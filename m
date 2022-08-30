@@ -2,164 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F19375A7034
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA7C5A7037
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:57:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231741AbiH3Vzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 17:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58616 "EHLO
+        id S231959AbiH3V5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 17:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232266AbiH3Vxk (ORCPT
+        with ESMTP id S231964AbiH3V5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:53:40 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4D89858F
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:50:45 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33f8988daecso180753557b3.12
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:50:45 -0700 (PDT)
+        Tue, 30 Aug 2022 17:57:05 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 810169DF80
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:52:56 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id 72so12638715pfx.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:52:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc;
-        bh=q3DJ62FdAkc75G5f5TC1WQpGOVt3l/MJJCNdx5cTnOk=;
-        b=C8JONxxXVlTpftHaAGAIlpLkK3JbLire6Nmp7rtyqKkA8STqUN7GtKHqgck9OnhnK6
-         JLmVEdOBtO4UgVT+rqGSVVb8el9/E2EzKFM8T34Szjzm3zJ0p5kFz3mCYcxw5G4J1WvF
-         QMb4GTQ/yzzPPSsO8n/bi291Hq8qngpZB5y0K7P/GbpAFTCQEKZCNPr9wH/IKiRw2v40
-         589a1BB4hctRlz5v1afevUX177R+LYQq/8EEHO7YXqeqRF8HSNYDOdN7xFassnCgRext
-         TnhJSTiUhrw0wYWDFlFWpRGy66tj1fz8fdmGodc46WuVd0A4xLZ7WpBC/QBvDzjQGrdA
-         SEig==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=kmi765rhdWrzQirlOzDuA6v2AsLs7icy29dLcvjyZaY=;
+        b=hWJ7zNlkecdEXTrVZ6wmkEknTN/2exZUrz57/hU7W4XRQNtZqa+j7DxnleUp3IhKBb
+         sPjQfJCIpekxST95aTOvA6LRmjGl/9uM3t36fhzVjmgsHhFGbG/O8T0o1vgEyeLA5C0I
+         EFGHin0OUfFk0fiXENOHWlBqiA7nVmwWjwoJSedO1iB8vWSr7VHZW2nPJIXqSCBO/+pl
+         sOwVvJuTcV0RbXyJlpScwEsj8aMQTbBVhWXan+gXoZK5KecfX5JTb9nvfZqtbC+UjDPf
+         k0jWJ+//LY8Te/xXhINDpZFf2p1eG1WkkfXxk1m7qr7C9e/izZw1Pye0n6Us513YUn22
+         Sv0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=q3DJ62FdAkc75G5f5TC1WQpGOVt3l/MJJCNdx5cTnOk=;
-        b=aPyrDbNQ3tT4E2ejVSH8RkMFtn+rhCRCXH02jIKnsWQqUaRFtntujfja0A+jfJbyvQ
-         DOr5MFgJ0aHeMWjEpyCbe/HC7Ns5MpYCYDZCD75zqhyaf/yUL1ltmzGGNE34lTfBWI3L
-         JreYz6I950V1Hz6UscHwRfzmKSrBcApPip3enX9VT31HoyWY5aj97HzjQPYUfsh1r8B4
-         yHHY7nKIySzzBdd1m9XPhiMzNWlpmvBbqTFHzM/RkygbZpePfCH71LR6bmve1TIKoCFJ
-         RYun4fuY1ysgbRRwx/0Jtma+u5kHJZsSIEQvSw30PdHF98Fa5jtS9vGWRdmXdLS+v4K4
-         8R3g==
-X-Gm-Message-State: ACgBeo0YA9N3WJ2a7nBGK45MKWfwPhpd7Qke8vwFfvhKdQiNZHh3zDDH
-        wsIikCltz8mNWMpmGUyOOGqha/yGfE4=
-X-Google-Smtp-Source: AA6agR6mRIYh/Ugh76Z9OGxiRjbQrZ+9wpxKxcSIOnClnh/ne0QVaaMxuz4y8WxW9UVOyJ1glmO9CKBYbzs=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:a005:55b3:6c26:b3e4])
- (user=surenb job=sendgmr) by 2002:a25:8a85:0:b0:671:715e:a1b0 with SMTP id
- h5-20020a258a85000000b00671715ea1b0mr12680068ybl.98.1661896243785; Tue, 30
- Aug 2022 14:50:43 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 14:49:19 -0700
-In-Reply-To: <20220830214919.53220-1-surenb@google.com>
-Mime-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830214919.53220-31-surenb@google.com>
-Subject: [RFC PATCH 30/30] MAINTAINERS: Add entries for code tagging & related
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, changbin.du@intel.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, dvyukov@google.com, shakeelb@google.com,
-        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        surenb@google.com, kernel-team@android.com, linux-mm@kvack.org,
-        iommu@lists.linux.dev, kasan-dev@googlegroups.com,
-        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=kmi765rhdWrzQirlOzDuA6v2AsLs7icy29dLcvjyZaY=;
+        b=erHD40+Mbnl8yQAs1JCg8F+6gQk+wR+r2/tqg4I61/aSSx9ES7KLHguCF4x419pFsI
+         P7BQ794tXn23Rq2xF6ojodPyVGlXidar+thU32S/gCSSd8IdlyLxK71F2uzaJEoSlJCG
+         AhcNO6CX/Y+NrmkvTRFbrPDYdolNNwcId1iyltlkmFN90rQ33m8EQMEsRI7scWZ9XNjf
+         28mqkCFQ7ejAUxPlxCzIPuGEZ8qRXj0lyZpc/JUijAfW5Fh4sKwltFkZITgkthoZnnrM
+         HtLJPtgHfcEKE6EzcdGs1lO9WRZ5+RdSdGxxAZFzQc8U4J3FdqTPSH8cO5acpgp9+RV1
+         JOdg==
+X-Gm-Message-State: ACgBeo2ROI9BKlE75mDUYaAjj5Fbz1pgtIz85otFl4Y2vZu88CBqw8Es
+        vDHMjviBskNszcR/UTvXGpCqpw==
+X-Google-Smtp-Source: AA6agR6asL5tWEMD9qdeUkMoP6zzYNAqZvPkbIyCF6qv1uEQUKWXuBujKh4awFSCPYR/F9Y2M19nxA==
+X-Received: by 2002:aa7:8742:0:b0:537:ee75:601a with SMTP id g2-20020aa78742000000b00537ee75601amr17381844pfo.37.1661896357847;
+        Tue, 30 Aug 2022 14:52:37 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id k6-20020a170902ce0600b0015e8d4eb1dbsm10181118plg.37.2022.08.30.14.52.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 14:52:37 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 21:52:33 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, Huang@google.com,
+        Shaoqin <shaoqin.huang@intel.com>, cgroups@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v7 3/4] KVM: x86/mmu: count KVM mmu usage in secondary
+ pagetable stats.
+Message-ID: <Yw6GoWY411PrIRMx@google.com>
+References: <20220823004639.2387269-1-yosryahmed@google.com>
+ <20220823004639.2387269-4-yosryahmed@google.com>
+ <Ywkq8HYyTI1eStSO@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Ywkq8HYyTI1eStSO@google.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kent Overstreet <kent.overstreet@linux.dev>
+On Fri, Aug 26, 2022, Sean Christopherson wrote:
+> On Tue, Aug 23, 2022, Yosry Ahmed wrote:
+> > Count the pages used by KVM mmu on x86 in memory stats under secondary
+> > pagetable stats (e.g. "SecPageTables" in /proc/meminfo) to give better
+> > visibility into the memory consumption of KVM mmu in a similar way to
+> > how normal user page tables are accounted.
+> > 
+> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > Reviewed-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/mmu/mmu.c     | 16 ++++++++++++++--
+> >  arch/x86/kvm/mmu/tdp_mmu.c | 12 ++++++++++++
+> >  2 files changed, 26 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index e418ef3ecfcb..4d38e4eba772 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -1665,6 +1665,18 @@ static inline void kvm_mod_used_mmu_pages(struct kvm *kvm, long nr)
+> >  	percpu_counter_add(&kvm_total_used_mmu_pages, nr);
+> >  }
+> >  
+> > +static void kvm_account_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+> > +{
+> > +	kvm_mod_used_mmu_pages(kvm, +1);
+> > +	kvm_account_pgtable_pages((void *)sp->spt, +1);
+> > +}
+> > +
+> > +static void kvm_unaccount_mmu_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+> > +{
+> > +	kvm_mod_used_mmu_pages(kvm, -1);
+> > +	kvm_account_pgtable_pages((void *)sp->spt, -1);
+> > +}
+> 
+> Hrm, this is causing build on x86 issues for me.  AFAICT, modpost doesn't detect
+> that this creates a new module dependency on __mod_lruvec_page_state() and so doesn't
+> refresh vmlinux.symvers.
+> 
+>   ERROR: modpost: "__mod_lruvec_page_state" [arch/x86/kvm/kvm.ko] undefined!
+>   make[2]: *** [scripts/Makefile.modpost:128: modules-only.symvers] Error 1
+>   make[1]: *** [Makefile:1769: modules] Error 2
+>   make[1]: *** Waiting for unfinished jobs....
+>   Kernel: arch/x86/boot/bzImage is ready  (#128)
+>   make[1]: Leaving directory '/usr/local/google/home/seanjc/build/kernel/vm'
+>   make: *** [Makefile:222: __sub-make] Error 2
+> 
+> Both gcc and clang yield the same behavior, so I doubt it's the compiler doing
+> something odd.  Cleaning the build makes the problem go away, but that's a poor
+> band-aid.
+> 
+> If I squash this with the prior patch that adds kvm_account_pgtable_pages() to
+> kvm_host.h, modpost detects the need to refresh and all is well.
+> 
+> Given that ARM doesn't support building KVM as a module, i.e. can't run afoul
+> of whatever modpost weirdness I'm hitting, I'm inclined to squash this with the
+> previous patch and punt on the modpost issue so that we can get this merged.
+> 
+> Any objections?  Or thoughts on what's going wrong?
 
-The new code & libraries added are being maintained - mark them as such.
+Pushed the series with the squash to branch `for_paolo/6.1` at:
 
-Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
----
- MAINTAINERS | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+    https://github.com/sean-jc/linux.git
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 589517372408..902c96744bcb 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5111,6 +5111,19 @@ S:	Supported
- F:	Documentation/process/code-of-conduct-interpretation.rst
- F:	Documentation/process/code-of-conduct.rst
- 
-+CODE TAGGING
-+M:	Suren Baghdasaryan <surenb@google.com>
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	lib/codetag.c
-+F:	include/linux/codetag.h
-+
-+CODE TAGGING TIME STATS
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	lib/codetag_time_stats.c
-+F:	include/linux/codetag_time_stats.h
-+
- COMEDI DRIVERS
- M:	Ian Abbott <abbotti@mev.co.uk>
- M:	H Hartley Sweeten <hsweeten@visionengravers.com>
-@@ -11405,6 +11418,12 @@ M:	John Hawley <warthog9@eaglescrag.net>
- S:	Maintained
- F:	tools/testing/ktest
- 
-+LAZY PERCPU COUNTERS
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	lib/lazy-percpu-counter.c
-+F:	include/linux/lazy-percpu-counter.h
-+
- L3MDEV
- M:	David Ahern <dsahern@kernel.org>
- L:	netdev@vger.kernel.org
-@@ -13124,6 +13143,15 @@ F:	include/linux/memblock.h
- F:	mm/memblock.c
- F:	tools/testing/memblock/
- 
-+MEMORY ALLOCATION TRACKING
-+M:	Suren Baghdasaryan <surenb@google.com>
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	lib/alloc_tag.c
-+F:	lib/pgalloc_tag.c
-+F:	include/linux/alloc_tag.h
-+F:	include/linux/codetag_ctx.h
-+
- MEMORY CONTROLLER DRIVERS
- M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
- L:	linux-kernel@vger.kernel.org
-@@ -20421,6 +20449,12 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/luca/wl12xx.git
- F:	drivers/net/wireless/ti/
- F:	include/linux/wl12xx.h
- 
-+TIME STATS
-+M:	Kent Overstreet <kent.overstreet@linux.dev>
-+S:	Maintained
-+F:	lib/time_stats.c
-+F:	include/linux/time_stats.h
-+
- TIMEKEEPING, CLOCKSOURCE CORE, NTP, ALARMTIMER
- M:	John Stultz <jstultz@google.com>
- M:	Thomas Gleixner <tglx@linutronix.de>
--- 
-2.37.2.672.g94769d06f0-goog
+Unless you hear otherwise, it will make its way to kvm/queue "soon".
 
+Please yell if there are objections.

@@ -2,292 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D62945A664B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6995A6650
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiH3O3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 10:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50230 "EHLO
+        id S230090AbiH3Oab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 10:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229721AbiH3O3k (ORCPT
+        with ESMTP id S229737AbiH3Oa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 10:29:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE534D25CD
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:29:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661869778;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lmXShkPGu5qohlisPijwUoqxiVIKAZ+9/TfZzFh7608=;
-        b=JDxrlRBMyLVKmtIlqZCS3a/b26dQWvv9SL8Cr7KgoPBgWRRgW7cQgWv7hsGa688ZG7Z97Q
-        AJ+v9u9+do+WQlqO8hGwv1KS7sQ1PwP0654n3DqBGGtN2xohixDoBU33FftHHghNusqip5
-        xbnrgiFiZXDLfwPPMx8V5oVQ4DxCOCQ=
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com
- [209.85.214.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-274-vpZF_B4SPwWOUkird7P1DA-1; Tue, 30 Aug 2022 10:29:36 -0400
-X-MC-Unique: vpZF_B4SPwWOUkird7P1DA-1
-Received: by mail-pl1-f198.google.com with SMTP id u14-20020a170902e5ce00b00174b2ad8435so4362638plf.12
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:29:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=lmXShkPGu5qohlisPijwUoqxiVIKAZ+9/TfZzFh7608=;
-        b=E+PXkXSCYZUDawtEPlFuJerGlQtjkR8b3LR5dZdVT0jAbe6LVHDYxDznXaAFBT7Jyb
-         hyjQ64xOs3Q7xGCfvcjaH2CYv16a6KLyz+AaIsCk8kQXXwATgTxPyPLVRuOJtkHNS77j
-         vvgKprG/MR+4uHhOuS9QmtE/YQiwbLWbWkcwjaGcaJfkKwEk98BSQIGcTC1IfyKXPqrc
-         bYYbx7hnKSGeQ4dFb3v4dRTTOlwVNKUXhIT7DzP+g+6pIDb0vCIu24jQJ77JS59hcR9d
-         hLXJTlxHoyagQpe9t2nQ/q//C4+ZJG7ZFBOYzPHahQ7bBUomiiOD3Djh5F7JZvPDkb/u
-         cl9w==
-X-Gm-Message-State: ACgBeo2WKWOSh+bTugO/oKdaxtFVgXhj+puZ2pUBuNhQvVYF3/1ihaJI
-        2pvnpANooN/DehZmgdBcQ3Sj8NRZbrDNHk/6w7m5gpLyfoMkfanZlIz1I1mK4gUGWvGrfz5z7Vi
-        FqEMsW5rN+DkLR5GbHPNChNRzoMc+Wt8gW+WGWwWZ
-X-Received: by 2002:a63:d10b:0:b0:41d:bd7d:7759 with SMTP id k11-20020a63d10b000000b0041dbd7d7759mr18107744pgg.196.1661869775386;
-        Tue, 30 Aug 2022 07:29:35 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6ZkHiVpznHXYfoQbkr7dm3Zi5mkVALp/HWJ4F89gPVcA8KOGuI5YxXe4p2AipIfQA48i4dFJ6SAqik3HjUw/A=
-X-Received: by 2002:a63:d10b:0:b0:41d:bd7d:7759 with SMTP id
- k11-20020a63d10b000000b0041dbd7d7759mr18107710pgg.196.1661869775042; Tue, 30
- Aug 2022 07:29:35 -0700 (PDT)
+        Tue, 30 Aug 2022 10:30:27 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 7E6515FF6F
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:30:24 -0700 (PDT)
+Received: (qmail 158852 invoked by uid 1000); 30 Aug 2022 10:30:23 -0400
+Date:   Tue, 30 Aug 2022 10:30:23 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Yinbo Zhu <zhuyinbo@loongson.cn>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <greg@kroah.com>,
+        Patchwork Bot <patchwork-bot@kernel.org>
+Subject: Re: [PATCH v1] usb: ohci-platform: fix usb disconnect issue after s4
+Message-ID: <Yw4e/9GqGSrn89wo@rowland.harvard.edu>
+References: <20220830111449.2300-1-zhuyinbo@loongson.cn>
 MIME-Version: 1.0
-References: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
- <20220824134055.1328882-2-benjamin.tissoires@redhat.com> <CAADnVQKgkFpLh_URJn6qCiAONteA1dwZHd6=4cZn15g1JCAPag@mail.gmail.com>
- <CAP01T75ec_T0M6DU=JE2tfNsWRZuPSMu_7JHA7ZoOBw5eDh1Bg@mail.gmail.com>
-In-Reply-To: <CAP01T75ec_T0M6DU=JE2tfNsWRZuPSMu_7JHA7ZoOBw5eDh1Bg@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Tue, 30 Aug 2022 16:29:23 +0200
-Message-ID: <CAO-hwJLd9wXx+ppccBYPKZDymO0sk++Nt2E3-R97PY7LbfJfTg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 01/23] bpf/verifier: allow all functions to
- read user provided context
-To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830111449.2300-1-zhuyinbo@loongson.cn>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 3:51 AM Kumar Kartikeya Dwivedi
-<memxor@gmail.com> wrote:
->
-> On Fri, 26 Aug 2022 at 03:42, Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Wed, Aug 24, 2022 at 6:41 AM Benjamin Tissoires
-> > <benjamin.tissoires@redhat.com> wrote:
-> > >
-> > > When a function was trying to access data from context in a syscall eBPF
-> > > program, the verifier was rejecting the call unless it was accessing the
-> > > first element.
-> > > This is because the syscall context is not known at compile time, and
-> > > so we need to check this when actually accessing it.
-> > >
-> > > Check for the valid memory access if there is no convert_ctx callback,
-> > > and allow such situation to happen.
-> > >
-> > > There is a slight hiccup with subprogs. btf_check_subprog_arg_match()
-> > > will check that the types are matching, which is a good thing, but to
-> > > have an accurate result, it hides the fact that the context register may
-> > > be null. This makes env->prog->aux->max_ctx_offset being set to the size
-> > > of the context, which is incompatible with a NULL context.
-> > >
-> > > Solve that last problem by storing max_ctx_offset before the type check
-> > > and restoring it after.
-> > >
-> > > Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > >
-> > > ---
-> > >
-> > > changes in v9:
-> > > - rewrote the commit title and description
-> > > - made it so all functions can make use of context even if there is
-> > >   no convert_ctx
-> > > - remove the is_kfunc field in bpf_call_arg_meta
-> > >
-> > > changes in v8:
-> > > - fixup comment
-> > > - return -EACCESS instead of -EINVAL for consistency
-> > >
-> > > changes in v7:
-> > > - renamed access_t into atype
-> > > - allow zero-byte read
-> > > - check_mem_access() to the correct offset/size
-> > >
-> > > new in v6
-> > > ---
-> > >  kernel/bpf/btf.c      | 11 ++++++++++-
-> > >  kernel/bpf/verifier.c | 19 +++++++++++++++++++
-> > >  2 files changed, 29 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > index 903719b89238..386300f52b23 100644
-> > > --- a/kernel/bpf/btf.c
-> > > +++ b/kernel/bpf/btf.c
-> > > @@ -6443,8 +6443,8 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
-> > >  {
-> > >         struct bpf_prog *prog = env->prog;
-> > >         struct btf *btf = prog->aux->btf;
-> > > +       u32 btf_id, max_ctx_offset;
-> > >         bool is_global;
-> > > -       u32 btf_id;
-> > >         int err;
-> > >
-> > >         if (!prog->aux->func_info)
-> > > @@ -6457,9 +6457,18 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
-> > >         if (prog->aux->func_info_aux[subprog].unreliable)
-> > >                 return -EINVAL;
-> > >
-> > > +       /* subprogs arguments are not actually accessing the data, we need
-> > > +        * to check for the types if they match.
-> > > +        * Store the max_ctx_offset and restore it after btf_check_func_arg_match()
-> > > +        * given that this function will have a side effect of changing it.
-> > > +        */
-> > > +       max_ctx_offset = env->prog->aux->max_ctx_offset;
-> > > +
-> > >         is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
-> > >         err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0);
-> > >
-> > > +       env->prog->aux->max_ctx_offset = max_ctx_offset;
-> >
-> > I don't understand this.
-> > If we pass a ctx into a helper and it's going to
-> > access [0..N] bytes from it why do we need to hide it?
-> > max_ctx_offset will be used later raw_tp, tp, syscall progs
-> > to determine whether it's ok to load them.
-> > By hiding the actual size of access somebody can construct
-> > a prog that reads out of bounds.
-> > How is this related to NULL-ness property?
->
-> Same question, was just typing exactly the same thing.
+On Tue, Aug 30, 2022 at 07:14:49PM +0800, Yinbo Zhu wrote:
+> Avoid retaining bogus hardware states during resume-from-hibernation.
+> Previously we had reset the hardware as part of preparing to reinstate
+> the snapshot image. But we can do better now with the new PM framework,
+> since we know exactly which resume operations are from hibernation
+> 
+> According to the commit "cd1965db0" and "6ec4beb5c" that the flag
+> "hibernated" is for resume-from-hibernation and it should be true when
+> usb resume from disk.
+> 
+> When this flag "hibernated" is set, the drivers will reset the hardware
+> to get rid of any existing state and make sure resume from hibernation
+> re-enumerates everything for ohci.
 
-The test I have that is failing in patch 2/23 is the following, with
-args being set to NULL by userspace:
+What is the "usb disconnect issue" you mention in the Subject line that 
+this patch is supposed to fix?
 
-SEC("syscall")
-int kfunc_syscall_test_null(struct syscall_test_args *args)
-{
-       bpf_kfunc_call_test_mem_len_pass1(args, 0);
+> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+> ---
+>  drivers/usb/host/ohci-platform.c | 28 ++++++++++++++++++++++++----
+>  1 file changed, 24 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
+> index 0adae6265127..e733da2cd3b7 100644
+> --- a/drivers/usb/host/ohci-platform.c
+> +++ b/drivers/usb/host/ohci-platform.c
+> @@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
+>  	return ret;
+>  }
+>  
+> -static int ohci_platform_resume(struct device *dev)
+> +static int ohci_platform_renew(struct device *dev, bool hibernated)
 
-       return 0;
-}
+How about calling this routine ohci_platform_resume_maybe_hibernated() 
+instead?
 
-Basically:
-if userspace declares the following:
- DECLARE_LIBBPF_OPTS(bpf_test_run_opts, syscall_topts,
-               .ctx_in = NULL,
-               .ctx_size_in = 0,
-       );
+Alan Stern
 
-The verifier is happy with the current released kernel:
-kfunc_syscall_test_fail() never dereferences the ctx pointer, it just
-passes it around to bpf_kfunc_call_test_mem_len_pass1(), which in turn
-is also happy because it says it is not accessing the data at all (0
-size memory parameter).
-
-In the current code, check_helper_mem_access() actually returns
--EINVAL, but doesn't change max_ctx_offset (it's still at the value of
-0 here). The program is now marked as unreliable, but the verifier
-goes on.
-
-When adding this patch, if we declare a syscall eBPF (or any other
-function that doesn't have env->ops->convert_ctx_access), the previous
-"test" is failing because this ensures the syscall program has to have
-a valid ctx pointer.
-btf_check_func_arg_match() now calls check_mem_access() which
-basically validates the fact that the program can dereference the ctx.
-
-So now, without the max_ctx_offset store/restore, the verifier
-enforces that the provided ctx is not null.
-
-What I thought that would happen was that if we were to pass a NULL
-context from userspace, but the eBPF program dereferences it (or in
-that case have a subprog or a function call that dereferences it),
-then max_ctx_offset would still be set to the proper value because of
-that internal dereference, and so the verifier would reject with
--EINVAL the call to the eBPF program.
-
-If I add another test that has the following ebpf prog (with ctx_in
-being set to NULL by the userspace):
-
-SEC("syscall")
-int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
-{
-       bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
-
-       return 0;
-}
-
-Then the call of the program is actually failing with -EINVAL, even
-with this patch.
-
-But again, if setting from userspace a ctx of NULL with a 0 size is
-not considered as valid, then we can just drop that hunk and add a
-test to enforce it.
-
-Cheers,
-Benjamin
-
->
-> >
-> > > +
-> > >         /* Compiler optimizations can remove arguments from static functions
-> > >          * or mismatched type can be passed into a global function.
-> > >          * In such cases mark the function as unreliable from BTF point of view.
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 2c1f8069f7b7..d694f43ab911 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -5229,6 +5229,25 @@ static int check_helper_mem_access(struct bpf_verifier_env *env, int regno,
-> > >                                 env,
-> > >                                 regno, reg->off, access_size,
-> > >                                 zero_size_allowed, ACCESS_HELPER, meta);
-> > > +       case PTR_TO_CTX:
-> > > +               /* in case the function doesn't know how to access the context,
-> > > +                * (because we are in a program of type SYSCALL for example), we
-> > > +                * can not statically check its size.
-> > > +                * Dynamically check it now.
-> > > +                */
-> > > +               if (!env->ops->convert_ctx_access) {
-> > > +                       enum bpf_access_type atype = meta && meta->raw_mode ? BPF_WRITE : BPF_READ;
-> > > +                       int offset = access_size - 1;
-> > > +
-> > > +                       /* Allow zero-byte read from PTR_TO_CTX */
-> > > +                       if (access_size == 0)
-> > > +                               return zero_size_allowed ? 0 : -EACCES;
-> > > +
-> > > +                       return check_mem_access(env, env->insn_idx, regno, offset, BPF_B,
-> > > +                                               atype, -1, false);
-> > > +               }
-> >
-> > This part looks good alone. Without max_ctx_offset save/restore.
->
-> +1, save/restore would be incorrect.
->
-
+>  {
+>  	struct usb_hcd *hcd = dev_get_drvdata(dev);
+>  	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
+> @@ -301,7 +301,7 @@ static int ohci_platform_resume(struct device *dev)
+>  			return err;
+>  	}
+>  
+> -	ohci_resume(hcd, false);
+> +	ohci_resume(hcd, hibernated);
+>  
+>  	pm_runtime_disable(dev);
+>  	pm_runtime_set_active(dev);
+> @@ -309,6 +309,16 @@ static int ohci_platform_resume(struct device *dev)
+>  
+>  	return 0;
+>  }
+> +
+> +static int ohci_platform_resume(struct device *dev)
+> +{
+> +	return ohci_platform_renew(dev, false);
+> +}
+> +
+> +static int ohci_platform_restore(struct device *dev)
+> +{
+> +	return ohci_platform_renew(dev, true);
+> +}
+>  #endif /* CONFIG_PM_SLEEP */
+>  
+>  static const struct of_device_id ohci_platform_ids[] = {
+> @@ -325,8 +335,16 @@ static const struct platform_device_id ohci_platform_table[] = {
+>  };
+>  MODULE_DEVICE_TABLE(platform, ohci_platform_table);
+>  
+> -static SIMPLE_DEV_PM_OPS(ohci_platform_pm_ops, ohci_platform_suspend,
+> -	ohci_platform_resume);
+> +#ifdef CONFIG_PM_SLEEP
+> +static const struct dev_pm_ops ohci_platform_pm_ops = {
+> +	.suspend = ohci_platform_suspend,
+> +	.resume = ohci_platform_resume,
+> +	.freeze = ohci_platform_suspend,
+> +	.thaw = ohci_platform_resume,
+> +	.poweroff = ohci_platform_suspend,
+> +	.restore = ohci_platform_restore,
+> +};
+> +#endif
+>  
+>  static struct platform_driver ohci_platform_driver = {
+>  	.id_table	= ohci_platform_table,
+> @@ -335,7 +353,9 @@ static struct platform_driver ohci_platform_driver = {
+>  	.shutdown	= usb_hcd_platform_shutdown,
+>  	.driver		= {
+>  		.name	= "ohci-platform",
+> +#ifdef CONFIG_PM_SLEEP
+>  		.pm	= &ohci_platform_pm_ops,
+> +#endif
+>  		.of_match_table = ohci_platform_ids,
+>  		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
+>  	}
+> -- 
+> 2.31.1
+> 

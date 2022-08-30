@@ -2,294 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03A85A58C3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:04:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A8E5A58C1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiH3BCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 21:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
+        id S229832AbiH3BCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 21:02:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiH3BBj (ORCPT
+        with ESMTP id S229819AbiH3BCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 21:01:39 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF5DA033B
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:01:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661821298; x=1693357298;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=4VaUqe2NAYSwSGWHP2GlkAzpRNxCF7gpiQRDfS8DC1s=;
-  b=ZNOE0WBIRQMmIJUcw/p1q6ZQG/DoJXwDThJgzLO8jmlCFtnGeBLqjQqQ
-   7BW2+QezMuA0BSPTl3CZUy17DQsEdsGgy1krrcRO0REI4OvK7VCJcwEsF
-   bWyFw2n6En5norVlENGfOZGVaYo2xD4opUAMRMQZZ6henrHLqsgESsudZ
-   fq9tmK3Gopegpupbvu+hM1bkJVQSTXE31QJvw3JgFOUqWpkwdbCZA8lTg
-   WHdf2r8mMl6vuCC0UovBDSIELRCRB7RGN8MyxeEUjhAuWxyucCEt8gwrC
-   1lySPiUW1aPYM/O7x67anMW5O/1TC7t7SgrO1q4iARYjYP294R/HrBxwX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="295047608"
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="295047608"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 18:01:38 -0700
-X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="588386803"
-Received: from fpalamon-mobl.amr.corp.intel.com (HELO box.shutemov.name) ([10.252.54.23])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 18:01:33 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id C691210428C; Tue, 30 Aug 2022 04:01:24 +0300 (+03)
-From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-To:     Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Taras Madan <tarasmadan@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Weihong Zhang <weihong.zhang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv8 11/11] selftests/x86/lam: Add inherit test cases for linear-address masking
-Date:   Tue, 30 Aug 2022 04:01:04 +0300
-Message-Id: <20220830010104.1282-12-kirill.shutemov@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
-References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
+        Mon, 29 Aug 2022 21:02:20 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5109CA6C72;
+        Mon, 29 Aug 2022 18:01:54 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MGprC5xP9zKFJb;
+        Tue, 30 Aug 2022 09:00:11 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgAXj45+YQ1jfxpzAA--.54680S3;
+        Tue, 30 Aug 2022 09:01:51 +0800 (CST)
+Subject: Re: [PATCH -next 1/3] md/raid10: fix improper BUG_ON() in
+ raise_barrier()
+To:     John Stoffel <john@stoffel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220829131502.165356-1-yukuai1@huaweicloud.com>
+ <20220829131502.165356-2-yukuai1@huaweicloud.com>
+ <25357.6485.659159.476926@quad.stoffel.home>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <d46162b3-cd7c-cbc5-0ded-bb62a8a03ca5@huaweicloud.com>
+Date:   Tue, 30 Aug 2022 09:01:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <25357.6485.659159.476926@quad.stoffel.home>
+Content-Type: text/plain; charset=gbk; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: gCh0CgAXj45+YQ1jfxpzAA--.54680S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7trWftry5tF15XFy8Zw4rAFb_yoW8Xw1rpa
+        9Fga1jya1DCwn0yw1DXr4xuFyrKayDKay0y347Ww1kZFyqqFyfGF47Jr95Wr1v9rs3J3W0
+        vay5Ka9agF1xtaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
+        UUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Weihong Zhang <weihong.zhang@intel.com>
+Hi, John
 
-LAM is enabled per-thread and gets inherited on fork(2)/clone(2). exec()
-reverts LAM status to the default disabled state.
+ÔÚ 2022/08/30 3:53, John Stoffel Ð´µÀ:
+>>>>>> "Yu" == Yu Kuai <yukuai1@huaweicloud.com> writes:
+> 
+> Yu> From: Yu Kuai <yukuai3@huawei.com>
+> Yu> 'conf->barrier' is protected by 'conf->resync_lock', reading
+> Yu> 'conf->barrier' without holding the lock is wrong.
+> 
+> Yu> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> Yu> ---
+> Yu>  drivers/md/raid10.c | 2 +-
+> Yu>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Yu> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> Yu> index 9117fcdee1be..b70c207f7932 100644
+> Yu> --- a/drivers/md/raid10.c
+> Yu> +++ b/drivers/md/raid10.c
+> Yu> @@ -930,8 +930,8 @@ static void flush_pending_writes(struct r10conf *conf)
+>   
+> Yu>  static void raise_barrier(struct r10conf *conf, int force)
+> Yu>  {
+> Yu> -	BUG_ON(force && !conf->barrier);
+> Yu>  	spin_lock_irq(&conf->resync_lock);
+> Yu> +	BUG_ON(force && !conf->barrier);
+> 
+> I don't like this BUG_ON() at all, why are you crashing the system
+> here instead of just doing a simple WARN_ONCE() instead?  Is there
+> anything the user can do to get into this situation on their own, or
+> does it really signify a logic error in the code?  If so, why are you
+> killing the system?
 
-There are two test scenarios:
+I'm not sure why to use the BUG_ON() here. I just noticed that
+'conf->barrier' is read without holding 'resync_lock', and BUG_ON() can
+be triggered false positive.
 
- - Fork test cases:
-
-   These cases were used to test the inheritance of LAM for per-thread,
-   Child process generated by fork() should inherit LAM feature from
-   parent process, Child process can get the LAM mode same as parent
-   process.
-
- - Execve test cases:
-
-   Processes generated by execve() are different from processes
-   generated by fork(), these processes revert LAM status to disabled
-   status.
-
-Signed-off-by: Weihong Zhang <weihong.zhang@intel.com>
-Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
----
- tools/testing/selftests/x86/lam.c | 125 +++++++++++++++++++++++++++++-
- 1 file changed, 121 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index 25e6d0fc4a83..0d76f883efdd 100644
---- a/tools/testing/selftests/x86/lam.c
-+++ b/tools/testing/selftests/x86/lam.c
-@@ -37,8 +37,9 @@
- #define FUNC_MMAP               0x4
- #define FUNC_SYSCALL            0x8
- #define FUNC_URING              0x10
-+#define FUNC_INHERITE           0x20
- 
--#define TEST_MASK               0x1f
-+#define TEST_MASK               0x3f
- 
- #define LOW_ADDR                (0x1UL << 30)
- #define HIGH_ADDR               (0x3UL << 48)
-@@ -174,6 +175,28 @@ static unsigned long get_default_tag_bits(void)
- 	return lam;
- }
- 
-+/*
-+ * Set tagged address and read back untag mask.
-+ * check if the untag mask is expected.
-+ */
-+static int get_lam(void)
-+{
-+	uint64_t ptr = 0;
-+	int ret = -1;
-+	/* Get untagged mask */
-+	if (syscall(SYS_arch_prctl, ARCH_GET_UNTAG_MASK, &ptr) == -1)
-+		return -1;
-+
-+	/* Check mask returned is expected */
-+	if (ptr == ~(LAM_U57_MASK))
-+		ret = LAM_U57_BITS;
-+	else if (ptr == -1ULL)
-+		ret = LAM_NONE;
-+
-+
-+	return ret;
-+}
-+
- /* According to LAM mode, set metadata in high bits */
- static uint64_t set_metadata(uint64_t src, unsigned long lam)
- {
-@@ -581,7 +604,7 @@ int do_uring(unsigned long lam)
- 
- 			switch (lam) {
- 			case LAM_U57_BITS: /* Clear bits 62:57 */
--				addr = (addr & ~(0x3fULL << 57));
-+				addr = (addr & ~(LAM_U57_MASK));
- 				break;
- 			}
- 			free((void *)addr);
-@@ -632,6 +655,72 @@ static int fork_test(struct testcases *test)
- 	return ret;
- }
- 
-+static int handle_execve(struct testcases *test)
-+{
-+	int ret, child_ret;
-+	int lam = test->lam;
-+	pid_t pid;
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		perror("Fork failed.");
-+		ret = 1;
-+	} else if (pid == 0) {
-+		char path[PATH_MAX];
-+
-+		/* Set LAM mode in parent process */
-+		if (set_lam(lam) != 0)
-+			return 1;
-+
-+		/* Get current binary's path and the binary was run by execve */
-+		if (readlink("/proc/self/exe", path, PATH_MAX) <= 0)
-+			exit(-1);
-+
-+		/* run binary to get LAM mode and return to parent process */
-+		if (execlp(path, path, "-t 0x0", NULL) < 0) {
-+			perror("error on exec");
-+			exit(-1);
-+		}
-+	} else {
-+		wait(&child_ret);
-+		ret = WEXITSTATUS(child_ret);
-+		if (ret != LAM_NONE)
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
-+static int handle_inheritance(struct testcases *test)
-+{
-+	int ret, child_ret;
-+	int lam = test->lam;
-+	pid_t pid;
-+
-+	/* Set LAM mode in parent process */
-+	if (set_lam(lam) != 0)
-+		return 1;
-+
-+	pid = fork();
-+	if (pid < 0) {
-+		perror("Fork failed.");
-+		return 1;
-+	} else if (pid == 0) {
-+		/* Set LAM mode in parent process */
-+		int child_lam = get_lam();
-+
-+		exit(child_lam);
-+	} else {
-+		wait(&child_ret);
-+		ret = WEXITSTATUS(child_ret);
-+
-+		if (lam != ret)
-+			return 1;
-+	}
-+
-+	return 0;
-+}
-+
- static void run_test(struct testcases *test, int count)
- {
- 	int i, ret = 0;
-@@ -733,11 +822,26 @@ static struct testcases mmap_cases[] = {
- 	},
- };
- 
-+static struct testcases inheritance_cases[] = {
-+	{
-+		.expected = 0,
-+		.lam = LAM_U57_BITS,
-+		.test_func = handle_inheritance,
-+		.msg = "FORK: LAM_U57, child process should get LAM mode same as parent\n",
-+	},
-+	{
-+		.expected = 0,
-+		.lam = LAM_U57_BITS,
-+		.test_func = handle_execve,
-+		.msg = "EXECVE: LAM_U57, child process should get disabled LAM mode\n",
-+	},
-+};
-+
- static void cmd_help(void)
- {
- 	printf("usage: lam [-h] [-t test list]\n");
- 	printf("\t-t test list: run tests specified in the test list, default:0x%x\n", TEST_MASK);
--	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall; 0x10:io_uring.\n");
-+	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall; 0x10:io_uring; 0x20:inherit;\n");
- 	printf("\t-h: help\n");
- }
- 
-@@ -757,7 +861,7 @@ int main(int argc, char **argv)
- 		switch (c) {
- 		case 't':
- 			tests = strtoul(optarg, NULL, 16);
--			if (!(tests & TEST_MASK)) {
-+			if (tests && !(tests & TEST_MASK)) {
- 				ksft_print_msg("Invalid argument!\n");
- 				return -1;
- 			}
-@@ -771,6 +875,16 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
-+	/*
-+	 * When tests is 0, it is not a real test case;
-+	 * the option used by test case(execve) to check the lam mode in
-+	 * process generated by execve, the process read back lam mode and
-+	 * check with lam mode in parent process.
-+	 */
-+	if (!tests)
-+		return (get_lam());
-+
-+	/* Run test cases */
- 	if (tests & FUNC_MALLOC)
- 		run_test(malloc_cases, ARRAY_SIZE(malloc_cases));
- 
-@@ -786,6 +900,9 @@ int main(int argc, char **argv)
- 	if (tests & FUNC_URING)
- 		run_test(uring_cases, ARRAY_SIZE(uring_cases));
- 
-+	if (tests & FUNC_INHERITE)
-+		run_test(inheritance_cases, ARRAY_SIZE(inheritance_cases));
-+
- 	ksft_set_plan(tests_cnt);
- 
- 	return ksft_exit_pass();
--- 
-2.35.1
+Thanks,
+Kuai
+> 
+> 
+>   
+> Yu>  	/* Wait until no block IO is waiting (unless 'force') */
+> Yu>  	wait_event_lock_irq(conf->wait_barrier, force || !conf->nr_waiting,
+> Yu> --
+> Yu> 2.31.1
+> 
+> 
+> .
+> 
 

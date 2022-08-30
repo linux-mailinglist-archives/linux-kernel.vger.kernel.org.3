@@ -2,63 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C5805A6553
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:42:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C06455A64EF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:37:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbiH3Nml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:42:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42572 "EHLO
+        id S230358AbiH3Nhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:37:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiH3NmI (ORCPT
+        with ESMTP id S229777AbiH3Nhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:42:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4CA2B1AE
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:40:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661866750;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jtIS1VsLeTWsr8wnUR6qesTZez08emIVhcN1jg/PKaE=;
-        b=BJqs+z1Js5kEbgRPw5GUBMe4991nLx3Al47PgbpoII5nRqFcXTMNaVUOYwhDEgEHblW67b
-        KLIJDYrydK5XuXfCpqG3W3qcoiMS57mx2Tso3fDKHtd0jhNhFyWlMnQ3icwYlND9FFQYwu
-        U3L3IQa1tm39/MkXHlY71eADBX2jP2o=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-602-sQBjN_0tPxWdEtmME_E3BQ-1; Tue, 30 Aug 2022 09:39:05 -0400
-X-MC-Unique: sQBjN_0tPxWdEtmME_E3BQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 26E19811E9B;
-        Tue, 30 Aug 2022 13:39:05 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BA3782166B2A;
-        Tue, 30 Aug 2022 13:39:02 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 33/33] KVM: nVMX: Use cached host MSR_IA32_VMX_MISC value for setting up nested MSR
-Date:   Tue, 30 Aug 2022 15:37:37 +0200
-Message-Id: <20220830133737.1539624-34-vkuznets@redhat.com>
-In-Reply-To: <20220830133737.1539624-1-vkuznets@redhat.com>
-References: <20220830133737.1539624-1-vkuznets@redhat.com>
+        Tue, 30 Aug 2022 09:37:45 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C35A6612A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:37:44 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id k9so14309914wri.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:37:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=eJwvPnyxYM+rkWN/B5T3u9GVEhfio+TrUX3WU5XcQn0=;
+        b=eJ8Q9S1/vCT7cijJVAWN8HR5xnr4XG/bT9gfNLUDKdyxQxPABjo+s4Y6pUxKK4Tl4O
+         jPc2/lY4v59LZSUGa9aKxBb01w/WAWEog2r8xqVxzlhi7sYloua5sSMoo8h1Ju3qINN/
+         3avwaD6Hws/C4g+njGzPWYxF+RusS9DNMyl9nt2y5ZJnNdOG5bGLLNdGTXWMMHpi5f2E
+         IIjR87c/vXSr0+OPP2cwmM1pzjUy5FHA+vG4pvTZWF9oCnm1SdWfv32yZASc1o+ERboZ
+         XMrCHtZPBtVNx/gkiYGlNPnexb2ABfjXNmkHIEWQAhFq4YntlmA92bdCXkafb7r0LXVd
+         7Eiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=eJwvPnyxYM+rkWN/B5T3u9GVEhfio+TrUX3WU5XcQn0=;
+        b=PYG/bUuxVD86hxp1AwCPX33hKVvjsNIRDJtBFwzXv3l342UbaFDJA9ODxK0YGXaw26
+         2NQ7K+7MvvzhAZyyOLIolooaHZHYE2d+xfMF/MopPTR86CYXbqy8bf57dLOcQXHqNI4b
+         haS4rfFOsr+TasMsj+Eg99IswmuXi5U4AmjbJEfdBce93RdUMEoKNqTG0nBVsmAf4ccv
+         uSKMt7Jml4Ihpo2pEd2o3I6ioAcfn0V/9BYe8ofkgKs++Q9E8tll4hrFFd08j9bmXMK/
+         2SroJ4HUYDIOKCpbGV2x23mDw4LTMC3OorwdqV5EqexlRrOENfT3jF6MQH5mh6nBaqeq
+         QfFg==
+X-Gm-Message-State: ACgBeo1tK+o+M+unyK3Kf9UKXNk3lpYTjQPM20G6k8LufahCKzvG458O
+        //RCAkewBNf+MofYOn0Ci0OGaw==
+X-Google-Smtp-Source: AA6agR4QHq093VZ3/eQb0FJDYlUt9A1Mn1xHd/D1qdIE2cMIfLfOMQUBjFLqXGMVXyoshwbgON+EAQ==
+X-Received: by 2002:adf:dec9:0:b0:226:e033:c048 with SMTP id i9-20020adfdec9000000b00226e033c048mr3225813wrn.577.1661866663228;
+        Tue, 30 Aug 2022 06:37:43 -0700 (PDT)
+Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
+        by smtp.googlemail.com with ESMTPSA id n8-20020a5d4848000000b00226d01a4635sm9658965wrs.35.2022.08.30.06.37.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 06:37:42 -0700 (PDT)
+Message-ID: <791ea3b6-c326-9e71-e23b-93206e305c85@linaro.org>
+Date:   Tue, 30 Aug 2022 14:37:41 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v1 00/14] nvmem: core: introduce NVMEM layouts
+Content-Language: en-US
+To:     Michael Walle <michael@walle.cc>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
+References: <20220825214423.903672-1-michael@walle.cc>
+ <768ff63a-54f5-9cde-e888-206cdf018df3@milecki.pl>
+ <267821eee5dcab79fd0ecebe0d9f8b0c@walle.cc>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <267821eee5dcab79fd0ecebe0d9f8b0c@walle.cc>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,36 +90,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-vmcs_config has cached host MSR_IA32_VMX_MISC value, use it for setting
-up nested MSR_IA32_VMX_MISC in nested_vmx_setup_ctls_msrs() and avoid the
-redundant rdmsr().
+Thanks Michael for the work.
 
-No (real) functional change intended.
+On 29/08/2022 09:22, Michael Walle wrote:
+> 
+>> One thing I believe you need to handle is replacing "cell_post_process"
+>> callback with your layout thing.
+>>
+>> I find it confusing to have
+>> 1. cell_post_process() CB at NVMEM device level
+>> 2. post_process() CB at NVMEM cell level
+> 
+> What is wrong with having a callback at both levels?
 
-Reviewed-by: Jim Mattson <jmattson@google.com>
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/nested.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+we should converge this tbh, its more than one code paths to deal with 
+similar usecases.
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index a079f013ccbc..02d442b3357a 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -6748,10 +6748,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
- 		msrs->secondary_ctls_high |= SECONDARY_EXEC_ENCLS_EXITING;
- 
- 	/* miscellaneous data */
--	rdmsr(MSR_IA32_VMX_MISC,
--		msrs->misc_low,
--		msrs->misc_high);
--	msrs->misc_low &= VMX_MISC_SAVE_EFER_LMA;
-+	msrs->misc_low = (u32)vmcs_conf->misc & VMX_MISC_SAVE_EFER_LMA;
- 	msrs->misc_low |=
- 		MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS |
- 		VMX_MISC_EMULATED_PREEMPTION_TIMER_RATE |
--- 
-2.37.2
+I have put down some thoughts in "[PATCH v1 06/14] nvmem: core: 
+introduce NVMEM layouts" and "[PATCH v1 07/14] nvmem: core: add per-cell 
+post processing" review.
 
+
+--srini
+> 
+> Granted, in this particular case (it is just used at one place), I still
+> think that it is the wrong approach to add this transformation in the
+> driver (in this particular case). The driver is supposed to give you
+> access to the SoC's fuse box, but it will magically change the content
+> of a cell if the nvmem consumer named this cell "mac-address" (which
+> you also found confusing the last time and I do too!).
+> 
+> The driver itself doesn't add any cells on its own, so I cannot register
+> a .post_process hook there. Therefore, you'd need that post_process hook
+> on every cell, which is equivalent to have a post_process hook at
+> device level.
+> 
+> Unless you have a better idea. I'll leave that up to NXP to fix that (or
+> leave it like that).
+> 
+> -michael

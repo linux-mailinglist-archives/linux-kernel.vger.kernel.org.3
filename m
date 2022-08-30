@@ -2,148 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29B2A5A5F68
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:28:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7176E5A5F6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:29:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiH3J2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
+        id S231815AbiH3J3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiH3J2h (ORCPT
+        with ESMTP id S231876AbiH3J3V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:28:37 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13848D99C0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:28:36 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id z6so14674434lfu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:28:35 -0700 (PDT)
+        Tue, 30 Aug 2022 05:29:21 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EA1DDA8A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:29:12 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso17329923pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:29:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=FmzIDD4Pa7+MmcfVJAwljvGaSQDMssbd6GqQpiHG2xs=;
-        b=l/RBizF6kzePEfcYyZqRb6nMeIozE3Plc6MK0BE1z9FSW6eEoTADB7lH50rjVtKVQq
-         aTqmCKBtnm6wV5Kxht5W+Ewwq+uFCzHlcHlgGiTPkWOJdSETsWYLh61oYlnGg5owVOt4
-         gTgRcao62+Di9UQGpr8ywKs/U7T16LOlJPS3gfiRUCGgQ1t+mGhWOrabo3LCkRdrlRhV
-         LGOm4OsQsPsCD1yoyrc1650LghtiO8wVRy/t2PRKP/bbZ8GUCFO4sCcWknY7m03qo9ei
-         zhMZEP9GT1iqij0GtA82IvCC+xLVClsJgUcZzL92rTS+HteejrYHKWXXwNnafYTLpewu
-         Yppg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=8hn22DiKT6B2qAXWtehvZaaB/0iSzkXCb8vTs5kctVc=;
+        b=XuvigDUjsTlew5QByyid0KyBITvNUqJn6IcfgWkQV7zAGAl3UMoMtTDzftEhlP45tn
+         FMWBDAJQivrINusQeWrFv12BU/n9lkyS+L/PWPne5BKo+U6omVTBfU60EwAZjN/tx30i
+         ULMBCCtdiOT/NlPnfEyCq+6pMn88BFC1a5Ke68UMctEY+82Ufuk35IiR4/pOHj+LY9E5
+         BKA/MC97VPtvymxh4RApDtCRokkLv/HgiWyNT/pQVoGgbzCkEPngQYQxYORjY0ddFs6e
+         lnPNT2gHKD5B3Z1xSYopZJOBWcFx+CF4GjeBxg23kJSZldS1qrGCX+RdUmQaFeuTLF5a
+         0zyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=FmzIDD4Pa7+MmcfVJAwljvGaSQDMssbd6GqQpiHG2xs=;
-        b=NDDrRz+Gyb+v+TDgbN/PV/0yB2Dpb5HaudIEms1qLNWASUSEJhFHJwIKcFgiG8nW8Z
-         l1sbtf0rKHLIt/d4Cf8up1Ef//ogeioVlGqJcF74ZzBjK0wetP3S4rEiMuJOLgi13Ngu
-         4wBAlLp071UIY9ul98tTATk3GVDMBFguTLlY2JPrTUQLnpb6xGC21b2WWDqQ1V04bz9c
-         eXVNwlAqSbP6nigTzgA2C6fwyoqFBZFO2vw08lQam0kbnbraXKtUTqGYe1IugbAJxJxT
-         sGQi3jm6WfttycOuznoZ80G+ZDXQ3R4mUpuowbvAxpcnyPqT44W1NEVqcltkm3Y2WpN0
-         aIXg==
-X-Gm-Message-State: ACgBeo0XgejvRGmIJEXgGiFEvDYsvL5UVXYv7E+dlwfgG7gOTmZZ0ALh
-        abSdBexg119wGm+F6BqdiOLJHQ==
-X-Google-Smtp-Source: AA6agR4+KSqYDLnziLnnQeT1r6I0LXNAxazi5IGv/j87wuVt+YLGrV9a67iwU0YcX+hsxrZFnxmBBw==
-X-Received: by 2002:a05:6512:10d4:b0:492:ede1:ec75 with SMTP id k20-20020a05651210d400b00492ede1ec75mr7014503lfg.146.1661851713946;
-        Tue, 30 Aug 2022 02:28:33 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id t28-20020a056512031c00b00492e4c97ca3sm85446lfp.246.2022.08.30.02.28.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 02:28:33 -0700 (PDT)
-Message-ID: <f614f968-baf4-6b4d-507e-29221e1469bc@linaro.org>
-Date:   Tue, 30 Aug 2022 12:28:32 +0300
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=8hn22DiKT6B2qAXWtehvZaaB/0iSzkXCb8vTs5kctVc=;
+        b=su3tKDqtvZfN4By6hBrwgGKu3WtbmqY2a6S1bWwfJ0iizQd9u3kZQkti6K6jdw74dg
+         EKb86kXrM4LYv/nB+0c+vcAEC4UpaLZp2XCw2XRQ9OLejGj3lXYvCLrwapGM4JZU7u0T
+         /P5P6znNHMqRPYRkfkqkGqbDnhMwqtmMD39gn+H6kPltYstE44VIwfNZAoK1zqdrECTF
+         8uFkqi1Kn6u8zCLeHoQfPDPU3uS4xEJJVprn48hhIXGPJVHmh0d2K/fIHNZzEgO731D6
+         UrGGOp0K3wVoOCOOMw8FODzpL7hSwHWKcz/o8jaHmaUq1hGvlwrZLZTKu0u5nUu6HdDL
+         IgcQ==
+X-Gm-Message-State: ACgBeo1bpqJ2ZhSv/mkonOiVGWSrXvXKMiM16WyP3ssUtRZcc1lqViQy
+        zR5464xxnFQZ9Q6CXC08Yx8=
+X-Google-Smtp-Source: AA6agR7gbfq0fmmwAEUpk3k1Mfq5iKb3ZA3FowaWJdaJ2BGUzjQPfWAwZs1PK7bMi0Wk9ZrJIY9mfg==
+X-Received: by 2002:a17:90a:4042:b0:1fa:a752:9e1c with SMTP id k2-20020a17090a404200b001faa7529e1cmr22409877pjg.117.1661851751402;
+        Tue, 30 Aug 2022 02:29:11 -0700 (PDT)
+Received: from localhost.localdomain ([118.235.15.129])
+        by smtp.gmail.com with ESMTPSA id z10-20020a17090a1fca00b001fd7cde9990sm6485500pjz.0.2022.08.30.02.29.06
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Tue, 30 Aug 2022 02:29:10 -0700 (PDT)
+From:   Levi Yun <ppbuk5246@gmail.com>
+To:     bhe@redhat.com, will@kernel.org, nramas@linux.microsoft.com,
+        thunder.leizhen@huawei.com
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kexec@lists.infradead.org, Levi Yun <ppbuk5246@gmail.com>
+Subject: [PATCH v2] arm64/kexec: Fix missing extra range for crashkres_low.
+Date:   Tue, 30 Aug 2022 18:28:39 +0900
+Message-Id: <20220830092839.3197-1-ppbuk5246@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <CAM7-yPTdihLsPjDKM-0OEszxNd8n0bgeRseiEkCsSZW-uuaRvw@mail.gmail.com>
+References: <CAM7-yPTdihLsPjDKM-0OEszxNd8n0bgeRseiEkCsSZW-uuaRvw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/5] ASoC: dt-bindings: fsl_rpmsg: Add a property to
- assign platform driver name
-Content-Language: en-US
-To:     Chancel Liu <chancel.liu@nxp.com>, lgirdwood@gmail.com,
-        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shengjiu.wang@nxp.com,
-        Xiubo.Lee@gmail.com, festevam@gmail.com, nicoleotsuka@gmail.com,
-        linuxppc-dev@lists.ozlabs.org
-References: <20220829075144.2405000-1-chancel.liu@nxp.com>
- <20220829075144.2405000-2-chancel.liu@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220829075144.2405000-2-chancel.liu@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/08/2022 10:51, Chancel Liu wrote:
-> Add a string property to assign ASoC platform driver name. It also
-> represents the rpmsg channel this sound card sits on. This property
-> can be omitted if there is only one sound card and it sits on
-> "rpmsg-audio-channel".
-> 
-> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
-> ---
->  .../devicetree/bindings/sound/fsl,rpmsg.yaml  | 34 +++++++++++++++++--
->  1 file changed, 32 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml b/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml
-> index d370c98a62c7..35e3cb9f768b 100644
-> --- a/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml
-> +++ b/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml
-> @@ -11,8 +11,11 @@ maintainers:
->  
->  description: |
->    fsl_rpmsg is a virtual audio device. Mapping to real hardware devices
-> -  are SAI, DMA controlled by Cortex M core. What we see from Linux
-> -  side is a device which provides audio service by rpmsg channel.
-> +  are SAI, MICFIL, DMA controlled by Cortex M core. What we see from
-> +  Linux side is a device which provides audio service by rpmsg channel.
-> +  We can create different sound cards which access different hardwares
-> +  such as SAI, MICFIL, .etc through building rpmsg channels between
-> +  Cortex-A and Cortex-M.
->  
->  properties:
->    compatible:
-> @@ -85,6 +88,14 @@ properties:
->        This is a boolean property. If present, the receiving function
->        will be enabled.
->  
-> +  fsl,platform:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: |
-> +      A string property to assign ASoC platform driver name. 
+Like crashk_res, Calling crash_exclude_mem_range function with
+crashk_low_res area would need extra crash_mem range too.
 
-No, this is not a property of hardware. Naming of some drivers in some
-systems does not fit DTS and bindings.
+Add one more extra cmem range slot in case of crashk_low_res is used.
 
-> It also
-> +      represents the rpmsg channel this sound card sits on. This property
-> +      can be omitted if there is only one sound card and it sits on
-> +      "rpmsg-audio-channel".
-> +
->  required:
->    - compatible
->    - model
-> @@ -107,3 +118,22 @@ examples:
->                   <&clk IMX8MN_AUDIO_PLL2_OUT>;
->          clock-names = "ipg", "mclk", "dma", "pll8k", "pll11k";
->      };
-> +
-> +  - |
-> +    #include <dt-bindings/clock/imx8mm-clock.h>
-> +
-> +    rpmsg_micfil: rpmsg_micfil {
+Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
+---
+ arch/arm64/kernel/machine_kexec_file.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+index 889951291cc0..a11a6e14ba89 100644
+--- a/arch/arm64/kernel/machine_kexec_file.c
++++ b/arch/arm64/kernel/machine_kexec_file.c
+@@ -47,7 +47,7 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
+ 	u64 i;
+ 	phys_addr_t start, end;
+ 
+-	nr_ranges = 1; /* for exclusion of crashkernel region */
++	nr_ranges = 2; /* for exclusion of crashkernel region */
+ 	for_each_mem_range(i, &start, &end)
+ 		nr_ranges++;
+ 
+-- 
+2.35.1
 
-Also: no underscores in node names.
-
-Best regards,
-Krzysztof

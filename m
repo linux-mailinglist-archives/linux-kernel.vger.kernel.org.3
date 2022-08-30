@@ -2,136 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5C3B5A7218
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE8355A7221
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:59:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiH3X4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 19:56:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
+        id S229720AbiH3X7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 19:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231828AbiH3X4U (ORCPT
+        with ESMTP id S231821AbiH3X7E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 19:56:20 -0400
-Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B3354CA2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 16:55:56 -0700 (PDT)
-Received: by mail-pl1-x649.google.com with SMTP id m15-20020a170902db0f00b001753b1c5adeso882806plx.18
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 16:55:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc;
-        bh=y3kz8obqLBonD5tHztG2UKXsESWQEw13imz9n7vKM28=;
-        b=QO4pr/OUWywfeGPew6Vl8vnqc3SYijsxKpAsnxfE5RTke1B7w5vPsYPaSlXahQSRM0
-         IFSjVWD2W8wZzhkPsUga2Qcy4LplXxzYUCdwOQa2fTzBcFfUmwDswKPc2KGBUp5hKseA
-         8jRRBhirZ1LvG1KiamPdIh/XZXfZQ4Lv6Syx6aZnoEZmL+WBGvq2MZUoSE6oKYbP7EQ0
-         hAwP/Hjnhd2/AgR1OYTOgk1cZsAulgKYVxH3dYIuLW0pTe1LMispqZh7Jq2cP4Vqm9tz
-         Jk347ukWwIPKiPZJv5FY12eMr59Ss8UKeSIGU+ss+mtyFLw51QCHcsavhOdZTEllbWE/
-         DO8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc;
-        bh=y3kz8obqLBonD5tHztG2UKXsESWQEw13imz9n7vKM28=;
-        b=QfZ8EbhwPaWO+RByqreRwuyByqRnoVFasVvTxX70xq0+GVkcs9kQSIMFJP8tdArqWS
-         1nhyRDgWRX818xBQ6LtdJvILGyXce75A6vKiOjBNBmwlhfWkmPeQORUVmB1jvLn6wcRV
-         SGi0KHmZjB/NBPN3Mr13SGNvwjJVgFjxQCEXJ7berFGd50O/xTJOZmd/UWIjhkBtcMaF
-         N8U2z6wULKZgKMpuKh93weqIGgAu50D4uUE5ZS4cmmgyNkhK8OT4vuQOGZk8kMwe59Dc
-         m8HDyw6EZtIBV7XIGVMfQQROzhog8Pwe06pkd8pSOV3OcHu3mVrNxFg1vEJ85N4BmVIp
-         aXrw==
-X-Gm-Message-State: ACgBeo3mrrLLEeOPuhHi2hcDDKixJezFqa8I319uvUX953MBBHWkEwIN
-        YX3gcRlAEVsd5Ry8sKptF2waQhvSkfo=
-X-Google-Smtp-Source: AA6agR4HYZOMjM4W62nKOMIMchdSJkN3Hvv4lk2xn8FabErsvrvhPNo3yhKmT05mKEsy59hy1iNCMgt1VDI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:e558:b0:1fb:c4b7:1a24 with SMTP id
- ei24-20020a17090ae55800b001fbc4b71a24mr18202pjb.1.1661903754875; Tue, 30 Aug
- 2022 16:55:54 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 30 Aug 2022 23:55:37 +0000
-In-Reply-To: <20220830235537.4004585-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20220830235537.4004585-1-seanjc@google.com>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830235537.4004585-10-seanjc@google.com>
-Subject: [PATCH v4 9/9] KVM: x86/mmu: explicitly check nx_hugepage in disallowed_hugepage_adjust()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Matlack <dmatlack@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Yan Zhao <yan.y.zhao@intel.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 30 Aug 2022 19:59:04 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA18C6A4A3;
+        Tue, 30 Aug 2022 16:58:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=+HJgGzdjoOCbPXQHd33i1N896ojtlMXsJVGIqbUOCQ8=; b=wLbgQIMvhs2qxhU2u+exycYzZ7
+        GhN4meGiLY2lUJcusxW0Z+E19B48T/KsvAoDqnHNoe7AG8wTN+7jMYK6DvYoy+QtHRqY02B8Hyy55
+        H92OqM7cgM4UlOwX9CwWCjMEWohnKfWEY2dz5OBAtuVPMvekxxA0H+b40eMZwftdqVwAiESOt8+hf
+        wie8TQLWt+9DB/1hsW5BPXMVfxsrH50twp90MBZL6BYZjyNM1dAnpFyHf5cN+hJ5nrnmOAgvfS5U9
+        2HLjHamkWgYN4tExun60r9dEs30pxImyjmndEZp0yrFNNJ+PY4+yu7JpYQpuhY0rvf+Xq4Un/y7km
+        ri0d60WQ==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oTB82-002arr-BT; Tue, 30 Aug 2022 23:58:46 +0000
+Message-ID: <74683697-df9f-6f8f-00eb-4bb25e1a1638@infradead.org>
+Date:   Tue, 30 Aug 2022 16:58:45 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH -next] fs/hfsplus: Fix some kernel-doc comments
+Content-Language: en-US
+To:     Yang Li <yang.lee@linux.alibaba.com>, axboe@kernel.dk
+Cc:     hch@lst.de, bvanassche@acm.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
+References: <20220830074223.20281-1-yang.lee@linux.alibaba.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220830074223.20281-1-yang.lee@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mingwei Zhang <mizhang@google.com>
 
-Explicitly check if a NX huge page is disallowed when determining if a
-page fault needs to be forced to use a smaller sized page.  KVM currently
-assumes that the NX huge page mitigation is the only scenario where KVM
-will force a shadow page instead of a huge page, and so unnecessarily
-keeps an existing shadow page instead of replacing it with a huge page.
 
-Any scenario that causes KVM to zap leaf SPTEs may result in having a SP
-that can be made huge without violating the NX huge page mitigation.
-E.g. prior to commit 5ba7c4c6d1c7 ("KVM: x86/MMU: Zap non-leaf SPTEs when
-disabling dirty logging"), KVM would keep shadow pages after disabling
-dirty logging due to a live migration being canceled, resulting in
-degraded performance due to running with 4kb pages instead of huge pages.
+On 8/30/22 00:42, Yang Li wrote:
+> Add the description of @opf and remove @op and @op_flags in
+> hfsplus_submit_bio() kernel-doc comment.
+> 
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2013
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 
-Although the dirty logging case is "fixed", that fix is coincidental,
-i.e. is an implementation detail, and there are other scenarios where KVM
-will zap leaf SPTEs.  E.g. zapping leaf SPTEs in response to a host page
-migration (mmu_notifier invalidation) to create a huge page would yield a
-similar result; KVM would see the shadow-present non-leaf SPTE and assume
-a huge page is disallowed.
 
-Fixes: b8e8c8303ff2 ("kvm: mmu: ITLB_MULTIHIT mitigation")
-Reviewed-by: Ben Gardon <bgardon@google.com>
-Reviewed-by: David Matlack <dmatlack@google.com>
-Signed-off-by: Mingwei Zhang <mizhang@google.com>
-[sean: use spte_to_child_sp(), massage changelog]
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/mmu/mmu.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
 
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 4737da767a40..d1fc087f86bf 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -3102,6 +3102,11 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
- 	    cur_level == fault->goal_level &&
- 	    is_shadow_present_pte(spte) &&
- 	    !is_large_pte(spte)) {
-+		u64 page_mask;
-+
-+		if (!spte_to_child_sp(spte)->nx_huge_page_disallowed)
-+			return;
-+
- 		/*
- 		 * A small SPTE exists for this pfn, but FNAME(fetch)
- 		 * and __direct_map would like to create a large PTE
-@@ -3109,8 +3114,8 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
- 		 * patching back for them into pfn the next 9 bits of
- 		 * the address.
- 		 */
--		u64 page_mask = KVM_PAGES_PER_HPAGE(cur_level) -
--				KVM_PAGES_PER_HPAGE(cur_level - 1);
-+		page_mask = KVM_PAGES_PER_HPAGE(cur_level) -
-+			    KVM_PAGES_PER_HPAGE(cur_level - 1);
- 		fault->pfn |= fault->gfn & page_mask;
- 		fault->goal_level--;
- 	}
+Thanks.
+
+> ---
+>  fs/hfsplus/wrapper.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/fs/hfsplus/wrapper.c b/fs/hfsplus/wrapper.c
+> index 0b791adf02e5..6202e877f459 100644
+> --- a/fs/hfsplus/wrapper.c
+> +++ b/fs/hfsplus/wrapper.c
+> @@ -30,8 +30,7 @@ struct hfsplus_wd {
+>   * @sector: block to read or write, for blocks of HFSPLUS_SECTOR_SIZE bytes
+>   * @buf: buffer for I/O
+>   * @data: output pointer for location of requested data
+> - * @op: direction of I/O
+> - * @op_flags: request op flags
+> + * @opf: operation and flags for bio
+>   *
+>   * The unit of I/O is hfsplus_min_io_size(sb), which may be bigger than
+>   * HFSPLUS_SECTOR_SIZE, and @buf must be sized accordingly. On reads
+
 -- 
-2.37.2.672.g94769d06f0-goog
-
+~Randy

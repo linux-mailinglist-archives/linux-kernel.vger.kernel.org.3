@@ -2,127 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB84C5A5BCF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:29:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58B75A5BD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:29:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiH3G2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33678 "EHLO
+        id S230122AbiH3G3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230185AbiH3G2n (ORCPT
+        with ESMTP id S230158AbiH3G3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:28:43 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2078.outbound.protection.outlook.com [40.107.20.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E117674D;
-        Mon, 29 Aug 2022 23:28:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OaLCFKDVfDZlzYwUYQV/YUjH322/k0sSIhDNYyZuo1ju571DjIEytinj5B8ERvXEtiRMYJVHRpJoJ80A4+SwT7Yhm1QYJqEVjieIGrTiSjT6IlpOyW0/TVuoDoLyumk4LiO7igt4QGnTG3K1JmyAdB2nv52FYwosa/4RF1KaTahe7ZVlyWqKXKjL6Kn3sECDi3QLKzbQoW+Q0fI80y/kM65C1EU0m+O/sreKskVS9RXyqb6MmLTSeLUjP665Ik+Mvn+A0iDZrUbcGgrPy4T9TL8QNu5dtTx1EDe63Ao4Qz0fTe/a2z3GturwiF4jCgD+7xqCiZtTm13VJNQpF9HIJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ymfPX6j+OWBEZcxVEjCrH6H9gl3THon3fAx7mHNf2jo=;
- b=PaeO/miPV17LnTXUr7taWtIsKtSjW6smBcdHo9NbnfpCvwnbNyRdlHU0KfYRmfA463wp8PrSV6ciNHOmth4mjsIAY/TNb37F7TBmtmtMeQHMG6D/B2kjWmp9cBdryQWQ/2tS/rd+WHqvHvu/tKx7+4GRwot1bgO7PeNFWUiJv4ANFlMJEpV48SXKarD7LxoaljwBFi/gcMEvrNJAMK0eTfb/7wCzlGsKbUC9fgS+gMdHpIPcEm4pxrT8uWPQOJYvalJ1kZNn0ldr/N7gXkqg7tnZr/ZFLGlTaofZ+S/NS01JnxCpQFgBjhUghURZ5sUt2QTCP7VnFg8s4pxQ5ZXtHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ymfPX6j+OWBEZcxVEjCrH6H9gl3THon3fAx7mHNf2jo=;
- b=WNY9ZGx3kL6caCprq3masGR2ZDldhyvZgxNG5KfjFaeRn7BoT3ZIEL2tcgp8cE0SjJQsTlB3KOQ94iapoaQ/pbPuQ7z0v4K1Nta3WjuO9f+7kdBw4fMcmpwhMFLdhBOS1KuVystKNTdEdAyUxkUMS4oLdcHSwNS5TxaPjPVUydk=
-Received: from GV1PR04MB9183.eurprd04.prod.outlook.com (2603:10a6:150:27::9)
- by HE1PR04MB3098.eurprd04.prod.outlook.com (2603:10a6:7:20::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Tue, 30 Aug
- 2022 06:28:27 +0000
-Received: from GV1PR04MB9183.eurprd04.prod.outlook.com
- ([fe80::28cf:2839:247c:b34e]) by GV1PR04MB9183.eurprd04.prod.outlook.com
- ([fe80::28cf:2839:247c:b34e%6]) with mapi id 15.20.5566.021; Tue, 30 Aug 2022
- 06:28:27 +0000
-From:   "S.J. Wang" <shengjiu.wang@nxp.com>
-To:     Chancel Liu <chancel.liu@nxp.com>,
-        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
-        "broonie@kernel.org" <broonie@kernel.org>,
-        "perex@perex.cz" <perex@perex.cz>,
-        "tiwai@suse.com" <tiwai@suse.com>,
-        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "Xiubo.Lee@gmail.com" <Xiubo.Lee@gmail.com>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        "nicoleotsuka@gmail.com" <nicoleotsuka@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-Subject: RE: [PATCH 1/5] ASoC: dt-bindings: fsl_rpmsg: Add a property to
- assign platform driver name
-Thread-Topic: [PATCH 1/5] ASoC: dt-bindings: fsl_rpmsg: Add a property to
- assign platform driver name
-Thread-Index: AQHYu3zGgKrj+wHzzkWzPDbVUiF1Eq3G++vw
-Date:   Tue, 30 Aug 2022 06:28:26 +0000
-Message-ID: <GV1PR04MB91839C3B94A89F235133374AE3799@GV1PR04MB9183.eurprd04.prod.outlook.com>
-References: <20220829075144.2405000-1-chancel.liu@nxp.com>
- <20220829075144.2405000-2-chancel.liu@nxp.com>
-In-Reply-To: <20220829075144.2405000-2-chancel.liu@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 3b52a81c-075d-4ae9-35c8-08da8a50d919
-x-ms-traffictypediagnostic: HE1PR04MB3098:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: PcAqEkgj1luFMWeOZBjXIFe9uRyYhyl0rrgibiV8sC28UeHRz/YCeY2NcLIx4HWmRm64EswByslWE/mCcO1ZoBn1vExtUqeKBLrrWSMUJacqPaEV2OxUnITmfOsmDae1JAil/ReP87aMDbuMxvo2unAmWPa9y5dtTfJqjn4ZWxYEXJ1SFacky38kGfIICzzHFRdqNv0sz2/hwi0T50OJ27fDeSnqXfiDeDQFyNlUdNgEFkqsdsVZ3Er7iT391m7hYGh+nG0bvGBFgStXL7OZ33IjQOpKIiPREvrhzM3hA4QQpXKWUyIhdM5HWBsp/IiPbA64kf45CIi+Is1ueUkyms7U/uUrlI2HBxt3SwAImASi04wlipE4zghWgvBjG9gEsqkYIoTfUTIGkhvn1vMKgIoq4Re0SVwgogDRO3f+NgI74Bz7Q2l0N1UyVF0fcHaA8Klv+7LQR5SwMLGnM7Snzpwz/yuQ3h3HAQ+ZPYmOrfXoMseCnrGsVcZJr6Un3oxiwQ+F0/JH8YPkLcBDY2qPqjs+imJXP6/0SolUrWEOUNLNqrX33dLKDmPPuARcPRna6uZp2XtzKRJZFKz0ahEekGlTF8ZPUOWAjn49pKPjtufB5/hhjv0whXqQsk+tJyko508ZJ7/X7paqB2u6ne6XY/9JYfSCWx0NhwjJco3nU3udNtMcgRJ8zvaBL8K30KygVNH1r8FhqDvbSE9HZZEEjpEgNf8V3RcApjR38AlBhsbAJ8qqn3atsmllqNNecpfiH28Uc84N6N076QzQbMEN5Pnmjd4+ZP4ZJyCO30lWJ+E=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9183.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(346002)(136003)(39860400002)(366004)(9686003)(38070700005)(921005)(83380400001)(186003)(2906002)(5660300002)(66946007)(64756008)(8676002)(66476007)(76116006)(66556008)(66446008)(8936002)(52536014)(55016003)(33656002)(7416002)(316002)(110136005)(71200400001)(7696005)(41300700001)(478600001)(86362001)(6506007)(26005)(122000001)(38100700002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?XJC+CgdAXwMPKFJh07LagO4mqvZu3e05fn3U5yobvnLaHL+aeaWX99kcA0tC?=
- =?us-ascii?Q?UpYWxnGB6WkYQikPsvHm3YiTO2/PTO4H/0v6Y5sCYAmXDGECZWNtGMVvCBrZ?=
- =?us-ascii?Q?6q2bM6+4V9R1GCqDx3Ont4VWtO8/XbF8uWkRtfoJnqkZpVXP47pGCJOFR3MS?=
- =?us-ascii?Q?4F4PUEAMv10qacSkTG1q5NEN3c7IdCj3FuIXByctWfo2sSE+Hg/U7HB6dZIW?=
- =?us-ascii?Q?mu6TYgf84TO4QF9HoKulGBvx3S4S7odcT9ApT2JJbfdBiaF0vlG2GF+R5CEr?=
- =?us-ascii?Q?hb1NMK4cQcxSM1ua9vDd20BAh66eD+isRTXfH5fDWgAtyZB5INZktHDw+rpj?=
- =?us-ascii?Q?nmyWJZ4G7xwNpaaHsgpWSsk8m6ywLh2s3acBpP7ayzLdKdYn/mp33L7hGviU?=
- =?us-ascii?Q?2V+Fe8WdEogomgddhfYlIzpcq2kpfKutIuNQpkhYlItW9ac9CM58CA7sanBw?=
- =?us-ascii?Q?qGbLG+FgRA3MM1bTzGtZdka+9gOBUCYoMNqvqjtX6B33KTDjfm03HEF7FJSF?=
- =?us-ascii?Q?zPbi6XPdV1LMf6f52cpa6aGr11EXcap3N7kXQ7Zf2n7TVjUO1mbw8qh0WWql?=
- =?us-ascii?Q?M8ybMfjpS7OLB/SczC66K3mp+FD/ogp1iIyiF7LouMlJMR4W5x3V9pp6LYTK?=
- =?us-ascii?Q?jXkEuJ4njJkaTHq3To1jf9Yz+NNmfJX9jpx/jtnsc4WNznprjQ4eJ/sI+JHW?=
- =?us-ascii?Q?o6O+vveloAQ6fMrfqehKDebzcj8CG1yx8wlmedizF5UQDe7LCCX1ThsXR9Ky?=
- =?us-ascii?Q?hNd0RYgGfJrp4DuFod7WDfgnYczHlOsW+nrI9MUparDU4en+7iGd7bM0TSvC?=
- =?us-ascii?Q?mRYpoemviRf9jjGrrY9EoYFUoI+qFAPXpul0VGla1SMVUOFzFaIJ97ohnoM4?=
- =?us-ascii?Q?JOlmqrkM4IVImgm9ddLTKx1B8cith1ImQSkQn7YjcTQDHF6l0GqFlutEpSO0?=
- =?us-ascii?Q?xN4U+7uIIOUUOH73XRjK5gO0fbvGw8Lc0eMujbBeNjxYr+F+dnH7fmSgwSEt?=
- =?us-ascii?Q?TPJ974f+lcG5lSXwrbjPiIERpLZIJp56ND4NvjtihtQIqR+VRduiBZw0dykd?=
- =?us-ascii?Q?eA/5t8yaVK4L8+bTMe62Iscviq4ZpYl5DV85WqG5uWsYGXEz5KonVe0RT8WV?=
- =?us-ascii?Q?10uMNvlYCMOgcz8lEKUqK4fcFwurIWZ9Nh/RREdUuJF42I1Fhft9BROx+yHo?=
- =?us-ascii?Q?jRwVB67zmwbF7xDLWAyQcqEdQjojvEXTI15YoS8EyxLRCpyWFau+MR86NwXy?=
- =?us-ascii?Q?c2X6/dGCYP1dDvcbpERIxNlds3DMsXthPYChusXNDH2VsD5CY0MGe6YDr02S?=
- =?us-ascii?Q?EU91xUrXO112mNm3UUXlQUmLPfiVQcZdJUDJQqvN83Yhh8qoNA3zF5Nqe7EW?=
- =?us-ascii?Q?QDNt28B5Lof74Fm8+ko6/9e0Uu17IM7M+5XjnYXdF1v06hD3HNpCOOcIkYq/?=
- =?us-ascii?Q?mddR6Ywe63JzbqHq2c+wWi95DynampDJ9W5pw5dDhLgAC+kWmjcTGrjYqjOk?=
- =?us-ascii?Q?mzr7oEmjyo/3B76qKhE9wyxCGOLDnNew2/C45W3iidC0bnRfN217ZgqODG+z?=
- =?us-ascii?Q?bNbE4mMX2m6xv5W0wuBcRcFWuozft+qlZgeX5NQR?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 30 Aug 2022 02:29:01 -0400
+Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA7909E0EA
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:28:52 -0700 (PDT)
+Received: from cmgw10.mail.unifiedlayer.com (unknown [10.0.90.125])
+        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id F0350100C82AE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:28:39 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id SujnojWBlCokGSujnoimol; Tue, 30 Aug 2022 06:28:39 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=c8Nu/Txl c=1 sm=1 tr=0 ts=630dae17
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=biHskzXt2R4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=mGdK1E61Nz/az3oMNW1pZ155d04/5aqM3RhgGDY14KU=; b=l1pHfrgMLmTkQBHPD+rtaf9mcl
+        58Fc2dlzwnOjttcH3yMo3dBYpGvUWoS9kO+sAixlmuYwI7ER2rzclgpP8xGdB1GJwBL+WtuXL839S
+        vRXm7mu6u1UcV0emg4OKUWChPfBwStIFde/GRP4tafjNJc6hZdafNj9RK/PQyqI3etXsbyK0V5Vdx
+        gAJR8iURju1LTc1FpZ6uuE6RwOwYkC379XP/6FQi8UvFypkBKsbgnGwKycSO7AHCisl9ZDA/j/MQ3
+        8MYe6EXA5fSObSpU52+HIHFAyn1U6ULfCzA9a6Ia1wD021QikfVUaHLWJs9/2mcgIpBmfuZ6dDw2i
+        fWWpESPA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:42420 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oSujm-000MSs-Av;
+        Tue, 30 Aug 2022 00:28:38 -0600
+Subject: Re: [PATCH 5.15 000/136] 5.15.64-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220829105804.609007228@linuxfoundation.org>
+In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <611f1074-3726-3b55-50c6-fa6768f191a2@w6rz.net>
+Date:   Mon, 29 Aug 2022 23:28:36 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: GV1PR04MB9183.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b52a81c-075d-4ae9-35c8-08da8a50d919
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Aug 2022 06:28:27.0358
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: B8xQaS0aeD9TwfjiPZ6SjunRO644zBsCzlXK9lHj9w4QqOvv7O4UIqioX8vmh8bP4iNvp52a7oFH0HIW+WrZPQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR04MB3098
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oSujm-000MSs-Av
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:42420
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,81 +93,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->=20
-> Add a string property to assign ASoC platform driver name. It also repres=
-ents
-> the rpmsg channel this sound card sits on. This property can be omitted i=
-f
-> there is only one sound card and it sits on "rpmsg-audio-channel".
->=20
-> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
-> ---
->  .../devicetree/bindings/sound/fsl,rpmsg.yaml  | 34 +++++++++++++++++--
->  1 file changed, 32 insertions(+), 2 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml
-> b/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml
-> index d370c98a62c7..35e3cb9f768b 100644
-> --- a/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml
-> +++ b/Documentation/devicetree/bindings/sound/fsl,rpmsg.yaml
-> @@ -11,8 +11,11 @@ maintainers:
->=20
->  description: |
->    fsl_rpmsg is a virtual audio device. Mapping to real hardware devices
-> -  are SAI, DMA controlled by Cortex M core. What we see from Linux
-> -  side is a device which provides audio service by rpmsg channel.
-> +  are SAI, MICFIL, DMA controlled by Cortex M core. What we see from
-> + Linux side is a device which provides audio service by rpmsg channel.
-> +  We can create different sound cards which access different hardwares
-> + such as SAI, MICFIL, .etc through building rpmsg channels between
-> + Cortex-A and Cortex-M.
->=20
->  properties:
->    compatible:
-> @@ -85,6 +88,14 @@ properties:
->        This is a boolean property. If present, the receiving function
->        will be enabled.
->=20
-> +  fsl,platform:
-> +    $ref: /schemas/types.yaml#/definitions/string
-> +    description: |
-> +      A string property to assign ASoC platform driver name. It also
-> +      represents the rpmsg channel this sound card sits on. This propert=
-y
-> +      can be omitted if there is only one sound card and it sits on
-> +      "rpmsg-audio-channel".
+On 8/29/22 3:57 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.64 release.
+> There are 136 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.64-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Please add enum to list supported strings.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Best regards
-Wang Shengjiu
-> +
->  required:
->    - compatible
->    - model
-> @@ -107,3 +118,22 @@ examples:
->                   <&clk IMX8MN_AUDIO_PLL2_OUT>;
->          clock-names =3D "ipg", "mclk", "dma", "pll8k", "pll11k";
->      };
-> +
-> +  - |
-> +    #include <dt-bindings/clock/imx8mm-clock.h>
-> +
-> +    rpmsg_micfil: rpmsg_micfil {
-> +        compatible =3D "fsl,imx8mm-rpmsg-audio";
-> +        model =3D "micfil-audio";
-> +        fsl,platform =3D "rpmsg-micfil-channel";
-> +        fsl,enable-lpa;
-> +        fsl,rpmsg-in;
-> +        clocks =3D <&clk IMX8MM_CLK_PDM_IPG>,
-> +                 <&clk IMX8MM_CLK_PDM_ROOT>,
-> +                 <&clk IMX8MM_CLK_SDMA3_ROOT>,
-> +                 <&clk IMX8MM_AUDIO_PLL1_OUT>,
-> +                 <&clk IMX8MM_AUDIO_PLL2_OUT>;
-> +        clock-names =3D "ipg", "mclk", "dma", "pll8k", "pll11k";
-> +    };
-> +
-> +...
-> --
-> 2.25.1
+Tested-by: Ron Economos <re@w6rz.net>
 

@@ -2,121 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CE35A6E65
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF76D5A6E6D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231693AbiH3UV7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 16:21:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52624 "EHLO
+        id S230212AbiH3U2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 16:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229914AbiH3UV4 (ORCPT
+        with ESMTP id S229640AbiH3U2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 16:21:56 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB8B52E46;
-        Tue, 30 Aug 2022 13:21:55 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id w28so9492908qtc.7;
-        Tue, 30 Aug 2022 13:21:55 -0700 (PDT)
+        Tue, 30 Aug 2022 16:28:01 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8347D27CC6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:27:59 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-11f0fa892aeso11291352fac.7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:27:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=GSwCSxkfswCTAr2W0z1p9wm8OPsGIVQ+vLw8r+QCbaI=;
-        b=n319MBFg0fYTSh7VP5cO10oaO8edZv/xWNrw7cy5VJI/79qfQEp9RdCxrEqW8qkiJG
-         brcnn03BWSCN55OFZOF+VAKsC8lbqcwMRTls8GozUjUDdipjjdahcGrj4OdUCrGV2xTv
-         m5Oflc3GWdKmZN21oyHOcEYrcGsrBrl0xxbYGtuNovusufG6XDfMA79gPLa2/IZTrJxq
-         qnUwiYFY3aHjJLkKTib/aIEby8FwdMMD8VcohEJ1j6Ndlj6AayluaWjbN1pH6s744ou8
-         /g+yXMBj7Nema420sJSOmode1xbhgIQehSWOY+U0GOXYTuT947QPPZXt2dsxPJSQO6fz
-         aSiQ==
+        bh=ILs+3Gk6I7yM+s5w9W2XlXLcFie3L1z8g352KV+BqGM=;
+        b=QS/UAm96K8CqO69ixyOwmxU+q3UF78G4ywHicDQH0UzEelZzizqIonli2UT+tc1MD0
+         yoyUlEZUbx+knPIGGB6jU8gv4eUosAta5byLZ6v9hZvm8mprzY7/43zxiwSYIXKHQKyU
+         D56wWVQYnwPypikBhQspsgr5ldrXNvH2oy39Tx0cC+QbD+4aM5Zvw5Jws0Y7joCaLkR0
+         I6Nd8xJnR/huWRzj1P0rMaVGkxPZRIYEdPtv8AXj5IZvv6nYVToMjTP2J5ivdzwHMSCz
+         YzMSAkUKGQBybw9X3bUKijVqrFU2/agxnYRoRCGod5i2tzQr7X9OY6uyQgUERUVBw+GQ
+         2iFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=GSwCSxkfswCTAr2W0z1p9wm8OPsGIVQ+vLw8r+QCbaI=;
-        b=HA3iBrGcY8tjAUkF9VkIQpLKZ/0z4kwVCz+YmJishqnys4KPI5fuklg7GYx3W45A+a
-         Pi9JthR/mKDrNspu9chjaJJ02YutWCWgC9Qg/cZLCqf/NIMpAyXgi69kk4SVlr37WCDk
-         zxd3Xh0q/uc9NdeWQzLRHhI45YqH+2pnmnzKN7iqZrbgrb9LObbeEMrOGHpPYnTAQJ2T
-         YBEwybkUHcZ4iOMMG0YZ3pkOAE44y5luQ8R35ECa9dYDtFooHg64hblB9AA9JyGoRoiW
-         jGioYIu0AlIH4w6N3uOAOEzibgoNqWVAg7XnnavuQuDYvStnXJ0LOBXh1ATaCkJl8nK0
-         0VYA==
-X-Gm-Message-State: ACgBeo211UXA9/kzijkZVspx5gXM/ZQP/aGyTyMOaErmscXBqhGvxEk0
-        sODUKOes4HUQrSTngkPJplWqGeC4bIy73Y8LL5A=
-X-Google-Smtp-Source: AA6agR5wtSa4e+dAhZJ/VjR9XzVzQcGJMQA0E4YnrC0fabueldGOqrkcSXmg1o/nKGytxwSARQloEsUQGHgtbRFOFXA=
-X-Received: by 2002:ac8:7f92:0:b0:344:8cd8:59a1 with SMTP id
- z18-20020ac87f92000000b003448cd859a1mr16713627qtj.384.1661890914718; Tue, 30
- Aug 2022 13:21:54 -0700 (PDT)
+        bh=ILs+3Gk6I7yM+s5w9W2XlXLcFie3L1z8g352KV+BqGM=;
+        b=fM3/V3394mSae9pce54M6dNRUzbziPGy8KwFZpA/ocxNXCuQL1L59KnLMr0ZV+5lH9
+         /gpaFMbBVutEi6GEfPY+J/+wIBvTferSjCvtqcKFZrYvUKkGP7h0Qb8lp0dnwwYknqLu
+         zNI4WwnEVMFTl4Nvwim0S7xImKqD55vhciDGvTGE6Wua2JmfdXXoHaoP4dF/0IMcXEeh
+         caeAZWnKUvxnGSXmRV2raHDhCQ5XSSNVX/caA6xiLQPOkPOsC5LTM5Swo86cDDtq70rx
+         NdA137VQyYNchnAwwvjMiR5Zr4Kobo7GkEpU+ndOxPJcr0s+lyWuA243NfhloxOwVMzN
+         Ci+g==
+X-Gm-Message-State: ACgBeo0eVGbiTNcjtpipXKGmVVNX8pSj4++/kzWA3sFxZSnB8XHGqtAE
+        izGrPSPfqirFvh2fXYGdoD4YJBoCDWpbNnMMVSAJ
+X-Google-Smtp-Source: AA6agR5GXY/SSUrrKA0f+B0gOebBUix5D+aX5TyY5xdYvfX0NMft8c+ica2iPBq+WzI+kwdMyHsXODwzMF9N6YCF8yM=
+X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
+ x13-20020a056870a78d00b0011c437bec70mr11344787oao.136.1661891278876; Tue, 30
+ Aug 2022 13:27:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1661789204.git.christophe.leroy@csgroup.eu> <CAHp75Vc5um3=gwnjoJNPxp+kbhFHT0Kp4gi1Qd+q5TL-y6-+oQ@mail.gmail.com>
-In-Reply-To: <CAHp75Vc5um3=gwnjoJNPxp+kbhFHT0Kp4gi1Qd+q5TL-y6-+oQ@mail.gmail.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 30 Aug 2022 23:21:18 +0300
-Message-ID: <CAHp75VeFbjRN7OE5MH0_bbx5aSerj+2F_vpBjRZhT3QQ+3wmng@mail.gmail.com>
-Subject: Re: [PATCH v1 0/8] gpio: Get rid of ARCH_NR_GPIOS (v1)
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+References: <20220830084124.284688-1-ye.xingchen@zte.com.cn>
+In-Reply-To: <20220830084124.284688-1-ye.xingchen@zte.com.cn>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 30 Aug 2022 16:27:48 -0400
+Message-ID: <CAHC9VhSGL7d_dSM-oLbH8wiAoms08U+53csKSET-gygk7gqrwQ@mail.gmail.com>
+Subject: Re: [PATCH linux-next] selinux: Remove the unneeded result variable
+To:     cgel.zte@gmail.com
+Cc:     stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        selinux@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 11:20 PM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
+On Tue, Aug 30, 2022 at 4:41 AM <cgel.zte@gmail.com> wrote:
 >
-> On Mon, Aug 29, 2022 at 7:17 PM Christophe Leroy
-> <christophe.leroy@csgroup.eu> wrote:
-> >
-> > Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
-> > there is no limitation on the number of GPIOs that can be allocated
-> > in the system since the allocation is fully dynamic.
-> >
-> > ARCH_NR_GPIOS is today only used in order to provide downwards
-> > gpiobase allocation from that value, while static allocation is
-> > performed upwards from 0. However that has the disadvantage of
-> > limiting the number of GPIOs that can be registered in the system.
-> >
-> > To overcome this limitation without requiring each and every
-> > platform to provide its 'best-guess' maximum number, rework the
-> > allocation to allocate from 256 upwards, allowing approx 2 millions
-> > of GPIOs.
-> >
-> > In the meantime, add a warning for drivers how are still doing
-> > static allocation, so that in the future the static allocation gets
-> > removed completely and dynamic allocation can start at base 0.
+> From: ye xingchen <ye.xingchen@zte.com.cn>
 >
-> For non-commented (by me or others) patches
-> Reviewed-by: Andy Shevchenko <andy.shevchenko!gmail.com>
+> Return the value sel_make_perm_files() directly instead of storing it
+> in another redundant variable.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  security/selinux/selinuxfs.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 
-Should be
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> For the patch 1 if you are going to address as suggested by the author
-> of the driver, you may also add my tag.
-
-
+Merged into selinux/next, thanks.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+paul-moore.com

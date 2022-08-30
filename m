@@ -2,152 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB55F5A5CDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:27:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12555A5CD0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229908AbiH3H1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:27:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41556 "EHLO
+        id S230441AbiH3HVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiH3H1v (ORCPT
+        with ESMTP id S230133AbiH3HVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:27:51 -0400
-X-Greylist: delayed 393 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 00:27:50 PDT
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D2BE9E100
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:27:50 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 5A8F55801DF;
-        Tue, 30 Aug 2022 03:21:13 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute3.internal (MEProxy); Tue, 30 Aug 2022 03:21:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1661844073; x=1661844673; bh=26pE8ggmkg
-        tQr3SPAdJrNTBLJZBDL+qDeHjv+0CKWZM=; b=nNx/iiMA6vIenqhBL2PaR8/yEC
-        ug1ymFWFeyKjENRQfPsFr2yPsxz7JEwjMYKF3a2dmh5XICnN6kl9xO+zRtt+vzMB
-        Op2BWmedtk9ruMZiwPwHgy/1XriTo9NFdWvHoefPCzmzmlbBqzxprwUkq2t97Nqa
-        nQQsKoBzZDUUrzRyYjNWTVrBTRJvRu+m7s8dxFGKoQRvn827NLAANABDMn+A6+nP
-        /4a4G3uqz4Ec7EsZMfoXsbh3wf9KV8ZotbGJ31o90EbtV4RmaQ+Muw4gvif5fY7i
-        A7ndKR80XHwMz60Mndgsne9e+02zGhYRA7YoJ6gltMgQez1rXu2wsrQxmZfQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        i56a14606.fm1; t=1661844073; x=1661844673; bh=26pE8ggmkgtQr3SPAd
-        JrNTBLJZBDL+qDeHjv+0CKWZM=; b=WzjER9xPj4EIBxerPBYULbXWV5mrji80ke
-        4waShHmv92FoL4RHwcUekLX/TbpdRQtE/1+HPlik9x+1ApzGTsKE0rneU6nsJDpd
-        LSpQn9oZsb6IYHTGfQqYJK2LxyuKk+M6+jSxB289c9/euzj/v3g/abTTPl+K76XV
-        0dM7pq3mjfpLh63ixf7M0gf2MDnQY/ZgWnTxWrB/3i5WRZzsxpLx93XEK0AMmg5M
-        JVjR42eJDdu6y3O3iPARvoBsG4UuLLSqFkl44sHpHVtVLzeyRKMeUNlR9106KofO
-        YxvXgMgsj77lwOy64trUeaTUgaWpWcpxB3YEfTwMkbOLsb2dIvgA==
-X-ME-Sender: <xms:aLoNY3cHube44ZjzyIRjh6oAQ70hjvjsuKLC729xt3rcdu075SWN8A>
-    <xme:aLoNY9MzJ9LJlBrLCK_-mfSFxLFkp4VogkJ1vHT0oyaMs6D9--Qryj4TjJoMAMSkr
-    TRAMIRIGH6yrQVUIcw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekvddguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
-    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    grrhhnugesrghrnhgusgdruggv
-X-ME-Proxy: <xmx:aLoNYwj7JGtiiV2GlZAA9uSxEoYYj36tLcWsEMfdabg03U-L0XeO_g>
-    <xmx:aLoNY49-i3gZjJnQCu-LuJwkVjdR5YwMFcF1-TpuxvnINnMBFq83UA>
-    <xmx:aLoNYzshMZF4SD5qofXc0FhMCo-85ccOt1lTJfMN48kJbtljZIQtfw>
-    <xmx:aboNY8PV0nOhd5OWmaZTNIMINI9Eoc7lB2dXy8skE7EW7rAFlMfqKfPZLVI>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 2A3CAB60083; Tue, 30 Aug 2022 03:21:12 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <63a630b7-9068-40f9-b7f7-d9a08f74ed13@www.fastmail.com>
-In-Reply-To: <CAK8P3a1PQjR2sv2rar6mFY9g4PkteAC+zgRUvnr04DETJX3K9w@mail.gmail.com>
-References: <20220818145616.3156379-1-arnd@kernel.org>
- <20220818145616.3156379-5-arnd@kernel.org>
- <CACRpkdbFkV1T+K9wKDyODkcwu=nhbV+4_JF=YTaA5ad_w4ggbw@mail.gmail.com>
- <CAK8P3a1PQjR2sv2rar6mFY9g4PkteAC+zgRUvnr04DETJX3K9w@mail.gmail.com>
-Date:   Tue, 30 Aug 2022 09:20:51 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Arnd Bergmann" <arnd@kernel.org>,
-        "Linus Walleij" <linus.walleij@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Geert Uytterhoeven" <geert+renesas@glider.be>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
-        "Ard Biesheuvel" <ardb@kernel.org>, "Sekhar Nori" <nsekhar@ti.com>,
-        "Bartosz Golaszewski" <brgl@bgdev.pl>,
-        "Shawn Guo" <shawnguo@kernel.org>,
-        "Sascha Hauer" <s.hauer@pengutronix.de>,
-        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
-        "Andrew Lunn" <andrew@lunn.ch>,
-        "Gregory Clement" <gregory.clement@bootlin.com>,
-        "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>
-Subject: [PATCH] ARM: fix XIP_KERNEL dependencies
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 30 Aug 2022 03:21:09 -0400
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D856E2D5;
+        Tue, 30 Aug 2022 00:21:08 -0700 (PDT)
+Received: by mail-qv1-f42.google.com with SMTP id q8so8079611qvr.9;
+        Tue, 30 Aug 2022 00:21:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=QOMOADjxX3AxTQL00SsYd+7QYCr6eFHbzE6U4FiL748=;
+        b=JX17LTtjcGH9EgCC/Sn8YM4CeGOUrSCV5kVO7zWqccyJAY6lqXFRbL1gev2nE7Uu30
+         jBurRZVMktqo2MA7n9Noqurl4MsGLM5Y75yPpgB3hJ7Na26MDtKl+0yT1kJp2MNBvfyG
+         tLYOkLmvKezm5RHXJAcpepWXH2cESaDTxqpOjxn1DOP/Kj7ZDbBRmepO3ltQREQlam3E
+         Vz7NeZDMZDKBvVkJa/0aKdiZ7HvwClOCMbd6XM/XAMqZGD6dNH5/cFX+1aWw5Ec8fLvx
+         laronjlFTJ1hoar2y6Ju98TnRL/ap/lvS8II48UGjkw5epPH/N6Gwi7NIKps2D00MaFl
+         h65Q==
+X-Gm-Message-State: ACgBeo2IAMk2i2zMJTWsmnh/AgfMOOMarzwVETgUDpl4luUkCuvFq65R
+        huKg5CdmiTQjhRGHdrVrDIUXs93L76jrjQ==
+X-Google-Smtp-Source: AA6agR6OqWL/6cQbJlnEWRAcb6Aic2oWVvHdEpw3gHSLtxqHZYYxa3w6efU6y3Cb3P+9rasnXbsvxQ==
+X-Received: by 2002:a05:6214:4015:b0:496:be28:62f5 with SMTP id kd21-20020a056214401500b00496be2862f5mr13740056qvb.14.1661844067098;
+        Tue, 30 Aug 2022 00:21:07 -0700 (PDT)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id u12-20020a05622a17cc00b003422c7ccbc5sm6488715qtk.59.2022.08.30.00.21.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 00:21:06 -0700 (PDT)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-33da3a391d8so252091137b3.2;
+        Tue, 30 Aug 2022 00:21:06 -0700 (PDT)
+X-Received: by 2002:a0d:d691:0:b0:340:f6e7:5654 with SMTP id
+ y139-20020a0dd691000000b00340f6e75654mr7738635ywd.502.1661844066437; Tue, 30
+ Aug 2022 00:21:06 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 30 Aug 2022 09:20:55 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVpYcV1p2rb-D=pcRut2y3o_SB1rkM+COuxbD5aCy-77w@mail.gmail.com>
+Message-ID: <CAMuHMdVpYcV1p2rb-D=pcRut2y3o_SB1rkM+COuxbD5aCy-77w@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: spi: renesas,sh-msiof: Fix
+ 'unevaluatedProperties' warnings
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi <linux-spi@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CONFIG_XIP_KERNEL does not work with any option that involves patching
-the read-only kernel .text.
+On Tue, Aug 30, 2022 at 12:03 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> With 'unevaluatedProperties' support implemented, there's a number of
+> warnings when running dtbs_check:
+>
+> arch/arm64/boot/dts/renesas/r8a77951-ulcb-kf.dtb: spi@e6e90000: Unevaluated properties are not allowed ('power-domains', 'resets' were unexpected)
+>         From schema: Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
+>
+> The main problem is that SoC DTSI's include power-domains and resets
+> property, whereas the renesas,sh-msiof.yaml has 'unevaluatedProperties:
+> false'. So just add optional power-domains and resets properties.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v1->v2
+> * Set maxItems to 1
 
-Since at least CONFIG_SMP_ON_UP is required in certain configurations,
-flip the dependency to always allow the .text patching options but make
-XIP_KERNEL have the dependency instead.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-This is a prerequisite for allowing CONFIG_ARCH_MULTIPLATFORM to
-be disabled.
+Gr{oetje,eeting}s,
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
-forgot to send this yesterday, replaces the CPU_v6 dependency patch
+                        Geert
 
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 3066ce82cffc..2d94e53037ec 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -246,7 +246,7 @@ config ARCH_MTD_XIP
- config ARM_PATCH_PHYS_VIRT
- 	bool "Patch physical to virtual translations at runtime" if EMBEDDED
- 	default y
--	depends on !XIP_KERNEL && MMU
-+	depends on MMU
- 	help
- 	  Patch phys-to-virt and virt-to-phys translation functions at
- 	  boot and module load time according to the position of the
-@@ -975,7 +975,7 @@ config SMP
- 
- config SMP_ON_UP
- 	bool "Allow booting SMP kernel on uniprocessor systems"
--	depends on SMP && !XIP_KERNEL && MMU
-+	depends on SMP && MMU
- 	default y
- 	help
- 	  SMP kernels contain instructions which fail on non-SMP processors.
-@@ -1224,7 +1224,7 @@ config THUMB2_KERNEL
- 
- config ARM_PATCH_IDIV
- 	bool "Runtime patch udiv/sdiv instructions into __aeabi_{u}idiv()"
--	depends on CPU_32v7 && !XIP_KERNEL
-+	depends on CPU_32v7
- 	default y
- 	help
- 	  The ARM compiler inserts calls to __aeabi_idiv() and
-@@ -1619,6 +1619,7 @@ endchoice
- config XIP_KERNEL
- 	bool "Kernel Execute-In-Place from ROM"
- 	depends on !ARM_LPAE && !ARCH_MULTIPLATFORM
-+	depends on !SMP_ON_UP && !ARM_PATCH_IDIV && !ARM_PATCH_PHYS_VIRT
- 	help
- 	  Execute-In-Place allows the kernel to run from non-volatile storage
- 	  directly addressable by the CPU, such as NOR flash. This saves RAM
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

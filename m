@@ -2,118 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2A8E5A58C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA48A5A58CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbiH3BCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 21:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36474 "EHLO
+        id S229691AbiH3BE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 21:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiH3BCU (ORCPT
+        with ESMTP id S229469AbiH3BEy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 21:02:20 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5109CA6C72;
-        Mon, 29 Aug 2022 18:01:54 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MGprC5xP9zKFJb;
-        Tue, 30 Aug 2022 09:00:11 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAXj45+YQ1jfxpzAA--.54680S3;
-        Tue, 30 Aug 2022 09:01:51 +0800 (CST)
-Subject: Re: [PATCH -next 1/3] md/raid10: fix improper BUG_ON() in
- raise_barrier()
-To:     John Stoffel <john@stoffel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     song@kernel.org, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20220829131502.165356-1-yukuai1@huaweicloud.com>
- <20220829131502.165356-2-yukuai1@huaweicloud.com>
- <25357.6485.659159.476926@quad.stoffel.home>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <d46162b3-cd7c-cbc5-0ded-bb62a8a03ca5@huaweicloud.com>
-Date:   Tue, 30 Aug 2022 09:01:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Mon, 29 Aug 2022 21:04:54 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6D972BDA;
+        Mon, 29 Aug 2022 18:04:47 -0700 (PDT)
+Received: from dread.disaster.area (pa49-195-4-169.pa.nsw.optusnet.com.au [49.195.4.169])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 1884D62D9C7;
+        Tue, 30 Aug 2022 11:04:43 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oSpgI-001XKz-SX; Tue, 30 Aug 2022 11:04:42 +1000
+Date:   Tue, 30 Aug 2022 11:04:42 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        trondmy@hammerspace.com, neilb@suse.de, viro@zeniv.linux.org.uk,
+        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
+        lczerner@redhat.com, jack@suse.cz, brauner@kernel.org,
+        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ceph@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
+        Colin Walters <walters@verbum.org>
+Subject: Re: [PATCH v3 1/7] iversion: update comments with info about atime
+ updates
+Message-ID: <20220830010442.GW3600936@dread.disaster.area>
+References: <20220826214703.134870-1-jlayton@kernel.org>
+ <20220826214703.134870-2-jlayton@kernel.org>
+ <20220829075651.GS3600936@dread.disaster.area>
+ <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <25357.6485.659159.476926@quad.stoffel.home>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAXj45+YQ1jfxpzAA--.54680S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7trWftry5tF15XFy8Zw4rAFb_yoW8Xw1rpa
-        9Fga1jya1DCwn0yw1DXr4xuFyrKayDKay0y347Ww1kZFyqqFyfGF47Jr95Wr1v9rs3J3W0
-        vay5Ka9agF1xtaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkC14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UU
-        UUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=630d622e
+        a=FOdsZBbW/tHyAhIVFJ0pRA==:117 a=FOdsZBbW/tHyAhIVFJ0pRA==:17
+        a=kj9zAlcOel0A:10 a=biHskzXt2R4A:10 a=zVjiu_gZAAAA:8 a=SEtKQCMJAAAA:8
+        a=7-415B0cAAAA:8 a=VwQbUJbxAAAA:8 a=qmMTymrXjTok30Q9744A:9
+        a=CjuIK1q_8ugA:10 a=DXoJjCrjhysRDS3qLJti:22 a=kyTSok1ft720jgMXX5-3:22
+        a=biEYGPWJfzWAr4FL6Ov7:22 a=AjGcO6oz07-iQ99wixmX:22
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, John
+On Mon, Aug 29, 2022 at 06:39:04AM -0400, Jeff Layton wrote:
+> On Mon, 2022-08-29 at 17:56 +1000, Dave Chinner wrote:
+> > On Fri, Aug 26, 2022 at 05:46:57PM -0400, Jeff Layton wrote:
+> > > The i_version field in the kernel has had different semantics over
+> > > the decades, but we're now proposing to expose it to userland via
+> > > statx. This means that we need a clear, consistent definition of
+> > > what it means and when it should change.
+> > > 
+> > > Update the comments in iversion.h to describe how a conformant
+> > > i_version implementation is expected to behave. This definition
+> > > suits the current users of i_version (NFSv4 and IMA), but is
+> > > loose enough to allow for a wide range of possible implementations.
+> > > 
+> > > Cc: Colin Walters <walters@verbum.org>
+> > > Cc: NeilBrown <neilb@suse.de>
+> > > Cc: Trond Myklebust <trondmy@hammerspace.com>
+> > > Cc: Dave Chinner <david@fromorbit.com>
+> > > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.17134712694961326033@noble.neil.brown.name/#t
+> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
+> > > ---
+> > >  include/linux/iversion.h | 23 +++++++++++++++++++++--
+> > >  1 file changed, 21 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
+> > > index 3bfebde5a1a6..45e93e1b4edc 100644
+> > > --- a/include/linux/iversion.h
+> > > +++ b/include/linux/iversion.h
+> > > @@ -9,8 +9,19 @@
+> > >   * ---------------------------
+> > >   * The change attribute (i_version) is mandated by NFSv4 and is mostly for
+> > >   * knfsd, but is also used for other purposes (e.g. IMA). The i_version must
+> > > - * appear different to observers if there was a change to the inode's data or
+> > > - * metadata since it was last queried.
+> > > + * appear different to observers if there was an explicit change to the inode's
+> > > + * data or metadata since it was last queried.
+> > > + *
+> > > + * An explicit change is one that would ordinarily result in a change to the
+> > > + * inode status change time (aka ctime). The version must appear to change, even
+> > > + * if the ctime does not (since the whole point is to avoid missing updates due
+> > > + * to timestamp granularity). If POSIX mandates that the ctime must change due
+> > > + * to an operation, then the i_version counter must be incremented as well.
+> > > + *
+> > > + * A conformant implementation is allowed to increment the counter in other
+> > > + * cases, but this is not optimal. NFSv4 and IMA both use this value to determine
+> > > + * whether caches are up to date. Spurious increments can cause false cache
+> > > + * invalidations.
+> > 
+> > "not optimal", but never-the-less allowed - that's "unspecified
+> > behaviour" if I've ever seen it. How is userspace supposed to
+> > know/deal with this?
+> > 
+> > Indeed, this loophole clause doesn't exist in the man pages that
+> > define what statx.stx_ino_version means. The man pages explicitly
+> > define that stx_ino_version only ever changes when stx_ctime
+> > changes.
+> > 
+> 
+> We can fix the manpage to make this more clear.
+> 
+> > IOWs, the behaviour userspace developers are going to expect *does
+> > not include* stx_ino_version changing it more often than ctime is
+> > changed. Hence a kernel iversion implementation that bumps the
+> > counter more often than ctime changes *is not conformant with the
+> > statx version counter specification*. IOWs, we can't export such
+> > behaviour to userspace *ever* - it is a non-conformant
+> > implementation.
+> > 
+> 
+> Nonsense. The statx version counter specification is *whatever we decide
+> to make it*.
 
-ÔÚ 2022/08/30 3:53, John Stoffel Ð´µÀ:
->>>>>> "Yu" == Yu Kuai <yukuai1@huaweicloud.com> writes:
-> 
-> Yu> From: Yu Kuai <yukuai3@huawei.com>
-> Yu> 'conf->barrier' is protected by 'conf->resync_lock', reading
-> Yu> 'conf->barrier' without holding the lock is wrong.
-> 
-> Yu> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> Yu> ---
-> Yu>  drivers/md/raid10.c | 2 +-
-> Yu>  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Yu> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> Yu> index 9117fcdee1be..b70c207f7932 100644
-> Yu> --- a/drivers/md/raid10.c
-> Yu> +++ b/drivers/md/raid10.c
-> Yu> @@ -930,8 +930,8 @@ static void flush_pending_writes(struct r10conf *conf)
->   
-> Yu>  static void raise_barrier(struct r10conf *conf, int force)
-> Yu>  {
-> Yu> -	BUG_ON(force && !conf->barrier);
-> Yu>  	spin_lock_irq(&conf->resync_lock);
-> Yu> +	BUG_ON(force && !conf->barrier);
-> 
-> I don't like this BUG_ON() at all, why are you crashing the system
-> here instead of just doing a simple WARN_ONCE() instead?  Is there
-> anything the user can do to get into this situation on their own, or
-> does it really signify a logic error in the code?  If so, why are you
-> killing the system?
+Yes, but...
 
-I'm not sure why to use the BUG_ON() here. I just noticed that
-'conf->barrier' is read without holding 'resync_lock', and BUG_ON() can
-be triggered false positive.
+> If we define it to allow for spurious version bumps, then
+> these implementations would be conformant.
 
-Thanks,
-Kuai
-> 
-> 
->   
-> Yu>  	/* Wait until no block IO is waiting (unless 'force') */
-> Yu>  	wait_event_lock_irq(conf->wait_barrier, force || !conf->nr_waiting,
-> Yu> --
-> Yu> 2.31.1
-> 
-> 
-> .
-> 
+... that's _not how you defined stx_ino_version to behave_!
 
+> Given that you can't tell what or how much changed in the inode whenever
+> the value changes, allowing it to be bumped on non-observable changes is
+> ok and the counter is still useful. When you see it change you need to
+> go stat/read/getxattr etc, to see what actually happened anyway.
+
+IDGI. If this is acceptible, then you're forcing userspace into
+"store and filter" implementations as the only viable method of
+using the change notification usefully.
+
+That means atime is just another attribute in the "store and
+filter" algorithm, so if this is how we define stx_ino_version
+behaviour, why carve out an explicit exception for atime?
+
+> Most applications won't be interested in every possible explicit change
+> that can happen to an inode. It's likely these applications would check
+> the parts of the inode they're interested in, and then go back to
+> waiting for the next bump if the change wasn't significant to them.
+
+Yes, that is exactly my point.
+
+You make the argument that we must not bump iversion in certain
+situations (atime) because it will cause spurious cache
+invalidations, but then say it is OK to bump it in others regardless
+of the fact that it will cause spurious cache invalidations. And you
+justify this latter behaviour by saying it is up to the application
+to avoid spurious invalidations by using "store and filter"
+algorithms.
+
+If the application has to store state and filter changes indicated
+by stx_ino_version changing, then by definition *it must be capable
+of filtering iversion bumps as a result of atime changes*.
+
+The iversion exception carved out for atime requires the application
+to implement "store and filter" algorithms only if it needs to care
+about atime changes. The "invisible bump" exception carved out here
+*requires* applications to implement "store and filter" algorithms
+to filter out invisible bumps.
+
+Hence if we combine both these behaviours, atime bumping iversion
+appears to userspace exactly the same as "invisible bump occurred,
+followed by access that changes atime".  IOWs, userspace cannot tell the
+difference between a filesystem implementation that doesn't bump
+iversion on atime but has invisible bump, and a filesystem that
+bumps iversion on atime updates and so it always needs to filter
+atime changes if it doesn't care about them.
+
+Hence if stx_ino_version can have invisible bumps, it makes no
+difference to userspace if atime updates bump iversion or not. They
+will have to filter atime if they don't care about it, and they have
+to store the new stx_ino_version every time they filter out an
+invisible bump that doesn't change anything their filters care
+about (e.g. atime!).
+
+At which point I have to ask: if we are expecting userspace to
+filter out invisible iversion bumps because that's allowed,
+conformant behaviour, then why aren't we requiring both the NFS
+server and IMA applications to filter spurious iversion bumps as
+well?
+
+> > Hence I think anything that bumps iversion outside the bounds of the
+> > statx definition should be declared as such:
+> > 
+> > "Non-conformant iversion implementations:
+> > 	- MUST NOT be exported by statx() to userspace
+> > 	- MUST be -tolerated- by kernel internal applications that
+> > 	  use iversion for their own purposes."
+> > 
+> 
+> I think this is more strict than is needed. An implementation that bumps
+> this value more often than is necessary is still useful.
+
+I never said that non-conformant implementations aren't useful. What
+I said is they aren't conformant with the provided definition of
+stx_ino_version, and as a result we should not allow them to be
+exposed to userspace.
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

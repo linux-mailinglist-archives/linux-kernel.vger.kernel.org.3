@@ -2,133 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 710405A6021
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:04:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDFD5A6027
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:04:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiH3KDf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:03:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S230024AbiH3KEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiH3KCc (ORCPT
+        with ESMTP id S230020AbiH3KCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:02:32 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7FC26D2771;
-        Tue, 30 Aug 2022 03:00:45 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 04EFC23A;
-        Tue, 30 Aug 2022 03:00:51 -0700 (PDT)
-Received: from [10.57.15.35] (unknown [10.57.15.35])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 01D6D3F766;
-        Tue, 30 Aug 2022 03:00:42 -0700 (PDT)
-Message-ID: <ebf02244-abd7-150a-7f41-54d766c39f02@arm.com>
-Date:   Tue, 30 Aug 2022 11:00:41 +0100
+        Tue, 30 Aug 2022 06:02:41 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F95D7CD8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:00:51 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id k18so4382349lji.13
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:00:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=qDIhNkRJpY0zIqLvOcBvjOAemNokXD1mo0hvIa/wH90=;
+        b=OQ3mmQBYHhAd69bT5cNYFcJRUHQKdp+s3J1NohDx42YDP64HWn8wMsR/vGNXS0tKlL
+         ys35MdecxfKaoP1cNLmwIop5D8GDktAERCdO2WMfPq8OCR4cMj4fkUI6HBb18KcfbbcR
+         2Y7S4xQoWjvc9KWs+fmI4n9g5SzYeT7BlQapS51INbWRngIFDv7LsMQVeGMJ1EoIUGaL
+         xWQ5PPxXLcO/2kr32Y30tZJkQLVA9keDmgvB1pXm29WXG0r6arXCasEu2v2xcuKpHb2n
+         AhiS1JbK8NDJx5VmbUaOj8wU8MesgIWT+6clHY4Lvyq2ptBNGmxwLHCcAv/GZwlIYsqq
+         iPew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=qDIhNkRJpY0zIqLvOcBvjOAemNokXD1mo0hvIa/wH90=;
+        b=1v5iE0EXgeESpGU6eLXUpugwtePKte6W+4/u2OsK220YOAPZjSJojmZtKm/NnI3FSo
+         HbBVauOrkhf4OtXzjvasU8TNTXKu0pdl75sAfyTviVu1YPr3UaDMrtlcqzgewe22wBwX
+         QCACv17qCMthrxHF2pKyeJjFBFIZ8G3/hEH88FUEImoCJn1g8yjQBlupyBI8CTr+00tQ
+         JjhtWRYtJgcw3Q7xgcbBQo7LCXbm2YkGR02uUSxxpFIh4SAOPh0MUxvbFEkSglSUf+r1
+         8IdRW2dIb1qHd9iAxgrkO3H5C6wUJNgHDS4Dv9uozWMhOVGCgR/WDwVKo2Frwef9q4vz
+         fEoQ==
+X-Gm-Message-State: ACgBeo2alN9j4cmRuVSsebk1vf1EgG9zrovcLKKI8HxzM0K7ZTo5SPeg
+        PUKm3imLFR9SP2xYjmX9SERbGg==
+X-Google-Smtp-Source: AA6agR4V48JSDjw5vfjVGos0ruqfM/zbNheM3UU9XdSMDVN2inT8jBGsiWxBdE4dINkH3wb+jmBe6w==
+X-Received: by 2002:a05:651c:b2c:b0:25e:6e68:ff51 with SMTP id b44-20020a05651c0b2c00b0025e6e68ff51mr6563202ljr.349.1661853649602;
+        Tue, 30 Aug 2022 03:00:49 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id e7-20020a05651236c700b004947a57722esm140010lfs.26.2022.08.30.03.00.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 03:00:48 -0700 (PDT)
+Message-ID: <ab678365-fb69-6aa5-75b2-865cfbdf0dea@linaro.org>
+Date:   Tue, 30 Aug 2022 13:00:47 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 3/3] x86/perf: Assert all platform event flags are within
- PERF_EVENT_FLAG_ARCH
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v4 3/4] dt-bindings: arm: qcom: Add Xiaomi Poco F1 EBBG
+ variant bindings
 Content-Language: en-US
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org
-References: <20220829065507.177781-1-anshuman.khandual@arm.com>
- <20220829065507.177781-4-anshuman.khandual@arm.com>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <20220829065507.177781-4-anshuman.khandual@arm.com>
+To:     Joel Selvaraj <joelselvaraj.oss@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20220828205723.20834-1-joelselvaraj.oss@gmail.com>
+ <20220828205723.20834-4-joelselvaraj.oss@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220828205723.20834-4-joelselvaraj.oss@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 29/08/2022 07:55, Anshuman Khandual wrote:
-> Ensure all platform specific event flags are within PERF_EVENT_FLAG_ARCH.
+On 28/08/2022 23:57, Joel Selvaraj wrote:
+> Add documentation for "xiaomi,beryllium-ebbg" device.
 > 
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-> Cc: Jiri Olsa <jolsa@kernel.org>
-> Cc: Namhyung Kim <namhyung@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: x86@kernel.org
-> Cc: linux-perf-users@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
->  arch/x86/events/amd/core.c |  2 ++
->  arch/x86/events/core.c     | 16 ++++++++++++++++
->  2 files changed, 18 insertions(+)
-> 
-> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-> index 9ac3718410ce..7aee514285ba 100644
-> --- a/arch/x86/events/amd/core.c
-> +++ b/arch/x86/events/amd/core.c
-> @@ -1469,6 +1469,8 @@ __init int amd_pmu_init(void)
->  	else
->  		memcpy(hw_cache_event_ids, amd_hw_cache_event_ids, sizeof(hw_cache_event_ids));
->  
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_PAIR);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_AMD_BRS);
->  	return 0;
->  }
->  
-> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
-> index f969410d0c90..98fe13f50632 100644
-> --- a/arch/x86/events/core.c
-> +++ b/arch/x86/events/core.c
-> @@ -2083,6 +2083,22 @@ static int __init init_hw_perf_events(void)
->  
->  	pr_info("Performance Events: ");
->  
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_PEBS_LDLAT);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_PEBS_ST);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_PEBS_ST_HSW);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_PEBS_LD_HSW);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_PEBS_NA_HSW);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_EXCL);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_DYNAMIC);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_EXCL_ACCT);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_AUTO_RELOAD);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_LARGE_PEBS);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_PEBS_VIA_PT);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_LBR_SELECT);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_TOPDOWN);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_PEBS_STLAT);
-> +	BUILD_BUG_ON(~PERF_EVENT_FLAG_ARCH & PERF_X86_EVENT_PEBS_LAT_HYBRID);
-> +
+> Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
 
-Hi Anshuman,
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-You can use static_assert() and then put them in the global scope. If
-they're next to the definition of these it will be clearer and easier to
-maintain.
 
-Also, I'm assuming that this now causes a build failure, so I would
-include the change to expand PERF_EVENT_FLAG_ARCH as the first commit in
-the set. That way we can see at least one proposed solution.
-
-Thanks
-James
-
->  	switch (boot_cpu_data.x86_vendor) {
->  	case X86_VENDOR_INTEL:
->  		err = intel_pmu_init();
+Best regards,
+Krzysztof

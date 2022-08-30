@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 753055A653D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C721D5A6540
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:42:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbiH3Nla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42526 "EHLO
+        id S230452AbiH3Nlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiH3Nkm (ORCPT
+        with ESMTP id S229838AbiH3NlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:40:42 -0400
+        Tue, 30 Aug 2022 09:41:12 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4691636E9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:39:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280EDFBA74
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:39:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661866726;
+        s=mimecast20190719; t=1661866729;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=B8QZ/KHlRT8W4KVpHmuA6d5aH8+Un6bo3HvywtrZ76A=;
-        b=H/SmPjpXAyOU6ml1neJkCgqd5Mz4TX+IMw6+Cbkx/JHnrpfOVKH1LaKT5iz7ceGWphta44
-        pZsafLH18BFFFsLfPGBDQMFgKDFgYnnOfGASyXxf8DRiy1YyrYLOOS6rflQUnVIkrUs0wu
-        Viozg1bRuNEie9LGXBMl/+z2HYoPz9w=
+        bh=ppxBvNBPIPgVe6xpKz5mkcug3vVW5FWLaNZHpD9dNCo=;
+        b=DNi1jelaH/WXDmKBATsZp+fqMSnhChl5q5k4EU0a+GBahL19n4nNvVnh1ERncSfHGUcrMq
+        aikTCziEZaZA1EPR4cM0KrwxpHX+7zus0pPvcxdUsqniCnJdUi0YG2GKnS/VVz0UgGf/72
+        jtqtzPPx9gyV2zF0YjGcNMihFu7c5eA=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-610-bcWM08KqNAOCUtVLAyOhMA-1; Tue, 30 Aug 2022 09:38:42 -0400
-X-MC-Unique: bcWM08KqNAOCUtVLAyOhMA-1
+ us-mta-650-zY9Dk9rHMvWObm9oPkwpVg-1; Tue, 30 Aug 2022 09:38:45 -0400
+X-MC-Unique: zY9Dk9rHMvWObm9oPkwpVg-1
 Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D937285A58B;
-        Tue, 30 Aug 2022 13:38:41 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A2F75185A7B2;
+        Tue, 30 Aug 2022 13:38:44 +0000 (UTC)
 Received: from fedora.redhat.com (unknown [10.40.194.232])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 31FF52166B26;
-        Tue, 30 Aug 2022 13:38:40 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 25EDA2166B26;
+        Tue, 30 Aug 2022 13:38:42 +0000 (UTC)
 From:   Vitaly Kuznetsov <vkuznets@redhat.com>
 To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>
 Cc:     Sean Christopherson <seanjc@google.com>,
@@ -47,9 +47,9 @@ Cc:     Sean Christopherson <seanjc@google.com>,
         Yuan Yao <yuan.yao@linux.intel.com>,
         Maxim Levitsky <mlevitsk@redhat.com>,
         linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v6 24/33] KVM: VMX: Move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering out of setup_vmcs_config()
-Date:   Tue, 30 Aug 2022 15:37:28 +0200
-Message-Id: <20220830133737.1539624-25-vkuznets@redhat.com>
+Subject: [PATCH v6 25/33] KVM: VMX: Add missing VMEXIT controls to vmcs_config
+Date:   Tue, 30 Aug 2022 15:37:29 +0200
+Message-Id: <20220830133737.1539624-26-vkuznets@redhat.com>
 In-Reply-To: <20220830133737.1539624-1-vkuznets@redhat.com>
 References: <20220830133737.1539624-1-vkuznets@redhat.com>
 MIME-Version: 1.0
@@ -67,56 +67,54 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 As a preparation to reusing the result of setup_vmcs_config() in
-nested VMX MSR setup, move CPU_BASED_CR8_{LOAD,STORE}_EXITING filtering
-to vmx_exec_control().
+nested VMX MSR setup, add the VMEXIT controls which KVM doesn't
+use but supports for nVMX to KVM_OPT_VMX_VM_EXIT_CONTROLS and
+filter them out in vmx_vmexit_ctrl().
 
 No functional change intended.
 
 Reviewed-by: Jim Mattson <jmattson@google.com>
 Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/vmx.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 7 +++++++
+ arch/x86/kvm/vmx/vmx.h | 3 +++
+ 2 files changed, 10 insertions(+)
 
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 9caed775b211..2e0deac5570f 100644
+index 2e0deac5570f..779377380399 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2556,11 +2556,6 @@ static __init int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- 				MSR_IA32_VMX_PROCBASED_CTLS,
- 				&_cpu_based_exec_control))
- 		return -EIO;
--#ifdef CONFIG_X86_64
--	if (_cpu_based_exec_control & CPU_BASED_TPR_SHADOW)
--		_cpu_based_exec_control &= ~CPU_BASED_CR8_LOAD_EXITING &
--					   ~CPU_BASED_CR8_STORE_EXITING;
--#endif
- 	if (_cpu_based_exec_control & CPU_BASED_ACTIVATE_SECONDARY_CONTROLS) {
- 		if (adjust_vmx_controls(KVM_REQUIRED_VMX_SECONDARY_VM_EXEC_CONTROL,
- 					KVM_OPTIONAL_VMX_SECONDARY_VM_EXEC_CONTROL,
-@@ -4331,13 +4326,17 @@ static u32 vmx_exec_control(struct vcpu_vmx *vmx)
- 	if (vmx->vcpu.arch.switch_db_regs & KVM_DEBUGREG_WONT_EXIT)
- 		exec_control &= ~CPU_BASED_MOV_DR_EXITING;
+@@ -4279,6 +4279,13 @@ static u32 vmx_vmexit_ctrl(void)
+ {
+ 	u32 vmexit_ctrl = vmcs_config.vmexit_ctrl;
  
--	if (!cpu_need_tpr_shadow(&vmx->vcpu)) {
-+	if (!cpu_need_tpr_shadow(&vmx->vcpu))
- 		exec_control &= ~CPU_BASED_TPR_SHADOW;
++	/*
++	 * Not used by KVM and never set in vmcs01 or vmcs02, but emulated for
++	 * nested virtualization and thus allowed to be set in vmcs12.
++	 */
++	vmexit_ctrl &= ~(VM_EXIT_SAVE_IA32_PAT | VM_EXIT_SAVE_IA32_EFER |
++			 VM_EXIT_SAVE_VMX_PREEMPTION_TIMER);
 +
- #ifdef CONFIG_X86_64
-+	if (exec_control & CPU_BASED_TPR_SHADOW)
-+		exec_control &= ~(CPU_BASED_CR8_LOAD_EXITING |
-+				  CPU_BASED_CR8_STORE_EXITING);
-+	else
- 		exec_control |= CPU_BASED_CR8_STORE_EXITING |
- 				CPU_BASED_CR8_LOAD_EXITING;
+ 	if (vmx_pt_mode_is_system())
+ 		vmexit_ctrl &= ~(VM_EXIT_PT_CONCEAL_PIP |
+ 				 VM_EXIT_CLEAR_IA32_RTIT_CTL);
+diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
+index e927d35bece5..200a17ca9406 100644
+--- a/arch/x86/kvm/vmx/vmx.h
++++ b/arch/x86/kvm/vmx/vmx.h
+@@ -508,7 +508,10 @@ static inline u8 vmx_get_rvi(void)
  #endif
--	}
- 	if (!enable_ept)
- 		exec_control |= CPU_BASED_CR3_STORE_EXITING |
- 				CPU_BASED_CR3_LOAD_EXITING  |
+ #define KVM_OPTIONAL_VMX_VM_EXIT_CONTROLS				\
+ 	      (VM_EXIT_LOAD_IA32_PERF_GLOBAL_CTRL |			\
++	       VM_EXIT_SAVE_IA32_PAT |					\
+ 	       VM_EXIT_LOAD_IA32_PAT |					\
++	       VM_EXIT_SAVE_IA32_EFER |					\
++	       VM_EXIT_SAVE_VMX_PREEMPTION_TIMER |			\
+ 	       VM_EXIT_LOAD_IA32_EFER |					\
+ 	       VM_EXIT_CLEAR_BNDCFGS |					\
+ 	       VM_EXIT_PT_CONCEAL_PIP |					\
 -- 
 2.37.2
 

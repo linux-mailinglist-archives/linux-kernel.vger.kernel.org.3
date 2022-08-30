@@ -2,197 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52DF5A6C49
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F615A6C4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiH3Se6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34830 "EHLO
+        id S231293AbiH3SfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiH3Se4 (ORCPT
+        with ESMTP id S231124AbiH3SfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:34:56 -0400
-Received: from p3plwbeout25-05.prod.phx3.secureserver.net (p3plsmtp25-05-2.prod.phx3.secureserver.net [216.69.139.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B5463A9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:34:51 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.145])
-        by :WBEOUT: with ESMTP
-        id T64WoYqP8w3ohT64XoyIRm; Tue, 30 Aug 2022 11:34:49 -0700
-X-CMAE-Analysis: v=2.4 cv=OruKdwzt c=1 sm=1 tr=0 ts=630e584a
- a=7e6w4QD8YWtpVJ/7+iiidw==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=biHskzXt2R4A:10
- a=sHY0xHeC1OU4nCuA0NUA:9 a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19 a=QEXdDO2ut3YA:10
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  T64WoYqP8w3oh
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
-        by smtp07.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1oT64V-00087N-MX; Tue, 30 Aug 2022 19:34:48 +0100
-Message-ID: <ab006c5e-1729-3e46-0daa-0df43a05a88b@squashfs.org.uk>
-Date:   Tue, 30 Aug 2022 19:34:44 +0100
+        Tue, 30 Aug 2022 14:35:01 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD5D6338
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:34:56 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id z6so16713241lfu.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:34:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=2qc4z4IniWo5S8Bjp3Lb04VkKR2XhFXi6h1hRVoeddw=;
+        b=qpMHDsaE+ARKwZPkRz6IRLDlJ7VtqId5wp+4T6HGUEbCLJsbF5YP9gHCCdt9inih7s
+         x8l6nXDAC9uWxI0rfem6ZOjMPmaIDBNy1GFefYAJz4QDhBT74NLhoZ0om1hKm08q7VHh
+         +phR+Z/nkhWVZCFxk+/utrxnT2P+5pLMmEj510hC3Pvnqn7Bv1ecUW8ccMR7wnQvVHCm
+         +9LykdEJTVS+39K0q97h0JuywbBdhsqtAgUL37dCHDHkoAnOwEFb4ZlPz5/5ZvJzXdRW
+         ZeXFcYvmCqQW0rFb+cqoxg1K3p/yDdTIL/MyYcDrekEvdSAT31IAuNgSQKHDOKJXMVlk
+         3F6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=2qc4z4IniWo5S8Bjp3Lb04VkKR2XhFXi6h1hRVoeddw=;
+        b=HoROMw5xQKw86GdChuLWUwe4867oRYTAQ8G3Cq2p+IZH3WI1lVbR7k08gkGi2iL3Uu
+         /zD40kdaSuFIeu+Bzd04On+T77k1lTZNxqP73VwmKhfacGE9SEkM4NT0LIMO0hLm158R
+         CIv4x8RxjyEbknocyTdD2kvU6Nu8ZbZy2tIXZDYCo2+Jw4zfg3vhykxV+EJJtOJfXN5c
+         2omxJeCPCLmKDKNnaq6HFFvxUxJdEEVRvQ42wubF+sFgoMP1w332hvAWjzz1oQWmplVs
+         3h7NYuE1Fg1Do+sfWqpHcf/fHn/3tk+m0B95nIb6IybjzBPn3R0GRW31Z76IyW/Z0q5H
+         XqvQ==
+X-Gm-Message-State: ACgBeo1qYkzxyYzAGu2X0v8xPvNZlxxQPsfcIkkuylYzNFaK4fhgiLN/
+        C+C/UcVLBUtTSuPGpCjNIGoM5Q==
+X-Google-Smtp-Source: AA6agR4/olU/KNlq60S9dpcH9lGfvx1IyF/SOa/kzAEpuENf6xMvHJWfCxVaAYu+ZS8TKwbsWS/wbw==
+X-Received: by 2002:a05:6512:3f14:b0:47d:e011:f19b with SMTP id y20-20020a0565123f1400b0047de011f19bmr7603468lfa.427.1661884494655;
+        Tue, 30 Aug 2022 11:34:54 -0700 (PDT)
+Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id 11-20020ac25f0b000000b004945f2de7ebsm1224892lfq.262.2022.08.30.11.34.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 11:34:52 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-clk@vger.kernel.org, Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <snawrocki@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Subject: [GIT PULL] clk: samsung: for v6.1
+Date:   Tue, 30 Aug 2022 21:34:48 +0300
+Message-Id: <20220830183448.18997-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: ping //Re: [PATCH v2 0/2] squashfs: Add the mount parameter
- "threads="
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-To:     Xiaoming Ni <nixiaoming@huawei.com>, linux-kernel@vger.kernel.org
-Cc:     wangle6@huawei.com, yi.zhang@huawei.com, wangbing6@huawei.com,
-        zhongjubin@huawei.com, chenjianguo3@huawei.com
-References: <20220815031100.75243-1-nixiaoming@huawei.com>
- <20220816010052.15764-1-nixiaoming@huawei.com>
- <8d139f03-7845-9c96-fffc-74fdf8b5d78d@huawei.com>
- <60b24133-234f-858b-8e71-e183fe72d2bb@squashfs.org.uk>
- <9c5bddc3-fc93-d76a-1163-0278c8d31dc5@huawei.com>
- <74fb0469-e593-ed0e-3f9b-5ec535969c78@squashfs.org.uk>
-In-Reply-To: <74fb0469-e593-ed0e-3f9b-5ec535969c78@squashfs.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfMnjqqWvUchMU7D9tqUf6XmIy4S0N1qK+voEl2lbcBIdPnQFrPucremb01hU7q0odlq6aXrj/u1PckkRdwb8FAQLlDk+F6OOYjYTQNjZ7WZeOXmmpzpA
- RfywJQ9BlneS3JTD1jvS6McmKRxe1vgjt3Ri1O7tUz1K+fi8E2YelRobzYzocoI1illQZgb57qI7n4I2gtFdgaijmuut4Wf1lNg=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 19:08, Phillip Lougher wrote:
-> On 30/08/2022 14:38, Xiaoming Ni wrote:
->> On 2022/8/29 7:18, Phillip Lougher wrote:
+Hi Stephen,
 
->>> As regards points 1 - 3, personally I would add a default kernel
->>> configuration option that keeps the existing behaviour, build time
->>> selectable only, no additional mount time options.  Then a
->>> kernel configuration option that allows the different decompressors
->>> to be selected at mount time, but which always builds all the
->>> decompressors.  This will avoid the silliness of point 2, and
->> Would it be better to allow flexible selection of decompression mode 
->> combinations?
-> 
-> I told you I don't like that (*).  I also told you I want the default 
-> behaviour to be the current behaviour.
-> 
-> Feel free to disagree, but that isn't a good way to get your patch
-> reviewed or accepted by me.
-> 
-> Cheers
-> 
-> Phillip
-> 
-> (*) Adding options to select the decompressor at mount time, but,
->      also allowing only 1 - 2 decompressors to be built is a waste of
->      time.  It has the effect of giving something with one hand and
->      taking it alway with the other.  Build the lot, this also
->      keeps it simple.
-> 
-> 
+Samsung clocks from a new tree. I hope we can meet on some Linux conference for
+a key signing. :)
 
-It also splatters super.c with #ifdef CONFIG lines.
+Best regards,
+Krzysztof
 
-phillip@phoenix:/external/stripe/linux/fs/squashfs$ grep "CONFIG_" super.c
-#ifdef CONFIG_SQUASHFS_DECOMP_SINGLE
-#ifdef CONFIG_SQUASHFS_DECOMP_MULTI
-#ifdef CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU
-#ifdef CONFIG_SQUASHFS_DECOMP_SINGLE
-#ifdef CONFIG_SQUASHFS_DECOMP_MULTI
-#ifdef CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU
-#ifdef CONFIG_SQUASHFS_DECOMP_DEFAULT_SINGLE
-#elif defined(CONFIG_SQUASHFS_DECOMP_DEFAULT_MULTI)
-#elif defined(CONFIG_SQUASHFS_DECOMP_DEFAULT_PERCPU)
 
-Or
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
 
-static int squashfs_parse_param_threads(const char *str, struct 
-squashfs_mount_opts *opts)
-{
-         unsigned long num;
-         int ret;
-#ifdef CONFIG_SQUASHFS_DECOMP_SINGLE
-         if (strcmp(str, "single") == 0) {
-                 opts->thread_ops = &squashfs_decompressor_single;
-                 return 0;
-         }
-#endif
-#ifdef CONFIG_SQUASHFS_DECOMP_MULTI
-         if (strcmp(str, "multi") == 0) {
-                 opts->thread_ops = &squashfs_decompressor_multi;
-                 return 0;
-         }
-#endif
-#ifdef CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU
-         if (strcmp(str, "percpu") == 0) {
-                 opts->thread_ops = &squashfs_decompressor_percpu;
-                 return 0;
-         }
-#endif
-         ret = kstrtoul(str, 0, &num);
-         if (ret != 0 || num == 0)
-                 return -EINVAL;
-#ifdef CONFIG_SQUASHFS_DECOMP_SINGLE
-         if (num == 1) {
-                 opts->thread_ops = &squashfs_decompressor_single;
-                 return 0;
-         }
-#endif
-#ifdef CONFIG_SQUASHFS_DECOMP_MULTI
-         opts->thread_ops = &squashfs_decompressor_multi;
-         if (num > opts->thread_ops->max_decompressors())
-                 num = opts->thread_ops->max_decompressors();
-         opts->thread_num = (int)num;
-         return 0;
-#else
-         return -EINVAL;
-#endif
-}
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
 
-SNIP
+are available in the Git repository at:
 
-static int squashfs_show_options(struct seq_file *s, struct dentry *root)
-{
-         struct super_block *sb = root->d_sb;
-         struct squashfs_sb_info *msblk = sb->s_fs_info;
+  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git tags/samsung-clk-6.1
 
-         if (msblk->panic_on_errors)
-                 seq_puts(s, ",errors=panic");
-         else
-                 seq_puts(s, ",errors=continue");
+for you to fetch changes up to ef96c458888fa2a329b14efc7991530f645fbddb:
 
-#ifdef CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU
-         /*
-          * thread=percpu and thread=<number> have different 
-configuration effects.
-          * the parameters need to be treated differently when they are 
-displayed.
-          */
-         if (msblk->thread_ops == &squashfs_decompressor_percpu) {
-                 seq_puts(s, ",threads=percpu");
-                 return 0;
-         }
-#endif
-         seq_printf(s, ",threads=%u", msblk->max_thread_num);
-         return 0;
-}
+  clk: samsung: MAINTAINERS: add Krzysztof Kozlowski (2022-08-24 16:10:22 +0300)
 
-static int squashfs_init_fs_context(struct fs_context *fc)
-{
-         struct squashfs_mount_opts *opts;
+----------------------------------------------------------------
+Samsung SoC clock drivers changes for 6.1
 
-         opts = kzalloc(sizeof(*opts), GFP_KERNEL);
-         if (!opts)
-                 return -ENOMEM;
+1. Exynos7885: add FSYS, TREX and MFC clock controllers.
+2. Exynos850: add IS and AUD (audio) clock controllers with bindings.
+3. ExynosAutov9: add FSYS clock controllers with bindings.
+4. ExynosAutov9: correct clock IDs in bindings of Peric 0 and 1 clock
+   controllers, due to duplicated entries.  This is an acceptable ABI
+   break: recently developed/added platform so without legacies, acked
+   by known users/developers.
+5. ExynosAutov9: add few missing Peric 0/1 gates.
+6. ExynosAutov9: correct register offsets of few Peric 0/1 clocks.
+7. Minor code improvements (use of_device_get_match_data() helper, code
+   style).
+8. Add Krzysztof Kozlowski as co-maintainer of Samsung SoC clocks, as he
+   already maintainers that architecture/platform.
 
-#ifdef CONFIG_SQUASHFS_DECOMP_DEFAULT_SINGLE
-         opts->thread_ops = &squashfs_decompressor_single;
-#elif defined(CONFIG_SQUASHFS_DECOMP_DEFAULT_MULTI)
-         opts->thread_ops = &squashfs_decompressor_multi,
-#elif defined(CONFIG_SQUASHFS_DECOMP_DEFAULT_PERCPU)
-         opts->thread_ops = &squashfs_decompressor_percpu;
-#endif
+----------------------------------------------------------------
+Chanho Park (8):
+      dt-bindings: clock: exynosautov9: correct clock numbering of peric0/c1
+      dt-bindings: clock: exynosautov9: add fys0 clock definitions
+      dt-bindings: clock: exynosautov9: add fsys1 clock definitions
+      dt-bindings: clock: exynosautov9: add schema for cmu_fsys0/1
+      clk: samsung: exynosautov9: add missing gate clks for peric0/c1
+      clk: samsung: exynosautov9: correct register offsets of peric0/c1
+      clk: samsung: exynosautov9: add fsys0 clock support
+      clk: samsung: exynosautov9: add fsys1 clock support
 
+David Virag (2):
+      clk: samsung: exynos7885: Implement CMU_FSYS domain
+      clk: samsung: exynos7885: Add TREX clocks
+
+Krzysztof Kozlowski (2):
+      Merge branch 'for-v6.0/samsung-clk-dt-bindings' into next/clk
+      clk: samsung: MAINTAINERS: add Krzysztof Kozlowski
+
+Minghao Chi (CGEL ZTE) (1):
+      clk: samsung: exynos-clkout: Use of_device_get_match_data()
+
+Sam Protsenko (7):
+      dt-bindings: clock: exynos850: Add Exynos850 CMU_AUD
+      dt-bindings: clock: exynos850: Add Exynos850 CMU_IS
+      dt-bindings: clock: exynos850: Add Exynos850 CMU_MFCMSCL
+      clk: samsung: exynos850: Style fixes
+      clk: samsung: exynos850: Implement CMU_AUD domain
+      clk: samsung: exynos850: Implement CMU_IS domain
+      clk: samsung: exynos850: Implement CMU_MFCMSCL domain
+
+ .../bindings/clock/samsung,exynos850-clock.yaml    |  69 +++
+ .../bindings/clock/samsung,exynosautov9-clock.yaml |  44 ++
+ MAINTAINERS                                        |   2 +
+ drivers/clk/samsung/clk-exynos-clkout.c            |   6 +-
+ drivers/clk/samsung/clk-exynos7885.c               | 207 ++++++-
+ drivers/clk/samsung/clk-exynos850.c                | 682 ++++++++++++++++++++-
+ drivers/clk/samsung/clk-exynosautov9.c             | 401 +++++++++++-
+ include/dt-bindings/clock/exynos850.h              | 136 +++-
+ include/dt-bindings/clock/samsung,exynosautov9.h   | 128 +++-
+ 9 files changed, 1620 insertions(+), 55 deletions(-)

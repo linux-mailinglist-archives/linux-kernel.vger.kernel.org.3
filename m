@@ -2,52 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31CBA5A6847
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:22:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 454B35A684D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiH3QWS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:22:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38446 "EHLO
+        id S229674AbiH3QXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbiH3QVz (ORCPT
+        with ESMTP id S230429AbiH3QXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:21:55 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E3931037D0;
-        Tue, 30 Aug 2022 09:21:05 -0700 (PDT)
+        Tue, 30 Aug 2022 12:23:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90375107C73;
+        Tue, 30 Aug 2022 09:22:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E4749B8168D;
-        Tue, 30 Aug 2022 16:20:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 802ECC433C1;
-        Tue, 30 Aug 2022 16:20:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 28AD3616EB;
+        Tue, 30 Aug 2022 16:22:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05BFBC433D6;
+        Tue, 30 Aug 2022 16:22:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661876457;
-        bh=k9h6tnmcoRayevbYWoC/2+lCcp4bU+a356Iu+VIdT3U=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=VjA6eHDv4UYBFcvi5IrpT8RO2Z7WsxBGJMQf2Feon5k/I0L1POv0clnczwTwJcfj+
-         QQFy8ECmUi4az+Kst/85l6wNSZdVhyGUpd5n3Jd2h6nAA7oWHykIdqlc1LyUlO7+ku
-         DZRn8w1F6Zk4/Fm8PGkTSkiOWvl+qnkWaZuMzXjkhGwTBLY0CFswGeBDFhMCNvKUfz
-         nKz5Odo1x8DdJjx9cy/ITwMO+yXFzifnwcdYuGvyF+42+MPhekidIpapPOp73rampq
-         iIWT7iHIMI+PCGhg8UTa0Rz8thBuJxJ3/lRS5iihZ0jUYjleXQRwTImF2hAjsfjDi+
-         yWxJmz1Q2Aj4Q==
-Date:   Tue, 30 Aug 2022 11:20:56 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Rajvi Jingar <rajvi.jingar@linux.intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        David Box <david.e.box@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: Re: [RESEND PATCH v3 1/2] PCI/PM: refactor pci_pm_suspend_noirq()
-Message-ID: <20220830162056.GA106242@bhelgaas>
+        s=k20201202; t=1661876567;
+        bh=l4ucqBG2hqOlX8Vixl+x14COoo99j5jqCteFncWM5SM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=iNi5FwP0B9QTyzMqptHji6XP/P/oDrGKZxbM9Kz82YVzZeypyd3VsXoSGaGS0IRDQ
+         H1c4LI4cj9qPPPntUNgW+N6ZsJQCdyFqxdkcj5dE6ILeEQieQFeQsFD/m3BrHq4GaF
+         yhNo+2JCIEk6At/7/Vzy3w/XBpHIOVu2maiOGrEPe4O7S4byy0q1e6MLESeSkpmt6/
+         8v3lvZeOCJ7mUwz28DV3Hcaql43g5WycbgK10tqZYWLot9ZQo23XS3Of8vw2imU613
+         3q2RZEo9SvYtUem1LQ5pWTnfQ1F372eVIuaNDg/Y/Bp0xE0Xz3VqL7CPYma8sBNhBW
+         ehvlEPpVWN5nA==
+Date:   Tue, 30 Aug 2022 18:22:44 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        rcu <rcu@vger.kernel.org>,
+        Vineeth Pillai <vineeth@bitbyteword.org>
+Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
+ fixes
+Message-ID: <20220830162244.GA73392@lothringen>
+References: <20220819204857.3066329-1-joel@joelfernandes.org>
+ <20220829134045.GA54589@lothringen>
+ <1f7dd31b-f4d0-5c1c-ce28-c27f75c17f05@joelfernandes.org>
+ <20220829194622.GA58291@lothringen>
+ <CAEXW_YS593n8Gget+REaD-c8vT8Ht_AzOY0kXA_uc674LOyvVw@mail.gmail.com>
+ <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220830105324.GA71266@lothringen>
+ <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220830160316.GC71266@lothringen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830161741.GA105724@bhelgaas>
+In-Reply-To: <20220830160316.GC71266@lothringen>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,13 +70,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 11:17:43AM -0500, Bjorn Helgaas wrote:
-> On Tue, Aug 30, 2022 at 01:44:43PM +0200, Rafael J. Wysocki wrote:
-> > On Tue, Aug 30, 2022 at 12:49 PM Rajvi Jingar
-
-> > >  v1->v2: no change
-> > >  v2->v3: no change
+On Tue, Aug 30, 2022 at 06:03:16PM +0200, Frederic Weisbecker wrote:
+> On Tue, Aug 30, 2022 at 04:43:43AM -0700, Paul E. McKenney wrote:
+> > On Tue, Aug 30, 2022 at 12:53:24PM +0200, Frederic Weisbecker wrote:
+> > > On Mon, Aug 29, 2022 at 01:42:02PM -0700, Paul E. McKenney wrote:
+> > > > On Mon, Aug 29, 2022 at 04:36:40PM -0400, Joel Fernandes wrote:
+> > > > > On Mon, Aug 29, 2022 at 3:46 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+> > > > > > On Mon, Aug 29, 2022 at 12:45:40PM -0400, Joel Fernandes wrote:
+> > > > > > > On 8/29/2022 9:40 AM, Frederic Weisbecker wrote:
+> > > > 
+> > > > [ . .  . ]
+> > > > 
+> > > > > > > > 2) NOCB implies performance issues.
+> > > > > > >
+> > > > > > > Which kinds of? There is slightly worse boot times, but I'm guessing that's do
+> > > > > > > with the extra scheduling overhead of the extra threads which is usually not a
+> > > > > > > problem except that RCU is used in the critical path of boot up (on ChromeOS).
+> > > > > >
+> > > > > > I never measured it myself but executing callbacks on another CPUs, with
+> > > > > > context switches and locking can only involve significant performance issues if callbacks
+> > > > > > are frequent. So it's a tradeoff between power and performance.
+> > > > > 
+> > > > > In my testing of benchmarks on real systems with 8-16 CPUs, the
+> > > > > performance hit is down in the noise. It is possible though that maybe
+> > > > > one can write a non-realistic synthetic test to force the performance
+> > > > > issues, but I've not seen it in the real world. Maybe on
+> > > > > networking-heavy servers with lots of cores, you'll see it but their
+> > > > > batteries if any would be pretty big :-).
+> > > > 
+> > > > To Frederic's point, if you have enough servers, even a 1% decrease in
+> > > > power consumption is a very big deal.  ;-)
+> > > 
+> > > The world has enough servers, for that matters ;-)
+> > 
+> > True enough!  Now you need only demonstrate that call_rcu_lazy() for
+> > !rcu_nocbs servers would actually deliver that 1%.  ;-)
 > 
-> Why are we bumping the version numbers if there's truly no change?
+> Well, !rcu_nocbs is not only used by server but also by pretty much
+> everything else, except android IIUC. I can't really measure the whole
+> world but I don't see how the idleness of a server/router/desktop/embedded/rt/hpc
+> device differs from the idleness of an android device.
+> 
+> But ok I'll try to measure that.
 
-Sorry, ignore this question; I see that patch 2/2 is changing.
+Although who knows, may be some periodic file operation while idle are specific
+to Android. I'll try to trace lazy callbacks while idle and the number of grace
+periods associated.
+
+

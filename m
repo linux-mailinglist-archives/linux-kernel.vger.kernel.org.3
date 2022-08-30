@@ -2,141 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40BE55A704D
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA885A704E
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229808AbiH3WCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 18:02:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
+        id S231760AbiH3WCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 18:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231959AbiH3WCY (ORCPT
+        with ESMTP id S232195AbiH3WC0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:02:24 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4E290817
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:58:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661896719; x=1693432719;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0QchS3pToVSk2fYaF5BA3KmAYs9eoRF9CtFUbxdGHBw=;
-  b=AX1+gRhejoK5ncibeDGERIInK75BDrT58U1rHdz7sfKij459BrcxGF+b
-   MUuWo/YshSeHIfK72vg6QBHUholVK8OnWyDPxSgopF2mjfoQM43gxoHqk
-   4+7UwIeoM3COjtQI5s5fjCyQE5e8tg4uG4NdjmfBzZMXXkeQup9U+j6wt
-   8cG4z+Z/3WVYQG0BlnYHVR9UOb5QV3m9M1/7FqlEaWg3quJ4ms19yvlQL
-   WPJzFNOArF7zNDSImBzqolVyqUt6B4cXwmBHFUT9OWERaxftrwHPQCVUx
-   y5CFO6ByYMrcRa2NqUWz3iI6T2hrPB781TOQc7WsDpxNR+tCoa9iP73TE
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296093117"
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="296093117"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 14:58:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="562819004"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Aug 2022 14:58:34 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oT9Fh-0000fG-1R;
-        Tue, 30 Aug 2022 21:58:33 +0000
-Date:   Wed, 31 Aug 2022 05:58:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     wuchi <wuchi.zero@gmail.com>, paul@paul-moore.com,
-        eparis@redhat.com
-Cc:     kbuild-all@lists.01.org, linux-audit@redhat.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] audit: remove obvious unnecessary header files
-Message-ID: <202208310549.y7u0iX8g-lkp@intel.com>
-References: <20220830105001.68478-1-wuchi.zero@gmail.com>
+        Tue, 30 Aug 2022 18:02:26 -0400
+Received: from mail-ot1-f41.google.com (mail-ot1-f41.google.com [209.85.210.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D66D91D20;
+        Tue, 30 Aug 2022 14:59:04 -0700 (PDT)
+Received: by mail-ot1-f41.google.com with SMTP id l5-20020a05683004a500b0063707ff8244so9043250otd.12;
+        Tue, 30 Aug 2022 14:59:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=c/mrE4x9g0huZBo1ugVDt1ad905oGNnLQIQ5LBb4CBI=;
+        b=NcIY6NkzNR74thJGbz+oCMiBavT+cCKGawax5DpLKQxtN7H3xhFv07setxTnm401ll
+         1oWy0MSoQIurLcr+K9RTlz5zIaaI6npQ3SBRr4uImwLC0sMUiLRkC0jiSN9h4jpKP1oX
+         LVSx0kAiskotCG53EUfAv1tTanE6DCsP6EYOc/ehbPgNCJp4wwvIBTheMzN6jm2E56eA
+         itLLAzYquzxDukbY+NC33F72CyvUPSkahV2EvyLTgFryZo32rlwY0RQzo7VCX8njstzI
+         4x+3gkfUpsD7fJsI1U09RkNyrxWaZXqpAGDsR14b8zPC3Zg73sbMH9RfrXVIjO0I3xhY
+         fn/Q==
+X-Gm-Message-State: ACgBeo0dLTfoQW3ZjJawrmN/UztJUH7iNN89bjDPumdDp0oaZhynXXpm
+        Rlz9JRYbqDXqVp1oOkCUFCE/GWvFNw==
+X-Google-Smtp-Source: AA6agR71tq++21E81nS1qjOGVLtVmMpvSKqybPuf6VKvptEt5YSJ3AZQMb63n+WeA2kCVWWehZ1y8w==
+X-Received: by 2002:a05:6830:929:b0:63b:25ba:dfe4 with SMTP id v41-20020a056830092900b0063b25badfe4mr6463836ott.311.1661896743283;
+        Tue, 30 Aug 2022 14:59:03 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id z7-20020a056870e30700b0011e4893127bsm8804950oad.38.2022.08.30.14.59.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 14:59:02 -0700 (PDT)
+Received: (nullmailer pid 2162196 invoked by uid 1000);
+        Tue, 30 Aug 2022 21:59:00 -0000
+Date:   Tue, 30 Aug 2022 16:59:00 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Conor Dooley <mail@conchuod.ie>
+Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Sagar Kadam <sagar.kadam@sifive.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
+Subject: Re: [PATCH 1/2] dt-bindings: riscv: sifive-l2: add a PolarFire SoC
+ compatible
+Message-ID: <20220830215900.GA2162133-robh@kernel.org>
+References: <20220825180417.1259360-1-mail@conchuod.ie>
+ <20220825180417.1259360-2-mail@conchuod.ie>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830105001.68478-1-wuchi.zero@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220825180417.1259360-2-mail@conchuod.ie>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi wuchi,
+On Thu, 25 Aug 2022 19:04:17 +0100, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> The l2 cache on PolarFire SoC is cross between that of the fu540 and
+> the fu740. It has the extra interrupt from the fu740 but the lower
+> number of cache-sets. Add a specific compatible to avoid the likes
+> of:
+> 
+> mpfs-polarberry.dtb: cache-controller@2010000: interrupts: [[1], [3], [4], [2]] is too long
+> 
+> Fixes: 34fc9cc3aebe ("riscv: dts: microchip: correct L2 cache interrupts")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  .../bindings/riscv/sifive-l2-cache.yaml       | 79 ++++++++++++-------
+>  1 file changed, 49 insertions(+), 30 deletions(-)
+> 
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on pcmoore-audit/next]
-[also build test ERROR on linus/master v6.0-rc3 next-20220830]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/wuchi/audit-remove-obvious-unnecessary-header-files/20220830-185249
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
-config: arm-randconfig-r015-20220830 (https://download.01.org/0day-ci/archive/20220831/202208310549.y7u0iX8g-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f693f8ef00782656e1a94129e11611d410914905
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review wuchi/audit-remove-obvious-unnecessary-header-files/20220830-185249
-        git checkout f693f8ef00782656e1a94129e11611d410914905
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/prefetch.h:15,
-                    from arch/arm/include/asm/atomic.h:12,
-                    from include/linux/atomic.h:7,
-                    from include/asm-generic/bitops/lock.h:5,
-                    from arch/arm/include/asm/bitops.h:245,
-                    from include/linux/bitops.h:67,
-                    from include/linux/log2.h:12,
-                    from include/asm-generic/div64.h:55,
-                    from arch/arm/include/asm/div64.h:107,
-                    from include/linux/math.h:6,
-                    from include/linux/math64.h:6,
-                    from include/linux/time64.h:5,
-                    from include/linux/restart_block.h:10,
-                    from include/linux/thread_info.h:14,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:78,
-                    from include/linux/spinlock.h:55,
-                    from include/linux/wait.h:9,
-                    from include/linux/wait_bit.h:8,
-                    from include/linux/fs.h:6,
-                    from kernel/auditsc.c:36:
-   kernel/auditsc.c: In function 'audit_seccomp':
->> arch/arm/include/asm/processor.h:90:47: error: implicit declaration of function 'task_stack_page'; did you mean 'task_stack_vm_area'? [-Werror=implicit-function-declaration]
-      90 |         ((struct pt_regs *)(THREAD_START_SP + task_stack_page(p)) - 1)
-         |                                               ^~~~~~~~~~~~~~~
-   arch/arm/include/asm/processor.h:92:25: note: in expansion of macro 'task_pt_regs'
-      92 | #define KSTK_EIP(tsk)   task_pt_regs(tsk)->ARM_pc
-         |                         ^~~~~~~~~~~~
-   kernel/auditsc.c:2987:47: note: in expansion of macro 'KSTK_EIP'
-    2987 |                          in_compat_syscall(), KSTK_EIP(current), code);
-         |                                               ^~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +90 arch/arm/include/asm/processor.h
-
-^1da177e4c3f41 include/asm-arm/processor.h Linus Torvalds 2005-04-16  88  
-815d5ec86eb8d5 include/asm-arm/processor.h Al Viro        2006-01-12  89  #define task_pt_regs(p) \
-32d39a9355780b include/asm-arm/processor.h Al Viro        2006-01-12 @90  	((struct pt_regs *)(THREAD_START_SP + task_stack_page(p)) - 1)
-815d5ec86eb8d5 include/asm-arm/processor.h Al Viro        2006-01-12  91  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Rob Herring <robh@kernel.org>

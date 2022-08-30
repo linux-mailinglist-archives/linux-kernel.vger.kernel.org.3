@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BA35A5AE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4B75A5AE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbiH3Es6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 00:48:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
+        id S229722AbiH3Etc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 00:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiH3Esx (ORCPT
+        with ESMTP id S229437AbiH3Et3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 00:48:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3858CAE22D;
-        Mon, 29 Aug 2022 21:48:50 -0700 (PDT)
+        Tue, 30 Aug 2022 00:49:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E7DADCE3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:49:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9599C61231;
-        Tue, 30 Aug 2022 04:48:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E41C433C1;
-        Tue, 30 Aug 2022 04:48:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CA19DB8161C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 04:49:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04247C433C1;
+        Tue, 30 Aug 2022 04:49:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661834929;
-        bh=zX1NN0m+kuHbiVw/vJt8nv2cDsPm1F+9+El9H/9IgbU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dUVF2+5SOda/PRZwwEadbecDju2R5FubkdwKO5tPXn0BsCq3b518zBz4M0fJZ0+FP
-         A2WTVob0K/t4rYf+9dio2MzYTGWH+gUg1SZG1FhJ1Jr6ZgvkJXsKnVmHYmK4qqY2eI
-         d9IJWsXgDt/Bzg/ShHjy1OBXnIeYw3vt5Vh5Yt2GScHBH02JiIcrruNarIP83em5ym
-         9rPrr5fIfOhhvD1oRoaMVWgQ793XTrXywiIWYCBmDpz8WZb8J1qkLASLBDxOxDgFAL
-         MOy34LJ/aeCaOZK6fO00VzokQPZUDlvwcQgIpEv8JDcN9L6T9Yw7R0eOjmtsVIvdf8
-         Uhh/8w4m48kuw==
-Date:   Mon, 29 Aug 2022 21:48:46 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     shaozhengchao <shaozhengchao@huawei.com>
-Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
-        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
-        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>
-Subject: Re: [PATCH net-next 0/3] net: sched: add other statistics when
- calling qdisc_drop()
-Message-ID: <20220829214846.3fbb41b1@kernel.org>
-In-Reply-To: <3bee0773-dc81-79b8-bddd-852141e3258c@huawei.com>
-References: <20220825032943.34778-1-shaozhengchao@huawei.com>
-        <20220826194052.7978b101@kernel.org>
-        <3bee0773-dc81-79b8-bddd-852141e3258c@huawei.com>
+        s=k20201202; t=1661834965;
+        bh=MX3HxKSSop3rjgdhjGuG13nF1e38sAvQKoCTUvhyoj8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t9Ngg8Oz+9ub/LTUoxB5A7w2yb5j3iCV11c37OUcfd0/dKaWglX5MTcpxH1kRb0JB
+         FJwpEb10EalJ8DWnYiNoZN08vesNBzBybRy8O163m9h4g224XJEypOdeZKmF1Q3rtJ
+         KMMeTaksT20lG1YvTK/DVPf3b+OxgZr02HHMasVDYNsHSxdgbfzfWuyATTA54TutZE
+         xfey/PuiLBe6AkcCLxJg4Ou/pfnFpkP9IcOjkVRy/PIaV4VfPXa/fyxkh59NjH1vZ0
+         XBKci6P28xMu6BvoV9Gl1vz2uI3hgB07IbYE1cFgnYJ1nlh99/ZQNZlXDgrMLw79C+
+         Z0ZR84HTHNRMg==
+Date:   Tue, 30 Aug 2022 10:19:20 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Bard Liao <yung-chuan.liao@linux.intel.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: Re: [PATCH 00/11] soundwire: register cleanups
+Message-ID: <Yw2W0GYriUZIE2k6@matsya>
+References: <20220823053846.2684635-1-yung-chuan.liao@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823053846.2684635-1-yung-chuan.liao@linux.intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -59,20 +54,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 27 Aug 2022 11:16:53 +0800 shaozhengchao wrote:
-> On 2022/8/27 10:40, Jakub Kicinski wrote:
-> > On Thu, 25 Aug 2022 11:29:40 +0800 Zhengchao Shao wrote:  
-> >> According to the description, "other" should be added when calling
-> >> qdisc_drop() to discard packets.  
-> > 
-> > The fact that an old copy & pasted comment says something is not
-> > in itself a sufficient justification to make code changes.
-> > 
-> > qdisc_drop() already counts drops, duplicating the same information
-> > in another place seems like a waste of CPU cycles.  
-> 
-> Hi Jakub:
-> 	Thank you for your reply. It seems more appropriate to delete the other 
-> variable, if it is unused?
+On 23-08-22, 13:38, Bard Liao wrote:
+> Clean-up and reorder/regroup SoundWire SHIM registers.
 
-Yes, removing it SGTM.
+The series does not apply on sdw-next. I have already applied and pushed
+IDA series, so I guess it needs rebase on that
+
+-- 
+~Vinod

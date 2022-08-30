@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B045A5977
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 04:35:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5E95A597C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 04:42:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiH3CfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 22:35:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54970 "EHLO
+        id S229984AbiH3CmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 22:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbiH3CfD (ORCPT
+        with ESMTP id S229824AbiH3CmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 22:35:03 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA95D11A2F
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 19:34:59 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MGrsg2T1dzlWJy;
-        Tue, 30 Aug 2022 10:31:35 +0800 (CST)
-Received: from [10.174.177.76] (10.174.177.76) by
- canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 10:34:57 +0800
-Subject: Re: [PATCH 6/8] hugetlb: add vma based lock for pmd sharing
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-CC:     Muchun Song <songmuchun@bytedance.com>,
-        David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Prakash Sangappa <prakash.sangappa@oracle.com>,
-        James Houghton <jthoughton@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Ray Fucillo <Ray.Fucillo@intersystems.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
-References: <20220824175757.20590-1-mike.kravetz@oracle.com>
- <20220824175757.20590-7-mike.kravetz@oracle.com>
- <47cc90bf-d616-5004-555d-b3d7e9b09bd1@huawei.com> <Yw08j5m62is7kqSg@monkey>
-From:   Miaohe Lin <linmiaohe@huawei.com>
-Message-ID: <33ed8bff-97f4-16c0-e4cb-fec18ff843c0@huawei.com>
-Date:   Tue, 30 Aug 2022 10:34:56 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.0
+        Mon, 29 Aug 2022 22:42:14 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F7F7A74F
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 19:42:13 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id p7so2556186lfu.3
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 19:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=p1rCUVVOx3EtRRRfoxbwmNUBHiId3GOW3+wZvEDaYcY=;
+        b=TYlpK7Cdl6vprclxB7keOnBZeV1p1z/gL/XVk9MveYIetBsLqBLhQStTg7EblQLiik
+         k1Ml9TiGc0fd3etLqxNriyETRIg5IVd+bS+zXwVnj2aRpIekJX96LwX34HT3RcA4BTuw
+         JHdOvwPRA1qnqGoxL1pH7pyqNT3bgG88I5C0zT87Cn86oJKhzdd7XQEsVS4mpZ2vRTRC
+         umOYmytqjl91gpEABkiabJkC9Luz8jltpl9ulang/vonNqfxT6kgadCNoj83yTXVj3Tf
+         1S3/sUvi2uSKMod9Jw20vtL5I/sj6+Z8LZRf2fpJNFUJwGQqbooK+6bcZscs0IwLXl0s
+         5+Jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=p1rCUVVOx3EtRRRfoxbwmNUBHiId3GOW3+wZvEDaYcY=;
+        b=hAlNgjKucyynxgRmCxCaH0bqjGhDhsWF84Y+PXBoymUxnpG4d3mtRLMZ9OcOnQQddz
+         GuvAltjqu6yO3fTV3+gnLySYhYeJ20AugC8Mmc3RIrHnAj9gn4LDzQWBKeSrIMQ7jiM2
+         6v+t+NORvZ8vbZBGArgHD/0PwAht+ogaGJcjszwtf+GN9JSb6qmcKehCwEVOMF/fXq+g
+         f45OZpjVW+Hu28qanUAPuug509fdbVaALgjQwIYYaHCfkkHSRUXDJHbGVFtR03nrG3AY
+         Tnp0dyYzu/rG2Ki1B1t0A57x76qaSI+YyPF/765C8NUrfDVoL6wmcUukO91MERbsvMlc
+         5sxw==
+X-Gm-Message-State: ACgBeo1Uql02SLDIQhYuJSIuDGY+Ct2vAI1vRAa72qKqIxYwCROE200p
+        cHAIsfm48em1YqxfUEl0fdmmg0OssIOlnb3+Rfx7DTWJ4fU=
+X-Google-Smtp-Source: AA6agR5+jUF2Ty12b+dONg9eCjxYohU7sTVXvt6uHwYeuTt72x4xwGfvu921skeEOOlWO+r8mFb3OmZbYgJamb4j2HI=
+X-Received: by 2002:a05:6512:e99:b0:492:db20:efd7 with SMTP id
+ bi25-20020a0565120e9900b00492db20efd7mr6675342lfb.468.1661827331338; Mon, 29
+ Aug 2022 19:42:11 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Yw08j5m62is7kqSg@monkey>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.177.76]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500002.china.huawei.com (7.192.104.244)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <1661483530-11308-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <CAGWkznH=Gwr_TDF3=fv+_ZH5P4QN6JXEAtH4DAzNus20pHxyeg@mail.gmail.com> <12759ac7-4a6c-89fa-5fd0-914728f6415e@redhat.com>
+In-Reply-To: <12759ac7-4a6c-89fa-5fd0-914728f6415e@redhat.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Tue, 30 Aug 2022 10:41:43 +0800
+Message-ID: <CAGWkznEtFp2+1QLFF-mA0_jhfB48n4oneVXXNvipw3eBYji4kw@mail.gmail.com>
+Subject: Re: [PATCH] mm: skip reserved page for kmem leak scanning
+To:     David Hildenbrand <david@redhat.com>
+Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        LKML <linux-kernel@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,94 +70,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/30 6:24, Mike Kravetz wrote:
-> On 08/27/22 17:30, Miaohe Lin wrote:
->> On 2022/8/25 1:57, Mike Kravetz wrote:
->>> Allocate a rw semaphore and hang off vm_private_data for
->>> synchronization use by vmas that could be involved in pmd sharing.  Only
->>> add infrastructure for the new lock here.  Actual use will be added in
->>> subsequent patch.
->>>
->>> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
->>
->> <snip>
->>
->>> +static void hugetlb_vma_lock_free(struct vm_area_struct *vma)
->>> +{
->>> +	/*
->>> +	 * Only present in sharable vmas.  See comment in
->>> +	 * __unmap_hugepage_range_final about the neeed to check both
->>
->> s/neeed/need/
->>
->>> +	 * VM_SHARED and VM_MAYSHARE in free path
->>
->> I think there might be some wrong checks around this patch. As above comment said, we
->> need to check both flags, so we should do something like below instead?
->>
->> 	if (!(vma->vm_flags & (VM_MAYSHARE | VM_SHARED) == (VM_MAYSHARE | VM_SHARED)))
->>
->>> +	 */
-> 
-> Thanks.  I will update.
-> 
->>> +	if (!vma || !(vma->vm_flags & (VM_MAYSHARE | VM_SHARED)))
->>> +		return;
->>> +
->>> +	if (vma->vm_private_data) {
->>> +		kfree(vma->vm_private_data);
->>> +		vma->vm_private_data = NULL;
->>> +	}
->>> +}
->>> +
->>> +static void hugetlb_vma_lock_alloc(struct vm_area_struct *vma)
->>> +{
->>> +	struct rw_semaphore *vma_sema;
->>> +
->>> +	/* Only establish in (flags) sharable vmas */
->>> +	if (!vma || !(vma->vm_flags & VM_MAYSHARE))
->>> +		return;
->>> +
->>> +	/* Should never get here with non-NULL vm_private_data */
->>
->> We can get here with non-NULL vm_private_data when called from hugetlb_vm_op_open during fork?
-> 
-> Right!
-> 
-> In fork, We allocate a new semaphore in hugetlb_dup_vma_private, and then
-> shortly after call hugetlb_vm_op_open.
-> 
-> It works as is, and I can update the comment.  However, I wonder if we should
-> just clear vm_private_data in hugetlb_dup_vma_private and let hugetlb_vm_op_open
-> do the allocation.
-
-I think it's a good idea. We can also avoid allocating memory for vma_lock (via clear_vma_resv_huge_pages()) and
-then free the corresponding vma right away (via do_munmap())in move_vma(). But maybe I'm miss something.
-
-Thanks,
-Miaohe Lin
-
-> 
->>
->> Also there's one missing change on comment:
->>
->> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
->> index d0617d64d718..4bc844a1d312 100644
->> --- a/mm/hugetlb.c
->> +++ b/mm/hugetlb.c
->> @@ -863,7 +863,7 @@ __weak unsigned long vma_mmu_pagesize(struct vm_area_struct *vma)
->>   * faults in a MAP_PRIVATE mapping. Only the process that called mmap()
->>   * is guaranteed to have their future faults succeed.
->>   *
->> - * With the exception of reset_vma_resv_huge_pages() which is called at fork(),
->> + * With the exception of hugetlb_dup_vma_private() which is called at fork(),
->>   * the reserve counters are updated with the hugetlb_lock held. It is safe
->>   * to reset the VMA at fork() time as it is not in use yet and there is no
->>   * chance of the global counters getting corrupted as a result of the values.
->>
->>
->> Otherwise this patch looks good to me. Thanks.
-> 
-> Will update, Thank you!
-> 
-
+On Mon, Aug 29, 2022 at 8:19 PM David Hildenbrand <david@redhat.com> wrote:
+>
+> On 26.08.22 05:23, Zhaoyang Huang wrote:
+> > On Fri, Aug 26, 2022 at 11:13 AM zhaoyang.huang
+> > <zhaoyang.huang@unisoc.com> wrote:
+> >>
+> >> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >>
+> >> It is no need to scan reserved page, skip it.
+> >>
+> >> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> >> ---
+> >>  mm/kmemleak.c | 2 +-
+> >>  1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
+> >> index a182f5d..c546250 100644
+> >> --- a/mm/kmemleak.c
+> >> +++ b/mm/kmemleak.c
+> >> @@ -1471,7 +1471,7 @@ static void kmemleak_scan(void)
+> >>                         if (page_zone(page) != zone)
+> >>                                 continue;
+> >>                         /* only scan if page is in use */
+> >> -                       if (page_count(page) == 0)
+> >> +                       if (page_count(page) == 0 || PageReserved(page))
+> > Sorry for previous stupid code by my faint, correct it here
+>
+> Did you even test the initial patch?
+>
+> I wonder why we should consider this change
+>
+> (a) I doubt it's a performance issue. If it is, please provide numbers
+>     before/after.
+For Android-like SOC systems where AP(cpu runs linux) are one of the
+memory consumers which are composed of other processors such as modem,
+isp,wcn etc. The reserved memory occupies a certain number of
+memory(could be 30% of MemTotal) which makes scan reserved pages
+pointless.
+> (b) We'll stop scanning early allocations. As the memmap is usually
+>     allocated early during boot ... we'll stop scanning essentially the
+>     whole mmap and that whole loop would be dead code? What am i
+>     missing?
+memmap refers to pages here? If we can surpass these as it exist
+permanently during life period. Besides, I wonder if PageLRU should
+also be skipped?
+-                       if (page_count(page) == 0)
++                       if (page_count(page) == 0 ||
+PageReserved(page) || PageLRU(page))
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>

@@ -2,129 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ABA85A5E0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:27:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DCD5A5E12
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:28:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbiH3I1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54240 "EHLO
+        id S231502AbiH3I2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231469AbiH3I1b (ORCPT
+        with ESMTP id S230332AbiH3I2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:27:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6ABA50C6;
-        Tue, 30 Aug 2022 01:27:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B0BFB816E4;
-        Tue, 30 Aug 2022 08:27:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4399BC433D6;
-        Tue, 30 Aug 2022 08:27:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661848047;
-        bh=cYROqscLQov2FurMStlbmEPq+s+/Ghnc6Lk9jgwdSLg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DLYXaxJ9jZ7iYH+AC08yMXUwAYG0g/XXQIvgF/Mgszi3ptLtgfqRXemuCyiyYVF8s
-         KF34WU73D2dh/BYUuBObTHIE9j0lZIAkLtf2wkCABSyYATZ9jjtgbAU1PMc5nOmDOr
-         nuPmbJn+en7E7iYTlPBwruYZw8XvFnTEOPURkPou5JOmNYppNQD+jHBZY4mLx+ZW1n
-         ZVyb2EWYwKSpN7IT12oZR121EbGlTUWKgPHeWqfkqhTN2psS+sIZzAt8UjDccx4hh0
-         GLn/9eX+Vv/YyvT6Kn6dnJlIxzYiGjfXg6Adkm2mrNOUJ7xkm1ml+gipJk8f6dk4ou
-         ZozQiJTbNNfPA==
-Date:   Tue, 30 Aug 2022 13:57:23 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Johan Hovold <johan+linaro@kernel.org>,
+        Tue, 30 Aug 2022 04:28:33 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FEF72FE7;
+        Tue, 30 Aug 2022 01:28:32 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-340f82c77baso139612157b3.1;
+        Tue, 30 Aug 2022 01:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=+LwAl7PUkEepJ1lIaE4+OPBBMc7O0EAG6xNwpqZpZHg=;
+        b=pIdNzjVbNqDCLu7th2NhL6YlLeZtusgcSiGIM10wkikXvkdU2UarJvv7cX4x9fnpnF
+         RoHO7evoZVeXsYjzacL7iqHkciPpq0q3+W24PBSSHJRjVeA3rJs5sPfTU4rPyioDw4wB
+         pYp2+JespgNH6DTzmNyJ4DBLebBGjWrjQS5iVv6R+VemKBip5lDcdcRV6TEyr05AcMid
+         6Ajcjj/mdBTEB2tlSmMKSqd/I4ai9FNwoB1LqSeoQ8Z8Ifwb8VRcz2FZHjBpM0eWKb9u
+         uubGSasiJyjw+fQQUMyel689DpGAjFkUQrF4PPXMnJ7P8/Kngt96kp2b9UX0kaBBNC9M
+         aduw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=+LwAl7PUkEepJ1lIaE4+OPBBMc7O0EAG6xNwpqZpZHg=;
+        b=p7tdTBCSkjKgn+QguOhjzb2RsS26DRRumOwvTXoN8NW4+qBRP2EMM0hBcwqorZBatb
+         YocaUCDwp6yaW6DaukeAirLOpVSrM0Oy4nJWwunwpzno57MkMTVsCwKNZauXV5yuSEUK
+         p87tpIZWJdsHE7dTTsi0i1ADc6sToW5/9AJoRMiaeiG4JghSpqKPw1483mEAaRc0ba6A
+         B4qZw8GBKKSu8bRFswYbs87JgDFDfBdDO1XE+s65FM9BLMP4iXXAs3NS5CQ8En51aTgS
+         ghGeyh9VJisT0tfxF03HvlI48KvSVZau0EKZWgzhdocOVmiZzDBf2/cskrw/P7fsUo6+
+         tBlQ==
+X-Gm-Message-State: ACgBeo3wb7jtR/kgfY3wXruVZZczzdf0pmERQ+b5wIE/QH4qF3RRzCKR
+        zSjgQuX1L/4I7ELAq/4GKMvw6w1Q/SI1G8zTjBs=
+X-Google-Smtp-Source: AA6agR7zI5uwUNMd7rMEnWYc6pU0UTrwwUW+ldgZCwHycenpKmKo3pCG2JmVmS5N2j7w3RikV0r6AKlINfnZRnHOYwM=
+X-Received: by 2002:a25:8b8c:0:b0:67b:5c18:870 with SMTP id
+ j12-20020a258b8c000000b0067b5c180870mr10814096ybl.244.1661848111642; Tue, 30
+ Aug 2022 01:28:31 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220829214256.5583-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdVV6eEtWBaeG4VESe_cyPKYcTo-xSfwJDPLYOYCG=ZHug@mail.gmail.com>
+In-Reply-To: <CAMuHMdVV6eEtWBaeG4VESe_cyPKYcTo-xSfwJDPLYOYCG=ZHug@mail.gmail.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 30 Aug 2022 09:28:05 +0100
+Message-ID: <CA+V-a8vJpj-S177DTsKezT=f3T4Oup0763fQtK3+9Rsums0N9Q@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mmc: renesas,sdhi: Add iommus property
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/30] phy: qcom,qmp: fix dt-bindings and deprecate
- lane suffix
-Message-ID: <Yw3J694FGcM6jErg@matsya>
-References: <20220714124333.27643-1-johan+linaro@kernel.org>
- <Yw2a44l9a6zz5qTJ@matsya>
- <Yw21t1SUGjCcUuuw@hovoldconsulting.com>
- <Yw28FdhYSv4x0a6B@matsya>
- <Yw2/sVyjofEM+61o@hovoldconsulting.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yw2/sVyjofEM+61o@hovoldconsulting.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linux MMC List <linux-mmc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30-08-22, 09:43, Johan Hovold wrote:
-> On Tue, Aug 30, 2022 at 12:58:21PM +0530, Vinod Koul wrote:
-> > On 30-08-22, 09:01, Johan Hovold wrote:
-> > > On Tue, Aug 30, 2022 at 10:36:43AM +0530, Vinod Koul wrote:
-> > > > On 14-07-22, 14:43, Johan Hovold wrote:
-> > > > > When adding support for SC8280XP to the QMP PHY driver I noticed that
-> > > > > the PHY provider child node was not described by the current DT schema.
-> > > > > 
-> > > > > The SC8280XP PHYs also need a second fixed-divider PIPE clock
-> > > > > ("pipediv2") and I didn't want to have to add a bogus "lane" suffix to
-> > > > > the clock name just to match the current "pipe0" name so I decided to
-> > > > > deprecate the unnecessary suffix in the current binding instead.
-> > > > > 
-> > > > > To be able to add the missing child-node schema and handle device
-> > > > > specifics like additional PIPE clocks, it quickly became obvious that
-> > > > > the binding needs to be split up.
-> > > > > 
-> > > > > This series clean up and fixes some issue with the current schema before
-> > > > > splitting it up in separate schemas for PCIe, UFS and USB and adding
-> > > > > missing parts like the child PHY provider nodes.
-> > > > > 
-> > > > > The MSM8996 PCIe PHY gets its own schema as this is the only non-combo
-> > > > > PHY that actually provides more than one PHY per IP block. Note that the
-> > > > > "lane" suffix is still unnecessary and misleading.
-> > > > > 
-> > > > > The final patches add support for the updated binding to the (recently
-> > > > > split up) PHY drivers. Included is also a related combo PHY cleanup.
-> > > > 
-> > > > This fails at patch 2 for me on v6.0-rc1, please rebase and resend
-> > > 
-> > > Are you sure you haven't applied anything to your local tree that causes
-> > > this?
-> > 
-> > Pretty sure :-)
-> 
-> Hmm. But nothing had changed in 6.0-rc1 and it still applies on a clean
-> 6.0-rc1 as expected here.
-> 
-> Would you mind trying again?
-> 
-> 	git checkout -b tmp-branch v6.0-rc1
-> 	b4 am 20220714124333.27643-1-johan+linaro@kernel.org
-> 	git am ./v3_20220714_johan_linaro_phy_qcom_qmp_fix_dt_bindings_and_deprecate_lane_suffix.mbx
-> 
-> > > I just tried fetching the v3 series from lore and it applies just fine
-> > > on top of 6.0-rc1.
-> > > 
-> > > Note that if you've added a new compatible string locally, the second
-> > > patch which sorts the compatible strings is likely to fail to apply.
-> > 
-> > At that time no, now I think I have patch or so ... Tree should be
-> > pushed in a bit, you can check
-> 
-> Which tree would that be? The linux-phy tree next branch is still at -rc1:
-> 
-> 	https://git.kernel.org/pub/scm/linux/kernel/git/phy/linux-phy.git/
+Hi Geert,
 
-It is updated now, my tests were running
+Thank you for the review.
 
--- 
-~Vinod
+On Tue, Aug 30, 2022 at 8:06 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>
+> Hi Prabhakar,
+>
+> Thanks for your patch!
+>
+> On Mon, Aug 29, 2022 at 11:43 PM Lad Prabhakar
+> <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> > The SDHI block on Renesas R-Car and RZ/G2 SoC's make use of IOMMU.
+>
+> blocks ... SoCs
+>
+> > This patch fixes the below dtbs_check warnings:
+> > arch/arm64/boot/dts/renesas/r8a774e1-hihope-rzg2h-ex-idk-1110wr.dtb: mmc@ee100000: Unevaluated properties are not allowed ('iommus' was unexpected)
+> >         From schema: Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>
+> > --- a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
+> > @@ -77,6 +77,9 @@ properties:
+> >
+> >    clock-names: true
+> >
+> > +  iommus:
+> > +    maxItems: 1
+>
+> I would insert iommus below dma-names, as iommus belongs to dmas,
+> logically (yes I know dmas is not used on R-Car Gen3 and RZ/G2, as
+> SDHI has its own DMA controller).
+>
+Ok, I will move it after dmas along with an updated commit message and
+send a v2.
+
+Cheers,
+Prabhakar

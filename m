@@ -2,176 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888335A749B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 05:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F6C5A74F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 06:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbiHaDtR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 23:49:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S231625AbiHaEXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 00:23:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiHaDtN (ORCPT
+        with ESMTP id S230350AbiHaEX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 23:49:13 -0400
-Received: from mail-qk1-x744.google.com (mail-qk1-x744.google.com [IPv6:2607:f8b0:4864:20::744])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488CBA8CFF
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 20:49:12 -0700 (PDT)
-Received: by mail-qk1-x744.google.com with SMTP id f4so9974050qkl.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 20:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=gk0iaSJZd5YzOd+2zJ3o0BDcK8HeEHtmeUyCb8yUhwg=;
-        b=QyPzKIVt2x781/58vuUJd2IpLRwDNMhuuv/u/in2ftPzeonWhYG6Lgvb4rxm+lgy7h
-         p7+c05xoW4aoU1QQuBsrFW+R0xTD7YyOzdcKc0eo+WcKtOYL4of2yicINzeJdsxTsICb
-         c93wO3BOziIlFkfZaV39mlAiZcagm6QYzYHcVcwVOU/rAacNdOG8lA/sCpHRWay8qOpj
-         UIE1n5qYGg5ANrt/9yc6EUv0t512o7Wr8HZoCcZVD8onj4D2kIqMMYGh4yWsgEVZd5do
-         kU6CUtsTKDcYZLggSiamKsbJlEKbCj1YTkl6CpyM2Cz5DZPw0llUBFDcFZvTMoykmhbn
-         3ASg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=gk0iaSJZd5YzOd+2zJ3o0BDcK8HeEHtmeUyCb8yUhwg=;
-        b=S7SusnGo7mj1rrTOljYX30hlb73jg0qWrYXxh2W82aSE968ToQ57kJ18wnvr7zwAuo
-         Jq5KEoFY9NT2ALvOPnl3fpz3jNhP7blfQkGgfHVgKMpwRJ5yqMh6lrFukd7C9Nj9CkqJ
-         S/WJWMFR1y8mVQgzsIwK0Wou9mCDXzEQjGnwqbO+flyKQVGXJAwoegPnfrixCslemmmt
-         HOg/tlZNs+S4NcdVB51hYegCGui1mq5mVhpXzrBDLITcjBwMToIfJeZkzBa/joUslzw/
-         2i8Mh9A8Yp8ndvs1h/EUXgsatqmeDpsMQRnMvcV8/ye51NbZDz8oWlg49obtsztvSbPg
-         Vpcg==
-X-Gm-Message-State: ACgBeo0VXQ4A6+YqvPEX6jK810+7DOnLLpgsHfZkAPkWbD42u5KYjeoe
-        hNVLQeEx6YYYWVFrxsDi6bt5mPZNajU=
-X-Google-Smtp-Source: AA6agR61z5dsBNHuUN1y8570X5NV/YX276IXuHchR3IZ3zRLEhosUC8KLcvp8jOb9LoJeGZxmDYFQg==
-X-Received: by 2002:a05:620a:4502:b0:6b4:6c2f:e7b7 with SMTP id t2-20020a05620a450200b006b46c2fe7b7mr14502233qkp.11.1661917751176;
-        Tue, 30 Aug 2022 20:49:11 -0700 (PDT)
-Received: from sophie ([45.134.140.172])
-        by smtp.gmail.com with ESMTPSA id u6-20020a05620a430600b006b893d135basm9012602qko.86.2022.08.30.20.49.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 20:49:10 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 22:49:09 -0500
-From:   Rebecca Mckeever <remckee0@gmail.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] memblock tests: add simulation of physical memory
- with multiple NUMA nodes
-Message-ID: <20220831034909.GA16092@sophie>
-References: <cover.1660897864.git.remckee0@gmail.com>
- <0cfb3c69ba6ca9ff55e1fc2528d18d108416ba57.1660897864.git.remckee0@gmail.com>
- <329ab669-620c-ba9e-3c57-9cb90d55b942@redhat.com>
+        Wed, 31 Aug 2022 00:23:27 -0400
+X-Greylist: delayed 9861 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 21:23:26 PDT
+Received: from dispatch1-us1.ppe-hosted.com (dispatch1-us1.ppe-hosted.com [67.231.154.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE142E4E;
+        Tue, 30 Aug 2022 21:23:26 -0700 (PDT)
+Received: from dispatch1-us1.ppe-hosted.com (localhost.localdomain [127.0.0.1])
+        by dispatch1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 70EC524B059;
+        Tue, 30 Aug 2022 22:16:28 +0000 (UTC)
+X-Virus-Scanned: Proofpoint Essentials engine
+Received: from mx1-us1.ppe-hosted.com (unknown [10.110.51.24])
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id CD4B1A0068;
+        Tue, 30 Aug 2022 22:16:26 +0000 (UTC)
+Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
+        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 68CB63C007B;
+        Tue, 30 Aug 2022 22:16:25 +0000 (UTC)
+Received: from [192.168.100.195] (50-251-239-81-static.hfc.comcastbusiness.net [50.251.239.81])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by mail3.candelatech.com (Postfix) with ESMTPSA id 8DFE413C2B0;
+        Tue, 30 Aug 2022 15:16:24 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com 8DFE413C2B0
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
+        s=default; t=1661897784;
+        bh=lSb6iPlm/e00kQHUQGYl6VDRSpB7b+OgWRMKI9nT3uU=;
+        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
+        b=CP3ZuQEG4SgFmdfJdIVeZc0bTNf4qlGF8he8eFS1a4zwosC7aG/QtHDE64dPnl7Kx
+         1p4iZp4zW85Wt1Ln6PXqCh7R5DSv+Ov5Zkp2zDGjC/9WFa5uwhRs1umjDp2r9cdZ33
+         ZwRzmX6mUxYi3CGyPC75afd2uHxfYR/7DgzMG08s=
+Subject: Re: [PATCH 5.4 182/389] PCI/portdrv: Dont disable AER reporting in
+ get_port_device_capability()
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, bjorn@helgaas.com,
+        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+        Stefan Roese <sr@denx.de>, Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Yao Hongbo <yaohongbo@linux.alibaba.com>,
+        Naveen Naidu <naveennaidu479@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+References: <20220823080115.331990024@linuxfoundation.org>
+ <20220823080123.228828362@linuxfoundation.org>
+ <CABhMZUVycsyy76j2Z=K+C6S1fwtzKE1Lx2povXKfB80o9g0MtQ@mail.gmail.com>
+ <YwXH/l37HaYQD66B@kroah.com>
+ <47b775c5-57fa-5edf-b59e-8a9041ffbee7@candelatech.com>
+ <20220830205832.g3lyysmgkarijkvj@pali>
+ <00735f18-11f9-c6c6-4abf-002d378957df@candelatech.com>
+ <20220830215532.6nnl6d4cfg55dmcl@pali>
+From:   Ben Greear <greearb@candelatech.com>
+Organization: Candela Technologies
+Message-ID: <370dee6c-919a-2f98-1404-a3feda14d1ba@candelatech.com>
+Date:   Tue, 30 Aug 2022 15:16:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <329ab669-620c-ba9e-3c57-9cb90d55b942@redhat.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220830215532.6nnl6d4cfg55dmcl@pali>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-MDID: 1661897787-3FcEtP5UB8oZ
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 01:17:56PM +0200, David Hildenbrand wrote:
-> On 19.08.22 11:05, Rebecca Mckeever wrote:
-> > Add functions setup_numa_memblock_generic() and setup_numa_memblock()
-> > for setting up a memory layout with multiple NUMA nodes in a previously
-> > allocated dummy physical memory. These functions can be used in place of
-> > setup_memblock() in tests that need to simulate a NUMA system.
-> > 
-> > setup_numa_memblock_generic():
-> > - allows for setting up a custom memory layout by specifying the amount
-> >   of memory in each node, the number of nodes, and a factor that will be
-> >   used to scale the memory in each node
-> > 
-> > setup_numa_memblock():
-> > - allows for setting up a default memory layout
-> > 
-> > Introduce constant MEM_FACTOR, which is used to scale the default memory
-> > layout based on MEM_SIZE.
-> > 
-> > Set CONFIG_NODES_SHIFT to 4 when building with NUMA=1 to allow for up to
-> > 16 NUMA nodes.
-> > 
-> > Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> > ---
-> >  .../testing/memblock/scripts/Makefile.include |  2 +-
-> >  tools/testing/memblock/tests/common.c         | 38 +++++++++++++++++++
-> >  tools/testing/memblock/tests/common.h         |  9 ++++-
-> >  3 files changed, 47 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/tools/testing/memblock/scripts/Makefile.include b/tools/testing/memblock/scripts/Makefile.include
-> > index aa6d82d56a23..998281723590 100644
-> > --- a/tools/testing/memblock/scripts/Makefile.include
-> > +++ b/tools/testing/memblock/scripts/Makefile.include
-> > @@ -3,7 +3,7 @@
-> >  
-> >  # Simulate CONFIG_NUMA=y
-> >  ifeq ($(NUMA), 1)
-> > -	CFLAGS += -D CONFIG_NUMA
-> > +	CFLAGS += -D CONFIG_NUMA -D CONFIG_NODES_SHIFT=4
-> >  endif
-> >  
-> >  # Use 32 bit physical addresses.
-> > diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
-> > index eec6901081af..15d8767dc70c 100644
-> > --- a/tools/testing/memblock/tests/common.c
-> > +++ b/tools/testing/memblock/tests/common.c
-> > @@ -34,6 +34,10 @@ static const char * const help_opts[] = {
-> >  
-> >  static int verbose;
-> >  
-> > +static const phys_addr_t node_sizes[] = {
-> > +	SZ_4K, SZ_1K, SZ_2K, SZ_2K, SZ_1K, SZ_1K, SZ_4K, SZ_1K
-> > +};
-> > +
-> >  /* sets global variable returned by movable_node_is_enabled() stub */
-> >  bool movable_node_enabled;
-> >  
-> > @@ -72,6 +76,40 @@ void setup_memblock(void)
-> >  	fill_memblock();
-> >  }
-> >  
-> > +/**
-> > + * setup_numa_memblock_generic:
-> > + * Set up a memory layout with multiple NUMA nodes in a previously allocated
-> > + * dummy physical memory.
-> > + * @nodes: an array containing the amount of memory in each node
-> > + * @node_cnt: the size of @nodes
-> > + * @factor: a factor that will be used to scale the memory in each node
-> > + *
-> > + * The nids will be set to 0 through node_cnt - 1.
-> > + */
-> > +void setup_numa_memblock_generic(const phys_addr_t nodes[],
-> > +				 int node_cnt, int factor)
-> > +{
-> > +	phys_addr_t base;
-> > +	int flags;
-> > +
-> > +	reset_memblock_regions();
-> > +	base = (phys_addr_t)memory_block.base;
-> > +	flags = (movable_node_is_enabled()) ? MEMBLOCK_NONE : MEMBLOCK_HOTPLUG;
-> > +
-> > +	for (int i = 0; i < node_cnt; i++) {
-> > +		phys_addr_t size = factor * nodes[i];
+On 8/30/22 2:55 PM, Pali Rohár wrote:
+> On Tuesday 30 August 2022 14:28:14 Ben Greear wrote:
+>> On 8/30/22 1:58 PM, Pali Rohár wrote:
+>>> On Tuesday 30 August 2022 13:47:48 Ben Greear wrote:
+>>>> On 8/23/22 11:41 PM, Greg Kroah-Hartman wrote:
+>>>>> On Tue, Aug 23, 2022 at 07:20:14AM -0500, Bjorn Helgaas wrote:
+>>>>>> On Tue, Aug 23, 2022, 6:35 AM Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>>>>>> wrote:
+>>>>>>
+>>>>>>> From: Stefan Roese <sr@denx.de>
+>>>>>>>
+>>>>>>> [ Upstream commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 ]
+>>>>>>>
+>>>>>>
+>>>>>> There's an open regression related to this commit:
+>>>>>>
+>>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=216373
+>>>>>
+>>>>> This is already in the following released stable kernels:
+>>>>> 	5.10.137 5.15.61 5.18.18 5.19.2
+>>>>>
+>>>>> I'll go drop it from the 4.19 and 5.4 queues, but when this gets
+>>>>> resolved in Linus's tree, make sure there's a cc: stable on the fix so
+>>>>> that we know to backport it to the above branches as well.  Or at the
+>>>>> least, a "Fixes:" tag.
+>>>>
+>>>> This is still in 5.19.5.  We saw some funny iwlwifi crashes in 5.19.3+
+>>>> that we did not see in 5.19.0+.  I just bisected the scary looking AER errors to this
+>>>> patch, though I do not know for certain if it causes the iwlwifi related crashes yet.
+>>>>
+>>>> In general, from reading the commit msg, this patch doesn't seem to be a great candidate
+>>>> for stable in general.  Does it fix some important problem?
+>>>>
+>>>> In case it helps, here is example of what I see in dmesg.  The kernel crashes in iwlwifi
+>>>> had to do with rx messages from the firmware, and some warnings lead me to believe that
+>>>> pci messages were slow coming back and/or maybe duplicated.  So maybe this AER patch changes
+>>>> timing or otherwise screws up the PCI adapter boards we use...
+>>>
+>>>   From that log I have feeling that issue is in that intel wifi card and
+>>> it was there also before that commit. Card is crashing (or something
+>>> other happens on PCIe bus) and because kernel had disabled Error
+>>> Reporting for this card, nobody spotted any issue. And that commit just
+>>> opened eye to kernel to see those errors.
+>>>
+>>> I think this issue should be reported to intel wifi card developers,
+>>> maybe they comment it, why card is reporting errors.
+>>
+>> My main concern is not that AER messages started showing up, but that there
+>> started being kernel NPE and WARNINGS showing up sometime after 5.19.0.
+>>
+>> Possibly this AER thing is mis-direction and the real bug is elsewhere,
+>> but since the bugzilla also indicated (different) driver crashes, then
+>> I am suspicious this changes things more significantly, at least in a subset
+>> of hardware out there.
 > 
-> I'm a bit lost why we need the factor if we already provide sizes in the
-> array.
+> Yea, of course, this is something needed to investigate.
 > 
-> Can you enlighten me? :)
-> 
-> Why can't we just stick to the sizes in the array?
-> 
-Without the factor, some of the tests will break if we increase MEM_SIZE
-in the future (which we may need to do). I could rewrite them so that the
-factor is not needed, but I thought the code would be over-complicated if
-I did.
+> Anyway, do you see driver crashes? Or just these AER errors? And are
+> your PCIe cards working, or after seeing these messages in dmesg they
+> stopped working? It is needed to know if you are just spammed by tons of
+> lines in dmesg and otherwise everything works. Or if after AER errors
+> your PCIe devices stop working and rebooting system is required.
 
-> -- 
-> Thanks,
+We did see higher frequency of weird crashes (accessing null-ish pointer) after upgrading to 5.19.3,
+I am building kernel now with 5.19.5 and that AER patch reverted.  We will
+test to see if that solves the crashes.
+
+>> Also, any idea what this error in my logs is actually indicating?
 > 
-> David / dhildenb
+> Your PCIe controller received non-fatal, but uncorrected error. There is
+> also indication of Unsupported Request Completion Status. Unsupported
+> Request is generated by PCIe device when controller / host / kernel try
+> to do something which is not supported by device; pretty generic error.
+> PCIe base spec describe lot of scenarios when card should return this
+> error. Maybe some more detailed information are in TLP Header hexdump,
+> but I cannot decode it now.
 > 
+> Basically it is PCIe card driver who could know how fatal it is that
+> issue and how to recover from it. But as you can see intel wifi driver
+> does not implement that callback.
+
+Odds of me getting a good answer on that are pretty small.
+
 Thanks,
-Rebecca
+Ben
+
+-- 
+Ben Greear <greearb@candelatech.com>
+Candela Technologies Inc  http://www.candelatech.com
+

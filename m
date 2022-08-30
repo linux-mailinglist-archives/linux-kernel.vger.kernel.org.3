@@ -2,59 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2FD75A641A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 287585A6428
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:55:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbiH3MyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:54:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
+        id S230097AbiH3Mzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiH3Mxx (ORCPT
+        with ESMTP id S230298AbiH3MzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:53:53 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 835A614FC96;
-        Tue, 30 Aug 2022 05:53:45 -0700 (PDT)
-Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MH6ft0wyhz687Jl;
-        Tue, 30 Aug 2022 20:53:10 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 30 Aug 2022 14:53:42 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 30 Aug
- 2022 13:53:41 +0100
-Date:   Tue, 30 Aug 2022 13:53:40 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Ira Weiny <ira.weiny@intel.com>
-CC:     Dan Williams <dan.j.williams@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>
-Subject: Re: [PATCH V2 1/2] PCI: Allow drivers to request exclusive config
- regions
-Message-ID: <20220830135340.00000e6f@huawei.com>
-In-Reply-To: <YweZjRYVcT5uCg2i@iweiny-desk3>
-References: <20220824232450.723179-1-ira.weiny@intel.com>
-        <20220824232450.723179-2-ira.weiny@intel.com>
-        <20220825160658.000051a6@huawei.com>
-        <YweZjRYVcT5uCg2i@iweiny-desk3>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Tue, 30 Aug 2022 08:55:08 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7404FCA17;
+        Tue, 30 Aug 2022 05:54:41 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id j6so4799217qvu.10;
+        Tue, 30 Aug 2022 05:54:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=SnrztBqfZL2rLznKVmAq3adfHOBCsmZV7kR61San/Ko=;
+        b=ewcbf6vMRM0qdxVSwJ6otoPPDQhovvHsVdpGFV7lA2fEdexPxt4mus/Bz5SWp9Uq+W
+         E/l8IGh1xYQaHoartZKymoJ+Bi0gYT+PIx1a3BYKX6VoNZeMptx54HH601DbQHwKLAQE
+         aro9XYS/p+TbRSZ+7Fb0hV4nm0bXMH7P2i23qX0+0IHmqx6urjFEANZT0qCn/uo3tLhN
+         bm6xbyDKkAaKB1ObEuOi4cLUh3LBQDdCVlNL7XhCBngWNL3cE/fyUnQy7PtQJHPLW7fn
+         hoBMSja0o4wxczBzg+nKEH4yJs9hs8WTa5pa5qjHYealNknQR9WaEpTSnLouEgFaFk7K
+         JWwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=SnrztBqfZL2rLznKVmAq3adfHOBCsmZV7kR61San/Ko=;
+        b=5sFK5FBUQBd27v/qwVu/SC2R62oj+3oMrMotpAab6Tmderr/qU9L+dS/7V1JALNfhm
+         pwm8n0HLT1gj42fgFflKj6Q+joaCYI3CU7qple0eV8az8UYQUKE8R/pL9bF1x576ogLz
+         gZpsz7ORk9+Ezv2XVTUnnZWTIbbQaC49mIqNg0Ee849iq9XKHvi0opiQmPB3tyhwnPk3
+         t/i5RRDy3vxCNPOEv1FrTRUZ8pqJmNFbNilNdZbwtf9Oc9hffaDvw9BTZhQWqn2dirDz
+         hW9jamG0nQNJT/e5U6OIzKgVp4HYxXjXvObty6Je8cWV6B/RyRDwEvQt2OUalhr9I7eK
+         NjLA==
+X-Gm-Message-State: ACgBeo1uPmhDO9EliW48Nh3W4SWxi+xv77nkxcqQWYW0ilTNbl5FeSN9
+        9zh0Bei2O466/zDYTs8nG5B+MdcE17Yh8dL9BME=
+X-Google-Smtp-Source: AA6agR4hNfo27nnJ0tHPMm5V/qO48rPNKGzJOIMBX/e21erUKvQwoMohBMfuYfWQIqo67B1xkF8bbGGb9EzAs5Ed/dc=
+X-Received: by 2002:a05:6214:29c2:b0:497:8b2:442 with SMTP id
+ gh2-20020a05621429c200b0049708b20442mr14739784qvb.97.1661864058833; Tue, 30
+ Aug 2022 05:54:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220825091707.8112-1-ilpo.jarvinen@linux.intel.com>
+ <20220825091707.8112-2-ilpo.jarvinen@linux.intel.com> <Yw4CP8y3b9E9XV0K@kroah.com>
+ <CAHp75VfQHhPoO3Rpk=o1c2qPJB-tc_6G41n6iz3sv_gP44PLUw@mail.gmail.com> <Yw4HALWWOWabR/l9@kroah.com>
+In-Reply-To: <Yw4HALWWOWabR/l9@kroah.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 30 Aug 2022 15:53:43 +0300
+Message-ID: <CAHp75VcdqwnKq80H7tzeyS_ior+FCHPH23wQZfvivn-6wRx1pA@mail.gmail.com>
+Subject: Re: [PATCH 1/3] serial: Create uart_xmit_advance()
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Stephen Warren <swarren@nvidia.com>,
+        Alan Cox <alan@linux.intel.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,105 +75,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 08:47:25 -0700
-Ira Weiny <ira.weiny@intel.com> wrote:
+On Tue, Aug 30, 2022 at 3:48 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Tue, Aug 30, 2022 at 03:38:27PM +0300, Andy Shevchenko wrote:
+> > On Tue, Aug 30, 2022 at 3:31 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > > On Thu, Aug 25, 2022 at 12:17:05PM +0300, Ilpo J=C3=A4rvinen wrote:
 
-> On Thu, Aug 25, 2022 at 04:06:58PM +0100, Jonathan Cameron wrote:
-> > On Wed, 24 Aug 2022 16:24:49 -0700
-> > ira.weiny@intel.com wrote:
-> >   
-> > > From: Ira Weiny <ira.weiny@intel.com>
-> > > 
-> > > PCI config space access from user space has traditionally been
-> > > unrestricted with writes being an understood risk for device operation.
-> > > 
-> > > Unfortunately, device breakage or odd behavior from config writes lacks
-> > > indicators that can leave driver writers confused when evaluating
-> > > failures.  This is especially true with the new PCIe Data Object
-> > > Exchange (DOE) mailbox protocol where backdoor shenanigans from user
-> > > space through things such as vendor defined protocols may affect device
-> > > operation without complete breakage.
-> > > 
-> > > A prior proposal restricted read and writes completely.[1]  Greg and
-> > > Bjorn pointed out that proposal is flawed for a couple of reasons.
-> > > First, lspci should always be allowed and should not interfere with any
-> > > device operation.  Second, setpci is a valuable tool that is sometimes
-> > > necessary and it should not be completely restricted.[2]  Finally
-> > > methods exist for full lock of device access if required.
-> > > 
-> > > Even though access should not be restricted it would be nice for driver
-> > > writers to be able to flag critical parts of the config space such that
-> > > interference from user space can be detected.
-> > > 
-> > > Introduce pci_request_config_region_exclusive() to mark exclusive config
-> > > regions.  Such regions trigger a warning and kernel taint if accessed
-> > > via user space.
-> > > 
-> > > Create pci_warn_once() to restrict the user from spamming the log.
-> > > 
-> > > [1] https://lore.kernel.org/all/161663543465.1867664.5674061943008380442.stgit@dwillia2-desk3.amr.corp.intel.com/
-> > > [2] https://lore.kernel.org/all/YF8NGeGv9vYcMfTV@kroah.com/
-> > > 
-> > > Cc: Bjorn Helgaas <bhelgaas@google.com>
-> > > Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > Cc: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> > > Suggested-by: Dan Williams <dan.j.williams@intel.com>
-> > > Signed-off-by: Ira Weiny <ira.weiny@intel.com>  
-> > One comment inline.
-> > 
-> > I'm not totally convinced of the necessity of this, but done this way
-> > it has very little impact so I'm fine with it.
-> > 
-> > Other than the comment about not realigning things...
-> > 
-> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>  
-> 
-> Thanks!
-> 
-> [snip]
-> 
-> > >  /* drivers/pci/bus.c */
-> > >  void pci_add_resource(struct list_head *resources, struct resource *res);
-> > >  void pci_add_resource_offset(struct list_head *resources, struct resource *res,
-> > > @@ -2486,14 +2502,15 @@ void pci_uevent_ers(struct pci_dev *pdev, enum  pci_ers_result err_type);
-> > >  #define pci_printk(level, pdev, fmt, arg...) \
-> > >  	dev_printk(level, &(pdev)->dev, fmt, ##arg)
-> > >  
-> > > -#define pci_emerg(pdev, fmt, arg...)	dev_emerg(&(pdev)->dev, fmt, ##arg)
-> > > -#define pci_alert(pdev, fmt, arg...)	dev_alert(&(pdev)->dev, fmt, ##arg)
-> > > -#define pci_crit(pdev, fmt, arg...)	dev_crit(&(pdev)->dev, fmt, ##arg)
-> > > -#define pci_err(pdev, fmt, arg...)	dev_err(&(pdev)->dev, fmt, ##arg)
-> > > -#define pci_warn(pdev, fmt, arg...)	dev_warn(&(pdev)->dev, fmt, ##arg)
-> > > -#define pci_notice(pdev, fmt, arg...)	dev_notice(&(pdev)->dev, fmt, ##arg)
-> > > -#define pci_info(pdev, fmt, arg...)	dev_info(&(pdev)->dev, fmt, ##arg)
-> > > -#define pci_dbg(pdev, fmt, arg...)	dev_dbg(&(pdev)->dev, fmt, ##arg)
-> > > +#define pci_emerg(pdev, fmt, arg...)	 dev_emerg(&(pdev)->dev, fmt, ##arg)
-> > > +#define pci_alert(pdev, fmt, arg...)	 dev_alert(&(pdev)->dev, fmt, ##arg)
-> > > +#define pci_crit(pdev, fmt, arg...)	 dev_crit(&(pdev)->dev, fmt, ##arg)
-> > > +#define pci_err(pdev, fmt, arg...)	 dev_err(&(pdev)->dev, fmt, ##arg)
-> > > +#define pci_warn(pdev, fmt, arg...)	 dev_warn(&(pdev)->dev, fmt, ##arg)
-> > > +#define pci_warn_once(pdev, fmt, arg...) dev_warn_once(&(pdev)->dev, fmt, ##arg)
-> > > +#define pci_notice(pdev, fmt, arg...)	 dev_notice(&(pdev)->dev, fmt, ##arg)
-> > > +#define pci_info(pdev, fmt, arg...)	 dev_info(&(pdev)->dev, fmt, ##arg)
-> > > +#define pci_dbg(pdev, fmt, arg...)	 dev_dbg(&(pdev)->dev, fmt, ##arg)  
-> > 
-> > This realignment is a lot of noise.  Do we really care about one diffentlyu
-> > aligned entry? + if you are going to do it two tabs rather than a space
-> > following the tab (I think that's what you have here?)  
-> 
-> I struggled a bit on this.  Not aligning makes the final code look odd while
-> the patch looks good.  Aligning with 2 tabs pushes everything past the 80 col
-> standard.
+...
 
-If you really want to do this then break the 80 char limit.  Weird space + tab combinations
-are a bad idea longer term.  Maybe do reformat as precursor 'no functional change' patch
-to make it all readable?
+> > I'm wondering how to tell stable maintainers about dependencies of
+> > (not yet applied) patches? In practice I saw that contributors use
+> > Fixes tag for the entire chain (for the preparatory patches + the real
+> > fix) when it's not easy / in a nice way to rebase to have a one-patch
+> > fix followed by refactoring, etc.
+>
+> It's as if no one has ever had this issue before and wrote it down for
+> all to read and know what to do in the future.
+>
+> {sigh}
+>
+> Please read:
+>     https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.ht=
+ml
+> for how to do this properly.
+>
+> If you don't know the git id, just use the subject line and it should
+> work the same.
+>
+> greg "why even write documentation?" k-h
 
-> 
-> This seemed like a good compromise.
-> 
-> Thanks for the review,
-> Ira
-> 
-> 
+It's good we have it, thanks for writing!
+From time to time even experienced developers need to re-read documentation=
+.
 
+--=20
+With Best Regards,
+Andy Shevchenko

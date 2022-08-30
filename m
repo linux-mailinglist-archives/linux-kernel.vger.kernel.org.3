@@ -2,88 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813E45A6F38
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:37:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CD25A6F39
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:37:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiH3VhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 17:37:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
+        id S231447AbiH3Vh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 17:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiH3VhD (ORCPT
+        with ESMTP id S230193AbiH3VhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:37:03 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9CD895CE
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:37:02 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id i5-20020a17090a2a0500b001fd8708ffdfso10050892pjd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:37:02 -0700 (PDT)
+        Tue, 30 Aug 2022 17:37:23 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC7E895CE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:37:22 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-11f34610d4aso9151586fac.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:37:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=zP3t1aYxwJPDk5XaVLsNCmAQ5v0NuNcsY2lJm9GovWA=;
-        b=sSBdnFkQOT821zpew9yak7rxkuZeb2MC4Eg/M3h9RsaLbVBKZWY1eG0KF0WBa4hLVO
-         dB4nfwltxmIzCziE1xcAppBM373cXbZojODy5YxqR70mcY1ijLMFLQO7/+hdRo12N5RW
-         mV/695VjyHZBmg1V7KrxpNYChUGpOisqUQjT0CiEVEppX2kmUB4xhztvwHWweMW9uPSN
-         9XsAYUnoXxgqfPg1WH+vZJt+6Yf8RIz5p8LdpBfClKrkDkszZH+4ezYh3iD01HriOvos
-         38iu1NJovNQHvTytzm3pMP9YM4tqbrZMogaWEMXGekMhhp1WHqgQtjkD9hvCTDUG6DVi
-         OIdQ==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=a+ZUuxUTAoz+nMDIAxIHUE5qjUM6hZWQNbOQhvaBX2U=;
+        b=RrGWsCafWkhNw3K9QCRmNs4BoXo7x/DwWu2wb/x0bMCU+YEBnonpY8lGB8RW71uO76
+         Q98F0xZd+iXyfmTeAzffFe1SQF/j7qUhEdjvqtW7VVGBU4i4I4WnpLEGsAfnagRpgJVN
+         Xfb0wjWfdWvKSLbo8dVKPyFQrkZz63/tHHwb9XDqC/CHQHbT2NA8veqfob4iluEMDuon
+         nDqIwQcgZ5U5IRnCUJ+3ufzgp51K/HELQafDZNIiddBNezRyMBuFgb10Xo3Bfv1VK1us
+         dfZQjI9E0qHjJ/jU9n0CVVH1kFG4a7PE0RtgBGmYuipNlirkqkJJciWy3jinkzJ6PquG
+         Q/5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=zP3t1aYxwJPDk5XaVLsNCmAQ5v0NuNcsY2lJm9GovWA=;
-        b=UqJ+JeWSRNupl7Me1CeJ3qYwl/3llp+jyffHMZe3/t+3yzRUAxlz0Bzd/BtTitbvjC
-         Z7OKxTXxBLisn8Xr7TsX7P2q5X61WEwrB306vqkPclkszHmQgjGaySG52tnlx0PLOK41
-         iaS2eXhKYMS0bwTUdemJ/b01LmqGqErnkWLQuFlwu1PUjTjsQ95NgjLTv98QgjmLKKYS
-         13R+weZU2NO8SM/Rry7cnSWB8W/zpJDHUFyai2+y5oySCLq5wRJDpnIuh4nvCBKX4irv
-         pCxIxn8k7WVWpA1A1zxKlIaBhhg8O5AbsOjjMgpzGK/HGloySSOouTdozGi43vkpu/KF
-         Lwzg==
-X-Gm-Message-State: ACgBeo0jqmfENf7TZ6QsrFRJh0W84WJC1OOgCIYTNazTRADXrEDSjrEz
-        J2oKVe1DqRH55Gj5Z/K9Ng75/g==
-X-Google-Smtp-Source: AA6agR7HymFegM1rQHVDFtk3+q6iFsbn6uobQxibnrsrUL5dEkAGm+VM696UFUWDHP/kya2qGH8WhQ==
-X-Received: by 2002:a17:90b:1c81:b0:1fb:887c:f82e with SMTP id oo1-20020a17090b1c8100b001fb887cf82emr36240pjb.92.1661895421775;
-        Tue, 30 Aug 2022 14:37:01 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b11-20020a170902650b00b00172a567d910sm10059594plk.289.2022.08.30.14.37.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 14:37:01 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 21:36:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Miaohe Lin <linmiaohe@huawei.com>
-Cc:     pbonzini@redhat.com, vkuznets@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: fix memoryleak in kvm_init()
-Message-ID: <Yw6C+tBZrbP5IX+e@google.com>
-References: <20220823063414.59778-1-linmiaohe@huawei.com>
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=a+ZUuxUTAoz+nMDIAxIHUE5qjUM6hZWQNbOQhvaBX2U=;
+        b=Q6i7K3zb9hpTn1Q7RxFLpuAL07m3kWfS8T2o+IxTQuSJy/pNNHklCuyhlPacANADxf
+         WTctlRKlCFNDQ6oyiSWjwpGTqtQtf851wIwpKo6juqefurXoubgrXzqx0UXEGpac/feE
+         4p3zAT4FKaFBceJAigksJU8wM39phvkwf1s00QQNOd9rbz6FC/GYyFagu6RtTQMXeVrO
+         DTFegTn1wuuwfLBz+vcg1h83Z+3ktvd0mTHI0t4hRJKPyE+LKR51k8/AxmczwbxUBtSr
+         nIXZ/sjXkLmQYV8ymp8zj6UQllrKL47iwEgjr0303ja0xIOx5/ALBaLmVmjyyGmVr2m/
+         QkVA==
+X-Gm-Message-State: ACgBeo1NuD422Hc+sr7SHnumyh/1Iq3vTdUGXejZfcxxthAa384dtHSu
+        ce7yjS6EjW7b6UnVP64JK4sYBphoUNr9rRfpPCc=
+X-Google-Smtp-Source: AA6agR5SOJ8NH8xoPI22/zO4Ba+S5kWGm62zPuLiSNSZYiURP/yn1LMKnSFn0Sgfb5Rwzf+3qz7obzN1GurGR66fZNY=
+X-Received: by 2002:a05:6870:3914:b0:11c:8c2c:9016 with SMTP id
+ b20-20020a056870391400b0011c8c2c9016mr95603oap.111.1661895442332; Tue, 30 Aug
+ 2022 14:37:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823063414.59778-1-linmiaohe@huawei.com>
-X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a05:6850:a60f:b0:32d:64e5:f873 with HTTP; Tue, 30 Aug 2022
+ 14:37:21 -0700 (PDT)
+Reply-To: Mrschantal1985@proton.me
+From:   Mrs chanta B <jij7525@gmail.com>
+Date:   Tue, 30 Aug 2022 21:37:21 +0000
+Message-ID: <CALRnWVTQ5ugtLDwm927=nL8o_WvgpjdsLj+7DpF4YLhW=9bPPg@mail.gmail.com>
+Subject: SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED NATION.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.9 required=5.0 tests=BAYES_60,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_SCAM,LOTS_OF_MONEY,LOTTO_DEPT,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,SUBJ_ALL_CAPS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY,UPPERCASE_50_75 autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2001:4860:4864:20:0:0:0:32 listed in]
+        [list.dnswl.org]
+        *  1.5 BAYES_60 BODY: Bayes spam probability is 60 to 80%
+        *      [score: 0.6008]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [jij7525[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [jij7525[at]gmail.com]
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  0.0 UPPERCASE_50_75 message body is 50-75% uppercase
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  2.0 HK_SCAM No description available.
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 LOTTO_DEPT Claims Department
+        *  1.8 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022, Miaohe Lin wrote:
-> When alloc_cpumask_var_node() fails for a certain cpu, there might be some
-> allocated cpumasks for percpu cpu_kick_mask. We should free these cpumasks
-> or memoryleak will occur.
-> 
-> Fixes: baff59ccdc65 ("KVM: Pre-allocate cpumasks for kvm_make_all_cpus_request_except()")
-> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-> ---
+SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED NATION.
 
-Pushed to branch `for_paolo/6.1` at:
+Your compensation fund of 6 million dollars is ready for payment
+contact me for more details.
 
-    https://github.com/sean-jc/linux.git
-
-Unless you hear otherwise, it will make its way to kvm/queue "soon".
-
-Note, the commit IDs are not guaranteed to be stable.
+Thanks

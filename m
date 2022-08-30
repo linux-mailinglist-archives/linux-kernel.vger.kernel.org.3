@@ -2,174 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3505A6E27
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:09:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48B655A6E2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:11:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiH3UJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 16:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56504 "EHLO
+        id S231127AbiH3UK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 16:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiH3UJq (ORCPT
+        with ESMTP id S229583AbiH3UKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 16:09:46 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB07B75FF8;
-        Tue, 30 Aug 2022 13:09:43 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27UK9NHi114191;
-        Tue, 30 Aug 2022 15:09:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1661890163;
-        bh=MGaUNOMjOPEfn4vlyIIkJ5sPBMGzyhbOAMe1O0L6SHc=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=tF4Jwr0+6fYb5w9JRGvr8E6vN2IIj4HOPBWuUyrTKIiQ7tfvvg2PBX2rqfNF/Tl3B
-         2VSnL391o9QlLAxWKdf1+VXeUjbuYcpwIYneOTxfu0wMQmufDmN9Yb3JhXxPRQR8Ic
-         KzBMD+Lx51xc/2UaazJ61z3GJP1DPFdQ4LUuviDc=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27UK9N7t033401
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Aug 2022 15:09:23 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 30
- Aug 2022 15:09:23 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 30 Aug 2022 15:09:23 -0500
-Received: from ubuntu (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27UK9GZB122208;
-        Tue, 30 Aug 2022 15:09:17 -0500
-Date:   Tue, 30 Aug 2022 13:09:14 -0700
-From:   Matt Ranostay <mranostay@ti.com>
-To:     Lee Jones <lee@kernel.org>
-CC:     <nm@ti.com>, <j-keerthy@ti.com>, <linux-kernel@vger.kernel.org>,
-        <linux-rtc@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v2 2/6] MFD: TPS6594x: Add new PMIC device driver for
- TPS6594x chips
-Message-ID: <Yw5t4G6hbn+mSD8y@ubuntu>
-References: <20220812032242.564026-1-mranostay@ti.com>
- <20220812032242.564026-3-mranostay@ti.com>
- <YvX6sBMItZoAhLKe@google.com>
+        Tue, 30 Aug 2022 16:10:52 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F614504D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:10:51 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-11eb8b133fbso15037858fac.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:10:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=qJlLpOkELPi/QHoI5MOqP2NXG1iWQCH2fEv8e9Ssxoo=;
+        b=xxEodV7a1e7/J/CC+G/b+UaD2Ii0/Rn30BjWnLmnHXaqxBbJn27dTX5+BSX6y2T0VC
+         600IGhnHSDehtxBC5L8x9dLnBArvX53kytinB+b/jGnGVCVUS6T2E6Tc5ilPu6cFI71+
+         502VF3G+Bep6f5sAH+kr0v2hYHzzsysrsYYKAfmYJEK+0VAyw/bUPTe6WuaNI6F8Nue4
+         BVO8z6ThCYrr8+HaYvlCZ2FMVbZTODrKqx22p0S3vziQ0cbciSBGRpVvwLRB/mT45d8d
+         la+wIdrLeEcfxsMJNYYJlHi+yiXYFQqhpgwl7P4jtf7+CdlAuwpy+NQqrluhn0DiqfLi
+         EFww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=qJlLpOkELPi/QHoI5MOqP2NXG1iWQCH2fEv8e9Ssxoo=;
+        b=GTNXme8IVRweI6wSwbsNftM9zxLZg38MUQOGYMDgBUx1NTy8XUIiaMlp3WB1S9P6gB
+         Y5f74zNpkRUjx9belmFCN2IdyYc8vBNFKNyDklXgniia8yC8M6ZQ7r4YgAAWtOwzkrEo
+         PGVseBBDUjSBMQc4V1klKky4QVDgprkbwup9JhQBzwTqeKdjQC5WQzPpY2KVgMW3SIZ3
+         keKL3WhzFUBoRoARFpiPh0nZkrg1HBlxLlRfIF/pSTUMuM/BkfnXY7I0Ccdz3ygeyyi0
+         tXfzIb1XN/di/0u7b9thqd3WA/Ri5IkU5hBIvAoeU8B0CBYG3QD0tet/fL6S9Qs+VqST
+         Xscg==
+X-Gm-Message-State: ACgBeo1DlUC5MvE1Xf32BG8IKITmuqauPu5jQW4T5UCPBKb6YKUijmWQ
+        jlu0CVgzJUR3AgLvW/40u43fYFuJFIH1gDwuNzdc
+X-Google-Smtp-Source: AA6agR7feW5/dLGJw4vAhaYoiUlA13S/ZyDm4jHFn05WI9FtjAPitCZNc7BF6TEeUYC8sgScaZjEpWOJ3swzuHG2cYU=
+X-Received: by 2002:a05:6870:a78d:b0:11c:437b:ec70 with SMTP id
+ x13-20020a056870a78d00b0011c437bec70mr11313980oao.136.1661890250283; Tue, 30
+ Aug 2022 13:10:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YvX6sBMItZoAhLKe@google.com>
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220708093451.472870-1-omosnace@redhat.com> <CAHC9VhSFUJ6J4_wt1SKAoLourNGVkxu0Tbd9NPDbYqjjrs-qoQ@mail.gmail.com>
+ <CAHC9VhRtLEg-xR5q33bVNOBi=54uJuix2QCZuCiKX2Qm6CaLzw@mail.gmail.com> <20220826084354.a2jrrvni6mf7zzyw@wittgenstein>
+In-Reply-To: <20220826084354.a2jrrvni6mf7zzyw@wittgenstein>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 30 Aug 2022 16:10:39 -0400
+Message-ID: <CAHC9VhR=+vVzx1-sKO=UxZyNG6J4-8q+WfxTmHPqxBFbs2-mtw@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND] userfaultfd: open userfaultfds with O_RDONLY
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Ondrej Mosnacek <omosnace@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Lokesh Gidra <lokeshgidra@google.com>, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Robert O'Callahan" <roc@ocallahan.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 08:01:04AM +0100, Lee Jones wrote:
-> On Thu, 11 Aug 2022, Matt Ranostay wrote:
-> 
-> > From: Keerthy <j-keerthy@ti.com>
-> > 
-> > The TPS6594x chip is a PMIC, and contains the following components:
-> > 
-> > - Regulators
-> > - GPIO controller
-> > - RTC
-> > 
-> > However initially only RTC is supported.
-> > 
-> > Signed-off-by: Keerthy <j-keerthy@ti.com>
-> > Signed-off-by: Matt Ranostay <mranostay@ti.com>
-> > ---
-> >  drivers/mfd/Kconfig          |  14 ++++
-> >  drivers/mfd/Makefile         |   1 +
-> >  drivers/mfd/tps6594x.c       | 121 +++++++++++++++++++++++++++++++++++
-> >  include/linux/mfd/tps6594x.h |  84 ++++++++++++++++++++++++
-> >  4 files changed, 220 insertions(+)
-> >  create mode 100644 drivers/mfd/tps6594x.c
-> >  create mode 100644 include/linux/mfd/tps6594x.h
-> > 
-> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> > index abb58ab1a1a4..4845683ae1d0 100644
-> > --- a/drivers/mfd/Kconfig
-> > +++ b/drivers/mfd/Kconfig
-> > @@ -1547,6 +1547,20 @@ config MFD_TI_LP873X
-> >  	  This driver can also be built as a module. If so, the module
-> >  	  will be called lp873x.
-> >  
-> > +config MFD_TPS6594X
-> > +	tristate "TI TPS6594X Power Management IC"
-> > +	depends on I2C && OF
-> > +	select MFD_CORE
-> > +	select REGMAP_I2C
-> > +	help
-> > +	  If you say yes here then you get support for the TPS6594X series of
-> > +	  Power Management Integrated Circuits (PMIC).
-> > +	  These include voltage regulators, RTS, configurable
-> > +	  General Purpose Outputs (GPO) that are used in portable devices.
-> > +
-> > +	  This driver can also be built as a module. If so, the module
-> > +	  will be called tps6594x.
-> > +
-> >  config MFD_TI_LP87565
-> >  	tristate "TI LP87565 Power Management IC"
-> >  	depends on I2C && OF
-> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > index 858cacf659d6..7ff6a8a57d55 100644
-> > --- a/drivers/mfd/Makefile
-> > +++ b/drivers/mfd/Makefile
-> > @@ -105,6 +105,7 @@ obj-$(CONFIG_MFD_TPS65910)	+= tps65910.o
-> >  obj-$(CONFIG_MFD_TPS65912)	+= tps65912-core.o
-> >  obj-$(CONFIG_MFD_TPS65912_I2C)	+= tps65912-i2c.o
-> >  obj-$(CONFIG_MFD_TPS65912_SPI)  += tps65912-spi.o
-> > +obj-$(CONFIG_MFD_TPS6594X)	+= tps6594x.o
-> >  obj-$(CONFIG_MENELAUS)		+= menelaus.o
-> >  
-> >  obj-$(CONFIG_TWL4030_CORE)	+= twl-core.o twl4030-irq.o twl6030-irq.o
-> > diff --git a/drivers/mfd/tps6594x.c b/drivers/mfd/tps6594x.c
-> > new file mode 100644
-> > index 000000000000..ff265b91db3e
-> > --- /dev/null
-> > +++ b/drivers/mfd/tps6594x.c
-> > @@ -0,0 +1,121 @@
-> > +// SPDX-License-Identifier: GPL-2.0-or-later
-> > +/*
-> > + * Driver for tps6594x PMIC chips
-> > + *
-> > + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
-> > + * Author: Keerthy <j-keerthy@ti.com>
-> > + */
-> > +
-> > +#include <linux/of.h>
-> > +#include <linux/of_device.h>
-> > +#include <linux/mfd/core.h>
-> > +#include <linux/mfd/tps6594x.h>
-> > +#include <linux/module.h>
-> > +#include <linux/i2c.h>
-> > +#include <linux/regmap.h>
-> > +
-> > +static const struct regmap_config tps6594x_regmap_config = {
-> > +	.reg_bits = 8,
-> > +	.val_bits = 8,
-> > +	.max_register = TPS6594X_REG_MAX,
-> > +};
-> > +
-> > +static const struct mfd_cell tps6594x_cells[] = {
-> > +	{ .name = "tps6594x-gpio" },
-> > +	{ .name = "tps6594x-regulator" },
-> > +	{ .name = "tps6594x-rtc" },
-> > +};
-> 
-> Where are the device drivers for these?
+On Fri, Aug 26, 2022 at 4:44 AM Christian Brauner <brauner@kernel.org> wrote:
+> On Fri, Aug 19, 2022 at 02:50:57PM -0400, Paul Moore wrote:
+> > On Tue, Aug 16, 2022 at 6:12 PM Paul Moore <paul@paul-moore.com> wrote:
+> > > On Fri, Jul 8, 2022 at 5:35 AM Ondrej Mosnacek <omosnace@redhat.com> wrote:
+> > > >
+> > > > Since userfaultfd doesn't implement a write operation, it is more
+> > > > appropriate to open it read-only.
+> > > >
+> > > > When userfaultfds are opened read-write like it is now, and such fd is
+> > > > passed from one process to another, SELinux will check both read and
+> > > > write permissions for the target process, even though it can't actually
+> > > > do any write operation on the fd later.
+> > > >
+> > > > Inspired by the following bug report, which has hit the SELinux scenario
+> > > > described above:
+> > > > https://bugzilla.redhat.com/show_bug.cgi?id=1974559
+> > > >
+> > > > Reported-by: Robert O'Callahan <roc@ocallahan.org>
+> > > > Fixes: 86039bd3b4e6 ("userfaultfd: add new syscall to provide memory externalization")
+> > > > Signed-off-by: Ondrej Mosnacek <omosnace@redhat.com>
+> > > > ---
+> > > >
+> > > > Resending as the last submission was ignored for over a year...
+> > > >
+> > > > https://lore.kernel.org/lkml/20210624152515.1844133-1-omosnace@redhat.com/T/
+> > > >
+> > > > I marked this as RFC, because I'm not sure if this has any unwanted side
+> > > > effects. I only ran this patch through selinux-testsuite, which has a
+> > > > simple userfaultfd subtest, and a reproducer from the Bugzilla report.
+> > > >
+> > > > Please tell me whether this makes sense and/or if it passes any
+> > > > userfaultfd tests you guys might have.
+> > > >
+> > > >  fs/userfaultfd.c | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >
+> > > VFS folks, any objection to this patch?  It seems reasonable to me and
+> > > I'd really prefer this to go in via the vfs tree, but I'm not above
+> > > merging this via the lsm/next tree to get someone in vfs land to pay
+> > > attention to this ...
+> >
+> > Okay, final warning, if I don't see any objections to this when I make
+> > my patch sweep next week I'm going to go ahead and merge this via the
+> > LSM tree.
 >
+> Makes sense,
+> Acked-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 
-They currently don't exist. Would these need to be merged/developed
-before the acceptance of the mfd driver?
+Merged into lsm/next, thanks all.
 
-- Matt
-
-> -- 
-> Lee Jones [李琼斯]
+-- 
+paul-moore.com

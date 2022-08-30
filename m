@@ -2,64 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31895A5BAE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DD6B5A5BBC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:25:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229538AbiH3GVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S229971AbiH3GZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiH3GVI (ORCPT
+        with ESMTP id S229764AbiH3GZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:21:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C90EB73323;
-        Mon, 29 Aug 2022 23:21:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52C6761407;
-        Tue, 30 Aug 2022 06:21:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93272C433D7;
-        Tue, 30 Aug 2022 06:21:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661840464;
-        bh=4pblfYpA63CrE4rMWyeeR7WMMlRkZGVcfIrjeRiiXz4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X0lVDNWwDs0piYuKSZk4VHLRFseVcxbpP6HucMF7+eCB2612CLy1kIWMwmnBeIs+c
-         T7ibHa1Qym3Ik7wZocYQ9/Cfz//5yURLwjqVPrKFdEpjnib54SOGZb385BPqwLkloO
-         p8CwTCO/wu1uGyVYhP8/IpHlPzNDo/3IdtlscjGpKhPMk1EpOOVSgMRWHbDbbQeicK
-         1ndJU+IIYlJ3giv8NHI/IIaKKK5JluMNfgJCZOHHf3cM2ntiRdc78d5eZ0dSbSEuKN
-         s2iFapYfReXT0fu07fzYUgfe58nQLzXfRbeTn2mxzkBc4CV5TcS2Vp8UdPpFwgBLQ+
-         NkEEediBSO2Rg==
-Date:   Tue, 30 Aug 2022 11:50:50 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Johan Hovold <johan@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] cpufreq: qcom-hw: Move clocks to CPU node
-Message-ID: <20220830062050.GA7066@workstation>
-References: <cover.1657695140.git.viresh.kumar@linaro.org>
- <20220715160933.GD12197@workstation>
- <20220718015742.uwskqo55qd67jx2w@vireshk-i7>
- <20220801023756.76jswkbwivuntqof@vireshk-i7>
- <20220830032456.z4olnogsyg32vhiz@builder.lan>
- <20220830054042.akj7pf366inelvpo@vireshk-i7>
+        Tue, 30 Aug 2022 02:25:33 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46D034CA33;
+        Mon, 29 Aug 2022 23:25:31 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MGxzd6st6zlWXK;
+        Tue, 30 Aug 2022 14:22:05 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 30 Aug 2022 14:25:28 +0800
+Received: from localhost.localdomain (10.69.192.56) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 30 Aug 2022 14:25:28 +0800
+From:   Jie Hai <haijie1@huawei.com>
+To:     <vkoul@kernel.org>, <wangzhou1@hisilicon.com>
+CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [RESEND PATCH v5 0/7] dmaengine: hisilicon: Add support for hisi dma driver
+Date:   Tue, 30 Aug 2022 14:22:44 +0800
+Message-ID: <20220830062251.52993-1-haijie1@huawei.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830054042.akj7pf366inelvpo@vireshk-i7>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.69.192.56]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,32 +49,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 11:10:42AM +0530, Viresh Kumar wrote:
-> On 29-08-22, 22:24, Bjorn Andersson wrote:
-> > Conceptually, it sounds like a good idea to express the clock feeding
-> > the CPU clusters, which is controlled by the OSM/EPSS.  But do you
-> > expect the OPP framework to actually do something with the clock, or
-> > just to ensure that the relationship is properly described?
-> 
-> No, the OPP core will never try to set the clock rate in your case,
-> though it will do clk_get().
-> 
+The HiSilicon IP08 and HiSilicon IP09 are DMA iEPs, they share the
+same pci device id but different pci revision and register layouts.
 
-Okay. Then I think it is a fair argument to make qcom-cpufreq-hw as the
-clock provider for CPUs.
+The original version supports HiSilicon IP08 but not HiSilicon IP09.
+This series support DMA driver for HIP08 and HIP09:
+1. Fix bugs for HIP08 DMA driver
+	- Disable hardware channels when driver detached
+	- Update cq_head whenever accessed it
+	- Support multi-thread for one DMA channel
+2. Use macros instead of magic number
+3. Add support for HIP09 DMA driver
+4. Add debugfs for HIP08 and HIP09 DMA driver
+5. Add myself as maintainer of hisi_dma.c
 
-I will send the RFC soon.
+Changes since version 4:
+ - Fix hdma_dev->base to hdma_dev->queue_base in hisi_dma_reset_or_disable_hw_chan
 
-Thanks,
-Mani
+Changes since version 3:
+ - remove reduldant braces
+ - add "Acked-by: Zhou Wang <wangzhou1@hisilicon.com>" in commit log
 
-> > FWIW, the possible discrepancy between the requested frequency and the
-> > actual frequency comes from the fact that OSM/EPSS throttles the cluster
-> > frequency based on a number of different factors (thermal, voltages
-> > ...).
-> > This is reported back to the kernel using the thermal pressure
-> > interface. It would be quite interesting to see some investigation in
-> > how efficient the kernel is at making use of this feedback.
-> 
-> -- 
-> viresh
+Changes since version 2:
+ - fix unnecessary line breaks
+ - fix register bit with BIT/GENMASK and adjust hisi_dma_update_bit to it
+ - remove "Reported-by" in commit message
+ - use dmaengine root instead of hisi_dma root
+ - ignore errors for creating debugfs
+
+Changes since version 1:
+ - remove error changes casuse compile failure
+ - remove reduldant "*" in comment
+ - remove debugfs-hisi-dma doc and path in MAINTAINERS
+
+Jie Hai (7):
+  dmaengine: hisilicon: Disable channels when unregister hisi_dma
+  dmaengine: hisilicon: Fix CQ head update
+  dmaengine: hisilicon: Add multi-thread support for a DMA channel
+  dmaengine: hisilicon: Use macros instead of magic number
+  dmaengine: hisilicon: Adapt DMA driver to HiSilicon IP09
+  dmaengine: hisilicon: Dump regs to debugfs
+  MAINTAINERS: Add myself as maintainer for hisi_dma
+
+ MAINTAINERS            |   1 +
+ drivers/dma/hisi_dma.c | 650 +++++++++++++++++++++++++++++++++++------
+ 2 files changed, 555 insertions(+), 96 deletions(-)
+
+-- 
+2.33.0
+

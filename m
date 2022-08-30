@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F965A6122
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583185A6123
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiH3Ku2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
+        id S230088AbiH3Kua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiH3KuD (ORCPT
+        with ESMTP id S230079AbiH3KuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:50:03 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41FFDE57
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:49:54 -0700 (PDT)
+        Tue, 30 Aug 2022 06:50:04 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE9CBAB
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:49:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1661856592;
-        bh=YGYJfp6hCx6eH/Nfs4eCDr4R+EBIr89AN05AxFZ+kgc=;
+        s=default; t=1661856597;
+        bh=xwyA5+g8JSApQRoCXLyrCSM88yP+CbIqwJ7m9kBGWbI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=i/iu15VaVq3fWj7vxK8lMB+T7u568U+R8lUMO5NuYU84svsWy1RAaP+P3HCjCpR4A
-         PwwA8vbo6uuAwzrFmVl63qDIdRa2d4E+WVA30ktk4H3wx4KzKjiWXm51Zk6OfoNswI
-         HJMkEx4YO6jPOEFmkhd8utxvUG+U4pIvqD8iZ7QI=
+        b=D7YaoPeCkFxnRz5OOFgWEZoCwM4CJCqL8pQE/qfNojMmI1zJAH8FaaDYnit54N7tc
+         j/8gPc1fkftU8HXayzdnR5SbViZdnwJyo0XhqDhywEEbd9SgooISipSLk9wLqaVi0f
+         qNMj/0wuLQs/cNHs2lZ9ZOAOykYHH5ROYK1xJAzY=
 Received: from xry111-x57s1.. (unknown [IPv6:240e:358:11dd:1900:dc73:854d:832e:5])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
         (Client did not present a certificate)
         (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 4B4E6660BA;
-        Tue, 30 Aug 2022 06:49:47 -0400 (EDT)
+        by xry111.site (Postfix) with ESMTPSA id 36BBC660B9;
+        Tue, 30 Aug 2022 06:49:52 -0400 (EDT)
 From:   Xi Ruoyao <xry111@xry111.site>
 To:     loongarch@lists.linux.dev
 Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
@@ -36,9 +36,9 @@ Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
         Youling Tang <tangyouling@loongson.cn>,
         Jinyang He <hejinyang@loongson.cn>,
         Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH v7 3/5] LoongArch: Define ELF relocation types added in v2.00 ABI
-Date:   Tue, 30 Aug 2022 18:48:04 +0800
-Message-Id: <20220830104806.128365-4-xry111@xry111.site>
+Subject: [PATCH v7 4/5] LoongArch: Support PC-relative relocations in modules
+Date:   Tue, 30 Aug 2022 18:48:05 +0800
+Message-Id: <20220830104806.128365-5-xry111@xry111.site>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220830104806.128365-1-xry111@xry111.site>
 References: <20220830104806.128365-1-xry111@xry111.site>
@@ -54,77 +54,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These relocation types are used by GNU binutils >= 2.40 and GCC >= 13.
-Add their definitions so we will be able to use them in later patches.
+Binutils >= 2.40 uses R_LARCH_B26 instead of R_LARCH_SOP_PUSH_PLT_PCREL,
+and R_LARCH_PCALA* instead of R_LARCH_SOP_PUSH_PCREL.
 
-Link: https://github.com/loongson/LoongArch-Documentation/pull/57
+Handle R_LARCH_B26 and R_LARCH_PCALA* in the module loader.  For
+R_LARCH_B26, also create a PLT entry as needed.
+
 Signed-off-by: Xi Ruoyao <xry111@xry111.site>
 ---
- arch/loongarch/include/asm/elf.h | 37 ++++++++++++++++++++++++++++++++
- arch/loongarch/kernel/module.c   |  2 +-
- 2 files changed, 38 insertions(+), 1 deletion(-)
+ arch/loongarch/kernel/module-sections.c |  7 ++-
+ arch/loongarch/kernel/module.c          | 67 +++++++++++++++++++++++++
+ 2 files changed, 73 insertions(+), 1 deletion(-)
 
-diff --git a/arch/loongarch/include/asm/elf.h b/arch/loongarch/include/asm/elf.h
-index 5f3ff4781fda..7af0cebf28d7 100644
---- a/arch/loongarch/include/asm/elf.h
-+++ b/arch/loongarch/include/asm/elf.h
-@@ -74,6 +74,43 @@
- #define R_LARCH_SUB64				56
- #define R_LARCH_GNU_VTINHERIT			57
- #define R_LARCH_GNU_VTENTRY			58
-+#define R_LARCH_B16				64
-+#define R_LARCH_B21				65
-+#define R_LARCH_B26				66
-+#define R_LARCH_ABS_HI20			67
-+#define R_LARCH_ABS_LO12			68
-+#define R_LARCH_ABS64_LO20			69
-+#define R_LARCH_ABS64_HI12			70
-+#define R_LARCH_PCALA_HI20			71
-+#define R_LARCH_PCALA_LO12			72
-+#define R_LARCH_PCALA64_LO20			73
-+#define R_LARCH_PCALA64_HI12			74
-+#define R_LARCH_GOT_PC_HI20			75
-+#define R_LARCH_GOT_PC_LO12			76
-+#define R_LARCH_GOT64_PC_LO20			77
-+#define R_LARCH_GOT64_PC_HI12			78
-+#define R_LARCH_GOT_HI20			79
-+#define R_LARCH_GOT_LO12			80
-+#define R_LARCH_GOT64_LO20			81
-+#define R_LARCH_GOT64_HI12			82
-+#define R_LARCH_TLS_LE_HI20			83
-+#define R_LARCH_TLS_LE_LO12			84
-+#define R_LARCH_TLS_LE64_LO20			85
-+#define R_LARCH_TLS_LE64_HI12			86
-+#define R_LARCH_TLS_IE_PC_HI20			87
-+#define R_LARCH_TLS_IE_PC_LO12			88
-+#define R_LARCH_TLS_IE64_PC_LO20		89
-+#define R_LARCH_TLS_IE64_PC_HI12		90
-+#define R_LARCH_TLS_IE_HI20			91
-+#define R_LARCH_TLS_IE_LO12			92
-+#define R_LARCH_TLS_IE64_LO20			93
-+#define R_LARCH_TLS_IE64_HI12			94
-+#define R_LARCH_TLS_LD_PC_HI20			95
-+#define R_LARCH_TLS_LD_HI20			96
-+#define R_LARCH_TLS_GD_PC_HI20			97
-+#define R_LARCH_TLS_GD_HI20			98
-+#define R_LARCH_32_PCREL			99
-+#define R_LARCH_RELAX				100
+diff --git a/arch/loongarch/kernel/module-sections.c b/arch/loongarch/kernel/module-sections.c
+index 6d498288977d..c67b9cb220eb 100644
+--- a/arch/loongarch/kernel/module-sections.c
++++ b/arch/loongarch/kernel/module-sections.c
+@@ -56,9 +56,14 @@ static void count_max_entries(Elf_Rela *relas, int num, unsigned int *plts)
  
- #ifndef ELF_ARCH
- 
+ 	for (i = 0; i < num; i++) {
+ 		type = ELF_R_TYPE(relas[i].r_info);
+-		if (type == R_LARCH_SOP_PUSH_PLT_PCREL) {
++		switch (type) {
++		case R_LARCH_SOP_PUSH_PLT_PCREL:
++		case R_LARCH_B26:
+ 			if (!duplicate_rela(relas, i))
+ 				(*plts)++;
++			break;
++		default:
++			/* Do nothing. */
+ 		}
+ 	}
+ }
 diff --git a/arch/loongarch/kernel/module.c b/arch/loongarch/kernel/module.c
-index 638427ff0d51..755d91ef8d85 100644
+index 755d91ef8d85..c09ddbe5ed8b 100644
 --- a/arch/loongarch/kernel/module.c
 +++ b/arch/loongarch/kernel/module.c
-@@ -296,7 +296,7 @@ typedef int (*reloc_rela_handler)(struct module *mod, u32 *location, Elf_Addr v,
+@@ -281,6 +281,71 @@ static int apply_r_larch_add_sub(struct module *mod, u32 *location, Elf_Addr v,
+ 	}
+ }
  
- /* The handlers for known reloc types */
- static reloc_rela_handler reloc_rela_handlers[] = {
--	[R_LARCH_NONE ... R_LARCH_SUB64]		     = apply_r_larch_error,
-+	[R_LARCH_NONE ... R_LARCH_RELAX]		     = apply_r_larch_error,
++static int apply_r_larch_b26(struct module *mod, u32 *location, Elf_Addr v,
++			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++{
++	ptrdiff_t offset = (void *)v - (void *)location;
++	union loongarch_instruction *insn = (union loongarch_instruction *)location;
++
++	if (offset >= SZ_128M)
++		v = module_emit_plt_entry(mod, v);
++
++	if (offset < -SZ_128M)
++		v = module_emit_plt_entry(mod, v);
++
++	offset = (void *)v - (void *)location;
++
++	if (offset & 3) {
++		pr_err("module %s: jump offset = 0x%llx unaligned! dangerous R_LARCH_B26 (%u) relocation\n",
++				mod->name, (long long)offset, type);
++		return -ENOEXEC;
++	}
++
++	if (!signed_imm_check(offset, 28)) {
++		pr_err("module %s: jump offset = 0x%llx overflow! dangerous R_LARCH_B26 (%u) relocation\n",
++				mod->name, (long long)offset, type);
++		return -ENOEXEC;
++	}
++
++	offset >>= 2;
++	insn->reg0i26_format.immediate_l = offset & 0xffff;
++	insn->reg0i26_format.immediate_h = (offset >> 16) & 0x3ff;
++	return 0;
++}
++
++static int apply_r_larch_pcala(struct module *mod, u32 *location, Elf_Addr v,
++			s64 *rela_stack, size_t *rela_stack_top, unsigned int type)
++{
++	union loongarch_instruction *insn = (union loongarch_instruction *)location;
++	/* Use s32 for a sign-extension deliberately. */
++	s32 offset_hi20 = (void *)((v + 0x800) & ~0xfff) -
++		(void *)((Elf_Addr)location & ~0xfff);
++	Elf_Addr anchor = (((Elf_Addr)location) & ~0xfff) + offset_hi20;
++	ptrdiff_t offset_rem = (void *)v - (void *)anchor;
++
++	switch (type) {
++	case R_LARCH_PCALA_HI20:
++		v = offset_hi20 >> 12;
++		insn->reg1i20_format.immediate = v & 0xfffff;
++		break;
++	case R_LARCH_PCALA64_LO20:
++		v = offset_rem >> 32;
++		insn->reg1i20_format.immediate = v & 0xfffff;
++		break;
++	case R_LARCH_PCALA64_HI12:
++		v = offset_rem >> 52;
++		/* fall through */
++	case R_LARCH_PCALA_LO12:
++		insn->reg2i12_format.immediate = v & 0xfff;
++		break;
++	default:
++		pr_err("%s: Unsupport relocation type %u\n", mod->name, type);
++		return -EINVAL;
++	}
++
++	return 0;
++}
++
+ /*
+  * reloc_handlers_rela() - Apply a particular relocation to a module
+  * @mod: the module to apply the reloc to
+@@ -310,6 +375,8 @@ static reloc_rela_handler reloc_rela_handlers[] = {
+ 	[R_LARCH_SOP_SUB ... R_LARCH_SOP_IF_ELSE] 	     = apply_r_larch_sop,
+ 	[R_LARCH_SOP_POP_32_S_10_5 ... R_LARCH_SOP_POP_32_U] = apply_r_larch_sop_imm_field,
+ 	[R_LARCH_ADD32 ... R_LARCH_SUB64]		     = apply_r_larch_add_sub,
++	[R_LARCH_B26]					     = apply_r_larch_b26,
++	[R_LARCH_PCALA_HI20...R_LARCH_PCALA64_HI12]	     = apply_r_larch_pcala,
+ };
  
- 	[R_LARCH_NONE]					     = apply_r_larch_none,
- 	[R_LARCH_32]					     = apply_r_larch_32,
+ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
 -- 
 2.37.0
 

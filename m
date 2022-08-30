@@ -2,146 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8690B5A6C21
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7E15A6C29
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiH3S2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50454 "EHLO
+        id S231342AbiH3S3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:29:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231842AbiH3S2j (ORCPT
+        with ESMTP id S229522AbiH3S3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:28:39 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4470A62AA7;
-        Tue, 30 Aug 2022 11:28:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661884116; x=1693420116;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=YfXWSBWHSc7nzFXc3C8U0RLqVjkKnSLqKhiNl+qs3I0=;
-  b=d9puZdKAwMkyNhqQt8BOi1HjCS7KSry/rAJFVnoN6+B1yYfvb4+cWe6a
-   0+ZP7YCZJ44tI8LnbTDhwWEPQfTtdxKTFxLZd/d0PCHDT0eL//sXfTj7o
-   5PnjyqGQCDNVTQlckrOFwuBFfUr0ZMhjM43ekrpY2kpqQ9q6a7REkdXLI
-   7kva3R3mtUe8KquWDSvr92S3DP8kza4Kedv91gZKAdhkBPrId1BECkfap
-   H3ICv1yfW5Ta3pV2Dp97mMxCBvCFLCnWWvy7qoOf47/iLVpR6EyXh74LS
-   WsGw9R2sPL1A/cRqgVBtz61sFN4xpyH7FOGmpJqWdxWUKdsCCSNesP1ro
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="292846189"
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="292846189"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 11:28:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="562763453"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga003.jf.intel.com with ESMTP; 30 Aug 2022 11:28:27 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E6672174; Tue, 30 Aug 2022 21:28:41 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Alexander Shiyan <shc_work@mail.ru>
-Subject: [PATCH v1 1/1] Input: clps711x-keypad - get rid of OF_GPIO dependency
-Date:   Tue, 30 Aug 2022 21:28:39 +0300
-Message-Id: <20220830182839.47965-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+        Tue, 30 Aug 2022 14:29:33 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8ADA606B0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:29:30 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id x19so10305535pfr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:29:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=FU+ZSlt3Sk8P5QdR6iQM+zCwA/rYcAEgbcQlERV36lo=;
+        b=AVLiim4/w5eNujQh+FHqe0pG1E450AahPmNT7gwr7uneMFBOtATFS/aD2CQjgf9kml
+         nOReDHrybn/RecLf1FL98oBhuifJCgGh7Yqif4fu+Wll9wIworADNFc31uiodiFTowHw
+         0i86kuA/KKcMWSjCFICKQN8C/MHe0p+RnJuk8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=FU+ZSlt3Sk8P5QdR6iQM+zCwA/rYcAEgbcQlERV36lo=;
+        b=YsiNPK0eSb7uymisU2byA3QwO8Jl7NNRprTgR2dbojkFfV0p37fpWS5G8tVwFi5Wr2
+         nWeTLah8n4ZtfAQbeMNjs9xvfTIP//abou/HYcfb4NuC1jlG/sbzlmMGqfOfHRlXVCea
+         eIixP0qcJElVBKfeo3dOrzDO5UyGv1csZ0BtBRs9AtHAxSwGa43osPNRH/cup8ZnbKSK
+         TVQxYUD44ZlBabPdtp1CPTazxDE1k21ArrzSRpIHP7U/BNM/rIF7bhp369rLc2MV/+1N
+         JLVKFOMIfzgWuxUn8qa8f4wSrMwa1XYy9Syo7jQ2H4x8UYU/bT2M9Y6TWYb0NKgLtA9+
+         Btkg==
+X-Gm-Message-State: ACgBeo3muHRz4GGdVOTrCN0QkbhYFAVEflQXp2Ys3hJ6kjoLh5Wexrgr
+        86fTANm0OZ9ZxdK6zyqGhyDlDQ==
+X-Google-Smtp-Source: AA6agR4/Oe6xii1sTCjsGZNxbvRtumssg8Ek7XhZXfjhbSUnofYieYWz7L2nXatt+BIfuwM+M9Y8MA==
+X-Received: by 2002:aa7:8551:0:b0:538:22ec:d965 with SMTP id y17-20020aa78551000000b0053822ecd965mr12614278pfn.16.1661884170216;
+        Tue, 30 Aug 2022 11:29:30 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:202:201:f016:d779:b6b0:fd9d])
+        by smtp.gmail.com with ESMTPSA id u202-20020a6279d3000000b0052e37b32618sm9596358pfc.132.2022.08.30.11.29.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 11:29:29 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Sibi Sankar <quic_sibis@quicinc.com>,
+        Jimmy Chen <jinghung.chen3@hotmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v9 0/3] arm64: dts: qcom: Add new board revision and LTE SKUs for sc7280-villager family
+Date:   Tue, 30 Aug 2022 11:29:20 -0700
+Message-Id: <20220830182923.3720287-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no such dependency in the driver, but it's implicitly
-used to have OF property APIs available. Replace that by device
-property API and get rid of OF_GPIO dependency.
+These patches add a new board revision for device Villager, and add
+new LTE sku for both board revisions.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/input/keyboard/Kconfig           |  2 +-
- drivers/input/keyboard/clps711x-keypad.c | 13 +++++++------
- 2 files changed, 8 insertions(+), 7 deletions(-)
+yaml issue has been clarified in [1] and [2], and 'status' has been
+reordeded last since v4.
 
-diff --git a/drivers/input/keyboard/Kconfig b/drivers/input/keyboard/Kconfig
-index a20ee693b22b..2c6cef222f9c 100644
---- a/drivers/input/keyboard/Kconfig
-+++ b/drivers/input/keyboard/Kconfig
-@@ -186,7 +186,7 @@ config KEYBOARD_QT2160
- 
- config KEYBOARD_CLPS711X
- 	tristate "CLPS711X Keypad support"
--	depends on OF_GPIO && (ARCH_CLPS711X || COMPILE_TEST)
-+	depends on ARCH_CLPS711X || COMPILE_TEST
- 	select INPUT_MATRIXKMAP
- 	help
- 	  Say Y here to enable the matrix keypad on the Cirrus Logic
-diff --git a/drivers/input/keyboard/clps711x-keypad.c b/drivers/input/keyboard/clps711x-keypad.c
-index 939c88655fc0..4c1a3e611edd 100644
---- a/drivers/input/keyboard/clps711x-keypad.c
-+++ b/drivers/input/keyboard/clps711x-keypad.c
-@@ -6,9 +6,11 @@
-  */
- 
- #include <linux/input.h>
-+#include <linux/mod_devicetable.h>
- #include <linux/module.h>
--#include <linux/of_gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/platform_device.h>
-+#include <linux/property.h>
- #include <linux/regmap.h>
- #include <linux/sched.h>
- #include <linux/input/matrix_keypad.h>
-@@ -86,7 +88,6 @@ static int clps711x_keypad_probe(struct platform_device *pdev)
- {
- 	struct clps711x_keypad_data *priv;
- 	struct device *dev = &pdev->dev;
--	struct device_node *np = dev->of_node;
- 	struct input_dev *input;
- 	u32 poll_interval;
- 	int i, err;
-@@ -95,11 +96,11 @@ static int clps711x_keypad_probe(struct platform_device *pdev)
- 	if (!priv)
- 		return -ENOMEM;
- 
--	priv->syscon = syscon_regmap_lookup_by_phandle(np, "syscon");
-+	priv->syscon = syscon_regmap_lookup_by_phandle(dev->of_node, "syscon");
- 	if (IS_ERR(priv->syscon))
- 		return PTR_ERR(priv->syscon);
- 
--	priv->row_count = of_gpio_named_count(np, "row-gpios");
-+	priv->row_count = gpiod_count(dev, "row");
- 	if (priv->row_count < 1)
- 		return -EINVAL;
- 
-@@ -119,7 +120,7 @@ static int clps711x_keypad_probe(struct platform_device *pdev)
- 			return PTR_ERR(data->desc);
- 	}
- 
--	err = of_property_read_u32(np, "poll-interval", &poll_interval);
-+	err = device_property_read_u32(dev, "poll-interval", &poll_interval);
- 	if (err)
- 		return err;
- 
-@@ -143,7 +144,7 @@ static int clps711x_keypad_probe(struct platform_device *pdev)
- 		return err;
- 
- 	input_set_capability(input, EV_MSC, MSC_SCAN);
--	if (of_property_read_bool(np, "autorepeat"))
-+	if (device_property_read_bool(dev, "autorepeat"))
- 		__set_bit(EV_REP, input->evbit);
- 
- 	/* Set all columns to low */
+v9 is me squashing changes from my patches [3] [4] in. For patches I
+touched I removed my Reviewed-by. I added my Signed-off-by to all
+patches.
+
+[1] https://lore.kernel.org/all/CAD=FV=WtKRFQr5jSQvsr08x9dgHrvenUWWtX_SKuCLuSvSH7WQ@mail.gmail.com/
+[2] https://lore.kernel.org/all/d3d4d90b-85b5-5ad9-78e6-5a074c21af4f@linaro.org/
+[3] https://lore.kernel.org/r/20220829084732.1.I9ef7f8b909a7afbef9ff2251a98c67033f37b516@changeid
+[4] https://lore.kernel.org/r/20220829084732.2.I22e256d1ebac577a91fac44d1d12919be7111cd4@changeid/
+
+Changes in v9:
+- Squash https://lore.kernel.org/r/20220829084732.1.I9ef7f8b909a7afbef9ff2251a98c67033f37b516@changeid
+- Squash https://lore.kernel.org/r/20220829084732.2.I22e256d1ebac577a91fac44d1d12919be7111cd4@changeid/
+
+Changes in v7:
+- Revise typo 'ARCG' to 'ARCH' in Makefile
+
+Changes in v6:
+- Remove v5 accidentally added sc7280-herobrine-herobrine-r1-lte.dts
+
+Changes in v5:
+- Revise rev0+ to rev0
+- Add -r1 line to the Makefile
+- Reorder '.dtb' in Makefile
+- Put the "interconnects" line back
+
+Changes in v4:
+- ("...: Add herobrine-villager-r1") new for v4
+- Reorder 'status' last
+
+Changes in v2:
+- ("...: document sc7280 and villager board") new for v2.
+
+Jimmy Chen (3):
+  dt-bindings: arm: qcom: document sc7280 and villager board
+  arm64: dts: qcom: sc7280: Add herobrine-villager-r1
+  arm64: dts: qcom: Add LTE SKUs for sc7280-villager family
+
+ .../devicetree/bindings/arm/qcom.yaml         |  10 +
+ arch/arm64/boot/dts/qcom/Makefile             |   2 +
+ .../boot/dts/qcom/sc7280-chrome-common.dtsi   |  11 -
+ .../boot/dts/qcom/sc7280-herobrine-crd.dts    |   1 +
+ .../qcom/sc7280-herobrine-herobrine-r1.dts    |   1 +
+ .../dts/qcom/sc7280-herobrine-lte-sku.dtsi    |  17 +
+ .../dts/qcom/sc7280-herobrine-villager-r0.dts | 325 +----------------
+ .../qcom/sc7280-herobrine-villager-r1-lte.dts |  14 +
+ .../dts/qcom/sc7280-herobrine-villager-r1.dts |  16 +
+ .../dts/qcom/sc7280-herobrine-villager.dtsi   | 326 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts       |   1 +
+ 11 files changed, 392 insertions(+), 332 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-lte-sku.dtsi
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager-r1.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-villager.dtsi
+
 -- 
-2.35.1
+2.37.2.672.g94769d06f0-goog
 

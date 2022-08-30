@@ -2,156 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECF15A6190
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:21:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39EF85A6198
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229989AbiH3LVo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:21:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44522 "EHLO
+        id S229741AbiH3LWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229965AbiH3LVd (ORCPT
+        with ESMTP id S229908AbiH3LWc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:21:33 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2CB5FF48
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 04:21:32 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oSzJ7-0000k6-BY; Tue, 30 Aug 2022 13:21:25 +0200
-Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oSzJ5-002rKh-LL; Tue, 30 Aug 2022 13:21:23 +0200
-Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oSzJ5-008dgv-0q; Tue, 30 Aug 2022 13:21:23 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?q?S=C3=B8ren=20Andersen?= <san@skov.dk>,
-        Sam Ravnborg <sam@ravnborg.org>
-Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: [PATCH v1 1/1] ARM: dts: imx6: skov: migrate to resistive-adc-touch
-Date:   Tue, 30 Aug 2022 13:21:21 +0200
-Message-Id: <20220830112121.2059062-1-o.rempel@pengutronix.de>
-X-Mailer: git-send-email 2.30.2
+        Tue, 30 Aug 2022 07:22:32 -0400
+Received: from smtp-42a9.mail.infomaniak.ch (smtp-42a9.mail.infomaniak.ch [IPv6:2001:1600:3:17::42a9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 558AEAD9AE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 04:22:31 -0700 (PDT)
+Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MH4fC4m5wzMqJT0;
+        Tue, 30 Aug 2022 13:22:27 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4MH4fB03k7zlh8TF;
+        Tue, 30 Aug 2022 13:22:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1661858547;
+        bh=VRsf1Wd8Vv3G5MDmh8RBWHIdTuSCowSnujkVCmhBQK0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=H76gWaKNdSZh20vELtEQWYecxd3svm/aauuwqOvursL/QabjaoS5FSrQjVaS4SJe4
+         gDmoIRSszixQ4TmnhKb6c1SaTMC7UzjfJ4mBPQGttWye0kdSQOZE8bdHJktGHVJkMf
+         KderlZWhS64b0y/GXMaPCt+IkVK27Zwf5oKXRKLU=
+Message-ID: <4142d01a-7362-0865-f199-7a49b2c1a5ea@digikod.net>
+Date:   Tue, 30 Aug 2022 13:22:25 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH -next v2 0/6] landlock: add chmod and chown support
+Content-Language: en-US
+To:     Xiu Jianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
+        corbet@lwn.net
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20220827111215.131442-1-xiujianfeng@huawei.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <20220827111215.131442-1-xiujianfeng@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Start to use more generic resistive-adc-touch node. ti,tsc2046 is an ADC
-controller used for resistive touchscreen. So, define it as ADC and
-attach resistive-adc-touch to it.
+Please add a description and include links to the previous versions.
 
-Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
----
- arch/arm/boot/dts/imx6qdl-skov-cpu-revc.dtsi | 65 ++++++++++++++------
- 1 file changed, 45 insertions(+), 20 deletions(-)
-
-diff --git a/arch/arm/boot/dts/imx6qdl-skov-cpu-revc.dtsi b/arch/arm/boot/dts/imx6qdl-skov-cpu-revc.dtsi
-index 8254bce1b8a22..b81799d7076aa 100644
---- a/arch/arm/boot/dts/imx6qdl-skov-cpu-revc.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-skov-cpu-revc.dtsi
-@@ -2,35 +2,60 @@
- //
- // Copyright (C) 2020 Pengutronix, Ulrich Oelmann <kernel@pengutronix.de>
- 
-+/ {
-+	touchscreen {
-+		compatible = "resistive-adc-touch";
-+		io-channels = <&adc_ts 1>, <&adc_ts 3>, <&adc_ts 4>, <&adc_ts 5>;
-+		io-channel-names = "y", "z1", "z2", "x";
-+		touchscreen-min-pressure = <65000>;
-+		touchscreen-inverted-y;
-+		touchscreen-swapped-x-y;
-+		touchscreen-x-plate-ohms = <300>;
-+		touchscreen-y-plate-ohms = <800>;
-+	};
-+};
-+
- &ecspi4 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_ecspi4>;
- 	cs-gpios = <&gpio3 20 GPIO_ACTIVE_LOW>;
- 	status = "okay";
- 
--	touchscreen@0 {
--		pinctrl-names = "default";
--		pinctrl-0 = <&pinctrl_touch>;
--		compatible = "ti,tsc2046";
-+	adc_ts: adc@0 {
-+		compatible = "ti,tsc2046e-adc";
- 		reg = <0>;
-+		pinctrl-0 = <&pinctrl_touch>;
-+		pinctrl-names ="default";
- 		spi-max-frequency = <1000000>;
- 		interrupts-extended = <&gpio3 19 IRQ_TYPE_LEVEL_LOW>;
--		vcc-supply = <&reg_3v3>;
--		pendown-gpio = <&gpio3 19 GPIO_ACTIVE_LOW>;
--		ti,x-plate-ohms = /bits/ 16 <850>;
--		ti,y-plate-ohms = /bits/ 16 <295>;
--		ti,pressure-min = /bits/ 16 <2>;
--		ti,pressure-max = /bits/ 16 <1500>;
--		ti,vref-mv = /bits/ 16 <3300>;
--		ti,settle-delay-usec = /bits/ 16 <15>;
--		ti,vref-delay-usecs = /bits/ 16 <0>;
--		ti,penirq-recheck-delay-usecs = /bits/ 16 <100>;
--		ti,debounce-max = /bits/ 16 <100>;
--		ti,debounce-tol = /bits/ 16 <(~0)>;
--		ti,debounce-rep = /bits/ 16 <4>;
--		touchscreen-swapped-x-y;
--		touchscreen-inverted-y;
--		wakeup-source;
-+		#io-channel-cells = <1>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		channel@1 {
-+			reg = <1>;
-+			settling-time-us = <700>;
-+			oversampling-ratio = <5>;
-+		};
-+
-+		channel@3 {
-+			reg = <3>;
-+			settling-time-us = <700>;
-+			oversampling-ratio = <5>;
-+		};
-+
-+		channel@4 {
-+			reg = <4>;
-+			settling-time-us = <700>;
-+			oversampling-ratio = <5>;
-+		};
-+
-+		channel@5 {
-+			reg = <5>;
-+			settling-time-us = <700>;
-+			oversampling-ratio = <5>;
-+		};
- 	};
- };
- 
--- 
-2.30.2
-
+On 27/08/2022 13:12, Xiu Jianfeng wrote:
+> v2:
+>   * abstract walk_to_visible_parent() helper
+>   * chmod and chown rights only take affect on directory's context
+>   * add testcase for fchmodat/lchown/fchownat
+>   * fix other review issues
+> 
+> Xiu Jianfeng (6):
+>    landlock: expand access_mask_t to u32 type
+>    landlock: abstract walk_to_visible_parent() helper
+>    landlock: add chmod and chown support
+>    landlock/selftests: add selftests for chmod and chown
+>    landlock/samples: add chmod and chown support
+>    landlock: update chmod and chown support in document
+> 
+>   Documentation/userspace-api/landlock.rst     |   9 +-
+>   include/uapi/linux/landlock.h                |  10 +-
+>   samples/landlock/sandboxer.c                 |  13 +-
+>   security/landlock/fs.c                       | 110 ++++++--
+>   security/landlock/limits.h                   |   2 +-
+>   security/landlock/ruleset.h                  |   2 +-
+>   security/landlock/syscalls.c                 |   2 +-
+>   tools/testing/selftests/landlock/base_test.c |   2 +-
+>   tools/testing/selftests/landlock/fs_test.c   | 267 ++++++++++++++++++-
+>   9 files changed, 386 insertions(+), 31 deletions(-)
+> 

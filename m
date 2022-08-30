@@ -2,148 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3300D5A6CD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFC45A6CCC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:09:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbiH3TKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S230445AbiH3TJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:09:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbiH3TKc (ORCPT
+        with ESMTP id S229658AbiH3TJR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:10:32 -0400
-Received: from conuserg-11.nifty.com (conuserg-11.nifty.com [210.131.2.78])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC37925C74
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:10:30 -0700 (PDT)
-Received: from grover.sesame (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-11.nifty.com with ESMTP id 27UJ8ZDM014149;
-        Wed, 31 Aug 2022 04:08:36 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-11.nifty.com 27UJ8ZDM014149
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1661886516;
-        bh=t6DIbr1IDWpT0lqcKO3t7PGRcyr9N1NHL0EgAGmnfbA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=c5L6Tcp9xyYkrBi2N0bkaidBeq2lHcIOWncoXMDzNLVc9vAvKt7GOCjYcOxy+EKGd
-         KoVN0wcbRvZaWaaBnf5/T0ZuH7cv6g0J2ClDzfGMFsJ/FpJW0byn9A17A0paX1NrQ3
-         nJoEuHhnE4wtiOkK3y99dqMgwfNGW7h5T7sXFVoKYieB4DufV5W3x5cRb1j9Lnwqwm
-         k7+n7GmLHJqI23M7xbcW/wQPx2PTc0wG7LwjtG4uCpOV553Z1QsDhdnI6xwjkpwvaa
-         3ZBxTsAGPzIh/z6FrHtJRVWtddmfnR6WP6jjg11YwJXy31MzunwBqM9xBtz1D/A79z
-         slz6SgdtEj3Jg==
-X-Nifty-SrcIP: [133.32.182.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH 2/2] powerpc: remove old code for binutils < 2.25
-Date:   Wed, 31 Aug 2022 04:08:11 +0900
-Message-Id: <20220830190811.323760-2-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220830190811.323760-1-masahiroy@kernel.org>
-References: <20220830190811.323760-1-masahiroy@kernel.org>
+        Tue, 30 Aug 2022 15:09:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7EA972696;
+        Tue, 30 Aug 2022 12:09:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 95EC9B81D8D;
+        Tue, 30 Aug 2022 19:09:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F5E9C433D7;
+        Tue, 30 Aug 2022 19:09:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661886554;
+        bh=3RzQ8lzdJbVGxY7Fac63eSU33uBmGlFQpKF4dZbtmYQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KxM8lKrSS4cHRGJfhY3zm2DFkvGjesnkECPeKDRSoi7V/N8qDwKwfuGk9nlyZNVHW
+         qlvp1LWn3xuE6vE14IfgXS27bJ5HUv5OHc4vz4U7OvTLdWSGmRT6ehYBxuQv4gcwah
+         osNFJeiEW8JVresvADuFt8dGst3SsQQwD5PHu3fY0FgUkDE63wfS3H9natCO5bYoDV
+         9Au/4UHIgRRqYFjZe/sEpXcOSMsvmVRLSoEGaDMbJZ8k9AvzxCdXaDgWBCRQXvzsFI
+         X2qIrST+G4gDQDiE96BNWTzcrHo1eofi5BKA8UNx/lKLHD9FL17GdirMgDMaNkhm2E
+         xXExo6H05m2tQ==
+Date:   Tue, 30 Aug 2022 20:08:56 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Wei Yongjun <weiyongjun1@huawei.com>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org
+Subject: Re: [PATCH -next 0/4] spi: Introduce BPF based SPI mockup controller
+Message-ID: <Yw5gSElhbYwoXrfw@sirena.org.uk>
+References: <20220826144341.532265-1-weiyongjun1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VEE/E6KN77c45Ytn"
+Content-Disposition: inline
+In-Reply-To: <20220826144341.532265-1-weiyongjun1@huawei.com>
+X-Cookie: Necessity is a mother.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The minimum supported version of binutils has been raised to 2.25.1.
-Drop the old code.
 
-PPC is the last user of ld-ifversion. With all the callers removed,
-the macro definition in scripts/Makefile.compiler can go away.
+--VEE/E6KN77c45Ytn
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+On Fri, Aug 26, 2022 at 02:43:37PM +0000, Wei Yongjun wrote:
+> This series Introduce a BPF based SPI mockup controller, which can be
+> used for testing SPI drivers without real device.
+>=20
+> The testsuite for SPI drivers will be post in other series, with also
+> support for I2C and PCI bus device drivers.
 
- arch/powerpc/Makefile     | 21 ---------------------
- arch/powerpc/lib/Makefile |  8 --------
- scripts/Makefile.compiler |  4 ----
- 3 files changed, 33 deletions(-)
+I replied to some of the individual patches here with some more
+detailed issues but I do have some big picture reservations with
+this approach as well.  One big one is that this seems like it's
+only going to be able to handle emulation of devices that are
+purely synchronous - I don't see any sensible direction here for
+extending to devices that need an interrupt line as well.  That
+seems like a major limitation.  It's fine not to immediately
+implement everything but it should be fairly clear how that would
+be done when someone needs it and some of the BPF design goals I
+understood seem to conflict with that.
 
-diff --git a/arch/powerpc/Makefile b/arch/powerpc/Makefile
-index 02742facf895..fb607758eeca 100644
---- a/arch/powerpc/Makefile
-+++ b/arch/powerpc/Makefile
-@@ -46,13 +46,7 @@ UTS_MACHINE := $(subst $(space),,$(machine-y))
- ifdef CONFIG_PPC32
- KBUILD_LDFLAGS_MODULE += arch/powerpc/lib/crtsavres.o
- else
--ifeq ($(call ld-ifversion, -ge, 22500, y),y)
--# Have the linker provide sfpr if possible.
--# There is a corresponding test in arch/powerpc/lib/Makefile
- KBUILD_LDFLAGS_MODULE += --save-restore-funcs
--else
--KBUILD_LDFLAGS_MODULE += arch/powerpc/lib/crtsavres.o
--endif
- endif
- 
- ifdef CONFIG_CPU_LITTLE_ENDIAN
-@@ -395,8 +389,6 @@ vdso_prepare: prepare0
- 		$(build)=arch/powerpc/kernel/vdso include/generated/vdso64-offsets.h)
- endif
- 
--archprepare: checkbin
--
- archheaders:
- 	$(Q)$(MAKE) $(build)=arch/powerpc/kernel/syscalls all
- 
-@@ -411,16 +403,3 @@ else
- 	$(eval KBUILD_CFLAGS += -mstack-protector-guard-offset=$(shell awk '{if ($$2 == "TASK_CANARY") print $$3;}' include/generated/asm-offsets.h))
- endif
- endif
--
--PHONY += checkbin
--# Check toolchain versions:
--# - gcc-4.6 is the minimum kernel-wide version so nothing required.
--checkbin:
--	@if test "x${CONFIG_LD_IS_LLD}" != "xy" -a \
--		"x$(call ld-ifversion, -le, 22400, y)" = "xy" ; then \
--		echo -n '*** binutils 2.24 miscompiles weak symbols ' ; \
--		echo 'in some circumstances.' ; \
--		echo    '*** binutils 2.23 do not define the TOC symbol ' ; \
--		echo -n '*** Please use a different binutils version.' ; \
--		false ; \
--	fi
-diff --git a/arch/powerpc/lib/Makefile b/arch/powerpc/lib/Makefile
-index 8560c912186d..5eb3971ccb9c 100644
---- a/arch/powerpc/lib/Makefile
-+++ b/arch/powerpc/lib/Makefile
-@@ -38,14 +38,6 @@ obj-$(CONFIG_PPC32)	+= div64.o copy_32.o crtsavres.o
- 
- obj-$(CONFIG_FUNCTION_ERROR_INJECTION)	+= error-inject.o
- 
--# See corresponding test in arch/powerpc/Makefile
--# 64-bit linker creates .sfpr on demand for final link (vmlinux),
--# so it is only needed for modules, and only for older linkers which
--# do not support --save-restore-funcs
--ifeq ($(call ld-ifversion, -lt, 22500, y),y)
--extra-$(CONFIG_PPC64)	+= crtsavres.o
--endif
--
- obj-$(CONFIG_PPC_BOOK3S_64) += copyuser_power7.o copypage_power7.o \
- 			       memcpy_power7.o restart_table.o
- 
-diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-index 94d0d40cddb3..63e7d79dd877 100644
---- a/scripts/Makefile.compiler
-+++ b/scripts/Makefile.compiler
-@@ -68,7 +68,3 @@ cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] && echo $(3) || e
- # ld-option
- # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
- ld-option = $(call try-run, $(LD) $(KBUILD_LDFLAGS) $(1) -v,$(1),$(2),$(3))
--
--# ld-ifversion
--# Usage:  $(call ld-ifversion, -ge, 22252, y)
--ld-ifversion = $(shell [ $(CONFIG_LD_VERSION)0 $(1) $(2)0 ] && echo $(3) || echo $(4))
--- 
-2.34.1
+I'm also not clear what the BPF environment is like when it comes
+to extensible frameworks, as soon as you start thinking about the
+problem space there are some obvious extensions with things like
+more detailed register map descriptions and validating that the
+operations that the driver is doing to the device are actually in
+spec for the device or trying to stimulate race conditions or
+error paths in the driver.
 
+There's also the issue with getting the BPF userspace tooling
+that I mentioned in reply to one of the individual patches.
+
+Basically while this does look very simple from a kernel point of
+view I worry that BPF might not be the right tool for the job and
+could be a bit of a blind alley, with people rapidly running into
+issues trying to do anything non-trivial.
+
+There was a series in the past year or so from someone
+implementing a similarish idea but rather than using BPF they
+provided a framework for writing device emulations in qemu with
+a simplified Python framework.  That seemed like a more obvious
+direction here.  They were initially focusing on I2C but it's a
+similar space.  Unfortunately I'm drawing a blank on who was
+working on it or the name of the framework so I can't give a
+useful reference here.  Their direction was towards having
+something that could also be used to validate what the driver was
+doing to the device from the device's perspective.  I do know it
+was written up on LWN.  Hopefully someone else will remember what
+I'm talking about from this vauge description.
+
+--VEE/E6KN77c45Ytn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMOYEcACgkQJNaLcl1U
+h9BFXwf/SI9sfIsMapZOZHgClNyczWRLtC8JMAIgJIsFm+pTR7CU0VO+POH9cTdd
+Jlx14x01XFV17MjZnQyWyT2IgzKLXoJ2AA5SSoZy8fy/iA+zQGwsM0OXp6HkjRv5
+KrtMtbb7/2mKsRfENacOGyirdkKFnyDQ2VVi6pmpAYruFHfmveTOXfIewgUjD86e
+8Z/9MPo9hShmdH1t3EvZGKkucP0BLTi4pyQYmoGIlrvlhikWKKy5Apk0pNu5SvH4
+mx3cpcDyxRbLqQGxmGt0fFGQniM5UlC4oXOa8j4DxkB4LcXrUPuv1WjJQyB8Q/2c
+rJZm2XXVMveuEGEXTnXXAacJ/4+l7g==
+=oMk3
+-----END PGP SIGNATURE-----
+
+--VEE/E6KN77c45Ytn--

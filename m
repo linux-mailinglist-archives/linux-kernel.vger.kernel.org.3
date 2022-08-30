@@ -2,81 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31D745A5CF8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D715A5CFA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiH3HcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+        id S230109AbiH3Hcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiH3HcF (ORCPT
+        with ESMTP id S230134AbiH3Hc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:32:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE6D5A88B
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:32:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661844722;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OOVt4IExjzgPDgf7VEi0MGTcB1ysxhPeqK70kuHJ9WU=;
-        b=PgbZ21vyZAoNTKi8Sm/aK8OuoLL375xcukdxwB1q/CiSfBeNVCqARyni+ZMyhfcZ1tZU7Q
-        CSu/SQgw0+T61cLCJpmiCDIN5mLNUEog7BbvZYiAE1A+1FyhlVxyGc2LoXavi5dEFTC+ec
-        vbpkyFx4kdkzllo1JCNPQEOPB1HLE/k=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-445-UoYerASSOPeuIJY-pm_mtg-1; Tue, 30 Aug 2022 03:31:57 -0400
-X-MC-Unique: UoYerASSOPeuIJY-pm_mtg-1
-Received: by mail-ej1-f69.google.com with SMTP id qw34-20020a1709066a2200b00730ca5a94bfso3440743ejc.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:31:57 -0700 (PDT)
+        Tue, 30 Aug 2022 03:32:29 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD822A431
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:32:23 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id z6so14321642lfu.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Eji6PfnetUxjQWQNmNTakZ0GC+nZVjefNIjiiKx7moM=;
+        b=Y0KPVd1kR1gE9M2EkCjBhgd5MvrfZDrI3sNF+dsW070vrOtJwZi7Kgk5iG9/J4M0yM
+         JbvVOarhVyapGXJWjGsZ5Y3kyLEEP15iXzXKH3xpgqJ5l3tS54r3yv9iMEiPToVToThV
+         KifmuIndpaDj5A8H3xUWm+A9aTIitNoGAPViE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=OOVt4IExjzgPDgf7VEi0MGTcB1ysxhPeqK70kuHJ9WU=;
-        b=FnMne8i/TWIWCe4w11HKsvzJ2cM6uuG6s90SIlhhn0QnbGKv9NFIky5ph3nxv2mMJG
-         lnI9Lc119rn1IZTLt2KI5OHR5U24RLdh7lt2HNogguAgI91SI7KRknjmKb8DO4uHD2Er
-         L2CHC2XcEwRueufNS711ffqzSRDKEd75rJ/0fqhCNyA2Y4MFW5F3urBDRWTDktZQkYp2
-         HGedt+BYYsPJZO0FsBPjjhzM2WlvTaZzmrPej6cmimqa0hrunlk+cXlgziMWFA0Y1yC+
-         PxR9E2syWRWGWxfNKnRK1afsexpZ/dqAe94FUjNYjUNnOai/9SUDZjRsqTmjg2jH68vC
-         LjfQ==
-X-Gm-Message-State: ACgBeo1MBs3/BO8Y5FnWDoOGRmuCFcc6t5uMjQUYSUqvjGLrTzDvY3dF
-        IhWfHBBMf0HD1qB05Ng3mSifaEpErVZeeTv83JgpU5bhWK3hKRqarQ133Q6+GJdOHF34DNgf+2W
-        5ytmMWV3VjvLQYZsquZ9Dt+jX
-X-Received: by 2002:a05:6402:40c3:b0:442:d798:48ad with SMTP id z3-20020a05640240c300b00442d79848admr19117000edb.154.1661844716127;
-        Tue, 30 Aug 2022 00:31:56 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5geuesvzHhVoqBxInKeA8loMmBCSHKoxr3j6EnwNKzcho7wEaeR3bBW9svuet4LzxXa/fI2w==
-X-Received: by 2002:a05:6402:40c3:b0:442:d798:48ad with SMTP id z3-20020a05640240c300b00442d79848admr19116988edb.154.1661844715957;
-        Tue, 30 Aug 2022 00:31:55 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b00731745a7e62sm5367557ejg.28.2022.08.30.00.31.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 00:31:55 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-pci@vger.kernel.org,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Deepak Rawat <drawat.floss@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>
-Subject: Re: [PATCH v3 1/3] PCI: Move
- PCI_VENDOR_ID_MICROSOFT/PCI_DEVICE_ID_HYPERV_VIDEO definitions to
- pci_ids.h
-In-Reply-To: <20220829171508.GA8481@bhelgaas>
-References: <20220829171508.GA8481@bhelgaas>
-Date:   Tue, 30 Aug 2022 09:31:54 +0200
-Message-ID: <875yiauqz9.fsf@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Eji6PfnetUxjQWQNmNTakZ0GC+nZVjefNIjiiKx7moM=;
+        b=OFT5xBNOujTK4FV1En5jbLkiaLHnn7iHvRs7hrHWFyxZuVl4sXUukfGU78qDT7kpED
+         biIikM1Ul8NwwLOHSmYvW4dFfAQJMLpl1F7apBZE2FC4W2HBKvBQ/dTebZcO0CjrHpe+
+         wo002U0uQdQ+mz0iV8j06cbsvOvsVIpXqvTzJVBXoSkCa4UDh1zfGgsLp8LtlJPdZ/oZ
+         lbONzmjRy7zoYGW2jV0ycNQJaWVQVC647E6UdJbYIORqahiZjHqBDpK+JcJZvnsSIcG0
+         Ipc0krWfy6PgoIqN0Srn/pdd2doOyjVIuJtwqMmBXfjTyeDiCTkYPF0BjqJ55vslwwva
+         h57g==
+X-Gm-Message-State: ACgBeo25pJCnVOKM+DYb6qQuDJeV/Dx9r6Gt+05toRBFm0N+bwKKssvx
+        X8HRzKL+BhV+5EliqSBavOJjcg==
+X-Google-Smtp-Source: AA6agR6M8H7ruSctbEDCn6rn2Dvz8Vl6vFaH1IXmie6+yi7qrMnkkIN957laBbOFT0OF5i1omOvd6g==
+X-Received: by 2002:a05:6512:2511:b0:493:50c:ec3 with SMTP id be17-20020a056512251100b00493050c0ec3mr7102905lfb.665.1661844741975;
+        Tue, 30 Aug 2022 00:32:21 -0700 (PDT)
+Received: from [172.16.11.74] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id v4-20020ac258e4000000b004946c3cf53fsm615377lfo.59.2022.08.30.00.32.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 00:32:21 -0700 (PDT)
+Message-ID: <cac2eaf0-2a56-d750-3508-7b5ed03e1eb5@rasmusvillemoes.dk>
+Date:   Tue, 30 Aug 2022 09:32:19 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] lib/test_printf.c: Add ip6 tests
+Content-Language: en-US
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+References: <20220830003119.1793219-1-kent.overstreet@linux.dev>
+ <20220830003119.1793219-2-kent.overstreet@linux.dev>
+ <Yw1sKTOEs1Nrdb2S@google.com>
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <Yw1sKTOEs1Nrdb2S@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,37 +77,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bjorn Helgaas <helgaas@kernel.org> writes:
+On 30/08/2022 03.47, Sergey Senozhatsky wrote:
+> On (22/08/29 20:31), Kent Overstreet wrote:
+>> diff --git a/lib/test_printf.c b/lib/test_printf.c
+>> index 4bd15a593f..6a56dbf076 100644
+>> --- a/lib/test_printf.c
+>> +++ b/lib/test_printf.c
+>> @@ -18,6 +18,7 @@
+>>  #include <linux/dcache.h>
+>>  #include <linux/socket.h>
+>>  #include <linux/in.h>
+>> +#include <linux/in6.h>
+>>  
+>>  #include <linux/gfp.h>
+>>  #include <linux/mm.h>
+>> @@ -61,6 +62,9 @@ do_test(int bufsize, const char *expect, int elen,
+>>  		pr_warn("vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d\n",
+>>  			bufsize, fmt, ret, elen);
+>>  		return 1;
+>> +		pr_warn("vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d (%s != %s)\n",
+>> +			bufsize, fmt, ret, elen, test_buffer, expect);
+>> +		return 1;
+>>  	}
+> 
+> I assume you intended to replace first pr_warn() with the second one?
 
-> On Sat, Aug 27, 2022 at 03:03:43PM +0200, Vitaly Kuznetsov wrote:
->> There are already three places in kernel which define PCI_VENDOR_ID_MICROSOFT
->> and two for PCI_DEVICE_ID_HYPERV_VIDEO and there's a need to use these
->> from core Vmbus code. Move the defines where they belong.
->
-> It's a minor annoyance that the above is 81 characters long when "git
-> log" adds its 4-character indent, so it wraps in a default terminal.
->
-> It'd be nice if we could settle on a conventional spelling of "Vmbus",
-> too.  "Vmbus" looks to be in the minority:
->
->   $ git grep Vmbus | wc -l; git grep VMbus | wc -l; git grep VMBus | wc -l
->   4
->   82
->   62
->
-> FWIW, one published microsoft.com doc uses "VMBus":
-> https://docs.microsoft.com/en-us/virtualization/hyper-v-on-windows/reference/hyper-v-architecture
+Probably, but that's not ok. The test framework does not trust
+vsnprintf(), especially not when it does not behave as expected. So I
+very much carefully do not treat the buffer as a nul-terminated string
+until I have verified that it does have a nul character (that's tested a
+few lines below), and then when I compare the buffer contents can I pass
+it as a %s argument. Also note how that test takes the 'we may be
+testing a truncated write' into consideration, by printing the expect
+string via %.*s.
 
-Makes sense,
+tl;dr, please just remove that hunk.
 
-Wei,
-
-assuming there are no other concerns about these patches, would you be
-able to tweak the commit message here when queueing or would you like me
-to send v4 instead? 
-
-Thanks!
-
--- 
-Vitaly
-
+Rasmus

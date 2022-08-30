@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C5965A669C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A78D5A669F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiH3Otz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 10:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52092 "EHLO
+        id S229714AbiH3OuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 10:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiH3Otw (ORCPT
+        with ESMTP id S229709AbiH3OuL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 10:49:52 -0400
+        Tue, 30 Aug 2022 10:50:11 -0400
 Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDFC2613
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:49:51 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id b16so6928673wru.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:49:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF3D1B795
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:50:08 -0700 (PDT)
+Received: by mail-wr1-x442.google.com with SMTP id b16so6929895wru.7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ffwll.ch; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=kZOaD1B8emphOfywTXzw4uigM54srkRRmu9c5V6NK1A=;
-        b=TYS4YvSN1AwESNxvEaaENxBSTEIASwZ0luttSQjo1X3Lce5ydRuQLu3JwlKvSpKDYs
-         sd0pjW75BkM1hAar8lrW/TM+TVp5OuMrI10WEFguN+TskyaUZcGI1+8MdEPQsnv1sGPt
-         dk283ZnDDTzZjOJq1v0fp6N0Vk60Vx6K3z/Zk=
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=hw1EJiwr4Al7TCfH8SB9V/gTFnExQ67cbO1DoH3A/6Q=;
+        b=i9RDRTllGAeTyupOXinyWn4xi9uMuo8hOBZb1u7BPZJI0mWVvCAnZZngKQec7WUR/u
+         LZI150GiVdviCoWWQiUhcPslBdFM31/iCXrLduHiTrz9ne6r4a6BpmvKcpSkswTFh+eh
+         PrJVi+po5hGMRgLE+vOzHKw8ac8G64mcS45yw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=kZOaD1B8emphOfywTXzw4uigM54srkRRmu9c5V6NK1A=;
-        b=m8LbZ/ZJjcTG31Q91Zax17LMl+274HckrMt6num4Zv+bav6xQN6nZqEf+udPv0+lsa
-         CMTbsdOW+0y/i9velC3Wj+jNaJ8lnWjjqSmhaMDob4NYeHWEMfb2wqAzLgYSI2kbOpmj
-         9vH+/5+OjCxxjb2wD/ffsoJYqClvGIGbmJIOltQHlN3ArkWYbF+T6Y7lZylIliSpgBy6
-         4EOacnMsJG29cTlhtU6GaV8k+/IOtkyPl7lYExuujZmaxkpo4woBbAMRI8e/cxw9pYXC
-         ofYu/rEWdxenomuaQqQbIf2lo5dibd/YcXK6afEgBesc+2Diffs6o2gpAszK0RK4wsVg
-         Gw7A==
-X-Gm-Message-State: ACgBeo2dBC7Wh2SylrnepFNDeQS8KN7WFkWYBe3E5afT7sPahQb35PA0
-        fqc5BTzUBTZ4UypNA9QVgNrjSH9UWQxC0jB1
-X-Google-Smtp-Source: AA6agR7IMUCFZ3dgjIQVl3c5wI9BXlutzG3Yq1jGBDzrat+5siYaeXaWXUU2UMfR7XiA2eFppONTFw==
-X-Received: by 2002:a05:6000:81d:b0:226:dbad:1699 with SMTP id bt29-20020a056000081d00b00226dbad1699mr5622520wrb.212.1661870990105;
-        Tue, 30 Aug 2022 07:49:50 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=hw1EJiwr4Al7TCfH8SB9V/gTFnExQ67cbO1DoH3A/6Q=;
+        b=mw39ZIzDqONcOC+BZYaJFZMuN5r4m/uOdop91cfKK/PT2z5SEFC7ARvgDAa8fGH0d1
+         uLc7hBKAtEqoFbnLzCVfPvNvO4NqXLyK4Nj3sZf50xzdOHrB+O1rEWn8CNwN5+0WoJWw
+         JVqMQ0d4O3zpdnouTsImdsrNpbEUvSS9arKiQnY4P16EBvmjHwQ4RezAnSD1/9GUGPgg
+         q4+Zm+6Z6Z8hYuBtUCEA/CJuDY2DZLC9aT5fAjpCY5Z/7FXqP8EjND15ifAwtQpHdgyI
+         Jnq+eVBpAkk5TG/YejTosHx02Fg0qYgZM/XqYxr9AkIR51tUBYkIIvV10s5LyxJ6+Dzc
+         QFiw==
+X-Gm-Message-State: ACgBeo0St2gh2Mmeu9z5QAnebRarkS2cNS0KOoUuF6+JJOsMomn48XX+
+        sHNWbf2hkN6HBVlOnOE4i7ttR1CEPAiweLGP
+X-Google-Smtp-Source: AA6agR5vnx/Qj8N0shwU05wIS8ZamJQt01pDAEzx54hq/2rMu3bvqyQWBWhD/bErmOj0YIPk1QhkDA==
+X-Received: by 2002:a5d:6b09:0:b0:225:37cf:fb8b with SMTP id v9-20020a5d6b09000000b0022537cffb8bmr9247069wrw.179.1661871007971;
+        Tue, 30 Aug 2022 07:50:07 -0700 (PDT)
 Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id n8-20020a5d4848000000b00226d01a4635sm9805359wrs.35.2022.08.30.07.49.48
+        by smtp.gmail.com with ESMTPSA id l9-20020adfe9c9000000b0022586045c89sm10278212wrn.69.2022.08.30.07.50.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 07:49:49 -0700 (PDT)
+        Tue, 30 Aug 2022 07:50:07 -0700 (PDT)
 From:   Daniel Vetter <daniel.vetter@ffwll.ch>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
@@ -53,21 +53,25 @@ Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
         Yangxi Xiang <xyangxi5@gmail.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
         nick black <dankamongmen@gmail.com>,
         Petr Mladek <pmladek@suse.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Marco Elver <elver@google.com>,
         John Ogness <john.ogness@linutronix.de>,
-        Sam Ravnborg <sam@ravnborg.org>
-Subject: [PATCH] tty/vt: Add console_lock check to vt_console_print()
-Date:   Tue, 30 Aug 2022 16:49:45 +0200
-Message-Id: <20220830144945.430528-1-daniel.vetter@ffwll.ch>
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        David Gow <davidgow@google.com>,
+        tangmeng <tangmeng@uniontech.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Chris Wilson <chris@chris-wilson.co.uk>
+Subject: [PATCH] kernel/panic: Drop unblank_screen call
+Date:   Tue, 30 Aug 2022 16:50:04 +0200
+Message-Id: <20220830145004.430545-1-daniel.vetter@ffwll.ch>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220830132803.403744-1-daniel.vetter@ffwll.ch>
-References: <20220830132803.403744-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -81,82 +85,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I'm scratching my head why we have this printing_lock. Digging through
-historical git trees shows that:
-- Added in 1.1.73, and I found absolutely no reason why.
-- Converted to atomic bitops in 2.1.125pre2, I guess as part of SMP
-  enabling/bugfixes.
-- Converted to a proper spinlock in b0940003f25d ("vt: bitlock fix")
-  because the hand-rolled atomic version lacked necessary memory
-  barriers.
+console_unblank() does this too (called in both places right after),
+and with a lot more confidence inspiring approach to locking.
 
-Digging around in lore for that time period did also not shed further
-light.
+Reconstructing this story is very strange:
 
-The only reason I think this might still be relevant today is that (to
-my understanding at least, ymmv) during an oops we might be printing
-without console_lock held. See console_flush_on_panic() and the
-comments in there - we flush out the console buffers irrespective of
-whether we managed to acquire the right locks.
+In b61312d353da ("oops handling: ensure that any oops is flushed to
+the mtdoops console") it is claimed that a printk(" "); flushed out
+the console buffer, which was removed in e3e8a75d2acf ("[PATCH]
+Extract and use wake_up_klogd()"). In todays kernels this is done way
+earlier in console_flush_on_panic with some really nasty tricks. I
+didn't bother to fully reconstruct this all, least because the call to
+bust_spinlock(0); gets moved every few years, depending upon how the
+wind blows (or well, who screamed loudest about the various issue each
+call site caused).
 
-The strange thing is that this reason is fairly recent, because the
-console flushing was historically done without oops_in_progress set.
-This only changed in c7c3f05e341a ("panic: avoid deadlocks in
-re-entrant console drivers"), which removed the call to
-bust_spinlocks(0) (which decrements oops_in_progress again) before
-flushing out the console (which back then was open coded as a
-console_trylock/unlock pair).
+Before that commit the only calls to console_unblank() where in s390
+arch code.
 
-Note that this entire mess should be properly fixed in the
-printk/console layer, and not inflicted on each implementation.
+The other side here is the console->unblank callback, which was
+introduced in 2.1.31 for the vt driver. Which predates the
+console_unblank() function by a lot, which was added (without users)
+in 2.4.14.3. So pretty much impossible to guess at any motivation
+here. Also afaict the vt driver is the only (and always was the only)
+console driver implementing the unblank callback, so no idea why a
+call to console_unblank() was added for the mtdooops driver - the
+action actually flushing out the console buffers is done from
+console_unlock() only.
 
-For now just document what's going on and check that in all other
-cases callers obey the locking rules.
+Note that as prep for the s390 users the locking was adjusted in
+2.5.22 (I couldn't figure out how to properly reference the BK commit
+from the historical git trees) from a normal semaphore to a trylock.
 
-v2: WARN_CONSOLE_UNLOCKED already checks for oops_in_progress
-(something else that should be fixed I guess), hence remove the
-open-coded check I've had.
+Note that a copy of the direct unblank_screen() call was added to
+panic() in c7c3f05e341a ("panic: avoid deadlocks in re-entrant console
+drivers"), which partially inlined the bust_spinlocks(0); call.
+
+Long story short, I have no idea why the direct call to unblank_screen
+survived for so long (the infrastructure to do it properly existed for
+years), nor why it wasn't removed when the console_unblank() call was
+finally added. But it makes a ton more sense to finally do that than
+not - it's just better encapsulation to go through the console
+functions instead of doing a direct call, so let's dare. Plus it
+really does not make much sense to call the only unblank
+implementation there is twice, once without, and once with appropriate
+locking.
 
 Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: "Ilpo Järvinen" <ilpo.jarvinen@linux.intel.com>
 Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc: "Ilpo Järvinen" <ilpo.jarvinen@linux.intel.com>
+Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 Cc: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 Cc: Yangxi Xiang <xyangxi5@gmail.com>
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
 Cc: nick black <dankamongmen@gmail.com>
 Cc: Petr Mladek <pmladek@suse.com>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Luis Chamberlain <mcgrof@kernel.org>
+Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc: Marco Elver <elver@google.com>
 Cc: John Ogness <john.ogness@linutronix.de>
-Cc: Sam Ravnborg <sam@ravnborg.org>
---
-Note that this applies on top of my earlier vt patch:
-
-https://lore.kernel.org/lkml/20220826202419.198535-1-daniel.vetter@ffwll.ch/
-
-Expect more, I'm digging around in here a bit ...
--Daniel
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: David Gow <davidgow@google.com>
+Cc: tangmeng <tangmeng@uniontech.com>
+Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
+Cc: Chris Wilson <chris@chris-wilson.co.uk>
 ---
- drivers/tty/vt/vt.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ drivers/tty/vt/vt.c     | 3 ++-
+ include/linux/vt_kern.h | 1 -
+ kernel/panic.c          | 3 ---
+ lib/bust_spinlocks.c    | 3 ---
+ 4 files changed, 2 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 4d29e4a17db7..a6be32798fad 100644
+index a6be32798fad..08498fcf080a 100644
 --- a/drivers/tty/vt/vt.c
 +++ b/drivers/tty/vt/vt.c
-@@ -3083,7 +3083,9 @@ static void vt_console_print(struct console *co, const char *b, unsigned count)
- 	ushort start_x, cnt;
- 	int kmsg_console;
+@@ -154,6 +154,7 @@ static void console_callback(struct work_struct *ignored);
+ static void con_driver_unregister_callback(struct work_struct *ignored);
+ static void blank_screen_t(struct timer_list *unused);
+ static void set_palette(struct vc_data *vc);
++static void unblank_screen(void);
  
--	/* console busy or not yet initialized */
-+	WARN_CONSOLE_UNLOCKED();
-+
-+	/* this protects against concurrent oops only */
- 	if (!spin_trylock(&printing_lock))
- 		return;
+ #define vt_get_kmsg_redirect() vt_kmsg_redirect(-1)
  
+@@ -4450,7 +4451,7 @@ EXPORT_SYMBOL(do_unblank_screen);
+  * call it with 1 as an argument and so force a mode restore... that may kill
+  * X or at least garbage the screen but would also make the Oops visible...
+  */
+-void unblank_screen(void)
++static void unblank_screen(void)
+ {
+ 	do_unblank_screen(0);
+ }
+diff --git a/include/linux/vt_kern.h b/include/linux/vt_kern.h
+index b5ab452fca5b..c1f5aebef170 100644
+--- a/include/linux/vt_kern.h
++++ b/include/linux/vt_kern.h
+@@ -30,7 +30,6 @@ struct vc_data *vc_deallocate(unsigned int console);
+ void reset_palette(struct vc_data *vc);
+ void do_blank_screen(int entering_gfx);
+ void do_unblank_screen(int leaving_gfx);
+-void unblank_screen(void);
+ void poke_blanked_console(void);
+ int con_font_op(struct vc_data *vc, struct console_font_op *op);
+ int con_set_cmap(unsigned char __user *cmap);
+diff --git a/kernel/panic.c b/kernel/panic.c
+index 1fc3d98417d1..74a7b55851c4 100644
+--- a/kernel/panic.c
++++ b/kernel/panic.c
+@@ -330,9 +330,6 @@ void panic(const char *fmt, ...)
+ 	if (_crash_kexec_post_notifiers)
+ 		__crash_kexec(NULL);
+ 
+-#ifdef CONFIG_VT
+-	unblank_screen();
+-#endif
+ 	console_unblank();
+ 
+ 	/*
+diff --git a/lib/bust_spinlocks.c b/lib/bust_spinlocks.c
+index 8be59f84eaea..bfd53972a4d8 100644
+--- a/lib/bust_spinlocks.c
++++ b/lib/bust_spinlocks.c
+@@ -22,9 +22,6 @@ void bust_spinlocks(int yes)
+ 	if (yes) {
+ 		++oops_in_progress;
+ 	} else {
+-#ifdef CONFIG_VT
+-		unblank_screen();
+-#endif
+ 		console_unblank();
+ 		if (--oops_in_progress == 0)
+ 			wake_up_klogd();
 -- 
 2.37.2
 

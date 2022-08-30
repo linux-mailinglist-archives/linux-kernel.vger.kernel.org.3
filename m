@@ -2,85 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A9465A5ECF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:00:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B397F5A5ED2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbiH3JAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:00:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
+        id S230201AbiH3JBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiH3JAm (ORCPT
+        with ESMTP id S229716AbiH3JBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:00:42 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2813D3D582
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:00:40 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U6Tnpn015916;
-        Tue, 30 Aug 2022 04:00:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=PODMain02222019;
- bh=uRhx0qsItgHE0IAxKDqM89f+96sF81OK+0o/iFCcvgc=;
- b=cpI3qv8nZ3bz6aZFMMwF48lZRIKJ1bkMiyJRW/QvlydqTx+d8/Bgx7bZYaBmcR0pV6nB
- ZugUGNv/T97JqpSriapR7s80CF1aKOCpNrqegUxZ3L5AIq2iVcuRrDg3hI9pzBJEOHp2
- JCssrq1RcyWiaAa5szcooOLNFdOHUVNHyeD7tAIEzxkagiBk22lpxC6L6lXX+ppTzQcl
- wWn91ISG+vIyf0siIGiQgPC7yJnmOy1MNoIAkHlCSuwpxRBq5fr5d2hTkquN2IEXg6uJ
- d2Q9EjnEiUF/OKFKMoPMY4e5KuJ6p7BRaYdZwu6CeDteq80uzmEqYLO1hb436WpLyC6T hQ== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3j7fppb5b3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 04:00:16 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.12; Tue, 30 Aug
- 2022 04:00:15 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.12 via Frontend Transport; Tue, 30 Aug 2022 04:00:15 -0500
-Received: from [198.90.251.95] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.95])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id CFC7F459;
-        Tue, 30 Aug 2022 09:00:14 +0000 (UTC)
-Message-ID: <b3162f04-5cfe-75c2-6117-d7949ccd0a5a@opensource.cirrus.com>
-Date:   Tue, 30 Aug 2022 10:00:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 3/3] soundwire: bus: Fix lost UNATTACH when re-enumerating
-Content-Language: en-US
-To:     <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
-        <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>
-CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>
-References: <20220825122241.273090-1-rf@opensource.cirrus.com>
- <20220825122241.273090-4-rf@opensource.cirrus.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <20220825122241.273090-4-rf@opensource.cirrus.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: kK2WzBMWuKoTtPqrw0Bpl2oY0_QG6cYL
-X-Proofpoint-ORIG-GUID: kK2WzBMWuKoTtPqrw0Bpl2oY0_QG6cYL
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 30 Aug 2022 05:01:46 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A28F89F1A6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:01:45 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id j5so6596615plj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:01:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc;
+        bh=ZsM+Pubh86dNJZPbNsb1xubr5PluY9cW5aAlTnyyxiM=;
+        b=ksrEMwGox/KdS8tnvTJL1LuPVoMIKREyu/DU/fJRvdnheYItSIfp/iQzhq338blCNr
+         eNRkBd60PyxI4prFnqg1qvB6eb8MU1U2tvgwskptoNmSL2oZGs22/tJmLIWeUJu8h8gl
+         yMN5FHBHPyewwbe5irx28Cq7oN3zpeUMtvwR+YCpEaM1Gja/OG7QHDfaLxmqd14JDN0h
+         XwR0xnKYyXP10vrC4ofLR/aUACg2Hr6GuJ/6hnEPe3YvTNS1DYrd5kkQh8Wi6HsW15kC
+         94Ok8a1MnYr8aBjMZU7S2c9sRXzPorWr8pD9RBk9CqwOG7gIVrVq94t1gMUuBFNo5T2I
+         erKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc;
+        bh=ZsM+Pubh86dNJZPbNsb1xubr5PluY9cW5aAlTnyyxiM=;
+        b=idKVhcWYnWPJck6OkmVdeRc7sgrAspvRctWGadzaLQS2+tbrC4f/89FlREp7FhpmJT
+         6CeEeiCj+s9ck9cth6HRNqmr1Nwe0UgsYUYVYZNR80ATrgtmf3XvGO74H92jC5g9/4lC
+         xoanOQqhbeUPLRvipY62RWVxIf202PXfhNGF5ibQtQZ5vswJxnEJj/2qgMY5FM0oBf5s
+         BqlCWErv8HvN0gMqbZGvG43Boej1U3If6aimbWxvMFqYi03YuxDKesHf8beAnJXyg5U+
+         aKKtHQmU/RHsfu4dufjnkfApOgwclRPEM9ifwfFDGbKGyoVhl+udCwiGCvPGuN4m6VKq
+         7adA==
+X-Gm-Message-State: ACgBeo1OvIoz7f02whSELJSTj2kX0B2ko8algrRIz+0y5Ctf3+79q4E0
+        KqjcPH3jmFuMjgdwSU8xlUTj789FFac=
+X-Google-Smtp-Source: AA6agR6DLFbyWQ/quE3yh/lHCixblbHmTVBpnk7eHKlpzdJgcFTirVtyqhxEuQ4sJvCN7xrr9cHreg==
+X-Received: by 2002:a17:902:70c6:b0:173:c64:c03b with SMTP id l6-20020a17090270c600b001730c64c03bmr19752192plt.34.1661850105106;
+        Tue, 30 Aug 2022 02:01:45 -0700 (PDT)
+Received: from localhost (110-175-65-113.tpgi.com.au. [110.175.65.113])
+        by smtp.gmail.com with ESMTPSA id a13-20020a170902b58d00b00172f4835f60sm8974438pls.189.2022.08.30.02.01.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 02:01:44 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 30 Aug 2022 19:01:39 +1000
+Message-Id: <CMJ8P06JA9OY.1S8VDV2XRU3W5@bobo>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "Zhouyi Zhou" <zhouzhouyi@gmail.com>
+Subject: Re: [PATCH v2] powerpc: Fix irq_soft_mask_set() and
+ irq_soft_mask_return() with sanitizer
+From:   "Nicholas Piggin" <npiggin@gmail.com>
+To:     "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+        "Michael Ellerman" <mpe@ellerman.id.au>,
+        "Segher Boessenkool" <segher@kernel.crashing.org>
+X-Mailer: aerc 0.11.0
+References: <c0b486e782b6695092dcdb2cd340a3d44c8c266d.1661272738.git.christophe.leroy@csgroup.eu> <CMJ3VICKD1CI.SVFJOKYJPKZQ@bobo> <e022754d-b4d3-bc9f-cc79-2cf556180459@csgroup.eu>
+In-Reply-To: <e022754d-b4d3-bc9f-cc79-2cf556180459@csgroup.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/08/2022 13:22, Richard Fitzgerald wrote:
-> Rearrange sdw_handle_slave_status() so that any peripherals
-> on device #0 that are given a device ID are reported as
-> unattached. The ensures that UNATTACH status is not lost.
-> 
-> Handle unenumerated devices first and update the
-> sdw_slave_status array to indicate IDs that must have become
-> UNATTACHED.
-> 
+On Tue Aug 30, 2022 at 3:24 PM AEST, Christophe Leroy wrote:
+>
+>
+> Le 30/08/2022 =C3=A0 07:15, Nicholas Piggin a =C3=A9crit=C2=A0:
+> > On Wed Aug 24, 2022 at 2:39 AM AEST, Christophe Leroy wrote:
+> >> In ppc, compiler based sanitizer will generate instrument instructions
+> >> around statement WRITE_ONCE(local_paca->irq_soft_mask, mask):
+> >>
+>
+> [...]
+>
+> >>
+> >> If there is a context switch before "stb     r9,2354(r31)", r31 may
+> >> not equal to r13, in such case, irq soft mask will not work.
+> >>
+> >> The same problem occurs in irq_soft_mask_return() with
+> >> READ_ONCE(local_paca->irq_soft_mask).
+> >=20
+> > WRITE_ONCE doesn't require address generation to be atomic with the
+> > store so this is a bug without sanitizer too. I have seen gcc put r13
+> > into a nvgpr before.
+> >=20
+> > READ_ONCE maybe could be argued is safe in this case because data
+> > could be stale when you use it anyway, but pointless and risky
+> > in some cases (imagine cpu offline -> store poison value to irq soft
+> > mask.
+> >=20
+> >> This patch partially reverts commit ef5b570d3700 ("powerpc/irq: Don't
+> >> open code irq_soft_mask helpers") with a more modern inline assembly.
+> >>
+> >> Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> >> Fixes: ef5b570d3700 ("powerpc/irq: Don't open code irq_soft_mask helpe=
+rs")
+> >> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> >> ---
+> >> v2: Use =3Dm constraint for stb instead of m constraint
+> >> ---
+> >>   arch/powerpc/include/asm/hw_irq.h | 9 ++++++---
+> >>   1 file changed, 6 insertions(+), 3 deletions(-)
+> >>
+> >> diff --git a/arch/powerpc/include/asm/hw_irq.h b/arch/powerpc/include/=
+asm/hw_irq.h
+> >> index 26ede09c521d..815420988ef3 100644
+> >> --- a/arch/powerpc/include/asm/hw_irq.h
+> >> +++ b/arch/powerpc/include/asm/hw_irq.h
+> >> @@ -113,7 +113,11 @@ static inline void __hard_RI_enable(void)
+> >>  =20
+> >>   static inline notrace unsigned long irq_soft_mask_return(void)
+> >>   {
+> >> -	return READ_ONCE(local_paca->irq_soft_mask);
+> >> +	unsigned long flags;
+> >> +
+> >> +	asm volatile("lbz%X1 %0,%1" : "=3Dr" (flags) : "m" (local_paca->irq_=
+soft_mask));
+> >> +
+> >> +	return flags;
+> >>   }
+> >>  =20
+> >>   /*
+> >> @@ -140,8 +144,7 @@ static inline notrace void irq_soft_mask_set(unsig=
+ned long mask)
+> >>   	if (IS_ENABLED(CONFIG_PPC_IRQ_SOFT_MASK_DEBUG))
+> >>   		WARN_ON(mask && !(mask & IRQS_DISABLED));
+> >>  =20
+> >> -	WRITE_ONCE(local_paca->irq_soft_mask, mask);
+> >> -	barrier();
+> >> +	asm volatile("stb%X0 %1,%0" : "=3Dm" (local_paca->irq_soft_mask) : "=
+r" (mask) : "memory");
+> >=20
+> > This is still slightly concerning to me. Is there any guarantee that th=
+e
+> > compiler would not use a different sequence for the address here?
+> >=20
+> > Maybe explicit r13 is required.
+> >=20
+>
+> local_paca is defined as:
+>
+> 	register struct paca_struct *local_paca asm("r13");
+>
+> Why would the compiler use another register ?
 
-Don't use this patch!
-I found there's a race condition with the Cadence interrupts.
-Use my alternative fix.
+Hopefully it doesn't. Is it guaranteed that it won't?
+
+> If so, do we also have an=20
+> issue with the use of current_stack_pointer in irq.c ?
+
+What problems do you think it might have?  I think it may be okay
+because we're only using it to check what stack we are using so doesn't
+really matter what value it is when we sample it.
+
+The overflow check similarly probably doesn't matter the exact value.
+
+> Segher ?
+
+I'm sure Segher will be delighted with the creative asm in __do_IRQ
+and call_do_irq :) *Grabs popcorn*
+
+Thanks,
+Nick

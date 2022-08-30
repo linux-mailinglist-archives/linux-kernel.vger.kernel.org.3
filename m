@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83995A6162
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:10:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5DB5A6159
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:10:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiH3LKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:10:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55726 "EHLO
+        id S229744AbiH3LKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230145AbiH3LKh (ORCPT
+        with ESMTP id S229674AbiH3LKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:10:37 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D021F647CA;
-        Tue, 30 Aug 2022 04:10:35 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3376851fe13so264197917b3.6;
-        Tue, 30 Aug 2022 04:10:35 -0700 (PDT)
+        Tue, 30 Aug 2022 07:10:15 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112A31A053;
+        Tue, 30 Aug 2022 04:10:13 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id n17so13735855wrm.4;
+        Tue, 30 Aug 2022 04:10:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=nMi96jo7aVtzV6gHY/awbFwjLueQUwadnmUfMNrWPWs=;
-        b=N5QYfCJq7Cxaeozg3Gf3tMUV5fMKzuBbCiW2Pf2xoodoPo1NssosU9qMOyG2x8pBav
-         ZpkqItxXDSYOL4cYHma9WvI49RgQEiu22j5ua4GVT5W03hlEdMQvXJT6hCMUAHj1ImiO
-         4EcHDkd6QRPqmXek//SgS73D+HqtLclg0CP3dwAGxHPk+2Vcb7Ma/627r/vCjP+UFnQ4
-         m6NMiM9YOtijdVirXkQdx73yGlROl91Ub+cI0qZFXgFy0yeH8zRKG1b7W7AEWKiaUiUS
-         TiZOiSKHIq2LzmjkcF9/IPepSxzTncovLQtM/T7qxZNkvI+In0a0GAJq0dI7+Ir/RjJD
-         qHfQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=KpgP2qAqf0KZkAqvNQ7Evuz6Whcqmhjrgxj7AES/ew4=;
+        b=YxyWlugdaEOoY//AT76IwSakYBJd26WbYy29IbOmDS2env9XYf7ICqkx0tUJguUOHu
+         g64EfBQHV+KW5VXbCs4Q+xJIPYnbTLxOy18C2Bvze0AvNOh4FvY2Q0QGNIAtYVkIB28w
+         wlF0An6tiLeHDXVr8JrCyFK3MBs9sKRXztUhNrPWUBcXFlvpMTHKPr+p/k3XbsIK1ibB
+         G6LQavIMnudARUo0ayG3MLTk5C3rD1MxcF/q3kE1atFlwbU48yXmsW/FGPuwY5Cne792
+         aRT0zY8eU6Tye9PHzIx9PCDZLo5Q8Ojxg1h11VQsSDaRFBcdQL2tI+39gbFPQ1CfHBcB
+         kcIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=nMi96jo7aVtzV6gHY/awbFwjLueQUwadnmUfMNrWPWs=;
-        b=mRSm0Vm2KxYq/kN7rG/w4BXtgLTaD0cMNeXhTo0EHGBLo/RJ8It3N4L9wNLBWu2fdo
-         fPcvcZ+HAKPNwwV2frgsObW+0SPKG12Qd5kdauAUEFNQPvifSsbueCn7bg3BQ1Yw/1nB
-         4XSAr1qWObjLFTgj7ggm4RIXp5IBEKLqCMLJT59/ZqH+jRffY85c07nXdzrjDgTLcLW+
-         MENtRhLR2PgvO77fpgS6/QZ8ZSyidULJ5F83hzJB0aEgCGakykS5hxmoy8Pc5p6CdTah
-         qlj2nRNNv7XAvNBmT2WAo+MQ172KJZagGi5o46iNDvp3ulqxiYBSe5vfhJP/IdugeA0l
-         hp3A==
-X-Gm-Message-State: ACgBeo2KinOS/HFf1EpJabg0qtBhi3fK7BFaomyPLFrWkdhXHJE5QIuj
-        E9+lOjvoqX68sFEz8Fpa1Y4cXW4luqNaTYtsauc=
-X-Google-Smtp-Source: AA6agR4CZCaWmPXoKzg6Ztgh4d98cRi1kgG4tJBVKN5dzRNiAybN999CPngmWWX6PkzbEE0vRkssrns3FT6fIUSBn8k=
-X-Received: by 2002:a81:6a84:0:b0:341:9e24:58aa with SMTP id
- f126-20020a816a84000000b003419e2458aamr167202ywc.138.1661857835053; Tue, 30
- Aug 2022 04:10:35 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=KpgP2qAqf0KZkAqvNQ7Evuz6Whcqmhjrgxj7AES/ew4=;
+        b=lomLTaOWDzvCIDd8OSej3X74F+QTt6PXoCCJOcJmXBCZcuS94ALMfbkSb4GrRSVSsB
+         7HbW+U5SEhfZkAJr1WUHN7PL3TIb7NF6rTnl3fuSdtDqnw/FL9yU2txyRpcdN1oO88cI
+         5anYYQBJERPXSwVVxQKLtIIUzw8MkirniqO8q+Zl39B0ygQy80062W0TY9SJgjAknVYd
+         FkI2mGrutS06YbNpDNSmn6u6UhvPoZ+cOdFpO6kDrLC0CQYFOosXj6yKqMJLFY9osxQj
+         B6kt0R1gW/p4g/LuKBXDYj/BFU+ftjkxblE6nqh3NP/L6v6ZG7on1jDDBdQVgtqXFTkI
+         j6fw==
+X-Gm-Message-State: ACgBeo20ayirC9wmio2AiV2XtJx5/0k7PrceZipeNK5e2Xi4yas3NxxM
+        xVcsKmefy/TaBnbZPD1l14eXv/BgsrA=
+X-Google-Smtp-Source: AA6agR5/R1cJLwxYVCLUahhMwmW8K71m5gbXB/54eAbtUV5b+RKCbRfYtumpKmuhmih0DiU7bfmmHA==
+X-Received: by 2002:adf:e38e:0:b0:226:cff1:4b21 with SMTP id e14-20020adfe38e000000b00226cff14b21mr8561304wrm.226.1661857811449;
+        Tue, 30 Aug 2022 04:10:11 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id j2-20020a056000124200b0022537d826f3sm9314130wrx.23.2022.08.30.04.10.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 04:10:10 -0700 (PDT)
+Message-ID: <18caa4aa-9ed9-b2d8-b375-395b444d0ed5@gmail.com>
+Date:   Tue, 30 Aug 2022 13:10:09 +0200
 MIME-Version: 1.0
-References: <20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20220801214718.16943-2-prabhakar.mahadev-lad.rj@bp.renesas.com> <Yw1MmyFxnWNpQx8q@pendragon.ideasonboard.com>
-In-Reply-To: <Yw1MmyFxnWNpQx8q@pendragon.ideasonboard.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 30 Aug 2022 12:10:07 +0100
-Message-ID: <CA+V-a8uw-X+OC=Pa+gZtQvNF9OKU4Jd9Ne3YDJRNd4aMwsLZeQ@mail.gmail.com>
-Subject: Re: [PATCH 1/4] media: dt-bindings: media: Document RZ/G2L CSI-2 block
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-media <linux-media@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: linux-next: build failure after merge of the mediatek tree
+Content-Language: en-US
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220830094230.18c76615@canb.auug.org.au>
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220830094230.18c76615@canb.auug.org.au>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,214 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+Hi Stephen,
 
-Thank you for the patch.
+On 30/08/2022 01:42, Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the mediatek tree, today's linux-next build (x86_64
+> allmodconfig) failed like this:
+> 
+> drivers/soc/mediatek/mtk-svs.c: In function 'svs_get_bank_volts_v3':
+> drivers/soc/mediatek/mtk-svs.c:887:47: error: implicit declaration of function 'FIELD_GET'; did you mean 'FOLL_GET'? [-Werror=implicit-function-declaration]
+>    887 |                         svsb->volt[turn_pt] = FIELD_GET(SVSB_VOPS_FLD_VOP0_4, vop30);
+>        |                                               ^~~~~~~~~
+>        |                                               FOLL_GET
+> drivers/soc/mediatek/mtk-svs.c: In function 'svs_set_bank_freq_pct_v2':
+> drivers/soc/mediatek/mtk-svs.c:1073:25: error: implicit declaration of function 'FIELD_PREP' [-Werror=implicit-function-declaration]
+>   1073 |         freqpct74_val = FIELD_PREP(SVSB_FREQPCTS_FLD_PCT0_4, svsb->freq_pct[8]) |
+>        |                         ^~~~~~~~~~
+> 
+> Caused by commit
+> 
+>    a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros where possible")
+> 
+> I have used the mediatek tree from next-20220829 for today.
+> 
 
-On Tue, Aug 30, 2022 at 12:32 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Prabhakar,
->
-> Thank you for the patch.
->
-> On Mon, Aug 01, 2022 at 10:47:15PM +0100, Lad Prabhakar wrote:
-> > Document the CSI-2 block which is part of CRU found in Renesas
-> > RZ/G2L SoC.
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > RFC v2 -> v1
-> > * Fixed review comments pointed by Rob and Jacopo.
-> >
-> > RFC v1 -> RFC v2
-> > * New patch
-> > ---
-> >  .../bindings/media/renesas,rzg2l-csi2.yaml    | 149 ++++++++++++++++++
-> >  1 file changed, 149 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
-> > new file mode 100644
-> > index 000000000000..f82f88c096df
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-csi2.yaml
-> > @@ -0,0 +1,149 @@
-> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > +# Copyright (C) 2022 Renesas Electronics Corp.
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/media/renesas,rzg2l-csi2.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Renesas RZ/G2L (and alike SoC's) MIPI CSI-2 receiver
-> > +
-> > +maintainers:
-> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > +
-> > +description:
-> > +  The CSI-2 receiver device provides MIPI CSI-2 capabilities for the Renesas RZ/G2L
-> > +  (and alike SoCs). MIPI CSI-2 is part of the CRU block which is used in conjunction
-> > +  with the Image Processing module, which provides the video capture capabilities.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    oneOf:
-> > +      - items:
->
-> You can drop the oneOf and write
->
-Agreed.
-
->     items:
->       - enum:
->           - renesas,r9a07g044-csi2       # RZ/G2{L,LC}
->           - renesas,r9a07g054-csi2       # RZ/V2L
->       - const: renesas,rzg2l-csi2
->
-> > +          - enum:
-> > +              - renesas,r9a07g044-csi2       # RZ/G2{L,LC}
-> > +              - renesas,r9a07g054-csi2       # RZ/V2L
-> > +          - const: renesas,rzg2l-csi2
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  interrupt-names:
-> > +    const: csi2_link
->
-> If there's a single interrupt you can drop the name.
->
-OK, I will drop it.
+Thanks for the information. We were able to identify the issue (not really 
+difficult) and I pushed a fix to my for-next tree. So we should be good by tomorrow.
 
 Cheers,
-Prabhakar
-
-> > +
-> > +  clocks:
-> > +    items:
-> > +      - description: Internal clock for connecting CRU and MIPI
-> > +      - description: CRU Main clock
-> > +      - description: CPU Register access clock
-> > +
-> > +  clock-names:
-> > +    items:
-> > +      - const: sysclk
-> > +      - const: vclk
-> > +      - const: pclk
-> > +
-> > +  power-domains:
-> > +    maxItems: 1
-> > +
-> > +  resets:
-> > +    items:
-> > +      - description: CRU_CMN_RSTB reset terminal
-> > +
-> > +  reset-names:
-> > +    const: cmn-rstb
->
-> Same here.
->
-> Reviewed-by: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
->
-> > +
-> > +  ports:
-> > +    $ref: /schemas/graph.yaml#/properties/ports
-> > +
-> > +    properties:
-> > +      port@0:
-> > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > +        unevaluatedProperties: false
-> > +        description:
-> > +          Input port node, single endpoint describing the CSI-2 transmitter.
-> > +
-> > +        properties:
-> > +          endpoint:
-> > +            $ref: video-interfaces.yaml#
-> > +            unevaluatedProperties: false
-> > +
-> > +            properties:
-> > +              data-lanes:
-> > +                minItems: 1
-> > +                maxItems: 4
-> > +                items:
-> > +                  maximum: 4
-> > +
-> > +            required:
-> > +              - clock-lanes
-> > +              - data-lanes
-> > +
-> > +      port@1:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description:
-> > +          Output port node, Image Processing block connected to the CSI-2 receiver.
-> > +
-> > +    required:
-> > +      - port@0
-> > +      - port@1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - clock-names
-> > +  - power-domains
-> > +  - resets
-> > +  - reset-names
-> > +  - ports
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/clock/r9a07g044-cpg.h>
-> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +
-> > +    csi20: csi2@10830400 {
-> > +            compatible = "renesas,r9a07g044-csi2", "renesas,rzg2l-csi2";
-> > +            reg = <0x10830400 0xfc00>;
-> > +            interrupts = <GIC_SPI 166 IRQ_TYPE_LEVEL_HIGH>;
-> > +            clocks = <&cpg CPG_MOD R9A07G044_CRU_SYSCLK>,
-> > +                     <&cpg CPG_MOD R9A07G044_CRU_VCLK>,
-> > +                     <&cpg CPG_MOD R9A07G044_CRU_PCLK>;
-> > +            clock-names = "sysclk", "vclk", "pclk";
-> > +            power-domains = <&cpg>;
-> > +            resets = <&cpg R9A07G044_CRU_CMN_RSTB>;
-> > +            reset-names = "cmn-rstb";
-> > +
-> > +            ports {
-> > +                    #address-cells = <1>;
-> > +                    #size-cells = <0>;
-> > +
-> > +                    port@0 {
-> > +                            reg = <0>;
-> > +
-> > +                            csi2_in: endpoint {
-> > +                                    clock-lanes = <0>;
-> > +                                    data-lanes = <1 2>;
-> > +                                    remote-endpoint = <&ov5645_ep>;
-> > +                            };
-> > +                    };
-> > +
-> > +                    port@1 {
-> > +                            #address-cells = <1>;
-> > +                            #size-cells = <0>;
-> > +
-> > +                            reg = <1>;
-> > +
-> > +                            csi2cru: endpoint@0 {
-> > +                                    reg = <0>;
-> > +                                    remote-endpoint = <&crucsi2>;
-> > +                            };
-> > +                    };
-> > +            };
-> > +    };
->
-> --
-> Regards,
->
-> Laurent Pinchart
+Matthias

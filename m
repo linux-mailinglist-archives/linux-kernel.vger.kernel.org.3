@@ -2,58 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDDA35A5AE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63BA35A5AE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229966AbiH3Esi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 00:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60512 "EHLO
+        id S229886AbiH3Es6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 00:48:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbiH3EsR (ORCPT
+        with ESMTP id S229587AbiH3Esx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 00:48:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89146B02BA;
-        Mon, 29 Aug 2022 21:48:16 -0700 (PDT)
+        Tue, 30 Aug 2022 00:48:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3858CAE22D;
+        Mon, 29 Aug 2022 21:48:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B2F9B811B9;
-        Tue, 30 Aug 2022 04:48:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2FF2C433D7;
-        Tue, 30 Aug 2022 04:48:13 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9599C61231;
+        Tue, 30 Aug 2022 04:48:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04E41C433C1;
+        Tue, 30 Aug 2022 04:48:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661834894;
-        bh=fx/2R2KpWM7H7A+xXD+jhcW9b7yHd7jYx/HOk0b0+FM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Lfi5ILY7H7MlFVkOoxKjJwpESchr+4w3n5xuiE4sXXJySElHGle+AWHp2j3itzS/b
-         1FzA3t1FdGjnVZpulB3FDolZ28wXbpWg1dj89dYE+zEyh4ULGAyH4Pn4ti9NS7kvxL
-         K11VRl/0ic+6/L5rpXm1QLo+sjBgLzjVKzzmR/DvYWjgx5I3b2qk/6RuMVQvknoRhA
-         sGmj3xCJFv8VUlPM5CB2RDBWUnn6HRiWsxt+X6LehzqNuKGmcOjtydPaKZFHoxTSXV
-         Gtf83tVJQvUOyRhdABK9Yi23Y++hAN5DD7CYfhNW6wdjLoBWWb3wrqYuZprKL9yPMz
-         2ebaN29wWwh9g==
-Date:   Mon, 29 Aug 2022 21:48:11 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     David Laight <David.Laight@aculab.com>
-Cc:     'Peter Zijlstra' <peterz@infradead.org>,
-        Segher Boessenkool <segher@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
-        Michael Matz <matz@suse.de>,
-        "linux-toolchains@vger.kernel.org" <linux-toolchains@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH] x86/sev: Mark snp_abort() noreturn
-Message-ID: <20220830044811.jad66k4sxdfnprul@treble>
-References: <20220824152420.20547-1-bp@alien8.de>
- <20220824172929.GA25951@gate.crashing.org>
- <YwaN2HtMyM0YEdSB@worktop.programming.kicks-ass.net>
- <20220824224144.GC25951@gate.crashing.org>
- <YwcZjxVkO/lspvmv@worktop.programming.kicks-ass.net>
- <ce56926842dc49ecb08ddb9d828590af@AcuMS.aculab.com>
+        s=k20201202; t=1661834929;
+        bh=zX1NN0m+kuHbiVw/vJt8nv2cDsPm1F+9+El9H/9IgbU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=dUVF2+5SOda/PRZwwEadbecDju2R5FubkdwKO5tPXn0BsCq3b518zBz4M0fJZ0+FP
+         A2WTVob0K/t4rYf+9dio2MzYTGWH+gUg1SZG1FhJ1Jr6ZgvkJXsKnVmHYmK4qqY2eI
+         d9IJWsXgDt/Bzg/ShHjy1OBXnIeYw3vt5Vh5Yt2GScHBH02JiIcrruNarIP83em5ym
+         9rPrr5fIfOhhvD1oRoaMVWgQ793XTrXywiIWYCBmDpz8WZb8J1qkLASLBDxOxDgFAL
+         MOy34LJ/aeCaOZK6fO00VzokQPZUDlvwcQgIpEv8JDcN9L6T9Yw7R0eOjmtsVIvdf8
+         Uhh/8w4m48kuw==
+Date:   Mon, 29 Aug 2022 21:48:46 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     shaozhengchao <shaozhengchao@huawei.com>
+Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>,
+        <jhs@mojatatu.com>, <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>,
+        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>
+Subject: Re: [PATCH net-next 0/3] net: sched: add other statistics when
+ calling qdisc_drop()
+Message-ID: <20220829214846.3fbb41b1@kernel.org>
+In-Reply-To: <3bee0773-dc81-79b8-bddd-852141e3258c@huawei.com>
+References: <20220825032943.34778-1-shaozhengchao@huawei.com>
+        <20220826194052.7978b101@kernel.org>
+        <3bee0773-dc81-79b8-bddd-852141e3258c@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ce56926842dc49ecb08ddb9d828590af@AcuMS.aculab.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,23 +59,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 01:12:42PM +0000, David Laight wrote:
-> ...
-> > Objtool follows control flow. As you said above, noreturn functions
-> > behave differently and code-gen after a call to a noreturn function
-> > stops.
+On Sat, 27 Aug 2022 11:16:53 +0800 shaozhengchao wrote:
+> On 2022/8/27 10:40, Jakub Kicinski wrote:
+> > On Thu, 25 Aug 2022 11:29:40 +0800 Zhengchao Shao wrote:  
+> >> According to the description, "other" should be added when calling
+> >> qdisc_drop() to discard packets.  
+> > 
+> > The fact that an old copy & pasted comment says something is not
+> > in itself a sufficient justification to make code changes.
+> > 
+> > qdisc_drop() already counts drops, duplicating the same information
+> > in another place seems like a waste of CPU cycles.  
 > 
-> Thinks....
-> 
-> How near is objtool to outputting a list of functions and the
-> stack offset at which they call something else?
+> Hi Jakub:
+> 	Thank you for your reply. It seems more appropriate to delete the other 
+> variable, if it is unused?
 
-It basically already does this.
-
-> With the 'magic numbers' to track indirect jumps that is very
-> nearly enough information to do full static stack depth checking.
-
-What do you mean by 'magic numbers'?
-
--- 
-Josh
+Yes, removing it SGTM.

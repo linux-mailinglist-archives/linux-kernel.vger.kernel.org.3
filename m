@@ -2,117 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369625A7074
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:16:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB9B85A707B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231627AbiH3WQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 18:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
+        id S231749AbiH3WSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 18:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiH3WQh (ORCPT
+        with ESMTP id S230205AbiH3WSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:16:37 -0400
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BCF6D57B;
-        Tue, 30 Aug 2022 15:16:36 -0700 (PDT)
-Received: by mail-ot1-x32f.google.com with SMTP id d18-20020a9d72d2000000b0063934f06268so9096097otk.0;
-        Tue, 30 Aug 2022 15:16:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=E/nyH/3foDxtGmIpzv0kFzFIyfD8qg2WZXXTeapubaI=;
-        b=aleLjERqp1LW6YXXzsbNFYloljaBys8t7B5VCraRETR/5ZqZSHy3oVct65uewmmRO/
-         y84S6F4UZE7GM0ax8bllzZll6ssuZzdOUzMCbm+g0WpYEIoX80pIpENOYzsSmL+3oHkR
-         1tlwWy75lwdts1PGGp1Gin5KtX44Fsby9XATU/UQjtnKg0p8IQ8PqK9ntM4soE4zM0K1
-         33SVv0U3qL0W8C5nF+u7Up/jYYhKovt4jaifGWvn3fmqXXOSz0WUiYhdPIwnNeLvHZuB
-         bIWsFt4iB5GmpDGenTuyrdsMSUKZSf/uTAbyo+xfxFFdzQE/XdAHEVRqpoYLb1x+XnEW
-         UG5A==
+        Tue, 30 Aug 2022 18:18:45 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083316D9E7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 15:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661897923;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TSSAWMfY5IhOGMsl4sCR/Sqq+wVCREXXNdNLZqAgz7E=;
+        b=SlbKa74lYPJssd8c/BRasmJh/BCMoFRnl+LKFu990Im56H2r9rlfnBx/pOVX2WeyD+cO3o
+        FYv9Aq3OVjO0cCeb16LKkwvyDQSzcG9QtFHmy/Qqt2/f0jWBkgt7YcdOlSmwj0HlMHgXb+
+        EhLsUhL3sgVDc+T6UkwIx9stxfQlMAg=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-453-8uZ9sd4qOtqzvjUReITHDg-1; Tue, 30 Aug 2022 18:18:42 -0400
+X-MC-Unique: 8uZ9sd4qOtqzvjUReITHDg-1
+Received: by mail-io1-f71.google.com with SMTP id y10-20020a5d914a000000b00688fa7b2252so7542822ioq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 15:18:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=E/nyH/3foDxtGmIpzv0kFzFIyfD8qg2WZXXTeapubaI=;
-        b=gE2RJ7jFJK3/2p5nVJWHkq/wpHCy9R6iNtuEwj5fzObiXo9A1n+iN+7Of9kyTuE6iX
-         OE8KC/mt7oFs2PafoCsuDlAVtp9jYRFhTg4+pfiMpHHy0EnNMYLa96AmyKpHjpJujs3r
-         kejt1h2DVvbH7DaFDrYUmp+1acHucFoPUHJRDbhHHljmw9sj8lwCep7F+CBpreDwSzhs
-         5ryUPyMiuUpkMDNhqA5tvCkT14QMwB1TUEC/fKfhfT5VuU+v49WM0gih0ncMNKSKB7c+
-         9t1LdEXfhiouOydmOvw5yrYEs8gPAoiEkO/mzJKDYffS76o3zUZ2lqXDdrk8kOkk9FaD
-         Q1Pg==
-X-Gm-Message-State: ACgBeo21Isu9IId7w7GRntA48gT5dQmMHQeDSCdAZCkNndQ6yIQ57DYt
-        QRdpupW6Bvgyb8qKWKJunTo=
-X-Google-Smtp-Source: AA6agR5jcgaxWchPKuW3dNX3lxYpGsOf2VOT7pIQ3io1qrIVEaeid8kBi8k2D0V1OkLk5Sr9VSi8Xw==
-X-Received: by 2002:a05:6830:2704:b0:638:8d4f:8eb8 with SMTP id j4-20020a056830270400b006388d4f8eb8mr9786428otu.40.1661897795979;
-        Tue, 30 Aug 2022 15:16:35 -0700 (PDT)
-Received: from ?IPV6:2600:1700:2442:6db0:891d:81c:f58f:3bd4? ([2600:1700:2442:6db0:891d:81c:f58f:3bd4])
-        by smtp.gmail.com with ESMTPSA id s41-20020a056870612900b0011f035022b8sm4064296oae.17.2022.08.30.15.16.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 15:16:35 -0700 (PDT)
-Message-ID: <63b5fa8c-9fb8-b2ff-3f15-cc8649224f06@gmail.com>
-Date:   Tue, 30 Aug 2022 17:16:33 -0500
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc;
+        bh=TSSAWMfY5IhOGMsl4sCR/Sqq+wVCREXXNdNLZqAgz7E=;
+        b=0V+4mC32oIDaeOjyLYNbcveucbM5zyuzckq6P0P6Ep0tnXyTkUC4G4+jyNs+batQ6S
+         d37itlK6Yzreeg/6bVdNG8hkCy5sf6mULl2rYP/ZVibkBL15ozItVXXOPOd/yJcwgAnv
+         ZHB8FybDdP8zff8gGfnLukUGC9ajPpfY54lf0HSzgPu/trby70BmmZZ+X+f+C/azu5pc
+         w8ZdLupgsR8Dl6pDYmXMPtsgx5vxK+lN12jCh1dD/G2YVcwV9Yc5eiTSL8Z6a0AXeiyQ
+         bmGeDFWiLI+vnRxDd0K6fU8UJvlXG7r1xi5QGvyUwF1y7QB8EAyU99TyqfZhhZe9H18K
+         iYHw==
+X-Gm-Message-State: ACgBeo1+QmPyazwlLXC/VFvF2BCWglM9054Azkger7DroZDck90soOrC
+        BYrUtHRTv8rLgDCyQD+QXp9NotfQ6nqgB0OFLMEUmJAnF0cgjdquRYjWQu1cj/A51zQivQzpECc
+        ys2S+baqGzR3vvcziJynyQAVt
+X-Received: by 2002:a05:6602:1c4:b0:689:2db5:ea0f with SMTP id w4-20020a05660201c400b006892db5ea0fmr11509838iot.197.1661897921390;
+        Tue, 30 Aug 2022 15:18:41 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR73OWrrAXNYUM7X5f/RFjdmLhOTn+HRSKcgl5cCW81jvTLPZGl1q1ozpKM9lFAFywZRpg27UQ==
+X-Received: by 2002:a05:6602:1c4:b0:689:2db5:ea0f with SMTP id w4-20020a05660201c400b006892db5ea0fmr11509822iot.197.1661897921151;
+        Tue, 30 Aug 2022 15:18:41 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id z30-20020a056602081e00b0068b1858c81asm6110858iow.13.2022.08.30.15.18.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 15:18:40 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 16:18:38 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Kevin Tian <kevin.tian@intel.com>
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
+Subject: Re: [PATCH 15/15] vfio: Add struct device to vfio_device
+Message-ID: <20220830161838.4aa47045.alex.williamson@redhat.com>
+In-Reply-To: <20220827171037.30297-16-kevin.tian@intel.com>
+References: <20220827171037.30297-1-kevin.tian@intel.com>
+        <20220827171037.30297-16-kevin.tian@intel.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 0/2] begin KTAP spec v2 process
-Content-Language: en-US
-To:     David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
-        guillaume.tucker@collabora.com, dlatypov@google.com,
-        kernelci@groups.io, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220829233150.3564612-1-frowand.list@gmail.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20220829233150.3564612-1-frowand.list@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/29/22 18:31, frowand.list@gmail.com wrote:
-> From: Frank Rowand <frank.rowand@sony.com>
-> 
-> The process to create version 2 of the KTAP Specification is documented
-> in email discussions.  I am attempting to capture this information at
-> 
->    https://elinux.org/Test_Results_Format_Notes#KTAP_version_2
-> 
-> I am already not following the suggested process, which says:
-> "...please try to follow this principal of one major topic per email
-> thread."  I think that is ok in this case because the two patches
-> are related and (hopefully) not controversial.
-> 
-> Changes since patch version 2:
->    - correct version 1 change text
->    - version 1 patch 2/2 had not yet been applied when I created version 2,
->      refresh version 2 patch 2/2 for new context
-> 
-> Changes since patch version 1:
->    - drop patch 2/2.  Jonathan Corbet has already applied this patch
->      into version 1 of the Specification
->    - add new patch 2/2
-> 
-> Frank Rowand (2):
->   ktap_v2: change version to 2-rc in KTAP specification
->   ktap_v2: change "version 1" to "version 2" in examples
-> 
->  Documentation/dev-tools/ktap.rst | 25 +++++++++++++------------
->  1 file changed, 13 insertions(+), 12 deletions(-)
-> 
+On Sun, 28 Aug 2022 01:10:37 +0800
+Kevin Tian <kevin.tian@intel.com> wrote:
 
-The process for developing KTAP spec v2 and the status of proposals
-and accepted patches can be found at:
+> From: Yi Liu <yi.l.liu@intel.com>
+> 
+> and replace kref. With it a 'vfio-dev/vfioX' node is created under the
+> sysfs path of the parent, indicating the device is bound to a vfio
+> driver, e.g.:
+> 
+> /sys/devices/pci0000\:6f/0000\:6f\:01.0/vfio-dev/vfio0
+> 
+> It is also a preparatory step toward adding cdev for supporting future
+> device-oriented uAPI.
 
-  https://elinux.org/Test_Results_Format_Notes#KTAP_version_2
+Shall we start Documentation/ABI/testing/vfio-dev now?  Thanks.
+
+Alex
+

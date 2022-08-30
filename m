@@ -2,104 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A65F15A7139
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FA65A713D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiH3W6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 18:58:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S230092AbiH3XAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 19:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231528AbiH3W6i (ORCPT
+        with ESMTP id S230205AbiH3XAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:58:38 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BAA82F8E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 15:58:37 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id y1so10650359plb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 15:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=9i6pUjJNJbv0URDTN17d2CcuUvvkFRJoPPsB0ChrC84=;
-        b=K2J5xRAk/tKVnjvdGCtwzZC/znuGdEUztUB2UHn4wXft/46xq8gyf0Ddl57gL2NETG
-         M0vOBzYECWvKK4hidx1uBJNXH2NsR9pGU3zcm1+sXOa9rrbJrvaKTah1s9gjtU1As/XQ
-         +GhjBJOLmxYXJbLlpGP3ExvkBiOw6dPva01r4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=9i6pUjJNJbv0URDTN17d2CcuUvvkFRJoPPsB0ChrC84=;
-        b=XUHt/w+2jZj6J+XIsfjcyjYDihAZAWi8w20OaH7WEHD71Wax6GqwIFUgZFFxTvzPi5
-         3sPs7/zLI0JFO1CtUmynOdscrDNNDnBy51h1VjuMQopi3Q0WAfegUGWPr3e99au5+/Ps
-         BlNPIsDUmeAJKWVxgRa7GDXDNusLKi36bSU7pw+vEAEIae4x8wbFTONI1t+gZ3tGT0es
-         poWPXzA+geeI9OcwtqaKh6cvmrQ6qAnddqE30bcKjJCoTN16fL9jtbNtQl6hLQrUSQs5
-         urRk8vxr9BvgTqt1JqKBtSfuPqoDssGBrxO2r5UuMhIwzDMTxAJ0y+X/vaqrEeo5Zzpg
-         hozg==
-X-Gm-Message-State: ACgBeo0nxGCAC/KtLVp8TX1Da/XYEc6XRIU1br+gu92RBWfTSgr2CUZG
-        mgURD6LCSIBVeEcwf+GYLtlsSw==
-X-Google-Smtp-Source: AA6agR6wm6nWs+6nAf9TZDvola8E8ygfG4X7jJS1hsOIaTMHd8b0kiBAbmAJLdFsGBuzT3sT26/VrA==
-X-Received: by 2002:a17:90b:4d8f:b0:1fc:314a:17e7 with SMTP id oj15-20020a17090b4d8f00b001fc314a17e7mr284377pjb.194.1661900317130;
-        Tue, 30 Aug 2022 15:58:37 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:202:201:5f34:2f6:2856:188e])
-        by smtp.gmail.com with ESMTPSA id bf3-20020a170902b90300b001743be790b4sm10083539plb.215.2022.08.30.15.58.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 15:58:36 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Prashant Malani <pmalani@chromium.org>,
-        Benson Leung <bleung@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        chrome-platform@lists.linux.dev, Tzung-Bi Shih <tzungbi@kernel.org>
-Subject: [PATCH 4/4] platform/chrome: cros_typec_switch: Inline DRV_NAME
-Date:   Tue, 30 Aug 2022 15:58:31 -0700
-Message-Id: <20220830225831.2362403-5-swboyd@chromium.org>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-In-Reply-To: <20220830225831.2362403-1-swboyd@chromium.org>
-References: <20220830225831.2362403-1-swboyd@chromium.org>
+        Tue, 30 Aug 2022 19:00:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9212AE0D;
+        Tue, 30 Aug 2022 16:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661900410; x=1693436410;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=snlO9+PIZi6VhvlaPIhpKNuiJA6J1a/AssLGfCUxwkc=;
+  b=Tr2TEF+h8SYAqPh+AytLRBh4xrWP7sCLEYRXKmyHT25i4kZ44K6NIW1l
+   PyCQsrQVLuU0oK4PRquYXRyXlE4z0R7xMlwZoeHOQXeZIMfe9fqLaZfrc
+   1W+TZ7oHAqwh5OW1O+fRbIhqDgBIKQHJK55jmdiqUmr6DwvAzozaNsVnS
+   6exIqnxj/tE4tUjfkkp7Ktd1c1TfXPMmc/yaH7lj+g97pXdOrMSNmEaFT
+   kC0RlkQE/bPlNwMT+MfJCqMLOuPDd5ODc7tOmQH+X0AE5etqxFgA8yQMd
+   dsLpiCsLzkzkZYwkVi1y+8nDoT0sPKp0q6lNzsDxSjb80vlSZTVbk4yMC
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="295329341"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="295329341"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 16:00:10 -0700
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="701174958"
+Received: from skanpuri-mobl1.amr.corp.intel.com (HELO desk) ([10.212.18.137])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 16:00:10 -0700
+Date:   Tue, 30 Aug 2022 16:00:08 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     stable@vger.kernel.org
+Cc:     gregkh@linuxfoundation.org, andrew.cooper3@citrix.com, bp@suse.de,
+        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4.14 1/2] x86/cpu: Add Tiger Lake to Intel family
+Message-ID: <20220830230008.uvkdp2r54uexpwbz@desk>
+References: <ec31e22b4f3b079d0da6b60f5899ffcd79d9bea0.1661899117.git.pawan.kumar.gupta@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ec31e22b4f3b079d0da6b60f5899ffcd79d9bea0.1661899117.git.pawan.kumar.gupta@linux.intel.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This macro is only used one place, let's inline it instead to save a
-line or two.
+On Tue, Aug 30, 2022 at 03:43:25PM -0700, Pawan Gupta wrote:
+> From: Gayatri Kammela <gayatri.kammela@intel.com>
+> 
+> [ Upstream commit 6e1c32c5dbb4b90eea8f964c2869d0bde050dbe0 ]
+> 
+> Add the model numbers/CPUIDs of Tiger Lake mobile and desktop to the
+> Intel family.
+> 
+> Suggested-by: Tony Luck <tony.luck@intel.com>
+> Signed-off-by: Gayatri Kammela <gayatri.kammela@intel.com>
+> Signed-off-by: Tony Luck <tony.luck@intel.com>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> Cc: Linus Torvalds <torvalds@linux-foundation.org>
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Rahul Tanwar <rahul.tanwar@linux.intel.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Link: https://lkml.kernel.org/r/20190905193020.14707-2-tony.luck@intel.com
+> Signed-off-by: Ingo Molnar <mingo@kernel.org>
+> Signed-off-by: Sasha Levin <sashal@kernel.org>
 
-Cc: Prashant Malani <pmalani@chromium.org>
-Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/platform/chrome/cros_typec_switch.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-diff --git a/drivers/platform/chrome/cros_typec_switch.c b/drivers/platform/chrome/cros_typec_switch.c
-index 09ad0d268f4b..a26219e97c93 100644
---- a/drivers/platform/chrome/cros_typec_switch.c
-+++ b/drivers/platform/chrome/cros_typec_switch.c
-@@ -18,8 +18,6 @@
- #include <linux/usb/typec_mux.h>
- #include <linux/usb/typec_retimer.h>
- 
--#define DRV_NAME "cros-typec-switch"
--
- /* Handles and other relevant data required for each port's switches. */
- struct cros_typec_port {
- 	int port_num;
-@@ -309,7 +307,7 @@ MODULE_DEVICE_TABLE(acpi, cros_typec_switch_acpi_id);
- 
- static struct platform_driver cros_typec_switch_driver = {
- 	.driver	= {
--		.name = DRV_NAME,
-+		.name = "cros-typec-switch",
- 		.acpi_match_table = ACPI_PTR(cros_typec_switch_acpi_id),
- 	},
- 	.probe = cros_typec_switch_probe,
--- 
-https://chromeos.dev
+I just realized that my sign-off was missing. I can resend the patch if
+required.
 
+Thanks,
+Pawan

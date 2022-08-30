@@ -2,116 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CE05A629B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D11755A62A0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbiH3L5e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:57:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58260 "EHLO
+        id S229913AbiH3L7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229521AbiH3L5a (ORCPT
+        with ESMTP id S229674AbiH3L67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:57:30 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D55D3EC4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 04:57:28 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id i5-20020a17090a2a0500b001fd8708ffdfso8475806pjd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 04:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=VuqtagyKtA4/dl6tqxoSG7e1PY/tdisIi6TZ+/J5Vhc=;
-        b=CD0pb5hyTtMpTa0viEmL0ZdXrAxHv91tx7llcQSFpYoDMqgOE8cKHCmOa2w0ulqxbM
-         BqRSBqB3xmf5kUP4hg6yv++AdcB2Cg0NKU7Alv+jsqm2SYmGr565acJ/rAb8UmFEfgnS
-         9eeAQ62A/TR6nh6coI2K+OqWy5dLNv3Vw022FCQCjoaVIQjTcBVK2a3YGARLjsa4IYfO
-         uG/BbiGUyB2nF34tVMHFWW2FKwc93eqWdtHenGSCVgc5dxe74ANPrRSw55iQzhnAxgA1
-         RFq/IzDYE2SnQxW04bjv75Y3HJakRADBxOyaxGTx1yWbsA0GFQlTHpNpHZ9dmU6OqyCi
-         vDWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=VuqtagyKtA4/dl6tqxoSG7e1PY/tdisIi6TZ+/J5Vhc=;
-        b=nYbCDLIJ1GOE6xlUqqhfDpo/Fsy5sHsIVFvnd77GXKh3IiK1JI+z2uZNyaijydAlSp
-         6q9daJJk5lnNxNT6/FVYnfAfTrlh/Dmj0kTwXGuHmNm23BsdXpZOwD3ct25I/4AptbX3
-         lNQ9xZsl/DUpUSodAz7vv7k8ut8C8RXEyJxWLZaPquGRzerTFPBwvNTIb9ou4uPCo3J3
-         vIJPgqaNX1z4zUswPYgzHSDg2+XmOiYVCA52jLBUJGiN+b/gDfEEw+KKK/A7qkQ0oKWS
-         FBKXG2VW6YSin9fZKQTzBJPaisVCEWK03rZKi1g7a940enkiDimW2fjDEujwO/xAbRk2
-         szYA==
-X-Gm-Message-State: ACgBeo2p09qmAi5/Ydzu2t8Vl/KZsI1iMQW4MgdfQbK4ZjigeRlqy9XK
-        8uodFpN8OszR66zNBb3ll8cW
-X-Google-Smtp-Source: AA6agR6KSZoACgPWIZiJrygkINu8nPOhh7IgucQwM8gZJU8Ys7AEtxyAmvui2CvR58iqKJp/ZESNkQ==
-X-Received: by 2002:a17:902:7586:b0:172:d0de:7a3c with SMTP id j6-20020a170902758600b00172d0de7a3cmr21300245pll.38.1661860647978;
-        Tue, 30 Aug 2022 04:57:27 -0700 (PDT)
-Received: from thinkpad ([117.217.182.234])
-        by smtp.gmail.com with ESMTPSA id c8-20020a170903234800b0016d3935eff0sm7549406plh.176.2022.08.30.04.57.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 04:57:27 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 17:27:21 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     lpieralisi@kernel.org, robh@kernel.org, andersson@kernel.org,
-        kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        dmitry.baryshkov@linaro.org
-Subject: Re: [PATCH 10/11] dt-bindings: PCI: qcom-ep: Add support for SM8450
- SoC
-Message-ID: <20220830115721.GF135982@thinkpad>
-References: <20220826181923.251564-1-manivannan.sadhasivam@linaro.org>
- <20220826181923.251564-11-manivannan.sadhasivam@linaro.org>
- <53897584-f9a1-d305-4024-79a73d2837d8@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Tue, 30 Aug 2022 07:58:59 -0400
+X-Greylist: delayed 128 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 04:58:58 PDT
+Received: from mail.thorsis.com (mail.thorsis.com [92.198.35.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E54D86C5;
+        Tue, 30 Aug 2022 04:58:57 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 13:58:51 +0200
+From:   Alexander Dahl <ada@thorsis.com>
+To:     Olliver Schinagl <oliver@schinagl.nl>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-leds@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Oleh Kravchenko <oleg@kaa.org.ua>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Olliver Schinagl <oliver+list@schinagl.nl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: leds: Expand LED_COLOR_ID definitions
+Message-ID: <Yw37exBark8pCE2p@ada.ifak-system.com>
+Mail-Followup-To: Olliver Schinagl <oliver@schinagl.nl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-leds@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Oleh Kravchenko <oleg@kaa.org.ua>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Olliver Schinagl <oliver+list@schinagl.nl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220830084454.1133369-1-oliver@schinagl.nl>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <53897584-f9a1-d305-4024-79a73d2837d8@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220830084454.1133369-1-oliver@schinagl.nl>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 06:17:43PM +0300, Krzysztof Kozlowski wrote:
-> On 26/08/2022 21:19, Manivannan Sadhasivam wrote:
-> > Add devicetree bindings support for SM8450 SoC. Only the clocks are
-> > different on this platform, rest is same as SDX55.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >  .../devicetree/bindings/pci/qcom,pcie-ep.yaml | 27 +++++++++++++++++--
-> >  1 file changed, 25 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> > index 83a2cfc63bc1..9914d575ec41 100644
-> > --- a/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> > +++ b/Documentation/devicetree/bindings/pci/qcom,pcie-ep.yaml
-> > @@ -12,6 +12,7 @@ maintainers:
-> >  properties:
-> >    compatible:
-> >      const: qcom,sdx55-pcie-ep
-> > +    const: qcom,sm8450-pcie-ep
+Hello Olliver,
+
+Am Tue, Aug 30, 2022 at 10:44:54AM +0200 schrieb Olliver Schinagl:
+> In commit 853a78a7d6c7 (dt-bindings: leds: Add LED_COLOR_ID definitions,
+> Sun Jun 9 20:19:04 2019 +0200) the most basic color definitions where
+> added. However, there's a little more very common LED colors.
 > 
-> You need to test the bindings with `make dt_binding_check`. This
-> requires an enum instead of two consts.
-
-Sorry! Usually I do but somehow missed on this series.
-
-Thanks,
-Mani
-
+> While the documentation states 'add what is missing', engineers tend to
+> be lazy and will just use what currently exists. So this patch will take
+> (a) list from online retailers [0], [1], [2] and use the common LED colors from
+> there, this being reasonable as this is what is currently available to purchase.
 > 
+> Note, that LIME seems to be the modern take to 'Yellow-green' or
+> 'Yellowish-green' from some older datasheets.
 > 
-> Best regards,
-> Krzysztof
+> [0]: https://www.digikey.com/en/products/filter/led-lighting-color/125
+> [1]: https://eu.mouser.com/c/optoelectronics/led-lighting/led-emitters/standard-leds-smd
+> [2]: https://nl.farnell.com/en-NL/c/optoelectronics-displays/led-products/standard-single-colour-leds-under-75ma
+> 
+> Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
+> ---
+> No chances since v2: Re-send with the proper e-mails.
+> Changes since v1: Unbreak existing definitions.
+> 
+>  include/dt-bindings/leds/common.h | 28 ++++++++++++++++------------
+>  1 file changed, 16 insertions(+), 12 deletions(-)
+> 
+> diff --git a/include/dt-bindings/leds/common.h b/include/dt-bindings/leds/common.h
+> index 3be89a7c20a9..04bf94523ea3 100644
+> --- a/include/dt-bindings/leds/common.h
+> +++ b/include/dt-bindings/leds/common.h
+> @@ -22,18 +22,22 @@
+>  #define LEDS_BOOST_FIXED	2
+>  
+>  /* Standard LED colors */
+> -#define LED_COLOR_ID_WHITE	0
+> -#define LED_COLOR_ID_RED	1
+> -#define LED_COLOR_ID_GREEN	2
+> -#define LED_COLOR_ID_BLUE	3
+> -#define LED_COLOR_ID_AMBER	4
+> -#define LED_COLOR_ID_VIOLET	5
+> -#define LED_COLOR_ID_YELLOW	6
+> -#define LED_COLOR_ID_IR		7
+> -#define LED_COLOR_ID_MULTI	8	/* For multicolor LEDs */
+> -#define LED_COLOR_ID_RGB	9	/* For multicolor LEDs that can do arbitrary color,
+> -					   so this would include RGBW and similar */
+> -#define LED_COLOR_ID_MAX	10
+> +#define LED_COLOR_ID_WHITE      0
+> +#define LED_COLOR_ID_RED        1
+> +#define LED_COLOR_ID_GREEN      2
+> +#define LED_COLOR_ID_BLUE       3
+> +#define LED_COLOR_ID_AMBER      4
+> +#define LED_COLOR_ID_VIOLET     5
+> +#define LED_COLOR_ID_YELLOW     6
+> +#define LED_COLOR_ID_IR         7
+> +#define LED_COLOR_ID_MULTI      8 /* For multicolor LEDs */
+> +#define LED_COLOR_ID_RGB        9 /* For multicolor LEDs that can do arbitrary color, including RGBW etc. */
+> +#define LED_COLOR_ID_PUPRPLE   10
 
--- 
-மணிவண்ணன் சதாசிவம்
+This is still a typo, isn't it? Purple?
+
+Greets
+Alex
+
+> +#define LED_COLOR_ID_ORANGE    11
+> +#define LED_COLOR_ID_PINK      12
+> +#define LED_COLOR_ID_CYAN      13
+> +#define LED_COLOR_ID_LIME      14
+> +#define LED_COLOR_ID_MAX       15
+>  
+>  /* Standard LED functions */
+>  /* Keyboard LEDs, usually it would be input4::capslock etc. */
+> -- 
+> 2.37.2
+> 

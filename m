@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 296805A5E97
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:50:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CC335A5E94
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:50:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230422AbiH3Iua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
+        id S231187AbiH3IuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:50:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbiH3IuI (ORCPT
+        with ESMTP id S231718AbiH3IuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Aug 2022 04:50:08 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B59F9FCB;
-        Tue, 30 Aug 2022 01:49:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FEFC1116D;
+        Tue, 30 Aug 2022 01:49:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661849395; x=1693385395;
+  t=1661849396; x=1693385396;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tp8AdUXc/CyFpAtBRv1FRHZ47fXqPlu3sywMVyMvX4w=;
-  b=ma41IJYTagrVRN3J6+HhPQEfCImzD/9G+8klJLl9img1l7QPqXgjYZY9
-   UCeJztvWOjkYw6YfvaS2VZYznOX22yg3rqcpQs29AiiPYslG542DDSUSP
-   MH25SiZ82J3TXu/9gI3uBMCdiLPoVZr26eY8vLB6I2JSXoQUa91gs0ubo
-   iduq+QoNa3Pw6sAx/eQTayFdnomYzpFeygGXqoyhWrdWH7CdIG1vcJO7u
-   cJW4Hs8zRagFbgRRhfvMcIBCmZafSOxUS3ncy2lGO+/z2owjHAemabHcU
-   vD7s2BWi9PBb3RsIPLeTEJ7W1u18CEB3ifyQEpMx2d3YMGzCg10IuKX91
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="293866316"
+  bh=7tobZ5SnMmu7atea54D1+8bNrJpPf5EPxFoyVmNne08=;
+  b=bIbYO8E7Q5WAjtSg5TmOOhnWMvoUVKv87Tl43+sw0m+Dt1nzpJO4H3cN
+   82deaUbfPrfWrRA/39jxbx02No4f1P1wQ0vv7FFX7ziJHAdBwdafis4M4
+   t9DpCQcdUDhM7bGtKka4G7A/H0N3DkjyeIWXvmNR/LPy+QP5rZKdxyT0y
+   gkS1XCdFYoEDkmokHjQECvP/s3LZOL/WtCvrWu4gi6o4u/MVN05isjg6y
+   8o3keThBGnmjjl48IR/OpJI/EA7NfGcnEWjR9xVfcpsIoDYqlDwBJasU0
+   /FzWu/soRr9JYWvWKmp3FtsEgB63Jl11cBv+Yrx+TIiNRY6Yo1/VczxhZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="293866325"
 X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="293866316"
+   d="scan'208";a="293866325"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:49:52 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:49:55 -0700
 X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="672761862"
+   d="scan'208";a="672761871"
 Received: from arnesgom-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.54.235])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:49:49 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:49:53 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
@@ -45,9 +45,9 @@ To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2 2/5] serial: cpm_uart: Remove custom frame size calculation
-Date:   Tue, 30 Aug 2022 11:49:22 +0300
-Message-Id: <20220830084925.5608-3-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 3/5] serial: fsl_lpuart: Remove custom frame size calculation
+Date:   Tue, 30 Aug 2022 11:49:23 +0300
+Message-Id: <20220830084925.5608-4-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220830084925.5608-1-ilpo.jarvinen@linux.intel.com>
 References: <20220830084925.5608-1-ilpo.jarvinen@linux.intel.com>
@@ -64,96 +64,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The number of bits can be calculated using helpers in core, no need for
-the driver to do it on its own.
-
-The mode register is programmed with frame bits minus 1, rearrange the
-comments related to that "feature" closer to the actual write.
+The number of bits can be calculated using tty_get_frame_size(), no
+need for the driver to do it on its own. Change bits to unsigned and
+baud too since we're touching the declarations line anyway (the
+respective core functions are typed unsigned).
 
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/cpm_uart/cpm_uart_core.c | 31 +++++++--------------
- 1 file changed, 10 insertions(+), 21 deletions(-)
+ drivers/tty/serial/fsl_lpuart.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/tty/serial/cpm_uart/cpm_uart_core.c b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-index db07d6a5d764..28c73c28f0c5 100644
---- a/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-+++ b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
-@@ -489,7 +489,6 @@ static void cpm_uart_set_termios(struct uart_port *port,
- 	int baud;
- 	unsigned long flags;
- 	u16 cval, scval, prev_mode;
--	int bits, sbits;
- 	struct uart_cpm_port *pinfo =
- 		container_of(port, struct uart_cpm_port, port);
- 	smc_t __iomem *smcp = pinfo->smcp;
-@@ -515,28 +514,17 @@ static void cpm_uart_set_termios(struct uart_port *port,
- 	if (maxidl > 0x10)
- 		maxidl = 0x10;
- 
--	/* Character length programmed into the mode register is the
--	 * sum of: 1 start bit, number of data bits, 0 or 1 parity bit,
--	 * 1 or 2 stop bits, minus 1.
--	 * The value 'bits' counts this for us.
--	 */
- 	cval = 0;
- 	scval = 0;
- 
--	/* byte size */
--	bits = tty_get_char_size(termios->c_cflag);
--	sbits = bits - 5;
+diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
+index f6c33cd228c8..7fef653e7265 100644
+--- a/drivers/tty/serial/fsl_lpuart.c
++++ b/drivers/tty/serial/fsl_lpuart.c
+@@ -1284,17 +1284,12 @@ static inline int lpuart_start_rx_dma(struct lpuart_port *sport)
+ 	struct dma_slave_config dma_rx_sconfig = {};
+ 	struct circ_buf *ring = &sport->rx_ring;
+ 	int ret, nent;
+-	int bits, baud;
+ 	struct tty_port *port = &sport->port.state->port;
+ 	struct tty_struct *tty = port->tty;
+ 	struct ktermios *termios = &tty->termios;
+ 	struct dma_chan *chan = sport->dma_rx_chan;
 -
- 	if (termios->c_cflag & CSTOPB) {
- 		cval |= SMCMR_SL;	/* Two stops */
- 		scval |= SCU_PSMR_SL;
+-	baud = tty_get_baud_rate(tty);
+-
+-	bits = (termios->c_cflag & CSIZE) == CS7 ? 9 : 10;
+-	if (termios->c_cflag & PARENB)
 -		bits++;
- 	}
++	unsigned int bits = tty_get_frame_size(termios->c_cflag);
++	unsigned int baud = tty_get_baud_rate(tty);
  
- 	if (termios->c_cflag & PARENB) {
- 		cval |= SMCMR_PEN;
- 		scval |= SCU_PSMR_PEN;
--		bits++;
- 		if (!(termios->c_cflag & PARODD)) {
- 			cval |= SMCMR_PM_EVEN;
- 			scval |= (SCU_PSMR_REVP | SCU_PSMR_TEVP);
-@@ -580,12 +568,9 @@ static void cpm_uart_set_termios(struct uart_port *port,
- 
- 	spin_lock_irqsave(&port->lock, flags);
- 
--	/* Start bit has not been added (so don't, because we would just
--	 * subtract it later), and we need to add one for the number of
--	 * stops bits (there is always at least one).
--	 */
--	bits++;
- 	if (IS_SMC(pinfo)) {
-+		unsigned int bits = tty_get_frame_size(termios->c_cflag);
-+
- 		/*
- 		 * MRBLR can be changed while an SMC/SCC is operating only
- 		 * if it is done in a single bus cycle with one 16-bit move
-@@ -604,13 +589,17 @@ static void cpm_uart_set_termios(struct uart_port *port,
- 		 */
- 		prev_mode = in_be16(&smcp->smc_smcmr) & (SMCMR_REN | SMCMR_TEN);
- 		/* Output in *one* operation, so we don't interrupt RX/TX if they
--		 * were already enabled. */
--		out_be16(&smcp->smc_smcmr, smcr_mk_clen(bits) | cval |
--		    SMCMR_SM_UART | prev_mode);
-+		 * were already enabled.
-+		 * Character length programmed into the register is frame bits minus 1.
-+		 */
-+		out_be16(&smcp->smc_smcmr, smcr_mk_clen(bits - 1) | cval |
-+					   SMCMR_SM_UART | prev_mode);
- 	} else {
-+		unsigned int bits = tty_get_char_size(termios->c_cflag);
-+
- 		out_be16(&pinfo->sccup->scc_genscc.scc_mrblr, pinfo->rx_fifosize);
- 		out_be16(&pinfo->sccup->scc_maxidl, maxidl);
--		out_be16(&sccp->scc_psmr, (sbits << 12) | scval);
-+		out_be16(&sccp->scc_psmr, (UART_LCR_WLEN(bits) << 12) | scval);
- 	}
- 
- 	if (pinfo->clk)
+ 	/*
+ 	 * Calculate length of one DMA buffer size to keep latency below
 -- 
 2.30.2
 

@@ -2,107 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 228B55A5DB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55BEB5A5DBA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230097AbiH3IGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S230102AbiH3IGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiH3IGe (ORCPT
+        with ESMTP id S230043AbiH3IGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:06:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AB6267E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:06:33 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F1BFD6601E8E;
-        Tue, 30 Aug 2022 09:06:31 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661846792;
-        bh=q3hz6lam6ByJZFG8AQKAq6AKbuWIaklHb+CToWCW60Q=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=elOrtcVL18D5qLmrky4vEOBy9QkcMtBFUGfLp8RpLC97BehAQhqmFtweput3RR/J6
-         LPIjesKRFEIeGOQVSwTdJLJ+V4yijxQAb4CXzj4Hfk+jz6AkRakIBFC+FCXPgl653s
-         yd8MaMrED5m/yZMG1ycFCE+e90RCxssUSsip5m6v8qIXxjVZERER8p+8WaAtG9fadi
-         lM42gcshgTQM7MXuTVwQkVc38D9fNI5WNEkPcn6ZtcfNENZPtMgTuHpsqBgqHeB9ed
-         DzsWtupeyrR1vfi/rE2BJAgfiKXlMtrPkDFoNaVBe35GqHGV0yRRUZQnGFshHMb5X6
-         wy4uSSlCLfy/g==
-Message-ID: <ea7b7b08-cb9a-b6a3-bc7a-050616696e89@collabora.com>
-Date:   Tue, 30 Aug 2022 10:06:29 +0200
+        Tue, 30 Aug 2022 04:06:37 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404616372
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:06:36 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id y1so8502695plb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:06:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=8Z25boPX4asRDgl02aIg3PuDzFAm2vwEFCuCA8c/wKs=;
+        b=NTLe3/yVFyjXX7Ndf0xx8fMGW0Z5C1mTOjEEVDLqfOxeecLYNIjIjOw2sqWRhfmDTV
+         g4N161eENmlepH9UNxMokK+b7y/TmnBZ85OWQIlRvV8y/5JEDh42WQJE39UZHmMtijH5
+         qHb528wNSeXxoTZY0dfjVEj0/7hoZkRIPCoqTmkxWej3UZEUAV56pWuXLGoUKB3Mkjro
+         bpkVONpHTaI7xzZ8fmy88o6gx2eDNfJ/P4wXVg4YGbD9wbI5XFhA4Wbzdnd8xTGw1obp
+         Zzu4DabMAYhhAHznIsmYkXqNEiGEOrqgLH1feB6LMQZHLeNLVMkhr/1VRBKy7f7SS326
+         O2Hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=8Z25boPX4asRDgl02aIg3PuDzFAm2vwEFCuCA8c/wKs=;
+        b=ML0qCtu6C998hhp0Mvh3NgcFETHnxSO+A/vUTdRTszbqVvPLkxa/BPGWCD4SQQ2W56
+         uwg/274E9T4xZeJaYqNCIP6wbCg+elhL/+tHZKcDpFp56Ky98xiRdkhIe39+uEFzclcE
+         OKPfotWq+HOo5QV5btJZutPrrCLQJI6pVdyCNrdd+9DXG7wkfDUBsHxzkuQEcioLpZcc
+         BL9fdDUnUQcCO4MH9QybeK8gsbazPZuUfw88le2Y8C+j/W84HuhrP7gs1eubf75bbiG0
+         BIZrP5z71GIMw7tSEk7iD6JKddDY1GI69QSQTiXZtviwynfo3vssPTE/7GjjKF65OmZQ
+         Znkw==
+X-Gm-Message-State: ACgBeo0bZQIueCo9nuKOE/bmlEd+WxXKHKtAgPCydy77MeL1NXITc9nt
+        CXHLL12LL/4I7FZYaFo8urZynw==
+X-Google-Smtp-Source: AA6agR7DXJFMnHqD98ybdqHiAh9gSYgLDf34vWnO0ZLUMTHPQ7lPc129/PQ6IxeiMSHcT7dwlzTlCg==
+X-Received: by 2002:a17:90b:612:b0:1fd:5ec1:6c74 with SMTP id gb18-20020a17090b061200b001fd5ec16c74mr21275408pjb.221.1661846795669;
+        Tue, 30 Aug 2022 01:06:35 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id u1-20020a1709026e0100b001618b70dcc9sm8876241plk.101.2022.08.30.01.06.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 01:06:35 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 13:36:32 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "zhangjianhua (E)" <chris.zjh@huawei.com>
+Cc:     mmayer@broadcom.com, rafael@kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: bmips-cpufreq: Use module_init and add
+ module_exit
+Message-ID: <20220830080632.2iaq6juv6snma3gu@vireshk-i7>
+References: <20220826021845.2283648-1-chris.zjh@huawei.com>
+ <20220830052922.aedexy7ovdus5pzk@vireshk-i7>
+ <954cdab4-62d3-b413-f615-9c7b1563c1b1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] soc: mediatek: mtk-svs: Explicitly include bitfield
- header
-Content-Language: en-US
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     kernel@collabora.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20220829204439.3748648-1-nfraprado@collabora.com>
- <5a8a2b0d-fa7c-e8c6-bb04-152f8c17aa76@gmail.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <5a8a2b0d-fa7c-e8c6-bb04-152f8c17aa76@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <954cdab4-62d3-b413-f615-9c7b1563c1b1@huawei.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 30/08/22 09:37, Matthias Brugger ha scritto:
+On 30-08-22, 16:01, zhangjianhua (E) wrote:
 > 
+> 在 2022/8/30 13:29, Viresh Kumar 写道:
+> > On 26-08-22, 10:18, Zhang Jianhua wrote:
+> > > - Use module_init instead of device_initcall.
+> > > - Add a function for module_exit to unregister driver.
+> > > 
+> > > Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
+> > > ---
+> > >   drivers/cpufreq/bmips-cpufreq.c | 10 ++++++++--
+> > >   1 file changed, 8 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/cpufreq/bmips-cpufreq.c b/drivers/cpufreq/bmips-cpufreq.c
+> > > index f7c23fa468f0..21c0417c95e1 100644
+> > > --- a/drivers/cpufreq/bmips-cpufreq.c
+> > > +++ b/drivers/cpufreq/bmips-cpufreq.c
+> > > @@ -156,7 +156,7 @@ static struct cpufreq_driver bmips_cpufreq_driver = {
+> > >   	.name		= BMIPS_CPUFREQ_PREFIX,
+> > >   };
+> > > -static int __init bmips_cpufreq_probe(void)
+> > > +static int __init bmips_cpufreq_driver_init(void)
+> > >   {
+> > >   	struct cpufreq_compat *cc;
+> > >   	struct device_node *np;
+> > > @@ -176,7 +176,13 @@ static int __init bmips_cpufreq_probe(void)
+> > >   	return cpufreq_register_driver(&bmips_cpufreq_driver);
+> > >   }
+> > > -device_initcall(bmips_cpufreq_probe);
+> > > +module_init(bmips_cpufreq_driver_init);
+> > > +
+> > > +static void __exit bmips_cpufreq_driver_exit(void)
+> > > +{
+> > > +	cpufreq_unregister_driver(&bmips_cpufreq_driver);
+> > > +}
+> > > +module_exit(bmips_cpufreq_driver_exit)
+> > Semicolon ? Did you even compile this ? :)
 > 
-> On 29/08/2022 22:44, Nícolas F. R. A. Prado wrote:
->> Commit a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros
->> where possible") introduced the use of FIELD_GET and FIELD_PREP macros,
->> which are defined in the bitfield header. Add an explicit include for it
->> so we're sure to have the symbols defined independently of the config.
->>
->> Fixes: a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros where 
->> possible")
->> Reported-by: kernel test robot <lkp@intel.com>
->> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>
->> ---
->>
->>   drivers/soc/mediatek/mtk-svs.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
->> index 64dba9f830f3..f67f3e971653 100644
->> --- a/drivers/soc/mediatek/mtk-svs.c
->> +++ b/drivers/soc/mediatek/mtk-svs.c
->> @@ -3,6 +3,7 @@
->>    * Copyright (C) 2022 MediaTek Inc.
->>    */
->> +#include <linux/bitfield.h>
->>   #include <linux/bits.h>
-> 
-> What do we need the bits.h for?
-> 
+> Semicolon is not necessary for module_exit, and it can be compiled. I will send v2 patch to keep the format consistent, thanks.
 
-bits.h has the definition for GENMASK(h, l), used in this file :-)
+Ahh, because module exit is defined as:
 
-Cheers,
-Angelo
+#define module_exit(x)	__exitcall(x);
 
-> Regards,
-> Matthias
-> 
->>   #include <linux/clk.h>
->>   #include <linux/completion.h>
+Yeah, please send V2 with a semicolon in place.
 
-
+-- 
+viresh

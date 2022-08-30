@@ -2,288 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FCFD5A5D04
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:34:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7678D5A5D09
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:34:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiH3HeN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:34:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51204 "EHLO
+        id S231132AbiH3Heq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiH3HeK (ORCPT
+        with ESMTP id S229531AbiH3Hen (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:34:10 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D19DA2617
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:34:08 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 529E321F3E;
-        Tue, 30 Aug 2022 07:34:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661844847; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=g9OX2kU4wHyvmVyOS1gFsOzCM2jeYG5ykVfYJ1gz5vM=;
-        b=HSzDcIeDyuom9eWNz8+KkvUd2/QJ4Xih3zqa1iMfFL5THkJWFnWKlc8EavPOvEcCID9Qql
-        I/xTEljCbc1xj/5IZo7Qkl6cPstQjKBC3le0sN68JbadPxMpVjn5BQzU2bRedpOzJDiodt
-        3Z1siIWz4UIbSWxQtP7Spo5k4i0Ew7E=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 329DD13ACF;
-        Tue, 30 Aug 2022 07:34:07 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eUueCW+9DWM4OAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 30 Aug 2022 07:34:07 +0000
-Date:   Tue, 30 Aug 2022 09:34:06 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     linux-mm@kvack.org
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] mm: reduce noise in show_mem for lowmem allocations
-Message-ID: <Yw29bmJTIkKogTiW@dhcp22.suse.cz>
-References: <YwScVmVofIZkopkF@dhcp22.suse.cz>
+        Tue, 30 Aug 2022 03:34:43 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E688AC7436
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:34:41 -0700 (PDT)
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
+        (envelope-from <a.fatoum@pengutronix.de>)
+        id 1oSvlP-0001jH-KH; Tue, 30 Aug 2022 09:34:23 +0200
+Message-ID: <d703bd19-7e68-86ee-681a-544321c25d37@pengutronix.de>
+Date:   Tue, 30 Aug 2022 09:34:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YwScVmVofIZkopkF@dhcp22.suse.cz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 0/2] dt-bindings: Intorduce domain-controller
+Content-Language: en-US
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
+        "alexandre.torgue@st.com" <alexandre.torgue@st.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "tomase@xilinx.com" <tomase@xilinx.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "fabio.estevam@nxp.com" <fabio.estevam@nxp.com>,
+        "loic.pallardy@st.com" <loic.pallardy@st.com>,
+        "mark.rutland@arm.com" <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+References: <cover.1657187536.git.oleksii_moisieiev@epam.com>
+ <3ca7cd75-4b62-2380-adb0-646bbeb647a2@pengutronix.de>
+ <Yv4A9Rgna2bzAuvj@EPUAKYIW015D>
+From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <Yv4A9Rgna2bzAuvj@EPUAKYIW015D>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[Cc Dan]
-Dan has brought up[1] that the use of gfp mask has confused his static
-analyzer which assumes that GFP_HIGHUSER_MOVABLE implies a sleeping
-allocation and that wouldn't be a great idea from the panic path. I
-would add that most callers of this function would be really bad to
-allocate.
+Hello Oleksii,
 
-The report itself is a false positive but it made me think a bit about
-this. Even if the check is too simplistic I guess it resembles how many
-developers are thinking (including me). If I see GFP_HIGHUSER_MOVABLE or
-GF_KERNEL I automatically assume a sleeping allocation down the road.
-And who know somebody might add one in the future even into show_mem
-because the gfp parameter would be too tempting to not (ab)use.
+On 18.08.22 11:05, Oleksii Moisieiev wrote:
+> On Mon, Aug 15, 2022 at 06:37:23PM +0200, Ahmad Fatoum wrote:
+>> Hello Oleksii,
+>>
+>> On 07.07.22 12:25, Oleksii Moisieiev wrote:
+>>> Introducing the domain controller provider/consumenr bindngs which allow to
+>>> divided system on chip into multiple domains that can be used to select
+>>> by who hardware blocks could be accessed.
+>>> A domain could be a cluster of CPUs, a group of hardware blocks or the
+>>> set of devices, passed-through to the Guest in the virtualized systems.
+>>>
+>>> Device controllers are typically used to set the permissions of the hardware
+>>> block. The contents of the domain configuration properties are defined by the
+>>> binding for the individual domain controller device.
+>>>
+>>> The device controller conception in the virtualized systems is to set
+>>> the device configuration for SCMI (System Control and Management
+>>> Interface) which controls clocks/power-domains/resets etc from the
+>>> Firmware. This configuratio sets the device_id to set the device permissions
+>>> for the Fimware using BASE_SET_DEVICE_PERMISSIONS message (see 4.2.2.10 of [0]).
+>>> There is no BASE_GET_DEVICE_PERMISSIONS call in SCMI and the way to
+>>> determine device_id is not covered by the specification.
+>>> Device permissions management described in DEN 0056, Section 4.2.2.10 [0].
+>>> Given parameter should set the device_id, needed to set device
+>>> permissions in the Firmware.
+>>> This property is used by trusted Agent (which is hypervisor in our case)
+>>> to set permissions for the devices, passed-through to the non-trusted
+>>> Agents. Trusted Agent will use device-perms to set the Device
+>>> permissions for the Firmware (See Section 4.2.2.10 [0] for details).
+>>> Agents concept is described in Section 4.2.1 [0].
+>>>
+>>> Domains in Device-tree node example:
+>>> usb@e6590000
+>>> {
+>>>     domain-0 = <&scmi 19>; //Set domain id 19 to usb node
+>>>     clocks = <&scmi_clock 3>, <&scmi_clock 2>;
+>>>     resets = <&scmi_reset 10>, <&scmi_reset 9>;
+>>>     power-domains = <&scmi_power 0>;
+>>> };
+>>>
+>>> &scmi {
+>>>     #domain-cells = <1>;
+>>> }
+>>>
+>>> All mentioned bindings are going to be processed by XEN SCMI mediator
+>>> feature, which is responsible to redirect SCMI calls from guests to the
+>>> firmware, and not going be passed to the guests.
+>>>
+>>> Domain-controller provider/consumenr concept was taken from the bus
+>>> controller framework patch series, provided in the following thread:
+>>> [1].
+>>
+>> I also was inspired by Benjamin's series to draft up a binding, but for a slightly
+>> different problem: Some SoCs like the i.MX8MP have a great deal of variation
+>> in which IPs are actually available. After factory testing, fuses are burnt
+>> to describe which IPs are available and as the upstream DT only describes
+>> the full featured SoCs, either board DT or bootloader is expected to turn
+>> off the device that are unavailable.
+>>
+>> What I came up with as a binding for the bootloader to guide its fixup
+>> looks very similar to what you have:
+>>
+>> feat: &ocotp { /* This is the efuse (On-Chip OTP) device */
+>>     feature-controller;
+>>     feature-cells = <1>;
+>> };
+>>
+>> &vpu_g1 {
+>>     features-gates = <&feat IMX8MP_VPU>;
+>> };
+>>
+>> The OCOTP driver would see that it has a feature-controller property and register
+>> a callback with a feature controller framework that checks whether a device
+>> is available. barebox, that I implemented this binding for, would walk
+>> the kernel device tree on boot looking for the feature-gates property and then
+>> disable/delete nodes as indicated without having to write any SoC specific code
+>> and especially without hardcoding node names and hierarchies, which is quite brittle.
+>>
+>> There was a previous attempt at defining a binding for this, but Rob's NAK
+>> mentioned that a solution should cover both cases:
+>>
+>>  https://urldefense.com/v3/__https://lore.kernel.org/all/20220324042024.26813-1-peng.fan@oss.nxp.com/__;!!GF_29dbcQIUBPA!2j_vN6Jc1k2XI3EegAC2yzTLgJ1Rw1DhDrjGF03a5tDtOGpm_qp9B0zHJeAJzw-fWOeJp5HtnzYmOJZ0XPJxHzHFDBt_$  [lore[.]kernel[.]org]
+>>
+>> Having implemented nearly the same binding as what you describe, I obviously like your
+>> patch. Only thing I think that should be changed is the naming. A domain doesn't
+>> really describe this gated-by-fuses scenario I have. Calling it feature-gates
+>> instead OTOH makes sense for both your and my use case. Same goes for the documentation
+>> that could be worded more generically. I am open to other suggestions of course. :-)
+>>
+>> Also a general gpio-controller like property would be nice. It would allow drivers
+>> to easily check whether they are supposed to register a domain/feature controller.
+>> For devices like yours where a dedicated device node represents the domain controller,
+>> it's redundant, but for a fuse bank, it's useful. #feature-cells could be used for
+>> that, but I think a dedicated property may be better.
+>>
+>> Let me know what you think and thanks for working on this!
+>>
+>> Cheers,
+>> Ahmad
+>>
+> 
+> Hello Ahmad,
+> 
+> I'm very happy that you are interested in my proposal. It will be great
+> if we produce common binding to suite both our requirements.
+> I agree that binding should be renamed, but I don't think feature-gates
+> name would fit my case.
+> IIUC both our cases requires different devices across the system to
+> provide some information to the controller device. This information
+> could be used to identify the devices later or to make some
+> controller-specific configuration. In this case I would prefer name
+> "device-feature" or "bus-domain", suggested by Linus Walleij.
+> Also I like your idea to add dedicated property. This will make bindings
+> more clear.
+> Summarizing all above, I would suggest the following names:
+> 
+>  feat: &ocotp { /* This is the efuse (On-Chip OTP) device */
+>      device-feature-controller;
+>      device-feature-cells = <1>;
+>  };
+> 
+>  &vpu_g1 {
+>      device-features = <&feat IMX8MP_VPU>;
+>  };
+> 
+> What do you think about this?
 
-My original intention was to use a natural allocation speak but this can
-backfire so maybe it would be better to give the argument its real
-meaning and that is the high_zone_idx. This is cryptic for code outside
-of MM but that is not all that many callers and we can hide this fact
-from them. In other words does the thing below looks better (incremental
-for illustration, I will make it a proper patch if yes)?
+Sorry for the late answer. Full plate before vacation :)
 
-[1] https://lore.kernel.org/all/Yw2ugrlZ8bwE5/hh@kili/?q=http%3A%2F%2Flkml.kernel.org%2Fr%2FYw2ugrlZ8bwE5%2Fhh%40kili
+A device- prefix for device properties is kind of redundant IMO.
+And [device-]features is somewhat ambiguous (it's not
+a list of features of the device, but a list of features that
+control the device). I see that gates might sounds a bit odd, how about
+feature-domains, feature-domain-controller, #feature-domain-cells?
 
---- 
-diff --git a/arch/powerpc/xmon/xmon.c b/arch/powerpc/xmon/xmon.c
-index 19b1a94b0c00..3d9782ea3fa7 100644
---- a/arch/powerpc/xmon/xmon.c
-+++ b/arch/powerpc/xmon/xmon.c
-@@ -1086,7 +1086,7 @@ cmds(struct pt_regs *excp)
- 				memzcan();
- 				break;
- 			case 'i':
--				show_mem(0, NULL, GFP_HIGHUSER_MOVABLE);
-+				show_mem(0, NULL);
- 				break;
- 			default:
- 				termch = cmd;
-diff --git a/arch/sparc/kernel/setup_32.c b/arch/sparc/kernel/setup_32.c
-index 2a1e5641a7cc..c8e0dd99f370 100644
---- a/arch/sparc/kernel/setup_32.c
-+++ b/arch/sparc/kernel/setup_32.c
-@@ -83,7 +83,7 @@ static void prom_sync_me(void)
- 			     "nop\n\t" : : "r" (&trapbase));
- 
- 	prom_printf("PROM SYNC COMMAND...\n");
--	show_free_areas(0, NULL, GFP_HIGHUSER_MOVABLE);
-+	show_free_areas(0, NULL);
- 	if (!is_idle_task(current)) {
- 		local_irq_enable();
- 		ksys_sync();
-diff --git a/drivers/tty/sysrq.c b/drivers/tty/sysrq.c
-index c6b2b42d2367..d2b2720db6ca 100644
---- a/drivers/tty/sysrq.c
-+++ b/drivers/tty/sysrq.c
-@@ -342,7 +342,7 @@ static const struct sysrq_key_op sysrq_ftrace_dump_op = {
- 
- static void sysrq_handle_showmem(int key)
- {
--	show_mem(0, NULL, GFP_HIGHUSER_MOVABLE);
-+	show_mem(0, NULL);
- }
- static const struct sysrq_key_op sysrq_showmem_op = {
- 	.handler	= sysrq_handle_showmem,
-diff --git a/drivers/tty/vt/keyboard.c b/drivers/tty/vt/keyboard.c
-index 9ceeea531cf6..be8313cdbac3 100644
---- a/drivers/tty/vt/keyboard.c
-+++ b/drivers/tty/vt/keyboard.c
-@@ -606,7 +606,7 @@ static void fn_scroll_back(struct vc_data *vc)
- 
- static void fn_show_mem(struct vc_data *vc)
- {
--	show_mem(0, NULL, GFP_HIGHUSER_MOVABLE);
-+	show_mem(0, NULL);
- }
- 
- static void fn_show_state(struct vc_data *vc)
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index e0d0ac52770c..0756798feaff 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -1827,7 +1827,11 @@ extern void pagefault_out_of_memory(void);
-  */
- #define SHOW_MEM_FILTER_NODES		(0x0001u)	/* disallowed nodes */
- 
--extern void show_free_areas(unsigned int flags, nodemask_t *nodemask, gfp_t gfp_mask);
-+extern void __show_free_areas(unsigned int flags, nodemask_t *nodemask, int max_zone_idx);
-+static void __maybe_unused show_free_areas(unsigned int flags, nodemask_t *nodemask)
-+{
-+	__show_free_areas(flags, nodemask, MAX_NR_ZONES - 1);
-+}
- 
- #ifdef CONFIG_MMU
- extern bool can_do_mlock(void);
-@@ -2563,7 +2567,12 @@ extern void calculate_min_free_kbytes(void);
- extern int __meminit init_per_zone_wmark_min(void);
- extern void mem_init(void);
- extern void __init mmap_init(void);
--extern void show_mem(unsigned int flags, nodemask_t *nodemask, gfp_t gfp_mask);
-+
-+extern void __show_mem(unsigned int flags, nodemask_t *nodemask, int max_zone_idx);
-+static inline void show_mem(unsigned int flags, nodemask_t *nodemask)
-+{
-+	__show_mem(flags, nodemask, MAX_NR_ZONES - 1);
-+}
- extern long si_mem_available(void);
- extern void si_meminfo(struct sysinfo * val);
- extern void si_meminfo_node(struct sysinfo *val, int nid);
-diff --git a/init/initramfs.c b/init/initramfs.c
-index ec966cb78363..18229cfe8906 100644
---- a/init/initramfs.c
-+++ b/init/initramfs.c
-@@ -63,7 +63,7 @@ static void panic_show_mem(const char *fmt, ...)
- {
- 	va_list args;
- 
--	show_mem(0, NULL, GFP_HIGHUSER_MOVABLE);
-+	show_mem(0, NULL);
- 	va_start(args, fmt);
- 	panic(fmt, args);
- 	va_end(args);
-diff --git a/kernel/panic.c b/kernel/panic.c
-index ba5f7691d15c..a3308af28a21 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -187,7 +187,7 @@ static void panic_print_sys_info(bool console_flush)
- 		show_state();
- 
- 	if (panic_print & PANIC_PRINT_MEM_INFO)
--		show_mem(0, NULL, GFP_HIGHUSER_MOVABLE);
-+		show_mem(0, NULL);
- 
- 	if (panic_print & PANIC_PRINT_TIMER_INFO)
- 		sysrq_timer_list_show();
-diff --git a/lib/show_mem.c b/lib/show_mem.c
-index b97461a6c4bb..ade71096e241 100644
---- a/lib/show_mem.c
-+++ b/lib/show_mem.c
-@@ -8,13 +8,13 @@
- #include <linux/mm.h>
- #include <linux/cma.h>
- 
--void show_mem(unsigned int filter, nodemask_t *nodemask, gfp_t gfp_mask)
-+void __show_mem(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
- {
- 	pg_data_t *pgdat;
- 	unsigned long total = 0, reserved = 0, highmem = 0;
- 
- 	printk("Mem-Info:\n");
--	show_free_areas(filter, nodemask, gfp_mask);
-+	show_free_areas(filter, nodemask, max_zone_idx);
- 
- 	for_each_online_pgdat(pgdat) {
- 		int zoneid;
-diff --git a/mm/nommu.c b/mm/nommu.c
-index 46cff4a51fa0..9d7afc2d959e 100644
---- a/mm/nommu.c
-+++ b/mm/nommu.c
-@@ -1047,7 +1047,7 @@ static int do_mmap_private(struct vm_area_struct *vma,
- enomem:
- 	pr_err("Allocation of length %lu from process %d (%s) failed\n",
- 	       len, current->pid, current->comm);
--	show_free_areas(0, NULL, GFP_KERNEL);
-+	show_free_areas(0, NULL);
- 	return -ENOMEM;
- }
- 
-@@ -1270,13 +1270,13 @@ unsigned long do_mmap(struct file *file,
- 	kmem_cache_free(vm_region_jar, region);
- 	pr_warn("Allocation of vma for %lu byte allocation from process %d failed\n",
- 			len, current->pid);
--	show_free_areas(0, NULL, GFP_KERNEL);
-+	show_free_areas(0, NULL);
- 	return -ENOMEM;
- 
- error_getting_region:
- 	pr_warn("Allocation of vm region for %lu byte allocation from process %d failed\n",
- 			len, current->pid);
--	show_free_areas(0, NULL, GFP_KERNEL);
-+	show_free_areas(0, NULL);
- 	return -ENOMEM;
- }
- 
-diff --git a/mm/oom_kill.c b/mm/oom_kill.c
-index ffeaad3b348d..94804504be9c 100644
---- a/mm/oom_kill.c
-+++ b/mm/oom_kill.c
-@@ -461,7 +461,7 @@ static void dump_header(struct oom_control *oc, struct task_struct *p)
- 	if (is_memcg_oom(oc))
- 		mem_cgroup_print_oom_meminfo(oc->memcg);
- 	else {
--		show_mem(SHOW_MEM_FILTER_NODES, oc->nodemask, oc->gfp_mask);
-+		__show_mem(SHOW_MEM_FILTER_NODES, oc->nodemask, gfp_zone(oc->gfp_mask));
- 		if (should_dump_unreclaim_slab())
- 			dump_unreclaimable_slab();
- 	}
-diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-index 208e3f8b38f8..110a16ea848a 100644
---- a/mm/page_alloc.c
-+++ b/mm/page_alloc.c
-@@ -4248,7 +4248,7 @@ static void warn_alloc_show_mem(gfp_t gfp_mask, nodemask_t *nodemask)
- 	if (!in_task() || !(gfp_mask & __GFP_DIRECT_RECLAIM))
- 		filter &= ~SHOW_MEM_FILTER_NODES;
- 
--	show_mem(filter, nodemask, gfp_mask);
-+	__show_mem(filter, nodemask, gfp_zone(gfp_mask));
- }
- 
- void warn_alloc(gfp_t gfp_mask, nodemask_t *nodemask, const char *fmt, ...)
-@@ -5944,10 +5944,9 @@ static bool node_has_managed_zones(pg_data_t *pgdat, int max_zone_idx)
-  * SHOW_MEM_FILTER_NODES: suppress nodes that are not allowed by current's
-  *   cpuset.
-  */
--void show_free_areas(unsigned int filter, nodemask_t *nodemask, gfp_t gfp_mask)
-+void __show_free_areas(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
- {
- 	unsigned long free_pcp = 0;
--	int max_zone_idx = gfp_zone(gfp_mask);
- 	int cpu;
- 	struct zone *zone;
- 	pg_data_t *pgdat;
+Cheers,
+Ahmad
+
+> 
+> Best regards,
+> Oleksii.
+> 
+>>
+>>>
+>>> I think we can cooperate with the bus controller framework developers
+>>> and produce the common binding, which will fit the requirements of both
+>>> features
+>>>
+>>> Also, I think that binding can also be used for STM32 ETZPC bus
+>>> controller feature, proposed in the following thread: [2].
+>>>
+>>> Looking forward for your thoughts and ideas.
+>>>
+>>> [0] https://urldefense.com/v3/__https://developer.arm.com/documentation/den0056/latest__;!!GF_29dbcQIUBPA!2j_vN6Jc1k2XI3EegAC2yzTLgJ1Rw1DhDrjGF03a5tDtOGpm_qp9B0zHJeAJzw-fWOeJp5HtnzYmOJZ0XPJxH59KKjhc$  [developer[.]arm[.]com]
+>>> [1] https://urldefense.com/v3/__https://lore.kernel.org/all/20190318100605.29120-1-benjamin.gaignard@st.com/__;!!GF_29dbcQIUBPA!2j_vN6Jc1k2XI3EegAC2yzTLgJ1Rw1DhDrjGF03a5tDtOGpm_qp9B0zHJeAJzw-fWOeJp5HtnzYmOJZ0XPJxHy1kyyWZ$  [lore[.]kernel[.]org]
+>>> [2] https://urldefense.com/v3/__https://lore.kernel.org/all/20200701132523.32533-1-benjamin.gaignard@st.com/__;!!GF_29dbcQIUBPA!2j_vN6Jc1k2XI3EegAC2yzTLgJ1Rw1DhDrjGF03a5tDtOGpm_qp9B0zHJeAJzw-fWOeJp5HtnzYmOJZ0XPJxHzVdVT4B$  [lore[.]kernel[.]org]
+>>>
+>>> ---
+>>> Changes v1 -> V2:
+>>>    - update parameter name, made it xen-specific
+>>>    - add xen vendor bindings
+>>>
+>>> Changes V2 -> V3:
+>>>    - update parameter name, make it generic
+>>>    - update parameter format, add link to controller
+>>>    - do not include xen vendor bindings as already upstreamed
+>>>
+>>> Changes V3 -> V4:
+>>>    - introduce domain controller provider/consumer device tree bindings
+>>>    - making scmi node to act as domain controller provider when the
+>>>      device permissions should be configured
+>>> ---
+>>>
+>>> Oleksii Moisieiev (2):
+>>>   dt-bindings: Document common device controller bindings
+>>>   dt-bindings: Update scmi node description
+>>>
+>>>  .../bindings/domains/domain-controller.yaml   | 80 +++++++++++++++++++
+>>>  .../bindings/firmware/arm,scmi.yaml           | 25 ++++++
+>>>  2 files changed, 105 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/domains/domain-controller.yaml
+>>>
+>>
+>>
+>> -- 
+>> Pengutronix e.K.                           |                             |
+>> Steuerwalder Str. 21                       | https://urldefense.com/v3/__http://www.pengutronix.de/__;!!GF_29dbcQIUBPA!2j_vN6Jc1k2XI3EegAC2yzTLgJ1Rw1DhDrjGF03a5tDtOGpm_qp9B0zHJeAJzw-fWOeJp5HtnzYmOJZ0XPJxH_HqFmwM$  [pengutronix[.]de]  |
+>> 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+>> Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+
+
 -- 
-Michal Hocko
-SUSE Labs
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

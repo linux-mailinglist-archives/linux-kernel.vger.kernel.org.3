@@ -2,176 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9955A6E5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:20:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ED625A6E60
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231793AbiH3UUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 16:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49338 "EHLO
+        id S230462AbiH3UVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 16:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbiH3UU0 (ORCPT
+        with ESMTP id S231511AbiH3UVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 16:20:26 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1A44E85C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:20:23 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id f4so11637034pgc.12
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:20:23 -0700 (PDT)
+        Tue, 30 Aug 2022 16:21:10 -0400
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A83FE74DDC;
+        Tue, 30 Aug 2022 13:21:08 -0700 (PDT)
+Received: by mail-qt1-x835.google.com with SMTP id g14so9483112qto.11;
+        Tue, 30 Aug 2022 13:21:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=IIahQC3iUsvNJToMk9UFFnI7uylEWwTVmxgpc7S23kI=;
-        b=b7QJQ9dHysGM+ncTgpqvop8xm6lADhwcKDUxSvuBLHkcQnYctwKKneWicxRpu/zf8y
-         SqKNSU96C4poiPDV3DriN5+AnMP2nY7GAwMmbEm3hCbfeOm/ZGYfeVfeB+e1vAx1dC/I
-         94azdNR986kJJ38TaOVaFJrSVmVbHbiEjSPb4=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Bz05174cqW7AMJyc+1JWBKlip7+1YmmDgJ2cawhFu4c=;
+        b=gj0Nt3Kfe7oKlaasQM0+pr69WnfRr6SXKyZpFUQn0OOmPGD1eNeaTX6dGK+w1p6EZV
+         +rDx2cujr94wYsIKWm35MNqcnq7QKByDb2L/4TygQcZOJMDP/+1u6lkcW1PqRr7wTT4T
+         8vqNF17itYMfobBmaaQOz5N1O6U325tWC+aS/ryAYcPWsVKP607APVOiSR0Vr78DjK50
+         /3/umVXuzVTQni+o7FativAUOTelebzUmdKQj/Xi8gqXLFc9532TV+i73L+UFR8h9Mq8
+         XcaZALp7iS4CPOWyozHBGXrsmFn9DrK165/phQSi4/X9I514bj/HqiLq3FQNmVnpHqZ2
+         B5Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=IIahQC3iUsvNJToMk9UFFnI7uylEWwTVmxgpc7S23kI=;
-        b=CHL3qAHryL4VFk8LAPueUZo0a4Iqaun75yEZxU2739mNZTywaAWsImZ5ZpfdcQS/uo
-         Mh5+VFCZGJYEMp+ghx2uoR3f/qJMDZXHRmhUmu5xEKXj5YW9zGk6T6bDsTMnS9ON5ze0
-         0Ey1LxIk3QU/Nz8jnkUkQgg3/G/ohCrQ65QTvjeHyw1XYvvhjJgbhbmucfLsRYQ0j0A/
-         B40hayYWzM/53Z9abf76BJbzj5koCQ8LXHnR8RBAKyOs/cgvt6pEe1j93f1KM/6CsM1z
-         TlGfMmj5mlEfPoSS2+AaMJwSeVd3clesCf3mPnOUUtzuFqDI+jxQxz/nsVrQCFzX1/XB
-         S90w==
-X-Gm-Message-State: ACgBeo1Y4xYkfWNXggaZSQMme42bmh1V5QeRbb4t3xuSAiXlRcOeA6k7
-        x07MhEJyRa5INC5vYJ/Esxj/lK5WO6L3BA==
-X-Google-Smtp-Source: AA6agR7W/292GbS9tKYBQcHXvWWz7uZ8dK3q3BOUaxIu+S/sTOJMmQ29g+D7tnTn/5qgQNN+VJzuHg==
-X-Received: by 2002:a05:6a00:24d3:b0:53a:8f28:5054 with SMTP id d19-20020a056a0024d300b0053a8f285054mr2524501pfv.36.1661890823158;
-        Tue, 30 Aug 2022 13:20:23 -0700 (PDT)
-Received: from pmalani.c.googlers.com.com (137.22.168.34.bc.googleusercontent.com. [34.168.22.137])
-        by smtp.gmail.com with ESMTPSA id y1-20020a17090264c100b0016d4f05eb95sm6657528pli.272.2022.08.30.13.20.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 13:20:22 -0700 (PDT)
-From:   Prashant Malani <pmalani@chromium.org>
-To:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev
-Cc:     bleung@chromium.org, Prashant Malani <pmalani@chromium.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <groeck@chromium.org>
-Subject: [PATCH] platform/chrome: cros_ec_typec: Register partner PDOs
-Date:   Tue, 30 Aug 2022 20:20:18 +0000
-Message-Id: <20220830202018.1884851-1-pmalani@chromium.org>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Bz05174cqW7AMJyc+1JWBKlip7+1YmmDgJ2cawhFu4c=;
+        b=bgayfL4MHjvXjgmkTNARtyu9aBW7MlHkwujJ5Yuh4n/JSKAb5ggDQ7rF/EYEjezHtr
+         uUq93rkdH4uvQiMT76zLtVifrhyUWdpPuzczSg6ls/83OE73bfnfsbkrYajNapUJnIMV
+         NhpZkZ3ig6GfOW9hbv38XvN2w4smVEPmEeh9dhnU/1EXHP1Qb9V1p60IfJaryah9ZBaA
+         wm4OtpWOzn/uZ8ZinZ1VQltpakPOAEKEGDYULObK2BnpC/ToWC4EdZrhwYpgw4zcn4kb
+         OBI5TW6JtxRJjeULAmQjW7Fj6r/2/3YZ+a1cecJW8xJ2ZXWPz93k2XyvnOFiqDMuRkaX
+         JZjA==
+X-Gm-Message-State: ACgBeo3uaR2ZSu0Swo3t4KjagvarqRF+yZvOP/fWcE2a+yOaBTr7ElF4
+        bnWAgWNJW7nYN4IE1Xni6zXP1yrev7P6UvHGjXE=
+X-Google-Smtp-Source: AA6agR4of83BnXvtH1YLHe2IfGvNgWbJOdijvYQwtUd6ZD4mR9Jg/N3+N6Cij8KJTFh2kZBkptMbjiTgWk2ltNGoaHk=
+X-Received: by 2002:a05:622a:491:b0:344:95bf:8f05 with SMTP id
+ p17-20020a05622a049100b0034495bf8f05mr16412498qtx.61.1661890867719; Tue, 30
+ Aug 2022 13:21:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1661789204.git.christophe.leroy@csgroup.eu>
+In-Reply-To: <cover.1661789204.git.christophe.leroy@csgroup.eu>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 30 Aug 2022 23:20:31 +0300
+Message-ID: <CAHp75Vc5um3=gwnjoJNPxp+kbhFHT0Kp4gi1Qd+q5TL-y6-+oQ@mail.gmail.com>
+Subject: Re: [PATCH v1 0/8] gpio: Get rid of ARCH_NR_GPIOS (v1)
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        Linux Documentation List <linux-doc@vger.kernel.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ChromeOS EC exports partner source/sink cap PDOs (Power Data
-Objects) to the application processor (AP). Use this information
-to register USB PD (Power Delivery) capabilities with the
-USB Type-C Power Delivery device class.
+On Mon, Aug 29, 2022 at 7:17 PM Christophe Leroy
+<christophe.leroy@csgroup.eu> wrote:
+>
+> Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
+> there is no limitation on the number of GPIOs that can be allocated
+> in the system since the allocation is fully dynamic.
+>
+> ARCH_NR_GPIOS is today only used in order to provide downwards
+> gpiobase allocation from that value, while static allocation is
+> performed upwards from 0. However that has the disadvantage of
+> limiting the number of GPIOs that can be registered in the system.
+>
+> To overcome this limitation without requiring each and every
+> platform to provide its 'best-guess' maximum number, rework the
+> allocation to allocate from 256 upwards, allowing approx 2 millions
+> of GPIOs.
+>
+> In the meantime, add a warning for drivers how are still doing
+> static allocation, so that in the future the static allocation gets
+> removed completely and dynamic allocation can start at base 0.
 
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Prashant Malani <pmalani@chromium.org>
----
- drivers/platform/chrome/cros_ec_typec.c | 56 +++++++++++++++++++++++++
- 1 file changed, 56 insertions(+)
+For non-commented (by me or others) patches
+Reviewed-by: Andy Shevchenko <andy.shevchenko!gmail.com>
+For the patch 1 if you are going to address as suggested by the author
+of the driver, you may also add my tag.
 
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 00208ffbe2e7..f84bf9659a0f 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -73,6 +73,11 @@ struct cros_typec_port {
- 	struct ec_response_typec_discovery *disc_data;
- 	struct list_head partner_mode_list;
- 	struct list_head plug_mode_list;
-+
-+	/* PDO-related structs */
-+	struct usb_power_delivery *partner_pd;
-+	struct usb_power_delivery_capabilities *partner_src_caps;
-+	struct usb_power_delivery_capabilities *partner_sink_caps;
- };
- 
- /* Platform-specific data for the Chrome OS EC Type C controller. */
-@@ -253,6 +258,14 @@ static void cros_typec_remove_partner(struct cros_typec_data *typec,
- 
- 	cros_typec_unregister_altmodes(typec, port_num, true);
- 
-+	typec_partner_set_usb_power_delivery(port->partner, NULL);
-+	usb_power_delivery_unregister_capabilities(port->partner_sink_caps);
-+	port->partner_sink_caps = NULL;
-+	usb_power_delivery_unregister_capabilities(port->partner_src_caps);
-+	port->partner_src_caps = NULL;
-+	usb_power_delivery_unregister(port->partner_pd);
-+	port->partner_pd = NULL;
-+
- 	cros_typec_usb_disconnect_state(port);
- 	port->mux_flags = USB_PD_MUX_NONE;
- 
-@@ -939,6 +952,46 @@ static int cros_typec_send_clear_event(struct cros_typec_data *typec, int port_n
- 			   sizeof(req), NULL, 0);
- }
- 
-+static void cros_typec_register_partner_pdos(struct cros_typec_data *typec,
-+					     struct ec_response_typec_status *resp, int port_num)
-+{
-+	struct usb_power_delivery_capabilities_desc caps_desc = {};
-+	struct usb_power_delivery_desc desc = {
-+		.revision = (le16_to_cpu(resp->sop_revision) & 0xff00) >> 4,
-+	};
-+	struct cros_typec_port *port = typec->ports[port_num];
-+
-+	if (!port->partner || port->partner_pd)
-+		return;
-+
-+	/* If no caps are available, don't bother creating a device. */
-+	if (!resp->source_cap_count && !resp->sink_cap_count)
-+		return;
-+
-+	port->partner_pd = usb_power_delivery_register(NULL, &desc);
-+	if (IS_ERR(port->partner_pd)) {
-+		dev_warn(typec->dev, "Failed to register partner PD device, port: %d\n", port_num);
-+		return;
-+	}
-+
-+	typec_partner_set_usb_power_delivery(port->partner, port->partner_pd);
-+
-+	memcpy(caps_desc.pdo, resp->source_cap_pdos, sizeof(u32) * resp->source_cap_count);
-+	caps_desc.role = TYPEC_SOURCE;
-+	port->partner_src_caps = usb_power_delivery_register_capabilities(port->partner_pd,
-+									  &caps_desc);
-+	if (IS_ERR(port->partner_src_caps))
-+		dev_warn(typec->dev, "Failed to register source caps, port: %d\n", port_num);
-+
-+	memset(&caps_desc, 0, sizeof(caps_desc));
-+	memcpy(caps_desc.pdo, resp->sink_cap_pdos, sizeof(u32) * resp->sink_cap_count);
-+	caps_desc.role = TYPEC_SINK;
-+	port->partner_sink_caps = usb_power_delivery_register_capabilities(port->partner_pd,
-+									   &caps_desc);
-+	if (IS_ERR(port->partner_sink_caps))
-+		dev_warn(typec->dev, "Failed to register sink caps, port: %d\n", port_num);
-+}
-+
- static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num)
- {
- 	struct ec_response_typec_status resp;
-@@ -986,6 +1039,8 @@ static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num
- 		}
- 		if (resp.sop_connected)
- 			typec_set_pwr_opmode(typec->ports[port_num]->port, TYPEC_PWR_MODE_PD);
-+
-+		cros_typec_register_partner_pdos(typec, &resp, port_num);
- 	}
- 
- 	if (resp.events & PD_STATUS_EVENT_SOP_PRIME_DISC_DONE &&
-@@ -1006,6 +1061,7 @@ static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num
- 					 "Failed SOP Disc event clear, port: %d\n", port_num);
- 		}
- 	}
-+
- }
- 
- static int cros_typec_port_update(struct cros_typec_data *typec, int port_num)
+> Christophe Leroy (8):
+>   gpio: aggregator: Stop using ARCH_NR_GPIOS
+>   gpio: davinci: Stop using ARCH_NR_GPIOS
+>   gpiolib: Warn on drivers still using static gpiobase allocation
+>   gpiolib: Get rid of ARCH_NR_GPIOS
+>   Documentation: gpio: Remove text about ARCH_NR_GPIOS
+>   x86: Remove CONFIG_ARCH_NR_GPIO
+>   arm: Remove CONFIG_ARCH_NR_GPIO
+>   arm64: Remove CONFIG_ARCH_NR_GPIO
+>
+>  Documentation/driver-api/gpio/legacy.rst |  5 ---
+>  arch/arm/Kconfig                         | 21 ---------
+>  arch/arm/include/asm/gpio.h              |  1 -
+>  arch/arm64/Kconfig                       | 12 ------
+>  arch/x86/Kconfig                         |  5 ---
+>  drivers/gpio/gpio-aggregator.c           |  8 ++--
+>  drivers/gpio/gpio-davinci.c              |  3 --
+>  drivers/gpio/gpio-sta2x11.c              |  5 +--
+>  drivers/gpio/gpiolib.c                   | 13 +++---
+>  include/asm-generic/gpio.h               | 55 +++++++++---------------
+>  10 files changed, 36 insertions(+), 92 deletions(-)
+>
+> --
+> 2.37.1
+>
+
+
 -- 
-2.37.2.672.g94769d06f0-goog
-
+With Best Regards,
+Andy Shevchenko

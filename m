@@ -2,125 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 927A25A585E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 02:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BC75A5864
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 02:21:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiH3AT0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 20:19:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46622 "EHLO
+        id S229710AbiH3AVQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 20:21:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiH3ATY (ORCPT
+        with ESMTP id S229589AbiH3AVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 20:19:24 -0400
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634AC7C772
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 17:19:23 -0700 (PDT)
-Received: by mail-qv1-xf2b.google.com with SMTP id x14so3112733qvr.6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 17:19:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=+IcUApVhhRXn9dL/Sn9lQ7owQd37yO7YZ+ZOj1J1q9c=;
-        b=icKnWS+4zvyLBC2dPq3Jw3kDx+SdPoS9gqv5cR59cRvHUjDeKnl06BAse9dQOTFqpF
-         t2b8cvzyqfXN+vVN0w94czWiNhW3qigbU7WugRjslUoUPKfjdIZUW6rXaodBZFRE0CUR
-         pKyCeWZ/AWqrOj7fO5LOJVIFy/m1hA6HESsMqvYnjYN/yv2BrGjVK44oIxPDNWfC53d1
-         nQv0pY0EH7HXyO2cQUfZj2mGZ38D5rem6rasFohmD1kcXB7kfPk+KFCzVmq8u4kKVSX7
-         eMKBxZI+sv+z+gCUxC01usErbm/53WD+Oram6DXVcZT/nfI6NrSXKlRUKi4SpOsvZ+fX
-         CLuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+IcUApVhhRXn9dL/Sn9lQ7owQd37yO7YZ+ZOj1J1q9c=;
-        b=BS85PkRE8SLQ8WMAdCKFvNCh7w3HVa3H/gv6rqkkQ37YoBIbOaEtAvXFHCiZPA/MCx
-         u3MpGMnpDzBpPwwC2T4WM24h59B1TdZrPh2I9lyGLpckNtLGKL8jh+FNeNWGZz2KKzi9
-         zO38S5bMjKnc9s49fYJqIo+8iviPPjh+EnkfpeoxnTPRVz5arAMMVC0KOFKA1y6zXNPN
-         8UldvVBkeEH3YNWfeWllQO3YJy6JnzBVTCwHO9Nd9gb8g0pmsgom2rTI7tW4+1+qPbCv
-         zZwJi8anQELM2jo3CpWGWy1n/Sohek0y7sfX8d11CxD56BaNzTiIkKy+SiWfRvWk2SNr
-         Ve/Q==
-X-Gm-Message-State: ACgBeo2wlyMSsqzb5+3dJ2ZFxXYURyxi+12OEWp8kOc6/LCC/N1cdB0Y
-        zT+NWfBp5aYEAQV7rNCldB3Uqwhcj7xEDj1pGB3Gng==
-X-Google-Smtp-Source: AA6agR4Y3pl4AL6jDWxeFGLq6zw6x354o0nLyKVJpRyFb31x6dDr3vcYj89e35kThJWIY0DkknrAVcJSk1i2Ibm9fiY=
-X-Received: by 2002:a05:6214:2267:b0:474:8ff7:a21c with SMTP id
- gs7-20020a056214226700b004748ff7a21cmr13080856qvb.56.1661818762403; Mon, 29
- Aug 2022 17:19:22 -0700 (PDT)
+        Mon, 29 Aug 2022 20:21:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 866376D556;
+        Mon, 29 Aug 2022 17:21:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 215286132F;
+        Tue, 30 Aug 2022 00:21:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F2D4C433C1;
+        Tue, 30 Aug 2022 00:21:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661818871;
+        bh=s+OBNXHeiC/7YlCgYcgl1W4cfCFenomwgAAxuz8XPoU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Gkz2Boz7icTLWU71ES4UPrUbsTszAKYKROAazD14GZ7ZNiKtw0hjA4GCCxrjQLL+g
+         CoN6+lNrE37/GrerxrGidpetGxjV87QGdL3LYAgmbnfc4ldLuRWx5C7+g6L9euxRr5
+         Kl75B2TNpVqrjCQ4LmBZIAAecN9v23UtBGAMXuZJQK2VYpeXYuvkFYLQDECVTCGBvq
+         Hwo0J2roQrWaB7kcN5lWuZgOTUrtp5BKUeqtmPLA0RluFeWW56eCykx187Pr1eaSzJ
+         puHMh27ErnDdKgMDh6AzgQFaWJchKcsDbGxST8V2F2lTNF98oV/Ic/qcHamleDH7WT
+         H3EUusp49M53w==
+Date:   Mon, 29 Aug 2022 17:21:11 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Cong Wang <xiyou.wangcong@gmail.com>
+Cc:     Peilin Ye <yepeilin.cs@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Cong Wang <cong.wang@bytedance.com>,
+        Stephen Hemminger <stephen@networkplumber.org>,
+        Dave Taht <dave.taht@gmail.com>
+Subject: Re: [PATCH RFC v2 net-next 0/5] net: Qdisc backpressure
+ infrastructure
+Message-ID: <20220829172111.4471d913@kernel.org>
+In-Reply-To: <Ywzu/ey83T8QCT/Z@pop-os.localdomain>
+References: <cover.1651800598.git.peilin.ye@bytedance.com>
+        <cover.1661158173.git.peilin.ye@bytedance.com>
+        <20220822091737.4b870dbb@kernel.org>
+        <Ywzu/ey83T8QCT/Z@pop-os.localdomain>
 MIME-Version: 1.0
-References: <5d2addca-10e5-f7a6-9efd-43322eec8347@iogearbox.net> <20220827135711.21507-1-liulin063@gmail.com>
-In-Reply-To: <20220827135711.21507-1-liulin063@gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Mon, 29 Aug 2022 17:19:10 -0700
-Message-ID: <CA+khW7hb5GgeT_ph_OijXR6F3oYRqsEV=SDvzShmwYCnFdUqjw@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 1/2] bpf: Do more tight ALU bounds tracking
-To:     Youlin Li <liulin063@gmail.com>
-Cc:     daniel@iogearbox.net, ast@kernel.org, john.fastabend@gmail.com,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, kpsingh@kernel.org, sdf@google.com, jolsa@kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Youlin,
+On Mon, 29 Aug 2022 09:53:17 -0700 Cong Wang wrote:
+> > Similarly to Eric's comments on v1 I'm not seeing the clear motivation
+> > here. Modern high speed UDP users will have a CC in user space, back
+> > off and set transmission time on the packets. Could you describe your
+> > _actual_ use case / application in more detail?  
+> 
+> Not everyone implements QUIC or CC, it is really hard to implement CC
+> from scratch. This backpressure mechnism is much simpler than CC (TCP or
+> QUIC), as clearly it does not deal with any remote congestions.
+> 
+> And, although this patchset only implements UDP backpressure, it can be
+> applied to any other protocol easily, it is protocol-independent.
 
-On Sat, Aug 27, 2022 at 6:57 AM Youlin Li <liulin063@gmail.com> wrote:
->
-> In adjust_scalar_min_max_vals(), let 32bit bounds learn from 64bit bounds
-> to get more tight bounds tracking. Similar operation can be found in
-> reg_set_min_max().
->
-> Note that we cannot simply add a call to __reg_combine_64_into_32(). In
-> previous versions of the code, when __reg_combine_64_into_32() was
-> called, the 32bit boundary was completely deduced from the 64bit
-> boundary, so there was a call to __mark_reg32_unbounded() in
-> __reg_combine_64_into_32(). But in adjust_scalar_min_max_vals(), the 32bit
-> bounds are already calculated to some extent, and __mark_reg32_unbounded()
-> will eliminate these information.
->
-> Simply copying a code without __mark_reg32_unbounded() should work.
->
-> Also, we can now fold reg_bounds_sync() into zext_32_to_64().
->
-> Before:
->
->     func#0 @0
->     0: R1=ctx(off=0,imm=0) R10=fp0
->     0: (b7) r0 = 0                        ; R0_w=0
->     1: (b7) r1 = 0                        ; R1_w=0
->     2: (87) r1 = -r1                      ; R1_w=scalar()
->     3: (87) r1 = -r1                      ; R1_w=scalar()
->     4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
->     5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0xffffffff))  <--- [*]
->     6: (95) exit
->
-> It can be seen that even if the 64bit bounds is clear here, the 32bit
-> bounds is still in the state of 'UNKNOWN'.
->
-> After:
->
->     func#0 @0
->     0: R1=ctx(off=0,imm=0) R10=fp0
->     0: (b7) r0 = 0                        ; R0_w=0
->     1: (b7) r1 = 0                        ; R1_w=0
->     2: (87) r1 = -r1                      ; R1_w=scalar()
->     3: (87) r1 = -r1                      ; R1_w=scalar()
->     4: (c7) r1 s>>= 63                    ; R1_w=scalar(smin=-1,smax=0)
->     5: (07) r1 += 2                       ; R1_w=scalar(umin=1,umax=2,var_off=(0x0; 0x3))  <--- [*]
->     6: (95) exit
->
-> Signed-off-by: Youlin Li <liulin063@gmail.com>
-> ---
-
-It might be better to put the code that performs the actual bounds
-deduction into a helper function. It avoids code duplication. But the
-current version looks fine to me. Thanks for the patch!
-
-Acked-by: Hao Luo <haoluo@google.com>
+No disagreement on any of your points. But I don't feel like 
+you answered my question about the details of the use case.

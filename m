@@ -2,151 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 448CB5A5F89
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC345A5F92
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231936AbiH3Jf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50742 "EHLO
+        id S230292AbiH3Jg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230111AbiH3Jeg (ORCPT
+        with ESMTP id S230183AbiH3JgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:34:36 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4040E58AF
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:33:06 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id br21so8935028lfb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:33:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Sg21c2U2EDU591BTmReyYxGtxFU2rdWH4lXcz9Jl/oQ=;
-        b=UwZYN0UUvos+DFIuMcMKB3/g70v3pn0hSXod2WnobjsosLlxM6kc3MnjSquBQ4YB01
-         C8+4FlN6dJKloZ6tAHIniVANNjj2S3Uj7hAfJ121LePeGSAg8R2qs82XPu3yrtSqV5uB
-         4lr3R3VIprm4JwhjyDgYyHRY8lN5UKqy2h/RzKb1+6pOdBz7CQ6EHJK1tdSWmRhBk86x
-         2oDZpP8yBcbncwsxoHSVZiyT1xccZcfZzLIHwL5rQC748fggv06LdR34ktXRtdB8COQI
-         T9wVYQ59zQ9ui9T/fcB0oxAaBSZWz5A+hGMm5QcuTJUwey65/YnoUEwSDp1fDyMZzA5b
-         gMMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Sg21c2U2EDU591BTmReyYxGtxFU2rdWH4lXcz9Jl/oQ=;
-        b=GQU5EaKr4LNlS9t/dxDm9qEGOpSvc+zZEHuMUGeJKstH5tRREMGzwGL5cDC5MXsNPR
-         ohS4Fzfcgp5bCgAojRCuWU4TO2ysUnFnSidcc8y85g+m0DGfNUHFz3aDsjcS5F9xcgPG
-         vtxnjyI22MDzLm7FIWFtrpSbsKYL/aVktcsCeXe/wCPgAfXHUFe0zkmER0pqOujZF3rI
-         37+1ida09m1SQgo84Elyp2T/KMDhomgaelzT0NQFmFMsko9UgLlE0kUi5Wu8aGX87NFG
-         KAtkwA83wsIC+7XNNXY1ZOYWnTUWaWX8YEaO7Cs2GZzP66Z3zLCvOYVTn6CBq8TEzj/Z
-         PrCw==
-X-Gm-Message-State: ACgBeo1CzavL1bAiVw1FMX90HC5aK6Gwjb9zad03T/E1L3aPtcuTQjLK
-        vXIVlH76HhAS1IEDL978hIjApA==
-X-Google-Smtp-Source: AA6agR5yh8X5BmKU4wxxWdgpsp/W/CNveRawwlV8nLGSOyxDU0ID2dkfzy1lRZaQcQkOIti+Cy+hYQ==
-X-Received: by 2002:ac2:5462:0:b0:48b:2a7b:3c15 with SMTP id e2-20020ac25462000000b0048b2a7b3c15mr7783055lfn.489.1661851981612;
-        Tue, 30 Aug 2022 02:33:01 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id a13-20020ac2520d000000b0048a9603399csm1556472lfl.116.2022.08.30.02.33.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 02:33:01 -0700 (PDT)
-Message-ID: <184d4ff5-e80c-6a24-8071-0b0a69710685@linaro.org>
-Date:   Tue, 30 Aug 2022 12:32:59 +0300
+        Tue, 30 Aug 2022 05:36:22 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AC8EA172
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:34:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661852044; x=1693388044;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZvVIkfptZOksDHoD5BQ0BvgCrKxH5FewlQmDfWFAIwY=;
+  b=W7vvRqUjoGxPkUbLLflIq7VviN3VbYUujZbAp/v/o3ntKjUtR6VNbZXk
+   fJ/B2hVJEzx0CjUQJu8Z4m9Zivf/UfPnJ/cPCt5icVM1LYydNO7Iry94E
+   +x8j9xE28stLEud6pqDmkdAR7cvdaZaEKKdt7heBURhcjfmIjFRoWHM6v
+   TfYO+6TzrhvZIqxiN5BZ+Uv0VebnGz1MrEKnKFwhKszZIhqRPYd3q8wMx
+   99ir/lLWLAOXXc/or06a+J8iQgMVCLgv/EA64ZrlDC6M7O7iM/xQBY458
+   WYjvZqvmqPo93G4gP/pFzQ3m1DNVU1wPe3ZlL+ve+hlciwRspkecWSHcl
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="274879163"
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="274879163"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 02:34:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="641303152"
+Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 30 Aug 2022 02:34:01 -0700
+Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oSxdA-00008g-1V;
+        Tue, 30 Aug 2022 09:34:00 +0000
+Date:   Tue, 30 Aug 2022 17:33:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:testing/6.0-rc2-fam0-non-uapi] BUILD SUCCESS
+ 50ad7b6697a546e4c55e1ae7a6778fde61def1aa
+Message-ID: <630dd957.SVyvitW5FsG3LFfM%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/1] arm64: dts: qcom: sc7280: Add device tree for
- herobrine evoker
-Content-Language: en-US
-To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     mka@chromium.org, dianders@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220830053307.3997495-1-sheng-liang.pan@quanta.corp-partner.google.com>
- <20220830133300.1.I7dd7a79c4cc5fe91c3feb004473feb3b34b7b2d8@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830133300.1.I7dd7a79c4cc5fe91c3feb004473feb3b34b7b2d8@changeid>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 08:33, Sheng-Liang Pan wrote:
-> Add a basic device tree for the herobrine evoker board.
-> 
-> Signed-off-by: Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
-> ---
-> 
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../dts/qcom/sc7280-herobrine-evoker-r0.dts   | 333 ++++++++++++++++++
->  2 files changed, 334 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 1d86a33de528c..59c22ba54a366 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -103,6 +103,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-evoker-r0.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-idp2.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-crd-r3.dtb
-> diff --git a/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
-> new file mode 100644
-> index 0000000000000..ccbe50b6249ab
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
-> @@ -0,0 +1,333 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-> +/*
-> + * Google Evoker board device tree source
-> + *
-> + * Copyright 2022 Google LLC.
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "sc7280-herobrine.dtsi"
-> +
-> +/ {
-> +	model = "Google Evoker";
-> +	compatible = "google,evoker", "qcom,sc7280";
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git testing/6.0-rc2-fam0-non-uapi
+branch HEAD: 50ad7b6697a546e4c55e1ae7a6778fde61def1aa  can: etas_es58x: Replace zero-length array with DECLARE_FLEX_ARRAY() helper
 
-Undocumented compatible.
+elapsed time: 721m
 
-Please run scripts/checkpatch.pl and fix reported warnings.
+configs tested: 151
+configs skipped: 4
 
-Does not look like you tested the bindings. Please run `make
-dt_binding_check` (see
-Documentation/devicetree/bindings/writing-schema.rst for instructions).
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> +};
-> +
-> +/*
-> + * ADDITIONS TO FIXED REGULATORS DEFINED IN PARENT DEVICE TREE FILES
+gcc tested configs:
+powerpc                           allnoconfig
+arc                  randconfig-r043-20220829
+x86_64               randconfig-a003-20220829
+x86_64               randconfig-a002-20220829
+x86_64               randconfig-a001-20220829
+alpha                            allyesconfig
+x86_64               randconfig-a005-20220829
+arc                              allyesconfig
+x86_64               randconfig-a006-20220829
+um                           x86_64_defconfig
+um                             i386_defconfig
+sh                               allmodconfig
+x86_64               randconfig-a004-20220829
+m68k                             allmodconfig
+mips                             allyesconfig
+x86_64                    rhel-8.3-kselftests
+m68k                             allyesconfig
+powerpc                          allmodconfig
+x86_64                           rhel-8.3-syz
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+i386                 randconfig-a001-20220829
+i386                                defconfig
+x86_64                           rhel-8.3-kvm
+i386                 randconfig-a003-20220829
+i386                 randconfig-a002-20220829
+i386                 randconfig-a004-20220829
+i386                 randconfig-a005-20220829
+i386                 randconfig-a006-20220829
+x86_64                              defconfig
+x86_64                               rhel-8.3
+sh                            migor_defconfig
+sh                      rts7751r2d1_defconfig
+x86_64                           allyesconfig
+xtensa                           alldefconfig
+i386                             allyesconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arm                  randconfig-c002-20220829
+i386                 randconfig-c001-20220829
+x86_64               randconfig-c001-20220829
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+arm                         s3c6400_defconfig
+powerpc                      tqm8xx_defconfig
+arm                         vf610m4_defconfig
+powerpc                     tqm8548_defconfig
+ia64                             allmodconfig
+sh                             sh03_defconfig
+powerpc                      makalu_defconfig
+i386                          randconfig-c001
+powerpc              randconfig-c003-20220830
+mips                 randconfig-c004-20220830
+loongarch                           defconfig
+loongarch                         allnoconfig
+sparc                               defconfig
+xtensa                           allyesconfig
+csky                                defconfig
+sparc                            allyesconfig
+x86_64                                  kexec
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+nios2                            allyesconfig
+nios2                               defconfig
+parisc                              defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+arm                       imx_v6_v7_defconfig
+powerpc                       maple_defconfig
+mips                    maltaup_xpa_defconfig
+arm                         at91_dt_defconfig
+x86_64                        randconfig-c001
+arm                  randconfig-c002-20220830
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+arm                          pxa910_defconfig
+powerpc                      pasemi_defconfig
+mips                  maltasmvp_eva_defconfig
+arm64                               defconfig
+ia64                             allyesconfig
+arm                              allmodconfig
+m68k                                defconfig
+ia64                                defconfig
+mips                             allmodconfig
+powerpc                          allyesconfig
+riscv                               defconfig
+riscv                            allmodconfig
+riscv                            allyesconfig
+s390                       zfcpdump_defconfig
+arm                            mps2_defconfig
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+powerpc                   motionpro_defconfig
+m68k                       m5475evb_defconfig
+xtensa                generic_kc705_defconfig
+m68k                            mac_defconfig
+arm                        oxnas_v6_defconfig
+m68k                             alldefconfig
+sh                           se7780_defconfig
+loongarch                 loongson3_defconfig
+sh                         ecovec24_defconfig
+arm                      integrator_defconfig
+powerpc                     asp8347_defconfig
 
-What does it mean and why it's SCREAMING?
+clang tested configs:
+hexagon              randconfig-r041-20220829
+hexagon              randconfig-r045-20220829
+riscv                randconfig-r042-20220829
+s390                 randconfig-r044-20220829
+i386                 randconfig-a011-20220829
+i386                 randconfig-a014-20220829
+x86_64               randconfig-a011-20220829
+x86_64               randconfig-a014-20220829
+i386                 randconfig-a013-20220829
+x86_64               randconfig-a015-20220829
+x86_64               randconfig-a012-20220829
+x86_64               randconfig-a013-20220829
+x86_64               randconfig-a016-20220829
+i386                 randconfig-a012-20220829
+i386                 randconfig-a016-20220829
+i386                 randconfig-a015-20220829
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+i386                             allyesconfig
+powerpc                     powernv_defconfig
+mips                     cu1000-neo_defconfig
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+s390                 randconfig-r044-20220830
+hexagon              randconfig-r045-20220830
+hexagon              randconfig-r041-20220830
+riscv                randconfig-r042-20220830
+x86_64                        randconfig-k001
+x86_64                        randconfig-c007
+i386                          randconfig-c001
+s390                 randconfig-c005-20220830
+riscv                randconfig-c006-20220830
+powerpc              randconfig-c003-20220830
+mips                 randconfig-c004-20220830
+arm                  randconfig-c002-20220830
 
-> + *
-> + * Sort order matches the order in the parent files (parents before children).
-
-Why? Sorting should be rather alphabetical.
-
-
-Best regards,
-Krzysztof
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

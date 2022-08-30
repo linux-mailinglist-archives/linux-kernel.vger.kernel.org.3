@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2DF05A67AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:47:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 164FA5A67B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:48:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229699AbiH3Prv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 11:47:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S229959AbiH3Psc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 11:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiH3Prs (ORCPT
+        with ESMTP id S229522AbiH3PsX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 11:47:48 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8948DB075
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:47:47 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id c4so9573080iof.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=9f2bO9sEBdq+wgciheHTKF7TZKiz92E+7DCQ/5qexd0=;
-        b=hbufoTwEPykpa51OHC80c1lNeHDkPA9Syp/0nviAloJ905gGMGBophKG498BPZGv0g
-         xN7wqPhyjGhJ6x/9aWVh0LFYBT6YB/GustCVXqbxObHu3yKIXR2NjGKpcjuXII6wIrQ6
-         cEpQZ/2nb7f/UbVFFeBpheb9gb7G8k6uanF60=
+        Tue, 30 Aug 2022 11:48:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563DEB6032
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:48:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661874501;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mbOHhoGxSCdY0/v0Y5mT98E8ZAdTtYHYoFgDmUTVqfA=;
+        b=SgKbxPNvPpNXZYxCOIScOyscI0lwQkloYTXf+wI/9BTqPzWndtkwSCDHqT1rIY9bHrtaH+
+        BDR9l7NCNarHt19mWVsMfhTTAdzStoXO7S/Gsv8Nr34e5K/ZkyzFrJedtIidOElihyZiVf
+        NAYJF/urotMdmIk/Xvp5lIhK9hA6C/s=
+Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
+ [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-354-G8yEFCfMMlaTh6J6_E2-8w-1; Tue, 30 Aug 2022 11:48:18 -0400
+X-MC-Unique: G8yEFCfMMlaTh6J6_E2-8w-1
+Received: by mail-ua1-f72.google.com with SMTP id p4-20020a9f2b04000000b0039f2ed5774aso3653946uaj.10
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:48:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=9f2bO9sEBdq+wgciheHTKF7TZKiz92E+7DCQ/5qexd0=;
-        b=hgu9deQpNnyu/r82Zf4N+CIZzFGe88OdjC3VuQ4TPVMmND6FBCP25SNosREASuNNys
-         MVKtV0CL4jINvBF/ufm0ZDuxX4pf46XvJT7yw8ijGH7M32fieCxyznxigmJCduipVbj7
-         LZ4Zz5dqfxSNNjVw2AkWhYkLGoFVK+ZtRdwv4NF4jySZeEciQxLGH9k3penLelTSOVXP
-         KWpUF6q454eTN3t+RBoLkCab/SXLk4Zg7XKx3++0F84jTwGcNh+AhuwKooZ+wLH6GB40
-         c4bqSi/RGOzY77cDvG7IgZtmkKMiMbde7lgtSkhDVtpjJ009rEg/Y+4AMrDW1AC3cXZD
-         msag==
-X-Gm-Message-State: ACgBeo1/w3rPCThHuQ4iW7d7M+OdBPul2u9fE8Lxrz+Fb8YU5UBUy8zh
-        uvvcsVYEYpiXIASYzmonCDh1Jqlwqsal3XoL
-X-Google-Smtp-Source: AA6agR42vSJXPvk7cqInlw7rKfSYLubbX+uOw8wlmFUMsGIrZaYZAELJxP+cvh4beJ3lMzjLOKnpEQ==
-X-Received: by 2002:a05:6638:160a:b0:349:d991:d929 with SMTP id x10-20020a056638160a00b00349d991d929mr13699910jas.144.1661874466785;
-        Tue, 30 Aug 2022 08:47:46 -0700 (PDT)
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com. [209.85.166.176])
-        by smtp.gmail.com with ESMTPSA id c12-20020a02960c000000b0034277c336b0sm5733448jai.58.2022.08.30.08.47.45
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 08:47:45 -0700 (PDT)
-Received: by mail-il1-f176.google.com with SMTP id t11so3280278ilf.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:47:45 -0700 (PDT)
-X-Received: by 2002:a05:6e02:1789:b0:2ea:ccd4:d0ed with SMTP id
- y9-20020a056e02178900b002eaccd4d0edmr7210776ilu.177.1661874465309; Tue, 30
- Aug 2022 08:47:45 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=mbOHhoGxSCdY0/v0Y5mT98E8ZAdTtYHYoFgDmUTVqfA=;
+        b=5eZPXNfGwug38s0zUVui9hkWExKC56rTEbIOV68E9BzEuwc3ckciQoR5/UpE1Ha+1u
+         eySYsXftjh5X3dZYO8Ewbn6tfTEZTe502ti7aq5w6lC5gge6mSQL7xASL56eAeFBIwFs
+         o4dQPRGEVChtllx0ajvsnd0n6gicxDsQ3TDqRE+1f1myKUCy1jXkQzF+P5Yz+/e70JsJ
+         MsbwPa04I5Sw0HXAMBA/9XuuLCftaBT14HUAZYP1d0spFsh1U+7S4AzEvVT6/jYkuVW0
+         d+qf2m175ouu0csCkkFAGT2qWW2qCb5x0Jz//dYiLYGzvhxUp7kJybZBj6kCK+B26FRQ
+         cOag==
+X-Gm-Message-State: ACgBeo0aCLHuIMuNe0w8FzE8wwzL768IcI0Vn4o4sNuLXNOBcQDkGZAe
+        kAGFUG0nw5IXzhgeXpmZ7gIbYGpjjaMxKPBdP4nLbG8FubirN/MrOyhTZjmy6Kdz8vEi5lDkBEF
+        ExglixEUQ7zi3TzBtDV9QA+kUVLZP8x/4OkqoUtht
+X-Received: by 2002:a1f:91c4:0:b0:394:8136:c142 with SMTP id t187-20020a1f91c4000000b003948136c142mr2700552vkd.21.1661874497501;
+        Tue, 30 Aug 2022 08:48:17 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR54VZeIrBA6rFYE7McHjwk5q/BP0aEB1ftzlEXS3iHyd3qCAZ/+vUQr5wimdPxPp3/PKNr8KQKESFGNgYEqpIg=
+X-Received: by 2002:a1f:91c4:0:b0:394:8136:c142 with SMTP id
+ t187-20020a1f91c4000000b003948136c142mr2700543vkd.21.1661874497282; Tue, 30
+ Aug 2022 08:48:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220822105340.1.I66a9a5577f9b0af66492ef13c47bc78ed85e5d6b@changeid>
- <YwjhxQjiJeQ0u5rh@ravnborg.org>
-In-Reply-To: <YwjhxQjiJeQ0u5rh@ravnborg.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 30 Aug 2022 08:47:31 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U+2OJzXvkXKbvm=veJeoxpHs_sHhs-maNGCWjPowCeJQ@mail.gmail.com>
-Message-ID: <CAD=FV=U+2OJzXvkXKbvm=veJeoxpHs_sHhs-maNGCWjPowCeJQ@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Add myself as a reviewer for panel-edp.c
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     dri-devel <dri-devel@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220829154805.1205507-1-mlombard@redhat.com> <Yw3lXaDTfvJcEM4Q@linutronix.de>
+In-Reply-To: <Yw3lXaDTfvJcEM4Q@linutronix.de>
+From:   Maurizio Lombardi <mlombard@redhat.com>
+Date:   Tue, 30 Aug 2022 17:48:06 +0200
+Message-ID: <CAFL455=4SBhJ4LpiPQr+PmL2ShuTpR=bAo8JVfe-2x3cg85cbQ@mail.gmail.com>
+Subject: Re: [PATCH RFC] mm: slub: fix flush_cpu_slab()/__free_slab()
+ invocations in task context.
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     Vlastimil Babka <vbabka@suse.cz>, linux-mm <linux-mm@kvack.org>,
+        David Rientjes <rientjes@google.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>, tglx@linutronix.de
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,21 +79,55 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Fri, Aug 26, 2022 at 8:07 AM Sam Ravnborg <sam@ravnborg.org> wrote:
+=C3=BAt 30. 8. 2022 v 12:24 odes=C3=ADlatel Sebastian Andrzej Siewior
+<bigeasy@linutronix.de> napsal:
 >
-> On Mon, Aug 22, 2022 at 10:53:59AM -0700, Douglas Anderson wrote:
-> > panel-edp changes go through the drm-misc tree (as per the "DRM PANEL
-> > DRIVERS" entry in MAINTAINERS), but ever since splitting panel-edp out
-> > of panel-simple I've been trying to keep a close eye on it. Make that
-> > official by listing me as a reviewer.
+> On 2022-08-29 17:48:05 [+0200], Maurizio Lombardi wrote:
+> > diff --git a/mm/slub.c b/mm/slub.c
+> > index 862dbd9af4f5..d46ee90651d2 100644
+> > --- a/mm/slub.c
+> > +++ b/mm/slub.c
+> > @@ -2681,30 +2681,34 @@ struct slub_flush_work {
+> >       bool skip;
+> >  };
 > >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> Acked-by: Sam Ravnborg <sam@ravnborg.org>
+> > +static void flush_cpu_slab(void *d)
+> > +{
+> > +     struct kmem_cache *s =3D d;
+> > +     struct kmem_cache_cpu *c =3D this_cpu_ptr(s->cpu_slab);
+> > +
+> > +     if (c->slab)
+> > +             flush_slab(s, c);
+> > +
+> > +     unfreeze_partials(s);
+> > +}
+> =E2=80=A6
+> > @@ -2721,13 +2725,18 @@ static void flush_all_cpus_locked(struct kmem_c=
+ache *s)
+> >       lockdep_assert_cpus_held();
+> >       mutex_lock(&flush_lock);
+> >
+> > +     if (in_task()) {
+> > +             on_each_cpu_cond(has_cpu_slab, flush_cpu_slab, s, 1);
+>
+> This blocks with disabled preemption until it completes flush_cpu_slab()
+> on all CPUs.
+> That function acquires a local_lock_t which can not be
+> acquired from in-IRQ which is where this function will be invoked due to
+> on_each_cpu_cond().
 
-Pushed with Sam's ack.
+Hmm, this is not good indeed. I guess I should have used for_each_online_cp=
+u()
+instead of on_each_cpu_cond().
 
-e6545831a17b MAINTAINERS: Add myself as a reviewer for panel-edp.c
+>
+> Couldn't we instead use a workqueue with that WQ_MEM_RECLAIM bit? It may
+> reclaim memory after all ;)
 
--Doug
+That should also fix it, do you think it would be ok to allocate a workqueu=
+e in
+in kmem_cache_init() ?
+
+Thanks,
+Maurizio
+

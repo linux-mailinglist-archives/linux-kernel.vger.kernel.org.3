@@ -2,52 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D11755A62A0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:59:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327B65A62A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:00:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiH3L7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S229681AbiH3MAd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:00:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbiH3L67 (ORCPT
+        with ESMTP id S229574AbiH3MAb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:58:59 -0400
-X-Greylist: delayed 128 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 04:58:58 PDT
-Received: from mail.thorsis.com (mail.thorsis.com [92.198.35.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E54D86C5;
-        Tue, 30 Aug 2022 04:58:57 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 13:58:51 +0200
-From:   Alexander Dahl <ada@thorsis.com>
-To:     Olliver Schinagl <oliver@schinagl.nl>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Oleh Kravchenko <oleg@kaa.org.ua>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Olliver Schinagl <oliver+list@schinagl.nl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] dt-bindings: leds: Expand LED_COLOR_ID definitions
-Message-ID: <Yw37exBark8pCE2p@ada.ifak-system.com>
-Mail-Followup-To: Olliver Schinagl <oliver@schinagl.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        linux-leds@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Oleh Kravchenko <oleg@kaa.org.ua>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Olliver Schinagl <oliver+list@schinagl.nl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220830084454.1133369-1-oliver@schinagl.nl>
-Content-Type: text/plain; charset=us-ascii
+        Tue, 30 Aug 2022 08:00:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF403AE6F;
+        Tue, 30 Aug 2022 05:00:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=PdmZTpzthURRizUZ4JSn2ogictuJkmVakktejwJD/dQ=; b=H5ll5BMZRJfCXUcTYrh+kk5imH
+        irP4h4IRToGvqnj3tgPuUzjoGOrUWYO4ranhLM75kFZII7bOXd+wQifv6AGa3BxVGVQp/POexa0VH
+        F50M0M8yF3UVFAEzV0UlWIJThz1fdukyAkqmoRNgpwxqR3MKuBwDGPZsB755z9wqbIJNflV3TEz42
+        IpannB3sI0keaI9cLYY9Q+ye6kI2fYO71YwRpuPBOWLZtIKUij7DvODCrlhzSjXN+pS44iWcXFAkY
+        7JipoQOweYAJyJ/wZ8wN+P2ZGlQpZW5nlG1x6s6hIu0oFEMemiu9QN23P3ZIg4JrbjLeKFhz52wCB
+        2VtuvuyQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oSzuX-0040Ca-Lk; Tue, 30 Aug 2022 12:00:05 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E11A330031D;
+        Tue, 30 Aug 2022 14:00:02 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id BF6C720A3C659; Tue, 30 Aug 2022 14:00:02 +0200 (CEST)
+Date:   Tue, 30 Aug 2022 14:00:02 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     =?iso-8859-1?Q?Martin-=C9ric?= Racine <martin-eric.racine@iki.fi>
+Cc:     Ben Hutchings <ben@decadent.org.uk>, x86@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        1017425@bugs.debian.org, stable@vger.kernel.org,
+        regressions@lists.linux.dev,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: Re: [PATCH] x86/speculation: Avoid LFENCE in FILL_RETURN_BUFFER on
+ CPUs that lack it
+Message-ID: <Yw37wnE19bAIhhP2@hirez.programming.kicks-ass.net>
+References: <Yv7aRJ/SvVhSdnSB@decadent.org.uk>
+ <Yv9OGVc+WpoDAB0X@worktop.programming.kicks-ass.net>
+ <Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net>
+ <9395338630e3313c1bf0393ae507925d1f9af870.camel@decadent.org.uk>
+ <Yv9+8vR4QH6j6J/5@worktop.programming.kicks-ass.net>
+ <CAPZXPQeYh_BrZzinsvCjHvd=szAsOXUmkVYS1tJC5vwamx+Wow@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220830084454.1133369-1-oliver@schinagl.nl>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPZXPQeYh_BrZzinsvCjHvd=szAsOXUmkVYS1tJC5vwamx+Wow@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,78 +69,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Olliver,
+On Tue, Aug 30, 2022 at 02:42:04PM +0300, Martin-Éric Racine wrote:
+> Greetings,
+> 
+> On Fri, Aug 19, 2022 at 3:15 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Fri, Aug 19, 2022 at 01:38:27PM +0200, Ben Hutchings wrote:
+> >
+> > > So that puts the whole __FILL_RETURN_BUFFER inside an alternative, and
+> > > we can't have nested alternatives.  That's unfortunate.
+> >
+> > Well, both alternatives end with the LFENCE instruction, so I could pull
+> > it out and do two consequtive ALTs, but unrolling the loop for i386 is
+> > a better solution in that the sequence, while larger, removes the need
+> > for the LFENCE.
+> 
+> Have we reached a definitive conclusion on to how to fix this?
 
-Am Tue, Aug 30, 2022 at 10:44:54AM +0200 schrieb Olliver Schinagl:
-> In commit 853a78a7d6c7 (dt-bindings: leds: Add LED_COLOR_ID definitions,
-> Sun Jun 9 20:19:04 2019 +0200) the most basic color definitions where
-> added. However, there's a little more very common LED colors.
-> 
-> While the documentation states 'add what is missing', engineers tend to
-> be lazy and will just use what currently exists. So this patch will take
-> (a) list from online retailers [0], [1], [2] and use the common LED colors from
-> there, this being reasonable as this is what is currently available to purchase.
-> 
-> Note, that LIME seems to be the modern take to 'Yellow-green' or
-> 'Yellowish-green' from some older datasheets.
-> 
-> [0]: https://www.digikey.com/en/products/filter/led-lighting-color/125
-> [1]: https://eu.mouser.com/c/optoelectronics/led-lighting/led-emitters/standard-leds-smd
-> [2]: https://nl.farnell.com/en-NL/c/optoelectronics-displays/led-products/standard-single-colour-leds-under-75ma
-> 
-> Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
-> ---
-> No chances since v2: Re-send with the proper e-mails.
-> Changes since v1: Unbreak existing definitions.
-> 
->  include/dt-bindings/leds/common.h | 28 ++++++++++++++++------------
->  1 file changed, 16 insertions(+), 12 deletions(-)
-> 
-> diff --git a/include/dt-bindings/leds/common.h b/include/dt-bindings/leds/common.h
-> index 3be89a7c20a9..04bf94523ea3 100644
-> --- a/include/dt-bindings/leds/common.h
-> +++ b/include/dt-bindings/leds/common.h
-> @@ -22,18 +22,22 @@
->  #define LEDS_BOOST_FIXED	2
->  
->  /* Standard LED colors */
-> -#define LED_COLOR_ID_WHITE	0
-> -#define LED_COLOR_ID_RED	1
-> -#define LED_COLOR_ID_GREEN	2
-> -#define LED_COLOR_ID_BLUE	3
-> -#define LED_COLOR_ID_AMBER	4
-> -#define LED_COLOR_ID_VIOLET	5
-> -#define LED_COLOR_ID_YELLOW	6
-> -#define LED_COLOR_ID_IR		7
-> -#define LED_COLOR_ID_MULTI	8	/* For multicolor LEDs */
-> -#define LED_COLOR_ID_RGB	9	/* For multicolor LEDs that can do arbitrary color,
-> -					   so this would include RGBW and similar */
-> -#define LED_COLOR_ID_MAX	10
-> +#define LED_COLOR_ID_WHITE      0
-> +#define LED_COLOR_ID_RED        1
-> +#define LED_COLOR_ID_GREEN      2
-> +#define LED_COLOR_ID_BLUE       3
-> +#define LED_COLOR_ID_AMBER      4
-> +#define LED_COLOR_ID_VIOLET     5
-> +#define LED_COLOR_ID_YELLOW     6
-> +#define LED_COLOR_ID_IR         7
-> +#define LED_COLOR_ID_MULTI      8 /* For multicolor LEDs */
-> +#define LED_COLOR_ID_RGB        9 /* For multicolor LEDs that can do arbitrary color, including RGBW etc. */
-> +#define LED_COLOR_ID_PUPRPLE   10
-
-This is still a typo, isn't it? Purple?
-
-Greets
-Alex
-
-> +#define LED_COLOR_ID_ORANGE    11
-> +#define LED_COLOR_ID_PINK      12
-> +#define LED_COLOR_ID_CYAN      13
-> +#define LED_COLOR_ID_LIME      14
-> +#define LED_COLOR_ID_MAX       15
->  
->  /* Standard LED functions */
->  /* Keyboard LEDs, usually it would be input4::capslock etc. */
-> -- 
-> 2.37.2
-> 
+https://git.kernel.org/tip/332924973725e8cdcc783c175f68cf7e162cb9e5

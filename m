@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796925A5ACE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:33:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426195A5AD1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229839AbiH3EdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 00:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45456 "EHLO
+        id S229675AbiH3EgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 00:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiH3EdD (ORCPT
+        with ESMTP id S229437AbiH3EgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 00:33:03 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA759E0F6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:33:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661833982; x=1693369982;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=T7wCpl3XC9SbO31t4+rBi/ZeBKLcmnn3SPwiLCQtZiQ=;
-  b=MxM+cjJRcbjrhyRgyv1xr+9ecgGgJYR6crxlj5miccHiLO5ot76FrsCk
-   Ubcl4b+js6H5Nly6cRqPq+vi3nbiVJNujr+tNmV05oFm3wj/NUt0ujrpp
-   n5V3UxBBex953N6uv9JqvqPkTG1689mf+KoQBduUnILg+prSJotD7kQa+
-   5MlPVKgv9hHBfHRSSp8NO4xOsnTm7ULUVxwHq8anfjauMOpYhoDHdSQfF
-   MgqjZVP3eZZE5vJKt2xnCEXG1sjIrL417J3GGPkQzoSbRyrnMUjlAqYv+
-   lIVc8M5e30Pu5LHd/ubr1wMv4lQULgdYiiBPt1u18Q/hm117wqjL0+zMh
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="296353439"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="296353439"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 21:33:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="588436895"
-Received: from lkp-server02.sh.intel.com (HELO e45bc14ccf4d) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 29 Aug 2022 21:32:59 -0700
-Received: from kbuild by e45bc14ccf4d with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSsvr-0000X9-12;
-        Tue, 30 Aug 2022 04:32:59 +0000
-Date:   Tue, 30 Aug 2022 12:32:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Subject: drivers/remoteproc/stm32_rproc.c:139:20: sparse: sparse: incorrect
- type in argument 1 (different address spaces)
-Message-ID: <202208301242.YC5114Ec-lkp@intel.com>
+        Tue, 30 Aug 2022 00:36:09 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ABB978233;
+        Mon, 29 Aug 2022 21:36:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0B808611DA;
+        Tue, 30 Aug 2022 04:36:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85B12C433D6;
+        Tue, 30 Aug 2022 04:36:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661834165;
+        bh=M5yG2yTFswgWexgNhMPM7W1/h1WPqfE4dGt85x2Ogls=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=V87okQhwG7UDqSnF8GLIb/Aqt2Ig1X+KyVJezb7nrkUeVx9PiVFad8Y4HIvC9yP9Y
+         Zx582UPhmxVtJpOA/Nwu+Qf/k1NhKre/OXxO7bBc/jhOfYX+NdqzfCzUFX7CTjLNPc
+         pwGOB+y2y20HVfcMRJEplQdI4wAo4X9w4xoRytDMx9bFYsDc904F8q8vjH9mKOrpNw
+         xFyf3Qki+Kf1CN3hQXESPv6Pqlgb5fP55VYjVxPe+XopDM79aeS7irGvxZPza4W2E8
+         IdWidQ72Fx52rVcNEGnpBDMDMJOeHNgq8y4PLo6HAx+2PLU4npEIdy9yD16UZsZ0bx
+         QKSE9mO7Kiibg==
+Date:   Tue, 30 Aug 2022 10:06:00 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Stephen Boyd <sboyd@kernel.org>
+Cc:     David Collins <quic_collinsd@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        David Dai <daidavid1@codeaurora.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/2] spmi: pmic-arb: Add support for PMIC v7
+Message-ID: <Yw2TsARPfuCLvDg0@matsya>
+References: <20220201134108.2677578-1-vkoul@kernel.org>
+ <YhUVAwtfjuIdKrRQ@matsya>
+ <1c66890b-6736-61ef-7d16-619f90ced4a0@linaro.org>
+ <4f1ae43c-0f22-19fe-0794-3cc268104396@linaro.org>
+ <20220829222601.47241C433C1@smtp.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220829222601.47241C433C1@smtp.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,56 +64,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
-commit: d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee ARM: mm: kill unused runtime hook arch_iounmap()
-date:   9 weeks ago
-config: arm-randconfig-s031-20220829 (https://download.01.org/0day-ci/archive/20220830/202208301242.YC5114Ec-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/
+On 29-08-22, 15:25, Stephen Boyd wrote:
+> Quoting Dmitry Baryshkov (2022-06-18 08:29:58)
+> > On 01/05/2022 22:41, Dmitry Baryshkov wrote:
+> > > On 22/02/2022 19:53, Vinod Koul wrote:
+> > >> On 01-02-22, 19:11, Vinod Koul wrote:
+> > >>> Hello,
+> > >>>
+> > >>> The is version 3 of support for PMIC v7. I have added a new property
+> > >>> qcom,bus-id for supporting v7 and then add driver changes for v7
+> > >>>
+> > >>> This depends on yaml conversion patch:
+> > >>> https://lore.kernel.org/linux-arm-msm/20211227170151.73116-1-david@ixit.cz/ 
+> > >>>
+> > >>
+> > >> Any feedback on this...
+> > > 
+> > > Another gracious reminder about these patches. At this moment this is 
+> > > one of the important pieces lacking for the full SM8450 support in the 
+> > > upstream kernel.
+> > 
+> > Stephen, yet another ping. This is the blocking point for the further 
+> > SM8450 progress.
+> > 
+> 
+> Sorry I completely missed this one as it fell off the end of my inbox
+> into the abyss.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks for the reply. Is this applied now or you have some feedback for
+me to address..
 
-sparse warnings: (new ones prefixed by >>)
-   drivers/remoteproc/stm32_rproc.c:122:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
-   drivers/remoteproc/stm32_rproc.c:122:12: sparse:     expected void *va
-   drivers/remoteproc/stm32_rproc.c:122:12: sparse:     got void [noderef] __iomem *
->> drivers/remoteproc/stm32_rproc.c:139:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *io_addr @@     got void *va @@
-   drivers/remoteproc/stm32_rproc.c:139:20: sparse:     expected void volatile [noderef] __iomem *io_addr
-   drivers/remoteproc/stm32_rproc.c:139:20: sparse:     got void *va
-   drivers/remoteproc/stm32_rproc.c:632:17: sparse: sparse: cast removes address space '__iomem' of expression
-
-vim +139 drivers/remoteproc/stm32_rproc.c
-
-13140de09cc2dd Fabien Dessenne 2019-05-14  134  
-13140de09cc2dd Fabien Dessenne 2019-05-14  135  static int stm32_rproc_mem_release(struct rproc *rproc,
-13140de09cc2dd Fabien Dessenne 2019-05-14  136  				   struct rproc_mem_entry *mem)
-13140de09cc2dd Fabien Dessenne 2019-05-14  137  {
-13140de09cc2dd Fabien Dessenne 2019-05-14  138  	dev_dbg(rproc->dev.parent, "unmap memory: %pa\n", &mem->dma);
-13140de09cc2dd Fabien Dessenne 2019-05-14 @139  	iounmap(mem->va);
-13140de09cc2dd Fabien Dessenne 2019-05-14  140  
-13140de09cc2dd Fabien Dessenne 2019-05-14  141  	return 0;
-13140de09cc2dd Fabien Dessenne 2019-05-14  142  }
-13140de09cc2dd Fabien Dessenne 2019-05-14  143  
-
-:::::: The code at line 139 was first introduced by commit
-:::::: 13140de09cc2dd5e5166ad42292bb82af4e23cef remoteproc: stm32: add an ST stm32_rproc driver
-
-:::::: TO: Fabien Dessenne <fabien.dessenne@st.com>
-:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
-
+Thanks
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+~Vinod

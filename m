@@ -2,103 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F535A665D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:33:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C668A5A6660
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230314AbiH3Od2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 10:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S229734AbiH3Odu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 10:33:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiH3Od0 (ORCPT
+        with ESMTP id S230482AbiH3Odh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 10:33:26 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57222B530F;
-        Tue, 30 Aug 2022 07:33:25 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id s206so10856081pgs.3;
-        Tue, 30 Aug 2022 07:33:25 -0700 (PDT)
+        Tue, 30 Aug 2022 10:33:37 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D5F3B6D29
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:33:34 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id 202so10843078pgc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:33:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=fUwt7yj09XB0Ng50ttOlbYr2HPETQA5wazbCmht9hZM=;
-        b=YIEPpO/4BwljrKam4CEanBvRJL9EW3SDkoP2ZVwKPVDHmNoulkmF8hbq/8J5omlqGM
-         ASCsm8dxfvvoqhHRjzLseP788VNZ8nM8MlTNzdLoDNpw+RI81Xah4+EuzNN67gQ/U81A
-         DCipa8xTsgV8HhJPYKBt8ZHrkPavEVpJxEdvg/CKl/I7BXhQ53BR0/ZHXpaVoWyOA7E8
-         3kuYOtyQ+cdEhc4xaRJKX9PouQ3htxsZ9sXqeyLrCVgEdK6r2IWBHk0XE9sqy2a/5B8t
-         KI+klDTRdfqdZN5AUirf+2dngiWlDDl0vQz7Aa8LUN3UwLdqpwjm+PgBWh3SguhnQQhJ
-         615Q==
+        d=heitbaum.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=GUYgovoxwFssEe5BGbUlJPBWA2o+QO1KVaImYyXVu24=;
+        b=CzLG8FCoj4AsXFUl3AnvsNoUlHTNUM2lMsQVuMKfxsZeYSb81mGoUd7VO+sG1Ddlvw
+         uzKqMyXORxqPw/bBLkB/H8Pm+lTtfFvMroUNtjvvj73IS8GpQOAFXIwsw6GqNyQK/dgB
+         sIByymieZn0Mfz8xVpVAV8iwCBw3vzb7USayo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=fUwt7yj09XB0Ng50ttOlbYr2HPETQA5wazbCmht9hZM=;
-        b=OAKCe88CTvnXi8e74AJTumij1f56DOJrAobSsdx4WA8msYm10YjoYLiR6SB6nAENIn
-         IgCTyEVAW4y3ng7iIR4Kcf+JFSipC+vxioGKIEIelu44eWfgkfgzAk2q6bT4oRuDXbtg
-         9ylsCMfHTOjOz91WVOCJMVJvY7xll7rXkGkHpIX34+dnicrKpRODB03ymCJny6o5NWtf
-         XBCFnTMxdGAxz02DuEgqneIcN+kuu0cxmr5qgTk+cN6k2YUcgWOAJLJWN9yxkGHwM5Py
-         n2HkbxaXGH+hGu5gdI7DAtzfR72hLtrMXN4VfVlud8lqBAu7UwPRD3n/nypMIRXiYEQP
-         UsTQ==
-X-Gm-Message-State: ACgBeo2RwjNrBnyjd0XfPDvqK2HFR45Uypz/yPy9RW3yA3AMOxEHKrXR
-        Q/Y1iQ0aIdbtQfVyFFFtzYY=
-X-Google-Smtp-Source: AA6agR6QqrPzpRSg1am4AEwOixlGhH2Ny4FkY75lwCi5RCBm7QuPJwLJEcMdiSL2SGnVbC6gQ+1XVw==
-X-Received: by 2002:a05:6a00:1a44:b0:52a:ecd5:bbef with SMTP id h4-20020a056a001a4400b0052aecd5bbefmr21272004pfv.28.1661870004824;
-        Tue, 30 Aug 2022 07:33:24 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id q4-20020a170902dac400b0016d10267927sm1545909plx.203.2022.08.30.07.33.22
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=GUYgovoxwFssEe5BGbUlJPBWA2o+QO1KVaImYyXVu24=;
+        b=39NwCB5kjPxsk7P2AAFicSqxxE1voxJJoTYew8vecl1WTZ1y65CFjNF4NOUuK3l62l
+         /MrlzK5AzYS0FedmlS38xgT+5ewwtbU6xzZ5PjTvdFpsmoWPfFx7KQz89UuWRQzVHfCN
+         WzfZJAi1CXCCJ+vi2QJjNsKVI+jo9sJx7CmpG5dpAWUQ76xECoLNP8A7M2cSL0TPPUrF
+         8o2PSGXIexuvyF7QtZXtiBtW6nO0mEOaY46vgM40VmMbvXbh8v5ygkK95YwcLxSIvaZX
+         EgoVxX+2LG0GSgGyxz0iGTsuMxxIvI5CHpsIdF5NNHBGtO6+a6v45GD07psf0wNwQg3c
+         tVAQ==
+X-Gm-Message-State: ACgBeo1mMu2L8sSv+VEvj/3RtLAzyI3+fO3nHM9CoZUCeqArgsF+TyVK
+        DnwiNdXefSkvMFQ7uJcDR0CjXQ==
+X-Google-Smtp-Source: AA6agR5Rpm8R6PchJRMrnmNiYa9yfX3THHmmFIgMt9I3LK38qaD/L6X9y1Lin6cigI28qZIjwSQgBg==
+X-Received: by 2002:aa7:8a0b:0:b0:537:f5f1:fd91 with SMTP id m11-20020aa78a0b000000b00537f5f1fd91mr15881451pfa.41.1661870013539;
+        Tue, 30 Aug 2022 07:33:33 -0700 (PDT)
+Received: from a1173f985c48 ([203.220.223.63])
+        by smtp.gmail.com with ESMTPSA id e3-20020a17090301c300b00172cb8b97a8sm10099795plh.5.2022.08.30.07.33.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 07:33:24 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     stern@rowland.harvard.edu, skhan@linuxfoundation.org,
-        richard.leitner@skidata.com, tasos@tasossah.com
-Cc:     wsa+renesas@sang-engineering.com, ingo.rohloff@lauterbach.com,
-        cui.jinpeng2@zte.com.cn, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] usb: core: remove redundant variables ret
-Date:   Tue, 30 Aug 2022 14:33:18 +0000
-Message-Id: <20220830143318.299640-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Aug 2022 07:33:32 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:33:24 +0000
+From:   Rudi Heitbaum <rudi@heitbaum.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 000/158] 5.19.6-rc1 review
+Message-ID: <20220830143324.GA2972764@a1173f985c48>
+References: <20220829105808.828227973@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Mon, Aug 29, 2022 at 12:57:30PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.6 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
+> Anything received after that time might be too late.
 
-Rturn value directly from usbdev_do_ioctl() instead of
-getting value from redundant variable ret.
+Hi Greg,
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- drivers/usb/core/devio.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+5.19.6-rc1 tested.
 
-diff --git a/drivers/usb/core/devio.c b/drivers/usb/core/devio.c
-index 837f3e57f580..043d934ead83 100644
---- a/drivers/usb/core/devio.c
-+++ b/drivers/usb/core/devio.c
-@@ -2802,11 +2802,8 @@ static long usbdev_do_ioctl(struct file *file, unsigned int cmd,
- static long usbdev_ioctl(struct file *file, unsigned int cmd,
- 			unsigned long arg)
- {
--	int ret;
--
--	ret = usbdev_do_ioctl(file, cmd, (void __user *)arg);
- 
--	return ret;
-+	return usbdev_do_ioctl(file, cmd, (void __user *)arg);
- }
- 
- /* No kernel lock - fine */
--- 
-2.25.1
+Run tested on:
+- Intel Tiger Lake x86_64 (nuc11 i7-1165G7)
 
+In addition - build tested for:
+- Allwinner A64
+- Allwinner H3
+- Allwinner H5
+- Allwinner H6
+- NXP iMX6
+- NXP iMX8
+- Qualcomm Dragonboard
+- Rockchip RK3288
+- Rockchip RK3328
+- Rockchip RK3399pro
+- Samsung Exynos
+
+Tested-by: Rudi Heitbaum <rudi@heitbaum.com>
+--
+Rudi

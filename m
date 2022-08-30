@@ -2,110 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76275A68C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:49:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 435A25A68C5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:50:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiH3Qtw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:49:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34120 "EHLO
+        id S230461AbiH3Qu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiH3Qtr (ORCPT
+        with ESMTP id S230289AbiH3QuE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:49:47 -0400
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA54C5784
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:49:25 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id T4QUox6DM09yuT4QUoxxpA; Tue, 30 Aug 2022 18:49:23 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 30 Aug 2022 18:49:23 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <431dacd9-bda0-7a0b-3280-e27d01030c01@wanadoo.fr>
-Date:   Tue, 30 Aug 2022 18:49:22 +0200
+        Tue, 30 Aug 2022 12:50:04 -0400
+Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66550E2C41;
+        Tue, 30 Aug 2022 09:49:40 -0700 (PDT)
+Received: from [167.98.27.226] (helo=[10.35.5.6])
+        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1oT4Qh-0069aK-2x; Tue, 30 Aug 2022 17:49:35 +0100
+Message-ID: <c2f86a2a-a30e-5fac-de6c-6a28edc5bcee@codethink.co.uk>
+Date:   Tue, 30 Aug 2022 17:49:34 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] HID: cp2112: Remove some dead code
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RESEND PATCH] dt-bindings: sifive-ccache: fix cache level for l3
+ cache
+To:     Conor.Dooley@microchip.com, ben.dooks@sifive.com,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        devicetree@vger.kernel.org
+References: <20220829062202.3287-1-zong.li@sifive.com>
+ <20220830125133.1698781-1-ben.dooks@sifive.com>
+ <b810d354-18f3-9ae0-6310-57d9e36f4f9b@microchip.com>
+ <6b6837c1-5a2c-567b-ba64-72a1dca38807@sifive.com>
+ <8422fb34-fc05-eddd-0eaa-3e713896d05d@microchip.com>
 Content-Language: en-GB
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Jiri Kosina <jikos@kernel.org>
-Cc:     lkml <linux-kernel@vger.kernel.org>,
-        kernel-janitors@vger.kernel.org,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
-References: <6ee2132c415db2fc90e7fa2106db427a914cc566.1655563907.git.christophe.jaillet@wanadoo.fr>
- <nycvar.YFH.7.76.2208251126010.19850@cbobk.fhfr.pm>
- <CAO-hwJJfncQ3jgtS=HO0atbzrTNOT_rzU66oG2yRTWTSY-L8KA@mail.gmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <CAO-hwJJfncQ3jgtS=HO0atbzrTNOT_rzU66oG2yRTWTSY-L8KA@mail.gmail.com>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <8422fb34-fc05-eddd-0eaa-3e713896d05d@microchip.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 30/08/2022 à 13:56, Benjamin Tissoires a écrit :
-> On Thu, Aug 25, 2022 at 11:26 AM Jiri Kosina <jikos@kernel.org> wrote:
+On 30/08/2022 14:49, Conor.Dooley@microchip.com wrote:
+> On 30/08/2022 13:58, Ben Dooks wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 >>
->> On Sat, 18 Jun 2022, Christophe JAILLET wrote:
->>
->>> Commit 13de9cca514e ("HID: cp2112: add IRQ chip handling") has introduced
->>> cp2112_allocate_irq() that seems to be unused since 2016.
+>> On 30/08/2022 13:56, Conor.Dooley@microchip.com wrote:
+>>> On 30/08/2022 13:51, Ben Dooks wrote:
+>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>>>
+>>>> With newer cores such as the p550, the SiFive composable cache can be
+>>>> a level 3 cache. Update the cache level to be one of 2 or 3.
+>>>>
+>>>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>>>> ---
+>>>>     Documentation/devicetree/bindings/riscv/sifive-ccache.yaml | 2 +-
+>>>>     1 file changed, 1 insertion(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/riscv/sifive-ccache.yaml b/Documentation/devicetree/bindings/riscv/sifive-ccache.yaml
+>>>> index 1a64a5384e36..6190deb65455 100644
+>>>> --- a/Documentation/devicetree/bindings/riscv/sifive-ccache.yaml
+>>>> +++ b/Documentation/devicetree/bindings/riscv/sifive-ccache.yaml
+>>>> @@ -45,7 +45,7 @@ properties:
+>>>>         const: 64
+>>>>
+>>>>       cache-level:
+>>>> -    const: 2
+>>>> +    enum: [2, 3]
 >>>
->>> Remove it, remove the associated resources and part of the remove()
->>> function that frees the resources allocated in cp2112_allocate_irq().
->>>
->>> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
->>> ---
->>> Compile tested only.
->>>
->>> Maybe the issue is completely elsewhere and the probe() should call
->>> cp2112_allocate_irq() in some cases.
+>>> Do we want to enforce the cache level like we currently do for
+>>> interrupts and cache-sets?
 >>
->> Benjamin, could you please take a look? Apparently you were aware of the
->> code being dead due to the __maybe_unused annotation ... :) What was the
->> point?
->>
+>> Not sure on that, for the P550 cores the ccache is going to be level3
+>> and my colleague has said it does confuse some tooling if the level is
+>> not set correctly.
 > 
-> Looks like I kept that code around for the CI I am running on HID patches.
+> What I meant was:
+> Currently we enforce the correct cache-sets & interrupts based on the
+> compatible string. Adding enum: [2, 3] relaxes the enforcement of the
+> cache-level for existing compatibles and does not prevent someone from
+> setting an incorrect cache level for p550 cores.
 > 
-> IIRC, I left the code in the tree because it might have been useful to
-> others when they need to declare IRQs on the board. So yes, it is
-> entirely dead code upstream :/
-> 
-> I am applying the following 3 patches on the current master tree to be
-> able to declare hid-cp2112 as an i2c-hid transport:
-> https://gitlab.freedesktop.org/bentiss/gitlab-kernel-ci/-/tree/master/VM
-> 
-> Those 3 patches can not be upstreamed because platform drivers are a
-> dead thing, but I have no other ideas on how I can declare an i2c-hid
-> device on top of hid-cp2112.  Given that we don't have DT on x86_64
-> vm, I can not rely on that to have my custom sensor (or maybe I can
-> but I am not aware of it).
-> 
-> So unless anybody has a better idea, I won't fight against removing
-> that code, but it's more convenient for me to have it.
-> 
-> Cheers,
-> Benjamin
-> 
+> I think that on top of adding the enum, we should add some enforcement
+> so that the cache is not incorrectly configured for both existing l2
+> caches and for the new l3 versions.
 
-This was just a clean-up patch. I personally don't really care if 
-applied or not.
+Ok, we can add some enforcement once we add the new bindings, but I'm
+not ready for that today and I'd rather get the current queue sorted
+out first before we come in with newer silicon which hasn't hit the
+market uet.
 
-So, from my POV if it helps, it can stay.
-On the other side, I guess that it could also easily become another 
-patch in your serie.
+> @Zong, could you please incorporate Ben's patches into your V2? it
+> would make it a lot easier to review what's going on here. It may
+> also make sense to add the compatible for the p550 cache while we are
+> at it...
+> 
+> FYI, there is also this patch here outstanding against the l2:
+> https://lore.kernel.org/linux-riscv/20220825180417.1259360-2-mail@conchuod.ie/
+> 
+> I intend taking this into 6.0-rc5 or so as a fix, so if you could
+> rebase the series on that so it is not lost in the dt-binding rename
+> that would be great.
 
-Do what is best.
+Do we need someone to take charge of this series?
 
-CJ
+-- 
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
 
+https://www.codethink.co.uk/privacy.html
 

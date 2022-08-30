@@ -2,94 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DCF5A6620
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4715A6623
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230321AbiH3OUh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 10:20:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34970 "EHLO
+        id S230133AbiH3OVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 10:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbiH3OUc (ORCPT
+        with ESMTP id S230280AbiH3OVD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 10:20:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE035F203
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:20:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661869224;
+        Tue, 30 Aug 2022 10:21:03 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52D5642C5;
+        Tue, 30 Aug 2022 07:20:57 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id F400B121;
+        Tue, 30 Aug 2022 16:20:54 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1661869255;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=tORAGdOuIEyxqy7Xiz8FX0cV5xzTMMZWt6i8kmL4jMo=;
-        b=OVTkcgM2M8kIQ5pYaFvUzz1zf8R1NPo15+nttQ4cFeIAGf9QTgcw1DLUYFcvUj871woSOS
-        zA5TTXoxttbJMx6aBZ45Jw0XId82HHhIKAddd4WN79HlePK3++L98kO0bv9E9gLkSlxuF/
-        HCa+4hCROueTArtPqVhQaLKl4WXdr80=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-516-l7kwZy8tMv2HEIQ0v8HnPw-1; Tue, 30 Aug 2022 10:20:17 -0400
-X-MC-Unique: l7kwZy8tMv2HEIQ0v8HnPw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 897F1101A54E;
-        Tue, 30 Aug 2022 14:20:12 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.40.192.123])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 8D16B492C3B;
-        Tue, 30 Aug 2022 14:20:08 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Tue, 30 Aug 2022 16:20:12 +0200 (CEST)
-Date:   Tue, 30 Aug 2022 16:20:07 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     guoren@kernel.org, Andrew Morton <akpm@linux-foundation.org>
-Cc:     vgupta@kernel.org, linux@armlinux.org.uk, monstr@monstr.eu,
-        dinguyen@kernel.org, palmer@dabbelt.com, davem@davemloft.net,
-        arnd@arndb.de, shorne@gmail.com, linux-arch@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org, sparclinux@vger.kernel.org,
-        openrisc@lists.librecores.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: Re: [PATCH 0/3] arch: ptrace: Cleanup ptrace_disable
-Message-ID: <20220830142006.GA20935@redhat.com>
-References: <20220830065316.3924938-1-guoren@kernel.org>
+        bh=ufgo92+9MD8lMZnJHj9JynwICztvJiv6z2nBDKJvsyU=;
+        b=2yILkXih+cAfHWb8i3cp/6iRnfOrNCytTMCkSciINo9wWDbNKv1Fn9jWenJYKua0/vjE04
+        aoxqLXbBcB2/Oe+kW78QNsAXD1pkHlJTv3M1V/5vjJ0/eJmyi29tWbDb4VMT4DgIDX7eta
+        KdP7m8cj1Yh0ELjMnqleaTCEeMFKRunCmPsdLK8Otxp31CgWKGxF/W4EaZgv/zi4roTt6E
+        1NvmXNqWYyzwysYs4OMlGxbQvDH0Dj950OCe1aikpPAv3gOh13SlHizqbeoPoP/Pcd5lMs
+        3oB+zX+iWMm0Q+RgQM64NoGQFLpTP2We4OEIkQchlA3alLQ+/Sowy7OkqYM9GQ==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830065316.3924938-1-guoren@kernel.org>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Date:   Tue, 30 Aug 2022 16:20:54 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v1 07/14] nvmem: core: add per-cell post processing
+In-Reply-To: <ddae21bf-a51b-7266-60ba-8a10c293888a@linaro.org>
+References: <20220825214423.903672-1-michael@walle.cc>
+ <20220825214423.903672-8-michael@walle.cc>
+ <ddae21bf-a51b-7266-60ba-8a10c293888a@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <9592f45176ae77799836391df92bb29e@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/30, guoren@kernel.org wrote:
->
-> From: Guo Ren <guoren@linux.alibaba.com>
->
-> This series cleanup ptrace_disable() in arch/*. Some architectures
-> are duplicate clearing SYSCALL TRACE.
->
-> Guo Ren (3):
->   riscv: ptrace: Remove duplicate operation
->   openrisc: ptrace: Remove duplicate operation
->   arch: ptrace: Cleanup ptrace_disable
->
->  arch/arc/kernel/ptrace.c        |  4 ----
->  arch/arm/kernel/ptrace.c        |  8 --------
->  arch/microblaze/kernel/ptrace.c |  5 -----
->  arch/nios2/kernel/ptrace.c      |  5 -----
->  arch/openrisc/kernel/ptrace.c   |  1 -
->  arch/riscv/kernel/ptrace.c      |  5 -----
->  arch/sparc/kernel/ptrace_32.c   | 10 ----------
->  arch/sparc/kernel/ptrace_64.c   | 10 ----------
->  kernel/ptrace.c                 |  8 ++++++++
->  9 files changed, 8 insertions(+), 48 deletions(-)
+Hi,
 
-Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+Am 2022-08-30 15:37, schrieb Srinivas Kandagatla:
+> On 25/08/2022 22:44, Michael Walle wrote:
+>> Instead of relying on the name the consumer is using for the cell, 
+>> like
+>> it is done for the nvmem .cell_post_process configuration parameter,
+>> provide a per-cell post processing hook. This can then be populated by
+>> the NVMEM provider (or the NVMEM layout) when adding the cell.
+>> 
+>> Signed-off-by: Michael Walle <michael@walle.cc>
+>> ---
+>>   drivers/nvmem/core.c           | 16 ++++++++++++++++
+>>   include/linux/nvmem-consumer.h |  5 +++++
+>>   2 files changed, 21 insertions(+)
+>> 
+>> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+>> index 5357fc378700..cbfbe6264e6c 100644
+>> --- a/drivers/nvmem/core.c
+>> +++ b/drivers/nvmem/core.c
+>> @@ -52,6 +52,7 @@ struct nvmem_cell_entry {
+>>   	int			bytes;
+>>   	int			bit_offset;
+>>   	int			nbits;
+>> +	nvmem_cell_post_process_t post_process;
+> 
+> 
+> two post_processing callbacks for cells is confusing tbh, we could
+> totally move to use of cell->post_process.
+> 
+> one idea is to point cell->post_process to nvmem->cell_post_process
+> during cell creation time which should clean this up a bit.
 
+You'll then trigger the read-only check below for all the cells
+if nvmem->cell_post_process is set.
+
+> Other option is to move to using layouts for every thing.
+
+As mentioned in a previous reply, I can't see how it could be
+achieved. The problem here is that:
+  (1) the layout isn't creating the cells, the OF parser is
+  (2) even if we would create the cells, we wouldn't know
+      which cell needs the post_process. So we are back to
+      the situation above, were we have to add it to all
+      the cells, making them read-only. [We depend on the
+      name of the nvmem-consumer to apply the hook.
+
+> prefixing post_process with read should also make it explicit that
+> this callback is very specific to reads only.
+
+good idea.
+
+-michael
+
+>>   	struct device_node	*np;
+>>   	struct nvmem_device	*nvmem;
+>>   	struct list_head	node;
+>> @@ -468,6 +469,7 @@ static int 
+>> nvmem_cell_info_to_nvmem_cell_entry_nodup(struct nvmem_device *nvmem,
+>>   	cell->offset = info->offset;
+>>   	cell->bytes = info->bytes;
+>>   	cell->name = info->name;
+>> +	cell->post_process = info->post_process;
+>>     	cell->bit_offset = info->bit_offset;
+>>   	cell->nbits = info->nbits;
+>> @@ -1500,6 +1502,13 @@ static int __nvmem_cell_read(struct 
+>> nvmem_device *nvmem,
+>>   	if (cell->bit_offset || cell->nbits)
+>>   		nvmem_shift_read_buffer_in_place(cell, buf);
+>>   +	if (cell->post_process) {
+>> +		rc = cell->post_process(nvmem->priv, id, index,
+>> +					cell->offset, buf, cell->bytes);
+>> +		if (rc)
+>> +			return rc;
+>> +	}
+>> +
+>>   	if (nvmem->cell_post_process) {
+>>   		rc = nvmem->cell_post_process(nvmem->priv, id, index,
+>>   					      cell->offset, buf, cell->bytes);
+>> @@ -1608,6 +1617,13 @@ static int __nvmem_cell_entry_write(struct 
+>> nvmem_cell_entry *cell, void *buf, si
+>>   	    (cell->bit_offset == 0 && len != cell->bytes))
+>>   		return -EINVAL;
+>>   +	/*
+>> +	 * Any cells which have a post_process hook are read-only because we
+>> +	 * cannot reverse the operation and it might affect other cells, 
+>> too.
+>> +	 */
+>> +	if (cell->post_process)
+>> +		return -EINVAL;
+> 
+> Post process was always implicitly for reads only, this check should
+> also tie the loose ends of cell_post_processing callback.
+> 
+> 
+> --srini
+>> +
+>>   	if (cell->bit_offset || cell->nbits) {
+>>   		buf = nvmem_cell_prepare_write_buffer(cell, buf, len);
+>>   		if (IS_ERR(buf))
+>> diff --git a/include/linux/nvmem-consumer.h 
+>> b/include/linux/nvmem-consumer.h
+>> index 980f9c9ac0bc..761b8ef78adc 100644
+>> --- a/include/linux/nvmem-consumer.h
+>> +++ b/include/linux/nvmem-consumer.h
+>> @@ -19,6 +19,10 @@ struct device_node;
+>>   struct nvmem_cell;
+>>   struct nvmem_device;
+>>   +/* duplicated from nvmem-provider.h */
+>> +typedef int (*nvmem_cell_post_process_t)(void *priv, const char *id, 
+>> int index,
+>> +					 unsigned int offset, void *buf, size_t bytes);
+>> +
+>>   struct nvmem_cell_info {
+>>   	const char		*name;
+>>   	unsigned int		offset;
+>> @@ -26,6 +30,7 @@ struct nvmem_cell_info {
+>>   	unsigned int		bit_offset;
+>>   	unsigned int		nbits;
+>>   	struct device_node	*np;
+>> +	nvmem_cell_post_process_t post_process;
+>>   };
+>>     /**

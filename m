@@ -2,57 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA48A5A58CC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FE4D5A58D0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:07:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiH3BE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 21:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41508 "EHLO
+        id S229739AbiH3BGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 21:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiH3BEy (ORCPT
+        with ESMTP id S229447AbiH3BGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 21:04:54 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A6D972BDA;
-        Mon, 29 Aug 2022 18:04:47 -0700 (PDT)
-Received: from dread.disaster.area (pa49-195-4-169.pa.nsw.optusnet.com.au [49.195.4.169])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 1884D62D9C7;
-        Tue, 30 Aug 2022 11:04:43 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oSpgI-001XKz-SX; Tue, 30 Aug 2022 11:04:42 +1000
-Date:   Tue, 30 Aug 2022 11:04:42 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
-        trondmy@hammerspace.com, neilb@suse.de, viro@zeniv.linux.org.uk,
-        zohar@linux.ibm.com, xiubli@redhat.com, chuck.lever@oracle.com,
-        lczerner@redhat.com, jack@suse.cz, brauner@kernel.org,
-        linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ceph@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org,
-        Colin Walters <walters@verbum.org>
-Subject: Re: [PATCH v3 1/7] iversion: update comments with info about atime
- updates
-Message-ID: <20220830010442.GW3600936@dread.disaster.area>
-References: <20220826214703.134870-1-jlayton@kernel.org>
- <20220826214703.134870-2-jlayton@kernel.org>
- <20220829075651.GS3600936@dread.disaster.area>
- <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
+        Mon, 29 Aug 2022 21:06:12 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46BB77EFE9;
+        Mon, 29 Aug 2022 18:06:09 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R941e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VNhytaX_1661821564;
+Received: from 30.97.48.45(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VNhytaX_1661821564)
+          by smtp.aliyun-inc.com;
+          Tue, 30 Aug 2022 09:06:05 +0800
+Message-ID: <57c8f032-e48a-bacb-7922-3e2cc10dc0d2@linux.alibaba.com>
+Date:   Tue, 30 Aug 2022 09:06:18 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=630d622e
-        a=FOdsZBbW/tHyAhIVFJ0pRA==:117 a=FOdsZBbW/tHyAhIVFJ0pRA==:17
-        a=kj9zAlcOel0A:10 a=biHskzXt2R4A:10 a=zVjiu_gZAAAA:8 a=SEtKQCMJAAAA:8
-        a=7-415B0cAAAA:8 a=VwQbUJbxAAAA:8 a=qmMTymrXjTok30Q9744A:9
-        a=CjuIK1q_8ugA:10 a=DXoJjCrjhysRDS3qLJti:22 a=kyTSok1ft720jgMXX5-3:22
-        a=biEYGPWJfzWAr4FL6Ov7:22 a=AjGcO6oz07-iQ99wixmX:22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] hugetlb: simplify hugetlb handling in follow_page_mask
+To:     Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, inuxppc-dev@lists.ozlabs.org,
+        linux-ia64@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.ibm.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+References: <20220829234053.159158-1-mike.kravetz@oracle.com>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20220829234053.159158-1-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,163 +49,516 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 06:39:04AM -0400, Jeff Layton wrote:
-> On Mon, 2022-08-29 at 17:56 +1000, Dave Chinner wrote:
-> > On Fri, Aug 26, 2022 at 05:46:57PM -0400, Jeff Layton wrote:
-> > > The i_version field in the kernel has had different semantics over
-> > > the decades, but we're now proposing to expose it to userland via
-> > > statx. This means that we need a clear, consistent definition of
-> > > what it means and when it should change.
-> > > 
-> > > Update the comments in iversion.h to describe how a conformant
-> > > i_version implementation is expected to behave. This definition
-> > > suits the current users of i_version (NFSv4 and IMA), but is
-> > > loose enough to allow for a wide range of possible implementations.
-> > > 
-> > > Cc: Colin Walters <walters@verbum.org>
-> > > Cc: NeilBrown <neilb@suse.de>
-> > > Cc: Trond Myklebust <trondmy@hammerspace.com>
-> > > Cc: Dave Chinner <david@fromorbit.com>
-> > > Link: https://lore.kernel.org/linux-xfs/166086932784.5425.17134712694961326033@noble.neil.brown.name/#t
-> > > Signed-off-by: Jeff Layton <jlayton@kernel.org>
-> > > ---
-> > >  include/linux/iversion.h | 23 +++++++++++++++++++++--
-> > >  1 file changed, 21 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/include/linux/iversion.h b/include/linux/iversion.h
-> > > index 3bfebde5a1a6..45e93e1b4edc 100644
-> > > --- a/include/linux/iversion.h
-> > > +++ b/include/linux/iversion.h
-> > > @@ -9,8 +9,19 @@
-> > >   * ---------------------------
-> > >   * The change attribute (i_version) is mandated by NFSv4 and is mostly for
-> > >   * knfsd, but is also used for other purposes (e.g. IMA). The i_version must
-> > > - * appear different to observers if there was a change to the inode's data or
-> > > - * metadata since it was last queried.
-> > > + * appear different to observers if there was an explicit change to the inode's
-> > > + * data or metadata since it was last queried.
-> > > + *
-> > > + * An explicit change is one that would ordinarily result in a change to the
-> > > + * inode status change time (aka ctime). The version must appear to change, even
-> > > + * if the ctime does not (since the whole point is to avoid missing updates due
-> > > + * to timestamp granularity). If POSIX mandates that the ctime must change due
-> > > + * to an operation, then the i_version counter must be incremented as well.
-> > > + *
-> > > + * A conformant implementation is allowed to increment the counter in other
-> > > + * cases, but this is not optimal. NFSv4 and IMA both use this value to determine
-> > > + * whether caches are up to date. Spurious increments can cause false cache
-> > > + * invalidations.
-> > 
-> > "not optimal", but never-the-less allowed - that's "unspecified
-> > behaviour" if I've ever seen it. How is userspace supposed to
-> > know/deal with this?
-> > 
-> > Indeed, this loophole clause doesn't exist in the man pages that
-> > define what statx.stx_ino_version means. The man pages explicitly
-> > define that stx_ino_version only ever changes when stx_ctime
-> > changes.
-> > 
+Hi Mike,
+
+On 8/30/2022 7:40 AM, Mike Kravetz wrote:
+> During discussions of this series [1], it was suggested that hugetlb
+> handling code in follow_page_mask could be simplified.  At the beginning
+> of follow_page_mask, there currently is a call to follow_huge_addr which
+> 'may' handle hugetlb pages.  ia64 is the only architecture which provides
+> a follow_huge_addr routine that does not return error.  Instead, at each
+> level of the page table a check is made for a hugetlb entry.  If a hugetlb
+> entry is found, a call to a routine associated with that entry is made.
 > 
-> We can fix the manpage to make this more clear.
+> Currently, there are two checks for hugetlb entries at each page table
+> level.  The first check is of the form:
+> 	if (p?d_huge())
+> 		page = follow_huge_p?d();
+> the second check is of the form:
+> 	if (is_hugepd())
+> 		page = follow_huge_pd().
 > 
-> > IOWs, the behaviour userspace developers are going to expect *does
-> > not include* stx_ino_version changing it more often than ctime is
-> > changed. Hence a kernel iversion implementation that bumps the
-> > counter more often than ctime changes *is not conformant with the
-> > statx version counter specification*. IOWs, we can't export such
-> > behaviour to userspace *ever* - it is a non-conformant
-> > implementation.
-> > 
+> We can replace these checks, as well as the special handling routines
+> such as follow_huge_p?d() and follow_huge_pd() with a single routine to
+> handle hugetlb vmas.
 > 
-> Nonsense. The statx version counter specification is *whatever we decide
-> to make it*.
+> A new routine hugetlb_follow_page_mask is called for hugetlb vmas at the
+> beginning of follow_page_mask.  hugetlb_follow_page_mask will use the
+> existing routine huge_pte_offset to walk page tables looking for hugetlb
+> entries.  huge_pte_offset can be overwritten by architectures, and already
+> handles special cases such as hugepd entries.
 
-Yes, but...
+Could you also mention that this patch will fix the lock issue for 
+CONT-PTE/PMD hugetlb by changing to use huge_pte_lock()? which will help 
+people to understand the issue.
 
-> If we define it to allow for spurious version bumps, then
-> these implementations would be conformant.
+Otherwise the changes look good to me.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-... that's _not how you defined stx_ino_version to behave_!
-
-> Given that you can't tell what or how much changed in the inode whenever
-> the value changes, allowing it to be bumped on non-observable changes is
-> ok and the counter is still useful. When you see it change you need to
-> go stat/read/getxattr etc, to see what actually happened anyway.
-
-IDGI. If this is acceptible, then you're forcing userspace into
-"store and filter" implementations as the only viable method of
-using the change notification usefully.
-
-That means atime is just another attribute in the "store and
-filter" algorithm, so if this is how we define stx_ino_version
-behaviour, why carve out an explicit exception for atime?
-
-> Most applications won't be interested in every possible explicit change
-> that can happen to an inode. It's likely these applications would check
-> the parts of the inode they're interested in, and then go back to
-> waiting for the next bump if the change wasn't significant to them.
-
-Yes, that is exactly my point.
-
-You make the argument that we must not bump iversion in certain
-situations (atime) because it will cause spurious cache
-invalidations, but then say it is OK to bump it in others regardless
-of the fact that it will cause spurious cache invalidations. And you
-justify this latter behaviour by saying it is up to the application
-to avoid spurious invalidations by using "store and filter"
-algorithms.
-
-If the application has to store state and filter changes indicated
-by stx_ino_version changing, then by definition *it must be capable
-of filtering iversion bumps as a result of atime changes*.
-
-The iversion exception carved out for atime requires the application
-to implement "store and filter" algorithms only if it needs to care
-about atime changes. The "invisible bump" exception carved out here
-*requires* applications to implement "store and filter" algorithms
-to filter out invisible bumps.
-
-Hence if we combine both these behaviours, atime bumping iversion
-appears to userspace exactly the same as "invisible bump occurred,
-followed by access that changes atime".  IOWs, userspace cannot tell the
-difference between a filesystem implementation that doesn't bump
-iversion on atime but has invisible bump, and a filesystem that
-bumps iversion on atime updates and so it always needs to filter
-atime changes if it doesn't care about them.
-
-Hence if stx_ino_version can have invisible bumps, it makes no
-difference to userspace if atime updates bump iversion or not. They
-will have to filter atime if they don't care about it, and they have
-to store the new stx_ino_version every time they filter out an
-invisible bump that doesn't change anything their filters care
-about (e.g. atime!).
-
-At which point I have to ask: if we are expecting userspace to
-filter out invisible iversion bumps because that's allowed,
-conformant behaviour, then why aren't we requiring both the NFS
-server and IMA applications to filter spurious iversion bumps as
-well?
-
-> > Hence I think anything that bumps iversion outside the bounds of the
-> > statx definition should be declared as such:
-> > 
-> > "Non-conformant iversion implementations:
-> > 	- MUST NOT be exported by statx() to userspace
-> > 	- MUST be -tolerated- by kernel internal applications that
-> > 	  use iversion for their own purposes."
-> > 
 > 
-> I think this is more strict than is needed. An implementation that bumps
-> this value more often than is necessary is still useful.
-
-I never said that non-conformant implementations aren't useful. What
-I said is they aren't conformant with the provided definition of
-stx_ino_version, and as a result we should not allow them to be
-exposed to userspace.
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+> [1] https://lore.kernel.org/linux-mm/cover.1661240170.git.baolin.wang@linux.alibaba.com/
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>   arch/ia64/mm/hugetlbpage.c    |  15 ---
+>   arch/powerpc/mm/hugetlbpage.c |  37 --------
+>   include/linux/hugetlb.h       |  51 ++--------
+>   mm/gup.c                      |  65 ++-----------
+>   mm/hugetlb.c                  | 173 +++++++++++-----------------------
+>   5 files changed, 74 insertions(+), 267 deletions(-)
+> 
+> diff --git a/arch/ia64/mm/hugetlbpage.c b/arch/ia64/mm/hugetlbpage.c
+> index f993cb36c062..380d2f3966c9 100644
+> --- a/arch/ia64/mm/hugetlbpage.c
+> +++ b/arch/ia64/mm/hugetlbpage.c
+> @@ -91,21 +91,6 @@ int prepare_hugepage_range(struct file *file,
+>   	return 0;
+>   }
+>   
+> -struct page *follow_huge_addr(struct mm_struct *mm, unsigned long addr, int write)
+> -{
+> -	struct page *page;
+> -	pte_t *ptep;
+> -
+> -	if (REGION_NUMBER(addr) != RGN_HPAGE)
+> -		return ERR_PTR(-EINVAL);
+> -
+> -	ptep = huge_pte_offset(mm, addr, HPAGE_SIZE);
+> -	if (!ptep || pte_none(*ptep))
+> -		return NULL;
+> -	page = pte_page(*ptep);
+> -	page += ((addr & ~HPAGE_MASK) >> PAGE_SHIFT);
+> -	return page;
+> -}
+>   int pmd_huge(pmd_t pmd)
+>   {
+>   	return 0;
+> diff --git a/arch/powerpc/mm/hugetlbpage.c b/arch/powerpc/mm/hugetlbpage.c
+> index bc84a594ca62..b0e037c75c12 100644
+> --- a/arch/powerpc/mm/hugetlbpage.c
+> +++ b/arch/powerpc/mm/hugetlbpage.c
+> @@ -506,43 +506,6 @@ void hugetlb_free_pgd_range(struct mmu_gather *tlb,
+>   	} while (addr = next, addr != end);
+>   }
+>   
+> -struct page *follow_huge_pd(struct vm_area_struct *vma,
+> -			    unsigned long address, hugepd_t hpd,
+> -			    int flags, int pdshift)
+> -{
+> -	pte_t *ptep;
+> -	spinlock_t *ptl;
+> -	struct page *page = NULL;
+> -	unsigned long mask;
+> -	int shift = hugepd_shift(hpd);
+> -	struct mm_struct *mm = vma->vm_mm;
+> -
+> -retry:
+> -	/*
+> -	 * hugepage directory entries are protected by mm->page_table_lock
+> -	 * Use this instead of huge_pte_lockptr
+> -	 */
+> -	ptl = &mm->page_table_lock;
+> -	spin_lock(ptl);
+> -
+> -	ptep = hugepte_offset(hpd, address, pdshift);
+> -	if (pte_present(*ptep)) {
+> -		mask = (1UL << shift) - 1;
+> -		page = pte_page(*ptep);
+> -		page += ((address & mask) >> PAGE_SHIFT);
+> -		if (flags & FOLL_GET)
+> -			get_page(page);
+> -	} else {
+> -		if (is_hugetlb_entry_migration(*ptep)) {
+> -			spin_unlock(ptl);
+> -			__migration_entry_wait(mm, ptep, ptl);
+> -			goto retry;
+> -		}
+> -	}
+> -	spin_unlock(ptl);
+> -	return page;
+> -}
+> -
+>   bool __init arch_hugetlb_valid_size(unsigned long size)
+>   {
+>   	int shift = __ffs(size);
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index 852f911d676e..8ea3e5e726e4 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -142,6 +142,8 @@ int move_hugetlb_page_tables(struct vm_area_struct *vma,
+>   			     unsigned long len);
+>   int copy_hugetlb_page_range(struct mm_struct *, struct mm_struct *,
+>   			    struct vm_area_struct *, struct vm_area_struct *);
+> +struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+> +				unsigned long address, unsigned int flags);
+>   long follow_hugetlb_page(struct mm_struct *, struct vm_area_struct *,
+>   			 struct page **, struct vm_area_struct **,
+>   			 unsigned long *, unsigned long *, long, unsigned int,
+> @@ -202,17 +204,6 @@ int huge_pmd_unshare(struct mm_struct *mm, struct vm_area_struct *vma,
+>   				unsigned long addr, pte_t *ptep);
+>   void adjust_range_if_pmd_sharing_possible(struct vm_area_struct *vma,
+>   				unsigned long *start, unsigned long *end);
+> -struct page *follow_huge_addr(struct mm_struct *mm, unsigned long address,
+> -			      int write);
+> -struct page *follow_huge_pd(struct vm_area_struct *vma,
+> -			    unsigned long address, hugepd_t hpd,
+> -			    int flags, int pdshift);
+> -struct page *follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+> -				pmd_t *pmd, int flags);
+> -struct page *follow_huge_pud(struct mm_struct *mm, unsigned long address,
+> -				pud_t *pud, int flags);
+> -struct page *follow_huge_pgd(struct mm_struct *mm, unsigned long address,
+> -			     pgd_t *pgd, int flags);
+>   
+>   void hugetlb_vma_lock_read(struct vm_area_struct *vma);
+>   void hugetlb_vma_unlock_read(struct vm_area_struct *vma);
+> @@ -264,6 +255,13 @@ static inline void adjust_range_if_pmd_sharing_possible(
+>   {
+>   }
+>   
+> +static struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+> +				unsigned long address, unsigned int flags)
+> +{
+> +	/* should never happen, but do not want to BUG */
+> +	return ERR_PTR(-EINVAL);
+> +}
+> +
+>   static inline long follow_hugetlb_page(struct mm_struct *mm,
+>   			struct vm_area_struct *vma, struct page **pages,
+>   			struct vm_area_struct **vmas, unsigned long *position,
+> @@ -274,12 +272,6 @@ static inline long follow_hugetlb_page(struct mm_struct *mm,
+>   	return 0;
+>   }
+>   
+> -static inline struct page *follow_huge_addr(struct mm_struct *mm,
+> -					unsigned long address, int write)
+> -{
+> -	return ERR_PTR(-EINVAL);
+> -}
+> -
+>   static inline int copy_hugetlb_page_range(struct mm_struct *dst,
+>   					  struct mm_struct *src,
+>   					  struct vm_area_struct *dst_vma,
+> @@ -312,31 +304,6 @@ static inline void hugetlb_show_meminfo_node(int nid)
+>   {
+>   }
+>   
+> -static inline struct page *follow_huge_pd(struct vm_area_struct *vma,
+> -				unsigned long address, hugepd_t hpd, int flags,
+> -				int pdshift)
+> -{
+> -	return NULL;
+> -}
+> -
+> -static inline struct page *follow_huge_pmd(struct mm_struct *mm,
+> -				unsigned long address, pmd_t *pmd, int flags)
+> -{
+> -	return NULL;
+> -}
+> -
+> -static inline struct page *follow_huge_pud(struct mm_struct *mm,
+> -				unsigned long address, pud_t *pud, int flags)
+> -{
+> -	return NULL;
+> -}
+> -
+> -static inline struct page *follow_huge_pgd(struct mm_struct *mm,
+> -				unsigned long address, pgd_t *pgd, int flags)
+> -{
+> -	return NULL;
+> -}
+> -
+>   static inline int prepare_hugepage_range(struct file *file,
+>   				unsigned long addr, unsigned long len)
+>   {
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 66d8619e02ad..80ce04a5bae5 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -661,20 +661,6 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
+>   	pmdval = READ_ONCE(*pmd);
+>   	if (pmd_none(pmdval))
+>   		return no_page_table(vma, flags);
+> -	if (pmd_huge(pmdval) && is_vm_hugetlb_page(vma)) {
+> -		page = follow_huge_pmd(mm, address, pmd, flags);
+> -		if (page)
+> -			return page;
+> -		return no_page_table(vma, flags);
+> -	}
+> -	if (is_hugepd(__hugepd(pmd_val(pmdval)))) {
+> -		page = follow_huge_pd(vma, address,
+> -				      __hugepd(pmd_val(pmdval)), flags,
+> -				      PMD_SHIFT);
+> -		if (page)
+> -			return page;
+> -		return no_page_table(vma, flags);
+> -	}
+>   retry:
+>   	if (!pmd_present(pmdval)) {
+>   		/*
+> @@ -764,20 +750,6 @@ static struct page *follow_pud_mask(struct vm_area_struct *vma,
+>   	pud = pud_offset(p4dp, address);
+>   	if (pud_none(*pud))
+>   		return no_page_table(vma, flags);
+> -	if (pud_huge(*pud) && is_vm_hugetlb_page(vma)) {
+> -		page = follow_huge_pud(mm, address, pud, flags);
+> -		if (page)
+> -			return page;
+> -		return no_page_table(vma, flags);
+> -	}
+> -	if (is_hugepd(__hugepd(pud_val(*pud)))) {
+> -		page = follow_huge_pd(vma, address,
+> -				      __hugepd(pud_val(*pud)), flags,
+> -				      PUD_SHIFT);
+> -		if (page)
+> -			return page;
+> -		return no_page_table(vma, flags);
+> -	}
+>   	if (pud_devmap(*pud)) {
+>   		ptl = pud_lock(mm, pud);
+>   		page = follow_devmap_pud(vma, address, pud, flags, &ctx->pgmap);
+> @@ -797,7 +769,6 @@ static struct page *follow_p4d_mask(struct vm_area_struct *vma,
+>   				    struct follow_page_context *ctx)
+>   {
+>   	p4d_t *p4d;
+> -	struct page *page;
+>   
+>   	p4d = p4d_offset(pgdp, address);
+>   	if (p4d_none(*p4d))
+> @@ -806,14 +777,6 @@ static struct page *follow_p4d_mask(struct vm_area_struct *vma,
+>   	if (unlikely(p4d_bad(*p4d)))
+>   		return no_page_table(vma, flags);
+>   
+> -	if (is_hugepd(__hugepd(p4d_val(*p4d)))) {
+> -		page = follow_huge_pd(vma, address,
+> -				      __hugepd(p4d_val(*p4d)), flags,
+> -				      P4D_SHIFT);
+> -		if (page)
+> -			return page;
+> -		return no_page_table(vma, flags);
+> -	}
+>   	return follow_pud_mask(vma, address, p4d, flags, ctx);
+>   }
+>   
+> @@ -851,10 +814,15 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
+>   
+>   	ctx->page_mask = 0;
+>   
+> -	/* make this handle hugepd */
+> -	page = follow_huge_addr(mm, address, flags & FOLL_WRITE);
+> -	if (!IS_ERR(page)) {
+> -		WARN_ON_ONCE(flags & (FOLL_GET | FOLL_PIN));
+> +	/*
+> +	 * Call hugetlb_follow_page_mask for hugetlb vmas as it will use
+> +	 * special hugetlb page table walking code.  This eliminates the
+> +	 * need to check for hugetlb entries in the general walking code.
+> +	 */
+> +	if (is_vm_hugetlb_page(vma)) {
+> +		page = hugetlb_follow_page_mask(vma, address, flags);
+> +		if (!page)
+> +			page = no_page_table(vma, flags);
+>   		return page;
+>   	}
+>   
+> @@ -863,21 +831,6 @@ static struct page *follow_page_mask(struct vm_area_struct *vma,
+>   	if (pgd_none(*pgd) || unlikely(pgd_bad(*pgd)))
+>   		return no_page_table(vma, flags);
+>   
+> -	if (pgd_huge(*pgd)) {
+> -		page = follow_huge_pgd(mm, address, pgd, flags);
+> -		if (page)
+> -			return page;
+> -		return no_page_table(vma, flags);
+> -	}
+> -	if (is_hugepd(__hugepd(pgd_val(*pgd)))) {
+> -		page = follow_huge_pd(vma, address,
+> -				      __hugepd(pgd_val(*pgd)), flags,
+> -				      PGDIR_SHIFT);
+> -		if (page)
+> -			return page;
+> -		return no_page_table(vma, flags);
+> -	}
+> -
+>   	return follow_p4d_mask(vma, address, pgd, flags, ctx);
+>   }
+>   
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index d0617d64d718..b3da421ba5be 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6190,6 +6190,62 @@ static inline bool __follow_hugetlb_must_fault(unsigned int flags, pte_t *pte,
+>   	return false;
+>   }
+>   
+> +struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+> +				unsigned long address, unsigned int flags)
+> +{
+> +	struct hstate *h = hstate_vma(vma);
+> +	struct mm_struct *mm = vma->vm_mm;
+> +	unsigned long haddr = address & huge_page_mask(h);
+> +	struct page *page = NULL;
+> +	spinlock_t *ptl;
+> +	pte_t *pte, entry;
+> +
+> +	/*
+> +	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
+> +	 * follow_hugetlb_page().
+> +	 */
+> +	if (WARN_ON_ONCE(flags & FOLL_PIN))
+> +		return NULL;
+> +
+> +	pte = huge_pte_offset(mm, haddr, huge_page_size(h));
+> +	if (!pte)
+> +		return NULL;
+> +
+> +retry:
+> +	ptl = huge_pte_lock(h, mm, pte);
+> +	entry = huge_ptep_get(pte);
+> +	if (pte_present(entry)) {
+> +		page = pte_page(entry) +
+> +				((address & ~huge_page_mask(h)) >> PAGE_SHIFT);
+> +		/*
+> +		 * Note that page may be a sub-page, and with vmemmap
+> +		 * optimizations the page struct may be read only.
+> +		 * try_grab_page() will increase the ref count on the
+> +		 * head page, so this will be OK.
+> +		 *
+> +		 * try_grab_page() should always succeed here, because we hold
+> +		 * the ptl lock and have verified pte_present().
+> +		 */
+> +		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
+> +			page = NULL;
+> +			goto out;
+> +		}
+> +	} else {
+> +		if (is_hugetlb_entry_migration(entry)) {
+> +			spin_unlock(ptl);
+> +			__migration_entry_wait_huge(pte, ptl);
+> +			goto retry;
+> +		}
+> +		/*
+> +		 * hwpoisoned entry is treated as no_page_table in
+> +		 * follow_page_mask().
+> +		 */
+> +	}
+> +out:
+> +	spin_unlock(ptl);
+> +	return page;
+> +}
+> +
+>   long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+>   			 struct page **pages, struct vm_area_struct **vmas,
+>   			 unsigned long *position, unsigned long *nr_pages,
+> @@ -7140,123 +7196,6 @@ __weak unsigned long hugetlb_mask_last_page(struct hstate *h)
+>    * These functions are overwritable if your architecture needs its own
+>    * behavior.
+>    */
+> -struct page * __weak
+> -follow_huge_addr(struct mm_struct *mm, unsigned long address,
+> -			      int write)
+> -{
+> -	return ERR_PTR(-EINVAL);
+> -}
+> -
+> -struct page * __weak
+> -follow_huge_pd(struct vm_area_struct *vma,
+> -	       unsigned long address, hugepd_t hpd, int flags, int pdshift)
+> -{
+> -	WARN(1, "hugepd follow called with no support for hugepage directory format\n");
+> -	return NULL;
+> -}
+> -
+> -struct page * __weak
+> -follow_huge_pmd(struct mm_struct *mm, unsigned long address,
+> -		pmd_t *pmd, int flags)
+> -{
+> -	struct page *page = NULL;
+> -	spinlock_t *ptl;
+> -	pte_t pte;
+> -
+> -	/*
+> -	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
+> -	 * follow_hugetlb_page().
+> -	 */
+> -	if (WARN_ON_ONCE(flags & FOLL_PIN))
+> -		return NULL;
+> -
+> -retry:
+> -	ptl = pmd_lockptr(mm, pmd);
+> -	spin_lock(ptl);
+> -	/*
+> -	 * make sure that the address range covered by this pmd is not
+> -	 * unmapped from other threads.
+> -	 */
+> -	if (!pmd_huge(*pmd))
+> -		goto out;
+> -	pte = huge_ptep_get((pte_t *)pmd);
+> -	if (pte_present(pte)) {
+> -		page = pmd_page(*pmd) + ((address & ~PMD_MASK) >> PAGE_SHIFT);
+> -		/*
+> -		 * try_grab_page() should always succeed here, because: a) we
+> -		 * hold the pmd (ptl) lock, and b) we've just checked that the
+> -		 * huge pmd (head) page is present in the page tables. The ptl
+> -		 * prevents the head page and tail pages from being rearranged
+> -		 * in any way. So this page must be available at this point,
+> -		 * unless the page refcount overflowed:
+> -		 */
+> -		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
+> -			page = NULL;
+> -			goto out;
+> -		}
+> -	} else {
+> -		if (is_hugetlb_entry_migration(pte)) {
+> -			spin_unlock(ptl);
+> -			__migration_entry_wait_huge((pte_t *)pmd, ptl);
+> -			goto retry;
+> -		}
+> -		/*
+> -		 * hwpoisoned entry is treated as no_page_table in
+> -		 * follow_page_mask().
+> -		 */
+> -	}
+> -out:
+> -	spin_unlock(ptl);
+> -	return page;
+> -}
+> -
+> -struct page * __weak
+> -follow_huge_pud(struct mm_struct *mm, unsigned long address,
+> -		pud_t *pud, int flags)
+> -{
+> -	struct page *page = NULL;
+> -	spinlock_t *ptl;
+> -	pte_t pte;
+> -
+> -	if (WARN_ON_ONCE(flags & FOLL_PIN))
+> -		return NULL;
+> -
+> -retry:
+> -	ptl = huge_pte_lock(hstate_sizelog(PUD_SHIFT), mm, (pte_t *)pud);
+> -	if (!pud_huge(*pud))
+> -		goto out;
+> -	pte = huge_ptep_get((pte_t *)pud);
+> -	if (pte_present(pte)) {
+> -		page = pud_page(*pud) + ((address & ~PUD_MASK) >> PAGE_SHIFT);
+> -		if (WARN_ON_ONCE(!try_grab_page(page, flags))) {
+> -			page = NULL;
+> -			goto out;
+> -		}
+> -	} else {
+> -		if (is_hugetlb_entry_migration(pte)) {
+> -			spin_unlock(ptl);
+> -			__migration_entry_wait(mm, (pte_t *)pud, ptl);
+> -			goto retry;
+> -		}
+> -		/*
+> -		 * hwpoisoned entry is treated as no_page_table in
+> -		 * follow_page_mask().
+> -		 */
+> -	}
+> -out:
+> -	spin_unlock(ptl);
+> -	return page;
+> -}
+> -
+> -struct page * __weak
+> -follow_huge_pgd(struct mm_struct *mm, unsigned long address, pgd_t *pgd, int flags)
+> -{
+> -	if (flags & (FOLL_GET | FOLL_PIN))
+> -		return NULL;
+> -
+> -	return pte_page(*(pte_t *)pgd) + ((address & ~PGDIR_MASK) >> PAGE_SHIFT);
+> -}
+> -
+>   int isolate_hugetlb(struct page *page, struct list_head *list)
+>   {
+>   	int ret = 0;

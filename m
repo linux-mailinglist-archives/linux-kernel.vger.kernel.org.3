@@ -2,76 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217CD5A692E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:03:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 939045A6930
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:03:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiH3RDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53308 "EHLO
+        id S229969AbiH3RDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:03:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231267AbiH3RCy (ORCPT
+        with ESMTP id S229550AbiH3RDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:02:54 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AEDF15A1F
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:02:41 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id m2so12625660lfp.11
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:02:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=MRhddpJA+lgXt6Sory277eBUBdu2WrBidojgTD73Yuo=;
-        b=FldSeHKHZ1KDEukm8iKfWba8HUDHdk925SJkveqljZdC5w++3Y9TlaE/Y/kuEB/0zq
-         Oj2LXbo88y9CqkhDmgMp22Oy6ZVeF/qcn+bXwKY1RiWD4Z4jpX/CR1qLiUr5o5V4s3AE
-         YPfmnEIRGpipBzKnwaH7FZRFwAJEEewOuHVqByqTJ6ZcipxSFoOomiEHQuNisAxE5Zxz
-         R0bv4HLBPTfp8rRIGNEdNdnp7eE88fqZhRiDd1GbF4dMz3HWZDaE9jL2+ES5ZCjAU/rK
-         iR2+t902enedqvPvGXAx/HAUJY4N325tuLWVDjI3WcyfuPhDAtYXQXJbbhX9Fcs+YxrL
-         iq3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=MRhddpJA+lgXt6Sory277eBUBdu2WrBidojgTD73Yuo=;
-        b=y3L7TeUFT01sQgsRw/J3iTCTyF1nFG+Ay+ZxaHiOC+DrNWvGfC6ledsYIEBi4++XRE
-         kXXNLVVV+9ovEm0kHdlP8VPv7/5vFbzaEKiEFyzrBO5v1GyEOUmhXmsh+hgQOvWWU0/D
-         0o6YTMcL1/VIB3g9A/E3NTcdfP/4x/iP8IgJa92moxGqnNlmA7PP0MRUlBaJe6kDOkWA
-         EaaoofyG/ubS3Trdl4DejX4A73Hg3nK0LDAWeiUtIOW0NjjJSraLGQUUxhPyps5ayiAl
-         YbATefOW8wAiY6ZFfay3Mn6WcjkpLpoeF/4L1i+GTIQyWTZuls/6lk3lB4GVVlz4hfGH
-         zKZg==
-X-Gm-Message-State: ACgBeo0890zihtFZgcQBPS0BO6mHp5SbyH716w3vCmAeNj31ekNS/i8B
-        5/XIv+6AKnz+QDbIqL4KjVJNYQ==
-X-Google-Smtp-Source: AA6agR4YaR3zige40oqXHN14BkAjmJfCQwGjsKSNPK9sbXvmdLoS2CuaEYOPzLbVDDdMkgxSJMDd0w==
-X-Received: by 2002:a05:6512:2353:b0:492:db5e:775b with SMTP id p19-20020a056512235300b00492db5e775bmr7462751lfu.656.1661878959375;
-        Tue, 30 Aug 2022 10:02:39 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id bk37-20020a05651c23a500b00261ca006158sm557973ljb.54.2022.08.30.10.02.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 10:02:38 -0700 (PDT)
-Message-ID: <92c213de-872c-bc0b-382c-c9940309f272@linaro.org>
-Date:   Tue, 30 Aug 2022 20:02:37 +0300
+        Tue, 30 Aug 2022 13:03:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860F51094;
+        Tue, 30 Aug 2022 10:02:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id DF960CE18FF;
+        Tue, 30 Aug 2022 17:02:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D27C433C1;
+        Tue, 30 Aug 2022 17:02:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661878974;
+        bh=A1/OrWAmF4tVj/1o13SDFHfQO6YqKZ788Ss2rMX0LCM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Q4+ycBFZEzObq72/7BDzPaQ4ZxVKPUWf5eZOubnxrdoYDlfyeI2+kEETrRXdY++W6
+         YkdLAHIrCmWfn25iSx2vJHS+HJUFiQu46mhPxvOjOz+VHKst5lWmfYr0QuKaAzZ8Id
+         Q+c+HFdoODsRrVdDcWVJuUq+Tmbei9JQgHiMnWm2zxLJtwQxOCHe06vs5W2YobbGuO
+         ZqzSu6vqB4cYWPaXWlifJbDQkwGjKuGoPcxrnfPUAO2HBZSLWGSucdsNo1YZhKq3zM
+         KPlwZHAJxcWHarG/dn2DQhlhOVNbJ6BkwrE18OmaYEj/dz3ftG/o2iUlssS1Ke7sRp
+         D4M90SisHpVWw==
+Message-ID: <4adb2abd1890b147dbc61a06413f35d2f147c43a.camel@kernel.org>
+Subject: Re: [PATCH v3 1/7] iversion: update comments with info about atime
+ updates
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Trond Myklebust <trondmy@hammerspace.com>,
+        "bfields@fieldses.org" <bfields@fieldses.org>
+Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "neilb@suse.de" <neilb@suse.de>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-ceph@vger.kernel.org" <linux-ceph@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "walters@verbum.org" <walters@verbum.org>
+Date:   Tue, 30 Aug 2022 13:02:50 -0400
+In-Reply-To: <3e8c7af5d39870c5b0dc61736a79bd134be5a9b3.camel@hammerspace.com>
+References: <20220826214703.134870-1-jlayton@kernel.org>
+         <20220826214703.134870-2-jlayton@kernel.org>
+         <20220829075651.GS3600936@dread.disaster.area>
+         <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
+         <166181389550.27490.8200873228292034867@noble.neil.brown.name>
+         <f5c42c0d87dfa45188c2109ccf9baeb7a42aa27e.camel@kernel.org>
+         <20220830132443.GA26330@fieldses.org>
+         <a07686e7e1d1ef15720194be2abe5681f6a6c78e.camel@kernel.org>
+         <20220830144430.GD26330@fieldses.org>
+         <e4815337177c74a9928098940dfdcb371017a40c.camel@hammerspace.com>
+         <20220830151715.GE26330@fieldses.org>
+         <3e8c7af5d39870c5b0dc61736a79bd134be5a9b3.camel@hammerspace.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 2/2] dts: arm: at91: Add SAMA5D3-EDS board
-Content-Language: en-US
-To:     Jerry Ray <jerry.ray@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Ludovic Desroches <ludovic.desroches@microchip.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220830152428.12625-1-jerry.ray@microchip.com>
- <20220830152428.12625-2-jerry.ray@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830152428.12625-2-jerry.ray@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,409 +87,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 18:24, Jerry Ray wrote:
-> The SAMA5D3-EDS board is an Ethernet Development Platform allowing for
-> evaluating many Microchip ethernet switch and PHY products.  Various
-> daughter cards can connect up via an RGMII connector or an RMII connector.
-> 
+On Tue, 2022-08-30 at 15:43 +0000, Trond Myklebust wrote:
+> On Tue, 2022-08-30 at 11:17 -0400, J. Bruce Fields wrote:
+> > On Tue, Aug 30, 2022 at 02:58:27PM +0000, Trond Myklebust wrote:
+> > > On Tue, 2022-08-30 at 10:44 -0400, J. Bruce Fields wrote:
+> > > > On Tue, Aug 30, 2022 at 09:50:02AM -0400, Jeff Layton wrote:
+> > > > > On Tue, 2022-08-30 at 09:24 -0400, J. Bruce Fields wrote:
+> > > > > > On Tue, Aug 30, 2022 at 07:40:02AM -0400, Jeff Layton wrote:
+> > > > > > > Yes, saying only that it must be different is intentional.
+> > > > > > > What
+> > > > > > > we
+> > > > > > > really want is for consumers to treat this as an opaque
+> > > > > > > value
+> > > > > > > for the
+> > > > > > > most part [1]. Therefore an implementation based on hashing
+> > > > > > > would
+> > > > > > > conform to the spec, I'd think, as long as all of the
+> > > > > > > relevant
+> > > > > > > info is
+> > > > > > > part of the hash.
+> > > > > >=20
+> > > > > > It'd conform, but it might not be as useful as an increasing
+> > > > > > value.
+> > > > > >=20
+> > > > > > E.g. a client can use that to work out which of a series of
+> > > > > > reordered
+> > > > > > write replies is the most recent, and I seem to recall that
+> > > > > > can
+> > > > > > prevent
+> > > > > > unnecessary invalidations in some cases.
+> > > > > >=20
+> > > > >=20
+> > > > > That's a good point; the linux client does this. That said,
+> > > > > NFSv4
+> > > > > has a
+> > > > > way for the server to advertise its change attribute behavior
+> > > > > [1]
+> > > > > (though nfsd hasn't implemented this yet).
+> > > >=20
+> > > > It was implemented and reverted.=A0 The issue was that I thought
+> > > > nfsd
+> > > > should mix in the ctime to prevent the change attribute going
+> > > > backwards
+> > > > on reboot (see fs/nfsd/nfsfh.h:nfsd4_change_attribute()), but
+> > > > Trond
+> > > > was
+> > > > concerned about the possibility of time going backwards.=A0 See
+> > > > 1631087ba872 "Revert "nfsd4: support change_attr_type
+> > > > attribute"".
+> > > > There's some mailing list discussion to that I'm not turning up
+> > > > right
+> > > > now.
+> >=20
+> > https://lore.kernel.org/linux-nfs/a6294c25cb5eb98193f609a52aa8f4b5d4e81=
+279.camel@hammerspace.com/
+> > is what I was thinking of but it isn't actually that interesting.
+> >=20
+> > > My main concern was that some filesystems (e.g. ext3) were failing
+> > > to
+> > > provide sufficient timestamp resolution to actually label the
+> > > resulting
+> > > 'change attribute' as being updated monotonically. If the time
+> > > stamp
+> > > doesn't change when the file data or metadata are changed, then the
+> > > client has to perform extra checks to try to figure out whether or
+> > > not
+> > > its caches are up to date.
+> >=20
+> > That's a different issue from the one you were raising in that
+> > discussion.
+> >=20
+> > > > Did NFSv4 add change_attr_type because some implementations
+> > > > needed
+> > > > the
+> > > > unordered case, or because they realized ordering was useful but
+> > > > wanted
+> > > > to keep backwards compatibility?=A0 I don't know which it was.
+> > >=20
+> > > We implemented it because, as implied above, knowledge of whether
+> > > or
+> > > not the change attribute behaves monotonically, or strictly
+> > > monotonically, enables a number of optimisations.
+> >=20
+> > Of course, but my question was about the value of the old behavior,
+> > not
+> > about the value of the monotonic behavior.
+> >=20
+> > Put differently, if we could redesign the protocol from scratch would
+> > we
+> > actually have included the option of non-monotonic behavior?
+> >=20
+>=20
+> If we could design the filesystems from scratch, we probably would not.
+> The protocol ended up being as it is because people were trying to make
+> it as easy to implement as possible.
+>=20
+> So if we could design the filesystem from scratch, we would have
+> probably designed it along the lines of what AFS does.
+> i.e. each explicit change is accompanied by a single bump of the change
+> attribute, so that the clients can not only decide the order of the
+> resulting changes, but also if they have missed a change (that might
+> have been made by a different client).
+>=20
+> However that would be a requirement that is likely to be very specific
+> to distributed caches (and hence distributed filesystems). I doubt
+> there are many user space applications that would need that high
+> precision. Maybe MPI, but that's the only candidate I can think of for
+> now?
+>=20
 
-Use subject prefixes matching the subsystem (git log --oneline -- ...).
+The fact that NFS kept this more loosely-defined is what allowed us to
+elide some of the i_version bumps and regain a fair bit of performance
+for local filesystems [1]. If the change attribute had been more
+strictly defined like you mention, then that particular optimization
+would not have been possible.
 
-> The EDS board is not intended for stand-alone use and has no ethernet
-> capabilities when no daughter board is connected.  As such, this device
-> tree is intended to be used with a DT overlay defining the add-on board.
-> To better ensure consistency, some items are defined here as a form of
-> documentation so that all add-on overlays will use the same terms.
-> 
-> Google search keywords: "Microchip SAMA5D3-EDS"
-> 
-> Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
-> ---
-> v4->v5:
->  - patch now applies to v6.0-rc2
+This sort of thing is why I'm a fan of not defining this any more
+strictly than we require. Later on, maybe we'll come up with a way for
+filesystems to advertise that they can offer stronger guarantees.
+--=20
+Jeff Layton <jlayton@kernel.org>
 
-If this is rebased, why you did not CC me?
-
-> v3->v4:
->  - Fixed regulators as necessary to get the board to boot from SD Card.
-> v2->v3:
->  - Alphabetized pinctrl entries.
->  - cleaned up a warning in the regulators section.
->  - License tweaked to 'OR MIT'
->  - Included Makefile change
-> v1->v2:
->  - Modified the compatible field in the device tree to reflect Microchip
->    Ethernet Development System Board.
-> ---
->  arch/arm/boot/dts/Makefile             |   1 +
->  arch/arm/boot/dts/at91-sama5d3_eds.dts | 309 +++++++++++++++++++++++++
->  2 files changed, 310 insertions(+)
->  create mode 100644 arch/arm/boot/dts/at91-sama5d3_eds.dts
-> 
-> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-> index 05d8aef6e5d2..e92e639a2dc3 100644
-> --- a/arch/arm/boot/dts/Makefile
-> +++ b/arch/arm/boot/dts/Makefile
-> @@ -61,6 +61,7 @@ dtb-$(CONFIG_SOC_SAM_V7) += \
->  	at91-sama5d2_icp.dtb \
->  	at91-sama5d2_ptc_ek.dtb \
->  	at91-sama5d2_xplained.dtb \
-> +	at91-sama5d3_eds.dtb \
->  	at91-sama5d3_ksz9477_evb.dtb \
->  	at91-sama5d3_xplained.dtb \
->  	at91-dvk_som60.dtb \
-> diff --git a/arch/arm/boot/dts/at91-sama5d3_eds.dts b/arch/arm/boot/dts/at91-sama5d3_eds.dts
-> new file mode 100644
-> index 000000000000..2e6d94b30916
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/at91-sama5d3_eds.dts
-> @@ -0,0 +1,309 @@
-> +// SPDX-License-Identifier: GPL-2.0+ OR MIT
-> +/*
-> + * at91-sama5d3_eds.dts - Device Tree file for the SAMA5D3 Ethernet
-> + *    Development System board.
-> + *
-> + *  Copyright (C) 2022 Microchip Technology Inc. and its subsidiaries
-> + *		  2022 Jerry Ray <jerry.ray@microchip.com>
-> + */
-> +/dts-v1/;
-> +#include "sama5d36.dtsi"
-> +
-> +/ {
-> +	model = "SAMA5D3 Ethernet Development System";
-> +	compatible = "microchip,sama5d3-eds", "atmel,sama5d3",
-> +		     "atmel,sama5";
-
-This does not match your bindings.
-
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +
-> +	clocks {
-> +		slow_xtal {
-
-No underscores in node names. Generic node names, so at least add some
-generic prefix or suffix, e.g.: "slow-xtal-clock"
-
-> +			clock-frequency = <32768>;
-> +		};
-> +
-> +		main_xtal {
-
-Ditto, e.g. main-xtal-clock
-
-> +			clock-frequency = <12000000>;
-> +		};
-> +	};
-> +
-> +	gpio_keys {
-
-No underscores...
-
-> +		compatible = "gpio-keys";
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_key_gpio>;
-> +
-> +		button-3 {
-> +			label = "PB_USER";
-> +			gpios = <&pioE 29 GPIO_ACTIVE_LOW>;
-> +			linux,code = <0x104>;
-> +			wakeup-source;
-> +		};
-> +	};
-> +
-> +	memory@20000000 {
-> +		reg = <0x20000000 0x10000000>;
-> +	};
-> +
-> +	vcc_3v3_reg: BUCK_REG1 {
-
-No, this coding style is very poor. No capital letters, no underscores.
-Use generic node names, e.g. "regulator-0".
-
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VCC_3V3";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vcc_2v5_reg: LDO_REG2 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VCC_2V5";
-> +		regulator-min-microvolt = <2500000>;
-> +		regulator-max-microvolt = <2500000>;
-> +		regulator-always-on;
-> +		vin-supply = <&vcc_3v3_reg>;
-> +	};
-> +
-> +	vcc_1v8_reg: LDO_REG3 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VCC_1V8";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		regulator-always-on;
-> +		vin-supply = <&vcc_3v3_reg>;
-> +	};
-> +
-> +	vcc_1v2_reg: BUCK_REG4 {
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "VCC_1V2";
-> +		regulator-min-microvolt = <1200000>;
-> +		regulator-max-microvolt = <1200000>;
-> +		regulator-always-on;
-> +	};
-> +
-> +	vcc_mmc0_reg: fixedregulator_mmc0 {
-
-Another different pattern of naming..
-
-> +		compatible = "regulator-fixed";
-> +		regulator-name = "mmc0-card-supply";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-always-on;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_vcc_mmc0_reg_gpio>;
-> +		gpio = <&pioE 2 GPIO_ACTIVE_LOW>;
-> +	};
-> +};
-> +
-> +&can0 {
-> +	status = "okay";
-> +};
-> +
-> +&dbgu {
-> +	status = "okay";
-> +};
-> +
-> +&ebi {
-> +	pinctrl-0 = <&pinctrl_ebi_nand_addr>;
-> +	pinctrl-names = "default";
-> +	status = "okay";
-> +
-> +	nand_controller: nand-controller {
-> +		status = "okay";
-> +> +		nand@3 {
-> +			reg = <0x3 0x0 0x2>;
-> +			atmel,rb = <0>;
-> +			nand-bus-width = <8>;
-> +			nand-ecc-mode = "hw";
-> +			nand-ecc-strength = <4>;
-> +			nand-ecc-step-size = <512>;
-> +			nand-on-flash-bbt;
-> +			label = "atmel_nand";
-> +
-> +			partitions {
-> +				compatible = "fixed-partitions";
-> +				#address-cells = <1>;
-> +				#size-cells = <1>;
-> +
-> +				at91bootstrap@0 {
-> +					label = "at91bootstrap";
-> +					reg = <0x0 0x40000>;
-> +				};
-> +
-> +				bootloader@40000 {
-> +					label = "bootloader";
-> +					reg = <0x40000 0xc0000>;
-> +				};
-> +
-> +				bootloaderenvred@100000 {
-> +					label = "bootloader env redundant";
-> +					reg = <0x100000 0x40000>;
-> +				};
-> +
-> +				bootloaderenv@140000 {
-> +					label = "bootloader env";
-> +					reg = <0x140000 0x40000>;
-> +				};
-> +
-> +				dtb@180000 {
-> +					label = "device tree";
-> +					reg = <0x180000 0x80000>;
-> +				};
-> +
-> +				kernel@200000 {
-> +					label = "kernel";
-> +					reg = <0x200000 0x600000>;
-> +				};
-> +
-> +				rootfs@800000 {
-> +					label = "rootfs";
-> +					reg = <0x800000 0x0f800000>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +};
-> +
-> +&i2c0 {
-> +	pinctrl-0 = <&pinctrl_i2c0_pu>;
-> +	status = "okay";
-> +};
-> +
-> +&i2c1 {
-> +	status = "okay";
-> +};
-> +
-> +&i2c2 {
-> +	dmas = <0>, <0>;	/* Do not use DMA for i2c2 */
-
-Instead you need to remove the property.
-
-> +	pinctrl-0 = <&pinctrl_i2c2_pu>;
-> +	status = "okay";
-> +};
-> +
-> +&mmc0 {
-> +	pinctrl-0 = <&pinctrl_mmc0_clk_cmd_dat0 &pinctrl_mmc0_dat1_3
-> +		     &pinctrl_mmc0_dat4_7 &pinctrl_mmc0_cd>;
-> +	vmmc-supply = <&vcc_mmc0_reg>;
-> +	vqmmc-supply = <&vcc_3v3_reg>;
-> +	status = "okay";
-> +	slot@0 {
-> +		reg = <0>;
-> +		bus-width = <8>;
-> +		cd-gpios = <&pioE 0 GPIO_ACTIVE_LOW>;
-> +	};
-> +};
-> +
-> +&pinctrl {
-> +	board {
-> +		pinctrl_i2c0_pu: i2c0_pu {
-
-No underscores in node names.
-
-> +			atmel,pins =
-> +				<AT91_PIOA 30 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>,
-> +				<AT91_PIOA 31 AT91_PERIPH_A AT91_PINCTRL_PULL_UP>;
-> +		};
-> +
-> +		pinctrl_i2c2_pu: i2c2_pu {
-> +			atmel,pins =
-> +				<AT91_PIOA 18 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>,
-> +				<AT91_PIOA 19 AT91_PERIPH_B AT91_PINCTRL_PULL_UP>;
-> +		};
-> +
-> +		pinctrl_key_gpio: key_gpio_0 {
-> +			atmel,pins =
-> +				<AT91_PIOE 29 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
-> +		};
-> +
-> +		pinctrl_mmc0_cd: mmc0_cd {
-> +			atmel,pins =
-> +				<AT91_PIOE 0 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
-> +		};
-> +
-> +		/* Reserved for reset signal to the RGMII connector. */
-> +		pinctrl_rgmii_rstn: rgmii_rstn {
-> +			atmel,pins =
-> +				<AT91_PIOD 18 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP_DEGLITCH>;
-> +		};
-> +
-> +		/* Reserved for an interrupt line from the RMII and RGMII connectors. */
-> +		pinctrl_spi_irqn: spi_irqn {
-> +			atmel,pins =
-> +				<AT91_PIOB 28 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
-> +		};
-> +
-> +		pinctrl_spi0_cs: spi0_cs_default {
-> +			atmel,pins =
-> +				<AT91_PIOD 13 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-> +				 AT91_PIOD 16 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-> +		};
-> +
-> +		pinctrl_spi1_cs: spi1_cs_default {
-> +			atmel,pins = <AT91_PIOC 25 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-> +				      AT91_PIOC 28 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-> +		};
-> +
-> +		pinctrl_usba_vbus: usba_vbus {
-> +			atmel,pins =
-> +				<AT91_PIOE 9 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
-> +		};
-> +
-> +		pinctrl_usb_default: usb_default {
-> +			atmel,pins =
-> +				<AT91_PIOE 3 AT91_PERIPH_GPIO AT91_PINCTRL_NONE
-> +				 AT91_PIOE 4 AT91_PERIPH_GPIO AT91_PINCTRL_NONE>;
-> +		};
-> +
-> +		/* Reserved for VBUS fault interrupt. */
-> +		pinctrl_vbusfault_irqn: vbusfault_irqn {
-> +			atmel,pins =
-> +				<AT91_PIOE 5 AT91_PERIPH_GPIO AT91_PINCTRL_DEGLITCH>;
-> +		};
-> +
-> +		pinctrl_vcc_mmc0_reg_gpio: vcc_mmc0_reg_gpio_default {
-> +			atmel,pins = <AT91_PIOE 2 AT91_PERIPH_GPIO AT91_PINCTRL_PULL_UP>;
-> +		};
-> +	};
-> +};
-> +
-> +&spi0 {
-> +	pinctrl-names = "default", "cs";
-> +	pinctrl-1 = <&pinctrl_spi0_cs>;
-> +	cs-gpios = <&pioD 13 0>, <0>, <0>, <&pioD 16 0>;
-> +	status = "okay";
-> +};
-> +
-> +&spi1 {
-> +	pinctrl-names = "default", "cs";
-> +	pinctrl-1 = <&pinctrl_spi1_cs>;
-> +	cs-gpios = <&pioC 25 0>, <0>, <0>, <&pioC 28 0>;
-
-Use proper flags. What is <0>???
-
-
-> +	status = "okay";
-> +};
-> +
-> +&tcb0 {
-> +	timer0: timer@0 {
-> +		compatible = "atmel,tcb-timer";
-> +		reg = <0>;
-> +	};
-> +
-> +	timer1: timer@1 {
-> +		compatible = "atmel,tcb-timer";
-> +		reg = <1>;
-> +	};
-> +};
-> +
-> +&usb0 {
-> +	atmel,vbus-gpio = <&pioE 9 GPIO_ACTIVE_HIGH>;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_usba_vbus>;
-> +	status = "okay";
-> +};
-> +
-> +&usb1 {
-> +	atmel,vbus-gpio = <0
-
-What is this 0?
-
-> +			   &pioE 3 GPIO_ACTIVE_HIGH
-> +			   &pioE 4 GPIO_ACTIVE_HIGH
-
-Why two GPIOs?
-
-> +			  >;
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_usb_default>;
-> +	num-ports = <3>;
-> +	status = "okay";
-> +};
-> +
-> +&usb2 {
-> +	status = "okay";
-> +};
-
-
-Best regards,
-Krzysztof
+[1]:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
+id=3Df02a9ad1f15d

@@ -2,73 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1195A5C49
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A835A5C4C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiH3G6T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
+        id S230321AbiH3G7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiH3G5y (ORCPT
+        with ESMTP id S230311AbiH3G7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:57:54 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE6C564F6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:57:53 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id s15so5186043ljp.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=MW1YzegDLarSYjOyZFmSWtQsOdOkkipTn6NsA3/awlM=;
-        b=WQrkEPrveKwgi1zwLcyvWQg9IfEC9AiIZ7vmhFjQwiooHoNHNIuJLE1mKIyYZDYd2n
-         uzrswmGVf8+a11ipEdX30cZKFMX+3r3t7I1Z2bX2daOtjq4XS2hevQi1iYCzyRQzdCVY
-         WyGPk5ZYBg5nJLEvsJZkfx8IsAekA2e3KH8FIJMnwplCP2iOwWu9m9LivShCKVkVrkL6
-         TlCuaTNF8KOa1ex27YCUdICRqP0hQM4VQ5xQHKE3vtwXY/RUEcmft+zSmE4QTSk0MWTC
-         gHcfYf/LO3kLk30VzN9AtFGeO3gxWT+efWatVDW255FHX5o/erN163Z2CNCW50Jl4Z8Q
-         bI5A==
+        Tue, 30 Aug 2022 02:59:40 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52952C00DA;
+        Mon, 29 Aug 2022 23:59:39 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id fy31so19781075ejc.6;
+        Mon, 29 Aug 2022 23:59:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=MW1YzegDLarSYjOyZFmSWtQsOdOkkipTn6NsA3/awlM=;
-        b=g2z7CdLH4dHyin/UJ7HkIfb7VQ12mfHz8hJj8kiuPVYgH7DOQrhNJYW7byrPsXRnJO
-         v3uwG+fUJLicLMbVUJd75jei1dkHi0m55jmctQbUXFdecElFnWZQm80osR10/O4xibiC
-         pPU+lsX/+IjtPV0EogAcF/fFeLkQNvVFst02d3Z+w7PqjwRbJyZR2woF+1vzTuGzc/ch
-         wdDr9aik2emQQUV0/s7uYPIfcOMc27cz3OH4HFVjnFk+0Y6mR0aqMz7YqjPlAwtLxG1C
-         /bUU7V9pV4xNJnyiLwxMWCemqBbOTMZqjHVt7YrKkc3RBPee25Fur6gNV+Gb3QUom5+y
-         oVTA==
-X-Gm-Message-State: ACgBeo1/xuTH34pEbMVBLl6JK8QtNTUzwguKmaVCjeqVUIxEy4qP40Ft
-        XpzIjUeHnQz0LSybbYcTgS9OVg==
-X-Google-Smtp-Source: AA6agR6u7YjqH6u9sV/UwghO80J9vA0yT2hqA/KYJyVY6yz3/59CqJc+A1gVGLeiBTvFaLzqUFQbPQ==
-X-Received: by 2002:a05:651c:381:b0:264:4fc0:611c with SMTP id e1-20020a05651c038100b002644fc0611cmr2898951ljp.129.1661842671398;
-        Mon, 29 Aug 2022 23:57:51 -0700 (PDT)
-Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id c1-20020a056512074100b00492cdba2903sm1515420lfs.97.2022.08.29.23.57.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 23:57:50 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v7 3/3] arm64: dts: qcom: msm8992-xiaomi-libra: split qcom,msm-id into tuples
-Date:   Tue, 30 Aug 2022 09:57:44 +0300
-Message-Id: <20220830065744.161163-4-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220830065744.161163-1-krzysztof.kozlowski@linaro.org>
-References: <20220830065744.161163-1-krzysztof.kozlowski@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=udLDyvqYEWiFFMc7PF4o3+l6dw+FJ84syS3HsmSGTcA=;
+        b=nybnJGTvo1weV/qzWwUP+2cXrQ3ED9Pyh5MQbj+W47K8nM0QkwohrSGjtUZ+enM9Dd
+         9H/dpixKrroTtehrQoZBETDDFHs4Lc16eS4ItdSSEgnMOEp0zkiuO/KFIynJQ5q7AtmX
+         WhwzJWS8uCNmND9xfR0x9cBEwLrV6lLM1UUITeH7CJYAN9G47QWEjWoHyFWjd6Ril9cJ
+         cpZu5YJayw8DVVe4g++Bqihs6zwGPm6opVytoqD5Hb3FP1J6WvLmj8WeZsDZ1eAHzQ+G
+         XRsvh/gqMh+imm+GUJuZC0Qy1V4cHNjpT9t+TCLjfo+rzfsBaWpzh1Mb20MnoUcrvwZv
+         KiYQ==
+X-Gm-Message-State: ACgBeo3Qk8xuvnHZGreVeZ3nBWoPFxikEv1ww6ESppxi9QtkRGIbtoTf
+        nFtxQtobfkPdmDH+RUP6S9U7jbk7N9ltVA==
+X-Google-Smtp-Source: AA6agR6Flm8qe4jXyOfHveehL6f0JSYaqRNWgZurTFrHZIkwS7S7R7X/1vOMlUKm8gI2O12IYevEbg==
+X-Received: by 2002:a17:907:728d:b0:731:8396:ea86 with SMTP id dt13-20020a170907728d00b007318396ea86mr16058182ejc.361.1661842777858;
+        Mon, 29 Aug 2022 23:59:37 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id w23-20020aa7cb57000000b0043a61f6c389sm5638914edt.4.2022.08.29.23.59.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 23:59:37 -0700 (PDT)
+Message-ID: <fe014b7b-a1d2-9be9-625b-2f630934c56c@kernel.org>
+Date:   Tue, 30 Aug 2022 08:59:36 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 4/6] tty: n_gsm: introduce gsm_control_command()
+ function
+Content-Language: en-US
+To:     "D. Starke" <daniel.starke@siemens.com>,
+        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220823062259.4754-1-daniel.starke@siemens.com>
+ <20220823062259.4754-4-daniel.starke@siemens.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220823062259.4754-4-daniel.starke@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,27 +66,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The qcom,msm-id is an uint32 matrix, so a list of tuples.
+On 23. 08. 22, 8:22, D. Starke wrote:
+> From: Daniel Starke <daniel.starke@siemens.com>
+> 
+> Move the content of gsm_control_transmit() to a new function
+> gsm_control_command() with a more generic signature and analog to
+> gsm_control_reply(). Use this within gsm_control_transmit().
+> 
+> This is needed to simplify upcoming functional additions.
+> 
+> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> ---
+>   drivers/tty/n_gsm.c | 30 +++++++++++++++++++++++-------
+>   1 file changed, 23 insertions(+), 7 deletions(-)
+> 
+> No changes since v1.
+> 
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index 9535e84f3063..5a20561c0a5d 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -1316,6 +1316,28 @@ static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
+>    */
+>   
+>   
+> +/**
+> + *	gsm_control_command	-	send a command frame to a control
+> + *	@gsm: gsm channel
+> + *	@cmd: the command to use
+> + *	@data: data to follow encoded info
+> + *	@dlen: length of data
+> + *
+> + *	Encode up and queue a UI/UIH frame containing our command.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+These tabs after asterisks are not understood by kernel-doc. You should 
+add no new ones.
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-index cbe11c060df9..c4e87d0aec42 100644
---- a/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-+++ b/arch/arm64/boot/dts/qcom/msm8992-xiaomi-libra.dts
-@@ -17,7 +17,7 @@ / {
- 	chassis-type = "handset";
- 
- 	/* required for bootloader to select correct board */
--	qcom,msm-id = <251 0 252 0>;
-+	qcom,msm-id = <251 0>, <252 0>;
- 	qcom,pmic-id = <65545 65546 0 0>;
- 	qcom,board-id = <12 0>;
- 
+> + */
+> +static int gsm_control_command(struct gsm_mux *gsm, int cmd, u8 *data, int dlen)
+
+Can gsm and data be const? I assume gsm cannot due to call to 
+gsm_data_queue(). And what about cmd & dlen being uint? cmd seems to be 
+u8 at least...
+
+> +{
+> +	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, dlen + 2, gsm->ftype);
+> +
+> +	if (msg == NULL)
+> +		return -ENOMEM;
+
+\n here
+
+> +	msg->data[0] = (cmd << 1) | CR | EA;	/* Set C/R */
+> +	msg->data[1] = (dlen << 1) | EA;
+> +	memcpy(msg->data + 2, data, dlen);
+> +	gsm_data_queue(gsm->dlci[0], msg);
+
+\n here
+
+> +	return 0;
+> +}
+> +
+>   /**
+>    *	gsm_control_reply	-	send a response frame to a control
+>    *	@gsm: gsm channel
+> @@ -1623,13 +1645,7 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
+>   
+>   static void gsm_control_transmit(struct gsm_mux *gsm, struct gsm_control *ctrl)
+>   {
+> -	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 2, gsm->ftype);
+> -	if (msg == NULL)
+> -		return;
+> -	msg->data[0] = (ctrl->cmd << 1) | CR | EA;	/* command */
+> -	msg->data[1] = (ctrl->len << 1) | EA;
+> -	memcpy(msg->data + 2, ctrl->data, ctrl->len);
+> -	gsm_data_queue(gsm->dlci[0], msg);
+> +	gsm_control_command(gsm, ctrl->cmd, ctrl->data, ctrl->len);
+>   }
+
+thanks,
 -- 
-2.34.1
+js
+suse labs
 

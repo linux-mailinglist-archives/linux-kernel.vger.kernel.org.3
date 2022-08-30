@@ -2,162 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D88B25A679C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:44:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A726A5A679D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbiH3Pn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 11:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51102 "EHLO
+        id S230205AbiH3PpJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 11:45:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiH3Pnt (ORCPT
+        with ESMTP id S229437AbiH3PpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 11:43:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08B0B95B6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661874228;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5LIdhu1lS7jdtXtXqeaM3XP6rtL42Pg7PAfv3l7oebo=;
-        b=IV53Ttd32XeYWOHgftAAdmpyRTjTuN5C522ipxOfaCUdnB6TVRc4PvI6VmHukEyo07KyHF
-        E3BlXxOlX0LR5AhuGeC10pNTpBP8ySMUzZ0d5+3btwI9hTDuMM/AU6O9gjarvzkcdopIg3
-        oMej10XnKqFZ57mwIswFXaccOqC1hNM=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-112-AfJUtegQNna_HIU2mEvkoA-1; Tue, 30 Aug 2022 11:43:47 -0400
-X-MC-Unique: AfJUtegQNna_HIU2mEvkoA-1
-Received: by mail-wr1-f71.google.com with SMTP id j12-20020adfff8c000000b002265dcdfad7so1803191wrr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:43:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=5LIdhu1lS7jdtXtXqeaM3XP6rtL42Pg7PAfv3l7oebo=;
-        b=ma3fW2P5Y1Ox+5rAK+DcPcnRKwfkYF8rPbrfsb2/mb5xqpWZpNMPK/3TcMTaWp0eTm
-         wg1wViTUg8ibGTCRTf7r98abTl2FHi8dOtUbwcMfeNBQLMLlgS4GX9g69c37m4tXPzMy
-         oJqmR6GAC7BeqoUKxovXE0TXGXk4NhuMaAfzFEk22ri1Lfrvs04vQwF/FCCQ1ygAqD+6
-         WOljHinJmWFm8kY7RCI61blpvsYXYQIYf6A4THzZ1kLuKNru9XxuqM7qQyFplfF1anof
-         X48rtf0326Jcx41KdqSlSbDnErgw50buTgPkqeFM5TmjGyarZ/gg0x8BaSSYOIxV2H5F
-         bwgg==
-X-Gm-Message-State: ACgBeo1j+vPpQ/iwSzjqPKIRC0XDrK+gLe6fRu9x1vsfbQXKHRIuD2tD
-        l2jqHc0IkEUlGpqbrL0MHtpfJqa2kzah57MqNZF7khNSP8NXGrr3Wsq6iNpIQceWbvd25LDSjpu
-        vz3xePqP/wOJzx0fMwX/q4rxx
-X-Received: by 2002:a5d:59af:0:b0:220:6daf:5f64 with SMTP id p15-20020a5d59af000000b002206daf5f64mr9648509wrr.192.1661874224283;
-        Tue, 30 Aug 2022 08:43:44 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4gkqPdWZbUokRdCqwdy4IuKKkxA7Rj+Tnk9DhqwplLuPQUU4aRQaSFoXshT0hGQOn942TiHA==
-X-Received: by 2002:a5d:59af:0:b0:220:6daf:5f64 with SMTP id p15-20020a5d59af000000b002206daf5f64mr9648492wrr.192.1661874224005;
-        Tue, 30 Aug 2022 08:43:44 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70a:1000:ecb4:919b:e3d3:e20b? (p200300cbc70a1000ecb4919be3d3e20b.dip0.t-ipconnect.de. [2003:cb:c70a:1000:ecb4:919b:e3d3:e20b])
-        by smtp.gmail.com with ESMTPSA id d5-20020a5d4f85000000b0021e6c52c921sm11807206wru.54.2022.08.30.08.43.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 08:43:43 -0700 (PDT)
-Message-ID: <e1747d53-a02d-ca32-cdc4-702315da57df@redhat.com>
-Date:   Tue, 30 Aug 2022 17:43:43 +0200
+        Tue, 30 Aug 2022 11:45:04 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FE513F12
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:45:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=0rngN2Nly2Td71lXPLgCZdlPaLmW/RE3t+pErTGRmOg=; b=i4t5QpuE62W/R0OPwt7BoikIOg
+        qkvx7dNlculI+V9fFOnhxHhGQdlLv41mEyF8oVKDElfC+Q5zB9d7RwyKC8608wBCtAY3u+SP8AwYi
+        cBQHSPuPzKWfZ3rVG9OQdabM1xar0TF+Saz+aqxMcjRP1dhktJYGV2g+v3FNGJ/YVr6wAKHLbc5ET
+        Ouk8TMMu5RkOrGmGyGM8spP+M7879Z8CdTP6MH40dsTKCqRiF2eiKYN0PsdCm/uLaGmY9Xn24pECw
+        /xYonHXfHc/hVvL7WuBYeqtq6xLX5ksyZdwMcmY+QuYRqjO6d4grSoP4V60QciZY4ccbpiViteH7S
+        ubQzV0kg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34004)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oT3Q1-0002z9-S5; Tue, 30 Aug 2022 16:44:49 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oT3Pw-0001fS-Ub; Tue, 30 Aug 2022 16:44:44 +0100
+Date:   Tue, 30 Aug 2022 16:44:44 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Yongqin Liu <yongqin.liu@linaro.org>,
+        Christoph Hellwig <hch@lst.de>,
+        linux-arm-kernel@lists.infradead.org, m.szyprowski@samsung.com,
+        arnd@kernel.org, iommu@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        "Bajjuri, Praneeth" <praneeth@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+Subject: Re: [PATCH 0/3] More ARM DMA ops cleanup
+Message-ID: <Yw4wbMeQqpMbTwBw@shell.armlinux.org.uk>
+References: <cover.1650539846.git.robin.murphy@arm.com>
+ <20220421141300.GC20492@lst.de>
+ <665d2b46-c9e2-2543-cad5-9adf022e4bcb@arm.com>
+ <CAMSo37XN3PC22JK4ot-B8gUxWOhK+UD-73Zb8LqvYpgPL1Bj6g@mail.gmail.com>
+ <9ec5ba90-150a-c675-d95b-b13e3a4e9e10@arm.com>
+ <CAMSo37XmxGn4VJJXwOca=mjHfmgYoh-i4bOs_DpP2LdjaN87wA@mail.gmail.com>
+ <5c617d66-f04b-df26-bf7a-7f479d081ac2@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lpivarc@redhat.com
-References: <166182871735.3518559.8884121293045337358.stgit@omen>
- <39145649-c378-d027-8856-81b4f09050fc@redhat.com>
- <20220830091110.3f6d1737.alex.williamson@redhat.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH] vfio/type1: Unpin zero pages
-In-Reply-To: <20220830091110.3f6d1737.alex.williamson@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5c617d66-f04b-df26-bf7a-7f479d081ac2@arm.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.08.22 17:11, Alex Williamson wrote:
-> On Tue, 30 Aug 2022 09:59:33 +0200
-> David Hildenbrand <david@redhat.com> wrote:
+On Tue, Aug 30, 2022 at 04:36:19PM +0100, Robin Murphy wrote:
+> On 2022-08-30 16:19, Yongqin Liu wrote:
+> > Hi, Robin
+> > 
+> > Thanks for the kind reply!
+> > 
+> > On Tue, 30 Aug 2022 at 17:48, Robin Murphy <robin.murphy@arm.com> wrote:
+> > > 
+> > > On 2022-08-27 13:24, Yongqin Liu wrote:
+> > > > Hi, Robin, Christoph
+> > > > 
+> > > > With the changes landed in the mainline kernel,
+> > > > one problem is exposed with our out of tree pvr module.
+> > > > Like the source here[1], arm_dma_ops.sync_single_for_cpu is called in
+> > > > the format like the following:
+> > > >       arm_dma_ops.sync_single_for_cpu(NULL, pStart, pEnd - pStart,
+> > > > DMA_FROM_DEVICE);
+> > > > 
+> > > > Not sure if you could give some suggestions on what I should do next
+> > > > to make the pvr module work again.
+> > > 
+> > > Wow, that driver reinvents so many standard APIs for no apparent reason
+> > > it's not even funny.
+> > > 
+> > > Anyway, from a brief look it seemingly already knows how to call the DMA
+> > > API semi-correctly, so WTF that's doing behind an #ifdef, who knows?
+> > > However it's still so completely wrong in general - fundamentally broken
+> > > AArch64 set/way cache maintenance!? - that it looks largely beyond help.
+> > > "Throw CONFIG_DMA_API_DEBUG at it and cry" is about the extent of
+> > > support I'm prepared to provide for that mess.
+> > 
+> > For the moment, I do not care about the AArch64 lines, like if we only
+> > say the following two lines:
+> >      arm_dma_ops.sync_single_for_device(NULL, pStart, pEnd - pStart,
+> > DMA_TO_DEVICE);
+> >      arm_dma_ops.sync_single_for_cpu(NULL, pStart, pEnd - pStart,
+> > DMA_FROM_DEVICE);
+> > 
+> > Could you please give some suggestions for that?
 > 
->> On 30.08.22 05:05, Alex Williamson wrote:
->>> There's currently a reference count leak on the zero page.  We increment
->>> the reference via pin_user_pages_remote(), but the page is later handled
->>> as an invalid/reserved page, therefore it's not accounted against the
->>> user and not unpinned by our put_pfn().
->>>
->>> Introducing special zero page handling in put_pfn() would resolve the
->>> leak, but without accounting of the zero page, a single user could
->>> still create enough mappings to generate a reference count overflow.
->>>
->>> The zero page is always resident, so for our purposes there's no reason
->>> to keep it pinned.  Therefore, add a loop to walk pages returned from
->>> pin_user_pages_remote() and unpin any zero pages.
->>>
->>> Cc: David Hildenbrand <david@redhat.com>
->>> Cc: stable@vger.kernel.org
->>> Reported-by: Luboslav Pivarc <lpivarc@redhat.com>
->>> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
->>> ---
->>>  drivers/vfio/vfio_iommu_type1.c |   12 ++++++++++++
->>>  1 file changed, 12 insertions(+)
->>>
->>> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
->>> index db516c90a977..8706482665d1 100644
->>> --- a/drivers/vfio/vfio_iommu_type1.c
->>> +++ b/drivers/vfio/vfio_iommu_type1.c
->>> @@ -558,6 +558,18 @@ static int vaddr_get_pfns(struct mm_struct *mm, unsigned long vaddr,
->>>  	ret = pin_user_pages_remote(mm, vaddr, npages, flags | FOLL_LONGTERM,
->>>  				    pages, NULL, NULL);
->>>  	if (ret > 0) {
->>> +		int i;
->>> +
->>> +		/*
->>> +		 * The zero page is always resident, we don't need to pin it
->>> +		 * and it falls into our invalid/reserved test so we don't
->>> +		 * unpin in put_pfn().  Unpin all zero pages in the batch here.
->>> +		 */
->>> +		for (i = 0 ; i < ret; i++) {
->>> +			if (unlikely(is_zero_pfn(page_to_pfn(pages[i]))))
->>> +				unpin_user_page(pages[i]);
->>> +		}
->>> +
->>>  		*pfn = page_to_pfn(pages[0]);
->>>  		goto done;
->>>  	}
->>>
->>>   
->>
->> As discussed offline, for the shared zeropage (that's not even
->> refcounted when mapped into a process), this makes perfect sense to me.
->>
->> Good question raised by Sean if ZONE_DEVICE pages might similarly be
->> problematic. But for them, we cannot simply always unpin here.
+> Remove them. Then remove the #ifdef __arch64__ too, since the code under
+> there is doing a passable impression of generic DMA API usage, as long as
+> one ignores the bigger picture.
 > 
-> What sort of VM mapping would give me ZONE_DEVICE pages?  Thanks,
+> arm64 already uses dma-direct. To say you don't care about the arm64 code
+> when asking how to deal with ARM having now been converted to use dma-direct
+> as well is supremely missing the point.
 
-I think one approach is mmap'ing a devdax device. To test without actual
-NVDIMM hardware, there are ways to simulate it even on bare metal using
-the "memmap=" kernel parameter.
+It should also be pointed out that this culture of bodging around the
+DMA API by graphics drivers is entirely their own problem. If they used
+the proper interfaces that the kernel provides (like the DMA API) rather
+than thinking "I need to flush the caches in such-and-such a way here"
+so I need to find a function somewhere in the kernel's interfaces that
+I can get to in order to achieve that, and I don't care how that's done
+then maybe their code wouldn't keep breaking.
 
-https://nvdimm.wiki.kernel.org/
+This is really not our problem to solve.
 
-Alternatively, you can use an emulated nvdimm device under QEMU -- but
-then you'd have to run VFIO inside the VM. I know (that you know) that
-there are ways to get that working, but it certainly requires more effort :)
+This is not limited to just PVR. I've seen it with other stuff as well,
+and it's the reason I was not in favour of exposing the dmac_*
+functions that we have in arch/arm/mm - which are part of the DMA API
+implementation, being moved into a header file. One can see from PVR
+that they also made use of these before I intentionally hid them from
+driver modules.
 
-... let me know if you need any tips&tricks.
+Basically, out of tree graphics drivers will bodge around to get access
+to the specific cache manangement that they want to use - even if it
+means abusing stuff that may mean that their crappy drivers break when
+we make later changes.
+
+As I say, it's entirely _their_ problem to solve if they don't want to
+use our official interfaces. Or, they can decide to use our official
+interfaces, which would be nice.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

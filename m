@@ -2,115 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FCB5A5C4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDCE5A5C50
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229900AbiH3HAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50854 "EHLO
+        id S230322AbiH3HA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:00:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiH3HAE (ORCPT
+        with ESMTP id S230094AbiH3HAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:00:04 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6847DEB9;
-        Mon, 29 Aug 2022 23:59:56 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id t5so10279364pjs.0;
-        Mon, 29 Aug 2022 23:59:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=un7bfVrxWZbMlE5lL0c6Bd0MjpZ+yc/hHTZvrL6aS9g=;
-        b=oNYSMrpaiet3PYYywR1WswJAmgfjdDmPJG3KhvS7rDU6qZ+nnXO92DSb5d9+zqCjaS
-         FWl1cINOjAgto4nDGR0AXZQulcuOAtYreDGrb4KQOFI3f1WU1V3gVtgtctRhBnh4gOll
-         Iu3gDTw6Ch2svTgEjk6ToVqHlJ9QedyuagBdhfS2UG2NWmxRiYTU3JT4kES47Bn2ezIv
-         UemNp2X6ouTICU7/KGptRf8SOxOZg/zygyiB+uTppCcXapbS/H/iF+NyN7rUgeT0IYOP
-         TX+OTz7Uv36F4t3RG3Tx/HBB10RGalqiKGLkrSYiPo1Y6ARQLYeWeZ2Vl4rlZAqSfky/
-         ax0g==
+        Tue, 30 Aug 2022 03:00:52 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A7C6F566;
+        Tue, 30 Aug 2022 00:00:44 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id a36so9124878edf.5;
+        Tue, 30 Aug 2022 00:00:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=un7bfVrxWZbMlE5lL0c6Bd0MjpZ+yc/hHTZvrL6aS9g=;
-        b=rE+BObm7f6g9niUlEQYLzVB64gcwXtJu19YyDLXBsiIF4Ir0BR8GfZrbujPAZOQT4X
-         EYgg60ZwXsU8hjO8GQYjXlbZY4Ga+jUak1H1UvaLdapa50Jh7dm2dxgfyKAR8io2/YKb
-         JgkS8RptQCg5Qppq5xqQ3hiIeIpkD8luMOzHPER0QJSxDJb2Y7JX7zOdBI66YtqdkJ51
-         9GzxddIhomst9+XiymiAOC8ugGIyG69CtWC78hccEtfP3vydZguspaonsDXOP9pqxcGJ
-         NCgU3/8lPYf6u0IPSynD0d5GREk8gNqnQfdRUhJ77ve2O6z9y2v6fodRNatnm6i3d2nF
-         4LyA==
-X-Gm-Message-State: ACgBeo3U0YLjTujUImGwYqydsb94TOpclBbvWd6LiyRfhTG4zK9D6Xne
-        mehfa9EjZIACyaBSILdNW9+bVyA0C8DmPNnsyVA=
-X-Google-Smtp-Source: AA6agR6zYvWXw59Gspf7WJkW0aOYI5u+qi7kfd/iPbvB7KONax93pyauLxtDTrHlOHbAo8FFHLcyFQlEczlZWaBkr8s=
-X-Received: by 2002:a17:90a:de93:b0:1fd:b278:4736 with SMTP id
- n19-20020a17090ade9300b001fdb2784736mr11750700pjv.159.1661842796276; Mon, 29
- Aug 2022 23:59:56 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=xV3abq7+2rnbmJWT5ZvT6yxw5guw2CyFyWdbIvvWMJA=;
+        b=a3rOa3KumgObTHu1BD0se6vYXFnT/rouwl6Q8ucjoh8olMHup+AU9M0th4a37b/SHI
+         ZTLAaoayu0+WwMazygUzWkD1tn+UkItE+s0Lf3NoxJBa8LTRpHnL3rDXW/VkvdnXA7kL
+         /ZCjiXnkWL+Rkk2cbwMRQ/eh5FZX/e62HnfD5OPA/UGSjileWlyOFwtZLVK/nH+svUy/
+         uiNGLeh5W6oR0+VInQ9AqP7MeTWZQ0RnJFgAz7hhfwUYMleFIOY2YwfW/pVxdgBLm3PR
+         k3upRYVao6zjqWh3h0TjvF8Ao8/NpBA0idJNDEVL7ByWDxZHnW3eD33JUWmsWTR97NfH
+         J4tQ==
+X-Gm-Message-State: ACgBeo2uZ+vTwFLWOYHdwOJs5RlJcRpJhaxSyJRGqOMUIGsq9fTbdy/K
+        BeVhGms2cdTIFK3Xnp2at5E=
+X-Google-Smtp-Source: AA6agR4tGOGu91wzrBwm/B8UAYaCNCFPwtb9QkVXj889cIUIe4ZPADcJyTRWviMB/KKXN9s8TAs1+A==
+X-Received: by 2002:a05:6402:34cd:b0:448:8286:23f0 with SMTP id w13-20020a05640234cd00b00448828623f0mr5440366edc.40.1661842842861;
+        Tue, 30 Aug 2022 00:00:42 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id u18-20020a1709061db200b0073d7d9deb73sm5380485ejh.68.2022.08.30.00.00.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 00:00:42 -0700 (PDT)
+Message-ID: <1d8d0d72-a5b7-724e-a70a-71d9fd3330c4@kernel.org>
+Date:   Tue, 30 Aug 2022 09:00:41 +0200
 MIME-Version: 1.0
-References: <20220826083612.1699194-1-floridsleeves@gmail.com>
- <CAHp75VcdqL4wYnhEi8LrxqJktA2uDzP3a6-08suJRghX=1UZsg@mail.gmail.com>
- <CAMEuxRqBEMdva3qEphvuYkFLpRjp=xg7vpqQT1oqb2AgkkG2+w@mail.gmail.com> <2033d06d-10a4-5a57-d650-7541c39990ee@linux.intel.com>
-In-Reply-To: <2033d06d-10a4-5a57-d650-7541c39990ee@linux.intel.com>
-From:   Li Zhong <floridsleeves@gmail.com>
-Date:   Mon, 29 Aug 2022 23:59:45 -0700
-Message-ID: <CAMEuxRq6wn+wakYHGtnS_vSgpcw6aNOir=KyXWb12vPrOr76pA@mail.gmail.com>
-Subject: Re: [PATCH v2] drivers/tty/serial: check the return value of uart_port_check()
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 5/6] tty: n_gsm: name the debug bits
+Content-Language: en-US
+To:     "D. Starke" <daniel.starke@siemens.com>,
+        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20220823062259.4754-1-daniel.starke@siemens.com>
+ <20220823062259.4754-5-daniel.starke@siemens.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220823062259.4754-5-daniel.starke@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 12:09 AM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> On Sun, 28 Aug 2022, Li Zhong wrote:
->
-> > On Fri, Aug 26, 2022 at 9:01 AM Andy Shevchenko
-> > <andy.shevchenko@gmail.com> wrote:
-> > >
-> > > On Fri, Aug 26, 2022 at 11:38 AM Li Zhong <floridsleeves@gmail.com> w=
-rote:
-> > > >
-> > > > uart_port_check() will return NULL pointer when state->uart_port is
-> > > > NULL. Check the return value before dereference it to avoid
-> > > > null-pointer-dereference error.
-> > >
-> > > Have you taken the locking into consideration?
-> > > If no, please do, if yes, expand your commit message to explain why
-> > > the current locking scheme doesn't prevent an error from happening.
-> > >
-> >
-> > The locking is taken into consideration but these three checks do not n=
-eed to
-> > unlock in error-handling because unlock() will be called in the callers=
-. Will
-> > add the comment in v2 patch.
->
-> I think he meant you should indicate why the current locking doesn't cove=
-r
-> the case you're fixing, not whether this function should call unlock() or
-> not.
->
+On 23. 08. 22, 8:22, D. Starke wrote:
+> From: Daniel Starke <daniel.starke@siemens.com>
+> 
+> Introduce defines to name the various debug bits used within the code to
+> improve readability and to make its specific use clear.
+> 
+> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+> ---
+>   drivers/tty/n_gsm.c | 31 +++++++++++++++++++------------
+>   1 file changed, 19 insertions(+), 12 deletions(-)
+> 
+> No changes since v1.
+> 
+> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+> index 5a20561c0a5d..fcf2d52d5095 100644
+> --- a/drivers/tty/n_gsm.c
+> +++ b/drivers/tty/n_gsm.c
+> @@ -63,6 +63,13 @@
+>   static int debug;
+>   module_param(debug, int, 0600);
+>   
+> +/* Module debug bits */
+> +#define DBG_DUMP	(1 << 0) /* Data transmission dump. */
+> +#define DBG_CD_ON	(1 << 1) /* Always assume CD line on. */
+> +#define DBG_DATA	(1 << 2) /* Data transmission details. */
+> +#define DBG_ERRORS	(1 << 3) /* Details for fail conditions. */
+> +#define DBG_TTY		(1 << 4) /* Transmission statistics for DLCI TTYs. */
 
-Thanks for clarifications. The locking does not guarantee the return value =
-of
-uart_port_check()  is not NULL. Actually in line 773 of this file
-(drivers/tty/serial/serial_core.c), uart_port_check() is also called in
-critical section but still there is check on whether the return value is NU=
-LL.
+Could you use BIT() instead?
 
-> --
->  i.
->
+thanks,
+-- 
+js
+suse labs
+

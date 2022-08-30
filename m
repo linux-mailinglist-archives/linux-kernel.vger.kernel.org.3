@@ -2,97 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B77C55A5F01
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:15:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B26865A5EFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:15:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbiH3JPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
+        id S231192AbiH3JPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbiH3JPO (ORCPT
+        with ESMTP id S231180AbiH3JPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:15:14 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D40CA5D12C;
-        Tue, 30 Aug 2022 02:15:12 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 199so10683437pfz.2;
-        Tue, 30 Aug 2022 02:15:12 -0700 (PDT)
+        Tue, 30 Aug 2022 05:15:03 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336782B25A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:15:01 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id y10so7517592ljq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:15:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=1YatiKId/nj4drK3e2iwJNfEimcD7UODu6LflTCrDfg=;
-        b=jg5fvjMeAC+3jPEplPKkRHxF3l0F+HtE/sYbQqaGwsosPYAV8azEAQtPUJLDUJXrT4
-         JQ1gqXqT0iJUHwV6Fk/fCRttHUmz0p5Hj+Wt3nJYV/Yvy9bb1Nh9U1gcVsLr0SSGG9Si
-         PkNOzj9tZuIQ9VZ/c8rnagnB8hFgS5CZR51hZ1MTNDEYzqZ1D43XkMToM8xkCrlbZX+u
-         Nu5oW0v0JJPEzemlV8JQQfNu9CehEEW+dseJgvea4sWQQqU0U4h4bW5a/3vUaCwdYufE
-         pWipZUP9CWhoEVt4ea4gBVEbU/bmzyxm/c0yJi7U0YihXt4Xgnh7OmodU87bRlZ0KdQP
-         APOw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=mQ1R8RcwP/tDgQqtrGeS5/cc9K/I9GILUBCYhQFlkf4=;
+        b=DH9FJmepKcIheEYhRqnHcdsUNeJ2eX0KBXt/4fK/dirqflk9fMTaqmyKJ3oWEmLvn0
+         QKn/L9WMi0ePZVVOk8bbQe+zw1phTFHkc+sqZuxVKQh+jo6zinqVsaIjpfilfRE8BwE/
+         bQfbcm7OdDwHKx28V3zHd0V57jp8nDMt8T3Krw0ZuRt8BgYtKk9n3uZdUA31GknIW8aY
+         VyMIpakDwDzrqEvBo+jFQFdzfLjI6LO5ZNMz3/+HyUlvFckdc78wjab8ioJphaMVRQuU
+         yKbeXRjeTzWsXUNlCgDVO+Y6e5Ffl6c+9NKrJTz0itr5qOOvboCpZbYA0gza9XoSqeOF
+         h91g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=1YatiKId/nj4drK3e2iwJNfEimcD7UODu6LflTCrDfg=;
-        b=NNPfS29D9MoPOZbv4RsqQnM5Hn5PJNsQdCfTzEpJI4AErVNNcYYXAWQ6o8oXgKq+Fs
-         LL7NEaNibXeuCIeocKQTlXFnd6ZrPw+IBNepdNCYjtn0aI9nJr7syF9R++W+lIJggYOO
-         SturP5lGkWyV17NBQ7G27oXJiT+hPkTt2Ft4dHIdRNs9iQ6BryqVW31Q4EHFG2ftYVlT
-         RdK6uXUclfCVaIws78XbC+m51T7FyJft6cmm0FMOrz35H/jsoHT6QI8tdVDYCKlOik+c
-         yhH3n5EUnhzWY+QCP4odLOUj4KV56LhC6lMFKNVdM9GPFMzj+VyuMoLJr7kOsbd3YTNP
-         dB+g==
-X-Gm-Message-State: ACgBeo1P4IoaRp4B/vxFwpY2v+PCnF5VgaEyGvvuprQvDJQrp5S9VJ0J
-        zZQLr7gtwHjdjTrrKXVeu1KWUKMwUtw=
-X-Google-Smtp-Source: AA6agR74JLD8v1fTz0PnqUxhyNWWQkDpSHEQ2ejTQ1m12kEE6QKZP1U9XbMR1WxEJrkd920K+aSqwg==
-X-Received: by 2002:a63:2603:0:b0:42c:f0a1:aed7 with SMTP id m3-20020a632603000000b0042cf0a1aed7mr2709935pgm.82.1661850912219;
-        Tue, 30 Aug 2022 02:15:12 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id k6-20020a170902ce0600b0015e8d4eb1dbsm9107543plg.37.2022.08.30.02.15.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 02:15:11 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     davem@davemloft.net, kuba@kernel.org, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.xin16@zte.com.cn
-Subject: [PATCH v3 0/3] Namespaceify two sysctls related with route
-Date:   Tue, 30 Aug 2022 09:14:53 +0000
-Message-Id: <20220830091453.286285-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=mQ1R8RcwP/tDgQqtrGeS5/cc9K/I9GILUBCYhQFlkf4=;
+        b=lz21XESl9eQf0jl+WUAt1zJCwwnTxgbJywtbbRUIlTSJ8M5VTdO1Gxd2iq4NeBgMB1
+         1QCi6VgqhdeQs173IRsUDTj+GDNR9g30jdqB9db6vf5ixDbh2Tqm2Bt2rGqMST0q2IaJ
+         rs+pq1BcIOThIXZv0HkfNVi+5Mh5q70bI/PC54PGOnXbNMlL9Zxybkuw4pCLrZDgyJ1H
+         +NNWgEslzzDRVHYdBRnHWqTtI0bg5kM4zZRx6xKQCxyBacorUsB2o3KUL0GPG/VSq4HT
+         3nZruY45o4g9876p2CQiOXS18JHItb9dj0SMkczaOXuswnnYNZadU8pux9T93pirdl0P
+         0oiA==
+X-Gm-Message-State: ACgBeo3Pa4iAy9EG0WVhN+EmH7Mhei4OitJZeBPFg6iTjUIT9VdECIUR
+        ngt15PEdlzIK6MIk5P0Snmez+Q==
+X-Google-Smtp-Source: AA6agR4mjpxqV76Y/yBmdlPIWYz25w2cWQRfhhg5nB8mFSzLDDdTfPdcYkDBoKO+uIutMHwMXSzE8Q==
+X-Received: by 2002:a2e:1f01:0:b0:25f:ea3a:4ef0 with SMTP id f1-20020a2e1f01000000b0025fea3a4ef0mr6372995ljf.330.1661850899598;
+        Tue, 30 Aug 2022 02:14:59 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id a28-20020a2eb55c000000b0025e2c5a12b6sm822809ljn.129.2022.08.30.02.14.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 02:14:58 -0700 (PDT)
+Message-ID: <453ac258-ac6c-a9e4-ccc5-b687aa260df3@linaro.org>
+Date:   Tue, 30 Aug 2022 12:14:57 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/5] dt-bindings: vendor-prefixes: add Diodes
+Content-Language: en-US
+To:     Martyn Welch <martyn.welch@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     kernel@collabora.com, Rob Herring <robh@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220829133923.1114555-1-martyn.welch@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220829133923.1114555-1-martyn.welch@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+On 29/08/2022 16:39, Martyn Welch wrote:
+> Diodes Incorporated is a manufacturer of application specific standard
+> products within the discrete, logic, analog, and mixed-signal semiconductor
+> markets.
+> 
+> https://www.diodes.com/
+> 
+> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
 
-With the rise of cloud native, more and more container applications are
-deployed. The network namespace is one of the foundations of the container.
-The sysctls of error_cost and error_burst are important knobs to control
-the sending frequency of ICMP_DEST_UNREACH packet for ipv4. When different
-containers has requirements on the tuning of error_cost and error_burst,
-for host's security, the sysctls should exist per network namespace.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Different netns has different requirements on the setting of error_cost
-and error_burst, which are related with limiting the frequency of sending
-ICMP_DEST_UNREACH packets. Enable them to be configured per netns.
 
-xu xin (3):
-  ipv4: Namespaceify route/error_cost knob
-  ipv4: Namespaceify route/error_burst knob
-  ipv4: add documentation of two sysctls about icmp
-
- Documentation/networking/ip-sysctl.rst | 17 ++++++++++++
- include/net/netns/ipv4.h               |  2 ++
- net/ipv4/route.c                       | 36 ++++++++++++++------------
- 3 files changed, 39 insertions(+), 16 deletions(-)
-
--- 
-2.25.1
-
+Best regards,
+Krzysztof

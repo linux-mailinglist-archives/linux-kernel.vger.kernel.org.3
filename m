@@ -2,173 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7D265A6240
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:41:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4655A6249
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:43:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiH3Llf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:41:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
+        id S230215AbiH3Lno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiH3LlA (ORCPT
+        with ESMTP id S230438AbiH3LnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:41:00 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D35314FC82;
-        Tue, 30 Aug 2022 04:39:26 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-334dc616f86so265484857b3.8;
-        Tue, 30 Aug 2022 04:39:25 -0700 (PDT)
+        Tue, 30 Aug 2022 07:43:22 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844381A394
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 04:41:53 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id q7so15112106lfu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 04:41:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=PDm4CS+d3TEzVN3RfMYIEm8la5mbkwV+TixUxTpSbBk=;
+        b=w4Cmbu+fAEL1Kt+9VlmpNmDTQ20cWAN+cKiJsYvp0WZ5nNswwvSfZSTPvk/38TOZw7
+         HlkcEQriD+Kcfhizg4FzDQIUCp6davqWYa3PDBteiXORxFuT30zyOeYBw0Etj64fuXFQ
+         wMmFFxqVqZFeXCsISzO3vZ7XFzzHBAxwuX+ColpVKwYmL1fl5ohl9vddVeqJpL5QlZbj
+         YxNqEN8CC2aEhOFy6MzM0+IYXo6WODt+s8ikUBGcDlfokfEINExBAVcI8+iOJMQ1YcJf
+         GE/H8fjCdp4eCMC0c2Wnt//fUmXKbDlHWQA9wlQL/KXlruwaUoAWGv3ZiFvqvIT8NcDq
+         pAmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=uV5cfbuaLiTKcX8ebdpr5XbHeoGI6rysE5BbBclWCfI=;
-        b=zjsrBYCgzlhIsAkh7yQHqC7udor2hSvTI4ciFQ2THtTYcGCzifMhc4kkgrFo5/nPv9
-         /ieqy9lTL6DpUDLW+oXtwWCcHR2im1i/jZP3X3aB7zRNHF8NnTD6OOPTR6CY06qbjxOo
-         /nwWvUKNqWM3Eh7n00CETnRMc67Hv1RZlqF/DnOI5WLAuXvmJe8Zv9Efod+sEWT3fXO9
-         02XwZoyLUaRPRonWztVRGwUaBKnZgTMR7g3Ef7CswT+8NGDolmpQ3xn38NByizSBg/7k
-         UsLcRH8/JAo3+jFz5rb3HvEt2D/YzUyz3yVFNV6cR4qq0J36PCmdJ0KWZe+LuFu8z6El
-         MPPQ==
-X-Gm-Message-State: ACgBeo05EV14k3JjFCUbSlvmBJkIcoob+/YrZtBuVf/4p3MymKWQHPxa
-        diIQF9/WTIA26o6DVBjP4zPsGHhklS2n3QBPazTF7pVA
-X-Google-Smtp-Source: AA6agR4+KpbjY1aZb0VdgicXjYCJlvpgSIMRfqYob1yrYyrIGmJU1BotmLajKO2nBE3guHCl/eeE1pmLbzmU7/q+Cj8=
-X-Received: by 2002:a0d:da83:0:b0:329:9c04:fe6d with SMTP id
- c125-20020a0dda83000000b003299c04fe6dmr13902110ywe.196.1661859564844; Tue, 30
- Aug 2022 04:39:24 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=PDm4CS+d3TEzVN3RfMYIEm8la5mbkwV+TixUxTpSbBk=;
+        b=XeekJTRaWeCu3wWHlQE+YUpG/5geRL4ikVzyeE8V+nlgdGAz4IR3V6PhZqKVQTO9Z3
+         A2r9o/68J6k7ygCXVBD9bV/2pOZnpcc3C1ODSmjWIiWqf7wyJoBwpLF71Uai9N5IPv+S
+         /eBiF4f5lkXb3xDgrAjF4a+YnkO/1//vLHBGSGvQtG8l5vZGn8b+/AJkMc0CDdNqj8SH
+         BFKdfr/Ss5ZE/ROzdP/MPyWYH7xFC/2v5KrXUASx+k69vR7RMTiTpUG2ZjpyDrXs1H2I
+         g1j+8YRrqu2WFgl8+jn0PacffgaZgdTAZluLpN7May89lP4x0a8ldcfFzC68ZT6rv1ZZ
+         lbxQ==
+X-Gm-Message-State: ACgBeo2a0DMYrkLxaBZWPLSZmPSdTs1xQxcjyVXKw19a8qjgW/rlUIrh
+        3kte5NWJSISf7JK+ks8HdVjFHA==
+X-Google-Smtp-Source: AA6agR4QAoDP2/7MQFH7BxWhaGqK/kvTaiTH0IY/zf9ryscS7pwN8gh8soHETxiWuLNfYZMQRRqDRg==
+X-Received: by 2002:a05:6512:b89:b0:492:e4bf:adcf with SMTP id b9-20020a0565120b8900b00492e4bfadcfmr7317851lfv.203.1661859711050;
+        Tue, 30 Aug 2022 04:41:51 -0700 (PDT)
+Received: from localhost.localdomain (c-fdcc225c.014-348-6c756e10.bbcust.telenor.se. [92.34.204.253])
+        by smtp.gmail.com with ESMTPSA id f9-20020a0565123b0900b00492e570e036sm1586569lfv.54.2022.08.30.04.41.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 04:41:50 -0700 (PDT)
+From:   Linus Walleij <linus.walleij@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>
+Cc:     "Isaac J . Manjarres" <isaacmanjarres@google.com>,
+        stable@vger.kernel.org, Saravana Kannan <saravanak@google.com>,
+        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v3] driver core: Don't probe devices after bus_type.match() probe deferral
+Date:   Tue, 30 Aug 2022 13:39:40 +0200
+Message-Id: <20220830113940.331931-1-linus.walleij@linaro.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220817184026.3468620-1-isaacmanjarres@google.com>
+References: <20220817184026.3468620-1-isaacmanjarres@google.com>
 MIME-Version: 1.0
-References: <20220829162953.5947-1-mario.limonciello@amd.com> <20220829162953.5947-2-mario.limonciello@amd.com>
-In-Reply-To: <20220829162953.5947-2-mario.limonciello@amd.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 30 Aug 2022 13:39:09 +0200
-Message-ID: <CAJZ5v0iF1_MUptawLL4DD0RqZpysH2B+Pk5sj_=gLv9AOVdy=Q@mail.gmail.com>
-Subject: Re: [PATCH v3 1/4] ACPI: s2idle: Add a new ->check() callback for platform_s2idle_ops
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Hans de Goede <hdegoede@redhat.com>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 6:29 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
+> Both __device_attach_driver() and __driver_attach() check the return
+> code of the bus_type.match() function to see if the device needs to be
+> added to the deferred probe list. After adding the device to the list,
+> the logic attempts to bind the device to the driver anyway, as if the
+> device had matched with the driver, which is not correct.
 >
-> On some platforms it is found that Linux more aggressively enters s2idle
-> than Windows enters Modern Standby and this uncovers some synchronization
-> issues for the platform.  To aid in debugging this class of problems in
-> the future, add support for an extra optional callback intended for
-> drivers to emit extra debugging.
+> If __device_attach_driver() detects that the device in question is not
+> ready to match with a driver on the bus, then it doesn't make sense for
+> the device to attempt to bind with the current driver or continue
+> attempting to match with any of the other drivers on the bus. So, update
+> the logic in __device_attach_driver() to reflect this.
 >
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> If __driver_attach() detects that a driver tried to match with a device
+> that is not ready to match yet, then the driver should not attempt to bind
+> with the device. However, the driver can still attempt to match and bind
+> with other devices on the bus, as drivers can be bound to multiple
+> devices. So, update the logic in __driver_attach() to reflect this.
+>
+> Cc: stable@vger.kernel.org
+> Cc: Saravana Kannan <saravanak@google.com>
+> Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+> Tested-by: Guenter Roeck <linux@roeck-us.net>
+> Reviewed-by: Saravana Kannan <saravanak@google.com>
 
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+This fixes a QEMU regression for me:
+Tested-by: Linus Walleij <linus.walleij@linaro.org>
 
-and I'm assuming that this is for Hans.
-
-> ---
-> v2->v3:
->  * Rename to *check
-> v1->v2:
->  * Add a prototype for `acpi_s2idle_enter`
->
->  drivers/acpi/sleep.h      |  1 +
->  drivers/acpi/x86/s2idle.c | 14 ++++++++++++++
->  include/linux/acpi.h      |  1 +
->  include/linux/suspend.h   |  1 +
->  kernel/power/suspend.c    |  3 +++
->  5 files changed, 20 insertions(+)
->
-> diff --git a/drivers/acpi/sleep.h b/drivers/acpi/sleep.h
-> index 7fe41ee489d6..d960a238be4e 100644
-> --- a/drivers/acpi/sleep.h
-> +++ b/drivers/acpi/sleep.h
-> @@ -18,6 +18,7 @@ static inline acpi_status acpi_set_waking_vector(u32 wakeup_address)
->  extern int acpi_s2idle_begin(void);
->  extern int acpi_s2idle_prepare(void);
->  extern int acpi_s2idle_prepare_late(void);
-> +extern void acpi_s2idle_check(void);
->  extern bool acpi_s2idle_wake(void);
->  extern void acpi_s2idle_restore_early(void);
->  extern void acpi_s2idle_restore(void);
-> diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
-> index f9ac12b778e6..474aa46f82f6 100644
-> --- a/drivers/acpi/x86/s2idle.c
-> +++ b/drivers/acpi/x86/s2idle.c
-> @@ -486,6 +486,19 @@ int acpi_s2idle_prepare_late(void)
->         return 0;
->  }
->
-> +void acpi_s2idle_check(void)
-> +{
-> +       struct acpi_s2idle_dev_ops *handler;
-> +
-> +       if (!lps0_device_handle || sleep_no_lps0)
-> +               return;
-> +
-> +       list_for_each_entry(handler, &lps0_s2idle_devops_head, list_node) {
-> +               if (handler->check)
-> +                       handler->check();
-> +       }
-> +}
-> +
->  void acpi_s2idle_restore_early(void)
->  {
->         struct acpi_s2idle_dev_ops *handler;
-> @@ -527,6 +540,7 @@ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
->         .begin = acpi_s2idle_begin,
->         .prepare = acpi_s2idle_prepare,
->         .prepare_late = acpi_s2idle_prepare_late,
-> +       .check = acpi_s2idle_check,
->         .wake = acpi_s2idle_wake,
->         .restore_early = acpi_s2idle_restore_early,
->         .restore = acpi_s2idle_restore,
-> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
-> index 6f64b2f3dc54..acaa2ddc067d 100644
-> --- a/include/linux/acpi.h
-> +++ b/include/linux/acpi.h
-> @@ -1075,6 +1075,7 @@ acpi_status acpi_os_prepare_extended_sleep(u8 sleep_state,
->  struct acpi_s2idle_dev_ops {
->         struct list_head list_node;
->         void (*prepare)(void);
-> +       void (*check)(void);
->         void (*restore)(void);
->  };
->  int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg);
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 70f2921e2e70..03ed42ed2c7f 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -191,6 +191,7 @@ struct platform_s2idle_ops {
->         int (*begin)(void);
->         int (*prepare)(void);
->         int (*prepare_late)(void);
-> +       void (*check)(void);
->         bool (*wake)(void);
->         void (*restore_early)(void);
->         void (*restore)(void);
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index 827075944d28..c6272d466e58 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -136,6 +136,9 @@ static void s2idle_loop(void)
->                         break;
->                 }
->
-> +               if (s2idle_ops && s2idle_ops->check)
-> +                       s2idle_ops->check();
-> +
->                 s2idle_enter();
->         }
->
-> --
-> 2.34.1
->
+Yours,
+Linus Walleij

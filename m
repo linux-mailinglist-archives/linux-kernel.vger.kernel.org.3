@@ -2,98 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E875A714A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:00:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85D835A714D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:01:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231272AbiH3XAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 19:00:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
+        id S231754AbiH3XBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 19:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbiH3XAf (ORCPT
+        with ESMTP id S231667AbiH3XAn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 19:00:35 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A3A94EE8;
-        Tue, 30 Aug 2022 16:00:32 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 30 Aug 2022 19:00:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F03095E71;
+        Tue, 30 Aug 2022 16:00:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MHN7c497Yz4xG6;
-        Wed, 31 Aug 2022 09:00:28 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661900428;
-        bh=nE0WEQfnKDXBwm/+0D7dRm2n1Xi9E32uQ4lYG6IirkE=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id EE2B8B81E3C;
+        Tue, 30 Aug 2022 23:00:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70B2AC433D7;
+        Tue, 30 Aug 2022 23:00:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1661900437;
+        bh=cN2UArrEEjLgyw+ytEbcnL0Je4jmNbuPP7fQx642XoA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=DE4/T3ojyedyVuNVt8m9+GuuACl2DIKfc/EEh0vXdNiYO4cXjLrptwkR9aZtdxBMh
-         f3NL39gG0UQvvf8FJjTXhTXqjUEt8wEuMaHbkgfuJ0FiSw6TrBAhGjgKMTIqp7JWq3
-         PUv1O0UgJpX5EwSizhD6ZYtGMfmAk8W+DDZCaugOZNGnmkqv4NGqhvC0LP3Jewuhuk
-         rd1ejomR5dH4Sq5ZSWo5bRuRHJx77lbSIfsZVYKO7vhFFmIc5AiR1t+RaUBG9noVnl
-         PU0JBCA+B2r9AwOTqhKuHy2Nd8wPRCRm4k9EaYLjLILsaC781TLYtuosuDQruWPpxr
-         WSVgPizYED0aQ==
-Date:   Wed, 31 Aug 2022 09:00:26 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build warnings after merge of the amdgpu tree
-Message-ID: <20220831090026.2e6b57ac@canb.auug.org.au>
-In-Reply-To: <20220811121050.0da83776@canb.auug.org.au>
-References: <20220811121050.0da83776@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tTkT0.sZmTTKPObn2kXxfth";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        b=ohIDGa98EfP/vnDW70jHjDc/nd2xOxnSnu/mv2Jzjwe6cqIq+rV1Qhw/M4vnzrYOT
+         EwYTIPJTx/qLyv/h5cZ8xG+7o+dhtPCXzd/0q3GfwVuZ+LZ3GNljpMZgo4XBuJqAJ8
+         /Ti4orN80h+hji0IwOpWIihUD2Lh8l03kll5CWYI=
+Date:   Tue, 30 Aug 2022 16:00:35 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Yu Zhao <yuzhao@google.com>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 04/44] x86: asm: instrument usercopy in get_user()
+ and put_user()
+Message-Id: <20220830160035.8baf16a7f40cf09963e8bc55@linux-foundation.org>
+In-Reply-To: <CAOUHufZrb_gkxaWfCLuFodRtCwGGdYjo2wvFW7kTiTkRbg4XNQ@mail.gmail.com>
+References: <20220826150807.723137-1-glider@google.com>
+        <20220826150807.723137-5-glider@google.com>
+        <20220826211729.e65d52e7919fee5c34d22efc@linux-foundation.org>
+        <CAG_fn=Xpva_yx8oG-xi7jqJyM2YLcjNda+8ZyQPGBMV411XgMQ@mail.gmail.com>
+        <20220829122452.cce41f2754c4e063f3ae8b75@linux-foundation.org>
+        <CAG_fn=X6eZ6Cdrv5pivcROHi3D8uymdgh+EbnFasBap2a=0LQQ@mail.gmail.com>
+        <20220830150549.afa67340c2f5eb33ff9615f4@linux-foundation.org>
+        <CAOUHufZrb_gkxaWfCLuFodRtCwGGdYjo2wvFW7kTiTkRbg4XNQ@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/tTkT0.sZmTTKPObn2kXxfth
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, 30 Aug 2022 16:25:24 -0600 Yu Zhao <yuzhao@google.com> wrote:
 
-Hi all,
+> On Tue, Aug 30, 2022 at 4:05 PM Andrew Morton <akpm@linux-foundation.org> wrote:
+> >
+> > On Tue, 30 Aug 2022 16:23:44 +0200 Alexander Potapenko <glider@google.com> wrote:
+> >
+> > > >                  from init/do_mounts.c:2:
+> > > > ./include/linux/page-flags.h: In function ‘page_fixed_fake_head’:
+> > > > ./include/linux/page-flags.h:226:36: error: invalid use of undefined type ‘const struct page’
+> > > >   226 |             test_bit(PG_head, &page->flags)) {
+> > > >       |                                    ^~
+> > > > ./include/linux/bitops.h:50:44: note: in definition of macro ‘bitop’
+> > > >    50 |           __builtin_constant_p((uintptr_t)(addr) != (uintptr_t)NULL) && \
+> > > >       |                                            ^~~~
+> > > > ./include/linux/page-flags.h:226:13: note: in expansion of macro ‘test_bit’
+> > > >   226 |             test_bit(PG_head, &page->flags)) {
+> > > >       |             ^~~~~~~~
+> > > > ...
+> > >
+> > > Gotcha, this is a circular dependency: mm_types.h -> sched.h ->
+> > > kmsan.h -> gfp.h -> mmzone.h -> page-flags.h -> mm_types.h, where the
+> > > inclusion of sched.h into mm_types.h was only introduced in "mm:
+> > > multi-gen LRU: support page table walks" - that's why the problem was
+> > > missing in other trees.
+> >
+> > Ah, thanks for digging that out.
+> >
+> > Yu, that inclusion is regrettable.
+> 
+> Sorry for the trouble -- it's also superfluous because we don't call
+> lru_gen_use_mm() when switching to the kernel.
+> 
+> I've queued the following for now.
 
-On Thu, 11 Aug 2022 12:10:49 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
-wrote:
->
-> After merging the amdgpu tree, today's linux-next build (htmldocs)
-> produced these warnings:
->=20
-> drivers/gpu/drm/amd/display/dc/dc.h:465: warning: Enum value 'MPC_SPLIT_A=
-VOID' not described in enum 'pipe_split_policy'
-> drivers/gpu/drm/amd/display/dc/dc.h:465: warning: Enum value 'MPC_SPLIT_A=
-VOID_MULT_DISP' not described in enum 'pipe_split_policy'
->=20
-> Introduced by commit
->=20
->   a2b3b9d57bdb ("drm/amd/display: Document pipe split policy")
+Well, the rest of us want it too.
 
-I am still seeing these warnings.
+> --- a/include/linux/mm_types.h
+> +++ b/include/linux/mm_types.h
+> @@ -3,7 +3,6 @@
+>  #define _LINUX_MM_TYPES_H
+> 
+>  #include <linux/mm_types_task.h>
+> -#include <linux/sched.h>
+> 
+>  #include <linux/auxvec.h>
+>  #include <linux/kref.h>
+> @@ -742,8 +741,7 @@ static inline void lru_gen_init_mm(struct mm_struct *mm)
+> 
+>  static inline void lru_gen_use_mm(struct mm_struct *mm)
+>  {
+> -       if (!(current->flags & PF_KTHREAD))
+> -               WRITE_ONCE(mm->lru_gen.bitmap, -1);
+> +       WRITE_ONCE(mm->lru_gen.bitmap, -1);
+>  }
 
---=20
-Cheers,
-Stephen Rothwell
+Doesn't apply.  I did:
 
---Sig_/tTkT0.sZmTTKPObn2kXxfth
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--- a/include/linux/mm_types.h~mm-multi-gen-lru-support-page-table-walks-fix
++++ a/include/linux/mm_types.h
+@@ -3,7 +3,6 @@
+ #define _LINUX_MM_TYPES_H
+ 
+ #include <linux/mm_types_task.h>
+-#include <linux/sched.h>
+ 
+ #include <linux/auxvec.h>
+ #include <linux/kref.h>
+@@ -742,11 +741,7 @@ static inline void lru_gen_init_mm(struc
+ 
+ static inline void lru_gen_use_mm(struct mm_struct *mm)
+ {
+-	/* unlikely but not a bug when racing with lru_gen_migrate_mm() */
+-	VM_WARN_ON_ONCE(list_empty(&mm->lru_gen.list));
+-
+-	if (!(current->flags & PF_KTHREAD))
+-		WRITE_ONCE(mm->lru_gen.bitmap, -1);
++	WRITE_ONCE(mm->lru_gen.bitmap, -1);
+ }
+ 
+ #else /* !CONFIG_LRU_GEN */
+_
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMOlosACgkQAVBC80lX
-0GzZ5Qf/bM3zEdfIHo6hsYGNHDO2SlqPgO2cKKrCYEI+knlRPnaSVrjSBkSpSEt2
-DMhJO8QrBgtOphBKDdVtHshz1ArrsRibjNo58t7dqcNh/tzLPYxUYqTdrpLEH1KT
-V+gdUN4kTtEgvwdq5olhNw2JtzMJv5Yno/+1eml5SuHN6MCztIYq7aQQVoa/ysgT
-KSjXWHbqgh5781g6cIXRl0W7vGKZ5rXb0t8ZMiNQJzt2M71qTx1COwD4MUGL6VmY
-e/oArXcAF+1GipFUa0oxMfN3BHQsw7ZmbrlJDwKy/tbgQ20WFP37ZCQ5yP1vCbGe
-8vsrzTo5vYEPas0dXMToWVtj/yksaA==
-=IFam
------END PGP SIGNATURE-----
-
---Sig_/tTkT0.sZmTTKPObn2kXxfth--

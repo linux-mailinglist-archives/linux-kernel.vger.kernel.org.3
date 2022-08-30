@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 654415A64D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB885A64CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiH3NcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S230349AbiH3NcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:32:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiH3NcA (ORCPT
+        with ESMTP id S230318AbiH3NcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Aug 2022 09:32:00 -0400
 Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162CCD5E8E;
-        Tue, 30 Aug 2022 06:31:59 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MH7QY49p7zYcqR;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8A9D5DE9;
+        Tue, 30 Aug 2022 06:31:58 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MH7QY6dq2zYcqv;
         Tue, 30 Aug 2022 21:27:33 +0800 (CST)
 Received: from huawei.com (10.175.103.91) by dggpemm500022.china.huawei.com
  (7.185.36.162) with Microsoft SMTP Server (version=TLS1_2,
@@ -26,9 +26,9 @@ From:   Zeng Heng <zengheng4@huawei.com>
 To:     <djwong@kernel.org>
 CC:     <linux-xfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <zengheng4@huawei.com>
-Subject: [PATCH -next 1/2] xfs: simplify if-else condition in xfs_validate_new_dalign
-Date:   Tue, 30 Aug 2022 21:39:38 +0800
-Message-ID: <20220830133939.2726749-2-zengheng4@huawei.com>
+Subject: [PATCH -next 2/2] xfs: simplify if-else condition in xfs_reflink_trim_around_shared
+Date:   Tue, 30 Aug 2022 21:39:39 +0800
+Message-ID: <20220830133939.2726749-3-zengheng4@huawei.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220830133939.2726749-1-zengheng4@huawei.com>
 References: <20220830133939.2726749-1-zengheng4@huawei.com>
@@ -49,67 +49,56 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 "else" is not generally useful after a return,
-so remove them which makes if condition a bit
-more clear.
+so remove it for clean code.
 
 There is no logical changes.
 
 Signed-off-by: Zeng Heng <zengheng4@huawei.com>
 ---
- fs/xfs/xfs_mount.c | 38 ++++++++++++++++++++------------------
- 1 file changed, 20 insertions(+), 18 deletions(-)
+ fs/xfs/xfs_reflink.c | 22 ++++++++++++----------
+ 1 file changed, 12 insertions(+), 10 deletions(-)
 
-diff --git a/fs/xfs/xfs_mount.c b/fs/xfs/xfs_mount.c
-index f10c88cee116..e8bb3c2e847e 100644
---- a/fs/xfs/xfs_mount.c
-+++ b/fs/xfs/xfs_mount.c
-@@ -300,26 +300,28 @@ xfs_validate_new_dalign(
- 	"alignment check failed: sunit/swidth vs. blocksize(%d)",
- 			mp->m_sb.sb_blocksize);
- 		return -EINVAL;
+diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
+index 251f20ddd368..93bdd25680bc 100644
+--- a/fs/xfs/xfs_reflink.c
++++ b/fs/xfs/xfs_reflink.c
+@@ -200,7 +200,9 @@ xfs_reflink_trim_around_shared(
+ 	if (fbno == NULLAGBLOCK) {
+ 		/* No shared blocks at all. */
+ 		return 0;
+-	} else if (fbno == agbno) {
++	}
++
++	if (fbno == agbno) {
+ 		/*
+ 		 * The start of this extent is shared.  Truncate the
+ 		 * mapping at the end of the shared region so that a
+@@ -210,16 +212,16 @@ xfs_reflink_trim_around_shared(
+ 		irec->br_blockcount = flen;
+ 		*shared = true;
+ 		return 0;
 -	} else {
 -		/*
--		 * Convert the stripe unit and width to FSBs.
+-		 * There's a shared extent midway through this extent.
+-		 * Truncate the mapping at the start of the shared
+-		 * extent so that a subsequent iteration starts at the
+-		 * start of the shared region.
 -		 */
--		mp->m_dalign = XFS_BB_TO_FSBT(mp, mp->m_dalign);
--		if (mp->m_dalign && (mp->m_sb.sb_agblocks % mp->m_dalign)) {
--			xfs_warn(mp,
--		"alignment check failed: sunit/swidth vs. agsize(%d)",
--				 mp->m_sb.sb_agblocks);
--			return -EINVAL;
--		} else if (mp->m_dalign) {
--			mp->m_swidth = XFS_BB_TO_FSBT(mp, mp->m_swidth);
--		} else {
--			xfs_warn(mp,
--		"alignment check failed: sunit(%d) less than bsize(%d)",
--				 mp->m_dalign, mp->m_sb.sb_blocksize);
--			return -EINVAL;
--		}
+-		irec->br_blockcount = fbno - agbno;
+-		return 0;
  	}
- 
++
 +	/*
-+	 * Convert the stripe unit and width to FSBs.
++	 * There's a shared extent midway through this extent.
++	 * Truncate the mapping at the start of the shared
++	 * extent so that a subsequent iteration starts at the
++	 * start of the shared region.
 +	 */
-+	mp->m_dalign = XFS_BB_TO_FSBT(mp, mp->m_dalign);
-+	if (mp->m_dalign && (mp->m_sb.sb_agblocks % mp->m_dalign)) {
-+		xfs_warn(mp,
-+	"alignment check failed: sunit/swidth vs. agsize(%d)",
-+			mp->m_sb.sb_agblocks);
-+		return -EINVAL;
-+	}
-+
-+	if (!mp->m_dalign) {
-+		xfs_warn(mp,
-+	"alignment check failed: sunit(%d) less than bsize(%d)",
-+			mp->m_dalign, mp->m_sb.sb_blocksize);
-+		return -EINVAL;
-+	}
-+
-+	mp->m_swidth = XFS_BB_TO_FSBT(mp, mp->m_swidth);
-+
- 	if (!xfs_has_dalign(mp)) {
- 		xfs_warn(mp,
- "cannot change alignment: superblock does not support data alignment");
++	irec->br_blockcount = fbno - agbno;
++	return 0;
+ }
+ 
+ int
 -- 
 2.25.1
 

@@ -2,433 +2,851 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13DA95A6371
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:35:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAF015A6376
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiH3MfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
+        id S229752AbiH3MgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiH3MfN (ORCPT
+        with ESMTP id S229504AbiH3MgN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:35:13 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AC1F46DB3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:35:08 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4MH6G33z0Jz9spH;
-        Tue, 30 Aug 2022 12:35:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1661862908; bh=OW5Si2V5toqtmIHNaREVvGMPB0YJovcvgLjrqBDWMP0=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VRQX0iazTanVS5OceiJXZsNOZurFR6J6wCyykFuUK6WFMDOpJsOrs0UPDQUO+d33G
-         WEvACnYOpROhdazpsJvBRbP66IKP9ARhEDe3Ixl4q9flwxW8fA8nWzvcl26VXhkMov
-         5VW6GwaC0F7Miinq8IRccOhzjvvkWG6Of13Qo2Bk=
-X-Riseup-User-ID: BBFF72A898285B82B5AA53FEBBD26A988533D0558A62D62D26F14A98968C09B5
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4MH6Fs35Yvz5vP3;
-        Tue, 30 Aug 2022 12:34:57 +0000 (UTC)
-Message-ID: <1109a3f0-3b07-e354-91dc-b786370f5ccf@riseup.net>
-Date:   Tue, 30 Aug 2022 09:34:53 -0300
+        Tue, 30 Aug 2022 08:36:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33DAA61DF
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:36:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661862970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5oiYjf0mGVRXobzkKbV/sPZDxZVW6AII2pTU2TKyMq8=;
+        b=Mu1NQsBK2QR6BgkyF4wRxZ+SsM8cRg2Fe8ufMuuf28TVUbXkypJGC/8dV5RBxTFQiMaz+e
+        aRS+ZIijZ615tKwe4u+Ah+EoqZqXuahj19Q6P2k5NP2jv0ZCkctEyl2O7K0ockTq6/9rYR
+        dTsGuR2lKyPFztyTtJIfEUJuJmVj890=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-389-pur2U4iwMPaHtBmaryHuRA-1; Tue, 30 Aug 2022 08:36:08 -0400
+X-MC-Unique: pur2U4iwMPaHtBmaryHuRA-1
+Received: by mail-pl1-f199.google.com with SMTP id m15-20020a170902db0f00b001753b1c5adeso11722plx.18
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:36:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=5oiYjf0mGVRXobzkKbV/sPZDxZVW6AII2pTU2TKyMq8=;
+        b=lKrMVxuHXhQE6cgYSIO1JrWh2MlS/EBjfiZcmYNu+YjXJoOWIsMobSBR7l8i57THI6
+         8vg0hQLQmUwfGdU0DIDw+K0WHi45o1mpwE0Pu3OVVNPFANQZOBlGE0UUvYs6Ay8H01nW
+         XtEOdZOfgCyAeS5OKEd442DqhtD9zP+Z0WOl0iP7oN8p6dYGho2i0/ZjaKgHliIhc7mp
+         be/chDJ3GUU3k/DQ64RanDuIJecdd8Mmq4JAGSEWbg5M2z1xGeRJxK94J0b2zV0HtXpy
+         ZNhD/CZyotaD/FJl0lTv7ZXR85i0cjK0JNfXSFZ3CQmmR/CbBOolsKfpTuf3uW7SLflQ
+         Vh1w==
+X-Gm-Message-State: ACgBeo3boixHFxA3nI5QBavvvMV0+BhPhtXm7cHBQXWIkaXk3iKRr/4V
+        G/BzHIm26z6W3pZHXMZJ3YKG+zKlUI9CnzXT8PgDd+N1oHvNAquRRxQCVLGdxZqmopjOe1GW0E1
+        1w0Te9BQyAGAyh9XgoYIEnyQxiIqTObUoD+0AQSQp
+X-Received: by 2002:a17:902:b58a:b0:16e:f91a:486b with SMTP id a10-20020a170902b58a00b0016ef91a486bmr21598101pls.119.1661862966360;
+        Tue, 30 Aug 2022 05:36:06 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6RGHLOYWvG1/wLvEI4d119yJ1JbZ2ET1bLsBpoVe0M65yG5yg76TP8DqXe8znDOmzi5ZjlqPW52EhueTuHiTE=
+X-Received: by 2002:a17:902:b58a:b0:16e:f91a:486b with SMTP id
+ a10-20020a170902b58a00b0016ef91a486bmr21598056pls.119.1661862965842; Tue, 30
+ Aug 2022 05:36:05 -0700 (PDT)
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 19/41] drm/modes: Introduce the tv_mode property as a
- command-line option
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc:     Dom Cobley <dom@raspberrypi.com>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        nouveau@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-sunxi@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        linux-arm-kernel@lists.infradead.org
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-19-459522d653a7@cerno.tech>
-From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-19-459522d653a7@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220822060936.769855-1-marcus.folkesson@gmail.com>
+ <CAO-hwJ+3Yrr--cr=r5+jvs4A=A-cmDtrKQETo=YOYDC3nXTMBg@mail.gmail.com>
+ <YwTvrNuulKx0SB6H@gmail.com> <CAO-hwJKiq50fWwXNUGcXeWtWcUXb65ZmJMsADfrsUTac_Xj2dw@mail.gmail.com>
+ <Ywt5Oo+kTDoZFbqH@gmail.com>
+In-Reply-To: <Ywt5Oo+kTDoZFbqH@gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Tue, 30 Aug 2022 14:35:54 +0200
+Message-ID: <CAO-hwJ+YD8KuaO86Ws0T0y1VBzttpVSEKW=ut0JuT4TxGdDowQ@mail.gmail.com>
+Subject: Re: [RESEND PATCH 1/2] HID: Add driver for RC Simulator Controllers
+To:     Marcus Folkesson <marcus.folkesson@gmail.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, Jiri Kosina <jikos@kernel.org>,
+        Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+Hi Marcus,
 
-On 8/29/22 10:11, Maxime Ripard wrote:
-> Our new tv mode option allows to specify the TV mode from a property.
-> However, it can still be useful, for example to avoid any boot time
-> artifact, to set that property directly from the kernel command line.
-> 
-> Let's add some code to allow it, and some unit tests to exercise that code.
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
-> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
-> index 73d01e755496..a759a4ba0036 100644
-> --- a/drivers/gpu/drm/drm_modes.c
-> +++ b/drivers/gpu/drm/drm_modes.c
-> @@ -2115,6 +2115,30 @@ static int drm_mode_parse_panel_orientation(const char *delim,
->  	return 0;
->  }
->  
-> +static int drm_mode_parse_tv_mode(const char *delim,
-> +				  struct drm_cmdline_mode *mode)
-> +{
-> +	const char *value;
-> +	unsigned int len;
+On Sun, Aug 28, 2022 at 4:13 PM Marcus Folkesson
+<marcus.folkesson@gmail.com> wrote:
+>
+> Hi,
+>
+> On Tue, Aug 23, 2022 at 06:43:47PM +0200, Benjamin Tissoires wrote:
+> > On Tue, Aug 23, 2022 at 5:13 PM Marcus Folkesson
+> > <marcus.folkesson@gmail.com> wrote:
+>
+> > >
+> > > Thank you  Benjamin,
+> > >
+> > > On Tue, Aug 23, 2022 at 11:49:59AM +0200, Benjamin Tissoires wrote:
+> > > > Hi Marcus,
+> > > >
+> > > > [and sorry for the delay in the review of your patches]
+> > > >
+> > > > On Mon, Aug 22, 2022 at 8:04 AM Marcus Folkesson
+> > > > <marcus.folkesson@gmail.com> wrote:
+> > > > >
+> > > > > Several RC Simulator Controllers are HID compliant with similar
+> > > > > interface.
+> > > > >
+> > > > > Add support for these controllers:
+> > > > >  - Phoenix RC (HID variant)
+> > > > >  - Car VRC2.0
+> > > > >  - Real Flight G5/G6/G7
+> > > > >  - Aero Fly, FMS
+> > > > >  - OrangeRX FrSky
+> > > > >
+> > > > > Signed-off-by: Marcus Folkesson <marcus.folkesson@gmail.com>
+> > > > > ---
+> > > > >  Documentation/hid/index.rst |   1 +
+> > > > >  Documentation/hid/rcsim.rst | 142 ++++++++++++++++
+> > > > >  drivers/hid/Kconfig         |  11 ++
+> > > > >  drivers/hid/Makefile        |   1 +
+> > > > >  drivers/hid/hid-ids.h       |   5 +
+> > > > >  drivers/hid/hid-rcsim.c     | 315 ++++++++++++++++++++++++++++++++++++
+> > > > >  6 files changed, 475 insertions(+)
+> > > > >  create mode 100644 Documentation/hid/rcsim.rst
+> > > > >  create mode 100644 drivers/hid/hid-rcsim.c
+> > > > >
+> > > > > diff --git a/Documentation/hid/index.rst b/Documentation/hid/index.rst
+> > > > > index e50f513c579c..e5813d264f37 100644
+> > > > > --- a/Documentation/hid/index.rst
+> > > > > +++ b/Documentation/hid/index.rst
+> > > > > @@ -17,3 +17,4 @@ Human Interface Devices (HID)
+> > > > >     hid-alps
+> > > > >     intel-ish-hid
+> > > > >     amd-sfh-hid
+> > > > > +   rcsim
+> > > > > diff --git a/Documentation/hid/rcsim.rst b/Documentation/hid/rcsim.rst
+> > > > > new file mode 100644
+> > > > > index 000000000000..1a031f7189cb
+> > > > > --- /dev/null
+> > > > > +++ b/Documentation/hid/rcsim.rst
+> > > > > @@ -0,0 +1,142 @@
+> > > > > +.. SPDX-License-Identifier: GPL-2.0
+> > > > > +
+> > > > > +=================================
+> > > > > +rcsim - RC Simulator Controllers
+> > > > > +=================================
+> > > > > +
+> > > > > +:Author: Marcus Folkesson <marcus.folkesson@gmail.com>
+> > > > > +
+> > > > > +This driver let you use your own RC controller plugged
+> > > > > +into your computer using an HID compatible USB dongle.
+> > > > > +
+> > > > > +There are several HID compatible USB dongles from different
+> > > > > +vendors. The driver currently supports:
+> > > > > +
+> > > > > +- Phoenix RC (HID variant) (8ch)
+> > > > > +- Car VRC2.0 (2ch)
+> > > > > +- Real Flight G5/G6/G7 (6ch)
+> > > > > +- Aero Fly, FMS (8ch)
+> > > > > +- OrangeRX FrSky (6ch)
+> > > > > +
+> > > > > +Many RC controllers is able to configure which stick goes to which channel.
+> > > > > +This is also configurable in most simulators, so a matching is not necessary.
+> > > > > +
+> > > > > +Supported dongles
+> > > > > +==================
+> > > > > +
+> > > > > +PhoenixRC
+> > > > > +----------
+> > > > > +
+> > > > > +The PhoenixRC has one HID compatible variant which is supported by this driver.
+> > > > > +The controller has support for 8 analog channels.
+> > > > > +
+> > > > > +The driver is generating the following input event for on channels:
+> > > > > +
+> > > > > ++---------+----------------+
+> > > > > +| Channel |      Event     |
+> > > > > ++=========+================+
+> > > > > +|     1   |  ABS_Y         |
+> > > > > ++---------+----------------+
+> > > > > +|     2   |  ABS_X         |
+> > > > > ++---------+----------------+
+> > > > > +|     3   |  ABS_RY        |
+> > > > > ++---------+----------------+
+> > > > > +|     4   |  ABS_RX        |
+> > > > > ++---------+----------------+
+> > > > > +|     5   |  ABS_RUDDER    |
+> > > > > ++---------+----------------+
+> > > > > +|     6   |  ABS_THROTTLE  |
+> > > > > ++---------+----------------+
+> > > > > +|     7   |  ABS_Z         |
+> > > > > ++---------+----------------+
+> > > > > +|     8   |  ABS_RZ        |
+> > > > > ++---------+----------------+
+> > > > > +
+> > > > > +VRC2.0
+> > > > > +----------
+> > > > > +VRC2.0 is a controller for RC Cars.
+> > > > > +The controller has support for 2 analog channels.
+> > > > > +
+> > > > > +The driver is generating the following input event for on channels:
+> > > > > +
+> > > > > ++---------+----------------+
+> > > > > +| Channel |      Event     |
+> > > > > ++=========+================+
+> > > > > +|     1   |  ABS_GAS       |
+> > > > > ++---------+----------------+
+> > > > > +|     2   |  ABS_WHEEL     |
+> > > > > ++---------+----------------+
+> > > > > +
+> > > > > +RealFlight
+> > > > > +----------
+> > > > > +
+> > > > > +This driver supports Realflight G4-G7 and above
+> > > > > +The controller has support for 4 analog channels and two buttons.
+> > > > > +
+> > > > > +The driver is generating the following input event for on channels:
+> > > > > +
+> > > > > ++---------+----------------+
+> > > > > +| Channel |      Event     |
+> > > > > ++=========+================+
+> > > > > +|     1   |  ABS_Y         |
+> > > > > ++---------+----------------+
+> > > > > +|     2   |  ABS_X         |
+> > > > > ++---------+----------------+
+> > > > > +|     3   |  ABS_RY        |
+> > > > > ++---------+----------------+
+> > > > > +|     4   |  ABS_RX        |
+> > > > > ++---------+----------------+
+> > > > > +|     5   |  BTN_A         |
+> > > > > ++---------+----------------+
+> > > > > +|     6   |  BTN_B         |
+> > > > > ++---------+----------------+
+> > > > > +
+> > > > > +XTR+G2+FMS Controllers
+> > > > > +--------------------------------
+> > > > > +
+> > > > > +The controllers has support for 8 analog channels.
+> > > > > +
+> > > > > +The driver is generating the following input event for on channels:
+> > > > > +
+> > > > > ++---------+----------------+
+> > > > > +| Channel |      Event     |
+> > > > > ++=========+================+
+> > > > > +|     1   |  ABS_Y         |
+> > > > > ++---------+----------------+
+> > > > > +|     2   |  ABS_X         |
+> > > > > ++---------+----------------+
+> > > > > +|     3   |  ABS_RY        |
+> > > > > ++---------+----------------+
+> > > > > +|     4   |  ABS_RX        |
+> > > > > ++---------+----------------+
+> > > > > +|     5   |  ABS_RUDDER    |
+> > > > > ++---------+----------------+
+> > > > > +|     6   |  ABS_THROTTLE  |
+> > > > > ++---------+----------------+
+> > > > > +|     7   |  ABS_Z         |
+> > > > > ++---------+----------------+
+> > > > > +|     8   |  ABS_RZ        |
+> > > > > ++---------+----------------+
+> > > > > +
+> > > > > +OrangeRX
+> > > > > +----------
+> > > > > +
+> > > > > +The controllers has support for 6 analog channels.
+> > > > > +
+> > > > > +The driver is generating the following input event for on channels:
+> > > > > +
+> > > > > ++---------+----------------+
+> > > > > +| Channel |      Event     |
+> > > > > ++=========+================+
+> > > > > +|     1   |  ABS_Y         |
+> > > > > ++---------+----------------+
+> > > > > +|     2   |  ABS_X         |
+> > > > > ++---------+----------------+
+> > > > > +|     3   |  ABS_RY        |
+> > > > > ++---------+----------------+
+> > > > > +|     4   |  ABS_RX        |
+> > > > > ++---------+----------------+
+> > > > > +|     5   |  ABS_RUDDER    |
+> > > > > ++---------+----------------+
+> > > > > +|     6   |  ABS_THROTTLE  |
+> > > > > ++---------+----------------+
+> > > > > diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+> > > > > index 70da5931082f..d8313d36086c 100644
+> > > > > --- a/drivers/hid/Kconfig
+> > > > > +++ b/drivers/hid/Kconfig
+> > > > > @@ -957,6 +957,17 @@ config HID_RAZER
+> > > > >         Support for Razer devices that are not fully compliant with the
+> > > > >         HID standard.
+> > > > >
+> > > > > +config HID_RCSIM
+> > > > > +       tristate "RC Simulator Controllers"
+> > > > > +       depends on HID
+> > > > > +       help
+> > > > > +       Support for several HID compatible RC Simulator Controllers including
+> > > > > +         - Phoenix RC
+> > > > > +         - Car VRC2.0
+> > > > > +         - Real Flight
+> > > > > +         - Aero Fly, FMS
+> > > > > +         - OrangeRX FrSky
+> > > > > +
+> > > > >  config HID_PRIMAX
+> > > > >         tristate "Primax non-fully HID-compliant devices"
+> > > > >         depends on HID
+> > > > > diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
+> > > > > index cac2cbe26d11..85d50ab352ee 100644
+> > > > > --- a/drivers/hid/Makefile
+> > > > > +++ b/drivers/hid/Makefile
+> > > > > @@ -102,6 +102,7 @@ obj-$(CONFIG_HID_PLANTRONICS)       += hid-plantronics.o
+> > > > >  obj-$(CONFIG_HID_PLAYSTATION)  += hid-playstation.o
+> > > > >  obj-$(CONFIG_HID_PRIMAX)       += hid-primax.o
+> > > > >  obj-$(CONFIG_HID_RAZER)        += hid-razer.o
+> > > > > +obj-$(CONFIG_HID_RCSIM)        += hid-rcsim.o
+> > > >
+> > > > General rule of thumbs, we try to name the drivers after their
+> > > > vendors, unless we know we have a generic driver.
+> > > >
+> > > > Here, this driver seems to be really tied to a small set of devices,
+> > > > and thus I don't think we can call it "generic".
+> > >
+> > > Got it.
+> > >
+> > > >
+> > > > >  obj-$(CONFIG_HID_REDRAGON)     += hid-redragon.o
+> > > > >  obj-$(CONFIG_HID_RETRODE)      += hid-retrode.o
+> > > > >  obj-$(CONFIG_HID_ROCCAT)       += hid-roccat.o hid-roccat-common.o \
+> > > > > diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
+> > > > > index d9eb676abe96..baf5f74d5bed 100644
+> > > > > --- a/drivers/hid/hid-ids.h
+> > > > > +++ b/drivers/hid/hid-ids.h
+> > > > > @@ -1381,6 +1381,11 @@
+> > > > >
+> > > > >  #define USB_VENDOR_ID_MULTIPLE_1781    0x1781
+> > > > >  #define USB_DEVICE_ID_RAPHNET_4NES4SNES_OLD    0x0a9d
+> > > > > +#define USB_DEVICE_ID_PHOENIXRC        0x0898
+> > > > > +#define USB_DEVICE_ID_REALFLIGHT       0x0e56
+> > > > > +
+> > > > > +#define USB_VENDOR_ID_DIPLING  0x0B9B
+> > > > > +#define USB_DEVICE_ID_DIPLING_RCCONTROLLER     0x4012
+> > > > >
+> > > > >  #define USB_VENDOR_ID_DRACAL_RAPHNET   0x289b
+> > > > >  #define USB_DEVICE_ID_RAPHNET_2NES2SNES        0x0002
+> > > > > diff --git a/drivers/hid/hid-rcsim.c b/drivers/hid/hid-rcsim.c
+> > > > > new file mode 100644
+> > > > > index 000000000000..0f214cb5816a
+> > > > > --- /dev/null
+> > > > > +++ b/drivers/hid/hid-rcsim.c
+> > > > > @@ -0,0 +1,315 @@
+> > > > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > > > +/*
+> > > > > + * Driver for several HID compatible RC Simulator Controllers.
+> > > > > + * Currently supported controllers are:
+> > > > > + *
+> > > > > + * - Phoenix RC (HID variant) (8ch)
+> > > > > + * - Car VRC2.0 (2ch)
+> > > > > + * - Real Flight G5/G6/G7 (6ch)
+> > > > > + * - Aero Fly, FMS (8ch)
+> > > > > + * - OrangeRX FrSky (6ch)
+> > > > > + *
+> > > > > + * Copyright (C) 2022 Marcus Folkesson <marcus.folkesson@gmail.com>
+> > > > > + */
+> > > > > +
+> > > > > +#include <linux/bitfield.h>
+> > > > > +#include <linux/device.h>
+> > > > > +#include <linux/input.h>
+> > > > > +#include <linux/hid.h>
+> > > > > +#include <linux/module.h>
+> > > > > +#include <linux/usb.h>
+> > > > > +
+> > > > > +#include "hid-ids.h"
+> > > > > +
+> > > > > +/*
+> > > > > + * Some of these VID/PID are probably "borrowed", so keep them locally and
+> > > > > + * do not populate hid-ids.h with those.
+> > > > > + */
+> > > > > +
+> > > > > +/* PHOENIXRC Controlloer (HID variant) */
+> > > > > +#define PHOENIXRC_VID  (USB_VENDOR_ID_MULTIPLE_1781)
+> > > > > +#define PHOENIXRC_PID  (USB_DEVICE_ID_PHOENIXRC)
+> > > > > +#define PHOENIXRC_DSIZE        (8)
+> > > > > +
+> > > > > +/* VRC2 Controlloer */
+> > > > > +#define VRC2_VID       (0x07c0)
+> > > > > +#define VRC2_PID       (0x1125)
+> > > > > +#define VRC2_DSIZE     (7)
+> > > > > +
+> > > > > +/* Realflight G4-&7 and Above Controller */
+> > > > > +#define REALFLIGHT_VID (USB_VENDOR_ID_MULTIPLE_1781)
+> > > > > +#define REALFLIGHT_PID (USB_DEVICE_ID_REALFLIGHT)
+> > > > > +#define REALFLIGHT_DSIZE       (8)
+> > > > > +
+> > > > > +#define REALFLIGHT_BTN_A       BIT(0)
+> > > > > +#define REALFLIGHT_BTN_B       BIT(1)
+> > > > > +
+> > > > > +/* XTR+G2+FMS Controller */
+> > > > > +#define XTRG2FMS_VID   (USB_VENDOR_ID_DIPLING)
+> > > > > +#define XTRG2FMS_PID   (USB_DEVICE_ID_DIPLING_RCCONTROLLER)
+> > > > > +#define XTRG2FMS_DSIZE (8)
+> > > > > +
+> > > > > +#define XTRG2FMS_X_HI  GENMASK(3, 2)
+> > > > > +#define XTRG2FMS_Y_HI  GENMASK(1, 0)
+> > > > > +#define XTRG2FMS_RX_HI GENMASK(7, 6)
+> > > > > +#define XTRG2FMS_RY_HI GENMASK(5, 4)
+> > > > > +#define XTRG2FMS_ALT1_HI       GENMASK(3, 2)
+> > > > > +#define XTRG2FMS_ALT2_HI       GENMASK(1, 0)
+> > > > > +
+> > > > > +/* OrangeRX FrSky */
+> > > > > +#define ORANGERX_VID   (0x0451)
+> > > > > +#define ORANGERX_PID   (0x16a5)
+> > > > > +#define ORANGERX_DSIZE (8)
+> > > > > +
+> > > > > +enum rcsim_controller {
+> > > > > +       PHOENIXRC,
+> > > > > +       VRC2,
+> > > > > +       REALFLIGHT,
+> > > > > +       XTRG2FMS,
+> > > > > +       ORANGERX
+> > > > > +};
+> > > > > +
+> > > > > +struct rcsim_priv {
+> > > > > +       struct hid_device *hdev;
+> > > > > +       struct input_dev *input;
+> > > > > +       enum rcsim_controller controller;
+> > > > > +       u8 alt;
+> > > > > +};
+> > > > > +
+> > > > > +static int rcsim_open(struct input_dev *dev)
+> > > > > +{
+> > > > > +       struct rcsim_priv *priv = input_get_drvdata(dev);
+> > > > > +
+> > > > > +       return hid_hw_open(priv->hdev);
+> > > > > +}
+> > > > > +
+> > > > > +static void rcsim_close(struct input_dev *dev)
+> > > > > +{
+> > > > > +       struct rcsim_priv *priv = input_get_drvdata(dev);
+> > > > > +
+> > > > > +       hid_hw_close(priv->hdev);
+> > > > > +}
+> > > > > +
+> > > > > +static int rcsim_setup_input(struct rcsim_priv *priv)
+> > > > > +{
+> > > > > +       struct input_dev *input;
+> > > > > +
+> > > > > +       input = devm_input_allocate_device(&priv->hdev->dev);
+> > > > > +       if (!input)
+> > > > > +               return -ENOMEM;
+> > > > > +
+> > > > > +       input->id.bustype = priv->hdev->bus;
+> > > > > +       input->id.vendor  = priv->hdev->vendor;
+> > > > > +       input->id.product = priv->hdev->product;
+> > > > > +       input->id.version = priv->hdev->bus;
+> > > > > +       input->phys = priv->hdev->phys;
+> > > > > +       input->uniq = priv->hdev->uniq;
+> > > > > +       input->open = rcsim_open;
+> > > > > +       input->close = rcsim_close;
+> > > > > +
+> > > > > +       input_set_drvdata(input, priv);
+> > > > > +
+> > > > > +       switch (priv->controller) {
+> > > > > +       case PHOENIXRC:
+> > > > > +               input_set_abs_params(input, ABS_X, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_Y, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RX, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RY, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_Z, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RZ, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RUDDER, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_THROTTLE, 0, 255, 0, 0);
+> > > > > +               input->name = "RC Simuator Controller PhoenixRC";
+> > > > > +               break;
+> > > > > +       case VRC2:
+> > > > > +               input_set_abs_params(input, ABS_GAS, 0, 2048, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_WHEEL, 0, 2048, 0, 0);
+> > > > > +               input->name = "RC Simuator Controller VRC2.0";
+> > > > > +               break;
+> > > > > +       case REALFLIGHT:
+> > > > > +               input_set_abs_params(input, ABS_X, 0, 1024, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_Y, 0, 1024, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RX, 0, 1024, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RY, 0, 1024, 0, 0);
+> > > > > +               input_set_capability(input, EV_KEY, BTN_A);
+> > > > > +               input_set_capability(input, EV_KEY, BTN_B);
+> > > > > +               input->name = "RC Simuator Controller Realflight";
+> > > > > +               break;
+> > > > > +       case XTRG2FMS:
+> > > > > +               input_set_abs_params(input, ABS_X, 0, 1024, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_Y, 0, 1024, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RX, 0, 1024, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RY, 0, 1024, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_Z, 0, 1024, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RZ, 0, 1024, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RUDDER, 0, 1024, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_THROTTLE, 0, 1024, 0, 0);
+> > > > > +               input->name = "RC Simuator Controller AeroFly, FMS";
+> > > > > +               priv->alt = 0;
+> > > > > +               break;
+> > > > > +       case ORANGERX:
+> > > > > +               input_set_abs_params(input, ABS_X, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_Y, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RX, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RY, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_RUDDER, 0, 255, 0, 0);
+> > > > > +               input_set_abs_params(input, ABS_THROTTLE, 0, 255, 0, 0);
+> > > > > +               input->name = "RC Simuator Controller OrangeRX FrSky";
+> > > > > +               break;
+> > > > > +       };
+> > > > > +
+> > > > > +       priv->input = input;
+> > > > > +       return input_register_device(priv->input);
+> > > > > +}
+> > > >
+> > > > You are basically rewriting hid-input.c, which is suboptimal.
+> > >
+> > > Ouch. I will have a look at hid-input, thanks.
+> > >
+> > > >
+> > > > I guess the report descriptor provided by these devices are basically
+> > > > useless, and so you have to parse the reports yourself in the
+> > > > raw_event callback.
+> > >
+> > > Yep.
+> > >
+> > > >
+> > > > But instead of manually doing that, why not overwrite the report
+> > > > descriptor (with .rdesc_fixup) and declare here all of the data that
+> > >  Do you mean .report_fixup?
+> >
+> > yes, sorry :/
+> >
+> > >
+> > > > needs to be exported. You could remove basically everything in this
+> > > > driver by just providing a fixed report descriptor.
+> > >
+> > > What you are aiming for is to fixup the report descriptor and let the
+> > > generic hid-raw driver handle the rest, or do I get you wrong?
+> >
+> > yep, exactly
+> >
+> > >
+> > > How is the report mapped to certain events then?
+> >
+> > Have a look at hid_configure_usage in hid-input.c [3]. Most of HID
+> > events are mapped to input events with a one to one mapping.
+> >
+> > >
+> > > I do read at [1] but it is not obvious how to put it together.
+> > > Most drivers I've looked at that is using .report_fixup just fix broken
+> > > reports. I guess these reports are not "broken", just.. odd?
+> >
+> > Have a look at [2], lots of full report descriptors :)
+> >
+> > And in your case, the reports are incomplete, not odd.
+> >
+> > >
+> > >
+> > > >
+> > > > > +
+> > > > > +static int rcsim_raw_event(struct hid_device *hdev,
+> > > > > +                              struct hid_report *report,
+> > > > > +                              u8 *raw_data, int size)
+> > > > > +{
+> > > > > +       struct rcsim_priv *priv = hid_get_drvdata(hdev);
+> > > > > +       u16 value;
+> > > > > +
+> > > > > +       switch (priv->controller) {
+> > > > > +       case PHOENIXRC:
+> > > > > +               if (size != PHOENIXRC_DSIZE)
+> > > > > +                       break;
+> > > > > +
+> > > > > +               /* X, RX, Y and RY, RUDDER and THROTTLE are sent every time */
+> > > > > +               input_report_abs(priv->input, ABS_X, raw_data[2]);
+> > > > > +               input_report_abs(priv->input, ABS_Y, raw_data[0]);
+> > > > > +               input_report_abs(priv->input, ABS_RX, raw_data[4]);
+> > > > > +               input_report_abs(priv->input, ABS_RY, raw_data[3]);
+> > > > > +               input_report_abs(priv->input, ABS_RUDDER, raw_data[5]);
+> > > > > +               input_report_abs(priv->input, ABS_THROTTLE, raw_data[6]);
+> > > > > +
+> > > > > +               /* Z and RZ are sent every other time */
+> > > > > +               if (priv->alt)
+> > > > > +                       input_report_abs(priv->input, ABS_Z, raw_data[7]);
+> > > > > +               else
+> > > > > +                       input_report_abs(priv->input, ABS_RZ, raw_data[7]);
+> > > > > +
+> > > > > +               priv->alt ^= 1;
+> > > > > +               break;
+> > > > > +       case VRC2:
+> > > > > +               if (size != VRC2_DSIZE)
+> > > > > +                       break;
+> > > > > +               value = (raw_data[1] << 8 | raw_data[0]) & GENMASK(10, 0);
+> > > > > +               input_report_abs(priv->input, ABS_GAS, value);
+> > > > > +               value = (raw_data[3] << 8 | raw_data[2]) & GENMASK(10, 0);
+> > > > > +               input_report_abs(priv->input, ABS_WHEEL, value);
+> > > > > +               break;
+> > > > > +       case REALFLIGHT:
+> > > > > +               if (size != REALFLIGHT_DSIZE)
+> > > > > +                       break;
+> > > > > +               input_report_abs(priv->input, ABS_X, raw_data[2]);
+> > > > > +               input_report_abs(priv->input, ABS_Y, raw_data[1]);
+> > > > > +               input_report_abs(priv->input, ABS_RX, raw_data[5]);
+> > > > > +               input_report_abs(priv->input, ABS_RY, raw_data[3]);
+> > > > > +               input_report_abs(priv->input, ABS_MISC, raw_data[4]);
+> > > > > +               input_report_key(priv->input, BTN_A,
+> > > > > +                               raw_data[7] & REALFLIGHT_BTN_A);
+> > > > > +               input_report_key(priv->input, BTN_B,
+> > > > > +                               raw_data[7] & REALFLIGHT_BTN_B);
+> > > > > +               break;
+> > > > > +       case XTRG2FMS:
+> > > > > +               if (size != XTRG2FMS_DSIZE)
+> > > > > +                       break;
+> > > > > +
+> > > > > +               /* X, RX, Y and RY are sent every time */
+> > > > > +               value = FIELD_GET(XTRG2FMS_X_HI, raw_data[3]);
+> > > > > +               value = (value << 8) | raw_data[1];
+> > > > > +               input_report_abs(priv->input, ABS_X, value);
+> > > > > +
+> > > > > +               value = FIELD_GET(XTRG2FMS_Y_HI, raw_data[3]);
+> > > > > +               value = (value << 8) | raw_data[2];
+> > > > > +               input_report_abs(priv->input, ABS_Y, value);
+> > > > > +
+> > > > > +               value = FIELD_GET(XTRG2FMS_RX_HI, raw_data[3]);
+> > > > > +               value = (value << 8) | raw_data[0];
+> > > > > +               input_report_abs(priv->input, ABS_RX, value);
+> > > > > +
+> > > > > +               value = FIELD_GET(XTRG2FMS_RY_HI, raw_data[3]);
+> > > > > +               value = (value << 8) | raw_data[4];
+> > > > > +               input_report_abs(priv->input, ABS_RY, value);
+> > > > > +
+> > > > > +               /* Z, RZ, RUDDER and THROTTLE are sent every other time */
+> > > > > +               value = FIELD_GET(XTRG2FMS_ALT1_HI, raw_data[7]);
+> > > > > +               value = (value << 8) | raw_data[6];
+> > > > > +               if (priv->alt)
+> > > > > +                       input_report_abs(priv->input, ABS_Z, value);
+> > > > > +               else
+> > > > > +                       input_report_abs(priv->input, ABS_RUDDER, value);
+> > > > > +
+> > > > > +               value = FIELD_GET(XTRG2FMS_ALT2_HI, raw_data[7]);
+> > > > > +               value = (value << 8) | raw_data[5];
+> > > > > +               if (priv->alt)
+> > > > > +                       input_report_abs(priv->input, ABS_RZ, value);
+> > > > > +               else
+> > > > > +                       input_report_abs(priv->input, ABS_THROTTLE, value);
+> > > > > +
+> > > > > +               priv->alt ^= 1;
+> > > > > +               break;
+> > > > > +       case ORANGERX:
+> > > > > +               if (size != ORANGERX_DSIZE)
+> > > > > +                       break;
+> > > > > +               input_report_abs(priv->input, ABS_X, raw_data[0]);
+> > > > > +               input_report_abs(priv->input, ABS_Y, raw_data[2]);
+> > > > > +               input_report_abs(priv->input, ABS_RX, raw_data[3]);
+> > > > > +               input_report_abs(priv->input, ABS_RY, raw_data[1]);
+> > > > > +               input_report_abs(priv->input, ABS_RUDDER, raw_data[5]);
+> > > > > +               input_report_abs(priv->input, ABS_THROTTLE, raw_data[6]);
+> > > > > +               break;
+> > > > > +       };
+> > > > > +
+> > > > > +       input_sync(priv->input);
+> > > > > +       return 0;
+> > > > > +}
+> > > > > +
+> > > > > +static int rcsim_probe(struct hid_device *hdev, const struct hid_device_id *id)
+> > > > > +{
+> > > > > +       struct device *dev = &hdev->dev;
+> > > > > +       struct rcsim_priv *priv;
+> > > > > +       int ret;
+> > > > > +
+> > > > > +       if (!hid_is_using_ll_driver(hdev, &usb_hid_driver))
+> > > > > +               return -ENODEV;
+> > > >
+> > > > You are not accessing anything in the USB stack, so there is no need
+> > > > to prevent regression tests that could inject uhid devices to your
+> > > > drivers.
+> > >
+> > > Ok, thanks.
+> > >
+> > > >
+> > > > Cheers,
+> > > > Benjamin
+> > > >
+> > >
+> > > Best regards,
+> > > Marcus Folkesson
+> > >
+> > > [1] https://www.usb.org/hid
+> > >
+> >
+> > If you need help in writing report descriptors, I can give you some,
+> > but the easiest might be for you to start from the report descriptor
+> > in hid-sony.c. I used to have a tool to dynamically write a report
+> > descriptor, but I'm not sure it still works...
+>
+> I've worked with the report descriptor for VRC2, and have come up with
+> something that works.
 
-Looks like this variable len is not being used and is producing the
-following warning:
+Great that you managed to fill in most of the gaps :)
 
-../drivers/gpu/drm/drm_modes.c:2122:15: warning: unused variable 'len'
-[-Wunused-variable]
-        unsigned int len;
-                     ^
+>
+>
+> static __u8 vrc2_rdesc_fixed[] = {
+>         0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
+>         0x09, 0x04,        // Usage (Joystick)
+>         0xA1, 0x01,        // Collection (Application)
+>         0x09, 0x01,        //   Usage (Pointer)
+>         0xA1, 0x00,        //   Collection (Physical)
+>         0x09, 0x30,        //     Usage (X)
+>         0x09, 0x31,        //     Usage (Y)
+>         0x15, 0x00,        //     Logical Minimum (0)
+>         0x26, 0xFF, 0x07,  //     Logical Maximum (2047)
+>         0x35, 0x00,        //     Physical Minimum (0)
+>         0x46, 0xFF, 0x00,  //     Physical Maximum (255)
+>         0x75, 0x10,        //     Report Size (16)
+>         0x95, 0x02,        //     Report Count (2)
+>         0x81, 0x02,        //     Input (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position)
+>         0xC0,              //   End Collection
+>         0x95, 0x01,        //   Report Count (1)
+>         0x75, 0x18,        //   Report Size (24)
+>         0x81, 0x01,        //   Input (Const,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
+>         0x09, 0x00,        //   Usage (Undefined)
+>         0x15, 0x00,        //   Logical Minimum (0)
+>         0x26, 0xFF, 0x00,  //   Logical Maximum (255)
+>         0x75, 0x08,        //   Report Size (8)
+>         0x95, 0x08,        //   Report Count (8)
+>         0xB1, 0x02,        //   Feature (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
+>         0xC0,              // End Collection
+> };
+>
+>
+> It is a result of reading specifications and looking at various
+> examples.
+>
+> These lines are taken from an example, and I do not know why I need
+> those. I think the constant report size is wrong (should be 32 to
 
-Best Regards,
-- Maíra Canal
+Do you have an example of the actual data sent on the wire? hexdump or
+hid-recorder should be enough for me to get what is missing.
 
-> +	int ret;
-> +
-> +	if (*delim != '=')
-> +		return -EINVAL;
-> +
-> +	value = delim + 1;
-> +	delim = strchr(value, ',');
-> +	if (!delim)
-> +		delim = value + strlen(value);
-> +
-> +	ret = drm_get_tv_mode_from_name(value, delim - value);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	mode->tv_mode = ret;
-> +
-> +	return 0;
-> +}
-> +
->  static int drm_mode_parse_cmdline_options(const char *str,
->  					  bool freestanding,
->  					  const struct drm_connector *connector,
-> @@ -2184,6 +2208,9 @@ static int drm_mode_parse_cmdline_options(const char *str,
->  		} else if (!strncmp(option, "panel_orientation", delim - option)) {
->  			if (drm_mode_parse_panel_orientation(delim, mode))
->  				return -EINVAL;
-> +		} else if (!strncmp(option, "tv_mode", delim - option)) {
-> +			if (drm_mode_parse_tv_mode(delim, mode))
-> +				return -EINVAL;
->  		} else {
->  			return -EINVAL;
->  		}
-> @@ -2212,20 +2239,22 @@ struct drm_named_mode {
->  	unsigned int xres;
->  	unsigned int yres;
->  	unsigned int flags;
-> +	unsigned int tv_mode;
->  };
->  
-> -#define NAMED_MODE(_name, _pclk, _x, _y, _flags)	\
-> +#define NAMED_MODE(_name, _pclk, _x, _y, _flags, _mode)	\
->  	{						\
->  		.name = _name,				\
->  		.pixel_clock_khz = _pclk,		\
->  		.xres = _x,				\
->  		.yres = _y,				\
->  		.flags = _flags,			\
-> +		.tv_mode = _mode,			\
->  	}
->  
->  static const struct drm_named_mode drm_named_modes[] = {
-> -	NAMED_MODE("NTSC", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE),
-> -	NAMED_MODE("PAL", 13500, 720, 576, DRM_MODE_FLAG_INTERLACE),
-> +	NAMED_MODE("NTSC", 13500, 720, 480, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_NTSC_M),
-> +	NAMED_MODE("PAL", 13500, 720, 576, DRM_MODE_FLAG_INTERLACE, DRM_MODE_TV_MODE_PAL_B),
->  };
->  
->  static int drm_mode_parse_cmdline_named_mode(const char *name,
-> @@ -2271,6 +2300,7 @@ static int drm_mode_parse_cmdline_named_mode(const char *name,
->  		cmdline_mode->xres = mode->xres;
->  		cmdline_mode->yres = mode->yres;
->  		cmdline_mode->interlace = !!(mode->flags & DRM_MODE_FLAG_INTERLACE);
-> +		cmdline_mode->tv_mode = mode->tv_mode;
->  		cmdline_mode->specified = true;
->  
->  		return 1;
-> diff --git a/drivers/gpu/drm/tests/drm_cmdline_parser_test.c b/drivers/gpu/drm/tests/drm_cmdline_parser_test.c
-> index 59b29cdfdd35..f1e73ed65be0 100644
-> --- a/drivers/gpu/drm/tests/drm_cmdline_parser_test.c
-> +++ b/drivers/gpu/drm/tests/drm_cmdline_parser_test.c
-> @@ -885,6 +885,201 @@ static void drm_cmdline_test_multiple_options(struct kunit *test)
->  	KUNIT_EXPECT_EQ(test, mode.force, DRM_FORCE_UNSPECIFIED);
->  }
->  
-> +static void drm_cmdline_test_tv_options(struct kunit *test,
-> +					const char *cmdline,
-> +					const struct drm_display_mode *expected_mode,
-> +					unsigned int expected_tv_mode)
-> +{
-> +	struct drm_cmdline_mode mode = { };
-> +
-> +	KUNIT_EXPECT_TRUE(test, drm_mode_parse_command_line_for_connector(cmdline,
-> +									  &no_connector, &mode));
-> +	KUNIT_EXPECT_TRUE(test, mode.specified);
-> +	KUNIT_EXPECT_EQ(test, mode.xres, expected_mode->hdisplay);
-> +	KUNIT_EXPECT_EQ(test, mode.yres, expected_mode->vdisplay);
-> +	KUNIT_EXPECT_EQ(test, mode.tv_mode, expected_tv_mode);
-> +
-> +	KUNIT_EXPECT_FALSE(test, mode.refresh_specified);
-> +
-> +	KUNIT_EXPECT_FALSE(test, mode.bpp_specified);
-> +
-> +	KUNIT_EXPECT_FALSE(test, mode.rb);
-> +	KUNIT_EXPECT_FALSE(test, mode.cvt);
-> +	KUNIT_EXPECT_EQ(test, mode.interlace, !!(expected_mode->flags & DRM_MODE_FLAG_INTERLACE));
-> +	KUNIT_EXPECT_FALSE(test, mode.margins);
-> +	KUNIT_EXPECT_EQ(test, mode.force, DRM_FORCE_UNSPECIFIED);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_ntsc_443(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x480i,tv_mode=NTSC-443",
-> +				    drm_mode_analog_ntsc_480i(NULL),
-> +				    DRM_MODE_TV_MODE_NTSC_443);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_ntsc_j(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x480i,tv_mode=NTSC-J",
-> +				    drm_mode_analog_ntsc_480i(NULL),
-> +				    DRM_MODE_TV_MODE_NTSC_J);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_ntsc_m(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x480i,tv_mode=NTSC-M",
-> +				    drm_mode_analog_ntsc_480i(NULL),
-> +				    DRM_MODE_TV_MODE_NTSC_M);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_pal_60(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=PAL-60",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_PAL_60);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_pal_b(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=PAL-B",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_PAL_B);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_pal_d(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=PAL-D",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_PAL_D);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_pal_g(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=PAL-G",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_PAL_G);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_pal_h(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=PAL-H",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_PAL_H);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_pal_i(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=PAL-I",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_PAL_I);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_pal_m(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x480i,tv_mode=PAL-M",
-> +				    drm_mode_analog_ntsc_480i(NULL),
-> +				    DRM_MODE_TV_MODE_PAL_M);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_pal_n(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=PAL-N",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_PAL_N);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_pal_nc(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=PAL-Nc",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_PAL_NC);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_secam_60(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=SECAM-60",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_SECAM_60);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_secam_b(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=SECAM-B",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_SECAM_B);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_secam_d(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=SECAM-D",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_SECAM_D);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_secam_g(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=SECAM-G",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_SECAM_G);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_secam_k(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=SECAM-K",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_SECAM_K);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_secam_k1(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=SECAM-K1",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_SECAM_K1);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_secam_l(struct kunit *test)
-> +{
-> +	drm_cmdline_test_tv_options(test,
-> +				    "720x576i,tv_mode=SECAM-L",
-> +				    drm_mode_analog_pal_576i(NULL),
-> +				    DRM_MODE_TV_MODE_SECAM_L);
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_invalid(struct kunit *test)
-> +{
-> +	struct drm_cmdline_mode mode = { };
-> +	const char *cmdline = "720x480i,tv_mode=invalid";
-> +
-> +	KUNIT_EXPECT_FALSE(test, drm_mode_parse_command_line_for_connector(cmdline,
-> +									   &no_connector, &mode));
-> +}
-> +
-> +static void drm_cmdline_test_tv_option_truncated(struct kunit *test)
-> +{
-> +	struct drm_cmdline_mode mode = { };
-> +	const char *cmdline = "720x480i,tv_mode=NTSC";
-> +
-> +	KUNIT_EXPECT_FALSE(test, drm_mode_parse_command_line_for_connector(cmdline,
-> +									   &no_connector, &mode));
-> +}
-> +
->  static void drm_cmdline_test_invalid_option(struct kunit *test)
->  {
->  	struct drm_cmdline_mode mode = { };
-> @@ -1047,6 +1242,27 @@ static struct kunit_case drm_cmdline_parser_tests[] = {
->  	KUNIT_CASE(drm_cmdline_test_name_refresh_invalid_mode),
->  	KUNIT_CASE(drm_cmdline_test_name_option),
->  	KUNIT_CASE(drm_cmdline_test_name_bpp_option),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_ntsc_443),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_ntsc_j),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_ntsc_m),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_pal_60),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_pal_b),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_pal_d),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_pal_g),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_pal_h),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_pal_i),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_pal_m),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_pal_n),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_pal_nc),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_secam_60),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_secam_b),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_secam_d),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_secam_g),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_secam_k),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_secam_k1),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_secam_l),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_invalid),
-> +	KUNIT_CASE(drm_cmdline_test_tv_option_truncated),
->  	KUNIT_CASE(drm_cmdline_test_rotate_0),
->  	KUNIT_CASE(drm_cmdline_test_rotate_90),
->  	KUNIT_CASE(drm_cmdline_test_rotate_180),
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> index 49d261977d4e..9589108ba202 100644
-> --- a/include/drm/drm_connector.h
-> +++ b/include/drm/drm_connector.h
-> @@ -1447,6 +1447,11 @@ struct drm_cmdline_mode {
->  	 * @tv_margins: TV margins to apply to the mode.
->  	 */
->  	struct drm_connector_tv_margins tv_margins;
-> +
-> +	/**
-> +	 * @tv_mode: TV mode standard. See DRM_MODE_TV_MODE_*.
-> +	 */
-> +	enum drm_connector_tv_mode tv_mode;
->  };
->  
->  /**
-> 
+As I read the report descriptors, we had:
+* old one:
+  - opening of application collection of usage undefined
+    - 64 buttons (logical max of 1), usage being being 0x01 and 0x3F
+(63) -> so the last bit is ignored
+
+Which would translate to a report of the following (each 0 being a
+separate button, | is marking bytes):
+
+0, 0, 0, 0, 0, 0, 0, 0 | 0, 0, 0, 0, 0, 0, 0, 0 | 0, 0, 0, 0, 0, 0, 0,
+0 | 0, 0, 0, 0, 0, 0, 0, 0 | 0, 0, 0, 0, 0, 0, 0, 0 | 0, 0, 0, 0, 0,
+0, 0, 0 | 0, 0, 0, 0, 0, 0, 0, 0 | 0, 0, 0, 0, 0, 0, 0, X
+
+-> 64 * 1 = 64 bits
+
+()last bit being ignored because of its duplicated usage with the previous one)
+
+* new one:
+  - opening of an application collection of usage Joystick
+    - opening of a physical collection of type Pointer
+      - 16 bits for X, with logical max of 2047 and physical max of 255
+      - 16 bits for Y, with logical max of 2047 and physical max of 255
+    - 1 const element of size 24 that has to be ignored
+    - one feature that should not be there :)
+
+So it would translate into the following (c being constant bit):
+X (2 bytes) | Y (2 bytes) | c, c, c, c, c, c, c, c | c, c, c, c, c, c,
+c, c | c, c, c, c, c, c, c, c
+
+-> 24 + 2*8 + 2*8 = 56 bits
+
+So I agree with you, you are missing 16 bits
+
+> fill up) and I do not know what the Feature is used for.
+
+You should not have to declare a feature. A feature is a special HID
+endpoint that you can use to talk to the HID device. By emitting
+special HID commands, (HID_REPORT_GET/HID_REPORT_SET) you can control
+how the device works. But if your current report descriptor doesn't
+have a feature declared, you should not declare it.
+
+>
+>         0x95, 0x01,        //   Report Count (1)
+>         0x75, 0x18,        //   Report Size (24)
+>         0x81, 0x01,        //   Input (Const,Array,Abs,No Wrap,Linear,Preferred State,No Null Position)
+>         0x09, 0x00,        //   Usage (Undefined)
+>         0x15, 0x00,        //   Logical Minimum (0)
+>         0x26, 0xFF, 0x00,  //   Logical Maximum (255)
+>         0x75, 0x08,        //   Report Size (8)
+>         0x95, 0x08,        //   Report Count (8)
+>         0xB1, 0x02,        //   Feature (Data,Var,Abs,No Wrap,Linear,Preferred State,No Null Position,Non-volatile)
+>
+> If I omit any of these lines then I only get tons of
+>
+> kernel: usb 3-12.3.1.3.3: input irq status -75 received
+
+I assume the feature in this particular case helps the driver to
+understand that you need to allocate a 64 bits chunk of memory to
+communicate with the device.
+
+I would advise to use the following report instead:
+
+----
+static __u8 vrc2_rdesc_fixed[] = {
+        0x05, 0x01,        // Usage Page (Generic Desktop Ctrls)
+        0x09, 0x04,        // Usage (Joystick)
+        0xA1, 0x01,        // Collection (Application)
+        0x09, 0x01,        //   Usage (Pointer)
+        0xA1, 0x00,        //   Collection (Physical)
+        0x09, 0x30,        //     Usage (X)
+        0x09, 0x31,        //     Usage (Y)
+        0x15, 0x00,        //     Logical Minimum (0)
+        0x26, 0xFF, 0x07,  //     Logical Maximum (2047)
+        0x35, 0x00,        //     Physical Minimum (0)
+        0x46, 0xFF, 0x00,  //     Physical Maximum (255)
+        0x75, 0x10,        //     Report Size (16)
+        0x95, 0x02,        //     Report Count (2)
+        0x81, 0x02,        //     Input (Data,Var,Abs,No
+Wrap,Linear,Preferred State,No Null Position)
+        0xC0,              //   End Collection
+        0x75, 0x08,        //   Report Size (8)
+       0x95, 0x04,        //   Report Count (4)
+        0x81, 0x03,        //   Input (Cnst,Var,Abs)
+        0xC0,              // End Collection
+};
+---
+
+Few changes:
+- use of 4 bytes of padding, instead of 1 24bits slot of padding
+- changed the padding from 0x01 to 0x03 to remove the "array" const
+definition which is tricky to handle
+- removed the feature report.
+
+Cheers,
+Benjamin
+
+>
+> In the kernel log.
+>
+>
+> >
+> > FYI, I just re-read rcsim_raw_event() and there is stuff that would
+> > require more than just a report descriptor fixup (the fact that some
+> > data is sent every other report is not good and will need some manual
+> > handling though).
+> >
+> > Cheers,
+> > Benjamin
+> >
+> > [2] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hid/hid-uclogic-rdesc.c
+> > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/hid/hid-input.c#n817
+> >
+>
+>
+> Best regards
+> Marcus Folkesson
+

@@ -2,141 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9486B5A5D27
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B029C5A5D2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:42:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiH3HmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
+        id S231177AbiH3Hmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiH3HmG (ORCPT
+        with ESMTP id S229994AbiH3Hma (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:42:06 -0400
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39894A221B;
-        Tue, 30 Aug 2022 00:42:04 -0700 (PDT)
-Received: (Authenticated sender: gregory.clement@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 90C381C000B;
-        Tue, 30 Aug 2022 07:42:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1661845322;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OlJsykSuKUj404P3HmaG9eK2FUUXIkKuT4JtjowBQZQ=;
-        b=kb3YuCStxdgM8c7BnX9v8sq2Dq25KzFhRtYTBt14EnoPA4vS5/Ydpz2SXeC1kR3lmzHVK0
-        PMyzQbQsYhwnCIpApS2jY0zpjSOosSNlI51XjqxgxiWi+89q48hrEAczm1LN0mEyIbtASk
-        80VsTFVPGwpKhBXz4z/mRAt9vSk5gGGvB0+InLwVH+u5lOj96WudzIT/M95aegn6MVnTa3
-        l1gN+u+hCD1ExxftigI+eU9iJL0Kd6tQFyuN7eJz38ZYKWxGU9uWTQ4kY/Rm6u30XUOGll
-        mxJ9oVorjw4+CRw16xMf2/8bPbUzu3suARsCxdHONwJ2qvDOLvS02MHGWXdtyg==
-From:   Gregory CLEMENT <gregory.clement@bootlin.com>
-To:     Robert Marko <robert.marko@sartura.hr>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
-        sebastian.hesselbarth@gmail.com, kostap@marvell.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH v4 10/10] arm64: dts: marvell: add support for Methode eDPU
-In-Reply-To: <CA+HBbNF2R--984SdB0v42GMQOwAx4pTEz_FHifTtebN05ELU-Q@mail.gmail.com>
-References: <20220516124828.45144-1-robert.marko@sartura.hr>
- <20220516124828.45144-10-robert.marko@sartura.hr>
- <CA+HBbNF2R--984SdB0v42GMQOwAx4pTEz_FHifTtebN05ELU-Q@mail.gmail.com>
-Date:   Tue, 30 Aug 2022 09:42:00 +0200
-Message-ID: <87mtbm5gaf.fsf@BL-laptop>
+        Tue, 30 Aug 2022 03:42:30 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953368048C;
+        Tue, 30 Aug 2022 00:42:28 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VNjwGyc_1661845344;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VNjwGyc_1661845344)
+          by smtp.aliyun-inc.com;
+          Tue, 30 Aug 2022 15:42:25 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     axboe@kernel.dk
+Cc:     hch@lst.de, bvanassche@acm.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] fs/hfsplus: Fix some kernel-doc comments
+Date:   Tue, 30 Aug 2022 15:42:23 +0800
+Message-Id: <20220830074223.20281-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Robert Marko <robert.marko@sartura.hr> writes:
+Add the description of @opf and remove @op and @op_flags in
+hfsplus_submit_bio() kernel-doc comment.
 
-> On Mon, May 16, 2022 at 2:48 PM Robert Marko <robert.marko@sartura.hr> wrote:
->>
->> Methode eDPU is an Armada 3720 powered board based on the Methode uDPU.
->>
->> They feature the same CPU, RAM, and storage as well as the form factor.
->>
->> However, eDPU only has one SFP slot plus a copper G.hn port.
->>
->> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->> Changes in v2:
->> * Make the DTS split a separate commit
->> ---
->>  arch/arm64/boot/dts/marvell/Makefile             |  1 +
->>  arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts | 14 ++++++++++++++
->>  2 files changed, 15 insertions(+)
->>  create mode 100644 arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
->>
->> diff --git a/arch/arm64/boot/dts/marvell/Makefile b/arch/arm64/boot/dts/marvell/Makefile
->> index 1c794cdcb8e6..104d7d7e8215 100644
->> --- a/arch/arm64/boot/dts/marvell/Makefile
->> +++ b/arch/arm64/boot/dts/marvell/Makefile
->> @@ -1,6 +1,7 @@
->>  # SPDX-License-Identifier: GPL-2.0
->>  # Mvebu SoC Family
->>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-db.dtb
->> +dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-eDPU.dtb
->>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin.dtb
->>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-emmc.dtb
->>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-ultra.dtb
->> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
->> new file mode 100644
->> index 000000000000..57fc698e55d0
->> --- /dev/null
->> +++ b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
->> @@ -0,0 +1,14 @@
->> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
->> +
->> +/dts-v1/;
->> +
->> +#include "armada-3720-uDPU.dtsi"
->> +
->> +/ {
->> +       model = "Methode eDPU Board";
->> +       compatible = "methode,edpu", "marvell,armada3720", "marvell,armada3710";
->> +};
->> +
->> +&eth0 {
->> +       phy-mode = "2500base-x";
->> +};
->> --
->> 2.36.1
->>
->
-> Hi Gregory,
-Hello Roberto,
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2013
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ fs/hfsplus/wrapper.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-> Is there something else that I can improve in the series?
-
-Sorry for having missed this series. At first view it seems OK, I am
-going to have a closer look this week.
-
-Gregory
-
-
->
-> Regards,
-> Robert
->
-> -- 
-> Robert Marko
-> Staff Embedded Linux Engineer
-> Sartura Ltd.
-> Lendavska ulica 16a
-> 10000 Zagreb, Croatia
-> Email: robert.marko@sartura.hr
-> Web: www.sartura.hr
-
+diff --git a/fs/hfsplus/wrapper.c b/fs/hfsplus/wrapper.c
+index 0b791adf02e5..6202e877f459 100644
+--- a/fs/hfsplus/wrapper.c
++++ b/fs/hfsplus/wrapper.c
+@@ -30,8 +30,7 @@ struct hfsplus_wd {
+  * @sector: block to read or write, for blocks of HFSPLUS_SECTOR_SIZE bytes
+  * @buf: buffer for I/O
+  * @data: output pointer for location of requested data
+- * @op: direction of I/O
+- * @op_flags: request op flags
++ * @opf: operation and flags for bio
+  *
+  * The unit of I/O is hfsplus_min_io_size(sb), which may be bigger than
+  * HFSPLUS_SECTOR_SIZE, and @buf must be sized accordingly. On reads
 -- 
-Gregory Clement, Bootlin
-Embedded Linux and Kernel engineering
-http://bootlin.com
+2.20.1.7.g153144c
+

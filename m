@@ -2,99 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7B5B5A590D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58B6F5A5914
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 04:02:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiH3B42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 21:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40144 "EHLO
+        id S229746AbiH3CCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 22:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiH3B40 (ORCPT
+        with ESMTP id S229535AbiH3CCR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 21:56:26 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2082.outbound.protection.outlook.com [40.107.92.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93D2A7AC31;
-        Mon, 29 Aug 2022 18:56:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LMUECIa3yF1V55w1MH/QMjzKDTiINgxwfZ0wenJ6dz1Q2IjZEvm1ioUXDj9e83shhVkuvilvK2p4PrQOzzQ2VVE0Gc/7melZNURx44hNhZp06xlbNUHfsu52008f71oihF/B9wMuDJwtcRr3CndPK/gzhpWdLk4Yo4/sFH8zdVLNXBxh6vefqEUihoinZGeceWB1h/n36lO0pesZCZYFOI1QeV4OzI3+PnqrTFEihCHRtWK8OBTfAYsVd/ps+Ih2HoITFt2rC0PTiR3W3PU6t+2jaEVjB8XH4rSdbmK55/y0LiVcUsxmybpTcsqz79B5dOe0kjV6CMqw5/51NCH59A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cxJ1llotJeDEk3OWuUNdKPrRuww5QZM6IQAJ7sE/bW4=;
- b=e9eQ7Iu//R0/Nkpl3iCJfMjSet8UgraiLalKWJYMu6GC2jAJeQuMWAcd97vwik2xYu/xGoDGZP5OK5JHjncSdZQMscvkcpqZtRl46W5gLkcFwDUGJOf9BJSQy2xdlTZM0w9JjpFiYKXwohIGE7KCFz9oXbmnrVlxcv/B/5aa+javrXgxXpaGZO5xKclVh8228usxtE6qiKJuRcfHNtdYks4HhPBRKatiim0ABZhsF8Fwbo4NCNLRGrK6AARxYB3vOQNU74JRuG1soYvmgofQQzphdLvJ4Z4ZBqP9z5FfmyjJny/uOTn1nVrMgLeU9LOjU2e5Oo5y3DvBb06NK+iIjQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cxJ1llotJeDEk3OWuUNdKPrRuww5QZM6IQAJ7sE/bW4=;
- b=AoRYSx4q9YMRUSXCGGtQ6bp1IGzHOxDAwlwLEMUaFQk+Uw8BtFyJqs9wWRCa5kKIHBZZpuPTzYf0Iz+4ad9J+5ST92r5FDavjC/iRuO3XjXro3kEvwLMDzF0toHp6btd5P3G5Rs53ebCMSdOXLc8Qp+UV2aogswH/j5ohH9BXgw=
-Received: from MW4PR04CA0102.namprd04.prod.outlook.com (2603:10b6:303:83::17)
- by MWHPR12MB1696.namprd12.prod.outlook.com (2603:10b6:301:8::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Tue, 30 Aug
- 2022 01:56:21 +0000
-Received: from CO1NAM11FT011.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:83:cafe::20) by MW4PR04CA0102.outlook.office365.com
- (2603:10b6:303:83::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.19 via Frontend
- Transport; Tue, 30 Aug 2022 01:56:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT011.mail.protection.outlook.com (10.13.175.186) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5566.15 via Frontend Transport; Tue, 30 Aug 2022 01:56:21 +0000
-Received: from aerithdevpyuan.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Mon, 29 Aug
- 2022 20:56:17 -0500
-From:   Perry Yuan <Perry.Yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
-        <viresh.kumar@linaro.org>
-CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
-        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
-        <Jinzhou.Su@amd.com>, <Shimmer.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Perry Yuan <Perry.Yuan@amd.com>
-Subject: [PATCH v3] cpufreq: amd_pstate: Fix initial highest_perf value
-Date:   Tue, 30 Aug 2022 09:56:00 +0800
-Message-ID: <20220830015600.373537-1-Perry.Yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 29 Aug 2022 22:02:17 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4707A53E
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 19:02:15 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MGr9l4kWXzHnX3;
+        Tue, 30 Aug 2022 10:00:27 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 30 Aug 2022 10:02:12 +0800
+Subject: Re: [PATCH 8/8] hugetlb: use new vma_lock for pmd sharing
+ synchronization
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220824175757.20590-1-mike.kravetz@oracle.com>
+ <20220824175757.20590-9-mike.kravetz@oracle.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <08edc08e-08ab-0706-3c8d-804080f37bd7@huawei.com>
+Date:   Tue, 30 Aug 2022 10:02:12 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: eae1465d-8969-4c36-36f5-08da8a2ad688
-X-MS-TrafficTypeDiagnostic: MWHPR12MB1696:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gG33z2XIuRg/XhFTpqvDszyf6kf+rIIU4oaykjAflRNJQqpev61wMdIIBiYkX4ZJfmUdIxcLkjdTlO2JEnu3wbEzSYv1wmG8hP7wnF9/DmTBOkk1qZnE+2Xgz76jcelqAy9KaycxkMeguxPTTod19YtH3HyLLepeo00kMZGR1vKVWzdeCTcy+l1Y3NZrzRuX3FG1dGqzjBcJvPQvHR/j2sVbCFael7lBqkRqPzWi6KGs8bwJEqWWO7FK8rHc0ph+aSWMp4e3ffp5KFoPuULE9rvuNM40jD0OS4fQnXY0HpDh3a5fZeDW6u/bkOC6C87Q4ElP8infEr+3Iym2HF+mmPIPTZ/ibzm/pGlu4f4s2f+QF44P/oVySyMNVLcxmROttYBJNhMDJ1GeqhYSdg/46+p6i/0u4Ej1HAO/ZSL6FZQieGdIel50/h/2Ex8YhH9vBjcemW4rHbPdoPusTF7XFaFTeCkK3WxITcU2v2CKSjkTsKJ1JCC6iCs6iMtvZIMPCcGIaiNi2P/k15NMdIp7qDU6h19l4OcnJ+NyJjlVpU3OWcFV9YB+vnFF2AxWPDAPtPSu8AcJsHPHRt42PjxT9vtTZrfbGnRcKwUk4byb7glZYVkHTlqNUE/jfdTxYh+oxedDIsXQgZi3XQMuD7cml598q1wp5d1/eAqlNZZKxaYIZ5ABXTQ2n+C3Y0GugGV2Qap82ASuwSuIjQzw7wu90I+cGJrqs1f/JZoDxkxQd6lKufuGLSphxvTkasJyekwvlNLtuW9ahCkXIM5xKbAbrsPYC+c1RkWIXs4wgjJAIZF4/UzinQJulWA1uDD3UUWCdpFFBIRasSqdcnOVXqhdsw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(136003)(376002)(46966006)(40470700004)(36840700001)(16526019)(36860700001)(8936002)(5660300002)(40480700001)(26005)(336012)(186003)(2616005)(86362001)(1076003)(426003)(47076005)(7696005)(6666004)(41300700001)(40460700003)(83380400001)(316002)(54906003)(70206006)(2906002)(36756003)(82310400005)(70586007)(110136005)(81166007)(356005)(478600001)(82740400003)(4326008)(8676002)(2101003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2022 01:56:21.6826
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: eae1465d-8969-4c36-36f5-08da8a2ad688
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT011.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR12MB1696
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220824175757.20590-9-mike.kravetz@oracle.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -102,75 +66,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid some new AMD processors use wrong highest perf when amd pstate
-driver loaded, this fix will query the highest perf from MSR register
-MSR_AMD_CPPC_CAP1 and cppc_acpi interface firstly, then compare with the
-highest perf value got by calling amd_get_highest_perf() function.
+On 2022/8/25 1:57, Mike Kravetz wrote:
+> The new hugetlb vma lock (rw semaphore) is used to address this race:
+> 
+> Faulting thread                                 Unsharing thread
+> ...                                                  ...
+> ptep = huge_pte_offset()
+>       or
+> ptep = huge_pte_alloc()
+> ...
+>                                                 i_mmap_lock_write
+>                                                 lock page table
+> ptep invalid   <------------------------        huge_pmd_unshare()
+> Could be in a previously                        unlock_page_table
+> sharing process or worse                        i_mmap_unlock_write
+> ...
+> 
+> The vma_lock is used as follows:
+> - During fault processing. the lock is acquired in read mode before
+>   doing a page table lock and allocation (huge_pte_alloc).  The lock is
+>   held until code is finished with the page table entry (ptep).
+> - The lock must be held in write mode whenever huge_pmd_unshare is
+>   called.
+> 
+> Lock ordering issues come into play when unmapping a page from all
+> vmas mapping the page.  The i_mmap_rwsem must be held to search for the
+> vmas, and the vma lock must be held before calling unmap which will
+> call huge_pmd_unshare.  This is done today in:
+> - try_to_migrate_one and try_to_unmap_ for page migration and memory
+>   error handling.  In these routines we 'try' to obtain the vma lock and
+>   fail to unmap if unsuccessful.  Calling routines already deal with the
+>   failure of unmapping.
+> - hugetlb_vmdelete_list for truncation and hole punch.  This routine
+>   also tries to acquire the vma lock.  If it fails, it skips the
+>   unmapping.  However, we can not have file truncation or hole punch
+>   fail because of contention.  After hugetlb_vmdelete_list, truncation
+>   and hole punch call remove_inode_hugepages.  remove_inode_hugepages
+>   check for mapped pages and call hugetlb_unmap_file_page to unmap them.
+>   hugetlb_unmap_file_page is designed to drop locks and reacquire in the
+>   correct order to guarantee unmap success.
+> 
+> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+> ---
+>  fs/hugetlbfs/inode.c |  46 +++++++++++++++++++
+>  mm/hugetlb.c         | 102 +++++++++++++++++++++++++++++++++++++++----
+>  mm/memory.c          |   2 +
+>  mm/rmap.c            | 100 +++++++++++++++++++++++++++---------------
+>  mm/userfaultfd.c     |   9 +++-
+>  5 files changed, 214 insertions(+), 45 deletions(-)
+> 
+> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> index b93d131b0cb5..52d9b390389b 100644
+> --- a/fs/hugetlbfs/inode.c
+> +++ b/fs/hugetlbfs/inode.c
+> @@ -434,6 +434,8 @@ static void hugetlb_unmap_file_folio(struct hstate *h,
+>  					struct folio *folio, pgoff_t index)
+>  {
+>  	struct rb_root_cached *root = &mapping->i_mmap;
+> +	unsigned long skipped_vm_start;
+> +	struct mm_struct *skipped_mm;
+>  	struct page *page = &folio->page;
+>  	struct vm_area_struct *vma;
+>  	unsigned long v_start;
+> @@ -444,6 +446,8 @@ static void hugetlb_unmap_file_folio(struct hstate *h,
+>  	end = ((index + 1) * pages_per_huge_page(h));
+>  
+>  	i_mmap_lock_write(mapping);
+> +retry:
+> +	skipped_mm = NULL;
+>  
+>  	vma_interval_tree_foreach(vma, root, start, end - 1) {
+>  		v_start = vma_offset_start(vma, start);
+> @@ -452,11 +456,49 @@ static void hugetlb_unmap_file_folio(struct hstate *h,
+>  		if (!hugetlb_vma_maps_page(vma, vma->vm_start + v_start, page))
+>  			continue;
+>  
+> +		if (!hugetlb_vma_trylock_write(vma)) {
+> +			/*
+> +			 * If we can not get vma lock, we need to drop
+> +			 * immap_sema and take locks in order.
+> +			 */
+> +			skipped_vm_start = vma->vm_start;
+> +			skipped_mm = vma->vm_mm;
+> +			/* grab mm-struct as we will be dropping i_mmap_sema */
+> +			mmgrab(skipped_mm);
+> +			break;
+> +		}
+> +
+>  		unmap_hugepage_range(vma, vma->vm_start + v_start, v_end,
+>  				NULL, ZAP_FLAG_DROP_MARKER);
+> +		hugetlb_vma_unlock_write(vma);
+>  	}
+>  
+>  	i_mmap_unlock_write(mapping);
+> +
+> +	if (skipped_mm) {
+> +		mmap_read_lock(skipped_mm);
+> +		vma = find_vma(skipped_mm, skipped_vm_start);
+> +		if (!vma || !is_vm_hugetlb_page(vma) ||
+> +					vma->vm_file->f_mapping != mapping ||
+> +					vma->vm_start != skipped_vm_start) {
 
-The lower value will be the correct highest perf we need to use.
-Otherwise the CPU max MHz will be incorrect if the
-amd_get_highest_perf() did not cover the new process family and model ID.
+i_mmap_lock_write(mapping) is missing here? Retry logic will do i_mmap_unlock_write(mapping) anyway.
 
-Like this lscpu info, the max frequency is incorrect.
+> +			mmap_read_unlock(skipped_mm);
+> +			mmdrop(skipped_mm);
+> +			goto retry;
+> +		}
+> +
 
-Vendor ID:               AuthenticAMD
-    Socket(s):           1
-    Stepping:            2
-    CPU max MHz:         5410.0000
-    CPU min MHz:         400.0000
-    BogoMIPS:            5600.54
+IMHO, above check is not enough. Think about the below scene:
 
-Fixes: 3743d55b289c2 (x86, sched: Fix the AMD CPPC maximum performance value on certain AMD Ryzen generations)
-Acked-by: Huang Rui <ray.huang@amd.com>
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+CPU 1					CPU 2
+hugetlb_unmap_file_folio		exit_mmap
+  mmap_read_lock(skipped_mm);		  mmap_read_lock(mm);
+  check vma is wanted.
+  					  unmap_vmas
+  mmap_read_unlock(skipped_mm);		  mmap_read_unlock
+  					  mmap_write_lock(mm);
+  					  free_pgtables
+  					  remove_vma
+					    hugetlb_vma_lock_free
+  vma, hugetlb_vma_lock is still *used after free*
+  					  mmap_write_unlock(mm);
+So we should check mm->mm_users == 0 to fix the above issue. Or am I miss something?
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 9f4375f7ab46..30fbd30c0949 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -354,6 +354,7 @@ static inline int amd_pstate_enable(bool enable)
- static int pstate_init_perf(struct amd_cpudata *cpudata)
- {
- 	u64 cap1;
-+	u32 highest_perf;
- 
- 	int ret = rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
- 				     &cap1);
-@@ -365,7 +366,11 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
- 	 *
- 	 * CPPC entry doesn't indicate the highest performance in some ASICs.
- 	 */
--	WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
-+	highest_perf = amd_get_highest_perf();
-+	if (highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
-+		highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
-+
-+	WRITE_ONCE(cpudata->highest_perf, highest_perf);
- 
- 	WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
- 	WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PERF(cap1));
-@@ -377,12 +382,17 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
- static int cppc_init_perf(struct amd_cpudata *cpudata)
- {
- 	struct cppc_perf_caps cppc_perf;
-+	u32 highest_perf;
- 
- 	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
- 	if (ret)
- 		return ret;
- 
--	WRITE_ONCE(cpudata->highest_perf, amd_get_highest_perf());
-+	highest_perf = amd_get_highest_perf();
-+	if (highest_perf > cppc_perf.highest_perf)
-+		highest_perf = cppc_perf.highest_perf;
-+
-+	WRITE_ONCE(cpudata->highest_perf, highest_perf);
- 
- 	WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
- 	WRITE_ONCE(cpudata->lowest_nonlinear_perf,
--- 
-2.34.1
+> +		hugetlb_vma_lock_write(vma);
+> +		i_mmap_lock_write(mapping);
+> +		mmap_read_unlock(skipped_mm);
+> +		mmdrop(skipped_mm);
+> +
+> +		v_start = vma_offset_start(vma, start);
+> +		v_end = vma_offset_end(vma, end);
+> +		unmap_hugepage_range(vma, vma->vm_start + v_start, v_end,
+> +				NULL, ZAP_FLAG_DROP_MARKER);
+> +		hugetlb_vma_unlock_write(vma);
+> +
+> +		goto retry;
+
+Should here be one cond_resched() here in case this function will take a really long time?
+
+> +	}
+>  }
+>  
+>  static void
+> @@ -474,11 +516,15 @@ hugetlb_vmdelete_list(struct rb_root_cached *root, pgoff_t start, pgoff_t end,
+>  		unsigned long v_start;
+>  		unsigned long v_end;
+>  
+> +		if (!hugetlb_vma_trylock_write(vma))
+> +			continue;
+> +
+>  		v_start = vma_offset_start(vma, start);
+>  		v_end = vma_offset_end(vma, end);
+>  
+>  		unmap_hugepage_range(vma, vma->vm_start + v_start, v_end,
+>  				     NULL, zap_flags);
+> +		hugetlb_vma_unlock_write(vma);
+>  	}
+
+unmap_hugepage_range is not called under hugetlb_vma_lock in unmap_ref_private since it's private vma?
+Add a comment to avoid future confusion?
+
+>  }
+>  
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 6fb0bff2c7ee..5912c2b97ddf 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -4801,6 +4801,14 @@ int copy_hugetlb_page_range(struct mm_struct *dst, struct mm_struct *src,
+>  		mmu_notifier_invalidate_range_start(&range);
+>  		mmap_assert_write_locked(src);
+>  		raw_write_seqcount_begin(&src->write_protect_seq);
+> +	} else {
+> +		/*
+> +		 * For shared mappings the vma lock must be held before
+> +		 * calling huge_pte_offset in the src vma. Otherwise, the
+
+s/huge_pte_offset/huge_pte_alloc/, i.e. huge_pte_alloc could return shared pmd, not huge_pte_offset which
+might lead to confusion. But this is really trivial...
+
+Except from above comments, this patch looks good to me.
+
+Thanks,
+Miaohe Lin
 

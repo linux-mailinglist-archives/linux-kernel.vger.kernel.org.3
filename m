@@ -2,202 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44C985A66CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E08A5A66CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiH3PCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 11:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
+        id S230092AbiH3PCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 11:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229990AbiH3PCC (ORCPT
+        with ESMTP id S229990AbiH3PCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 11:02:02 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47015107C6E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:02:00 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id bt10so15933776lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:02:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=vAQhC6sRUDhKjqRWeiE247SQ82Lv+OkFR1WrPTQjkcs=;
-        b=EGk0e3Rdu3KRJsoAEPep+jUDfvENxlUTd5ht2qcN8qj/atK2WcVCgRYM80nUX/mO43
-         7PaL2sMYBDsMR58YgFFh4YzbAVGiagMqFEAkpiAlPCgOrD/PI8DNO6ZK9YUjJ5O0IQ0f
-         S/IZdkbAWbrk0yE+aRgAdtPV/OnRtuAI/SY2aC637yodEteGUH6jsJGiAQJdvyoJMggE
-         2x0P1m1rbA512TellLunCUZpgHKFzYCuGnMD3sfPQ7oIR/dPBhoh+w1jB1RH7JHbLVJW
-         PfHNZgvvcbqDrm6FIRtRFpFLSUF7uYVugnodj2FWPNPBp4J/8m1MygoAGS2HXUEroqh0
-         N0MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=vAQhC6sRUDhKjqRWeiE247SQ82Lv+OkFR1WrPTQjkcs=;
-        b=sitiN6TzMdqEt9mGr8tlFFrcOgT5SlKmItLjmLaAPbhoGTsvSP8a+X/wP4h4ols7Ef
-         ph56Ll3Pq1m28HDM6TgtLfWrsL9fo0TVCuo7oGYytKx7Lmk0lwjYx0bbHTBI4A8jPJrd
-         8bsASIi9I31XmaxIvjIekK+lNhq947nzMbvL06+f0hK9TNLbTJh2vC5MuXagU2MO4vxR
-         53i91Pe1bdjes3pp/mG3ym/JSoqSl/0KI6frbX3L4dNVNAt2TbgU+sNXzclYO2pIyAQF
-         9vdLSG7du/v4PqUQ09RacHgviPmq0oRnr2qVgh9SK9fTCGAg1SSB+K6f7QhHGcc+96Zy
-         AdCw==
-X-Gm-Message-State: ACgBeo2j9K1WZX/AB1IorCpKWceIJT6s9h5of66aoSSp8fgl12wdslLZ
-        IlyqnBG8TXZjSeStUkXXCJwLmw==
-X-Google-Smtp-Source: AA6agR5i7pCzZPQ6g/Em71Ie9JOOQ0sghbZ9CABKEEvmPbaw4YT76PJ933F50vI+A3NC6iw3k/vWog==
-X-Received: by 2002:a19:dc4a:0:b0:493:e21:b77d with SMTP id f10-20020a19dc4a000000b004930e21b77dmr7542663lfj.580.1661871718516;
-        Tue, 30 Aug 2022 08:01:58 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id f6-20020a056512360600b0049288e0bd61sm1647696lfs.58.2022.08.30.08.01.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 08:01:57 -0700 (PDT)
-Message-ID: <3bb4b2c9-de07-f981-14bd-02c58c9fad35@linaro.org>
-Date:   Tue, 30 Aug 2022 18:01:56 +0300
+        Tue, 30 Aug 2022 11:02:06 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92B6DB6D41;
+        Tue, 30 Aug 2022 08:02:04 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id A76331CBC;
+        Tue, 30 Aug 2022 17:02:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1661871722;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Y1vcpi0+dohS3zcOPf9MT0OVkwJKzxxkawnTI2q960E=;
+        b=NLD+FYiLhcyxBJltX0QvzzIxv4DVz/IYFKMxMWdUbH0IBXO5fwF9/JKkEJXPC5qS+mhHvb
+        3tE7b4QYKQRgQu+eV24CG9OjIRq+A3vHI/REGCjk4f1Z21StOuHE6G/Yddu0r8KEUk2CST
+        Delj68jyIU/V3ygPhYnVnw9u8lCP+ROjAIc++zx5VywIla2hmj+KQKpOi3oEsdfI3glrWe
+        1Zc39XEYnDjkphKki5ep+u1XX18iKc18K0aX7C9XNnVlYinXPefW4gwajD0/r+dg8GlAAC
+        69392pt1s9kpAbvWVfJb8MhOwMWMGS6FRy0WJtGx4iUSp2+Oqb9N5bEsc1WlUA==
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 01/13] dt-bindings: memory: snps: Extend schema with
- IRQs/resets/clocks props
-Content-Language: en-US
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
+Date:   Tue, 30 Aug 2022 17:02:02 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220822191957.28546-1-Sergey.Semin@baikalelectronics.ru>
- <20220822191957.28546-2-Sergey.Semin@baikalelectronics.ru>
- <6a803554-bc1a-9f53-b7e2-7571fffea7e0@linaro.org>
- <20220826084726.7ra7342pa33bci5h@mobilestation>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220826084726.7ra7342pa33bci5h@mobilestation>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v1 06/14] nvmem: core: introduce NVMEM layouts
+In-Reply-To: <815f8e22-3a23-ebdb-7476-14682d0b3287@linaro.org>
+References: <20220825214423.903672-1-michael@walle.cc>
+ <20220825214423.903672-7-michael@walle.cc>
+ <e2d91011-583e-a88d-94f9-beb194416326@linaro.org>
+ <ae27e9d300a9c9eca4e9ec0c702b5e0a@walle.cc>
+ <815f8e22-3a23-ebdb-7476-14682d0b3287@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <c2e3a05339d54123de539fd124e874bb@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=UTF-8;
+ format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/08/2022 11:47, Serge Semin wrote:
+Am 2022-08-30 16:43, schrieb Srinivas Kandagatla:
 
->>
->>> +
->>> +  interrupt-names:
->>> +    minItems: 1
->>> +    maxItems: 5
->>> +    oneOf:
->>> +      - description: Common ECC CE/UE/Scrubber/DFI Errors IRQ
->>> +        items:
->>> +          - const: ecc
->>> +      - description: Individual ECC CE/UE/Scrubber/DFI Errors IRQs
->>> +        items:
->>> +          enum: [ ecc_ce, ecc_ue, ecc_ap, ecc_sbr, dfi_e ]
->>>  
->>>    reg:
->>>      maxItems: 1
->>>  
->>> +  clocks:
->>> +    description:
->>> +      A standard set of the clock sources contains CSRs bus clock, AXI-ports
->>> +      reference clock, DDRC core clock, Scrubber standalone clock
->>> +      (synchronous to the DDRC clock).
->>> +    minItems: 1
->>> +    maxItems: 4
->>
+>>>> diff --git a/drivers/nvmem/layouts/Makefile 
+>>>> b/drivers/nvmem/layouts/Makefile
+>>>> new file mode 100644
+>>>> index 000000000000..6fdb3c60a4fa
+>>>> --- /dev/null
+>>>> +++ b/drivers/nvmem/layouts/Makefile
+>>>> @@ -0,0 +1,4 @@
+>>>> +# SPDX-License-Identifier: GPL-2.0
+>>>> +#
+>>>> +# Makefile for nvmem layouts.
+>>>> +#
+>>>> diff --git a/include/linux/nvmem-provider.h 
+>>>> b/include/linux/nvmem-provider.h
+>>>> index e710404959e7..323685841e9f 100644
+>>>> --- a/include/linux/nvmem-provider.h
+>>>> +++ b/include/linux/nvmem-provider.h
+>>>> @@ -127,6 +127,28 @@ struct nvmem_cell_table {
+>>>>       struct list_head    node;
+>>>>   };
+>>>>   +/**
+>>>> + * struct nvmem_layout - NVMEM layout definitions
+>>>> + *
+>>>> + * @name:        Layout name.
+>>>> + * @of_match_table:    Open firmware match table.
+>>>> + * @add_cells:        Will be called if a nvmem device is found 
+>>>> which
+>>>> + *            has this layout. The function will add layout
+>>>> + *            specific cells with nvmem_add_one_cell().
+>>>> + * @node:        List node.
+>>>> + *
+>>>> + * A nvmem device can hold a well defined structure which can just 
+>>>> be
+>>>> + * evaluated during runtime. For example a TLV list, or a list of 
+>>>> "name=val"
+>>>> + * pairs. A nvmem layout can parse the nvmem device and add 
+>>>> appropriate
+>>>> + * cells.
+>>>> + */
+>>>> +struct nvmem_layout {
+>>>> +    const char *name;
+>>>> +    const struct of_device_id *of_match_table;
+>>> 
+>>> looking at this, I think its doable to convert the existing
+>>> cell_post_process callback to layouts by adding a layout specific
+>>> callback here.
+>> 
+>> can you elaborate on that?
 > 
->> I expect list to be strictly defined, not flexible.
+> If we relax add_cells + add nvmem_unregister_layout() and update
+> struct nvmem_layout to include post_process callback like
 > 
-> Some of the clock sources might be absent or tied up to another one
-> (for instance pclk, aclk and sbr can be clocked from a single core
-> clock source). It depends on the IP-core synthesize parameters.
-
-Yet still your device has clock lines - clock inputs, right? Therefore
-still 4 clocks will be going there or you want to say that the pin is
-not connected (or pulled down)?
-
+> struct nvmem_layout {
+> 	const char *name;
+> 	const struct of_device_id *of_match_table;
+> 	int (*add_cells)(struct nvmem_device *nvmem, struct nvmem_layout 
+> *layout);
+> 	struct list_head node;
+> 	/* default callback for every cell */
+> 	nvmem_cell_post_process_t post_process;
+> };
 > 
->>
->>> +
->>> +  clock-names:
->>> +    minItems: 1
->>> +    maxItems: 4
->>> +    items:
->>> +      enum: [ pclk, aclk, core, sbr ]
->>> +
->>> +  resets:
->>> +    description:
->>> +      Each clock domain can have separate reset signal.
->>> +    minItems: 1
->>> +    maxItems: 4
->>> +
->>> +  reset-names:
->>> +    minItems: 1
->>> +    maxItems: 4
->>> +    items:
->>> +      enum: [ prst, arst, core, sbr ]
->>
+> then we can move imx-ocotp to this layout style without add_cell
+> callback, and finally get rid of cell_process_callback from both
+> nvmem_config and nvmem_device.
 > 
->> The same.
+> If layout specific post_process callback is available and cell does
+> not have a callback set then we can can be either updated cell
+> post_process callback with this one or invoke layout specific callback
+> directly.
 > 
-> The same as for the clock.
-> 
->>
->>> +
->>>  required:
->>>    - compatible
->>>    - reg
->>> @@ -48,4 +92,15 @@ examples:
->>>        interrupt-parent = <&gic>;
->>>        interrupts = <0 112 4>;
->>>      };
->>> +  - |
->>> +    memory-controller@fd070000 {
->>> +      compatible = "snps,ddrc-3.80a";
->>> +      reg = <0x3d400000 0x400000>;
->>> +
->>> +      interrupts = <0 147 4>, <0 148 4>, <0 149 4>, <0 150 4>;
->>
-> 
->> Use proper defines.
-> 
-> What do you mean? Which defines do you think would be proper? If you
-> meant the IRQ DT-bindings macros, then what difference does it make
-> for a generic device in the DT-binding example? 
+> does that make sense?
 
-The macros/defines representing these numbers.
+Yes I get what you mean. BUT I'm not so sure; it mixes different
+things together. Layouts will add cells, analogue to
+nvmem_add_cells_from_of() or nvmem_add_cells_from_table(). With
+the hook above, the layout mechanism is abused to add post
+processing to cells added by other means.
 
+What is then the difference to the driver having that "global"
+post process hook?
 
-> Note since the device
-> is defined as generic it can be placed on different platforms with
-> different interrupt controller requirements. So what do you mean by
-> "proper" in this case?
+The correct place to add the per-cell hook in this case would be
+nvmem_add_cells_from_of().
 
-Proper means text instead of hard-coded number. This piece of code has
-meaning in a specific context, because you used interrupts matching some
-specific interrupt controllers. In that controller context, the "4" has
-a meaning. Just like "0". You cannot say that this piece of code is
-interrupt-controller-independent, because it is not. 4 has meaning.
-
-If you want it to be independent, drop all the flags... If you use flags
-from a specific implementation, then use proper defines matching them,
-not hard-coded numbers.
-
-Best regards,
-Krzysztof
+-michael

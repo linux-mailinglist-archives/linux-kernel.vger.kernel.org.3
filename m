@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98E4B5A5DFE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD965A5E03
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbiH3IYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
+        id S231450AbiH3I0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiH3IYE (ORCPT
+        with ESMTP id S230430AbiH3I00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:24:04 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F49AA3D7D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:23:58 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id z2so13201407edc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:23:58 -0700 (PDT)
+        Tue, 30 Aug 2022 04:26:26 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE41072FE7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:26:24 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso5690882wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:26:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=mpUjxCyEhTu/Vrrq9HCqiAy81B12JY5DlQuis+EGEOg=;
-        b=MDr2bJ1CbyLXhYi6zppIC7UWXfFIzwkollCWgwln4IgA0QGnokbrwiqTjaik/eXYT9
-         856bLTwXjSTvgsZOi1zwOozPmQGGUO8jttiPMpqItLONYPV6Gf1i9AI4yKBtft7O6KSd
-         eeewRUA9tWENYiQQQG8IW9a9At0QYj40f6CwI3oJXONZJ6zlGydjZgeE7x9x11QPvn4q
-         U217l+gOHGobaL3lsuuhaopvPvBy0qVDXkItHchyYo49aA96dw2zPrtjUDa/5APi8ggX
-         LnsjfhjkDuedFoFBpVYjqqGOgiR4LqxThE+p7Gl1hAg3vNNb28fOQS7bNaZh/eDNad73
-         DF3w==
+        d=sifive.com; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=XM3hePWi4RDkuttssXrZ5VE24lNRdsy0rflErqQPY28=;
+        b=bzJhyUUM5uZv8zprUMiOXaBrBVZ/UgJq0b0zOl6DqnXHgQojf+yPBZ5c8Z9vFqh5q0
+         2nQC93flygBxrmVG+ODrSWT/eSkSNRTcX2Y6vLp6UMgN3/WzkLhiHTMdoy6o6HA73hUW
+         7zxAcvoE2q3BvvO1sPktBzvhptHkN6EO0boN3qDwA5hFxGEbpZPabuYASBL9G8gR0zxJ
+         YUfIkQ9wY2Dy2pgy+A+lXXGd5UaZkvFVPTtexArM1iN/Tpw8y+A3cUa1v1LaizfnEZDR
+         Lq0pD5DIkVkFPgjzUP/wcrekf2b9g/c6OrRoDafImhR/ymh1Zr1j9JhaxlCfkVmB8cve
+         YtQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=mpUjxCyEhTu/Vrrq9HCqiAy81B12JY5DlQuis+EGEOg=;
-        b=V+2ZnN8tVRQepe9cf917Yo42lX4AlwGWiPXxFLn9pHXdmi0SXd2utdoZre7QPiSQjf
-         Pos1v2WpU6J5DyVjCk+VQ3s53QThli3nkMEjxdrhsluA+YVCvZm+8z6rAQ2RRHMdGMTW
-         wQ9+ee0+iSvuvAqjZci3RDk8qMfBxc3LbmTypHc9T+Q30BoVVVI742J9Y96pKlOwrm3h
-         FK2Mct0ilArNWmC0RoB4J3Pk7lYzfx0RY4uHzw3sB2bp4zyXXOt9AaK25mcEJf94z2U7
-         I7EXPQCgNnHCc3mK/57gRy3CeRhZRZOnCQg4j1RqTa+IvIWuKajQrbkk1aU0pbZj53J/
-         DvUQ==
-X-Gm-Message-State: ACgBeo084OtHMkFjozpWSu/UkzKbUBwQelZflAPgQuh+2Yu8ubY05zX8
-        YU9gv6ZkT10ARKYB0lTWjPZg3Ic4cqoqJg5MfnW3nCItHB1/PQ==
-X-Google-Smtp-Source: AA6agR5/IswRYM3PT+dPUwbiFcg/FVwCQjSZGLT2Sq2969wQy4hj2pgslkB5JCcfz/BL8HKIluLz+ycVriSnvKoEz3c=
-X-Received: by 2002:a05:6402:42d3:b0:435:2c49:313d with SMTP id
- i19-20020a05640242d300b004352c49313dmr19348314edc.86.1661847836877; Tue, 30
- Aug 2022 01:23:56 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=XM3hePWi4RDkuttssXrZ5VE24lNRdsy0rflErqQPY28=;
+        b=mpBLZOqjN3QE8naj0HtaxtUFr2YCI3jpJXOiM9jWMJ3Jq5RGHkT3cA/OZ6U1rJLkcb
+         2UcyXimISTn951KfztWjYzmYTPsOpYd4fogX6Nz1tPf6Npob6FplP3CEHwkeBmcCJVr+
+         7q30Y2ZQVa0B/zORzNKfMAHp5MpCxLFUrOUAd+W0+klyDn0vS/b4faCkyGJ05KmqCPnd
+         rt151G17kSlp/f1hdhJ56Dgn9nfdMf/njE9vpI4X4yraK9mHigDiluPtu8UZe8MpM0va
+         UuXoKeP7Y1pO87jRfn4JP2E00VuPb1v9NCYRSjzAKmEtX7VPy/xbLBlJWfNui817sEyN
+         zjPQ==
+X-Gm-Message-State: ACgBeo2QKex087AumqZy8kYoIMFQPPgkoTK7YDjsDDZLXyPbXkPveTVr
+        ZKAzfL2tRXn4u89+KiABv7dkWw==
+X-Google-Smtp-Source: AA6agR4t9yPdMnXaYpamc2su/lpj35tI/2NDGR0soqyjuxgixE2p5bvOVagi7BoSRqbqQcAVKeZZmA==
+X-Received: by 2002:a05:600c:1e05:b0:3a5:b441:e9c with SMTP id ay5-20020a05600c1e0500b003a5b4410e9cmr8915891wmb.24.1661847983138;
+        Tue, 30 Aug 2022 01:26:23 -0700 (PDT)
+Received: from rainbowdash.office.codethink.co.uk ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id bi26-20020a05600c3d9a00b003a5ea1cc63csm11051643wmb.39.2022.08.30.01.26.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 01:26:22 -0700 (PDT)
+From:   Ben Dooks <ben.dooks@sifive.com>
+To:     zong.li@sifive.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
+        conor.dooley@microchip.com, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Cc:     Ben Dooks <ben.dooks@sifive.com>
+Subject: [PATCH] soc: sifive: ccache: reduce printing on init
+Date:   Tue, 30 Aug 2022 09:26:20 +0100
+Message-Id: <20220830082620.1680602-1-ben.dooks@sifive.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220829062202.3287-1-zong.li@sifive.com>
+References: <20220829062202.3287-1-zong.li@sifive.com>
 MIME-Version: 1.0
-References: <20220826095615.74328-1-jinpu.wang@ionos.com> <20220826095615.74328-3-jinpu.wang@ionos.com>
- <YwtM+/nB1F6p1Ey3@unreal> <CAMGffEmffkW0fHrjx84gQ6FnWuwriRUg=HSdwzU4W_sZLdiT7g@mail.gmail.com>
- <Ywyr0+b350SZrznw@unreal> <CAMGffE=m_Na9n-oHkxm6C2C1sC3U9LkN_7k8Xx9g9SG2ifDjrw@mail.gmail.com>
- <Yw3D7TVgkANv7PDI@unreal>
-In-Reply-To: <Yw3D7TVgkANv7PDI@unreal>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Tue, 30 Aug 2022 10:23:46 +0200
-Message-ID: <CAMGffEmyhXEN99_yJpiGJFOtAKGEThz=c2MLw8qbWVn70XnSdA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] RDMA: dma-mapping: Return an unsigned int from ib_dma_map_sg{,_attrs}
-To:     Leon Romanovsky <leon@kernel.org>
-Cc:     Christoph Hellwig <hch@lst.de>, jgg@ziepe.ca,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,104 +72,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 10:01 AM Leon Romanovsky <leon@kernel.org> wrote:
->
-> On Mon, Aug 29, 2022 at 03:19:14PM +0200, Jinpu Wang wrote:
-> > On Mon, Aug 29, 2022 at 2:06 PM Leon Romanovsky <leon@kernel.org> wrote:
-> > >
-> > > On Mon, Aug 29, 2022 at 11:40:40AM +0200, Jinpu Wang wrote:
-> > > > On Sun, Aug 28, 2022 at 1:09 PM Leon Romanovsky <leon@kernel.org> wrote:
-> > > > >
-> > > > > On Fri, Aug 26, 2022 at 11:56:15AM +0200, Jack Wang wrote:
-> > > > > > Following 2a047e0662ae ("dma-mapping: return an unsigned int from dma_map_sg{,_attrs}")
-> > > > > > change the return value of ib_dma_map_sg{,attrs} to unsigned int.
-> > > > > >
-> > > > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > > > > Cc: Leon Romanovsky <leon@kernel.org>
-> > > > > > Cc: Christoph Hellwig <hch@lst.de>
-> > > > > > Cc: linux-rdma@vger.kernel.org
-> > > > > > Cc: linux-kernel@vger.kernel.org
-> > > > > >
-> > > > > > Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
-> > > > > > ---
-> > > > > >  drivers/infiniband/core/device.c | 2 +-
-> > > > > >  include/rdma/ib_verbs.h          | 6 +++---
-> > > > > >  2 files changed, 4 insertions(+), 4 deletions(-)
-> > > > >
-> > > > > You forgot to change ib_dma_map_sgtable_attrs() and various
-> > > > > ib_dma_map_sg*() callers.
-> > > > No, they are different.
-> > > > ib_dma_map_sgtable_attrs and dma_map_sgtable return negative on errors.
-> > >
-> > > It is not the point. You changed ib_dma_virt_map_sg() to be unsigned,
-> > > so now the following lines are not correct:
-> > >
-> > >   4138         int nents;
-> > >   4139
-> > >   4140         if (ib_uses_virt_dma(dev)) {
-> > >   4141                 nents = ib_dma_virt_map_sg(dev, sgt->sgl, sgt->orig_nents);
-> > >
-> > > "int nents" should be changed to "unsigned int".
-> > >
-> > > Thanks
-> > ok, I can do it.
-> > just to check if we are on the same page:
-> > For all the callers of ib_dma_map_sg,  would it be better to fix it
-> > one patch per driver or do it in a single bigger patch.
-> > I feel it's better to do it per driver, and there are drivers from
-> > different subsystems e.g. nvme/rds/etc.
->
-> I don't know, everything here looks not nice to me.
->
-> After commit 2a047e0662ae ("dma-mapping: return an unsigned int from dma_map_sg{,_attrs}"),
-> all callers left in limbo state where they expect that dma_map_sg{,_attrs} will return
-> upto INT_MAX. However now, the API can return upto UINT_MAX, which is not the case now
-> due to internal implementation of dma_map_sg_*(), but can be changed any second.
->
-> Can we simply revert that commit and restore the "int" return type?
-> I don't see any benefit in having "unsigned int" if compiler doesn't enforce it.
-I feel different, the dma_map_sg api since the kernel 2.x, is
-documented in DMA-API.txt[1]:
-"
+The driver prints out 6 lines on startup, which can easily be redcued
+to two lines without losing any information.
 
-int
-dma_map_sg(struct device *dev, struct scatterlist *sg,
-int nents, enum dma_data_direction direction)
+Note, to make the types work better, uint64_t has been replaced with
+ULL to make the unsigned long long match the format in the print
+statement.
 
-Returns: the number of physical segments mapped (this may be shorter
-than <nents> passed in if some elements of the scatter/gather list are
-physically or virtually adjacent and an IOMMU maps them with a single
-entry).
+Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+---
+ drivers/soc/sifive/sifive_ccache.c | 25 +++++++++++--------------
+ 1 file changed, 11 insertions(+), 14 deletions(-)
 
-Please note that the sg cannot be mapped again if it has been mapped once.
-The mapping process is allowed to destroy information in the sg.
+diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/sifive_ccache.c
+index 46ce33db7d30..65a10a6ee211 100644
+--- a/drivers/soc/sifive/sifive_ccache.c
++++ b/drivers/soc/sifive/sifive_ccache.c
+@@ -76,20 +76,17 @@ static void setup_sifive_debug(void)
+ 
+ static void ccache_config_read(void)
+ {
+-	u32 regval, val;
+-
+-	regval = readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+-	val = regval & 0xFF;
+-	pr_info("CCACHE: No. of Banks in the cache: %d\n", val);
+-	val = (regval & 0xFF00) >> 8;
+-	pr_info("CCACHE: No. of ways per bank: %d\n", val);
+-	val = (regval & 0xFF0000) >> 16;
+-	pr_info("CCACHE: Sets per bank: %llu\n", (uint64_t)1 << val);
+-	val = (regval & 0xFF000000) >> 24;
+-	pr_info("CCACHE: Bytes per cache block: %llu\n", (uint64_t)1 << val);
+-
+-	regval = readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+-	pr_info("CCACHE: Index of the largest way enabled: %d\n", regval);
++	u32 cfg;
++
++	cfg = readl(ccache_base + SIFIVE_CCACHE_CONFIG);
++
++	pr_info("CCACHE: %u banks, %u ways, sets/bank=%llu, bytes/block=%llu\n",
++		(cfg & 0xff), (cfg >> 8) & 0xff,
++		1ULL << ((cfg >> 16) & 0xff),
++		1ULL << ((cfg >> 24) & 0xff));
++
++	cfg = readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
++	pr_info("CCACHE: Index of the largest way enabled: %d\n", cfg);
+ }
+ 
+ static const struct of_device_id sifive_ccache_ids[] = {
+-- 
+2.35.1
 
-As with the other mapping interfaces, dma_map_sg can fail. When it
-does, 0 is returned and a driver must take appropriate action. It is
-critical that the driver do something, in the case of a block driver
-aborting the request or even oopsing is better than doing nothing and
-corrupting the filesystem.
-
-"
-It seems the return range for dma_map_sg never returns a negative
-value. I think it's just the API
-should have been defined to return "unsigned int"  IMHO. We should
-update the documentation in the Documentation there
-too. in core-api/dma-api.rst
-
-
-
-[1] https://elixir.bootlin.com/linux/v2.6.39.4/source/Documentation/DMA-API.txt
-
-
->
-> Thanks
->
-> >
-> > Thx!
-> >
-> >
-> > >
-> > > > >
-> > > > > Thanks
-> > > > Thanks!

@@ -2,67 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 478CB5A6954
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:13:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31D605A6957
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:14:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbiH3RNq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
+        id S230348AbiH3ROH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231193AbiH3RNj (ORCPT
+        with ESMTP id S229476AbiH3ROE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:13:39 -0400
-Received: from mailrelay1-1.pub.mailoutpod1-cph3.one.com (mailrelay1-1.pub.mailoutpod1-cph3.one.com [46.30.210.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFEABB6A1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:13:36 -0700 (PDT)
+        Tue, 30 Aug 2022 13:14:04 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739C7BB90D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:14:01 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id x10so12068788ljq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:14:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=n3BfHw5PefRvzcOIO6sgbfBKO6vC5BZ/oJ9fLf1w7GI=;
-        b=VvuIHcgm31RoGQz/bWZ5bFZuISuKqIdIicu+On8vsop1D78qHCpn/yy8CsOOdaVQsB81WFvaLcIMo
-         /rE71LDC3EPWHR+HQQ5XHUwLKgM+0TH5x+aATQ8Emj55g9d8HHc9M2vZhpRvtlZjcNLvlE4z7fPLhc
-         RjszyNcyb4PyHOxp/u0cw/vosQjseeRA2BDy9oQDEyX0svSDAy1fDZZQLD6uwB3OiL2C9B0DnXI+eP
-         yyK2lRhBLPdeAe+5Pp5jTn4nXILSq0K+f2VOaM2o2zEUpgqS5Y4xERo1RsiDo4DdNIBDFBH0p3P+6/
-         BPxQKuKg4dnOqdS0PXs3mNzZqkoKkxQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
-         message-id:subject:cc:to:from:date:from;
-        bh=n3BfHw5PefRvzcOIO6sgbfBKO6vC5BZ/oJ9fLf1w7GI=;
-        b=JraHDPTkoXnCs3RESpCFN6h2F7rJWy/53sl/xQ6XzCzk8Kl2sSIlsswXAMyFkKt/hV5TjzdXDt2aV
-         rAfACMhBQ==
-X-HalOne-Cookie: 941d2c37e9c4c58e81edbe42287d739f4454378b
-X-HalOne-ID: 13648c46-2887-11ed-a6d1-d0431ea8a283
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay1.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id 13648c46-2887-11ed-a6d1-d0431ea8a283;
-        Tue, 30 Aug 2022 17:13:34 +0000 (UTC)
-Date:   Tue, 30 Aug 2022 19:13:32 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Yangxi Xiang <xyangxi5@gmail.com>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
-        nick black <dankamongmen@gmail.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH] tty/vt: Remove printable variable
-Message-ID: <Yw5FPM8iHDxHmVwk@ravnborg.org>
-References: <20220830132803.403744-1-daniel.vetter@ffwll.ch>
- <20220830134117.416003-1-daniel.vetter@ffwll.ch>
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=NMG+tb0NL7DJnjXoTL3QKt3TNW9BfJSancliFW+t1M8=;
+        b=PKKkWR9H8flZ65Bv82OpLQ46D9KJJOmFqzyfyTqkffcjzwnvXPmTlprf/zMT9RmdVD
+         Szs8FaPKHmUfjJmIWLh/HJLSE/JzrMYK+VN6A8S6wbrXQp8/UNT4NICq0wZVdOOYijbi
+         +UsTpJaIMeu8kCAmKhlllbwFtd3LOBETb0+1Z0p2xwS7BjeadSJ3dDY/aZbzAC5ZYVci
+         zetEzgXXQj7eHHN6TUwmUM+OzIuht5ZJI8Zk82s4syQiYya20HHNJoGorSuQWxgyFaHN
+         477oJ/qZTOw1vEzbpoDLdwhePvdvIdo4wFHwK3x9XXD1DnwI7iYX+HoerT8X+oPmJYKq
+         o1WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=NMG+tb0NL7DJnjXoTL3QKt3TNW9BfJSancliFW+t1M8=;
+        b=VnXojqCzzDbIwHgBRh/N/eYLstab2b585maQmms1lRwT+yl3UXOvAKHmLyScvFxhED
+         YR4oCYVjeMsWpzjLoKHnlAzakrDvSMqnn5LIzqrgORI1KqKqLjorNSeGp9qEtr7Ckzy5
+         Uzv9O+5WUKfIfpBQGqaZ19XzAkqJ9DdP4bGZwx45QnlTouzcxpMCkCAKTafMUsrG7ikp
+         vFHJpcF9tZIJeOz3OoWz0D8RsA4czF97YvtPIGdErwV0ko1Z8wEsWuA/Hd/Rj6Mn/ely
+         XolRFoPSTrRY1wXsC5FxQ9OBbJhFJsDPxcVv9zgPRq1Y4rtmUWjcEwbt8My13vWB/6Sg
+         sRdA==
+X-Gm-Message-State: ACgBeo0H/ha0vMuvla04zgNijlD+J2jK1zVK3jNWMkb19eXjCz6yT1ei
+        GsC56jmlbT4Uq0ULEsf+nmP6xQ==
+X-Google-Smtp-Source: AA6agR7A+MFeY/CZNzmtpzJy5NKpu1On/5rvG7XYhypEcrqWVjP8ym6R5SWnTn8JH2QjrQPYY/mUYw==
+X-Received: by 2002:a05:651c:1507:b0:261:d72d:9959 with SMTP id e7-20020a05651c150700b00261d72d9959mr7980548ljf.77.1661879639497;
+        Tue, 30 Aug 2022 10:13:59 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id v2-20020a05651203a200b004931000140asm134672lfp.112.2022.08.30.10.13.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 10:13:58 -0700 (PDT)
+Message-ID: <4a37d318-8c83-148b-89b3-9729bc7c9761@linaro.org>
+Date:   Tue, 30 Aug 2022 20:13:56 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220830134117.416003-1-daniel.vetter@ffwll.ch>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH net-next v2 1/5] dt-bindings: net: Convert Altera TSE
+ bindings to yaml
+Content-Language: en-US
+To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+References: <20220830095549.120625-1-maxime.chevallier@bootlin.com>
+ <20220830095549.120625-2-maxime.chevallier@bootlin.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220830095549.120625-2-maxime.chevallier@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,31 +85,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On 30/08/2022 12:55, Maxime Chevallier wrote:
+> This converts the bindings for the Altera Triple-Speed Ethernet to yaml.
 
-On Tue, Aug 30, 2022 at 03:41:17PM +0200, Daniel Vetter wrote:
-> Every since the 0.99.7A release when console_register() was introduced
-> it's become impossible to call vt_console_print (called
-> console_print() back then still) directly. Which means the
-> initialization issue this variable protected against is no more.
+Do not use "This commit/patch".
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+
 > 
-> Give it a send off with style and let it rest in peace.
+> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
+
+Rebase your changes on some decent kernel and use get_maintainers.pl...
+
+> ---
+> V1->V2:
+>  - Removed unnedded maxItems
+>  - Added missing minItems
+>  - Fixed typos in some properties names
+>  - Fixed the mdio subnode definition
 > 
-> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Jiri Slaby <jirislaby@kernel.org>
-> Cc: "Ilpo Järvinen" <ilpo.jarvinen@linux.intel.com>
-> Cc: nick black <dankamongmen@gmail.com>
-> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-> Cc: Yangxi Xiang <xyangxi5@gmail.com>
-> Cc: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+>  .../devicetree/bindings/net/altera_tse.txt    | 113 -------------
+>  .../devicetree/bindings/net/altr,tse.yaml     | 156 ++++++++++++++++++
+>  2 files changed, 156 insertions(+), 113 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/net/altera_tse.txt
+>  create mode 100644 Documentation/devicetree/bindings/net/altr,tse.yaml
+> 
 
-I saw this was sent again on accident, but that sdoes not prevent me
-from adding a:
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+(...)
 
-I was a bit reluctant to r-b it, but well this looks obviously correct,
-so ...
+> diff --git a/Documentation/devicetree/bindings/net/altr,tse.yaml b/Documentation/devicetree/bindings/net/altr,tse.yaml
+> new file mode 100644
+> index 000000000000..1676e13b8c64
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/altr,tse.yaml
+> @@ -0,0 +1,156 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/altr,tse.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Altera Triple Speed Ethernet MAC driver (TSE)
+> +
+> +maintainers:
+> +  - Maxime Chevallier <maxime.chevallier@bootlin.com>
+> +
+> +allOf:
 
-	Sam
+Put allOf below "required".
+
+> +  - $ref: "ethernet-controller.yaml#"
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - altr,tse-1.0
+> +              - ALTR,tse-1.0
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 4
+> +        reg-names:
+> +          items:
+> +            - const: control_port
+> +            - const: rx_csr
+> +            - const: tx_csr
+> +            - const: s1
+> +
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - altr,tse-msgdma-1.0
+> +    then:
+> +      properties:
+> +        reg:
+> +          minItems: 6
+> +        reg-names:
+> +          minItems: 6
+
+No need for minItems.
+
+> +          items:
+> +            - const: control_port
+> +            - const: rx_csr
+> +            - const: rx_desc
+> +            - const: rx_resp
+> +            - const: tx_csr
+> +            - const: tx_desc
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - altr,tse-1.0
+> +      - ALTR,tse-1.0
+
+This is deprecated compatible. You need oneOf and then deprecated: true.
+
+> +      - altr,tse-msgdma-1.0
+> +
+> +  reg:
+> +    minItems: 4
+> +    maxItems: 6
+> +
+> +  reg-names:
+> +    minItems: 4
+> +    items:
+> +      - const: control_port
+> +      - const: rx_csr
+> +      - const: rx_desc
+> +      - const: rx_resp
+> +      - const: tx_csr
+> +      - const: tx_desc
+> +      - const: s1
+
+This is messed up. You allow only 6 items maximum, but list 7. It
+contradicts your other variants in allOf:if:then.
+
+
+Best regards,
+Krzysztof

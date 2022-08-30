@@ -2,56 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FB525A6A96
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940665A6A76
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:29:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231896AbiH3RbI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
+        id S231722AbiH3R33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbiH3Rac (ORCPT
+        with ESMTP id S231875AbiH3R2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:30:32 -0400
+        Tue, 30 Aug 2022 13:28:53 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EDCBC32E9;
-        Tue, 30 Aug 2022 10:27:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 501A71670C1;
+        Tue, 30 Aug 2022 10:26:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DF96A61775;
-        Tue, 30 Aug 2022 17:25:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAE22C433C1;
-        Tue, 30 Aug 2022 17:25:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D91D9617B2;
+        Tue, 30 Aug 2022 17:24:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7D12C4347C;
+        Tue, 30 Aug 2022 17:24:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661880340;
-        bh=LhMRPfK7UasEqG4OE4oQclpIUn/hzO8YS1HbMLVxpfs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=L49kWHNIqkjlnMawdOM09vuN0KEKZ3Yk4HkM+QCw/WNEj4/oxAWYE8x5VsA7R5v0z
-         EdmMWZQ2bXpag7d+st0PtSD2nfjgKKPlj4xM6sJ0t778q1gKpq4iwqDqEgiBWBiVK7
-         670JAAEEJoc+kD5CNjc1/a7vAKP3KoaQQ6muO9HojNhTmgEwJES9BcMPbHk7sxizry
-         Em3vAqrT1it5xIwLHlxQGjrbREjJJukukFj879rmW1NKI9GlchO+UqD+T/nhWQjtpv
-         MI5pzfuG6Fvc9XXa+KhUCxGifdvlJBfrTEM9zofn8GvL8emb4ZPqf9Mf1HKRB1Wauu
-         sFzEEX+DcZ1fA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qu Huang <jinsdb@126.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
-        Hawking.Zhang@amd.com, evan.quan@amd.com,
-        mario.limonciello@amd.com, guchun.chen@amd.com,
-        YiPeng.Chai@amd.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.4 12/12] drm/amdgpu: mmVM_L2_CNTL3 register not initialized correctly
-Date:   Tue, 30 Aug 2022 13:24:43 -0400
-Message-Id: <20220830172444.581654-12-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220830172444.581654-1-sashal@kernel.org>
-References: <20220830172444.581654-1-sashal@kernel.org>
+        s=k20201202; t=1661880290;
+        bh=6JmD2+JK8pwdRoPXDm6ONoHrQ/7bSyaKr0JerEnY4Rs=;
+        h=Date:From:To:Cc:Subject:From;
+        b=bFuWWnaqFPON02rz7uU2CAczrW+/GoCDFV8ePY47z/2L+m6q0/q7M1Evc/Pby+cKu
+         KsYKrcMi8vKQ4+YrMZ+KxiDZ4zqMTdvC5LAM320k5bJSQMbx6eZTNC4NL73jbboVg2
+         lRNQxPHsotXE8pFeOCar54RQNeqpMEQo96LUPOjHaGQfiZL6YpFludXm5i4qqfsmfP
+         u651Is2xB4DYRca/KsXBfk2Dl5z3op4MM9XZgWPPIRFISWBoDdIOhnFWxwA3iGjI5k
+         0yonpSwpbcodjzWqD0xeeFFDjQE1jWZMvZFPfHLM0kTf7kimstlTyp3aCcQn7Y+10i
+         lxCxwYy7Mm66Q==
+Date:   Tue, 30 Aug 2022 12:24:44 -0500
+From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH][next] uapi: net/ipv4: Use __DECLARE_FLEX_ARRAY() helper
+Message-ID: <Yw5H3E3a6mmpuTeT@work>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -62,31 +56,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qu Huang <jinsdb@126.com>
+We now have a cleaner way to keep compatibility with user-space
+(a.k.a. not breaking it) when we need to keep in place a one-element
+array (for its use in user-space) together with a flexible-array
+member (for its use in kernel-space) without making it hard to read
+at the source level. This is through the use of the new
+__DECLARE_FLEX_ARRAY() helper macro.
 
-[ Upstream commit b8983d42524f10ac6bf35bbce6a7cc8e45f61e04 ]
+The size and memory layout of the structure is preserved after the
+changes. See below.
 
-The mmVM_L2_CNTL3 register is not assigned an initial value
+Before changes:
 
-Signed-off-by: Qu Huang <jinsdb@126.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+$ pahole -C ip_msfilter net/ipv4/igmp.o
+struct ip_msfilter {
+	union {
+		struct {
+			__be32     imsf_multiaddr_aux;   /*     0     4 */
+			__be32     imsf_interface_aux;   /*     4     4 */
+			__u32      imsf_fmode_aux;       /*     8     4 */
+			__u32      imsf_numsrc_aux;      /*    12     4 */
+			__be32     imsf_slist[1];        /*    16     4 */
+		};                                       /*     0    20 */
+		struct {
+			__be32     imsf_multiaddr;       /*     0     4 */
+			__be32     imsf_interface;       /*     4     4 */
+			__u32      imsf_fmode;           /*     8     4 */
+			__u32      imsf_numsrc;          /*    12     4 */
+			__be32     imsf_slist_flex[0];   /*    16     0 */
+		};                                       /*     0    16 */
+	};                                               /*     0    20 */
+
+	/* size: 20, cachelines: 1, members: 1 */
+	/* last cacheline: 20 bytes */
+};
+
+After changes:
+
+$ pahole -C ip_msfilter net/ipv4/igmp.o
+struct ip_msfilter {
+	struct {
+		__be32             imsf_multiaddr;       /*     0     4 */
+		__be32             imsf_interface;       /*     4     4 */
+		__u32              imsf_fmode;           /*     8     4 */
+		__u32              imsf_numsrc;          /*    12     4 */
+		union {
+			__be32     imsf_slist[1];        /*    16     4 */
+			struct {
+				struct {
+				} __empty_imsf_slist_flex; /*    16     0 */
+				__be32 imsf_slist_flex[0]; /*    16     0 */
+			};                               /*    16     0 */
+		};                                       /*    16     4 */
+	};                                               /*     0    20 */
+
+	/* size: 20, cachelines: 1, members: 1 */
+	/* last cacheline: 20 bytes */
+};
+
+In the past, we had to duplicate the whole original structure within
+a union, and update the names of all the members. Now, we just need to
+declare the flexible-array member to be used in kernel-space through
+the __DECLARE_FLEX_ARRAY() helper together with the one-element array,
+within a union. This makes the source code more clean and easier to read.
+
+Link: https://github.com/KSPP/linux/issues/193
+Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/mmhub_v1_0.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/uapi/linux/in.h | 20 +++++++-------------
+ 1 file changed, 7 insertions(+), 13 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/mmhub_v1_0.c b/drivers/gpu/drm/amd/amdgpu/mmhub_v1_0.c
-index 641f1258f08dc..e60157fe7a7bf 100644
---- a/drivers/gpu/drm/amd/amdgpu/mmhub_v1_0.c
-+++ b/drivers/gpu/drm/amd/amdgpu/mmhub_v1_0.c
-@@ -182,6 +182,7 @@ static void mmhub_v1_0_init_cache_regs(struct amdgpu_device *adev)
- 	tmp = REG_SET_FIELD(tmp, VM_L2_CNTL2, INVALIDATE_L2_CACHE, 1);
- 	WREG32_SOC15(MMHUB, 0, mmVM_L2_CNTL2, tmp);
+diff --git a/include/uapi/linux/in.h b/include/uapi/linux/in.h
+index 14168225cecd..fa4dc8f8f081 100644
+--- a/include/uapi/linux/in.h
++++ b/include/uapi/linux/in.h
+@@ -188,20 +188,14 @@ struct ip_mreq_source {
+ };
  
-+	tmp = mmVM_L2_CNTL3_DEFAULT;
- 	if (adev->gmc.translate_further) {
- 		tmp = REG_SET_FIELD(tmp, VM_L2_CNTL3, BANK_SELECT, 12);
- 		tmp = REG_SET_FIELD(tmp, VM_L2_CNTL3,
+ struct ip_msfilter {
+-	union {
+-		struct {
+-			__be32		imsf_multiaddr_aux;
+-			__be32		imsf_interface_aux;
+-			__u32		imsf_fmode_aux;
+-			__u32		imsf_numsrc_aux;
++	struct {
++		__be32		imsf_multiaddr;
++		__be32		imsf_interface;
++		__u32		imsf_fmode;
++		__u32		imsf_numsrc;
++		union {
+ 			__be32		imsf_slist[1];
+-		};
+-		struct {
+-			__be32		imsf_multiaddr;
+-			__be32		imsf_interface;
+-			__u32		imsf_fmode;
+-			__u32		imsf_numsrc;
+-			__be32		imsf_slist_flex[];
++			__DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
+ 		};
+ 	};
+ };
 -- 
-2.35.1
+2.34.1
 

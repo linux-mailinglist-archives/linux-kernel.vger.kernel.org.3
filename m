@@ -2,109 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982925A6E55
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:19:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34BEC5A6E59
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:19:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiH3UTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 16:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45432 "EHLO
+        id S231845AbiH3UT3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 16:19:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiH3UTE (ORCPT
+        with ESMTP id S231609AbiH3UTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 16:19:04 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7643286C3;
-        Tue, 30 Aug 2022 13:19:03 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id x5so9484719qtv.9;
-        Tue, 30 Aug 2022 13:19:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=LVn6qx7D95RyzzEUvV9vWSYtbWzc15zDFAjhUMtiT8U=;
-        b=n4D10XaDUSei5RLSsY+I//s3biEMQ4gimTe364fs28GKuTXZ6h39Dr8c968TsbE1FK
-         YhJV38UY5llldYqcHq5Ao7rIATy9Lr4OSXns7i89iAxB+ieW4hFd1pEXACPZ9q5euCk3
-         uZc3gAfHf7wzcgI5O8L+COYoibPJj67mpjjtAdjJUabbtHBfkFas3CNPKglSUgXgyXA/
-         sqWLAxxoRelv4TB2yit1JpPsHXWvprRQa944PUCVRTVLlyJ6ILrAnBrPmVGhJT6ydErn
-         6fAlYcj7Ox1YKnu8+TuptVg2bctQogTTHmOniVxbsNJjvou4q1RApNT/dxJnOR3n/kSg
-         a20A==
+        Tue, 30 Aug 2022 16:19:23 -0400
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9087761B05;
+        Tue, 30 Aug 2022 13:19:22 -0700 (PDT)
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-11f34610d4aso8695666fac.9;
+        Tue, 30 Aug 2022 13:19:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=LVn6qx7D95RyzzEUvV9vWSYtbWzc15zDFAjhUMtiT8U=;
-        b=qp2Bt4ZKkf7+4lnYhRt30fftP7NWlNx0scx9PBg1WBO7R8qhh/sRQB4AhXWedm3eqi
-         FdGhDn6Wke+7mOJbzE3KQmVizrzxgbzZ9n94GTYioOAHMotZXK5AbR4nGlw+KAcLow2Y
-         RS+KElkLIoVQOa2G3IzJa9LQNjaYWPhIA1asfkW6B++/0wnJD7fjotp6nc5FdQTDIJ3+
-         b+LhrMeTl5LR+HIINpSUjtxLW6EOtvFWX1TTth109pEiiA8jkvZZbVXOCcFfNXWoOo/p
-         cPaSWG8/fXTvIc1FrLCOAQujmbQSPrMHchGJ7LwQgGQ29gQKelq1l7Meer1kkHa1fkRj
-         CBsw==
-X-Gm-Message-State: ACgBeo2VDunQgZ6l9N2uV7IGFEahTr2hJe63VgvKeTINW0ZOyl8Zn/9i
-        fpJb7OhSR7ClhprO3uwQAFUWC2IUvl2gRMtkBXY=
-X-Google-Smtp-Source: AA6agR79d85vpjTBtBYLCb2xQNPhnUnTI9Q+QLTg6ng9KLWLGM8ALchh4LqN/i4W7M4C88klpkE3OtAGkQj6rdwwXMk=
-X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id
- v6-20020ac85786000000b003433051170dmr16165431qta.429.1661890742791; Tue, 30
- Aug 2022 13:19:02 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Ybe6ruyjvPQK8gqfA76hafN5u49toJijAfoGF0avc0Q=;
+        b=awYn26viP1sWCllNHIdvwXKBW4ur9fQQ39GnJ3SogDGmVR1JhXoaxdm8xtXA+Q+/iL
+         ol9KYKYKrKC6ReSFvt35whidBVmnllF0sBmjV4Y7fx6fkgfelbs2toQz96oP6UVwYdiW
+         mnKuXNvJQFyHuE+nHaM+dsy+qnu4AB6Se6jbJferhxe5n26mCXmBFsh612bkMuHVAK9i
+         0sRSJAOI4xgM3fyCKZPHSZSszka1/liW5U3SI6MlZ9gA06e5XvcnN62ADUiYpTkeKm/Q
+         k2F0CUD3AQ10nOVrdLalSgOIPDi4mUQCIqlEbh/KbSKK10cN7AVND+BDOKhvaU22qL2h
+         2/jA==
+X-Gm-Message-State: ACgBeo0Mzh030WmfMcOPNXLvemExTN+6pmXAMtLEjdJExY29c+3G9cy5
+        +keDf5zN4I0iRIRHYgwC5A==
+X-Google-Smtp-Source: AA6agR5I3kVZCYvHupGcZNpsWqJuNU2x0SqozhVbdqcVAv9R3OtZ4JPvzwIb99dJtnuUxzpYULAp0g==
+X-Received: by 2002:a05:6870:b148:b0:112:cfe1:5062 with SMTP id a8-20020a056870b14800b00112cfe15062mr11114153oal.297.1661890761738;
+        Tue, 30 Aug 2022 13:19:21 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id h7-20020a9d2f07000000b0063736db0ae9sm5608884otb.15.2022.08.30.13.19.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 13:19:21 -0700 (PDT)
+Received: (nullmailer pid 1992523 invoked by uid 1000);
+        Tue, 30 Aug 2022 20:19:20 -0000
+Date:   Tue, 30 Aug 2022 15:19:20 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v4 1/7] dt-bindings: net: phy: add PoDL PSE
+ property
+Message-ID: <20220830201920.GB1874385-robh@kernel.org>
+References: <20220828063021.3963761-1-o.rempel@pengutronix.de>
+ <20220828063021.3963761-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-References: <cover.1661789204.git.christophe.leroy@csgroup.eu> <abb46a587b76d379ad32d53817d837d8a5fea8bd.1661789204.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <abb46a587b76d379ad32d53817d837d8a5fea8bd.1661789204.git.christophe.leroy@csgroup.eu>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 30 Aug 2022 23:18:26 +0300
-Message-ID: <CAHp75VcngRihpfUkeKs-g+TbPnpOsZ+-Q37zDVoWp8p_2GbSvQ@mail.gmail.com>
-Subject: Re: [PATCH v1 4/8] gpiolib: Get rid of ARCH_NR_GPIOS
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Keerthy <j-keerthy@ti.com>, Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220828063021.3963761-2-o.rempel@pengutronix.de>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 7:19 PM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
->
-> Since commit 14e85c0e69d5 ("gpio: remove gpio_descs global array")
-> there is no limitation on the number of GPIOs that can be allocated
-> in the system since the allocation is fully dynamic.
->
-> ARCH_NR_GPIOS is today only used in order to provide downwards
-> gpiobase allocation from that value, while static allocation is
-> performed upwards from 0. However that has the disadvantage of
-> limiting the number of GPIOs that can be registered in the system.
->
-> To overcome this limitation without requiring each and every
-> platform to provide its 'best-guess' maximum number, rework the
-> allocation to allocate upwards, allowing approx 2 millions of
-> GPIOs.
->
-> In order to still allow static allocation for legacy drivers, define
-> GPIO_DYNAMIC_BASE with the value 256 as the start for dynamic
-> allocation.
+On Sun, Aug 28, 2022 at 08:30:15AM +0200, Oleksij Rempel wrote:
+> Add property to reference node representing a PoDL Power Sourcing Equipment.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  Documentation/devicetree/bindings/net/ethernet-phy.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-phy.yaml b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> index ed1415a4381f2..0b7b9dc69d454 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-phy.yaml
+> @@ -144,6 +144,11 @@ properties:
+>        Mark the corresponding energy efficient ethernet mode as
+>        broken and request the ethernet to stop advertising it.
+>  
+> +  ieee802.3-pse:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
 
-Not sure about 256, but I understand that this can only be the best guess.
+If you are saying this is the only location we'll ever find 
+'ieee802.3-pse', then defining it here is okay. Otherwise, it 
+needs to be it's own file so there's exactly 1 type definition. As 
+you've said it might have cells by defining #pse-cells, 'phandle' is 
+the wrong type. 'phandle-array' is what you want, but then actual users 
+need to define how many entries (i.e. maxItems). Just like all the 
+other provider/consumer bindings are structured.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Rob

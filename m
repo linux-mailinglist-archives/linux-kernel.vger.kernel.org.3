@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768E75A5E7E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A0D45A5E84
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:49:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbiH3Isw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
+        id S231650AbiH3ItQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiH3Ist (ORCPT
+        with ESMTP id S230111AbiH3ItN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:48:49 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9BBBBA43
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:48:48 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id t5so13229236edc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:48:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=7iCvOssdkyuxbhoQt5lAWcL9dGnbKNvL6gaRHI/rUIE=;
-        b=e1waB5CIdo3f9+WqVOb5fZZ2HpfISqnyynQUiahYiWLbFsihpG9YE7QGYopiztHtXQ
-         YXEVdbX5AT4GycNvKMv93DvvepUVg+cxuEJlA0UotKWcwF/kSBe2qXUNXMGy9guT6bV5
-         AWSQtUErN9c0DciG1ox0ijf+yrYasDH4uJBLnx8hbOrv6gv7x85Jec8rXbrE0LjZj9sk
-         93q8Ykimr38kngAzUz8DKwDpkYE3jYvNo7+WdsjBp53wMiCrqp/oeTJzQjx6/W2HSGhW
-         u4Y5/h24B6BB5dnDQ/Ib5Lz38xBIe+zaPEQSgnFMnVmjsBqoTuzLc4NulAl2wPP3JkyF
-         Ynjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7iCvOssdkyuxbhoQt5lAWcL9dGnbKNvL6gaRHI/rUIE=;
-        b=rz+vuZw9o0N9mbuyPFoi1EcVK2vlWh9gE/xSs23PXV9P0YnEmCmkpeTkLYz4OKg6Dm
-         Wc5Eqqno9bEkn4P6Kbprd4+oAOYhVSyXWNGZpRnomdulzdjEGuXwePFgZcbgeGOWMzLa
-         OWZ2OQdSf7WYdfZWjkt8cmubJB0A+ZSP53apvBEectlub0K5TxCVj+riP4eftwDnKeaL
-         gQW0jEfAEUAmjJsVg5cwQ040rlMMGqAMdU57qY7N9R6MECJ8Q09mxw/pu5yt3MChCN9A
-         X0jXdtQCo4sjE/ZTRV2fz+NWJcA+2rRmC971O2MkNjpa7cAlUweGN7TuQbA1Fydz1KOZ
-         epJw==
-X-Gm-Message-State: ACgBeo0zLRifF+on5o0sF1xj0xmnBf5k/hTsQipPUyhu/NqzZ23Rzexf
-        6xckaDoGQmA55Wt/ocoiHkFjFVZY+EanO3Yj3ALCxn5wUis5Lw==
-X-Google-Smtp-Source: AA6agR6mBK9z4mx3yoZ8UY/yL9aH81E4FjsmEQwAZZK0RoH7oRkvILaIaW6x0TDSxBaGMRQvceJsm6oUWvUFEePGLIk=
-X-Received: by 2002:a05:6402:4446:b0:43b:e1f4:8525 with SMTP id
- o6-20020a056402444600b0043be1f48525mr19520149edb.236.1661849326660; Tue, 30
- Aug 2022 01:48:46 -0700 (PDT)
+        Tue, 30 Aug 2022 04:49:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82040BA144
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:49:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661849351;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rO4FZd8DM43FaK8mkRxXV5H/hvjL5yUM5ZIt/9HgsK0=;
+        b=LN2TCqZXjxzLeEH0xabSp08IHcFUnsuixjYfnsUSeMaetq7OkOzYALMDibwZ2TUagUr1I1
+        wtPFffGmkVjkGEnGsRAejbUIhYWRX1EjJkTrp7tZRh7CVfAEV1QxlQih6qZ7y3+5WDxlGP
+        QwWw7zkejONzzJltyMYjeLHJANmnoa0=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-455-VRXojYk8POGrzp5byeD5Jg-1; Tue, 30 Aug 2022 04:49:08 -0400
+X-MC-Unique: VRXojYk8POGrzp5byeD5Jg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C0F06380390A;
+        Tue, 30 Aug 2022 08:49:07 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D748FC15BB3;
+        Tue, 30 Aug 2022 08:49:05 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <c648aa7c-a49c-a7e2-6a05-d1dfe44b8fdb@schaufler-ca.com>
+References: <c648aa7c-a49c-a7e2-6a05-d1dfe44b8fdb@schaufler-ca.com> <166133579016.3678898.6283195019480567275.stgit@warthog.procyon.org.uk> <20220826082439.wdestxwkeccsyqtp@wittgenstein>
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     dhowells@redhat.com, Christian Brauner <brauner@kernel.org>,
+        viro@zeniv.linux.org.uk, Jeff Layton <jlayton@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Scott Mayhew <smayhew@redhat.com>,
+        Paul Moore <paul@paul-moore.com>, linux-nfs@vger.kernel.org,
+        selinux@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, dwysocha@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] vfs, security: Fix automount superblock LSM init problem, preventing NFS sb sharing
 MIME-Version: 1.0
-References: <20220802175755.6530-1-sudip.mukherjee@sifive.com> <20220826180327.yazfoydjiyygd7qf@mobilestation>
-In-Reply-To: <20220826180327.yazfoydjiyygd7qf@mobilestation>
-From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Date:   Tue, 30 Aug 2022 09:48:35 +0100
-Message-ID: <CAHyZL-cmyRprNmr_DtUQaZFXJtcV-6r-UOksFJeMz=XgDhnMNw@mail.gmail.com>
-Subject: Re: [PATCH 00/11] Add support for enhanced SPI for Designware SPI controllers
-To:     Serge Semin <fancer.lancer@gmail.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>,
-        Ben Dooks <ben.dooks@sifive.com>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeegar Lakhani <jeegar.lakhani@sifive.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1903708.1661849345.1@warthog.procyon.org.uk>
+Date:   Tue, 30 Aug 2022 09:49:05 +0100
+Message-ID: <1903709.1661849345@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,31 +71,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 26, 2022 at 7:03 PM Serge Semin <fancer.lancer@gmail.com> wrote:
->
-> Hello Sudip
->
-> On Tue, Aug 02, 2022 at 06:57:44PM +0100, Sudip Mukherjee wrote:
-> > Some Synopsys SSI controllers support enhanced SPI which includes
-> > Dual mode, Quad mode and Octal mode. DWC_ssi includes clock stretching
-> > feature in enhanced SPI modes which can be used to prevent FIFO underflow
-> > and overflow conditions while transmitting or receiving the data respectively.
-> > This is only tested on controller version 1.03a.
->
+Casey Schaufler <casey@schaufler-ca.com> wrote:
 
-<snip>
+> The authors of this version of the mount code failed to look
+> especially closely at how Smack maintains label names. Once a
+> label name is used in the kernel it is kept on a list forever.
+> All the copies of smk_known here and in the rest of the mount
+> infrastructure are unnecessary and wasteful. The entire set of
+> Smack hooks that deal with mounting need to be reworked to remove
+> that waste. It's on my list of Smack cleanups, but I'd be happy
+> if someone else wanted a go at it.
 
->
-> I've deliberately collected all the generic comments here so you'd be
-> aware of the required changes in total, because I very much doubt all
-> of them could be fixed at once via a single patchset iteration. But as
-> soon as all of them are fixed we'll get a very nice and neat solution
-> for the eSPI feature.
->
+I don't have time to overhaul Smack right now.  Should I drop the Smack part
+of the patch?
 
-Thanks a lot for the summary here Sergey. I am sure I will have a few
-questions for you after I start with the changes.
+David
 
--- 
-Regards
-Sudip

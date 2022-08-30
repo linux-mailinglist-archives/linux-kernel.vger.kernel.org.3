@@ -2,147 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFAA55A5AD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:42:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C71A5A5AD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229828AbiH3Emq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 00:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53752 "EHLO
+        id S229881AbiH3En1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 00:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiH3Emo (ORCPT
+        with ESMTP id S229437AbiH3EnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 00:42:44 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D295AA4F8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:42:40 -0700 (PDT)
-Received: from pps.filterd (m0098404.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U4Km3m010039;
-        Tue, 30 Aug 2022 04:42:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=pp1;
- bh=cHcAyJQxcN5coWhjTOmFLDC9BLXPhcUenvryaCOl6DQ=;
- b=qJ5DPNX1FGK2JZTrttbMnRkNVAGWsH6wF7d9mOL/JspiVVTKz/BnfCYMmQqXTLp0wDbd
- JXo1dan0Zd/JDLLc0jTuc2hUrAnaFQB1GqIgSbr5ETkty67bm13meebI+Zd6eKpUSBQ2
- 6nbiOvIjuFNfBDaGbizm0WS43+k0aqZNndtW02jIaN8nTlU+FpDbAlJZs8c+qdYN2HdE
- bfCDy+7PHiXVJV9ej/TIBZM8Uev3kpgQjhE/31GxeqylfeAi+6uvbhTHnlgDIS72hE2z
- xVt2blRUPJKih8UE5JU+LN4q45CG8tNqx5aN7xT0uyONBUg5gQX06zs+5p9XO2pcXd4J jQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j9ben0tes-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 04:42:22 +0000
-Received: from m0098404.ppops.net (m0098404.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27U4Mq82024987;
-        Tue, 30 Aug 2022 04:42:21 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j9ben0tdw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 04:42:21 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27U4ZfZr012657;
-        Tue, 30 Aug 2022 04:42:20 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma03wdc.us.ibm.com with ESMTP id 3j7aw99f2x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 04:42:20 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27U4gJ5r64225778
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Aug 2022 04:42:19 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 36685AC060;
-        Tue, 30 Aug 2022 04:42:19 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E211AC059;
-        Tue, 30 Aug 2022 04:42:13 +0000 (GMT)
-Received: from skywalker.ibmuc.com (unknown [9.43.77.247])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 30 Aug 2022 04:42:13 +0000 (GMT)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH mm-unstable] mm/demotion: Fix build error with CONFIG_MIGRATION disabled
-Date:   Tue, 30 Aug 2022 10:12:10 +0530
-Message-Id: <20220830044210.17546-1-aneesh.kumar@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 30 Aug 2022 00:43:25 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9AC7AB075
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:43:24 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id m7so5013388lfq.8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:43:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=8xaCXOqGfO+vQafsuCd8VhQH7il5VLrKJWKilF4St6M=;
+        b=GwXz5yPPgm9q+uJRWBAXBMfz9q2Z3LD2knKm+awIpyhrT0PxqlLIdd0R77flcUOhW2
+         3CEnf4yaakjY3/a5y1FLPd7WBpEBSFOAJKKJdMsrWZVfSrM6T+GK6NBssk2f53jtws+w
+         rtPF+gNYi+HMcNJNzZEW3iUkGldnNdN+JpBoQU6KUWbouwnOfqm83q+aGMj321lNitE8
+         vkgqxIP8LQZihOG0buJT+jiR7cfescw9PBAu+LiREdc92V1EcblaJRUAgovQY3cF/IIS
+         tVfvxQessHLqHZl2+HXkm5k3Suf4IbcVctAL7p7YZFOAL7QyJJD3RF2A55s0xJxOt3Ac
+         UbJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=8xaCXOqGfO+vQafsuCd8VhQH7il5VLrKJWKilF4St6M=;
+        b=QlmO8IOemaHLoAcKmbuD/gjgNb2wvUpfr8t9xTiJ8FUNLZcH1DUfQ/LEphdiAcTjKC
+         zgV4lhN7y8/yj0338qffBYmDwtH0dPyBqC7GUS43Vcl4ZL3AuL3hakh6a5qmP1ejvrQs
+         iiKEsoaqRSbcvOMDROJRXxeBR4NziVAAAitCm0Hs7hJlHApFL4Piz8aFE+yuz8jDsCfX
+         eiUHkzFK7yXUdAeQOR2TI9unFM+jTaOhDu9pKwGYxOleOqI79cDV6KMl0VojxrmAUF9V
+         mvrj26n4NwDY1qFErwyyo/qxcbynvmV78DMRuLLKKaITIqCEWIrttIYYK+vtHC5yjPpc
+         OvUQ==
+X-Gm-Message-State: ACgBeo1dn0o3td2+7GvPjR775TYW/6eXLC3bcgJp4XcHdcXUlcOQVYJQ
+        Tlvx3EVvjyrNsdCwQ/yFyEpnyyNrMyo+7l2Og0bECeI7sNI=
+X-Google-Smtp-Source: AA6agR6FIH9Ge0gOMHTpvPyKFk1FkUkl+1IoM24o5dRVl1xQTe2JUeowYngO6o1DEiT2kIyUvTkO2MLvRM2Q3rTY2gk=
+X-Received: by 2002:a05:6512:68f:b0:492:cbb1:c4b2 with SMTP id
+ t15-20020a056512068f00b00492cbb1c4b2mr7774424lfe.130.1661834603011; Mon, 29
+ Aug 2022 21:43:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: ms_3wKFoDG7SuOiU16agbwBvt1PyFDV7
-X-Proofpoint-GUID: GhD6_EsfBXZGg-d9TgHR1S6yDgGilRXK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-29_13,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- impostorscore=0 mlxlogscore=999 spamscore=0 clxscore=1015 mlxscore=0
- malwarescore=0 suspectscore=0 adultscore=0 phishscore=0 bulkscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208300021
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220829125226.511564-1-apatel@ventanamicro.com> <f4b2daab-72f6-ab5a-5743-b41bd5e2c920@microchip.com>
+In-Reply-To: <f4b2daab-72f6-ab5a-5743-b41bd5e2c920@microchip.com>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Tue, 30 Aug 2022 10:13:11 +0530
+Message-ID: <CAK9=C2UOGR2VQao8CCJ82mRP4kL_1V=8uXyKj_vnOXW7a=Kt8A@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Add PMEM support for RISC-V
+To:     Conor.Dooley@microchip.com
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        atishp@atishpatra.org, heiko@sntech.de, anup@brainfault.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-mm/memory-tiers.c: In function ‘toptier_nodes_show’:
-mm/memory-tiers.c:647:49: error: ‘top_tier_adistance’ undeclared (first use in this function); did you mean ‘iov_iter_advance’?
-  647 |                 if (memtier->adistance_start >= top_tier_adistance)
-      |                                                 ^~~~~~~~~~~~~~~~~~
-      |                                                 iov_iter_advance
-mm/memory-tiers.c:647:49: note: each undeclared identifier is reported only once for each function it appears in
-make[1]: *** [scripts/Makefile.build:249: mm/memory-tiers.o] Error 1
+On Mon, Aug 29, 2022 at 11:11 PM <Conor.Dooley@microchip.com> wrote:
+>
+> On 29/08/2022 13:52, Anup Patel wrote:
+> > The Linux NVDIMM PEM drivers require arch support to map and access the
+> > persistent memory device. This series adds RISC-V PMEM support using
+> > recently added Svpbmt and Zicbom support.
+> >
+> > These patches can also be found in riscv_pmem_v1 branch at:
+> > https://github.com/avpatel/linux.git
+>
+> Hey Anup, couple build errors here:
+>
+> /stuff/linux/arch/riscv/mm/cacheflush.c:99:2: error: call to undeclared function 'for_each_of_cpu_node'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>         for_each_of_cpu_node(node) {
+>         ^
+> /stuff/linux/arch/riscv/mm/cacheflush.c:99:28: error: expected ';' after expression
+>         for_each_of_cpu_node(node) {
+>                                   ^
+>                                   ;
+> 1 warning generated.
+> /stuff/linux/arch/riscv/mm/cacheflush.c:105:4: error: 'continue' statement not in loop statement
+>                         continue;
+>                         ^
+> /stuff/linux/arch/riscv/mm/cacheflush.c:108:4: error: 'continue' statement not in loop statement
+>                         continue;
+>                         ^
+> /stuff/linux/arch/riscv/mm/cacheflush.c:111:9: error: call to undeclared function 'of_property_read_u32'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+>                 ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
+>                       ^
+> /stuff/linux/arch/riscv/mm/cacheflush.c:113:4: error: 'continue' statement not in loop statement
+>                         continue;
+>                         ^
+> 6 errors generated.
+>
+> LKP already complained about this prior to you posting & as it has
+> all the repro needed, there's not much point in me sharing my config
+> etc:
+> https://lore.kernel.org/all/202208272028.IwrNZ0Ur-lkp@intel.com/
 
-Fixes: mm/demotion: Expose memory tier details via sysfs
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
----
- mm/memory-tiers.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+Strange, I never got this email.
 
-diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-index d4648d4e4d54..b6c7e5987829 100644
---- a/mm/memory-tiers.c
-+++ b/mm/memory-tiers.c
-@@ -635,6 +635,7 @@ static int __meminit memtier_hotplug_callback(struct notifier_block *self,
- 	return notifier_from_errno(0);
- }
- 
-+#ifdef CONFIG_MIGRATION
- static ssize_t toptier_nodes_show(struct device *dev,
- 				     struct device_attribute *attr, char *buf)
- {
-@@ -654,6 +655,15 @@ static ssize_t toptier_nodes_show(struct device *dev,
- 	mutex_unlock(&memory_tier_lock);
- 	return ret;
- }
-+#else
-+static ssize_t toptier_nodes_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	nodemask_t top_tier_mask = node_states[N_MEMORY];
-+
-+	return sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&top_tier_mask));
-+}
-+#endif
- static DEVICE_ATTR_RO(toptier_nodes);
- 
- static struct attribute *memtier_subsys_attrs[] = {
--- 
-2.37.2
+I will send v2 to fix this.
 
+Regards,
+Anup
+
+>
+> Thanks,
+> Conor.
+>
+> PS: I liked the last patch, must've been a hard config option to
+> find if it took two of you! ;)
+>
+>
+> >
+> > Anup Patel (4):
+> >   RISC-V: Fix ioremap_cache() and ioremap_wc() for systems with Svpbmt
+> >   RISC-V: Move riscv_init_cbom_blocksize() to cacheflush.c
+> >   RISC-V: Implement arch specific PMEM APIs
+> >   RISC-V: Enable PMEM drivers
+> >
+> >  arch/riscv/Kconfig                  |  1 +
+> >  arch/riscv/configs/defconfig        |  1 +
+> >  arch/riscv/include/asm/cacheflush.h |  2 ++
+> >  arch/riscv/include/asm/io.h         | 10 ++++++++
+> >  arch/riscv/include/asm/pgtable.h    |  2 ++
+> >  arch/riscv/mm/Makefile              |  1 +
+> >  arch/riscv/mm/cacheflush.c          | 37 +++++++++++++++++++++++++++++
+> >  arch/riscv/mm/dma-noncoherent.c     | 36 ----------------------------
+> >  arch/riscv/mm/pmem.c                | 21 ++++++++++++++++
+> >  9 files changed, 75 insertions(+), 36 deletions(-)
+> >  create mode 100644 arch/riscv/mm/pmem.c
+> >

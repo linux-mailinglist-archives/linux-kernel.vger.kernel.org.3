@@ -2,261 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B7235A7111
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3092D5A7112
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231366AbiH3Wpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 18:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40434 "EHLO
+        id S231765AbiH3Wqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 18:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231815AbiH3Wp0 (ORCPT
+        with ESMTP id S232006AbiH3WqO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:45:26 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33289DF87;
-        Tue, 30 Aug 2022 15:44:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661899472; x=1693435472;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=T2YHnYMDd4Fol+DaoGjhCT5He76leU8I4QvQYG9kKp4=;
-  b=hWXxHb+XbMycchMj1DKSYFzK44K6GXAOrfJTeCAPGIfXk99G5oZTJcNr
-   EiNNiTa7SXPNokVesNeUSAFAkMWPh5rEZYexk6NUOjyoBLBxizbIq1dW0
-   zM1Yw8mwbYGeQIB65PXbWoWGsQWwt37ejqjm+UAoZ3WRWqxm0CuNsboBS
-   48+2Ntf/f39Qhw/uMSyjC6+0smNEQiUbNIf4iBASwJ0PleHfTpS6p4h5m
-   dFFnOCrJhZGZMSk3vJHHjAUuaRbyKeb/Vt0JcW/IBzkkNMZqdCN4tZERc
-   aHSYax0WETxWep0HFF6DOCowapYWTrC8c/K43MulU6IE2+3mcZK9EUbDv
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="357039950"
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="357039950"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 15:44:27 -0700
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="737915064"
-Received: from skanpuri-mobl1.amr.corp.intel.com (HELO desk) ([10.212.18.137])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 15:44:26 -0700
-Date:   Tue, 30 Aug 2022 15:44:25 -0700
-From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To:     stable@vger.kernel.org
-Cc:     gregkh@linuxfoundation.org, andrew.cooper3@citrix.com, bp@suse.de,
-        tony.luck@intel.com, antonio.gomez.iglesias@linux.intel.com,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 4.14 2/2] x86/bugs: Add "unknown" reporting for MMIO Stale
- Data
-Message-ID: <4a2f049185e7032a98030631b9555cbdd9b96b8a.1661899117.git.pawan.kumar.gupta@linux.intel.com>
-References: <ec31e22b4f3b079d0da6b60f5899ffcd79d9bea0.1661899117.git.pawan.kumar.gupta@linux.intel.com>
+        Tue, 30 Aug 2022 18:46:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946AA3E744
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 15:45:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 67A8B604EF
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 22:44:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9016C433D6;
+        Tue, 30 Aug 2022 22:44:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661899488;
+        bh=cyRVqocYikABXBEFjBEpFUrn8ly9LlwBG3w4/jaRINg=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=WljNquIlEza3oah5WIlJjNp1TVa+5HdDoJXRWjS8aoBN5hi1u0q7ttH6DmPmLWawM
+         qnKOyOgJg7hKpovyX9urrbFCKrf+XKWNB4POT2yIWyDltTRDwG56j/szI473FPJBp5
+         30/khFQdQVSjG2iJYydbJVc5onQQ03Actqmq2aeRkjn7Trec6lnLGGVglXbh6E1Clf
+         75lV1xJsbry4tXTM1olwe8YPQZFzMqAKNTw8PMM7reoNFI1xj8nqG2NBfxa8bRBXcR
+         9vEESjFFNl3iyJsNtwiRzjdo/KjVtYcWpPQhN7phXd2ohpZ56CiKIWDccdI8EAiC0D
+         uymJ/BNa7XBNQ==
+Message-ID: <b1c74dc1-8d01-9041-9469-036273c5618d@kernel.org>
+Date:   Wed, 31 Aug 2022 06:44:45 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ec31e22b4f3b079d0da6b60f5899ffcd79d9bea0.1661899117.git.pawan.kumar.gupta@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] f2fs: fix to disallow getting inner inode via f2fs_iget()
+Content-Language: en-US
+To:     Jaegeuk Kim <jaegeuk@kernel.org>
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao.yu@oppo.com>
+References: <20220830103625.79034-1-chao@kernel.org>
+ <Yw5SdK5ItK9P/NUj@google.com>
+From:   Chao Yu <chao@kernel.org>
+In-Reply-To: <Yw5SdK5ItK9P/NUj@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ Upstream commit 7df548840c496b0141fb2404b889c346380c2b22 ]
+On 2022/8/31 2:09, Jaegeuk Kim wrote:
+> On 08/30, Chao Yu wrote:
+>> From: Chao Yu <chao.yu@oppo.com>
+>>
+>> Introduce f2fs_iget_inner() for f2fs_fill_super() to get inner inode:
+>> meta inode, node inode or compressed inode, and add f2fs_check_nid_range()
+>> in f2fs_iget() to avoid getting inner inode from external interfaces.
+>>
+>> Signed-off-by: Chao Yu <chao.yu@oppo.com>
+>> ---
+>>   fs/f2fs/compress.c |  2 +-
+>>   fs/f2fs/f2fs.h     |  1 +
+>>   fs/f2fs/inode.c    | 10 +++++++++-
+>>   fs/f2fs/super.c    |  4 ++--
+>>   4 files changed, 13 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+>> index 730256732a9e..c38b22bb6432 100644
+>> --- a/fs/f2fs/compress.c
+>> +++ b/fs/f2fs/compress.c
+>> @@ -1947,7 +1947,7 @@ int f2fs_init_compress_inode(struct f2fs_sb_info *sbi)
+>>   	if (!test_opt(sbi, COMPRESS_CACHE))
+>>   		return 0;
+>>   
+>> -	inode = f2fs_iget(sbi->sb, F2FS_COMPRESS_INO(sbi));
+>> +	inode = f2fs_iget_inner(sbi->sb, F2FS_COMPRESS_INO(sbi));
+>>   	if (IS_ERR(inode))
+>>   		return PTR_ERR(inode);
+>>   	sbi->compress_inode = inode;
+>> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+>> index 408d8034ed74..35f9e1a6a1bf 100644
+>> --- a/fs/f2fs/f2fs.h
+>> +++ b/fs/f2fs/f2fs.h
+>> @@ -3467,6 +3467,7 @@ int f2fs_pin_file_control(struct inode *inode, bool inc);
+>>   void f2fs_set_inode_flags(struct inode *inode);
+>>   bool f2fs_inode_chksum_verify(struct f2fs_sb_info *sbi, struct page *page);
+>>   void f2fs_inode_chksum_set(struct f2fs_sb_info *sbi, struct page *page);
+>> +struct inode *f2fs_iget_inner(struct super_block *sb, unsigned long ino);
+>>   struct inode *f2fs_iget(struct super_block *sb, unsigned long ino);
+>>   struct inode *f2fs_iget_retry(struct super_block *sb, unsigned long ino);
+>>   int f2fs_try_to_free_nats(struct f2fs_sb_info *sbi, int nr_shrink);
+>> diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+>> index 6d11c365d7b4..0ab3ae9b2110 100644
+>> --- a/fs/f2fs/inode.c
+>> +++ b/fs/f2fs/inode.c
+>> @@ -480,7 +480,7 @@ static int do_read_inode(struct inode *inode)
+>>   	return 0;
+>>   }
+>>   
+>> -struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+>> +struct inode *f2fs_iget_inner(struct super_block *sb, unsigned long ino)
+>>   {
+>>   	struct f2fs_sb_info *sbi = F2FS_SB(sb);
+>>   	struct inode *inode;
+>> @@ -568,6 +568,14 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+>>   	return ERR_PTR(ret);
+>>   }
+>>   
+>> +struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+>> +{
+>> +	if (f2fs_check_nid_range(F2FS_SB(sb), ino))
+>> +		return -EINVAL;
+> 
+> EINVAL or EFSCORRUPTED used in f2fs_check_nid_range?
 
-Older Intel CPUs that are not in the affected processor list for MMIO
-Stale Data vulnerabilities currently report "Not affected" in sysfs,
-which may not be correct. Vulnerability status for these older CPUs is
-unknown.
+Oh, I guess returning EFSCORRUPTED will be better.
 
-Add known-not-affected CPUs to the whitelist. Report "unknown"
-mitigation status for CPUs that are not in blacklist, whitelist and also
-don't enumerate MSR ARCH_CAPABILITIES bits that reflect hardware
-immunity to MMIO Stale Data vulnerabilities.
+> Do we have a report on this before?
 
-Mitigation is not deployed when the status is unknown.
+Not yet, but I guess it is possible in a fuzzed image like below paths, due to
+we will not check ino before pass it to f2fs_iget(), and then f2fs_iget() will
+find/return a hashed internal inode to caller, which should be avoided.
 
-  [ bp: Massage, fixup. ]
+case #1
+recover_dentry()
 
-Fixes: 8d50cdf8b834 ("x86/speculation/mmio: Add sysfs reporting for Processor MMIO Stale Data")
-Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
-Suggested-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Cc: stable@vger.kernel.org
-Link: https://lore.kernel.org/r/a932c154772f2121794a5f2eded1a11013114711.1657846269.git.pawan.kumar.gupta@linux.intel.com
----
- .../hw-vuln/processor_mmio_stale_data.rst     | 14 ++++++++
- arch/x86/include/asm/cpufeatures.h            |  1 +
- arch/x86/kernel/cpu/bugs.c                    | 14 ++++++--
- arch/x86/kernel/cpu/common.c                  | 34 +++++++++++++------
- 4 files changed, 50 insertions(+), 13 deletions(-)
+	de = __f2fs_find_entry(dir, &fname, &page);
+	if (de && inode->i_ino == le32_to_cpu(de->ino))
+		goto out_put;
 
-diff --git a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-index 9393c50b5afc..c98fd11907cc 100644
---- a/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-+++ b/Documentation/admin-guide/hw-vuln/processor_mmio_stale_data.rst
-@@ -230,6 +230,20 @@ The possible values in this file are:
-      * - 'Mitigation: Clear CPU buffers'
-        - The processor is vulnerable and the CPU buffer clearing mitigation is
-          enabled.
-+     * - 'Unknown: No mitigations'
-+       - The processor vulnerability status is unknown because it is
-+	 out of Servicing period. Mitigation is not attempted.
-+
-+Definitions:
-+------------
-+
-+Servicing period: The process of providing functional and security updates to
-+Intel processors or platforms, utilizing the Intel Platform Update (IPU)
-+process or other similar mechanisms.
-+
-+End of Servicing Updates (ESU): ESU is the date at which Intel will no
-+longer provide Servicing, such as through IPU or other similar update
-+processes. ESU dates will typically be aligned to end of quarter.
- 
- If the processor is vulnerable then the following information is appended to
- the above information:
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index e874b1709d9a..d56634d6b10c 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -394,5 +394,6 @@
- #define X86_BUG_ITLB_MULTIHIT		X86_BUG(23) /* CPU may incur MCE during certain page attribute changes */
- #define X86_BUG_SRBDS			X86_BUG(24) /* CPU may leak RNG bits if not mitigated */
- #define X86_BUG_MMIO_STALE_DATA		X86_BUG(25) /* CPU is affected by Processor MMIO Stale Data vulnerabilities */
-+#define X86_BUG_MMIO_UNKNOWN		X86_BUG(26) /* CPU is too old and its MMIO Stale Data status is unknown */
- 
- #endif /* _ASM_X86_CPUFEATURES_H */
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 4037317f55e7..68056ee5dff9 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -396,7 +396,8 @@ static void __init mmio_select_mitigation(void)
- 	u64 ia32_cap;
- 
- 	if (!boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA) ||
--	    cpu_mitigations_off()) {
-+	     boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN) ||
-+	     cpu_mitigations_off()) {
- 		mmio_mitigation = MMIO_MITIGATION_OFF;
- 		return;
- 	}
-@@ -501,6 +502,8 @@ static void __init md_clear_update_mitigation(void)
- 		pr_info("TAA: %s\n", taa_strings[taa_mitigation]);
- 	if (boot_cpu_has_bug(X86_BUG_MMIO_STALE_DATA))
- 		pr_info("MMIO Stale Data: %s\n", mmio_strings[mmio_mitigation]);
-+	else if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
-+		pr_info("MMIO Stale Data: Unknown: No mitigations\n");
- }
- 
- static void __init md_clear_select_mitigation(void)
-@@ -1823,6 +1826,9 @@ static ssize_t tsx_async_abort_show_state(char *buf)
- 
- static ssize_t mmio_stale_data_show_state(char *buf)
- {
-+	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
-+		return sysfs_emit(buf, "Unknown: No mitigations\n");
-+
- 	if (mmio_mitigation == MMIO_MITIGATION_OFF)
- 		return sysfs_emit(buf, "%s\n", mmio_strings[mmio_mitigation]);
- 
-@@ -1933,6 +1939,7 @@ static ssize_t cpu_show_common(struct device *dev, struct device_attribute *attr
- 		return srbds_show_state(buf);
- 
- 	case X86_BUG_MMIO_STALE_DATA:
-+	case X86_BUG_MMIO_UNKNOWN:
- 		return mmio_stale_data_show_state(buf);
- 
- 	default:
-@@ -1989,6 +1996,9 @@ ssize_t cpu_show_srbds(struct device *dev, struct device_attribute *attr, char *
- 
- ssize_t cpu_show_mmio_stale_data(struct device *dev, struct device_attribute *attr, char *buf)
- {
--	return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
-+	if (boot_cpu_has_bug(X86_BUG_MMIO_UNKNOWN))
-+		return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_UNKNOWN);
-+	else
-+		return cpu_show_common(dev, attr, buf, X86_BUG_MMIO_STALE_DATA);
- }
- #endif
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 608f37ac9c7b..e72a21c20772 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -905,6 +905,7 @@ static void identify_cpu_without_cpuid(struct cpuinfo_x86 *c)
- #define MSBDS_ONLY		BIT(5)
- #define NO_SWAPGS		BIT(6)
- #define NO_ITLB_MULTIHIT	BIT(7)
-+#define NO_MMIO			BIT(8)
- 
- #define VULNWL(_vendor, _family, _model, _whitelist)	\
- 	{ X86_VENDOR_##_vendor, _family, _model, X86_FEATURE_ANY, _whitelist }
-@@ -922,6 +923,11 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
- 	VULNWL(NSC,	5, X86_MODEL_ANY,	NO_SPECULATION),
- 
- 	/* Intel Family 6 */
-+	VULNWL_INTEL(TIGERLAKE,			NO_MMIO),
-+	VULNWL_INTEL(TIGERLAKE_L,		NO_MMIO),
-+	VULNWL_INTEL(ALDERLAKE,			NO_MMIO),
-+	VULNWL_INTEL(ALDERLAKE_L,		NO_MMIO),
-+
- 	VULNWL_INTEL(ATOM_SALTWELL,		NO_SPECULATION | NO_ITLB_MULTIHIT),
- 	VULNWL_INTEL(ATOM_SALTWELL_TABLET,	NO_SPECULATION | NO_ITLB_MULTIHIT),
- 	VULNWL_INTEL(ATOM_SALTWELL_MID,		NO_SPECULATION | NO_ITLB_MULTIHIT),
-@@ -939,9 +945,9 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
- 
- 	VULNWL_INTEL(ATOM_AIRMONT_MID,		NO_L1TF | MSBDS_ONLY | NO_SWAPGS | NO_ITLB_MULTIHIT),
- 
--	VULNWL_INTEL(ATOM_GOLDMONT,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_INTEL(ATOM_GOLDMONT_X,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_INTEL(ATOM_GOLDMONT_PLUS,	NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT),
-+	VULNWL_INTEL(ATOM_GOLDMONT,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_INTEL(ATOM_GOLDMONT_X,		NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_INTEL(ATOM_GOLDMONT_PLUS,	NO_MDS | NO_L1TF | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
- 
- 	/*
- 	 * Technically, swapgs isn't serializing on AMD (despite it previously
-@@ -954,13 +960,13 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
- 	VULNWL_INTEL(ATOM_TREMONT_X,		NO_ITLB_MULTIHIT),
- 
- 	/* AMD Family 0xf - 0x12 */
--	VULNWL_AMD(0x0f,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_AMD(0x10,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_AMD(0x11,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
--	VULNWL_AMD(0x12,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
-+	VULNWL_AMD(0x0f,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_AMD(0x10,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_AMD(0x11,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
-+	VULNWL_AMD(0x12,	NO_MELTDOWN | NO_SSB | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
- 
- 	/* FAMILY_ANY must be last, otherwise 0x0f - 0x12 matches won't work */
--	VULNWL_AMD(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT),
-+	VULNWL_AMD(X86_FAMILY_ANY,	NO_MELTDOWN | NO_L1TF | NO_MDS | NO_SWAPGS | NO_ITLB_MULTIHIT | NO_MMIO),
- 	{}
- };
- 
-@@ -1100,10 +1106,16 @@ static void __init cpu_set_bug_bits(struct cpuinfo_x86 *c)
- 	 * Affected CPU list is generally enough to enumerate the vulnerability,
- 	 * but for virtualization case check for ARCH_CAP MSR bits also, VMM may
- 	 * not want the guest to enumerate the bug.
-+	 *
-+	 * Set X86_BUG_MMIO_UNKNOWN for CPUs that are neither in the blacklist,
-+	 * nor in the whitelist and also don't enumerate MSR ARCH_CAP MMIO bits.
- 	 */
--	if (cpu_matches(cpu_vuln_blacklist, MMIO) &&
--	    !arch_cap_mmio_immune(ia32_cap))
--		setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-+	if (!arch_cap_mmio_immune(ia32_cap)) {
-+		if (cpu_matches(cpu_vuln_blacklist, MMIO))
-+			setup_force_cpu_bug(X86_BUG_MMIO_STALE_DATA);
-+		else if (!cpu_matches(cpu_vuln_whitelist, NO_MMIO))
-+			setup_force_cpu_bug(X86_BUG_MMIO_UNKNOWN);
-+	}
- 
- 	if (cpu_matches(cpu_vuln_whitelist, NO_MELTDOWN))
- 		return;
--- 
-2.37.2
+	if (de) {
+		einode = f2fs_iget_retry(inode->i_sb, le32_to_cpu(de->ino));
+		if (IS_ERR(einode)) {
+			WARN_ON(1);
+			err = PTR_ERR(einode);
+			if (err == -ENOENT)
+				err = -EEXIST;
+			goto out_put;
+		}
 
+case #2
+static int recover_orphan_inode(struct f2fs_sb_info *sbi, nid_t ino)
+{
+	struct inode *inode;
+	struct node_info ni;
+	int err;
 
+	inode = f2fs_iget_retry(sbi->sb, ino);
+
+Thanks,
+
+> 
+>> +
+>> +	return f2fs_iget_inner(sb, ino);
+>> +}
+>> +
+>>   struct inode *f2fs_iget_retry(struct super_block *sb, unsigned long ino)
+>>   {
+>>   	struct inode *inode;
+>> diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+>> index b8e5fe244596..a5f5e7483791 100644
+>> --- a/fs/f2fs/super.c
+>> +++ b/fs/f2fs/super.c
+>> @@ -4157,7 +4157,7 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
+>>   		goto free_xattr_cache;
+>>   
+>>   	/* get an inode for meta space */
+>> -	sbi->meta_inode = f2fs_iget(sb, F2FS_META_INO(sbi));
+>> +	sbi->meta_inode = f2fs_iget_inner(sb, F2FS_META_INO(sbi));
+>>   	if (IS_ERR(sbi->meta_inode)) {
+>>   		f2fs_err(sbi, "Failed to read F2FS meta data inode");
+>>   		err = PTR_ERR(sbi->meta_inode);
+>> @@ -4265,7 +4265,7 @@ static int f2fs_fill_super(struct super_block *sb, void *data, int silent)
+>>   		goto free_nm;
+>>   
+>>   	/* get an inode for node space */
+>> -	sbi->node_inode = f2fs_iget(sb, F2FS_NODE_INO(sbi));
+>> +	sbi->node_inode = f2fs_iget_inner(sb, F2FS_NODE_INO(sbi));
+>>   	if (IS_ERR(sbi->node_inode)) {
+>>   		f2fs_err(sbi, "Failed to read node inode");
+>>   		err = PTR_ERR(sbi->node_inode);
+>> -- 
+>> 2.25.1

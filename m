@@ -2,81 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C70745A5FC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:49:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98ACF5A5FCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiH3JtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53806 "EHLO
+        id S229523AbiH3JuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiH3JtP (ORCPT
+        with ESMTP id S229555AbiH3JuK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:49:15 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FF9C2A712
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:49:14 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id s15so5611425ljp.5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:49:14 -0700 (PDT)
+        Tue, 30 Aug 2022 05:50:10 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 546C83CBE2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:50:08 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id p7so3623020lfu.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:50:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=AcuCk4+e+KRZRMqw8MoQ/WuRfLAds3XsIU+iBTt/SPw=;
-        b=foXJ6wbxzshpneb30SQuoXhhe2u8EWyCpbF2Tv2lH8S8cBoNt/U/1wa71g3m0a76CU
-         suCNPZVxWEvCdd0rFQzErtKjaDJVcwoJ8/DFIbigdZ1+ezpYbCzvKJFmC1cqydgdVz8g
-         pklNRaZiu2CnliDb1sHa43pHcK42dvjUqylFNYpQsKvtuIay65OMc/bOZ1sxmYO+sqRq
-         vihnRQNFBWtT1GyXEyjoQ2xtosD6m1raAxY5khVExIyZQSGriKT02jaiIZ8+J1FH5Mwf
-         yiBzrdoI6d4baQzosAgazhRLgrotM78bhJ0U1oTFeml6b0Zp7Txj9X8YyzgGRIpf/XhG
-         Tk2w==
+        bh=2v5gr3EuoaAEuSb9CcBVwZKMWyYj0Ef79p2UK+9bBKo=;
+        b=KF2dX+CvLFpRg9J23ANVR7KCb4VULoxeWuboROEmuS7MhUltPim3swe5eFY9EmBpxZ
+         CmS3/XYpC+5Vd15RThF9gGCMveLEURCrW2q5qY+ZnUgD/k+ZUMzALZ1OKXI/90dyH+cb
+         uVuF1B0/DbUvoN22Z9pmI7uMaVnp0bY1sDDPNU8c8FWVBoSaRlMWuLdK80EPYRdw6nr4
+         +DQE5EEPiMSrseYy/k8y3aDwTrktBJ4vLxxkslTyJ4WChOMaAGED8KySJ5ugLwO6+iPT
+         W37V+J/WDKT3vO8z4nn77WnDKPSbQ9eGpSQ2fwr4JZt6sTI/7hcDdGW+QM3rLZx8m95j
+         J5iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=AcuCk4+e+KRZRMqw8MoQ/WuRfLAds3XsIU+iBTt/SPw=;
-        b=hpOV067YHuoKei8bg1qAN4s2tft6MqMC1KP6olq42eBLzqQsOQu+7YJlmS2yy/kNBZ
-         718G9Hb9/clx1G+j9LzYIZ5PCFouSeh9j6M7Lb1Bt+m3EHLR5PLw9twTkEdk2xaVu0Zg
-         l6rcud7EguKkhutA1PM0le/lcUM7KK3WcXvkCufU6VXJovNc+FE9ylXQz2A1VorgcDlg
-         rrHGGLWAQG3n8SNORMVD/cGZgLUp+tJbMJeLYF67ndE7sPfy2yWpm8uNGiK78kD2cWg3
-         p7fULdoTKfglTrMzZetkWVI2zRSwPOLnrj/uDn1li4nVFW/8JmM5tU4Yt1bkJf1Cmajq
-         5aMg==
-X-Gm-Message-State: ACgBeo1JcfbVUropZdKxzTHsmhwkpwx+p5cQzI48Hq+JrVBWThjmtdGh
-        rk9u2z9Ew/fszWVa0KGJatkhgQ==
-X-Google-Smtp-Source: AA6agR4z0JLfAUxpRgWDj2uSPv6e86hAExC8wxOhgcZacnV8AvvmODylWJwoJ38g7xERmFOM5kh9uQ==
-X-Received: by 2002:a05:651c:244:b0:253:ecad:a4ee with SMTP id x4-20020a05651c024400b00253ecada4eemr6339245ljn.21.1661852952708;
-        Tue, 30 Aug 2022 02:49:12 -0700 (PDT)
+        bh=2v5gr3EuoaAEuSb9CcBVwZKMWyYj0Ef79p2UK+9bBKo=;
+        b=Shg6c5gGJerhDEi3HUoWvXGxWI9qUlubmqseExI18Gq3yi39VaWOK1xYj87ciE4J3A
+         BpNs66gi2RWn1feyX+eeOZ1RobHVl2TuCBe/994UUPxm7+qkJIc20Wmeb6hyl4iRzNJ6
+         2Og+iQQgn75uuvob8PbiuO59VZ/Zm9ZE+NIoIV1TFyZ9N7K6ozt8TPM9nDQ+Qnt1QG1P
+         Spxx2Kj0hqIXYgfRO+A2StfbiS7iPLVUEBnWJg0x1Xf21CSielawhqM5Xs4i1jLa+Ykm
+         kux5pcElTV7QjrXWWStWDUSV2guHhZahRk6izKiDnC/l0yXMTFTrKpO0625kfYpDG5FC
+         6oOw==
+X-Gm-Message-State: ACgBeo2GER3TEH49ndfkFpjtSyd+b12hXzOMr/042LRtW9/r3pEkR5Oa
+        Cy9GS1erOYD5BuZoqC8KibvNMn6v6poVOAK2aK8=
+X-Google-Smtp-Source: AA6agR6TpZaAj9tXPHMAn+/T/7/VYkwQ6zc3UCxUpGnbbDE1QWyw8vznJKQEwWQym5CGS+TYrqCY0g==
+X-Received: by 2002:a05:6512:3409:b0:48a:ef20:ddb with SMTP id i9-20020a056512340900b0048aef200ddbmr8369276lfr.597.1661853006723;
+        Tue, 30 Aug 2022 02:50:06 -0700 (PDT)
 Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id u15-20020ac2518f000000b00492d064e8f8sm1542758lfi.263.2022.08.30.02.49.11
+        by smtp.gmail.com with ESMTPSA id u15-20020ac258cf000000b004917a30c82bsm1555014lfo.153.2022.08.30.02.50.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 02:49:12 -0700 (PDT)
-Message-ID: <6729c3d8-c59e-4655-d30a-aed315e8fe8f@linaro.org>
-Date:   Tue, 30 Aug 2022 12:49:10 +0300
+        Tue, 30 Aug 2022 02:50:06 -0700 (PDT)
+Message-ID: <4dfbf55b-744d-b0b6-0afd-530a45becba0@linaro.org>
+Date:   Tue, 30 Aug 2022 12:50:04 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH] dt-bindings: riscv: update microchip.yaml's
- maintainership
+Subject: Re: [PATCH 1/2] arm64: tegra: Add PWM controllers on Tegra234
 Content-Language: en-US
-To:     Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Cyril Jean <cyril.jean@microchip.com>,
-        Lewis Hanly <lewis.hanly@microchip.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220829134102.1248504-1-conor.dooley@microchip.com>
+To:     Sandipan Patra <spatra@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     bbasu@nvidia.com, kyarlagadda@nvidia.com
+References: <20220829114432.19566-1-spatra@nvidia.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220829134102.1248504-1-conor.dooley@microchip.com>
+In-Reply-To: <20220829114432.19566-1-spatra@nvidia.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,20 +77,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/08/2022 16:41, Conor Dooley wrote:
-> Daire and I are the platform maintainers for Microchip's RISC-V
-> FPGAs. Update the maintainers in microchip.yaml to reflect this and
-> explicitly add the binding to the SoC's MAINTAINERS entry.
+On 29/08/2022 14:44, Sandipan Patra wrote:
+> Tegra234 has eight single-channel PWM controllers, one of them in the
+> AON block.
 > 
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Sandipan Patra <spatra@nvidia.com>
 > ---
-> Two patches seemed overkill for this, but scream and I will split them.
-> I figured I would take this for 6.1 myself on top of my other changes
-> to microchip.yaml.
+>  arch/arm64/boot/dts/nvidia/tegra234.dtsi | 84 ++++++++++++++++++++++++
+>  1 file changed, 84 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/nvidia/tegra234.dtsi b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> index 81a0f599685f..c2dc651f0842 100644
+> --- a/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> +++ b/arch/arm64/boot/dts/nvidia/tegra234.dtsi
+> @@ -840,6 +840,90 @@
+>  			#pwm-cells = <2>;
+>  		};
+>  
+> +		pwm2: pwm@3290000 {
+> +			compatible = "nvidia,tegra194-pwm",
+> +				     "nvidia,tegra186-pwm";
 
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+This does not match bindings. Either DTS or bindings need to be fixed.
 
 Best regards,
 Krzysztof

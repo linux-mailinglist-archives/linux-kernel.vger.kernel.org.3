@@ -2,410 +2,623 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99165A5DEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:18:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 185B65A5E52
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231426AbiH3ISU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:18:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41150 "EHLO
+        id S231209AbiH3IjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230055AbiH3ISS (ORCPT
+        with ESMTP id S230034AbiH3IjV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:18:18 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDD680F43
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:18:16 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U8E5Xx005811;
-        Tue, 30 Aug 2022 08:17:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-type :
- content-transfer-encoding; s=pp1;
- bh=7u5zUT4sbhunsdX1IerE3lK6WYlfWvuAJsPf7w9nKMQ=;
- b=N5yHOXVT5L4M58PxkIZNEAwC0L8mQ5JJXfC3CddIwHJpghI5E2Tp2FM34y0Zk0RT+gep
- 7aaC4+KDhZSThSoFm7IxiM0e9xwVn2LEGIFLDPbk4k5ghl5zZLGqfzsM5uznjp25ypQ6
- /RHX7paAI/ZC/lpd7nudcCWe8Uz4rm7BaO27FcRBYGkURa4w27MKpLGp3JDI3ub+rCDK
- Ql5AiGKBVfMWNvS8lEAd78REZCMp4Ntawk1UPIyr0mecOR2qO6F0bcaERFNxw0lK0yMb
- 9+1OBZHzQfbxEzDeDNDJmMI/wIaMxhMsEfo8Cd2EZ8ZP7msRuVVH9OygBPxP1BO68x45 sw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j9euu03mc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 08:17:47 +0000
-Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27U8FjET011658;
-        Tue, 30 Aug 2022 08:17:47 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j9euu03kv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 08:17:46 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27U85aFP007095;
-        Tue, 30 Aug 2022 08:17:46 GMT
-Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
-        by ppma03wdc.us.ibm.com with ESMTP id 3j7aw9af3r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 08:17:46 +0000
-Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
-        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27U8Hj9q60752342
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Aug 2022 08:17:45 GMT
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C1AECAC05B;
-        Tue, 30 Aug 2022 08:17:45 +0000 (GMT)
-Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id EE706AC059;
-        Tue, 30 Aug 2022 08:17:39 +0000 (GMT)
-Received: from skywalker.ibmuc.com (unknown [9.43.77.247])
-        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
-        Tue, 30 Aug 2022 08:17:39 +0000 (GMT)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     linux-mm@kvack.org, akpm@linux-foundation.org
-Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Subject: [PATCH v3 updated] mm/demotion: Expose memory tier details via sysfs
-Date:   Tue, 30 Aug 2022 13:47:36 +0530
-Message-Id: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
-X-Mailer: git-send-email 2.37.2
+        Tue, 30 Aug 2022 04:39:21 -0400
+X-Greylist: delayed 1236 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 01:39:19 PDT
+Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0189D4F54;
+        Tue, 30 Aug 2022 01:39:19 -0700 (PDT)
+Received: from [167.98.27.226] (helo=[10.35.5.6])
+        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1oSwS4-006Nw1-61; Tue, 30 Aug 2022 09:18:28 +0100
+Message-ID: <122df8bd-bde1-01f9-49b9-a914b5d0e25c@codethink.co.uk>
+Date:   Tue, 30 Aug 2022 09:18:27 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: C89u5Jk2lA5Mnp_Zc2FvrOmMqfgxWrtI
-X-Proofpoint-ORIG-GUID: SNnAyl334nShH01UtFGTrk74QoGg2Iwm
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-30_04,2022-08-25_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 bulkscore=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 mlxlogscore=999 phishscore=0 malwarescore=0
- impostorscore=0 mlxscore=0 clxscore=1015 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208300036
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [PATCH 2/3] soc: sifive: l2 cache: Rename SiFive L2 cache to
+ composible cache.
+Content-Language: en-GB
+To:     Zong Li <zong.li@sifive.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
+        greentime.hu@sifive.com, conor.dooley@microchip.com,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220829062202.3287-1-zong.li@sifive.com>
+ <20220829062202.3287-3-zong.li@sifive.com>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <20220829062202.3287-3-zong.li@sifive.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
-related details can be found. All allocated memory tiers will be listed
-there as /sys/devices/virtual/memory_tiering/memory_tierN/
+On 29/08/2022 07:22, Zong Li wrote:
+> From: Greentime Hu <greentime.hu@sifive.com>
+> 
+> Since composible cache may be L3 cache if pL2 cache exists, we should use
+> its original name composible cache to prevent confusion.
 
-The nodes which are part of a specific memory tier can be listed via
-/sys/devices/virtual/memory_tiering/memory_tierN/nodes
+You probably should have noted in this that you also read the cache
+level property to work out if this is an l2 or l3 cache.
 
-A directory hierarchy looks like
-:/sys/devices/virtual/memory_tiering$ tree memory_tier4/
-memory_tier4/
-├── nodes
-├── subsystem -> ../../../../bus/memory_tiering
-└── uevent
+> 
+> Signed-off-by: Greentime Hu <greentime.hu@sifive.com>
+> Signed-off-by: Zong Li <zong.li@sifive.com>
+> ---
+>   drivers/soc/sifive/Kconfig           |   7 +-
+>   drivers/soc/sifive/Makefile          |   2 +-
+>   drivers/soc/sifive/sifive_ccache.c   | 221 +++++++++++++++++++++++++
+>   drivers/soc/sifive/sifive_l2_cache.c | 237 ---------------------------
+>   include/soc/sifive/sifive_ccache.h   |  16 ++
+>   include/soc/sifive/sifive_l2_cache.h |  16 --
+>   6 files changed, 242 insertions(+), 257 deletions(-)
+>   create mode 100644 drivers/soc/sifive/sifive_ccache.c
+>   delete mode 100644 drivers/soc/sifive/sifive_l2_cache.c
+>   create mode 100644 include/soc/sifive/sifive_ccache.h
+>   delete mode 100644 include/soc/sifive/sifive_l2_cache.h
+> 
+> diff --git a/drivers/soc/sifive/Kconfig b/drivers/soc/sifive/Kconfig
+> index 58cf8c40d08d..3d65d2771f9a 100644
+> --- a/drivers/soc/sifive/Kconfig
+> +++ b/drivers/soc/sifive/Kconfig
+> @@ -2,9 +2,10 @@
+>   
+>   if SOC_SIFIVE
+>   
+> -config SIFIVE_L2
+> -	bool "Sifive L2 Cache controller"
+> +config SIFIVE_CCACHE
+> +	bool "Sifive composable Cache controller"
+> +	default y
+>   	help
+> -	  Support for the L2 cache controller on SiFive platforms.
+> +	  Support for the composable cache controller on SiFive platforms.
+>   
+>   endif
+> diff --git a/drivers/soc/sifive/Makefile b/drivers/soc/sifive/Makefile
+> index b5caff77938f..1f5dc339bf82 100644
+> --- a/drivers/soc/sifive/Makefile
+> +++ b/drivers/soc/sifive/Makefile
+> @@ -1,3 +1,3 @@
+>   # SPDX-License-Identifier: GPL-2.0
+>   
+> -obj-$(CONFIG_SIFIVE_L2)	+= sifive_l2_cache.o
+> +obj-$(CONFIG_SIFIVE_CCACHE)	+= sifive_ccache.o
+> diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/sifive_ccache.c
+> new file mode 100644
+> index 000000000000..46ce33db7d30
+> --- /dev/null
+> +++ b/drivers/soc/sifive/sifive_ccache.c
+> @@ -0,0 +1,221 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * SiFive composable cache controller Driver
+> + *
+> + * Copyright (C) 2018-2019 SiFive, Inc.
+> + *
+> + */
+> +#include <linux/debugfs.h>
+> +#include <linux/interrupt.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/of_address.h>
+> +#include <linux/device.h>
+> +#include <asm/cacheinfo.h>
+> +#include <soc/sifive/sifive_ccache.h>
+> +
+> +#define SIFIVE_CCACHE_DIRECCFIX_LOW 0x100
+> +#define SIFIVE_CCACHE_DIRECCFIX_HIGH 0x104
+> +#define SIFIVE_CCACHE_DIRECCFIX_COUNT 0x108
+> +
+> +#define SIFIVE_CCACHE_DATECCFIX_LOW 0x140
+> +#define SIFIVE_CCACHE_DATECCFIX_HIGH 0x144
+> +#define SIFIVE_CCACHE_DATECCFIX_COUNT 0x148
+> +
+> +#define SIFIVE_CCACHE_DATECCFAIL_LOW 0x160
+> +#define SIFIVE_CCACHE_DATECCFAIL_HIGH 0x164
+> +#define SIFIVE_CCACHE_DATECCFAIL_COUNT 0x168
+> +
+> +#define SIFIVE_CCACHE_CONFIG 0x00
+> +#define SIFIVE_CCACHE_WAYENABLE 0x08
+> +#define SIFIVE_CCACHE_ECCINJECTERR 0x40
+> +
+> +#define SIFIVE_CCACHE_MAX_ECCINTR 3
+> +
+> +static void __iomem *ccache_base;
+> +static int level;
+> +static int g_irq[SIFIVE_CCACHE_MAX_ECCINTR];
+> +static struct riscv_cacheinfo_ops ccache_cache_ops;
+> +
+> +enum {
+> +	DIR_CORR = 0,
+> +	DATA_CORR,
+> +	DATA_UNCORR,
+> +};
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +static struct dentry *sifive_test;
+> +
+> +static ssize_t ccache_write(struct file *file, const char __user *data,
+> +			size_t count, loff_t *ppos)
+> +{
+> +	unsigned int val;
+> +
+> +	if (kstrtouint_from_user(data, count, 0, &val))
+> +		return -EINVAL;
+> +	if ((val < 0xFF) || (val >= 0x10000 && val < 0x100FF))
+> +		writel(val, ccache_base + SIFIVE_CCACHE_ECCINJECTERR);
+> +	else
+> +		return -EINVAL;
+> +	return count;
+> +}
+> +
+> +static const struct file_operations ccache_fops = {
+> +	.owner = THIS_MODULE,
+> +	.open = simple_open,
+> +	.write = ccache_write
+> +};
+> +
+> +static void setup_sifive_debug(void)
+> +{
+> +	sifive_test = debugfs_create_dir("sifive_ccache_cache", NULL);
+> +
+> +	debugfs_create_file("sifive_debug_inject_error", 0200,
+> +			    sifive_test, NULL, &ccache_fops);
+> +}
+> +#endif
+> +
+> +static void ccache_config_read(void)
+> +{
+> +	u32 regval, val;
+> +
+> +	regval = readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+> +	val = regval & 0xFF;
+> +	pr_info("CCACHE: No. of Banks in the cache: %d\n", val);
+> +	val = (regval & 0xFF00) >> 8;
+> +	pr_info("CCACHE: No. of ways per bank: %d\n", val);
+> +	val = (regval & 0xFF0000) >> 16;
+> +	pr_info("CCACHE: Sets per bank: %llu\n", (uint64_t)1 << val);
+> +	val = (regval & 0xFF000000) >> 24;
+> +	pr_info("CCACHE: Bytes per cache block: %llu\n", (uint64_t)1 << val);
+> +
+> +	regval = readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+> +	pr_info("CCACHE: Index of the largest way enabled: %d\n", regval);
+> +}
+> +
+> +static const struct of_device_id sifive_ccache_ids[] = {
+> +	{ .compatible = "sifive,fu540-c000-ccache" },
+> +	{ .compatible = "sifive,ccache0" },
+> +	{ /* end of table */ },
+> +};
+> +
+> +static ATOMIC_NOTIFIER_HEAD(ccache_err_chain);
+> +
+> +int register_sifive_ccache_error_notifier(struct notifier_block *nb)
+> +{
+> +	return atomic_notifier_chain_register(&ccache_err_chain, nb);
+> +}
+> +EXPORT_SYMBOL_GPL(register_sifive_ccache_error_notifier);
+> +
+> +int unregister_sifive_ccache_error_notifier(struct notifier_block *nb)
+> +{
+> +	return atomic_notifier_chain_unregister(&ccache_err_chain, nb);
+> +}
+> +EXPORT_SYMBOL_GPL(unregister_sifive_ccache_error_notifier);
+> +
+> +static int ccache_largest_wayenabled(void)
+> +{
+> +	return readl(ccache_base + SIFIVE_CCACHE_WAYENABLE) & 0xFF;
+> +}
+> +
+> +static ssize_t number_of_ways_enabled_show(struct device *dev,
+> +					   struct device_attribute *attr,
+> +					   char *buf)
+> +{
+> +	return sprintf(buf, "%u\n", ccache_largest_wayenabled());
+> +}
+> +
+> +static DEVICE_ATTR_RO(number_of_ways_enabled);
+> +
+> +static struct attribute *priv_attrs[] = {
+> +	&dev_attr_number_of_ways_enabled.attr,
+> +	NULL,
+> +};
+> +
+> +static const struct attribute_group priv_attr_group = {
+> +	.attrs = priv_attrs,
+> +};
+> +
+> +static const struct attribute_group *ccache_get_priv_group(struct cacheinfo *this_leaf)
+> +{
+> +	/* We want to use private group for composable cache only */
+> +	if (this_leaf->level == level)
+> +		return &priv_attr_group;
+> +	else
+> +		return NULL;
+> +}
+> +
+> +static irqreturn_t ccache_int_handler(int irq, void *device)
+> +{
+> +	unsigned int add_h, add_l;
+> +
+> +	if (irq == g_irq[DIR_CORR]) {
+> +		add_h = readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_HIGH);
+> +		add_l = readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_LOW);
+> +		pr_err("CCACHE: DirError @ 0x%08X.%08X\n", add_h, add_l);
+> +		/* Reading this register clears the DirError interrupt sig */
+> +		readl(ccache_base + SIFIVE_CCACHE_DIRECCFIX_COUNT);
+> +		atomic_notifier_call_chain(&ccache_err_chain, SIFIVE_CCACHE_ERR_TYPE_CE,
+> +					   "DirECCFix");
+> +	}
+> +	if (irq == g_irq[DATA_CORR]) {
+> +		add_h = readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_HIGH);
+> +		add_l = readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_LOW);
+> +		pr_err("CCACHE: DataError @ 0x%08X.%08X\n", add_h, add_l);
+> +		/* Reading this register clears the DataError interrupt sig */
+> +		readl(ccache_base + SIFIVE_CCACHE_DATECCFIX_COUNT);
+> +		atomic_notifier_call_chain(&ccache_err_chain, SIFIVE_CCACHE_ERR_TYPE_CE,
+> +					   "DatECCFix");
+> +	}
+> +	if (irq == g_irq[DATA_UNCORR]) {
+> +		add_h = readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_HIGH);
+> +		add_l = readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_LOW);
+> +		pr_err("CCACHE: DataFail @ 0x%08X.%08X\n", add_h, add_l);
+> +		/* Reading this register clears the DataFail interrupt sig */
+> +		readl(ccache_base + SIFIVE_CCACHE_DATECCFAIL_COUNT);
+> +		atomic_notifier_call_chain(&ccache_err_chain, SIFIVE_CCACHE_ERR_TYPE_UE,
+> +					   "DatECCFail");
+> +	}
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int __init sifive_ccache_init(void)
+> +{
+> +	struct device_node *np;
+> +	struct resource res;
+> +	int i, rc;
+> +
+> +	np = of_find_matching_node(NULL, sifive_ccache_ids);
+> +	if (!np)
+> +		return -ENODEV;
+> +
+> +	if (of_address_to_resource(np, 0, &res))
+> +		return -ENODEV;
+> +
+> +	if (of_property_read_u32(np, "cache-level", &level))
+> +		return -ENODEV;
+> +
+> +	ccache_base = ioremap(res.start, resource_size(&res));
+> +	if (!ccache_base)
+> +		return -ENOMEM;
+> +
+> +	for (i = 0; i < SIFIVE_CCACHE_MAX_ECCINTR; i++) {
+> +		g_irq[i] = irq_of_parse_and_map(np, i);
+> +		rc = request_irq(g_irq[i], ccache_int_handler, 0, "ccache_ecc", NULL);
+> +		if (rc) {
+> +			pr_err("CCACHE: Could not request IRQ %d\n", g_irq[i]);
+> +			return rc;
+> +		}
+> +	}
+> +
+> +	ccache_config_read();
+> +
+> +	ccache_cache_ops.get_priv_group = ccache_get_priv_group;
+> +	riscv_set_cacheinfo_ops(&ccache_cache_ops);
+> +
+> +#ifdef CONFIG_DEBUG_FS
+> +	setup_sifive_debug();
+> +#endif
+> +	return 0;
+> +}
+> +device_initcall(sifive_ccache_init);
+> diff --git a/drivers/soc/sifive/sifive_l2_cache.c b/drivers/soc/sifive/sifive_l2_cache.c
+> deleted file mode 100644
+> index 59640a1d0b28..000000000000
+> --- a/drivers/soc/sifive/sifive_l2_cache.c
+> +++ /dev/null
+> @@ -1,237 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0
+> -/*
+> - * SiFive L2 cache controller Driver
+> - *
+> - * Copyright (C) 2018-2019 SiFive, Inc.
+> - *
+> - */
+> -#include <linux/debugfs.h>
+> -#include <linux/interrupt.h>
+> -#include <linux/of_irq.h>
+> -#include <linux/of_address.h>
+> -#include <linux/device.h>
+> -#include <asm/cacheinfo.h>
+> -#include <soc/sifive/sifive_l2_cache.h>
+> -
+> -#define SIFIVE_L2_DIRECCFIX_LOW 0x100
+> -#define SIFIVE_L2_DIRECCFIX_HIGH 0x104
+> -#define SIFIVE_L2_DIRECCFIX_COUNT 0x108
+> -
+> -#define SIFIVE_L2_DIRECCFAIL_LOW 0x120
+> -#define SIFIVE_L2_DIRECCFAIL_HIGH 0x124
+> -#define SIFIVE_L2_DIRECCFAIL_COUNT 0x128
+> -
+> -#define SIFIVE_L2_DATECCFIX_LOW 0x140
+> -#define SIFIVE_L2_DATECCFIX_HIGH 0x144
+> -#define SIFIVE_L2_DATECCFIX_COUNT 0x148
+> -
+> -#define SIFIVE_L2_DATECCFAIL_LOW 0x160
+> -#define SIFIVE_L2_DATECCFAIL_HIGH 0x164
+> -#define SIFIVE_L2_DATECCFAIL_COUNT 0x168
+> -
+> -#define SIFIVE_L2_CONFIG 0x00
+> -#define SIFIVE_L2_WAYENABLE 0x08
+> -#define SIFIVE_L2_ECCINJECTERR 0x40
+> -
+> -#define SIFIVE_L2_MAX_ECCINTR 4
+> -
+> -static void __iomem *l2_base;
+> -static int g_irq[SIFIVE_L2_MAX_ECCINTR];
+> -static struct riscv_cacheinfo_ops l2_cache_ops;
+> -
+> -enum {
+> -	DIR_CORR = 0,
+> -	DATA_CORR,
+> -	DATA_UNCORR,
+> -	DIR_UNCORR,
+> -};
+> -
+> -#ifdef CONFIG_DEBUG_FS
+> -static struct dentry *sifive_test;
+> -
+> -static ssize_t l2_write(struct file *file, const char __user *data,
+> -			size_t count, loff_t *ppos)
+> -{
+> -	unsigned int val;
+> -
+> -	if (kstrtouint_from_user(data, count, 0, &val))
+> -		return -EINVAL;
+> -	if ((val < 0xFF) || (val >= 0x10000 && val < 0x100FF))
+> -		writel(val, l2_base + SIFIVE_L2_ECCINJECTERR);
+> -	else
+> -		return -EINVAL;
+> -	return count;
+> -}
+> -
+> -static const struct file_operations l2_fops = {
+> -	.owner = THIS_MODULE,
+> -	.open = simple_open,
+> -	.write = l2_write
+> -};
+> -
+> -static void setup_sifive_debug(void)
+> -{
+> -	sifive_test = debugfs_create_dir("sifive_l2_cache", NULL);
+> -
+> -	debugfs_create_file("sifive_debug_inject_error", 0200,
+> -			    sifive_test, NULL, &l2_fops);
+> -}
+> -#endif
+> -
+> -static void l2_config_read(void)
+> -{
+> -	u32 regval, val;
+> -
+> -	regval = readl(l2_base + SIFIVE_L2_CONFIG);
+> -	val = regval & 0xFF;
+> -	pr_info("L2CACHE: No. of Banks in the cache: %d\n", val);
+> -	val = (regval & 0xFF00) >> 8;
+> -	pr_info("L2CACHE: No. of ways per bank: %d\n", val);
+> -	val = (regval & 0xFF0000) >> 16;
+> -	pr_info("L2CACHE: Sets per bank: %llu\n", (uint64_t)1 << val);
+> -	val = (regval & 0xFF000000) >> 24;
+> -	pr_info("L2CACHE: Bytes per cache block: %llu\n", (uint64_t)1 << val);
+> -
+> -	regval = readl(l2_base + SIFIVE_L2_WAYENABLE);
+> -	pr_info("L2CACHE: Index of the largest way enabled: %d\n", regval);
+> -}
+> -
+> -static const struct of_device_id sifive_l2_ids[] = {
+> -	{ .compatible = "sifive,fu540-c000-ccache" },
+> -	{ .compatible = "sifive,fu740-c000-ccache" },
+> -	{ /* end of table */ },
+> -};
+> -
+> -static ATOMIC_NOTIFIER_HEAD(l2_err_chain);
+> -
+> -int register_sifive_l2_error_notifier(struct notifier_block *nb)
+> -{
+> -	return atomic_notifier_chain_register(&l2_err_chain, nb);
+> -}
+> -EXPORT_SYMBOL_GPL(register_sifive_l2_error_notifier);
+> -
+> -int unregister_sifive_l2_error_notifier(struct notifier_block *nb)
+> -{
+> -	return atomic_notifier_chain_unregister(&l2_err_chain, nb);
+> -}
+> -EXPORT_SYMBOL_GPL(unregister_sifive_l2_error_notifier);
+> -
+> -static int l2_largest_wayenabled(void)
+> -{
+> -	return readl(l2_base + SIFIVE_L2_WAYENABLE) & 0xFF;
+> -}
+> -
+> -static ssize_t number_of_ways_enabled_show(struct device *dev,
+> -					   struct device_attribute *attr,
+> -					   char *buf)
+> -{
+> -	return sprintf(buf, "%u\n", l2_largest_wayenabled());
+> -}
+> -
+> -static DEVICE_ATTR_RO(number_of_ways_enabled);
+> -
+> -static struct attribute *priv_attrs[] = {
+> -	&dev_attr_number_of_ways_enabled.attr,
+> -	NULL,
+> -};
+> -
+> -static const struct attribute_group priv_attr_group = {
+> -	.attrs = priv_attrs,
+> -};
+> -
+> -static const struct attribute_group *l2_get_priv_group(struct cacheinfo *this_leaf)
+> -{
+> -	/* We want to use private group for L2 cache only */
+> -	if (this_leaf->level == 2)
+> -		return &priv_attr_group;
+> -	else
+> -		return NULL;
+> -}
+> -
+> -static irqreturn_t l2_int_handler(int irq, void *device)
+> -{
+> -	unsigned int add_h, add_l;
+> -
+> -	if (irq == g_irq[DIR_CORR]) {
+> -		add_h = readl(l2_base + SIFIVE_L2_DIRECCFIX_HIGH);
+> -		add_l = readl(l2_base + SIFIVE_L2_DIRECCFIX_LOW);
+> -		pr_err("L2CACHE: DirError @ 0x%08X.%08X\n", add_h, add_l);
+> -		/* Reading this register clears the DirError interrupt sig */
+> -		readl(l2_base + SIFIVE_L2_DIRECCFIX_COUNT);
+> -		atomic_notifier_call_chain(&l2_err_chain, SIFIVE_L2_ERR_TYPE_CE,
+> -					   "DirECCFix");
+> -	}
+> -	if (irq == g_irq[DIR_UNCORR]) {
+> -		add_h = readl(l2_base + SIFIVE_L2_DIRECCFAIL_HIGH);
+> -		add_l = readl(l2_base + SIFIVE_L2_DIRECCFAIL_LOW);
+> -		/* Reading this register clears the DirFail interrupt sig */
+> -		readl(l2_base + SIFIVE_L2_DIRECCFAIL_COUNT);
+> -		atomic_notifier_call_chain(&l2_err_chain, SIFIVE_L2_ERR_TYPE_UE,
+> -					   "DirECCFail");
+> -		panic("L2CACHE: DirFail @ 0x%08X.%08X\n", add_h, add_l);
+> -	}
+> -	if (irq == g_irq[DATA_CORR]) {
+> -		add_h = readl(l2_base + SIFIVE_L2_DATECCFIX_HIGH);
+> -		add_l = readl(l2_base + SIFIVE_L2_DATECCFIX_LOW);
+> -		pr_err("L2CACHE: DataError @ 0x%08X.%08X\n", add_h, add_l);
+> -		/* Reading this register clears the DataError interrupt sig */
+> -		readl(l2_base + SIFIVE_L2_DATECCFIX_COUNT);
+> -		atomic_notifier_call_chain(&l2_err_chain, SIFIVE_L2_ERR_TYPE_CE,
+> -					   "DatECCFix");
+> -	}
+> -	if (irq == g_irq[DATA_UNCORR]) {
+> -		add_h = readl(l2_base + SIFIVE_L2_DATECCFAIL_HIGH);
+> -		add_l = readl(l2_base + SIFIVE_L2_DATECCFAIL_LOW);
+> -		pr_err("L2CACHE: DataFail @ 0x%08X.%08X\n", add_h, add_l);
+> -		/* Reading this register clears the DataFail interrupt sig */
+> -		readl(l2_base + SIFIVE_L2_DATECCFAIL_COUNT);
+> -		atomic_notifier_call_chain(&l2_err_chain, SIFIVE_L2_ERR_TYPE_UE,
+> -					   "DatECCFail");
+> -	}
+> -
+> -	return IRQ_HANDLED;
+> -}
+> -
+> -static int __init sifive_l2_init(void)
+> -{
+> -	struct device_node *np;
+> -	struct resource res;
+> -	int i, rc, intr_num;
+> -
+> -	np = of_find_matching_node(NULL, sifive_l2_ids);
+> -	if (!np)
+> -		return -ENODEV;
+> -
+> -	if (of_address_to_resource(np, 0, &res))
+> -		return -ENODEV;
+> -
+> -	l2_base = ioremap(res.start, resource_size(&res));
+> -	if (!l2_base)
+> -		return -ENOMEM;
+> -
+> -	intr_num = of_property_count_u32_elems(np, "interrupts");
+> -	if (!intr_num) {
+> -		pr_err("L2CACHE: no interrupts property\n");
+> -		return -ENODEV;
+> -	}
+> -
+> -	for (i = 0; i < intr_num; i++) {
+> -		g_irq[i] = irq_of_parse_and_map(np, i);
+> -		rc = request_irq(g_irq[i], l2_int_handler, 0, "l2_ecc", NULL);
+> -		if (rc) {
+> -			pr_err("L2CACHE: Could not request IRQ %d\n", g_irq[i]);
+> -			return rc;
+> -		}
+> -	}
+> -
+> -	l2_config_read();
+> -
+> -	l2_cache_ops.get_priv_group = l2_get_priv_group;
+> -	riscv_set_cacheinfo_ops(&l2_cache_ops);
+> -
+> -#ifdef CONFIG_DEBUG_FS
+> -	setup_sifive_debug();
+> -#endif
+> -	return 0;
+> -}
+> -device_initcall(sifive_l2_init);
+> diff --git a/include/soc/sifive/sifive_ccache.h b/include/soc/sifive/sifive_ccache.h
+> new file mode 100644
+> index 000000000000..16576d678ea8
+> --- /dev/null
+> +++ b/include/soc/sifive/sifive_ccache.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * SiFive composable Cache Controller header file
+> + *
+> + */
+> +
+> +#ifndef __SOC_SIFIVE_CCACHE_H
+> +#define __SOC_SIFIVE_CCACHE_H
+> +
+> +extern int register_sifive_ccache_error_notifier(struct notifier_block *nb);
+> +extern int unregister_sifive_ccache_error_notifier(struct notifier_block *nb);
+> +
+> +#define SIFIVE_CCACHE_ERR_TYPE_CE 0
+> +#define SIFIVE_CCACHE_ERR_TYPE_UE 1
+> +
+> +#endif /* __SOC_SIFIVE_CCACHE_H */
+> diff --git a/include/soc/sifive/sifive_l2_cache.h b/include/soc/sifive/sifive_l2_cache.h
+> deleted file mode 100644
+> index 92ade10ed67e..000000000000
+> --- a/include/soc/sifive/sifive_l2_cache.h
+> +++ /dev/null
+> @@ -1,16 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0 */
+> -/*
+> - * SiFive L2 Cache Controller header file
+> - *
+> - */
+> -
+> -#ifndef __SOC_SIFIVE_L2_CACHE_H
+> -#define __SOC_SIFIVE_L2_CACHE_H
+> -
+> -extern int register_sifive_l2_error_notifier(struct notifier_block *nb);
+> -extern int unregister_sifive_l2_error_notifier(struct notifier_block *nb);
+> -
+> -#define SIFIVE_L2_ERR_TYPE_CE 0
+> -#define SIFIVE_L2_ERR_TYPE_UE 1
+> -
+> -#endif /* __SOC_SIFIVE_L2_CACHE_H */
 
-All toptier nodes are listed via
-/sys/devices/virtual/memory_tiering/toptier_nodes
-
-:/sys/devices/virtual/memory_tiering$ cat toptier_nodes
-0,2
-:/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
-0,2
-
-Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
----
-
-Changes from v2:
-* update macro to static inline
-* Fix build error with CONFIG_MIGRATION disabled
-* drop abstract_distance
-* update commit message
-
-
- .../ABI/testing/sysfs-kernel-mm-memory-tiers  |  35 ++++
- mm/memory-tiers.c                             | 154 +++++++++++++++---
- 2 files changed, 167 insertions(+), 22 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
-
-diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
-new file mode 100644
-index 000000000000..55051fcf5502
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
-@@ -0,0 +1,35 @@
-+What:		/sys/devices/virtual/memory_tiering/
-+Date:		August 2022
-+Contact:	Linux memory management mailing list <linux-mm@kvack.org>
-+Description:	A collection of all the memory tiers allocated.
-+
-+		Individual memory tier details are contained in subdirectories
-+		named by the abstract distance of the memory tier.
-+
-+		/sys/devices/virtual/memory_tiering/memory_tierN/
-+
-+
-+What:		/sys/devices/virtual/memory_tiering/memory_tierN/
-+		/sys/devices/virtual/memory_tiering/memory_tierN/nodes
-+Date:		August 2022
-+Contact:	Linux memory management mailing list <linux-mm@kvack.org>
-+Description:	Directory with details of a specific memory tier
-+
-+		This is the directory containing information about a particular
-+		memory tier, memtierN, where N is derived based on abstract distance.
-+
-+		A smaller value of N implies a higher (faster) memory tier in the
-+		hierarchy.
-+
-+		nodes: NUMA nodes that are part of this memory tier.
-+
-+
-+What:		/sys/devices/virtual/memory_tiering/toptier_nodes
-+Date:		August 2022
-+Contact:	Linux memory management mailing list <linux-mm@kvack.org>
-+Description:	Toptier node mask
-+
-+		A toptier is defined as the memory tier from which memory promotion
-+		is not done by the kernel.
-+
-+		toptier_nodes: Union of NUMA nodes that are part of each toptier.
-diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-index c82eb0111383..33673ed9b3dc 100644
---- a/mm/memory-tiers.c
-+++ b/mm/memory-tiers.c
-@@ -19,6 +19,7 @@ struct memory_tier {
- 	 * adistance_start .. adistance_start + MEMTIER_CHUNK_SIZE
- 	 */
- 	int adistance_start;
-+	struct device dev;
- 	/* All the nodes that are part of all the lower memory tiers. */
- 	nodemask_t lower_tier_mask;
- };
-@@ -36,6 +37,12 @@ static DEFINE_MUTEX(memory_tier_lock);
- static LIST_HEAD(memory_tiers);
- static struct node_memory_type_map node_memory_types[MAX_NUMNODES];
- static struct memory_dev_type *default_dram_type;
-+
-+static struct bus_type memory_tier_subsys = {
-+	.name = "memory_tiering",
-+	.dev_name = "memory_tier",
-+};
-+
- #ifdef CONFIG_MIGRATION
- static int top_tier_adistance;
- /*
-@@ -98,8 +105,63 @@ static int top_tier_adistance;
- static struct demotion_nodes *node_demotion __read_mostly;
- #endif /* CONFIG_MIGRATION */
- 
-+static inline struct memory_tier *to_memory_tier(struct device *device)
-+{
-+	return container_of(device, struct memory_tier, dev);
-+}
-+
-+static __always_inline nodemask_t get_memtier_nodemask(struct memory_tier *memtier)
-+{
-+	nodemask_t nodes = NODE_MASK_NONE;
-+	struct memory_dev_type *memtype;
-+
-+	list_for_each_entry(memtype, &memtier->memory_types, tier_sibiling)
-+		nodes_or(nodes, nodes, memtype->nodes);
-+
-+	return nodes;
-+}
-+
-+static void memory_tier_device_release(struct device *dev)
-+{
-+	struct memory_tier *tier = to_memory_tier(dev);
-+	/*
-+	 * synchronize_rcu in clear_node_memory_tier makes sure
-+	 * we don't have rcu access to this memory tier.
-+	 */
-+	kfree(tier);
-+}
-+
-+static ssize_t nodes_show(struct device *dev,
-+			  struct device_attribute *attr, char *buf)
-+{
-+	int ret;
-+	nodemask_t nmask;
-+
-+	mutex_lock(&memory_tier_lock);
-+	nmask = get_memtier_nodemask(to_memory_tier(dev));
-+	ret = sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&nmask));
-+	mutex_unlock(&memory_tier_lock);
-+	return ret;
-+}
-+static DEVICE_ATTR_RO(nodes);
-+
-+static struct attribute *memtier_dev_attrs[] = {
-+	&dev_attr_nodes.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group memtier_dev_group = {
-+	.attrs = memtier_dev_attrs,
-+};
-+
-+static const struct attribute_group *memtier_dev_groups[] = {
-+	&memtier_dev_group,
-+	NULL
-+};
-+
- static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memtype)
- {
-+	int ret;
- 	bool found_slot = false;
- 	struct memory_tier *memtier, *new_memtier;
- 	int adistance = memtype->adistance;
-@@ -123,15 +185,14 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
- 
- 	list_for_each_entry(memtier, &memory_tiers, list) {
- 		if (adistance == memtier->adistance_start) {
--			list_add(&memtype->tier_sibiling, &memtier->memory_types);
--			return memtier;
-+			goto link_memtype;
- 		} else if (adistance < memtier->adistance_start) {
- 			found_slot = true;
- 			break;
- 		}
- 	}
- 
--	new_memtier = kmalloc(sizeof(struct memory_tier), GFP_KERNEL);
-+	new_memtier = kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
- 	if (!new_memtier)
- 		return ERR_PTR(-ENOMEM);
- 
-@@ -142,8 +203,23 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
- 		list_add_tail(&new_memtier->list, &memtier->list);
- 	else
- 		list_add_tail(&new_memtier->list, &memory_tiers);
--	list_add(&memtype->tier_sibiling, &new_memtier->memory_types);
--	return new_memtier;
-+
-+	new_memtier->dev.id = adistance >> MEMTIER_CHUNK_BITS;
-+	new_memtier->dev.bus = &memory_tier_subsys;
-+	new_memtier->dev.release = memory_tier_device_release;
-+	new_memtier->dev.groups = memtier_dev_groups;
-+
-+	ret = device_register(&new_memtier->dev);
-+	if (ret) {
-+		list_del(&memtier->list);
-+		put_device(&memtier->dev);
-+		return ERR_PTR(ret);
-+	}
-+	memtier = new_memtier;
-+
-+link_memtype:
-+	list_add(&memtype->tier_sibiling, &memtier->memory_types);
-+	return memtier;
- }
- 
- static struct memory_tier *__node_get_memory_tier(int node)
-@@ -275,17 +351,6 @@ static void disable_all_demotion_targets(void)
- 	synchronize_rcu();
- }
- 
--static __always_inline nodemask_t get_memtier_nodemask(struct memory_tier *memtier)
--{
--	nodemask_t nodes = NODE_MASK_NONE;
--	struct memory_dev_type *memtype;
--
--	list_for_each_entry(memtype, &memtier->memory_types, tier_sibiling)
--		nodes_or(nodes, nodes, memtype->nodes);
--
--	return nodes;
--}
--
- /*
-  * Find an automatic demotion target for all memory
-  * nodes. Failing here is OK.  It might just indicate
-@@ -433,11 +498,7 @@ static struct memory_tier *set_node_memory_tier(int node)
- static void destroy_memory_tier(struct memory_tier *memtier)
- {
- 	list_del(&memtier->list);
--	/*
--	 * synchronize_rcu in clear_node_memory_tier makes sure
--	 * we don't have rcu access to this memory tier.
--	 */
--	kfree(memtier);
-+	device_unregister(&memtier->dev);
- }
- 
- static bool clear_node_memory_tier(int node)
-@@ -564,11 +625,60 @@ static int __meminit memtier_hotplug_callback(struct notifier_block *self,
- 	return notifier_from_errno(0);
- }
- 
-+#ifdef CONFIG_MIGRATION
-+static ssize_t toptier_nodes_show(struct device *dev,
-+				     struct device_attribute *attr, char *buf)
-+{
-+	int ret;
-+	nodemask_t nmask, top_tier_mask = NODE_MASK_NONE;
-+	struct memory_tier *memtier = to_memory_tier(dev);
-+
-+	mutex_lock(&memory_tier_lock);
-+	list_for_each_entry(memtier, &memory_tiers, list) {
-+		if (memtier->adistance_start > top_tier_adistance)
-+			break;
-+		nmask = get_memtier_nodemask(memtier);
-+		nodes_or(top_tier_mask, top_tier_mask, nmask);
-+	}
-+
-+	ret = sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&top_tier_mask));
-+	mutex_unlock(&memory_tier_lock);
-+	return ret;
-+}
-+#else
-+static ssize_t toptier_nodes_show(struct device *dev,
-+				  struct device_attribute *attr, char *buf)
-+{
-+	nodemask_t top_tier_mask = node_states[N_MEMORY];
-+
-+	return sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&top_tier_mask));
-+}
-+#endif
-+static DEVICE_ATTR_RO(toptier_nodes);
-+
-+static struct attribute *memtier_subsys_attrs[] = {
-+	&dev_attr_toptier_nodes.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group memtier_subsys_group = {
-+	.attrs = memtier_subsys_attrs,
-+};
-+
-+static const struct attribute_group *memtier_subsys_groups[] = {
-+	&memtier_subsys_group,
-+	NULL
-+};
-+
- static int __init memory_tier_init(void)
- {
--	int node;
-+	int ret, node;
- 	struct memory_tier *memtier;
- 
-+	ret = subsys_virtual_register(&memory_tier_subsys, memtier_subsys_groups);
-+	if (ret)
-+		panic("%s() failed to register memory tier subsystem\n", __func__);
-+
- #ifdef CONFIG_MIGRATION
- 	node_demotion = kcalloc(nr_node_ids, sizeof(struct demotion_nodes),
- 				GFP_KERNEL);
 -- 
-2.37.2
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
+
+https://www.codethink.co.uk/privacy.html
 

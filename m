@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D49E5A637A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9945A637C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:36:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiH3Mgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:36:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43942 "EHLO
+        id S229544AbiH3Mgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiH3Mgh (ORCPT
+        with ESMTP id S229596AbiH3Mgh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Aug 2022 08:36:37 -0400
 Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4100FD86E4
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B19FD99F4
         for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:36:36 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MH6Fh0mcwzHnV7;
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MH6Fh3fQkzHnVM;
         Tue, 30 Aug 2022 20:34:48 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
@@ -26,9 +26,9 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 1/6] mm, hwpoison: use ClearPageHWPoison() in memory_failure()
-Date:   Tue, 30 Aug 2022 20:35:59 +0800
-Message-ID: <20220830123604.25763-2-linmiaohe@huawei.com>
+Subject: [PATCH 2/6] mm, hwpoison: use __PageMovable() to detect non-lru movable pages
+Date:   Tue, 30 Aug 2022 20:36:00 +0800
+Message-ID: <20220830123604.25763-3-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220830123604.25763-1-linmiaohe@huawei.com>
 References: <20220830123604.25763-1-linmiaohe@huawei.com>
@@ -48,8 +48,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use ClearPageHWPoison() instead of TestClearPageHWPoison() to clear page
-hwpoison flags to avoid unneeded full memory barrier overhead.
+It's more recommended to use __PageMovable() to detect non-lru movable
+pages. We can avoid bumping page refcnt via isolate_movable_page() for
+the isolated lru pages. Also if pages become PageLRU just after they're
+checked but before trying to isolate them, isolate_lru_page() will be
+called to do the right work.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
@@ -57,18 +60,18 @@ Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index ebf16d177ee5..a923a6dde871 100644
+index a923a6dde871..3966fa6abe03 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -2128,7 +2128,7 @@ int memory_failure(unsigned long pfn, int flags)
- 	page_flags = p->flags;
+@@ -2404,7 +2404,7 @@ EXPORT_SYMBOL(unpoison_memory);
+ static bool isolate_page(struct page *page, struct list_head *pagelist)
+ {
+ 	bool isolated = false;
+-	bool lru = PageLRU(page);
++	bool lru = !__PageMovable(page);
  
- 	if (hwpoison_filter(p)) {
--		TestClearPageHWPoison(p);
-+		ClearPageHWPoison(p);
- 		unlock_page(p);
- 		put_page(p);
- 		res = -EOPNOTSUPP;
+ 	if (PageHuge(page)) {
+ 		isolated = !isolate_hugetlb(page, pagelist);
 -- 
 2.23.0
 

@@ -2,103 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55E165A5D38
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:45:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF205A5D3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbiH3Hp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41740 "EHLO
+        id S230452AbiH3Hpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiH3HpT (ORCPT
+        with ESMTP id S231235AbiH3Hpl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:45:19 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7452C15A2D;
-        Tue, 30 Aug 2022 00:45:18 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.57])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MGzmp43d9znTt0;
-        Tue, 30 Aug 2022 15:42:50 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 15:45:15 +0800
-Received: from [10.67.102.167] (10.67.102.167) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 15:45:15 +0800
-Message-ID: <bf8ccd6f-b58d-8296-9e33-e7c32243922f@huawei.com>
-Date:   Tue, 30 Aug 2022 15:45:14 +0800
+        Tue, 30 Aug 2022 03:45:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A33362610E;
+        Tue, 30 Aug 2022 00:45:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFA9C614E2;
+        Tue, 30 Aug 2022 07:45:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D186C433C1;
+        Tue, 30 Aug 2022 07:45:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661845538;
+        bh=0AmD9efKkJBFo1GwVMluQEg1TLCwCH6ZxLnndj3/734=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rCXkCrd37RvDap0KsYcZj+bYkAcFfAxoIAZcy4bRUnIbeWIFRISy6KWYkcyDEkvka
+         gezXZKg/Q48loSa2wdMYu7LX7t0bvW1tqisl8hAtJFsGApqAnRdgb+pPd0vKYhRW+o
+         wa/EU6XFbtJ1b6WaaFb8enKdLZbdc4WLuv6crMl5sq5V8Qb53MNb7ay8wbgCI2iq3p
+         P7B16HFC8ctrj3UaBimH9OSxALpxg2NZAHXZVnHGHO20UWqgsevFrcOI1en7apmU5G
+         YMsRKbcHNAeq0REwY3hSBdKI2utS5RF+x5fzQO4o3pSvE8dHUQCdpQfXU9OFD5pO28
+         vSu5LZpDUeAUA==
+Date:   Tue, 30 Aug 2022 13:15:34 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Lucas Stach <l.stach@pengutronix.de>
+Cc:     Richard Zhu <hongxing.zhu@nxp.com>, p.zabel@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, alexander.stein@ew.tq-group.com,
+        marex@denx.de, richard.leitner@linux.dev,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Subject: Re: [PATCH 2/2] fixup! phy: freescale: imx8m-pcie: Add iMX8MP PCIe
+ PHY support
+Message-ID: <Yw3AHmMG9G1g9ruZ@matsya>
+References: <1661760917-9558-1-git-send-email-hongxing.zhu@nxp.com>
+ <20220829151623.808344-1-l.stach@pengutronix.de>
+ <20220829151623.808344-2-l.stach@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [RESENT PATCH v5 0/7] dmaengine: hisilicon: Add support for hisi
- dma driver
-From:   Jie Hai <haijie1@huawei.com>
-To:     <vkoul@kernel.org>, <wangzhou1@hisilicon.com>
-CC:     <dmaengine@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220830060555.50781-1-haijie1@huawei.com>
-In-Reply-To: <20220830060555.50781-1-haijie1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.167]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600007.china.huawei.com (7.193.23.208)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220829151623.808344-2-l.stach@pengutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/30 14:05, Jie Hai wrote:
-Sorry for incorrect titles with "RESENT", please drop this patch set and 
-follow the latest.
-> The HiSilicon IP08 and HiSilicon IP09 are DMA iEPs, they share the
-> same pci device id but different pci revision and register layouts.
+On 29-08-22, 17:16, Lucas Stach wrote:
+> ---
+>  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 31 +++-------------------
+>  1 file changed, 3 insertions(+), 28 deletions(-)
+
+Pls squash and resend the patch properly!
+
+
 > 
-> The original version supports HiSilicon IP08 but not HiSilicon IP09.
-> This series support DMA driver for HIP08 and HIP09:
-> 1. Fix bugs for HIP08 DMA driver
-> 	- Disable hardware channels when driver detached
-> 	- Update cq_head whenever accessed it
-> 	- Support multi-thread for one DMA channel
-> 2. Use macros instead of magic number
-> 3. Add support for HIP09 DMA driver
-> 4. Add debugfs for HIP08 and HIP09 DMA driver
-> 5. Add myself as maintainer of hisi_dma.c
-> 
-> Changes since version 4:
->   - Fix hdma_dev->base to hdma_dev->queue_base in hisi_dma_reset_or_disable_hw_chan
-> 
-> Changes since version 3:
->   - remove reduldant braces
->   - add "Acked-by: Zhou Wang <wangzhou1@hisilicon.com>" in commit log
-> 
-> Changes since version 2:
->   - fix unnecessary line breaks
->   - fix register bit with BIT/GENMASK and adjust hisi_dma_update_bit to it
->   - remove "Reported-by" in commit message
->   - use dmaengine root instead of hisi_dma root
->   - ignore errors for creating debugfs
-> 
-> Changes since version 1:
->   - remove error changes casuse compile failure
->   - remove reduldant "*" in comment
->   - remove debugfs-hisi-dma doc and path in MAINTAINERS
-> 
-> Jie Hai (7):
->    dmaengine: hisilicon: Disable channels when unregister hisi_dma
->    dmaengine: hisilicon: Fix CQ head update
->    dmaengine: hisilicon: Add multi-thread support for a DMA channel
->    dmaengine: hisilicon: Use macros instead of magic number
->    dmaengine: hisilicon: Adapt DMA driver to HiSilicon IP09
->    dmaengine: hisilicon: Dump regs to debugfs
->    MAINTAINERS: Add myself as maintainer for hisi_dma
-> 
->   MAINTAINERS            |   1 +
->   drivers/dma/hisi_dma.c | 650 +++++++++++++++++++++++++++++++++++------
->   2 files changed, 555 insertions(+), 96 deletions(-)
-> 
+> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> index 3463b4299f2f..f714f419b91f 100644
+> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/module.h>
+>  #include <linux/of_address.h>
+>  #include <linux/of_device.h>
+> +#include <linux/of_device.h>
+>  #include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> @@ -47,10 +48,6 @@
+>  #define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
+>  #define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
+>  
+> -#define IMX8MP_GPR_REG0			0x0
+> -#define IMX8MP_GPR_PHY_APB_RST		BIT(4)
+> -#define IMX8MP_GPR_PHY_INIT_RST		BIT(5)
+> -
+>  enum imx8_pcie_phy_type {
+>  	IMX8MM,
+>  	IMX8MP,
+> @@ -58,10 +55,8 @@ enum imx8_pcie_phy_type {
+>  
+>  struct imx8_pcie_phy {
+>  	void __iomem		*base;
+> -	struct device		*dev;
+>  	struct clk		*clk;
+>  	struct phy		*phy;
+> -	struct regmap		*hsio_blk_ctrl;
+>  	struct regmap		*iomuxc_gpr;
+>  	struct reset_control	*reset;
+>  	struct reset_control	*perst;
+> @@ -93,13 +88,6 @@ static int imx8_pcie_phy_init(struct phy *phy)
+>  		break;
+>  	case IMX8MP:
+>  		reset_control_assert(imx8_phy->perst);
+> -
+> -		/* release pcie_phy_apb_reset and pcie_phy_init_resetn */
+> -		regmap_update_bits(imx8_phy->hsio_blk_ctrl, IMX8MP_GPR_REG0,
+> -				   IMX8MP_GPR_PHY_APB_RST |
+> -				   IMX8MP_GPR_PHY_INIT_RST,
+> -				   IMX8MP_GPR_PHY_APB_RST |
+> -				   IMX8MP_GPR_PHY_INIT_RST);
+>  		break;
+>  	}
+>  
+> @@ -204,21 +192,16 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  {
+>  	struct phy_provider *phy_provider;
+>  	struct device *dev = &pdev->dev;
+> -	const struct of_device_id *of_id;
+>  	struct device_node *np = dev->of_node;
+>  	struct imx8_pcie_phy *imx8_phy;
+>  	struct resource *res;
+>  
+> -	of_id = of_match_device(imx8_pcie_phy_of_match, dev);
+> -	if (!of_id)
+> -		return -EINVAL;
+> -
+>  	imx8_phy = devm_kzalloc(dev, sizeof(*imx8_phy), GFP_KERNEL);
+>  	if (!imx8_phy)
+>  		return -ENOMEM;
+>  
+> -	imx8_phy->dev = dev;
+> -	imx8_phy->variant = (enum imx8_pcie_phy_type)of_id->data;
+> +	imx8_phy->variant =
+> +		(enum imx8_pcie_phy_type)of_device_get_match_data(dev);
+>  
+>  	/* get PHY refclk pad mode */
+>  	of_property_read_u32(np, "fsl,refclk-pad-mode",
+> @@ -257,14 +240,6 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  		return PTR_ERR(imx8_phy->reset);
+>  	}
+>  	if (imx8_phy->variant == IMX8MP) {
+> -		/* Grab HSIO MIX config register range */
+> -		imx8_phy->hsio_blk_ctrl =
+> -			 syscon_regmap_lookup_by_compatible("fsl,imx8mp-hsio-blk-ctrl");
+> -		if (IS_ERR(imx8_phy->hsio_blk_ctrl)) {
+> -			dev_err(dev, "Unable to find HSIO MIX registers\n");
+> -			return PTR_ERR(imx8_phy->hsio_blk_ctrl);
+> -		}
+> -
+>  		imx8_phy->perst =
+>  			devm_reset_control_get_exclusive(dev, "perst");
+>  		if (IS_ERR(imx8_phy->perst)) {
+> -- 
+> 2.30.2
+
+-- 
+~Vinod

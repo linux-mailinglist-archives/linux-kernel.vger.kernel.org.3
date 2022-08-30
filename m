@@ -2,86 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF2B15A6C8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ED9E5A6C8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:49:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiH3SrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58076 "EHLO
+        id S231314AbiH3Stc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:49:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiH3SrE (ORCPT
+        with ESMTP id S229735AbiH3Stb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:47:04 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7430B67C93
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:47:02 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id l5so9385621qvs.13
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:47:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=XaXlF349lOKckpeRFZDQNo5GwNs0MMYghB0K5tskEEA=;
-        b=v2Em28vJsFBxBufUF/UfGuZsx0qmO1twBw6Du9kdtlLTlSUTLRWLJKsvNJuHfTNxNt
-         0UOo8jfgTrVj7vUnWZYdWCHIqLtLRaryAknxGqPmsUtfipNUWVah4oHCUMWxbP8qMvP3
-         YcEWVHQsCqmn6Jbi8oT3NZkdRTDcEMh0U2EbA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=XaXlF349lOKckpeRFZDQNo5GwNs0MMYghB0K5tskEEA=;
-        b=rWWY6JFHAPRBCoqptA4t7K3Sdqwjr54UM6laNvltz3ll6DgioO5K96DeGzK2xB4R2O
-         hoZaMrhHT3R5ZWcVtynrQKBWaQsUU9U8F1V7YN5IrxssOrUirkPnI1mt1qsSbMF7pz1d
-         tpzlSiNQjn1lX7xFl09zf8IczQZsTbsEo9wRvUcI1CCS69fz93UmzOECRo2XJOweI66Q
-         ItpvkWqWVNfgf4mAvp0bR917khCRv9ve2Wxbp2s6+Eewio2WVni18V+43Fiy+e1Ow9fz
-         yQFaSqe0LFHub/vrWdka4eN2x+483IQ4JUL9S27aYIUDmHB7s2FEfhVj7ymboSXQ022t
-         QJaw==
-X-Gm-Message-State: ACgBeo11O2HDh1aEGtL3q5v7t+Xkv8mCpLra36TocxEPVpphZbZyei71
-        L3pCbXWlQuR1XY34iJOjtfrIBA==
-X-Google-Smtp-Source: AA6agR4oKF8hpWH3cMJA+GxQhC85lxseU3x3imVzSGoaVv3jtv/sBtxUEAAXMdXk9mmAVhkeq7jAbg==
-X-Received: by 2002:a05:6214:ccf:b0:499:72d:ccf9 with SMTP id 15-20020a0562140ccf00b00499072dccf9mr7640496qvx.116.1661885221571;
-        Tue, 30 Aug 2022 11:47:01 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id l5-20020a37f905000000b006af3f3b385csm8448512qkj.98.2022.08.30.11.47.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 11:47:01 -0700 (PDT)
-Message-ID: <de01d018-c2c7-95a5-2bf6-9128ba9dd133@joelfernandes.org>
-Date:   Tue, 30 Aug 2022 14:46:59 -0400
+        Tue, 30 Aug 2022 14:49:31 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A0F66C75B
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:49:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=2pwojP1tPkDYaoISIKgj4exxHoYsuGnV+Y70Sbw7xyw=; b=MepGmqDbrKqS3Vjv1YsrsBBHZV
+        KJHxBmAXJQ9D/ijMDSL2ctRCXrAnVjcR9nEFJntOQin3vrIvBs32NvAhP8O0FLTAaAD9TuiXcZh3Z
+        Q7769KUIiJ7De4ReuK+tYNuXRehe5bXiuC9eWvJm+qfT7OInvySrf8ks6kIfoBY6kp93x9zS8Bgug
+        cWCkcU/0Z1b2ibodxcSikeh4rtd4XXjfkUMlQqY3nztWMsVwfGqGxzt7tsGz947sXalDdNvx/+/zp
+        +nojSH7CA45+Fr44hj9Lrl71Ks061LTlA7p5KLgOnl/GS2uLiJ5Fgx1rFsC0ExKdIs/hsS0XhxX87
+        gpMWSCLw==;
+Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=63164)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oT6Ig-0005yu-Kf; Tue, 30 Aug 2022 20:49:26 +0200
+Message-ID: <575e58c3-a32f-54a6-6203-7a7e5a289a66@tronnes.org>
+Date:   Tue, 30 Aug 2022 20:49:22 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
- fixes
-Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rcu <rcu@vger.kernel.org>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-References: <20220819204857.3066329-1-joel@joelfernandes.org>
- <20220829134045.GA54589@lothringen>
- <1f7dd31b-f4d0-5c1c-ce28-c27f75c17f05@joelfernandes.org>
- <20220829194622.GA58291@lothringen>
- <CAEXW_YS593n8Gget+REaD-c8vT8Ht_AzOY0kXA_uc674LOyvVw@mail.gmail.com>
- <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830105324.GA71266@lothringen>
- <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830160316.GC71266@lothringen> <20220830162244.GA73392@lothringen>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20220830162244.GA73392@lothringen>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 23/41] drm/atomic-helper: Add an analog TV atomic_check
+ implementation
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-23-459522d653a7@cerno.tech>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v2-23-459522d653a7@cerno.tech>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -90,60 +84,180 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 8/30/2022 12:22 PM, Frederic Weisbecker wrote:
-> On Tue, Aug 30, 2022 at 06:03:16PM +0200, Frederic Weisbecker wrote:
->> On Tue, Aug 30, 2022 at 04:43:43AM -0700, Paul E. McKenney wrote:
->>> On Tue, Aug 30, 2022 at 12:53:24PM +0200, Frederic Weisbecker wrote:
->>>> On Mon, Aug 29, 2022 at 01:42:02PM -0700, Paul E. McKenney wrote:
->>>>> On Mon, Aug 29, 2022 at 04:36:40PM -0400, Joel Fernandes wrote:
->>>>>> On Mon, Aug 29, 2022 at 3:46 PM Frederic Weisbecker <frederic@kernel.org> wrote:
->>>>>>> On Mon, Aug 29, 2022 at 12:45:40PM -0400, Joel Fernandes wrote:
->>>>>>>> On 8/29/2022 9:40 AM, Frederic Weisbecker wrote:
->>>>>
->>>>> [ . .  . ]
->>>>>
->>>>>>>>> 2) NOCB implies performance issues.
->>>>>>>>
->>>>>>>> Which kinds of? There is slightly worse boot times, but I'm guessing that's do
->>>>>>>> with the extra scheduling overhead of the extra threads which is usually not a
->>>>>>>> problem except that RCU is used in the critical path of boot up (on ChromeOS).
->>>>>>>
->>>>>>> I never measured it myself but executing callbacks on another CPUs, with
->>>>>>> context switches and locking can only involve significant performance issues if callbacks
->>>>>>> are frequent. So it's a tradeoff between power and performance.
->>>>>>
->>>>>> In my testing of benchmarks on real systems with 8-16 CPUs, the
->>>>>> performance hit is down in the noise. It is possible though that maybe
->>>>>> one can write a non-realistic synthetic test to force the performance
->>>>>> issues, but I've not seen it in the real world. Maybe on
->>>>>> networking-heavy servers with lots of cores, you'll see it but their
->>>>>> batteries if any would be pretty big :-).
->>>>>
->>>>> To Frederic's point, if you have enough servers, even a 1% decrease in
->>>>> power consumption is a very big deal.  ;-)
->>>>
->>>> The world has enough servers, for that matters ;-)
->>>
->>> True enough!  Now you need only demonstrate that call_rcu_lazy() for
->>> !rcu_nocbs servers would actually deliver that 1%.  ;-)
->>
->> Well, !rcu_nocbs is not only used by server but also by pretty much
->> everything else, except android IIUC. I can't really measure the whole
->> world but I don't see how the idleness of a server/router/desktop/embedded/rt/hpc
->> device differs from the idleness of an android device.
->>
->> But ok I'll try to measure that.
+Den 29.08.2022 15.11, skrev Maxime Ripard:
+> The analog TV connector drivers share some atomic_check logic, and the new
 > 
-> Although who knows, may be some periodic file operation while idle are specific
-> to Android. I'll try to trace lazy callbacks while idle and the number of grace
-> periods associated.
+> TV standard property have created a bunch of new constraints that needs to
+> 
+> be shared across drivers too.
+> 
+> 
+> 
+> Let's create an atomic_check helper for those use cases.
+> 
+> 
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
+> 
+> 
+> diff --git a/drivers/gpu/drm/drm_atomic_state_helper.c b/drivers/gpu/drm/drm_atomic_state_helper.c
+> 
+> index 0373c3dc824b..d64733c6aae3 100644
+> 
+> --- a/drivers/gpu/drm/drm_atomic_state_helper.c
+> 
+> +++ b/drivers/gpu/drm/drm_atomic_state_helper.c
+> 
+> @@ -556,6 +556,42 @@ void drm_atomic_helper_connector_tv_reset(struct drm_connector *connector)
+> 
+>  }
+> 
+>  EXPORT_SYMBOL(drm_atomic_helper_connector_tv_reset);
+> 
+>  
+> 
+> +/**
+> 
+> + * @drm_atomic_helper_connector_tv_check: Validate an analog TV connector state
+> 
+> + * @connector: DRM Connector
+> 
+> + * @state: the DRM State object
+> 
+> + *
+> 
+> + * Checks the state object to see if the requested state is valid for an
+> 
+> + * analog TV connector.
+> 
+> + *
+> 
+> + * Returns:
+> 
+> + * Zero for success, a negative error code on error.
+> 
+> + */
+> 
+> +int drm_atomic_helper_connector_tv_check(struct drm_connector *connector,
+> 
+> +					 struct drm_atomic_state *state)
+> 
+> +{
+> 
+> +	struct drm_connector_state *old_conn_state =
+> 
+> +		drm_atomic_get_old_connector_state(state, connector);
+> 
+> +	struct drm_connector_state *new_conn_state =
+> 
+> +		drm_atomic_get_new_connector_state(state, connector);
+> 
+> +	struct drm_crtc_state *crtc_state;
+> 
+> +	struct drm_crtc *crtc;
+> 
+> +
+> 
+> +	crtc = new_conn_state->crtc;
+> 
+> +	if (!crtc)
+> 
+> +		return 0;
+> 
+> +
+> 
+> +	crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
+> 
+> +	if (!crtc_state)
+> 
+> +		return -EINVAL;
+> 
+> +
+> 
+> +	if (old_conn_state->tv.mode != new_conn_state->tv.mode)
+> 
+> +		crtc_state->mode_changed = true;
+> 
 
-One potential usecase could be logging if the logger is opening and closing log
-files during logging updates. Uladzislau reported this on Android, that a system
-logger was doing file open/close and triggering RCU that way (file table,
-dentry, inode code all queue RCU callbacks).
+If you can expand this check then I can use it in gud:
 
-Thanks,
+	if (old_conn_state->tv.margins.left != new_conn_state->tv.margins.left ||
+	    old_conn_state->tv.margins.right != new_conn_state->tv.margins.right ||
+	    old_conn_state->tv.margins.top != new_conn_state->tv.margins.top ||
+	    old_conn_state->tv.margins.bottom !=
+new_conn_state->tv.margins.bottom ||
+	    old_conn_state->tv.mode != new_conn_state->tv.mode ||
+	    old_conn_state->tv.brightness != new_conn_state->tv.brightness ||
+	    old_conn_state->tv.contrast != new_conn_state->tv.contrast ||
+	    old_conn_state->tv.flicker_reduction !=
+new_conn_state->tv.flicker_reduction ||
+	    old_conn_state->tv.overscan != new_conn_state->tv.overscan ||
+	    old_conn_state->tv.saturation != new_conn_state->tv.saturation ||
+	    old_conn_state->tv.hue != new_conn_state->tv.hue)
+		crtc_state->connectors_changed = true;
 
- - Joel
+With that considered:
 
+Reviewed-by: Noralf Trønnes <noralf@tronnes.org>
+
+> +
+> 
+> +	return 0;
+> 
+> +}
+> 
+> +EXPORT_SYMBOL(drm_atomic_helper_connector_tv_check);
+> 
+> +
+> 
+>  /**
+> 
+>   * __drm_atomic_helper_connector_duplicate_state - copy atomic connector state
+> 
+>   * @connector: connector object
+> 
+> diff --git a/include/drm/drm_atomic_state_helper.h b/include/drm/drm_atomic_state_helper.h
+> 
+> index c8fbce795ee7..b9740edb2658 100644
+> 
+> --- a/include/drm/drm_atomic_state_helper.h
+> 
+> +++ b/include/drm/drm_atomic_state_helper.h
+> 
+> @@ -26,6 +26,7 @@
+> 
+>  
+> 
+>  #include <linux/types.h>
+> 
+>  
+> 
+> +struct drm_atomic_state;
+> 
+>  struct drm_bridge;
+> 
+>  struct drm_bridge_state;
+> 
+>  struct drm_crtc;
+> 
+> @@ -71,6 +72,8 @@ void __drm_atomic_helper_connector_reset(struct drm_connector *connector,
+> 
+>  					 struct drm_connector_state *conn_state);
+> 
+>  void drm_atomic_helper_connector_reset(struct drm_connector *connector);
+> 
+>  void drm_atomic_helper_connector_tv_reset(struct drm_connector *connector);
+> 
+> +int drm_atomic_helper_connector_tv_check(struct drm_connector *connector,
+> 
+> +					 struct drm_atomic_state *state);
+> 
+>  void drm_atomic_helper_connector_tv_margins_reset(struct drm_connector *connector);
+> 
+>  void
+> 
+>  __drm_atomic_helper_connector_duplicate_state(struct drm_connector *connector,
+> 
+> 
+> 

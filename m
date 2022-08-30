@@ -2,133 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 216DB5A5C07
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:45:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D119C5A5C0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbiH3GpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:45:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55716 "EHLO
+        id S230214AbiH3Gp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiH3GpD (ORCPT
+        with ESMTP id S229616AbiH3Gpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:45:03 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E7113E39;
-        Mon, 29 Aug 2022 23:44:59 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id EEE1E1F991;
-        Tue, 30 Aug 2022 06:44:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661841897; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aqwnetj8xbUKp5QppMH6N1q9Y/Y7o7+y1Plx+97UHPo=;
-        b=HdWK9N8YSyfzISyC1zORz7jOWzLnPpeT8qKNYhP08SyMyCS/7i/QILKBq6O1dwotIJOHl2
-        mI34yRsJHN4QT79t3hxHFsnK35Vtajheuv5CeJ/t4XhboAuFlz4WBBiaSUfpDyJvRuZPhN
-        /mlH4FOLyd5WRp/ArheHZ/Gk6E1XNmE=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CDB7813ACF;
-        Tue, 30 Aug 2022 06:44:57 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ofHiL+mxDWObJAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 30 Aug 2022 06:44:57 +0000
-Date:   Tue, 30 Aug 2022 08:44:57 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kairui Song <kasong@tencent.com>
-Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] mm: memcontrol: remove mem_cgroup_kmem_disabled
-Message-ID: <Yw2x6T3xchjpzX7j@dhcp22.suse.cz>
-References: <20220830055949.12640-1-ryncsn@gmail.com>
- <20220830055949.12640-2-ryncsn@gmail.com>
+        Tue, 30 Aug 2022 02:45:53 -0400
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903182317A;
+        Mon, 29 Aug 2022 23:45:52 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id nc14so15224654ejc.4;
+        Mon, 29 Aug 2022 23:45:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=+OZpuLhh8hWqKNGZJp0lYNoL06o9pq04W9l8IHLxggE=;
+        b=oXJlMPncQ/22vcAnUKM5NJ5tI6XMe9kNhjO+nol+lMWo7aqCGbpfk+FUKIOH8i3uE/
+         AFe1pXioG9JTC4PS/dXeGbt98GqbxLtMhUozVhPj8QPZRmIOm8Kli4vWrgyAKtBaWeof
+         YxcirFnkhlE3+bsj5WUStAsD6lE0LN/ovsNMA7lIBaJQTaFQznnia4xREwbD0q6FeqbB
+         LQg0Sib2pfJ0TR2qmznXYOdGcYxJi4wBD0/Xldt5Ashvk7F/pNqBNMF/jFmhuqFE6PLX
+         DxYS/5C07rwY8Hkbmt9PQIvGuiI6hn4sO8qE9NMXT+tJMyj5sbLKC8ZbWtLFN+bEo8xx
+         NQuA==
+X-Gm-Message-State: ACgBeo0hk+SyDaD0hmK+RKOoT2ZKaIjYYthvJl4ltmo6uL1QlZcrr97t
+        64Ld5/vUEggInTGMVjXCzRA=
+X-Google-Smtp-Source: AA6agR4SUNMHSWC+ymRyrGrtm3M4dmsRjIgzoUCEDP33nu3mirxlGYIKov3OouXFV+iXXkIeUN0SIQ==
+X-Received: by 2002:a17:907:7214:b0:731:465d:a77c with SMTP id dr20-20020a170907721400b00731465da77cmr15448829ejc.308.1661841951157;
+        Mon, 29 Aug 2022 23:45:51 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id r1-20020a1709061ba100b0073dc897e040sm5381456ejg.51.2022.08.29.23.45.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 23:45:50 -0700 (PDT)
+Message-ID: <b8b99c89-0feb-5abd-59dd-851e8f0f19d2@kernel.org>
+Date:   Tue, 30 Aug 2022 08:45:49 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830055949.12640-2-ryncsn@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 1/3] serial: sh-sci: CIRC_CNT_TO_END() is enough
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220823141839.165244-1-ilpo.jarvinen@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220823141839.165244-1-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 30-08-22 13:59:48, Kairui Song wrote:
-> From: Kairui Song <kasong@tencent.com>
-> 
-> There are currently two helpers for checking if cgroup kmem
-> accounting is enabled:
-> 
-> - mem_cgroup_kmem_disabled
-> - memcg_kmem_enabled
+On 23. 08. 22, 16:18, Ilpo Järvinen wrote:
+> Testing also CIRC_CNT() with CIRC_CNT_TO_END() is unnecessary because
+> to latter alone covers all necessary cases.
 
-Yes, this is a bit confusing indeed!
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
-> mem_cgroup_kmem_disabled is a simple helper that returns true if
-> cgroup.memory=nokmem is specified, otherwise returns false.
-> 
-> memcg_kmem_enabled is a bit different, it returns true if
-> cgroup.memory=nokmem is not specified and there is at least one
-> non-root cgroup ever created. And once there is any non-root memcg
-> created, it won't go back to return false again.
-> 
-> This may help improve performance for some corner use cases where
-> the user enables memory cgroup and kmem accounting globally but never
-> create any cgroup.
-> 
-> Considering that corner case is rare, especially nowadays cgroup is
-> widely used as a standard way to organize services.
-
-Is it really that rare? Most configurations would use a default setup, so
-both MEMCG enabled and without nokmem on cmd line yet the memory
-controller is not enabled in their setups.
-
-> And the "once
-> enabled never disable" behavior is kind of strange. This commit simplifies
-> the behavior of memcg_kmem_enabled, making it simply the opposite of
-> mem_cgroup_kmem_disabled, always true if cgroup.memory=nokmem is
-> not specified. So mem_cgroup_kmem_disabled can be dropped.
-> 
-> This simplifies the code, and besides, memcg_kmem_enabled makes use
-> of static key so it has a lower overhead.
-
-I agree that this is slightly confusing and undocumented. The first step
-would be finding out why we need both outside of the memcg proper.
-
-E.g. it doesn't make much sense to me that count_objcg_event uses the
-command line variant when it should be using the dynamic (and more
-optimized no branch) variant.
-
-On the other hand pcpu_alloc_chunk seems to be different because it can
-be called before the controller is enabled but maybe we do not need to
-waste memory before that? Similarly new_kmalloc_cache. I suspect these
-are mostly to simplify the code and reduce special casing.
-> 
-> Signed-off-by: Kairui Song <kasong@tencent.com>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
->  include/linux/memcontrol.h |  8 +-------
->  mm/memcontrol.c            | 17 +++++++----------
->  mm/percpu.c                |  2 +-
->  mm/slab_common.c           |  2 +-
->  4 files changed, 10 insertions(+), 19 deletions(-)
-
-I do not think that saving 9 LOC and sacrifice optimization that might
-be useful is a good justification.
+>   drivers/tty/serial/sh-sci.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+> index 0075a1420005..6d2f5a08ff1f 100644
+> --- a/drivers/tty/serial/sh-sci.c
+> +++ b/drivers/tty/serial/sh-sci.c
+> @@ -1408,9 +1408,7 @@ static void sci_dma_tx_work_fn(struct work_struct *work)
+>   	head = xmit->head;
+>   	tail = xmit->tail;
+>   	buf = s->tx_dma_addr + (tail & (UART_XMIT_SIZE - 1));
+> -	s->tx_dma_len = min_t(unsigned int,
+> -		CIRC_CNT(head, tail, UART_XMIT_SIZE),
+> -		CIRC_CNT_TO_END(head, tail, UART_XMIT_SIZE));
+> +	s->tx_dma_len = CIRC_CNT_TO_END(head, tail, UART_XMIT_SIZE);
+>   	if (!s->tx_dma_len) {
+>   		/* Transmit buffer has been flushed */
+>   		spin_unlock_irq(&port->lock);
 
 -- 
-Michal Hocko
-SUSE Labs
+js
+suse labs
+

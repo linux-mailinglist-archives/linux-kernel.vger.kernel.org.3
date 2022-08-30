@@ -2,205 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C115A6D61
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0EC5A6D66
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:30:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbiH3T3W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:29:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S229776AbiH3TaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiH3T3U (ORCPT
+        with ESMTP id S229808AbiH3TaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:29:20 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012C3F35
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:29:18 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id x19so10455647pfr.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=p+lkmBdpbq3WAh4jvVmTQBMTdKT2FnQcs7Xr9pvsI60=;
-        b=akEYCxtSt9b3ZOoxTQ0B8rO6Fav+0KneyxKSMB7zNQyp66UA2h98ykKva6Mw6MWCOW
-         /uloT2Kf97r6jH8vDwgCfzynh2aixFbidQ1mDwWsqcoh9xIrUNP7m3aevD6ajK1r0FfF
-         H+v2rVN7V2JUnnSrZCByME6MrbdM4yZohTY1oEb02IqBKJ9IIbi3ZOVAHEB052+4jl1B
-         PS1/SR2w4MibcmQQirJ5lXNzh7uEer5m3yK7sFuE22uSyFOL1yRo2/OObnZf9OmKgY+j
-         Knq91Erbf8qIqYDZIeS0c119J6nQMdAB9ckhc8ngFWuKbOk6s3pWixAFZCVqD6YY5Q9H
-         Au9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=p+lkmBdpbq3WAh4jvVmTQBMTdKT2FnQcs7Xr9pvsI60=;
-        b=j1nSTGiJrh4As/QhBX/voQ9wjMmei2Q9ewvVZe5+dAw2YlGzVrzQ/l4kt/CoJx+glv
-         V2Dnm2H0VIEVLkgWWqX0QTe3BglyaJYJ2rydiJNXB0Da6Xj7QHZ1k5Kfzg3RJl9aNqpr
-         mQd1RnXRgFTYyyNPPlFmkz0rVjy7RLO9Gh5PQwm2F2t/ydenPpujzw5muCANwnVG4sIx
-         UiRhBpqcJC8Ou6MEpX09EAf+FahbNf4q8atf8BaB2Vniyarhfv64Kx05SV32asdxkRcv
-         IKL5hCoTmi5DRIXDV+Ti2SW5XqdiRDW3E7HpfznVTwmOGDeERJ6OUB7vBrDGgyIw0Kn+
-         WhuA==
-X-Gm-Message-State: ACgBeo0rbxNtZhJhrpVT3orgnHOR0QKmAepOEImGg1EegrRQc4Xosj33
-        hQqO5Hz3LkYv6vDHtCChvTRnvQ==
-X-Google-Smtp-Source: AA6agR7OoMeNnpkcsyUOySp9SJadQ8cuMnR9d1pAaLm8fRo7GWGTLR05tAwuzIc9NOUvGLV6NJ9rsw==
-X-Received: by 2002:a05:6a00:4147:b0:52d:fe84:2614 with SMTP id bv7-20020a056a00414700b0052dfe842614mr23250897pfb.10.1661887757374;
-        Tue, 30 Aug 2022 12:29:17 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id im23-20020a170902bb1700b00172bd84c8b4sm10053121plb.98.2022.08.30.12.29.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 12:29:16 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 19:29:13 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Wonhyuk Yang <vvghjk1234@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Baik Song An <bsahn@etri.re.kr>,
-        Hong Yeon Kim <kimhy@etri.re.kr>,
-        Taeung Song <taeung@reallinux.co.kr>, linuxgeek@linuxgeek.io,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: Add extra information in kvm_page_fault trace point
-Message-ID: <Yw5lCY5/SOmFGQrK@google.com>
-References: <20220510071001.87169-1-vvghjk1234@gmail.com>
+        Tue, 30 Aug 2022 15:30:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EBB1FCC0;
+        Tue, 30 Aug 2022 12:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16D4961772;
+        Tue, 30 Aug 2022 19:30:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E6D9C433D6;
+        Tue, 30 Aug 2022 19:30:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661887817;
+        bh=nBVnvrKt98aOcRMDXo5kWCSaoHa1L3WfB0MImmB7bsA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=LAGBjRI0iICkSCcey3Hj90hGM0SqheIVF3UoW82NBZzIz/pwdUg/h+ZPa9irfUgQB
+         1s2LRyXlDCP9C4zI3ji74eomVC+5lmIjm9aAB+/Hcttw0Y+R4eiEnQX2gIwcyylcGZ
+         m0HT0zoISUjbBp0qlYJXXVP8gT75R6Rg9V6R2tmBTQbZLwC5VMRi2/IuSdDU2wnnoQ
+         s8vbTr0QPN2e82jnZJX+Heu5jjIstCTuxNZNjDoGaO1O9jXsqCQ5asBV74B1QbtBAd
+         mUKvBBbd6N/l/Ri+dhT47y56cLzRqElhTacOHddkmxB7PKH22K4iwFitXwtuU0g0vP
+         s/YieDF4URcow==
+Message-ID: <b3c0e3ae74a6f30547bd5c49c32c17f1e7a13b0c.camel@kernel.org>
+Subject: Re: [PATCH v3 1/7] iversion: update comments with info about atime
+ updates
+From:   Jeff Layton <jlayton@kernel.org>
+To:     "J. Bruce Fields" <bfields@fieldses.org>
+Cc:     Trond Myklebust <trondmy@hammerspace.com>,
+        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
+        "djwong@kernel.org" <djwong@kernel.org>,
+        "xiubli@redhat.com" <xiubli@redhat.com>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "neilb@suse.de" <neilb@suse.de>,
+        "david@fromorbit.com" <david@fromorbit.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
+        "linux-ceph@vger.kernel.org" <linux-ceph@vger.kernel.org>,
+        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
+        "tytso@mit.edu" <tytso@mit.edu>,
+        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
+        "jack@suse.cz" <jack@suse.cz>,
+        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
+        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "lczerner@redhat.com" <lczerner@redhat.com>,
+        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
+        "walters@verbum.org" <walters@verbum.org>
+Date:   Tue, 30 Aug 2022 15:30:13 -0400
+In-Reply-To: <20220830183244.GG26330@fieldses.org>
+References: <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
+         <166181389550.27490.8200873228292034867@noble.neil.brown.name>
+         <f5c42c0d87dfa45188c2109ccf9baeb7a42aa27e.camel@kernel.org>
+         <20220830132443.GA26330@fieldses.org>
+         <a07686e7e1d1ef15720194be2abe5681f6a6c78e.camel@kernel.org>
+         <20220830144430.GD26330@fieldses.org>
+         <e4815337177c74a9928098940dfdcb371017a40c.camel@hammerspace.com>
+         <20220830151715.GE26330@fieldses.org>
+         <3e8c7af5d39870c5b0dc61736a79bd134be5a9b3.camel@hammerspace.com>
+         <4adb2abd1890b147dbc61a06413f35d2f147c43a.camel@kernel.org>
+         <20220830183244.GG26330@fieldses.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220510071001.87169-1-vvghjk1234@gmail.com>
-X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 10, 2022, Wonhyuk Yang wrote:
-> Currently, kvm_page_fault trace point provide fault_address and error
-> code. However it is not enough to find which cpu and instruction
-> cause kvm_page_faults. So add vcpu id and instruction pointer in
-> kvm_page_fault trace point.
-> 
-> Cc: Baik Song An <bsahn@etri.re.kr>
-> Cc: Hong Yeon Kim <kimhy@etri.re.kr>
-> Cc: Taeung Song <taeung@reallinux.co.kr>
-> Cc: linuxgeek@linuxgeek.io
-> Signed-off-by: Wonhyuk Yang <vvghjk1234@gmail.com>
-> ---
+On Tue, 2022-08-30 at 14:32 -0400, J. Bruce Fields wrote:
+> On Tue, Aug 30, 2022 at 01:02:50PM -0400, Jeff Layton wrote:
+> > The fact that NFS kept this more loosely-defined is what allowed us to
+> > elide some of the i_version bumps and regain a fair bit of performance
+> > for local filesystems [1]. If the change attribute had been more
+> > strictly defined like you mention, then that particular optimization
+> > would not have been possible.
+> >=20
+> > This sort of thing is why I'm a fan of not defining this any more
+> > strictly than we require. Later on, maybe we'll come up with a way for
+> > filesystems to advertise that they can offer stronger guarantees.
+>=20
+> Yeah, the afs change-attribute-as-counter thing seems ambitious--I
+> wouldn't even know how to define what exactly you're counting.
+>=20
+> My one question is whether it'd be worth just defining the thing as
+> *increasing*.  That's a lower bar.
+>=20
 
-Patch is good, some tangentially related FYI comments below.
+That's a very good question.
 
-> diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
-> index e3a24b8f04be..78d20d392904 100644
-> --- a/arch/x86/kvm/trace.h
-> +++ b/arch/x86/kvm/trace.h
-> @@ -383,20 +383,26 @@ TRACE_EVENT(kvm_inj_exception,
->   * Tracepoint for page fault.
->   */
->  TRACE_EVENT(kvm_page_fault,
-> -	TP_PROTO(unsigned long fault_address, unsigned int error_code),
-> -	TP_ARGS(fault_address, error_code),
-> +	TP_PROTO(struct kvm_vcpu *vcpu, unsigned long fault_address,
-> +		 unsigned int error_code),
-> +	TP_ARGS(vcpu, fault_address, error_code),
->  
->  	TP_STRUCT__entry(
-> +		__field(	unsigned int,	vcpu_id		)
-> +		__field(	unsigned long,	guest_rip	)
->  		__field(	unsigned long,	fault_address	)
->  		__field(	unsigned int,	error_code	)
+One could argue that NFSv4 sort of requires that for write delegations
+anyway. All of the existing implementations that I know of do this, so
+that wouldn't rule any of them out.
 
-This tracepoint is comically bad.  The address should be a u64 since GPAs can be
-64 bits even on 32-bit hosts.  Ditto for error_code since #NPF has 64-bit error
-codes.
+I'm not opposed to adding that constraint. Let me think on it a bit
+more.
 
->  	),
->  
->  	TP_fast_assign(
-> +		__entry->vcpu_id	= vcpu->vcpu_id;
-> +		__entry->guest_rip	= kvm_rip_read(vcpu);
->  		__entry->fault_address	= fault_address;
->  		__entry->error_code	= error_code;
->  	),
->  
-> -	TP_printk("address %lx error_code %x",
-> +	TP_printk("vcpu %u rip 0x%lx address 0x%lx error_code %x",
+> (Though admittedly we don't quite manage it now--see again 1631087ba872
+> "Revert "nfsd4: support change_attr_type attribute"".)
+>=20
 
-And here the error code needs a "0x" prefix, especially since the majority of error
-codes end up being valid decimal values, e.g. 182, 184, 181.
+Factoring the ctime into the change attr seems wrong, since a clock jump
+could make it go backward. Do you remember what drove that change (see
+630458e730b8) ?
 
-I also think it makes sense to force "address" to pad to 16, but not the others.
-Padding error_code is wasteful most of the time, and I actually like that user vs.
-kernel addresses and up with different formatting as it makes it trivial to see
-where the fault originated (when running "real" guests).
-
-       CPU 5/KVM-4145    [002] .....    86.581928: kvm_page_fault: vcpu 5 rip 0x7f08a4602116 address 0x0000000113600002 error_code 0x181
-       CPU 7/KVM-4150    [001] .....    86.581936: kvm_page_fault: vcpu 7 rip 0xffffffff81511f37 address 0x0000000113674000 error_code 0x182
-       CPU 5/KVM-4145    [002] .....    86.582585: kvm_page_fault: vcpu 5 rip 0xffffffff81040f72 address 0x00000000fee000b0 error_code 0x182
-       CPU 1/KVM-4136    [006] .....    86.588913: kvm_page_fault: vcpu 1 rip 0xffffffff81511ba7 address 0x0000000111400000 error_code 0x182
-       CPU 6/KVM-4146    [001] .....    86.594913: kvm_page_fault: vcpu 6 rip 0xffffffff81040f72 address 0x00000000fee000b0 error_code 0x182
-       CPU 5/KVM-4145    [002] .....    86.595872: kvm_page_fault: vcpu 5 rip 0x7f08a4602116 address 0x0000000113810002 error_code 0x181
-       CPU 5/KVM-4145    [002] .....    86.603341: kvm_page_fault: vcpu 5 rip 0x7f08a4602116 address 0x0000000113a00002 error_code 0x181
-
-All in all, what about me adding this on top?
-
----
-From: Sean Christopherson <seanjc@google.com>
-Date: Tue, 30 Aug 2022 12:26:24 -0700
-Subject: [PATCH] KVM: x86: Use u64 for address and error code in page fault
- tracepoint
-
-Track the address and error code as 64-bit values in the page fault
-tracepoint.  When TDP is enabled, the address is a GPA and thus can be a
-64-bit value even on 32-bit hosts.  And SVM's #NPF genereates 64-bit
-error codes.
-
-Opportunistically clean up the formatting.
-
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/trace.h | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
-index 331bdb0ae4b1..c369ebc7269c 100644
---- a/arch/x86/kvm/trace.h
-+++ b/arch/x86/kvm/trace.h
-@@ -394,15 +394,14 @@ TRACE_EVENT(kvm_inj_exception,
-  * Tracepoint for page fault.
-  */
- TRACE_EVENT(kvm_page_fault,
--	TP_PROTO(struct kvm_vcpu *vcpu, unsigned long fault_address,
--		 unsigned int error_code),
-+	TP_PROTO(struct kvm_vcpu *vcpu, u64 fault_address, u64 error_code),
- 	TP_ARGS(vcpu, fault_address, error_code),
-
- 	TP_STRUCT__entry(
- 		__field(	unsigned int,	vcpu_id		)
- 		__field(	unsigned long,	guest_rip	)
--		__field(	unsigned long,	fault_address	)
--		__field(	unsigned int,	error_code	)
-+		__field(	u64,		fault_address	)
-+		__field(	u64,		error_code	)
- 	),
-
- 	TP_fast_assign(
-@@ -412,7 +411,7 @@ TRACE_EVENT(kvm_page_fault,
- 		__entry->error_code	= error_code;
- 	),
-
--	TP_printk("vcpu %u rip 0x%lx address 0x%lx error_code %x",
-+	TP_printk("vcpu %u rip 0x%lx address 0x%016llx error_code 0x%llx",
- 		  __entry->vcpu_id, __entry->guest_rip,
- 		  __entry->fault_address, __entry->error_code)
- );
-
-base-commit: ca362851673d7c01c6624fff0f5a4ee192e6e56a
---
-
+It seems like if the i_version=A0were to go backward, then the ctime
+probably would too, and you'd still see a duplicate change attr.
+--=20
+Jeff Layton <jlayton@kernel.org>

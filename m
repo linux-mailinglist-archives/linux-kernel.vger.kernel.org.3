@@ -2,88 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFF825A5C6A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 684CF5A5C73
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiH3HFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:05:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S230427AbiH3HGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:06:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiH3HFN (ORCPT
+        with ESMTP id S230378AbiH3HF6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:05:13 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401AD4A838
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:05:08 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id bt10so14270137lfb.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:05:08 -0700 (PDT)
+        Tue, 30 Aug 2022 03:05:58 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A635760E4;
+        Tue, 30 Aug 2022 00:05:57 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id j9-20020a17090a3e0900b001fd9568b117so7298198pjc.3;
+        Tue, 30 Aug 2022 00:05:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=JVbQO8NaIJX9r2XXsX5JS1XPjDhaNVf/tZE3BTjyue8=;
-        b=aUvfBo7ge5wrT9PVdRa7n4WKc+KjoguCB0VGM5ArOYeVSOAtCGAZEIhVT1HktOBuXs
-         xVuo8JAqwWgOvbrNiXwuPoqNnTLm8bwbpdzBVdW1XBIGIvvAobm/5fUU1DaMZxhXYMt5
-         q9PRCAd0ycNSdCJ0SF3wM/sC/4Jv2wRlE5fJwmrsyHasgMrFm8hXCsm1aD90A+iBSqdp
-         JGIlgxplMRXcg90us2nijNq9XvpwRKJHtXnnWe7UD0HWPdTTVSw6af7IiSvj3TkZZcSl
-         I+qsTHUM5mofnppLxCg0Ch2lFK2+Sdu+1LslDLVXb/wyNEtQEALA7Ff4s3cbJgr4Eyrt
-         eXOw==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=UYQLKisXo/BAxNrAA7zsBCJdL0psoCAOEA7a+b76dao=;
+        b=c1ax37GJTbb8ap0dMglhKXjm2j8LhQAeTuYyh7wsb0Nj1UFwv7ktd6XmU6SBBN9sL5
+         LklTffP+wP7AmnqEgo5TgfxQW4Be8a9AODFxVGX2wSjC2kpnk95O1tmaZWWtMHsLMWUH
+         aEzYC3aJanKwnGtNUpLLAMDAEFShdQMGjUocb+AykBl8jA+LuM4jWTOvN0zV7uNrSGz/
+         O0/BGTXX6sshb/y2HS015kXFXW1cn8Yz93mzRkGeOtWw7tztyFJQN1biTNwkElbWCXsY
+         m/C6fDjiQ3SK+KpKu5aRBJ2TC7vHJ9gxsFx94DuOh0AramrIqjLXBoXE0YkWd3l8oLP0
+         FvEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=JVbQO8NaIJX9r2XXsX5JS1XPjDhaNVf/tZE3BTjyue8=;
-        b=3BbBSQfmfCTfJnqScFiSv6FBQ0oW6O8LKNxYYP+BTW0VKismDN9TpzNWFs5be2/mcQ
-         bdU0gaLxAdvLiObbBXlCv9HpZM1yBpf4IoGBvTVOxFmqaOjTw7313Xas8LFmxcnq6zGh
-         pmYoG4CifupleMmUlKCJZDN9RKgqEyiTvt1Xw7YZW0wlm9+AgihA1YwqaM5OwWViw0O4
-         f/LsYFC61VDJPwynFtaPIw+t0mLLj0cprD/nJdPzbIdbQYuy1PyXY3ejeA8KxDjGBptq
-         MGF5JVqrYSRlHOLUy1Phm2i5+1Y56gja+k/kvl3PtEwb/XcP287+JBW37G6ZKjmLpDH6
-         g/LQ==
-X-Gm-Message-State: ACgBeo0G/hmekQBopAh+nJoWqUhLpnF1PbQSIDEfG9/ZOYQ+D7BycWRW
-        tWnGt1Kj2o3V4CeuaQunQpM=
-X-Google-Smtp-Source: AA6agR5cFuxjTSbp2ILQnRmRzNd5Pjxhu1SWu2c7J9+e7QO7+oxCtHIczngbO2Ls5GyWNgJnT/iQrA==
-X-Received: by 2002:ac2:58d5:0:b0:48b:3a88:641 with SMTP id u21-20020ac258d5000000b0048b3a880641mr6784864lfo.421.1661843106574;
-        Tue, 30 Aug 2022 00:05:06 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id m20-20020a056512359400b00492d1eb41dfsm1506038lfr.240.2022.08.30.00.05.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 00:05:05 -0700 (PDT)
-Message-ID: <b5116f19-4b00-1717-a7ff-eac988bde4a4@gmail.com>
-Date:   Tue, 30 Aug 2022 10:04:58 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=UYQLKisXo/BAxNrAA7zsBCJdL0psoCAOEA7a+b76dao=;
+        b=o9J3g2c5qwDY2x0uODHlwxaNVcoNod87/b2T5QxLX/SEbiXEAi8PNLuL39AMbWCbcm
+         UKaEta+pDO4xLm9nuiVEoVbIYEMhwWnrD08T+qYmOLK3l1LM/tY58OtbRwzi+eTSmvHD
+         51PcWRSSedN9qgq4/wjdiFYDd8tlSn3h6CoSt9x+YxS9Suku0yK/Y3ldkswNBwQ+4ejF
+         kIxM5+QDeC4pDzbhYAiPnPsNSdkyS/QybHvqX8Ri113eUcMME2wBv0mNldMOB8Nner35
+         sUBmWHJ/ZfEy9G5T7ahNQq9JFlpAw9bXtIUc+9Nh7XHkn9XD0ds5PP7Rr8cwxppFWK81
+         WO2Q==
+X-Gm-Message-State: ACgBeo2S6qDfuuE564QKhzaKuv0vGXRuCugapJmQT0UfmeoEuRZUTG7B
+        Wje/fZ6Hff0qIISp1SZ5uOoGB1OAltFTlQyCUk0=
+X-Google-Smtp-Source: AA6agR6BNX2F9Y9ZIIDa+QrhIR5b6dHU1HcqWxalSzQWPAX0UT1Ya2RppBBoss/cwv/5Aq4IVZ82hDLQrVPH8bwsqrw=
+X-Received: by 2002:a17:903:40cf:b0:174:be28:6d3c with SMTP id
+ t15-20020a17090340cf00b00174be286d3cmr8688553pld.126.1661843156836; Tue, 30
+ Aug 2022 00:05:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 03/14] gpu: drm: simplify drivers using
- devm_regulator_*get_enable*()
-Content-Language: en-US
-To:     Robert Foss <robert.foss@linaro.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-References: <cover.1660934107.git.mazziesaccount@gmail.com>
- <3aacca7d9a0240d95dc3cf103d114b5c85392e71.1660934107.git.mazziesaccount@gmail.com>
- <CAG3jFyvQc4ZxEt8yRtiP6VAnurvfBdWzD7640DRXun+F7vDHog@mail.gmail.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <CAG3jFyvQc4ZxEt8yRtiP6VAnurvfBdWzD7640DRXun+F7vDHog@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220826065627.1615965-1-floridsleeves@gmail.com> <3226a822-b8be-b712-737a-f8cc523ebed1@intel.com>
+In-Reply-To: <3226a822-b8be-b712-737a-f8cc523ebed1@intel.com>
+From:   Li Zhong <floridsleeves@gmail.com>
+Date:   Tue, 30 Aug 2022 00:05:45 -0700
+Message-ID: <CAMEuxRr7qmP7e=HzbX=W1s7rC9b8noVJmxsMvBj9LLMgjcHvtA@mail.gmail.com>
+Subject: Re: [Intel-wired-lan] [PATCH net-next v2] drivers/net/ethernet: check
+ return value of e1e_rphy()
+To:     "Neftin, Sasha" <sasha.neftin@intel.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        intel-wired-lan@lists.osuosl.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, davem@davemloft.net,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "Ruinskiy, Dima" <dima.ruinskiy@intel.com>,
+        "Fuxbrumer, Devora" <devora.fuxbrumer@intel.com>,
+        "naamax.meir" <naamax.meir@linux.intel.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,122 +73,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/29/22 17:25, Robert Foss wrote:
+On Mon, Aug 29, 2022 at 11:03 AM Neftin, Sasha <sasha.neftin@intel.com> wrote:
+>
+> On 8/26/2022 09:56, Li Zhong wrote:
+> > e1e_rphy() could return error value, which needs to be checked and
+> > reported for debugging and diagnose.
+> >
+> > Signed-off-by: Li Zhong <floridsleeves@gmail.com>
+> > ---
+> > drivers/net/ethernet/intel/e1000e/phy.c | 20 +++++++++++++++++---
+> > 1 file changed, 17 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/net/ethernet/intel/e1000e/phy.c b/drivers/net/ethernet/intel/e1000e/phy.c
+> > index fd07c3679bb1..060b263348ce 100644
+> > --- a/drivers/net/ethernet/intel/e1000e/phy.c
+> > +++ b/drivers/net/ethernet/intel/e1000e/phy.c
+> > @@ -2697,9 +2697,14 @@ static s32 e1000_access_phy_wakeup_reg_bm(struct e1000_hw *hw, u32 offset,
+> > void e1000_power_up_phy_copper(struct e1000_hw *hw)
+> > {
+> > u16 mii_reg = 0;
+> > + int ret;
+> >
+> > /* The PHY will retain its settings across a power down/up cycle */
+> > - e1e_rphy(hw, MII_BMCR, &mii_reg);
+> > + ret = e1e_rphy(hw, MII_BMCR, &mii_reg);
+> > + if (ret) {
+> > + e_dbg("Error reading PHY register\n");
+> > + return;
+> > + }
+> > mii_reg &= ~BMCR_PDOWN;
+> > e1e_wphy(hw, MII_BMCR, mii_reg);
+> > }
+> > @@ -2715,9 +2720,14 @@ void e1000_power_up_phy_copper(struct e1000_hw *hw)
+> > void e1000_power_down_phy_copper(struct e1000_hw *hw)
+> > {
+> > u16 mii_reg = 0;
+> > + int ret;
+> >
+> > /* The PHY will retain its settings across a power down/up cycle */
+> > - e1e_rphy(hw, MII_BMCR, &mii_reg);
+> > + ret = e1e_rphy(hw, MII_BMCR, &mii_reg);
+> > + if (ret) {
+> > + e_dbg("Error reading PHY register\n");
+> > + return;
+> > + }
+> > mii_reg |= BMCR_PDOWN;
+> > e1e_wphy(hw, MII_BMCR, mii_reg);
+> > usleep_range(1000, 2000);
+> > @@ -3037,7 +3047,11 @@ s32 e1000_link_stall_workaround_hv(struct e1000_hw *hw)
+> > return 0;
+> >
+> > /* Do not apply workaround if in PHY loopback bit 14 set */
+> > - e1e_rphy(hw, MII_BMCR, &data);
+> > + ret_val = e1e_rphy(hw, MII_BMCR, &data);
+> > + if (ret_val) {
+> > + e_dbg("Error reading PHY register\n");
+> > + return ret_val;
+> > + }
+> > if (data & BMCR_LOOPBACK)
+> > return 0;
+> >
+> Generally, I am good with this patch. One question - it is old HW, any
+> idea how to check it? (82577/82578 GbE LOM - from 2008)
+> Li, how did you check it manually?
 
-Thanks for the review Robert.
-
-> Hi Matti,
-> 
-> On Fri, 19 Aug 2022 at 21:18, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
->>
->> Simplify drivers using managed "regulator get and enable".
->>
->> meson:
->> Use the devm_regulator_get_enable_optional(). Also drop the seemingly
->> unused struct member 'hdmi_supply'.
->>
->> sii902x:
->> Simplify using devm_regulator_bulk_get_enable()
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> ---
->> v2 => v3:
->> No changes
->>
->> RFCv1 => v2:
->> - Change also sii902x to use devm_regulator_bulk_get_enable()
->>
->> Please note - this is only compile-tested due to the lack of HW. Careful
->> review and testing is _highly_ appreciated.
->> ---
->>   drivers/gpu/drm/bridge/sii902x.c      | 22 +++-------------------
->>   drivers/gpu/drm/meson/meson_dw_hdmi.c | 23 +++--------------------
->>   2 files changed, 6 insertions(+), 39 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
->> index 7ab38d734ad6..162f9c87eeb2 100644
->> --- a/drivers/gpu/drm/bridge/sii902x.c
->> +++ b/drivers/gpu/drm/bridge/sii902x.c
->> @@ -171,7 +171,6 @@ struct sii902x {
->>          struct drm_connector connector;
->>          struct gpio_desc *reset_gpio;
->>          struct i2c_mux_core *i2cmux;
->> -       struct regulator_bulk_data supplies[2];
->>          bool sink_is_hdmi;
->>          /*
->>           * Mutex protects audio and video functions from interfering
->> @@ -1072,6 +1071,7 @@ static int sii902x_probe(struct i2c_client *client,
->>          struct device *dev = &client->dev;
->>          struct device_node *endpoint;
->>          struct sii902x *sii902x;
->> +       static const char * const supplies[] = {"iovcc", "cvcc12"};
->>          int ret;
->>
->>          ret = i2c_check_functionality(client->adapter,
->> @@ -1122,27 +1122,13 @@ static int sii902x_probe(struct i2c_client *client,
->>
->>          mutex_init(&sii902x->mutex);
->>
->> -       sii902x->supplies[0].supply = "iovcc";
->> -       sii902x->supplies[1].supply = "cvcc12";
->> -       ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(sii902x->supplies),
->> -                                     sii902x->supplies);
->> -       if (ret < 0)
->> -               return ret;
->> -
->> -       ret = regulator_bulk_enable(ARRAY_SIZE(sii902x->supplies),
->> -                                   sii902x->supplies);
->> +       ret = devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(supplies), supplies);
->>          if (ret < 0) {
->>                  dev_err_probe(dev, ret, "Failed to enable supplies");
->>                  return ret;
->>          }
->>
->> -       ret = sii902x_init(sii902x);
->> -       if (ret < 0) {
->> -               regulator_bulk_disable(ARRAY_SIZE(sii902x->supplies),
->> -                                      sii902x->supplies);
->> -       }
->> -
->> -       return ret;
->> +       return sii902x_init(sii902x);
->>   }
->>
->>   static int sii902x_remove(struct i2c_client *client)
->> @@ -1152,8 +1138,6 @@ static int sii902x_remove(struct i2c_client *client)
->>
->>          i2c_mux_del_adapters(sii902x->i2cmux);
->>          drm_bridge_remove(&sii902x->bridge);
->> -       regulator_bulk_disable(ARRAY_SIZE(sii902x->supplies),
->> -                              sii902x->supplies);
->>
->>          return 0;
->>   }
-> 
-> Ideally this patch would be split into two parts here, due to
-> maintainership boundaries.
-
-Ok. I will in any case respin this series when the dependency patches 
-from Mark's tree have been merged to the -rc1. I can split this to 
-patch/driver if it is preferred. I just though I'll decrease amount of 
-mails by squashing these almost trivial changes.
-
-> 
-> For the sii902x part, please add my r-b.
-> 
-> Reviewed-by: Robert Foss <robert.foss@linaro.org>
-Thanks.
-
-Best Regards
-  -- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
-Discuss - Estimate - Plan - Report and finally accomplish this:
-void do_work(int time) __attribute__ ((const));
+These bugs are detected by static analysis. Therefore it's not run-time
+checked. However, since currently there is no error handling after
+e1e_rphy(), so I think it's necessary to at least check it and expect
+there is a chance to fail.

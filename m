@@ -2,106 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 287815A5D17
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A305A5D16
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:37:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiH3HhP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:37:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
+        id S231167AbiH3Hh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230504AbiH3HhM (ORCPT
+        with ESMTP id S231175AbiH3HhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:37:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FC71BCC1F
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:37:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661845030;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b3NkIhLQKy7eVJi/82pOIjWmNoom7j0EFy9fhBJw9/E=;
-        b=Roya8zx70vPkBsb1Zvq+qSKlmhfqtZjIa6axvY596iluh8/pw5SHUSk8AywZ/tCyv+RJ4y
-        dky+Ws/maRK071TBpbsM31qVFLaDEIa8c4hOwm+6Mu90uCVPCToZ9KX2/Pg9LFyLebYZAv
-        46Y5t3QP+cxoDLLV6NcfMyNHRMMA438=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-204-cTciaf-dNbaNxSJAY5f-0Q-1; Tue, 30 Aug 2022 03:37:07 -0400
-X-MC-Unique: cTciaf-dNbaNxSJAY5f-0Q-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 403DB1019C88;
-        Tue, 30 Aug 2022 07:37:07 +0000 (UTC)
-Received: from localhost (ovpn-12-78.pek2.redhat.com [10.72.12.78])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8383A492C3B;
-        Tue, 30 Aug 2022 07:37:06 +0000 (UTC)
-Date:   Tue, 30 Aug 2022 15:37:03 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Yun Levi <ppbuk5246@gmail.com>
-Cc:     will@kernel.org, chenzhou10@huawei.com, nramas@linux.microsoft.com,
-        thunder.leizhen@huawei.com, linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kexec@lists.infradead.org
-Subject: Re: [PATCH-RESEND] arm64/kexec: Fix missing extra range for
- crashkres_low.
-Message-ID: <Yw2+H9MNpf3Ve0eJ@MiWiFi-R3L-srv>
-References: <20220803151217.75962-1-ppbuk5246@gmail.com>
- <CAM7-yPTdihLsPjDKM-0OEszxNd8n0bgeRseiEkCsSZW-uuaRvw@mail.gmail.com>
+        Tue, 30 Aug 2022 03:37:23 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C4DC59DB
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:37:22 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e13so12077328wrm.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=Zq/iNvuZhFEDaN8OcO2RvNrASLMMDALVcl47N1W89K8=;
+        b=mM5BtaTFWnCSIbgfMpWPjN6/DwGilpiMK4Qx1PL06CO0hoIUzF7ZY5tzk05mSm7x0z
+         DC/F5QA0AVUFg4q4dut6BcqqbZk1pmnI9wggVHnMhBBeKKakOtkAtGdoeowDaeQACyDv
+         tHP0lwKyqurExWG+0XKGPlrjiBfAiTL5XqSRV2LZp2Y1diY/NFSEon6nNFGXxBwKjawQ
+         2ypNSehU85aQBZ7EU0B0XCc+2PfAHkVrQs934MCU05CkWdvaHym6sXbiHkp5NQvq3Rkq
+         Z+77B9hScl9uaYAnxID6PAPETGK6LWXQlyHpMkY1u/ji63iOKuugZ47wSrtGy7aRoptH
+         nfgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=Zq/iNvuZhFEDaN8OcO2RvNrASLMMDALVcl47N1W89K8=;
+        b=4Pv9MQcmJhpV//0g2idgo4HSwpeT3Sltk4EuVXor3j1HG1tIJHAZEPSAQ6pb5wRJHV
+         qiCDXwnz9EStVyACuy05da2Mmlod8TkDMyiKm6YNQ+lZbbY28zouFumkqsi9WGGj6Biv
+         lW50oSemKiuZPgcrlOLqQo95AhIAL5PqjR0JiqkB/PsQckZ+jfOoYNhu9fF99K2DxVdG
+         +J7luSqoDrAodRC2L2OJNjNM8kVujnHiZi7e71FsZZSaHU/nC2pSayr3w5eGDkt1+37v
+         xsdLGTtbXM484egpvrb+NTClE99AdaGuD5qb4KM7e0gYW1X7aI6+SuxnFk/IrLFLMgFI
+         rHug==
+X-Gm-Message-State: ACgBeo2Td6LM4zJMlukQfYVt5VVHLPiUCPx0Hm8QKEGfFv1tKW7eH30Q
+        KtQcm7DcrQ1vbGo2iSy0tMZz+cKK9yQ=
+X-Google-Smtp-Source: AA6agR7838HEKDFv8SDR/C0DqIiWeOv2e48jy1bxo8YFxdmdRF2Vl1V9xjSqWzmOdDEXu2QYvR6ybg==
+X-Received: by 2002:a05:6000:1f8c:b0:225:3bea:1ac9 with SMTP id bw12-20020a0560001f8c00b002253bea1ac9mr8275179wrb.65.1661845040671;
+        Tue, 30 Aug 2022 00:37:20 -0700 (PDT)
+Received: from [192.168.2.177] ([207.188.167.132])
+        by smtp.gmail.com with ESMTPSA id g13-20020adfe40d000000b002252751629dsm8871598wrm.24.2022.08.30.00.37.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 00:37:19 -0700 (PDT)
+Message-ID: <5a8a2b0d-fa7c-e8c6-bb04-152f8c17aa76@gmail.com>
+Date:   Tue, 30 Aug 2022 09:37:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAM7-yPTdihLsPjDKM-0OEszxNd8n0bgeRseiEkCsSZW-uuaRvw@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] soc: mediatek: mtk-svs: Explicitly include bitfield
+ header
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+References: <20220829204439.3748648-1-nfraprado@collabora.com>
+Content-Language: en-US
+From:   Matthias Brugger <matthias.bgg@gmail.com>
+In-Reply-To: <20220829204439.3748648-1-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/30/22 at 01:28pm, Yun Levi wrote:
-> Like crashk_res, Calling crash_exclude_mem_range function with
-> crashk_low_res area would need extra crash_mem range too.
-> Add one extra crash_mem range when crashk_low_res is used.
+
+
+On 29/08/2022 22:44, Nícolas F. R. A. Prado wrote:
+> Commit a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros
+> where possible") introduced the use of FIELD_GET and FIELD_PREP macros,
+> which are defined in the bitfield header. Add an explicit include for it
+> so we're sure to have the symbols defined independently of the config.
 > 
-> Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
+> Fixes: a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros where possible")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> 
 > ---
->  arch/arm64/kernel/machine_kexec_file.c | 3 +++
->  1 file changed, 3 insertions(+)
 > 
-> diff --git a/arch/arm64/kernel/machine_kexec_file.c
-> b/arch/arm64/kernel/machine_kexec_file.c
-> index 889951291cc0..378aee04e7d4 100644
-> --- a/arch/arm64/kernel/machine_kexec_file.c
-> +++ b/arch/arm64/kernel/machine_kexec_file.c
-> @@ -51,6 +51,9 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
->         for_each_mem_range(i, &start, &end)
->                 nr_ranges++;
+>   drivers/soc/mediatek/mtk-svs.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> +       if (crashk_low_res.end)
-> +               nr_ranges++; /**< for exclusion of
-> crashkernel=size,low region */
-> +
+> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+> index 64dba9f830f3..f67f3e971653 100644
+> --- a/drivers/soc/mediatek/mtk-svs.c
+> +++ b/drivers/soc/mediatek/mtk-svs.c
+> @@ -3,6 +3,7 @@
+>    * Copyright (C) 2022 MediaTek Inc.
+>    */
+>   
+> +#include <linux/bitfield.h>
+>   #include <linux/bits.h>
 
-Right, excluding crashkernel region may cause memory region splitting,
-so we need extra slot for that.
+What do we need the bits.h for?
 
-Meanwhile, can you fix above code comment mess? Otherwise, this looks
-good to me. 
+Regards,
+Matthias
 
-Or we can add extra 2 slots like we do in x86, it just add another 16
-bytes temporarily.
-
-
->         cmem = kmalloc(struct_size(cmem, ranges, nr_ranges), GFP_KERNEL);
->         if (!cmem)
->                 return -ENOMEM;
-> --
-> 2.35.1
-> 
-
+>   #include <linux/clk.h>
+>   #include <linux/completion.h>

@@ -2,223 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A78D5A669F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBA015A66A2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbiH3OuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 10:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53142 "EHLO
+        id S230049AbiH3Ou3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 10:50:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiH3OuL (ORCPT
+        with ESMTP id S229521AbiH3OuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 10:50:11 -0400
-Received: from mail-wr1-x442.google.com (mail-wr1-x442.google.com [IPv6:2a00:1450:4864:20::442])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF3D1B795
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:50:08 -0700 (PDT)
-Received: by mail-wr1-x442.google.com with SMTP id b16so6929895wru.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:50:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=hw1EJiwr4Al7TCfH8SB9V/gTFnExQ67cbO1DoH3A/6Q=;
-        b=i9RDRTllGAeTyupOXinyWn4xi9uMuo8hOBZb1u7BPZJI0mWVvCAnZZngKQec7WUR/u
-         LZI150GiVdviCoWWQiUhcPslBdFM31/iCXrLduHiTrz9ne6r4a6BpmvKcpSkswTFh+eh
-         PrJVi+po5hGMRgLE+vOzHKw8ac8G64mcS45yw=
+        Tue, 30 Aug 2022 10:50:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3BF17AAE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:50:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661871015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HMgyN7KKHWBc6kUGC15Kytgi5k1dgZDjjbRIKs56ZQU=;
+        b=BOSa+Dc4GloHThDZM0g8zR1jOomt84dJfsUuhzT1seLvZK0B3sEp22NmGhhkLBiUHAXv2a
+        bSfUGfhBlXB50x44Y+ubi0qef638AFR3fj+zExzyVotOsQFK3CFso6IVI43wREgkIuQclj
+        +cgLllq1T2iUqrVHfctok0b+pkX9H7U=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-400-UotyWNTsPvKLd1zEZN9o1g-1; Tue, 30 Aug 2022 10:50:13 -0400
+X-MC-Unique: UotyWNTsPvKLd1zEZN9o1g-1
+Received: by mail-ed1-f70.google.com with SMTP id dz16-20020a0564021d5000b004489f04cc2cso2882853edb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:50:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=hw1EJiwr4Al7TCfH8SB9V/gTFnExQ67cbO1DoH3A/6Q=;
-        b=mw39ZIzDqONcOC+BZYaJFZMuN5r4m/uOdop91cfKK/PT2z5SEFC7ARvgDAa8fGH0d1
-         uLc7hBKAtEqoFbnLzCVfPvNvO4NqXLyK4Nj3sZf50xzdOHrB+O1rEWn8CNwN5+0WoJWw
-         JVqMQ0d4O3zpdnouTsImdsrNpbEUvSS9arKiQnY4P16EBvmjHwQ4RezAnSD1/9GUGPgg
-         q4+Zm+6Z6Z8hYuBtUCEA/CJuDY2DZLC9aT5fAjpCY5Z/7FXqP8EjND15ifAwtQpHdgyI
-         Jnq+eVBpAkk5TG/YejTosHx02Fg0qYgZM/XqYxr9AkIR51tUBYkIIvV10s5LyxJ6+Dzc
-         QFiw==
-X-Gm-Message-State: ACgBeo0St2gh2Mmeu9z5QAnebRarkS2cNS0KOoUuF6+JJOsMomn48XX+
-        sHNWbf2hkN6HBVlOnOE4i7ttR1CEPAiweLGP
-X-Google-Smtp-Source: AA6agR5vnx/Qj8N0shwU05wIS8ZamJQt01pDAEzx54hq/2rMu3bvqyQWBWhD/bErmOj0YIPk1QhkDA==
-X-Received: by 2002:a5d:6b09:0:b0:225:37cf:fb8b with SMTP id v9-20020a5d6b09000000b0022537cffb8bmr9247069wrw.179.1661871007971;
-        Tue, 30 Aug 2022 07:50:07 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id l9-20020adfe9c9000000b0022586045c89sm10278212wrn.69.2022.08.30.07.50.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 07:50:07 -0700 (PDT)
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     DRI Development <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
-        Yangxi Xiang <xyangxi5@gmail.com>,
-        nick black <dankamongmen@gmail.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Marco Elver <elver@google.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        David Gow <davidgow@google.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-Subject: [PATCH] kernel/panic: Drop unblank_screen call
-Date:   Tue, 30 Aug 2022 16:50:04 +0200
-Message-Id: <20220830145004.430545-1-daniel.vetter@ffwll.ch>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=HMgyN7KKHWBc6kUGC15Kytgi5k1dgZDjjbRIKs56ZQU=;
+        b=ExYNyojiAOdmuHGoEVgCuQtdtjJ3VBlhkK3KoJFVVopWCcmrILwRHnTfz5/BbXlEaZ
+         64QXzGD+qVXTx+AF4O2CNJ8dic9Lw582I9rj2EIVKyKfu2OzTtkXFMk3j95p/bOO+ul2
+         hOB273lzLNYqToxpFuukpjH6Cln/l63O7SwuAOlw9lEnGIXg2t27MADyFS88mwFVvXuQ
+         G05l7FE2Hj/x6eopYVlP8E2p2m2XpbI3LpLYl7aL6IyuIqeAxGazdxGvs5+45EYTppM9
+         dDDpKwv4TR+Fz52M/PlFnylYAntz1PX5c3Ksm/qr6M0nzs/F9LgyYwR5SJD8R9dJfJZy
+         /rxA==
+X-Gm-Message-State: ACgBeo1jf77QvCSnGOO28bfoFxqfYcD7ZuJTA9p7JG96OHW2UOhTeqxC
+        qa4Iqj78xiJvyeOfJZGD5xdzEj1RLb56GC6Agwk8yr8tJfqmGCGRRFRukclT7WFOaV0gGLJvBkE
+        N+MZsNApqBjwdLpee5f9ZoHao
+X-Received: by 2002:a17:907:75ea:b0:73d:daa0:3cbe with SMTP id jz10-20020a17090775ea00b0073ddaa03cbemr15573480ejc.662.1661871012673;
+        Tue, 30 Aug 2022 07:50:12 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5omIkQ2qHqLmuqgyMe1PNn8uLAHaQevnuGthpAqxbWhHzzxKNQ3+sDD48V+F3pjaJ0FAceAQ==
+X-Received: by 2002:a17:907:75ea:b0:73d:daa0:3cbe with SMTP id jz10-20020a17090775ea00b0073ddaa03cbemr15573463ejc.662.1661871012430;
+        Tue, 30 Aug 2022 07:50:12 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id e26-20020a170906315a00b007417041fb2bsm3576629eje.116.2022.08.30.07.50.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 07:50:11 -0700 (PDT)
+Message-ID: <6ecd5694-cb60-dda2-5092-cf14920c5877@redhat.com>
+Date:   Tue, 30 Aug 2022 16:50:11 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/4] ACPI: s2idle: Add a new ->check() callback for
+ platform_s2idle_ops
+Content-Language: en-US
+To:     "Limonciello, Mario" <mario.limonciello@amd.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        Shyam-sundar S-k <Shyam-sundar.S-k@amd.com>
+References: <20220829162953.5947-1-mario.limonciello@amd.com>
+ <20220829162953.5947-2-mario.limonciello@amd.com>
+ <CAJZ5v0iF1_MUptawLL4DD0RqZpysH2B+Pk5sj_=gLv9AOVdy=Q@mail.gmail.com>
+ <88b5f4aa-d238-efb6-82fd-e227c42cc10c@amd.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <88b5f4aa-d238-efb6-82fd-e227c42cc10c@amd.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-console_unblank() does this too (called in both places right after),
-and with a lot more confidence inspiring approach to locking.
+Hi,
 
-Reconstructing this story is very strange:
+On 8/30/22 13:42, Limonciello, Mario wrote:
+> On 8/30/2022 06:39, Rafael J. Wysocki wrote:
+>> On Mon, Aug 29, 2022 at 6:29 PM Mario Limonciello
+>> <mario.limonciello@amd.com> wrote:
+>>>
+>>> On some platforms it is found that Linux more aggressively enters s2idle
+>>> than Windows enters Modern Standby and this uncovers some synchronization
+>>> issues for the platform.  To aid in debugging this class of problems in
+>>> the future, add support for an extra optional callback intended for
+>>> drivers to emit extra debugging.
+>>>
+>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>
+>> Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>
+>> and I'm assuming that this is for Hans.
+> 
+> Thanks, and yeah I think it makes more sense for this to go through platform-x86.
 
-In b61312d353da ("oops handling: ensure that any oops is flushed to
-the mtdoops console") it is claimed that a printk(" "); flushed out
-the console buffer, which was removed in e3e8a75d2acf ("[PATCH]
-Extract and use wake_up_klogd()"). In todays kernels this is done way
-earlier in console_flush_on_panic with some really nasty tricks. I
-didn't bother to fully reconstruct this all, least because the call to
-bust_spinlock(0); gets moved every few years, depending upon how the
-wind blows (or well, who screamed loudest about the various issue each
-call site caused).
+Ok, I will review 2-4 and merge the entire series
+through platform-x86.
 
-Before that commit the only calls to console_unblank() where in s390
-arch code.
+Regards,
 
-The other side here is the console->unblank callback, which was
-introduced in 2.1.31 for the vt driver. Which predates the
-console_unblank() function by a lot, which was added (without users)
-in 2.4.14.3. So pretty much impossible to guess at any motivation
-here. Also afaict the vt driver is the only (and always was the only)
-console driver implementing the unblank callback, so no idea why a
-call to console_unblank() was added for the mtdooops driver - the
-action actually flushing out the console buffers is done from
-console_unlock() only.
+Hans
 
-Note that as prep for the s390 users the locking was adjusted in
-2.5.22 (I couldn't figure out how to properly reference the BK commit
-from the historical git trees) from a normal semaphore to a trylock.
 
-Note that a copy of the direct unblank_screen() call was added to
-panic() in c7c3f05e341a ("panic: avoid deadlocks in re-entrant console
-drivers"), which partially inlined the bust_spinlocks(0); call.
-
-Long story short, I have no idea why the direct call to unblank_screen
-survived for so long (the infrastructure to do it properly existed for
-years), nor why it wasn't removed when the console_unblank() call was
-finally added. But it makes a ton more sense to finally do that than
-not - it's just better encapsulation to go through the console
-functions instead of doing a direct call, so let's dare. Plus it
-really does not make much sense to call the only unblank
-implementation there is twice, once without, and once with appropriate
-locking.
-
-Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc: "Ilpo Järvinen" <ilpo.jarvinen@linux.intel.com>
-Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-Cc: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-Cc: Yangxi Xiang <xyangxi5@gmail.com>
-Cc: nick black <dankamongmen@gmail.com>
-Cc: Petr Mladek <pmladek@suse.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc: Marco Elver <elver@google.com>
-Cc: John Ogness <john.ogness@linutronix.de>
-Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc: David Gow <davidgow@google.com>
-Cc: tangmeng <tangmeng@uniontech.com>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-Cc: Chris Wilson <chris@chris-wilson.co.uk>
----
- drivers/tty/vt/vt.c     | 3 ++-
- include/linux/vt_kern.h | 1 -
- kernel/panic.c          | 3 ---
- lib/bust_spinlocks.c    | 3 ---
- 4 files changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index a6be32798fad..08498fcf080a 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -154,6 +154,7 @@ static void console_callback(struct work_struct *ignored);
- static void con_driver_unregister_callback(struct work_struct *ignored);
- static void blank_screen_t(struct timer_list *unused);
- static void set_palette(struct vc_data *vc);
-+static void unblank_screen(void);
- 
- #define vt_get_kmsg_redirect() vt_kmsg_redirect(-1)
- 
-@@ -4450,7 +4451,7 @@ EXPORT_SYMBOL(do_unblank_screen);
-  * call it with 1 as an argument and so force a mode restore... that may kill
-  * X or at least garbage the screen but would also make the Oops visible...
-  */
--void unblank_screen(void)
-+static void unblank_screen(void)
- {
- 	do_unblank_screen(0);
- }
-diff --git a/include/linux/vt_kern.h b/include/linux/vt_kern.h
-index b5ab452fca5b..c1f5aebef170 100644
---- a/include/linux/vt_kern.h
-+++ b/include/linux/vt_kern.h
-@@ -30,7 +30,6 @@ struct vc_data *vc_deallocate(unsigned int console);
- void reset_palette(struct vc_data *vc);
- void do_blank_screen(int entering_gfx);
- void do_unblank_screen(int leaving_gfx);
--void unblank_screen(void);
- void poke_blanked_console(void);
- int con_font_op(struct vc_data *vc, struct console_font_op *op);
- int con_set_cmap(unsigned char __user *cmap);
-diff --git a/kernel/panic.c b/kernel/panic.c
-index 1fc3d98417d1..74a7b55851c4 100644
---- a/kernel/panic.c
-+++ b/kernel/panic.c
-@@ -330,9 +330,6 @@ void panic(const char *fmt, ...)
- 	if (_crash_kexec_post_notifiers)
- 		__crash_kexec(NULL);
- 
--#ifdef CONFIG_VT
--	unblank_screen();
--#endif
- 	console_unblank();
- 
- 	/*
-diff --git a/lib/bust_spinlocks.c b/lib/bust_spinlocks.c
-index 8be59f84eaea..bfd53972a4d8 100644
---- a/lib/bust_spinlocks.c
-+++ b/lib/bust_spinlocks.c
-@@ -22,9 +22,6 @@ void bust_spinlocks(int yes)
- 	if (yes) {
- 		++oops_in_progress;
- 	} else {
--#ifdef CONFIG_VT
--		unblank_screen();
--#endif
- 		console_unblank();
- 		if (--oops_in_progress == 0)
- 			wake_up_klogd();
--- 
-2.37.2
+> 
+>>
+>>> ---
+>>> v2->v3:
+>>>   * Rename to *check
+>>> v1->v2:
+>>>   * Add a prototype for `acpi_s2idle_enter`
+>>>
+>>>   drivers/acpi/sleep.h      |  1 +
+>>>   drivers/acpi/x86/s2idle.c | 14 ++++++++++++++
+>>>   include/linux/acpi.h      |  1 +
+>>>   include/linux/suspend.h   |  1 +
+>>>   kernel/power/suspend.c    |  3 +++
+>>>   5 files changed, 20 insertions(+)
+>>>
+>>> diff --git a/drivers/acpi/sleep.h b/drivers/acpi/sleep.h
+>>> index 7fe41ee489d6..d960a238be4e 100644
+>>> --- a/drivers/acpi/sleep.h
+>>> +++ b/drivers/acpi/sleep.h
+>>> @@ -18,6 +18,7 @@ static inline acpi_status acpi_set_waking_vector(u32 wakeup_address)
+>>>   extern int acpi_s2idle_begin(void);
+>>>   extern int acpi_s2idle_prepare(void);
+>>>   extern int acpi_s2idle_prepare_late(void);
+>>> +extern void acpi_s2idle_check(void);
+>>>   extern bool acpi_s2idle_wake(void);
+>>>   extern void acpi_s2idle_restore_early(void);
+>>>   extern void acpi_s2idle_restore(void);
+>>> diff --git a/drivers/acpi/x86/s2idle.c b/drivers/acpi/x86/s2idle.c
+>>> index f9ac12b778e6..474aa46f82f6 100644
+>>> --- a/drivers/acpi/x86/s2idle.c
+>>> +++ b/drivers/acpi/x86/s2idle.c
+>>> @@ -486,6 +486,19 @@ int acpi_s2idle_prepare_late(void)
+>>>          return 0;
+>>>   }
+>>>
+>>> +void acpi_s2idle_check(void)
+>>> +{
+>>> +       struct acpi_s2idle_dev_ops *handler;
+>>> +
+>>> +       if (!lps0_device_handle || sleep_no_lps0)
+>>> +               return;
+>>> +
+>>> +       list_for_each_entry(handler, &lps0_s2idle_devops_head, list_node) {
+>>> +               if (handler->check)
+>>> +                       handler->check();
+>>> +       }
+>>> +}
+>>> +
+>>>   void acpi_s2idle_restore_early(void)
+>>>   {
+>>>          struct acpi_s2idle_dev_ops *handler;
+>>> @@ -527,6 +540,7 @@ static const struct platform_s2idle_ops acpi_s2idle_ops_lps0 = {
+>>>          .begin = acpi_s2idle_begin,
+>>>          .prepare = acpi_s2idle_prepare,
+>>>          .prepare_late = acpi_s2idle_prepare_late,
+>>> +       .check = acpi_s2idle_check,
+>>>          .wake = acpi_s2idle_wake,
+>>>          .restore_early = acpi_s2idle_restore_early,
+>>>          .restore = acpi_s2idle_restore,
+>>> diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+>>> index 6f64b2f3dc54..acaa2ddc067d 100644
+>>> --- a/include/linux/acpi.h
+>>> +++ b/include/linux/acpi.h
+>>> @@ -1075,6 +1075,7 @@ acpi_status acpi_os_prepare_extended_sleep(u8 sleep_state,
+>>>   struct acpi_s2idle_dev_ops {
+>>>          struct list_head list_node;
+>>>          void (*prepare)(void);
+>>> +       void (*check)(void);
+>>>          void (*restore)(void);
+>>>   };
+>>>   int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg);
+>>> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+>>> index 70f2921e2e70..03ed42ed2c7f 100644
+>>> --- a/include/linux/suspend.h
+>>> +++ b/include/linux/suspend.h
+>>> @@ -191,6 +191,7 @@ struct platform_s2idle_ops {
+>>>          int (*begin)(void);
+>>>          int (*prepare)(void);
+>>>          int (*prepare_late)(void);
+>>> +       void (*check)(void);
+>>>          bool (*wake)(void);
+>>>          void (*restore_early)(void);
+>>>          void (*restore)(void);
+>>> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+>>> index 827075944d28..c6272d466e58 100644
+>>> --- a/kernel/power/suspend.c
+>>> +++ b/kernel/power/suspend.c
+>>> @@ -136,6 +136,9 @@ static void s2idle_loop(void)
+>>>                          break;
+>>>                  }
+>>>
+>>> +               if (s2idle_ops && s2idle_ops->check)
+>>> +                       s2idle_ops->check();
+>>> +
+>>>                  s2idle_enter();
+>>>          }
+>>>
+>>> -- 
+>>> 2.34.1
+>>>
+> 
 

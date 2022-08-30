@@ -2,72 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A895A65F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:13:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 103535A6603
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiH3ONY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 10:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
+        id S230420AbiH3OOn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 10:14:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiH3ONV (ORCPT
+        with ESMTP id S230043AbiH3OOm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 10:13:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A64E01EF
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:13:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EB346B81C22
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:13:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41BB2C433D6;
-        Tue, 30 Aug 2022 14:13:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661868798;
-        bh=ZTk15ZgVYXrQGuome5BmZMDt8/CCStppaB/q541mVbo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FC5PtbFCsH/4038LOLUR7Ia9VSEqlv+Pi/d0Lo0RHJ2IMuLJ1ED9mhDQYDxNhz6/9
-         eZ/8iaM5cznE7OaOaqYdxQ4rljnUc31x6T/mw0zNdTzPpfSLvlYOKBHEki99y0LVdS
-         2vpIHJfewiR1io/tM5SCTsZYDfiFO3zui1MlBuO4=
-Date:   Tue, 30 Aug 2022 16:13:12 +0200
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     "Winiarska, Iwona" <iwona.winiarska@intel.com>
-Cc:     "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [GIT PULL] PECI fixes for v6.0
-Message-ID: <Yw4a+EbQSiSw7JR/@kroah.com>
-References: <c0585d60961ed200f422a9f2124ee269827504e3.camel@intel.com>
+        Tue, 30 Aug 2022 10:14:42 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB327F8EE9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:14:40 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id 62so9314755iov.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc;
+        bh=i7zNg0BSUxqwtCI4z0pxRrzokR8vlBB38y5Casl7Awc=;
+        b=x/D8aen/4r4ZlBBAFyRsZee67ThQrnuuVTWdIZ++jBIpG3tcAa/cPcVW8/GzJF4Pek
+         APOvN9cX+xEV1mvL0bvuG+3E2PiibBgSluHcnktvzCcNecZNpelPJImGoDIK914W2mOj
+         tRTmltN46kMCbEbbZMbS8BU98PGakTRkCRVlQKSIRerqMIWcyw4HhITB0v2G4ldGlegh
+         Au6WvKcl+9JtFFwFR3rsoExQoWUn+8NpvitKO4qdGcNCGpy9sKXaDAVxtRZE6EyCCJ1L
+         h5wbTSJ+cUOdn8JMmH07GSAhdEZvqRe4RoM/VhvI52ISVNLzrNQQz/UVG3ycQrfpOTJ+
+         Q6jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=i7zNg0BSUxqwtCI4z0pxRrzokR8vlBB38y5Casl7Awc=;
+        b=CS3CS/jVIhu17L4Sld/35jeP3kmzH0P84jXfhqyqvG9S2Gjro8lysm7Fhp2WxlTWBv
+         fE9Db5VfKTAT+XhcaJk2+bg8TuaIYQyRMxJ+uzwqKOjFow3e6yJp82taQST7zMga052g
+         OVulKDKi6iacgR0dSaxgyjllwkO+AMt6gZU0j9w+zJTCaEzGAxplqU+5mPcF6vW08cXq
+         RvwYS9rCiUs5yGyWLvoXf+32p162x3J5Vn08PG6zdI0IZ332CCQyykR1B28lqikkxRrw
+         irFvkjNDV+ooDp2spKOXYxZZQXTm0tUU0mRN03tTCH66DCRlbIsdYHabrDAvKfvJcFRX
+         MeKA==
+X-Gm-Message-State: ACgBeo1k1iWjdEInlh+4ihMjYDeIlDzqbhRCQsrf/7kcKBOE+gZELklI
+        cYCS0V6lsDUV7JIpdIwM1ABzlUz1U8CLQQ==
+X-Google-Smtp-Source: AA6agR5tBbIlgUln84Ol1tt7VPgk751SFID9WmLzW6T3veKSNvAM8Jyl9Ls50OTiJv1EiTsnFtbslA==
+X-Received: by 2002:a05:6638:3a16:b0:349:d8cc:2d22 with SMTP id cn22-20020a0566383a1600b00349d8cc2d22mr12530344jab.224.1661868879853;
+        Tue, 30 Aug 2022 07:14:39 -0700 (PDT)
+Received: from [127.0.0.1] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id m13-20020a92cacd000000b002dd0bfd2467sm5670937ilq.11.2022.08.30.07.14.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 07:14:39 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        Caleb Sander <csander@purestorage.com>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        Muhammad Rizki <kiizuha@gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>
+In-Reply-To: <20220830005122.885209-1-ammar.faizi@intel.com>
+References: <20220830005122.885209-1-ammar.faizi@intel.com>
+Subject: Re: [PATCH liburing v2 0/7] Export io_uring syscall functions
+Message-Id: <166186887874.35842.10405862161728511204.b4-ty@kernel.dk>
+Date:   Tue, 30 Aug 2022 08:14:38 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c0585d60961ed200f422a9f2124ee269827504e3.camel@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.10.0-dev-65ba7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 06:58:16PM +0000, Winiarska, Iwona wrote:
-> Hi Greg,
+On Tue, 30 Aug 2022 07:56:36 +0700, Ammar Faizi wrote:
+> From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 > 
-> Those fixes were previously sent after your development tree was already closed.
-> It would be great, if you can pull them for Linux v6.0.
+> Hi Jens,
 > 
-> Thanks
-> -Iwona
+> This series adds io_uring syscall functions and exports them. There
+> are 7 patches in this series:
 > 
-> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
-> 
->   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/iwi/linux.git tags/peci-fixes-6.0
+> [...]
 
-Pulled and pushed out, thanks.
+Applied, thanks!
 
-greg k-h
+[1/7] syscall: Make io_uring syscall arguments consistent
+      commit: 09164272d3aa5f4727fdf2181284d29e88194201
+[2/7] syscall: Add io_uring syscall functions
+      commit: f0b43c84cb3d1a4af4f1a32193bcad66fe458488
+[3/7] man: Clarify "man 2" entry for io_uring syscalls
+      commit: 9a8512f6dbd259a52b3f98fb5e6324a9b2841c3c
+[4/7] man: Add `io_uring_enter2()` function signature
+      commit: 584b9ed0ceef30934e747435fe0b535528495de6
+[5/7] man: Alias `io_uring_enter2()` to `io_uring_enter()`
+      commit: 8251e2778b0a1a897337aa011cb59ec85de599e0
+[6/7] test/io_uring_{enter,setup,register}: Use the exported syscall functions
+      commit: 64208a184c155580bfde12ced79ff09d9bcc52a8
+[7/7] man/io_uring_enter.2: Fix typo "which is behaves" -> "which behaves"
+      commit: 1ef00fc157cd0fa96d4da355ee86c977b6e4169e
+
+Best regards,
+-- 
+Jens Axboe
+
+

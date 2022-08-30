@@ -2,477 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6535A6BC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16DF95A6BC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:09:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232212AbiH3SId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:08:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
+        id S232220AbiH3SIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:08:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiH3SI3 (ORCPT
+        with ESMTP id S231160AbiH3SI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Aug 2022 14:08:29 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86CA7C1CD;
-        Tue, 30 Aug 2022 11:08:27 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id gb36so2946061ejc.10;
-        Tue, 30 Aug 2022 11:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
-         :subject:date;
-        bh=jXXGaSH+LzmXXbPUT3jEtW2Nm9tCbJ23kAhFelj4/UI=;
-        b=GqOSBwv1YK+A7Mb1equalINdHRuqpp1aEf1gzJELuYodsQqDNneY8QgUm1sJP9C7n2
-         YlGH8Df1ahxfyFPgCZ91EvBYexqftfL/C3povlv0krCSMFm/8uQglkIfoOyALbpV04yc
-         mZumiKZ7JX8QrH8wytf7OXgCZS/+C7MUyt00I2f0Z0Svilf6miRhWZmpEF8ibKgnHu/t
-         JJxIJg/X4Rg71fokNziRvRAQFUnB8ODT5ShNBMOlH1dySVV7gLVQgcv5wqBr4KbZ5tH1
-         uTuO4FigNxRTSvGmA2M10VsxLEhu6q0zG6rbDcr3ME6endO37eyHwnuzj7AyqFoj+cK7
-         aENg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=jXXGaSH+LzmXXbPUT3jEtW2Nm9tCbJ23kAhFelj4/UI=;
-        b=mbZEKr1UtLEiadtLbQuJEAKTXF2FSmIf6KcXHkTdR/nBTSPfFy5VMAQdr3W96+mrt3
-         rr10i0PQ5lrhjOEn+84gHCOnCfVhWpenNVz0ZHoqneQ3uGkBxL+X3QZpQZw781CAXfXd
-         PX4sxMrja8i8tgiQVDvnZ+N0r0K9ltm51vcPEPk4vCOGehpsIYQUH+YM3yHGyAqNPWEn
-         ZIwJW7nCKBu+A3QtcSdcnDkxhR6wh8MThrNSuTm1OfccmWWmIFKgdkmnNtJ3jFzob1eN
-         tAcCtI4Pj90fYAYqe+YIZMHhUEMgCsNd+5NcZcS4JPYlihEefkM/BkRufN7bLOZwnMNl
-         mf5Q==
-X-Gm-Message-State: ACgBeo3ovF2tSqProuMpJzJRfEFvannpLzoDCKnV6/Vnxw3Cb/kOgV2A
-        ZUd2zDtWIrUM2Ag6gJRZh/Y2k7BZpkuYRQ==
-X-Google-Smtp-Source: AA6agR7I6Kro0gm3iRAIJRdyaM5Z01ZJudCHbpC4biu2BNn3iA6Jo4paJUuMaRGwAvHnxZjKKlUs/Q==
-X-Received: by 2002:a17:906:4fd0:b0:73d:be5b:291d with SMTP id i16-20020a1709064fd000b0073dbe5b291dmr17745504ejw.506.1661882905888;
-        Tue, 30 Aug 2022 11:08:25 -0700 (PDT)
-Received: from [192.168.1.10] ([46.249.74.23])
-        by smtp.googlemail.com with ESMTPSA id h8-20020a50ed88000000b004463b99bc09sm7725272edr.88.2022.08.30.11.08.24
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 30 Aug 2022 11:08:25 -0700 (PDT)
-Subject: Re: [PATCH 3/3] drm: omapdrm: Do no allocate non-scanout GEMs through
- DMM/TILER
-To:     Yongqin Liu <yongqin.liu@linaro.org>, Andrew Davis <afd@ti.com>
-Cc:     "Bajjuri, Praneeth" <praneeth@ti.com>, tomba@kernel.org,
-        airlied@linux.ie, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        merlijn@wizzup.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, tony@atomide.com,
-        linux-omap@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>
-References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <1642587791-13222-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <5b6d3e7f-c638-fdc7-5080-44d34abed610@ideasonboard.com>
- <a3ed3a2c-86ce-1c85-e8aa-c08b54ad1a43@gmail.com>
- <CAMSo37XdZSZUHLWJj373DdtOBA9=uD8SJ7ywWCYF2pU1i4cB_g@mail.gmail.com>
- <ed4fe238-4fcd-1253-658f-18fe1e1f13b0@gmail.com>
- <CAMSo37V3U5nYng77jzSnKH73CTLhGYQJu11Q5wRt289se5nFJw@mail.gmail.com>
- <4128aed0-211a-d12a-6a86-deb4457d39f7@gmail.com>
- <CAMSo37W-DePLDP=zk-nY6FGcZuk0QzHj4=usrieyV0TNcNfbXw@mail.gmail.com>
- <da2a661e-9da0-850c-3067-8c1e8d5531bc@gmail.com>
- <CAMSo37VXNQeR0qZgzZONBwp_4z9CuUSJJJzhM7k+K39BcwvW6A@mail.gmail.com>
- <235621d0-2141-5ef9-bcd4-5c48b985b3a0@gmail.com>
- <5dc2c212-4967-ab2d-c016-f3b3a854fe32@ti.com>
- <CAMSo37W+Z2hn_wJ9At1nyJX6XnpZx9JLXJv9g6DoqoaqqjUATw@mail.gmail.com>
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Message-ID: <0eb026d9-faaa-68cb-cdcd-7d031acfbb03@gmail.com>
-Date:   Tue, 30 Aug 2022 21:08:13 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Firefox/60.0 Thunderbird/60.6.1
+Received: from p3plwbeout26-03.prod.phx3.secureserver.net (p3plsmtp26-03-2.prod.phx3.secureserver.net [216.69.139.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E819D7AC23
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:08:27 -0700 (PDT)
+Received: from mailex.mailcore.me ([94.136.40.143])
+        by :WBEOUT: with ESMTP
+        id T5exoqiHwUn6tT5eyoW1tx; Tue, 30 Aug 2022 11:08:24 -0700
+X-CMAE-Analysis: v=2.4 cv=b9V3XvKx c=1 sm=1 tr=0 ts=630e521a
+ a=EhJYbXVJKsomWlz4CTV+qA==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
+ a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=biHskzXt2R4A:10 a=QyXUC8HyAAAA:8
+ a=jgZ1YHje5GoJlr7bozsA:9 a=7Zwj6sZBwVKJAoWSPKxL6X1jA+E=:19 a=QEXdDO2ut3YA:10
+X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
+X-SID:  T5exoqiHwUn6t
+Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.33])
+        by smtp07.mailcore.me with esmtpa (Exim 4.94.2)
+        (envelope-from <phillip@squashfs.org.uk>)
+        id 1oT5ew-0003UF-M4; Tue, 30 Aug 2022 19:08:23 +0100
+Message-ID: <74fb0469-e593-ed0e-3f9b-5ec535969c78@squashfs.org.uk>
+Date:   Tue, 30 Aug 2022 19:08:19 +0100
 MIME-Version: 1.0
-In-Reply-To: <CAMSo37W+Z2hn_wJ9At1nyJX6XnpZx9JLXJv9g6DoqoaqqjUATw@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-GB
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: ping //Re: [PATCH v2 0/2] squashfs: Add the mount parameter
+ "threads="
+To:     Xiaoming Ni <nixiaoming@huawei.com>, linux-kernel@vger.kernel.org
+Cc:     wangle6@huawei.com, yi.zhang@huawei.com, wangbing6@huawei.com,
+        zhongjubin@huawei.com, chenjianguo3@huawei.com
+References: <20220815031100.75243-1-nixiaoming@huawei.com>
+ <20220816010052.15764-1-nixiaoming@huawei.com>
+ <8d139f03-7845-9c96-fffc-74fdf8b5d78d@huawei.com>
+ <60b24133-234f-858b-8e71-e183fe72d2bb@squashfs.org.uk>
+ <9c5bddc3-fc93-d76a-1163-0278c8d31dc5@huawei.com>
+From:   Phillip Lougher <phillip@squashfs.org.uk>
+In-Reply-To: <9c5bddc3-fc93-d76a-1163-0278c8d31dc5@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Mailcore-Auth: 439999529
+X-Mailcore-Domain: 1394945
+X-123-reg-Authenticated:  phillip@squashfs.org.uk  
+X-Originating-IP: 82.69.79.175
+X-CMAE-Envelope: MS4xfGO7VA9pQTxtgo8Nd9/r6iz5C4bUiYW9YnYQz8qXqzgg+soqw+Uqh/N64GjTGvGm3lEwJ06hNnHCAikXxT2l1A66LUXdc/3rq8ISQgUMGDxcTyVphK+F
+ GAXrnuZw5pN7DzUH0zpa+6jokwk+UZ2C6FoQoc1x3djS0qlxH+RT6pRoAvsBXgisVqdveLA5+98+NqCdd8C4pq/JHVQp7cgH980=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 30.08.22 г. 18:08 ч., Yongqin Liu wrote:
-> HI, Andrew
-> 
-> Thanks a lot for the information! And great to have you here!
-> 
-> Hi, Ivaylo
-> 
-> With the code provided by Andrew, could you please help give suggestions
-> on how to modify it in the gralloc lib side?
-> 
-> to add the OMAP_BO_SCANOUT flag unconditionally as OMAP_BO_MEM_CONTIG?
-> 
-
-I don't think adding OMAP_BO_SCANOUT unconditionally is a good idea - we 
-already agreed on why. Without having access to the whole source code, I 
-would not make blind suggestions and would leave between you (as user) 
-and Andrew (as a provider) to agree on what is the best way to fix the 
-issue. Still, see the comments bellow.
-
-> Thanks,
-> Yongqin Liu
-> 
-> On Mon, 29 Aug 2022 at 22:36, Andrew Davis <afd@ti.com> wrote:
->>
->> On 8/29/22 8:24 AM, Ivaylo Dimitrov wrote:
->>> Hi,
+On 30/08/2022 14:38, Xiaoming Ni wrote:
+> On 2022/8/29 7:18, Phillip Lougher wrote:
+>> On 26/08/2022 07:19, Xiaoming Ni wrote:
+>>> ping
 >>>
 >>>
->>> On 29.08.22 г. 5:51 ч., Yongqin Liu wrote:
->>>> Hi, Ivaylo
+>>> On 2022/8/16 9:00, Xiaoming Ni wrote:
+>>>> Currently, Squashfs supports multiple decompressor parallel modes. 
+>>>> However, this
+>>>> mode can be configured only during kernel building and does not 
+>>>> support flexible
+>>>> selection during runtime.
 >>>>
->>>> Sorry for the late response, and Thanks very much for the detailed explanations!
+>>>> In the current patch set, the mount parameter "threads=" is added to 
+>>>> allow users
+>>>> to select the parallel decompressor mode and configure the number of 
+>>>> decompressors
+>>>> when mounting a file system.
 >>>>
->>>> On Thu, 18 Aug 2022 at 18:23, Ivaylo Dimitrov
->>>> <ivo.g.dimitrov.75@gmail.com> wrote:
->>>>>
->>>>> Hi,
->>>>>
->>>>> On 17.08.22 г. 7:52 ч., Yongqin Liu wrote:
->>>>>> Hi, Ivaylo
->>>>>>
->>>>>> On Mon, 15 Aug 2022 at 14:23, Ivaylo Dimitrov
->>>>>> <ivo.g.dimitrov.75@gmail.com> wrote:
->>>>>>>
->>>>>>> Hi Liu,
->>>>>>>
->>>>>>> On 14.08.22 г. 17:27 ч., Yongqin Liu wrote:
->>>>>>>> Hi, IvayIo
->>>>>>>>
->>>>>>>> Thanks very much for the reply!
->>>>>>>>
->>>>>>>> On Sat, 13 Aug 2022 at 14:58, Ivaylo Dimitrov
->>>>>>>> <ivo.g.dimitrov.75@gmail.com> wrote:
->>>>>>>>>
->>>>>>>>> Hi Liu,
->>>>>>>>>
->>>>>>>>> On 12.08.22 г. 7:35 ч., Yongqin Liu wrote:
->>>>>>>>>> Hi, Ivaylo, Tomi
->>>>>>>>>>
->>>>>>>>>> We have one X15 Android AOSP master build, it could not have the home
->>>>>>>>>> screen displayed
->>>>>>>>>> on the hdmi monitor connected with this change, with the following
->>>>>>>>>> message printed on the serial console
->>>>>>>>>>          [  607.404205] omapdrm omapdrm.0: Failed to setup plane plane-0
->>>>>>>>>>          [  607.410522] omapdrm omapdrm.0: Failed to setup plane plane-1
->>>>>>>>>>          [  607.416381] omapdrm omapdrm.0: Failed to setup plane plane-2
->>>>>>>>>>          [  607.422088] omapdrm omapdrm.0: Failed to setup plane plane-3
->>>>>>>>>>
->>>>>>>>>>         # for details, please check the link here: http://ix.io/47m1
->>>>>>>>>>
->>>>>>>>>> It will work with home screen displayed on the hdmi monitor if this
->>>>>>>>>> change is reverted.
->>>>>>>>>>
->>>>>>>>>> Is this the broken problem you talked about here?
->>>>>>>>>>
->>>>>>>>>> And could you please give some suggestions on how to have the x15
->>>>>>>>>> Android build work with this change?
->>>>>>>>>>
->>>>>>>>>
->>>>>>>>> Make sure scanout (i.e. those to be displayed) buffers are actually
->>>>>>>>> allocated as such - OMAP_BO_SCANOUT flag must be set when calling
->>>>>>>>> omap_bo_new().
->>>>>>>>
->>>>>>>> I am not familiar with this area, I am sorry if I asked quite silly questions:(
->>>>>>>> I googled omap_bo_new, and found it's a function of libdrm here[1], is
->>>>>>>> it what you meant here?
->>>>>>>>
->>>>>>>
->>>>>>> Yes, calling this function from userspace ends in kernel code the
->>>>>>> $subject patch is part of.
->>>>>>>
->>>>>>>> If it's the omap_bo_new that we should pass OMAP_BO_SCANOUT when it is called,
->>>>>>>> then is it the correct way to update omap_bo_new to add the OMAP_BO_SCANOUT flag
->>>>>>>> before it calls omap_bo_new_impl?
->>>>>>>>
->>>>>>>
->>>>>>> omap_bo_new() is fine and does not need any updates/fixes, it is the
->>>>>>> code that uses it (whoever it is, I am not familiar with the userspace
->>>>>>> you are using) that shall pass correct flags (third parameter) when
->>>>>>> calling it.
->>>>>>
->>>>>> Sorry, I do not get the point here.
->>>>>> Like you said, the code that calls omap_bo_new needs to pass OMAP_BO_SCANOUT,
->>>>>> then IMO omap_bo_new should be the best place to add the OMAP_BO_SCANOUT flag,
->>>>>> (like via flags = flags | OMAP_BO_SCANOUT), that could help avoid
->>>>>> missing the flag by some code,
->>>>>> and also avoids hacks/changes on the possible blob binaries.
->>>>>>
->>>>>> Do I misunderstand somewhere?
->>>>>> Or is there some case that OMAP_BO_SCANOUT shouldn't be passed when
->>>>>> omap_bo_new is called?
->>>>>>
->>>>>
->>>>> Exactly. You need to pass OMAP_BO_SCANOUT only when you want your
->>>>> buffers to be 'scanout' buffers(i.e. buffers that can be displayed on
->>>>> screen), which is not always the case - there is no need offscreen
->>>>> buffers or pixmaps to be scanout capable, for example. There are more
->>>>> cases like that.
->>>>>
->>>>> The problem is that scanout buffer on OMAP4 allocate additional
->>>>> resources in DMM/TILER (a piece of hardware) and those resources are
->>>>> limited. Not only that, but DMM/TILER memory space eventually gets
->>>>> fragmented over time (if you have lots of allocataoins/deallocations)
->>>>> and you will start getting ENOMEM (or similar) errors.
->>>>>
->>>>> Ofc, in your particular use case you may never hit such issues.
->>>>
->>>> Thanks, I understand the cases now.
->>>>
->>>>
->>>>>>> BTW you shall really find who and how uses OMAP BO API, in theory it
->>>>>>> might use ioctls directly and not call omap_bo_xxx functions.
->>>>>>
->>>>>> Do you mean the DRM_OMAP_GEM_NEW ioctl api?
->>>>>> There is no place in the AOSP tree to call that except the
->>>>>> omap_bo_new_impl function,
->>>>>> which is called by the omap_bo_new and omap_bo_new_tiled functions.
->>>>>> The omap_bo_new should not be called with the OMAP_BO_TILED flag,
->>>>>> while the omap_bo_new_tiled should be called with the OMAP_BO_TILED flag
->>>>>>
->>>>>> Regarding to the omap_bo_new function, there are 2 places call it in
->>>>>> the AOSP tree:
->>>>>> #1 ./external/libkmsxx/kms++/src/omap/omapframebuffer.cpp
->>>>>> #2 ./device/ti/beagle_x15/gpu/gralloc.am57x.so
->>>>>>
->>>>>> #1 seems not used in AOSP yet, and #2 is one blob binary we do not
->>>>>> have the source for.
->>>>>>
->>>>>
->>>>> I would bet on gralloc.am57x.so.
->>>> yeah, that's my guess as well.
->>>>
->>>>>>> strace
->>>>>>> would be your friend there. or gdb, or whatever tools are used on
->>>>>>> android. Or put some printfs() in omap_bo_new() that output the PID of
->>>>>>> the calling process, etc.
->>>>>>
->>>>>> Thanks a lot for these great suggestions! Will use them when possible.
->>>>>>
->>>>>>>> And another question is that, since the userspace(libdrm) will be used
->>>>>>>> to work with different kernel versions,
->>>>>>>> like the old 4.14, 4.19, etc, do you think there will be problem to
->>>>>>>> pass  OMAP_BO_SCANOUT
->>>>>>>> from the userspace side with the old kernels(which does not have this change)?
->>>>>>>> does this change need to be backported to the old kernel versions?
->>>>>>>
->>>>>>> There should not be any issue. The changes could be backported if one
->>>>>>> hits the issues this $series is fixing, but there is no need.
->>>>>>
->>>>>> Thanks for the confirmation!
->>>>>> I just boot-tested with adding OMAP_BO_SCANOUT in the omap_bo_new function,
->>>>>> and it worked with the current 4.14, 4.19, and the mainline kernels.
->>>>>> # via adding line "flags = flags | OMAP_BO_SCANOUT" in the omap_bo_new function.
->>>>>>
->>>>>
->>>>> sure, the point is that with this change *every* BO will be allocated as
->>>>> scanout BO, potentially leading to the above explained issues.
->>>>
->>>> get it.
->>>>
->>>>>>>>
->>>>>>>> And the last question is that, omap_bo_new might be called by some
->>>>>>>> property binaries what not everyone
->>>>>>>> could get the source to update, for such case what's your suggestions?
->>>>>>>>
->>>>>>>
->>>>>>> Hard to say without knowing what that library would be.
->>>>>>>
->>>>>>> When I hit issues with closed blobs, sometimes I reverse-engineer them
->>>>>>> to fix the issue, example:
->>>>>>>
->>>>>>> https://github.com/maemo-leste/sgx-ddk-um/tree/master/dbm
->>>>>>>
->>>>>>> This is REed libdbm from sgx-ddk-um 1.17.4948957, that is responsible
->>>>>>> for allocating BOs (what omap_bo_new() does) but it uses DUMB buffers
->>>>>>> API, instead of OMAP BO API.
->>>>>>>
->>>>>>> I guess you are using some older version of sgx-ddk-um, so you may fix
->>>>>>> in similar way. Or binary patch.
->>>>>>
->>>>>> The blob binary that calls omap_bo_new is the gralloc.am57x.so here[2]:
->>>>>> any suggestions with it?
->>>>>> # sorry, I am not able to find out how you did the reverse-engineer
->>>>>> work# with the dbm repository shared here,
->>>>>> # not sure if you could give some tutorial steps for the similar
->>>>>> reverse-engineer# work with gralloc.am57x.so
->>>>>>
->>>>>
->>>>> Sorry, but it is like if you ask me to provide you with a tutorial on
->>>>> how to do brain surgery :)
->>>>>
->>>>>> [2]: https://android.googlesource.com/device/ti/beagle-x15/+/refs/heads/master/gpu/gralloc.am57x.so
->>>>>>
->>>>>
->>>>> I investigated this a bit and it seems it calls omap_bo_new() in a
->>>>> wrapper function like:
->>>>>
->>>>> bo = omap_bo_new(dev, -page_size & (size + page_size - 1), ((param5 &
->>>>> 0x800000) != 0) | OMAP_BO_WC | OMAP_BO_MEM_CONTIG);
->>>>>
->>>>> Didn't investigate further what param5 is, but it controls if
->>>>> OMAP_BO_SCANOUT is passed to omap_bo_new or not.
->>>>>
->>>>> However, this library was not made with upstream kernel in mind, as
->>>>> AFAIK OMAP_BO_MEM_CONTIG never made it upstream:
->>>>>
->>>>> https://yhbt.net/lore/all/2580272.MiZDHyRxZo@avalon/T/
->>>>>
->>>>> @Tomi - any comment?
->>>>>
->>>>> So, you have couple of options:
->>>>>
->>>>> 1. Ask TI for upstream-compatible library.
->>>> check is in progress, but it would take quite a long time I guess
->>>>> 2. Try to push OMAP_BO_MEM_CONTIG patch upstream.
->>>> hmm, sounds like one impossible thing...
->>>>> 3. Modify omap_bo_new() to something like:
->>>>> .
->>>>> #define OMAP_BO_MEM_CONTIG      0x00000008      /* only use contiguous dma mem */
->>>>> .
->>>>> if (flags & OMAP_BO_MEM_CONTIG)
->>>>>      flags |= OMAP_BO_SCANOUT;
->>>>> .
->>>>> This will not achieve exactly what OMAP_BO_MEM_CONTIG is supposed to do,
->>>>> but should make it work, at least.
->>>>
->>>> This looks like the only doable thing at the moment, maybe one change
->>>> needs to be submitted to the mesa/drm repository.
->>>> I can submit a request on your #3 change to the mesa/drm repository
->>>> for discussion after some check if you do not mind.
->>>>
->>>
->>> I doubt mesa/drm will accept such hack, I think you will need to support your drm clone (with the above fix) until TI fixes the closed library.
->>>
+>>>> v2: fix warning: sparse: incorrect type in initializer (different 
+>>>> address spaces)
+>>>>    Reported-by: kernel test robot <lkp@intel.com>
 >>
+>> I have made an initial review of the patches, and I have the following
+>> comments.
 >>
->> Hi all,
+>> Good things about the patch-series.
 >>
+>> 1. In principle I have no objections to making this configurable at
+>>     mount time.  But, a use-case for why this has become necessary
+>>     would help in the evaluation.
+>>
+>> 2. In general the code changes are good.  They are predominantly
+>>     exposing the existing different decompressor functionality into
+>>     structures which can be selected at mount time.  They do not
+>>     change existing functionality, and so there are no issues
+>>     about unexpected regressions.
+>>
+>> Things which I don't like about the patch-series.
+>>
+>> 1. There is no default kernel configuration option to keep the existing
+>>     behaviour, that is build time selectable only.  There may be many
+>>     companies/people where for "security" reasons the ability to
+>>     switch to a more CPU/memory intensive decompressor or more threads
+>>     is a risk.
+>>
+>>     Yes, I know the new kernel configuration options allow only the
+>>     selected default decompressor mode to be built.  In theory that
+>>     will restrict the available decompressors to the single decompressor
+>>     selected at build time.  So not much different to the current
+>>     position?  But, if the CONFIG_SQUASHFS_DECOMP_MULTI decompressor
+>>     is selected, that will now allow more threads to be used than is
+> No more threads than before the patch.
+> 
+>>     current, where it is currently restricted to num_online_cpus() * 2.
+> After the patch is installed, the maximum number of threads is still 
+> num_online_cpus() * 2.
+> 
+> [PATCH v2 2/2] squashfs: Allows users to configure the number of 
+> decompression threads
+> 
+> +#ifdef CONFIG_SQUASHFS_DECOMP_MULTI
+> +    opts->thread_ops = &squashfs_decompressor_multi;
+> +    if (num > opts->thread_ops->max_decompressors())
+> +        num = opts->thread_ops->max_decompressors();
+> +    opts->thread_num = (int)num;
+> +    return 0;
+> +#else
+> 
 
-Hi, glad to see you are doing fine :)
+I missed that the maximum number of threads is still limited
+to num_online_cpus() * 2.
 
->> Just got around to reading this thread. I work with the TI gralloc lib
->> and can generate new versions as needed (I was probably the one who compiled
->> the version you have now). I've wanted to have our gralloc layer open source'd
->> as there is nothing really propriety in it (and I re-wrote a lot of it already)
->> and to avoid issues like this. But it interacts with the GPU code in some places,
->> so it's up to Imagination :(. The actual code in question if it helps is:
->>
->>          if(ui32Flags & PVRSRV_MEM_CACHED)
->>                  flags &= ~OMAP_BO_CACHE_MASK;
->>          else
->>                  flags |= OMAP_BO_WC;
->>
->>          if (ui32Flags & PVRSRV_HAP_CONTIG)
->>                  flags |= OMAP_BO_SCANOUT;
->>
+You should make it clear in the patch commit message what the
+thread maximum is (and that it is unchanged).
 
-Why is PVRSRV_HAP_CONTIG not set if the code requesting the buffer needs 
-contiguous memory? Who is responsible for setting it?
-
->>          flags &= ~OMAP_BO_TILED_MASK;
->>          flags |= 0x00000008;
->>          flags |= OMAP_BO_WC;
->>
->>          bo = omap_bo_new(dev, size, flags);
->>
->> As you can see we use 0x00000008 (OMAP_BO_MEM_CONTIG) unconditionally.
->> This was a hack added since even non-scanout buffers sometimes need
->> to be contiguous (video decoder surfaces), but we had no way back
-
-Hmm, why would video decoder need linear memory? No MMU?
-
->> then to communicate this to the gralloc layer. I think your best
->> bet would be to modify the gralloc lib to not do that, or put it
->> under the CONTIG check.
->>
-
-Does that mean that now there is a way? If that's the case, then what 
-needs to be fixed is the application requesting the buffer to send the 
-truth about what it needs to gralloc.
-
->> If you tell me what the code should look like, I can rebuild the
->> lib and post a copy.
->>
->> Long term, I'd like to start using DMA-BUF Heaps for CMA memory
->> allocations in gralloc and elsewhere, then drop out the DMM/TILER
->> support from OMAPDRM, since it never really belonged there in
->> the first place (being a IOMMU unrelated to the display/GPU).
->>
-
-Umm, how will we rotate scanout buffers then?
-
->> Thanks,
->> Andrew
->>
-
+This means some of my reservations go away.
 
 >>
->>> Regards,
->>> Ivo
->>>
->>>> Thanks,
->>>> Yongqin Liu
->>>>
->>>>>>>>>> On Thu, 17 Feb 2022 at 23:29, Ivaylo Dimitrov
->>>>>>>>>> <ivo.g.dimitrov.75@gmail.com> wrote:
->>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> On 17.02.22 г. 14:46 ч., Tomi Valkeinen wrote:
->>>>>>>>>>>> Hi,
->>>>>>>>>>>>
->>>>>>>>>>>> On 19/01/2022 12:23, Ivaylo Dimitrov wrote:
->>>>>>>>>>>>> On devices with DMM, all allocations are done through either DMM or
->>>>>>>>>>>>> TILER.
->>>>>>>>>>>>> DMM/TILER being a limited resource means that such allocations will start
->>>>>>>>>>>>> to fail before actual free memory is exhausted. What is even worse is
->>>>>>>>>>>>> that
->>>>>>>>>>>>> with time DMM/TILER space gets fragmented to the point that even if we
->>>>>>>>>>>>> have
->>>>>>>>>>>>> enough free DMM/TILER space and free memory, allocation fails because
->>>>>>>>>>>>> there
->>>>>>>>>>>>> is no big enough free block in DMM/TILER space.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Such failures can be easily observed with OMAP xorg DDX, for example -
->>>>>>>>>>>>> starting few GUI applications (so buffers for their windows are
->>>>>>>>>>>>> allocated)
->>>>>>>>>>>>> and then rotating landscape<->portrait while closing and opening new
->>>>>>>>>>>>> windows soon results in allocation failures.
->>>>>>>>>>>>>
->>>>>>>>>>>>> Fix that by mapping buffers through DMM/TILER only when really needed,
->>>>>>>>>>>>> like, for scanout buffers.
->>>>>>>>>>>>
->>>>>>>>>>>> Doesn't this break users that get a buffer from omapdrm and expect it to
->>>>>>>>>>>> be contiguous?
->>>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> If you mean dumb buffer, then no, this does not break users as dumb
->>>>>>>>>>> buffers are allocated as scanout:
->>>>>>>>>>>
->>>>>>>>>>> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/omapdrm/omap_gem.c#L603
->>>>>>>>>>>
->>>>>>>>>>> If you mean omap_bo allocated buffers, then if users want
->>>>>>>>>>> linear(scanout) buffer, then they request it explicitly by passing
->>>>>>>>>>> OMAP_BO_SCANOUT.
->>>>>>>>>>>
->>>>>>>>>>> Ivo
->>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>>
->>>>>>>>
->>>>>>>>
->>>>>>>>
->>>>>>
->>>>>>
->>>>>>
->>>>
->>>>
->>>>
+>> 2. You have decided to allow the mutiple decompressor implementations
+>>     to be selected at mount time - but you have also allowed only one
+>>     decompressor to be built at kernel build time.  This means you
+>>     end up in the fairly silly situation of having a mount time
+>>     option which allows the user to select between one decompressor.
+>>     There doesn't seem much point in having an option which allows
+>>     nothing to be changed.
+> When multiple decompression modes are selected during kernel build, or 
+> only SQUASHFS_DECOMP_MULTI is selected during kernel build, the mount 
+> parameter "threads=" is meaningful,
+> However, when only SQUASHFS_DECOMP_SINGLE or 
+> SQUASHFS_DECOMP_MULTI_PERCPU is selected, the mount parameter "threads=" 
+> is meaningless.
+> 
+> Thank you for your guidance
 > 
 > 
+>>
+>> 3. Using thread=<number>, where thread=1 you use SQUASHFS_DECOMP_SINGLE
+>>     if it has been built, otherwise you fall back to
+>>     SQUASHFS_DECOMP_MULTI.  This meants the effect of thread=1 is
+>>     indeterminate and depends on the build options.  I would suggest
+>>     thread=1 should always mean use SQUASHFS_DECOMP_SINGLE.
 > 
+> SQUASHFS_DECOMP_MULTI and SQUASHFS_DECOMP_SINGLE are selected during 
+> construction. Thread=1 indicates that SQUASHFS_DECOMP_SINGLEI is used.
+> 
+> If only SQUASHFS_DECOMP_MULTI is selected during construction, thread=1 
+> indicates that SQUASHFS_DECOMP_MULTI is used, and only one decompression 
+> thread is created.
+
+That is wrong.  It violates the principles of KISS (keep it simple) and 
+least surprise.
+
+I will spell it out for you.
+
+thread=1 meaning either SQUASHFS_DECOMP_SINGLE or SQUASHFS_DECOMP_MULTI
+depending on the built, adds an ambiguity which cannot be determined
+unless you know how the kernel was built.  This violates KISS.
+
+SQUASHFS_DECOMP_MULTI is for parallel decompression - it's in the name.
+Over-loading it to do single decompression again violates KISS and
+it also violates the principle of least suprise.  Many people will not
+think single decompression should be possible with only 
+SQUASHFS_DECOMP_MULTI built in.
+
+SQUASHFS_DECOMP_SINGLE is for doing single decompression - again it's in 
+the name.
+
+So
+
+SQUASHFS_DECOMP_MULTI for threads >= 2
+SQUASHFS_DECOMP_SINGLE for thread = 1
+
+This keeps it simple and follows the principle of least suprise.
+
+If you want single threaded operation as a choice, then build the 
+SQUASHFS_DECOMP_SINGLE decompressor.
+
+> 
+> Would it be better to provide more flexible mount options for images 
+> that build only SQUASHFS_DECOMP_MULTI?
+>  >> 4. If SQUASHFS_DECOMP_MULTI is selected, there isn't a limit on the
+>>     maximum amount of threads allowed, and there is no ability to
+>>     set the maximum number of threads allowed at kernel build time
+>>     either.
+> After the patch is installed, the maximum number of threads is still 
+> num_online_cpus() * 2.
+> 
+> [PATCH v2 2/2] squashfs: Allows users to configure the number of 
+> decompression threads
+> 
+> +#ifdef CONFIG_SQUASHFS_DECOMP_MULTI
+> +    opts->thread_ops = &squashfs_decompressor_multi;
+> +    if (num > opts->thread_ops->max_decompressors())
+> +        num = opts->thread_ops->max_decompressors();
+> +    opts->thread_num = (int)num;
+> +    return 0;
+> 
+> Did I misunderstand your question?
+> 
+> 
+>>
+>> All of the above seems to be a bit of a mess.
+>>
+>> As regards points 1 - 3, personally I would add a default kernel
+>> configuration option that keeps the existing behaviour, build time
+>> selectable only, no additional mount time options.  Then a
+>> kernel configuration option that allows the different decompressors
+>> to be selected at mount time, but which always builds all the
+>> decompressors.  This will avoid the silliness of point 2, and
+> Would it be better to allow flexible selection of decompression mode 
+> combinations?
+
+I told you I don't like that (*).  I also told you I want the default 
+behaviour to be the current behaviour.
+
+Feel free to disagree, but that isn't a good way to get your patch
+reviewed or accepted by me.
+
+Cheers
+
+Phillip
+
+(*) Adding options to select the decompressor at mount time, but,
+     also allowing only 1 - 2 decompressors to be built is a waste of
+     time.  It has the effect of giving something with one hand and
+     taking it alway with the other.  Build the lot, this also
+     keeps it simple.
+
+

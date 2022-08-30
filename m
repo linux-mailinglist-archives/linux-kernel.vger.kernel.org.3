@@ -2,107 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0275A5FDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:54:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCD885A5FEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbiH3Jyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
+        id S229556AbiH3J4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiH3Jyc (ORCPT
+        with ESMTP id S229873AbiH3J4M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:54:32 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CD0C0E6E;
-        Tue, 30 Aug 2022 02:54:30 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27U9sG2Z104476;
-        Tue, 30 Aug 2022 04:54:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1661853256;
-        bh=RmNV7HcetEbUAooGy8C1avwiLm6r1H5yjogMVC6bEww=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=sCK5iK5S6F3BV7Zc1DNRvkHJeHoFTAeuX6c2vWDzbIo5f6nH45TEV/3koF0wIriGE
-         tMKUZ+mFbjON43tSp42l5NfYgJUaG1jg4N56HTLrk8kx3tzYVjaKpDgSx8QtrSn53w
-         BwEKPbcn8Qv+BO4PzEbn6xvb7ejdwEzRYRuHrguY=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27U9sGh5011546
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Aug 2022 04:54:16 -0500
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 30
- Aug 2022 04:54:15 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 30 Aug 2022 04:54:15 -0500
-Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27U9sCA0094080;
-        Tue, 30 Aug 2022 04:54:13 -0500
-Message-ID: <420e481d-0c91-1f0b-ea72-3a505a04330d@ti.com>
-Date:   Tue, 30 Aug 2022 15:24:12 +0530
+        Tue, 30 Aug 2022 05:56:12 -0400
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D523ECD8;
+        Tue, 30 Aug 2022 02:55:56 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 0847B1BF209;
+        Tue, 30 Aug 2022 09:55:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1661853353;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fNe7O3XpPrKWPRiBDZbqoQEmh7mC5aGWDTgnBM7l0Y4=;
+        b=X2eVFd1qvXvmNmg0+jyQHr4YkkmSfTlnrgKIXOpOJB/PPGW4SWQ9TB5gJxjYAntLFQWIXF
+        49cRvnWRdg/WeH3pnthiGwuOhHqGHjTFj/+sMKXrpYXccAiONmldTIOEnr8I0AOKU5Pjom
+        YFktlpPIZOO/8cJDutCi+tSMz2rnKtydUW4AckPeMqwpFZiQMsLp090DPj8uCBkOaY+J71
+        ceYhgbv8VQDTzyUiJ3inR/ezCuymXbgzHghEsonA99TS9an9jwCpmKV65aMV3WsKaY661x
+        kj6VqQ2c2ox521TZ80+I4hbzz3DH2GhmL+fL2tKVAuznw6UqKIY9Ynh1wEInaA==
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
+Cc:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: [PATCH net-next v2 0/5] net: altera: tse: phylink conversion
+Date:   Tue, 30 Aug 2022 11:55:44 +0200
+Message-Id: <20220830095549.120625-1-maxime.chevallier@bootlin.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/4] arm64: dts: ti: k3-am65-main: Disable RNG node
-Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220823001136.10944-1-afd@ti.com>
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-In-Reply-To: <20220823001136.10944-1-afd@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This is V2 of a series converting the Altera TSE driver to phylink,
+introducing a new PCS driver along the way.
 
+The Altera TSE can be built with a SGMII/1000BaseX PCS, allowing to use
+SFP ports with this MAC, which is the end goal of adding phylink support
+and a proper PCS driver.
 
-On 23/08/22 05:41, Andrew Davis wrote:
-> The hardware random number generator is used by OP-TEE and is access is
-> denied to other users with SoC level bus firewalls. Any access to this
-> device from Linux will result in firewall errors.
-> 
-> We could remove this node, but it is still valid device description,
-> and it is possible it could be re-enabled in the bootloader if OP-TEE
-> is not used. So only disable this node for now.
-> 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
-> 
-> Changes from v1:
->   - Added comment in DT
->   - Explained why it is only disabled in commit message
-> 
->   arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> index 8919fede3cd7..b3e714e1abed 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> @@ -127,6 +127,7 @@ rng: rng@4e10000 {
->   			reg = <0x0 0x4e10000 0x0 0x7d>;
->   			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->   			clocks = <&k3_clks 136 1>;
-> +			status = "disabled"; /* Used by OP-TEE */
->   		};
->   	};
->   
+The PCS itself can either be mapped in the MAC's register space, in that
+case, it's accessed through 32 bits registers, with the higher 16 bits
+always 0. Alternatively, it can sit on its own register space, exposing
+16 bits registers, some of which ressemble the standard PHY registers.
 
-Reviewed-by: Jayesh Choudhary <j-choudhary@ti.com>
+To tackle that rework, several things needs updating, starting by the DT
+binding, since we add support for a new register range for the PCS.
+
+Hence, the first patch of the series is a conversion to YAML of the
+existing binding.
+
+Then, patch 2 does a bit of simple cleanup to the TSE driver, using nice
+reverse xmas tree definitions.
+
+Patch 3 adds the actual PCS driver, as a standalone driver. Some future
+series will then reuse that PCS driver from the dwmac-socfpga driver,
+which implements support for this exact PCS too, allowing to share the
+code nicely.
+
+Patch 4 is then a phylink conversion of the altera_tse driver, to use
+this new PCS driver.
+
+Finally, patch 5 updates the newly converted DT binding to support the
+pcs register range.
+
+This series contains bits and pieces for this conversion, please tell me if
+you want me to send it as individual patches.
+
+Thanks,
+
+Maxime
+
+V2 Changes :
+ - Fixed the binding after the YAML conversion
+ - Added a pcs_validate() callback
+ - Introduced a comment to justify a soft reset for the PCS
+
+Maxime Chevallier (5):
+  dt-bindings: net: Convert Altera TSE bindings to yaml
+  net: altera: tse: cosmetic change to use reverse xmas tree ordering
+  net: pcs: add new PCS driver for altera TSE PCS
+  net: altera: tse: convert to phylink
+  dt-bindings: net: altera: tse: add an optional pcs register range
+
+ .../devicetree/bindings/net/altera_tse.txt    | 113 -----
+ .../devicetree/bindings/net/altr,tse.yaml     | 183 +++++++
+ MAINTAINERS                                   |   7 +
+ drivers/net/ethernet/altera/Kconfig           |   2 +
+ drivers/net/ethernet/altera/altera_tse.h      |  19 +-
+ .../net/ethernet/altera/altera_tse_ethtool.c  |  22 +-
+ drivers/net/ethernet/altera/altera_tse_main.c | 453 +++++-------------
+ drivers/net/pcs/Kconfig                       |   6 +
+ drivers/net/pcs/Makefile                      |   1 +
+ drivers/net/pcs/pcs-altera-tse.c              | 171 +++++++
+ include/linux/pcs-altera-tse.h                |  17 +
+ 11 files changed, 547 insertions(+), 447 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/altera_tse.txt
+ create mode 100644 Documentation/devicetree/bindings/net/altr,tse.yaml
+ create mode 100644 drivers/net/pcs/pcs-altera-tse.c
+ create mode 100644 include/linux/pcs-altera-tse.h
+
+-- 
+2.37.2
 

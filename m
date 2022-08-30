@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EEF5A709D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:21:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F275A70B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:23:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbiH3WVB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 18:21:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S232411AbiH3WXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 18:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232133AbiH3WUf (ORCPT
+        with ESMTP id S232360AbiH3WWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:20:35 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F866520A9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 15:20:19 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id bq11so15969887wrb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 15:20:19 -0700 (PDT)
+        Tue, 30 Aug 2022 18:22:44 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B3B61DB9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 15:21:26 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id d5so6449015wms.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 15:21:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=HPrbJ+vQ4o+fFD/423VJ+T5YmPm3lPQCBpQHSndaOWk=;
-        b=BmZbDD+CmNe77coREpWAp5PxrknVqRJCdZ7TB5b+lKhL/T2cQ+KQshuF5ZFE478uUM
-         SjwF1n0TW1/TBbIb3XMokYSDeJ8SqEAUywLe2yhwSmajq+uT0DR8azDtSNj6UTg4KWC7
-         VLDpuutcOeOcsOTbveoBk5PqnOPoaeUi6roKqthPPwuo6obEz0PdNwc7r02blAfv2CIJ
-         gY+fPBXvNI4SGCjGA6YrC/4agzYiUv8YoJWSfnXPBz7ICGkEitmWWBdiH8q+UIlaMvFd
-         jeCENyhUM6LTfiwBe9EZGcpxGaSSCY2Z/71+cQYkoBI2+sn1omeTb44tdJuddoxLkPsh
-         hlWw==
+        bh=Kl+rI6b3liHnCQIWIxXAKPSVYAtssiKdL90maP+tud0=;
+        b=rV34eCLfWaWChkkMn9CclOTorafupclcOXxcc53yJBuh2S/gyOsBYCbfeXqqyLqhyI
+         t7LvDHJ9cm6rC04l7iLYDqA9nhaOMTLuLkNO4zvMZs9np/noIpAdWOMwMCPjkLyWPAEE
+         r4OFos9bpiRy9zAXJgKRdh0nuiekym0ho784u4VA42PHCKgMM/Zvf7iA0Voje+XB0zPb
+         7dkhMEMo/wx1pWCQUZyCmJMBAKlGOeC5VbAbt4yyQP7vZYdo0zyW28nqVcERbwllNrGY
+         UWAPIiVDpDxjp1+hMcZg2f4hRYC0cUb0la2lT7E4z/6jdaW3/tGXRItzProD1Cqbb52B
+         xpYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=HPrbJ+vQ4o+fFD/423VJ+T5YmPm3lPQCBpQHSndaOWk=;
-        b=GNSkhRCjwVbzWWrU/hId4Ggj0YHA2a2jT2cSFZQW4/THYb3lcaGpIBc9ou5K8Zibcu
-         CkUvnEvNufWK1XMb0gvJU1nxkwWJskdvkQhUt9QU2cCSEylVXcAL1GJfWTUFd5cgbhPp
-         oc975dtW1xoiclCh8t6pjXYh0lfCL/WT98q/i/5y5/DayWSS0CRKP1uhupmi1EMGCBY7
-         qtXpL8fziDvW05OCdzeuyozkrA3Bwnd6y/DKCbSanGkf7dIddknlpjkk9pcpApaX22Dm
-         pmzBOTrYkbCgc5pSfcwSUHR5cppGppXmKieRj3VeDEeYC5SJi7bqH+m2ym2vcKQhFgfu
-         E+iA==
-X-Gm-Message-State: ACgBeo0oC+5YNJv6oCXVQcAfDKjEBNv8eTfskXhvJYIa24lcY4zkaxVC
-        d20eEl/mt8k2/RwiODIHTBZ5BVddANJZvKIwy9GZTA==
-X-Google-Smtp-Source: AA6agR6AHK3n/oQ6l8SIk21SqNa4hPOU8qFm/SkR6osnTCJcO6g82JPZIqMp1m8voh/gkX3ZK9OD3+FxbsH5RuCdkq4=
-X-Received: by 2002:a5d:64ab:0:b0:226:d997:ad5c with SMTP id
- m11-20020a5d64ab000000b00226d997ad5cmr6974773wrp.602.1661898017406; Tue, 30
- Aug 2022 15:20:17 -0700 (PDT)
+        bh=Kl+rI6b3liHnCQIWIxXAKPSVYAtssiKdL90maP+tud0=;
+        b=UpaL2WjZoIKVjCO3tFTNQ0CXmXfnsrPVStk1T4ZJUZO978hvb/n2gU5UJhwj9SCzNO
+         Tbhg7rznStrq/vtRjV1po6h/fu/HTX4BYNnKy0W3iR3WGbb+PVLwfF7ZrNHneA4+fPgC
+         Yt6N1KxY8wBC1eJ2AP8HN3L9ur5kznY7BjQud/og4r9zeKbyuRfN7c6fpKXfFMwPIO+i
+         6mCajZki6sNE+OgByPe0RZATfdShInOWMiRHZNKjF3qjI5osI23T/sXuHBK96qgjBJG6
+         utW5naMDfIGYyZmqTsAkQT/4grf5pQM0X5/kjqX345QsSG/JUBDGkIPfWK0KlKm7dzIo
+         49uw==
+X-Gm-Message-State: ACgBeo2y63tOn4pYOXRGiSJdCTr5lfkzlmy9d3PZJiqSTBxqRgVy4y0K
+        ErYKLHN5WHuymwCKdDZafh5zIfjbTxxd3zI7k8hn6w==
+X-Google-Smtp-Source: AA6agR52H8PLI6OITssNgjSG/kFV6xTgWI4uQ1YHChM6A5pxsfqR3r3bnMB8ZeD1Cc4ow7fDAOrs8g71YvKtSmSZvOY=
+X-Received: by 2002:a05:600c:4f89:b0:3a6:243d:3bbe with SMTP id
+ n9-20020a05600c4f8900b003a6243d3bbemr90482wmq.16.1661898059928; Tue, 30 Aug
+ 2022 15:20:59 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220829201254.1814484-1-cmllamas@google.com> <20220829201254.1814484-4-cmllamas@google.com>
-In-Reply-To: <20220829201254.1814484-4-cmllamas@google.com>
+References: <20220829201254.1814484-1-cmllamas@google.com> <20220829201254.1814484-3-cmllamas@google.com>
+In-Reply-To: <20220829201254.1814484-3-cmllamas@google.com>
 From:   Todd Kjos <tkjos@google.com>
-Date:   Tue, 30 Aug 2022 15:20:06 -0700
-Message-ID: <CAHRSSEzCUcmAO4SDeUtAutRSkhV9pOX9Ea7Q0uaeGcf_Mj9NRw@mail.gmail.com>
-Subject: Re: [PATCH 3/7] binder: rename alloc->vma_vm_mm to alloc->mm
+Date:   Tue, 30 Aug 2022 15:20:49 -0700
+Message-ID: <CAHRSSEwgbbu30fpFGJ4370UvA3CEh7WdhAqfpJPU6ycABCWLeg@mail.gmail.com>
+Subject: Re: [PATCH 2/7] binder: fix trivial kernel-doc typo
 To:     Carlos Llamas <cmllamas@google.com>
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
@@ -76,8 +76,7 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 On Mon, Aug 29, 2022 at 1:13 PM 'Carlos Llamas' via kernel-team
 <kernel-team@android.com> wrote:
 >
-> Rename ->vma_vm_mm to ->mm to reflect the fact that we no longer cache
-> this reference from vma->vm_mm but from current->mm instead.
+> Correct the misspelling of 'invariant' in kernel-doc section.
 >
 > No functional changes in this patch.
 >
@@ -86,144 +85,26 @@ On Mon, Aug 29, 2022 at 1:13 PM 'Carlos Llamas' via kernel-team
 Acked-by: Todd Kjos <tkjos@google.com>
 
 > ---
->  drivers/android/binder_alloc.c | 34 +++++++++++++++++-----------------
->  drivers/android/binder_alloc.h |  4 ++--
->  2 files changed, 19 insertions(+), 19 deletions(-)
+>  drivers/android/binder_alloc.h | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-> index 9b1778c00610..749a4cd30a83 100644
-> --- a/drivers/android/binder_alloc.c
-> +++ b/drivers/android/binder_alloc.c
-> @@ -208,8 +208,8 @@ static int binder_update_page_range(struct binder_alloc *alloc, int allocate,
->                 }
->         }
->
-> -       if (need_mm && mmget_not_zero(alloc->vma_vm_mm))
-> -               mm = alloc->vma_vm_mm;
-> +       if (need_mm && mmget_not_zero(alloc->mm))
-> +               mm = alloc->mm;
->
->         if (mm) {
->                 mmap_read_lock(mm);
-> @@ -322,9 +322,9 @@ static inline void binder_alloc_set_vma(struct binder_alloc *alloc,
->          */
->         if (vma) {
->                 vm_start = vma->vm_start;
-> -               mmap_assert_write_locked(alloc->vma_vm_mm);
-> +               mmap_assert_write_locked(alloc->mm);
->         } else {
-> -               mmap_assert_locked(alloc->vma_vm_mm);
-> +               mmap_assert_locked(alloc->mm);
->         }
->
->         alloc->vma_addr = vm_start;
-> @@ -336,7 +336,7 @@ static inline struct vm_area_struct *binder_alloc_get_vma(
->         struct vm_area_struct *vma = NULL;
->
->         if (alloc->vma_addr)
-> -               vma = vma_lookup(alloc->vma_vm_mm, alloc->vma_addr);
-> +               vma = vma_lookup(alloc->mm, alloc->vma_addr);
->
->         return vma;
->  }
-> @@ -401,15 +401,15 @@ static struct binder_buffer *binder_alloc_new_buf_locked(
->         size_t size, data_offsets_size;
->         int ret;
->
-> -       mmap_read_lock(alloc->vma_vm_mm);
-> +       mmap_read_lock(alloc->mm);
->         if (!binder_alloc_get_vma(alloc)) {
-> -               mmap_read_unlock(alloc->vma_vm_mm);
-> +               mmap_read_unlock(alloc->mm);
->                 binder_alloc_debug(BINDER_DEBUG_USER_ERROR,
->                                    "%d: binder_alloc_buf, no vma\n",
->                                    alloc->pid);
->                 return ERR_PTR(-ESRCH);
->         }
-> -       mmap_read_unlock(alloc->vma_vm_mm);
-> +       mmap_read_unlock(alloc->mm);
->
->         data_offsets_size = ALIGN(data_size, sizeof(void *)) +
->                 ALIGN(offsets_size, sizeof(void *));
-> @@ -823,7 +823,7 @@ void binder_alloc_deferred_release(struct binder_alloc *alloc)
->         buffers = 0;
->         mutex_lock(&alloc->mutex);
->         BUG_ON(alloc->vma_addr &&
-> -              vma_lookup(alloc->vma_vm_mm, alloc->vma_addr));
-> +              vma_lookup(alloc->mm, alloc->vma_addr));
->
->         while ((n = rb_first(&alloc->allocated_buffers))) {
->                 buffer = rb_entry(n, struct binder_buffer, rb_node);
-> @@ -873,8 +873,8 @@ void binder_alloc_deferred_release(struct binder_alloc *alloc)
->                 kfree(alloc->pages);
->         }
->         mutex_unlock(&alloc->mutex);
-> -       if (alloc->vma_vm_mm)
-> -               mmdrop(alloc->vma_vm_mm);
-> +       if (alloc->mm)
-> +               mmdrop(alloc->mm);
->
->         binder_alloc_debug(BINDER_DEBUG_OPEN_CLOSE,
->                      "%s: %d buffers %d, pages %d\n",
-> @@ -931,13 +931,13 @@ void binder_alloc_print_pages(struct seq_file *m,
->          * read inconsistent state.
->          */
->
-> -       mmap_read_lock(alloc->vma_vm_mm);
-> +       mmap_read_lock(alloc->mm);
->         if (binder_alloc_get_vma(alloc) == NULL) {
-> -               mmap_read_unlock(alloc->vma_vm_mm);
-> +               mmap_read_unlock(alloc->mm);
->                 goto uninitialized;
->         }
->
-> -       mmap_read_unlock(alloc->vma_vm_mm);
-> +       mmap_read_unlock(alloc->mm);
->         for (i = 0; i < alloc->buffer_size / PAGE_SIZE; i++) {
->                 page = &alloc->pages[i];
->                 if (!page->page_ptr)
-> @@ -1020,7 +1020,7 @@ enum lru_status binder_alloc_free_page(struct list_head *item,
->         index = page - alloc->pages;
->         page_addr = (uintptr_t)alloc->buffer + index * PAGE_SIZE;
->
-> -       mm = alloc->vma_vm_mm;
-> +       mm = alloc->mm;
->         if (!mmget_not_zero(mm))
->                 goto err_mmget;
->         if (!mmap_read_trylock(mm))
-> @@ -1089,8 +1089,8 @@ static struct shrinker binder_shrinker = {
->  void binder_alloc_init(struct binder_alloc *alloc)
->  {
->         alloc->pid = current->group_leader->pid;
-> -       alloc->vma_vm_mm = current->mm;
-> -       mmgrab(alloc->vma_vm_mm);
-> +       alloc->mm = current->mm;
-> +       mmgrab(alloc->mm);
->         mutex_init(&alloc->mutex);
->         INIT_LIST_HEAD(&alloc->buffers);
->  }
 > diff --git a/drivers/android/binder_alloc.h b/drivers/android/binder_alloc.h
-> index 0c37935ff7a2..fe80cc405707 100644
+> index 1e4fd37af5e0..0c37935ff7a2 100644
 > --- a/drivers/android/binder_alloc.h
 > +++ b/drivers/android/binder_alloc.h
-> @@ -78,7 +78,7 @@ struct binder_lru_page {
->   *                      (invariant after mmap)
+> @@ -75,10 +75,10 @@ struct binder_lru_page {
+>  /**
+>   * struct binder_alloc - per-binder proc state for binder allocator
+>   * @vma:                vm_area_struct passed to mmap_handler
+> - *                      (invarient after mmap)
+> + *                      (invariant after mmap)
 >   * @tsk:                tid for task that called init for this proc
 >   *                      (invariant after init)
-> - * @vma_vm_mm:          copy of vma->vm_mm (invariant after mmap)
-> + * @mm:                 copy of task->mm (invariant after open)
+> - * @vma_vm_mm:          copy of vma->vm_mm (invarient after mmap)
+> + * @vma_vm_mm:          copy of vma->vm_mm (invariant after mmap)
 >   * @buffer:             base of per-proc address space mapped via mmap
 >   * @buffers:            list of all buffers for this proc
 >   * @free_buffers:       rb tree of buffers available for allocation
-> @@ -101,7 +101,7 @@ struct binder_lru_page {
->  struct binder_alloc {
->         struct mutex mutex;
->         unsigned long vma_addr;
-> -       struct mm_struct *vma_vm_mm;
-> +       struct mm_struct *mm;
->         void __user *buffer;
->         struct list_head buffers;
->         struct rb_root free_buffers;
 > --
 > 2.37.2.672.g94769d06f0-goog
 >

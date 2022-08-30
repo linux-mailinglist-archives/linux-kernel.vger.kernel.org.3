@@ -2,75 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17515A6B9F
+	by mail.lfdr.de (Postfix) with ESMTP id 1CB4A5A6B9D
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:02:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232250AbiH3SCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55854 "EHLO
+        id S232242AbiH3SCG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:02:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbiH3SBg (ORCPT
+        with ESMTP id S230289AbiH3SBf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:01:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065EFA2238
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:01:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661882492;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=B4ruO31PHkrlH5v1gXJkpOHPSYcHLtyneSEzcjXO5Ho=;
-        b=DlMZGshwcN4/i4+370XO/DBPIkv3yM5skJYtQlgnMiM4KAcWw7YARrBtiVMBSD/akh/iuH
-        dM690b85iVZ+1l48CgSku93jhpwHbe1jTdxe186+Wcd8vcX2MgO30O6HdoRCBApuvc3PZ8
-        KwbsqNo58gmPw6zlRrpO1Gv7tjpYSQ4=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-247-f7wFDy8dM4CXZ3KMd9RupA-1; Tue, 30 Aug 2022 14:01:30 -0400
-X-MC-Unique: f7wFDy8dM4CXZ3KMd9RupA-1
-Received: by mail-qv1-f70.google.com with SMTP id d15-20020a056214184f00b00498efcf3965so7182604qvy.15
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:01:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=B4ruO31PHkrlH5v1gXJkpOHPSYcHLtyneSEzcjXO5Ho=;
-        b=sT7wR2p6IKd8kqY1+wFrq+wEQrHHLdt+UGf2zVMFTD0IuP/e4eN2/LTJnEb3Wqa9aJ
-         Oyd+WWLHY4edO/QyqA8maKxKUC4/gHLpe+6ykdF9uptpcblEyEYo91kXeiB9PMnzUvsh
-         KENZtUaB7nK1AVGMVMZY6/XdEcKAQesJ6ftvjsuOuSZBVmyZF5ICY4ia2X9TR6uEoAmd
-         raDBR7GdRHduBnSonqIOTx4b8AOcb6fHwK99aZv+jcXV+9+IvLk5uq7QqnBGUx4XDmo8
-         q62gWH9lifeQRNm/HNVi3tkEZvKyS6SNori4ziYkvJSaJoIayjwfB/N8UWEo/ePtynHG
-         Bltw==
-X-Gm-Message-State: ACgBeo1/fa+gJvmUlv04eO0w7Vh0AdTpJsClTI4VxyIhCSeTAnkYDIj1
-        QYGyMuwVhceilCCjiBKHWcvh6nyDraSPXdGlEkoMDLGEPVinD/8clgaVuULY86XOrKLLGezSCB6
-        DcaYo2YLQqRJbdAX2I64eh1Lr
-X-Received: by 2002:a05:620a:2452:b0:6bb:d8ba:ca65 with SMTP id h18-20020a05620a245200b006bbd8baca65mr12862210qkn.263.1661882489883;
-        Tue, 30 Aug 2022 11:01:29 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4FDpHPGTAEXt4hym2rCFYYguOK7NgS2axRiD3nKOflngOJy2QWn639ZrCJ/MLxORdMitK6Nw==
-X-Received: by 2002:a05:620a:2452:b0:6bb:d8ba:ca65 with SMTP id h18-20020a05620a245200b006bbd8baca65mr12862167qkn.263.1661882489395;
-        Tue, 30 Aug 2022 11:01:29 -0700 (PDT)
-Received: from xps13.redhat.com (c-98-239-145-235.hsd1.wv.comcast.net. [98.239.145.235])
-        by smtp.gmail.com with ESMTPSA id bm2-20020a05620a198200b006b5f06186aesm8599670qkb.65.2022.08.30.11.01.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 11:01:29 -0700 (PDT)
-From:   Brian Masney <bmasney@redhat.com>
-To:     andersson@kernel.org
-Cc:     agross@kernel.org, konrad.dybcio@somainline.org,
+        Tue, 30 Aug 2022 14:01:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593D59D129;
+        Tue, 30 Aug 2022 11:01:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EAEA06152A;
+        Tue, 30 Aug 2022 18:01:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81B6CC43470;
+        Tue, 30 Aug 2022 18:01:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661882490;
+        bh=0OojOeWriYciWCW7CDS3kKn+DRlqDdnrnDF91OklMPk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Khk4T1th+i44VfKwq3RXJb2dAxxojnHAhA3FXFkECpPxArX7mK7MdWrJmw7PrZIr7
+         5WgTA8clP9BzfH4tkxD6Q/SVIyA4AhRw6JUi9GASBU7ncgcIFEM2QswBwfyLbmLjWH
+         dyuFyI2dCF5s2exJ+dhPiujDAPdT0ouEkwMAbyZSqbghWUE1MO8SiJlHnuWQ2dwmKg
+         JH+AajuHyEbHQIDWLNZhz5AS2dEHdn2HfrBEgJK7w2aJYk5BBbvlzEl8rY1Rwg8ZMN
+         zaNbOiRxVEjCsQrizFGs++vjbsRLgY53n9k18worQpDE47g3RX8DyLz0bY11w/4XQv
+         Tz0HzYeF2iv3Q==
+Date:   Tue, 30 Aug 2022 19:01:27 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Ban Tao <fengzheng923@gmail.com>, lgirdwood@gmail.com,
         robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ahalaney@redhat.com,
-        echanude@redhat.com
-Subject: [PATCH v3] arm64: dts: qcom: sc8280xp: correct ref_aux clock for ufs_mem_phy
-Date:   Tue, 30 Aug 2022 14:01:20 -0400
-Message-Id: <20220830180120.2082734-1-bmasney@redhat.com>
-X-Mailer: git-send-email 2.37.1
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 2/2] ASoC: sun50i-dmic: dt-bindings: add DT bindings
+ for DMIC controller
+Message-ID: <Yw5Qd7ZNPIc/o7+6@sirena.org.uk>
+References: <1661872039-40174-1-git-send-email-fengzheng923@gmail.com>
+ <25072fba-64e2-df11-c8f0-a274037141f0@linaro.org>
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dVf75fQWW/SwR7TB"
+Content-Disposition: inline
+In-Reply-To: <25072fba-64e2-df11-c8f0-a274037141f0@linaro.org>
+X-Cookie: Necessity is a mother.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,63 +62,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The first UFS host controller fails to start on the SA8540P automotive
-board (QDrive3) due to the following errors:
 
-    ufshcd-qcom 1d84000.ufs: ufshcd_query_flag: Sending flag query for idn 18 failed, err = 253
-    ufshcd-qcom 1d84000.ufs: ufshcd_query_flag: Sending flag query for idn 18 failed, err = 253
-    ufshcd-qcom 1d84000.ufs: ufshcd_query_flag: Sending flag query for idn 18 failed, err = 253
-    ufshcd-qcom 1d84000.ufs: ufshcd_query_flag_retry: query attribute, opcode 5, idn 18, failed
-        with error 253 after 3 retries
+--dVf75fQWW/SwR7TB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The system eventually fails to boot with the warning:
+On Tue, Aug 30, 2022 at 08:35:09PM +0300, Krzysztof Kozlowski wrote:
+> On 30/08/2022 18:07, Ban Tao wrote:
+> > DT binding documentation for this new ASoC driver.
 
-    gcc_ufs_phy_axi_clk status stuck at 'off'
+> > +properties:
+> > +  "#sound-dai-cells":
+> > +    const: 0
+> > +
+> > +  compatible:
+> > +    const: allwinner,sun50i-h6-dmic
 
-This issue can be worked around by adding clk_ignore_unused to the
-kernel command line since the system firmware sets up this clock for us.
+> Put compatible first in the list of properties (also in required:).
 
-Let's fix this issue by updating the ref clock on ufs_mem_phy. Note
-that the downstream MSM 5.4 sources list this as ref_clk_parent. With
-this patch, the SA8540P is able to be booted without clk_ignore_unused.
+Can the tooling be taught about this?
 
-Signed-off-by: Brian Masney <bmasney@redhat.com>
-Fixes: 152d1faf1e2f3 ("arm64: dts: qcom: add SC8280XP platform")
----
-v2 of this patch can be found at
-https://lore.kernel.org/lkml/20220825163755.683843-1-bmasney@redhat.com/T/#u
+--dVf75fQWW/SwR7TB
+Content-Type: application/pgp-signature; name="signature.asc"
 
-v1 of this patch can be found at
-https://lore.kernel.org/lkml/20220623142837.3140680-1-bmasney@redhat.com/T/#u
+-----BEGIN PGP SIGNATURE-----
 
-Note that there's also a similar issue with the second UFS controller
-(ufs_card_hc) since it separately fails with:
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMOUHYACgkQJNaLcl1U
+h9CT4Af4wwvuSIZlXbwZfwgqtydzN1X3EMrS86L2JcV+PzlV4zr+e35HOC7vomxq
+fbSFJAddJVWTYKIAfu0PpX6ZBO7S+w6/0BBJpk45sQmz7mLgZMOFSnYCcunwBJA1
+3JxBST9Jf764020OPDnnWzzWH/nl6cB3B3pqBTXkYQbHB19qfWyRzPepYcuxX41X
+NGZRFEs4K/gnyRovZ/8eX570MMdjCkuvFK2B5rdrGrZqk6TRfgyZ1b2a6B9luCy2
+/Zn8EyqHOEqDCVZ39gXyRbY3U+kl05pRbtiYAVHC0gLGkf4vc4A88si+W+sRDZEx
+E3I4eExDAgQnQKh4Mq9ye3CbGNKq
+=QqUt
+-----END PGP SIGNATURE-----
 
-    ufshcd-qcom 1da4000.ufs: Controller enable failed
-    ufshcd-qcom 1da4000.ufs: link startup failed 1
-    ...
-    gcc_ufs_card_axi_clk status stuck at 'off'
-
-We are currently disabling the second UFS host controller (ufs_card_hc) in
-our DTS at the moment. I haven't had any luck so far tracking this one
-down and it's particularly tough without docs access.
-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-index 49ea8b5612fc..2bdde4b8f72b 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
-@@ -891,7 +891,7 @@ ufs_mem_phy: phy@1d87000 {
- 			ranges;
- 			clock-names = "ref",
- 				      "ref_aux";
--			clocks = <&rpmhcc RPMH_CXO_CLK>,
-+			clocks = <&gcc GCC_UFS_REF_CLKREF_CLK>,
- 				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
- 
- 			resets = <&ufs_mem_hc 0>;
--- 
-2.37.1
-
+--dVf75fQWW/SwR7TB--

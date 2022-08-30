@@ -2,192 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74EAC5A6F10
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:22:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79F545A6EA7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:49:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231487AbiH3VWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 17:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
+        id S230292AbiH3Ute (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 16:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbiH3VWW (ORCPT
+        with ESMTP id S229629AbiH3Utc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:22:22 -0400
-X-Greylist: delayed 2065 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 14:22:20 PDT
-Received: from dispatch1-us1.ppe-hosted.com (dispatch1-us1.ppe-hosted.com [148.163.129.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ADD57E81C;
-        Tue, 30 Aug 2022 14:22:20 -0700 (PDT)
-Received: from dispatch1-us1.ppe-hosted.com (localhost.localdomain [127.0.0.1])
-        by dispatch1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 22F472E567;
-        Tue, 30 Aug 2022 20:47:55 +0000 (UTC)
-X-Virus-Scanned: Proofpoint Essentials engine
-Received: from mx1-us1.ppe-hosted.com (unknown [10.7.67.134])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id 4FF4920080;
-        Tue, 30 Aug 2022 20:47:50 +0000 (UTC)
-Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 4F34EBC0079;
-        Tue, 30 Aug 2022 20:47:49 +0000 (UTC)
-Received: from [192.168.100.195] (50-251-239-81-static.hfc.comcastbusiness.net [50.251.239.81])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail3.candelatech.com (Postfix) with ESMTPSA id 7A23413C2B0;
-        Tue, 30 Aug 2022 13:47:48 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com 7A23413C2B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
-        s=default; t=1661892468;
-        bh=IWicMtCVoSqbenm0Io1txAB5st81R43ZF1d7pF9EvXI=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=W+SqcU3LQqLEdlEqyqVWKs/FDKKI5Cb0a92lWjyd+dB0d13sCe/xd8nGRt18ZnjpE
-         Qf4mUlTfun1cOFA0K5Ps/9bptWBSK+QlLCN4daW6NoCP99H6nIPmy5+GpCNpZMyWdP
-         1fnWbwWnGU4mhGGMHDChy6Fca1Lru0UnneEIzElE=
-Subject: Re: [PATCH 5.4 182/389] PCI/portdrv: Dont disable AER reporting in
- get_port_device_capability()
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, bjorn@helgaas.com
-Cc:     LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        Stefan Roese <sr@denx.de>, Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Yao Hongbo <yaohongbo@linux.alibaba.com>,
-        Naveen Naidu <naveennaidu479@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-References: <20220823080115.331990024@linuxfoundation.org>
- <20220823080123.228828362@linuxfoundation.org>
- <CABhMZUVycsyy76j2Z=K+C6S1fwtzKE1Lx2povXKfB80o9g0MtQ@mail.gmail.com>
- <YwXH/l37HaYQD66B@kroah.com>
-From:   Ben Greear <greearb@candelatech.com>
-Organization: Candela Technologies
-Message-ID: <47b775c5-57fa-5edf-b59e-8a9041ffbee7@candelatech.com>
-Date:   Tue, 30 Aug 2022 13:47:48 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Tue, 30 Aug 2022 16:49:32 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC0661727
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=X7iCSTOWnU9U3NhVrvgeJETd405QeOeiTIOooqNdB1U=; b=gHAz3xYNkI3tRJgVyrayctUNn6
+        FVSzD8fJhvqrScQM3uI3z3gV/t9Xe/uqUvA27go4xDvOr2+k0+eJ0tln1Z2/fJ8l1So8kOPQQ/DrW
+        o+c1C5yTgE98mfKcMK2h71rRIzLvbgfeGASSIcrUvwIh2SQboMxS54OJKIXTXdCvrCvgI/ZNpESA2
+        FgxNpDBwcJlHVD8FIQ1+HhQVn9UVQWl+2GljU8rjXvjDohBYmpmP6xvYGjGtiGik6mPXhE4PKh4lK
+        A7S5/S7F95ZS/c+JJcsGumqpCK6IPZpB6oDBbXmokqeBugfwQ/YOlOyP5d9ztO1HdJ9tzRanRpS6m
+        4PNfFFzQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34010)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oT8Ao-0003NE-Q0; Tue, 30 Aug 2022 21:49:26 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oT8An-0001qo-F7; Tue, 30 Aug 2022 21:49:25 +0100
+Date:   Tue, 30 Aug 2022 21:49:25 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: Re: [rmk-arm:for-next 5/7] arch/arm/mm/init.c:219: undefined
+ reference to `phys_initrd_start'
+Message-ID: <Yw531SABnjRQ0ZCK@shell.armlinux.org.uk>
+References: <202208310435.G07HW3ZF-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YwXH/l37HaYQD66B@kroah.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-MDID: 1661892470-e0BElUr0M9MX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202208310435.G07HW3ZF-lkp@intel.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 11:41 PM, Greg Kroah-Hartman wrote:
-> On Tue, Aug 23, 2022 at 07:20:14AM -0500, Bjorn Helgaas wrote:
->> On Tue, Aug 23, 2022, 6:35 AM Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->> wrote:
->>
->>> From: Stefan Roese <sr@denx.de>
->>>
->>> [ Upstream commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 ]
->>>
->>
->> There's an open regression related to this commit:
->>
->> https://bugzilla.kernel.org/show_bug.cgi?id=216373
+On Wed, Aug 31, 2022 at 04:36:48AM +0800, kernel test robot wrote:
+> tree:   git://git.armlinux.org.uk/~rmk/linux-arm for-next
+> head:   a72b4b3ba681398a3ac1c1384efb949bef3ac846
+> commit: b35b2736b43d7124e7da6a8050b8fd9e02f9f734 [5/7] ARM: 9230/1: Support initrd with address in boot alias region
+
+Dropping this patch.
+
+> config: arm-lubbock_defconfig (https://download.01.org/0day-ci/archive/20220831/202208310435.G07HW3ZF-lkp@intel.com/config)
+> compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+>         git fetch --no-tags rmk-arm for-next
+>         git checkout b35b2736b43d7124e7da6a8050b8fd9e02f9f734
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 > 
-> This is already in the following released stable kernels:
-> 	5.10.137 5.15.61 5.18.18 5.19.2
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
 > 
-> I'll go drop it from the 4.19 and 5.4 queues, but when this gets
-> resolved in Linus's tree, make sure there's a cc: stable on the fix so
-> that we know to backport it to the above branches as well.  Or at the
-> least, a "Fixes:" tag.
-
-This is still in 5.19.5.  We saw some funny iwlwifi crashes in 5.19.3+
-that we did not see in 5.19.0+.  I just bisected the scary looking AER errors to this
-patch, though I do not know for certain if it causes the iwlwifi related crashes yet.
-
-In general, from reading the commit msg, this patch doesn't seem to be a great candidate
-for stable in general.  Does it fix some important problem?
-
-In case it helps, here is example of what I see in dmesg.  The kernel crashes in iwlwifi
-had to do with rx messages from the firmware, and some warnings lead me to believe that
-pci messages were slow coming back and/or maybe duplicated.  So maybe this AER patch changes
-timing or otherwise screws up the PCI adapter boards we use...
-
-
-[   50.905809] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
-[   50.905830] pcieport 0000:03:01.0: AER: device recovery failed
-[   50.905831] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:01.0
-[   50.905845] pcieport 0000:03:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-[   50.915679] pcieport 0000:03:01.0:   device [10b5:8619] error status/mask=00100000/00000000
-[   50.922735] pcieport 0000:03:01.0:    [20] UnsupReq               (First)
-[   50.928230] pcieport 0000:03:01.0: AER:   TLP Header: 34000000 04001f10 00000000 88c888c8
-[   50.935126] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
-[   50.935133] pcieport 0000:03:01.0: AER: device recovery failed
-[   50.935134] pcieport 0000:00:1c.0: AER: Multiple Uncorrected (Non-Fatal) error received: 0000:03:01.0
-[   50.935222] pcieport 0000:03:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-[   50.945059] pcieport 0000:03:01.0:   device [10b5:8619] error status/mask=00100000/00000000
-[   50.952120] pcieport 0000:03:01.0:    [20] UnsupReq               (First)
-[   50.957614] pcieport 0000:03:01.0: AER:   TLP Header: 34000000 04001f10 00000000 88c888c8
-[   50.964492] pcieport 0000:03:01.0: AER:   Error of this Agent is reported first
-[   50.970519] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-[   50.980344] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
-[   50.987399] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
-[   50.992891] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
-[   50.999785] pcieport 0000:03:03.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-[   51.009611] pcieport 0000:03:03.0:   device [10b5:8619] error status/mask=00100000/00000000
-[   51.016665] pcieport 0000:03:03.0:    [20] UnsupReq               (First)
-[   51.022161] pcieport 0000:03:03.0: AER:   TLP Header: 34000000 06001f10 00000000 88c888c8
-[   51.029052] pcieport 0000:03:05.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-[   51.038881] pcieport 0000:03:05.0:   device [10b5:8619] error status/mask=00100000/00000000
-[   51.045931] pcieport 0000:03:05.0:    [20] UnsupReq               (First)
-[   51.051430] pcieport 0000:03:05.0: AER:   TLP Header: 34000000 07001f10 00000000 88c888c8
-[   51.058320] pcieport 0000:03:07.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-[   51.068147] pcieport 0000:03:07.0:   device [10b5:8619] error status/mask=00100000/00000000
-[   51.075200] pcieport 0000:03:07.0:    [20] UnsupReq               (First)
-[   51.080696] pcieport 0000:03:07.0: AER:   TLP Header: 34000000 08001f10 00000000 88c888c8
-[   51.087589] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
-[   51.087598] pcieport 0000:03:01.0: AER: device recovery failed
-[   51.087611] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
-[   51.087615] pcieport 0000:03:02.0: AER: device recovery failed
-[   51.087628] iwlwifi 0000:06:00.0: AER: can't recover (no error_detected callback)
-[   51.087631] pcieport 0000:03:03.0: AER: device recovery failed
-[   51.087643] iwlwifi 0000:07:00.0: AER: can't recover (no error_detected callback)
-[   51.087646] pcieport 0000:03:05.0: AER: device recovery failed
-[   51.087659] iwlwifi 0000:08:00.0: AER: can't recover (no error_detected callback)
-[   51.087662] pcieport 0000:03:07.0: AER: device recovery failed
-[   51.103761] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
-[   51.103778] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-[   51.113608] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
-[   51.120658] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
-[   51.126152] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
-[   51.133044] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
-[   51.133068] pcieport 0000:03:0f.0: AER: device recovery failed
-[   51.168925] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
-[   51.168940] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-[   51.178773] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
-[   51.185823] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
-[   51.191318] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
-[   51.198211] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
-[   51.198234] pcieport 0000:03:0f.0: AER: device recovery failed
-[   51.260695] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
-[   51.260710] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-[   51.270548] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
-[   51.277605] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
-[   51.283103] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
-[   51.290009] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
-[   51.290033] pcieport 0000:03:0f.0: AER: device recovery failed
-[   51.328514] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
-[   51.328530] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-[   51.331638] ACPI: \: failed to evaluate _DSM bf0212f2-788f-c64d-a5b3-1f738e285ade (0x1001)
-[   51.338363] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
-[   51.338364] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
-[   51.345413] ACPI: \: failed to evaluate _DSM bf0212f2-788f-c64d-a5b3-1f738e285ade (0x1001)
-[   51.350900] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
-[   51.350927] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
-
-
-Thanks,
-Ben
+> All errors (new ones prefixed by >>):
+> 
+>    arm-linux-gnueabi-ld: arch/arm/mm/init.o: in function `arm_memblock_init':
+> >> arch/arm/mm/init.c:219: undefined reference to `phys_initrd_start'
+> 
+> 
+> vim +219 arch/arm/mm/init.c
+> 
+> b35b2736b43d71 Matija Glavinic Pecotic 2022-08-19  197  
+> 3928624812dcfa Russell King            2017-01-16  198  void __init arm_memblock_init(const struct machine_desc *mdesc)
+> 3928624812dcfa Russell King            2017-01-16  199  {
+> 3928624812dcfa Russell King            2017-01-16  200  	/* Register the kernel text, kernel data and initrd with memblock. */
+> 3928624812dcfa Russell King            2017-01-16  201  	memblock_reserve(__pa(KERNEL_START), KERNEL_END - KERNEL_START);
+> 3928624812dcfa Russell King            2017-01-16  202  
+> b35b2736b43d71 Matija Glavinic Pecotic 2022-08-19  203  	sanitize_initrd_address();
+> e46e45f00d9ea5 Wang Kefeng             2021-12-22  204  	reserve_initrd_mem();
+> 2778f62056ada4 Russell King            2010-07-09  205  
+> 2778f62056ada4 Russell King            2010-07-09  206  	arm_mm_memblock_reserve();
+> 2778f62056ada4 Russell King            2010-07-09  207  
+> 8d717a52d1b095 Russell King            2010-05-22  208  	/* reserve any platform specific memblock areas */
+> 8d717a52d1b095 Russell King            2010-05-22  209  	if (mdesc->reserve)
+> 8d717a52d1b095 Russell King            2010-05-22  210  		mdesc->reserve();
+> 8d717a52d1b095 Russell King            2010-05-22  211  
+> bcedb5f9bd7466 Marek Szyprowski        2014-02-28  212  	early_init_fdt_scan_reserved_mem();
+> bcedb5f9bd7466 Marek Szyprowski        2014-02-28  213  
+> 99a468d779f685 George G. Davis         2015-01-16  214  	/* reserve memory for DMA contiguous allocations */
+> 95b0e655f91488 Marek Szyprowski        2014-10-09  215  	dma_contiguous_reserve(arm_dma_limit);
+> c79095092834a1 Marek Szyprowski        2011-12-29  216  
+> 716a3dc20084da Russell King            2012-01-13  217  	arm_memblock_steal_permitted = false;
+> 2778f62056ada4 Russell King            2010-07-09  218  	memblock_dump_all();
+> 2778f62056ada4 Russell King            2010-07-09 @219  }
+> 2778f62056ada4 Russell King            2010-07-09  220  
+> 
+> :::::: The code at line 219 was first introduced by commit
+> :::::: 2778f62056ada442414392d7ccd41188bb631619 ARM: initial LMB trial
+> 
+> :::::: TO: Russell King <rmk+kernel@arm.linux.org.uk>
+> :::::: CC: Russell King <rmk+kernel@arm.linux.org.uk>
+> 
+> -- 
+> 0-DAY CI Kernel Test Service
+> https://01.org/lkp
+> 
 
 -- 
-Ben Greear <greearb@candelatech.com>
-Candela Technologies Inc  http://www.candelatech.com
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C04D5A719F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8191D5A71A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiH3XSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 19:18:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S231882AbiH3XSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 19:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbiH3XR6 (ORCPT
+        with ESMTP id S229908AbiH3XSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 19:17:58 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF3B8A1A6D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 16:16:33 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id e11-20020a17090a630b00b001f8b2deb88dso11888058pjj.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 16:16:33 -0700 (PDT)
+        Tue, 30 Aug 2022 19:18:00 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1662A222A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 16:16:42 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id m34-20020a634c62000000b0042aff6dff12so6127503pgl.14
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 16:16:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc;
-        bh=9+JwBO4nX8GrUd03Z9QeV/uS8dpKH0L2avVFFDeS0ks=;
-        b=jXXAcjBui2gp6SLGVf6HlOAyNamaRGTU9bCBd9OArQqpSgOWiNRYQyFS62VJGb7awZ
-         MbuBS3ATOMu1rcMKmcDipN0/qy5F57JkCRaDfJ8OzL0FWE0F/2/jJJFZCaIcWkBt6K90
-         hT7ipBF3zGzKt+qniGAPX03UTOKgY8OwzTWBCzpJbB5x7/JfQT9NAgVGuLzHBOql6xlZ
-         b8HdfQbExvTD11n0LeyLbG8nyXbqIJ1AzHlQQmVBHqmMDsoPRqbZNY6VfIfhsGPlphTl
-         +2JFMldCRzJ733cuFpTajJrH9E1bJPrAe2kCY13SFhAscyaCw8rg4YEiSmpBMzYOCKPi
-         pLUQ==
+        bh=5F8+14Brh5MBr8u2d1sOMFBu5HJ9d+HmFP+Lqn7cDOc=;
+        b=AhzYyLfFNuGgbjuIQkFVfgenN4nYB5fqEYsB7EXL5is96NH1JMK4lxC+5cEqSQnDeg
+         xYtK2k+qu9V6IpkOfgcI54ZjUlsUXUgMWRiFqK2gLvXtLwhSJIfaImxh0jD5JNKqZRgh
+         tU/HkpmM3/idqCBZvq5o56ItWTF5GShK86ESJbtY5y/7hd9rbZidBDEiDv6MGAe9lc5X
+         CywobWBGB7FyVn0Emv25v85c1naYsWbm7u83FWGT8GA8s0PqUVtbmBNcn6uSwp7B7X43
+         lWCiedpbC7iWoc9T71zbr6gEkJvZuFx6GrRmWrBKZh6rbx7KfXyUC1VKygj7P1ZfAIZ8
+         ZLqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc;
-        bh=9+JwBO4nX8GrUd03Z9QeV/uS8dpKH0L2avVFFDeS0ks=;
-        b=uZfUnyD1gcydlkIypNNyB+eh8Hw+cl45calXgHekOB8vtS7i9mjNuH1tpyNhtRxRgr
-         xqXuAzEBLRHgd10NWeDSBZWQkmwKN1snszYm9e7KmxeTiWy2nuhEXofMUO5KI5BiLkb3
-         9QnyXxCmf1fYiaN2XdM8TEY6rOLxRyEs5arvXBKUNCOV/Bo4HzRuCtS0MEQXI4MeJhvv
-         Dja7apSnDGj9UgXvkxlbNS9u9+oVWfxXX7hWmPjXMmDI8RjqecIWGIN3M4VB4ws7x/ro
-         1Vqx74bH6pTU1+p41mjJIP36PR0lPzSUYRTwWIFG6Vo+WwKIKw0yoyWm763SvMCnPpBe
-         DhAA==
-X-Gm-Message-State: ACgBeo2xjJPt8QsYyggRx7z9B5cHz7oBP+0JWkbiPK4rVmxPQmKHK56f
-        UGJe7WmsP++jOE/YS44R+mOHZ94IWfs=
-X-Google-Smtp-Source: AA6agR7PpDK+dfX65Z2sMzsgx3m7tePN1WvJ9Hmgkqc960RY99L9vi3njldBIFNLzBOkYTsKCrRRz71/Pr4=
+        bh=5F8+14Brh5MBr8u2d1sOMFBu5HJ9d+HmFP+Lqn7cDOc=;
+        b=6a/k0Nrm1DP/QqWkEAtGI4a/E5ZTZg2P5L40bGM2kinc1iVgSWU9uH4ORZVwYfrUvK
+         rTNwzH5jg1nlTJcCwsOR9vdbCBwhOHaqeYvryUF4O06fSX/HSKMhLrDDhqrPjpGEAqxA
+         bYK/MNXMQajrW4Kt8eD5M/2RXtvzQaTFTa8yVe2RMrzSeeLRxa7JWeEkOEbxPv3nn4KH
+         zw2bFmsEfExQFMXNhAxGGplt+VFr8adYIjKZwfhgm1FhTGWz26ukjVTF3jnOlaKxMD/Y
+         xQT51lHpPg25xwSO9TM9KzuoItqtHYhva1aY0UN1y66Wf5/Vyy+jziPFsdePWKC1VVl+
+         P2sg==
+X-Gm-Message-State: ACgBeo26ldNO/bk+X03DeLryRZWMm9N3zy6OGLoEsfX6BE8DlKnhBOvR
+        dI+WTb2dMHrtU4+9jIt1qcZvs3fnePk=
+X-Google-Smtp-Source: AA6agR6SCG/hxGLoCedS3jsDdR66U15jGtF+14OiyOp6Xd21xNUd8Utew7Vms6pnqUwaGStMPtlP8W4qYqs=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:249:b0:1e0:a8a3:3c6c with SMTP id
- t9-20020a17090a024900b001e0a8a33c6cmr11231pje.0.1661901391766; Tue, 30 Aug
- 2022 16:16:31 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:aa7:8614:0:b0:538:1024:904e with SMTP id
+ p20-20020aa78614000000b005381024904emr14961575pfn.49.1661901393819; Tue, 30
+ Aug 2022 16:16:33 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Tue, 30 Aug 2022 23:15:56 +0000
+Date:   Tue, 30 Aug 2022 23:15:57 +0000
 In-Reply-To: <20220830231614.3580124-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220830231614.3580124-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830231614.3580124-10-seanjc@google.com>
-Subject: [PATCH v5 09/27] KVM: x86: Use DR7_GD macro instead of open coding
- check in emulator
+Message-ID: <20220830231614.3580124-11-seanjc@google.com>
+Subject: [PATCH v5 10/27] KVM: nVMX: Ignore SIPI that arrives in L2 when vCPU
+ is not in WFS
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -67,36 +67,45 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use DR7_GD in the emulator instead of open coding the check, and drop a
-comically wrong comment.
+Fall through to handling other pending exception/events for L2 if SIPI
+is pending while the CPU is not in Wait-for-SIPI.  KVM correctly ignores
+the event, but incorrectly returns immediately, e.g. a SIPI coincident
+with another event could lead to KVM incorrectly routing the event to L1
+instead of L2.
 
+Fixes: bf0cd88ce363 ("KVM: x86: emulate wait-for-SIPI and SIPI-VMExit")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- arch/x86/kvm/emulate.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/x86/kvm/vmx/nested.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
-index f092c54d1a2f..59b61a41125a 100644
---- a/arch/x86/kvm/emulate.c
-+++ b/arch/x86/kvm/emulate.c
-@@ -4168,8 +4168,7 @@ static int check_dr7_gd(struct x86_emulate_ctxt *ctxt)
+diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+index 5298457b3a1f..d11c785b2c1c 100644
+--- a/arch/x86/kvm/vmx/nested.c
++++ b/arch/x86/kvm/vmx/nested.c
+@@ -3932,10 +3932,12 @@ static int vmx_check_nested_events(struct kvm_vcpu *vcpu)
+ 			return -EBUSY;
  
- 	ctxt->ops->get_dr(ctxt, 7, &dr7);
+ 		clear_bit(KVM_APIC_SIPI, &apic->pending_events);
+-		if (vcpu->arch.mp_state == KVM_MP_STATE_INIT_RECEIVED)
++		if (vcpu->arch.mp_state == KVM_MP_STATE_INIT_RECEIVED) {
+ 			nested_vmx_vmexit(vcpu, EXIT_REASON_SIPI_SIGNAL, 0,
+ 						apic->sipi_vector & 0xFFUL);
+-		return 0;
++			return 0;
++		}
++		/* Fallthrough, the SIPI is completely ignored. */
+ 	}
  
--	/* Check if DR7.Global_Enable is set */
--	return dr7 & (1 << 13);
-+	return dr7 & DR7_GD;
- }
- 
- static int check_dr_read(struct x86_emulate_ctxt *ctxt)
+ 	/*
 -- 
 2.37.2.672.g94769d06f0-goog
 

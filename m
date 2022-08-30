@@ -2,66 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 957675A5F0B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:17:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6718C5A5F20
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiH3JRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:17:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48372 "EHLO
+        id S231570AbiH3JTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229747AbiH3JR1 (ORCPT
+        with ESMTP id S231384AbiH3JSw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:17:27 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C62A2D2E95;
-        Tue, 30 Aug 2022 02:17:26 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id v5so4301014plo.9;
-        Tue, 30 Aug 2022 02:17:26 -0700 (PDT)
+        Tue, 30 Aug 2022 05:18:52 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F29AAD5701;
+        Tue, 30 Aug 2022 02:18:47 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id d12-20020a05600c34cc00b003a83d20812fso4159288wmq.1;
+        Tue, 30 Aug 2022 02:18:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=z0jGwIZNk8TLu9n677sjLmPSpOtIptc1LacJkvrgElA=;
-        b=NzFNslmJiCMzU+pz9gBs301wZcRFS8yhsdzOifJK49tFI09UD3OV7aoZDED0pfkrxS
-         qOfhAKU1lE/V9jprDsAUId+NZyOiYAjoq2RBV7UziKE+9lTK9jcB3qx7ntwMnXFCe+Cq
-         5xzzTKD2YCj4UYltCHOCdH6MgJUhs9nFeJOGmj/gpkOCVBPgZtulvEWiyOlonX4R8KzT
-         b+VmaUUKPIGjt4gkcQcZHePhT1MeY34UTAjTX3wmOqLeSr8poM7yWsFBTeVVE5DqdRSL
-         LmBj0qTo1XGP1xHIECmp3cjBe4imLRWV/ql0KBrmc1fP5ekt0xOpK8oOJKVpQGarPb2z
-         vOzA==
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=AGaSWYBJDgKfuNXBk/rMpd9HzYqxQJNCfvux8aOnciU=;
+        b=OkWDZIa6FOObDPg4K064OvXgsu/npv0Y459BFnvrGpjZtayryIOXm//bV7VtE+O6Ku
+         Z6wd2miesiJN/ppW2YMSP9cBRqmBKexlGpHQAjEv+y2Eu6lkXXKdYMdSo3EKWztpsW5n
+         LDeMJBGtmITWQY6Ini2sc9A4VU7633IBYInTPbSFNVnazdFOhBgmWg49tISF8q2xXT3L
+         zZhoSBvCa4634fkQJ++bWj41wbFXDwaxLDCo1mbSHQSoFPQTMB9SDOth0gHv/HUV/AWQ
+         VsZZGRgDrYBEB/ip4uuvUBsJkrOnk9bvsp/Dtd8p6BMdIvup4DP62ymW9/8+WGIDGIxX
+         zRzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=z0jGwIZNk8TLu9n677sjLmPSpOtIptc1LacJkvrgElA=;
-        b=Q0qK2nHp69Mc87Kh2kDiGzPz4suxKn1H1K+5rFRt6nuHxnipXi5nXIS/OXmQm1/Dvo
-         3vSV9S37vW3CxV8X38iDl0BZW7BM3WSf1RTCv7xaNulO7qEQVBdJYeaEc/m0nFbLmM8j
-         +ulQeAq5Z0+aJCWL+2uoAq1p+SyFi069pB0GKd6CdVN5V0CsLJnoUW3wrbKTxry4tbLx
-         m98q/Eg8zC9Hvtd1VGwKnXWOQIdzen7ir3l0+BGUgsZrQGdiBh/BXenZ97qrJdE6x8es
-         gObFtrzvurrT4almQRUuVXeIzpAqTdEPQUwDiPQPlrsEveb4ZBj4BMHDcn2aGafD5m6Y
-         yvlQ==
-X-Gm-Message-State: ACgBeo3bq1TTDpgzgAHGONUuWU8XKz9GiwWAuk4K6rZnVkeomEcF2kCw
-        s4u1z4U8d8K0d7wwwEm8bkk=
-X-Google-Smtp-Source: AA6agR59tLWXuj9EZY0lhnw5QOQ7LD0VviMav4BPIhsAEorDIWJNaBTAawU6xsxliwm/F0XPT4m8zg==
-X-Received: by 2002:a17:902:ebc9:b0:172:951d:fc9c with SMTP id p9-20020a170902ebc900b00172951dfc9cmr20474898plg.97.1661851046339;
-        Tue, 30 Aug 2022 02:17:26 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id i11-20020a170902c94b00b0016dc6243bb2sm9177749pla.143.2022.08.30.02.17.23
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=AGaSWYBJDgKfuNXBk/rMpd9HzYqxQJNCfvux8aOnciU=;
+        b=truJ8s3yLhtpS5qCWbrtXoEDl1SQ/kw7Lj8gQ8lquEl1chVEm1VUYv5U/tvIt1C94l
+         q6njMxU8Pb09dEJoQy02U2FmkUbZ4Jvdmyc5+GlQ7osfORvzk4Sjv4iigPRS7sM1poZY
+         oWTTE7bas8KYniKQnYtZ+GVERbIIsIyFdnYIuGDYBpPtgA24ymd3m0hrcPxWh0zfFNPX
+         awdqN+g1i0WOSwiiZAjlsi0JqF29DyLHEd3nUsYEk4CXzOG2t4n5jlyOr209a/8w5I2o
+         QmonfXta3ibp++Gx1x2QVk2JxbxHh0W7yy4p0i3lkA0x682wAiYr6fPtLP/tzEQsqG+d
+         IVAg==
+X-Gm-Message-State: ACgBeo3aK1Jnv139HH+CV/YfL5Nu4Uvq4ZPFePl3xiOsvrb5MYV6lGzb
+        /p1FQdLg4AiWQFDgNVsNqHs=
+X-Google-Smtp-Source: AA6agR5QPnPnzmdDQ8z8WSYvFsJyyoFZG9CQ43BYjg2K03qhgWNqHPOigcjYhoX/TqbT6IEa4NyRmQ==
+X-Received: by 2002:a05:600c:1f05:b0:3a5:c789:1d9c with SMTP id bd5-20020a05600c1f0500b003a5c7891d9cmr9138971wmb.26.1661851125988;
+        Tue, 30 Aug 2022 02:18:45 -0700 (PDT)
+Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
+        by smtp.gmail.com with ESMTPSA id h15-20020a5d548f000000b0020e6ce4dabdsm9040737wrv.103.2022.08.30.02.18.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 02:17:26 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     davem@davemloft.net, kuba@kernel.org, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xu.xin16@zte.com.cn, Yunkai Zhang <zhang.yunkai@zte.com.cn>
-Subject: [PATCH v3 3/3] ipv4: add documentation of two sysctls about icmp
-Date:   Tue, 30 Aug 2022 09:17:18 +0000
-Message-Id: <20220830091718.286452-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220830091453.286285-1-xu.xin16@zte.com.cn>
-References: <20220830091453.286285-1-xu.xin16@zte.com.cn>
+        Tue, 30 Aug 2022 02:18:45 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 10:18:43 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: build failure of next-20220830 due to 5f8cdece42ff ("drm/msm/dsi:
+ switch to DRM_PANEL_BRIDGE")
+Message-ID: <Yw3V8yJgAnPD8o6P@debian>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -72,45 +75,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
+Hi All,
 
-Add the descriptions of the sysctls of error_cost and error_burst in
-Documentation/networking/ip-sysctl.rst.
+The builds of arm64 allmodconfig with clang have failed to build
+next-20220830 with the error:
 
-Signed-off-by: xu xin (CGEL ZTE) <xu.xin16@zte.com.cn>
-Reviewed-by: Yunkai Zhang (CGEL ZTE) <zhang.yunkai@zte.com.cn>
----
- Documentation/networking/ip-sysctl.rst | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
+drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'device_node' is uninitialized when used here [-Werror,-Wuninitialized]
+        of_node_put(device_node);
+                    ^~~~~~~~~~~
+drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variable 'device_node' to silence this warning
+        struct device_node *endpoint, *device_node;
+                                                  ^
+                                                   = NULL
 
-diff --git a/Documentation/networking/ip-sysctl.rst b/Documentation/networking/ip-sysctl.rst
-index 56cd4ea059b2..c113a34a4115 100644
---- a/Documentation/networking/ip-sysctl.rst
-+++ b/Documentation/networking/ip-sysctl.rst
-@@ -156,6 +156,23 @@ route/max_size - INTEGER
- 	From linux kernel 3.6 onwards, this is deprecated for ipv4
- 	as route cache is no longer used.
- 
-+route/error_cost - INTEGER
-+	The minimum time interval between two consecutive ICMP-DEST-
-+	UNREACHABLE packets allowed sent to the same peer in the stable
-+	period. Basically, The higher its value is, the lower the general
-+	frequency of sending ICMP DEST-UNREACHABLE packets.
-+
-+	Default: HZ (one second)
-+
-+route/error_burst - INTEGER
-+	Together with error_cost, it controls the max number of burstly
-+	sent ICMP DEST-UNREACHABLE packets after a long calm time (no
-+	sending ICMP DEST-UNREACHABLE). Basically, the higher the rate
-+	of error_burst over error_cost is, the more allowed burstly sent
-+	ICMP DEST-UNREACHABLE packets after a long calm time.
-+
-+	Default: 5 * HZ
-+
- neigh/default/gc_thresh1 - INTEGER
- 	Minimum number of entries to keep.  Garbage collector will not
- 	purge entries if there are fewer than this number.
+git bisect pointed to 5f8cdece42ff ("drm/msm/dsi: switch to DRM_PANEL_BRIDGE")
+
+I will be happy to test any patch or provide any extra log if needed.
+
+
 -- 
-2.25.1
-
+Regards
+Sudip

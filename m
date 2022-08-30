@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FE295A5F22
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D9CE5A5F2A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231655AbiH3JTD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:19:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50048 "EHLO
+        id S231663AbiH3JTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:19:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiH3JS6 (ORCPT
+        with ESMTP id S231602AbiH3JTa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:18:58 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03A5D83E2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:18:52 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id z20so10695915ljq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:18:52 -0700 (PDT)
+        Tue, 30 Aug 2022 05:19:30 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35328D86EA;
+        Tue, 30 Aug 2022 02:19:24 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3413ad0640dso102420537b3.13;
+        Tue, 30 Aug 2022 02:19:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=dAQKouAgPWkFgT/L79DpCLEZVs1s1eMpf1fs8oVBpVQ=;
-        b=nx+b9zWTRn8VBKy2hv2AW48rKFz7yDy7ZCwY4g8fh3Dr5MIhGzmiv9vamitvGAop9j
-         uR7aswDYelsTXdH4tN7LHERpElabXR2NyqVONA/Ix5r4VxMY1/mStBYGWbirrfZl1k9C
-         FgqVai25gyW1uhAonEqfXSg2H0JIX4qMgEz/lE9f1nyHaNndzq1x2lYZYP/T4Ixmkp4Q
-         R2HklRoNZEH+enzMmFuBv7Bg6Shc7vMH4E9lphwi0irurXMKWm0u+yuUDG6m0DiVjlXp
-         W1VSnhrTul2IBpQSNu5O7H/fSlBsH/ykUdWFO8C+Hda0PJjV0YVQ8IAUB07YZYGCqex7
-         Xyzw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=4LzcYMLA4n0/7gNYzbK/mkckLDWj4Hrt+zYpQebTjH4=;
+        b=SO3qgOdHgFHXeHQcJlqYfbrWrZD8Iw0sHlWqtM/SViI75ecfevio/ANBS8vklEio/D
+         OJ4WIL2E8RSLgQuJ4LWQ17wIV1ldFB8FGiKUFXjM/NfD3WO4c9SvLhbbWY0sxymF8e3X
+         hHRsta6pn4uc/Wkq/47lGiXBJSuCypE5X1jNm7+OJAzUlDxaVDva9eAuV85WMIG1+E5I
+         Qvo+EUEAcHdst3jlpPFPaDCOMRK5dvTe/rGnIqdEh1CEwylKa8ZMlGZOYQ+5BznRVlJj
+         MY08cMyF8KlyjXhDSozG9ne+PjUGBrjuffcPpe+Vg317U5QtU1zTDcPi2dmKO33MnHHF
+         OvmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=dAQKouAgPWkFgT/L79DpCLEZVs1s1eMpf1fs8oVBpVQ=;
-        b=2Xoc/2oFAJRnMFKM59siTtbXK718Jj42/QRqSBl0hBgswId8imu80GzyFKC6xErbuj
-         lfxOxsOBLnJj7kOztecWeIHLfgwSzza1nGxlUqoK3vZnMx5lpoKiMqwilnKb5P2PLxFO
-         tnRY87LEtT+x+4k1suysdW7sHYClkVXcQQcJRuHtCYekb5gD4TpX+LEuL8td4ZXme4f0
-         XyYjSoaqq1CDgoRksufrxkNnHkZdCWX+x+KKj6apxXwqvRTSLqTIt2N1gwWBgtyzqyrs
-         +ku3y6X4JAoVbB5FX6+HzwsWJqe66R1jFIoC4gTQdtVvy+HvE4Wc0Vg0PGx/Q20kDx2e
-         TjZQ==
-X-Gm-Message-State: ACgBeo08nxrwaYECovONJHJxbuIDGC/o2s0Et3yPq1/1OnKt0AReqtxs
-        lDR/zmyOtFFUrh/ysqot3EYSvAtckn1aQonCbG4=
-X-Google-Smtp-Source: AA6agR4UDLA9aC7NOX4uB7Mk2+pP5fmbHLtmhnkg6QTxLXxp91xsFSmr40D9xuX4dP0masF2L8Hj6A==
-X-Received: by 2002:a2e:8749:0:b0:25e:4357:8ef7 with SMTP id q9-20020a2e8749000000b0025e43578ef7mr7171083ljj.319.1661851129908;
-        Tue, 30 Aug 2022 02:18:49 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id f27-20020a05651c02db00b00261800f0e02sm1682559ljo.26.2022.08.30.02.18.48
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 02:18:49 -0700 (PDT)
-Message-ID: <787d6aa5-ff85-dede-cc16-958290cd77b3@linaro.org>
-Date:   Tue, 30 Aug 2022 12:18:48 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=4LzcYMLA4n0/7gNYzbK/mkckLDWj4Hrt+zYpQebTjH4=;
+        b=frs61rvGdvr+4kZaI2SbdSf/4oNwGkdJMQrFvilQgCTueETFSvHRO/bCsOu207AV6j
+         qCPoEkDFxq8TioHlqKcBkHtojDLO7wQxwIfEIcAnadU8+LNJoq+1JAvM7NeUVZIC5dOU
+         e4MLbtPoqGM4qGD9DrMIheFiG9svuB73upxXiqSgLayiq3YRTGyZ1YbfBgJM9WO/KR52
+         GPg3Rf2BwhPSzogzOHE/xif8zPQqkxJddKL1gVLhQ7oN2dZoxxM6ndDCTRw+1fxZv5KA
+         qULr7TA4u3z2wSUOCthfy/+4CgW5iHmtNQEUOxmLSMXnJ5O2oY3/zkU7aBSj/lQSZQdG
+         jf6w==
+X-Gm-Message-State: ACgBeo0aH/SMnqOpimlhjzhhFy/TP23aHgeZkVZGuwdZmWYLoIkz4chB
+        oHMmA+RuLcuUgQrlnrJ1AvAZ07P7+lFL36lb080=
+X-Google-Smtp-Source: AA6agR6wngvVcYUXvDSRVYgU7fd+FzO0hqISd0AH9TIazM2vBMpxMInlA0UjIOaSuYNpdfIIxOv7C9lgwFqkpoWh4hI=
+X-Received: by 2002:a25:2502:0:b0:695:9024:4cfd with SMTP id
+ l2-20020a252502000000b0069590244cfdmr11949686ybl.299.1661851164044; Tue, 30
+ Aug 2022 02:19:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2] dt-bindings: spi: renesas,sh-msiof: Fix
+References: <20220829215816.6206-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <Yw1G69ny9tZrFWk4@pendragon.ideasonboard.com>
+In-Reply-To: <Yw1G69ny9tZrFWk4@pendragon.ideasonboard.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 30 Aug 2022 10:18:57 +0100
+Message-ID: <CA+V-a8sPRTBTFnH4W=qcKU3=WYU79oX3WxBONpCG2f4m9V2ncA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: display: bridge: renesas,dw-hdmi: Fix
  'unevaluatedProperties' warnings
-Content-Language: en-US
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Mark Brown <broonie@kernel.org>,
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prabhakar <prabhakar.csengg@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
         Biju Das <biju.das.jz@bp.renesas.com>
-References: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 01:03, Lad Prabhakar wrote:
-> With 'unevaluatedProperties' support implemented, there's a number of
-> warnings when running dtbs_check:
-> 
-> arch/arm64/boot/dts/renesas/r8a77951-ulcb-kf.dtb: spi@e6e90000: Unevaluated properties are not allowed ('power-domains', 'resets' were unexpected)
-> 	From schema: Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
-> 
-> The main problem is that SoC DTSI's include power-domains and resets
-> property, whereas the renesas,sh-msiof.yaml has 'unevaluatedProperties:
-> false'. So just add optional power-domains and resets properties.
+Hi Laurent,
 
-This is not the  main problem. Main problem is that this device is in
-power domain and/or uses resets, so the bindings are incomplete. Please
-rephrase the commit msg.
+On Tue, Aug 30, 2022 at 12:08 AM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Prabhakar,
+>
+> Thank you for the patch.
+>
+> On Mon, Aug 29, 2022 at 10:58:16PM +0100, Lad Prabhakar wrote:
+> > With 'unevaluatedProperties' support implemented, there's a number of
+> > warnings when running dtbs_check:
+> >
+> > arch/arm64/boot/dts/renesas/r8a774b1-hihope-rzg2n-rev2-ex-idk-1110wr.dtb: hdmi@fead0000: Unevaluated properties are not allowed ('resets' was unexpected)
+> >       From schema: Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.yaml
+> >
+> > The main problem is that SoC DTSI's are including resets property, whereas
+> > the renesas,dw-hdmi.yaml has 'unevaluatedProperties: false'. So just add
+> > optional resets property to the binding.
+>
+> Given that all the DT sources in the kernel specify the resets property,
+> how about making it mandatory ?
+>
+Agreed, will do that and send a v2.
 
-Best regards,
-Krzysztof
+Cheers,
+Prabhakar

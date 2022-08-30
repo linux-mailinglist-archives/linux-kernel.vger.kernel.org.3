@@ -2,144 +2,356 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 953E05A657F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75D1C5A6573
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:49:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbiH3Ntu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:49:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        id S229874AbiH3NtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:49:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231451AbiH3NtC (ORCPT
+        with ESMTP id S231259AbiH3Ns2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:49:02 -0400
-Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5140B1037F5;
-        Tue, 30 Aug 2022 06:46:41 -0700 (PDT)
-Received: from [10.2.12.24] (unknown [10.2.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by 7of9.schinagl.nl (Postfix) with ESMTPSA id 5C7DE186AE54;
-        Tue, 30 Aug 2022 15:40:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
-        t=1661866837; bh=QkP2rkDehwBSgpkLqWhg0SK62w0hxaRkEmx2wFzDvpY=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=f6ABrVy6bO3nlMdiBhuXoDGeIXTsdsKNSqq+xT3bRsvVp39Vb+AezWjHr2IjF9MDa
-         +wX7JY3ODlzt0oXnXVBkxEX/bkM1S4OUK0HvgISfKki9AiJSiYbkUi5egAJCld+PCp
-         2iJnOSari/WzosWMx/jJWLHcAvX9kgU2vVvoEnSA=
-Message-ID: <f9e6e452-0e00-785c-1f4f-43f7754ab720@schinagl.nl>
-Date:   Tue, 30 Aug 2022 15:40:36 +0200
+        Tue, 30 Aug 2022 09:48:28 -0400
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2188F107C60
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:46:13 -0700 (PDT)
+Received: by mail-ed1-f54.google.com with SMTP id y64so2442387ede.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:46:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=zeqCrYbLRqbzzFt4QKomGEJNQndGCiBbRSxMMbNW/MY=;
+        b=iD+jR834O/23Q1+XGpSqyaXld/4kkuf5B9D8H8ohS0Wdymhqe+RRZ9WcD4amHdx77O
+         reCUJoXHQzu409HzizTeEctZKVSH7LOB9XXzESSb7cgYmnjcUfgK5K77a91FRvRtuJDA
+         0+qQ7FqFVUzCL4pdaqo1AmviIaZT3D4mUlSsE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=zeqCrYbLRqbzzFt4QKomGEJNQndGCiBbRSxMMbNW/MY=;
+        b=OMlMrjDfbuNkgE4I9HYclWTkp9FyvliY7pjp3vCiEJ1GybtR36kgwvte6cWdgkfTT+
+         cfrBIyGEKx7jRBE+PxPXTuD1rFM6F6fXngeUceyD7mGtCoI5QhRZUXyudQlyR5qpoxEP
+         AnZ+AMxKFYnzfcDL1ZVMysDzqaVlczZkoEUi8pS3hW/UJrYh0N9SSc87PWewqNcAMkbm
+         azlJgDJRe2BI8YXkiiJlPoHJyWWhiF2O9PYnYttQIIrAL+KsilKMxJ39jb3ArWgEF/0r
+         ncKWaqdobveuy18/2mn7zKoMQ7tZeuL/bmCOG8giYZlgwZEBJAJD6AbLlTiv3E/VQnPz
+         KRKQ==
+X-Gm-Message-State: ACgBeo1deoDX0X4azdKM3zNulB24xXZ2pZxPPpjUlbjw9GgGbyc0DuIY
+        T9A+HVB7LrlRoHEi9nY5gIbph9xpthmsIGfraZIXTg==
+X-Google-Smtp-Source: AA6agR7u8cywbHV4Qndx4R3eFD3tb1TBNDA1nKLbYkdYbLwCOrN/QBJqqMMKopj+F5/B11o3QKmyXjxIVKUoCqGy1s4=
+X-Received: by 2002:a05:6402:27d3:b0:43e:5490:27ca with SMTP id
+ c19-20020a05640227d300b0043e549027camr21062997ede.307.1661866864670; Tue, 30
+ Aug 2022 06:41:04 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCHv2 resend] dt-bindings: leds: Expand LED_COLOR_ID
- definitions
-Content-Language: en-US
-To:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Baolin Wang <baolin.wang@linaro.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Oleh Kravchenko <oleg@kaa.org.ua>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Simon Shields <simon@lineageos.org>,
-        Olliver Schinagl <oliver+list@schinagl.nl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220819152904.433514-1-oliver@schinagl.nl>
- <44eec926-b7d0-f8eb-f944-d28e3b35257a@gmail.com>
-From:   Olliver Schinagl <oliver@schinagl.nl>
-In-Reply-To: <44eec926-b7d0-f8eb-f944-d28e3b35257a@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220822081424.1310926-1-wenst@chromium.org> <12115951.O9o76ZdvQC@steina-w>
+ <CAGXv+5E788T01XJF-dYRW6ZB5-TTU_L5=0hT3AQ0g+zA=LzG2w@mail.gmail.com> <2254919.ElGaqSPkdT@steina-w>
+In-Reply-To: <2254919.ElGaqSPkdT@steina-w>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Tue, 30 Aug 2022 21:40:53 +0800
+Message-ID: <CAGXv+5Hf0n5jkqwuQmh0PG8ejxDND6BRVG47J9HTQrqz9OhLdQ@mail.gmail.com>
+Subject: Re: [PATCH RESEND v2 1/2] clk: core: Honor CLK_OPS_PARENT_ENABLE for
+ clk gate ops
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30-08-2022 12:28, Jacek Anaszewski wrote:
-> Hi Oliver,
+On Tue, Aug 30, 2022 at 8:37 PM Alexander Stein
+<alexander.stein@ew.tq-group.com> wrote:
 >
-> On 8/19/22 17:29, Olliver Schinagl wrote:
->> In commit 853a78a7d6c7 (dt-bindings: leds: Add LED_COLOR_ID definitions,
->> Sun Jun 9 20:19:04 2019 +0200) the most basic color definitions where
->> added. However, there's a little more very common LED colors.
->>
->> While the documentation states 'add what is missing', engineers tend to
->> be lazy and will just use what currently exists. So this patch will take
->> (a) list from online retailers [0], [1], [2] and use the common LED colors
->> from there, this being reasonable as this is what is currently available to
->> purchase.
->>
->> Note, that LIME seems to be the modern take to 'Yellow-green' or
->> 'Yellowish-green' from some older datasheets.
->>
->> [0]: https://www.digikey.com/en/products/filter/led-lighting-color/125
->> [1]: https://eu.mouser.com/c/optoelectronics/led-lighting/led-emitters/standard-leds-smd
->> [2]: https://nl.farnell.com/en-NL/c/optoelectronics-displays/led-products/standard-single-colour-leds-under-75ma
->>
->> Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
->> ---
->>
->> Changes since v1: Unbreak existing definitions.
->>
->>
->>    include/dt-bindings/leds/common.h | 28 ++++++++++++++++------------
->>    1 file changed, 16 insertions(+), 12 deletions(-)
->>
->> diff --git a/include/dt-bindings/leds/common.h b/include/dt-bindings/leds/common.h
->> index 3be89a7c20a9..04bf94523ea3 100644
->> --- a/include/dt-bindings/leds/common.h
->> +++ b/include/dt-bindings/leds/common.h
->> @@ -22,18 +22,22 @@
->>    #define LEDS_BOOST_FIXED	2
->>    
->>    /* Standard LED colors */
->> -#define LED_COLOR_ID_WHITE	0
->> -#define LED_COLOR_ID_RED	1
->> -#define LED_COLOR_ID_GREEN	2
->> -#define LED_COLOR_ID_BLUE	3
->> -#define LED_COLOR_ID_AMBER	4
->> -#define LED_COLOR_ID_VIOLET	5
->> -#define LED_COLOR_ID_YELLOW	6
->> -#define LED_COLOR_ID_IR		7
->> -#define LED_COLOR_ID_MULTI	8	/* For multicolor LEDs */
->> -#define LED_COLOR_ID_RGB	9	/* For multicolor LEDs that can do arbitrary color,
->> -					   so this would include RGBW and similar */
->> -#define LED_COLOR_ID_MAX	10
->> +#define LED_COLOR_ID_WHITE      0
->> +#define LED_COLOR_ID_RED        1
->> +#define LED_COLOR_ID_GREEN      2
->> +#define LED_COLOR_ID_BLUE       3
->> +#define LED_COLOR_ID_AMBER      4
->> +#define LED_COLOR_ID_VIOLET     5
->> +#define LED_COLOR_ID_YELLOW     6
->> +#define LED_COLOR_ID_IR         7
->> +#define LED_COLOR_ID_MULTI      8 /* For multicolor LEDs */
->> +#define LED_COLOR_ID_RGB        9 /* For multicolor LEDs that can do arbitrary color, including RGBW etc. */
->> +#define LED_COLOR_ID_PUPRPLE   10
-> typo - as already mentioned
-Sorry, I did not receive your earlier mail it seems, or it's not showing 
-up in the thread; well caught!
+> Hi,
 >
->> +#define LED_COLOR_ID_ORANGE    11
->> +#define LED_COLOR_ID_PINK      12
->> +#define LED_COLOR_ID_CYAN      13
->> +#define LED_COLOR_ID_LIME      14
->> +#define LED_COLOR_ID_MAX       15
->>    
->>    /* Standard LED functions */
->>    /* Keyboard LEDs, usually it would be input4::capslock etc. */
-> And it seems that change in spacing between definition name and value
-> is not required, is it? Without that change, it would be easier to
-> notice what really changes here.
+> Am Montag, 29. August 2022, 11:22:16 CEST schrieb Chen-Yu Tsai:
+> > Hi,
+> >
+> > On Fri, Aug 26, 2022 at 8:28 PM Alexander Stein
+> >
+> > <alexander.stein@ew.tq-group.com> wrote:
+> > > Hi everybody,
+> > >
+> > > Am Montag, 22. August 2022, 10:14:23 CEST schrieb Chen-Yu Tsai:
+> > > > In the previous commits that added CLK_OPS_PARENT_ENABLE, support f=
+or
+> > > > this flag was only added to rate change operations (rate setting an=
+d
+> > > > reparent) and disabling unused subtree. It was not added to the
+> > > > clock gate related operations. Any hardware driver that needs it fo=
+r
+> > > > these operations will either see bogus results, or worse, hang.
+> > > >
+> > > > This has been seen on MT8192 and MT8195, where the imp_ii2_* clk
+> > > > drivers set this, but dumping debugfs clk_summary would cause it
+> > > > to hang.
+> > > >
+> > > > Fixes: fc8726a2c021 ("clk: core: support clocks which requires pare=
+nts
+> > > > enable (part 2)") Fixes: a4b3518d146f ("clk: core: support clocks w=
+hich
+> > > > requires parents enable (part 1)") Signed-off-by: Chen-Yu Tsai
+> > > > <wenst@chromium.org>
+> > > > Reviewed-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > Tested-by: N=C3=ADcolas F. R. A. Prado <nfraprado@collabora.com>
+> > > > ---
+> > > >
+> > > >  drivers/clk/clk.c | 28 ++++++++++++++++++++++++++++
+> > > >  1 file changed, 28 insertions(+)
+> > > >
+> > > > diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+> > > > index 7fc191c15507..9b365cd6d14b 100644
+> > > > --- a/drivers/clk/clk.c
+> > > > +++ b/drivers/clk/clk.c
+> > > > @@ -196,6 +196,9 @@ static bool clk_core_rate_is_protected(struct
+> > > > clk_core
+> > > > *core) return core->protect_count;
+> > > >
+> > > >  }
+> > > >
+> > > > +static int clk_core_prepare_enable(struct clk_core *core);
+> > > > +static void clk_core_disable_unprepare(struct clk_core *core);
+> > > > +
+> > > >
+> > > >  static bool clk_core_is_prepared(struct clk_core *core)
+> > > >  {
+> > > >
+> > > >       bool ret =3D false;
+> > > >
+> > > > @@ -208,7 +211,11 @@ static bool clk_core_is_prepared(struct clk_co=
+re
+> > > > *core) return core->prepare_count;
+> > > >
+> > > >       if (!clk_pm_runtime_get(core)) {
+> > > >
+> > > > +             if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +                     clk_core_prepare_enable(core->parent);
+> > > >
+> > > >               ret =3D core->ops->is_prepared(core->hw);
+> > > >
+> > > > +             if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +                     clk_core_disable_unprepare(core->parent);
+> > > >
+> > > >               clk_pm_runtime_put(core);
+> > > >
+> > > >       }
+> > > >
+> > > > @@ -244,7 +251,13 @@ static bool clk_core_is_enabled(struct clk_cor=
+e
+> > > > *core)
+> > > >
+> > > >               }
+> > > >
+> > > >       }
+> > > >
+> > > > +     if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +             clk_core_prepare_enable(core->parent);
+> > > > +
+> > > >
+> > > >       ret =3D core->ops->is_enabled(core->hw);
+> > > >
+> > > > +
+> > > > +     if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +             clk_core_disable_unprepare(core->parent);
+> > > >
+> > > >  done:
+> > > >       if (core->rpm_enabled)
+> > > >
+> > > >               pm_runtime_put(core->dev);
+> > > >
+> > > > @@ -812,6 +825,9 @@ int clk_rate_exclusive_get(struct clk *clk)
+> > > >
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(clk_rate_exclusive_get);
+> > > >
+> > > > +static int clk_core_enable_lock(struct clk_core *core);
+> > > > +static void clk_core_disable_lock(struct clk_core *core);
+> > > > +
+> > > >
+> > > >  static void clk_core_unprepare(struct clk_core *core)
+> > > >  {
+> > > >
+> > > >       lockdep_assert_held(&prepare_lock);
+> > > >
+> > > > @@ -835,6 +851,9 @@ static void clk_core_unprepare(struct clk_core
+> > > > *core)
+> > > >
+> > > >       WARN(core->enable_count > 0, "Unpreparing enabled %s\n", core=
+-
+> > > >
+> > > >name);
+> > > >
+> > > > +     if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +             clk_core_enable_lock(core->parent);
+> > > > +
+> > > >
+> > > >       trace_clk_unprepare(core);
+> > > >
+> > > >       if (core->ops->unprepare)
+> > > >
+> > > > @@ -843,6 +862,9 @@ static void clk_core_unprepare(struct clk_core
+> > > > *core)
+> > > >
+> > > >       clk_pm_runtime_put(core);
+> > > >
+> > > >       trace_clk_unprepare_complete(core);
+> > > >
+> > > > +
+> > > > +     if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +             clk_core_disable_lock(core->parent);
+> > > >
+> > > >       clk_core_unprepare(core->parent);
+> > > >
+> > > >  }
+> > > >
+> > > > @@ -891,6 +913,9 @@ static int clk_core_prepare(struct clk_core *co=
+re)
+> > > >
+> > > >               if (ret)
+> > > >
+> > > >                       goto runtime_put;
+> > > >
+> > > > +             if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +                     clk_core_enable_lock(core->parent);
+> > > > +
+> > > >
+> > > >               trace_clk_prepare(core);
+> > > >
+> > > >               if (core->ops->prepare)
+> > > >
+> > > > @@ -898,6 +923,9 @@ static int clk_core_prepare(struct clk_core *co=
+re)
+> > > >
+> > > >               trace_clk_prepare_complete(core);
+> > > >
+> > > > +             if (core->flags & CLK_OPS_PARENT_ENABLE)
+> > > > +                     clk_core_disable_lock(core->parent);
+> > > > +
+> > > >
+> > > >               if (ret)
+> > > >
+> > > >                       goto unprepare;
+> > > >
+> > > >       }
+> > >
+> > > Unfortunately this completely locks up my i.MX8M Plus based board dur=
+ing
+> > > early boot.
+> > > I'm currently running on next-20220826 using
+> > > arch/arm64/boot/dts/freescale/
+> > > imx8mp-tqma8mpql-mba8mpxl.dts
+> > > Reverting this patch gets my board booting again. dmesg until hard lo=
+ckup
+> > > below.
+> >
+> > The standard logs don't have anything to go on. Could you add some prin=
+tk
+> > calls to the clk core around the areas this patch touchs? That would he=
+lp.
+> >
+> > Could you also provide a dump of /sys/kernel/debug/clk/clk_summary? Tha=
+t
+> > would help to understand the clock tree.
 >
-Yes, you are correct, I initially had LimeGreen there, which made it 
-longer, as I later found out, that LimeGreen could actually just be Lime 
-as much, I forgot to 're-shorten it. The fixed diff for v4 does look as 
-expected! thanks for that one.
+> Sure,
+>
+> These are the last kernel log lines before hard lockup:
+> [    0.686357] io scheduler mq-deadline registered
+> [    0.690907] io scheduler kyber registered
+> [    0.699275] clk_core_prepare: clk: main_axi CLK_OPS_PARENT_ENABLE
+>
+> main_axi is also the only debug output up to this point. This is the used
+> patch for debugging:
+> ---8<---
+> --- a/drivers/clk/clk.c
+> +++ b/drivers/clk/clk.c
+> @@ -211,8 +211,10 @@ static bool clk_core_is_prepared(struct clk_core *co=
+re)
+>                 return core->prepare_count;
+>
+>         if (!clk_pm_runtime_get(core)) {
+> -               if (core->flags & CLK_OPS_PARENT_ENABLE)
+> +               if (core->flags & CLK_OPS_PARENT_ENABLE) {
+> +                       pr_info("%s: clk: %s CLK_OPS_PARENT_ENABLE\n",
+> __func__, core->name);
+>                         clk_core_prepare_enable(core->parent);
+> +               }
+>                 ret =3D core->ops->is_prepared(core->hw);
+>                 if (core->flags & CLK_OPS_PARENT_ENABLE)
+>                         clk_core_disable_unprepare(core->parent);
+> @@ -251,8 +253,10 @@ static bool clk_core_is_enabled(struct clk_core *cor=
+e)
+>                 }
+>         }
+>
+> -       if (core->flags & CLK_OPS_PARENT_ENABLE)
+> +       if (core->flags & CLK_OPS_PARENT_ENABLE) {
+> +               pr_info("%s: clk: %s CLK_OPS_PARENT_ENABLE\n", __func__, =
+core-
+> >name);
+>                 clk_core_prepare_enable(core->parent);
+> +       }
+>
+>         ret =3D core->ops->is_enabled(core->hw);
+>
+> @@ -851,8 +855,10 @@ static void clk_core_unprepare(struct clk_core *core=
+)
+>
+>         WARN(core->enable_count > 0, "Unpreparing enabled %s\n", core->na=
+me);
+>
+> -       if (core->flags & CLK_OPS_PARENT_ENABLE)
+> +       if (core->flags & CLK_OPS_PARENT_ENABLE) {
+> +               pr_info("%s: clk: %s CLK_OPS_PARENT_ENABLE\n", __func__, =
+core-
+> >name);
+>                 clk_core_enable_lock(core->parent);
+> +       }
+>
+>         trace_clk_unprepare(core);
+>
+> @@ -912,8 +918,10 @@ static int clk_core_prepare(struct clk_core *core)
+>                 if (ret)
+>                         goto runtime_put;
+>
+> -               if (core->flags & CLK_OPS_PARENT_ENABLE)
+> +               if (core->flags & CLK_OPS_PARENT_ENABLE) {
+> +                       pr_info("%s: clk: %s CLK_OPS_PARENT_ENABLE\n",
+> __func__, core->name);
+>                         clk_core_enable_lock(core->parent);
+> +               }
+>
+>                 trace_clk_prepare(core);
+>
+>
+> ---8<---
 
+Thanks. So the part of the clock tree that's problematic is this:
+
+ osc_24m (fixed)
+    sys_pll1_ref_sel (mux)
+       sys_pll1 (imx pll14xx)
+          sys_pll1_bypass (mux)
+             sys_pll1_out (gate)
+                sys_pll1_800m (fixed factor)
+                   main_axi (composite CLK_IS_CRITICAL)
+
+Would it be possible for you to produce a stack dump as well? And also
+enable lock debugging? This likely still won't catch anything if it's
+a spinlock deadlock though.
+
+
+Thanks
+ChenYu

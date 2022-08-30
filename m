@@ -2,79 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D5C65A5BD9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B2395A5BDB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:31:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230144AbiH3GbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38670 "EHLO
+        id S230164AbiH3Gbh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiH3GbU (ORCPT
+        with ESMTP id S230133AbiH3Gbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:31:20 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C14186D8
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:31:19 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id 72so10393805pfx.9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:31:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=kRrTAo8daY4XFPJzzujJBwELH2FLL+aCQ7HxRf6l2Fg=;
-        b=KnuzT4G4A4+o4hLLipG5ZVCHsIIIclmUzrhCyj/a6DT6QzlXMBn2dTkgzB4f+9K0DO
-         Z98kmgHtvs9lVUk4jh1N98hcQT6jv6gPycCWTmqGVKlwcnJ7lFjbvBN0BXvZ2oH4OqWZ
-         36WCsIVrPIgtPOo+dlpTW/oV4tTWBEc+mZWf6abluxyF+Ud1xPPqX1Hojkrl1GnqxNSn
-         22c0o5JQ6BjRmT+GUj5rXwIJlCsGXwLeMabe8dvXoLbjTJMRRHPZGopJzrrp079yucF1
-         kgv02QWmWCqufqauuD9zCUxiPS6suuulBiF/PbGO6GSKXJ0htLGG1brQSPFJw6CPBQH6
-         I4Lg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=kRrTAo8daY4XFPJzzujJBwELH2FLL+aCQ7HxRf6l2Fg=;
-        b=8J1cV9KFJ/bdJIacKLTqC6vQdL3OWxhTPDORgMReMbZZGXjTctGhJIRmFKlhTt9uH2
-         NlfMRQ9HLL6Ki16+3talJuGJ4W197NK0WAyBMhQHSYkMjj3Arb7qmD2efoRdpvjQrrmX
-         TzZppKHNth34QbWEwXq1QfS6b0Y9DDr1eJ2qNeCc4VgPwQGdqp32NTGmAiWSNzZxYyyd
-         B26TQHl7scrzby2WTJEXSflW6u2zaeSzNQriRuncbOq7CaQ9VKr2/pdct9m414vnQPhI
-         E63CUmzfztZpMZ5pQwZyLs9MIvWyDSZN6JkXAxgqtCJF6TssOk+G6z3l5iJ2W2z2Rq44
-         D1Lw==
-X-Gm-Message-State: ACgBeo3CXO6BFLMhFsuJSgfplhEVIOgY4keJsV+Nu8ry9UXxFsSFqcDd
-        iBrURvUVHoW5zrjHRCdcQMbijyYYH5a8Nd+72/uC5g==
-X-Google-Smtp-Source: AA6agR6zA8pPQxj3vn4SjOHDVmXoyzrIhWwvsRLk0uKVTgviVLur2pUxJ31jB2lSsM3Rqplsc4PL78sQdVP4WzSZPK4=
-X-Received: by 2002:a65:46c7:0:b0:42a:c9db:cb7 with SMTP id
- n7-20020a6546c7000000b0042ac9db0cb7mr17184925pgr.515.1661841078722; Mon, 29
- Aug 2022 23:31:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220829060745.287468-1-aneesh.kumar@linux.ibm.com>
-In-Reply-To: <20220829060745.287468-1-aneesh.kumar@linux.ibm.com>
-From:   Wei Xu <weixugc@google.com>
-Date:   Mon, 29 Aug 2022 23:31:07 -0700
-Message-ID: <CAAPL-u9HRHyQEw7q+bTUvYRQWwii7DWYyx3DCgmxJu+u3panbQ@mail.gmail.com>
-Subject: Re: [PATCH v2] mm/demotion: Expose memory tier details via sysfs
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Huang Ying <ying.huang@intel.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
-        Bharata B Rao <bharata@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+        Tue, 30 Aug 2022 02:31:33 -0400
+Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80054.outbound.protection.outlook.com [40.107.8.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 497577CAAB;
+        Mon, 29 Aug 2022 23:31:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C6G4lF/fqeoYMmcQ2t2ooUIh3Gr8Dz1kH+ddvPybh744/Ie3rf3HPMPnLrW4cmL0pQRNd7srZOi1qb5+NzuSVLoEgPUOLrOpsP8MmJbKpN+jgC7c7Z8cjpwFOGv/5Ce2JHQ9u7qKctclAgSXrCW55ZciKFxxnNLC5h4uh4+IPSaOdNjlk6uZqffnx8VSQon0OezEet/AisrgUURVby5fYF5MoNSuRwrryjub++YuKMz76mzAWRGeQtciQhPvHXfLT1NR//kskrviFOVCnEJo54ziOLaeHM/Q7xpEh3rWk/6DIJooZJLmih2DwG2fUJFQc79jiyiW0L2zik6wzmFkKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PwXP5SMtyE04bOBH8XFq8vDH4DxauUpXC3pR9MeQTgA=;
+ b=P/bkozPZ4UH/uoK+BVT5Jm2BbYnnUo0KlEimuvqoyQ9Vm34n1NwitNZNXSj3cz9eQQ+0QKAl/zxPPVdHut3bOPI0yIImt/sKnwsirtmqk+zcQXQXzA2GIIR0kuGsgDsTJo2e6+QlhvmrjBlChyhkuV+1qEukqCkBVbviRcKZJ5ZYPJNoA64A+Pw+qNUUDszL5uYY8uCgIPrDK9FF7c8rFnWKtHlR63CZ3oA0bUm8gmI14vIfOSJ4RoEPxfjWaYJEmrlQQXjLegaBr9mx2gNBWkgXy7Aci1/7AcdkX2XDcpg+OcR1J18+FcJ6NiAFE4ib1IdboyH1+B6QRhX2RwlHjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PwXP5SMtyE04bOBH8XFq8vDH4DxauUpXC3pR9MeQTgA=;
+ b=YGKikfhzBYl4j5zAvRuDxbcfxBwijyirgw+FV5Hvb2mz80QHUgAab49JzAYaVhGh66+T2TeYS6ikLiQGmTZsMPcEzQThbnQ02aw06NaZ7MJ8wMEOjDszCLhP94+RMrxtwP76oG7RtnMcGU6wFFq2Y0kaxOr8owukikq1Tv11yg8=
+Received: from GV1PR04MB9183.eurprd04.prod.outlook.com (2603:10a6:150:27::9)
+ by HE1PR04MB2953.eurprd04.prod.outlook.com (2603:10a6:7:1a::33) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Tue, 30 Aug
+ 2022 06:31:28 +0000
+Received: from GV1PR04MB9183.eurprd04.prod.outlook.com
+ ([fe80::28cf:2839:247c:b34e]) by GV1PR04MB9183.eurprd04.prod.outlook.com
+ ([fe80::28cf:2839:247c:b34e%6]) with mapi id 15.20.5566.021; Tue, 30 Aug 2022
+ 06:31:27 +0000
+From:   "S.J. Wang" <shengjiu.wang@nxp.com>
+To:     Chancel Liu <chancel.liu@nxp.com>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "Xiubo.Lee@gmail.com" <Xiubo.Lee@gmail.com>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        "nicoleotsuka@gmail.com" <nicoleotsuka@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+Subject: RE: [PATCH 3/5] ASoC: imx-pcm-rpmsg: Register different platform
+ drivers
+Thread-Topic: [PATCH 3/5] ASoC: imx-pcm-rpmsg: Register different platform
+ drivers
+Thread-Index: AQHYu3zMYmOVvaPO90OGp9+KALSMdq3G/IvA
+Date:   Tue, 30 Aug 2022 06:31:27 +0000
+Message-ID: <GV1PR04MB91831EF183F0D0E6E9BBD9E9E3799@GV1PR04MB9183.eurprd04.prod.outlook.com>
+References: <20220829075144.2405000-1-chancel.liu@nxp.com>
+ <20220829075144.2405000-4-chancel.liu@nxp.com>
+In-Reply-To: <20220829075144.2405000-4-chancel.liu@nxp.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 4ac7239c-22ae-4bbe-6d4a-08da8a5144c1
+x-ms-traffictypediagnostic: HE1PR04MB2953:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: dOYEdoikss+2Yc81n2hVhSn2Z1VghPmHm/Qf9o2G1Qdr2peqzJmsImJWyTkaEjuMEnjeobJZ8koDMu4d355O7sOneMHKCuu0pKRjZerqKexzFL4bpNNEDcRKKrFILzF36hp9MW8zKL4xWLJuouGLERVApHR/8Hl1K6oJnBlm8oWx8B62oH/kEM/XiqbvoxBFYUI7bFoIw5xaAltmPFC4jHQDYu1/PanI7LwNxZlA5d393NOt8Yh/JE1a6r+vs+z6kl5EHF2jxp+ssnq0R2cnX3Etk5NqWmRpUWSWzk4KOi8oZ9VisOCc+DhFKZ/HSpAswtN9WBTtMHU0b9h/PI8/IFqtims5uRzbSSHA4AFPsoayqCQO/LwU2OiTCLQRutLX6dbLHHNpTeCrE9O1BY4g4fxAIoJQ2zwoJLOTXghn0S2tiG+9XneVDUxNt6raDUyTqm1j2xaiwuEUchQENNgQK1onJlaoJFE3MVF25o6/0zKwbA7ckT4Y27HZ8b71CTSPJY1sVUIA+4FqJXTSz0B9o9PqGewjqsAf+uVDRihB9UQLdgGf4s8B5O+wF9+xi9JzHBFnbgCHhmGuqqiCoEApESw96tSII0ECU1u9AY87CLuJ2SQJZpQW2yU2ayGwwEOKMX1KQU2B/Q0QtlaBcRs7YclwkjSnK+sqYqIQurhEiojBEnjt9K/zWfdB++RTmEjjisqScZBufpao0Jcx+UM8ZFw+4IP/0lNjj52ilHoZalhAhSSlq2Ac81N2QyJUQK+e2PtyGzm62yBWXib2mWM9XRVGXP4AOJZ3x3jsHo2LSVc=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9183.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(39860400002)(396003)(366004)(136003)(346002)(26005)(9686003)(55016003)(71200400001)(86362001)(478600001)(6506007)(7696005)(41300700001)(186003)(38100700002)(122000001)(921005)(38070700005)(83380400001)(66476007)(64756008)(110136005)(2906002)(66556008)(8936002)(5660300002)(8676002)(52536014)(66446008)(66946007)(316002)(7416002)(76116006)(33656002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?JgPjEXyfkwNiYPny0Ak2giJX+K9X89haSEnSdfDG2miCpuDusvUz50wFRHiR?=
+ =?us-ascii?Q?jS09GEeRDCglumeNXLNN6mh54QRmjHRyLVsceTGQtMdL27WBI6q9qY/b2x2s?=
+ =?us-ascii?Q?AYBdMY1yo907M+xw7wX2jNDZkV1TqFOA0toTnb0oc3HazCN6vlNZ1t6EIpXc?=
+ =?us-ascii?Q?j6dOIgDLxj66DcdQsKdfxWp4tsq22YupagBKr96waZky3LgRirGdBuo2E0Fn?=
+ =?us-ascii?Q?UXjkbZJP/jbu5Q3AMnd21XuexYz7cDLsXUMf8HUtm+ej0grF8f6UWajgDAFK?=
+ =?us-ascii?Q?VnICVfp08mBtWke2D4cr6dKxg74mOkOPIdeL6fOrHsxKRuxnUu8JPCnSUZfg?=
+ =?us-ascii?Q?uV9dKbbeOK3s8HPFoQZLJlnGwAkkMBbyQbOA6ito35swcoVdAeoY6GI+JrFx?=
+ =?us-ascii?Q?1pNgo+ktxa0RBZ4SZzbLrC4j/HI/3/lrKPZLH/AMc/0BR1SpYCzRjnG3Fd37?=
+ =?us-ascii?Q?VLN5Or2eeS2SsaSeMgDBgNoKYnnUqxGgGBR7UBBOl7HD8f67wwni93ANHv5B?=
+ =?us-ascii?Q?SINhYO5BpYeQVVf87spqw9cQChA5ggD1gCTB3rb3CmDeyYDOqGm6acPvesdR?=
+ =?us-ascii?Q?LKzC7rB+a1DaiGw2CbHMz4Zx4hodvTZwX3w2X7yNrAYNSkNJU0ec8wetPn0h?=
+ =?us-ascii?Q?2t9cwmMdyV0j1kWCwbfYvzqskhfRMfB8oUtJyZZou0wAAJGbN+6B8LY+cteR?=
+ =?us-ascii?Q?dIhNR0ihS0xH/ttWPphOFa5DAJluFEgEE7ZKf+NKomrxg0rAo6t3lZHQ2HUI?=
+ =?us-ascii?Q?UTVcpNd3gl75C8odwPpqHBfYxiFENAjuZ6uM6DFj2GM7vxb5Mwnh6KryGG0Y?=
+ =?us-ascii?Q?qRFF00+Y71MDPZNK9IkkkSP2sY4l4+D7RvdpYznkmHl+HtceD6TgS/7vZcGD?=
+ =?us-ascii?Q?OmAsuf9S64tKwCRllqrX6r9/je4yxmFVN4LFG/nnUVIoXYFf+Bd1kRvZU1m1?=
+ =?us-ascii?Q?4hWO6x3n9ceBthAGTo0R43QDNFJbma3yAg1UjlEJBqbW9QJorZHzTJY6v+Gz?=
+ =?us-ascii?Q?oNU/xVa5e2EELXs6T3+DmkYHxULL/89/otOuSUbx49Zo8xuCVjdQh2MB47DY?=
+ =?us-ascii?Q?/GxNpgKnf6fUWlzpT4oCUVnjTzWkKBTh2FXzDE7RLhDhB4MdzhkiJgXDC+Ba?=
+ =?us-ascii?Q?GuVwBqLoCEcW4MohRB1Wgl2QUikxmhXC0XMmJNazHqBaN6KOF3dS5Z8L6ppS?=
+ =?us-ascii?Q?K8Hy597vfOi2qM+v8lAESdcSBXt02nFBTGTFzwHy7Qp/08PCf+ESZok3zYLi?=
+ =?us-ascii?Q?8e8JL8dYUzkaRzZQI8IcpFzOqQKt5pCJEYMldLTxRiFxGXXnFZTn3MgrGEWK?=
+ =?us-ascii?Q?Sm95BHEn6z4TpDroFTTCR8EQ2c0YmzcNgYMUYORKauiyl09v4Fo4l25rGRbo?=
+ =?us-ascii?Q?8i0441I1wpbg5QdpGosueDIfX4Jj0L0KsEd+/wA5oa+mU3mu1XnpcQE3iRiV?=
+ =?us-ascii?Q?6e+okwl2zbBvmvqgymt3KQOPJqO9pOyKW7aFIlylMxBcUlvMaq9SDxluAZzJ?=
+ =?us-ascii?Q?3A6zlm7NwTBvAAZXPskSo20GGvNKy/rCahWR9xeXef0jgoWhVOqCj063FCUt?=
+ =?us-ascii?Q?VPlUjtjZBsoYyGjf09l3LMjyCgYQnvsEMsn7n7FJ?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: GV1PR04MB9183.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4ac7239c-22ae-4bbe-6d4a-08da8a5144c1
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Aug 2022 06:31:27.6545
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: OMFquitHciJcD1/o+xGZuiwGbI3+yMjot0X5rrpTBYQeyMJHyZK9hV52b1G5peKAciLCf9typo8dCWvNZXjZfQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: HE1PR04MB2953
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,369 +130,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 11:08 PM Aneesh Kumar K.V
-<aneesh.kumar@linux.ibm.com> wrote:
->
-> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tie=
-r
-> related details can be found. All allocated memory tiers will be listed
-> there as /sys/devices/virtual/memory_tiering/memory_tierN/
->
-> The nodes which are part of a specific memory tier can be listed via
-> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
->
-> The abstract distance range value of a specific memory tier can be listed=
- via
-> /sys/devices/virtual/memory_tiering/memory_tierN/abstract_distance
->
-> A directory hierarchy looks like
-> :/sys/devices/virtual/memory_tiering$ tree memory_tier4/
-> memory_tier4/
-> =E2=94=9C=E2=94=80=E2=94=80 abstract_distance
-> =E2=94=9C=E2=94=80=E2=94=80 nodes
-> =E2=94=9C=E2=94=80=E2=94=80 subsystem -> ../../../../bus/memory_tiering
-> =E2=94=94=E2=94=80=E2=94=80 uevent
->
-> All toptier nodes are listed via
-> /sys/devices/virtual/memory_tiering/toptier_nodes
->
-> :/sys/devices/virtual/memory_tiering$ cat toptier_nodes
-> 0,2
-> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
-> 0,2
-> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/abstract_distance
-> 512 - 639
->
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>=20
+> This patch can register different ASoC platform drivers in reference to
+> "fsl,platform" property of the corresponding node in dts. So sound cards
+> based on different rpmsg channels can link to their respective platform
+> drivers.
+>=20
+> Signed-off-by: Chancel Liu <chancel.liu@nxp.com>
 > ---
->  .../ABI/testing/sysfs-kernel-mm-memory-tiers  |  41 +++++
->  mm/memory-tiers.c                             | 155 +++++++++++++++---
->  2 files changed, 174 insertions(+), 22 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-kernel-mm-memory-tier=
-s
->
-> diff --git a/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers b/Doc=
-umentation/ABI/testing/sysfs-kernel-mm-memory-tiers
-> new file mode 100644
-> index 000000000000..6955f69a4423
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-kernel-mm-memory-tiers
-> @@ -0,0 +1,41 @@
-> +What:          /sys/devices/virtual/memory_tiering/
-> +Date:          August 2022
-> +Contact:       Linux memory management mailing list <linux-mm@kvack.org>
-> +Description:   A collection of all the memory tiers allocated.
-> +
-> +               Individual memory tier details are contained in subdirect=
-ories
-> +               named by the abstract distance of the memory tier.
-> +
-> +               /sys/devices/virtual/memory_tiering/memory_tierN/
-> +
-> +
-> +What:          /sys/devices/virtual/memory_tiering/memory_tierN/
-> +               /sys/devices/virtual/memory_tiering/memory_tierN/abstract=
-_distance
-> +               /sys/devices/virtual/memory_tiering/memory_tierN/nodes
-> +Date:          August 2022
-> +Contact:       Linux memory management mailing list <linux-mm@kvack.org>
-> +Description:   Directory with details of a specific memory tier
-> +
-> +               This is the directory containing information about a part=
-icular
-> +               memory tier, memtierN, where N is derived based on abstra=
-ct distance.
-> +
-> +               A smaller value of N implies a higher (faster) memory tie=
-r in the
-> +               hierarchy.
+>  sound/soc/fsl/imx-pcm-rpmsg.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/sound/soc/fsl/imx-pcm-rpmsg.c b/sound/soc/fsl/imx-pcm-
+> rpmsg.c index 35049043e532..2f310994f7ee 100644
+> --- a/sound/soc/fsl/imx-pcm-rpmsg.c
+> +++ b/sound/soc/fsl/imx-pcm-rpmsg.c
+> @@ -178,7 +178,7 @@ static int imx_rpmsg_pcm_hw_params(struct
+> snd_soc_component *component,
+>  		msg->s_msg.param.channels =3D RPMSG_CH_STEREO;
+>  		break;
+>  	default:
+> -		ret =3D -EINVAL;
+> +		msg->s_msg.param.channels =3D params_channels(params);
 
-Given that abstract_distance is provided, it would be more flexible if
-we don't commit to the interface where N in memtierN also indicates
-the memory tier ordering.
+Please use separate commit for this change, I think the fsl_rpmsg_dai. chan=
+nels_max
+Should be updated also?
 
-> +
-> +               abstract_distance: The abstract distance range this speci=
-fic memory
-> +               tier maps to.
+Best regards
+Wang shengjiug
 
-I still think the name of "abstract distance" is kind of confusing
-because it is not clear what is the other object that this distance
-value is relative to.  Do we have to expose this value at this point
-if N in memtierN can already indicate the memory tier ordering?
-
-> +               nodes: NUMA nodes that are part of this memory tier.
+>  		break;
+>  	}
+>=20
+> @@ -684,7 +684,7 @@ static int imx_rpmsg_pcm_probe(struct
+> platform_device *pdev)
+>  	info->rpdev =3D container_of(pdev->dev.parent, struct rpmsg_device,
+> dev);
+>  	info->dev =3D &pdev->dev;
+>  	/* Setup work queue */
+> -	info->rpmsg_wq =3D alloc_ordered_workqueue("rpmsg_audio",
+> +	info->rpmsg_wq =3D alloc_ordered_workqueue(info->rpdev->id.name,
+>  						 WQ_HIGHPRI |
+>  						 WQ_UNBOUND |
+>  						 WQ_FREEZABLE);
+> @@ -723,11 +723,15 @@ static int imx_rpmsg_pcm_probe(struct
+> platform_device *pdev)
+>  	if (ret)
+>  		goto fail;
+>=20
+> -	component =3D snd_soc_lookup_component(&pdev->dev,
+> IMX_PCM_DRV_NAME);
+> +	component =3D snd_soc_lookup_component(&pdev->dev, NULL);
+>  	if (!component) {
+>  		ret =3D -EINVAL;
+>  		goto fail;
+>  	}
 > +
+> +	/* platform component name is used by machine driver to link with
+> */
+> +	component->name =3D info->rpdev->id.name;
 > +
-> +What:          /sys/devices/virtual/memory_tiering/toptier_nodes
-> +Date:          August 2022
-> +Contact:       Linux memory management mailing list <linux-mm@kvack.org>
-> +Description:   Toptier node mask
-> +
-> +               A toptier is defined as the memory tier from which memory=
- promotion
-> +               is not done by the kernel.
-> +
-> +               toptier_nodes: NUMA nodes that are part of all the memory=
- tiers
-> +               above a topier tier.
-
-Nit: topier -> toptier
-
-toptier_nodes should be the union of NUMA nodes that are part of each
-toptier, not above a toptier, right?
-
-> +
-> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-> index c4bd6d052a33..d4648d4e4d54 100644
-> --- a/mm/memory-tiers.c
-> +++ b/mm/memory-tiers.c
-> @@ -19,6 +19,7 @@ struct memory_tier {
->          * adistance_start .. adistance_start + MEMTIER_CHUNK_SIZE
->          */
->         int adistance_start;
-> +       struct device dev;
->         /* All the nodes that are part of all the lower memory tiers. */
->         nodemask_t lower_tier_mask;
->  };
-> @@ -36,6 +37,13 @@ static DEFINE_MUTEX(memory_tier_lock);
->  static LIST_HEAD(memory_tiers);
->  static struct node_memory_type_map node_memory_types[MAX_NUMNODES];
->  static struct memory_dev_type *default_dram_type;
-> +
-> +#define to_memory_tier(device) container_of(device, struct memory_tier, =
-dev)
-> +static struct bus_type memory_tier_subsys =3D {
-> +       .name =3D "memory_tiering",
-> +       .dev_name =3D "memory_tier",
-> +};
-> +
->  #ifdef CONFIG_MIGRATION
->  static int top_tier_adistance;
->  /*
-> @@ -98,8 +106,73 @@ static int top_tier_adistance;
->  static struct demotion_nodes *node_demotion __read_mostly;
->  #endif /* CONFIG_MIGRATION */
->
-> +static __always_inline nodemask_t get_memtier_nodemask(struct memory_tie=
-r *memtier)
-> +{
-> +       nodemask_t nodes =3D NODE_MASK_NONE;
-> +       struct memory_dev_type *memtype;
-> +
-> +       list_for_each_entry(memtype, &memtier->memory_types, tier_sibilin=
-g)
-> +               nodes_or(nodes, nodes, memtype->nodes);
-> +
-> +       return nodes;
-> +}
-> +
-> +static void memory_tier_device_release(struct device *dev)
-> +{
-> +       struct memory_tier *tier =3D to_memory_tier(dev);
-> +       /*
-> +        * synchronize_rcu in clear_node_memory_tier makes sure
-> +        * we don't have rcu access to this memory tier.
-> +        */
-> +       kfree(tier);
-> +}
-> +
-> +static ssize_t nodes_show(struct device *dev,
-> +                         struct device_attribute *attr, char *buf)
-> +{
-> +       int ret;
-> +       nodemask_t nmask;
-> +
-> +       mutex_lock(&memory_tier_lock);
-> +       nmask =3D get_memtier_nodemask(to_memory_tier(dev));
-> +       ret =3D sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&nmask));
-> +       mutex_unlock(&memory_tier_lock);
-> +       return ret;
-> +}
-> +static DEVICE_ATTR_RO(nodes);
-> +
-> +static ssize_t abstract_distance_show(struct device *dev,
-> +                                     struct device_attribute *attr, char=
- *buf)
-> +{
-> +       int ret;
-> +       struct memory_tier *memtier =3D to_memory_tier(dev);
-> +
-> +       mutex_lock(&memory_tier_lock);
-> +       ret =3D sysfs_emit(buf, "%d - %d\n", memtier->adistance_start,
-> +                        memtier->adistance_start + MEMTIER_CHUNK_SIZE - =
-1);
-> +       mutex_unlock(&memory_tier_lock);
-> +       return ret;
-> +}
-> +static DEVICE_ATTR_RO(abstract_distance);
-> +
-> +static struct attribute *memtier_dev_attrs[] =3D {
-> +       &dev_attr_nodes.attr,
-> +       &dev_attr_abstract_distance.attr,
-> +       NULL
-> +};
-> +
-> +static const struct attribute_group memtier_dev_group =3D {
-> +       .attrs =3D memtier_dev_attrs,
-> +};
-> +
-> +static const struct attribute_group *memtier_dev_groups[] =3D {
-> +       &memtier_dev_group,
-> +       NULL
-> +};
-> +
->  static struct memory_tier *find_create_memory_tier(struct memory_dev_typ=
-e *memtype)
->  {
-> +       int ret;
->         bool found_slot =3D false;
->         struct memory_tier *memtier, *new_memtier;
->         int adistance =3D memtype->adistance;
-> @@ -123,15 +196,14 @@ static struct memory_tier *find_create_memory_tier(=
-struct memory_dev_type *memty
->
->         list_for_each_entry(memtier, &memory_tiers, list) {
->                 if (adistance =3D=3D memtier->adistance_start) {
-> -                       list_add(&memtype->tier_sibiling, &memtier->memor=
-y_types);
-> -                       return memtier;
-> +                       goto link_memtype;
->                 } else if (adistance < memtier->adistance_start) {
->                         found_slot =3D true;
->                         break;
->                 }
->         }
->
-> -       new_memtier =3D kmalloc(sizeof(struct memory_tier), GFP_KERNEL);
-> +       new_memtier =3D kzalloc(sizeof(struct memory_tier), GFP_KERNEL);
->         if (!new_memtier)
->                 return ERR_PTR(-ENOMEM);
->
-> @@ -142,8 +214,23 @@ static struct memory_tier *find_create_memory_tier(s=
-truct memory_dev_type *memty
->                 list_add_tail(&new_memtier->list, &memtier->list);
->         else
->                 list_add_tail(&new_memtier->list, &memory_tiers);
-> -       list_add(&memtype->tier_sibiling, &new_memtier->memory_types);
-> -       return new_memtier;
-> +
-> +       new_memtier->dev.id =3D adistance >> MEMTIER_CHUNK_BITS;
-> +       new_memtier->dev.bus =3D &memory_tier_subsys;
-> +       new_memtier->dev.release =3D memory_tier_device_release;
-> +       new_memtier->dev.groups =3D memtier_dev_groups;
-> +
-> +       ret =3D device_register(&new_memtier->dev);
-> +       if (ret) {
-> +               list_del(&memtier->list);
-> +               put_device(&memtier->dev);
-> +               return ERR_PTR(ret);
-> +       }
-> +       memtier =3D new_memtier;
-> +
-> +link_memtype:
-> +       list_add(&memtype->tier_sibiling, &memtier->memory_types);
-> +       return memtier;
->  }
->
->  static struct memory_tier *__node_get_memory_tier(int node)
-> @@ -275,17 +362,6 @@ static void disable_all_demotion_targets(void)
->         synchronize_rcu();
->  }
->
-> -static __always_inline nodemask_t get_memtier_nodemask(struct memory_tie=
-r *memtier)
-> -{
-> -       nodemask_t nodes =3D NODE_MASK_NONE;
-> -       struct memory_dev_type *memtype;
-> -
-> -       list_for_each_entry(memtype, &memtier->memory_types, tier_sibilin=
-g)
-> -               nodes_or(nodes, nodes, memtype->nodes);
-> -
-> -       return nodes;
-> -}
-> -
->  /*
->   * Find an automatic demotion target for all memory
->   * nodes. Failing here is OK.  It might just indicate
-> @@ -432,11 +508,7 @@ static struct memory_tier *set_node_memory_tier(int =
-node)
->  static void destroy_memory_tier(struct memory_tier *memtier)
->  {
->         list_del(&memtier->list);
-> -       /*
-> -        * synchronize_rcu in clear_node_memory_tier makes sure
-> -        * we don't have rcu access to this memory tier.
-> -        */
-> -       kfree(memtier);
-> +       device_unregister(&memtier->dev);
->  }
->
->  static bool clear_node_memory_tier(int node)
-> @@ -563,11 +635,50 @@ static int __meminit memtier_hotplug_callback(struc=
-t notifier_block *self,
->         return notifier_from_errno(0);
->  }
->
-> +static ssize_t toptier_nodes_show(struct device *dev,
-> +                                    struct device_attribute *attr, char =
-*buf)
-> +{
-> +       int ret;
-> +       nodemask_t nmask, top_tier_mask =3D NODE_MASK_NONE;
-> +       struct memory_tier *memtier =3D to_memory_tier(dev);
-> +
-> +       mutex_lock(&memory_tier_lock);
-> +       list_for_each_entry(memtier, &memory_tiers, list) {
-> +               if (memtier->adistance_start >=3D top_tier_adistance)
-
-It is kind of confusing that a tier with top_tier_adistance is not
-considered as a toptier.  Can we redefine top_tier_adistance to be the
-inclusive upper bound of toptiers?
-
-> +                       break;
-> +               nmask =3D get_memtier_nodemask(memtier);
-> +               nodes_or(top_tier_mask, top_tier_mask, nmask);
-> +       }
-> +
-> +       ret =3D sysfs_emit(buf, "%*pbl\n", nodemask_pr_args(&top_tier_mas=
-k));
-> +       mutex_unlock(&memory_tier_lock);
-> +       return ret;
-> +}
-> +static DEVICE_ATTR_RO(toptier_nodes);
-> +
-> +static struct attribute *memtier_subsys_attrs[] =3D {
-> +       &dev_attr_toptier_nodes.attr,
-> +       NULL
-> +};
-> +
-> +static const struct attribute_group memtier_subsys_group =3D {
-> +       .attrs =3D memtier_subsys_attrs,
-> +};
-> +
-> +static const struct attribute_group *memtier_subsys_groups[] =3D {
-> +       &memtier_subsys_group,
-> +       NULL
-> +};
-> +
->  static int __init memory_tier_init(void)
->  {
-> -       int node;
-> +       int ret, node;
->         struct memory_tier *memtier;
->
-> +       ret =3D subsys_virtual_register(&memory_tier_subsys, memtier_subs=
-ys_groups);
-> +       if (ret)
-> +               panic("%s() failed to register memory tier subsystem\n", =
-__func__);
-> +
->  #ifdef CONFIG_MIGRATION
->         node_demotion =3D kcalloc(nr_node_ids, sizeof(struct demotion_nod=
-es),
->                                 GFP_KERNEL);
+>  #ifdef CONFIG_DEBUG_FS
+>  	component->debugfs_prefix =3D "rpmsg";
+>  #endif
 > --
-> 2.37.2
->
+> 2.25.1
+

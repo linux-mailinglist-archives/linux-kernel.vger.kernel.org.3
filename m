@@ -2,82 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0EC5A6D66
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:30:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4B455A6D6B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:32:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbiH3TaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48634 "EHLO
+        id S230060AbiH3Tct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229808AbiH3TaT (ORCPT
+        with ESMTP id S229569AbiH3Tcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:30:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81EBB1FCC0;
-        Tue, 30 Aug 2022 12:30:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16D4961772;
-        Tue, 30 Aug 2022 19:30:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E6D9C433D6;
-        Tue, 30 Aug 2022 19:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661887817;
-        bh=nBVnvrKt98aOcRMDXo5kWCSaoHa1L3WfB0MImmB7bsA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=LAGBjRI0iICkSCcey3Hj90hGM0SqheIVF3UoW82NBZzIz/pwdUg/h+ZPa9irfUgQB
-         1s2LRyXlDCP9C4zI3ji74eomVC+5lmIjm9aAB+/Hcttw0Y+R4eiEnQX2gIwcyylcGZ
-         m0HT0zoISUjbBp0qlYJXXVP8gT75R6Rg9V6R2tmBTQbZLwC5VMRi2/IuSdDU2wnnoQ
-         s8vbTr0QPN2e82jnZJX+Heu5jjIstCTuxNZNjDoGaO1O9jXsqCQ5asBV74B1QbtBAd
-         mUKvBBbd6N/l/Ri+dhT47y56cLzRqElhTacOHddkmxB7PKH22K4iwFitXwtuU0g0vP
-         s/YieDF4URcow==
-Message-ID: <b3c0e3ae74a6f30547bd5c49c32c17f1e7a13b0c.camel@kernel.org>
-Subject: Re: [PATCH v3 1/7] iversion: update comments with info about atime
- updates
-From:   Jeff Layton <jlayton@kernel.org>
-To:     "J. Bruce Fields" <bfields@fieldses.org>
-Cc:     Trond Myklebust <trondmy@hammerspace.com>,
-        "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "neilb@suse.de" <neilb@suse.de>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-ceph@vger.kernel.org" <linux-ceph@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "walters@verbum.org" <walters@verbum.org>
-Date:   Tue, 30 Aug 2022 15:30:13 -0400
-In-Reply-To: <20220830183244.GG26330@fieldses.org>
-References: <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
-         <166181389550.27490.8200873228292034867@noble.neil.brown.name>
-         <f5c42c0d87dfa45188c2109ccf9baeb7a42aa27e.camel@kernel.org>
-         <20220830132443.GA26330@fieldses.org>
-         <a07686e7e1d1ef15720194be2abe5681f6a6c78e.camel@kernel.org>
-         <20220830144430.GD26330@fieldses.org>
-         <e4815337177c74a9928098940dfdcb371017a40c.camel@hammerspace.com>
-         <20220830151715.GE26330@fieldses.org>
-         <3e8c7af5d39870c5b0dc61736a79bd134be5a9b3.camel@hammerspace.com>
-         <4adb2abd1890b147dbc61a06413f35d2f147c43a.camel@kernel.org>
-         <20220830183244.GG26330@fieldses.org>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Tue, 30 Aug 2022 15:32:46 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73CD474E9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:32:45 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id u22so12074489plq.12
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:32:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=OYzA9p0n5o59safiaW4KMlIlfnAxPamL+boi+em99/M=;
+        b=W851mZSHA2NuVBwcGoGcf21aojaeZQ6itzde6gqVH7X2Aejqg6gmKniUdZpYCGwMgr
+         /VYzjXwux5er4xhFoJ0SDpu1AxswH9or1LBBQDLKe2Ys/Yy9YyeyaOpZ8rS2ida5eoV6
+         X2Ic6/yFW7PMZ82ej3p8GBPLvZV4vcpIpyLIg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=OYzA9p0n5o59safiaW4KMlIlfnAxPamL+boi+em99/M=;
+        b=ixzRrBSB9UMLKLYvLj5hIN96fxCdk7FWK6w1kFy2PbOdVhteMsA7GuZAmS2aT/a5nM
+         mQwx61kSHcUfS3T4ouIm6ngi9s6TTfNCkLLWqKDaK2s7VGgDFLJa5tb8XUQbyhmpU4hM
+         ygjJUUWXWbL6G3RcWqyXNcdRVGRRD/e4ty4oW2UfQ/AMg1yPkukspYSliCAeqfV09rgc
+         JE39FDPj4CB8S6e+FK+W77US6QbVezRSNmZu8lFWIg6uEF4OoQ+K1apCpCrkWjMDCUGo
+         mE0ptV+d9470Yek9kZlL+O6Jwlo4EAtejm7ozKd0+CE2riITbgFGL1VkMNcvZ+xob9Jq
+         yKzw==
+X-Gm-Message-State: ACgBeo0r+XgKoLSfXC00UBTuUEJ+xjmu5pDp99nFyHZrAOp/UsgZ8xxf
+        9cahxq/PegWItHRZSFg1gG89xw==
+X-Google-Smtp-Source: AA6agR5a1ydzTy5CU1whWuOm/VAiahfPCvqjM4F31B9VPVSXp3Z7Evq1Nk8FjLUtWiUUav60coeBOQ==
+X-Received: by 2002:a17:902:d501:b0:174:c4c9:9b77 with SMTP id b1-20020a170902d50100b00174c4c99b77mr10894828plg.67.1661887965373;
+        Tue, 30 Aug 2022 12:32:45 -0700 (PDT)
+Received: from localhost ([2620:15c:202:201:d14a:ebf8:88f1:35e])
+        by smtp.gmail.com with UTF8SMTPSA id z5-20020a17090a66c500b001f334aa9170sm8868376pjl.48.2022.08.30.12.32.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 12:32:44 -0700 (PDT)
+From:   Brian Norris <briannorris@chromium.org>
+To:     Heiko Stuebner <heiko@sntech.de>
+Cc:     zain wang <wzz@rock-chips.com>, Lin Huang <hl@rock-chips.com>,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        Douglas Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: [PATCH] arm64: dts: rockchip: Set RK3399-Gru PCLK_EDP to 24 MHz
+Date:   Tue, 30 Aug 2022 12:32:33 -0700
+Message-Id: <20220830123231.1.I98d30623f13b785ca77094d0c0fd4339550553b6@changeid>
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,43 +69,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-08-30 at 14:32 -0400, J. Bruce Fields wrote:
-> On Tue, Aug 30, 2022 at 01:02:50PM -0400, Jeff Layton wrote:
-> > The fact that NFS kept this more loosely-defined is what allowed us to
-> > elide some of the i_version bumps and regain a fair bit of performance
-> > for local filesystems [1]. If the change attribute had been more
-> > strictly defined like you mention, then that particular optimization
-> > would not have been possible.
-> >=20
-> > This sort of thing is why I'm a fan of not defining this any more
-> > strictly than we require. Later on, maybe we'll come up with a way for
-> > filesystems to advertise that they can offer stronger guarantees.
->=20
-> Yeah, the afs change-attribute-as-counter thing seems ambitious--I
-> wouldn't even know how to define what exactly you're counting.
->=20
-> My one question is whether it'd be worth just defining the thing as
-> *increasing*.  That's a lower bar.
->=20
+We've found the AUX channel to be less reliable with PCLK_EDP at a
+higher rate (typically 25 MHz). This is especially important on systems
+with PSR-enabled panels (like Gru-Kevin), since we make heavy, constant
+use of AUX.
 
-That's a very good question.
+According to Rockchip, using any rate other than 24 MHz can cause
+"problems between syncing the PHY an PCLK", which leads to all sorts of
+unreliabilities around register operations.
 
-One could argue that NFSv4 sort of requires that for write delegations
-anyway. All of the existing implementations that I know of do this, so
-that wouldn't rule any of them out.
+Signed-off-by: zain wang <wzz@rock-chips.com>
+Signed-off-by: Brian Norris <briannorris@chromium.org>
+---
 
-I'm not opposed to adding that constraint. Let me think on it a bit
-more.
+ arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-> (Though admittedly we don't quite manage it now--see again 1631087ba872
-> "Revert "nfsd4: support change_attr_type attribute"".)
->=20
+diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+index 45796b9fd94f..ee6095baba4d 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+@@ -244,6 +244,14 @@ &dmc {
+ &edp {
+ 	status = "okay";
+ 
++	/*
++	 * eDP PHY/clk don't sync reliably at anything other than 24 MHz. Only
++	 * set this here, because rk3399-gru.dtsi ensures we can generate this
++	 * off GPLL=600MHz, whereas some other RK3399 boards may not.
++	 */
++	assigned-clocks = <&cru PCLK_EDP>;
++	assigned-clock-rates = <24000000>;
++
+ 	ports {
+ 		edp_out: port@1 {
+ 			reg = <1>;
+-- 
+2.37.2.672.g94769d06f0-goog
 
-Factoring the ctime into the change attr seems wrong, since a clock jump
-could make it go backward. Do you remember what drove that change (see
-630458e730b8) ?
-
-It seems like if the i_version=A0were to go backward, then the ctime
-probably would too, and you'd still see a duplicate change attr.
---=20
-Jeff Layton <jlayton@kernel.org>

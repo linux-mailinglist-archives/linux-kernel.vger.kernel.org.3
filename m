@@ -2,133 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9415A5991
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 04:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87DA75A5992
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 04:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiH3CxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 22:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45892 "EHLO
+        id S229770AbiH3CzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 22:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229651AbiH3CxF (ORCPT
+        with ESMTP id S229476AbiH3CzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 22:53:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3711E7B7B5;
-        Mon, 29 Aug 2022 19:53:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 29 Aug 2022 22:55:06 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE13827FD7
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 19:54:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1661828095; bh=jicVVKpBA+cgvSfNxC/C7jbvEsQZylNBRPCAz8Pbepc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=mJ8W4cnQ35S5Y3Ib7frUpIObfVTiRs0QTvpSjGzeUwZBQq4wQHx+2gacfT/u25gPW
+         CfA2ZKvh6TiukvTS/DJqKJuPYx7RXNDcEzBDE24V5OmxeneVc+LWDi9WxnCEL7QGoB
+         Oj30PCKsjroReFVXxejCy7JLQ4TDHbpqfFiYYRPk=
+Received: from [100.100.57.219] (unknown [220.248.53.61])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C0BFE61476;
-        Tue, 30 Aug 2022 02:53:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BCEDC433C1;
-        Tue, 30 Aug 2022 02:53:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661827984;
-        bh=wQ5Dru6/oa9ffz6dr3xOWZsCMwvrrx/xunl61P65KnE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LsoelcCaNVQW5CRnYsiKN6Ej3YlOTb0T6DWHOzO1EaZs1BMRaqzpZTuffMk6iUkgV
-         bVTrufuqhhym9pKMjTzMoZE9PtYoumz3f3QyghxXgU3/Ar9qGrvEW6yovXlUySQzOw
-         TkjgydCnPNgeqsSsszIJysS7IvUgAQGoMHDIpcUCl6uwH01H3sNXZSCEQZtxfhkME6
-         n8H7B0aYIjFW0bpHascN9tksmosZd3icsij0SVA8g8rvt9Si2lwdgVhAvP7lLmGNS+
-         6A1lkaPcq6GV5FeVpUAmxMn0HKPHieW0kG1gpHcBTJNWMYYFaYj+1Yn92MmFDuE90R
-         oan/gLTpvPzxQ==
-Date:   Tue, 30 Aug 2022 05:52:55 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Dhanuka Warusadura <wdnuka@gmail.com>
-Cc:     dave.hansen@linux.intel.com, shuah@kernel.org,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/sgx: Fix OpenSSL deprecated warning for
- ERR_get_error_line
-Message-ID: <Yw17hyrjX1AiELZG@kernel.org>
-References: <20220828061859.181061-1-wdnuka@gmail.com>
- <Ywyt4tvHrK4r48RK@kernel.org>
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id 966A2600D4;
+        Tue, 30 Aug 2022 10:54:55 +0800 (CST)
+Message-ID: <6563ce1b-7637-3402-be54-0e7acf4f86ca@xen0n.name>
+Date:   Tue, 30 Aug 2022 10:54:54 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Ywyt4tvHrK4r48RK@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:106.0)
+ Gecko/20100101 Thunderbird/106.0a1
+Subject: Re: [PATCH v2] checksyscalls: Ignore fstat to silence build warning
+ on LoongArch
+Content-Language: en-US
+To:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <1661827800-8463-1-git-send-email-yangtiezhu@loongson.cn>
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <1661827800-8463-1-git-send-email-yangtiezhu@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 03:15:30PM +0300, Jarkko Sakkinen wrote:
-> On Sun, Aug 28, 2022 at 11:48:59AM +0530, Dhanuka Warusadura wrote:
-> > These changes fix the "error: ‘ERR_get_error_line’ is deprecated:
-> > Since OpenSSL 3.0" warning.
-> > 
-> > Signed-off-by: Dhanuka Warusadura <wdnuka@gmail.com>
-> > ---
-> >  tools/testing/selftests/sgx/sigstruct.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-> > index 50c5ab1aa6fa..671d9b58e274 100644
-> > --- a/tools/testing/selftests/sgx/sigstruct.c
-> > +++ b/tools/testing/selftests/sgx/sigstruct.c
-> > @@ -136,7 +136,7 @@ static bool check_crypto_errors(void)
-> >  			break;
-> >  
-> >  		had_errors = true;
-> > -		err = ERR_get_error_line(&filename, &line);
-> > +		err = ERR_peek_last_error_line(&filename, &line);
-> >  		ERR_error_string_n(err, str, sizeof(str));
-> >  		fprintf(stderr, "crypto: %s: %s:%d\n", str, filename, line);
-> >  	}
-> > -- 
-> > 2.37.2
-> > 
+On 2022/8/30 10:50, Tiezhu Yang wrote:
+> fstat is replaced by statx on the new architecture, so an exception
+> is added to the checksyscalls script to silence the following build
+> warning on LoongArch:
 > 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+>    CALL    scripts/checksyscalls.sh
+> <stdin>:569:2: warning: #warning syscall fstat not implemented [-Wcpp]
+> 
+> Suggested-by: WANG Xuerui <kernel@xen0n.name>
+> Suggested-by: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+> ---
+> 
+> Hi Xuerui and Arnd,
+> 
+> Thank you for your reviews and suggestions.
+> 
+> v2:
+>    -- Change scripts/checksyscalls.sh
+>    -- Modify patch subject and commit message
+> 
+>   scripts/checksyscalls.sh | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/scripts/checksyscalls.sh b/scripts/checksyscalls.sh
+> index f33e61a..c0a093c 100755
+> --- a/scripts/checksyscalls.sh
+> +++ b/scripts/checksyscalls.sh
+> @@ -114,7 +114,6 @@ cat << EOF
+>   #define __IGNORE_truncate
+>   #define __IGNORE_stat
+>   #define __IGNORE_lstat
+> -#define __IGNORE_fstat
+>   #define __IGNORE_fcntl
+>   #define __IGNORE_fadvise64
+>   #define __IGNORE_newfstatat
+> @@ -253,6 +252,7 @@ cat << EOF
+>   #define __IGNORE_vserver
+>   
+>   /* 64-bit ports never needed these, and new 32-bit ports can use statx */
+> +#define __IGNORE_fstat
 
-Actually NAK.
+This should not belong here, because some 64-bit ports apparently need 
+fstat. Instead it should be its own block with some explanation like 
+"Newer ports are not required to provide fstat in favor of statx".
 
-This fix is not complete:
+>   #define __IGNORE_fstat64
+>   #define __IGNORE_fstatat64
+>   EOF
 
-sigstruct.c: In function ‘get_modulus’:
-sigstruct.c:151:9: error: ‘RSA_get0_key’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
-  151 |         RSA_get0_key(key, &n, NULL, NULL);
-      |         ^~~~~~~~~~~~
-In file included from /usr/include/openssl/x509.h:36,
-                 from /usr/include/openssl/pem.h:23,
-                 from sigstruct.c:16:
-/usr/include/openssl/rsa.h:217:28: note: declared here
-  217 | OSSL_DEPRECATEDIN_3_0 void RSA_get0_key(const RSA *r,
-      |                            ^~~~~~~~~~~~
-sigstruct.c: In function ‘gen_sign_key’:
-sigstruct.c:168:9: error: ‘PEM_read_bio_RSAPrivateKey’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declaration
-]
-  168 |         key = PEM_read_bio_RSAPrivateKey(bio, NULL, NULL, NULL);
-      |         ^~~
-/usr/include/openssl/pem.h:447:1: note: declared here
-  447 | DECLARE_PEM_rw_cb_attr(OSSL_DEPRECATEDIN_3_0, RSAPrivateKey, RSA)
-      | ^~~~~~~~~~~~~~~~~~~~~~
-sigstruct.c: In function ‘encl_measure’:
-sigstruct.c:364:9: error: ‘RSA_sign’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
-  364 |         if (!RSA_sign(NID_sha256, digest, SHA256_DIGEST_LENGTH,
-      |         ^~
-/usr/include/openssl/rsa.h:348:27: note: declared here
-  348 | OSSL_DEPRECATEDIN_3_0 int RSA_sign(int type, const unsigned char *m,
-      |                           ^~~~~~~~
-sigstruct.c:377:9: error: ‘RSA_free’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
-  377 |         RSA_free(key);
-      |         ^~~~~~~~
-/usr/include/openssl/rsa.h:293:28: note: declared here
-  293 | OSSL_DEPRECATEDIN_3_0 void RSA_free(RSA *r);
-      |                            ^~~~~~~~
-sigstruct.c:382:9: error: ‘RSA_free’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
-  382 |         RSA_free(key);
-      |         ^~~~~~~~
-/usr/include/openssl/rsa.h:293:28: note: declared here
-  293 | OSSL_DEPRECATEDIN_3_0 void RSA_free(RSA *r);
-      |                            ^~~~~~~~
-cc1: all warnings being treated as errors
-make: *** [Makefile:39: /home/jarkko/work/linux-sgx/tools/testing/selftests/sgx/sigstruct.o] Error 1
+Otherwise LGTM, thanks!
 
-BR, Jarkko
+-- 
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+

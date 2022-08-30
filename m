@@ -2,133 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4034B5A6128
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A4CA5A612C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:52:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbiH3KvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
+        id S229862AbiH3KwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229988AbiH3Kuk (ORCPT
+        with ESMTP id S230180AbiH3Kvq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:50:40 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B3C61124;
-        Tue, 30 Aug 2022 03:50:25 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id f24so7978141plr.1;
-        Tue, 30 Aug 2022 03:50:25 -0700 (PDT)
+        Tue, 30 Aug 2022 06:51:46 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D670DF14D8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:51:27 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id k22so10910189ljg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:51:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=IhaMXTWAcaW3hhnK8+sC1vZiKgHn05Km4N0GxkG/RW0=;
-        b=lHomL4xEN0wjcDcNxCpVINhbuhekmy1qmwlIc2sII/l02dAPS2iaLeRNU6nI8XAfhW
-         jK3P+XYW/yAU0LwHZJZDOWItZVfjcCN9TCjdqZSWuJvf/MHz1HLewtQvwtITo7uT9MSX
-         eYoSt5xuhZiXd2ZTN3xen5ijEpdeknJ+8cVHNKV4tRP+o1Rxzw7g1zZQ8BsTyXwIER5a
-         IiEx+mwDnZ4clVX/fzeNf99CUEavXzBQdXsyBUE6sBr5dHz1IspEALz+czefmzQzn5Tb
-         Gh1URRqE64V3TkfnDUAVR6Zh8scB8a+S6ghT0eb+gqbOyPlaY7LfJRVXECPyM93/2r4q
-         7pJg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=e1hN6u3b87oGXUwDtR5NW7sGRX93ClE7I6RCTP747nA=;
+        b=sFhnzPlIb+FancITooLULAVcUz2hglMvTCtBdqmvF6tRXgvAEbWlhSrvThObhZU2q2
+         jJSlV7xiDXzCi1OhH+CbH2oX4NSQaBosZUrZH8OZXRkh6wQvT0GsN99m1WeGZDqlUbxC
+         v7nhR8BT/K7bZDNBZAsViBbsXje9xPNjOhbHyvAdxl1tt3WR4k45pW9nInvcotXVin/C
+         hPBZwrfhcIzfj2WLJGIJMLhjsMiIsmlH61Ya+/bfKBbFvvew6B549EjXqLoIY7ajmlj5
+         who8iAH3DWXRqaHIInSE1WPuEIR4XFood7iCMz1HSYmHpj5E9RG1jhh3iPRy3hC9Danm
+         oANg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=IhaMXTWAcaW3hhnK8+sC1vZiKgHn05Km4N0GxkG/RW0=;
-        b=JsZSTURZgwWsVD0tVly/Wu7WUYm/mnmK5LAHkbtwFwm7LM3bSY+Rtzwvhq9hz0+CCp
-         WzOvwA7B03qEsnUOd6Xq5VWSV8Ur9odQGpzotFBSNOggTmj7NmBugF88OURU7b/HorXf
-         gZ0/tnD7VTrbpZde0AZBiaM1Esm3Ok0LNC+ssN6zFc1hc/O0RkUZLilzebbC5SvhYQZZ
-         2+KsiscJgJfdy5po31bJkwERzau+zvrjvdZGZCiCv89t2H0tu9puuC7haipvTGdCSQ7b
-         g1Jd6BviDhLuEofOVjCLt/YF52QJ5/daN5eLsn1kbQxt+aBR9svzUqQTbED3VHp2MziO
-         eSrg==
-X-Gm-Message-State: ACgBeo0jm2hmhqM5GDn9YKXTjpNutqufzvDwirMxC49+wfxnuYcEIkHI
-        JOyGJehKmsuVlu+Inj+eWKA=
-X-Google-Smtp-Source: AA6agR4L12NnWdeknXVCJQE3JGwrtXsEDyRO+bGNadYbaB/gOM/nUCFaR6bvSQQg5F9lQHnRIiS+FA==
-X-Received: by 2002:a17:902:a705:b0:172:ecca:8d2d with SMTP id w5-20020a170902a70500b00172ecca8d2dmr20794672plq.27.1661856624399;
-        Tue, 30 Aug 2022 03:50:24 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id p5-20020a17090a2c4500b001efa9e83927sm8150591pjm.51.2022.08.30.03.50.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 03:50:24 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     aspriel@gmail.com, franky.lin@broadcom.com,
-        hante.meuleman@broadcom.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com
-Cc:     kuba@kernel.org, pabeni@redhat.com, johannes.berg@intel.com,
-        alsi@bang-olufsen.dk, a.fatoum@pengutronix.de,
-        loic.poulain@linaro.org, quic_vjakkam@quicinc.com,
-        prestwoj@gmail.com, colin.i.king@gmail.com, hdegoede@redhat.com,
-        smoch@web.de, cui.jinpeng2@zte.com.cn,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH v2 linux-next] wifi: brcmfmac: remove redundant err variable
-Date:   Tue, 30 Aug 2022 10:50:16 +0000
-Message-Id: <20220830105016.287337-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=e1hN6u3b87oGXUwDtR5NW7sGRX93ClE7I6RCTP747nA=;
+        b=ssZF3NoGngiq+DxLdHd1zvM/1eJ5BhiSYQFZFYdU2v3U47yQf6p1T0Q6hFWzntekP0
+         KI3TUMCgoH/H3KPeYeWPoIbLaT77N0jDs+RB8o7BgUFOBDpzS0f82txez21oVK3H7GF4
+         DOisE2vbnQ/JDngKfgCBlKbZQam5zMoIH3TbLwSPUNQD0Z5N5AFZLiCZI9BAR9CO3JXB
+         b4+khkvCNaC5+LHKoxOK0DMfJCtzDOjCIE906SBko0hRrE13/zKGASrkyx2vIoCTHZgM
+         nM4ERcdwwmbmvbxZKOIT2mQWZY+xc8qoK+jnyljXa+P0qcT6hpex6R1mE3GPKYI5Eaqy
+         ceOw==
+X-Gm-Message-State: ACgBeo0zlxi3ApipNyRgi5mSywfWCnyrkZZDBqPuWvZAzes5owRgXggV
+        EY9cvhJd9V7SPqMRtRWvDGtN6g==
+X-Google-Smtp-Source: AA6agR5v0PT16Rdmu1bSg98MXyeZl7RNSOvY0CUjkIpj4W8Ea2EcduQQvevDfM4Dpo6TfmHeijnijA==
+X-Received: by 2002:a05:651c:105a:b0:267:5d3d:2b25 with SMTP id x26-20020a05651c105a00b002675d3d2b25mr823185ljm.370.1661856678233;
+        Tue, 30 Aug 2022 03:51:18 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id d8-20020a056512368800b004946bec4e61sm684730lfs.140.2022.08.30.03.51.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 03:51:17 -0700 (PDT)
+Message-ID: <34fd836d-56f1-3d88-0571-349aef95fe96@linaro.org>
+Date:   Tue, 30 Aug 2022 13:51:16 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] ASoC: codecs: allow compile testing without MFD drivers
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20220826093659.1059276-1-krzysztof.kozlowski@linaro.org>
+ <YwkSi1IIRsW2Hc/u@sirena.org.uk>
+ <a5266af6-af19-48f9-8bc6-94c171ba6d0c@linaro.org>
+ <Yw3oA6pVp3PMxfA3@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Yw3oA6pVp3PMxfA3@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On 30/08/2022 13:35, Mark Brown wrote:
+> On Sat, Aug 27, 2022 at 12:02:39PM +0300, Krzysztof Kozlowski wrote:
+> 
+>> True, it's not the same build coverage need as subsystem/interface
+>> dependencies, but still:
+>> 1. Drivers can be built independently, so why not?
+>> 2. There is no drawback in allowing to building them independently
+>> (compile test).
+>> 3. The parent MFD device could also depend on something (RK817 and
+>> MFD_LOCHNAGAR depends on I2C and OF; CPCAP on SPI), so it's not always
+>> the case of just enabling parent. IOW, you can compile test codecs
+>> without I2C and SPI which is valuable itself.
+> 
+>> I find the last reason actually quite valid and applicable here. If you
+>> wish I can add it to the commit msg.
+> 
+> You've already found one case where there's a dependency being
+> pulled in by the parent, I suspect there's more.  There's a
+> tradeoff between getting coverage and having to deal with the
+> noise from randconfigs.
 
-Return value from brcmf_fil_iovar_data_set() and
-brcmf_config_ap_mgmt_ie() directly instead of
-taking this in another redundant variable.
+Yeah, that was my mistake because did not spot it has "select
+REGMAP_I2C". For such cases the benefit is indeed gone.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- .../wireless/broadcom/brcm80211/brcmfmac/cfg80211.c    | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-index 7c72ea26a7d7..8a8c5a3bb2fb 100644
---- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-+++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-@@ -3988,7 +3988,6 @@ brcmf_update_pmklist(struct brcmf_cfg80211_info *cfg, struct brcmf_if *ifp)
- 	struct brcmf_pmk_list_le *pmk_list;
- 	int i;
- 	u32 npmk;
--	s32 err;
- 
- 	pmk_list = &cfg->pmk_list;
- 	npmk = le32_to_cpu(pmk_list->npmk);
-@@ -3997,10 +3996,8 @@ brcmf_update_pmklist(struct brcmf_cfg80211_info *cfg, struct brcmf_if *ifp)
- 	for (i = 0; i < npmk; i++)
- 		brcmf_dbg(CONN, "PMK[%d]: %pM\n", i, &pmk_list->pmk[i].bssid);
- 
--	err = brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_list,
-+	return brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_list,
- 				       sizeof(*pmk_list));
--
--	return err;
- }
- 
- static s32
-@@ -5046,13 +5043,10 @@ brcmf_cfg80211_change_beacon(struct wiphy *wiphy, struct net_device *ndev,
- 			     struct cfg80211_beacon_data *info)
- {
- 	struct brcmf_if *ifp = netdev_priv(ndev);
--	s32 err;
- 
- 	brcmf_dbg(TRACE, "Enter\n");
- 
--	err = brcmf_config_ap_mgmt_ie(ifp->vif, info);
--
--	return err;
-+	return brcmf_config_ap_mgmt_ie(ifp->vif, info);
- }
- 
- static int
--- 
-2.25.1
-
+Best regards,
+Krzysztof

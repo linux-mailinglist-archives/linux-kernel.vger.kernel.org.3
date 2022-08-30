@@ -2,122 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09C7A5A60F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:42:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64D9A5A6110
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiH3KmE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:42:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40112 "EHLO
+        id S229524AbiH3Ksp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:48:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbiH3Kl6 (ORCPT
+        with ESMTP id S229833AbiH3Ksh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:41:58 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCF49D67C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:41:57 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MH3gD6QBkzkWng;
-        Tue, 30 Aug 2022 18:38:16 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 18:41:55 +0800
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 18:41:54 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>
-CC:     <linux-kernel@vger.kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-Subject: [PATCH v2] mm: memory-failure: kill __soft_offline_page()
-Date:   Tue, 30 Aug 2022 18:46:54 +0800
-Message-ID: <20220830104654.28234-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
-Reply-To: <20220830071514.GA1106752@hori.linux.bs1.fc.nec.co.jp>
+        Tue, 30 Aug 2022 06:48:37 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35399DC5D0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1661856514;
+        bh=DRSUwEoTCztac7oUAw8Om3bUbvawDARF481p3R69yCc=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TGxo0Hi8qz0Y7QGlB7/VaZv0/oO9yWi2zVUih/Pvf+NR7U0pTtqNod7V6Ikvrcpff
+         4Uu3N1LkA3jRVWhXQeydtMgsTcrUOlrersduah/KbtMbA4+/JpH0xGjPENqGRHgC9E
+         U2/EcZHVhwy0iyxtDNnhZZMl/WYUxU9FDJqB0lE4=
+Received: from xry111-x57s1.. (unknown [IPv6:240e:358:11dd:1900:dc73:854d:832e:5])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 726BD65927;
+        Tue, 30 Aug 2022 06:48:28 -0400 (EDT)
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     loongarch@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>,
+        Xi Ruoyao <xry111@xry111.site>
+Subject: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation types
+Date:   Tue, 30 Aug 2022 18:48:01 +0800
+Message-Id: <20220830104806.128365-1-xry111@xry111.site>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Squash the __soft_offline_page() into soft_offline_in_use_page() and kill
-__soft_offline_page().
+The version 2.00 of LoongArch ELF ABI specification introduced new
+relocation types, and the development tree of Binutils and GCC has
+started to use them.  If the kernel is built with the latest snapshot of
+Binutils or GCC, it will fail to load the modules because of unrecognized
+relocation types in modules.
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
----
-v2: update hpage when try_to_split_thp_page() success
+Add support for GOT and new relocation types for the module loader, so
+the kernel (with modules) can be built with the "normal" code model and
+function properly.
 
- mm/memory-failure.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+This series does not break the compatibility with old toolchain using
+stack-based relocation types, so with the patches applied the kernel can
+be be built with both old and new toolchains.  But, the combination of
+"new" Binutils and "old" GCC is not supported.
 
-diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index b61f2de9f2a1..df54a6bc9bef 100644
---- a/mm/memory-failure.c
-+++ b/mm/memory-failure.c
-@@ -2434,11 +2434,11 @@ static bool isolate_page(struct page *page, struct list_head *pagelist)
- }
- 
- /*
-- * __soft_offline_page handles hugetlb-pages and non-hugetlb pages.
-+ * soft_offline_in_use_page handles hugetlb-pages and non-hugetlb pages.
-  * If the page is a non-dirty unmapped page-cache page, it simply invalidates.
-  * If the page is mapped, it migrates the contents over.
-  */
--static int __soft_offline_page(struct page *page)
-+static int soft_offline_in_use_page(struct page *page)
- {
- 	long ret = 0;
- 	unsigned long pfn = page_to_pfn(page);
-@@ -2451,6 +2451,14 @@ static int __soft_offline_page(struct page *page)
- 		.gfp_mask = GFP_USER | __GFP_MOVABLE | __GFP_RETRY_MAYFAIL,
- 	};
- 
-+	if (!huge && PageTransHuge(hpage)) {
-+		if (try_to_split_thp_page(page)) {
-+			pr_info("soft offline: %#lx: thp split failed\n", pfn);
-+			return -EBUSY;
-+		}
-+		hpage = page;
-+	}
-+
- 	lock_page(page);
- 	if (!PageHuge(page))
- 		wait_on_page_writeback(page);
-@@ -2500,19 +2508,6 @@ static int __soft_offline_page(struct page *page)
- 	return ret;
- }
- 
--static int soft_offline_in_use_page(struct page *page)
--{
--	struct page *hpage = compound_head(page);
--
--	if (!PageHuge(page) && PageTransHuge(hpage))
--		if (try_to_split_thp_page(page) < 0) {
--			pr_info("soft offline: %#lx: thp split failed\n",
--				page_to_pfn(page));
--			return -EBUSY;
--		}
--	return __soft_offline_page(page);
--}
--
- static void put_ref_page(struct page *page)
- {
- 	if (page)
+Tested by building the kernel with the following combinations:
+
+- GCC 12 and Binutils 2.39
+- GCC trunk and Binutils trunk
+
+and running the builds with 35 in-tree modules loaded, and loading one
+module with 20 GOT loads and a per-CPU variable (loaded addresses
+verified by comparing with /proc/kallsyms).
+
+Changes from v6 to v7:
+
+- Simplify apply_r_larch_pcala.
+- Remove a build check only for excluding early GCC 13 dev snapshots.
+- Squash model attribute addition into the previous patch.
+- Retain "-fplt".
+
+Changes from v5 to v6:
+
+- Restore version number.
+- Rename CONFIG_CC_HAS_EXPLICIT_RELOCS to CONFIG_AS_HAS_EXPLICIT_RELOCS.
+  It now only checks assembler.
+- No longer support "old GCC with new Binutils", so R_LARCH_ABS* is
+  dropped.
+  - "Old GCC with old Binutils" is still supported until Arnd ack.
+  - "New GCC with old Binutils" is still supported as it does not
+    require additional code.
+- Remove "cc-option" around "-mexplicit-relocs".  For unsupported
+  "old GCC with new Binutils" combination, forcing -mexplicit-relocs
+  makes assembling fail, instead of silently producing unloadable
+  modules.
+- Move the error report for "lacking model attribute" into Makefile.
+- Squash the two patches for R_LARCH_B26 and R_LARCH_PCALA* into one.
+
+Changes from v4 to v5 ("v5" missed in the subject):
+
+- Change subject.
+- Introduce CONFIG_CC_HAS_EXPLICIT_RELOCS.
+- Retain -Wa,-mla-* options for old toolchains
+  (!CONFIG_CC_HAS_EXPLICIT_RELOCS).
+- Use __attribute__((model("extreme"))) in PER_CPU_ATTRIBUTES, to fix
+  a breakage with per-CPU variables defined in modules.
+- Handle R_LARCH_PCALA64_{HI12,LO12} for extreme model.
+- Handle R_LARCH_ABS* for "old GCC with new Binutils".
+- Separate the last patch into more small patches.
+- Avoid BUG_ON() for the handling of GOT.
+
+Changes from v3 to v4:
+
+- No code change.  Reword the commit message of the 3rd patch again
+  based on suggestion from Huacai.
+
+Changes from v2 to v3:
+
+- Use `union loongarch_instruction` instead of explicit bit shifts
+  applying the relocation.  Suggested by Youling.
+- For R_LARCH_B26, move the alignment check before the range check to be
+  consistent with stack pop relocations.  Suggested by Youling.
+- Reword the commit message of the 3rd patch.  Suggested by Huacai.
+
+Changes from v1 to v2:
+
+- Fix a stupid programming error (confusion between the number of PLT
+  entries and the number of GOT entries).  (Bug spotted by Youling).
+- Synthesize the _GLOBAL_OFFSET_TABLE_ symbol with module.lds, instead
+  of faking it at runtime.  The 3rd patch from V1 is now merged into
+  the 1st patch because it would be a one-line change.  (Suggested by
+  Jinyang).
+- Keep reloc_rela_handlers[] ordered by the relocation type ID.
+  (Suggested by Youling).
+- Remove -fplt along with -Wa,-mla-* options because it's the default.
+  (Suggested by Youling).
+
+Xi Ruoyao (5):
+  LoongArch: Add CONFIG_AS_HAS_EXPLICIT_RELOCS
+  LoongArch: Adjust symbol addressing for CONFIG_AS_HAS_EXPLICIT_RELOCS
+  LoongArch: Define ELF relocation types added in v2.00 ABI
+  LoongArch: Support PC-relative relocations in modules
+  LoongArch: Support R_LARCH_GOT_PC* in modules
+
+ arch/loongarch/Kconfig                  |  3 +
+ arch/loongarch/Makefile                 | 17 +++++
+ arch/loongarch/include/asm/elf.h        | 37 ++++++++++
+ arch/loongarch/include/asm/module.h     | 23 ++++++
+ arch/loongarch/include/asm/module.lds.h |  1 +
+ arch/loongarch/include/asm/percpu.h     |  8 +++
+ arch/loongarch/kernel/head.S            | 10 +--
+ arch/loongarch/kernel/module-sections.c | 56 +++++++++++++--
+ arch/loongarch/kernel/module.c          | 93 ++++++++++++++++++++++++-
+ 9 files changed, 238 insertions(+), 10 deletions(-)
+
 -- 
-2.35.3
+2.37.0
 

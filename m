@@ -2,76 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EF95A715D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8C35A7161
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231129AbiH3XGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 19:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53970 "EHLO
+        id S231185AbiH3XH7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 19:07:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiH3XGd (ORCPT
+        with ESMTP id S229453AbiH3XH5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 19:06:33 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C336E9F77B
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 16:06:32 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id q8so9870275qvr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 16:06:32 -0700 (PDT)
+        Tue, 30 Aug 2022 19:07:57 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F4FA0246
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 16:07:55 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id f185so8200811vsc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 16:07:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=nBDXZy0PNI6HxH20NIcd0boi0iBLy+daKqm4xUcQcFU=;
-        b=h8viMjz+y6iHBxaQsccGgC/gv+qGP1KNSL8rg/v4QcxfEnmZ9wgWx9AJSUgxsgxFJ1
-         /2E5OZi80IiFljcLSosBBJxQaTgXYAOU1HzUM/GLORtvZcmDXlNTyp0cfRQQQJdkcxzo
-         xgugvXpTk/iTffxwFcSe209orXG7+HVsu4M4M=
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=Vynfz887MVYBr6yRDwVUmonMdQzXB6om2UVf81HGico=;
+        b=RkRI1oprMfXXLpzBKkKjNEE0iBv/FK31O/Vsua3ZqNk5Jw/g1s21qy0kTygzKtnHfC
+         lY9wR+G5UlcjIwAA4/39IeybLoAteKygD1Ow+DgBGPLpyRJ1v6W16eZKGEorS1bXrjhI
+         4+Qcl6NLpMPAjU8VSXwekJNBCMdrndJ6vytCRXox2Hb4G1b25XWISysG2vBM3guf69op
+         24L7hI6lu3HlJgn2PekWGQMvbjBOeYr8HzMgHuB12x91JrH53OLu7wEPNlXGeSiGgmUj
+         rejb2k4cpa+RKoMggqHVM2isuE0e3U2zzPcNwVwrRuVBAwrpQIu2ss6QKoTL9+VQBtvH
+         mh2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=nBDXZy0PNI6HxH20NIcd0boi0iBLy+daKqm4xUcQcFU=;
-        b=WewO+vGiCv/093RoLshEkqedV1DjokCFZFV6jzUz/QAWCo8aPLlwI7BNzlLbbedZ71
-         1o+nULW65cssOf9u9iuvSeqdLd7IEO7E6bPe+mGm7xSHmF1pABV4kxj6iymEsmiK/RpT
-         GNBS+IY1a3RFxDFRFmtV7sEhGjfoSPR+5yecg6uOpDttg5IJNvHqA62g91CD7ry1nIcS
-         Nbkik5TZ5im36V0/i/VgYX87+pohjxWPKkYDqe0oHA6XDwkUbUReRZ0s1jir9NRV0Vaz
-         7XixAnU6jQmWECvRPpEVvCEkpNGAm8T4vGpyb4o/S/ESjvyXrTA5hBsxt9mZAXRV0G8/
-         6ovw==
-X-Gm-Message-State: ACgBeo03q06PJ10bjfHa9FWvl/DZk+s5cYLeQ5B8Qb8bPnGh943jQScx
-        tkwyQtx//jDlQ4MjtRcbqWWvzUJWjJO9R+EBc766WdvJsqx05Q==
-X-Google-Smtp-Source: AA6agR5UHLA8tvZAhQU4iM5tHIJAg9lMspH17o8Q7wO2kO91E24epLxwG8CU0Ojl/5hTeZIy2P8e1YISSNiYUw1f4IA=
-X-Received: by 2002:a05:6214:2a82:b0:499:720:509e with SMTP id
- jr2-20020a0562142a8200b004990720509emr8585137qvb.62.1661900791943; Tue, 30
- Aug 2022 16:06:31 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=Vynfz887MVYBr6yRDwVUmonMdQzXB6om2UVf81HGico=;
+        b=bbBpIHXPCenEvby0LGmWX6mM8GNYnwkr4QAkO8wt1C8DleljErBkXud/jdEH3rkCx2
+         LONi5cEUDOrLq+gb0GAasxPNsldaphKlGOvCiKZ+ea5UknpjC2lwlz46Eo5YBdaq1FUQ
+         3FJgtKmiVjYJfomkbNEMXT3vbijGnE4mPF+5ZIY6G7pncIVVmi/ZbMM9NTtjCQFiZR/f
+         85fIBtJvILCkDOSNHVA1Yii8uUoemKScoBT514D+DYX1lmKqHMqiGAnGojfZ09gJLXaZ
+         2CjosllB6qXJLbEpL8FD+HLULpgZlBK/mJvk3bQrqLXCkaPi6wkxBjyjkDbS7KVFLnDm
+         kq/w==
+X-Gm-Message-State: ACgBeo3ZydqFViTSsoBksroEB0OX5S2t8k3vk04Vs/Fe2BwZnUw+O6rw
+        n0g80mc8OFX822lPBYv+fHJV1zo6jIAUmwhxgUtd9Q==
+X-Google-Smtp-Source: AA6agR7+hhtQNr2WwEZoh61BOKtr4K7KVpgcvB0U7/bL9aMM3hfCAlmVJnFGNFxDqyRYeNjdxYV5Ue+xFWHIlN3sOxw=
+X-Received: by 2002:a05:6102:e93:b0:390:d839:9aa2 with SMTP id
+ l19-20020a0561020e9300b00390d8399aa2mr5153556vst.65.1661900873993; Tue, 30
+ Aug 2022 16:07:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220830225831.2362403-1-swboyd@chromium.org> <20220830225831.2362403-5-swboyd@chromium.org>
-In-Reply-To: <20220830225831.2362403-5-swboyd@chromium.org>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Tue, 30 Aug 2022 16:06:20 -0700
-Message-ID: <CACeCKafwySAK0Wti1PC7ZC=OjBoM96XXHMnbtAdyTMrQMz436w@mail.gmail.com>
-Subject: Re: [PATCH 4/4] platform/chrome: cros_typec_switch: Inline DRV_NAME
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Benson Leung <bleung@chromium.org>, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, chrome-platform@lists.linux.dev,
-        Tzung-Bi Shih <tzungbi@kernel.org>
+References: <20220826150807.723137-1-glider@google.com> <20220826150807.723137-5-glider@google.com>
+ <20220826211729.e65d52e7919fee5c34d22efc@linux-foundation.org>
+ <CAG_fn=Xpva_yx8oG-xi7jqJyM2YLcjNda+8ZyQPGBMV411XgMQ@mail.gmail.com>
+ <20220829122452.cce41f2754c4e063f3ae8b75@linux-foundation.org>
+ <CAG_fn=X6eZ6Cdrv5pivcROHi3D8uymdgh+EbnFasBap2a=0LQQ@mail.gmail.com>
+ <20220830150549.afa67340c2f5eb33ff9615f4@linux-foundation.org>
+ <CAOUHufZrb_gkxaWfCLuFodRtCwGGdYjo2wvFW7kTiTkRbg4XNQ@mail.gmail.com> <20220830160035.8baf16a7f40cf09963e8bc55@linux-foundation.org>
+In-Reply-To: <20220830160035.8baf16a7f40cf09963e8bc55@linux-foundation.org>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 30 Aug 2022 17:07:17 -0600
+Message-ID: <CAOUHufZQ5QV4_GaJU_SPYk-hNEWnnTxcE8EdpcPBHK6M3qSm-w@mail.gmail.com>
+Subject: Re: [PATCH v5 04/44] x86: asm: instrument usercopy in get_user() and put_user()
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the cleanups!
+On Tue, Aug 30, 2022 at 5:00 PM Andrew Morton <akpm@linux-foundation.org> w=
+rote:
+>
+> On Tue, 30 Aug 2022 16:25:24 -0600 Yu Zhao <yuzhao@google.com> wrote:
+>
+> > On Tue, Aug 30, 2022 at 4:05 PM Andrew Morton <akpm@linux-foundation.or=
+g> wrote:
+> > >
+> > > On Tue, 30 Aug 2022 16:23:44 +0200 Alexander Potapenko <glider@google=
+.com> wrote:
+> > >
+> > > > >                  from init/do_mounts.c:2:
+> > > > > ./include/linux/page-flags.h: In function =E2=80=98page_fixed_fak=
+e_head=E2=80=99:
+> > > > > ./include/linux/page-flags.h:226:36: error: invalid use of undefi=
+ned type =E2=80=98const struct page=E2=80=99
+> > > > >   226 |             test_bit(PG_head, &page->flags)) {
+> > > > >       |                                    ^~
+> > > > > ./include/linux/bitops.h:50:44: note: in definition of macro =E2=
+=80=98bitop=E2=80=99
+> > > > >    50 |           __builtin_constant_p((uintptr_t)(addr) !=3D (ui=
+ntptr_t)NULL) && \
+> > > > >       |                                            ^~~~
+> > > > > ./include/linux/page-flags.h:226:13: note: in expansion of macro =
+=E2=80=98test_bit=E2=80=99
+> > > > >   226 |             test_bit(PG_head, &page->flags)) {
+> > > > >       |             ^~~~~~~~
+> > > > > ...
+> > > >
+> > > > Gotcha, this is a circular dependency: mm_types.h -> sched.h ->
+> > > > kmsan.h -> gfp.h -> mmzone.h -> page-flags.h -> mm_types.h, where t=
+he
+> > > > inclusion of sched.h into mm_types.h was only introduced in "mm:
+> > > > multi-gen LRU: support page table walks" - that's why the problem w=
+as
+> > > > missing in other trees.
+> > >
+> > > Ah, thanks for digging that out.
+> > >
+> > > Yu, that inclusion is regrettable.
+> >
+> > Sorry for the trouble -- it's also superfluous because we don't call
+> > lru_gen_use_mm() when switching to the kernel.
+> >
+> > I've queued the following for now.
+>
+> Well, the rest of us want it too.
+>
+> > --- a/include/linux/mm_types.h
+> > +++ b/include/linux/mm_types.h
+> > @@ -3,7 +3,6 @@
+> >  #define _LINUX_MM_TYPES_H
+> >
+> >  #include <linux/mm_types_task.h>
+> > -#include <linux/sched.h>
+> >
+> >  #include <linux/auxvec.h>
+> >  #include <linux/kref.h>
+> > @@ -742,8 +741,7 @@ static inline void lru_gen_init_mm(struct mm_struct=
+ *mm)
+> >
+> >  static inline void lru_gen_use_mm(struct mm_struct *mm)
+> >  {
+> > -       if (!(current->flags & PF_KTHREAD))
+> > -               WRITE_ONCE(mm->lru_gen.bitmap, -1);
+> > +       WRITE_ONCE(mm->lru_gen.bitmap, -1);
+> >  }
+>
+> Doesn't apply.  I did:
+>
+> --- a/include/linux/mm_types.h~mm-multi-gen-lru-support-page-table-walks-=
+fix
+> +++ a/include/linux/mm_types.h
+> @@ -3,7 +3,6 @@
+>  #define _LINUX_MM_TYPES_H
+>
+>  #include <linux/mm_types_task.h>
+> -#include <linux/sched.h>
+>
+>  #include <linux/auxvec.h>
+>  #include <linux/kref.h>
+> @@ -742,11 +741,7 @@ static inline void lru_gen_init_mm(struc
+>
+>  static inline void lru_gen_use_mm(struct mm_struct *mm)
+>  {
+> -       /* unlikely but not a bug when racing with lru_gen_migrate_mm() *=
+/
+> -       VM_WARN_ON_ONCE(list_empty(&mm->lru_gen.list));
 
-On Tue, Aug 30, 2022 at 3:58 PM Stephen Boyd <swboyd@chromium.org> wrote:
->
-> This macro is only used one place, let's inline it instead to save a
-> line or two.
->
-> Cc: Prashant Malani <pmalani@chromium.org>
-> Cc: Tzung-Bi Shih <tzungbi@kernel.org>
-> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
-Acked-by: Prashant Malani <pmalani@chromium.org>
+Yes. I got a report that somebody tripped over this "unlikely"
+condition (and ascertained it's not a bug). So I deleted this part as
+well.
+
+Will refresh the series around rc5. Thanks.

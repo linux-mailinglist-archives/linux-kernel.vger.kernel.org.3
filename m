@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 269315A68DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:56:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B755A68E2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230237AbiH3Qz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
+        id S230309AbiH3Q5T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:57:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiH3Qzw (ORCPT
+        with ESMTP id S230147AbiH3Q5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:55:52 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E17D6FA39
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:55:50 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id q16so12010600ljp.8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:55:50 -0700 (PDT)
+        Tue, 30 Aug 2022 12:57:16 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3170C91D08
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:57:15 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id z23so9162731ljk.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:57:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=Wtbpa/TU/UVvG6l5cM7I57cwKv6TjGE2IRy/n2NlvH8=;
-        b=cMRjqV0y4Hw5Gevy9PhVk8bcNnSQ2heXx1mf3hGi/9WUfYrYbbUNC6+x2l0fFIF5bl
-         gjJF9k/4icTUHR/na8HOT3AcLhZcnszsdCAn9CDmzo4jV8mitV7k0SCrgFigcGCOfqnf
-         hxFG2UvZ8mtG5qerP9EYWBRi03Sj2BqEFfTBlLlyZ+xt6Dyut4HJTZwWoETV12ezZ21q
-         pTMWJ8vpPnf0C21NX98FPj+3YG/LVwNecX1OWFd7vjYmFKmRLTXAeaI2FCJXpNyL9VDQ
-         YM1+Q9hXiApWt/QSwLbkFuJMKVOHLBqV4Btnc+KIuPpxG0/a+uhpTfv4aHAaHOs78bSz
-         K28Q==
+        bh=NHTv/YagwR+R6J02v+OmtzRbd+ajWoa+eikA7WbAS1I=;
+        b=vBNXPrf6dpEWBjfidNj/wZfZsohX0MKSaj+wzW+qLwZFaraoMcHyZwj049UeW3S/uS
+         9dvfrHibRjijK17j3Sa2e9oK3wQiPV0z7N/HE+4tRMHikANI3y3LGj5y4zUgQniLAnzQ
+         BEPB5OAgti+ZLIZ5l9ql3bJ8uEo31DT2yjdKpceAcDPGX2vzg4ZI47MYP1AiNoTR1nA4
+         FQs6XtD46ZJiw0aCLFMWTzOE4MzJscsQveVb8Kk6zZwtYzq0zpnS7nr+uOJWoMeG4Uuc
+         v/pk5qLm3BBbnd7tdUVsUIkxnx7ZZASwP/KgP6bSaDSJuoIlmniqxz6F4CpXqEMF/yfW
+         F+4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=Wtbpa/TU/UVvG6l5cM7I57cwKv6TjGE2IRy/n2NlvH8=;
-        b=JdrMt7ONweNp76yWAF+X5eujfWaLtGtIZycLD/Zfs6hQGGoym7+8U4qZ3MDkLurOR5
-         jAhutP8cztgot6qgjBM6ukOd80h6qr9XVLy645eCvtokG5Rd0u+u8lcFvveO6XOFuX96
-         ciepsOTbIBAxN0KV4lKTwP7ibLu5039u0cdH8XUR1xjSVTrA35DPdjHAW41j32MZFaB3
-         sKkEvB//mJ3jWUCcPWjArYHYDc7xnT7w2TcdeZeGSRhVI45nAKRfCUNtnNbfkjKb5nFG
-         /Kipa+3xMnSwdX3kH/2Rdfc/+M30mwbE1u9l9BD7ODZxwjzG2ydHr76XEs5SxUcIXf43
-         Yo6A==
-X-Gm-Message-State: ACgBeo2kBwGaBSHtNcEjBuPDWuGiIqWtO35DnKWh9HMtBusKT68HhWVk
-        RGfPYHpTAvGjCqmvdjI/LwrPOQ==
-X-Google-Smtp-Source: AA6agR7yTClqQKYpNWFYkL+HxX6EKhzfUXFgL84ffTm/hRU1N31ME2ALvGOeJml2kv4XcFnI7BxQeQ==
-X-Received: by 2002:a2e:6e09:0:b0:261:be09:6339 with SMTP id j9-20020a2e6e09000000b00261be096339mr6847202ljc.15.1661878548935;
-        Tue, 30 Aug 2022 09:55:48 -0700 (PDT)
+        bh=NHTv/YagwR+R6J02v+OmtzRbd+ajWoa+eikA7WbAS1I=;
+        b=sdvFX6xFes3ri/XP6hrj0BVvsNPmXFlrQwl6Vfozw9dE774fKU95e4F3q0IEUkjyne
+         JGsgcKYB2t40NJ7zHxEuuxkTTis/w1RuG1WgaQ9QyEUPDpMwCjgC5vX7EfxEffZoLhX1
+         EOdVLgrmZrFg8FfLZ/1lOi29I7TdHzdCqcO88qAwdPQd5vSyrYRLwbxt8gcfxdhLGJcS
+         SFAXiqhwZGRC3Jsr/Sd+rJtGPxr2aj5HwWe522nVJNbbZRi+vaSVGXL8M0A8VmBzNVx6
+         5IdNyQ6E87NCXa/8tOANu/R/vaUUDHSwbf2iXrnEHLKCwilox4/pGOX0xhlxIvpld7mu
+         T42A==
+X-Gm-Message-State: ACgBeo0Tpt6suaMB7ZHsq/bD1NflN4NPHb7ouZdQLcG1t7rn6Mra/1dZ
+        U13FjMX3zAfJmeK3SIglTBj49w==
+X-Google-Smtp-Source: AA6agR5XI1w7PMCRct7yzLTkgtcUovMkYkLPQmG0bVst51Z9T6sJlArpQ3kbZ5+1C/4YuglhQTXBJA==
+X-Received: by 2002:a05:651c:1143:b0:25e:4aa1:e518 with SMTP id h3-20020a05651c114300b0025e4aa1e518mr7265341ljo.57.1661878633601;
+        Tue, 30 Aug 2022 09:57:13 -0700 (PDT)
 Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id u4-20020a2eb804000000b00265ec8ce420sm743371ljo.122.2022.08.30.09.55.47
+        by smtp.gmail.com with ESMTPSA id l19-20020a2e9093000000b0025d5eb5dde7sm1777438ljg.104.2022.08.30.09.57.12
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 09:55:48 -0700 (PDT)
-Message-ID: <1065bc99-d73a-9d19-7f09-26cd862fe0c7@linaro.org>
-Date:   Tue, 30 Aug 2022 19:55:47 +0300
+        Tue, 30 Aug 2022 09:57:13 -0700 (PDT)
+Message-ID: <7f58edca-3685-d9a8-d4f6-40a45c3f385d@linaro.org>
+Date:   Tue, 30 Aug 2022 19:57:12 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH v2 2/9] dt-bindings: riscv: microchip: document the aries
- m100pfsevp
+Subject: Re: [PATCH v5 1/2] dts: arm: Adding documentation for SAMA5D3-EDS
+ board
 Content-Language: en-US
-To:     Conor.Dooley@microchip.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Daire.McNamara@microchip.com,
-        Shravan.Chippa@microchip.com
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, Cyril.Jean@microchip.com,
-        Lewis.Hanly@microchip.com, Praveen.Kumar@microchip.com,
-        wg@aries-embedded.de, Hugh.Breslin@microchip.com,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+To:     Jerry Ray <jerry.ray@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-References: <20220830101803.1456180-1-conor.dooley@microchip.com>
- <20220830101803.1456180-3-conor.dooley@microchip.com>
- <a3a8e2ba-a6bd-6e66-fd04-e3a46661a34d@linaro.org>
- <27b8aa9e-9173-b40e-8f9c-a53fa5ba36c8@microchip.com>
+References: <20220830152428.12625-1-jerry.ray@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <27b8aa9e-9173-b40e-8f9c-a53fa5ba36c8@microchip.com>
+In-Reply-To: <20220830152428.12625-1-jerry.ray@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,51 +80,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 18:25, Conor.Dooley@microchip.com wrote:
-> On 30/08/2022 15:37, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> On 30/08/2022 13:17, Conor Dooley wrote:
->>> Add compatibles for both configurations of the Aries Embedded
->>> M100PFSEVP SOM + EVK platform.
->>>
->>> Link: https://www.aries-embedded.com/polarfire-soc-fpga-microsemi-m100pfs-som-mpfs025t-pcie-serdes
->>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
->>> ---
->>>  Documentation/devicetree/bindings/riscv/microchip.yaml | 3 +++
->>>  1 file changed, 3 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/riscv/microchip.yaml b/Documentation/devicetree/bindings/riscv/microchip.yaml
->>> index 485981fbfb4b..04ebd48caaa7 100644
->>> --- a/Documentation/devicetree/bindings/riscv/microchip.yaml
->>> +++ b/Documentation/devicetree/bindings/riscv/microchip.yaml
->>> @@ -27,9 +27,12 @@ properties:
->>>
->>>        - items:
->>>            - enum:
->>> +              - aries,m100pfsevp-emmc
->>> +              - aries,m100pfsevp-sdcard
->>
->> Usually sd card is pluggable, so what is the actual difference here? For
->> example this one:
->> https://shop.aries-embedded.de/evaluation-kit/m/m100pfsevp/445/m100pfsevp-250baab
->> has eMMC and SD card...
+On 30/08/2022 18:24, Jerry Ray wrote:
+> Adding the SAMA5D3-EDS board from Microchip into the atmel AT91 board
+> description yaml file.
 > 
-> Yeah, both are there but it is muxed by the bootloader using a GPIO. For
-> icicle this is done by a mux in the FPGA fabric instead. T
+> Signed-off-by: Jerry Ray <jerry.ray@microchip.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> ---
 
-Ah, this is still just one MMC controller - either as eMMC or as SD-card?
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
 
-> w dts were
-> needed so that the gpio-hog could be set correctly. Out of curiosity, I can
-> have the same compatible in multiple devicetrees right? In that case, it
-> would just be "aries,m100pfsevp" here and I could put that in both?
-> Would make things easier..
+> v4->v5:
+>  - No change
+> v3->v4:
+>  - No change
+> v2->v3:
+>  - No change
+> v1->v2:
+>  - Added Device Tree documentation for Microchip SAMA5D3-EDS board
+> ---
+>  Documentation/devicetree/bindings/arm/atmel-at91.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/arm/atmel-at91.yaml b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+> index 08efb259a947..635491aaeb0c 100644
+> --- a/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+> +++ b/Documentation/devicetree/bindings/arm/atmel-at91.yaml
+> @@ -138,6 +138,13 @@ properties:
+>            - const: atmel,at91sam9g20
+>            - const: atmel,at91sam9
+>  
+> +      - description: Microchip SAMA5D3 Ethernet Development System Board
+> +        items:
+> +          - const: microchip,sama5d3-eds
+> +          - const: atmel,sama5d36
 
-Depends, but I would say for this case rather not. The compatible should
-identify the board. If the boards are different, one compatible should
-not identify both of them. Imagine U-Boot (or something else) trying to
-match the DTS.
+This does not match your DTS.
+
+Test your bindings...
+
+Please drop Rob's ack as this is not correct.
 
 Best regards,
 Krzysztof

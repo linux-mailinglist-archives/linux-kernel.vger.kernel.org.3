@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AA5E5A5AE0
+	by mail.lfdr.de (Postfix) with ESMTP id D421A5A5AE1
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229883AbiH3Erf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 00:47:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
+        id S229922AbiH3Ero (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 00:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiH3Erc (ORCPT
+        with ESMTP id S229830AbiH3Erf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 00:47:32 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B32BAB4F9
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:47:30 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id r22so9623650pgm.5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:47:30 -0700 (PDT)
+        Tue, 30 Aug 2022 00:47:35 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF36AB4F9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:47:34 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id z3-20020a17090abd8300b001fd803e34f1so8110603pjr.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:47:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=/b4XTCSmASmcmXWYN+QoQmuk6ptlc7NOGx3fVn0HIvc=;
-        b=agLFlbQx6jF9QmcGj/HcN/B4W0gUvv3ONgKioHftXcDXr9GQWnQ4lraS+pn6hJTd0X
-         x5YUfzKAGw0LIvoyZxC4nruig6UaCtZBV7xpRNsofBkNIlU1zSyUWTbKM7xRd8EsnSMR
-         szEETqdqlGEcvWnl1W2ttzvrowZ8Y6GxHuJC49Y3AU5qWexqHLSH5uy+VYnbTLKagFUe
-         JyCBosGdbmmmaFUubyhCoAjqdRP5+XBedaV9igQzPKWtKeJiglwjqtAmUR2MGzu3u4SV
-         75taJTI2HvYQ2YLgQlMriGryHIoEGaG/cIpPNE5abQnj0KTU1YlXWM+f1FHtlM+J725d
-         1BsQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=DF3EHZACZLIxZm103wJfkyVVUnHhmNz4e84k34pg8iM=;
+        b=d//IYFbFbRj/XGv/L+vodF9VdUAaDfuMlXokuJPWHcVkRNgY84J/Nq6BwNLvkQJH+l
+         qIY3tux1IkH+TGS1zi/PJWIDe/9R1ROlQPIotY7+VEvdoMJ4/thsof72inQ0Cn80VXj+
+         xltiE7undvWYlNF+uMHyz6euWLMHSPsJoRSnEupUASGZx1lcKIDaxRaywMxGeyC3jOfj
+         +B6i5IFJw98Qv6rfWsaCKPTgHuNrb7NawC+gGZG3zQg9LKTo8SVMHL6JYCYJrlJh8M3h
+         ZYz+ouRwEeFK43KJD33wD1e4BwnP/wFeR9+Qkjk++zoL5wsLEeHee6JpThHE5socKCRj
+         crFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=/b4XTCSmASmcmXWYN+QoQmuk6ptlc7NOGx3fVn0HIvc=;
-        b=ETnWbSTmOeaur25awND48nYru4ecuQOJV6Lkf7UkMDv10A1xAeugB6j00smw0gwmJT
-         QFQkyqUvZBUpUp7T0GkOLs2ezzKNQWpUgkw5GZm9Z2QBdU0/wGTr0yNpjj9CJUOd4vKn
-         oN5I8+7TX7BUBgXLjouU1CZbfLqHwe4dbiGiy/aOoYLjmJ8YLMKOx8vIbGJiApmckSDS
-         xLIQ8db95NWhovE+vRYWTV7YvJt39PQctuTWtAZ46A3D6H+vhIITFvUbj0qamfauMWwN
-         rVGrrY4eLOn7QgabyMQXaNbPOLB1eB6f12hJq2npP5uPwRED0tRTmOG4+vicuRO3Tat0
-         gnRw==
-X-Gm-Message-State: ACgBeo2jRopdPWSL3y1j6IbWrQ6FxA6yY9MbIUpTvQ3TP+3nMAy/Rcw9
-        OC3XZANaW3mXnbd83skuV3leKw==
-X-Google-Smtp-Source: AA6agR7CYibaFU7E3W+MayVq1XBf019nhVormO9jRUAcvfkWaUo2MBQRrD6wT+/Ii9xPcKDYzhQGsA==
-X-Received: by 2002:a05:6a00:180b:b0:536:816b:f770 with SMTP id y11-20020a056a00180b00b00536816bf770mr20015644pfa.3.1661834849979;
-        Mon, 29 Aug 2022 21:47:29 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=DF3EHZACZLIxZm103wJfkyVVUnHhmNz4e84k34pg8iM=;
+        b=FUauNUsngEg/b4s8V1hDkjyVR2nGleImwImNGPq6gjjIGOKS/On+eKY5/RVmqIeAgZ
+         WljI4PsXqFh20i0ZuePNoVNgn8Ck0xW84D9+e/k05inGwT9bIKa42xaUn8yZprxI9iXB
+         ji5HwqX+KWJTubLNotNj/FNoB3Ade0wMp8pMhmxBeIX/CPPP8AXNpiLiwK9c7qnrt1ch
+         kjrfgrJpiCj0S3femuKxeyQ5BvybIvyBpp1y7alDalwedxAELljg4rR3EpVY6ZbOvja3
+         z0KZ5F3JdXqCK6pW2azh51ViQhdwZx8nqqdsnooN7cHCG6lo1YPZvtkiEKZk9uTfapMB
+         dtBQ==
+X-Gm-Message-State: ACgBeo3Mu/FNlKRdCUNw7RKM/9b9mLVwtip7o8zm0r5gNaWnN835CaRa
+        olKWxzsW2Fr+YnMCZQZ+PPAvRQ==
+X-Google-Smtp-Source: AA6agR5dOijUTXfsEnOaqP4oO/8aejOL3xC6Fv953h7pj5T7Bxh/cxnIMjRjsK29SKoejrrC+jmtyg==
+X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id mw7-20020a17090b4d0700b001ef521cf051mr22130876pjb.164.1661834853798;
+        Mon, 29 Aug 2022 21:47:33 -0700 (PDT)
 Received: from anup-ubuntu64-vm.. ([171.76.81.23])
-        by smtp.gmail.com with ESMTPSA id y27-20020a634b1b000000b0041cd5ddde6fsm592240pga.76.2022.08.29.21.47.26
+        by smtp.gmail.com with ESMTPSA id y27-20020a634b1b000000b0041cd5ddde6fsm592240pga.76.2022.08.29.21.47.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 21:47:29 -0700 (PDT)
+        Mon, 29 Aug 2022 21:47:33 -0700 (PDT)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Palmer Dabbelt <palmer@dabbelt.com>,
         Paul Walmsley <paul.walmsley@sifive.com>
@@ -55,11 +55,14 @@ Cc:     Atish Patra <atishp@atishpatra.org>,
         Heiko Stuebner <heiko@sntech.de>,
         Anup Patel <anup@brainfault.org>,
         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v2 0/4] Add PMEM support for RISC-V
-Date:   Tue, 30 Aug 2022 10:16:38 +0530
-Message-Id: <20220830044642.566769-1-apatel@ventanamicro.com>
+        Anup Patel <apatel@ventanamicro.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>
+Subject: [PATCH v2 1/4] RISC-V: Fix ioremap_cache() and ioremap_wc() for systems with Svpbmt
+Date:   Tue, 30 Aug 2022 10:16:39 +0530
+Message-Id: <20220830044642.566769-2-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220830044642.566769-1-apatel@ventanamicro.com>
+References: <20220830044642.566769-1-apatel@ventanamicro.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,35 +75,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Linux NVDIMM PEM drivers require arch support to map and access the
-persistent memory device. This series adds RISC-V PMEM support using
-recently added Svpbmt and Zicbom support.
+Currently, all flavors of ioremap_xyz() function maps to the generic
+ioremap() which means any ioremap_xyz() call will always map the
+target memory as IO using _PAGE_IOREMAP page attributes. This breaks
+ioremap_cache() and ioremap_wc() on systems with Svpbmt because memory
+remapped using ioremap_cache() and ioremap_wc() will use _PAGE_IOREMAP
+page attributes.
 
-These patches can also be found in riscv_pmem_v2 branch at:
-https://github.com/avpatel/linux.git
+To address above (just like other architectures), we implement RISC-V
+specific ioremap_cache() and ioremap_wc() which maps memory using page
+attributes as defined by the Svpbmt specification.
 
-Changes since v1:
- - Fix error reported by test bot
-   https://lore.kernel.org/all/202208272028.IwrNZ0Ur-lkp@intel.com/
+Fixes: ff689fd21cb1 ("riscv: add RISC-V Svpbmt extension support")
+Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+---
+ arch/riscv/include/asm/io.h      | 10 ++++++++++
+ arch/riscv/include/asm/pgtable.h |  2 ++
+ 2 files changed, 12 insertions(+)
 
-Anup Patel (4):
-  RISC-V: Fix ioremap_cache() and ioremap_wc() for systems with Svpbmt
-  RISC-V: Move riscv_init_cbom_blocksize() to cacheflush.c
-  RISC-V: Implement arch specific PMEM APIs
-  RISC-V: Enable PMEM drivers
-
- arch/riscv/Kconfig                  |  1 +
- arch/riscv/configs/defconfig        |  1 +
- arch/riscv/include/asm/cacheflush.h |  2 ++
- arch/riscv/include/asm/io.h         | 10 ++++++++
- arch/riscv/include/asm/pgtable.h    |  2 ++
- arch/riscv/mm/Makefile              |  1 +
- arch/riscv/mm/cacheflush.c          | 39 +++++++++++++++++++++++++++++
- arch/riscv/mm/dma-noncoherent.c     | 38 ----------------------------
- arch/riscv/mm/pmem.c                | 21 ++++++++++++++++
- 9 files changed, 77 insertions(+), 38 deletions(-)
- create mode 100644 arch/riscv/mm/pmem.c
-
+diff --git a/arch/riscv/include/asm/io.h b/arch/riscv/include/asm/io.h
+index 69605a474270..07ac63999575 100644
+--- a/arch/riscv/include/asm/io.h
++++ b/arch/riscv/include/asm/io.h
+@@ -133,6 +133,16 @@ __io_writes_outs(outs, u64, q, __io_pbr(), __io_paw())
+ #define outsq(addr, buffer, count) __outsq((void __iomem *)addr, buffer, count)
+ #endif
+ 
++#ifdef CONFIG_MMU
++#define ioremap_wc(addr, size)		\
++	ioremap_prot((addr), (size), _PAGE_IOREMAP_WC)
++#endif
++
+ #include <asm-generic/io.h>
+ 
++#ifdef CONFIG_MMU
++#define ioremap_cache(addr, size)	\
++	ioremap_prot((addr), (size), _PAGE_KERNEL)
++#endif
++
+ #endif /* _ASM_RISCV_IO_H */
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 7ec936910a96..346b7c1a3eeb 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -182,6 +182,8 @@ extern struct pt_alloc_ops pt_ops __initdata;
+ #define PAGE_TABLE		__pgprot(_PAGE_TABLE)
+ 
+ #define _PAGE_IOREMAP	((_PAGE_KERNEL & ~_PAGE_MTMASK) | _PAGE_IO)
++#define _PAGE_IOREMAP_WC	((_PAGE_KERNEL & ~_PAGE_MTMASK) | \
++				 _PAGE_NOCACHE)
+ #define PAGE_KERNEL_IO		__pgprot(_PAGE_IOREMAP)
+ 
+ extern pgd_t swapper_pg_dir[];
 -- 
 2.34.1
 

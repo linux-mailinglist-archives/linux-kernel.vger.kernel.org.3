@@ -2,200 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C2E5A603B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:05:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D07C45A6042
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiH3KFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
+        id S229679AbiH3KGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbiH3KEP (ORCPT
+        with ESMTP id S229827AbiH3KGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:04:15 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDD2E9935
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:02:10 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id z6so14784734lfu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:02:09 -0700 (PDT)
+        Tue, 30 Aug 2022 06:06:00 -0400
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB6BF1B59;
+        Tue, 30 Aug 2022 03:03:14 -0700 (PDT)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-33dba2693d0so259618567b3.12;
+        Tue, 30 Aug 2022 03:03:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=XTo3q+mYdw/9PjZFiZ4r8XFtLJMcNPoTEDIQJX2GN1A=;
-        b=PMtleank1JlxTB9xtAYWSLgzJx5+N0S3rWQGvBrc4xHau8uCKKBNcWiA+YGgNIwucg
-         kFZfewjJDI7yS5rnFe+t3TeYIhNsg6LOgI7Q5IhxYkqNdmEdQ6XBX7LtgSNmNtUUCrSy
-         ZAqxYx/T+io8wNiFniaem6BXmx90apn8Fczns=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=I3uyFklCX86QnaO4FGwtK3r174JBbykuqGUsbUF86CM=;
+        b=SvE6u95A8KIYBCs4xKxTiCYBbxBSN2iF5GZ9kH5C/9wkg0aMPTTH37wmp6hMOIWLtS
+         kC/9M7nTr3ZMa29TCkbg8BVblGpxJtPFxhnW8FJqUavlqEUtwodde3Xio4iCYWBbiz+z
+         hHvwesFhf9khHthd7cskM2WeM28No/t0xUfgmB4T+KGuP5CQTrgnZvlIHI7T9gdPywIU
+         tdb0UkPXOLOJwSGT6n2VUf/sjEKB0/gcO6ewRhMieGfTGS2g1d0Tl8nqGkj44st+zkfF
+         f3/s9my62nvIu2qVuPTxTwzHqj5p7ZazPXEyDGE/e08LSjCIVVwpX0hJFmgu9qKGUShC
+         NX8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=XTo3q+mYdw/9PjZFiZ4r8XFtLJMcNPoTEDIQJX2GN1A=;
-        b=yVQh0Na6z0RWBeKQOrCGHcLE8uGvNL3O+4LY2ZRMc7toWxGEe/j/+G6HY+ZwHhI9xc
-         cJIlIVkspc4nHwCQcOaITqEG9b4Dq08rC3qBsFtPV/+OaKhYwGxfweoSMSPK9v+pVn/Z
-         MsL79G2E8alyFn0SHftNBhhDhF/io9+v5hbkvfzw78JJ/pAkVFLEZTtPM0swLEKep9z3
-         Yn1L9GVy+sVYND/EAh0mStjtv/DXSC3h/RKXR1izM9nIGSUavxURxAN1n35EX/8XGJsT
-         +ZCxw6PfPlwcXl78YGWDTVQdGe3NwhbMKWbj3jciCnoKVHCnPIr8IUNU/38/6JHXpxtX
-         /aEQ==
-X-Gm-Message-State: ACgBeo3hPyBdnx/e1yizQG2XS1tgEVUZdca7eDKB44FYWmaBnSGaZUSJ
-        pnHQa5OiMRB9I6tfB+m533qGTw==
-X-Google-Smtp-Source: AA6agR7OkZ+mkz0MOg8POSt7JBF/h6f019AHL8Fu93/UAdUMpZ4aQjBCUvnFmcihuv0hxXKUkzv5kg==
-X-Received: by 2002:ac2:4c55:0:b0:492:d91d:363f with SMTP id o21-20020ac24c55000000b00492d91d363fmr8463727lfk.116.1661853729576;
-        Tue, 30 Aug 2022 03:02:09 -0700 (PDT)
-Received: from prevas-ravi.prevas.se ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id m6-20020a056512114600b0048af6242892sm1573435lfg.14.2022.08.30.03.02.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 03:02:08 -0700 (PDT)
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>
-Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org
-Subject: [PATCH 6/6] rtc: isl12022: add support for temperature sensor
-Date:   Tue, 30 Aug 2022 12:01:52 +0200
-Message-Id: <20220830100152.698506-7-linux@rasmusvillemoes.dk>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
-References: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=I3uyFklCX86QnaO4FGwtK3r174JBbykuqGUsbUF86CM=;
+        b=5RSdjygaB7xHVzgbopVulnnX5DmxLEc7cdUjHwN2zTnkZfRW7EKiVXjZZLR0eh9SCi
+         BmRclojWmrkTnRpbFrcHNKgWCAAR/hvE38XwgbxMpYsewja/OiRa9r6kNv8Z8YUxgfMS
+         3JYtzkjWC7GlV8jGXrUG4I1EK4Cg0npUmqZymUaRiOybamuop677VyPhEsvZRmJQaE+G
+         10nBych+G+11wpy6UjhIwxR7gg/PoTTIOIDS9dq/gEBGnVVQwpiWI+vTwwxjwD3qKapD
+         gqxPaAvR+vJP99ssnEzMdTgnDJ0yar3C3O24FC8yD3HX489su45y9p9WlUS6g5BYekSW
+         ssbA==
+X-Gm-Message-State: ACgBeo1Xttp4BuIx7QEZm2MBYAg2uizqCeZe2TxvxKDy5P4MTIHnglS1
+        c9apbUwTI3uM+bKmkQuDrp4+CiVDalY786gLJSI=
+X-Google-Smtp-Source: AA6agR7cJuSH4etKCu9hKCZHGR2bD5vDU9CYpMir88OlfN8Q5rHi5hJI+n41bex3eVce9XadXKx3EOprlFLuWLXffl4=
+X-Received: by 2002:a05:6902:1146:b0:699:ba1f:8934 with SMTP id
+ p6-20020a056902114600b00699ba1f8934mr10959552ybu.354.1661853792903; Tue, 30
+ Aug 2022 03:03:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20220829215816.6206-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <e455ebd7-7949-47d6-5f9b-9869dfdd601d@linaro.org>
+In-Reply-To: <e455ebd7-7949-47d6-5f9b-9869dfdd601d@linaro.org>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 30 Aug 2022 11:02:46 +0100
+Message-ID: <CA+V-a8so2GYf5PZAPmCzyZayYXVqnVZ7LBLbb-WUqSeWvVX_vA@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: display: bridge: renesas,dw-hdmi: Fix
+ 'unevaluatedProperties' warnings
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
----
- drivers/rtc/rtc-isl12022.c | 81 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 81 insertions(+)
+Hi Krzysztof,
 
-diff --git a/drivers/rtc/rtc-isl12022.c b/drivers/rtc/rtc-isl12022.c
-index b295ec92ee17..1bd72f436318 100644
---- a/drivers/rtc/rtc-isl12022.c
-+++ b/drivers/rtc/rtc-isl12022.c
-@@ -17,6 +17,8 @@
- #include <linux/of.h>
- #include <linux/of_device.h>
- #include <linux/regmap.h>
-+#include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
- 
- /* ISL register offsets */
- #define ISL12022_REG_SC		0x00
-@@ -30,6 +32,9 @@
- #define ISL12022_REG_SR		0x07
- #define ISL12022_REG_INT	0x08
- 
-+#define ISL12022_REG_BETA	0x0d
-+#define ISL12022_REG_TEMP_L	0x28
-+
- /* ISL register bits */
- #define ISL12022_HR_MIL		(1 << 7)	/* military or 24 hour time */
- 
-@@ -38,6 +43,7 @@
- 
- #define ISL12022_INT_WRTC	(1 << 6)
- 
-+#define ISL12022_BETA_TSE	(1 << 7)
- 
- static struct i2c_driver isl12022_driver;
- 
-@@ -48,6 +54,79 @@ struct isl12022 {
- 	bool write_enabled;	/* true if write enable is set */
- };
- 
-+/*
-+ * A user-initiated temperature conversion is not started by this function,
-+ * so the temperature is updated once every ~60 seconds.
-+ */
-+static int isl12022_hwmon_read_temp(struct device *dev, s32 *mC)
-+{
-+	struct isl12022 *isl12022 = dev_get_drvdata(dev);
-+	struct regmap *regmap = isl12022->regmap;
-+	u8 temp_buf[2];
-+	s32 temp;
-+	int ret;
-+
-+	ret = regmap_bulk_read(regmap, ISL12022_REG_TEMP_L,
-+			       temp_buf, sizeof(temp_buf));
-+	if (ret)
-+		return ret;
-+	/*
-+	 * Temperature is represented as a 10-bit number, unit half-Kelvins.
-+	 */
-+	temp = (temp_buf[1] << 8) | temp_buf[0];
-+	temp *= 500;
-+	temp -= 273000;
-+
-+	*mC = temp;
-+
-+	return 0;
-+}
-+
-+static ssize_t
-+isl12022_hwmon_show_temp(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	int ret;
-+	s32 temp;
-+
-+	ret = isl12022_hwmon_read_temp(dev, &temp);
-+	if (ret)
-+		return ret;
-+
-+	return sprintf(buf, "%d\n", temp);
-+}
-+static SENSOR_DEVICE_ATTR(temp1_input, 0444, isl12022_hwmon_show_temp,
-+			  NULL, 0);
-+
-+static struct attribute *isl12022_hwmon_attrs[] = {
-+	&sensor_dev_attr_temp1_input.dev_attr.attr,
-+	NULL,
-+};
-+ATTRIBUTE_GROUPS(isl12022_hwmon);
-+
-+static void isl12022_hwmon_register(struct device *dev)
-+{
-+	struct isl12022 *isl12022;
-+	struct device *hwmon;
-+	int ret;
-+
-+	if (!IS_REACHABLE(CONFIG_HWMON))
-+		return;
-+
-+	isl12022 = dev_get_drvdata(dev);
-+
-+	ret = regmap_update_bits(isl12022->regmap, ISL12022_REG_BETA,
-+				 ISL12022_BETA_TSE, ISL12022_BETA_TSE);
-+	if (ret) {
-+		dev_warn(dev, "unable to enable temperature sensor\n");
-+		return;
-+	}
-+
-+	hwmon = devm_hwmon_device_register_with_groups(dev, "isl12022", isl12022,
-+						       isl12022_hwmon_groups);
-+	if (IS_ERR(hwmon))
-+		dev_warn(dev, "unable to register hwmon device: %pe\n", hwmon);
-+}
-+
- /*
-  * In the routines that deal directly with the isl12022 hardware, we use
-  * rtc_time -- month 0-11, hour 0-23, yr = calendar year-epoch.
-@@ -179,6 +258,8 @@ static int isl12022_probe(struct i2c_client *client)
- 		return PTR_ERR(isl12022->regmap);
- 	}
- 
-+	isl12022_hwmon_register(&client->dev);
-+
- 	isl12022->rtc = devm_rtc_allocate_device(&client->dev);
- 	if (IS_ERR(isl12022->rtc))
- 		return PTR_ERR(isl12022->rtc);
--- 
-2.37.2
+Thank you for the review.
 
+On Tue, Aug 30, 2022 at 10:23 AM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 30/08/2022 00:58, Lad Prabhakar wrote:
+> > With 'unevaluatedProperties' support implemented, there's a number of
+> > warnings when running dtbs_check:
+> >
+> > arch/arm64/boot/dts/renesas/r8a774b1-hihope-rzg2n-rev2-ex-idk-1110wr.dtb: hdmi@fead0000: Unevaluated properties are not allowed ('resets' was unexpected)
+> >       From schema: Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.yaml
+> >
+> > The main problem is that SoC DTSI's are including resets property, whereas
+> > the renesas,dw-hdmi.yaml has 'unevaluatedProperties: false'. So just add
+> > optional resets property to the binding.
+>
+> This is not main problem. I already commented on two of your similar
+> patches, so same applies here. Please describe real problem.
+>
+Sure will do that and send a v2 (and also for the reset of the patches).
+
+Cheers,
+Prabhakar

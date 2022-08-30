@@ -2,57 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC7C45A6BCE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5934D5A6BD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:11:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiH3SKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
+        id S231485AbiH3SLP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:11:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232281AbiH3SKZ (ORCPT
+        with ESMTP id S229876AbiH3SLJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:10:25 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0453E03D;
-        Tue, 30 Aug 2022 11:10:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 37DC6CE1D50;
-        Tue, 30 Aug 2022 18:10:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6C59FC433B5;
-        Tue, 30 Aug 2022 18:10:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661883014;
-        bh=E+0GumMHf43GJMuL3WMp/UctvGywv4fE3+GG2pVbefI=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=kMhcJTkY+gshHETkMEvi7CUT1MtuxyYeVMZCm5Mkim1LctQhkA5NMxsi8pywxhPwy
-         vgo19gL8/YwPgLJlPM0j40f3OlzlsWfUGRMzGprR/SETQbNue51H1EmNC6u7he+g6g
-         3cNAcAYA+mutfpUs3cRA5ItO4SQqfnslf1x12LaGyXPsZdZUgOeC9ryK5/6gxkyBhf
-         PVpQREvT0zoabEsrVBr7XQi6Y6fI6aBHHCS/TxvlQsmElHCeHMUGKD1Qv81elhUWII
-         xgNzIt2wDSMMLGM2VWJdyYrq0kJ3GW4WoCrqKX8v81U/eatwwm5BGCLCmH8lQYhzl5
-         m4irxq+y7nGrg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 45304E924D8;
-        Tue, 30 Aug 2022 18:10:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 30 Aug 2022 14:11:09 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CB313F3C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:11:08 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id m2so12871684lfp.11
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:11:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=0jx9VNj/HcW0dooShctB6tlNBtRfv946EPoOPim3t0E=;
+        b=IdHkGy3kZluHn+s1pCS1fWDIsltwMDgJ5SLNDPu4jLO5nDxOv7HtdjosNkKuyV0DmG
+         eUVjPmcsRIc71d5lUiyCBv5yz5iwuKITxlkI2CCTrVITfLANq+620vJrpokgFTnjMf65
+         PPqxsSS+0cG9/10Su2NyJ/PoPuhyRXxyjcg+WLJwi+0JwWn4830Atw3YAVd9seGZ8bBd
+         pQb455HbnE8H9AyoNrefVsPmjpWDZYG8ji2B4reou+a4cddd1nX5+NK/Opneeh+VVpgv
+         0tybYtY7AnI1k1Wc5+hDcL2lPd/zK924fpvX3KRBLJpdU13SX0L3NR2Wv2HkylcGhsWw
+         6Kig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=0jx9VNj/HcW0dooShctB6tlNBtRfv946EPoOPim3t0E=;
+        b=yg5qrv14AsZK3suEg78FM4nC28zU7HTieLB477101LQKbWrXrMbgxyYyxVTf7KYX3p
+         Ir/eGUmDAMHHYug6THcMcGOqJivOOd+lIRLGea/j4HhtaDo2rOiBGC2Ol9i57mbZFOQt
+         AmjsUy71ymVQqgJO5IPmN7s/ZtsI037z+iCsTNG0iAUGDKUrq/1P0tWjvcQuper4Usk+
+         Oswa4/Qouy6/giiXUdnXLi9eBbEYI3VKlte42QvNoqKRHvPaIWzCQ1v0j5kCv9hTnUz5
+         zGjwX9utCNveZKSchcGJeo8PMV7gw3eCzJo5jDp+1t7S91p0u63yM23TbaM8TDOUIxVe
+         4HYQ==
+X-Gm-Message-State: ACgBeo3uQ3PGKKLPMplPvarswmZn43MvZ5LgVnO8PczslnUAbvlwnj8k
+        9vWNeCva360oQhkyk8SuMTxa7w==
+X-Google-Smtp-Source: AA6agR4LS54/XWSxpR5JM4CrvVaGHIeYIc+KzFnzxBcHugfK4mmyTYOXAfXMhla6rcSZpaiqZFIh6g==
+X-Received: by 2002:a05:6512:3503:b0:481:4470:4128 with SMTP id h3-20020a056512350300b0048144704128mr7794471lfs.303.1661883066495;
+        Tue, 30 Aug 2022 11:11:06 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id o17-20020ac24e91000000b00492ef074fc1sm1683629lfr.183.2022.08.30.11.11.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 11:11:05 -0700 (PDT)
+Message-ID: <ce096b36-b678-63e1-e98c-7549f3df357f@linaro.org>
+Date:   Tue, 30 Aug 2022 21:11:03 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v1] bpftool: Add support for querying cgroup_iter
- link
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166188301427.32674.16752744307188143944.git-patchwork-notify@kernel.org>
-Date:   Tue, 30 Aug 2022 18:10:14 +0000
-References: <20220829231828.1016835-1-haoluo@google.com>
-In-Reply-To: <20220829231828.1016835-1-haoluo@google.com>
-To:     Hao Luo <haoluo@google.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org,
-        john.fastabend@gmail.com, sdf@google.com, jolsa@kernel.org,
-        yosryahmed@google.com, quentin@isovalent.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v9 2/2] ASoC: sun50i-dmic: dt-bindings: add DT bindings
+ for DMIC controller
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Ban Tao <fengzheng923@gmail.com>, lgirdwood@gmail.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+References: <1661872039-40174-1-git-send-email-fengzheng923@gmail.com>
+ <25072fba-64e2-df11-c8f0-a274037141f0@linaro.org>
+ <Yw5Qd7ZNPIc/o7+6@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <Yw5Qd7ZNPIc/o7+6@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,30 +82,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by Martin KaFai Lau <martin.lau@linux.dev>:
-
-On Mon, 29 Aug 2022 16:18:28 -0700 you wrote:
-> Support dumping info of a cgroup_iter link. This includes
-> showing the cgroup's id and the order for walking the cgroup
-> hierarchy. Example output is as follows:
+On 30/08/2022 21:01, Mark Brown wrote:
+> On Tue, Aug 30, 2022 at 08:35:09PM +0300, Krzysztof Kozlowski wrote:
+>> On 30/08/2022 18:07, Ban Tao wrote:
+>>> DT binding documentation for this new ASoC driver.
 > 
-> > bpftool link show
-> 1: iter  prog 2  target_name bpf_map
-> 2: iter  prog 3  target_name bpf_prog
-> 3: iter  prog 12  target_name cgroup  cgroup_id 72  order self_only
+>>> +properties:
+>>> +  "#sound-dai-cells":
+>>> +    const: 0
+>>> +
+>>> +  compatible:
+>>> +    const: allwinner,sun50i-h6-dmic
 > 
-> [...]
+>> Put compatible first in the list of properties (also in required:).
+> 
+> Can the tooling be taught about this?
 
-Here is the summary with links:
-  - [bpf-next,v1] bpftool: Add support for querying cgroup_iter link
-    https://git.kernel.org/bpf/bpf-next/c/6f95de6d7131
+Probably could save me some time in writing reviews... Let me look.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Best regards,
+Krzysztof

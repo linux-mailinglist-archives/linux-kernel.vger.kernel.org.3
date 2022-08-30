@@ -2,110 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51ED85A645D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:06:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF0F5A6435
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:58:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiH3NGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46250 "EHLO
+        id S229671AbiH3M6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiH3NGr (ORCPT
+        with ESMTP id S229732AbiH3M6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:06:47 -0400
-X-Greylist: delayed 563 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 06:06:42 PDT
-Received: from smtp1.rz.tu-harburg.de (smtp1.rz.tu-harburg.de [IPv6:2001:638:702:20aa::205:38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C3E97B1A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:06:42 -0700 (PDT)
-Received: from mail.tu-harburg.de (mail3.rz.tu-harburg.de [134.28.202.82])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (Client CN "mail.tu-harburg.de", Issuer "DFN-Verein Global Issuing CA" (verified OK))
-        by smtp1.rz.tu-harburg.de (Postfix) with ESMTPS id 4MH6ld31TXzxR9;
-        Tue, 30 Aug 2022 14:57:17 +0200 (CEST)
-Received: from mailspring.rz.tuhh.de (mailspring.rz.tuhh.de [134.28.202.181])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: ccd5802@KERBEROS.TU-HARBURG.DE)
-        by mail.tu-harburg.de (Postfix) with ESMTPSA id 4MH6ld1brZzJrCR;
-        Tue, 30 Aug 2022 14:57:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tuhh.de; s=x2022-35;
-        t=1661864237; bh=3M5KoBjmdncSnK+7gaN5/nElfuzhGBpbhk1ql1rqzsM=;
-        h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-         Content-Transfer-Encoding;
-        b=uamaj48JtI3YvFPznHSpkCiq7cFrd+ToU6ra/DfYBft7xjTMaoq7dzEhtapbEmAcm
-         X2B6Mc/j6LRB5dlg7T4toywzOEU93Yoc7xIbP55ivdvXf8UpzLLdzlaJ0LkZBZCorO
-         y90rapyUfrzM00KDI0Z1wr4KSRPU9GsnHT/t7eXY=
-From:   Christian Dietrich <christian.dietrich@tuhh.de>
-To:     linux-kernel@vger.kernel.org
-Cc:     Max =?utf-8?Q?Kr=C3=BCger?= <maxk@posteo.de>,
-        John 'Warthog9' Hawley <warthog9@eaglescrag.net>
-Subject: Unexpected behavior: Sending signalfd over AF_UNIX
-Organization: Technische =?utf-8?Q?Universit=C3=A4t?= Hamburg
-X-Commit-Hash-org: fa8b6bc392fa8cd66bd1773f47a6d531f437cf27
-X-Commit-Hash-Maildir: 4826b0f25ca3598beaad655896227faaf1c9ec19
-Date:   Tue, 30 Aug 2022 14:57:06 +0200
-Message-ID: <s7b1qsx3n4t.fsf@dokucode.de>
+        Tue, 30 Aug 2022 08:58:05 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A73524BD4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:58:01 -0700 (PDT)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MH6gM4yVTzYcpg;
+        Tue, 30 Aug 2022 20:53:35 +0800 (CST)
+Received: from [10.174.178.41] (10.174.178.41) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 30 Aug 2022 20:57:58 +0800
+Message-ID: <2501c884-7c78-d367-3463-5b86d302da89@huawei.com>
+Date:   Tue, 30 Aug 2022 20:57:58 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_20,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] iommu: use iommu_group_ref_get to hold group reference
+To:     Robin Murphy <robin.murphy@arm.com>, <joro@8bytes.org>,
+        <will@kernel.org>, <iommu@lists.linux.dev>
+CC:     <linux-kernel@vger.kernel.org>, <baolu.lu@linux.intel.com>,
+        <haifeng.zhao@linux.intel.com>
+References: <20220826024024.101553-1-yuancan@huawei.com>
+ <5f47c5b7-534d-5714-1f91-04005ada8b8f@arm.com>
+From:   Yuan Can <yuancan@huawei.com>
+In-Reply-To: <5f47c5b7-534d-5714-1f91-04005ada8b8f@arm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.41]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500024.china.huawei.com (7.185.36.10)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[John is also on Cc: since I sent the mail before, but somehow vger ate
- the mail and it did not arrive on the LKML]
 
-Hi everyone!
+在 2022/8/30 17:32, Robin Murphy 写道:
+> On 2022-08-26 03:40, Yuan Can wrote:
+>> Replace kobject_get with iommu_group_ref_get for better
+>> readability.
+>
+> I disagree, sorry. iommu_group_ref_get() is meant as a helper for 
+> drivers, and the core code uses the raw kobject internally everywhere 
+> else, including several other times within this function. Especially 
+> the raw kobject_put() in the cleanup path - in terms of readability 
+> I'd say it's actively harmful to obfuscate what that pairs with.
+>
+> Thanks,
+> Robin.
 
-For a small pet project of mine[1], I experimented with signalfd and
-wanted to send it over UNIX domain sockets. Thereby, I encountered an
-unexpected behavior:
+Understood, thanks for your reply.
 
-My expectation was that task A can create a signalfd and send it to
-task B, whereby B becomes able to receive the signals of task A.
+Best regards,
 
-However, this is not whats happening there. What is actually happening
-is that I can correctly transfer the fd to the other process. But
-instead of read(2)-ing the siginfos of task A in task B, I now receive
-the signals of task B on this foreign file descriptor.
+Yuan Can
 
-And by looking at the code, this is also the implemented behavior.
-There, the code references `current' at various places and signalfd_ctx
-does not hold a `struct task_struct*' but only a signal mask.
-
-As already said, this behavior was unexpected for me. What would be
-less surpringing would be one of the following:
-
-A. I cannot transfer the signalfd fd at all (are there non-transferable fds=
-?)
-
-B. I can read the signals of task A in task B
-
-With B, there remains the question, whether I should read those signals
-directed to task A or to its task group. If route B is chosen, it would
-also be great to derive a signalfd from a pidfd.
-
-And yes, the whole idea of sending my own signalfd to another task is
-kind of insane. However, for the sake of orthogonality, this would just
-be beautiful and I could point my students to this and say: Look! In
-Linux, file descriptors are just capabilities that can be transferred
-between processes.
-
-chris
-
-[1] I'm currently working on a system-call Christmas calendar that has
-    a nice exercise for every day before Christmas.
---=20
-Prof. Dr.-Ing. Christian Dietrich
-Operating System Group (E-EXK4)
-Technische Universit=C3=A4t Hamburg
-Am Schwarzenberg-Campus 3 (E), 4.092
-21073 Hamburg
-
-eMail:  christian.dietrich@tuhh.de
-Tel:    +49 40 42878 2188
-WWW:    https://osg.tuhh.de/
+>
+>> Signed-off-by: Yuan Can <yuancan@huawei.com>
+>> ---
+>>   drivers/iommu/iommu.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+>> index 780fb7071577..8e7f30f7188c 100644
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -903,7 +903,7 @@ int iommu_group_add_device(struct iommu_group 
+>> *group, struct device *dev)
+>>           goto err_free_name;
+>>       }
+>>   -    kobject_get(group->devices_kobj);
+>> +    iommu_group_ref_get(group);
+>>         dev->iommu_group = group;
+>

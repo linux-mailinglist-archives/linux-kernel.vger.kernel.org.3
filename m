@@ -2,147 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B682E5A5DE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:17:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C95C05A5DE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:17:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231408AbiH3IQy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:16:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
+        id S231300AbiH3IQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229729AbiH3IQu (ORCPT
+        with ESMTP id S231349AbiH3IQm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:16:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DCD39AF8C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:16:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661847407;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=/zPHAN3qGo7NVF2OTVY04vNzvTw3myDXxymM/1eiXU4=;
-        b=XfRa5WImGppjIdA4RZP+PFHSohf+h4LSS3MZbO3GMplXRvWzBPH7NtVKSJUomo9YaPRdq4
-        rpzn2R9EEbh5FFYNWxazD+rmhraWvnQoz6I83IqJuOTfVfoKqOL9kODQ20g4CI1xrzx2De
-        i8oh6/Bce9pBJPv6PXHzTcmYsME86os=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-310-Qkp0WAYFPiuLdQuBOBf5yA-1; Tue, 30 Aug 2022 04:16:31 -0400
-X-MC-Unique: Qkp0WAYFPiuLdQuBOBf5yA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 30 Aug 2022 04:16:42 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C93286FC5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:16:41 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BB66D101AA47;
-        Tue, 30 Aug 2022 08:16:30 +0000 (UTC)
-Received: from p1.luc.com (unknown [10.40.195.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7965C909FF;
-        Tue, 30 Aug 2022 08:16:28 +0000 (UTC)
-From:   Ivan Vecera <ivecera@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     Jacob Keller <jacob.e.keller@intel.com>,
-        Patryk Piotrowski <patryk.piotrowski@intel.com>,
-        SlawomirX Laba <slawomirx.laba@intel.com>,
-        Vitaly Grinberg <vgrinber@redhat.com>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net v2] iavf: Detach device during reset task
-Date:   Tue, 30 Aug 2022 10:16:27 +0200
-Message-Id: <20220830081627.1205872-1-ivecera@redhat.com>
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5279A6601E8E;
+        Tue, 30 Aug 2022 09:16:39 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661847400;
+        bh=WZChgXoVHLOIRXF2mN0QrI8uplM6Fh3PZD9YJmLSqxo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=MhBgXvtat6cy9ZP5JOiRoGu+XppJIYp2CuGoxhKEW4pV/eiv/C1CQhtRP51S75xP/
+         PG5ndYriiX4yRP8Ug++15ZBx3aaQqZ9no55ymFdKz1SsJBTWaHv73XTn9ZBPhzjiW1
+         lsbZv4W2xIxyiVf2gQhVHz2mj1cANDhr3v7A7NYKjPrMX8v4N/fYr0+7kWRmr385Xy
+         +26q3LS1uMnMiHbCdi7ukj+SfJhpCWkxeqYgabcGA+LnJOOwDkpEf3YIzU6ZMfnsMJ
+         S1d62v3QLYAvL3/GX5g9WL/SyT/1D33R3GM3DDHbtaIVi1+n3Hzb9E0l3Xu6B4ATzr
+         lpbRC9VgNbCzw==
+Message-ID: <62b52d5b-26e7-a629-daa6-8c63265e62e0@collabora.com>
+Date:   Tue, 30 Aug 2022 10:16:37 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 1/6] iommu/mediatek: Add platform_device_put for
+ recovering the device refcnt
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        libo.kang@mediatek.com, chengci.xu@mediatek.com,
+        youlin.pei@mediatek.com, anan.sun@mediatek.com,
+        xueqi.zhang@mediatek.com, Guenter Roeck <groeck@chromium.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220824064306.21495-1-yong.wu@mediatek.com>
+ <20220824064306.21495-2-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220824064306.21495-2-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iavf_reset_task() takes crit_lock at the beginning and holds
-it during whole call. The function subsequently calls
-iavf_init_interrupt_scheme() that grabs RTNL. Problem occurs
-when userspace initiates during the reset task any ndo callback
-that runs under RTNL like iavf_open() because some of that
-functions tries to take crit_lock. This leads to classic A-B B-A
-deadlock scenario.
+Il 24/08/22 08:43, Yong Wu ha scritto:
+> Add platform_device_put to match with of_find_device_by_node.
+> 
+> Meanwhile, I add a new variable "pcommdev" which is for smi common device.
+> Otherwise, "platform_device_put(plarbdev)" for smi-common dev may be not
+> readable. And add a checking for whether pcommdev is NULL.
+> 
+> Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with the MM TYPE")
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
 
-To resolve this situation the device should be detached in
-iavf_reset_task() prior taking crit_lock to avoid subsequent
-ndos running under RTNL and reattach the device at the end.
-
-Fixes: 62fe2a865e6d ("i40evf: add missing rtnl_lock() around i40evf_set_interrupt_capability")
-Cc: Jacob Keller <jacob.e.keller@intel.com>
-Cc: Patryk Piotrowski <patryk.piotrowski@intel.com>
-Cc: SlawomirX Laba <slawomirx.laba@intel.com>
-Tested-by: Vitaly Grinberg <vgrinber@redhat.com>
-Signed-off-by: Ivan Vecera <ivecera@redhat.com>
----
- drivers/net/ethernet/intel/iavf/iavf_main.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index f39440ad5c50..10aa99dfdcdb 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -2877,6 +2877,11 @@ static void iavf_reset_task(struct work_struct *work)
- 	int i = 0, err;
- 	bool running;
- 
-+	/* Detach interface to avoid subsequent NDO callbacks */
-+	rtnl_lock();
-+	netif_device_detach(netdev);
-+	rtnl_unlock();
-+
- 	/* When device is being removed it doesn't make sense to run the reset
- 	 * task, just return in such a case.
- 	 */
-@@ -2884,7 +2889,7 @@ static void iavf_reset_task(struct work_struct *work)
- 		if (adapter->state != __IAVF_REMOVE)
- 			queue_work(iavf_wq, &adapter->reset_task);
- 
--		return;
-+		goto reset_finish;
- 	}
- 
- 	while (!mutex_trylock(&adapter->client_lock))
-@@ -2954,7 +2959,6 @@ static void iavf_reset_task(struct work_struct *work)
- 
- 	if (running) {
- 		netif_carrier_off(netdev);
--		netif_tx_stop_all_queues(netdev);
- 		adapter->link_up = false;
- 		iavf_napi_disable_all(adapter);
- 	}
-@@ -3084,7 +3088,7 @@ static void iavf_reset_task(struct work_struct *work)
- 	mutex_unlock(&adapter->client_lock);
- 	mutex_unlock(&adapter->crit_lock);
- 
--	return;
-+	goto reset_finish;
- reset_err:
- 	if (running) {
- 		set_bit(__IAVF_VSI_DOWN, adapter->vsi.state);
-@@ -3095,6 +3099,10 @@ static void iavf_reset_task(struct work_struct *work)
- 	mutex_unlock(&adapter->client_lock);
- 	mutex_unlock(&adapter->crit_lock);
- 	dev_err(&adapter->pdev->dev, "failed to allocate resources during reinit\n");
-+reset_finish:
-+	rtnl_lock();
-+	netif_device_attach(netdev);
-+	rtnl_unlock();
- }
- 
- /**
--- 
-2.35.1
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 

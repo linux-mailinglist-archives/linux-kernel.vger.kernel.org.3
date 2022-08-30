@@ -2,107 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABBEC5A6B03
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:42:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B975A6AFC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:39:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232108AbiH3RmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:42:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55558 "EHLO
+        id S230474AbiH3Rjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231455AbiH3Rls (ORCPT
+        with ESMTP id S232297AbiH3Riu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:41:48 -0400
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99EB7136B04
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:39:06 -0700 (PDT)
-Received: by mail-lf1-f47.google.com with SMTP id bq23so16517712lfb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:39:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=e7JEKYuofd3ohVuN0wQat/Bd3pvagzYZJuquu9YnaTc=;
-        b=sccqeAOnaZ63YsK2QiDUkPx1XiQueuhmVcEyY7D1/T3NLqy3NAh1+Rn5w6JOBChXhu
-         ofeHiBKfVgGiNTBIcjYbaWG0bevSh3X+fk5q7sb5LCLRS+4DyYSJ+uG/vBOBiWAMmKDW
-         jyvx+aaIJMt2iCgo44tfCGHh4nDVa8QMUy6otmtxcqjNbWx6q/0MDzbY2s7hU9faiC5X
-         cdgbRrNnmv9X+w1NVtP+ut5y/2I9SI0LdciIfqtNo7Eop8so4Is9jCUG+1q2fBdQQcD0
-         D4DjZbo9t1yznxP0R1uwKzA4EyA2VIJBZJdJZy4sYf9PIhWN6ow3ixkbKogA3GvRC2QN
-         MhHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=e7JEKYuofd3ohVuN0wQat/Bd3pvagzYZJuquu9YnaTc=;
-        b=RJD51U5OHXqzxqiMXWZBifoJHPCORWR36uZ6CKR/6TrFyvjmcr2KvlTk5rocIX/kDc
-         9j9v3ehVhFUAu5s76wQMFGuBlm6DGhMq1XD9r1EO226q8CWhnTt8e4YyWhp9MeztofRv
-         yOIOH95U//1b09wW5KDqktXtqlxH8emb1YZSCSAaWh7vFf57BXlQ/6yRvTI/Hqh7nO/9
-         wXOlwyldGsW/hy87liDOTMBBcvkKxwjh9IysPo3rQSyJWPIAkWVc6LvYqZ9eg3TPCKrF
-         m4DTNYS8VOHKoYalegJ9+WaQlGsnBZ6wVnx2stejlrcC5RdzVmNo/ciuP/m2YJbQuGIW
-         Ewqg==
-X-Gm-Message-State: ACgBeo3OgzdzTrGv08+x25VwkoOaan23FPMABKEJ3uVaYrmWLa9n0wL7
-        ZuAwKVqbITVbrrytP0H4rk1jTA==
-X-Google-Smtp-Source: AA6agR71Ri1C6ITQXhDL5pZbp01DKxvtr8nIL2S4m+SgX2lfZcjbi0Z3IVSXrgmMwJay7vslWOAXeg==
-X-Received: by 2002:a05:6512:3d1e:b0:48b:3f76:eff with SMTP id d30-20020a0565123d1e00b0048b3f760effmr8545084lfv.312.1661880765623;
-        Tue, 30 Aug 2022 10:32:45 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id q7-20020a2eb4a7000000b00263d44b079bsm1166844ljm.99.2022.08.30.10.32.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 10:32:44 -0700 (PDT)
-Message-ID: <af1dd205-149b-034e-5f35-727ac1d151f2@linaro.org>
-Date:   Tue, 30 Aug 2022 20:32:43 +0300
+        Tue, 30 Aug 2022 13:38:50 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C68CF23D0;
+        Tue, 30 Aug 2022 10:36:10 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UFx294005591;
+        Tue, 30 Aug 2022 17:34:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=F+JHeRN8PToozitBrhdv/oNgrBd/V/BN8qJ5YgZ6y3A=;
+ b=Q6aVkRA3hwQE7Dx4uV30w0WB0adFEdbn0/BIURgSZjy6fFOK/PMuDjqRYp3zml7h7lzY
+ HuM51aBFO2aCbT1d3bheglCJIrM6bkDYqDlfwJ3PCoIid5kqFuRb7CEJNLybd8w7vZ6x
+ o2d+cs/TrvcT4oyRRlDdjl5dbjhi2urRZ+WKJ/OuMu6iv6A1zbE0QSOAS2T/IsBGMdyG
+ 1j7isLrrj9fL/7WDKRMja3Wru1hS/0vtVTOnZlGxiYfyI/wb53uCwvLq4R8SaqycjrFk
+ QKKFeA6c7cEHlejyk/71m6KLYspVoLW0nj5IptNWKpKFHc9U39Lb6InA0s4wkNTgIf3X Ug== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j9m2t0m8y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 17:34:00 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27UHXxOg005519
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 17:33:59 GMT
+Received: from [10.110.39.132] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 30 Aug
+ 2022 10:33:58 -0700
+Message-ID: <a437b91a-281d-56b3-41bf-15d9593ece74@quicinc.com>
+Date:   Tue, 30 Aug 2022 10:33:58 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH v1 1/1] usb: phy: mxs: apply board calibration value base
- on chip trim value
+Subject: Re: [PATCH 1/3] slimbus: qcom-ngd: use correct error in message of
+ pdr_add_lookup() failure
 Content-Language: en-US
-To:     Frank Li <Frank.Li@nxp.com>, kishon@ti.com, vkoul@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, balbi@kernel.org,
-        gregkh@linuxfoundation.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-        imx@lists.linux.dev
-References: <20220830162538.2845274-1-Frank.Li@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830162538.2845274-1-Frank.Li@nxp.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     <stable@vger.kernel.org>
+References: <20220830121359.634344-1-krzysztof.kozlowski@linaro.org>
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+In-Reply-To: <20220830121359.634344-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: kCyURfhdLxmWT3BuVaOOtQftpVhRUuqZ
+X-Proofpoint-ORIG-GUID: kCyURfhdLxmWT3BuVaOOtQftpVhRUuqZ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-30_10,2022-08-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 mlxlogscore=963 bulkscore=0 suspectscore=0
+ mlxscore=0 clxscore=1011 spamscore=0 malwarescore=0 impostorscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208300081
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 19:25, Frank Li wrote:
-> USBPHY_TRIM_OVERRIDE provide chip trim value. DTS provide board level
-> calibration data. Board level calibration data should be base on chip
-> trim value.
+On 8/30/2022 5:13 AM, Krzysztof Kozlowski wrote:
+> Use cprrect error code, instead of previous 'ret' value, when printing
+
+s/cprrect/correct/
+
+> error from pdr_add_lookup() failure.
 > 
-> For example, TXCAL45DP board level hope add +2.85% register base on
-> standard 45ohm. But chip trim value is -5.25% to get 45ohm output.
-> Actually finial TXCAL45DP should be -5.25% + 2.85% = -2.4%.
-> 
-> If chip have not trim value at USBPHY_TRIM_OVERRIDE, No behavior change.
-> board level calibration will be applied.
-> 
-> If chip have trim value at USBPHY_TRIM_OVERRIDE and no DTS board level
-> data, chip trim value will be applied.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> Cc: <stable@vger.kernel.org>
+> Fixes: e1ae85e1830e ("slimbus: qcom-ngd-ctrl: add Protection Domain Restart Support")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  drivers/usb/phy/phy-mxs-usb.c | 40 ++++++++++++++++++++++++++++++++---
->  1 file changed, 37 insertions(+), 3 deletions(-)
+>   drivers/slimbus/qcom-ngd-ctrl.c | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
+> index 0aa8408464ad..6fe6abb86061 100644
+> --- a/drivers/slimbus/qcom-ngd-ctrl.c
+> +++ b/drivers/slimbus/qcom-ngd-ctrl.c
+> @@ -1581,6 +1581,7 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
+>   
+>   	pds = pdr_add_lookup(ctrl->pdr, "avs/audio", "msm/adsp/audio_pd");
+>   	if (IS_ERR(pds) && PTR_ERR(pds) != -EALREADY) {
+> +		ret = PTR_ERR(pds);
+>   		dev_err(dev, "pdr add lookup failed: %d\n", ret);
+>   		return PTR_ERR(pds);
 
-Use scripts/get_maintainers.pl to CC all maintainers and relevant
-mailing lists.... and do not Cc unrelated folks.
+return ret?
 
-Best regards,
-Krzysztof
+>   	}
+

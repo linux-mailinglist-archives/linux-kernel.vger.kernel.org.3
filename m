@@ -2,180 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEACC5A5FE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0275A5FDF
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiH3Jzi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:55:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36146 "EHLO
+        id S229723AbiH3Jyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229746AbiH3Jza (ORCPT
+        with ESMTP id S229536AbiH3Jyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:55:30 -0400
-Received: from mail.pr-group.ru (mail.pr-group.ru [178.18.215.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB54724BD5;
-        Tue, 30 Aug 2022 02:55:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-        d=metrotek.ru; s=mail;
-        h=from:subject:date:message-id:to:cc:mime-version:content-transfer-encoding:
-         in-reply-to:references;
-        bh=yvMCirHtcm1R7nZRNEcEPzTLj99Z8YgRXzvWBLcx31Q=;
-        b=KCTwvVi6COde+fLN/aTkDRDYNTOU55leKMcdmIwU005cFrlOBl9Wv55RYTKPGvsMT3WamLu2lTuI5
-         N33v6dX+aZ/UPC/wd39ZL52bpqWPylXEIYh1jtJ7ek+cEccVKyrq3DpIBUvs1DAtlat7nGb3Gmqnc5
-         f1/Ypra//3AC/NA65gJ7OfpAq+dpv9CCJyLXEiJ+/8EF0qWr+NsF3debPJ6gfPqTUhuxJmWu85DhzC
-         4nuR+bOut4GAA+H6D6Ieo9V6HtK6DeRPZ8oEsr+HBAFEXNdgdXYEuWUVRJuttL3aNQfdkZJ2p7Qx9R
-         8s8wuu/b4Epyo4TGwCJq7HnT34HJuRQ==
-X-Kerio-Anti-Spam:  Build: [Engines: 2.16.4.1445, Stamp: 3], Multi: [Enabled, t: (0.000011,0.014225)], BW: [Enabled, t: (0.000017,0.000001)], RTDA: [Enabled, t: (0.091416), Hit: No, Details: v2.41.0; Id: 15.52kal2.1gbn2qfhd.1182; mclb], total: 0(700)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Level: 
-X-Footer: bWV0cm90ZWsucnU=
-Received: from h-e2.ddg ([85.143.252.66])
-        (authenticated user i.bornyakov@metrotek.ru)
-        by mail.pr-group.ru with ESMTPSA
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256 bits));
-        Tue, 30 Aug 2022 12:55:14 +0300
-From:   Ivan Bornyakov <i.bornyakov@metrotek.ru>
-To:     mdf@kernel.org, hao.wu@intel.com, yilun.xu@intel.com,
-        trix@redhat.com, dg@emlix.com, j.zink@pengutronix.de,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org
-Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
-        linux-fpga@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        system@metrotek.ru
-Subject: [PATCH v9 2/2] dt-bindings: fpga: document Lattice sysCONFIG FPGA manager
-Date:   Tue, 30 Aug 2022 12:54:05 +0300
-Message-Id: <20220830095405.31609-3-i.bornyakov@metrotek.ru>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220830095405.31609-1-i.bornyakov@metrotek.ru>
-References: <20220830095405.31609-1-i.bornyakov@metrotek.ru>
+        Tue, 30 Aug 2022 05:54:32 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3CD0C0E6E;
+        Tue, 30 Aug 2022 02:54:30 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27U9sG2Z104476;
+        Tue, 30 Aug 2022 04:54:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661853256;
+        bh=RmNV7HcetEbUAooGy8C1avwiLm6r1H5yjogMVC6bEww=;
+        h=Date:Subject:To:References:From:In-Reply-To;
+        b=sCK5iK5S6F3BV7Zc1DNRvkHJeHoFTAeuX6c2vWDzbIo5f6nH45TEV/3koF0wIriGE
+         tMKUZ+mFbjON43tSp42l5NfYgJUaG1jg4N56HTLrk8kx3tzYVjaKpDgSx8QtrSn53w
+         BwEKPbcn8Qv+BO4PzEbn6xvb7ejdwEzRYRuHrguY=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27U9sGh5011546
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 30 Aug 2022 04:54:16 -0500
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 30
+ Aug 2022 04:54:15 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 30 Aug 2022 04:54:15 -0500
+Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27U9sCA0094080;
+        Tue, 30 Aug 2022 04:54:13 -0500
+Message-ID: <420e481d-0c91-1f0b-ea72-3a505a04330d@ti.com>
+Date:   Tue, 30 Aug 2022 15:24:12 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/4] arm64: dts: ti: k3-am65-main: Disable RNG node
+Content-Language: en-US
+To:     Andrew Davis <afd@ti.com>, Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220823001136.10944-1-afd@ti.com>
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+In-Reply-To: <20220823001136.10944-1-afd@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Device Tree Binding doc for configuring Lattice ECP5 and MachXO2
-FPGAs over Slave SPI sysCONFIG interface.
 
-Signed-off-by: Ivan Bornyakov <i.bornyakov@metrotek.ru>
----
- .../bindings/fpga/lattice,sysconfig.yaml      | 102 ++++++++++++++++++
- 1 file changed, 102 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
 
-diff --git a/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-new file mode 100644
-index 000000000000..17f1e0c50bc4
---- /dev/null
-+++ b/Documentation/devicetree/bindings/fpga/lattice,sysconfig.yaml
-@@ -0,0 +1,102 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/fpga/lattice,sysconfig.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Lattice Slave SPI sysCONFIG FPGA manager
-+
-+maintainers:
-+  - Ivan Bornyakov <i.bornyakov@metrotek.ru>
-+
-+description: |
-+  Lattice sysCONFIG port, which is used for FPGA configuration, among others,
-+  have Slave Serial Peripheral Interface. Only full reconfiguration is
-+  supported.
-+
-+  Programming of ECP5 is done by writing uncompressed bitstream image in .bit
-+  format into FPGA's SRAM configuration memory.
-+
-+  Programming of MachXO2 is done by writing configuration data into device's
-+  internal non-volatile Flash memory, then Self-Download of data from Flash
-+  into SRAM is issued.
-+
-+properties:
-+  compatible:
-+    enum:
-+      - lattice,ecp5-fpga-mgr
-+      - lattice,machxo2-fpga-mgr
-+
-+  reg:
-+    maxItems: 1
-+
-+  program-gpios:
-+    description:
-+      A GPIO line connected to PROGRAMN (active low) pin of the device.
-+      Initiates configuration sequence.
-+    maxItems: 1
-+
-+  init-gpios:
-+    description:
-+      A GPIO line connected to INITN (active low) pin of the device.
-+      Indicates that the FPGA is ready to be configured.
-+    maxItems: 1
-+
-+  done-gpios:
-+    description:
-+      A GPIO line connected to DONE (active high) pin of the device.
-+      Indicates that the configuration sequence is complete.
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,machxo2-fpga-mgr
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 66000000
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: lattice,ecp5-fpga-mgr
-+    then:
-+      properties:
-+        spi-max-frequency:
-+          maximum: 60000000
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        fpga-mgr@0 {
-+            compatible = "lattice,ecp5-fpga-mgr";
-+            reg = <0>;
-+            spi-max-frequency = <20000000>;
-+            program-gpios = <&gpio3 4 GPIO_ACTIVE_LOW>;
-+            init-gpios = <&gpio3 3 GPIO_ACTIVE_LOW>;
-+            done-gpios = <&gpio3 2 GPIO_ACTIVE_HIGH>;
-+        };
-+
-+        fpga-mgr@1 {
-+            compatible = "lattice,machxo2-fpga-mgr";
-+            reg = <1>;
-+            spi-max-frequency = <20000000>;
-+        };
-+    };
--- 
-2.37.2
+On 23/08/22 05:41, Andrew Davis wrote:
+> The hardware random number generator is used by OP-TEE and is access is
+> denied to other users with SoC level bus firewalls. Any access to this
+> device from Linux will result in firewall errors.
+> 
+> We could remove this node, but it is still valid device description,
+> and it is possible it could be re-enabled in the bootloader if OP-TEE
+> is not used. So only disable this node for now.
+> 
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
+> 
+> Changes from v1:
+>   - Added comment in DT
+>   - Explained why it is only disabled in commit message
+> 
+>   arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+> index 8919fede3cd7..b3e714e1abed 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+> @@ -127,6 +127,7 @@ rng: rng@4e10000 {
+>   			reg = <0x0 0x4e10000 0x0 0x7d>;
+>   			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
+>   			clocks = <&k3_clks 136 1>;
+> +			status = "disabled"; /* Used by OP-TEE */
+>   		};
+>   	};
+>   
 
+Reviewed-by: Jayesh Choudhary <j-choudhary@ti.com>
 

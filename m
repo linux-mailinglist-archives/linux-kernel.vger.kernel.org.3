@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385905A6D0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:22:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A595A6D2F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiH3TWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:22:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58836 "EHLO
+        id S230076AbiH3TXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230330AbiH3TW3 (ORCPT
+        with ESMTP id S231517AbiH3TW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:22:29 -0400
-Received: from smtp-fw-80006.amazon.com (smtp-fw-80006.amazon.com [99.78.197.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA4279A41;
-        Tue, 30 Aug 2022 12:22:28 -0700 (PDT)
+        Tue, 30 Aug 2022 15:22:57 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B5947A767;
+        Tue, 30 Aug 2022 12:22:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661887349; x=1693423349;
+  t=1661887364; x=1693423364;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=dUAtUowfndtQUTld7zE3vvVQEMIwQJ09YELan4asaoM=;
-  b=OytGhpZiE1ELjuy+aqrYQlFM8S7u5AaLmmtaXCmbcZe/ypaJYyvN0atz
-   Ymn5IxZzMQ4qQR8Jm7MdoFZdSXAFZbS4lf7aGLPtvac27T4dydtgsFSj5
-   xZkjWhYMvIGvkKfdAc+rVUiXrzfYsMMdxWwMEt+Qi/q6zcHFGqD51gu2W
-   4=;
+  bh=f5P3J3S9Ti1VFAfx1jGvICC/fceEslJWV21LViEEo3o=;
+  b=CL7L4rxxWvkbgQQVEDkN79+mviKRlXR1BLovdI095XH/QqCftFRVW80v
+   TohkVNlocsAtahIXOF8Zkkd66rrUBddtE8tvP2PXLfKKiRplLmgFrcIPe
+   n7zCUA53Sr50beLO5BcWHyhvpZQDMEL/dZrYpuaT2yf2fJTUPrDJNFscj
+   o=;
 X-IronPort-AV: E=Sophos;i="5.93,275,1654560000"; 
-   d="scan'208";a="124960444"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-6a4112b2.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80006.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:17 +0000
-Received: from EX13D37EUA002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-2a-6a4112b2.us-west-2.amazon.com (Postfix) with ESMTPS id 76EE84C014E;
-        Tue, 30 Aug 2022 19:22:16 +0000 (UTC)
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D37EUA002.ant.amazon.com (10.43.165.200) with Microsoft SMTP Server (TLS)
+   d="scan'208";a="235792568"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-b69ea591.us-east-1.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:42 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-b69ea591.us-east-1.amazon.com (Postfix) with ESMTPS id 1BEC6C02C3;
+        Tue, 30 Aug 2022 19:22:38 +0000 (UTC)
+Received: from EX19D013UWA002.ant.amazon.com (10.13.138.210) by
+ EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
  id 15.0.1497.38; Tue, 30 Aug 2022 19:22:15 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWA002.ant.amazon.com (10.13.138.210) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
+ Tue, 30 Aug 2022 19:22:15 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.60.234) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:13
+ (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:15
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 60EB84D48; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
+        id 68F574D4A; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -51,9 +55,9 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dkl@amazon.com>,
         <rahul.tanwar@linux.intel.com>, <andriy.shevchenko@intel.com>
-Subject: [PATCH v3 03/19] hwmon: (mr75203) update pvt->v_num to the actual number of used sensors
-Date:   Tue, 30 Aug 2022 19:21:56 +0000
-Message-ID: <20220830192212.28570-4-farbere@amazon.com>
+Subject: [PATCH v3 04/19] dt-bindings: hwmon: (mr75203) change "reset" property to be optional
+Date:   Tue, 30 Aug 2022 19:21:57 +0000
+Message-ID: <20220830192212.28570-5-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220830192212.28570-1-farbere@amazon.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
@@ -62,37 +66,39 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This issue is relevant when "intel,vm-map" is set in device-tree, and
-defines a lower number of VMs than actually supported.
-
-This change is needed for all places that use pvt->v_num later on in the
-code.
+Change "reset" property to be optional instead of required, for SOCs that
+don't support a reset controller.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
- drivers/hwmon/mr75203.c | 1 +
- 1 file changed, 1 insertion(+)
+V3 -> v2:
+- Change "reset" property to be optional instead of adding new
+  "reset-control-skip" property.
 
-diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
-index 0e29877a1a9c..f89f7bb5d698 100644
---- a/drivers/hwmon/mr75203.c
-+++ b/drivers/hwmon/mr75203.c
-@@ -605,6 +605,7 @@ static int mr75203_probe(struct platform_device *pdev)
- 					break;
+ Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+index 6abde48b746e..2ec4b9da4b92 100644
+--- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
++++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+@@ -49,7 +49,6 @@ required:
+   - reg
+   - reg-names
+   - clocks
+-  - resets
+   - "#thermal-sensor-cells"
  
- 			vm_num = i;
-+			pvt->v_num = i;
- 		}
- 
- 		in_config = devm_kcalloc(dev, vm_num + 1,
+ additionalProperties: false
 -- 
 2.37.1
 

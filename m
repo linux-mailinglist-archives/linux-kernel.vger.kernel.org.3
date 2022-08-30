@@ -2,111 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D9CE5A5F2A
+	by mail.lfdr.de (Postfix) with ESMTP id EF0BA5A5F2C
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:20:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbiH3JTx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:19:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50172 "EHLO
+        id S231768AbiH3JTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231602AbiH3JTa (ORCPT
+        with ESMTP id S231444AbiH3JT1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:19:30 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35328D86EA;
-        Tue, 30 Aug 2022 02:19:24 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-3413ad0640dso102420537b3.13;
-        Tue, 30 Aug 2022 02:19:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=4LzcYMLA4n0/7gNYzbK/mkckLDWj4Hrt+zYpQebTjH4=;
-        b=SO3qgOdHgFHXeHQcJlqYfbrWrZD8Iw0sHlWqtM/SViI75ecfevio/ANBS8vklEio/D
-         OJ4WIL2E8RSLgQuJ4LWQ17wIV1ldFB8FGiKUFXjM/NfD3WO4c9SvLhbbWY0sxymF8e3X
-         hHRsta6pn4uc/Wkq/47lGiXBJSuCypE5X1jNm7+OJAzUlDxaVDva9eAuV85WMIG1+E5I
-         Qvo+EUEAcHdst3jlpPFPaDCOMRK5dvTe/rGnIqdEh1CEwylKa8ZMlGZOYQ+5BznRVlJj
-         MY08cMyF8KlyjXhDSozG9ne+PjUGBrjuffcPpe+Vg317U5QtU1zTDcPi2dmKO33MnHHF
-         OvmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=4LzcYMLA4n0/7gNYzbK/mkckLDWj4Hrt+zYpQebTjH4=;
-        b=frs61rvGdvr+4kZaI2SbdSf/4oNwGkdJMQrFvilQgCTueETFSvHRO/bCsOu207AV6j
-         qCPoEkDFxq8TioHlqKcBkHtojDLO7wQxwIfEIcAnadU8+LNJoq+1JAvM7NeUVZIC5dOU
-         e4MLbtPoqGM4qGD9DrMIheFiG9svuB73upxXiqSgLayiq3YRTGyZ1YbfBgJM9WO/KR52
-         GPg3Rf2BwhPSzogzOHE/xif8zPQqkxJddKL1gVLhQ7oN2dZoxxM6ndDCTRw+1fxZv5KA
-         qULr7TA4u3z2wSUOCthfy/+4CgW5iHmtNQEUOxmLSMXnJ5O2oY3/zkU7aBSj/lQSZQdG
-         jf6w==
-X-Gm-Message-State: ACgBeo0aH/SMnqOpimlhjzhhFy/TP23aHgeZkVZGuwdZmWYLoIkz4chB
-        oHMmA+RuLcuUgQrlnrJ1AvAZ07P7+lFL36lb080=
-X-Google-Smtp-Source: AA6agR6wngvVcYUXvDSRVYgU7fd+FzO0hqISd0AH9TIazM2vBMpxMInlA0UjIOaSuYNpdfIIxOv7C9lgwFqkpoWh4hI=
-X-Received: by 2002:a25:2502:0:b0:695:9024:4cfd with SMTP id
- l2-20020a252502000000b0069590244cfdmr11949686ybl.299.1661851164044; Tue, 30
- Aug 2022 02:19:24 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220829215816.6206-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <Yw1G69ny9tZrFWk4@pendragon.ideasonboard.com>
-In-Reply-To: <Yw1G69ny9tZrFWk4@pendragon.ideasonboard.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Tue, 30 Aug 2022 10:18:57 +0100
-Message-ID: <CA+V-a8sPRTBTFnH4W=qcKU3=WYU79oX3WxBONpCG2f4m9V2ncA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: display: bridge: renesas,dw-hdmi: Fix
- 'unevaluatedProperties' warnings
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 30 Aug 2022 05:19:27 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85286D9D7A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:19:23 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id F21625802D9;
+        Tue, 30 Aug 2022 05:19:19 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute3.internal (MEProxy); Tue, 30 Aug 2022 05:19:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1661851159; x=1661851759; bh=BfVVTqANl6
+        VcnVUkLHgR9myKBGF2gDkzyQACK0g8F4Q=; b=i6lx62PYavWO9iFsFTgnWjjA4I
+        5ec0ld4jtR1grA8CIhaD8dZexz71baEJIhtpa/kkhYa7iEzoyJRVOv0tMKN/GfFq
+        Bs6S0JGWSZbY7T63boCVO+LtyqGukgkWxy9IiEQxsAGIxa0Ja47utzgWuVvN77rh
+        wr4ZC7ghb3HlFIreAGIARlx+O6thnSBuwnxzBQe9W6MFib9Bj/+iogS5Fih8KBsh
+        b2ffghMcfYRzwQlKirA4PllE8xXg8v7xVmD4X1fclnIpCKQVVzWEXiCGxP49M1iP
+        r8C3NWoixXCbFQyuX/xGNbOoeB2cqWLIYp/NSnLUV5uikDaNmFDhJlRp4llQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        i56a14606.fm1; t=1661851159; x=1661851759; bh=BfVVTqANl6VcnVUkLH
+        gR9myKBGF2gDkzyQACK0g8F4Q=; b=VJGvRx1/eQmn2c4iOuGtRoWxHVEv29Xk2G
+        WFOcNNjiXW/yv57T8JTRWnDmbwSnnuu3DbfHs1B1HF7xDPB650z1yVjFLPQKNS+v
+        gm9qvlNJ5sC0gxGkF5vlgVup3VF3FEHjLi2l1fRVT66y5ClkRDqaKS9TckdPysON
+        CQsnCNooPl1biJlg9wyJ65AAYVXnpnj/K+OgVwhSVp3GSPDh7M5dZaijP7QMtDt0
+        R1iRsiD0+zOl4hF0p5On2U2Sirxzsbib6V5px5evjtJB5zec6Ot8oEtxFajNlQvY
+        jSXi9lFf1JF3lGkHPqf2T57Lybh2U87mXPTZvHvwY0RYxagIHIgw==
+X-ME-Sender: <xms:F9YNY0alaex1K_F7meYwTyhDKtcKpEWZefv83R2z4jzMwSIo68Jj5Q>
+    <xme:F9YNY_Ze9uvkLdO4gAbiSi8ZlXarwxSoiiAwzfjYKThg19fqLvzW3FYW6mhfRlXCG
+    d56Y9A4tqcHAKZ2Pxg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekfedgudegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
+    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
+    hrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:F9YNY-_KX6fPQg2Irk_-T5Y8m7ze4aRky6fDmHgpfu2hvCWuDej8Uw>
+    <xmx:F9YNY-qNU--8T5_5Yei804LHKB46QTOphKIjnPxtur5tf6_c1WbcPQ>
+    <xmx:F9YNY_psD_RKJtFjvTguoZoBwJuF7xMb1b9RJrLXl_Yz2S4eLFtLLA>
+    <xmx:F9YNY4449dkx9bZr5DWvRRjHgz8vHT2cskXdqFu37CZCYFOjkmb1HaW3H24>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id DA30BB60083; Tue, 30 Aug 2022 05:19:18 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <3ef107b1-d4a7-4f12-8a26-1c5e357cec8c@www.fastmail.com>
+In-Reply-To: <CAMuHMdXqzOTDkbC7NXXQ32dLfO+JfkEMijxepEA=FfThSE9Xow@mail.gmail.com>
+References: <20220818145616.3156379-1-arnd@kernel.org>
+ <20220818145616.3156379-5-arnd@kernel.org>
+ <CACRpkdbFkV1T+K9wKDyODkcwu=nhbV+4_JF=YTaA5ad_w4ggbw@mail.gmail.com>
+ <CAK8P3a1PQjR2sv2rar6mFY9g4PkteAC+zgRUvnr04DETJX3K9w@mail.gmail.com>
+ <63a630b7-9068-40f9-b7f7-d9a08f74ed13@www.fastmail.com>
+ <CAMuHMdXqzOTDkbC7NXXQ32dLfO+JfkEMijxepEA=FfThSE9Xow@mail.gmail.com>
+Date:   Tue, 30 Aug 2022 11:18:57 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc:     "Arnd Bergmann" <arnd@kernel.org>,
+        "Linus Walleij" <linus.walleij@linaro.org>,
+        "Linux ARM" <linux-arm-kernel@lists.infradead.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Ard Biesheuvel" <ardb@kernel.org>, "Sekhar Nori" <nsekhar@ti.com>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "Shawn Guo" <shawnguo@kernel.org>,
+        "Sascha Hauer" <s.hauer@pengutronix.de>,
+        "Pengutronix Kernel Team" <kernel@pengutronix.de>,
+        "Andrew Lunn" <andrew@lunn.ch>,
+        "Gregory Clement" <gregory.clement@bootlin.com>,
+        "Sebastian Hesselbarth" <sebastian.hesselbarth@gmail.com>
+Subject: Re: [PATCH] ARM: fix XIP_KERNEL dependencies
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Laurent,
+On Tue, Aug 30, 2022, at 9:41 AM, Geert Uytterhoeven wrote:
+>> --- a/arch/arm/Kconfig
+>> +++ b/arch/arm/Kconfig
+>> @@ -1619,6 +1619,7 @@ endchoice
+>>  config XIP_KERNEL
+>>         bool "Kernel Execute-In-Place from ROM"
+>>         depends on !ARM_LPAE && !ARCH_MULTIPLATFORM
+>> +       depends on !SMP_ON_UP && !ARM_PATCH_IDIV && !ARM_PATCH_PHYS_VIRT
+>
+> You may want to keep the list sorted.
 
-On Tue, Aug 30, 2022 at 12:08 AM Laurent Pinchart
-<laurent.pinchart@ideasonboard.com> wrote:
->
-> Hi Prabhakar,
->
-> Thank you for the patch.
->
-> On Mon, Aug 29, 2022 at 10:58:16PM +0100, Lad Prabhakar wrote:
-> > With 'unevaluatedProperties' support implemented, there's a number of
-> > warnings when running dtbs_check:
-> >
-> > arch/arm64/boot/dts/renesas/r8a774b1-hihope-rzg2n-rev2-ex-idk-1110wr.dtb: hdmi@fead0000: Unevaluated properties are not allowed ('resets' was unexpected)
-> >       From schema: Documentation/devicetree/bindings/display/bridge/renesas,dw-hdmi.yaml
-> >
-> > The main problem is that SoC DTSI's are including resets property, whereas
-> > the renesas,dw-hdmi.yaml has 'unevaluatedProperties: false'. So just add
-> > optional resets property to the binding.
->
-> Given that all the DT sources in the kernel specify the resets property,
-> how about making it mandatory ?
->
-Agreed, will do that and send a v2.
+Done
 
-Cheers,
-Prabhakar
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+
+Thanks,
+
+       Arnd

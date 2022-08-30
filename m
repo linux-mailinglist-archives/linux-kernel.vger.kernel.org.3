@@ -2,53 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EFF45A5E92
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:50:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 296805A5E97
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:50:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbiH3IuO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:50:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33986 "EHLO
+        id S230422AbiH3Iua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbiH3IuD (ORCPT
+        with ESMTP id S231717AbiH3IuI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:50:03 -0400
+        Tue, 30 Aug 2022 04:50:08 -0400
 Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2976389;
-        Tue, 30 Aug 2022 01:49:50 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B59F9FCB;
+        Tue, 30 Aug 2022 01:49:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661849390; x=1693385390;
+  t=1661849395; x=1693385395;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QY5pcFaRk9Pil+zQdIFM0ph2NdnnrO8rptdre2dGddM=;
-  b=YNDvWjNq5XGMft/wUqLv2Iwlx3iyRNEGwcCLZ9yR5criVEvrX5rrs/ji
-   muQQKf2ljYRPpXuEe+8RvyDOQAyZsDS2lQKWyT9u1yyMCiN+ILjt62iD0
-   paIMfDli4BUr0GdLJbfPO1i0/25ugepfzhRg4YT0A8QhOXzMkigRmb7La
-   gaQnNb8kzk5IkWzQTTDuHC5eVUapORDR+lmMxN4M+uTeCjoUTE19/0GPS
-   3JawpnoPaaXP8NBj78Vu6R1J1M7QpXutlCnxVXe3acxK8Q1hojG3Cvqbr
-   OjeN2zAsCWAHcb6GH2uvL8HU0aNA2GoOd9WUWp88zFpEUg3TwvgD8ARNj
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="293866306"
+  bh=tp8AdUXc/CyFpAtBRv1FRHZ47fXqPlu3sywMVyMvX4w=;
+  b=ma41IJYTagrVRN3J6+HhPQEfCImzD/9G+8klJLl9img1l7QPqXgjYZY9
+   UCeJztvWOjkYw6YfvaS2VZYznOX22yg3rqcpQs29AiiPYslG542DDSUSP
+   MH25SiZ82J3TXu/9gI3uBMCdiLPoVZr26eY8vLB6I2JSXoQUa91gs0ubo
+   iduq+QoNa3Pw6sAx/eQTayFdnomYzpFeygGXqoyhWrdWH7CdIG1vcJO7u
+   cJW4Hs8zRagFbgRRhfvMcIBCmZafSOxUS3ncy2lGO+/z2owjHAemabHcU
+   vD7s2BWi9PBb3RsIPLeTEJ7W1u18CEB3ifyQEpMx2d3YMGzCg10IuKX91
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="293866316"
 X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="293866306"
+   d="scan'208";a="293866316"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:49:49 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:49:52 -0700
 X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="672761845"
+   d="scan'208";a="672761862"
 Received: from arnesgom-mobl.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.54.235])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:49:44 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:49:49 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
         linux-serial@vger.kernel.org,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Timur Tabi <timur@kernel.org>, linuxppc-dev@lists.ozlabs.org,
         linux-kernel@vger.kernel.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: [PATCH v2 1/5] serial: ucc_uart: Remove custom frame size calculation
-Date:   Tue, 30 Aug 2022 11:49:21 +0300
-Message-Id: <20220830084925.5608-2-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 2/5] serial: cpm_uart: Remove custom frame size calculation
+Date:   Tue, 30 Aug 2022 11:49:22 +0300
+Message-Id: <20220830084925.5608-3-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220830084925.5608-1-ilpo.jarvinen@linux.intel.com>
 References: <20220830084925.5608-1-ilpo.jarvinen@linux.intel.com>
@@ -65,84 +64,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The number of bits can be calculated using tty_get_frame_size(), no
-need for the driver to do it on its own.
+The number of bits can be calculated using helpers in core, no need for
+the driver to do it on its own.
 
-Also remove a comment on number of bits that doesn't match the code nor
-the comment on ucc_uart_pram's rx_length ("minus 1" part differs). That
-comment seems a verbatim copy of that in cpm_uart/cpm_uart_core.c
-anyway so perhaps it was just copied over w/o much thinking.
+The mode register is programmed with frame bits minus 1, rearrange the
+comments related to that "feature" closer to the actual write.
 
 Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- drivers/tty/serial/ucc_uart.c | 15 +--------------
- 1 file changed, 1 insertion(+), 14 deletions(-)
+ drivers/tty/serial/cpm_uart/cpm_uart_core.c | 31 +++++++--------------
+ 1 file changed, 10 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/tty/serial/ucc_uart.c b/drivers/tty/serial/ucc_uart.c
-index 3cc9ef08455c..7331964163c5 100644
---- a/drivers/tty/serial/ucc_uart.c
-+++ b/drivers/tty/serial/ucc_uart.c
-@@ -853,13 +853,6 @@ static void qe_uart_set_termios(struct uart_port *port,
- 	u16 upsmr = ioread16be(&uccp->upsmr);
- 	struct ucc_uart_pram __iomem *uccup = qe_port->uccup;
- 	u16 supsmr = ioread16be(&uccup->supsmr);
--	u8 char_length = 2; /* 1 + CL + PEN + 1 + SL */
--
+diff --git a/drivers/tty/serial/cpm_uart/cpm_uart_core.c b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
+index db07d6a5d764..28c73c28f0c5 100644
+--- a/drivers/tty/serial/cpm_uart/cpm_uart_core.c
++++ b/drivers/tty/serial/cpm_uart/cpm_uart_core.c
+@@ -489,7 +489,6 @@ static void cpm_uart_set_termios(struct uart_port *port,
+ 	int baud;
+ 	unsigned long flags;
+ 	u16 cval, scval, prev_mode;
+-	int bits, sbits;
+ 	struct uart_cpm_port *pinfo =
+ 		container_of(port, struct uart_cpm_port, port);
+ 	smc_t __iomem *smcp = pinfo->smcp;
+@@ -515,28 +514,17 @@ static void cpm_uart_set_termios(struct uart_port *port,
+ 	if (maxidl > 0x10)
+ 		maxidl = 0x10;
+ 
 -	/* Character length programmed into the mode register is the
 -	 * sum of: 1 start bit, number of data bits, 0 or 1 parity bit,
 -	 * 1 or 2 stop bits, minus 1.
 -	 * The value 'bits' counts this for us.
 -	 */
+ 	cval = 0;
+ 	scval = 0;
  
- 	/* byte size */
- 	upsmr &= UCC_UART_UPSMR_CL_MASK;
-@@ -869,22 +862,18 @@ static void qe_uart_set_termios(struct uart_port *port,
- 	case CS5:
- 		upsmr |= UCC_UART_UPSMR_CL_5;
- 		supsmr |= UCC_UART_SUPSMR_CL_5;
--		char_length += 5;
- 		break;
- 	case CS6:
- 		upsmr |= UCC_UART_UPSMR_CL_6;
- 		supsmr |= UCC_UART_SUPSMR_CL_6;
--		char_length += 6;
- 		break;
- 	case CS7:
- 		upsmr |= UCC_UART_UPSMR_CL_7;
- 		supsmr |= UCC_UART_SUPSMR_CL_7;
--		char_length += 7;
- 		break;
- 	default:	/* case CS8 */
- 		upsmr |= UCC_UART_UPSMR_CL_8;
- 		supsmr |= UCC_UART_SUPSMR_CL_8;
--		char_length += 8;
- 		break;
- 	}
- 
-@@ -892,13 +881,11 @@ static void qe_uart_set_termios(struct uart_port *port,
+-	/* byte size */
+-	bits = tty_get_char_size(termios->c_cflag);
+-	sbits = bits - 5;
+-
  	if (termios->c_cflag & CSTOPB) {
- 		upsmr |= UCC_UART_UPSMR_SL;
- 		supsmr |= UCC_UART_SUPSMR_SL;
--		char_length++;  /* + SL */
+ 		cval |= SMCMR_SL;	/* Two stops */
+ 		scval |= SCU_PSMR_SL;
+-		bits++;
  	}
  
  	if (termios->c_cflag & PARENB) {
- 		upsmr |= UCC_UART_UPSMR_PEN;
- 		supsmr |= UCC_UART_SUPSMR_PEN;
--		char_length++;  /* + PEN */
- 
+ 		cval |= SMCMR_PEN;
+ 		scval |= SCU_PSMR_PEN;
+-		bits++;
  		if (!(termios->c_cflag & PARODD)) {
- 			upsmr &= ~(UCC_UART_UPSMR_RPM_MASK |
-@@ -953,7 +940,7 @@ static void qe_uart_set_termios(struct uart_port *port,
- 	iowrite16be(upsmr, &uccp->upsmr);
- 	if (soft_uart) {
- 		iowrite16be(supsmr, &uccup->supsmr);
--		iowrite8(char_length, &uccup->rx_length);
-+		iowrite8(tty_get_frame_size(termios->c_cflag), &uccup->rx_length);
+ 			cval |= SMCMR_PM_EVEN;
+ 			scval |= (SCU_PSMR_REVP | SCU_PSMR_TEVP);
+@@ -580,12 +568,9 @@ static void cpm_uart_set_termios(struct uart_port *port,
  
- 		/* Soft-UART requires a 1X multiplier for TX */
- 		qe_setbrg(qe_port->us_info.rx_clock, baud, 16);
+ 	spin_lock_irqsave(&port->lock, flags);
+ 
+-	/* Start bit has not been added (so don't, because we would just
+-	 * subtract it later), and we need to add one for the number of
+-	 * stops bits (there is always at least one).
+-	 */
+-	bits++;
+ 	if (IS_SMC(pinfo)) {
++		unsigned int bits = tty_get_frame_size(termios->c_cflag);
++
+ 		/*
+ 		 * MRBLR can be changed while an SMC/SCC is operating only
+ 		 * if it is done in a single bus cycle with one 16-bit move
+@@ -604,13 +589,17 @@ static void cpm_uart_set_termios(struct uart_port *port,
+ 		 */
+ 		prev_mode = in_be16(&smcp->smc_smcmr) & (SMCMR_REN | SMCMR_TEN);
+ 		/* Output in *one* operation, so we don't interrupt RX/TX if they
+-		 * were already enabled. */
+-		out_be16(&smcp->smc_smcmr, smcr_mk_clen(bits) | cval |
+-		    SMCMR_SM_UART | prev_mode);
++		 * were already enabled.
++		 * Character length programmed into the register is frame bits minus 1.
++		 */
++		out_be16(&smcp->smc_smcmr, smcr_mk_clen(bits - 1) | cval |
++					   SMCMR_SM_UART | prev_mode);
+ 	} else {
++		unsigned int bits = tty_get_char_size(termios->c_cflag);
++
+ 		out_be16(&pinfo->sccup->scc_genscc.scc_mrblr, pinfo->rx_fifosize);
+ 		out_be16(&pinfo->sccup->scc_maxidl, maxidl);
+-		out_be16(&sccp->scc_psmr, (sbits << 12) | scval);
++		out_be16(&sccp->scc_psmr, (UART_LCR_WLEN(bits) << 12) | scval);
+ 	}
+ 
+ 	if (pinfo->clk)
 -- 
 2.30.2
 

@@ -2,60 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770585A6103
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8383B5A6100
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:45:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiH3KpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43858 "EHLO
+        id S229889AbiH3KpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:45:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229955AbiH3KpR (ORCPT
+        with ESMTP id S229579AbiH3Ko7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:45:17 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B461AF35
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:45:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661856316; x=1693392316;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kKlFORyxnWPVtksZ250hmueT/fkq9pSrvO9JbImEhww=;
-  b=EYIVbCr5lQ4GsbkvxO2HfVkJik15aPWIz7HJZ55yApKu/HqkUcflJgEg
-   Q9KGz8RPAEJHkSEzJPCWQ6gej0VV74beFTJ2hZiS1aWcf0Rg/dviuVR3Z
-   V3H3turiEc+gbyZlpBe2UycdGg+amWmk0kgSujPdQZ18idzhiavEjQJ3y
-   M74/niCLra1P/hvK0uvxSyCDElX6FX9qV/DK4tNkQdihPN36UQ8Ph8F7o
-   w8iF/7u8NH+A9Esd/RRYHq6+SbSqokeIrVDrlVbV0DV0g6JStUhUYw2aL
-   EPw7Ugt1Zi5zhuM2/5MrZzj+tXnzW5fa8kZYDS9azGc8Tiz6dk9JRgy3S
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="293886217"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="293886217"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 03:45:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="614568569"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Aug 2022 03:45:15 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSyk6-0000CQ-1g;
-        Tue, 30 Aug 2022 10:45:14 +0000
-Date:   Tue, 30 Aug 2022 18:44:17 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Mayuresh Chitale <mchitale@ventanamicro.com>
-Subject: [avpatel:riscv_sbi_dbcn_v1 9/42] arch/riscv/mm/cacheflush.c:123:6:
- warning: variable 'cbom_hartid' is uninitialized when used here
-Message-ID: <202208301804.6NyqVVPU-lkp@intel.com>
+        Tue, 30 Aug 2022 06:44:59 -0400
+Received: from imap5.colo.codethink.co.uk (imap5.colo.codethink.co.uk [78.40.148.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716A1DFD9;
+        Tue, 30 Aug 2022 03:44:55 -0700 (PDT)
+Received: from [167.98.27.226] (helo=[10.35.5.6])
+        by imap5.colo.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1oSyjc-006Sy9-7N; Tue, 30 Aug 2022 11:44:44 +0100
+Message-ID: <879a6823-6651-93cf-8500-661bedb050af@codethink.co.uk>
+Date:   Tue, 30 Aug 2022 11:44:43 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [PATCH v2 6/9] riscv: dts: microchip: icicle: update pci address
+ properties
+Content-Language: en-GB
+To:     Conor Dooley <conor.dooley@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Shravan Chippa <shravan.chippa@microchip.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Cyril Jean <Cyril.Jean@microchip.com>,
+        Lewis Hanly <lewis.hanly@microchip.com>,
+        Vattipalli Praveen <praveen.kumar@microchip.com>,
+        Wolfgang Grandegger <wg@aries-embedded.de>,
+        Hugh Breslin <hugh.breslin@microchip.com>,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220830101803.1456180-1-conor.dooley@microchip.com>
+ <20220830101803.1456180-7-conor.dooley@microchip.com>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <20220830101803.1456180-7-conor.dooley@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,82 +57,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/avpatel/linux.git riscv_sbi_dbcn_v1
-head:   74814d446b33fc095867181d8953a92ede0b042c
-commit: 9a1ab381c3ec9717a3b694fc72fed88b4dde6b91 [9/42] RISC-V: Move riscv_init_cbom_blocksize() to cacheflush.c
-config: riscv-randconfig-r042-20220830 (https://download.01.org/0day-ci/archive/20220830/202208301804.6NyqVVPU-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
-        # https://github.com/avpatel/linux/commit/9a1ab381c3ec9717a3b694fc72fed88b4dde6b91
-        git remote add avpatel https://github.com/avpatel/linux.git
-        git fetch --no-tags avpatel riscv_sbi_dbcn_v1
-        git checkout 9a1ab381c3ec9717a3b694fc72fed88b4dde6b91
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash arch/riscv/mm/
+On 30/08/2022 11:18, Conor Dooley wrote:
+> For the v2022.09 reference design the PCI root port's data region has
+> been moved to FIC1 from FIC0. This is a shorter path, allowing for
+> higher clock rates and improved through-put. As a result, the address at
+> which the PCIe's data region appears to the core complex has changed.
+> The config region's address is unchanged.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Did this also fix the 32bit address apperture issue which plagued
+getting pcie graphics cards sorted.
 
-All warnings (new ones prefixed by >>):
-
->> arch/riscv/mm/cacheflush.c:123:6: warning: variable 'cbom_hartid' is uninitialized when used here [-Wuninitialized]
-                                           cbom_hartid, hartid);
-                                           ^~~~~~~~~~~
-   include/linux/printk.h:517:37: note: expanded from macro 'pr_warn'
-           printk(KERN_WARNING pr_fmt(fmt), ##__VA_ARGS__)
-                                              ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                              ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                                   ^~~~~~~~~~~
-   arch/riscv/mm/cacheflush.c:103:18: note: initialize the variable 'cbom_hartid' to silence this warning
-                   int cbom_hartid;
-                                  ^
-                                   = 0
-   1 warning generated.
-
-
-vim +/cbom_hartid +123 arch/riscv/mm/cacheflush.c
-
-    93	
-    94	#ifdef CONFIG_RISCV_ISA_ZICBOM
-    95	void riscv_init_cbom_blocksize(void)
-    96	{
-    97		struct device_node *node;
-    98		int ret;
-    99		u32 val;
-   100	
-   101		for_each_of_cpu_node(node) {
-   102			unsigned long hartid;
-   103			int cbom_hartid;
-   104	
-   105			ret = riscv_of_processor_hartid(node, &hartid);
-   106			if (ret)
-   107				continue;
-   108	
-   109			if (hartid < 0)
-   110				continue;
-   111	
-   112			/* set block-size for cbom extension if available */
-   113			ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-   114			if (ret)
-   115				continue;
-   116	
-   117			if (!riscv_cbom_block_size) {
-   118				riscv_cbom_block_size = val;
-   119				cbom_hartid = hartid;
-   120			} else {
-   121				if (riscv_cbom_block_size != val)
-   122					pr_warn("cbom-block-size mismatched between harts %d and %lu\n",
- > 123						cbom_hartid, hartid);
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
+
+https://www.codethink.co.uk/privacy.html
+

@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746335A67EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75AA95A67E7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:08:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231124AbiH3QIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53716 "EHLO
+        id S230457AbiH3QH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbiH3QIP (ORCPT
+        with ESMTP id S230326AbiH3QHy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:08:15 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9BFF7B07;
-        Tue, 30 Aug 2022 09:08:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661875694; x=1693411694;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Z0/Ubngx7Rd7BOFwF6Nv7y8NUPvSEx2rhy2J3cUSUqk=;
-  b=icGeuF+GCrIT6iD5/50/L9kqm/z1O+EApORnk9e5VBue5dJ+a/eM8OZg
-   YebevJNym6yXKQwjRzT9fWTCAr+RV1bf4LQi4oJFuY2VA84E0iVzdgOHq
-   QZgBqasWV6uY5ucAyTLfAnZ3yoWI+fqst+wzSm7mb/TxAF4xFvGKrmyX4
-   6Tzzszh1glmEGC1J0HM93b8n6FXTEynbD/BbDpzWjFONUvLYjPQLPkNss
-   c/10YQ8w8GHck7j1iSBzcN0jRGqRXJscykc1f7GkzZYU4o4Un+iKsiFjJ
-   tdJd3L4IM2UmMxBydc1JlUPBU6I2PEzdzxzRpHapI6U4eaxqJFBbPf8Tt
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="295218911"
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="295218911"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 09:05:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="680087910"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Aug 2022 09:05:48 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-        id 13D11AD; Tue, 30 Aug 2022 19:06:02 +0300 (EEST)
-Date:   Tue, 30 Aug 2022 19:06:02 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, Andy Shevchenko <andy@kernel.org>
-Subject: Re: [PATCH v1 2/2] ACPI: PMIC: Replace open coded be16_to_cpu()
-Message-ID: <Yw41ai0mYHIgtgs4@black.fi.intel.com>
-References: <20220830135532.28992-1-andriy.shevchenko@linux.intel.com>
- <20220830135532.28992-2-andriy.shevchenko@linux.intel.com>
+        Tue, 30 Aug 2022 12:07:54 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7F1F72F8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:07:53 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oT3mA-00071b-F1; Tue, 30 Aug 2022 18:07:42 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oT3m6-0004SO-0i; Tue, 30 Aug 2022 18:07:38 +0200
+Date:   Tue, 30 Aug 2022 18:07:37 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [PATCH v1 3/3] iio: adc: tsc2046: silent spi_device_id warning
+Message-ID: <20220830160737.GC16715@pengutronix.de>
+References: <20220830110709.2037302-1-o.rempel@pengutronix.de>
+ <20220830110709.2037302-3-o.rempel@pengutronix.de>
+ <20220830140228.000013ca@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220830135532.28992-2-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220830140228.000013ca@huawei.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Aug 30, 2022 at 02:02:28PM +0100, Jonathan Cameron wrote:
+> On Tue, 30 Aug 2022 13:07:09 +0200
+> Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+> 
+> > Add spi_device_id to silent following warning:
+> >  SPI driver tsc2046 has no spi_device_id for ti,tsc2046e-adc
+> > 
+> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> > ---
+> >  drivers/iio/adc/ti-tsc2046.c | 17 ++++++++++++++++-
+> >  1 file changed, 16 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
+> > index bbc8b4137b0b1..b9a1fac659d46 100644
+> > --- a/drivers/iio/adc/ti-tsc2046.c
+> > +++ b/drivers/iio/adc/ti-tsc2046.c
+> > @@ -761,7 +761,15 @@ static int tsc2046_adc_probe(struct spi_device *spi)
+> >  		return -EINVAL;
+> >  	}
+> >  
+> > -	dcfg = device_get_match_data(dev);
+> > +	if (!dev_fwnode(dev)) {
+> > +		const struct spi_device_id *id;
+> > +
+> > +		id = spi_get_device_id(spi);
+> > +		dcfg = (const struct tsc2046_adc_dcfg *)id->driver_data;
+> 
+> Driver data not set below.
 
-On Tue, Aug 30, 2022 at 04:55:32PM +0300, Andy Shevchenko wrote:
-> +
-> +#include <asm/byteorder.h>
+..facepalm..
 
-Isn't there <linux/byteorder/*> as well? Is there something that
-prevents using it?
+> Otherwise this looks good to me.  An alternative more common form (I think...)
+> is call device_get_match_data() unconditionally and if that is null follow
+> the driver_data path. Either way is fine though.
+> 
+> Could you add to the patch description where
+> the warning is coming from?   Build time / runtime etc and what tool?
 
-Otherwise looks good to me.
+ack. It is runtime warning in the kernel log.
+
+Regards,
+Oleksij
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

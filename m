@@ -2,111 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8AE5A67CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F50E5A67CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:57:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiH3P4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 11:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41620 "EHLO
+        id S230346AbiH3P5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 11:57:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiH3P4m (ORCPT
+        with ESMTP id S230326AbiH3P5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 11:56:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28782B6031;
-        Tue, 30 Aug 2022 08:56:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C3E6EB81CCE;
-        Tue, 30 Aug 2022 15:56:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D16C433D6;
-        Tue, 30 Aug 2022 15:56:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661874998;
-        bh=4MfZ2CCn8fhHH/Gt5iirr/AOGINTw9QezerOet2l08g=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=H4kEIIWyxgOlguNNyyYoVWW9S5KnAAsJ+EbiyQQErMIK+stft/vi0m5cy1LomDk2L
-         h5VpgDwrWcXRd4Kt0Zxcu2QUgkZMPebEozFNt2ciI5hxfGK3QTONM94Bj8y4E8W0sM
-         qtONO/KZG8Gj4rAIvh084ZaWbp0KzPNvMyEkfPXcOXV9s+UfPa7REHR7Yq7sq5VSC/
-         c7CYrs0CM8tDqKQ9StIutf7uJEc2kqU+da1fxdoD3dMgrpTIk7JWsIPNpn/gNfah2C
-         nfj89MpvCJbSx2PXt9/k3zsgkUpcS5N1U6vsKmV8rNeKNQFs6rFZ+Y4VIwNRB6hra8
-         PeEiQsd2EITXw==
-Date:   Tue, 30 Aug 2022 17:56:22 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Christian =?utf-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        =?utf-8?B?QW5kcsOp?= Almeida <andrealmeid@igalia.com>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Guo Ren <guoren@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Wang Haojun <jiangliuer01@gmail.com>,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
-        linux-fsdevel@vger.kernel.org, linux-audit@redhat.com,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] fs/xattr: wire up syscalls
-Message-ID: <20220830155622.4hcj6dka5jswydrg@wittgenstein>
-References: <20220830152858.14866-1-cgzones@googlemail.com>
+        Tue, 30 Aug 2022 11:57:17 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C097B6D70;
+        Tue, 30 Aug 2022 08:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661875036; x=1693411036;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nyO3eXpBciEJYkjPPepKRjcZ/w25Y4N/Ho+bxQPdMgU=;
+  b=HVAiyw3OSK0shxnPWsNOmHWfLJ48EqFUWhcWqIHsSToWNhlSaVwLPU2I
+   7FZ3U2rS3KRIxLl/OU3DTtbt7Cut63sO6ZcbMBW/P+QHmh2DzyHLKZT8o
+   XeiUcfjuXhf+MlSS/D+nVzsPd/UqQYG697PX2U2mKm+gkobwC0MzCVzC8
+   ckyLeWKLIKOHk+KZ1IqLzsJ4/8dU6eZpsP3flBol+uQpK4l8siWMEFgtI
+   zQjXPrzVfQ++4HniD//YBGA7Zh0xbDcD+jxfN6QqyzolAUWS5vDYGjNzU
+   pxcNt4DMftG8gt0Fwk+9Kj4R7rVbxTstKOAFOxAnCFOz0lFh8DwNEZv/w
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="282185430"
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="282185430"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 08:57:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="672920904"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga008.fm.intel.com with ESMTP; 30 Aug 2022 08:57:14 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id C86B2AD; Tue, 30 Aug 2022 18:57:28 +0300 (EEST)
+Date:   Tue, 30 Aug 2022 18:57:28 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v1 1/2] ACPI: PMIC: Use sizeof() instead of hard coded
+ value
+Message-ID: <Yw4zaBJu81SvkFMM@black.fi.intel.com>
+References: <20220830135532.28992-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220830152858.14866-1-cgzones@googlemail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220830135532.28992-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 05:28:38PM +0200, Christian Göttsche wrote:
-> Enable the new added extended attribute related syscalls.
+On Tue, Aug 30, 2022 at 04:55:31PM +0300, Andy Shevchenko wrote:
+> It's better to use sizeof() of a given buffer than spreading
+> a hard coded value.
 > 
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
-> ---
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Fwiw, I think a while ago it was pointed out that for most syscall
-additions you can just fold the hookup patch in. It probably also
-wouldn't hurt to trim that Cc list significantly down to mostly the
-lists...
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>

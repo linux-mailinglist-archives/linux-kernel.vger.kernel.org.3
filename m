@@ -2,102 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12555A5CD0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C26775A5CD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230441AbiH3HVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33876 "EHLO
+        id S230171AbiH3HXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiH3HVJ (ORCPT
+        with ESMTP id S229531AbiH3HXU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:21:09 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D856E2D5;
-        Tue, 30 Aug 2022 00:21:08 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id q8so8079611qvr.9;
-        Tue, 30 Aug 2022 00:21:08 -0700 (PDT)
+        Tue, 30 Aug 2022 03:23:20 -0400
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA34FB7749;
+        Tue, 30 Aug 2022 00:23:18 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id b16so12996787edd.4;
+        Tue, 30 Aug 2022 00:23:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=QOMOADjxX3AxTQL00SsYd+7QYCr6eFHbzE6U4FiL748=;
-        b=JX17LTtjcGH9EgCC/Sn8YM4CeGOUrSCV5kVO7zWqccyJAY6lqXFRbL1gev2nE7Uu30
-         jBurRZVMktqo2MA7n9Noqurl4MsGLM5Y75yPpgB3hJ7Na26MDtKl+0yT1kJp2MNBvfyG
-         tLYOkLmvKezm5RHXJAcpepWXH2cESaDTxqpOjxn1DOP/Kj7ZDbBRmepO3ltQREQlam3E
-         Vz7NeZDMZDKBvVkJa/0aKdiZ7HvwClOCMbd6XM/XAMqZGD6dNH5/cFX+1aWw5Ec8fLvx
-         laronjlFTJ1hoar2y6Ju98TnRL/ap/lvS8II48UGjkw5epPH/N6Gwi7NIKps2D00MaFl
-         h65Q==
-X-Gm-Message-State: ACgBeo2IAMk2i2zMJTWsmnh/AgfMOOMarzwVETgUDpl4luUkCuvFq65R
-        huKg5CdmiTQjhRGHdrVrDIUXs93L76jrjQ==
-X-Google-Smtp-Source: AA6agR6OqWL/6cQbJlnEWRAcb6Aic2oWVvHdEpw3gHSLtxqHZYYxa3w6efU6y3Cb3P+9rasnXbsvxQ==
-X-Received: by 2002:a05:6214:4015:b0:496:be28:62f5 with SMTP id kd21-20020a056214401500b00496be2862f5mr13740056qvb.14.1661844067098;
-        Tue, 30 Aug 2022 00:21:07 -0700 (PDT)
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
-        by smtp.gmail.com with ESMTPSA id u12-20020a05622a17cc00b003422c7ccbc5sm6488715qtk.59.2022.08.30.00.21.06
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=h92OFoHcscLoVZdNmDKj0YVmJDx8MKtyLOQI76zzz+M=;
+        b=k83E8nDFuipqYTB2qH9B9sRtQVhhuUg9TuQ+Ev4C+1hvosxHN2A/fC2d0PonvV4K0Q
+         YHaISBekDs08UhSoQOAuycA7VJngVGim4YwfRXW6Jowo/XFqNphbM97GZkcwpV2rpC5Q
+         hSfrDjz+aZ7NQqqqmRBNNHx13bCHAXtfBWFwHvx4e+qXLG3ckVtmopL3HE/mImVKkj1B
+         4jHZO2btLjDph1VTPtoH49QSTVBDS2pJN+XuBCbOKxlMsPK8S0uojnILA5wWUF+um+GW
+         CdgiUwTQNTHfjnftfCOFPtOzMptpKGEXbPax1QH4suQ5lRHUWoCq9NQReA7J53CZVuqi
+         fWJA==
+X-Gm-Message-State: ACgBeo1SMgp2in87fufqchIBa0i8xVn7eaV51zB0doc8np+6O6kW2mPm
+        UA8YTZvJsnS70BANhhzd5pI=
+X-Google-Smtp-Source: AA6agR6GdO78X7ShA7eIwVF55Gd83NZLVU+aV19Oza8mJ9lSkrZ242TTINijF+n3YBED4WKcswXFwA==
+X-Received: by 2002:a05:6402:451:b0:446:7349:f9e8 with SMTP id p17-20020a056402045100b004467349f9e8mr19853745edw.180.1661844197211;
+        Tue, 30 Aug 2022 00:23:17 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id p23-20020a056402045700b00447c646ad1asm6907975edw.57.2022.08.30.00.23.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 00:21:06 -0700 (PDT)
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-33da3a391d8so252091137b3.2;
-        Tue, 30 Aug 2022 00:21:06 -0700 (PDT)
-X-Received: by 2002:a0d:d691:0:b0:340:f6e7:5654 with SMTP id
- y139-20020a0dd691000000b00340f6e75654mr7738635ywd.502.1661844066437; Tue, 30
- Aug 2022 00:21:06 -0700 (PDT)
+        Tue, 30 Aug 2022 00:23:16 -0700 (PDT)
+Message-ID: <5df0c2fb-0eb4-e0fd-a517-b7ea1d4a8f4e@kernel.org>
+Date:   Tue, 30 Aug 2022 09:23:15 +0200
 MIME-Version: 1.0
-References: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220829220334.6379-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 30 Aug 2022 09:20:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVpYcV1p2rb-D=pcRut2y3o_SB1rkM+COuxbD5aCy-77w@mail.gmail.com>
-Message-ID: <CAMuHMdVpYcV1p2rb-D=pcRut2y3o_SB1rkM+COuxbD5aCy-77w@mail.gmail.com>
-Subject: Re: [PATCH v2] dt-bindings: spi: renesas,sh-msiof: Fix
- 'unevaluatedProperties' warnings
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi <linux-spi@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] tty: move from strlcpy with unused retval to strscpy
+Content-Language: en-US
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        linuxppc-dev@lists.ozlabs.org, linux-serial@vger.kernel.org,
+        sparclinux@vger.kernel.org
+References: <20220818210113.7469-1-wsa+renesas@sang-engineering.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220818210113.7469-1-wsa+renesas@sang-engineering.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 12:03 AM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> With 'unevaluatedProperties' support implemented, there's a number of
-> warnings when running dtbs_check:
->
-> arch/arm64/boot/dts/renesas/r8a77951-ulcb-kf.dtb: spi@e6e90000: Unevaluated properties are not allowed ('power-domains', 'resets' were unexpected)
->         From schema: Documentation/devicetree/bindings/spi/renesas,sh-msiof.yaml
->
-> The main problem is that SoC DTSI's include power-domains and resets
-> property, whereas the renesas,sh-msiof.yaml has 'unevaluatedProperties:
-> false'. So just add optional power-domains and resets properties.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On 18. 08. 22, 23:01, Wolfram Sang wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 > ---
-> v1->v2
-> * Set maxItems to 1
+>   drivers/tty/hvc/hvcs.c           | 2 +-
+>   drivers/tty/serial/earlycon.c    | 6 +++---
+>   drivers/tty/serial/serial_core.c | 2 +-
+>   drivers/tty/serial/sunsu.c       | 6 +++---
+>   drivers/tty/serial/sunzilog.c    | 6 +++---
+>   5 files changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/drivers/tty/hvc/hvcs.c b/drivers/tty/hvc/hvcs.c
+> index 9b7e8246a464..b79ce8d34f11 100644
+> --- a/drivers/tty/hvc/hvcs.c
+> +++ b/drivers/tty/hvc/hvcs.c
+> @@ -839,7 +839,7 @@ static void hvcs_set_pi(struct hvcs_partner_info *pi, struct hvcs_struct *hvcsd)
+>   	hvcsd->p_partition_ID  = pi->partition_ID;
+>   
+>   	/* copy the null-term char too */
+> -	strlcpy(hvcsd->p_location_code, pi->location_code,
+> +	strscpy(hvcsd->p_location_code, pi->location_code,
+>   		sizeof(hvcsd->p_location_code));
+>   }
+>   
+> diff --git a/drivers/tty/serial/earlycon.c b/drivers/tty/serial/earlycon.c
+> index 88d08ba1ca83..a5f380584cda 100644
+> --- a/drivers/tty/serial/earlycon.c
+> +++ b/drivers/tty/serial/earlycon.c
+> @@ -67,7 +67,7 @@ static void __init earlycon_init(struct earlycon_device *device,
+>   	if (*s)
+>   		earlycon->index = simple_strtoul(s, NULL, 10);
+>   	len = s - name;
+> -	strlcpy(earlycon->name, name, min(len + 1, sizeof(earlycon->name)));
+> +	strscpy(earlycon->name, name, min(len + 1, sizeof(earlycon->name)));
+>   	earlycon->data = &early_console_dev;
+>   }
+>   
+> @@ -123,7 +123,7 @@ static int __init parse_options(struct earlycon_device *device, char *options)
+>   		device->baud = simple_strtoul(options, NULL, 0);
+>   		length = min(strcspn(options, " ") + 1,
+>   			     (size_t)(sizeof(device->options)));
+> -		strlcpy(device->options, options, length);
+> +		strscpy(device->options, options, length);
+>   	}
+>   
+>   	return 0;
+> @@ -304,7 +304,7 @@ int __init of_setup_earlycon(const struct earlycon_id *match,
+>   
+>   	if (options) {
+>   		early_console_dev.baud = simple_strtoul(options, NULL, 0);
+> -		strlcpy(early_console_dev.options, options,
+> +		strscpy(early_console_dev.options, options,
+>   			sizeof(early_console_dev.options));
+>   	}
+>   	earlycon_init(&early_console_dev, match->name);
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 12c87cd201a7..3561a160cbd5 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -2497,7 +2497,7 @@ uart_report_port(struct uart_driver *drv, struct uart_port *port)
+>   			 "MMIO 0x%llx", (unsigned long long)port->mapbase);
+>   		break;
+>   	default:
+> -		strlcpy(address, "*unknown*", sizeof(address));
+> +		strscpy(address, "*unknown*", sizeof(address));
+>   		break;
+>   	}
+>   
+> diff --git a/drivers/tty/serial/sunsu.c b/drivers/tty/serial/sunsu.c
+> index 84d545e5a8c7..d5dcb612804e 100644
+> --- a/drivers/tty/serial/sunsu.c
+> +++ b/drivers/tty/serial/sunsu.c
+> @@ -1217,13 +1217,13 @@ static int sunsu_kbd_ms_init(struct uart_sunsu_port *up)
+>   	serio->id.type = SERIO_RS232;
+>   	if (up->su_type == SU_PORT_KBD) {
+>   		serio->id.proto = SERIO_SUNKBD;
+> -		strlcpy(serio->name, "sukbd", sizeof(serio->name));
+> +		strscpy(serio->name, "sukbd", sizeof(serio->name));
+>   	} else {
+>   		serio->id.proto = SERIO_SUN;
+>   		serio->id.extra = 1;
+> -		strlcpy(serio->name, "sums", sizeof(serio->name));
+> +		strscpy(serio->name, "sums", sizeof(serio->name));
+>   	}
+> -	strlcpy(serio->phys,
+> +	strscpy(serio->phys,
+>   		(!(up->port.line & 1) ? "su/serio0" : "su/serio1"),
+>   		sizeof(serio->phys));
+>   
+> diff --git a/drivers/tty/serial/sunzilog.c b/drivers/tty/serial/sunzilog.c
+> index c14275d83b0b..c44cf613ff1a 100644
+> --- a/drivers/tty/serial/sunzilog.c
+> +++ b/drivers/tty/serial/sunzilog.c
+> @@ -1307,13 +1307,13 @@ static void sunzilog_register_serio(struct uart_sunzilog_port *up)
+>   	serio->id.type = SERIO_RS232;
+>   	if (up->flags & SUNZILOG_FLAG_CONS_KEYB) {
+>   		serio->id.proto = SERIO_SUNKBD;
+> -		strlcpy(serio->name, "zskbd", sizeof(serio->name));
+> +		strscpy(serio->name, "zskbd", sizeof(serio->name));
+>   	} else {
+>   		serio->id.proto = SERIO_SUN;
+>   		serio->id.extra = 1;
+> -		strlcpy(serio->name, "zsms", sizeof(serio->name));
+> +		strscpy(serio->name, "zsms", sizeof(serio->name));
+>   	}
+> -	strlcpy(serio->phys,
+> +	strscpy(serio->phys,
+>   		((up->flags & SUNZILOG_FLAG_CONS_KEYB) ?
+>   		 "zs/serio0" : "zs/serio1"),
+>   		sizeof(serio->phys));
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+-- 
+js
+suse labs
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

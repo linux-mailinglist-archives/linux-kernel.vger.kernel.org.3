@@ -2,161 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997415A6079
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:14:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91DFF5A6081
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:17:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbiH3KOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
+        id S229883AbiH3KRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiH3KO1 (ORCPT
+        with ESMTP id S230077AbiH3KQj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:14:27 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA882785BC;
-        Tue, 30 Aug 2022 03:12:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 43D6B21ACB;
-        Tue, 30 Aug 2022 10:12:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661854341; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=LYvW4/C2mjaJQZlE3mRWOzrMuvS8imMEtRVp0zKjWZI=;
-        b=qsVu4V70wdDHwjBgpKiDN0IlP/BDCuLEwMyjOQLn0UUCVFhXfjfQkoPEbTbScmBED/gl6P
-        bhU/EU/BRe2KUivYSHMfWx7D/0VMg7tkZvJUo10luRxxgtwxj1QUbxotcwmi5ML2RzsZF/
-        j9alAbuMHIT1y5Qy8jCkr4+d0Co14+M=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A90213B0C;
-        Tue, 30 Aug 2022 10:12:21 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id IHTZA4XiDWPAKQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 30 Aug 2022 10:12:21 +0000
-Date:   Tue, 30 Aug 2022 12:12:20 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kairui Song <ryncsn@gmail.com>
-Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] mm: memcontrol: make cgroup_memory_noswap a static
- key
-Message-ID: <Yw3ihBZ7J/V37eU0@dhcp22.suse.cz>
-References: <20220830055949.12640-1-ryncsn@gmail.com>
- <20220830055949.12640-3-ryncsn@gmail.com>
- <Yw21uOyEz9lLkI3p@dhcp22.suse.cz>
- <CAMgjq7CM_SX3jLj9yp5hzAr6c3hBtS5nd4Nh4z8bTY8yWx-3KQ@mail.gmail.com>
+        Tue, 30 Aug 2022 06:16:39 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 554D9F8260
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:13:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661854425; x=1693390425;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6z+he6W5PM2UZdejK5EeZjXD+k1l6Ef9YraX41eHvS8=;
+  b=lhAoHaAQRzySk3O/BIQdcEqTtcsS4sMF9LpGQI/wkuygt8M9zYQveFIO
+   UaUgmYsbR7Y4tfIuglxf0XkqnGFB4N6qsYWgmaPR2lBiSarnoAf/n28wx
+   aPUUTEmXavydIddH3MXEseL3IDtogx9/vChYW4UiR7jA0Z7hHMWUe/04N
+   p4xEPwTt+3ZPC3a5/5kK/DGJ6D43T+YVnto7qeORMWk2Mo/09G+cR9efn
+   fol2VE2m72j5dWKFkQ7XGGeNUuGD1I46is3AUTwaxpuOuiQde9jZI6t1p
+   TysS8fgEHvqwaeVqF6w7o5Eut8U6iF08jQt2wNPG8tXDsAahq6qUHo6TC
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="359099940"
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="359099940"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 03:13:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="700934087"
+Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Aug 2022 03:13:03 -0700
+Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oSyEw-0000Am-1C;
+        Tue, 30 Aug 2022 10:13:02 +0000
+Date:   Tue, 30 Aug 2022 18:12:47 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [linux-stable-rc:linux-4.19.y 437/3764] net/core/sock.c:1090: Error:
+ unrecognized opcode `csrs sstatus,s9'
+Message-ID: <202208301804.Vok0kvBk-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMgjq7CM_SX3jLj9yp5hzAr6c3hBtS5nd4Nh4z8bTY8yWx-3KQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 30-08-22 16:50:38, Kairui Song wrote:
-> Michal Hocko <mhocko@suse.com> 于2022年8月30日周二 15:01写道：
-> >
-> > On Tue 30-08-22 13:59:49, Kairui Song wrote:
-> > > From: Kairui Song <kasong@tencent.com>
-> > >
-> > > cgroup_memory_noswap is used in many hot path, so make it a static key
-> > > to lower the kernel overhead.
-> > >
-> > > Using 8G of ZRAM as SWAP, benchmark using `perf stat -d -d -d --repeat 100`
-> > > with the following code snip in a non-root cgroup:
-> > >
-> > >    #include <stdio.h>
-> > >    #include <string.h>
-> > >    #include <linux/mman.h>
-> > >    #include <sys/mman.h>
-> > >    #define MB 1024UL * 1024UL
-> > >    int main(int argc, char **argv){
-> > >       void *p = mmap(NULL, 8000 * MB, PROT_READ | PROT_WRITE,
-> > >                      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> > >       memset(p, 0xff, 8000 * MB);
-> > >       madvise(p, 8000 * MB, MADV_PAGEOUT);
-> > >       memset(p, 0xff, 8000 * MB);
-> > >       return 0;
-> > >    }
-> > >
-> > > Before:
-> > >           7,021.43 msec task-clock                #    0.967 CPUs utilized            ( +-  0.03% )
-> > >              4,010      context-switches          #  573.853 /sec                     ( +-  0.01% )
-> > >                  0      cpu-migrations            #    0.000 /sec
-> > >          2,052,057      page-faults               #  293.661 K/sec                    ( +-  0.00% )
-> > >     12,616,546,027      cycles                    #    1.805 GHz                      ( +-  0.06% )  (39.92%)
-> > >        156,823,666      stalled-cycles-frontend   #    1.25% frontend cycles idle     ( +-  0.10% )  (40.25%)
-> > >        310,130,812      stalled-cycles-backend    #    2.47% backend cycles idle      ( +-  4.39% )  (40.73%)
-> > >     18,692,516,591      instructions              #    1.49  insn per cycle
-> > >                                                   #    0.01  stalled cycles per insn  ( +-  0.04% )  (40.75%)
-> > >      4,907,447,976      branches                  #  702.283 M/sec                    ( +-  0.05% )  (40.30%)
-> > >         13,002,578      branch-misses             #    0.26% of all branches          ( +-  0.08% )  (40.48%)
-> > >      7,069,786,296      L1-dcache-loads           #    1.012 G/sec                    ( +-  0.03% )  (40.32%)
-> > >        649,385,847      L1-dcache-load-misses     #    9.13% of all L1-dcache accesses  ( +-  0.07% )  (40.10%)
-> > >      1,485,448,688      L1-icache-loads           #  212.576 M/sec                    ( +-  0.15% )  (39.49%)
-> > >         31,628,457      L1-icache-load-misses     #    2.13% of all L1-icache accesses  ( +-  0.40% )  (39.57%)
-> > >          6,667,311      dTLB-loads                #  954.129 K/sec                    ( +-  0.21% )  (39.50%)
-> > >          5,668,555      dTLB-load-misses          #   86.40% of all dTLB cache accesses  ( +-  0.12% )  (39.03%)
-> > >                765      iTLB-loads                #  109.476 /sec                     ( +- 21.81% )  (39.44%)
-> > >          4,370,351      iTLB-load-misses          # 214320.09% of all iTLB cache accesses  ( +-  1.44% )  (39.86%)
-> > >        149,207,254      L1-dcache-prefetches      #   21.352 M/sec                    ( +-  0.13% )  (40.27%)
-> > >
-> > >            7.25869 +- 0.00203 seconds time elapsed  ( +-  0.03% )
-> > >
-> > > After:
-> > >           6,576.16 msec task-clock                #    0.953 CPUs utilized            ( +-  0.10% )
-> > >              4,020      context-switches          #  605.595 /sec                     ( +-  0.01% )
-> > >                  0      cpu-migrations            #    0.000 /sec
-> > >          2,052,056      page-faults               #  309.133 K/sec                    ( +-  0.00% )
-> > >     11,967,619,180      cycles                    #    1.803 GHz                      ( +-  0.36% )  (38.76%)
-> > >        161,259,240      stalled-cycles-frontend   #    1.38% frontend cycles idle     ( +-  0.27% )  (36.58%)
-> > >        253,605,302      stalled-cycles-backend    #    2.16% backend cycles idle      ( +-  4.45% )  (34.78%)
-> > >     19,328,171,892      instructions              #    1.65  insn per cycle
-> > >                                                   #    0.01  stalled cycles per insn  ( +-  0.10% )  (31.46%)
-> > >      5,213,967,902      branches                  #  785.461 M/sec                    ( +-  0.18% )  (30.68%)
-> > >         12,385,170      branch-misses             #    0.24% of all branches          ( +-  0.26% )  (34.13%)
-> > >      7,271,687,822      L1-dcache-loads           #    1.095 G/sec                    ( +-  0.12% )  (35.29%)
-> > >        649,873,045      L1-dcache-load-misses     #    8.93% of all L1-dcache accesses  ( +-  0.11% )  (41.41%)
-> > >      1,950,037,608      L1-icache-loads           #  293.764 M/sec                    ( +-  0.33% )  (43.11%)
-> > >         31,365,566      L1-icache-load-misses     #    1.62% of all L1-icache accesses  ( +-  0.39% )  (45.89%)
-> > >          6,767,809      dTLB-loads                #    1.020 M/sec                    ( +-  0.47% )  (48.42%)
-> > >          6,339,590      dTLB-load-misses          #   95.43% of all dTLB cache accesses  ( +-  0.50% )  (46.60%)
-> > >                736      iTLB-loads                #  110.875 /sec                     ( +-  1.79% )  (48.60%)
-> > >          4,314,836      iTLB-load-misses          # 518653.73% of all iTLB cache accesses  ( +-  0.63% )  (42.91%)
-> > >        144,950,156      L1-dcache-prefetches      #   21.836 M/sec                    ( +-  0.37% )  (41.39%)
-> > >
-> > >            6.89935 +- 0.00703 seconds time elapsed  ( +-  0.10% )
-> >
-> > Do you happen to have a perf profile before and after to see which of
-> > the paths really benefits from this?
-> 
-> No I don't have a clear profile data about which path benefit the most.
-> The performance benchmark result can be stably reproduced, but perf
-> record & report & diff doesn't seems too helpful, as I can't see a
-> significant change of any single symbols.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
+head:   cbdeb714075662db12b9a4819f15f1856e8ed7ec
+commit: 0512a9aede6e4417c4fa6e0042a7ca8bc7e06b86 [437/3764] af_unix: fix races in sk_peer_pid and sk_peer_cred accesses
+config: riscv-randconfig-c042-20220829 (https://download.01.org/0day-ci/archive/20220830/202208301804.Vok0kvBk-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git/commit/?id=0512a9aede6e4417c4fa6e0042a7ca8bc7e06b86
+        git remote add linux-stable-rc https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+        git fetch --no-tags linux-stable-rc linux-4.19.y
+        git checkout 0512a9aede6e4417c4fa6e0042a7ca8bc7e06b86
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash net/core/
 
-This is a good information on its own as it suggests that the overhead
-is spilled over multiple places rather than a single hot spot. Good to
-have in the changelog.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   net/core/sock.c: Assembler messages:
+   net/core/sock.c:673: Error: unrecognized opcode `csrs sstatus,a4'
+   net/core/sock.c:673: Error: unrecognized opcode `csrc sstatus,a4'
+   net/core/sock.c:1112: Error: unrecognized opcode `csrs sstatus,a4'
+   net/core/sock.c:1112: Error: unrecognized opcode `csrc sstatus,a4'
+   net/core/sock.c:1267: Error: unrecognized opcode `csrs sstatus,a4'
+   net/core/sock.c:1267: Error: unrecognized opcode `csrc sstatus,a4'
+>> net/core/sock.c:1090: Error: unrecognized opcode `csrs sstatus,s9'
+>> net/core/sock.c:1090: Error: unrecognized opcode `csrc sstatus,s9'
+   net/core/sock.c:1420: Error: unrecognized opcode `csrs sstatus,a4'
+   net/core/sock.c:1420: Error: unrecognized opcode `csrc sstatus,a4'
+
+
+vim +1090 net/core/sock.c
+
+3f551f9436c05a3 Eric W. Biederman 2010-06-13  1083  
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1084  static int groups_to_user(gid_t __user *dst, const struct group_info *src)
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1085  {
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1086  	struct user_namespace *user_ns = current_user_ns();
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1087  	int i;
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1088  
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1089  	for (i = 0; i < src->ngroups; i++)
+28b5ba2aa0f55d8 David Herrmann    2017-06-21 @1090  		if (put_user(from_kgid_munged(user_ns, src->gid[i]), dst + i))
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1091  			return -EFAULT;
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1092  
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1093  	return 0;
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1094  }
+28b5ba2aa0f55d8 David Herrmann    2017-06-21  1095  
+
+:::::: The code at line 1090 was first introduced by commit
+:::::: 28b5ba2aa0f55d80adb2624564ed2b170c19519e net: introduce SO_PEERGROUPS getsockopt
+
+:::::: TO: David Herrmann <dh.herrmann@gmail.com>
+:::::: CC: David S. Miller <davem@davemloft.net>
 
 -- 
-Michal Hocko
-SUSE Labs
+0-DAY CI Kernel Test Service
+https://01.org/lkp

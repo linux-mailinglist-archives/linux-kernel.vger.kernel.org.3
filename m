@@ -2,194 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA755A6EC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 202BE5A6ED5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:05:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230455AbiH3U6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 16:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
+        id S229594AbiH3VFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 17:05:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231206AbiH3U6i (ORCPT
+        with ESMTP id S229876AbiH3VFL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 16:58:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7F77C755;
-        Tue, 30 Aug 2022 13:58:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C473061839;
-        Tue, 30 Aug 2022 20:58:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3749C433D6;
-        Tue, 30 Aug 2022 20:58:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661893116;
-        bh=DGa8DZfgmN4fY2jkpCB2mbfVdu7HUE7vBbFQOMTS9DY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BAeTBa0jgM8cQy4hOltLiCbZud891Erw6dFvDUiygC5nfQW9jFqcFEJtQxpVQPv0T
-         mxtSmDAbfM4sHMmKgiYcND4PsyBgH9EFjec1NhFFgdrb0KN0T2YcCqDBvwBz7nXxvc
-         yk9MBd0fHMnEXY4J+YBYsEa3uLJH38TcEJj0Xxtz4cq2r+Gcz8LQ/nUP+YLIpjBd4Y
-         lT4+/VabW7CyKxFfgcr0xfAdLmhIom6Rj26GCmBJwNB4n0wMtuwLLW+DR2xGU1UQZ7
-         JW3rTvX+94g13EbGWEqSZbmNyJY25aTIwvhiVfetZx9U2abKy+em7tIqdbhx5podLW
-         xQB9D7oN3ZEOg==
-Received: by pali.im (Postfix)
-        id 0F2CC834; Tue, 30 Aug 2022 22:58:33 +0200 (CEST)
-Date:   Tue, 30 Aug 2022 22:58:32 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Ben Greear <greearb@candelatech.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, bjorn@helgaas.com,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        Stefan Roese <sr@denx.de>, Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Yao Hongbo <yaohongbo@linux.alibaba.com>,
-        Naveen Naidu <naveennaidu479@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: Re: [PATCH 5.4 182/389] PCI/portdrv: Dont disable AER reporting in
- get_port_device_capability()
-Message-ID: <20220830205832.g3lyysmgkarijkvj@pali>
-References: <20220823080115.331990024@linuxfoundation.org>
- <20220823080123.228828362@linuxfoundation.org>
- <CABhMZUVycsyy76j2Z=K+C6S1fwtzKE1Lx2povXKfB80o9g0MtQ@mail.gmail.com>
- <YwXH/l37HaYQD66B@kroah.com>
- <47b775c5-57fa-5edf-b59e-8a9041ffbee7@candelatech.com>
+        Tue, 30 Aug 2022 17:05:11 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3528A27FD6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:05:09 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso8962915otb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:05:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=b+Kvem5dMGmT18RSkMe+CwrBq1FhWyXbm8AARNnMSu8=;
+        b=SZgPYIfx0h0j3nv+O9wFVsipq88SIqX7H7vW3xxBot8qqGjkLFctq2TcAUqczL7PlV
+         l5/kZv2UObRBayj2U5hPTl3uvg/iZIMBuIGWw5+m/9Hd8lmKeKYPrCk9Ei38jfkmnrZy
+         s6NaKWYJLAhnzp4IH9LEH+h3k6wO6i4ZR1wM3cPXcm8K3MO+f8HvOBqcLDvzNsMXo1X7
+         XmLQ2T/61CeGLjoEf+vV1h2VetZ+978vreYE4KaTFOHqND3cwAXkG7yzn5fIfFlF/NYz
+         gCNk79Wru31XOR5WvZuANroCffUhtdRKkrnUV3UPqoEv0Lt8fW8sY4wZVyslPdcISRUb
+         EeFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=b+Kvem5dMGmT18RSkMe+CwrBq1FhWyXbm8AARNnMSu8=;
+        b=XhQHkN7JxOKHl9wOzjUe5xJWEzS1wmLKlpz5twaQMELvTwWu+Dx8grORXk0GJ/xq9O
+         IJDBWHh51BNy6JJnvdgbDnc38Bgn1qbS3yJrRP8pcO8A95WBINvitjrg57dplFUTGgdj
+         hsfEkTvntVYWJwmHl53yvdsFHxuaefIGWsV49Fx30P8ugguhvsJEM+xdiDM4XSWsX/Nd
+         1rchL/KxAfysfkZ+GFnvdTPiEtVF0FJggFjfPfjn+aRDVf/9mhg2+b+0BnVa4lAjNeET
+         48JN0QTUaBLzKQ5mlIN6iFMqEvy1Q5gnHBtGcyXNI+uqJXWoXRMS6abwzfcBA/orS+zW
+         GDoA==
+X-Gm-Message-State: ACgBeo1BUZVJkV2N8IUxdPRjMdzlXu8woL9/e54tryfqLSGf+adJ89/x
+        iB1fC12y3ak1aylirD/uO0A=
+X-Google-Smtp-Source: AA6agR7WegBTeWN1BHYw1vb+PxlPQgFIxk9n5+h+K+bPkxIX608SEniccUFV/SaO0xTIsV1oP/NVQA==
+X-Received: by 2002:a9d:3e5d:0:b0:639:2702:b9e8 with SMTP id h29-20020a9d3e5d000000b006392702b9e8mr9104742otg.337.1661893509048;
+        Tue, 30 Aug 2022 14:05:09 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id u187-20020acaabc4000000b00342df642fd3sm6640087oie.48.2022.08.30.14.05.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 14:05:08 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:02:56 -0700
+From:   Yury Norov <yury.norov@gmail.com>
+To:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Vivek Goyal <vgoyal@redhat.com>,
+        Yinghai Lu <yinghai@kernel.org>,
+        "H. Peter Anvin" <hpa@linux.intel.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Stephen Rothwell <sfr@canb.auug.org.au>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        Alexey Klimov <klimov.linux@gmail.com>,
+        Eric Biggers <ebiggers@google.com>
+Subject: Re: [PATCH 4/4] lib/cpumask: add FORCE_NR_CPUS config option
+Message-ID: <Yw57ABzUuW7Fic9w@yury-laptop>
+References: <20220829165748.1008477-5-yury.norov@gmail.com>
+ <202208310215.C2IzssKr-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <47b775c5-57fa-5edf-b59e-8a9041ffbee7@candelatech.com>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202208310215.C2IzssKr-lkp@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tuesday 30 August 2022 13:47:48 Ben Greear wrote:
-> On 8/23/22 11:41 PM, Greg Kroah-Hartman wrote:
-> > On Tue, Aug 23, 2022 at 07:20:14AM -0500, Bjorn Helgaas wrote:
-> > > On Tue, Aug 23, 2022, 6:35 AM Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > wrote:
-> > > 
-> > > > From: Stefan Roese <sr@denx.de>
-> > > > 
-> > > > [ Upstream commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 ]
-> > > > 
-> > > 
-> > > There's an open regression related to this commit:
-> > > 
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=216373
-> > 
-> > This is already in the following released stable kernels:
-> > 	5.10.137 5.15.61 5.18.18 5.19.2
-> > 
-> > I'll go drop it from the 4.19 and 5.4 queues, but when this gets
-> > resolved in Linus's tree, make sure there's a cc: stable on the fix so
-> > that we know to backport it to the above branches as well.  Or at the
-> > least, a "Fixes:" tag.
-> 
-> This is still in 5.19.5.  We saw some funny iwlwifi crashes in 5.19.3+
-> that we did not see in 5.19.0+.  I just bisected the scary looking AER errors to this
-> patch, though I do not know for certain if it causes the iwlwifi related crashes yet.
-> 
-> In general, from reading the commit msg, this patch doesn't seem to be a great candidate
-> for stable in general.  Does it fix some important problem?
-> 
-> In case it helps, here is example of what I see in dmesg.  The kernel crashes in iwlwifi
-> had to do with rx messages from the firmware, and some warnings lead me to believe that
-> pci messages were slow coming back and/or maybe duplicated.  So maybe this AER patch changes
-> timing or otherwise screws up the PCI adapter boards we use...
++ Vivek Goyal <vgoyal@redhat.com>
++ Yinghai Lu <yinghai@kernel.org>
++ H. Peter Anvin <hpa@linux.intel.com>
 
-From that log I have feeling that issue is in that intel wifi card and
-it was there also before that commit. Card is crashing (or something
-other happens on PCIe bus) and because kernel had disabled Error
-Reporting for this card, nobody spotted any issue. And that commit just
-opened eye to kernel to see those errors.
+On Wed, Aug 31, 2022 at 02:33:41AM +0800, kernel test robot wrote:
+> Hi Yury,
+> 
+> I love your patch! Perhaps something to improve:
+> 
+> [auto build test WARNING on tip/x86/core]
+> [also build test WARNING on linus/master v6.0-rc3 next-20220830]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Yury-Norov/cpumask-cleanup-nr_cpu_ids-vs-nr_cpumask_bits-mess/20220830-010755
+> base:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git bc12b70f7d216b36bd87701349374a13e486f8eb
+> config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220831/202208310215.C2IzssKr-lkp@intel.com/config)
+> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> smatch warnings:
+> arch/x86/kernel/apic/apic.c:2437 generic_processor_info() warn: always true condition '(num_processors >= (1) - 1) => (0-u32max >= 0)'
 
-I think this issue should be reported to intel wifi card developers,
-maybe they comment it, why card is reporting errors.
+This is the code that woke up the smatch:
+  /*
+   * If boot cpu has not been detected yet, then only allow upto
+   * nr_cpu_ids - 1 processors and keep one slot free for boot cpu
+   */
+  if (!boot_cpu_detected && num_processors >= nr_cpu_ids - 1 &&
+      apicid != boot_cpu_physical_apicid) {
+          int thiscpu = max + disabled_cpus - 1;
 
-> 
-> [   50.905809] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
-> [   50.905830] pcieport 0000:03:01.0: AER: device recovery failed
-> [   50.905831] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:01.0
-> [   50.905845] pcieport 0000:03:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   50.915679] pcieport 0000:03:01.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   50.922735] pcieport 0000:03:01.0:    [20] UnsupReq               (First)
-> [   50.928230] pcieport 0000:03:01.0: AER:   TLP Header: 34000000 04001f10 00000000 88c888c8
-> [   50.935126] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
-> [   50.935133] pcieport 0000:03:01.0: AER: device recovery failed
-> [   50.935134] pcieport 0000:00:1c.0: AER: Multiple Uncorrected (Non-Fatal) error received: 0000:03:01.0
-> [   50.935222] pcieport 0000:03:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   50.945059] pcieport 0000:03:01.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   50.952120] pcieport 0000:03:01.0:    [20] UnsupReq               (First)
-> [   50.957614] pcieport 0000:03:01.0: AER:   TLP Header: 34000000 04001f10 00000000 88c888c8
-> [   50.964492] pcieport 0000:03:01.0: AER:   Error of this Agent is reported first
-> [   50.970519] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   50.980344] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   50.987399] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
-> [   50.992891] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
-> [   50.999785] pcieport 0000:03:03.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   51.009611] pcieport 0000:03:03.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   51.016665] pcieport 0000:03:03.0:    [20] UnsupReq               (First)
-> [   51.022161] pcieport 0000:03:03.0: AER:   TLP Header: 34000000 06001f10 00000000 88c888c8
-> [   51.029052] pcieport 0000:03:05.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   51.038881] pcieport 0000:03:05.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   51.045931] pcieport 0000:03:05.0:    [20] UnsupReq               (First)
-> [   51.051430] pcieport 0000:03:05.0: AER:   TLP Header: 34000000 07001f10 00000000 88c888c8
-> [   51.058320] pcieport 0000:03:07.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   51.068147] pcieport 0000:03:07.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   51.075200] pcieport 0000:03:07.0:    [20] UnsupReq               (First)
-> [   51.080696] pcieport 0000:03:07.0: AER:   TLP Header: 34000000 08001f10 00000000 88c888c8
-> [   51.087589] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
-> [   51.087598] pcieport 0000:03:01.0: AER: device recovery failed
-> [   51.087611] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
-> [   51.087615] pcieport 0000:03:02.0: AER: device recovery failed
-> [   51.087628] iwlwifi 0000:06:00.0: AER: can't recover (no error_detected callback)
-> [   51.087631] pcieport 0000:03:03.0: AER: device recovery failed
-> [   51.087643] iwlwifi 0000:07:00.0: AER: can't recover (no error_detected callback)
-> [   51.087646] pcieport 0000:03:05.0: AER: device recovery failed
-> [   51.087659] iwlwifi 0000:08:00.0: AER: can't recover (no error_detected callback)
-> [   51.087662] pcieport 0000:03:07.0: AER: device recovery failed
-> [   51.103761] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
-> [   51.103778] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   51.113608] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   51.120658] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
-> [   51.126152] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
-> [   51.133044] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
-> [   51.133068] pcieport 0000:03:0f.0: AER: device recovery failed
-> [   51.168925] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
-> [   51.168940] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   51.178773] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   51.185823] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
-> [   51.191318] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
-> [   51.198211] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
-> [   51.198234] pcieport 0000:03:0f.0: AER: device recovery failed
-> [   51.260695] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
-> [   51.260710] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   51.270548] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   51.277605] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
-> [   51.283103] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
-> [   51.290009] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
-> [   51.290033] pcieport 0000:03:0f.0: AER: device recovery failed
-> [   51.328514] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
-> [   51.328530] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   51.331638] ACPI: \: failed to evaluate _DSM bf0212f2-788f-c64d-a5b3-1f738e285ade (0x1001)
-> [   51.338363] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   51.338364] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
-> [   51.345413] ACPI: \: failed to evaluate _DSM bf0212f2-788f-c64d-a5b3-1f738e285ade (0x1001)
-> [   51.350900] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
-> [   51.350927] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
-> 
-> 
-> Thanks,
-> Ben
-> 
-> -- 
-> Ben Greear <greearb@candelatech.com>
-> Candela Technologies Inc  http://www.candelatech.com
-> 
+          pr_warn("APIC: NR_CPUS/possible_cpus limit of %i almost"
+                  " reached. Keeping one slot for boot cpu."
+                  "  Processor %d/0x%x ignored.\n", max, thiscpu, apicid);
+
+          disabled_cpus++;
+          return -ENODEV;
+  }
+
+It has been added in a patch 14cb6dcf0a023f597 ("x86, boot: Wait for
+boot cpu to show up if nr_cpus limit is about to hit")
+
+My patch adds an option FORCE_NR_CPUS that makes nr_cpu_ids a compile-time
+defined.
+
+Hence, the num_processors >= nr_cpus - 1,
+may become: num_processors >= 0, if NR_CPUS == 1.
+
+So the plain straightforward fix would be:
+
+    if (!boot_cpu_detected &&
+ #if (NR_CPUS > 1)
+        num_processors >= nr_cpu_ids - 1 &&
+ #endif
+        apicid != boot_cpu_physical_apicid) { ... }
+
+However, I have a feeling that all the logic above is not needed at
+all on UP machines. If that's true, the '#if NR_CPUS > 1' should
+protect the whole condition, or even bigger piece of the
+generic_processor_info().
+
+Guys, could you please comment on that?
+
+Thanks,
+Yury

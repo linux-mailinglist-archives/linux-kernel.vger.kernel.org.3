@@ -2,73 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 244665A5843
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 02:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5801E5A5845
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 02:05:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiH3ABD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 20:01:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59170 "EHLO
+        id S229637AbiH3AFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 20:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiH3ABA (ORCPT
+        with ESMTP id S229450AbiH3AFg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 20:01:00 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07BBF62A86;
-        Mon, 29 Aug 2022 17:00:58 -0700 (PDT)
-Date:   Mon, 29 Aug 2022 20:00:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661817657;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=jJPz8pVCwweKgpeW4WUF/uGLiBPtN7wJWGEfgkepeY0=;
-        b=ViRNyaG6zDTNMdiaD9rxTdK/u01sPgpNSj3Cz8YWpvFHHFeYOoyzVXTQRx6dpHDTpj3PSO
-        eBPO2xb7kX7x9Z2MH3OKP6wmmv3wFwZlXvBaJvDwSMbgT6oulbKZk2M2NpQ1ZvbBDu2c45
-        yiEhgvJORFjAy1lCZgXpIeaHiqZNcjw=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org,
-        colyli@suse.de
-Subject: Re: [PATCH 1/3] lib/time_stats: New library for statistics on events
-Message-ID: <20220830000050.u4e7p3ddii4amfbb@moria.home.lan>
-References: <20220829165344.2958640-1-kent.overstreet@linux.dev>
- <20220829165344.2958640-2-kent.overstreet@linux.dev>
- <1e80af02-ca1a-f320-bd3d-0ab674712da4@infradead.org>
+        Mon, 29 Aug 2022 20:05:36 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72CD5B076
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 17:05:34 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id s11-20020a056e02216b00b002e9d4c9d98fso7162584ilv.22
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 17:05:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=3qVmTD3+pVsCJtnKVn9HTqJIISDhqHbYBEvV4wOpfE0=;
+        b=KLytQPYkYpp1/S14ptWh3u3H79JZg7S1WTU/hNL6RQ8IMg3vWGbBUVpA0u3m6/QeVH
+         +b0+WFo6wq6ronfDMNAi2C8SdPRDgjX4leUK+Qjs0llMhchvbvvuCKJpvK5OHzjGfaoF
+         3FfjCxLcvnIsiqY6i7NeGDUUtWctDwMlGduWOpitD1MW90UL5iP+f20is0SzcEbupLRx
+         KWhZwjLxVdM3ETLPXfNAjq0yYUAEeiUxZhRUFv43dBLnaf3hX8VavuwUexpHRP/6A5bo
+         HZWDjrXO/PGrBhQIsZYczzXz7BMwQqlDD2mwONYSX3g2n5sucrM97mLBoAH/3vfevGuY
+         W5/g==
+X-Gm-Message-State: ACgBeo3IIV7qc19x1EZaWqt1feJfYIkL81/VMyCSLJi7II56baahS0lA
+        c2svE0dEDSBW+D4JWK8uMLBIubHMIsaWOfpT2mE0oUNvI/Ar
+X-Google-Smtp-Source: AA6agR5CuZDIyUhlMNbduI24IYB68uvBWwjB6bBbQCoDw3WMjUUV6wQ+Me7/gwgSyI6c1C4kgebmBMVK0nX4BtgqMCJBJd6cilIb
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1e80af02-ca1a-f320-bd3d-0ab674712da4@infradead.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Received: by 2002:a05:6602:1402:b0:68a:9d38:8248 with SMTP id
+ t2-20020a056602140200b0068a9d388248mr9624316iov.68.1661817934170; Mon, 29 Aug
+ 2022 17:05:34 -0700 (PDT)
+Date:   Mon, 29 Aug 2022 17:05:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a5d1ac05e76a23bb@google.com>
+Subject: [syzbot] KASAN: slab-out-of-bounds Read in __fscache_acquire_volume
+From:   syzbot <syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com>
+To:     asmadeus@codewreck.org, dhowells@redhat.com, jlayton@kernel.org,
+        linux-cachefs@redhat.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 04:34:14PM -0700, Randy Dunlap wrote:
-> 
-> 
-> On 8/29/22 09:53, Kent Overstreet wrote:
-> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> > index bbe3ef939c..bfb49505c9 100644
-> > --- a/lib/Kconfig.debug
-> > +++ b/lib/Kconfig.debug
-> > @@ -1728,6 +1728,9 @@ config LATENCYTOP
-> >  	  Enable this option if you want to use the LatencyTOP tool
-> >  	  to find out which userspace is blocking on what kernel operations.
-> >  
-> > +config TIME_STATS
-> > +	bool
-> > +
-> 
-> Hi Kent,
-> 
-> Why not just in lib/Kconfig?
+Hello,
 
-Probably just lazyness, I'll move it there :)
+syzbot found the following issue on:
+
+HEAD commit:    8379c0b31fbc Merge tag 'for-6.0-rc3-tag' of git://git.kern..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12f5306d080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=911efaff115942bb
+dashboard link: https://syzkaller.appspot.com/bug?extid=a76f6a6e524cf2080aa3
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1552b3ad080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b0294d080000
+
+The issue was bisected to:
+
+commit 24e42e32d347f0787a6f99aeb590f3aaa7221093
+Author: David Howells <dhowells@redhat.com>
+Date:   Wed Nov 18 09:06:42 2020 +0000
+
+    9p: Use fscache indexing rewrite and reenable caching
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14660e8b080000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16660e8b080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12660e8b080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a76f6a6e524cf2080aa3@syzkaller.appspotmail.com
+Fixes: 24e42e32d347 ("9p: Use fscache indexing rewrite and reenable caching")
+
+==================================================================
+BUG: KASAN: slab-out-of-bounds in memcmp+0x16f/0x1c0 lib/string.c:757
+Read of size 8 at addr ffff888016f3aa90 by task syz-executor344/3613
+
+CPU: 0 PID: 3613 Comm: syz-executor344 Not tainted 6.0.0-rc2-syzkaller-00327-g8379c0b31fbc #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ memcmp+0x16f/0x1c0 lib/string.c:757
+ memcmp include/linux/fortify-string.h:420 [inline]
+ fscache_volume_same fs/fscache/volume.c:133 [inline]
+ fscache_hash_volume fs/fscache/volume.c:171 [inline]
+ __fscache_acquire_volume+0x76c/0x1080 fs/fscache/volume.c:328
+ fscache_acquire_volume include/linux/fscache.h:204 [inline]
+ v9fs_cache_session_get_cookie+0x143/0x240 fs/9p/cache.c:34
+ v9fs_session_init+0x1166/0x1810 fs/9p/v9fs.c:473
+ v9fs_mount+0xba/0xc90 fs/9p/vfs_super.c:126
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f7d5064b1d9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 e1 14 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffd1700c028 EFLAGS: 00000246 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 00007ffd1700c060 RCX: 00007f7d5064b1d9
+RDX: 0000000020000040 RSI: 0000000020000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000020000200 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000f4240
+R13: 0000000000000000 R14: 00007ffd1700c04c R15: 00007ffd1700c050
+ </TASK>
+
+Allocated by task 3613:
+ kasan_save_stack+0x1e/0x40 mm/kasan/common.c:38
+ kasan_set_track mm/kasan/common.c:45 [inline]
+ set_alloc_info mm/kasan/common.c:437 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:516 [inline]
+ ____kasan_kmalloc mm/kasan/common.c:475 [inline]
+ __kasan_kmalloc+0xa9/0xd0 mm/kasan/common.c:525
+ kmalloc include/linux/slab.h:605 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ fscache_alloc_volume fs/fscache/volume.c:234 [inline]
+ __fscache_acquire_volume+0x2c2/0x1080 fs/fscache/volume.c:323
+ fscache_acquire_volume include/linux/fscache.h:204 [inline]
+ v9fs_cache_session_get_cookie+0x143/0x240 fs/9p/cache.c:34
+ v9fs_session_init+0x1166/0x1810 fs/9p/v9fs.c:473
+ v9fs_mount+0xba/0xc90 fs/9p/vfs_super.c:126
+ legacy_get_tree+0x105/0x220 fs/fs_context.c:610
+ vfs_get_tree+0x89/0x2f0 fs/super.c:1530
+ do_new_mount fs/namespace.c:3040 [inline]
+ path_mount+0x1326/0x1e20 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+The buggy address belongs to the object at ffff888016f3aa00
+ which belongs to the cache kmalloc-192 of size 192
+The buggy address is located 144 bytes inside of
+ 192-byte region [ffff888016f3aa00, ffff888016f3aac0)
+
+The buggy address belongs to the physical page:
+page:ffffea00005bce80 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x16f3a
+flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000200 ffffea00005bd000 dead000000000002 ffff888011841a00
+raw: 0000000000000000 0000000080100010 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x12cc0(GFP_KERNEL|__GFP_NOWARN|__GFP_NORETRY), pid 1, tgid 1 (swapper/0), ts 1480756181, free_ts 0
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x109b/0x2ce0 mm/page_alloc.c:4283
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5515
+ alloc_page_interleave+0x1e/0x200 mm/mempolicy.c:2103
+ alloc_pages+0x22f/0x270 mm/mempolicy.c:2265
+ alloc_slab_page mm/slub.c:1824 [inline]
+ allocate_slab+0x27e/0x3d0 mm/slub.c:1969
+ new_slab mm/slub.c:2029 [inline]
+ ___slab_alloc+0x7f1/0xe10 mm/slub.c:3031
+ __slab_alloc.constprop.0+0x4d/0xa0 mm/slub.c:3118
+ slab_alloc_node mm/slub.c:3209 [inline]
+ slab_alloc mm/slub.c:3251 [inline]
+ kmem_cache_alloc_trace+0x323/0x3e0 mm/slub.c:3282
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ call_usermodehelper_setup+0x97/0x340 kernel/umh.c:365
+ kobject_uevent_env+0xee6/0x1640 lib/kobject_uevent.c:614
+ kernel_add_sysfs_param kernel/params.c:816 [inline]
+ param_sysfs_builtin kernel/params.c:851 [inline]
+ param_sysfs_init+0x367/0x43b kernel/params.c:970
+ do_one_initcall+0xfe/0x650 init/main.c:1296
+ do_initcall_level init/main.c:1369 [inline]
+ do_initcalls init/main.c:1385 [inline]
+ do_basic_setup init/main.c:1404 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1623
+ kernel_init+0x1a/0x1d0 init/main.c:1512
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffff888016f3a980: fb fb fb fb fb fb fb fb fc fc fc fc fc fc fc fc
+ ffff888016f3aa00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+>ffff888016f3aa80: 00 00 04 fc fc fc fc fc fc fc fc fc fc fc fc fc
+                         ^
+ ffff888016f3ab00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffff888016f3ab80: 00 00 00 00 00 00 00 00 fc fc fc fc fc fc fc fc
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

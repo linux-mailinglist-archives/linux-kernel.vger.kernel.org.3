@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B375A5D51
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8B85A5D56
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:50:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiH3HtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
+        id S231258AbiH3Hum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiH3HtQ (ORCPT
+        with ESMTP id S231134AbiH3Hui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:49:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C6B1CCD60;
-        Tue, 30 Aug 2022 00:49:16 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 686806601F01;
-        Tue, 30 Aug 2022 08:49:14 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661845755;
-        bh=ZtcFXim2qq7Y5hMJ+YdDBhB84JBbL99ub5L+GYg2dh8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=LFeLUho0SjjplBBxWPqOqI+WNcbEf0dHrzy9EW7kzePaGPZJ5CsFWprHVa8eLbDu9
-         HhHz9tKLM64lYNcTcW9yP0h1EpdbsmCoIjcrg90kCKS0+oYS2UWwZuK1ptqH4BIwBA
-         JdDkLMB8o+w63OOGvzREOnwD3alI16HCrwDhRIV1UOr3ZbxmF0zylfdsUgZlnxAXBZ
-         LmeEcNRw+VVKc3AP0S30IdLAs6nO7NkkA+4RYT2iyrbWjnLxftsC5kgk8RcYi+cYKf
-         xW4gK1ntZMvCPPupmrb/YrgZ9AayF4/fMZuM2tij6FOqnCzZpV3nH9Ae6FJUbgcijt
-         B/WQ+7RYucKIg==
-Message-ID: <a209aea3-bf23-4670-91d0-e7f41ac57833@collabora.com>
-Date:   Tue, 30 Aug 2022 09:49:11 +0200
+        Tue, 30 Aug 2022 03:50:38 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C8297962B;
+        Tue, 30 Aug 2022 00:50:37 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1661845830tvbi6www
+Received: from localhost.localdomain ( [182.148.13.26])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 Aug 2022 15:50:25 +0800 (CST)
+X-QQ-SSF: 01000000000000B0C000000A0000000
+X-QQ-FEAT: BC0NppmhE9kviExaj2iXTtkhw3oOXdTo65tIsNUK1q4ApXM/coMCVU2jmjCmk
+        nsSNVvmv+NxftehZhfIstEYuHrbEskhL2HXipauTpWEjUeB1CnfvgLgBKYuxsvsAUwFNA9V
+        cGrVxjduW9NypzVWnlzDdlXVlQt0Qbunx63A8d5Xp4zSfHJenEQsRJbnFUtOdSafnv2TMUP
+        HFvLppWsEnb2xVpeQc4BK3BIRKx+zch7SyNKqqLmYt1XVCCdvAAkgcb1YuTESkr1r71XTIb
+        3V5loH85BANGM/Ifrn0DhRw6WU9C52Jd5Kqn+3bkgPK5zD5nKF9hXBYOf0SZMzkvk5q19MG
+        33DiuxvRWxwptJq4INwL+4/ycUDSgG/coT1C991NcBDPeVJ4G8=
+X-QQ-GoodBg: 0
+From:   Shaomin Deng <dengshaomin@cdjrlc.com>
+To:     damien.lemoal@opensource.wdc.com, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: [PATCH] ata: libata-sff: Fix double word in comments
+Date:   Tue, 30 Aug 2022 03:50:24 -0400
+Message-Id: <20220830075024.13917-1-dengshaomin@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 3/3] arm64: dts: Modify gamma compatible for mt8195
-Content-Language: en-US
-To:     "zheng-yan.chen" <zheng-yan.chen@mediatek.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        "Jason-JH . Lin" <jason-jh.lin@mediatek.com>,
-        Singo Chang <singo.chang@mediatek.com>,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220830063929.13390-1-zheng-yan.chen@mediatek.com>
- <20220830063929.13390-4-zheng-yan.chen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220830063929.13390-4-zheng-yan.chen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 30/08/22 08:39, zheng-yan.chen ha scritto:
-> Modify gamma compatible for mt8195.
-> 
-> Fixes: 16590e634f1d ("arm64: dts: mt8195: Add display node for vdosys0")
-> Signed-off-by: zheng-yan.chen <zheng-yan.chen@mediatek.com>
+Remove the repeated word "Transfer" in comments.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+---
+ drivers/ata/libata-sff.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/ata/libata-sff.c b/drivers/ata/libata-sff.c
+index b1666adc1c3a..7916e369e15e 100644
+--- a/drivers/ata/libata-sff.c
++++ b/drivers/ata/libata-sff.c
+@@ -776,7 +776,7 @@ static void atapi_send_cdb(struct ata_port *ap, struct ata_queued_cmd *qc)
+  *	@qc: Command on going
+  *	@bytes: number of bytes
+  *
+- *	Transfer Transfer data from/to the ATAPI device.
++ *	Transfer data from/to the ATAPI device.
+  *
+  *	LOCKING:
+  *	Inherited from caller.
+-- 
+2.35.1
 

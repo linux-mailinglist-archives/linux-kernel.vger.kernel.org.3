@@ -2,80 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482625A5F8C
+	by mail.lfdr.de (Postfix) with ESMTP id 8F7315A5F8D
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbiH3JgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49362 "EHLO
+        id S229972AbiH3Jgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231664AbiH3Jfs (ORCPT
+        with ESMTP id S229750AbiH3JgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:35:48 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E318E9275
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:33:33 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id q16so10703563ljp.8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=8jLhtnIVjN/sROM6rGUEJSLxhjc41TVh4VC82bHwbSY=;
-        b=z13p8nSsHlnc2WlRI3gE1BGc+ZZF+OEOnqIGGnp/9JM+rMpBm5njAyfuLFD6hBGzMK
-         83NaOvwJBC/1HbFRiwRka/5Xxe+wqRJDM0oAwH22vBmKEZFI/EeTEfrBMXmTMAzRuuRA
-         fqIjWuygbjf+MYU5d07gEEny4azu0sMuewlszqX0Apr/TALpZiGDiJy5p7Dwd4lILeiF
-         DKIbKNljhX3dim3EDesV3mCjOIzwnXvq/yyJHHX6KfOsGkRd1QQJZhX1mjE1XU3yKBg+
-         AU//NNFT8jsyF1bYGoTvu2kHYFY5aB8BpLrWhrcf7/Sez9rPCXOAsLX900qAGw3Y3u2k
-         k5aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=8jLhtnIVjN/sROM6rGUEJSLxhjc41TVh4VC82bHwbSY=;
-        b=DGy0lYHEUr/KyaKW2JMlWt/tSngPy5AGupfQMx9RpVs1sKPNxmn2PV0dy/4EtaZdyd
-         pSFaAyh7qwZQYp8KfPAq4ag3R14usMeRAFBP15uCehKbS6LdGrVOMLKPEjMqSoRdCg4K
-         7TzDsVhlQLLUXv0S1xhQRT9BfDscYyTBKCqwNJ7OFNcouWCz0jGxaZBAMNrKevC4ulEJ
-         RGUaXuBf3TAJ6SHVsp9kftjOGspN7dd6Y9cMZ6rlo/Gx+XkDPm8UZv3VwqxmGh0S5GCL
-         GlCGSPeIHgV6Cd55+xuFKt0fxxPr7V39oUdlBqWqg2Ris5v7Hr+T9B8hEriWX4uKE3UF
-         mGFA==
-X-Gm-Message-State: ACgBeo0jOQOr8tV7k1oQkQQboC9UWSRpJlHmeJmYmREWO7ynbQXJHDWp
-        vEj5dwSqNZniiW/oGwiAIZf40A==
-X-Google-Smtp-Source: AA6agR5rDpXTINB0t6CY1m8qyUHEvTl7b7yra5ZZrgOSbhUtIvb+lpGvcayneP88lZdREf5a7J99Gw==
-X-Received: by 2002:a2e:a1c8:0:b0:261:e4e5:1cc3 with SMTP id c8-20020a2ea1c8000000b00261e4e51cc3mr7107767ljm.248.1661852010357;
-        Tue, 30 Aug 2022 02:33:30 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id f6-20020a056512360600b0049288e0bd61sm1561420lfs.58.2022.08.30.02.33.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 02:33:29 -0700 (PDT)
-Message-ID: <74aa8d80-c176-7c8e-e80e-8d8910d10d8c@linaro.org>
-Date:   Tue, 30 Aug 2022 12:33:28 +0300
+        Tue, 30 Aug 2022 05:36:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6216BE9905;
+        Tue, 30 Aug 2022 02:33:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7CA07B818C4;
+        Tue, 30 Aug 2022 09:33:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EC2FC433D7;
+        Tue, 30 Aug 2022 09:33:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661852034;
+        bh=RtTBoBmIFnTDD6x72hBHnoVvBe1GpBrLQzVhYk4MgBQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rCWxQH8FcNcRmBJklBuDvw/CdqD37yq141CRU2jMGMPcbFVnqwXbg6PHxDMp2T0dq
+         mKGSYSwq/CtUnQeBi0xTaTxIu4lvHNvglmfL0MzJUnJa8yep5+8StTjKTxYdLVp/42
+         z01SenxMYwyJSwzbD9ylNbvgOVTM5g4d8DrsUnNM=
+Date:   Tue, 30 Aug 2022 11:33:51 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Subject: Re: [PATCH v2 4/4] serial: Add kserial_rs485 to avoid wasted space
+ due to .padding
+Message-ID: <Yw3Zf5cwJIlBAV2z@kroah.com>
+References: <20220830072956.3630-1-ilpo.jarvinen@linux.intel.com>
+ <20220830072956.3630-5-ilpo.jarvinen@linux.intel.com>
+ <Yw3Pw9kwDDKXuqC+@kroah.com>
+ <58d6748-ebd-e637-c1b2-b8e469e6d86d@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/1] arm64: dts: qcom: sc7280: Add device tree for
- herobrine evoker
-Content-Language: en-US
-To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     mka@chromium.org, dianders@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220830053307.3997495-1-sheng-liang.pan@quanta.corp-partner.google.com>
- <20220830133300.1.I7dd7a79c4cc5fe91c3feb004473feb3b34b7b2d8@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830133300.1.I7dd7a79c4cc5fe91c3feb004473feb3b34b7b2d8@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <58d6748-ebd-e637-c1b2-b8e469e6d86d@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,28 +75,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 08:33, Sheng-Liang Pan wrote:
-> Add a basic device tree for the herobrine evoker board.
+On Tue, Aug 30, 2022 at 12:26:29PM +0300, Ilpo Järvinen wrote:
+> On Tue, 30 Aug 2022, Greg Kroah-Hartman wrote:
 > 
-> Signed-off-by: Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
-> ---
+> > On Tue, Aug 30, 2022 at 10:29:56AM +0300, Ilpo Järvinen wrote:
+> > > -static int serial_rs485_from_user(struct serial_rs485 *rs485,
+> > > +static int serial_rs485_from_user(struct kserial_rs485 *rs485,
+> > >  				  const struct serial_rs485 __user *rs485_user)
+> > >  {
+> > > -	if (copy_from_user(rs485, rs485_user, sizeof(*rs485)))
+> > > +	struct serial_rs485 rs485_uapi;
+> > > +
+> > > +	if (copy_from_user(&rs485_uapi, rs485_user, sizeof(*rs485)))
+> > >  		return -EFAULT;
+> > >  
+> > > +	*rs485 = *((struct kserial_rs485 *)&rs485_uapi);
+> > 
+> > Ah, you are mapping this on top of the existing structure, so there was
+> > no padding in the original one, why say that?
 > 
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../dts/qcom/sc7280-herobrine-evoker-r0.dts   | 333 ++++++++++++++++++
->  2 files changed, 334 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
+> While I'm not exactly sure what you tried to say with this, I'll try to 
+> answer regardless.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-> index 1d86a33de528c..59c22ba54a366 100644
-> --- a/arch/arm64/boot/dts/qcom/Makefile
-> +++ b/arch/arm64/boot/dts/qcom/Makefile
-> @@ -103,6 +103,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-r1-lte.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-crd.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-herobrine-r1.dtb
->  dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-villager-r0.dtb
-> +dtb-$(CONFIG_ARCH_QCOM)	+= sc7280-herobrine-evoker-r0.dtb
+> It's the opposite, there's padding in rs485_user, and therefore also in 
+> rs485_uapi. Struct serial_rs485 has padding and is part of uapi so it 
+> cannot be changed to remove the extra padding.
+> 
+> I cannot directly copy_from_user into *rs485 because it lacks the padding. 
+> Thus, the immediate rs485_uapi and then assign to rs485.
 
-Why breaking ordering?
+Padding could be in the middle of the structure, it's not obvious that
+it is not there.  You are just trying to drop the trailing "unused
+space", while all of the fields are identical otherwise.
 
-Best regards,
-Krzysztof
+So be specific about that, as padding is often in the middle of a
+structure.
+
+> > > +/*
+> > > + * Compile-time asserts for struct kserial_rs485 and struct serial_rs485 equality
+> > > + * (except padding).
+> > 
+> > This does not take into account any padding, in fact it's the opposite
+> > as all of this:
+> 
+> ?? I said: "(except padding)" which I thought implies that padding is 
+> intentionally excluded (it doesn't exist in kserial_rs485).
+> 
+> > > + */
+> > > +static_assert(offsetof(struct kserial_rs485, flags) ==
+> > > +	      offsetof(struct serial_rs485, flags));
+> > > +static_assert(offsetof(struct kserial_rs485, delay_rts_before_send) ==
+> > > +	      offsetof(struct serial_rs485, delay_rts_before_send));
+> > > +static_assert(offsetof(struct kserial_rs485, delay_rts_after_send) ==
+> > > +	      offsetof(struct serial_rs485, delay_rts_after_send));
+> > > +static_assert(offsetof(struct kserial_rs485, addr_recv) ==
+> > > +	      offsetof(struct serial_rs485, addr_recv));
+> > > +static_assert(offsetof(struct kserial_rs485, addr_dest) ==
+> > > +	      offsetof(struct serial_rs485, addr_dest));
+> > > +static_assert(sizeof(struct kserial_rs485) <= sizeof(struct serial_rs485));
+> > 
+> > Is there to ensure that the offsets are exactly the same, no padding
+> > involved anywhere.
+> 
+> That's because for kernel padding "doesn't matter", it doesn't want it,
+> it would be just wasted space. After this series, padding is used only for 
+> uapi, no longer for the in-kernel structs.
+
+Again, you are talking about padding at the end, not in the middle,
+hence my confusion.
+
+> > So I don't understand the problem you are trying to solve here,
+> 
+> struct serial_rs485 has padding that is ~16B long currently. serial_rs485 
+> is currently used for a few things:
+> - Keep track of rs485 state (per port)
+> - Record what rs485 options the port supports (per port)
+> - Record rs485 options a driver supports (per driver with rs485 support)
+> - Exchange rs485 config/state information with userspace
+> 
+> Only the last of those requires the padding (because it has been part of 
+> uapi since day 1). With kserial_rs485, the padding can eliminated for the 
+> first 3 cases.
+> 
+> If you feel ~32B per uart_port too little to be useful (and a little 
+> more per driver), I can just drop this patch.
+
+I think 32 bytes per serial port is totally lost in the noise and would
+not even be able to be measured at all due to how slabs are aligned
+(meaning you are not actually saving any memory at all.)
+
+Can you notice any measurable savings on your systems?
+
+And what is the code increase overall with this patch series?  :)
+
+I'm all for making things const, to prevent errors, but that could
+probably be done without this type of change, right?
+
+thanks,
+
+greg k-h

@@ -2,136 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4DD5A686D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418DD5A6882
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:36:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiH3Q2K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:28:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56728 "EHLO
+        id S230054AbiH3Qgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:36:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiH3Q2F (ORCPT
+        with ESMTP id S230000AbiH3Qgd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:28:05 -0400
-Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE9C7D8B29
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:28:01 -0700 (PDT)
-Received: by mail-io1-xd29.google.com with SMTP id 62so9675698iov.5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:28:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc;
-        bh=ljt1msDQIdw3/XSMupQE90lgVlsNEZUL9fSl+XU13v4=;
-        b=cgdWDladoMlwY46B/oIfIm/9U1ny1N2TQ1E+ZEX8BQHMlsLqfNHO39Bl3W8X/2ZUe5
-         YjsojUkxuW5N2dyTkeY791YMNUMOyRDERFPDetJ77fFBuNFFiFRyaV1IwdKj/FAfXjcm
-         KiKtmaPSZc04d54unaEPogPTTkhAzjs34lSpgTabJaGe3Qqg1mAvD0B/ymxUsNpPStoN
-         Jhk2BSHLCvWoNdV9cQtVsS7S+jcJd5GoN08783uoDFBZIELbKL6wtmjNuwYCL0r+7b/k
-         Oqg580ENEz+L1lBNWPNcXdXRfkT8950wWIF5xWn4XtP8D5+DPAzbJ7jRKt5qLHV4zSIm
-         /W+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ljt1msDQIdw3/XSMupQE90lgVlsNEZUL9fSl+XU13v4=;
-        b=6AdYAf2ZEmIrfE7yvu/Ugfk+q2qaeSmAcE/zSB3WEjRbGpQnafITuZfCacBrvOzcPN
-         2Kc6feang5/tz/u+bl7450TSk6Vp/rbY7uCtuAd71QyMH2PZoCCFnjktMXMcgodBD6Mm
-         +iGuYEGGAKBcX0XV10iNhmJtS2ZJNvitfeVpiXQ7jASo6zz92K2VxgzeAjZ9Ge86Caka
-         5aTAhLaSJOBIxTJm2gRlCN2OvxkzOQkFLMjL1UWhC0zCN3zzEMXU8pOw2FbQ9kRYHAnI
-         4OH1yy8Vx4Uhw7Vhogqi2LLOPSDnATOHl1LhTpqZUwifHk7vTi1BRi491PNrBcoTVXKA
-         j3cQ==
-X-Gm-Message-State: ACgBeo0PgQb9+JnNwHLtudUofREqYMlVc09TPNu4vsLVvwTeCyMkP8hl
-        49IOYKmngpXp/XBZmHQ0pWqSRpxHOAUfXow8REw=
-X-Google-Smtp-Source: AA6agR7kVYZepuHRqkRKo9NzNoanzrIEjhMEOyk+ZSkmfrJgGfE/Sj5MSp9zZKLopZ3dzztsZMoq65ZpqPcrruu6MPA=
-X-Received: by 2002:a6b:5f19:0:b0:688:2173:1ae3 with SMTP id
- t25-20020a6b5f19000000b0068821731ae3mr11091161iob.12.1661876881340; Tue, 30
- Aug 2022 09:28:01 -0700 (PDT)
+        Tue, 30 Aug 2022 12:36:33 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADC5B6D5C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:36:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661877392; x=1693413392;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=evuEwafeYuR5tiKtPLjXwPPmUAgK2MYWXlQ13DrPxvQ=;
+  b=BlUYICb0mMbkWcHyFXUTan6T/iIgrS6Q/udpxiz/XBONvb4rSEuMa1Qf
+   PofUk0DjS7y8J/xt5mDf7HAXamnUDWjG6/YGGtsumnFdRBNmuFXPmtSaj
+   mi6CSKNN6qWgZyM4gKBPuDa5VQTYIYLmfo8DHeIT+uzdcbInDnH4G3Skr
+   2V3L+5Sr23KnYsurpf3hOCICL4IPa+wE1YuEDXB7Fp8t11g8ZbitSC1dL
+   JAdveE68RlrTZcnPg+qaLUUJJVrdaN/HP7fPO+VCDHsu8GIyVdO3LrLcn
+   ykIRINvNLFdRKOzXnr/96nuUUAmrnXvQh98JprAkNCk3BY1Ep/W9nMti6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="292811009"
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="292811009"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 09:28:43 -0700
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="680101151"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 09:28:42 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oT46R-0061u5-2a;
+        Tue, 30 Aug 2022 19:28:39 +0300
+Date:   Tue, 30 Aug 2022 19:28:39 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2 v5] regmap: Support accelerated noinc operations
+Message-ID: <Yw46t9Y1PYoMLSKq@smile.fi.intel.com>
+References: <20220816204832.265837-1-linus.walleij@linaro.org>
 MIME-Version: 1.0
-Received: by 2002:a05:6e02:1aaf:0:0:0:0 with HTTP; Tue, 30 Aug 2022 09:28:00
- -0700 (PDT)
-Reply-To: jon768266@gmail.com
-From:   johnson <adjassou665@gmail.com>
-Date:   Tue, 30 Aug 2022 16:28:00 +0000
-Message-ID: <CADTOecKYJE30eo5DxQdzYX3TEanX0c-CDmyRe-SX5-4Tk5t-=A@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:d29 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [adjassou665[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jon768266[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [adjassou665[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816204832.265837-1-linus.walleij@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jsem r=C3=A1d, =C5=BEe v=C3=A1s mohu informovat o m=C3=A9m =C3=BAsp=C4=9Bch=
-u p=C5=99i p=C5=99evodu t=C4=9Bchto
-prost=C5=99edk=C5=AF ve spolupr=C3=A1ci s nov=C3=BDm partnerem z Indie. V s=
-ou=C4=8Dasn=C3=A9 dob=C4=9B
-jsem v Indii kv=C5=AFli investi=C4=8Dn=C3=ADm projekt=C5=AFm s vlastn=C3=AD=
-m pod=C3=ADlem na celkov=C3=A9
-sum=C4=9B. Mezit=C3=ADm jsem nezapomn=C4=9Bl na va=C5=A1e minul=C3=A9 snahy=
- a pokusy pomoci mi
-s p=C5=99evodem t=C4=9Bch prost=C5=99edk=C5=AF, p=C5=99esto=C5=BEe se n=C3=
-=A1m to n=C4=9Bjak nepoda=C5=99ilo. Nyn=C3=AD
-kontaktujte m=C3=A9ho sekret=C3=A1=C5=99e v Lome.Togo, s jeho n=C3=AD=C5=BE=
-e uveden=C3=BDm kontaktem
-jsem upustil certifikovanou v=C3=ADzovou kartu do bankomatu, po=C5=BE=C3=A1=
-dejte ho,
-aby v=C3=A1m poslal v=C3=ADzovou kartu do bankomatu ve v=C3=BD=C5=A1i 250 0=
-00,00 $, kterou
-jsem mu nechal jako kompenzaci za ve=C5=A1ker=C3=A9 minul=C3=A9 =C3=BAsil=
-=C3=AD a sna=C5=BE=C3=AD se mi v
-t=C3=A9to v=C4=9Bci pomoci. Velmi jsem si va=C5=A1eho tehdej=C5=A1=C3=ADho =
-=C3=BAsil=C3=AD v=C3=A1=C5=BEil.
+On Tue, Aug 16, 2022 at 10:48:31PM +0200, Linus Walleij wrote:
+> Several architectures have accelerated operations for MMIO
+> operations writing to a single register, such as writesb, writesw,
+> writesl, writesq, readsb, readsw, readsl and readsq but regmap
+> currently cannot use them because we have no hooks for providing
+> an accelerated noinc back-end for MMIO.
+> 
+> Solve this by providing reg_[read/write]_noinc callbacks for
+> the bus abstraction, so that the regmap-mmio bus can use this.
+> 
+> Currently I do not see a need to support this for custom regmaps
+> so it is only added to the bus.
+> 
+> Callbacks are passed a void * with the array of values and a
+> count which is the number of items of the byte chunk size for
+> the specific register width.
 
-Tak=C5=BEe nev=C3=A1hejte a spojte se s moj=C3=AD sekret=C3=A1=C5=99kou a d=
-ejte mu pokyn, kam
-v=C3=A1m m=C3=A1 zaslat bankomatovou v=C3=ADzovou kartu s obnosem. Pros=C3=
-=ADm, dejte mi
-okam=C5=BEit=C4=9B v=C4=9Bd=C4=9Bt, jestli to dostanete, abychom mohli spol=
-e=C4=8Dn=C4=9B sd=C3=ADlet
-radost po v=C5=A1ech tehdej=C5=A1=C3=ADch =C3=BAtrap=C3=A1ch. v tuto chv=C3=
-=ADli jsem zde velmi
-zanepr=C3=A1zdn=C4=9Bn kv=C5=AFli investi=C4=8Dn=C3=ADm projekt=C5=AFm, kte=
-r=C3=A9 realizuji s m=C3=BDm nov=C3=BDm
-partnerem, tak se s n=C3=ADm rychle spojte a p=C5=99epo=C5=A1lete mu va=C5=
-=A1e informace,
-va=C5=A1e cel=C3=A1 jm=C3=A9na, adresu a kontaktn=C3=AD =C4=8D=C3=ADslo pro=
- snadnou komunikaci,
-dokud nedostanete bankomat Visa karta. (jon768266@gmail.com)
+I see these applied, but consider below for the possible followups.
 
-S pozdravem
-Orlando Moris.
+...
+
+> +			ret = regcache_write(map, reg, lastval);
+> +			if (ret != 0)
+
+if (ret) ?
+
+> +				return ret;
+
+...
+
+> +		dev_info(map->dev, "%x %s [", reg, write ? "<=" : "=>");
+> +		for (i = 0; i < val_len; i++) {
+> +			switch (val_bytes) {
+> +			case 1:
+> +				pr_cont("%x", u8p[i]);
+> +				break;
+> +			case 2:
+> +				pr_cont("%x", u16p[i]);
+> +				break;
+> +			case 4:
+> +				pr_cont("%x", u32p[i]);
+> +				break;
+> +#ifdef CONFIG_64BIT
+> +			case 8:
+> +				pr_cont("%llx", u64p[i]);
+> +				break;
+> +#endif
+> +			default:
+> +				break;
+> +			}
+> +			if (i == (val_len - 1))
+> +				pr_cont("]\n");
+> +			else
+> +				pr_cont(",");
+> +		}
+
+I'm wondering why we can't use hex_dump_to_buffer() approach? Or even better,
+introduce eventually dev_hex_dump() (as it's done for seq_file and printk)
+and use it.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

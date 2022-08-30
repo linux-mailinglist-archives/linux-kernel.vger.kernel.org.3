@@ -2,171 +2,477 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7CD5A6BC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:07:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F6535A6BC5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:09:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232197AbiH3SHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
+        id S232212AbiH3SId (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:08:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiH3SHX (ORCPT
+        with ESMTP id S229737AbiH3SI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:07:23 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850C865814
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:07:22 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso18756517pjk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:07:22 -0700 (PDT)
+        Tue, 30 Aug 2022 14:08:29 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E86CA7C1CD;
+        Tue, 30 Aug 2022 11:08:27 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id gb36so2946061ejc.10;
+        Tue, 30 Aug 2022 11:08:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=HwoaPhoS6p05+6Q+y0C7EJbnrSAeSDJjW5DKVBz8mhg=;
-        b=SdF5T+pT4uOyKFnCG1wz2UF9L14M0q5BWr9oA8ZC2cA+NiEDTLk9b/dExAULtx8Dim
-         qDXstRuMxlIsQ7QW134sht0ZJQ1vJNjHOks/aM3Klo+PeW25oP2D5OsU/xh8bnMp+1/n
-         lI9MUsc3zaGOio0HAHYfXedxEv/v0ZSoDNqLeafh/Wk9CmBdbLkSIVmW3gQ6I1L9PVn5
-         j8CQEYXSyXqpiRVcrduU6g0vJLc7v2b4Lfcktg9DvWEJrYcRr60/RKyy87PNWfzldRZo
-         +Hwb3TZkO+DLR+bQz92lwPby8MVb+I2XGM4jmBhmD0t4nEWJyuXK296vqYY9VKbtYQ2Y
-         htdQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date;
+        bh=jXXGaSH+LzmXXbPUT3jEtW2Nm9tCbJ23kAhFelj4/UI=;
+        b=GqOSBwv1YK+A7Mb1equalINdHRuqpp1aEf1gzJELuYodsQqDNneY8QgUm1sJP9C7n2
+         YlGH8Df1ahxfyFPgCZ91EvBYexqftfL/C3povlv0krCSMFm/8uQglkIfoOyALbpV04yc
+         mZumiKZ7JX8QrH8wytf7OXgCZS/+C7MUyt00I2f0Z0Svilf6miRhWZmpEF8ibKgnHu/t
+         JJxIJg/X4Rg71fokNziRvRAQFUnB8ODT5ShNBMOlH1dySVV7gLVQgcv5wqBr4KbZ5tH1
+         uTuO4FigNxRTSvGmA2M10VsxLEhu6q0zG6rbDcr3ME6endO37eyHwnuzj7AyqFoj+cK7
+         aENg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=HwoaPhoS6p05+6Q+y0C7EJbnrSAeSDJjW5DKVBz8mhg=;
-        b=o/EU35rrYxWQa4cKnFV/jeES5Bd7NgV5SG2q215tJADk4NUB8Uo46qpb3QKGAumYAj
-         MLoW92/SzewwyqLlH4cXu0w3bAAUuXEW2Ed7HPcJC8VCHDJ13KjWZ8GIFBcGe6NoDFJ1
-         43uwauqMeuJO1DuE9X05XXEEQ5x45/QOsTewtBHQ/B5hBlFF+WE3U3O1x5AjbTpsZwmW
-         JtEvgvL7yhoTfIJa9sYocOZr9/42EBq9zqzUwwXoFX7EPPzESy+tbP8T6kOnt8t3uGOI
-         +cRf1adbTijXqFLowgfzo99+CwYzp96pdGm1dFNiPhSa3EtZET/06ISiVJ6pjHKLkFiO
-         Zrcg==
-X-Gm-Message-State: ACgBeo1w4+ApH3uOpiNlkqJ97GWO53NBljzclC/jxdWNOAOLIVUG3YUC
-        TkL9hvNLZSRF0ssz20QIe2qgl5QrpYjWHw==
-X-Google-Smtp-Source: AA6agR5IkLNhQCq1BkUjRP0ujgvxI96gMiG8ejO8FeNgh2oc1noU34HT99172dmCfg+zpCRG+5WhWw==
-X-Received: by 2002:a17:902:d589:b0:174:63e0:5a5c with SMTP id k9-20020a170902d58900b0017463e05a5cmr17210303plh.5.1661882841868;
-        Tue, 30 Aug 2022 11:07:21 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 69-20020a630548000000b0042aca53b4cesm1919014pgf.70.2022.08.30.11.07.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 11:07:21 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 18:07:17 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Like Xu <like.xu.linux@gmail.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH RESEND v2 7/8] KVM: x86/svm/pmu: Direct access
- pmu->gp_counter[] to implement amd_*_to_pmc()
-Message-ID: <Yw5R1VUpFaG5cROP@google.com>
-References: <20220823093221.38075-1-likexu@tencent.com>
- <20220823093221.38075-8-likexu@tencent.com>
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=jXXGaSH+LzmXXbPUT3jEtW2Nm9tCbJ23kAhFelj4/UI=;
+        b=mbZEKr1UtLEiadtLbQuJEAKTXF2FSmIf6KcXHkTdR/nBTSPfFy5VMAQdr3W96+mrt3
+         rr10i0PQ5lrhjOEn+84gHCOnCfVhWpenNVz0ZHoqneQ3uGkBxL+X3QZpQZw781CAXfXd
+         PX4sxMrja8i8tgiQVDvnZ+N0r0K9ltm51vcPEPk4vCOGehpsIYQUH+YM3yHGyAqNPWEn
+         ZIwJW7nCKBu+A3QtcSdcnDkxhR6wh8MThrNSuTm1OfccmWWmIFKgdkmnNtJ3jFzob1eN
+         tAcCtI4Pj90fYAYqe+YIZMHhUEMgCsNd+5NcZcS4JPYlihEefkM/BkRufN7bLOZwnMNl
+         mf5Q==
+X-Gm-Message-State: ACgBeo3ovF2tSqProuMpJzJRfEFvannpLzoDCKnV6/Vnxw3Cb/kOgV2A
+        ZUd2zDtWIrUM2Ag6gJRZh/Y2k7BZpkuYRQ==
+X-Google-Smtp-Source: AA6agR7I6Kro0gm3iRAIJRdyaM5Z01ZJudCHbpC4biu2BNn3iA6Jo4paJUuMaRGwAvHnxZjKKlUs/Q==
+X-Received: by 2002:a17:906:4fd0:b0:73d:be5b:291d with SMTP id i16-20020a1709064fd000b0073dbe5b291dmr17745504ejw.506.1661882905888;
+        Tue, 30 Aug 2022 11:08:25 -0700 (PDT)
+Received: from [192.168.1.10] ([46.249.74.23])
+        by smtp.googlemail.com with ESMTPSA id h8-20020a50ed88000000b004463b99bc09sm7725272edr.88.2022.08.30.11.08.24
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 30 Aug 2022 11:08:25 -0700 (PDT)
+Subject: Re: [PATCH 3/3] drm: omapdrm: Do no allocate non-scanout GEMs through
+ DMM/TILER
+To:     Yongqin Liu <yongqin.liu@linaro.org>, Andrew Davis <afd@ti.com>
+Cc:     "Bajjuri, Praneeth" <praneeth@ti.com>, tomba@kernel.org,
+        airlied@linux.ie, Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        merlijn@wizzup.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, tony@atomide.com,
+        linux-omap@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>
+References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <1642587791-13222-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <5b6d3e7f-c638-fdc7-5080-44d34abed610@ideasonboard.com>
+ <a3ed3a2c-86ce-1c85-e8aa-c08b54ad1a43@gmail.com>
+ <CAMSo37XdZSZUHLWJj373DdtOBA9=uD8SJ7ywWCYF2pU1i4cB_g@mail.gmail.com>
+ <ed4fe238-4fcd-1253-658f-18fe1e1f13b0@gmail.com>
+ <CAMSo37V3U5nYng77jzSnKH73CTLhGYQJu11Q5wRt289se5nFJw@mail.gmail.com>
+ <4128aed0-211a-d12a-6a86-deb4457d39f7@gmail.com>
+ <CAMSo37W-DePLDP=zk-nY6FGcZuk0QzHj4=usrieyV0TNcNfbXw@mail.gmail.com>
+ <da2a661e-9da0-850c-3067-8c1e8d5531bc@gmail.com>
+ <CAMSo37VXNQeR0qZgzZONBwp_4z9CuUSJJJzhM7k+K39BcwvW6A@mail.gmail.com>
+ <235621d0-2141-5ef9-bcd4-5c48b985b3a0@gmail.com>
+ <5dc2c212-4967-ab2d-c016-f3b3a854fe32@ti.com>
+ <CAMSo37W+Z2hn_wJ9At1nyJX6XnpZx9JLXJv9g6DoqoaqqjUATw@mail.gmail.com>
+From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+Message-ID: <0eb026d9-faaa-68cb-cdcd-7d031acfbb03@gmail.com>
+Date:   Tue, 30 Aug 2022 21:08:13 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Firefox/60.0 Thunderbird/60.6.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823093221.38075-8-likexu@tencent.com>
-X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAMSo37W+Z2hn_wJ9At1nyJX6XnpZx9JLXJv9g6DoqoaqqjUATw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 23, 2022, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> AMD only has gp counters, whose corresponding vPMCs are initialised
-> and stored in pmu->gp_counter[] in order of idx, so we can access this
+Hi,
 
-Avoid pronouns, and state what the patch is doing, not what it _can_ do.  IIUC:
+On 30.08.22 г. 18:08 ч., Yongqin Liu wrote:
+> HI, Andrew
+> 
+> Thanks a lot for the information! And great to have you here!
+> 
+> Hi, Ivaylo
+> 
+> With the code provided by Andrew, could you please help give suggestions
+> on how to modify it in the gralloc lib side?
+> 
+> to add the OMAP_BO_SCANOUT flag unconditionally as OMAP_BO_MEM_CONTIG?
+> 
 
-  Access PMU counters on AMD by directly indexing the array of general
-  purpose counters instead of translating the PMC index to an MSR index.
-  AMD only supports gp counters, there's no need to translate a PMC index
-  to an MSR index and back to a PMC index.
+I don't think adding OMAP_BO_SCANOUT unconditionally is a good idea - we 
+already agreed on why. Without having access to the whole source code, I 
+would not make blind suggestions and would leave between you (as user) 
+and Andrew (as a provider) to agree on what is the best way to fix the 
+issue. Still, see the comments bellow.
 
-> array directly based on any valid pmc->idx, without any help from other
-> interfaces at all. The amd_rdpmc_ecx_to_pmc() can now reuse this part
-> of the code quite naturally.
+> Thanks,
+> Yongqin Liu
 > 
-> Opportunistically apply array_index_nospec() to reduce the attack
-> surface for speculative execution and remove the dead code.
+> On Mon, 29 Aug 2022 at 22:36, Andrew Davis <afd@ti.com> wrote:
+>>
+>> On 8/29/22 8:24 AM, Ivaylo Dimitrov wrote:
+>>> Hi,
+>>>
+>>>
+>>> On 29.08.22 г. 5:51 ч., Yongqin Liu wrote:
+>>>> Hi, Ivaylo
+>>>>
+>>>> Sorry for the late response, and Thanks very much for the detailed explanations!
+>>>>
+>>>> On Thu, 18 Aug 2022 at 18:23, Ivaylo Dimitrov
+>>>> <ivo.g.dimitrov.75@gmail.com> wrote:
+>>>>>
+>>>>> Hi,
+>>>>>
+>>>>> On 17.08.22 г. 7:52 ч., Yongqin Liu wrote:
+>>>>>> Hi, Ivaylo
+>>>>>>
+>>>>>> On Mon, 15 Aug 2022 at 14:23, Ivaylo Dimitrov
+>>>>>> <ivo.g.dimitrov.75@gmail.com> wrote:
+>>>>>>>
+>>>>>>> Hi Liu,
+>>>>>>>
+>>>>>>> On 14.08.22 г. 17:27 ч., Yongqin Liu wrote:
+>>>>>>>> Hi, IvayIo
+>>>>>>>>
+>>>>>>>> Thanks very much for the reply!
+>>>>>>>>
+>>>>>>>> On Sat, 13 Aug 2022 at 14:58, Ivaylo Dimitrov
+>>>>>>>> <ivo.g.dimitrov.75@gmail.com> wrote:
+>>>>>>>>>
+>>>>>>>>> Hi Liu,
+>>>>>>>>>
+>>>>>>>>> On 12.08.22 г. 7:35 ч., Yongqin Liu wrote:
+>>>>>>>>>> Hi, Ivaylo, Tomi
+>>>>>>>>>>
+>>>>>>>>>> We have one X15 Android AOSP master build, it could not have the home
+>>>>>>>>>> screen displayed
+>>>>>>>>>> on the hdmi monitor connected with this change, with the following
+>>>>>>>>>> message printed on the serial console
+>>>>>>>>>>          [  607.404205] omapdrm omapdrm.0: Failed to setup plane plane-0
+>>>>>>>>>>          [  607.410522] omapdrm omapdrm.0: Failed to setup plane plane-1
+>>>>>>>>>>          [  607.416381] omapdrm omapdrm.0: Failed to setup plane plane-2
+>>>>>>>>>>          [  607.422088] omapdrm omapdrm.0: Failed to setup plane plane-3
+>>>>>>>>>>
+>>>>>>>>>>         # for details, please check the link here: http://ix.io/47m1
+>>>>>>>>>>
+>>>>>>>>>> It will work with home screen displayed on the hdmi monitor if this
+>>>>>>>>>> change is reverted.
+>>>>>>>>>>
+>>>>>>>>>> Is this the broken problem you talked about here?
+>>>>>>>>>>
+>>>>>>>>>> And could you please give some suggestions on how to have the x15
+>>>>>>>>>> Android build work with this change?
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Make sure scanout (i.e. those to be displayed) buffers are actually
+>>>>>>>>> allocated as such - OMAP_BO_SCANOUT flag must be set when calling
+>>>>>>>>> omap_bo_new().
+>>>>>>>>
+>>>>>>>> I am not familiar with this area, I am sorry if I asked quite silly questions:(
+>>>>>>>> I googled omap_bo_new, and found it's a function of libdrm here[1], is
+>>>>>>>> it what you meant here?
+>>>>>>>>
+>>>>>>>
+>>>>>>> Yes, calling this function from userspace ends in kernel code the
+>>>>>>> $subject patch is part of.
+>>>>>>>
+>>>>>>>> If it's the omap_bo_new that we should pass OMAP_BO_SCANOUT when it is called,
+>>>>>>>> then is it the correct way to update omap_bo_new to add the OMAP_BO_SCANOUT flag
+>>>>>>>> before it calls omap_bo_new_impl?
+>>>>>>>>
+>>>>>>>
+>>>>>>> omap_bo_new() is fine and does not need any updates/fixes, it is the
+>>>>>>> code that uses it (whoever it is, I am not familiar with the userspace
+>>>>>>> you are using) that shall pass correct flags (third parameter) when
+>>>>>>> calling it.
+>>>>>>
+>>>>>> Sorry, I do not get the point here.
+>>>>>> Like you said, the code that calls omap_bo_new needs to pass OMAP_BO_SCANOUT,
+>>>>>> then IMO omap_bo_new should be the best place to add the OMAP_BO_SCANOUT flag,
+>>>>>> (like via flags = flags | OMAP_BO_SCANOUT), that could help avoid
+>>>>>> missing the flag by some code,
+>>>>>> and also avoids hacks/changes on the possible blob binaries.
+>>>>>>
+>>>>>> Do I misunderstand somewhere?
+>>>>>> Or is there some case that OMAP_BO_SCANOUT shouldn't be passed when
+>>>>>> omap_bo_new is called?
+>>>>>>
+>>>>>
+>>>>> Exactly. You need to pass OMAP_BO_SCANOUT only when you want your
+>>>>> buffers to be 'scanout' buffers(i.e. buffers that can be displayed on
+>>>>> screen), which is not always the case - there is no need offscreen
+>>>>> buffers or pixmaps to be scanout capable, for example. There are more
+>>>>> cases like that.
+>>>>>
+>>>>> The problem is that scanout buffer on OMAP4 allocate additional
+>>>>> resources in DMM/TILER (a piece of hardware) and those resources are
+>>>>> limited. Not only that, but DMM/TILER memory space eventually gets
+>>>>> fragmented over time (if you have lots of allocataoins/deallocations)
+>>>>> and you will start getting ENOMEM (or similar) errors.
+>>>>>
+>>>>> Ofc, in your particular use case you may never hit such issues.
+>>>>
+>>>> Thanks, I understand the cases now.
+>>>>
+>>>>
+>>>>>>> BTW you shall really find who and how uses OMAP BO API, in theory it
+>>>>>>> might use ioctls directly and not call omap_bo_xxx functions.
+>>>>>>
+>>>>>> Do you mean the DRM_OMAP_GEM_NEW ioctl api?
+>>>>>> There is no place in the AOSP tree to call that except the
+>>>>>> omap_bo_new_impl function,
+>>>>>> which is called by the omap_bo_new and omap_bo_new_tiled functions.
+>>>>>> The omap_bo_new should not be called with the OMAP_BO_TILED flag,
+>>>>>> while the omap_bo_new_tiled should be called with the OMAP_BO_TILED flag
+>>>>>>
+>>>>>> Regarding to the omap_bo_new function, there are 2 places call it in
+>>>>>> the AOSP tree:
+>>>>>> #1 ./external/libkmsxx/kms++/src/omap/omapframebuffer.cpp
+>>>>>> #2 ./device/ti/beagle_x15/gpu/gralloc.am57x.so
+>>>>>>
+>>>>>> #1 seems not used in AOSP yet, and #2 is one blob binary we do not
+>>>>>> have the source for.
+>>>>>>
+>>>>>
+>>>>> I would bet on gralloc.am57x.so.
+>>>> yeah, that's my guess as well.
+>>>>
+>>>>>>> strace
+>>>>>>> would be your friend there. or gdb, or whatever tools are used on
+>>>>>>> android. Or put some printfs() in omap_bo_new() that output the PID of
+>>>>>>> the calling process, etc.
+>>>>>>
+>>>>>> Thanks a lot for these great suggestions! Will use them when possible.
+>>>>>>
+>>>>>>>> And another question is that, since the userspace(libdrm) will be used
+>>>>>>>> to work with different kernel versions,
+>>>>>>>> like the old 4.14, 4.19, etc, do you think there will be problem to
+>>>>>>>> pass  OMAP_BO_SCANOUT
+>>>>>>>> from the userspace side with the old kernels(which does not have this change)?
+>>>>>>>> does this change need to be backported to the old kernel versions?
+>>>>>>>
+>>>>>>> There should not be any issue. The changes could be backported if one
+>>>>>>> hits the issues this $series is fixing, but there is no need.
+>>>>>>
+>>>>>> Thanks for the confirmation!
+>>>>>> I just boot-tested with adding OMAP_BO_SCANOUT in the omap_bo_new function,
+>>>>>> and it worked with the current 4.14, 4.19, and the mainline kernels.
+>>>>>> # via adding line "flags = flags | OMAP_BO_SCANOUT" in the omap_bo_new function.
+>>>>>>
+>>>>>
+>>>>> sure, the point is that with this change *every* BO will be allocated as
+>>>>> scanout BO, potentially leading to the above explained issues.
+>>>>
+>>>> get it.
+>>>>
+>>>>>>>>
+>>>>>>>> And the last question is that, omap_bo_new might be called by some
+>>>>>>>> property binaries what not everyone
+>>>>>>>> could get the source to update, for such case what's your suggestions?
+>>>>>>>>
+>>>>>>>
+>>>>>>> Hard to say without knowing what that library would be.
+>>>>>>>
+>>>>>>> When I hit issues with closed blobs, sometimes I reverse-engineer them
+>>>>>>> to fix the issue, example:
+>>>>>>>
+>>>>>>> https://github.com/maemo-leste/sgx-ddk-um/tree/master/dbm
+>>>>>>>
+>>>>>>> This is REed libdbm from sgx-ddk-um 1.17.4948957, that is responsible
+>>>>>>> for allocating BOs (what omap_bo_new() does) but it uses DUMB buffers
+>>>>>>> API, instead of OMAP BO API.
+>>>>>>>
+>>>>>>> I guess you are using some older version of sgx-ddk-um, so you may fix
+>>>>>>> in similar way. Or binary patch.
+>>>>>>
+>>>>>> The blob binary that calls omap_bo_new is the gralloc.am57x.so here[2]:
+>>>>>> any suggestions with it?
+>>>>>> # sorry, I am not able to find out how you did the reverse-engineer
+>>>>>> work# with the dbm repository shared here,
+>>>>>> # not sure if you could give some tutorial steps for the similar
+>>>>>> reverse-engineer# work with gralloc.am57x.so
+>>>>>>
+>>>>>
+>>>>> Sorry, but it is like if you ask me to provide you with a tutorial on
+>>>>> how to do brain surgery :)
+>>>>>
+>>>>>> [2]: https://android.googlesource.com/device/ti/beagle-x15/+/refs/heads/master/gpu/gralloc.am57x.so
+>>>>>>
+>>>>>
+>>>>> I investigated this a bit and it seems it calls omap_bo_new() in a
+>>>>> wrapper function like:
+>>>>>
+>>>>> bo = omap_bo_new(dev, -page_size & (size + page_size - 1), ((param5 &
+>>>>> 0x800000) != 0) | OMAP_BO_WC | OMAP_BO_MEM_CONTIG);
+>>>>>
+>>>>> Didn't investigate further what param5 is, but it controls if
+>>>>> OMAP_BO_SCANOUT is passed to omap_bo_new or not.
+>>>>>
+>>>>> However, this library was not made with upstream kernel in mind, as
+>>>>> AFAIK OMAP_BO_MEM_CONTIG never made it upstream:
+>>>>>
+>>>>> https://yhbt.net/lore/all/2580272.MiZDHyRxZo@avalon/T/
+>>>>>
+>>>>> @Tomi - any comment?
+>>>>>
+>>>>> So, you have couple of options:
+>>>>>
+>>>>> 1. Ask TI for upstream-compatible library.
+>>>> check is in progress, but it would take quite a long time I guess
+>>>>> 2. Try to push OMAP_BO_MEM_CONTIG patch upstream.
+>>>> hmm, sounds like one impossible thing...
+>>>>> 3. Modify omap_bo_new() to something like:
+>>>>> .
+>>>>> #define OMAP_BO_MEM_CONTIG      0x00000008      /* only use contiguous dma mem */
+>>>>> .
+>>>>> if (flags & OMAP_BO_MEM_CONTIG)
+>>>>>      flags |= OMAP_BO_SCANOUT;
+>>>>> .
+>>>>> This will not achieve exactly what OMAP_BO_MEM_CONTIG is supposed to do,
+>>>>> but should make it work, at least.
+>>>>
+>>>> This looks like the only doable thing at the moment, maybe one change
+>>>> needs to be submitted to the mesa/drm repository.
+>>>> I can submit a request on your #3 change to the mesa/drm repository
+>>>> for discussion after some check if you do not mind.
+>>>>
+>>>
+>>> I doubt mesa/drm will accept such hack, I think you will need to support your drm clone (with the above fix) until TI fixes the closed library.
+>>>
+>>
+>>
+>> Hi all,
+>>
+
+Hi, glad to see you are doing fine :)
+
+>> Just got around to reading this thread. I work with the TI gralloc lib
+>> and can generate new versions as needed (I was probably the one who compiled
+>> the version you have now). I've wanted to have our gralloc layer open source'd
+>> as there is nothing really propriety in it (and I re-wrote a lot of it already)
+>> and to avoid issues like this. But it interacts with the GPU code in some places,
+>> so it's up to Imagination :(. The actual code in question if it helps is:
+>>
+>>          if(ui32Flags & PVRSRV_MEM_CACHED)
+>>                  flags &= ~OMAP_BO_CACHE_MASK;
+>>          else
+>>                  flags |= OMAP_BO_WC;
+>>
+>>          if (ui32Flags & PVRSRV_HAP_CONTIG)
+>>                  flags |= OMAP_BO_SCANOUT;
+>>
+
+Why is PVRSRV_HAP_CONTIG not set if the code requesting the buffer needs 
+contiguous memory? Who is responsible for setting it?
+
+>>          flags &= ~OMAP_BO_TILED_MASK;
+>>          flags |= 0x00000008;
+>>          flags |= OMAP_BO_WC;
+>>
+>>          bo = omap_bo_new(dev, size, flags);
+>>
+>> As you can see we use 0x00000008 (OMAP_BO_MEM_CONTIG) unconditionally.
+>> This was a hack added since even non-scanout buffers sometimes need
+>> to be contiguous (video decoder surfaces), but we had no way back
+
+Hmm, why would video decoder need linear memory? No MMU?
+
+>> then to communicate this to the gralloc layer. I think your best
+>> bet would be to modify the gralloc lib to not do that, or put it
+>> under the CONTIG check.
+>>
+
+Does that mean that now there is a way? If that's the case, then what 
+needs to be fixed is the application requesting the buffer to send the 
+truth about what it needs to gralloc.
+
+>> If you tell me what the code should look like, I can rebuild the
+>> lib and post a copy.
+>>
+>> Long term, I'd like to start using DMA-BUF Heaps for CMA memory
+>> allocations in gralloc and elsewhere, then drop out the DMM/TILER
+>> support from OMAPDRM, since it never really belonged there in
+>> the first place (being a IOMMU unrelated to the display/GPU).
+>>
+
+Umm, how will we rotate scanout buffers then?
+
+>> Thanks,
+>> Andrew
+>>
+
+
+>>
+>>> Regards,
+>>> Ivo
+>>>
+>>>> Thanks,
+>>>> Yongqin Liu
+>>>>
+>>>>>>>>>> On Thu, 17 Feb 2022 at 23:29, Ivaylo Dimitrov
+>>>>>>>>>> <ivo.g.dimitrov.75@gmail.com> wrote:
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> On 17.02.22 г. 14:46 ч., Tomi Valkeinen wrote:
+>>>>>>>>>>>> Hi,
+>>>>>>>>>>>>
+>>>>>>>>>>>> On 19/01/2022 12:23, Ivaylo Dimitrov wrote:
+>>>>>>>>>>>>> On devices with DMM, all allocations are done through either DMM or
+>>>>>>>>>>>>> TILER.
+>>>>>>>>>>>>> DMM/TILER being a limited resource means that such allocations will start
+>>>>>>>>>>>>> to fail before actual free memory is exhausted. What is even worse is
+>>>>>>>>>>>>> that
+>>>>>>>>>>>>> with time DMM/TILER space gets fragmented to the point that even if we
+>>>>>>>>>>>>> have
+>>>>>>>>>>>>> enough free DMM/TILER space and free memory, allocation fails because
+>>>>>>>>>>>>> there
+>>>>>>>>>>>>> is no big enough free block in DMM/TILER space.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Such failures can be easily observed with OMAP xorg DDX, for example -
+>>>>>>>>>>>>> starting few GUI applications (so buffers for their windows are
+>>>>>>>>>>>>> allocated)
+>>>>>>>>>>>>> and then rotating landscape<->portrait while closing and opening new
+>>>>>>>>>>>>> windows soon results in allocation failures.
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Fix that by mapping buffers through DMM/TILER only when really needed,
+>>>>>>>>>>>>> like, for scanout buffers.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Doesn't this break users that get a buffer from omapdrm and expect it to
+>>>>>>>>>>>> be contiguous?
+>>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> If you mean dumb buffer, then no, this does not break users as dumb
+>>>>>>>>>>> buffers are allocated as scanout:
+>>>>>>>>>>>
+>>>>>>>>>>> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/omapdrm/omap_gem.c#L603
+>>>>>>>>>>>
+>>>>>>>>>>> If you mean omap_bo allocated buffers, then if users want
+>>>>>>>>>>> linear(scanout) buffer, then they request it explicitly by passing
+>>>>>>>>>>> OMAP_BO_SCANOUT.
+>>>>>>>>>>>
+>>>>>>>>>>> Ivo
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>
+>>>>>>
+>>>>>>
+>>>>>>
+>>>>
+>>>>
+>>>>
 > 
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->  arch/x86/kvm/svm/pmu.c | 41 +++++------------------------------------
->  1 file changed, 5 insertions(+), 36 deletions(-)
 > 
-> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
-> index e9c66dd659a6..e57eb0555a04 100644
-> --- a/arch/x86/kvm/svm/pmu.c
-> +++ b/arch/x86/kvm/svm/pmu.c
-> @@ -33,23 +33,6 @@ enum index {
->  	INDEX_ERROR,
->  };
->  
-> -static unsigned int get_msr_base(struct kvm_pmu *pmu, enum pmu_type type)
-> -{
-> -	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
-> -
-> -	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
-> -		if (type == PMU_TYPE_COUNTER)
-> -			return MSR_F15H_PERF_CTR;
-> -		else
-> -			return MSR_F15H_PERF_CTL;
-> -	} else {
-> -		if (type == PMU_TYPE_COUNTER)
-> -			return MSR_K7_PERFCTR0;
-> -		else
-> -			return MSR_K7_EVNTSEL0;
-> -	}
-> -}
-> -
->  static enum index msr_to_index(u32 msr)
->  {
->  	switch (msr) {
-> @@ -141,18 +124,12 @@ static bool amd_pmc_is_enabled(struct kvm_pmc *pmc)
->  
->  static struct kvm_pmc *amd_pmc_idx_to_pmc(struct kvm_pmu *pmu, int pmc_idx)
->  {
-> -	unsigned int base = get_msr_base(pmu, PMU_TYPE_COUNTER);
-> -	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
-> +	unsigned int num_counters = pmu->nr_arch_gp_counters;
->  
-> -	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
-> -		/*
-> -		 * The idx is contiguous. The MSRs are not. The counter MSRs
-> -		 * are interleaved with the event select MSRs.
-> -		 */
-> -		pmc_idx *= 2;
-> -	}
-> +	if (pmc_idx >= num_counters)
-> +		return NULL;
->  
-> -	return get_gp_pmc_amd(pmu, base + pmc_idx, PMU_TYPE_COUNTER);
-> +	return &pmu->gp_counters[array_index_nospec(pmc_idx, num_counters)];
->  }
->  
->  static bool amd_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
-> @@ -168,15 +145,7 @@ static bool amd_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
->  static struct kvm_pmc *amd_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
->  	unsigned int idx, u64 *mask)
->  {
-> -	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
-> -	struct kvm_pmc *counters;
-> -
-> -	idx &= ~(3u << 30);
-> -	if (idx >= pmu->nr_arch_gp_counters)
-> -		return NULL;
-> -	counters = pmu->gp_counters;
-> -
-> -	return &counters[idx];
-> +	return amd_pmc_idx_to_pmc(vcpu_to_pmu(vcpu), idx & ~(3u << 30));
->  }
->  
->  static bool amd_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
-> -- 
-> 2.37.2
 > 

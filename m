@@ -2,139 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3915A714F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:01:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11E875A714A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 01:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiH3XBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 19:01:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44128 "EHLO
+        id S231272AbiH3XAp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 19:00:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbiH3XAr (ORCPT
+        with ESMTP id S230205AbiH3XAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 19:00:47 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F43F9675D;
-        Tue, 30 Aug 2022 16:00:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661900441; x=1693436441;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u24qmCxu/nmcxL/d7ko8eIbijaFgPKTEjucw9W1Ntz0=;
-  b=OYLR/1pJxRRuiN70byetv/jQlKVfyviU6k3Ff1U/RweAJITAWYH6j++1
-   SL86kR1FKZpb0F6l2KGS2ta+0egMpqKzPD27CR6QwfIrp22ipzKmscLwE
-   4d0lHWcojLAdbS3ZWcGT/2q6YezWFrbAm55UUmpS0J3W1qcXgQy997dlm
-   ETkuMqo7BGvQxB3z08YlUndDGpjjEkA4nVqzM73wtnDtpgFwNq+bQ6IHK
-   wasX++4zH2ClfZ8iDJRuhFb5+3bzr7zmUs2tHql74yS/zhhMnQkvAw4qR
-   cIp9c0EW//A3VqmQp9NfgvNTiPxtZvSbFWL7TGFaB6vuu4TI3n+t5cTw1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="381622037"
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="381622037"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 16:00:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="715497511"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 30 Aug 2022 16:00:36 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTADj-0000iJ-28;
-        Tue, 30 Aug 2022 23:00:35 +0000
-Date:   Wed, 31 Aug 2022 07:00:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        ilpo.jarvinen@linux.intel.com, andy.shevchenko@gmail.com,
-        u.kleine-koenig@pengutronix.de, johan@kernel.org,
-        wander@redhat.com, etremblay@distech-controls.com,
-        macro@orcam.me.uk, geert+renesas@glider.be, jk@ozlabs.org,
-        phil.edworthy@renesas.com, lukas@wunner.de
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v1 tty-next 2/2] 8250: microchip: pci1xxxx: Add power
- management functions to pci1xxxx's  quad-uart driver.
-Message-ID: <202208310603.ea8ISalW-lkp@intel.com>
-References: <20220830180054.1998296-3-kumaravel.thiagarajan@microchip.com>
+        Tue, 30 Aug 2022 19:00:35 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8A3A94EE8;
+        Tue, 30 Aug 2022 16:00:32 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MHN7c497Yz4xG6;
+        Wed, 31 Aug 2022 09:00:28 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661900428;
+        bh=nE0WEQfnKDXBwm/+0D7dRm2n1Xi9E32uQ4lYG6IirkE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=DE4/T3ojyedyVuNVt8m9+GuuACl2DIKfc/EEh0vXdNiYO4cXjLrptwkR9aZtdxBMh
+         f3NL39gG0UQvvf8FJjTXhTXqjUEt8wEuMaHbkgfuJ0FiSw6TrBAhGjgKMTIqp7JWq3
+         PUv1O0UgJpX5EwSizhD6ZYtGMfmAk8W+DDZCaugOZNGnmkqv4NGqhvC0LP3Jewuhuk
+         rd1ejomR5dH4Sq5ZSWo5bRuRHJx77lbSIfsZVYKO7vhFFmIc5AiR1t+RaUBG9noVnl
+         PU0JBCA+B2r9AwOTqhKuHy2Nd8wPRCRm4k9EaYLjLILsaC781TLYtuosuDQruWPpxr
+         WSVgPizYED0aQ==
+Date:   Wed, 31 Aug 2022 09:00:26 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings after merge of the amdgpu tree
+Message-ID: <20220831090026.2e6b57ac@canb.auug.org.au>
+In-Reply-To: <20220811121050.0da83776@canb.auug.org.au>
+References: <20220811121050.0da83776@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830180054.1998296-3-kumaravel.thiagarajan@microchip.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/tTkT0.sZmTTKPObn2kXxfth";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kumaravel,
+--Sig_/tTkT0.sZmTTKPObn2kXxfth
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I love your patch! Perhaps something to improve:
+Hi all,
 
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on linus/master v6.0-rc3 next-20220830]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Thu, 11 Aug 2022 12:10:49 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>
+> After merging the amdgpu tree, today's linux-next build (htmldocs)
+> produced these warnings:
+>=20
+> drivers/gpu/drm/amd/display/dc/dc.h:465: warning: Enum value 'MPC_SPLIT_A=
+VOID' not described in enum 'pipe_split_policy'
+> drivers/gpu/drm/amd/display/dc/dc.h:465: warning: Enum value 'MPC_SPLIT_A=
+VOID_MULT_DISP' not described in enum 'pipe_split_policy'
+>=20
+> Introduced by commit
+>=20
+>   a2b3b9d57bdb ("drm/amd/display: Document pipe split policy")
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kumaravel-Thiagarajan/8250-microchip-pci1xxxx-Add-driver-for-the-pci1xxxx-s-quad-uart-function/20220831-020314
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20220831/202208310603.ea8ISalW-lkp@intel.com/config)
-compiler: mips-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a994946078a1bca8361d4f3245ad306515291b6e
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kumaravel-Thiagarajan/8250-microchip-pci1xxxx-Add-driver-for-the-pci1xxxx-s-quad-uart-function/20220831-020314
-        git checkout a994946078a1bca8361d4f3245ad306515291b6e
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash drivers/tty/serial/8250/
+I am still seeing these warnings.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--=20
+Cheers,
+Stephen Rothwell
 
-All warnings (new ones prefixed by >>):
+--Sig_/tTkT0.sZmTTKPObn2kXxfth
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-   drivers/tty/serial/8250/8250_pci1xxxx.c: In function 'mchp_pci1xxxx_setup':
-   drivers/tty/serial/8250/8250_pci1xxxx.c:293:32: error: assignment to 'void (*)(struct uart_port *, struct ktermios *, const struct ktermios *)' from incompatible pointer type 'void (*)(struct uart_port *, struct ktermios *, struct ktermios *)' [-Werror=incompatible-pointer-types]
-     293 |         port->port.set_termios = mchp_pci1xxxx_set_termios;
-         |                                ^
-   drivers/tty/serial/8250/8250_pci1xxxx.c: At top level:
-   drivers/tty/serial/8250/8250_pci1xxxx.c:305:6: warning: no previous prototype for 'mchp_pci1xxxx_irq_assign' [-Wmissing-prototypes]
-     305 | void mchp_pci1xxxx_irq_assign(struct pci1xxxx_8250 *priv,
-         |      ^~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/tty/serial/8250/8250_pci1xxxx.c:475:6: warning: no previous prototype for 'pci1xxxx_port_resume' [-Wmissing-prototypes]
-     475 | void pci1xxxx_port_resume(int line)
-         |      ^~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMOlosACgkQAVBC80lX
+0GzZ5Qf/bM3zEdfIHo6hsYGNHDO2SlqPgO2cKKrCYEI+knlRPnaSVrjSBkSpSEt2
+DMhJO8QrBgtOphBKDdVtHshz1ArrsRibjNo58t7dqcNh/tzLPYxUYqTdrpLEH1KT
+V+gdUN4kTtEgvwdq5olhNw2JtzMJv5Yno/+1eml5SuHN6MCztIYq7aQQVoa/ysgT
+KSjXWHbqgh5781g6cIXRl0W7vGKZ5rXb0t8ZMiNQJzt2M71qTx1COwD4MUGL6VmY
+e/oArXcAF+1GipFUa0oxMfN3BHQsw7ZmbrlJDwKy/tbgQ20WFP37ZCQ5yP1vCbGe
+8vsrzTo5vYEPas0dXMToWVtj/yksaA==
+=IFam
+-----END PGP SIGNATURE-----
 
-vim +/pci1xxxx_port_resume +475 drivers/tty/serial/8250/8250_pci1xxxx.c
-
-   474	
- > 475	void pci1xxxx_port_resume(int line)
-   476	{
-   477		struct uart_8250_port *up = serial8250_get_port(line);
-   478		struct uart_port *port = &up->port;
-   479		unsigned long flags;
-   480	
-   481		writeb(UART_WAKE_SRCS, port->membase + UART_WAKE_REG);
-   482	
-   483		if (port->suspended == 0) {
-   484			spin_lock_irqsave(&port->lock, flags);
-   485			port->mctrl |= TIOCM_OUT2;
-   486			port->ops->set_mctrl(port, port->mctrl);
-   487			spin_unlock_irqrestore(&port->lock, flags);
-   488		}
-   489	}
-   490	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+--Sig_/tTkT0.sZmTTKPObn2kXxfth--

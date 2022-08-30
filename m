@@ -2,185 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1A95A619B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB8485A61A1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiH3LWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46396 "EHLO
+        id S229774AbiH3L0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:26:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiH3LWm (ORCPT
+        with ESMTP id S229559AbiH3L0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:22:42 -0400
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5DAEF32D1;
-        Tue, 30 Aug 2022 04:22:39 -0700 (PDT)
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MH4fP5JpWzMqZGW;
-        Tue, 30 Aug 2022 13:22:37 +0200 (CEST)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MH4fP0wk3zlh8T5;
-        Tue, 30 Aug 2022 13:22:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1661858557;
-        bh=oTAsEX4jtRncYkonlQ5yqqIyY7BL0fVt/IXLQVoyFPI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Tr1U4QMmwu0OqYWwnPhbq0UjR8tckF+/TQewme/kjKnyXfhUJn3mNSJ+mW0s3g732
-         xcROOERjCIkjegRVNKO96nQPQFimyD5KX0y5tP+q5llD22jdo0Mt0IPDWMY2IBuF3C
-         HDml75lG2XGnYkJ4VW+KwOswrH5CVxE2EJww3Ru0=
-Message-ID: <4f5adce6-50a6-ca2e-6146-71626d2af197@digikod.net>
-Date:   Tue, 30 Aug 2022 13:22:36 +0200
+        Tue, 30 Aug 2022 07:26:01 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 525ACBB01F;
+        Tue, 30 Aug 2022 04:26:00 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A4EA23A;
+        Tue, 30 Aug 2022 04:26:06 -0700 (PDT)
+Received: from [10.57.13.45] (unknown [10.57.13.45])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A5443F71A;
+        Tue, 30 Aug 2022 04:25:55 -0700 (PDT)
+Message-ID: <2db3b103-7034-6c0d-4ec8-caae7654b264@arm.com>
+Date:   Tue, 30 Aug 2022 12:25:49 +0100
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH -next v2 2/6] landlock: abstract walk_to_visible_parent()
- helper
-Content-Language: en-US
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>, paul@paul-moore.com,
-        jmorris@namei.org, serge@hallyn.com, shuah@kernel.org,
-        corbet@lwn.net
-Cc:     linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20220827111215.131442-1-xiujianfeng@huawei.com>
- <20220827111215.131442-3-xiujianfeng@huawei.com>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <20220827111215.131442-3-xiujianfeng@huawei.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [RFC PATCH v2 2/6] bus/cdx: add the cdx bus driver
+Content-Language: en-GB
+To:     "Gupta, Nipun" <Nipun.Gupta@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
+        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
+        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
+        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
+        "mani@kernel.org" <mani@kernel.org>,
+        "yishaih@nvidia.com" <yishaih@nvidia.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "okaya@kernel.org" <okaya@kernel.org>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "git (AMD-Xilinx)" <git@amd.com>
+References: <20220817150542.483291-3-nipun.gupta@amd.com>
+ <Yv0KHROjESUI59Pd@kroah.com>
+ <DM6PR12MB3082D966CFC0FA1C2148D8FAE8719@DM6PR12MB3082.namprd12.prod.outlook.com>
+ <YwOEv6107RfU5p+H@kroah.com>
+ <DM6PR12MB3082B4BDD39632264E7532B8E8739@DM6PR12MB3082.namprd12.prod.outlook.com>
+ <YwYVhJCSAuYcgj1/@kroah.com> <20220824233122.GA4068@nvidia.com>
+ <CAGETcx846Pomh_DUToncbaOivHMhHrdt-MTVYqkfLUKvM8b=6w@mail.gmail.com>
+ <a6ca5a5a-8424-c953-6f76-c9212db88485@arm.com>
+ <DM6PR12MB30824C5129A7251C589F1461E8769@DM6PR12MB3082.namprd12.prod.outlook.com>
+ <Ywzb4RmbgbnQYTIl@nvidia.com>
+ <MN2PR12MB30870CE2759A9ABE652FAFD8E8799@MN2PR12MB3087.namprd12.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <MN2PR12MB30870CE2759A9ABE652FAFD8E8799@MN2PR12MB3087.namprd12.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 27/08/2022 13:12, Xiu Jianfeng wrote:
-> This helper will be used in the next commit which supports chmod and
-> chown access rights restriction.
+On 2022-08-30 08:06, Gupta, Nipun wrote:
+> [AMD Official Use Only - General]
 > 
-> Signed-off-by: Xiu Jianfeng <xiujianfeng@huawei.com>
-> ---
->   security/landlock/fs.c | 67 ++++++++++++++++++++++++++++++------------
->   1 file changed, 49 insertions(+), 18 deletions(-)
 > 
-> diff --git a/security/landlock/fs.c b/security/landlock/fs.c
-> index c57f581a9cd5..4ef614a4ea22 100644
-> --- a/security/landlock/fs.c
-> +++ b/security/landlock/fs.c
-> @@ -38,6 +38,44 @@
->   #include "ruleset.h"
->   #include "setup.h"
->   
-> +enum walk_result {
-> +	WALK_CONTINUE,
-> +	WALK_TO_REAL_ROOT,
-> +	WALK_TO_DISCONN_ROOT,
+> 
+>> -----Original Message-----
+>> From: Jason Gunthorpe <jgg@nvidia.com>
+>> Sent: Monday, August 29, 2022 9:02 PM
+>> To: Gupta, Nipun <Nipun.Gupta@amd.com>
+>> Cc: Robin Murphy <robin.murphy@arm.com>; Saravana Kannan
+>> <saravanak@google.com>; Greg KH <gregkh@linuxfoundation.org>;
+>> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; rafael@kernel.org;
+>> eric.auger@redhat.com; alex.williamson@redhat.com; cohuck@redhat.com;
+>> Gupta, Puneet (DCG-ENG) <puneet.gupta@amd.com>;
+>> song.bao.hua@hisilicon.com; mchehab+huawei@kernel.org;
+>> maz@kernel.org; f.fainelli@gmail.com; jeffrey.l.hugo@gmail.com;
+>> Michael.Srba@seznam.cz; mani@kernel.org; yishaih@nvidia.com; linux-
+>> kernel@vger.kernel.org; devicetree@vger.kernel.org; kvm@vger.kernel.org;
+>> okaya@kernel.org; Anand, Harpreet <harpreet.anand@amd.com>; Agarwal,
+>> Nikhil <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>;
+>> git (AMD-Xilinx) <git@amd.com>
+>> Subject: Re: [RFC PATCH v2 2/6] bus/cdx: add the cdx bus driver
+>>
+>> [CAUTION: External Email]
+>>
+>> On Mon, Aug 29, 2022 at 04:49:02AM +0000, Gupta, Nipun wrote:
+>>
+>>> Devices are created in FPFGA with a CDX wrapper, and CDX
+>> controller(firmware)
+>>> reads that CDX wrapper to find out new devices. Host driver then interacts
+>> with
+>>> firmware to find newly discovered devices. This bus aligns with PCI
+>> infrastructure.
+>>> It happens to be an embedded interface as opposed to off-chip
+>> connection.
+>>
+>> Why do you need an FW in all of this?
+>>
+>> And why do you need DT at all?
+> 
+> We need DT to describe the CDX controller only, similar to
+> how PCI controller is described in DT. PCI devices are
+> never enumerated in DT. All children are to be dynamically
+> discovered.
+> 
+> Children devices do not require DT as they will be discovered
+> by the bus driver.
+> 
+> Like PCI controller talks to PCI device over PCI spec defined channel,
+> we need CDX controller to talk to CDX device over a custom
+> defined (FW managed) channel.
 
-Why did you created these results instead of the ones I proposed?
+OK, thanks for clarifying - it actually sounds quite cool :)
 
+I think it's clear now that this should be a a full-fledged bus 
+implementation. Note that if the CDX interface provides a way to query 
+arbitrary properties beyond standard resources then you may well also 
+want your own fwnode type to hook into the device_property APIs too. 
+Yes, it then means a bit more work adapting individual drivers too, but 
+that should be far cleaner in the long run, and there's already plenty 
+of precedent for IPs which exist with multiple standard interfaces for 
+PCI/USB/SDIO/platform MMIO/etc.
 
-> +};
-> +
-> +/*
-> + * walk to the visible parent, caller should call path_get()/path_put()
-> + * before/after this helpler.
-> + *
-> + * Returns:
-> + * - WALK_TO_REAL_ROOT if walk to the real root;
-> + * - WALK_TO_DISCONN_ROOT if walk to disconnected root;
-> + * - WALK_CONTINUE otherwise.
-> + */
-> +static enum walk_result walk_to_visible_parent(struct path *path)
-> +{
-> +	struct dentry *parent_dentry;
-> +jump_up:
-> +	if (path->dentry == path->mnt->mnt_root) {
-> +		if (follow_up(path)) {
-> +			/* Ignores hidden mount points. */
-> +			goto jump_up;
-> +		} else {
-> +			/* Stop at the real root. */
-> +			return WALK_TO_REAL_ROOT;
-> +		}
-> +	}
-> +	/* Stops at disconnected root directories. */
-> +	if (unlikely(IS_ROOT(path->dentry)))
-> +		return WALK_TO_DISCONN_ROOT;
-> +	parent_dentry = dget_parent(path->dentry);
-> +	dput(path->dentry);
-> +	path->dentry = parent_dentry;
-> +
-> +	return WALK_CONTINUE;
-> +}
-> +
->   /* Underlying object management */
->   
->   static void release_inode(struct landlock_object *const object)
-> @@ -539,8 +577,8 @@ static int check_access_path_dual(
->   	 * restriction.
->   	 */
->   	while (true) {
-> -		struct dentry *parent_dentry;
->   		const struct landlock_rule *rule;
-> +		enum walk_result wr;
+Plus it means that if CDX ever makes its way into PCIe-attached FPGA 
+cards which can be used on non-OF systems, you've not painted yourself 
+into a corner.
 
-Please make the names understandable. In this case this variable may not 
-be needed anyway.
-
-
->   
->   		/*
->   		 * If at least all accesses allowed on the destination are
-> @@ -588,20 +626,12 @@ static int check_access_path_dual(
->   		if (allowed_parent1 && allowed_parent2)
->   			break;
->   
-> -jump_up:
-> -		if (walker_path.dentry == walker_path.mnt->mnt_root) {
-> -			if (follow_up(&walker_path)) {
-> -				/* Ignores hidden mount points. */
-> -				goto jump_up;
-> -			} else {
-> -				/*
-> -				 * Stops at the real root.  Denies access
-> -				 * because not all layers have granted access.
-> -				 */
-> -				break;
-> -			}
-> -		}
-> -		if (unlikely(IS_ROOT(walker_path.dentry))) {
-> +		wr = walk_to_visible_parent(&walker_path);
-> +		switch (wr) {
-> +		case WALK_TO_REAL_ROOT:
-> +			/* Stop at the real root. */
-> +			goto out;
-> +		case WALK_TO_DISCONN_ROOT:
->   			/*
->   			 * Stops at disconnected root directories.  Only allows
->   			 * access to internal filesystems (e.g. nsfs, which is
-> @@ -609,12 +639,13 @@ static int check_access_path_dual(
->   			 */
->   			allowed_parent1 = allowed_parent2 =
->   				!!(walker_path.mnt->mnt_flags & MNT_INTERNAL);
-
-Why not include this check in the helper? This is then not checked in 
-patch 3 with current_check_access_path_context_only(), which is a bug.
-
-
-> +			goto out;
-> +		case WALK_CONTINUE:
-> +		default:
->   			break;
->   		}
-> -		parent_dentry = dget_parent(walker_path.dentry);
-> -		dput(walker_path.dentry);
-> -		walker_path.dentry = parent_dentry;
->   	}
-> +out:
->   	path_put(&walker_path);
->   
->   	if (allowed_parent1 && allowed_parent2)
+Thanks,
+Robin.

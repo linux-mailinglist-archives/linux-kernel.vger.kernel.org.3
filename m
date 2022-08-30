@@ -2,128 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045905A704B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40BE55A704D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:03:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbiH3WCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 18:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56208 "EHLO
+        id S229808AbiH3WCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 18:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232009AbiH3WCX (ORCPT
+        with ESMTP id S231959AbiH3WCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:02:23 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9A189080D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:58:38 -0700 (PDT)
+        Tue, 30 Aug 2022 18:02:24 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD4E290817
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:58:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661896718; x=1693432718;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UWNhfGM4o48/RHMrCxXlv99aKPtZmUSaLxKD1tQ+80U=;
-  b=BsHoz8GWGZZLaZjQxiVlOC7qzOoBbBWeWJ6zZFjZrYeVcSuo4Bmb6LCb
-   vt1DbdlHzxd6H6TH3HHRUGgVS5ZxhtfWoFyVYj3gbGeyVSdK5tgATqibu
-   UlzQ483LRQUPIbs93djdnvXB2XZGNSIKv8M7s7kvh8ghL+9XUKKDAWMzy
-   +b9+bp8EHWCP09jepRboxhZkI3EkJo+zJBzrdG8juqFSLRq5JYy6/crj6
-   TVA9QmWmavQxAo9BAGqlUGcR+yWtw509uunbmLJUYmwrgAi9FMvhmAdEE
-   Sk4lCSg/g5+h81red8C5urANcEFQrhSGmU8NDyoqzoVh/aBPui/cg49xh
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="294049033"
+  t=1661896719; x=1693432719;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=0QchS3pToVSk2fYaF5BA3KmAYs9eoRF9CtFUbxdGHBw=;
+  b=AX1+gRhejoK5ncibeDGERIInK75BDrT58U1rHdz7sfKij459BrcxGF+b
+   MUuWo/YshSeHIfK72vg6QBHUholVK8OnWyDPxSgopF2mjfoQM43gxoHqk
+   4+7UwIeoM3COjtQI5s5fjCyQE5e8tg4uG4NdjmfBzZMXXkeQup9U+j6wt
+   8cG4z+Z/3WVYQG0BlnYHVR9UOb5QV3m9M1/7FqlEaWg3quJ4ms19yvlQL
+   WPJzFNOArF7zNDSImBzqolVyqUt6B4cXwmBHFUT9OWERaxftrwHPQCVUx
+   y5CFO6ByYMrcRa2NqUWz3iI6T2hrPB781TOQc7WsDpxNR+tCoa9iP73TE
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296093117"
 X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="294049033"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 14:58:38 -0700
+   d="scan'208";a="296093117"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 14:58:35 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="588794460"
+   d="scan'208";a="562819004"
 Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 30 Aug 2022 14:58:35 -0700
+  by orsmga003.jf.intel.com with ESMTP; 30 Aug 2022 14:58:34 -0700
 Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oT9Fh-0000fD-1L;
+        id 1oT9Fh-0000fG-1R;
         Tue, 30 Aug 2022 21:58:33 +0000
-Date:   Wed, 31 Aug 2022 05:58:22 +0800
+Date:   Wed, 31 Aug 2022 05:58:24 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:virt-to-pfn-v6.0-rc1 10/24]
- fs/iomap/direct-io.c:195:29: sparse: sparse: Using plain integer as NULL
- pointer
-Message-ID: <202208310538.aeMiqjUq-lkp@intel.com>
+To:     wuchi <wuchi.zero@gmail.com>, paul@paul-moore.com,
+        eparis@redhat.com
+Cc:     kbuild-all@lists.01.org, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] audit: remove obvious unnecessary header files
+Message-ID: <202208310549.y7u0iX8g-lkp@intel.com>
+References: <20220830105001.68478-1-wuchi.zero@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220830105001.68478-1-wuchi.zero@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git virt-to-pfn-v6.0-rc1
-head:   fd7709c9f1119794e96665ae423d79d93bfe43fc
-commit: cb1bcb8486737f0d37b3ee9522ee44106d9875ae [10/24] ARM: mm: Make virt_to_pfn() a static inline
-config: arm-randconfig-s042-20220830 (https://download.01.org/0day-ci/archive/20220831/202208310538.aeMiqjUq-lkp@intel.com/config)
+Hi wuchi,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on pcmoore-audit/next]
+[also build test ERROR on linus/master v6.0-rc3 next-20220830]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/wuchi/audit-remove-obvious-unnecessary-header-files/20220830-185249
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/audit.git next
+config: arm-randconfig-r015-20220830 (https://download.01.org/0day-ci/archive/20220831/202208310549.y7u0iX8g-lkp@intel.com/config)
 compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
+reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=cb1bcb8486737f0d37b3ee9522ee44106d9875ae
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator virt-to-pfn-v6.0-rc1
-        git checkout cb1bcb8486737f0d37b3ee9522ee44106d9875ae
+        # https://github.com/intel-lab-lkp/linux/commit/f693f8ef00782656e1a94129e11611d410914905
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review wuchi/audit-remove-obvious-unnecessary-header-files/20220830-185249
+        git checkout f693f8ef00782656e1a94129e11611d410914905
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash block/ fs/cifs/ fs/iomap/ lib/crypto/ net/ceph/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-sparse warnings: (new ones prefixed by >>)
->> fs/iomap/direct-io.c:195:29: sparse: sparse: Using plain integer as NULL pointer
---
->> block/blk-lib.c:186:53: sparse: sparse: Using plain integer as NULL pointer
---
->> net/ceph/messenger.c:247:26: sparse: sparse: Using plain integer as NULL pointer
---
->> lib/crypto/chacha20poly1305.c:60:26: sparse: sparse: Using plain integer as NULL pointer
-   lib/crypto/chacha20poly1305.c:128:26: sparse: sparse: Using plain integer as NULL pointer
-   lib/crypto/chacha20poly1305.c:215:26: sparse: sparse: Using plain integer as NULL pointer
---
->> lib/crypto/chacha20poly1305-selftest.c:8833:26: sparse: sparse: Using plain integer as NULL pointer
+All errors (new ones prefixed by >>):
 
-vim +195 fs/iomap/direct-io.c
+   In file included from include/linux/prefetch.h:15,
+                    from arch/arm/include/asm/atomic.h:12,
+                    from include/linux/atomic.h:7,
+                    from include/asm-generic/bitops/lock.h:5,
+                    from arch/arm/include/asm/bitops.h:245,
+                    from include/linux/bitops.h:67,
+                    from include/linux/log2.h:12,
+                    from include/asm-generic/div64.h:55,
+                    from arch/arm/include/asm/div64.h:107,
+                    from include/linux/math.h:6,
+                    from include/linux/math64.h:6,
+                    from include/linux/time64.h:5,
+                    from include/linux/restart_block.h:10,
+                    from include/linux/thread_info.h:14,
+                    from include/asm-generic/preempt.h:5,
+                    from ./arch/arm/include/generated/asm/preempt.h:1,
+                    from include/linux/preempt.h:78,
+                    from include/linux/spinlock.h:55,
+                    from include/linux/wait.h:9,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from kernel/auditsc.c:36:
+   kernel/auditsc.c: In function 'audit_seccomp':
+>> arch/arm/include/asm/processor.h:90:47: error: implicit declaration of function 'task_stack_page'; did you mean 'task_stack_vm_area'? [-Werror=implicit-function-declaration]
+      90 |         ((struct pt_regs *)(THREAD_START_SP + task_stack_page(p)) - 1)
+         |                                               ^~~~~~~~~~~~~~~
+   arch/arm/include/asm/processor.h:92:25: note: in expansion of macro 'task_pt_regs'
+      92 | #define KSTK_EIP(tsk)   task_pt_regs(tsk)->ARM_pc
+         |                         ^~~~~~~~~~~~
+   kernel/auditsc.c:2987:47: note: in expansion of macro 'KSTK_EIP'
+    2987 |                          in_compat_syscall(), KSTK_EIP(current), code);
+         |                                               ^~~~~~~~
+   cc1: some warnings being treated as errors
 
-db074436f42196 Darrick J. Wong   2019-07-15  190  
-a6d3d49587d10d Christoph Hellwig 2021-08-10  191  static void iomap_dio_zero(const struct iomap_iter *iter, struct iomap_dio *dio,
-a6d3d49587d10d Christoph Hellwig 2021-08-10  192  		loff_t pos, unsigned len)
-db074436f42196 Darrick J. Wong   2019-07-15  193  {
-489734ef94f4f7 Eric Biggers      2022-01-28  194  	struct inode *inode = file_inode(dio->iocb->ki_filp);
-db074436f42196 Darrick J. Wong   2019-07-15 @195  	struct page *page = ZERO_PAGE(0);
-db074436f42196 Darrick J. Wong   2019-07-15  196  	struct bio *bio;
-db074436f42196 Darrick J. Wong   2019-07-15  197  
-908c54909ae72d Christoph Hellwig 2022-05-05  198  	bio = iomap_dio_alloc_bio(iter, dio, 1, REQ_OP_WRITE | REQ_SYNC | REQ_IDLE);
-489734ef94f4f7 Eric Biggers      2022-01-28  199  	fscrypt_set_bio_crypt_ctx(bio, inode, pos >> inode->i_blkbits,
-489734ef94f4f7 Eric Biggers      2022-01-28  200  				  GFP_KERNEL);
-a6d3d49587d10d Christoph Hellwig 2021-08-10  201  	bio->bi_iter.bi_sector = iomap_sector(&iter->iomap, pos);
-db074436f42196 Darrick J. Wong   2019-07-15  202  	bio->bi_private = dio;
-db074436f42196 Darrick J. Wong   2019-07-15  203  	bio->bi_end_io = iomap_dio_bio_end_io;
-db074436f42196 Darrick J. Wong   2019-07-15  204  
-db074436f42196 Darrick J. Wong   2019-07-15  205  	get_page(page);
-db074436f42196 Darrick J. Wong   2019-07-15  206  	__bio_add_page(bio, page, len, 0);
-a6d3d49587d10d Christoph Hellwig 2021-08-10  207  	iomap_dio_submit_bio(iter, dio, bio, pos);
-db074436f42196 Darrick J. Wong   2019-07-15  208  }
-db074436f42196 Darrick J. Wong   2019-07-15  209  
 
-:::::: The code at line 195 was first introduced by commit
-:::::: db074436f421967f4f30cfbb6fbc2a728f3e62b3 iomap: move the direct IO code into a separate file
+vim +90 arch/arm/include/asm/processor.h
 
-:::::: TO: Darrick J. Wong <darrick.wong@oracle.com>
-:::::: CC: Darrick J. Wong <darrick.wong@oracle.com>
+^1da177e4c3f41 include/asm-arm/processor.h Linus Torvalds 2005-04-16  88  
+815d5ec86eb8d5 include/asm-arm/processor.h Al Viro        2006-01-12  89  #define task_pt_regs(p) \
+32d39a9355780b include/asm-arm/processor.h Al Viro        2006-01-12 @90  	((struct pt_regs *)(THREAD_START_SP + task_stack_page(p)) - 1)
+815d5ec86eb8d5 include/asm-arm/processor.h Al Viro        2006-01-12  91  
 
 -- 
 0-DAY CI Kernel Test Service

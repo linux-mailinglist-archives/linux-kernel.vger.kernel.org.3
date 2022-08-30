@@ -2,86 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E44BE5A6B83
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:59:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C095A6B87
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:59:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231895AbiH3R7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42494 "EHLO
+        id S230043AbiH3R7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231405AbiH3R7B (ORCPT
+        with ESMTP id S232014AbiH3R7K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:59:01 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B4066586;
-        Tue, 30 Aug 2022 10:58:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661882318; x=1693418318;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=c1bfzPlPnwcIaAydZuBk1LBtzOY1e4cy8A3W3XSpJms=;
-  b=cSc+B+c5ce1JVHR4VGfOKGu5LDxCcbfATWx7CP+IIyzb+cSpO3/PBVtN
-   yRQd3BoozdQLgLsNNn9Sp0AnEWcN6+IsHBEVzTdz6Wmj4CWETYE8DC8DZ
-   JBSxOe1yRYzZi6H8/YMRkIQheOLCscfDs1RWJUzMqTW6txBwP4KnOyl19
-   kQTout4rHT9UfYT6Pzd6u0BDgJLEpyYFY9MhgcpyGSk7zG3fYd5B5YRKF
-   kX1FYcz4JMTr+hb+JrwKSqpmY4WYCZNuyhlC/90sWg4V6A4uIyV0/x/9U
-   R/Jwxo/l9WRNK5iAHvvgbdoxTcbZyVzdMrbzzeuf9FHv5q1QKqCnePU/h
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="292837247"
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="292837247"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 10:58:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="614710548"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 30 Aug 2022 10:58:37 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id E612AAD; Tue, 30 Aug 2022 20:58:51 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Linus Walleij <linus.walleij@linaro.org>
-Subject: [PATCH v1 1/1] pinctrl: mcp23s08: Drop assignment of default number of OF cells
+        Tue, 30 Aug 2022 13:59:10 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB48426E1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:58:55 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id y10so9058824ljq.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc;
+        bh=fFHSYBHtp1mvsz+IAjz2NGyNU51T7wG7r3Us+Us+0Vw=;
+        b=Mz+XBr4i91zmayQTLDcg5nbqbzzFaxast2esKZcLiLJmvssU6wnfIVf9n1AD3xLKX8
+         Dk60Q2Drb3tsY4ppP2WLs7M7vu9aBP9n+cNA1jHXyPHEOov3PGT/OaBhG/iP07ioX4I1
+         rv0Y1LZEh4mjzb2Zb5gZGvSPyK4uL4xLrLPbl+76erVp5Ijdi9TWITsx+o/bZBmiJ1ma
+         fYOmjbe6oTev9ddJbGEF/YaJ23El1QksBEv6dItigIKGp8Vvy7NJL+uDgc/RArKRikml
+         CIwJUjrfn2jVIXXZMFt4yvD1P5XykKIjuyk9bfu5vIwdY2tuRNOYv2o0Se8A1XC6l7uF
+         h1IA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc;
+        bh=fFHSYBHtp1mvsz+IAjz2NGyNU51T7wG7r3Us+Us+0Vw=;
+        b=h0t/90ukcP7plS3sRhzUie60pPh4R5rXr/oYrzetqpLvw0apUT13MaJKR3249d2/O4
+         5Ee5jJPmYhQdBcYHJlX6cx6+RgadfV4agQOUNS/XPwlFNA1ipY/mPZB96pw3kCtO8vQ1
+         3KlVv6JY46NlSBcE84V4sBVrC0YxFSSRC3ENV+esk78OMpuo4DyezNDrdPR6K7O6gBWo
+         RDkiJWcY9pYmEA9AbGE8vP2xvRZgaSAnhUletf93t+3J+G34WbzfYtDCU38cOJEZy/LX
+         bI+M1tWDxROni7TemYB9+Py/Aca7qwDCckpl7VoYBvvuMfPFzE9DKB0ACPKPXw9e+eEU
+         wCeQ==
+X-Gm-Message-State: ACgBeo1oiyERRWjG4eoQfwx6/PevKKsTUDFL7ypgvNjCEVAbaVb7DWv6
+        tMKWAA9ORLON4PcDXv+3ZQOUig==
+X-Google-Smtp-Source: AA6agR45uW8uWrJR4EMgmEiWctiQg92imuC4b8KqOElTDpw7sCyn5YFBnhPT4NSyjt3tUL58uJToVA==
+X-Received: by 2002:a2e:a548:0:b0:261:c647:1d86 with SMTP id e8-20020a2ea548000000b00261c6471d86mr7955807ljn.237.1661882334138;
+        Tue, 30 Aug 2022 10:58:54 -0700 (PDT)
+Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id h5-20020a2ea485000000b0025e6a3556ffsm1851394lji.22.2022.08.30.10.58.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 10:58:53 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     devicetree@vger.kernel.org, festevam@gmail.com, peng.fan@nxp.com,
+        krzysztof.kozlowski+dt@linaro.org, krzysztof.kozlowski@linaro.org,
+        Sascha Hauer <s.hauer@pengutronix.de>, robh+dt@kernel.org,
+        djakov@kernel.org, linux-imx@nxp.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
+        kernel@pengutronix.de, linux-pm@vger.kernel.org
+Subject: Re: (subset) [PATCH 2/2] dt-bindings: memory-controllers: fsl,imx8m-ddrc: drop Leonard Crestez
 Date:   Tue, 30 Aug 2022 20:58:50 +0300
-Message-Id: <20220830175850.44770-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
+Message-Id: <166188232677.14577.9890180783714533041.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220817065946.24303-2-krzysztof.kozlowski@linaro.org>
+References: <20220817065946.24303-1-krzysztof.kozlowski@linaro.org> <20220817065946.24303-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GPIO library code will assign default value for number of OF
-cells, no need to repeat this in the driver.
+On Wed, 17 Aug 2022 09:59:46 +0300, Krzysztof Kozlowski wrote:
+> Emails to Leonard Crestez bounce ("550 5.4.1 Recipient address rejected:
+> Access denied:), so change maintainer to Peng Fan from NXP.
+> 
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/pinctrl/pinctrl-mcp23s08.c | 3 ---
- 1 file changed, 3 deletions(-)
+Applied, thanks!
 
-diff --git a/drivers/pinctrl/pinctrl-mcp23s08.c b/drivers/pinctrl/pinctrl-mcp23s08.c
-index 695236636d05..5f356edfd0fd 100644
---- a/drivers/pinctrl/pinctrl-mcp23s08.c
-+++ b/drivers/pinctrl/pinctrl-mcp23s08.c
-@@ -549,9 +549,6 @@ int mcp23s08_probe_one(struct mcp23s08 *mcp, struct device *dev,
- 	mcp->chip.get = mcp23s08_get;
- 	mcp->chip.direction_output = mcp23s08_direction_output;
- 	mcp->chip.set = mcp23s08_set;
--#ifdef CONFIG_OF_GPIO
--	mcp->chip.of_gpio_n_cells = 2;
--#endif
- 
- 	mcp->chip.base = base;
- 	mcp->chip.can_sleep = true;
+[2/2] dt-bindings: memory-controllers: fsl,imx8m-ddrc: drop Leonard Crestez
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/c941e6305958fb85e0e4d6c632c8a7a489c76f88
+
+Best regards,
 -- 
-2.35.1
-
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

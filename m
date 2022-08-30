@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A665A61F7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01E15A61FE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiH3LbK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:31:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54822 "EHLO
+        id S231150AbiH3Lb6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:31:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230128AbiH3LaI (ORCPT
+        with ESMTP id S230201AbiH3LaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:30:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839D3220DD;
-        Tue, 30 Aug 2022 04:30:05 -0700 (PDT)
+        Tue, 30 Aug 2022 07:30:10 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93A0E17E17;
+        Tue, 30 Aug 2022 04:30:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E54E26155F;
-        Tue, 30 Aug 2022 11:30:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 722C5C433C1;
+        by sin.source.kernel.org (Postfix) with ESMTPS id 48F95CE1AA1;
+        Tue, 30 Aug 2022 11:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3E44C43146;
         Tue, 30 Aug 2022 11:30:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661859001;
-        bh=UQQZwGZMsAgB6wntjPMvyAwdQR7zbV03fNjOm2r8HlU=;
+        bh=rSg12kEuWS2O2FPCoPpZ3ZokcSUHOv1wererebey3pg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=st9qQ5KvmdF62rXhskVV3dkakgNz8dtSIhCAltnPj9MW+DQPoW/tWOW2nRvVP2Vcx
-         3ZrtXos7R/zzQV/eHTQMlQ693gX7ufLkdDxCZfqT9qMHn3Jc1r7VH3fhhE0MzxnoNc
-         D7h9Mqkx7Fr8vH4CHSYUexGFon/1JBhR5QvXXNteNpHagF7SXr/Kf0U+yjtioBJjEq
-         g6sPBZLRQ6TQRSI9q2FNRrA4gmkH2CeZgXouoBNaYRkz+vDWKirIuvBHEWZ/N1HQHI
-         Q86cPk+OMMO1kuR8g0f/itUx4+awbuDcuLUR/TYsf3LSu2dr7/jsuZTIrZCe7p5WMX
-         V20WWcmZ3VGFA==
+        b=rxg6mR2devwTXYEMS7dUmNKKBexRyNFdB+fjFB1IqBOoZ/oRvAcfoz64FiFudgRov
+         Q9ZBqbWUYE5OeqzICbzN/t6yOnYEVc9usVtdSp0bv71WawUSsGlwK+r7rOyJF4LC1n
+         bOJRhduADe0QWkWkAwiQUjOkGwg4DbImiwKQx+aQ7AUwkwKi86tzHSNhZ04j9wsbK9
+         vuufSwQEykyaJdT6uUMiO4SPUbEa/zxiLcNUTWJ+DgKYGgMe5Zk22plwRcD9AM3tyG
+         issfTVOp/ameJSI+ARBYex/Sntc7BSgOMoJHlLFeEv6BX7hvcbAhkoVOHa5O1p+mtT
+         IiK3RFMpcmNXw==
 Received: from johan by xi.lan with local (Exim 4.94.2)
         (envelope-from <johan+linaro@kernel.org>)
-        id 1oSzRP-000117-82; Tue, 30 Aug 2022 13:29:59 +0200
+        id 1oSzRP-00011A-AM; Tue, 30 Aug 2022 13:29:59 +0200
 From:   Johan Hovold <johan+linaro@kernel.org>
 To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
@@ -47,9 +47,9 @@ Cc:     Andy Gross <agross@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Johan Hovold <johan+linaro@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4 27/30] phy: qcom-qmp-combo: drop pipe clock lane suffix
-Date:   Tue, 30 Aug 2022 13:29:20 +0200
-Message-Id: <20220830112923.3725-28-johan+linaro@kernel.org>
+Subject: [PATCH v4 28/30] phy: qcom-qmp-pcie-msm8996: drop pipe clock lane suffix
+Date:   Tue, 30 Aug 2022 13:29:21 +0200
+Message-Id: <20220830112923.3725-29-johan+linaro@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220830112923.3725-1-johan+linaro@kernel.org>
 References: <20220830112923.3725-1-johan+linaro@kernel.org>
@@ -75,31 +75,23 @@ Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index 41e7548ef0b5..d200cd5ca4fa 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -2723,7 +2723,6 @@ int qcom_qmp_phy_combo_create(struct device *dev, struct device_node *np, int id
- 	struct phy *generic_phy;
- 	struct qmp_phy *qphy;
- 	const struct phy_ops *ops;
--	char prop_name[MAX_PROP_NAME];
- 	int ret;
+diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
+index be6a94439b6c..7b893c66cf75 100644
+--- a/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
++++ b/drivers/phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c
+@@ -892,8 +892,7 @@ int qcom_qmp_phy_pcie_msm8996_create(struct device *dev, struct device_node *np,
+ 	if (!qphy->pcs_misc)
+ 		dev_vdbg(dev, "PHY pcs_misc-reg not used\n");
  
- 	qphy = devm_kzalloc(dev, sizeof(*qphy), GFP_KERNEL);
-@@ -2789,8 +2788,7 @@ int qcom_qmp_phy_combo_create(struct device *dev, struct device_node *np, int id
- 	 * Otherwise, we initialize pipe clock to NULL for
- 	 * all phys that don't need this.
- 	 */
 -	snprintf(prop_name, sizeof(prop_name), "pipe%d", id);
 -	qphy->pipe_clk = devm_get_clk_from_child(dev, np, prop_name);
 +	qphy->pipe_clk = devm_get_clk_from_child(dev, np, NULL);
  	if (IS_ERR(qphy->pipe_clk)) {
- 		if (cfg->type == PHY_TYPE_USB3) {
- 			ret = PTR_ERR(qphy->pipe_clk);
+ 		return dev_err_probe(dev, PTR_ERR(qphy->pipe_clk),
+ 				     "failed to get lane%d pipe clock\n", id);
 -- 
 2.35.1
 

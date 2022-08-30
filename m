@@ -2,144 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965395A5EAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94A895A5EAA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiH3IxE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36170 "EHLO
+        id S230329AbiH3IxA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:53:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbiH3Iwn (ORCPT
+        with ESMTP id S231768AbiH3Iwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:52:43 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC0863F0F
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:52:39 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id z25so14578016lfr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:52:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=kguPy3wkAys/EGwS8Nyv4zZp1jqQK2hNEkzoKqRl47o=;
-        b=TPRi+MgkWEfe3wDbg7GpgpypRM62/orWgjZwhLwTwvxq1Q6qUQULhI+lr/OfIiCbig
-         mVS9Wz9Z21/SKULBKaJmLRRZh1XMTJYc1nAdH1LRy8AWmR6QG0ORxf7wdw5IEunn3BhX
-         lXrtUE8LW9tLPtehwHw6hyXxCkOFUgMDEmApEJ9rqt8W1LfE9pMO0vDJ5I/3GYX8vJNL
-         GgXWZF55qFA4EUV4v3X1vfhDnRqw4gDDQUNQAMeqzsDwi6PNbVch6UVPrmQys4PTeDrA
-         mfuLEm59fejkvqK8Bzu0nP3yayb2AKOK7GADH2GWhhkEsQ+0lfoCmAXDuWjig3ttKePR
-         Ty2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=kguPy3wkAys/EGwS8Nyv4zZp1jqQK2hNEkzoKqRl47o=;
-        b=wbLMjFXxZN4kap/cv9rWWutBesLVBvrF26ReVsAh9ngVb/J4KIjpe8I4xoE2YFiE4F
-         ZkbcJu0rM7zXhXWRxxxg9+7Zvgt4li3EubtGWTL70wE3QnVI/LWW409+GLsudWaGw1En
-         HCERx8K/C5Q8uWXSuDLgAeHbLhpiKeZaKQqm/QJMHSezm1ynYDuJo/IG4FHhg3QdSpWw
-         NMZULMO1pyQchkVhA4rG4WAS2ZR9LNzptmw3hB8ih6gZOrevaIe6i/UjfiiVv0EjHt3c
-         GdjlSxJSHEZImkQp803DFh7gXNN1q76dNpNvXzHkhvugcYdXxJvqEFMZwHYNIMhPkW1B
-         2tig==
-X-Gm-Message-State: ACgBeo2XhrCaZt+KfmQpCTpYNeESAoCMEAZyEijNGD8B+8810SpGzyBg
-        x6A03M1j895s+OhXfqT95BpiTaDQulMclA9/6E0WU3uL
-X-Google-Smtp-Source: AA6agR5Saf7AnuJL9SY2My7MlZXUw7DF+aC3twmdn8zwmRrKs39J2HhW1ZcErvKGBWL/ZO/X1LFI2OxzDCBVAvRHEhY=
-X-Received: by 2002:a05:6512:12c5:b0:48c:df54:a41a with SMTP id
- p5-20020a05651212c500b0048cdf54a41amr7049124lfg.464.1661849557114; Tue, 30
- Aug 2022 01:52:37 -0700 (PDT)
+        Tue, 30 Aug 2022 04:52:33 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A6AF9A967;
+        Tue, 30 Aug 2022 01:52:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C35ABB81888;
+        Tue, 30 Aug 2022 08:52:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE725C433D7;
+        Tue, 30 Aug 2022 08:52:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661849542;
+        bh=GfTk307VAPbulMgNaAUsMDt2ahKUcbPofgSTa8PhAiQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DyAjFc9HC2ltJIBwtejCLHGP0+sh4+HuJH4YfCl6P8VLxiBLSdh4bYf4KeN7al3lV
+         5PLJQlBjMnWL25yCyRqMVhzRZ3gM02EAmzOaeMviC4al0M8ZWWAUGB8MNMawubTwtT
+         eF2q9bnUCiff/VsE6cHX2ADN9bnv18PGyeNm8ssg=
+Date:   Tue, 30 Aug 2022 10:52:19 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        Lino Sanfilippo <LinoSanfilippo@gmx.de>
+Subject: Re: [PATCH v2 4/4] serial: Add kserial_rs485 to avoid wasted space
+ due to .padding
+Message-ID: <Yw3Pw9kwDDKXuqC+@kroah.com>
+References: <20220830072956.3630-1-ilpo.jarvinen@linux.intel.com>
+ <20220830072956.3630-5-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-References: <1661483530-11308-1-git-send-email-zhaoyang.huang@unisoc.com>
- <CAGWkznH=Gwr_TDF3=fv+_ZH5P4QN6JXEAtH4DAzNus20pHxyeg@mail.gmail.com>
- <12759ac7-4a6c-89fa-5fd0-914728f6415e@redhat.com> <CAGWkznEtFp2+1QLFF-mA0_jhfB48n4oneVXXNvipw3eBYji4kw@mail.gmail.com>
- <29503bc0-441e-359e-29d0-37ac3c5dff04@redhat.com>
-In-Reply-To: <29503bc0-441e-359e-29d0-37ac3c5dff04@redhat.com>
-From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
-Date:   Tue, 30 Aug 2022 16:52:09 +0800
-Message-ID: <CAGWkznH9XFvEeuKcpcp6T+c6jSCs4Snwi4CWR0cE1ca0ycahvw@mail.gmail.com>
-Subject: Re: [PATCH] mm: skip reserved page for kmem leak scanning
-To:     David Hildenbrand <david@redhat.com>
-Cc:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        LKML <linux-kernel@vger.kernel.org>, Ke Wang <ke.wang@unisoc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220830072956.3630-5-ilpo.jarvinen@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 4:03 PM David Hildenbrand <david@redhat.com> wrote:
->
-> On 30.08.22 04:41, Zhaoyang Huang wrote:
-> > On Mon, Aug 29, 2022 at 8:19 PM David Hildenbrand <david@redhat.com> wrote:
-> >>
-> >> On 26.08.22 05:23, Zhaoyang Huang wrote:
-> >>> On Fri, Aug 26, 2022 at 11:13 AM zhaoyang.huang
-> >>> <zhaoyang.huang@unisoc.com> wrote:
-> >>>>
-> >>>> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> >>>>
-> >>>> It is no need to scan reserved page, skip it.
-> >>>>
-> >>>> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> >>>> ---
-> >>>>  mm/kmemleak.c | 2 +-
-> >>>>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/mm/kmemleak.c b/mm/kmemleak.c
-> >>>> index a182f5d..c546250 100644
-> >>>> --- a/mm/kmemleak.c
-> >>>> +++ b/mm/kmemleak.c
-> >>>> @@ -1471,7 +1471,7 @@ static void kmemleak_scan(void)
-> >>>>                         if (page_zone(page) != zone)
-> >>>>                                 continue;
-> >>>>                         /* only scan if page is in use */
-> >>>> -                       if (page_count(page) == 0)
-> >>>> +                       if (page_count(page) == 0 || PageReserved(page))
-> >>> Sorry for previous stupid code by my faint, correct it here
-> >>
-> >> Did you even test the initial patch?
-> >>
-> >> I wonder why we should consider this change
-> >>
-> >> (a) I doubt it's a performance issue. If it is, please provide numbers
-> >>     before/after.
-> > For Android-like SOC systems where AP(cpu runs linux) are one of the
-> > memory consumers which are composed of other processors such as modem,
-> > isp,wcn etc. The reserved memory occupies a certain number of
-> > memory(could be 30% of MemTotal) which makes scan reserved pages
-> > pointless.
->
-> But we only scan the memmap (struct page) here and not the actual
-> memory. Do you have any performance numbers showing that there is even
-> an observable change?
->
-> >> (b) We'll stop scanning early allocations. As the memmap is usually
-> >>     allocated early during boot ... we'll stop scanning essentially the
-> >>     whole mmap and that whole loop would be dead code? What am i
-> >>     missing?
-> > memmap refers to pages here? If we can surpass these as it exist
-> > permanently during life period. Besides, I wonder if PageLRU should
-> > also be skipped?
-> > -                       if (page_count(page) == 0)
-> > +                       if (page_count(page) == 0 ||
-> > PageReserved(page) || PageLRU(page))
->
-> I think we need a really good justification to start poking holes into
-> the memmap scanner. I'm no expert on this code (and under which
-> circumstances we actually might find referenced objects in a memmap),
-> though.
->
-> But we should be careful with that.
-Agree. It may be helpless as kmemleak is for debugging purposes. Nack
-this patch by myself. Sorry for interrupt.
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+On Tue, Aug 30, 2022 at 10:29:56AM +0300, Ilpo Järvinen wrote:
+> -static int serial_rs485_from_user(struct serial_rs485 *rs485,
+> +static int serial_rs485_from_user(struct kserial_rs485 *rs485,
+>  				  const struct serial_rs485 __user *rs485_user)
+>  {
+> -	if (copy_from_user(rs485, rs485_user, sizeof(*rs485)))
+> +	struct serial_rs485 rs485_uapi;
+> +
+> +	if (copy_from_user(&rs485_uapi, rs485_user, sizeof(*rs485)))
+>  		return -EFAULT;
+>  
+> +	*rs485 = *((struct kserial_rs485 *)&rs485_uapi);
+
+Ah, you are mapping this on top of the existing structure, so there was
+no padding in the original one, why say that?
+
+> +/*
+> + * Compile-time asserts for struct kserial_rs485 and struct serial_rs485 equality
+> + * (except padding).
+
+This does not take into account any padding, in fact it's the opposite
+as all of this:
+
+> + */
+> +static_assert(offsetof(struct kserial_rs485, flags) ==
+> +	      offsetof(struct serial_rs485, flags));
+> +static_assert(offsetof(struct kserial_rs485, delay_rts_before_send) ==
+> +	      offsetof(struct serial_rs485, delay_rts_before_send));
+> +static_assert(offsetof(struct kserial_rs485, delay_rts_after_send) ==
+> +	      offsetof(struct serial_rs485, delay_rts_after_send));
+> +static_assert(offsetof(struct kserial_rs485, addr_recv) ==
+> +	      offsetof(struct serial_rs485, addr_recv));
+> +static_assert(offsetof(struct kserial_rs485, addr_dest) ==
+> +	      offsetof(struct serial_rs485, addr_dest));
+> +static_assert(sizeof(struct kserial_rs485) <= sizeof(struct serial_rs485));
+
+Is there to ensure that the offsets are exactly the same, no padding
+involved anywhere.
+
+So I don't understand the problem you are trying to solve here,
+
+greg k-h

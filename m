@@ -2,120 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21F55A5A18
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 05:36:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 124075A5A1A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 05:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229913AbiH3Dgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 23:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46026 "EHLO
+        id S229622AbiH3DhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 23:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229566AbiH3Dgl (ORCPT
+        with ESMTP id S229566AbiH3DhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 23:36:41 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9627FE52
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 20:36:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=uRgJgJxuAtkFqhcrFtpIXGr2qJkeEfRvFFtV3MUVJKg=; b=lkuoSRY94uq2I9RzVPvlgPl/F7
-        cGGeAzHCVeMN62Xg4IT6DYHHKK0fpb2+Mb0hd8nxm1VQLJLa1tY2shASO5agTDTJXlOzRLcZc/7ZL
-        mIsu3IdwedATtQHfPPEOB4P92SPM48epx0gUdPkVZm2lJwVteJHt6Nb9v6vUoiH8WqOFb+raYYZ8f
-        8uW6MjNEWE+HlEGVQmgq28ODTxPhtwYpBYyv4cQ3x+7OgPZRGNmRsSGwnbJSTk5+1nXjS+WsoTk4o
-        OQpLgaCSlzxZ3cqU3nHhLuuRwSE5v/WNtaAy/BNWH/vdyp2MNfyjeZxbACQHwPNy75KxHpxunyw7R
-        +GxItWOg==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oSs3I-003e6W-GS; Tue, 30 Aug 2022 03:36:36 +0000
-Date:   Tue, 30 Aug 2022 04:36:36 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com, vbabka@suse.cz,
-        william.kucharski@oracle.com, dhowells@redhat.com,
-        peterx@redhat.com, arnd@arndb.de, ccross@google.com,
-        hughd@google.com, ebiederm@xmission.com
-Subject: Re: [PATCH 2/7] mm: add private field of first tail to struct page
- and struct folio
-Message-ID: <Yw2FxCKxm429Py9P@casper.infradead.org>
-References: <20220829230014.384722-1-sidhartha.kumar@oracle.com>
- <20220829230014.384722-3-sidhartha.kumar@oracle.com>
+        Mon, 29 Aug 2022 23:37:17 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BD780B68;
+        Mon, 29 Aug 2022 20:37:16 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id p18so9859037plr.8;
+        Mon, 29 Aug 2022 20:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date;
+        bh=cP18/M+EyPxw7T9Zgu8KcrAe0OP5LLjvkZI4wzfWBio=;
+        b=M8CRVnI97CnsiDSOxUnvB8BZE2sgRitkJQS7KraBTYwoj0Cr5UodBBeQ/tstHZaMDP
+         C09qWSWxOj36OfJTBrPWi494nCothF2nYxPbztpFp7Y7wz5CIpmGdDQM+N2h3Tjx75oc
+         wG2Dk8bSUeXHC3F6sAZyS7Hpx5ysSsiaCFP3lQhUGNBJFIeEQOTINOPzkboW6aIAVMTN
+         qYP1fBvF3z/8QJ2yF1QVMLiNXjjDog9BQwOnJSNJA2pbnHeXXnCy26VIkOiXDgffceVS
+         y+VU560sZ8VSpOnQJi0HoiSZ0ttQSPwJnfJh/EUFGiUJzj8yjRr5dh3j1pIzTm+dVRAs
+         Ce0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=cP18/M+EyPxw7T9Zgu8KcrAe0OP5LLjvkZI4wzfWBio=;
+        b=Sw/xWHg80LMxmd+NZzD9ZVVbdvmUBfEt5qoCim8Nq07snKksD/3xSuKsXEeYTnWR9h
+         oPzig3N4WW6ohNiupvp1HTZNseNV1ullQbj4pxvkRKRdnQ7F1NrfmQPrOCWUG91S0ROf
+         F9XZ46ls9CHizYYtVjoe0rA5sz4omHRCSeoJpJ/rFj/QjyHGM+tchdMsUrF06UyIoQ14
+         heNWsT5HMsGn2V3/hLzJDSK+Sd5A45UF7hnOfdYR/vh3bO3oOR+Bhry0+Qw71WgfxyiH
+         IIkAmZ7Q9hYU5BVavgzUEwFq6C6GaB/yyziY0XHR8FnpgRZGYOkCScxqQTh8Ara2r7Fg
+         8T0w==
+X-Gm-Message-State: ACgBeo0GJLIoLtFdMF3FKzmMyZNkRZpAF3tn1x4R8yEyZb3XIEEAXZP7
+        YFBrmHVzDMGXLiaPumU7nfpDVy9ZHzY=
+X-Google-Smtp-Source: AA6agR7MqkZjBR+Uf2VT90X9je+mc78Gtjq1L/rq3cjngv/PJOVEhE4zQnc4AT6YKU87YVnbbWuFwg==
+X-Received: by 2002:a17:90b:1e0f:b0:1f5:37f5:159c with SMTP id pg15-20020a17090b1e0f00b001f537f5159cmr21574601pjb.189.1661830636506;
+        Mon, 29 Aug 2022 20:37:16 -0700 (PDT)
+Received: from [192.168.43.80] (subs32-116-206-28-15.three.co.id. [116.206.28.15])
+        by smtp.gmail.com with ESMTPSA id m9-20020a17090a858900b001faf7a88138sm7396957pjn.42.2022.08.29.20.37.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 20:37:16 -0700 (PDT)
+Message-ID: <e79ebc62-7e44-3ec8-fdaf-42572c8ac75c@gmail.com>
+Date:   Tue, 30 Aug 2022 10:37:08 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829230014.384722-3-sidhartha.kumar@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] checkpatch: warn for non-standard fixes tag style
+Content-Language: en-US
+To:     =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@corigine.com>,
+        Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Joe Perches <joe@perches.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Whitcroft <apw@canonical.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     oss-drivers@corigine.com, Simon Horman <simon.horman@corigine.com>,
+        Louis Peens <louis.peens@corigine.com>
+References: <20220829155358.2546732-1-niklas.soderlund@corigine.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20220829155358.2546732-1-niklas.soderlund@corigine.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 04:00:09PM -0700, Sidhartha Kumar wrote:
-> +++ b/include/linux/mm_types.h
-> @@ -144,6 +144,7 @@ struct page {
->  #ifdef CONFIG_64BIT
->  			unsigned int compound_nr; /* 1 << compound_order */
->  #endif
-> +			unsigned long _private_1;
->  		};
->  		struct {	/* Second tail page of compound page */
->  			unsigned long _compound_pad_1;	/* compound_head */
-
-Have you tested compiling this on 32-bit?  I think you need to move
-the _private_1 inside the ifdef CONFIG_64BIT.
-
-> @@ -251,6 +252,7 @@ struct page {
->   * @_total_mapcount: Do not use directly, call folio_entire_mapcount().
->   * @_pincount: Do not use directly, call folio_maybe_dma_pinned().
->   * @_folio_nr_pages: Do not use directly, call folio_nr_pages().
-> + * @_private_1: Do not use directly, call folio_get_private_1().
->   *
->   * A folio is a physically, virtually and logically contiguous set
->   * of bytes.  It is a power-of-two in size, and it is aligned to that
-> @@ -298,6 +300,8 @@ struct folio {
->  #ifdef CONFIG_64BIT
->  	unsigned int _folio_nr_pages;
->  #endif
-> +	unsigned long _private_1;
-
-(but don't do that here!)
-
-The intent is that _private_1 lines up with head[1].private on 32-bit.
-It's a bit tricky, and I'm not sure that I'm thinking about it quite right.
-
->  };
->  
->  #define FOLIO_MATCH(pg, fl)						\
-> @@ -325,6 +329,7 @@ FOLIO_MATCH(compound_mapcount, _total_mapcount);
->  FOLIO_MATCH(compound_pincount, _pincount);
->  #ifdef CONFIG_64BIT
->  FOLIO_MATCH(compound_nr, _folio_nr_pages);
-> +FOLIO_MATCH(_private_1, _private_1);
->  #endif
->  #undef FOLIO_MATCH
->  
-> @@ -370,6 +375,16 @@ static inline void *folio_get_private(struct folio *folio)
->  	return folio->private;
->  }
->  
-> +static inline void folio_set_private_1(struct folio *folio, unsigned long private)
-> +{
-> +	folio->_private_1 = private;
-> +}
+On 8/29/22 22:53, Niklas Söderlund wrote:
+> +  **BAD_FIXES_TAG**
+> +    The fixes line does not fall in line with the standards specified by the
+> +    community.
 > +
-> +static inline unsigned long folio_get_private_1(struct folio *folio)
-> +{
-> +	return folio->_private_1;
-> +}
+> +    See: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#describe-your-changes
 > +
->  struct page_frag_cache {
->  	void * va;
->  #if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
-> -- 
-> 2.31.1
-> 
+>  
+
+Did you mean "The Fixes: tag is malformed"?
+
+Also, mention that this message can occur when the tag is split
+into multiple lines (e.g., when pasted in email program with word
+wrapping enabled).
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara

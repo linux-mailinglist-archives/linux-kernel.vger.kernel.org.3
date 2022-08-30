@@ -2,145 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAED55A6284
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:55:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB5665A6288
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiH3LzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52392 "EHLO
+        id S229851AbiH3Lza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiH3Lyw (ORCPT
+        with ESMTP id S229831AbiH3Lz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:54:52 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2088.outbound.protection.outlook.com [40.107.20.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9584610A7;
-        Tue, 30 Aug 2022 04:54:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jx9I7QV3KvUOGUM2RYaCpruzSzNSHxIqdsnaMgKDMpfwz4aSZJsYugArJ76+/CwPiMQNyphMqEn3rhs3JmxH0allu4W5q6UO6LT4SnlcSLEhw1mRY/Gnspw25e3vef6dpxr7/IlIT+mJGHQQWE/3iz+wSH+fObDI6yvoi2WtL/qUBQc18z962TugOgSJZtoWqLAPx6hk/eYyscq48hYLaylf85TCCQt2VPOvP2bbtSPRyHZvhzCvjt0XIzKet1DHNKsNXLW4Ono3SIXujcgcYknPujV0MlYLCTHzddrXduWoQVzUTY9t0PPP7VkmLD6dI7S9F6Misoo0AiCbWl8XhA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3Nfo7WiGI/7gnvSct9EU5g9uSM+o9Qlx2zIWHlv4zZQ=;
- b=ZB5XlDEp3zG2w/j3KTJi4jp2RjtwKX5Q7GYATipQbt2wl3S7xeVUbnSOdv0Pzje3gesW8Y8LF5hyaJ3zBxcc7hbgMqarBX0dh8oJJm/rgbAH4bipgnAd23kMsYIK1TrdvWsMuq8wu0Bba3GN9DkzR7mSYr8Y1exJvAiSdH1QcqYsByL3IWwfs/qeSgOd5K+vuvVAHt1G0b0zELcQuShI2gyPCSlKTie6OV/bmIv+P8U3HYHsGE8AhG7picgr07nrMz81+fKssBsaEAgW5vyYK5vmGYpH8LDcfTLrhUWig1pbt6Zm1cPa4jASpJqOEwDtAKZKyWjP3xd/zTojidAapA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
- dkim=pass header.d=suse.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Nfo7WiGI/7gnvSct9EU5g9uSM+o9Qlx2zIWHlv4zZQ=;
- b=wB/ksOeEf+EwSTCAB5DHnkwyWFww4PbLDbSdEggHZ3Gc/FWaByBkKdVzELbpm8bQXPgkvOuBG8SC3WyPSJ1RX/DmHIYNi8xdqbeKKU+hyKYQJk31J2UOZFagww394/qNz77m8RNrM/nY6pPmzdIlZKqB8zw/LvbCyT38x3NmEUTyzYRBqazveDZe+iN3TfSDJ6N8LpH6aRc8H6ASYZgWGY+yC6wAHQmhnLqianvL2HyDO2PEiMV/ml7ezuNZAEZmhMefWMtvzmf0slo++FwZnKDvoDw2axr83pvOOV3UBmJtFEkMQz6tUwF+8ML4/Fze/zRaTCCYuBgOpMDNcu4vXA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=suse.com;
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com (2603:10a6:800:126::9)
- by VI1PR04MB7200.eurprd04.prod.outlook.com (2603:10a6:800:12d::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Tue, 30 Aug
- 2022 11:54:45 +0000
-Received: from VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::b083:534b:70ae:416a]) by VI1PR04MB7104.eurprd04.prod.outlook.com
- ([fe80::b083:534b:70ae:416a%2]) with mapi id 15.20.5566.021; Tue, 30 Aug 2022
- 11:54:45 +0000
-Message-ID: <31aeee3c-f4f1-16a8-272b-96da5d4a565e@suse.com>
-Date:   Tue, 30 Aug 2022 13:54:43 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] usb: add quirks for Lenovo OneLink+ Dock
-Content-Language: en-US
-To:     JFLF <jflf_kernel@gmx.com>, gregkh@linuxfoundation.org,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220824160946.10128-1-jflf_kernel@gmx.com>
-From:   Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20220824160946.10128-1-jflf_kernel@gmx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR3P281CA0074.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:1f::12) To VI1PR04MB7104.eurprd04.prod.outlook.com
- (2603:10a6:800:126::9)
+        Tue, 30 Aug 2022 07:55:26 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF964E63A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 04:55:24 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d12so10864221plr.6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 04:55:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=fyFT8QYNTXAXuWa2luhizjn+sDYqI/fEqOEfOhP43Go=;
+        b=lOLC5rNnSUFiPL4SOwr2ytXsEZFRVUUpHGbgCOKoPj2miFeoURlvUj1yknB6xl1h/j
+         ah72aaCgp8ugpvrwn1EXouIO1NwWyKBY1J/vpNW2OcXuaCJdf8jexulLw7BBC6cpSids
+         bgnZcCWsYvU1jtXTF6vzt6Uz73cpR91PPGlNqB6iMtg/9rSKwkoy13K8xj6fX8XB+bXO
+         4pD7owWwkwoAJVvadJCdjF7gKHHys2w0iDhtt/cjKLRaBA9HlvyGF99qnDgSdFNUtMMR
+         JTLT10bsq69P3DZf9L91zWge4xEAi6gBkssDabwm1J9Of5LFwIjlVW2Ot49WsYSIB9Hx
+         2OTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=fyFT8QYNTXAXuWa2luhizjn+sDYqI/fEqOEfOhP43Go=;
+        b=vdysGKFggSAP7Jtdvi3KviWeAgqVe82kLSthPqtp+Hshm+pWsVTCQFOp1kgHRBlth6
+         hk4CV1aQmrBXNsQ6939flDTwlRdd6xNrdCArREW1DVO9UEIPRAOfPPxA/K+YtAB51yKl
+         u4oMsjDqjvQG4i6DE3FraXgznI2IdtWjg4UBxiIgaZJzPnlXlP7jGqYAk54uNxPqYrPS
+         TL1wQjyd5pMbKtH3/w6z4A05RhCSv2Y53BqNhG/Kf92COpLqE2Ad/lU5SXK93dRK9g0v
+         qwhljSLON96XUmzcem1uf/k3sjUNqREtXwlkS8JWvdfWOYSZdw8O5z76gOmlFY8vy0+c
+         wkYg==
+X-Gm-Message-State: ACgBeo3i2lI3s/pQ5Aj8/fFezrx/wRVABUd8TvCjiGw5jpTj88rrZwSC
+        3gJS4wy8s+kF7tICIWvFogqOcF4ihmB0
+X-Google-Smtp-Source: AA6agR4nKp8fxJW7OsYF7nGW1wKJPM3RJj8PdqSwrgqEzo6hws6adwA09zAj/DOEBcmbHaoPNv8/QQ==
+X-Received: by 2002:a17:90a:d343:b0:1fd:b437:7ae9 with SMTP id i3-20020a17090ad34300b001fdb4377ae9mr12947467pjx.73.1661860523933;
+        Tue, 30 Aug 2022 04:55:23 -0700 (PDT)
+Received: from thinkpad ([117.217.182.234])
+        by smtp.gmail.com with ESMTPSA id a6-20020a170902ecc600b0016ed5266a5csm9615538plh.170.2022.08.30.04.55.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 04:55:23 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 17:25:14 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Krishna Chaitanya Chundru <quic_krichai@quicinc.com>
+Cc:     Stephen Boyd <swboyd@chromium.org>, helgaas@kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mka@chromium.org,
+        quic_vbadigan@quicinc.com, quic_hemantk@quicinc.com,
+        quic_nitegupt@quicinc.com, quic_skananth@quicinc.com,
+        quic_ramkri@quicinc.com, dmitry.baryshkov@linaro.org,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Stanimir Varbanov <svarbanov@mm-sol.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH v5 2/3] PCI: qcom: Restrict pci transactions after pci
+ suspend
+Message-ID: <20220830115514.GD135982@thinkpad>
+References: <1659526134-22978-1-git-send-email-quic_krichai@quicinc.com>
+ <1659526134-22978-3-git-send-email-quic_krichai@quicinc.com>
+ <CAE-0n500y-n+ZjasYQRAa3JgamQG1c+Aqn0YiX-i0L-w6C4dbQ@mail.gmail.com>
+ <3d052733-3600-b6eb-baf3-d8806a150af3@quicinc.com>
+ <CAE-0n53oMnnn7rOPEiibc=XM52z9THDc9jYhe3x3C_AsLtmARQ@mail.gmail.com>
+ <81dcbf72-92bb-093a-da48-89a73ead820e@quicinc.com>
+ <CAE-0n50NRiBNDjK2UrA_wOoRz3+3cKb4uiUiCw4t1F19Kw9EhA@mail.gmail.com>
+ <20220827172655.GA14465@thinkpad>
+ <a1b7c47c-9657-54bb-6b4e-1d98b3a65b91@quicinc.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f6d0b878-309f-4516-699e-08da8a7e6ea7
-X-MS-TrafficTypeDiagnostic: VI1PR04MB7200:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uT6MRA6RK7q2gnqViOSbmiLpYltfrfxax4gu8vm2F+qfhKdck5Izirk8uT3TJQHSPRZNir1a3rYpWg390iuuZX0wQteoWnMbhRH01h4RGSIqBSQjfrWKVfhThwhQ8ZPwJ4jpCldjgBUWfsDW/hy782b08F86PidnHs+bomO+1CRIIxHDqWl5CKGmPIxMle0q48l+lRuKMXpY8UKO7wmA/NpdypYDNr+u1sNGm+uripYP0Rdf5XGnL3V4hY6nK8/u+xYDsEJQCORyz7tcdcdo49V838FHnpjgaHgPFLZCFFOMq7oEEesQvyY3IBQK6zE6BBDY+LvH/lCT/rVtAhIA2uv3bpOb5gj6VvPHwVDgA9amzrCPfXqVm/HQd7SwZGNwGBpKLjdWNBLOo6UjBGzzDBngfPp93jGOr9F3Jx08sM/MjqYSs1HqP9UhdyMTSARZvRUhzV9j8+e1kv0QEcX6ioiUc4tYSNtCKl9UEaGhgpLMnchpi8+hNjOwOsE0BH9E8osrTwvOHZN+uhz9m/ise9IjdbPs7QPSreglul9loolh1pjpXl+2zF6MqyvfRPoNNNS5t34nPh8berV5ktehJ00K3vjsJCECm0CSY+ICDue8aoecHy0/EDeksuSTvO3JtqCJfXntdpup7/RmBKwdVSTbo3y6TvaWelBpfCjvWJGU4QVmf3mm8SIokEOUnqOmTsT5OrI0yzHEOPafIETtoFLeJXYfRIcNZc75TaQZqlFvRwqcxo1DgHP+dy2qt+QSK+g5dRe+53+L0+Gh9PH8gZUR68duMoZON/QVep/GFks=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB7104.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(136003)(39860400002)(396003)(366004)(346002)(83380400001)(6506007)(41300700001)(53546011)(316002)(86362001)(478600001)(31696002)(6486002)(38100700002)(6512007)(2616005)(5660300002)(2906002)(66946007)(4744005)(186003)(8936002)(8676002)(66476007)(66556008)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZjhhWmdhK3hWQlFlUElNa3VYTzlFNDEyRTIzRmhkN1pVeXNpeDdxL3BwTUZu?=
- =?utf-8?B?bGtiZ0xLam5SQlE2eXhkVW45Z3hwdEd4T1NiaHh1Q01UUlZmYVlhMUR3WDJj?=
- =?utf-8?B?YjVwRVYwVGNQWjI3V0IwWGY5WGx2TTZwVHJRSktIVGZxODluZFU2RUhKOFlO?=
- =?utf-8?B?ZWFoQWR3VStJUzVIOW5GQTArdk9nUm5Fd2xLelh1cmdseFZtaGI4TEg4MlZW?=
- =?utf-8?B?aE1JZnJmVVJ3eXdIRjZFUENMeHdNU1lHeE1jcTZzM2hBWlEzN2NpRTZGVmhu?=
- =?utf-8?B?RzI4OStEa28wY1lwMjNWQWNxazQ0TGIxN09MRmRhdGpLU2lsamFJRVkvYzVv?=
- =?utf-8?B?cE1YNmtGSWRpSGVtVzZScXZGT3FFSnN0ME1GSWYyRXhXbGpwRHVTUGI3MjRU?=
- =?utf-8?B?TXhTNXNZZy9FelZFZnFidHNJejdnTVVKdGp5amd6dVlCVU9pVWZJZU1RbEJo?=
- =?utf-8?B?dTB1aFB6eGMvQkM3djVoZDl6THNaOTJQeGhQNGY1Y2xyVWR1QmVBcjFTdmNv?=
- =?utf-8?B?eEgvWmZvemVITU1vcDduRHRYUjBKZjV0QTc5YVFzV05Halh2QVV5UU1lWU1z?=
- =?utf-8?B?MUcwbjJnSW9ER0tBd0NmU3orS001ZWJZUVhCWDQ1KzI3VHZtV2puSkZPd1lh?=
- =?utf-8?B?NWgvY3ZqWHpST3NDNVVRSk1Td1R1VFExK0RreWNtTHBCMURjbVVNb0p2RHgy?=
- =?utf-8?B?V2hzbnBQMDVRbjh4OTk5ZXNBcFFab0paUDl2REdRUWFoY2xRd2xRcHhrajZU?=
- =?utf-8?B?RXlXTnp0N2MzMExYamkwdG1UZUNJdkVHcFN2Z08zbDJ4d1Jyd0YrZ1JuZVRv?=
- =?utf-8?B?alpOOEdBdnFVWnM5NUdXdSt4emxHdVZhQlBYUVJ3cGdUdzB3ZGJBNHhxeDBZ?=
- =?utf-8?B?Rjd1MjNTVHhDK0dveHhQM0NtSG1RQzVmdjJJenBHTHcrRThFdTJ3aHByd0dO?=
- =?utf-8?B?Q3NsZVEwL041MGVoTVlYTFU5M29DWTAvZjVnT0c5eDJ3eGtKUVVYZkhhdWtC?=
- =?utf-8?B?d0V5WmpscDJPVkh0RCtlOElyN1ZWODhmR25LazJHSHFZQUNxd3crM3R2NSti?=
- =?utf-8?B?Tk1QWUxSM0tHVmEzcjJGbHg1aUxmRFp6YkV4N2F6YUFYOEdaUWJGTHRBR3Iz?=
- =?utf-8?B?eEorUm9SY3g0Zkl3aUJvRkwzZkxVZWdpaVc0YXlTNmwzb1c1Tm9HRENndy80?=
- =?utf-8?B?R1V3QU5Zd0NjM1NCaHN3NllDYlRwM2dUTC9POUYxSGYwK2xnVW55N0dwZzg3?=
- =?utf-8?B?V0F6VnAwYTdoZkVzRmc3MVZLMzErRTZvZmUvY3k4YVZWbEl5Z2ZQYWFVRnlz?=
- =?utf-8?B?Wm4yS0NpV3pQMVR2VGM3TTluK1JUaFJmclNub1FOaklrbEIvTXk2dGdLVUEw?=
- =?utf-8?B?Tk9obUFlY0NjNm9wSk1hMXdxOFdoVWQveUI0UHgzMVdicGp5UFJuQ050T3Nk?=
- =?utf-8?B?d2QzVHNkcXBTYStYN0dhdFRiQmZ1WDNyZUNCVWEwTE5Kcm0zbHJzZHBsVEVO?=
- =?utf-8?B?U3pmcVNiZURzUXlMU2djYU5EOHNKalpNcHVXckQwR0M0NTJranlBUm1QV0ha?=
- =?utf-8?B?MkxRVit3TGgwOVVQRzVvTlFiUXUvM1Z1dHByeU9XaHhjdlUvM2tpSFhhQ25a?=
- =?utf-8?B?NEM4ckJZQjAxME5NTU9WV2pEcEtyWmJlYWpkcVdyRU1HNjNaRitRdjQxaUNJ?=
- =?utf-8?B?VUlKeDlhNjB4UmFseDIwaDhnNVVwR0dPN0FSUTl5d3dhMHJKanZxblpQY2Ey?=
- =?utf-8?B?K3Y0MVBZNWpBZEtKNXF1cHUrZlFVSG1SeHVBZkFaY0NBeWhZM2VYNnJyZW14?=
- =?utf-8?B?Nllsd0xYUWZiY0NPcno5a1lTWkNwWjlpVlRKeDFRN0U3TEllVldEMG9RaUUw?=
- =?utf-8?B?ZkZmTmZhZmZWUGE0THNndnJ6ZmNlMmIyOFBlQUdxdFBJekxYTHBNWXdVL2hn?=
- =?utf-8?B?V0lvTDNiU2F1aFFiSG1yUGZ1TnU2L085eEUxaTNiL0RDMFczMCtmUG1BMndk?=
- =?utf-8?B?NEJqL0xpb0lDK2R0b29ha1BIc1JrQWZFa1lDSjNHK2xwTEw3NXdGaWJBVUlM?=
- =?utf-8?B?dEVhZEZaVjQ2SjhTRE1kQlFEMnNBS2YwLzF5cVdodGNVRU9MU2hvZWw0Ly82?=
- =?utf-8?B?ZUdqOEZMUXJnTmxyUHNNZDdlZ3hlTnVkcDREUGZKMTVJNVRaUTczbG50SmNp?=
- =?utf-8?Q?LxbTlCDD5eMzGgdz/737s7Y=3D?=
-X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6d0b878-309f-4516-699e-08da8a7e6ea7
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB7104.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2022 11:54:45.4730
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rDT0N8C75ESQuvptj1sPl+f8Q/SiVMjM2BJLlfWzQj8wvSLODxEY2+qTXxjCimL5Ux5n5pKiNxsTT9qYRCJT/g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7200
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a1b7c47c-9657-54bb-6b4e-1d98b3a65b91@quicinc.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24.08.22 18:09, JFLF wrote:
+On Mon, Aug 29, 2022 at 11:01:58PM +0530, Krishna Chaitanya Chundru wrote:
+> 
+> On 8/27/2022 10:56 PM, Manivannan Sadhasivam wrote:
+> > On Fri, Aug 26, 2022 at 03:23:00PM -0500, Stephen Boyd wrote:
+> > > Quoting Krishna Chaitanya Chundru (2022-08-25 06:52:43)
+> > > > On 8/24/2022 10:50 PM, Stephen Boyd wrote:
+> > > > > Quoting Krishna Chaitanya Chundru (2022-08-23 20:37:59)
+> > > > > > On 8/9/2022 12:42 AM, Stephen Boyd wrote:
+> > > > > > > Quoting Krishna chaitanya chundru (2022-08-03 04:28:53)
+> > > > > > > > If the endpoint device state is D0 and irq's are not freed, then
+> > > > > > > > kernel try to mask interrupts in system suspend path by writing
+> > > > > > > > in to the vector table (for MSIX interrupts) and config space (for MSI's).
+> > > > > > > > 
+> > > > > > > > These transactions are initiated in the pm suspend after pcie clocks got
+> > > > > > > > disabled as part of platform driver pm  suspend call. Due to it, these
+> > > > > > > > transactions are resulting in un-clocked access and eventually to crashes.
+> > > > > > > Why are the platform driver pm suspend calls disabling clks that early?
+> > > > > > > Can they disable clks in noirq phase, or even later, so that we don't
+> > > > > > > have to check if the device is clocking in the irq poking functions?
+> > > > > > > It's best to keep irq operations fast, so that irq control is fast given
+> > > > > > > that these functions are called from irq flow handlers.
+> > > > > > We are registering the pcie pm suspend ops as noirq ops only. And this
+> > > > > > msix and config
+> > > > > > 
+> > > > > > access is coming at the later point of time that is reason we added that
+> > > > > > check.
+> > > > > > 
+> > > > > What is accessing msix and config? Can you dump_stack() after noirq ops
+> > > > > are called and figure out what is trying to access the bus when it is
+> > > > > powered down?
+> > > > The msix and config space is being accessed to mask interrupts. The
+> > > > access is coming at the end of the suspend
+> > > > 
+> > > > and near CPU disable. We tried to dump the stack there but the call
+> > > > stack is not coming as it is near cpu disable.
+> > > That is odd that you can't get a stacktrace.
+> > > 
+> > > > But we got dump at resume please have look at it
+> > > > 
+> > > > [   54.946268] Enabling non-boot CPUs ...
+> > > > [   54.951182] CPU: 1 PID: 21 Comm: cpuhp/1 Not tainted 5.15.41 #105
+> > > > 43491e4414b1db8a6f59d56b617b520d92a9498e
+> > > > [   54.961122] Hardware name: Qualcomm Technologies, Inc. sc7280 IDP
+> > > > SKU2 platform (DT)
+> > > > [   54.969088] Call trace:
+> > > > [   54.971612]  dump_backtrace+0x0/0x200
+> > > > [   54.975399]  show_stack+0x20/0x2c
+> > > > [   54.978826]  dump_stack_lvl+0x6c/0x90
+> > > > [   54.982614]  dump_stack+0x18/0x38
+> > > > [   54.986043]  dw_msi_unmask_irq+0x2c/0x58
+> > > > [   54.990096]  irq_enable+0x58/0x90
+> > > > [   54.993522]  __irq_startup+0x68/0x94
+> > > > [   54.997216]  irq_startup+0xf4/0x140
+> > > > [   55.000820]  irq_affinity_online_cpu+0xc8/0x154
+> > > > [   55.005491]  cpuhp_invoke_callback+0x19c/0x6e4
+> > > > [   55.010077]  cpuhp_thread_fun+0x11c/0x188
+> > > > [   55.014216]  smpboot_thread_fn+0x1ac/0x30c
+> > > > [   55.018445]  kthread+0x140/0x30c
+> > > > [   55.021788]  ret_from_fork+0x10/0x20
+> > > > [   55.028243] CPU1 is up
+> > > > 
+> > > > So the same stack should be called at the suspend path while disabling CPU.
+> > > Sounds like you're getting hit by affinity changes while offlining CPUs
+> > > during suspend (see irq_migrate_all_off_this_cpu()). That will happen
+> > > after devices are suspended (all phases of suspend ops).
+> > The affinity setting should not happen since DWC MSI controller doesn't support
+> > setting IRQ affinity (hierarchial IRQ domain). In the migrate_one_irq()
+> > function, there is a check for the existence of the irq_set_affinity()
+> > callback, but the DWC MSI controller return -EINVAL in the callback. So this
+> > is the reason the migration was still atempted?
+> > 
+> > A quick check would be to test this suspend/resume with GIC ITS for MSI since
+> > it supports settings IRQ affinity and resides in a separate domain.
+> > Chaitanya, can you try that?
+> 
+> Hi mani,
+> 
+> I tried with gic its there also I see same behavior.
+> 
 
-> By process of elimination the controllers themselves were identified as
-> the cause of the problem. Through trial and error the issue was solved
-> by using USB_QUIRK_RESET_RESUME for both chips.
+Okay
 
-Hi,
+> The only which helps to comment out affinity in the following function.
+> 
+> diff --git a/kernel/irq/irqdesc.c b/kernel/irq/irqdesc.c
+> index 21b3ac2a29d2..042afec1cf9d 100644
+> --- a/kernel/irq/irqdesc.c
+> +++ b/kernel/irq/irqdesc.c
+> @@ -487,8 +487,9 @@ static int alloc_descs(unsigned int start, unsigned int
+> cnt, int node,
+> 
+> 
+> 
+>                if (affinity) {
+>                         if (affinity->is_managed) {
+> -                               flags = IRQD_AFFINITY_MANAGED |
+> -                                       IRQD_MANAGED_SHUTDOWN;
+> +//                             flags = IRQD_AFFINITY_MANAGED |
+> +//                                     IRQD_MANAGED_SHUTDOWN;
+> +                               flags = 0;//IRQD_AFFINITY_MANAGED |
+>                         }
+>                         mask = &affinity->mask;
+>                         node = cpu_to_node(cpumask_first(mask));
+> 
 
+The only solution I can think of is keeping the clocks related to DBI access
+active or switch to another clock source that consumes less power if available
+during suspend.
 
-aside from the aspects of getting this properly signed off and merged,
-this opens up a question. What does resetting a hub do to its children?
-That is if the request to wake up comes from a child, do we
+But limiting the DBI access using hacks doesn't look good.
 
-a) lose state in the child?
-b) retain the knowledge which port requested the wakeup?
+Thanks,
+Mani
 
-How far has this patch been tested?
+> > > > If there is any other way to remove these calls can you please help us
+> > > > point that way.
+> > > I'm not sure. I believe genirq assumes the irqchips are always
+> > > accessible. There is some support to suspend irqchips. See how the
+> > > struct irq_chip::irq_suspend() function is called by syscore ops in the
+> > > generic irqchip 'irq_gc_syscore_ops' hooks. Maybe you could add a
+> > > syscore suspend/resume hook to disable/enable the clks and power to the
+> > > PCI controller. syscore ops run after secondary CPUs are hotplugged out
+> > > during suspend.
+> > > 
+> > > Or maybe setting the IRQCHIP_MASK_ON_SUSPEND flag can be used so that on
+> > > irq migration nothing writes the irq hardware because it is already
+> > > masked in the hardware earlier. I think the problem is that on resume
+> > > we'll restart the irq from the first CPU online event, when you don't
+> > > want to do that because it is too early.
+> > > 
+> > > I have another question though, which is do MSIs support wakeup? I don't
+> > > see how it works if the whole bus is effectively off during suspend. If
+> > > wakeup needs to be supported then I suspect the bus can't be powered
+> > > down during suspend.
+> > Wake up should be handled by a dedicated side-band GPIO or in-band PME message.
+> > 
+> > But I still wonder how the link stays in L1/L1ss when the clocks are disabled
+> > and PHY is powered down. Maybe the link or phy is powered by a separate power
+> > domain like MX that keeps the link active?
+> We will come back to you on this.
 
-	Regards
-		Oliver
+Okay.
+
+Thanks,
+Mani
+
+> > 
+> > Thanks,
+> > Mani
+> > 
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்

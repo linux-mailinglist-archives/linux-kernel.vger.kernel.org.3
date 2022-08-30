@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6F45A6C69
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:41:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B8DF95A6C7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:42:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231437AbiH3SlN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:41:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47514 "EHLO
+        id S229736AbiH3Sm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231442AbiH3SlF (ORCPT
+        with ESMTP id S231402AbiH3SmX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:41:05 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BF4356F6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:41:04 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id v26so6509409lfd.10
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:41:04 -0700 (PDT)
+        Tue, 30 Aug 2022 14:42:23 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5AFB71999
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:42:22 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id t5so12016419pjs.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:42:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=whr6DsPc0YpQivNDZQFyeGw5fN+mBCcZ18Z6UAvm9sg=;
-        b=Rpd6Ew4iEx/DBhQPDIm7iU/aVsRKanTgd/uFQ49Dmw2HgayJ0KXQO0dfniF+F3KYFj
-         2tDZl2Z7hOlhvxBIhqE36WG9PP/dp0UH3KzzpUZhOT2W9OhpBTbztuB3yTznz39rZiIm
-         yiyEv3pKSa8OT4TwF9QjZf7tW+CiPL7ZYFf4eGuAt95EWd00w6AwgWOK00Oy4c+3qUtt
-         qeg8eg1fYJF+oEMV+7N8oEo3ovJiMFvvC30N8TgN/XYOMHALQCdnooaqPDd4CvbtjSoi
-         a/T/Do+jAlghN6jlNVj4nDGMpCHCnc7F8VHdIODKnv0MdFx1yihi94QmpPbMl+TvgNgW
-         EUbA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=/4wRyQVPnpm0KB4dE3umHjXeWEoivMkXwHyYZflvSps=;
+        b=oHW2q7g58OU5P4I1xg11aEMvZ4GqvzNeTNxgPmTS5nkgtaLrFThhrWWIbjQSHSIibI
+         KNxxW61WBoZriW6aocPIyN2bG+7apSGakrbqv8pmegKsvq6KD137k3nBMgOXLhVslzP1
+         1ycSlTZi2nAe+pH0XaDiQMY3Gq4LQSuXQ1pSQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=whr6DsPc0YpQivNDZQFyeGw5fN+mBCcZ18Z6UAvm9sg=;
-        b=tgAPRcKz14FCXUGc+fkO6fYCpWUJcX0RkgAOZ9Cd7B7Ww72+ldsRuwE82HyCjMeKlI
-         NkRr2zIE5Uh7V/mR19XeQz4suEueXkbGAnJfJa8X/AmUPQ7o6Y2LDutG6dAwL0/39/HK
-         8uzR1l9y/keVs3yAMzFynwFhsB8sEzy7Se8Kg487m/OtMVlwlR+TqS9X45k49FG1eH3X
-         nBmkICxDVtvvQo5B36i9D8EgmVG95C5avgdW5k/Y2hId3Y2lRoJ/ac0ygDCkVGZi9nO2
-         JF8IBTo5nyTzTz5scdwr69Wkmschwhm3lxcMffk1gdscJChGhJH6Rj2FWPZRurjcurSz
-         NCuA==
-X-Gm-Message-State: ACgBeo3LrTg7s0qNdLsyfZTHilgBRd2w/yofWdOmV6wz3nvRk60/ifmF
-        TBMVAJFeHMynSalPgTCqCxbcHw==
-X-Google-Smtp-Source: AA6agR7uzUMU5pJwXm8j90akKK+hS5iuQ/1f7T9YtWDas3OtBJVsQazsaOBVXkgtA+NzkUBx8xlVDQ==
-X-Received: by 2002:a05:6512:260f:b0:492:8e9f:c647 with SMTP id bt15-20020a056512260f00b004928e9fc647mr7650980lfb.443.1661884862629;
-        Tue, 30 Aug 2022 11:41:02 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id a28-20020a2eb55c000000b0025e2c5a12b6sm999660ljn.129.2022.08.30.11.41.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 11:41:02 -0700 (PDT)
-Message-ID: <69960d7f-321f-f8b6-66d3-456bbf697858@linaro.org>
-Date:   Tue, 30 Aug 2022 21:41:01 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=/4wRyQVPnpm0KB4dE3umHjXeWEoivMkXwHyYZflvSps=;
+        b=fda9uqkIrCHYZ2ZehL9wGGkYqShO1At/CHz+7qjzl9+7UimiJe+pSg7Ks6hBdl7g3I
+         3eDO2hk4PCaym5plg2Uad+exVKBscoSqyH9tz/omX5bPQlaESqM1cWgkDWl+fWfBIDVm
+         Xsci0GO//1Bm81ZkQika9zTXrbCssLgF0KYVyQuSLf1vtjRHVO5DWYL7NJUMC4oUxXe+
+         fXMDYdjQHGgm477dmZfIV0lDTAgOCEV1SEABJhr8f1vkanLcFn1a8vv0UwK4Jx4OVwCH
+         Y3LN+uvGwbbf3Xn+jV32sucfX+TvWPJ6llf0ta6RiOwxMOPVAqfuGle2pSIPvWaYgLux
+         M+Dw==
+X-Gm-Message-State: ACgBeo1Da/MKd97riJGb5Eo9fomhh23gB0qN7jOK7RwSbmaQzf9euMPr
+        iN9YGTzKCot6OM0S803TR9ptmQ==
+X-Google-Smtp-Source: AA6agR5BlmQWTRcjYXPHxW7g/mCkXXJ5KQ4OLa0ngCNjDRDFz87eUdeicBGUWiZ6SHhiWRAzSV9BtQ==
+X-Received: by 2002:a17:90b:4f81:b0:1fe:1716:fe20 with SMTP id qe1-20020a17090b4f8100b001fe1716fe20mr3001701pjb.63.1661884942237;
+        Tue, 30 Aug 2022 11:42:22 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id m2-20020a170902db0200b0016bf9437766sm10198594plx.261.2022.08.30.11.42.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 11:42:20 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 11:42:19 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Andrzej Hajda <andrzej.hajda@intel.com>
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-hardening@vger.kernel.org,
+        Daniel Latypov <dlatypov@google.com>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] overflow: Allow mixed type arguments
+Message-ID: <202208301141.8CA10CA@keescook>
+References: <20220829214550.3443472-1-keescook@chromium.org>
+ <8d880425-72f5-6ba6-933f-b8b016da88cd@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 10/11] dt-bindings: PCI: qcom-ep: Add support for
- SM8450 SoC
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        lpieralisi@kernel.org, robh@kernel.org, andersson@kernel.org
-Cc:     kw@linux.com, bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        dmitry.baryshkov@linaro.org
-References: <20220830165817.183571-1-manivannan.sadhasivam@linaro.org>
- <20220830165817.183571-11-manivannan.sadhasivam@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830165817.183571-11-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8d880425-72f5-6ba6-933f-b8b016da88cd@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,30 +74,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 19:58, Manivannan Sadhasivam wrote:
->    clock-names:
-> -    maxItems: 7
-> +    minItems: 7
-> +    maxItems: 8
->  
->    qcom,perst-regs:
->      description: Reference to a syscon representing TCSR followed by the two
-> @@ -125,6 +129,36 @@ allOf:
->              - const: sleep
->              - const: ref
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm8450-pcie-ep
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 8
+On Tue, Aug 30, 2022 at 08:40:25AM +0200, Andrzej Hajda wrote:
+> 
+> 
+> On 29.08.2022 23:45, Kees Cook wrote:
+> > When the check_[op]_overflow() helpers were introduced, all arguments were
+> > required to be the same type to make the fallback macros simpler. However,
+> > once the fallback macros were removed[1], it is fine to allow mixed
+> > types, which makes using the helpers much more useful, as they can be
+> > used to test for type-based overflows (e.g. adding two large ints but
+> > storing into a u8), as would be handy in the drm core[2].
+> > 
+> > Remove the restriction, and add additional self-tests that exercise some
+> > of the mixed-type overflow cases.
+> > 
+> > [1] https://git.kernel.org/linus/4eb6bd55cfb22ffc20652732340c4962f3ac9a91
+> > [2] https://lore.kernel.org/lkml/20220824084514.2261614-2-gwan-gyeong.mun@intel.com
+> > 
+> > Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> > Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> > Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> > Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> > Cc: Nick Desaulniers <ndesaulniers@google.com>
+> > Cc: linux-hardening@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> > v2: change names to "type1_type2__output-type" for better readability (Rasmus)
+> > v1: https://lore.kernel.org/lkml/20220829204729.3409270-1-keescook@chromium.org
+> > ---
+> >   include/linux/overflow.h |  6 ----
+> >   lib/overflow_kunit.c     | 77 +++++++++++++++++++++++++++++-----------
+> >   2 files changed, 57 insertions(+), 26 deletions(-)
+> > 
+> > diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+> > index 0eb3b192f07a..ad692fb11bf3 100644
+> > --- a/include/linux/overflow.h
+> > +++ b/include/linux/overflow.h
+> > @@ -63,8 +63,6 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+> >   	typeof(a) __a = (a);			\
+> >   	typeof(b) __b = (b);			\
+> >   	typeof(d) __d = (d);			\
+> > -	(void) (&__a == &__b);			\
+> > -	(void) (&__a == __d);			\
+> >   	__builtin_add_overflow(__a, __b, __d);	\
+> >   }))
+> 
+> Is there a reason to keep all local vars?
+> Why not:
+> #define check_add_overflow(a, b, d)
+> __must_check_overflow(__builtin_add_overflow((a), (b), (d)))
 
-Same as in previous patch - maxItems is not needed now.
+Excellent point! Those were there to avoid side-effects when doing the
+type comparisons in the macro, which are being removed too. :P
 
-Best regards,
-Krzysztof
+-- 
+Kees Cook

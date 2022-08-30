@@ -2,59 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C160B5A6786
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B09895A6785
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230483AbiH3Pf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 11:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41884 "EHLO
+        id S230232AbiH3PfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 11:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiH3Pft (ORCPT
+        with ESMTP id S229629AbiH3PfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 11:35:49 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD4074342
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:35:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661873745; x=1693409745;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GpLoBJm2Ty+i6TG+gd0vvbsgp0dzQ/zeD/DKMtwMfO0=;
-  b=Tl2WNb3S38Z432eVkcTYghwBGDJ6YRpM/lJoD6qAH6dN9ebFUydXbBNP
-   LW5i0jjWKKlDxXY1XrsvaC6nv0/7SfZr48FccCWQVqgNWG0rmeKfS5qrv
-   wbhh9vwcDX242xDI9z+Zq85+QE2bexgOd8DRKpH6dAoMtkDyyRemxjZPd
-   xx6cqHvt6+Wge/S7xerqgfO9UPmftolvTH/caPZa6CLVl9jEy5VIOUSrB
-   A/FRy0Qau1SeX83KGXbOkcpOEKqWOA02SXlhkzRbst9C6GFZaKcD56vUV
-   3QYidKtKGsb+9ZnhGoMQCl6XI8hrDqnN2M9Pb/2BXtXISDJxztxgXAax9
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="274957244"
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="274957244"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 08:35:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="562689838"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Aug 2022 08:35:21 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oT3Gr-0000MX-12;
-        Tue, 30 Aug 2022 15:35:21 +0000
-Date:   Tue, 30 Aug 2022 23:34:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [arm-integrator:virt-to-pfn-v6.0-rc1 24/24]
- arch/x86/xen/setup.c:341:20: sparse: sparse: incorrect type in argument 1
- (different base types)
-Message-ID: <202208302308.KMyPwJTE-lkp@intel.com>
+        Tue, 30 Aug 2022 11:35:11 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCDC1C105;
+        Tue, 30 Aug 2022 08:35:09 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id m7so7137117lfq.8;
+        Tue, 30 Aug 2022 08:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc;
+        bh=8CZDm+Rx5pWirtBbG6z1Askq14xihhKzy8697kobm8Y=;
+        b=YYbnFlTpKq5abMWPJiqxB9eZnai3g92csfa92BL6vjrXdIXwPrYG6tE4Wy2TKCg1l0
+         I6GZC1qB8eBHJkftfwlnuXQn8M6kWKj8g1aVIUe7iShZpiAJNAP2Vx7RGsehynricOkB
+         PI/cVoFcKSkU8voN3hPAe+muuoA519oYhsQe9tCH4DAHlxcS/TaLPBeO78iPQFE2OLQS
+         i0zbfR18bxim0sJk4wgiUhnFHt5R8q2MZYdD4DKHbzYytqL3arH/i7RssulbS/QRHuJQ
+         QA+AO5+U6BEBuNuUkzYUlKhT7Wh8RMsWUHnFbL3dWbBRpEMT0MarvwTn7U/vB1uIQ4TI
+         rrAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=8CZDm+Rx5pWirtBbG6z1Askq14xihhKzy8697kobm8Y=;
+        b=tkAdpTmIJ/XifRi00yfcM/3W9HuLyNTPPnSrUZdz34jOJ46kLSf4FxAy4S7KPzGwbJ
+         HeUdefOgcu5sXJsfagZ/Cx3nFvGjVtdXXwu/f2DZeZb/Z7Z/pKaYyEbkx0JAilFw5O2L
+         82S1rG+wIgAYtSvOmqcd0llFo4KMl4GQqG85+KlDGJTCtV5en79aBZB7kPa9N6f/hZHD
+         R4gMfmf6eOeIBIMxI0ali56ik9WEWusivSGog0fvC+YQCbxRb+XA55n2/7QgOsxPDse0
+         HfFyPcskVtUJxYpAYoDAgu8uVW2BSN41N00jWEwrPGVaV0VjmPyWlv7Gtl84+wfslSs7
+         Xq4w==
+X-Gm-Message-State: ACgBeo0FcOjjYzeVvoqxQOB3Nbg1W3RvjZOG8gGp3y3+RC04IWfChxmw
+        tG/8n3Feb7kTCIc2UAkfh+e6Aw0MRJBeGw==
+X-Google-Smtp-Source: AA6agR4ExSlbec7qBnBfFEYvJAiDQyfz44r18jMrVkn3VL2AfoKRIVo4CKmar/de40oMm9/tPx+qNg==
+X-Received: by 2002:a05:6512:1087:b0:492:e36c:d6c6 with SMTP id j7-20020a056512108700b00492e36cd6c6mr7454982lfg.502.1661873707631;
+        Tue, 30 Aug 2022 08:35:07 -0700 (PDT)
+Received: from ubuntu.armcompdev.pub.tds.tieto.com ([89.46.86.70])
+        by smtp.gmail.com with ESMTPSA id h1-20020a05651c124100b0026181a42284sm1315165ljh.88.2022.08.30.08.35.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 08:35:07 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 15:35:00 +0000
+From:   Marek Bykowski <marek.bykowski@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] of/fdt: Don't calculate initrd_start from the DT if
+ 'linux,initrd-end' is 0
+Message-ID: <20220830153500.49206b5a@ubuntu.armcompdev.pub.tds.tieto.com>
+In-Reply-To: <CAL_JsqKGgZOSdWQ2ithipvrRAYwt-vOL1z9-RM++-_h6pA=C_Q@mail.gmail.com>
+References: <20220826220017.188066-1-marek.bykowski@gmail.com>
+        <CAL_JsqKGgZOSdWQ2ithipvrRAYwt-vOL1z9-RM++-_h6pA=C_Q@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,95 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git virt-to-pfn-v6.0-rc1
-head:   fd7709c9f1119794e96665ae423d79d93bfe43fc
-commit: fd7709c9f1119794e96665ae423d79d93bfe43fc [24/24] x86/xen: Make virt_to_pfn() a static inline
-config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220830/202208302308.KMyPwJTE-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git/commit/?id=fd7709c9f1119794e96665ae423d79d93bfe43fc
-        git remote add arm-integrator https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-integrator.git
-        git fetch --no-tags arm-integrator virt-to-pfn-v6.0-rc1
-        git checkout fd7709c9f1119794e96665ae423d79d93bfe43fc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash arch/x86/xen/ drivers/pci/
+On Sun, 28 Aug 2022 20:12:41 -0500
+Rob Herring <robh+dt@kernel.org> wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> Shouldn't we just check that start < end?
+> 
+> Can we check this somewhere not DT specific (and also not arch
+> specific)? Then we don't have to worry if any other method of setting
+> initrd could have the same error.
 
-sparse warnings: (new ones prefixed by >>)
->> arch/x86/xen/setup.c:341:20: sparse: sparse: incorrect type in argument 1 (different base types) @@     expected void const *v @@     got unsigned long buf @@
-   arch/x86/xen/setup.c:341:20: sparse:     expected void const *v
-   arch/x86/xen/setup.c:341:20: sparse:     got unsigned long buf
+Yes, we can switch from checking on the end being 0 to that proposed:
+- if (!end)
+-     return;
++ if (start >= end)
++     return;
 
-vim +341 arch/x86/xen/setup.c
+Then the check would even go further as would also catch cases where
+end < start.
 
-83d51ab473dddde David Vrabel  2012-05-03  316  
-83d51ab473dddde David Vrabel  2012-05-03  317  /*
-4fbb67e3c87b806 Matt Rushton  2014-08-11  318   * This function updates the p2m and m2p tables with an identity map from
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  319   * start_pfn to start_pfn+size and prepares remapping the underlying RAM of the
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  320   * original allocation at remap_pfn. The information needed for remapping is
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  321   * saved in the memory itself to avoid the need for allocating buffers. The
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  322   * complete remap information is contained in a list of MFNs each containing
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  323   * up to REMAP_SIZE MFNs and the start target PFN for doing the remap.
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  324   * This enables us to preserve the original mfn sequence while doing the
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  325   * remapping at a time when the memory management is capable of allocating
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  326   * virtual and physical memory in arbitrary amounts, see 'xen_remap_memory' and
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  327   * its callers.
-83d51ab473dddde David Vrabel  2012-05-03  328   */
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  329  static void __init xen_do_set_identity_and_remap_chunk(
-4fbb67e3c87b806 Matt Rushton  2014-08-11  330          unsigned long start_pfn, unsigned long size, unsigned long remap_pfn)
-4fbb67e3c87b806 Matt Rushton  2014-08-11  331  {
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  332  	unsigned long buf = (unsigned long)&xen_remap_buf;
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  333  	unsigned long mfn_save, mfn;
-4fbb67e3c87b806 Matt Rushton  2014-08-11  334  	unsigned long ident_pfn_iter, remap_pfn_iter;
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  335  	unsigned long ident_end_pfn = start_pfn + size;
-4fbb67e3c87b806 Matt Rushton  2014-08-11  336  	unsigned long left = size;
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  337  	unsigned int i, chunk;
-e201bfcc5c4fe6d David Vrabel  2013-07-22  338  
-4fbb67e3c87b806 Matt Rushton  2014-08-11  339  	WARN_ON(size == 0);
-e201bfcc5c4fe6d David Vrabel  2013-07-22  340  
-1f3ac86b4c45a14 Juergen Gross 2014-11-28 @341  	mfn_save = virt_to_mfn(buf);
-4fbb67e3c87b806 Matt Rushton  2014-08-11  342  
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  343  	for (ident_pfn_iter = start_pfn, remap_pfn_iter = remap_pfn;
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  344  	     ident_pfn_iter < ident_end_pfn;
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  345  	     ident_pfn_iter += REMAP_SIZE, remap_pfn_iter += REMAP_SIZE) {
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  346  		chunk = (left < REMAP_SIZE) ? left : REMAP_SIZE;
-4fbb67e3c87b806 Matt Rushton  2014-08-11  347  
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  348  		/* Map first pfn to xen_remap_buf */
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  349  		mfn = pfn_to_mfn(ident_pfn_iter);
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  350  		set_pte_mfn(buf, mfn, PAGE_KERNEL);
-4fbb67e3c87b806 Matt Rushton  2014-08-11  351  
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  352  		/* Save mapping information in page */
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  353  		xen_remap_buf.next_area_mfn = xen_remap_mfn;
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  354  		xen_remap_buf.target_pfn = remap_pfn_iter;
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  355  		xen_remap_buf.size = chunk;
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  356  		for (i = 0; i < chunk; i++)
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  357  			xen_remap_buf.mfns[i] = pfn_to_mfn(ident_pfn_iter + i);
-4fbb67e3c87b806 Matt Rushton  2014-08-11  358  
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  359  		/* Put remap buf into list. */
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  360  		xen_remap_mfn = mfn;
-4fbb67e3c87b806 Matt Rushton  2014-08-11  361  
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  362  		/* Set identity map */
-bc7142cf798ae77 David Vrabel  2015-01-07  363  		set_phys_range_identity(ident_pfn_iter, ident_pfn_iter + chunk);
-4fbb67e3c87b806 Matt Rushton  2014-08-11  364  
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  365  		left -= chunk;
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  366  	}
-4fbb67e3c87b806 Matt Rushton  2014-08-11  367  
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  368  	/* Restore old xen_remap_buf mapping */
-1f3ac86b4c45a14 Juergen Gross 2014-11-28  369  	set_pte_mfn(buf, mfn_save, PAGE_KERNEL);
-4fbb67e3c87b806 Matt Rushton  2014-08-11  370  }
-4fbb67e3c87b806 Matt Rushton  2014-08-11  371  
+My taking is early_init_dt_scan_chosen() that sets initrd size
+incorrectly is DT specific but generic/arch agnostic. So that if
+the error got introduced by a bootloader/U-Boot through the DT
+chosen node, we should catch it in DT and react.
 
-:::::: The code at line 341 was first introduced by commit
-:::::: 1f3ac86b4c45a146e090d24bf66c49b95e72f071 xen: Delay remapping memory of pv-domain
+ARM64, for example, before going down for mapping for the incorrect
+address (some extra large address resulting from the negative to
+positive value conversion), has a check after DT parsing if
+phys_initrd_size is other than 0 to proceed, and it is so that it
+passes or in other words it doesn't catch the error.
 
-:::::: TO: Juergen Gross <jgross@suse.com>
-:::::: CC: David Vrabel <david.vrabel@citrix.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Marek

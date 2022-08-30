@@ -2,192 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 413865A60D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:34:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1256D5A60D9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:34:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiH3KeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:34:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54354 "EHLO
+        id S229618AbiH3Kef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiH3KeR (ORCPT
+        with ESMTP id S229819AbiH3Ked (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:34:17 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 149BFA61F2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:34:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661855656; x=1693391656;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=UmE9G5WYbcf6gjWp81kIsNp2P30UbhH4t6g5LEz3WGo=;
-  b=VKn7E4QpsupSwIil7j5x2ytRHcil+kMapwxDBcvUXughw2EbOi8QlvuY
-   RA/dV1wJRIdsX+4H5arwWESHVuqQRfVwVx8ibpo2wfqeFGZNFHJALgQzX
-   qD20xzzK91CfJcn3W4hahCy3gWrdz87Lz7cmKp0rBL9SpMQ4ip9T1Xgmi
-   3y6CJCTiRP5taCRJKSQJ7gewhT+5HFEpgMWf6BvOn7mC/hidXwphgz+2B
-   4uN/gS8ZQAZ6ZQPu3HQZCLpWDWfcWZk5cb4ChOsanrzjXItl8U3HtASY9
-   SJ3JAleugw7KjLpO1bIpGdQPLU9Iq4n7lo6tRoKFE5F0Uxj3s7FECf+MZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="359103329"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="359103329"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 03:34:14 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="753982171"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Aug 2022 03:34:13 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSyZQ-0000Be-2m;
-        Tue, 30 Aug 2022 10:34:12 +0000
-Date:   Tue, 30 Aug 2022 18:33:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream-workaround 186/314] vmlinux.o: warning:
- objtool: vmw_port_hb_in+0x114: stack state mismatch: cfa1=5+16 cfa2=4+8
-Message-ID: <202208301832.2HlmZGf8-lkp@intel.com>
+        Tue, 30 Aug 2022 06:34:33 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F548A99D6;
+        Tue, 30 Aug 2022 03:34:32 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id b26so3958411ljk.12;
+        Tue, 30 Aug 2022 03:34:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
+        bh=UCod0/HFGUKrf2p2FZSzQ0kgTIqag5Zo13Nui3Avcqk=;
+        b=noyZtazLMxDeLMfMDx3LzywqrsR+b2bysTT2q3oiIa9pxwlngpzxZTDp13jqqd6dCX
+         +iruMKgnQOuteRSP16gDFsiPCoF8X2cOaqV47Oqp+djtXyA+CjsWoKiOvMqp2+zFk3h9
+         Edg/HiO1bLa3dtSePz0K6bXpcgaMOAAVybubczCy4zESHU8A6j4Hqk2cDHQlQPn1rgs4
+         XjWKTmSKEr8NywzyeQvckAGZEvmrOO/3MjkfonVyUZXCRpxVZqkGHyc5QCbVn8ZWo7EK
+         VLBl0XbKPSzOeoGKkV+mILUlAr43vEefx0LUkmTabu1Zku3CQcOxCE6s+FqLHeEIgwQW
+         3wOg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=UCod0/HFGUKrf2p2FZSzQ0kgTIqag5Zo13Nui3Avcqk=;
+        b=akbcr7J/hs3f9yKI9ZwKw4kcOB6TT3Ga3ButDNw5RsN/frY80u6Vel14nQVNIR24O9
+         jXmvikorCv+gVKpPX1qyqhK4qI0BMgLlLoLA5UzESB6PvDypgsA2zD4qbq+HpsqAhIHy
+         0JrEqj6lIcrIvWEbQVJ1JxnbhOYqHptny3N40TBYgBioeLwwUteyTgwODXlFxVPRlVKn
+         qBQAn+kIgTRxrEkYNDXq5cpyZXqWH0o9z5miAZazR8PqXEJ/wm7bsjqjuCrvtHBssRYZ
+         aJujxTm+bBn/85HFwrFU+2wJvpVO+MI1OOQOYm/y1NHtR7zJ1waE+8G4EGuFu4nBYLIL
+         eZ1Q==
+X-Gm-Message-State: ACgBeo0M/GH2Cz8AjURxCoMCFvtmRcvG0MGhjWGO4lKKVUvjkYelCbwW
+        NOKAiIJsJM7s8eJh3fZjpMA=
+X-Google-Smtp-Source: AA6agR42HvKOpgztKSbICMioabWyivzr6d0K3E8tGVuitdTRPJulyJHicb40e5bgT5czhA+yR45EiQ==
+X-Received: by 2002:a05:651c:1993:b0:263:a41d:3d7b with SMTP id bx19-20020a05651c199300b00263a41d3d7bmr3523730ljb.63.1661855670682;
+        Tue, 30 Aug 2022 03:34:30 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id e20-20020a196914000000b0048b17852938sm1099036lfc.162.2022.08.30.03.34.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 03:34:30 -0700 (PDT)
+Message-ID: <8f501644-9793-214f-8a19-45ee8af3c907@gmail.com>
+Date:   Tue, 30 Aug 2022 13:34:28 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee@kernel.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, jic23@kernel.org,
+        lars@metafoo.de, deller@gmx.de, broonie@kernel.org,
+        andriy.shevchenko@linux.intel.com
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, szunichen@gmail.com,
+        andy.shevchenko@gmail.com
+References: <20220830034042.9354-2-peterwu.pub@gmail.com>
+ <20220830034042.9354-8-peterwu.pub@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v9 07/10] power: supply: mt6370: Add MediaTek MT6370
+ charger driver
+In-Reply-To: <20220830034042.9354-8-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Isaku,
+On 8/30/22 06:40, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> MediaTek MT6370 is a SubPMIC consisting of a single cell battery charger
+> with ADC monitoring, RGB LEDs, dual channel flashlight, WLED backlight
+> driver, display bias voltage supply, one general purpose LDO, and the
+> USB Type-C & PD controller complies with the latest USB Type-C and PD
+> standards.
+> 
+> Add support for the MediaTek MT6370 Charger driver. The charger module
+> of MT6370 supports High-Accuracy Voltage/Current Regulation,
+> Average Input Current Regulation, Battery Temperature Sensing,
+> Over-Temperature Protection, DPDM Detection for BC1.2.
+> 
+> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
+> 
+> +
+> +static const struct linear_range mt6370_chg_ranges[MT6370_RANGE_F_MAX] = {
+> +	LINEAR_RANGE_IDX(MT6370_RANGE_F_IAICR, 100000, 0x0, 0x3F, 50000),
+> +	LINEAR_RANGE_IDX(MT6370_RANGE_F_VOREG, 3900000, 0x0, 0x51, 10000),
+> +	LINEAR_RANGE_IDX(MT6370_RANGE_F_VMIVR, 3900000, 0x0, 0x5F, 100000),
+> +	LINEAR_RANGE_IDX(MT6370_RANGE_F_ICHG, 900000, 0x08, 0x31, 100000),
+> +	LINEAR_RANGE_IDX(MT6370_RANGE_F_IPREC, 100000, 0x0, 0x0F, 50000),
+> +	LINEAR_RANGE_IDX(MT6370_RANGE_F_IEOC, 100000, 0x0, 0x0F, 50000),
+> +};
 
-FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
+This looks good to me now :) Thanks for the linear-range improvement!
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   552dd80c48f67ca01bcdd10667e0c11efd375177
-commit: 9d5abec402aef6791b3a57d9cefe3cad2dcd2cb9 [186/314] [REVERTME] fix undefined symbol of cc_init
-config: x86_64-randconfig-a002-20220829 (https://download.01.org/0day-ci/archive/20220830/202208301832.2HlmZGf8-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/9d5abec402aef6791b3a57d9cefe3cad2dcd2cb9
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 9d5abec402aef6791b3a57d9cefe3cad2dcd2cb9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+> +	INIT_DELAYED_WORK(&priv->mivr_dwork, mt6370_chg_mivr_dwork_func);
+> +	ret = devm_add_action_or_reset(dev, mt6370_chg_cancel_mivr_dwork,
+> +				       &priv->mivr_dwork);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failed to init mivr dwork\n");
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I just noticed this. Maybe this could be done using 
+devm_delayed_work_autocancel() ?
 
-All warnings (new ones prefixed by >>):
-
->> vmlinux.o: warning: objtool: vmw_port_hb_in+0x114: stack state mismatch: cfa1=5+16 cfa2=4+8
->> vmlinux.o: warning: objtool: vmw_port_hb_out+0x11a: stack state mismatch: cfa1=5+16 cfa2=4+8
-
-
-objdump-func vmlinux.o vmw_port_hb_in:
-0000 000000000098e34a <vmw_port_hb_in>:
-0000   98e34a:	55                   	push   %rbp
-0001   98e34b:	48 89 e5             	mov    %rsp,%rbp
-0004   98e34e:	41 57                	push   %r15
-0006   98e350:	49 89 f7             	mov    %rsi,%r15
-0009   98e353:	41 56                	push   %r14
-000b   98e355:	41 55                	push   %r13
-000d   98e357:	49 89 fd             	mov    %rdi,%r13
-0010   98e35a:	41 54                	push   %r12
-0012   98e35c:	49 89 d4             	mov    %rdx,%r12
-0015   98e35f:	53                   	push   %rbx
-0016   98e360:	48 83 ec 10          	sub    $0x10,%rsp
-001a   98e364:	65 48 8b 04 25 28 00 00 00 	mov    %gs:0x28,%rax
-0023   98e36d:	48 89 45 d0          	mov    %rax,-0x30(%rbp)
-0027   98e371:	31 c0                	xor    %eax,%eax
-0029   98e373:	84 c9                	test   %cl,%cl
-002b   98e375:	75 24                	jne    98e39b <vmw_port_hb_in+0x51>
-002d   98e377:	48 ff 05 00 00 00 00 	incq   0x0(%rip)        # 98e37e <vmw_port_hb_in+0x34>	98e37a: R_X86_64_PC32	.bss+0x113a6d4
-0034   98e37e:	b8 00 00 01 00       	mov    $0x10000,%eax
-0039   98e383:	4c 8d 4d c8          	lea    -0x38(%rbp),%r9
-003d   98e387:	41 be 68 58 4d 56    	mov    $0x564d5868,%r14d
-0043   98e38d:	41 bb 01 00 00 00    	mov    $0x1,%r11d
-0049   98e393:	41 ba 1e 00 04 00    	mov    $0x4001e,%r10d
-004f   98e399:	eb 76                	jmp    98e411 <vmw_port_hb_in+0xc7>
-0051   98e39b:	31 ff                	xor    %edi,%edi
-0053   98e39d:	48 ff 05 00 00 00 00 	incq   0x0(%rip)        # 98e3a4 <vmw_port_hb_in+0x5a>	98e3a0: R_X86_64_PC32	.bss+0x113a6bc
-005a   98e3a4:	e8 00 00 00 00       	call   98e3a9 <vmw_port_hb_in+0x5f>	98e3a5: R_X86_64_PLT32	cc_platform_has-0x4
-005f   98e3a9:	48 ff 05 00 00 00 00 	incq   0x0(%rip)        # 98e3b0 <vmw_port_hb_in+0x66>	98e3ac: R_X86_64_PC32	.bss+0x113a6c4
-0066   98e3b0:	84 c0                	test   %al,%al
-0068   98e3b2:	75 c3                	jne    98e377 <vmw_port_hb_in+0x2d>
-006a   98e3b4:	41 0f b7 55 00       	movzwl 0x0(%r13),%edx
-006f   98e3b9:	41 8b 75 04          	mov    0x4(%r13),%esi
-0073   98e3bd:	4c 89 e1             	mov    %r12,%rcx
-0076   98e3c0:	4c 89 ff             	mov    %r15,%rdi
-0079   98e3c3:	48 ff 05 00 00 00 00 	incq   0x0(%rip)        # 98e3ca <vmw_port_hb_in+0x80>	98e3c6: R_X86_64_PC32	.bss+0x113a6cc
-0080   98e3ca:	45 8b 45 08          	mov    0x8(%r13),%r8d
-0084   98e3ce:	b8 68 58 4d 56       	mov    $0x564d5868,%eax
-0089   98e3d3:	bb 00 00 01 00       	mov    $0x10000,%ebx
-008e   98e3d8:	c1 e2 10             	shl    $0x10,%edx
-0091   98e3db:	83 ca 01             	or     $0x1,%edx
-0094   98e3de:	55                   	push   %rbp
-0095   98e3df:	4c 89 c5             	mov    %r8,%rbp
-0098   98e3e2:	66 ba 59 56          	mov    $0x5659,%dx
-009c   98e3e6:	f3 6c                	rep insb (%dx),%es:(%rdi)
-009e   98e3e8:	5d                   	pop    %rbp
-009f   98e3e9:	48 ff 05 00 00 00 00 	incq   0x0(%rip)        # 98e3f0 <vmw_port_hb_in+0xa6>	98e3ec: R_X86_64_PC32	.bss+0x113a6dc
-00a6   98e3f0:	48 89 d8             	mov    %rbx,%rax
-00a9   98e3f3:	48 89 5d c8          	mov    %rbx,-0x38(%rbp)
-00ad   98e3f7:	eb 65                	jmp    98e45e <vmw_port_hb_in+0x114>
-00af   98e3f9:	4c 89 ff             	mov    %r15,%rdi
-00b2   98e3fc:	44 89 c1             	mov    %r8d,%ecx
-00b5   98e3ff:	4c 89 ce             	mov    %r9,%rsi
-00b8   98e402:	48 ff 05 00 00 00 00 	incq   0x0(%rip)        # 98e409 <vmw_port_hb_in+0xbf>	98e405: R_X86_64_PC32	.bss+0x113a71c
-00bf   98e409:	f3 a4                	rep movsb %ds:(%rsi),%es:(%rdi)
-00c1   98e40b:	4d 29 c4             	sub    %r8,%r12
-00c4   98e40e:	4d 01 c7             	add    %r8,%r15
-00c7   98e411:	4d 85 e4             	test   %r12,%r12
-00ca   98e414:	74 41                	je     98e457 <vmw_port_hb_in+0x10d>
-00cc   98e416:	41 0f b7 55 00       	movzwl 0x0(%r13),%edx
-00d1   98e41b:	41 8b 75 04          	mov    0x4(%r13),%esi
-00d5   98e41f:	44 89 f0             	mov    %r14d,%eax
-00d8   98e422:	44 89 db             	mov    %r11d,%ebx
-00db   98e425:	41 b8 04 00 00 00    	mov    $0x4,%r8d
-00e1   98e42b:	41 8b 7d 08          	mov    0x8(%r13),%edi
-00e5   98e42f:	44 89 d1             	mov    %r10d,%ecx
-00e8   98e432:	4d 39 c4             	cmp    %r8,%r12
-00eb   98e435:	4d 0f 46 c4          	cmovbe %r12,%r8
-00ef   98e439:	c1 e2 10             	shl    $0x10,%edx
-00f2   98e43c:	66 ba 58 56          	mov    $0x5658,%dx
-00f6   98e440:	ed                   	in     (%dx),%eax
-00f7   98e441:	0f ba e1 10          	bt     $0x10,%ecx
-00fb   98e445:	48 89 5d c8          	mov    %rbx,-0x38(%rbp)
-00ff   98e449:	48 89 c8             	mov    %rcx,%rax
-0102   98e44c:	72 ab                	jb     98e3f9 <vmw_port_hb_in+0xaf>
-0104   98e44e:	48 ff 05 00 00 00 00 	incq   0x0(%rip)        # 98e455 <vmw_port_hb_in+0x10b>	98e451: R_X86_64_PC32	.bss+0x113a6e4
-010b   98e455:	eb 07                	jmp    98e45e <vmw_port_hb_in+0x114>
-010d   98e457:	48 ff 05 00 00 00 00 	incq   0x0(%rip)        # 98e45e <vmw_port_hb_in+0x114>	98e45a: R_X86_64_PC32	.bss+0x113a724
-0114   98e45e:	48 8b 55 d0          	mov    -0x30(%rbp),%rdx
-0118   98e462:	65 48 2b 14 25 28 00 00 00 	sub    %gs:0x28,%rdx
-0121   98e46b:	74 05                	je     98e472 <vmw_port_hb_in+0x128>
-0123   98e46d:	e8 00 00 00 00       	call   98e472 <vmw_port_hb_in+0x128>	98e46e: R_X86_64_PLT32	__stack_chk_fail-0x4
-0128   98e472:	5a                   	pop    %rdx
-0129   98e473:	59                   	pop    %rcx
-012a   98e474:	5b                   	pop    %rbx
-012b   98e475:	41 5c                	pop    %r12
-012d   98e477:	41 5d                	pop    %r13
-012f   98e479:	41 5e                	pop    %r14
-0131   98e47b:	41 5f                	pop    %r15
-0133   98e47d:	5d                   	pop    %rbp
-0134   98e47e:	31 d2                	xor    %edx,%edx
-0136   98e480:	31 c9                	xor    %ecx,%ecx
-0138   98e482:	31 f6                	xor    %esi,%esi
-013a   98e484:	31 ff                	xor    %edi,%edi
-013c   98e486:	45 31 c0             	xor    %r8d,%r8d
-013f   98e489:	45 31 c9             	xor    %r9d,%r9d
-0142   98e48c:	45 31 d2             	xor    %r10d,%r10d
-0145   98e48f:	45 31 db             	xor    %r11d,%r11d
-0148   98e492:	c3                   	ret
+Yours
+-- Matti
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~

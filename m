@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 880E65A5DF2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98E4B5A5DFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231463AbiH3IUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43834 "EHLO
+        id S231439AbiH3IYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbiH3IUO (ORCPT
+        with ESMTP id S230043AbiH3IYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:20:14 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14D911A27;
-        Tue, 30 Aug 2022 01:20:08 -0700 (PDT)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Tue, 30 Aug
- 2022 16:20:05 +0800
-Message-ID: <2b6035f3-8cbe-ab75-bed9-5751b141d3d6@amlogic.com>
-Date:   Tue, 30 Aug 2022 16:20:05 +0800
+        Tue, 30 Aug 2022 04:24:04 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F49AA3D7D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:23:58 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id z2so13201407edc.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ionos.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=mpUjxCyEhTu/Vrrq9HCqiAy81B12JY5DlQuis+EGEOg=;
+        b=MDr2bJ1CbyLXhYi6zppIC7UWXfFIzwkollCWgwln4IgA0QGnokbrwiqTjaik/eXYT9
+         856bLTwXjSTvgsZOi1zwOozPmQGGUO8jttiPMpqItLONYPV6Gf1i9AI4yKBtft7O6KSd
+         eeewRUA9tWENYiQQQG8IW9a9At0QYj40f6CwI3oJXONZJ6zlGydjZgeE7x9x11QPvn4q
+         U217l+gOHGobaL3lsuuhaopvPvBy0qVDXkItHchyYo49aA96dw2zPrtjUDa/5APi8ggX
+         LnsjfhjkDuedFoFBpVYjqqGOgiR4LqxThE+p7Gl1hAg3vNNb28fOQS7bNaZh/eDNad73
+         DF3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=mpUjxCyEhTu/Vrrq9HCqiAy81B12JY5DlQuis+EGEOg=;
+        b=V+2ZnN8tVRQepe9cf917Yo42lX4AlwGWiPXxFLn9pHXdmi0SXd2utdoZre7QPiSQjf
+         Pos1v2WpU6J5DyVjCk+VQ3s53QThli3nkMEjxdrhsluA+YVCvZm+8z6rAQ2RRHMdGMTW
+         wQ9+ee0+iSvuvAqjZci3RDk8qMfBxc3LbmTypHc9T+Q30BoVVVI742J9Y96pKlOwrm3h
+         FK2Mct0ilArNWmC0RoB4J3Pk7lYzfx0RY4uHzw3sB2bp4zyXXOt9AaK25mcEJf94z2U7
+         I7EXPQCgNnHCc3mK/57gRy3CeRhZRZOnCQg4j1RqTa+IvIWuKajQrbkk1aU0pbZj53J/
+         DvUQ==
+X-Gm-Message-State: ACgBeo084OtHMkFjozpWSu/UkzKbUBwQelZflAPgQuh+2Yu8ubY05zX8
+        YU9gv6ZkT10ARKYB0lTWjPZg3Ic4cqoqJg5MfnW3nCItHB1/PQ==
+X-Google-Smtp-Source: AA6agR5/IswRYM3PT+dPUwbiFcg/FVwCQjSZGLT2Sq2969wQy4hj2pgslkB5JCcfz/BL8HKIluLz+ycVriSnvKoEz3c=
+X-Received: by 2002:a05:6402:42d3:b0:435:2c49:313d with SMTP id
+ i19-20020a05640242d300b004352c49313dmr19348314edc.86.1661847836877; Tue, 30
+ Aug 2022 01:23:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V3 6/6] clk: meson: s4: add s4 SoC peripheral clock
- controller driver
-Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220805085716.5635-1-yu.tu@amlogic.com>
- <20220805085716.5635-7-yu.tu@amlogic.com>
- <1jedxlzxyz.fsf@starbuckisacylon.baylibre.com>
- <8f40cb49-fdc5-20cd-343b-8ce50e5d6d97@amlogic.com>
- <1j7d2rte33.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1j7d2rte33.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220826095615.74328-1-jinpu.wang@ionos.com> <20220826095615.74328-3-jinpu.wang@ionos.com>
+ <YwtM+/nB1F6p1Ey3@unreal> <CAMGffEmffkW0fHrjx84gQ6FnWuwriRUg=HSdwzU4W_sZLdiT7g@mail.gmail.com>
+ <Ywyr0+b350SZrznw@unreal> <CAMGffE=m_Na9n-oHkxm6C2C1sC3U9LkN_7k8Xx9g9SG2ifDjrw@mail.gmail.com>
+ <Yw3D7TVgkANv7PDI@unreal>
+In-Reply-To: <Yw3D7TVgkANv7PDI@unreal>
+From:   Jinpu Wang <jinpu.wang@ionos.com>
+Date:   Tue, 30 Aug 2022 10:23:46 +0200
+Message-ID: <CAMGffEmyhXEN99_yJpiGJFOtAKGEThz=c2MLw8qbWVn70XnSdA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] RDMA: dma-mapping: Return an unsigned int from ib_dma_map_sg{,_attrs}
+To:     Leon Romanovsky <leon@kernel.org>
+Cc:     Christoph Hellwig <hch@lst.de>, jgg@ziepe.ca,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,380 +69,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 30, 2022 at 10:01 AM Leon Romanovsky <leon@kernel.org> wrote:
+>
+> On Mon, Aug 29, 2022 at 03:19:14PM +0200, Jinpu Wang wrote:
+> > On Mon, Aug 29, 2022 at 2:06 PM Leon Romanovsky <leon@kernel.org> wrote:
+> > >
+> > > On Mon, Aug 29, 2022 at 11:40:40AM +0200, Jinpu Wang wrote:
+> > > > On Sun, Aug 28, 2022 at 1:09 PM Leon Romanovsky <leon@kernel.org> wrote:
+> > > > >
+> > > > > On Fri, Aug 26, 2022 at 11:56:15AM +0200, Jack Wang wrote:
+> > > > > > Following 2a047e0662ae ("dma-mapping: return an unsigned int from dma_map_sg{,_attrs}")
+> > > > > > change the return value of ib_dma_map_sg{,attrs} to unsigned int.
+> > > > > >
+> > > > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
+> > > > > > Cc: Leon Romanovsky <leon@kernel.org>
+> > > > > > Cc: Christoph Hellwig <hch@lst.de>
+> > > > > > Cc: linux-rdma@vger.kernel.org
+> > > > > > Cc: linux-kernel@vger.kernel.org
+> > > > > >
+> > > > > > Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
+> > > > > > ---
+> > > > > >  drivers/infiniband/core/device.c | 2 +-
+> > > > > >  include/rdma/ib_verbs.h          | 6 +++---
+> > > > > >  2 files changed, 4 insertions(+), 4 deletions(-)
+> > > > >
+> > > > > You forgot to change ib_dma_map_sgtable_attrs() and various
+> > > > > ib_dma_map_sg*() callers.
+> > > > No, they are different.
+> > > > ib_dma_map_sgtable_attrs and dma_map_sgtable return negative on errors.
+> > >
+> > > It is not the point. You changed ib_dma_virt_map_sg() to be unsigned,
+> > > so now the following lines are not correct:
+> > >
+> > >   4138         int nents;
+> > >   4139
+> > >   4140         if (ib_uses_virt_dma(dev)) {
+> > >   4141                 nents = ib_dma_virt_map_sg(dev, sgt->sgl, sgt->orig_nents);
+> > >
+> > > "int nents" should be changed to "unsigned int".
+> > >
+> > > Thanks
+> > ok, I can do it.
+> > just to check if we are on the same page:
+> > For all the callers of ib_dma_map_sg,  would it be better to fix it
+> > one patch per driver or do it in a single bigger patch.
+> > I feel it's better to do it per driver, and there are drivers from
+> > different subsystems e.g. nvme/rds/etc.
+>
+> I don't know, everything here looks not nice to me.
+>
+> After commit 2a047e0662ae ("dma-mapping: return an unsigned int from dma_map_sg{,_attrs}"),
+> all callers left in limbo state where they expect that dma_map_sg{,_attrs} will return
+> upto INT_MAX. However now, the API can return upto UINT_MAX, which is not the case now
+> due to internal implementation of dma_map_sg_*(), but can be changed any second.
+>
+> Can we simply revert that commit and restore the "int" return type?
+> I don't see any benefit in having "unsigned int" if compiler doesn't enforce it.
+I feel different, the dma_map_sg api since the kernel 2.x, is
+documented in DMA-API.txt[1]:
+"
+
+int
+dma_map_sg(struct device *dev, struct scatterlist *sg,
+int nents, enum dma_data_direction direction)
+
+Returns: the number of physical segments mapped (this may be shorter
+than <nents> passed in if some elements of the scatter/gather list are
+physically or virtually adjacent and an IOMMU maps them with a single
+entry).
+
+Please note that the sg cannot be mapped again if it has been mapped once.
+The mapping process is allowed to destroy information in the sg.
+
+As with the other mapping interfaces, dma_map_sg can fail. When it
+does, 0 is returned and a driver must take appropriate action. It is
+critical that the driver do something, in the case of a block driver
+aborting the request or even oopsing is better than doing nothing and
+corrupting the filesystem.
+
+"
+It seems the return range for dma_map_sg never returns a negative
+value. I think it's just the API
+should have been defined to return "unsigned int"  IMHO. We should
+update the documentation in the Documentation there
+too. in core-api/dma-api.rst
 
 
-On 2022/8/29 20:19, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Tue 16 Aug 2022 at 20:00, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
-> Please trim your replies
-> 
->>>> diff --git a/drivers/clk/meson/Kconfig b/drivers/clk/meson/Kconfig
->>>> index f4244edc7b28..ec6beb9284d3 100644
->>>> --- a/drivers/clk/meson/Kconfig
->>>> +++ b/drivers/clk/meson/Kconfig
->>>> @@ -127,4 +127,17 @@ config COMMON_CLK_S4_PLL
->>>>    	  Support for the pll clock controller on Amlogic S805X2 and S905Y4 devices,
->>>>    	  aka s4. Amlogic S805X2 and S905Y4 devices include AQ222 and AQ229.
->>>>    	  Say Y if you want peripherals and CPU frequency scaling to work.
->>>> +
->>>> +config COMMON_CLK_S4
->>>> +	tristate "S4 SoC Peripherals clock controllers support"
->>>> +	depends on ARM64
->>>> +	default y
->>>> +	select COMMON_CLK_MESON_REGMAP
->>>> +	select COMMON_CLK_MESON_DUALDIV
->>>> +	select COMMON_CLK_MESON_VID_PLL_DIV
->>>> +	select COMMON_CLK_S4_PLL
->>> Do you really this ? your driver does not even include the related
->>> header.
->> If the PLL driver is not turned on in DTS, will it not cause an error?
->>>
-> 
-> I don't get the question.
-> Kconfig list compile deps. S4 PLL is not a compile dep of the peripheral
-> controller.
-> 
-> If you really want to, you may use 'imply'.
 
-V4 has been changed as you suggested.
+[1] https://elixir.bootlin.com/linux/v2.6.39.4/source/Documentation/DMA-API.txt
 
->>>
->>>> +static const struct clk_parent_data sys_ab_clk_parent_data[] = {
->>>> +	{ .fw_name = "xtal" },
->>>> +	{ .fw_name = "fclk_div2" },
->>>> +	{ .fw_name = "fclk_div3" },
->>>> +	{ .fw_name = "fclk_div4" },
->>>> +	{ .fw_name = "fclk_div5" },
->>>> +	{ .fw_name = "fclk_div7" },
->>>> +	{ .hw = &s4_rtc_clk.hw }
->>>> +};
->>>> +
->>>> +static struct clk_regmap s4_sysclk_b_sel = {
->>>> +	.data = &(struct clk_regmap_mux_data){
->>>> +		.offset = CLKCTRL_SYS_CLK_CTRL0,
->>>> +		.mask = 0x7,
->>>> +		.shift = 26,
->>>> +		.table = mux_table_sys_ab_clk_sel,
->>>> +	},
->>>> +	.hw.init = &(struct clk_init_data){
->>>> +		.name = "sysclk_b_sel",
->>>> +		.ops = &clk_regmap_mux_ro_ops,
->>> Why is this using the RO ops ?
->> Sys_clk is initialized during the Uboot phase and is fixed at
->> 166.666MHz. So I'm going to change it to ro.
-> 
-> That really much depends on the bootloader and is a pretty weak design.
-> The bootloader deps should be kept as minimal as possible.
-> 
-> I see no reason for RO.
-> 
-> You may cut rate propagation on the user if you need to and continue to
-> whatever you want in your u-boot
 
-I think I know what you mean. But we let the user be in control and not 
-set the frequency, which can be risky. If you insist, I will change it 
-as you suggest.
-
-> 
->>>
->>>> +		.parent_data = sys_ab_clk_parent_data,
->>>> +		.num_parents = ARRAY_SIZE(sys_ab_clk_parent_data),
->>>> +	},
->>>> +};
->>>> +
->>>> +static struct clk_regmap s4_sysclk_b_div = {
->>>> +	.data = &(struct clk_regmap_div_data){
->>>> +		.offset = CLKCTRL_SYS_CLK_CTRL0,
->>>> +		.shift = 16,
->>>> +		.width = 10,
->>>> +	},
->>>> +	.hw.init = &(struct clk_init_data){
->>>> +		.name = "sysclk_b_div",
->>>> +		.ops = &clk_regmap_divider_ro_ops,
->>> Same here and for the rest of the sys part
->> Same above.
-> 
-> We can play that game for a while
-
-Ah, you're so funny.
-
-> 
->>>> +
->>>> +/* Video Clocks */
->>>> +static struct clk_regmap s4_vid_pll_div = {
->>>> +	.data = &(struct meson_vid_pll_div_data){
->>>> +		.val = {
->>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
->>>> +			.shift   = 0,
->>>> +			.width   = 15,
->>>> +		},
->>>> +		.sel = {
->>>> +			.reg_off = CLKCTRL_VID_PLL_CLK_DIV,
->>>> +			.shift   = 16,
->>>> +			.width   = 2,
->>>> +		},
->>>> +	},
->>>> +	.hw.init = &(struct clk_init_data) {
->>>> +		.name = "vid_pll_div",
->>>> +		.ops = &meson_vid_pll_div_ro_ops,
->>> Why RO ? applies to the rest of the video part.
->> Because vid_pll_div parent is HDMI_PLL, and HDMI_PLL is a fixed
->> frequency. Flags is CLK_SET_RATE_PARENT. So we use RO.
-> 
-> If the HDMI_PLL is fixed somehow, that is not reason for this clock to
-> be RO
-> 
->> Can I remove RO and use CLK_SET_RATE_NO_REPARENT instead, which one do you
->> think is more reasonable?
-> 
-> Neither. CLK_SET_RATE_NO_REPARENT makes no sense, it is not mux
-> 
-
-"drivers/clk/meson/vid-pll-div.c"
-This file only provides ro_ops. Maybe the submission records will give 
-us the answer.
-
-In fact, our hardware design is the same as the G12 series.
-
->>
->>>
->>>> +		.parent_data = (const struct clk_parent_data []) {
->>>> +			{ .fw_name = "hdmi_pll", }
->>>> +		},
->>>> +		.num_parents = 1,
->>>> +		.flags = CLK_SET_RATE_PARENT,
->>>> +	},
->>>> +};
->>>> +
->>>> +static struct clk_regmap s4_vid_pll_sel = {
->>>> +	.data = &(struct clk_regmap_mux_data){
->>>> +		.offset = CLKCTRL_VID_PLL_CLK_DIV,
->>>> +		.mask = 0x1,
->>>> +		.shift = 18,
->>>> +	},
->>>> +	.hw.init = &(struct clk_init_data){
->>>> +		.name = "vid_pll_sel",
->>>> +		.ops = &clk_regmap_mux_ops,
->>>> +		/*
->>>> +		 * bit 18 selects from 2 possible parents:
->>>> +		 * vid_pll_div or hdmi_pll
->>>> +		 */
->>>> +		.parent_data = (const struct clk_parent_data []) {
->>>> +			{ .hw = &s4_vid_pll_div.hw },
->>>> +			{ .fw_name = "hdmi_pll", }
->>>> +		},
->>>> +		.num_parents = 2,
->>>> +		.flags = CLK_SET_RATE_NO_REPARENT,
->>> Why ? are you planning to DT assigned clocks to statically set this ?
->> Because vid_pll_sel one parent is HDMI_PLL, and HDMI_PLL is a fixed
->> frequency. To prevent modification, use CLK_SET_RATE_NO_REPARENT.
-> 
-> Again, this makes no sense.
-
-Unfortunately you don't read V4, in fact I have corrected in V4.
-
-".flags = CLK_SET_RATE_PARENT," in V4. Is that okay with you?
-
-> 
->>>
->>>> +	},
->>>> +};
->>>> +
->>>> +static struct clk_regmap s4_vid_pll = {
->>>> +	.data = &(struct clk_regmap_gate_data){
->>>> +		.offset = CLKCTRL_VID_PLL_CLK_DIV,
->>>> +		.bit_idx = 19,
->>>> +	},
->>>> +	.hw.init = &(struct clk_init_data) {
->>>> +		.name = "vid_pll",
->>>> +		.ops = &clk_regmap_gate_ops,
->>>> +		.parent_hws = (const struct clk_hw *[]) {
->>>> +			&s4_vid_pll_sel.hw
->>>> +		},
->>>> +		.num_parents = 1,
->>>> +		.flags = CLK_SET_RATE_PARENT,
->>>> +	},
->>>> +};
->>>> +
->>>> +static const struct clk_parent_data s4_vclk_parent_data[] = {
->>>> +	{ .hw = &s4_vid_pll.hw },
->>>> +	{ .fw_name = "gp0_pll", },
->>>> +	{ .fw_name = "hifi_pll", },
->>>> +	{ .fw_name = "mpll1", },
->>>> +	{ .fw_name = "fclk_div3", },
->>>> +	{ .fw_name = "fclk_div4", },
->>>> +	{ .fw_name = "fclk_div5", },
->>>> +	{ .fw_name = "fclk_div7", },
->>>> +};
->>>> +
->>>> +static struct clk_regmap s4_vclk_sel = {
->>>> +	.data = &(struct clk_regmap_mux_data){
->>>> +		.offset = CLKCTRL_VID_CLK_CTRL,
->>>> +		.mask = 0x7,
->>>> +		.shift = 16,
->>>> +	},
->>>> +	.hw.init = &(struct clk_init_data){
->>>> +		.name = "vclk_sel",
->>>> +		.ops = &clk_regmap_mux_ops,
->>>> +		.parent_data = s4_vclk_parent_data,
->>>> +		.num_parents = ARRAY_SIZE(s4_vclk_parent_data),
->>>> +		.flags = CLK_SET_RATE_NO_REPARENT,
->>> Same
->> Since fclk_div* is a fixed frequency value, mplL1 and hifi_pll and gp0_pll
->> are used by other specialized modules, vid_pll has CLK_SET_RATE_PARENT. The
->> parent of vid_pll is that vid_pll_sel uses CLK_SET_RATE_NO_REPARENT.
-> 
-> Still not good.
-> 
-> You don't have CLK_SET_RATE, propagation is stopped and parent clock
-> will not changed. The best parent will be picked but not changed.
-> 
-> If one parent MUST NOT be picked, just remove it from the list and add a
-> explaining why
-> 
-> [...]
-
-Okay.
-
-> 
->>>> +
->>>> +static struct clk_regmap s4_ts_clk_div = {
->>>> +	.data = &(struct clk_regmap_div_data){
->>>> +		.offset = CLKCTRL_TS_CLK_CTRL,
->>>> +		.shift = 0,
->>>> +		.width = 8,
->>>> +	},
->>>> +	.hw.init = &(struct clk_init_data){
->>>> +		.name = "ts_clk_div",
->>>> +		.ops = &clk_regmap_divider_ops,
->>>> +		.parent_data = &(const struct clk_parent_data) {
->>>> +			.fw_name = "xtal",
->>>> +		},
->>>> +		.num_parents = 1,
->>> propagation stopped ?
->> Its parent is xtal, so I should use CLK_SET_RATE_NO_REPARENT.
-> 
-> Still no. You seem to have problem with the meaning of
-> CLK_SET_RATE_NO_REPARENT.
-> 
-> * CLK_SET_RATE_NO_REPARENT: means the parent will no be changed, even if
->    selecting another parent would result in a closer rate to the
->    request. It makes sense only if the clock has several parents
-> 
-> * CLK_SET_RATE_PARENT: means rate change may propagate the parent,
->    meaning the rate of the parent may change if it help the child achieve
->    a closer rate to the request
-
-Thank you for explaining.I got it.
-
-> 
->>>
->>>> +	},
->>>> +};
->>>> +
->>>> +static struct clk_regmap s4_ts_clk_gate = {
->>>> +	.data = &(struct clk_regmap_gate_data){
->>>> +		.offset = CLKCTRL_TS_CLK_CTRL,
->>>> +		.bit_idx = 8,
->>>> +	},
->>>> +	.hw.init = &(struct clk_init_data){
->>>> +		.name = "ts_clk",
->>>> +		.ops = &clk_regmap_gate_ops,
->>>> +		.parent_hws = (const struct clk_hw *[]) {
->>>> +			&s4_ts_clk_div.hw
->>>> +		},
->>>> +		.num_parents = 1,
->>>> +	},
->>> propagation stopped ?
->> I will add CLK_SET_RATE_PARENT.
-> 
-> [...]
-> 
->>>> +/* EMMC/NAND clock */
->>>> +
->>>> +static const struct clk_parent_data s4_sd_emmc_clk0_parent_data[] = {
->>>> +	{ .fw_name = "xtal", },
->>>> +	{ .fw_name = "fclk_div2", },
->>>> +	{ .fw_name = "fclk_div3", },
->>>> +	{ .fw_name = "hifi_pll", },
->>>> +	{ .fw_name = "fclk_div2p5", },
->>>> +	/*
->>>> +	 * Following these parent clocks, we should also have had mpll2, mpll3
->>>> +	 * and gp0_pll but these clocks are too precious to be used here. All
->>>> +	 * the necessary rates for MMC and NAND operation can be acheived using
->>>> +	 * hifi_pll or fclk_div clocks
->>>> +	 */
->>> You don't want to list mplls but hifi_pll is fine ? seems dangerous.
->> hifi pll is for EMMC and NAND on this SoC.
-> 
-> That deserve a better explanation.
-> Why can't it use fdiv2 and xtal like the previous SoCs ?
-> 
-> Which PLLs are you using for Audio then ?
-> Typical operation on these SoCs usually require 3 PLLs to acheive all rates
-> 
-
-I'll list all the clocks and let the driver itself select Parent as needed.
-
->>>
-> 
-> 
->>>> +/*
->>>> + * gen clk is designed for debug/monitor some internal clock quality. Some of the
->>>> + * corresponding clock sources are not described in the clock tree, so they are skipped.
->>>> + */
->>> Still feels a bit light, don't you think ? Among all the clocks, can't
->>> you add a bit more parents here ? It would certainly help debug down the road
->> [16:12]	is gen_clk source select.All is:
->> 0: cts_oscin_clk
->> 1:cts_rtc_clk
->> 2:sys_pll_div16 (internal clock)
->> 3:ddr_pll_div32  (internal clock)
->> 4: vid_pll
->> 5: gp0_pll
->> 7: hifi_pll
->> 10:adc_dpll_clk_b3 (internal clock for debug)
->> 11:adc_dpll_intclk (internal clock for debug)
->> 12:clk_msr_src(select from all internal clock except PLLs);
->> 16: no used
->> 17: sys_cpu_clk_div16 (internal clock)
->> 19: fclk_div2
->> 20: fclk_div2p5
->> 21: fclk_div3
->> 22: fclk_div4
->> 23: fclk_div5
->> 24: fclk_div7
->> 25: mpll0
->> 26: mpll1
->> 27: mpll2
->> 28: mpll3
->> So i only added the clocks that will actually be used, and some debugging
->> clock peripherals will not be used.
-> 
-> you may at least add vid_pll
-
-Okay.
-
-> 
->>>
->>>> +static u32 s4_gen_clk_mux_table[] = { 0, 5, 7, 19, 21, 22,
->>>> +				      23, 24, 25, 26, 27, 28 };
->>>> +static const struct clk_parent_data s4_gen_clk_parent_data[] = {
->>>> +	{ .fw_name = "xtal", },
->>>> +	{ .fw_name = "gp0_pll", },
->>>> +	{ .fw_name = "hifi_pll", },
->>>> +	{ .fw_name = "fclk_div2", },
->>>> +	{ .fw_name = "fclk_div3", },
->>>> +	{ .fw_name = "fclk_div4", },
->>>> +	{ .fw_name = "fclk_div5", },
->>>> +	{ .fw_name = "fclk_div7", },
->>>> +	{ .fw_name = "mpll0", },
->>>> +	{ .fw_name = "mpll1", },
->>>> +	{ .fw_name = "mpll2", },
->>>> +	{ .fw_name = "mpll3", },
->>>> +};
-> 
-> .
+>
+> Thanks
+>
+> >
+> > Thx!
+> >
+> >
+> > >
+> > > > >
+> > > > > Thanks
+> > > > Thanks!

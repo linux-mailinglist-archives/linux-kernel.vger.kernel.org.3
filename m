@@ -2,186 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5CD5A5DD4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F4C5A5DD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:15:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230356AbiH3IO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:14:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
+        id S230497AbiH3IP3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:15:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiH3IO4 (ORCPT
+        with ESMTP id S229472AbiH3IP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:14:56 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FEBA18A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:14:54 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB0FA6601E8E;
-        Tue, 30 Aug 2022 09:14:51 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661847292;
-        bh=+3rbZqqmv73wMbeInDkzjcrs5wRlRORGTvNqVpAV+0I=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PKsbGKjnzDW63fZqu8LsimuIi2gEpXHevnR6JOQMKXGeuVL1Ku7moeVX+5gvAJbVx
-         B+fcVa6ZbShM6bl2bW6Q/smdTRXmIQmJDOrAlqn3G6wOyuwFNgJLwvm2jZy2b0RK+U
-         Ooe+T551J4Of6uq3fT9QJ2T9TSMthdDRftUZ4Q0oMX+KKxemkc8i8iCaJX4cJZh0qu
-         PGUPQ7+x8ccE5y8kXsXo9RSB58sq5Eg1JtZ0m/AL5imr+uzomNK2C5ZjyhU+VrN75x
-         6yrAhUqPFJ8yhVC7a2VvIrlwAs+QwDmGQ1CRVjGpDFSRIcVrGW4cpQhRGODGPDEepT
-         TNpOMaTdldV2A==
-Message-ID: <f0cc5ea8-9fd8-dc77-e595-33973e315d28@collabora.com>
-Date:   Tue, 30 Aug 2022 10:14:49 +0200
+        Tue, 30 Aug 2022 04:15:28 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521166446
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:15:27 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27U7wqp1032408;
+        Tue, 30 Aug 2022 08:15:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=Nvw7+EdkkyhknysMScLPafiaExuYZPA4g6Y9MtEHr5M=;
+ b=qlUiuD8Q4Jv10lvMd4u93MQ3B6vjRFqUcbIGxT5LcUDA1K+tot+jcvGwejvd/5y0wN+V
+ yrMoYFioNKQzJ7/hvB7nZx1ihtM5Zlj7Kmb/qlMq3JTeEFXzv4xwecTFPmaJEyrLxLA+
+ 43lUafnSSCvVNBTuqUYXO/maKutx9gT9MG2bkam73k8LcPcO2LhEdLP862mpVFDU9wP6
+ 0E1Nao9n9ZvIEmiGyz3GSZxKJL0bP1emexkiGzYgQ/Egeb2DU673Wvw9d1wNucedsZQl
+ 4ERpO9quxVRXtIXfOM+HL8ByEzY+g0ZPTxp7xvsWdWqbW+7tYcdKFjUYGROfU16POU3a aA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j9emx8q1q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 08:15:12 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27U800uK005045;
+        Tue, 30 Aug 2022 08:15:12 GMT
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3j9emx8q10-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 08:15:11 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27U850md006503;
+        Tue, 30 Aug 2022 08:15:10 GMT
+Received: from b01cxnp22033.gho.pok.ibm.com (b01cxnp22033.gho.pok.ibm.com [9.57.198.23])
+        by ppma01dal.us.ibm.com with ESMTP id 3j7aw9pyje-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 08:15:10 +0000
+Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
+        by b01cxnp22033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27U8F9Cm53543354
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 30 Aug 2022 08:15:10 GMT
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E4A902805A;
+        Tue, 30 Aug 2022 08:15:09 +0000 (GMT)
+Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E2CCF28059;
+        Tue, 30 Aug 2022 08:15:03 +0000 (GMT)
+Received: from skywalker.ibmuc.com (unknown [9.43.77.247])
+        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
+        Tue, 30 Aug 2022 08:15:03 +0000 (GMT)
+From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     Wei Xu <weixugc@google.com>, Huang Ying <ying.huang@intel.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
+Subject: [PATCH mm-unstable] mm/demotion: Make toptier_distance inclusive upper bound of toptiers
+Date:   Tue, 30 Aug 2022 13:44:57 +0530
+Message-Id: <20220830081457.118960-1-aneesh.kumar@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 3/6] iommu/mediatek: Add error path for loop of
- mm_dts_parse
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Will Deacon <will@kernel.org>
-Cc:     Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-        iommu@lists.linux-foundation.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        libo.kang@mediatek.com, chengci.xu@mediatek.com,
-        youlin.pei@mediatek.com, anan.sun@mediatek.com,
-        xueqi.zhang@mediatek.com, Guenter Roeck <groeck@chromium.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220824064306.21495-1-yong.wu@mediatek.com>
- <20220824064306.21495-4-yong.wu@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220824064306.21495-4-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: gXQk2Br2uqwkmmQA3QUipJeTwT080boP
+X-Proofpoint-ORIG-GUID: WQC1rrHFjpPZSua_uVPsc-G3TLmEbjwV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-30_04,2022-08-25_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 adultscore=0 malwarescore=0 mlxlogscore=999 clxscore=1015
+ suspectscore=0 mlxscore=0 bulkscore=0 impostorscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208300038
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 24/08/22 08:43, Yong Wu ha scritto:
-> The mtk_iommu_mm_dts_parse will parse the smi larbs nodes. if the i+1
-> larb is parsed fail, we should put_device for the 0..i larbs.
-> 
-> There are two places need to comment:
-> 1) The larbid may be not linear mapping, we should loop whole
->     the array in the error path.
-> 2) I move this line position: "data->larb_imu[id].dev = &plarbdev->dev;"
->     That means set data->larb_imu[id].dev before the error path.
->     then we don't need "platform_device_put(plarbdev)" again while
->     probe_defer case. All depend on "put_device" in the error path in error
->     cases.
-> 
-> Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with the MM TYPE")
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> ---
->   drivers/iommu/mtk_iommu.c | 42 ++++++++++++++++++++++++++++-----------
->   1 file changed, 30 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
-> index 9c5902207bef..f63d4210043d 100644
-> --- a/drivers/iommu/mtk_iommu.c
-> +++ b/drivers/iommu/mtk_iommu.c
-> @@ -1053,8 +1053,10 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
->   		u32 id;
->   
->   		larbnode = of_parse_phandle(dev->of_node, "mediatek,larbs", i);
-> -		if (!larbnode)
-> -			return -EINVAL;
-> +		if (!larbnode) {
-> +			ret = -EINVAL;
-> +			goto err_larbdev_put;
-> +		}
->   
->   		if (!of_device_is_available(larbnode)) {
->   			of_node_put(larbnode);
-> @@ -1067,14 +1069,16 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
->   
->   		plarbdev = of_find_device_by_node(larbnode);
->   		of_node_put(larbnode);
-> -		if (!plarbdev)
-> -			return -ENODEV;
-> +		if (!plarbdev) {
-> +			ret = -ENODEV;
-> +			goto err_larbdev_put;
-> +		}
-> +		data->larb_imu[id].dev = &plarbdev->dev;
->   
->   		if (!plarbdev->dev.driver) {
-> -			platform_device_put(plarbdev);
-> -			return -EPROBE_DEFER;
-> +			ret = -EPROBE_DEFER;
-> +			goto err_larbdev_put;
->   		}
-> -		data->larb_imu[id].dev = &plarbdev->dev;
->   
->   		component_match_add(dev, match, component_compare_dev, &plarbdev->dev);
->   		platform_device_put(plarbdev);
-> @@ -1082,8 +1086,10 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
->   
->   	/* Get smi-(sub)-common dev from the last larb. */
->   	smi_subcomm_node = of_parse_phandle(larbnode, "mediatek,smi", 0);
-> -	if (!smi_subcomm_node)
-> -		return -EINVAL;
-> +	if (!smi_subcomm_node) {
-> +		ret = -EINVAL;
-> +		goto err_larbdev_put;
-> +	}
->   
->   	/*
->   	 * It may have two level smi-common. the node is smi-sub-common if it
-> @@ -1097,8 +1103,10 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
->   
->   	pcommdev = of_find_device_by_node(smicomm_node);
->   	of_node_put(smicomm_node);
-> -	if (!pcommdev)
-> -		return -EINVAL;
-> +	if (!pcommdev) {
-> +		ret = -EINVAL;
-> +		goto err_larbdev_put;
-> +	}
->   	data->smicomm_dev = &pcommdev->dev;
->   
->   	link = device_link_add(data->smicomm_dev, dev,
-> @@ -1106,9 +1114,19 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
->   	platform_device_put(pcommdev);
->   	if (!link) {
->   		dev_err(dev, "Unable to link %s.\n", dev_name(data->smicomm_dev));
-> -		return -EINVAL;
-> +		ret = -EINVAL;
-> +		goto err_larbdev_put;
->   	}
->   	return 0;
-> +
-> +err_larbdev_put:
-> +	/* id may be not linear mapping, loop whole the array */
-> +	for (i = 0; i < MTK_LARB_NR_MAX; i++) {
+Based on suggestion from Wei Xu <weixugc@google.com>, having an
+inclusive upper bound is found simpler.
 
-Since there may be a case in which the mapping is linear and we're doing teardown,
-I think it would be sensible to loop the other way around instead, from
-MTK_LARB_NR_MAX to 0.
+Fixes: mm/demotion: Update node_is_toptier to work with memory tiers
+Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+---
+ mm/memory-tiers.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Everything else looks good to me.
-
-Cheers,
-Angelo
-
-> +		if (!data->larb_imu[i].dev)
-> +			continue;
-> +		put_device(data->larb_imu[i].dev);
-> +	}
-> +	return ret;
->   }
->   
->   static int mtk_iommu_probe(struct platform_device *pdev)
+diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+index c4bd6d052a33..c82eb0111383 100644
+--- a/mm/memory-tiers.c
++++ b/mm/memory-tiers.c
+@@ -179,7 +179,7 @@ bool node_is_toptier(int node)
+ 		toptier = true;
+ 		goto out;
+ 	}
+-	if (memtier->adistance_start < top_tier_adistance)
++	if (memtier->adistance_start <= top_tier_adistance)
+ 		toptier = true;
+ 	else
+ 		toptier = false;
+@@ -361,7 +361,8 @@ static void establish_demotion_targets(void)
+ 			 * abstract distance below the max value of this memtier
+ 			 * is considered toptier.
+ 			 */
+-			top_tier_adistance = memtier->adistance_start + MEMTIER_CHUNK_SIZE;
++			top_tier_adistance = memtier->adistance_start +
++						MEMTIER_CHUNK_SIZE - 1;
+ 			break;
+ 		}
+ 	}
+-- 
+2.37.2
 

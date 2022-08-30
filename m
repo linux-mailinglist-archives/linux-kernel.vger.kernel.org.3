@@ -2,117 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF3B5A657E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:50:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1345A657B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiH3Nt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57446 "EHLO
+        id S231222AbiH3Nti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:49:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbiH3Nsm (ORCPT
+        with ESMTP id S231361AbiH3Nsu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:48:42 -0400
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35612101E1;
-        Tue, 30 Aug 2022 06:46:19 -0700 (PDT)
-Received: by mail-qv1-f51.google.com with SMTP id y17so1548264qvr.5;
-        Tue, 30 Aug 2022 06:46:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=21bngEPsx9nENODhGKloV6uJhY/ub47K75lzmtVSqjY=;
-        b=ajVTQTfgysLWpj7YHSxQdryhNnfQ1uiutmZpgxOdyGGyHIbBe+t2010ZGQq1FRORMn
-         i+gB9FaiiqwZOhzLvfaDMjYUH2LlgRCp6IcLc3Owfw0aOb2JBK/AbMIq5oPN+tA4sUC4
-         Bwg/pUEPf39uQ7VraDZHvmft4erZSxhzhDafk/9W4bTu8xeDdSBEaDYIIimFSVkOhCxm
-         +HdFzblzWv7J+GK3NqKJW/w06RVvLoe0ZxBEXLAghKj3iOrwNtFsYqrmFBfZfpsJqvfB
-         1XmTU+lkX64pxC7OAKj5OBMSVrg7A9a0hK9H+yJuM4TG1VA6di5gwZz9HMkeQQ1FcyUK
-         IBYQ==
-X-Gm-Message-State: ACgBeo3yT7zIDI97m6hGamOaN4aBZCSSADt5EyqfUSXAUROdGmL+nMmK
-        IP7lnfZ5mFPG2OAkPiOTA4U=
-X-Google-Smtp-Source: AA6agR6qsN5IRB4YXJCP4WyzhBkFmtmh4gNPDHtZPGWlp0qMb55XioYmJX4BacH+uy69tJMFjYAokg==
-X-Received: by 2002:a05:6214:d6d:b0:496:e11b:69e9 with SMTP id 13-20020a0562140d6d00b00496e11b69e9mr15334444qvs.45.1661867171236;
-        Tue, 30 Aug 2022 06:46:11 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::2341])
-        by smtp.gmail.com with ESMTPSA id i13-20020a05620a248d00b006baed8f3a2esm7870099qkn.103.2022.08.30.06.46.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 06:46:10 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 08:46:12 -0500
-From:   David Vernet <void@manifault.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, andrii@kernel.org,
-        daniel@iogearbox.net, kernel-team@fb.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
-        jolsa@kernel.org, joannelkoong@gmail.com, tj@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] selftests/bpf: Add selftests validating the user
- ringbuf
-Message-ID: <Yw4UpK4uPZP9fYD+@maniforge.dhcp.thefacebook.com>
-References: <20220818221212.464487-1-void@manifault.com>
- <20220818221212.464487-5-void@manifault.com>
- <CAEf4Bzbj0ACUmZqQLhRR5DvEX9Zphqz5UwBWdkTdXfKqxWM0mQ@mail.gmail.com>
+        Tue, 30 Aug 2022 09:48:50 -0400
+Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED8597644;
+        Tue, 30 Aug 2022 06:46:35 -0700 (PDT)
+Received: from localhost (7of9.are-b.org [127.0.0.1])
+        by 7of9.schinagl.nl (Postfix) with ESMTP id 779D6186AE5F;
+        Tue, 30 Aug 2022 15:46:23 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
+        t=1661867183; bh=khVk1+h4oRx19cuXioiLMZPDQXnPvXugjyG7HAbcHbA=;
+        h=From:To:Cc:Subject:Date;
+        b=J9TkkAZizFX2Ev8WcXA3wLYmmQ7tvzq0XsCjnnGO7IUhN6FYfcALRLtWCob0MWN3e
+         Y3BssB6Pwa/gDTrZFHVHMX0zWIJrQErOIVv5mVpCBZPCsiH9XatxzF/gpWujm/5QW8
+         ZGtfiQ6WtwzFUhxyK2toZAZLHqbsCAmYqG9ejfIM=
+X-Virus-Scanned: amavisd-new at schinagl.nl
+Received: from 7of9.schinagl.nl ([127.0.0.1])
+        by localhost (7of9.schinagl.nl [127.0.0.1]) (amavisd-new, port 10024)
+        with LMTP id 9XaeXzQxb9rJ; Tue, 30 Aug 2022 15:46:22 +0200 (CEST)
+Received: from valexia.are-b.org (unknown [10.2.12.24])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by 7of9.schinagl.nl (Postfix) with ESMTPSA id 59C10186AE5A;
+        Tue, 30 Aug 2022 15:46:22 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
+        t=1661867182; bh=khVk1+h4oRx19cuXioiLMZPDQXnPvXugjyG7HAbcHbA=;
+        h=From:To:Cc:Subject:Date;
+        b=u5jTUgEhBJ5YagZbfQY573wymlKRocKrYrGD05gSu9uJP3lOy3g7GFIKb0kpRebC9
+         KdvHEVaLVCf/C9YZH8gsrwANvm+wRFZwy+U1hFUyA03YnYd3mCCZgXPRbxlVs927W9
+         gX+snmwf1HCJrABQCp1k6LVSO/S7L4lXakVfcRXY=
+From:   Olliver Schinagl <oliver@schinagl.nl>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        linux-leds@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Oleh Kravchenko <oleg@kaa.org.ua>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Olliver Schinagl <oliver+list@schinagl.nl>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Olliver Schinagl <oliver@schinagl.nl>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4] dt-bindings: leds: Expand LED_COLOR_ID definitions
+Date:   Tue, 30 Aug 2022 15:46:13 +0200
+Message-Id: <20220830134613.1564059-1-oliver@schinagl.nl>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4Bzbj0ACUmZqQLhRR5DvEX9Zphqz5UwBWdkTdXfKqxWM0mQ@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 03:03:54PM -0700, Andrii Nakryiko wrote:
+In commit 853a78a7d6c7 (dt-bindings: leds: Add LED_COLOR_ID definitions,
+Sun Jun 9 20:19:04 2019 +0200) the most basic color definitions where
+added. However, there's a little more very common LED colors.
 
-[...]
+While the documentation states 'add what is missing', engineers tend to
+be lazy and will just use what currently exists. So this patch will take
+(a) list from online retailers [0], [1], [2] and use the common LED colors from
+there, this being reasonable as this is what is currently available to purchase.
 
-> > +                       CHECK(read <= 0, "snprintf_comm",
-> > +                             "Failed to write index %d to comm\n", i);
-> 
-> please, no CHECK() use in new tests, we have ASSERT_xxx() covering all
-> common cases
+Note, that LIME seems to be the modern take to 'Yellow-green' or
+'Yellowish-green' from some older datasheets.
 
-No problem, I'll make this change in v4. Unless I missed something,
-CHECK() isn't documented as deprecated in test_progs.h. I'll take care
-of adding that in a separate change.
+[0]: https://www.digikey.com/en/products/filter/led-lighting-color/125
+[1]: https://eu.mouser.com/c/optoelectronics/led-lighting/led-emitters/standard-leds-smd
+[2]: https://nl.farnell.com/en-NL/c/optoelectronics-displays/led-products/standard-single-colour-leds-under-75ma
 
-> > +static long
-> > +bad_access1(struct bpf_dynptr *dynptr, void *context)
-> > +{
-> > +       const struct sample *sample;
-> > +
-> > +       sample = bpf_dynptr_data(dynptr - 1, 0, sizeof(*sample));
-> > +       bpf_printk("Was able to pass bad pointer %lx\n", (__u64)dynptr - 1);
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +/* A callback that accesses a dynptr in a bpf_user_ringbuf_drain callback should
-> > + * not be able to read before the pointer.
-> > + */
-> > +SEC("?raw_tp/sys_nanosleep")
-> 
-> there is no sys_nanosleep raw tracepoint, use SEC("?raw_tp") to
-> specify type, that's enough
+Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+Changes since v3: Fix typo in purple; Fix whitespacing
+No changes since v2: Re-send with the proper e-mails.
+Changes since v1: Unbreak existing definitions.
+ include/dt-bindings/leds/common.h | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-Got it, thanks for catching that. Will fix.
+diff --git a/include/dt-bindings/leds/common.h b/include/dt-bindings/leds/common.h
+index 3be89a7c20a9..9a0d33d027ff 100644
+--- a/include/dt-bindings/leds/common.h
++++ b/include/dt-bindings/leds/common.h
+@@ -33,7 +33,12 @@
+ #define LED_COLOR_ID_MULTI	8	/* For multicolor LEDs */
+ #define LED_COLOR_ID_RGB	9	/* For multicolor LEDs that can do arbitrary color,
+ 					   so this would include RGBW and similar */
+-#define LED_COLOR_ID_MAX	10
++#define LED_COLOR_ID_PURPLE	10
++#define LED_COLOR_ID_ORANGE	11
++#define LED_COLOR_ID_PINK	12
++#define LED_COLOR_ID_CYAN	13
++#define LED_COLOR_ID_LIME	14
++#define LED_COLOR_ID_MAX	15
+ 
+ /* Standard LED functions */
+ /* Keyboard LEDs, usually it would be input4::capslock etc. */
+-- 
+2.37.2
 
-> > diff --git a/tools/testing/selftests/bpf/test_user_ringbuf.h b/tools/testing/selftests/bpf/test_user_ringbuf.h
-> > new file mode 100644
-> > index 000000000000..1643b4d59ba7
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/bpf/test_user_ringbuf.h
-> 
-> nit: I'd probably put it under progs/test_user_ringbuf.h so it's
-> closer to BPF source code. As it is right now, it's neither near
-> user-space part of tests nor near BPF part.
-
-Fair enough, will fix.
-
-Thanks,
-David

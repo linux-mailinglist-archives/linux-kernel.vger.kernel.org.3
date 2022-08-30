@@ -2,95 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBF695A6B45
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:52:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A75E05A6B58
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:54:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231908AbiH3RwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
+        id S230035AbiH3RyK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:54:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231232AbiH3Rv6 (ORCPT
+        with ESMTP id S231487AbiH3Rx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:51:58 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D1E11CF94
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:48:27 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id k18so5772215lji.13
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:48:26 -0700 (PDT)
+        Tue, 30 Aug 2022 13:53:28 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB59AA1D35
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:50:54 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id z187so12050091pfb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:50:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=PSuf5+uKyRCAUiI+NXml1CeEx283tkYLDjiJC0rmPIc=;
-        b=Pa38oV3EVhdVuxDZfh0mLFLLZj0UBeyf9wUuaxsSKLBOQMSwP/+JXnyg/+1bYSvB6P
-         clumNFaYdbLtvk3RCoO7z7tXkfk3qhapicwWk09WHdnxzWc6l/jfpXnmuEU6KnrEz6Kt
-         VofAZ3ldyFZosiRqzUpeLIlIMVS5EmYCySQI7+EOvU+4cABLf/SL19ENqRy7bEdgXjgl
-         v1/C7lRGBdGDQM+im6QASqFK3eALWIvAwXYcsU/o7jVMguTS3WO9LcyxT/iQR3MKPL/T
-         5U0Lw0y9tdW7IwO+/VcodE8+Mip00rT3Vv6Vl3fb1N3QUAG1skvdmwM8K6uAuldeB38q
-         PIPQ==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=YV/f5sqbKEGWBuvtfcm8tiZZc5uH22weT2bMAIJ+E6o=;
+        b=ZMdpOak96virr1fYYhL/yKe+y0694FCFTHASlf+g2MT2vqnWV2UlratX4rqVrcYi8n
+         Cx30bnwgOdk9t1/GVvWA5X1AVpPU8i6ONiSQvIzCqpyTCI580nuKZI9TOnzzeDu159B7
+         I7tURtKM7JulRI6tfitCB7brGnvvKqQfl/+zHmac3Av9yblW4Vstj7sEzNOE5DRk2kHR
+         gmSPjnrgsPX6u5fD3IC+bfouEdjsw0h+GFDUjmy47NeQSjCzQYl6meA+DAwarqoujl+P
+         rWJzboEX7l4chW3OZGlVHziGIOLOUG2h2bXncMXIAyHlM6HZMGoIW+2wf1mRLw8OL9nK
+         z9iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=PSuf5+uKyRCAUiI+NXml1CeEx283tkYLDjiJC0rmPIc=;
-        b=OY56XUw43zaY6S5dGYg8LxY+nHefeYA/XQZX6icSOWZ8UnwUQJ0SQkf8WYXRXsYW1c
-         B/k0tVDXLaWuFc/jMQz+TtWGamELLDwzh3mzGlDuMhydKgYTOYPRt2fWgTUlo00Lp94I
-         8myRD1Esu49JHBszPOIGUlCYJ3tCKdrKc110sFXNMT2rjRghac6eReyaP5Ymhmxvw930
-         rYEkxA/naJgxMoB4g7WHTv39Kf510YY0lWDHl9mpywLfcw1WRvY2Qew4os4MZreFWpLU
-         W8ePbGooX5xy/yWHPplZ8lZIYVcAkN5fvaryGCEGrXjD7hUhMB380f6SVucEVXAN6T0C
-         5Wbg==
-X-Gm-Message-State: ACgBeo3YoBu53XvuYIgEvcPwOMM8MrCaTmDmIkH5APKSRa1NFpZiXaTs
-        YV1DcJwBZLOXoAZejp9/q4T8pw==
-X-Google-Smtp-Source: AA6agR7HZ6jJHiaVODBD57pgKGHlsu+AMUYygh3v4y+9xL4VMk3jrHV/vfKt6fcZwoaqiu0Yk7UBwg==
-X-Received: by 2002:a05:651c:905:b0:261:d00c:e71 with SMTP id e5-20020a05651c090500b00261d00c0e71mr7370638ljq.407.1661881702529;
-        Tue, 30 Aug 2022 10:48:22 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id n2-20020a05651203e200b0048a757d1303sm997253lfq.217.2022.08.30.10.48.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 10:48:22 -0700 (PDT)
-Message-ID: <3c319873-72c9-632c-7c32-4ee909aa1e64@linaro.org>
-Date:   Tue, 30 Aug 2022 20:48:21 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=YV/f5sqbKEGWBuvtfcm8tiZZc5uH22weT2bMAIJ+E6o=;
+        b=PAew7EE1O5ZfMBzcwoaDUSsjTPaM1L/qxPCJyAUiM71z7WuiOgL3pwZg3RTTnRZZyI
+         mB0LaQEiyUOgNQkuaKOss5GrNlzi6i9aWJOmGEAGDd3iOw/idQoYJwPTskSHxPM8WIja
+         E+xjX3lUZkl2+QkKs3Rj3c/LElMIv552RlaKo8/R9QfPFjIM+ilDeel3QnSgHgBzOetA
+         +vnkTcWAAQDSrddgcvvvk+1L0yKGDbqFbF1T0EKt/YvS9pB2U0eUyccUEoZpljIJ5VOP
+         lC78fRrPyt81x8E3WunTcwDV5YCoK2NjaLpNfMmhdq1XXAof6q6h3SeeklZDfknYgjuR
+         Se2g==
+X-Gm-Message-State: ACgBeo2RSf75rkpozTtdPZ4uNddBFdDo/wJGpKzH7yTTdg91vqf9Z9lp
+        79/zJwzSUgBSrAPOUkaFmaKykA==
+X-Google-Smtp-Source: AA6agR7qc1K9kDv0X0SZZtIw5hC84df7zBBoNGZqaC4KZQb3eZkQzVTWu8J3CrDvrLyuL7nxaLXATw==
+X-Received: by 2002:a63:4f24:0:b0:429:aee9:f59a with SMTP id d36-20020a634f24000000b00429aee9f59amr18155504pgb.180.1661881853427;
+        Tue, 30 Aug 2022 10:50:53 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u123-20020a626081000000b0053813de1fdasm5869347pfb.28.2022.08.30.10.50.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 10:50:52 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 17:50:49 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 5/8] KVM: x86/pmu: Defer reprogram_counter() to
+ kvm_pmu_handle_event()
+Message-ID: <Yw5N+eGfOsCgtHpw@google.com>
+References: <20220823093221.38075-1-likexu@tencent.com>
+ <20220823093221.38075-6-likexu@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/3] slimbus: qcom-ngd: use correct error in message of
- pdr_add_lookup() failure
-Content-Language: en-US
-To:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org
-References: <20220830121359.634344-1-krzysztof.kozlowski@linaro.org>
- <a437b91a-281d-56b3-41bf-15d9593ece74@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <a437b91a-281d-56b3-41bf-15d9593ece74@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823093221.38075-6-likexu@tencent.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 20:33, Jeff Johnson wrote:
-> On 8/30/2022 5:13 AM, Krzysztof Kozlowski wrote:
->> Use cprrect error code, instead of previous 'ret' value, when printing
+On Tue, Aug 23, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> s/cprrect/correct/
+> During a KVM-trap from vm-exit to vm-entry, requests from different
+> sources will try to create one or more perf_events via reprogram_counter(),
+> which will allow some predecessor actions to be undone posteriorly,
+> especially repeated calls to some perf subsystem interfaces. These
+> repetitive calls can be omitted because only the final state of the
+> perf_event and the hardware resources it occupies will take effect
+> for the guest right before the vm-entry.
 > 
+> To realize this optimization, KVM marks the creation requirements via
+> an inline version of reprogram_counter(), and then defers the actual
+> execution with the help of vcpu KVM_REQ_PMU request.
 
-Thanks. I'll fix it.
+Use imperative mood and state what change is being made, not what KVM's behavior
+is as a result of the change.
 
-Best regards,
-Krzysztof
+And this is way more complicated than it needs to be, and it also neglects to
+call out that the deferred logic is needed for a bug fix.  IIUC:
+
+  Batch reprogramming PMU counters by setting KVM_REQ_PMU and thus deferring
+  reprogramming kvm_pmu_handle_event() to avoid reprogramming a counter
+  multiple times during a single VM-Exit.
+
+  Deferring programming will also allow KVM to fix a bug where immediately
+  reprogramming a counter can result in sleeping (taking a mutex) while
+  interrupts are disabled in the VM-Exit fastpath.
+
+> Opportunistically update related comments to avoid misunderstandings.
+> 
+> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
+> index d9b9a0f0db17..6940cbeee54d 100644
+> --- a/arch/x86/kvm/pmu.c
+> +++ b/arch/x86/kvm/pmu.c
+> @@ -101,7 +101,7 @@ static inline void __kvm_perf_overflow(struct kvm_pmc *pmc, bool in_pmi)
+>  	struct kvm_pmu *pmu = pmc_to_pmu(pmc);
+>  	bool skip_pmi = false;
+>  
+> -	/* Ignore counters that have been reprogrammed already. */
+> +	/* Ignore counters that have not been reprogrammed. */
+
+Eh, just drop this comment, it's fairly obvious what the code is doing and your
+suggested comment is wrong in the sense that the counters haven't actually been
+reprogrammed, i.e. it should be:
+
+	/* Ignore counters that don't need to be reprogrammed. */
+
+but IMO that's pretty obvious.
+
+>  	if (test_and_set_bit(pmc->idx, pmu->reprogram_pmi))
+>  		return;
+>  
+> @@ -293,7 +293,7 @@ static bool check_pmu_event_filter(struct kvm_pmc *pmc)
+>  	return allow_event;
+>  }
+>  
+> -void reprogram_counter(struct kvm_pmc *pmc)
+> +static void __reprogram_counter(struct kvm_pmc *pmc)
+
+This is misleading.  Double-underscore variants are usually inner helpers, whereas
+these have a different relationship.
+
+Instaed of renaming reprogram_counter(), how about introcuing
+
+	kvm_pmu_request_counter_reprogam()
+
+to make it obvious that KVM is _requesting_ a reprogram and not actually doing
+the reprogram.

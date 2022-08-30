@@ -2,130 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06455A64EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 752B15A6529
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230358AbiH3Nhv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:37:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40772 "EHLO
+        id S230127AbiH3Nkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbiH3Nhp (ORCPT
+        with ESMTP id S230489AbiH3NkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:37:45 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C35A6612A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:37:44 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id k9so14309914wri.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:37:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=eJwvPnyxYM+rkWN/B5T3u9GVEhfio+TrUX3WU5XcQn0=;
-        b=eJ8Q9S1/vCT7cijJVAWN8HR5xnr4XG/bT9gfNLUDKdyxQxPABjo+s4Y6pUxKK4Tl4O
-         jPc2/lY4v59LZSUGa9aKxBb01w/WAWEog2r8xqVxzlhi7sYloua5sSMoo8h1Ju3qINN/
-         3avwaD6Hws/C4g+njGzPWYxF+RusS9DNMyl9nt2y5ZJnNdOG5bGLLNdGTXWMMHpi5f2E
-         IIjR87c/vXSr0+OPP2cwmM1pzjUy5FHA+vG4pvTZWF9oCnm1SdWfv32yZASc1o+ERboZ
-         XMrCHtZPBtVNx/gkiYGlNPnexb2ABfjXNmkHIEWQAhFq4YntlmA92bdCXkafb7r0LXVd
-         7Eiw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=eJwvPnyxYM+rkWN/B5T3u9GVEhfio+TrUX3WU5XcQn0=;
-        b=PYG/bUuxVD86hxp1AwCPX33hKVvjsNIRDJtBFwzXv3l342UbaFDJA9ODxK0YGXaw26
-         2NQ7K+7MvvzhAZyyOLIolooaHZHYE2d+xfMF/MopPTR86CYXbqy8bf57dLOcQXHqNI4b
-         haS4rfFOsr+TasMsj+Eg99IswmuXi5U4AmjbJEfdBce93RdUMEoKNqTG0nBVsmAf4ccv
-         uSKMt7Jml4Ihpo2pEd2o3I6ioAcfn0V/9BYe8ofkgKs++Q9E8tll4hrFFd08j9bmXMK/
-         2SroJ4HUYDIOKCpbGV2x23mDw4LTMC3OorwdqV5EqexlRrOENfT3jF6MQH5mh6nBaqeq
-         QfFg==
-X-Gm-Message-State: ACgBeo1tK+o+M+unyK3Kf9UKXNk3lpYTjQPM20G6k8LufahCKzvG458O
-        //RCAkewBNf+MofYOn0Ci0OGaw==
-X-Google-Smtp-Source: AA6agR4QHq093VZ3/eQb0FJDYlUt9A1Mn1xHd/D1qdIE2cMIfLfOMQUBjFLqXGMVXyoshwbgON+EAQ==
-X-Received: by 2002:adf:dec9:0:b0:226:e033:c048 with SMTP id i9-20020adfdec9000000b00226e033c048mr3225813wrn.577.1661866663228;
-        Tue, 30 Aug 2022 06:37:43 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id n8-20020a5d4848000000b00226d01a4635sm9658965wrs.35.2022.08.30.06.37.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 06:37:42 -0700 (PDT)
-Message-ID: <791ea3b6-c326-9e71-e23b-93206e305c85@linaro.org>
-Date:   Tue, 30 Aug 2022 14:37:41 +0100
+        Tue, 30 Aug 2022 09:40:03 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D02DFCA0C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:38:48 -0700 (PDT)
+Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MH7cM0r6nznTVv;
+        Tue, 30 Aug 2022 21:36:03 +0800 (CST)
+Received: from [10.67.110.83] (10.67.110.83) by canpemm500006.china.huawei.com
+ (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 30 Aug
+ 2022 21:38:28 +0800
+Subject: Re: ping //Re: [PATCH v2 0/2] squashfs: Add the mount parameter
+ "threads="
+To:     Phillip Lougher <phillip@squashfs.org.uk>,
+        <linux-kernel@vger.kernel.org>
+CC:     <wangle6@huawei.com>, <yi.zhang@huawei.com>,
+        <wangbing6@huawei.com>, <zhongjubin@huawei.com>,
+        <chenjianguo3@huawei.com>
+References: <20220815031100.75243-1-nixiaoming@huawei.com>
+ <20220816010052.15764-1-nixiaoming@huawei.com>
+ <8d139f03-7845-9c96-fffc-74fdf8b5d78d@huawei.com>
+ <60b24133-234f-858b-8e71-e183fe72d2bb@squashfs.org.uk>
+From:   Xiaoming Ni <nixiaoming@huawei.com>
+Message-ID: <9c5bddc3-fc93-d76a-1163-0278c8d31dc5@huawei.com>
+Date:   Tue, 30 Aug 2022 21:38:28 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.0.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 00/14] nvmem: core: introduce NVMEM layouts
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
-References: <20220825214423.903672-1-michael@walle.cc>
- <768ff63a-54f5-9cde-e888-206cdf018df3@milecki.pl>
- <267821eee5dcab79fd0ecebe0d9f8b0c@walle.cc>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <267821eee5dcab79fd0ecebe0d9f8b0c@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <60b24133-234f-858b-8e71-e183fe72d2bb@squashfs.org.uk>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.83]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500006.china.huawei.com (7.192.105.130)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Michael for the work.
-
-On 29/08/2022 09:22, Michael Walle wrote:
-> 
->> One thing I believe you need to handle is replacing "cell_post_process"
->> callback with your layout thing.
+On 2022/8/29 7:18, Phillip Lougher wrote:
+> On 26/08/2022 07:19, Xiaoming Ni wrote:
+>> ping
 >>
->> I find it confusing to have
->> 1. cell_post_process() CB at NVMEM device level
->> 2. post_process() CB at NVMEM cell level
+>>
+>> On 2022/8/16 9:00, Xiaoming Ni wrote:
+>>> Currently, Squashfs supports multiple decompressor parallel modes. 
+>>> However, this
+>>> mode can be configured only during kernel building and does not 
+>>> support flexible
+>>> selection during runtime.
+>>>
+>>> In the current patch set, the mount parameter "threads=" is added to 
+>>> allow users
+>>> to select the parallel decompressor mode and configure the number of 
+>>> decompressors
+>>> when mounting a file system.
+>>>
+>>> v2: fix warning: sparse: incorrect type in initializer (different 
+>>> address spaces)
+>>>    Reported-by: kernel test robot <lkp@intel.com>
 > 
-> What is wrong with having a callback at both levels?
+> I have made an initial review of the patches, and I have the following
+> comments.
+> 
+> Good things about the patch-series.
+> 
+> 1. In principle I have no objections to making this configurable at
+>     mount time.  But, a use-case for why this has become necessary
+>     would help in the evaluation.
+> 
+> 2. In general the code changes are good.  They are predominantly
+>     exposing the existing different decompressor functionality into
+>     structures which can be selected at mount time.  They do not
+>     change existing functionality, and so there are no issues
+>     about unexpected regressions.
+> 
+> Things which I don't like about the patch-series.
+> 
+> 1. There is no default kernel configuration option to keep the existing
+>     behaviour, that is build time selectable only.  There may be many
+>     companies/people where for "security" reasons the ability to
+>     switch to a more CPU/memory intensive decompressor or more threads
+>     is a risk.
+> 
+>     Yes, I know the new kernel configuration options allow only the
+>     selected default decompressor mode to be built.  In theory that
+>     will restrict the available decompressors to the single decompressor
+>     selected at build time.  So not much different to the current
+>     position?  But, if the CONFIG_SQUASHFS_DECOMP_MULTI decompressor
+>     is selected, that will now allow more threads to be used than is
+No more threads than before the patch.
 
-we should converge this tbh, its more than one code paths to deal with 
-similar usecases.
+>     current, where it is currently restricted to num_online_cpus() * 2.
+After the patch is installed, the maximum number of threads is still 
+num_online_cpus() * 2.
 
-I have put down some thoughts in "[PATCH v1 06/14] nvmem: core: 
-introduce NVMEM layouts" and "[PATCH v1 07/14] nvmem: core: add per-cell 
-post processing" review.
+[PATCH v2 2/2] squashfs: Allows users to configure the number of 
+decompression threads
+
++#ifdef CONFIG_SQUASHFS_DECOMP_MULTI
++    opts->thread_ops = &squashfs_decompressor_multi;
++    if (num > opts->thread_ops->max_decompressors())
++        num = opts->thread_ops->max_decompressors();
++    opts->thread_num = (int)num;
++    return 0;
++#else
+
+> 
+> 2. You have decided to allow the mutiple decompressor implementations
+>     to be selected at mount time - but you have also allowed only one
+>     decompressor to be built at kernel build time.  This means you
+>     end up in the fairly silly situation of having a mount time
+>     option which allows the user to select between one decompressor.
+>     There doesn't seem much point in having an option which allows
+>     nothing to be changed.
+When multiple decompression modes are selected during kernel build, or 
+only SQUASHFS_DECOMP_MULTI is selected during kernel build, the mount 
+parameter "threads=" is meaningful,
+However, when only SQUASHFS_DECOMP_SINGLE or 
+SQUASHFS_DECOMP_MULTI_PERCPU is selected, the mount parameter "threads=" 
+is meaningless.
+
+Thank you for your guidance
 
 
---srini
 > 
-> Granted, in this particular case (it is just used at one place), I still
-> think that it is the wrong approach to add this transformation in the
-> driver (in this particular case). The driver is supposed to give you
-> access to the SoC's fuse box, but it will magically change the content
-> of a cell if the nvmem consumer named this cell "mac-address" (which
-> you also found confusing the last time and I do too!).
+> 3. Using thread=<number>, where thread=1 you use SQUASHFS_DECOMP_SINGLE
+>     if it has been built, otherwise you fall back to
+>     SQUASHFS_DECOMP_MULTI.  This meants the effect of thread=1 is
+>     indeterminate and depends on the build options.  I would suggest
+>     thread=1 should always mean use SQUASHFS_DECOMP_SINGLE.
+
+SQUASHFS_DECOMP_MULTI and SQUASHFS_DECOMP_SINGLE are selected during 
+construction. Thread=1 indicates that SQUASHFS_DECOMP_SINGLEI is used.
+
+If only SQUASHFS_DECOMP_MULTI is selected during construction, thread=1 
+indicates that SQUASHFS_DECOMP_MULTI is used, and only one decompression 
+thread is created.
+
+Would it be better to provide more flexible mount options for images 
+that build only SQUASHFS_DECOMP_MULTI?
+
 > 
-> The driver itself doesn't add any cells on its own, so I cannot register
-> a .post_process hook there. Therefore, you'd need that post_process hook
-> on every cell, which is equivalent to have a post_process hook at
-> device level.
+> 4. If SQUASHFS_DECOMP_MULTI is selected, there isn't a limit on the
+>     maximum amount of threads allowed, and there is no ability to
+>     set the maximum number of threads allowed at kernel build time
+>     either.
+After the patch is installed, the maximum number of threads is still 
+num_online_cpus() * 2.
+
+[PATCH v2 2/2] squashfs: Allows users to configure the number of 
+decompression threads
+
++#ifdef CONFIG_SQUASHFS_DECOMP_MULTI
++    opts->thread_ops = &squashfs_decompressor_multi;
++    if (num > opts->thread_ops->max_decompressors())
++        num = opts->thread_ops->max_decompressors();
++    opts->thread_num = (int)num;
++    return 0;
+
+Did I misunderstand your question?
+
+
 > 
-> Unless you have a better idea. I'll leave that up to NXP to fix that (or
-> leave it like that).
+> All of the above seems to be a bit of a mess.
 > 
-> -michael
+> As regards points 1 - 3, personally I would add a default kernel
+> configuration option that keeps the existing behaviour, build time
+> selectable only, no additional mount time options.  Then a
+> kernel configuration option that allows the different decompressors
+> to be selected at mount time, but which always builds all the
+> decompressors.  This will avoid the silliness of point 2, and
+Would it be better to allow flexible selection of decompression mode 
+combinations?
+
+> the indeterminate behaviour of point 3.
+> 
+> As regards point 4, I think you should require the maximum number
+> of threads allowable to be determined at build time, this is
+> good for security and avoids attempts to use too much CPU
+> and memory.  The default at kernel build time should be minimal,
+> to avoid cases where an unchanged value can cause a potential
+> security hazard on a low end system.  In otherwords it is
+> up to the user at build time to set the value to an appropriate
+> value for their system.
+In patch 2, the maximum number of threads has been limited,
+Have I misunderstood your question
+
+
+> 
+> Phillip
+> 
+> ---
+> Phillip Lougher, Squashfs author and maintainer.
+> 
+
+Thanks
+Xiaoming Ni
+
+>>>
+>>> v1: 
+>>> https://lore.kernel.org/lkml/20220815031100.75243-1-nixiaoming@huawei.com/ 
+>>>
+>>> ----
+>>>
+>>> Xiaoming Ni (2):
+>>>    squashfs: add the mount parameter theads=<single|multi|percpu>
+>>>    squashfs: Allows users to configure the number of decompression
+>>>      threads.
+>>>
+>>>   fs/squashfs/Kconfig                     | 24 ++++++++--
+>>>   fs/squashfs/decompressor_multi.c        | 32 ++++++++------
+>>>   fs/squashfs/decompressor_multi_percpu.c | 39 ++++++++++-------
+>>>   fs/squashfs/decompressor_single.c       | 23 ++++++----
+>>>   fs/squashfs/squashfs.h                  | 39 ++++++++++++++---
+>>>   fs/squashfs/squashfs_fs_sb.h            |  4 +-
+>>>   fs/squashfs/super.c                     | 77 
+>>> ++++++++++++++++++++++++++++++++-
+>>>   7 files changed, 192 insertions(+), 46 deletions(-)
+>>>
+>>
+> 
+> 
+> .
+

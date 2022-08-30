@@ -2,87 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128BC5A5F4E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 328165A5F53
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbiH3JYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32932 "EHLO
+        id S231675AbiH3JZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbiH3JYA (ORCPT
+        with ESMTP id S231816AbiH3JYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:24:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 789F37392A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:23:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7BD991474;
-        Tue, 30 Aug 2022 02:24:03 -0700 (PDT)
-Received: from [10.57.13.45] (unknown [10.57.13.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7E28D3F766;
-        Tue, 30 Aug 2022 02:23:56 -0700 (PDT)
-Message-ID: <cd53526d-2564-996b-7b0d-d1fe9f114590@arm.com>
-Date:   Tue, 30 Aug 2022 10:23:51 +0100
+        Tue, 30 Aug 2022 05:24:35 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39B32DAEC4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:24:33 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id k22so10682720ljg.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:24:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=jPE8s2Kt3dUsxcnIqtLj7/AZOCEV2Z6WNW6ajJLpgAk=;
+        b=Ea6rLBEAw2NxruDIka8fGE0ig2WFE573LHTZwMNbX63EMy06VT9zSACpuZQokMOoBP
+         jDaiidLide0Uz+D7NRniP/2fdNahaCqr0GSO69ejL7ZicbQM/cwL1luIOZGNCny+Hawq
+         guS6ZROfPe1QtK20nVh5XSGVAl4tg7g9iWcomlksV/eCl0ryxddQBRllFL53C3ByxINO
+         5L2AV3Gt3MO1J0nmqjKRbaFo/utkhKH95Yv82jsYpGhyY8aKWZ5Nrfc7b5O7gj4QLbSu
+         SUbsBYufYqvLLszGhKvQe41Fv30JS/vmoLXXiHk/kHFRwhM4IeRHEBOOcdCbvHgsL4j7
+         Qm0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=jPE8s2Kt3dUsxcnIqtLj7/AZOCEV2Z6WNW6ajJLpgAk=;
+        b=LTi1EQvQg7zR4pKncs9tQP/5ZTflJTlBbDeDMni+qpob9JkjthQIbifUgdIMWsKn8r
+         A6mI1fQ4ZQCmM5nONo6FVio1b9fr9eIGUT1C3Iml4jTc2KctHkjNXON2O1nL+E3ffs4F
+         GmrnDPtrnMVosTR7jR0/P2QKjrxEQ7oG8bj1iI+YVtiqywpQ2ZdCsG3cKn6L+WnHAVWW
+         oJLBkgZgkR65TnZ94COfN6MelyCEMM1Rr6v3PCGsWIBIF2+Fl/ozJEY4UmIqIRgZtbXS
+         VM4bsxEVhS0pmk129WP5rZdnIpga7OJZVzEbvHVvyx4sWOM1Xxl3PHLwUabrAQYnYKdn
+         nFwg==
+X-Gm-Message-State: ACgBeo1sM++gv/iZ3vVJjoKQF4jqcQaFr0KDPIx6Z00b0q9synwqHYfq
+        fyOyGeWUd1sGtfd6B47lV9K73A==
+X-Google-Smtp-Source: AA6agR4KboDwVazwy87bAPg6mq5EfwSkiL2QxqhaNDrjmTJ+8TMDq6WdhJBaVmHuHl6DRaqCuPexUw==
+X-Received: by 2002:a2e:a793:0:b0:267:3fce:a2cf with SMTP id c19-20020a2ea793000000b002673fcea2cfmr779943ljf.263.1661851471549;
+        Tue, 30 Aug 2022 02:24:31 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id z4-20020a056512370400b00492c463526dsm613439lfr.186.2022.08.30.02.24.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 02:24:30 -0700 (PDT)
+Message-ID: <d511bdcb-49be-53ac-ac4b-1dc8b5955dc8@linaro.org>
+Date:   Tue, 30 Aug 2022 12:24:29 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] swiotlb: fix a typo
-Content-Language: en-GB
-To:     Chao Gao <chao.gao@intel.com>, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev
-Cc:     hch@infradead.org, m.szyprowski@samsung.com
-References: <20220826095046.880626-1-chao.gao@intel.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220826095046.880626-1-chao.gao@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] dt-bindings: i2c: renesas,riic: Fix
+ 'unevaluatedProperties' warnings
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Chris Brandt <chris.brandt@renesas.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220829214730.5752-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220829214730.5752-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-26 10:50, Chao Gao wrote:
-> "overwirte" isn't a word. It should be "overwrite".
+On 30/08/2022 00:47, Lad Prabhakar wrote:
+> With 'unevaluatedProperties' support implemented, there's a number of
+> warnings when running dtbs_check:
 > 
-> Signed-off-by: Chao Gao <chao.gao@intel.com>
-> ---
-> BTW, I am wondering if copying the original buffer to the tlb buffer
-> unconditionally will leak the original buffer to the VMM, especially
-> when VMM isn't trusted e.g., by confidential VMs. Would it be better
-> to zero the tlb buffer for dir == DMA_FROM_DEVICE?
-
-No, at the point of dma_map(), the buffer contents are owned by the 
-caller, so if parts of that buffer are sensitive and shouldn't be 
-exposed to DMA, then don't map the whole buffer for DMA. There are more 
-DMA API implementations than SWIOTLB.
-
-The whole point of bouncing the original contents here is that doing 
-anything else effectively corrupts any part of the mapping that the 
-device may end up *not* writing to - see the whole sordid original 
-discussion (but don't be confused by the fact that the caller's original 
-data happened to be zeros in that particular case).
-
-Thanks,
-Robin.
-
+> arch/arm64/boot/dts/renesas/r9a07g043u11-smarc.dtb: i2c@10058000: Unevaluated properties are not allowed ('resets' was unexpected)
+> 	From schema: Documentation/devicetree/bindings/i2c/renesas,riic.yaml
 > 
->   kernel/dma/swiotlb.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/kernel/dma/swiotlb.c b/kernel/dma/swiotlb.c
-> index c5a9190b218f..f67e5f50ee3c 100644
-> --- a/kernel/dma/swiotlb.c
-> +++ b/kernel/dma/swiotlb.c
-> @@ -765,7 +765,7 @@ phys_addr_t swiotlb_tbl_map_single(struct device *dev, phys_addr_t orig_addr,
->   	/*
->   	 * When dir == DMA_FROM_DEVICE we could omit the copy from the orig
->   	 * to the tlb buffer, if we knew for sure the device will
-> -	 * overwirte the entire current content. But we don't. Thus
-> +	 * overwrite the entire current content. But we don't. Thus
->   	 * unconditional bounce may prevent leaking swiotlb content (i.e.
->   	 * kernel memory) to user-space.
->   	 */
+> The main problem is that bindings schema marks resets as a required
+> property for RZ/G2L (and alike) SoC's but resets property is not part
+> of schema. So to fix this just add a resets property with maxItems
+> set to 1.
+
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+
+Best regards,
+Krzysztof

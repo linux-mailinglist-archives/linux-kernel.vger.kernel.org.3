@@ -2,72 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77E65A5C6D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:05:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFF825A5C6A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiH3HFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:05:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
+        id S230362AbiH3HFQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:05:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiH3HFR (ORCPT
+        with ESMTP id S229585AbiH3HFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:05:17 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E622CCA2;
-        Tue, 30 Aug 2022 00:05:14 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-11f34610d4aso3906859fac.9;
-        Tue, 30 Aug 2022 00:05:13 -0700 (PDT)
+        Tue, 30 Aug 2022 03:05:13 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401AD4A838
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:05:08 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bt10so14270137lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:05:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=kYWohH57HrtiR3G5jR/2fpi0CaMLK4KnxnOm/MXWrNQ=;
-        b=kAI1RG3rQl+TxxWuck7+8J10qVbuA1PCMdmiOGcOubN8F+pjSnkDLe0AMOwkjl11H1
-         zxmyPbe0DM2OZLG6gfScChP7iWhMKwe7YOWTW+cnhSKUx37T5lMN+UxJZ1dE3VPlNdTL
-         YtxYrizahOv0tio3ymXn1oLxtUu3aJyMKSeAwvN+/gUbqJxWSu5TFNbCyDQ9T98+l55e
-         exHKjFuVbSDAzbQi+z7KT0vniQCNVs+S0cWezfLEVUW/ovAxmZFLFSxv/0kleUDB468Z
-         tSTvcZSryEkOvg66sPufpHBozSsi/CV05ZSNSmzqaWWurRKPJEcmeI71Zh4qsq6SpwnJ
-         B1rg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=JVbQO8NaIJX9r2XXsX5JS1XPjDhaNVf/tZE3BTjyue8=;
+        b=aUvfBo7ge5wrT9PVdRa7n4WKc+KjoguCB0VGM5ArOYeVSOAtCGAZEIhVT1HktOBuXs
+         xVuo8JAqwWgOvbrNiXwuPoqNnTLm8bwbpdzBVdW1XBIGIvvAobm/5fUU1DaMZxhXYMt5
+         q9PRCAd0ycNSdCJ0SF3wM/sC/4Jv2wRlE5fJwmrsyHasgMrFm8hXCsm1aD90A+iBSqdp
+         JGIlgxplMRXcg90us2nijNq9XvpwRKJHtXnnWe7UD0HWPdTTVSw6af7IiSvj3TkZZcSl
+         I+qsTHUM5mofnppLxCg0Ch2lFK2+Sdu+1LslDLVXb/wyNEtQEALA7Ff4s3cbJgr4Eyrt
+         eXOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=kYWohH57HrtiR3G5jR/2fpi0CaMLK4KnxnOm/MXWrNQ=;
-        b=uKWzNLWZVRbnyvmV0jcKTDjtWyub6U62jOHt859PgHYvAQtMN6w+6+Xe5k9WfSWjVQ
-         WAqTf5sK1hw0Zvo++Cbx5eI3TQP+3J4nPZCarpWT7XAePdGb2WqeYjnj/h8gU7OzChmp
-         HVExV0x/7s0kxXrb5QzibeQ0Rn17tHN4dP5+90Q7kpn+KkTy2DFZ4zF68sFd0hGk5Ur8
-         9VYxY/rbYmrhBJjXC8mZ0B2MTLPbjz6hapq4OwLDpbLE2ICdrS6rOyvIzgApKdQARBQ4
-         iD8DJ3BDJKKt/+JN7b7AFOMv+yV1AtWBSKKOWxP2dnFqjLzC2Ap7x7KpgIH5IejP5jfS
-         dvzQ==
-X-Gm-Message-State: ACgBeo0Oo0NGmMLHrqxEmWnofO03ZB12eGgvVZD3fcyHp9KHvGcaAYy0
-        G2RPBv4BEMR9TebMyK+kLowffKEHlK+WM/R8aJo=
-X-Google-Smtp-Source: AA6agR6iDqDZpkAfemrVBNQR5IyP5DV+Nn8coE8ekGnmXxUZXafNRucloDJzxBU+nvKGN/PMZ8YvWlIZwafcrnWayC0=
-X-Received: by 2002:a05:6808:201c:b0:343:b55:ae85 with SMTP id
- q28-20020a056808201c00b003430b55ae85mr8737545oiw.185.1661843112755; Tue, 30
- Aug 2022 00:05:12 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=JVbQO8NaIJX9r2XXsX5JS1XPjDhaNVf/tZE3BTjyue8=;
+        b=3BbBSQfmfCTfJnqScFiSv6FBQ0oW6O8LKNxYYP+BTW0VKismDN9TpzNWFs5be2/mcQ
+         bdU0gaLxAdvLiObbBXlCv9HpZM1yBpf4IoGBvTVOxFmqaOjTw7313Xas8LFmxcnq6zGh
+         pmYoG4CifupleMmUlKCJZDN9RKgqEyiTvt1Xw7YZW0wlm9+AgihA1YwqaM5OwWViw0O4
+         f/LsYFC61VDJPwynFtaPIw+t0mLLj0cprD/nJdPzbIdbQYuy1PyXY3ejeA8KxDjGBptq
+         MGF5JVqrYSRlHOLUy1Phm2i5+1Y56gja+k/kvl3PtEwb/XcP287+JBW37G6ZKjmLpDH6
+         g/LQ==
+X-Gm-Message-State: ACgBeo0G/hmekQBopAh+nJoWqUhLpnF1PbQSIDEfG9/ZOYQ+D7BycWRW
+        tWnGt1Kj2o3V4CeuaQunQpM=
+X-Google-Smtp-Source: AA6agR5cFuxjTSbp2ILQnRmRzNd5Pjxhu1SWu2c7J9+e7QO7+oxCtHIczngbO2Ls5GyWNgJnT/iQrA==
+X-Received: by 2002:ac2:58d5:0:b0:48b:3a88:641 with SMTP id u21-20020ac258d5000000b0048b3a880641mr6784864lfo.421.1661843106574;
+        Tue, 30 Aug 2022 00:05:06 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id m20-20020a056512359400b00492d1eb41dfsm1506038lfr.240.2022.08.30.00.05.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 00:05:05 -0700 (PDT)
+Message-ID: <b5116f19-4b00-1717-a7ff-eac988bde4a4@gmail.com>
+Date:   Tue, 30 Aug 2022 10:04:58 +0300
 MIME-Version: 1.0
-References: <20220822071902.3419042-1-tcs_kernel@tencent.com>
- <f7e87879-1ac6-65e5-5162-c251204f07d4@datenfreihafen.org> <CAK-6q+hf27dY9d-FyAh2GtA_zG5J4kkHEX2Qj38Rac_PH63bQg@mail.gmail.com>
- <85f66a3a-95fa-5aaa-def0-998bf3f5139f@datenfreihafen.org>
-In-Reply-To: <85f66a3a-95fa-5aaa-def0-998bf3f5139f@datenfreihafen.org>
-From:   zhang haiming <tcs.kernel@gmail.com>
-Date:   Tue, 30 Aug 2022 15:04:36 +0800
-Message-ID: <CAB2z9exjHXMTA5dHFwdf0V+niQZ4ER00pT5Kwz2ybiRHqDC2ow@mail.gmail.com>
-Subject: Re: [PATCH] net/ieee802154: fix uninit value bug in dgram_sendmsg
-To:     Stefan Schmidt <stefan@datenfreihafen.org>
-Cc:     Alexander Aring <aahringo@redhat.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wpan - ML <linux-wpan@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Haimin Zhang <tcs_kernel@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 03/14] gpu: drm: simplify drivers using
+ devm_regulator_*get_enable*()
+Content-Language: en-US
+To:     Robert Foss <robert.foss@linaro.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <cover.1660934107.git.mazziesaccount@gmail.com>
+ <3aacca7d9a0240d95dc3cf103d114b5c85392e71.1660934107.git.mazziesaccount@gmail.com>
+ <CAG3jFyvQc4ZxEt8yRtiP6VAnurvfBdWzD7640DRXun+F7vDHog@mail.gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <CAG3jFyvQc4ZxEt8yRtiP6VAnurvfBdWzD7640DRXun+F7vDHog@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,59 +92,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks to all.
-I have sent patch v2 to fix this.
+On 8/29/22 17:25, Robert Foss wrote:
 
-On Mon, Aug 29, 2022 at 5:08 PM Stefan Schmidt
-<stefan@datenfreihafen.org> wrote:
->
->
-> Hello Alex.
->
-> On 23.08.22 14:22, Alexander Aring wrote:
-> > Hi,
-> >
-> > On Tue, Aug 23, 2022 at 5:42 AM Stefan Schmidt
-> > <stefan@datenfreihafen.org> wrote:
-> >>
-> >> Hello.
-> >>
-> >> On 22.08.22 09:19, Haimin Zhang wrote:
-> >>> There is uninit value bug in dgram_sendmsg function in
-> >>> net/ieee802154/socket.c when the length of valid data pointed by the
-> >>> msg->msg_name isn't verified.
-> >>>
-> >>> This length is specified by msg->msg_namelen. Function
-> >>> ieee802154_addr_from_sa is called by dgram_sendmsg, which use
-> >>> msg->msg_name as struct sockaddr_ieee802154* and read it, that will
-> >>> eventually lead to uninit value read. So we should check the length of
-> >>> msg->msg_name is not less than sizeof(struct sockaddr_ieee802154)
-> >>> before entering the ieee802154_addr_from_sa.
-> >>>
-> >>> Signed-off-by: Haimin Zhang <tcs_kernel@tencent.com>
-> >>
-> >>
-> >> This patch has been applied to the wpan tree and will be
-> >> part of the next pull request to net. Thanks!
-> >
-> > For me this patch is buggy or at least it is questionable how to deal
-> > with the size of ieee802154_addr_sa here.
->
-> You are right. I completely missed this. Thanks for spotting!
->
-> > There should be a helper to calculate the size which depends on the
-> > addr_type field. It is not required to send the last 6 bytes if
-> > addr_type is IEEE802154_ADDR_SHORT.
-> > Nitpick is that we should check in the beginning of that function.
->
-> Haimin, in ieee802154 we could have two different sizes for
-> ieee802154_addr_sa depending on the addr_type. We have short and
-> extended addresses.
->
-> Could you please rework this patch to take this into account as Alex
-> suggested?
->
-> I reverted your original patch from my tree.
->
-> regards
-> Stefan Schmidt
+Thanks for the review Robert.
+
+> Hi Matti,
+> 
+> On Fri, 19 Aug 2022 at 21:18, Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+>>
+>> Simplify drivers using managed "regulator get and enable".
+>>
+>> meson:
+>> Use the devm_regulator_get_enable_optional(). Also drop the seemingly
+>> unused struct member 'hdmi_supply'.
+>>
+>> sii902x:
+>> Simplify using devm_regulator_bulk_get_enable()
+>>
+>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+>>
+>> ---
+>> v2 => v3:
+>> No changes
+>>
+>> RFCv1 => v2:
+>> - Change also sii902x to use devm_regulator_bulk_get_enable()
+>>
+>> Please note - this is only compile-tested due to the lack of HW. Careful
+>> review and testing is _highly_ appreciated.
+>> ---
+>>   drivers/gpu/drm/bridge/sii902x.c      | 22 +++-------------------
+>>   drivers/gpu/drm/meson/meson_dw_hdmi.c | 23 +++--------------------
+>>   2 files changed, 6 insertions(+), 39 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/bridge/sii902x.c b/drivers/gpu/drm/bridge/sii902x.c
+>> index 7ab38d734ad6..162f9c87eeb2 100644
+>> --- a/drivers/gpu/drm/bridge/sii902x.c
+>> +++ b/drivers/gpu/drm/bridge/sii902x.c
+>> @@ -171,7 +171,6 @@ struct sii902x {
+>>          struct drm_connector connector;
+>>          struct gpio_desc *reset_gpio;
+>>          struct i2c_mux_core *i2cmux;
+>> -       struct regulator_bulk_data supplies[2];
+>>          bool sink_is_hdmi;
+>>          /*
+>>           * Mutex protects audio and video functions from interfering
+>> @@ -1072,6 +1071,7 @@ static int sii902x_probe(struct i2c_client *client,
+>>          struct device *dev = &client->dev;
+>>          struct device_node *endpoint;
+>>          struct sii902x *sii902x;
+>> +       static const char * const supplies[] = {"iovcc", "cvcc12"};
+>>          int ret;
+>>
+>>          ret = i2c_check_functionality(client->adapter,
+>> @@ -1122,27 +1122,13 @@ static int sii902x_probe(struct i2c_client *client,
+>>
+>>          mutex_init(&sii902x->mutex);
+>>
+>> -       sii902x->supplies[0].supply = "iovcc";
+>> -       sii902x->supplies[1].supply = "cvcc12";
+>> -       ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(sii902x->supplies),
+>> -                                     sii902x->supplies);
+>> -       if (ret < 0)
+>> -               return ret;
+>> -
+>> -       ret = regulator_bulk_enable(ARRAY_SIZE(sii902x->supplies),
+>> -                                   sii902x->supplies);
+>> +       ret = devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(supplies), supplies);
+>>          if (ret < 0) {
+>>                  dev_err_probe(dev, ret, "Failed to enable supplies");
+>>                  return ret;
+>>          }
+>>
+>> -       ret = sii902x_init(sii902x);
+>> -       if (ret < 0) {
+>> -               regulator_bulk_disable(ARRAY_SIZE(sii902x->supplies),
+>> -                                      sii902x->supplies);
+>> -       }
+>> -
+>> -       return ret;
+>> +       return sii902x_init(sii902x);
+>>   }
+>>
+>>   static int sii902x_remove(struct i2c_client *client)
+>> @@ -1152,8 +1138,6 @@ static int sii902x_remove(struct i2c_client *client)
+>>
+>>          i2c_mux_del_adapters(sii902x->i2cmux);
+>>          drm_bridge_remove(&sii902x->bridge);
+>> -       regulator_bulk_disable(ARRAY_SIZE(sii902x->supplies),
+>> -                              sii902x->supplies);
+>>
+>>          return 0;
+>>   }
+> 
+> Ideally this patch would be split into two parts here, due to
+> maintainership boundaries.
+
+Ok. I will in any case respin this series when the dependency patches 
+from Mark's tree have been merged to the -rc1. I can split this to 
+patch/driver if it is preferred. I just though I'll decrease amount of 
+mails by squashing these almost trivial changes.
+
+> 
+> For the sii902x part, please add my r-b.
+> 
+> Reviewed-by: Robert Foss <robert.foss@linaro.org>
+Thanks.
+
+Best Regards
+  -- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
+Discuss - Estimate - Plan - Report and finally accomplish this:
+void do_work(int time) __attribute__ ((const));

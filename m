@@ -2,143 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5B95A5FC1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:48:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5355A5FC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:48:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiH3JsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:48:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
+        id S229722AbiH3JsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiH3JsG (ORCPT
+        with ESMTP id S229561AbiH3JsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:48:06 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D0080362
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:48:04 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id bn9so10741252ljb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=1B8agEvOhcrbh7osNWZ4zacBSoqzKCRV4W/UdfB2Q0k=;
-        b=y4kyND4MXnnB0qr7XrN0sOzUe3DRMFz5iSNi01kAX8eTChhO7dm8KjP6hYa/aDDSHG
-         xyWMAnUAx0eQejmcLRxCzOQHGNXfRgShtmX5d1DTlYbmpDDiUp21q6GaaX87S0L+vcp2
-         z84wRkPbATrjT91LtFZmk7SyyF4E20Vd+SAkswPEZvkmO3W9kBaEKG93ekjxwsydEGdE
-         7f53yy9cfziruNxjuM0hHzXGedE1SGTlbMKnvn9aZr3AF5VadfmEoeAY58I6S4Ci94ZG
-         B0ng1RFchW6v3ZfgJgfmyNyAkw4/tbv5ozbbuIgASMK66+jK9IjiqOotR3ur2biMp5mz
-         TAKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=1B8agEvOhcrbh7osNWZ4zacBSoqzKCRV4W/UdfB2Q0k=;
-        b=wGsZEXrEnVlD7Vnjd5P2KmC37pBLmCvLV3Olammw05SDJLRlm+Cog6zMYd7rgeAZ+V
-         lM/98comRfyOAMQ3hLkQbMEtXGi9kx+NVhy9KGn4cUw4RxO9YDpnnESeoSZ2IBoj8/nd
-         fSBtWwtfMVZu4WeNXYUYHjv4n5KeD/8y1nBTgdJGFl+9387yHDfUHZY0bmtwfcsttoUF
-         z37Fu8SG9pUmXAipnw8rKEON9u7N1DaJwbNXm5i3EPDG3keeIDtUcxcOQDzALq3Ptjs6
-         CX5rrzat+E0ThfREHZXGHZZriJ+Z6xczWYQQy/MBPz+TqLGZ3zYmPQDdJeLHOZXntIqO
-         LyUw==
-X-Gm-Message-State: ACgBeo2ECOok1Cgxzjy+oLPGfMvreiE2LfSlfbm4FqhJ1Lwk2z8baM/F
-        6dAs2lZGLmyihbA3LAIE/hhhWw==
-X-Google-Smtp-Source: AA6agR6Dq6C7MSOxzfke89FEuTHtENsfk93cm3duATGZNLuyIPGiBBJlh74yTA+qfNkzRcW+RMzytg==
-X-Received: by 2002:a2e:9e50:0:b0:261:e3fd:cdc5 with SMTP id g16-20020a2e9e50000000b00261e3fdcdc5mr6731602ljk.56.1661852883220;
-        Tue, 30 Aug 2022 02:48:03 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id by6-20020a05651c1a0600b0026181f65600sm1712560ljb.136.2022.08.30.02.48.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 02:48:02 -0700 (PDT)
-Message-ID: <a04c5c6b-6195-91c6-dd83-4ca04767a441@linaro.org>
-Date:   Tue, 30 Aug 2022 12:48:01 +0300
+        Tue, 30 Aug 2022 05:48:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A60E67B1D2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:48:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A7D623A;
+        Tue, 30 Aug 2022 02:48:18 -0700 (PDT)
+Received: from [10.57.13.45] (unknown [10.57.13.45])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4ADD3F766;
+        Tue, 30 Aug 2022 02:48:10 -0700 (PDT)
+Message-ID: <9ec5ba90-150a-c675-d95b-b13e3a4e9e10@arm.com>
+Date:   Tue, 30 Aug 2022 10:48:08 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/2] dt-bindings: mtd: spi-nor: Add reset-gpios property
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
-        Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org, saikrishna12468@gmail.com,
-        git@amd.com
-References: <20220829090528.21613-1-sai.krishna.potthuri@amd.com>
- <20220829090528.21613-2-sai.krishna.potthuri@amd.com>
- <9a63271b-48c0-1b31-c450-5abc9eedbced@linaro.org>
- <6619ebc290f12fbb7613f32087aa9200@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <6619ebc290f12fbb7613f32087aa9200@walle.cc>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 0/3] More ARM DMA ops cleanup
+To:     Yongqin Liu <yongqin.liu@linaro.org>,
+        Christoph Hellwig <hch@lst.de>
+Cc:     linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
+        m.szyprowski@samsung.com, arnd@kernel.org,
+        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
+        "Bajjuri, Praneeth" <praneeth@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>
+References: <cover.1650539846.git.robin.murphy@arm.com>
+ <20220421141300.GC20492@lst.de>
+ <665d2b46-c9e2-2543-cad5-9adf022e4bcb@arm.com>
+ <CAMSo37XN3PC22JK4ot-B8gUxWOhK+UD-73Zb8LqvYpgPL1Bj6g@mail.gmail.com>
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <CAMSo37XN3PC22JK4ot-B8gUxWOhK+UD-73Zb8LqvYpgPL1Bj6g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 12:36, Michael Walle wrote:
-> Am 2022-08-30 11:21, schrieb Krzysztof Kozlowski:
->> On 29/08/2022 12:05, Sai Krishna Potthuri wrote:
->>> SPI-NOR flashes have RESET pin which can be toggled using GPIO
->>> controller, for those platforms reset-gpios property can be used to
->>> reset the flash device.
->>>
->>> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
->>> ---
->>>  Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml 
->>> b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
->>> index 7149784a36ac..d2fc8e9c787f 100644
->>> --- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
->>> +++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
->>> @@ -70,6 +70,12 @@ properties:
->>>        be used on such systems, to denote the absence of a reliable 
->>> reset
->>>        mechanism.
->>>
->>> +  reset-gpios:
->>> +    description:
->>> +      contains a GPIO specifier.
->>
->> Skip this part - obvious.
->>
->>> The reset GPIO is asserted and then deasserted
->>> +      to perform device reset. If "broken-flash-reset" is present 
->>> then having
->>> +      this property does not make any difference.
->>
->> Isn't then broken-flash-reset conflicting with this one (e.g.
->> disallowing it)?
+On 2022-08-27 13:24, Yongqin Liu wrote:
+> Hi, Robin, Christoph
 > 
-> Sometimes the spi-nor driver needs to switch modes, which are persistent
-> until you either switch em back or do a hardware reset (or software
-> reset IIRC) of the flash. If broken-flash-reset is set, we try hard
-> to leave the flash in the mode which it is normally in after reset or
-> don't switch modes at all.
-> Of course we cannot make sure, our shutdown gets called in each case,
-> thus there is may be warning during startup.
+> With the changes landed in the mainline kernel,
+> one problem is exposed with our out of tree pvr module.
+> Like the source here[1], arm_dma_ops.sync_single_for_cpu is called in
+> the format like the following:
+>      arm_dma_ops.sync_single_for_cpu(NULL, pStart, pEnd - pStart,
+> DMA_FROM_DEVICE);
 > 
-> So, even if you have a reset-gpio it might be broken I guess. Think
-> of it being high active, but someone forgot the pull-up. So, if you
-> do an unexpected reset, the flash chip might not be reset
-> automatically. So yes, I think, even if there is a dedicated reset
-> gpio, it could still be messed up. How likely is it? I don't know,
-> probably not very.
+> Not sure if you could give some suggestions on what I should do next
+> to make the pvr module work again.
 
-OK, so let's keep it and allow both.
+Wow, that driver reinvents so many standard APIs for no apparent reason 
+it's not even funny.
 
-Best regards,
-Krzysztof
+Anyway, from a brief look it seemingly already knows how to call the DMA 
+API semi-correctly, so WTF that's doing behind an #ifdef, who knows? 
+However it's still so completely wrong in general - fundamentally broken 
+AArch64 set/way cache maintenance!? - that it looks largely beyond help. 
+"Throw CONFIG_DMA_API_DEBUG at it and cry" is about the extent of 
+support I'm prepared to provide for that mess.
+
+Thanks,
+Robin.
+
+> Thanks in advance!
+> 
+> [1]: https://android-git.linaro.org/kernel/omap-modules.git/tree/pvr/services4/srvkm/env/linux/osfunc.c?h=android-mainline#n4615
+> 
+> Thanks,
+> Yongqin Liu
+> 
+> On Thu, 21 Apr 2022 at 22:35, Robin Murphy <robin.murphy@arm.com> wrote:
+>>
+>> On 2022-04-21 15:13, Christoph Hellwig wrote:
+>>> On Thu, Apr 21, 2022 at 12:36:56PM +0100, Robin Murphy wrote:
+>>>> Hi all,
+>>>>
+>>>> Thanks to Christoph's latest series, I'm reminded that, if we're going
+>>>> to give the ARM DMA ops some cleanup this cycle, it's as good a time as
+>>>> any to dust off these old patches and add them on top as well. I've
+>>>> based these on the arm-dma-direct branch which I assume matches the
+>>>> patches posted at [1].
+>>>
+>>> All these do look sensible to me.  But weren't you working on replacing
+>>> the ARM iommu dma_ops with dma-іommu anyway?
+>>
+>> Yes, that's somewhat entangled with the IOMMU bus ops stuff, so I'll
+>> probably get to the point of having to revisit it in a couple of months
+>> or so. These patches are off the bottom of that stack from my first
+>> attempt, where the aim was to make the current ops the same shape first
+>> so that the switch is then easier to reason about (particularly in terms
+>> of sounding out any issues with the hooking up of dev->dma_coherent,
+>> although your series will now be taking most of the load off there).
+>>
+>> Cheers,
+>> Robin.
+> 
+> 
+> 

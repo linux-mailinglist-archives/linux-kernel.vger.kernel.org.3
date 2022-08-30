@@ -2,120 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06825A62D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00AE05A62EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbiH3MD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
+        id S229781AbiH3MLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbiH3MCg (ORCPT
+        with ESMTP id S229608AbiH3MLC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:02:36 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F4B2EF9D8;
-        Tue, 30 Aug 2022 05:02:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661860928; x=1693396928;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eeD6WJYKHUyfZ/PXC4poyF6VyKFe0V4LAqKVsAEhnLI=;
-  b=CSqQfYURJd8rkqxNgLXcQ2YySp2cJZ49YZsXvGQmTFM47UqF307o167C
-   M2AIfIJ/pzLxJek3sDX3iPRlkxmtgL+sIM9BEPH64jl9u5ceeAs/ASjxg
-   EkqHM6eyfxM0cGi2PHkgZhD4tyb86Ncd4AmetbaeheQWTnEn3Kea/wJkl
-   cCRUjXbpCocUB7kZEcz3VwxhptAomNQillKi/ZEw/wsR/dGITbodYYnup
-   tBJcCOj2zchOhjndqlsFXQZM8eDzqC9S1hQLsXr1jDeuaR+wGTb+u7YcB
-   wp3o83Y4AZjiNJp0Mnkkl06v0GnvaI0mO3fkPRXB9GViL0tIbGaxjSxNz
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="356871006"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="356871006"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 05:02:01 -0700
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="787469680"
-Received: from ls.sc.intel.com (HELO localhost) ([143.183.96.54])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 05:02:01 -0700
-From:   isaku.yamahata@intel.com
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kai Huang <kai.huang@intel.com>, Chao Gao <chao.gao@intel.com>,
-        Will Deacon <will@kernel.org>
-Subject: [PATCH v2 19/19] RFC: KVM: Remove cpus_hardware_enabled and related sanity check
-Date:   Tue, 30 Aug 2022 05:01:34 -0700
-Message-Id: <21b2efeb4b43605a8c1a327a3656650d96be0968.1661860550.git.isaku.yamahata@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1661860550.git.isaku.yamahata@intel.com>
-References: <cover.1661860550.git.isaku.yamahata@intel.com>
+        Tue, 30 Aug 2022 08:11:02 -0400
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E495A6AE5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:10:57 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 7213D5802D9;
+        Tue, 30 Aug 2022 08:03:36 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 30 Aug 2022 08:03:36 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1661861016; x=
+        1661868216; bh=Un4EFnpmCrjF0op+CQJbf6xj3KV7/HPMuOuXK7AEo2I=; b=D
+        tvEwgKsQqnUenjfacp4PZwK0ZhaN/HT87mq75are5HFk0XfZglYSMRXUP2aNVpdO
+        tabv3AyDoz4CT5k++l9c3y9JHGnsYqDVm7cgR/iWQye24reLcluU/RRGezMHMa3o
+        26lJD1g9RgnfgW/OANYyo9K4c6vWlN71CduB2tRPAJqZq16cgjpZieIr87H4Jlg7
+        CMhS9/azps7Am17rwoqUK1Uzi2DSu+b8JpaWS9CO4G+HZmfnAPs/5HNsjBkwTnzN
+        ipQSgsrTKotKvLM9y8XxkH7d+I9Z2kpDV/7B7h5Pj3SpiRe4LvYuUnsxAp9CyoMZ
+        AwL0Hm7CQETZv9e626ipQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1661861016; x=
+        1661868216; bh=Un4EFnpmCrjF0op+CQJbf6xj3KV7/HPMuOuXK7AEo2I=; b=3
+        6dbXYWyKPwm/+6hbuyU/giI2uQ63drNFQSePRhBlilQ67WGUWjcWLI1p+LqEK73g
+        fs0NRJU95nYgN8bDHN8FFYkRwp8xIREz5mPdBI26UdsvXS/065X+RwB5GxhnS7De
+        rKK6aH8bgofjNfDGB4pg6ieTA8OIAtlPiMqiN5aA38ZA7g7KDM7sUn9DyxZVOCOe
+        vrAeQ7vrwxvCPu8swnYxmAZY1Ax1Ud1UUMQ8fqiDPb28jmFFKhi09+a0LWmcu3Xn
+        7E4+8+7+U/xAMvq+LZ7fMjdTdaqwxfwhcecTw/1UJu+ZPvkslXODYswUAoZdUdOo
+        vaJgClnI41QuGh/kzRTgA==
+X-ME-Sender: <xms:l_wNY6oGFCuPrXLu_lICDTdCbSEu35J3iVJVjDE6nUcPvveRoHEZiw>
+    <xme:l_wNY4quMS5CXVM1erpTf7cw2djyVbwpuQRrcz2Jhxok1vKHyOF8yaKwhraLbbSse
+    sSXcX3CLE88lmpFNxA>
+X-ME-Received: <xmr:l_wNY_Okj9gTra9L6Fm8reAM8HlENdzUrpVeFZ0H_Ckc2Ky9DkU-Uuh76b0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekfedggeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnheptefgleeggfegkeekgffgleduieduffejffegveevkeejudektdduueet
+    feetfefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:l_wNY575QlKLJhE0dUITZhr1Y2xjKtL3jvcKcW6f6p2TbHDxlpTffA>
+    <xmx:l_wNY54AtJBpBRMzVSilS5LlYoWV0xW1oilUo4CAO7DJ4OoEQbFw9A>
+    <xmx:l_wNY5jTwGvBb8C8tqMpNARDm_YnrE5LfgJuayPRMJOXWiSvsec9ig>
+    <xmx:mPwNY16sLANYyD2X2vgc2p_03AS9Unm3tT13yoQ8vkPx2iJxXj6aNQ>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 Aug 2022 08:03:34 -0400 (EDT)
+Date:   Tue, 30 Aug 2022 14:03:30 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nouveau Dev <nouveau@lists.freedesktop.org>,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Subject: Re: [PATCH v2 14/41] drm/modes: Move named modes parsing to a
+ separate function
+Message-ID: <20220830120330.6f5f22d35gu7cbr3@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-14-459522d653a7@cerno.tech>
+ <CAMuHMdV9wVgHFfwHoqtBoYzJDnjDmKTfaZkAKvTVKh1Y-2x1pA@mail.gmail.com>
+ <87czcidnb8.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <87czcidnb8.fsf@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Isaku Yamahata <isaku.yamahata@intel.com>
+Hi,
 
-cpus_hardware_enabled mask seems incomplete protection against other kernel
-component using CPU virtualization feature.  Because it's obscure and
-incomplete, remove the check.
+On Tue, Aug 30, 2022 at 01:43:07PM +0300, Jani Nikula wrote:
+> On Tue, 30 Aug 2022, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> > On Mon, Aug 29, 2022 at 3:13 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> >> +#define STR_STRICT_EQ(str, len, cmp) \
+> >> +       ((strlen(cmp) =3D=3D len) && !strncmp(str, cmp, len))
+> >
+> > This is not part of the move, but newly added.
+>=20
+> The same construct is also duplicated elsewhere in the series, and I
+> kept being confused by it.
 
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
----
- virt/kvm/kvm_arch.c | 16 ++--------------
- 1 file changed, 2 insertions(+), 14 deletions(-)
+I'm not sure what is confusing, but I can add a comment if needed.
 
-diff --git a/virt/kvm/kvm_arch.c b/virt/kvm/kvm_arch.c
-index 8f2d920a2a8f..cbad0181c177 100644
---- a/virt/kvm/kvm_arch.c
-+++ b/virt/kvm/kvm_arch.c
-@@ -12,22 +12,16 @@
- 
- #include <linux/kvm_host.h>
- 
--static cpumask_t cpus_hardware_enabled = CPU_MASK_NONE;
--
- static int __hardware_enable(void)
- {
--	int cpu = raw_smp_processor_id();
- 	int r;
- 
- 	WARN_ON_ONCE(preemptible());
- 
--	if (cpumask_test_cpu(cpu, &cpus_hardware_enabled))
--		return 0;
- 	r = kvm_arch_hardware_enable();
- 	if (r)
--		pr_info("kvm: enabling virtualization on CPU%d failed\n", cpu);
--	else
--		cpumask_set_cpu(cpu, &cpus_hardware_enabled);
-+		pr_info("kvm: enabling virtualization on CPU%d failed\n",
-+			smp_processor_id());
- 	return r;
- }
- 
-@@ -41,13 +35,7 @@ static void hardware_enable(void *arg)
- 
- static void hardware_disable(void *junk)
- {
--	int cpu = raw_smp_processor_id();
--
- 	WARN_ON_ONCE(preemptible());
--
--	if (!cpumask_test_cpu(cpu, &cpus_hardware_enabled))
--		return;
--	cpumask_clear_cpu(cpu, &cpus_hardware_enabled);
- 	kvm_arch_hardware_disable();
- }
- 
--- 
-2.25.1
+> The above is precisely the same as:
+>=20
+> 	str_has_prefix(str, cmp) =3D=3D len
 
+Here, it's used to make sure we don't have a named mode starting with
+either e, d, or D.
+
+If I understood str_has_prefix() right, str_has_prefix("DUMB-MODE", "D")
+=3D=3D strlen("DUMB-MODE") would return true, while it's actually what we
+want to avoid.
+
+It's also used indeed in drm_get_tv_mode_from_name(), where we try to
+match a list of names with one passed as argument.
+
+With drm_get_tv_mode_from_name("NSTC", strlen("NTSC")), we would end up
+calling str_has_prefix("NTSC-J", "NTSC") =3D=3D strlen("NTSC-J") which would
+work. However, we end up calling prefix not a prefix, but an entire
+string we want to match against, which is very confusing to me too.
+
+Maxime

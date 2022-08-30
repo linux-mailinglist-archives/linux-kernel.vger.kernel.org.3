@@ -2,54 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 682AA5A68B9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:49:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF2F5A68BB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:49:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230163AbiH3Qs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:48:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
+        id S230205AbiH3QtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiH3Qs5 (ORCPT
+        with ESMTP id S229633AbiH3QtL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:48:57 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98121B657E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:48:56 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id x27-20020a25ac9b000000b0069140cfbbd9so170682ybi.8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:48:56 -0700 (PDT)
+        Tue, 30 Aug 2022 12:49:11 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25449BA162
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:49:04 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33daeaa6b8eso182133007b3.7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:49:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=bqWWElpifsVIcRBtLS4h3nAno3DuqAdm5MwVPcG6g2U=;
-        b=ohH04+bmBKg6/u4gjhGe4ql6BSMCMzp43mE/vQ1+o8MMfyn3LexUr+otcCJbGXxt5B
-         zA73E2gOIwAro0XcudubwXtWJQ1gxhBUgP9JjDi1EPaaK6hwxynzIh4VAsPdb8NmnwLk
-         YabXxaYmQb5CeozvGL/q3XcX7nXBzmeY2HPERul/OKs/ikAffbgglH2fGF+HbIkAbhYM
-         4F5Cs4d0d/v7fiWbf3yKGY+ER5IDJ8jxf0E6R3oK+Qoo9tghgwwY2E2PrxOnqaEc4Axg
-         ITTNacw061mfcumS7EsJDub8SCVYbVvwpbYkKgtSlJLu2B0FGKZUJEYHwD9Nian/1xgv
-         ZdSw==
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc;
+        bh=TTzZt2MqnQlXfvTzLI7MzZx0sdeqXflvaM4OPZwrit0=;
+        b=LWxnDRkDBU9PC3Z/RMXD1/pPx+42f81N9G3pjnaKh9jFYWInA7UDNwGH9Vl49dOcQo
+         OtWlvneeBw9GZQEfAqvQjVlm2WCpZPVdUsWuoQRARR1izk+d1ZO4ziXPNLckOZ3ivBVz
+         1/LazNhdZ5T/wNLJOwbtNzkE3jUOVDYK6VLIVGPyGqjWjgr6uUsSBWHfPIuu/i5RdFR1
+         fS40Bji8+JWHv33iYInieIbyOSeETu1GHZ6tUfgoRGWy40+SPCvirpEkrVJtDFsKX6pF
+         4EszuIGn5zlvk9NUI0w8D4pQlcj9GZbzbaEuhVMtr4NK0HOuWSyvYZv6CwakKx+x15OS
+         JMeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=bqWWElpifsVIcRBtLS4h3nAno3DuqAdm5MwVPcG6g2U=;
-        b=dLB8aj6dO7FCCdFLI8HW8RNW/x0Tz73Fs+DCm+XyUWsYQgY6NxXgiJvyLK34MMGzcX
-         PV1FhcGyMMrRzs5VwsuWjHNHTgC+jStfc6xbvWO1u+oXE8CgKtZo2AlLdJb77vgsVy5Q
-         WyKSU5TeVj2h0VqdUA5uQkH3JN+9+VT+cJeQ7EI/oxSnuCWsRwVGsHsGb+7//223tVSI
-         MlzqqnM42gsT8GChTQZA4OV86O8hhGQoHnolOvTZalxZGAuSlk8UxDkF9f4wF8nzitbF
-         OuIJsdsC+ieO0dCfpD5u1Tn/4sZ0OHI/vB/nhXWTz5y/m9ahPyvVsp0+KZ+0vy9wRceb
-         VpRg==
-X-Gm-Message-State: ACgBeo2c6VHtQdjerrH35DSp7RLT7Yxb/AVQohTMdHUsfTcl8hp10xju
-        QMJHOza/1bsUZUhAYR73juuQ3H48auEi
-X-Google-Smtp-Source: AA6agR5HYPGdfJCmFz6kSepJum8lO1auKcPBMGIAOUdWwb2wB+i9kNM7DUBx1cmoh+TCIyRIFxNSFW2DxAmz
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc;
+        bh=TTzZt2MqnQlXfvTzLI7MzZx0sdeqXflvaM4OPZwrit0=;
+        b=BvZZ5cSlCdtLuJtJZ3WjGlPUKIp3e4uRwOGdEXHHmQhd1ci/apGi3xxFHUnCUbhHCt
+         eKPpVr4b49Z+6kSBhJzhnsOB2/QTr7q6iRIHXjhrnq4p3mHNnFqikRW5rmTH63VKwfba
+         9LvLsF5/gW2XpUXVAX7tS1BUm7NqjZR98tmrdydA2F7TM36XrpTyM5DwJ/FwcvvGDjtE
+         89K0ET4u9lGjD4sKRF4z6kJ273FrcrQOBqw97RpmUton1CUKEpaDP7k8goqJMHXBxpYV
+         52AFU/ZIeW+ckF8wo1NG8DTJ2PItZNG3t+vCQ3dzwNIwA2AjgcbVvT5JTr8llQSeRXaC
+         GS7Q==
+X-Gm-Message-State: ACgBeo1CQN4XLa6C8ag2014tMJKcBaz0I8bbQtYblB3hgF/EPCYDlN2J
+        NyJucA+4C8JQegeKss4WnKn2JoGNjQer
+X-Google-Smtp-Source: AA6agR52AWfpqQYvl/0z5UzBgsYu7Z5fc3HvzYVDoiN8Fqg2ln6CV35ottUScDetIIkDMxxA+Y/suIv+rG7X
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:902c:b0fa:dec9:8767])
- (user=irogers job=sendgmr) by 2002:a25:db48:0:b0:696:4274:477b with SMTP id
- g69-20020a25db48000000b006964274477bmr12234993ybf.146.1661878135792; Tue, 30
- Aug 2022 09:48:55 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 09:48:38 -0700
-Message-Id: <20220830164846.401143-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a05:6902:1143:b0:695:7755:2acb with SMTP
+ id p3-20020a056902114300b0069577552acbmr12618883ybu.48.1661878143376; Tue, 30
+ Aug 2022 09:49:03 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 09:48:39 -0700
+In-Reply-To: <20220830164846.401143-1-irogers@google.com>
+Message-Id: <20220830164846.401143-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20220830164846.401143-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Subject: [PATCH v1 0/8] Add core wide metric literal
+Subject: [PATCH v1 1/8] perf smt: Tidy header guard add SPDX
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -82,65 +85,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible to optimize metrics when all SMT threads (CPUs) on a
-core are measuring events in system wide mode. For example, TMA
-metrics [1] defines CORE_CLKS for Sandybrdige as:
-    
-if SMT is disabled:
-  CPU_CLK_UNHALTED.THREAD
-if SMT is enabled and recording on all SMT threads (for all processes):
-  CPU_CLK_UNHALTED.THREAD_ANY / 2
-if SMT is enabled and not recording on all SMT threads:
-  (CPU_CLK_UNHALTED.THREAD/2)*
-  (1+CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE/CPU_CLK_UNHALTED.REF_XCLK )
-    
-That is two more events are necessary when not gathering counts on all
-SMT threads. To distinguish all SMT threads on a core vs system wide
-(all CPUs) call the new property core wide.
+Make the header guard consistent with others.
 
-As this literal requires the user requested CPUs and system wide to be
-present, the parsing of metrics is delayed until after command line
-option processing. As events are used to compute the evlist maps, and
-metrics create events, the data for core wide must come from the target.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/util/smt.c | 1 +
+ tools/perf/util/smt.h | 7 ++++---
+ 2 files changed, 5 insertions(+), 3 deletions(-)
 
-This patch series doesn't correct the Intel metrics to use #core_wide,
-which will be done in follow up work. To see the two behaviors
-currently you need an Intel CPU between Sandybridge and before
-Icelake, then compare the events for tma_backend_bound_percent and
-Backend_Bound_SMT where the former assumes recording on all SMT
-threads and the latter assumes not recording on all SMT threads. The
-future work will just have a single backend bound metric for both
-cases determined using #core_wide.
-
-[1] https://download.01.org/perfmon/TMA_Metrics.xlsx Note, #EBS_Mode
-is false when recording on all SMT threads and all processes which is
- #core_wide true in this change.
-
-Ian Rogers (8):
-  perf smt: Tidy header guard add SPDX
-  perf metric: Return early if no CPU PMU table exists
-  perf expr: Move the scanner_ctx into the parse_ctx
-  perf smt: Compute SMT from topology
-  perf topology: Add core_wide
-  perf stat: Delay metric parsing
-  perf metrics: Wire up core_wide
-  perf test: Add basic core_wide expression test
-
- tools/perf/builtin-stat.c     |  57 +++++++++++++-----
- tools/perf/tests/expr.c       |  37 +++++++++---
- tools/perf/util/cputopo.c     |  61 +++++++++++++++++++
- tools/perf/util/cputopo.h     |   5 ++
- tools/perf/util/expr.c        |  26 ++++----
- tools/perf/util/expr.h        |  14 +++--
- tools/perf/util/expr.l        |   6 +-
- tools/perf/util/metricgroup.c |  92 +++++++++++++++++++++-------
- tools/perf/util/metricgroup.h |   4 +-
- tools/perf/util/smt.c         | 110 ++++++++--------------------------
- tools/perf/util/smt.h         |  19 ++++--
- tools/perf/util/stat-shadow.c |  13 ++--
- tools/perf/util/stat.h        |   2 +
- 13 files changed, 286 insertions(+), 160 deletions(-)
-
+diff --git a/tools/perf/util/smt.c b/tools/perf/util/smt.c
+index 2b0a36ebf27a..8fed03283c85 100644
+--- a/tools/perf/util/smt.c
++++ b/tools/perf/util/smt.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: GPL-2.0-only
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <unistd.h>
+diff --git a/tools/perf/util/smt.h b/tools/perf/util/smt.h
+index b8414b7bcbc8..a98d65808f6a 100644
+--- a/tools/perf/util/smt.h
++++ b/tools/perf/util/smt.h
+@@ -1,6 +1,7 @@
+-#ifndef SMT_H
+-#define SMT_H 1
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __SMT_H
++#define __SMT_H 1
+ 
+ int smt_on(void);
+ 
+-#endif
++#endif /* __SMT_H */
 -- 
 2.37.2.672.g94769d06f0-goog
 

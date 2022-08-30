@@ -2,56 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204BB5A5B78
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1622C5A5B8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:11:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbiH3GII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33186 "EHLO
+        id S229685AbiH3GLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiH3GIG (ORCPT
+        with ESMTP id S229653AbiH3GLB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:08:06 -0400
-Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78F1B5E7F;
-        Mon, 29 Aug 2022 23:08:04 -0700 (PDT)
-Received: from [10.18.29.47] (10.18.29.47) by mail-sh.amlogic.com (10.18.11.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.9; Tue, 30 Aug
- 2022 14:08:02 +0800
-Message-ID: <b98ad038-5f69-204f-fda5-0e55b34144c7@amlogic.com>
-Date:   Tue, 30 Aug 2022 14:08:02 +0800
+        Tue, 30 Aug 2022 02:11:01 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B2EA63F06
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:10:59 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id j14so3783425lfu.4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=hUQZ2ejLKEXtWhiFjkIEXiKx5+7W4LSI/qrPj7Va8no=;
+        b=DjSh7ZrxojdvW/IHtazfcEv3r0dT3Oa1ZJ22pgkSZwBwa0goaY+VpApIDLBgzjgT/Z
+         J/LTlLADyeMLChodCmockA/RRD5mBOJOB7GrbTBe16OP4/nuIXZnr5qZzU/+HH/smwen
+         bSW6mOa6DuPl/hb34TrX6RuXrMPVCSsQ9FkLjbFfptlMED4UJVH5E/Va9RulZuCSI0Ou
+         fqLQPzsb8K4/g/3idBKUfBqJ4IVU4sjqErKdF+f+zDvGZBp2wdEjrDx1ur3uHj0k40Dg
+         Lox8PQYC8kQUTI1Vd+C5b+Kzxox6kQO59X01VhjKWNTrfMe+1zmARq4YxZnluMNhJSIL
+         lzWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=hUQZ2ejLKEXtWhiFjkIEXiKx5+7W4LSI/qrPj7Va8no=;
+        b=KD//6DJByrjRpYxXTQ2QQDHNHnm3vBDB67K8nbU1LiwT1mO3Ila1USH9kqUmyJZDVM
+         nN7pLI+Et0GbtbfKutgGDkxOs6EQwatoVwVfVHheKffJfuSBqWJKDr3vZzcxwTQuWCfA
+         kiESsfSu5u5W8t2yToDVcFNBK2zHj2o8l2h6HQi+tSl5dUTOdzRpXkMd1EpHsxPqlQah
+         gw25Pvu+g9O8ih9Zvrhvg6al08toS7WZymwInHVhgpgxTupKfAkPcANxmzZkzyAoNour
+         pFrgIOyqBzbWO5fwyU3SAWS9b/2zmoCbCTWwUzAlptYjQ8XiwVZMwXvryL8E+EdXenSz
+         ZNyg==
+X-Gm-Message-State: ACgBeo3qa/hsiehlBiDG/kVzv0oRNhavX4mGMXR1Nxs7pCtFLSUzvMoS
+        5DM/fMoklJSUeS+xpWLvEmbukw==
+X-Google-Smtp-Source: AA6agR7YIuHSExFLCmMqS015z962FMdrfJfgCt1OY2a8PJgFrirhqrDKu3uVqX7f0kX0kQERhZsUog==
+X-Received: by 2002:a05:6512:1521:b0:48a:3c5d:5d17 with SMTP id bq33-20020a056512152100b0048a3c5d5d17mr7007337lfb.587.1661839857716;
+        Mon, 29 Aug 2022 23:10:57 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id q18-20020a2eb4b2000000b00265757e0e66sm638874ljm.48.2022.08.29.23.10.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 23:10:57 -0700 (PDT)
+Message-ID: <ef905cd6-89fd-f274-7848-ba43edc8dab3@linaro.org>
+Date:   Tue, 30 Aug 2022 09:10:56 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V3 3/6] clk: meson: S4: add support for Amlogic S4 SoC PLL
- clock driver
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] dt-bindings: mfd: qcom,spmi-pmic: add missing compatibles
 Content-Language: en-US
-To:     Jerome Brunet <jbrunet@baylibre.com>, <linux-clk@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        David Heidelberg <david@ixit.cz>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-References: <20220805085716.5635-1-yu.tu@amlogic.com>
- <20220805085716.5635-4-yu.tu@amlogic.com>
- <1jiln0yzgj.fsf@starbuckisacylon.baylibre.com>
- <ed4038fb-c230-fc27-800c-c99bd1770a1c@amlogic.com>
- <1jwnartm78.fsf@starbuckisacylon.baylibre.com>
-From:   Yu Tu <yu.tu@amlogic.com>
-In-Reply-To: <1jwnartm78.fsf@starbuckisacylon.baylibre.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220828065123.39734-1-krzysztof.kozlowski@linaro.org>
+ <20220829220836.4487FC433D6@smtp.kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220829220836.4487FC433D6@smtp.kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.18.29.47]
-X-ClientProxiedBy: mail-sh.amlogic.com (10.18.11.5) To mail-sh.amlogic.com
- (10.18.11.5)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,37 +81,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/8/29 17:46, Jerome Brunet wrote:
-> [ EXTERNAL EMAIL ]
-> 
-> 
-> On Mon 15 Aug 2022 at 14:34, Yu Tu <yu.tu@amlogic.com> wrote:
-> 
->> Hi Jerome,
+On 30/08/2022 01:08, Stephen Boyd wrote:
+> Quoting Krzysztof Kozlowski (2022-08-27 23:51:23)
+>> Conversion from TXT to DT schema lost several compatibles.
 >>
->> On 2022/8/10 21:47, Jerome Brunet wrote:
->>> [ EXTERNAL EMAIL ]
->>> On Fri 05 Aug 2022 at 16:57, Yu Tu <yu.tu@amlogic.com> wrote:
->>> */
+>> Fixes: 3f5117be9584 ("dt-bindings: mfd: convert to yaml Qualcomm SPMI PMIC")
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
 > 
-> [... ]
+> Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 > 
->>>> +#define ANACTRL_FIXPLL_CTRL0                       (0x0010 << 2)
->>> I already commented on the "<< 2" . Remove them please.
->> Sorry, maybe I didn't pay attention to this comment earlier. A little bit
->> of a question why is this not okay? I understand isn't it better for the
->> compiler to help with this calculation itself?
-> 
-> Because it is aweful to read
-> 
-> Also please trim your replies.
-> It is a bit annoying to search for your comments in the replies
-> 
+> Unless you want me to pick it up?
 
-Okay. Like this?
+Usually this should go via MFD tree, if Lee is around (I saw some emails
+about OoO).
 
-> 
-> 
-> .
+Best regards,
+Krzysztof

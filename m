@@ -2,93 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD795A6F2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5781B5A6F31
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbiH3Vcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 17:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58138 "EHLO
+        id S231458AbiH3Vdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 17:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229921AbiH3Vcl (ORCPT
+        with ESMTP id S229522AbiH3Vdb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:32:41 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9D189CCC;
-        Tue, 30 Aug 2022 14:32:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B808421D95;
-        Tue, 30 Aug 2022 21:32:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661895158; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d3perT1+wYBFzimt6PoAuQXJOi1UiBFbwqJ4dPzW82w=;
-        b=Ui5uyccbAyMenyeCJNV9CZh8INAK2XGYUdZXbl1x9FVimqaE44fHUM7skTfanB3I+UKk9Z
-        OEbOrnvAM9K5ufTyvpy17Eix+jxjJP6JRCV0ltnSU34bZJ9gnV60kUt415OX0TS2THithE
-        P/EgovYEzUe+XcN0QvU4dIz7Gj6u77I=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661895158;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=d3perT1+wYBFzimt6PoAuQXJOi1UiBFbwqJ4dPzW82w=;
-        b=1x1EhlhLnklmr9OfhRAa5rCd3w5b8/oP4g6kapHLbvHODvivdzeuRwixuJ+sndIHfyFELz
-        Kd79p5xo+ubGd1BA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8305C13ACF;
-        Tue, 30 Aug 2022 21:32:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eWJjHvaBDmMUWgAAMHmgww
-        (envelope-from <jdelvare@suse.de>); Tue, 30 Aug 2022 21:32:38 +0000
-Date:   Tue, 30 Aug 2022 23:32:37 +0200
-From:   Jean Delvare <jdelvare@suse.de>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH AUTOSEL 5.19 01/33] firmware: dmi: Use the proper
- accessor for the version field
-Message-ID: <20220830233237.0c08cc7e@endymion.delvare>
-In-Reply-To: <20220830171825.580603-1-sashal@kernel.org>
-References: <20220830171825.580603-1-sashal@kernel.org>
-Organization: SUSE Linux
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; x86_64-suse-linux-gnu)
+        Tue, 30 Aug 2022 17:33:31 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EEA89CD1;
+        Tue, 30 Aug 2022 14:33:30 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-11f11d932a8so11544882fac.3;
+        Tue, 30 Aug 2022 14:33:30 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=GOTFRorBIBX66XRGhGzIOArD4XzR32U93olT+o6d4TA=;
+        b=VuJMpl9oAxY06r4R75Gk7VsDfq5b8jBPNia7nHXsPfk7TrFFtA9AlGEyfoZ1HNL2Fa
+         0yasx+tStgUwIok13KPxh7GUAv20CUY/jHOaRaoPew9SB5Y04WmKMVtsIlE10+C+Sl35
+         QyqTmqkex+YVQMUpw/Zs/xFPUOMRy086sNKLTIkFYkaEGv1AJYHEDy9KNnOWL9bR4yQl
+         BC5gIZyjCp0ycarRrbTHrSbs4ky9Kkz/Zpyv2rDj149LKj17F/AG6fSWUIWFtJxdUZFl
+         UAfUJ+7nTdjKTS/FeZYtk5FxUsIE42SWRmRz6l1ZXoNaKoJd8YTwVwinBR/c2SHYkm8r
+         SpUg==
+X-Gm-Message-State: ACgBeo1550/Mv+dNqLG2CoV0SWqnKYHqVyhcvP0XAA3Rg7PnoddFpW3X
+        6B1CG+B84SXyla2/WVGaZg==
+X-Google-Smtp-Source: AA6agR4k02r9J+x1/GLhvNLKKpUomnGSi6dqOqh4iMGYwbRwkQ6CKz7vjvtcYrTFM+ll8SfyT0J2Wg==
+X-Received: by 2002:a05:6808:e8a:b0:337:9846:931a with SMTP id k10-20020a0568080e8a00b003379846931amr78260oil.215.1661895209805;
+        Tue, 30 Aug 2022 14:33:29 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g15-20020a056830160f00b00636eeba9209sm7977462otr.52.2022.08.30.14.33.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 14:33:29 -0700 (PDT)
+Received: (nullmailer pid 2113828 invoked by uid 1000);
+        Tue, 30 Aug 2022 21:33:28 -0000
+Date:   Tue, 30 Aug 2022 16:33:28 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 02/20] dt-bindings: visconti-pcie: Fix interrupts
+ array max constraints
+Message-ID: <20220830213328.GA2112212-robh@kernel.org>
+References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822184701.25246-3-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822184701.25246-3-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sasha,
-
-On Tue, 30 Aug 2022 13:17:52 -0400, Sasha Levin wrote:
-> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Mon, Aug 22, 2022 at 09:46:43PM +0300, Serge Semin wrote:
+> In accordance with the way the device DT-node is actually defined in
+> arch/arm64/boot/dts/toshiba/tmpv7708.dtsi and the way the device is probed
+> by the DW PCIe driver there are two IRQs it actually has. It's MSI IRQ the
+> DT-bindings lack. Let's extend the interrupts property constraints then
+> and fix the schema example so one would be acceptable by the actual device
+> DT-bindings.
 > 
-> [ Upstream commit d2139dfca361a1f5bfc4d4a23455b1a409a69cd4 ]
+> Fixes: 17c1b16340f0 ("dt-bindings: pci: Add DT binding for Toshiba Visconti PCIe controller")
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
 > 
-> The byte at offset 6 represents length. Don't take it and drop it
-> immediately by using proper accessor, i.e. get_unaligned_be24().
+> ---
 > 
-> [JD: Change the subject to something less frightening]
+> Changelog v5:
+> - This is a new patch added on the v5 release of the patchset.
+> ---
+>  .../devicetree/bindings/pci/toshiba,visconti-pcie.yaml     | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 
-Nack. This is NOT a bug fix, there's simply no reason to backport
-this to stable kernel trees.
+No need for this to be in this series.
 
-Thanks,
--- 
-Jean Delvare
-SUSE L3 Support
+Acked-by: Rob Herring <robh@kernel.org>

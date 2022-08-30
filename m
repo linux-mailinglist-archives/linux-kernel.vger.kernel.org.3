@@ -2,124 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473EF5A5D25
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:42:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9486B5A5D27
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:42:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbiH3Hl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:41:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
+        id S230461AbiH3HmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbiH3Hlz (ORCPT
+        with ESMTP id S229807AbiH3HmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:41:55 -0400
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315378048C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:41:54 -0700 (PDT)
-Received: by mail-qt1-f175.google.com with SMTP id cr9so7902530qtb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:41:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=305s+Px20ZffvameY0SQ6LsiYZFhK2XEewc8CJZLQd8=;
-        b=LSS+bbvUv1TwQI2BkgnAz4kJyiWq08D7TygVqHvnYJT9oULxHnJAsrvRvAt8sDLRUE
-         s2/UvMywc5K9NkVLbYYaaFyBOp2UpgWFwHELM4OfUDctVetnD22++lj0ElG9Q6UKb+DG
-         kMFFQS2DdYBkSJ915H9ipPuJWZcYnYpDiD4f2RpdgRTPaiygGvyZSCPq2iivGbZYPEML
-         CU9btRrF5eoe0ZkCiE5IlXyGPb4Hsa1YXdUqrUrsiNkBoRKCC8nlK45WrcMdyen3hJF5
-         vNpgO4/pDhTHjypmW++OV3yuxEBmY/XuZFtU4WyBUqst9wMCSReM/DUdvWHRK2BvezNg
-         3qsQ==
-X-Gm-Message-State: ACgBeo0u1ydfIZ9gL3PHwunBPsIVinuiwk/XTgrKWL53XzPPwn/78Juc
-        xarBQllldqJKn/DdBtSHT2b+yUetbW7jhg==
-X-Google-Smtp-Source: AA6agR6aoEdHa+bkCXsOrJZRmZQbeSALSxQnxpQZEON94jNTG8i33/5A+rE/5nYpMwxHUrY+gDM0zA==
-X-Received: by 2002:a05:622a:392:b0:343:738e:6f6b with SMTP id j18-20020a05622a039200b00343738e6f6bmr13719337qtx.174.1661845313190;
-        Tue, 30 Aug 2022 00:41:53 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id f5-20020ac81345000000b0034455ff76ddsm6251693qtj.34.2022.08.30.00.41.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 00:41:51 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-32a09b909f6so253613027b3.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:41:51 -0700 (PDT)
-X-Received: by 2002:a81:ac68:0:b0:340:a36c:9807 with SMTP id
- z40-20020a81ac68000000b00340a36c9807mr12426570ywj.283.1661845310788; Tue, 30
- Aug 2022 00:41:50 -0700 (PDT)
+        Tue, 30 Aug 2022 03:42:06 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39894A221B;
+        Tue, 30 Aug 2022 00:42:04 -0700 (PDT)
+Received: (Authenticated sender: gregory.clement@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 90C381C000B;
+        Tue, 30 Aug 2022 07:42:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1661845322;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OlJsykSuKUj404P3HmaG9eK2FUUXIkKuT4JtjowBQZQ=;
+        b=kb3YuCStxdgM8c7BnX9v8sq2Dq25KzFhRtYTBt14EnoPA4vS5/Ydpz2SXeC1kR3lmzHVK0
+        PMyzQbQsYhwnCIpApS2jY0zpjSOosSNlI51XjqxgxiWi+89q48hrEAczm1LN0mEyIbtASk
+        80VsTFVPGwpKhBXz4z/mRAt9vSk5gGGvB0+InLwVH+u5lOj96WudzIT/M95aegn6MVnTa3
+        l1gN+u+hCD1ExxftigI+eU9iJL0Kd6tQFyuN7eJz38ZYKWxGU9uWTQ4kY/Rm6u30XUOGll
+        mxJ9oVorjw4+CRw16xMf2/8bPbUzu3suARsCxdHONwJ2qvDOLvS02MHGWXdtyg==
+From:   Gregory CLEMENT <gregory.clement@bootlin.com>
+To:     Robert Marko <robert.marko@sartura.hr>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, andrew@lunn.ch,
+        sebastian.hesselbarth@gmail.com, kostap@marvell.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v4 10/10] arm64: dts: marvell: add support for Methode eDPU
+In-Reply-To: <CA+HBbNF2R--984SdB0v42GMQOwAx4pTEz_FHifTtebN05ELU-Q@mail.gmail.com>
+References: <20220516124828.45144-1-robert.marko@sartura.hr>
+ <20220516124828.45144-10-robert.marko@sartura.hr>
+ <CA+HBbNF2R--984SdB0v42GMQOwAx4pTEz_FHifTtebN05ELU-Q@mail.gmail.com>
+Date:   Tue, 30 Aug 2022 09:42:00 +0200
+Message-ID: <87mtbm5gaf.fsf@BL-laptop>
 MIME-Version: 1.0
-References: <20220818145616.3156379-1-arnd@kernel.org> <20220818145616.3156379-5-arnd@kernel.org>
- <CACRpkdbFkV1T+K9wKDyODkcwu=nhbV+4_JF=YTaA5ad_w4ggbw@mail.gmail.com>
- <CAK8P3a1PQjR2sv2rar6mFY9g4PkteAC+zgRUvnr04DETJX3K9w@mail.gmail.com> <63a630b7-9068-40f9-b7f7-d9a08f74ed13@www.fastmail.com>
-In-Reply-To: <63a630b7-9068-40f9-b7f7-d9a08f74ed13@www.fastmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 30 Aug 2022 09:41:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXqzOTDkbC7NXXQ32dLfO+JfkEMijxepEA=FfThSE9Xow@mail.gmail.com>
-Message-ID: <CAMuHMdXqzOTDkbC7NXXQ32dLfO+JfkEMijxepEA=FfThSE9Xow@mail.gmail.com>
-Subject: Re: [PATCH] ARM: fix XIP_KERNEL dependencies
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+Robert Marko <robert.marko@sartura.hr> writes:
 
-On Tue, Aug 30, 2022 at 9:21 AM Arnd Bergmann <arnd@arndb.de> wrote:
-> CONFIG_XIP_KERNEL does not work with any option that involves patching
-> the read-only kernel .text.
+> On Mon, May 16, 2022 at 2:48 PM Robert Marko <robert.marko@sartura.hr> wrote:
+>>
+>> Methode eDPU is an Armada 3720 powered board based on the Methode uDPU.
+>>
+>> They feature the same CPU, RAM, and storage as well as the form factor.
+>>
+>> However, eDPU only has one SFP slot plus a copper G.hn port.
+>>
+>> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>> Changes in v2:
+>> * Make the DTS split a separate commit
+>> ---
+>>  arch/arm64/boot/dts/marvell/Makefile             |  1 +
+>>  arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts | 14 ++++++++++++++
+>>  2 files changed, 15 insertions(+)
+>>  create mode 100644 arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+>>
+>> diff --git a/arch/arm64/boot/dts/marvell/Makefile b/arch/arm64/boot/dts/marvell/Makefile
+>> index 1c794cdcb8e6..104d7d7e8215 100644
+>> --- a/arch/arm64/boot/dts/marvell/Makefile
+>> +++ b/arch/arm64/boot/dts/marvell/Makefile
+>> @@ -1,6 +1,7 @@
+>>  # SPDX-License-Identifier: GPL-2.0
+>>  # Mvebu SoC Family
+>>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-db.dtb
+>> +dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-eDPU.dtb
+>>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin.dtb
+>>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-emmc.dtb
+>>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-ultra.dtb
+>> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+>> new file mode 100644
+>> index 000000000000..57fc698e55d0
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+>> @@ -0,0 +1,14 @@
+>> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+>> +
+>> +/dts-v1/;
+>> +
+>> +#include "armada-3720-uDPU.dtsi"
+>> +
+>> +/ {
+>> +       model = "Methode eDPU Board";
+>> +       compatible = "methode,edpu", "marvell,armada3720", "marvell,armada3710";
+>> +};
+>> +
+>> +&eth0 {
+>> +       phy-mode = "2500base-x";
+>> +};
+>> --
+>> 2.36.1
+>>
 >
-> Since at least CONFIG_SMP_ON_UP is required in certain configurations,
-> flip the dependency to always allow the .text patching options but make
-> XIP_KERNEL have the dependency instead.
+> Hi Gregory,
+Hello Roberto,
+
+> Is there something else that I can improve in the series?
+
+Sorry for having missed this series. At first view it seems OK, I am
+going to have a closer look this week.
+
+Gregory
+
+
 >
-> This is a prerequisite for allowing CONFIG_ARCH_MULTIPLATFORM to
-> be disabled.
+> Regards,
+> Robert
 >
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> -- 
+> Robert Marko
+> Staff Embedded Linux Engineer
+> Sartura Ltd.
+> Lendavska ulica 16a
+> 10000 Zagreb, Croatia
+> Email: robert.marko@sartura.hr
+> Web: www.sartura.hr
 
-Thanks for your patch!
-
-> --- a/arch/arm/Kconfig
-> +++ b/arch/arm/Kconfig
-> @@ -1619,6 +1619,7 @@ endchoice
->  config XIP_KERNEL
->         bool "Kernel Execute-In-Place from ROM"
->         depends on !ARM_LPAE && !ARCH_MULTIPLATFORM
-> +       depends on !SMP_ON_UP && !ARM_PATCH_IDIV && !ARM_PATCH_PHYS_VIRT
-
-You may want to keep the list sorted.
-
->         help
->           Execute-In-Place allows the kernel to run from non-volatile storage
->           directly addressable by the CPU, such as NOR flash. This saves RAM
-
-Regardless, LGTM, so
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+-- 
+Gregory Clement, Bootlin
+Embedded Linux and Kernel engineering
+http://bootlin.com

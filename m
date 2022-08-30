@@ -2,119 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B143A5A5B2A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 07:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF475A5B2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 07:35:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiH3FeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 01:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51970 "EHLO
+        id S229988AbiH3FfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 01:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiH3FeV (ORCPT
+        with ESMTP id S229807AbiH3Fe6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 01:34:21 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80659B0289
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 22:34:20 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id h11-20020a17090a470b00b001fbc5ba5224so10767019pjg.2
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 22:34:20 -0700 (PDT)
+        Tue, 30 Aug 2022 01:34:58 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D866063D4
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 22:34:55 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id y127so10312518pfy.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 22:34:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc;
-        bh=cwSBr2h4OiE+kR2d/zytgkkxH2nVR6e5Ml0P+brWa7w=;
-        b=izwFkQCjgHh98pqhta5QMnPqwogQkPuXt4vwuuPnviLbBfeTDPELCS7HBIfwOSdFfZ
-         SWxq9/4B9OIQCJX6T6hkrdu8OQrdpmP9vpuWju6X7kncF4rpSAiwpqPNKVpmU6DLgCf4
-         aVv8l81q6NkWHuJFtlkjS6TTHqyPfQq43j2FJz8JYMzkpjJ3d/iAsgAXOD5DqIshsxzp
-         hKAgLgQMXX/e2ayWDoEsHzicmoCDNG2/fp3MK/VqRTlVKus2YczLd+8Ykenonva6g4jB
-         DfKKGHhAKoDYPR3Iu2jRvlwhVmdTYKxGJ+nVuQxGD/R1xdQej7AtFHXwrO8s4h3jLGtC
-         U9Nw==
+        bh=dKOrthFlbnjVeVQ0rS6buD4uV0A0EXEatsTMiU6XtaU=;
+        b=EneG2w1Rcvj9QqHKY9/WFAkOkqscs399/+OHsJihdU0gM711Fy51V2lIJOUqY1bJL8
+         aC1tUuR0gPSudQYrVS1g4BLoHJ+9bwIImBD+YbIyMwb2+pJkDxO+AvmJDJ05wJuC/KQ9
+         cpHmRczVotV13YofM7deeawyMFKPJV02RKbBnHT7f3DaaDYAkDObQVUVjhOuLNLU6bK0
+         loZ7wI4r3JXwCeFKYjT5klWVyEjFsm+tW+cdIRQV7/LJxRWIYj9G6P9oO+CETCYr0jD/
+         pHI4wILpEzZ4gdnbWht/009nPCxmsuSsuN+QOKg0tEcjmdOE3g9t0j0/Ec7TEeFVmqZ0
+         KqTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=cwSBr2h4OiE+kR2d/zytgkkxH2nVR6e5Ml0P+brWa7w=;
-        b=svboR3NLrqHmB+lkLPESDyUGbFtqD93NtdQSQ3SwfqcP7Ppdyd9L56gRuwrjRr9KCA
-         AtVIWxkCry324iMmJgVCEbc+31N9J0lHcZUtE8dPAQnCBB0s66u0C2JwrzmP01ZUwvpO
-         GysGOUIW2jO4qSQ/TlWHCr41IdCOIEU+BZN3pEFR49QVNe1zRjvlQhTdlsT3V/1AsDdG
-         Lc06DB1EAVaGi/88urMTaxxExkQq+UWJAvq8HxNK7nIC95XtOABDmB7PX3Rn9KBrrYtB
-         8w03YcpgaAG5JFsUfAYUW3Bfy5MLbqz2pqSkN87EnSJo7Wi+nO61P+ZBX2adwb5fcqxu
-         VY1w==
-X-Gm-Message-State: ACgBeo1NZ/8ksLPWnxoug9CLnqCbu80BiuGD5kN+p/z7V7MPx8x28kBC
-        BnCh+Co9Aq2cUyFX6qY7yZOAGQ==
-X-Google-Smtp-Source: AA6agR5r9/cuTJggQxaSA6iBk8vx7A4+KxmBY77FiZVjd+KTv4ZIoX2+8GOjyJ9o+7++NfiXrWSgcQ==
-X-Received: by 2002:a17:902:9b85:b0:16e:cc02:b9b2 with SMTP id y5-20020a1709029b8500b0016ecc02b9b2mr19813668plp.74.1661837660055;
-        Mon, 29 Aug 2022 22:34:20 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id x10-20020a170902ec8a00b0016c0c82e85csm8664633plg.75.2022.08.29.22.34.18
+        bh=dKOrthFlbnjVeVQ0rS6buD4uV0A0EXEatsTMiU6XtaU=;
+        b=e6cwt47gJk06WjaBEvomFmw1ZZZke4/Va+0QTgzrs6wb1rQYuiISbW3DwdAXG4s1x0
+         04qnzg1rfvqFwyPFPSbIYvKNwP4eDk8GSZ79cyjWHFXmgkpZhtIJKF1NLZgvtb1O+lJo
+         RN4e65l/tP/dESJYeGffjKXX0IktnncqPlWCwvAJPjq1FVQxSTMLYo80Mn6+tOwrJHOQ
+         +JwbJxmCKlMOhuA3K0oe+XQotQImrtAi4R8VXquccC8tBcRQjllotfyTFRpdhOkOerFl
+         xkIw3sp31ocy4YcVbGhyRG6pSkdFMbJStAKkGI4Vun9WB01K/2zHCv2NtO5DEn+jImAZ
+         w9jA==
+X-Gm-Message-State: ACgBeo16nZnUDRdQSDSFuinb3AV9HNlV43U2r3EYIllX+YwNiLLTrdCq
+        tF6WrxBYVeyugyL/A2J3Py2xYA==
+X-Google-Smtp-Source: AA6agR7zW+i/d3NgK1mLET1x2R6V+hN2k+oA6fEFb9KkRNj8mpWXIajmR0Fou52TH6/Ak4p1W+Qh8Q==
+X-Received: by 2002:a63:fb4f:0:b0:42c:a1:43b4 with SMTP id w15-20020a63fb4f000000b0042c00a143b4mr7543916pgj.140.1661837695263;
+        Mon, 29 Aug 2022 22:34:55 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id f12-20020a170902ce8c00b001749acb167csm4784285plg.27.2022.08.29.22.34.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 22:34:19 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 11:04:17 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Xuewen Yan <xuewen.yan@unisoc.com>
-Cc:     lukasz.luba@arm.com, amit.kachhap@gmail.com,
-        daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org,
-        rui.zhang@intel.com, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xuewen.yan94@gmail.com,
-        di.shen@unisoc.com
-Subject: Re: [PATCH] thermal: Check the policy first in
- cpufreq_cooling_register
-Message-ID: <20220830053417.eebsc6joyvlpti3s@vireshk-i7>
-References: <20220825114018.1715-1-xuewen.yan@unisoc.com>
+        Mon, 29 Aug 2022 22:34:54 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 05:34:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        david@redhat.com, lpivarc@redhat.com
+Subject: Re: [PATCH] vfio/type1: Unpin zero pages
+Message-ID: <Yw2heyQmvPgBe6f9@google.com>
+References: <166182871735.3518559.8884121293045337358.stgit@omen>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220825114018.1715-1-xuewen.yan@unisoc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <166182871735.3518559.8884121293045337358.stgit@omen>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25-08-22, 19:40, Xuewen Yan wrote:
-> Since the policy needs to be accessed first when obtaining cpu devices,
-> first check whether the policy is legal before this.
-> 
-> Signed-off-by: Xuewen Yan <xuewen.yan@unisoc.com>
+On Mon, Aug 29, 2022, Alex Williamson wrote:
+> There's currently a reference count leak on the zero page.  We increment
+> the reference via pin_user_pages_remote(), but the page is later handled
+> as an invalid/reserved page, therefore it's not accounted against the
+> user and not unpinned by our put_pfn().
 
-Fixes: 5130802ddbb1 ("thermal: cpu_cooling: Switch to QoS requests for freq limits")
-
-> ---
->  drivers/thermal/cpufreq_cooling.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-> index b76293cc989c..7838b6e2dba5 100644
-> --- a/drivers/thermal/cpufreq_cooling.c
-> +++ b/drivers/thermal/cpufreq_cooling.c
-> @@ -501,17 +501,17 @@ __cpufreq_cooling_register(struct device_node *np,
->  	struct thermal_cooling_device_ops *cooling_ops;
->  	char *name;
->  
-> +	if (IS_ERR_OR_NULL(policy)) {
-> +		pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
-> +		return ERR_PTR(-EINVAL);
-> +	}
-> +
->  	dev = get_cpu_device(policy->cpu);
->  	if (unlikely(!dev)) {
->  		pr_warn("No cpu device for cpu %d\n", policy->cpu);
->  		return ERR_PTR(-ENODEV);
->  	}
->  
-> -	if (IS_ERR_OR_NULL(policy)) {
-> -		pr_err("%s: cpufreq policy isn't valid: %p\n", __func__, policy);
-> -		return ERR_PTR(-EINVAL);
-> -	}
-> -
->  	i = cpufreq_table_count_valid_entries(policy);
->  	if (!i) {
->  		pr_debug("%s: CPUFreq table not found or has no valid entries\n",
-
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-
--- 
-viresh
+Heh, kvm_pfn_to_refcounted_page() all over again.  is_zone_device_page() is the
+other known case where a PageReserved page is refcounted.  But as KVM's comment
+calls out, KVM's list was built through trial and error.

@@ -2,187 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BEC5A58D2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:08:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4241A5A58D4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:10:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiH3BHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 21:07:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44862 "EHLO
+        id S229779AbiH3BJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 21:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiH3BHU (ORCPT
+        with ESMTP id S229564AbiH3BJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 21:07:20 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BDE8B99C
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:07:19 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id c7so5520520wrp.11
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:07:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=iXY5dhqtt+GaEA9JOFgzSPC/9abv6ejSAU61pIxPRME=;
-        b=e+J0vrzSvlrS/JYfTy6KJKqq2wPKrVIbDyyvdMcZDx0cukujnLwwEuE09UVpZsTIAc
-         WgDUJPFSixngaWvcffnSoqXD2kXhZ6g1QKgSsvvesr0pzFw1cnb1vO6ewlKuiWL5IWWT
-         xa+Ek3JQXteMT6if21DTss98t5liylC04Sr3rVBI7xhoJqFZhyGKVEniLSaEG++HeNeE
-         A/oowX+5ooZ9nTIfQmd2mcUQbCHmgzB2+8Y/mkvnM4OiwagA2z1KOpzhzgr70vdzduR/
-         ENcCGtEIZ9zLCRgt5FewxbL7D6k+3BHDU9xzYWh/j9ZYGidwofBMXTt0fFkLfaPCHN2C
-         PXXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=iXY5dhqtt+GaEA9JOFgzSPC/9abv6ejSAU61pIxPRME=;
-        b=cbwStnODpnWK5E8ovffazKtIaUR/THSPN+i+O2cUD95B63PFbtlPYTTVp4pZB84L+H
-         KM+nMIRcvUW5FPS0dTutTa/7JSzebTh4a0QIhKD7b2s82gNX4IIqddMiQg2SSr7TJZbc
-         XLBVJTooJVUnbFxFwG5UMDsRrlH2SqBy+KYpT5sRJyS1WytnErVr7TxlyV4KN8fuO1dT
-         GHNQS0shBY+IuPhn8u9bDOER8KcHWLBTANJgCzgnKXP1wgLwgNS2JdUT6ANkRQuU6Ycp
-         NBcz0lFaVglc18+i/3hzP2vZqqme/R62oll58wfvb1KYyIKTDcY/cn+chHVOwn6r5Dlb
-         mg4w==
-X-Gm-Message-State: ACgBeo0PrJ1df/OLkeLhQ/HTHoq5iBuMOLoi76UyZOLHMCbPpp4lR0xI
-        fD/wlX1qGTrTGPIGna15RY4oVxFB+EESQGH/GYCxlA==
-X-Google-Smtp-Source: AA6agR6hFLRkkJ4QersafU+0XzbS5C/WkvP6CS5JeU1xCL4KejI+HazleqEuDJiqPmp0OSM14drj59108j/Q0nvFKPU=
-X-Received: by 2002:a5d:5a82:0:b0:224:f744:1799 with SMTP id
- bp2-20020a5d5a82000000b00224f7441799mr7421991wrb.582.1661821637538; Mon, 29
- Aug 2022 18:07:17 -0700 (PDT)
+        Mon, 29 Aug 2022 21:09:54 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0740272E;
+        Mon, 29 Aug 2022 18:09:51 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MGq1h626Xzl653;
+        Tue, 30 Aug 2022 09:08:24 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP1 (Coremail) with SMTP id cCh0CgB3_TBdYw1jg5twAA--.39274S3;
+        Tue, 30 Aug 2022 09:09:49 +0800 (CST)
+Subject: Re: [PATCH -next 0/3] md/raid10: reduce lock contention for io
+To:     Paul Menzel <pmenzel@molgen.mpg.de>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     song@kernel.org, linux-raid@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220829131502.165356-1-yukuai1@huaweicloud.com>
+ <70172016-8ae5-92b8-2a43-8f0d4a2f6668@molgen.mpg.de>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <0e22c51b-d36a-2216-4bfd-522049d3ed44@huaweicloud.com>
+Date:   Tue, 30 Aug 2022 09:09:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-References: <20220826230639.1249436-1-yosryahmed@google.com>
- <CA+khW7iN6hyyBBR+4ey+9pNmEyKPZS82-C9kZ2NRXKMEOXHrng@mail.gmail.com> <CAJD7tkYKYv+SKhCJs2281==55sALTX_DXifaWPv1w5=xrJjqQA@mail.gmail.com>
-In-Reply-To: <CAJD7tkYKYv+SKhCJs2281==55sALTX_DXifaWPv1w5=xrJjqQA@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 29 Aug 2022 18:06:41 -0700
-Message-ID: <CAJD7tkZg2jzDDR6vn5=-TS93Tm3P-YEQ+06KDsjg=Mzkt5LqsA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: simplify cgroup_hierarchical_stats selftest
-To:     Hao Luo <haoluo@google.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>, Song Liu <song@kernel.org>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <70172016-8ae5-92b8-2a43-8f0d4a2f6668@molgen.mpg.de>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgB3_TBdYw1jg5twAA--.39274S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7urW7trWUuFW5Gw17ArWUJwb_yoW8ZrWDpa
+        y3KFW3Zr47uw1xZrWavr4UXa4YyayxXrZ8Cry3Jry7AFW5ZFWxXF4IgF4rWryqqrZYgw17
+        X3WUGrZ5Wa45Z3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkE14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j
+        6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUZa9
+        -UUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 3:15 PM Yosry Ahmed <yosryahmed@google.com> wrote:
->
-> Hi Hao,
->
-> Thanks for taking a look!
->
-> On Mon, Aug 29, 2022 at 1:08 PM Hao Luo <haoluo@google.com> wrote:
-> >
-> > On Fri, Aug 26, 2022 at 4:06 PM Yosry Ahmed <yosryahmed@google.com> wrote:
-> > >
-> > > The cgroup_hierarchical_stats selftest is complicated. It has to be,
-> > > because it tests an entire workflow of recording, aggregating, and
-> > > dumping cgroup stats. However, some of the complexity is unnecessary.
-> > > The test now enables the memory controller in a cgroup hierarchy, invokes
-> > > reclaim, measure reclaim time, THEN uses that reclaim time to test the
-> > > stats collection and aggregation. We don't need to use such a
-> > > complicated stat, as the context in which the stat is collected is
-> > > orthogonal.
-> > >
-> > > Simplify the test by using a simple stat instead of reclaim time, the
-> > > total number of times a process has ever entered a cgroup. This makes
-> > > the test simpler and removes the dependency on the memory controller and
-> > > the memory reclaim interface.
-> > >
-> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > > ---
-> >
-> > Yosry, please tag the patch with the repo it should be applied on:
-> > bpf-next or bpf.
-> >
->
-> Will do for v2.
->
-> > >
-> > > When the test failed on Alexei's setup because the memory controller was
-> > > not enabled I realized this is an unnecessary dependency for the test,
-> > > which inspired this patch :) I am not sure if this prompt a Fixes tag as
-> > > the test wasn't broken.
-> > >
-> > > ---
-> > >  .../prog_tests/cgroup_hierarchical_stats.c    | 157 ++++++---------
-> > >  .../bpf/progs/cgroup_hierarchical_stats.c     | 181 ++++++------------
-> > >  2 files changed, 118 insertions(+), 220 deletions(-)
-> > >
-> > [...]
-> > > diff --git a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> > > index 8ab4253a1592..c74362854948 100644
-> > > --- a/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> > > +++ b/tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
-> > > @@ -1,7 +1,5 @@
-> > >  // SPDX-License-Identifier: GPL-2.0-only
-> > >  /*
-> > > - * Functions to manage eBPF programs attached to cgroup subsystems
-> > > - *
-> >
-> > Please also add comments here explaining what the programs in this file do.
-> >
->
-> Will do.
->
-> > >   * Copyright 2022 Google LLC.
-> > >   */
-> > [...]
-> > >
-> > > -SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
-> > > -int BPF_PROG(vmscan_start, int order, gfp_t gfp_flags)
-> > > +SEC("fentry/cgroup_attach_task")
-> >
-> > Can we select an attachpoint that is more stable? It seems
-> > 'cgroup_attach_task' is an internal helper function in cgroup, and its
-> > signature can change. I'd prefer using those commonly used tracepoints
-> > and EXPORT'ed functions. IMHO their interfaces are more stable.
-> >
->
-> Will try to find a more stable attach point. Thanks!
+Hi, Paul!
 
-Hey Hao,
+在 2022/08/29 21:58, Paul Menzel 写道:
+> Dear Yu,
+> 
+> 
+> Thank you for your patches.
+> 
+> Am 29.08.22 um 15:14 schrieb Yu Kuai:
+>> From: Yu Kuai <yukuai3@huawei.com>
+>>
+>> patch 1 is a small problem found by code review.
+>> patch 2 avoid holding resync_lock in fast path.
+>> patch 3 avoid holding lock in wake_up() in fast path.
+>>
+>> Test environment:
+>>
+>> Architecture: aarch64
+>> Cpu: Huawei KUNPENG 920, there are four numa nodes
+>>
+>> Raid10 initialize:
+>> mdadm --create /dev/md0 --level 10 --bitmap none --raid-devices 4 
+>> /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1
+>>
+>> Test cmd:
+>> fio -name=0 -ioengine=libaio -direct=1 -group_reporting=1 
+>> -randseed=2022 -rwmixread=70 -refill_buffers -filename=/dev/md0 
+>> -numjobs=16 -runtime=60s -bs=4k -iodepth=256 -rw=randread
+>>
+>> Test result:
+>> before this patchset:    2.9 GiB/s
+>> after this patchset:    6.6 Gib/s
+> 
+> Could you please give more details about the test setup, like the drives 
+> used?
 
-I couldn't find any suitable stable attach points under kernel/cgroup.
-Most tracepoints are created using TRACE_CGROUP_PATH which only
-invokes the tracepoint if the trace event is enabled, which I assume
-is not something we can rely on. Otherwise, there is only
-trace_cgroup_setup_root() and trace_cgroup_destroy_root() which are
-irrelevant here. A lot of EXPORT'ed functions are not called in the
-kernel, or cannot be invoked from userspace (the test) in a
-straightforward way. Even if they did, future changes to such code
-paths can also change in the future, so I don't think there is really
-a way to guarantee that future changes don't break the test.
+test setup is described above, four nvme disks is used.
+> 
+> Did you use some tools like ftrace to figure out the bottleneck?
 
-Let me know what you think.
+Yes, I'm sure the bottleneck is spin_lock(), specifically threads from
+multiple nodes try to grab the same lock. By the way, if I bind the
+threads to the same node, performance can also improve to 6.6 Gib/s
+without this patchset.
 
->
-> > > +int BPF_PROG(counter, struct cgroup *dst_cgrp, struct task_struct *leader,
-> > > +            bool threadgroup)
-> > >  {
-> > > -       struct task_struct *task = bpf_get_current_task_btf();
-> > > -       __u64 *start_time_ptr;
-> > > -
-> > > -       start_time_ptr = bpf_task_storage_get(&vmscan_start_time, task, 0,
-> > > -                                             BPF_LOCAL_STORAGE_GET_F_CREATE);
-> > > -       if (start_time_ptr)
-> > > -               *start_time_ptr = bpf_ktime_get_ns();
-> > > -       return 0;
-> > > -}
-> > [...]
-> > >  }
-> > > --
-> > > 2.37.2.672.g94769d06f0-goog
-> > >
+Thanks,
+Kuai
+> 
+>> Please noted that in kunpeng-920, memory access latency is very bad
+>> accross nodes compare to local node, and in other architecture
+>> performance improvement might not be significant.
+>>
+>> Yu Kuai (3):
+>>    md/raid10: fix improper BUG_ON() in raise_barrier()
+>>    md/raid10: convert resync_lock to use seqlock
+>>    md/raid10: prevent unnecessary calls to wake_up() in fast path
+>>
+>>   drivers/md/raid10.c | 88 +++++++++++++++++++++++++++++----------------
+>>   drivers/md/raid10.h |  2 +-
+>>   2 files changed, 59 insertions(+), 31 deletions(-)
+> 
+> 
+> Kind regards,
+> 
+> Paul
+> .
+> 
+

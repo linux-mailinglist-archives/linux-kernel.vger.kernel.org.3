@@ -2,67 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E133C5A5E7A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:48:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 768E75A5E7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231334AbiH3Ism (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59548 "EHLO
+        id S231660AbiH3Isw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:48:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiH3Isd (ORCPT
+        with ESMTP id S231340AbiH3Ist (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:48:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510EF17042;
-        Tue, 30 Aug 2022 01:48:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D8661573;
-        Tue, 30 Aug 2022 08:48:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 410DBC43470;
-        Tue, 30 Aug 2022 08:48:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661849311;
-        bh=mur76lNGE+I46mLYwMPLURxYeQSunVyf5OFbYWIjJU4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=S+Kuj8vVi4Mp41/wA5gQVtT4sccnyNErKR/o7HykxSU48mNy/zGQ7BbJou9+eiFss
-         tKRoCuDva0mhnea5AiEhMEzfMzUk7QTIBqJsXgb/77IUQbskKBKuaIZcXcZ0sOKECP
-         1CnkCk/aVdEBCM2hVWGY8VnEcfJq7JScorv+pSJGWJXJXLsyb1mavPcjpl9Ox0ymq6
-         CbXlca2H2LB0Ok0slvNasG0KnhQtYdbtskxHvzlOo6kL4gCudZsqQcc2p1MpzP2Xe+
-         dN+oOxOVuuc4AzihF13jmhsOHGU5B/B/5BzFCHO7mCcuu64lcJm0h6r1C5Ikex39TX
-         Z+8nkDok//Hbg==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1oSwv6-006gFg-Vh;
-        Tue, 30 Aug 2022 09:48:29 +0100
+        Tue, 30 Aug 2022 04:48:49 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A9BBBBA43
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:48:48 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id t5so13229236edc.11
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=7iCvOssdkyuxbhoQt5lAWcL9dGnbKNvL6gaRHI/rUIE=;
+        b=e1waB5CIdo3f9+WqVOb5fZZ2HpfISqnyynQUiahYiWLbFsihpG9YE7QGYopiztHtXQ
+         YXEVdbX5AT4GycNvKMv93DvvepUVg+cxuEJlA0UotKWcwF/kSBe2qXUNXMGy9guT6bV5
+         AWSQtUErN9c0DciG1ox0ijf+yrYasDH4uJBLnx8hbOrv6gv7x85Jec8rXbrE0LjZj9sk
+         93q8Ykimr38kngAzUz8DKwDpkYE3jYvNo7+WdsjBp53wMiCrqp/oeTJzQjx6/W2HSGhW
+         u4Y5/h24B6BB5dnDQ/Ib5Lz38xBIe+zaPEQSgnFMnVmjsBqoTuzLc4NulAl2wPP3JkyF
+         Ynjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=7iCvOssdkyuxbhoQt5lAWcL9dGnbKNvL6gaRHI/rUIE=;
+        b=rz+vuZw9o0N9mbuyPFoi1EcVK2vlWh9gE/xSs23PXV9P0YnEmCmkpeTkLYz4OKg6Dm
+         Wc5Eqqno9bEkn4P6Kbprd4+oAOYhVSyXWNGZpRnomdulzdjEGuXwePFgZcbgeGOWMzLa
+         OWZ2OQdSf7WYdfZWjkt8cmubJB0A+ZSP53apvBEectlub0K5TxCVj+riP4eftwDnKeaL
+         gQW0jEfAEUAmjJsVg5cwQ040rlMMGqAMdU57qY7N9R6MECJ8Q09mxw/pu5yt3MChCN9A
+         X0jXdtQCo4sjE/ZTRV2fz+NWJcA+2rRmC971O2MkNjpa7cAlUweGN7TuQbA1Fydz1KOZ
+         epJw==
+X-Gm-Message-State: ACgBeo0zLRifF+on5o0sF1xj0xmnBf5k/hTsQipPUyhu/NqzZ23Rzexf
+        6xckaDoGQmA55Wt/ocoiHkFjFVZY+EanO3Yj3ALCxn5wUis5Lw==
+X-Google-Smtp-Source: AA6agR6mBK9z4mx3yoZ8UY/yL9aH81E4FjsmEQwAZZK0RoH7oRkvILaIaW6x0TDSxBaGMRQvceJsm6oUWvUFEePGLIk=
+X-Received: by 2002:a05:6402:4446:b0:43b:e1f4:8525 with SMTP id
+ o6-20020a056402444600b0043be1f48525mr19520149edb.236.1661849326660; Tue, 30
+ Aug 2022 01:48:46 -0700 (PDT)
 MIME-Version: 1.0
-Date:   Tue, 30 Aug 2022 09:48:28 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     linus.walleij@linaro.org, bjorn.andersson@linaro.org,
-        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        johan+linaro@kernel.org, steev@kali.org
-Subject: Re: [PATCH v2] pinctrl: qcom: spmi-gpio: Make IRQCHIP immutable
-In-Reply-To: <20220830084441.GB135982@thinkpad>
-References: <20220830081212.164709-1-manivannan.sadhasivam@linaro.org>
- <e20dabe02d88f28fc933b596dee8b69d@kernel.org>
- <20220830084441.GB135982@thinkpad>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <61371efca85fbbd360b3ede9a258ee69@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: manivannan.sadhasivam@linaro.org, linus.walleij@linaro.org, bjorn.andersson@linaro.org, robimarko@gmail.com, linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, johan+linaro@kernel.org, steev@kali.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220802175755.6530-1-sudip.mukherjee@sifive.com> <20220826180327.yazfoydjiyygd7qf@mobilestation>
+In-Reply-To: <20220826180327.yazfoydjiyygd7qf@mobilestation>
+From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
+Date:   Tue, 30 Aug 2022 09:48:35 +0100
+Message-ID: <CAHyZL-cmyRprNmr_DtUQaZFXJtcV-6r-UOksFJeMz=XgDhnMNw@mail.gmail.com>
+Subject: Re: [PATCH 00/11] Add support for enhanced SPI for Designware SPI controllers
+To:     Serge Semin <fancer.lancer@gmail.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
+        William Salmon <william.salmon@sifive.com>,
+        Adnan Chowdhury <adnan.chowdhury@sifive.com>,
+        Ben Dooks <ben.dooks@sifive.com>, linux-spi@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jeegar Lakhani <jeegar.lakhani@sifive.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,44 +75,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-30 09:44, Manivannan Sadhasivam wrote:
-> On Tue, Aug 30, 2022 at 09:26:51AM +0100, Marc Zyngier wrote:
->> On 2022-08-30 09:12, Manivannan Sadhasivam wrote:
->> > The IRQCHIP implementation used inside the gpiochips are not supposed to
->> 
->> lower case
->> 
->> > be changed during runtime. So let's make the one inside the spmi-gpio
->> > gpiochip immutable.
->> >
->> > This fixes the below warning during boot:
->> > gpio gpiochip0: (c440000.spmi:pmic@0:gpio@c000): not an immutable
->> > chip, please consider fixing it!
->> >
->> > Separate callbacks need to be provided for irq_{mask/unmask} pointers
->> > since
->> > the callbacks are supposed to mask/unmask the corresponding parent IRQ
->> > in
->> > addition to changing the gpio_desc flags.
->> 
->> This is all part of the existing documentation, so I don't think
->> this is really needed.
->> 
-> 
-> Yes it is documented, but developers usually refer the commits doing 
-> the similar
-> thing while doing these kind of conversions. For them, this text serves 
-> as a
-> quick documentation.
+On Fri, Aug 26, 2022 at 7:03 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+>
+> Hello Sudip
+>
+> On Tue, Aug 02, 2022 at 06:57:44PM +0100, Sudip Mukherjee wrote:
+> > Some Synopsys SSI controllers support enhanced SPI which includes
+> > Dual mode, Quad mode and Octal mode. DWC_ssi includes clock stretching
+> > feature in enhanced SPI modes which can be used to prevent FIFO underflow
+> > and overflow conditions while transmitting or receiving the data respectively.
+> > This is only tested on controller version 1.03a.
+>
 
-If they can't be bothered to read the documentation, why would they
-consider reading unrelated commits?
+<snip>
 
-> 
-> So I prefer to keep it in the commit message.
+>
+> I've deliberately collected all the generic comments here so you'd be
+> aware of the required changes in total, because I very much doubt all
+> of them could be fixed at once via a single patchset iteration. But as
+> soon as all of them are fixed we'll get a very nice and neat solution
+> for the eSPI feature.
+>
 
-I still think this is pointless.
+Thanks a lot for the summary here Sergey. I am sure I will have a few
+questions for you after I start with the changes.
 
-         M.
 -- 
-Jazz is not dead. It just smells funny...
+Regards
+Sudip

@@ -2,187 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A51895A5CCB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD0A5A5CCA
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:20:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230500AbiH3HUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60898 "EHLO
+        id S230241AbiH3HUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:20:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbiH3HUj (ORCPT
+        with ESMTP id S230266AbiH3HU3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:20:39 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460D65A14E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:20:37 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3321c2a8d4cso251932327b3.5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:20:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=qA4nFlapT5Cp3x59xqBr8L01v99UDre3YMqa7ZF5Ji4=;
-        b=KcEMzYnNkv+u7eeHEAdUk0f0Swfw7hgrKVGXPIB+6PG8ZvlgopVG4eVxqBf7wlhcbf
-         fUjWRyveweaKJJ9peHUloBI5d6HtHcDePx9uxOeZixT9TWLzRmn+9zT1PCWzpdf73SMn
-         fGgE21r+pPugkzfgm+YjwvuMrPXD4DuSJeBT6NQsg5lCZjcehgstRX99EDWEsj+5NV0O
-         L4XmCmN6pCF/TGmRM3a7z/KdH270claRx7XFR6d6c5aEczq6tx9jIYNjVikyRtcMi1C6
-         ePilba+cZTxW6BWi7t68iSgBziPKCuqsE2n4fUnhAtyBj4U37DMw0FibrB0P1InqQwzs
-         XyuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=qA4nFlapT5Cp3x59xqBr8L01v99UDre3YMqa7ZF5Ji4=;
-        b=JrPY9wEXVKSReWhILt0IAXYJEtJzoL2of7sabErGoTfgU3a6rIEnp6UPx8EbZtaJB0
-         uTeCdzmbDwUM6N/gAiIIZ8UVedUdxbNDo7AB6aiIbtXBfIQaq9uMiA71676zFAv1zKpD
-         jMKf30EppdOUCA0ru1BmhWZH4RO2f9p75tJJE8IdkJCU1x0N16/PiDtpBCDDDu7+D0Kv
-         0XNk6cXPzxCnAPFsTkeFafVghTadcuC+znitDKdafGuujNGilvoFdM5lfXarmePPbRg6
-         6OHW+8amburH7PWxWvWsg0kWoK/INCAb9jMw+603eC4A5Yefot66bMB9eoWyD4r246Ic
-         YqVg==
-X-Gm-Message-State: ACgBeo3NBjz3D1LWde5VDP8f/IBWjUagA81gU7gAHtBazOnLPYeLXNtw
-        SUQFI6eaUhT2qDKoDJId3kPBx+PX7146jAfJ7ppjBw==
-X-Google-Smtp-Source: AA6agR6h3QjyxQT9HTWEYi2dapXCExpSGWtnAqbavvqdVNgWSL1YZTMQYx1ujl8429TYy7yP/EMb3funPPsBu0atDgE=
-X-Received: by 2002:a25:a06:0:b0:695:8d8f:b5c3 with SMTP id
- 6-20020a250a06000000b006958d8fb5c3mr11051969ybk.352.1661844036344; Tue, 30
- Aug 2022 00:20:36 -0700 (PDT)
+        Tue, 30 Aug 2022 03:20:29 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FDFE5004C;
+        Tue, 30 Aug 2022 00:20:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661844028; x=1693380028;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=axUyRkQDEujGll+U4gNW9NGbIqhXvci7jUZVzKU+b8k=;
+  b=XaeWYzd6ovApkXvJrbc3owRwl6Torv9LDkkSUYVU/dOhHXhSQSQuGT6e
+   eK7gXiPogyOVBYU6xymhW/XaLo/5UgHIoVHV4JHie7AWlWInz3nrQsVKx
+   DnDJpNlmwFHrFpZ+uxZ+eZy5MM2WmvwNwvhuWVqlJeE+J5EpMZ9Ia6Snk
+   KhnUM+QW4AJvjLYNYjX1LQyg6/BVP/ufjbH2F1MuKIZKXGUVVLkCopRaC
+   hfjukD293rmIc/vIAOOWDXV6TKE7p3s8l6awfYealJOUnn35bdbG3K5rJ
+   kFw99rLDyDs5UOr65zqQJZ7ol4OmhTWXXQYMGIqt0ewz87VWhPV7Sykqh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="321231777"
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="321231777"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 00:20:27 -0700
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="672728650"
+Received: from arnesgom-mobl.ger.corp.intel.com ([10.252.54.235])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 00:20:25 -0700
+Date:   Tue, 30 Aug 2022 10:20:20 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Li Zhong <floridsleeves@gmail.com>
+cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v2] drivers/tty/serial: check the return value of
+ uart_port_check()
+In-Reply-To: <CAMEuxRq6wn+wakYHGtnS_vSgpcw6aNOir=KyXWb12vPrOr76pA@mail.gmail.com>
+Message-ID: <40e16474-99d2-2359-a545-4a437f555ec1@linux.intel.com>
+References: <20220826083612.1699194-1-floridsleeves@gmail.com> <CAHp75VcdqL4wYnhEi8LrxqJktA2uDzP3a6-08suJRghX=1UZsg@mail.gmail.com> <CAMEuxRqBEMdva3qEphvuYkFLpRjp=xg7vpqQT1oqb2AgkkG2+w@mail.gmail.com> <2033d06d-10a4-5a57-d650-7541c39990ee@linux.intel.com>
+ <CAMEuxRq6wn+wakYHGtnS_vSgpcw6aNOir=KyXWb12vPrOr76pA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220830065413.638-1-thunder.leizhen@huawei.com>
-In-Reply-To: <20220830065413.638-1-thunder.leizhen@huawei.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 30 Aug 2022 00:20:00 -0700
-Message-ID: <CAGETcx8hfzAthF_gCMrmnVOgwgFJEPE=bwRuVeXaiB7ywUkWkg@mail.gmail.com>
-Subject: Re: [PATCH v2] ARM: Add sanity check for dev->periphid in amba_probe()
-To:     Zhen Lei <thunder.leizhen@huawei.com>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        patches@armlinux.org.uk, Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-68519279-1661842936=:1864"
+Content-ID: <2edbf640-1cd7-a490-7077-b3c91cf8135f@linux.intel.com>
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 11:59 PM Zhen Lei <thunder.leizhen@huawei.com> wrote:
->
-> Commit f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
-> forcibly invokes device_add() even if dev->periphid is not ready. Although
-> it will be remedied in amba_match(): dev->periphid will be initialized
-> if everything is in place; Otherwise, return -EPROBE_DEFER to block
-> __driver_attach() from further execution. But not all drivers have .match
-> hook, such as pl031, the dev->bus->probe will be called directly in
-> __driver_attach(). Unfortunately, if dev->periphid is still not
-> initialized, the following exception will be triggered.
->
-> 8<--- cut here ---
-> Unable to handle kernel NULL pointer dereference at virtual address 00000008
-> [00000008] *pgd=00000000
-> Internal error: Oops: 5 [#1] SMP ARM
-> Modules linked in:
-> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc2+ #7
-> Hardware name: ARM-Versatile Express
-> PC is at pl031_probe+0x8/0x208
-> LR is at amba_probe+0xf0/0x160
-> pc : 80698df8  lr : 8050eb54  psr: 80000013
-> sp : c0825df8  ip : 00000000  fp : 811fda38
-> r10: 00000000  r9 : 80d72470  r8 : fffffdfb
-> r7 : 811fd800  r6 : be7eb330  r5 : 00000000  r4 : 811fd900
-> r3 : 80698df0  r2 : 37000000  r1 : 00000000  r0 : 811fd800
-> Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
-> Control: 10c5387d  Table: 6000406a  DAC: 00000051
-> ... ...
->  pl031_probe from amba_probe+0xf0/0x160
->  amba_probe from really_probe+0x118/0x290
->  really_probe from __driver_probe_device+0x84/0xe4
->  __driver_probe_device from driver_probe_device+0x30/0xd0
->  driver_probe_device from __driver_attach+0x8c/0xfc
->  __driver_attach from bus_for_each_dev+0x70/0xb0
->  bus_for_each_dev from bus_add_driver+0x168/0x1f4
->  bus_add_driver from driver_register+0x7c/0x118
->  driver_register from do_one_initcall+0x44/0x1ec
->  do_one_initcall from kernel_init_freeable+0x238/0x288
->  kernel_init_freeable from kernel_init+0x18/0x12c
->  kernel_init from ret_from_fork+0x14/0x2c
-> ... ...
-> ---[ end trace 0000000000000000 ]---
->
-> Therefore, take the same action as in amba_match(): return -EPROBE_DEFER
-> if dev->periphid is not ready in amba_probe().
->
-> Fixes: f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> ---
-> KernelVersion: v6.0-rc3
->  drivers/amba/bus.c | 24 +++++++++++++++++++++---
->  1 file changed, 21 insertions(+), 3 deletions(-)
->
-> v1 --> v2:
-> 1. Update this patch based on:
->    https://lore.kernel.org/lkml/20220818172852.3548-1-isaacmanjarres@google.com/
-> 2. Move the operations of sanity checking and reading dev->periphid,
->    updating uevent into new function amba_prepare_periphid().
->
-> diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
-> index 110a535648d2e1f..8e4c7e190880206 100644
-> --- a/drivers/amba/bus.c
-> +++ b/drivers/amba/bus.c
-> @@ -204,10 +204,9 @@ static int amba_read_periphid(struct amba_device *dev)
->         return ret;
->  }
->
-> -static int amba_match(struct device *dev, struct device_driver *drv)
-> +static int amba_prepare_periphid(struct device *dev)
->  {
->         struct amba_device *pcdev = to_amba_device(dev);
-> -       struct amba_driver *pcdrv = to_amba_driver(drv);
->
->         mutex_lock(&pcdev->periphid_lock);
->         if (!pcdev->periphid) {
-> @@ -228,6 +227,19 @@ static int amba_match(struct device *dev, struct device_driver *drv)
->         }
->         mutex_unlock(&pcdev->periphid_lock);
->
-> +       return 0;
-> +}
-> +
-> +static int amba_match(struct device *dev, struct device_driver *drv)
-> +{
-> +       struct amba_device *pcdev = to_amba_device(dev);
-> +       struct amba_driver *pcdrv = to_amba_driver(drv);
-> +       int ret;
-> +
-> +       ret = amba_prepare_periphid(dev);
-> +       if (ret)
-> +               return ret;
-> +
->         /* When driver_override is set, only bind to the matching driver */
->         if (pcdev->driver_override)
->                 return !strcmp(pcdev->driver_override, drv->name);
-> @@ -278,9 +290,15 @@ static int amba_probe(struct device *dev)
->  {
->         struct amba_device *pcdev = to_amba_device(dev);
->         struct amba_driver *pcdrv = to_amba_driver(dev->driver);
-> -       const struct amba_id *id = amba_lookup(pcdrv->id_table, pcdev);
-> +       const struct amba_id *id;
->         int ret;
->
-> +       ret = amba_prepare_periphid(dev);
-> +       if (ret)
-> +               return ret;
-> +
-> +       id = amba_lookup(pcdrv->id_table, pcdev);
-> +
->         do {
->                 ret = of_amba_device_decode_irq(pcdev);
->                 if (ret)
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Let's wait for Isaac to review this. He has been looking at the
-locking issue for a bit and there were some tricky cases.
+--8323329-68519279-1661842936=:1864
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <7768bd39-e4a3-2d53-551f-1d81a45711d3@linux.intel.com>
 
--Saravana
+On Mon, 29 Aug 2022, Li Zhong wrote:
+
+> On Mon, Aug 29, 2022 at 12:09 AM Ilpo Järvinen
+> <ilpo.jarvinen@linux.intel.com> wrote:
+> >
+> > On Sun, 28 Aug 2022, Li Zhong wrote:
+> >
+> > > On Fri, Aug 26, 2022 at 9:01 AM Andy Shevchenko
+> > > <andy.shevchenko@gmail.com> wrote:
+> > > >
+> > > > On Fri, Aug 26, 2022 at 11:38 AM Li Zhong <floridsleeves@gmail.com> wrote:
+> > > > >
+> > > > > uart_port_check() will return NULL pointer when state->uart_port is
+> > > > > NULL. Check the return value before dereference it to avoid
+> > > > > null-pointer-dereference error.
+> > > >
+> > > > Have you taken the locking into consideration?
+> > > > If no, please do, if yes, expand your commit message to explain why
+> > > > the current locking scheme doesn't prevent an error from happening.
+> > > >
+> > >
+> > > The locking is taken into consideration but these three checks do not need to
+> > > unlock in error-handling because unlock() will be called in the callers. Will
+> > > add the comment in v2 patch.
+> >
+> > I think he meant you should indicate why the current locking doesn't cover
+> > the case you're fixing, not whether this function should call unlock() or
+> > not.
+> >
+> 
+> Thanks for clarifications. The locking does not guarantee the return value of
+> uart_port_check()  is not NULL.
+
+Please put such explanation into the commit message like Andy was asking, 
+thank you.
+
+And make sure you properly mention what has changed for any new version 
+of any patch you send so that Greg don't need to auto-mail you about it 
+(and end up ignoring your patch).
+
+> Actually in line 773 of this file
+> (drivers/tty/serial/serial_core.c), uart_port_check() is also called in
+> critical section but still there is check on whether the return value is NULL.
+
+Existance of such a check elsewhere alone isn't enough to guarantee that 
+the check is necessary (and not even that the check in that other place 
+would be necessary). You need a deeper analysis than that. I'm not 
+claiming its either way here, just pointing out to the direction/details 
+you should consider while writing the analysis of the problem.
+
+
+-- 
+ i.
+--8323329-68519279-1661842936=:1864--

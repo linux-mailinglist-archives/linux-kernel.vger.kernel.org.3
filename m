@@ -2,106 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB775A613B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:55:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51DEF5A613D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:57:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbiH3KzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:55:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36690 "EHLO
+        id S230033AbiH3K5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:57:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiH3KzN (ORCPT
+        with ESMTP id S229510AbiH3K5o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:55:13 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D77459B4;
-        Tue, 30 Aug 2022 03:55:11 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id l5so6861855pjy.5;
-        Tue, 30 Aug 2022 03:55:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=YkkKSKY+6i4yHV5ZW1S/rfBMmWbd8iaSJkFCcuATEeY=;
-        b=p3cq/nRDe5bCHQpv+Q/v+EOxCWzkEjShDMWv1x80W2zx27nfFDt9XzgftCVbiiYSwV
-         0XhKEKhquLDXtGPpaf/19mwDLY2OPH9qWQrCD8tOhOVvqK2mwrQEO4uuqPf4c58LJmu+
-         cgQGEBp4NQkeyV49XnxU5u0Z81i+vGZ1XEpwHrM+WAUNRju3ngosUJkHvvPzo0T8FKPF
-         q4V6g915bpJ8FWeUoxbXxUoMyNA0HNe5hg8hTi6a/vBGYszrNroZvLz/rQVyoCW2yuFR
-         rM+DzlLODvcZCMiwYkdinn+D6MX1H4bEqadGhJ2kV8eg0tbAQF7yfqMRLbiLPNw3IHrV
-         PKRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=YkkKSKY+6i4yHV5ZW1S/rfBMmWbd8iaSJkFCcuATEeY=;
-        b=wNRQY8v/ijsHOUCkJYLAmeGkiz0Bo3GV8jPGaBxzVJQxkUojnlT9dScf53Rl+sjaP/
-         CfH61egqtCqYVcnLXuPR7cQWz+v30uWAVvLGnegntrgHdO4p4fpOsTs5US/YOn1VZHPb
-         oLwic3gv8ZJAgObxmfhRoRy020Ak/r72k3E/eSnpeNtN/mFqzi+YAVAAT5ykKsK+TBh2
-         DdRElvl+trYqD2I5SI0fxxr/UIaFtrF0VcD/3kQ4K1/M7XTPjs1tZ1gvRGmKPgmy/+a4
-         BhR2eKoAQxTTt+l8csXZkytIgxPl2kFMPKrc7tAdAhLC5bZ+7yNQV5giCQCE+V/XALD/
-         XGWQ==
-X-Gm-Message-State: ACgBeo1Tlk2zSarx4b3d4Cph8tDIV2Osvc8TqDjfFa1wxmp8PYAyCg1P
-        XL6ipjRSfxO7aSyi0pVMF6g=
-X-Google-Smtp-Source: AA6agR7bl0WZTwMSAILTrpdXV8udJeu1bpiewwcHUflUMe66bj1Y/+sOb0UN6GOSl/1q99T91lqljw==
-X-Received: by 2002:a17:90a:bd02:b0:1fd:d9b5:c6ce with SMTP id y2-20020a17090abd0200b001fdd9b5c6cemr8319660pjr.219.1661856911486;
-        Tue, 30 Aug 2022 03:55:11 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id m20-20020a656a14000000b0042a59ecdbdfsm1349459pgu.84.2022.08.30.03.55.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 03:55:11 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     ajay.kathat@microchip.com, claudiu.beznea@microchip.com,
-        kvalo@kernel.org, davem@davemloft.net, edumazet@google.com
-Cc:     kuba@kernel.org, pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH v2 linux-next] wifi: wilc1000: remove redundant ret variable
-Date:   Tue, 30 Aug 2022 10:55:05 +0000
-Message-Id: <20220830105505.287564-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Aug 2022 06:57:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 460FFE42C4;
+        Tue, 30 Aug 2022 03:57:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E2D2860CF2;
+        Tue, 30 Aug 2022 10:57:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB691C433C1;
+        Tue, 30 Aug 2022 10:57:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661857062;
+        bh=zrx2tzoy3uB2UpVoq4nUpuLps2c4xn/uqwRVCuI/+Mg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Phz3gGL+fi7mVlBxRw+EQEzn+o9yDbF1P23Mfwh5gTwSFGHKsbQDLTbR45b4/H+85
+         MKj4SChO3GHB454ouTQmaSnVmiW5Om0IiCfcfkFkiOlpVrk87Mj5xWyMhaF3upX6qC
+         9S27YhPPf9r7PP75/J2S7w8PYt4bHctm1QU67cT5OXM6aq2bmQEzhhwZMVlpdH7Ha1
+         YjHwq+W1HeuRBLrzKQEBTHbTApBDEVBwzF3odUnl45tflf4Brz34XimnSVkYcHS5oM
+         YVn9y08gBU8YHV3Oz09klv4Fp8sQ9R/hU+5gajUEJYEaEGiRCjjIFBO7i1/WztrmrB
+         XeHZrM9TeTmvA==
+Date:   Tue, 30 Aug 2022 12:57:39 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        rcu <rcu@vger.kernel.org>,
+        Vineeth Pillai <vineeth@bitbyteword.org>
+Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
+ fixes
+Message-ID: <20220830105739.GB71266@lothringen>
+References: <20220819204857.3066329-1-joel@joelfernandes.org>
+ <20220829134045.GA54589@lothringen>
+ <1f7dd31b-f4d0-5c1c-ce28-c27f75c17f05@joelfernandes.org>
+ <20220829194622.GA58291@lothringen>
+ <CAEXW_YS593n8Gget+REaD-c8vT8Ht_AzOY0kXA_uc674LOyvVw@mail.gmail.com>
+ <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YSwkSi0UfBUrK=4gyMPC-R7pvQbreWOC3DcQqmLgp3aFQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YSwkSi0UfBUrK=4gyMPC-R7pvQbreWOC3DcQqmLgp3aFQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Mon, Aug 29, 2022 at 04:48:25PM -0400, Joel Fernandes wrote:
+> On Mon, Aug 29, 2022 at 4:42 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Mon, Aug 29, 2022 at 04:36:40PM -0400, Joel Fernandes wrote:
+> > > On Mon, Aug 29, 2022 at 3:46 PM Frederic Weisbecker <frederic@kernel.org> wrote:
+> > > > On Mon, Aug 29, 2022 at 12:45:40PM -0400, Joel Fernandes wrote:
+> > > > > On 8/29/2022 9:40 AM, Frederic Weisbecker wrote:
+> >
+> > [ . .  . ]
+> >
+> > > > > > 2) NOCB implies performance issues.
+> > > > >
+> > > > > Which kinds of? There is slightly worse boot times, but I'm guessing that's do
+> > > > > with the extra scheduling overhead of the extra threads which is usually not a
+> > > > > problem except that RCU is used in the critical path of boot up (on ChromeOS).
+> > > >
+> > > > I never measured it myself but executing callbacks on another CPUs, with
+> > > > context switches and locking can only involve significant performance issues if callbacks
+> > > > are frequent. So it's a tradeoff between power and performance.
+> > >
+> > > In my testing of benchmarks on real systems with 8-16 CPUs, the
+> > > performance hit is down in the noise. It is possible though that maybe
+> > > one can write a non-realistic synthetic test to force the performance
+> > > issues, but I've not seen it in the real world. Maybe on
+> > > networking-heavy servers with lots of cores, you'll see it but their
+> > > batteries if any would be pretty big :-).
+> >
+> > To Frederic's point, if you have enough servers, even a 1% decrease in
+> > power consumption is a very big deal.  ;-)
+> 
+> Ah I see Frederick's point now, so basically the claim is that using
+> lazy-RCU on servers might make sense to save power because
+> CONFIG_RCU_NO_CB_CPU may not be an option there (networking throughput
+> and so forth).
+> 
+> That's a good point indeed...
 
-Return value from cfg80211_rx_mgmt() directly instead of
-taking this in another redundant variable.
+You got it! And it's not just servers but pretty much everything that may
+be idle sometimes. Distros (except android then) don't use rcu_nocbs= by
+default. Routers enjoy night bandwith, etc...
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- drivers/net/wireless/microchip/wilc1000/cfg80211.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/net/wireless/microchip/wilc1000/cfg80211.c b/drivers/net/wireless/microchip/wilc1000/cfg80211.c
-index f810a56a7ff0..b89047965e78 100644
---- a/drivers/net/wireless/microchip/wilc1000/cfg80211.c
-+++ b/drivers/net/wireless/microchip/wilc1000/cfg80211.c
-@@ -997,12 +997,11 @@ bool wilc_wfi_mgmt_frame_rx(struct wilc_vif *vif, u8 *buff, u32 size)
- {
- 	struct wilc *wl = vif->wilc;
- 	struct wilc_priv *priv = &vif->priv;
--	int freq, ret;
-+	int freq;
- 
- 	freq = ieee80211_channel_to_frequency(wl->op_ch, NL80211_BAND_2GHZ);
--	ret = cfg80211_rx_mgmt(&priv->wdev, freq, 0, buff, size, 0);
- 
--	return ret;
-+	return cfg80211_rx_mgmt(&priv->wdev, freq, 0, buff, size, 0);
- }
- 
- void wilc_wfi_p2p_rx(struct wilc_vif *vif, u8 *buff, u32 size)
--- 
-2.25.1
-
+Thanks!

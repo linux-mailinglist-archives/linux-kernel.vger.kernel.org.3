@@ -2,127 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A81FC5A6426
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:55:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C475A642B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiH3MzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:55:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48586 "EHLO
+        id S229985AbiH3M4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:56:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230245AbiH3My4 (ORCPT
+        with ESMTP id S230048AbiH3M4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:54:56 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3034E122BCF;
-        Tue, 30 Aug 2022 05:54:28 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id z25so15403993lfr.2;
-        Tue, 30 Aug 2022 05:54:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=PI82MzFvdHP75c7weRhmZb8nU9JOXMueIl3nwAOMIGk=;
-        b=XhN2VTNabjEKtoWOzHgPVjJ1yePu6flob5CKlciItMWh9Q559bF3hKp4BefZlZ5k7s
-         TezrpQO7B2zeRnRrah1a38p/pc2jJV0YOl1YXmx3lWIGI0p+CDKIGeuQQJCCyHvkJD6f
-         zQ6sb1rqQ9qegqcAeq+XKvHbqBVGNSqYDt9O+gzjaFRH+YziJ0x6gFXfUnhrZuzittNf
-         W4YdMl72KP0whn81v46NKjK4TZV2Hwy6sgl+OwZhIsvOrjsk32GBS/tAf1M5GWldwaYD
-         VOAdggCQtCsoxWRiEl5aUAG8LIbWLlS2dEIB3pzTCAqd2cHtRUqrZlyzvZOs7EoZluI9
-         oS/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=PI82MzFvdHP75c7weRhmZb8nU9JOXMueIl3nwAOMIGk=;
-        b=E3o5nRMX4Zdy9iZqk6KGfmH6ldvX3jV4elekYbT/uLEm2DqbeMXOCEnQGY3PBPzzj4
-         J3QBfjqtCA+Ip74jxc+uukbdPkOWg3thdRAK0keNha0qEQ0Eu91VBGBFQSQlJmvhyeQU
-         /TVqiEyp/6QM6A+RXcwF4w/f+q5aytlwZFykJygkbocKzAhOsuCDB88lRc7NuRlhWZ4q
-         i+oSDxHWe05xAcjk7TBhaSTV06+inQQW/rEwtUsDc9P8mFdOi/fzykBi/VK5YYaCUqr8
-         vPPCiNV3WVepM46zsmsm8yYhz6k2jaPyoUeidg18UW/9AvWvrJMLevNTOjsf86O0Ba+a
-         t5vA==
-X-Gm-Message-State: ACgBeo3lDj5v7x5fw/00wBLTcAqlWNHlaXtg3IhV7fLvbPlUpbxI+MBu
-        9RHwqm/MITHR6chQFjWkF9c=
-X-Google-Smtp-Source: AA6agR6OkiSrMxyw4LWK6fNAB7FxseNF8wU9mDYISGsRgO04gUdFhOFyiclQMQeFrJRC6Ue3RkSMdQ==
-X-Received: by 2002:a05:6512:3b0b:b0:494:66e7:e3f with SMTP id f11-20020a0565123b0b00b0049466e70e3fmr4065680lfv.279.1661864048680;
-        Tue, 30 Aug 2022 05:54:08 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
-        by smtp.gmail.com with ESMTPSA id s20-20020a056512315400b0048af3c315efsm1605659lfi.191.2022.08.30.05.54.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 05:54:08 -0700 (PDT)
-Message-ID: <0aaeb018-94ba-eaaa-4000-7ad082a09850@gmail.com>
-Date:   Tue, 30 Aug 2022 15:54:07 +0300
+        Tue, 30 Aug 2022 08:56:04 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5D9FAEDAE;
+        Tue, 30 Aug 2022 05:55:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=kzUIqwLwyoAHe13fdSfoFA6rcHGHeXti2XRC8Z2C/Qw=; b=E3HCE5rED8f/4ky5V4p+vTFtiC
+        681+hpGie25wwfbhi/FmGLlR6tzZZknPrqv6JW4zsAq1XdnQeGGGf5Avd2QRtAgMrcnE3U4DSC4If
+        TVVHZJSP6HkVJJP1vP2YL/ZlBoTySkPfbwKRlOJp/vd4kyw8KgAZLnuBCZnyCZlKGoXpmkbNzJrLN
+        XA+zXlDQht7BBu31aHWgxNUT7RqF8FZxBelCu3MTpvvi4BllU5gY/BsCwfP2E/d5rw0bPNxTklAaM
+        ICE40rUDMvz/TkH4pwo8DIuz7gSiw8luunvNe6UEHC3OpbIA5lqYyESQBhrSvOsKctUc7e88SUzvD
+        p59gK1eg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oT0lZ-00433h-Rw; Tue, 30 Aug 2022 12:54:53 +0000
+Date:   Tue, 30 Aug 2022 13:54:53 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     frowand.list@gmail.com
+Cc:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] ktap_v2: change version to 2-rc in KTAP
+ specification
+Message-ID: <Yw4InUF5TpR/wdwb@casper.infradead.org>
+References: <20220829233150.3564612-1-frowand.list@gmail.com>
+ <20220829233150.3564612-2-frowand.list@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 11/14] iio: ad7606: simplify using
- devm_regulator_get_enable()
-Content-Language: en-US
-To:     "Sa, Nuno" <Nuno.Sa@analog.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        "Hennerich, Michael" <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <cover.1660934107.git.mazziesaccount@gmail.com>
- <521c52f5a9bdc2db04d5775b36df4b233ae338da.1660934107.git.mazziesaccount@gmail.com>
- <SN4PR03MB6784BE44D4A6DCECA0859C5F99799@SN4PR03MB6784.namprd03.prod.outlook.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <SN4PR03MB6784BE44D4A6DCECA0859C5F99799@SN4PR03MB6784.namprd03.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220829233150.3564612-2-frowand.list@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the review(s) Nuno!
-
-On 8/30/22 14:46, Sa, Nuno wrote:
->> From: Matti Vaittinen <mazziesaccount@gmail.com>
->> Sent: Friday, August 19, 2022 9:20 PM
->> To: Matti Vaittinen <mazziesaccount@gmail.com>; Matti Vaittinen
->> <matti.vaittinen@fi.rohmeurope.com>
->> Cc: Lars-Peter Clausen <lars@metafoo.de>; Hennerich, Michael
->> <Michael.Hennerich@analog.com>; Jonathan Cameron
->> <jic23@kernel.org>; linux-iio@vger.kernel.org; linux-
->> kernel@vger.kernel.org
->> Subject: [PATCH v3 11/14] iio: ad7606: simplify using
->> devm_regulator_get_enable()
->>
->> [External]
->>
->> Drop open-coded pattern: 'devm_regulator_get(), regulator_enable(),
->> add_action_or_reset(regulator_disable)' and use the
->> devm_regulator_get_enable() and drop the pointer to the regulator.
->> This simplifies code and makes it less tempting to add manual control
->> for the regulator which is also controlled by devm.
->>
->> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
->>
->> ---
+On Mon, Aug 29, 2022 at 06:31:49PM -0500, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
 > 
-> The commit message could state that while doing the change, dev_err_probe()
-> was also introduced. Bah, anyways:
+> Prepare KTAP Specification for the process of creating version 2.
 > 
-> Acked-by: Nuno Sá <nuno.sa@analog.com>
+> The version will remain "2-rc" until the final commit to complete
+> Version 2.  Adding the "-rc" ensures that none of the development
+> versions will be mistaken for the completed version 2.
+> 
+> After this commit, Sphinx complains that we now need more '=' signs:
+> 
+>   Documentation/dev-tools/ktap.rst:3: WARNING: Title overline too short.
+>   ===================================================
+>   The Kernel Test Anything Protocol (KTAP), version 2-rc
+>   ===================================================
 
-Good point. I have few other changes to the series pending - and I 
-probably need to rebase/respin when -rc1 is out (and dependency patches 
-are merged from Mark's tree) => I may as well alter the commit message.
+Hey Frank, you can actually use overlength lines to prevent this kind of
+problem from occurring.  eg, this is perfectly acceptable:
 
-Yours,
-	-- Matti
+===================================================================
+Hi
+===================================================================
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+I wonder if we should prefer this style to avoid the rash of complaints
+when a headline is changed.

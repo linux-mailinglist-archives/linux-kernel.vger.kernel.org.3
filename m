@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87E765A5ADB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AA5E5A5AE0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229794AbiH3Eqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 00:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
+        id S229883AbiH3Erf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 00:47:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiH3Eqc (ORCPT
+        with ESMTP id S229602AbiH3Erc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 00:46:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74BAAB42E;
-        Mon, 29 Aug 2022 21:46:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4385861124;
-        Tue, 30 Aug 2022 04:46:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5405FC433D6;
-        Tue, 30 Aug 2022 04:46:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661834789;
-        bh=NiW3r5AK9XWrE8Z5VmpCFINbdcTHRs8dHUrAnKvR0Xk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X+yq7rtjeemMtmVvWMk7Sd8Pdgf1d8zFw/0WgqgA2FJnF9SLa/PRFDT5Bbb/oExuk
-         o6py24wiaAtOqp8C0FU2RTrC6BeW5ZW9MzeG1buK8mQDfl6W/VjXtoF0yWzfC0Bm9D
-         wzlfyYW6TUBcnw5IClQptlumSJGd23PuNgNUqkQyjtT6r/NRddEGUE7D60FBYc1iFm
-         8fCYyRDTHnd85hH7BuYlCH46kkn8+Tbtla1Ly0ZW41k9Y/pKxrXHmqvQRAZyDk9EuH
-         bLo8LaCs8LpiCfRs+ahf3cOnSARZ16cSz0ENKyAiHTBNQIXGRnK0i4oTTZLj8G4Eg2
-         FKmcFtANjhD7g==
-Date:   Mon, 29 Aug 2022 21:46:27 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
-        Borislav Petkov <bp@alien8.de>, X86 ML <x86@kernel.org>,
-        Michael Matz <matz@suse.de>, linux-toolchains@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH] x86/sev: Mark snp_abort() noreturn
-Message-ID: <20220830044627.t37gkqjdknu4wgz6@treble>
-References: <20220824152420.20547-1-bp@alien8.de>
- <20220824172929.GA25951@gate.crashing.org>
- <YwaN2HtMyM0YEdSB@worktop.programming.kicks-ass.net>
+        Tue, 30 Aug 2022 00:47:32 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B32BAB4F9
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:47:30 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id r22so9623650pgm.5
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 21:47:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=/b4XTCSmASmcmXWYN+QoQmuk6ptlc7NOGx3fVn0HIvc=;
+        b=agLFlbQx6jF9QmcGj/HcN/B4W0gUvv3ONgKioHftXcDXr9GQWnQ4lraS+pn6hJTd0X
+         x5YUfzKAGw0LIvoyZxC4nruig6UaCtZBV7xpRNsofBkNIlU1zSyUWTbKM7xRd8EsnSMR
+         szEETqdqlGEcvWnl1W2ttzvrowZ8Y6GxHuJC49Y3AU5qWexqHLSH5uy+VYnbTLKagFUe
+         JyCBosGdbmmmaFUubyhCoAjqdRP5+XBedaV9igQzPKWtKeJiglwjqtAmUR2MGzu3u4SV
+         75taJTI2HvYQ2YLgQlMriGryHIoEGaG/cIpPNE5abQnj0KTU1YlXWM+f1FHtlM+J725d
+         1BsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=/b4XTCSmASmcmXWYN+QoQmuk6ptlc7NOGx3fVn0HIvc=;
+        b=ETnWbSTmOeaur25awND48nYru4ecuQOJV6Lkf7UkMDv10A1xAeugB6j00smw0gwmJT
+         QFQkyqUvZBUpUp7T0GkOLs2ezzKNQWpUgkw5GZm9Z2QBdU0/wGTr0yNpjj9CJUOd4vKn
+         oN5I8+7TX7BUBgXLjouU1CZbfLqHwe4dbiGiy/aOoYLjmJ8YLMKOx8vIbGJiApmckSDS
+         xLIQ8db95NWhovE+vRYWTV7YvJt39PQctuTWtAZ46A3D6H+vhIITFvUbj0qamfauMWwN
+         rVGrrY4eLOn7QgabyMQXaNbPOLB1eB6f12hJq2npP5uPwRED0tRTmOG4+vicuRO3Tat0
+         gnRw==
+X-Gm-Message-State: ACgBeo2jRopdPWSL3y1j6IbWrQ6FxA6yY9MbIUpTvQ3TP+3nMAy/Rcw9
+        OC3XZANaW3mXnbd83skuV3leKw==
+X-Google-Smtp-Source: AA6agR7CYibaFU7E3W+MayVq1XBf019nhVormO9jRUAcvfkWaUo2MBQRrD6wT+/Ii9xPcKDYzhQGsA==
+X-Received: by 2002:a05:6a00:180b:b0:536:816b:f770 with SMTP id y11-20020a056a00180b00b00536816bf770mr20015644pfa.3.1661834849979;
+        Mon, 29 Aug 2022 21:47:29 -0700 (PDT)
+Received: from anup-ubuntu64-vm.. ([171.76.81.23])
+        by smtp.gmail.com with ESMTPSA id y27-20020a634b1b000000b0041cd5ddde6fsm592240pga.76.2022.08.29.21.47.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 21:47:29 -0700 (PDT)
+From:   Anup Patel <apatel@ventanamicro.com>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>
+Subject: [PATCH v2 0/4] Add PMEM support for RISC-V
+Date:   Tue, 30 Aug 2022 10:16:38 +0530
+Message-Id: <20220830044642.566769-1-apatel@ventanamicro.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YwaN2HtMyM0YEdSB@worktop.programming.kicks-ass.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,48 +72,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 24, 2022 at 10:45:12PM +0200, Peter Zijlstra wrote:
-> On Wed, Aug 24, 2022 at 12:29:29PM -0500, Segher Boessenkool wrote:
-> > Hi!
-> > 
-> > On Wed, Aug 24, 2022 at 05:24:20PM +0200, Borislav Petkov wrote:
-> > > Mark both the function prototype and definition as noreturn in order to
-> > > prevent the compiler from doing transformations which confuse objtool
-> > > like so:
-> > > 
-> > >   vmlinux.o: warning: objtool: sme_enable+0x71: unreachable instruction
-> > 
-> > Would -Wmissing-noreturn have caught this?  It sounds like you need this
-> > (and then fix all resulting warnings) to not upset objtool?
-> > 
-> > It is nice to have this anyway (if there aren't a zillion false
-> > positives), but it seems objtool is very fragile.
-> 
-> Well, just like gcc has noreturn heuristics so has objtool, it just
-> turns into pain when they don't agree with one another.
-> 
-> Ideally noreturn would be reflected in the object file so we don't have
-> to guess at it. STT_FUNC_NORETURN would do I suppose, except then all
-> the tools will need to be taught how to deal with that, which is also
-> very painful.
-> 
-> Another options is something like .symtab.noreturn which is another
-> symbol table explicitly listing the noreturn functions. Since it's an
-> extra section tools that don't know about it can freely ignore it and
-> carry on as usual.
+The Linux NVDIMM PEM drivers require arch support to map and access the
+persistent memory device. This series adds RISC-V PMEM support using
+recently added Svpbmt and Zicbom support.
 
-We're planning to talk about this at the LPC toolchains microconference.
+These patches can also be found in riscv_pmem_v2 branch at:
+https://github.com/avpatel/linux.git
 
-My proposal is similar to yours except I called it .annotate.noreturn.
-It would be enabled with a --annotate=noreturn compiler option.  It
-would report both explicit noreturns (with the "noreturn" function
-attribute) and implicit noreturns (static functions which only call
-other noreturn functions).
+Changes since v1:
+ - Fix error reported by test bot
+   https://lore.kernel.org/all/202208272028.IwrNZ0Ur-lkp@intel.com/
 
-There would also be an --annotate=jump_table option which creates an
-.annotate.jump_table to describe switch statement jump table flow.
+Anup Patel (4):
+  RISC-V: Fix ioremap_cache() and ioremap_wc() for systems with Svpbmt
+  RISC-V: Move riscv_init_cbom_blocksize() to cacheflush.c
+  RISC-V: Implement arch specific PMEM APIs
+  RISC-V: Enable PMEM drivers
 
-Those are the two biggest challenges for objtool.
+ arch/riscv/Kconfig                  |  1 +
+ arch/riscv/configs/defconfig        |  1 +
+ arch/riscv/include/asm/cacheflush.h |  2 ++
+ arch/riscv/include/asm/io.h         | 10 ++++++++
+ arch/riscv/include/asm/pgtable.h    |  2 ++
+ arch/riscv/mm/Makefile              |  1 +
+ arch/riscv/mm/cacheflush.c          | 39 +++++++++++++++++++++++++++++
+ arch/riscv/mm/dma-noncoherent.c     | 38 ----------------------------
+ arch/riscv/mm/pmem.c                | 21 ++++++++++++++++
+ 9 files changed, 77 insertions(+), 38 deletions(-)
+ create mode 100644 arch/riscv/mm/pmem.c
 
 -- 
-Josh
+2.34.1
+

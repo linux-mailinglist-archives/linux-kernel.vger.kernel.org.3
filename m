@@ -2,41 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA5405A66CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DDC5A66D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:04:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiH3PDH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 Aug 2022 11:03:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S230136AbiH3PEn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 11:04:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230041AbiH3PDE (ORCPT
+        with ESMTP id S229469AbiH3PEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 11:03:04 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35E7107C75
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:03:01 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oT2lP-0007UQ-Vl; Tue, 30 Aug 2022 17:02:52 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     atishp@atishpatra.org, anup@brainfault.org, will@kernel.org,
-        mark.rutland@arm.com, paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, Conor.Dooley@microchip.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        philipp.tomsich@vrull.eu, cmuellner@linux.com, samuel@sholland.org,
-        guoren@kernel.org
-Subject: Re: [PATCH v2] drivers/perf: riscv_pmu_sbi: add support for PMU variant on T-Head C9xx cores
-Date:   Tue, 30 Aug 2022 17:02:51 +0200
-Message-ID: <3973491.N7aMVyhfb1@diego>
-In-Reply-To: <3627040.SvYEEZNnvj@diego>
-References: <20220826163500.1748653-1-heiko@sntech.de> <5f72e3da-d87d-2d8d-bb4b-d95dca65d4f7@microchip.com> <3627040.SvYEEZNnvj@diego>
+        Tue, 30 Aug 2022 11:04:40 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432B711B3DC;
+        Tue, 30 Aug 2022 08:04:36 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1661871870t8iggrns
+Received: from localhost.localdomain ( [182.148.13.26])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Tue, 30 Aug 2022 23:04:05 +0800 (CST)
+X-QQ-SSF: 01000000002000B0C000B00A0000000
+X-QQ-FEAT: 5mtg6EGDOv7CKWRTCkhsEx4OjHeB+nlND5qgfznMXxB8U9rvwSL64VwrPVm6P
+        2FQIDpGOkhxFJW8UfdQNc02o666JTU1stc3/dNVWrhE4tzNwTnMgFZ68n2xyN5EzESDv8Dp
+        WZtJbTEHAfJ/roYxUtyVyil5kyEyeaIXe4CVcrc6Z2ClAwWPWWq9hXj0WXgDKgCU0QKM5Qg
+        BvkWUQaqo5NPQ8TZJIYSZjSBd75MqZZFpGwBIC9rzCwCvMS3Il3CwkDsTr2gr6to8j6b09a
+        gJ1L34lH/bVVlJZBOvQKvtOgBG7y1eJ48Y0hhXnhwXEB3ZcFEfuzQycZ2I+PZJVGi7/XW96
+        X7PC00OH3yv7O2ckSiERlO4Ob2IPyA+VOmGppSACRmfJPIbBX8iSWyHoEaEig==
+X-QQ-GoodBg: 0
+From:   Shaomin Deng <dengshaomin@cdjrlc.com>
+To:     vkoul@kernel.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, dmaengine@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
+Subject: [PATCH] maengine: stm32-dmamux: Fix double word in comments
+Date:   Tue, 30 Aug 2022 11:04:05 -0400
+Message-Id: <20220830150405.23581-1-dengshaomin@cdjrlc.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,38 +49,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, 30. August 2022, 16:33:27 CEST schrieb Heiko Stübner:
-> Am Freitag, 26. August 2022, 19:57:33 CEST schrieb Conor.Dooley@microchip.com:
-> > On 26/08/2022 17:35, Heiko Stuebner wrote:
-> > > diff --git a/arch/riscv/errata/thead/errata.c b/arch/riscv/errata/thead/errata.c
-> > > index 202c83f677b2..e6101eab25c8 100644
-> > > --- a/arch/riscv/errata/thead/errata.c
-> > > +++ b/arch/riscv/errata/thead/errata.c
-> > > @@ -44,6 +44,22 @@ static bool errata_probe_cmo(unsigned int stage,
-> > >  #endif
-> > >  }
-> > > 
-> > > +static bool errata_probe_pmu(unsigned int stage,
-> > > +                            unsigned long arch_id, unsigned long impid)
-> > > +{
-> > > +#ifdef CONFIG_ERRATA_THEAD_PMU
-> > 
-> > Is there a reason that all the alternatives use ifdef
-> > rather than if(IS_ENABLED())?
-> 
-> no real reason I guess - more like not enough thinking :-)
-> 
-> Using IS_ENABLED also makes it way nicer as we can just do
-> 
-> 	if (!IS_ENABLED(CONFIG_ERRATA_THEAD_PMU))
-> 		return false;
+Delete the repeated word "end" in stm32-dmamux.c.
 
-Though at least for the CMO this is not possible, as the
-	riscv_noncoherent_supported()
-is not defined in that case.
+Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+---
+ drivers/dma/stm32-dmamux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Though it might be nice to define a stub for the
-not-CONFIG_RISCV_DMA_NONCOHERENT case
-so that we don't need to #ifdef around it.
-
+diff --git a/drivers/dma/stm32-dmamux.c b/drivers/dma/stm32-dmamux.c
+index eee0c5aa5fb5..ca18dee3ccc0 100644
+--- a/drivers/dma/stm32-dmamux.c
++++ b/drivers/dma/stm32-dmamux.c
+@@ -45,7 +45,7 @@ struct stm32_dmamux_data {
+ 						 */
+ 	u32 dma_reqs[]; /* Number of DMA Request per DMA masters.
+ 			 *  [0] holds number of DMA Masters.
+-			 *  To be kept at very end end of this structure
++			 *  To be kept at very end of this structure
+ 			 */
+ };
+ 
+-- 
+2.35.1
 

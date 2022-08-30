@@ -2,334 +2,368 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D9C85A70DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073745A70DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:31:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232470AbiH3WbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 18:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40598 "EHLO
+        id S232417AbiH3Wbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 18:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232512AbiH3WbB (ORCPT
+        with ESMTP id S231990AbiH3WbT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:31:01 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2077.outbound.protection.outlook.com [40.107.94.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A34715739;
-        Tue, 30 Aug 2022 15:29:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ksGiGD/BQoQzfEz/0nEN7HQrFK4AcQvMU2JwBOU27dxUXoZsx7gmR4nMeCOpuDELaaFsmq0JyXFoiqMAYo68a6SO4CV/yrwZpglGdwiy5DOzBmcPnTQDUlGAeC3XGyMAO4WQyewcDKrMpnKLHxd45tfsG43qV+ikDhraaBsvD4QuPaBUg1+Q+8rzCVmvZAD49bYCY/ELIfpOY+FDIM4g3dvqAEzKlgxWx7x9t+nUfp5ouNUMuKkxCPSmfWtuLqRYaV0MwahyCXcxziVGoljeqbQRdOtUZQySD2QdHE7UAVcgbp23JtPAWhFR0oM74rFDgjqd1HwON8z6UeDvHUfcWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vYN2oV0rmHFWHE6/9aOun2ZFj5dcSnrBm3QUdAGZqqs=;
- b=SJ+uRIwFpSEu4d+TJqPymLKlllA8q69L5Ua4cFeczl76uAXZiKtu1oHzAl+K/zXyNZPBARYGmYY8er3AqqsX6QIfgs/vyPAWn3/YBNNeW85e5V6Qbnj1mD71J64FYoTKtmm09ZN/yZYKPqjy2M10jppxRp24alILmCJPRwIPd3rBfh1pUCKMeSWhzd+ECvxp0j5PBXx0iEFfNLmiUbLB0prui9XUTaYtDXBynDhU/h79S/LvY44LEyzRORrzHjvh648ITrUe1pKq6zBiGRUNe2nD+cg4SWlAOI/W6UAvQCd2jyJLw2+MO8zxSoE6dfvIksOAxdvaZIghmyhxmVFuxQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vYN2oV0rmHFWHE6/9aOun2ZFj5dcSnrBm3QUdAGZqqs=;
- b=es29bP1MbWZWeW0z1P2xFnaBva9ixL7ElbT7caRBTSY5dbaa7+LshDrVRcSNLsmNwLd1jl+hHwMa3i35tzQVFwJQXP68BYlUje3aN3iuVilqA/aW7LV4dNlPl//B0dNNWSuCibOh1N+MUh2w7aqyit/UEiag88qAiYvjMd/u9SE=
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com (2603:10b6:303:2c::19)
- by DS7PR12MB6095.namprd12.prod.outlook.com (2603:10b6:8:9c::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Tue, 30 Aug
- 2022 22:29:00 +0000
-Received: from MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::88f:a211:8c98:a973]) by MW3PR12MB4553.namprd12.prod.outlook.com
- ([fe80::88f:a211:8c98:a973%7]) with mapi id 15.20.5566.021; Tue, 30 Aug 2022
- 22:29:00 +0000
-From:   "Moger, Babu" <Babu.Moger@amd.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-CC:     "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "bp@alien8.de" <bp@alien8.de>, "corbet@lwn.net" <corbet@lwn.net>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "eranian@google.com" <eranian@google.com>,
-        "fenghua.yu@intel.com" <fenghua.yu@intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: [PATCH v3 02/10] x86/cpufeatures: Add Slow Memory Bandwidth
- Allocation feature flag
-Thread-Topic: [PATCH v3 02/10] x86/cpufeatures: Add Slow Memory Bandwidth
- Allocation feature flag
-Thread-Index: AQHYu/6+97Z1rqQba0+RuPu1SMOwwa3HpjGAgABg2VA=
-Date:   Tue, 30 Aug 2022 22:28:59 +0000
-Message-ID: <MW3PR12MB455321E78C1D50181541422C95799@MW3PR12MB4553.namprd12.prod.outlook.com>
-References: <9965edff-c558-2962-4aad-3342480026bc@intel.com>
- <20220829232554.53763-1-babu.moger@amd.com>
- <59259155-6c51-a750-216a-ebbb0702d200@intel.com>
-In-Reply-To: <59259155-6c51-a750-216a-ebbb0702d200@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-08-30T22:26:15Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=67a9fa66-ef03-4b89-a055-5160f044eaf7;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-08-30T22:28:58Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: df93114c-3a1e-4f02-8b3e-ee11414b8d39
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6ee1d03d-db30-4575-2a0b-08da8ad70907
-x-ms-traffictypediagnostic: DS7PR12MB6095:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: GasiGGSmxgOIFIESNvOjMnVznrHtF4RJYq4AzzyoeIEuOw0E1NW+OX6mO6XslkBApXd9BfNOkBYR/4oAMh2VuFZbWjfMHHaeKfirJWEMcezap0hcu2/aLXJ82f5a5R44AXGPbDRySIM5yxPdUbyqET44O0M/6soxl9HvKf5tQoLpvQ4VFILxNGRNs0K+JfWPYnIO+pbEwyKrcVuZPhyOcMIMbmwp+Z9tDGk1lcBAvlDmA2izE4HMJ1R2ul2iB0ZHnjwt9Kr8zitQZYb0dBAm5436Dwr0wcHegJvtw69rgbSONbj+61+hO4jd5oxIkUIoYyuvTjBD9pi9J5X9PGLjhkaPtydr1c/5+HT1w8Ube756Ml4Vxrr/zeB4A+mZ1GeCreMg3cc3c+KLbxLSutMR8tp4VA4jue/c/o/71xJrLnqDTYsB16cc6xoht2QXENSR1UprD72V04rTaNsUtfURkwIXQbqxSmp5efizkK4/8gk2Hsb781hhScrX/MHl/G1OFPK51Ms1nNgYY/5rV85Epu3bXjU+gmWrrlnNOtqgZe2l7OniLHejqB/9phrUC2dnJ0Lh/u/zWhJHCxFKU4gIqn1QvmTHIVLtckH5FUfbUHHaqcuujZy4oPGkG+BsMVlDcqdduJEWZZNOTEB5DiyI88uSdsf1tdYpoYf7B1joK1JOrVMIsTuHsUQJmvA8ntqL5l6v0IUHM4jpVGz4rsUiBExFDi/Ud33Yd1P8Kih8X+TURACQVaRPqIzOcy4HyMEeRbLtzDFtG+dzTuWkidnkuhyt5FnOkFoiANV+r2P2qaDdbQeVRKw4uLITCwdjm3iAT6Go0caFpVo+NhWOu3/nYA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW3PR12MB4553.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(396003)(346002)(376002)(39860400002)(38070700005)(122000001)(83380400001)(86362001)(186003)(38100700002)(52536014)(5660300002)(4326008)(55016003)(7416002)(66946007)(66556008)(66476007)(8676002)(64756008)(6506007)(2906002)(66446008)(76116006)(9686003)(41300700001)(54906003)(71200400001)(8936002)(966005)(7696005)(478600001)(53546011)(6916009)(26005)(316002)(33656002)(45080400002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Ie0bb7qm5hnYtE4x9bdU2tK3N3oxGRTXOTKci6mqVme76NbEybFze/IbKIty?=
- =?us-ascii?Q?pVqpDrOUeaqv1QvP0lF/hyTxpBqxCFB5WcFYCcHuDqZa9wlzePjag/darW2p?=
- =?us-ascii?Q?mgUO1Jf+oii1xnT2PEoKnNv/+1VaBEoMKUAWsVo599cPdbpqSTpUvMsE2k05?=
- =?us-ascii?Q?P/Kw/daMGdS4goOP4yUBVp0yYbv4KS5ZOqmdTnkkQtUWZGNZti9PGaZDQQdC?=
- =?us-ascii?Q?fcIij9MGONhBrQX5PGZ+JHLCbRlhOP/RgpebyzND//78uT8/og39TgEceYwS?=
- =?us-ascii?Q?mFmk7sZmnXtu7aG6I5qcwizf/rOUf9ir5x96JtT8DxjFmggnfeIx92c7SziR?=
- =?us-ascii?Q?E88+RbWFY9RCvfMqOdAYliAtda5ZafrkKsuNg05gG7+lAla8tBE9fRPkgNL5?=
- =?us-ascii?Q?5B5fjwBpg8wZnT6JcwPzIMbORu5sGsIV5eiRHtkEB6swrjyHhGrPXm2CPBCb?=
- =?us-ascii?Q?0MToihDTwYQoB+jQoSoUO4BBz7qghhvuFz0E+l/m0PP9L0R3bu+NUBjXppul?=
- =?us-ascii?Q?zkXIuRvreO68XuA6QbYv0e/ZN63IuijLfSqJWMJlRO4RQBmmQRsQj+9NvyFi?=
- =?us-ascii?Q?QEYu+LpcOnjXQ7lGV0xXgSR6tbqzMNLmykGPmDJUUVMLAfkph4Kxi3SZ8Fss?=
- =?us-ascii?Q?KYt+tCrOOuB2wLi4WwbWvvV2+6zzBqoVzjQVOcFeJUilGOBjSM+tl+HBHyPH?=
- =?us-ascii?Q?7kHhKbYxib6q+XdBvlXQFnwvxWNM9H3SYpbfc/O9gNVcw/KhSW9iWptJjK6B?=
- =?us-ascii?Q?KiqJ0e0anU/qziG2iFiE5bAuaR9C7JsN4RIsUNd9MerUBYLAEQkXYDlY2cmp?=
- =?us-ascii?Q?f3ZYCQE/0selgBp6WROMS3PPY4CVgoaxQbO0gDO5WybDE8uGSwh/hF6heuny?=
- =?us-ascii?Q?2nTvsF5HdwQFM4FLCCXDg4o/mDtnNguweRpob5UasMRfmu5MbjHtQt40Rwub?=
- =?us-ascii?Q?PG0eaPwepb1H40og006wJvn39jCPO7fgn/mf5v8gBZFku4QhhLYufZXqzyuu?=
- =?us-ascii?Q?6/PieKGvYmEuH90sT+rhDt60idLz39NqnXkxF4IwJO53h/Z3/wjnm7MRhw3e?=
- =?us-ascii?Q?sTb7864p6ADiBwc222nPt4I/S7pl5MrhN15j4JcE8shHeAJpDj3qlnsHd8s4?=
- =?us-ascii?Q?7iXNPI++Ul4t/v3XKv0FCuK9/VUkXiywrUaGLtl80qjEtljYFlbGtrlasnGP?=
- =?us-ascii?Q?FGB+RodlGped/8D9KOmxLYy86H9hS4BfpWDMCCEAu1jjMHPxSr6WxDI+7Omo?=
- =?us-ascii?Q?RCwmOYrSuMiBlh5yJk1dig2akF57whOP/5M/CMIbvFjOHoSmJU6N8yoNOVOo?=
- =?us-ascii?Q?rs6+biUHHR2ig73vG0bNlVDURtdNOqwsUF//aBc5FlYplSkvPbzGl5DbdxrY?=
- =?us-ascii?Q?1C7zFPOEVsz3kiFD8hCZgJSyHILuxUoAgi8n8RMBA0kNq2Pwnn1iPGPGCFVR?=
- =?us-ascii?Q?FeV4Z2RAEfddpJoLmqZ7BDEs2R0gykNF6ejHricHQY1bRnv6YvaUb9xel9T4?=
- =?us-ascii?Q?hjDsJCypswoIWnX9PsVhlWTpRNfq4rkjTjgapxLIrYvRQxFWXc6NOjha10qn?=
- =?us-ascii?Q?W89gHcFp56/GFhTwdEA=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 30 Aug 2022 18:31:19 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A1456BAB;
+        Tue, 30 Aug 2022 15:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661898583; x=1693434583;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Dp64WZqYHNnLJOu0YFx9YuwDvUwkq72qCZCHNuAboFU=;
+  b=eaB7bJUwlHFYh/BInSqTMKipT58eqiLekCKPr/Ik5gtwwbF9NtxbHwvP
+   qdHmoBlDl6IOTTxD/m4LPFTSi9hOInTzrkPSqxKQLdoiFHfJHt0/Ffh0q
+   MTayTYDsoEqHWVOOsle4GxqEgCg33yx8mODHwI3V7D5ok/TOZeJ6vf0nH
+   zniFY89eqLPEPOIzDDfOZfLggz5xLz9LB/tE0LVmB7NfZxgX23pL+i6zr
+   n8CHmbLk8+sdGNUHYeCgR8bebkbEL8PeJ4nwGxZfXGoxNA/u8YPJw2Yir
+   sz6yc38LK68pneSE5tWwLDlUAe7UNSdIdiLE4BF5b4fxnxRct3fH4rtdu
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="294061628"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="294061628"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 15:29:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="611894781"
+Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 30 Aug 2022 15:29:35 -0700
+Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oT9ji-0000gn-1P;
+        Tue, 30 Aug 2022 22:29:34 +0000
+Date:   Wed, 31 Aug 2022 06:29:16 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, andy.shevchenko@gmail.com,
+        u.kleine-koenig@pengutronix.de, johan@kernel.org,
+        wander@redhat.com, etremblay@distech-controls.com,
+        macro@orcam.me.uk, geert+renesas@glider.be, jk@ozlabs.org,
+        phil.edworthy@renesas.com, lukas@wunner.de
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, UNGLinuxDriver@microchip.com
+Subject: Re: [PATCH v1 tty-next 1/2] 8250: microchip: pci1xxxx: Add driver
+ for the quad-uart function in the  multi-function endpoint of pci1xxxx
+ device.
+Message-ID: <202208310603.2xUZ8ee9-lkp@intel.com>
+References: <20220830180054.1998296-2-kumaravel.thiagarajan@microchip.com>
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MW3PR12MB4553.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ee1d03d-db30-4575-2a0b-08da8ad70907
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Aug 2022 22:28:59.9944
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /VuPeimKIjzy65FC1Mp3cnalnMNkc1MIOUi5dfK4C5Litzt26oTAKPqg4xoKzB7t
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6095
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830180054.1998296-2-kumaravel.thiagarajan@microchip.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+Hi Kumaravel,
 
-Hi Reinette,
+I love your patch! Yet something to improve:
 
-> -----Original Message-----
-> From: Reinette Chatre <reinette.chatre@intel.com>
-> Sent: Tuesday, August 30, 2022 11:40 AM
-> To: Moger, Babu <Babu.Moger@amd.com>
-> Cc: bagasdotme@gmail.com; bp@alien8.de; corbet@lwn.net;
-> dave.hansen@linux.intel.com; eranian@google.com; fenghua.yu@intel.com;
-> hpa@zytor.com; linux-doc@vger.kernel.org; linux-kernel@vger.kernel.org;
-> mingo@redhat.com; tglx@linutronix.de; tony.luck@intel.com; x86@kernel.org
-> Subject: Re: [PATCH v3 02/10] x86/cpufeatures: Add Slow Memory Bandwidth
-> Allocation feature flag
->=20
-> Hi Babu,
->=20
-> On 8/29/2022 4:25 PM, Babu Moger wrote:
-> > Hi Reinette,
-> >    Some reason this thread did not land in my mailbox. Replying using
-> > git sendmail to the thread
-> >
-> >> (snip modified links)
-> >
-> > Link:
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fwww=
-.
-> > amd.com%2Fen%2Fsupport%2Ftech-docs%2Famd64-technology-platform-
-> quality
-> > -service-
-> extensions&amp;data=3D05%7C01%7Cbabu.moger%40amd.com%7C5e1d3f7a
-> >
-> a30749a3841e08da8aa69bd0%7C3dd8961fe4884e608e11a82d994e183d%7C0
-> %7C0%7C
-> >
-> 637974796714276452%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMD
-> AiLCJQIjo
-> >
-> iV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdat
-> a=3DyGIo
-> > q%2Fp9xD1i6IfrkPEUj8sg9Xz08r0jrNTvGK7khko%3D&amp;reserved=3D0
-> > Link:
-> > https://nam11.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fbug=
-z
-> >
-> illa.kernel.org%2Fshow_bug.cgi%3Fid%3D206537&amp;data=3D05%7C01%7Cbab
-> u.m
-> >
-> oger%40amd.com%7C5e1d3f7aa30749a3841e08da8aa69bd0%7C3dd8961fe48
-> 84e608e
-> >
-> 11a82d994e183d%7C0%7C0%7C637974796714276452%7CUnknown%7CTWFpb
-> GZsb3d8ey
-> >
-> JWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7
-> C300
-> >
-> 0%7C%7C%7C&amp;sdata=3Dqu1cxHp6nCdEFJbJv5QDD0tAHHaV4tJ63NKC9fIiIx0%
-> 3D&am
-> > p;reserved=3D0
-> >
-> >> When you say "in this case", is there another case?
-> >
-> > There is no other interface. It is only CXL memory device.
-> >
-> >>
-> >> Should "Slow Memory Bandwidth Allocation" thus be considered to be
-> >> "CXL.mem Memory Bandwidth Allocation"? Why not call it "CXL(.mem?)
-> >> Memory Bandwith Allocation"?
-> >
-> > Checked with our team here. The currently only supported slow memory
-> > is CXL.mem device. As for the naming, the "slow" memory landscape is st=
-ill
-> evolving.
-> > While CXL.mem is the only known type supported right now. The specs
-> > says "Slow Memory Bandwidth Allocation". So, we would prefer to keep it
-> that way.
->=20
-> If you prefer to keep "Slow Memory Bandwidth Allocation" then please also
-> provide clear information to the user on what is managed via "Memory
-> Bandwidth Allocation" and what is managed via "Slow Memory Bandwidth
-> Allocation". This could be in the documentation.
+[auto build test ERROR on tty/tty-testing]
+[also build test ERROR on linus/master v6.0-rc3 next-20220830]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Sure.
->=20
-> >> I am not familiar with CXL so please correct me where I am wrong.
-> >> From what I understand CXL.mem is a protocol and devices that
-> >> implement it can have different memory types ... some faster than
-> >> others. So, even if SMBA supports "CXL.mem" devices, could a system
-> >> have multiple CXL.mem devices, some faster than others? Would all be
-> >> configured the same with SMBA (they would all be classified as "slow" =
-and
-> throttled the same)?
-> >
-> > I have not tested the multiple devices with different memory speeds her=
-e.
-> > But checking with team here says it should just work the same way. It
-> > appears that the throttling logic groups all the slow sources together
-> > and applies the limit on them as a whole.
->=20
-> "the throttling logic groups all the slow sources together and applies th=
-e limit
-> on them as a whole.". This is valuable content for the documentation abou=
-t this
-> feature. Could the changes to Documentation/x86/resctrl.rst be updated to
-> include a paragraph describing SMBA and what is (or is not) considered a =
-"slow
-> resource"?
+url:    https://github.com/intel-lab-lkp/linux/commits/Kumaravel-Thiagarajan/8250-microchip-pci1xxxx-Add-driver-for-the-pci1xxxx-s-quad-uart-function/20220831-020314
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220831/202208310603.2xUZ8ee9-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/075ee716bd7ce075396d0539dffa4ae59e6b985a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kumaravel-Thiagarajan/8250-microchip-pci1xxxx-Add-driver-for-the-pci1xxxx-s-quad-uart-function/20220831-020314
+        git checkout 075ee716bd7ce075396d0539dffa4ae59e6b985a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/tty/serial/8250/
 
-Sure.
->=20
-> >> I do not think these devices are invisible to the OS though (after
-> >> reading Documentation/driver-api/cxl/memory-devices.rst and
-> >> Documentation/ABI/testing/sysfs-class-cxl).
-> >>
-> >> Is there not a way to provide some more clarity to users on what
-> >> would be throttled?
-> >>
->=20
-> I repeat the question you snipped from my email (please don't do that). C=
-ould
-Sorry.. Not intentional.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> you please answer it?:
-> Would the "SMBA" resource be available only when CXL.mem devices are
-> present on the system? Since this is a CPU feature it is unclear to me wh=
-ether
-> presence of CXL.mem devices would be known at the time "SMBA" is
-> enumerated.
-> Could the "SMBA" resource thus exist without memory to throttle?
+All errors (new ones prefixed by >>):
 
-Yes.  The presence of the SMBA feature(with CXL.mem) is independent of whet=
-her slow memory is actually present in the system.  If there is no slow mem=
-ory, then setting a SMBA limit will have no impact on the performance of th=
-e system.
->=20
-> >> How does a user know which memory on the system is "slow memory"?
-> >>
-> >> It remains unclear to me how a user is intended to use this feature.
-> >>
-> >> How will a user know which devices/memory (if any) are being
-> >> throttled by "SMBA"?
-> >>
-> > This is a new technology. I am still learning.
-> >
-> > Currently, I have tested with CXL 1.1 type of device. CXL 1.1 uses a
-> > simple topology structure of direct attachment between host (such as a
-> > CPU or GPU) and CXL device.
-> >
-> > #numactl -H
-> > available: 2 nodes (0-1)
-> > node 0 cpus: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 node 0 size:
-> > 63678 MB node 0 free: 59542 MB
-> > node 1 cpus:             (CPU list is emply. Node 1 have CXL memory)
-> > node 1 size: 16122 MB    (There is 16GB CXL memory)
-> > node 1 free: 15627 MB
-> > node distances:
-> > node   0   1
-> >   0:  10  50
-> >   1:  50  10
-> >
-> > The cpu-cxl node distance is greater than cpu-to-cpu distances.
-> >
-> > We can also verify using lsmem
-> >
-> > #lsmem --output RANGE,SIZE,STATE,NODE,ZONES,BLOCK
-> > RANGE                                 SIZE  STATE NODE  ZONES BLOCK
-> > 0x0000000000000000-0x000000007fffffff   2G online    0   None     0
-> > 0x0000000080000000-0x00000000ffffffff   2G online    0  DMA32     1
-> > 0x0000000100000000-0x0000000fffffffff  60G online    0 Normal  2-31
-> > 0x0000001000000000-0x000000107fffffff   2G online    0   None    32
-> > 0x0000001080000000-0x000000147fffffff  16G online    1 Normal 33-40
-> >
-> > Memory block size:         2G
-> > Total online memory:      82G
-> > Total offline memory:      0B
-> >
-> >
-> > We can also verify using ACPI SRAT table and memory maps.
->=20
-> I think that adding (in general terms) that "SMBA throttles CXL.mem devic=
-es" to
-> Documentation/x86/resctrl.rst may be sufficient for a user to understand =
-what
-> will be throttled without needing to go into details about CXL device dis=
-covery.
+   drivers/tty/serial/8250/8250_pci1xxxx.c: In function 'mchp_pci1xxxx_setup':
+>> drivers/tty/serial/8250/8250_pci1xxxx.c:289:32: error: assignment to 'void (*)(struct uart_port *, struct ktermios *, const struct ktermios *)' from incompatible pointer type 'void (*)(struct uart_port *, struct ktermios *, struct ktermios *)' [-Werror=incompatible-pointer-types]
+     289 |         port->port.set_termios = mchp_pci1xxxx_set_termios;
+         |                                ^
+   drivers/tty/serial/8250/8250_pci1xxxx.c: At top level:
+   drivers/tty/serial/8250/8250_pci1xxxx.c:301:6: warning: no previous prototype for 'mchp_pci1xxxx_irq_assign' [-Wmissing-prototypes]
+     301 | void mchp_pci1xxxx_irq_assign(struct pci1xxxx_8250 *priv,
+         |      ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/tty/serial/8250/8250_pci1xxxx.c: In function 'pci1xxxx_serial_probe':
+>> drivers/tty/serial/8250/8250_pci1xxxx.c:395:57: error: 'PCI_IRQ_ALL_TYPES' undeclared (first use in this function)
+     395 |         num_vectors  = pci_alloc_irq_vectors(dev, 1, 4, PCI_IRQ_ALL_TYPES);
+         |                                                         ^~~~~~~~~~~~~~~~~
+   drivers/tty/serial/8250/8250_pci1xxxx.c:395:57: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/tty/serial/8250/8250_pci1xxxx.c: At top level:
+   drivers/tty/serial/8250/8250_pci1xxxx.c:459:1: warning: data definition has no type or storage class
+     459 | module_pci_driver(pci1xxxx_pci_driver);
+         | ^~~~~~~~~~~~~~~~~
+>> drivers/tty/serial/8250/8250_pci1xxxx.c:459:1: error: type defaults to 'int' in declaration of 'module_pci_driver' [-Werror=implicit-int]
+   drivers/tty/serial/8250/8250_pci1xxxx.c:459:1: warning: parameter names (without types) in function declaration
+   drivers/tty/serial/8250/8250_pci1xxxx.c:452:26: warning: 'pci1xxxx_pci_driver' defined but not used [-Wunused-variable]
+     452 | static struct pci_driver pci1xxxx_pci_driver = {
+         |                          ^~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-Sure.
-Thanks
-Babu
+
+vim +289 drivers/tty/serial/8250/8250_pci1xxxx.c
+
+   227	
+   228	static int mchp_pci1xxxx_setup(struct pci1xxxx_8250 *priv,
+   229				       struct uart_8250_port *port, int idx)
+   230	{
+   231		int first_offset = 0;
+   232		int offset;
+   233		u8 *data;
+   234		int ret;
+   235	
+   236		switch (priv->dev->subsystem_device) {
+   237		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p1:
+   238			first_offset = 256;
+   239			break;
+   240		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p2:
+   241			first_offset = 512;
+   242			break;
+   243		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p3:
+   244			first_offset = 768;
+   245			break;
+   246		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p02:
+   247			if (idx > 0)
+   248				idx++;
+   249			break;
+   250		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p03:
+   251			if (idx > 0)
+   252				idx += 2;
+   253			break;
+   254		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p12:
+   255			first_offset = 256;
+   256			if (idx > 0)
+   257				idx++;
+   258			break;
+   259		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p13:
+   260			first_offset = 256;
+   261			if (idx > 0)
+   262				idx++;
+   263			break;
+   264		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p23:
+   265			first_offset = 512;
+   266			break;
+   267	
+   268		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p123:
+   269			first_offset = 256;
+   270			break;
+   271		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p013:
+   272			if (idx > 1)
+   273				idx++;
+   274			break;
+   275		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p023:
+   276			if (idx > 0)
+   277				idx++;
+   278			break;
+   279		}
+   280	
+   281		data = devm_kzalloc(&priv->dev->dev, sizeof(u8), GFP_KERNEL);
+   282		if (!data)
+   283			return -ENOMEM;
+   284	
+   285		offset = first_offset + (idx * 256);
+   286		port->port.flags |= UPF_FIXED_TYPE | UPF_SKIP_TEST;
+   287		port->port.type = PORT_MCHP16550A;
+   288		port->port.rs485_config = mchp_pci1xxxx_rs485_config;
+ > 289		port->port.set_termios = mchp_pci1xxxx_set_termios;
+   290		ret = setup_port(priv, port, 0x00, offset, 0x00);
+   291		if (ret < 0)
+   292			return ret;
+   293	
+   294		writeb(UART_ACTV_SET_ACTIVE, port->port.membase + UART_ACTV_REG);
+   295		writeb(UART_WAKE_SRCS, port->port.membase + UART_WAKE_REG);
+   296		writeb(UART_WAKE_N_PIN, port->port.membase + UART_WAKE_MASK_REG);
+   297	
+   298		return 0;
+   299	}
+   300	
+   301	void mchp_pci1xxxx_irq_assign(struct pci1xxxx_8250 *priv,
+   302				      struct uart_8250_port *uart, int idx)
+   303	{
+   304		switch (priv->dev->subsystem_device) {
+   305		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p0:
+   306		case PCI_SUBDEVICE_ID_MCHP_PCI12000:
+   307		case PCI_SUBDEVICE_ID_MCHP_PCI11010:
+   308		case PCI_SUBDEVICE_ID_MCHP_PCI11101:
+   309		case PCI_SUBDEVICE_ID_MCHP_PCI11400:
+   310			uart->port.irq = pci_irq_vector(priv->dev, 0);
+   311			break;
+   312		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p1:
+   313			uart->port.irq = pci_irq_vector(priv->dev, 1);
+   314			break;
+   315		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p2:
+   316			uart->port.irq = pci_irq_vector(priv->dev, 2);
+   317			break;
+   318		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_1p3:
+   319			uart->port.irq = pci_irq_vector(priv->dev, 3);
+   320			break;
+   321		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p01:
+   322			uart->port.irq = pci_irq_vector(priv->dev, idx);
+   323			break;
+   324		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p02:
+   325			if (idx > 0)
+   326				idx++;
+   327			uart->port.irq = pci_irq_vector(priv->dev, idx);
+   328			break;
+   329		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p03:
+   330			if (idx > 0)
+   331				idx += 2;
+   332			uart->port.irq = pci_irq_vector(priv->dev, idx);
+   333			break;
+   334		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p12:
+   335			uart->port.irq = pci_irq_vector(priv->dev, idx + 1);
+   336			break;
+   337		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p13:
+   338			if (idx > 0)
+   339				idx += 1;
+   340			uart->port.irq = pci_irq_vector(priv->dev, idx + 1);
+   341			break;
+   342		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_2p23:
+   343			uart->port.irq = pci_irq_vector(priv->dev, idx + 2);
+   344			break;
+   345		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p012:
+   346			uart->port.irq = pci_irq_vector(priv->dev, idx);
+   347			break;
+   348		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p013:
+   349			if (idx > 1)
+   350				idx++;
+   351			uart->port.irq = pci_irq_vector(priv->dev, idx);
+   352			break;
+   353		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p023:
+   354			if (idx > 0)
+   355				idx++;
+   356			uart->port.irq = pci_irq_vector(priv->dev, idx);
+   357			break;
+   358		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_3p123:
+   359			uart->port.irq = pci_irq_vector(priv->dev, idx + 1);
+   360			break;
+   361		case PCI_SUBDEVICE_ID_MCHP_PCI1XXXX_4p:
+   362		case PCI_SUBDEVICE_ID_MCHP_PCI11414:
+   363			uart->port.irq = pci_irq_vector(priv->dev, idx);
+   364			break;
+   365		}
+   366	}
+   367	
+   368	static int pci1xxxx_serial_probe(struct pci_dev *dev,
+   369					 const struct pci_device_id *ent)
+   370	{
+   371		struct pci1xxxx_8250 *priv;
+   372		struct uart_8250_port uart;
+   373		unsigned int nr_ports, i;
+   374		int num_vectors = 0;
+   375		int rc;
+   376	
+   377		rc = pcim_enable_device(dev);
+   378		pci_save_state(dev);
+   379		if (rc)
+   380			return rc;
+   381	
+   382		nr_ports = pci1xxxx_get_num_ports(dev);
+   383	
+   384		priv = devm_kzalloc(&dev->dev, struct_size(priv, line, nr_ports), GFP_KERNEL);
+   385	
+   386		priv->membase = pcim_iomap(dev, 0, 0);
+   387		priv->dev = dev;
+   388		priv->nr =  nr_ports;
+   389	
+   390		if (!priv)
+   391			return -ENOMEM;
+   392	
+   393		pci_set_master(dev);
+   394	
+ > 395		num_vectors  = pci_alloc_irq_vectors(dev, 1, 4, PCI_IRQ_ALL_TYPES);
+   396		if (num_vectors < 0)
+   397			return rc;
+   398	
+   399		memset(&uart, 0, sizeof(uart));
+   400		uart.port.flags = UPF_SHARE_IRQ | UPF_FIXED_TYPE | UPF_FIXED_PORT;
+   401		uart.port.uartclk = 48000000;
+   402		uart.port.dev = &dev->dev;
+   403	
+   404		if (num_vectors == 4)
+   405			writeb(UART_PCI_CTRL_SET_MULTIPLE_MSI, (priv->membase + UART_PCI_CTRL_REG));
+   406		else
+   407			uart.port.irq = pci_irq_vector(dev, 0);
+   408	
+   409		for (i = 0; i < nr_ports; i++) {
+   410			if (num_vectors == 4)
+   411				mchp_pci1xxxx_irq_assign(priv, &uart, i);
+   412			rc = mchp_pci1xxxx_setup(priv, &uart, i);
+   413			if (rc) {
+   414				dev_err(&dev->dev, "Failed to setup port %u\n", i);
+   415				break;
+   416			}
+   417			priv->line[i] = serial8250_register_8250_port(&uart);
+   418	
+   419			if (priv->line[i] < 0) {
+   420				dev_err(&dev->dev,
+   421					"Couldn't register serial port %lx, irq %d, type %d, error %d\n",
+   422					uart.port.iobase, uart.port.irq,
+   423					uart.port.iotype, priv->line[i]);
+   424				break;
+   425			}
+   426		}
+   427	
+   428		pci_set_drvdata(dev, priv);
+   429	
+   430		return 0;
+   431	}
+   432	
+   433	static void pci1xxxx_serial_remove(struct pci_dev *dev)
+   434	{
+   435		struct pci1xxxx_8250 *priv = pci_get_drvdata(dev);
+   436		int i;
+   437	
+   438		for (i = 0; i < priv->nr; i++)
+   439			serial8250_unregister_port(priv->line[i]);
+   440	}
+   441	
+   442	static const struct pci_device_id pci1xxxx_pci_tbl[] = {
+   443		{ PCI_DEVICE(PCI_VENDOR_ID_MCHP_PCI1XXXX, PCI_DEVICE_ID_MCHP_PCI11010) },
+   444		{ PCI_DEVICE(PCI_VENDOR_ID_MCHP_PCI1XXXX, PCI_DEVICE_ID_MCHP_PCI11101) },
+   445		{ PCI_DEVICE(PCI_VENDOR_ID_MCHP_PCI1XXXX, PCI_DEVICE_ID_MCHP_PCI11400) },
+   446		{ PCI_DEVICE(PCI_VENDOR_ID_MCHP_PCI1XXXX, PCI_DEVICE_ID_MCHP_PCI11414) },
+   447		{ PCI_DEVICE(PCI_VENDOR_ID_MCHP_PCI1XXXX, PCI_DEVICE_ID_MCHP_PCI12000) },
+   448		{0,}
+   449	};
+   450	MODULE_DEVICE_TABLE(pci, pci1xxxx_pci_tbl);
+   451	
+   452	static struct pci_driver pci1xxxx_pci_driver = {
+   453		.name		= "pci1xxxx serial",
+   454		.probe		= pci1xxxx_serial_probe,
+   455		.remove	= pci1xxxx_serial_remove,
+   456		.id_table	= pci1xxxx_pci_tbl,
+   457	};
+   458	
+ > 459	module_pci_driver(pci1xxxx_pci_driver);
+   460	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

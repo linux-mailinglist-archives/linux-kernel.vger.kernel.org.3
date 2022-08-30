@@ -2,129 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 418DD5A6882
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E365A6881
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:36:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230054AbiH3Qgh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:36:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39884 "EHLO
+        id S229999AbiH3Qg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:36:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiH3Qgd (ORCPT
+        with ESMTP id S229880AbiH3Qg1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:36:33 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DADC5B6D5C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:36:31 -0700 (PDT)
+        Tue, 30 Aug 2022 12:36:27 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41753A9C24;
+        Tue, 30 Aug 2022 09:36:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661877392; x=1693413392;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=evuEwafeYuR5tiKtPLjXwPPmUAgK2MYWXlQ13DrPxvQ=;
-  b=BlUYICb0mMbkWcHyFXUTan6T/iIgrS6Q/udpxiz/XBONvb4rSEuMa1Qf
-   PofUk0DjS7y8J/xt5mDf7HAXamnUDWjG6/YGGtsumnFdRBNmuFXPmtSaj
-   mi6CSKNN6qWgZyM4gKBPuDa5VQTYIYLmfo8DHeIT+uzdcbInDnH4G3Skr
-   2V3L+5Sr23KnYsurpf3hOCICL4IPa+wE1YuEDXB7Fp8t11g8ZbitSC1dL
-   JAdveE68RlrTZcnPg+qaLUUJJVrdaN/HP7fPO+VCDHsu8GIyVdO3LrLcn
-   ykIRINvNLFdRKOzXnr/96nuUUAmrnXvQh98JprAkNCk3BY1Ep/W9nMti6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="292811009"
+  t=1661877386; x=1693413386;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JQcuXMXfnMd8wurcg9NxfmRdRvyNP0uZVbqes8AUE34=;
+  b=UfFfzEYmFNND2ohydjDAyLhZHIx334fOj6ktvvU45+XSIWhMK7XZ7Cad
+   u2AkUwZMyAKEbltb9rwoKn+GTyQ86Nv633Gp5/cQgpphDHQ+NAfTORdWc
+   M6GYjqTk2JV1Y2zif1CjE9oFrzlC3Fv+lMbMMIQZELABAwgbaTAjigPt0
+   7PHShfKGAxOcWMhjjuw1B5jDsH5FxPR7lDKR8r2s9IgwUJ48l0Q3PMaFC
+   Bm9JpSMpoyEUsq0SoFRaOTEaWGqNIifv2bdukwhtjX/cKF5+j/7Map/Nt
+   Y4yLY4r8wh4I9dTr3C4SYbjwW7judGHlQOKsB8/Qd0zUoL69xvAFOKW5O
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="278251872"
 X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="292811009"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 09:28:43 -0700
+   d="scan'208";a="278251872"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 09:30:32 -0700
 X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="680101151"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 09:28:42 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oT46R-0061u5-2a;
-        Tue, 30 Aug 2022 19:28:39 +0300
-Date:   Tue, 30 Aug 2022 19:28:39 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2 v5] regmap: Support accelerated noinc operations
-Message-ID: <Yw46t9Y1PYoMLSKq@smile.fi.intel.com>
-References: <20220816204832.265837-1-linus.walleij@linaro.org>
+   d="scan'208";a="588678249"
+Received: from lzaino-mobl1.amr.corp.intel.com (HELO [10.212.130.115]) ([10.212.130.115])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 09:30:32 -0700
+Message-ID: <1edc5cf3-c629-a7ed-4531-3c814367c004@linux.intel.com>
+Date:   Tue, 30 Aug 2022 09:30:32 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220816204832.265837-1-linus.walleij@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] PCI: Disable PTM on Upstream Ports during suspend
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     Koba Ko <koba.ko@canonical.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        "David E . Box" <david.e.box@linux.intel.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>
+References: <20220830155224.103907-1-helgaas@kernel.org>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20220830155224.103907-1-helgaas@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 10:48:31PM +0200, Linus Walleij wrote:
-> Several architectures have accelerated operations for MMIO
-> operations writing to a single register, such as writesb, writesw,
-> writesl, writesq, readsb, readsw, readsl and readsq but regmap
-> currently cannot use them because we have no hooks for providing
-> an accelerated noinc back-end for MMIO.
+
+
+On 8/30/22 8:52 AM, Bjorn Helgaas wrote:
+> From: Bjorn Helgaas <bhelgaas@google.com>
 > 
-> Solve this by providing reg_[read/write]_noinc callbacks for
-> the bus abstraction, so that the regmap-mmio bus can use this.
+> During suspend, we want to disable PTM on Root Ports because that allows
+> some chips, e.g., Intel mobile chips since Coffee Lake, to enter a
+> lower-power PM state.
 > 
-> Currently I do not see a need to support this for custom regmaps
-> so it is only added to the bus.
+> Previously we only disabled PTM for Root Ports, but PCIe r6.0, sec 2.2.8,
+> strongly recommends that functions support generation of Messages in non-D0
+> states, so we must assume that Switch Upstream Ports or Endpoints may send
+> PTM Request Messages while in D1, D2, and D3hot.
 > 
-> Callbacks are passed a void * with the array of values and a
-> count which is the number of items of the byte chunk size for
-> the specific register width.
+> A PTM Message received by a Downstream Port, e.g., a Root Port, with PTM
+> disabled must be treated as an Unsupported Request (sec 6.21.3).
+> 
+> With this topology:
+> 
+>   0000:00:1d.0 Root Port              to [bus 08-71]
+>   0000:08:00.0 Switch Upstream Port   to [bus 09-71]
+> 
+> Kai-Heng reported errors like this:
+> 
+>   pcieport 0000:00:1d.0: AER: Uncorrected (Non-Fatal) error received: 0000:00:1d.0
+>   pcieport 0000:00:1d.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+>   pcieport 0000:00:1d.0:   device [8086:7ab0] error status/mask=00100000/00004000
+>   pcieport 0000:00:1d.0:    [20] UnsupReq               (First)
+>   pcieport 0000:00:1d.0: AER:   TLP Header: 34000000 08000052 00000000 00000000
+> 
+> Decoding this (from PCIe r6.0, sec 2.2.1.1, 2.2.8.10) shows that 00:1d.0
+> logged an Unsupported Request error when it received a PTM Request with
+> Requester ID 08:00.0.
+> 
+> To prevent this error, disable PTM when suspending Upstream Ports
+> (including those on Endpoints), not just Root Ports.
+> 
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=215453
+> Bugzilla: https://bugzilla.kernel.org/show_bug.cgi?id=216210
+> Based-on: https://lore.kernel.org/r/20220706123244.18056-1-kai.heng.feng@canonical.com
+> Based-on-patch-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Reported-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Tested-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+> Cc: David E. Box <david.e.box@linux.intel.com>
+> Cc: Sathyanarayanan Kuppuswamy <sathyanarayanan.kuppuswamy@linux.intel.com>
+> ---
 
-I see these applied, but consider below for the possible followups.
+Looks good to me
 
-...
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
 
-> +			ret = regcache_write(map, reg, lastval);
-> +			if (ret != 0)
-
-if (ret) ?
-
-> +				return ret;
-
-...
-
-> +		dev_info(map->dev, "%x %s [", reg, write ? "<=" : "=>");
-> +		for (i = 0; i < val_len; i++) {
-> +			switch (val_bytes) {
-> +			case 1:
-> +				pr_cont("%x", u8p[i]);
-> +				break;
-> +			case 2:
-> +				pr_cont("%x", u16p[i]);
-> +				break;
-> +			case 4:
-> +				pr_cont("%x", u32p[i]);
-> +				break;
-> +#ifdef CONFIG_64BIT
-> +			case 8:
-> +				pr_cont("%llx", u64p[i]);
-> +				break;
-> +#endif
-> +			default:
-> +				break;
-> +			}
-> +			if (i == (val_len - 1))
-> +				pr_cont("]\n");
-> +			else
-> +				pr_cont(",");
-> +		}
-
-I'm wondering why we can't use hex_dump_to_buffer() approach? Or even better,
-introduce eventually dev_hex_dump() (as it's done for seq_file and printk)
-and use it.
+>  drivers/pci/pci.c      | 30 ++++++++++++++----------------
+>  drivers/pci/pcie/ptm.c |  8 +++++++-
+>  2 files changed, 21 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/pci/pci.c b/drivers/pci/pci.c
+> index 95bc329e74c0..96487a9ce5bf 100644
+> --- a/drivers/pci/pci.c
+> +++ b/drivers/pci/pci.c
+> @@ -2707,14 +2707,19 @@ int pci_prepare_to_sleep(struct pci_dev *dev)
+>  		return -EIO;
+>  
+>  	/*
+> -	 * There are systems (for example, Intel mobile chips since Coffee
+> -	 * Lake) where the power drawn while suspended can be significantly
+> -	 * reduced by disabling PTM on PCIe root ports as this allows the
+> -	 * port to enter a lower-power PM state and the SoC to reach a
+> -	 * lower-power idle state as a whole.
+> +	 * We want to disable PTM on Root Ports because that allows some
+> +	 * chips, e.g., Intel mobile chips since Coffee Lake, to enter a
+> +	 * lower-power PM state.
+> +	 *
+> +	 * PCIe r6.0, sec 2.2.8, strongly recommends that functions support
+> +	 * generation of messages in non-D0 states, so we assume Switch
+> +	 * Upstream Ports or Endpoints may send PTM Requests while in D1,
+> +	 * D2, and D3hot.  A PTM message received by a Downstream Port
+> +	 * (including a Root Port) with PTM disabled must be treated as an
+> +	 * Unsupported Request (sec 6.21.3).  To prevent this error,
+> +	 * disable PTM in *all* devices, not just Root Ports.
+>  	 */
+> -	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -		pci_disable_ptm(dev);
+> +	pci_disable_ptm(dev);
+>  
+>  	pci_enable_wake(dev, target_state, wakeup);
+>  
+> @@ -2764,15 +2769,8 @@ int pci_finish_runtime_suspend(struct pci_dev *dev)
+>  	if (target_state == PCI_POWER_ERROR)
+>  		return -EIO;
+>  
+> -	/*
+> -	 * There are systems (for example, Intel mobile chips since Coffee
+> -	 * Lake) where the power drawn while suspended can be significantly
+> -	 * reduced by disabling PTM on PCIe root ports as this allows the
+> -	 * port to enter a lower-power PM state and the SoC to reach a
+> -	 * lower-power idle state as a whole.
+> -	 */
+> -	if (pci_pcie_type(dev) == PCI_EXP_TYPE_ROOT_PORT)
+> -		pci_disable_ptm(dev);
+> +	/* See rationale above for disabling PTM */
+> +	pci_disable_ptm(dev);
+>  
+>  	__pci_enable_wake(dev, target_state, pci_dev_run_wake(dev));
+>  
+> diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
+> index 368a254e3124..ec338470d13f 100644
+> --- a/drivers/pci/pcie/ptm.c
+> +++ b/drivers/pci/pcie/ptm.c
+> @@ -31,12 +31,18 @@ static void pci_ptm_info(struct pci_dev *dev)
+>  
+>  void pci_disable_ptm(struct pci_dev *dev)
+>  {
+> -	int ptm;
+> +	int type, ptm;
+>  	u16 ctrl;
+>  
+>  	if (!pci_is_pcie(dev))
+>  		return;
+>  
+> +	type = pci_pcie_type(dev);
+> +	if (!(type == PCI_EXP_TYPE_ROOT_PORT ||
+> +	      type == PCI_EXP_TYPE_UPSTREAM ||
+> +	      type == PCI_EXP_TYPE_ENDPOINT))
+> +		return;
+> +
+>  	ptm = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_PTM);
+>  	if (!ptm)
+>  		return;
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer

@@ -2,102 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1968F5A6699
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 614175A669B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:49:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiH3Osm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 10:48:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50962 "EHLO
+        id S229888AbiH3Osz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 10:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiH3Osi (ORCPT
+        with ESMTP id S229481AbiH3Osw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 10:48:38 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A2D8BFC46;
-        Tue, 30 Aug 2022 07:48:37 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id jm11so11311946plb.13;
-        Tue, 30 Aug 2022 07:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=PzFydKNwJFrQJTDHNguIpkAiPm6m9rG7392GYNGhqRM=;
-        b=hR7lNPvcJsuJ4wkmpQauiVWOOMK4TDxwDPY897qZj8FyJClUmDDPvR+9pwBQZGenNJ
-         JtBXbKWPXnhp4lahN5rHGhZEncnLARBvXEeUSVZ9OjF9+V2MYUAi2Cc4BLnFiRBxE483
-         dYjVd26A5NCDf3l6s28eGk43gLZamecwAbgMe0URV7VW4u5bY3VzVZy6CkGxmSlU0wAe
-         iejBP6L+Eev8s7QUIEUSoQx8w9mNTydTAh83DcwIuGCUA5FOqQnoreIAh+SViGsm6y+z
-         v/VIqA0Jn9uyX/LW4TW4RhozUXIy1OPzibiJzgiUTfpkFrQsOQEfGwXCLm8PgYLk9Fx5
-         IyHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=PzFydKNwJFrQJTDHNguIpkAiPm6m9rG7392GYNGhqRM=;
-        b=2QF3rYkUWZjf/JnwenZI3z9JpQe95X+t0h2ML+SmjC8l0/IDwmqSxure+TOzRFjVrB
-         U5Uyc5I0X1KFZXgOTsxDR4NlMbk9o18MAqTue8wVV/ATBFD8GmhwEChHhpqAXen1UXOM
-         dgUbEkiNydcqYl4S8Gj8cUdXzkcAp9f+9Cn9JbqpRGVhzX5GkqyuL3FZNv1jorJPLwpe
-         6ZQ859xCoUg4tFGHOBHQBGYhV8siv7XrMed6bUAFRAmyn++I39fMN62gpOpP96WmVnVE
-         lvE2AJq3F/e69kIMkJdhmZ2p02+7GvkApwWNri/zXWx5d+/cuuRtmBV8gAtKXfc2685o
-         C2JQ==
-X-Gm-Message-State: ACgBeo185aefeKQuhqLqcr7GV/k2ELgoc6ia5GvFop3Wu4rcxy2eD5jg
-        fckhXz13ffw9QJYYWHP+VLpPdJU/BC4=
-X-Google-Smtp-Source: AA6agR7Bpn4pRWGzH75l9rWYc/G3Y8PcuvLog4ycJEOKfM+z/mQxBS97LNbCFrNyluKkEqi1kgJE1g==
-X-Received: by 2002:a17:902:ccd1:b0:172:5c49:34be with SMTP id z17-20020a170902ccd100b001725c4934bemr21125748ple.23.1661870917172;
-        Tue, 30 Aug 2022 07:48:37 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id a1-20020a1709027e4100b00172c7dee22fsm9762718pln.236.2022.08.30.07.48.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 07:48:36 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com
-Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] btrfs: remove redundant variables ret
-Date:   Tue, 30 Aug 2022 14:48:32 +0000
-Message-Id: <20220830144832.300092-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Aug 2022 10:48:52 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6529BD59A2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:48:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1661870929;
+        bh=plnJi1158so8FnpKmu07i/6iZtvFF/Jkr8UGSu1UjGY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=Hh34hpJ4f1vhjFKKCRmY56KAUnElHyO0VPczWr+lEdBGu26kZhEpmDEqonv5jfufB
+         Lfy1mYsXzgINAN2bZeHXVUfvlGNPeffzg9KpzjH1IuY3sB5HJ4XWrxcA5jmlhinVVN
+         qmkb/yIWPoNpkq7ciC1YZ35qn5WnzrixAKL7ENrM=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id EF6D866795;
+        Tue, 30 Aug 2022 10:48:47 -0400 (EDT)
+Message-ID: <d5eaffd85b38fe491a4df8cd560fa0cfa3d00d87.camel@xry111.site>
+Subject: Re: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation
+ types
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Youling Tang <tangyouling@loongson.cn>,
+        Jinyang He <hejinyang@loongson.cn>
+Date:   Tue, 30 Aug 2022 22:48:46 +0800
+In-Reply-To: <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
+References: <20220830104806.128365-1-xry111@xry111.site>
+         <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.45.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Tue, 2022-08-30 at 21:05 +0800, Huacai Chen wrote:
+> Hi, Ruoyao,
+>=20
+> Thank you for your contribution, this whole series will be queued for
+> 6.1. Though lkp reported some warnings, I will fix them myself.
 
-Rturn value directly from iterate_object_props() instead of
-getting value from redundant variable ret.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- fs/btrfs/props.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/fs/btrfs/props.c b/fs/btrfs/props.c
-index a2ec8ecae8de..055a631276ce 100644
---- a/fs/btrfs/props.c
-+++ b/fs/btrfs/props.c
-@@ -270,11 +270,8 @@ int btrfs_load_inode_props(struct inode *inode, struct btrfs_path *path)
- {
- 	struct btrfs_root *root = BTRFS_I(inode)->root;
- 	u64 ino = btrfs_ino(BTRFS_I(inode));
--	int ret;
--
--	ret = iterate_object_props(root, path, ino, inode_prop_iterator, inode);
- 
--	return ret;
-+	return iterate_object_props(root, path, ino, inode_prop_iterator, inode);
- }
- 
- static int prop_compression_validate(const struct btrfs_inode *inode,
--- 
-2.25.1
-
+Hmm, we are using -Wimplicit-fallthrough=3D5 so "fallthrough;" (which
+expands into some magic) should be used instead of "/* fallthrough */".
+=C2=A0
+For -Woverride-init I'm not sure how to fix it properly.
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

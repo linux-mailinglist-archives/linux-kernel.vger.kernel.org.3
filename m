@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAAA55A6BD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC7C45A6BCE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:10:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232242AbiH3SKo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:10:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S230334AbiH3SKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbiH3SKf (ORCPT
+        with ESMTP id S232281AbiH3SKZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:10:35 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68D94BA2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:10:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=EpEl/DobhYcf1wL8+3jtYw7OG3wsK8lDs0hnWxAIwFI=; b=W88hsrHUWhMA6NG8LTU8d1pbxs
-        +hNb4LUdFnMg9k2YxNI+RTvkRN4NddihmoSbATU6UyeI2TDM6IDP+8c7FhM20V7JBQjmU5ir8dKZb
-        iztuhnFizxfFSGM6ONqL//pFt4oSTT0An9GyAFBYHWuymJOjYlEBFK2d6JM7qPuC6NRrkLQGfTyha
-        yLAMX8TlAJVPcepZOreZvGaD6a7XZAgNMhdiCZ6I0AlawCse4kbhjwICtgnjkBpN63jXPT07vYap6
-        cKMZ9FGN55oxDppqpCD8TU0wumlFgKrdn90TzbcpV2yiVbX+yxIx/PAgAeRVKlIjjRUN0lGS+Y2yL
-        kec4tEEg==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oT5gj-0017CY-8C; Tue, 30 Aug 2022 18:10:13 +0000
-Message-ID: <dd45cdec-ee8c-b699-2e23-064a866caa04@infradead.org>
-Date:   Tue, 30 Aug 2022 11:10:11 -0700
+        Tue, 30 Aug 2022 14:10:25 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0453E03D;
+        Tue, 30 Aug 2022 11:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 37DC6CE1D50;
+        Tue, 30 Aug 2022 18:10:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6C59FC433B5;
+        Tue, 30 Aug 2022 18:10:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661883014;
+        bh=E+0GumMHf43GJMuL3WMp/UctvGywv4fE3+GG2pVbefI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=kMhcJTkY+gshHETkMEvi7CUT1MtuxyYeVMZCm5Mkim1LctQhkA5NMxsi8pywxhPwy
+         vgo19gL8/YwPgLJlPM0j40f3OlzlsWfUGRMzGprR/SETQbNue51H1EmNC6u7he+g6g
+         3cNAcAYA+mutfpUs3cRA5ItO4SQqfnslf1x12LaGyXPsZdZUgOeC9ryK5/6gxkyBhf
+         PVpQREvT0zoabEsrVBr7XQi6Y6fI6aBHHCS/TxvlQsmElHCeHMUGKD1Qv81elhUWII
+         xgNzIt2wDSMMLGM2VWJdyYrq0kJ3GW4WoCrqKX8v81U/eatwwm5BGCLCmH8lQYhzl5
+         m4irxq+y7nGrg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 45304E924D8;
+        Tue, 30 Aug 2022 18:10:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] ASoC: amd: fix spelling mistake: "i.e" -> "i.e."
-Content-Language: en-US
-To:     Syed Saba Kareem <Syed.SabaKareem@amd.com>, broonie@kernel.org,
-        alsa-devel@alsa-project.org
-Cc:     Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
-        Sunil-kumar.Dommati@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Julian Braha <julianbraha@gmail.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220830132259.7759-1-Syed.SabaKareem@amd.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220830132259.7759-1-Syed.SabaKareem@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v1] bpftool: Add support for querying cgroup_iter
+ link
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166188301427.32674.16752744307188143944.git-patchwork-notify@kernel.org>
+Date:   Tue, 30 Aug 2022 18:10:14 +0000
+References: <20220829231828.1016835-1-haoluo@google.com>
+In-Reply-To: <20220829231828.1016835-1-haoluo@google.com>
+To:     Hao Luo <haoluo@google.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org,
+        john.fastabend@gmail.com, sdf@google.com, jolsa@kernel.org,
+        yosryahmed@google.com, quentin@isovalent.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,37 +61,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello:
 
+This patch was applied to bpf/bpf-next.git (master)
+by Martin KaFai Lau <martin.lau@linux.dev>:
 
-On 8/30/22 06:22, Syed Saba Kareem wrote:
-> From: Syed Saba kareem <Syed.SabaKareem@amd.com>
+On Mon, 29 Aug 2022 16:18:28 -0700 you wrote:
+> Support dumping info of a cgroup_iter link. This includes
+> showing the cgroup's id and the order for walking the cgroup
+> hierarchy. Example output is as follows:
 > 
-> trivial fix to spelling mistake in Kconfig File.
+> > bpftool link show
+> 1: iter  prog 2  target_name bpf_map
+> 2: iter  prog 3  target_name bpf_prog
+> 3: iter  prog 12  target_name cgroup  cgroup_id 72  order self_only
 > 
-> Reported by : Randy Dunlap <rdunlap@infradead.org>
-> Signed-off-by: Syed Saba Kareem <Syed.SabaKareem@amd.com>
+> [...]
 
-Acked-by: Randy Dunlap <rdunlap@infradead.org>
+Here is the summary with links:
+  - [bpf-next,v1] bpftool: Add support for querying cgroup_iter link
+    https://git.kernel.org/bpf/bpf-next/c/6f95de6d7131
 
-Thanks.
-
-> ---
->  sound/soc/amd/Kconfig | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/sound/soc/amd/Kconfig b/sound/soc/amd/Kconfig
-> index 68837d42736d..150786279257 100644
-> --- a/sound/soc/amd/Kconfig
-> +++ b/sound/soc/amd/Kconfig
-> @@ -122,7 +122,7 @@ config SND_SOC_AMD_RPL_ACP6x
->          tristate "AMD Audio Coprocessor-v6.2 RPL support"
->          depends on X86 && PCI
->          help
-> -          This option enables Audio Coprocessor i.e ACP v6.2 support on
-> +          This option enables Audio Coprocessor i.e. ACP v6.2 support on
->            AMD RPL platform. By enabling this flag build will be
->            triggered for ACP PCI driver.
->            Say m if you have such a device.
-
+You are awesome, thank you!
 -- 
-~Randy
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

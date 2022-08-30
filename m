@@ -2,118 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 901265A5882
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 02:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8705A5885
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 02:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229633AbiH3Ao7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 20:44:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42166 "EHLO
+        id S229561AbiH3AqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 20:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiH3Ao4 (ORCPT
+        with ESMTP id S229558AbiH3AqS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 20:44:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0ADA5FD7;
-        Mon, 29 Aug 2022 17:44:52 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MGpRj3vxQznTqx;
-        Tue, 30 Aug 2022 08:42:25 +0800 (CST)
-Received: from [10.174.178.66] (10.174.178.66) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 08:44:50 +0800
-Message-ID: <368a9fef-740b-eac7-072a-d230cd4f6b1f@huawei.com>
-Date:   Tue, 30 Aug 2022 08:44:49 +0800
+        Mon, 29 Aug 2022 20:46:18 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6FA7EFC1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 17:46:15 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id r69so9238869pgr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 17:46:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=vu7WwGg8hHjHQMxVBeejwIO9X7hwzWU+rYfumkNTH28=;
+        b=b6S3/gCKo9NnWhn25HJlEhO8WEl7M4A1s/ssomIGAzJE1FH4gXEurRRpcCR9M6R3Se
+         gcZNRDdvw/CyXRDSoZE8QCSDE3T2kQkYNrDeQnXJw4CgKfMwaTsJqzQ2oVOVNrZsD61p
+         dNilZgZ0MKd5EZdlmfh9+HiVlYYhnlFyJPFSo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=vu7WwGg8hHjHQMxVBeejwIO9X7hwzWU+rYfumkNTH28=;
+        b=FNUdzouJ9N5MyPh6tjnLOFTY03LpIIxIrUVYjgX6SHagC7Dt0DUT5kw+I5+2zgSWEm
+         Vir8HvLut+RlJLKbXudG7m2GaQ/JKDNQYifmbsYWR4oG/0tp2znPypAUFBgbpkJE5CYX
+         4I+3aMLIkIrkO0dD0NKDc/9CXS993DcIhL/qEseKD0XyYNuTv7rUgT8Hmrnu0trh4cZc
+         QQ+SwDhMMbDFlyGJy1lwbSYx9A2Wr4bKHspy77Z/o93CuHgaw0r6VxCiv0+iYBoEWkzT
+         NdcQtrmejvBudMNz2TK8tpKt7iAMu+Ox+JDJvo+cvpEC8Xn44S3kxZnIkc2+b6EYVR59
+         4nrg==
+X-Gm-Message-State: ACgBeo0ny0V0DUeLaOOLb63kZBZciLwsBzKlLJjVzSnys1MqT3qy4cWp
+        PQ/yLjXdkJJ3mS9VRO0x8KB3zQ==
+X-Google-Smtp-Source: AA6agR5uP241h5cUO36rE+CaGBwKIwp8ECEml29/w5Jc3feGDEcnJZOOebGr3TnXFvoWckC8FIXkmA==
+X-Received: by 2002:a63:5b61:0:b0:41d:3227:37b8 with SMTP id l33-20020a635b61000000b0041d322737b8mr15863985pgm.265.1661820375015;
+        Mon, 29 Aug 2022 17:46:15 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:49ac:6e1:90a2:a0e0])
+        by smtp.gmail.com with UTF8SMTPSA id o18-20020a170903009200b00172ff99d0afsm2331495pld.140.2022.08.29.17.46.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 17:46:14 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     James Morris <jmorris@namei.org>,
+        Kees Cook <keescook@chromium.org>,
+        Paul Moore <paul@paul-moore.com>,
+        "Serge E . Hallyn" <serge@hallyn.com>
+Cc:     Jae Hoon Kim <kimjae@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org
+Subject: [PATCH] LoadPin: Fix Kconfig doc about format of file with verity digests
+Date:   Mon, 29 Aug 2022 17:46:10 -0700
+Message-Id: <20220829174557.1.I5d202d1344212a3800d9828f936df6511eb2d0d1@changeid>
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH net-next,v2 1/3] net: sched: choke: remove unused
- variables in struct choke_sched_data
-To:     Eric Dumazet <edumazet@google.com>
-CC:     netdev <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>, <weiyongjun1@huawei.com>,
-        YueHaibing <yuehaibing@huawei.com>
-References: <20220829081704.255235-1-shaozhengchao@huawei.com>
- <20220829081704.255235-2-shaozhengchao@huawei.com>
- <CANn89iLqXB-O7AP5qf+gGtK48fgYYxpciCyZa76jJNac9Bq1aQ@mail.gmail.com>
-From:   shaozhengchao <shaozhengchao@huawei.com>
-In-Reply-To: <CANn89iLqXB-O7AP5qf+gGtK48fgYYxpciCyZa76jJNac9Bq1aQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.66]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The doc for CONFIG_SECURITY_LOADPIN_VERITY says that the file with verity
+digests must contain a comma separated list of digests. That was the case
+at some stage of the development, but was changed during the review
+process to one digest per line. Update the Kconfig doc accordingly.
 
+Reported-by: Jae Hoon Kim <kimjae@chromium.org>
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
 
-On 2022/8/30 1:08, Eric Dumazet wrote:
-> On Mon, Aug 29, 2022 at 1:14 AM Zhengchao Shao <shaozhengchao@huawei.com> wrote:
->>
->> The variable "other" in the struct choke_sched_data is not used. Remove it.
->>
->> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
->> ---
->> v1: qdisc_drop() already counts drops, unnecessary to use "other" to duplicate the same information.
->> ---
->>   include/uapi/linux/pkt_sched.h | 1 -
->>   net/sched/sch_choke.c          | 2 --
->>   2 files changed, 3 deletions(-)
->>
->> diff --git a/include/uapi/linux/pkt_sched.h b/include/uapi/linux/pkt_sched.h
->> index f292b467b27f..32d49447cc7a 100644
->> --- a/include/uapi/linux/pkt_sched.h
->> +++ b/include/uapi/linux/pkt_sched.h
->> @@ -396,7 +396,6 @@ struct tc_choke_qopt {
->>   struct tc_choke_xstats {
->>          __u32           early;          /* Early drops */
->>          __u32           pdrop;          /* Drops due to queue limits */
->> -       __u32           other;          /* Drops due to drop() calls */
-> 
-> You can not remove a field in UAPI.
-> 
->>          __u32           marked;         /* Marked packets */
->>          __u32           matched;        /* Drops due to flow match */
->>   };
->> diff --git a/net/sched/sch_choke.c b/net/sched/sch_choke.c
->> index 25d2daaa8122..3ac3e5c80b6f 100644
->> --- a/net/sched/sch_choke.c
->> +++ b/net/sched/sch_choke.c
->> @@ -60,7 +60,6 @@ struct choke_sched_data {
->>                  u32     forced_drop;    /* Forced drops, qavg > max_thresh */
->>                  u32     forced_mark;    /* Forced marks, qavg > max_thresh */
->>                  u32     pdrop;          /* Drops due to queue limits */
->> -               u32     other;          /* Drops due to drop() calls */
->>                  u32     matched;        /* Drops to flow match */
->>          } stats;
->>
->> @@ -464,7 +463,6 @@ static int choke_dump_stats(struct Qdisc *sch, struct gnet_dump *d)
->>                  .early  = q->stats.prob_drop + q->stats.forced_drop,
->>                  .marked = q->stats.prob_mark + q->stats.forced_mark,
->>                  .pdrop  = q->stats.pdrop,
->> -               .other  = q->stats.other,
->>                  .matched = q->stats.matched,
->>          };
->>
->> --
->> 2.17.1
->>
+ security/loadpin/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Hi Eric:
-	Thanks for the heads up. I'll pay attention in the future.
+diff --git a/security/loadpin/Kconfig b/security/loadpin/Kconfig
+index 70e7985b2561..994c1d9376e6 100644
+--- a/security/loadpin/Kconfig
++++ b/security/loadpin/Kconfig
+@@ -33,4 +33,4 @@ config SECURITY_LOADPIN_VERITY
+ 	  on the LoadPin securityfs entry 'dm-verity'. The ioctl
+ 	  expects a file descriptor of a file with verity digests as
+ 	  parameter. The file must be located on the pinned root and
+-	  contain a comma separated list of digests.
++	  contain one digest per line.
+-- 
+2.37.2.672.g94769d06f0-goog
 
-Zhengchao Shao

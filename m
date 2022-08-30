@@ -2,68 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78E265A6628
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:21:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 398095A663A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 16:24:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229692AbiH3OVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 10:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37984 "EHLO
+        id S229688AbiH3OY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 10:24:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiH3OVt (ORCPT
+        with ESMTP id S229521AbiH3OYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 10:21:49 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE212AFADA;
-        Tue, 30 Aug 2022 07:21:42 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id bh13so10819762pgb.4;
-        Tue, 30 Aug 2022 07:21:42 -0700 (PDT)
+        Tue, 30 Aug 2022 10:24:23 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACEA211C166
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:24:21 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-33dce2d4bc8so277113587b3.4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 07:24:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=Ep2MANbHOmXdnX6tPL+TZV3efYdCEHeaDVmWvQZttAw=;
-        b=YevEzndU6KjjBk3G++RPD82udEXoQOHSDepG5BdKyLWPCuHWQUiShgLmeCD10OOgAR
-         pugP+dBXpSPATFgNp3LmGKil+TIZW9+vrDXMxkQGLMGzcjvry4mCmZNomSvSRZvrwSBU
-         +05bE0UpQQLOA2FT/pmSd8qntpyR3kuAA1x/K84Hj6YCqawbAgje9lgHq7QiG99VQ38x
-         qfAmIICABejXyRUxxDDYN4BY2JLYAwo+UO8XdJSuAvGU1wl1WLp0iGcJUlWMSmeVjz24
-         MpnugA6LjbJ4AnAUn0kirmpjwbG1jL/78Tn1um+UptkPP2WX0z70vyASlwLUBVF6hF2M
-         V/Ug==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=gt/5eV/ZpK3WodQ+XAEGUey1G3s7WAZiZKt3bPC8X9Y=;
+        b=NJkAG1gpVqHfWInlurGJmVG3R+RA9MT+JGCwiveMgAZ2izde0jgt/HGcHXZpxsoM+D
+         VX2DmYxU5+R06Av1HoBK2lfCyrLi0SHU35Xn3Eqg/1pT/OOEJXltQTuKai98zcE4qPc3
+         IyPVDXb7QXZdAdQs102YteFR2UaXoJog7lMP6N8UOoGxqzL+0EmI/kRV05/P/fNgYP1R
+         u+tfUGRZZmvy2fluAPQYX/tLrSXQtbMStUsiHRhm7CaVhrm7UsEkVAAX9h6nlIKKWaF1
+         9zcnoe03OdMBz4ny6yBrIehUOgNyXloHhB7PVq+sp0OVonxt1HYY+lLh93wCriBKPj7N
+         Rhmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=Ep2MANbHOmXdnX6tPL+TZV3efYdCEHeaDVmWvQZttAw=;
-        b=IB4boHjbU1V7WCBCTZ6aIYM0BE7INqB770wbbANybOxQnbRoomBb4GE5unhAYoZ+Zu
-         zWhKsmjVzv7GETmEfpQX9/qQqlJjIAQBJrV783FEjlkfJa6842p0A3PQHroy9qfusPuL
-         ++yi9a7VtUFbneMowK2tu3qhTKkIXESI8X6N7RwCL++h+ghZjMKCWAEwFJU+4yRqZclu
-         P7GHigEPUOZpXFVwYlcfHlfAois+FZR0Hjy110RHNVUUnSRiD2xwpUHnP77e6QiE64V2
-         i/MM90+SGbWfaWwxKl/dq7pEJCbxcBPkBByEusbeDZ2nhXTWL+5NEq1l0CeLVtqQQzAX
-         IihQ==
-X-Gm-Message-State: ACgBeo0xIP8kE03BoG14j231EWaDeCOu9w4pNpTP7xX1wg3i6ONp4z8/
-        Werr3NaPc505TK3782zOxlA=
-X-Google-Smtp-Source: AA6agR7RjwL35h/4E+5ZpPrxnPws776CluJ2ghuHRWveoV3I4HEU7+TaV+zfiUyKcEcChdKLpVVlQQ==
-X-Received: by 2002:a63:88c8:0:b0:42b:59d4:ea81 with SMTP id l191-20020a6388c8000000b0042b59d4ea81mr17416941pgd.344.1661869301549;
-        Tue, 30 Aug 2022 07:21:41 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id z1-20020a626501000000b0053675c0b773sm9371834pfb.88.2022.08.30.07.21.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 07:21:40 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     aaro.koskinen@iki.fi, jmkrzyszt@gmail.com, tony@atomide.com
-Cc:     linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] ARM: omap1: remove redundant variables err
-Date:   Tue, 30 Aug 2022 14:21:36 +0000
-Message-Id: <20220830142136.299373-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=gt/5eV/ZpK3WodQ+XAEGUey1G3s7WAZiZKt3bPC8X9Y=;
+        b=WXk2TH6vlrHZYWKi/BLXjnOGsCGQjF0Ttq/sC5ryeca1bVS8m2xzzYRm1Hz9ZJ/66U
+         jTCV7I0Dqbl+KmuM0IfNQPpU/6IEbkpYt+Flf6FiXhX0Tj0cIJskQMRyLeyVOusg4/Ku
+         jDdsnLyTSnx4HgVsC6cj3ceIOUtybUB8gtSlMpp/oe0oXYmEM0CuDuSeAlVBZgWSUk7C
+         mXx5F+S+wS/ceSqW5TISn8SDgi+mOtIQeam5tfJ+BRhyOqaDWYMV4u6ng9wJQ+jZlQ09
+         gDfF6J752Icmvqxfe2CiSRxhDntvDO9ZKouw2B953UpQuYgWNtlCDQMH/auZd4Gw+P9Y
+         dDuw==
+X-Gm-Message-State: ACgBeo0DvYc6vJKR4P+t5RoSGylZxU26K6A7VFw4NxlBCBv2nNs7Z6ek
+        EUglvtlalXrg4JFR4YXWy+RQIu6kwhR4uN4SHFdZ9Q==
+X-Google-Smtp-Source: AA6agR7jvVei8SmZabQHeD/SkA+/TrCqpW8qHKuBCJ3rJnHGAOGAH2dSiGFPEKmuWrV3gqrtSOKO3hjd/206yNSfB14=
+X-Received: by 2002:a05:6902:1106:b0:695:c353:2c32 with SMTP id
+ o6-20020a056902110600b00695c3532c32mr12729722ybu.398.1661869460597; Tue, 30
+ Aug 2022 07:24:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220826150807.723137-1-glider@google.com> <20220826150807.723137-5-glider@google.com>
+ <20220826211729.e65d52e7919fee5c34d22efc@linux-foundation.org>
+ <CAG_fn=Xpva_yx8oG-xi7jqJyM2YLcjNda+8ZyQPGBMV411XgMQ@mail.gmail.com> <20220829122452.cce41f2754c4e063f3ae8b75@linux-foundation.org>
+In-Reply-To: <20220829122452.cce41f2754c4e063f3ae8b75@linux-foundation.org>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Tue, 30 Aug 2022 16:23:44 +0200
+Message-ID: <CAG_fn=X6eZ6Cdrv5pivcROHi3D8uymdgh+EbnFasBap2a=0LQQ@mail.gmail.com>
+Subject: Re: [PATCH v5 04/44] x86: asm: instrument usercopy in get_user() and put_user()
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Marco Elver <elver@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,41 +100,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Mon, Aug 29, 2022 at 9:24 PM Andrew Morton <akpm@linux-foundation.org> w=
+rote:
+>
+> On Mon, 29 Aug 2022 16:57:31 +0200 Alexander Potapenko <glider@google.com=
+> wrote:
+>
+> > On Sat, Aug 27, 2022 at 6:17 AM Andrew Morton <akpm@linux-foundation.or=
+g> wrote:
+> > >
+> > > On Fri, 26 Aug 2022 17:07:27 +0200 Alexander Potapenko <glider@google=
+.com> wrote:
+> > >
+> > > > Use hooks from instrumented.h to notify bug detection tools about
+> > > > usercopy events in variations of get_user() and put_user().
+> > >
+> > > And this one blows up x86_64 allmodconfig builds.
+> >
+> > How do I reproduce this?
+> > I tried running `make mrproper; make allmodconfig; make -j64` (or
+> > allyesconfig, allnoconfig) on both KMSAN tree
+> > (https://github.com/google/kmsan/commit/ac3859c02d7f40f59992737d63afcac=
+da0a972ec,
+> > which is Linux v6.0-rc2 plus the 44 KMSAN patches) and
+> > linux-mm/mm-stable @ec6624452e36158d0813758d837f7a2263a4109d with
+> > KMSAN patches applied on top of it.
+> > All builds were successful.
+> >
+> > I then tried to cherry-pick just the first 4 commits to mm-stable and
+> > see if allmodconfig works - it resulted in numerous "implicit
+> > declaration of function =E2=80=98instrument_get_user=E2=80=99" errors (=
+quite silly of
+> > me), but nothing looking like the errors you posted.
+> > I'll try to build-test every patch in the series after fixing the
+> > missing declarations, but so far I don't see other problems.
+> >
+> > Could you share the mmotm commit id which resulted in the failures?
+>
+> I just pushed out a tree which exhibits this with gcc-12.1.1 and with
+> gcc-11.1.0.  Tag is mm-everything-2022-08-29-19-17.
+>
+> The problem is introduced by d0d9a44d2210 ("kmsan: add KMSAN runtime core=
+")
+>
+> make mrproper
+> make allmodconfig
+> make init/do_mounts.o
+>
+> In file included from ./include/linux/kernel.h:22,
+>                  from ./arch/x86/include/asm/percpu.h:27,
+>                  from ./arch/x86/include/asm/nospec-branch.h:14,
+>                  from ./arch/x86/include/asm/paravirt_types.h:40,
+>                  from ./arch/x86/include/asm/ptrace.h:97,
+>                  from ./arch/x86/include/asm/math_emu.h:5,
+>                  from ./arch/x86/include/asm/processor.h:13,
+>                  from ./arch/x86/include/asm/timex.h:5,
+>                  from ./include/linux/timex.h:67,
+>                  from ./include/linux/time32.h:13,
+>                  from ./include/linux/time.h:60,
+>                  from ./include/linux/stat.h:19,
+>                  from ./include/linux/module.h:13,
+>                  from init/do_mounts.c:2:
+> ./include/linux/page-flags.h: In function =E2=80=98page_fixed_fake_head=
+=E2=80=99:
+> ./include/linux/page-flags.h:226:36: error: invalid use of undefined type=
+ =E2=80=98const struct page=E2=80=99
+>   226 |             test_bit(PG_head, &page->flags)) {
+>       |                                    ^~
+> ./include/linux/bitops.h:50:44: note: in definition of macro =E2=80=98bit=
+op=E2=80=99
+>    50 |           __builtin_constant_p((uintptr_t)(addr) !=3D (uintptr_t)=
+NULL) && \
+>       |                                            ^~~~
+> ./include/linux/page-flags.h:226:13: note: in expansion of macro =E2=80=
+=98test_bit=E2=80=99
+>   226 |             test_bit(PG_head, &page->flags)) {
+>       |             ^~~~~~~~
+> ...
 
-Rturn value directly from platform_device_register()
-instead of getting value from redundant variable err.
+Gotcha, this is a circular dependency: mm_types.h -> sched.h ->
+kmsan.h -> gfp.h -> mmzone.h -> page-flags.h -> mm_types.h, where the
+inclusion of sched.h into mm_types.h was only introduced in "mm:
+multi-gen LRU: support page table walks" - that's why the problem was
+missing in other trees.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- arch/arm/mach-omap1/board-ams-delta.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+In fact sched.h only needs the definitions of `struct
+kmsan_context_state` and `struct kmsan_ctx` from kmsan.h, so I am
+splitting them off into kmsan_types.h to break this circle.
+Doing so also helped catch a couple of missing/incorrect inclusions of
+KMSAN headers in subsystems.
 
-diff --git a/arch/arm/mach-omap1/board-ams-delta.c b/arch/arm/mach-omap1/board-ams-delta.c
-index 651c28d81132..e5531ef0fbde 100644
---- a/arch/arm/mach-omap1/board-ams-delta.c
-+++ b/arch/arm/mach-omap1/board-ams-delta.c
-@@ -822,8 +822,6 @@ static int __init modem_nreset_init(void)
-  */
- static int __init ams_delta_modem_init(void)
- {
--	int err;
--
- 	if (!machine_is_ams_delta())
- 		return -ENODEV;
- 
-@@ -832,9 +830,7 @@ static int __init ams_delta_modem_init(void)
- 	/* Initialize the modem_nreset regulator consumer before use */
- 	modem_priv.regulator = ERR_PTR(-ENODEV);
- 
--	err = platform_device_register(&ams_delta_modem_device);
--
--	return err;
-+	return platform_device_register(&ams_delta_modem_device);
- }
- arch_initcall_sync(ams_delta_modem_init);
- 
--- 
-2.25.1
+I'll fix those and do more testing.
 
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

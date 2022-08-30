@@ -2,75 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E87D5A63CF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BF0D5A63D3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:48:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229942AbiH3Mrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
+        id S229965AbiH3MsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiH3Mrq (ORCPT
+        with ESMTP id S229840AbiH3MsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:47:46 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D86C8ABD64;
-        Tue, 30 Aug 2022 05:47:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=3DFiWf/O2nEaK0RaIY+HnSISDVWcCiaB89634qTWNxY=; b=3atNH1u7rzWigXKovzGkZsKbF7
-        xfCv9cZKzJPsNhPMA6HAYnjVenVH3yWIRe7VQFK3gBWsdrcpuT/S1bCsXbz15GgyGvCWp1UACwFkj
-        GwByX0f2UEQ1e4IQjGqBAHHwIPfezuJM643gdLEFI5I8kwHJbjymxT2AKadDA9bUSm8M=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oT0ee-00F4Xx-9h; Tue, 30 Aug 2022 14:47:44 +0200
-Date:   Tue, 30 Aug 2022 14:47:44 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Tristram Ha <Tristram.Ha@microchip.com>
-Subject: Re: [RFC Patch net-next v3 2/3] net: dsa: microchip: add reference
- to ksz_device inside the ksz_port
-Message-ID: <Yw4G8FA1BjA9hfD4@lunn.ch>
-References: <20220830105303.22067-1-arun.ramadoss@microchip.com>
- <20220830105303.22067-3-arun.ramadoss@microchip.com>
+        Tue, 30 Aug 2022 08:48:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FBD12F55A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:48:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 35B7BB81B33
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:48:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 083E0C43470
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:48:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661863686;
+        bh=/cAJwBHtM/ZURW3cF5eFVB0hZFmtk7GamSbxXq9JtWo=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=huSe1YohCQxf4H7e96UWv5Mjs28frLHyOt4kUHnkbsTPI9PHdVXBA90CE0nVX/bQE
+         6+ROles0scsg9L0csQEvv9KqOo6vcHjhicLtcimIyF63rlJl+cYcd2YknRk6WvSTqy
+         PQNB5BZvnI14eeJK/Lpk9Hyabjfj/6PBLls8VayuHXnmX80FRVtVH7DikPGiIW78/U
+         hXh4CSbPjXHRTH1eO1fJbEb0afdIrPxKvrEfkiXg1ZiJYFeT6qNFWxNog4gyugHIbk
+         8oGNDGLRR0r0OfKO40aejhv9Hpk0vDX4JqAJ4A6XG/b4U6qhZkP41DIVWR+9caYYD/
+         n8G50TLq5B5mQ==
+Received: by mail-vs1-f43.google.com with SMTP id f185so6556654vsc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:48:05 -0700 (PDT)
+X-Gm-Message-State: ACgBeo23pS/Yaa2H9aLo1+I+UH1H3kibgoVwmdUtEYbVTzO5XFKeb2YR
+        YpK80xdpiRDia0aMhL6amHRlUnVIaFJBFqLieA==
+X-Google-Smtp-Source: AA6agR4BFxbKvuMHCS56CHge6iE78gvzzPulVJJ1K3ptPrTy0eibGx4WI+E7FOdKqKeTEMm2IWkL3Jc05bfWSfSp3QU=
+X-Received: by 2002:a67:b808:0:b0:388:b23e:8395 with SMTP id
+ i8-20020a67b808000000b00388b23e8395mr4860489vsf.64.1661863684738; Tue, 30 Aug
+ 2022 05:48:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830105303.22067-3-arun.ramadoss@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220829062202.3287-1-zong.li@sifive.com> <20220830083606.1681385-1-ben.dooks@sifive.com>
+In-Reply-To: <20220830083606.1681385-1-ben.dooks@sifive.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Tue, 30 Aug 2022 07:47:53 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKo5puQ-nE=G9YPon2xFb7MRX5GGj11YPPjnbRJ3yVX6Q@mail.gmail.com>
+Message-ID: <CAL_JsqKo5puQ-nE=G9YPon2xFb7MRX5GGj11YPPjnbRJ3yVX6Q@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: sifive-ccache: fix cache level for l3 cache
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 04:23:02PM +0530, Arun Ramadoss wrote:
-> struct ksz_port doesn't have reference to ksz_device as of now. In order
-> to find out from which port interrupt has triggered, we need to pass the
-> struct ksz_port as a host data. When the interrupt is triggered, we can
-> get the port from which interrupt triggered, but to identify it is phy
-> interrupt we have to read status register. The regmap structure for
-> accessing the device register is present in the ksz_device struct. To
-> access the ksz_device from the ksz_port, the reference is added to it
-> with port number as well.
-> 
-> Signed-off-by: Arun Ramadoss <arun.ramadoss@microchip.com>
+On Tue, Aug 30, 2022 at 3:36 AM Ben Dooks <ben.dooks@sifive.com> wrote:
+>
+> With newer cores such as the p550, the SiFive composable cache can be
+> a level 3 cache. Update the cache level to be one of 2 or 3.
+>
+> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+> ---
+>  Documentation/devicetree/bindings/riscv/sifive-ccache.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Please send DT patches to the DT list. Resend so checks run.
 
-    Andrew
+Rob

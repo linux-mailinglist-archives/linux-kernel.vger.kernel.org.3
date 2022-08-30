@@ -2,81 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10E8B5A5EB9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 540125A5EC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiH3I4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
+        id S230134AbiH3I5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230226AbiH3I4P (ORCPT
+        with ESMTP id S229697AbiH3I5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:56:15 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1FB8D3FB
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:56:12 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id q16so10605856ljp.8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:56:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=yksgcHaH8yK2nL0/KktGbN00V41GBl96J/5UMeIcDaY=;
-        b=MiIh4A8LV+RAbbjdllOrCTzRQJalCXjENCi1YWUULbNDueGRtSEDZ+qnWGRkJkiyOD
-         Dy+A91s6x4frfWPG2NJ3jIzWP/ByZjFzH30mCCa7H+GtAfPa/0iKOtosR57wC4p5TYdT
-         j9Nas+5xRGYF5WBnjH8JWMuShunfxEOs3gcyi8SOis4bclqePvBRXkXy5SmppTq7D1Dm
-         iyaGmtXrdKMfVxMIRqaeHqz/NmmBZUFqbRaiyin45dQDTtOihs+WF6B01ngFp9492Qvr
-         g/YdyMqOxePjBLzeZU7Y3pCQpIAYZiKrYZU+CXCsbd3nQs3wVtVC+rR1/cjBEITICZQn
-         vlZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=yksgcHaH8yK2nL0/KktGbN00V41GBl96J/5UMeIcDaY=;
-        b=zXc78rEIsacxv2S4uN7JS33H2G/5cU3dBdMr+qvlx+lw4zkNRfCrdqwFBNWPUeqYo6
-         eSBc97YM9SdMUZMI/gEM3XEa7Z6720PjO9OotWDuIe4335Ye6hY9G8+H4FTs5S1WNXI1
-         oExg6RvYHhs3PR5RKCAqS5Vm9GrvIuY+DocKuiXbe7hgVO27TFmmcYWUAd+Y5W1GmF1K
-         ZUd6IRsKVRRuJ0F/2SWjmeH1y1tei4HIv/TeEmkzv1wFhe5e+q6V8Amy/tpo5YPC73AT
-         HLWjxYDQogJTEPJwHzbBBd7RoF8o7+hkPaLf8cj3mHnrxgQ3VmEheZ9FO81I2TBTUBi5
-         3AaA==
-X-Gm-Message-State: ACgBeo2T/VMW9BbyIR5Zh5RYAfyObfWqA2tp7C6GAUiekhY++ySU+cg8
-        5UuMgSHsqcjMsxXQK8tdt6IoeQ==
-X-Google-Smtp-Source: AA6agR4zZBU15rr+qcZ9goA/DUAtlU7TAZ0VTwAna0Yhnj/neDvMXGtyCwyH92/wxaQkndWDniibrA==
-X-Received: by 2002:a2e:bf29:0:b0:25f:fbd5:b693 with SMTP id c41-20020a2ebf29000000b0025ffbd5b693mr7114274ljr.372.1661849770702;
-        Tue, 30 Aug 2022 01:56:10 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id f10-20020a056512360a00b004946e72711bsm539608lfs.76.2022.08.30.01.56.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 01:56:10 -0700 (PDT)
-Message-ID: <45004d0c-e470-72e3-fad6-e8c48aefac1b@linaro.org>
-Date:   Tue, 30 Aug 2022 11:56:08 +0300
+        Tue, 30 Aug 2022 04:57:37 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1167D9FA82;
+        Tue, 30 Aug 2022 01:57:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661849854; x=1693385854;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=iFyqrBQdxTUBOpu9l4E3C3J/Crs7bTOiZ1ntimc+HSU=;
+  b=YC5OvuaOapHHUl/e59sWdA1w8pUHbITorDwapbw2Xlfh6ao3GEGgtmWV
+   nUe2r4xujjb3bTrcqSz776pNjX3c+IUMz2noVU3To/YguWPwE29GELYiJ
+   Mc6+FVN7BspJ4flV9EKgfX4xkL0nPvwLM++zpCopLDGeN2saz/EyIAoC2
+   xI/D0Co3Qrh8hw9CyCt7aUiTOs4B/wKM1fiviKGimwOaI7/MOB7RC+rIS
+   vO/pO1gA26Y/4Wf6jaOxwOCQQiywb+a1GIGmjiylTlniHy9/OGpbEIcK1
+   FSh92vCrxR79G1Qp4pMcAzOORFQeufKqQQprbwDOCnyrW4qGpR/zwW9Yn
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="359086657"
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="359086657"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:57:30 -0700
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="641290765"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.172.100]) ([10.249.172.100])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:57:27 -0700
+Message-ID: <6704f880-14ed-b8e8-4204-ac0d8afef5ef@linux.intel.com>
+Date:   Tue, 30 Aug 2022 16:57:23 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: Add sc7180-pazquel360
-Content-Language: en-US
-To:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Henry Sun <henrysun@google.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bob Moragues <moragues@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220830083740.v2.1.Ic4d4e0777115011544dbc2ab07ed4d7b408c003a@changeid>
- <20220830083740.v2.2.I5bd646de8fac81eb23c8bcf1cbe21125bf9638f3@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830083740.v2.2.I5bd646de8fac81eb23c8bcf1cbe21125bf9638f3@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v8 020/103] KVM: TDX: create/destroy VM structure
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>
+References: <cover.1659854790.git.isaku.yamahata@intel.com>
+ <810ce6dbd0330f06a80e05afa0a068b5f5b332f3.1659854790.git.isaku.yamahata@intel.com>
+ <bd9ae0af-47de-c8ea-3880-a98fed2de48d@linux.intel.com>
+ <20220829190921.GA2700446@ls.amr.corp.intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20220829190921.GA2700446@ls.amr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,22 +66,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 11:42, Yunlong Jia wrote:
-> Create first version device tree for pazquel360
-> pazquel360 is convertible and the pazquel it is based on is clamshell.
-> sku 20 for lte & wifi
-> sku 21 for wifi only
-> sku 22 for lte w/o esim & wifi
-> 
-> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
-> ---
-> 
-> Changes in v2:
-> - Remove the touchscreen setting, as a follow-up patch
-> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-It's still wrong place for Rb tag. Apply this patch by yourself and
-check the result...
+On 2022/8/30 3:09, Isaku Yamahata wrote:
+>
+>>> +}
+>>> +
+>>> +static int tdx_reclaim_page(unsigned long va, hpa_t pa, bool do_wb, u16 hkid)
+>>> +{
+>>> +	struct tdx_module_output out;
+>>> +	u64 err;
+>>> +
+>>> +	err = tdh_phymem_page_reclaim(pa, &out);
+>>> +	if (WARN_ON_ONCE(err)) {
+>>> +		pr_tdx_error(TDH_PHYMEM_PAGE_RECLAIM, err, &out);
+>>> +		return -EIO;
+>>> +	}
+>>> +
+>>> +	if (do_wb) {
+>>> +		err = tdh_phymem_page_wbinvd(set_hkid_to_hpa(pa, hkid));
+>>> +		if (WARN_ON_ONCE(err)) {
+>>> +			pr_tdx_error(TDH_PHYMEM_PAGE_WBINVD, err, NULL);
+>>> +			return -EIO;
+>>> +		}
+>>> +	}
+>>> +
+>>> +	tdx_clear_page(va);
+>> Is it really necessary to clear the reclaimed page using MOVDIR64?
+>>
+>> According to the TDX module spec,  when add a page to TD, both for control
+>> structures and TD private memory, during the process some function of the
+>> TDX module will initialize the page using binding hkid and direct write
+>> (MOVDIR64B).
+>>
+>> So still need to clear the page using direct write to avoid integrity error
+>> when re-assign one page from old keyid to a new keyid as you mentioned in
+>> the comment?
+> Yes. As you described above, TDX module does when assining a page to a private
+> hkid. i.e. TDH.MEM.PAGE.{ADD, AUG}.  But when re-assigning a page from an old
+> private hkid to a new _shared_ hkid, i.e. TDH.MEM.PAGE.REMOVE or
+> TDH.PHYMEM.PAGE.RECLAIM, TDX module doesn't.
 
-Best regards,
-Krzysztof
+Is the reason you added the tdx_clear_page() here due to the description 
+in 1.3.1 of Intel CPU Architectural Extensions Specification for TDX 
+(343754-002US)?
+
+The description as following:
+"MKTME on an SOC that supports SEAM might support an integrity 
+protected, memory encryption mode. When using keys with integrity 
+enabled, the MKTME associates a message authentication code (MAC) with 
+each cache line. By design, when reading a cache line using a KeyID with 
+integrity enabled, if the MAC stored in the metadata does not match the 
+MAC regenerated by the MKTME, then the cache line is marked poisoned to 
+prevent the data from being consumed. Integrity protected memory must be 
+initialized before being read, and such initialization must be performed 
+using 64-bytes direct-store with 64-byte write atomicity using the 
+MOVDIR64B instruction"
+
+Actually I have a question about the description,  does the 
+initialization using MOVDIR64B must associated with the according hkid?
+
+
+

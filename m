@@ -2,171 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2573A5A5BC7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:27:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945BB5A5BCD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:28:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiH3G1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58592 "EHLO
+        id S230113AbiH3G23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:28:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbiH3G1E (ORCPT
+        with ESMTP id S230120AbiH3G2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:27:04 -0400
-Received: from FRA01-MR2-obe.outbound.protection.outlook.com (mail-eopbgr90074.outbound.protection.outlook.com [40.107.9.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90B43B6D34
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:26:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a+4RcCm2qNCEmom6N8ufsoY8D8BSbyV/h/QJsECXU2BCDKKaQIKNEs1DT9qXN0oEdZBnGNBzh89kQvLQmsE4lx5DQGwk0cbi9gYQAFjxmgF+4Rawj/PF6UdPHLvmwJeI8i1DjLK8R7eGJ0d7BXv+dgvCvVgnxlDPacNZ6S8bA3hqPTzfKtITlMKfiIdF98RLU8vxXgQiFMtbNwOhJ6KScWRllc3povx7GyE5YvpCOq6E125re2B/3rj9WQ8NS+CBlnbD1dCsF30KHXTOqe6tT1f8Lr43VyhXrbUhJUc5vgEpJ9+kCpTECToNRSV08QKbB9XWu+iphl6+VunFFWNgLg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sO53/oOQndHYj0jfrhGrpHBoNgSTTVadwiaURBnYa/k=;
- b=OwZAwAh2Ego30lN1G6Q3C4l8wOBApig8dO1YqfDrZwdpTZ48XVm5efHo8QxisV3mv2/MrgcL+eB13XTsdmJhI8dmpQqbXoxXEpWgKeqBWYrkPqbSHoNdav0oMUo/jiqGrqwihjag7PIe+rnqLVtjgnUzRJCDaNW8JJOo2Ri619yyPlaD2Q0jBMc/GyA98Es1oAgZj7DjphS4Q4QTu90YKtyuB+jtMHnl8RZvzr9K52PYRQMeRR9d74uwpYV4LG9xswRTsnZG4oI94wG4Tl8DL59uRKO/7Nel7/blWSxRJ5NTAX4oaIbJxVRsg91ZU7ElmlragR+pxbTStI6NAgsuQQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sO53/oOQndHYj0jfrhGrpHBoNgSTTVadwiaURBnYa/k=;
- b=u5tY1UJpKUOiP/7YhGifIqk8/P/UApAjOOa5ggEnqxQ9QoE4c1jwv9pnIH+lL0nZx8I/BBZySf6ycHK8BuNxU0PzXHOx18RDl65ndVyBEVy5AP/vckTk6NSro8Xp3LKtFdZCf9qLgnUvVuUBQOXatvxEoPGgTza2BwtwTErv5YFjn8lMZvggvZck4O6rLj9BE6w6LroJqQrLBQq5b5uR0NKJILXS6YRBhdP6ihYSeEISPojSQmf69qrGn+/R3zJBS2eEZrlhpkn7l1C8mdfXSyPwxqNomAiqT9VG8aeXqadfxNp7asbLAvZLWBuxLwIXC+LZJHLRQho5sB8BtcajNg==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB1695.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1b4::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Tue, 30 Aug
- 2022 06:26:42 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::382a:ed3b:83d6:e5d8%4]) with mapi id 15.20.5566.021; Tue, 30 Aug 2022
- 06:26:42 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v2 05/16] powerpc: Skip objtool from running on
- drivers/crypto/vmx/aesp8-ppc.o
-Thread-Topic: [PATCH v2 05/16] powerpc: Skip objtool from running on
- drivers/crypto/vmx/aesp8-ppc.o
-Thread-Index: AQHYu2ud2SA5fCr0+EyRwZDSKcWn6a3G/BeA
-Date:   Tue, 30 Aug 2022 06:26:42 +0000
-Message-ID: <0ff8e573-fc14-a388-d057-d7ba54ba9de6@csgroup.eu>
-References: <20220829055223.24767-1-sv@linux.ibm.com>
- <20220829055223.24767-6-sv@linux.ibm.com>
-In-Reply-To: <20220829055223.24767-6-sv@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: a7248bc1-7379-4cb6-1890-08da8a509add
-x-ms-traffictypediagnostic: PR1P264MB1695:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 10wXS/tjBSpFqqqffzITkuIEs212O6J4EKGrUNYpJgMfXkXSX5LDcIcdukgaLPzraOL9gGo5D9iJwxTR8xGVY3pDm7vxA/jFwwFjoCo9lVlTGpP14fwF7545eBdSopyTP1F0vWpTrSVnFrL78W1yDZesoa2MDl6++kV8+36s0F+X6qA7NSU5nULChdpJkLtzFNxA5k+16S0lK1o55cAdlFXnw9+D3RWSR3y1YAvpKTWSV5gfCqcc3pK0EgbVwvPIWSPW7YiunNyni0qX2l6zWUl/5GjwZHdfEUX8dAILxG9OE+t24A2inlM7H18GkSJ1Xx5H0FK5bMDg7uMH+43nkw+tlFD0eShqE0x0g2vt8qaPpkJnVmTL44rDjqpKPfZxkZ4Do9AxHy9VFPi4C6KYXGDfjTLS8NaOXYNK5RnWPMi0X6sG8hTmTjelzBpCgWbNe0SzSqgM18eKZQuWuT9dGEXcN/4tGAJDOEEjn3na47E1CXiI6nG1jZ85zz8k+UglwNzByzuoaoFEY3Y7HaE59x531wh8X/eX85ZgrZ0Jr+eo7hw7aquu3GlI02pGzPo9m3+u19mZl5lM8iZmecpv5g4XBK22+zfVFljSlEJ1Y37AlqiN/o8PKAFedctPqL44iIZrTyHqFOX/NhHIKweT5jG50uH0vEkPdQlO2ZvUJK83J2ZK1av8K/zQxYM1H/FVRLPzW+nMIt3DWg0GwijGCcIxy+oYFti+WTGmgDvFnby2sVZ7SIuEQz4QDxpV1K4l8QcfJ3bOQAYnDoaVsv8Z++QhLP//QopCdXPpMFlLozypFXrUJT8XzGw0Z6JBKJ3KqaRiNZ2yvGKg/Juw0z0s3w==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(136003)(366004)(346002)(39850400004)(316002)(54906003)(110136005)(66476007)(86362001)(66556008)(6486002)(8676002)(76116006)(31686004)(4326008)(66946007)(31696002)(66446008)(71200400001)(64756008)(5660300002)(478600001)(36756003)(38070700005)(7416002)(41300700001)(8936002)(44832011)(2616005)(122000001)(26005)(6506007)(2906002)(38100700002)(83380400001)(66574015)(186003)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Tzk1UHRPQmhuS0owdlcveHdwNU5VS1JZWHBCTEdUSU83aWJlUmF0VndKVE1k?=
- =?utf-8?B?STgxZ2ZKR0prLzhPZFgwZlJXc1U1RUlwV3VMakp1Z0JJRjBVM1FUTUh5S2RQ?=
- =?utf-8?B?NzZkMHRCeUxOaXg4YnRVRHM5MmJEcklNem0ydlJMekFTTEFFSTZwWUduNHNL?=
- =?utf-8?B?MUJob2YyakhVVHowSENPbU9MWmVJQ3FpbmQwSitPVysrd0UzTnFYSnlPRDVU?=
- =?utf-8?B?MkJINCt1YkJhMlh4UTBpaWdMZVhDTW1HZnhoZzVVL3VwVCtORE5WTC9aOWRY?=
- =?utf-8?B?dHFhQk4xMW1BVXlzSzhHRnNYZFNtS3JkajAvZTVFcEduVkIvRjA4WDMwOFQ3?=
- =?utf-8?B?M1pzNm1SMVN4VnRBbCt5SFVpOXl2MXRmWXdzTE9MdmdHMXFteE5EazFqUjRF?=
- =?utf-8?B?cWlja1p3UzFYOGM3V0NQbjVjZDk5em9FVUR5T3dCdUpHaXAwbmFieVJWbDJz?=
- =?utf-8?B?RVpHZ1pveWFtOHNlMUFLWnJHSEx3M0EwV2dXQ3FJM0luNFNZT0ZtZ2s1S2Zu?=
- =?utf-8?B?R05ra0RBbVdkWGhNelFyZGIveVZXZzU0emZZMHp4Qkx6NXZoYWdKZXhUUkdt?=
- =?utf-8?B?VUY2YlpjU3JjS2wyUmh2R2ZRWGlXalBibFNRM2daVTdZQ3c2ZFpHbzRRTVZo?=
- =?utf-8?B?Q2EwbkRHVzc4enI0U1lMTlZ1cWY5VW1zajRCZWNDMGtDZEdxcG9LOENXbWpB?=
- =?utf-8?B?Y3g4QWNDaGtvcUFQbTVGcFlZZ3NXZE9YS0RubWFUdnRTRldxYTlYTlIwTmw0?=
- =?utf-8?B?YTgvQk1CZzRUU2VHWGxDN3ZOdnRHSVpBUFkvNnI4SzRHUlVyVUZxNnZQZVJr?=
- =?utf-8?B?R0x2TGtqcDl6aXBnS2FoWUhsYVprcmRDbVcwOXNBY1dIS1FCcG1meldSazhh?=
- =?utf-8?B?S2RGS2xSR3h6QytFSlpkRE5rQjA4NndEcHorYkY2N2ZqdGpYZW9LeHhCc2gx?=
- =?utf-8?B?d0hhVVFyWEQ4KzZvU2VmUDRQaXhFbVA3SkMyL0JIQ1NqYlpoQ25ndEFNcita?=
- =?utf-8?B?a1FEcHFIL2Znbk9RRy9rZmt1N3BsOVZ2V3BFMW5yRk9BQXFWbVdCSldUY2NX?=
- =?utf-8?B?aHhhTWR0YTc1LytsK0twdk14cTdGWVI1YjBiSEVSL2VwcWtkcUNmVTlVdHEr?=
- =?utf-8?B?YmxDdGExR291cm9hOUpjNCtpK1ZGakswRGd5aDR2d2dsYVZSQld6Y3BnWkdx?=
- =?utf-8?B?RHdKUzdKZ2ViOXRibFN0QVJneVdLT21oMmJmNnhhbmM2bCtRR1JwRjc0dmxD?=
- =?utf-8?B?L1VjY1Z1UVR3SmtnMGtQdlhKZzhOV0sxSE45andUZ2V2d1FuUVFmYzJ3eDBL?=
- =?utf-8?B?WXhaWUFnK3hzVTVwcjMrb2U5UFQ5ZEtTRHFUWFJvbGlrWUVscGFlNjJIdm9z?=
- =?utf-8?B?aUUzM08vYkNWN3FrdVVCY2Y1RGRMZGRTdUVzOUcvZXhjWXVoZU1HSWJZTG42?=
- =?utf-8?B?S3VnZW01SW9jcVNDL2s3L0lYU3lVYmh2MElpdit1VDMyQnhDY3F1MURoM0lN?=
- =?utf-8?B?OUp4Y3JSaFdnOUd5aHR4aS8vbG12Z3VwRU1QK3ZZZUpILzlIeUxUNUNndTI1?=
- =?utf-8?B?VzJIc2ViTEJZM2IzWUhJZklYcW01TS9uV0JIMU1Mc0Y1dmM3UVhja3VZSE43?=
- =?utf-8?B?N3pFVFJ1eUxzRjhVc01vb2RrRUx5ejFnVjgxQ1FDSjlPVmttalcxc29CWTBD?=
- =?utf-8?B?YnNiV2FCZjA1RHFpSmtZQWhvSjg0bGMyZXZITXJiVWN1dHJYM0pvdVhqbUk4?=
- =?utf-8?B?enlWMld2bXJYMFZMZ2dkUERhbTNZNk5OeU1La3FlSzMrVWlaaWpFTHpkRGJr?=
- =?utf-8?B?UkhKVmhSejJ1S1hmTW9pc0ZTMjlQcFBTbURCa3JxUGJSbm4xN2dKT3dpdStU?=
- =?utf-8?B?ZGNXc0xwRTRzMEN2V1plbnNseHZ4dCtBYXdNZFRsQi9ocFp5WENnT0d3R1pS?=
- =?utf-8?B?YStVRVphVTl4enMyQ0NPdW9zaDlSZW15a1dOQTdaMDcwNDZsb1JOSlFvc1ho?=
- =?utf-8?B?Zmw0bGVXeVlQbjBxT1FJMWxZNFFwSk5aZzhYUFY5REZJT3luMmxwZHgyMXB2?=
- =?utf-8?B?OEppMVBwL1lCZlV6VjA5OFJmL08welpHUVpqRFVRRTM1Ny9ST0tEZkU0bXIr?=
- =?utf-8?B?K3h6cFIxSTF0R2RTM1RSTGpRZW1CN2VucktGeFpMazRPMVY2UmVwOXpWbUFX?=
- =?utf-8?B?dUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4CB8DF6174E39344B6AB81A0FEF097DF@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Tue, 30 Aug 2022 02:28:20 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BA6079EDF
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661840891; x=1693376891;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=S73koVKcgsUDVetxeCsU/72gi/xdCrC6CUy6MAc5fAg=;
+  b=S7TRgMbrn2B4EArS2Mr2YEMUfyKt16F/p64L6tFmIsfEdPKIFOnU5zh/
+   smeeOVeAnm+2vneLys0DWDKz22xPn/saYibmiZ+5oF6T6yKrsm/8lClzX
+   dVxojl5hG79xJVFHnr0hMU69UylSOrqeB1ztCqW3AWph54jYocY/RRxHo
+   DuIN9I5vo05WQel+MTKVvO6XeFxvVdGufHgT8lISQHS6G+m33xhhteJ+w
+   nkMmCC31z4JZC+ShQDVVJ61TIW+k9izd1zUA2BLrLKk4YCSnkJDqY0zb8
+   X+r6vxhWi+GSFKHIEA2yd7y0VoZqfsInbzkgghKOLedtvedkBnp+dlJd6
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="295096507"
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="295096507"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 23:28:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="644713666"
+Received: from lkp-server02.sh.intel.com (HELO e45bc14ccf4d) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 29 Aug 2022 23:28:06 -0700
+Received: from kbuild by e45bc14ccf4d with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oSujF-0000dl-14;
+        Tue, 30 Aug 2022 06:28:05 +0000
+Date:   Tue, 30 Aug 2022 14:27:17 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: drivers/remoteproc/stm32_rproc.c:139:20: sparse: sparse: incorrect
+ type in argument 1 (different address spaces)
+Message-ID: <202208301441.pwlngzY0-lkp@intel.com>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: a7248bc1-7379-4cb6-1890-08da8a509add
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Aug 2022 06:26:42.5919
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: h3rKQUnyyn+5lEZqRPws6LiQbObh4B0FNtNW2z8boHpa19U7oVBGgApk90gVDgXamPLTBT44uOkgRcAE49A7EI4kb3CAvZiibDMNUqUJhrU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB1695
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDI5LzA4LzIwMjIgw6AgMDc6NTIsIFNhdGh2aWthIFZhc2lyZWRkeSBhIMOpY3JpdMKg
-Og0KPiBXaXRoIG9ianRvb2wgZW5hYmxlZCwgYmVsb3cgd2FybmluZ3MgYXJlIHNlZW4gd2hlbiB0
-cnlpbmcgdG8gYnVpbGQ6DQo+IA0KPiBkcml2ZXJzL2NyeXB0by92bXgvYWVzcDgtcHBjLm86IHdh
-cm5pbmc6IG9ianRvb2w6IGFlc19wOF9zZXRfZW5jcnlwdF9rZXkrMHg0NDogdW5hbm5vdGF0ZWQg
-aW50cmEtZnVuY3Rpb24gY2FsbA0KPiANCj4gZHJpdmVycy9jcnlwdG8vdm14L2Flc3A4LXBwYy5v
-OiB3YXJuaW5nOiBvYmp0b29sOiAudGV4dCsweDI0NDg6IHVuYW5ub3RhdGVkIGludHJhLWZ1bmN0
-aW9uIGNhbGwNCj4gDQo+IGRyaXZlcnMvY3J5cHRvL3ZteC9hZXNwOC1wcGMubzogd2FybmluZzog
-b2JqdG9vbDogLnRleHQrMHgyZDY4OiB1bmFubm90YXRlZCBpbnRyYS1mdW5jdGlvbiBjYWxsDQo+
-IA0KPiBTa2lwIG9ianRvb2wgZnJvbSBydW5uaW5nIG9uIHRoaXMgZmlsZSwgZm9yIHR3byBtYWlu
-IHJlYXNvbnM6DQo+IA0KPiBTaW5jZSB0aGlzIGZpbGUgY29tZXMgZnJvbSBPcGVuU1NMLCBhbmQg
-c2luY2UgaXQgaXMgYSBwZXJsIGZpbGUNCj4gd2hpY2ggZ2VuZXJhdGVzIGEgLlMgZmlsZSwgaXQg
-bWF5IG5vdCBiZSB0aGUgYmVzdCBjaG9pY2UgdG8NCj4gbWFrZSB0b28gbWFueSBjb2RlIGNoYW5n
-ZXMgdG8gc3VjaCBmaWxlcywgdW5sZXNzIGFic29sdXRlbHkNCj4gbmVjZXNzYXJ5Lg0KPiANCj4g
-U2Vjb25kIHJlYXNvbiBpcyB0aGF0LCBhdCBsZWFzdCBhcyBmYXIgYXMgdGhlIG9ianRvb2wgLS1t
-Y291bnQNCj4gZnVuY3Rpb25hbGl0eSBpcyBjb25jZXJuZWQsIHdlIGRvIG5vdCBoYXZlIHRvIHJ1
-biBvYmp0b29sIG9uDQo+IHRoYXQgZmlsZSBiZWNhdXNlIHRoYXQgZmlsZSBkb2VzIG5vdCBoYXZl
-IGFueSBjYWxscyB0byBfbWNvdW50Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogU2F0aHZpa2EgVmFz
-aXJlZGR5IDxzdkBsaW51eC5pYm0uY29tPg0KDQpSZXZpZXdlZC1ieTogQ2hyaXN0b3BoZSBMZXJv
-eSA8Y2hyaXN0b3BoZS5sZXJveUBjc2dyb3VwLmV1Pg0KDQo+IC0tLQ0KPiAgIGRyaXZlcnMvY3J5
-cHRvL3ZteC9NYWtlZmlsZSB8IDIgKysNCj4gICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25z
-KCspDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9jcnlwdG8vdm14L01ha2VmaWxlIGIvZHJp
-dmVycy9jcnlwdG8vdm14L01ha2VmaWxlDQo+IGluZGV4IDI1NjBjZmVhMWRlYy4uN2I0MWYwZGE2
-ODA3IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2NyeXB0by92bXgvTWFrZWZpbGUNCj4gKysrIGIv
-ZHJpdmVycy9jcnlwdG8vdm14L01ha2VmaWxlDQo+IEBAIC05LDMgKzksNSBAQCB0YXJnZXRzICs9
-IGFlc3A4LXBwYy5TIGdoYXNocDgtcHBjLlMNCj4gICANCj4gICAkKG9iaikvYWVzcDgtcHBjLlMg
-JChvYmopL2doYXNocDgtcHBjLlM6ICQob2JqKS8lLlM6ICQoc3JjKS8lLnBsIEZPUkNFDQo+ICAg
-CSQoY2FsbCBpZl9jaGFuZ2VkLHBlcmwpDQo+ICsNCj4gK09CSkVDVF9GSUxFU19OT05fU1RBTkRB
-UkRfYWVzcDgtcHBjLm8gOj0geQ==
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
+commit: d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee ARM: mm: kill unused runtime hook arch_iounmap()
+date:   9 weeks ago
+config: arm-randconfig-s031-20220829 (https://download.01.org/0day-ci/archive/20220830/202208301441.pwlngzY0-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+   drivers/remoteproc/stm32_rproc.c:122:12: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *va @@     got void [noderef] __iomem * @@
+   drivers/remoteproc/stm32_rproc.c:122:12: sparse:     expected void *va
+   drivers/remoteproc/stm32_rproc.c:122:12: sparse:     got void [noderef] __iomem *
+>> drivers/remoteproc/stm32_rproc.c:139:20: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *io_addr @@     got void *va @@
+   drivers/remoteproc/stm32_rproc.c:139:20: sparse:     expected void volatile [noderef] __iomem *io_addr
+   drivers/remoteproc/stm32_rproc.c:139:20: sparse:     got void *va
+   drivers/remoteproc/stm32_rproc.c:632:17: sparse: sparse: cast removes address space '__iomem' of expression
+
+vim +139 drivers/remoteproc/stm32_rproc.c
+
+13140de09cc2dd Fabien Dessenne 2019-05-14  134  
+13140de09cc2dd Fabien Dessenne 2019-05-14  135  static int stm32_rproc_mem_release(struct rproc *rproc,
+13140de09cc2dd Fabien Dessenne 2019-05-14  136  				   struct rproc_mem_entry *mem)
+13140de09cc2dd Fabien Dessenne 2019-05-14  137  {
+13140de09cc2dd Fabien Dessenne 2019-05-14  138  	dev_dbg(rproc->dev.parent, "unmap memory: %pa\n", &mem->dma);
+13140de09cc2dd Fabien Dessenne 2019-05-14 @139  	iounmap(mem->va);
+13140de09cc2dd Fabien Dessenne 2019-05-14  140  
+13140de09cc2dd Fabien Dessenne 2019-05-14  141  	return 0;
+13140de09cc2dd Fabien Dessenne 2019-05-14  142  }
+13140de09cc2dd Fabien Dessenne 2019-05-14  143  
+
+:::::: The code at line 139 was first introduced by commit
+:::::: 13140de09cc2dd5e5166ad42292bb82af4e23cef remoteproc: stm32: add an ST stm32_rproc driver
+
+:::::: TO: Fabien Dessenne <fabien.dessenne@st.com>
+:::::: CC: Bjorn Andersson <bjorn.andersson@linaro.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

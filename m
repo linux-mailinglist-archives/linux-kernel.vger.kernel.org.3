@@ -2,311 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC6D85A5D90
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:01:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F20E5A5D8D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:00:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiH3IAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:00:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
+        id S230224AbiH3IAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:00:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiH3IAJ (ORCPT
+        with ESMTP id S231375AbiH3H7o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:00:09 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9287213F6A;
-        Tue, 30 Aug 2022 01:00:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661846405; x=1693382405;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=gj7BG2I75M6eDiqbF3AlhKCmmZofbp2bRV6PEgQpKu8=;
-  b=n1fzlxMvX54OgM9QTi7Yi3G9cX5RejlyUC2BiO1GcCUpvG9T4vMSA0xa
-   4edS0r83v529yYI0t63s6SWwl9LhajtYQKewPWo9j4h0saC4+gIn69Vq6
-   LGv95AsBl2daukQCqFpGB2Ig0Or7eUNn+8NCL89ZeP+pmLOk9p+lHcihc
-   qzFljl759T1EdDUdUXaOvdaOwkzwbhIWukPPgeRTS4DUWOgumOWdttZgq
-   DZq013xA1IJq3XDirK7Jbk0EWwu79jTn1dCbweH/CJlZjFhbbNeL+TwTP
-   seLqZnNWCGcFOiyCKWuEYpCQ/3lUBCEiHWVyJ3IvBVuIFDnfGa3BrRAhG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="278129386"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="278129386"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:00:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="939920813"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 30 Aug 2022 00:59:54 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oSwA5-00003W-2n;
-        Tue, 30 Aug 2022 07:59:53 +0000
-Date:   Tue, 30 Aug 2022 15:59:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mazin Al Haddad <mazinalhaddad05@gmail.com>, pontus.fuchs@gmail.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, kvalo@kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        skhan@linuxfoundation.org,
-        Mazin Al Haddad <mazinalhaddad05@gmail.com>,
-        syzbot+1bc2c2afd44f820a669f@syzkaller.appspotmail.com
-Subject: Re: [PATCH v3] ar5523: check endpoints type and direction in probe()
-Message-ID: <202208301536.yCbVfZ1a-lkp@intel.com>
-References: <20220827110148.203104-1-mazinalhaddad05@gmail.com>
+        Tue, 30 Aug 2022 03:59:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7F9D276A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:59:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661846380;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=KCfrLsUUliFZAsT7cuTFQ+KKBb55P+r5AzSlUp1Nkos=;
+        b=V/nX782znauQJCKsfwuDTU6icvwpBC0Z+5Ve94Rj6Cx+SjgKkI6WaqK61tAxbhzBtRKMek
+        yNeglz02H37459h2+e4eLLHXuOoj//yZw20MB9ZrYMJroAZC5dr8JMtkng0GxRL/hVNihg
+        9XdgfodtdsdfRJUwJlmmJc5wVZKvZ0E=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-128-20ZX4OesOfa0xoWUl8dOag-1; Tue, 30 Aug 2022 03:59:35 -0400
+X-MC-Unique: 20ZX4OesOfa0xoWUl8dOag-1
+Received: by mail-wm1-f70.google.com with SMTP id m22-20020a7bca56000000b003a652939bd1so1802718wml.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:59:35 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=KCfrLsUUliFZAsT7cuTFQ+KKBb55P+r5AzSlUp1Nkos=;
+        b=xVV80RHRiXAYo4CYBGT4bi1eVcOyooR7wNaUaMIEVJb7SPojCEXEA8Lc902ZpXkbNR
+         I/ukAryO89jAyS5wDuTSuFE9XYMWFQldDmn9AsPHlqo6o9rqKhwWceKFdsyZM6a7F0TB
+         efPCfHUuz05aZW9BhgYh1jIUHz0KSJowPj8T58wSyaCa3U8zwUkI2/V/5JeU432k9+F6
+         glZws+ZyHP6MBEBpY49S6Hbe6n/zGrGwBJGhDc09plEUxKrxjmFEsQyfGfa4qDdqhiy0
+         ihPz6oEVsSzIiiEXA1tEtW1a8ImaGO91AmooweBE0KOyzphynVzxMH0Xs28M8e1LNExY
+         4jTA==
+X-Gm-Message-State: ACgBeo3ZFWG+GRZ8M0TtdAJ+JBzdQxGffcuAHEyEPsEEIfJ8GlWkq/FF
+        xKTVyHri3tZlPlyubpnxYk0YSNRkO4DWRbb9TTBoYHqCa39KGdMvgUD7F1Ajmg4qYYVuBK4/4Br
+        tVquhskhmybyo73+FEroTK2h8
+X-Received: by 2002:a05:600c:1992:b0:3a6:23f6:8417 with SMTP id t18-20020a05600c199200b003a623f68417mr8373207wmq.14.1661846374816;
+        Tue, 30 Aug 2022 00:59:34 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6G+HNENoZbk/kP0Upti13ajYwcNsvPHgO3ZJjPM9lTCEmTs9Are0AGapPE11SllUCzKZrfKw==
+X-Received: by 2002:a05:600c:1992:b0:3a6:23f6:8417 with SMTP id t18-20020a05600c199200b003a623f68417mr8373198wmq.14.1661846374508;
+        Tue, 30 Aug 2022 00:59:34 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70a:1000:ecb4:919b:e3d3:e20b? (p200300cbc70a1000ecb4919be3d3e20b.dip0.t-ipconnect.de. [2003:cb:c70a:1000:ecb4:919b:e3d3:e20b])
+        by smtp.gmail.com with ESMTPSA id l14-20020a05600c4f0e00b003a83d5f3678sm11136280wmq.7.2022.08.30.00.59.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 00:59:34 -0700 (PDT)
+Message-ID: <39145649-c378-d027-8856-81b4f09050fc@redhat.com>
+Date:   Tue, 30 Aug 2022 09:59:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220827110148.203104-1-mazinalhaddad05@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] vfio/type1: Unpin zero pages
+Content-Language: en-US
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lpivarc@redhat.com
+References: <166182871735.3518559.8884121293045337358.stgit@omen>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <166182871735.3518559.8884121293045337358.stgit@omen>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mazin,
+On 30.08.22 05:05, Alex Williamson wrote:
+> There's currently a reference count leak on the zero page.  We increment
+> the reference via pin_user_pages_remote(), but the page is later handled
+> as an invalid/reserved page, therefore it's not accounted against the
+> user and not unpinned by our put_pfn().
+> 
+> Introducing special zero page handling in put_pfn() would resolve the
+> leak, but without accounting of the zero page, a single user could
+> still create enough mappings to generate a reference count overflow.
+> 
+> The zero page is always resident, so for our purposes there's no reason
+> to keep it pinned.  Therefore, add a loop to walk pages returned from
+> pin_user_pages_remote() and unpin any zero pages.
+> 
+> Cc: David Hildenbrand <david@redhat.com>
+> Cc: stable@vger.kernel.org
+> Reported-by: Luboslav Pivarc <lpivarc@redhat.com>
+> Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+> ---
+>  drivers/vfio/vfio_iommu_type1.c |   12 ++++++++++++
+>  1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
+> index db516c90a977..8706482665d1 100644
+> --- a/drivers/vfio/vfio_iommu_type1.c
+> +++ b/drivers/vfio/vfio_iommu_type1.c
+> @@ -558,6 +558,18 @@ static int vaddr_get_pfns(struct mm_struct *mm, unsigned long vaddr,
+>  	ret = pin_user_pages_remote(mm, vaddr, npages, flags | FOLL_LONGTERM,
+>  				    pages, NULL, NULL);
+>  	if (ret > 0) {
+> +		int i;
+> +
+> +		/*
+> +		 * The zero page is always resident, we don't need to pin it
+> +		 * and it falls into our invalid/reserved test so we don't
+> +		 * unpin in put_pfn().  Unpin all zero pages in the batch here.
+> +		 */
+> +		for (i = 0 ; i < ret; i++) {
+> +			if (unlikely(is_zero_pfn(page_to_pfn(pages[i]))))
+> +				unpin_user_page(pages[i]);
+> +		}
+> +
+>  		*pfn = page_to_pfn(pages[0]);
+>  		goto done;
+>  	}
+> 
+> 
 
-Thank you for the patch! Yet something to improve:
+As discussed offline, for the shared zeropage (that's not even
+refcounted when mapped into a process), this makes perfect sense to me.
 
-[auto build test ERROR on wireless-next/main]
-[also build test ERROR on wireless/main linus/master v6.0-rc3 next-20220829]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Good question raised by Sean if ZONE_DEVICE pages might similarly be
+problematic. But for them, we cannot simply always unpin here.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Mazin-Al-Haddad/ar5523-check-endpoints-type-and-direction-in-probe/20220827-190333
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git main
-config: i386-randconfig-a016-20220829 (https://download.01.org/0day-ci/archive/20220830/202208301536.yCbVfZ1a-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0c1dd42c9cfa5b58485b12b4f27e1539fcb8b9dd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mazin-Al-Haddad/ar5523-check-endpoints-type-and-direction-in-probe/20220827-190333
-        git checkout 0c1dd42c9cfa5b58485b12b4f27e1539fcb8b9dd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/net/wireless/ath/ar5523/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All error/warnings (new ones prefixed by >>):
-
->> drivers/net/wireless/ath/ar5523/ar5523.c:1620:41: error: too few arguments provided to function-like macro invocation
-                   dev_warn("wrong number of endpoints\n");
-                                                         ^
-   include/linux/dev_printk.h:145:9: note: macro 'dev_warn' defined here
-   #define dev_warn(dev, fmt, ...) \
-           ^
->> drivers/net/wireless/ath/ar5523/ar5523.c:1620:3: error: use of undeclared identifier 'dev_warn'; did you mean '_dev_warn'?
-                   dev_warn("wrong number of endpoints\n");
-                   ^~~~~~~~
-                   _dev_warn
-   include/linux/dev_printk.h:52:6: note: '_dev_warn' declared here
-   void _dev_warn(const struct device *dev, const char *fmt, ...);
-        ^
->> drivers/net/wireless/ath/ar5523/ar5523.c:1620:3: warning: expression result unused [-Wunused-value]
-                   dev_warn("wrong number of endpoints\n");
-                   ^~~~~~~~
-   1 warning and 2 errors generated.
-
-
-vim +1620 drivers/net/wireless/ath/ar5523/ar5523.c
-
-  1577	
-  1578	static int ar5523_probe(struct usb_interface *intf,
-  1579				const struct usb_device_id *id)
-  1580	{
-  1581		struct usb_device *dev = interface_to_usbdev(intf);
-  1582		struct ieee80211_hw *hw;
-  1583		struct ar5523 *ar;
-  1584		struct usb_host_interface *host = intf->cur_altsetting;
-  1585		struct usb_endpoint_descriptor *cmd_tx, *cmd_rx, *data_tx, *data_rx;
-  1586		int error = -ENOMEM;
-  1587	
-  1588		if (host->desc.bNumEndpoints != 4) {
-  1589			dev_err(&dev->dev, "Wrong number of endpoints\n");
-  1590			return -ENODEV;
-  1591		}
-  1592	
-  1593		for (int i = 0; i < host->desc.bNumEndpoints; ++i) {
-  1594			struct usb_endpoint_descriptor *ep = &host->endpoint[i].desc;
-  1595	
-  1596			if (usb_endpoint_is_bulk_out(ep)) {
-  1597				if (!cmd_tx) {
-  1598					if (ep->bEndpointAddress == AR5523_CMD_TX_PIPE)
-  1599						cmd_tx = ep;
-  1600				}
-  1601				if (!data_tx) {
-  1602					if (ep->bEndpointAddress == AR5523_DATA_TX_PIPE)
-  1603						data_tx = ep;
-  1604					}
-  1605			}
-  1606	
-  1607			if (usb_endpoint_is_bulk_in(ep)) {
-  1608				if (!cmd_rx) {
-  1609					if (ep->bEndpointAddress == AR5523_CMD_RX_PIPE)
-  1610						cmd_rx = ep;
-  1611				}
-  1612				if (!data_rx) {
-  1613					if (ep->bEndpointAddress == AR5523_DATA_RX_PIPE)
-  1614						data_rx = ep;
-  1615				}
-  1616			}
-  1617		}
-  1618	
-  1619		if (!cmd_tx || !data_tx || !cmd_rx || !data_rx) {
-> 1620			dev_warn("wrong number of endpoints\n");
-  1621			return -ENODEV;
-  1622		}
-  1623	
-  1624		/*
-  1625		 * Load firmware if the device requires it.  This will return
-  1626		 * -ENXIO on success and we'll get called back afer the usb
-  1627		 * id changes to indicate that the firmware is present.
-  1628		 */
-  1629		if (id->driver_info & AR5523_FLAG_PRE_FIRMWARE)
-  1630			return ar5523_load_firmware(dev);
-  1631	
-  1632	
-  1633		hw = ieee80211_alloc_hw(sizeof(*ar), &ar5523_ops);
-  1634		if (!hw)
-  1635			goto out;
-  1636		SET_IEEE80211_DEV(hw, &intf->dev);
-  1637	
-  1638		ar = hw->priv;
-  1639		ar->hw = hw;
-  1640		ar->dev = dev;
-  1641		mutex_init(&ar->mutex);
-  1642	
-  1643		INIT_DELAYED_WORK(&ar->stat_work, ar5523_stat_work);
-  1644		timer_setup(&ar->tx_wd_timer, ar5523_tx_wd_timer, 0);
-  1645		INIT_WORK(&ar->tx_wd_work, ar5523_tx_wd_work);
-  1646		INIT_WORK(&ar->tx_work, ar5523_tx_work);
-  1647		INIT_LIST_HEAD(&ar->tx_queue_pending);
-  1648		INIT_LIST_HEAD(&ar->tx_queue_submitted);
-  1649		spin_lock_init(&ar->tx_data_list_lock);
-  1650		atomic_set(&ar->tx_nr_total, 0);
-  1651		atomic_set(&ar->tx_nr_pending, 0);
-  1652		init_waitqueue_head(&ar->tx_flush_waitq);
-  1653	
-  1654		atomic_set(&ar->rx_data_free_cnt, 0);
-  1655		INIT_WORK(&ar->rx_refill_work, ar5523_rx_refill_work);
-  1656		INIT_LIST_HEAD(&ar->rx_data_free);
-  1657		INIT_LIST_HEAD(&ar->rx_data_used);
-  1658		spin_lock_init(&ar->rx_data_list_lock);
-  1659	
-  1660		ar->wq = create_singlethread_workqueue("ar5523");
-  1661		if (!ar->wq) {
-  1662			ar5523_err(ar, "Could not create wq\n");
-  1663			goto out_free_ar;
-  1664		}
-  1665	
-  1666		error = ar5523_alloc_rx_bufs(ar);
-  1667		if (error) {
-  1668			ar5523_err(ar, "Could not allocate rx buffers\n");
-  1669			goto out_free_wq;
-  1670		}
-  1671	
-  1672		error = ar5523_alloc_rx_cmd(ar);
-  1673		if (error) {
-  1674			ar5523_err(ar, "Could not allocate rx command buffers\n");
-  1675			goto out_free_rx_bufs;
-  1676		}
-  1677	
-  1678		error = ar5523_alloc_tx_cmd(ar);
-  1679		if (error) {
-  1680			ar5523_err(ar, "Could not allocate tx command buffers\n");
-  1681			goto out_free_rx_cmd;
-  1682		}
-  1683	
-  1684		error = ar5523_submit_rx_cmd(ar);
-  1685		if (error) {
-  1686			ar5523_err(ar, "Failed to submit rx cmd\n");
-  1687			goto out_free_tx_cmd;
-  1688		}
-  1689	
-  1690		/*
-  1691		 * We're now ready to send/receive firmware commands.
-  1692		 */
-  1693		error = ar5523_host_available(ar);
-  1694		if (error) {
-  1695			ar5523_err(ar, "could not initialize adapter\n");
-  1696			goto out_cancel_rx_cmd;
-  1697		}
-  1698	
-  1699		error = ar5523_get_max_rxsz(ar);
-  1700		if (error) {
-  1701			ar5523_err(ar, "could not get caps from adapter\n");
-  1702			goto out_cancel_rx_cmd;
-  1703		}
-  1704	
-  1705		error = ar5523_get_devcap(ar);
-  1706		if (error) {
-  1707			ar5523_err(ar, "could not get caps from adapter\n");
-  1708			goto out_cancel_rx_cmd;
-  1709		}
-  1710	
-  1711		error = ar5523_get_devstatus(ar);
-  1712		if (error != 0) {
-  1713			ar5523_err(ar, "could not get device status\n");
-  1714			goto out_cancel_rx_cmd;
-  1715		}
-  1716	
-  1717		ar5523_info(ar, "MAC/BBP AR5523, RF AR%c112\n",
-  1718				(id->driver_info & AR5523_FLAG_ABG) ? '5' : '2');
-  1719	
-  1720		ar->vif = NULL;
-  1721		ieee80211_hw_set(hw, HAS_RATE_CONTROL);
-  1722		ieee80211_hw_set(hw, RX_INCLUDES_FCS);
-  1723		ieee80211_hw_set(hw, SIGNAL_DBM);
-  1724		hw->extra_tx_headroom = sizeof(struct ar5523_tx_desc) +
-  1725					sizeof(struct ar5523_chunk);
-  1726		hw->wiphy->interface_modes = BIT(NL80211_IFTYPE_STATION);
-  1727		hw->queues = 1;
-  1728	
-  1729		error = ar5523_init_modes(ar);
-  1730		if (error)
-  1731			goto out_cancel_rx_cmd;
-  1732	
-  1733		wiphy_ext_feature_set(hw->wiphy, NL80211_EXT_FEATURE_CQM_RSSI_LIST);
-  1734	
-  1735		usb_set_intfdata(intf, hw);
-  1736	
-  1737		error = ieee80211_register_hw(hw);
-  1738		if (error) {
-  1739			ar5523_err(ar, "could not register device\n");
-  1740			goto out_cancel_rx_cmd;
-  1741		}
-  1742	
-  1743		ar5523_info(ar, "Found and initialized AR5523 device\n");
-  1744		return 0;
-  1745	
-  1746	out_cancel_rx_cmd:
-  1747		ar5523_cancel_rx_cmd(ar);
-  1748	out_free_tx_cmd:
-  1749		ar5523_free_tx_cmd(ar);
-  1750	out_free_rx_cmd:
-  1751		ar5523_free_rx_cmd(ar);
-  1752	out_free_rx_bufs:
-  1753		ar5523_free_rx_bufs(ar);
-  1754	out_free_wq:
-  1755		destroy_workqueue(ar->wq);
-  1756	out_free_ar:
-  1757		ieee80211_free_hw(hw);
-  1758	out:
-  1759		return error;
-  1760	}
-  1761	
+Reviewed-by: David Hildenbrand <david@redhat.com>
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+
+David / dhildenb
+

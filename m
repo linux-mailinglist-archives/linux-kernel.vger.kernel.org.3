@@ -2,263 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0EB5A5C39
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:55:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 135615A5C3C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiH3Gza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40790 "EHLO
+        id S230289AbiH3G4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:56:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbiH3GzZ (ORCPT
+        with ESMTP id S229817AbiH3G4X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:55:25 -0400
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722EBDF23;
-        Mon, 29 Aug 2022 23:55:21 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id cu2so20243248ejb.0;
-        Mon, 29 Aug 2022 23:55:21 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=UPXJ1JqGigKFmyD9U/hiuxsOSi9xW0X3BsnOgNCxc0w=;
-        b=UTlnTHLuKDdgEQydVpgsFP5L7frav0d1NKNZR7Kpn9j0Ygj6ntrr6+ciWdMHxQdVNA
-         Q9MpxUDVck+wpnGe1fBUj/o1JOK36roJ5m/Eo9XGrGbg9c/vNgzupKexRS1kiAcnO1Oq
-         Jk6xZAsJ1RgWu8A/X19SLrObHI9RHYT1nVVmttAM1QdewevOTTYSXtIriRZDswKi8B9l
-         5s+XcfDP6AAGAOeR/V+d2hS3q140/I5Y1iNIoIOGFffnCZHMrjHXxE1hDmOcnAAKkIRz
-         bNXhT7PjFveGJr+nwZfnECzDUIPA2lxDep5GQ3C5WnRGwCr4y2iueC5qi/Zot7DeOsMU
-         U4AQ==
-X-Gm-Message-State: ACgBeo20sGPWjQQFiu7U0JoY6wUJhUpxE+LCrLy23L5M8jBxrXcmXJgD
-        1MSAWd3lNlmOlNLX7egK2dI=
-X-Google-Smtp-Source: AA6agR5tLpVcq4TB+Wma0x0M4j3UnQqurgLeChLbe8oncg++th8Y0G6ch7qXXpgLNgRrw2X52XMatg==
-X-Received: by 2002:a17:907:9625:b0:730:ad62:9c86 with SMTP id gb37-20020a170907962500b00730ad629c86mr15882997ejc.281.1661842519955;
-        Mon, 29 Aug 2022 23:55:19 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id h8-20020a50ed88000000b004463b99bc09sm6756792edr.88.2022.08.29.23.55.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Aug 2022 23:55:19 -0700 (PDT)
-Message-ID: <387a0d37-6a75-d721-87dd-86219f61ef86@kernel.org>
-Date:   Tue, 30 Aug 2022 08:55:18 +0200
+        Tue, 30 Aug 2022 02:56:23 -0400
+Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E90BD113
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:56:13 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTPS id 27U6tgxX028537
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
+        Tue, 30 Aug 2022 14:55:42 +0800 (CST)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Tue, 30 Aug 2022 14:55:43 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>,
+        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>
+Subject: [PATCH] fs: use kvmalloc for big coredump file
+Date:   Tue, 30 Aug 2022 14:55:23 +0800
+Message-ID: <1661842523-26716-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2 3/6] tty: n_gsm: replace use of gsm_read_ea() with
- gsm_read_ea_val()
-Content-Language: en-US
-To:     "D. Starke" <daniel.starke@siemens.com>,
-        linux-serial@vger.kernel.org, gregkh@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-References: <20220823062259.4754-1-daniel.starke@siemens.com>
- <20220823062259.4754-3-daniel.starke@siemens.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220823062259.4754-3-daniel.starke@siemens.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 27U6tgxX028537
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23. 08. 22, 8:22, D. Starke wrote:
-> From: Daniel Starke <daniel.starke@siemens.com>
-> 
-> Replace the use of gsm_read_ea() with gsm_read_ea_val() where applicable to
-> improve code readability and avoid errors like in the past.
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-What errors?
+High order page allocation observed which even introduce kernel panic when generating
+coredump file, use kvmalloc_array instead of kmalloc_array
 
-> Reported-by: kernel test robot <lkp@intel.com>
+[68058.982108] init: Untracked pid 3847 exited with status 0
+[68058.982343] init: Untracked pid 3847 did not have an associated service entry and will not be reaped
+[68059.038127] warn_alloc: 29 callbacks suppressed
+[68059.038132] TimerThread: page allocation failure: order:7, mode:0x40dc0(GFP_KERNEL|__GFP_COMP|__GFP_ZERO), nodemask=(null),cpuset=foreground,mems_allowed=0
+[68059.038155] CPU: 6 PID: 3597 Comm: TimerThread Tainted: G        W  OE     5.15.41-android13-8-01198-g03458ee9a090-ab000039 #1
+[68059.038159] Hardware name: Unisoc UMS9620-base Board (DT)
+[68059.038161] Call trace:
+[68059.038163]  dump_backtrace.cfi_jt+0x0/0x8
+[68059.038169]  dump_stack_lvl+0x98/0xe8
+[68059.038174]  warn_alloc+0x164/0x200
+[68059.038180]  __alloc_pages_slowpath+0x9d4/0xb64
+[68059.038183]  __alloc_pages+0x21c/0x39c
+[68059.038186]  kmalloc_order+0x4c/0x13c
+[68059.038189]  kmalloc_order_trace+0x34/0x154
+[68059.038192]  __kmalloc+0x600/0x8a8
+[68059.038196]  elf_core_dump+0x7c4/0x15d8
+[68059.038201]  do_coredump+0x680/0xe54
+[68059.038203]  get_signal+0x610/0x988
+[68059.038209]  do_signal+0xd4/0x2bc
+[68059.038213]  do_notify_resume+0xa0/0x1c8
+[68059.038216]  el0_svc+0x68/0x90
+[68059.038219]  el0t_64_sync_handler+0x88/0xec
+[68059.038222]  el0t_64_sync+0x1b4/0x1b8
 
-Perhaps you have a link?
+Reported-by: Guanglu Xu <guanglu.xu@unisoc.com>
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+---
+ fs/coredump.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
-> ---
->   drivers/tty/n_gsm.c | 99 +++++++++++++++++++++++----------------------
->   1 file changed, 51 insertions(+), 48 deletions(-)
-> 
-> Changes since v1:
-> Fixed use of wrong variable in debug output within gsm_dlci_data().
-> 
-> Link: https://lore.kernel.org/all/202208222147.WfFRmf1r-lkp@intel.com/
-
-Ah, you do. This should have been above...
-
-> diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-> index ed399d57b197..9535e84f3063 100644
-> --- a/drivers/tty/n_gsm.c
-> +++ b/drivers/tty/n_gsm.c
-> @@ -1418,18 +1418,13 @@ static void gsm_control_modem(struct gsm_mux *gsm, const u8 *data, int clen)
->   	unsigned int modem = 0;
->   	struct gsm_dlci *dlci;
->   	int len = clen;
-> -	int slen;
-> +	int cl = clen;
->   	const u8 *dp = data;
->   	struct tty_struct *tty;
->   
-> -	while (gsm_read_ea(&addr, *dp++) == 0) {
-> -		len--;
-> -		if (len == 0)
-> -			return;
-> -	}
-> -	/* Must be at least one byte following the EA */
-> -	len--;
-> -	if (len <= 0)
-> +	len = gsm_read_ea_val(&addr, data, cl);
-> +
-
-There should be likely no extra \n here between assignment and check of 
-the value (len).
-
-> +	if (len < 1)
->   		return;
->   
->   	addr >>= 1;
-> @@ -1438,15 +1433,21 @@ static void gsm_control_modem(struct gsm_mux *gsm, const u8 *data, int clen)
->   		return;
->   	dlci = gsm->dlci[addr];
->   
-> -	slen = len;
-> -	while (gsm_read_ea(&modem, *dp++) == 0) {
-> -		len--;
-> -		if (len == 0)
-> -			return;
-> -	}
-> -	len--;
-> +	/* Must be at least one byte following the EA */
-> +	if ((cl - len) < 1)
-> +		return;
-> +
-> +	dp += len;
-> +	cl -= len;
-> +
-> +	/* get the modem status */
-> +	len = gsm_read_ea_val(&modem, dp, cl);
-> +
-> +	if (len < 1)
-
-The same here.
-
-> +		return;
-> +
->   	tty = tty_port_tty_get(&dlci->port);
-> -	gsm_process_modem(tty, dlci, modem, slen - len);
-> +	gsm_process_modem(tty, dlci, modem, cl);
->   	if (tty) {
->   		tty_wakeup(tty);
->   		tty_kref_put(tty);
-> @@ -1921,11 +1922,10 @@ static void gsm_dlci_data(struct gsm_dlci *dlci, const u8 *data, int clen)
->   	struct tty_port *port = &dlci->port;
->   	struct tty_struct *tty;
->   	unsigned int modem = 0;
-> -	int len = clen;
-> -	int slen = 0;
-> +	int len;
->   
->   	if (debug & 16)
-> -		pr_debug("%d bytes for tty\n", len);
-> +		pr_debug("%d bytes for tty\n", clen);
->   	switch (dlci->adaption)  {
->   	/* Unsupported types */
->   	case 4:		/* Packetised interruptible data */
-> @@ -1933,24 +1933,22 @@ static void gsm_dlci_data(struct gsm_dlci *dlci, const u8 *data, int clen)
->   	case 3:		/* Packetised uininterruptible voice/data */
->   		break;
->   	case 2:		/* Asynchronous serial with line state in each frame */
-> -		while (gsm_read_ea(&modem, *data++) == 0) {
-> -			len--;
-> -			slen++;
-> -			if (len == 0)
-> -				return;
-> -		}
-> -		len--;
-> -		slen++;
-> +		len = gsm_read_ea_val(&modem, data, clen);
-> +		if (len < 1)
-> +			return;
->   		tty = tty_port_tty_get(port);
->   		if (tty) {
-> -			gsm_process_modem(tty, dlci, modem, slen);
-> +			gsm_process_modem(tty, dlci, modem, len);
->   			tty_wakeup(tty);
->   			tty_kref_put(tty);
->   		}
-> +		/* Skip processed modem data */
-> +		data += len;
-> +		clen -= len;
->   		fallthrough;
->   	case 1:		/* Line state will go via DLCI 0 controls only */
->   	default:
-> -		tty_insert_flip_string(port, data, len);
-> +		tty_insert_flip_string(port, data, clen);
->   		tty_flip_buffer_push(port);
->   	}
->   }
-> @@ -1971,24 +1969,29 @@ static void gsm_dlci_command(struct gsm_dlci *dlci, const u8 *data, int len)
->   {
->   	/* See what command is involved */
->   	unsigned int command = 0;
-> -	while (len-- > 0) {
-> -		if (gsm_read_ea(&command, *data++) == 1) {
-> -			int clen = *data++;
-> -			len--;
-> -			/* FIXME: this is properly an EA */
-> -			clen >>= 1;
-> -			/* Malformed command ? */
-> -			if (clen > len)
-> -				return;
-> -			if (command & 1)
-> -				gsm_control_message(dlci->gsm, command,
-> -								data, clen);
-> -			else
-> -				gsm_control_response(dlci->gsm, command,
-> -								data, clen);
-> -			return;
-> -		}
-> -	}
-> +	const u8 *dp = data;
-
-Why is the local "dp" needed?
-
-> +	int clen = 0;
-> +	int dlen;
-
-Having lengths signed is mostly confusing. Shouldn't/couldn't they be 
-uint instead?
-
-> +	/* read the command */
-> +	dlen = gsm_read_ea_val(&command, dp, len);
-> +	len -= dlen;
-> +	dp += dlen;
-> +
-> +	/* read any control data */
-> +	dlen = gsm_read_ea_val(&clen, dp, len);
-> +	len -= dlen;
-> +	dp += dlen;
-> +
-> +	/* Malformed command? */
-> +	if (clen > len)
-> +		return;
-> +
-> +	if (command & 1)
-> +		gsm_control_message(dlci->gsm, command, dp, clen);
-> +	else
-> +		gsm_control_response(dlci->gsm, command, dp, clen);
-> +	return;
-
-An extra return.
-
->   }
-
-thanks,
+diff --git a/fs/coredump.c b/fs/coredump.c
+index ebc43f9..ed9b191 100644
+--- a/fs/coredump.c
++++ b/fs/coredump.c
+@@ -213,7 +213,7 @@ static int format_corename(struct core_name *cn, struct coredump_params *cprm,
+ 
+ 	if (ispipe) {
+ 		int argvs = sizeof(core_pattern) / 2;
+-		(*argv) = kmalloc_array(argvs, sizeof(**argv), GFP_KERNEL);
++		(*argv) = kvmalloc_array(argvs, sizeof(**argv), GFP_KERNEL);
+ 		if (!(*argv))
+ 			return -ENOMEM;
+ 		(*argv)[(*argc)++] = 0;
+@@ -612,7 +612,7 @@ void do_coredump(const kernel_siginfo_t *siginfo)
+ 			goto fail_dropcount;
+ 		}
+ 
+-		helper_argv = kmalloc_array(argc + 1, sizeof(*helper_argv),
++		helper_argv = kvmalloc_array(argc + 1, sizeof(*helper_argv),
+ 					    GFP_KERNEL);
+ 		if (!helper_argv) {
+ 			printk(KERN_WARNING "%s failed to allocate memory\n",
 -- 
-js
-suse labs
+1.9.1
 

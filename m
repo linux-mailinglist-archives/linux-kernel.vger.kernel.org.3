@@ -2,63 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BD145A6166
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 251FC5A6173
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:14:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbiH3LNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:13:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
+        id S230224AbiH3LON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:14:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiH3LN1 (ORCPT
+        with ESMTP id S230142AbiH3LNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:13:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226EAD9D40;
-        Tue, 30 Aug 2022 04:13:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9641B61515;
-        Tue, 30 Aug 2022 11:13:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A89BC433C1;
-        Tue, 30 Aug 2022 11:13:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661858006;
-        bh=jNG2gCWSllTupgHvGrYYT7PSUlHkq8MWcYG0y8EZTnE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VR/Gg2PqVwxfODQVdOPHed+GMSCt5kWnEOktkTVShuBRbNw4+W2AdvwACXwYlXtUy
-         yKhhnDH3iUR4R1Ln8FBX9pW+2qIRzQHA0XTmbVvAPvLIhc3wzYt2gdqh96O2M5JwDP
-         bq2j+W2pWJ9ThC8IhytZUcY53oBRlq4qlQB0FJ+YAAvesw8IGKKRWs/NBWtFwqg69K
-         5adafvTT6LbEuBFaPXC7M4edfbdCHQUDkl85dfEAWvSvUMVDdWB0fcqIF8lqmcX9PJ
-         oGSeUx41CIJ9ldgBbO0fx8ms722Axin+RFflkcu1yWi8YGc0VxkgQU//oGEpNJVYW/
-         wkH91MtjMrKwQ==
-Message-ID: <7dff961e-908d-48de-fff1-8b6029d28eed@kernel.org>
-Date:   Tue, 30 Aug 2022 14:13:20 +0300
+        Tue, 30 Aug 2022 07:13:51 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C0DD9EA1;
+        Tue, 30 Aug 2022 04:13:50 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-324ec5a9e97so263987617b3.7;
+        Tue, 30 Aug 2022 04:13:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Bwh3DGnbZqNlQ7US14g5KeAbB+d9U52bRYCLzAnaFkU=;
+        b=b9WJ9Yv196Ex+J2/AQAww1MFcJ4K2KhvoOZ4zFMU27W/aJhVjoOLLnu+avud4kueZ/
+         mjB5RkDZH6qXi6yI4trjZBzwnCkgUpYfK+LSWUy1LrljzfTP2eJRLO5i5cjmENB75MTB
+         o/UngNQsrk2muDJg85UPa+0/TZ/c5utNKbNmpYTv3m2XB4GtCPDuiq2KBIk7UdGrMOvW
+         2bj/BHGbRtra2ypjHZqLoNXvDSb2XyO+UlHhLb3B8dj7st80n1HGqjnU9v+KJsYzS1M3
+         2zdxxJnzD9b9tFwJbdOF4NNj1UTOL8tu1Pqw8+EVKlkJKwbXH/xjVguoxOHRVb7/4ubJ
+         hopQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Bwh3DGnbZqNlQ7US14g5KeAbB+d9U52bRYCLzAnaFkU=;
+        b=dU5MUTX3aA1t+rQI6ts+vk/wB+ZdM+gMr2VuA0NgZ/oZKmZhGxQ6tuMuRVF33HGgnr
+         iiq81PudKytlpt8rWUQNpeczQDZuhKn/vIGhYJ2DKFo2YvcsX5T5vMK6vnX/Y9BFx9/j
+         5aanElZgSEmGkZUcvB9BFHw2+oqujY1VxxXpcZEoy2kAJFE6npIWO/SiLoCn75Z7nPca
+         V/+e8MRZTpJk0RWvsSj0lQBDYzVVswAjwdUYhseNjxYBem1KOhoghN676Sk4SxzfyFFZ
+         0aJD0zAt15swLZO8BgY8yDmzyJzAOGiziQXY8ACHuf3k/Ov/hifWXZ67zS6IiIySRHPQ
+         sQGA==
+X-Gm-Message-State: ACgBeo0LPAWTsrFYzkcAJgAIBqZWZ5kwTvuwDrhSzq4gbL3MZOTPM/jv
+        qbaroWteUErhPt++IwipUI5O7R25fixLfyyVgGo=
+X-Google-Smtp-Source: AA6agR4xyFS5E2JcXlPCOGbgogie5UbAjwXtRKc4il93NCyCngR87xjnlPjHgKh7P+aiLjcGt3oX3PXSOcIbJ/8OFoc=
+X-Received: by 2002:a25:8b8c:0:b0:67b:5c18:870 with SMTP id
+ j12-20020a258b8c000000b0067b5c180870mr11198176ybl.244.1661858029391; Tue, 30
+ Aug 2022 04:13:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v3 2/2] phy: ti: gmii-sel: Add support for CPSW5G GMII SEL
- in J7200
-Content-Language: en-US
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     robh+dt@kernel.org, lee.jones@linaro.org,
-        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        kishon@ti.com, vkoul@kernel.org, dan.carpenter@oracle.com,
-        grygorii.strashko@ti.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
-References: <20220822065631.27933-1-s-vadapalli@ti.com>
- <20220822065631.27933-3-s-vadapalli@ti.com>
- <655c39a3-cf5f-6dd7-3c1a-61ebeae915bd@kernel.org>
- <7dd27795-11d0-3147-ed86-959ff3e89df4@ti.com>
- <8ef8b2f8-a1c1-b277-22b1-6e951e8dfc72@kernel.org>
- <533a4186-62b1-ce7b-e097-9fb04be8f018@ti.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <533a4186-62b1-ce7b-e097-9fb04be8f018@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220801214718.16943-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220801214718.16943-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <Yw1Oz5Zcwgig8/Xy@pendragon.ideasonboard.com>
+In-Reply-To: <Yw1Oz5Zcwgig8/Xy@pendragon.ideasonboard.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Tue, 30 Aug 2022 12:13:21 +0100
+Message-ID: <CA+V-a8sh=JJk=c7B=xRWQSad3+_0pDb6aqiwfP-qPx-knzYd7A@mail.gmail.com>
+Subject: Re: [PATCH 2/4] media: dt-bindings: media: Document RZ/G2L CRU
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        =?UTF-8?Q?Niklas_S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-media <linux-media@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,63 +81,138 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Siddharth,
+Hi Laurent,
 
-On 30/08/2022 07:31, Siddharth Vadapalli wrote:
-> Hello Roger,
-> 
-> On 29/08/22 18:13, Roger Quadros wrote:
->> Siddharth,
->>
->> On 29/08/2022 07:53, Siddharth Vadapalli wrote:
->>> Hello Roger,
->>>
->>> On 25/08/22 13:11, Roger Quadros wrote:
->>>> Hi Siddharth,
->>>>
->>>> On 22/08/2022 09:56, Siddharth Vadapalli wrote:
->>>>> Each of the CPSW5G ports in J7200 support additional modes like QSGMII.
->>>>> Add a new compatible for J7200 to support the additional modes.
->>>>>
->>>>> In TI's J7200, each of the CPSW5G ethernet interfaces can act as a
->>>>> QSGMII or QSGMII-SUB port. The QSGMII interface is responsible for
->>>>> performing auto-negotiation between the MAC and the PHY while the rest of
->>>>> the interfaces are designated as QSGMII-SUB interfaces, indicating that
->>>>> they will not be taking part in the auto-negotiation process.
->>>>>
->>>>> To indicate the interface which will serve as the main QSGMII interface,
->>>>> add a property "ti,qsgmii-main-ports", whose value indicates the
->>>>> port number of the interface which shall serve as the main QSGMII
->>>>> interface. The rest of the interfaces are then assigned QSGMII-SUB mode by
->>>>> default.
->>>>
->>>> Can you please describe here why you are using "ti,qsgmii-main-ports" instead
->>>> of "ti,qsgmii-main-port" as there can be only one main port per PHY instance?
->>>
->>> Thank you for reviewing the patch. I am using "ports" instead of "port"
->>> because I plan to add support for CPSW9G on TI's J721e device in the
->>> future patches. CPSW9G (8 external ports) supports up to two QSGMII main
->>> ports. For CPSW9G, by specifying the two main ports in the device tree,
->>> it is possible to configure the CTRLMMR_ENETx_CTRL register for each of
->>> the 8 ports, with the two QSGMII main ports being configured as main
->>> ports in the CTRLMMR_ENETx_CTRL register and the rest of them being
->>> configured as sub ports. Since I will be using the same property
->>> "ti,qsgmii-main-ports" for CPSW9G as well, the property will be an array
->>> of 2 values for CPSW9G. Therefore, I am using "ports" instead of "port".
->>> Please let me know if this is fine.
->>>
->>
->> OK. Please mention this in commit message.
-> 
-> I will mention that the property ti,qsgmii-main-ports is used to
-> configure the CTRLMMR_ENETx_CTRL register and that it is possible
-> depending on the device for there to be more than one main port which is
-> why the property is an array of values.
-> 
-> Would it be sufficient to mention the above in the commit message?
-> Please let me know.
+Thank you for the review.
 
-This is fine. Thanks.
+On Tue, Aug 30, 2022 at 12:42 AM Laurent Pinchart
+<laurent.pinchart@ideasonboard.com> wrote:
+>
+> Hi Prabhakar,
+>
+> Thank you for the patch.
+>
+> On Mon, Aug 01, 2022 at 10:47:16PM +0100, Lad Prabhakar wrote:
+> > Document the CRU block found on Renesas RZ/G2L SoC's.
+> >
+> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > ---
+> > RFC v2 -> v1
+> > * Dropped endpoint stuff from port1 as suggested by Rob
+> > * Updated description for endpoint
+> >
+> > RFC v1 -> RFC v2
+> > * Dropped CSI
+> > ---
+> >  .../bindings/media/renesas,rzg2l-cru.yaml     | 142 ++++++++++++++++++
+> >  1 file changed, 142 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> > new file mode 100644
+> > index 000000000000..d7389693dae9
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/renesas,rzg2l-cru.yaml
+> > @@ -0,0 +1,142 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +# Copyright (C) 2022 Renesas Electronics Corp.
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/renesas,rzg2l-cru.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Renesas RZ/G2L (and alike SoC's) Camera Data Receiving Unit (CRU) Image processing
+> > +
+> > +maintainers:
+> > +  - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > +
+> > +description:
+> > +  The CRU image processing module is a data conversion module equipped with pixel
+> > +  color space conversion, LUT, pixel format conversion, etc. An MIPI CSI-2 input and
+> > +  parallel (including ITU-R BT.656) input are provided as the image sensor interface.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    oneOf:
+>
+> No oneOf here either.
+>
+Agreed, I will drop it.
 
-cheers,
--roger
+> > +      - items:
+> > +          - enum:
+> > +              - renesas,r9a07g044-cru     # RZ/G2{L,LC}
+> > +              - renesas,r9a07g054-cru     # RZ/V2L
+> > +          - const: renesas,rzg2l-cru
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 3
+> > +
+> > +  interrupt-names:
+> > +    items:
+> > +      - const: image_conv
+> > +      - const: image_conv_err
+> > +      - const: axi_mst_err
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: CRU Main clock
+> > +      - description: CPU Register access clock
+> > +      - description: CRU image transfer clock
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: vclk
+> > +      - const: pclk
+> > +      - const: aclk
+> > +
+> > +  power-domains:
+> > +    maxItems: 1
+> > +
+> > +  resets:
+> > +    items:
+> > +      - description: CRU_PRESETN reset terminal
+> > +      - description: CRU_ARESETN reset terminal
+> > +
+> > +  reset-names:
+> > +    items:
+> > +      - const: presetn
+> > +      - const: aresetn
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/$defs/port-base
+> > +        unevaluatedProperties: false
+> > +        description:
+> > +          Input port node, single endpoint describing a parallel input source.
+> > +
+> > +        properties:
+> > +          endpoint:
+> > +            $ref: video-interfaces.yaml#
+> > +            unevaluatedProperties: false
+> > +
+> > +            properties:
+> > +              hsync-active: true
+> > +              vsync-active: true
+> > +              bus-width: true
+> > +              data-shift: true
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description:
+> > +          Input port node, describing the Image Processing module connected to the
+> > +          CSI-2 receiver.
+>
+> Both ports should be mandatory as they exist at the hardware level.
+> Connections (through endpoints) are optional.
+>
+Agreed, I will make the ports as required.
+
+Cheers,
+Prabhakar

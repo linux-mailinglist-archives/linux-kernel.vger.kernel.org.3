@@ -2,137 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E2035A5891
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 02:54:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F92A5A589A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 02:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229547AbiH3AyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 20:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S229605AbiH3A5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 20:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiH3AyN (ORCPT
+        with ESMTP id S229608AbiH3A5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 20:54:13 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8184981B2D;
-        Mon, 29 Aug 2022 17:54:12 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MGpfT6JDVznTnY;
-        Tue, 30 Aug 2022 08:51:45 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
- (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 30 Aug
- 2022 08:54:10 +0800
-From:   Zhengchao Shao <shaozhengchao@huawei.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <jhs@mojatatu.com>,
-        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>
-CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
-        <shaozhengchao@huawei.com>
-Subject: [PATCH net-next 2/2] net: sched: htb: remove redundant resource cleanup in htb_init()
-Date:   Tue, 30 Aug 2022 08:56:38 +0800
-Message-ID: <20220830005638.276584-3-shaozhengchao@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220830005638.276584-1-shaozhengchao@huawei.com>
-References: <20220830005638.276584-1-shaozhengchao@huawei.com>
+        Mon, 29 Aug 2022 20:57:01 -0400
+Received: from linux.gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 098D0883EF;
+        Mon, 29 Aug 2022 17:56:58 -0700 (PDT)
+Received: from localhost.localdomain (unknown [68.183.184.174])
+        by linux.gnuweeb.org (Postfix) with ESMTPSA id 5BB45374EC4;
+        Tue, 30 Aug 2022 00:56:55 +0000 (UTC)
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Caleb Sander <csander@purestorage.com>,
+        Muhammad Rizki <kiizuha@gnuweeb.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [PATCH liburing v2 2/7] syscall: Add io_uring syscall functions
+Date:   Tue, 30 Aug 2022 07:56:38 +0700
+Message-Id: <20220830005122.885209-3-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220830005122.885209-1-ammar.faizi@intel.com>
+References: <20220830005122.885209-1-ammar.faizi@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500026.china.huawei.com (7.185.36.106)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If htb_init() fails, qdisc_create() invokes htb_destroy() to clear
-resources. Therefore, remove redundant resource cleanup in htb_init().
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+We have:
+
+  man 2 io_uring_setup;
+  man 2 io_uring_enter;
+  man 2 io_uring_register;
+
+Those entries say that io_uring syscall functions are declared in
+`<linux/io_uring.h>`. But they don't actually exist and never existed.
+This is causing confusion for people who read the manpage. Let's just
+implement them in liburing so they exist.
+
+This also allows the user to invoke io_uring syscalls directly instead
+of using the full liburing provided setup.
+
+v2:
+  - Use consistent argument types.
+  - Separate syscall declarations in liburing.h with a blank line.
+  - Remove unused include in syscall.c.
+
+Link: https://github.com/axboe/liburing/pull/646#issuecomment-1229639532
+Reviewed-by: Caleb Sander <csander@purestorage.com>
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- net/sched/sch_htb.c | 36 +++++++++---------------------------
- 1 file changed, 9 insertions(+), 27 deletions(-)
+ src/Makefile           |  2 +-
+ src/include/liburing.h | 12 ++++++++++++
+ src/liburing.map       |  4 ++++
+ src/syscall.c          | 29 +++++++++++++++++++++++++++++
+ 4 files changed, 46 insertions(+), 1 deletion(-)
+ create mode 100644 src/syscall.c
 
-diff --git a/net/sched/sch_htb.c b/net/sched/sch_htb.c
-index cb5872d22ecf..da75885bbffd 100644
---- a/net/sched/sch_htb.c
-+++ b/net/sched/sch_htb.c
-@@ -1102,7 +1102,7 @@ static int htb_init(struct Qdisc *sch, struct nlattr *opt,
+diff --git a/src/Makefile b/src/Makefile
+index dad379d..73a98ba 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -32,7 +32,7 @@ endif
  
- 	err = qdisc_class_hash_init(&q->clhash);
- 	if (err < 0)
--		goto err_free_direct_qdiscs;
-+		return err;
+ all: $(all_targets)
  
- 	qdisc_skb_head_init(&q->direct_queue);
+-liburing_srcs := setup.c queue.c register.c
++liburing_srcs := setup.c queue.c register.c syscall.c
  
-@@ -1125,8 +1125,7 @@ static int htb_init(struct Qdisc *sch, struct nlattr *opt,
- 		qdisc = qdisc_create_dflt(dev_queue, &pfifo_qdisc_ops,
- 					  TC_H_MAKE(sch->handle, 0), extack);
- 		if (!qdisc) {
--			err = -ENOMEM;
--			goto err_free_qdiscs;
-+			return -ENOMEM;
- 		}
+ ifeq ($(CONFIG_NOLIBC),y)
+ 	liburing_srcs += nolibc.c
+diff --git a/src/include/liburing.h b/src/include/liburing.h
+index 66c5095..6e86847 100644
+--- a/src/include/liburing.h
++++ b/src/include/liburing.h
+@@ -203,6 +203,18 @@ int io_uring_register_notifications(struct io_uring *ring, unsigned nr,
+ 				    struct io_uring_notification_slot *slots);
+ int io_uring_unregister_notifications(struct io_uring *ring);
  
- 		htb_set_lockdep_class_child(qdisc);
-@@ -1144,7 +1143,7 @@ static int htb_init(struct Qdisc *sch, struct nlattr *opt,
- 	};
- 	err = htb_offload(dev, &offload_opt);
- 	if (err)
--		goto err_free_qdiscs;
-+		return err;
- 
- 	/* Defer this assignment, so that htb_destroy skips offload-related
- 	 * parts (especially calling ndo_setup_tc) on errors.
-@@ -1152,22 +1151,6 @@ static int htb_init(struct Qdisc *sch, struct nlattr *opt,
- 	q->offload = true;
- 
- 	return 0;
--
--err_free_qdiscs:
--	for (ntx = 0; ntx < q->num_direct_qdiscs && q->direct_qdiscs[ntx];
--	     ntx++)
--		qdisc_put(q->direct_qdiscs[ntx]);
--
--	qdisc_class_hash_destroy(&q->clhash);
--	/* Prevent use-after-free and double-free when htb_destroy gets called.
--	 */
--	q->clhash.hash = NULL;
--	q->clhash.hashsize = 0;
--
--err_free_direct_qdiscs:
--	kfree(q->direct_qdiscs);
--	q->direct_qdiscs = NULL;
--	return err;
- }
- 
- static void htb_attach_offload(struct Qdisc *sch)
-@@ -1690,13 +1673,12 @@ static void htb_destroy(struct Qdisc *sch)
- 	qdisc_class_hash_destroy(&q->clhash);
- 	__qdisc_reset_queue(&q->direct_queue);
- 
--	if (!q->offload)
--		return;
--
--	offload_opt = (struct tc_htb_qopt_offload) {
--		.command = TC_HTB_DESTROY,
--	};
--	htb_offload(dev, &offload_opt);
-+	if (q->offload) {
-+		offload_opt = (struct tc_htb_qopt_offload) {
-+			.command = TC_HTB_DESTROY,
-+		};
-+		htb_offload(dev, &offload_opt);
-+	}
- 
- 	if (!q->direct_qdiscs)
- 		return;
++/*
++ * io_uring syscalls.
++ */
++int io_uring_enter(unsigned int fd, unsigned int to_submit,
++		   unsigned int min_complete, unsigned int flags, sigset_t *sig);
++int io_uring_enter2(unsigned int fd, unsigned int to_submit,
++		    unsigned int min_complete, unsigned int flags,
++		    sigset_t *sig, size_t sz);
++int io_uring_setup(unsigned int entries, struct io_uring_params *p);
++int io_uring_register(unsigned int fd, unsigned int opcode, const void *arg,
++		      unsigned int nr_args);
++
+ /*
+  * Helper for the peek/wait single cqe functions. Exported because of that,
+  * but probably shouldn't be used directly in an application.
+diff --git a/src/liburing.map b/src/liburing.map
+index 7d8f143..8573dfc 100644
+--- a/src/liburing.map
++++ b/src/liburing.map
+@@ -62,4 +62,8 @@ LIBURING_2.3 {
+ 		io_uring_register_file_alloc_range;
+ 		io_uring_register_notifications;
+ 		io_uring_unregister_notifications;
++		io_uring_enter;
++		io_uring_enter2;
++		io_uring_setup;
++		io_uring_register;
+ } LIBURING_2.2;
+diff --git a/src/syscall.c b/src/syscall.c
+new file mode 100644
+index 0000000..2054d17
+--- /dev/null
++++ b/src/syscall.c
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: MIT */
++
++#include "syscall.h"
++#include <liburing.h>
++
++int io_uring_enter(unsigned int fd, unsigned int to_submit,
++		   unsigned int min_complete, unsigned int flags, sigset_t *sig)
++{
++	return __sys_io_uring_enter(fd, to_submit, min_complete, flags, sig);
++}
++
++int io_uring_enter2(unsigned int fd, unsigned int to_submit,
++		    unsigned int min_complete, unsigned int flags,
++		    sigset_t *sig, size_t sz)
++{
++	return __sys_io_uring_enter2(fd, to_submit, min_complete, flags, sig,
++				     sz);
++}
++
++int io_uring_setup(unsigned int entries, struct io_uring_params *p)
++{
++	return __sys_io_uring_setup(entries, p);
++}
++
++int io_uring_register(unsigned int fd, unsigned int opcode, const void *arg,
++		      unsigned int nr_args)
++{
++	return __sys_io_uring_register(fd, opcode, arg, nr_args);
++}
 -- 
-2.17.1
+Ammar Faizi
 

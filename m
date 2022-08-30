@@ -2,77 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F8D05A66FF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:11:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A7F75A6704
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 17:12:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229585AbiH3PL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 11:11:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S229875AbiH3PMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 11:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiH3PLX (ORCPT
+        with ESMTP id S229541AbiH3PMt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 11:11:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E28E7A52F
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661872281;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9Uj1KSGVvpg1e2uy6Lmq+BilnZLZf+fvAkkGZhgZ/JI=;
-        b=PrtntdDA40DHFnBfitRJ9AUBYLMyJO/2eTj7cCG1/1HdlMXzvOSF9AftZsYePw+Um5x5lQ
-        LlT9fgetvct0vkWYqDZiWQzkpaSLwD2+iETIGnepgkax+mQIfcd0zchEa35STzLhHUuaGL
-        YGlTiKd8974zid1C4R8TvoXX3FAbWvg=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-126-lbs1wQghP6ODrvOlIQ0NMA-1; Tue, 30 Aug 2022 11:11:19 -0400
-X-MC-Unique: lbs1wQghP6ODrvOlIQ0NMA-1
-Received: by mail-oo1-f72.google.com with SMTP id z15-20020a4a304f000000b0044b0ae69807so5250562ooz.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 08:11:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=9Uj1KSGVvpg1e2uy6Lmq+BilnZLZf+fvAkkGZhgZ/JI=;
-        b=mZseJi0cD5XF8Fsoj/UKR96ez1VqlyGdRUWWgP5+qmDqcbYddUXef4L78la74mc/ZW
-         jAGtNGLENTDr39x912WtN1vaY0nRJZT4SYDJ8R7/p6QTHfoEHjCS8rr5SughkhzDKvAv
-         U7Mpkj/12rJck5s3npXEPs5LG41q72yHuwKnQ01/F8SE2feL68mfOH9PKvT0F0Vu+7D+
-         ttrGl4d18u/B8lcMCxIUvUYtgvm0TlQN8yO8EOPEEgqXEh69JSPlFlK00QiKyPlzCXgD
-         eMo5jc+1GelIs8gFPaaZslxoczYe1q62PEbhvgd5uLK+RGtEnXY2xuEjyRoVOcG4yMmm
-         NtwA==
-X-Gm-Message-State: ACgBeo2fPVlX1Q2NggfY4RyXhFwCDFlVQmE+DQU27zlR82/wtJp5jjWU
-        dtOiLnIin/MAxnJy2kUK8ZcxLoHPmhic6DKTkkf26GoMI+vcijY8m2hq9+KWYF/ImBkWKVj9sRP
-        5fNt6d4tt7Gd0INZcPKJAF1iC
-X-Received: by 2002:a05:6830:1e64:b0:63b:25dd:ed07 with SMTP id m4-20020a0568301e6400b0063b25dded07mr5689836otr.159.1661872278756;
-        Tue, 30 Aug 2022 08:11:18 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7imdzhCAin1zc5CWFAJrLO27P5NJLOlKojo5DBQINDuHfcvZzdAo7eVrmJH+TF0TXpUXCpRg==
-X-Received: by 2002:a05:6830:1e64:b0:63b:25dd:ed07 with SMTP id m4-20020a0568301e6400b0063b25dded07mr5689827otr.159.1661872278524;
-        Tue, 30 Aug 2022 08:11:18 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id e5-20020aca1305000000b00344e3751fc4sm6192535oii.36.2022.08.30.08.11.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 08:11:18 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 09:11:10 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lpivarc@redhat.com
-Subject: Re: [PATCH] vfio/type1: Unpin zero pages
-Message-ID: <20220830091110.3f6d1737.alex.williamson@redhat.com>
-In-Reply-To: <39145649-c378-d027-8856-81b4f09050fc@redhat.com>
-References: <166182871735.3518559.8884121293045337358.stgit@omen>
-        <39145649-c378-d027-8856-81b4f09050fc@redhat.com>
-Organization: Red Hat
+        Tue, 30 Aug 2022 11:12:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA3C0122BD3;
+        Tue, 30 Aug 2022 08:12:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 44645615AE;
+        Tue, 30 Aug 2022 15:12:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95EBCC433C1;
+        Tue, 30 Aug 2022 15:12:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661872367;
+        bh=GVovB5ughtpp8DMMikXepA1SW5sxU5d03vidqk/2iPI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MGnXhRDK/2qQC5fi6PX/EnoYnr19wpX+OpopnKR8vvH5mPaP6T2hRgqEgZsKoL+LP
+         6VEAMh4oG7NwcKVFgd+6omkfdLERxobWWcmtbYDrLl1Yl8Wa5djES/1skJXoNH5r3v
+         gTGjf+hQtkORLy2+UmhJ8t+8UcZjvYnNJqucECpQilxkYZeaNLOD50ghvhyoGm9ASK
+         LJA/IhGahPI2FbRXqDN3aUikmL0afZBFIOY2Uem2VXt7jGWRoBn1qiZ5hH6bjnniM6
+         tGuRImNgYflGAob8J1shoxNgAzaTvJMqOhjvjBmkBhgIIBVX22GCg2Hwz6H5fUlBxO
+         MzsetNoBGwtvg==
+Date:   Tue, 30 Aug 2022 08:12:47 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Zeng Heng <zengheng4@huawei.com>
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -next 2/2] xfs: simplify if-else condition in
+ xfs_reflink_trim_around_shared
+Message-ID: <Yw4o7yug91RORMD3@magnolia>
+References: <20220830133939.2726749-1-zengheng4@huawei.com>
+ <20220830133939.2726749-3-zengheng4@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830133939.2726749-3-zengheng4@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,64 +55,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Aug 2022 09:59:33 +0200
-David Hildenbrand <david@redhat.com> wrote:
-
-> On 30.08.22 05:05, Alex Williamson wrote:
-> > There's currently a reference count leak on the zero page.  We increment
-> > the reference via pin_user_pages_remote(), but the page is later handled
-> > as an invalid/reserved page, therefore it's not accounted against the
-> > user and not unpinned by our put_pfn().
-> > 
-> > Introducing special zero page handling in put_pfn() would resolve the
-> > leak, but without accounting of the zero page, a single user could
-> > still create enough mappings to generate a reference count overflow.
-> > 
-> > The zero page is always resident, so for our purposes there's no reason
-> > to keep it pinned.  Therefore, add a loop to walk pages returned from
-> > pin_user_pages_remote() and unpin any zero pages.
-> > 
-> > Cc: David Hildenbrand <david@redhat.com>
-> > Cc: stable@vger.kernel.org
-> > Reported-by: Luboslav Pivarc <lpivarc@redhat.com>
-> > Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
-> > ---
-> >  drivers/vfio/vfio_iommu_type1.c |   12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> > 
-> > diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-> > index db516c90a977..8706482665d1 100644
-> > --- a/drivers/vfio/vfio_iommu_type1.c
-> > +++ b/drivers/vfio/vfio_iommu_type1.c
-> > @@ -558,6 +558,18 @@ static int vaddr_get_pfns(struct mm_struct *mm, unsigned long vaddr,
-> >  	ret = pin_user_pages_remote(mm, vaddr, npages, flags | FOLL_LONGTERM,
-> >  				    pages, NULL, NULL);
-> >  	if (ret > 0) {
-> > +		int i;
-> > +
-> > +		/*
-> > +		 * The zero page is always resident, we don't need to pin it
-> > +		 * and it falls into our invalid/reserved test so we don't
-> > +		 * unpin in put_pfn().  Unpin all zero pages in the batch here.
-> > +		 */
-> > +		for (i = 0 ; i < ret; i++) {
-> > +			if (unlikely(is_zero_pfn(page_to_pfn(pages[i]))))
-> > +				unpin_user_page(pages[i]);
-> > +		}
-> > +
-> >  		*pfn = page_to_pfn(pages[0]);
-> >  		goto done;
-> >  	}
-> > 
-> >   
+On Tue, Aug 30, 2022 at 09:39:39PM +0800, Zeng Heng wrote:
+> "else" is not generally useful after a return,
+> so remove it for clean code.
 > 
-> As discussed offline, for the shared zeropage (that's not even
-> refcounted when mapped into a process), this makes perfect sense to me.
+> There is no logical changes.
 > 
-> Good question raised by Sean if ZONE_DEVICE pages might similarly be
-> problematic. But for them, we cannot simply always unpin here.
+> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
 
-What sort of VM mapping would give me ZONE_DEVICE pages?  Thanks,
+Looks correct to me,
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
-Alex
+--D
 
+> ---
+>  fs/xfs/xfs_reflink.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
+> 
+> diff --git a/fs/xfs/xfs_reflink.c b/fs/xfs/xfs_reflink.c
+> index 251f20ddd368..93bdd25680bc 100644
+> --- a/fs/xfs/xfs_reflink.c
+> +++ b/fs/xfs/xfs_reflink.c
+> @@ -200,7 +200,9 @@ xfs_reflink_trim_around_shared(
+>  	if (fbno == NULLAGBLOCK) {
+>  		/* No shared blocks at all. */
+>  		return 0;
+> -	} else if (fbno == agbno) {
+> +	}
+> +
+> +	if (fbno == agbno) {
+>  		/*
+>  		 * The start of this extent is shared.  Truncate the
+>  		 * mapping at the end of the shared region so that a
+> @@ -210,16 +212,16 @@ xfs_reflink_trim_around_shared(
+>  		irec->br_blockcount = flen;
+>  		*shared = true;
+>  		return 0;
+> -	} else {
+> -		/*
+> -		 * There's a shared extent midway through this extent.
+> -		 * Truncate the mapping at the start of the shared
+> -		 * extent so that a subsequent iteration starts at the
+> -		 * start of the shared region.
+> -		 */
+> -		irec->br_blockcount = fbno - agbno;
+> -		return 0;
+>  	}
+> +
+> +	/*
+> +	 * There's a shared extent midway through this extent.
+> +	 * Truncate the mapping at the start of the shared
+> +	 * extent so that a subsequent iteration starts at the
+> +	 * start of the shared region.
+> +	 */
+> +	irec->br_blockcount = fbno - agbno;
+> +	return 0;
+>  }
+>  
+>  int
+> -- 
+> 2.25.1
+> 

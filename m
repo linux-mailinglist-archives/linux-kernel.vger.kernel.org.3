@@ -2,110 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31C4C5A5A93
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F2905A5A96
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 06:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229759AbiH3EPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 00:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56966 "EHLO
+        id S229806AbiH3ESm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 00:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiH3EPC (ORCPT
+        with ESMTP id S229488AbiH3ESk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 00:15:02 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29D375FD9;
-        Mon, 29 Aug 2022 21:14:59 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id x1-20020a17090ab00100b001fda21bbc90so6249963pjq.3;
-        Mon, 29 Aug 2022 21:14:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=mEDeep3eaBiDjR2GVynIS1tU5uA7irV+7CKnosukC40=;
-        b=pYLJVVLoh6vi47e47N/1kLMdIpzEiAZ6T+GwbM82+8mmIUAAibFEPqaVPIDVaROLXP
-         dWnEf5eGxbQih/Eb+u8u8tw599Wy9r++dtxUwg4xdt4ftt6MRpXE5QIp6noZhwIbwihK
-         o+KsO+AWWDO/K3C8ojL0gKm4GPqXqYUsR8oiaXkRyD/yylX4QkzvzyUg6mON2Jz1BjMY
-         PKNBToIyYgBUsVy2I8SBegB63HKDj2UH9NfLcg4mhPiiOwoKmxKzL9AWWmoP2DydhvHo
-         iw7lqbfaxzLHCwP2hNBVoPJAaAEQLRBX+6YKU+VX3j9ORsl7uajR6VADDCDNLkUEmPro
-         gU8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=mEDeep3eaBiDjR2GVynIS1tU5uA7irV+7CKnosukC40=;
-        b=jz+07IpAn8TQVossk9wTaTn9AxD6sgUPex0FFw5H06gev3PkqVhJRZPstMMLfbxCKf
-         bsxrbpbcbYbmo2C7sZkO/N1COxOBx1KpI83Luu0LysAZfyG2IUWl3oQvG1MSHspUqU3D
-         JP9X7UYdSK6NRzM0CckStym4Q4SfGYKalF+wxgLmRsiZrxtW6tFiQ6ec3nc05GzCn0zZ
-         w3svIujF6WCbh6Gspgfv6hPtIHYjt9pZeI7SQ/mO+kf3Rgunz88CvDfK7RXPkXy/Hozs
-         Fxtz74rtmWklBXKo5cy1SCv7Fl3iunfrVBvdUmWVhrUJocAGWzp2R+WGAYjA/znkKxlv
-         /zrg==
-X-Gm-Message-State: ACgBeo3Hc+l78ysRKz0qJwrPEKA4WjBBjUPLkDGFFX3fycNwQfb5rHZA
-        rUF12xGi8awazhYtMh6VAKoslA0CKfgZTA==
-X-Google-Smtp-Source: AA6agR782NlN3iXtZU4KjlROQ7axfqcfCTlOzkMyTnm4MhFzuMRnJrYulhOYLNk0ejizvQ6fxP32aQ==
-X-Received: by 2002:a17:902:904b:b0:170:a3e6:9d98 with SMTP id w11-20020a170902904b00b00170a3e69d98mr19297445plz.50.1661832898727;
-        Mon, 29 Aug 2022 21:14:58 -0700 (PDT)
-Received: from debian.me (subs03-180-214-233-22.three.co.id. [180.214.233.22])
-        by smtp.gmail.com with ESMTPSA id l15-20020a170903120f00b00174a8d357b7sm4253373plh.20.2022.08.29.21.14.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 21:14:58 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 85EEC108176; Tue, 30 Aug 2022 11:14:54 +0700 (WIB)
-Date:   Tue, 30 Aug 2022 11:14:54 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/136] 5.15.64-rc1 review
-Message-ID: <Yw2Ovjv2BcHCayWD@debian.me>
-References: <20220829105804.609007228@linuxfoundation.org>
+        Tue, 30 Aug 2022 00:18:40 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5303392F54;
+        Mon, 29 Aug 2022 21:18:38 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27U4ISYM030269;
+        Mon, 29 Aug 2022 23:18:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661833108;
+        bh=JOpo5jiC9Q8Qn8kMwX7YmoPC+T4eOYeABbTxmcAsNOE=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=TpYzRY+eTD+PNxdxuIKgqGPysWaszXD9cO/tAqQ2lX3Jm5XNzQcUiO/iPrJ4BitvH
+         /2H483cwrF4QQlDv1HEOGXdhF68kyukEO1uh3PDxb3r8snfzA8IBtF3LgNfyCcLNJi
+         V7oUQu7JbrWeCb+WhfJi0vYtMxqFdFnxpVKfzQjg=
+Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27U4ISSc002863
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 29 Aug 2022 23:18:28 -0500
+Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 29
+ Aug 2022 23:18:27 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 29 Aug 2022 23:18:27 -0500
+Received: from ula0497641.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27U4INnp120598;
+        Mon, 29 Aug 2022 23:18:24 -0500
+From:   Neha Malcom Francis <n-francis@ti.com>
+To:     <afd@ti.com>
+CC:     <devicetree@vger.kernel.org>, <kristo@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <nm@ti.com>, <robh+dt@kernel.org>,
+        <vigneshr@ti.com>, <n-francis@ti.com>
+Subject: [PATCH] arm64: dts: ti: k3-j7200-main: Add main domain watchdog entries
+Date:   Tue, 30 Aug 2022 09:48:22 +0530
+Message-ID: <20220830041822.7435-1-n-francis@ti.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220822235006.7081-1-afd@ti.com>
+References: <20220822235006.7081-1-afd@ti.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="aSqdN414gnjNK7Gm"
-Content-Disposition: inline
-In-Reply-To: <20220829105804.609007228@linuxfoundation.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Andrew Davis <afd@ti.com>
 
---aSqdN414gnjNK7Gm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From: Gowtham Tammana <g-tammana@ti.com>
 
-On Mon, Aug 29, 2022 at 12:57:47PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.64 release.
-> There are 136 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-=20
-Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
-powerpc (ps3_defconfig, GCC 12.1.0).
+Add DT entries for main domain watchdog instances.
 
-Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+Signed-off-by: Gowtham Tammana <g-tammana@ti.com>
+Reviewed-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
+Reviewed-by: Neha Francis <n-francis@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-j7200-main.dtsi | 18 ++++++++++++++++++
+ 1 file changed, 18 insertions(+)
 
---=20
-An old man doll... just what I always wanted! - Clara
+diff --git a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+index 16684a2f054d..cf657ac0bd6a 100644
+--- a/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200-main.dtsi
+@@ -739,6 +739,24 @@ main_gpio6: gpio@630000 {
+ 		clock-names = "gpio";
+ 	};
+ 
++	watchdog0: watchdog@2200000 {
++		compatible = "ti,j7-rti-wdt";
++		reg = <0x0 0x2200000 0x0 0x100>;
++		clocks = <&k3_clks 252 1>;
++		power-domains = <&k3_pds 252 TI_SCI_PD_EXCLUSIVE>;
++		assigned-clocks = <&k3_clks 252 1>;
++		assigned-clock-parents = <&k3_clks 252 5>;
++	};
++
++	watchdog1: watchdog@2210000 {
++		compatible = "ti,j7-rti-wdt";
++		reg = <0x0 0x2210000 0x0 0x100>;
++		clocks = <&k3_clks 253 1>;
++		power-domains = <&k3_pds 253 TI_SCI_PD_EXCLUSIVE>;
++		assigned-clocks = <&k3_clks 253 1>;
++		assigned-clock-parents = <&k3_clks 253 5>;
++	};
++
+ 	main_r5fss0: r5fss@5c00000 {
+ 		compatible = "ti,j7200-r5fss";
+ 		ti,cluster-mode = <1>;
+-- 
+2.36.1
 
---aSqdN414gnjNK7Gm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYw2OuQAKCRD2uYlJVVFO
-o3wGAQC69Cj2yAWMLhqi4QdML0F6rGgRvVvoS8vD4lO6TczEXQEAjPrHzdW7kFTK
-2tf6t/Z2nKriKZCWcBBAM9ug59sM2A8=
-=E+vZ
------END PGP SIGNATURE-----
-
---aSqdN414gnjNK7Gm--

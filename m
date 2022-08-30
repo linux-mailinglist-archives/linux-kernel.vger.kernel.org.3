@@ -2,108 +2,350 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4B455A6D6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04BB45A6D6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:35:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiH3Tct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S230117AbiH3Tf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:35:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiH3Tcq (ORCPT
+        with ESMTP id S229569AbiH3TfX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:32:46 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D73CD474E9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:32:45 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id u22so12074489plq.12
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:32:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=OYzA9p0n5o59safiaW4KMlIlfnAxPamL+boi+em99/M=;
-        b=W851mZSHA2NuVBwcGoGcf21aojaeZQ6itzde6gqVH7X2Aejqg6gmKniUdZpYCGwMgr
-         /VYzjXwux5er4xhFoJ0SDpu1AxswH9or1LBBQDLKe2Ys/Yy9YyeyaOpZ8rS2ida5eoV6
-         X2Ic6/yFW7PMZ82ej3p8GBPLvZV4vcpIpyLIg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=OYzA9p0n5o59safiaW4KMlIlfnAxPamL+boi+em99/M=;
-        b=ixzRrBSB9UMLKLYvLj5hIN96fxCdk7FWK6w1kFy2PbOdVhteMsA7GuZAmS2aT/a5nM
-         mQwx61kSHcUfS3T4ouIm6ngi9s6TTfNCkLLWqKDaK2s7VGgDFLJa5tb8XUQbyhmpU4hM
-         ygjJUUWXWbL6G3RcWqyXNcdRVGRRD/e4ty4oW2UfQ/AMg1yPkukspYSliCAeqfV09rgc
-         JE39FDPj4CB8S6e+FK+W77US6QbVezRSNmZu8lFWIg6uEF4OoQ+K1apCpCrkWjMDCUGo
-         mE0ptV+d9470Yek9kZlL+O6Jwlo4EAtejm7ozKd0+CE2riITbgFGL1VkMNcvZ+xob9Jq
-         yKzw==
-X-Gm-Message-State: ACgBeo0r+XgKoLSfXC00UBTuUEJ+xjmu5pDp99nFyHZrAOp/UsgZ8xxf
-        9cahxq/PegWItHRZSFg1gG89xw==
-X-Google-Smtp-Source: AA6agR5a1ydzTy5CU1whWuOm/VAiahfPCvqjM4F31B9VPVSXp3Z7Evq1Nk8FjLUtWiUUav60coeBOQ==
-X-Received: by 2002:a17:902:d501:b0:174:c4c9:9b77 with SMTP id b1-20020a170902d50100b00174c4c99b77mr10894828plg.67.1661887965373;
-        Tue, 30 Aug 2022 12:32:45 -0700 (PDT)
-Received: from localhost ([2620:15c:202:201:d14a:ebf8:88f1:35e])
-        by smtp.gmail.com with UTF8SMTPSA id z5-20020a17090a66c500b001f334aa9170sm8868376pjl.48.2022.08.30.12.32.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 12:32:44 -0700 (PDT)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Heiko Stuebner <heiko@sntech.de>
-Cc:     zain wang <wzz@rock-chips.com>, Lin Huang <hl@rock-chips.com>,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        Douglas Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH] arm64: dts: rockchip: Set RK3399-Gru PCLK_EDP to 24 MHz
-Date:   Tue, 30 Aug 2022 12:32:33 -0700
-Message-Id: <20220830123231.1.I98d30623f13b785ca77094d0c0fd4339550553b6@changeid>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+        Tue, 30 Aug 2022 15:35:23 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C130F1C125;
+        Tue, 30 Aug 2022 12:35:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661888121; x=1693424121;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9JjFH5wJlXECsz+dCmrpkwr6vG5q1UaVVqS4OYWfitk=;
+  b=JhK5l10GDwReA1pNpHp5CJcc2ppnf+8OJBQyI9Yw/4UBOtg0Sp+c6fJf
+   P/L6d03E7iaXk8vT9bGy0hvtScsyace2/v3UHT/irobcXznxe+blYi9sb
+   CwRfo+ElhA9bnigddb9o7clFgt6bCscXQIrnOy2l4CYsFvmIK8Rne+EcZ
+   lVq7kxRFyPAgxiWH/eCa3KFyobt6KtTbwwoS5N8LBN0/GlC1r6kinv0zN
+   BZpxwG4m2M4RMlN3eI2AZWxC1ut8gOPcrjzNqhIAv6y3MHgs7emCYtsh8
+   XBR/GskD/lTrvdBBjUBywnfuiEhiDlLkBsQx6LSSgjUfH6YIGpALAa9VQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="359244394"
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="359244394"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 12:34:11 -0700
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="673019281"
+Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.1.195]) ([10.213.1.195])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 12:34:08 -0700
+Message-ID: <0272e34e-1660-1c55-29c5-4234e8d7d0fc@intel.com>
+Date:   Tue, 30 Aug 2022 21:34:06 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.13.0
+Subject: Re: [PATCH v3] overflow: Allow mixed type arguments
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-hardening@vger.kernel.org,
+        Daniel Latypov <dlatypov@google.com>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        linux-kernel@vger.kernel.org
+References: <20220830192147.47069-1-keescook@chromium.org>
+From:   Andrzej Hajda <andrzej.hajda@intel.com>
+Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
+ Gdansk - KRS 101882 - NIP 957-07-52-316
+In-Reply-To: <20220830192147.47069-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We've found the AUX channel to be less reliable with PCLK_EDP at a
-higher rate (typically 25 MHz). This is especially important on systems
-with PSR-enabled panels (like Gru-Kevin), since we make heavy, constant
-use of AUX.
 
-According to Rockchip, using any rate other than 24 MHz can cause
-"problems between syncing the PHY an PCLK", which leads to all sorts of
-unreliabilities around register operations.
 
-Signed-off-by: zain wang <wzz@rock-chips.com>
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
+On 30.08.2022 21:21, Kees Cook wrote:
+> When the check_[op]_overflow() helpers were introduced, all arguments were
+> required to be the same type to make the fallback macros simpler. However,
+> now that the fallback macros have been removed[1], it is fine to allow
+> mixed types, which makes using the helpers much more useful, as they
+> can be used to test for type-based overflows (e.g. adding two large ints
+> but storing into a u8), as would be handy in the drm core[2].
+>
+> Remove the restriction, and add additional self-tests that exercise some
+> of the mixed-type overflow cases, and double-check for accidental macro
+> side-effects.
+>
+> [1] https://git.kernel.org/linus/4eb6bd55cfb22ffc20652732340c4962f3ac9a91
+> [2] https://lore.kernel.org/lkml/20220824084514.2261614-2-gwan-gyeong.mun@intel.com
+>
+> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: linux-hardening@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
- arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
 
-diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-index 45796b9fd94f..ee6095baba4d 100644
---- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-+++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
-@@ -244,6 +244,14 @@ &dmc {
- &edp {
- 	status = "okay";
- 
-+	/*
-+	 * eDP PHY/clk don't sync reliably at anything other than 24 MHz. Only
-+	 * set this here, because rk3399-gru.dtsi ensures we can generate this
-+	 * off GPLL=600MHz, whereas some other RK3399 boards may not.
-+	 */
-+	assigned-clocks = <&cru PCLK_EDP>;
-+	assigned-clock-rates = <24000000>;
-+
- 	ports {
- 		edp_out: port@1 {
- 			reg = <1>;
--- 
-2.37.2.672.g94769d06f0-goog
+Regards
+Andrzej
+
+
+> ---
+> v3: drop needless local variables (Andrzej)
+> v2: https://lore.kernel.org/lkml/20220829214550.3443472-1-keescook@chromium.org
+> v1: https://lore.kernel.org/lkml/20220829204729.3409270-1-keescook@chromium.org
+> ---
+>   include/linux/overflow.h |  72 ++++++++++++++++------------
+>   lib/overflow_kunit.c     | 101 ++++++++++++++++++++++++++++-----------
+>   2 files changed, 113 insertions(+), 60 deletions(-)
+>
+> diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+> index 0eb3b192f07a..19dfdd74835e 100644
+> --- a/include/linux/overflow.h
+> +++ b/include/linux/overflow.h
+> @@ -51,40 +51,50 @@ static inline bool __must_check __must_check_overflow(bool overflow)
+>   	return unlikely(overflow);
+>   }
+>   
+> -/*
+> - * For simplicity and code hygiene, the fallback code below insists on
+> - * a, b and *d having the same type (similar to the min() and max()
+> - * macros), whereas gcc's type-generic overflow checkers accept
+> - * different types. Hence we don't just make check_add_overflow an
+> - * alias for __builtin_add_overflow, but add type checks similar to
+> - * below.
+> +/** check_add_overflow() - Calculate addition with overflow checking
+> + *
+> + * @a: first addend
+> + * @b: second addend
+> + * @d: pointer to store sum
+> + *
+> + * Returns 0 on success.
+> + *
+> + * *@d holds the results of the attempted addition, but is not considered
+> + * "safe for use" on a non-zero return value, which indicates that the
+> + * sum has overflowed or been truncated.
+>    */
+> -#define check_add_overflow(a, b, d) __must_check_overflow(({	\
+> -	typeof(a) __a = (a);			\
+> -	typeof(b) __b = (b);			\
+> -	typeof(d) __d = (d);			\
+> -	(void) (&__a == &__b);			\
+> -	(void) (&__a == __d);			\
+> -	__builtin_add_overflow(__a, __b, __d);	\
+> -}))
+> +#define check_add_overflow(a, b, d)	\
+> +	__must_check_overflow(__builtin_add_overflow(a, b, d))
+>   
+> -#define check_sub_overflow(a, b, d) __must_check_overflow(({	\
+> -	typeof(a) __a = (a);			\
+> -	typeof(b) __b = (b);			\
+> -	typeof(d) __d = (d);			\
+> -	(void) (&__a == &__b);			\
+> -	(void) (&__a == __d);			\
+> -	__builtin_sub_overflow(__a, __b, __d);	\
+> -}))
+> +/** check_sub_overflow() - Calculate subtraction with overflow checking
+> + *
+> + * @a: minuend; value to subtract from
+> + * @b: subtrahend; value to subtract from @a
+> + * @d: pointer to store difference
+> + *
+> + * Returns 0 on success.
+> + *
+> + * *@d holds the results of the attempted subtraction, but is not considered
+> + * "safe for use" on a non-zero return value, which indicates that the
+> + * difference has underflowed or been truncated.
+> + */
+> +#define check_sub_overflow(a, b, d)	\
+> +	__must_check_overflow(__builtin_sub_overflow(a, b, d))
+>   
+> -#define check_mul_overflow(a, b, d) __must_check_overflow(({	\
+> -	typeof(a) __a = (a);			\
+> -	typeof(b) __b = (b);			\
+> -	typeof(d) __d = (d);			\
+> -	(void) (&__a == &__b);			\
+> -	(void) (&__a == __d);			\
+> -	__builtin_mul_overflow(__a, __b, __d);	\
+> -}))
+> +/** check_mul_overflow() - Calculate multiplication with overflow checking
+> + *
+> + * @a: first factor
+> + * @b: second factor
+> + * @d: pointer to store product
+> + *
+> + * Returns 0 on success.
+> + *
+> + * *@d holds the results of the attempted multiplication, but is not
+> + * considered "safe for use" on a non-zero return value, which indicates
+> + * that the product has overflowed or been truncated.
+> + */
+> +#define check_mul_overflow(a, b, d)	\
+> +	__must_check_overflow(__builtin_mul_overflow(a, b, d))
+>   
+>   /** check_shl_overflow() - Calculate a left-shifted value and check overflow
+>    *
+> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+> index 7e3e43679b73..0d98c9bc75da 100644
+> --- a/lib/overflow_kunit.c
+> +++ b/lib/overflow_kunit.c
+> @@ -16,12 +16,15 @@
+>   #include <linux/types.h>
+>   #include <linux/vmalloc.h>
+>   
+> -#define DEFINE_TEST_ARRAY(t)			\
+> -	static const struct test_ ## t {	\
+> -		t a, b;				\
+> -		t sum, diff, prod;		\
+> -		bool s_of, d_of, p_of;		\
+> -	} t ## _tests[]
+> +#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
+> +	static const struct test_ ## t1 ## _ ## t2 ## __ ## t {	\
+> +		t1 a;						\
+> +		t2 b;						\
+> +		t sum, diff, prod;				\
+> +		bool s_of, d_of, p_of;				\
+> +	} t1 ## _ ## t2 ## __ ## t ## _tests[]
+> +
+> +#define DEFINE_TEST_ARRAY(t)	DEFINE_TEST_ARRAY_TYPED(t, t, t)
+>   
+>   DEFINE_TEST_ARRAY(u8) = {
+>   	{0, 0, 0, 0, 0, false, false, false},
+> @@ -222,21 +225,27 @@ DEFINE_TEST_ARRAY(s64) = {
+>   };
+>   #endif
+>   
+> -#define check_one_op(t, fmt, op, sym, a, b, r, of) do {		\
+> -	t _r;							\
+> -	bool _of;						\
+> -								\
+> -	_of = check_ ## op ## _overflow(a, b, &_r);		\
+> -	KUNIT_EXPECT_EQ_MSG(test, _of, of,			\
+> +#define check_one_op(t, fmt, op, sym, a, b, r, of) do {			\
+> +	int _a_orig = a, _a_bump = a + 1;				\
+> +	int _b_orig = b, _b_bump = b + 1;				\
+> +	bool _of;							\
+> +	t _r;								\
+> +									\
+> +	_of = check_ ## op ## _overflow(a, b, &_r);			\
+> +	KUNIT_EXPECT_EQ_MSG(test, _of, of,				\
+>   		"expected "fmt" "sym" "fmt" to%s overflow (type %s)\n",	\
+> -		a, b, of ? "" : " not", #t);			\
+> -	KUNIT_EXPECT_EQ_MSG(test, _r, r,			\
+> +		a, b, of ? "" : " not", #t);				\
+> +	KUNIT_EXPECT_EQ_MSG(test, _r, r,				\
+>   		"expected "fmt" "sym" "fmt" == "fmt", got "fmt" (type %s)\n", \
+> -		a, b, r, _r, #t);				\
+> +		a, b, r, _r, #t);					\
+> +	/* Check for internal macro side-effects. */			\
+> +	_of = check_ ## op ## _overflow(_a_orig++, _b_orig++, &_r);	\
+> +	KUNIT_EXPECT_EQ_MSG(test, _a_orig, _a_bump, "Unexpected " #op " macro side-effect!\n"); \
+> +	KUNIT_EXPECT_EQ_MSG(test, _b_orig, _b_bump, "Unexpected " #op " macro side-effect!\n"); \
+>   } while (0)
+>   
+> -#define DEFINE_TEST_FUNC(t, fmt)					\
+> -static void do_test_ ## t(struct kunit *test, const struct test_ ## t *p) \
+> +#define DEFINE_TEST_FUNC_TYPED(n, t, fmt)				\
+> +static void do_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
+>   {							   		\
+>   	check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);	\
+>   	check_one_op(t, fmt, add, "+", p->b, p->a, p->sum, p->s_of);	\
+> @@ -245,15 +254,18 @@ static void do_test_ ## t(struct kunit *test, const struct test_ ## t *p) \
+>   	check_one_op(t, fmt, mul, "*", p->b, p->a, p->prod, p->p_of);	\
+>   }									\
+>   									\
+> -static void t ## _overflow_test(struct kunit *test) {			\
+> +static void n ## _overflow_test(struct kunit *test) {			\
+>   	unsigned i;							\
+>   									\
+> -	for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)			\
+> -		do_test_ ## t(test, &t ## _tests[i]);			\
+> +	for (i = 0; i < ARRAY_SIZE(n ## _tests); ++i)			\
+> +		do_test_ ## n(test, &n ## _tests[i]);			\
+>   	kunit_info(test, "%zu %s arithmetic tests finished\n",		\
+> -		ARRAY_SIZE(t ## _tests), #t);				\
+> +		ARRAY_SIZE(n ## _tests), #n);				\
+>   }
+>   
+> +#define DEFINE_TEST_FUNC(t, fmt)					\
+> +	DEFINE_TEST_FUNC_TYPED(t ## _ ## t ## __ ## t, t, fmt)
+> +
+>   DEFINE_TEST_FUNC(u8, "%d");
+>   DEFINE_TEST_FUNC(s8, "%d");
+>   DEFINE_TEST_FUNC(u16, "%d");
+> @@ -265,6 +277,33 @@ DEFINE_TEST_FUNC(u64, "%llu");
+>   DEFINE_TEST_FUNC(s64, "%lld");
+>   #endif
+>   
+> +DEFINE_TEST_ARRAY_TYPED(u32, u32, u8) = {
+> +	{0, 0, 0, 0, 0, false, false, false},
+> +	{U8_MAX, 2, 1, U8_MAX - 2, U8_MAX - 1, true, false, true},
+> +	{U8_MAX + 1, 0, 0, 0, 0, true, true, false},
+> +};
+> +DEFINE_TEST_FUNC_TYPED(u32_u32__u8, u8, "%d");
+> +
+> +DEFINE_TEST_ARRAY_TYPED(u32, u32, int) = {
+> +	{0, 0, 0, 0, 0, false, false, false},
+> +	{U32_MAX, 0, -1, -1, 0, true, true, false},
+> +};
+> +DEFINE_TEST_FUNC_TYPED(u32_u32__int, int, "%d");
+> +
+> +DEFINE_TEST_ARRAY_TYPED(u8, u8, int) = {
+> +	{0, 0, 0, 0, 0, false, false, false},
+> +	{U8_MAX, U8_MAX, 2 * U8_MAX, 0, U8_MAX * U8_MAX, false, false, false},
+> +	{1, 2, 3, -1, 2, false, false, false},
+> +};
+> +DEFINE_TEST_FUNC_TYPED(u8_u8__int, int, "%d");
+> +
+> +DEFINE_TEST_ARRAY_TYPED(int, int, u8) = {
+> +	{0, 0, 0, 0, 0, false, false, false},
+> +	{1, 2, 3, U8_MAX, 2, false, true, false},
+> +	{-1, 0, U8_MAX, U8_MAX, 0, true, true, false},
+> +};
+> +DEFINE_TEST_FUNC_TYPED(int_int__u8, u8, "%d");
+> +
+>   static void overflow_shift_test(struct kunit *test)
+>   {
+>   	int count = 0;
+> @@ -649,17 +688,21 @@ static void overflow_size_helpers_test(struct kunit *test)
+>   }
+>   
+>   static struct kunit_case overflow_test_cases[] = {
+> -	KUNIT_CASE(u8_overflow_test),
+> -	KUNIT_CASE(s8_overflow_test),
+> -	KUNIT_CASE(u16_overflow_test),
+> -	KUNIT_CASE(s16_overflow_test),
+> -	KUNIT_CASE(u32_overflow_test),
+> -	KUNIT_CASE(s32_overflow_test),
+> +	KUNIT_CASE(u8_u8__u8_overflow_test),
+> +	KUNIT_CASE(s8_s8__s8_overflow_test),
+> +	KUNIT_CASE(u16_u16__u16_overflow_test),
+> +	KUNIT_CASE(s16_s16__s16_overflow_test),
+> +	KUNIT_CASE(u32_u32__u32_overflow_test),
+> +	KUNIT_CASE(s32_s32__s32_overflow_test),
+>   /* Clang 13 and earlier generate unwanted libcalls on 32-bit. */
+>   #if BITS_PER_LONG == 64
+> -	KUNIT_CASE(u64_overflow_test),
+> -	KUNIT_CASE(s64_overflow_test),
+> +	KUNIT_CASE(u64_u64__u64_overflow_test),
+> +	KUNIT_CASE(s64_s64__s64_overflow_test),
+>   #endif
+> +	KUNIT_CASE(u32_u32__u8_overflow_test),
+> +	KUNIT_CASE(u32_u32__int_overflow_test),
+> +	KUNIT_CASE(u8_u8__int_overflow_test),
+> +	KUNIT_CASE(int_int__u8_overflow_test),
+>   	KUNIT_CASE(overflow_shift_test),
+>   	KUNIT_CASE(overflow_allocation_test),
+>   	KUNIT_CASE(overflow_size_helpers_test),
 

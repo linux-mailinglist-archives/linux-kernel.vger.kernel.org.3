@@ -2,167 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1BF5A592B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 04:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEF45A592E
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 04:14:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbiH3CMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 22:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56382 "EHLO
+        id S229723AbiH3COi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 22:14:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiH3CMv (ORCPT
+        with ESMTP id S229566AbiH3COe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 22:12:51 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87C09AFAE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 19:12:49 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MGrPy1BsJzHnXH;
-        Tue, 30 Aug 2022 10:11:02 +0800 (CST)
-Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 10:12:48 +0800
-Received: from [10.174.178.55] (10.174.178.55) by
- dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 10:12:47 +0800
-Subject: Re: [PATCH] ARM: 9220/1: amba: Add sanity check for dev->periphid in
- amba_probe()
-To:     Saravana Kannan <saravanak@google.com>
-CC:     Russell King <linux@armlinux.org.uk>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <patches@armlinux.org.uk>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        "Isaac Manjarres" <isaacmanjarres@google.com>
-References: <20220827101853.353-1-thunder.leizhen@huawei.com>
- <CAGETcx9yXSsHZDQ4QOnVLbO3rZ1nQ0x=x5TeSQj6mpG05PmGcw@mail.gmail.com>
-From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Message-ID: <43291037-4348-1d68-cecc-57e520a309db@huawei.com>
-Date:   Tue, 30 Aug 2022 10:12:47 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.0
+        Mon, 29 Aug 2022 22:14:34 -0400
+Received: from mail-oa1-x34.google.com (mail-oa1-x34.google.com [IPv6:2001:4860:4864:20::34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BA39D8F0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 19:14:32 -0700 (PDT)
+Received: by mail-oa1-x34.google.com with SMTP id 586e51a60fabf-11e9a7135easo11152402fac.6
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 19:14:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=qR5uEo28JsXCsuGX4MoCWnnCxcpMhsEmJxldP6wV/gw=;
+        b=qj0Ras3Gx9KtnXhGmB+i4qXQSYjKuhPrnVsawNHrdfg0Q1r+WBNRENX3p1viRq8cKt
+         fzmPbe/7maUN1ju8+kIfgAvrSC69G7dD/CyqUK+6vpQq9uv+LxP7aeIM8wqf2vptMs24
+         RSQQTVXYdylcckOoQakB10emxs4tg+8yhOr8qjz0WlUdbsvCsHZ56p7oKijREAwucHKx
+         rwZVYNgvi6b8O3bqa36ygz6wUxZTss0sgvTO7VYGlT5ifqFds9uo5+z00+G5C2l4Gk/j
+         HWpsbGEvogJjAZNm+p42MWU9BfA7zJA7UmFU8ZzCyuepbyZxxKzkFmFGcbAMs3Ejw0pG
+         Uzhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=qR5uEo28JsXCsuGX4MoCWnnCxcpMhsEmJxldP6wV/gw=;
+        b=inJX0mj+JwTJM9MA26IvpbPhEZHfdlfIlWqog1UCZAUciPK/WFXBrXVcpEvFnYW5s/
+         84eZSuYO17YGnSKBgDXZBefNqCF4ZnSa02O20WJRO6Je2PrQPFx9y1c2GL1hvseKTO8i
+         kT9dGuy35WW3g1fBNHg35odVrodeJDN9BBYldH9dt38yW+4xMObm/l5+QRKTkkOc6il9
+         pmTvlJpt9JQp3mhrTEFR0tF2FqrRmyXqC1SFqE4iHahtSthSD6yLY3Wmvp3Ik8KQYuHM
+         4C4ymFkCT4wrV4y2s1r7PSoe2IckFyEfFC3MUT5THql+KB5TIi6CYgKynwN1ZqLUVrv3
+         ilyg==
+X-Gm-Message-State: ACgBeo037tv8wKQJRMSe4jo7uCp0582v0TZStDWWwGBJl1fvcWNBYPUe
+        oFDlWs+ZUGfmwnf0b31VD6lvCw==
+X-Google-Smtp-Source: AA6agR4/IHMs50rxASXth2n5hwilJZ8KVIZdTCzxlTBTzhZpjEYL0woIWjYJUQoIkLVfAEKRg4HhyQ==
+X-Received: by 2002:a05:6808:11ca:b0:2d9:a01a:488b with SMTP id p10-20020a05680811ca00b002d9a01a488bmr8301601oiv.214.1661825672316;
+        Mon, 29 Aug 2022 19:14:32 -0700 (PDT)
+Received: from [192.168.17.16] ([189.219.72.147])
+        by smtp.gmail.com with ESMTPSA id l2-20020a9d7a82000000b0063974238a5dsm5843301otn.63.2022.08.29.19.14.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 19:14:31 -0700 (PDT)
+Message-ID: <1e67f6e1-49d0-60bb-9252-e872ca232ba4@linaro.org>
+Date:   Mon, 29 Aug 2022 21:14:30 -0500
 MIME-Version: 1.0
-In-Reply-To: <CAGETcx9yXSsHZDQ4QOnVLbO3rZ1nQ0x=x5TeSQj6mpG05PmGcw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 5.19 000/158] 5.19.6-rc1 review
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.55]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- dggpemm500006.china.huawei.com (7.185.36.236)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220829105808.828227973@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello!
+
+On 29/08/22 05:57, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.6 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+
+Results from Linaro's test farm.
+No regressions on arm64, arm, x86_64, and i386.
+
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.19.6-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.19.y
+* git commit: 5cfa6cf5bd86ffb0f956ff2ac4876ec6905dd3cf
+* git describe: v5.19.4-161-g5cfa6cf5bd86
+* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19.4-161-g5cfa6cf5bd86
+
+## No test regressions (compared to v5.19.5)
+
+## No metric regressions (compared to v5.19.5)
+
+## No test fixes (compared to v5.19.5)
+
+## No metric fixes (compared to v5.19.5)
+
+## Test result summary
+total: 112530, pass: 101420, fail: 894, skip: 9953, xfail: 263
+
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 306 total, 303 passed, 3 failed
+* arm64: 68 total, 65 passed, 3 failed
+* i386: 57 total, 51 passed, 6 failed
+* mips: 50 total, 47 passed, 3 failed
+* parisc: 14 total, 14 passed, 0 failed
+* powerpc: 65 total, 56 passed, 9 failed
+* riscv: 32 total, 26 passed, 6 failed
+* s390: 22 total, 20 passed, 2 failed
+* sh: 26 total, 24 passed, 2 failed
+* sparc: 14 total, 14 passed, 0 failed
+* x86_64: 61 total, 58 passed, 3 failed
+
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
 
 
-On 2022/8/30 5:17, Saravana Kannan wrote:
-> On Sat, Aug 27, 2022 at 3:21 AM Zhen Lei <thunder.leizhen@huawei.com> wrote:
->>
->> Commit f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
->> forcibly invokes device_add() even if dev->periphid is not ready. Although
->> it will be remedied in amba_match(): dev->periphid will be initialized
->> if everything is in place; Otherwise, return -EPROBE_DEFER to block
->> __driver_attach() from further execution. But not all drivers have .match
->> hook, such as pl031, the dev->bus->probe will be called directly in
->> __driver_attach(). Unfortunately, if dev->periphid is still not
->> initialized, the following exception will be triggered.
->>
->> 8<--- cut here ---
->> Unable to handle kernel NULL pointer dereference at virtual address 00000008
->> [00000008] *pgd=00000000
->> Internal error: Oops: 5 [#1] SMP ARM
->> Modules linked in:
->> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc2+ #7
->> Hardware name: ARM-Versatile Express
->> PC is at pl031_probe+0x8/0x208
->> LR is at amba_probe+0xf0/0x160
->> pc : 80698df8  lr : 8050eb54  psr: 80000013
->> sp : c0825df8  ip : 00000000  fp : 811fda38
->> r10: 00000000  r9 : 80d72470  r8 : fffffdfb
->> r7 : 811fd800  r6 : be7eb330  r5 : 00000000  r4 : 811fd900
->> r3 : 80698df0  r2 : 37000000  r1 : 00000000  r0 : 811fd800
->> Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
->> Control: 10c5387d  Table: 6000406a  DAC: 00000051
->> ... ...
->>  pl031_probe from amba_probe+0xf0/0x160
->>  amba_probe from really_probe+0x118/0x290
->>  really_probe from __driver_probe_device+0x84/0xe4
->>  __driver_probe_device from driver_probe_device+0x30/0xd0
->>  driver_probe_device from __driver_attach+0x8c/0xfc
->>  __driver_attach from bus_for_each_dev+0x70/0xb0
->>  bus_for_each_dev from bus_add_driver+0x168/0x1f4
->>  bus_add_driver from driver_register+0x7c/0x118
->>  driver_register from do_one_initcall+0x44/0x1ec
->>  do_one_initcall from kernel_init_freeable+0x238/0x288
->>  kernel_init_freeable from kernel_init+0x18/0x12c
->>  kernel_init from ret_from_fork+0x14/0x2c
->> ... ...
->> ---[ end trace 0000000000000000 ]---
->>
->> Therefore, take the same action as in amba_match(): return -EPROBE_DEFER
->> if dev->periphid is not ready in amba_probe().
->>
->> Fixes: f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
->> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
->> ---
->> KernelVersion: v6.0-rc2
->>  drivers/amba/bus.c | 10 +++++++++-
->>  1 file changed, 9 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
->> index 32b0e0b930c1068..2e5572f60692a33 100644
->> --- a/drivers/amba/bus.c
->> +++ b/drivers/amba/bus.c
->> @@ -274,9 +274,17 @@ static int amba_probe(struct device *dev)
->>  {
->>         struct amba_device *pcdev = to_amba_device(dev);
->>         struct amba_driver *pcdrv = to_amba_driver(dev->driver);
->> -       const struct amba_id *id = amba_lookup(pcdrv->id_table, pcdev);
->> +       const struct amba_id *id;
->>         int ret;
->>
->> +       if (!pcdev->periphid) {
->> +               ret = amba_read_periphid(pcdev);
->> +               if (ret)
->> +                       return -EPROBE_DEFER;
->> +       }
->> +
->> +       id = amba_lookup(pcdrv->id_table, pcdev);
->> +
->>         do {
->>                 ret = of_amba_device_decode_irq(pcdev);
->>                 if (ret)
-> 
-> Cc: Isaac
-> 
-> Hi Zhen,
-> 
-> Thanks for the report and trying to fix it. I think your change is in
-> the right direction but there are a couple of issues that need to be
-> addressed.
-> 
-> Firstly, please make your change on top of [1] that fixes a race in my
-> patch. So, you'll need to use some locks here. Also, you'll need to do
-> the uevent update thing I do in amba_match() when you read the
-> periphid successfully for the first time.
+Greetings!
 
-OK, I will do it in v2. It seems necessary to add a helper function to
-avoid duplication of code.
-
-> 
-> Thanks,
-> Saravana
-> 
-> [1] - https://lore.kernel.org/lkml/20220818172852.3548-1-isaacmanjarres@google.com/
-> .
-> 
+Daniel Díaz
+daniel.diaz@linaro.org
 
 -- 
-Regards,
-  Zhen Lei
+Linaro LKFT
+https://lkft.linaro.org

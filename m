@@ -2,135 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75D6A5A68A9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1665A68B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiH3Qqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57758 "EHLO
+        id S230041AbiH3QrH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:47:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiH3Qqi (ORCPT
+        with ESMTP id S230112AbiH3QrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:46:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4F18B2CF2;
-        Tue, 30 Aug 2022 09:46:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 753B6B81C35;
-        Tue, 30 Aug 2022 16:46:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B51AC433C1;
-        Tue, 30 Aug 2022 16:46:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661877995;
-        bh=AR8ycBXfaOCATMPDffJV6k+LpBnMDGH/P5BC77bn7rk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=DhJNH6a6reToiPh/T+FS/mZQUF+qaOZAk2XtdC3omOuoy2VSkRU8UVHSTlAb9FJlm
-         1GfW87TueIgO4VnqYO1YGxmIOXC/qOvT1e1FzF5NmNATZtNfpe5yz7lnzYJlqs1xDu
-         HP/HppLMk5YnUz8Jy2t04yRe3Gx5bA5PICZQ4Bdrv3s76tCekJFSUUT4tnBQnli+kX
-         lWuiQKwdQQSJI6sxqVSbiiqdtqc56KaTGj8Y85qe6nSaGzTlkvpw3GkPAeJETppL7L
-         aUltoS4WcFu8N6LVAcMSMB8o8wKGmPPlv/PEA5Zy8D5R9aUd4j2EpBOB5nrOTVV7/G
-         sJWMhMvTyHslg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id B7B6C5C0981; Tue, 30 Aug 2022 09:46:34 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 09:46:34 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rcu <rcu@vger.kernel.org>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
- fixes
-Message-ID: <20220830164634.GC6159@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220819204857.3066329-1-joel@joelfernandes.org>
- <20220829134045.GA54589@lothringen>
- <1f7dd31b-f4d0-5c1c-ce28-c27f75c17f05@joelfernandes.org>
- <20220829194622.GA58291@lothringen>
- <CAEXW_YS593n8Gget+REaD-c8vT8Ht_AzOY0kXA_uc674LOyvVw@mail.gmail.com>
- <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830105324.GA71266@lothringen>
- <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830160316.GC71266@lothringen>
- <20220830162244.GA73392@lothringen>
+        Tue, 30 Aug 2022 12:47:01 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F350FB654D;
+        Tue, 30 Aug 2022 09:46:53 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id r4so14978309edi.8;
+        Tue, 30 Aug 2022 09:46:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=1AFNZlzSZWcJdvdgruC16P+i1WUA5VJSb9W5RFFvucA=;
+        b=hMFE98nV+X9JQJiBf12uyzGf/BQr/ijcGk+8ElRrwVaOXjvyT7/FpAqdjSUiQtO0kc
+         NWJfEPRsnVPRj/VviMCoTYRkObelu28uFnJIZrgASCkr5cfe0jFOJlDMAm/rSj11S4o5
+         D3EYd17vDD8TfRIJa1fdFcneMVZMJDY7Iv7DreaTOazf4UkNggzUftnjErfkrZvyJWIQ
+         WuOqwkZ/20XubWwTe6HitbUv2O8JPsJkecqmJulgtG/tDewU3LYm5B3Ckm1Wir7LwkFe
+         mJxyjeFWzwEMqKNiQpeHRmjzaO7RhRhf6GvE1JPe4Yja0/qtnT9XuZuEAtz/jGsOneW7
+         OJsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=1AFNZlzSZWcJdvdgruC16P+i1WUA5VJSb9W5RFFvucA=;
+        b=V9waGUy1QjFI9Ymzls2OqvMAs1F/vx+nTZKgiN8RVEnBB+rirWCWwREI8Lnd5ubI52
+         pHhKgooWrDVDUzk/fgmHEl6z0KEl4/g2TteNAetbWa2Bi+FKMoQ/fawJdNR1qN93Ma6+
+         ZmrJivLbOBwWYxr2H61nQ/xf8UbHqOcdRSh0NtMWPAg6dgODWrTohZ8ZsIOoMzD0JW4P
+         5K4O9N/6kOWV33KyOR+1KZbZpuaFlEShCOrL/VI1JVFgk6oOTn0v8y5zD/KBjAJE57/6
+         6BOMdKJpAf/HlotYj8XVnQWdMRWh05EjUZbYp4r1XBouqK6rrG44rOf0O5ByJVUcfRhz
+         kBmg==
+X-Gm-Message-State: ACgBeo3H9dxdF3aZHPCsA9d35Oa/PEjruVrUBZqlgJiZODHdCJrkl/e9
+        UC9cXQdPuIFHUI4ekLL83Sge1MG/pfgalzbJveo=
+X-Google-Smtp-Source: AA6agR6zCvjUuBANcNe0mySzUsgSK/SNXbtQUEhStfMzOX91Gs6XvPn4gSOPAnZR3ZLFJFG1aUZzJb1GFKYF5/6XJVo=
+X-Received: by 2002:a05:6402:1e8c:b0:448:8776:d813 with SMTP id
+ f12-20020a0564021e8c00b004488776d813mr7041452edf.15.1661878012245; Tue, 30
+ Aug 2022 09:46:52 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830162244.GA73392@lothringen>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220830161716.754078-1-roberto.sassu@huaweicloud.com> <20220830161716.754078-3-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20220830161716.754078-3-roberto.sassu@huaweicloud.com>
+From:   Joanne Koong <joannelkoong@gmail.com>
+Date:   Tue, 30 Aug 2022 09:46:41 -0700
+Message-ID: <CAJnrk1bL2MSN81ORrkm9JcFQh3qsJ1jVGXEycSjyhk+Jv_Bz2Q@mail.gmail.com>
+Subject: Re: [PATCH v14 02/12] bpf: Move dynptr type check to is_dynptr_type_expected()
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 06:22:44PM +0200, Frederic Weisbecker wrote:
-> On Tue, Aug 30, 2022 at 06:03:16PM +0200, Frederic Weisbecker wrote:
-> > On Tue, Aug 30, 2022 at 04:43:43AM -0700, Paul E. McKenney wrote:
-> > > On Tue, Aug 30, 2022 at 12:53:24PM +0200, Frederic Weisbecker wrote:
-> > > > On Mon, Aug 29, 2022 at 01:42:02PM -0700, Paul E. McKenney wrote:
-> > > > > On Mon, Aug 29, 2022 at 04:36:40PM -0400, Joel Fernandes wrote:
-> > > > > > On Mon, Aug 29, 2022 at 3:46 PM Frederic Weisbecker <frederic@kernel.org> wrote:
-> > > > > > > On Mon, Aug 29, 2022 at 12:45:40PM -0400, Joel Fernandes wrote:
-> > > > > > > > On 8/29/2022 9:40 AM, Frederic Weisbecker wrote:
-> > > > > 
-> > > > > [ . .  . ]
-> > > > > 
-> > > > > > > > > 2) NOCB implies performance issues.
-> > > > > > > >
-> > > > > > > > Which kinds of? There is slightly worse boot times, but I'm guessing that's do
-> > > > > > > > with the extra scheduling overhead of the extra threads which is usually not a
-> > > > > > > > problem except that RCU is used in the critical path of boot up (on ChromeOS).
-> > > > > > >
-> > > > > > > I never measured it myself but executing callbacks on another CPUs, with
-> > > > > > > context switches and locking can only involve significant performance issues if callbacks
-> > > > > > > are frequent. So it's a tradeoff between power and performance.
-> > > > > > 
-> > > > > > In my testing of benchmarks on real systems with 8-16 CPUs, the
-> > > > > > performance hit is down in the noise. It is possible though that maybe
-> > > > > > one can write a non-realistic synthetic test to force the performance
-> > > > > > issues, but I've not seen it in the real world. Maybe on
-> > > > > > networking-heavy servers with lots of cores, you'll see it but their
-> > > > > > batteries if any would be pretty big :-).
-> > > > > 
-> > > > > To Frederic's point, if you have enough servers, even a 1% decrease in
-> > > > > power consumption is a very big deal.  ;-)
-> > > > 
-> > > > The world has enough servers, for that matters ;-)
-> > > 
-> > > True enough!  Now you need only demonstrate that call_rcu_lazy() for
-> > > !rcu_nocbs servers would actually deliver that 1%.  ;-)
-> > 
-> > Well, !rcu_nocbs is not only used by server but also by pretty much
-> > everything else, except android IIUC.
+On Tue, Aug 30, 2022 at 9:18 AM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Move dynptr type check to is_dynptr_type_expected() from
+> is_dynptr_reg_valid_init(), so that callers can better determine the cause
+> of a negative result (dynamic pointer not valid/initialized, dynamic
+> pointer of the wrong type).
+>
+> Also, splitting makes the code more readable, since checking the dynamic
+> pointer type is not necessarily related to validity and initialization.
 
-And soon, ChromeOS.
+I think it'd be helpful to also include that btf will be using these
+functions, which seems like the main motivation behind why this change
+is needed.
 
-> >                                       I can't really measure the whole
-> > world but I don't see how the idleness of a server/router/desktop/embedded/rt/hpc
-> > device differs from the idleness of an android device.
-> > 
-> > But ok I'll try to measure that.
-> 
-> Although who knows, may be some periodic file operation while idle are specific
-> to Android. I'll try to trace lazy callbacks while idle and the number of grace
-> periods associated.
+>
+> Split the validity/initialization and dynamic pointer type check also in
+> the verifier, and adjust the expected error message in the test (a test for
+> an unexpected dynptr type passed to a helper cannot be added due to missing
+> suitable helpers, but this case has been tested manually).
 
-Sounds like a good start.
+The bpf_ringbuf_submit_dynptr() and bpf_ringbuf_discard_dynptr()
+helpers take in only ringbuf-type dynptrs, so either of these would
+work for testing the case where an incorrect dynptr type is passed in
+:)
 
-And yes, we don't need to show that the whole !NOCB world needs this,
-just some significant portion of it.  But we do need some decent evidence.
-After all, it is all too easy to do a whole lot of work and find that
-the expected benefits fail to materialize.
+>
+> Cc: Joanne Koong <joannelkoong@gmail.com>
+> Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  kernel/bpf/verifier.c                         | 35 ++++++++++++++-----
+>  .../testing/selftests/bpf/prog_tests/dynptr.c |  2 +-
+>  2 files changed, 28 insertions(+), 9 deletions(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 0194a36d0b36..1b913db252a3 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -779,8 +779,8 @@ static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, struct bpf_
+>         return true;
+>  }
+>
+> -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
+> -                                    enum bpf_arg_type arg_type)
+> +static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+> +                                    struct bpf_reg_state *reg)
+>  {
+>         struct bpf_func_state *state = func(env, reg);
+>         int spi = get_spi(reg->off);
+> @@ -796,11 +796,24 @@ static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env, struct bpf_re
+>                         return false;
+>         }
+>
+> +       return true;
+> +}
+> +
+> +static bool is_dynptr_type_expected(struct bpf_verifier_env *env,
+> +                                   struct bpf_reg_state *reg,
+> +                                   enum bpf_arg_type arg_type)
+> +{
+> +       struct bpf_func_state *state = func(env, reg);
+> +       int spi = get_spi(reg->off);
+> +       enum bpf_dynptr_type dynptr_type;
 
-							Thanx, Paul
+nit: the above 2 lines should be swapped to maintain reverse christmas
+tree order of declarations
+
+> +
+>         /* ARG_PTR_TO_DYNPTR takes any type of dynptr */
+>         if (arg_type == ARG_PTR_TO_DYNPTR)
+>                 return true;
+>
+> -       return state->stack[spi].spilled_ptr.dynptr.type == arg_to_dynptr_type(arg_type);
+> +       dynptr_type = arg_to_dynptr_type(arg_type);
+> +
+> +       return state->stack[spi].spilled_ptr.dynptr.type == dynptr_type;
+>  }
+>
+>  /* The reg state of a pointer or a bounded scalar was saved when
+> @@ -6050,21 +6063,27 @@ static int check_func_arg(struct bpf_verifier_env *env, u32 arg,
+>                         }
+>
+>                         meta->uninit_dynptr_regno = regno;
+> -               } else if (!is_dynptr_reg_valid_init(env, reg, arg_type)) {
+> +               } else if (!is_dynptr_reg_valid_init(env, reg)) {
+> +                       verbose(env,
+> +                               "Expected an initialized dynptr as arg #%d\n",
+> +                               arg + 1);
+> +                       return -EINVAL;
+> +               } else if (!is_dynptr_type_expected(env, reg, arg_type)) {
+>                         const char *err_extra = "";
+>
+>                         switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
+>                         case DYNPTR_TYPE_LOCAL:
+> -                               err_extra = "local ";
+> +                               err_extra = "local";
+>                                 break;
+>                         case DYNPTR_TYPE_RINGBUF:
+> -                               err_extra = "ringbuf ";
+> +                               err_extra = "ringbuf";
+>                                 break;
+>                         default:
+> +                               err_extra = "<unknown>";
+>                                 break;
+>                         }
+> -
+> -                       verbose(env, "Expected an initialized %sdynptr as arg #%d\n",
+> +                       verbose(env,
+> +                               "Expected a dynptr of type %s as arg #%d\n",
+>                                 err_extra, arg + 1);
+>                         return -EINVAL;
+>                 }
+> diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> index bcf80b9f7c27..8fc4e6c02bfd 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> @@ -30,7 +30,7 @@ static struct {
+>         {"invalid_helper2", "Expected an initialized dynptr as arg #3"},
+>         {"invalid_write1", "Expected an initialized dynptr as arg #1"},
+>         {"invalid_write2", "Expected an initialized dynptr as arg #3"},
+> -       {"invalid_write3", "Expected an initialized ringbuf dynptr as arg #1"},
+> +       {"invalid_write3", "Expected an initialized dynptr as arg #1"},
+>         {"invalid_write4", "arg 1 is an unacquired reference"},
+>         {"invalid_read1", "invalid read from stack"},
+>         {"invalid_read2", "cannot pass in dynptr at an offset"},
+> --
+> 2.25.1
+>

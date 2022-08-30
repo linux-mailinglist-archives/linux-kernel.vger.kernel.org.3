@@ -2,158 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DD65A6B02
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF78B5A6B23
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:47:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiH3RmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59330 "EHLO
+        id S230000AbiH3Rrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbiH3Rln (ORCPT
+        with ESMTP id S232167AbiH3RrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:41:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84B20F43A2;
-        Tue, 30 Aug 2022 10:38:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AFAA6117D;
-        Tue, 30 Aug 2022 17:37:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79EAEC433C1;
-        Tue, 30 Aug 2022 17:37:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661881045;
-        bh=hZvLlOnL6yvpi8MoLMu1NOUQlpnm115KJD6h3xz3kYQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=K9lvo23yx93EcY9vHb7bwHgIC1VWsQ1EfJtvY2xWks3CAQDqBrhAEi+UOtHb3xn5i
-         0/hNGs2TzLP0LldhEpmvmtp+k74bfSWG0oaAgBdWac4jgeLeZdARcZyG+WMu/EVMG4
-         Nw5a1KGDnV4w8cQVp+MJGCSsNbS1UaSPbBcd5R84a6ieI7FYOIqOxoKUDj5aiR29nw
-         2/aVMtftL5wE1I9Ku3C23J893RZABS6LQb9Cn4aX28M62Rb3Da4R1zr8hiQjm26BpL
-         ajOzoClqNa/bIMKBLPVzGpcHiQbEYVhe1J7EMD16G4NsQi1/aCv2AxoCPV6gndEcqk
-         2ZavPaEXNINmA==
-Date:   Tue, 30 Aug 2022 12:37:23 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Rajvi Jingar <rajvi.jingar@linux.intel.com>,
-        Rafael Wysocki <rafael.j.wysocki@intel.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        David Box <david.e.box@linux.intel.com>,
-        Linux PCI <linux-pci@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>
-Subject: Re: [RESEND PATCH v3 2/2] PCI/PTM: fix to maintain
- pci_dev->ptm_enabled
-Message-ID: <20220830173723.GA109210@bhelgaas>
+        Tue, 30 Aug 2022 13:47:17 -0400
+Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111FD2BB06
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:43:32 -0700 (PDT)
+Received: by mail-lj1-f172.google.com with SMTP id w19so9167460ljj.7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:43:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=LNOYEau6NCyMFt2UF/kOrdVjy55MOyCZeOBAl0rr6hw=;
+        b=JD7T2lrVvZF5GuK6KGickAQthyTSo1wl9nmJAy/h3ZXsePGnpeOzxDZhY5lljse7bg
+         06oxnhr/vVv/IfWFBXuv+pBCkF3YH9FQJ93IRcWSueYyfagxPFrKrWLTQxMNB3nqcwyZ
+         Bg6PD0m0ckgnKVzvYMVvoSEWBteYmvIL0HupVOodxYjnE2DSrTZEIJQeOAmMni9X7Ec7
+         KkzX7xrNAE6S/SzVhw9jmyEfEpMKzuul+iCIXLBk0BlkjYcJhUXi/HbUF/KEFVxpBD+g
+         Q0iM1Enws7ViTWcia6GQH7FGqeOnB43qwPl54FvzOZ1pDPd4ffTsY+n4atQQILBSYknj
+         C5Eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=LNOYEau6NCyMFt2UF/kOrdVjy55MOyCZeOBAl0rr6hw=;
+        b=nsNIvIBndnE8tEPwb9Kh/RfekBHZcAQ0Ga0zB3x0Ql3iUkkCwxiWUpm/SS2U+ICI+e
+         +VsqHP6Xe92FgFzA/rwIRuoqGNb8ABzy//EcinA5yK9QTK4iVXQbH3rqgVHdoxUt9y+v
+         E44Yjo1qEifw7vWfToeASDHHXtcy4uaISQWKOWd7PPuyln3PX05EZMHUHrzYF9pD9YU4
+         8vDCZ1szLptowxoCyQuYF91temih20OpwPBCbJgKKN/FHLSviXRTOapmSbxRw/uGpl98
+         ia/WhtzCf6ia/PF18jEtZqLgeF9ggAFQqscPX8WoU1DedEgKcxWS1gFBRlD2VDIUR04+
+         /meQ==
+X-Gm-Message-State: ACgBeo2cxSonGGyYlMY67VxWuWdRFmQ6CekxR4Sih0y9wjz+MYm4JkTD
+        EK/Lpn7axFdfd2pPZ2EGhz3EMA==
+X-Google-Smtp-Source: AA6agR4+iZSFr53G4vs26EmPBaP0Tw6RUL9/GjW9nDcQMmgpq7SSZtskFMm/hYnqoKkDPU6gjFG6NA==
+X-Received: by 2002:a2e:a403:0:b0:267:7e5:a5ef with SMTP id p3-20020a2ea403000000b0026707e5a5efmr1555985ljn.93.1661881092264;
+        Tue, 30 Aug 2022 10:38:12 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id e15-20020a05651c038f00b00264bb2351e8sm446663ljp.7.2022.08.30.10.38.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 10:38:11 -0700 (PDT)
+Message-ID: <d1f49935-b465-7495-d345-f35bf4dea9f9@linaro.org>
+Date:   Tue, 30 Aug 2022 20:38:10 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0jL812FKOJsmijE7gx5GEYp0hQ9+3UtQ_WUr-Uf5pgxAg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/7] dt-bindings: phy: mediatek,tphy: add property to
+ set pre-emphasis
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Eddie Hung <eddie.hung@mediatek.com>
+References: <20220829080830.5378-1-chunfeng.yun@mediatek.com>
+ <20220829080830.5378-2-chunfeng.yun@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220829080830.5378-2-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 06:58:20PM +0200, Rafael J. Wysocki wrote:
-> On Tue, Aug 30, 2022 at 6:25 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Tue, Aug 30, 2022 at 03:49:13AM -0700, Rajvi Jingar wrote:
-> > > pci_dev->ptm_enabled needs to be maintained to reflect the current PTM
-> > > state of the device. In pci_ptm_disable(), clear ptm_enabled from
-> > > 'struct pci_dev' on disabling PTM state for the device.
-> > > In pci_restore_ptm_state(), set dev->ptm_enabled based on the restored
-> > > PTM state of the device.
-> > >
-> > > In pci_ptm_disable(), perform ptm_enabled check to avoid config space
-> > > access in case if PTM is already disabled for the device. ptm_enabled
-> > > won't be set for non-PCIe devices so pci_is_pcie(dev) check is not
-> > > needed anymore.
-> >
-> > This one sounds like it's supposed to fix something, but I'm not clear
-> > exactly what.
-> >
-> > I have a vague memory of config accesses messing up a low power state.
-> > But this is still completely magical and unmaintainable since AFAIK
-> > there is nothing in the PCIe spec about avoiding config accesses when
-> > PTM is disabled.
+On 29/08/2022 11:08, Chunfeng Yun wrote:
+> Add a property to set usb2 phy's pre-emphasis, which used to widen eye
+> opening and boost eye swing.
+> 
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+> ---
+> v2: Add more description suggested by Krzysztof
+> ---
+>  .../devicetree/bindings/phy/mediatek,tphy.yaml         | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+> index 848edfb1f677..e0754fb44451 100644
+> --- a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+> +++ b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
+> @@ -219,6 +219,16 @@ patternProperties:
+>          minimum: 1
+>          maximum: 15
+>  
+> +      mediatek,pre-emphasis:
+> +        description:
+> +          The level of pre-emphasis which used to widen the eye opening and
+> +          boost eye swing, the unit step is about 4.16% increment; e.g. the
+> +          level 1 means amplitude increases about 4.16%, the level 2 is about
+> +          8.3% etc. (U2 phy)
+> +        $ref: /schemas/types.yaml#/definitions/uint32
 
-I'm remembering this, which seemed like an ancestor of this patch:
-https://lore.kernel.org/r/CAJZ5v0gNy6YJA+RNTEyHBdoJK-jqKN60oU_k_LX4=cTuyoO2mg@mail.gmail.com
+As I proposed - use instead common units. Since only three values are
+allowed - make it an enum. These bindings are expected to be
+usable/applicable on several devices, so units, not register values
+which can change between devices, are the proper and reliable way to
+describe a feature.
 
-This patch is queued up and does something similar (disabling PTM on
-all devices before suspend):
-https://git.kernel.org/cgit/linux/kernel/git/helgaas/pci.git/commit/?id=d878400c7d98
 
-Is d878400c7d98 enough to solve the functional issue, and this patch
-is basically a cleanup?  I think it's a nice cleanup and worth doing.
-
-I'm just trying to figure out the "avoid config space access" in the
-commit log.  If avoiding config space access is necessary, it needs
-more explanation.
-
-> Because ptm_enabled is expected to always reflect the hardware state,
-> pci_disable_ptm() needs to be amended to clear it.  Also it is prudent
-> to explicitly make it reflect the new hardware state in
-> pci_restore_ptm_state().
->
-> Then, pci_disable_ptm() can be made bail out if ptm_enabled is clear,
-> because it has nothing to do then and the pci_is_pcie() check in there
-> is not necessary, because ptm_enabled will never be set for devices
-> that are not PCIe.
->
-> > At the very least, we would need more details in the commit log and
-> > a hint in the code about this.
-> >
-> > > Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-> > > Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > ---
-> > >  v1->v2:
-> > >    - add ptm_enabled check in pci_ptm_disable().
-> > >    - set the dev->ptm_enabled value in pci_restore_ptm_state().
-> > >  v2->v3:
-> > >    - remove pci_is_pcie(dev) check in pci_ptm_disable().
-> > >    - add Reviewed-by tag in commit message
-> > > ---
-> > >  drivers/pci/pcie/ptm.c | 4 +++-
-> > >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/pci/pcie/ptm.c b/drivers/pci/pcie/ptm.c
-> > > index 368a254e3124..1ce241d4538f 100644
-> > > --- a/drivers/pci/pcie/ptm.c
-> > > +++ b/drivers/pci/pcie/ptm.c
-> > > @@ -34,7 +34,7 @@ void pci_disable_ptm(struct pci_dev *dev)
-> > >       int ptm;
-> > >       u16 ctrl;
-> > >
-> > > -     if (!pci_is_pcie(dev))
-> > > +     if (!dev->ptm_enabled)
-> > >               return;
-> >
-> > This will conflict with a change Kai-Heng Feng and I have been working
-> > on, but I can resolve it when applying.
-> >
-> > >       ptm = pci_find_ext_capability(dev, PCI_EXT_CAP_ID_PTM);
-> > > @@ -44,6 +44,7 @@ void pci_disable_ptm(struct pci_dev *dev)
-> > >       pci_read_config_word(dev, ptm + PCI_PTM_CTRL, &ctrl);
-> > >       ctrl &= ~(PCI_PTM_CTRL_ENABLE | PCI_PTM_CTRL_ROOT);
-> > >       pci_write_config_word(dev, ptm + PCI_PTM_CTRL, ctrl);
-> > > +     dev->ptm_enabled = 0;
-> > >  }
-> > >
-> > >  void pci_save_ptm_state(struct pci_dev *dev)
-> > > @@ -83,6 +84,7 @@ void pci_restore_ptm_state(struct pci_dev *dev)
-> > >
-> > >       cap = (u16 *)&save_state->cap.data[0];
-> > >       pci_write_config_word(dev, ptm + PCI_PTM_CTRL, *cap);
-> > > +     dev->ptm_enabled = !!(*cap & PCI_PTM_CTRL_ENABLE);
-> > >  }
-> > >
-> > >  void pci_ptm_init(struct pci_dev *dev)
-> > > --
-> > > 2.25.1
-> > >
+Best regards,
+Krzysztof

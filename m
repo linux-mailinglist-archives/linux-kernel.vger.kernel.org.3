@@ -2,195 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9D05A6E75
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C51D5A6E7A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbiH3UaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 16:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
+        id S230389AbiH3Ube (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 16:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiH3UaW (ORCPT
+        with ESMTP id S229896AbiH3Ubb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 16:30:22 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0374A54C98;
-        Tue, 30 Aug 2022 13:30:19 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UHtp9d006486;
-        Tue, 30 Aug 2022 20:30:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=HZQUgSez5PSi0aCRnyfKq+gLvz9ctCAP1VRxsViwuzM=;
- b=gj0HnkyLduj18wbuT8uz/7lkqCwRSgwOmAErKphPe7f6T9lV8W54kFpn6D4tQuxGkgKa
- /d5hf6g4KQcoNCxeunK2gVc1sO+vNlqenZu/UNenUUGAJTbZz30Tlb7tv3xKZfW5WSzC
- Eli4x0N3JDV8RKlUE3bPNd9VyIb9KXuH/aCLIAv6C+/2Ylmtm6pZae6szkarczSM+Pzu
- ATPSVTDSCodjTlW3AqSWmw5/CthHOjYWdgJqHF+2EQeK5HsiefhyHClTZSA0Ux3Y+mLc
- kg9CQiK0P/ZE52R91oOH2izxVlGlZ3XL8fBtRiBlXfr2zS27AEAX0e7MfzWKnVM4rCxy Fw== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j7avsfgsw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Aug 2022 20:30:10 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27UIXVqV013111;
-        Tue, 30 Aug 2022 20:30:10 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2041.outbound.protection.outlook.com [104.47.66.41])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j79q4cq81-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 30 Aug 2022 20:30:10 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SX1CCrkimgBn3jJJWYfjreVw8SpVwEZANWh/F02GTJzUG9BvYv8sRbqt/C90WNyXgzcRo2KUYEB1+xbwIMczWWYRwE18nP3KNYeCHJb4GTBo/3tWvcuE4XWsjG5dS/G3dLC1UkZU2Lf/+rJYBbfHvvsW+DKTN3hf6u58UCTUIezp8/w3nwLKADXb2vP0mY1iSA1MikYJ7oPQ23Q7AijZ1nce7z7smbtR0INmRwnRlsIUrmQfaXiZgTk7Gov3fKuV+5cTe8zcxytOZZ6DKFMpOrtELaiwd4s3pdFxqRfpmpsJS/7dFuiOuDtoNickylrWfqOdIFxUc+xabVa7r1QGDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=HZQUgSez5PSi0aCRnyfKq+gLvz9ctCAP1VRxsViwuzM=;
- b=VGLntEbjdBNkKmTKlwvjH//U7geLkKE3UkvoLshwLrQI4mrlUI/gzmmYMra9zyyhY2rOV146PUGiV7Sn+wR34txd0TYNKN/qEC6AElCMoDEOjCwq09fyjsmY/3ek8K6tEPn/vkNCMdeb3TLbK+RYzYx1kCYJRHrQz86tusK1B2zO3YBKtqYMT2YMGyvAY6xrKwUf/bzcWAjc+EBTvqmTqmEWxP/CRMN2IwZbGvdL2iFLC4pjf83ewsTFfXirGpObdLbGaC4n+ZT4nIrrvYzh/eqQKJZBjAgkxBMcr/Ssk5WzIekMWESXdPqNdVmLruC11sgJ4Y7rxIIKNOpuOClz4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 30 Aug 2022 16:31:31 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE92485F99
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:31:24 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id f4so11659555pgc.12
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=HZQUgSez5PSi0aCRnyfKq+gLvz9ctCAP1VRxsViwuzM=;
- b=zSK1EaTDQzXYGSG4cOxj3k7ToXk61W9jL4u76rFcKSBoH2Jsf0yPGFdq2hS/RoWXI+UhoRve768AM/XIFigwVh509I36F99GwJQuLOgu3b4ouqniFpSeUPV8PkzQAOrEGQrksUU2ybTwTtd8NRBP/nQlkg4bqZaTKjQt2NBaaCM=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by BLAPR10MB5281.namprd10.prod.outlook.com (2603:10b6:208:30f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Tue, 30 Aug
- 2022 20:30:07 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::a420:3107:436d:d223]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::a420:3107:436d:d223%5]) with mapi id 15.20.5566.021; Tue, 30 Aug 2022
- 20:30:07 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     Carlos Llamas <cmllamas@google.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?iso-8859-1?Q?Arve_Hj=F8nnev=E5g?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com" 
-        <syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com>,
-        "syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com" 
-        <syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/7] binder: fix alloc->vma_vm_mm null-ptr dereference
-Thread-Topic: [PATCH 1/7] binder: fix alloc->vma_vm_mm null-ptr dereference
-Thread-Index: AQHYu+O+8j78ewjyGUWdeBrLUwjJOK3Hz2wAgAAJnICAAA2+AA==
-Date:   Tue, 30 Aug 2022 20:30:07 +0000
-Message-ID: <20220830203000.qgv3dkbgep2d6saw@revolver>
-References: <20220829201254.1814484-1-cmllamas@google.com>
- <20220829201254.1814484-2-cmllamas@google.com>
- <20220830190515.dlrp2a3ypfyhzid5@revolver> <Yw5nwaNI5ewExYtC@google.com>
-In-Reply-To: <Yw5nwaNI5ewExYtC@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 76c7327a-086c-4dfc-bbe2-08da8ac66da6
-x-ms-traffictypediagnostic: BLAPR10MB5281:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: EMvdUvEbdctmHSAX9IiZdC1f/Ukhy0cOQHfpA2sbM6A3gkoiIXqMEHt0BO+eiSQNI6tMFIN+u6zRmbsKnbyN9Qh87kk+h5Na/CT9VPsXCXCOqaT/LLtiX0KnKHgcmF/gFnT1DIa/qwMKyd4vePZYF496Z9c7pI3ZnSi+e2wdtIN8JX4leqTCmLcVDc31lP09m+F+J/sxmNJC7Yl7jW5OsvHjsfkyazpQ5zsfcvKQebkD4nRMp83ehfg4Vt56cyDLonnAvmLGxF00w+BHFrVB7FpKzI+OsHyt7ptgk/saErNeHuzcwSM8A9Vv088A5xIDTM9jS8EVvX5rPpjz2zg/vCgg7ZeDnPu7rGfbT3Zn2jSst386plZ+chb6n2s8jeFHZmO9mBxKBlMarJ7k9h+pJXMN2USRH0kbW81JKorizGd49nPxB/aqxYNWNY47E8U0o68ev00U+fp7kgAF8my1ApvOP0n2gLyfa59oPobbB/jMMYVuO4jXuIhfvgH8Gn/bnrrEFgSmt2f4h1z8vK7/ACVZTGvKl2SjW+zoXvAopz8B7z314f+bC1Xa9iMZrituTy9RfgkxLyzSW6HRoNuu7z7re8813is4SNmwitYi+3kV+6ZFXtukKuSjuJPtkre0vC0KfGLdbIf9sfDc77PcFASu1GryRKAqNzhGhF9cG/LPC9Z8ecyKtY3tBdxDBmKbYO10X32hyjHyfLfjbdAQTZn3KOfpdKPIXgYOq4rXN+/eRbVW6aKdYKQx+bQXTagU1eYT+p2m5meYFixGg6ZbRw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(376002)(366004)(136003)(346002)(39860400002)(33716001)(44832011)(38100700002)(6512007)(6506007)(122000001)(9686003)(2906002)(26005)(1076003)(186003)(71200400001)(83380400001)(54906003)(66946007)(66446008)(4326008)(8676002)(66556008)(6916009)(66476007)(64756008)(76116006)(91956017)(6486002)(86362001)(7416002)(38070700005)(5660300002)(316002)(8936002)(41300700001)(478600001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Pd2hKYx0ppbV7Jyc7U9IWjOVEigD72KlqdPgLvshV1hT7YxQWHmzntk0JM?=
- =?iso-8859-1?Q?IB25sbaAlfi4TKkMa5zgG8vUo8tPysBXyXz2E12bLhDCypzAeguqfvKmL0?=
- =?iso-8859-1?Q?Z9g4fsZyg9TFgvJN8WyZkxW5fSPeSPOy5DHEcFaXUO4sf0Afrp5ndocwo/?=
- =?iso-8859-1?Q?yk99g/DKAmemqTHvWrrIjoSRTm+i53r2lBsBnFbQzaMaaZe7KxiPikPrBs?=
- =?iso-8859-1?Q?kYr9v0jFmMdNu2R3Om9w3RzvJjSwdBMQn8VMNCWlxc+4bBjnxGMfUaWMZn?=
- =?iso-8859-1?Q?gQeThYoF+7Ije0295zsIeNjB7YF5HaFcoXW6o70vR5uwMPaEgRjz6i2vmT?=
- =?iso-8859-1?Q?e0b/ZCw4F9lU3wGkIKX5wB7lSiqxzwsXnG22+sIDti0wbQIUyFMTexzB2O?=
- =?iso-8859-1?Q?ekbyN4meZ2UMQfWpofurGElPh6JU4Ga+Xlj3AP3mTv+pjk9FeNZy5SRyGV?=
- =?iso-8859-1?Q?pD9ExrnfJUBjTfopRF2NaVNzaPsSAz6GjICD1Aa4jt/kpjSKjNpiTpgZNI?=
- =?iso-8859-1?Q?37NbTnSbcdMn1QG27lvMLULQOZfgq2S2zoYujVBSp2iLo0tVGWoLdqQTbM?=
- =?iso-8859-1?Q?QjPQos8b7H16JF7GoL5yAVeFdjf/SfuJBnzgf0PehyMz6IxAUFG7v7INWD?=
- =?iso-8859-1?Q?WxMKTH4fwrq/1f3V5PnJeiD3R8zk4hJpVTbZfVxoMSO+mysJ1P//lbQYo7?=
- =?iso-8859-1?Q?D+KLXT22uTcej+6raRbxmBqbwRaoEU9X/0WEwhbmwcrRMDZAoD3F+RIBa2?=
- =?iso-8859-1?Q?7ohsdVzfv1UUkUwOGiS9peaUag6t88fa+ArZR49Hy0axXK3qPjpYW3BRHE?=
- =?iso-8859-1?Q?/TTr4yrM0c8YyPThecOCTd3xZDyci6SPxZNEZjg/4jpWUhkmDE+ZYs6nZh?=
- =?iso-8859-1?Q?u0QdlYGCf3QrU12m9IHDOmvMW6l8s/E5HXxDMTVzlPBJ/I49z1trl7H0FD?=
- =?iso-8859-1?Q?nYr0BOI5B/j4VKzM8sLPEjgHAfQp1xDVNFfkvRUwDdt9UV/UJZZuX2k4PR?=
- =?iso-8859-1?Q?Y9C4cPC0gnj3DFWlG+eqYs98QwOAilC/0vp1eL9aPii3ANDhmtL6aOYhkO?=
- =?iso-8859-1?Q?sQIjFAaJz99tlbL4ZBeFMLXVmVEphPeKmGlD4uhAh2/Az3TqnolFG7y4Ck?=
- =?iso-8859-1?Q?8OPTQuQ9/jcDF4ZTfyefYzDBqSgz2wYqe3JL8rvhGCg1kRgGr0h5qfCMEH?=
- =?iso-8859-1?Q?vIFEY41TUbMazqCfJHDL3knPuliJWYyzWZptLD2Hnu2Qr3XfCkqiri2714?=
- =?iso-8859-1?Q?RKBJ2srKMrEo4rTx8BqVF2bNRcB5C55E0h25Ne0a1bxf2Ynu94wcbNLNFt?=
- =?iso-8859-1?Q?V62pnJgmzQVuQJs0+ZfPFmh3BwRVs9d6qIL/zG9Ne1ocP/DTl37Kxm6gY1?=
- =?iso-8859-1?Q?a+lM/8JuUxz7SvCvLTV/5isZ67mrUdPKqESmWvrdGZ1eJ4owAB0zRlX4uG?=
- =?iso-8859-1?Q?ocVwYqOgAsqhnmUX2TwD01VXsAVV+kztI9r6DP7Uf2LDXE7c6MtCc4H3pV?=
- =?iso-8859-1?Q?Eap/05sL0h9a2iAdAt6N5MyBSGl9sGWE81+IihQ/AhgFnTa7xWqHJZNPvQ?=
- =?iso-8859-1?Q?ImeL314NZrJwUIEGhWtAbb0L3SYBL7nvseN9fubd6Chpa4IEEB4QOPUsPK?=
- =?iso-8859-1?Q?YrB8rClwcy8AOCB92iUO3qJ4BhmZTX/NqM5jQmAza/a5uPdIbnIWLNFw?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-ID: <C16BBB581CA9C64BB400E4E701653FEA@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=VhQjP7vAYE+SlD5yTLJPVb2a2QXgO+i5i5rQOlbyqVs=;
+        b=oHG83udHI7eDbQ7ovNoh62uso4MlGXGW3ST5K3qj5aVf8jdUVrL82V1xSVRo4RxGF4
+         HKmOyxxHWFcXgEZ9n1inL/AFlOUGRsPAea7x2OrWjRmXcvC8LhyP5xuLeyI7v+SrAwoi
+         G0f5cvK77y9i7of4+HUlCHMvHl75QqtVXLoHc4Tnp3g6N3j9TNSbqt+K2RoGg+uippDZ
+         5uNv84C8swb4S+kDJ3iHTgjEx4viZOIaDP4OPsdSIcMMsniMwzwVOpE46hSCq8DibwNc
+         7WIV0SJlrvD7o23Xk0ehNJShVTrkX//NoNM3scQe+zt1JnzKb75PVOd5LgcBdoSwRD+/
+         a4DQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=VhQjP7vAYE+SlD5yTLJPVb2a2QXgO+i5i5rQOlbyqVs=;
+        b=l3ZaK4tZaxAAr1D7Ip7NvanIIyoEC7NsDRDpYgEHG/TA8ErttW22CRFo9KWOtMJvOb
+         cV422ji/zBulOr4P27d0IJIm3DkEg7+OqneHdrCrHvM24cxq/l8M2wbkFzpBjjZ23xm2
+         i1DP8Bw34Ji12TesVHF7Kr0dr9G4WMxfHoP6FFAKxjL5Ah6wOjsif+SO8JlO7KobXwHh
+         UUFTCUlrMxDmu1jvPKEHc4PbQS26FvSKcV4b16ayHrJ+eopTtcz2v7+S5yhonnz6zVL7
+         Yso43oZUidMyC6UxVxNGSpmI35hy8ziDJdp7tORvY1WjYw3VxCC3hl3EnanMFihdEJz7
+         d0PQ==
+X-Gm-Message-State: ACgBeo0x+s1ZtkGm1TQg00dcdhG7tuFGh8uvMxnAWMc4iF7vG6RRakTM
+        oIo5qi0UT48ZyvDV5tqDGtbrjVnr/MqkaA==
+X-Google-Smtp-Source: AA6agR79SICm6XYVf2AnNWrs6lG/SRQDnoGalyORXXW/0+eak3TigV619GMNLL8yaphShcmSMl/pZw==
+X-Received: by 2002:a65:588d:0:b0:42a:2778:164f with SMTP id d13-20020a65588d000000b0042a2778164fmr20096338pgu.616.1661891484242;
+        Tue, 30 Aug 2022 13:31:24 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id ik30-20020a170902ab1e00b0016bdc98730bsm10065152plb.151.2022.08.30.13.31.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 13:31:23 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 20:31:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v4 1/3] KVM: x86: Update trace function for nested VM
+ entry to support VMX
+Message-ID: <Yw5zmL1MVyAvjeCf@google.com>
+References: <20220825225755.907001-1-mizhang@google.com>
+ <20220825225755.907001-2-mizhang@google.com>
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76c7327a-086c-4dfc-bbe2-08da8ac66da6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Aug 2022 20:30:07.3835
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 1CF2am3g/WBat5T3JSHl5IuhbWnyRBJc6WCX611xF7YMRExBeYtxhEreiBk2NhuQKErm4nZMFcRfC+KiU2jgCQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB5281
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-30_11,2022-08-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 mlxscore=0
- spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208300091
-X-Proofpoint-GUID: 4WQR8FMWj6sgAbvo58Q0T49ibDG7hh73
-X-Proofpoint-ORIG-GUID: 4WQR8FMWj6sgAbvo58Q0T49ibDG7hh73
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825225755.907001-2-mizhang@google.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Carlos Llamas <cmllamas@google.com> [220830 15:41]:
-> On Tue, Aug 30, 2022 at 07:06:37PM +0000, Liam Howlett wrote:
-> > > diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_=
-alloc.c
-> > > index 51f4e1c5cd01..9b1778c00610 100644
-> > > --- a/drivers/android/binder_alloc.c
-> > > +++ b/drivers/android/binder_alloc.c
-> > > @@ -322,7 +322,6 @@ static inline void binder_alloc_set_vma(struct bi=
-nder_alloc *alloc,
-> > >  	 */
-> > >  	if (vma) {
-> > >  		vm_start =3D vma->vm_start;
-> > > -		alloc->vma_vm_mm =3D vma->vm_mm;
-> >=20
-> > Is this really the null pointer dereference?  We check for vma above..?
-> >=20
->=20
-> Not here. The sequence leading to the null-ptr-deref happens when we try
-> to take alloc->vma_vm_mm->mmap_lock in binder_alloc_new_buf_locked() and
-> in binder_alloc_print_pages() without initializing alloc->vma_vm_mm
-> first (e.g. mmap() was never called). These sequences are described in
-> the commit message but basically they translate to mmap_read_lock(NULL)
-> calls.
+On Thu, Aug 25, 2022, Mingwei Zhang wrote:
+> Update trace function for nested VM entry to support VMX. Existing trace
+> function only supports nested VMX and the information printed out is AMD
+> specific.
+> 
+> So, update trace_kvm_nested_vmrun() to trace_kvm_nested_vmenter(), since
+> 'vmenter' is generic. Add a new field 'isa' to recognize Intel and AMD;
+> Update the output to print out VMX/SVM related naming respectively, eg.,
+> vmcb vs. vmcs; npt vs. ept.
+> 
+> Opportunistically update the call site of trace_kvm_nested_vmenter() to make
+> one line per parameter.
+> 
+> Signed-off-by: Mingwei Zhang <mizhang@google.com>
+> ---
+>  arch/x86/kvm/svm/nested.c |  6 ++++--
+>  arch/x86/kvm/trace.h      | 28 ++++++++++++++++++----------
+>  arch/x86/kvm/x86.c        |  2 +-
+>  3 files changed, 23 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/nested.c b/arch/x86/kvm/svm/nested.c
+> index 76dcc8a3e849..835c508eed8e 100644
+> --- a/arch/x86/kvm/svm/nested.c
+> +++ b/arch/x86/kvm/svm/nested.c
+> @@ -781,11 +781,13 @@ int enter_svm_guest_mode(struct kvm_vcpu *vcpu, u64 vmcb12_gpa,
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  	int ret;
+>  
+> -	trace_kvm_nested_vmrun(svm->vmcb->save.rip, vmcb12_gpa,
+> +	trace_kvm_nested_vmenter(svm->vmcb->save.rip,
+> +			       vmcb12_gpa,
+>  			       vmcb12->save.rip,
+>  			       vmcb12->control.int_ctl,
+>  			       vmcb12->control.event_inj,
+> -			       vmcb12->control.nested_ctl);
+> +			       vmcb12->control.nested_ctl,
+> +			       KVM_ISA_SVM);
 
-Ah, this is unnecessary with the rest of the change.
+Align indentation.
 
-Feel free to add my reviewed-by if you want.
+>  
+>  	trace_kvm_nested_intercepts(vmcb12->control.intercepts[INTERCEPT_CR] & 0xffff,
+>  				    vmcb12->control.intercepts[INTERCEPT_CR] >> 16,
+> diff --git a/arch/x86/kvm/trace.h b/arch/x86/kvm/trace.h
+> index 2120d7c060a9..e7f0da9474f0 100644
+> --- a/arch/x86/kvm/trace.h
+> +++ b/arch/x86/kvm/trace.h
+> @@ -589,10 +589,11 @@ TRACE_EVENT(kvm_pv_eoi,
+>  /*
+>   * Tracepoint for nested VMRUN
+>   */
+> -TRACE_EVENT(kvm_nested_vmrun,
+> +TRACE_EVENT(kvm_nested_vmenter,
+>  	    TP_PROTO(__u64 rip, __u64 vmcb, __u64 nested_rip, __u32 int_ctl,
+> -		     __u32 event_inj, bool npt),
+> -	    TP_ARGS(rip, vmcb, nested_rip, int_ctl, event_inj, npt),
+> +		     __u32 event_inj, bool tdp_enabled, __u32 isa),
+> +	    TP_ARGS(rip, vmcb, nested_rip, int_ctl, event_inj, tdp_enabled,
+> +		    isa),
 
+Let this poke out, "isa" feels quite lonely here.  It's a moot point when patch 3
+comes along, mostly a "for future reference" thing.
+ 
+>  	TP_STRUCT__entry(
+>  		__field(	__u64,		rip		)
+> @@ -600,7 +601,8 @@ TRACE_EVENT(kvm_nested_vmrun,
+>  		__field(	__u64,		nested_rip	)
+>  		__field(	__u32,		int_ctl		)
+>  		__field(	__u32,		event_inj	)
+> -		__field(	bool,		npt		)
+> +		__field(	bool,		tdp_enabled	)
+> +		__field(	__u32,		isa		)
+>  	),
+>  
+>  	TP_fast_assign(
+> @@ -609,14 +611,20 @@ TRACE_EVENT(kvm_nested_vmrun,
+>  		__entry->nested_rip	= nested_rip;
+>  		__entry->int_ctl	= int_ctl;
+>  		__entry->event_inj	= event_inj;
+> -		__entry->npt		= npt;
+> +		__entry->tdp_enabled	= tdp_enabled;
+> +		__entry->isa		= isa;
+>  	),
+>  
+> -	TP_printk("rip: 0x%016llx vmcb: 0x%016llx nrip: 0x%016llx int_ctl: 0x%08x "
+> -		  "event_inj: 0x%08x npt: %s",
+> -		__entry->rip, __entry->vmcb, __entry->nested_rip,
+> -		__entry->int_ctl, __entry->event_inj,
+> -		__entry->npt ? "on" : "off")
+> +	TP_printk("rip: 0x%016llx %s: 0x%016llx nested_rip: 0x%016llx "
+> +		  "int_ctl: 0x%08x event_inj: 0x%08x nested_%s: %s",
+> +		__entry->rip,
+> +		__entry->isa == KVM_ISA_VMX ? "vmcs" : "vmcb",
+> +		__entry->vmcb,
+> +		__entry->nested_rip,
+> +		__entry->int_ctl,
+> +		__entry->event_inj,
+> +		__entry->isa == KVM_ISA_VMX ? "ept" : "npt",
+> +		__entry->tdp_enabled ? "on" : "off")
 
-Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Align indentation.

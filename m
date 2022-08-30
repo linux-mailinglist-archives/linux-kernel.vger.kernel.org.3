@@ -2,150 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00AE05A62EB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:11:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A4C45A62F7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229781AbiH3MLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60298 "EHLO
+        id S230092AbiH3MNg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:13:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbiH3MLC (ORCPT
+        with ESMTP id S229686AbiH3MNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:11:02 -0400
-Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E495A6AE5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:10:57 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 7213D5802D9;
-        Tue, 30 Aug 2022 08:03:36 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 30 Aug 2022 08:03:36 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1661861016; x=
-        1661868216; bh=Un4EFnpmCrjF0op+CQJbf6xj3KV7/HPMuOuXK7AEo2I=; b=D
-        tvEwgKsQqnUenjfacp4PZwK0ZhaN/HT87mq75are5HFk0XfZglYSMRXUP2aNVpdO
-        tabv3AyDoz4CT5k++l9c3y9JHGnsYqDVm7cgR/iWQye24reLcluU/RRGezMHMa3o
-        26lJD1g9RgnfgW/OANYyo9K4c6vWlN71CduB2tRPAJqZq16cgjpZieIr87H4Jlg7
-        CMhS9/azps7Am17rwoqUK1Uzi2DSu+b8JpaWS9CO4G+HZmfnAPs/5HNsjBkwTnzN
-        ipQSgsrTKotKvLM9y8XxkH7d+I9Z2kpDV/7B7h5Pj3SpiRe4LvYuUnsxAp9CyoMZ
-        AwL0Hm7CQETZv9e626ipQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1661861016; x=
-        1661868216; bh=Un4EFnpmCrjF0op+CQJbf6xj3KV7/HPMuOuXK7AEo2I=; b=3
-        6dbXYWyKPwm/+6hbuyU/giI2uQ63drNFQSePRhBlilQ67WGUWjcWLI1p+LqEK73g
-        fs0NRJU95nYgN8bDHN8FFYkRwp8xIREz5mPdBI26UdsvXS/065X+RwB5GxhnS7De
-        rKK6aH8bgofjNfDGB4pg6ieTA8OIAtlPiMqiN5aA38ZA7g7KDM7sUn9DyxZVOCOe
-        vrAeQ7vrwxvCPu8swnYxmAZY1Ax1Ud1UUMQ8fqiDPb28jmFFKhi09+a0LWmcu3Xn
-        7E4+8+7+U/xAMvq+LZ7fMjdTdaqwxfwhcecTw/1UJu+ZPvkslXODYswUAoZdUdOo
-        vaJgClnI41QuGh/kzRTgA==
-X-ME-Sender: <xms:l_wNY6oGFCuPrXLu_lICDTdCbSEu35J3iVJVjDE6nUcPvveRoHEZiw>
-    <xme:l_wNY4quMS5CXVM1erpTf7cw2djyVbwpuQRrcz2Jhxok1vKHyOF8yaKwhraLbbSse
-    sSXcX3CLE88lmpFNxA>
-X-ME-Received: <xmr:l_wNY_Okj9gTra9L6Fm8reAM8HlENdzUrpVeFZ0H_Ckc2Ky9DkU-Uuh76b0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekfedggeelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnheptefgleeggfegkeekgffgleduieduffejffegveevkeejudektdduueet
-    feetfefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epmhgrgihimhgvsegtvghrnhhordhtvggthh
-X-ME-Proxy: <xmx:l_wNY575QlKLJhE0dUITZhr1Y2xjKtL3jvcKcW6f6p2TbHDxlpTffA>
-    <xmx:l_wNY54AtJBpBRMzVSilS5LlYoWV0xW1oilUo4CAO7DJ4OoEQbFw9A>
-    <xmx:l_wNY5jTwGvBb8C8tqMpNARDm_YnrE5LfgJuayPRMJOXWiSvsec9ig>
-    <xmx:mPwNY16sLANYyD2X2vgc2p_03AS9Unm3tT13yoQ8vkPx2iJxXj6aNQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 30 Aug 2022 08:03:34 -0400 (EDT)
-Date:   Tue, 30 Aug 2022 14:03:30 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Jani Nikula <jani.nikula@linux.intel.com>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nouveau Dev <nouveau@lists.freedesktop.org>,
-        linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Subject: Re: [PATCH v2 14/41] drm/modes: Move named modes parsing to a
- separate function
-Message-ID: <20220830120330.6f5f22d35gu7cbr3@houat>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-14-459522d653a7@cerno.tech>
- <CAMuHMdV9wVgHFfwHoqtBoYzJDnjDmKTfaZkAKvTVKh1Y-2x1pA@mail.gmail.com>
- <87czcidnb8.fsf@intel.com>
+        Tue, 30 Aug 2022 08:13:33 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7177155A4A;
+        Tue, 30 Aug 2022 05:13:28 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id z3-20020a17090abd8300b001fd803e34f1so9120737pjr.1;
+        Tue, 30 Aug 2022 05:13:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=d5FW/aTr1oAV0rKefcF9Fhqa6ci97Qr4hxAph5ajFrQ=;
+        b=m0a0EOWiIyO8U1hNa7X8n7UmQ2oFRfn4/oteKtv0hFMsz36odNp5M8dyu+KdzvHF5Z
+         qjqtm5JIcHONWpq/A+j8o6TwTv+Wt+g06sBAvHkPe3v20Up7WpERzhoUt6kL2ytUdPLJ
+         w7c7rQBDNhRCItNLmoMrxNjlwjnAiWdW8x8+Rv55OmHQKp/ywMcbC7Pi6YuBvekk0tvo
+         MYo2ve74S/t/Wt/UENxRpLNI2z+SeSUifVuIIN4iTZrm0Jd4OvsQ5EUNgcldNIbrXRgv
+         rYacO5DNUV3Ita8+cpzkz0T6+Nuu0JKTMaOOqo+9L4kV2QzfxwW5p1XReQoRTZrHZ7SX
+         mNaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=d5FW/aTr1oAV0rKefcF9Fhqa6ci97Qr4hxAph5ajFrQ=;
+        b=i10jjEf31fCo6OmOB8HW+IkYmOK89YfdOM19bWLbaWjpkQAxY8gqT2q67/0b8c3Z3L
+         +2SVL3dXrJ6Zcjp5SJgK4Pts9H0h9BT5qV8EIDKN8kEKsf1cmCPDnAbSbBEEdWV2+GRX
+         xk9+bFf3myzgSG5qq92HvaikOI9oDk7jZz5YZXLs5w2T7hqs5z6KlOzUzg7rXcqsthAl
+         K88vRAxdk59RGIEXL4dv6C0Ccl7qBg0R2bDk4OBdKzksgLVP1Ixa9TGwIuFiYUdNwsCL
+         OQ4sBAPOkTxG4bERI+dENmo/runVmLJmg7xtjBEI2bdAY+1jZFdPaWHyXXjs1i9P/N3R
+         mfeA==
+X-Gm-Message-State: ACgBeo0YEInmr21L4yLNpm4uN+ek9XgERuG9qesDmYZbjqNQgVS1UCZx
+        PHRkwymP3NiqoxsBfFGUwK4=
+X-Google-Smtp-Source: AA6agR4bAtdRX9G6Y6NbKHJ0/3hPX/7Jx4RzkERqcmLkcPC5egGCeffFReXPhM2aQRQ8cIOzHFNmYg==
+X-Received: by 2002:a17:90a:ec05:b0:1fd:9368:2c8 with SMTP id l5-20020a17090aec0500b001fd936802c8mr15947935pjy.183.1661861608355;
+        Tue, 30 Aug 2022 05:13:28 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-68.three.co.id. [180.214.233.68])
+        by smtp.gmail.com with ESMTPSA id p22-20020a170902a41600b00172c8b5df10sm9493351plq.208.2022.08.30.05.13.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 05:13:27 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 1D10D103CCA; Tue, 30 Aug 2022 19:04:39 +0700 (WIB)
+Date:   Tue, 30 Aug 2022 19:04:39 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 000/158] 5.19.6-rc1 review
+Message-ID: <Yw3814fjiyWeLZD7@debian.me>
+References: <20220829105808.828227973@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="K4O7naYT0neF4lNP"
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <87czcidnb8.fsf@intel.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Tue, Aug 30, 2022 at 01:43:07PM +0300, Jani Nikula wrote:
-> On Tue, 30 Aug 2022, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Mon, Aug 29, 2022 at 3:13 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> >> +#define STR_STRICT_EQ(str, len, cmp) \
-> >> +       ((strlen(cmp) =3D=3D len) && !strncmp(str, cmp, len))
-> >
-> > This is not part of the move, but newly added.
+--K4O7naYT0neF4lNP
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Mon, Aug 29, 2022 at 12:57:30PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.6 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >=20
-> The same construct is also duplicated elsewhere in the series, and I
-> kept being confused by it.
 
-I'm not sure what is confusing, but I can add a comment if needed.
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.1.0).
 
-> The above is precisely the same as:
->=20
-> 	str_has_prefix(str, cmp) =3D=3D len
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+=20
+--=20
+An old man doll... just what I always wanted! - Clara
 
-Here, it's used to make sure we don't have a named mode starting with
-either e, d, or D.
+--K4O7naYT0neF4lNP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-If I understood str_has_prefix() right, str_has_prefix("DUMB-MODE", "D")
-=3D=3D strlen("DUMB-MODE") would return true, while it's actually what we
-want to avoid.
+-----BEGIN PGP SIGNATURE-----
 
-It's also used indeed in drm_get_tv_mode_from_name(), where we try to
-match a list of names with one passed as argument.
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCYw380wAKCRD2uYlJVVFO
+oy41AP9dppT09Um7CAsZkcCU39jZajtFd9dPH2poYlhE7IccpAD/YyQUi8MtyXTc
+Q716vHqxNEx3Im4k+WigvilVMpQDlQU=
+=NkP2
+-----END PGP SIGNATURE-----
 
-With drm_get_tv_mode_from_name("NSTC", strlen("NTSC")), we would end up
-calling str_has_prefix("NTSC-J", "NTSC") =3D=3D strlen("NTSC-J") which would
-work. However, we end up calling prefix not a prefix, but an entire
-string we want to match against, which is very confusing to me too.
-
-Maxime
+--K4O7naYT0neF4lNP--

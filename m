@@ -2,350 +2,398 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BB45A6D6F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:35:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F2C5A6D72
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:37:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiH3Tf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54230 "EHLO
+        id S229896AbiH3Tgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:36:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229569AbiH3TfX (ORCPT
+        with ESMTP id S229457AbiH3Tgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:35:23 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C130F1C125;
-        Tue, 30 Aug 2022 12:35:21 -0700 (PDT)
+        Tue, 30 Aug 2022 15:36:49 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F133161B1A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:36:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661888121; x=1693424121;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=9JjFH5wJlXECsz+dCmrpkwr6vG5q1UaVVqS4OYWfitk=;
-  b=JhK5l10GDwReA1pNpHp5CJcc2ppnf+8OJBQyI9Yw/4UBOtg0Sp+c6fJf
-   P/L6d03E7iaXk8vT9bGy0hvtScsyace2/v3UHT/irobcXznxe+blYi9sb
-   CwRfo+ElhA9bnigddb9o7clFgt6bCscXQIrnOy2l4CYsFvmIK8Rne+EcZ
-   lVq7kxRFyPAgxiWH/eCa3KFyobt6KtTbwwoS5N8LBN0/GlC1r6kinv0zN
-   BZpxwG4m2M4RMlN3eI2AZWxC1ut8gOPcrjzNqhIAv6y3MHgs7emCYtsh8
-   XBR/GskD/lTrvdBBjUBywnfuiEhiDlLkBsQx6LSSgjUfH6YIGpALAa9VQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="359244394"
+  t=1661888207; x=1693424207;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=nkkM0Dp1B2YkJRrxHxMFQf65AUlTMbDUhqGUOeVfgSw=;
+  b=RcpKecc3IW1q+22wBP2xoRgdijdM4PbqNna9tVOFI551CwUdRjixZQSK
+   JmZELxy+6N8o1oiotbgVjiK/3LGP7aMsK9Q8IdFTK1wtLIEFeENAS6QoI
+   gnhRnU1v5hlMVUfCsqHcicLEfUeOc7NzJaFU8j8Vz854qDo5OqAqdeR3L
+   E0my79GB7DIejCBXxtNF3hlmUq6V9t2aECzPAznY4uXhVQ3O3CAcP2d1V
+   xyz5npC8o6Ko4M8xNTZdNwbJ++egZ1AWuMh27fFnX4uP+MCWyMLUcJc3x
+   gyM1gkq9mtlGVF1gyI2s4L3S4fEvesuMTzYUKCRmPrIue/H2ASXSJZtFd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="282255679"
 X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="359244394"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 12:34:11 -0700
+   d="scan'208";a="282255679"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 12:36:31 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="673019281"
-Received: from ahajda-mobl.ger.corp.intel.com (HELO [10.213.1.195]) ([10.213.1.195])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 12:34:08 -0700
-Message-ID: <0272e34e-1660-1c55-29c5-4234e8d7d0fc@intel.com>
-Date:   Tue, 30 Aug 2022 21:34:06 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.13.0
-Subject: Re: [PATCH v3] overflow: Allow mixed type arguments
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-hardening@vger.kernel.org,
-        Daniel Latypov <dlatypov@google.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
+   d="scan'208";a="680166135"
+Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 30 Aug 2022 12:36:29 -0700
+Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oT72C-0000XT-2X;
+        Tue, 30 Aug 2022 19:36:28 +0000
+Date:   Wed, 31 Aug 2022 03:35:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
         linux-kernel@vger.kernel.org
-References: <20220830192147.47069-1-keescook@chromium.org>
-From:   Andrzej Hajda <andrzej.hajda@intel.com>
-Organization: Intel Technology Poland sp. z o.o. - ul. Slowackiego 173, 80-298
- Gdansk - KRS 101882 - NIP 957-07-52-316
-In-Reply-To: <20220830192147.47069-1-keescook@chromium.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-fixes 1/5]
+ net/rxrpc/peer_event.c:234:3: warning: variable 'err' is used uninitialized
+ whenever switch default is taken
+Message-ID: <202208310344.BhjBqXzR-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-fixes
+head:   c2f6ecfc2c8d95244507cfe244710f61e0f727a7
+commit: b6b6fa5db526817c2b4e8f2fdec40592e9817804 [1/5] rxrpc: Fix ICMP/ICMP6 error handling
+config: hexagon-randconfig-r045-20220830 (https://download.01.org/0day-ci/archive/20220831/202208310344.BhjBqXzR-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/b6b6fa5db526817c2b4e8f2fdec40592e9817804
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-fixes
+        git checkout b6b6fa5db526817c2b4e8f2fdec40592e9817804
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/rxrpc/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> net/rxrpc/peer_event.c:234:3: warning: variable 'err' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
+                   default:
+                   ^~~~~~~
+   net/rxrpc/peer_event.c:241:17: note: uninitialized use occurs here
+                   ee.ee_errno = err;
+                                 ^~~
+   net/rxrpc/peer_event.c:167:9: note: initialize the variable 'err' to silence this warning
+           int err;
+                  ^
+                   = 0
+>> net/rxrpc/peer_event.c:418:6: warning: variable 'peer' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+           if (serr->ee.ee_origin == SO_EE_ORIGIN_LOCAL) {
+               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/rxrpc/peer_event.c:430:17: note: uninitialized use occurs here
+           rxrpc_put_peer(peer);
+                          ^~~~
+   net/rxrpc/peer_event.c:418:2: note: remove the 'if' if its condition is always true
+           if (serr->ee.ee_origin == SO_EE_ORIGIN_LOCAL) {
+           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   net/rxrpc/peer_event.c:393:25: note: initialize the variable 'peer' to silence this warning
+           struct rxrpc_peer *peer;
+                                  ^
+                                   = NULL
+   2 warnings generated.
 
 
-On 30.08.2022 21:21, Kees Cook wrote:
-> When the check_[op]_overflow() helpers were introduced, all arguments were
-> required to be the same type to make the fallback macros simpler. However,
-> now that the fallback macros have been removed[1], it is fine to allow
-> mixed types, which makes using the helpers much more useful, as they
-> can be used to test for type-based overflows (e.g. adding two large ints
-> but storing into a u8), as would be handy in the drm core[2].
->
-> Remove the restriction, and add additional self-tests that exercise some
-> of the mixed-type overflow cases, and double-check for accidental macro
-> side-effects.
->
-> [1] https://git.kernel.org/linus/4eb6bd55cfb22ffc20652732340c4962f3ac9a91
-> [2] https://lore.kernel.org/lkml/20220824084514.2261614-2-gwan-gyeong.mun@intel.com
->
-> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Cc: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-> Cc: Andrzej Hajda <andrzej.hajda@intel.com>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: Nick Desaulniers <ndesaulniers@google.com>
-> Cc: linux-hardening@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+vim +/err +234 net/rxrpc/peer_event.c
 
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
+   155	
+   156	/*
+   157	 * Handle an error received on the local endpoint as a tunnel.
+   158	 */
+   159	void rxrpc_encap_err_rcv(struct sock *sk, struct sk_buff *skb,
+   160				 unsigned int udp_offset)
+   161	{
+   162		struct sock_extended_err ee;
+   163		struct sockaddr_rxrpc srx;
+   164		struct rxrpc_local *local;
+   165		struct rxrpc_peer *peer;
+   166		unsigned int info = 0;
+   167		int err;
+   168		u8 version = ip_hdr(skb)->version;
+   169		u8 type = icmp_hdr(skb)->type;
+   170		u8 code = icmp_hdr(skb)->code;
+   171	
+   172		rcu_read_lock();
+   173		local = rcu_dereference_sk_user_data(sk);
+   174		if (unlikely(!local)) {
+   175			rcu_read_unlock();
+   176			return;
+   177		}
+   178	
+   179		rxrpc_new_skb(skb, rxrpc_skb_received);
+   180	
+   181		switch (ip_hdr(skb)->version) {
+   182		case IPVERSION:
+   183			peer = rxrpc_lookup_peer_icmp_rcu(local, skb, udp_offset,
+   184							  &info, &srx);
+   185			break;
+   186		case 6:
+   187			peer = rxrpc_lookup_peer_icmp6_rcu(local, skb, udp_offset,
+   188							   &info, &srx);
+   189			break;
+   190		default:
+   191			rcu_read_unlock();
+   192			return;
+   193		}
+   194	
+   195		if (peer && !rxrpc_get_peer_maybe(peer))
+   196			peer = NULL;
+   197		if (!peer) {
+   198			rcu_read_unlock();
+   199			return;
+   200		}
+   201	
+   202		memset(&ee, 0, sizeof(ee));
+   203	
+   204		switch (version) {
+   205		case IPVERSION:
+   206			switch (type) {
+   207			case ICMP_DEST_UNREACH:
+   208				switch (code) {
+   209				case ICMP_FRAG_NEEDED:
+   210					rxrpc_adjust_mtu(peer, info);
+   211					rcu_read_unlock();
+   212					rxrpc_put_peer(peer);
+   213					return;
+   214				default:
+   215					break;
+   216				}
+   217	
+   218				err = EHOSTUNREACH;
+   219				if (code <= NR_ICMP_UNREACH) {
+   220					/* Might want to do something different with
+   221					 * non-fatal errors
+   222					 */
+   223					//harderr = icmp_err_convert[code].fatal;
+   224					err = icmp_err_convert[code].errno;
+   225				}
+   226				break;
+   227	
+   228			case ICMP_PARAMETERPROB:
+   229				err = EPROTO;
+   230				break;
+   231			case ICMP_TIME_EXCEEDED:
+   232				err = EHOSTUNREACH;
+   233				break;
+ > 234			default:
+   235				break;
+   236			}
+   237	
+   238			ee.ee_origin = SO_EE_ORIGIN_ICMP;
+   239			ee.ee_type = type;
+   240			ee.ee_code = code;
+   241			ee.ee_errno = err;
+   242			break;
+   243	
+   244		case 6:
+   245			switch (type) {
+   246			case ICMPV6_PKT_TOOBIG:
+   247				rxrpc_adjust_mtu(peer, info);
+   248				rcu_read_unlock();
+   249				rxrpc_put_peer(peer);
+   250				return;
+   251			}
+   252	
+   253			icmpv6_err_convert(type, code, &err);
+   254	
+   255			if (err == EACCES)
+   256				err = EHOSTUNREACH;
+   257	
+   258			ee.ee_origin = SO_EE_ORIGIN_ICMP6;
+   259			ee.ee_type = type;
+   260			ee.ee_code = code;
+   261			ee.ee_errno = err;
+   262			break;
+   263		}
+   264	
+   265		trace_rxrpc_rx_icmp(peer, &ee, &srx);
+   266	
+   267		rxrpc_distribute_error(peer, err, RXRPC_CALL_NETWORK_ERROR);
+   268		rcu_read_unlock();
+   269		rxrpc_put_peer(peer);
+   270	}
+   271	
+   272	/*
+   273	 * Find the peer associated with a local error.
+   274	 */
+   275	static struct rxrpc_peer *rxrpc_lookup_peer_local_rcu(struct rxrpc_local *local,
+   276							      const struct sk_buff *skb,
+   277							      struct sockaddr_rxrpc *srx)
+   278	{
+   279		struct sock_exterr_skb *serr = SKB_EXT_ERR(skb);
+   280	
+   281		_enter("");
+   282	
+   283		memset(srx, 0, sizeof(*srx));
+   284		srx->transport_type = local->srx.transport_type;
+   285		srx->transport_len = local->srx.transport_len;
+   286		srx->transport.family = local->srx.transport.family;
+   287	
+   288		switch (srx->transport.family) {
+   289		case AF_INET:
+   290			srx->transport_len = sizeof(srx->transport.sin);
+   291			srx->transport.family = AF_INET;
+   292			srx->transport.sin.sin_port = serr->port;
+   293			switch (serr->ee.ee_origin) {
+   294			case SO_EE_ORIGIN_ICMP:
+   295				_net("Rx ICMP");
+   296				memcpy(&srx->transport.sin.sin_addr,
+   297				       skb_network_header(skb) + serr->addr_offset,
+   298				       sizeof(struct in_addr));
+   299				break;
+   300			case SO_EE_ORIGIN_ICMP6:
+   301				_net("Rx ICMP6 on v4 sock");
+   302				memcpy(&srx->transport.sin.sin_addr,
+   303				       skb_network_header(skb) + serr->addr_offset + 12,
+   304				       sizeof(struct in_addr));
+   305				break;
+   306			default:
+   307				memcpy(&srx->transport.sin.sin_addr, &ip_hdr(skb)->saddr,
+   308				       sizeof(struct in_addr));
+   309				break;
+   310			}
+   311			break;
+   312	
+   313	#ifdef CONFIG_AF_RXRPC_IPV6
+   314		case AF_INET6:
+   315			switch (serr->ee.ee_origin) {
+   316			case SO_EE_ORIGIN_ICMP6:
+   317				_net("Rx ICMP6");
+   318				srx->transport.sin6.sin6_port = serr->port;
+   319				memcpy(&srx->transport.sin6.sin6_addr,
+   320				       skb_network_header(skb) + serr->addr_offset,
+   321				       sizeof(struct in6_addr));
+   322				break;
+   323			case SO_EE_ORIGIN_ICMP:
+   324				_net("Rx ICMP on v6 sock");
+   325				srx->transport_len = sizeof(srx->transport.sin);
+   326				srx->transport.family = AF_INET;
+   327				srx->transport.sin.sin_port = serr->port;
+   328				memcpy(&srx->transport.sin.sin_addr,
+   329				       skb_network_header(skb) + serr->addr_offset,
+   330				       sizeof(struct in_addr));
+   331				break;
+   332			default:
+   333				memcpy(&srx->transport.sin6.sin6_addr,
+   334				       &ipv6_hdr(skb)->saddr,
+   335				       sizeof(struct in6_addr));
+   336				break;
+   337			}
+   338			break;
+   339	#endif
+   340	
+   341		default:
+   342			BUG();
+   343		}
+   344	
+   345		return rxrpc_lookup_peer_rcu(local, srx);
+   346	}
+   347	
+   348	/*
+   349	 * Handle an MTU/fragmentation problem.
+   350	 */
+   351	static void rxrpc_adjust_mtu(struct rxrpc_peer *peer, unsigned int mtu)
+   352	{
+   353		_net("Rx ICMP Fragmentation Needed (%d)", mtu);
+   354	
+   355		/* wind down the local interface MTU */
+   356		if (mtu > 0 && peer->if_mtu == 65535 && mtu < peer->if_mtu) {
+   357			peer->if_mtu = mtu;
+   358			_net("I/F MTU %u", mtu);
+   359		}
+   360	
+   361		if (mtu == 0) {
+   362			/* they didn't give us a size, estimate one */
+   363			mtu = peer->if_mtu;
+   364			if (mtu > 1500) {
+   365				mtu >>= 1;
+   366				if (mtu < 1500)
+   367					mtu = 1500;
+   368			} else {
+   369				mtu -= 100;
+   370				if (mtu < peer->hdrsize)
+   371					mtu = peer->hdrsize + 4;
+   372			}
+   373		}
+   374	
+   375		if (mtu < peer->mtu) {
+   376			spin_lock_bh(&peer->lock);
+   377			peer->mtu = mtu;
+   378			peer->maxdata = peer->mtu - peer->hdrsize;
+   379			spin_unlock_bh(&peer->lock);
+   380			_net("Net MTU %u (maxdata %u)",
+   381			     peer->mtu, peer->maxdata);
+   382		}
+   383	}
+   384	
+   385	/*
+   386	 * Handle an error received on the local endpoint.
+   387	 */
+   388	void rxrpc_error_report(struct sock *sk)
+   389	{
+   390		struct sock_exterr_skb *serr;
+   391		struct sockaddr_rxrpc srx;
+   392		struct rxrpc_local *local;
+   393		struct rxrpc_peer *peer;
+   394		struct sk_buff *skb;
+   395	
+   396		rcu_read_lock();
+   397		local = rcu_dereference_sk_user_data(sk);
+   398		if (unlikely(!local)) {
+   399			rcu_read_unlock();
+   400			return;
+   401		}
+   402		_enter("%p{%d}", sk, local->debug_id);
+   403	
+   404		/* Clear the outstanding error value on the socket so that it doesn't
+   405		 * cause kernel_sendmsg() to return it later.
+   406		 */
+   407		sock_error(sk);
+   408	
+   409		skb = sock_dequeue_err_skb(sk);
+   410		if (!skb) {
+   411			rcu_read_unlock();
+   412			_leave("UDP socket errqueue empty");
+   413			return;
+   414		}
+   415		rxrpc_new_skb(skb, rxrpc_skb_received);
+   416		serr = SKB_EXT_ERR(skb);
+   417	
+ > 418		if (serr->ee.ee_origin == SO_EE_ORIGIN_LOCAL) {
+   419			peer = rxrpc_lookup_peer_local_rcu(local, skb, &srx);
+   420			if (peer && !rxrpc_get_peer_maybe(peer))
+   421				peer = NULL;
+   422			if (peer) {
+   423				trace_rxrpc_rx_icmp(peer, &serr->ee, &srx);
+   424				rxrpc_store_error(peer, serr);
+   425			}
+   426		}
+   427	
+   428		rcu_read_unlock();
+   429		rxrpc_free_skb(skb, rxrpc_skb_freed);
+   430		rxrpc_put_peer(peer);
+   431		_leave("");
+   432	}
+   433	
 
-Regards
-Andrzej
-
-
-> ---
-> v3: drop needless local variables (Andrzej)
-> v2: https://lore.kernel.org/lkml/20220829214550.3443472-1-keescook@chromium.org
-> v1: https://lore.kernel.org/lkml/20220829204729.3409270-1-keescook@chromium.org
-> ---
->   include/linux/overflow.h |  72 ++++++++++++++++------------
->   lib/overflow_kunit.c     | 101 ++++++++++++++++++++++++++++-----------
->   2 files changed, 113 insertions(+), 60 deletions(-)
->
-> diff --git a/include/linux/overflow.h b/include/linux/overflow.h
-> index 0eb3b192f07a..19dfdd74835e 100644
-> --- a/include/linux/overflow.h
-> +++ b/include/linux/overflow.h
-> @@ -51,40 +51,50 @@ static inline bool __must_check __must_check_overflow(bool overflow)
->   	return unlikely(overflow);
->   }
->   
-> -/*
-> - * For simplicity and code hygiene, the fallback code below insists on
-> - * a, b and *d having the same type (similar to the min() and max()
-> - * macros), whereas gcc's type-generic overflow checkers accept
-> - * different types. Hence we don't just make check_add_overflow an
-> - * alias for __builtin_add_overflow, but add type checks similar to
-> - * below.
-> +/** check_add_overflow() - Calculate addition with overflow checking
-> + *
-> + * @a: first addend
-> + * @b: second addend
-> + * @d: pointer to store sum
-> + *
-> + * Returns 0 on success.
-> + *
-> + * *@d holds the results of the attempted addition, but is not considered
-> + * "safe for use" on a non-zero return value, which indicates that the
-> + * sum has overflowed or been truncated.
->    */
-> -#define check_add_overflow(a, b, d) __must_check_overflow(({	\
-> -	typeof(a) __a = (a);			\
-> -	typeof(b) __b = (b);			\
-> -	typeof(d) __d = (d);			\
-> -	(void) (&__a == &__b);			\
-> -	(void) (&__a == __d);			\
-> -	__builtin_add_overflow(__a, __b, __d);	\
-> -}))
-> +#define check_add_overflow(a, b, d)	\
-> +	__must_check_overflow(__builtin_add_overflow(a, b, d))
->   
-> -#define check_sub_overflow(a, b, d) __must_check_overflow(({	\
-> -	typeof(a) __a = (a);			\
-> -	typeof(b) __b = (b);			\
-> -	typeof(d) __d = (d);			\
-> -	(void) (&__a == &__b);			\
-> -	(void) (&__a == __d);			\
-> -	__builtin_sub_overflow(__a, __b, __d);	\
-> -}))
-> +/** check_sub_overflow() - Calculate subtraction with overflow checking
-> + *
-> + * @a: minuend; value to subtract from
-> + * @b: subtrahend; value to subtract from @a
-> + * @d: pointer to store difference
-> + *
-> + * Returns 0 on success.
-> + *
-> + * *@d holds the results of the attempted subtraction, but is not considered
-> + * "safe for use" on a non-zero return value, which indicates that the
-> + * difference has underflowed or been truncated.
-> + */
-> +#define check_sub_overflow(a, b, d)	\
-> +	__must_check_overflow(__builtin_sub_overflow(a, b, d))
->   
-> -#define check_mul_overflow(a, b, d) __must_check_overflow(({	\
-> -	typeof(a) __a = (a);			\
-> -	typeof(b) __b = (b);			\
-> -	typeof(d) __d = (d);			\
-> -	(void) (&__a == &__b);			\
-> -	(void) (&__a == __d);			\
-> -	__builtin_mul_overflow(__a, __b, __d);	\
-> -}))
-> +/** check_mul_overflow() - Calculate multiplication with overflow checking
-> + *
-> + * @a: first factor
-> + * @b: second factor
-> + * @d: pointer to store product
-> + *
-> + * Returns 0 on success.
-> + *
-> + * *@d holds the results of the attempted multiplication, but is not
-> + * considered "safe for use" on a non-zero return value, which indicates
-> + * that the product has overflowed or been truncated.
-> + */
-> +#define check_mul_overflow(a, b, d)	\
-> +	__must_check_overflow(__builtin_mul_overflow(a, b, d))
->   
->   /** check_shl_overflow() - Calculate a left-shifted value and check overflow
->    *
-> diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-> index 7e3e43679b73..0d98c9bc75da 100644
-> --- a/lib/overflow_kunit.c
-> +++ b/lib/overflow_kunit.c
-> @@ -16,12 +16,15 @@
->   #include <linux/types.h>
->   #include <linux/vmalloc.h>
->   
-> -#define DEFINE_TEST_ARRAY(t)			\
-> -	static const struct test_ ## t {	\
-> -		t a, b;				\
-> -		t sum, diff, prod;		\
-> -		bool s_of, d_of, p_of;		\
-> -	} t ## _tests[]
-> +#define DEFINE_TEST_ARRAY_TYPED(t1, t2, t)			\
-> +	static const struct test_ ## t1 ## _ ## t2 ## __ ## t {	\
-> +		t1 a;						\
-> +		t2 b;						\
-> +		t sum, diff, prod;				\
-> +		bool s_of, d_of, p_of;				\
-> +	} t1 ## _ ## t2 ## __ ## t ## _tests[]
-> +
-> +#define DEFINE_TEST_ARRAY(t)	DEFINE_TEST_ARRAY_TYPED(t, t, t)
->   
->   DEFINE_TEST_ARRAY(u8) = {
->   	{0, 0, 0, 0, 0, false, false, false},
-> @@ -222,21 +225,27 @@ DEFINE_TEST_ARRAY(s64) = {
->   };
->   #endif
->   
-> -#define check_one_op(t, fmt, op, sym, a, b, r, of) do {		\
-> -	t _r;							\
-> -	bool _of;						\
-> -								\
-> -	_of = check_ ## op ## _overflow(a, b, &_r);		\
-> -	KUNIT_EXPECT_EQ_MSG(test, _of, of,			\
-> +#define check_one_op(t, fmt, op, sym, a, b, r, of) do {			\
-> +	int _a_orig = a, _a_bump = a + 1;				\
-> +	int _b_orig = b, _b_bump = b + 1;				\
-> +	bool _of;							\
-> +	t _r;								\
-> +									\
-> +	_of = check_ ## op ## _overflow(a, b, &_r);			\
-> +	KUNIT_EXPECT_EQ_MSG(test, _of, of,				\
->   		"expected "fmt" "sym" "fmt" to%s overflow (type %s)\n",	\
-> -		a, b, of ? "" : " not", #t);			\
-> -	KUNIT_EXPECT_EQ_MSG(test, _r, r,			\
-> +		a, b, of ? "" : " not", #t);				\
-> +	KUNIT_EXPECT_EQ_MSG(test, _r, r,				\
->   		"expected "fmt" "sym" "fmt" == "fmt", got "fmt" (type %s)\n", \
-> -		a, b, r, _r, #t);				\
-> +		a, b, r, _r, #t);					\
-> +	/* Check for internal macro side-effects. */			\
-> +	_of = check_ ## op ## _overflow(_a_orig++, _b_orig++, &_r);	\
-> +	KUNIT_EXPECT_EQ_MSG(test, _a_orig, _a_bump, "Unexpected " #op " macro side-effect!\n"); \
-> +	KUNIT_EXPECT_EQ_MSG(test, _b_orig, _b_bump, "Unexpected " #op " macro side-effect!\n"); \
->   } while (0)
->   
-> -#define DEFINE_TEST_FUNC(t, fmt)					\
-> -static void do_test_ ## t(struct kunit *test, const struct test_ ## t *p) \
-> +#define DEFINE_TEST_FUNC_TYPED(n, t, fmt)				\
-> +static void do_test_ ## n(struct kunit *test, const struct test_ ## n *p) \
->   {							   		\
->   	check_one_op(t, fmt, add, "+", p->a, p->b, p->sum, p->s_of);	\
->   	check_one_op(t, fmt, add, "+", p->b, p->a, p->sum, p->s_of);	\
-> @@ -245,15 +254,18 @@ static void do_test_ ## t(struct kunit *test, const struct test_ ## t *p) \
->   	check_one_op(t, fmt, mul, "*", p->b, p->a, p->prod, p->p_of);	\
->   }									\
->   									\
-> -static void t ## _overflow_test(struct kunit *test) {			\
-> +static void n ## _overflow_test(struct kunit *test) {			\
->   	unsigned i;							\
->   									\
-> -	for (i = 0; i < ARRAY_SIZE(t ## _tests); ++i)			\
-> -		do_test_ ## t(test, &t ## _tests[i]);			\
-> +	for (i = 0; i < ARRAY_SIZE(n ## _tests); ++i)			\
-> +		do_test_ ## n(test, &n ## _tests[i]);			\
->   	kunit_info(test, "%zu %s arithmetic tests finished\n",		\
-> -		ARRAY_SIZE(t ## _tests), #t);				\
-> +		ARRAY_SIZE(n ## _tests), #n);				\
->   }
->   
-> +#define DEFINE_TEST_FUNC(t, fmt)					\
-> +	DEFINE_TEST_FUNC_TYPED(t ## _ ## t ## __ ## t, t, fmt)
-> +
->   DEFINE_TEST_FUNC(u8, "%d");
->   DEFINE_TEST_FUNC(s8, "%d");
->   DEFINE_TEST_FUNC(u16, "%d");
-> @@ -265,6 +277,33 @@ DEFINE_TEST_FUNC(u64, "%llu");
->   DEFINE_TEST_FUNC(s64, "%lld");
->   #endif
->   
-> +DEFINE_TEST_ARRAY_TYPED(u32, u32, u8) = {
-> +	{0, 0, 0, 0, 0, false, false, false},
-> +	{U8_MAX, 2, 1, U8_MAX - 2, U8_MAX - 1, true, false, true},
-> +	{U8_MAX + 1, 0, 0, 0, 0, true, true, false},
-> +};
-> +DEFINE_TEST_FUNC_TYPED(u32_u32__u8, u8, "%d");
-> +
-> +DEFINE_TEST_ARRAY_TYPED(u32, u32, int) = {
-> +	{0, 0, 0, 0, 0, false, false, false},
-> +	{U32_MAX, 0, -1, -1, 0, true, true, false},
-> +};
-> +DEFINE_TEST_FUNC_TYPED(u32_u32__int, int, "%d");
-> +
-> +DEFINE_TEST_ARRAY_TYPED(u8, u8, int) = {
-> +	{0, 0, 0, 0, 0, false, false, false},
-> +	{U8_MAX, U8_MAX, 2 * U8_MAX, 0, U8_MAX * U8_MAX, false, false, false},
-> +	{1, 2, 3, -1, 2, false, false, false},
-> +};
-> +DEFINE_TEST_FUNC_TYPED(u8_u8__int, int, "%d");
-> +
-> +DEFINE_TEST_ARRAY_TYPED(int, int, u8) = {
-> +	{0, 0, 0, 0, 0, false, false, false},
-> +	{1, 2, 3, U8_MAX, 2, false, true, false},
-> +	{-1, 0, U8_MAX, U8_MAX, 0, true, true, false},
-> +};
-> +DEFINE_TEST_FUNC_TYPED(int_int__u8, u8, "%d");
-> +
->   static void overflow_shift_test(struct kunit *test)
->   {
->   	int count = 0;
-> @@ -649,17 +688,21 @@ static void overflow_size_helpers_test(struct kunit *test)
->   }
->   
->   static struct kunit_case overflow_test_cases[] = {
-> -	KUNIT_CASE(u8_overflow_test),
-> -	KUNIT_CASE(s8_overflow_test),
-> -	KUNIT_CASE(u16_overflow_test),
-> -	KUNIT_CASE(s16_overflow_test),
-> -	KUNIT_CASE(u32_overflow_test),
-> -	KUNIT_CASE(s32_overflow_test),
-> +	KUNIT_CASE(u8_u8__u8_overflow_test),
-> +	KUNIT_CASE(s8_s8__s8_overflow_test),
-> +	KUNIT_CASE(u16_u16__u16_overflow_test),
-> +	KUNIT_CASE(s16_s16__s16_overflow_test),
-> +	KUNIT_CASE(u32_u32__u32_overflow_test),
-> +	KUNIT_CASE(s32_s32__s32_overflow_test),
->   /* Clang 13 and earlier generate unwanted libcalls on 32-bit. */
->   #if BITS_PER_LONG == 64
-> -	KUNIT_CASE(u64_overflow_test),
-> -	KUNIT_CASE(s64_overflow_test),
-> +	KUNIT_CASE(u64_u64__u64_overflow_test),
-> +	KUNIT_CASE(s64_s64__s64_overflow_test),
->   #endif
-> +	KUNIT_CASE(u32_u32__u8_overflow_test),
-> +	KUNIT_CASE(u32_u32__int_overflow_test),
-> +	KUNIT_CASE(u8_u8__int_overflow_test),
-> +	KUNIT_CASE(int_int__u8_overflow_test),
->   	KUNIT_CASE(overflow_shift_test),
->   	KUNIT_CASE(overflow_allocation_test),
->   	KUNIT_CASE(overflow_size_helpers_test),
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

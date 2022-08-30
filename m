@@ -2,107 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 135615A5C3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22BA55A5C3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:56:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbiH3G4p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:56:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46132 "EHLO
+        id S230151AbiH3Gzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbiH3G4X (ORCPT
+        with ESMTP id S229817AbiH3Gzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:56:23 -0400
-Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E90BD113
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:56:13 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 27U6tgxX028537
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Tue, 30 Aug 2022 14:55:42 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Tue, 30 Aug 2022 14:55:43 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>
-Subject: [PATCH] fs: use kvmalloc for big coredump file
-Date:   Tue, 30 Aug 2022 14:55:23 +0800
-Message-ID: <1661842523-26716-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
+        Tue, 30 Aug 2022 02:55:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A7742AD6
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:55:38 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oSv9s-0003o2-Ev; Tue, 30 Aug 2022 08:55:36 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oSv9p-0005Jg-M3; Tue, 30 Aug 2022 08:55:33 +0200
+Date:   Tue, 30 Aug 2022 08:55:33 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Arun Ramadoss <arun.ramadoss@microchip.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>
+Subject: Re: [Patch net-next v2 0/9] net: dsa: microchip: add support for
+ phylink mac config and link up
+Message-ID: <20220830065533.GA18106@pengutronix.de>
+References: <20220724092823.24567-1-arun.ramadoss@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 27U6tgxX028537
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220724092823.24567-1-arun.ramadoss@microchip.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Hi Arun,
 
-High order page allocation observed which even introduce kernel panic when generating
-coredump file, use kvmalloc_array instead of kmalloc_array
+starting with this patch set I have following regression on ksz8873
+switch. Can you please take a look at it:
+ 8<--- cut here ---
+ Unable to handle kernel NULL pointer dereference at virtual address 00000005
+ ksz8863-switch gpio-0:00: nonfatal error -34 setting MTU to 1500 on port 0
+...
+ Modules linked in:                                          
+ CPU: 0 PID: 16 Comm: kworker/0:1 Not tainted 6.0.0-rc2-00436-g3da285df1324 #74
+ Hardware name: Freescale i.MX6 Quad/DualLite (Device Tree)
+ Workqueue: events_power_efficient phylink_resolve
+ PC is at ksz_set_gbit+0x5c/0xa4
+ LR is at arch_atomic_cmpxchg_relaxed+0x1c/0x38
+....
+ Backtrace: 
+  ksz_set_gbit from ksz_phylink_mac_link_up+0x15c/0x1c8
+  ksz_phylink_mac_link_up from dsa_port_phylink_mac_link_up+0x7c/0x80
+  dsa_port_phylink_mac_link_up from phylink_resolve+0x304/0x3d0
+  phylink_resolve from process_one_work+0x214/0x31c
+  process_one_work from worker_thread+0x254/0x2d4
+  worker_thread from kthread+0xfc/0x108
+  kthread from ret_from_fork+0x14/0x2c
+...
+ ksz8863-switch gpio-0:00 lan2 (uninitialized): PHY [dsa-0.0:01] driver [Micrel KSZ8851 Ethernet MAC or KSZ886X Switch] (irq=POLL)
+ ksz8863-switch gpio-0:00: nonfatal error -34 setting MTU to 1500 on port 1
+ device eth0 entered promiscuous mode
+ DSA: tree 0 setup
+ ---[ end trace 0000000000000000 ]---
 
-[68058.982108] init: Untracked pid 3847 exited with status 0
-[68058.982343] init: Untracked pid 3847 did not have an associated service entry and will not be reaped
-[68059.038127] warn_alloc: 29 callbacks suppressed
-[68059.038132] TimerThread: page allocation failure: order:7, mode:0x40dc0(GFP_KERNEL|__GFP_COMP|__GFP_ZERO), nodemask=(null),cpuset=foreground,mems_allowed=0
-[68059.038155] CPU: 6 PID: 3597 Comm: TimerThread Tainted: G        W  OE     5.15.41-android13-8-01198-g03458ee9a090-ab000039 #1
-[68059.038159] Hardware name: Unisoc UMS9620-base Board (DT)
-[68059.038161] Call trace:
-[68059.038163]  dump_backtrace.cfi_jt+0x0/0x8
-[68059.038169]  dump_stack_lvl+0x98/0xe8
-[68059.038174]  warn_alloc+0x164/0x200
-[68059.038180]  __alloc_pages_slowpath+0x9d4/0xb64
-[68059.038183]  __alloc_pages+0x21c/0x39c
-[68059.038186]  kmalloc_order+0x4c/0x13c
-[68059.038189]  kmalloc_order_trace+0x34/0x154
-[68059.038192]  __kmalloc+0x600/0x8a8
-[68059.038196]  elf_core_dump+0x7c4/0x15d8
-[68059.038201]  do_coredump+0x680/0xe54
-[68059.038203]  get_signal+0x610/0x988
-[68059.038209]  do_signal+0xd4/0x2bc
-[68059.038213]  do_notify_resume+0xa0/0x1c8
-[68059.038216]  el0_svc+0x68/0x90
-[68059.038219]  el0t_64_sync_handler+0x88/0xec
-[68059.038222]  el0t_64_sync+0x1b4/0x1b8
+Regards,
+Oleksij
 
-Reported-by: Guanglu Xu <guanglu.xu@unisoc.com>
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
----
- fs/coredump.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On Sun, Jul 24, 2022 at 02:58:14PM +0530, Arun Ramadoss wrote:
+> This patch series add support common phylink mac config and link up for the ksz
+> series switches. At present, ksz8795 and ksz9477 doesn't implement the phylink
+> mac config and link up. It configures the mac interface in the port setup hook.
+> ksz8830 series switch does not mac link configuration. For lan937x switches, in
+> the part support patch series has support only for MII and RMII configuration.
+> Some group of switches have some register address and bit fields common and
+> others are different. So, this patch aims to have common phylink implementation
+> which configures the register based on the chip id.
 
-diff --git a/fs/coredump.c b/fs/coredump.c
-index ebc43f9..ed9b191 100644
---- a/fs/coredump.c
-+++ b/fs/coredump.c
-@@ -213,7 +213,7 @@ static int format_corename(struct core_name *cn, struct coredump_params *cprm,
- 
- 	if (ispipe) {
- 		int argvs = sizeof(core_pattern) / 2;
--		(*argv) = kmalloc_array(argvs, sizeof(**argv), GFP_KERNEL);
-+		(*argv) = kvmalloc_array(argvs, sizeof(**argv), GFP_KERNEL);
- 		if (!(*argv))
- 			return -ENOMEM;
- 		(*argv)[(*argc)++] = 0;
-@@ -612,7 +612,7 @@ void do_coredump(const kernel_siginfo_t *siginfo)
- 			goto fail_dropcount;
- 		}
- 
--		helper_argv = kmalloc_array(argc + 1, sizeof(*helper_argv),
-+		helper_argv = kvmalloc_array(argc + 1, sizeof(*helper_argv),
- 					    GFP_KERNEL);
- 		if (!helper_argv) {
- 			printk(KERN_WARNING "%s failed to allocate memory\n",
+> Changes in v2
+> - combined the modification of duplex, tx_pause and rx_pause into single
+>   function.
+> 
+> Changes in v1
+> - Squash the reading rgmii value from dt to patch which apply the rgmii value
+> - Created the new function ksz_port_set_xmii_speed
+> - Seperated the namespace values for xmii_ctrl_0 and xmii_ctrl_1 register
+> - Applied the rgmii delay value based on the rx/tx-internal-delay-ps
+> 
+> Arun Ramadoss (9):
+>   net: dsa: microchip: add common gigabit set and get function
+>   net: dsa: microchip: add common ksz port xmii speed selection function
+>   net: dsa: microchip: add common duplex and flow control function
+>   net: dsa: microchip: add support for common phylink mac link up
+>   net: dsa: microchip: lan937x: add support for configuing xMII register
+>   net: dsa: microchip: apply rgmii tx and rx delay in phylink mac config
+>   net: dsa: microchip: ksz9477: use common xmii function
+>   net: dsa: microchip: ksz8795: use common xmii function
+>   net: dsa: microchip: add support for phylink mac config
+> 
+>  drivers/net/dsa/microchip/ksz8795.c      |  40 ---
+>  drivers/net/dsa/microchip/ksz8795_reg.h  |   8 -
+>  drivers/net/dsa/microchip/ksz9477.c      | 183 +------------
+>  drivers/net/dsa/microchip/ksz9477_reg.h  |  24 --
+>  drivers/net/dsa/microchip/ksz_common.c   | 312 ++++++++++++++++++++++-
+>  drivers/net/dsa/microchip/ksz_common.h   |  54 ++++
+>  drivers/net/dsa/microchip/lan937x.h      |   8 +-
+>  drivers/net/dsa/microchip/lan937x_main.c | 125 +++------
+>  drivers/net/dsa/microchip/lan937x_reg.h  |  32 ++-
+>  9 files changed, 431 insertions(+), 355 deletions(-)
+> 
+> 
+> base-commit: 502c6f8cedcce7889ccdefeb88ce36b39acd522f
+> -- 
+> 2.36.1
+> 
+
 -- 
-1.9.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63D45A64CD
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:32:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33E3C5A64D6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:33:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbiH3NcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58926 "EHLO
+        id S230306AbiH3NdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230310AbiH3Nb6 (ORCPT
+        with ESMTP id S229828AbiH3NdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:31:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B5BD5E8E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:31:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661866316;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=flDzlEay+lodzMjSMxeLlXBa87F2xJak8mHh7Ha6Q8w=;
-        b=I4gTXpwwqaRd5ydjK5j3LpeRLJHTGDEp/+VafheUVO3vmKuWdSCB0QfEEs47alAKOg5Jdv
-        mjelwD65iC72KbXknH8uCipAo6BXTW7rAta4mMsSK9wDtBYn+BsHLHh/pqYKdbV7AGOWai
-        pMTwpdXvhD1q2i0V3RNIfqS/Ic5NHw8=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-78-NZ4BMJJCN8GWsKDIWQp2Lw-1; Tue, 30 Aug 2022 09:31:52 -0400
-X-MC-Unique: NZ4BMJJCN8GWsKDIWQp2Lw-1
-Received: by mail-wr1-f70.google.com with SMTP id c25-20020adfa319000000b00226d3f6d28cso1303624wrb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:31:51 -0700 (PDT)
+        Tue, 30 Aug 2022 09:33:16 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B74B2D89;
+        Tue, 30 Aug 2022 06:33:16 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id y17so1518748qvr.5;
+        Tue, 30 Aug 2022 06:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date;
+        bh=h8Ro8IuNO2Gir8WKx/cG+xP2lCu4UuyaAndPwSiU8ks=;
+        b=Dg8YDGG56CTeIbd09KTUeVvyvKb1O0MiNSEfT6Z7L/ZQE4rBLy2POz7F797V/VLyfX
+         X1w58+xXaYHdeRDDuMo6H3qIub9+YYUIqwhtovO+p/IhTCj3mLpfxppIVKlhm74F0IM9
+         H49RPpCGCf+atyPU0QzqKnkqCpCY2s58zuwfuY4C32Y7cU8QmsdLcqsJAuX/POtipzGs
+         NMNeONxLsrOuVbnNmtGFOUsv0operNrfbxu7AQ1e2ViLOCJkr8YngjkNoMvjJNHBwD+A
+         ibt+DUvf3rNoBLF4reR3lzMTthYqywLyq6SKKxKSNNTVbqLECcfNeeIT4efMeDbqt+3W
+         DzHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=flDzlEay+lodzMjSMxeLlXBa87F2xJak8mHh7Ha6Q8w=;
-        b=7Q9Wzm4jO1TB5yITaXoaR7IixV6EKnW1BJ3H9gUbJGa7P29nydfe1ocCYGDBMEdLJM
-         Dp9uFpJ5O2m8KwJH9DB3GS6PQaMtHhHHR2jExTfb4A6nom1aJ+nTrR2pKxqL/MbgmIqN
-         sxUM57I7OKDNJdT5lcbQhLE7KjayMI4Ly0UgoFCvt83MfdxQ1CwsRjzQl4dOPrJr5X1n
-         wYnNxyRIwiypbA7DGzeOAUjw51o03pcgKk+oM+tnzjBM3C/jHxMn3iEjfci8hrYwYeHD
-         n3JG/k31yoACuFSrz1Aw3sc/qfyOhQG7MPJtYZZpibIFSEIvU1XcZ2dEvR0YvDPEFnE+
-         c49w==
-X-Gm-Message-State: ACgBeo2a6TEQbaO+id9p+LZF2Nadax4s590Nli+Ysb7L+v3Sg2etdYjw
-        hdiSvOkTstMrUQwIWirj7J9xZHKkpr88hpOh2DEaoK0xzY6yzfR62cTusWS4vhqo/x3T9d8rVR5
-        6kBlJAauJxCtErombe3KD8k5F
-X-Received: by 2002:a05:6000:250:b0:225:624b:13 with SMTP id m16-20020a056000025000b00225624b0013mr8629519wrz.127.1661866310600;
-        Tue, 30 Aug 2022 06:31:50 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7ybcKJlMPOgXGaL4HC4oxp8Kqtr7p+UpDGKDcABx3SZvT9l8XIqCiTiKNrbY3ebxVec8554w==
-X-Received: by 2002:a05:6000:250:b0:225:624b:13 with SMTP id m16-20020a056000025000b00225624b0013mr8629503wrz.127.1661866310345;
-        Tue, 30 Aug 2022 06:31:50 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70a:1000:ecb4:919b:e3d3:e20b? (p200300cbc70a1000ecb4919be3d3e20b.dip0.t-ipconnect.de. [2003:cb:c70a:1000:ecb4:919b:e3d3:e20b])
-        by smtp.gmail.com with ESMTPSA id bs10-20020a056000070a00b002250fcfe2ddsm9366544wrb.14.2022.08.30.06.31.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 06:31:49 -0700 (PDT)
-Message-ID: <4a76cc97-4185-4236-65bd-676a2684f46b@redhat.com>
-Date:   Tue, 30 Aug 2022 15:31:49 +0200
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=h8Ro8IuNO2Gir8WKx/cG+xP2lCu4UuyaAndPwSiU8ks=;
+        b=VPXRFtWQixBB1/Ep10ZhGfTDDW1bVHn8UpBU2mDrE2mcGRTBUtOye31O+6HS2vcqCR
+         fuAV/Sq1+Lm2bxhk0t8PYjcrYhXpYh9C1VvHhDoTUpWZEiBQaWJuBSo0AqGTw5YnsF8M
+         NdU30yJnTSftETIAdnJQSklmy8n2GGLZcpuINvVRM0BYCilLN7TWmrFeEYZM+ka7uyVj
+         eRIjNmm0JYoKS7VImibd/VS8BL3Di8t6tF4EYgFe5dXygVpa9i0VcsQ+WUqDDNZDCuXi
+         JE1YmgB05w8DXKGn64ELCijtAFX6EYRVa+iWfjwT/3aavBly9f/5NY9R/dU4khnZiwYl
+         w4zg==
+X-Gm-Message-State: ACgBeo2cIImRPff76sZJjND4cvf6b0UBz8M/nrVUWk4ddpfYvHKp9KSf
+        poJ1dl60H7Q5QMjWzSJQCQ42uPX3qbyUccVN7sGOJadh+TUatQ==
+X-Google-Smtp-Source: AA6agR4wZTWWCAVGtLtxwuKO6qT0R87tWfH2WlU1I/MF7dtHnVvUJKuNfOsbC//GHIpAET7lHiBZeiDcpcyxdkL2KyQ=
+X-Received: by 2002:a05:6214:c2b:b0:476:813a:b173 with SMTP id
+ a11-20020a0562140c2b00b00476813ab173mr14978476qvd.31.1661866395183; Tue, 30
+ Aug 2022 06:33:15 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] mm: memory-failure: kill __soft_offline_page()
-Content-Language: en-US
-To:     20220830071514.GA1106752@hori.linux.bs1.fc.nec.co.jp,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>
-References: <20220830104654.28234-1-wangkefeng.wang@huawei.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220830104654.28234-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Jiacheng Xu <578001344xu@gmail.com>
+Date:   Tue, 30 Aug 2022 21:33:03 +0800
+Message-ID: <CAO4S-me0tq289wabwsL4xbRXfHgaetqvExt8+ZyrKLxfGzLteA@mail.gmail.com>
+Subject: possible deadlock in io_poll_double_wake
+To:     linux-kernel@vger.kernel.org, axboe@kernel.dk,
+        asml.silence@gmail.com, Qiang.Zhang@windriver.com
+Cc:     io-uring@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        FROM_STARTS_WITH_NUMS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30.08.22 12:46, Kefeng Wang wrote:
-> Squash the __soft_offline_page() into soft_offline_in_use_page() and kill
-> __soft_offline_page().
-> 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
-> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
-> ---
-> v2: update hpage when try_to_split_thp_page() success
-> 
+Hello,
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+When using modified Syzkaller to fuzz the Linux kernel-5.19, the
+following crash was triggered. Though the issue seems to get fixed on
+syzbot(https://syzkaller.appspot.com/bug?id=12e4415bf5272f433acefa690478208f3be3be2d),
+it could still be triggered with the following repro.
+We would appreciate a CVE ID if this is a security issue.
 
+HEAD commit: 568035b01cfb Linux-5.15.58
+git tree: upstream
 
--- 
-Thanks,
+console output:
+https://drive.google.com/file/d/1e4DHaUKhY9DLZJK_pNScWHydUv-MaD9_/view?usp=sharing
+https://drive.google.com/file/d/1NmOGWcfPnY2kSrS0nOwvG1AZ923jFQ3p/view?usp=sharing
+kernel config: https://drive.google.com/file/d/1wgIUDwP5ho29AM-K7HhysSTfWFpfXYkG/view?usp=sharing
+syz repro: https://drive.google.com/file/d/1e5xY8AOMimLbpAlOOupmGYC_tUA3sa8k/view?usp=sharing
+C reproducer: https://drive.google.com/file/d/1esAe__18Lt7and43QdXFfI6GJCsF85_z/view?usp=sharing
 
-David / dhildenb
+Description:
+spin_lock_irqsave() in __wake_up_common_lock() is called before waking
+up a task. However, spin_lock_irqsave() has to be called once in
+io_poll_double_wake().
+such call stack is:
 
+   snd_pcm_post_stop()
+      __wake_up_common_lock()
+         spin_lock_irqsave()
+             io_poll_double_wake()
+                 spin_lock_irqsave()
+
+Environment:
+Ubuntu 20.04 on Linux 5.4.0
+QEMU 4.2.1:
+qemu-system-x86_64 \
+  -m 2G \
+  -smp 2 \
+  -kernel /home/workdir/bzImage \
+  -append "console=ttyS0 root=/dev/sda earlyprintk=serial net.ifnames=0" \
+  -drive file=/home/workdir/stretch.img,format=raw \
+  -net user,host=10.0.2.10,hostfwd=tcp:127.0.0.1:10021-:22 \
+  -net nic,model=e1000 \
+  -enable-kvm \
+  -nographic \
+  -pidfile vm.pid \
+  2>&1 | tee vm.log
+
+If you fix this issue, please add the following tag to the commit:
+Reported-by Jiacheng Xu<578001344xu@gmail.com>

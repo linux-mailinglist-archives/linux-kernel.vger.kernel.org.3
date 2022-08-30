@@ -2,65 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F8275A5F13
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B87F5A5D99
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231483AbiH3JSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
+        id S231375AbiH3ICO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231387AbiH3JRz (ORCPT
+        with ESMTP id S229814AbiH3ICF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:17:55 -0400
-X-Greylist: delayed 1804 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 02:17:53 PDT
-Received: from mail.gnudd.com (mail.gnudd.com [93.91.132.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFD9D2E95;
-        Tue, 30 Aug 2022 02:17:53 -0700 (PDT)
-Received: from dciminaghi by mail.gnudd.com with local (Exim 4.94.2)
-        (envelope-from <dciminaghi@arcana.gnudd.com>)
-        id 1oSw8m-0002Aa-Tn; Tue, 30 Aug 2022 09:58:32 +0200
-Date:   Tue, 30 Aug 2022 09:58:32 +0200
-From:   Davide Ciminaghi <ciminaghi@gnudd.com>
-Sender: ciminaghi@gnudd.com
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Alexandre Courbot <gnurou@gmail.com>,
-        Alexandre Courbot <acourbot@nvidia.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>, Alessandro Rubini <rubini@gnudd.com>
-Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-Message-ID: <Yw3DKCuDoPkCaqxE@arcana.i.gnudd.com>
-References: <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
- <CACRpkda0+iy8H0YmyowSDn8RbYgnVbC1k+o5F67inXg4Qb934Q@mail.gmail.com>
- <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
- <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
- <87f2ff4c-3426-201c-df86-2d06d3587a20@csgroup.eu>
- <CACRpkdYizQhiJXzXNHg7TXUVHzhkwXHFN5+e58kH4udGm1ziEA@mail.gmail.com>
- <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
- <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
- <515364a9-33a1-fafa-fdce-dc7dbd5bb7fb@csgroup.eu>
- <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
+        Tue, 30 Aug 2022 04:02:05 -0400
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903C9D25FD;
+        Tue, 30 Aug 2022 01:02:03 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id se27so12744264ejb.8;
+        Tue, 30 Aug 2022 01:02:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ydfrnuw+55leI10v9SJBVImy0rWUjcTdkZR1kZGXwFw=;
+        b=sCZHtuEJbBNTCPPXnFKl1I/vDNoEd4x6jEQ/dfUciIobmxcR/mka6M4ftEPzmZkT6h
+         DPpIUmDGkn6nRWj3T/vmNKaH1F59vdUmDKFczzUqZ43ZBsoJ6VCd/TDz9pDI9YDjAhrO
+         fW2bCiW5nNrZAUAFXTIaZdb5UW2FoKClEBBBaYYOJbfCvz1iwKuU3wdQx7QpnBhuB2qP
+         O6kNEELllG4+3XxhKvOls6EUXKAp29KTOfm3CJ8STllBKTkMeHbPgfD4zN56GxA4J7Lt
+         /i02ys49bs8iWtcf2NJhpAn/zVJ8L4SwlxYvISf1pW9qzoYDA5WOaUXj63D/mBca/+I2
+         L+vw==
+X-Gm-Message-State: ACgBeo2zHnlL5tdbvH9rR7q6RMlFhyNV7G1mndAhxx1QAPBT+cWUsC+R
+        8mKRm2t183oQdAvEECrEEVo=
+X-Google-Smtp-Source: AA6agR5gDrSS4cPDXB6O0pPRBT0lOuKdfVV/ExsAVlNsE2XddNhK40qAq02POdSU0t1LhaH7OI+8WQ==
+X-Received: by 2002:a17:906:ee89:b0:73d:70c5:1a4e with SMTP id wt9-20020a170906ee8900b0073d70c51a4emr15397045ejb.683.1661846522007;
+        Tue, 30 Aug 2022 01:02:02 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id h3-20020a056402094300b00445e037345csm6832470edz.14.2022.08.30.01.02.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 01:02:01 -0700 (PDT)
+Message-ID: <1068ad37-d80c-6e63-6cd9-6ecf6c256d46@kernel.org>
+Date:   Tue, 30 Aug 2022 10:01:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
-X-Face: #Q;A)@_4.#>0+_%y]7aBr:c"ndLp&#+2?]J;lkse\^)FP^Lr5@O0{)J;'nny4%74.fM'n)M
- >ISCj.KmsL/HTxz!:Ju'pnj'Gz&.
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 4/4] serial: Add kserial_rs485 to avoid wasted space
+ due to .padding
+Content-Language: en-US
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-serial@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Richard Genoud <richard.genoud@gmail.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
+References: <20220830072956.3630-1-ilpo.jarvinen@linux.intel.com>
+ <20220830072956.3630-5-ilpo.jarvinen@linux.intel.com>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220830072956.3630-5-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,58 +85,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 30. 08. 22, 9:29, Ilpo Järvinen wrote:
+> --- a/include/linux/serial_core.h
+> +++ b/include/linux/serial_core.h
+> @@ -31,6 +31,29 @@ struct serial_struct;
+...
+> + * Must match with struct serial_rs485 in include/uapi/linux/serial.h excluding
+> + * the padding.
 
-tl;dr: sta2x11 support can be removed.
+Have you considered BUILD_BUG_ON() checks with few offset_of()s to 
+enforce the above?
 
-On Sun, Aug 28, 2022 at 12:04:29PM +0200, Arnd Bergmann wrote:
-> On Sun, Aug 28, 2022 at 11:06 AM Christophe Leroy
-> <christophe.leroy@csgroup.eu> wrote:
-> > Le 26/08/2022 ?? 23:54, Linus Walleij a ??crit :
+> +struct kserial_rs485 {
+> +	__u32	flags;
+> +	__u32	delay_rts_before_send;
+> +	__u32	delay_rts_after_send;
+> +	struct {
+> +		__u8    addr_recv;
+> +		__u8    addr_dest;
+> +	};
+> +};
 
-....
+thanks,
+-- 
+js
+suse labs
 
->
-> I think that just means the code that one would have to modify
-> is in vendor kernels of devices using this chip, but there is no
-> way to fix those if they are not in mainline. The last meaningful
-> patches on this SoC support were in 2012 by  Davide Ciminaghi
-> and Alessandro Rubini, though they still Acked patches after that.
-> 
-> I wonder if I was missing the interesting bit about it, if the driver
-> is just obsolete and can be removed, or if there is something
-> that is still worth fixing here.
->
-Hi,
-
-the sta2x11 was a chip containing AMBA peripherals and a PCIe to AMBA bridge
-(it is still in production as far as I know, but deprecated for new designs).
-It would typically be installed on x86 machines, so you needed to build and
-run AMBA drivers in an x86 environment. The original drivers we started from
-had platform data, but then we were told to switch to DTS.
-
-Device trees, though, were not very common under x86 at the time and,
-perhaps most important, we had a bunch of amba peripherals "behind" a
-pci bus, which is a dynamic thing. Our idea was to build a device
-tree at runtime (in user space) and then booting a second kernel via
-kexec with the correct DTB, but this was not a complete solution.
-For instance we needed to patch the device tree at runtime to
-take dynamically assigned IRQ numbers into account.
-Also the clocks tree had to be dynamically instantiated, once for each sta2x11
-chip. Finally, there were some problems allocating dma buffers because
-the AMBA side of the bridge could only reach some ranges of physical
-addresses.
-
-We had a more or less working prototype, and you may want to have a look
-at some of our work:
-
-https://lore.kernel.org/lkml/5202C655.6050609@zytor.com/t/
-
-Nevertheless the upstreaming effort was eventually too big for Alessandro
-and myself.
-So the sta2x11 drivers upstreaming project has been abandoned (even though
-I like to think of it as one of the funniest failures of my life).
-Sta2x11 related drivers can of course be removed.
-
-
-Thanks and regards
-Davide

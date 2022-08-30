@@ -2,196 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113FE5A6F5B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:44:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29AFC5A6F5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231699AbiH3Vnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 17:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
+        id S231793AbiH3VoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 17:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231787AbiH3Vnj (ORCPT
+        with ESMTP id S231669AbiH3Vnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:43:39 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9CE8B2D9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:43:29 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id e2-20020a056e020b2200b002e1a5b67e29so9281193ilu.11
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:43:29 -0700 (PDT)
+        Tue, 30 Aug 2022 17:43:41 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1EC8C45D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:43:33 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id f24so9618763plr.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:43:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=yxuPGAgyr2YjlkXSwoWeZko/CUmlXgmDG76kUE3q7zA=;
+        b=aH4Waxy1Ly1CTXiseORnUequMFv5g4WKFXKSK01Tg3E5FoZ7Voi3A6YVqRdS/Dd0Yl
+         1IoVc+nowFtPr5sPbdRIHZ1iyG9u4lJTSJyCUmSP0X7QPDn3TFtRJYxHIeF3+PHo083R
+         QBmouR14BZZWovfe7pvOcUGHQWH546mpL+nAEYCtDfZjacoRQiIDC7mlRqp0vVxvWbG7
+         QNG0bk3KcvENRkbms8yzQC87X4mXCIxqcG9eNc8FQ43O7QkXjA43sNzxIXJ5HI8HjdL/
+         ciJz06EE+gFPjAaYrwoEe1da4NDUZ9u5CAwUolpEhve8fC45OLNAdyfxeU4E3Gyyxus2
+         pZcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=hZh3KPzu6vdJmcyyc9fUNxMkq5x2+UaiRlgdtQCrWEU=;
-        b=Pd8FAd3vOxe8YrWCuINbeNTroYWeI3/gliN5U9DFORlzkRMdSWFRQ6yZshDos9GPvR
-         bxqGxF7zZMHSk8yQBOMbB0bBw6bcxnCSv2DhAbvqPgnmaf0tryZ+Jw0IksvSh6+2UJWn
-         JhupsmUz7451AdHt/LDhD0Hn9k7rHZTZlxLSpeBN4eScAZzillC90FRJVwSg5vgCefsu
-         +l6+lSpktcNr6j+vFrIwKsn63A8XP0SjAr8JfIgdOKQ7xmuBjoU84ch/BBv6Y8es6u/w
-         7qX6AAqAxwBW0UbweAjvlVZyZyVpVmq6GkO3uXGwWL6WU1P8zDLr921KR8Jn9V0kESgO
-         B0MA==
-X-Gm-Message-State: ACgBeo1rkPVj2E6QcZxa/p5/6sSjNPDI+3ILOBLQleUSvaTM0snYNuar
-        AyUnoFbLeA9NFLT/WFKMDUMNksffquO2S88d8vz7SBZifrBk
-X-Google-Smtp-Source: AA6agR6qi8L+tGvCcx/hZ0pVix3H6mvvJw+FlU77PhHXSRcmqs9Q+44EOhcGC+4jPeHXSc6HJjIyqoZEDVG/eFLsQJs+/YXuY4W3
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=yxuPGAgyr2YjlkXSwoWeZko/CUmlXgmDG76kUE3q7zA=;
+        b=1pf0igiPufFgubYBFEn1g3tnHzRm+Cyz9HP0hkeLhyAiwO8mix69F6oKW5MHo38rYi
+         EDLwYb31XNmFOELhMrML0MN1/WQKnrw+6SRmQ1Nq+1o1+D0IreWt9QmVat9Hc8Zp8t1X
+         VrpvvxRGdRRzB6/nh4RfDpCu3IGkhRLvKoZty5qeHCnDTR5hO9s6CvtvP812sBISbDY1
+         uXs73GHMDUge7Tmvlw7lrZmKCQroHMitkpYbICtcsOnYhPm6rIBAvat935lvVSXP73/h
+         1zzpxN/MnsEXheZhlD8ACvCHdycVyM9YvtQMdmUuor7PPrDU15cgJSX7uyZrDTr7J+3w
+         c6cg==
+X-Gm-Message-State: ACgBeo1B4872vSkcQ9dh181rhif3H8Q6efQo4iJnANIFRItwRQHt7hZl
+        9GXBVbDHnoPL3RECg7yPRXqw5Q==
+X-Google-Smtp-Source: AA6agR4d9a86XOYmekbqcUomIz+HR7ZC0q/6LOY3PB+81Acv7okg/KHbPM8scoZKhlG1pAM+Wzz7Eg==
+X-Received: by 2002:a17:902:edd5:b0:174:a6e6:51f4 with SMTP id q21-20020a170902edd500b00174a6e651f4mr13206714plk.82.1661895812536;
+        Tue, 30 Aug 2022 14:43:32 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id j8-20020a170903024800b00172e97382cdsm10404872plh.285.2022.08.30.14.43.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 14:43:32 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 21:43:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH] KVM/VMX: Avoid stack engine synchronization uop in
+ __vmx_vcpu_run
+Message-ID: <Yw6EgFOcnCGa5hOo@google.com>
+References: <20220816211010.25693-1-ubizjak@gmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:ca04:0:b0:349:f94d:5ea8 with SMTP id
- i4-20020a02ca04000000b00349f94d5ea8mr13321724jak.156.1661895808438; Tue, 30
- Aug 2022 14:43:28 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 14:43:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000050d56805e77c4582@google.com>
-Subject: [syzbot] WARNING in writeback_single_inode
-From:   syzbot <syzbot+fc721e2fe15a5aac41d1@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220816211010.25693-1-ubizjak@gmail.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Aug 16, 2022, Uros Bizjak wrote:
+> Avoid instructions with explicit uses of the stack pointer between
+> instructions that implicitly refer to it. The sequence of
+> POP %reg; ADD $x, %RSP; POP %reg forces emission of synchronization
+> uop to synchronize the value of the stack pointer in the stack engine
+> and the out-of-order core.
+> 
+> Using POP with the dummy register instead of ADD $x, %RSP results in a
+> smaller code size and faster code.
+> 
+> The patch also fixes the reference to the wrong register in the
+> nearby comment.
+> 
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+> ---
 
-syzbot found the following issue on:
+Pushed to branch `for_paolo/6.1` at:
 
-HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=178fc957080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
-dashboard link: https://syzkaller.appspot.com/bug?extid=fc721e2fe15a5aac41d1
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+    https://github.com/sean-jc/linux.git
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Unless you hear otherwise, it will make its way to kvm/queue "soon".
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fc721e2fe15a5aac41d1@syzkaller.appspotmail.com
-
-ntfs3: loop4: RAW NTFS volume: Filesystem size 0.00 Gb > volume size 0.00 Gb. Mount in read-only
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 24385 at fs/fs-writeback.c:1678 writeback_single_inode+0x374/0x388 fs/fs-writeback.c:1678
-Modules linked in:
-CPU: 0 PID: 24385 Comm: syz-executor.4 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : writeback_single_inode+0x374/0x388 fs/fs-writeback.c:1678
-lr : writeback_single_inode+0x374/0x388 fs/fs-writeback.c:1678
-sp : ffff800020d4b9c0
-x29: ffff800020d4ba10 x28: ffff0000e4bc8000 x27: fffffc0003f22700
-x26: 0000000000000a00 x25: 0000000000000000 x24: 0000000000000001
-x23: 0000000000001000 x22: ffff800020d4ba60 x21: 0000000000000000
-x20: ffff0000fd87f7b7 x19: ffff0000fd87f840 x18: 0000000000000369
-x17: 0000000000000000 x16: ffff80000dbb8658 x15: ffff0000e1cc0000
-x14: 0000000000000130 x13: 00000000ffffffff x12: 0000000000040000
-x11: 000000000003ffff x10: ffff80001d55c000 x9 : ffff80000861f6d4
-x8 : 0000000000040000 x7 : ffff80000861f3a4 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- writeback_single_inode+0x374/0x388 fs/fs-writeback.c:1678
- write_inode_now+0xb0/0xdc fs/fs-writeback.c:2723
- iput_final fs/inode.c:1735 [inline]
- iput+0x1d4/0x314 fs/inode.c:1774
- ntfs_fill_super+0xc30/0x14a4 fs/ntfs/super.c:2994
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-irq event stamp: 3030
-hardirqs last  enabled at (3029): [<ffff800008163d78>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1367 [inline]
-hardirqs last  enabled at (3029): [<ffff800008163d78>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4942
-hardirqs last disabled at (3030): [<ffff80000bffe9cc>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
-softirqs last  enabled at (2780): [<ffff8000080102e4>] _stext+0x2e4/0x37c
-softirqs last disabled at (1405): [<ffff800008104658>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
-softirqs last disabled at (1405): [<ffff800008104658>] invoke_softirq+0x70/0xbc kernel/softirq.c:452
----[ end trace 0000000000000000 ]---
-Unable to handle kernel paging request at virtual address 000000fd87f9e147
-Mem abort info:
-  ESR = 0x0000000096000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=0000000128316000
-[000000fd87f9e147] pgd=0000000000000000, p4d=0000000000000000
-Internal error: Oops: 96000004 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 24385 Comm: syz-executor.4 Tainted: G        W          6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : xa_marked include/linux/xarray.h:420 [inline]
-pc : mapping_tagged include/linux/fs.h:461 [inline]
-pc : writeback_single_inode+0x228/0x388 fs/fs-writeback.c:1703
-lr : writeback_single_inode+0x218/0x388 fs/fs-writeback.c:1702
-sp : ffff800020d4b9c0
-x29: ffff800020d4ba10 x28: ffff0000e4bc8000 x27: fffffc0003f22700
-x26: 0000000000000a00 x25: 0000000000001000 x24: 0000000000000001
-x23: 0000000000000001 x22: ffff800020d4ba60 x21: ffff0000fd87f88f
-x20: ffff0000fd87f7b7 x19: ffff0000fd87f840 x18: 0000000000000369
-x17: 0000000000000000 x16: ffff80000dbb8658 x15: ffff0000e1cc0000
-x14: 0000000000000130 x13: 00000000ffffffff x12: 0000000000040000
-x11: ff8080000861f578 x10: 0000000000000002 x9 : ffff0000e1cc0000
-x8 : ff0000fd87f9e0ff x7 : ffff80000861f3a4 x6 : 0000000000000000
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000001 x1 : 0000000000000001 x0 : 0000000000000000
-Call trace:
- xa_marked include/linux/xarray.h:420 [inline]
- mapping_tagged include/linux/fs.h:461 [inline]
- writeback_single_inode+0x228/0x388 fs/fs-writeback.c:1703
- write_inode_now+0xb0/0xdc fs/fs-writeback.c:2723
- iput_final fs/inode.c:1735 [inline]
- iput+0x1d4/0x314 fs/inode.c:1774
- ntfs_fill_super+0xc30/0x14a4 fs/ntfs/super.c:2994
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-Code: 710006ff 54000281 f9401a88 2a1f03e0 (b9404917) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	710006ff 	cmp	w23, #0x1
-   4:	54000281 	b.ne	0x54  // b.any
-   8:	f9401a88 	ldr	x8, [x20, #48]
-   c:	2a1f03e0 	mov	w0, wzr
-* 10:	b9404917 	ldr	w23, [x8, #72] <-- trapping instruction
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Note, the commit IDs are not guaranteed to be stable.

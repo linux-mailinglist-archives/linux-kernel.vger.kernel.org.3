@@ -2,167 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3005A6C05
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:24:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFD15A6C08
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:24:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231375AbiH3SYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41846 "EHLO
+        id S231508AbiH3SYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230328AbiH3SX7 (ORCPT
+        with ESMTP id S230330AbiH3SYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:23:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D96B34F689
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661883837;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ir5bMIFXiZONcKjtB/Oq1xcLlKJ3S8ekcvj8t7HWk6Q=;
-        b=MRgX0vmsN/+At5l58zch/I7BjOJpuxWX9obtA02MORy+LhY0LfoEVTNaI2LRL8WbCq8j+i
-        JDsEwBsg24Z6kuubodmUXt/LsiXYKI0uxQBRoSME05kQqKDhGM8G+4kNeqec3cb5kNvJJt
-        rpP8gFX1iYFg27p0vIXC7WbkIpFOXc4=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-1-DetVjwetPf65Nthl2j4zrQ-1; Tue, 30 Aug 2022 14:23:56 -0400
-X-MC-Unique: DetVjwetPf65Nthl2j4zrQ-1
-Received: by mail-wr1-f69.google.com with SMTP id j4-20020adfa544000000b002255264474bso1929170wrb.17
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:23:56 -0700 (PDT)
+        Tue, 30 Aug 2022 14:24:41 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FA84558FF
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:24:40 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id l5so8036229pjy.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:24:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=ORzmu3cToEXn/JrE0yYz4OUtzs3Wj8GxmB/541angU0=;
+        b=pVjliP8f3ulCYXc/Z66/V583yR3MCrpaSmL0b0NVDIthObIOMjoIalL/jWRkNlTWMf
+         96oSLaumwMmDF/3cXLvKaPk31KveDIagqGoKVWAEGcDcjOHQF6/wdd8BMAX6UxyiAvMp
+         v6D7afGE9QuYbjUmfkf0AFqRmuT0EIKeVV81maqB/2ZavVuwfDcbTb4esAuu2cjP4oE/
+         fgkRJPJIrjmIKzhmipulA1fcJEqqW0kKs6JJRgt48BYUOLi/RiIxcDnlNoWpdwDPsRsR
+         jQ/Wsa2S757PM5CvdF5B39CC2XWeatCXy9rrrfxhdwMjtIfA5UIwEGANQAVGhL+p39pd
+         h+Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :from:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=Ir5bMIFXiZONcKjtB/Oq1xcLlKJ3S8ekcvj8t7HWk6Q=;
-        b=s0Ys0YxQ9M24qC2quS6FxeISsAQXLwZ4WXj6xCczoSihqL0W097MahvBuQpUP49AN+
-         Y/tHrtZ5QZ4SooXhHo46GNtRyVDALS8RmoEoNVYBDKz7pl46/kTGbxUOG2HqPphIbkv7
-         iI5hkqEnZQ6civkOnktM/kjcMXr1uX/6nbvX64d0QGUplgD1ZZi24H9acaIQUGsNdrhV
-         kHvSc9o1WCqmAVwsIFVdoAYQkR7rnwelLgFyaYrZfMaVd3vaP7o9ttEV55iZuAliPXLp
-         s/FFWjQRByAMa0+ekQV0OL5ldmlwR1mEk0E+atL6Lnj2K4HfYsAQ/DQErLzV6YSFF/pU
-         1vww==
-X-Gm-Message-State: ACgBeo1UDGx/vCSXhF2Qtsq4qvdoud0hiQy06jyAHTO0E/Jg0Ulf5pjO
-        eLasyAbS8V1wsul749PwMGptC3qOftOtDSTkzmHL5XkY9p6foGkr5KTamEwW0Zc4hvq6hJeWqRq
-        0jUavbydj3ndr30Ox4mQzH8unTMNlWYPPPdD6SdGBcZlt3aWlCWk/OW6Pc8dwXQGiyZt/EtiR
-X-Received: by 2002:a05:600c:4e0f:b0:3a5:e065:9b50 with SMTP id b15-20020a05600c4e0f00b003a5e0659b50mr10494561wmq.35.1661883834506;
-        Tue, 30 Aug 2022 11:23:54 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4oOp4zxQ/thee2JZtJ0alh2W3O9idTGxyH9xQar4vvfTNOtE/WqskpiaC27YCXMgTh0Fj/gQ==
-X-Received: by 2002:a05:600c:4e0f:b0:3a5:e065:9b50 with SMTP id b15-20020a05600c4e0f00b003a5e0659b50mr10494538wmq.35.1661883834131;
-        Tue, 30 Aug 2022 11:23:54 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70a:1000:ecb4:919b:e3d3:e20b? (p200300cbc70a1000ecb4919be3d3e20b.dip0.t-ipconnect.de. [2003:cb:c70a:1000:ecb4:919b:e3d3:e20b])
-        by smtp.gmail.com with ESMTPSA id c124-20020a1c3582000000b003a30fbde91dsm12810957wma.20.2022.08.30.11.23.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 11:23:53 -0700 (PDT)
-Message-ID: <2e20c90d-4d1f-dd83-aa63-9d8d17021263@redhat.com>
-Date:   Tue, 30 Aug 2022 20:23:52 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ORzmu3cToEXn/JrE0yYz4OUtzs3Wj8GxmB/541angU0=;
+        b=X+HmSjwuM4jRmMSZqClbeF0nOKAqrVptqznC06vtVNxINx6U95ZXoT6LdB+JGZfrnS
+         1qPmsp431RSuQLMc83aUAHcEMfEuFKDjxgEn4pr7xWpLbVdUdSXe7UW+nLBODWIb/7Ft
+         b63C+Q4SUjOFkhhBUkR8moYQlO57kjRpm1OzA/1ON9g/fT0KFb568qezfstn74YtOYBA
+         upmxZrsCXMXZKjTe9/jXvsVO+irl3c4j2NchTnISmdGxo8VQY/8cQyYoWlzAjsou48ex
+         9/FYXW5GCw/f9IYEIE65mGBLWtfVZ5u990NcmiF5LXbo4suDpnnwFAKTBkkenBQuRBc9
+         RSSQ==
+X-Gm-Message-State: ACgBeo15mZTF8ejPjka8N49+Bx4Hhia47Sy5NNjecG1wF4lNh5KA7bXe
+        4F3wWvmE15X2UqV5/xPVsJ0eaQ==
+X-Google-Smtp-Source: AA6agR41DEPzBCPzj+CfnNFZhKQiq7WpNnkcNOsei7TbTovXf+3m5l+2RxDrtmyf7PUjOcHxJEZQ3Q==
+X-Received: by 2002:a17:90b:4d8f:b0:1fc:314a:17e8 with SMTP id oj15-20020a17090b4d8f00b001fc314a17e8mr25483476pjb.152.1661883879863;
+        Tue, 30 Aug 2022 11:24:39 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n4-20020a170902d2c400b001754064ac31sm87087plc.280.2022.08.30.11.24.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 11:24:39 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 18:24:36 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 8/8] KVM: x86/svm/pmu: Rewrite get_gp_pmc_amd()
+ for more counters scalability
+Message-ID: <Yw5V5H+e8pBahl5b@google.com>
+References: <20220823093221.38075-1-likexu@tencent.com>
+ <20220823093221.38075-9-likexu@tencent.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 2/3] mm/gup: use gup_can_follow_protnone() also in
- GUP-fast
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>, Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>
-References: <20220825164659.89824-1-david@redhat.com>
- <20220825164659.89824-3-david@redhat.com>
- <1892f6de-fd22-0e8b-3ff6-4c8641e1c68e@redhat.com>
-Organization: Red Hat
-In-Reply-To: <1892f6de-fd22-0e8b-3ff6-4c8641e1c68e@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823093221.38075-9-likexu@tencent.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.08.22 16:59, David Hildenbrand wrote:
-> On 25.08.22 18:46, David Hildenbrand wrote:
->> There seems to be no reason why FOLL_FORCE during GUP-fast would have to
->> fallback to the slow path when stumbling over a PROT_NONE mapped page. We
->> only have to trigger hinting faults in case FOLL_FORCE is not set, and any
->> kind of fault handling naturally happens from the slow path -- where
->> NUMA hinting accounting/handling would be performed.
->>
->> Note that the comment regarding THP migration is outdated:
->> commit 2b4847e73004 ("mm: numa: serialise parallel get_user_page against
->> THP migration") described that this was required for THP due to lack of PMD
->> migration entries. Nowadays, we do have proper PMD migration entries in
->> place -- see set_pmd_migration_entry(), which does a proper
->> pmdp_invalidate() when placing the migration entry.
->>
->> So let's just reuse gup_can_follow_protnone() here to make it
->> consistent and drop the somewhat outdated comments.
->>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
->>  mm/gup.c | 14 +++-----------
->>  1 file changed, 3 insertions(+), 11 deletions(-)
->>
->> diff --git a/mm/gup.c b/mm/gup.c
->> index a1355dbd848e..dfef23071dc8 100644
->> --- a/mm/gup.c
->> +++ b/mm/gup.c
->> @@ -2350,11 +2350,7 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
->>  		struct page *page;
->>  		struct folio *folio;
->>  
->> -		/*
->> -		 * Similar to the PMD case below, NUMA hinting must take slow
->> -		 * path using the pte_protnone check.
->> -		 */
->> -		if (pte_protnone(pte))
->> +		if (pte_protnone(pte) && !gup_can_follow_protnone(flags))
->>  			goto pte_unmap;
->>  
->>  		if (!pte_access_permitted(pte, flags & FOLL_WRITE))
->> @@ -2736,12 +2732,8 @@ static int gup_pmd_range(pud_t *pudp, pud_t pud, unsigned long addr, unsigned lo
->>  
->>  		if (unlikely(pmd_trans_huge(pmd) || pmd_huge(pmd) ||
->>  			     pmd_devmap(pmd))) {
->> -			/*
->> -			 * NUMA hinting faults need to be handled in the GUP
->> -			 * slowpath for accounting purposes and so that they
->> -			 * can be serialised against THP migration.
->> -			 */
->> -			if (pmd_protnone(pmd))
->> +			if (pmd_protnone(pmd) &&
->> +			    !gup_can_follow_protnone(flags))
->>  				return 0;
->>  
->>  			if (!gup_huge_pmd(pmd, pmdp, addr, next, flags,
-> 
-> 
-> I just stumbled over something interesting. If we have a pte_protnone()
-> entry, ptep_clear_flush() might not flush, because the !pte_accessible()
->  does not hold.
-> 
-> Consequently, we could be in trouble when using ptep_clear_flush() on a
-> pte_protnone() PTE to make sure that GUP cannot run anymore.
-> 
-> Will give this a better thought, but most probably I'll replace this
-> patch by a proper documentation update here.
+On Tue, Aug 23, 2022, Like Xu wrote:
+>  static inline struct kvm_pmc *get_gp_pmc_amd(struct kvm_pmu *pmu, u32 msr,
+>  					     enum pmu_type type)
+>  {
+>  	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
+> +	unsigned int idx;
+>  
+>  	if (!vcpu->kvm->arch.enable_pmu)
+>  		return NULL;
+>  
+>  	switch (msr) {
+> -	case MSR_F15H_PERF_CTL0:
+> -	case MSR_F15H_PERF_CTL1:
+> -	case MSR_F15H_PERF_CTL2:
+> -	case MSR_F15H_PERF_CTL3:
+> -	case MSR_F15H_PERF_CTL4:
+> -	case MSR_F15H_PERF_CTL5:
+> +	case MSR_F15H_PERF_CTL0 ... MSR_F15H_PERF_CTR5:
+>  		if (!guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE))
+>  			return NULL;
+> -		fallthrough;
 
-... and looking into the details of TLB flush and GUP-fast interaction
-nowadays, that case is no longer relevant. A TLB flush is no longer
-sufficient to stop concurrent GUP-fast ever since we introduced generic
-RCU GUP-fast.
+> +		idx = (unsigned int)((msr - MSR_F15H_PERF_CTL0) / 2);
 
--- 
-Thanks,
+> +		if ((msr == (MSR_F15H_PERF_CTL0 + 2 * idx)) !=
+> +		    (type == PMU_TYPE_EVNTSEL))
 
-David / dhildenb
+This is more complicated than it needs to be.  CTLn is even, CTRn is odd (I think
+I got the logic right, but the below is untested).
 
+And this all needs a comment.
+
+
+		/*
+		 * Each PMU counter has a pair of CTL and CTR MSRs.  CTLn MSRs
+		 * (accessed via EVNTSEL) are even, CTRn MSRs are odd.
+		 */
+		idx = (unsigned int)((msr - MSR_F15H_PERF_CTL0) / 2);
+		if (!(msr & 0x1) != (type == PMU_TYPE_EVNTSEL))
+			return NULL;
+
+> +			return NULL;
+> +		break;

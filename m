@@ -2,43 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 491895A5DC9
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:11:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49CAC5A5DCB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiH3IKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58678 "EHLO
+        id S230202AbiH3ILT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:11:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiH3IKw (ORCPT
+        with ESMTP id S230027AbiH3ILR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:10:52 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F03D7392A;
-        Tue, 30 Aug 2022 01:10:51 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MH0M22wxWzHnYD;
-        Tue, 30 Aug 2022 16:09:02 +0800 (CST)
-Received: from huawei.com (10.67.174.96) by canpemm500005.china.huawei.com
- (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 30 Aug
- 2022 16:10:48 +0800
-From:   Zhang Jianhua <chris.zjh@huawei.com>
-To:     <mmayer@broadcom.com>, <bcm-kernel-feedback-list@broadcom.com>,
-        <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC:     <chris.zjh@huawei.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH -next v2] cpufreq: bmips-cpufreq: Use module_init and add module_exit
-Date:   Tue, 30 Aug 2022 16:07:32 +0800
-Message-ID: <20220830080732.3600988-1-chris.zjh@huawei.com>
-X-Mailer: git-send-email 2.31.0
+        Tue, 30 Aug 2022 04:11:17 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DD9DA7AAD
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:11:15 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id z8so4332382edb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=fF0F3OYElqiJ53mOWS2AL4qmvq01DykDqlv2QChjd7g=;
+        b=CzT/IQv7gIVrM71VDnXPNhL10sVQ2eUR0MHqENslzwNedOPhq/reWqCs2XyNtxxZc+
+         09hE41ikqlI9fAL2+O22OJZ8I7UBrqLO2ofhMISbkSWo57EXqcsZCFGMO4lqdzxHeLgS
+         sImQjaRz6cCmdNbS0laz6bbe3+3tw/zCaFZptsMGG0HZy2abJzxP26ymxEvPKyDPrJXa
+         1EN8U2X3ZbKkdwnJNULDab2vUNVhmuj1qbmGNXs3g+gUdHUOf9m4iBi9/S4KYHomjFeD
+         Te8jiPbJxU67i6RL+9TDxBSIJR3NWKHC9cYxz91qW5AxoZpXDWiwe4A4Uj9XwvG46jns
+         iEVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=fF0F3OYElqiJ53mOWS2AL4qmvq01DykDqlv2QChjd7g=;
+        b=2HEd2p8P29QAhvkhO22ptxYAl9S/RkZiv8F9mX/ED0fsVD9RAnBpv9b3xtpvoPs11q
+         9b2EKseERNcwZrL3W8kS0kR9XAJ0+hGuRhqDD8btMKXVYTNxOQbUw54ZJAQWoZSwijfT
+         kMdJyhdTZlD8mrS/ctXdugA7hTQhQrPKLYou7xDFA4WM4xUXlElbphUPamcKrRt4OMB4
+         IeAlEIU7qEuKnQjTLROLH1sv7Ww3fipd74LLe5JyKdC9sfkVE8zNdbe7IdqFY4Nd8X3b
+         QKckIKUfjx6/X+lMblovY/ono7uHP81OWIhKVJDVjtykDWpPqAHChfpFYQuwotGv7V7N
+         Tf0g==
+X-Gm-Message-State: ACgBeo1DLQNG9gPFAS2EVfYj/a+y5FwREt+LZud2Nqt4EYrnpySohUeX
+        4nNlYP9mLFnxxrkB9nZxCYlU6ncw+l7K9V3DNbTZGw==
+X-Google-Smtp-Source: AA6agR7wcsvJt7cWbQfr58ltQz1nqA2WxVpk4pe5C09l6YNxCdtMXZvU+pXR0hNwmstqf0n6DYqJ1xHU4O3UpqLiN7c=
+X-Received: by 2002:aa7:d846:0:b0:447:d664:8409 with SMTP id
+ f6-20020aa7d846000000b00447d6648409mr15730188eds.159.1661847073970; Tue, 30
+ Aug 2022 01:11:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.96]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20220830073450.1897020-1-zheyuma97@gmail.com>
+In-Reply-To: <20220830073450.1897020-1-zheyuma97@gmail.com>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Tue, 30 Aug 2022 10:11:01 +0200
+Message-ID: <CAG3jFyuQOb8gM0=86sUDXVjRiBw+3R3fCxc-E2X+=KnLaoQrKA@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/bridge: megachips: Fix a null pointer dereference bug
+To:     Zheyu Ma <zheyuma97@gmail.com>
+Cc:     peter.senna@gmail.com, martin.donnelly@ge.com,
+        martyn.welch@collabora.co.uk, andrzej.hajda@intel.com,
+        narmstrong@baylibre.com, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,45 +70,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-- Use module_init instead of device_initcall.
-- Add a function for module_exit to unregister driver.
+On Tue, 30 Aug 2022 at 09:35, Zheyu Ma <zheyuma97@gmail.com> wrote:
+>
+> When removing the module we will get the following warning:
+>
+> [   31.911505] i2c-core: driver [stdp2690-ge-b850v3-fw] unregistered
+> [   31.912484] general protection fault, probably for non-canonical address 0xdffffc0000000001: 0000 [#1] PREEMPT SMP KASAN PTI
+> [   31.913338] KASAN: null-ptr-deref in range [0x0000000000000008-0x000000000000000f]
+> [   31.915280] RIP: 0010:drm_bridge_remove+0x97/0x130
+> [   31.921825] Call Trace:
+> [   31.922533]  stdp4028_ge_b850v3_fw_remove+0x34/0x60 [megachips_stdpxxxx_ge_b850v3_fw]
+> [   31.923139]  i2c_device_remove+0x181/0x1f0
+>
+> The two bridges (stdp2690, stdp4028) do not probe at the same time, so
+> the driver does not call ge_b850v3_resgiter() when probing, causing the
+> driver to try to remove the object that has not been initialized.
+>
+> Fix this by checking whether both the bridges are probed.
+>
+> Fixes: 11632d4aa2b3 ("drm/bridge: megachips: Ensure both bridges are probed before registration")
+> Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+> ---
+> Changes in v2:
+>     - Alignment format
+> ---
+>  drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+> index cce98bf2a4e7..72248a565579 100644
+> --- a/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+> +++ b/drivers/gpu/drm/bridge/megachips-stdpxxxx-ge-b850v3-fw.c
+> @@ -296,7 +296,9 @@ static void ge_b850v3_lvds_remove(void)
+>          * This check is to avoid both the drivers
+>          * removing the bridge in their remove() function
+>          */
+> -       if (!ge_b850v3_lvds_ptr)
+> +       if (!ge_b850v3_lvds_ptr ||
+> +           !ge_b850v3_lvds_ptr->stdp2690_i2c ||
+> +               !ge_b850v3_lvds_ptr->stdp4028_i2c)
+>                 goto out;
+>
+>         drm_bridge_remove(&ge_b850v3_lvds_ptr->bridge);
+> --
+> 2.25.1
+>
 
-Signed-off-by: Zhang Jianhua <chris.zjh@huawei.com>
----
-v2:
-- add semicolon after module_exit to keep the format consistent
----
- drivers/cpufreq/bmips-cpufreq.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/cpufreq/bmips-cpufreq.c b/drivers/cpufreq/bmips-cpufreq.c
-index f7c23fa468f0..39221a9a187a 100644
---- a/drivers/cpufreq/bmips-cpufreq.c
-+++ b/drivers/cpufreq/bmips-cpufreq.c
-@@ -156,7 +156,7 @@ static struct cpufreq_driver bmips_cpufreq_driver = {
- 	.name		= BMIPS_CPUFREQ_PREFIX,
- };
- 
--static int __init bmips_cpufreq_probe(void)
-+static int __init bmips_cpufreq_driver_init(void)
- {
- 	struct cpufreq_compat *cc;
- 	struct device_node *np;
-@@ -176,7 +176,13 @@ static int __init bmips_cpufreq_probe(void)
- 
- 	return cpufreq_register_driver(&bmips_cpufreq_driver);
- }
--device_initcall(bmips_cpufreq_probe);
-+module_init(bmips_cpufreq_driver_init);
-+
-+static void __exit bmips_cpufreq_driver_exit(void)
-+{
-+	cpufreq_unregister_driver(&bmips_cpufreq_driver);
-+}
-+module_exit(bmips_cpufreq_driver_exit);
- 
- MODULE_AUTHOR("Markus Mayer <mmayer@broadcom.com>");
- MODULE_DESCRIPTION("CPUfreq driver for Broadcom BMIPS SoCs");
--- 
-2.31.0
-
+Applied to drm-misc-next.

@@ -2,110 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 253135A60F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6775A60F8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:43:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229837AbiH3KmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40110 "EHLO
+        id S229905AbiH3Kn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229605AbiH3Kl6 (ORCPT
+        with ESMTP id S229541AbiH3KnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:41:58 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7316F9D8E2;
-        Tue, 30 Aug 2022 03:41:57 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id n17so13636078wrm.4;
-        Tue, 30 Aug 2022 03:41:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=Ur9LSE+726hU91hAgUo0OMhul68sy6ujWhk0uIeDHZI=;
-        b=qVlno9n5cb+TbqRZhshHrFOsqlASjw2EL6BzeYdAHoUWeF/DFR3SU+3VYhw72gJipp
-         ZqaoUXas/reQ8XDn0FgWkvs91x5P90UoHsmP3pQ0f/tEOlt6FyfdsNtJHgjqXpirTe9x
-         Fstc6wOQa9uzn43+ExCDV92sOtKiJEGGpj4fiePVVV+tjSFqTShXPzmBDt/ZSXB+suYZ
-         XEvGolSxDHQR1HZ+GrlX0CoLTaXg3tnnX1pmSImHajGEnk8P4TjuYRNVAMaindLqXu1m
-         hLXJzk8flUkTQXVL1pBS0Xf92ZxCByv1dnPS5BHCDoKrvmjQIq/uZoXwFC261LtGgWra
-         FG4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ur9LSE+726hU91hAgUo0OMhul68sy6ujWhk0uIeDHZI=;
-        b=usM9xNHAsuw/GHF0/Jq+GjNZGIkbaEr5x0A56b3jy2fwjIlG77A6znVhJf+SqQfX80
-         JRDqWVKYDXsnRA1kpJ4QAvbhM4qNvp97RkBY6LQRX9eXXwQKnRzlCTA1SNCviXcxvlzp
-         sYVifIl14YfLh5dz/9zfrrTBO+OgaGGdnyV7Cu/1cmLRevm83z070HIBc81t3+aq8DBs
-         VH75XGhFPlm0AEpqv+FUYAzzxt9KBFqEPeGCrqcvF0lXR+PRAgAs2e8vaAtZ7QKpx8EP
-         Mu/p09I7jx6n3G58GY3uEKDmZO5MXgJOdZcpPaRH4IHb7MaaBGhNzQeAXfWUioY06bZn
-         BVKA==
-X-Gm-Message-State: ACgBeo1nwtbJKEuEKby3HD2+FQ2EqXzoLTBrNJPhavet2wMa936hgyaI
-        p6n3HlAS83T5ojnUh3hg7jI=
-X-Google-Smtp-Source: AA6agR53FqQ8+jVD1Xwx/uc1sp8KKbMwx57GiifnN9mIZ/Hs1WNJDhbJtOmEKiHw+YlFBTbtdxh9Rw==
-X-Received: by 2002:a05:6000:1a8d:b0:226:dfe2:15ed with SMTP id f13-20020a0560001a8d00b00226dfe215edmr2896756wry.110.1661856115993;
-        Tue, 30 Aug 2022 03:41:55 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id m3-20020a05600c4f4300b003a84375d0d1sm8670378wmq.44.2022.08.30.03.41.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 03:41:55 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 11:41:53 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 5.10 00/86] 5.10.140-rc1 review
-Message-ID: <Yw3pcSOJlmpBqqP9@debian>
-References: <20220829105756.500128871@linuxfoundation.org>
+        Tue, 30 Aug 2022 06:43:24 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7947D9D67C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:43:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661856203; x=1693392203;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=1JuE3MlMyluva+oTcotxIb88e/kWe/AXbzFxNtVjZ48=;
+  b=ZPqfZqh9kdZL496Ur0JCehwqJi1G0tc2+qDvcTklIgdLwBpDkPOOgYhf
+   5M5ipuSPOnFQHg9tm8m1AFYeSB6xsbvGB6D+mhKHBhMxDAsRouB1Yv3u/
+   Pm56NHCxBkJW/MhGnX5vC/AEKCh6PF9uUiuzgtcD7zdOvcN4r0xG58NNA
+   qJMQKaSsiMV11gO9bcBzeqTYe8rtco1D346odGxS2KjJbiAAMj8pLAbyc
+   8kd7FpnV68i2gAgJtyqfXWIa/nI3oKagteHhWEW0u7ldRYAen8NBhkswf
+   r1HqJK4Mo/JuJ4StBZnG8U5hH8NC/EUo5HxdE1ZHbxCLaq6NHpPwZJnDP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="293885984"
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="293885984"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 03:43:23 -0700
+X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
+   d="scan'208";a="672807662"
+Received: from amrabet-mobl.ger.corp.intel.com (HELO localhost) ([10.252.41.211])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 03:43:15 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Maxime Ripard <maxime@cerno.tech>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nouveau Dev <nouveau@lists.freedesktop.org>,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Subject: Re: [PATCH v2 14/41] drm/modes: Move named modes parsing to a
+ separate function
+In-Reply-To: <CAMuHMdV9wVgHFfwHoqtBoYzJDnjDmKTfaZkAKvTVKh1Y-2x1pA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-14-459522d653a7@cerno.tech>
+ <CAMuHMdV9wVgHFfwHoqtBoYzJDnjDmKTfaZkAKvTVKh1Y-2x1pA@mail.gmail.com>
+Date:   Tue, 30 Aug 2022 13:43:07 +0300
+Message-ID: <87czcidnb8.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829105756.500128871@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Tue, 30 Aug 2022, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+> On Mon, Aug 29, 2022 at 3:13 PM Maxime Ripard <maxime@cerno.tech> wrote:
+>> +#define STR_STRICT_EQ(str, len, cmp) \
+>> +       ((strlen(cmp) == len) && !strncmp(str, cmp, len))
+>
+> This is not part of the move, but newly added.
 
-On Mon, Aug 29, 2022 at 12:58:26PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.140 release.
-> There are 86 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
-> Anything received after that time might be too late.
+The same construct is also duplicated elsewhere in the series, and I
+kept being confused by it. The above is precisely the same as:
 
-Build test (gcc version 11.3.1 20220819):
-mips: 63 configs -> no failure
-arm: 104 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+	str_has_prefix(str, cmp) == len
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/1728
-[2]. https://openqa.qa.codethink.co.uk/tests/1732
+Which is more intuitive and available in string.h instead of being a
+local duplicate.
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+BR,
+Jani.
 
---
-Regards
-Sudip
+-- 
+Jani Nikula, Intel Open Source Graphics Center

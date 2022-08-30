@@ -2,101 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55865A602A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0B8A5A602F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiH3KEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50560 "EHLO
+        id S229769AbiH3KEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiH3KDq (ORCPT
+        with ESMTP id S229955AbiH3KD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:03:46 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C2284B499;
-        Tue, 30 Aug 2022 03:01:45 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27UA1P1n072699;
-        Tue, 30 Aug 2022 05:01:25 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1661853685;
-        bh=rA0l0kMxcWsrdBCeVjS7sz/SB9EJAgl9ijOnOgpt8IM=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=cjlEMu5KXVIhDxBUD+Sjna5+nc+4G8L5ivvJzO/jbd2hYZJpHo6U8lohN7JtSv0yu
-         W9BTeMcVvqi6X3YR+KQgkAhqu3zkgzE906aBEsqi64oD8OWYYDzAVbo2a1zN4YrV/u
-         ejCnKap4nUCvHLzosSwzrsLs5ZWXCJyfPH/AJzbU=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27UA1Poj115432
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 30 Aug 2022 05:01:25 -0500
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 30
- Aug 2022 05:01:24 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Tue, 30 Aug 2022 05:01:24 -0500
-Received: from [172.24.145.136] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27UA1L0G020617;
-        Tue, 30 Aug 2022 05:01:22 -0500
-Message-ID: <c6285157-480d-d8f6-f11f-25604455ece0@ti.com>
-Date:   Tue, 30 Aug 2022 15:31:21 +0530
+        Tue, 30 Aug 2022 06:03:58 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7167AE3404
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:02:00 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bt10so14810760lfb.1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:02:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=c6qafmfYY6lQC4Y0+wZr5Ybx3Q7TmzLJh34bfJvmCdI=;
+        b=Ok77HrRnMhSaGYWq/8pRsZBHzp7PAYMdXHsIHQ9Wy4uZWFH/yY3zg1Y5tZbF3KFfVp
+         pOMD3ULLmkpicTKMXrdcEQhVwlipMgy4NP4SvVVtF1pgR6svywEvlOuEkUhXEAHCItFs
+         youFgtIMSrwuwGMRkGRQW1IfaDuEPg3/BLy8I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=c6qafmfYY6lQC4Y0+wZr5Ybx3Q7TmzLJh34bfJvmCdI=;
+        b=jez9v8M+U4ZYSb/h6o+eTE7iktJA4224PL1ENxTz7Oo8wD6MCfXKYmzcidfqQCuGfL
+         jlE3cddxE9XId6cyrhjPBq+sUC0TvHyFE+DD5yDrLmth6IAvC4phoDdRY/h5k6JeOtRZ
+         Sg0o/zS1ldYSV+wynXzT7tb5DSTkSOQzHnedUle8dwholebcrV9H8+3PQOPM6SP/aJgS
+         +ruINQ/H5ZD9sU61ljeT9JGGmPYIMKMcve5+fEvjmb52Zk+CykCf0P4oj45/5PTxt1eA
+         EQgoP5ikYij1OqMlf4bMHNOHa65FDSWjioFikOoPe0TtOHMxkN+jVZ9CEmPSujtsU2Hr
+         bL3Q==
+X-Gm-Message-State: ACgBeo08Do+UPzvBGm8QV1vIGYXe3y3JwXLopcLO+B++sLV3HRWNqM9N
+        8bfXyLjG1rTVqhjOVYGZYGN69g==
+X-Google-Smtp-Source: AA6agR7cToP+DF+pA85UXzrPeuxMmB63NydDTabiisThD2OnK4ZcXHq1oCvWh0VUyZ5O6j/UEQyzAw==
+X-Received: by 2002:a05:6512:12d3:b0:493:187:e34d with SMTP id p19-20020a05651212d300b004930187e34dmr7204052lfg.402.1661853718784;
+        Tue, 30 Aug 2022 03:01:58 -0700 (PDT)
+Received: from prevas-ravi.prevas.se ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id m6-20020a056512114600b0048af6242892sm1573435lfg.14.2022.08.30.03.01.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 03:01:57 -0700 (PDT)
+From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>, linux-rtc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+Cc:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: [PATCH 0/6] rtc: isl12022: cleanups and hwmon support
+Date:   Tue, 30 Aug 2022 12:01:46 +0200
+Message-Id: <20220830100152.698506-1-linux@rasmusvillemoes.dk>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 3/4] arm64: dts: ti: k3-am65-main: Do not exclusively
- claim SA2UL
-Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220823001136.10944-1-afd@ti.com>
- <20220823001136.10944-3-afd@ti.com>
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-In-Reply-To: <20220823001136.10944-3-afd@ti.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series does a few cleanups of the isl12022 driver,
 
+- removes use of deprecated function
+- removes some  redundant code
+- switches to regmap API instead of private helpers
 
-On 23/08/22 05:41, Andrew Davis wrote:
-> The SA2UL hardware is also used by SYSFW and OP-TEE. It should be
-> requested using the shared TI-SCI flags instead of the exclusive
-> flags or the request will fail.
-> 
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->   arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> index 165f53bd058b..4005a73cfea9 100644
-> --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
-> @@ -112,7 +112,7 @@ main_uart2: serial@2820000 {
->   	crypto: crypto@4e00000 {
->   		compatible = "ti,am654-sa2ul";
->   		reg = <0x0 0x4e00000 0x0 0x1200>;
-> -		power-domains = <&k3_pds 136 TI_SCI_PD_EXCLUSIVE>;
-> +		power-domains = <&k3_pds 136 TI_SCI_PD_SHARED>;
->   		#address-cells = <2>;
->   		#size-cells = <2>;
->   		ranges = <0x0 0x04e00000 0x00 0x04e00000 0x0 0x30000>;
+and finally hooks up the temperatur sensor to hwmon.
 
-Reviewed-by: Jayesh Choudhary <j-choudhary@ti.com>
+Rasmus Villemoes (6):
+  rtc: isl12022: stop using deprecated devm_rtc_device_register()
+  rtc: isl12022: simplify some expressions
+  rtc: isl12022: use dev_set_drvdata() instead of i2c_set_clientdata()
+  rtc: isl12022: drop redundant write to HR register
+  rtc: isl12022: switch to using regmap API
+  rtc: isl12022: add support for temperature sensor
+
+ drivers/rtc/Kconfig        |   1 +
+ drivers/rtc/rtc-isl12022.c | 195 ++++++++++++++++++++-----------------
+ 2 files changed, 107 insertions(+), 89 deletions(-)
+
+-- 
+2.37.2
 

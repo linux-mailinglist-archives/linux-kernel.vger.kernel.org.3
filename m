@@ -2,149 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF2CB5A5899
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 02:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E09C5A5894
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 02:54:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbiH3A45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 20:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56534 "EHLO
+        id S229570AbiH3AyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 20:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiH3A4y (ORCPT
+        with ESMTP id S229450AbiH3AyN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 20:56:54 -0400
-Received: from linux.gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD85C86FE2;
-        Mon, 29 Aug 2022 17:56:52 -0700 (PDT)
-Received: from localhost.localdomain (unknown [68.183.184.174])
-        by linux.gnuweeb.org (Postfix) with ESMTPSA id 673E2374E5F;
-        Tue, 30 Aug 2022 00:56:49 +0000 (UTC)
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Caleb Sander <csander@purestorage.com>,
-        Muhammad Rizki <kiizuha@gnuweeb.org>,
-        Kanna Scarlet <knscarlet@gnuweeb.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [PATCH liburing v2 0/7] Export io_uring syscall functions
-Date:   Tue, 30 Aug 2022 07:56:36 +0700
-Message-Id: <20220830005122.885209-1-ammar.faizi@intel.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 29 Aug 2022 20:54:13 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AE881B1C;
+        Mon, 29 Aug 2022 17:54:11 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MGpdM1R01zlWXW;
+        Tue, 30 Aug 2022 08:50:47 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 30 Aug
+ 2022 08:54:09 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <jhs@mojatatu.com>,
+        <xiyou.wangcong@gmail.com>, <jiri@resnulli.us>
+CC:     <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net-next 0/2] net: sched: remove redundant resource cleanup when init() fails
+Date:   Tue, 30 Aug 2022 08:56:36 +0800
+Message-ID: <20220830005638.276584-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+qdisc_create() calls .init() to initialize qdisc. If the initialization
+fails, qdisc_create() will call .destroy() to release resources.
 
-Hi Jens,
+Zhengchao Shao (2):
+  net: sched: fq_codel: remove redundant resource cleanup in
+    fq_codel_init()
+  net: sched: htb: remove redundant resource cleanup in htb_init()
 
-This series adds io_uring syscall functions and exports them. There
-are 7 patches in this series:
+ net/sched/sch_fq_codel.c | 17 ++++-------------
+ net/sched/sch_htb.c      | 36 +++++++++---------------------------
+ 2 files changed, 13 insertions(+), 40 deletions(-)
 
-1) Make the arguments of io_uring syscalls consistent with what is
-   said in the manpage. These change are in header files. No
-   functional change is intended.
-
-2) Add io_uring syscall functions.
-
-   We have:
-
-     man 2 io_uring_setup;
-     man 2 io_uring_enter;
-     man 2 io_uring_register;
-
-   Those entries say that io_uring syscall functions are declared in
-   `<linux/io_uring.h>`. But they don't actually exist and never
-   existed. This is causing confusion for people who read the manpage.
-   Let's just implement them in liburing so they exist. This also
-   allows the user to invoke io_uring syscalls directly instead of
-   using the full liburing provided setup.
-
-3) man: Clarify "man 2" entry for io_uring syscalls.
-
-   io_uring_enter(), io_uring_register(), and io_uring_setup() are not
-   declared in `<linux/io_uring.h>` (and never were). A previous
-   commit adds the implementation of these functions in liburing.
-   Change the include header to `<liburing.h>`. Then clarify that
-   those functions don't intentionally set the `errno` variable.
-   Instead they return a negative error code when the syscall fails.
-
-4) Add `io_uring_enter2()` function signature.
-
-   Since kernel 5.11, liburing has io_uring_enter2() wrapper which
-   behaves just like the io_uring_enter(), but with an extra argument
-   for `IORING_ENTER_EXT_ARG` case. Add this function signature to the
-   synopsis part.
-
-5) man: Alias `io_uring_enter2()` to `io_uring_enter()`.
-
-   We have a new function io_uring_enter2(), add the man page entry
-   for it by aliasing it to io_uring_enter(). The aliased man entry
-   has already explained it.
-
-6) test/io_uring_{enter,setup,register}: Use the exported syscall
-   functions.
-
-   These tests use the internal definition of __sys_io_uring*
-   functions. A previous commit exported new functions that do the
-   same thing with those __sys_io_uring* functions. Test the exported
-   functions instead of the internal functions. No functional change
-   is intended.
-
-7) Just a trivial typo fix.
-
-
-## Changelog revision
-
- RFC v1 -> v2:
-
-  - Make io_uring syscall arguments consistent with the manpage.
-  - Separate syscall declarations in liburing.h with a blank line.
-  - Remove unused include in syscall.c.
-  - Add io_uring_enter2() function signature to manpage.
-  - Append Reviewed-by tags from Caleb Sander.
-  - Fix typo introduced by an old commit, 1dbc9974486cbc.
-
-
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
-
-Ammar Faizi (7):
-  syscall: Make io_uring syscall arguments consistent
-  syscall: Add io_uring syscall functions
-  man: Clarify "man 2" entry for io_uring syscalls
-  man: Add `io_uring_enter2()` function signature
-  man: Alias `io_uring_enter2()` to `io_uring_enter()`
-  test/io_uring_{enter,setup,register}: Use the exported syscall functions
-  man/io_uring_enter.2: Fix typo "which is behaves" -> "which behaves"
-
- man/io_uring_enter.2       | 21 ++++++++++++---------
- man/io_uring_enter2.2      |  1 +
- man/io_uring_register.2    |  9 ++++-----
- man/io_uring_setup.2       |  8 +++-----
- src/Makefile               |  2 +-
- src/arch/generic/syscall.h | 19 ++++++++++---------
- src/arch/syscall-defs.h    | 19 ++++++++++---------
- src/include/liburing.h     | 12 ++++++++++++
- src/liburing.map           |  4 ++++
- src/syscall.c              | 29 +++++++++++++++++++++++++++++
- test/io_uring_enter.c      | 10 +++++-----
- test/io_uring_register.c   | 34 ++++++++++++++++------------------
- test/io_uring_setup.c      |  4 ++--
- 13 files changed, 109 insertions(+), 63 deletions(-)
- create mode 120000 man/io_uring_enter2.2
- create mode 100644 src/syscall.c
-
-
-base-commit: 243477691678af27dafe378f1e19be5df61e9daf
 -- 
-Ammar Faizi
+2.17.1
 

@@ -2,74 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 431795A5F33
+	by mail.lfdr.de (Postfix) with ESMTP id 8C3735A5F34
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:21:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231829AbiH3JUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50558 "EHLO
+        id S231766AbiH3JUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiH3JUU (ORCPT
+        with ESMTP id S231747AbiH3JUQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:20:20 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AD7E2A712
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:20:01 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id n65-20020a17090a5ac700b001fbb4fad865so11230892pji.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:20:01 -0700 (PDT)
+        Tue, 30 Aug 2022 05:20:16 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DACE1EC4D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:19:59 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id m2so10889500lfp.11
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:19:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=1stEK7orHgTbYEfwbeXC8fEwW/r5cq766TAqvkrU7s8=;
-        b=nmk9fHCkrfrblpy/7kg08OX3ped77vmORbwkjjnbEVvUoXKOEKmX0Y1VGcflg+qh+d
-         X5tuUyECrJp6R8RxGK62QsdF+fQbRQzNyCiGISzE5m5StPKqzt0BZ7Glg//ELPo5oSVG
-         etz+NTjXyBz9fyw10DCx3yIeBzqheARABobLgWEFIgvMnpni+6W7Y8HuUMHy2YNYqJHY
-         m9emxannnhCC1uNXxj8tgTkk/x5/54Y8WlBugCyPUt6MTgXTeO99BmfTb1wvKi4O0XP4
-         9fnghGoemu9Z13rG/mPuPrqOM5DJ8YuChJLBsl3tIg+uxjn5TpFRQH9ubuzE0FRZUxDL
-         RPnw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=XrVac6qDsWgpMvtn1ZnbtlFbgOKdsqH/r3JZVyl+4NY=;
+        b=RbGE7WV/j3CrIZiHvc/Omisv8ViGrUYmgs+MS1wAch568zYdmRzslhJCm7+EURA8R/
+         heWsOU798FnM0oFPrMGUBHbnMl0c+Z8TqPO71WWL9201XcoPYS6YKeqX0Ywis0K3QSkJ
+         qOo8WJo5uzpbY4SAHBdKATNM5t6HDHQ7Urj2OfMXk2MWWmTdKzvQWa8BcT/NYRDt4kqp
+         Te3PMJ/p29gMsAab59p5sk24kgw5maJH3MiAP9wBU2aXtg4Eb+Knvu+X+8YYQpDpkK2v
+         jna5DAZsIz6CxY70IRG1I0JQSToYl+sXRBRol8oyRsh4OSx4MAfZqYAsqVLkPMaoAB4d
+         J+nA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=1stEK7orHgTbYEfwbeXC8fEwW/r5cq766TAqvkrU7s8=;
-        b=7KZrsnfxrLVQOmScrKpuVsMa9UsQV8t/64G0zEX7ofh0GiMxgIW7+649gZNux/FAbf
-         C6ZTF40xOpUW8BZegy4XdY6YiVpzmi/dMYXDgAV7k1QhgAtlxDLlkFTvNqIrH/pKSmDe
-         XTKIC2TIfl6eLkgDgBySj4CLz+cP7wcLkXKQKNlmKUcVgxHPUf0FVqZbxtUyhRPS/l5l
-         dlkPfmIY3VzXONKq1w1cCUajAgABKtuDksqGxxIzgJMWVtTKgRci3GPbUXwREKIUz1U0
-         CN4QJBOfGt5odVRkFkesMOrtppRvKMH3dlFJYWgAvpl3YgW7AgsAwXgYmYacdluTNV2t
-         TVtw==
-X-Gm-Message-State: ACgBeo1IQpvvJ/WZ7XVTVqEoW1u2mrUhxDttvQYXc+e9UNv+z9fFJAHW
-        G9261vYRCdLL7XSNoTnJTViLOnMTU9PY
-X-Google-Smtp-Source: AA6agR71f7NK6QRTQvMbVYh6yrfXsyqBOXunCOCPdx/lBWuvieJpGZ4JeK25bmov9unRjiB3MYANpA==
-X-Received: by 2002:a17:902:f64a:b0:172:7576:2124 with SMTP id m10-20020a170902f64a00b0017275762124mr19856760plg.155.1661851200915;
-        Tue, 30 Aug 2022 02:20:00 -0700 (PDT)
-Received: from thinkpad ([117.193.209.245])
-        by smtp.gmail.com with ESMTPSA id q10-20020a170902eb8a00b001749e8eee4fsm5100555plg.226.2022.08.30.02.19.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 02:20:00 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 14:49:53 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     linus.walleij@linaro.org, bjorn.andersson@linaro.org,
-        robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        johan+linaro@kernel.org, steev@kali.org
-Subject: Re: [PATCH v2] pinctrl: qcom: spmi-gpio: Make IRQCHIP immutable
-Message-ID: <20220830091953.GC135982@thinkpad>
-References: <20220830081212.164709-1-manivannan.sadhasivam@linaro.org>
- <e20dabe02d88f28fc933b596dee8b69d@kernel.org>
- <20220830084441.GB135982@thinkpad>
- <61371efca85fbbd360b3ede9a258ee69@kernel.org>
+        bh=XrVac6qDsWgpMvtn1ZnbtlFbgOKdsqH/r3JZVyl+4NY=;
+        b=HIkz4LzEnbsn04HBi3GvLSDcBu8sKoYZJTPejl++LhrOYrYh0Mdj+GKnJ0OPCXseHw
+         Jj9mmGJyjrVK3zgogjIE+WzjiuuKZii8OsNs0BdaPcZVE9Uwg8q77/BpowSB2KHxqFEW
+         F5mFXEQjd6v8l8fRh6TH5TgAruJAwrufZ1WPLi8l0PXUJnyR8RMebun9eD62wJmqSxam
+         f/FTMrV0vqzRfbnZv4EeKxD1evw2tAlYJw5GAmgBW4fqxLo/ibphV84xmyhvJ9lilwXN
+         AjAdPphmegSZkWv+RykpySVDYhOVVLHDp1VPRidvIJQuK/XzbITt3itqa8OlYEgcl/TK
+         2g6w==
+X-Gm-Message-State: ACgBeo0mCENFTCc5UOXsBJXQPIS8rV57rWQZg7rg72+NihH9C3hevfev
+        amB2sOiWDa4QaY5wVpnCUYqCiw==
+X-Google-Smtp-Source: AA6agR50zspYm+xIw1F0Qq3uF7KPz1mPCdDTLxZCYWULT17Lz01av8PLiSE1u/3wde1TG5PAKvCWgA==
+X-Received: by 2002:a05:6512:3f9b:b0:492:d6c7:24e8 with SMTP id x27-20020a0565123f9b00b00492d6c724e8mr7050299lfa.346.1661851197729;
+        Tue, 30 Aug 2022 02:19:57 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id t7-20020a056512208700b0048b13d0b896sm702754lfr.141.2022.08.30.02.19.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 02:19:57 -0700 (PDT)
+Message-ID: <963693d9-6016-f279-a543-22e9be802d87@linaro.org>
+Date:   Tue, 30 Aug 2022 12:19:56 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <61371efca85fbbd360b3ede9a258ee69@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] arm64: dts: renesas: Drop clock-names property from RPC
+ node
+Content-Language: en-US
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20220829215128.5983-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220829215128.5983-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,54 +82,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 09:48:28AM +0100, Marc Zyngier wrote:
-> On 2022-08-30 09:44, Manivannan Sadhasivam wrote:
-> > On Tue, Aug 30, 2022 at 09:26:51AM +0100, Marc Zyngier wrote:
-> > > On 2022-08-30 09:12, Manivannan Sadhasivam wrote:
-> > > > The IRQCHIP implementation used inside the gpiochips are not supposed to
-> > > 
-> > > lower case
-> > > 
-> > > > be changed during runtime. So let's make the one inside the spmi-gpio
-> > > > gpiochip immutable.
-> > > >
-> > > > This fixes the below warning during boot:
-> > > > gpio gpiochip0: (c440000.spmi:pmic@0:gpio@c000): not an immutable
-> > > > chip, please consider fixing it!
-> > > >
-> > > > Separate callbacks need to be provided for irq_{mask/unmask} pointers
-> > > > since
-> > > > the callbacks are supposed to mask/unmask the corresponding parent IRQ
-> > > > in
-> > > > addition to changing the gpio_desc flags.
-> > > 
-> > > This is all part of the existing documentation, so I don't think
-> > > this is really needed.
-> > > 
-> > 
-> > Yes it is documented, but developers usually refer the commits doing the
-> > similar
-> > thing while doing these kind of conversions. For them, this text serves
-> > as a
-> > quick documentation.
+On 30/08/2022 00:51, Lad Prabhakar wrote:
+> With 'unevaluatedProperties' support implemented, there's a number of
+> warnings when running dtbs_check:
 > 
-> If they can't be bothered to read the documentation, why would they
-> consider reading unrelated commits?
+> arch/arm64/boot/dts/renesas/r8a774b1-hihope-rzg2n-rev2-ex-idk-1110wr.dtb: spi@ee200000: Unevaluated properties are not allowed ('clock-names' was unexpected)
+> 	From schema: Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
 > 
-> > 
-> > So I prefer to keep it in the commit message.
-> 
-> I still think this is pointless.
-> 
+> The main problem is that SoC DTSI's are including clock-names, whereas the
+> renesas,rpc-if.yaml has 'unevaluatedProperties: false'. So just drop
+> clock-names property from the SoC DTSI's.
 
-Okay. I'll remove it in v3.
+This is not the main problem. The main problem is that bindings do not
+allow clock-names. Commit msg should reflect that.
 
-Thanks,
-Mani
-
->         M.
-> -- 
-> Jazz is not dead. It just smells funny...
-
--- 
-மணிவண்ணன் சதாசிவம்
+Best regards,
+Krzysztof

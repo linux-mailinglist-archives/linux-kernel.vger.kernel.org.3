@@ -2,82 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDFA5A695F
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C435A6972
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiH3RPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
+        id S230082AbiH3RSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:18:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbiH3RO6 (ORCPT
+        with ESMTP id S229556AbiH3RSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:14:58 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5431582A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:14:56 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id z6so16425811lfu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:14:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=wqM8poQSBkP5+AJNOGOym7LP5PEFsyVQuT3qGSt/MeQ=;
-        b=t8SfeBC0CMrKUskuld6g6k95a+OrKLt1l4p4i4wYP5WfVoRA9m4tYKjPyeefFS2Sth
-         W1k3LmTakdmvBcyR4Of4koYIRweWQg1g2QJ4DIBUy63ug74x8XdiZhKyg5c8s9mnL3w2
-         OMf8+BGfeuk97J9Kb/7Bciy1t29Izl5eUd7Qfwrs+K2XPZlN3lCL1uoP3U+yPLarKhbI
-         j3hiitXgHkTlYj/jZcEyCynSBMBxjlotKnR9RFOh5Z8i37jEyurjLHMi7qvxxj4/VDl9
-         rN1+tbMgUjAexZWmGr9d34icgOVS3D99IvFNGEc29Q7A7JRku2sQ4VSnOgO7GnRMm0bX
-         UwqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=wqM8poQSBkP5+AJNOGOym7LP5PEFsyVQuT3qGSt/MeQ=;
-        b=AxSFqoqLgQvLlagrrTXoJazcPVwehVZZl4hL6c6pT1MjFOuVKwvqXc8crLK0FlQYe2
-         a1R7X0ONgEY/GNPQwVR/vgCot8YH3nfzHeTshw8nZQaMPW8Mo1KuMzzLeDhWPyO8j1ns
-         uxF+pP9AcYLYISakf/m5VQJqWoAX0EPs1iZsmNbRI1X9E3C72tcs2gjgP0lgkISmcrVX
-         ix34M7Lnb/ZtUrjrqAAsoU5MGqCAxnFTjK9EEp52JTKHfM8ghbpArSFvfTTEEV/RBxGD
-         S5QthS7U5YqRhKcVHz7TyeNsNtHHAGwTA0xYblvzQibxa28NOM5L4JpakpW2mpFU66j5
-         N5ww==
-X-Gm-Message-State: ACgBeo2kNctkaXU8oVEwls7KGrFNrmjYQVbMFjp+neaFe233aSffUkP7
-        2BLJftp3rVnwGTLqwGEEvobLBQ==
-X-Google-Smtp-Source: AA6agR7f3qJImjMtLOVfjApYz2NAbNuJJj7Daybtc1K7dNVuZS10wfEilsUloLI82Iu8FA5wnfynyQ==
-X-Received: by 2002:a05:6512:159b:b0:492:c1c0:5aab with SMTP id bp27-20020a056512159b00b00492c1c05aabmr7875077lfb.523.1661879694642;
-        Tue, 30 Aug 2022 10:14:54 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id c17-20020a05651200d100b00492ea54beeasm384652lfp.306.2022.08.30.10.14.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 10:14:53 -0700 (PDT)
-Message-ID: <c8236663-055c-d6da-64ed-ae3f7fb2e690@linaro.org>
-Date:   Tue, 30 Aug 2022 20:14:52 +0300
+        Tue, 30 Aug 2022 13:18:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B36AD345B;
+        Tue, 30 Aug 2022 10:18:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13E2661781;
+        Tue, 30 Aug 2022 17:18:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD7A9C433D6;
+        Tue, 30 Aug 2022 17:18:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661879908;
+        bh=rqld0LvDVhzWFpEjDb8wjNHR//5uTqyyn0tKTLTW/0g=;
+        h=From:To:Cc:Subject:Date:From;
+        b=i0JPenE1ZQyR9Mwfjv7hlkLd4nQ0zRj+eBeB7ciPRg/JbAI6unRsxd2p90c50vA8t
+         YP1Yvu/0HVuGvUVkIQVVEaw78gd638vo/K5F62Bq04GP1BVQmWSkqJs+mMqXPj7cWa
+         VoFwDJc3+me+KnnYzEp2Xq3A2e9XFtlHaRv3DQfUZZdorjfoww6v0xVJsPvsroUpmB
+         9+t+uKRjIaTHxKugwKk607RPZEIn3G8RK1td9EC90e4jNSfrCVnF5fsDN6wCRmUX9i
+         7nd9KAuUJ93892HrglFcO99Pobo2DiwBxTA1bSFjYgq6eIK/EjOmBQ//oI1xe2GWRL
+         BDyhKoHZOhYvg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com
+Subject: [PATCH AUTOSEL 5.19 01/33] firmware: dmi: Use the proper accessor for the version field
+Date:   Tue, 30 Aug 2022 13:17:52 -0400
+Message-Id: <20220830171825.580603-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH net-next v2 5/5] dt-bindings: net: altera: tse: add an
- optional pcs register range
-Content-Language: en-US
-To:     Maxime Chevallier <maxime.chevallier@bootlin.com>,
-        davem@davemloft.net, Rob Herring <robh+dt@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
-References: <20220830095549.120625-1-maxime.chevallier@bootlin.com>
- <20220830095549.120625-6-maxime.chevallier@bootlin.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830095549.120625-6-maxime.chevallier@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,85 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 12:55, Maxime Chevallier wrote:
-> Some implementations of the TSE have their PCS as an external bloc,
-> exposed at its own register range. Document this, and add a new example
-> showing a case using the pcs and the new phylink conversion to connect
-> an sfp port to a TSE mac.
-> 
-> Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> ---
-> V1->V2 :
->  - Fixed example
-> 
->  .../devicetree/bindings/net/altr,tse.yaml     | 29 ++++++++++++++++++-
->  1 file changed, 28 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/altr,tse.yaml b/Documentation/devicetree/bindings/net/altr,tse.yaml
-> index 1676e13b8c64..4b314861a831 100644
-> --- a/Documentation/devicetree/bindings/net/altr,tse.yaml
-> +++ b/Documentation/devicetree/bindings/net/altr,tse.yaml
-> @@ -39,6 +39,7 @@ allOf:
->        properties:
->          reg:
->            minItems: 6
-> +          maxItems: 7
->          reg-names:
->            minItems: 6
->            items:
-> @@ -48,6 +49,7 @@ allOf:
->              - const: rx_resp
->              - const: tx_csr
->              - const: tx_desc
-> +            - const: pcs
->  
->  properties:
->    compatible:
-> @@ -58,7 +60,7 @@ properties:
->  
->    reg:
->      minItems: 4
-> -    maxItems: 6
-> +    maxItems: 7
->  
->    reg-names:
->      minItems: 4
-> @@ -69,6 +71,7 @@ properties:
->        - const: rx_resp
->        - const: tx_csr
->        - const: tx_desc
-> +      - const: pcs
->        - const: s1
->  
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-So now 8 items?
+[ Upstream commit d2139dfca361a1f5bfc4d4a23455b1a409a69cd4 ]
 
->    interrupts:
-> @@ -122,6 +125,30 @@ required:
->  unevaluatedProperties: false
->  
->  examples:
-> +  - |
-> +    tse_sub_0: ethernet@c0100000 {
-> +        compatible = "altr,tse-msgdma-1.0";
-> +        reg = <0xc0100000 0x00000400>,
-> +              <0xc0101000 0x00000020>,
-> +              <0xc0102000 0x00000020>,
-> +              <0xc0103000 0x00000008>,
-> +              <0xc0104000 0x00000020>,
-> +              <0xc0105000 0x00000020>,
-> +              <0xc0106000 0x00000100>;
-> +        reg-names = "control_port", "rx_csr", "rx_desc", "rx_resp", "tx_csr", "tx_desc", "pcs";
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <0 44 4>,<0 45 4>;
-> +        interrupt-names = "rx_irq","tx_irq";
-> +        rx-fifo-depth = <2048>;
-> +        tx-fifo-depth = <2048>;
-> +        max-frame-size = <1500>;
-> +        local-mac-address = [ 00 0C ED 00 00 02 ];
+The byte at offset 6 represents length. Don't take it and drop it
+immediately by using proper accessor, i.e. get_unaligned_be24().
 
-00 00 00 00 00 00
-(easier to spot that it is invalid)
+[JD: Change the subject to something less frightening]
 
-Best regards,
-Krzysztof
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/firmware/dmi_scan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/dmi_scan.c b/drivers/firmware/dmi_scan.c
+index f191a1f901ac7..0eb6b617f709a 100644
+--- a/drivers/firmware/dmi_scan.c
++++ b/drivers/firmware/dmi_scan.c
+@@ -630,7 +630,7 @@ static int __init dmi_smbios3_present(const u8 *buf)
+ {
+ 	if (memcmp(buf, "_SM3_", 5) == 0 &&
+ 	    buf[6] < 32 && dmi_checksum(buf, buf[6])) {
+-		dmi_ver = get_unaligned_be32(buf + 6) & 0xFFFFFF;
++		dmi_ver = get_unaligned_be24(buf + 7);
+ 		dmi_num = 0;			/* No longer specified */
+ 		dmi_len = get_unaligned_le32(buf + 12);
+ 		dmi_base = get_unaligned_le64(buf + 16);
+-- 
+2.35.1
+

@@ -2,84 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939045A6930
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45F065A6932
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbiH3RDY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:03:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
+        id S230060AbiH3REE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:04:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbiH3RDA (ORCPT
+        with ESMTP id S230099AbiH3RDw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:03:00 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860F51094;
-        Tue, 30 Aug 2022 10:02:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id DF960CE18FF;
-        Tue, 30 Aug 2022 17:02:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D27C433C1;
-        Tue, 30 Aug 2022 17:02:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661878974;
-        bh=A1/OrWAmF4tVj/1o13SDFHfQO6YqKZ788Ss2rMX0LCM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Q4+ycBFZEzObq72/7BDzPaQ4ZxVKPUWf5eZOubnxrdoYDlfyeI2+kEETrRXdY++W6
-         YkdLAHIrCmWfn25iSx2vJHS+HJUFiQu46mhPxvOjOz+VHKst5lWmfYr0QuKaAzZ8Id
-         Q+c+HFdoODsRrVdDcWVJuUq+Tmbei9JQgHiMnWm2zxLJtwQxOCHe06vs5W2YobbGuO
-         ZqzSu6vqB4cYWPaXWlifJbDQkwGjKuGoPcxrnfPUAO2HBZSLWGSucdsNo1YZhKq3zM
-         KPlwZHAJxcWHarG/dn2DQhlhOVNbJ6BkwrE18OmaYEj/dz3ftG/o2iUlssS1Ke7sRp
-         D4M90SisHpVWw==
-Message-ID: <4adb2abd1890b147dbc61a06413f35d2f147c43a.camel@kernel.org>
-Subject: Re: [PATCH v3 1/7] iversion: update comments with info about atime
- updates
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Trond Myklebust <trondmy@hammerspace.com>,
-        "bfields@fieldses.org" <bfields@fieldses.org>
-Cc:     "zohar@linux.ibm.com" <zohar@linux.ibm.com>,
-        "djwong@kernel.org" <djwong@kernel.org>,
-        "xiubli@redhat.com" <xiubli@redhat.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "neilb@suse.de" <neilb@suse.de>,
-        "david@fromorbit.com" <david@fromorbit.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "chuck.lever@oracle.com" <chuck.lever@oracle.com>,
-        "linux-ceph@vger.kernel.org" <linux-ceph@vger.kernel.org>,
-        "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "tytso@mit.edu" <tytso@mit.edu>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "jack@suse.cz" <jack@suse.cz>,
-        "linux-ext4@vger.kernel.org" <linux-ext4@vger.kernel.org>,
-        "linux-btrfs@vger.kernel.org" <linux-btrfs@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "lczerner@redhat.com" <lczerner@redhat.com>,
-        "adilger.kernel@dilger.ca" <adilger.kernel@dilger.ca>,
-        "walters@verbum.org" <walters@verbum.org>
-Date:   Tue, 30 Aug 2022 13:02:50 -0400
-In-Reply-To: <3e8c7af5d39870c5b0dc61736a79bd134be5a9b3.camel@hammerspace.com>
-References: <20220826214703.134870-1-jlayton@kernel.org>
-         <20220826214703.134870-2-jlayton@kernel.org>
-         <20220829075651.GS3600936@dread.disaster.area>
-         <549776abfaddcc936c6de7800b6d8249d97d9f28.camel@kernel.org>
-         <166181389550.27490.8200873228292034867@noble.neil.brown.name>
-         <f5c42c0d87dfa45188c2109ccf9baeb7a42aa27e.camel@kernel.org>
-         <20220830132443.GA26330@fieldses.org>
-         <a07686e7e1d1ef15720194be2abe5681f6a6c78e.camel@kernel.org>
-         <20220830144430.GD26330@fieldses.org>
-         <e4815337177c74a9928098940dfdcb371017a40c.camel@hammerspace.com>
-         <20220830151715.GE26330@fieldses.org>
-         <3e8c7af5d39870c5b0dc61736a79bd134be5a9b3.camel@hammerspace.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Tue, 30 Aug 2022 13:03:52 -0400
+Received: from imap4.hz.codethink.co.uk (imap4.hz.codethink.co.uk [188.40.203.114])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D081CB0F
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:03:51 -0700 (PDT)
+Received: from [167.98.27.226] (helo=[10.35.5.6])
+        by imap4.hz.codethink.co.uk with esmtpsa  (Exim 4.94.2 #2 (Debian))
+        id 1oT4eR-0069vo-0x; Tue, 30 Aug 2022 18:03:47 +0100
+Message-ID: <cefcf96f-5bcc-d134-fbe5-d1169313b6f3@codethink.co.uk>
+Date:   Tue, 30 Aug 2022 18:03:46 +0100
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] soc: sifive: ccache: reduce printing on init
+Content-Language: en-GB
+To:     Conor.Dooley@microchip.com, ben.dooks@sifive.com,
+        zong.li@sifive.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20220829062202.3287-1-zong.li@sifive.com>
+ <20220830082620.1680602-1-ben.dooks@sifive.com>
+ <fdec1b72-27f3-96e6-5e19-d54ded4aea68@microchip.com>
+From:   Ben Dooks <ben.dooks@codethink.co.uk>
+Organization: Codethink Limited.
+In-Reply-To: <fdec1b72-27f3-96e6-5e19-d54ded4aea68@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,127 +46,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-08-30 at 15:43 +0000, Trond Myklebust wrote:
-> On Tue, 2022-08-30 at 11:17 -0400, J. Bruce Fields wrote:
-> > On Tue, Aug 30, 2022 at 02:58:27PM +0000, Trond Myklebust wrote:
-> > > On Tue, 2022-08-30 at 10:44 -0400, J. Bruce Fields wrote:
-> > > > On Tue, Aug 30, 2022 at 09:50:02AM -0400, Jeff Layton wrote:
-> > > > > On Tue, 2022-08-30 at 09:24 -0400, J. Bruce Fields wrote:
-> > > > > > On Tue, Aug 30, 2022 at 07:40:02AM -0400, Jeff Layton wrote:
-> > > > > > > Yes, saying only that it must be different is intentional.
-> > > > > > > What
-> > > > > > > we
-> > > > > > > really want is for consumers to treat this as an opaque
-> > > > > > > value
-> > > > > > > for the
-> > > > > > > most part [1]. Therefore an implementation based on hashing
-> > > > > > > would
-> > > > > > > conform to the spec, I'd think, as long as all of the
-> > > > > > > relevant
-> > > > > > > info is
-> > > > > > > part of the hash.
-> > > > > >=20
-> > > > > > It'd conform, but it might not be as useful as an increasing
-> > > > > > value.
-> > > > > >=20
-> > > > > > E.g. a client can use that to work out which of a series of
-> > > > > > reordered
-> > > > > > write replies is the most recent, and I seem to recall that
-> > > > > > can
-> > > > > > prevent
-> > > > > > unnecessary invalidations in some cases.
-> > > > > >=20
-> > > > >=20
-> > > > > That's a good point; the linux client does this. That said,
-> > > > > NFSv4
-> > > > > has a
-> > > > > way for the server to advertise its change attribute behavior
-> > > > > [1]
-> > > > > (though nfsd hasn't implemented this yet).
-> > > >=20
-> > > > It was implemented and reverted.=A0 The issue was that I thought
-> > > > nfsd
-> > > > should mix in the ctime to prevent the change attribute going
-> > > > backwards
-> > > > on reboot (see fs/nfsd/nfsfh.h:nfsd4_change_attribute()), but
-> > > > Trond
-> > > > was
-> > > > concerned about the possibility of time going backwards.=A0 See
-> > > > 1631087ba872 "Revert "nfsd4: support change_attr_type
-> > > > attribute"".
-> > > > There's some mailing list discussion to that I'm not turning up
-> > > > right
-> > > > now.
-> >=20
-> > https://lore.kernel.org/linux-nfs/a6294c25cb5eb98193f609a52aa8f4b5d4e81=
-279.camel@hammerspace.com/
-> > is what I was thinking of but it isn't actually that interesting.
-> >=20
-> > > My main concern was that some filesystems (e.g. ext3) were failing
-> > > to
-> > > provide sufficient timestamp resolution to actually label the
-> > > resulting
-> > > 'change attribute' as being updated monotonically. If the time
-> > > stamp
-> > > doesn't change when the file data or metadata are changed, then the
-> > > client has to perform extra checks to try to figure out whether or
-> > > not
-> > > its caches are up to date.
-> >=20
-> > That's a different issue from the one you were raising in that
-> > discussion.
-> >=20
-> > > > Did NFSv4 add change_attr_type because some implementations
-> > > > needed
-> > > > the
-> > > > unordered case, or because they realized ordering was useful but
-> > > > wanted
-> > > > to keep backwards compatibility?=A0 I don't know which it was.
-> > >=20
-> > > We implemented it because, as implied above, knowledge of whether
-> > > or
-> > > not the change attribute behaves monotonically, or strictly
-> > > monotonically, enables a number of optimisations.
-> >=20
-> > Of course, but my question was about the value of the old behavior,
-> > not
-> > about the value of the monotonic behavior.
-> >=20
-> > Put differently, if we could redesign the protocol from scratch would
-> > we
-> > actually have included the option of non-monotonic behavior?
-> >=20
->=20
-> If we could design the filesystems from scratch, we probably would not.
-> The protocol ended up being as it is because people were trying to make
-> it as easy to implement as possible.
->=20
-> So if we could design the filesystem from scratch, we would have
-> probably designed it along the lines of what AFS does.
-> i.e. each explicit change is accompanied by a single bump of the change
-> attribute, so that the clients can not only decide the order of the
-> resulting changes, but also if they have missed a change (that might
-> have been made by a different client).
->=20
-> However that would be a requirement that is likely to be very specific
-> to distributed caches (and hence distributed filesystems). I doubt
-> there are many user space applications that would need that high
-> precision. Maybe MPI, but that's the only candidate I can think of for
-> now?
->=20
+On 30/08/2022 17:30, Conor.Dooley@microchip.com wrote:
+> On 30/08/2022 09:26, Ben Dooks wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> The driver prints out 6 lines on startup, which can easily be redcued
+>> to two lines without losing any information.
+>>
+>> Note, to make the types work better, uint64_t has been replaced with
+>> ULL to make the unsigned long long match the format in the print
+>> statement.
+>>
+>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+>> ---
+>>   drivers/soc/sifive/sifive_ccache.c | 25 +++++++++++--------------
+>>   1 file changed, 11 insertions(+), 14 deletions(-)
+>>
+>> diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/sifive_ccache.c
+>> index 46ce33db7d30..65a10a6ee211 100644
+>> --- a/drivers/soc/sifive/sifive_ccache.c
+>> +++ b/drivers/soc/sifive/sifive_ccache.c
+>> @@ -76,20 +76,17 @@ static void setup_sifive_debug(void)
+>>
+>>   static void ccache_config_read(void)
+>>   {
+>> -       u32 regval, val;
+>> -
+>> -       regval = readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+>> -       val = regval & 0xFF;
+>> -       pr_info("CCACHE: No. of Banks in the cache: %d\n", val);
+>> -       val = (regval & 0xFF00) >> 8;
+>> -       pr_info("CCACHE: No. of ways per bank: %d\n", val);
+>> -       val = (regval & 0xFF0000) >> 16;
+>> -       pr_info("CCACHE: Sets per bank: %llu\n", (uint64_t)1 << val);
+>> -       val = (regval & 0xFF000000) >> 24;
+>> -       pr_info("CCACHE: Bytes per cache block: %llu\n", (uint64_t)1 << val);
+>> -
+>> -       regval = readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+>> -       pr_info("CCACHE: Index of the largest way enabled: %d\n", regval);
+>> +       u32 cfg;
+>> +
+>> +       cfg = readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+>> +
+>> +       pr_info("CCACHE: %u banks, %u ways, sets/bank=%llu, bytes/block=%llu\n",
+>> +               (cfg & 0xff), (cfg >> 8) & 0xff,
+>> +               1ULL << ((cfg >> 16) & 0xff),
+> 
+> This is just BIT_ULL((cfg >> 16) & 0xff), no?
+> Would be nice too if these were defined, so you'd have something
+> like BIT_ULL((cfg >> SETS_PER_BANK_SHIFT) & 0xff)
+> 
+> I do like the cleanup of the uint64_t & cutting down on the prints
+> though :) Again, it'd be nice if you and Zong could collaborate on
+> a combined v2.
 
-The fact that NFS kept this more loosely-defined is what allowed us to
-elide some of the i_version bumps and regain a fair bit of performance
-for local filesystems [1]. If the change attribute had been more
-strictly defined like you mention, then that particular optimization
-would not have been possible.
+I think even BIT_UL() would do here, if someone is going to make a
+cache bigger than 2GiB we'll probably be quite old by then, so v2
+might have the last two values down as %lu.
 
-This sort of thing is why I'm a fan of not defining this any more
-strictly than we require. Later on, maybe we'll come up with a way for
-filesystems to advertise that they can offer stronger guarantees.
---=20
-Jeff Layton <jlayton@kernel.org>
+> Thanks,
+> Conor.
+> 
+>> +               1ULL << ((cfg >> 24) & 0xff));
+>> +
+>> +       cfg = readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+>> +       pr_info("CCACHE: Index of the largest way enabled: %d\n", cfg);
+>>   }
+>>
+>>   static const struct of_device_id sifive_ccache_ids[] = {
+>> --
+>> 2.35.1
+>>
+> 
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> 
 
-[1]:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?=
-id=3Df02a9ad1f15d
+-- 
+Ben Dooks				http://www.codethink.co.uk/
+Senior Engineer				Codethink - Providing Genius
+
+https://www.codethink.co.uk/privacy.html
+

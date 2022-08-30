@@ -2,67 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C895A6EC5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:57:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA755A6EC9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 22:58:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbiH3U53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 16:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
+        id S230455AbiH3U6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 16:58:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiH3U51 (ORCPT
+        with ESMTP id S231206AbiH3U6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 16:57:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234037C755;
-        Tue, 30 Aug 2022 13:57:26 -0700 (PDT)
+        Tue, 30 Aug 2022 16:58:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7F77C755;
+        Tue, 30 Aug 2022 13:58:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BE145B81D9E;
-        Tue, 30 Aug 2022 20:57:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 581C7C43142;
-        Tue, 30 Aug 2022 20:57:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C473061839;
+        Tue, 30 Aug 2022 20:58:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3749C433D6;
+        Tue, 30 Aug 2022 20:58:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661893043;
-        bh=iftuHYqQXTY9T/Jpg0WAmZaO4NFtXezaRWCYZ6TK3ig=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sN4VuKXwsfijKIrdwPjxw4NxzoBbgK7Lox0+jXU7CWFZd7NuNAH8YfB9YRrON1H2e
-         Ign2ztR7Z18cKcRwpntRAKciL/Im4Y1zybhsvCWZ2eCg0Nsl4C7ZuTyheh3jt01mLy
-         Mlau/BTkjCJzMXT/wYvTnibXh8G+67o0svHApuryc4XyV1dPxGs50jScXBItoxOOBs
-         MZ3rej3kOXPmbMBikQg5kcyZpUZ7c9tW9FB1aO85szVVn0bI9Vc0RQjMBKL1J6k0Zo
-         CDsU4caak9l+0z4fo9Fsp3f92DXvvQbqUIAS0ApPTxfEiimAH2N0Tt4q/WvbaETQCl
-         f/zRNkDfPTVlA==
-Received: by mail-ua1-f53.google.com with SMTP id a18so4535916uat.11;
-        Tue, 30 Aug 2022 13:57:23 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0T+Qozbw5WsKtB7xUwv4dW24FltCftOLV6I1tXc4UQQyft7Yff
-        JeOHJdiAEbWbHy1l50DzOAL20U9kp3G+bg44tQ==
-X-Google-Smtp-Source: AA6agR6f85XnSpzHwZBKN0RRZyto5EZpAAgQSxtyliRBWdAaWrt2oixrLAfJCE0oQ44ghreW7ST5f7W6/kpWI4HA5iI=
-X-Received: by 2002:a9f:23ec:0:b0:39e:c54f:ffc7 with SMTP id
- 99-20020a9f23ec000000b0039ec54fffc7mr5975565uao.17.1661893042185; Tue, 30 Aug
- 2022 13:57:22 -0700 (PDT)
+        s=k20201202; t=1661893116;
+        bh=DGa8DZfgmN4fY2jkpCB2mbfVdu7HUE7vBbFQOMTS9DY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BAeTBa0jgM8cQy4hOltLiCbZud891Erw6dFvDUiygC5nfQW9jFqcFEJtQxpVQPv0T
+         mxtSmDAbfM4sHMmKgiYcND4PsyBgH9EFjec1NhFFgdrb0KN0T2YcCqDBvwBz7nXxvc
+         yk9MBd0fHMnEXY4J+YBYsEa3uLJH38TcEJj0Xxtz4cq2r+Gcz8LQ/nUP+YLIpjBd4Y
+         lT4+/VabW7CyKxFfgcr0xfAdLmhIom6Rj26GCmBJwNB4n0wMtuwLLW+DR2xGU1UQZ7
+         JW3rTvX+94g13EbGWEqSZbmNyJY25aTIwvhiVfetZx9U2abKy+em7tIqdbhx5podLW
+         xQB9D7oN3ZEOg==
+Received: by pali.im (Postfix)
+        id 0F2CC834; Tue, 30 Aug 2022 22:58:33 +0200 (CEST)
+Date:   Tue, 30 Aug 2022 22:58:32 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Ben Greear <greearb@candelatech.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, bjorn@helgaas.com,
+        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
+        Stefan Roese <sr@denx.de>, Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Yao Hongbo <yaohongbo@linux.alibaba.com>,
+        Naveen Naidu <naveennaidu479@gmail.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [PATCH 5.4 182/389] PCI/portdrv: Dont disable AER reporting in
+ get_port_device_capability()
+Message-ID: <20220830205832.g3lyysmgkarijkvj@pali>
+References: <20220823080115.331990024@linuxfoundation.org>
+ <20220823080123.228828362@linuxfoundation.org>
+ <CABhMZUVycsyy76j2Z=K+C6S1fwtzKE1Lx2povXKfB80o9g0MtQ@mail.gmail.com>
+ <YwXH/l37HaYQD66B@kroah.com>
+ <47b775c5-57fa-5edf-b59e-8a9041ffbee7@candelatech.com>
 MIME-Version: 1.0
-References: <20220825180417.1259360-1-mail@conchuod.ie> <20220825180417.1259360-2-mail@conchuod.ie>
- <5f00ab85-d5ac-728d-2157-e70f2a46cc90@canonical.com>
-In-Reply-To: <5f00ab85-d5ac-728d-2157-e70f2a46cc90@canonical.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 30 Aug 2022 15:57:10 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqLdYT5Bqn1aCd+vDxgOQAH_B2nMwsP9siATdK6DRte0QA@mail.gmail.com>
-Message-ID: <CAL_JsqLdYT5Bqn1aCd+vDxgOQAH_B2nMwsP9siATdK6DRte0QA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: riscv: sifive-l2: add a PolarFire SoC compatible
-To:     Heinrich Schuchardt <heinrich.schuchardt@canonical.com>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Sagar Kadam <sagar.kadam@sifive.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <mail@conchuod.ie>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <47b775c5-57fa-5edf-b59e-8a9041ffbee7@candelatech.com>
+User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -73,80 +69,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 1:36 PM Heinrich Schuchardt
-<heinrich.schuchardt@canonical.com> wrote:
->
-> On 8/25/22 20:04, Conor Dooley wrote:
-> > From: Conor Dooley <conor.dooley@microchip.com>
-> >
-> > The l2 cache on PolarFire SoC is cross between that of the fu540 and
-> > the fu740. It has the extra interrupt from the fu740 but the lower
-> > number of cache-sets. Add a specific compatible to avoid the likes
-> > of:
-> >
-> > mpfs-polarberry.dtb: cache-controller@2010000: interrupts: [[1], [3], [4], [2]] is too long
->
-> Where is such a message written? I couldn't find the string in
-> next-20220825 (git grep -n 'is too long"').
->
-> Why should a different number of cache sets require an extra compatible
-> string. cache-size is simply a parameter going with the existing
-> compatible strings.
->
-> I would assume that you only need an extra compatible string if there is
-> a functional difference that can not be expressed with the existing
-> parameters.
+On Tuesday 30 August 2022 13:47:48 Ben Greear wrote:
+> On 8/23/22 11:41 PM, Greg Kroah-Hartman wrote:
+> > On Tue, Aug 23, 2022 at 07:20:14AM -0500, Bjorn Helgaas wrote:
+> > > On Tue, Aug 23, 2022, 6:35 AM Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > wrote:
+> > > 
+> > > > From: Stefan Roese <sr@denx.de>
+> > > > 
+> > > > [ Upstream commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 ]
+> > > > 
+> > > 
+> > > There's an open regression related to this commit:
+> > > 
+> > > https://bugzilla.kernel.org/show_bug.cgi?id=216373
+> > 
+> > This is already in the following released stable kernels:
+> > 	5.10.137 5.15.61 5.18.18 5.19.2
+> > 
+> > I'll go drop it from the 4.19 and 5.4 queues, but when this gets
+> > resolved in Linus's tree, make sure there's a cc: stable on the fix so
+> > that we know to backport it to the above branches as well.  Or at the
+> > least, a "Fixes:" tag.
+> 
+> This is still in 5.19.5.  We saw some funny iwlwifi crashes in 5.19.3+
+> that we did not see in 5.19.0+.  I just bisected the scary looking AER errors to this
+> patch, though I do not know for certain if it causes the iwlwifi related crashes yet.
+> 
+> In general, from reading the commit msg, this patch doesn't seem to be a great candidate
+> for stable in general.  Does it fix some important problem?
+> 
+> In case it helps, here is example of what I see in dmesg.  The kernel crashes in iwlwifi
+> had to do with rx messages from the firmware, and some warnings lead me to believe that
+> pci messages were slow coming back and/or maybe duplicated.  So maybe this AER patch changes
+> timing or otherwise screws up the PCI adapter boards we use...
 
-Correct, but you have to account for unknown functional differences
-aka errata as well. Otherwise, we need firmware updates to enable the
-OS to handle errata.
+From that log I have feeling that issue is in that intel wifi card and
+it was there also before that commit. Card is crashing (or something
+other happens on PCIe bus) and because kernel had disabled Error
+Reporting for this card, nobody spotted any issue. And that commit just
+opened eye to kernel to see those errors.
 
-> > Fixes: 34fc9cc3aebe ("riscv: dts: microchip: correct L2 cache interrupts")
-> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> > ---
-> >   .../bindings/riscv/sifive-l2-cache.yaml       | 79 ++++++++++++-------
-> >   1 file changed, 49 insertions(+), 30 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-> > index 69cdab18d629..ca3b9be58058 100644
-> > --- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-> > +++ b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
-> > @@ -17,9 +17,6 @@ description:
-> >     acts as directory-based coherency manager.
-> >     All the properties in ePAPR/DeviceTree specification applies for this platform.
-> >
-> > -allOf:
-> > -  - $ref: /schemas/cache-controller.yaml#
-> > -
-> >   select:
-> >     properties:
-> >       compatible:
-> > @@ -33,11 +30,16 @@ select:
-> >
-> >   properties:
-> >     compatible:
-> > -    items:
-> > -      - enum:
-> > -          - sifive,fu540-c000-ccache
-> > -          - sifive,fu740-c000-ccache
->
-> Why can't you simply add microchip,mpfs-ccache here?
->
-> > -      - const: cache
-> > +    oneOf:
-> > +      - items:
-> > +          - enum:
-> > +              - sifive,fu540-c000-ccache
-> > +              - sifive,fu740-c000-ccache
-> > +          - const: cache
-> > +      - items:
-> > +          - const: microchip,mpfs-ccache
-> > +          - const: sifive,fu540-c000-ccache
->
-> Why do we need 'sifive,fu540-c000-ccache' twice?
+I think this issue should be reported to intel wifi card developers,
+maybe they comment it, why card is reporting errors.
 
-Because it is in 2 different positions. While we can express that the
-last N entries in a list are optional, there is no way in json-schema
-to express entries at the beginning or in the middle are optional.
-
-Rob
+> 
+> [   50.905809] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
+> [   50.905830] pcieport 0000:03:01.0: AER: device recovery failed
+> [   50.905831] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:01.0
+> [   50.905845] pcieport 0000:03:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> [   50.915679] pcieport 0000:03:01.0:   device [10b5:8619] error status/mask=00100000/00000000
+> [   50.922735] pcieport 0000:03:01.0:    [20] UnsupReq               (First)
+> [   50.928230] pcieport 0000:03:01.0: AER:   TLP Header: 34000000 04001f10 00000000 88c888c8
+> [   50.935126] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
+> [   50.935133] pcieport 0000:03:01.0: AER: device recovery failed
+> [   50.935134] pcieport 0000:00:1c.0: AER: Multiple Uncorrected (Non-Fatal) error received: 0000:03:01.0
+> [   50.935222] pcieport 0000:03:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> [   50.945059] pcieport 0000:03:01.0:   device [10b5:8619] error status/mask=00100000/00000000
+> [   50.952120] pcieport 0000:03:01.0:    [20] UnsupReq               (First)
+> [   50.957614] pcieport 0000:03:01.0: AER:   TLP Header: 34000000 04001f10 00000000 88c888c8
+> [   50.964492] pcieport 0000:03:01.0: AER:   Error of this Agent is reported first
+> [   50.970519] pcieport 0000:03:02.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> [   50.980344] pcieport 0000:03:02.0:   device [10b5:8619] error status/mask=00100000/00000000
+> [   50.987399] pcieport 0000:03:02.0:    [20] UnsupReq               (First)
+> [   50.992891] pcieport 0000:03:02.0: AER:   TLP Header: 34000000 05001f10 00000000 88c888c8
+> [   50.999785] pcieport 0000:03:03.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> [   51.009611] pcieport 0000:03:03.0:   device [10b5:8619] error status/mask=00100000/00000000
+> [   51.016665] pcieport 0000:03:03.0:    [20] UnsupReq               (First)
+> [   51.022161] pcieport 0000:03:03.0: AER:   TLP Header: 34000000 06001f10 00000000 88c888c8
+> [   51.029052] pcieport 0000:03:05.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> [   51.038881] pcieport 0000:03:05.0:   device [10b5:8619] error status/mask=00100000/00000000
+> [   51.045931] pcieport 0000:03:05.0:    [20] UnsupReq               (First)
+> [   51.051430] pcieport 0000:03:05.0: AER:   TLP Header: 34000000 07001f10 00000000 88c888c8
+> [   51.058320] pcieport 0000:03:07.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> [   51.068147] pcieport 0000:03:07.0:   device [10b5:8619] error status/mask=00100000/00000000
+> [   51.075200] pcieport 0000:03:07.0:    [20] UnsupReq               (First)
+> [   51.080696] pcieport 0000:03:07.0: AER:   TLP Header: 34000000 08001f10 00000000 88c888c8
+> [   51.087589] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
+> [   51.087598] pcieport 0000:03:01.0: AER: device recovery failed
+> [   51.087611] iwlwifi 0000:05:00.0: AER: can't recover (no error_detected callback)
+> [   51.087615] pcieport 0000:03:02.0: AER: device recovery failed
+> [   51.087628] iwlwifi 0000:06:00.0: AER: can't recover (no error_detected callback)
+> [   51.087631] pcieport 0000:03:03.0: AER: device recovery failed
+> [   51.087643] iwlwifi 0000:07:00.0: AER: can't recover (no error_detected callback)
+> [   51.087646] pcieport 0000:03:05.0: AER: device recovery failed
+> [   51.087659] iwlwifi 0000:08:00.0: AER: can't recover (no error_detected callback)
+> [   51.087662] pcieport 0000:03:07.0: AER: device recovery failed
+> [   51.103761] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
+> [   51.103778] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> [   51.113608] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
+> [   51.120658] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
+> [   51.126152] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
+> [   51.133044] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
+> [   51.133068] pcieport 0000:03:0f.0: AER: device recovery failed
+> [   51.168925] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
+> [   51.168940] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> [   51.178773] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
+> [   51.185823] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
+> [   51.191318] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
+> [   51.198211] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
+> [   51.198234] pcieport 0000:03:0f.0: AER: device recovery failed
+> [   51.260695] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
+> [   51.260710] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> [   51.270548] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
+> [   51.277605] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
+> [   51.283103] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
+> [   51.290009] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
+> [   51.290033] pcieport 0000:03:0f.0: AER: device recovery failed
+> [   51.328514] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:0f.0
+> [   51.328530] pcieport 0000:03:0f.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
+> [   51.331638] ACPI: \: failed to evaluate _DSM bf0212f2-788f-c64d-a5b3-1f738e285ade (0x1001)
+> [   51.338363] pcieport 0000:03:0f.0:   device [10b5:8619] error status/mask=00100000/00000000
+> [   51.338364] pcieport 0000:03:0f.0:    [20] UnsupReq               (First)
+> [   51.345413] ACPI: \: failed to evaluate _DSM bf0212f2-788f-c64d-a5b3-1f738e285ade (0x1001)
+> [   51.350900] pcieport 0000:03:0f.0: AER:   TLP Header: 34000000 0f001f10 00000000 88c888c8
+> [   51.350927] iwlwifi 0000:0f:00.0: AER: can't recover (no error_detected callback)
+> 
+> 
+> Thanks,
+> Ben
+> 
+> -- 
+> Ben Greear <greearb@candelatech.com>
+> Candela Technologies Inc  http://www.candelatech.com
+> 

@@ -2,250 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B15B75A6CE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:15:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CBA5A6CF0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:16:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231160AbiH3TPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47472 "EHLO
+        id S231269AbiH3TQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:16:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230020AbiH3TPj (ORCPT
+        with ESMTP id S231338AbiH3TQn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:15:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B72A94D258
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:15:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2933E61703
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 19:15:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8518FC43141
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 19:15:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661886935;
-        bh=w9radkabqhUd3OLgPbRfZ1Y/HtR3pNtqCwH5lVVybGg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=jqDb9X19r1DBjmxizgBgeXSCNu8ZXgeS1ETCOeh7MOmH0MKzuKe+8HbI/93Wgez9A
-         vyxaW0pTV9p3gtUPdS5kiuzu4O9zgKaQs1hud3hNL+QoCVzO2jL0UNWl567wJCGSiB
-         YQfztV43FGYbrBI8u521VJYTHMB/mnvjN9UqJa1sZ4Zv3hTu0nTC3OcEEJVHR8iz9W
-         VBfWaTzyoqnBfvjNhYoeApkMp8bGia6J+WG2K/eFudtPvohghyOg25t7qFbC8xu21F
-         QEAMTbgWu98xJF0+bhkX3fyCa3KNTzHauPw5FEZCDSHmcUz8bANvByoRxuDik47U/G
-         VNjHgpuoemTFg==
-Received: by mail-yb1-f169.google.com with SMTP id p204so984929yba.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:15:35 -0700 (PDT)
-X-Gm-Message-State: ACgBeo07jPSgcOyY3AreYJO8G/084wXCHTLDmVHVn5HfUad6b7UIon+i
-        OgFphaoRWJvIviJmCJY/1BMGCZgpORZJSIcHxfS6FA==
-X-Google-Smtp-Source: AA6agR4nr8gQWk8wkFn8CdjuUEFMGuYaTE2Yh76MuRk2+40FGCqF0qO7udWXRNgylJaFQTObIrWkZ7nhfwOOcLL7Yzs=
-X-Received: by 2002:a25:103:0:b0:695:8b6b:308d with SMTP id
- 3-20020a250103000000b006958b6b308dmr12602675ybb.572.1661886934504; Tue, 30
- Aug 2022 12:15:34 -0700 (PDT)
+        Tue, 30 Aug 2022 15:16:43 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 598A070E62;
+        Tue, 30 Aug 2022 12:16:29 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 8744A60002;
+        Tue, 30 Aug 2022 19:16:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1661886988;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=pEs/624W+YKYvj5zK7eZjM1JCt8Sw3adqq+ghpUn+WU=;
+        b=gAi2AYe+rzZDIMKdSyGAjdksSyWKke1CHDdI0PPJ1NnHrqIptMBcrgXs2kclPV9FvOh5uN
+        TDcgLl/CrP49/ZS85XzgEsckc4qx7Ff/uq7oXEirfngVZsA3ZtFsKG9YSQYHot6OCkXygF
+        jQji4IghD3zlXZeH+K6/fp8rftOMgcrhlLiJEjbvIRe6YHUcNKkx2jAo4aPkE6o8r/jYVI
+        iE/Le2UxGMlFERgKFceBwAWKsPaT4DowtCgLnM32Kx80YDX/RbvhF2oqXWrzB06kF0B5/7
+        UuoGCGt6fC+mJtVndhAfvDN2TTYBMZTyLy5Vm1fUUBNNTRQMLm8quq9+tDJjnw==
+Date:   Tue, 30 Aug 2022 21:16:17 +0200
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     davem@davemloft.net, Rob Herring <robh+dt@kernel.org>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, Andrew Lunn <andrew@lunn.ch>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v2 1/5] dt-bindings: net: Convert Altera TSE
+ bindings to yaml
+Message-ID: <20220830211617.54d2abc9@pc-10.home>
+In-Reply-To: <4a37d318-8c83-148b-89b3-9729bc7c9761@linaro.org>
+References: <20220830095549.120625-1-maxime.chevallier@bootlin.com>
+        <20220830095549.120625-2-maxime.chevallier@bootlin.com>
+        <4a37d318-8c83-148b-89b3-9729bc7c9761@linaro.org>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20220817051127.3323755-1-ashok.raj@intel.com> <20220817051127.3323755-6-ashok.raj@intel.com>
-In-Reply-To: <20220817051127.3323755-6-ashok.raj@intel.com>
-From:   Andy Lutomirski <luto@kernel.org>
-Date:   Tue, 30 Aug 2022 12:15:23 -0700
-X-Gmail-Original-Message-ID: <CALCETrUBzP1YPob3JhOZZepBPbyFXuTG2pb8Sq_o+c_WpioGTw@mail.gmail.com>
-Message-ID: <CALCETrUBzP1YPob3JhOZZepBPbyFXuTG2pb8Sq_o+c_WpioGTw@mail.gmail.com>
-Subject: Re: [PATCH v3 5/5] x86/microcode: Place siblings in NMI loop while
- update in progress
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        LKML Mailing List <linux-kernel@vger.kernel.org>,
-        X86-kernel <x86@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Jacon Jun Pan <jacob.jun.pan@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 16, 2022 at 10:12 PM Ashok Raj <ashok.raj@intel.com> wrote:
->
-> Microcode updates need a guarantee that the thread sibling that is waiting
-> for the update to finish on the primary core will not execute any
-> instructions until the update is complete. This is required to guarantee
-> any MSR or instruction that's being patched will be executed before the
-> update is complete.
->
-> After the stop_machine() rendezvous, an NMI handler is registered. If an
-> NMI were to happen while the microcode update is not complete, the
-> secondary thread will spin until the ucode update state is cleared.
->
-> Couple of choices discussed are:
->
-> 1. Rendezvous inside the NMI handler, and also perform the update from
->    within the handler. This seemed too risky and might cause instability
->    with the races that we would need to solve. This would be a difficult
->    choice.
->         1.a Since the primary thread of every core is performing a wrmsr
->         for the update, once the wrmsr has started, it can't be
->         interrupted. Hence its not required to NMI the primary thread of
->         the core. Only the secondary thread needs to be parked in NMI
->         before the update begins.
->         Suggested by From Andy Cooper
-> 2. Thomas (tglx) suggested that we could look into masking all the LVT
->    originating NMI's. Such as LINT1, Perf control LVT entries and such.
->    Since we are in the rendezvous loop, we don't need to worry about any
->    NMI IPI's generated by the OS.
->
->    The one we didn't have any control over is the ACPI mechanism of sending
->    notifications to kernel for Firmware First Processing (FFM). Apparently
->    it seems there is a PCH register that BIOS in SMI would write to
->    generate such an interrupt (ACPI GHES).
-> 3. This is a simpler option. OS registers an NMI handler and doesn't do any
->    NMI rendezvous dance. But if an NMI were to happen, we check if any of
->    the CPUs thread siblings have an update in progress. Only those CPUs
->    would take an NMI. The thread performing the wrmsr() will only take an
->    NMI after the completion of the wrmsr 0x79 flow.
->
->    [ Lutomirsky thinks this is weak, and what happens from taking the
->    interrupt and the path to the registered callback handler might be
->    exposed.]
->
->    Seems like 1.a is the best candidate.
->
-> The algorithm is something like this:
->
-> After stop_machine() all threads are executing __reload_late()
->
-> nmi_callback()
-> {
->         if (!in_ucode_update)
->                 return NMI_DONE;
->         if (cpu not in sibling_mask)
->                 return NMI_DONE;
->         update sibling reached NMI for primary to continue
->
->         while (cpu in sibling_mask)
->                 wait;
->         return NMI_HANDLED;
-> }
->
-> __reload_late()
-> {
->
->         entry_rendezvous(&late_cpus_in);
->         set_mcip()
->         if (this_cpu is first_cpu in the core)
->                 wait for siblings to drop in NMI
->                 apply_microcode()
->         else {
->                 send self_ipi(NMI_VECTOR);
->                 goto wait_for_siblings;
->         }
->
-> wait_for_siblings:
->         exit_rendezvous(&late_cpus_out);
->         clear_mcip
-> }
->
-> reload_late()
-> {
->         register_nmi_handler()
->         prepare_mask of all sibling cpus()
->         update state = ucode in progress;
->         stop_machine();
->         unregister_nmi_handler();
-> }
->
-> Signed-off-by: Ashok Raj <ashok.raj@intel.com>
-> ---
->  arch/x86/kernel/cpu/microcode/core.c | 218 ++++++++++++++++++++++++++-
->  1 file changed, 211 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-> index d24e1c754c27..fd3b8ce2c82a 100644
-> --- a/arch/x86/kernel/cpu/microcode/core.c
-> +++ b/arch/x86/kernel/cpu/microcode/core.c
-> @@ -39,7 +39,9 @@
->  #include <asm/processor.h>
->  #include <asm/cmdline.h>
->  #include <asm/setup.h>
-> +#include <asm/apic.h>
->  #include <asm/mce.h>
-> +#include <asm/nmi.h>
->
->  #define DRIVER_VERSION "2.2"
->
-> @@ -411,6 +413,13 @@ static int check_online_cpus(void)
->
->  static atomic_t late_cpus_in;
->  static atomic_t late_cpus_out;
-> +static atomic_t nmi_cpus;      // number of CPUs that enter NMI
-> +static atomic_t nmi_timeouts;   // number of siblings that timeout
-> +static atomic_t nmi_siblings;   // Nmber of siblings that enter NMI
-> +static atomic_t in_ucode_update;// Are we in microcode update?
-> +static atomic_t nmi_exit;       // Siblings that exit NMI
+On Tue, 30 Aug 2022 20:13:56 +0300
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-Some of these variables seem oddly managed and just for debugging.
+> On 30/08/2022 12:55, Maxime Chevallier wrote:
+> > This converts the bindings for the Altera Triple-Speed Ethernet to
+> > yaml.  
+> 
+> Do not use "This commit/patch".
+> https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
-> +
-> +static struct cpumask all_sibling_mask;
->
->  static int __wait_for_cpus(atomic_t *t, long long timeout)
->  {
-> @@ -433,6 +442,104 @@ static int __wait_for_cpus(atomic_t *t, long long timeout)
->         return 0;
->  }
->
-> +struct core_rendez {
-> +       int num_core_cpus;
-> +       atomic_t callin;
-> +       atomic_t core_done;
-> +};
-> +
-> +static DEFINE_PER_CPU(struct core_rendez, core_sync);
-> +
-> +static int __wait_for_update(atomic_t *t, long long timeout)
-> +{
-> +       while (!atomic_read(t)) {
-> +               if (timeout < SPINUNIT)
-> +                       return 1;
+ack
 
-Since you're using signed arithmetic, timeout < 0 would be a less
-error-prone condition.
+> > 
+> > Signed-off-by: Maxime Chevallier <maxime.chevallier@bootlin.com>  
+> 
+> Rebase your changes on some decent kernel and use
+> get_maintainers.pl...
 
-Anyway, this patch is full of debugging stuff, so I won't do a
-line-for-line review, but I do have a suggestion.  Instead of all this
-bookkeeping, maybe just track the number of cores to park in NMI, kind
-of like this (hand-wavy pseudocode):
+I'm rebased against net-next, so I don't understand how I'm supposed to
+do for this series, should I sent binding patches separately and based
+on another tree ?
 
-static struct cpumask cpus_to_park_in_nmi;
+I'll cc you next time, sorry about that.
 
-/* fill out the cpumask */
-static atomic_t nmi_parked_cpus;
-static bool park_enabled;
+> > ---
+> > V1->V2:
+> >  - Removed unnedded maxItems
+> >  - Added missing minItems
+> >  - Fixed typos in some properties names
+> >  - Fixed the mdio subnode definition
+> > 
+> >  .../devicetree/bindings/net/altera_tse.txt    | 113 -------------
+> >  .../devicetree/bindings/net/altr,tse.yaml     | 156
+> > ++++++++++++++++++ 2 files changed, 156 insertions(+), 113
+> > deletions(-) delete mode 100644
+> > Documentation/devicetree/bindings/net/altera_tse.txt create mode
+> > 100644 Documentation/devicetree/bindings/net/altr,tse.yaml 
+> 
+> (...)
+> 
+> > diff --git a/Documentation/devicetree/bindings/net/altr,tse.yaml
+> > b/Documentation/devicetree/bindings/net/altr,tse.yaml new file mode
+> > 100644 index 000000000000..1676e13b8c64
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/altr,tse.yaml
+> > @@ -0,0 +1,156 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/altr,tse.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Altera Triple Speed Ethernet MAC driver (TSE)
+> > +
+> > +maintainers:
+> > +  - Maxime Chevallier <maxime.chevallier@bootlin.com>
+> > +
+> > +allOf:  
+> 
+> Put allOf below "required".
 
-Then, after __wait_for_cpus (once everything is stopped), one cpu sets
-up the nmi handler, sets park_enabled, and sends the NMI IPI to all
-the CPUs parked in there.  The handler does:
+Ack
 
-if (this cpu is in cpus_to_mark_in_nmi) {
-  WARN_ON_ONCE(!park_enabled);
-  atomic_inc(&nmi_parked_cpus);
-  while (READ_ONCE(park_enabled))
-    ;  /* because Intel won't promise that cpu_relax() is okay */
-  atomic_dec(&nmi_parked_cpus);
-}
+> > +  - $ref: "ethernet-controller.yaml#"
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - altr,tse-1.0
+> > +              - ALTR,tse-1.0
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          minItems: 4
+> > +        reg-names:
+> > +          items:
+> > +            - const: control_port
+> > +            - const: rx_csr
+> > +            - const: tx_csr
+> > +            - const: s1
+> > +
+> > +  - if:
+> > +      properties:
+> > +        compatible:
+> > +          contains:
+> > +            enum:
+> > +              - altr,tse-msgdma-1.0
+> > +    then:
+> > +      properties:
+> > +        reg:
+> > +          minItems: 6
+> > +        reg-names:
+> > +          minItems: 6  
+> 
+> No need for minItems.
 
-and the CPUs that aren't supposed to park wait for nmi_parked_cpus to
-have the right value.  After the update, park_enabled gets cleared and
-everything resumes.
+Ok I'll remove it
 
-Does this seem reasonable?
+> > +          items:
+> > +            - const: control_port
+> > +            - const: rx_csr
+> > +            - const: rx_desc
+> > +            - const: rx_resp
+> > +            - const: tx_csr
+> > +            - const: tx_desc
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - altr,tse-1.0
+> > +      - ALTR,tse-1.0  
+> 
+> This is deprecated compatible. You need oneOf and then deprecated:
+> true.
 
-I was thinking it would be straightforward to have __wait_for_cpus
-handle this, but that would only really be easy in a language with
-closures or continuation passing.
+Ok thanks for the tip
 
---Andy
+> > +      - altr,tse-msgdma-1.0
+> > +
+> > +  reg:
+> > +    minItems: 4
+> > +    maxItems: 6
+> > +
+> > +  reg-names:
+> > +    minItems: 4
+> > +    items:
+> > +      - const: control_port
+> > +      - const: rx_csr
+> > +      - const: rx_desc
+> > +      - const: rx_resp
+> > +      - const: tx_csr
+> > +      - const: tx_desc
+> > +      - const: s1  
+> 
+> This is messed up. You allow only 6 items maximum, but list 7. It
+> contradicts your other variants in allOf:if:then.
+
+I'll remove that part then, apparently it's not needed at all if the
+allOf:if:then cover all cases.
+
+Thanks for the review,
+
+Maxime
+> 
+> Best regards,
+> Krzysztof
+

@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B045E5A6D43
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9689C5A6D2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:23:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231590AbiH3TYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59240 "EHLO
+        id S231351AbiH3TXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbiH3TYH (ORCPT
+        with ESMTP id S229907AbiH3TWx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:24:07 -0400
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB2297C311;
-        Tue, 30 Aug 2022 12:23:14 -0700 (PDT)
+        Tue, 30 Aug 2022 15:22:53 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53C0379A7E;
+        Tue, 30 Aug 2022 12:22:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661887395; x=1693423395;
+  t=1661887362; x=1693423362;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=843kBT2eo8fZBeKaiWYGVSNFPK3qHfLWFvr35ISO3DM=;
-  b=PzXUUC855NsrLuKCVsCDt7/2niPV73pc3cYtCcjO6ol2LCPxRmtBGosN
-   h1vnM9hV1pBcRcMWlRfNYmrTAmBdHQ/7iexPCNYxqy07DEp1OcxyiAVlM
-   M/fPymgcbjdIK4nk6MWSeFTpiiY9BwUnDP5zVsSIVv6vN+A4/Q48Jog+s
-   E=;
+  bh=U0VJcbOTM8ab3MiQEMGAYi1n6qUqXBDMxjPiRHK115k=;
+  b=Lh0vawBdls/5T6rFmXcgDZCxiuJveGKDZrnaq3QOjJw5/aWwSHVdSx0/
+   /SeMtWrg8GpvclrrtvEjwZVBiksnNt6uGvaM0CZfA9NCnbqKj5Z+jW/KW
+   /P8BgWy/XrrYqeeUjjavp0J0rZsrLCqJd5Zu+vJ60R4aO8r6ELDc30fMc
+   A=;
 X-IronPort-AV: E=Sophos;i="5.93,275,1654560000"; 
-   d="scan'208";a="222136157"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:41 +0000
-Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-7dac3c4d.us-east-1.amazon.com (Postfix) with ESMTPS id 84690819D8;
-        Tue, 30 Aug 2022 19:22:38 +0000 (UTC)
-Received: from EX19D013UWA001.ant.amazon.com (10.13.138.253) by
+   d="scan'208";a="125055929"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-f771ae83.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:22:40 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
+        by email-inbound-relay-iad-1e-f771ae83.us-east-1.amazon.com (Postfix) with ESMTPS id 2DD74120072;
+        Tue, 30 Aug 2022 19:22:39 +0000 (UTC)
+Received: from EX19D013UWA004.ant.amazon.com (10.13.138.207) by
  EX13MTAUWA001.ant.amazon.com (10.43.160.118) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Tue, 30 Aug 2022 19:22:15 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX19D013UWA001.ant.amazon.com (10.13.138.253) with Microsoft SMTP Server
+ id 15.0.1497.38; Tue, 30 Aug 2022 19:22:16 +0000
+Received: from EX13MTAUWA001.ant.amazon.com (10.43.160.58) by
+ EX19D013UWA004.ant.amazon.com (10.13.138.207) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.12;
- Tue, 30 Aug 2022 19:22:14 +0000
+ Tue, 30 Aug 2022 19:22:16 +0000
 Received: from dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com
- (172.19.116.181) by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP
- Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:14
+ (172.19.116.181) by mail-relay.amazon.com (10.43.160.118) with Microsoft SMTP
+ Server id 15.0.1497.38 via Frontend Transport; Tue, 30 Aug 2022 19:22:15
  +0000
 Received: by dev-dsk-farbere-1a-46ecabed.eu-west-1.amazon.com (Postfix, from userid 14301484)
-        id 634754D4E; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
+        id 6B5974D41; Tue, 30 Aug 2022 19:22:12 +0000 (UTC)
 From:   Eliav Farber <farbere@amazon.com>
 To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
         <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
@@ -55,9 +55,9 @@ CC:     <farbere@amazon.com>, <talel@amazon.com>, <hhhawa@amazon.com>,
         <itamark@amazon.com>, <shellykz@amazon.com>, <shorer@amazon.com>,
         <amitlavi@amazon.com>, <almogbs@amazon.com>, <dkl@amazon.com>,
         <rahul.tanwar@linux.intel.com>, <andriy.shevchenko@intel.com>
-Subject: [PATCH v3 16/19] dt-bindings: hwmon: (mr75203) add coefficient properties for the thermal equation
-Date:   Tue, 30 Aug 2022 19:22:09 +0000
-Message-ID: <20220830192212.28570-17-farbere@amazon.com>
+Subject: [PATCH v3 17/19] hwmon: (mr75203) parse temperature coefficients from device-tree
+Date:   Tue, 30 Aug 2022 19:22:10 +0000
+Message-ID: <20220830192212.28570-18-farbere@amazon.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220830192212.28570-1-farbere@amazon.com>
 References: <20220830192212.28570-1-farbere@amazon.com>
@@ -74,76 +74,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add optional temperature coefficient properties:
- *) moortec,ts-coeff-g
- *) moortec,ts-coeff-h
- *) moortec,ts-coeff-cal5
- *) moortec,ts-coeff-j
-If defined they shall be used instead of defaults.
+Use thermal coefficients from the device tree if they exist.
+Otherwise, use default values according to the series (5 or 6).
+All coefficients can be used or only part of them.
 
-The coefficients were added to device tree on top of the series property
-(which can be used to select between series 5 and series 6), because
-coefficients can vary between product and product, and code defaults might
-not be accurate enough.
+The coefficients shall be used for fine tuning the default values since
+coefficients can vary between product and product.
 
 Signed-off-by: Eliav Farber <farbere@amazon.com>
 ---
-V3 -> V2:
-- Add "moortec" prefix to property name.
+ drivers/hwmon/mr75203.c | 29 ++++++++++++++++++++++++++++-
+ 1 file changed, 28 insertions(+), 1 deletion(-)
 
- .../bindings/hwmon/moortec,mr75203.yaml       | 33 +++++++++++++++++++
- 1 file changed, 33 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-index ec2dbe7da9c2..a92da6064285 100644
---- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-+++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
-@@ -74,6 +74,37 @@ properties:
-     default: 5
-     $ref: /schemas/types.yaml#definitions/uint32
+diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+index 6a035fd115ca..d9fc5d225868 100644
+--- a/drivers/hwmon/mr75203.c
++++ b/drivers/hwmon/mr75203.c
+@@ -676,7 +676,8 @@ static int pvt_set_temp_coeff(struct device *dev, struct pvt_device *pvt)
+ {
+ 	struct temp_coeff *ts_coeff = &pvt->ts_coeff;
+ 	const struct device_node *np = dev->of_node;
+-	u32 series;
++	u32 series, coeff_h, coeff_g, coeff_cal5;
++	s32 coeff_j;
+ 	int ret;
  
-+  moortec,ts-coeff-g:
-+    description:
-+      G coefficient for temperature equation.
-+      Value should be multiplied by factor 1000.
-+      Default for series 5 = 60000
-+      Default for series 6 = 57400
-+    $ref: /schemas/types.yaml#/definitions/uint32
+ 	/* Incase ts-series property is not defined, use default 5. */
+@@ -702,6 +703,32 @@ static int pvt_set_temp_coeff(struct device *dev, struct pvt_device *pvt)
+ 
+ 	dev_dbg(dev, "temperature sensor series = %u\n", series);
+ 
++	/* Override ts-coeff-h/g/j/cal5 if they are defined. */
++	ret = of_property_read_u32(np, "moortec,ts-coeff-h", &coeff_h);
++	if (!ret)
++		ts_coeff->h = coeff_h;
 +
-+  moortec,ts-coeff-h:
-+    description:
-+      H coefficient for temperature equation.
-+      Value should be multiplied by factor 1000.
-+      Default for series 5 = 200000
-+      Default for series 6 = 249400
-+    $ref: /schemas/types.yaml#/definitions/uint32
++	ret = of_property_read_u32(np, "moortec,ts-coeff-g", &coeff_g);
++	if (!ret)
++		ts_coeff->g = coeff_g;
 +
-+  moortec,ts-coeff-cal5:
-+    description:
-+      cal5 coefficient for temperature equation (can't be 0).
-+      Default for series 5 = 4094
-+      Default for series 6 = 4096
-+    $ref: /schemas/types.yaml#/definitions/uint32
++	ret = of_property_read_s32(np, "moortec,ts-coeff-j", &coeff_j);
++	if (!ret)
++		ts_coeff->j = coeff_j;
 +
-+  moortec,ts-coeff-j:
-+    description:
-+      J coefficient for temperature equation.
-+      Value should be multiplied by factor 1000.
-+      Default for series 5 = -100
-+      Default for series 6 = 0
-+    $ref: /schemas/types.yaml#/definitions/int32
++	ret = of_property_read_u32(np, "moortec,ts-coeff-cal5", &coeff_cal5);
++	if (!ret) {
++		if (coeff_cal5 == 0) {
++			dev_err(dev, "moortec,ts-coeff-cal5 can't be 0\n");
++			return -EINVAL;
++		}
 +
- required:
-   - compatible
-   - reg
-@@ -97,5 +128,7 @@ examples:
-         resets = <&rcu0 0x40 7>;
-         moortec,vm-active-channels = <0x10 0x05>;
-         moortec,vm-pre-scaler = <5 6>;
-+        moortec,ts-coeff-g = <61400>;
-+        moortec,ts-coeff-h = <253700>;
-         #thermal-sensor-cells = <1>;
-     };
++		ts_coeff->cal5 = coeff_cal5;
++	}
++
++	dev_dbg(dev, "ts-coeff: h = %u, g = %u, j = %d, cal5 = %u\n",
++		ts_coeff->h, ts_coeff->g, ts_coeff->j, ts_coeff->cal5);
++
+ 	return 0;
+ }
+ 
 -- 
 2.37.1
 

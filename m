@@ -2,131 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8905A5CB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:16:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FDE65A5CB4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230491AbiH3HQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:16:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54268 "EHLO
+        id S230498AbiH3HQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiH3HQQ (ORCPT
+        with ESMTP id S229446AbiH3HQs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:16:16 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479FC7331C;
-        Tue, 30 Aug 2022 00:16:15 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id y141so10496991pfb.7;
-        Tue, 30 Aug 2022 00:16:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=oV//up81vPxxhX9sqIPOvRWHdXCHQPB4s33YAP3fJbQ=;
-        b=DkURfYdM0njl6lwV7AsIMzsiUsHpKV2320LS9AfWmwUgP9+ND+tfDxVtlnwnJSiAgW
-         fomwVRFWfwI0SQYZzKP1caVs9PjfiAsqzWR6vI0FQVbUbCmCsJARxwvmncNFGGz94vM7
-         zLEx5rprQyOt8moZhD/5pWHI4OZ+phtrU8Wmw5M9o++y9R6XqI+EEEsc0RWDn+HvLWfZ
-         J2YuGrQ/RYCstVGzcCQwBfPQfPgTuEdPsUGZ3VCjpHv3pJ0f3tGm4JQfzl1Yu2NRL2w8
-         ViWSr8SbqDXBTnlHcBng2PBm3b1WVAEpaPHz83pIjpwdPZT0RKl4lXT7Mlzg3RswO80y
-         +gSg==
+        Tue, 30 Aug 2022 03:16:48 -0400
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DC4A67442;
+        Tue, 30 Aug 2022 00:16:48 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id c20so7880697qtw.8;
+        Tue, 30 Aug 2022 00:16:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=oV//up81vPxxhX9sqIPOvRWHdXCHQPB4s33YAP3fJbQ=;
-        b=G2DVjE3qZpQekDR91EmMjj2Fdyip/yAE/VbUq/w0xU6wjOB8LEKwQuy+6THMZf0vTU
-         8upNICSpXF56GIRt7GKF2XvgfpZ9Si1mn0dR75fJAPsSY8uwWZqdeO4cmGx9RLHEwBPV
-         OxzEPNA4UXK4TpZGQJwEADwwbihgx3t2Kj7sGUkGXKCKWRi4rcJqXrZiFw+bJyTUySXO
-         b8vjBrUyLgFJdtVOH69Hr4jzO2sCp5cGNpc/OtV116mLnWtpxHatvHNCqmRGuGkLbKDj
-         e6rhcyA3Nua97bwRwcEvyCKXHxw9uHK3Tq6TPMzFPD0/34kcdHJkZDbLJ2QQw0Ny51vq
-         9/Tg==
-X-Gm-Message-State: ACgBeo3maRfDaf553KqvRMbafVVYhzOyemCa2RX8PeTXk08YGiVjuwIo
-        JSHJDzxXgWj+ZfPzJ4dJOBXsPgAIQqZk4g==
-X-Google-Smtp-Source: AA6agR5w1Kz8qTSPfL/3YelPPCFHbLYuEOQxreX4CK4hqNgRCjE21rEvtTBF1fT7RVEP1uEJforG5g==
-X-Received: by 2002:a63:1223:0:b0:42c:11b:91d8 with SMTP id h35-20020a631223000000b0042c011b91d8mr8097812pgl.97.1661843774581;
-        Tue, 30 Aug 2022 00:16:14 -0700 (PDT)
-Received: from localhost.localdomain (lily-optiplex-3070.dynamic.ucsd.edu. [2607:f720:1300:3033::1:4dd])
-        by smtp.googlemail.com with ESMTPSA id g2-20020a170902d1c200b0017300ec80b0sm8663910plb.308.2022.08.30.00.16.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 00:16:14 -0700 (PDT)
-From:   Li Zhong <floridsleeves@gmail.com>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        intel-wired-lan@lists.osuosl.org
-Cc:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, Li Zhong <floridsleeves@gmail.com>
-Subject: [PATCH v3] drivers/net/ethernet/e1000e: check return value of e1e_rphy()
-Date:   Tue, 30 Aug 2022 00:15:49 -0700
-Message-Id: <20220830071549.2137413-1-floridsleeves@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=hbfMWbJBfBTtap4GWkn344FiWXI5cQK869u8DvT8sKM=;
+        b=LQ5XP93PhZb7xmLEDoIwn058EjsUhDiTwW592EJa9pGlo4atdeCPPW/wIHvHdzP66J
+         QIdv+shWpTGDTdV4BtAES3/Lx9dQoK/F6lbSxRdgYpJmDwUkPhIbT3buyCOOYUgLOOTh
+         hVm9WMimMXVk73WT7NMFuS76J3ehfLPn5udL94HNaGyA2yw3cQ0HAwHRq6BiRVCv/goa
+         nQTR1lfQcGycZ4qNcSXmXfYyWD1Ih8gs8ixe3nPpdZMImQIqQl/ypiguBeIWvfv6ShXK
+         mIWd/+KXFfbXlvBWsfPGKouzCctHpdcWRsqA4kumW5W0Lz+fV7bKLkRiBDMa5xD8ULo/
+         hYtw==
+X-Gm-Message-State: ACgBeo3lviP2AB048vrubD2siEre/1o//S8zoYLVaudHRv1uu1uQZ24I
+        rT61zG5UGPvNyz45RNaqm2UgyT4k9BojgQ==
+X-Google-Smtp-Source: AA6agR5DsovEqpiUM/z35D73uGu6TTj5lZXXpDEIsP1D8F8q1m2WCZRkUEXgl/Xpy+H9/SCyhqidbg==
+X-Received: by 2002:ac8:5c52:0:b0:343:3dc7:db0d with SMTP id j18-20020ac85c52000000b003433dc7db0dmr13674240qtj.179.1661843806969;
+        Tue, 30 Aug 2022 00:16:46 -0700 (PDT)
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
+        by smtp.gmail.com with ESMTPSA id u187-20020a3760c4000000b006bb9e4b96e6sm7449212qkb.24.2022.08.30.00.16.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 00:16:46 -0700 (PDT)
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-3413ad0640dso96155137b3.13;
+        Tue, 30 Aug 2022 00:16:46 -0700 (PDT)
+X-Received: by 2002:a81:83c8:0:b0:341:4b7b:3d9e with SMTP id
+ t191-20020a8183c8000000b003414b7b3d9emr4513475ywf.47.1661843806284; Tue, 30
+ Aug 2022 00:16:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220829215128.5983-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220829215128.5983-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 30 Aug 2022 09:16:34 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVr8s3xYdRZOixm1CmYjQWPGqW5uG1DHSZAzrACm6tB+A@mail.gmail.com>
+Message-ID: <CAMuHMdVr8s3xYdRZOixm1CmYjQWPGqW5uG1DHSZAzrACm6tB+A@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: renesas: Drop clock-names property from RPC node
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-e1e_rphy() could return error value when reading PHY register, which
-needs to be checked.
+On Mon, Aug 29, 2022 at 11:51 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> With 'unevaluatedProperties' support implemented, there's a number of
+> warnings when running dtbs_check:
+>
+> arch/arm64/boot/dts/renesas/r8a774b1-hihope-rzg2n-rev2-ex-idk-1110wr.dtb: spi@ee200000: Unevaluated properties are not allowed ('clock-names' was unexpected)
+>         From schema: Documentation/devicetree/bindings/memory-controllers/renesas,rpc-if.yaml
+>
+> The main problem is that SoC DTSI's are including clock-names, whereas the
+> renesas,rpc-if.yaml has 'unevaluatedProperties: false'. So just drop
+> clock-names property from the SoC DTSI's.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 
-Signed-off-by: Li Zhong <floridsleeves@gmail.com>
----
- drivers/net/ethernet/intel/e1000e/phy.c | 20 +++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.1.
 
-diff --git a/drivers/net/ethernet/intel/e1000e/phy.c b/drivers/net/ethernet/intel/e1000e/phy.c
-index fd07c3679bb1..060b263348ce 100644
---- a/drivers/net/ethernet/intel/e1000e/phy.c
-+++ b/drivers/net/ethernet/intel/e1000e/phy.c
-@@ -2697,9 +2697,14 @@ static s32 e1000_access_phy_wakeup_reg_bm(struct e1000_hw *hw, u32 offset,
- void e1000_power_up_phy_copper(struct e1000_hw *hw)
- {
- 	u16 mii_reg = 0;
-+	int ret;
- 
- 	/* The PHY will retain its settings across a power down/up cycle */
--	e1e_rphy(hw, MII_BMCR, &mii_reg);
-+	ret = e1e_rphy(hw, MII_BMCR, &mii_reg);
-+	if (ret) {
-+		e_dbg("Error reading PHY register\n");
-+		return;
-+	}
- 	mii_reg &= ~BMCR_PDOWN;
- 	e1e_wphy(hw, MII_BMCR, mii_reg);
- }
-@@ -2715,9 +2720,14 @@ void e1000_power_up_phy_copper(struct e1000_hw *hw)
- void e1000_power_down_phy_copper(struct e1000_hw *hw)
- {
- 	u16 mii_reg = 0;
-+	int ret;
- 
- 	/* The PHY will retain its settings across a power down/up cycle */
--	e1e_rphy(hw, MII_BMCR, &mii_reg);
-+	ret = e1e_rphy(hw, MII_BMCR, &mii_reg);
-+	if (ret) {
-+		e_dbg("Error reading PHY register\n");
-+		return;
-+	}
- 	mii_reg |= BMCR_PDOWN;
- 	e1e_wphy(hw, MII_BMCR, mii_reg);
- 	usleep_range(1000, 2000);
-@@ -3037,7 +3047,11 @@ s32 e1000_link_stall_workaround_hv(struct e1000_hw *hw)
- 		return 0;
- 
- 	/* Do not apply workaround if in PHY loopback bit 14 set */
--	e1e_rphy(hw, MII_BMCR, &data);
-+	ret_val = e1e_rphy(hw, MII_BMCR, &data);
-+	if (ret_val) {
-+		e_dbg("Error reading PHY register\n");
-+		return ret_val;
-+	}
- 	if (data & BMCR_LOOPBACK)
- 		return 0;
- 
--- 
-2.25.1
+Gr{oetje,eeting}s,
 
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

@@ -2,69 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F6C5A6865
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:27:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7E95A6868
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:27:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230048AbiH3Q1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55348 "EHLO
+        id S230117AbiH3Q1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:27:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiH3Q1J (ORCPT
+        with ESMTP id S230073AbiH3Q1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:27:09 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9F22BADAB;
-        Tue, 30 Aug 2022 09:27:06 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-11f11d932a8so9549049fac.3;
-        Tue, 30 Aug 2022 09:27:06 -0700 (PDT)
+        Tue, 30 Aug 2022 12:27:17 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5800EA8BE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:27:14 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id c24so11114970pgg.11
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:27:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=MHoR6yIrGCrlxd9mVdCiPC/GPzHGRJ7W5b2peJNI/oY=;
+        b=hOviUGYdQ5DATRxPhlLL4hCmPmmixmpEsR/zwwy+kUTMzVSpSWurCTDUGDcjcsUw3S
+         EK1//woJjRLS5UUDJfOM6W1bdxqfXRFuKbLjwinNaqFI8g+uWjpik6dla0S6AV/o5fzO
+         fcU/P2GmMiPiMSxit102hDbwvATUXkc4S2G00R3p2MSXDfshAHCKkb642nZmz5IkabMU
+         Kp/m4IFI+1nsxvuhSf2fqsD9UkHsaSaReoAWEJh58VoaZMYPRX4t0xRB6HaFhX/fwLx9
+         CvMJ7nSgJAdPa2MIYlIUE0dGerbfGgkKHJBjEbsGSCSs1q5k171nQa8qLzEKZlalhLmc
+         uQxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=wuRk+VYHRYicUuf1j8uq3lODBftZnoqCCHUZOuAjQB0=;
-        b=ubr6Oc7/6uEi+jjkodRkt+tXu1UMf2zXttuY9xjTyIEDg3GUS+0s1i9dNp/EcLivmU
-         bsngRC38/B2K/wUGfAJ7GJoQxJ6Gj+nlcw1kPA7NTIaj9ll43soHkWo0qCMjbBgFeAdb
-         hlKbxEx8Vo8seLlA6ZL9VH+g6SU/f4vTeN9hWNQLPjPLpsVFvaAWMdAwzkmpuhHVHrQj
-         c7mo3hlu2tPOtFa131qFKW9v9zRpfIp9mxVdQ7duvzYVLpAaTobrWl2SI909zYqMihZB
-         NVCVwbIQaUMOOVXV1fg0sBT/nzxOSwacrdOmk43sJ2qxduYe46OKczE6Q2k/me4MDM3t
-         SRqQ==
-X-Gm-Message-State: ACgBeo3QXUlMKeRzkE5wCnGhAI3zlCRpW2iN8H5muSICIK7IB0wE1hXP
-        2Vu74ULu3APd2PcJZTI8pkxkIgcQig==
-X-Google-Smtp-Source: AA6agR6GA6Q0ErAGzOIHxDnClzhpq9ne0VqxD6Z//Rl9F2SULHqE/HhYGYWk0fVndX+8Zi3adywX5w==
-X-Received: by 2002:a05:6808:1892:b0:344:d066:5171 with SMTP id bi18-20020a056808189200b00344d0665171mr9457806oib.195.1661876825779;
-        Tue, 30 Aug 2022 09:27:05 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id w14-20020a0568080d4e00b0033b15465357sm6390194oik.5.2022.08.30.09.27.05
+        bh=MHoR6yIrGCrlxd9mVdCiPC/GPzHGRJ7W5b2peJNI/oY=;
+        b=XuI2vqGAFbUROzIoaeDPr1RLa+fS02GX1qxvu6X7AZkZpv3/3k+2BF8ULB7bKchPKa
+         qcmc35rjolEyhCzTEgLbbl02kf436RbENAQ8QtGw3lKV3TBoknjsrPBIwSMM5R3ZYm0u
+         27118lzNkstNnm7nJoGdSQEGc9RAD3y1mWB1WmPkPNMi1tkdksz3aIZHpF0ajmrQQmEc
+         xvOxzVtkZQdQGPZLYZwz2MJFtaLNnosaYQcNPCYR50w6cIkKNC1SnHiP+zJsqi4pGLXE
+         /eBRPsgVx6VEX77ewlenT8gHeunc2EAiDHos1oDM4L6sxFikqQsggXRclOVVbdPwA5CQ
+         8mYg==
+X-Gm-Message-State: ACgBeo1PynAeOq4bYIeb8HzCO2tMF1Uenu/RkaroqsYDZj0oateFfhe4
+        mnv4lRNxP2DDI6pm7OMKcdk/dQ==
+X-Google-Smtp-Source: AA6agR55aWGRWytPY81SSLflhZPqZlfHmk2iF5IHJO67qNPRP1M7RVU8TqYgGuFMMaAe4iCDuwo3uA==
+X-Received: by 2002:a63:8641:0:b0:42c:42ac:b6b1 with SMTP id x62-20020a638641000000b0042c42acb6b1mr6860753pgd.508.1661876833230;
+        Tue, 30 Aug 2022 09:27:13 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id x17-20020a170902ec9100b00174a69f69b8sm5985886plg.51.2022.08.30.09.27.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 09:27:05 -0700 (PDT)
-Received: (nullmailer pid 1527854 invoked by uid 1000);
-        Tue, 30 Aug 2022 16:27:04 -0000
-Date:   Tue, 30 Aug 2022 11:27:04 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, David Heidelberg <david@ixit.cz>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andy Gross <agross@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH 14/14] dt-bindings: mfd: qcom,spmi-pmic: fix TM ADC node
- schema on PM8998
-Message-ID: <20220830162704.GA1527768-robh@kernel.org>
-References: <20220828084341.112146-1-krzysztof.kozlowski@linaro.org>
- <20220828084341.112146-15-krzysztof.kozlowski@linaro.org>
+        Tue, 30 Aug 2022 09:27:12 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 16:27:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v9 00/40] KVM: x86: hyper-v: Fine-grained TLB flush + L2
+ TLB flush features
+Message-ID: <Yw46XAP3aafdH/xZ@google.com>
+References: <20220803134110.397885-1-vkuznets@redhat.com>
+ <8735ddvoc2.fsf@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220828084341.112146-15-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <8735ddvoc2.fsf@redhat.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,18 +80,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 28 Aug 2022 11:43:41 +0300, Krzysztof Kozlowski wrote:
-> There are two bindings for Qualcomm SPMI PMIC Thermal Monitoring ADC:
-> one for ADC HC and one for ADC TM5 and TM7.  PM8998 uses the former one,
-> so fix matching of child schema:
+On Tue, Aug 30, 2022, Vitaly Kuznetsov wrote:
+> Vitaly Kuznetsov <vkuznets@redhat.com> writes:
 > 
->   qcom/msm8998-asus-novago-tp370ql.dtb: pmic@0: adc-tm@3400:compatible:0: 'qcom,spmi-adc-tm-hc' is not one of ['qcom,spmi-adc-tm5', 'qcom,spmi-adc-tm5-gen2', 'qcom,adc-tm7']
+> > Changes since v8:
+> > - Rebase to the current kvm/queue (93472b797153)
+> > - selftests: move Hyper-V test pages to a dedicated struct untangling from 
+> >  vendor-specific (VMX/SVM) pages allocation [Sean].
 > 
-> Fixes: 3f5117be9584 ("dt-bindings: mfd: convert to yaml Qualcomm SPMI PMIC")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/mfd/qcom,spmi-pmic.yaml           | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
+> Sean, Paolo,
 > 
+> I've jsut checked and this series applies cleanly on top of the latest
+> kvm/queue [372d07084593]. I also don't seem to have any feedback to
+> address.
+> 
+> Any chance this can be queued?
 
-Acked-by: Rob Herring <robh@kernel.org>
+It's the top "big" series on my todo list.  I fully plan on getting queued for 6.1,
+but I don't expect to get to it this week.

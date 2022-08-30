@@ -2,107 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77FD65A6D81
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:41:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B29B5A6D8A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:42:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiH3Tk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:40:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S230495AbiH3Tl6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:41:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiH3Tkz (ORCPT
+        with ESMTP id S229513AbiH3Tlz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:40:55 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2BA86A49A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:40:54 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id y1so10247761plb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:40:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=cmkGTb9L9OeIMFxD3jKQUsg9TEkzwU9aSjE2Dw5vIEQ=;
-        b=pE4Bx71pvd9dZKRF5z6T8Pt+bB46qQGtd9GcQDH2oAD1s76fa9WKjAuSmWyzPWGQpG
-         FNbMF1rYoivPT1f8QXiYqZ+1HjEdCPv3zARTVSchZnowgeH7pmJWpqcu786U63xjebHh
-         j/mnY4Nn33R/UydBsSBPRHKotcLndCHiknF7gSjmqe60n71QICcKqNrXcat1K0VxOnO+
-         c6oUjhHwUyUQUqan6gHFT6OrfVs6lupH8rxh4NVVFwKLjCj/Ko/B0MyeyqHq5D6jX3vT
-         JdpcEoIAEwEawrh++3bTY7tivyd1iaD7bOYV+R6BUulsRnSyM2hduVBNyn0eCeXqyfKh
-         wyPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=cmkGTb9L9OeIMFxD3jKQUsg9TEkzwU9aSjE2Dw5vIEQ=;
-        b=TThNdXBa0OAd1vmfxlNZ+3auOceFXrU9l9htXqVssPqN65j5xZbFn9EGdMfq8qA4zG
-         fwwuDjMawSU0ZUHLuskELayaoOzRbJX+87YwJMo7xMENiHuM6eguQc4dSSRcvclYVP9Z
-         OjOwmxUpf/q+UzLE1jFD/gf4Q7DH9ZGNGwaxx/+8d+CyR2clJVDvMHnCsAHi0zpt+Z4p
-         AzN4n1FQUSBgXTR3wXfDi6q+rt6XvNBL2KphhI5xJMo9bMRGLCuD/Y/cOiVdR1oDlR6J
-         gzL2W6Mx8zHj7CTRTz1Sx8HEsPcfMnyu4uqKGp763KEwGtuO7B3KwdqXWlapcEnXRR9P
-         b5nA==
-X-Gm-Message-State: ACgBeo2fN3AEWQ6oIcj+rq1ho3wUp/w4D2nK/IKRVeuGp7APP+tDKUlj
-        oxlGOYfOHzNW4P0qoObk08EdlA==
-X-Google-Smtp-Source: AA6agR6a2tkSKcXvOkhpwgJXaxn6qr4k21/Nygc6Bo9hxI7CsKNxw/3JGemz1LbLs53jqC6gBwaMBg==
-X-Received: by 2002:a17:902:ccd1:b0:172:5c49:34be with SMTP id z17-20020a170902ccd100b001725c4934bemr22117194ple.23.1661888454066;
-        Tue, 30 Aug 2022 12:40:54 -0700 (PDT)
-Received: from google.com (157.214.185.35.bc.googleusercontent.com. [35.185.214.157])
-        by smtp.gmail.com with ESMTPSA id h21-20020a17090aa89500b001fd982478cbsm6344983pjq.45.2022.08.30.12.40.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 12:40:53 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 19:40:49 +0000
-From:   Carlos Llamas <cmllamas@google.com>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com" 
-        <syzbot+f7dc54e5be28950ac459@syzkaller.appspotmail.com>,
-        "syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com" 
-        <syzbot+a75ebe0452711c9e56d9@syzkaller.appspotmail.com>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/7] binder: fix alloc->vma_vm_mm null-ptr dereference
-Message-ID: <Yw5nwaNI5ewExYtC@google.com>
-References: <20220829201254.1814484-1-cmllamas@google.com>
- <20220829201254.1814484-2-cmllamas@google.com>
- <20220830190515.dlrp2a3ypfyhzid5@revolver>
+        Tue, 30 Aug 2022 15:41:55 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1650F726A0;
+        Tue, 30 Aug 2022 12:41:54 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661888512;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QlZz4xsWZh51ZQP7HNgRWu8mkrkQyxoC5UQCh4dA9Gc=;
+        b=oW0OkHRXICpe1qsMt0Vkf05qJypn89W1g6AlFhTy1KOz5tK4JqHClut6fFaXYCX49Vc1QJ
+        jhWNFu4tgN1b56RXLkVgSjCkxoSdx4TVq936DjQMlyZOnhuv8/848Ta6ygx6EIPnwQZlbP
+        IAcGQ4HxQopueoqeyeKY2SIVQBOPmhQ=
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Quentin Perret <qperret@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Reiji Watanabe <reijiw@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Oliver Upton <oliver.upton@linux.dev>
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 01/14] KVM: arm64: Add a helper to tear down unlinked stage-2 subtrees
+Date:   Tue, 30 Aug 2022 19:41:19 +0000
+Message-Id: <20220830194132.962932-2-oliver.upton@linux.dev>
+In-Reply-To: <20220830194132.962932-1-oliver.upton@linux.dev>
+References: <20220830194132.962932-1-oliver.upton@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830190515.dlrp2a3ypfyhzid5@revolver>
-X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:06:37PM +0000, Liam Howlett wrote:
-> > diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
-> > index 51f4e1c5cd01..9b1778c00610 100644
-> > --- a/drivers/android/binder_alloc.c
-> > +++ b/drivers/android/binder_alloc.c
-> > @@ -322,7 +322,6 @@ static inline void binder_alloc_set_vma(struct binder_alloc *alloc,
-> >  	 */
-> >  	if (vma) {
-> >  		vm_start = vma->vm_start;
-> > -		alloc->vma_vm_mm = vma->vm_mm;
-> 
-> Is this really the null pointer dereference?  We check for vma above..?
-> 
+A subsequent change to KVM will move the tear down of an unlinked
+stage-2 subtree out of the critical path of the break-before-make
+sequence.
 
-Not here. The sequence leading to the null-ptr-deref happens when we try
-to take alloc->vma_vm_mm->mmap_lock in binder_alloc_new_buf_locked() and
-in binder_alloc_print_pages() without initializing alloc->vma_vm_mm
-first (e.g. mmap() was never called). These sequences are described in
-the commit message but basically they translate to mmap_read_lock(NULL)
-calls.
+Introduce a new helper for tearing down unlinked stage-2 subtrees.
+Leverage the existing stage-2 free walkers to do so, with a deep call
+into __kvm_pgtable_walk() as the subtree is no longer reachable from the
+root.
+
+Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
+---
+ arch/arm64/include/asm/kvm_pgtable.h | 11 +++++++++++
+ arch/arm64/kvm/hyp/pgtable.c         | 26 ++++++++++++++++++++++++++
+ 2 files changed, 37 insertions(+)
+
+diff --git a/arch/arm64/include/asm/kvm_pgtable.h b/arch/arm64/include/asm/kvm_pgtable.h
+index 9f339dffbc1a..d71fb92dc913 100644
+--- a/arch/arm64/include/asm/kvm_pgtable.h
++++ b/arch/arm64/include/asm/kvm_pgtable.h
+@@ -316,6 +316,17 @@ int __kvm_pgtable_stage2_init(struct kvm_pgtable *pgt, struct kvm_s2_mmu *mmu,
+  */
+ void kvm_pgtable_stage2_destroy(struct kvm_pgtable *pgt);
+ 
++/**
++ * kvm_pgtable_stage2_free_removed() - Free a removed stage-2 paging structure.
++ * @pgtable:	Unlinked stage-2 paging structure to be freed.
++ * @level:	Level of the stage-2 paging structure to be freed.
++ * @arg:	Page-table structure initialised by kvm_pgtable_stage2_init*()
++ *
++ * The page-table is assumed to be unreachable by any hardware walkers prior to
++ * freeing and therefore no TLB invalidation is performed.
++ */
++void kvm_pgtable_stage2_free_removed(void *pgtable, u32 level, void *arg);
++
+ /**
+  * kvm_pgtable_stage2_map() - Install a mapping in a guest stage-2 page-table.
+  * @pgt:	Page-table structure initialised by kvm_pgtable_stage2_init*().
+diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+index 2cb3867eb7c2..d8127c25424c 100644
+--- a/arch/arm64/kvm/hyp/pgtable.c
++++ b/arch/arm64/kvm/hyp/pgtable.c
+@@ -1233,3 +1233,29 @@ void kvm_pgtable_stage2_destroy(struct kvm_pgtable *pgt)
+ 	pgt->mm_ops->free_pages_exact(pgt->pgd, pgd_sz);
+ 	pgt->pgd = NULL;
+ }
++
++void kvm_pgtable_stage2_free_removed(void *pgtable, u32 level, void *arg)
++{
++	struct kvm_pgtable *pgt = (struct kvm_pgtable *)arg;
++	kvm_pte_t *ptep = (kvm_pte_t *)pgtable;
++	struct kvm_pgtable_walker walker = {
++		.cb	= stage2_free_walker,
++		.flags	= KVM_PGTABLE_WALK_LEAF |
++			  KVM_PGTABLE_WALK_TABLE_POST,
++		.arg	= pgt->mm_ops,
++	};
++	struct kvm_pgtable_walk_data data = {
++		.pgt	= pgt,
++		.walker	= &walker,
++
++		/*
++		 * At this point the IPA really doesn't matter, as the page
++		 * table being traversed has already been removed from the stage
++		 * 2. Set an appropriate range to cover the entire page table.
++		 */
++		.addr	= 0,
++		.end	= kvm_granule_size(level),
++	};
++
++	WARN_ON(__kvm_pgtable_walk(&data, ptep, level));
++}
+-- 
+2.37.2.672.g94769d06f0-goog
+

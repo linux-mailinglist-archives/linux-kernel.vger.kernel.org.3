@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7C215A6047
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:07:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E4F5A604B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbiH3KHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
+        id S230057AbiH3KHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229744AbiH3KGQ (ORCPT
+        with ESMTP id S229850AbiH3KGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:06:16 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DF87F2C83
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:03:33 -0700 (PDT)
-Received: from fraeml708-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MH2tV5nWJz6842y;
-        Tue, 30 Aug 2022 18:02:58 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml708-chm.china.huawei.com (10.206.15.36) with Microsoft SMTP Server
+        Tue, 30 Aug 2022 06:06:17 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BD2D5DDB
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:03:34 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MH2s64qqQzHnWq;
+        Tue, 30 Aug 2022 18:01:46 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 30 Aug 2022 12:03:30 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 30 Aug
- 2022 11:03:30 +0100
-Date:   Tue, 30 Aug 2022 11:03:29 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     kernel test robot <lkp@intel.com>
-CC:     Dmitry Rokosov <DDRokosov@sberdevices.ru>, <llvm@lists.linux.dev>,
-        <kbuild-all@lists.01.org>, <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-Subject: Re: [jic23-iio:testing 124/129] drivers/iio/accel/msa311.c:993:24:
- warning: format specifies type 'unsigned char' but the argument has type
- 'unsigned int'
-Message-ID: <20220830110329.00000d18@huawei.com>
-In-Reply-To: <202208290618.wU7mHfOp-lkp@intel.com>
-References: <202208290618.wU7mHfOp-lkp@intel.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+ 15.1.2375.24; Tue, 30 Aug 2022 18:03:32 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 30 Aug 2022 18:03:32 +0800
+Subject: Re: [PATCH v2] ARM: Add sanity check for dev->periphid in
+ amba_probe()
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Saravana Kannan <saravanak@google.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <patches@armlinux.org.uk>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>
+References: <20220830065413.638-1-thunder.leizhen@huawei.com>
+ <CAGETcx8hfzAthF_gCMrmnVOgwgFJEPE=bwRuVeXaiB7ywUkWkg@mail.gmail.com>
+ <Yw3cs6wb4PvnDN/7@shell.armlinux.org.uk>
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <b120e94b-4b43-6d8a-a136-41417cb250cc@huawei.com>
+Date:   Tue, 30 Aug 2022 18:03:31 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+In-Reply-To: <Yw3cs6wb4PvnDN/7@shell.armlinux.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,75 +60,153 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 29 Aug 2022 06:25:53 +0800
-kernel test robot <lkp@intel.com> wrote:
 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git testing
-> head:   fc32c348a52157665cd8f3f060669ef4e8a03cd4
-> commit: 1a622d75985c5950a470edc50c7ad7c10e79a1d3 [124/129] iio: add MEMSensing MSA311 3-axis accelerometer driver
-> config: powerpc-randconfig-r024-20220829 (https://download.01.org/0day-ci/archive/20220829/202208290618.wU7mHfOp-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project a2100daf12fb980a29fd1a9c85ccf8eaaaf79730)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install powerpc cross compiling tool for clang build
->         # apt-get install binutils-powerpc-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git/commit/?id=1a622d75985c5950a470edc50c7ad7c10e79a1d3
->         git remote add jic23-iio https://git.kernel.org/pub/scm/linux/kernel/git/jic23/iio.git
->         git fetch --no-tags jic23-iio testing
->         git checkout 1a622d75985c5950a470edc50c7ad7c10e79a1d3
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash drivers/iio/accel/
+
+On 2022/8/30 17:47, Russell King (Oracle) wrote:
+> On Tue, Aug 30, 2022 at 12:20:00AM -0700, Saravana Kannan wrote:
+>> On Mon, Aug 29, 2022 at 11:59 PM Zhen Lei <thunder.leizhen@huawei.com> wrote:
+>>>
+>>> Commit f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
+>>> forcibly invokes device_add() even if dev->periphid is not ready. Although
+>>> it will be remedied in amba_match(): dev->periphid will be initialized
+>>> if everything is in place; Otherwise, return -EPROBE_DEFER to block
+>>> __driver_attach() from further execution. But not all drivers have .match
+>>> hook, such as pl031, the dev->bus->probe will be called directly in
+>>> __driver_attach(). Unfortunately, if dev->periphid is still not
+>>> initialized, the following exception will be triggered.
+>>>
+>>> 8<--- cut here ---
+>>> Unable to handle kernel NULL pointer dereference at virtual address 00000008
+>>> [00000008] *pgd=00000000
+>>> Internal error: Oops: 5 [#1] SMP ARM
+>>> Modules linked in:
+>>> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc2+ #7
+>>> Hardware name: ARM-Versatile Express
+>>> PC is at pl031_probe+0x8/0x208
+>>> LR is at amba_probe+0xf0/0x160
+>>> pc : 80698df8  lr : 8050eb54  psr: 80000013
+>>> sp : c0825df8  ip : 00000000  fp : 811fda38
+>>> r10: 00000000  r9 : 80d72470  r8 : fffffdfb
+>>> r7 : 811fd800  r6 : be7eb330  r5 : 00000000  r4 : 811fd900
+>>> r3 : 80698df0  r2 : 37000000  r1 : 00000000  r0 : 811fd800
+>>> Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+>>> Control: 10c5387d  Table: 6000406a  DAC: 00000051
+>>> ... ...
+>>>  pl031_probe from amba_probe+0xf0/0x160
+>>>  amba_probe from really_probe+0x118/0x290
+>>>  really_probe from __driver_probe_device+0x84/0xe4
+>>>  __driver_probe_device from driver_probe_device+0x30/0xd0
+>>>  driver_probe_device from __driver_attach+0x8c/0xfc
+>>>  __driver_attach from bus_for_each_dev+0x70/0xb0
+>>>  bus_for_each_dev from bus_add_driver+0x168/0x1f4
+>>>  bus_add_driver from driver_register+0x7c/0x118
+>>>  driver_register from do_one_initcall+0x44/0x1ec
+>>>  do_one_initcall from kernel_init_freeable+0x238/0x288
+>>>  kernel_init_freeable from kernel_init+0x18/0x12c
+>>>  kernel_init from ret_from_fork+0x14/0x2c
+>>> ... ...
+>>> ---[ end trace 0000000000000000 ]---
+>>>
+>>> Therefore, take the same action as in amba_match(): return -EPROBE_DEFER
+>>> if dev->periphid is not ready in amba_probe().
+>>>
+>>> Fixes: f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
+>>> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+>>> ---
+>>> KernelVersion: v6.0-rc3
+>>>  drivers/amba/bus.c | 24 +++++++++++++++++++++---
+>>>  1 file changed, 21 insertions(+), 3 deletions(-)
+>>>
+>>> v1 --> v2:
+>>> 1. Update this patch based on:
+>>>    https://lore.kernel.org/lkml/20220818172852.3548-1-isaacmanjarres@google.com/
+>>> 2. Move the operations of sanity checking and reading dev->periphid,
+>>>    updating uevent into new function amba_prepare_periphid().
+>>>
+>>> diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
+>>> index 110a535648d2e1f..8e4c7e190880206 100644
+>>> --- a/drivers/amba/bus.c
+>>> +++ b/drivers/amba/bus.c
+>>> @@ -204,10 +204,9 @@ static int amba_read_periphid(struct amba_device *dev)
+>>>         return ret;
+>>>  }
+>>>
+>>> -static int amba_match(struct device *dev, struct device_driver *drv)
+>>> +static int amba_prepare_periphid(struct device *dev)
+>>>  {
+>>>         struct amba_device *pcdev = to_amba_device(dev);
+>>> -       struct amba_driver *pcdrv = to_amba_driver(drv);
+>>>
+>>>         mutex_lock(&pcdev->periphid_lock);
+>>>         if (!pcdev->periphid) {
+>>> @@ -228,6 +227,19 @@ static int amba_match(struct device *dev, struct device_driver *drv)
+>>>         }
+>>>         mutex_unlock(&pcdev->periphid_lock);
+>>>
+>>> +       return 0;
+>>> +}
+>>> +
+>>> +static int amba_match(struct device *dev, struct device_driver *drv)
+>>> +{
+>>> +       struct amba_device *pcdev = to_amba_device(dev);
+>>> +       struct amba_driver *pcdrv = to_amba_driver(drv);
+>>> +       int ret;
+>>> +
+>>> +       ret = amba_prepare_periphid(dev);
+>>> +       if (ret)
+>>> +               return ret;
+>>> +
+>>>         /* When driver_override is set, only bind to the matching driver */
+>>>         if (pcdev->driver_override)
+>>>                 return !strcmp(pcdev->driver_override, drv->name);
+>>> @@ -278,9 +290,15 @@ static int amba_probe(struct device *dev)
+>>>  {
+>>>         struct amba_device *pcdev = to_amba_device(dev);
+>>>         struct amba_driver *pcdrv = to_amba_driver(dev->driver);
+>>> -       const struct amba_id *id = amba_lookup(pcdrv->id_table, pcdev);
+>>> +       const struct amba_id *id;
+>>>         int ret;
+>>>
+>>> +       ret = amba_prepare_periphid(dev);
+>>> +       if (ret)
+>>> +               return ret;
+>>> +
+>>> +       id = amba_lookup(pcdrv->id_table, pcdev);
+>>> +
+>>>         do {
+>>>                 ret = of_amba_device_decode_irq(pcdev);
+>>>                 if (ret)
+>>
+>> Let's wait for Isaac to review this. He has been looking at the
+>> locking issue for a bit and there were some tricky cases.
 > 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
+> How can we get to amba_probe() if amba_match() has not returned a
+> positive match for an ID? Surely if that happens, the driver model
+
+Always return true.
+
+__driver_attach
+    driver_match_device
+
+static inline int driver_match_device(struct device_driver *drv,
+                                      struct device *dev)
+{
+        return drv->bus->match ? drv->bus->match(dev, drv) : 1;
+}
+
+> is failed - since a probe function should not be called unless the
+> driver matches the device.
 > 
-> All warnings (new ones prefixed by >>):
+> This patch, and 9229/1 both feel like they're working around some
+> brokenness elsewhere in the kernel.
 > 
-> >> drivers/iio/accel/msa311.c:993:24: warning: format specifies type 'unsigned char' but the argument has type 'unsigned int' [-Wformat]  
->                                               "msa311-%hhx", partid);
->                                                       ~~~~   ^~~~~~
->                                                       %x
->    1 warning generated.
-> 
-> 
-> vim +993 drivers/iio/accel/msa311.c
-> 
->    977	
->    978	static int msa311_check_partid(struct msa311_priv *msa311)
->    979	{
->    980		struct device *dev = msa311->dev;
->    981		unsigned int partid;
->    982		int err;
->    983	
->    984		err = regmap_read(msa311->regs, MSA311_PARTID_REG, &partid);
->    985		if (err)
->    986			return dev_err_probe(dev, err, "failed to read partid\n");
->    987	
->    988		if (partid != MSA311_WHO_AM_I)
->    989			dev_warn(dev, "invalid partid (%#x), expected (%#x)\n",
->    990				 partid, MSA311_WHO_AM_I);
->    991	
->    992		msa311->chip_name = devm_kasprintf(dev, GFP_KERNEL,
->  > 993						   "msa311-%hhx", partid);  
-
-Dmitry,
-
-I'm thinking intent here was to limit range of what was printed. Maybe better to use
-local u8 variable or cast?
-
-I can fix it up if that's fine with you - or even better send me a patch that fixes
-it however you prefer!
-
-Jonathan
-
-
->    994		if (!msa311->chip_name)
->    995			return dev_err_probe(dev, -ENOMEM, "can't alloc chip name\n");
->    996	
->    997		return 0;
->    998	}
->    999	
+> The description in 9229/1, specifically "But not all drivers have .match
+> hook, such as pl031, the dev->bus->probe will be called directly in
+> __driver_attach()." AMBA drivers do not have a .match hook - the bus
+> does, which all AMBA drivers must be a member of. If amba_match fails,
+> there is no way that amba_probe() should ever be called.
 > 
 
+-- 
+Regards,
+  Zhen Lei

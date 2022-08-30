@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220335A6BDE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:14:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29F45A6BE2
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:15:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231319AbiH3SOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
+        id S231518AbiH3SPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiH3SOI (ORCPT
+        with ESMTP id S229888AbiH3SPr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:14:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E97298D12;
-        Tue, 30 Aug 2022 11:14:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 30 Aug 2022 14:15:47 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567A01C124;
+        Tue, 30 Aug 2022 11:15:41 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
+ id d80d4b748d72c08a; Tue, 30 Aug 2022 20:15:39 +0200
+Received: from kreacher.localnet (unknown [213.134.183.102])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6559B81D0C;
-        Tue, 30 Aug 2022 18:14:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42DCEC433C1;
-        Tue, 30 Aug 2022 18:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661883245;
-        bh=VKzLFiP5mB24ZQikYwTCSQzw6IlGtjNBLJRJ3/f8DN4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VoQzTTQT6IaJUZCXQsb10J+JwgNfoHg0nCI4uVecJ+sh6iaQo7idU22k+xf0mHwYS
-         TFZKdr5oKf0jcULLavtJGByELsx0GZkjE9faQNyttS2enX7z82jrvOXNuAWuXgrIsr
-         FSTZ79v5BU1XcqhAu/4Z3n7fxoY4Z11RrpeND7WGSnLvGmmFs+8NFnIZ31u3mcuUsV
-         gV54BfP4OHnFpyW3BHvjKHpN7AkVx3obiekUh0Li925PI7GgIXwGbyEfDtB8Dmkgba
-         zVOe12BdnPNYGrusd8noWIFxQPqsx5pi++zxAj5Scux/M6AyzTH2FXwNJKMdi/D/SR
-         j9XYn+qb8aw1A==
-Date:   Tue, 30 Aug 2022 19:14:03 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH -next 2/4] spi: mockup: Add writeable tracepoint for spi
- transfer
-Message-ID: <Yw5Ta8sO3fMsPLDY@sirena.org.uk>
-References: <20220826144341.532265-1-weiyongjun1@huawei.com>
- <20220826144341.532265-3-weiyongjun1@huawei.com>
+        by v370.home.net.pl (Postfix) with ESMTPSA id DF57466D26F;
+        Tue, 30 Aug 2022 20:15:38 +0200 (CEST)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: [PATCH] thermal: gov_user_space: Do not lock thermal zone mutex
+Date:   Tue, 30 Aug 2022 20:15:38 +0200
+Message-ID: <12067136.O9o76ZdvQC@kreacher>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="NrO7SSyXeKA+hN76"
-Content-Disposition: inline
-In-Reply-To: <20220826144341.532265-3-weiyongjun1@huawei.com>
-X-Cookie: Necessity is a mother.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.183.102
+X-CLIENT-HOSTNAME: 213.134.183.102
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekfedguddvfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepvddufedrudefgedrudekfedruddtvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeefrddutddvpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdhinhhtvghlrdgt
+ ohhmpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrgh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
---NrO7SSyXeKA+hN76
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Commit 670a5e356cb6 ("thermal/core: Move the thermal zone lock out of
+the governors") moved thermal zone locking away from governors, but it
+forgot about the user space one which deadlocks now.
 
-On Fri, Aug 26, 2022 at 02:43:39PM +0000, Wei Yongjun wrote:
+Fix this by removing the thermal zone locking from the user space
+governor.
 
-> +#define SPI_BUFSIZ_MAX		0x1000
-> +
-> +struct spi_msg_ctx {
-> +	int ret;
-> +	__u8 data[SPI_BUFSIZ_MAX];
-> +};
+Fixes: 670a5e356cb6 ("thermal/core: Move the thermal zone lock out of the governors")
+Tested-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
 
-This has a hard limit on the size of messages of only 4k on the
-size of messages, that seems a bit on the low side especially
-considering that the example is for a flash device.  There's also
-things like firmware downloads which can easily exceed 4k.  The
-driver should at the very least report this limit via the SPI
-API, and probably also complain loudly if the limit is exceeded
-since it's unlikely that most drivers will actually be checking
-for such a low limit given how rare they are.=20
+linux-next material
 
---NrO7SSyXeKA+hN76
-Content-Type: application/pgp-signature; name="signature.asc"
+---
+ drivers/thermal/gov_user_space.c |    5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+Index: linux-pm/drivers/thermal/gov_user_space.c
+===================================================================
+--- linux-pm.orig/drivers/thermal/gov_user_space.c
++++ linux-pm/drivers/thermal/gov_user_space.c
+@@ -34,7 +34,8 @@ static int notify_user_space(struct ther
+ 	char *thermal_prop[5];
+ 	int i;
+ 
+-	mutex_lock(&tz->lock);
++	lockdep_assert_held(&tz->lock);
++
+ 	thermal_prop[0] = kasprintf(GFP_KERNEL, "NAME=%s", tz->type);
+ 	thermal_prop[1] = kasprintf(GFP_KERNEL, "TEMP=%d", tz->temperature);
+ 	thermal_prop[2] = kasprintf(GFP_KERNEL, "TRIP=%d", trip);
+@@ -43,7 +44,7 @@ static int notify_user_space(struct ther
+ 	kobject_uevent_env(&tz->device.kobj, KOBJ_CHANGE, thermal_prop);
+ 	for (i = 0; i < 4; ++i)
+ 		kfree(thermal_prop[i]);
+-	mutex_unlock(&tz->lock);
++
+ 	return 0;
+ }
+ 
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMOU2oACgkQJNaLcl1U
-h9Dh1Af9GdUHS58zJBE+b0BdW2/c+ovfh36z1nrwxcJmGcLx+PFKfGGpTnk+7BX0
-oBKAI50N9F0ah3pROKYTAwz7jKW92dHXakjR14zsPG2TnOX3mb3ZBcellJ+LveNQ
-HTGjT+XX7Ggc1ZvjzTyTQ/FlSGRCOviRpem61IzIxvbdB2XDPFETQS0sbfNkvWxC
-YRKyVg/yFMLQAQ49pEeoJnUOU4Cxe0PxagFAvjbeav8tiOrGxsBchmzb8opSVTGD
-p8wF1d0tZnMyzrCGyklWblniXO7oiUsf/3Dc5+QwHCTqEu+KOgTTLM3AbLWYcEXt
-zVUPTPuxfCQv4cPJk//ZJolyfz9Y7w==
-=RqoT
------END PGP SIGNATURE-----
 
---NrO7SSyXeKA+hN76--
+

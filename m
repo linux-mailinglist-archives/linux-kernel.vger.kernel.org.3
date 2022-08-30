@@ -2,147 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 818675A6075
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 997415A6079
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:14:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230074AbiH3KOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:14:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41778 "EHLO
+        id S229449AbiH3KOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229716AbiH3KNb (ORCPT
+        with ESMTP id S230254AbiH3KO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:13:31 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3141054F
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:10:22 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id br21so9056280lfb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=EgnDZawayll/TZ+ocCBlj4vzfhU1iWcXae1blePHBeI=;
-        b=pQPWKaV07CHWz5hl5ve9Mj3xCOzwiOV/diab5zIdgaaw/UjGMdEIQqdvm5wj3cYvIX
-         +Zm2hwL2j9HxaUayBUC3mHfqwsNUmQPJb6mh0oBOvqsT2e162F1rl+B3zZ9R+5m7rkqW
-         M3MLbfrWoo8KUEQ/DL1Uf/9cr5vnrK58GEzm5lL6oi9FYWyDXU2waXoJz4YTVVufvmm5
-         /oskk+OGSFfysz2tTxUQhUc+X3grEoBoS3P9Kt5HZQOQrai31SHdioBoJY6vRzAG9M7c
-         jmj1uiIrdULzgMHvObn6jDBWz9aTrEU0phbNDPZMpJobT+fB+WeycnNC83rw/Bwsu5v2
-         x3Kw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=EgnDZawayll/TZ+ocCBlj4vzfhU1iWcXae1blePHBeI=;
-        b=kpWbuPe4XwJUgovTOY5QLm9mPX5Lm3C1iB2tRdXETsOMAJe3yXlQ+r+bFLm5uThbpe
-         q4xzRDrgVZTZBWnSdVMrAX2v21GMHMX6z6IknvYM8YjpEkRDgErODxf2ewbse6M6+8sJ
-         nHehygSVZar2dTxgOL3avWNhPP4vWdU9ggbvhpSSQo9Ly7kO348GyJKPd6vDvFKUdIlw
-         gZKo+QzpqY5H0Psur50GUtK3kFsmvS/rNCFaiH641Tc7jEROv9b5iBelxV/JSqrVSB4F
-         v3gOMwrcYPLNUIQxU0JwlmYpCcAUT4jNWJ/rYREa4vfIzwijtPpdrQ7//n1zYwM9intz
-         mA9g==
-X-Gm-Message-State: ACgBeo24GJooSb4Cohbs5RgUNV3YCMl/uvcIYRkQx0SYdwHCZiHNA++c
-        xsA6Reo8DIkrymNgH0pMYNYO1w==
-X-Google-Smtp-Source: AA6agR6abuAS5upLveqHIvJ7T72ZEkevibkm46Oky+6kWT+BFztbk1BBuuWRwkW4nBy132uOrL5irA==
-X-Received: by 2002:ac2:52ad:0:b0:492:d8ae:364f with SMTP id r13-20020ac252ad000000b00492d8ae364fmr6919677lfm.249.1661854219242;
-        Tue, 30 Aug 2022 03:10:19 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id m9-20020ac24249000000b00492f37e428asm1562479lfl.172.2022.08.30.03.10.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 03:10:18 -0700 (PDT)
-Message-ID: <fa987e2a-cd48-b08b-d191-419624699dc9@linaro.org>
-Date:   Tue, 30 Aug 2022 13:10:17 +0300
+        Tue, 30 Aug 2022 06:14:27 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA882785BC;
+        Tue, 30 Aug 2022 03:12:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 43D6B21ACB;
+        Tue, 30 Aug 2022 10:12:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1661854341; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=LYvW4/C2mjaJQZlE3mRWOzrMuvS8imMEtRVp0zKjWZI=;
+        b=qsVu4V70wdDHwjBgpKiDN0IlP/BDCuLEwMyjOQLn0UUCVFhXfjfQkoPEbTbScmBED/gl6P
+        bhU/EU/BRe2KUivYSHMfWx7D/0VMg7tkZvJUo10luRxxgtwxj1QUbxotcwmi5ML2RzsZF/
+        j9alAbuMHIT1y5Qy8jCkr4+d0Co14+M=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1A90213B0C;
+        Tue, 30 Aug 2022 10:12:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IHTZA4XiDWPAKQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 30 Aug 2022 10:12:21 +0000
+Date:   Tue, 30 Aug 2022 12:12:20 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Kairui Song <ryncsn@gmail.com>
+Cc:     cgroups@vger.kernel.org, linux-mm@kvack.org,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] mm: memcontrol: make cgroup_memory_noswap a static
+ key
+Message-ID: <Yw3ihBZ7J/V37eU0@dhcp22.suse.cz>
+References: <20220830055949.12640-1-ryncsn@gmail.com>
+ <20220830055949.12640-3-ryncsn@gmail.com>
+ <Yw21uOyEz9lLkI3p@dhcp22.suse.cz>
+ <CAMgjq7CM_SX3jLj9yp5hzAr6c3hBtS5nd4Nh4z8bTY8yWx-3KQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: lan9662-otpc: document Lan9662 OTPC
-Content-Language: en-US
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, UNGLinuxDriver@microchip.com
-References: <20220825204041.1485731-1-horatiu.vultur@microchip.com>
- <20220825204041.1485731-2-horatiu.vultur@microchip.com>
- <96da4897-7b55-84d5-8f1d-892e116153df@linaro.org>
- <20220826073103.kkotbaxc3latculo@soft-dev3-1.localhost>
- <bb0331e7-2203-e8cb-70b6-5d43bf6a0aaf@linaro.org>
- <20220829063557.3ntgt6uqblgew3r3@soft-dev3-1.localhost>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220829063557.3ntgt6uqblgew3r3@soft-dev3-1.localhost>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMgjq7CM_SX3jLj9yp5hzAr6c3hBtS5nd4Nh4z8bTY8yWx-3KQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/08/2022 09:35, Horatiu Vultur wrote:
-> The 08/26/2022 20:37, Krzysztof Kozlowski wrote:
->>
->> On 26/08/2022 10:31, Horatiu Vultur wrote:
->>> The 08/26/2022 09:42, Krzysztof Kozlowski wrote:
->>>
->>> Hi Krzysztof,
->>>
->>>>> +properties:
->>>>> +  compatible:
->>>>> +    items:
->>>>> +      - const: microchip,lan9662-otpc
->>>>> +      - const: microchip,lan9668-otpc
->>>>
->>>> Does not look like you tested the bindings. Please run `make
->>>> dt_binding_check` (see
->>>> Documentation/devicetree/bindings/writing-schema.rst for instructions).
->>>>
->>>> This won't work...
->>>
->>> You are right. That was a silly mistake on my side.
->>>
->>> It should be:
->>> ---
->>> properties:
->>>   compatible:
->>>     enum:
->>>       - microchip,lan9662-otpc
->>>       - microchip,lan9668-otpc
->>> ---
->>> Because what I want to achive is to be able to use any of
->>> string(microchip,lan9662-otpc or microchip,lan9668-otpc) as compatible
->>> string.
->>>
->>> Or this is not the correct change?
->>> At least with this change dt_binding_check is happy.
->>
->> This would be correct from syntax point of view, however maybe not the
->> best choice from functional point of view. How you wrote the driver and
->> bindings, these devices are compatible, so why this is not expressed as
->> compatible devices?
+On Tue 30-08-22 16:50:38, Kairui Song wrote:
+> Michal Hocko <mhocko@suse.com> 于2022年8月30日周二 15:01写道：
+> >
+> > On Tue 30-08-22 13:59:49, Kairui Song wrote:
+> > > From: Kairui Song <kasong@tencent.com>
+> > >
+> > > cgroup_memory_noswap is used in many hot path, so make it a static key
+> > > to lower the kernel overhead.
+> > >
+> > > Using 8G of ZRAM as SWAP, benchmark using `perf stat -d -d -d --repeat 100`
+> > > with the following code snip in a non-root cgroup:
+> > >
+> > >    #include <stdio.h>
+> > >    #include <string.h>
+> > >    #include <linux/mman.h>
+> > >    #include <sys/mman.h>
+> > >    #define MB 1024UL * 1024UL
+> > >    int main(int argc, char **argv){
+> > >       void *p = mmap(NULL, 8000 * MB, PROT_READ | PROT_WRITE,
+> > >                      MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
+> > >       memset(p, 0xff, 8000 * MB);
+> > >       madvise(p, 8000 * MB, MADV_PAGEOUT);
+> > >       memset(p, 0xff, 8000 * MB);
+> > >       return 0;
+> > >    }
+> > >
+> > > Before:
+> > >           7,021.43 msec task-clock                #    0.967 CPUs utilized            ( +-  0.03% )
+> > >              4,010      context-switches          #  573.853 /sec                     ( +-  0.01% )
+> > >                  0      cpu-migrations            #    0.000 /sec
+> > >          2,052,057      page-faults               #  293.661 K/sec                    ( +-  0.00% )
+> > >     12,616,546,027      cycles                    #    1.805 GHz                      ( +-  0.06% )  (39.92%)
+> > >        156,823,666      stalled-cycles-frontend   #    1.25% frontend cycles idle     ( +-  0.10% )  (40.25%)
+> > >        310,130,812      stalled-cycles-backend    #    2.47% backend cycles idle      ( +-  4.39% )  (40.73%)
+> > >     18,692,516,591      instructions              #    1.49  insn per cycle
+> > >                                                   #    0.01  stalled cycles per insn  ( +-  0.04% )  (40.75%)
+> > >      4,907,447,976      branches                  #  702.283 M/sec                    ( +-  0.05% )  (40.30%)
+> > >         13,002,578      branch-misses             #    0.26% of all branches          ( +-  0.08% )  (40.48%)
+> > >      7,069,786,296      L1-dcache-loads           #    1.012 G/sec                    ( +-  0.03% )  (40.32%)
+> > >        649,385,847      L1-dcache-load-misses     #    9.13% of all L1-dcache accesses  ( +-  0.07% )  (40.10%)
+> > >      1,485,448,688      L1-icache-loads           #  212.576 M/sec                    ( +-  0.15% )  (39.49%)
+> > >         31,628,457      L1-icache-load-misses     #    2.13% of all L1-icache accesses  ( +-  0.40% )  (39.57%)
+> > >          6,667,311      dTLB-loads                #  954.129 K/sec                    ( +-  0.21% )  (39.50%)
+> > >          5,668,555      dTLB-load-misses          #   86.40% of all dTLB cache accesses  ( +-  0.12% )  (39.03%)
+> > >                765      iTLB-loads                #  109.476 /sec                     ( +- 21.81% )  (39.44%)
+> > >          4,370,351      iTLB-load-misses          # 214320.09% of all iTLB cache accesses  ( +-  1.44% )  (39.86%)
+> > >        149,207,254      L1-dcache-prefetches      #   21.352 M/sec                    ( +-  0.13% )  (40.27%)
+> > >
+> > >            7.25869 +- 0.00203 seconds time elapsed  ( +-  0.03% )
+> > >
+> > > After:
+> > >           6,576.16 msec task-clock                #    0.953 CPUs utilized            ( +-  0.10% )
+> > >              4,020      context-switches          #  605.595 /sec                     ( +-  0.01% )
+> > >                  0      cpu-migrations            #    0.000 /sec
+> > >          2,052,056      page-faults               #  309.133 K/sec                    ( +-  0.00% )
+> > >     11,967,619,180      cycles                    #    1.803 GHz                      ( +-  0.36% )  (38.76%)
+> > >        161,259,240      stalled-cycles-frontend   #    1.38% frontend cycles idle     ( +-  0.27% )  (36.58%)
+> > >        253,605,302      stalled-cycles-backend    #    2.16% backend cycles idle      ( +-  4.45% )  (34.78%)
+> > >     19,328,171,892      instructions              #    1.65  insn per cycle
+> > >                                                   #    0.01  stalled cycles per insn  ( +-  0.10% )  (31.46%)
+> > >      5,213,967,902      branches                  #  785.461 M/sec                    ( +-  0.18% )  (30.68%)
+> > >         12,385,170      branch-misses             #    0.24% of all branches          ( +-  0.26% )  (34.13%)
+> > >      7,271,687,822      L1-dcache-loads           #    1.095 G/sec                    ( +-  0.12% )  (35.29%)
+> > >        649,873,045      L1-dcache-load-misses     #    8.93% of all L1-dcache accesses  ( +-  0.11% )  (41.41%)
+> > >      1,950,037,608      L1-icache-loads           #  293.764 M/sec                    ( +-  0.33% )  (43.11%)
+> > >         31,365,566      L1-icache-load-misses     #    1.62% of all L1-icache accesses  ( +-  0.39% )  (45.89%)
+> > >          6,767,809      dTLB-loads                #    1.020 M/sec                    ( +-  0.47% )  (48.42%)
+> > >          6,339,590      dTLB-load-misses          #   95.43% of all dTLB cache accesses  ( +-  0.50% )  (46.60%)
+> > >                736      iTLB-loads                #  110.875 /sec                     ( +-  1.79% )  (48.60%)
+> > >          4,314,836      iTLB-load-misses          # 518653.73% of all iTLB cache accesses  ( +-  0.63% )  (42.91%)
+> > >        144,950,156      L1-dcache-prefetches      #   21.836 M/sec                    ( +-  0.37% )  (41.39%)
+> > >
+> > >            6.89935 +- 0.00703 seconds time elapsed  ( +-  0.10% )
+> >
+> > Do you happen to have a perf profile before and after to see which of
+> > the paths really benefits from this?
 > 
-> OK, so then it should be something like this?
-> ---
-> properties:
->   compatible:
->     items:
->        - const: microchip,lan9662-otpc
->        - const: microchip,lan9668-otpc
-> ---
-> 
+> No I don't have a clear profile data about which path benefit the most.
+> The performance benchmark result can be stably reproduced, but perf
+> record & report & diff doesn't seems too helpful, as I can't see a
+> significant change of any single symbols.
 
-I would expect:
+This is a good information on its own as it suggests that the overhead
+is spilled over multiple places rather than a single hot spot. Good to
+have in the changelog.
 
-oneOf:
-  - items:
-       - const: microchip,lan9668-otpc
-       - const: microchip,lan9662-otpc
-  - enum:
-       - microchip,lan9662-otpc
-
-(but you need to fix indentation)
-
-Best regards,
-Krzysztof
+-- 
+Michal Hocko
+SUSE Labs

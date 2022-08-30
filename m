@@ -2,106 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75AA95A67E7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062F45A67EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbiH3QH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53360 "EHLO
+        id S230510AbiH3QIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbiH3QHy (ORCPT
+        with ESMTP id S230513AbiH3QIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:07:54 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED7F1F72F8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:07:53 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oT3mA-00071b-F1; Tue, 30 Aug 2022 18:07:42 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oT3m6-0004SO-0i; Tue, 30 Aug 2022 18:07:38 +0200
-Date:   Tue, 30 Aug 2022 18:07:37 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc:     devicetree@vger.kernel.org, Lars-Peter Clausen <lars@metafoo.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>, kernel@pengutronix.de,
-        Jonathan Cameron <jic23@kernel.org>
-Subject: Re: [PATCH v1 3/3] iio: adc: tsc2046: silent spi_device_id warning
-Message-ID: <20220830160737.GC16715@pengutronix.de>
-References: <20220830110709.2037302-1-o.rempel@pengutronix.de>
- <20220830110709.2037302-3-o.rempel@pengutronix.de>
- <20220830140228.000013ca@huawei.com>
+        Tue, 30 Aug 2022 12:08:12 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E893F7B1B
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:08:09 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id br21so10420023lfb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:08:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=PbzCLE7f0NU8ABR6EXH3xv26zLpKLKNRVyw1XV/T+Tc=;
+        b=Hf4uAEjakvrb7p03+qv6sa+T9fOUhx/0wTWJsLz+h78/fkQSdkhredb31ae5nkkpuG
+         G69KcPxN0MTOteLwWBixR4Eae+Azuzu4p0YGwjjgIjRVsfONxqg/empykAW40yPDpKvu
+         00bIDJc5Ps0MMndl7Nlnluj0YGATAKIN34MwiZAtsEpk1wyWGOPS9kWcOTdp+F0LlO+q
+         Nk5E/oHzrbqNCtVpW1ptt/Ik7OySOZn/688OzEUD8ckvrdZ7S1lqfVX+/Acgy7u1FnHp
+         JnBG7YRSK6Sj3l/nw2yHgtT0j2d5ChQfqeDItVd+6EYO6l62QxZkjZFmMFvprQANM/4w
+         5fCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=PbzCLE7f0NU8ABR6EXH3xv26zLpKLKNRVyw1XV/T+Tc=;
+        b=l0boyuL7iW+rPfpx8XTDNru9fcd5ZPi7Q1zwNL91a/BO9/yQMZldocT8WvFPswWcu/
+         0VSJS3aCg9PU31VnJJLJB6C7L0BqeQoT6p9ITikBOuHD37ZhnSKFbD9orW38zunuwEnE
+         aMG29GJ/60cZQML6ACiNtu5Tu+b5J6C62pIBgO+jy9c76yoSE/tLo7rJh7mwHk8+zI3W
+         mCkPLyBrQ2iHyuJ09L33yXUUKoecEPIbddihKLB5ZMxCgbQUh32bkcJVwcI/MLw8mvKA
+         uzEPNaqPfppfJZ0ru3+sVZBH7bueaBrThPdGqrDmuHCwWvxpKWnj8J2f0gRtUAtXt+C9
+         rjLA==
+X-Gm-Message-State: ACgBeo0abk23ELjZ7WBWokxujT+v+m467NukLW602ianycbnhv1fHlfl
+        +dme/OO8kG/HpExEF52IEWpE6rkPxEJtfG9fGaw=
+X-Google-Smtp-Source: AA6agR6V9tefD+e/XUudSef+jLlRW7RJZ3CjF9QC8V//zBs29Z99oU/n5dCS8ElYsO4/kzyHqOqJm7PDr+SJLghMDz4=
+X-Received: by 2002:a05:6512:104f:b0:494:736a:8332 with SMTP id
+ c15-20020a056512104f00b00494736a8332mr2090480lfb.683.1661875687922; Tue, 30
+ Aug 2022 09:08:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220830140228.000013ca@huawei.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220830014356.5364-1-avagin@gmail.com> <20220830014356.5364-2-avagin@gmail.com>
+ <20220830095750.ljtdk7hekmmzhf2b@wittgenstein>
+In-Reply-To: <20220830095750.ljtdk7hekmmzhf2b@wittgenstein>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Tue, 30 Aug 2022 09:07:56 -0700
+Message-ID: <CANaxB-x=77SDqvoj4vpg8uKvntK+ttHWQyq1gdOhp1LZfAvfsg@mail.gmail.com>
+Subject: Re: [PATCH 1/4] seccomp: don't use semaphore and wait_queue together
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Andy Lutomirski <luto@amacapital.net>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Kees Cook <keescook@chromium.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Peter Oskolkov <posk@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Tycho Andersen <tycho@tycho.pizza>,
+        Will Drewry <wad@chromium.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 02:02:28PM +0100, Jonathan Cameron wrote:
-> On Tue, 30 Aug 2022 13:07:09 +0200
-> Oleksij Rempel <o.rempel@pengutronix.de> wrote:
-> 
-> > Add spi_device_id to silent following warning:
-> >  SPI driver tsc2046 has no spi_device_id for ti,tsc2046e-adc
-> > 
-> > Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> > ---
-> >  drivers/iio/adc/ti-tsc2046.c | 17 ++++++++++++++++-
-> >  1 file changed, 16 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
-> > index bbc8b4137b0b1..b9a1fac659d46 100644
-> > --- a/drivers/iio/adc/ti-tsc2046.c
-> > +++ b/drivers/iio/adc/ti-tsc2046.c
-> > @@ -761,7 +761,15 @@ static int tsc2046_adc_probe(struct spi_device *spi)
-> >  		return -EINVAL;
-> >  	}
-> >  
-> > -	dcfg = device_get_match_data(dev);
-> > +	if (!dev_fwnode(dev)) {
-> > +		const struct spi_device_id *id;
+On Tue, Aug 30, 2022 at 2:57 AM Christian Brauner <brauner@kernel.org> wrote:
+
+> >
+> > +static bool notify_wakeup(struct seccomp_filter *filter)
+> > +{
+> > +     bool ret;
 > > +
-> > +		id = spi_get_device_id(spi);
-> > +		dcfg = (const struct tsc2046_adc_dcfg *)id->driver_data;
-> 
-> Driver data not set below.
+> > +     rcu_read_lock();
+> > +     ret = atomic_add_unless(&filter->notif->requests, -1, 0);
+>
+> Can you please spell out why the change to wait_event_interruptible()
+> below that calls notify_wakeup() makes it necessary to rcu protect
+> ->notif?
 
-..facepalm..
+This is my mistake. rcu is used here when I tried to implement notify_wakeup
+without introducing notif->request. The idea was to enumerate all elements of
+notif->notifications. Now, it doesn't matter. In this context, filter->notif
+can be dereferenced without any additional locks. Thanks for catching this.
 
-> Otherwise this looks good to me.  An alternative more common form (I think...)
-> is call device_get_match_data() unconditionally and if that is null follow
-> the driver_data path. Either way is fine though.
-> 
-> Could you add to the patch description where
-> the warning is coming from?   Build time / runtime etc and what tool?
+>
+> Given that you're using rcu_read_lock() here and the
+> WRITE_ONCE(fitler->notify, NULL) + kfree_rcu() sequence in
+> seccomp_notify_free() it seems to imply that filter->notif could be NULL
+> here and so would need a non-NULL check on ->notif before incrementing?
+>
+> > +     rcu_read_unlock();
+> > +
+> > +     return ret;
+> > +}
+>
+>  static long seccomp_notify_recv(struct seccomp_filter *filter,
+>                               void __user *buf)
+> @@ -1467,7 +1479,7 @@ static long seccomp_notify_recv(struct seccomp_filter *filter,
+>
+>       memset(&unotif, 0, sizeof(unotif));
+>
+> -     ret = down_interruptible(&filter->notif->request);
+> +     ret = wait_event_interruptible(filter->wqh, notify_wakeup(filter));
+>       if (ret < 0)
+>               return ret;
+>
 
-ack. It is runtime warning in the kernel log.
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Thanks,
+Andrei

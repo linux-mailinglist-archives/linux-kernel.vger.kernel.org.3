@@ -2,68 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74DB05A693E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:07:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A512E5A6940
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:07:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbiH3RHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43540 "EHLO
+        id S231138AbiH3RHk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:07:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbiH3RHS (ORCPT
+        with ESMTP id S229774AbiH3RHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:07:18 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD300A0604
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:07:12 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id qh18so3230930ejb.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:07:12 -0700 (PDT)
+        Tue, 30 Aug 2022 13:07:36 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F005212AA5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:07:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=amarulasolutions.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=AvdCfYjT/xhsGz3hwU8EJwwAxSoChuuFpkaC5m1h5Ss=;
-        b=odLHEHirz8JquS9bzO1JvmBNKQiYSktXvBo/HPSZwI5+9jgfpG8e56+1hCimn8dxuH
-         htDjkk9FRHx/ObuClkmPhlgFojB+QxVahURCiNy9DHFS4ABJ3P4tScBZCTvN/ePbZEoz
-         ctFkrujcoEkbtQ3lHYKIaXdgXzpU49NZf5kk4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=AvdCfYjT/xhsGz3hwU8EJwwAxSoChuuFpkaC5m1h5Ss=;
-        b=fRnA7v4XJ/aX3J9v/TiafgE44gQAtGnOJPRYMfLWmna3tKX09jeoH0eWDa8a1Ek2sU
-         EjNPxsLkBG2VS7WKoWxjkZNCixzRL6V9OdbPAjjsEqueqTtwcCHJCdQQqid6DS6RDZku
-         ZKwn27nME6DdMXQg5pGUXP54qpvtd9b9czjLFsUGCH9UA/NIL05X8hwBwEBQSv8+b6Tw
-         SKuO/+bSQ+8sCJxFD2duefKR6LXv0/9q+774nqTo7BR9gq6gMg7WLlbrlwqxrf1Z0ejg
-         Tk299LC7H1Ub5N/nq+ffq4G1n9cVA+zKrk8JUVSy1FPM/Ul4UQg3dm8QMqOlbxIxBiGI
-         SLnw==
-X-Gm-Message-State: ACgBeo3WI7xyHBJPx+Jzt2lG7hfz7ZVRH4sAfp52r4I0XIvOa1xEQNU/
-        d//KR9VkQb/J3AgFFUMcVjNkHw==
-X-Google-Smtp-Source: AA6agR4zRA+K46Z8+ezJunedLRnzhn2M5vq7ZC/3Rxn0St3EV3VeUQYitIGl9xnwjNZD+1uEyIwg9w==
-X-Received: by 2002:a17:907:d0f:b0:731:5c2:a9a5 with SMTP id gn15-20020a1709070d0f00b0073105c2a9a5mr16955340ejc.413.1661879231398;
-        Tue, 30 Aug 2022 10:07:11 -0700 (PDT)
-Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-49-118.cust.vodafonedsl.it. [188.217.49.118])
-        by smtp.gmail.com with ESMTPSA id kv2-20020a17090778c200b0073cd7cc2c81sm6007502ejc.181.2022.08.30.10.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 10:07:10 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 19:07:08 +0200
-From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-To:     Ming Qian <ming.qian@nxp.com>
-Cc:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl, shawnguo@kernel.org,
-        robh+dt@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
-        festevam@gmail.com, linux-imx@nxp.com, xiahong.bao@nxp.com,
-        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] media: amphion: release m2m ctx when releasing vpu
- instance
-Message-ID: <20220830170708.GA141868@tom-ThinkPad-T14s-Gen-2i>
-References: <20220829053316.19400-1-ming.qian@nxp.com>
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
+         message-id:subject:cc:to:from:date:from;
+        bh=yATArImrPbIdbkbJ+hsnN/9dIbuyx0Cx7ksTH+tJO44=;
+        b=H5+GfBkE0jpfYLFU7yyVM/gA1deuEIZOq+/PTfaXJnFmH41wG5uqfMJxqBFjQEEQjkQiuij/zpg+d
+         zQA+voxGCBrNH7e3Vpl6eC7jaxN2+wLdbYtbDwlA8K9RqYa3t5FEYX4Aj8DCcCo++wurSKgzdgYejN
+         rnTKeLtPmuYjQILB0lto7Qx1Jmj/MO2m08AIwCHB9wki7m5BCMwST41pfT/YQvu7QKmECcP0FnLl+e
+         gASLKDAuMzcfQDDqZvb7z8LWqLLmlGQyyRjpOKLjpVs0+3XtTQlkJwImf4TC2yUUehXwTwTaOqeXC2
+         atiOAJINQUpCYEwnsTjPPHvMQS+1dxA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-transfer-encoding:content-type:mime-version:references:
+         message-id:subject:cc:to:from:date:from;
+        bh=yATArImrPbIdbkbJ+hsnN/9dIbuyx0Cx7ksTH+tJO44=;
+        b=BTqJZD30Y7DGArUp4cCUmXdRg3NTadt6T+dHuoltm2mE5UWbmaC3aMlZTZb7P8e4SRpUMIbHMLfUJ
+         9vNyqg6AQ==
+X-HalOne-Cookie: d4c5467cf0517736179749e36de942919052f25d
+X-HalOne-ID: 3ac09ed2-2886-11ed-824a-d0431ea8bb10
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 3ac09ed2-2886-11ed-824a-d0431ea8bb10;
+        Tue, 30 Aug 2022 17:07:30 +0000 (UTC)
+Date:   Tue, 30 Aug 2022 19:07:29 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Daniel Vetter <daniel.vetter@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
+        Yangxi Xiang <xyangxi5@gmail.com>,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        nick black <dankamongmen@gmail.com>,
+        Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        John Ogness <john.ogness@linutronix.de>
+Subject: Re: [PATCH] tty/vt: Add console_lock check to vt_console_print()
+Message-ID: <Yw5D0QeSt9TYy/41@ravnborg.org>
+References: <20220830132803.403744-1-daniel.vetter@ffwll.ch>
+ <20220830144945.430528-1-daniel.vetter@ffwll.ch>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220829053316.19400-1-ming.qian@nxp.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220830144945.430528-1-daniel.vetter@ffwll.ch>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,72 +74,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ming,
-Nice, from my point off view you move v4l2_m2m_ctx_release
-into the right position (release function).
+Hi Daniel,
 
-checkpatch.pl also looks good.
-total: 0 errors, 0 warnings, 772 lines checked
-
-Looks good to me.
-
-Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
-
-Regards,
-Tommaso
-
-On Mon, Aug 29, 2022 at 01:33:16PM +0800, Ming Qian wrote:
-> release m2m ctx in the callback function that
-> release the vpu instance, then there is no need
-> to add lock around releasing m2m ctx.
+On Tue, Aug 30, 2022 at 04:49:45PM +0200, Daniel Vetter wrote:
+> I'm scratching my head why we have this printing_lock. Digging through
+> historical git trees shows that:
+> - Added in 1.1.73, and I found absolutely no reason why.
+> - Converted to atomic bitops in 2.1.125pre2, I guess as part of SMP
+>   enabling/bugfixes.
+> - Converted to a proper spinlock in b0940003f25d ("vt: bitlock fix")
+>   because the hand-rolled atomic version lacked necessary memory
+>   barriers.
 > 
-> Fixes: 3cd084519c6f ("media: amphion: add vpu v4l2 m2m support")
-> Signed-off-by: Ming Qian <ming.qian@nxp.com>
+> Digging around in lore for that time period did also not shed further
+> light.
+> 
+> The only reason I think this might still be relevant today is that (to
+> my understanding at least, ymmv) during an oops we might be printing
+> without console_lock held. See console_flush_on_panic() and the
+> comments in there - we flush out the console buffers irrespective of
+> whether we managed to acquire the right locks.
+> 
+> The strange thing is that this reason is fairly recent, because the
+> console flushing was historically done without oops_in_progress set.
+> This only changed in c7c3f05e341a ("panic: avoid deadlocks in
+> re-entrant console drivers"), which removed the call to
+> bust_spinlocks(0) (which decrements oops_in_progress again) before
+> flushing out the console (which back then was open coded as a
+> console_trylock/unlock pair).
+> 
+> Note that this entire mess should be properly fixed in the
+> printk/console layer, and not inflicted on each implementation.
+> 
+> For now just document what's going on and check that in all other
+> cases callers obey the locking rules.
+> 
+> v2: WARN_CONSOLE_UNLOCKED already checks for oops_in_progress
+> (something else that should be fixed I guess), hence remove the
+> open-coded check I've had.
+> 
+> Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
+> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Cc: Jiri Slaby <jirislaby@kernel.org>
+> Cc: "Ilpo Järvinen" <ilpo.jarvinen@linux.intel.com>
+> Cc: Daniel Vetter <daniel.vetter@ffwll.ch>
+> Cc: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+> Cc: Yangxi Xiang <xyangxi5@gmail.com>
+> Cc: Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+> Cc: nick black <dankamongmen@gmail.com>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: John Ogness <john.ogness@linutronix.de>
+> Cc: Sam Ravnborg <sam@ravnborg.org>
+
+It is always good to warn in case assumptions do not hold.
+And thanks for the comment.
+
+Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+
+Hmm, I prefer to start comments with upper-case, but in vt.c there is no
+specific style.
+
+	Sam
+
+> --
+> Note that this applies on top of my earlier vt patch:
+> 
+> https://lore.kernel.org/lkml/20220826202419.198535-1-daniel.vetter@ffwll.ch/
+> 
+> Expect more, I'm digging around in here a bit ...
+> -Daniel
 > ---
->  drivers/media/platform/amphion/vpu_v4l2.c | 11 ++++-------
->  1 file changed, 4 insertions(+), 7 deletions(-)
+>  drivers/tty/vt/vt.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 > 
-> diff --git a/drivers/media/platform/amphion/vpu_v4l2.c b/drivers/media/platform/amphion/vpu_v4l2.c
-> index 1f18289aa47a..99ad2f1c5a53 100644
-> --- a/drivers/media/platform/amphion/vpu_v4l2.c
-> +++ b/drivers/media/platform/amphion/vpu_v4l2.c
-> @@ -688,6 +688,10 @@ static int vpu_v4l2_release(struct vpu_inst *inst)
->  		inst->workqueue = NULL;
->  	}
+> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+> index 4d29e4a17db7..a6be32798fad 100644
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -3083,7 +3083,9 @@ static void vt_console_print(struct console *co, const char *b, unsigned count)
+>  	ushort start_x, cnt;
+>  	int kmsg_console;
 >  
-> +	if (inst->fh.m2m_ctx) {
-> +		v4l2_m2m_ctx_release(inst->fh.m2m_ctx);
-> +		inst->fh.m2m_ctx = NULL;
-> +	}
->  	v4l2_ctrl_handler_free(&inst->ctrl_handler);
->  	mutex_destroy(&inst->lock);
->  	v4l2_fh_del(&inst->fh);
-> @@ -770,13 +774,6 @@ int vpu_v4l2_close(struct file *file)
+> -	/* console busy or not yet initialized */
+> +	WARN_CONSOLE_UNLOCKED();
+> +
+> +	/* this protects against concurrent oops only */
+>  	if (!spin_trylock(&printing_lock))
+>  		return;
 >  
->  	vpu_trace(vpu->dev, "tgid = %d, pid = %d, inst = %p\n", inst->tgid, inst->pid, inst);
->  
-> -	vpu_inst_lock(inst);
-> -	if (inst->fh.m2m_ctx) {
-> -		v4l2_m2m_ctx_release(inst->fh.m2m_ctx);
-> -		inst->fh.m2m_ctx = NULL;
-> -	}
-> -	vpu_inst_unlock(inst);
-> -
->  	call_void_vop(inst, release);
->  	vpu_inst_unregister(inst);
->  	vpu_inst_put(inst);
 > -- 
-> 2.37.1
-> 
-
--- 
-Tommaso Merciai
-Embedded Linux Engineer
-tommaso.merciai@amarulasolutions.com
-__________________________________
-
-Amarula Solutions SRL
-Via Le Canevare 30, 31100 Treviso, Veneto, IT
-T. +39 042 243 5310
-info@amarulasolutions.com
-www.amarulasolutions.com
+> 2.37.2

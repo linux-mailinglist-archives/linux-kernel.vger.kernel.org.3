@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6D9D5A68BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 037D45A68BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiH3Qt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33754 "EHLO
+        id S230255AbiH3Qtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiH3Qt0 (ORCPT
+        with ESMTP id S230226AbiH3Qta (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:49:26 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 533F1C6B7D
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:49:10 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33dce8cae71so183002937b3.8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:49:10 -0700 (PDT)
+        Tue, 30 Aug 2022 12:49:30 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC831CCE1C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:49:16 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33dce8cae71so183004777b3.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 09:49:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=FIhE9np411d4p3gN9blVTRPdzI3E6ppyXBOT6UPFbR4=;
-        b=OB9LHc8+8o4/iZ0pku4OGrdZbF6yK0SRgaoyCd1QczBcJO/t3tAbU3x/u16rFi6MUs
-         movMoeOJ+FEdjpK3a7cvjtczSoz0sUB4UOCyo484agRRkmpcnekDO6t/TyXwtT+kcNt7
-         RU6rdtTzp4zAk5j2tjFJ5/MMHobhdviXUreRR8aiFbr4V9mpRA+oUy6gajOepvZ28dYp
-         J+s5cZ30KE9zhdJtEVpUat8aZaRIbXLqOazxoQA/ZUTCA90ZBGi+tqXUVgb/Z0Z36n9Q
-         STSIFswLJqCToWbeoXSPlSKmGrNnWoC3dIj/bd6RkOkd11uwM1gO1uz52IqrpMjhAiq6
-         qz/A==
+        bh=odHu9oIdvGG5Uqss/fdCBkUP/s7a3MyMjrudizWvuiM=;
+        b=YqaB/84L6355lUp5qA3G0U1TjM6sLP6qlWRS90aHbw+JCID++v+ocFenvaXukcRZiz
+         btEjNZ3jE5bZwwC20MfuhJ0MLicERf+azMwjwY04ynDTGtmg5phjXV82ZKYQVsHxcAlK
+         eXyy9LBy3yWhKs2plbSsBL3wXLcsUv7i7zHgS5qnLEMQFItk6ifWkXsjklnQCf5Qx77k
+         3dRPNSdqnHVtyCgNPMw7SdAxw01UnEZT8wfnsySTEtVw3M+H+GJZv5gWJf15zhGmtbhh
+         S2P0WuabjciP8msWLGYRjgApvAMAzHiE/qeoolHc0Gug1fMjX+s5Pexz7YKxgw7VCVw0
+         LWCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=FIhE9np411d4p3gN9blVTRPdzI3E6ppyXBOT6UPFbR4=;
-        b=3t28ZSUGpA+tOwkhrBSqrKiXhtugUrgGY4Sr8cbq4yBWBnMe1HcpbeeZAbKUoXyEJF
-         G3r09hqE0qIs/neqiYuwJfq8iBqJ1srdbqvk3Ho7pl7Yc+/xNuZoUI3oKakqDOS1zs90
-         AuhxMMzYHL/3aQmoyQBcXDwPnuKrjJ/BSL5JQKA2aSttWL3LzzVP+GQgoX9oERR5+NA6
-         KN9cw7eQo/JFoQZY4R3/vBXCxX3RLdsXJXH0aR1dsVMh95QEempcavGUPO/FJmWJOJvu
-         D1UjbT9Qy54gezuxfHsa1eZrmKw9qJfRBuiTvqbBC2I2mPMs1qR/RqOIsKFm//UhjXX+
-         Vctw==
-X-Gm-Message-State: ACgBeo2ooyFogEtiz01lRuK9+jP2XANnLWJiMNzAtKBdrr88HRo7Khe1
-        lWRzqeBvYxuB4i+cPidAU15lFveWKh93
-X-Google-Smtp-Source: AA6agR60NLTVro4NGYnyxknnlRFNT4NfEDW+vIPr4CfSzsgb8ynaczdPxrSsjF2yG4pOZQ0thLLj35ZsE/Of
+        bh=odHu9oIdvGG5Uqss/fdCBkUP/s7a3MyMjrudizWvuiM=;
+        b=3OrJTr3PZbRPuAoYloCcq8CPAADv/oRxg1TPLtlJ+wOV8FgmTngFcBmSDAMlW/Xnqs
+         DaFW3uw8g00ww+q3xhTfLlEtuOkATGM09VbOIe0F/4wdCLNm0teh6hN/2K0Q2mnksSm0
+         2SNraf3rNQ2muxSqcDiVuFUeqMZHkWVfU7FbSMCvEtXYC4KL/LynkjkDpxiyebWdfNtf
+         t3a34ZDhiM+TEj77tGTemqVRCdVxVLlI5hycrfUcFWrh+4c6cxY8nQMkqkjQW9hfh+rI
+         E7B3UCrXemiDV94bkHBhdDDUgBXU0Cal5wJ3BF0JOcJAgcSceEtRO/teoOva9hMYggxH
+         r0pg==
+X-Gm-Message-State: ACgBeo2hK0CGNnQGrfOaauD9i3rUtKHe1eT4Fkk7AcjaEvdJkNMGvAe+
+        CBqLqV0k7vzUiO2fuhvXIjW5S3DB9Y1W
+X-Google-Smtp-Source: AA6agR7X9hKxwDIGVbB6qPRnX3EOKZxMUd5dAbThYH3DDmSTRtjl079C74XG6sfYzgdS/gfe7Y0MmIGx06Ik
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:902c:b0fa:dec9:8767])
- (user=irogers job=sendgmr) by 2002:a25:1f89:0:b0:696:4d6e:62aa with SMTP id
- f131-20020a251f89000000b006964d6e62aamr12438386ybf.373.1661878149113; Tue, 30
- Aug 2022 09:49:09 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 09:48:40 -0700
+ (user=irogers job=sendgmr) by 2002:a25:4110:0:b0:696:4e11:3b9 with SMTP id
+ o16-20020a254110000000b006964e1103b9mr11849466yba.287.1661878156138; Tue, 30
+ Aug 2022 09:49:16 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 09:48:41 -0700
 In-Reply-To: <20220830164846.401143-1-irogers@google.com>
-Message-Id: <20220830164846.401143-3-irogers@google.com>
+Message-Id: <20220830164846.401143-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20220830164846.401143-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Subject: [PATCH v1 2/8] perf metric: Return early if no CPU PMU table exists
+Subject: [PATCH v1 3/8] perf expr: Move the scanner_ctx into the parse_ctx
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -85,30 +85,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previous behavior is to segfault if there is no CPU PMU table and a
-metric is sought. To reproduce compile with NO_JEVENTS=1 then request
-a metric, for example, "perf stat -M IPC true".
+We currently maintain the two independently and copy from one to the
+other. This is a burden when additional scanner context values are
+necessary, so combine them.
 
-Fixes: 00facc760903 ("perf jevents: Switch build to use jevents.py")
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/util/metricgroup.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/perf/tests/expr.c       |  2 +-
+ tools/perf/util/expr.c        |  7 ++-----
+ tools/perf/util/expr.h        | 10 +++++-----
+ tools/perf/util/metricgroup.c |  4 ++--
+ tools/perf/util/stat-shadow.c |  2 +-
+ 5 files changed, 11 insertions(+), 14 deletions(-)
 
+diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
+index 2efe9e3a63b8..7ca5e37de560 100644
+--- a/tools/perf/tests/expr.c
++++ b/tools/perf/tests/expr.c
+@@ -133,7 +133,7 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
+ 						    (void **)&val_ptr));
+ 
+ 	expr__ctx_clear(ctx);
+-	ctx->runtime = 3;
++	ctx->sctx.runtime = 3;
+ 	TEST_ASSERT_VAL("find ids",
+ 			expr__find_ids("EVENT1\\,param\\=?@ + EVENT2\\,param\\=?@",
+ 					NULL, ctx) == 0);
+diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
+index c15a9852fa41..00bde682e743 100644
+--- a/tools/perf/util/expr.c
++++ b/tools/perf/util/expr.c
+@@ -310,7 +310,7 @@ struct expr_parse_ctx *expr__ctx_new(void)
+ 		free(ctx);
+ 		return NULL;
+ 	}
+-	ctx->runtime = 0;
++	ctx->sctx.runtime = 0;
+ 
+ 	return ctx;
+ }
+@@ -344,16 +344,13 @@ static int
+ __expr__parse(double *val, struct expr_parse_ctx *ctx, const char *expr,
+ 	      bool compute_ids)
+ {
+-	struct expr_scanner_ctx scanner_ctx = {
+-		.runtime = ctx->runtime,
+-	};
+ 	YY_BUFFER_STATE buffer;
+ 	void *scanner;
+ 	int ret;
+ 
+ 	pr_debug2("parsing metric: %s\n", expr);
+ 
+-	ret = expr_lex_init_extra(&scanner_ctx, &scanner);
++	ret = expr_lex_init_extra(&ctx->sctx, &scanner);
+ 	if (ret)
+ 		return ret;
+ 
+diff --git a/tools/perf/util/expr.h b/tools/perf/util/expr.h
+index bd2116983bbb..de9b886ec49a 100644
+--- a/tools/perf/util/expr.h
++++ b/tools/perf/util/expr.h
+@@ -13,17 +13,17 @@
+ 
+ struct metric_ref;
+ 
++struct expr_scanner_ctx {
++	int runtime;
++};
++
+ struct expr_parse_ctx {
+ 	struct hashmap	*ids;
+-	int runtime;
++	struct expr_scanner_ctx sctx;
+ };
+ 
+ struct expr_id_data;
+ 
+-struct expr_scanner_ctx {
+-	int runtime;
+-};
+-
+ struct hashmap *ids__new(void);
+ void ids__free(struct hashmap *ids);
+ int ids__insert(struct hashmap *ids, const char *id);
 diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index ad5cacdecd81..18aae040d61d 100644
+index 18aae040d61d..b144c3e35264 100644
 --- a/tools/perf/util/metricgroup.c
 +++ b/tools/perf/util/metricgroup.c
-@@ -1655,6 +1655,9 @@ int metricgroup__parse_groups(const struct option *opt,
- 	struct evlist *perf_evlist = *(struct evlist **)opt->value;
- 	const struct pmu_events_table *table = pmu_events_table__find();
+@@ -215,7 +215,7 @@ static struct metric *metric__new(const struct pmu_event *pe,
+ 	}
+ 	m->metric_expr = pe->metric_expr;
+ 	m->metric_unit = pe->unit;
+-	m->pctx->runtime = runtime;
++	m->pctx->sctx.runtime = runtime;
+ 	m->has_constraint = metric_no_group || metricgroup__has_constraint(pe);
+ 	m->metric_refs = NULL;
+ 	m->evlist = NULL;
+@@ -1626,7 +1626,7 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+ 		}
+ 		expr->metric_unit = m->metric_unit;
+ 		expr->metric_events = metric_events;
+-		expr->runtime = m->pctx->runtime;
++		expr->runtime = m->pctx->sctx.runtime;
+ 		list_add(&expr->nd, &me->head);
+ 	}
  
-+	if (!table)
-+		return -EINVAL;
-+
- 	return parse_groups(perf_evlist, str, metric_no_group,
- 			    metric_no_merge, NULL, metric_events, table);
- }
+diff --git a/tools/perf/util/stat-shadow.c b/tools/perf/util/stat-shadow.c
+index 979c8cb918f7..1439acd109db 100644
+--- a/tools/perf/util/stat-shadow.c
++++ b/tools/perf/util/stat-shadow.c
+@@ -911,7 +911,7 @@ static void generic_metric(struct perf_stat_config *config,
+ 	if (!pctx)
+ 		return;
+ 
+-	pctx->runtime = runtime;
++	pctx->sctx.runtime = runtime;
+ 	i = prepare_metric(metric_events, metric_refs, pctx, cpu_map_idx, st);
+ 	if (i < 0) {
+ 		expr__ctx_free(pctx);
 -- 
 2.37.2.672.g94769d06f0-goog
 

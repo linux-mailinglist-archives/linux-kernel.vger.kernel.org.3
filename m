@@ -2,174 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D645A6126
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:51:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4034B5A6128
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:51:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbiH3Ku4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52652 "EHLO
+        id S230229AbiH3KvW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:51:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiH3KuK (ORCPT
+        with ESMTP id S229988AbiH3Kuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:50:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BB61A39B;
-        Tue, 30 Aug 2022 03:50:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D23DD60B8A;
-        Tue, 30 Aug 2022 10:50:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBB13C433D6;
-        Tue, 30 Aug 2022 10:50:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661856605;
-        bh=5zv8W9z3kEX6VLd73dgxcZrGz10KMFZOlfooDLr1Zhc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s8AdVO8SRaItH1cCotJE4Wngtw5G6UpxqfKvJXh/dbi4RLw93FGQnvcgsCTwLbHhL
-         iCwKFriDlyKbMogSZ7FSaT/3wS8aPUeTbPD3it0/wxnXhaGSQb9ZtxB/ZNB4cUjTcT
-         qr7Nd3h4DpwQ6Gl57JRqkBM1pFhw1fkM/QNZEthUk7GwYd17xgNNbN0CVzYF8XOTzn
-         YEGxqFGKqiadNuNX/6w3vMPinQeEWyhNIiDGxIOv2H1mIhN+IkDy0wkAlazmERnkto
-         TdwsZtuU0aL54otjHvieBLcTQAKVB1miKNqDRT3DHfH+Pfr0ke58fbfb1prU29cPct
-         Ly5AeYe+Kwo/A==
-Date:   Tue, 30 Aug 2022 12:50:02 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        linux-kernel@vger.kernel.org,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rcu <rcu@vger.kernel.org>, vineeth@bitbyteword.org
-Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
- fixes
-Message-ID: <20220830105002.GB70936@lothringen>
-References: <20220819204857.3066329-1-joel@joelfernandes.org>
- <20220829134045.GA54589@lothringen>
- <1f7dd31b-f4d0-5c1c-ce28-c27f75c17f05@joelfernandes.org>
- <20220829194622.GA58291@lothringen>
- <20220829203131.GP6159@paulmck-ThinkPad-P17-Gen-1>
+        Tue, 30 Aug 2022 06:50:40 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B3C61124;
+        Tue, 30 Aug 2022 03:50:25 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id f24so7978141plr.1;
+        Tue, 30 Aug 2022 03:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=IhaMXTWAcaW3hhnK8+sC1vZiKgHn05Km4N0GxkG/RW0=;
+        b=lHomL4xEN0wjcDcNxCpVINhbuhekmy1qmwlIc2sII/l02dAPS2iaLeRNU6nI8XAfhW
+         jK3P+XYW/yAU0LwHZJZDOWItZVfjcCN9TCjdqZSWuJvf/MHz1HLewtQvwtITo7uT9MSX
+         eYoSt5xuhZiXd2ZTN3xen5ijEpdeknJ+8cVHNKV4tRP+o1Rxzw7g1zZQ8BsTyXwIER5a
+         IiEx+mwDnZ4clVX/fzeNf99CUEavXzBQdXsyBUE6sBr5dHz1IspEALz+czefmzQzn5Tb
+         Gh1URRqE64V3TkfnDUAVR6Zh8scB8a+S6ghT0eb+gqbOyPlaY7LfJRVXECPyM93/2r4q
+         7pJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=IhaMXTWAcaW3hhnK8+sC1vZiKgHn05Km4N0GxkG/RW0=;
+        b=JsZSTURZgwWsVD0tVly/Wu7WUYm/mnmK5LAHkbtwFwm7LM3bSY+Rtzwvhq9hz0+CCp
+         WzOvwA7B03qEsnUOd6Xq5VWSV8Ur9odQGpzotFBSNOggTmj7NmBugF88OURU7b/HorXf
+         gZ0/tnD7VTrbpZde0AZBiaM1Esm3Ok0LNC+ssN6zFc1hc/O0RkUZLilzebbC5SvhYQZZ
+         2+KsiscJgJfdy5po31bJkwERzau+zvrjvdZGZCiCv89t2H0tu9puuC7haipvTGdCSQ7b
+         g1Jd6BviDhLuEofOVjCLt/YF52QJ5/daN5eLsn1kbQxt+aBR9svzUqQTbED3VHp2MziO
+         eSrg==
+X-Gm-Message-State: ACgBeo0jm2hmhqM5GDn9YKXTjpNutqufzvDwirMxC49+wfxnuYcEIkHI
+        JOyGJehKmsuVlu+Inj+eWKA=
+X-Google-Smtp-Source: AA6agR4L12NnWdeknXVCJQE3JGwrtXsEDyRO+bGNadYbaB/gOM/nUCFaR6bvSQQg5F9lQHnRIiS+FA==
+X-Received: by 2002:a17:902:a705:b0:172:ecca:8d2d with SMTP id w5-20020a170902a70500b00172ecca8d2dmr20794672plq.27.1661856624399;
+        Tue, 30 Aug 2022 03:50:24 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id p5-20020a17090a2c4500b001efa9e83927sm8150591pjm.51.2022.08.30.03.50.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 03:50:24 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     aspriel@gmail.com, franky.lin@broadcom.com,
+        hante.meuleman@broadcom.com, kvalo@kernel.org, davem@davemloft.net,
+        edumazet@google.com
+Cc:     kuba@kernel.org, pabeni@redhat.com, johannes.berg@intel.com,
+        alsi@bang-olufsen.dk, a.fatoum@pengutronix.de,
+        loic.poulain@linaro.org, quic_vjakkam@quicinc.com,
+        prestwoj@gmail.com, colin.i.king@gmail.com, hdegoede@redhat.com,
+        smoch@web.de, cui.jinpeng2@zte.com.cn,
+        linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH v2 linux-next] wifi: brcmfmac: remove redundant err variable
+Date:   Tue, 30 Aug 2022 10:50:16 +0000
+Message-Id: <20220830105016.287337-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829203131.GP6159@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 01:31:31PM -0700, Paul E. McKenney wrote:
-> On Mon, Aug 29, 2022 at 09:46:22PM +0200, Frederic Weisbecker wrote:
-> > It's really sad that this is the first time I hear about that. I've been working
-> > on this code for years now without this usecase in mind. And yet it's fundamental.
-> > 
-> > I asked several times around about other usecases of rcu_nocbs than nohz_full=
-> > and nobody reported that. I can hardly even google a significant link
-> > between power saving and rcu_nocbs=
-> > 
-> > If this is really used that way for a long time then it's a cruel disconnection
-> > between users and developers.
-> 
-> Knowing me, you probably asked about rcu_nocbs and I probably thought
-> you were asking about nohz_full.  :-/
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-Can't remember but no big deal, now we know about it and we can move forward
-with that in mind.
+Return value from brcmf_fil_iovar_data_set() and
+brcmf_config_ap_mgmt_ie() directly instead of
+taking this in another redundant variable.
 
-> 
-> > > > 2) NOCB implies performance issues.
-> > > 
-> > > Which kinds of? There is slightly worse boot times, but I'm guessing that's do
-> > > with the extra scheduling overhead of the extra threads which is usually not a
-> > > problem except that RCU is used in the critical path of boot up (on ChromeOS).
-> > 
-> > I never measured it myself but executing callbacks on another CPUs, with
-> > context switches and locking can only involve significant performance issues if callbacks
-> > are frequent. So it's a tradeoff between power and performance.
-> 
-> It has indeed been a problem for some workloads in the past.  But I don't
-> know of any recent measurements.  And NOCB has gotten at least somewhat
-> faster over the years.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+---
+ .../wireless/broadcom/brcm80211/brcmfmac/cfg80211.c    | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-I should try a comparison on a simple kernel build someday.
+diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
+index 7c72ea26a7d7..8a8c5a3bb2fb 100644
+--- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
++++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
+@@ -3988,7 +3988,6 @@ brcmf_update_pmklist(struct brcmf_cfg80211_info *cfg, struct brcmf_if *ifp)
+ 	struct brcmf_pmk_list_le *pmk_list;
+ 	int i;
+ 	u32 npmk;
+-	s32 err;
+ 
+ 	pmk_list = &cfg->pmk_list;
+ 	npmk = le32_to_cpu(pmk_list->npmk);
+@@ -3997,10 +3996,8 @@ brcmf_update_pmklist(struct brcmf_cfg80211_info *cfg, struct brcmf_if *ifp)
+ 	for (i = 0; i < npmk; i++)
+ 		brcmf_dbg(CONN, "PMK[%d]: %pM\n", i, &pmk_list->pmk[i].bssid);
+ 
+-	err = brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_list,
++	return brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_list,
+ 				       sizeof(*pmk_list));
+-
+-	return err;
+ }
+ 
+ static s32
+@@ -5046,13 +5043,10 @@ brcmf_cfg80211_change_beacon(struct wiphy *wiphy, struct net_device *ndev,
+ 			     struct cfg80211_beacon_data *info)
+ {
+ 	struct brcmf_if *ifp = netdev_priv(ndev);
+-	s32 err;
+ 
+ 	brcmf_dbg(TRACE, "Enter\n");
+ 
+-	err = brcmf_config_ap_mgmt_ie(ifp->vif, info);
+-
+-	return err;
++	return brcmf_config_ap_mgmt_ie(ifp->vif, info);
+ }
+ 
+ static int
+-- 
+2.25.1
 
-> 
-> > > > 3) We are mixing up two very different things in a single list of callbacks:
-> > > >    lazy callbacks and flooding callbacks, as a result we are adding lots of
-> > > >    off-topic corner cases all around:
-> > > >      * a seperate lazy len field to struct rcu_cblist whose purpose is much more
-> > > >        general than just bypass/lazy
-> > > >      * "lazy" specialized parameters to general purpose cblist management
-> > > >        functions
-> > > 
-> > > I think just 1 or 2 functions have a new lazy param. It didn't seem too
-> > > intrusive to me.
-> > 
-> > What bothers me is that struct cblist has a general purpose and we are adding a field
-> > and a parameter that is relevant to only one specialized user.
-> 
-> This does sound like a bad idea, now that you mention it.  Joel, if
-> this is still in place, can it be moved near the rcu_data structure's
-> bypass-related fields?
-> 
-> And by the way, thank you for reviewing this patch series!
-
-I'll go into a deeper review if we proceed.
-
-> > > > So here is a proposal: how about forgetting NOCB for now and instead add a new
-> > > > RCU_LAZY_TAIL segment in the struct rcu_segcblist right after RCU_NEXT_TAIL?
-> > > > Then ignore that segment until some timer expiry has been met or the CPU is
-> > > > known to be busy? Probably some tiny bits need to be tweaked in segcblist
-> > > > management functions but probably not that much. And also make sure that entrain()
-> > > > queues to RCU_LAZY_TAIL.
-> > > > 
-> > > > Then the only difference in the case of NOCB is that we add a new timer to the
-> > > > nocb group leader instead of a local timer in !NOCB.
-> > > 
-> > > It sounds reasonable, but I'll go with Paul on the usecase argument - who would
-> > > actually care about lazy CBs outside of power, and would those guys ever use
-> > > !NO_CB if they cared about power / battery?
-> > 
-> > _Everybody_ cares about power. Those who don't yet will very soon ;-)
-> 
-> Apparently not enough to use CONFIG_RCU_FAST_NO_HZ.  Though to be fair,
-> that option had its own performance issues.  And it would not reduce
-> grace periods anywhere near as much as call_rcu_lazy().  But the problem
-> was that last I checked on server workloads, the callbacks were mostly
-> those that could not reasonably be lazy.
-
-Right, but like I said, even servers can sometimes find a moment to think about
-their good life.
-
-> > And given the numbers you provided with your measurements, I bet this will
-> > be significant with !NOCB as well. This is not only delaying callbacks execution,
-> > this also reduces the frequency of grace periods, and that impact should be
-> > quite visible.
-> > 
-> > Note I'm not stricly opposed to the current approach. But I can't say I'm
-> > comfortable with it.
-> > 
-> > Can we do a simple test? Would it be possible to affine every rcuo%c/%d kthread
-> > to the corresponding CPU%d? For example affine rcuop/1 to CPU 1, rcuop/2 to
-> > CPU2, etc... And then relaunch your measurements on top of that?
-> > 
-> > The point is that having the callback kthreads affined to their corresponding
-> > CPUs should elude the power saving advantages of rcu_nocbs=, back to roughly
-> > a !NOCB behaviour powerwise (except we have context switches). If you find good
-> > numbers with this setup then you'll find good numbers with !NOCB.
-> 
-> Another test would be to look at which callbacks are being invoked
-> on each grace period.  We have to have a substantial number of grace
-> periods having all lazy callbacks before call_rcu_lazy() has any chance
-> of helping.  This would need to happen on a server platform because
-> Android and ChromeOS data might or might not carry over.
-
-Also that yes.
-
-Thanks.

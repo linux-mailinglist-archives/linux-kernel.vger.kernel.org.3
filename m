@@ -2,161 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F17F5A616E
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:14:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BD145A6166
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230036AbiH3LOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58824 "EHLO
+        id S229671AbiH3LNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229750AbiH3LNt (ORCPT
+        with ESMTP id S229504AbiH3LN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:13:49 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A06BEDDA95;
-        Tue, 30 Aug 2022 04:13:48 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MH4N10V1lz1N7J3;
-        Tue, 30 Aug 2022 19:10:09 +0800 (CST)
-Received: from kwepemm600016.china.huawei.com (7.193.23.20) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 19:13:46 +0800
-Received: from localhost.localdomain (10.69.192.56) by
- kwepemm600016.china.huawei.com (7.193.23.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 30 Aug 2022 19:13:46 +0800
-From:   Guangbin Huang <huangguangbin2@huawei.com>
-To:     <davem@davemloft.net>, <kuba@kernel.org>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lipeng321@huawei.com>, <lanhao@huawei.com>
-Subject: [PATCH net-next 4/4] net: hns3: net: hns3: add querying and setting fec off mode from firmware
-Date:   Tue, 30 Aug 2022 19:11:17 +0800
-Message-ID: <20220830111117.47865-5-huangguangbin2@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220830111117.47865-1-huangguangbin2@huawei.com>
-References: <20220830111117.47865-1-huangguangbin2@huawei.com>
+        Tue, 30 Aug 2022 07:13:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 226EAD9D40;
+        Tue, 30 Aug 2022 04:13:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9641B61515;
+        Tue, 30 Aug 2022 11:13:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A89BC433C1;
+        Tue, 30 Aug 2022 11:13:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661858006;
+        bh=jNG2gCWSllTupgHvGrYYT7PSUlHkq8MWcYG0y8EZTnE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=VR/Gg2PqVwxfODQVdOPHed+GMSCt5kWnEOktkTVShuBRbNw4+W2AdvwACXwYlXtUy
+         yKhhnDH3iUR4R1Ln8FBX9pW+2qIRzQHA0XTmbVvAPvLIhc3wzYt2gdqh96O2M5JwDP
+         bq2j+W2pWJ9ThC8IhytZUcY53oBRlq4qlQB0FJ+YAAvesw8IGKKRWs/NBWtFwqg69K
+         5adafvTT6LbEuBFaPXC7M4edfbdCHQUDkl85dfEAWvSvUMVDdWB0fcqIF8lqmcX9PJ
+         oGSeUx41CIJ9ldgBbO0fx8ms722Axin+RFflkcu1yWi8YGc0VxkgQU//oGEpNJVYW/
+         wkH91MtjMrKwQ==
+Message-ID: <7dff961e-908d-48de-fff1-8b6029d28eed@kernel.org>
+Date:   Tue, 30 Aug 2022 14:13:20 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.69.192.56]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600016.china.huawei.com (7.193.23.20)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 2/2] phy: ti: gmii-sel: Add support for CPSW5G GMII SEL
+ in J7200
+Content-Language: en-US
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     robh+dt@kernel.org, lee.jones@linaro.org,
+        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
+        kishon@ti.com, vkoul@kernel.org, dan.carpenter@oracle.com,
+        grygorii.strashko@ti.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org
+References: <20220822065631.27933-1-s-vadapalli@ti.com>
+ <20220822065631.27933-3-s-vadapalli@ti.com>
+ <655c39a3-cf5f-6dd7-3c1a-61ebeae915bd@kernel.org>
+ <7dd27795-11d0-3147-ed86-959ff3e89df4@ti.com>
+ <8ef8b2f8-a1c1-b277-22b1-6e951e8dfc72@kernel.org>
+ <533a4186-62b1-ce7b-e097-9fb04be8f018@ti.com>
+From:   Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <533a4186-62b1-ce7b-e097-9fb04be8f018@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For some new devices, the FEC mode can not be set to OFF in speed 200G.
-In order to flexibly adapt to all types of devices, driver queries
-fec ability from firmware to decide whether OFF mode can be supported.
+Siddharth,
 
-Signed-off-by: Guangbin Huang <huangguangbin2@huawei.com>
----
- drivers/net/ethernet/hisilicon/hns3/hnae3.h      |  1 +
- .../net/ethernet/hisilicon/hns3/hns3_ethtool.c   | 11 +++++------
- .../ethernet/hisilicon/hns3/hns3pf/hclge_main.c  | 16 ++++++++++------
- 3 files changed, 16 insertions(+), 12 deletions(-)
+On 30/08/2022 07:31, Siddharth Vadapalli wrote:
+> Hello Roger,
+> 
+> On 29/08/22 18:13, Roger Quadros wrote:
+>> Siddharth,
+>>
+>> On 29/08/2022 07:53, Siddharth Vadapalli wrote:
+>>> Hello Roger,
+>>>
+>>> On 25/08/22 13:11, Roger Quadros wrote:
+>>>> Hi Siddharth,
+>>>>
+>>>> On 22/08/2022 09:56, Siddharth Vadapalli wrote:
+>>>>> Each of the CPSW5G ports in J7200 support additional modes like QSGMII.
+>>>>> Add a new compatible for J7200 to support the additional modes.
+>>>>>
+>>>>> In TI's J7200, each of the CPSW5G ethernet interfaces can act as a
+>>>>> QSGMII or QSGMII-SUB port. The QSGMII interface is responsible for
+>>>>> performing auto-negotiation between the MAC and the PHY while the rest of
+>>>>> the interfaces are designated as QSGMII-SUB interfaces, indicating that
+>>>>> they will not be taking part in the auto-negotiation process.
+>>>>>
+>>>>> To indicate the interface which will serve as the main QSGMII interface,
+>>>>> add a property "ti,qsgmii-main-ports", whose value indicates the
+>>>>> port number of the interface which shall serve as the main QSGMII
+>>>>> interface. The rest of the interfaces are then assigned QSGMII-SUB mode by
+>>>>> default.
+>>>>
+>>>> Can you please describe here why you are using "ti,qsgmii-main-ports" instead
+>>>> of "ti,qsgmii-main-port" as there can be only one main port per PHY instance?
+>>>
+>>> Thank you for reviewing the patch. I am using "ports" instead of "port"
+>>> because I plan to add support for CPSW9G on TI's J721e device in the
+>>> future patches. CPSW9G (8 external ports) supports up to two QSGMII main
+>>> ports. For CPSW9G, by specifying the two main ports in the device tree,
+>>> it is possible to configure the CTRLMMR_ENETx_CTRL register for each of
+>>> the 8 ports, with the two QSGMII main ports being configured as main
+>>> ports in the CTRLMMR_ENETx_CTRL register and the rest of them being
+>>> configured as sub ports. Since I will be using the same property
+>>> "ti,qsgmii-main-ports" for CPSW9G as well, the property will be an array
+>>> of 2 values for CPSW9G. Therefore, I am using "ports" instead of "port".
+>>> Please let me know if this is fine.
+>>>
+>>
+>> OK. Please mention this in commit message.
+> 
+> I will mention that the property ti,qsgmii-main-ports is used to
+> configure the CTRLMMR_ENETx_CTRL register and that it is possible
+> depending on the device for there to be more than one main port which is
+> why the property is an array of values.
+> 
+> Would it be sufficient to mention the above in the commit message?
+> Please let me know.
 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hnae3.h b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-index d7754b180f53..795df7111119 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-+++ b/drivers/net/ethernet/hisilicon/hns3/hnae3.h
-@@ -224,6 +224,7 @@ enum hnae3_fec_mode {
- 	HNAE3_FEC_BASER,
- 	HNAE3_FEC_RS,
- 	HNAE3_FEC_LLRS,
-+	HNAE3_FEC_NONE,
- 	HNAE3_FEC_USER_DEF,
- };
- 
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-index 82a48ec20618..3ca9c2b67da4 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_ethtool.c
-@@ -1625,10 +1625,8 @@ static unsigned int loc_to_eth_fec(u8 loc_fec)
- 		eth_fec |= ETHTOOL_FEC_LLRS;
- 	if (loc_fec & BIT(HNAE3_FEC_BASER))
- 		eth_fec |= ETHTOOL_FEC_BASER;
--
--	/* if nothing is set, then FEC is off */
--	if (!eth_fec)
--		eth_fec = ETHTOOL_FEC_OFF;
-+	if (loc_fec & BIT(HNAE3_FEC_NONE))
-+		eth_fec |= ETHTOOL_FEC_OFF;
- 
- 	return eth_fec;
- }
-@@ -1639,8 +1637,7 @@ static unsigned int eth_to_loc_fec(unsigned int eth_fec)
- 	u32 loc_fec = 0;
- 
- 	if (eth_fec & ETHTOOL_FEC_OFF)
--		return loc_fec;
--
-+		loc_fec |= BIT(HNAE3_FEC_NONE);
- 	if (eth_fec & ETHTOOL_FEC_AUTO)
- 		loc_fec |= BIT(HNAE3_FEC_AUTO);
- 	if (eth_fec & ETHTOOL_FEC_RS)
-@@ -1672,6 +1669,8 @@ static int hns3_get_fecparam(struct net_device *netdev,
- 
- 	fec->fec = loc_to_eth_fec(fec_ability);
- 	fec->active_fec = loc_to_eth_fec(fec_mode);
-+	if (!fec->active_fec)
-+		fec->active_fec = ETHTOOL_FEC_OFF;
- 
- 	return 0;
- }
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-index 5cc19ff56121..fcdc978379ff 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3pf/hclge_main.c
-@@ -1008,6 +1008,7 @@ static void hclge_update_fec_support(struct hclge_mac *mac)
- 	linkmode_clear_bit(ETHTOOL_LINK_MODE_FEC_BASER_BIT, mac->supported);
- 	linkmode_clear_bit(ETHTOOL_LINK_MODE_FEC_RS_BIT, mac->supported);
- 	linkmode_clear_bit(ETHTOOL_LINK_MODE_FEC_LLRS_BIT, mac->supported);
-+	linkmode_clear_bit(ETHTOOL_LINK_MODE_FEC_NONE_BIT, mac->supported);
- 
- 	if (mac->fec_ability & BIT(HNAE3_FEC_BASER))
- 		linkmode_set_bit(ETHTOOL_LINK_MODE_FEC_BASER_BIT,
-@@ -1018,6 +1019,9 @@ static void hclge_update_fec_support(struct hclge_mac *mac)
- 	if (mac->fec_ability & BIT(HNAE3_FEC_LLRS))
- 		linkmode_set_bit(ETHTOOL_LINK_MODE_FEC_LLRS_BIT,
- 				 mac->supported);
-+	if (mac->fec_ability & BIT(HNAE3_FEC_NONE))
-+		linkmode_set_bit(ETHTOOL_LINK_MODE_FEC_NONE_BIT,
-+				 mac->supported);
- }
- 
- static void hclge_convert_setting_sr(u16 speed_ability,
-@@ -1125,17 +1129,17 @@ static void hclge_convert_setting_fec(struct hclge_mac *mac)
- 	switch (mac->speed) {
- 	case HCLGE_MAC_SPEED_10G:
- 	case HCLGE_MAC_SPEED_40G:
--		mac->fec_ability =
--			BIT(HNAE3_FEC_BASER) | BIT(HNAE3_FEC_AUTO);
-+		mac->fec_ability = BIT(HNAE3_FEC_BASER) | BIT(HNAE3_FEC_AUTO) |
-+				   BIT(HNAE3_FEC_NONE);
- 		break;
- 	case HCLGE_MAC_SPEED_25G:
- 	case HCLGE_MAC_SPEED_50G:
--		mac->fec_ability =
--			BIT(HNAE3_FEC_BASER) | BIT(HNAE3_FEC_RS) |
--			BIT(HNAE3_FEC_AUTO);
-+		mac->fec_ability = BIT(HNAE3_FEC_BASER) | BIT(HNAE3_FEC_RS) |
-+				   BIT(HNAE3_FEC_AUTO) | BIT(HNAE3_FEC_NONE);
- 		break;
- 	case HCLGE_MAC_SPEED_100G:
--		mac->fec_ability = BIT(HNAE3_FEC_RS) | BIT(HNAE3_FEC_AUTO);
-+		mac->fec_ability = BIT(HNAE3_FEC_RS) | BIT(HNAE3_FEC_AUTO) |
-+				   BIT(HNAE3_FEC_NONE);
- 		break;
- 	case HCLGE_MAC_SPEED_200G:
- 		mac->fec_ability = BIT(HNAE3_FEC_RS) | BIT(HNAE3_FEC_AUTO) |
--- 
-2.33.0
+This is fine. Thanks.
 
+cheers,
+-roger

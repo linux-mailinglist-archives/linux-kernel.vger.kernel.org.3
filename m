@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB04C5A605C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:12:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8EB5A6060
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:12:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiH3KM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
+        id S229697AbiH3KMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229705AbiH3KLx (ORCPT
+        with ESMTP id S230145AbiH3KLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Aug 2022 06:11:53 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 20CF7EA17E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:07:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB9EEFB0CC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:07:35 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 58BF823A;
-        Tue, 30 Aug 2022 03:07:40 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CAF231474;
+        Tue, 30 Aug 2022 03:07:41 -0700 (PDT)
 Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F2CA23F766;
-        Tue, 30 Aug 2022 03:07:32 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6F8F93F766;
+        Tue, 30 Aug 2022 03:07:34 -0700 (PDT)
 From:   Sudeep Holla <sudeep.holla@arm.com>
 To:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org
 Cc:     Sudeep Holla <sudeep.holla@arm.com>,
@@ -30,9 +30,9 @@ Cc:     Sudeep Holla <sudeep.holla@arm.com>,
         Valentin Laurent <valentin.laurent@trustonic.com>,
         Lukas Hanel <lukas.hanel@trustonic.com>,
         Coboy Chen <coboy.chen@mediatek.com>
-Subject: [PATCH 5/9] firmware: arm_ffa: Use FFA_FEATURES to detect if native versions are supported
-Date:   Tue, 30 Aug 2022 11:06:56 +0100
-Message-Id: <20220830100700.344594-6-sudeep.holla@arm.com>
+Subject: [PATCH 6/9] firmware: arm_ffa: Make memory apis ffa_device independent
+Date:   Tue, 30 Aug 2022 11:06:57 +0100
+Message-Id: <20220830100700.344594-7-sudeep.holla@arm.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220830100700.344594-1-sudeep.holla@arm.com>
 References: <20220830100700.344594-1-sudeep.holla@arm.com>
@@ -47,85 +47,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, the ffa_dev->mode_32bit is use to detect if the native 64-bit
-or 32-bit versions of FF-A ABI needs to be used. However for the FF-A
-memory ABIs, it is not dependent on the ffa_device(i.e. the partition)
-itself, but the partition manager(SPM).
+There is a requirement to make memory APIs independent of the ffa_device.
+One of the use-case is to have a common memory driver that manages the
+memory for all the ffa_devices. That commom memory driver won't be a
+ffa_driver or won't have any ffa_device associated with it. So having
+these memory APIs accessible without a ffa_device is needed and should
+be possible as most of these are handled by the partition manager(SPM
+or hypervisor).
 
-So, the FFA_FEATURES can be use to detect if the native 64bit ABIs are
-supported or not and appropriate calls can be made based on that.
-
-Use FFA_FEATURES to detect if native versions of MEM_LEND or MEM_SHARE
-are implemented and make of the same to use native memory ABIs later on.
+Drop the ffa_device argument to the memory APIs and make them ffa_device
+independent.
 
 Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
 ---
- drivers/firmware/arm_ffa/driver.c | 22 ++++++++++++++++------
- 1 file changed, 16 insertions(+), 6 deletions(-)
+ drivers/firmware/arm_ffa/driver.c | 6 ++----
+ drivers/tee/optee/ffa_abi.c       | 2 +-
+ include/linux/arm_ffa.h           | 6 ++----
+ 3 files changed, 5 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-index de94073f4109..5f02b670e964 100644
+index 5f02b670e964..5c8484b05c50 100644
 --- a/drivers/firmware/arm_ffa/driver.c
 +++ b/drivers/firmware/arm_ffa/driver.c
-@@ -163,6 +163,7 @@ struct ffa_drv_info {
- 	struct mutex tx_lock; /* lock to protect Tx buffer */
- 	void *rx_buffer;
- 	void *tx_buffer;
-+	bool mem_ops_native;
+@@ -640,8 +640,7 @@ static int ffa_sync_send_receive(struct ffa_device *dev,
+ 				       dev->mode_32bit, data);
+ }
+ 
+-static int
+-ffa_memory_share(struct ffa_device *dev, struct ffa_mem_ops_args *args)
++static int ffa_memory_share(struct ffa_mem_ops_args *args)
+ {
+ 	if (drv_info->mem_ops_native)
+ 		return ffa_memory_ops(FFA_FN_NATIVE(MEM_SHARE), args);
+@@ -649,8 +648,7 @@ ffa_memory_share(struct ffa_device *dev, struct ffa_mem_ops_args *args)
+ 	return ffa_memory_ops(FFA_MEM_SHARE, args);
+ }
+ 
+-static int
+-ffa_memory_lend(struct ffa_device *dev, struct ffa_mem_ops_args *args)
++static int ffa_memory_lend(struct ffa_mem_ops_args *args)
+ {
+ 	/* Note that upon a successful MEM_LEND request the caller
+ 	 * must ensure that the memory region specified is not accessed
+diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+index 4c3b5d0008dd..7ec0a2f9a63b 100644
+--- a/drivers/tee/optee/ffa_abi.c
++++ b/drivers/tee/optee/ffa_abi.c
+@@ -294,7 +294,7 @@ static int optee_ffa_shm_register(struct tee_context *ctx, struct tee_shm *shm,
+ 	if (rc)
+ 		return rc;
+ 	args.sg = sgt.sgl;
+-	rc = ffa_ops->memory_share(ffa_dev, &args);
++	rc = ffa_ops->memory_share(&args);
+ 	sg_free_table(&sgt);
+ 	if (rc)
+ 		return rc;
+diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
+index 556f50f27fb1..eafab07c9f58 100644
+--- a/include/linux/arm_ffa.h
++++ b/include/linux/arm_ffa.h
+@@ -262,10 +262,8 @@ struct ffa_dev_ops {
+ 	int (*sync_send_receive)(struct ffa_device *dev,
+ 				 struct ffa_send_direct_data *data);
+ 	int (*memory_reclaim)(u64 g_handle, u32 flags);
+-	int (*memory_share)(struct ffa_device *dev,
+-			    struct ffa_mem_ops_args *args);
+-	int (*memory_lend)(struct ffa_device *dev,
+-			   struct ffa_mem_ops_args *args);
++	int (*memory_share)(struct ffa_mem_ops_args *args);
++	int (*memory_lend)(struct ffa_mem_ops_args *args);
  };
  
- static struct ffa_drv_info *drv_info;
-@@ -594,6 +595,13 @@ static int ffa_features(u32 func_feat_id, u32 input_props, u32 *if_props)
- 	return 0;
- }
- 
-+static void ffa_set_up_mem_ops_native_flag(void)
-+{
-+	if (!ffa_features(FFA_FN_NATIVE(MEM_LEND), 0, NULL) ||
-+	    !ffa_features(FFA_FN_NATIVE(MEM_SHARE), 0, NULL))
-+		drv_info->mem_ops_native = true;
-+}
-+
- static u32 ffa_api_version_get(void)
- {
- 	return drv_info->version;
-@@ -635,10 +643,10 @@ static int ffa_sync_send_receive(struct ffa_device *dev,
- static int
- ffa_memory_share(struct ffa_device *dev, struct ffa_mem_ops_args *args)
- {
--	if (dev->mode_32bit)
--		return ffa_memory_ops(FFA_MEM_SHARE, args);
-+	if (drv_info->mem_ops_native)
-+		return ffa_memory_ops(FFA_FN_NATIVE(MEM_SHARE), args);
- 
--	return ffa_memory_ops(FFA_FN_NATIVE(MEM_SHARE), args);
-+	return ffa_memory_ops(FFA_MEM_SHARE, args);
- }
- 
- static int
-@@ -651,10 +659,10 @@ ffa_memory_lend(struct ffa_device *dev, struct ffa_mem_ops_args *args)
- 	 * however on systems without a hypervisor the responsibility
- 	 * falls to the calling kernel driver to prevent access.
- 	 */
--	if (dev->mode_32bit)
--		return ffa_memory_ops(FFA_MEM_LEND, args);
-+	if (drv_info->mem_ops_native)
-+		return ffa_memory_ops(FFA_FN_NATIVE(MEM_LEND), args);
- 
--	return ffa_memory_ops(FFA_FN_NATIVE(MEM_LEND), args);
-+	return ffa_memory_ops(FFA_MEM_LEND, args);
- }
- 
- static const struct ffa_dev_ops ffa_ops = {
-@@ -765,6 +773,8 @@ static int __init ffa_init(void)
- 
- 	ffa_setup_partitions();
- 
-+	ffa_set_up_mem_ops_native_flag();
-+
- 	return 0;
- free_pages:
- 	if (drv_info->tx_buffer)
+ #endif /* _LINUX_ARM_FFA_H */
 -- 
 2.37.2
 

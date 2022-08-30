@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDAFC5A58BD
+	by mail.lfdr.de (Postfix) with ESMTP id 834315A58BC
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:04:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiH3BCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 21:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35742 "EHLO
+        id S229698AbiH3BCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 21:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiH3BBj (ORCPT
+        with ESMTP id S229679AbiH3BBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 29 Aug 2022 21:01:39 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08CD1A027E
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4372A0277
         for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:01:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661821298; x=1693357298;
+  t=1661821297; x=1693357297;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=paLLfnuCD3vCLKnZtUsd0mpWPekiZ/gq8Xe6lyMWCSA=;
-  b=EZur8Cd9BcROwVmaDDK6nkqClPGoYJIKEvLugCsRCHJUFpChvfBOdt/v
-   jplAEb1JCqevju46jGhX6VX9bvJblqlIbX3RbZcR7IvV3loEYL+jwplDH
-   yJLxIzDv6d5baBgdBcxD6YodZtXMODbcYtyUTzLBs92ijSgsKfv+7ENKN
-   96issaMF7TVaoejKjfXDn57uc+XuBM3lcjWTHFH5B+0KVIBB0GKp/Rl4d
-   lSaG76Db4EYUqcOIFMJHhcUaZ/cSoRl+CFLVz93LIosFr/7oAcDpZZS+a
-   CDaW4r2C/pl9OAuVRw6ecSeZ/mhfa0+oQJkZvsPpmZadgFfkkiYhJOWGF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="359008858"
+  bh=tKXUIYG/Xz5e/k5YeoUZSvllZOQ+wWGcTbccvaDbCKc=;
+  b=Dj3Lp87n9/WSsmhBVRid7HvYDS3Q/3nylZXrmlDPTb5bf4Nb8d07aI1z
+   lFjTQTDBdEhkLtIjH6tPCpd/boIkAxM1iVIynznll+CZvhzvQj+vZDOSx
+   y2bpvXtGPClsWww3piMMETzI5O8JVEiN1AXwJ/mAGm2vX/WkE8qODc3lz
+   2eunZcRNyBxdGPDLzxnJHsonLBAxWa3S3myJEv6V0mKVMPb4UlMQ6LI2F
+   0AKF8r6CRQt3ZwAgnNgALia8+etk/UWZaBdGzdfUq8VBo3EN4zQ6IiCAn
+   Mjwx4lybjDW8EGFgrkab26N7+vL9kG9ZBDUXJ8piHgoQSQUNwJ1IbTgqO
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="356762073"
 X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="359008858"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 18:01:37 -0700
+   d="scan'208";a="356762073"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 18:01:37 -0700
 X-IronPort-AV: E=Sophos;i="5.93,273,1654585200"; 
-   d="scan'208";a="787305244"
+   d="scan'208";a="679838305"
 Received: from fpalamon-mobl.amr.corp.intel.com (HELO box.shutemov.name) ([10.252.54.23])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 18:01:33 -0700
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 18:01:33 -0700
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id B1E3C10428A; Tue, 30 Aug 2022 04:01:24 +0300 (+03)
+        id BC31C10428B; Tue, 30 Aug 2022 04:01:24 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -55,9 +55,9 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         Weihong Zhang <weihong.zhang@intel.com>,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv8 09/11] selftests/x86/lam: Add mmap and SYSCALL test cases for linear-address masking
-Date:   Tue, 30 Aug 2022 04:01:02 +0300
-Message-Id: <20220830010104.1282-10-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv8 10/11] selftests/x86/lam: Add io_uring test cases for linear-address masking
+Date:   Tue, 30 Aug 2022 04:01:03 +0300
+Message-Id: <20220830010104.1282-11-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
 References: <20220830010104.1282-1-kirill.shutemov@linux.intel.com>
@@ -75,134 +75,364 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Weihong Zhang <weihong.zhang@intel.com>
 
-Add mmap and SYSCALL test cases.
+LAM should be supported in kernel thread, using io_uring to verify LAM feature.
+The test cases implement read a file through io_uring, the test cases choose an
+iovec array as receiving buffer, which used to receive data, according to LAM
+mode, set metadata in high bits of these buffer.
 
-SYSCALL test cases:
-
- - LAM supports set metadata in high bits 62:57 (LAM_U57) of a user pointer, pass
-   the pointer to SYSCALL, SYSCALL can dereference the pointer and return correct
-   result.
-
- - Disable LAM, pass a pointer with metadata in high bits to SYSCALL,
-   SYSCALL returns -1 (EFAULT).
-
-MMAP test cases:
-
- - Enable LAM_U57, MMAP with low address (below bits 47), set metadata
-   in high bits of the address, dereference the address should be
-   allowed.
-
- - Enable LAM_U57, MMAP with high address (above bits 47), set metadata
-   in high bits of the address, dereference the address should be
-   allowed.
+io_uring can deal with these buffers that pointed to pointers with the metadata
+in high bits.
 
 Signed-off-by: Weihong Zhang <weihong.zhang@intel.com>
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 ---
- tools/testing/selftests/x86/lam.c | 135 +++++++++++++++++++++++++++++-
- 1 file changed, 132 insertions(+), 3 deletions(-)
+ tools/testing/selftests/x86/lam.c | 341 +++++++++++++++++++++++++++++-
+ 1 file changed, 339 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
-index 900a3a0fb709..b88e007ee0a3 100644
+index b88e007ee0a3..25e6d0fc4a83 100644
 --- a/tools/testing/selftests/x86/lam.c
 +++ b/tools/testing/selftests/x86/lam.c
-@@ -7,6 +7,7 @@
- #include <signal.h>
- #include <setjmp.h>
+@@ -9,8 +9,12 @@
  #include <sys/mman.h>
-+#include <sys/utsname.h>
+ #include <sys/utsname.h>
  #include <sys/wait.h>
++#include <sys/stat.h>
++#include <fcntl.h>
  #include <inttypes.h>
  
-@@ -29,11 +30,18 @@
- /* Specified test function bits */
- #define FUNC_MALLOC             0x1
++#include <sys/uio.h>
++#include <linux/io_uring.h>
+ #include "../kselftest.h"
+ 
+ #ifndef __x86_64__
+@@ -32,8 +36,9 @@
  #define FUNC_BITS               0x2
-+#define FUNC_MMAP               0x4
-+#define FUNC_SYSCALL            0x8
+ #define FUNC_MMAP               0x4
+ #define FUNC_SYSCALL            0x8
++#define FUNC_URING              0x10
  
--#define TEST_MASK               0x3
-+#define TEST_MASK               0xf
+-#define TEST_MASK               0xf
++#define TEST_MASK               0x1f
+ 
+ #define LOW_ADDR                (0x1UL << 30)
+ #define HIGH_ADDR               (0x3UL << 48)
+@@ -42,6 +47,13 @@
+ 
+ #define PAGE_SIZE               (4 << 10)
+ 
++#define barrier() ({						\
++		   __asm__ __volatile__("" : : : "memory");	\
++})
 +
-+#define LOW_ADDR                (0x1UL << 30)
-+#define HIGH_ADDR               (0x3UL << 48)
- 
- #define MALLOC_LEN              32
- 
-+#define PAGE_SIZE               (4 << 10)
++#define URING_QUEUE_SZ 1
++#define URING_BLOCK_SZ 2048
 +
  struct testcases {
  	unsigned int later;
  	int expected; /* 2: SIGSEGV Error; 1: other errors */
-@@ -49,6 +57,7 @@ jmp_buf segv_env;
- static void segv_handler(int sig)
- {
- 	ksft_print_msg("Get segmentation fault(%d).", sig);
-+
- 	siglongjmp(segv_env, 1);
- }
+@@ -51,6 +63,33 @@ struct testcases {
+ 	const char *msg;
+ };
  
-@@ -61,6 +70,16 @@ static inline int cpu_has_lam(void)
- 	return (cpuinfo[0] & (1 << 26));
- }
++/* Used by CQ of uring, source file handler and file's size */
++struct file_io {
++	int file_fd;
++	off_t file_sz;
++	struct iovec iovecs[];
++};
++
++struct io_uring_queue {
++	unsigned int *head;
++	unsigned int *tail;
++	unsigned int *ring_mask;
++	unsigned int *ring_entries;
++	unsigned int *flags;
++	unsigned int *array;
++	union {
++		struct io_uring_cqe *cqes;
++		struct io_uring_sqe *sqes;
++	} queue;
++	size_t ring_sz;
++};
++
++struct io_ring {
++	int ring_fd;
++	struct io_uring_queue sq_ring;
++	struct io_uring_queue cq_ring;
++};
++
+ int tests_cnt;
+ jmp_buf segv_env;
  
-+/* Check 5-level page table feature in CPUID.(EAX=07H, ECX=00H):ECX.[bit 16] */
-+static inline int cpu_has_la57(void)
-+{
-+	unsigned int cpuinfo[4];
-+
-+	__cpuid_count(0x7, 0, cpuinfo[0], cpuinfo[1], cpuinfo[2], cpuinfo[3]);
-+
-+	return (cpuinfo[2] & (1 << 16));
-+}
-+
- /*
-  * Set tagged address and read back untag mask.
-  * check if the untagged mask is expected.
-@@ -213,6 +232,68 @@ static int handle_malloc(struct testcases *test)
+@@ -294,6 +333,285 @@ static int handle_syscall(struct testcases *test)
  	return ret;
  }
  
-+static int handle_mmap(struct testcases *test)
++int sys_uring_setup(unsigned int entries, struct io_uring_params *p)
 +{
-+	void *ptr;
-+	unsigned int flags = MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED;
-+	int ret = 0;
++	return (int)syscall(__NR_io_uring_setup, entries, p);
++}
 +
-+	if (test->later == 0 && test->lam != 0)
-+		if (set_lam(test->lam) != 0)
-+			return 1;
++int sys_uring_enter(int fd, unsigned int to, unsigned int min, unsigned int flags)
++{
++	return (int)syscall(__NR_io_uring_enter, fd, to, min, flags, NULL, 0);
++}
 +
-+	ptr = mmap((void *)test->addr, PAGE_SIZE, PROT_READ | PROT_WRITE,
-+		   flags, -1, 0);
-+	if (ptr == MAP_FAILED) {
-+		if (test->addr == HIGH_ADDR)
-+			if (!cpu_has_la57())
-+				return 3; /* unsupport LA57 */
++/* Init submission queue and completion queue */
++int mmap_io_uring(struct io_uring_params p, struct io_ring *s)
++{
++	struct io_uring_queue *sring = &s->sq_ring;
++	struct io_uring_queue *cring = &s->cq_ring;
++
++	sring->ring_sz = p.sq_off.array + p.sq_entries * sizeof(unsigned int);
++	cring->ring_sz = p.cq_off.cqes + p.cq_entries * sizeof(struct io_uring_cqe);
++
++	if (p.features & IORING_FEAT_SINGLE_MMAP) {
++		if (cring->ring_sz > sring->ring_sz)
++			sring->ring_sz = cring->ring_sz;
++
++		cring->ring_sz = sring->ring_sz;
++	}
++
++	void *sq_ptr = mmap(0, sring->ring_sz, PROT_READ | PROT_WRITE,
++			    MAP_SHARED | MAP_POPULATE, s->ring_fd,
++			    IORING_OFF_SQ_RING);
++
++	if (sq_ptr == MAP_FAILED) {
++		perror("sub-queue!");
 +		return 1;
 +	}
 +
-+	if (test->later != 0 && test->lam != 0)
-+		if (set_lam(test->lam) != 0)
-+			ret = 1;
++	void *cq_ptr = sq_ptr;
 +
-+	if (ret == 0) {
-+		if (sigsetjmp(segv_env, 1) == 0) {
-+			signal(SIGSEGV, segv_handler);
-+			ret = handle_lam_test(ptr, test->lam);
-+		} else {
-+			ret = 2;
++	if (!(p.features & IORING_FEAT_SINGLE_MMAP)) {
++		cq_ptr = mmap(0, cring->ring_sz, PROT_READ | PROT_WRITE,
++			      MAP_SHARED | MAP_POPULATE, s->ring_fd,
++			      IORING_OFF_CQ_RING);
++		if (cq_ptr == MAP_FAILED) {
++			perror("cpl-queue!");
++			munmap(sq_ptr, sring->ring_sz);
++			return 1;
 +		}
 +	}
 +
-+	munmap(ptr, PAGE_SIZE);
++	sring->head = sq_ptr + p.sq_off.head;
++	sring->tail = sq_ptr + p.sq_off.tail;
++	sring->ring_mask = sq_ptr + p.sq_off.ring_mask;
++	sring->ring_entries = sq_ptr + p.sq_off.ring_entries;
++	sring->flags = sq_ptr + p.sq_off.flags;
++	sring->array = sq_ptr + p.sq_off.array;
++
++	/* Map a queue as mem map */
++	s->sq_ring.queue.sqes = mmap(0, p.sq_entries * sizeof(struct io_uring_sqe),
++				     PROT_READ | PROT_WRITE, MAP_SHARED | MAP_POPULATE,
++				     s->ring_fd, IORING_OFF_SQES);
++	if (s->sq_ring.queue.sqes == MAP_FAILED) {
++		munmap(sq_ptr, sring->ring_sz);
++		if (sq_ptr != cq_ptr) {
++			ksft_print_msg("failed to mmap uring queue!");
++			munmap(cq_ptr, cring->ring_sz);
++			return 1;
++		}
++	}
++
++	cring->head = cq_ptr + p.cq_off.head;
++	cring->tail = cq_ptr + p.cq_off.tail;
++	cring->ring_mask = cq_ptr + p.cq_off.ring_mask;
++	cring->ring_entries = cq_ptr + p.cq_off.ring_entries;
++	cring->queue.cqes = cq_ptr + p.cq_off.cqes;
++
++	return 0;
++}
++
++/* Init io_uring queues */
++int setup_io_uring(struct io_ring *s)
++{
++	struct io_uring_params para;
++
++	memset(&para, 0, sizeof(para));
++	s->ring_fd = sys_uring_setup(URING_QUEUE_SZ, &para);
++	if (s->ring_fd < 0)
++		return 1;
++
++	return mmap_io_uring(para, s);
++}
++
++/*
++ * Get data from completion queue. the data buffer saved the file data
++ * return 0: success; others: error;
++ */
++int handle_uring_cq(struct io_ring *s)
++{
++	struct file_io *fi = NULL;
++	struct io_uring_queue *cring = &s->cq_ring;
++	struct io_uring_cqe *cqe;
++	unsigned int head;
++	off_t len = 0;
++
++	head = *cring->head;
++
++	do {
++		barrier();
++		if (head == *cring->tail)
++			break;
++		/* Get the entry */
++		cqe = &cring->queue.cqes[head & *s->cq_ring.ring_mask];
++		fi = (struct file_io *)cqe->user_data;
++		if (cqe->res < 0)
++			break;
++
++		int blocks = (int)(fi->file_sz + URING_BLOCK_SZ - 1) / URING_BLOCK_SZ;
++
++		for (int i = 0; i < blocks; i++)
++			len += fi->iovecs[i].iov_len;
++
++		head++;
++	} while (1);
++
++	*cring->head = head;
++	barrier();
++
++	return (len != fi->file_sz);
++}
++
++/*
++ * Submit squeue. specify via IORING_OP_READV.
++ * the buffer need to be set metadata according to LAM mode
++ */
++int handle_uring_sq(struct io_ring *ring, struct file_io *fi, unsigned long lam)
++{
++	int file_fd = fi->file_fd;
++	struct io_uring_queue *sring = &ring->sq_ring;
++	unsigned int index = 0, cur_block = 0, tail = 0, next_tail = 0;
++	struct io_uring_sqe *sqe;
++
++	off_t remain = fi->file_sz;
++	int blocks = (int)(remain + URING_BLOCK_SZ - 1) / URING_BLOCK_SZ;
++
++	while (remain) {
++		off_t bytes = remain;
++		void *buf;
++
++		if (bytes > URING_BLOCK_SZ)
++			bytes = URING_BLOCK_SZ;
++
++		fi->iovecs[cur_block].iov_len = bytes;
++
++		if (posix_memalign(&buf, URING_BLOCK_SZ, URING_BLOCK_SZ))
++			return 1;
++
++		fi->iovecs[cur_block].iov_base = (void *)set_metadata((uint64_t)buf, lam);
++		remain -= bytes;
++		cur_block++;
++	}
++
++	next_tail = *sring->tail;
++	tail = next_tail;
++	next_tail++;
++
++	barrier();
++
++	index = tail & *ring->sq_ring.ring_mask;
++
++	sqe = &ring->sq_ring.queue.sqes[index];
++	sqe->fd = file_fd;
++	sqe->flags = 0;
++	sqe->opcode = IORING_OP_READV;
++	sqe->addr = (unsigned long)fi->iovecs;
++	sqe->len = blocks;
++	sqe->off = 0;
++	sqe->user_data = (uint64_t)fi;
++
++	sring->array[index] = index;
++	tail = next_tail;
++
++	if (*sring->tail != tail) {
++		*sring->tail = tail;
++		barrier();
++	}
++
++	if (sys_uring_enter(ring->ring_fd, 1, 1, IORING_ENTER_GETEVENTS) < 0)
++		return 1;
++
++	return 0;
++}
++
++/*
++ * Test LAM in async I/O and io_uring, read current binery through io_uring
++ * Set metadata in pointers to iovecs buffer.
++ */
++int do_uring(unsigned long lam)
++{
++	struct io_ring *ring;
++	struct file_io *fi;
++	struct stat st;
++	int ret = 1;
++	char path[PATH_MAX];
++
++	/* get current process path */
++	if (readlink("/proc/self/exe", path, PATH_MAX) <= 0)
++		return 1;
++
++	int file_fd = open(path, O_RDONLY);
++
++	if (file_fd < 0)
++		return 1;
++
++	if (fstat(file_fd, &st) < 0)
++		return 1;
++
++	off_t file_sz = st.st_size;
++
++	int blocks = (int)(file_sz + URING_BLOCK_SZ - 1) / URING_BLOCK_SZ;
++
++	fi = malloc(sizeof(*fi) + sizeof(struct iovec) * blocks);
++	if (!fi)
++		return 1;
++
++	fi->file_sz = file_sz;
++	fi->file_fd = file_fd;
++
++	ring = malloc(sizeof(*ring));
++	if (!ring)
++		return 1;
++
++	memset(ring, 0, sizeof(struct io_ring));
++
++	if (setup_io_uring(ring))
++		goto out;
++
++	if (handle_uring_sq(ring, fi, lam))
++		goto out;
++
++	ret = handle_uring_cq(ring);
++
++out:
++	free(ring);
++
++	for (int i = 0; i < blocks; i++) {
++		if (fi->iovecs[i].iov_base) {
++			uint64_t addr = ((uint64_t)fi->iovecs[i].iov_base);
++
++			switch (lam) {
++			case LAM_U57_BITS: /* Clear bits 62:57 */
++				addr = (addr & ~(0x3fULL << 57));
++				break;
++			}
++			free((void *)addr);
++			fi->iovecs[i].iov_base = NULL;
++		}
++	}
++
++	free(fi);
++
 +	return ret;
 +}
 +
-+static int handle_syscall(struct testcases *test)
++int handle_uring(struct testcases *test)
 +{
-+	struct utsname unme, *pu;
 +	int ret = 0;
 +
 +	if (test->later == 0 && test->lam != 0)
@@ -211,17 +441,10 @@ index 900a3a0fb709..b88e007ee0a3 100644
 +
 +	if (sigsetjmp(segv_env, 1) == 0) {
 +		signal(SIGSEGV, segv_handler);
-+		pu = (struct utsname *)set_metadata((uint64_t)&unme, test->lam);
-+		ret = uname(pu);
-+		if (ret < 0)
-+			ret = 1;
++		ret = do_uring(test->lam);
 +	} else {
 +		ret = 2;
 +	}
-+
-+	if (test->later != 0 && test->lam != 0)
-+		if (set_lam(test->lam) != -1 && ret == 0)
-+			ret = 1;
 +
 +	return ret;
 +}
@@ -229,79 +452,44 @@ index 900a3a0fb709..b88e007ee0a3 100644
  static int fork_test(struct testcases *test)
  {
  	int ret, child_ret;
-@@ -268,7 +349,6 @@ static struct testcases malloc_cases[] = {
- 	},
- };
+@@ -333,6 +651,22 @@ static void run_test(struct testcases *test, int count)
+ 	}
+ }
  
--
- static struct testcases bits_cases[] = {
- 	{
- 		.test_func = handle_max_bits,
-@@ -276,11 +356,54 @@ static struct testcases bits_cases[] = {
- 	},
- };
- 
-+static struct testcases syscall_cases[] = {
++static struct testcases uring_cases[] = {
 +	{
 +		.later = 0,
 +		.lam = LAM_U57_BITS,
-+		.test_func = handle_syscall,
-+		.msg = "SYSCALL: LAM_U57. syscall with metadata\n",
++		.test_func = handle_uring,
++		.msg = "URING: LAM_U57. Dereferencing pointer with metadata\n",
 +	},
 +	{
 +		.later = 1,
 +		.expected = 1,
 +		.lam = LAM_U57_BITS,
-+		.test_func = handle_syscall,
-+		.msg = "SYSCALL:[Negative] Disable LAM. Dereferencing pointer with metadata.\n",
++		.test_func = handle_uring,
++		.msg = "URING:[Negative] Disable LAM. Dereferencing pointer with metadata.\n",
 +	},
 +};
 +
-+static struct testcases mmap_cases[] = {
-+	{
-+		.later = 1,
-+		.expected = 0,
-+		.lam = LAM_U57_BITS,
-+		.addr = HIGH_ADDR,
-+		.test_func = handle_mmap,
-+		.msg = "MMAP: First mmap high address, then set LAM_U57.\n",
-+	},
-+	{
-+		.later = 0,
-+		.expected = 0,
-+		.lam = LAM_U57_BITS,
-+		.addr = HIGH_ADDR,
-+		.test_func = handle_mmap,
-+		.msg = "MMAP: First LAM_U57, then High address.\n",
-+	},
-+	{
-+		.later = 0,
-+		.expected = 0,
-+		.lam = LAM_U57_BITS,
-+		.addr = LOW_ADDR,
-+		.test_func = handle_mmap,
-+		.msg = "MMAP: First LAM_U57, then Low address.\n",
-+	},
-+};
-+
- static void cmd_help(void)
+ static struct testcases malloc_cases[] = {
+ 	{
+ 		.later = 0,
+@@ -403,7 +737,7 @@ static void cmd_help(void)
  {
  	printf("usage: lam [-h] [-t test list]\n");
  	printf("\t-t test list: run tests specified in the test list, default:0x%x\n", TEST_MASK);
--	printf("\t\t0x1:malloc; 0x2:max_bits;\n");
-+	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall.\n");
+-	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall.\n");
++	printf("\t\t0x1:malloc; 0x2:max_bits; 0x4:mmap; 0x8:syscall; 0x10:io_uring.\n");
  	printf("\t-h: help\n");
  }
  
-@@ -320,6 +443,12 @@ int main(int argc, char **argv)
- 	if (tests & FUNC_BITS)
- 		run_test(bits_cases, ARRAY_SIZE(bits_cases));
+@@ -449,6 +783,9 @@ int main(int argc, char **argv)
+ 	if (tests & FUNC_SYSCALL)
+ 		run_test(syscall_cases, ARRAY_SIZE(syscall_cases));
  
-+	if (tests & FUNC_MMAP)
-+		run_test(mmap_cases, ARRAY_SIZE(mmap_cases));
-+
-+	if (tests & FUNC_SYSCALL)
-+		run_test(syscall_cases, ARRAY_SIZE(syscall_cases));
++	if (tests & FUNC_URING)
++		run_test(uring_cases, ARRAY_SIZE(uring_cases));
 +
  	ksft_set_plan(tests_cnt);
  

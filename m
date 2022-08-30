@@ -2,63 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540125A5EC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F63B5A5EC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbiH3I5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49070 "EHLO
+        id S230310AbiH3I5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:57:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229697AbiH3I5h (ORCPT
+        with ESMTP id S229842AbiH3I5a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:57:37 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1167D9FA82;
-        Tue, 30 Aug 2022 01:57:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661849854; x=1693385854;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=iFyqrBQdxTUBOpu9l4E3C3J/Crs7bTOiZ1ntimc+HSU=;
-  b=YC5OvuaOapHHUl/e59sWdA1w8pUHbITorDwapbw2Xlfh6ao3GEGgtmWV
-   nUe2r4xujjb3bTrcqSz776pNjX3c+IUMz2noVU3To/YguWPwE29GELYiJ
-   Mc6+FVN7BspJ4flV9EKgfX4xkL0nPvwLM++zpCopLDGeN2saz/EyIAoC2
-   xI/D0Co3Qrh8hw9CyCt7aUiTOs4B/wKM1fiviKGimwOaI7/MOB7RC+rIS
-   vO/pO1gA26Y/4Wf6jaOxwOCQQiywb+a1GIGmjiylTlniHy9/OGpbEIcK1
-   FSh92vCrxR79G1Qp4pMcAzOORFQeufKqQQprbwDOCnyrW4qGpR/zwW9Yn
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="359086657"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="359086657"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:57:30 -0700
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="641290765"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.172.100]) ([10.249.172.100])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 01:57:27 -0700
-Message-ID: <6704f880-14ed-b8e8-4204-ac0d8afef5ef@linux.intel.com>
-Date:   Tue, 30 Aug 2022 16:57:23 +0800
+        Tue, 30 Aug 2022 04:57:30 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7A69E11B
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:57:28 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id z25so14593745lfr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:57:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=GqxXJYLcgxzpP2ZXiJpKYao0UsYj8w9DXe+9ym7gme0=;
+        b=ujObYb7BZjSY2DG1cWtiXE+XefTdW9gkANM8ivM/MyZaWp2WACtiRtjyn9khuMY6dL
+         7xUWQE/PGwBxSRXLV9PYIOx6nGWmv+nQ3T1/vQnrHh8AwYM+oNFlit+m23uReoNY1LCQ
+         bp41qS+zVwBwi7JDyvD29HsZ9GPn12z10Dm9eP49yjHEBVJWyO/XCpu9UMxdd5B2/Y4M
+         28dCWyzz+s01uq9wDqUJGS58VnQRCtUsghnGTwjqaGFj9zUgkUfQQ92Zl3A9CUWGZW98
+         4oOXfroo9QygAIsAaCszAk/SlpVh5P3h7kghynKiDVCGlt0b814ZRJrxokUIATYQXzak
+         NbTg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=GqxXJYLcgxzpP2ZXiJpKYao0UsYj8w9DXe+9ym7gme0=;
+        b=oid6OEdIHsalp6mKwFtdqLvJ4H560YNykckItLhef2fJG3ICOaHmzXlMotdQ+CQuSP
+         cqX7v0eMA6icKESPB8HuQ/man0IbwUKhjfw8gJUAI9D0u6gUjwri2oWLKzm8w9yxhGsa
+         W5I81uafYthBKemXcU2hWrhAPD+reU31h2tevGNQi40Xiit9p4At+kD9Eo/Vv1jDswDR
+         T9PGUoEPf+DpbZyIHwf2Qz9nR3T/FvP0O7+2fRhkoo9NpwEe+JkbCiMRiCBF31cGw5Dr
+         f3F0i21NIuwgod7KiVsb3pmS+QeaeTx+Wvx59rVh2VJlWKExFvCU1BoiicPWvhMDr263
+         T5og==
+X-Gm-Message-State: ACgBeo3+IsYuPi876Es1shEpu/jVv2Jy55ljcYVIzmjWXNI1PWWnt0os
+        9ZAyj60tgEUak53G+KdLzln9Nw==
+X-Google-Smtp-Source: AA6agR4EU+9shH21zvi7esssrpBh2nzV77A/AczGVMGQGOf/eJ1aqB+K9adBP6pNavBwjlUVXcwY3w==
+X-Received: by 2002:a05:6512:108f:b0:494:7299:7152 with SMTP id j15-20020a056512108f00b0049472997152mr1954983lfg.514.1661849846799;
+        Tue, 30 Aug 2022 01:57:26 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id c9-20020a2e9d89000000b002655fb689a6sm718889ljj.139.2022.08.30.01.57.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 01:57:26 -0700 (PDT)
+Message-ID: <40577a34-6046-a10b-e444-4fb36d13e8e6@linaro.org>
+Date:   Tue, 30 Aug 2022 11:57:25 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v8 020/103] KVM: TDX: create/destroy VM structure
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
- <810ce6dbd0330f06a80e05afa0a068b5f5b332f3.1659854790.git.isaku.yamahata@intel.com>
- <bd9ae0af-47de-c8ea-3880-a98fed2de48d@linux.intel.com>
- <20220829190921.GA2700446@ls.amr.corp.intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20220829190921.GA2700446@ls.amr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH V3 1/2] dt-bindings: fsl-imx-sdma: Convert imx sdma to DT
+ schema
+Content-Language: en-US
+To:     Joy Zou <joy.zou@nxp.com>
+Cc:     shengjiu.wang@nxp.com, vkoul@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, dmaengine@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+References: <20220830081839.1201720-1-joy.zou@nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220830081839.1201720-1-joy.zou@nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,64 +80,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 30/08/2022 11:18, Joy Zou wrote:
+> Convert the i.MX SDMA binding to DT schema format using
+> json-schema. In addition, add new peripheral types HDMI
+> Audio.
+> 
+> when run dtbs_check will occur nodename not match issue
+> because the old dts nodename can't match new rule. I have
+> modified thoes old dts, and will upstream in the near future.
+> 
+> Signed-off-by: Joy Zou <joy.zou@nxp.com>
+> ---
+> Changes since (implicit) v2:
+> modify the commit message in patch v3.
+> modify the filename in patch v3.
+> modify the maintainer in patch v3.
+> delete the unnecessary comment in patch v3.
+> modify the compatible and run dt_binding_check and
+> dtbs_check in patch v3.
+> add clocks and clock-names property in patch v3.
+> delete the reg description and add maxItems in patch v3.
+> delete the interrupts description and add maxItems in patch v3.
+> add ref for gpr property.
+> modify the fsl,sdma-event-remap ref type and add items
+> in patch v3.
+> delete consumer example in patch v3.
 
-On 2022/8/30 3:09, Isaku Yamahata wrote:
->
->>> +}
->>> +
->>> +static int tdx_reclaim_page(unsigned long va, hpa_t pa, bool do_wb, u16 hkid)
->>> +{
->>> +	struct tdx_module_output out;
->>> +	u64 err;
->>> +
->>> +	err = tdh_phymem_page_reclaim(pa, &out);
->>> +	if (WARN_ON_ONCE(err)) {
->>> +		pr_tdx_error(TDH_PHYMEM_PAGE_RECLAIM, err, &out);
->>> +		return -EIO;
->>> +	}
->>> +
->>> +	if (do_wb) {
->>> +		err = tdh_phymem_page_wbinvd(set_hkid_to_hpa(pa, hkid));
->>> +		if (WARN_ON_ONCE(err)) {
->>> +			pr_tdx_error(TDH_PHYMEM_PAGE_WBINVD, err, NULL);
->>> +			return -EIO;
->>> +		}
->>> +	}
->>> +
->>> +	tdx_clear_page(va);
->> Is it really necessary to clear the reclaimed page using MOVDIR64?
->>
->> According to the TDX module spec,  when add a page to TD, both for control
->> structures and TD private memory, during the process some function of the
->> TDX module will initialize the page using binding hkid and direct write
->> (MOVDIR64B).
->>
->> So still need to clear the page using direct write to avoid integrity error
->> when re-assign one page from old keyid to a new keyid as you mentioned in
->> the comment?
-> Yes. As you described above, TDX module does when assining a page to a private
-> hkid. i.e. TDH.MEM.PAGE.{ADD, AUG}.  But when re-assigning a page from an old
-> private hkid to a new _shared_ hkid, i.e. TDH.MEM.PAGE.REMOVE or
-> TDH.PHYMEM.PAGE.RECLAIM, TDX module doesn't.
+This is patch 1/2. Where is 2/2?
 
-Is the reason you added the tdx_clear_page() here due to the description 
-in 1.3.1 of Intel CPU Architectural Extensions Specification for TDX 
-(343754-002US)?
-
-The description as following:
-"MKTME on an SOC that supports SEAM might support an integrity 
-protected, memory encryption mode. When using keys with integrity 
-enabled, the MKTME associates a message authentication code (MAC) with 
-each cache line. By design, when reading a cache line using a KeyID with 
-integrity enabled, if the MAC stored in the metadata does not match the 
-MAC regenerated by the MKTME, then the cache line is marked poisoned to 
-prevent the data from being consumed. Integrity protected memory must be 
-initialized before being read, and such initialization must be performed 
-using 64-bytes direct-store with 64-byte write atomicity using the 
-MOVDIR64B instruction"
-
-Actually I have a question about the description,  does the 
-initialization using MOVDIR64B must associated with the according hkid?
-
-
-
+Best regards,
+Krzysztof

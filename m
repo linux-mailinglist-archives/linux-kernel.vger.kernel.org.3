@@ -2,69 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC9D85A59E0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 05:26:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 780805A59E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 05:27:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiH3D0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 23:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58598 "EHLO
+        id S230008AbiH3D0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 23:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiH3D02 (ORCPT
+        with ESMTP id S229577AbiH3D0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 23:26:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0341D86FC5
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 20:26:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Sj2YAf+jcJpwZgorIhbu6IO4GDMZ2Kf9QmWmBPLXWvU=; b=kSS0ivJZA881DO1pPuT5Jep76P
-        EKfzIVdydNx9TKycdzueqIPeCY0HoFzlgRsNay+JdDbP6aJR9v6uZRcrHYsL/tGbgzlOBbIWQp0mr
-        p3vq0+rO67wFe3vR5/P8o75ACPROvcJh6G/vVmldTrPI8muBkZK3tyrDE2w232PN4adJC9oDtpE+6
-        rJ2hh9pTqRjpTxTH9zYRfKO9L0prazTDkP9iZXlscM5s9RfjJu4WMzzrocBq5GUDQTcZVOfbTHPaB
-        MvOKYqDkqbDfQ5pKDo+NxdR7VoZqFWGN9ebgS0H67O7L656skRPc650HDxz77sSloGFJkgAT/wr7M
-        CEJP/64g==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oSrtI-003dkn-T1; Tue, 30 Aug 2022 03:26:16 +0000
-Date:   Tue, 30 Aug 2022 04:26:16 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com, vbabka@suse.cz,
-        william.kucharski@oracle.com, dhowells@redhat.com,
-        peterx@redhat.com, arnd@arndb.de, ccross@google.com,
-        hughd@google.com, ebiederm@xmission.com
-Subject: Re: [PATCH 5/7] mm/hugetlb: convert hugetlb_delete_from_page_cache()
- to use folios
-Message-ID: <Yw2DWCHlivGge03V@casper.infradead.org>
-References: <20220829230014.384722-1-sidhartha.kumar@oracle.com>
- <20220829230014.384722-6-sidhartha.kumar@oracle.com>
+        Mon, 29 Aug 2022 23:26:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67F7086FC5;
+        Mon, 29 Aug 2022 20:26:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2EED2B80CAE;
+        Tue, 30 Aug 2022 03:26:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E84CDC433C1;
+        Tue, 30 Aug 2022 03:26:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661830006;
+        bh=vCeutC1YE7j2Xgcpxklc+eiDLOAW0q6hOs3qSU3HIJM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=BUPtvlqZNpW6fyT4yBq6nWG/n14pJ+PHSdA0JmiwJFKlhg1BP/hv46tALG3PY7Xnt
+         dtwPqHQ9GU1tFr6bgHy31RwUHrtXmAHzIjwKkLUsbrX8tbtim/omiedAbxZCtntb9F
+         Qk0pH0J1SYY8liXS89W9bR0sIm6n7pVfdFBiIhru1Z2UnNe0dnhR4EQboDtrUOgb67
+         1qQZC/xZkuMycZB7IEmrhXKnGvPSV94JD+nYdLhRyt++FQUwp9WKx6+GzBfbryt0Qn
+         zJ7Ugz/f2SOW6s/qFbXnShUctPghj/ffyeD9HZ7VuL4hj96kONXQWCIwLVmDavh3tx
+         mmnYOTw5UXp6g==
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     vkoul@kernel.org, lee@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, david@ixit.cz, sboyd@kernel.org,
+        devicetree@vger.kernel.org, agross@kernel.org,
+        krzysztof.kozlowski@linaro.org
+Cc:     bryan.odonoghue@linaro.org
+Subject: Re: (subset) [PATCH 00/14] arm64/dt-bindings: mfd: qcom: SPMI PMIC fixes
+Date:   Mon, 29 Aug 2022 22:26:43 -0500
+Message-Id: <166182996519.340873.11988950576516786131.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220828084341.112146-1-krzysztof.kozlowski@linaro.org>
+References: <20220828084341.112146-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829230014.384722-6-sidhartha.kumar@oracle.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 04:00:12PM -0700, Sidhartha Kumar wrote:
->  static void hugetlb_delete_from_page_cache(struct page *page)
->  {
-> -	ClearPageDirty(page);
-> -	ClearPageUptodate(page);
-> -	delete_from_page_cache(page);
-> +	folio_clear_dirty(folio);
-> +	folio_clear_uptodate(folio);
-> +	filemap_remove_folio(folio);
->  }
+On Sun, 28 Aug 2022 11:43:27 +0300, Krzysztof Kozlowski wrote:
+> The Qualcomm SPMI PMIC DT schema conversion was not really tested and several
+> issues in the bindings and DTS should be corrected.
+> 
+> 1. The DTS patches can go independently.
+> 2. The binding change continuous work of PWM reg fix and depends on it in
+>    context (diff hunk):
+>    https://lore.kernel.org/all/20220827145640.3530878-1-bryan.odonoghue@linaro.org/
+>    Binidings changes and above, can be taken via MFD tree (fixed commit was
+>    merged in v6.0-rc1).
+> 
+> [...]
 
-Did you send the right version of this patch?  It doesn't look like it'll
-compile.
+Applied, thanks!
+
+[01/14] ARM: dts: qcom: align SPMI PMIC ADC node name with dtschema
+        commit: 662e305dfc29b96913a03dde1e89e8968da65238
+[02/14] ARM: dts: qcom: pm8941: align SPMI PMIC LPG node name with dtschema
+        commit: 7b357d3126226b7ec4810e26f4ded44b2286d197
+[03/14] ARM: dts: qcom: pmx55: align SPMI PMIC Power-on node name with dtschema
+        commit: 4bdfd92cb14d97ef58600926ea6b2788b31c719f
+
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>

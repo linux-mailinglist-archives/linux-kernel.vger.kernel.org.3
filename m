@@ -2,74 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF80E5A5AF7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 07:00:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96A45A5AF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 07:03:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229892AbiH3FAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 01:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45920 "EHLO
+        id S229846AbiH3FDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 01:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiH3FAI (ORCPT
+        with ESMTP id S229538AbiH3FDI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 01:00:08 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E201910FE6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 22:00:01 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id r6so7742802qtx.6
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 22:00:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=I53anoOXNt7rTHSRPo4j42KHm4z7y87xF4J5ljpGIqM=;
-        b=Htu05WzvVRDm+Xumm+rHwVxvbnwoRA05W1J1mp3J6WLjalNXIoCQyffl+/icOznwrz
-         WadY5GW0Pqy+ESMgOiztmpjcc4+UfK97vPA1lu52B2w1zZZc+qg/DOvrXh4SN53Sf666
-         LS85RWAiXu6i0WFoePcb8C9Fy/S76+YdtvXUA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=I53anoOXNt7rTHSRPo4j42KHm4z7y87xF4J5ljpGIqM=;
-        b=ylqaodbgiOWOG//YjAg9/KxWHg/KScME9Q35oj731HK0C6eSOiXsmljgO0wnnIE85r
-         AgF41Hnr8kRhYFygXmZWT+m0Bzuf52fWbJh626/clmpC7y5QRyjWg49HeWpi/DRLdbWe
-         2/YQhU9A3XhjXF+L6zA/ZGSIIDD/ICXlSmvl4ZslkOzZxJTbWAaVFSF7p3nhz9k/QUn9
-         ybwptFjEhKC2pxgaAKPfNcP4oad3geY0c5p7SS6SVTJMBOu4zX3eC8yVFSm/LXAjFgC6
-         lxjHYAgkx2wpF1jnNU/IpK4skV5GP5ndukyGt8oZgIJf50oXbcxwbHglkmyXyMiFzusB
-         ypkg==
-X-Gm-Message-State: ACgBeo1n6fNS69nj9rEbJ4id3k5KKjQE++/4MRUB1WkDl++FUdjoxeQu
-        gyMsvLPyJYdDRIU8p9wyER29ZNdAh6GmkCMf
-X-Google-Smtp-Source: AA6agR71cY3PDc8ND17Ruv81ez8CXnnUQ0EHo2jFhVWRNeAlHJ0/IDfcL8p62fd0iPZ1EAxAmk+hoQ==
-X-Received: by 2002:a05:622a:344:b0:343:6a5f:321 with SMTP id r4-20020a05622a034400b003436a5f0321mr12655063qtw.204.1661835600783;
-        Mon, 29 Aug 2022 22:00:00 -0700 (PDT)
-Received: from trappist.c.googlers.com.com (48.230.85.34.bc.googleusercontent.com. [34.85.230.48])
-        by smtp.gmail.com with ESMTPSA id dm56-20020a05620a1d7800b006b941e994fasm6981047qkb.14.2022.08.29.22.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 22:00:00 -0700 (PDT)
-From:   Sven van Ashbrook <svenva@chromium.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Alex Levin <levinale@google.com>,
-        Chithra Annegowda <chithraa@google.com>,
-        Frank Gorgenyi <frankgor@google.com>,
-        Sven van Ashbrook <svenva@chromium.org>,
-        Aaron Ma <aaron.ma@canonical.com>,
-        David Ober <dober6023@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Hao Chen <chenhao288@hisilicon.com>,
-        Hayes Wang <hayeswang@realtek.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-usb@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH net-next v1] r8152: allow userland to disable multicast
-Date:   Tue, 30 Aug 2022 04:59:39 +0000
-Message-Id: <20220830045923.net-next.v1.1.I4fee0ac057083d4f848caf0fa3a9fd466fc374a0@changeid>
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+        Tue, 30 Aug 2022 01:03:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F98C5246B
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 22:03:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20864B81632
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:03:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19571C433D6;
+        Tue, 30 Aug 2022 05:03:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661835784;
+        bh=UEGxpf5PeVt1wCUvkuPifC5GN/BTpqhuMv/zeTutc+w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=J4k8QZhYWyG27LiA5Jk6FMbRQoyjXL4TzBJPUE1EBFN2xfx22T8zgQSKBNEkUSesb
+         9iTgQXU+6y1YNxmGQYOCYYMEueNkkOCCYMLEiGy81F7apvAk7XThYxuinVlxKDk+cz
+         rEQFIfxCfze/dR3c8dMpyrR2w82G0RUWrILPeaKSicGNj/lmJ/k6LVig/BSGRhyoLt
+         Vavlnewh1ZNY02yila/BDetppqG5BAWb1mT25iu+X7xBhw1qC4QDcx5iHWsxR0BZI2
+         +9SFOYB81aTi68rs0tvyjTu/5bh4nTU6/6549Yn0apsik0e6kNnlRqKvQhSjDo9tuK
+         /oONLP7mYU0Ww==
+Date:   Tue, 30 Aug 2022 10:33:00 +0530
+From:   Vinod Koul <vkoul@kernel.org>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>,
+        Damien Le Moal <Damien.LeMoal@wdc.com>,
+        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] phy: marvell: phy-mvebu-a3700-comphy: Remove broken
+ reset support
+Message-ID: <Yw2aBNnVoV8wwk4i@matsya>
+References: <20220829083046.15082-1-pali@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <20220829083046.15082-1-pali@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,67 +60,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rtl8152 driver does not disable multicasting when userspace asks
-it to. For example:
- $ ifconfig eth0 -multicast -allmulti
- $ tcpdump -p -i eth0  # will still capture multicast frames
+On 29-08-22, 10:30, Pali Rohár wrote:
+> Reset support for SATA PHY is somehow broken and after calling it, kernel
+> is not able to detect and initialize SATA disk Samsung SSD 850 EMT0 [1].
+> 
+> Reset support was introduced in commit 934337080c6c ("phy: marvell:
+> phy-mvebu-a3700-comphy: Add native kernel implementation") as part of
+> complete rewrite of this driver. v1 patch series of that commit [2] did
+> not contain reset support and was tested that is working fine with
+> Ethernet, SATA and USB PHYs without issues too.
+> 
+> So for now remove broken reset support and change implementation of
+> power_off callback to power off all functions on specified lane (and not
+> only selected function) because during startup kernel does not know which
+> function was selected and configured by bootloader. Same logic was used
+> also in v1 patch series of that commit.
+> 
+> This change fixes issues with initialization of SATA disk Samsung SSD 850
+> and disk is working again, like before mentioned commit.
+> 
+> Once problem with PHY reset callback is solved its functionality could be
+> re-introduced. But for now it is unknown why it does not work.
 
-Fix by clearing the device multicast filter table when multicast and
-allmulti are both unset.
+Applied, thanks
 
-Tested as follows:
-- Set multicast on eth0 network interface
-- verify that multicast packets are coming in:
-  $ tcpdump -p -i eth0
-- Clear multicast and allmulti on eth0 network interface
-- verify that no more multicast packets are coming in:
-  $ tcpdump -p -i eth0
-
-Signed-off-by: Sven van Ashbrook <svenva@chromium.org>
----
-
- drivers/net/usb/r8152.c | 20 ++++++++++++--------
- 1 file changed, 12 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 688905ea0a6d..5e85b8bf9e87 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -2727,22 +2727,26 @@ static void _rtl8152_set_rx_mode(struct net_device *netdev)
- 		ocp_data |= RCR_AM | RCR_AAP;
- 		mc_filter[1] = 0xffffffff;
- 		mc_filter[0] = 0xffffffff;
--	} else if ((netdev_mc_count(netdev) > multicast_filter_limit) ||
--		   (netdev->flags & IFF_ALLMULTI)) {
-+	} else if ((netdev->flags & IFF_MULTICAST &&
-+				netdev_mc_count(netdev) > multicast_filter_limit) ||
-+			   (netdev->flags & IFF_ALLMULTI)) {
- 		/* Too many to filter perfectly -- accept all multicasts. */
- 		ocp_data |= RCR_AM;
- 		mc_filter[1] = 0xffffffff;
- 		mc_filter[0] = 0xffffffff;
- 	} else {
--		struct netdev_hw_addr *ha;
--
- 		mc_filter[1] = 0;
- 		mc_filter[0] = 0;
--		netdev_for_each_mc_addr(ha, netdev) {
--			int bit_nr = ether_crc(ETH_ALEN, ha->addr) >> 26;
- 
--			mc_filter[bit_nr >> 5] |= 1 << (bit_nr & 31);
--			ocp_data |= RCR_AM;
-+		if (netdev->flags & IFF_MULTICAST) {
-+			struct netdev_hw_addr *ha;
-+
-+			netdev_for_each_mc_addr(ha, netdev) {
-+				int bit_nr = ether_crc(ETH_ALEN, ha->addr) >> 26;
-+
-+				mc_filter[bit_nr >> 5] |= 1 << (bit_nr & 31);
-+				ocp_data |= RCR_AM;
-+			}
- 		}
- 	}
- 
 -- 
-2.37.2.672.g94769d06f0-goog
-
+~Vinod

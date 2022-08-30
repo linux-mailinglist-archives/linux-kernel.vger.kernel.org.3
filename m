@@ -2,63 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C6845A6F5A
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:43:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 113FE5A6F5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:44:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231797AbiH3Vnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 17:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45070 "EHLO
+        id S231699AbiH3Vnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 17:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231681AbiH3Vn2 (ORCPT
+        with ESMTP id S231787AbiH3Vnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:43:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A89538B9BA
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:43:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661895797;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zFRR0acvkckiwuQhdIkt5k47ZpuUerQuvus48A9VabU=;
-        b=hyRbIDMt22mqiDUTTIjnkGonGdV2nfsap+SYsGKQbvoVm608iFGb18kvLP1xS/AnA8FXOB
-        ucbI8hiXoaWBv/reqyDiqyHPUbyQyDFdy0Bp1Vb+y919F400OnAluieG08DsCeF/mrrtug
-        sft+OfumPmro8VS1Aw/eH/sS2yrJTiQ=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-496-4uKP6pM4O_uYQBQbLLyfJA-1; Tue, 30 Aug 2022 17:43:14 -0400
-X-MC-Unique: 4uKP6pM4O_uYQBQbLLyfJA-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF57429AB3FF;
-        Tue, 30 Aug 2022 21:43:13 +0000 (UTC)
-Received: from swamp.redhat.com (unknown [10.40.194.110])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6946C1415117;
-        Tue, 30 Aug 2022 21:43:12 +0000 (UTC)
-From:   Petr Oros <poros@redhat.com>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        intel-wired-lan@lists.osuosl.org (moderated list:INTEL ETHERNET DRIVERS),
-        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] Revert "iavf: Add waiting for response from PF in set mac"
-Date:   Tue, 30 Aug 2022 23:43:09 +0200
-Message-Id: <20220830214309.3813378-2-poros@redhat.com>
-In-Reply-To: <20220830214309.3813378-1-poros@redhat.com>
-References: <20220830214309.3813378-1-poros@redhat.com>
+        Tue, 30 Aug 2022 17:43:39 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9CE8B2D9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:43:29 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id e2-20020a056e020b2200b002e1a5b67e29so9281193ilu.11
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:43:29 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=hZh3KPzu6vdJmcyyc9fUNxMkq5x2+UaiRlgdtQCrWEU=;
+        b=Pd8FAd3vOxe8YrWCuINbeNTroYWeI3/gliN5U9DFORlzkRMdSWFRQ6yZshDos9GPvR
+         bxqGxF7zZMHSk8yQBOMbB0bBw6bcxnCSv2DhAbvqPgnmaf0tryZ+Jw0IksvSh6+2UJWn
+         JhupsmUz7451AdHt/LDhD0Hn9k7rHZTZlxLSpeBN4eScAZzillC90FRJVwSg5vgCefsu
+         +l6+lSpktcNr6j+vFrIwKsn63A8XP0SjAr8JfIgdOKQ7xmuBjoU84ch/BBv6Y8es6u/w
+         7qX6AAqAxwBW0UbweAjvlVZyZyVpVmq6GkO3uXGwWL6WU1P8zDLr921KR8Jn9V0kESgO
+         B0MA==
+X-Gm-Message-State: ACgBeo1rkPVj2E6QcZxa/p5/6sSjNPDI+3ILOBLQleUSvaTM0snYNuar
+        AyUnoFbLeA9NFLT/WFKMDUMNksffquO2S88d8vz7SBZifrBk
+X-Google-Smtp-Source: AA6agR6qi8L+tGvCcx/hZ0pVix3H6mvvJw+FlU77PhHXSRcmqs9Q+44EOhcGC+4jPeHXSc6HJjIyqoZEDVG/eFLsQJs+/YXuY4W3
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Received: by 2002:a02:ca04:0:b0:349:f94d:5ea8 with SMTP id
+ i4-20020a02ca04000000b00349f94d5ea8mr13321724jak.156.1661895808438; Tue, 30
+ Aug 2022 14:43:28 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:43:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000050d56805e77c4582@google.com>
+Subject: [syzbot] WARNING in writeback_single_inode
+From:   syzbot <syzbot+fc721e2fe15a5aac41d1@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,378 +54,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change caused a regressions with MAC address changing.
-It is not possible to simple fix issues caused by this patch.
-It is better revert/rework it.
+Hello,
 
-[root@host ~]# ethtool -i enp65s0f0
-driver: ice
-version: 5.19.4-200.fc36.x86_64
-firmware-version: 3.20 0x8000d83e 1.3146.0
+syzbot found the following issue on:
 
-- Change MAC for VF
-[root@host ~]# echo 1 > /sys/class/net/enp65s0f0/device/sriov_numvfs
-[root@host ~]# ip link set enp65s0f0v0 up
-[root@host ~]# ip link set enp65s0f0v0 addr 00:11:22:33:44:55
-RTNETLINK answers: Permission denied
+HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=178fc957080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
+dashboard link: https://syzkaller.appspot.com/bug?extid=fc721e2fe15a5aac41d1
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-- Add VF to bond
-[root@host ~]# echo 2 > /sys/class/net/enp65s0f0/device/sriov_numvfs
-[root@host ~]# ip link add bond0 type bond
-[root@host ~]# ip link set enp65s0f0v0 down
-[root@host ~]# ip link set enp65s0f0v1 down
-[root@host ~]# ip link set enp65s0f0v0 master bond0
-RTNETLINK answers: Permission denied
-dmesg:
-bond0: (slave enp65s0f0v1): Error -13 calling set_mac_address
+Unfortunately, I don't have any reproducer for this issue yet.
 
-This reverts commit 35a2443d0910fdd6ce29d4f724447ad7029e8f23.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+fc721e2fe15a5aac41d1@syzkaller.appspotmail.com
 
-Signed-off-by: Petr Oros <poros@redhat.com>
+ntfs3: loop4: RAW NTFS volume: Filesystem size 0.00 Gb > volume size 0.00 Gb. Mount in read-only
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 24385 at fs/fs-writeback.c:1678 writeback_single_inode+0x374/0x388 fs/fs-writeback.c:1678
+Modules linked in:
+CPU: 0 PID: 24385 Comm: syz-executor.4 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : writeback_single_inode+0x374/0x388 fs/fs-writeback.c:1678
+lr : writeback_single_inode+0x374/0x388 fs/fs-writeback.c:1678
+sp : ffff800020d4b9c0
+x29: ffff800020d4ba10 x28: ffff0000e4bc8000 x27: fffffc0003f22700
+x26: 0000000000000a00 x25: 0000000000000000 x24: 0000000000000001
+x23: 0000000000001000 x22: ffff800020d4ba60 x21: 0000000000000000
+x20: ffff0000fd87f7b7 x19: ffff0000fd87f840 x18: 0000000000000369
+x17: 0000000000000000 x16: ffff80000dbb8658 x15: ffff0000e1cc0000
+x14: 0000000000000130 x13: 00000000ffffffff x12: 0000000000040000
+x11: 000000000003ffff x10: ffff80001d55c000 x9 : ffff80000861f6d4
+x8 : 0000000000040000 x7 : ffff80000861f3a4 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
+Call trace:
+ writeback_single_inode+0x374/0x388 fs/fs-writeback.c:1678
+ write_inode_now+0xb0/0xdc fs/fs-writeback.c:2723
+ iput_final fs/inode.c:1735 [inline]
+ iput+0x1d4/0x314 fs/inode.c:1774
+ ntfs_fill_super+0xc30/0x14a4 fs/ntfs/super.c:2994
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
+ vfs_get_tree+0x40/0x140 fs/super.c:1530
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x914 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+irq event stamp: 3030
+hardirqs last  enabled at (3029): [<ffff800008163d78>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1367 [inline]
+hardirqs last  enabled at (3029): [<ffff800008163d78>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4942
+hardirqs last disabled at (3030): [<ffff80000bffe9cc>] el1_dbg+0x24/0x5c arch/arm64/kernel/entry-common.c:395
+softirqs last  enabled at (2780): [<ffff8000080102e4>] _stext+0x2e4/0x37c
+softirqs last disabled at (1405): [<ffff800008104658>] do_softirq_own_stack include/asm-generic/softirq_stack.h:10 [inline]
+softirqs last disabled at (1405): [<ffff800008104658>] invoke_softirq+0x70/0xbc kernel/softirq.c:452
+---[ end trace 0000000000000000 ]---
+Unable to handle kernel paging request at virtual address 000000fd87f9e147
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+user pgtable: 4k pages, 48-bit VAs, pgdp=0000000128316000
+[000000fd87f9e147] pgd=0000000000000000, p4d=0000000000000000
+Internal error: Oops: 96000004 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 24385 Comm: syz-executor.4 Tainted: G        W          6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : xa_marked include/linux/xarray.h:420 [inline]
+pc : mapping_tagged include/linux/fs.h:461 [inline]
+pc : writeback_single_inode+0x228/0x388 fs/fs-writeback.c:1703
+lr : writeback_single_inode+0x218/0x388 fs/fs-writeback.c:1702
+sp : ffff800020d4b9c0
+x29: ffff800020d4ba10 x28: ffff0000e4bc8000 x27: fffffc0003f22700
+x26: 0000000000000a00 x25: 0000000000001000 x24: 0000000000000001
+x23: 0000000000000001 x22: ffff800020d4ba60 x21: ffff0000fd87f88f
+x20: ffff0000fd87f7b7 x19: ffff0000fd87f840 x18: 0000000000000369
+x17: 0000000000000000 x16: ffff80000dbb8658 x15: ffff0000e1cc0000
+x14: 0000000000000130 x13: 00000000ffffffff x12: 0000000000040000
+x11: ff8080000861f578 x10: 0000000000000002 x9 : ffff0000e1cc0000
+x8 : ff0000fd87f9e0ff x7 : ffff80000861f3a4 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : 0000000000000001 x1 : 0000000000000001 x0 : 0000000000000000
+Call trace:
+ xa_marked include/linux/xarray.h:420 [inline]
+ mapping_tagged include/linux/fs.h:461 [inline]
+ writeback_single_inode+0x228/0x388 fs/fs-writeback.c:1703
+ write_inode_now+0xb0/0xdc fs/fs-writeback.c:2723
+ iput_final fs/inode.c:1735 [inline]
+ iput+0x1d4/0x314 fs/inode.c:1774
+ ntfs_fill_super+0xc30/0x14a4 fs/ntfs/super.c:2994
+ get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
+ vfs_get_tree+0x40/0x140 fs/super.c:1530
+ do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
+ path_mount+0x358/0x914 fs/namespace.c:3370
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount fs/namespace.c:3568 [inline]
+ __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+Code: 710006ff 54000281 f9401a88 2a1f03e0 (b9404917) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	710006ff 	cmp	w23, #0x1
+   4:	54000281 	b.ne	0x54  // b.any
+   8:	f9401a88 	ldr	x8, [x20, #48]
+   c:	2a1f03e0 	mov	w0, wzr
+* 10:	b9404917 	ldr	w23, [x8, #72] <-- trapping instruction
+
+
 ---
- drivers/net/ethernet/intel/iavf/iavf.h        |   7 +-
- drivers/net/ethernet/intel/iavf/iavf_main.c   | 127 +++---------------
- .../net/ethernet/intel/iavf/iavf_virtchnl.c   |  61 +--------
- 3 files changed, 21 insertions(+), 174 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/net/ethernet/intel/iavf/iavf.h b/drivers/net/ethernet/intel/iavf/iavf.h
-index 3f6187c164240f..a988c08e906f1e 100644
---- a/drivers/net/ethernet/intel/iavf/iavf.h
-+++ b/drivers/net/ethernet/intel/iavf/iavf.h
-@@ -146,8 +146,7 @@ struct iavf_mac_filter {
- 		u8 remove:1;        /* filter needs to be removed */
- 		u8 add:1;           /* filter needs to be added */
- 		u8 is_primary:1;    /* filter is a default VF MAC */
--		u8 add_handled:1;   /* received response for filter add */
--		u8 padding:3;
-+		u8 padding:4;
- 	};
- };
- 
-@@ -253,7 +252,6 @@ struct iavf_adapter {
- 	struct work_struct adminq_task;
- 	struct delayed_work client_task;
- 	wait_queue_head_t down_waitqueue;
--	wait_queue_head_t vc_waitqueue;
- 	struct iavf_q_vector *q_vectors;
- 	struct list_head vlan_filter_list;
- 	struct list_head mac_filter_list;
-@@ -298,7 +296,6 @@ struct iavf_adapter {
- #define IAVF_FLAG_QUEUES_DISABLED		BIT(17)
- #define IAVF_FLAG_SETUP_NETDEV_FEATURES		BIT(18)
- #define IAVF_FLAG_REINIT_MSIX_NEEDED		BIT(20)
--#define IAVF_FLAG_INITIAL_MAC_SET		BIT(23)
- /* duplicates for common code */
- #define IAVF_FLAG_DCB_ENABLED			0
- 	/* flags for admin queue service task */
-@@ -576,8 +573,6 @@ void iavf_enable_vlan_stripping_v2(struct iavf_adapter *adapter, u16 tpid);
- void iavf_disable_vlan_stripping_v2(struct iavf_adapter *adapter, u16 tpid);
- void iavf_enable_vlan_insertion_v2(struct iavf_adapter *adapter, u16 tpid);
- void iavf_disable_vlan_insertion_v2(struct iavf_adapter *adapter, u16 tpid);
--int iavf_replace_primary_mac(struct iavf_adapter *adapter,
--			     const u8 *new_mac);
- void
- iavf_set_vlan_offload_features(struct iavf_adapter *adapter,
- 			       netdev_features_t prev_features,
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_main.c b/drivers/net/ethernet/intel/iavf/iavf_main.c
-index f39440ad5c50d6..aa280c892d1b99 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_main.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_main.c
-@@ -978,7 +978,6 @@ struct iavf_mac_filter *iavf_add_filter(struct iavf_adapter *adapter,
- 
- 		list_add_tail(&f->list, &adapter->mac_filter_list);
- 		f->add = true;
--		f->add_handled = false;
- 		f->is_new_mac = true;
- 		f->is_primary = ether_addr_equal(macaddr, adapter->hw.mac.addr);
- 		adapter->aq_required |= IAVF_FLAG_AQ_ADD_MAC_FILTER;
-@@ -990,132 +989,47 @@ struct iavf_mac_filter *iavf_add_filter(struct iavf_adapter *adapter,
- }
- 
- /**
-- * iavf_replace_primary_mac - Replace current primary address
-- * @adapter: board private structure
-- * @new_mac: new MAC address to be applied
-- *
-- * Replace current dev_addr and send request to PF for removal of previous
-- * primary MAC address filter and addition of new primary MAC filter.
-- * Return 0 for success, -ENOMEM for failure.
-+ * iavf_set_mac - NDO callback to set port mac address
-+ * @netdev: network interface device structure
-+ * @p: pointer to an address structure
-  *
-- * Do not call this with mac_vlan_list_lock!
-+ * Returns 0 on success, negative on failure
-  **/
--int iavf_replace_primary_mac(struct iavf_adapter *adapter,
--			     const u8 *new_mac)
-+static int iavf_set_mac(struct net_device *netdev, void *p)
- {
-+	struct iavf_adapter *adapter = netdev_priv(netdev);
- 	struct iavf_hw *hw = &adapter->hw;
- 	struct iavf_mac_filter *f;
-+	struct sockaddr *addr = p;
- 
--	spin_lock_bh(&adapter->mac_vlan_list_lock);
-+	if (!is_valid_ether_addr(addr->sa_data))
-+		return -EADDRNOTAVAIL;
- 
--	list_for_each_entry(f, &adapter->mac_filter_list, list) {
--		f->is_primary = false;
--	}
-+	if (ether_addr_equal(netdev->dev_addr, addr->sa_data))
-+		return 0;
-+
-+	spin_lock_bh(&adapter->mac_vlan_list_lock);
- 
- 	f = iavf_find_filter(adapter, hw->mac.addr);
- 	if (f) {
- 		f->remove = true;
-+		f->is_primary = true;
- 		adapter->aq_required |= IAVF_FLAG_AQ_DEL_MAC_FILTER;
- 	}
- 
--	f = iavf_add_filter(adapter, new_mac);
--
-+	f = iavf_add_filter(adapter, addr->sa_data);
- 	if (f) {
--		/* Always send the request to add if changing primary MAC
--		 * even if filter is already present on the list
--		 */
- 		f->is_primary = true;
--		f->add = true;
--		adapter->aq_required |= IAVF_FLAG_AQ_ADD_MAC_FILTER;
--		ether_addr_copy(hw->mac.addr, new_mac);
-+		ether_addr_copy(hw->mac.addr, addr->sa_data);
- 	}
- 
- 	spin_unlock_bh(&adapter->mac_vlan_list_lock);
- 
- 	/* schedule the watchdog task to immediately process the request */
--	if (f) {
-+	if (f)
- 		queue_work(iavf_wq, &adapter->watchdog_task.work);
--		return 0;
--	}
--	return -ENOMEM;
--}
--
--/**
-- * iavf_is_mac_set_handled - wait for a response to set MAC from PF
-- * @netdev: network interface device structure
-- * @macaddr: MAC address to set
-- *
-- * Returns true on success, false on failure
-- */
--static bool iavf_is_mac_set_handled(struct net_device *netdev,
--				    const u8 *macaddr)
--{
--	struct iavf_adapter *adapter = netdev_priv(netdev);
--	struct iavf_mac_filter *f;
--	bool ret = false;
--
--	spin_lock_bh(&adapter->mac_vlan_list_lock);
--
--	f = iavf_find_filter(adapter, macaddr);
- 
--	if (!f || (!f->add && f->add_handled))
--		ret = true;
--
--	spin_unlock_bh(&adapter->mac_vlan_list_lock);
--
--	return ret;
--}
--
--/**
-- * iavf_set_mac - NDO callback to set port MAC address
-- * @netdev: network interface device structure
-- * @p: pointer to an address structure
-- *
-- * Returns 0 on success, negative on failure
-- */
--static int iavf_set_mac(struct net_device *netdev, void *p)
--{
--	struct iavf_adapter *adapter = netdev_priv(netdev);
--	struct sockaddr *addr = p;
--	bool handle_mac = iavf_is_mac_set_handled(netdev, addr->sa_data);
--	int ret;
--
--	if (!is_valid_ether_addr(addr->sa_data))
--		return -EADDRNOTAVAIL;
--
--	ret = iavf_replace_primary_mac(adapter, addr->sa_data);
--
--	if (ret)
--		return ret;
--
--	/* If this is an initial set MAC during VF spawn do not wait */
--	if (adapter->flags & IAVF_FLAG_INITIAL_MAC_SET) {
--		adapter->flags &= ~IAVF_FLAG_INITIAL_MAC_SET;
--		return 0;
--	}
--
--	if (handle_mac)
--		goto done;
--
--	ret = wait_event_interruptible_timeout(adapter->vc_waitqueue, false, msecs_to_jiffies(2500));
--
--	/* If ret < 0 then it means wait was interrupted.
--	 * If ret == 0 then it means we got a timeout.
--	 * else it means we got response for set MAC from PF,
--	 * check if netdev MAC was updated to requested MAC,
--	 * if yes then set MAC succeeded otherwise it failed return -EACCES
--	 */
--	if (ret < 0)
--		return ret;
--
--	if (!ret)
--		return -EAGAIN;
--
--done:
--	if (!ether_addr_equal(netdev->dev_addr, addr->sa_data))
--		return -EACCES;
--
--	return 0;
-+	return (f == NULL) ? -ENOMEM : 0;
- }
- 
- /**
-@@ -2531,8 +2445,6 @@ static void iavf_init_config_adapter(struct iavf_adapter *adapter)
- 		ether_addr_copy(netdev->perm_addr, adapter->hw.mac.addr);
- 	}
- 
--	adapter->flags |= IAVF_FLAG_INITIAL_MAC_SET;
--
- 	adapter->tx_desc_count = IAVF_DEFAULT_TXD;
- 	adapter->rx_desc_count = IAVF_DEFAULT_RXD;
- 	err = iavf_init_interrupt_scheme(adapter);
-@@ -4831,9 +4743,6 @@ static int iavf_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	/* Setup the wait queue for indicating transition to down status */
- 	init_waitqueue_head(&adapter->down_waitqueue);
- 
--	/* Setup the wait queue for indicating virtchannel events */
--	init_waitqueue_head(&adapter->vc_waitqueue);
--
- 	return 0;
- 
- err_ioremap:
-diff --git a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-index 15ee85dc33bd81..0265eaeb100a57 100644
---- a/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-+++ b/drivers/net/ethernet/intel/iavf/iavf_virtchnl.c
-@@ -594,8 +594,6 @@ static void iavf_mac_add_ok(struct iavf_adapter *adapter)
- 	spin_lock_bh(&adapter->mac_vlan_list_lock);
- 	list_for_each_entry_safe(f, ftmp, &adapter->mac_filter_list, list) {
- 		f->is_new_mac = false;
--		if (!f->add && !f->add_handled)
--			f->add_handled = true;
- 	}
- 	spin_unlock_bh(&adapter->mac_vlan_list_lock);
- }
-@@ -616,9 +614,6 @@ static void iavf_mac_add_reject(struct iavf_adapter *adapter)
- 		if (f->remove && ether_addr_equal(f->macaddr, netdev->dev_addr))
- 			f->remove = false;
- 
--		if (!f->add && !f->add_handled)
--			f->add_handled = true;
--
- 		if (f->is_new_mac) {
- 			list_del(&f->list);
- 			kfree(f);
-@@ -1971,7 +1966,6 @@ void iavf_virtchnl_completion(struct iavf_adapter *adapter,
- 			iavf_mac_add_reject(adapter);
- 			/* restore administratively set MAC address */
- 			ether_addr_copy(adapter->hw.mac.addr, netdev->dev_addr);
--			wake_up(&adapter->vc_waitqueue);
- 			break;
- 		case VIRTCHNL_OP_DEL_VLAN:
- 			dev_err(&adapter->pdev->dev, "Failed to delete VLAN filter, error %s\n",
-@@ -2136,13 +2130,7 @@ void iavf_virtchnl_completion(struct iavf_adapter *adapter,
- 		if (!v_retval)
- 			iavf_mac_add_ok(adapter);
- 		if (!ether_addr_equal(netdev->dev_addr, adapter->hw.mac.addr))
--			if (!ether_addr_equal(netdev->dev_addr,
--					      adapter->hw.mac.addr)) {
--				netif_addr_lock_bh(netdev);
--				eth_hw_addr_set(netdev, adapter->hw.mac.addr);
--				netif_addr_unlock_bh(netdev);
--			}
--		wake_up(&adapter->vc_waitqueue);
-+			eth_hw_addr_set(netdev, adapter->hw.mac.addr);
- 		break;
- 	case VIRTCHNL_OP_GET_STATS: {
- 		struct iavf_eth_stats *stats =
-@@ -2172,11 +2160,10 @@ void iavf_virtchnl_completion(struct iavf_adapter *adapter,
- 			/* restore current mac address */
- 			ether_addr_copy(adapter->hw.mac.addr, netdev->dev_addr);
- 		} else {
--			netif_addr_lock_bh(netdev);
- 			/* refresh current mac address if changed */
-+			eth_hw_addr_set(netdev, adapter->hw.mac.addr);
- 			ether_addr_copy(netdev->perm_addr,
- 					adapter->hw.mac.addr);
--			netif_addr_unlock_bh(netdev);
- 		}
- 		spin_lock_bh(&adapter->mac_vlan_list_lock);
- 		iavf_add_filter(adapter, adapter->hw.mac.addr);
-@@ -2212,10 +2199,6 @@ void iavf_virtchnl_completion(struct iavf_adapter *adapter,
- 		}
- 		fallthrough;
- 	case VIRTCHNL_OP_GET_OFFLOAD_VLAN_V2_CAPS: {
--		struct iavf_mac_filter *f;
--		bool was_mac_changed;
--		u64 aq_required = 0;
--
- 		if (v_opcode == VIRTCHNL_OP_GET_OFFLOAD_VLAN_V2_CAPS)
- 			memcpy(&adapter->vlan_v2_caps, msg,
- 			       min_t(u16, msglen,
-@@ -2223,46 +2206,6 @@ void iavf_virtchnl_completion(struct iavf_adapter *adapter,
- 
- 		iavf_process_config(adapter);
- 		adapter->flags |= IAVF_FLAG_SETUP_NETDEV_FEATURES;
--		was_mac_changed = !ether_addr_equal(netdev->dev_addr,
--						    adapter->hw.mac.addr);
--
--		spin_lock_bh(&adapter->mac_vlan_list_lock);
--
--		/* re-add all MAC filters */
--		list_for_each_entry(f, &adapter->mac_filter_list, list) {
--			if (was_mac_changed &&
--			    ether_addr_equal(netdev->dev_addr, f->macaddr))
--				ether_addr_copy(f->macaddr,
--						adapter->hw.mac.addr);
--
--			f->is_new_mac = true;
--			f->add = true;
--			f->add_handled = false;
--			f->remove = false;
--		}
--
--		/* re-add all VLAN filters */
--		if (VLAN_FILTERING_ALLOWED(adapter)) {
--			struct iavf_vlan_filter *vlf;
--
--			if (!list_empty(&adapter->vlan_filter_list)) {
--				list_for_each_entry(vlf,
--						    &adapter->vlan_filter_list,
--						    list)
--					vlf->add = true;
--
--				aq_required |= IAVF_FLAG_AQ_ADD_VLAN_FILTER;
--			}
--		}
--
--		spin_unlock_bh(&adapter->mac_vlan_list_lock);
--
--		netif_addr_lock_bh(netdev);
--		eth_hw_addr_set(netdev, adapter->hw.mac.addr);
--		netif_addr_unlock_bh(netdev);
--
--		adapter->aq_required |= IAVF_FLAG_AQ_ADD_MAC_FILTER |
--			aq_required;
- 		}
- 		break;
- 	case VIRTCHNL_OP_ENABLE_QUEUES:
--- 
-2.37.2
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,78 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3AD05A5FAB
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5385A5A5FB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:45:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiH3Jof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44716 "EHLO
+        id S230223AbiH3JpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:45:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229766AbiH3Jod (ORCPT
+        with ESMTP id S230212AbiH3JpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:44:33 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E93A8CD5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:44:31 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id p18so7412833ljc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:44:31 -0700 (PDT)
+        Tue, 30 Aug 2022 05:45:07 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A44A1FCDC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:45:03 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id bn9so10732855ljb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:45:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=1AEJkkvJsW5PL2iwboBiHlwrTQTde2dlnWXw8tEu3D0=;
-        b=FAgokXKk3aNNyd6z/ejsI3SNO9qh9ttn1mD6G87U7kRtJfoUvCuuO7Mde+uT52JjKZ
-         Aw5N2X5seVmUl3beG/WFteNBZDJugEFyBsyaXtlPZuGMwRCrYZmZjC0bZqWKn/6Pe2UW
-         z0z6N/7VGLzwlfYm2CO3OeKNBn0Fx/xkbtFMcdKz2x5APvvQcX/+3bBKeQCUJRZATf1b
-         8qgrCvnNNMEt+1zGgc3tias8nN9BCU+qoQl0mN7RdrkquLgh+jWSK2tT79gUBZ+atGCV
-         fDEGScertwUdt1sMEj5ZGPISPcrjrAgqsMGXcCitMqWt53tz9RNwKPX95/VovA77YzTy
-         Z3Bw==
+        bh=N4LheGfogZwAoz4Rv/ngvYZ5qgXotWdDTgd++DbmjE4=;
+        b=yMR844Oy9Ze/yRFGOhG2S6WZEqMvDZZHFlHeR7wdxfjeHJF+5QfyF0dGuHL6yp4fOv
+         rdvMTpaNfQOfuWbxl/n8XZtzDwbHrmQL4gAMgF5UsOQAskIfHOw20OGjIwCE9Fa+DlHK
+         DeKJg7zSZ220l4BZbyyAbdYz/9b/pIjRCMPTRWI0NHt9eTAOlnRwcf52BjFzEi6noU2L
+         9cF1NkvS72kEfqAO9URotrJ4ea9X7yvpIEzevtnnb0t0h+vMwo6wSKE8uw8s5BLFUCEn
+         p91Bb0oubgM6vyWgbqwV1uY9oeSlN2se9vAVKn5rjiFcdjWyRWsxxsNLQKnutsIFuPBI
+         qewQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:from:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=1AEJkkvJsW5PL2iwboBiHlwrTQTde2dlnWXw8tEu3D0=;
-        b=Ficksq8dY0H+oek5iyXnhreZyaignDPnAhxv+kxY8H0uqWlhxyfjPIwAjo107iW/1e
-         x5iiPqZE3bdfOqBTGAe8s8g4hVPWpY35o+sTkT6DsXNGi8JQvqPoSkbHvmZG7dhzjsEP
-         uF4cq8TsGldC9n2O4RiNpQSTpp/kYmhmsa9RAiqFJjQE/C4tDNLopBYnN7yOUMhoX2CN
-         dd8yxBEYaJFolGG66LCET61eOazIjmqXFNNTrA3Ecuq9klcevdOaX5SL9EAmir/pXDT6
-         Ib/r2f6AiA8dmnOCniAiBVoegGVtk90YL99xr2l+D+7qQS55ULhTVuWcmYYtQCkTAOhz
-         8Cjw==
-X-Gm-Message-State: ACgBeo0OQpwKQpBnDvLnAOBUpn+s1ZXFN2okye0GvkJZaUzxaQMPcO5Y
-        0L81diVrJLyM3xXikn9XAsmOaw==
-X-Google-Smtp-Source: AA6agR4wmHcZxRiO0kPf6nYJC6H8QVWakQUNp3C2O2l7s7/+azxjAIcRdaM+cCy4MnOoOrgqzVs13w==
-X-Received: by 2002:a2e:a548:0:b0:261:c647:1d86 with SMTP id e8-20020a2ea548000000b00261c6471d86mr7330658ljn.237.1661852669933;
-        Tue, 30 Aug 2022 02:44:29 -0700 (PDT)
+        bh=N4LheGfogZwAoz4Rv/ngvYZ5qgXotWdDTgd++DbmjE4=;
+        b=RDtqQbi0MmAyfkOiwds4JVF+pqdHTAvLM2JeVHlZURBeJTRGqKheDwUw9LwiBYXQlz
+         VvMXjmSFJrYeU1nk1bTrWnqCHn8wqAknZXtcJnLygUiUems8+cX5DsSnm/J/WzVlBwf4
+         UNVRO+2bPvMaOjqwFhPBcpVKf91SbB2BgjpMzKNI9kt/LB2bIsS+q/Zpbpku3Q+BaPYU
+         NWhSWlx0rkxgmEGSte927Ri4k2B7tBmFWCMKVtwMDW4qQvJCzlV/WdlTfyMQaDXLGeLw
+         ESlEkTWj1Ph6VTJF87EihImT5WC7/A5/AChD3g/veRu0s3Aa6hUeqqVeyVL3JQzrYhTI
+         CbHg==
+X-Gm-Message-State: ACgBeo0nLm3FSSPieLz0R0akL9b+yl0K9eV5F8b4Qr+sTdxjIK7C5s/U
+        dMsSomNnFKMKg90aA/mdcegCPg==
+X-Google-Smtp-Source: AA6agR4jn6kVx3JsJKuIGOtqSpsDxFV6XeVfQe6nNwKELDQnsJHDnsIDeT+6VZnDMYThKJJoXi2+FA==
+X-Received: by 2002:a05:651c:88e:b0:261:b5e5:8622 with SMTP id d14-20020a05651c088e00b00261b5e58622mr6375100ljq.99.1661852701925;
+        Tue, 30 Aug 2022 02:45:01 -0700 (PDT)
 Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id h5-20020a2ea485000000b0025e6a3556ffsm1697579lji.22.2022.08.30.02.44.28
+        by smtp.gmail.com with ESMTPSA id f10-20020a056512360a00b004946e72711bsm552290lfs.76.2022.08.30.02.44.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 02:44:29 -0700 (PDT)
-Message-ID: <ed582145-3694-b39c-bf54-815279fe93f4@linaro.org>
-Date:   Tue, 30 Aug 2022 12:44:27 +0300
+        Tue, 30 Aug 2022 02:45:00 -0700 (PDT)
+Message-ID: <9bbce65a-b955-cc76-ebba-266675c95964@linaro.org>
+Date:   Tue, 30 Aug 2022 12:44:59 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: Adjust LTE SKUs for
- sc7280-villager
+Subject: Re: [PATCH v1 1/2] doc: dt-binding: mxs-usb-phy: fix
+ fsl,tx-cal-45-dn-ohms max and min value
 Content-Language: en-US
-To:     Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Jimmy Chen <jinghung.chen3@hotmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220829084732.1.I9ef7f8b909a7afbef9ff2251a98c67033f37b516@changeid>
+To:     Frank Li <Frank.Li@nxp.com>, kishon@ti.com, vkoul@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com, linux-imx@nxp.com, balbi@kernel.org,
+        gregkh@linuxfoundation.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        imx@lists.linux.dev
+References: <20220829153124.2791210-1-Frank.Li@nxp.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220829084732.1.I9ef7f8b909a7afbef9ff2251a98c67033f37b516@changeid>
+In-Reply-To: <20220829153124.2791210-1-Frank.Li@nxp.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,22 +81,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/08/2022 18:48, Douglas Anderson wrote:
-> There have been a few changes since the patch ("dt-bindings: arm:
-> qcom: document sc7280 and villager board").
-> * New firmware reports LTE boards as "SKU 512" now. Old firmware will
->   still report "SKU 0", but that's all pre-production and everyone
->   will update.
-> * It's been relaized that no "-rev0" boards were ever built that were
->   WiFi-only. Thus we don't two entries for -rev0.
+On 29/08/2022 18:31, Frank Li wrote:
+> According to spec:
+> 	0000 +19.95%
+> 	....
+> 	1111 -21.68%
 > 
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
-> This builds upon the patch ("dt-bindings: arm: qcom: document sc7280
-> and villager board") which hasn't landed yet. In theory this could be
-> squashed into that patch.
+> 45 * (1 + 19.95%) = 53.9775
+> 45 * (1 - 21.68%) = 35.244
+> 
+> Chanege fsl,tx-cal-45-dn-ohms and fsl,tx-cal-45-dp-ohms range to [35-54]
+> from [30-55]
+> 
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
 
-Unless Bjorn already merged it, this should be squashed.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
 Best regards,
 Krzysztof

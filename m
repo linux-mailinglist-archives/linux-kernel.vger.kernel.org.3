@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 235875A6F34
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:35:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813E45A6F38
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:37:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiH3Vfi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 17:35:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
+        id S231236AbiH3VhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 17:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiH3Vff (ORCPT
+        with ESMTP id S230193AbiH3VhD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:35:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF91F51A04;
-        Tue, 30 Aug 2022 14:35:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CF42618D1;
-        Tue, 30 Aug 2022 21:35:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C4FCC433C1;
-        Tue, 30 Aug 2022 21:35:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661895333;
-        bh=x1sCWCTYTgRWZSrAxd+CG69DWl89Qy8FYP1J3jZbV2w=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=QW9dkOSDL3LcXJ2CGAGZmb53L5XBaDxaYAFVmLanW0euALps4DYP71DcaZo1qw3yQ
-         KLb9U6BPqHT9OffKATcXHB/kdt6aLWNfnQzJfyFDbBl2EjNMyOj1skn6iQyzW2aNIB
-         pOHal4yvccQfjpuxFY0N/HqIiKrpIir0pcqsUZr3/HpOjOo0oj+jAMIOfUabENkHRQ
-         ZMt/EhuyY8nrY0wh15rXYlpjps+msr2YJ38UosPKSjcgm4vROnLGFSJf9KSqmc9SxB
-         ClQW3xYp1n9ti4JUKWwaLxGubjWK6c87CKnaZh2QugYPyRk7rGSu73AveFfxKkh5+V
-         xq3jFqBhwIN8g==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 30 Aug 2022 17:37:03 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D9CD895CE
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:37:02 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id i5-20020a17090a2a0500b001fd8708ffdfso10050892pjd.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:37:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=zP3t1aYxwJPDk5XaVLsNCmAQ5v0NuNcsY2lJm9GovWA=;
+        b=sSBdnFkQOT821zpew9yak7rxkuZeb2MC4Eg/M3h9RsaLbVBKZWY1eG0KF0WBa4hLVO
+         dB4nfwltxmIzCziE1xcAppBM373cXbZojODy5YxqR70mcY1ijLMFLQO7/+hdRo12N5RW
+         mV/695VjyHZBmg1V7KrxpNYChUGpOisqUQjT0CiEVEppX2kmUB4xhztvwHWweMW9uPSN
+         9XsAYUnoXxgqfPg1WH+vZJt+6Yf8RIz5p8LdpBfClKrkDkszZH+4ezYh3iD01HriOvos
+         38iu1NJovNQHvTytzm3pMP9YM4tqbrZMogaWEMXGekMhhp1WHqgQtjkD9hvCTDUG6DVi
+         OIdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=zP3t1aYxwJPDk5XaVLsNCmAQ5v0NuNcsY2lJm9GovWA=;
+        b=UqJ+JeWSRNupl7Me1CeJ3qYwl/3llp+jyffHMZe3/t+3yzRUAxlz0Bzd/BtTitbvjC
+         Z7OKxTXxBLisn8Xr7TsX7P2q5X61WEwrB306vqkPclkszHmQgjGaySG52tnlx0PLOK41
+         iaS2eXhKYMS0bwTUdemJ/b01LmqGqErnkWLQuFlwu1PUjTjsQ95NgjLTv98QgjmLKKYS
+         13R+weZU2NO8SM/Rry7cnSWB8W/zpJDHUFyai2+y5oySCLq5wRJDpnIuh4nvCBKX4irv
+         pCxIxn8k7WVWpA1A1zxKlIaBhhg8O5AbsOjjMgpzGK/HGloySSOouTdozGi43vkpu/KF
+         Lwzg==
+X-Gm-Message-State: ACgBeo0jqmfENf7TZ6QsrFRJh0W84WJC1OOgCIYTNazTRADXrEDSjrEz
+        J2oKVe1DqRH55Gj5Z/K9Ng75/g==
+X-Google-Smtp-Source: AA6agR7HymFegM1rQHVDFtk3+q6iFsbn6uobQxibnrsrUL5dEkAGm+VM696UFUWDHP/kya2qGH8WhQ==
+X-Received: by 2002:a17:90b:1c81:b0:1fb:887c:f82e with SMTP id oo1-20020a17090b1c8100b001fb887cf82emr36240pjb.92.1661895421775;
+        Tue, 30 Aug 2022 14:37:01 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170902650b00b00172a567d910sm10059594plk.289.2022.08.30.14.37.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 14:37:01 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 21:36:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Miaohe Lin <linmiaohe@huawei.com>
+Cc:     pbonzini@redhat.com, vkuznets@redhat.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: fix memoryleak in kvm_init()
+Message-ID: <Yw6C+tBZrbP5IX+e@google.com>
+References: <20220823063414.59778-1-linmiaohe@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <5ff21b1e-3af9-36ef-e13e-fa33f526d0e3@quicinc.com>
-References: <20220825182152.v2.1.I45235b7c40997bc2abf813e4722b4dcdd6aecf6b@changeid> <20220826024003.qpqtdmdohdmpcskt@baldur> <5ff21b1e-3af9-36ef-e13e-fa33f526d0e3@quicinc.com>
-Subject: Re: [PATCH v2 1/2] clk: qcom: gcc-sc7180: Keep the USB GDSC always on
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-clk@vger.kernel.org,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>
-Date:   Tue, 30 Aug 2022 14:35:31 -0700
-User-Agent: alot/0.10
-Message-Id: <20220830213533.7C4FCC433C1@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823063414.59778-1-linmiaohe@huawei.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Rajendra Nayak (2022-08-29 01:12:02)
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index d3244006c661..0fe017ba901b 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -368,6 +368,10 @@ static int _gdsc_disable(struct gdsc *sc)
->          if (sc->pwrsts & PWRSTS_OFF)
->                  gdsc_clear_mem_on(sc);
->=20
-> +       /* If the GDSC supports RET, do not explicitly power it off */
-> +       if (sc->pwrsts & PWRSTS_RET)
-> +               return 0;
-> +
->          ret =3D gdsc_toggle_logic(sc, GDSC_OFF);
->          if (ret)
->                  return ret;
->=20
->=20
-> So with that change, we would then not need the ALWAYS_ON flag set for us=
-b gdsc,
-> instead we would update the .pwrsts to PWRSTS_RET_ON instead of PWRSTS_OF=
-F_ON,
-> and that should make both usb wake-ups to work and we can still have the =
-usb_gdsc as
-> a subdomain of CX for performance state voting.
+On Tue, Aug 23, 2022, Miaohe Lin wrote:
+> When alloc_cpumask_var_node() fails for a certain cpu, there might be some
+> allocated cpumasks for percpu cpu_kick_mask. We should free these cpumasks
+> or memoryleak will occur.
+> 
+> Fixes: baff59ccdc65 ("KVM: Pre-allocate cpumasks for kvm_make_all_cpus_request_except()")
+> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+> ---
 
-To clarify, usb_gdsc is not setup as a subdomain of CX so far, right?
-Just that eventually we'll make usb_gdsc a subdomain of CX so that
-dev_pm_opp_set_rate() can target the CX domain instead of the usb one?
+Pushed to branch `for_paolo/6.1` at:
 
-> Does that sounds like a reasonable solution?
+    https://github.com/sean-jc/linux.git
 
-It sounds good to me. What about the existing users of PWRSTS_RET
-though? If I understand correctly this flag means the domain will never
-be turned off, instead it will hit retention during low power modes.
+Unless you hear otherwise, it will make its way to kvm/queue "soon".
 
-While you're crafting this patch can you also document the PWRSTS_*
-defines so that we know what they mean? I can guess that PWRSTS_RET
-means "retention" but I don't know what it really means. I guess it
-means "Deepest power off state is retention of memory cells".
+Note, the commit IDs are not guaranteed to be stable.

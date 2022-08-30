@@ -2,114 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5355A5FC3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B66535A5FC6
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbiH3JsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52554 "EHLO
+        id S229675AbiH3Jsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiH3JsN (ORCPT
+        with ESMTP id S229787AbiH3Jsl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:48:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A60E67B1D2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:48:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8A7D623A;
-        Tue, 30 Aug 2022 02:48:18 -0700 (PDT)
-Received: from [10.57.13.45] (unknown [10.57.13.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4ADD3F766;
-        Tue, 30 Aug 2022 02:48:10 -0700 (PDT)
-Message-ID: <9ec5ba90-150a-c675-d95b-b13e3a4e9e10@arm.com>
-Date:   Tue, 30 Aug 2022 10:48:08 +0100
+        Tue, 30 Aug 2022 05:48:41 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7318DA0316
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:48:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=fMLvcGcyJSODFnT4Iz/XOC3ekaKsMQFjA2PPCqmntjY=; b=nRAESfedUvvhQ7RX+ZGqkzn1sE
+        Y3Mmo/ShftKSqebe5/XFpxICs/C8XvTY6wZyhiqAHS/nOd0e5kgMKJ70hId+nJn/5FQYSERW5tc8C
+        m++NqG8kErJO75tvdC7AACFiLH3fgQM5HbHn2A2s2YWroyeq98cl4m1seFad+phdTx2LcS5OvJ0yU
+        kP7n/bwGBTLb4QFzRdB/5vdNomw8DEWVKyarkm5pFiw7i03UH0tnCQcOB39DZFIc1Em01oiyrILOq
+        NCeKmW+INVRb877TQQIT30QGmC8z3nmMuGd/DBE55MP3Di3gvwap9mgH1Z+mehUyt6aNVl/S/HeQ/
+        OfogP4bg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33990)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oSxrI-0002V7-Mv; Tue, 30 Aug 2022 10:48:36 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oSxrI-0001PD-42; Tue, 30 Aug 2022 10:48:36 +0100
+Date:   Tue, 30 Aug 2022 10:48:36 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Zhen Lei <thunder.leizhen@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        patches@armlinux.org.uk, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2] ARM: Add sanity check for dev->periphid in
+ amba_probe()
+Message-ID: <Yw3c9Dbai5E9Nvvp@shell.armlinux.org.uk>
+References: <20220830065413.638-1-thunder.leizhen@huawei.com>
+ <CAGETcx8hfzAthF_gCMrmnVOgwgFJEPE=bwRuVeXaiB7ywUkWkg@mail.gmail.com>
+ <Yw3cs6wb4PvnDN/7@shell.armlinux.org.uk>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 0/3] More ARM DMA ops cleanup
-To:     Yongqin Liu <yongqin.liu@linaro.org>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        m.szyprowski@samsung.com, arnd@kernel.org,
-        iommu@lists.linux-foundation.org, linux-kernel@vger.kernel.org,
-        "Bajjuri, Praneeth" <praneeth@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-References: <cover.1650539846.git.robin.murphy@arm.com>
- <20220421141300.GC20492@lst.de>
- <665d2b46-c9e2-2543-cad5-9adf022e4bcb@arm.com>
- <CAMSo37XN3PC22JK4ot-B8gUxWOhK+UD-73Zb8LqvYpgPL1Bj6g@mail.gmail.com>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAMSo37XN3PC22JK4ot-B8gUxWOhK+UD-73Zb8LqvYpgPL1Bj6g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yw3cs6wb4PvnDN/7@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-27 13:24, Yongqin Liu wrote:
-> Hi, Robin, Christoph
+On Tue, Aug 30, 2022 at 10:47:31AM +0100, Russell King (Oracle) wrote:
+> How can we get to amba_probe() if amba_match() has not returned a
+> positive match for an ID? Surely if that happens, the driver model
+> is failed - since a probe function should not be called unless the
+> driver matches the device.
 > 
-> With the changes landed in the mainline kernel,
-> one problem is exposed with our out of tree pvr module.
-> Like the source here[1], arm_dma_ops.sync_single_for_cpu is called in
-> the format like the following:
->      arm_dma_ops.sync_single_for_cpu(NULL, pStart, pEnd - pStart,
-> DMA_FROM_DEVICE);
+> This patch, and 9229/1 both feel like they're working around some
+> brokenness elsewhere in the kernel.
 > 
-> Not sure if you could give some suggestions on what I should do next
-> to make the pvr module work again.
+> The description in 9229/1, specifically "But not all drivers have .match
 
-Wow, that driver reinvents so many standard APIs for no apparent reason 
-it's not even funny.
+Sorry, meant 9238/1.
 
-Anyway, from a brief look it seemingly already knows how to call the DMA 
-API semi-correctly, so WTF that's doing behind an #ifdef, who knows? 
-However it's still so completely wrong in general - fundamentally broken 
-AArch64 set/way cache maintenance!? - that it looks largely beyond help. 
-"Throw CONFIG_DMA_API_DEBUG at it and cry" is about the extent of 
-support I'm prepared to provide for that mess.
+> hook, such as pl031, the dev->bus->probe will be called directly in
+> __driver_attach()." AMBA drivers do not have a .match hook - the bus
+> does, which all AMBA drivers must be a member of. If amba_match fails,
+> there is no way that amba_probe() should ever be called.
 
-Thanks,
-Robin.
-
-> Thanks in advance!
-> 
-> [1]: https://android-git.linaro.org/kernel/omap-modules.git/tree/pvr/services4/srvkm/env/linux/osfunc.c?h=android-mainline#n4615
-> 
-> Thanks,
-> Yongqin Liu
-> 
-> On Thu, 21 Apr 2022 at 22:35, Robin Murphy <robin.murphy@arm.com> wrote:
->>
->> On 2022-04-21 15:13, Christoph Hellwig wrote:
->>> On Thu, Apr 21, 2022 at 12:36:56PM +0100, Robin Murphy wrote:
->>>> Hi all,
->>>>
->>>> Thanks to Christoph's latest series, I'm reminded that, if we're going
->>>> to give the ARM DMA ops some cleanup this cycle, it's as good a time as
->>>> any to dust off these old patches and add them on top as well. I've
->>>> based these on the arm-dma-direct branch which I assume matches the
->>>> patches posted at [1].
->>>
->>> All these do look sensible to me.  But weren't you working on replacing
->>> the ARM iommu dma_ops with dma-іommu anyway?
->>
->> Yes, that's somewhat entangled with the IOMMU bus ops stuff, so I'll
->> probably get to the point of having to revisit it in a couple of months
->> or so. These patches are off the bottom of that stack from my first
->> attempt, where the aim was to make the current ops the same shape first
->> so that the switch is then easier to reason about (particularly in terms
->> of sounding out any issues with the hooking up of dev->dma_coherent,
->> although your series will now be taking most of the load off there).
->>
->> Cheers,
->> Robin.
-> 
-> 
-> 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

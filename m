@@ -2,51 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC0C5A6461
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F345A6466
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:10:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiH3NHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
+        id S230145AbiH3NKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiH3NHn (ORCPT
+        with ESMTP id S229808AbiH3NKH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:07:43 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B0AADCC1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:07:38 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1oT0xX-00081U-Ii; Tue, 30 Aug 2022 15:07:15 +0200
-Message-ID: <06d256719a2ac5bf22ce80bb30b8320eec8fc1d9.camel@pengutronix.de>
-Subject: Re: [PATCH v5 6/7] phy: freescale: imx8m-pcie: Add iMX8MP PCIe PHY
- support
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Richard Zhu <hongxing.zhu@nxp.com>, p.zabel@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org, vkoul@kernel.org,
-        alexander.stein@ew.tq-group.com, marex@denx.de,
-        richard.leitner@linux.dev
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com
-Date:   Tue, 30 Aug 2022 15:07:13 +0200
-In-Reply-To: <1661845564-11373-7-git-send-email-hongxing.zhu@nxp.com>
-References: <1661845564-11373-1-git-send-email-hongxing.zhu@nxp.com>
-         <1661845564-11373-7-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+        Tue, 30 Aug 2022 09:10:07 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73AC61AD8F;
+        Tue, 30 Aug 2022 06:10:04 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 4DEE05C0161;
+        Tue, 30 Aug 2022 09:10:04 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Tue, 30 Aug 2022 09:10:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1661865004; x=
+        1661951404; bh=+9S2ly6azi6QK5yxzI1YIvhw2qv6fjY+mHj3WQg30AI=; b=W
+        SxKpNk8nv/UScPsSIccAw+9P+VEw/eMJtzsBnv2s1kgc6kUGXs7vaoORkccEcxcH
+        EJWc+STG//Zr5K4AzUdSyfsficVDdwiTkSQxbNOlASntm6WRowNGkAJznAoCqINT
+        Kf+Rl3khIsN65A43/QF+5v83eVXGZ50LnvPncz54KdbrUi1jzX/ClkIwxS8oRp57
+        B+tRhS8fssqxjKSnNJOzB8kp+Jrfvqric3qn7BYm2eKr4FGmw/A1wHHoFTX1vv9v
+        kqTfZ60nC3WO72louA9CPCkgK0aMBKXgTZLOLaicnCM1gItt7fsU1uO/i7tgE/h3
+        O1LwkrZ/2P7Euh9xWGW6w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1661865004; x=
+        1661951404; bh=+9S2ly6azi6QK5yxzI1YIvhw2qv6fjY+mHj3WQg30AI=; b=X
+        oB3xH+4+M6p9uBSloPBmZsU5YX4/g3oD2rO/uDYiP06jVcvfW7wuVyqMVAHjFtGF
+        jB4B6MhX5GHB5VvQJtI0tYt3mh5Ew3NYjVtABeCMRMBWNppNujsg3dbfYoXPSdYy
+        f4L8iVcKJWrbesWWcrHvBrXDcG/lvB+uxyPL4fPwS5hhltY8Y6r/nshUfDEZ0hKU
+        7w8bPn0Lp2SGP8CYw24GXs4bl/5m8KbCkNJKFMGbyImRtG+Cy5FBU74f7mXAmW+9
+        EWpRyjgfV67i+rgZ8dFW+03tkG1y8kzg5OzDVZ6A+TuclC1/g7Sp6MMR1RTBLUN3
+        3dKgg9HawHZmF/al8to8A==
+X-ME-Sender: <xms:KwwOY3QuLu8cBtSSdTo9-SedcFdq4QMNwWqLcSx7Rm8nopWFyS7Z-g>
+    <xme:KwwOY4wbTAeISAeljpOJgYo2yUtoRYQnBAOixPirovghOKTyOayQKO_jgP4pR4hTT
+    f0TraPiB8iYNUrYVQ>
+X-ME-Received: <xmr:KwwOY83al0CiK7Vk21I4vt-7tC40f3V_1X3dQzuu-GUQTOJ3dxFCel51wZXis6bkM6tNt76xNhjFiBiMCKcBnvAmvHKYJDKTRQxT93_ezITxTP6eu8JqSfguLw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekfedgieduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
+    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
+    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:KwwOY3DDG68tNnTlC6vyQexkNbZ0UOwp4k9sTQdW3pha7EAVCMnUEg>
+    <xmx:KwwOYwib7Af5efkdVPRSLTuYgy94ghlxTYkKXWXV4OQyTdlotu_nZA>
+    <xmx:KwwOY7rOTU8bq-o113n87MK_gzywrUzUywHz8DdShbWAogeY_AbcYQ>
+    <xmx:LAwOYzOgaFmUmjRhrM8hzgoVOF1C0D1h_xfzHkCCxydtpZlds138xA>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 30 Aug 2022 09:10:03 -0400 (EDT)
+Subject: Re: [PATCH 1/3] dt-bindings: i2c: mv64xxx: Document DMA properties
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+References: <20220830020824.62288-1-samuel@sholland.org>
+ <20220830020824.62288-2-samuel@sholland.org>
+ <1c9cb6c2-2030-257d-a50d-dada0ab4449e@linaro.org>
+From:   Samuel Holland <samuel@sholland.org>
+Message-ID: <7fd702e9-dedc-e5bf-fd54-f07d053b1870@sholland.org>
+Date:   Tue, 30 Aug 2022 08:10:01 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.6.0
 MIME-Version: 1.0
+In-Reply-To: <1c9cb6c2-2030-257d-a50d-dada0ab4449e@linaro.org>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,256 +95,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Dienstag, dem 30.08.2022 um 15:46 +0800 schrieb Richard Zhu:
-> Add i.MX8MP PCIe PHY support.
+On 8/30/22 4:36 AM, Krzysztof Kozlowski wrote:
+> On 30/08/2022 05:08, Samuel Holland wrote:
+>> Allwinner's I2C offload engine includes bidirectional DMA support. Add
+>> the properties for describing this in the devicetree. "dmas" is optional
+>> because not all instances of the controller have their DRQs hooked up.
+>> For example, R_I2C0 and R_I2C1 on V536 have no DRQ number assigned.
+>>
+>> Signed-off-by: Samuel Holland <samuel@sholland.org>
 > 
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
-> Tested-by: Marek Vasut <marex@denx.de>
-> Tested-by: Richard Leitner <richard.leitner@skidata.com>
-> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> ---
->  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 137 +++++++++++++--------
->  1 file changed, 89 insertions(+), 48 deletions(-)
+> Thank you for your patch. There is something to discuss/improve.
 > 
-> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> index ad7d2edfc414..c76e3a1a5f51 100644
-> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
-> @@ -11,6 +11,9 @@
->  #include <linux/mfd/syscon.h>
->  #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
->  #include <linux/module.h>
-> +#include <linux/of_address.h>
-> +#include <linux/of_device.h>
-> +#include <linux/of_device.h>
->  #include <linux/phy/phy.h>
->  #include <linux/platform_device.h>
->  #include <linux/regmap.h>
-> @@ -31,12 +34,10 @@
->  #define IMX8MM_PCIE_PHY_CMN_REG065	0x194
->  #define  ANA_AUX_RX_TERM		(BIT(7) | BIT(4))
->  #define  ANA_AUX_TX_LVL			GENMASK(3, 0)
-> -#define IMX8MM_PCIE_PHY_CMN_REG75	0x1D4
-> -#define  PCIE_PHY_CMN_REG75_PLL_DONE	0x3
-> +#define IMX8MM_PCIE_PHY_CMN_REG075	0x1D4
-> +#define  ANA_PLL_DONE			0x3
->  #define PCIE_PHY_TRSV_REG5		0x414
-> -#define  PCIE_PHY_TRSV_REG5_GEN1_DEEMP	0x2D
->  #define PCIE_PHY_TRSV_REG6		0x418
-> -#define  PCIE_PHY_TRSV_REG6_GEN2_DEEMP	0xF
->  
->  #define IMX8MM_GPR_PCIE_REF_CLK_SEL	GENMASK(25, 24)
->  #define IMX8MM_GPR_PCIE_REF_CLK_PLL	FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x3)
-> @@ -47,16 +48,23 @@
->  #define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
->  #define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
->  
-> +enum imx8_pcie_phy_type {
-> +	IMX8MM,
-> +	IMX8MP,
-> +};
-> +
->  struct imx8_pcie_phy {
->  	void __iomem		*base;
->  	struct clk		*clk;
->  	struct phy		*phy;
->  	struct regmap		*iomuxc_gpr;
->  	struct reset_control	*reset;
-> +	struct reset_control	*perst;
->  	u32			refclk_pad_mode;
->  	u32			tx_deemph_gen1;
->  	u32			tx_deemph_gen2;
->  	bool			clkreq_unused;
-> +	enum imx8_pcie_phy_type	variant;
->  };
->  
->  static int imx8_pcie_phy_init(struct phy *phy)
-> @@ -68,31 +76,20 @@ static int imx8_pcie_phy_init(struct phy *phy)
->  	reset_control_assert(imx8_phy->reset);
->  
->  	pad_mode = imx8_phy->refclk_pad_mode;
-> -	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
-> -			   imx8_phy->clkreq_unused ?
-> -			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_AUX_EN,
-> -			   IMX8MM_GPR_PCIE_AUX_EN);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_SSC_EN, 0);
-> -
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
-> -			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
-> -			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
-> -			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
-> -	usleep_range(100, 200);
-> -
-> -	/* Do the PHY common block reset */
-> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> -			   IMX8MM_GPR_PCIE_CMN_RST,
-> -			   IMX8MM_GPR_PCIE_CMN_RST);
-> -	usleep_range(200, 500);
-> +	switch (imx8_phy->variant) {
-> +	case IMX8MM:
-> +		/* Tune PHY de-emphasis setting to pass PCIe compliance. */
-> +		if (imx8_phy->tx_deemph_gen1)
-> +			writel(imx8_phy->tx_deemph_gen1,
-> +			       imx8_phy->base + PCIE_PHY_TRSV_REG5);
-> +		if (imx8_phy->tx_deemph_gen2)
-> +			writel(imx8_phy->tx_deemph_gen2,
-> +			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
-> +		break;
-> +	case IMX8MP:
-> +		reset_control_assert(imx8_phy->perst);
-> +		break;
-> +	}
->  
->  	if (pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ||
->  	    pad_mode == IMX8_PCIE_REFCLK_PAD_UNUSED) {
-> @@ -120,20 +117,44 @@ static int imx8_pcie_phy_init(struct phy *phy)
->  		       imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG065);
->  	}
->  
-> -	/* Tune PHY de-emphasis setting to pass PCIe compliance. */
-> -	if (imx8_phy->tx_deemph_gen1)
-> -		writel(imx8_phy->tx_deemph_gen1,
-> -		       imx8_phy->base + PCIE_PHY_TRSV_REG5);
-> -	if (imx8_phy->tx_deemph_gen2)
-> -		writel(imx8_phy->tx_deemph_gen2,
-> -		       imx8_phy->base + PCIE_PHY_TRSV_REG6);
-> +	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
-> +			   imx8_phy->clkreq_unused ?
-> +			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_AUX_EN,
-> +			   IMX8MM_GPR_PCIE_AUX_EN);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_SSC_EN, 0);
-> +
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
-> +			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
-> +			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
-> +			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
-> +	usleep_range(100, 200);
-> +
-> +	/* Do the PHY common block reset */
-> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
-> +			   IMX8MM_GPR_PCIE_CMN_RST,
-> +			   IMX8MM_GPR_PCIE_CMN_RST);
->  
-> -	reset_control_deassert(imx8_phy->reset);
-> +	switch (imx8_phy->variant) {
-> +	case IMX8MP:
-> +		reset_control_deassert(imx8_phy->perst);
-> +		fallthrough;
-> +	case IMX8MM:
-> +		reset_control_deassert(imx8_phy->reset);
-> +		usleep_range(200, 500);
-> +		break;
-> +	}
->  
->  	/* Polling to check the phy is ready or not. */
-> -	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG75,
-> -				 val, val == PCIE_PHY_CMN_REG75_PLL_DONE,
-> -				 10, 20000);
-> +	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG075,
-> +				 val, val == ANA_PLL_DONE, 10, 20000);
->  	return ret;
->  }
->  
-> @@ -160,6 +181,13 @@ static const struct phy_ops imx8_pcie_phy_ops = {
->  	.owner		= THIS_MODULE,
->  };
->  
-> +static const struct of_device_id imx8_pcie_phy_of_match[] = {
-> +	{.compatible = "fsl,imx8mm-pcie-phy", .data = (void *)IMX8MM},
-> +	{.compatible = "fsl,imx8mp-pcie-phy", .data = (void *)IMX8MP},
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
-> +
->  static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  {
->  	struct phy_provider *phy_provider;
-> @@ -172,6 +200,9 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  	if (!imx8_phy)
->  		return -ENOMEM;
->  
-> +	imx8_phy->variant =
-> +		(enum imx8_pcie_phy_type)of_device_get_match_data(dev);
-> +
->  	/* get PHY refclk pad mode */
->  	of_property_read_u32(np, "fsl,refclk-pad-mode",
->  			     &imx8_phy->refclk_pad_mode);
-> @@ -196,8 +227,16 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  	}
->  
->  	/* Grab GPR config register range */
-> -	imx8_phy->iomuxc_gpr =
-> -		 syscon_regmap_lookup_by_compatible("fsl,imx6q-iomuxc-gpr");
-> +	switch (imx8_phy->variant) {
-> +	case IMX8MM:
-> +		imx8_phy->iomuxc_gpr =
-> +			 syscon_regmap_lookup_by_compatible("fsl,imx8mm-iomuxc-gpr");
-> +		break;
-> +	case IMX8MP:
-> +		imx8_phy->iomuxc_gpr =
-> +			 syscon_regmap_lookup_by_compatible("fsl,imx8mp-iomuxc-gpr");
-> +		break;
-> +	}
+>> ---
+>>
+>>  .../bindings/i2c/marvell,mv64xxx-i2c.yaml           | 13 +++++++++++++
+>>  1 file changed, 13 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+>> index 0ec033e48830..63d665a4f9bb 100644
+>> --- a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+>> +++ b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
+>> @@ -66,6 +66,19 @@ properties:
+>>    resets:
+>>      maxItems: 1
+>>  
+>> +  dmas:
+>> +    items:
+>> +      - description: RX DMA Channel
+>> +      - description: TX DMA Channel
+>> +
+>> +  dma-names:
+>> +    items:
+>> +      - const: rx
+>> +      - const: tx
+>> +
+>> +dependencies:
+>> +  dmas: [ dma-names ]
+> 
+> Dependency is not needed. meta-schema has it.
 
-Oh, I had a real phandle in DT in mind for this, but I see how this
-would be hard to introduce in a backward compatible manner for the 8MM.
-At least this way it is fully contained in the driver and doesn't leak
-into DT compatibles.
+The only dma-names dependencies I see in dtschema (meta-schemas/dma.yaml and
+schemas/dma/dma.yaml) are in the other direction. Those are saying that
+dma-names only makes sense if dmas is provided.
 
-Maybe we could make this a little nicer by just having an const array
-of iomux syscon compatibles indexed by imx8_phy->variant, to avoid the
-switch and the resulting code (almost-)duplication.
+Here I am saying that the two DMA requests are optional, but only optional
+"together". The node must either have no DMA properties or both DMA properties.
 
 Regards,
-Lucas
-
->  	if (IS_ERR(imx8_phy->iomuxc_gpr)) {
->  		dev_err(dev, "unable to find iomuxc registers\n");
->  		return PTR_ERR(imx8_phy->iomuxc_gpr);
-> @@ -208,6 +247,14 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  		dev_err(dev, "Failed to get PCIEPHY reset control\n");
->  		return PTR_ERR(imx8_phy->reset);
->  	}
-> +	if (imx8_phy->variant == IMX8MP) {
-> +		imx8_phy->perst =
-> +			devm_reset_control_get_exclusive(dev, "perst");
-> +		if (IS_ERR(imx8_phy->perst)) {
-> +			dev_err(dev, "Failed to get PCIE PHY PERST control\n");
-> +			return PTR_ERR(imx8_phy->perst);
-> +		}
-> +	}
->  
->  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
->  	imx8_phy->base = devm_ioremap_resource(dev, res);
-> @@ -225,12 +272,6 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
->  	return PTR_ERR_OR_ZERO(phy_provider);
->  }
->  
-> -static const struct of_device_id imx8_pcie_phy_of_match[] = {
-> -	{.compatible = "fsl,imx8mm-pcie-phy",},
-> -	{ },
-> -};
-> -MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
-> -
->  static struct platform_driver imx8_pcie_phy_driver = {
->  	.probe	= imx8_pcie_phy_probe,
->  	.driver = {
-
-
+Samuel

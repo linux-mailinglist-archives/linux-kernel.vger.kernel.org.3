@@ -2,56 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C9A5A5C36
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:54:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E37E05A5C4A
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:59:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbiH3GyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40400 "EHLO
+        id S230268AbiH3G7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:59:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230324AbiH3Gxv (ORCPT
+        with ESMTP id S229636AbiH3G7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:53:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFF4BD116;
-        Mon, 29 Aug 2022 23:53:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 034A461461;
-        Tue, 30 Aug 2022 06:53:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5161C433D6;
-        Tue, 30 Aug 2022 06:53:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661842429;
-        bh=wxIJahY4bNgAXVbpWaC9W2nMSDfpOu3ZSd8EuV6xsso=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Kpjay5YsyYfycs7ZTlN911Ki+d8mT0EfwjtiLpalFcYQh9VpfuE8febThdR3WlnSH
-         UOKGnoa4Hq0l+0R0LxhjKYOaEwb/eRa6LsEMQc16RMRgrKMy3HBQNx25b6nmcLNktt
-         pBiDHwH1u9nGpTGlAnoOiEEXCOJIDJuzm8Dx5CJh1hQq/XtcnYKJbcLssjhuFvP+Fa
-         7K9DNxIZ5S51MuwUHRlxLRm8Fie5EEEQwcURimXekqg5sJNst6Qsfvh7tGwUNBBldG
-         3tkthmrYK1VdUoucu3Vf5fK+K5aMvwCzvWuO8xUsFXooEjAYyFicx6dANpQa1aKAl3
-         +q9Qfe43KkXTQ==
-From:   guoren@kernel.org
-To:     oleg@redhat.com, vgupta@kernel.org, linux@armlinux.org.uk,
-        monstr@monstr.eu, dinguyen@kernel.org, palmer@dabbelt.com,
-        davem@davemloft.net, arnd@arndb.de, shorne@gmail.com,
-        guoren@kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-snps-arc@lists.infradead.org, sparclinux@vger.kernel.org,
-        openrisc@lists.librecores.org, Guo Ren <guoren@linux.alibaba.com>
-Subject: [PATCH 3/3] arch: ptrace: Cleanup ptrace_disable
-Date:   Tue, 30 Aug 2022 02:53:16 -0400
-Message-Id: <20220830065316.3924938-4-guoren@kernel.org>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220830065316.3924938-1-guoren@kernel.org>
-References: <20220830065316.3924938-1-guoren@kernel.org>
+        Tue, 30 Aug 2022 02:59:16 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599BF564F6
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:59:15 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MGyjQ5GlQzYd1M;
+        Tue, 30 Aug 2022 14:54:50 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 30 Aug 2022 14:59:13 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 30 Aug 2022 14:59:13 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Russell King <linux@armlinux.org.uk>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <patches@armlinux.org.uk>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        "Linus Walleij" <linus.walleij@linaro.org>
+Subject: [PATCH v2] ARM: Add sanity check for dev->periphid in amba_probe()
+Date:   Tue, 30 Aug 2022 14:54:13 +0800
+Message-ID: <20220830065413.638-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.26.0.windows.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,163 +54,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Guo Ren <guoren@linux.alibaba.com>
+Commit f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
+forcibly invokes device_add() even if dev->periphid is not ready. Although
+it will be remedied in amba_match(): dev->periphid will be initialized
+if everything is in place; Otherwise, return -EPROBE_DEFER to block
+__driver_attach() from further execution. But not all drivers have .match
+hook, such as pl031, the dev->bus->probe will be called directly in
+__driver_attach(). Unfortunately, if dev->periphid is still not
+initialized, the following exception will be triggered.
 
-Add a weak empty function in common and remove architectures' duplicated
-ones.
+8<--- cut here ---
+Unable to handle kernel NULL pointer dereference at virtual address 00000008
+[00000008] *pgd=00000000
+Internal error: Oops: 5 [#1] SMP ARM
+Modules linked in:
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.0.0-rc2+ #7
+Hardware name: ARM-Versatile Express
+PC is at pl031_probe+0x8/0x208
+LR is at amba_probe+0xf0/0x160
+pc : 80698df8  lr : 8050eb54  psr: 80000013
+sp : c0825df8  ip : 00000000  fp : 811fda38
+r10: 00000000  r9 : 80d72470  r8 : fffffdfb
+r7 : 811fd800  r6 : be7eb330  r5 : 00000000  r4 : 811fd900
+r3 : 80698df0  r2 : 37000000  r1 : 00000000  r0 : 811fd800
+Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none
+Control: 10c5387d  Table: 6000406a  DAC: 00000051
+... ...
+ pl031_probe from amba_probe+0xf0/0x160
+ amba_probe from really_probe+0x118/0x290
+ really_probe from __driver_probe_device+0x84/0xe4
+ __driver_probe_device from driver_probe_device+0x30/0xd0
+ driver_probe_device from __driver_attach+0x8c/0xfc
+ __driver_attach from bus_for_each_dev+0x70/0xb0
+ bus_for_each_dev from bus_add_driver+0x168/0x1f4
+ bus_add_driver from driver_register+0x7c/0x118
+ driver_register from do_one_initcall+0x44/0x1ec
+ do_one_initcall from kernel_init_freeable+0x238/0x288
+ kernel_init_freeable from kernel_init+0x18/0x12c
+ kernel_init from ret_from_fork+0x14/0x2c
+... ...
+---[ end trace 0000000000000000 ]---
 
-Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-Signed-off-by: Guo Ren <guoren@kernel.org>
+Therefore, take the same action as in amba_match(): return -EPROBE_DEFER
+if dev->periphid is not ready in amba_probe().
+
+Fixes: f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
+Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 ---
- arch/arc/kernel/ptrace.c        |  4 ----
- arch/arm/kernel/ptrace.c        |  8 --------
- arch/microblaze/kernel/ptrace.c |  5 -----
- arch/nios2/kernel/ptrace.c      |  5 -----
- arch/riscv/kernel/ptrace.c      |  4 ----
- arch/sparc/kernel/ptrace_32.c   | 10 ----------
- arch/sparc/kernel/ptrace_64.c   | 10 ----------
- kernel/ptrace.c                 |  8 ++++++++
- 8 files changed, 8 insertions(+), 46 deletions(-)
+KernelVersion: v6.0-rc3
+ drivers/amba/bus.c | 24 +++++++++++++++++++++---
+ 1 file changed, 21 insertions(+), 3 deletions(-)
 
-diff --git a/arch/arc/kernel/ptrace.c b/arch/arc/kernel/ptrace.c
-index da7542cea0d8..c227e145fede 100644
---- a/arch/arc/kernel/ptrace.c
-+++ b/arch/arc/kernel/ptrace.c
-@@ -317,10 +317,6 @@ const struct user_regset_view *task_user_regset_view(struct task_struct *task)
- 	return &user_arc_view;
- }
- 
--void ptrace_disable(struct task_struct *child)
--{
--}
--
- long arch_ptrace(struct task_struct *child, long request,
- 		 unsigned long addr, unsigned long data)
- {
-diff --git a/arch/arm/kernel/ptrace.c b/arch/arm/kernel/ptrace.c
-index bfe88c6e60d5..b85f5bdc56ef 100644
---- a/arch/arm/kernel/ptrace.c
-+++ b/arch/arm/kernel/ptrace.c
-@@ -186,14 +186,6 @@ put_user_reg(struct task_struct *task, int offset, long data)
+v1 --> v2:
+1. Update this patch based on:
+   https://lore.kernel.org/lkml/20220818172852.3548-1-isaacmanjarres@google.com/
+2. Move the operations of sanity checking and reading dev->periphid,
+   updating uevent into new function amba_prepare_periphid().
+
+diff --git a/drivers/amba/bus.c b/drivers/amba/bus.c
+index 110a535648d2e1f..8e4c7e190880206 100644
+--- a/drivers/amba/bus.c
++++ b/drivers/amba/bus.c
+@@ -204,10 +204,9 @@ static int amba_read_periphid(struct amba_device *dev)
  	return ret;
  }
  
--/*
-- * Called by kernel/ptrace.c when detaching..
-- */
--void ptrace_disable(struct task_struct *child)
--{
--	/* Nothing to do. */
--}
--
- /*
-  * Handle hitting a breakpoint.
-  */
-diff --git a/arch/microblaze/kernel/ptrace.c b/arch/microblaze/kernel/ptrace.c
-index 5234d0c1dcaa..72e3eece72aa 100644
---- a/arch/microblaze/kernel/ptrace.c
-+++ b/arch/microblaze/kernel/ptrace.c
-@@ -162,8 +162,3 @@ asmlinkage void do_syscall_trace_leave(struct pt_regs *regs)
- 	if (step || test_thread_flag(TIF_SYSCALL_TRACE))
- 		ptrace_report_syscall_exit(regs, step);
- }
--
--void ptrace_disable(struct task_struct *child)
--{
--	/* nothing to do */
--}
-diff --git a/arch/nios2/kernel/ptrace.c b/arch/nios2/kernel/ptrace.c
-index cd62f310778b..de5f4199c45f 100644
---- a/arch/nios2/kernel/ptrace.c
-+++ b/arch/nios2/kernel/ptrace.c
-@@ -117,11 +117,6 @@ const struct user_regset_view *task_user_regset_view(struct task_struct *task)
- 	return &nios2_user_view;
- }
- 
--void ptrace_disable(struct task_struct *child)
--{
--
--}
--
- long arch_ptrace(struct task_struct *child, long request, unsigned long addr,
- 		 unsigned long data)
+-static int amba_match(struct device *dev, struct device_driver *drv)
++static int amba_prepare_periphid(struct device *dev)
  {
-diff --git a/arch/riscv/kernel/ptrace.c b/arch/riscv/kernel/ptrace.c
-index 44f4b1ca315d..19e4d8057e24 100644
---- a/arch/riscv/kernel/ptrace.c
-+++ b/arch/riscv/kernel/ptrace.c
-@@ -210,10 +210,6 @@ unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs, unsigned int n)
- 		return 0;
- }
+ 	struct amba_device *pcdev = to_amba_device(dev);
+-	struct amba_driver *pcdrv = to_amba_driver(drv);
  
--void ptrace_disable(struct task_struct *child)
--{
--}
--
- long arch_ptrace(struct task_struct *child, long request,
- 		 unsigned long addr, unsigned long data)
- {
-diff --git a/arch/sparc/kernel/ptrace_32.c b/arch/sparc/kernel/ptrace_32.c
-index e7db48acb838..f6df84e12739 100644
---- a/arch/sparc/kernel/ptrace_32.c
-+++ b/arch/sparc/kernel/ptrace_32.c
-@@ -29,16 +29,6 @@
+ 	mutex_lock(&pcdev->periphid_lock);
+ 	if (!pcdev->periphid) {
+@@ -228,6 +227,19 @@ static int amba_match(struct device *dev, struct device_driver *drv)
+ 	}
+ 	mutex_unlock(&pcdev->periphid_lock);
  
- /* #define ALLOW_INIT_TRACING */
- 
--/*
-- * Called by kernel/ptrace.c when detaching..
-- *
-- * Make sure single step bits etc are not set.
-- */
--void ptrace_disable(struct task_struct *child)
--{
--	/* nothing to do */
--}
--
- enum sparc_regset {
- 	REGSET_GENERAL,
- 	REGSET_FP,
-diff --git a/arch/sparc/kernel/ptrace_64.c b/arch/sparc/kernel/ptrace_64.c
-index 86a7eb5c27ba..b20a16ebe533 100644
---- a/arch/sparc/kernel/ptrace_64.c
-+++ b/arch/sparc/kernel/ptrace_64.c
-@@ -83,16 +83,6 @@ static const struct pt_regs_offset regoffset_table[] = {
- 	REG_OFFSET_END,
- };
- 
--/*
-- * Called by kernel/ptrace.c when detaching..
-- *
-- * Make sure single step bits etc are not set.
-- */
--void ptrace_disable(struct task_struct *child)
--{
--	/* nothing to do */
--}
--
- /* To get the necessary page struct, access_process_vm() first calls
-  * get_user_pages().  This has done a flush_dcache_page() on the
-  * accessed page.  Then our caller (copy_{to,from}_user_page()) did
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 1893d909e45c..77299bb65d97 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -579,6 +579,14 @@ static bool __ptrace_detach(struct task_struct *tracer, struct task_struct *p)
- 	return dead;
- }
- 
-+__weak void ptrace_disable(struct task_struct *child)
-+{
-+	/*
-+	 * Nothing to do.., some architectures would replace it with
-+	 * their own function.
-+	 */
++	return 0;
 +}
 +
- static int ptrace_detach(struct task_struct *child, unsigned int data)
++static int amba_match(struct device *dev, struct device_driver *drv)
++{
++	struct amba_device *pcdev = to_amba_device(dev);
++	struct amba_driver *pcdrv = to_amba_driver(drv);
++	int ret;
++
++	ret = amba_prepare_periphid(dev);
++	if (ret)
++		return ret;
++
+ 	/* When driver_override is set, only bind to the matching driver */
+ 	if (pcdev->driver_override)
+ 		return !strcmp(pcdev->driver_override, drv->name);
+@@ -278,9 +290,15 @@ static int amba_probe(struct device *dev)
  {
- 	if (!valid_signal(data))
+ 	struct amba_device *pcdev = to_amba_device(dev);
+ 	struct amba_driver *pcdrv = to_amba_driver(dev->driver);
+-	const struct amba_id *id = amba_lookup(pcdrv->id_table, pcdev);
++	const struct amba_id *id;
+ 	int ret;
+ 
++	ret = amba_prepare_periphid(dev);
++	if (ret)
++		return ret;
++
++	id = amba_lookup(pcdrv->id_table, pcdev);
++
+ 	do {
+ 		ret = of_amba_device_decode_irq(pcdev);
+ 		if (ret)
 -- 
-2.36.1
+2.25.1
 

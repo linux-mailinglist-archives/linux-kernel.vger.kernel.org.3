@@ -2,70 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525945A5F87
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 807C65A5F84
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:35:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbiH3Jdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51056 "EHLO
+        id S231810AbiH3Jd6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:33:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbiH3Jcw (ORCPT
+        with ESMTP id S231536AbiH3Jcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 30 Aug 2022 05:32:52 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A13E0FDA
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:32:33 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id bu22so13041463wrb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:32:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=HgYd3d3VYtxdYcLPgCySGEmVJkVfThbgrxhOUNERh1k=;
-        b=Na8wILonq+BLnoW8P6MiJP24r/Akpp+N9EMEdhrGiz1BsMz8kBfq3YqGxMRGJxzV1P
-         +IxbAbLVgK3hRs28chUgGDQZtKkH1qwND0Ux5Pb7VFcmzEhTw0AFx21f/kbuv5aIEa2E
-         2zNE2leJ2WlUgIdkGgMoBe5kUxUxH5iGS04fsuxxNXnQsGu7J8Z1jimPFQDxAo0BiGVf
-         CDE+hKtnHkKjmqtNqI7T1+FkI/ZBCmOq7COX4v63ou5WsbzuS2+4JZspccWjYgmhvH0x
-         TueiduxSlRweVTOS0OmvBbPw6vz1/LWdQNqfq/OXoQwSjk2cfjLGDlKy2QmWxJ4GpCAc
-         sikw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=HgYd3d3VYtxdYcLPgCySGEmVJkVfThbgrxhOUNERh1k=;
-        b=qFQLFuDzNPCJRBUHz4u2ZIbRBRXciRiLBbzCH0g9/HwmzTYVEToT6pp09oOPQQiAGU
-         uew7c+D2odd2dcfyqLVpEQUG4TfXj47DvOst0B8U99lctn1bpaKPincW75amJ/a4mY6x
-         stdQ8qNJLjJZ9IoIqozVWulZp74gYXhfJMzRgvFWj/j2VSJl+30DTIJASTtWjkclWmef
-         S1AIW2FKhvvc5O84be7KnnKXi8BMW9tUT+2NqCVTZdbiYLzUwQ+MIuqaCQ3e9+ymqQp2
-         X5TJWrDdAyH0zZk7SPFSrdFkXHLWWM0Mc2S7fwKMDLCM6hLcsxnM6WjomrbSowltqjst
-         UOHg==
-X-Gm-Message-State: ACgBeo2NGINBjobywaSAIliXz86J+X0Zq/OeSbgrR007pVZG1f1Qyk34
-        aWX0aKIy2xSDatLUB1Hs08XtgFSqidfqwr5DDNOXBKpnT1s=
-X-Google-Smtp-Source: AA6agR5pzkc7DUT+vCkdEvZePNLxFbdX02pdZh353bGxLp3Y08BYRfWMl8Hz8YL+mN0pFSXLuMrhCXxCRDEbLAkRBCQ=
-X-Received: by 2002:a5d:4587:0:b0:226:d803:2acf with SMTP id
- p7-20020a5d4587000000b00226d8032acfmr5836912wrq.329.1661851949759; Tue, 30
- Aug 2022 02:32:29 -0700 (PDT)
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8493A8CC7
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:32:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3B83223A;
+        Tue, 30 Aug 2022 02:32:36 -0700 (PDT)
+Received: from [10.57.13.45] (unknown [10.57.13.45])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E7DDA3F766;
+        Tue, 30 Aug 2022 02:32:28 -0700 (PDT)
+Message-ID: <5f47c5b7-534d-5714-1f91-04005ada8b8f@arm.com>
+Date:   Tue, 30 Aug 2022 10:32:24 +0100
 MIME-Version: 1.0
-References: <Yvrb3hfZuUzSpX5e@slm.duckdns.org> <20220818143348.1134136-1-jiangshanlai@gmail.com>
- <Ywlmb1ADhHnfFUI8@slm.duckdns.org>
-In-Reply-To: <Ywlmb1ADhHnfFUI8@slm.duckdns.org>
-From:   Lai Jiangshan <jiangshanlai@gmail.com>
-Date:   Tue, 30 Aug 2022 17:32:17 +0800
-Message-ID: <CAJhGHyB69M7uSu6Ot5JQ=Uc_svRCKqXbvUvwFK1xCm=FcS9Zmw@mail.gmail.com>
-Subject: Re: [PATCH] workqueue: Protects wq_unbound_cpumask with wq_pool_attach_mutex
-To:     Tejun Heo <tj@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Lai Jiangshan <jiangshan.ljs@antgroup.com>,
-        Zqiang <qiang1.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] iommu: use iommu_group_ref_get to hold group reference
+Content-Language: en-GB
+To:     Yuan Can <yuancan@huawei.com>, joro@8bytes.org, will@kernel.org,
+        iommu@lists.linux.dev
+Cc:     linux-kernel@vger.kernel.org, baolu.lu@linux.intel.com,
+        haifeng.zhao@linux.intel.com
+References: <20220826024024.101553-1-yuancan@huawei.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220826024024.101553-1-yuancan@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,47 +46,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 8:33 AM Tejun Heo <tj@kernel.org> wrote:
->
-> Hello,
->
-> On Thu, Aug 18, 2022 at 10:33:48PM +0800, Lai Jiangshan wrote:
-> > @@ -5342,6 +5344,11 @@ static int workqueue_apply_unbound_cpumask(void)
-> >               apply_wqattrs_cleanup(ctx);
-> >       }
-> >
-> > +     if (!ret) {
-> > +             mutex_lock(&wq_pool_attach_mutex);
-> > +             cpumask_copy(wq_unbound_cpumask, unbound_cpumask);
-> > +             mutex_unlock(&wq_pool_attach_mutex);
->
-> Is this enough? Shouldn't the lock be protecting a wider scope? If there's
-> someone reading the flag with just pool_attach_mutex, what prevents them
-> reading it right before the new value is committed and keeps using the stale
-> value?
+On 2022-08-26 03:40, Yuan Can wrote:
+> Replace kobject_get with iommu_group_ref_get for better
+> readability.
 
-Which "flag"? wq_unbound_cpumask?
+I disagree, sorry. iommu_group_ref_get() is meant as a helper for 
+drivers, and the core code uses the raw kobject internally everywhere 
+else, including several other times within this function. Especially the 
+raw kobject_put() in the cleanup path - in terms of readability I'd say 
+it's actively harmful to obfuscate what that pairs with.
 
-This code is adding protection for wq_unbound_cpumask and makes
-unbind_workers() use a stable version of wq_unbound_cpumask during
-operation.
+Thanks,
+Robin.
 
-It doesn't really matter if pool's mask becomes stale later again
-with respect to wq_unbound_cpumask.
-
-No code ensures the disassociated pool's mask is kept with the newest
-wq_unbound_cpumask since the 10a5a651e3af ("workqueue: Restrict kworker
-in the offline CPU pool running on housekeeping CPUs") first uses
-wq_unbound_cpumask for the disassociated pools.
-
-What matters is that the pool's mask should the wq_unbound_cpumask
-at the time when it becomes disassociated which has no isolated CPUs.
-
-I don't like 10a5a651e3af for it not synching the pool's mask
-with wq_unbound_cpumask. But I think it works anyway.
-
->
-> Thanks.
->
-> --
-> tejun
+> Signed-off-by: Yuan Can <yuancan@huawei.com>
+> ---
+>   drivers/iommu/iommu.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
+> index 780fb7071577..8e7f30f7188c 100644
+> --- a/drivers/iommu/iommu.c
+> +++ b/drivers/iommu/iommu.c
+> @@ -903,7 +903,7 @@ int iommu_group_add_device(struct iommu_group *group, struct device *dev)
+>   		goto err_free_name;
+>   	}
+>   
+> -	kobject_get(group->devices_kobj);
+> +	iommu_group_ref_get(group);
+>   
+>   	dev->iommu_group = group;
+>   

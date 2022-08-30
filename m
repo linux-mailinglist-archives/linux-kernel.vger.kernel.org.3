@@ -2,65 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E948A5A6DE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:56:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 904C95A6DE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:57:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbiH3T4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:56:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35798 "EHLO
+        id S231685AbiH3T47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiH3T4S (ORCPT
+        with ESMTP id S231277AbiH3T4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:56:18 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 212926F573
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:56:17 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-11ba6e79dd1so19316192fac.12
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:56:17 -0700 (PDT)
+        Tue, 30 Aug 2022 15:56:55 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC8670E6C;
+        Tue, 30 Aug 2022 12:56:54 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id a15so9308821qko.4;
+        Tue, 30 Aug 2022 12:56:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=lBTUT+GVdBiQUCihY+/A5rUw5kNVJzfY/JeA/pnXpEs=;
-        b=DgaiEVgslI7e0eGNfIOS5Vp94gC4G2BU9LxhMOe3TchCkRG9cnOj/FnEXjayigu4DL
-         ZdJT3HDemNCb6dFTR+Uz6SDQKuyibPwDoc2ASmRiEIHgYZ/t1BO+gcFIgzpofiPzdUxp
-         24XMiwCeGU4GTiAbSQSjQegzHgkTPhU6Fb9GmYrR8/Fsc6rLlh9B/Z/XoGAbJIbtBSAE
-         TyV3oDVj/nlrUGPA8NnKCmErrGWQ5+11J016FaTWPPPkxHmNnv5mIb+K1DvflSgH3Txc
-         d/ev4tICWkHSxrtFUIyNgioJWSzu32zFuDZBtdPrXaKL/5yq5eBlAPC6fg1lLCYt+jV8
-         pvaw==
+        bh=B7z26XIqnnDQkHMdYCIbF/h+gJRRyxIq0yn7zncBJrk=;
+        b=YTnX+rhn984d5NOCrdBYNeb+VhC21SiC3ELqCVa0g/FHVCINcdFWpyRBc+ZenESTsu
+         1EbWd0pLHXUiO6JWpC75u9oLgv5GCWCBrxyF6wi0INXtgRqSD6nR+9Z6GIBJtvHFQgfQ
+         d+7yAjw8ZJf9E1+RmUHZbk8Wxi0gTWr8utmrsQIiNnaMydl3uQvzbsttNtAgKhDA+Msc
+         jtWZIq7vJXTRUkA7/q+kFSMs23lMlEzcCaabUGSVVWrX0JmKEtzYQBcd6DthOo7Rhf1o
+         Lc/quHnUw98Lq04EG4BFJaeopAa+CXkWLEzRu2owRzpeC+wjC0+psVyae8Y7LIgTANpI
+         Z2zA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=lBTUT+GVdBiQUCihY+/A5rUw5kNVJzfY/JeA/pnXpEs=;
-        b=mMhTdAk8uyUHTGZTn0MmPJg9BFw9Oqzv5gH1G0fSx/bTEI0E6SnqN6wvcdC60x0sgb
-         VSqjn6ycqQ45JR5h1BQO9O9Yn9T45nSffJ5EmfBuJ9u5vl4uIXMbTdScgOqOTtX5OEg4
-         GBY1KlK8gLVwIJS45Y489eRM676ifZjZ7AvqV59E0NgDtY66PzaSI4hVTUu3C+pQ4ROm
-         RYR4N4VGAiYlvEadOrBPfr4JysPvSX7w36aDgJUPta6kbmft2I+Rt/yn5QCQcZxY2zok
-         5suaLvuzhlW72t7MJ+rjjd4eA7/XcGSQcudQ7lrHy/CSvVKBBkPtQgn/mqmODmrN1ucE
-         N4eA==
-X-Gm-Message-State: ACgBeo0QhJ/ZbS8rSXYpPm3whbphUqhRBJ+IFxEcFZgbsLt2knvGh0Po
-        v3y3LiyK43yrjGwj53P4jbIcbFBmuQrpiIqUlt4=
-X-Google-Smtp-Source: AA6agR641haMjojLY/HZV4ZaOM/8iZ69AXdkLv8EK6YA7hL7dCZBvYc4kpbe7afMxtyK/FXR/v6fZTgZQKPGSv0CkCk=
-X-Received: by 2002:a05:6808:2187:b0:344:eccd:3fc5 with SMTP id
- be7-20020a056808218700b00344eccd3fc5mr10666398oib.46.1661889376533; Tue, 30
- Aug 2022 12:56:16 -0700 (PDT)
+        bh=B7z26XIqnnDQkHMdYCIbF/h+gJRRyxIq0yn7zncBJrk=;
+        b=8BUti9//1LjYTAoOct3W0eAP3LJ+0uqXk/BKvGxIgiSlxAn93h3sFY2N/awlXFKhbj
+         KmAQGTpLOjpJsc3H2GS/y8GljeR6kA1MNkk6XwAceVe3AljLA8c8v+dkELjlqZAW6pbJ
+         iGZfefdJSZdSFNR4OmRSCuItcOpgRO3YP4FT+ynJxb5Xf8TOwG1AChUDv9La+iHutVcP
+         oBJZo2xWUxau2Nw6lIloY3GFUH0WLBFQpMokM58CAEleB+0XRW1lC6hqZwLtnA30TX+l
+         p1jIzOFgcDb5LoSYEsSC2mox++9pYnKWYxqV0TfWc6bHUjvFWN2+GVJhMDYXRUTfkPlZ
+         zZYw==
+X-Gm-Message-State: ACgBeo0X2CihXSlrUcsLLrhA3ViHsvZDq2oV1PGEzTm2Ces6dAR4wiik
+        e/M/UMwLlemcJgCs5OtF0+CQhKXTG4erQuZKdjw=
+X-Google-Smtp-Source: AA6agR7If6K9Ws6GFJM7MlVrzvzz8ToSXYYqOTNTvjdSnv+hnybpiixcbqyrkD49BDTHw0jsFVHfZPHkjTASrhb6ZCg=
+X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
+ s13-20020a05620a254d00b006ab84b825ebmr13249125qko.383.1661889413770; Tue, 30
+ Aug 2022 12:56:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220830083243.276646-1-ye.xingchen@zte.com.cn>
-In-Reply-To: <20220830083243.276646-1-ye.xingchen@zte.com.cn>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 30 Aug 2022 15:56:05 -0400
-Message-ID: <CADnq5_OhFNSLus1-=NxgePEvJhUu3pxgtwZZA6LOvO9QngCCvg@mail.gmail.com>
-Subject: Re: [PATCH linux-next] drm/amdgpu: Remove the unneeded result
- variable 'r'
-To:     cgel.zte@gmail.com
-Cc:     alexander.deucher@amd.com, Jack.Xiao@amd.com, tao.zhou1@amd.com,
-        airlied@linux.ie, ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>, Xinhui.Pan@amd.com,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        rajib.mahapatra@amd.com, YiPeng.Chai@amd.com,
-        dri-devel@lists.freedesktop.org, christian.koenig@amd.com,
-        Hawking.Zhang@amd.com
+References: <20220830180054.1998296-1-kumaravel.thiagarajan@microchip.com> <20220830180054.1998296-3-kumaravel.thiagarajan@microchip.com>
+In-Reply-To: <20220830180054.1998296-3-kumaravel.thiagarajan@microchip.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Tue, 30 Aug 2022 22:56:17 +0300
+Message-ID: <CAHp75Vc=D4GVmQ+ohk21iXPGvXMex3WLcRGtquy57D-e4fx-7Q@mail.gmail.com>
+Subject: Re: [PATCH v1 tty-next 2/2] 8250: microchip: pci1xxxx: Add power
+ management functions to pci1xxxx's quad-uart driver.
+To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, Johan Hovold <johan@kernel.org>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Jeremy Kerr <jk@ozlabs.org>,
+        Phil Edworthy <phil.edworthy@renesas.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -72,45 +80,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied.  Thanks!
+On Tue, Aug 30, 2022 at 9:01 PM Kumaravel Thiagarajan
+<kumaravel.thiagarajan@microchip.com> wrote:
+>
+> pci1xxxx's quad-uart function has the capability to wake up the host from
+> suspend state. Enable wakeup before entering into suspend and disable
+> wakeup upon resume.
 
-Alex
+on resume
 
-On Tue, Aug 30, 2022 at 4:32 AM <cgel.zte@gmail.com> wrote:
->
-> From: ye xingchen <ye.xingchen@zte.com.cn>
->
-> Return the value sdma_v4_0_start() directly instead of storing it in
-> another redundant variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c b/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
-> index 65181efba50e..0cf9d3b486b2 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/sdma_v4_0.c
-> @@ -2002,7 +2002,6 @@ static int sdma_v4_0_sw_fini(void *handle)
->
->  static int sdma_v4_0_hw_init(void *handle)
->  {
-> -       int r;
->         struct amdgpu_device *adev = (struct amdgpu_device *)handle;
->
->         if (adev->flags & AMD_IS_APU)
-> @@ -2011,9 +2010,7 @@ static int sdma_v4_0_hw_init(void *handle)
->         if (!amdgpu_sriov_vf(adev))
->                 sdma_v4_0_init_golden_registers(adev);
->
-> -       r = sdma_v4_0_start(adev);
-> -
-> -       return r;
-> +       return sdma_v4_0_start(adev);
->  }
->
->  static int sdma_v4_0_hw_fini(void *handle)
-> --
-> 2.25.1
+...
+
+First of all, we have pm_ptr() and pm_sleep_ptr() with corresponding
+other macros in pm.h. Use them.
+Second, if you need to duplicate a lot of code from 8250_pci, split
+that code to 8250_pcilib.c and use it in the driver.
+
+-- 
+With Best Regards,
+Andy Shevchenko

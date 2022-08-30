@@ -2,183 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF0A5A6DCA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:51:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09C915A6DB7
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:46:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiH3Tu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:50:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
+        id S231334AbiH3TqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229923AbiH3Tux (ORCPT
+        with ESMTP id S229752AbiH3TqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:50:53 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB490422E3;
-        Tue, 30 Aug 2022 12:50:51 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661889050;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wmlaPuCg5CtRxJvAdYOU8R7EmSZufHl35iEQ4YqU9EM=;
-        b=gZwcKwarj6vtKm4xaDadIqmvqzkEqNnWTT5UVK4aQjMzPEiAmWQm88cHA06R3FZQbXgM2G
-        dV6QOVzhnU9Hwbxs1sI9upcn5KUz6nFNtrrD05GTTrR32L6nCWig4wtILoZlwCYlRviJF8
-        zNj6lMvzeENPIAPn2eR/zKb59oUuyXo=
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 10/14] KVM: arm64: Atomically update stage 2 leaf attributes in parallel walks
-Date:   Tue, 30 Aug 2022 19:50:36 +0000
-Message-Id: <20220830195036.964607-1-oliver.upton@linux.dev>
-In-Reply-To: <20220830194132.962932-1-oliver.upton@linux.dev>
-References: <20220830194132.962932-1-oliver.upton@linux.dev>
+        Tue, 30 Aug 2022 15:46:06 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 462D3DED5;
+        Tue, 30 Aug 2022 12:46:03 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id b26so5567731ljk.12;
+        Tue, 30 Aug 2022 12:46:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=BwaHnJXXKqVytA1xrbgIzEHld+egNRhsKszAve8kFp4=;
+        b=c+HPoubViNuEViD7RQqJolXuAhs9JdQ7Fz6AGt0VRq9NCotzcqj5B2lA+dfrQF+bOm
+         CLOR7qhKA3BVPvjt/16F5/OveJLnrq2aKthzwKlWs+aCLtm7hz3uEZP0IIjybPUeg/ry
+         kJcsUQCFGUsIq9Ql1RVpqD0hH/myBsnXKWw250WCo9TUqLsq/f4PYLzoTj1rZJw+avIH
+         SemhCygI2CTajJwo4uqMPB1BJYHDqzbOOwYv0TVwO3w6svWAFvWZPHdwS039zYYZjFzF
+         Q6AZmAFKZOpCQfheCrpeY4Vu1piTcjgZDPP4E+HnOoWvbAqpuDXcMb1T1Lj1Xioy9RYd
+         fWTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=BwaHnJXXKqVytA1xrbgIzEHld+egNRhsKszAve8kFp4=;
+        b=q9VzQy5gVYNxquJUvCVRWR7EO5P/gpc3cOP9gSJhkEOoIMiCFMDGvsL9vFfGleYMHN
+         SqLg6xR71G3oS9L5P/pBAHvL1SedLAfRh+zSf3sopPyucGXWAMBeQ/jEaitpKNXoKfGH
+         9RtzW2MmJYMYOxrvIgpsKaGuHSDXmvF/v3yWIN3Xx6cgzRbjmt498pKItYDyr4UARlTG
+         VKV5boO1PWRL0sXVcEiuQNRgulJ3NnEhBNW/MfZXeV3DXchl/4S12othgC8HpuwMl46B
+         rRXJmiu9MvU+gzOUdGEAlWXH6LU2SdiU5EL5LPwzGDRpo2lVDg+hB0iATGoM6WFwfYhm
+         aa/w==
+X-Gm-Message-State: ACgBeo04d36U4RVz7ZX7xmzpu+Y2qGg23c+t8JPqjjXmZhgrloL6by2q
+        kKLlc8PzceitKWBy6iAtCy2RT/hvJac=
+X-Google-Smtp-Source: AA6agR4uBUMP5duJkR3o6KSBQRfwS7MYuVjef1YHkGazbzPXiMrPsGncvHPdxSLWlESaPaU1z9wvAA==
+X-Received: by 2002:a05:651c:160b:b0:261:d3c7:4d92 with SMTP id f11-20020a05651c160b00b00261d3c74d92mr6940400ljq.23.1661888761364;
+        Tue, 30 Aug 2022 12:46:01 -0700 (PDT)
+Received: from localhost.localdomain (82-209-154-112.cust.bredband2.com. [82.209.154.112])
+        by smtp.gmail.com with ESMTPSA id g20-20020a05651222d400b004948b61f780sm1036lfu.144.2022.08.30.12.46.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 12:46:00 -0700 (PDT)
+From:   Marcus Folkesson <marcus.folkesson@gmail.com>
+To:     benjamin.tissoires@redhat.com, jikos@kernel.org,
+        marcus.folkesson@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] VRC-2 Car Controller
+Date:   Tue, 30 Aug 2022 21:50:54 +0200
+Message-Id: <20220830195055.1812192-1-marcus.folkesson@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The stage2 attr walker is already used for parallel walks. Since commit
-f783ef1c0e82 ("KVM: arm64: Add fast path to handle permission relaxation
-during dirty logging"), KVM acquires the read lock when
-write-unprotecting a PTE. However, the walker only uses a simple store
-to update the PTE. This is safe as the only possible race is with
-hardware updates to the access flag, which is benign.
+Hi,
 
-However, a subsequent change to KVM will allow more changes to the stage
-2 page tables to be done in parallel. Prepare the stage 2 attribute
-walker by performing atomic updates to the PTE when walking in parallel.
+The device creates two USB endpoints where on of those represent the X/Y
+axis as 16 buttons which is not.. quite right.
+So get rid of that endpoint.
 
-Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
----
- arch/arm64/kvm/hyp/pgtable.c | 28 +++++++++++++++++++++-------
- 1 file changed, 21 insertions(+), 7 deletions(-)
+Also fix the report descriptor for the other endpoint.
 
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 215a14c434ed..61a4437c8c16 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -691,6 +691,16 @@ static bool stage2_pte_is_counted(kvm_pte_t pte)
- 	return kvm_pte_valid(pte) || kvm_invalid_pte_owner(pte);
- }
- 
-+static bool stage2_try_set_pte(kvm_pte_t *ptep, kvm_pte_t old, kvm_pte_t new, bool shared)
-+{
-+	if (!shared) {
-+		WRITE_ONCE(*ptep, new);
-+		return true;
-+	}
-+
-+	return cmpxchg(ptep, old, new) == old;
-+}
-+
- static void stage2_put_pte(kvm_pte_t *ptep, struct kvm_s2_mmu *mmu, u64 addr,
- 			   u32 level, struct kvm_pgtable_mm_ops *mm_ops)
- {
-@@ -985,6 +995,7 @@ struct stage2_attr_data {
- 	kvm_pte_t			pte;
- 	u32				level;
- 	struct kvm_pgtable_mm_ops	*mm_ops;
-+	bool				shared;
- };
- 
- static int stage2_attr_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
-@@ -1017,7 +1028,9 @@ static int stage2_attr_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
- 		    stage2_pte_executable(pte) && !stage2_pte_executable(data->pte))
- 			mm_ops->icache_inval_pou(kvm_pte_follow(pte, mm_ops),
- 						  kvm_granule_size(level));
--		WRITE_ONCE(*ptep, pte);
-+
-+		if (!stage2_try_set_pte(ptep, data->pte, pte, data->shared))
-+			return -EAGAIN;
- 	}
- 
- 	return 0;
-@@ -1026,7 +1039,7 @@ static int stage2_attr_walker(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
- static int stage2_update_leaf_attrs(struct kvm_pgtable *pgt, u64 addr,
- 				    u64 size, kvm_pte_t attr_set,
- 				    kvm_pte_t attr_clr, kvm_pte_t *orig_pte,
--				    u32 *level)
-+				    u32 *level, bool shared)
- {
- 	int ret;
- 	kvm_pte_t attr_mask = KVM_PTE_LEAF_ATTR_LO | KVM_PTE_LEAF_ATTR_HI;
-@@ -1034,6 +1047,7 @@ static int stage2_update_leaf_attrs(struct kvm_pgtable *pgt, u64 addr,
- 		.attr_set	= attr_set & attr_mask,
- 		.attr_clr	= attr_clr & attr_mask,
- 		.mm_ops		= pgt->mm_ops,
-+		.shared		= shared,
- 	};
- 	struct kvm_pgtable_walker walker = {
- 		.cb		= stage2_attr_walker,
-@@ -1057,14 +1071,14 @@ int kvm_pgtable_stage2_wrprotect(struct kvm_pgtable *pgt, u64 addr, u64 size)
- {
- 	return stage2_update_leaf_attrs(pgt, addr, size, 0,
- 					KVM_PTE_LEAF_ATTR_LO_S2_S2AP_W,
--					NULL, NULL);
-+					NULL, NULL, false);
- }
- 
- kvm_pte_t kvm_pgtable_stage2_mkyoung(struct kvm_pgtable *pgt, u64 addr)
- {
- 	kvm_pte_t pte = 0;
- 	stage2_update_leaf_attrs(pgt, addr, 1, KVM_PTE_LEAF_ATTR_LO_S2_AF, 0,
--				 &pte, NULL);
-+				 &pte, NULL, false);
- 	dsb(ishst);
- 	return pte;
- }
-@@ -1073,7 +1087,7 @@ kvm_pte_t kvm_pgtable_stage2_mkold(struct kvm_pgtable *pgt, u64 addr)
- {
- 	kvm_pte_t pte = 0;
- 	stage2_update_leaf_attrs(pgt, addr, 1, 0, KVM_PTE_LEAF_ATTR_LO_S2_AF,
--				 &pte, NULL);
-+				 &pte, NULL, false);
- 	/*
- 	 * "But where's the TLBI?!", you scream.
- 	 * "Over in the core code", I sigh.
-@@ -1086,7 +1100,7 @@ kvm_pte_t kvm_pgtable_stage2_mkold(struct kvm_pgtable *pgt, u64 addr)
- bool kvm_pgtable_stage2_is_young(struct kvm_pgtable *pgt, u64 addr)
- {
- 	kvm_pte_t pte = 0;
--	stage2_update_leaf_attrs(pgt, addr, 1, 0, 0, &pte, NULL);
-+	stage2_update_leaf_attrs(pgt, addr, 1, 0, 0, &pte, NULL, false);
- 	return pte & KVM_PTE_LEAF_ATTR_LO_S2_AF;
- }
- 
-@@ -1109,7 +1123,7 @@ int kvm_pgtable_stage2_relax_perms(struct kvm_pgtable *pgt, u64 addr,
- 	if (prot & KVM_PGTABLE_PROT_X)
- 		clr |= KVM_PTE_LEAF_ATTR_HI_S2_XN;
- 
--	ret = stage2_update_leaf_attrs(pgt, addr, 1, set, clr, NULL, &level);
-+	ret = stage2_update_leaf_attrs(pgt, addr, 1, set, clr, NULL, &level, true);
- 	if (!ret)
- 		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, pgt->mmu, addr, level);
- 	return ret;
+Output from hid-recorder:
+#  X:     32 | Y:   1001 | # 
+E: 000105.808008 7 20 00 e9 03 00 00 00
+
+Link to previous discussion:
+https://lore.kernel.org/all/CAO-hwJL-3vAzywjeUsopsRSJX6j-maC5R75ekxZg-W_oKDqYYw@mail.gmail.com/
+
+Marcus Folkesson (1):
+  HID: Add driver for VRC-2 Car Controller
+
+ MAINTAINERS            |   6 +++
+ drivers/hid/Kconfig    |   9 ++++
+ drivers/hid/Makefile   |   1 +
+ drivers/hid/hid-vrc2.c | 100 +++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 116 insertions(+)
+ create mode 100644 drivers/hid/hid-vrc2.c
+
 -- 
-2.37.2.672.g94769d06f0-goog
+2.37.1
 

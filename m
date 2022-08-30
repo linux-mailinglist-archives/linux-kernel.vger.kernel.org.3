@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AE195A6C00
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 626245A6C04
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:23:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbiH3SVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
+        id S230214AbiH3SXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiH3SVi (ORCPT
+        with ESMTP id S231215AbiH3SXh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:21:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7504F17050;
-        Tue, 30 Aug 2022 11:21:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18E4F615F3;
-        Tue, 30 Aug 2022 18:21:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F0AC433C1;
-        Tue, 30 Aug 2022 18:21:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661883696;
-        bh=hEcJQgeqsw3y9ftigfqvc55T9IiJXbNXceyR/L9Nq0U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=loFc3EhNodztGhZZnDSkOIIofEmmsyLTZ+gj6nyBikvbzRCuWpufEA1qJcpzlg0Mf
-         W0IO+ZQLmFvFUWTUURFsgj59PGoMOX5mKMbjR1t9FvxLoj1WnJ//jwsTD3Lxa2SM5I
-         AHiyGZSN8pAiUS0Zqfv8BVig7hMh2pMDsN44huYkvSpB9CDfN2kh9pawD9IsrYioTl
-         A6/u/S7Z+kylHW2/uS4TygaLKU2+fGMT6yeD36wofmDyWcnWmzixcMF9ddJMIZRBXl
-         m+tE8zc2tERLx8tpZrdsaO1k6PGA7mzTpXmAT6FYWrd9Sb/w1rm9U+IZObS6zk2Sfr
-         f5MLNiqCg3f4g==
-Date:   Tue, 30 Aug 2022 19:21:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH -next 4/4] spi: mockup: Add documentation
-Message-ID: <Yw5VL2MsJ4L6vLRF@sirena.org.uk>
-References: <20220826144341.532265-1-weiyongjun1@huawei.com>
- <20220826144341.532265-5-weiyongjun1@huawei.com>
+        Tue, 30 Aug 2022 14:23:37 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30783481EB;
+        Tue, 30 Aug 2022 11:23:35 -0700 (PDT)
+Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 32465481;
+        Tue, 30 Aug 2022 20:23:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1661883812;
+        bh=uH2RujtJW24+NlHEo7Rl1VvmvbNokKsSNH3cq36NFVY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=ES4RuUJSw5KwsaRB8c5Tlc/rgSwzuSVDr6e4YUcSpkaRVlh7QrQCTMlP70R+oPWC6
+         ZJ3T2AmgdWAVAzpe5JCr4az83Rk5vjU1optGw7WzdkKpQ5LIaWgDGhEE1IxSvr1x4t
+         +sljZmDmqSh4FCFo/8Tr7m/5o1uUdLOfVU7jYIxw=
+Message-ID: <db245ada-2f2e-c65d-ef14-35ea4adda123@ideasonboard.com>
+Date:   Tue, 30 Aug 2022 21:23:28 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="TvtZemuiz5sCf+Us"
-Content-Disposition: inline
-In-Reply-To: <20220826144341.532265-5-weiyongjun1@huawei.com>
-X-Cookie: Necessity is a mother.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 3/3] drm: omapdrm: Do no allocate non-scanout GEMs through
+ DMM/TILER
+Content-Language: en-US
+To:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>,
+        Yongqin Liu <yongqin.liu@linaro.org>, Andrew Davis <afd@ti.com>
+Cc:     "Bajjuri, Praneeth" <praneeth@ti.com>, airlied@linux.ie,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        merlijn@wizzup.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, tony@atomide.com,
+        linux-omap@vger.kernel.org, Sumit Semwal <sumit.semwal@linaro.org>
+References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <1642587791-13222-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <5b6d3e7f-c638-fdc7-5080-44d34abed610@ideasonboard.com>
+ <a3ed3a2c-86ce-1c85-e8aa-c08b54ad1a43@gmail.com>
+ <CAMSo37XdZSZUHLWJj373DdtOBA9=uD8SJ7ywWCYF2pU1i4cB_g@mail.gmail.com>
+ <ed4fe238-4fcd-1253-658f-18fe1e1f13b0@gmail.com>
+ <CAMSo37V3U5nYng77jzSnKH73CTLhGYQJu11Q5wRt289se5nFJw@mail.gmail.com>
+ <4128aed0-211a-d12a-6a86-deb4457d39f7@gmail.com>
+ <CAMSo37W-DePLDP=zk-nY6FGcZuk0QzHj4=usrieyV0TNcNfbXw@mail.gmail.com>
+ <da2a661e-9da0-850c-3067-8c1e8d5531bc@gmail.com>
+ <CAMSo37VXNQeR0qZgzZONBwp_4z9CuUSJJJzhM7k+K39BcwvW6A@mail.gmail.com>
+ <235621d0-2141-5ef9-bcd4-5c48b985b3a0@gmail.com>
+ <5dc2c212-4967-ab2d-c016-f3b3a854fe32@ti.com>
+ <CAMSo37W+Z2hn_wJ9At1nyJX6XnpZx9JLXJv9g6DoqoaqqjUATw@mail.gmail.com>
+ <0eb026d9-faaa-68cb-cdcd-7d031acfbb03@gmail.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <0eb026d9-faaa-68cb-cdcd-7d031acfbb03@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 30/08/2022 21:08, Ivaylo Dimitrov wrote:
 
---TvtZemuiz5sCf+Us
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+>>>          flags &= ~OMAP_BO_TILED_MASK;
+>>>          flags |= 0x00000008;
+>>>          flags |= OMAP_BO_WC;
+>>>
+>>>          bo = omap_bo_new(dev, size, flags);
+>>>
+>>> As you can see we use 0x00000008 (OMAP_BO_MEM_CONTIG) unconditionally.
+>>> This was a hack added since even non-scanout buffers sometimes need
+>>> to be contiguous (video decoder surfaces), but we had no way back
+> 
+> Hmm, why would video decoder need linear memory? No MMU?
 
-On Fri, Aug 26, 2022 at 02:43:41PM +0000, Wei Yongjun wrote:
+Not sure about this case, but many/most IPs don't have MMU. E.g. CSI-2 
+or parallel capture.
 
-> +The typical use-case is like this:
-> +        1. load this module
-> +        2. use bpftool to load BPF program
-> +        3. load the target chip driver module
+>>> If you tell me what the code should look like, I can rebuild the
+>>> lib and post a copy.
+>>>
+>>> Long term, I'd like to start using DMA-BUF Heaps for CMA memory
+>>> allocations in gralloc and elsewhere, then drop out the DMM/TILER
+>>> support from OMAPDRM, since it never really belonged there in
+>>> the first place (being a IOMMU unrelated to the display/GPU).
+>>>
+> 
+> Umm, how will we rotate scanout buffers then?
 
-This needs to go into a bit more detail on how one is expected to
-obtain a copy of bpftool I think (or point to some good
-documentation, I can't seem to find any in tree right now),
-things may have changed since the last time I looked into this
-but in the past the userspace tooling for BPF had some extremely
-ambitious build dependencies which would be a fairly substantial
-barrier to entry.
+Didn't we discuss this earlier in this thread. Or some other thread. 
+Related to VRFB... I'm not sure =).
 
-> +Compile your copy of the kernel source. Make sure to configure the spi-mockup
-> +and the target chip driver as a module. Prepare a dts described the spi-mockup
-> +device.
+Anyway, neither VRFB nor DMM/TILER are part of the DSS. They're part of 
+the memory subsystem. They can be used without DSS being in the setup. 
+Thus the code for VRFB and DMM/TILER should not be in the DSS driver.
 
-As I said in another mail the DT part of this appears to be
-inappropriate, the driver should just allow the creation of
-virtual devices.
+The DSS driver should still, of course, support DMM/TILER (and maybe 
+VRFB some day) in the "use" sense, i.e. so that DSS can use the 
+DMM/TILER provided from another driver.
 
---TvtZemuiz5sCf+Us
-Content-Type: application/pgp-signature; name="signature.asc"
+But how exactly that's to be implemented, I don't know.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMOVS4ACgkQJNaLcl1U
-h9Cq6wf9GYh8XeiXuu/caGDq8OMy5MOOjg5WDignKSUxW2jhdMl45BWR9uCfHO/C
-oGs5x4l1eLMq9NQ2Z7tOCf78/7XEMwjQ1dBySk89/MvkL2L6fsWOXc44jvkvygR3
-rFMJrxDLDW114l7IsLebsctZ2Na7nbjt1tz+ZyfpMF05grdcR1G/ygU/eiJQ4cP5
-Mn2vMw34d+UfEMC15ZMzTDfKusk/Z+VbBhBSyDJVROpgNoLAVHPGXnqUfqkuT+s8
-z1bGuvyop0hN/e0STh7Ssws0g8bVgBblXGd/Dwr2RYkBMepZVE5gmyIHOfN68g4N
-RQfBF/0jr82w58GLL56bT+cjhDzD2Q==
-=4dZD
------END PGP SIGNATURE-----
-
---TvtZemuiz5sCf+Us--
+  Tomi

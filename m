@@ -2,73 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D22E95A6C44
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:33:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D86E85A6C41
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiH3Sdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32988 "EHLO
+        id S231162AbiH3SdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231246AbiH3Sd2 (ORCPT
+        with ESMTP id S230438AbiH3SdB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:33:28 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A740F6C768;
-        Tue, 30 Aug 2022 11:33:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=WEmQN+6Nw20owgW81yaoQaqKOSVpiLyZb3sg8Y1rIiw=; b=oPO8HBOuU4ELWQw0nJ93ViKWT0
-        yyEf9j8EVAGjU+Mgm+4W3xATroP2LLFq3ZKBZuyRF6optEsL1uplSH+28bKdhvJeYLA2rlqBMq/ia
-        UHgOtVLzm96UdmYim94H1rxEVddp4xubb2i7gP7XLO2qhyY4KI+tBQzWTAoH0BON0glx7myauqHSX
-        jTl/6HdQKyk/d+hJXlzDczGI4fVjsm2rq/8c4JM897q+so9IHHkDwm2YYRvB5aVQjLPrkrwte9Pd7
-        0mL9I+sXyk7T2oxLx1T92EC7F2OkVuWAzFoFkex93tsvPDYpOht8dqkfsLQhf/aaSTUxVda7QbFMN
-        0WSFEzww==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oT62p-004K31-S7; Tue, 30 Aug 2022 18:33:03 +0000
-Date:   Tue, 30 Aug 2022 19:33:03 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Cezary Rojewski <cezary.rojewski@intel.com>
-Cc:     alsa-devel@alsa-project.org, broonie@kernel.org, tiwai@suse.com,
-        perex@perex.cz, amadeuszx.slawinski@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, hdegoede@redhat.com,
-        lgirdwood@gmail.com, kai.vehmanen@linux.intel.com,
-        peter.ujfalusi@linux.intel.com, ranjani.sridharan@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        andy.shevchenko@gmail.com
-Subject: Re: [PATCH v2 1/2] libfs: Introduce tokenize_user_input()
-Message-ID: <Yw5X379ct1PK6wZO@casper.infradead.org>
-References: <20220825164833.3923454-1-cezary.rojewski@intel.com>
- <20220825164833.3923454-2-cezary.rojewski@intel.com>
+        Tue, 30 Aug 2022 14:33:01 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74DE6D56E;
+        Tue, 30 Aug 2022 11:33:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661884380; x=1693420380;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XXGsy3iHg2TGWxhTSUsEXSInjBFqhM73CeJFq+RRHnI=;
+  b=D491yvbJBVAKmD2w2RRpDOrwBDE3synaWHE3T6K4szirt7xagndnB/wH
+   lwDLlvTzspn0O7vhqv4idEJG3tnQCNNZdmVGzOJk9cJd8Ccrp8iDvEgmp
+   +a5OkuSxCv6icOTDttnP6QV1/9dkCnusodFqv4pyQzk/ZeWixhM+Q3o3O
+   QSHGRFxN6Rdf2LhdPf/AVO1z0N48mG9m801L6Pg3nm9TQyM/71roj1p3F
+   Z/4pFHouCFJwiHORM/k5U0umiySo3ueurvpTxaAbgI2dXT4J/4W5s7yqH
+   rRqgcPrjlHO69weWeOnkqY5LADjMHjpApUIPMN0qkIT+jzVNEIlYJk1YF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="282241956"
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="282241956"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 11:33:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="701099213"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by FMSMGA003.fm.intel.com with ESMTP; 30 Aug 2022 11:32:57 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 99E77174; Tue, 30 Aug 2022 21:33:11 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Bjorn Helgaas <bhelgaas@google.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Xiaowei Song <songxiaowei@hisilicon.com>,
+        Binghui Wang <wangbinghui@hisilicon.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/1] PCI: dwc: Replace of_gpio_named_count() by gpiod_count()
+Date:   Tue, 30 Aug 2022 21:33:10 +0300
+Message-Id: <20220830183310.48541-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220825164833.3923454-2-cezary.rojewski@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 06:48:32PM +0200, Cezary Rojewski wrote:
-> Add new helper function to allow for splitting specified user string
-> into a sequence of integers. Internally it makes use of get_options() so
-> the returned sequence contains the integers extracted plus an additional
-> element that begins the sequence and specifies the integers count.
-> 
-> Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Signed-off-by: Cezary Rojewski <cezary.rojewski@intel.com>
-> ---
->  fs/libfs.c         | 45 +++++++++++++++++++++++++++++++++++++++++++++
->  include/linux/fs.h |  1 +
+As a preparation to unexport of_gpio_named_count(), convert the
+driver to use gpiod_count() instead.
 
-This really has nothing to do with filesystems.  Surely
-string_helpers.[ch] is the appropriate place for this code?
-Also get_options() should probably move its prototype from kernel.h to
-string_helpers.h.
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/pci/controller/dwc/pcie-kirin.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/pci/controller/dwc/pcie-kirin.c b/drivers/pci/controller/dwc/pcie-kirin.c
+index 7f67aad71df4..3bde045e20ad 100644
+--- a/drivers/pci/controller/dwc/pcie-kirin.c
++++ b/drivers/pci/controller/dwc/pcie-kirin.c
+@@ -366,12 +366,11 @@ static int kirin_pcie_get_gpio_enable(struct kirin_pcie *pcie,
+ 				      struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+-	struct device_node *np = dev->of_node;
+ 	char name[32];
+ 	int ret, i;
+ 
+ 	/* This is an optional property */
+-	ret = of_gpio_named_count(np, "hisilicon,clken-gpios");
++	ret = gpiod_count(dev, "hisilicon,clken");
+ 	if (ret < 0)
+ 		return 0;
+ 
+-- 
+2.35.1
+

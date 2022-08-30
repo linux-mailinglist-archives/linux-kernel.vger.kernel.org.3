@@ -2,196 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E125A5981
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 04:45:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6915A5982
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 04:46:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229833AbiH3Cpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 22:45:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38214 "EHLO
+        id S229725AbiH3Cqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 22:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiH3Cpu (ORCPT
+        with ESMTP id S229472AbiH3Cqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 22:45:50 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC36659D3;
-        Mon, 29 Aug 2022 19:45:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661827548; x=1693363548;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=0TI8jQLapdOITPsRn4jkg5RomLHydJPJ4LzrJPCvLTI=;
-  b=dN0sMA3b1PDc3u+/hv5AMp2KNzzChy+I7M6ejzyayR1h4yFsN8IMRAdl
-   ToJwLCBtg3J7T1R55mb2CXb9zV0WrpmCsfyJvsa4BZJdm+kzExoIF9Y/M
-   MtKQdm2Fm1N1cY751TaxDFbguLjEthQ30n99vT+g15TNCvOgG8drGaVy3
-   f1N3B8Nc5EfLDpdp9b2GItGjYc5I/07aXn40WN9mEpaCcE7Cq9x3niyO3
-   +x+R/YuGH7yowdvTun9m81q4NauUhuECyzVqR0CmqEuajaxpDocACvSJV
-   cabRDZz3tmxLorIbPyCtRYszRFBakYNW/XDvRUHEFBNw48I/NYVUKSMFw
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="296338703"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="296338703"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 19:45:48 -0700
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="939831538"
-Received: from yghanbar-mobl2.amr.corp.intel.com (HELO khuang2-desk.gar.corp.intel.com) ([10.213.185.134])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 19:45:43 -0700
-From:   Kai Huang <kai.huang@intel.com>
-To:     linux-sgx@vger.kernel.org, kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, dave.hansen@linux.intel.com,
-        seanjc@google.com, pbonzini@redhat.com, jarkko@kernel.org,
-        haitao.huang@linux.intel.com
-Subject: [PATCH v3] KVM: VMX: Allow exposing EDECCSSA user leaf function to KVM guest
-Date:   Tue, 30 Aug 2022 14:45:10 +1200
-Message-Id: <20220830024510.68973-1-kai.huang@intel.com>
-X-Mailer: git-send-email 2.37.1
+        Mon, 29 Aug 2022 22:46:50 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F183867461
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 19:46:48 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MGs713TSyz1N7by;
+        Tue, 30 Aug 2022 10:43:09 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Tue, 30 Aug 2022 10:46:46 +0800
+Subject: Re: [PATCH 7/8] hugetlb: create hugetlb_unmap_file_folio to unmap
+ single file folio
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+CC:     Muchun Song <songmuchun@bytedance.com>,
+        David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>, Peter Xu <peterx@redhat.com>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Prakash Sangappa <prakash.sangappa@oracle.com>,
+        James Houghton <jthoughton@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Ray Fucillo <Ray.Fucillo@intersystems.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>
+References: <20220824175757.20590-1-mike.kravetz@oracle.com>
+ <20220824175757.20590-8-mike.kravetz@oracle.com>
+ <0e31f9da-5953-2f44-1a59-888e3313e919@huawei.com> <Yw0/w0u+4qBHyy5u@monkey>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <304a6d9a-9029-8ee8-7205-d0ef4a5403bd@huawei.com>
+Date:   Tue, 30 Aug 2022 10:46:45 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yw0/w0u+4qBHyy5u@monkey>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new Asynchronous Exit (AEX) notification mechanism (AEX-notify)
-allows one enclave to receive a notification in the ERESUME after the
-enclave exit due to an AEX.  EDECCSSA is a new SGX user leaf function
-(ENCLU[EDECCSSA]) to facilitate the AEX notification handling.  The new
-EDECCSSA is enumerated via CPUID(EAX=0x12,ECX=0x0):EAX[11].
+On 2022/8/30 6:37, Mike Kravetz wrote:
+> On 08/29/22 10:44, Miaohe Lin wrote:
+>> On 2022/8/25 1:57, Mike Kravetz wrote:
+>>> Create the new routine hugetlb_unmap_file_folio that will unmap a single
+>>> file folio.  This is refactored code from hugetlb_vmdelete_list.  It is
+>>> modified to do locking within the routine itself and check whether the
+>>> page is mapped within a specific vma before unmapping.
+>>>
+>>> This refactoring will be put to use and expanded upon in a subsequent
+>>> patch adding vma specific locking.
+>>>
+>>> Signed-off-by: Mike Kravetz <mike.kravetz@oracle.com>
+>>> ---
+>>>  fs/hugetlbfs/inode.c | 123 +++++++++++++++++++++++++++++++++----------
+>>>  1 file changed, 94 insertions(+), 29 deletions(-)
+>>>
+>>> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+>>> index e83fd31671b3..b93d131b0cb5 100644
+>>> --- a/fs/hugetlbfs/inode.c
+>>> +++ b/fs/hugetlbfs/inode.c
+>>> @@ -371,6 +371,94 @@ static void hugetlb_delete_from_page_cache(struct page *page)
+>>>  	delete_from_page_cache(page);
+>>>  }
+>>>  
+>>> +/*
+>>> + * Called with i_mmap_rwsem held for inode based vma maps.  This makes
+>>> + * sure vma (and vm_mm) will not go away.  We also hold the hugetlb fault
+>>> + * mutex for the page in the mapping.  So, we can not race with page being
+>>> + * faulted into the vma.
+>>> + */
+>>> +static bool hugetlb_vma_maps_page(struct vm_area_struct *vma,
+>>> +				unsigned long addr, struct page *page)
+>>> +{
+>>> +	pte_t *ptep, pte;
+>>> +
+>>> +	ptep = huge_pte_offset(vma->vm_mm, addr,
+>>> +			huge_page_size(hstate_vma(vma)));
+>>> +
+>>> +	if (!ptep)
+>>> +		return false;
+>>> +
+>>> +	pte = huge_ptep_get(ptep);
+>>> +	if (huge_pte_none(pte) || !pte_present(pte))
+>>> +		return false;
+>>> +
+>>> +	if (pte_page(pte) == page)
+>>> +		return true;
+>>
+>> I'm thinking whether pte entry could change after we check it since huge_pte_lock is not held here.
+>> But I think holding i_mmap_rwsem in writelock mode should give us such a guarantee, e.g. migration
+>> entry is changed back to huge pte entry while holding i_mmap_rwsem in readlock mode.
+>> Or am I miss something?
+> 
+> Let me think about this.  I do not think it is possible, but you ask good
+> questions.
+> 
+> Do note that this is the same locking sequence used at the beginning of the
+> page fault code where the decision to call hugetlb_no_page() is made.
 
-Besides Allowing reporting the new AEX-notify attribute to KVM guests,
-also allow reporting the new EDECCSSA user leaf function to KVM guests
-so the guest can fully utilize the AEX-notify mechanism.
+Yes, hugetlb_fault() can tolerate the stale pte entry because pte entry will be re-checked later under the page table lock.
+However if we see a stale pte entry here, the page might be leftover after truncated and thus break truncation? But I'm not
+sure whether this will occur. Maybe the i_mmap_rwsem writelock and hugetlb_fault_mutex can prevent this issue.
 
-Similar to existing X86_FEATURE_SGX1 and X86_FEATURE_SGX2, introduce a
-new scattered X86_FEATURE_SGX_EDECCSSA bit for the new EDECCSSA, and
-report it in KVM's supported CPUIDs.
+Thanks,
+Miaohe Lin
 
-Note, no additional KVM enabling is required to allow the guest to use
-EDECCSSA.  It's impossible to trap ENCLU (without completely preventing
-the guest from using SGX).  Advertise EDECCSSA as supported purely so
-that userspace doesn't need to special case EDECCSSA, i.e. doesn't need
-to manually check host CPUID.
 
-The inability to trap ENCLU also means that KVM can't prevent the guest
-from using EDECCSSA, but that virtualization hole is benign as far as
-KVM is concerned.  EDECCSSA is simply a fancy way to modify internal
-enclave state.
-
-More background about how do AEX-notify and EDECCSSA work:
-
-SGX maintains a Current State Save Area Frame (CSSA) for each enclave
-thread.  When AEX happens, the enclave thread context is saved to the
-CSSA and the CSSA is increased by 1.  For a normal ERESUME which doesn't
-deliver AEX notification, it restores the saved thread context from the
-previously saved SSA and decreases the CSSA.  If AEX-notify is enabled
-for one enclave, the ERESUME acts differently.  Instead of restoring the
-saved thread context and decreasing the CSSA, it acts like EENTER which
-doesn't decrease the CSSA but establishes a clean slate thread context
-using the CSSA for the enclave to handle the notification.  After some
-handling, the enclave must discard the "new-established" SSA and switch
-back to the previously saved SSA (upon AEX).  Otherwise, the enclave
-will run out of SSA space upon further AEXs and eventually fail to run.
-
-To solve this problem, the new EDECCSSA essentially decreases the CSSA.
-It can be used by the enclave notification handler to switch back to the
-previous saved SSA when needed, i.e. after it handles the notification.
-
-Acked-by: Sean Christopherson <seanjc@google.com>
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
-Signed-off-by: Kai Huang <kai.huang@intel.com>
----
-v2 -> v3:
-
- - Updated subsystem tag to "KVM: VMX:" (Sean).
- - Updated changelog (Sean).
- - Added Sean and Jarkko's Acks.
-
----
- arch/x86/include/asm/cpufeatures.h | 1 +
- arch/x86/kernel/cpu/cpuid-deps.c   | 1 +
- arch/x86/kernel/cpu/scattered.c    | 1 +
- arch/x86/kvm/cpuid.c               | 2 +-
- arch/x86/kvm/reverse_cpuid.h       | 3 +++
- 5 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 235dc85c91c3..ccdd35adae9e 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -304,6 +304,7 @@
- #define X86_FEATURE_UNRET		(11*32+15) /* "" AMD BTB untrain return */
- #define X86_FEATURE_USE_IBPB_FW		(11*32+16) /* "" Use IBPB during runtime firmware calls */
- #define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM exit when EIBRS is enabled */
-+#define X86_FEATURE_SGX_EDECCSSA	(11*32+18) /* "" SGX EDECCSSA user leaf function */
- 
- /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
- #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
-diff --git a/arch/x86/kernel/cpu/cpuid-deps.c b/arch/x86/kernel/cpu/cpuid-deps.c
-index c881bcafba7d..d95221117129 100644
---- a/arch/x86/kernel/cpu/cpuid-deps.c
-+++ b/arch/x86/kernel/cpu/cpuid-deps.c
-@@ -75,6 +75,7 @@ static const struct cpuid_dep cpuid_deps[] = {
- 	{ X86_FEATURE_SGX_LC,			X86_FEATURE_SGX	      },
- 	{ X86_FEATURE_SGX1,			X86_FEATURE_SGX       },
- 	{ X86_FEATURE_SGX2,			X86_FEATURE_SGX1      },
-+	{ X86_FEATURE_SGX_EDECCSSA,		X86_FEATURE_SGX1      },
- 	{ X86_FEATURE_XFD,			X86_FEATURE_XSAVES    },
- 	{ X86_FEATURE_XFD,			X86_FEATURE_XGETBV1   },
- 	{ X86_FEATURE_AMX_TILE,			X86_FEATURE_XFD       },
-diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
-index fd44b54c90d5..0bb339857985 100644
---- a/arch/x86/kernel/cpu/scattered.c
-+++ b/arch/x86/kernel/cpu/scattered.c
-@@ -40,6 +40,7 @@ static const struct cpuid_bit cpuid_bits[] = {
- 	{ X86_FEATURE_PER_THREAD_MBA,	CPUID_ECX,  0, 0x00000010, 3 },
- 	{ X86_FEATURE_SGX1,		CPUID_EAX,  0, 0x00000012, 0 },
- 	{ X86_FEATURE_SGX2,		CPUID_EAX,  1, 0x00000012, 0 },
-+	{ X86_FEATURE_SGX_EDECCSSA,	CPUID_EAX, 11, 0x00000012, 0 },
- 	{ X86_FEATURE_HW_PSTATE,	CPUID_EDX,  7, 0x80000007, 0 },
- 	{ X86_FEATURE_CPB,		CPUID_EDX,  9, 0x80000007, 0 },
- 	{ X86_FEATURE_PROC_FEEDBACK,    CPUID_EDX, 11, 0x80000007, 0 },
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 75dcf7a72605..c21b4a5dc8fa 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -644,7 +644,7 @@ void kvm_set_cpu_caps(void)
- 	);
- 
- 	kvm_cpu_cap_init_scattered(CPUID_12_EAX,
--		SF(SGX1) | SF(SGX2)
-+		SF(SGX1) | SF(SGX2) | SF(SGX_EDECCSSA)
- 	);
- 
- 	kvm_cpu_cap_mask(CPUID_8000_0001_ECX,
-diff --git a/arch/x86/kvm/reverse_cpuid.h b/arch/x86/kvm/reverse_cpuid.h
-index a19d473d0184..4e5b8444f161 100644
---- a/arch/x86/kvm/reverse_cpuid.h
-+++ b/arch/x86/kvm/reverse_cpuid.h
-@@ -23,6 +23,7 @@ enum kvm_only_cpuid_leafs {
- /* Intel-defined SGX sub-features, CPUID level 0x12 (EAX). */
- #define KVM_X86_FEATURE_SGX1		KVM_X86_FEATURE(CPUID_12_EAX, 0)
- #define KVM_X86_FEATURE_SGX2		KVM_X86_FEATURE(CPUID_12_EAX, 1)
-+#define KVM_X86_FEATURE_SGX_EDECCSSA	KVM_X86_FEATURE(CPUID_12_EAX, 11)
- 
- struct cpuid_reg {
- 	u32 function;
-@@ -78,6 +79,8 @@ static __always_inline u32 __feature_translate(int x86_feature)
- 		return KVM_X86_FEATURE_SGX1;
- 	else if (x86_feature == X86_FEATURE_SGX2)
- 		return KVM_X86_FEATURE_SGX2;
-+	else if (x86_feature == X86_FEATURE_SGX_EDECCSSA)
-+		return KVM_X86_FEATURE_SGX_EDECCSSA;
- 
- 	return x86_feature;
- }
-
-base-commit: ee56a283988d739c25d2d00ffb22707cb487ab47
--- 
-2.37.1
+> 
+>>
+>>> +
+>>> +	return false;
+>>> +}
+>>> +
+>>> +/*
+>>> + * Can vma_offset_start/vma_offset_end overflow on 32-bit arches?
+>>> + * No, because the interval tree returns us only those vmas
+>>> + * which overlap the truncated area starting at pgoff,
+>>> + * and no vma on a 32-bit arch can span beyond the 4GB.
+>>> + */
+>>> +static unsigned long vma_offset_start(struct vm_area_struct *vma, pgoff_t start)
+>>> +{
+>>> +	if (vma->vm_pgoff < start)
+>>> +		return (start - vma->vm_pgoff) << PAGE_SHIFT;
+>>> +	else
+>>> +		return 0;
+>>> +}
+>>> +
+>>> +static unsigned long vma_offset_end(struct vm_area_struct *vma, pgoff_t end)
+>>> +{
+>>> +	unsigned long t_end;
+>>> +
+>>> +	if (!end)
+>>> +		return vma->vm_end;
+>>> +
+>>> +	t_end = ((end - vma->vm_pgoff) << PAGE_SHIFT) + vma->vm_start;
+>>> +	if (t_end > vma->vm_end)
+>>> +		t_end = vma->vm_end;
+>>> +	return t_end;
+>>> +}
+>>> +
+>>> +/*
+>>> + * Called with hugetlb fault mutex held.  Therefore, no more mappings to
+>>> + * this folio can be created while executing the routine.
+>>> + */
+>>> +static void hugetlb_unmap_file_folio(struct hstate *h,
+>>> +					struct address_space *mapping,
+>>> +					struct folio *folio, pgoff_t index)
+>>> +{
+>>> +	struct rb_root_cached *root = &mapping->i_mmap;
+>>> +	struct page *page = &folio->page;
+>>> +	struct vm_area_struct *vma;
+>>> +	unsigned long v_start;
+>>> +	unsigned long v_end;
+>>> +	pgoff_t start, end;
+>>> +
+>>> +	start = index * pages_per_huge_page(h);
+>>> +	end = ((index + 1) * pages_per_huge_page(h));
+>>
+>> It seems the outer parentheses is unneeded?
+> 
+> Correct.  Thanks.
+> 
 

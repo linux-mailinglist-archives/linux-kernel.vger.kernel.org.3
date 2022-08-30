@@ -2,207 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 559145A631C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:18:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FC945A631F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:19:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230332AbiH3MRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:17:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
+        id S230373AbiH3MTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230255AbiH3MRu (ORCPT
+        with ESMTP id S230255AbiH3MTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:17:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB81D21F0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:17:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661861868;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Tue, 30 Aug 2022 08:19:13 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFAAEF7B06;
+        Tue, 30 Aug 2022 05:19:08 -0700 (PDT)
+Received: from mail-vk1-f177.google.com (mail-vk1-f177.google.com [209.85.221.177])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: martin-eric.racine)
+        by meesny.iki.fi (Postfix) with ESMTPSA id A30B2205A1;
+        Tue, 30 Aug 2022 15:19:04 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1661861944; h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wStWHojG+mqSkx5w9odtf8yhDsAk+/Zs+ge/ktP/P14=;
-        b=gUknbzr40ySmQrJTnRyYtFl6KXzqRHlIMia/kSNPkvEUmGrJz6wz/3aek16LVQmUKBSYG8
-        9bMjt4ksHrjp3Hlv1nr3lgrq+zs4YIzC4B6TlcYPkokZUDRnrG3L2FAREKYNpI5HGOgu9i
-        5joC+JnkEWt6mBt38dvX+R1LmeSyoLc=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-126-H0Lzhxe0Ny2Z19HMkeyrFA-1; Tue, 30 Aug 2022 08:17:47 -0400
-X-MC-Unique: H0Lzhxe0Ny2Z19HMkeyrFA-1
-Received: by mail-wm1-f69.google.com with SMTP id c25-20020a05600c0ad900b003a5ebad295aso1925617wmr.5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:17:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=wStWHojG+mqSkx5w9odtf8yhDsAk+/Zs+ge/ktP/P14=;
-        b=rfKAlRyJVzudQMFy0guXFxOcZTHQtuPTajDmJhmtBKYVsCd0iHJ8bAnJ5rS1xYajON
-         6a/o7PWdz0LYq+S8fNCzdpIrQamllJDTXYOEiKW/KpszgtvUXptRM2IJLMC1uD7Idgoz
-         1maCEFlHV/aNYqozbJpWgHiCRAglIP2WnX/wiYBQB5uKTzLCq25D/pwDZP2c2dIkov8x
-         AZL7TD77cACWnau4sQfFwc2oy/Z1h1THUHboOFPWYcABBbN9WesB96u0z3+Kx7SLS9Nz
-         er181cPTF0ZJ8L2pRxgZXE9kUIZESWeAmXDQhAlW2gEb23w5Io/Tc9ZKW58CTfit9tdc
-         sJVg==
-X-Gm-Message-State: ACgBeo1TTSjM/3Ragv15GO2PWOtWjMoPqlvp244QJYA2DyaALebWZsTj
-        78ORPOtCMsfFrAAsV1jm4EHOTotGj7aGM9Y62xeMyrQCfMYLqs6xUS21Tu+HMhZokD6Me2VuM0j
-        l9Re2ztsQeym+jXILKRp22bwZ
-X-Received: by 2002:adf:ed50:0:b0:225:4c37:5346 with SMTP id u16-20020adfed50000000b002254c375346mr8810784wro.207.1661861866324;
-        Tue, 30 Aug 2022 05:17:46 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7LbEwWL4kKOvLdx0sOtNkvmwSMVrgmd2sgfE/jJVeFo0Jfzf2IRVyzOcC+QvzNNPwpyxNgIQ==
-X-Received: by 2002:adf:ed50:0:b0:225:4c37:5346 with SMTP id u16-20020adfed50000000b002254c375346mr8810749wro.207.1661861865960;
-        Tue, 30 Aug 2022 05:17:45 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c70a:1000:ecb4:919b:e3d3:e20b? (p200300cbc70a1000ecb4919be3d3e20b.dip0.t-ipconnect.de. [2003:cb:c70a:1000:ecb4:919b:e3d3:e20b])
-        by smtp.gmail.com with ESMTPSA id z20-20020a05600c0a1400b003a5e9337967sm12853676wmp.13.2022.08.30.05.17.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 05:17:45 -0700 (PDT)
-Message-ID: <5aa08b4f-251e-a63d-c36c-324a04ba24f4@redhat.com>
-Date:   Tue, 30 Aug 2022 14:17:44 +0200
+        bh=B1IU/Vmv+KZu7a/do/ie4ryReg1wzXp+x8m05MY3sN4=;
+        b=T5c8amJbGhpf41aUBfRM5HBFG1FyJTLhr6Wv9mEJBwYuCOiIOorZer5oP5hDA126IyxSzK
+        yffoD1fIO27107XLX9QVZa8KcNx9XVRnsSyRM3ftrjquGoZuYGfbfdzOdO89ioi2dkQQCT
+        lZ2/GMAd7sou4zNR7/SFcB6jDdM1VHY=
+Received: by mail-vk1-f177.google.com with SMTP id j11so3171280vkl.12;
+        Tue, 30 Aug 2022 05:19:04 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0boMwaGo2+gmpujZSMMSDD/enYFLr6WMGF3tKRmWNP2q5ZX/uC
+        4wTkRR3ScK78uYlTb8YEf8Dgn4pdQIMeTqtpPCU=
+X-Google-Smtp-Source: AA6agR5rR1fVDlOBNX7yh43t51QfOGYtnAZYHCcN7/0XB9TOzAvuqMxXzIhZQAVtx7cQ2q4Z/gGHZLV9vDclvymdWSc=
+X-Received: by 2002:a1f:9105:0:b0:388:353b:1b2d with SMTP id
+ t5-20020a1f9105000000b00388353b1b2dmr4786178vkd.0.1661861943311; Tue, 30 Aug
+ 2022 05:19:03 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     John Hubbard <jhubbard@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Jens Axboe <axboe@kernel.dk>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Christoph Hellwig <hch@infradead.org>,
-        "Darrick J . Wong" <djwong@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
-        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
-References: <20220827083607.2345453-1-jhubbard@nvidia.com>
- <20220827083607.2345453-2-jhubbard@nvidia.com>
- <10a9d33a-58a3-10b3-690b-53100d4e5440@redhat.com>
- <a47eef63-0f29-2185-f044-854ffaefae9c@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 1/6] mm/gup: introduce pin_user_page()
-In-Reply-To: <a47eef63-0f29-2185-f044-854ffaefae9c@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <Yv7aRJ/SvVhSdnSB@decadent.org.uk> <Yv9OGVc+WpoDAB0X@worktop.programming.kicks-ass.net>
+ <Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net> <9395338630e3313c1bf0393ae507925d1f9af870.camel@decadent.org.uk>
+ <Yv9+8vR4QH6j6J/5@worktop.programming.kicks-ass.net> <CAPZXPQeYh_BrZzinsvCjHvd=szAsOXUmkVYS1tJC5vwamx+Wow@mail.gmail.com>
+ <Yw37wnE19bAIhhP2@hirez.programming.kicks-ass.net>
+In-Reply-To: <Yw37wnE19bAIhhP2@hirez.programming.kicks-ass.net>
+Reply-To: martin-eric.racine@iki.fi
+From:   =?UTF-8?Q?Martin=2D=C3=89ric_Racine?= <martin-eric.racine@iki.fi>
+Date:   Tue, 30 Aug 2022 15:18:51 +0300
+X-Gmail-Original-Message-ID: <CAPZXPQfrCQi5y0yS0kXNYajb_YyRGBPj1hhJEYEWWUsJxa-EHw@mail.gmail.com>
+Message-ID: <CAPZXPQfrCQi5y0yS0kXNYajb_YyRGBPj1hhJEYEWWUsJxa-EHw@mail.gmail.com>
+Subject: Re: [PATCH] x86/speculation: Avoid LFENCE in FILL_RETURN_BUFFER on
+ CPUs that lack it
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ben Hutchings <ben@decadent.org.uk>, x86@kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        1017425@bugs.debian.org, stable@vger.kernel.org,
+        regressions@lists.linux.dev,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1661861944;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=B1IU/Vmv+KZu7a/do/ie4ryReg1wzXp+x8m05MY3sN4=;
+        b=szISCSm+ZyvjZfMveQ7tlIIc7sJnoVI9NOFu2fPo9lfwULv6qgFq5L+t8QcjqY/w0SXv93
+        s9FcMqumaD/qTaTayyPtN7pFhfk7s9AOq5F8FhDeo/2yI3si4GIOu4QP5oz7WkFN6LxU7N
+        Nu5RBjF0ZFEpR4jP0ZDE6rqmRC6/1Oo=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=martin-eric.racine smtp.mailfrom=martin-eric.racine@iki.fi
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1661861944; a=rsa-sha256; cv=none;
+        b=ITTTng9ykl4+SWZHqEU45LlUbNO3+0rfnaAYRhd4ApUjGAVDA8B5FwRmETCyewjAraYj/G
+        NgG0wFoiNl98Szq80Tu3uEefHYYryoh8WNz/sFTj43t8aU9NPDgCC6xD6iBIy0gTUSYiAl
+        P+wtcNCWURO0SXZE5Gn0epXHYcnyvEM=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29.08.22 21:33, John Hubbard wrote:
-> On 8/29/22 05:07, David Hildenbrand wrote:
->>> +/**
->>> + * pin_user_page() - apply a FOLL_PIN reference to a page
->>> + *
->>> + * @page: the page to be pinned.
->>> + *
->>> + * This is similar to get_user_pages(), except that the page's refcount is
->>> + * elevated using FOLL_PIN, instead of FOLL_GET.
-> 
-> Actually, my commit log has a more useful documentation of this routine,
-> and given the questions below, I think I'll change to that:
-> 
->  * pin_user_page() is an externally-usable version of try_grab_page(), but with
->  * semantics that match get_page(), so that it can act as a drop-in replacement
->  * for get_page().
->  *
->  * pin_user_page() elevates a page's refcount using FOLL_PIN rules. This means
->  * that the caller must release the page via unpin_user_page().
+On Tue, Aug 30, 2022 at 3:00 PM Peter Zijlstra <peterz@infradead.org> wrote=
+:
+> On Tue, Aug 30, 2022 at 02:42:04PM +0300, Martin-=C3=89ric Racine wrote:
+> > On Fri, Aug 19, 2022 at 3:15 PM Peter Zijlstra <peterz@infradead.org> w=
+rote:
+> > >
+> > > On Fri, Aug 19, 2022 at 01:38:27PM +0200, Ben Hutchings wrote:
+> > >
+> > > > So that puts the whole __FILL_RETURN_BUFFER inside an alternative, =
+and
+> > > > we can't have nested alternatives.  That's unfortunate.
+> > >
+> > > Well, both alternatives end with the LFENCE instruction, so I could p=
+ull
+> > > it out and do two consequtive ALTs, but unrolling the loop for i386 i=
+s
+> > > a better solution in that the sequence, while larger, removes the nee=
+d
+> > > for the LFENCE.
+> >
+> > Have we reached a definitive conclusion on to how to fix this?
+>
+> https://git.kernel.org/tip/332924973725e8cdcc783c175f68cf7e162cb9e5
 
-Some thoughts:
+Thanks.
 
-a) Can we generalize such that pages with a dedicated pincount
-(multi-page folios) are also covered? Maybe avoiding the refcount
-terminology would be best.
+Ben: When can we expect an updated kernel to security-updates at Debian?
 
-b) Should we directly work on folios?
-
-c) Would it be valid to pass in a tail page right now?
-
-> 
->>> + *
->>> + * IMPORTANT: The caller must release the page via unpin_user_page().
->>> + *
->>> + */
->>> +void pin_user_page(struct page *page)
->>> +{
->>> +	struct folio *folio = page_folio(page);
->>> +
->>> +	WARN_ON_ONCE(folio_ref_count(folio) <= 0);
->>> +
->>
->> We should warn if the page is anon and !exclusive.
-> 
-> That would be sort of OK, because pin_user_page() is being created
-> specifically for file system (O_DIRECT cases) use, and so the pages
-> should mostly be file-backed, rather than anon. Although I'm a little
-> vague about whether all of these iov_iter cases are really always
-> file-backed pages, especially for cases such as splice(2) to an
-> O_DIRECT-opened file, that Al Viro mentioned [1].
-
-If we can, we should document that this interface is not for anonymous
-pages and WARN if pinning an anonymous page via this interface.
-
-The only reasonable way to obtain a pin on an anonymous page is via the
-page table. Here, FOLL_PIN should be used to do the right thing -- for
-example, unshare first (break COW) instead of pinning a shared anonymous
-page.
-
-Nothing would speak against duplicating such a pin using this interface
-(we'd have to sanity check that the page we're pinning may already be
-pinned), but I assume the pages we pin here are *not* necessarily
-obtained via GUP FOLL_PIN.
-
-I would be curious under which scenarios we could end up here with an
-anonymous page and how we obtained that reference (if not via GUP).
-
-> 
-> Can you walk me through the reasoning for why we need to keep out
-> anon shared pages? 
-
-We make sure to only pin anonymous pages that are exclusive and check
-when unpinning -- see sanity_check_pinned_pages(), there is also a
-comment in there -- that pinned anonymous pages are in fact still
-exclusive, otherwise we might have a BUG lurking somewhere that can
-result in memory corruptions or leaking information between processes.
-
-For example, once we'd pinned an anonymous pages that are not marked
-exclusive (!PageAnonExclusive), or we'd be sharing a page that is
-pinned, the next write fault would replace the page in the user page
-table due to breaking COW, and the GUP pin would point at a different
-page than the page table.
-
-Disallowing pinning of anon pages that may be shared in any case
-(FOLL_LONGTERM or not) simplifies GUP handling and allows for such
-sanity checks.
-
-(side note: after recent VM_BUG_ON discussions we might want to convert
-the VM_BUG_ON_PAGE in sanity_check_pinned_pages())
-
-> 
->>
->> I assume the intend is to use pin_user_page() only to duplicate pins, right?
->>
-> 
-> Well, yes or no, depending on your use of the term "pin":
-> 
-> pin_user_page() is used on a page that already has a refcount >= 1 (so
-> no worries about speculative pinning should apply here), but the page
-> does not necessarily have any FOLL_PIN's applied to it yet (so it's not
-> "pinned" in the FOLL_PIN sense).
-
-Okay, then we should really figure out if/how anonymous pages could end
-up here. I assume they can't, really. But let's see :)
-
-
--- 
-Thanks,
-
-David / dhildenb
-
+Martin-=C3=89ric

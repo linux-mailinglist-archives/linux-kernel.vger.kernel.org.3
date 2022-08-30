@@ -2,111 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F63B5A5EC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:57:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C4625A5ECC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbiH3I5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:57:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
+        id S230076AbiH3JA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbiH3I5a (ORCPT
+        with ESMTP id S229716AbiH3JAY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:57:30 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A7A69E11B
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:57:28 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id z25so14593745lfr.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:57:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=GqxXJYLcgxzpP2ZXiJpKYao0UsYj8w9DXe+9ym7gme0=;
-        b=ujObYb7BZjSY2DG1cWtiXE+XefTdW9gkANM8ivM/MyZaWp2WACtiRtjyn9khuMY6dL
-         7xUWQE/PGwBxSRXLV9PYIOx6nGWmv+nQ3T1/vQnrHh8AwYM+oNFlit+m23uReoNY1LCQ
-         bp41qS+zVwBwi7JDyvD29HsZ9GPn12z10Dm9eP49yjHEBVJWyO/XCpu9UMxdd5B2/Y4M
-         28dCWyzz+s01uq9wDqUJGS58VnQRCtUsghnGTwjqaGFj9zUgkUfQQ92Zl3A9CUWGZW98
-         4oOXfroo9QygAIsAaCszAk/SlpVh5P3h7kghynKiDVCGlt0b814ZRJrxokUIATYQXzak
-         NbTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=GqxXJYLcgxzpP2ZXiJpKYao0UsYj8w9DXe+9ym7gme0=;
-        b=oid6OEdIHsalp6mKwFtdqLvJ4H560YNykckItLhef2fJG3ICOaHmzXlMotdQ+CQuSP
-         cqX7v0eMA6icKESPB8HuQ/man0IbwUKhjfw8gJUAI9D0u6gUjwri2oWLKzm8w9yxhGsa
-         W5I81uafYthBKemXcU2hWrhAPD+reU31h2tevGNQi40Xiit9p4At+kD9Eo/Vv1jDswDR
-         T9PGUoEPf+DpbZyIHwf2Qz9nR3T/FvP0O7+2fRhkoo9NpwEe+JkbCiMRiCBF31cGw5Dr
-         f3F0i21NIuwgod7KiVsb3pmS+QeaeTx+Wvx59rVh2VJlWKExFvCU1BoiicPWvhMDr263
-         T5og==
-X-Gm-Message-State: ACgBeo3+IsYuPi876Es1shEpu/jVv2Jy55ljcYVIzmjWXNI1PWWnt0os
-        9ZAyj60tgEUak53G+KdLzln9Nw==
-X-Google-Smtp-Source: AA6agR4EU+9shH21zvi7esssrpBh2nzV77A/AczGVMGQGOf/eJ1aqB+K9adBP6pNavBwjlUVXcwY3w==
-X-Received: by 2002:a05:6512:108f:b0:494:7299:7152 with SMTP id j15-20020a056512108f00b0049472997152mr1954983lfg.514.1661849846799;
-        Tue, 30 Aug 2022 01:57:26 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id c9-20020a2e9d89000000b002655fb689a6sm718889ljj.139.2022.08.30.01.57.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 01:57:26 -0700 (PDT)
-Message-ID: <40577a34-6046-a10b-e444-4fb36d13e8e6@linaro.org>
-Date:   Tue, 30 Aug 2022 11:57:25 +0300
+        Tue, 30 Aug 2022 05:00:24 -0400
+Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403862127E;
+        Tue, 30 Aug 2022 02:00:18 -0700 (PDT)
+Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
+        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1oSx6T-00GeWo-DQ; Tue, 30 Aug 2022 19:00:14 +1000
+Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Tue, 30 Aug 2022 17:00:13 +0800
+Date:   Tue, 30 Aug 2022 17:00:13 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Ignat Korchagin <ignat@cloudflare.com>
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        linux-crypto <linux-crypto@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel-team <kernel-team@cloudflare.com>
+Subject: Re: [PATCH] crypto: akcipher - default implementations for setting
+ private/public keys
+Message-ID: <Yw3Rneo6Ik1QEfbG@gondor.apana.org.au>
+References: <20220729165954.991-1-ignat@cloudflare.com>
+ <Yv9dvvy0rK/1T0sU@gondor.apana.org.au>
+ <CALrw=nEh7LX3DSCa3FTu8BYr4QWx+W2h3Jei9Qo67+XXH-Vegw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH V3 1/2] dt-bindings: fsl-imx-sdma: Convert imx sdma to DT
- schema
-Content-Language: en-US
-To:     Joy Zou <joy.zou@nxp.com>
-Cc:     shengjiu.wang@nxp.com, vkoul@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220830081839.1201720-1-joy.zou@nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830081839.1201720-1-joy.zou@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CALrw=nEh7LX3DSCa3FTu8BYr4QWx+W2h3Jei9Qo67+XXH-Vegw@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 11:18, Joy Zou wrote:
-> Convert the i.MX SDMA binding to DT schema format using
-> json-schema. In addition, add new peripheral types HDMI
-> Audio.
-> 
-> when run dtbs_check will occur nodename not match issue
-> because the old dts nodename can't match new rule. I have
-> modified thoes old dts, and will upstream in the near future.
-> 
-> Signed-off-by: Joy Zou <joy.zou@nxp.com>
-> ---
-> Changes since (implicit) v2:
-> modify the commit message in patch v3.
-> modify the filename in patch v3.
-> modify the maintainer in patch v3.
-> delete the unnecessary comment in patch v3.
-> modify the compatible and run dt_binding_check and
-> dtbs_check in patch v3.
-> add clocks and clock-names property in patch v3.
-> delete the reg description and add maxItems in patch v3.
-> delete the interrupts description and add maxItems in patch v3.
-> add ref for gpr property.
-> modify the fsl,sdma-event-remap ref type and add items
-> in patch v3.
-> delete consumer example in patch v3.
+On Mon, Aug 29, 2022 at 11:48:23AM +0100, Ignat Korchagin wrote:
+>
+> I can only elaborate here as I didn't encounter any real-world
+> use-cases, but may assume some limited crypto hardware device, which
+> may somehow "encourage" doing public key operations in software and
+> providing only "private-key" operations due to its limited resources.
 
-This is patch 1/2. Where is 2/2?
+In general if a hardware is missing a piece of the functinoality
+required by the API then it should implement a software fallback.
 
-Best regards,
-Krzysztof
+The only time such a NULL helper would make sense if an algorithm
+had no public key.
+
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt

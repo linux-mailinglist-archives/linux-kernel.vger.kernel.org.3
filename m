@@ -2,91 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EB7A5A60BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:27:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCB285A60BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:28:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbiH3K1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
+        id S229941AbiH3K2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229730AbiH3K1h (ORCPT
+        with ESMTP id S229490AbiH3K2K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:27:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4A661A07C;
-        Tue, 30 Aug 2022 03:27:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 70C98614CC;
-        Tue, 30 Aug 2022 10:27:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F40FC433C1;
-        Tue, 30 Aug 2022 10:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661855253;
-        bh=NzwhEaBJ4IOFNkpz7IFnyFmSrONqw0D+AKDzNV7uN/Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VNm5r1x0PvLchegLQEwxCiIPruSdG/UMoKKhhCZi8yphv4z0yGEDjOYJaEzknqiOL
-         LK/XFJgEnb9waGQAsKmhTpsEE7VobsC2ynAdxk8/EvXPI06MKnyBriQotuh97CJyo/
-         NR6/ChInRbVRQbznnE4lzxHGV7NxUZmWWQG2hiO/CHEaL7Ak2mCY5BfFNAf2/IbQSG
-         zqcU0mdD0aBrAsXG6dk/jjGPwVbO3G10KhVANqqBZ6ujB8azOx0XDCMMKHPz72L3si
-         7TeecoVWs5P0wLPZwjvDSAtvkUojVkBDxFLn7PTUg6OPShZdIdufqgkuqd0yCXCZH1
-         iV1k0gcMyOUJg==
-Date:   Tue, 30 Aug 2022 11:27:31 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Wei Yongjun <weiyongjun1@huawei.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org
-Subject: Re: [PATCH -next 3/4] spi: mockup: Add runtime device tree overlay
- interface
-Message-ID: <Yw3mE1UX1z/fGSBL@sirena.org.uk>
-References: <20220826144341.532265-1-weiyongjun1@huawei.com>
- <20220826144341.532265-4-weiyongjun1@huawei.com>
+        Tue, 30 Aug 2022 06:28:10 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537C79D645
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 03:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=iVRqb6pvYoEPCs3UsIknWmZQWN73wQEyaT6OK3Lynb4=; b=e36ywwCk/qloQi5u7GDXWcmGUm
+        cv9tIADKqkkFFkA76US3eMzLIsceik6ifT5qlEDIOifT+yDDvf8CtKASL7gf1FkltxSnGxQYdmKPp
+        Ujb8hjIhv39numbFGMz0InLFgq2eDuW7kWVf4h64MEO1dXFgMvGGKv2uvH5sJWG6DY7EWY683wbeJ
+        NhPcod2oQeAw2o+PXtlxtVtrMMWqPEaAvw6cwcUNnLVgjx9m2+4niVbXukp9F6ElY0gELgxCFsiLb
+        WUMNb025C2Sj37SC9a1JXuOBJKYZRvtup7SjZH/dLyUpUW3EpY62Lk470NhW/HjAmmVvdjyKFdvB/
+        c1GOmHgg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33996)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oSyTV-0002bP-89; Tue, 30 Aug 2022 11:28:05 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oSyTS-0001Qm-OW; Tue, 30 Aug 2022 11:28:02 +0100
+Date:   Tue, 30 Aug 2022 11:28:02 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        patches@armlinux.org.uk, Saravana Kannan <saravanak@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v2] ARM: Add sanity check for dev->periphid in
+ amba_probe()
+Message-ID: <Yw3mMrx0oJjLGVN0@shell.armlinux.org.uk>
+References: <20220830065413.638-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wxSWXB32qDsSatsV"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220826144341.532265-4-weiyongjun1@huawei.com>
-X-Cookie: Necessity is a mother.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220830065413.638-1-thunder.leizhen@huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 30, 2022 at 02:54:13PM +0800, Zhen Lei wrote:
+> Commit f2d3b9a46e0e ("ARM: 9220/1: amba: Remove deferred device addition")
+> forcibly invokes device_add() even if dev->periphid is not ready. Although
+> it will be remedied in amba_match(): dev->periphid will be initialized
+> if everything is in place; Otherwise, return -EPROBE_DEFER to block
+> __driver_attach() from further execution. But not all drivers have .match
+> hook, such as pl031, the dev->bus->probe will be called directly in
+> __driver_attach(). Unfortunately, if dev->periphid is still not
+> initialized, the following exception will be triggered.
 
---wxSWXB32qDsSatsV
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Please check whether 9229/1 fixes this issue for you.
 
-On Fri, Aug 26, 2022 at 02:43:40PM +0000, Wei Yongjun wrote:
+http://www.armlinux.org.uk/developer/patches/download.php?id=9229/1
 
-> Add a runtime device tree overlay interface for device need dts file.
-> With it its possible to use device tree overlays without having to use
-> a per-platform overlay manager.
+Thanks.
 
-Why would an entirely virtual device like this need to appear in
-DT?  DT is supposed to be a hardware description and this clearly
-isn't hardware, nor is it something we're providing to a VM.
-
---wxSWXB32qDsSatsV
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMN5hMACgkQJNaLcl1U
-h9D/Bwf/aef79RHV/G5TkjWiI1kbn0b9uY3uoZKV9xk9eBNMXd13sjvf6WhmtUmz
-KCG7q3O7XpyseM6HiReyzkMHaYPxrv7KaO6i8FUJgkhF/TFoe6s+IQXNu5M1pRhp
-x+t85j49FlEwb6Z3/pjN0EBibcabsngLlCmDft6H73doof+BQqOVBJbIVyPjBrFd
-FNcadq56ZGwYLHAXl/lBL/y1G2Z6eJxkcoXPNaYF9NEraCEgd11rdFkF+vXUy/16
-mUR6go79EsBPw37/QeSi3WCkajG8YJG+6/sdM5icdW6yp9w6afsDB5gZpy+eGvCd
-JD8Xd1s5I17XCn2fktJDBzjwEs8HCQ==
-=aD7p
------END PGP SIGNATURE-----
-
---wxSWXB32qDsSatsV--
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

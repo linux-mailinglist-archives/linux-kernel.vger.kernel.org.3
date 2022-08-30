@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B555A637B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34B775A637F
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229560AbiH3Mgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S229936AbiH3Mg4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:36:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbiH3Mgh (ORCPT
+        with ESMTP id S229504AbiH3Mgi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:36:37 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA50E01EA
+        Tue, 30 Aug 2022 08:36:38 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A58E116D
         for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:36:37 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4MH6Fj29qJzHnVZ;
-        Tue, 30 Aug 2022 20:34:49 +0800 (CST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MH6CY57dmzkWTX;
+        Tue, 30 Aug 2022 20:32:57 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 30 Aug
@@ -26,9 +26,9 @@ From:   Miaohe Lin <linmiaohe@huawei.com>
 To:     <akpm@linux-foundation.org>, <naoya.horiguchi@nec.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH 4/6] mm, hwpoison: avoid unneeded page_mapped_in_vma() overhead in collect_procs_anon()
-Date:   Tue, 30 Aug 2022 20:36:02 +0800
-Message-ID: <20220830123604.25763-5-linmiaohe@huawei.com>
+Subject: [PATCH 5/6] mm, hwpoison: check PageTable() explicitly in hwpoison_user_mappings()
+Date:   Tue, 30 Aug 2022 20:36:03 +0800
+Message-ID: <20220830123604.25763-6-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220830123604.25763-1-linmiaohe@huawei.com>
 References: <20220830123604.25763-1-linmiaohe@huawei.com>
@@ -48,34 +48,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If vma->vm_mm != t->mm, there's no need to call page_mapped_in_vma() as
-add_to_kill() won't be called in this case. Move up the mm check to avoid
-possible unneeded calling to page_mapped_in_vma().
+PageTable can't be handled by memory_failure(). Filter it out explicitly in
+hwpoison_user_mappings(). This will also make code more consistent with the
+relevant check in unpoison_memory().
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
 ---
- mm/memory-failure.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ mm/memory-failure.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/mm/memory-failure.c b/mm/memory-failure.c
-index 69c4d1b48ad6..904c2b6284a4 100644
+index 904c2b6284a4..fb6a10005109 100644
 --- a/mm/memory-failure.c
 +++ b/mm/memory-failure.c
-@@ -521,11 +521,11 @@ static void collect_procs_anon(struct page *page, struct list_head *to_kill,
- 		anon_vma_interval_tree_foreach(vmac, &av->rb_root,
- 					       pgoff, pgoff) {
- 			vma = vmac->vma;
-+			if (vma->vm_mm != t->mm)
-+				continue;
- 			if (!page_mapped_in_vma(page, vma))
- 				continue;
--			if (vma->vm_mm == t->mm)
--				add_to_kill(t, page, FSDAX_INVALID_PGOFF, vma,
--					    to_kill);
-+			add_to_kill(t, page, FSDAX_INVALID_PGOFF, vma, to_kill);
- 		}
- 	}
- 	read_unlock(&tasklist_lock);
+@@ -1406,7 +1406,7 @@ static bool hwpoison_user_mappings(struct page *p, unsigned long pfn,
+ 	 * Here we are interested only in user-mapped pages, so skip any
+ 	 * other types of pages.
+ 	 */
+-	if (PageReserved(p) || PageSlab(p))
++	if (PageReserved(p) || PageSlab(p) || PageTable(p))
+ 		return true;
+ 	if (!(PageLRU(hpage) || PageHuge(p)))
+ 		return true;
 -- 
 2.23.0
 

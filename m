@@ -2,161 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E52235A5DD1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5CD5A5DD4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:15:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230377AbiH3IMY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:12:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60256 "EHLO
+        id S230356AbiH3IO6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:14:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbiH3IMW (ORCPT
+        with ESMTP id S229472AbiH3IO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:12:22 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED247AA4EC
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:12:19 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id b196so302172pga.7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=MBk2nnm5jPvR2jKN1FsnZ000vs/LFS6W/sdktL/Mvis=;
-        b=OEs/g0n5T5cy1cL+p7vJ0Swo6MllX5g3m9QeFGFwvGTIIkDu75xZuz8JekMcfhFFOQ
-         Unu1LxWbmmfGY60Z2Z0A3s+0azKTXADtX8kJrW+Kt//8lC2KKvdke1l2s17mixbfrYnp
-         f2J58ccrvoi0OJ6RcDWQi3nj+nPjZgKny39zPR4JjGTLXBZ/KptxJoT5MwJvNhKCHxdo
-         cKx0Tc4c5rgL65QccEE9dGwH2sTOPpHOd42zHCwOdt+owbYru0VprjZVpHkOoojm3hHY
-         0w2QvSt/Wj2SC7dTStMmjFdWlxA5LGLxhk241ymQcpKGQhT6LrZ4s30qp8HKIsNIou26
-         XM1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=MBk2nnm5jPvR2jKN1FsnZ000vs/LFS6W/sdktL/Mvis=;
-        b=wdC9An0keDvLRd74yIr1LQETpzIVsoa0b9MEdmtf7fXCcqMBsNvmijQTzT9498LYQZ
-         rJY3iaFsKsHU/U0VoYeeQiX2w29jvrtlOu3a8lC+yODMXmYDDKeqCE03wyF66RPQzwBn
-         Wh48elavU9JqZ1R0pZetKKFJ0ZfNnLkq48MrhDufEf5NT6bV73yQu58Hy7agtEbtLEf9
-         jbaqm1KyFB7ZqrcXtkbri6aohP8PmQei68rDVNOhBhn0PdOCkcfHmjhdquzo3HTSeKsp
-         YTQ3mlkBEFYQM4jhZvfSeC7wVN26SUoH6n9uaD6JOJzEYrFp1blpE1J12q/REzaPUYmD
-         xbgQ==
-X-Gm-Message-State: ACgBeo2VOOXh3NO11ygYlrXHbQpjB+EGD8u8SvIVy0QB/HTl4UQcXP7G
-        nN0kOldi8zkarMhyDeEgtw1O
-X-Google-Smtp-Source: AA6agR7Y5gSLsvSjaAqtvLywlc0OurzraPk+YFwXJz0BZu7eNpBHItuWld0SzvQIFJsy/p94mODHXQ==
-X-Received: by 2002:a05:6a00:2489:b0:52f:9d31:c1ce with SMTP id c9-20020a056a00248900b0052f9d31c1cemr20380281pfv.51.1661847139352;
-        Tue, 30 Aug 2022 01:12:19 -0700 (PDT)
-Received: from localhost.localdomain ([117.193.209.245])
-        by smtp.gmail.com with ESMTPSA id cq2-20020a17090af98200b001fd8df95decsm5778832pjb.27.2022.08.30.01.12.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 01:12:18 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     linus.walleij@linaro.org, bjorn.andersson@linaro.org
-Cc:     robimarko@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maz@kernel.org, johan+linaro@kernel.org, steev@kali.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2] pinctrl: qcom: spmi-gpio: Make IRQCHIP immutable
-Date:   Tue, 30 Aug 2022 13:42:12 +0530
-Message-Id: <20220830081212.164709-1-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Aug 2022 04:14:56 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FEBA18A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:14:54 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BB0FA6601E8E;
+        Tue, 30 Aug 2022 09:14:51 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661847292;
+        bh=+3rbZqqmv73wMbeInDkzjcrs5wRlRORGTvNqVpAV+0I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PKsbGKjnzDW63fZqu8LsimuIi2gEpXHevnR6JOQMKXGeuVL1Ku7moeVX+5gvAJbVx
+         B+fcVa6ZbShM6bl2bW6Q/smdTRXmIQmJDOrAlqn3G6wOyuwFNgJLwvm2jZy2b0RK+U
+         Ooe+T551J4Of6uq3fT9QJ2T9TSMthdDRftUZ4Q0oMX+KKxemkc8i8iCaJX4cJZh0qu
+         PGUPQ7+x8ccE5y8kXsXo9RSB58sq5Eg1JtZ0m/AL5imr+uzomNK2C5ZjyhU+VrN75x
+         6yrAhUqPFJ8yhVC7a2VvIrlwAs+QwDmGQ1CRVjGpDFSRIcVrGW4cpQhRGODGPDEepT
+         TNpOMaTdldV2A==
+Message-ID: <f0cc5ea8-9fd8-dc77-e595-33973e315d28@collabora.com>
+Date:   Tue, 30 Aug 2022 10:14:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 3/6] iommu/mediatek: Add error path for loop of
+ mm_dts_parse
+Content-Language: en-US
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Will Deacon <will@kernel.org>
+Cc:     Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        iommu@lists.linux-foundation.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
+        libo.kang@mediatek.com, chengci.xu@mediatek.com,
+        youlin.pei@mediatek.com, anan.sun@mediatek.com,
+        xueqi.zhang@mediatek.com, Guenter Roeck <groeck@chromium.org>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+References: <20220824064306.21495-1-yong.wu@mediatek.com>
+ <20220824064306.21495-4-yong.wu@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220824064306.21495-4-yong.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The IRQCHIP implementation used inside the gpiochips are not supposed to
-be changed during runtime. So let's make the one inside the spmi-gpio
-gpiochip immutable.
+Il 24/08/22 08:43, Yong Wu ha scritto:
+> The mtk_iommu_mm_dts_parse will parse the smi larbs nodes. if the i+1
+> larb is parsed fail, we should put_device for the 0..i larbs.
+> 
+> There are two places need to comment:
+> 1) The larbid may be not linear mapping, we should loop whole
+>     the array in the error path.
+> 2) I move this line position: "data->larb_imu[id].dev = &plarbdev->dev;"
+>     That means set data->larb_imu[id].dev before the error path.
+>     then we don't need "platform_device_put(plarbdev)" again while
+>     probe_defer case. All depend on "put_device" in the error path in error
+>     cases.
+> 
+> Fixes: d2e9a1102cfc ("iommu/mediatek: Contain MM IOMMU flow with the MM TYPE")
+> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
+> ---
+>   drivers/iommu/mtk_iommu.c | 42 ++++++++++++++++++++++++++++-----------
+>   1 file changed, 30 insertions(+), 12 deletions(-)
+> 
+> diff --git a/drivers/iommu/mtk_iommu.c b/drivers/iommu/mtk_iommu.c
+> index 9c5902207bef..f63d4210043d 100644
+> --- a/drivers/iommu/mtk_iommu.c
+> +++ b/drivers/iommu/mtk_iommu.c
+> @@ -1053,8 +1053,10 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
+>   		u32 id;
+>   
+>   		larbnode = of_parse_phandle(dev->of_node, "mediatek,larbs", i);
+> -		if (!larbnode)
+> -			return -EINVAL;
+> +		if (!larbnode) {
+> +			ret = -EINVAL;
+> +			goto err_larbdev_put;
+> +		}
+>   
+>   		if (!of_device_is_available(larbnode)) {
+>   			of_node_put(larbnode);
+> @@ -1067,14 +1069,16 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
+>   
+>   		plarbdev = of_find_device_by_node(larbnode);
+>   		of_node_put(larbnode);
+> -		if (!plarbdev)
+> -			return -ENODEV;
+> +		if (!plarbdev) {
+> +			ret = -ENODEV;
+> +			goto err_larbdev_put;
+> +		}
+> +		data->larb_imu[id].dev = &plarbdev->dev;
+>   
+>   		if (!plarbdev->dev.driver) {
+> -			platform_device_put(plarbdev);
+> -			return -EPROBE_DEFER;
+> +			ret = -EPROBE_DEFER;
+> +			goto err_larbdev_put;
+>   		}
+> -		data->larb_imu[id].dev = &plarbdev->dev;
+>   
+>   		component_match_add(dev, match, component_compare_dev, &plarbdev->dev);
+>   		platform_device_put(plarbdev);
+> @@ -1082,8 +1086,10 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
+>   
+>   	/* Get smi-(sub)-common dev from the last larb. */
+>   	smi_subcomm_node = of_parse_phandle(larbnode, "mediatek,smi", 0);
+> -	if (!smi_subcomm_node)
+> -		return -EINVAL;
+> +	if (!smi_subcomm_node) {
+> +		ret = -EINVAL;
+> +		goto err_larbdev_put;
+> +	}
+>   
+>   	/*
+>   	 * It may have two level smi-common. the node is smi-sub-common if it
+> @@ -1097,8 +1103,10 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
+>   
+>   	pcommdev = of_find_device_by_node(smicomm_node);
+>   	of_node_put(smicomm_node);
+> -	if (!pcommdev)
+> -		return -EINVAL;
+> +	if (!pcommdev) {
+> +		ret = -EINVAL;
+> +		goto err_larbdev_put;
+> +	}
+>   	data->smicomm_dev = &pcommdev->dev;
+>   
+>   	link = device_link_add(data->smicomm_dev, dev,
+> @@ -1106,9 +1114,19 @@ static int mtk_iommu_mm_dts_parse(struct device *dev, struct component_match **m
+>   	platform_device_put(pcommdev);
+>   	if (!link) {
+>   		dev_err(dev, "Unable to link %s.\n", dev_name(data->smicomm_dev));
+> -		return -EINVAL;
+> +		ret = -EINVAL;
+> +		goto err_larbdev_put;
+>   	}
+>   	return 0;
+> +
+> +err_larbdev_put:
+> +	/* id may be not linear mapping, loop whole the array */
+> +	for (i = 0; i < MTK_LARB_NR_MAX; i++) {
 
-This fixes the below warning during boot:
-gpio gpiochip0: (c440000.spmi:pmic@0:gpio@c000): not an immutable chip, please consider fixing it!
+Since there may be a case in which the mapping is linear and we're doing teardown,
+I think it would be sensible to loop the other way around instead, from
+MTK_LARB_NR_MAX to 0.
 
-Separate callbacks need to be provided for irq_{mask/unmask} pointers since
-the callbacks are supposed to mask/unmask the corresponding parent IRQ in
-addition to changing the gpio_desc flags.
+Everything else looks good to me.
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
+Cheers,
+Angelo
 
-Changes in v2:
-
-* Added new callbacks for irq_{mask/unmask} for masking/unmasking the parent
-  IRQ that was missing in v1. (Thanks to Marc)
-* Modified the commit message accordingly.
-
- drivers/pinctrl/qcom/pinctrl-spmi-gpio.c | 38 +++++++++++++++++-------
- 1 file changed, 28 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-index ccaf40a9c0e6..d40e3b2d38cc 100644
---- a/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-+++ b/drivers/pinctrl/qcom/pinctrl-spmi-gpio.c
-@@ -171,7 +171,6 @@ struct pmic_gpio_state {
- 	struct regmap	*map;
- 	struct pinctrl_dev *ctrl;
- 	struct gpio_chip chip;
--	struct irq_chip irq;
- 	u8 usid;
- 	u8 pid_base;
- };
-@@ -985,6 +984,33 @@ static int pmic_gpio_populate_parent_fwspec(struct gpio_chip *chip,
- 	return 0;
- }
- 
-+static void pmic_gpio_irq_mask(struct irq_data *data)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+
-+	irq_chip_mask_parent(data);
-+	gpiochip_disable_irq(gc, data->hwirq);
-+}
-+
-+static void pmic_gpio_irq_unmask(struct irq_data *data)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(data);
-+
-+	irq_chip_unmask_parent(data);
-+	gpiochip_enable_irq(gc, data->hwirq);
-+}
-+
-+static const struct irq_chip spmi_gpio_irq_chip = {
-+	.name		= "spmi-gpio",
-+	.irq_ack	= irq_chip_ack_parent,
-+	.irq_mask	= pmic_gpio_irq_mask,
-+	.irq_unmask	= pmic_gpio_irq_unmask,
-+	.irq_set_type	= irq_chip_set_type_parent,
-+	.irq_set_wake	= irq_chip_set_wake_parent,
-+	.flags		= IRQCHIP_IMMUTABLE | IRQCHIP_MASK_ON_SUSPEND,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
-+};
-+
- static int pmic_gpio_probe(struct platform_device *pdev)
- {
- 	struct irq_domain *parent_domain;
-@@ -1078,16 +1104,8 @@ static int pmic_gpio_probe(struct platform_device *pdev)
- 	if (!parent_domain)
- 		return -ENXIO;
- 
--	state->irq.name = "spmi-gpio",
--	state->irq.irq_ack = irq_chip_ack_parent,
--	state->irq.irq_mask = irq_chip_mask_parent,
--	state->irq.irq_unmask = irq_chip_unmask_parent,
--	state->irq.irq_set_type = irq_chip_set_type_parent,
--	state->irq.irq_set_wake = irq_chip_set_wake_parent,
--	state->irq.flags = IRQCHIP_MASK_ON_SUSPEND,
--
- 	girq = &state->chip.irq;
--	girq->chip = &state->irq;
-+	gpio_irq_chip_set_chip(girq, &spmi_gpio_irq_chip);
- 	girq->default_type = IRQ_TYPE_NONE;
- 	girq->handler = handle_level_irq;
- 	girq->fwnode = of_node_to_fwnode(state->dev->of_node);
--- 
-2.25.1
+> +		if (!data->larb_imu[i].dev)
+> +			continue;
+> +		put_device(data->larb_imu[i].dev);
+> +	}
+> +	return ret;
+>   }
+>   
+>   static int mtk_iommu_probe(struct platform_device *pdev)
 

@@ -2,69 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 299AC5A6364
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F1BE5A636B
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:33:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbiH3M35 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:29:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60934 "EHLO
+        id S229671AbiH3MdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229878AbiH3M3t (ORCPT
+        with ESMTP id S229451AbiH3MdN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:29:49 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9877BF2420;
-        Tue, 30 Aug 2022 05:29:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1661862583; x=1693398583;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=yilvub0N+ZLWbVr8R2JtpvM3e6wJMcNccDNvxhh0vq8=;
-  b=fwXPq4zIvko2/HXWO6OU3e9g7C3o+mSHzOaRrgAfIeUnxSN+RWUbfCYf
-   vLCeuaIpbJRke3Rp8t2ClaEkovyBZ/CQgDFcjgK2fbbubEww+t7IQKLdL
-   ZFxf9xVOveW6+rA69CRIVSXeczABDcQ0VC58hYklOTe9YYtTAWLzAtllO
-   L1OuGNp08qfnKb+fqvOpLvQs/LXm0SgZDC0q50edSjVpnd8eQ9SB8o5Zf
-   ON/VW2dVs9rQ/nw1d0hIJjcusGWfFgb7NEuZNq5D1j3Kqg/TJSuLBB6yU
-   v9RYeLS2pRnnqM34gtJp50oYFK0DnqmqXv/qmqDZTstOe/fyg0P0cmtKp
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="111375763"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 30 Aug 2022 05:29:42 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 30 Aug 2022 05:29:40 -0700
-Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 30 Aug 2022 05:29:38 -0700
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        Tue, 30 Aug 2022 08:33:13 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC11EF9C6;
+        Tue, 30 Aug 2022 05:33:11 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27UCWxHq127102;
+        Tue, 30 Aug 2022 07:32:59 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1661862779;
+        bh=d64uRuElyXn+nnuwkRe6NcehSJcas6x/0Wpuh/pQkRc=;
+        h=From:To:CC:Subject:Date;
+        b=PugNvUNEOS2IWg18pBUSRIiwfxhqlql4QuVJxqHoCI+qPBmuUnoPCvjcaSI+x9X9i
+         HlkSwDy5+6iN8mXipb2sE2b3yea6f2yFRhTNcq+QcFQHLZkl19q4f5th1oZr3MDODH
+         KTPRFxb5eJNV5i5WJeYXS6rQEDfbe1q9WhtS6yk0=
+Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27UCWxso058939
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 30 Aug 2022 07:32:59 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Tue, 30
+ Aug 2022 07:32:58 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Tue, 30 Aug 2022 07:32:58 -0500
+Received: from uda0132425.dhcp.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27UCWua8067799;
+        Tue, 30 Aug 2022 07:32:56 -0500
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Hugh Breslin <hugh.breslin@microchip.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v4 5/5] riscv: dts: microchip: add the mpfs' fabric clock control
-Date:   Tue, 30 Aug 2022 13:28:56 +0100
-Message-ID: <20220830122855.2207752-6-conor.dooley@microchip.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220830122855.2207752-1-conor.dooley@microchip.com>
-References: <20220830122855.2207752-1-conor.dooley@microchip.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] arm64: dts: ti: k3-am642-sk: Add DT entry for onboard LEDs
+Date:   Tue, 30 Aug 2022 18:02:54 +0530
+Message-ID: <20220830123254.522222-1-vigneshr@ti.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,166 +65,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "fabric clocks" in current PolarFire SoC device trees are not
-really fixed clocks. Their frequency is set by the bitstream, so having
-them located in -fabric.dtsi is not a problem - they're just as "fixed"
-as the IP blocks etc used in the FPGA fabric.
-However, their configuration can be read at runtime (and to an extent
-they can be controlled, although the intended usage is static
-configurations set by the bitstream) through the system controller bus.
+From: Aparna M <a-m1@ti.com>
 
-In the v2209 reference design a single CCC (north-west corner) is
-enabled, using a 50 MHz off-chip oscillator as its reference.
+AM642 SK has 8 leds connected to tpic2810 onboard. Add support for these
+gpio leds.
 
-Updating to the v2209 reference design is required.
-
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Aparna M <a-m1@ti.com>
+Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
 ---
- .../dts/microchip/mpfs-icicle-kit-fabric.dtsi | 27 +++++++++------
- .../boot/dts/microchip/mpfs-icicle-kit.dts    |  4 +++
- .../dts/microchip/mpfs-polarberry-fabric.dtsi |  5 +++
- arch/riscv/boot/dts/microchip/mpfs.dtsi       | 34 +++++++++++++++++--
- 4 files changed, 58 insertions(+), 12 deletions(-)
+v3:
+Fix compile error due to missing header
+Fix whitespace issues
 
-diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
-index 0d28858b83f2..f17cb00df467 100644
---- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
-+++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
-@@ -2,14 +2,14 @@
- /* Copyright (c) 2020-2021 Microchip Technology Inc */
+v2: https://lore.kernel.org/all/20220629075859.6939-1-a-m1@ti.com/
+
+ arch/arm64/boot/dts/ti/k3-am642-sk.dts | 70 ++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-am642-sk.dts b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+index 2620469a7517..cc36b9368356 100644
+--- a/arch/arm64/boot/dts/ti/k3-am642-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-am642-sk.dts
+@@ -9,6 +9,7 @@
+ #include <dt-bindings/phy/phy.h>
+ #include <dt-bindings/gpio/gpio.h>
+ #include <dt-bindings/net/ti-dp83867.h>
++#include <dt-bindings/leds/common.h>
+ #include "k3-am642.dtsi"
  
  / {
--	compatible = "microchip,mpfs-icicle-reference-rtlv2203", "microchip,mpfs";
-+	compatible = "microchip,mpfs-icicle-reference-rtlv2209", "microchip,mpfs";
- 
- 	core_pwm0: pwm@41000000 {
- 		compatible = "microchip,corepwm-rtl-v4";
- 		reg = <0x0 0x41000000 0x0 0xF0>;
- 		microchip,sync-update-mask = /bits/ 32 <0>;
- 		#pwm-cells = <2>;
--		clocks = <&fabric_clk3>;
-+		clocks = <&ccc_nw CLK_CCC_PLL0_OUT0>;
- 		status = "disabled";
+@@ -150,6 +151,67 @@ wlan_en: regulator-2 {
+ 		vin-supply = <&com8_ls_en>;
+ 		gpio = <&main_gpio0 48 GPIO_ACTIVE_HIGH>;
  	};
++
++	led-controller {
++		compatible = "gpio-leds";
++
++		led-0 {
++			color = <LED_COLOR_ID_GREEN>;
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <1>;
++			gpios = <&exp2 0 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++		led-1 {
++			color = <LED_COLOR_ID_RED>;
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <2>;
++			gpios = <&exp2 1 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++		led-2 {
++			color = <LED_COLOR_ID_GREEN>;
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <3>;
++			gpios = <&exp2 2 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++		led-3 {
++			color = <LED_COLOR_ID_AMBER>;
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <4>;
++			gpios = <&exp2 3 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++		led-4 {
++			color = <LED_COLOR_ID_GREEN>;
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <5>;
++			gpios = <&exp2 4 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++		led-5 {
++			color = <LED_COLOR_ID_RED>;
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <6>;
++			gpios = <&exp2 5 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++		led-6 {
++			color = <LED_COLOR_ID_GREEN>;
++			function = LED_FUNCTION_INDICATOR;
++			function-enumerator = <7>;
++			gpios = <&exp2 6 GPIO_ACTIVE_HIGH>;
++			default-state = "off";
++		};
++		led-7 {
++			color = <LED_COLOR_ID_AMBER>;
++			function = LED_FUNCTION_HEARTBEAT;
++			function-enumerator = <8>;
++			linux,default-trigger = "heartbeat";
++			gpios = <&exp2 7 GPIO_ACTIVE_HIGH>;
++		};
++	};
+ };
  
-@@ -18,22 +18,29 @@ i2c2: i2c@44000000 {
- 		reg = <0x0 0x44000000 0x0 0x1000>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
--		clocks = <&fabric_clk3>;
-+		clocks = <&ccc_nw CLK_CCC_PLL0_OUT3>;
- 		interrupt-parent = <&plic>;
- 		interrupts = <122>;
- 		clock-frequency = <100000>;
- 		status = "disabled";
+ &main_pmx0 {
+@@ -330,6 +392,14 @@ exp1: gpio@70 {
+ 				  "VPP_LDO_EN", "RPI_PS_3V3_En",
+ 				  "RPI_PS_5V0_En", "RPI_HAT_DETECT";
  	};
- 
--	fabric_clk3: fabric-clk3 {
-+	refclk_ccc: cccrefclk {
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
--		clock-frequency = <62500000>;
- 	};
-+};
- 
--	fabric_clk1: fabric-clk1 {
--		compatible = "fixed-clock";
--		#clock-cells = <0>;
--		clock-frequency = <125000000>;
--	};
-+&ccc_nw {
-+	clocks = <&refclk_ccc>, <&refclk_ccc>, <&refclk_ccc>, <&refclk_ccc>,
-+		 <&refclk_ccc>, <&refclk_ccc>;
-+	clock-names = "pll0_ref0", "pll0_ref1", "pll1_ref0", "pll1_ref1",
-+		      "dll0_ref", "dll1_ref";
-+	status = "okay";
-+};
 +
-+&pcie {
-+	clocks = <&ccc_nw CLK_CCC_PLL0_OUT0>, <&ccc_nw CLK_CCC_PLL0_OUT1>,
-+		 <&ccc_nw CLK_CCC_PLL0_OUT3>;
-+	clock-names = "fic0", "fic1", "fic3";
- };
-diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-index f3f87ed2007f..e7bd564291d6 100644
---- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-+++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dts
-@@ -137,6 +137,10 @@ &refclk {
- 	clock-frequency = <125000000>;
++	exp2: gpio@60 {
++		compatible = "ti,tpic2810";
++		reg = <0x60>;
++		gpio-controller;
++		#gpio-cells = <2>;
++		gpio-line-names = "LED1","LED2","LED3","LED4","LED5","LED6","LED7","LED8";
++	};
  };
  
-+&refclk_ccc {
-+	clock-frequency = <50000000>;
-+};
-+
- &rtc {
- 	status = "okay";
- };
-diff --git a/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
-index 49380c428ec9..3beb450b4259 100644
---- a/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
-+++ b/arch/riscv/boot/dts/microchip/mpfs-polarberry-fabric.dtsi
-@@ -14,3 +14,8 @@ fabric_clk1: fabric-clk1 {
- 		clock-frequency = <125000000>;
- 	};
- };
-+
-+&pcie {
-+	clocks = <&fabric_clk1>, <&fabric_clk1>, <&fabric_clk3>;
-+	clock-names = "fic0", "fic1", "fic3";
-+};
-diff --git a/arch/riscv/boot/dts/microchip/mpfs.dtsi b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-index 74493344ea41..1e92adf0094e 100644
---- a/arch/riscv/boot/dts/microchip/mpfs.dtsi
-+++ b/arch/riscv/boot/dts/microchip/mpfs.dtsi
-@@ -236,6 +236,38 @@ clkcfg: clkcfg@20002000 {
- 			#clock-cells = <1>;
- 		};
- 
-+		ccc_se: clock-controller@38010000 {
-+			compatible = "microchip,mpfs-ccc";
-+			reg = <0x0 0x38010000 0x0 0x1000>, <0x0 0x38020000 0x0 0x1000>,
-+			      <0x0 0x39010000 0x0 0x1000>, <0x0 0x39020000 0x0 0x1000>;
-+			#clock-cells = <1>;
-+			status = "disabled";
-+		};
-+
-+		ccc_ne: clock-controller@38040000 {
-+			compatible = "microchip,mpfs-ccc";
-+			reg = <0x0 0x38040000 0x0 0x1000>, <0x0 0x38080000 0x0 0x1000>,
-+			      <0x0 0x39040000 0x0 0x1000>, <0x0 0x39080000 0x0 0x1000>;
-+			#clock-cells = <1>;
-+			status = "disabled";
-+		};
-+
-+		ccc_nw: clock-controller@38100000 {
-+			compatible = "microchip,mpfs-ccc";
-+			reg = <0x0 0x38100000 0x0 0x1000>, <0x0 0x38200000 0x0 0x1000>,
-+			      <0x0 0x39100000 0x0 0x1000>, <0x0 0x39200000 0x0 0x1000>;
-+			#clock-cells = <1>;
-+			status = "disabled";
-+		};
-+
-+		ccc_sw: clock-controller@38400000 {
-+			compatible = "microchip,mpfs-ccc";
-+			reg = <0x0 0x38400000 0x0 0x1000>, <0x0 0x38800000 0x0 0x1000>,
-+			      <0x0 0x39400000 0x0 0x1000>, <0x0 0x39800000 0x0 0x1000>;
-+			#clock-cells = <1>;
-+			status = "disabled";
-+		};
-+
- 		mmuart0: serial@20000000 {
- 			compatible = "ns16550a";
- 			reg = <0x0 0x20000000 0x0 0x400>;
-@@ -480,8 +512,6 @@ pcie: pcie@2000000000 {
- 					<0 0 0 3 &pcie_intc 2>,
- 					<0 0 0 4 &pcie_intc 3>;
- 			interrupt-map-mask = <0 0 0 7>;
--			clocks = <&fabric_clk1>, <&fabric_clk1>, <&fabric_clk3>;
--			clock-names = "fic0", "fic1", "fic3";
- 			ranges = <0x3000000 0x0 0x8000000 0x20 0x8000000 0x0 0x80000000>;
- 			msi-parent = <&pcie>;
- 			msi-controller;
+ &main_i2c3 {
 -- 
-2.36.1
+2.37.2
 

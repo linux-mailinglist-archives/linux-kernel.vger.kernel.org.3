@@ -2,135 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E075A5EB7
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:56:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10E8B5A5EB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:56:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230342AbiH3I4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:56:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
+        id S230304AbiH3I4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiH3I4K (ORCPT
+        with ESMTP id S230226AbiH3I4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:56:10 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6767D7BB
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:56:09 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id v16so10517238wrm.8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:56:09 -0700 (PDT)
+        Tue, 30 Aug 2022 04:56:15 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1FB8D3FB
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:56:12 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id q16so10605856ljp.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:56:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=IQsYoJcJj+hrRt1cv36jHySIhXkSA0/HItyBCk3yloI=;
-        b=hVpKlmQSZ1poDiEgiEMuQb1JBdOXqUi05gHmK5W4i0sbjvZXOqtB2hR9/liRY4tSp4
-         nHKHFaukNBtGFOaqCCPATK+yCTPjOWsXYezL9CG1oninUcN+rcJ+RSDSM9mox2x/77Bl
-         iXGLwYKE9wzwSCY6b0EH/mZR+OP8pjJ6n3Gn6cxb4lm/Dr/HyNmDoaf+uAFZBBfjGH4m
-         KkRzQHjnLyijGX2Idr0u2NxhMCpzo12U3Kkz+Y1roEqjRDP+iY+8RN+Rw7cWqB+cYj+V
-         Ic3dj06WuQPG7iCsRYrNnt+MkN/GrfCibH6zkOp62dFoxckjOhtZn12VGYZY2oZNHTjA
-         Crgw==
+         :from:to:cc;
+        bh=yksgcHaH8yK2nL0/KktGbN00V41GBl96J/5UMeIcDaY=;
+        b=MiIh4A8LV+RAbbjdllOrCTzRQJalCXjENCi1YWUULbNDueGRtSEDZ+qnWGRkJkiyOD
+         Dy+A91s6x4frfWPG2NJ3jIzWP/ByZjFzH30mCCa7H+GtAfPa/0iKOtosR57wC4p5TYdT
+         j9Nas+5xRGYF5WBnjH8JWMuShunfxEOs3gcyi8SOis4bclqePvBRXkXy5SmppTq7D1Dm
+         iyaGmtXrdKMfVxMIRqaeHqz/NmmBZUFqbRaiyin45dQDTtOihs+WF6B01ngFp9492Qvr
+         g/YdyMqOxePjBLzeZU7Y3pCQpIAYZiKrYZU+CXCsbd3nQs3wVtVC+rR1/cjBEITICZQn
+         vlZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=IQsYoJcJj+hrRt1cv36jHySIhXkSA0/HItyBCk3yloI=;
-        b=jKMyQcL1oWncsOl4BhruL0hlyyNt3rJJ83IzMcJmAPj/lCg9rJPWOaLPVzJe8B71QN
-         qwTyMmukWqe89E4C0Y3HAP/VNehBPrV2BWxXJ9DenYXkXjCCto+OrNzfcKXEQJfofQdo
-         txSuvZL00J0SeH3jUvlZ5tTOEtD4S7eR7f6pUMJ3q5IVtM1z0E9ghy4+MpQ9bYIK94Ry
-         ZnvIPxLVjAbnkS1BNDBSyB1HnNWwXRNjrxpOZZXmcWX5yxl2z4bf6hKTOH2/4wySxjDB
-         /G+WNATcz6pXNuJ5SMyDr8PHK1Btba3f4ZdFPpGUruy9MqFD5y6G6WfS7N2JBb5ho49P
-         68Jw==
-X-Gm-Message-State: ACgBeo0elff+iAvFU6I7xLXkJdyr0hIsuKj5IGxkmnVwLX7i0wT/+b1M
-        Teojah+DUsM0TcGmUQYCCiQDYjz8p+U=
-X-Google-Smtp-Source: AA6agR4w6N5w3ZMDmfqrj94y8/JEIVQqlq8DKQ3N+FsJmqb6FNHnL33qPTQTuhl6g94rqWakjwryPg==
-X-Received: by 2002:a05:6000:156b:b0:222:c789:cb2d with SMTP id 11-20020a056000156b00b00222c789cb2dmr8426597wrz.197.1661849767619;
-        Tue, 30 Aug 2022 01:56:07 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id i13-20020a05600c354d00b003a5f4fccd4asm11950542wmq.35.2022.08.30.01.56.06
+         :x-gm-message-state:from:to:cc;
+        bh=yksgcHaH8yK2nL0/KktGbN00V41GBl96J/5UMeIcDaY=;
+        b=zXc78rEIsacxv2S4uN7JS33H2G/5cU3dBdMr+qvlx+lw4zkNRfCrdqwFBNWPUeqYo6
+         eSBc97YM9SdMUZMI/gEM3XEa7Z6720PjO9OotWDuIe4335Ye6hY9G8+H4FTs5S1WNXI1
+         oExg6RvYHhs3PR5RKCAqS5Vm9GrvIuY+DocKuiXbe7hgVO27TFmmcYWUAd+Y5W1GmF1K
+         ZUd6IRsKVRRuJ0F/2SWjmeH1y1tei4HIv/TeEmkzv1wFhe5e+q6V8Amy/tpo5YPC73AT
+         HLWjxYDQogJTEPJwHzbBBd7RoF8o7+hkPaLf8cj3mHnrxgQ3VmEheZ9FO81I2TBTUBi5
+         3AaA==
+X-Gm-Message-State: ACgBeo2T/VMW9BbyIR5Zh5RYAfyObfWqA2tp7C6GAUiekhY++ySU+cg8
+        5UuMgSHsqcjMsxXQK8tdt6IoeQ==
+X-Google-Smtp-Source: AA6agR4zZBU15rr+qcZ9goA/DUAtlU7TAZ0VTwAna0Yhnj/neDvMXGtyCwyH92/wxaQkndWDniibrA==
+X-Received: by 2002:a2e:bf29:0:b0:25f:fbd5:b693 with SMTP id c41-20020a2ebf29000000b0025ffbd5b693mr7114274ljr.372.1661849770702;
+        Tue, 30 Aug 2022 01:56:10 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id f10-20020a056512360a00b004946e72711bsm539608lfs.76.2022.08.30.01.56.09
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 01:56:06 -0700 (PDT)
-Message-ID: <80280240-8769-ea25-6348-b5f60d34ef5f@gmail.com>
-Date:   Tue, 30 Aug 2022 10:56:05 +0200
+        Tue, 30 Aug 2022 01:56:10 -0700 (PDT)
+Message-ID: <45004d0c-e470-72e3-fad6-e8c48aefac1b@linaro.org>
+Date:   Tue, 30 Aug 2022 11:56:08 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] soc: mediatek: mtk-svs: Explicitly include bitfield
- header
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: Add sc7180-pazquel360
 Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     kernel@collabora.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20220829204439.3748648-1-nfraprado@collabora.com>
- <5a8a2b0d-fa7c-e8c6-bb04-152f8c17aa76@gmail.com>
- <ea7b7b08-cb9a-b6a3-bc7a-050616696e89@collabora.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <ea7b7b08-cb9a-b6a3-bc7a-050616696e89@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+To:     Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Henry Sun <henrysun@google.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Bob Moragues <moragues@chromium.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220830083740.v2.1.Ic4d4e0777115011544dbc2ab07ed4d7b408c003a@changeid>
+ <20220830083740.v2.2.I5bd646de8fac81eb23c8bcf1cbe21125bf9638f3@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220830083740.v2.2.I5bd646de8fac81eb23c8bcf1cbe21125bf9638f3@changeid>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 30/08/2022 10:06, AngeloGioacchino Del Regno wrote:
-> Il 30/08/22 09:37, Matthias Brugger ha scritto:
->>
->>
->> On 29/08/2022 22:44, Nícolas F. R. A. Prado wrote:
->>> Commit a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros
->>> where possible") introduced the use of FIELD_GET and FIELD_PREP macros,
->>> which are defined in the bitfield header. Add an explicit include for it
->>> so we're sure to have the symbols defined independently of the config.
->>>
->>> Fixes: a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros 
->>> where possible")
->>> Reported-by: kernel test robot <lkp@intel.com>
->>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->>>
->>> ---
->>>
->>>   drivers/soc/mediatek/mtk-svs.c | 1 +
->>>   1 file changed, 1 insertion(+)
->>>
->>> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
->>> index 64dba9f830f3..f67f3e971653 100644
->>> --- a/drivers/soc/mediatek/mtk-svs.c
->>> +++ b/drivers/soc/mediatek/mtk-svs.c
->>> @@ -3,6 +3,7 @@
->>>    * Copyright (C) 2022 MediaTek Inc.
->>>    */
->>> +#include <linux/bitfield.h>
->>>   #include <linux/bits.h>
->>
->> What do we need the bits.h for?
->>
+On 30/08/2022 11:42, Yunlong Jia wrote:
+> Create first version device tree for pazquel360
+> pazquel360 is convertible and the pazquel it is based on is clamshell.
+> sku 20 for lte & wifi
+> sku 21 for wifi only
+> sku 22 for lte w/o esim & wifi
 > 
-> bits.h has the definition for GENMASK(h, l), used in this file :-)
+> Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
+> ---
 > 
+> Changes in v2:
+> - Remove the touchscreen setting, as a follow-up patch
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 
-Right, seems that some other include includes bits.h as well, as compilation 
-does not break. But we probably don't want to rely on that for the future.
+It's still wrong place for Rb tag. Apply this patch by yourself and
+check the result...
 
-Applied thanks.
-
-> Cheers,
-> Angelo
-> 
->> Regards,
->> Matthias
->>
->>>   #include <linux/clk.h>
->>>   #include <linux/completion.h>
-> 
-> 
+Best regards,
+Krzysztof

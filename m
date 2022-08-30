@@ -2,59 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 387A65A5EF5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:13:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D53C5A5EF8
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiH3JNL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40298 "EHLO
+        id S230483AbiH3JNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiH3JNJ (ORCPT
+        with ESMTP id S231197AbiH3JN0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:13:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A8309925D;
-        Tue, 30 Aug 2022 02:13:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9950C615C4;
-        Tue, 30 Aug 2022 09:13:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AC02C433C1;
-        Tue, 30 Aug 2022 09:13:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661850787;
-        bh=F8bubcRuzeMrEHgYHWC3hGXqCd0s4CSYz++LFEj9Eqo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GIUsIl6mfkJSlIWc4SThl1nS8ATmzbeXEzs65MaoThS0v371lug1gIpGpx40vxEpJ
-         UYD07+i0iSPJb3WgbwxoAmFbZxxhcoFnGxxjPPLJNiFO5mjtC7XqMjG4szS6qlhNYd
-         /K7KbBl3bKKwc35504sjk3nMudGYzl5gqcpa6B+MZTE7p0SREuiLs+dn7V+d7BWv20
-         r+fSHkYmG2ecd3q42BFQnI+NZpKFrg32XeODzCGvYNswZYpFIUpgI7/jeeowkScZNr
-         tZ6Rj5/roeOyfbLWzNF7dgJ58GGrS5rP4zZ4nqtmN79v+y8RJf5evCN+F+1RvNpWGb
-         HyPd7hW/h6y2w==
-Date:   Tue, 30 Aug 2022 12:13:02 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Jinpu Wang <jinpu.wang@ionos.com>
-Cc:     Christoph Hellwig <hch@lst.de>, jgg@ziepe.ca,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] RDMA: dma-mapping: Return an unsigned int from
- ib_dma_map_sg{,_attrs}
-Message-ID: <Yw3UnqZlv0Wnih7E@unreal>
-References: <20220826095615.74328-1-jinpu.wang@ionos.com>
- <20220826095615.74328-3-jinpu.wang@ionos.com>
- <YwtM+/nB1F6p1Ey3@unreal>
- <CAMGffEmffkW0fHrjx84gQ6FnWuwriRUg=HSdwzU4W_sZLdiT7g@mail.gmail.com>
- <Ywyr0+b350SZrznw@unreal>
- <CAMGffE=m_Na9n-oHkxm6C2C1sC3U9LkN_7k8Xx9g9SG2ifDjrw@mail.gmail.com>
- <Yw3D7TVgkANv7PDI@unreal>
- <CAMGffEmyhXEN99_yJpiGJFOtAKGEThz=c2MLw8qbWVn70XnSdA@mail.gmail.com>
+        Tue, 30 Aug 2022 05:13:26 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C18CE330
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:13:21 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id m7so5723082lfq.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:13:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=85ddw98iKNFdMuScvqYcAwOPIMZilnqs6BhTFJ5fmQo=;
+        b=RxXyqq8+0Sxkf95IUpCyHZevRPKgc/uV5kRhgHRSayzKqoncb1jP95k6uoqpB+Q7Ih
+         XbDvlK7PdYc4wBljUVJm4e7bC6hgCSPMsCRiqAQT5lD/IYU2O6yQR6uF29h0OwYG5Jft
+         lW+dJJNbBhSClZ4dtreIM5qESkCbodSoEsmYEC0Jt0OghwP+Au7FMDroyDf9vY38R105
+         jANwEVyNnrniE9bcocSlxFMaPHqTTp+j+S5uXy9c/c7zsy9JKWQK2j1uet5Td2os0RoZ
+         hWLBySci78bEdowzZO29kvGhhxBSGFoGJHHxxIFzHWfj9GK78HFt/hsI9rADW/JLcgVD
+         Iilw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=85ddw98iKNFdMuScvqYcAwOPIMZilnqs6BhTFJ5fmQo=;
+        b=gn3l/ZlOFDjxc8DV/B45gNukV6giwMOddmUcIFny1u8orLvZv5NbarT3hBg6znQSVF
+         KARXSB88TBMhOYqFGPsHX21QnkJny/JmQwWy0ykj+jdHVTH3PHRhOqNz1t/hOvMRl+4B
+         9XONnzEJVLVfouDyb3+BrTQ9fwC1mB5bFTEkXgKiMBX1pybZrYgt0hJ00RWSQTeTET+S
+         5JJFrrUg9vzd2t1FJh6Ae8beI9jMF765wWxcBCuTE+TIi5fLgYQiEjflf8uWkD7W0MM/
+         Yw9ABlX9JgB/kCeziqkG4UYu3dnEFnrIW/4UvEv4a2T28pyocbaanEISAjQKvjOvWrR1
+         mMYA==
+X-Gm-Message-State: ACgBeo15M36iUwaprGg3B+v1A0LDTMHFefFOnqQNPdNYp74KCqMjntHX
+        5FNCkhqgkxSSnIaZXQ2ANNMBdw==
+X-Google-Smtp-Source: AA6agR6Epke9TZidjS+t7TVXu/nI8IDXuv2Zcj4qF33M58gVrL9aocLEX9bOQfB3mw2k5CxN4EZ2zg==
+X-Received: by 2002:a05:6512:4012:b0:492:c667:c899 with SMTP id br18-20020a056512401200b00492c667c899mr7177797lfb.48.1661850799778;
+        Tue, 30 Aug 2022 02:13:19 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id v1-20020a05651203a100b0049482adb3basm11931lfp.63.2022.08.30.02.13.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 02:13:19 -0700 (PDT)
+Message-ID: <e668a86b-f47b-bc42-440a-a74591827ccb@linaro.org>
+Date:   Tue, 30 Aug 2022 12:13:18 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMGffEmyhXEN99_yJpiGJFOtAKGEThz=c2MLw8qbWVn70XnSdA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 3/3] arm64: dts: Modify gamma compatible for mt8195
+Content-Language: en-US
+To:     "zheng-yan.chen" <zheng-yan.chen@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        "Jason-JH . Lin" <jason-jh.lin@mediatek.com>,
+        Singo Chang <singo.chang@mediatek.com>,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220830063929.13390-1-zheng-yan.chen@mediatek.com>
+ <20220830063929.13390-4-zheng-yan.chen@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220830063929.13390-4-zheng-yan.chen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,120 +84,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 10:23:46AM +0200, Jinpu Wang wrote:
-> On Tue, Aug 30, 2022 at 10:01 AM Leon Romanovsky <leon@kernel.org> wrote:
-> >
-> > On Mon, Aug 29, 2022 at 03:19:14PM +0200, Jinpu Wang wrote:
-> > > On Mon, Aug 29, 2022 at 2:06 PM Leon Romanovsky <leon@kernel.org> wrote:
-> > > >
-> > > > On Mon, Aug 29, 2022 at 11:40:40AM +0200, Jinpu Wang wrote:
-> > > > > On Sun, Aug 28, 2022 at 1:09 PM Leon Romanovsky <leon@kernel.org> wrote:
-> > > > > >
-> > > > > > On Fri, Aug 26, 2022 at 11:56:15AM +0200, Jack Wang wrote:
-> > > > > > > Following 2a047e0662ae ("dma-mapping: return an unsigned int from dma_map_sg{,_attrs}")
-> > > > > > > change the return value of ib_dma_map_sg{,attrs} to unsigned int.
-> > > > > > >
-> > > > > > > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > > > > > > Cc: Leon Romanovsky <leon@kernel.org>
-> > > > > > > Cc: Christoph Hellwig <hch@lst.de>
-> > > > > > > Cc: linux-rdma@vger.kernel.org
-> > > > > > > Cc: linux-kernel@vger.kernel.org
-> > > > > > >
-> > > > > > > Signed-off-by: Jack Wang <jinpu.wang@ionos.com>
-> > > > > > > ---
-> > > > > > >  drivers/infiniband/core/device.c | 2 +-
-> > > > > > >  include/rdma/ib_verbs.h          | 6 +++---
-> > > > > > >  2 files changed, 4 insertions(+), 4 deletions(-)
-> > > > > >
-> > > > > > You forgot to change ib_dma_map_sgtable_attrs() and various
-> > > > > > ib_dma_map_sg*() callers.
-> > > > > No, they are different.
-> > > > > ib_dma_map_sgtable_attrs and dma_map_sgtable return negative on errors.
-> > > >
-> > > > It is not the point. You changed ib_dma_virt_map_sg() to be unsigned,
-> > > > so now the following lines are not correct:
-> > > >
-> > > >   4138         int nents;
-> > > >   4139
-> > > >   4140         if (ib_uses_virt_dma(dev)) {
-> > > >   4141                 nents = ib_dma_virt_map_sg(dev, sgt->sgl, sgt->orig_nents);
-> > > >
-> > > > "int nents" should be changed to "unsigned int".
-> > > >
-> > > > Thanks
-> > > ok, I can do it.
-> > > just to check if we are on the same page:
-> > > For all the callers of ib_dma_map_sg,  would it be better to fix it
-> > > one patch per driver or do it in a single bigger patch.
-> > > I feel it's better to do it per driver, and there are drivers from
-> > > different subsystems e.g. nvme/rds/etc.
-> >
-> > I don't know, everything here looks not nice to me.
-> >
-> > After commit 2a047e0662ae ("dma-mapping: return an unsigned int from dma_map_sg{,_attrs}"),
-> > all callers left in limbo state where they expect that dma_map_sg{,_attrs} will return
-> > upto INT_MAX. However now, the API can return upto UINT_MAX, which is not the case now
-> > due to internal implementation of dma_map_sg_*(), but can be changed any second.
-> >
-> > Can we simply revert that commit and restore the "int" return type?
-> > I don't see any benefit in having "unsigned int" if compiler doesn't enforce it.
-> I feel different, the dma_map_sg api since the kernel 2.x, is
-> documented in DMA-API.txt[1]:
-> "
-> 
-> int
-> dma_map_sg(struct device *dev, struct scatterlist *sg,
-> int nents, enum dma_data_direction direction)
-> 
-> Returns: the number of physical segments mapped (this may be shorter
-> than <nents> passed in if some elements of the scatter/gather list are
-> physically or virtually adjacent and an IOMMU maps them with a single
-> entry).
-> 
-> Please note that the sg cannot be mapped again if it has been mapped once.
-> The mapping process is allowed to destroy information in the sg.
-> 
-> As with the other mapping interfaces, dma_map_sg can fail. When it
-> does, 0 is returned and a driver must take appropriate action. It is
-> critical that the driver do something, in the case of a block driver
-> aborting the request or even oopsing is better than doing nothing and
-> corrupting the filesystem.
-> 
-> "
-> It seems the return range for dma_map_sg never returns a negative
-> value. I think it's just the API
-> should have been defined to return "unsigned int"  IMHO. We should
-> update the documentation in the Documentation there
-> too. in core-api/dma-api.rst
+On 30/08/2022 09:39, zheng-yan.chen wrote:
+> Modify gamma compatible for mt8195.
 
-If you need documentation and implementation to use API, it is not best API [1].
-According to Rusty's manifesto it is "2. Read the implementation and you'll get it right.".
-
-You need to dig into the function to understand that UINT_MAX is not
-possible, instead of relying on compiler that will prevent such number
-if callers are not updated to be unsigned int safe.
-
-So commit 2a047e0662ae "downgraded" API from level "3. Read the documentation and
-you'll get it right." to level 2.
-
-Thanks
-
-[1] http://sweng.the-davies.net/Home/rustys-api-design-manifesto
-
+Commit should explain why. "What" we all can easily see.
 > 
+> Fixes: 16590e634f1d ("arm64: dts: mt8195: Add display node for vdosys0")
+
+Your patchset is not bisectable and might cause ABI break. I doubt that
+it matches the criteria of backports, especially that you did not
+describe here bug being fixed.
+
+Drop the tag and explain reasons for ABI break.
+
+> Signed-off-by: zheng-yan.chen <zheng-yan.chen@mediatek.com>
+> ---
+>  arch/arm64/boot/dts/mediatek/mt8195.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> 
-> [1] https://elixir.bootlin.com/linux/v2.6.39.4/source/Documentation/DMA-API.txt
-> 
-> 
-> >
-> > Thanks
-> >
-> > >
-> > > Thx!
-> > >
-> > >
-> > > >
-> > > > > >
-> > > > > > Thanks
-> > > > > Thanks!
+> diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> index a50ebb5d145f..d4110f6fac62 100644
+> --- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> +++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+> @@ -2022,7 +2022,7 @@
+>  		};
+>  
+>  		gamma0: gamma@1c006000 {
+> -			compatible = "mediatek,mt8195-disp-gamma", "mediatek,mt8183-disp-gamma";
+> +			compatible = "mediatek,mt8195-disp-gamma";
+>  			reg = <0 0x1c006000 0 0x1000>;
+>  			interrupts = <GIC_SPI 642 IRQ_TYPE_LEVEL_HIGH 0>;
+>  			power-domains = <&spm MT8195_POWER_DOMAIN_VDOSYS0>;
+
+
+Best regards,
+Krzysztof

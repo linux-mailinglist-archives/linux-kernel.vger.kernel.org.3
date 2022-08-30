@@ -2,103 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3C05A6316
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:17:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 559145A631C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:18:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiH3MRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:17:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41982 "EHLO
+        id S230332AbiH3MRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230113AbiH3MRO (ORCPT
+        with ESMTP id S230255AbiH3MRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:17:14 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A24AB41E;
-        Tue, 30 Aug 2022 05:17:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=aIP+WVaMc1nJy/asMHv8LFrhhyHBgcCdUD1nWkCarDY=; b=jRAgsNifyCmFk62Jvng7ixAvg8
-        MyaTIB0XbeZftng3h67Jl4PHyE+37F9JMw2mG++qrI4Ex2a/mFVUxpXeBer066eqE8A3R6Aifp2WB
-        vnn2etoh/Yoq6H5uzR5YbS7lXoOvHCduPqVsqGS4+y+K/ty+BcEX6gXXS+yb+6ZFLfv4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oT0Au-00F4O3-1P; Tue, 30 Aug 2022 14:17:00 +0200
-Date:   Tue, 30 Aug 2022 14:17:00 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     "Jamaluddin, Aminuddin" <aminuddin.jamaluddin@intel.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Ismail, Mohammad Athari" <mohammad.athari.ismail@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "Tan, Tee Min" <tee.min.tan@intel.com>,
-        "Zulkifli, Muhammad Husaini" <muhammad.husaini.zulkifli@intel.com>
-Subject: Re: [PATCH net 1/1] net: phy: marvell: add link status check before
- enabling phy loopback
-Message-ID: <Yw3/vIDAr9W7zZwv@lunn.ch>
-References: <20220825082238.11056-1-aminuddin.jamaluddin@intel.com>
- <Ywd4oUPEssQ+/OBE@lunn.ch>
- <DM6PR11MB43480C1D3526031F79592A7F81799@DM6PR11MB4348.namprd11.prod.outlook.com>
+        Tue, 30 Aug 2022 08:17:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB81D21F0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:17:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661861868;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wStWHojG+mqSkx5w9odtf8yhDsAk+/Zs+ge/ktP/P14=;
+        b=gUknbzr40ySmQrJTnRyYtFl6KXzqRHlIMia/kSNPkvEUmGrJz6wz/3aek16LVQmUKBSYG8
+        9bMjt4ksHrjp3Hlv1nr3lgrq+zs4YIzC4B6TlcYPkokZUDRnrG3L2FAREKYNpI5HGOgu9i
+        5joC+JnkEWt6mBt38dvX+R1LmeSyoLc=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-126-H0Lzhxe0Ny2Z19HMkeyrFA-1; Tue, 30 Aug 2022 08:17:47 -0400
+X-MC-Unique: H0Lzhxe0Ny2Z19HMkeyrFA-1
+Received: by mail-wm1-f69.google.com with SMTP id c25-20020a05600c0ad900b003a5ebad295aso1925617wmr.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:17:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=wStWHojG+mqSkx5w9odtf8yhDsAk+/Zs+ge/ktP/P14=;
+        b=rfKAlRyJVzudQMFy0guXFxOcZTHQtuPTajDmJhmtBKYVsCd0iHJ8bAnJ5rS1xYajON
+         6a/o7PWdz0LYq+S8fNCzdpIrQamllJDTXYOEiKW/KpszgtvUXptRM2IJLMC1uD7Idgoz
+         1maCEFlHV/aNYqozbJpWgHiCRAglIP2WnX/wiYBQB5uKTzLCq25D/pwDZP2c2dIkov8x
+         AZL7TD77cACWnau4sQfFwc2oy/Z1h1THUHboOFPWYcABBbN9WesB96u0z3+Kx7SLS9Nz
+         er181cPTF0ZJ8L2pRxgZXE9kUIZESWeAmXDQhAlW2gEb23w5Io/Tc9ZKW58CTfit9tdc
+         sJVg==
+X-Gm-Message-State: ACgBeo1TTSjM/3Ragv15GO2PWOtWjMoPqlvp244QJYA2DyaALebWZsTj
+        78ORPOtCMsfFrAAsV1jm4EHOTotGj7aGM9Y62xeMyrQCfMYLqs6xUS21Tu+HMhZokD6Me2VuM0j
+        l9Re2ztsQeym+jXILKRp22bwZ
+X-Received: by 2002:adf:ed50:0:b0:225:4c37:5346 with SMTP id u16-20020adfed50000000b002254c375346mr8810784wro.207.1661861866324;
+        Tue, 30 Aug 2022 05:17:46 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7LbEwWL4kKOvLdx0sOtNkvmwSMVrgmd2sgfE/jJVeFo0Jfzf2IRVyzOcC+QvzNNPwpyxNgIQ==
+X-Received: by 2002:adf:ed50:0:b0:225:4c37:5346 with SMTP id u16-20020adfed50000000b002254c375346mr8810749wro.207.1661861865960;
+        Tue, 30 Aug 2022 05:17:45 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c70a:1000:ecb4:919b:e3d3:e20b? (p200300cbc70a1000ecb4919be3d3e20b.dip0.t-ipconnect.de. [2003:cb:c70a:1000:ecb4:919b:e3d3:e20b])
+        by smtp.gmail.com with ESMTPSA id z20-20020a05600c0a1400b003a5e9337967sm12853676wmp.13.2022.08.30.05.17.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 05:17:45 -0700 (PDT)
+Message-ID: <5aa08b4f-251e-a63d-c36c-324a04ba24f4@redhat.com>
+Date:   Tue, 30 Aug 2022 14:17:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM6PR11MB43480C1D3526031F79592A7F81799@DM6PR11MB4348.namprd11.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+References: <20220827083607.2345453-1-jhubbard@nvidia.com>
+ <20220827083607.2345453-2-jhubbard@nvidia.com>
+ <10a9d33a-58a3-10b3-690b-53100d4e5440@redhat.com>
+ <a47eef63-0f29-2185-f044-854ffaefae9c@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 1/6] mm/gup: introduce pin_user_page()
+In-Reply-To: <a47eef63-0f29-2185-f044-854ffaefae9c@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > @@ -2015,14 +2016,23 @@ static int m88e1510_loopback(struct
-> > phy_device *phydev, bool enable)
-> > >  		if (err < 0)
-> > >  			return err;
-> > >
-> > > -		/* FIXME: Based on trial and error test, it seem 1G need to
-> > have
-> > > -		 * delay between soft reset and loopback enablement.
-> > > -		 */
-> > > -		if (phydev->speed == SPEED_1000)
-> > > -			msleep(1000);
-> > > +		if (phydev->speed == SPEED_1000) {
-> > > +			err = phy_read_poll_timeout(phydev, MII_BMSR,
-> > val, val & BMSR_LSTATUS,
-> > > +						    PHY_LOOP_BACK_SLEEP,
-> > > +
-> > PHY_LOOP_BACK_TIMEOUT, true);
-> > 
-> > Is this link with itself?
->  
-> Its required cabled plug in, back to back connection.
-
-Loopback should not require that. The whole point of loopback in the
-PHY is you can do it without needing a cable.
-
-> > 
-> > Have you tested this with the cable unplugged?
+On 29.08.22 21:33, John Hubbard wrote:
+> On 8/29/22 05:07, David Hildenbrand wrote:
+>>> +/**
+>>> + * pin_user_page() - apply a FOLL_PIN reference to a page
+>>> + *
+>>> + * @page: the page to be pinned.
+>>> + *
+>>> + * This is similar to get_user_pages(), except that the page's refcount is
+>>> + * elevated using FOLL_PIN, instead of FOLL_GET.
 > 
-> Yes we have and its expected to have the timeout. But the self-test required the link
-> to be up first before it can be run.
+> Actually, my commit log has a more useful documentation of this routine,
+> and given the questions below, I think I'll change to that:
+> 
+>  * pin_user_page() is an externally-usable version of try_grab_page(), but with
+>  * semantics that match get_page(), so that it can act as a drop-in replacement
+>  * for get_page().
+>  *
+>  * pin_user_page() elevates a page's refcount using FOLL_PIN rules. This means
+>  * that the caller must release the page via unpin_user_page().
 
-So you get an ETIMEDOUT, and then skip the code which actually sets
-the LOOPBACK bit?
+Some thoughts:
 
-Please look at this again, and make it work without a cable.
+a) Can we generalize such that pages with a dedicated pincount
+(multi-page folios) are also covered? Maybe avoiding the refcount
+terminology would be best.
 
-Maybe you are addressing the wrong issue? Is the PHY actually
-performing loopback, but reporting the link is down? Maybe you need to
-fake a link up? Maybe you need the self test to not care about the
-link state, all it really needs is that packets get looped?
+b) Should we directly work on folios?
 
-       Andrew
+c) Would it be valid to pass in a tail page right now?
+
+> 
+>>> + *
+>>> + * IMPORTANT: The caller must release the page via unpin_user_page().
+>>> + *
+>>> + */
+>>> +void pin_user_page(struct page *page)
+>>> +{
+>>> +	struct folio *folio = page_folio(page);
+>>> +
+>>> +	WARN_ON_ONCE(folio_ref_count(folio) <= 0);
+>>> +
+>>
+>> We should warn if the page is anon and !exclusive.
+> 
+> That would be sort of OK, because pin_user_page() is being created
+> specifically for file system (O_DIRECT cases) use, and so the pages
+> should mostly be file-backed, rather than anon. Although I'm a little
+> vague about whether all of these iov_iter cases are really always
+> file-backed pages, especially for cases such as splice(2) to an
+> O_DIRECT-opened file, that Al Viro mentioned [1].
+
+If we can, we should document that this interface is not for anonymous
+pages and WARN if pinning an anonymous page via this interface.
+
+The only reasonable way to obtain a pin on an anonymous page is via the
+page table. Here, FOLL_PIN should be used to do the right thing -- for
+example, unshare first (break COW) instead of pinning a shared anonymous
+page.
+
+Nothing would speak against duplicating such a pin using this interface
+(we'd have to sanity check that the page we're pinning may already be
+pinned), but I assume the pages we pin here are *not* necessarily
+obtained via GUP FOLL_PIN.
+
+I would be curious under which scenarios we could end up here with an
+anonymous page and how we obtained that reference (if not via GUP).
+
+> 
+> Can you walk me through the reasoning for why we need to keep out
+> anon shared pages? 
+
+We make sure to only pin anonymous pages that are exclusive and check
+when unpinning -- see sanity_check_pinned_pages(), there is also a
+comment in there -- that pinned anonymous pages are in fact still
+exclusive, otherwise we might have a BUG lurking somewhere that can
+result in memory corruptions or leaking information between processes.
+
+For example, once we'd pinned an anonymous pages that are not marked
+exclusive (!PageAnonExclusive), or we'd be sharing a page that is
+pinned, the next write fault would replace the page in the user page
+table due to breaking COW, and the GUP pin would point at a different
+page than the page table.
+
+Disallowing pinning of anon pages that may be shared in any case
+(FOLL_LONGTERM or not) simplifies GUP handling and allows for such
+sanity checks.
+
+(side note: after recent VM_BUG_ON discussions we might want to convert
+the VM_BUG_ON_PAGE in sanity_check_pinned_pages())
+
+> 
+>>
+>> I assume the intend is to use pin_user_page() only to duplicate pins, right?
+>>
+> 
+> Well, yes or no, depending on your use of the term "pin":
+> 
+> pin_user_page() is used on a page that already has a refcount >= 1 (so
+> no worries about speculative pinning should apply here), but the page
+> does not necessarily have any FOLL_PIN's applied to it yet (so it's not
+> "pinned" in the FOLL_PIN sense).
+
+Okay, then we should really figure out if/how anonymous pages could end
+up here. I assume they can't, really. But let's see :)
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

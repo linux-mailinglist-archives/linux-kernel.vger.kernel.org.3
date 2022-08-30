@@ -2,160 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92BB95A706A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:12:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369625A7074
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 00:16:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231514AbiH3WMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 18:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43306 "EHLO
+        id S231627AbiH3WQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 18:16:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiH3WMD (ORCPT
+        with ESMTP id S229640AbiH3WQh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 18:12:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA9857E06;
-        Tue, 30 Aug 2022 15:12:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE27A60EDE;
-        Tue, 30 Aug 2022 22:12:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC914C433C1;
-        Tue, 30 Aug 2022 22:12:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661897521;
-        bh=FX0ZKpS8EqEfM31j0VPpDQV8soiepTjJeSGUHubL7AQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=uxomOZUu6oC7Jivk+uWWiHdqdkxgK4UVnScMeYGIwMn2cB2WnUGXwgMsgFV30Ar7m
-         QK0FapY4yIBJ7YZTLl/ddBE48vzHWCVB5P8yx3MZqsiwJKuLhm6gNH2kJZcnWQCBc8
-         zo4nH6jLiZofkuz2VhZxTSEbSbrM4i8AOw37BIDcazAD3gfylG04jiimn5eswN0Idw
-         7+PjX3fQPbMK2IUnyU3v6ngVXuuAmYrccwoh6S4RKLpXgsN6BMxfUQf3Uapw1qHvZH
-         rKlFMKhjx8w2FH5+t+CE5+qq1U5og5PfRavXQBYZucliinBJMOogYugI4mKL1YoxzG
-         oXKPjMQnSBRww==
-Date:   Tue, 30 Aug 2022 17:11:59 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ben Greear <greearb@candelatech.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, bjorn@helgaas.com,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        Stefan Roese <sr@denx.de>, Bjorn Helgaas <bhelgaas@google.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Yao Hongbo <yaohongbo@linux.alibaba.com>,
-        Naveen Naidu <naveennaidu479@gmail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        linux-wireless@vger.kernel.org
-Subject: Re: [PATCH 5.4 182/389] PCI/portdrv: Dont disable AER reporting in
- get_port_device_capability()
-Message-ID: <20220830221159.GA132418@bhelgaas>
+        Tue, 30 Aug 2022 18:16:37 -0400
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96BCF6D57B;
+        Tue, 30 Aug 2022 15:16:36 -0700 (PDT)
+Received: by mail-ot1-x32f.google.com with SMTP id d18-20020a9d72d2000000b0063934f06268so9096097otk.0;
+        Tue, 30 Aug 2022 15:16:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=E/nyH/3foDxtGmIpzv0kFzFIyfD8qg2WZXXTeapubaI=;
+        b=aleLjERqp1LW6YXXzsbNFYloljaBys8t7B5VCraRETR/5ZqZSHy3oVct65uewmmRO/
+         y84S6F4UZE7GM0ax8bllzZll6ssuZzdOUzMCbm+g0WpYEIoX80pIpENOYzsSmL+3oHkR
+         1tlwWy75lwdts1PGGp1Gin5KtX44Fsby9XATU/UQjtnKg0p8IQ8PqK9ntM4soE4zM0K1
+         33SVv0U3qL0W8C5nF+u7Up/jYYhKovt4jaifGWvn3fmqXXOSz0WUiYhdPIwnNeLvHZuB
+         bIWsFt4iB5GmpDGenTuyrdsMSUKZSf/uTAbyo+xfxFFdzQE/XdAHEVRqpoYLb1x+XnEW
+         UG5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=E/nyH/3foDxtGmIpzv0kFzFIyfD8qg2WZXXTeapubaI=;
+        b=gE2RJ7jFJK3/2p5nVJWHkq/wpHCy9R6iNtuEwj5fzObiXo9A1n+iN+7Of9kyTuE6iX
+         OE8KC/mt7oFs2PafoCsuDlAVtp9jYRFhTg4+pfiMpHHy0EnNMYLa96AmyKpHjpJujs3r
+         kejt1h2DVvbH7DaFDrYUmp+1acHucFoPUHJRDbhHHljmw9sj8lwCep7F+CBpreDwSzhs
+         5ryUPyMiuUpkMDNhqA5tvCkT14QMwB1TUEC/fKfhfT5VuU+v49WM0gih0ncMNKSKB7c+
+         9t1LdEXfhiouOydmOvw5yrYEs8gPAoiEkO/mzJKDYffS76o3zUZ2lqXDdrk8kOkk9FaD
+         Q1Pg==
+X-Gm-Message-State: ACgBeo21Isu9IId7w7GRntA48gT5dQmMHQeDSCdAZCkNndQ6yIQ57DYt
+        QRdpupW6Bvgyb8qKWKJunTo=
+X-Google-Smtp-Source: AA6agR5jcgaxWchPKuW3dNX3lxYpGsOf2VOT7pIQ3io1qrIVEaeid8kBi8k2D0V1OkLk5Sr9VSi8Xw==
+X-Received: by 2002:a05:6830:2704:b0:638:8d4f:8eb8 with SMTP id j4-20020a056830270400b006388d4f8eb8mr9786428otu.40.1661897795979;
+        Tue, 30 Aug 2022 15:16:35 -0700 (PDT)
+Received: from ?IPV6:2600:1700:2442:6db0:891d:81c:f58f:3bd4? ([2600:1700:2442:6db0:891d:81c:f58f:3bd4])
+        by smtp.gmail.com with ESMTPSA id s41-20020a056870612900b0011f035022b8sm4064296oae.17.2022.08.30.15.16.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 15:16:35 -0700 (PDT)
+Message-ID: <63b5fa8c-9fb8-b2ff-3f15-cc8649224f06@gmail.com>
+Date:   Tue, 30 Aug 2022 17:16:33 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <47b775c5-57fa-5edf-b59e-8a9041ffbee7@candelatech.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 0/2] begin KTAP spec v2 process
+Content-Language: en-US
+To:     David Gow <davidgow@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Kees Cook <keescook@chromium.org>, Tim.Bird@sony.com,
+        Brendan Higgins <brendanhiggins@google.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>, rmr167@gmail.com,
+        guillaume.tucker@collabora.com, dlatypov@google.com,
+        kernelci@groups.io, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220829233150.3564612-1-frowand.list@gmail.com>
+From:   Frank Rowand <frowand.list@gmail.com>
+In-Reply-To: <20220829233150.3564612-1-frowand.list@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Gregory, linux-wireless for iwlwifi issue]
-
-On Tue, Aug 30, 2022 at 01:47:48PM -0700, Ben Greear wrote:
-> On 8/23/22 11:41 PM, Greg Kroah-Hartman wrote:
-> > On Tue, Aug 23, 2022 at 07:20:14AM -0500, Bjorn Helgaas wrote:
-> > > On Tue, Aug 23, 2022, 6:35 AM Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > wrote:
-> > > 
-> > > > From: Stefan Roese <sr@denx.de>
-> > > > 
-> > > > [ Upstream commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 ]
-> > > > 
-> > > 
-> > > There's an open regression related to this commit:
-> > > 
-> > > https://bugzilla.kernel.org/show_bug.cgi?id=216373
-> > 
-> > This is already in the following released stable kernels:
-> > 	5.10.137 5.15.61 5.18.18 5.19.2
-> > 
-> > I'll go drop it from the 4.19 and 5.4 queues, but when this gets
-> > resolved in Linus's tree, make sure there's a cc: stable on the fix so
-> > that we know to backport it to the above branches as well.  Or at the
-> > least, a "Fixes:" tag.
+On 8/29/22 18:31, frowand.list@gmail.com wrote:
+> From: Frank Rowand <frank.rowand@sony.com>
 > 
-> This is still in 5.19.5.  We saw some funny iwlwifi crashes in 5.19.3+
-> that we did not see in 5.19.0+.  I just bisected the scary looking
-> AER errors to this patch, though I do not know for certain if it
-> causes the iwlwifi related crashes yet.
+> The process to create version 2 of the KTAP Specification is documented
+> in email discussions.  I am attempting to capture this information at
 > 
-> In general, from reading the commit msg, this patch doesn't seem to
-> be a great candidate for stable in general.  Does it fix some
-> important problem?
+>    https://elinux.org/Test_Results_Format_Notes#KTAP_version_2
+> 
+> I am already not following the suggested process, which says:
+> "...please try to follow this principal of one major topic per email
+> thread."  I think that is ok in this case because the two patches
+> are related and (hopefully) not controversial.
+> 
+> Changes since patch version 2:
+>    - correct version 1 change text
+>    - version 1 patch 2/2 had not yet been applied when I created version 2,
+>      refresh version 2 patch 2/2 for new context
+> 
+> Changes since patch version 1:
+>    - drop patch 2/2.  Jonathan Corbet has already applied this patch
+>      into version 1 of the Specification
+>    - add new patch 2/2
+> 
+> Frank Rowand (2):
+>   ktap_v2: change version to 2-rc in KTAP specification
+>   ktap_v2: change "version 1" to "version 2" in examples
+> 
+>  Documentation/dev-tools/ktap.rst | 25 +++++++++++++------------
+>  1 file changed, 13 insertions(+), 12 deletions(-)
+> 
 
-I agree, I don't think this is a good candidate for stable.  It has
-already exposed latent amdgpu issues and we'll likely find more.  It's
-good to find and fix these things, but I'd rather do it in -rc than in
-stable kernels.
+The process for developing KTAP spec v2 and the status of proposals
+and accepted patches can be found at:
 
-It would be interesting to know whether similar crashes or AER reports
-occur in v6.0-rc.
-
-> In case it helps, here is example of what I see in dmesg.  The
-> kernel crashes in iwlwifi had to do with rx messages from the
-> firmware, and some warnings lead me to believe that pci messages
-> were slow coming back and/or maybe duplicated.  So maybe this AER
-> patch changes timing or otherwise screws up the PCI adapter boards
-> we use...
-
-It shouldn't.  This looks like a latent issue that happened before but
-was ignored because we didn't have AER enabled at the switch that
-detected the error.
-
-> [   50.905809] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
-> [   50.905830] pcieport 0000:03:01.0: AER: device recovery failed
-> [   50.905831] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:01.0
-> [   50.905845] pcieport 0000:03:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
-> [   50.915679] pcieport 0000:03:01.0:   device [10b5:8619] error status/mask=00100000/00000000
-> [   50.922735] pcieport 0000:03:01.0:    [20] UnsupReq               (First)
-> [   50.928230] pcieport 0000:03:01.0: AER:   TLP Header: 34000000 04001f10 00000000 88c888c8
-
-This is an LTR message (Message Code 0x10), Requester ID 04:00.0.  I
-think the iwlwifi device at 04:00.0 sent the LTR message, and 03:01.0
-(probably a Switch Downstream Port leading to bus 04) received it but
-had LTR disabled.  In that case, 03:01.0 would treat the LTR message
-as an Unsupported Request.
-
-The other errors below are the same but from different devices.
-
-Does this happen during or after a suspend/resume?  I assume no
-hotplug involved.  Can you collect the output of "sudo lspci -vv" so
-we can see the LTR config for the entire path?
-
-You can boot with "pci=noaer" to shut up the AER messages (that
-shouldn't affect the parts of lspci output I'm interested in).  Would
-be interesting to know whether "pci=noaer" affects the iwlwifi
-crashes, though.
-
-> [   51.331638] ACPI: \: failed to evaluate _DSM bf0212f2-788f-c64d-a5b3-1f738e285ade (0x1001)
-> [   51.345413] ACPI: \: failed to evaluate _DSM bf0212f2-788f-c64d-a5b3-1f738e285ade (0x1001)
-
-These look like they're from iwlwifi:
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/wireless/intel/iwlwifi/fw/acpi.c?id=v5.19#n13
-
-No idea what this is about.  Maybe unrelated, but the fact that Google
-can't find anything with that UUID makes me think it might actually be
-related.  The UUID was only added to the message in v5.19-rc1 by
-06eb8dc097b3 ("ACPI: utils: include UUID in _DSM evaluation warning"),
-but that should be enough time to see some for a common device like
-iwlwifi.
-
-Too bad we print the GUID in a different byte order than GUID_INIT
-takes, which makes it hard to search for, even in the Linux source.
-
-Bjorn
+  https://elinux.org/Test_Results_Format_Notes#KTAP_version_2

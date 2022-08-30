@@ -2,398 +2,279 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71F2C5A6D72
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F2B55A6D76
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229896AbiH3Tgv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:36:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56994 "EHLO
+        id S230093AbiH3ThL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiH3Tgt (ORCPT
+        with ESMTP id S230214AbiH3ThI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:36:49 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F133161B1A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:36:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661888207; x=1693424207;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=nkkM0Dp1B2YkJRrxHxMFQf65AUlTMbDUhqGUOeVfgSw=;
-  b=RcpKecc3IW1q+22wBP2xoRgdijdM4PbqNna9tVOFI551CwUdRjixZQSK
-   JmZELxy+6N8o1oiotbgVjiK/3LGP7aMsK9Q8IdFTK1wtLIEFeENAS6QoI
-   gnhRnU1v5hlMVUfCsqHcicLEfUeOc7NzJaFU8j8Vz854qDo5OqAqdeR3L
-   E0my79GB7DIejCBXxtNF3hlmUq6V9t2aECzPAznY4uXhVQ3O3CAcP2d1V
-   xyz5npC8o6Ko4M8xNTZdNwbJ++egZ1AWuMh27fFnX4uP+MCWyMLUcJc3x
-   gyM1gkq9mtlGVF1gyI2s4L3S4fEvesuMTzYUKCRmPrIue/H2ASXSJZtFd
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="282255679"
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="282255679"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 12:36:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
-   d="scan'208";a="680166135"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 30 Aug 2022 12:36:29 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oT72C-0000XT-2X;
-        Tue, 30 Aug 2022 19:36:28 +0000
-Date:   Wed, 31 Aug 2022 03:35:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-fixes 1/5]
- net/rxrpc/peer_event.c:234:3: warning: variable 'err' is used uninitialized
- whenever switch default is taken
-Message-ID: <202208310344.BhjBqXzR-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 30 Aug 2022 15:37:08 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CE561D6B
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:37:06 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-337ed9110c2so187406107b3.15
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:37:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc;
+        bh=HzbcF/PG+Qawg6hoRF5n8gXT8jVmH+0bSMmdlpBSH5Q=;
+        b=WpitjJHu8yxIzlhTDzfzTCcSOyFFbGrF9N7RrYOmSR07TVUgSws08DXXqfslj/EH5j
+         IsYZqhJ5K8tAhqVApAq2q/WIC/++F5MDzikJlI38OBsGNSnjrVnezaJyqELJ24AWj9oY
+         +7zvlA29KkLUGk9Uj43LWRMl4eQscf8yt8u3sVQKPxrcuFB3XdTu33eTM9AW7mrkzjHJ
+         MWB68cpxlcvUtd5L6VGzqO0qLNv4Hgt9Va3PWgaVR9ZPp1c62DtJKo0xM30WTUSA53v6
+         pG4vF6AJRUnrXSYmplq5oKz4I9od/3GkzCLSCofbWUy+mWFkhhKIj3T9xk09kAq1idXu
+         8d5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc;
+        bh=HzbcF/PG+Qawg6hoRF5n8gXT8jVmH+0bSMmdlpBSH5Q=;
+        b=L0qAKTqQiiFtTLRuA9/VvU8/UI2Z/d0wlmbqyNA9rtLpmYuwqqvTrJeaeFKzoo3AOs
+         kZy/NFGMCOdre5yKpKthsnpH3NOJ5mYY9cMrfPEF/AQX5hOb58urE30C/TBa5QNd+CCc
+         H74anflM90H9DjQ1cdN/kHn9K0sPj6q+2JgVs5xqqVjClzTVwlUjanWFePOxWTmMA57C
+         DV6JhL2y3I4BAi9FA2S/53yytFmLinScsMPSS+Q0hMSr87HmAoN+/JVlSwzeNZCoaGsz
+         rlYdgxawJlfSeI1gStzC4bv8AJmjDjoklN3bLYPpR5zJ+AdH0DCbz/dkkhRz1s8d+5Vq
+         Pu8w==
+X-Gm-Message-State: ACgBeo1+yjj5LK+D47u/IA39B8xOJ/s6hXAxagYfeYH693DTjbkbV0Ds
+        e6T/EW53AFVX9ew2avycVu1TT6PAs8ZI
+X-Google-Smtp-Source: AA6agR7bVRyO8OFgpLGeXzgagUQGCk3zR5h8YG1Nini2V46NdLsYk5dAFhH/q7QqcX6WfjSFE1K09uH566NU
+X-Received: from maskray1.svl.corp.google.com ([2620:15c:2ce:200:2c5:644c:c610:2bb9])
+ (user=maskray job=sendgmr) by 2002:a0d:eb4f:0:b0:341:8004:8ebd with SMTP id
+ u76-20020a0deb4f000000b0034180048ebdmr3573747ywe.396.1661888225675; Tue, 30
+ Aug 2022 12:37:05 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 12:37:01 -0700
+Mime-Version: 1.0
+Message-ID: <20220830193701.1702962-1-maskray@google.com>
+Subject: [PATCH] vdso: Improve cmd_vdso_check to check all dynamic relocations
+From:   Fangrui Song <maskray@google.com>
+To:     Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org
+Cc:     Fangrui Song <maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-fixes
-head:   c2f6ecfc2c8d95244507cfe244710f61e0f727a7
-commit: b6b6fa5db526817c2b4e8f2fdec40592e9817804 [1/5] rxrpc: Fix ICMP/ICMP6 error handling
-config: hexagon-randconfig-r045-20220830 (https://download.01.org/0day-ci/archive/20220831/202208310344.BhjBqXzR-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/b6b6fa5db526817c2b4e8f2fdec40592e9817804
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-fixes
-        git checkout b6b6fa5db526817c2b4e8f2fdec40592e9817804
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash net/rxrpc/
+The actual intention is that no dynamic relocation exists. However, some
+GNU ld ports produce unneeded R_*_NONE. (If a port is not care enough to
+determine the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
+relocations. E.g. powerpc64le ld as of 2.38 has the issue with
+defconfig.) R_*_NONE are generally no-op in the dynamic loaders. So just
+ignore them.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
+bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
+not called "absolute relocations". (The patch is motivated by the arm64
+port missing R_AARCH64_RELATIVE.)
 
-All warnings (new ones prefixed by >>):
+While here, replace "egrep" with "grep" as "egrep" is deprecated in GNU
+grep 3.7.
 
->> net/rxrpc/peer_event.c:234:3: warning: variable 'err' is used uninitialized whenever switch default is taken [-Wsometimes-uninitialized]
-                   default:
-                   ^~~~~~~
-   net/rxrpc/peer_event.c:241:17: note: uninitialized use occurs here
-                   ee.ee_errno = err;
-                                 ^~~
-   net/rxrpc/peer_event.c:167:9: note: initialize the variable 'err' to silence this warning
-           int err;
-                  ^
-                   = 0
->> net/rxrpc/peer_event.c:418:6: warning: variable 'peer' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
-           if (serr->ee.ee_origin == SO_EE_ORIGIN_LOCAL) {
-               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/rxrpc/peer_event.c:430:17: note: uninitialized use occurs here
-           rxrpc_put_peer(peer);
-                          ^~~~
-   net/rxrpc/peer_event.c:418:2: note: remove the 'if' if its condition is always true
-           if (serr->ee.ee_origin == SO_EE_ORIGIN_LOCAL) {
-           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   net/rxrpc/peer_event.c:393:25: note: initialize the variable 'peer' to silence this warning
-           struct rxrpc_peer *peer;
-                                  ^
-                                   = NULL
-   2 warnings generated.
+Signed-off-by: Fangrui Song <maskray@google.com>
+---
+ arch/arm/vdso/Makefile            |  3 ---
+ arch/arm64/kernel/vdso/Makefile   |  3 ---
+ arch/arm64/kernel/vdso32/Makefile |  3 ---
+ arch/csky/kernel/vdso/Makefile    |  3 ---
+ arch/loongarch/vdso/Makefile      |  3 ---
+ arch/mips/vdso/Makefile           |  3 ---
+ arch/powerpc/kernel/vdso/Makefile |  1 -
+ arch/riscv/kernel/vdso/Makefile   |  3 ---
+ arch/s390/kernel/vdso32/Makefile  |  2 --
+ arch/s390/kernel/vdso64/Makefile  |  2 --
+ arch/x86/entry/vdso/Makefile      |  4 ----
+ lib/vdso/Makefile                 | 13 ++++---------
+ 12 files changed, 4 insertions(+), 39 deletions(-)
 
-
-vim +/err +234 net/rxrpc/peer_event.c
-
-   155	
-   156	/*
-   157	 * Handle an error received on the local endpoint as a tunnel.
-   158	 */
-   159	void rxrpc_encap_err_rcv(struct sock *sk, struct sk_buff *skb,
-   160				 unsigned int udp_offset)
-   161	{
-   162		struct sock_extended_err ee;
-   163		struct sockaddr_rxrpc srx;
-   164		struct rxrpc_local *local;
-   165		struct rxrpc_peer *peer;
-   166		unsigned int info = 0;
-   167		int err;
-   168		u8 version = ip_hdr(skb)->version;
-   169		u8 type = icmp_hdr(skb)->type;
-   170		u8 code = icmp_hdr(skb)->code;
-   171	
-   172		rcu_read_lock();
-   173		local = rcu_dereference_sk_user_data(sk);
-   174		if (unlikely(!local)) {
-   175			rcu_read_unlock();
-   176			return;
-   177		}
-   178	
-   179		rxrpc_new_skb(skb, rxrpc_skb_received);
-   180	
-   181		switch (ip_hdr(skb)->version) {
-   182		case IPVERSION:
-   183			peer = rxrpc_lookup_peer_icmp_rcu(local, skb, udp_offset,
-   184							  &info, &srx);
-   185			break;
-   186		case 6:
-   187			peer = rxrpc_lookup_peer_icmp6_rcu(local, skb, udp_offset,
-   188							   &info, &srx);
-   189			break;
-   190		default:
-   191			rcu_read_unlock();
-   192			return;
-   193		}
-   194	
-   195		if (peer && !rxrpc_get_peer_maybe(peer))
-   196			peer = NULL;
-   197		if (!peer) {
-   198			rcu_read_unlock();
-   199			return;
-   200		}
-   201	
-   202		memset(&ee, 0, sizeof(ee));
-   203	
-   204		switch (version) {
-   205		case IPVERSION:
-   206			switch (type) {
-   207			case ICMP_DEST_UNREACH:
-   208				switch (code) {
-   209				case ICMP_FRAG_NEEDED:
-   210					rxrpc_adjust_mtu(peer, info);
-   211					rcu_read_unlock();
-   212					rxrpc_put_peer(peer);
-   213					return;
-   214				default:
-   215					break;
-   216				}
-   217	
-   218				err = EHOSTUNREACH;
-   219				if (code <= NR_ICMP_UNREACH) {
-   220					/* Might want to do something different with
-   221					 * non-fatal errors
-   222					 */
-   223					//harderr = icmp_err_convert[code].fatal;
-   224					err = icmp_err_convert[code].errno;
-   225				}
-   226				break;
-   227	
-   228			case ICMP_PARAMETERPROB:
-   229				err = EPROTO;
-   230				break;
-   231			case ICMP_TIME_EXCEEDED:
-   232				err = EHOSTUNREACH;
-   233				break;
- > 234			default:
-   235				break;
-   236			}
-   237	
-   238			ee.ee_origin = SO_EE_ORIGIN_ICMP;
-   239			ee.ee_type = type;
-   240			ee.ee_code = code;
-   241			ee.ee_errno = err;
-   242			break;
-   243	
-   244		case 6:
-   245			switch (type) {
-   246			case ICMPV6_PKT_TOOBIG:
-   247				rxrpc_adjust_mtu(peer, info);
-   248				rcu_read_unlock();
-   249				rxrpc_put_peer(peer);
-   250				return;
-   251			}
-   252	
-   253			icmpv6_err_convert(type, code, &err);
-   254	
-   255			if (err == EACCES)
-   256				err = EHOSTUNREACH;
-   257	
-   258			ee.ee_origin = SO_EE_ORIGIN_ICMP6;
-   259			ee.ee_type = type;
-   260			ee.ee_code = code;
-   261			ee.ee_errno = err;
-   262			break;
-   263		}
-   264	
-   265		trace_rxrpc_rx_icmp(peer, &ee, &srx);
-   266	
-   267		rxrpc_distribute_error(peer, err, RXRPC_CALL_NETWORK_ERROR);
-   268		rcu_read_unlock();
-   269		rxrpc_put_peer(peer);
-   270	}
-   271	
-   272	/*
-   273	 * Find the peer associated with a local error.
-   274	 */
-   275	static struct rxrpc_peer *rxrpc_lookup_peer_local_rcu(struct rxrpc_local *local,
-   276							      const struct sk_buff *skb,
-   277							      struct sockaddr_rxrpc *srx)
-   278	{
-   279		struct sock_exterr_skb *serr = SKB_EXT_ERR(skb);
-   280	
-   281		_enter("");
-   282	
-   283		memset(srx, 0, sizeof(*srx));
-   284		srx->transport_type = local->srx.transport_type;
-   285		srx->transport_len = local->srx.transport_len;
-   286		srx->transport.family = local->srx.transport.family;
-   287	
-   288		switch (srx->transport.family) {
-   289		case AF_INET:
-   290			srx->transport_len = sizeof(srx->transport.sin);
-   291			srx->transport.family = AF_INET;
-   292			srx->transport.sin.sin_port = serr->port;
-   293			switch (serr->ee.ee_origin) {
-   294			case SO_EE_ORIGIN_ICMP:
-   295				_net("Rx ICMP");
-   296				memcpy(&srx->transport.sin.sin_addr,
-   297				       skb_network_header(skb) + serr->addr_offset,
-   298				       sizeof(struct in_addr));
-   299				break;
-   300			case SO_EE_ORIGIN_ICMP6:
-   301				_net("Rx ICMP6 on v4 sock");
-   302				memcpy(&srx->transport.sin.sin_addr,
-   303				       skb_network_header(skb) + serr->addr_offset + 12,
-   304				       sizeof(struct in_addr));
-   305				break;
-   306			default:
-   307				memcpy(&srx->transport.sin.sin_addr, &ip_hdr(skb)->saddr,
-   308				       sizeof(struct in_addr));
-   309				break;
-   310			}
-   311			break;
-   312	
-   313	#ifdef CONFIG_AF_RXRPC_IPV6
-   314		case AF_INET6:
-   315			switch (serr->ee.ee_origin) {
-   316			case SO_EE_ORIGIN_ICMP6:
-   317				_net("Rx ICMP6");
-   318				srx->transport.sin6.sin6_port = serr->port;
-   319				memcpy(&srx->transport.sin6.sin6_addr,
-   320				       skb_network_header(skb) + serr->addr_offset,
-   321				       sizeof(struct in6_addr));
-   322				break;
-   323			case SO_EE_ORIGIN_ICMP:
-   324				_net("Rx ICMP on v6 sock");
-   325				srx->transport_len = sizeof(srx->transport.sin);
-   326				srx->transport.family = AF_INET;
-   327				srx->transport.sin.sin_port = serr->port;
-   328				memcpy(&srx->transport.sin.sin_addr,
-   329				       skb_network_header(skb) + serr->addr_offset,
-   330				       sizeof(struct in_addr));
-   331				break;
-   332			default:
-   333				memcpy(&srx->transport.sin6.sin6_addr,
-   334				       &ipv6_hdr(skb)->saddr,
-   335				       sizeof(struct in6_addr));
-   336				break;
-   337			}
-   338			break;
-   339	#endif
-   340	
-   341		default:
-   342			BUG();
-   343		}
-   344	
-   345		return rxrpc_lookup_peer_rcu(local, srx);
-   346	}
-   347	
-   348	/*
-   349	 * Handle an MTU/fragmentation problem.
-   350	 */
-   351	static void rxrpc_adjust_mtu(struct rxrpc_peer *peer, unsigned int mtu)
-   352	{
-   353		_net("Rx ICMP Fragmentation Needed (%d)", mtu);
-   354	
-   355		/* wind down the local interface MTU */
-   356		if (mtu > 0 && peer->if_mtu == 65535 && mtu < peer->if_mtu) {
-   357			peer->if_mtu = mtu;
-   358			_net("I/F MTU %u", mtu);
-   359		}
-   360	
-   361		if (mtu == 0) {
-   362			/* they didn't give us a size, estimate one */
-   363			mtu = peer->if_mtu;
-   364			if (mtu > 1500) {
-   365				mtu >>= 1;
-   366				if (mtu < 1500)
-   367					mtu = 1500;
-   368			} else {
-   369				mtu -= 100;
-   370				if (mtu < peer->hdrsize)
-   371					mtu = peer->hdrsize + 4;
-   372			}
-   373		}
-   374	
-   375		if (mtu < peer->mtu) {
-   376			spin_lock_bh(&peer->lock);
-   377			peer->mtu = mtu;
-   378			peer->maxdata = peer->mtu - peer->hdrsize;
-   379			spin_unlock_bh(&peer->lock);
-   380			_net("Net MTU %u (maxdata %u)",
-   381			     peer->mtu, peer->maxdata);
-   382		}
-   383	}
-   384	
-   385	/*
-   386	 * Handle an error received on the local endpoint.
-   387	 */
-   388	void rxrpc_error_report(struct sock *sk)
-   389	{
-   390		struct sock_exterr_skb *serr;
-   391		struct sockaddr_rxrpc srx;
-   392		struct rxrpc_local *local;
-   393		struct rxrpc_peer *peer;
-   394		struct sk_buff *skb;
-   395	
-   396		rcu_read_lock();
-   397		local = rcu_dereference_sk_user_data(sk);
-   398		if (unlikely(!local)) {
-   399			rcu_read_unlock();
-   400			return;
-   401		}
-   402		_enter("%p{%d}", sk, local->debug_id);
-   403	
-   404		/* Clear the outstanding error value on the socket so that it doesn't
-   405		 * cause kernel_sendmsg() to return it later.
-   406		 */
-   407		sock_error(sk);
-   408	
-   409		skb = sock_dequeue_err_skb(sk);
-   410		if (!skb) {
-   411			rcu_read_unlock();
-   412			_leave("UDP socket errqueue empty");
-   413			return;
-   414		}
-   415		rxrpc_new_skb(skb, rxrpc_skb_received);
-   416		serr = SKB_EXT_ERR(skb);
-   417	
- > 418		if (serr->ee.ee_origin == SO_EE_ORIGIN_LOCAL) {
-   419			peer = rxrpc_lookup_peer_local_rcu(local, skb, &srx);
-   420			if (peer && !rxrpc_get_peer_maybe(peer))
-   421				peer = NULL;
-   422			if (peer) {
-   423				trace_rxrpc_rx_icmp(peer, &serr->ee, &srx);
-   424				rxrpc_store_error(peer, serr);
-   425			}
-   426		}
-   427	
-   428		rcu_read_unlock();
-   429		rxrpc_free_skb(skb, rxrpc_skb_freed);
-   430		rxrpc_put_peer(peer);
-   431		_leave("");
-   432	}
-   433	
-
+diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
+index 8ca1c9f262a2..5ebd2e6f7d46 100644
+--- a/arch/arm/vdso/Makefile
++++ b/arch/arm/vdso/Makefile
+@@ -1,8 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
+ include $(srctree)/lib/vdso/Makefile
+ 
+ hostprogs := vdsomunge
+diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
+index bafbf78fab77..66dc4f338a86 100644
+--- a/arch/arm64/kernel/vdso/Makefile
++++ b/arch/arm64/kernel/vdso/Makefile
+@@ -6,9 +6,6 @@
+ # Heavily based on the vDSO Makefiles for other archs.
+ #
+ 
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_AARCH64_JUMP_SLOT|R_AARCH64_GLOB_DAT|R_AARCH64_ABS64
+ include $(srctree)/lib/vdso/Makefile
+ 
+ obj-vdso := vgettimeofday.o note.o sigreturn.o
+diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
+index 36c8f66cad25..48d713d59ef2 100644
+--- a/arch/arm64/kernel/vdso32/Makefile
++++ b/arch/arm64/kernel/vdso32/Makefile
+@@ -3,9 +3,6 @@
+ # Makefile for vdso32
+ #
+ 
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
+ include $(srctree)/lib/vdso/Makefile
+ 
+ # Same as cc-*option, but using CC_COMPAT instead of CC
+diff --git a/arch/csky/kernel/vdso/Makefile b/arch/csky/kernel/vdso/Makefile
+index 0b6909f10667..86c8c4de1b0f 100644
+--- a/arch/csky/kernel/vdso/Makefile
++++ b/arch/csky/kernel/vdso/Makefile
+@@ -1,8 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_CKCORE_ADDR32|R_CKCORE_JUMP_SLOT
+ include $(srctree)/lib/vdso/Makefile
+ 
+ # Symbols present in the vdso
+diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
+index d89e2ac75f7b..1b2e0f149f55 100644
+--- a/arch/loongarch/vdso/Makefile
++++ b/arch/loongarch/vdso/Makefile
+@@ -1,9 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ # Objects to go into the VDSO.
+ 
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_LARCH_32|R_LARCH_64|R_LARCH_MARK_LA|R_LARCH_JUMP_SLOT
+ include $(srctree)/lib/vdso/Makefile
+ 
+ obj-vdso-y := elf.o vgetcpu.o vgettimeofday.o sigreturn.o
+diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
+index f72658b3a53f..cea97abffc03 100644
+--- a/arch/mips/vdso/Makefile
++++ b/arch/mips/vdso/Makefile
+@@ -4,9 +4,6 @@
+ # Sanitizer runtimes are unavailable and cannot be linked here.
+  KCSAN_SANITIZE			:= n
+ 
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_MIPS_JUMP_SLOT|R_MIPS_GLOB_DAT
+ include $(srctree)/lib/vdso/Makefile
+ 
+ obj-vdso-y := elf.o vgettimeofday.o sigreturn.o
+diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+index 096b0bf1335f..d3c5be32034d 100644
+--- a/arch/powerpc/kernel/vdso/Makefile
++++ b/arch/powerpc/kernel/vdso/Makefile
+@@ -2,7 +2,6 @@
+ 
+ # List of files in the vdso, has to be asm only for now
+ 
+-ARCH_REL_TYPE_ABS := R_PPC_JUMP_SLOT|R_PPC_GLOB_DAT|R_PPC_ADDR32|R_PPC_ADDR24|R_PPC_ADDR16|R_PPC_ADDR16_LO|R_PPC_ADDR16_HI|R_PPC_ADDR16_HA|R_PPC_ADDR14|R_PPC_ADDR14_BRTAKEN|R_PPC_ADDR14_BRNTAKEN|R_PPC_REL24
+ include $(srctree)/lib/vdso/Makefile
+ 
+ obj-vdso32 = sigtramp32-32.o gettimeofday-32.o datapage-32.o cacheflush-32.o note-32.o getcpu-32.o
+diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
+index f2e065671e4d..77d6bed3a700 100644
+--- a/arch/riscv/kernel/vdso/Makefile
++++ b/arch/riscv/kernel/vdso/Makefile
+@@ -1,9 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ # Copied from arch/tile/kernel/vdso/Makefile
+ 
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
+ include $(srctree)/lib/vdso/Makefile
+ # Symbols present in the vdso
+ vdso-syms  = rt_sigreturn
+diff --git a/arch/s390/kernel/vdso32/Makefile b/arch/s390/kernel/vdso32/Makefile
+index 245bddfe9bc0..e795fdbbf484 100644
+--- a/arch/s390/kernel/vdso32/Makefile
++++ b/arch/s390/kernel/vdso32/Makefile
+@@ -2,8 +2,6 @@
+ # List of files in the vdso
+ 
+ KCOV_INSTRUMENT := n
+-ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
+-ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
+ 
+ include $(srctree)/lib/vdso/Makefile
+ obj-vdso32 = vdso_user_wrapper-32.o note-32.o
+diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makefile
+index 9e2b95a222a9..47dbbfdfad68 100644
+--- a/arch/s390/kernel/vdso64/Makefile
++++ b/arch/s390/kernel/vdso64/Makefile
+@@ -2,8 +2,6 @@
+ # List of files in the vdso
+ 
+ KCOV_INSTRUMENT := n
+-ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
+-ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
+ 
+ include $(srctree)/lib/vdso/Makefile
+ obj-vdso64 = vdso_user_wrapper.o note.o
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 12f6c4d714cd..a97f3630ca20 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -3,10 +3,6 @@
+ # Building vDSO images for x86.
+ #
+ 
+-# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
+-# the inclusion of generic Makefile.
+-ARCH_REL_TYPE_ABS := R_X86_64_JUMP_SLOT|R_X86_64_GLOB_DAT|R_X86_64_RELATIVE|
+-ARCH_REL_TYPE_ABS += R_386_GLOB_DAT|R_386_JMP_SLOT|R_386_RELATIVE
+ include $(srctree)/lib/vdso/Makefile
+ 
+ # Sanitizer runtimes are unavailable and cannot be linked here.
+diff --git a/lib/vdso/Makefile b/lib/vdso/Makefile
+index c415a685d61b..9f031eafc465 100644
+--- a/lib/vdso/Makefile
++++ b/lib/vdso/Makefile
+@@ -5,18 +5,13 @@ GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
+ 
+ c-gettimeofday-$(CONFIG_GENERIC_GETTIMEOFDAY) := $(addprefix $(GENERIC_VDSO_DIR), gettimeofday.c)
+ 
+-# This cmd checks that the vdso library does not contain absolute relocation
++# This cmd checks that the vdso library does not contain dynamic relocations.
+ # It has to be called after the linking of the vdso library and requires it
+ # as a parameter.
+ #
+-# $(ARCH_REL_TYPE_ABS) is defined in the arch specific makefile and corresponds
+-# to the absolute relocation types printed by "objdump -R" and accepted by the
+-# dynamic linker.
+-ifndef ARCH_REL_TYPE_ABS
+-$(error ARCH_REL_TYPE_ABS is not set)
+-endif
+-
++# As a workaround for some GNU ld ports which produce unneeded R_*_NONE
++# dynamic relocations, ignore R_*_NONE.
+ quiet_cmd_vdso_check = VDSOCHK $@
+-      cmd_vdso_check = if $(OBJDUMP) -R $@ | egrep -h "$(ARCH_REL_TYPE_ABS)"; \
++      cmd_vdso_check = if $(READELF) -rW $@ | grep -v _NONE | grep -q " R_\w*_"; \
+ 		       then (echo >&2 "$@: dynamic relocations are not supported"; \
+ 			     rm -f $@; /bin/false); fi
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2.672.g94769d06f0-goog
+

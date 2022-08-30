@@ -2,62 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BF0D5A63D3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE585A63D1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 14:48:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229965AbiH3MsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 08:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38308 "EHLO
+        id S229853AbiH3MsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 08:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229840AbiH3MsJ (ORCPT
+        with ESMTP id S229770AbiH3MsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 08:48:09 -0400
+        Tue, 30 Aug 2022 08:48:07 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FBD12F55A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:48:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E17212F546;
+        Tue, 30 Aug 2022 05:48:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35B7BB81B33
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:48:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 083E0C43470
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:48:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661863686;
-        bh=/cAJwBHtM/ZURW3cF5eFVB0hZFmtk7GamSbxXq9JtWo=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=huSe1YohCQxf4H7e96UWv5Mjs28frLHyOt4kUHnkbsTPI9PHdVXBA90CE0nVX/bQE
-         6+ROles0scsg9L0csQEvv9KqOo6vcHjhicLtcimIyF63rlJl+cYcd2YknRk6WvSTqy
-         PQNB5BZvnI14eeJK/Lpk9Hyabjfj/6PBLls8VayuHXnmX80FRVtVH7DikPGiIW78/U
-         hXh4CSbPjXHRTH1eO1fJbEb0afdIrPxKvrEfkiXg1ZiJYFeT6qNFWxNog4gyugHIbk
-         8oGNDGLRR0r0OfKO40aejhv9Hpk0vDX4JqAJ4A6XG/b4U6qhZkP41DIVWR+9caYYD/
-         n8G50TLq5B5mQ==
-Received: by mail-vs1-f43.google.com with SMTP id f185so6556654vsc.4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 05:48:05 -0700 (PDT)
-X-Gm-Message-State: ACgBeo23pS/Yaa2H9aLo1+I+UH1H3kibgoVwmdUtEYbVTzO5XFKeb2YR
-        YpK80xdpiRDia0aMhL6amHRlUnVIaFJBFqLieA==
-X-Google-Smtp-Source: AA6agR4BFxbKvuMHCS56CHge6iE78gvzzPulVJJ1K3ptPrTy0eibGx4WI+E7FOdKqKeTEMm2IWkL3Jc05bfWSfSp3QU=
-X-Received: by 2002:a67:b808:0:b0:388:b23e:8395 with SMTP id
- i8-20020a67b808000000b00388b23e8395mr4860489vsf.64.1661863684738; Tue, 30 Aug
- 2022 05:48:04 -0700 (PDT)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 33539B81B31;
+        Tue, 30 Aug 2022 12:48:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B690C433D6;
+        Tue, 30 Aug 2022 12:48:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661863683;
+        bh=OAh+DLRsxby01KGNRIxvYJEv80iev1FoY/1ihc89qeo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kyt2axUo3wku6Kk3CgkAayyGli93rvZpbgEBOq6hOY3guD66TdeR02kLDabuHbj5G
+         olUUtuZmmu4CEkPwNGffuxvD4B541E91LtD8pqzBB6xeRb65tHn+DQwTIuZA/ZtuQJ
+         ZDNKMpRvi9e4Z7782wlHSxvrTPoc/c/mU5ycgh24=
+Date:   Tue, 30 Aug 2022 14:48:00 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "open list:SERIAL DRIVERS" <linux-serial@vger.kernel.org>,
+        Stephen Warren <swarren@nvidia.com>,
+        Alan Cox <alan@linux.intel.com>,
+        Laxman Dewangan <ldewangan@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/3] serial: Create uart_xmit_advance()
+Message-ID: <Yw4HALWWOWabR/l9@kroah.com>
+References: <20220825091707.8112-1-ilpo.jarvinen@linux.intel.com>
+ <20220825091707.8112-2-ilpo.jarvinen@linux.intel.com>
+ <Yw4CP8y3b9E9XV0K@kroah.com>
+ <CAHp75VfQHhPoO3Rpk=o1c2qPJB-tc_6G41n6iz3sv_gP44PLUw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220829062202.3287-1-zong.li@sifive.com> <20220830083606.1681385-1-ben.dooks@sifive.com>
-In-Reply-To: <20220830083606.1681385-1-ben.dooks@sifive.com>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Tue, 30 Aug 2022 07:47:53 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKo5puQ-nE=G9YPon2xFb7MRX5GGj11YPPjnbRJ3yVX6Q@mail.gmail.com>
-Message-ID: <CAL_JsqKo5puQ-nE=G9YPon2xFb7MRX5GGj11YPPjnbRJ3yVX6Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: sifive-ccache: fix cache level for l3 cache
-To:     Ben Dooks <ben.dooks@sifive.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VfQHhPoO3Rpk=o1c2qPJB-tc_6G41n6iz3sv_gP44PLUw@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -68,16 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 3:36 AM Ben Dooks <ben.dooks@sifive.com> wrote:
->
-> With newer cores such as the p550, the SiFive composable cache can be
-> a level 3 cache. Update the cache level to be one of 2 or 3.
->
-> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
-> ---
->  Documentation/devicetree/bindings/riscv/sifive-ccache.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Aug 30, 2022 at 03:38:27PM +0300, Andy Shevchenko wrote:
+> On Tue, Aug 30, 2022 at 3:31 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Thu, Aug 25, 2022 at 12:17:05PM +0300, Ilpo Järvinen wrote:
+> > > A very common pattern in the drivers is to advance xmit tail
+> > > index and do bookkeeping of Tx'ed characters. Create
+> > > uart_xmit_advance() to handle it.
+> > >
+> > > Fixes: e9ea096dd225 ("serial: tegra: add serial driver")
+> > > Fixes: 2d908b38d409 ("serial: Add Tegra Combined UART driver")
+> >
+> > This commit only adds a new function, it does not "Fix" anything :(
+> 
+> I'm wondering how to tell stable maintainers about dependencies of
+> (not yet applied) patches? In practice I saw that contributors use
+> Fixes tag for the entire chain (for the preparatory patches + the real
+> fix) when it's not easy / in a nice way to rebase to have a one-patch
+> fix followed by refactoring, etc.
 
-Please send DT patches to the DT list. Resend so checks run.
+It's as if no one has ever had this issue before and wrote it down for
+all to read and know what to do in the future.
 
-Rob
+{sigh}
+
+Please read:
+    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
+for how to do this properly.
+
+If you don't know the git id, just use the subject line and it should
+work the same.
+
+greg "why even write documentation?" k-h

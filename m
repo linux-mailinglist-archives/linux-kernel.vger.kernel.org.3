@@ -2,219 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89E665A6DD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 822565A6DD5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 21:51:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231663AbiH3Tv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 15:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S231721AbiH3Tvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 15:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbiH3TvX (ORCPT
+        with ESMTP id S231669AbiH3Tvl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 15:51:23 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B8772B5E;
-        Tue, 30 Aug 2022 12:51:21 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661889080;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jyA52n5PXIfZG6yhWBQm3SaPH6T9tI0OWXKlc6krVCE=;
-        b=LUuBibphlFTocfvHxEYwjPEhEbf34nsdxlCj+c68189duPaL4Z3ld/zR4FVqL4zRYfqU/c
-        Ymt4M1PCH0aBBAwlq2co7SkEZPXrLewGCiTfKB4c5BIadgvKQ9jawXUG13aMoTW/tFH4no
-        licZLjpIvirfUDEBqZ8h7/Mu/owfqH4=
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
-        kvm@vger.kernel.org, Quentin Perret <qperret@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Reiji Watanabe <reijiw@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Gavin Shan <gshan@redhat.com>, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 11/14] KVM: arm64: Make changes block->table to leaf PTEs parallel-aware
-Date:   Tue, 30 Aug 2022 19:51:01 +0000
-Message-Id: <20220830195102.964724-1-oliver.upton@linux.dev>
-In-Reply-To: <20220830194132.962932-1-oliver.upton@linux.dev>
-References: <20220830194132.962932-1-oliver.upton@linux.dev>
+        Tue, 30 Aug 2022 15:51:41 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E27717E802
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:51:39 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id b16so15632042edd.4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:51:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=y2BsAU9V1vGdt8p536WRg36dWX8Oh3MzpJrUWzUelg0=;
+        b=PKO9Ih5HCXvgFcNbUeRyybhQkiOyrhvI0hcbzTdHIAMDpYBWL9GHOUDjjY9UdWnRNU
+         Z5Ojdi4hHX6CCebuGU0G1jKXT+BjL/h/yF6zBNhY0o6zuOgUIOcw5bMFsvIG9jbbgq4F
+         5Iq5WrNcC4ROpyxhCYHMZPO3M5Fhv7/kemXOs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=y2BsAU9V1vGdt8p536WRg36dWX8Oh3MzpJrUWzUelg0=;
+        b=ZmmrJrVwU1fx9If895CcMTotkbldeDsPWlwrZv+4jAnok8BgHJ55uUW/YJ+dEYauj+
+         HqjpaFm9EmbXMxzvHMCR1LW/V27WHvtsODwJGSeHpK+qflsiX1GeIQQlhBXVsIcUSrCC
+         ge7M5+bAFdTf2wPLixMAb479cwwrGfMYMW1PMFlDhDUbn8X7vr9uLnGh/d1CqbStVrTX
+         ccButR32xr2zyI+jY5sB0hmEU6c2ZAkGpOfGnWAE1zz2scK1xAQEEKm6q1YHGrMZrLik
+         67Uhoyh6A2Az6/qDbZ7NGFmISHyo7+aWiParVHl1vrkuiWTAtfUaBVmsuKVNGIwJB2pK
+         x9XA==
+X-Gm-Message-State: ACgBeo0WqP25lHwB5Vhl87GDqRjuPi/XW0W8vnNsZNimUAgKcJ3L95pG
+        tVJsuVsrIwZPZVaGf5MCMkJtOJyzv3MK3YEt
+X-Google-Smtp-Source: AA6agR4asCOAZE2cGK0r1RwiOE7nTalPz2cAPiGSj+p7ugPWV1MWaXrbOcUK89ZvZn6m276TagxehQ==
+X-Received: by 2002:a05:6402:5c9:b0:446:fb0:56bb with SMTP id n9-20020a05640205c900b004460fb056bbmr22186950edx.173.1661889098322;
+        Tue, 30 Aug 2022 12:51:38 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id y8-20020a056402170800b0043c0fbdcd8esm7814015edu.70.2022.08.30.12.51.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 12:51:37 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id m16so15569907wru.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 12:51:36 -0700 (PDT)
+X-Received: by 2002:a5d:6881:0:b0:225:28cb:332f with SMTP id
+ h1-20020a5d6881000000b0022528cb332fmr9826377wru.405.1661889096492; Tue, 30
+ Aug 2022 12:51:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220830123231.1.I98d30623f13b785ca77094d0c0fd4339550553b6@changeid>
+In-Reply-To: <20220830123231.1.I98d30623f13b785ca77094d0c0fd4339550553b6@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Tue, 30 Aug 2022 12:51:22 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=XO++XMrdZmupY8ED97W6AaU=H=sB2PN=6EpRxOOo4Afw@mail.gmail.com>
+Message-ID: <CAD=FV=XO++XMrdZmupY8ED97W6AaU=H=sB2PN=6EpRxOOo4Afw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: dts: rockchip: Set RK3399-Gru PCLK_EDP to 24 MHz
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     Heiko Stuebner <heiko@sntech.de>, zain wang <wzz@rock-chips.com>,
+        Lin Huang <hl@rock-chips.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to service stage-2 faults in parallel, stage-2 table walkers
-must take exclusive ownership of the PTE being worked on. An additional
-requirement of the architecture is that software must perform a
-'break-before-make' operation when changing the block size used for
-mapping memory.
+Hi,
 
-Roll these two concepts together into helpers for performing a
-'break-before-make' sequence. Use a special PTE value to indicate a PTE
-has been locked by a software walker. Additionally, use an atomic
-compare-exchange to 'break' the PTE when the stage-2 page tables are
-possibly shared with another software walker. Elide the DSB + TLBI if
-the evicted PTE was invalid (and thus not subject to break-before-make).
+On Tue, Aug 30, 2022 at 12:32 PM Brian Norris <briannorris@chromium.org> wrote:
+>
+> We've found the AUX channel to be less reliable with PCLK_EDP at a
+> higher rate (typically 25 MHz). This is especially important on systems
+> with PSR-enabled panels (like Gru-Kevin), since we make heavy, constant
+> use of AUX.
+>
+> According to Rockchip, using any rate other than 24 MHz can cause
+> "problems between syncing the PHY an PCLK", which leads to all sorts of
+> unreliabilities around register operations.
+>
+> Signed-off-by: zain wang <wzz@rock-chips.com>
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
 
-All of the atomics do nothing for now, as the stage-2 walker isn't fully
-ready to perform parallel walks.
+nit: Sinze zain wang's SoB is first then I think either the patch
+needs to be "From" zain wang or you need some different tagging, like
+Co-Developed-by or something.
 
-Signed-off-by: Oliver Upton <oliver.upton@linux.dev>
----
- arch/arm64/kvm/hyp/pgtable.c | 87 +++++++++++++++++++++++++++++++++---
- 1 file changed, 82 insertions(+), 5 deletions(-)
+> ---
+>
+>  arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+> index 45796b9fd94f..ee6095baba4d 100644
+> --- a/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+> +++ b/arch/arm64/boot/dts/rockchip/rk3399-gru-chromebook.dtsi
+> @@ -244,6 +244,14 @@ &dmc {
+>  &edp {
+>         status = "okay";
+>
+> +       /*
+> +        * eDP PHY/clk don't sync reliably at anything other than 24 MHz. Only
+> +        * set this here, because rk3399-gru.dtsi ensures we can generate this
+> +        * off GPLL=600MHz, whereas some other RK3399 boards may not.
+> +        */
+> +       assigned-clocks = <&cru PCLK_EDP>;
+> +       assigned-clock-rates = <24000000>;
+> +
 
-diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
-index 61a4437c8c16..71ae96608752 100644
---- a/arch/arm64/kvm/hyp/pgtable.c
-+++ b/arch/arm64/kvm/hyp/pgtable.c
-@@ -49,6 +49,12 @@
- #define KVM_INVALID_PTE_OWNER_MASK	GENMASK(9, 2)
- #define KVM_MAX_OWNER_ID		1
- 
-+/*
-+ * Used to indicate a pte for which a 'break-before-make' sequence is in
-+ * progress.
-+ */
-+#define KVM_INVALID_PTE_LOCKED		BIT(10)
-+
- struct kvm_pgtable_walk_data {
- 	struct kvm_pgtable		*pgt;
- 	struct kvm_pgtable_walker	*walker;
-@@ -586,6 +592,8 @@ struct stage2_map_data {
- 
- 	/* Force mappings to page granularity */
- 	bool				force_pte;
-+
-+	bool				shared;
- };
- 
- u64 kvm_get_vtcr(u64 mmfr0, u64 mmfr1, u32 phys_shift)
-@@ -691,6 +699,11 @@ static bool stage2_pte_is_counted(kvm_pte_t pte)
- 	return kvm_pte_valid(pte) || kvm_invalid_pte_owner(pte);
- }
- 
-+static bool stage2_pte_is_locked(kvm_pte_t pte)
-+{
-+	return !kvm_pte_valid(pte) && (pte & KVM_INVALID_PTE_LOCKED);
-+}
-+
- static bool stage2_try_set_pte(kvm_pte_t *ptep, kvm_pte_t old, kvm_pte_t new, bool shared)
- {
- 	if (!shared) {
-@@ -701,6 +714,69 @@ static bool stage2_try_set_pte(kvm_pte_t *ptep, kvm_pte_t old, kvm_pte_t new, bo
- 	return cmpxchg(ptep, old, new) == old;
- }
- 
-+/**
-+ * stage2_try_break_pte() - Invalidates a pte according to the
-+ *			    'break-before-make' requirements of the
-+ *			    architecture.
-+ *
-+ * @ptep: Pointer to the pte to break
-+ * @old: The previously observed value of the pte
-+ * @addr: IPA corresponding to the pte
-+ * @level: Table level of the pte
-+ * @shared: true if the stage-2 page tables could be shared by multiple software
-+ *	    walkers
-+ *
-+ * Returns: true if the pte was successfully broken.
-+ *
-+ * If the removed pte was valid, performs the necessary serialization and TLB
-+ * invalidation for the old value. For counted ptes, drops the reference count
-+ * on the containing table page.
-+ */
-+static bool stage2_try_break_pte(kvm_pte_t *ptep, kvm_pte_t old, u64 addr, u32 level,
-+				 struct stage2_map_data *data)
-+{
-+	struct kvm_pgtable_mm_ops *mm_ops = data->mm_ops;
-+
-+	if (stage2_pte_is_locked(old)) {
-+		/*
-+		 * Should never occur if this walker has exclusive access to the
-+		 * page tables.
-+		 */
-+		WARN_ON(!data->shared);
-+		return false;
-+	}
-+
-+	if (!stage2_try_set_pte(ptep, old, KVM_INVALID_PTE_LOCKED, data->shared))
-+		return false;
-+
-+	/*
-+	 * Perform the appropriate TLB invalidation based on the evicted pte
-+	 * value (if any).
-+	 */
-+	if (kvm_pte_table(old, level))
-+		kvm_call_hyp(__kvm_tlb_flush_vmid, data->mmu);
-+	else if (kvm_pte_valid(old))
-+		kvm_call_hyp(__kvm_tlb_flush_vmid_ipa, data->mmu, addr, level);
-+
-+	if (stage2_pte_is_counted(old))
-+		mm_ops->put_page(ptep);
-+
-+	return true;
-+}
-+
-+static void stage2_make_pte(kvm_pte_t *ptep, kvm_pte_t old, kvm_pte_t new,
-+			    struct stage2_map_data *data)
-+{
-+	struct kvm_pgtable_mm_ops *mm_ops = data->mm_ops;
-+
-+	WARN_ON(!stage2_pte_is_locked(*ptep));
-+
-+	if (stage2_pte_is_counted(new))
-+		mm_ops->get_page(ptep);
-+
-+	smp_store_release(ptep, new);
-+}
-+
- static void stage2_put_pte(kvm_pte_t *ptep, struct kvm_s2_mmu *mmu, u64 addr,
- 			   u32 level, struct kvm_pgtable_mm_ops *mm_ops)
- {
-@@ -836,17 +912,18 @@ static int stage2_map_walk_leaf(u64 addr, u64 end, u32 level, kvm_pte_t *ptep,
- 	if (!childp)
- 		return -ENOMEM;
- 
-+	if (!stage2_try_break_pte(ptep, *old, addr, level, data)) {
-+		mm_ops->put_page(childp);
-+		return -EAGAIN;
-+	}
-+
- 	/*
- 	 * If we've run into an existing block mapping then replace it with
- 	 * a table. Accesses beyond 'end' that fall within the new table
- 	 * will be mapped lazily.
- 	 */
--	if (stage2_pte_is_counted(pte))
--		stage2_put_pte(ptep, data->mmu, addr, level, mm_ops);
--
- 	new = kvm_init_table_pte(childp, mm_ops);
--	mm_ops->get_page(ptep);
--	smp_store_release(ptep, new);
-+	stage2_make_pte(ptep, *old, new, data);
- 	*old = new;
- 
- 	return 0;
--- 
-2.37.2.672.g94769d06f0-goog
+Yeah, this looks right to me. From my memory of the problem:
 
+* For some reason, some devices hit it more than others (maybe just
+process variance?)
+
+* The problem affected nearly any register read or write on the eDP
+controller and wasn't rk3399 specific (other Rockchip models were
+impacted) but the failure rate was crazy low so it wasn't discovered
+until rk3399 came about and we implemented PSR and the number of
+register reads/writes to the eDP controller went through the roof.
+
+* Most other devices use GPLL at 594 so that they can use it to make
+certain standard HDMI rates. Changing other devices so GPLL = 600
+wouldn't be trivial.
+
+* It's fairly hard to change GPLL to 600 without coordinating with the
+bootloader. Certainly it could be possible, but you'd have to make
+sure that no important devices were impacted at boot when doing the
+change. gru devices bootloaders are the only known ones to set GPLL to
+600 MHz.
+
+
+So:
+
+Reviewed-by: Douglas Anderson <dianders@chromium.org>

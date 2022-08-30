@@ -2,155 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5194B5A58F4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:46:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A3335A58F5
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbiH3BqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 21:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53382 "EHLO
+        id S229688AbiH3Brb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 21:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiH3BqO (ORCPT
+        with ESMTP id S229468AbiH3Br2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 21:46:14 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1E637170A;
-        Mon, 29 Aug 2022 18:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661823973; x=1693359973;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=g/WWeE3dDMjzGcqcOmiQkfDtGDanYr/MP7cytR+qkDw=;
-  b=mZPRa/RnAgJ/nyKFtRB7qE2cXp/iGGrSiSRjk9a8L2dY3SSj6+9dKQNM
-   tN3S7rsTC3M5FtLCBq1RNxUx80KKnCHwnHd90nmA6QcAe58d8HUAPDrj5
-   +I0Eua/WlDfoYvYulF6GZtY5WbJ3OnKSbqNp3xW4+GdKZ2hz5kWXRT+JK
-   QLp4xdgrCopiDOQGm0GK6B3ekveDS4N/lXG6jDthdYUUa7yUIbUxXu1xT
-   laTaD1RPnQMtIc532vKOY9Fl5HmoOXuNuLovXC2LZF0imbokHTF5T0z+I
-   5YCRCKIIYlj4D/xdgUz4JMNQuwtAW0+nTrs/j0X8+8vzibreIRJzzqcOv
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="295053764"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="295053764"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 18:46:10 -0700
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="672621796"
-Received: from hhuan14-mobl1.ccr.corp.intel.com (HELO [10.254.215.208]) ([10.254.215.208])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2022 18:46:04 -0700
-Message-ID: <c7d71936-ea06-3a71-d13a-cedd108413b5@linux.intel.com>
-Date:   Tue, 30 Aug 2022 09:46:01 +0800
+        Mon, 29 Aug 2022 21:47:28 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A9967C778
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:47:27 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso16419104pjk.0
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:47:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=IyD7fwTMy15wH7pBcObtdwE5dJQ5CpVWpD2s2V7wnQg=;
+        b=UyIN6Jt3LBLWRE8mHc+0kCt3klWBuwoY3j/hDdBnD1v/EOw8PkgPQ5JZno1K4KZ0LA
+         IDz8PubRdmoICKtAXGDsHdqUABsocbumFpcnntKeFO2iMcb4FweCrlg/Ds1Iam3TCrtB
+         wQZi2kbqVbCVME0cyyV9aoBB4DIW8MgrwC6YU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=IyD7fwTMy15wH7pBcObtdwE5dJQ5CpVWpD2s2V7wnQg=;
+        b=zGWlpV9aLffvEHrY9xsDUct6u1MVYo7Wz6bmvN1xS8B4aH7WB3QsbGzq8NIDS+32f7
+         IpYDldGLw2MHyEIeeoEw+/+uBuj4e0UR9cuTZgYI1Oo7rph6OUsLSnb+HZEpPQ2ARQlZ
+         oAv+h/OGa0iXTDcN6+W4G9dfnP4Wl5d3n9HtT1FKdTsRowGTIWTFnOC6RAhtpyBJO97v
+         qMburfCqUB4AfMhKpwHn/NjPinQoy7MxHMzOk9d8vpSA872I8+MaWXij8qWkMg5q8sm0
+         PEtdMNEQv7QUYflVcmC+JCBYZhz7eLQgtEkdvOc1YN7cn5xXd4lBbws5QzazxxD2OMLy
+         GyFA==
+X-Gm-Message-State: ACgBeo1YaI9dldCfuH4Xf7OsExSVugbBms7TuNHW+NZKUiO8BZdk0njj
+        U7fWD6NrQRkFCBfSMs4Cza7L0A==
+X-Google-Smtp-Source: AA6agR6Vtf9yrF/gN/4hEfM3EyhsyzlTFsaOTnVNngviGQ2VNePTZJuQIauz2Zs73YXWXEk0nFFJ3A==
+X-Received: by 2002:a17:90a:3002:b0:1fd:d4fe:29a6 with SMTP id g2-20020a17090a300200b001fdd4fe29a6mr7155764pjb.236.1661824046912;
+        Mon, 29 Aug 2022 18:47:26 -0700 (PDT)
+Received: from google.com ([110.11.159.72])
+        by smtp.gmail.com with ESMTPSA id v12-20020a1709029a0c00b0017294d80f25sm8154306plp.258.2022.08.29.18.47.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Aug 2022 18:47:26 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 10:47:21 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH 1/2] lib/test_printf.c: Add ip6 tests
+Message-ID: <Yw1sKTOEs1Nrdb2S@google.com>
+References: <20220830003119.1793219-1-kent.overstreet@linux.dev>
+ <20220830003119.1793219-2-kent.overstreet@linux.dev>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eric Auger <eric.auger@redhat.com>,
-        Liu Yi L <yi.l.liu@intel.com>,
-        Jacob jun Pan <jacob.jun.pan@intel.com>,
-        Zhangfei Gao <zhangfei.gao@linaro.org>,
-        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v12 07/17] iommu: Try to allocate blocking domain when
- probing device
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-References: <20220826121141.50743-1-baolu.lu@linux.intel.com>
- <20220826121141.50743-8-baolu.lu@linux.intel.com>
- <YwjeL2SVmdRpoWb6@nvidia.com>
- <316f6575-59ea-08e3-aaaf-bc1e4f42a574@linux.intel.com>
- <Ywz3A3tHEzY+Sf7b@nvidia.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <Ywz3A3tHEzY+Sf7b@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830003119.1793219-2-kent.overstreet@linux.dev>
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/30 01:27, Jason Gunthorpe wrote:
-> On Mon, Aug 29, 2022 at 11:40:24AM +0800, Baolu Lu wrote:
->> On 2022/8/26 22:52, Jason Gunthorpe wrote:
->>> On Fri, Aug 26, 2022 at 08:11:31PM +0800, Lu Baolu wrote:
->>>> Allocate the blocking domain when probing devices if the driver supports
->>>> blocking domain allocation. Otherwise, revert to the previous behavior,
->>>> that is, use UNMANAGED domain instead when the blocking domain is needed.
->>>>
->>>> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
->>>> Tested-by: Zhangfei Gao<zhangfei.gao@linaro.org>
->>>> Tested-by: Tony Zhu<tony.zhu@intel.com>
->>>> ---
->>>>    drivers/iommu/iommu.c | 29 +++++++++++++++++------------
->>>>    1 file changed, 17 insertions(+), 12 deletions(-)
->>> This seems like a lot of overhead to allocate these things for every
->>> group?
->>>
->>> Why not add a simple refcount on the blocking domain instead and
->>> allocate the domain on the pasid attach like we do for ownership?
->>
->> I am working towards implementing static instance of blocking domain for
->> each IOMMU driver, and then, there's no much overhead to allocate it in
->> the probing device path.
-> 
-> Well, I thought about that and I don't think we can get
-> there in a short order.
+On (22/08/29 20:31), Kent Overstreet wrote:
+> diff --git a/lib/test_printf.c b/lib/test_printf.c
+> index 4bd15a593f..6a56dbf076 100644
+> --- a/lib/test_printf.c
+> +++ b/lib/test_printf.c
+> @@ -18,6 +18,7 @@
+>  #include <linux/dcache.h>
+>  #include <linux/socket.h>
+>  #include <linux/in.h>
+> +#include <linux/in6.h>
+>  
+>  #include <linux/gfp.h>
+>  #include <linux/mm.h>
+> @@ -61,6 +62,9 @@ do_test(int bufsize, const char *expect, int elen,
+>  		pr_warn("vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d\n",
+>  			bufsize, fmt, ret, elen);
+>  		return 1;
+> +		pr_warn("vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d (%s != %s)\n",
+> +			bufsize, fmt, ret, elen, test_buffer, expect);
+> +		return 1;
+>  	}
 
-Yes. Fair enough.
-
-> Would rather you progress this series without
-> getting entangled in such a big adventure
-
-Agreed. I will drop this patch and add below code in the iommu
-interface:
-
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -3219,6 +3219,26 @@ int iommu_attach_device_pasid(struct iommu_domain 
-*domain,
-                 return -ENODEV;
-
-         mutex_lock(&group->mutex);
-+
-+       /*
-+        * The underlying IOMMU driver needs to support blocking domain
-+        * allocation and the callback to block DMA transactions with a
-+        * specific PASID.
-+        */
-+       if (!group->blocking_domain) {
-+               group->blocking_domain = __iommu_domain_alloc(dev->bus,
-+                               IOMMU_DOMAIN_BLOCKED);
-+               if (!group->blocking_domain) {
-+                       ret = -ENODEV;
-+                       goto out_unlock;
-+               }
-+       }
-+
-+       if (!group->blocking_domain->ops->set_dev_pasid) {
-+               ret = -EOPNOTSUPP;
-+               goto out_unlock;
-+       }
-+
-         curr = xa_cmpxchg(&group->pasid_array, pasid, NULL, domain, 
-GFP_KERNEL);
-         if (curr) {
-                 ret = xa_err(curr) ? : -EBUSY;
-
-Currently both ARM SMMUv3 and VT-d drivers use static blocking domain.
-Hence I didn't use a refcount for blocking domain release here.
-
-Best regards,
-baolu
-
+I assume you intended to replace first pr_warn() with the second one?

@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810CC5A5DB4
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:05:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 228B55A5DB9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:06:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231512AbiH3IFN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:05:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48960 "EHLO
+        id S230097AbiH3IGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 04:06:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231509AbiH3IEy (ORCPT
+        with ESMTP id S230043AbiH3IGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:04:54 -0400
+        Tue, 30 Aug 2022 04:06:34 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55635D4186;
-        Tue, 30 Aug 2022 01:04:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AB6267E
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 01:06:33 -0700 (PDT)
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 985836601E8E;
-        Tue, 30 Aug 2022 09:04:18 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id F1BFD6601E8E;
+        Tue, 30 Aug 2022 09:06:31 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1661846659;
-        bh=GJTT/+oC84VOzmoCMWQbYo6gCKJxXUVb6WsZq7befSg=;
+        s=mail; t=1661846792;
+        bh=q3hz6lam6ByJZFG8AQKAq6AKbuWIaklHb+CToWCW60Q=;
         h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=hY1arLLCHiudf/f8QWUU8Lj3X+uZ+7gf4C5dIzPmbYDSNd5XWXvzXQKRwA6SM9rAS
-         J7yIFjkQv93hBk1BeI86Hf7WP2y5TyiJBFKD3jnmo6evTEKAAaDnyhDu+1CE83SauY
-         arUn61LBtCFqlOVDQR/K0KglyQb2I28AP91KJ47DUUXgFT/45I32Kuefb+foFSQzQf
-         lbEqHBDzYpU7ipvqmbTWnqCAdnRADHyBzjHhJA3dPRClMIIVnzJNIZab5pOwafkwl9
-         GJJk0vRm+Wd+KbdxrTRAFZfcDbWMvSz1ZLLZivZmMXTTcFYBcwuJOACxRIuHiep4XL
-         w5XPoJIYwil1A==
-Message-ID: <c34ba319-ad62-5ec7-55c0-94027265e77e@collabora.com>
-Date:   Tue, 30 Aug 2022 10:04:16 +0200
+        b=elOrtcVL18D5qLmrky4vEOBy9QkcMtBFUGfLp8RpLC97BehAQhqmFtweput3RR/J6
+         LPIjesKRFEIeGOQVSwTdJLJ+V4yijxQAb4CXzj4Hfk+jz6AkRakIBFC+FCXPgl653s
+         yd8MaMrED5m/yZMG1ycFCE+e90RCxssUSsip5m6v8qIXxjVZERER8p+8WaAtG9fadi
+         lM42gcshgTQM7MXuTVwQkVc38D9fNI5WNEkPcn6ZtcfNENZPtMgTuHpsqBgqHeB9ed
+         DzsWtupeyrR1vfi/rE2BJAgfiKXlMtrPkDFoNaVBe35GqHGV0yRRUZQnGFshHMb5X6
+         wy4uSSlCLfy/g==
+Message-ID: <ea7b7b08-cb9a-b6a3-bc7a-050616696e89@collabora.com>
+Date:   Tue, 30 Aug 2022 10:06:29 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH] dt-bindings: mfd: Rename mediatek,mt8195-scpsys.yaml
+Subject: Re: [PATCH] soc: mediatek: mtk-svs: Explicitly include bitfield
+ header
 Content-Language: en-US
-To:     matthias.bgg@kernel.org, lee@kernel.org, robh+dt@kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        mandyjh.liu@mediatek.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Matthias Brugger <mbrugger@suse.com>
-References: <20220825141656.15747-1-matthias.bgg@kernel.org>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     kernel@collabora.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+References: <20220829204439.3748648-1-nfraprado@collabora.com>
+ <5a8a2b0d-fa7c-e8c6-bb04-152f8c17aa76@gmail.com>
 From:   AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20220825141656.15747-1-matthias.bgg@kernel.org>
+In-Reply-To: <5a8a2b0d-fa7c-e8c6-bb04-152f8c17aa76@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -61,29 +62,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 25/08/22 16:16, matthias.bgg@kernel.org ha scritto:
-> From: Matthias Brugger <mbrugger@suse.com>
+Il 30/08/22 09:37, Matthias Brugger ha scritto:
 > 
-> The file describes the scpsys node for all SoCs and not only the mt8195.
-> Rename it to reflect this fact.
 > 
-> Signed-off-by: Matthias Brugger <mbrugger@suse.com>
+> On 29/08/2022 22:44, Nícolas F. R. A. Prado wrote:
+>> Commit a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros
+>> where possible") introduced the use of FIELD_GET and FIELD_PREP macros,
+>> which are defined in the bitfield header. Add an explicit include for it
+>> so we're sure to have the symbols defined independently of the config.
+>>
+>> Fixes: a92438c5a30a ("soc: mediatek: mtk-svs: Use bitfield access macros where 
+>> possible")
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+>>
+>> ---
+>>
+>>   drivers/soc/mediatek/mtk-svs.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/soc/mediatek/mtk-svs.c b/drivers/soc/mediatek/mtk-svs.c
+>> index 64dba9f830f3..f67f3e971653 100644
+>> --- a/drivers/soc/mediatek/mtk-svs.c
+>> +++ b/drivers/soc/mediatek/mtk-svs.c
+>> @@ -3,6 +3,7 @@
+>>    * Copyright (C) 2022 MediaTek Inc.
+>>    */
+>> +#include <linux/bitfield.h>
+>>   #include <linux/bits.h>
+> 
+> What do we need the bits.h for?
+> 
 
-Makes sense to me... but you forgot to change the $id in the yaml file to
-reflect the new name.
+bits.h has the definition for GENMASK(h, l), used in this file :-)
 
-Please fix that, after which:
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cheers,
+Angelo
 
-> ---
->   .../mfd/{mediatek,mt8195-scpsys.yaml => mediatek,scpsys.yaml}     | 0
->   1 file changed, 0 insertions(+), 0 deletions(-)
->   rename Documentation/devicetree/bindings/mfd/{mediatek,mt8195-scpsys.yaml => mediatek,scpsys.yaml} (100%)
+> Regards,
+> Matthias
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt8195-scpsys.yaml b/Documentation/devicetree/bindings/mfd/mediatek,scpsys.yaml
-> similarity index 100%
-> rename from Documentation/devicetree/bindings/mfd/mediatek,mt8195-scpsys.yaml
-> rename to Documentation/devicetree/bindings/mfd/mediatek,scpsys.yaml
-> 
+>>   #include <linux/clk.h>
+>>   #include <linux/completion.h>
 
 

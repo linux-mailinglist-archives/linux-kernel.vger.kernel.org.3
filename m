@@ -2,57 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459BE5A59F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 05:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D9D5A5A08
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 05:31:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230099AbiH3D2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 23:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
+        id S229689AbiH3Dbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 23:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbiH3D2L (ORCPT
+        with ESMTP id S230159AbiH3DbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 23:28:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FFDA2DA3;
-        Mon, 29 Aug 2022 20:28:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 05D04B8161C;
-        Tue, 30 Aug 2022 03:28:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD77EC433D6;
-        Tue, 30 Aug 2022 03:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661830087;
-        bh=fpJVDoUPfAFFVyClIW/ENZvoBFYy+UmZpu9qtnrnB+E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ENeJ5dUPJZqcO8ez5TrCm8VqtdFQfGQ5oMdc7tIacKzfhd35GaGFAX9n9c8GVEuXf
-         n9N7JzvSPsLoPS3NrwwfyXTLEQSjMRU3HYgZsauXjrXf0x5liRH+87/qYeBrNocnsK
-         G8sEul0GH7EM/k3aeGje37YcUu9exj5Sh7NqlDhVuPaNHsTDv1EaiQFgjw8qkRV6A5
-         tEMYw+zCXVhclcsLgUesUqY8KyQGWDy8aaTQvxtUImMolCsoSDb+kY8vaECrHNpi/0
-         WdhnR5vKyCD72S/4JQ3jch1poConoRi10pRYm9jr9Y9mmIgBTfVGJrJqElQqlnVWcT
-         IQ+o79wtvLJfQ==
-Date:   Mon, 29 Aug 2022 22:28:04 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     vkoul@kernel.org, lee@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, david@ixit.cz, sboyd@kernel.org,
-        devicetree@vger.kernel.org, agross@kernel.org,
-        krzysztof.kozlowski@linaro.org
-Cc:     bryan.odonoghue@linaro.org
-Subject: Re: (subset) [PATCH 00/14] arm64/dt-bindings: mfd: qcom: SPMI PMIC
- fixes
-Message-ID: <20220830032804.wurwqwrvhje3qfld@builder.lan>
-References: <20220828084341.112146-1-krzysztof.kozlowski@linaro.org>
- <166182996519.340873.11988950576516786131.b4-ty@kernel.org>
+        Mon, 29 Aug 2022 23:31:17 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33C53AA346
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 20:30:59 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id 202so9493882pgc.8
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 20:30:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Gy9YEsBdDbtVX/3Y80hOdCjQjL++x+x3fWEIjnaGXeQ=;
+        b=ne8kwc0jDnt5KZ8vTixBZW1PnZvG/6KPA200TdzWZAuxrM92TRPeaRiF+AJGNePkEu
+         mn9R56EUmriofJiKsN9eDn5I2hgWmxakEk+oNnCEENjxN3jei+EI0Iyhfe7mA0p0XoD7
+         bBg1ohTeoXsCEH2QMTZBvSBnbRZ81BYhOf63J0KUE9dEhoonXTr2bvXtueT1SQ2PqcQ+
+         r7X3H4tV8tDW5vzpC+4E5qHA8JCDpwhbMBB1H9F/7LZbO/Lart6+E1VDbA8Dii6N0rug
+         cap5pJ5MrtubucrdvolzSRc43S9E6mVoqfXbQ/U0Y6xJNufOKeR3zoQJmL2NP/smDANP
+         76hg==
+X-Gm-Message-State: ACgBeo2rDUM0nOx3QDyAtnmfBJ1yACOS7wRo0X/+FXs9cmNCgYteeU3I
+        bUL0OIjxsX7QPEWToEGfG+YTTxHoKzY=
+X-Google-Smtp-Source: AA6agR4xI2ojVx50t9P7GpGpjYE71Eigy08mvFfpR3uK5N8U5LzzyLeScNNNKtlA9uW0cB+ApbvG3A==
+X-Received: by 2002:a63:4621:0:b0:429:f162:555e with SMTP id t33-20020a634621000000b00429f162555emr16210981pga.63.1661830257950;
+        Mon, 29 Aug 2022 20:30:57 -0700 (PDT)
+Received: from [172.20.0.236] ([12.219.165.6])
+        by smtp.gmail.com with ESMTPSA id 198-20020a6216cf000000b0052b84ca900csm8054360pfw.62.2022.08.29.20.30.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 29 Aug 2022 20:30:57 -0700 (PDT)
+Message-ID: <3bd708e6-2cee-9177-5453-f6b152ec762c@acm.org>
+Date:   Mon, 29 Aug 2022 20:30:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <166182996519.340873.11988950576516786131.b4-ty@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 1/2] testing/selftests: Add tests for the is_signed_type()
+ macro
+Content-Language: en-US
+To:     Isabella Basso <isabbasso@riseup.net>
+Cc:     Kees Cook <keescook@chromium.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Sander Vanheule <sander@svanheule.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yury Norov <yury.norov@gmail.com>
+References: <20220826162116.1050972-1-bvanassche@acm.org>
+ <20220826162116.1050972-2-bvanassche@acm.org>
+ <74370E0B-AC37-435F-A44C-5DBAA8A38496@riseup.net>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <74370E0B-AC37-435F-A44C-5DBAA8A38496@riseup.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,30 +83,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 10:26:43PM -0500, Bjorn Andersson wrote:
-> On Sun, 28 Aug 2022 11:43:27 +0300, Krzysztof Kozlowski wrote:
-> > The Qualcomm SPMI PMIC DT schema conversion was not really tested and several
-> > issues in the bindings and DTS should be corrected.
-> > 
-> > 1. The DTS patches can go independently.
-> > 2. The binding change continuous work of PWM reg fix and depends on it in
-> >    context (diff hunk):
-> >    https://lore.kernel.org/all/20220827145640.3530878-1-bryan.odonoghue@linaro.org/
-> >    Binidings changes and above, can be taken via MFD tree (fixed commit was
-> >    merged in v6.0-rc1).
-> > 
-> > [...]
+On 8/29/22 19:33, Isabella Basso wrote:
+>> +#include <kunit/test.h>
+>> +#include <linux/overflow.h>
 > 
-> Applied, thanks!
-> 
-> [01/14] ARM: dts: qcom: align SPMI PMIC ADC node name with dtschema
->         commit: 662e305dfc29b96913a03dde1e89e8968da65238
-> [02/14] ARM: dts: qcom: pm8941: align SPMI PMIC LPG node name with dtschema
->         commit: 7b357d3126226b7ec4810e26f4ded44b2286d197
-> [03/14] ARM: dts: qcom: pmx55: align SPMI PMIC Power-on node name with dtschema
->         commit: 4bdfd92cb14d97ef58600926ea6b2788b31c719f
+> Nit: I don’t know if that makes a huge difference but you might include
+> `<linux/compiler.h>` directly to make the final object smaller. Of course, that
+> would ideally be a change happening in 2/2 but that was already merged :).
 
-Not sure what I did to trick b4 here, but I also merged 4-12.
+Right, that could have been done in patch 2/2 but I think this can also 
+be done as a follow-up patch. I'm not sure what Kees prefers?
 
-Regards,
-Bjorn
+Thanks,
+
+Bart.

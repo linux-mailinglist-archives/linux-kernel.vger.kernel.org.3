@@ -2,167 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 392725A5BF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:39:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 011AB5A5BEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 08:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230215AbiH3GjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 02:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48492 "EHLO
+        id S230178AbiH3GgM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 02:36:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiH3GjJ (ORCPT
+        with ESMTP id S229569AbiH3GgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 02:39:09 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4591C79EDE
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:39:07 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id n17so12833995wrm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:39:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:to:from:user-agent:references:from:to:cc;
-        bh=mNuvuJblGgM9erVe7VcLK6pPLtsf0LmqJmZgGgV3TEY=;
-        b=4JZcJU5Kk16NjSy/F4gIG+ZROwRDQaEaxk1TBxGeyVmhVZBBuI6MlZntdzUydskp0Y
-         K2QLeLkibCJDa+iqJgONHz3Yp7okPWStEX6X/5KZddbDfK+ogKTKEomSOc//pbZKU23J
-         8uoC5jijvaDy3zUtqNZBca90oR8FwjUXcnJwam1TiKWROB2VKLm5qsQEQQVTfCoyuOSo
-         TB9WV0mEclmgLdHmsxiMyeSjoeoL/4wR2W6Tc4qo5E2oSQ91RoiQc7DSXCFs3KjxTG0O
-         KPNWhSKWgMsvyl+JPG2BdMjDjlwa2ZbqCc4THp+M00xceZQUQOQSNS1b9CbV2R5lgNHH
-         NtoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:in-reply-to:date
-         :subject:to:from:user-agent:references:x-gm-message-state:from:to:cc;
-        bh=mNuvuJblGgM9erVe7VcLK6pPLtsf0LmqJmZgGgV3TEY=;
-        b=DNiWbutAkNcjRfaejK+q6Lhy20J8DpKN1myaMYCiLQpYpN1fxYpivLBaRdICKYNyvj
-         YWfoUHscj6lx6AwjKtk7chPIJibIyLd37XnjIoR4IRYnnQK4DeQ3tcD6Abv8rVZ+6vgH
-         dxumSiYh8I28dZ6QhctoMdIJLgcHVZbupwPilJ2xL0mWRc3tzm3TO31EoksnMx+xHegE
-         OaCo2PbuzLtkHzQn95ixX2eHc1ERY3BAkBQQ6U3j2Div4C5IjETWwe8U6YmQGKgQcPkf
-         5CzYPjmXMAwJJvkAYUYqEKku6K+jQiUhFZxkLyWcpJF0ymUMKdilWUBpz0DbaCfJytD8
-         RhIg==
-X-Gm-Message-State: ACgBeo3SD7dJuHl5MT80KxtA5K09Q6PJvZr7UKgnUqLtC3jsVSofV0Lr
-        uDFXOqiV+nEQhcbP2I//um+zgw==
-X-Google-Smtp-Source: AA6agR62NkzOlArUrEk7k7uj4nn6Sn+TSr+IpCcQazgLhmOgjmRiJzUtmuBSZR6cyJwtWRmU9owjjw==
-X-Received: by 2002:adf:fa4e:0:b0:225:8616:be3a with SMTP id y14-20020adffa4e000000b002258616be3amr7730934wrr.234.1661841545776;
-        Mon, 29 Aug 2022 23:39:05 -0700 (PDT)
-Received: from localhost (laubervilliers-658-1-213-31.w90-63.abo.wanadoo.fr. [90.63.244.31])
-        by smtp.gmail.com with ESMTPSA id m13-20020a05600c3b0d00b003a83b066401sm10964211wms.31.2022.08.29.23.39.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 23:39:05 -0700 (PDT)
-References: <20220805085716.5635-1-yu.tu@amlogic.com>
- <20220805085716.5635-3-yu.tu@amlogic.com>
- <19654574-bdc0-9fa5-6465-fc88b20e20c5@linaro.org>
- <c223a85a-b76e-0e82-9a8c-6b60588dc03a@amlogic.com>
- <1jmtccz0f4.fsf@starbuckisacylon.baylibre.com>
- <edc9b0bd-6c69-0562-05ca-db0496897cf1@amlogic.com>
- <1j1qszv0wa.fsf@starbuckisacylon.baylibre.com>
- <72631035-58a6-23b5-1f7e-f1643b120432@amlogic.com>
-User-agent: mu4e 1.8.7; emacs 28.1
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Yu Tu <yu.tu@amlogic.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Subject: Re: [PATCH V3 2/6] arm64: dts: meson: add S4 Soc PLL clock
- controller in DT
-Date:   Tue, 30 Aug 2022 08:36:00 +0200
-In-reply-to: <72631035-58a6-23b5-1f7e-f1643b120432@amlogic.com>
-Message-ID: <1jy1v6z14n.fsf@starbuckisacylon.baylibre.com>
+        Tue, 30 Aug 2022 02:36:09 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120077.outbound.protection.outlook.com [40.107.12.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 286F16D552
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 23:36:08 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dMagSckHz4mnNO1sMiZlCz4HPOAD1hvcEdHhoLmNCVRK1pbcMkIzWL51UkDXrvpzFmKXY8V+2CgsDX9+XePWtkeI2MU0rw7IdXymjpKrWKYEPwNWgzIO9dKWm0QeWdH38Yp3j8RrwAN9KMQI2+G3qZ9t6NlsbaPbyp281n1brTg3b58nypx0LHxXIcwtyMaP4ue9RuImcK0lRV5bh+BlmcYj60H12X3jKCI+iAMoEM0FFEbMI6yIAiz5E2v21Elw2DLo5aloZSpnaMnsyHK8Eddh4clpr0f8u+mhZaU45G65+vzf/vTzcht3srq7EyuJpnIzm8W4xLZ7Llqs3IfvCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=REhG5AlhphRwyuIyIXIvAerOf8OlXTuZxjZGBnHjotE=;
+ b=C26X/3Tb6Vxmms5mogY7PwDhUH3mVPJrnfOson2iLYyZaxicyECnPkuyuLM0impKYzXkVuMqYVkUNsZqvXnDAnaSG+6Pjuiik54b78vPIoaIKrOuwCHWa3PqztWq9GRnNyKnGfI8oTWfwtoI45zaSev5yPpEaj16jFwuczyx9XGVBQzaQh/X/6QNlhylYQmhy+VIeT4Ec3IHFPlvm2XaXEI/tMi0Z0BiRIuO1EiyrJzSEFvd44Xs1qiANwyJz1DwDTiLDlAel7RCjD8osXEtK3f4opc9018qP+t+RPNULyX9MtY0xPiHYtiQwU5ErshJOGSl8QetaFH2IZX0hy3Dkg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=REhG5AlhphRwyuIyIXIvAerOf8OlXTuZxjZGBnHjotE=;
+ b=yIQ43ip9N6iWKewanDAM7TzbNT3on7aYNEX+cHTlEGC13KJFxmKMmbadH6mGw1UGXlwS6fHG4tcEGt/FN2QtjE0vsxCDNrRvOEgMuQIKvHxWtGF+t0/I8QCWUP6YxS7ILUgtquUqe6PmNwHPJbl8KtfXxTfkN2v3I6EOjvbTvpdsVkUWBjMFA1Y1ocz2EJyKYSvWhg4hD7XK/ODW7AhueNZfV2SSv+DbEH7/qp1GC/MLjbk4roJ32PfntIPj/jqHs/CzhPqo/RTLbjyzR2LaFPUqHkHF8jf5s7p1yN4OqcKTMVcIYxIdYUI/lhp/wJF8ZN+Qm3HCRbmtzK7bhmpcBg==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB2171.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:166::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Tue, 30 Aug
+ 2022 06:36:05 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::382a:ed3b:83d6:e5d8%4]) with mapi id 15.20.5566.021; Tue, 30 Aug 2022
+ 06:36:05 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Sathvika Vasireddy <sv@linux.ibm.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+CC:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "aik@ozlabs.ru" <aik@ozlabs.ru>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mbenes@suse.cz" <mbenes@suse.cz>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
+        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
+Subject: Re: [PATCH v2 14/16] objtool: Add arch specific function
+ arch_ftrace_match()
+Thread-Topic: [PATCH v2 14/16] objtool: Add arch specific function
+ arch_ftrace_match()
+Thread-Index: AQHYu2u6wfhFk4SmS0i7HQOQnPBaJ63G/rYA
+Date:   Tue, 30 Aug 2022 06:36:05 +0000
+Message-ID: <9db3f9f3-8fc0-9f33-2c93-7d51006dc127@csgroup.eu>
+References: <20220829055223.24767-1-sv@linux.ibm.com>
+ <20220829055223.24767-15-sv@linux.ibm.com>
+In-Reply-To: <20220829055223.24767-15-sv@linux.ibm.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 86860d6d-047d-4fc1-3547-08da8a51ea47
+x-ms-traffictypediagnostic: PR0P264MB2171:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bBVqupFpsO12LNMCS52gGNoaFHvNMOGLOKV/tRgzI/BpE30tOJ7kXusH7fDFxU2rRbVf1ELwDWfoyW8YhNXFnCNDM4aHUSpzPkNV75JcYD9tV00gS336I0E/b/W1lUOy8Q0hJhksS0ds2So/9CKcXfLFH0HUP26YUnJ5zqiUlS4Ir0U6t8EvUYQhY59VDLEdWJCRyWuHLYaMBEqRHiDNo1EK1u0VdKZ8SfYS5qVuUtAVJO/BYa4L3u0fBG1SqxO4jOLoHkypjlvPz3VI18s7otu9SA4elphnE+ZBy4YA7zTThcyrZcn+SstYnvZMY6JqOU+baE0qowTOB3WZB91JkQF+dnIYEmwhYb5GoBdrxOLQ45CfIGNt5iwtrfHv4+v0ImEfokfhfaf8HWnkFxI/3zPEi9a26/0kOt8kqRXqfpwr5KAVl24W6Kun2SRLpoq/4QpjGPircDwmDup+1fnyxV0Ba7AgqmwBcD8U80BF5L3c3EtYdcXOouhzLrBvr/5bEofC/FdPvbGELEkyMXbbVId7EXVkmJu7GknoUVmVJHg2kiHxBCnTa/ph5WHS5ujjOQS1mrPoXs7TQDTTyGN4MYSFIC4719r/kRFFlNQ6/yRmz9F0Daf5Rrpr4x5HOCjIik4fFgOufzg9WaXfzqr5Jsh0w0Mapb21GWPqgjZ+19ULm7Eiu+RBGV6sFi+vPB+OIVFOuv6gURAbBgRp3hYYiYKAfBd+IdlbQJ49O5bXTcV5Od3obkTNuMiCAzIpqdbipHjY15xxz62KxbA1Fywl0eNm8pOvyBW6Kk5lWOS5YIaJurj5mIghnXQY4sCpN9pMLsff7/b6h0vS2YEmPia5Ug==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(376002)(39850400004)(366004)(136003)(346002)(38100700002)(2906002)(6512007)(26005)(44832011)(6506007)(122000001)(2616005)(66574015)(186003)(83380400001)(66556008)(64756008)(66446008)(66476007)(8676002)(66946007)(316002)(31686004)(76116006)(6486002)(110136005)(31696002)(4326008)(71200400001)(54906003)(7416002)(41300700001)(8936002)(5660300002)(36756003)(38070700005)(86362001)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NXVmd3ZHRnc0ZTFEaUhyNDVUUWZoUTBqZEI2VTgwQWNrNTZicGZ1U1V5RG42?=
+ =?utf-8?B?d0NUMlpFTDZQbE1ra1dDQVV0d2Y2YVhFYkpINEszd240RExuWURDelA2Rks5?=
+ =?utf-8?B?SytXaDh5SGcvajdYNElvZ2tKcXBHaU1MMEZMc1NXYVM3N2IveTQwR3MzcVFk?=
+ =?utf-8?B?SW50cVpkZW5vOUZIUWR4V0M2UzBCY2w2WUlyeDJXY0p3aldxemI1UXo0bm1q?=
+ =?utf-8?B?MExGNDlXOFkrUDNXcHl2RzNkL3VQV2ZoalVKZHNWT0RvdHhmdGt3RWpwZkcy?=
+ =?utf-8?B?dFU2TE1vcWgrbXlmclpnSUp0S3RVUFVVdS9xelR4VjgyaE11NWZnOFgvL2M0?=
+ =?utf-8?B?Rk83R0xZcjZ2RU03ZjNhYk14ZmpLMjYwcFA0UFdMdTdSdkJJbmF3MWZEZ0Rr?=
+ =?utf-8?B?ak56Ny9uNDA1akF1YmxkSCtLSCtMR0tpZDNjejJEdXJZbGNyWEZab3psQW13?=
+ =?utf-8?B?UHpLSGJMbzM4TzkyQlZWdFI1K1plMUxmUTlqakdwZi9BaUNya0tnVEhYNWtZ?=
+ =?utf-8?B?eWxGYmJkcDB5Yk1OVXg0R1VER0o5eGtTeHdSU1RuQzNoUTFId1U1ZGhXcTEx?=
+ =?utf-8?B?QWZnM0IxSHUxelk3VHZEK3RoQ0JORkRDREhKaEN0aGFHeCs4WUNWY2c0MzM3?=
+ =?utf-8?B?b2xlQThjZHNGdktuQ0l4OXlaUWp0WWwwQytTVE9ObW9sSkNzdi80VmxwWWpt?=
+ =?utf-8?B?UUFRd0pENWxsekxub0JBcDUzQWFxbDVIMGY3WFVCZjdlZHlFb3BjdThTQUh0?=
+ =?utf-8?B?UnU4Q2RWaDJjOTN6SVpwc2IwVXB2R1Y4SnhGaTJqUllMNkRSaVVYeG1MK2ZR?=
+ =?utf-8?B?RDkxTzM0S2Y4WUhudjVaZCszcHlpbHVuR1BFbHNCZTEwSWNXVk1MbCtYRnlD?=
+ =?utf-8?B?S2IxbFE3OUprQWZMa2VOeEMxWGpGY1YzR083QzF0NndPTXlJU3lPYWVwWmV1?=
+ =?utf-8?B?NnNkVWRVdmM0Vi85SWx3TkJLRWcrQ3RWQUFJUEpFUzgrMCtuZWlLNzBna05z?=
+ =?utf-8?B?bENoYzIvTE55UFRVaGxZdzg5cm9NNjVzSVlpTTdsV2pHOHZFRjlkd2UzakVM?=
+ =?utf-8?B?emQyRE9zeXB5K201QXdjZzRuNlM1bG0xSy9ray8wME1tcUNDYXRHTDllREdD?=
+ =?utf-8?B?c0pzSGwzYlF6em1jSkZTbHNNVjdjNFg1Q1EyRFI0YTU4ekJiQUwxVHBzc2pQ?=
+ =?utf-8?B?dVUxVSt0aExKcG9xaVUyVitFM2xZU0JnZDMvaFd5N0F4UXdvRzlXRngzcWhY?=
+ =?utf-8?B?eE5vTkJzY3Y0UnoyYzZ0R1QrUkNhWDIwR093UzJkRUN1SkQydHhza0pINnNy?=
+ =?utf-8?B?V2lzVWRrV2NhMHdHUStwSUpSU1VSUk9lbjlLWDIwMnZocVZFbEtYQW0rMUZa?=
+ =?utf-8?B?OFozUVFmV2tudkNBQTczc2FJTlpGYzUvZU04N2pIaVdpdjYvbHJDL2pubm1n?=
+ =?utf-8?B?eHJxTTZCY0MxTVh4NkxUelRvZEhNSk5odzFjUks3WHk4TGxhMmRjZlUxeXNh?=
+ =?utf-8?B?YmJpYURneDF1VjhqK2gzeTB2VUJjL1MxaW12bUFNbkVzbUZiaWhTVzlaNWJp?=
+ =?utf-8?B?cDQvMEVuOC9PQ05lcUZPN2IwUStGV0lNSjVGd1VCbzhqbXRFUEpRb1BIOFUw?=
+ =?utf-8?B?aUVDdnZZWnlYZCtjZUFZVS93K1IwNFg4MkQ3M0lsMHp3Y2lTQkRVaDBKUWlL?=
+ =?utf-8?B?blJ0WVpsM3BETVd0VUFzblJiTm9Ha3RuTG0vTkYvUnBUcGd4V2ZwV1FJQ3hz?=
+ =?utf-8?B?VDVRZFpVMHV5SDY0VlVnM2pPUnZ1T3NsUmpWZU9qY3ExYnBKQjhUL3BXaXFO?=
+ =?utf-8?B?OEkrY3VpQWN6WnYveG9pclFoY2p1L2dtViswNzFnckFrbnNxeFByN1k1WVAr?=
+ =?utf-8?B?dDRlaGtPL3o2RE5pUUNVcmd2ODhzeWR6Tmw1V281cGVKdXUzWDVTcUZBZEk0?=
+ =?utf-8?B?dyszTHFHcEIrYXVpbXBNWk9EVFNzdUVreFhVZ3NzSEltRmVaMEJFa1ZpcHov?=
+ =?utf-8?B?S2lFQWk3ckNmMnNHdndyWDRWQXFwbmEzaEN3WlMrOVlnUjZydnlISU5ENHI2?=
+ =?utf-8?B?RXlvSFJjdFZEZ0VpVi9xRm9MNmNSTEk5OGZyZS9rKzJQVU1ZZVl5YjZIYXlC?=
+ =?utf-8?B?aXoyZk5tMlVJSFI1N1gxTVRZa2xDa3BSRUphamtycVUyZXJwMEgySTZxTWMr?=
+ =?utf-8?B?Rmc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6ABEDE72A0E27F438B6F141B07598E0E@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86860d6d-047d-4fc1-3547-08da8a51ea47
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Aug 2022 06:36:05.3397
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IppYNKu+oVvGSrdm+hyCcq1dK/Njpocusgo7MzvF47gNSpq4La2tv023Od7CksxV7hllnulZkIxFXCste1GGIJiaablfKMlz8AT7NcQcCoo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB2171
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Tue 30 Aug 2022 at 14:05, Yu Tu <yu.tu@amlogic.com> wrote:
-
-> On 2022/8/29 17:43, Jerome Brunet wrote:
->> [ EXTERNAL EMAIL ]
->> On Mon 15 Aug 2022 at 14:17, Yu Tu <yu.tu@amlogic.com> wrote:
->>=20
->>> Hi Jerome=EF=BC=8C
->>>
->>> On 2022/8/10 21:32, Jerome Brunet wrote:
->>>> [ EXTERNAL EMAIL ]
->>>> On Fri 05 Aug 2022 at 17:39, Yu Tu <yu.tu@amlogic.com> wrote:
->>>>
->>>>> Hi Krzysztof,
->>>>>       Thank you for your reply.
->>>>>
->>>>> On 2022/8/5 17:16, Krzysztof Kozlowski wrote:
->>>>>> [ EXTERNAL EMAIL ]
->>>>>> On 05/08/2022 10:57, Yu Tu wrote:
->>>>>>> Added information about the S4 SOC PLL Clock controller in DT.
->>>>>>>
->>>>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>>>>> ---
->>>>>>>     arch/arm64/boot/dts/amlogic/meson-s4.dtsi | 8 ++++++++
->>>>>>>     1 file changed, 8 insertions(+)
->>>>>>>
->>>>>>> diff --git a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi b/arch/arm64=
-/boot/dts/amlogic/meson-s4.dtsi
->>>>>>> index ff213618a598..a816b1f7694b 100644
->>>>>>> --- a/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->>>>>>> +++ b/arch/arm64/boot/dts/amlogic/meson-s4.dtsi
->>>>>>> @@ -92,6 +92,14 @@ apb4: apb4@fe000000 {
->>>>>>>     			#size-cells =3D <2>;
->>>>>>>     			ranges =3D <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
->>>>>>>     +			clkc_pll: pll-clock-controller@8000 {
->>>>>> Node names should be generic - clock-controller.
->>>>>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-d=
-evicetree-basics.html#generic-names-recommendation
->>>>>>
->>>>> I will change to clkc_pll: clock-controller@8000, in next version.
->>>> Same comment applies to the binding doc.
->>> OKay.
->>>> Also it would be nice to split this in two series.
->>>> Bindings and drivers in one, arm64 dt in the other. These changes goes
->>>> in through different trees.
->>> At present, Bindings, DTS and drivers are three series. Do you mean to =
-put
->>> Bindings and drivers together? If so, checkpatch.pl will report a warni=
-ng.
->> Yes because patches are not in yet so there is a good reason to ignore
->> the warning. Warning will never show up on the actual tree if the
->> patches are correctly ordered.
->
-> I think Binding, DTS and drivers use three series and you said two series
-> is not a big problem. Three series are recommended for checkpatch.pl, I
-> think it should be easy for that to separate and merge=E3=80=82
-
-No - There is only 2 series. 1 for the bindings and clock drivers and
-one for the DT once things are in
-
->
-> I've sent it to V4. Please look at V4 and give some comments.
->
-
-That's not how it works. You sent that before v3 review was done. There
-are still comments that needed to be addressed
-
-Given the time it takes to make that review I going to completly skip v4
-and I'd like on the comment to addressed before you send another version
-
-
->>=20
->>>
->>>>
->>>>>> Best regards,
->>>>>> Krzysztof
->>>>>> .
->>>> .
->> .
-
+DQoNCkxlIDI5LzA4LzIwMjIgw6AgMDc6NTIsIFNhdGh2aWthIFZhc2lyZWRkeSBhIMOpY3JpdMKg
+Og0KPiBBZGQgYXJjaGl0ZWN0dXJlIHNwZWNpZmljIGZ1bmN0aW9uIHRvIGxvb2sgZm9yDQo+IHJl
+bG9jYXRpb24gcmVjb3JkcyBwb2ludGluZyB0byBhcmNoIHNwZWNpZmljDQo+IHN5bWJvbHMuDQo+
+IA0KPiBTdWdnZXN0ZWQtYnk6IENocmlzdG9waGUgTGVyb3kgPGNocmlzdG9waGUubGVyb3lAY3Nn
+cm91cC5ldT4NCj4gU2lnbmVkLW9mZi1ieTogU2F0aHZpa2EgVmFzaXJlZGR5IDxzdkBsaW51eC5p
+Ym0uY29tPg0KDQpSZXZpZXdlZC1ieTogQ2hyaXN0b3BoZSBMZXJveSA8Y2hyaXN0b3BoZS5sZXJv
+eUBjc2dyb3VwLmV1Pg0KDQo+IC0tLQ0KPiAgIHRvb2xzL29ianRvb2wvYXJjaC94ODYvZGVjb2Rl
+LmMgICAgICB8IDggKysrKysrKysNCj4gICB0b29scy9vYmp0b29sL2NoZWNrLmMgICAgICAgICAg
+ICAgICAgfCAyICstDQo+ICAgdG9vbHMvb2JqdG9vbC9pbmNsdWRlL29ianRvb2wvYXJjaC5oIHwg
+MiArKw0KPiAgIDMgZmlsZXMgY2hhbmdlZCwgMTEgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigt
+KQ0KPiANCj4gZGlmZiAtLWdpdCBhL3Rvb2xzL29ianRvb2wvYXJjaC94ODYvZGVjb2RlLmMgYi90
+b29scy9vYmp0b29sL2FyY2gveDg2L2RlY29kZS5jDQo+IGluZGV4IGMyNjAwMDYxMDZiZS4uMDI1
+NTk4YjZiNzAzIDEwMDY0NA0KPiAtLS0gYS90b29scy9vYmp0b29sL2FyY2gveDg2L2RlY29kZS5j
+DQo+ICsrKyBiL3Rvb2xzL29ianRvb2wvYXJjaC94ODYvZGVjb2RlLmMNCj4gQEAgLTIzLDYgKzIz
+LDE0IEBADQo+ICAgI2luY2x1ZGUgPG9ianRvb2wvYnVpbHRpbi5oPg0KPiAgICNpbmNsdWRlIDxh
+cmNoL2VsZi5oPg0KPiAgIA0KPiArYm9vbCBhcmNoX2Z0cmFjZV9tYXRjaChjaGFyICpuYW1lKQ0K
+PiArew0KPiArCWlmICghc3RyY21wKG5hbWUsICJfX2ZlbnRyeV9fIikpDQo+ICsJCXJldHVybiB0
+cnVlOw0KPiArDQo+ICsJcmV0dXJuIGZhbHNlOw0KDQpDb3VsZCBiZSBzaW1wbGlmaWVkIGFzOg0K
+DQoJcmV0dXJuICFzdHJjbXAobmFtZSwgIl9fZmVudHJ5X18iKTsNCg0KDQpXaGF0ZXZlcjoNCg0K
+UmV2aWV3ZWQtYnk6IENocmlzdG9waGUgTGVyb3kgPGNocmlzdG9waGUubGVyb3lAY3Nncm91cC5l
+dT4NCg0KDQoNCj4gK30NCj4gKw0KPiAgIHN0YXRpYyBpbnQgaXNfeDg2XzY0KGNvbnN0IHN0cnVj
+dCBlbGYgKmVsZikNCj4gICB7DQo+ICAgCXN3aXRjaCAoZWxmLT5laGRyLmVfbWFjaGluZSkgew0K
+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvb2JqdG9vbC9jaGVjay5jIGIvdG9vbHMvb2JqdG9vbC9jaGVj
+ay5jDQo+IGluZGV4IGYxZDA1NTQ2NzkyNi4uMDFmZjc1MDRmMThkIDEwMDY0NA0KPiAtLS0gYS90
+b29scy9vYmp0b29sL2NoZWNrLmMNCj4gKysrIGIvdG9vbHMvb2JqdG9vbC9jaGVjay5jDQo+IEBA
+IC0yMjk0LDcgKzIyOTQsNyBAQCBzdGF0aWMgaW50IGNsYXNzaWZ5X3N5bWJvbHMoc3RydWN0IG9i
+anRvb2xfZmlsZSAqZmlsZSkNCj4gICAJCQlpZiAoYXJjaF9pc19yZXRodW5rKGZ1bmMpKQ0KPiAg
+IAkJCQlmdW5jLT5yZXR1cm5fdGh1bmsgPSB0cnVlOw0KPiAgIA0KPiAtCQkJaWYgKCFzdHJjbXAo
+ZnVuYy0+bmFtZSwgIl9fZmVudHJ5X18iKSkNCj4gKwkJCWlmIChhcmNoX2Z0cmFjZV9tYXRjaChm
+dW5jLT5uYW1lKSkNCj4gICAJCQkJZnVuYy0+ZmVudHJ5ID0gdHJ1ZTsNCj4gICANCj4gICAJCQlp
+ZiAoaXNfcHJvZmlsaW5nX2Z1bmMoZnVuYy0+bmFtZSkpDQo+IGRpZmYgLS1naXQgYS90b29scy9v
+Ymp0b29sL2luY2x1ZGUvb2JqdG9vbC9hcmNoLmggYi90b29scy9vYmp0b29sL2luY2x1ZGUvb2Jq
+dG9vbC9hcmNoLmgNCj4gaW5kZXggYmViMmYzYWE5NGZmLi4yYmE0Yjk4OTcyODUgMTAwNjQ0DQo+
+IC0tLSBhL3Rvb2xzL29ianRvb2wvaW5jbHVkZS9vYmp0b29sL2FyY2guaA0KPiArKysgYi90b29s
+cy9vYmp0b29sL2luY2x1ZGUvb2JqdG9vbC9hcmNoLmgNCj4gQEAgLTY5LDYgKzY5LDggQEAgc3Ry
+dWN0IHN0YWNrX29wIHsNCj4gICANCj4gICBzdHJ1Y3QgaW5zdHJ1Y3Rpb247DQo+ICAgDQo+ICti
+b29sIGFyY2hfZnRyYWNlX21hdGNoKGNoYXIgKm5hbWUpOw0KPiArDQo+ICAgdm9pZCBhcmNoX2lu
+aXRpYWxfZnVuY19jZmlfc3RhdGUoc3RydWN0IGNmaV9pbml0X3N0YXRlICpzdGF0ZSk7DQo+ICAg
+DQo+ICAgaW50IGFyY2hfZGVjb2RlX2luc3RydWN0aW9uKHN0cnVjdCBvYmp0b29sX2ZpbGUgKmZp
+bGUsIGNvbnN0IHN0cnVjdCBzZWN0aW9uICpzZWMs

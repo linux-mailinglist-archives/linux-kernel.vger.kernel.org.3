@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B975A6AFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 843925A6B48
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:52:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbiH3Rjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48890 "EHLO
+        id S231741AbiH3Rw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232297AbiH3Riu (ORCPT
+        with ESMTP id S231583AbiH3RwF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:38:50 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C68CF23D0;
-        Tue, 30 Aug 2022 10:36:10 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UFx294005591;
-        Tue, 30 Aug 2022 17:34:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=F+JHeRN8PToozitBrhdv/oNgrBd/V/BN8qJ5YgZ6y3A=;
- b=Q6aVkRA3hwQE7Dx4uV30w0WB0adFEdbn0/BIURgSZjy6fFOK/PMuDjqRYp3zml7h7lzY
- HuM51aBFO2aCbT1d3bheglCJIrM6bkDYqDlfwJ3PCoIid5kqFuRb7CEJNLybd8w7vZ6x
- o2d+cs/TrvcT4oyRRlDdjl5dbjhi2urRZ+WKJ/OuMu6iv6A1zbE0QSOAS2T/IsBGMdyG
- 1j7isLrrj9fL/7WDKRMja3Wru1hS/0vtVTOnZlGxiYfyI/wb53uCwvLq4R8SaqycjrFk
- QKKFeA6c7cEHlejyk/71m6KLYspVoLW0nj5IptNWKpKFHc9U39Lb6InA0s4wkNTgIf3X Ug== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j9m2t0m8y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 17:34:00 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27UHXxOg005519
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 17:33:59 GMT
-Received: from [10.110.39.132] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 30 Aug
- 2022 10:33:58 -0700
-Message-ID: <a437b91a-281d-56b3-41bf-15d9593ece74@quicinc.com>
-Date:   Tue, 30 Aug 2022 10:33:58 -0700
+        Tue, 30 Aug 2022 13:52:05 -0400
+Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE7A6165
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:48:37 -0700 (PDT)
+Received: by mail-oo1-xc2e.google.com with SMTP id t15-20020a4a96cf000000b0044e0142ec24so834713ooi.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:48:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=QOHQdT3OVUHpaukm+t85KBAiboEat0T162RdVG0MMRc=;
+        b=ic2UsMvdh43Vh89r7gu68/5vS8Gc7ct2j4Rov7GrexcQ9s16/wXTD1ymMp1y6SR3aV
+         Jh2sexQ5LADumerYJDxpJk0EJ1AiZ07QkeB0n6zBSGwAqDJGm1oQ20+7KRjGiYxY65VP
+         0hcbTfHGfgIbtrWpk7s6DgceZhnxQc8Z/b2b/KDIdabS2V/wIYca0xqNKhksoli2+BJj
+         ZINYb9N1UkQ418SNClE0gKC2YGQfAl8IvArpO5hk9t6Az5FYaP1sxl/UMPJZcIHVoO27
+         GiDt6a72zGXNlCEyx0Dejn0NzQbRW9luawE9d9riQwmoNMDdCdkIwdslQEMyt6W1yNq1
+         buww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=QOHQdT3OVUHpaukm+t85KBAiboEat0T162RdVG0MMRc=;
+        b=afqbxBsG4Jupw+pX7Uj1r8ur7nM0w/OJlqnzkN16Nnyd8iF3yb4sbchYBRpK6TMmjX
+         Ec/ACaI7h3ahVILWuBTAnT0vctR3lE/uAEMFTnFrDen5mGaxQ+8zmglwd56A3ooTQBkP
+         khBPt6+4SBAvsv0Ks6GS1S03AV2owpHRI/xpEMD8bSu+XN2z/Vvw/+VoRyOmKuIjl3eb
+         AGGPAa/NkkwFNF4pjuoqcjcmt4u/bvXmLYPi1su8H1SyNwhJni2X8gGHIoYY2v15jl00
+         oYF3LHWI7Dl+LcrYsheGIIpp4/7gRdaA1Zm3iDZ6W9O+IZMkm3pYEUT1ago2c+aqH0p5
+         71dw==
+X-Gm-Message-State: ACgBeo0M9aQwCqGEsOz2TA1NrVqB16raCYTrr82N5zbmMHbWNhxFX4Fp
+        tk+OmEBR75hYPuMQ2kBsHxyNsYArMlbIFQ3nNSQfpnhSAnutCg==
+X-Google-Smtp-Source: AA6agR5myCVhW84r+QnDSTVy/jqy/jK/lcmeHgeFWiCsfy/GwPMSD184FpXqLE+yTKCnYkkikETTKuY42+Rb2QyDVOg=
+X-Received: by 2002:a0d:fd05:0:b0:329:3836:53ac with SMTP id
+ n5-20020a0dfd05000000b00329383653acmr15412080ywf.455.1661880907756; Tue, 30
+ Aug 2022 10:35:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/3] slimbus: qcom-ngd: use correct error in message of
- pdr_add_lookup() failure
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <stable@vger.kernel.org>
-References: <20220830121359.634344-1-krzysztof.kozlowski@linaro.org>
-From:   Jeff Johnson <quic_jjohnson@quicinc.com>
-In-Reply-To: <20220830121359.634344-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: kCyURfhdLxmWT3BuVaOOtQftpVhRUuqZ
-X-Proofpoint-ORIG-GUID: kCyURfhdLxmWT3BuVaOOtQftpVhRUuqZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-30_10,2022-08-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 adultscore=0 mlxlogscore=963 bulkscore=0 suspectscore=0
- mlxscore=0 clxscore=1011 spamscore=0 malwarescore=0 impostorscore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208300081
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220830065413.638-1-thunder.leizhen@huawei.com>
+ <CAGETcx8hfzAthF_gCMrmnVOgwgFJEPE=bwRuVeXaiB7ywUkWkg@mail.gmail.com>
+ <Yw3cs6wb4PvnDN/7@shell.armlinux.org.uk> <b120e94b-4b43-6d8a-a136-41417cb250cc@huawei.com>
+ <Yw3hfGV4DYyJ0Gno@shell.armlinux.org.uk> <2452e7b0-d4fd-2e27-a336-bf87b85a8d50@huawei.com>
+ <Yw3oR6WhM0O5LQX5@shell.armlinux.org.uk>
+In-Reply-To: <Yw3oR6WhM0O5LQX5@shell.armlinux.org.uk>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Tue, 30 Aug 2022 10:34:31 -0700
+Message-ID: <CAGETcx_GB-r+H96hWHfoKSZjK9hodqe-+FWh6rve0E09pz0nXA@mail.gmail.com>
+Subject: Re: [PATCH v2] ARM: Add sanity check for dev->periphid in amba_probe()
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        patches@armlinux.org.uk, Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Linus Walleij <linus.walleij@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/30/2022 5:13 AM, Krzysztof Kozlowski wrote:
-> Use cprrect error code, instead of previous 'ret' value, when printing
+On Tue, Aug 30, 2022 at 3:36 AM Russell King (Oracle)
+<linux@armlinux.org.uk> wrote:
+>
+> On Tue, Aug 30, 2022 at 06:31:14PM +0800, Leizhen (ThunderTown) wrote:
+> > On 2022/8/30 18:07, Russell King (Oracle) wrote:
+> > > For an amba driver, drv->bus will always be pointing at amba_bustype.
+> > > That always has a "match" operation. Therefore, the default of '1'
+> > > above will *never* be used for an AMBA driver.
+> > >
+> > > If drv->bus does not point at amba_bustype, then amba_probe() will
+> > > not be called for "drv".
+> > >
+> > > Therefore, amba_match() must always be called before amba_probe().
+> >
+> > Oh, I was careless. I think it's drv->match. But the processing flow
+> > will continue to go to "dev->bus->probe".
+> >
+> > __driver_attach():
+> >         ret = driver_match_device(drv, dev);
+> >         if (ret == 0) {
+> >                 /* no match */
+> >                 return 0;
+> >         } else if (ret == -EPROBE_DEFER) {               <------no return in this branch
+> >                 dev_dbg(dev, "Device match requests probe deferral\n");
+> >                 dev->can_match = true;
+> >                 driver_deferred_probe_add(dev);
+> >         } else if (ret < 0) {
+> >                 dev_dbg(dev, "Bus failed to match device: %d\n", ret);
+> >                 return ret;
+> >         } /* ret > 0 means positive match */
+> >
+> >         ... ...
+> >         driver_probe_device(drv, dev);
+> >              ......
+> >                   dev->bus->probe
+>
+> And that makes no sense, is an already known issue, and there is a patch
+> to fix it:
+>
+> https://lore.kernel.org/all/20220817184026.3468620-1-isaacmanjarres@google.com/
 
-s/cprrect/correct/
+Russell,
 
-> error from pdr_add_lookup() failure.
-> 
-> Cc: <stable@vger.kernel.org>
-> Fixes: e1ae85e1830e ("slimbus: qcom-ngd-ctrl: add Protection Domain Restart Support")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->   drivers/slimbus/qcom-ngd-ctrl.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/slimbus/qcom-ngd-ctrl.c b/drivers/slimbus/qcom-ngd-ctrl.c
-> index 0aa8408464ad..6fe6abb86061 100644
-> --- a/drivers/slimbus/qcom-ngd-ctrl.c
-> +++ b/drivers/slimbus/qcom-ngd-ctrl.c
-> @@ -1581,6 +1581,7 @@ static int qcom_slim_ngd_ctrl_probe(struct platform_device *pdev)
->   
->   	pds = pdr_add_lookup(ctrl->pdr, "avs/audio", "msm/adsp/audio_pd");
->   	if (IS_ERR(pds) && PTR_ERR(pds) != -EALREADY) {
-> +		ret = PTR_ERR(pds);
->   		dev_err(dev, "pdr add lookup failed: %d\n", ret);
->   		return PTR_ERR(pds);
+Thanks for discussing this further and pointing out the other fix. I
+assumed Leizhen was talking about an instance of
+device_driver_attach() which allows probe to be called without match.
+Thankfully that function is used only by some specific
+frameworks/buses types. I did a cursory check and I don't see any
+intersection with we amba.
 
-return ret?
-
->   	}
-
+-Saravana
+P.S: I hate that function exists, as it just throws a wrench in the
+whole driver core design and adds corner cases to a lot of generic
+driver core design.

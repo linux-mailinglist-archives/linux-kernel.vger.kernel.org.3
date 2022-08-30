@@ -2,122 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319DF5A621D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CDFE5A6219
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:38:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbiH3Lh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43528 "EHLO
+        id S231157AbiH3LiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230332AbiH3Lhc (ORCPT
+        with ESMTP id S230398AbiH3Lhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:37:32 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F182BF5CE2;
-        Tue, 30 Aug 2022 04:36:03 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id a10so4315650qkl.13;
-        Tue, 30 Aug 2022 04:36:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=t+R/8H1+D6PkifBzEZLGo3obwCZRygBKpW0t5nLQzgI=;
-        b=WB19/tzLCc9OYHyYBrBBW0BeoEBlCigT8+6ePSd9j9yQkl6FwAyJAxc6zlSluGXIZR
-         FltdZpyyGxcJR/1nAnsUPbPV9bhcQkoB/ooh5vEc8QCyi/0TW2ZkFKtv9i6mRyhcn2sQ
-         1gScXFtNKPfHkM6PTPi8/UH/tC862rvGXFc6Xvn65EyxgB+5HsZY67VStr7McHHZRtFO
-         hksVsu4Tu0r/sMU9QxJzIhIWFRl7YW9TXeqhFy9K9I+LpmwIFNus1K2E9QzdifNuOEDB
-         BZrtHTavMetSrRhMk7KC7oP8AaOPVWY+qjwNlPyON/i2USQwGzdgD4BNqJxnQlE/K/KT
-         GLyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=t+R/8H1+D6PkifBzEZLGo3obwCZRygBKpW0t5nLQzgI=;
-        b=rLsoz5SzbRKVFtq2C+MTYvvUgVLqH6a4h1wRRLDDuWnbQH/jj1ck2neY7ex/xWm9H8
-         EdADuzqGcjfIMSm9ByqPFgiFH1lmDDTauFIDr1OIAjWoAdItiNlRT2k2/HB6Q+0twDSm
-         e7q66eDhntTsEQt4O03N3rkA88+zrSWhX1Pxhri0C2Uu1+K2gf2/QoSQ5i6EEf7K96dy
-         yUvQ3QvaNGw9Z2rpYgsHPNQvD/HssRX/PohLZuJXuj9ft1sq3/APltKl2hd04T77HX9j
-         HFLsg8SQ5wAuPYKOFmYBQ+aWHd6YXsR0Fl23HvLhVyBlwfzJ2ftYVJMpvNjJAXu6EzSh
-         oBgA==
-X-Gm-Message-State: ACgBeo0A2DrLJ96sR2O8VuWMYGKkTV09Ozcoi2LeMbXnytZZGTmJfo9s
-        jP3Cqx2AKbHRZOrQV1zapQo=
-X-Google-Smtp-Source: AA6agR5Y8ZVzxmzDExFDhrRRK/J1flUuzG1hHeLJKLG1K/nrsN+OdsrMaM0o2SyYX6E+tTBsdWoGPw==
-X-Received: by 2002:a05:620a:68f:b0:6be:5a7c:d61a with SMTP id f15-20020a05620a068f00b006be5a7cd61amr11542266qkh.519.1661859308921;
-        Tue, 30 Aug 2022 04:35:08 -0700 (PDT)
-Received: from [10.176.68.61] ([192.19.148.250])
-        by smtp.gmail.com with ESMTPSA id bs43-20020a05620a472b00b006bb619a6a85sm8102429qkb.48.2022.08.30.04.35.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 04:35:08 -0700 (PDT)
-Message-ID: <72139841-f5ba-6fb8-8268-f59cee0a2bc2@gmail.com>
-Date:   Tue, 30 Aug 2022 13:35:04 +0200
+        Tue, 30 Aug 2022 07:37:36 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602ACF7B2B;
+        Tue, 30 Aug 2022 04:36:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 651C5CE179E;
+        Tue, 30 Aug 2022 11:35:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A539C433C1;
+        Tue, 30 Aug 2022 11:35:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661859310;
+        bh=4x1wLad4lxqLcbPeEX3pXTHar7BXU+tX9ogUCdd1sS8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=l08TrNv4ZslTuo3zNpM5NDtTTcdAPtKu64zQnnDDfiqMo6RUICldc5ojANYH7aPRT
+         pN8xYy5oyeusKKIGYzK1EWG/at5VoW+uJbj7lPjAG8gop2o+oeoDTeUw6EprOQg0Va
+         QmyTDvfXr89f2sznYUbZjRV7fVzxWlGnOLuBUgtI=
+Date:   Tue, 30 Aug 2022 13:35:07 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     tuo cao <91tuocao@gmail.com>
+Cc:     alcooperx@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+        jirislaby@kernel.org, linux-serial@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RESEND] serial: 8250_bcm7271: move spin_lock_irqsave to
+ spin_lock in interrupt handler
+Message-ID: <Yw316/3zuIXvm/Ty@kroah.com>
+References: <20220822141110.17199-1-91tuocao@gmail.com>
+ <YwORy3QMbRUSlBZE@kroah.com>
+ <CAEVeK2AiYFK9eopn1Uzp+osA-j22e1KbfUohJ+hRVmLNsq0gpQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 linux-next] wifi: brcmfmac: remove redundant err
- variable
-Content-Language: en-US
-To:     cgel.zte@gmail.com, franky.lin@broadcom.com,
-        hante.meuleman@broadcom.com, kvalo@kernel.org, davem@davemloft.net,
-        edumazet@google.com
-Cc:     kuba@kernel.org, pabeni@redhat.com, johannes.berg@intel.com,
-        alsi@bang-olufsen.dk, a.fatoum@pengutronix.de,
-        loic.poulain@linaro.org, quic_vjakkam@quicinc.com,
-        prestwoj@gmail.com, colin.i.king@gmail.com, hdegoede@redhat.com,
-        smoch@web.de, cui.jinpeng2@zte.com.cn,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Zeal Robot <zealci@zte.com.cn>
-References: <20220830105016.287337-1-cui.jinpeng2@zte.com.cn>
-From:   Arend Van Spriel <aspriel@gmail.com>
-In-Reply-To: <20220830105016.287337-1-cui.jinpeng2@zte.com.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEVeK2AiYFK9eopn1Uzp+osA-j22e1KbfUohJ+hRVmLNsq0gpQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/30/2022 12:50 PM, cgel.zte@gmail.com wrote:
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-> 
-> Return value from brcmf_fil_iovar_data_set() and
-> brcmf_config_ap_mgmt_ie() directly instead of
-> taking this in another redundant variable.
-> 
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-Acked-by: Arend van Spriel <arend.vanspriel@broadcom.com>
-> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
-> ---
->   .../wireless/broadcom/brcm80211/brcmfmac/cfg80211.c    | 10 ++--------
->   1 file changed, 2 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-> index 7c72ea26a7d7..8a8c5a3bb2fb 100644
-> --- a/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-> +++ b/drivers/net/wireless/broadcom/brcm80211/brcmfmac/cfg80211.c
-[...]
+On Sat, Aug 27, 2022 at 05:42:19PM +0800, tuo cao wrote:
+> No, whether it's spin_lock_irqsave() or spin_lock(), the security is
+> the same. Since this commit:e58aa3d2d0cc01ad8d6f7f640a0670433f794922,
+> interrupt nesting is disabled, which means interrupts has disabled in
+> the interrupt handlers. So, it is unnecessary to call
+> spin_lock_irqsave in a interrupt handler. And it takes less time
+> obviously to use spin_lock()，so I think this change is needed.
 
-> @@ -3997,10 +3996,8 @@ brcmf_update_pmklist(struct brcmf_cfg80211_info *cfg, struct brcmf_if *ifp)
->   	for (i = 0; i < npmk; i++)
->   		brcmf_dbg(CONN, "PMK[%d]: %pM\n", i, &pmk_list->pmk[i].bssid);
->   
-> -	err = brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_list,
-> +	return brcmf_fil_iovar_data_set(ifp, "pmkid_info", pmk_list,
->   				       sizeof(*pmk_list));
+I have no context at all here, please never top-post :(
 
-You should align the next line on the column after the opening brace. 
-Using the checkpatch script should report this.
+And have you measured the time difference?  Is it a real thing?
 
-> -
-> -	return err;
->   }
->   
->   static s32
+> Finally, I'm sorry I lacked real hardware to verify it and can't
+> provide changelog text.
+
+Try to never do changes for drivers for functionality like this where
+you do not have the hardware to test for, until you get a lot more
+experience.
+
+good luck!
+
+greg k-h

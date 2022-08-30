@@ -2,61 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BFC25A645B
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC0C5A6461
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiH3NGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45324 "EHLO
+        id S230117AbiH3NHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229572AbiH3NGL (ORCPT
+        with ESMTP id S229620AbiH3NHn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:06:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6ED99A3479
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:06:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C19F6170C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:06:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68F62C433B5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 13:06:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661864769;
-        bh=X8RU1C3e0sntkkaG9dNAPLJlvvdFjnh43Set1ULFjOc=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=H2k75mrHdFosjv36ifWmMTLkCe72XhyOO5kAPpX6iHY/6OrkSUgQqm+sOV4m0zRej
-         ode7RvmtMD1vrRE1fu/kLtx5xRwSQmdG0qXUsMVi0fVYPctWt3HoDNUFCUzDXa6+0D
-         I8wpQergKNWmQvwxomyb/hQlCybsdZV3d4ERqovwbFOrTYsY38qJapUKJ8H6uugU8u
-         T+cHo4GhzKLn9R0B+o9y5vppMEcR0NV3AXdaeByygpeJpz6yzYTK/jqwjs1WeU/ZQZ
-         OA2G2ZzksZtJAEn7JZJu0XwuPwNXMDZz/8f7ttCfmviMYN2b2qjW1RTKSOlYfgmMN0
-         XQ2A/TR7XBi4Q==
-Received: by mail-vs1-f47.google.com with SMTP id m66so11388561vsm.12
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:06:09 -0700 (PDT)
-X-Gm-Message-State: ACgBeo3S/983KKy1g6hQGl0WEueb0/g18WaWPfw0xCpvc4YV667j/SgS
-        qiLVk9js/tKVxhlAJd8xg11XnH/dmixCr0rT6z0=
-X-Google-Smtp-Source: AA6agR4xO4pMuBb9KKlGJRO7k+h82oKb0i4lmX9YFw9m160njCSeADM64Ez0taq8rBdDmaTle0UkRg9ONK01y7GI22o=
-X-Received: by 2002:a67:d582:0:b0:390:d6dd:5612 with SMTP id
- m2-20020a67d582000000b00390d6dd5612mr3760828vsj.78.1661864768263; Tue, 30 Aug
- 2022 06:06:08 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220830104806.128365-1-xry111@xry111.site>
-In-Reply-To: <20220830104806.128365-1-xry111@xry111.site>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Tue, 30 Aug 2022 21:05:56 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
-Message-ID: <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
-Subject: Re: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation types
-To:     Xi Ruoyao <xry111@xry111.site>
-Cc:     loongarch@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Youling Tang <tangyouling@loongson.cn>,
-        Jinyang He <hejinyang@loongson.cn>
+        Tue, 30 Aug 2022 09:07:43 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2B0AADCC1
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:07:38 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oT0xX-00081U-Ii; Tue, 30 Aug 2022 15:07:15 +0200
+Message-ID: <06d256719a2ac5bf22ce80bb30b8320eec8fc1d9.camel@pengutronix.de>
+Subject: Re: [PATCH v5 6/7] phy: freescale: imx8m-pcie: Add iMX8MP PCIe PHY
+ support
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Richard Zhu <hongxing.zhu@nxp.com>, p.zabel@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, vkoul@kernel.org,
+        alexander.stein@ew.tq-group.com, marex@denx.de,
+        richard.leitner@linux.dev
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Date:   Tue, 30 Aug 2022 15:07:13 +0200
+In-Reply-To: <1661845564-11373-7-git-send-email-hongxing.zhu@nxp.com>
+References: <1661845564-11373-1-git-send-email-hongxing.zhu@nxp.com>
+         <1661845564-11373-7-git-send-email-hongxing.zhu@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,120 +54,256 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ruoyao,
+Am Dienstag, dem 30.08.2022 um 15:46 +0800 schrieb Richard Zhu:
+> Add i.MX8MP PCIe PHY support.
+> 
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+> Tested-by: Marek Vasut <marex@denx.de>
+> Tested-by: Richard Leitner <richard.leitner@skidata.com>
+> Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+> ---
+>  drivers/phy/freescale/phy-fsl-imx8m-pcie.c | 137 +++++++++++++--------
+>  1 file changed, 89 insertions(+), 48 deletions(-)
+> 
+> diff --git a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> index ad7d2edfc414..c76e3a1a5f51 100644
+> --- a/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> +++ b/drivers/phy/freescale/phy-fsl-imx8m-pcie.c
+> @@ -11,6 +11,9 @@
+>  #include <linux/mfd/syscon.h>
+>  #include <linux/mfd/syscon/imx7-iomuxc-gpr.h>
+>  #include <linux/module.h>
+> +#include <linux/of_address.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_device.h>
+>  #include <linux/phy/phy.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/regmap.h>
+> @@ -31,12 +34,10 @@
+>  #define IMX8MM_PCIE_PHY_CMN_REG065	0x194
+>  #define  ANA_AUX_RX_TERM		(BIT(7) | BIT(4))
+>  #define  ANA_AUX_TX_LVL			GENMASK(3, 0)
+> -#define IMX8MM_PCIE_PHY_CMN_REG75	0x1D4
+> -#define  PCIE_PHY_CMN_REG75_PLL_DONE	0x3
+> +#define IMX8MM_PCIE_PHY_CMN_REG075	0x1D4
+> +#define  ANA_PLL_DONE			0x3
+>  #define PCIE_PHY_TRSV_REG5		0x414
+> -#define  PCIE_PHY_TRSV_REG5_GEN1_DEEMP	0x2D
+>  #define PCIE_PHY_TRSV_REG6		0x418
+> -#define  PCIE_PHY_TRSV_REG6_GEN2_DEEMP	0xF
+>  
+>  #define IMX8MM_GPR_PCIE_REF_CLK_SEL	GENMASK(25, 24)
+>  #define IMX8MM_GPR_PCIE_REF_CLK_PLL	FIELD_PREP(IMX8MM_GPR_PCIE_REF_CLK_SEL, 0x3)
+> @@ -47,16 +48,23 @@
+>  #define IMX8MM_GPR_PCIE_SSC_EN		BIT(16)
+>  #define IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE	BIT(9)
+>  
+> +enum imx8_pcie_phy_type {
+> +	IMX8MM,
+> +	IMX8MP,
+> +};
+> +
+>  struct imx8_pcie_phy {
+>  	void __iomem		*base;
+>  	struct clk		*clk;
+>  	struct phy		*phy;
+>  	struct regmap		*iomuxc_gpr;
+>  	struct reset_control	*reset;
+> +	struct reset_control	*perst;
+>  	u32			refclk_pad_mode;
+>  	u32			tx_deemph_gen1;
+>  	u32			tx_deemph_gen2;
+>  	bool			clkreq_unused;
+> +	enum imx8_pcie_phy_type	variant;
+>  };
+>  
+>  static int imx8_pcie_phy_init(struct phy *phy)
+> @@ -68,31 +76,20 @@ static int imx8_pcie_phy_init(struct phy *phy)
+>  	reset_control_assert(imx8_phy->reset);
+>  
+>  	pad_mode = imx8_phy->refclk_pad_mode;
+> -	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
+> -			   imx8_phy->clkreq_unused ?
+> -			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_AUX_EN,
+> -			   IMX8MM_GPR_PCIE_AUX_EN);
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_SSC_EN, 0);
+> -
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
+> -			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
+> -			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
+> -			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
+> -	usleep_range(100, 200);
+> -
+> -	/* Do the PHY common block reset */
+> -	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> -			   IMX8MM_GPR_PCIE_CMN_RST,
+> -			   IMX8MM_GPR_PCIE_CMN_RST);
+> -	usleep_range(200, 500);
+> +	switch (imx8_phy->variant) {
+> +	case IMX8MM:
+> +		/* Tune PHY de-emphasis setting to pass PCIe compliance. */
+> +		if (imx8_phy->tx_deemph_gen1)
+> +			writel(imx8_phy->tx_deemph_gen1,
+> +			       imx8_phy->base + PCIE_PHY_TRSV_REG5);
+> +		if (imx8_phy->tx_deemph_gen2)
+> +			writel(imx8_phy->tx_deemph_gen2,
+> +			       imx8_phy->base + PCIE_PHY_TRSV_REG6);
+> +		break;
+> +	case IMX8MP:
+> +		reset_control_assert(imx8_phy->perst);
+> +		break;
+> +	}
+>  
+>  	if (pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ||
+>  	    pad_mode == IMX8_PCIE_REFCLK_PAD_UNUSED) {
+> @@ -120,20 +117,44 @@ static int imx8_pcie_phy_init(struct phy *phy)
+>  		       imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG065);
+>  	}
+>  
+> -	/* Tune PHY de-emphasis setting to pass PCIe compliance. */
+> -	if (imx8_phy->tx_deemph_gen1)
+> -		writel(imx8_phy->tx_deemph_gen1,
+> -		       imx8_phy->base + PCIE_PHY_TRSV_REG5);
+> -	if (imx8_phy->tx_deemph_gen2)
+> -		writel(imx8_phy->tx_deemph_gen2,
+> -		       imx8_phy->base + PCIE_PHY_TRSV_REG6);
+> +	/* Set AUX_EN_OVERRIDE 1'b0, when the CLKREQ# isn't hooked */
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE,
+> +			   imx8_phy->clkreq_unused ?
+> +			   0 : IMX8MM_GPR_PCIE_AUX_EN_OVERRIDE);
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_AUX_EN,
+> +			   IMX8MM_GPR_PCIE_AUX_EN);
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_POWER_OFF, 0);
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_SSC_EN, 0);
+> +
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_REF_CLK_SEL,
+> +			   pad_mode == IMX8_PCIE_REFCLK_PAD_INPUT ?
+> +			   IMX8MM_GPR_PCIE_REF_CLK_EXT :
+> +			   IMX8MM_GPR_PCIE_REF_CLK_PLL);
+> +	usleep_range(100, 200);
+> +
+> +	/* Do the PHY common block reset */
+> +	regmap_update_bits(imx8_phy->iomuxc_gpr, IOMUXC_GPR14,
+> +			   IMX8MM_GPR_PCIE_CMN_RST,
+> +			   IMX8MM_GPR_PCIE_CMN_RST);
+>  
+> -	reset_control_deassert(imx8_phy->reset);
+> +	switch (imx8_phy->variant) {
+> +	case IMX8MP:
+> +		reset_control_deassert(imx8_phy->perst);
+> +		fallthrough;
+> +	case IMX8MM:
+> +		reset_control_deassert(imx8_phy->reset);
+> +		usleep_range(200, 500);
+> +		break;
+> +	}
+>  
+>  	/* Polling to check the phy is ready or not. */
+> -	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG75,
+> -				 val, val == PCIE_PHY_CMN_REG75_PLL_DONE,
+> -				 10, 20000);
+> +	ret = readl_poll_timeout(imx8_phy->base + IMX8MM_PCIE_PHY_CMN_REG075,
+> +				 val, val == ANA_PLL_DONE, 10, 20000);
+>  	return ret;
+>  }
+>  
+> @@ -160,6 +181,13 @@ static const struct phy_ops imx8_pcie_phy_ops = {
+>  	.owner		= THIS_MODULE,
+>  };
+>  
+> +static const struct of_device_id imx8_pcie_phy_of_match[] = {
+> +	{.compatible = "fsl,imx8mm-pcie-phy", .data = (void *)IMX8MM},
+> +	{.compatible = "fsl,imx8mp-pcie-phy", .data = (void *)IMX8MP},
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
+> +
+>  static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  {
+>  	struct phy_provider *phy_provider;
+> @@ -172,6 +200,9 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  	if (!imx8_phy)
+>  		return -ENOMEM;
+>  
+> +	imx8_phy->variant =
+> +		(enum imx8_pcie_phy_type)of_device_get_match_data(dev);
+> +
+>  	/* get PHY refclk pad mode */
+>  	of_property_read_u32(np, "fsl,refclk-pad-mode",
+>  			     &imx8_phy->refclk_pad_mode);
+> @@ -196,8 +227,16 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	/* Grab GPR config register range */
+> -	imx8_phy->iomuxc_gpr =
+> -		 syscon_regmap_lookup_by_compatible("fsl,imx6q-iomuxc-gpr");
+> +	switch (imx8_phy->variant) {
+> +	case IMX8MM:
+> +		imx8_phy->iomuxc_gpr =
+> +			 syscon_regmap_lookup_by_compatible("fsl,imx8mm-iomuxc-gpr");
+> +		break;
+> +	case IMX8MP:
+> +		imx8_phy->iomuxc_gpr =
+> +			 syscon_regmap_lookup_by_compatible("fsl,imx8mp-iomuxc-gpr");
+> +		break;
+> +	}
 
-Thank you for your contribution, this whole series will be queued for
-6.1. Though lkp reported some warnings, I will fix them myself.
+Oh, I had a real phandle in DT in mind for this, but I see how this
+would be hard to introduce in a backward compatible manner for the 8MM.
+At least this way it is fully contained in the driver and doesn't leak
+into DT compatibles.
 
-Huacai
+Maybe we could make this a little nicer by just having an const array
+of iomux syscon compatibles indexed by imx8_phy->variant, to avoid the
+switch and the resulting code (almost-)duplication.
 
-On Tue, Aug 30, 2022 at 6:48 PM Xi Ruoyao <xry111@xry111.site> wrote:
->
-> The version 2.00 of LoongArch ELF ABI specification introduced new
-> relocation types, and the development tree of Binutils and GCC has
-> started to use them.  If the kernel is built with the latest snapshot of
-> Binutils or GCC, it will fail to load the modules because of unrecognized
-> relocation types in modules.
->
-> Add support for GOT and new relocation types for the module loader, so
-> the kernel (with modules) can be built with the "normal" code model and
-> function properly.
->
-> This series does not break the compatibility with old toolchain using
-> stack-based relocation types, so with the patches applied the kernel can
-> be be built with both old and new toolchains.  But, the combination of
-> "new" Binutils and "old" GCC is not supported.
->
-> Tested by building the kernel with the following combinations:
->
-> - GCC 12 and Binutils 2.39
-> - GCC trunk and Binutils trunk
->
-> and running the builds with 35 in-tree modules loaded, and loading one
-> module with 20 GOT loads and a per-CPU variable (loaded addresses
-> verified by comparing with /proc/kallsyms).
->
-> Changes from v6 to v7:
->
-> - Simplify apply_r_larch_pcala.
-> - Remove a build check only for excluding early GCC 13 dev snapshots.
-> - Squash model attribute addition into the previous patch.
-> - Retain "-fplt".
->
-> Changes from v5 to v6:
->
-> - Restore version number.
-> - Rename CONFIG_CC_HAS_EXPLICIT_RELOCS to CONFIG_AS_HAS_EXPLICIT_RELOCS.
->   It now only checks assembler.
-> - No longer support "old GCC with new Binutils", so R_LARCH_ABS* is
->   dropped.
->   - "Old GCC with old Binutils" is still supported until Arnd ack.
->   - "New GCC with old Binutils" is still supported as it does not
->     require additional code.
-> - Remove "cc-option" around "-mexplicit-relocs".  For unsupported
->   "old GCC with new Binutils" combination, forcing -mexplicit-relocs
->   makes assembling fail, instead of silently producing unloadable
->   modules.
-> - Move the error report for "lacking model attribute" into Makefile.
-> - Squash the two patches for R_LARCH_B26 and R_LARCH_PCALA* into one.
->
-> Changes from v4 to v5 ("v5" missed in the subject):
->
-> - Change subject.
-> - Introduce CONFIG_CC_HAS_EXPLICIT_RELOCS.
-> - Retain -Wa,-mla-* options for old toolchains
->   (!CONFIG_CC_HAS_EXPLICIT_RELOCS).
-> - Use __attribute__((model("extreme"))) in PER_CPU_ATTRIBUTES, to fix
->   a breakage with per-CPU variables defined in modules.
-> - Handle R_LARCH_PCALA64_{HI12,LO12} for extreme model.
-> - Handle R_LARCH_ABS* for "old GCC with new Binutils".
-> - Separate the last patch into more small patches.
-> - Avoid BUG_ON() for the handling of GOT.
->
-> Changes from v3 to v4:
->
-> - No code change.  Reword the commit message of the 3rd patch again
->   based on suggestion from Huacai.
->
-> Changes from v2 to v3:
->
-> - Use `union loongarch_instruction` instead of explicit bit shifts
->   applying the relocation.  Suggested by Youling.
-> - For R_LARCH_B26, move the alignment check before the range check to be
->   consistent with stack pop relocations.  Suggested by Youling.
-> - Reword the commit message of the 3rd patch.  Suggested by Huacai.
->
-> Changes from v1 to v2:
->
-> - Fix a stupid programming error (confusion between the number of PLT
->   entries and the number of GOT entries).  (Bug spotted by Youling).
-> - Synthesize the _GLOBAL_OFFSET_TABLE_ symbol with module.lds, instead
->   of faking it at runtime.  The 3rd patch from V1 is now merged into
->   the 1st patch because it would be a one-line change.  (Suggested by
->   Jinyang).
-> - Keep reloc_rela_handlers[] ordered by the relocation type ID.
->   (Suggested by Youling).
-> - Remove -fplt along with -Wa,-mla-* options because it's the default.
->   (Suggested by Youling).
->
-> Xi Ruoyao (5):
->   LoongArch: Add CONFIG_AS_HAS_EXPLICIT_RELOCS
->   LoongArch: Adjust symbol addressing for CONFIG_AS_HAS_EXPLICIT_RELOCS
->   LoongArch: Define ELF relocation types added in v2.00 ABI
->   LoongArch: Support PC-relative relocations in modules
->   LoongArch: Support R_LARCH_GOT_PC* in modules
->
->  arch/loongarch/Kconfig                  |  3 +
->  arch/loongarch/Makefile                 | 17 +++++
->  arch/loongarch/include/asm/elf.h        | 37 ++++++++++
->  arch/loongarch/include/asm/module.h     | 23 ++++++
->  arch/loongarch/include/asm/module.lds.h |  1 +
->  arch/loongarch/include/asm/percpu.h     |  8 +++
->  arch/loongarch/kernel/head.S            | 10 +--
->  arch/loongarch/kernel/module-sections.c | 56 +++++++++++++--
->  arch/loongarch/kernel/module.c          | 93 ++++++++++++++++++++++++-
->  9 files changed, 238 insertions(+), 10 deletions(-)
->
-> --
-> 2.37.0
->
+Regards,
+Lucas
+
+>  	if (IS_ERR(imx8_phy->iomuxc_gpr)) {
+>  		dev_err(dev, "unable to find iomuxc registers\n");
+>  		return PTR_ERR(imx8_phy->iomuxc_gpr);
+> @@ -208,6 +247,14 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  		dev_err(dev, "Failed to get PCIEPHY reset control\n");
+>  		return PTR_ERR(imx8_phy->reset);
+>  	}
+> +	if (imx8_phy->variant == IMX8MP) {
+> +		imx8_phy->perst =
+> +			devm_reset_control_get_exclusive(dev, "perst");
+> +		if (IS_ERR(imx8_phy->perst)) {
+> +			dev_err(dev, "Failed to get PCIE PHY PERST control\n");
+> +			return PTR_ERR(imx8_phy->perst);
+> +		}
+> +	}
+>  
+>  	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+>  	imx8_phy->base = devm_ioremap_resource(dev, res);
+> @@ -225,12 +272,6 @@ static int imx8_pcie_phy_probe(struct platform_device *pdev)
+>  	return PTR_ERR_OR_ZERO(phy_provider);
+>  }
+>  
+> -static const struct of_device_id imx8_pcie_phy_of_match[] = {
+> -	{.compatible = "fsl,imx8mm-pcie-phy",},
+> -	{ },
+> -};
+> -MODULE_DEVICE_TABLE(of, imx8_pcie_phy_of_match);
+> -
+>  static struct platform_driver imx8_pcie_phy_driver = {
+>  	.probe	= imx8_pcie_phy_probe,
+>  	.driver = {
+
+

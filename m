@@ -2,181 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D7E5A5D1C
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFCE5A5D2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiH3HiK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        id S230352AbiH3Hmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:42:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiH3HiC (ORCPT
+        with ESMTP id S231178AbiH3Hmg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:38:02 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B401BA15E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:37:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661845070; x=1693381070;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4146rQbNgpJKmVBNz3ybM+Hn/wyGiAEsiucLmRjbNWI=;
-  b=hXSXDo0zxr8FQjTsgXbgW4ccI4lN4Hf6kAdVtNcXgtuT6iu1UYZzpYno
-   3GHj0Lm9nC+8CG0EsH7OBhxUVyOkHG+6dlKaPvq5sts2U6Flw+jJwdQJ8
-   WZsMTwcaBPNeKcZP0lOLHPRALgGBqzzaymkw8xX9VJyBCtCYVmXBsjsaz
-   1FpfrThFlgm40HMx/rnN9qLGgYgmFLcUCq2KFqQAeZUBzYCamw+pEl+u6
-   K+6A3xm2wVZ1VpfuNP3gpw4EPS8e5KgtcSzh4GYSZpsxqxN8YGqKW0Oy3
-   4HfQxpJopSvfieMwxdILnnZ1Fs0QrLTzDzzVXEjsVxEDsY+/hMHGqJzby
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10454"; a="282078621"
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="282078621"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 00:37:45 -0700
-X-IronPort-AV: E=Sophos;i="5.93,274,1654585200"; 
-   d="scan'208";a="672734380"
-Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 00:37:43 -0700
-From:   Bard Liao <yung-chuan.liao@linux.intel.com>
-To:     alsa-devel@alsa-project.org, vkoul@kernel.org, broonie@kernel.org
-Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH] soundwire: bus: conditionally recheck UNATTACHED status
-Date:   Tue, 30 Aug 2022 15:42:24 +0800
-Message-Id: <20220830074224.2924179-1-yung-chuan.liao@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Aug 2022 03:42:36 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCCC2A1D06
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:42:33 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id z6so14351066lfu.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:42:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=c+BAz5TKARnaA7ePcUOXjPEFWuKXdNXQbdrTJXQiOA8=;
+        b=cE6M+jIIm2JY5p5Gd+AJwb7gJD4EP8fNwBY5jsaBGDhUk5F47Jt1yWBILhG6/v01t9
+         iPmhdwwrzBtw2x8aWbrqV+HzC2xg+2gh7HYHRgdMVVFmwVlzQ99Fm0baz8MI1lUb8qt3
+         feihot3Aru7Q+6iAzlZo6vbOUk9At8lVccORWCmbwDzrqW4edMA5kmWyevdx4RhwEOse
+         j2nkWQmsH5mFYVGNVninKWpd4zF8bX0AyOFpUcJTQkCpRidRU+wHEw2YrkiKp1EOy7/N
+         MYYSS+KwJvlA2Z1fJAWGwWJKMEVN7VMuU3IXuwWy8k5VHpFEg0Mt4Bpdx+zIrmUUjzNd
+         k8Gw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=c+BAz5TKARnaA7ePcUOXjPEFWuKXdNXQbdrTJXQiOA8=;
+        b=OVV+y5D2SqV2j2wPFUwzxexcpHw2i4+N4wO1u0hM38KPuo7ghAxvIDw7nunrC2fDWO
+         M6XC9S1Abs76vdbNC7HKyBj0ui1lk3tlNxtyOsqSEJwQusGJQgJU3syOYUFFL+4lSOUi
+         RXBdscUDYNf6OBOrxCV2kms1Hwd2B1rvXw0bvLv+IEvVsmL7uLAuNVMqC9MpcW9qxA0p
+         j6yroO+K0wUO709/9TJDfNoKV8VoWDsYMsEwA8fTkqiUwPgn/UOR+WVRQXHZ3xcCFORm
+         zyCbEE/cv6nquIMLhH9yH/iffmKTn3JK30ysB5JsvadBW03YoJTbfYzq6AHzuDaqLMZX
+         Pddw==
+X-Gm-Message-State: ACgBeo2ikDxYEaB6uAhumcyKAg6tl+eki8fjHePBySS0OjC8O7y3koJi
+        i8glB0y4L3da2eClg6PCkxN0MA==
+X-Google-Smtp-Source: AA6agR5e7+jk6RNyxPoSGiPYTuNDPyAoTBhOV75Af0njmGE2v5/xj4Z02ryp1GDslTWJlAu/Y3EvVg==
+X-Received: by 2002:a05:6512:1684:b0:47f:5f27:b006 with SMTP id bu4-20020a056512168400b0047f5f27b006mr7304537lfb.225.1661845352094;
+        Tue, 30 Aug 2022 00:42:32 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id g6-20020a056512118600b00492d270db5esm1520758lfr.242.2022.08.30.00.42.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 00:42:31 -0700 (PDT)
+Message-ID: <52336b1e-f0b3-c828-48ef-b6977fd90547@linaro.org>
+Date:   Tue, 30 Aug 2022 10:42:29 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v4] regulator: dt-bindings: mediatek: add mt6366
+Content-Language: en-US
+To:     "zhiyong.tao" <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
+        robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
+        broonie@kernel.org, eddie.huang@mediatek.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, fshao@chromium.org
+Cc:     sen.chu@mediatek.com, hui.liu@mediatek.com,
+        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220823123745.14061-1-zhiyong.tao@mediatek.com>
+ <57d259cd-613b-a608-5b67-01aa72c2babb@linaro.org>
+ <93bb8a3f7f5567cfe427ed067f68d5c8b6db776d.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <93bb8a3f7f5567cfe427ed067f68d5c8b6db776d.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+On 29/08/2022 06:25, zhiyong.tao wrote:
+>>> +properties:
+>>> +  compatible:
+>>> +    const: mediatek,mt6366-regulator
+>>
+>> This looks incomplete. How does it bind? Further pieces also suggest
+>> you
+>> send something incomplete.
+> ==>
+> 
+> The project dts file(such as 8186-evb.dts) will add the compatible.
+> The project dts file is examining.
+> 
 
-In configurations with two amplifiers on the same link, the Intel CI
-reports occasional enumeration/initialization timeouts during
-suspend-resume stress tests, where one of the two amplifiers becomes
-UNATTACHED immediately after being enumerated. This problem was
-reported both with Maxim and Realtek codecs, which pointed initially
-to a problem with status handling on the Intel side.
+I don't understand this at all. I am not talking about DTS, but about
+bindings which look incomplete. Although seeing entire DTS would
+probably help understand the context.
 
-The Cadence IP integrated on Intel platforms throws an interrupt when
-the status changes, and the information is kept with sticky bits until
-cleared. We initially added more checks to make sure the edge
-detection did not miss any transition, but that did not improve the
-results significantly.
+(...)
 
-With the recent addition of the read_ping_status() callback, we were
-able to show that the status in sticky bits is shown as UNATTACHED
-even though the PING frames show the problematic device as
-ATTACHED. That completely breaks the entire logic where we assumed
-that a peripheral would always re-attach as device0. The resume
-timeouts make sense in that in those cases, the
-enumeration/initialization never happens a second time.
+>>
+>>
+>>> +        type: object
+>>> +        $ref: regulator.yaml#
+>>> +        unevaluatedProperties: false
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - regulators
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
 
-One possible explanation is that this problem typically happens when a
-bus clash is reported, so it could very well be that the detection is
-fooled by a transient electrical issue or conflict between two
-peripherals.
+>>> +  - |
+>>> +    pmic {
+>>> +        compatible = "mediatek,mt6366-regulator";
+>>> +
+>>> +        regulators {
+>>> +            mt6366_vdram1_reg: buck-vdram1 {
+>>
+>> Drop the labels here and further. Why you do not have here any
+>> regular
+>> constraints like min/max voltage?
+> 
+> we will add properties min/max voltag on project dts file.
 
-This patch conditionally double-checks the status reported in the
-sticky bits with the actual PING frame status. If the peripheral
-reports as attached in PING frames, the early detection based on
-sticky bits is discarded.
+Example should be complete. DTS does not matter here.
 
-Note that this patch only corrects issues of false positives on the
-manager side.
+> 
+>>
+>>> +                regulator-ramp-delay = <12500>;
+>>> +                regulator-enable-ramp-delay = <0>;
+>>> +                regulator-allowed-modes = <0 1>;
+>>
+>> Where do you explain the meaning of modes?
+> support pwm mode.
 
-If the peripheral lost and regain sync, then it would report as
-attached on Device0. A peripheral that would not reset its dev_num
-would not be compliant with the MIPI specification.
+The question was "Where". Where did you explain them?
 
-BugLink: https://github.com/thesofproject/linux/issues/3638
-BugLink: https://github.com/thesofproject/linux/issues/3325
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Rander Wang <rander.wang@intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
----
-Hi Vinod,
+(...)
 
-You will need the "ASoC/soundwire: log actual PING status on resume issues"
-series which is applied at ASoC tree before appling this patch.
+>>> +
+>>> +            mt6366_vsim2_reg: ldo-vsim2 {
+>>> +                regulator-enable-ramp-delay = <540>;
+>>> +            };
+>>> +
+>>> +            mt6366_vcore_sshub_reg: buck-vcore-sshub {
+>>
+>> Empty node? What does it do?
+> just define here, we will add properties on project dts file.
 
----
- drivers/soundwire/bus.c       | 19 +++++++++++++++++++
- drivers/soundwire/intel.c     |  1 +
- include/linux/soundwire/sdw.h |  3 +++
- 3 files changed, 23 insertions(+)
+How is it related to bindings?
 
-diff --git a/drivers/soundwire/bus.c b/drivers/soundwire/bus.c
-index 2772973eebb1..d0d486f07673 100644
---- a/drivers/soundwire/bus.c
-+++ b/drivers/soundwire/bus.c
-@@ -1767,6 +1767,25 @@ int sdw_handle_slave_status(struct sdw_bus *bus,
- 		    slave->status != SDW_SLAVE_UNATTACHED) {
- 			dev_warn(&slave->dev, "Slave %d state check1: UNATTACHED, status was %d\n",
- 				 i, slave->status);
-+
-+			if (bus->recheck_unattached && bus->ops->read_ping_status) {
-+				u32 ping_status;
-+
-+				mutex_lock(&bus->msg_lock);
-+
-+				ping_status = bus->ops->read_ping_status(bus);
-+
-+				mutex_unlock(&bus->msg_lock);
-+
-+				ping_status >>= (i * 2);
-+				ping_status &= 0x3;
-+
-+				if (ping_status != 0) {
-+					dev_warn(&slave->dev, "Slave %d state in PING frame is %d, ignoring earlier detection\n",
-+						 i, ping_status);
-+					continue;
-+				}
-+			}
- 			sdw_modify_slave_status(slave, SDW_SLAVE_UNATTACHED);
- 		}
- 	}
-diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index 25ec9c272239..0c6e674dbf85 100644
---- a/drivers/soundwire/intel.c
-+++ b/drivers/soundwire/intel.c
-@@ -1311,6 +1311,7 @@ static int intel_link_probe(struct auxiliary_device *auxdev,
- 
- 	bus->link_id = auxdev->id;
- 	bus->dev_num_ida_min = INTEL_DEV_NUM_IDA_MIN;
-+	bus->recheck_unattached = true;
- 
- 	sdw_cdns_probe(cdns);
- 
-diff --git a/include/linux/soundwire/sdw.h b/include/linux/soundwire/sdw.h
-index a2b31d25ea27..51ac71984260 100644
---- a/include/linux/soundwire/sdw.h
-+++ b/include/linux/soundwire/sdw.h
-@@ -892,6 +892,8 @@ struct sdw_master_ops {
-  * @dev_num_ida_min: if set, defines the minimum values for the IDA
-  * used to allocate system-unique device numbers. This value needs to be
-  * identical across all SoundWire bus in the system.
-+ * @recheck_unattached: if set, double-check UNATTACHED status changes
-+ * by reading PING frame status.
-  */
- struct sdw_bus {
- 	struct device *dev;
-@@ -917,6 +919,7 @@ struct sdw_bus {
- 	bool multi_link;
- 	int hw_sync_min_links;
- 	int dev_num_ida_min;
-+	bool recheck_unattached;
- };
- 
- int sdw_bus_master_add(struct sdw_bus *bus, struct device *parent,
--- 
-2.25.1
-
+Best regards,
+Krzysztof

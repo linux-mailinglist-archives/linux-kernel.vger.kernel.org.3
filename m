@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E745A7010
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D66A45A701C
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbiH3Vxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 17:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
+        id S231648AbiH3Vxs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 17:53:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232085AbiH3VwZ (ORCPT
+        with ESMTP id S232155AbiH3Vwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:52:25 -0400
+        Tue, 30 Aug 2022 17:52:50 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69FA923CD
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:50:25 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-340ae84fb7dso156837267b3.17
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:50:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32C249413F
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:50:28 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-32a115757b6so190474457b3.13
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:50:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=tbrDSnAu2qp291q6FJVI5HAkVfDwcm9jT2uRBxykBxo=;
-        b=kiiww/u+gNRUQ3btvqFql15o+OQdqGRa8iL5JT7J5S/FJUftRrKykzaiX80qCn3gMA
-         N7fu/FadrPTfEuXGUmENdVvQNfb5Lc4hc7j+KvIJFmTYxMub96J2Dq6Qz7qLRmUGLg7U
-         /uSKboJAjqTu07ETlC77WQsJyUV6n0Enhp4LQHtPzmOHIYGgLaodwOejnzgOW/A+KcGj
-         gwCBB1i6MWj4k2p8na3VWnkGj14/Yz4lw5Y6xUMEQ+oozkWQlSuhUKUMfndEmuXu4exw
-         3VsqAU7Bes2ONZTxN75FIe9AuWEsm6slCzF5WV8jRwyOqmL1j24ghFNHmneopZkYIiwV
-         aIGg==
+        bh=PJDqdE16VQFkhBtAZQdE7ryguEFDkMx7mMptHwdJxIQ=;
+        b=Ij75nFrUrPvJu2bumKHw5qB/wQ6gVxiA7JiR459fjyWwf8bAM7esU+z26b2Gs2wm+2
+         GJco7Z59pIbk7lAYzIUjBLlbgij5WieJsWdNVz1juJkVh+sa9UWATRgrEBqBGRWkiIgS
+         e9fE2xkYV7tYVniZBisXLNcLv1T2Qe2o0c8hnbKmgjEZ4CuxPiv3aHRBgJXL1TW2FAU/
+         xTP0HeMc1J5XCTMzbl6MriSnvFIhWbWVUtAJ/9V96DnOp2vk9Hc7k6iFLgNru+svATI5
+         qjP0FOpFl9sx7TmiI9c+PBZgc2FqjExNp+v4DIbowFGQu7f8+ZLj1VsmDoNwIg4tHpwc
+         B9Cg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=tbrDSnAu2qp291q6FJVI5HAkVfDwcm9jT2uRBxykBxo=;
-        b=32+PL+XGHnAbzhAtVPXEKNFMK5rV0iUYK0ArwY3alYhkyWzZNcVilgAU3Ic4/oa8N3
-         1Q4po4O4wAsqfMbxF9ooBAYvZpwWcjZ36ycsA2FiqafZ43MiAMf8gSfYnwVyX3mWY3QR
-         RElg+MST5tTtZEg4pm+b+uaNBK7ST+ZUCfO0szBIK6vTrupZluYvKdQF5G3jpeWauUHc
-         Vn9gK9KrxuI1JKHBezsZeCX4QS6ww6SqfF0Iig7qOxSrHUBL1DOCkBsJpblg1aIPx+e1
-         W/JpTfXo49Wgy1bPsPHmz6HB/OmtzrssDCJLU247T0i47LvZVf21XgeOGLQGKGu9NzYS
-         DJhg==
-X-Gm-Message-State: ACgBeo3EYUZUVW/2U8QFCggdJToiyGOAth5nZGHKIs0Y6QN7iTgX2z/x
-        JqKhviFNZ4sHlvskxK2H1MKdkauWO1U=
-X-Google-Smtp-Source: AA6agR68X2SkqWShs2xXg87H6kYkH/5wxhQgvNByd1kyOXdUxqgguxdVIPa42ox8e5jz4qITJ7VUdF/uTQY=
+        bh=PJDqdE16VQFkhBtAZQdE7ryguEFDkMx7mMptHwdJxIQ=;
+        b=kriM4s39NWIJNAf1z4prUx6u0khilDt28iRUmPMQhLszLQ/ajOmhaosRKSrQ055L5t
+         UjSacY66EkZbaX5jLHZsenDLRF2Yix5Yza8OnMX9MScXkcaM4iRBJfkdNW5C95/m69ng
+         iKWSYBPyAZ/69UE0GxFwD1xg75ierGi6nwOr71zNDIu1bR7cXyZ1LdD2C1tt2VqIkAPB
+         YcTB9qAnu8bTcroWIla4y69zGodkHd797JeZ15k6O60H9bfyjkZaErH72e/clerKoLGM
+         mSyD6zioao/QcJrl1nIHN3eIfMJ6IzsRgT7qyxuvejpRQInBu/NDNWyacfObUX6bHCGJ
+         p5rw==
+X-Gm-Message-State: ACgBeo2dtnAEdD98RNylCPTfnA4fGe7JKz34/6TZFjkkHrLUFYYrivye
+        332l0l62mn5YWlzxMx69l1LM545onsY=
+X-Google-Smtp-Source: AA6agR6avTM18XP2y4CdHSCV3FE6n/efM5TdzJAiOApCx+OJvVOl1HBVpl97MaszhlrgGlpdRen0jumUZ8U=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:a005:55b3:6c26:b3e4])
- (user=surenb job=sendgmr) by 2002:a81:13d7:0:b0:324:7dcb:8d26 with SMTP id
- 206-20020a8113d7000000b003247dcb8d26mr16712805ywt.452.1661896224365; Tue, 30
- Aug 2022 14:50:24 -0700 (PDT)
-Date:   Tue, 30 Aug 2022 14:49:12 -0700
+ (user=surenb job=sendgmr) by 2002:a81:54c4:0:b0:329:d0e1:cfcf with SMTP id
+ i187-20020a8154c4000000b00329d0e1cfcfmr15741208ywb.451.1661896227243; Tue, 30
+ Aug 2022 14:50:27 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 14:49:13 -0700
 In-Reply-To: <20220830214919.53220-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220830214919.53220-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220830214919.53220-24-surenb@google.com>
-Subject: [RFC PATCH 23/30] timekeeping: Add a missing include
+Message-ID: <20220830214919.53220-25-surenb@google.com>
+Subject: [RFC PATCH 24/30] wait: Clean up waitqueue_entry initialization
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
@@ -73,7 +73,8 @@ Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
         iommu@lists.linux.dev, kasan-dev@googlegroups.com,
         io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
         xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org
+        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ingo Molnar <mingo@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -87,25 +88,163 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kent Overstreet <kent.overstreet@linux.dev>
 
-We need ktime.h for ktime_t.
+Cleanup for code tagging latency tracking:
+
+Add an initializer, WAIT_FUNC_INITIALIZER(), to be used by initializers
+for structs that include wait_queue_entries.
+
+Also, change init_wait(), init_wait_entry etc.  to be a wrapper around
+the new __init_waitqueue_entry(); more de-duplication prep work.
 
 Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
 ---
- include/linux/timekeeping.h | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/sbitmap.h  |  6 +----
+ include/linux/wait.h     | 52 +++++++++++++++++++---------------------
+ include/linux/wait_bit.h |  7 +-----
+ kernel/sched/wait.c      |  9 -------
+ 4 files changed, 27 insertions(+), 47 deletions(-)
 
-diff --git a/include/linux/timekeeping.h b/include/linux/timekeeping.h
-index fe1e467ba046..7c43e98cf211 100644
---- a/include/linux/timekeeping.h
-+++ b/include/linux/timekeeping.h
-@@ -4,6 +4,7 @@
+diff --git a/include/linux/sbitmap.h b/include/linux/sbitmap.h
+index 8f5a86e210b9..f696c29d9ab3 100644
+--- a/include/linux/sbitmap.h
++++ b/include/linux/sbitmap.h
+@@ -596,11 +596,7 @@ struct sbq_wait {
+ #define DEFINE_SBQ_WAIT(name)							\
+ 	struct sbq_wait name = {						\
+ 		.sbq = NULL,							\
+-		.wait = {							\
+-			.private	= current,				\
+-			.func		= autoremove_wake_function,		\
+-			.entry		= LIST_HEAD_INIT((name).wait.entry),	\
+-		}								\
++		.wait = WAIT_FUNC_INITIALIZER((name).wait, autoremove_wake_function),\
+ 	}
  
- #include <linux/errno.h>
- #include <linux/clocksource_ids.h>
-+#include <linux/ktime.h>
+ /*
+diff --git a/include/linux/wait.h b/include/linux/wait.h
+index 58cfbf81447c..91ced6a118bc 100644
+--- a/include/linux/wait.h
++++ b/include/linux/wait.h
+@@ -79,21 +79,38 @@ extern void __init_waitqueue_head(struct wait_queue_head *wq_head, const char *n
+ # define DECLARE_WAIT_QUEUE_HEAD_ONSTACK(name) DECLARE_WAIT_QUEUE_HEAD(name)
+ #endif
  
- /* Included from linux/ktime.h */
+-static inline void init_waitqueue_entry(struct wait_queue_entry *wq_entry, struct task_struct *p)
+-{
+-	wq_entry->flags		= 0;
+-	wq_entry->private	= p;
+-	wq_entry->func		= default_wake_function;
++#define WAIT_FUNC_INITIALIZER(name, function) {					\
++	.private	= current,						\
++	.func		= function,						\
++	.entry		= LIST_HEAD_INIT((name).entry),				\
+ }
  
++#define DEFINE_WAIT_FUNC(name, function)					\
++	struct wait_queue_entry name = WAIT_FUNC_INITIALIZER(name, function)
++
++#define DEFINE_WAIT(name) DEFINE_WAIT_FUNC(name, autoremove_wake_function)
++
+ static inline void
+-init_waitqueue_func_entry(struct wait_queue_entry *wq_entry, wait_queue_func_t func)
++__init_waitqueue_entry(struct wait_queue_entry *wq_entry, unsigned int flags,
++		       void *private, wait_queue_func_t func)
+ {
+-	wq_entry->flags		= 0;
+-	wq_entry->private	= NULL;
++	wq_entry->flags		= flags;
++	wq_entry->private	= private;
+ 	wq_entry->func		= func;
++	INIT_LIST_HEAD(&wq_entry->entry);
+ }
+ 
++#define init_waitqueue_func_entry(_wq_entry, _func)			\
++	__init_waitqueue_entry(_wq_entry, 0, NULL, _func)
++
++#define init_waitqueue_entry(_wq_entry, _task)				\
++	__init_waitqueue_entry(_wq_entry, 0, _task, default_wake_function)
++
++#define init_wait_entry(_wq_entry, _flags)				\
++	__init_waitqueue_entry(_wq_entry, _flags, current, autoremove_wake_function)
++
++#define init_wait(wait)		init_wait_entry(wait, 0)
++
+ /**
+  * waitqueue_active -- locklessly test for waiters on the queue
+  * @wq_head: the waitqueue to test for waiters
+@@ -283,8 +300,6 @@ static inline void wake_up_pollfree(struct wait_queue_head *wq_head)
+ 	(!__builtin_constant_p(state) ||					\
+ 		state == TASK_INTERRUPTIBLE || state == TASK_KILLABLE)		\
+ 
+-extern void init_wait_entry(struct wait_queue_entry *wq_entry, int flags);
+-
+ /*
+  * The below macro ___wait_event() has an explicit shadow of the __ret
+  * variable when used from the wait_event_*() macros.
+@@ -1170,23 +1185,6 @@ long wait_woken(struct wait_queue_entry *wq_entry, unsigned mode, long timeout);
+ int woken_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync, void *key);
+ int autoremove_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync, void *key);
+ 
+-#define DEFINE_WAIT_FUNC(name, function)					\
+-	struct wait_queue_entry name = {					\
+-		.private	= current,					\
+-		.func		= function,					\
+-		.entry		= LIST_HEAD_INIT((name).entry),			\
+-	}
+-
+-#define DEFINE_WAIT(name) DEFINE_WAIT_FUNC(name, autoremove_wake_function)
+-
+-#define init_wait(wait)								\
+-	do {									\
+-		(wait)->private = current;					\
+-		(wait)->func = autoremove_wake_function;			\
+-		INIT_LIST_HEAD(&(wait)->entry);					\
+-		(wait)->flags = 0;						\
+-	} while (0)
+-
+ typedef int (*task_call_f)(struct task_struct *p, void *arg);
+ extern int task_call_func(struct task_struct *p, task_call_f func, void *arg);
+ 
+diff --git a/include/linux/wait_bit.h b/include/linux/wait_bit.h
+index 7725b7579b78..267ca0fe9fd9 100644
+--- a/include/linux/wait_bit.h
++++ b/include/linux/wait_bit.h
+@@ -38,12 +38,7 @@ int wake_bit_function(struct wait_queue_entry *wq_entry, unsigned mode, int sync
+ #define DEFINE_WAIT_BIT(name, word, bit)					\
+ 	struct wait_bit_queue_entry name = {					\
+ 		.key = __WAIT_BIT_KEY_INITIALIZER(word, bit),			\
+-		.wq_entry = {							\
+-			.private	= current,				\
+-			.func		= wake_bit_function,			\
+-			.entry		=					\
+-				LIST_HEAD_INIT((name).wq_entry.entry),		\
+-		},								\
++		.wq_entry = WAIT_FUNC_INITIALIZER((name).wq_entry, wake_bit_function),\
+ 	}
+ 
+ extern int bit_wait(struct wait_bit_key *key, int mode);
+diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
+index 9860bb9a847c..b9922346077d 100644
+--- a/kernel/sched/wait.c
++++ b/kernel/sched/wait.c
+@@ -289,15 +289,6 @@ prepare_to_wait_exclusive(struct wait_queue_head *wq_head, struct wait_queue_ent
+ }
+ EXPORT_SYMBOL(prepare_to_wait_exclusive);
+ 
+-void init_wait_entry(struct wait_queue_entry *wq_entry, int flags)
+-{
+-	wq_entry->flags = flags;
+-	wq_entry->private = current;
+-	wq_entry->func = autoremove_wake_function;
+-	INIT_LIST_HEAD(&wq_entry->entry);
+-}
+-EXPORT_SYMBOL(init_wait_entry);
+-
+ long prepare_to_wait_event(struct wait_queue_head *wq_head, struct wait_queue_entry *wq_entry, int state)
+ {
+ 	unsigned long flags;
 -- 
 2.37.2.672.g94769d06f0-goog
 

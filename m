@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0F25A58F2
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2141F5A58F1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229852AbiH3Bog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 21:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S229840AbiH3BoT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 21:44:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiH3BoI (ORCPT
+        with ESMTP id S229689AbiH3BoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 21:44:08 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0F7F7C305
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:44:07 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id 145so9549500pfw.4
-        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:44:07 -0700 (PDT)
+        Mon, 29 Aug 2022 21:44:10 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B257C1C2
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:44:09 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id c24so9301314pgg.11
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:44:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=G+5+t9wS3j8loUJEHuF9oZ643Kgj2nRnoYQ+cdIzE4Q=;
-        b=p8rDSiod8Q6m2f7lk+vGYHRbMdp8G+R142a05Y91cEYOFDAIz4HqPR/p3gogUm0Ylz
-         5l58AwitYF7ClY7/r1uh90AHZqPulavtZLGuBk1pX+s1yUacjmsdsKZW9neSzre0hvZu
-         Uqsfq7HgJLDLvNwr/UmZiExWBFqy8ePwhgbx3JfoKZJD7K6x9c+27IKwVKo7mLHeE7wG
-         GQFB0gz0ZkrPU2pWnPg3Hut15UYaAuEwNO8/Xg08tn3wqAdJOGwrmqc0DyJLQZfr2pah
-         +8nFLLbrjKfx/EsQNSPRF64j6afoBibu8dS6S/XrL3fnl1dAICEfbtwxZwqkWGxhZJJO
-         QOBA==
+        bh=BKqwlh2LYsyA0xlbuRIO9SBcDmgUfBuyVHnS5ZwNoOg=;
+        b=Fv+/cLbwo1iO+WAVeCuZ1vvS2QJyW7JL6cHtZ1jdcabtqKyvDPTpIefGiVZ5yw5V5t
+         aRbk+afsASV4S+b7UfR4lWcFtOAz33T8lREB0hH9Eaoufs4fGHmigLHl4dZ6C46QdByz
+         KeMJPPi1tnK+mL2cN8TfcY5ErIS+WgVBhifznkUvVqlsoZlg7aXTGsT3/PjRXSen3TKB
+         eV+zNnZFqa+0WmDOxv4sPstNKAlKb4Ok79IoDL8OEdcTDdfapLrMYEHGT88f5SX+TCBE
+         /vS58uGQwYD2eZfXDSkqc4eiV5+W4nkUo/jQC5Ru9Dat/Kscu/19lfxB9vr4s8ilbtUq
+         93Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=G+5+t9wS3j8loUJEHuF9oZ643Kgj2nRnoYQ+cdIzE4Q=;
-        b=J0EvrtehfgzIJNEBxlPl8fMoiou5m06tvza4cSp8RVLoVI17di5TgBRbno9iaI2CtU
-         4/VHcX3eNZX4OAghZbcctmpCa7k/g1VeAW+haE9zw6P3gWCaylqEIZtB6G1zesz/Fm2o
-         uF5GFxn8cmc9eav3B2THxkdjgUlyos9r+0jvc7dzAcKm79tHPao/3gS+4RyiyMi1L0eM
-         QwuZmPkkS7uPw8EFVO3qfoBwHo1CjEgmY1t5R8erLuJsx6EqB4NG7BImkAmWBKW/eGh7
-         J/2/xA8trnLj1q14oEXFFE0ZLfbo+1lF1nVzDoZMr2jPwx9oYogK4NvsPb318rGqo/qd
-         xBOA==
-X-Gm-Message-State: ACgBeo15P2t2EAkEp6DZbbzPk3VOb3oYCJCuLf1s3Y8sI6DyZhKM1fTZ
-        N3bcwPNO3fU9adWVvKvZAgDCOlKFHcQ=
-X-Google-Smtp-Source: AA6agR5h5y0JHFyZVNXdoeR4s3tDd2r5LXjhoA3xugPlUhw3wrPSh1KuENIbd4Gu1ZSwl/Dg+K4pyA==
-X-Received: by 2002:a65:494b:0:b0:428:d68c:35bf with SMTP id q11-20020a65494b000000b00428d68c35bfmr15539520pgs.509.1661823846843;
-        Mon, 29 Aug 2022 18:44:06 -0700 (PDT)
+        bh=BKqwlh2LYsyA0xlbuRIO9SBcDmgUfBuyVHnS5ZwNoOg=;
+        b=WBfnWetj/dKa1kiveXda+AEFX6C28r62WyOHLdjZFls640vOsMpLQ95PsZlhdDDYEG
+         ukRhyymdLxjDCY+s4n97stqjUv+TiUBSf4WdIohNcZkIICE/d3Wdam2fdIzEe2+ve+U8
+         pCAl1O1BzWMC/6P+oSkilaoK1iTsMVucJ7Mu3Gav11BAv3lYQMfaf7kPtowrXbr6PBPa
+         t1oHVYzWcVEgQ/ilWy6/wG099zabPY4WlzVQQmWU33Wc+W9IR/gG2TVW5DXQ0nwW98HN
+         4kM0mrQSqlnU412nDlNymLFzo5cZGCAeHLQjw8FwcZiHPNUUi0mS+incIafxl+un/RvK
+         lzxQ==
+X-Gm-Message-State: ACgBeo3wNh34tr3zqXSfie20KzUaBaN+6ns1j97A3yvbZOQP3Ptz6yZ0
+        4Lc8xJMhQVutgUj4CVf3CDTe4sYf/HI=
+X-Google-Smtp-Source: AA6agR7P4i0pBPdvGm0aHAx9/RlRD0/FDRYQzHti2KWDUbjF3jvIiPWmddCZYi+AkdvVVqj8eSeC0g==
+X-Received: by 2002:a63:5418:0:b0:42a:d773:cbd6 with SMTP id i24-20020a635418000000b0042ad773cbd6mr16214306pgb.106.1661823848381;
+        Mon, 29 Aug 2022 18:44:08 -0700 (PDT)
 Received: from laptop.hsd1.wa.comcast.net ([2601:600:8500:5f14:d627:c51e:516e:a105])
-        by smtp.gmail.com with ESMTPSA id v14-20020aa799ce000000b00535faa9d6f2sm7976038pfi.53.2022.08.29.18.44.05
+        by smtp.gmail.com with ESMTPSA id v14-20020aa799ce000000b00535faa9d6f2sm7976038pfi.53.2022.08.29.18.44.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Aug 2022 18:44:06 -0700 (PDT)
+        Mon, 29 Aug 2022 18:44:07 -0700 (PDT)
 From:   Andrei Vagin <avagin@gmail.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Andrei Vagin <avagin@gmail.com>,
@@ -62,9 +62,9 @@ Cc:     Andrei Vagin <avagin@gmail.com>,
         Tycho Andersen <tycho@tycho.pizza>,
         Will Drewry <wad@chromium.org>,
         Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH 2/4] sched: add WF_CURRENT_CPU and externise ttwu
-Date:   Mon, 29 Aug 2022 18:43:54 -0700
-Message-Id: <20220830014356.5364-3-avagin@gmail.com>
+Subject: [PATCH 3/4] sched: add a few helpers to wake up tasks on the current cpu
+Date:   Mon, 29 Aug 2022 18:43:55 -0700
+Message-Id: <20220830014356.5364-4-avagin@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220830014356.5364-1-avagin@gmail.com>
 References: <20220830014356.5364-1-avagin@gmail.com>
@@ -80,84 +80,139 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Oskolkov <posk@google.com>
+Add complete_on_current_cpu, wake_up_poll_on_current_cpu helpers to wake
+up processes on the current CPU.
 
-Add WF_CURRENT_CPU wake flag that advices the scheduler to
-move the wakee to the current CPU. This is useful for fast on-CPU
-context switching use cases such as UMCG.
-
-In addition, make ttwu external rather than static so that
-the flag could be passed to it from outside of sched/core.c.
-
-Signed-off-by: Peter Oskolkov <posk@google.com>
 Signed-off-by: Andrei Vagin <avagin@gmail.com>
 ---
- kernel/sched/core.c  |  3 +--
- kernel/sched/fair.c  |  4 ++++
- kernel/sched/sched.h | 13 ++++++++-----
- 3 files changed, 13 insertions(+), 7 deletions(-)
+ include/linux/completion.h |  1 +
+ include/linux/swait.h      |  1 +
+ include/linux/wait.h       |  3 +++
+ kernel/sched/completion.c  | 12 ++++++++++++
+ kernel/sched/core.c        |  2 +-
+ kernel/sched/swait.c       | 11 +++++++++++
+ kernel/sched/wait.c        |  5 +++++
+ 7 files changed, 34 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ee28253c9ac0..008be12c31e6 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -4045,8 +4045,7 @@ bool ttwu_state_match(struct task_struct *p, unsigned int state, int *success)
-  * Return: %true if @p->state changes (an actual wakeup was done),
-  *	   %false otherwise.
-  */
--static int
--try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
-+int try_to_wake_up(struct task_struct *p, unsigned int state, int wake_flags)
- {
- 	unsigned long flags;
- 	int cpu, success = 0;
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 914096c5b1ae..7b043870b634 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -7028,6 +7028,10 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
- 	if (wake_flags & WF_TTWU) {
- 		record_wakee(p);
+diff --git a/include/linux/completion.h b/include/linux/completion.h
+index 51d9ab079629..1699e697a225 100644
+--- a/include/linux/completion.h
++++ b/include/linux/completion.h
+@@ -115,6 +115,7 @@ extern bool try_wait_for_completion(struct completion *x);
+ extern bool completion_done(struct completion *x);
  
-+		if ((wake_flags & WF_CURRENT_CPU) &&
-+		    cpumask_test_cpu(cpu, p->cpus_ptr))
-+			return cpu;
-+
- 		if (sched_energy_enabled()) {
- 			new_cpu = find_energy_efficient_cpu(p, prev_cpu);
- 			if (new_cpu >= 0)
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index e26688d387ae..6e93e8808bfd 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2080,12 +2080,13 @@ static inline int task_on_rq_migrating(struct task_struct *p)
+ extern void complete(struct completion *);
++extern void complete_on_current_cpu(struct completion *x);
+ extern void complete_all(struct completion *);
+ 
+ #endif
+diff --git a/include/linux/swait.h b/include/linux/swait.h
+index 6a8c22b8c2a5..1f27b254adf5 100644
+--- a/include/linux/swait.h
++++ b/include/linux/swait.h
+@@ -147,6 +147,7 @@ static inline bool swq_has_sleeper(struct swait_queue_head *wq)
+ extern void swake_up_one(struct swait_queue_head *q);
+ extern void swake_up_all(struct swait_queue_head *q);
+ extern void swake_up_locked(struct swait_queue_head *q);
++extern void swake_up_locked_on_current_cpu(struct swait_queue_head *q);
+ 
+ extern void prepare_to_swait_exclusive(struct swait_queue_head *q, struct swait_queue *wait, int state);
+ extern long prepare_to_swait_event(struct swait_queue_head *q, struct swait_queue *wait, int state);
+diff --git a/include/linux/wait.h b/include/linux/wait.h
+index 58cfbf81447c..dcd01dd4de3e 100644
+--- a/include/linux/wait.h
++++ b/include/linux/wait.h
+@@ -210,6 +210,7 @@ __remove_wait_queue(struct wait_queue_head *wq_head, struct wait_queue_entry *wq
  }
  
- /* Wake flags. The first three directly map to some SD flag value */
--#define WF_EXEC     0x02 /* Wakeup after exec; maps to SD_BALANCE_EXEC */
--#define WF_FORK     0x04 /* Wakeup after fork; maps to SD_BALANCE_FORK */
--#define WF_TTWU     0x08 /* Wakeup;            maps to SD_BALANCE_WAKE */
-+#define WF_EXEC         0x02 /* Wakeup after exec; maps to SD_BALANCE_EXEC */
-+#define WF_FORK         0x04 /* Wakeup after fork; maps to SD_BALANCE_FORK */
-+#define WF_TTWU         0x08 /* Wakeup;            maps to SD_BALANCE_WAKE */
+ void __wake_up(struct wait_queue_head *wq_head, unsigned int mode, int nr, void *key);
++void __wake_up_on_current_cpu(struct wait_queue_head *wq_head, unsigned int mode, void *key);
+ void __wake_up_locked_key(struct wait_queue_head *wq_head, unsigned int mode, void *key);
+ void __wake_up_locked_key_bookmark(struct wait_queue_head *wq_head,
+ 		unsigned int mode, void *key, wait_queue_entry_t *bookmark);
+@@ -237,6 +238,8 @@ void __wake_up_pollfree(struct wait_queue_head *wq_head);
+ #define key_to_poll(m) ((__force __poll_t)(uintptr_t)(void *)(m))
+ #define wake_up_poll(x, m)							\
+ 	__wake_up(x, TASK_NORMAL, 1, poll_to_key(m))
++#define wake_up_poll_on_current_cpu(x, m)					\
++	__wake_up_on_current_cpu(x, TASK_NORMAL, poll_to_key(m))
+ #define wake_up_locked_poll(x, m)						\
+ 	__wake_up_locked_key((x), TASK_NORMAL, poll_to_key(m))
+ #define wake_up_interruptible_poll(x, m)					\
+diff --git a/kernel/sched/completion.c b/kernel/sched/completion.c
+index 35f15c26ed54..1ae9b34822ef 100644
+--- a/kernel/sched/completion.c
++++ b/kernel/sched/completion.c
+@@ -38,6 +38,18 @@ void complete(struct completion *x)
+ }
+ EXPORT_SYMBOL(complete);
  
--#define WF_SYNC     0x10 /* Waker goes to sleep after wakeup */
--#define WF_MIGRATED 0x20 /* Internal use, task got migrated */
-+#define WF_SYNC         0x10 /* Waker goes to sleep after wakeup */
-+#define WF_MIGRATED     0x20 /* Internal use, task got migrated */
-+#define WF_CURRENT_CPU  0x40 /* Prefer to move the wakee to the current CPU. */
- 
- #ifdef CONFIG_SMP
- static_assert(WF_EXEC == SD_BALANCE_EXEC);
-@@ -3151,6 +3152,8 @@ static inline bool is_per_cpu_kthread(struct task_struct *p)
- extern void swake_up_all_locked(struct swait_queue_head *q);
- extern void __prepare_to_swait(struct swait_queue_head *q, struct swait_queue *wait);
- 
-+extern int try_to_wake_up(struct task_struct *tsk, unsigned int state, int wake_flags);
++void complete_on_current_cpu(struct completion *x)
++{
++	unsigned long flags;
 +
- #ifdef CONFIG_PREEMPT_DYNAMIC
- extern int preempt_dynamic_mode;
- extern int sched_dynamic_mode(const char *str);
++	raw_spin_lock_irqsave(&x->wait.lock, flags);
++
++	if (x->done != UINT_MAX)
++		x->done++;
++	swake_up_locked_on_current_cpu(&x->wait);
++	raw_spin_unlock_irqrestore(&x->wait.lock, flags);
++}
++
+ /**
+  * complete_all: - signals all threads waiting on this completion
+  * @x:  holds the state of this particular completion
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index 008be12c31e6..1e164d8fde1a 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -6813,7 +6813,7 @@ asmlinkage __visible void __sched preempt_schedule_irq(void)
+ int default_wake_function(wait_queue_entry_t *curr, unsigned mode, int wake_flags,
+ 			  void *key)
+ {
+-	WARN_ON_ONCE(IS_ENABLED(CONFIG_SCHED_DEBUG) && wake_flags & ~WF_SYNC);
++	WARN_ON_ONCE(IS_ENABLED(CONFIG_SCHED_DEBUG) && wake_flags & ~(WF_SYNC|WF_CURRENT_CPU));
+ 	return try_to_wake_up(curr->private, mode, wake_flags);
+ }
+ EXPORT_SYMBOL(default_wake_function);
+diff --git a/kernel/sched/swait.c b/kernel/sched/swait.c
+index 76b9b796e695..9ebe23868942 100644
+--- a/kernel/sched/swait.c
++++ b/kernel/sched/swait.c
+@@ -31,6 +31,17 @@ void swake_up_locked(struct swait_queue_head *q)
+ }
+ EXPORT_SYMBOL(swake_up_locked);
+ 
++void swake_up_locked_on_current_cpu(struct swait_queue_head *q)
++{
++	struct swait_queue *curr;
++
++	if (list_empty(&q->task_list))
++		return;
++
++	curr = list_first_entry(&q->task_list, typeof(*curr), task_list);
++	try_to_wake_up(curr->task, TASK_NORMAL, WF_CURRENT_CPU);
++	list_del_init(&curr->task_list);
++}
+ /*
+  * Wake up all waiters. This is an interface which is solely exposed for
+  * completions and not for general usage.
+diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
+index 9860bb9a847c..9a78bca79419 100644
+--- a/kernel/sched/wait.c
++++ b/kernel/sched/wait.c
+@@ -157,6 +157,11 @@ void __wake_up(struct wait_queue_head *wq_head, unsigned int mode,
+ }
+ EXPORT_SYMBOL(__wake_up);
+ 
++void __wake_up_on_current_cpu(struct wait_queue_head *wq_head, unsigned int mode, void *key)
++{
++	__wake_up_common_lock(wq_head, mode, 1, WF_CURRENT_CPU, key);
++}
++
+ /*
+  * Same as __wake_up but called with the spinlock in wait_queue_head_t held.
+  */
 -- 
 2.37.2
 

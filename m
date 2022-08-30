@@ -2,138 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B89B85A68E5
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:57:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B10B85A68E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:58:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230326AbiH3Q5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
+        id S230360AbiH3Q6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiH3Q5a (ORCPT
+        with ESMTP id S230096AbiH3Q6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:57:30 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F617B02B5;
-        Tue, 30 Aug 2022 09:57:29 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id z29so7801828lfb.13;
-        Tue, 30 Aug 2022 09:57:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=4sIm+5RqskE4s5NMNUoHNNOj6uwTL7sHVMyCwXn/6M0=;
-        b=Cdn9MKbtWLQt7/yqQyF93sylLXXGpfdAE415lc0maeWe1YHxfpBbvtmoNr7Y2BV/GS
-         craDikj9YYOrwka5FF3bW8E1WsR7Ye5+b3H7cmZEPAqdWTGpDmeSxqIXfIWQh6Mmyh0O
-         3+GoRngT+f+l55S8DBekoQPhQFh5PZok+TiMCDvpKU2Zwf4LYFWVmu41FjIGzYdIVP4p
-         7AUI+T9mf7YX0JsuKWhbUmRS+qJuM/yUCrtHkPjxk958qvI/FG15AKO+IEM8BYooDchU
-         7MXCrlCAIZGzWQA6rGHXj0vhXPnhe+KvwJ+JTREYBh8Jd8KItOylqy+Vdr6U2M2W8UMM
-         hU+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=4sIm+5RqskE4s5NMNUoHNNOj6uwTL7sHVMyCwXn/6M0=;
-        b=MCjpOcBZ3SkBLsnU9c+FKlVgvdG8q9OIqfIsqUCU1rC6R9a3qquwZW7TjBSoQD/pnf
-         UNpUXtFCmiXfrtmh3DokHcF+56IdgzfICbxGieV1693EDJEy4ciYz5WNtIXwHjmHF8Le
-         m6tYkYXv5tSFrh5DBXG+jX79AABNlAljVvSvgJFX2G3bjErtFDR9fToeazPZ4kTzhLfc
-         3kqPsHrTTW9/mcBlwccm5WMc4RhVCGNXLrXFJacc9Z3pBeef42BlJTk5Qze3wzXOs7ZP
-         KbWq0u1sp2QPo1yrd1uxiMRxMGqPck97CEraGNiSOcKrlksr1QAjQYqIw+E/ezzJmETh
-         U+jg==
-X-Gm-Message-State: ACgBeo3YgfFaoqobAOy2uLzRCr4rA0XCoe3Ndxz1t+SimgdX5oToaJJ2
-        vvqurJI2PSIj8DGY0JkLUOM=
-X-Google-Smtp-Source: AA6agR4mySH5uXncbBft/rRGekD9KUWU/GQfnwEa9HgTAbH3klbqUjCCgTKL7M0G0TwTRkCRqa4Kaw==
-X-Received: by 2002:ac2:43c2:0:b0:494:77ab:b8f2 with SMTP id u2-20020ac243c2000000b0049477abb8f2mr1481226lfl.171.1661878647894;
-        Tue, 30 Aug 2022 09:57:27 -0700 (PDT)
-Received: from [192.168.0.131] ([194.183.54.57])
-        by smtp.gmail.com with ESMTPSA id m20-20020a056512359400b00492d1eb41dfsm1659420lfr.240.2022.08.30.09.57.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 09:57:26 -0700 (PDT)
-Message-ID: <c938fa66-6f2f-50e1-58a2-ff27777af037@gmail.com>
-Date:   Tue, 30 Aug 2022 18:57:25 +0200
+        Tue, 30 Aug 2022 12:58:18 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385AEB24A1;
+        Tue, 30 Aug 2022 09:58:17 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UFxJTm028885;
+        Tue, 30 Aug 2022 16:58:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=5Wf6+OkpJlbMMlkzUeaHJttZ4+wKwZmkQLfCuv3YGbI=;
+ b=ePU0x17jHUirtMZYvZBIuWKeWoMyRTPh9iJ3Jnsy0g4g3bcovHNjCl0DDoQWUA9Enyuw
+ 8xSLHYzca8m7vTG0OlTHf6Ux3G2Mz8vmFcAmB2/51w1n3WIMLQ84DxWRjMIr+5pzOUlE
+ xrwv+njI1uIUD9Wa6hQAMyTewgJesh2+0zVQUwhzl73D/guOVBH6SnVdlWYSw6/nu8jg
+ MaDwu/nGAe4NQpXCi4D9A6+xhRlveviGUPyk9lVZMsUa8vgwLwPGlWU4m2nJg7UtMmvt
+ lpmO3M+X9H1Kiwh44kGh3kBLac4gKdYZgLXW+IKkENzcYpcv3kEFP7pYzT480tz00g7h LQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j9jm4gqj9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 16:58:07 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27UGv4dg026790;
+        Tue, 30 Aug 2022 16:58:06 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3j7cbkmq64-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 16:58:06 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27UGw5ji027514;
+        Tue, 30 Aug 2022 16:58:05 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 27UGw4RF027510
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 30 Aug 2022 16:58:05 +0000
+Received: from [10.111.165.88] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 30 Aug
+ 2022 09:58:02 -0700
+Message-ID: <38a03147-058c-53e5-ea3f-68e40ad39ec4@quicinc.com>
+Date:   Tue, 30 Aug 2022 09:58:00 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] dt-bindings: leds: Expand LED_COLOR_ID definitions
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH] drm/msm/dsi: Remove use of device_node in
+ dsi_host_parse_dt()
 Content-Language: en-US
-To:     Olliver Schinagl <oliver@schinagl.nl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>
-Cc:     linux-leds@vger.kernel.org, Daniel Mack <daniel@zonque.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Oleh Kravchenko <oleg@kaa.org.ua>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Olliver Schinagl <oliver+list@schinagl.nl>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20220830134613.1564059-1-oliver@schinagl.nl>
-From:   Jacek Anaszewski <jacek.anaszewski@gmail.com>
-In-Reply-To: <20220830134613.1564059-1-oliver@schinagl.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Nathan Chancellor <nathan@kernel.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Sean Paul <sean@poorly.run>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <llvm@lists.linux.dev>, <patches@lists.linux.dev>
+References: <20220829165450.217628-1-nathan@kernel.org>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <20220829165450.217628-1-nathan@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: RdoyeJjpYfi6TAnYZH_N9WCrNw_tGLHS
+X-Proofpoint-GUID: RdoyeJjpYfi6TAnYZH_N9WCrNw_tGLHS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-30_10,2022-08-30_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ adultscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ phishscore=0 clxscore=1011 suspectscore=0 mlxscore=0 impostorscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208300078
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SCC_BODY_URI_ONLY,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ho Olliver,
 
-Thanks for the update.
 
-On 8/30/22 15:46, Olliver Schinagl wrote:
-> In commit 853a78a7d6c7 (dt-bindings: leds: Add LED_COLOR_ID definitions,
-> Sun Jun 9 20:19:04 2019 +0200) the most basic color definitions where
-> added. However, there's a little more very common LED colors.
+On 8/29/2022 9:54 AM, Nathan Chancellor wrote:
+> Clang warns:
 > 
-> While the documentation states 'add what is missing', engineers tend to
-> be lazy and will just use what currently exists. So this patch will take
-> (a) list from online retailers [0], [1], [2] and use the common LED colors from
-> there, this being reasonable as this is what is currently available to purchase.
+>    drivers/gpu/drm/msm/dsi/dsi_host.c:1903:14: error: variable 'device_node' is uninitialized when used here [-Werror,-Wuninitialized]
+>            of_node_put(device_node);
+>                        ^~~~~~~~~~~
+>    drivers/gpu/drm/msm/dsi/dsi_host.c:1870:44: note: initialize the variable 'device_node' to silence this warning
+>            struct device_node *endpoint, *device_node;
+>                                                      ^
+>                                                      = NULL
+>    1 error generated.
 > 
-> Note, that LIME seems to be the modern take to 'Yellow-green' or
-> 'Yellowish-green' from some older datasheets.
+> device_node's assignment was removed but not all of its uses. Remove the
+> call to of_node_put() and the variable declaration to clean up the
+> warning.
 > 
-> [0]: https://www.digikey.com/en/products/filter/led-lighting-color/125
-> [1]: https://eu.mouser.com/c/optoelectronics/led-lighting/led-emitters/standard-leds-smd
-> [2]: https://nl.farnell.com/en-NL/c/optoelectronics-displays/led-products/standard-single-colour-leds-under-75ma
-> 
-> Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Fixes: 5f8cdece42ff ("drm/msm/dsi: switch to DRM_PANEL_BRIDGE")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1700
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
 > ---
-> Changes since v3: Fix typo in purple; Fix whitespacing
-> No changes since v2: Re-send with the proper e-mails.
-> Changes since v1: Unbreak existing definitions.
->   include/dt-bindings/leds/common.h | 7 ++++++-
->   1 file changed, 6 insertions(+), 1 deletion(-)
+>   drivers/gpu/drm/msm/dsi/dsi_host.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> diff --git a/include/dt-bindings/leds/common.h b/include/dt-bindings/leds/common.h
-> index 3be89a7c20a9..9a0d33d027ff 100644
-> --- a/include/dt-bindings/leds/common.h
-> +++ b/include/dt-bindings/leds/common.h
-> @@ -33,7 +33,12 @@
->   #define LED_COLOR_ID_MULTI	8	/* For multicolor LEDs */
->   #define LED_COLOR_ID_RGB	9	/* For multicolor LEDs that can do arbitrary color,
->   					   so this would include RGBW and similar */
-> -#define LED_COLOR_ID_MAX	10
-> +#define LED_COLOR_ID_PURPLE	10
-> +#define LED_COLOR_ID_ORANGE	11
-> +#define LED_COLOR_ID_PINK	12
-> +#define LED_COLOR_ID_CYAN	13
-> +#define LED_COLOR_ID_LIME	14
-> +#define LED_COLOR_ID_MAX	15
+> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> index 57a4c0fa614b..7fbf391c024f 100644
+> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
+> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
+> @@ -1867,7 +1867,7 @@ static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
+>   {
+>   	struct device *dev = &msm_host->pdev->dev;
+>   	struct device_node *np = dev->of_node;
+> -	struct device_node *endpoint, *device_node;
+> +	struct device_node *endpoint;
+>   	int ret = 0;
 >   
->   /* Standard LED functions */
->   /* Keyboard LEDs, usually it would be input4::capslock etc. */
-
-Acked-by: Jacek Anaszewski <jacek.anaszewski@gmail.com>
-
--- 
-Best regards,
-Jacek Anaszewski
+>   	/*
+> @@ -1900,8 +1900,6 @@ static int dsi_host_parse_dt(struct msm_dsi_host *msm_host)
+>   		}
+>   	}
+>   
+> -	of_node_put(device_node);
+> -
+>   err:
+>   	of_node_put(endpoint);
+>   
+> 
+> base-commit: 5f8cdece42ff0c615e213b6619d29487f9f409d7

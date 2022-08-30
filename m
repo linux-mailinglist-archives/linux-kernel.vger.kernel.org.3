@@ -2,188 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 443595A5DAC
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 10:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F8275A5F13
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:18:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231478AbiH3IEW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 04:04:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46774 "EHLO
+        id S231483AbiH3JSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiH3IEF (ORCPT
+        with ESMTP id S231387AbiH3JRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 04:04:05 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D1B3D3446;
-        Tue, 30 Aug 2022 01:03:57 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 9C024203E43;
-        Tue, 30 Aug 2022 10:03:55 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 30445203E37;
-        Tue, 30 Aug 2022 10:03:55 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 114FE180031C;
-        Tue, 30 Aug 2022 16:03:51 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org, vkoul@kernel.org,
-        alexander.stein@ew.tq-group.com, marex@denx.de,
-        richard.leitner@linux.dev
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, Richard Zhu <hongxing.zhu@nxp.com>
-Subject: [PATCH v5 7/7] PCI: imx6: Add iMX8MP PCIe support
-Date:   Tue, 30 Aug 2022 15:46:04 +0800
-Message-Id: <1661845564-11373-8-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1661845564-11373-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1661845564-11373-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 30 Aug 2022 05:17:55 -0400
+X-Greylist: delayed 1804 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 02:17:53 PDT
+Received: from mail.gnudd.com (mail.gnudd.com [93.91.132.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AFD9D2E95;
+        Tue, 30 Aug 2022 02:17:53 -0700 (PDT)
+Received: from dciminaghi by mail.gnudd.com with local (Exim 4.94.2)
+        (envelope-from <dciminaghi@arcana.gnudd.com>)
+        id 1oSw8m-0002Aa-Tn; Tue, 30 Aug 2022 09:58:32 +0200
+Date:   Tue, 30 Aug 2022 09:58:32 +0200
+From:   Davide Ciminaghi <ciminaghi@gnudd.com>
+Sender: ciminaghi@gnudd.com
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Alexandre Courbot <gnurou@gmail.com>,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>, Alessandro Rubini <rubini@gnudd.com>
+Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+Message-ID: <Yw3DKCuDoPkCaqxE@arcana.i.gnudd.com>
+References: <CAK8P3a0j-54_OkXC7x3NSNaHhwJ+9umNgbpsrPxUB4dwewK63A@mail.gmail.com>
+ <CACRpkda0+iy8H0YmyowSDn8RbYgnVbC1k+o5F67inXg4Qb934Q@mail.gmail.com>
+ <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
+ <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
+ <87f2ff4c-3426-201c-df86-2d06d3587a20@csgroup.eu>
+ <CACRpkdYizQhiJXzXNHg7TXUVHzhkwXHFN5+e58kH4udGm1ziEA@mail.gmail.com>
+ <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
+ <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
+ <515364a9-33a1-fafa-fdce-dc7dbd5bb7fb@csgroup.eu>
+ <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
+X-Face: #Q;A)@_4.#>0+_%y]7aBr:c"ndLp&#+2?]J;lkse\^)FP^Lr5@O0{)J;'nny4%74.fM'n)M
+ >ISCj.KmsL/HTxz!:Ju'pnj'Gz&.
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MX8MP PCIe support.
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-Tested-by: Marek Vasut <marex@denx.de>
-Tested-by: Richard Leitner <richard.leitner@skidata.com>
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
- drivers/pci/controller/dwc/pci-imx6.c | 29 ++++++++++++++++++++++++---
- 1 file changed, 26 insertions(+), 3 deletions(-)
+tl;dr: sta2x11 support can be removed.
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 6e5debdbc55b..0488ce752f34 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -51,6 +51,7 @@ enum imx6_pcie_variants {
- 	IMX7D,
- 	IMX8MQ,
- 	IMX8MM,
-+	IMX8MP,
- };
- 
- #define IMX6_PCIE_FLAG_IMX6_PHY			BIT(0)
-@@ -150,7 +151,8 @@ struct imx6_pcie {
- static unsigned int imx6_pcie_grp_offset(const struct imx6_pcie *imx6_pcie)
- {
- 	WARN_ON(imx6_pcie->drvdata->variant != IMX8MQ &&
--		imx6_pcie->drvdata->variant != IMX8MM);
-+		imx6_pcie->drvdata->variant != IMX8MM &&
-+		imx6_pcie->drvdata->variant != IMX8MP);
- 	return imx6_pcie->controller_id == 1 ? IOMUXC_GPR16 : IOMUXC_GPR14;
- }
- 
-@@ -301,6 +303,7 @@ static void imx6_pcie_init_phy(struct imx6_pcie *imx6_pcie)
- {
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX8MM:
-+	case IMX8MP:
- 		/*
- 		 * The PHY initialization had been done in the PHY
- 		 * driver, break here directly.
-@@ -558,6 +561,7 @@ static int imx6_pcie_enable_ref_clk(struct imx6_pcie *imx6_pcie)
- 		break;
- 	case IMX8MM:
- 	case IMX8MQ:
-+	case IMX8MP:
- 		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
- 		if (ret) {
- 			dev_err(dev, "unable to enable pcie_aux clock\n");
-@@ -602,6 +606,7 @@ static void imx6_pcie_disable_ref_clk(struct imx6_pcie *imx6_pcie)
- 		break;
- 	case IMX8MM:
- 	case IMX8MQ:
-+	case IMX8MP:
- 		clk_disable_unprepare(imx6_pcie->pcie_aux);
- 		break;
- 	default:
-@@ -669,6 +674,7 @@ static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
- 		reset_control_assert(imx6_pcie->pciephy_reset);
- 		fallthrough;
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_assert(imx6_pcie->apps_reset);
- 		break;
- 	case IMX6SX:
-@@ -744,6 +750,7 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
- 		break;
- 	case IMX6Q:		/* Nothing to do */
- 	case IMX8MM:
-+	case IMX8MP:
- 		break;
- 	}
- 
-@@ -793,6 +800,7 @@ static void imx6_pcie_ltssm_enable(struct device *dev)
- 	case IMX7D:
- 	case IMX8MQ:
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_deassert(imx6_pcie->apps_reset);
- 		break;
- 	}
-@@ -812,6 +820,7 @@ static void imx6_pcie_ltssm_disable(struct device *dev)
- 	case IMX7D:
- 	case IMX8MQ:
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_assert(imx6_pcie->apps_reset);
- 		break;
- 	}
-@@ -1179,6 +1188,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
- 		}
- 		break;
- 	case IMX8MM:
-+	case IMX8MP:
- 		imx6_pcie->pcie_aux = devm_clk_get(dev, "pcie_aux");
- 		if (IS_ERR(imx6_pcie->pcie_aux))
- 			return dev_err_probe(dev, PTR_ERR(imx6_pcie->pcie_aux),
-@@ -1215,8 +1225,16 @@ static int imx6_pcie_probe(struct platform_device *pdev)
- 	}
- 
- 	/* Grab GPR config register range */
--	imx6_pcie->iomuxc_gpr =
--		 syscon_regmap_lookup_by_compatible("fsl,imx6q-iomuxc-gpr");
-+	switch (imx6_pcie->drvdata->variant) {
-+	case IMX8MP:
-+		imx6_pcie->iomuxc_gpr =
-+			 syscon_regmap_lookup_by_compatible("fsl,imx8mp-iomuxc-gpr");
-+		break;
-+	default:
-+		imx6_pcie->iomuxc_gpr =
-+			 syscon_regmap_lookup_by_compatible("fsl,imx6q-iomuxc-gpr");
-+		break;
-+	}
- 	if (IS_ERR(imx6_pcie->iomuxc_gpr)) {
- 		dev_err(dev, "unable to find iomuxc registers\n");
- 		return PTR_ERR(imx6_pcie->iomuxc_gpr);
-@@ -1320,6 +1338,10 @@ static const struct imx6_pcie_drvdata drvdata[] = {
- 		.variant = IMX8MM,
- 		.flags = IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
- 	},
-+	[IMX8MP] = {
-+		.variant = IMX8MP,
-+		.flags = IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
-+	},
- };
- 
- static const struct of_device_id imx6_pcie_of_match[] = {
-@@ -1329,6 +1351,7 @@ static const struct of_device_id imx6_pcie_of_match[] = {
- 	{ .compatible = "fsl,imx7d-pcie",  .data = &drvdata[IMX7D],  },
- 	{ .compatible = "fsl,imx8mq-pcie", .data = &drvdata[IMX8MQ], },
- 	{ .compatible = "fsl,imx8mm-pcie", .data = &drvdata[IMX8MM], },
-+	{ .compatible = "fsl,imx8mp-pcie", .data = &drvdata[IMX8MP], },
- 	{},
- };
- 
--- 
-2.25.1
+On Sun, Aug 28, 2022 at 12:04:29PM +0200, Arnd Bergmann wrote:
+> On Sun, Aug 28, 2022 at 11:06 AM Christophe Leroy
+> <christophe.leroy@csgroup.eu> wrote:
+> > Le 26/08/2022 ?? 23:54, Linus Walleij a ??crit :
 
+....
+
+>
+> I think that just means the code that one would have to modify
+> is in vendor kernels of devices using this chip, but there is no
+> way to fix those if they are not in mainline. The last meaningful
+> patches on this SoC support were in 2012 by  Davide Ciminaghi
+> and Alessandro Rubini, though they still Acked patches after that.
+> 
+> I wonder if I was missing the interesting bit about it, if the driver
+> is just obsolete and can be removed, or if there is something
+> that is still worth fixing here.
+>
+Hi,
+
+the sta2x11 was a chip containing AMBA peripherals and a PCIe to AMBA bridge
+(it is still in production as far as I know, but deprecated for new designs).
+It would typically be installed on x86 machines, so you needed to build and
+run AMBA drivers in an x86 environment. The original drivers we started from
+had platform data, but then we were told to switch to DTS.
+
+Device trees, though, were not very common under x86 at the time and,
+perhaps most important, we had a bunch of amba peripherals "behind" a
+pci bus, which is a dynamic thing. Our idea was to build a device
+tree at runtime (in user space) and then booting a second kernel via
+kexec with the correct DTB, but this was not a complete solution.
+For instance we needed to patch the device tree at runtime to
+take dynamically assigned IRQ numbers into account.
+Also the clocks tree had to be dynamically instantiated, once for each sta2x11
+chip. Finally, there were some problems allocating dma buffers because
+the AMBA side of the bridge could only reach some ranges of physical
+addresses.
+
+We had a more or less working prototype, and you may want to have a look
+at some of our work:
+
+https://lore.kernel.org/lkml/5202C655.6050609@zytor.com/t/
+
+Nevertheless the upstreaming effort was eventually too big for Alessandro
+and myself.
+So the sta2x11 drivers upstreaming project has been abandoned (even though
+I like to think of it as one of the funniest failures of my life).
+Sta2x11 related drivers can of course be removed.
+
+
+Thanks and regards
+Davide

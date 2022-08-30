@@ -2,167 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10CA35A6EEF
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:12:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C69B55A6EF1
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 23:13:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231162AbiH3VMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 17:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57474 "EHLO
+        id S231218AbiH3VMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 17:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiH3VMh (ORCPT
+        with ESMTP id S230309AbiH3VMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 17:12:37 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 153C086FC8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:12:36 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id b9so9459486qka.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 14:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=2S/gPzbn70K9n2kENTZuMHMg0rHkBn7eRQ2xitbAkvQ=;
-        b=l31XDqgcVa767LbJ/esQ54hvux+TzmouIJhDZQLPDm+jHDp6aO13ixM8EB1+UP+wNd
-         subtyvz4u5a7FNkB7FgjTmEkkK8CYQ7ZYdUbM9HEiA0rwwLz9Fq781zz5SFzmIToEhiN
-         J3PWrV7LeUp6my/1B6xgSfEeksh8eNgTyV5U4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=2S/gPzbn70K9n2kENTZuMHMg0rHkBn7eRQ2xitbAkvQ=;
-        b=dvAStocT73v97KVNWVdHOS4C/6GqzuMr+clxk0S1oQpHFweHODi18SkZyA9nW//zcK
-         vpvbUHO2/OJPv2v2wf3T9RzW2Al94aTICmvKV2ZNhLEO5ZuZ8McrHfhVwbEjIVy/Vynk
-         carpkbXHpkm/qsn6hVOimbAPzyJ5NYd9+ggoQiwDVAjry+7UKUcXTWej/a+bM9WPWNsT
-         if5G6CGtsgo0CEgs8nmvYS7JDhEig7XGE1Wm4qWFLhy32uyZOcma0y6LtyYjrtEvofXx
-         kuSQYRqgITDzIcHFGe8TkNyxTdPUaHH3gB7Pmv6sMLgo04OPNauIVqGfME2cta0evLgf
-         1GIg==
-X-Gm-Message-State: ACgBeo0Heu8fajHNe8Lucv76gsEJzTeXXG9qm7AP5UpHFkcY9xt2N7W3
-        41wlc3OlYSTAcaSyY1QEeEEMcw==
-X-Google-Smtp-Source: AA6agR5Fysxg3xWrlOzGO2qBXwoKrx8axP3/frxLtEAid18xOVogn75KthGHW4lns7Nv9j+ALb60rA==
-X-Received: by 2002:a05:620a:2585:b0:6b6:66b2:d40c with SMTP id x5-20020a05620a258500b006b666b2d40cmr13458668qko.710.1661893955222;
-        Tue, 30 Aug 2022 14:12:35 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id v17-20020a05620a0f1100b006b58d8f6181sm8654958qkl.72.2022.08.30.14.12.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 14:12:34 -0700 (PDT)
-Message-ID: <98f2b194-1fe6-3cd8-36cf-da017c35198f@joelfernandes.org>
-Date:   Tue, 30 Aug 2022 17:12:33 -0400
+        Tue, 30 Aug 2022 17:12:47 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 472DB86C09;
+        Tue, 30 Aug 2022 14:12:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661893964; x=1693429964;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DLynHZET2acG5Gj5TYndmhTuc8yNK1YXJbk/LA3IMMw=;
+  b=dKJUWZJMJ6EyUlSZ+V96ViL9ihsqgLRGtn+UdfWXHlhcNlTh3aj8hS08
+   kDkxWp/kQxQwpE+8SRy4RFRtTQcV17ieS3quFL68qra5s2b/ZDzJMA1W+
+   ulPZnpIwSkhyjYwAFVSBrozAs2E5MXwEB2nxn7X/cAyKd7Ap0OZsQHNGH
+   oYY0PfcgSG0rzoEv9s7per5iPtmi5Pay+UtV1nZLsfDGp/hKCNdZb1SbD
+   KVl/rcyTgvSVtgOobnVTwcGomqKjuOg6m6nwf18tf8HOPuNAGnbYpXZiW
+   Yf32rhra8TrsYogPTiX3LYW9ZFHHuWpAO693VyUqPGnAg4A/PG1VKkHYW
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="278318068"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="278318068"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 14:12:43 -0700
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="701143474"
+Received: from zhan8-mobl2.ccr.corp.intel.com (HELO dsneddon-desk.sneddon.lan) ([10.254.103.46])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 14:12:42 -0700
+From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc:     pawan.kumar.gupta@linux.intel.com,
+        antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Neelima Krishnan <neelima.krishnan@intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 RESEND] x86/apic: Don't disable x2APIC if locked
+Date:   Tue, 30 Aug 2022 14:12:34 -0700
+Message-Id: <20220830211235.2029116-1-daniel.sneddon@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] tools/memory-model: Weaken ctrl dependency definition in
- explanation.txt
-Content-Language: en-US
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     =?UTF-8?Q?Paul_Heidekr=c3=bcger?= <paul.heidekrueger@in.tum.de>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org
-Cc:     Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-References: <20220830204446.3590197-1-paul.heidekrueger@in.tum.de>
- <663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org>
-In-Reply-To: <663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The APIC supports two modes, legacy APIC (or xAPIC), and Extended APIC
+(or x2APIC).  X2APIC mode is mostly compatible with legacy APIC, but
+it disables the memory-mapped APIC interface in favor of one that uses
+MSRs.  The APIC mode is controlled by the EXT bit in the APIC MSR.
 
+The MMIO/xAPIC interface has some problems, most notably the APIC LEAK
+[1].  This bug allows an attacker to use the APIC MMIO interface to
+extract data from the SGX enclave.
 
-On 8/30/2022 5:08 PM, Joel Fernandes wrote:
-> 
-> 
-> On 8/30/2022 4:44 PM, Paul Heidekrüger wrote:
->> The current informal control dependency definition in explanation.txt is
->> too broad and, as dicsussed, needs to be updated.
->>
->> Consider the following example:
->>
->>> if(READ_ONCE(x))
->>> 	return 42;
->>>
->>> 	WRITE_ONCE(y, 42);
->>>
->>> 	return 21;
->>
->> The read event determines whether the write event will be executed "at
->> all" - as per the current definition - but the formal LKMM does not
->> recognize this as a control dependency.
->>
->> Introduce a new defintion which includes the requirement for the second
->> memory access event to syntactically lie within the arm of a non-loop
->> conditional.
->>
->> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
->> Cc: Marco Elver <elver@google.com>
->> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
->> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
->> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
->> Cc: Martin Fink <martin.fink@in.tum.de>
->> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
->> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
->> ---
->>
->> @Alan:
->>
->> Since I got it wrong the last time, I'm adding you as a co-developer after my
->> SOB. I'm sorry if this creates extra work on your side due to you having to
->> resubmit the patch now with your SOB if I understand correctly, but since it's
->> based on your wording from the other thread, I definitely wanted to give you
->> credit.
->>
->>  tools/memory-model/Documentation/explanation.txt | 7 ++++---
->>  1 file changed, 4 insertions(+), 3 deletions(-)
->>
->> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
->> index ee819a402b69..0bca50cac5f4 100644
->> --- a/tools/memory-model/Documentation/explanation.txt
->> +++ b/tools/memory-model/Documentation/explanation.txt
->> @@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
->>  through a pointer will depend on the value read earlier from that
->>  pointer.
->>
->> -Finally, a read event and another memory access event are linked by a
->> -control dependency if the value obtained by the read affects whether
->> -the second event is executed at all.  Simple example:
->> +Finally, a read event X and another memory access event Y are linked by
->> +a control dependency if Y syntactically lies within an arm of an if,
->> +else or switch statement and the condition guarding Y is either data or
->> +address-dependent on X.  Simple example:
-> 
-> 'conditioning guarding Y' sounds confusing to me as it implies to me that the
-> condition's evaluation depends on Y. I much prefer Alan's wording from the
-> linked post saying something like 'the branch condition is data or address
-> dependent on X, and Y lies in one of the arms'.
-> 
-> I have to ask though, why doesn't this imply that the second instruction never
-> executes at all? I believe that would break the MP-pattern if it were not true.
+Introduce support for a new feature that will allow the BIOS to lock
+the APIC in x2APIC mode.  If the APIC is locked in x2APIC mode and the
+kernel tries to disable the APIC or revert to legacy APIC mode a GP
+fault will occur.
 
-About my last statement, I believe your patch does not disagree with the
-correctness of the earlier text but just wants to improve it. If that's case
-then that's fine.
+Introduce support for a new MSR (IA32_XAPIC_DISABLE_STATUS) and handle
+the new locked mode when the LEGACY_XAPIC_DISABLED bit is set by
+preventing the kernel from trying to disable the x2APIC.
 
- - Joel
+On platforms with the IA32_XAPIC_DISABLE_STATUS MSR, if SGX or TDX are
+enabled the LEGACY_XAPIC_DISABLED will be set by the BIOS.  If
+legacy APIC is required, then it SGX and TDX need to be disabled in the
+BIOS.
+
+[1]: https://aepicleak.com/aepicleak.pdf
+
+Signed-off-by: Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Tested-by: Neelima Krishnan <neelima.krishnan@intel.com>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+---
+V1 -> V2:
+	Updated commit message (Dave)
+	Added note to nox2apic documentation and Kconfig (Dave)
+	Made SGX depend on X2APIC (TGLX)
+	Added Tested-by
+	Added Dave's Ack
+
+[v1] https://lore.kernel.org/lkml/20220809234000.783284-1-daniel.sneddon@linux.intel.com/
+
+ .../admin-guide/kernel-parameters.txt         |  4 ++
+ arch/x86/Kconfig                              |  7 ++-
+ arch/x86/include/asm/cpu.h                    |  2 +
+ arch/x86/include/asm/msr-index.h              | 13 ++++++
+ arch/x86/kernel/apic/apic.c                   | 44 +++++++++++++++++--
+ 5 files changed, 65 insertions(+), 5 deletions(-)
+
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 54a9756f2dad..a3bf1707dcd3 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -3804,6 +3804,10 @@
+ 
+ 	nox2apic	[X86-64,APIC] Do not enable x2APIC mode.
+ 
++			NOTE: this parameter will be ignored on systems with the
++			LEGACY_XAPIC_DISABLED bit set in the
++			IA32_XAPIC_DISABLE_STATUS MSR.
++
+ 	nps_mtm_hs_ctr=	[KNL,ARC]
+ 			This parameter sets the maximum duration, in
+ 			cycles, each HW thread of the CTOP can run
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index f9920f1341c8..159c025ebb03 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -448,6 +448,11 @@ config X86_X2APIC
+ 	  This allows 32-bit apic IDs (so it can support very large systems),
+ 	  and accesses the local apic via MSRs not via mmio.
+ 
++	  Some Intel systems circa 2022 and later are locked into x2APIC mode
++	  and can not fall back to the legacy APIC modes if SGX or TDX are
++	  enabled in the BIOS.  They will be unable to boot without enabling
++	  this option.
++
+ 	  If you don't know what to do here, say N.
+ 
+ config X86_MPPARSE
+@@ -1919,7 +1924,7 @@ endchoice
+ 
+ config X86_SGX
+ 	bool "Software Guard eXtensions (SGX)"
+-	depends on X86_64 && CPU_SUP_INTEL
++	depends on X86_64 && CPU_SUP_INTEL && X86_X2APIC
+ 	depends on CRYPTO=y
+ 	depends on CRYPTO_SHA256=y
+ 	select SRCU
+diff --git a/arch/x86/include/asm/cpu.h b/arch/x86/include/asm/cpu.h
+index 8cbf623f0ecf..b472ef76826a 100644
+--- a/arch/x86/include/asm/cpu.h
++++ b/arch/x86/include/asm/cpu.h
+@@ -94,4 +94,6 @@ static inline bool intel_cpu_signatures_match(unsigned int s1, unsigned int p1,
+ 	return p1 & p2;
+ }
+ 
++extern u64 x86_read_arch_cap_msr(void);
++
+ #endif /* _ASM_X86_CPU_H */
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 6674bdb096f3..1e086b37a307 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -155,6 +155,11 @@
+ 						 * Return Stack Buffer Predictions.
+ 						 */
+ 
++#define ARCH_CAP_XAPIC_DISABLE		BIT(21)	/*
++						 * IA32_XAPIC_DISABLE_STATUS MSR
++						 * supported
++						 */
++
+ #define MSR_IA32_FLUSH_CMD		0x0000010b
+ #define L1D_FLUSH			BIT(0)	/*
+ 						 * Writeback and invalidate the
+@@ -1054,4 +1059,12 @@
+ #define MSR_IA32_HW_FEEDBACK_PTR        0x17d0
+ #define MSR_IA32_HW_FEEDBACK_CONFIG     0x17d1
+ 
++/* x2APIC locked status */
++#define MSR_IA32_XAPIC_DISABLE_STATUS	0xBD
++#define LEGACY_XAPIC_DISABLED		BIT(0) /*
++						* x2APIC mode is locked and
++						* disabling x2APIC will cause
++						* a #GP
++						*/
++
+ #endif /* _ASM_X86_MSR_INDEX_H */
+diff --git a/arch/x86/kernel/apic/apic.c b/arch/x86/kernel/apic/apic.c
+index 6d303d1d276c..c6876d3ea4b1 100644
+--- a/arch/x86/kernel/apic/apic.c
++++ b/arch/x86/kernel/apic/apic.c
+@@ -61,6 +61,7 @@
+ #include <asm/cpu_device_id.h>
+ #include <asm/intel-family.h>
+ #include <asm/irq_regs.h>
++#include <asm/cpu.h>
+ 
+ unsigned int num_processors;
+ 
+@@ -1751,11 +1752,26 @@ EXPORT_SYMBOL_GPL(x2apic_mode);
+ 
+ enum {
+ 	X2APIC_OFF,
+-	X2APIC_ON,
+ 	X2APIC_DISABLED,
++	/* All states below here have X2APIC enabled */
++	X2APIC_ON,
++	X2APIC_ON_LOCKED
+ };
+ static int x2apic_state;
+ 
++static bool x2apic_hw_locked(void)
++{
++	u64 ia32_cap;
++	u64 msr;
++
++	ia32_cap = x86_read_arch_cap_msr();
++	if (ia32_cap & ARCH_CAP_XAPIC_DISABLE) {
++		rdmsrl(MSR_IA32_XAPIC_DISABLE_STATUS, msr);
++		return (msr & LEGACY_XAPIC_DISABLED);
++	}
++	return false;
++}
++
+ static void __x2apic_disable(void)
+ {
+ 	u64 msr;
+@@ -1793,6 +1809,10 @@ static int __init setup_nox2apic(char *str)
+ 				apicid);
+ 			return 0;
+ 		}
++		if (x2apic_hw_locked()) {
++			pr_warn("APIC locked in x2apic mode, can't disable\n");
++			return 0;
++		}
+ 		pr_warn("x2apic already enabled.\n");
+ 		__x2apic_disable();
+ 	}
+@@ -1807,10 +1827,18 @@ early_param("nox2apic", setup_nox2apic);
+ void x2apic_setup(void)
+ {
+ 	/*
+-	 * If x2apic is not in ON state, disable it if already enabled
++	 * Try to make the AP's APIC state match that of the BSP,  but if the
++	 * BSP is unlocked and the AP is locked then there is a state mismatch.
++	 * Warn about the mismatch in case a GP fault occurs due to a locked AP
++	 * trying to be turned off.
++	 */
++	if (x2apic_state != X2APIC_ON_LOCKED && x2apic_hw_locked())
++		pr_warn("x2apic lock mismatch between BSP and AP.\n");
++	/*
++	 * If x2apic is not in ON or LOCKED state, disable it if already enabled
+ 	 * from BIOS.
+ 	 */
+-	if (x2apic_state != X2APIC_ON) {
++	if (x2apic_state < X2APIC_ON) {
+ 		__x2apic_disable();
+ 		return;
+ 	}
+@@ -1831,6 +1859,11 @@ static __init void x2apic_disable(void)
+ 	if (x2apic_id >= 255)
+ 		panic("Cannot disable x2apic, id: %08x\n", x2apic_id);
+ 
++	if (x2apic_hw_locked()) {
++		pr_warn("Cannot disable locked x2apic, id: %08x\n", x2apic_id);
++		return;
++	}
++
+ 	__x2apic_disable();
+ 	register_lapic_address(mp_lapic_addr);
+ }
+@@ -1889,7 +1922,10 @@ void __init check_x2apic(void)
+ 	if (x2apic_enabled()) {
+ 		pr_info("x2apic: enabled by BIOS, switching to x2apic ops\n");
+ 		x2apic_mode = 1;
+-		x2apic_state = X2APIC_ON;
++		if (x2apic_hw_locked())
++			x2apic_state = X2APIC_ON_LOCKED;
++		else
++			x2apic_state = X2APIC_ON;
+ 	} else if (!boot_cpu_has(X86_FEATURE_X2APIC)) {
+ 		x2apic_state = X2APIC_DISABLED;
+ 	}
+-- 
+2.25.1
+

@@ -2,158 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6712B5A6BBE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:06:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E7CD5A6BC0
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 20:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231403AbiH3SGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 14:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40206 "EHLO
+        id S232197AbiH3SHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 14:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbiH3SGw (ORCPT
+        with ESMTP id S229737AbiH3SHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 14:06:52 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DAAB6DF80;
-        Tue, 30 Aug 2022 11:06:52 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27UFrW3P007713;
-        Tue, 30 Aug 2022 11:06:33 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fb.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=facebook; bh=OPpkmUXn2/cHKRCRQ7UYmzLZevUYAERLAk5ElvMyIIU=;
- b=JPhPBndgqMZZ+hwllMNUTx1QhMP4B+i/xaz0Hfcht8tcfCXew6bLaY1ZonJnnRld/uNZ
- uo3+RXsuNMYDzWqv6IlLq4yoM7f4qjSkr/BCgXIHcn2rtz8MvIbBsWYk4wVJ9JYXtL4P
- kKkufV4BIxkD1GydtgC6TrGHY2tXea6meX8= 
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2041.outbound.protection.outlook.com [104.47.74.41])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3j9e9ykgjt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 30 Aug 2022 11:06:33 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QdAOWRHSzuXa8WUjrSn5wNISc383gqODJYU+dJZlgDFMGnF61EIm2TcReD2LikRF7YrE9KoDjp1aCd1Ez+hERvxaQVhalSRsKDDMLxQ/jdD8qxd3yQHpJwlmREKVXf1Jcsyqb8XkibcSCeh3nW1oMmuXRoqwRFblPd8edvq4QeVp6D2OSGgooP2O7Q2R8j+Kn4jZpxqnwM7klUGnsVOKADVNXitSZDfz8ruWc99pIaArlbsaGY+TuAPb9e43jYdowTaE6/DqXWDFLVjlpI0n8rB7TUQnKWfofwcJR12J91tqfiVldqkIn9gCWgV+ErNkYsC1oo7fHR1HCkouVhlnEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OPpkmUXn2/cHKRCRQ7UYmzLZevUYAERLAk5ElvMyIIU=;
- b=EjuRzs9UWBykCAexVVSVBslgYBSNJYA9dCL3GofInt0/IQw8eHfHdunH9Z5lvipajP+UQXvVUwiTGjRWOsfjIxqihlChdTCvxtyHYbHBTWRZizsGL5CHEIjfLI+t2TqT41FTge6Doa30LyMo8jZxP4dtVzkihtHM2P8UogqyGDdeuwcfDAT24m+mZTObu+z/fYwt0ndp9FlZKop6MapPKL1GUTCtpaDcxJ23b49JJbYLdTaIhe8CPHL8o/xBBgfPWbtVDRE/4ZgzgajhMojgbW6AMXpbMWK1n3SWpdFHRhQdmXSv6OQwb3DPcwRP8lq9gK1jiPLFpvo89i8ELrMHEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=fb.com; dmarc=pass action=none header.from=fb.com; dkim=pass
- header.d=fb.com; arc=none
-Received: from MW4PR15MB4475.namprd15.prod.outlook.com (2603:10b6:303:104::16)
- by BYAPR15MB3319.namprd15.prod.outlook.com (2603:10b6:a03:10b::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Tue, 30 Aug
- 2022 18:06:29 +0000
-Received: from MW4PR15MB4475.namprd15.prod.outlook.com
- ([fe80::1858:f420:93d2:4b5e]) by MW4PR15MB4475.namprd15.prod.outlook.com
- ([fe80::1858:f420:93d2:4b5e%3]) with mapi id 15.20.5588.010; Tue, 30 Aug 2022
- 18:06:29 +0000
-Date:   Tue, 30 Aug 2022 11:06:23 -0700
-From:   Martin KaFai Lau <kafai@fb.com>
-To:     Quentin Monnet <quentin@isovalent.com>, Hao Luo <haoluo@google.com>
-Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: Re: [PATCH bpf-next v1] bpftool: Add support for querying
- cgroup_iter link
-Message-ID: <20220830180623.hi6ma6nql4by23sr@kafai-mbp.dhcp.thefacebook.com>
-References: <20220829231828.1016835-1-haoluo@google.com>
- <016bdefd-ff75-35ca-52a5-0e058e0a5d04@isovalent.com>
+        Tue, 30 Aug 2022 14:07:23 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 850C865814
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:07:22 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso18756517pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 11:07:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=HwoaPhoS6p05+6Q+y0C7EJbnrSAeSDJjW5DKVBz8mhg=;
+        b=SdF5T+pT4uOyKFnCG1wz2UF9L14M0q5BWr9oA8ZC2cA+NiEDTLk9b/dExAULtx8Dim
+         qDXstRuMxlIsQ7QW134sht0ZJQ1vJNjHOks/aM3Klo+PeW25oP2D5OsU/xh8bnMp+1/n
+         lI9MUsc3zaGOio0HAHYfXedxEv/v0ZSoDNqLeafh/Wk9CmBdbLkSIVmW3gQ6I1L9PVn5
+         j8CQEYXSyXqpiRVcrduU6g0vJLc7v2b4Lfcktg9DvWEJrYcRr60/RKyy87PNWfzldRZo
+         +Hwb3TZkO+DLR+bQz92lwPby8MVb+I2XGM4jmBhmD0t4nEWJyuXK296vqYY9VKbtYQ2Y
+         htdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=HwoaPhoS6p05+6Q+y0C7EJbnrSAeSDJjW5DKVBz8mhg=;
+        b=o/EU35rrYxWQa4cKnFV/jeES5Bd7NgV5SG2q215tJADk4NUB8Uo46qpb3QKGAumYAj
+         MLoW92/SzewwyqLlH4cXu0w3bAAUuXEW2Ed7HPcJC8VCHDJ13KjWZ8GIFBcGe6NoDFJ1
+         43uwauqMeuJO1DuE9X05XXEEQ5x45/QOsTewtBHQ/B5hBlFF+WE3U3O1x5AjbTpsZwmW
+         JtEvgvL7yhoTfIJa9sYocOZr9/42EBq9zqzUwwXoFX7EPPzESy+tbP8T6kOnt8t3uGOI
+         +cRf1adbTijXqFLowgfzo99+CwYzp96pdGm1dFNiPhSa3EtZET/06ISiVJ6pjHKLkFiO
+         Zrcg==
+X-Gm-Message-State: ACgBeo1w4+ApH3uOpiNlkqJ97GWO53NBljzclC/jxdWNOAOLIVUG3YUC
+        TkL9hvNLZSRF0ssz20QIe2qgl5QrpYjWHw==
+X-Google-Smtp-Source: AA6agR5IkLNhQCq1BkUjRP0ujgvxI96gMiG8ejO8FeNgh2oc1noU34HT99172dmCfg+zpCRG+5WhWw==
+X-Received: by 2002:a17:902:d589:b0:174:63e0:5a5c with SMTP id k9-20020a170902d58900b0017463e05a5cmr17210303plh.5.1661882841868;
+        Tue, 30 Aug 2022 11:07:21 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 69-20020a630548000000b0042aca53b4cesm1919014pgf.70.2022.08.30.11.07.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 11:07:21 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 18:07:17 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 7/8] KVM: x86/svm/pmu: Direct access
+ pmu->gp_counter[] to implement amd_*_to_pmc()
+Message-ID: <Yw5R1VUpFaG5cROP@google.com>
+References: <20220823093221.38075-1-likexu@tencent.com>
+ <20220823093221.38075-8-likexu@tencent.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <016bdefd-ff75-35ca-52a5-0e058e0a5d04@isovalent.com>
-X-ClientProxiedBy: SJ0PR03CA0245.namprd03.prod.outlook.com
- (2603:10b6:a03:3a0::10) To MW4PR15MB4475.namprd15.prod.outlook.com
- (2603:10b6:303:104::16)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f61475bb-b5ec-4f9c-296d-08da8ab25b12
-X-MS-TrafficTypeDiagnostic: BYAPR15MB3319:EE_
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vLFKMsaIDcCYz7rmYlF9dpwkbC4blwgvTlcc/7QyjkpMSJILIVMas3I4z5odkLSNzDvsrFLgQYi/pjWCe9uIkt6uTkL3GMUYV2paT1XlgFmGGCbCNGfZuMQmJY2Rc7ON6yJjhtgrRIhw4o1I3UKIRAuoRazyI5bR35URqISY87sxel0P9b6Km55MgF8XWglu7clBeKmBocjE0kVzsUMYKswWztH3NMxykvMi66FaS8LZpbrR1B03em8PBFtRXpVuYOCC7k6ptXxJ6WRYtoa15Ut9DUVggyiTyt/ZH0a6UbaQ/7WQqhoORBauOsiWfEB6c9eeK7xGHQneBTOKH1ebXAc/bdLIbcrH2oCblScoTrs0vk6ruKAyH9LY7I8l4hpIY+ds8Tqej4GV0WUUg+xb7MOeoU7Fz91mh1LBG9x0d7vUaBuHBzIiFP50HL2LhUIXbZjdnrYtripaqCNJSYwFVVBKrvXxtGykyFzucTPClYFPxRsihvOdoetFJhOK2TaSDbWgHdCqAryXK3/dpmfZ0/k7VsUkImY28j3mq/SMizUFU1setJYLkQeS3e1cte6PVTtf60VID8RpnXIAkjANDM95nNdmiJSYbw1soznE3wH1FAvky/CbiOEW4BVKVCKZlYUnt/9hc6Rd9MMgwzyiq/1Rybqa9yhfNP1x/J/luJEAkuJsqYvlW/6xai4E6PcGk570d3dGhF5Ex+C/U08WAw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR15MB4475.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(346002)(376002)(396003)(366004)(38100700002)(1076003)(2906002)(52116002)(6506007)(4744005)(6666004)(83380400001)(9686003)(6512007)(86362001)(66946007)(6486002)(66556008)(4326008)(66476007)(316002)(8676002)(186003)(110136005)(5660300002)(54906003)(478600001)(41300700001)(7416002)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?mKpIbAbRFtCmEphYi2VZ9nWOQI7R2bykNKQvkC3lLktndilLf4zt+Uy/5DxF?=
- =?us-ascii?Q?+f9jkOcQ3sRHOljduMkZOn61Hy+8XafuKxaE9qVsd582u6O9C75LRNGsUdEK?=
- =?us-ascii?Q?h4o/n8n6k9xm9WEbLTt7AutY73rNksQDdJoe6CDR28jkEnmVnTtQ+SfNxNFX?=
- =?us-ascii?Q?eISN/c3TP/Wlge03sEY8sft0XZkBVFEx7rtnI4Ut3HBE5KFmjBgJy6lon+Gr?=
- =?us-ascii?Q?h+K/UjEmoNKvPg+cEsq3g7BVSBV9O17I9jP+eUnp6HBIsVADBwWDJx4mFz1Y?=
- =?us-ascii?Q?h0Y7mAxhP52KgtNh9FTKxVJf3t++uXUpjT79UJYxVV+2GiFJuZZ92RkR2QmL?=
- =?us-ascii?Q?TOMnhunvi510E84EPWd5ttltTiLzKrnp9XxE2b2oZlAAHKLUZybVtYITxfbG?=
- =?us-ascii?Q?3Aa0nI6f1fOgV5zUjg/LvB0gagIvxe3kcateZ0ThNTQDp+XZIbFs/Pm8DWpM?=
- =?us-ascii?Q?QnhSVu09rqNhY/TTE0zBiUlAOD0TlMiKbGppm4UIiPh4/CNNPXn4QHB26wFk?=
- =?us-ascii?Q?Zd3lylRUcaOuM0yQl9l5FyB+VzBszxmI0GaHiX0tv7kTU99LU59tX8FUFz8l?=
- =?us-ascii?Q?IbrXoBO5odpid+TaYKFBSwIOjvz1MFXqioBkpepPER4GUuMx2rZFqs4gO5jf?=
- =?us-ascii?Q?lPa65TCBcd4pH4+gEV1sjPetLqhn8plyt9V/8/8nMya15UB+7R9r6DokOrdW?=
- =?us-ascii?Q?VMmQWKhQiyKXu2mI6xFnBK2TFVlaM/gP/Cx0Hx9oQh7Zhbi6DItWgrQZKmRD?=
- =?us-ascii?Q?2h3tCtWLaJbh127T2x7w53ReRjOa/+qAY5P9GcGir2+hIT7eXYy9tjhzA335?=
- =?us-ascii?Q?wsOtyoIRWctd5pnI1s3fa4nyn0JRkq2o5MDxNn4WOSR6DxdugJUa9qXrzIG2?=
- =?us-ascii?Q?KpkQmEOKh24Zh/z8yPlJWKU7zF3kkWFKK4lLtlCwpRDXPzAlr/lIyT+eSONI?=
- =?us-ascii?Q?c7LmZ/+vSSxZ/u41rJFVxLGgWNpYlToQC3x/UR4juSdLxXaS0k7VgcSwKVqs?=
- =?us-ascii?Q?NdzOKS5UxdzYhQ3tzAFy2QTYFEowUjaPAyMmbB5avHe4s2C86d7HSzhm8/IK?=
- =?us-ascii?Q?TfxgHDsKjSG8Ou2NFGWW3Li07hoeDTT4QGUm9iRLBqXuZ1WXLZ2g8WOZpqeZ?=
- =?us-ascii?Q?Sk+juJ5cIECMWhzUyADPDxX8i/QqYCjgmLoCzw8Mfg3+tqRyVZPs3U87kQJu?=
- =?us-ascii?Q?3CPvEYG9LLJdF99HQxkWfvmB10dXViuHvTowA1185Ull4uD4yAhgMdiYZzox?=
- =?us-ascii?Q?OIALMKz/djL2Kd/nHqeY3GsI2rxi9fJfVNXgqsE8XeVumKbjXedhXIHwN/dF?=
- =?us-ascii?Q?Z5VMn3b8jsUe+XFZb+GQZRJrGTo8t7kewYdHQuTDELvGfFfZj4WGjVS22cZT?=
- =?us-ascii?Q?zENAowoUgiPpkD8vSoh0fppu4i2rJ5WM3EHQYfFYciXo3jU5UsF1gMua6fFi?=
- =?us-ascii?Q?O/jE8p8oi0RcjmikxmJwm2K5twrnC3UTbMiD1ZLU1ve20dTq89YQbm4DhkFy?=
- =?us-ascii?Q?5dIYIlU5gdn2jEdbSY2ORpiHFCQ5vAFGdg82FR5iV6hTM/L60II8rWsxzXSB?=
- =?us-ascii?Q?xP73e0gJIbPvlnRRmwvb9rXflX9TeCIjimfMR2WskLxmhu7l0BqWeZYjsI7R?=
- =?us-ascii?Q?eA=3D=3D?=
-X-OriginatorOrg: fb.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f61475bb-b5ec-4f9c-296d-08da8ab25b12
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR15MB4475.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Aug 2022 18:06:28.9957
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4d9uRx7rNnqETulj6DdOrocFleFFWpPC2QCC+hO2Z3vC9WknrQICgnFPYeqfrHLZ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR15MB3319
-X-Proofpoint-ORIG-GUID: pt-5oBfS3hb4CUsac3OT7Zf9Ei_nRF-Y
-X-Proofpoint-GUID: pt-5oBfS3hb4CUsac3OT7Zf9Ei_nRF-Y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-30_10,2022-08-30_01,2022-06-22_01
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220823093221.38075-8-likexu@tencent.com>
+X-Spam-Status: No, score=-14.9 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 02:33:47PM +0100, Quentin Monnet wrote:
-> > +static const char *cgroup_order_string(__u32 order)
-> > +{
-> > +	switch (order) {
-> > +	case BPF_CGROUP_ITER_ORDER_UNSPEC:
-> > +		return "order_unspec";
-> > +	case BPF_CGROUP_ITER_SELF_ONLY:
-> > +		return "self_only";
-> > +	case BPF_CGROUP_ITER_DESCENDANTS_PRE:
-> > +		return "descendants_pre";
-> > +	case BPF_CGROUP_ITER_DESCENDANTS_POST:
-> > +		return "descendants_post";
-> > +	case BPF_CGROUP_ITER_ANCESTORS_UP:
-> > +		return "ancestors_up";
-> > +	default: /* won't happen */
-> > +		return "";
+On Tue, Aug 23, 2022, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> I wonder if that one should be "unknown", in case another option is
-> added in the future, so we can spot it and address it?
-I added "unknown" and applied.
+> AMD only has gp counters, whose corresponding vPMCs are initialised
+> and stored in pmu->gp_counter[] in order of idx, so we can access this
+
+Avoid pronouns, and state what the patch is doing, not what it _can_ do.  IIUC:
+
+  Access PMU counters on AMD by directly indexing the array of general
+  purpose counters instead of translating the PMC index to an MSR index.
+  AMD only supports gp counters, there's no need to translate a PMC index
+  to an MSR index and back to a PMC index.
+
+> array directly based on any valid pmc->idx, without any help from other
+> interfaces at all. The amd_rdpmc_ecx_to_pmc() can now reuse this part
+> of the code quite naturally.
+> 
+> Opportunistically apply array_index_nospec() to reduce the attack
+> surface for speculative execution and remove the dead code.
+> 
+> Signed-off-by: Like Xu <likexu@tencent.com>
+> ---
+>  arch/x86/kvm/svm/pmu.c | 41 +++++------------------------------------
+>  1 file changed, 5 insertions(+), 36 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/pmu.c b/arch/x86/kvm/svm/pmu.c
+> index e9c66dd659a6..e57eb0555a04 100644
+> --- a/arch/x86/kvm/svm/pmu.c
+> +++ b/arch/x86/kvm/svm/pmu.c
+> @@ -33,23 +33,6 @@ enum index {
+>  	INDEX_ERROR,
+>  };
+>  
+> -static unsigned int get_msr_base(struct kvm_pmu *pmu, enum pmu_type type)
+> -{
+> -	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
+> -
+> -	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
+> -		if (type == PMU_TYPE_COUNTER)
+> -			return MSR_F15H_PERF_CTR;
+> -		else
+> -			return MSR_F15H_PERF_CTL;
+> -	} else {
+> -		if (type == PMU_TYPE_COUNTER)
+> -			return MSR_K7_PERFCTR0;
+> -		else
+> -			return MSR_K7_EVNTSEL0;
+> -	}
+> -}
+> -
+>  static enum index msr_to_index(u32 msr)
+>  {
+>  	switch (msr) {
+> @@ -141,18 +124,12 @@ static bool amd_pmc_is_enabled(struct kvm_pmc *pmc)
+>  
+>  static struct kvm_pmc *amd_pmc_idx_to_pmc(struct kvm_pmu *pmu, int pmc_idx)
+>  {
+> -	unsigned int base = get_msr_base(pmu, PMU_TYPE_COUNTER);
+> -	struct kvm_vcpu *vcpu = pmu_to_vcpu(pmu);
+> +	unsigned int num_counters = pmu->nr_arch_gp_counters;
+>  
+> -	if (guest_cpuid_has(vcpu, X86_FEATURE_PERFCTR_CORE)) {
+> -		/*
+> -		 * The idx is contiguous. The MSRs are not. The counter MSRs
+> -		 * are interleaved with the event select MSRs.
+> -		 */
+> -		pmc_idx *= 2;
+> -	}
+> +	if (pmc_idx >= num_counters)
+> +		return NULL;
+>  
+> -	return get_gp_pmc_amd(pmu, base + pmc_idx, PMU_TYPE_COUNTER);
+> +	return &pmu->gp_counters[array_index_nospec(pmc_idx, num_counters)];
+>  }
+>  
+>  static bool amd_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
+> @@ -168,15 +145,7 @@ static bool amd_is_valid_rdpmc_ecx(struct kvm_vcpu *vcpu, unsigned int idx)
+>  static struct kvm_pmc *amd_rdpmc_ecx_to_pmc(struct kvm_vcpu *vcpu,
+>  	unsigned int idx, u64 *mask)
+>  {
+> -	struct kvm_pmu *pmu = vcpu_to_pmu(vcpu);
+> -	struct kvm_pmc *counters;
+> -
+> -	idx &= ~(3u << 30);
+> -	if (idx >= pmu->nr_arch_gp_counters)
+> -		return NULL;
+> -	counters = pmu->gp_counters;
+> -
+> -	return &counters[idx];
+> +	return amd_pmc_idx_to_pmc(vcpu_to_pmu(vcpu), idx & ~(3u << 30));
+>  }
+>  
+>  static bool amd_is_valid_msr(struct kvm_vcpu *vcpu, u32 msr)
+> -- 
+> 2.37.2
+> 

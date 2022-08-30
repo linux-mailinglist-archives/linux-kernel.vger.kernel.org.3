@@ -2,79 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFE475A6A61
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:28:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78AD85A6A82
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiH3R2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S231784AbiH3R3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbiH3R1n (ORCPT
+        with ESMTP id S231881AbiH3R2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:27:43 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B60D372695
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:25:03 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id y17so985646ilb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=SmSdpqqfvhuzBeG/p+7mNhDOexI5aI2aAxoNsJihLIw=;
-        b=MwDNBXN8YnULPfgN5yg8hA/ERoe4PKJ3NdV4H3LBuK3diQMkKr9cIVUpBkhp0GFul7
-         xFM3eJ+klfy1CjKvDD1Do+ILnhEFPDprBhHlJ3Xr7sCEauXpNsnplfq6tPGAs3ejXHNH
-         8lfx2cndEqpo6Na7ga1peK96Bzlgck8g6Ahbw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=SmSdpqqfvhuzBeG/p+7mNhDOexI5aI2aAxoNsJihLIw=;
-        b=XualzDoardxWbhhRkoBgJjB70B+2tATzfu7eyvi7HB7g6e6cKca73f5btptFBTVFd4
-         RNab5/0iUm51XrN/JCdgkuSo1ippY5s0iBS1D9dwZA4V1USozTapv9wt3Ycg0HmQleTI
-         08Q62Rmt21BgatZ9O3lYmn3hz2xZHRWvahchFfglZRjbKDWbXLctYTM59kLBde1LopU9
-         dkLkfbx5Dggd92992yUXX5o+G+/GHokc3r5flNZ/4m3edG/2QOast5hsTgDZmWQaQecq
-         cNbhsyEUoLS/g9y5U+05ty/7nLeX3c+dAx5y/XyXRkXpQKrnIqUgN+jp7J3zDM0WPfpW
-         WW7A==
-X-Gm-Message-State: ACgBeo1MJlYhzygDgcY3PZIshmUcxwWezQIIbgcaq3h0RK0QNwSeVWSu
-        oJyMjazCClDYQSRd0IhWuMM7RF4jYs6gOC7U
-X-Google-Smtp-Source: AA6agR7yQq40MWmvDDqMdsRkq3Zb+PaDLbh+zAABeP/N+WCIr4VrKNq1fl6qtMSjFfXlhiZyGTH0xg==
-X-Received: by 2002:a92:ca08:0:b0:2eb:626b:dc2a with SMTP id j8-20020a92ca08000000b002eb626bdc2amr1613510ils.127.1661880237005;
-        Tue, 30 Aug 2022 10:23:57 -0700 (PDT)
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com. [209.85.166.52])
-        by smtp.gmail.com with ESMTPSA id i25-20020a056e021d1900b002eb2b6323ebsm1984204ila.16.2022.08.30.10.23.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 10:23:56 -0700 (PDT)
-Received: by mail-io1-f52.google.com with SMTP id 10so9825950iou.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:23:56 -0700 (PDT)
-X-Received: by 2002:a05:6638:14d0:b0:349:d176:d376 with SMTP id
- l16-20020a05663814d000b00349d176d376mr12105487jak.58.1661880236045; Tue, 30
- Aug 2022 10:23:56 -0700 (PDT)
+        Tue, 30 Aug 2022 13:28:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83FBBA9C5;
+        Tue, 30 Aug 2022 10:25:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 87060617A0;
+        Tue, 30 Aug 2022 17:24:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 604F6C433B5;
+        Tue, 30 Aug 2022 17:24:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661880287;
+        bh=0WUU++dqVkY/V+r8PloicSqp/Eh8KskFSA/LU3DiJQ8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FDwOcizNr1n1dpeXEhVZXKlNzHyXi2y8xerTBs2O/8CIqfMqWBq2obrEuvjPpsL3i
+         u/Kcw+/Qh7jreXbOdwcyekUtkLpYrztCkK+oPbKzI4ERwz0hF3swML0xhlxcj69L/q
+         2JP4ky/1ET5QCIKqMtg2jJcq+z1UhYCllH3pBS8w9pRj4ll6Ng3PoQ/lhZn2FFJjkc
+         aGKJb3jBIKB69V44s2oFiCptYj45DqDdc26syrpPjtRE1O8dlGZGw+WhF2UdakfMq6
+         7sox6ina7K1wouzazp2895fqV/py7vnKMuCwqZnm9RddAwIpANlk68gNSup3yCBsoo
+         YRl5DtLMDOYRA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Sasha Levin <sashal@kernel.org>, jdelvare@suse.com
+Subject: [PATCH AUTOSEL 5.4 01/12] firmware: dmi: Use the proper accessor for the version field
+Date:   Tue, 30 Aug 2022 13:24:32 -0400
+Message-Id: <20220830172444.581654-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20220830053307.3997495-1-sheng-liang.pan@quanta.corp-partner.google.com>
-In-Reply-To: <20220830053307.3997495-1-sheng-liang.pan@quanta.corp-partner.google.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 30 Aug 2022 10:23:44 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=XXV4x-Hpa9-GUzkwS+cxfvpL93HBCUrn_bvMK8hBAaBA@mail.gmail.com>
-Message-ID: <CAD=FV=XXV4x-Hpa9-GUzkwS+cxfvpL93HBCUrn_bvMK8hBAaBA@mail.gmail.com>
-Subject: Re: [PATCH 0/1] Add a new board device tree named 'evoker' for
- herobrine variant.
-To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,24 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-On Mon, Aug 29, 2022 at 10:33 PM Sheng-Liang Pan
-<sheng-liang.pan@quanta.corp-partner.google.com> wrote:
->
-> This patch add the initial dts file for new board 'evoker'.
->
->
->
-> Sheng-Liang Pan (1):
->   arm64: dts: qcom: sc7280: Add device tree for herobrine evoker
->
->  arch/arm64/boot/dts/qcom/Makefile             |   1 +
->  .../dts/qcom/sc7280-herobrine-evoker-r0.dts   | 333 ++++++++++++++++++
->  2 files changed, 334 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-r0.dts
+[ Upstream commit d2139dfca361a1f5bfc4d4a23455b1a409a69cd4 ]
 
-Just as a heads up, usually you don't need a cover letter if you're
-just sending one patch.
+The byte at offset 6 represents length. Don't take it and drop it
+immediately by using proper accessor, i.e. get_unaligned_be24().
 
--Doug
+[JD: Change the subject to something less frightening]
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Jean Delvare <jdelvare@suse.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/firmware/dmi_scan.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/firmware/dmi_scan.c b/drivers/firmware/dmi_scan.c
+index 1e21fc3e9851a..70b7abbe1e4bf 100644
+--- a/drivers/firmware/dmi_scan.c
++++ b/drivers/firmware/dmi_scan.c
+@@ -593,7 +593,7 @@ static int __init dmi_smbios3_present(const u8 *buf)
+ {
+ 	if (memcmp(buf, "_SM3_", 5) == 0 &&
+ 	    buf[6] < 32 && dmi_checksum(buf, buf[6])) {
+-		dmi_ver = get_unaligned_be32(buf + 6) & 0xFFFFFF;
++		dmi_ver = get_unaligned_be24(buf + 7);
+ 		dmi_num = 0;			/* No longer specified */
+ 		dmi_len = get_unaligned_le32(buf + 12);
+ 		dmi_base = get_unaligned_le64(buf + 16);
+-- 
+2.35.1
+

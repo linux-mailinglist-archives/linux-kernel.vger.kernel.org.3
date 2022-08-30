@@ -2,150 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8485A61A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0145A61EB
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 13:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbiH3L0D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 07:26:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51168 "EHLO
+        id S230394AbiH3Lai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 07:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbiH3L0B (ORCPT
+        with ESMTP id S229980AbiH3LaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 07:26:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 525ACBB01F;
-        Tue, 30 Aug 2022 04:26:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A4EA23A;
-        Tue, 30 Aug 2022 04:26:06 -0700 (PDT)
-Received: from [10.57.13.45] (unknown [10.57.13.45])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A5443F71A;
-        Tue, 30 Aug 2022 04:25:55 -0700 (PDT)
-Message-ID: <2db3b103-7034-6c0d-4ec8-caae7654b264@arm.com>
-Date:   Tue, 30 Aug 2022 12:25:49 +0100
+        Tue, 30 Aug 2022 07:30:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D11717581;
+        Tue, 30 Aug 2022 04:30:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8324A6154F;
+        Tue, 30 Aug 2022 11:30:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C941CC4347C;
+        Tue, 30 Aug 2022 11:29:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661858999;
+        bh=1xLqX4IZAgNYnC4h10WjJw6PlukikNFYKog3HwdWdDM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RAo042DFSY5REyFDd6pGeOPdJAPUXxbTgfnMCpejt+lV5oKgFcPTfrgyP/yI8eNkv
+         FW3lPw+jvjEWDyiIUwXliYqmH7ZPTSi4GF45lXUloWfhAZzXGol+/9A2dBKfuOSjiX
+         38YlKJu9t8SjzxQMpwLo9+WMbcTzF/CLUNECEPk299TLZh0VfB3xwb16J9OiRUaO5o
+         df40iErnbvip+clMNIE12Vmjs8K/qlhJjKgh0I4/R3wDrZ6elLrr9LfZD2dggsSpfJ
+         nWb9oiZ1euphycUvxzprcAyehDXLvgFmwL8RD1hLdm9ZgftlcmnGl3f1y+qIW4LIa6
+         B97R9LCXNy4wg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1oSzRM-0000zn-47; Tue, 30 Aug 2022 13:29:56 +0200
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v4 00/30] phy: qcom,qmp: fix dt-bindings and deprecate lane suffix
+Date:   Tue, 30 Aug 2022 13:28:53 +0200
+Message-Id: <20220830112923.3725-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [RFC PATCH v2 2/6] bus/cdx: add the cdx bus driver
-Content-Language: en-GB
-To:     "Gupta, Nipun" <Nipun.Gupta@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "Gupta, Puneet (DCG-ENG)" <puneet.gupta@amd.com>,
-        "song.bao.hua@hisilicon.com" <song.bao.hua@hisilicon.com>,
-        "mchehab+huawei@kernel.org" <mchehab+huawei@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "jeffrey.l.hugo@gmail.com" <jeffrey.l.hugo@gmail.com>,
-        "Michael.Srba@seznam.cz" <Michael.Srba@seznam.cz>,
-        "mani@kernel.org" <mani@kernel.org>,
-        "yishaih@nvidia.com" <yishaih@nvidia.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "okaya@kernel.org" <okaya@kernel.org>,
-        "Anand, Harpreet" <harpreet.anand@amd.com>,
-        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
-        "Simek, Michal" <michal.simek@amd.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-References: <20220817150542.483291-3-nipun.gupta@amd.com>
- <Yv0KHROjESUI59Pd@kroah.com>
- <DM6PR12MB3082D966CFC0FA1C2148D8FAE8719@DM6PR12MB3082.namprd12.prod.outlook.com>
- <YwOEv6107RfU5p+H@kroah.com>
- <DM6PR12MB3082B4BDD39632264E7532B8E8739@DM6PR12MB3082.namprd12.prod.outlook.com>
- <YwYVhJCSAuYcgj1/@kroah.com> <20220824233122.GA4068@nvidia.com>
- <CAGETcx846Pomh_DUToncbaOivHMhHrdt-MTVYqkfLUKvM8b=6w@mail.gmail.com>
- <a6ca5a5a-8424-c953-6f76-c9212db88485@arm.com>
- <DM6PR12MB30824C5129A7251C589F1461E8769@DM6PR12MB3082.namprd12.prod.outlook.com>
- <Ywzb4RmbgbnQYTIl@nvidia.com>
- <MN2PR12MB30870CE2759A9ABE652FAFD8E8799@MN2PR12MB3087.namprd12.prod.outlook.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <MN2PR12MB30870CE2759A9ABE652FAFD8E8799@MN2PR12MB3087.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-30 08:06, Gupta, Nipun wrote:
-> [AMD Official Use Only - General]
-> 
-> 
-> 
->> -----Original Message-----
->> From: Jason Gunthorpe <jgg@nvidia.com>
->> Sent: Monday, August 29, 2022 9:02 PM
->> To: Gupta, Nipun <Nipun.Gupta@amd.com>
->> Cc: Robin Murphy <robin.murphy@arm.com>; Saravana Kannan
->> <saravanak@google.com>; Greg KH <gregkh@linuxfoundation.org>;
->> robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org; rafael@kernel.org;
->> eric.auger@redhat.com; alex.williamson@redhat.com; cohuck@redhat.com;
->> Gupta, Puneet (DCG-ENG) <puneet.gupta@amd.com>;
->> song.bao.hua@hisilicon.com; mchehab+huawei@kernel.org;
->> maz@kernel.org; f.fainelli@gmail.com; jeffrey.l.hugo@gmail.com;
->> Michael.Srba@seznam.cz; mani@kernel.org; yishaih@nvidia.com; linux-
->> kernel@vger.kernel.org; devicetree@vger.kernel.org; kvm@vger.kernel.org;
->> okaya@kernel.org; Anand, Harpreet <harpreet.anand@amd.com>; Agarwal,
->> Nikhil <nikhil.agarwal@amd.com>; Simek, Michal <michal.simek@amd.com>;
->> git (AMD-Xilinx) <git@amd.com>
->> Subject: Re: [RFC PATCH v2 2/6] bus/cdx: add the cdx bus driver
->>
->> [CAUTION: External Email]
->>
->> On Mon, Aug 29, 2022 at 04:49:02AM +0000, Gupta, Nipun wrote:
->>
->>> Devices are created in FPFGA with a CDX wrapper, and CDX
->> controller(firmware)
->>> reads that CDX wrapper to find out new devices. Host driver then interacts
->> with
->>> firmware to find newly discovered devices. This bus aligns with PCI
->> infrastructure.
->>> It happens to be an embedded interface as opposed to off-chip
->> connection.
->>
->> Why do you need an FW in all of this?
->>
->> And why do you need DT at all?
-> 
-> We need DT to describe the CDX controller only, similar to
-> how PCI controller is described in DT. PCI devices are
-> never enumerated in DT. All children are to be dynamically
-> discovered.
-> 
-> Children devices do not require DT as they will be discovered
-> by the bus driver.
-> 
-> Like PCI controller talks to PCI device over PCI spec defined channel,
-> we need CDX controller to talk to CDX device over a custom
-> defined (FW managed) channel.
+When adding support for SC8280XP to the QMP PHY driver I noticed that
+the PHY provider child node was not described by the current DT schema.
 
-OK, thanks for clarifying - it actually sounds quite cool :)
+The SC8280XP PHYs also need a second fixed-divider PIPE clock
+("pipediv2") and I didn't want to have to add a bogus "lane" suffix to
+the clock name just to match the current "pipe0" name so I decided to
+deprecate the unnecessary suffix in the current binding instead.
 
-I think it's clear now that this should be a a full-fledged bus 
-implementation. Note that if the CDX interface provides a way to query 
-arbitrary properties beyond standard resources then you may well also 
-want your own fwnode type to hook into the device_property APIs too. 
-Yes, it then means a bit more work adapting individual drivers too, but 
-that should be far cleaner in the long run, and there's already plenty 
-of precedent for IPs which exist with multiple standard interfaces for 
-PCI/USB/SDIO/platform MMIO/etc.
+To be able to add the missing child-node schema and handle device
+specifics like additional PIPE clocks, it quickly became obvious that
+the binding needs to be split up.
 
-Plus it means that if CDX ever makes its way into PCIe-attached FPGA 
-cards which can be used on non-OF systems, you've not painted yourself 
-into a corner.
+This series clean up and fixes some issue with the current schema before
+splitting it up in separate schemas for PCIe, UFS and USB and adding
+missing parts like the child PHY provider nodes.
 
-Thanks,
-Robin.
+The MSM8996 PCIe PHY gets its own schema as this is the only non-combo
+PHY that actually provides more than one PHY per IP block. Note that the
+"lane" suffix is still unnecessary and misleading.
+
+The final patches add support for the updated binding to the (recently
+split up) PHY drivers. Included is also a related combo PHY cleanup.
+
+Johan
+
+
+Changes in v4
+ - rebase on phy/next from 2022-08-30 (71351b0e5646 ("phy: move from
+   strlcpy with unused retval to strscpy")) which included a new
+   sc8280xp USB PHY binding
+ - add more tags from Krzysztof and Dmitry
+
+Changes in v3
+ - rebase on linux-next which has a new binding for IPQ8074
+ - fix git-bisect breakage due to removal of an unused variable one
+   patch too soon (Krzysztof)
+ - replace one Fixes tag with reference in commit message (Krzysztof)
+ - drop two redundant minItems (Krzysztof)
+ - fix two Fixes tags that lacked the actual tag
+ - add more ack and review tags from Krzysztof
+
+Changes in v2
+ - squash split + cleanup + example patches (Krzysztof)
+ - deprecate clock-names instead of dropping suffix (Krzysztof)
+ - deprecate reset-names instead of dropping suffix (Krzysztof)
+ - flatten child reg if/then schemas (Krzysztof)
+ - add back optional vddp-ref-clk to all bindings even though it likely
+   only applies to MSM8996/98 UFS (Krzysztof)
+ - add missing sc7180 schema to USB binding
+ - misc clean ups
+   - shorten or drop descriptions
+   - drop quotes around $id and $schema (Krzysztof)
+   - use maxItems with clock-output-names
+   - combine two USB clock+reset schemas
+ - add Reviewed-by/Acked-by tags
+
+
+Johan Hovold (30):
+  dt-bindings: phy: qcom,qmp: fix bogus clock-cells property
+  dt-bindings: phy: qcom,qmp: sort compatible strings
+  dt-bindings: phy: qcom,qmp: drop redundant descriptions
+  dt-bindings: phy: qcom,qmp: fix child node description
+  dt-bindings: phy: qcom,qmp: clean up descriptions
+  dt-bindings: phy: qcom,qmp: clean up example
+  dt-bindings: phy: qcom,qmp: drop child-node comment
+  dt-bindings: phy: add qcom,msm8996-qmp-pcie-phy schema
+  dt-bindings: phy: qcom,msm8996-qmp-pcie: add missing child node schema
+  dt-bindings: phy: qcom,msm8996-qmp-pcie: deprecate PIPE clock names
+  dt-bindings: phy: qcom,msm8996-qmp-pcie: deprecate reset names
+  dt-bindings: phy: add QMP PCIe PHY schema
+  dt-bindings: phy: qcom,qmp-pcie: add missing child node schema
+  dt-bindings: phy: qcom,qmp-pcie: deprecate PIPE clock name
+  dt-bindings: phy: add QMP UFS PHY schema
+  dt-bindings: phy: qcom,qmp-ufs: add missing SM8450 clock
+  dt-bindings: phy: qcom,qmp-ufs: add missing SM8150 power domain
+  dt-bindings: phy: qcom,qmp-ufs: add missing child node schema
+  dt-bindings: phy: add QMP USB PHY schema
+  dt-bindings: phy: qcom,qmp-usb: add missing child node schema
+  dt-bindings: phy: qcom,qmp-usb: deprecate PIPE clock name
+  dt-bindings: phy: qcom,qmp-usb: add missing qcom,sc7180-qmp-usb3-phy
+    schema
+  dt-bindings: phy: qcom,qmp-usb3-dp: fix bogus clock-cells property
+  dt-bindings: phy: qcom,qmp-usb3-dp: deprecate USB PIPE clock name
+  phy: qcom-qmp-pcie: drop pipe clock lane suffix
+  phy: qcom-qmp-combo: drop unused lane reset
+  phy: qcom-qmp-combo: drop pipe clock lane suffix
+  phy: qcom-qmp-pcie-msm8996: drop pipe clock lane suffix
+  phy: qcom-qmp-pcie-msm8996: drop reset lane suffix
+  phy: qcom-qmp-usb: drop pipe clock lane suffix
+
+ .../phy/qcom,msm8996-qmp-pcie-phy.yaml        | 189 +++++++
+ .../bindings/phy/qcom,qmp-pcie-phy.yaml       | 296 ++++++++++
+ .../devicetree/bindings/phy/qcom,qmp-phy.yaml | 504 ------------------
+ .../bindings/phy/qcom,qmp-ufs-phy.yaml        | 239 +++++++++
+ .../bindings/phy/qcom,qmp-usb-phy.yaml        | 388 ++++++++++++++
+ .../bindings/phy/qcom,qmp-usb3-dp-phy.yaml    |   8 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-combo.c     |   6 +-
+ .../phy/qualcomm/phy-qcom-qmp-pcie-msm8996.c  |   8 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-pcie.c      |   4 +-
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |   4 +-
+ 10 files changed, 1118 insertions(+), 528 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,msm8996-qmp-pcie-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-pcie-phy.yaml
+ delete mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-ufs-phy.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/qcom,qmp-usb-phy.yaml
+
+-- 
+2.35.1
+

@@ -2,82 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDF75A64DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:35:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121F85A64E4
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 15:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbiH3Nfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 09:35:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35876 "EHLO
+        id S229647AbiH3Ngw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 09:36:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiH3Nfc (ORCPT
+        with ESMTP id S230365AbiH3Ngr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 09:35:32 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB95D4B0C1;
-        Tue, 30 Aug 2022 06:35:30 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id c7so7594069wrp.11;
-        Tue, 30 Aug 2022 06:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=JpguWKHCz7w89q6BLLDu3VHzbooJ+x9K5EqEg9fOx8M=;
-        b=c2pG9ATJI7Vfg1cNbQDHpSFAphTLeHsKffxD2fhvclwhvmDc8MNye2JlUVbiFLEwyI
-         an267YrcHIQxDvJJq3UfNMKVtHmyVegrYXiT4eFRoLbf/ApQADUClSgf4SzlghwDphB9
-         51BBe9PZr82GWYUQesDCcL1ol9dmIXPPk5QuqUPcvBNRfEGjiKk61hLof6VNvEefWiIx
-         qth/JeKZSuuSYcwR+WN474a/hSBvgy1rEXHXQ2rREECA7TUQtAmg8P+ewovvPqo+XA3P
-         2IFOLOKpg2HDOEYA55JiuKtODLt/IPk6TT02zC/Pp9HEpi0LrMYw4DJrNU0qvfCH3eMI
-         LAcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=JpguWKHCz7w89q6BLLDu3VHzbooJ+x9K5EqEg9fOx8M=;
-        b=En/AB4WfGo3pxQzTf9JEOzDOH5l3+wpIOaRZNUtwt57YPdK6zeYNU5Wx5g7CLoTqTx
-         Zs+/mzRzYSJIspXp+qsX4uONawrE7eiamRZcoAaEa9Axqk4LSDadu0y0MBabgC7E4UBF
-         HwNovwMAAFoYxkN3zUvDae75LlvUTBkVlRDbXtRItJZFR63z/it3ao41RgVIajkJIfNv
-         ZbkpoIlMMlrTValGZRmrgsYfPRB/tUxbrXJSgmuJA+kQXnmBM9PO3JrLS3ytSTUUsKix
-         q6kuOoXrN/E1yeDtqeZylt3FT+bORUhACXT0QE+whv0crxcwExUXx3yL138i9G5QojcG
-         Fz9w==
-X-Gm-Message-State: ACgBeo1XA5fBYB4TflJ51Xj6hqMfyfxTinztMyAtQzZqy3PtQBlsfXtG
-        WYMG4br2zOXss2hNwBG9ai4=
-X-Google-Smtp-Source: AA6agR51Z+ds6I0M8yufiA5kSmLZU2RKP47ZMnLS09yHSfjWtCL9aMVHuotM8jobWxV0h43gw/6yEQ==
-X-Received: by 2002:a5d:51d2:0:b0:226:cfa4:a998 with SMTP id n18-20020a5d51d2000000b00226cfa4a998mr8880175wrv.689.1661866529306;
-        Tue, 30 Aug 2022 06:35:29 -0700 (PDT)
-Received: from elende (elende.valinor.li. [2a01:4f9:6a:1c47::2])
-        by smtp.gmail.com with ESMTPSA id n5-20020a05600c3b8500b003a319b67f64sm3752650wms.0.2022.08.30.06.35.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 06:35:28 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Date:   Tue, 30 Aug 2022 15:35:27 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     martin-eric.racine@iki.fi, 1017425@bugs.debian.org
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ben Hutchings <ben@decadent.org.uk>, x86@kernel.org,
+        Tue, 30 Aug 2022 09:36:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD194E39B6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 06:36:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661866599; x=1693402599;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=O9CgTkDBOczWNsw6xgnL7AlVgHCVygWfHTMUKa/QgD8=;
+  b=d8YuDrvsUXU2NT992PGZ3eotpCrktdhojJf8pVMRj+fcwKWLbe0GZZtm
+   jIBdjYv2oBkMDZIFCGt0iwkkk+w3bWFoJQMIJbJcuzWe+hJ2ghHT98L4i
+   OMusSZaWd7GqULYvF89gQeXFn4tQxEDnoT1jX4trc5g8wxt9atYHYqTpw
+   6F4yJsF+gDuDjh7aPBm2xnpL6W2GHTa+xsIr4QOmKae71qY0PTx6HzO56
+   QmD6PPInon52r0u7HIqpLW0eLTI54DM2sDmukr+j+/wrnWS/qNSAgIYBx
+   uTnL1+dOqEX7tnhE1iHeTHce9nEtcN5FjQRoHFnYqerJvY/6Uv8pJFc2O
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="359136439"
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="359136439"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 06:36:38 -0700
+X-IronPort-AV: E=Sophos;i="5.93,275,1654585200"; 
+   d="scan'208";a="672867819"
+Received: from amrabet-mobl.ger.corp.intel.com (HELO localhost) ([10.252.41.211])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 06:36:31 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Maxime Ripard <maxime@cerno.tech>
+Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Phil Elwell <phil@raspberrypi.com>,
+        Intel Graphics Development <intel-gfx@lists.freedesktop.org>,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Dom Cobley <dom@raspberrypi.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        stable@vger.kernel.org, regressions@lists.linux.dev,
-        Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Subject: Re: Bug#1017425: [PATCH] x86/speculation: Avoid LFENCE in
- FILL_RETURN_BUFFER on CPUs that lack it
-Message-ID: <Yw4SH2EuvnFJZHJs@lorien.valinor.li>
-References: <Yv7aRJ/SvVhSdnSB@decadent.org.uk>
- <Yv9OGVc+WpoDAB0X@worktop.programming.kicks-ass.net>
- <Yv9tj9vbQ9nNlXoY@worktop.programming.kicks-ass.net>
- <9395338630e3313c1bf0393ae507925d1f9af870.camel@decadent.org.uk>
- <Yv9+8vR4QH6j6J/5@worktop.programming.kicks-ass.net>
- <CAPZXPQeYh_BrZzinsvCjHvd=szAsOXUmkVYS1tJC5vwamx+Wow@mail.gmail.com>
- <Yw37wnE19bAIhhP2@hirez.programming.kicks-ass.net>
- <166062224255.2056.9595118849979455037.reportbug@pxeth.lan>
- <CAPZXPQfrCQi5y0yS0kXNYajb_YyRGBPj1hhJEYEWWUsJxa-EHw@mail.gmail.com>
+        Nouveau Dev <nouveau@lists.freedesktop.org>,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Subject: Re: [PATCH v2 14/41] drm/modes: Move named modes parsing to a
+ separate function
+In-Reply-To: <20220830120330.6f5f22d35gu7cbr3@houat>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-14-459522d653a7@cerno.tech>
+ <CAMuHMdV9wVgHFfwHoqtBoYzJDnjDmKTfaZkAKvTVKh1Y-2x1pA@mail.gmail.com>
+ <87czcidnb8.fsf@intel.com> <20220830120330.6f5f22d35gu7cbr3@houat>
+Date:   Tue, 30 Aug 2022 16:36:23 +0300
+Message-ID: <875yi9etuw.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPZXPQfrCQi5y0yS0kXNYajb_YyRGBPj1hhJEYEWWUsJxa-EHw@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,33 +87,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+On Tue, 30 Aug 2022, Maxime Ripard <maxime@cerno.tech> wrote:
+> Hi,
+>
+> On Tue, Aug 30, 2022 at 01:43:07PM +0300, Jani Nikula wrote:
+>> On Tue, 30 Aug 2022, Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>> > On Mon, Aug 29, 2022 at 3:13 PM Maxime Ripard <maxime@cerno.tech> wrote:
+>> >> +#define STR_STRICT_EQ(str, len, cmp) \
+>> >> +       ((strlen(cmp) == len) && !strncmp(str, cmp, len))
+>> >
+>> > This is not part of the move, but newly added.
+>> 
+>> The same construct is also duplicated elsewhere in the series, and I
+>> kept being confused by it.
+>
+> I'm not sure what is confusing, but I can add a comment if needed.
 
-On Tue, Aug 30, 2022 at 03:18:51PM +0300, Martin-??ric Racine wrote:
-> On Tue, Aug 30, 2022 at 3:00 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > On Tue, Aug 30, 2022 at 02:42:04PM +0300, Martin-??ric Racine wrote:
-> > > On Fri, Aug 19, 2022 at 3:15 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> > > >
-> > > > On Fri, Aug 19, 2022 at 01:38:27PM +0200, Ben Hutchings wrote:
-> > > >
-> > > > > So that puts the whole __FILL_RETURN_BUFFER inside an alternative, and
-> > > > > we can't have nested alternatives.  That's unfortunate.
-> > > >
-> > > > Well, both alternatives end with the LFENCE instruction, so I could pull
-> > > > it out and do two consequtive ALTs, but unrolling the loop for i386 is
-> > > > a better solution in that the sequence, while larger, removes the need
-> > > > for the LFENCE.
-> > >
-> > > Have we reached a definitive conclusion on to how to fix this?
-> >
-> > https://git.kernel.org/tip/332924973725e8cdcc783c175f68cf7e162cb9e5
-> 
-> Thanks.
-> 
-> Ben: When can we expect an updated kernel to security-updates at Debian?
+STR_STRICT_EQ() is what's confusing. I have to look at the
+implementation to understand what it means. What does "strict" string
+equality mean?
 
-When the update is ready to go. Likely the update for the next point
-release for bullseye will contain the fix for this issue.
+>
+>> The above is precisely the same as:
+>> 
+>> 	str_has_prefix(str, cmp) == len
+>
+> Here, it's used to make sure we don't have a named mode starting with
+> either e, d, or D.
+>
+> If I understood str_has_prefix() right, str_has_prefix("DUMB-MODE", "D")
+> == strlen("DUMB-MODE") would return true, while it's actually what we
+> want to avoid.
 
-Regards,
-Salvatore
+That's not true, str_has_prefix("DUMB-MODE", "D") == strlen("D") is.
+
+> It's also used indeed in drm_get_tv_mode_from_name(), where we try to
+> match a list of names with one passed as argument.
+>
+> With drm_get_tv_mode_from_name("NSTC", strlen("NTSC")), we would end up
+> calling str_has_prefix("NTSC-J", "NTSC") == strlen("NTSC-J") which would
+> work. However, we end up calling prefix not a prefix, but an entire
+> string we want to match against, which is very confusing to me too.
+
+If I get this right, you have a string and you want to check if that has
+a certain prefix. Additionally, you want to check the prefix is a
+certain length.
+
+Sure, that the prefix is a certain length is more of a property of the
+string, which is NUL terminated later than at length, but that's doesn't
+really matter.
+
+That condition is simply str_has_prefix(string, prefix) == length.
+
+BR,
+Jani.
+
+
+-- 
+Jani Nikula, Intel Open Source Graphics Center

@@ -2,58 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 351EE5A6B80
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:59:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC8255A6B86
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 19:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbiH3R7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 13:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40066 "EHLO
+        id S229826AbiH3R7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 13:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232285AbiH3R6s (ORCPT
+        with ESMTP id S232004AbiH3R7J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 13:58:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6534A28E29;
-        Tue, 30 Aug 2022 10:58:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1ABD5B81D44;
-        Tue, 30 Aug 2022 17:58:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E7B2C433C1;
-        Tue, 30 Aug 2022 17:58:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661882292;
-        bh=sybPumXRTrZl2VUTu1Lul+2QtsmCj+bXbYY0Ec9V6Nc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F/kq8cXE+OBDPeYGcLVKD7LAAPXvfffIjNmrdN7JICx0jHC5rZjDtjNXiIMof9XDx
-         Dp89MRx4or0pCiPChJieA4of8rBpgn/z33h54tVBJ8QHqmaEypKUKp/ZrYRK9KHvkI
-         47eRucrG6j1s1Z3WOFNuEJpDXcIgmIp+f+mXvj+alcSVtpMHkEqBPNY3AkMrfQg3GE
-         eZuP6SCTbpTu/vR1FoYJmEOmCHTf/DPFAp4jm+4fRkbPI2BPb2WhKSHsPl78T9smoI
-         ag8RGM6/MpBEuTq6wDugRaXdm7PzX/iKRvvCSUfj31xRSRIoI17rqwEG9HD1mkEHja
-         CbxX1yn+2BaPA==
-Date:   Tue, 30 Aug 2022 18:58:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, seanjc@google.com,
-        mark.rutland@arm.com, elver@google.com, david.engraf@sysgo.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH AUTOSEL 5.15 14/23] arm64/signal: Raise limit on stack
- frames
-Message-ID: <Yw5PgFEtUloKxRNQ@sirena.org.uk>
-References: <20220830172141.581086-1-sashal@kernel.org>
- <20220830172141.581086-14-sashal@kernel.org>
+        Tue, 30 Aug 2022 13:59:09 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91FE92676
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:58:54 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id p18so8870891ljc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 10:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=zOi9kFOde5m40Z0kzt7eejwPpj0TyHiFN0Epj0E8EcY=;
+        b=kOSsVdTVsCPhkycrz9pFHCagY9vhvZ/ZsHKsO5/WpC2KatVlstdZC08p4rRCGwGnlI
+         vvMTass1nOfPlNAGL9Trvt+FHMNNL7Qh2MzuJ8CqKER9ItW1mo6hIDF7t4D+lvlbJRJM
+         rwZGQV18MmjoPqeP1qNb3zT8C9aHqzsQ9F3uXBaEMUDEJYzA6Mn8HSdI2Cm4L5LR6TOE
+         QC0prfswFQK60mYEimHhLstNDjvG79CMdJd13Xbb9Hbaa+857gKoePXq3i1OXGPD16FH
+         eaLK/BIKs1UvuaajzvE6hn8fEg7e8WMWUbGpiGOI0e8kml4OBsZQO3TYsDM7Qezz3RFa
+         lqWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=zOi9kFOde5m40Z0kzt7eejwPpj0TyHiFN0Epj0E8EcY=;
+        b=X38lYHmw2W5vSyuPtHOQmNFJdntDX1OH3kZv20Au/lKjPFsc+YS1ONhdySi3TqYEN7
+         qBV5vQ+fhw9PN60MpjQmPTPeEHV7ZZucg/PjbKkD0F73kJIhDfGylbj6DOROUNshAx1I
+         nrIeTiNNL3De3T9FpCTpnmPXn7aJqpe3mYiaalteVtJ6QiCDGv6P8xNIh5ulmqeYFKYl
+         BCIsZfnlzZkwHw++VPU1tb2vMNuv9qAlutf6suKJP/CEa6Bd1x88Y8G+skkBWEmgCbct
+         aH42+DEr1dFpaUfvPMizhqWubZOAaeC/5x3ACcDTE4TjOLpbGXE9pdSFkpYD9HDDKT1q
+         jXXg==
+X-Gm-Message-State: ACgBeo2/V8TvNiU3RDkM9HxwyFOwdcEqSZZTEgHcvUXIMp1DKM52MlBU
+        ilzNeeGpfeQmwkt01ELnWMdg6w==
+X-Google-Smtp-Source: AA6agR5fB8tcI6nebScGu9KgPYQP+YMJ6wrIkqasj8/WnuIm+BOxrAGCTs+OgaoBOeK4z79Jb3aqmw==
+X-Received: by 2002:a2e:be9b:0:b0:25f:e027:4999 with SMTP id a27-20020a2ebe9b000000b0025fe0274999mr7477279ljr.395.1661882332908;
+        Tue, 30 Aug 2022 10:58:52 -0700 (PDT)
+Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id h5-20020a2ea485000000b0025e6a3556ffsm1851394lji.22.2022.08.30.10.58.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 10:58:52 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     matthias.bgg@gmail.com, robh+dt@kernel.org, yong.wu@mediatek.com,
+        chengci.xu@mediatek.com
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        devicetree@vger.kernel.org, yi.kuo@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        anthony.huang@mediatek.com, wendy-st.lin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v5 0/4] MT8188 SMI SUPPORT
+Date:   Tue, 30 Aug 2022 20:58:49 +0300
+Message-Id: <166188232676.14577.13660349538278549218.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220817124608.10062-1-chengci.xu@mediatek.com>
+References: <20220817124608.10062-1-chengci.xu@mediatek.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5BnFLNDp644MiSfw"
-Content-Disposition: inline
-In-Reply-To: <20220830172141.581086-14-sashal@kernel.org>
-X-Cookie: Necessity is a mother.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,35 +76,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 17 Aug 2022 20:46:04 +0800, Chengci.Xu wrote:
+> This patchset adds MT8188 SMI support.
+> 
+> MT8188, similar to mt8195, there are two SMI-common HW, one is for
+> VDO(video output), the other is for VPP(video processing pipe). They
+> connect with different SMI-larbs, then some setting(bus_sel) is
+> different.
+> 
+> [...]
 
---5BnFLNDp644MiSfw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-On Tue, Aug 30, 2022 at 01:21:31PM -0400, Sasha Levin wrote:
-> From: Mark Brown <broonie@kernel.org>
->=20
-> [ Upstream commit 7ddcaf78e93c9282b4d92184f511b4d5bee75355 ]
->=20
-> The signal code has a limit of 64K on the size of a stack frame that it
-> will generate, if this limit is exceeded then a process will be killed if
+[1/4] dt-bindings: memory: mediatek: Add mt8188 smi binding
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/9d9fde47430298455544b283cffa390c40d58bfc
+[2/4] memory: mtk-smi: Add return value for configure port function
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/8c1561edc0692fa8e321daf2777c3c32454b5748
+[3/4] memory: mtk-smi: Add enable IOMMU SMC command for MM master
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/4e508b259ed02f5fa608cdd83b817a7f49c22271
+[4/4] memory: mtk-smi: mt8188: Add SMI Support
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/673e71df5ccfaefeb32bb5b3130a5d397b742194
 
-I don't believe this is relevant to kernels without SME support.
-
---5BnFLNDp644MiSfw
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMOT7EACgkQJNaLcl1U
-h9BqAAf+P0C3w4jbPe9ZwvlXlJ5Lxcz1wmkm/TM/Ybj/OgRPqAlAy8JcHq9TqPDD
-WxMUfFH8yYktrmFZJfhxOwWOuBpDIMHOebd/7c07LvcOzEEdCzKK3YS1Gb8pv1xJ
-nsHnONwiWFlsubP7MtJL9NuDO9tSlCK1dqTbWmCpIe7AdnwI0d5yUMcqJYT8rw78
-ZFNcjBrrKYcFHE9k1/mZNvxbUEDmKgfOYgmSB7KNEn9JPB4+1UMPpXCuTsgf+aMl
-UrmpcL3ZHrAFGQ5U2hVhzQLMhqYHFGnmbVYYO6C5fvLYjbZAoIJQEfdBhw0QJdZJ
-AWNDcwm4RtAEnfekY8ooobBFr69g5A==
-=E+48
------END PGP SIGNATURE-----
-
---5BnFLNDp644MiSfw--
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>

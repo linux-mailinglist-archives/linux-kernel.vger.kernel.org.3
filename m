@@ -2,127 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADB75A60B2
+	by mail.lfdr.de (Postfix) with ESMTP id 2250C5A60B1
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 12:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230352AbiH3KXY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 06:23:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58746 "EHLO
+        id S229986AbiH3KX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 06:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230273AbiH3KWt (ORCPT
+        with ESMTP id S230282AbiH3KWu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 06:22:49 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2052.outbound.protection.outlook.com [40.107.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD87958B41;
-        Tue, 30 Aug 2022 03:22:11 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oAnB9vAO6q8AC+VHh1KGLr1MCxeZJz4ZJgqHkN4M1sF7IrQBwOxhAdQuUD//8Lz4sicdHeyeirBZCjs8lME1icFXMSQOnQ5iYdEYP/r6aRy5k9Caa7QTcyOVy274PLaERqDC+OrCn8xHy3C4z+cZzscwKTXG1ByaYaUN1Kkp9B2Jhm/4lyyiajnTgwmZoocQeMWdZ6shaYf/AIp/ly5yDWEbJ22eafnr5jEHJzboEQeOmgCtrud2OPtF3xGYPfvAoPhsZ+o94ykStHf2EW+Vcpsu3SAhyBI3LaCvLv5QL1k8VFT8Hejn4PH/N3co9WMspemkjcNOrvjhfg0o2aUgJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F2lzMTBJ7AfOH6kO8n2PWxBbG3D1Umde/BqAfoKycLA=;
- b=kB0nhdrfAm0EGGzRQFlv46dyw4dj5GHtotcMQWwE9eVbYWjOVQeOF+VDaiGHzF0I++wncLme50nOXISlXmxXCCDrO0bYqItScftENOKM0oc2o8Fl1JDA/CmeOwOLUmHziKNi6AoNBDs6r3hRQjJwM+FZyMr1VRtlEpuMpMakYSFmD+ImTohepQDhDou1yEccvS0KGoYany2V7mFSVG9DXS7dBeo/Kltfq0oBSMoWmKQAM+JKg1lQQPsTXDTislxhG82YYAtFwW51QVJgBC0nVoHNgURYPffSJ+d4R8xYYalDILnRk3iJtlx0lXtBMBf3Xw43o+qoRdHCoFH4wfSb9g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F2lzMTBJ7AfOH6kO8n2PWxBbG3D1Umde/BqAfoKycLA=;
- b=cwK+u7c9HPo52T2+5quaEdhauQ7g9OLvG2+N2Hilf5twrseDCWSQuD7W3d3BlsEJATn/OWMZwd9FHD/tfLl3JzoOqpc29GRrnvFILmjgedH/g0cxNsuH81j90aGENfTAPvfaaDbv/vhiKMTf7yBOYbh+v6EUBj6efm8UsUdEz5I=
-Received: from CH2PR12MB4264.namprd12.prod.outlook.com (2603:10b6:610:a4::15)
- by BN6PR12MB1811.namprd12.prod.outlook.com (2603:10b6:404:fe::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Tue, 30 Aug
- 2022 10:22:08 +0000
-Received: from CH2PR12MB4264.namprd12.prod.outlook.com
- ([fe80::79bb:53e7:f1cf:840d]) by CH2PR12MB4264.namprd12.prod.outlook.com
- ([fe80::79bb:53e7:f1cf:840d%7]) with mapi id 15.20.5566.021; Tue, 30 Aug 2022
- 10:22:08 +0000
-From:   "Potthuri, Sai Krishna" <sai.krishna.potthuri@amd.com>
-To:     Michael Walle <michael@walle.cc>
-CC:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-mtd@lists.infradead.org" <linux-mtd@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "saikrishna12468@gmail.com" <saikrishna12468@gmail.com>,
-        "git (AMD-Xilinx)" <git@amd.com>
-Subject: RE: [PATCH 2/2] mtd: spi-nor: Add support for flash reset
-Thread-Topic: [PATCH 2/2] mtd: spi-nor: Add support for flash reset
-Thread-Index: AQHYu4bSUGIrY8nYfU66nbvPu6SLyK3FpnEAgAAQlYCAAVDzAIAALXQQ
-Date:   Tue, 30 Aug 2022 10:22:08 +0000
-Message-ID: <CH2PR12MB4264DD83557D759B8EC8EAD8DB799@CH2PR12MB4264.namprd12.prod.outlook.com>
-References: <20220829090528.21613-1-sai.krishna.potthuri@amd.com>
- <20220829090528.21613-3-sai.krishna.potthuri@amd.com>
- <be7f0b7bbb25d86ac079502babbf5f1b@walle.cc>
- <BY5PR12MB425817D90687D37ABDC638EADB799@BY5PR12MB4258.namprd12.prod.outlook.com>
- <c7fd841b2244cbe60e174be3babb1607@walle.cc>
-In-Reply-To: <c7fd841b2244cbe60e174be3babb1607@walle.cc>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 64b97130-7346-4ff2-f882-08da8a717e9d
-x-ms-traffictypediagnostic: BN6PR12MB1811:EE_
-x-ld-processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 8kJpeD0EkudwyfqtNHfKe4fRM5Zr8TggK6kC69hCyNOGDngLWBbM6sFfCkNImrmWNMKneYKHVgJm36Z8HNxcNLsbYQvVhOhXRvyDZtrd8Ta61gxfj1GBCagtnpgD34410O41lgTSjC7+SyymPLY9PDz1Zlsf1fjIqvqYVWf42Z9gn9VwNx8CY/NO1Fny68+zotmSQy+E0nzVBjMZ795WBAqPqoGOvtMhcqyPdZsnVxLWa/X6QVfTy4j0UCOzGk3cC7DbGNAlm6TAQBFDlUmPRET12piwIjmy3gqLZ5rBMCnn2jwJ/wZNgGLXErIBn7jRL0+Q8PuBti0egbZKNvtWvQ513+Z0aUtfY7PRtZb2yvTnz1Y7S+PHMWTBinWUH6WLEIoogAEOPSeJkG17fuicXGLh9maN2tjxz63cmkTTBPz7Ag3pCxFuAxo1B9lkNJKTRJUN4ZOJTMuKv5o2Nouftwf9DVjIbB7TMRZ4DGXOi1ARJqgpKsh02vSY/Ak1Xqdx1SVVkFbfJBH4d0eao46gX5BVBTTm/TG9sgXAbuQhsiWZ/A5fX0x6lRm4aWHknqjB7LMHfrNN26zUEGZ0x+r8ZFkzxzCmTI6W2l8KLeU4/GmfW6zG8kF1bbkTr3V+iZuFonsvGyGXdB6aCXsuz+ftIgC6ni9PD0kjtwEF5uyiPGOD3gvBsSYTEissutoeQPnJQfGeDAr5Zb6PsvvFLZTYcYNSEfhwMu17uKPU7uylFI2RHZtL5jrvwP5rK2plQMCIldg7fBO+zm5MZxmukBIBEg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH2PR12MB4264.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(396003)(366004)(39860400002)(122000001)(6916009)(316002)(83380400001)(38100700002)(54906003)(71200400001)(478600001)(76116006)(64756008)(4326008)(66446008)(66556008)(8676002)(38070700005)(66476007)(41300700001)(7416002)(5660300002)(52536014)(55016003)(86362001)(8936002)(33656002)(7696005)(6506007)(66946007)(186003)(53546011)(2906002)(26005)(9686003);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fIbxZac4UCdinV0w/F5RSMgOtJO/Jn0x2MpCcvMIclO1Sn91+ucjM9FsFW2s?=
- =?us-ascii?Q?XPhW4QTa8urKU/8aoDcu8Lu/bjavcKvjgjlOGhHyowTfGil0opXv2Xr03Bsa?=
- =?us-ascii?Q?TroSzvCwbsGySPq/xw7vXKbW9Wy9cV56zHJyCdm7+n/Hde4wrUJiAa9DF+lg?=
- =?us-ascii?Q?sUhbse/ud15NVqYs25xsjiFDQsonyDD7280trln1nieUP1MWnOMI17TKXJ2n?=
- =?us-ascii?Q?PXrQqF5py01HpdBUayvnBh16Go9lzZ40m+saR98MgFw6/4q/GoBKTy4XMenU?=
- =?us-ascii?Q?sLljI8Q/iwLPOi9SNu2wvVYaZ7dD4Dj+YUTBYJmJ+M6+ZKyxQSQwOYmP8feA?=
- =?us-ascii?Q?SMmqIWmND5UAxXqrMohS/JtKijmLYaxAYAt60T7PvtU2pD9tmMUj2VG0D8lT?=
- =?us-ascii?Q?8Oah7ykncUxoGZYAIri6zGjYvWQLS5WbqpmC8bHThfDOLijqiFO/sUqYyQAM?=
- =?us-ascii?Q?2IV3hTqtKKzSS/6UuPVeeMhber8qCO6nnQ1gels5BYlSCLW80R00P8ug7A19?=
- =?us-ascii?Q?2Q4RpSzXB0uN5zc7w9yKn71SK2VVT8KBJOKxF+gXV13QZfaqcMpbkzrTu7Nh?=
- =?us-ascii?Q?BvvkXN0+VuHLpwU1xNYeRC/7hXosxOieIGMya+JanhHPOEthlkSs72tE6k1B?=
- =?us-ascii?Q?jA2WFwC5B8FjXUSlsHoinMmEIY74/8I/APhLDWH1olVQuW9K6wYGcqWZTzba?=
- =?us-ascii?Q?ujZ4OBRH4XuKL2Qh7i/THcjptOnJ8crx1ws6C+kqWPTyMENN9SBwBzwT12sW?=
- =?us-ascii?Q?SebsJdCiqN3Pb2EluOCVegHjCY/eCsifw2lUx00qFr/zeLwFGzWlCg2Xf8I8?=
- =?us-ascii?Q?+6W6QtyHJX+EHTItG031RCzZGQggik5LjpTOreXS3chqcx9w+rAFqG6GPDNW?=
- =?us-ascii?Q?ZQ6/WBFcKEDqpO4V1M+y0XWve6tq2tbaj/PZMPjha2L37vpL0e4VNAhBMu3L?=
- =?us-ascii?Q?I5xweYaUqkU8oDeSEu/AxfEHIpu1/+BrYNVlTkjQID4xlNR+nWrrpoUdkT7E?=
- =?us-ascii?Q?TigFQR+RO1kK/6EhZjGBwv4SqA0Fb55PzpQGgCx7GIM25/kTux1py1LgAgkJ?=
- =?us-ascii?Q?zdFAy+CNtO+wGBxdSibZSR4XUwh9R4ZnxCTzKQx0kLOqf+WZnjJ2gbz+6x+u?=
- =?us-ascii?Q?KPOaeLBlTj7TeoUsfsYJKLbs9YhilOjbwl4AJpPs8P8gCcyWe8ISIT3tf3sI?=
- =?us-ascii?Q?Cp+CFXeqHZoZ6FEeP81rtzMM9PbxOZbKe0ETh4kK8X4cTzyVYNFxEWBzEn86?=
- =?us-ascii?Q?PdYBURQVHzaz2cfjDq0yjAOUElmlB25G6plFX2uIzeWsW2dHYXxPkSrOQ/3E?=
- =?us-ascii?Q?Pv9AM0nXZuMgg5Y8PsxmA54+fTo1Qzyhl6yc0A4glEO1UasiKKqlH1Z2OMLX?=
- =?us-ascii?Q?Frt7TH/L6e5UAnPos4CybOaAVXJLveO4hfbtmCx1gS/PSIBPoCZvIFQkduie?=
- =?us-ascii?Q?cUg7yhuxfLN97n/daP6VQbgUz5zek04NQhL+H0IsM4RnkgtsImaQE/N9WZ7c?=
- =?us-ascii?Q?bva0fRma7O/5UBDHgVayAi9NrRe2tHgcr+XZwdRwlcURk7+961Sm4/Q/1+dI?=
- =?us-ascii?Q?TL01J3QNpuX9HbBqLT0=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 30 Aug 2022 06:22:50 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D1F177579;
+        Tue, 30 Aug 2022 03:22:18 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id p7so3732264lfu.3;
+        Tue, 30 Aug 2022 03:22:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ewFvocVNfh/1BMVRJJhj6y+q9DXa1cklPYO4jJJ+ZPI=;
+        b=G9w+EHsaYTf3RTd0wF+VIfFaIZEtTiw4ylQgi2J4gfawcB7MJij1hAOQqp127Cp3sV
+         9Tzei6RF70Zq7P0eHDXPdurkyOZKpYeFgoxBN0D5cMrM0uLxYqhKS0l/yQ44wCBmxaY1
+         AUBPV/+Z8fqfQYJ8GHWpjeAs5IfSkBqKmy7vOWlOkf8c5T+fXxDFhYycK2i6UO53EhTY
+         cG5QhtsblzJeRgBxxQjOmn9uK0CJfYkOLVZ3wmGlUZ6MuDmSfKC5y/ZbnjyB+sUEmXyL
+         jv0sIEergg/34/jqdrJr6jA1UbDviYTis75trAfEUisn8YAmdt9KwvPDvprXRBd0r+Wp
+         1VSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ewFvocVNfh/1BMVRJJhj6y+q9DXa1cklPYO4jJJ+ZPI=;
+        b=nWihu9Z4Jfx4rVigjr9y4GmfqfpNuoS0cMe7W2ak8+6APlH68PZ1AT/p/wWFJt2agH
+         h8Dxr/EmZl4DY+V/dmRhMEpM03wJNehhFxgsPuq7kHnozmmjLUuwScb6h1xESjftN3Dp
+         IRkRWzIwK6E01wsJTIFS9+bJ/dD7ZP7rVNzPIvJgxRJzOTc6rBgm5iE+KK6zv36yhObp
+         wdBXg9qarBsgM7ZoisXrOJZkshSPHD5xnGzP7NLdogMgRU9SvNbRybyKNYeV66L+60he
+         Ax+4Jm2O4iH3//fUd+IgwqjtmMPmohg+DX/3u+DlSYaMTAqxHxkx3E7CN/A0wb+06F+c
+         xaaQ==
+X-Gm-Message-State: ACgBeo1r62u8Hm1kaIeRO2fqmfih65FG7au16y0DKeMnv1C+2/rEaU+g
+        rVvyp4Yar6Us/3YhcW/4/Y0=
+X-Google-Smtp-Source: AA6agR6roG+6pfy1GbA43X3JSuD5tBGJOEwN6P3O5bTo8eY5FYH8nUbstwZW9bi3uCb39lJN5D/lvA==
+X-Received: by 2002:a19:911d:0:b0:494:6701:1d17 with SMTP id t29-20020a19911d000000b0049467011d17mr3991390lfd.31.1661854936337;
+        Tue, 30 Aug 2022 03:22:16 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::1? (dc75zzyyyyyyyyyyyyyyt-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::1])
+        by smtp.gmail.com with ESMTPSA id t17-20020ac25491000000b004946d1f3cc4sm613954lfk.164.2022.08.30.03.22.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 03:22:15 -0700 (PDT)
+Message-ID: <a97be2ae-b7d2-2ecf-fa17-de2d8755fb83@gmail.com>
+Date:   Tue, 30 Aug 2022 13:22:13 +0300
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH2PR12MB4264.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64b97130-7346-4ff2-f882-08da8a717e9d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Aug 2022 10:22:08.6409
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: pc1xScnzgSeuHd3TNkatyBNgvApQL4oeaYljS35Zn+vBMsam8lJkPLuXmr+/Sb8+OHhUmuZQFG+o723XLaseAw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR12MB1811
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v9 05/10] lib: add linear range index macro
+Content-Language: en-US
+To:     ChiaEn Wu <peterwu.pub@gmail.com>, lee@kernel.org,
+        daniel.thompson@linaro.org, jingoohan1@gmail.com, pavel@ucw.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, sre@kernel.org, jic23@kernel.org,
+        lars@metafoo.de, deller@gmx.de, broonie@kernel.org,
+        andriy.shevchenko@linux.intel.com
+Cc:     chiaen_wu@richtek.com, alice_chen@richtek.com,
+        cy_huang@richtek.com, dri-devel@lists.freedesktop.org,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, szunichen@gmail.com,
+        andy.shevchenko@gmail.com
+References: <20220830034042.9354-2-peterwu.pub@gmail.com>
+ <20220830034042.9354-6-peterwu.pub@gmail.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20220830034042.9354-6-peterwu.pub@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -130,64 +87,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+On 8/30/22 06:40, ChiaEn Wu wrote:
+> From: ChiaEn Wu <chiaen_wu@richtek.com>
+> 
+> Add linear_range_idx macro for declaring the linear_range struct simply.
+> 
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
 
-> -----Original Message-----
-> From: Michael Walle <michael@walle.cc>
-> Sent: Tuesday, August 30, 2022 12:40 PM
-> To: Potthuri, Sai Krishna <sai.krishna.potthuri@amd.com>
-> Cc: Tudor Ambarus <tudor.ambarus@microchip.com>; Pratyush Yadav
-> <pratyush@kernel.org>; Miquel Raynal <miquel.raynal@bootlin.com>;
-> Richard Weinberger <richard@nod.at>; Vignesh Raghavendra
-> <vigneshr@ti.com>; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> <krzysztof.kozlowski+dt@linaro.org>; devicetree@vger.kernel.org; linux-
-> mtd@lists.infradead.org; linux-kernel@vger.kernel.org;
-> saikrishna12468@gmail.com; git (AMD-Xilinx) <git@amd.com>
-> Subject: Re: [PATCH 2/2] mtd: spi-nor: Add support for flash reset
->=20
-> Hi,
->=20
-> Am 2022-08-30 08:32, schrieb Potthuri, Sai Krishna:
->=20
-> >> > +	if (ret)
-> >> > +		return ret;
-> >> > +
-> >> > +	/*
-> >> > +	 * Experimental Minimum Chip select high to Reset delay value
-> >> > +	 * based on the flash device spec.
-> >> > +	 */
-> >>
-> >> Which flash device spec?
-> > I referred some of the qspi, ospi flash vendors datasheets like
-> > Micron, Macronix, ISSI, gigadevice, spansion.
->=20
-> Please mention here that you've looked at datasheets of different vendors=
-.
-> And maybe instead of doing three comments, just one and then the reset
-> sequence.
-Ok, I will update in v2.
->=20
-> >>
-> >> > +	usleep_range(1, 5);
-> >> > +	gpiod_set_value(reset, 0);
-> >>
-> >> Mh, is your logic inverted here? If I read the code correctly, you
-> >> should use a value of 1 to take the device into reset. The device
-> >> tree should then have a flag "active low", which will
-> > Reset Sequence which I implemented here is high(1)->low(0)->high(1).
-> > By doing this sequence (active low), flash device is getting reset,
-> > this sequence is tested using Octal SPI flash device.
->=20
-> How does the device tree property for your look like?
-> Has it the GPIO_ACTIVE_LOW flag set?
-Sorry, I misunderstand your initial ask, This logic is developed by keeping
-the GPIO_ACTIVE_HIGH flag set in the device-tree. Agree this will violate t=
-he
-flash reset sequence (active low reset).
-I will update the sequence in v2 to match with the "active low" flag in the
-device tree.
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Regards
-Sai Krishna
->=20
-> -michael
+> ---
+> 
+> v9
+> - Revise LINEAR_RANGE() and LINEAR_RANGE_IDX()
+> ---
+>   include/linux/linear_range.h | 11 +++++++++++
+>   1 file changed, 11 insertions(+)
+> 
+> diff --git a/include/linux/linear_range.h b/include/linux/linear_range.h
+> index fd3d0b3..2e4f4c3 100644
+> --- a/include/linux/linear_range.h
+> +++ b/include/linux/linear_range.h
+> @@ -26,6 +26,17 @@ struct linear_range {
+>   	unsigned int step;
+>   };
+>   
+> +#define LINEAR_RANGE(_min, _min_sel, _max_sel, _step)		\
+> +	{							\
+> +		.min = _min,					\
+> +		.min_sel = _min_sel,				\
+> +		.max_sel = _max_sel,				\
+> +		.step = _step,					\
+> +	}
+> +
+> +#define LINEAR_RANGE_IDX(_idx, _min, _min_sel, _max_sel, _step)	\
+> +	[_idx] = LINEAR_RANGE(_min, _min_sel, _max_sel, _step)
+> +
+>   unsigned int linear_range_values_in_range(const struct linear_range *r);
+>   unsigned int linear_range_values_in_range_array(const struct linear_range *r,
+>   						int ranges);
+
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~

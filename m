@@ -2,121 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C615A5F9B
+	by mail.lfdr.de (Postfix) with ESMTP id 8969C5A5F9A
 	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 11:39:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230244AbiH3JjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 05:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36668 "EHLO
+        id S229792AbiH3JjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 05:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231389AbiH3Jid (ORCPT
+        with ESMTP id S231582AbiH3Jii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 05:38:33 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 386FBE868A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:36:35 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id s15so5577498ljp.5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 02:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=kCi8L1+oD+4JTBvg0D7KspDhAid2IOnvW3ckVIUBt9U=;
-        b=YO/VLJYgQtWvyKOuDYePVhu0MG9qTHHNwyrER5jP7xrz5Ovu8sFTgTrT9hUTRdyN3+
-         4TFLgf2CI3a5HHtqwqZ/JiUdBvEVWGpzZBskvMxHeqBgofR6zQjMX+YCXZevj+KiQj5Z
-         Q1unqYNIZPZEVMqv8FrAEl7qK38tahod0e5h3d+ECr9O1oMkNGId9Oviz7MsvZUJwVOt
-         1NF497u1MgpgtGPjqkVGj3GGumW0HBKkE2S3x3tAwK8XgJ6oyVgF09DpwatmEyCHYFEs
-         FALpdbKoWv3Kr/BmJ+mDTqr8a5WOoGXvutD/GcI/HUrqfzyLnqQd4Jwuddr8bkVAXRpY
-         biGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=kCi8L1+oD+4JTBvg0D7KspDhAid2IOnvW3ckVIUBt9U=;
-        b=UosOygUr/5Oc6YQczIw9r3sAqKAI0teTgDuDAd5hbltI5tmUXHUKOnn4X9Wv7qAlwX
-         VjoULxLXt+ms2ecapaUZpHYAqvV8yKIo1RlcQobLajiNOocIuLVE9IjqD+oFDpjiKxre
-         uxmTmbxbsoQD4wO/giT8v9L0hpTFuSQN+Rtq3zGhT7CiCMMVz0UW+36TH+Ix343+p+pu
-         q6OBEhO4CiLXRngBKQweaASndfzNc1glds1G5NsrDg5uiyxC/7hf+1WcVmsHw9ErIJUB
-         9h6ULvkWUkkUV3VuUnFl4+sfvQZmRi9DxLqEOcfQj/9JHv2gCTr0Pp5k+9+7EOZKS3MV
-         cSTA==
-X-Gm-Message-State: ACgBeo2+GiPEUlzppkBnncu17AERsQW6P9w8T1AyIB1WZXr/wqFpyZPJ
-        xkFddRV/I8c5jeIxnY4W/ZLe0A==
-X-Google-Smtp-Source: AA6agR4d1/sQGxXZPNDK/31Tjg9grm6UsSbjOwAS5Sq/aDGVQCp4oN3d9PYLjMqb5EjZ0bcCmPIeQg==
-X-Received: by 2002:a2e:3006:0:b0:266:6677:5125 with SMTP id w6-20020a2e3006000000b0026666775125mr1872362ljw.352.1661852193294;
-        Tue, 30 Aug 2022 02:36:33 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id c9-20020a05651c014900b0025e15fe421bsm1705374ljd.17.2022.08.30.02.36.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 02:36:32 -0700 (PDT)
-Message-ID: <1c9cb6c2-2030-257d-a50d-dada0ab4449e@linaro.org>
-Date:   Tue, 30 Aug 2022 12:36:31 +0300
+        Tue, 30 Aug 2022 05:38:38 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE59E1915;
+        Tue, 30 Aug 2022 02:36:41 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 2E68922CF;
+        Tue, 30 Aug 2022 11:36:39 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1661852199;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=MVoTxfXy8cDqrSIhz4HpBP22qZhpepvVK6F1WYi9tQc=;
+        b=ekkB0CUy37+MNjEXna5X662xWN2c19XCvS+Tz/efZLb2PBH5oMPE0q0bSDqKrFodNksUau
+        1PqOnYx7crQ2Ev8h1/LqM5nu5Aqy/M1w5PTT5wpwToKtqpnw15G1H9TYOP9aK+xM5fzGjp
+        a5kcIEADlvSHDqggxoevpOyGZj7mSqT59K/UxFKyhWl+FFeZgPoGlO62swPVncIHDiCpPC
+        2Wmy3Q9q741BAiOnAFq1D5/ESvShjcPcSc1Fnmx3kWmCHqeAHYoWTt4oZJcFPxIbcDt6d4
+        7FsyIQ7dhGSisEuEl0fdBxZUzn/QKTzxMrZHd0gawVCsBz6c6NsZ9kbU5l91UQ==
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/3] dt-bindings: i2c: mv64xxx: Document DMA properties
-Content-Language: en-US
-To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     Gregory CLEMENT <gregory.clement@bootlin.com>,
+Date:   Tue, 30 Aug 2022 11:36:38 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
-References: <20220830020824.62288-1-samuel@sholland.org>
- <20220830020824.62288-2-samuel@sholland.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830020824.62288-2-samuel@sholland.org>
-Content-Type: text/plain; charset=UTF-8
+        devicetree@vger.kernel.org, linux-mtd@lists.infradead.org,
+        linux-kernel@vger.kernel.org, saikrishna12468@gmail.com,
+        git@amd.com
+Subject: Re: [PATCH 1/2] dt-bindings: mtd: spi-nor: Add reset-gpios property
+In-Reply-To: <9a63271b-48c0-1b31-c450-5abc9eedbced@linaro.org>
+References: <20220829090528.21613-1-sai.krishna.potthuri@amd.com>
+ <20220829090528.21613-2-sai.krishna.potthuri@amd.com>
+ <9a63271b-48c0-1b31-c450-5abc9eedbced@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <6619ebc290f12fbb7613f32087aa9200@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 05:08, Samuel Holland wrote:
-> Allwinner's I2C offload engine includes bidirectional DMA support. Add
-> the properties for describing this in the devicetree. "dmas" is optional
-> because not all instances of the controller have their DRQs hooked up.
-> For example, R_I2C0 and R_I2C1 on V536 have no DRQ number assigned.
+Am 2022-08-30 11:21, schrieb Krzysztof Kozlowski:
+> On 29/08/2022 12:05, Sai Krishna Potthuri wrote:
+>> SPI-NOR flashes have RESET pin which can be toggled using GPIO
+>> controller, for those platforms reset-gpios property can be used to
+>> reset the flash device.
+>> 
+>> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+>> ---
+>>  Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml | 6 ++++++
+>>  1 file changed, 6 insertions(+)
+>> 
+>> diff --git a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml 
+>> b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+>> index 7149784a36ac..d2fc8e9c787f 100644
+>> --- a/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+>> +++ b/Documentation/devicetree/bindings/mtd/jedec,spi-nor.yaml
+>> @@ -70,6 +70,12 @@ properties:
+>>        be used on such systems, to denote the absence of a reliable 
+>> reset
+>>        mechanism.
+>> 
+>> +  reset-gpios:
+>> +    description:
+>> +      contains a GPIO specifier.
 > 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
-
-Thank you for your patch. There is something to discuss/improve.
-
-> ---
+> Skip this part - obvious.
 > 
->  .../bindings/i2c/marvell,mv64xxx-i2c.yaml           | 13 +++++++++++++
->  1 file changed, 13 insertions(+)
+>> The reset GPIO is asserted and then deasserted
+>> +      to perform device reset. If "broken-flash-reset" is present 
+>> then having
+>> +      this property does not make any difference.
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-> index 0ec033e48830..63d665a4f9bb 100644
-> --- a/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-> +++ b/Documentation/devicetree/bindings/i2c/marvell,mv64xxx-i2c.yaml
-> @@ -66,6 +66,19 @@ properties:
->    resets:
->      maxItems: 1
->  
-> +  dmas:
-> +    items:
-> +      - description: RX DMA Channel
-> +      - description: TX DMA Channel
-> +
-> +  dma-names:
-> +    items:
-> +      - const: rx
-> +      - const: tx
-> +
-> +dependencies:
-> +  dmas: [ dma-names ]
+> Isn't then broken-flash-reset conflicting with this one (e.g.
+> disallowing it)?
 
-Dependency is not needed. meta-schema has it.
+Sometimes the spi-nor driver needs to switch modes, which are persistent
+until you either switch em back or do a hardware reset (or software
+reset IIRC) of the flash. If broken-flash-reset is set, we try hard
+to leave the flash in the mode which it is normally in after reset or
+don't switch modes at all.
+Of course we cannot make sure, our shutdown gets called in each case,
+thus there is may be warning during startup.
 
-Best regards,
-Krzysztof
+So, even if you have a reset-gpio it might be broken I guess. Think
+of it being high active, but someone forgot the pull-up. So, if you
+do an unexpected reset, the flash chip might not be reset
+automatically. So yes, I think, even if there is a dedicated reset
+gpio, it could still be messed up. How likely is it? I don't know,
+probably not very.
+
+-michael

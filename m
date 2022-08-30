@@ -2,50 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD635A58EA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9705A58EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 03:42:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiH3Bln (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 29 Aug 2022 21:41:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47266 "EHLO
+        id S229692AbiH3BmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 29 Aug 2022 21:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiH3Blm (ORCPT
+        with ESMTP id S229472AbiH3BmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 29 Aug 2022 21:41:42 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FBB7C195;
-        Mon, 29 Aug 2022 18:41:40 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MGqlz2j7vz4x7X;
-        Tue, 30 Aug 2022 11:41:35 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661823695;
-        bh=P+lb/tIYQq6aag2PQYjfBDSH2pP3UDS2e1DSqGU3JXU=;
-        h=Date:From:To:Cc:Subject:From;
-        b=comR83GscCRaACGVrchJfsTYOJLBM8wz/rrXxPFs2nVmbzaFPjaeW+e+YPgyB3iBi
-         NFgAS4lFl6P4bizsbYOoorNy8unjlElQeZVgBzMhY4loDLWV011TTXMs7y2CQZXhnY
-         0XOzXkL9O0fmw1LsFx7fXv+1oGACYRwfTPqMay+ZMwawEIPTEi921WyDRBEOlWB8Il
-         ui68KKAj9zvdqKqAgA/GBD+bQ9o8dDo80+YbZkjrHIVNIaDal14HnpFOmIEYieqsKt
-         XXDeWZ1Toh495tfPT3oh7f/z+Qp7Pnn9cXUPTYvGkp2/mJbal9Dd8gE1EJPFTQhSye
-         yEXhYI/4lPzOA==
-Date:   Tue, 30 Aug 2022 11:41:33 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alvin Lee <Alvin.Lee2@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Jun Lei <Jun.Lei@amd.com>, Brian Chang <Brian.Chang@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>
-Subject: linux-next: build failure after merge of the amdgpu tree
-Message-ID: <20220830114133.161cab26@canb.auug.org.au>
+        Mon, 29 Aug 2022 21:42:21 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 948FD7C1AC
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:42:20 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id e28so7553105qts.1
+        for <linux-kernel@vger.kernel.org>; Mon, 29 Aug 2022 18:42:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Eq9oJONfbFs62JvZq36/1G/FIjacqvpRKeOI8NE7X8k=;
+        b=eAbv2OL7hkEcq5Z3tIN/d7+/cxgVZGR9/HYsvWxzevSti25E529r7+xZ9ZPit3bC8J
+         iIcAcLv1DKBpwbmVUeW9VfZt6uGteDyRiTsQ2PIy2ANtrtocZY7JDc5NjmW26CsodMEq
+         83+Y5hbLzjhcQzi5sWJTBi9k5fDxFAxHcRHO6HHETkb0TfHbS9/4KnXByQUXaXx602s9
+         MgWdd9uf8QLyWou1ZU1SOYsbt0qlMR9P7PSM92/eus3c65vVPBEczNfpatLwYWOvbTAp
+         b7HMK2b2DNu/PmoA74bpyMZoQV+Vgy+fLKyfMr0eTsZTbXLRwWDm9z2hXlhxO+zBMb2b
+         dMdQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Eq9oJONfbFs62JvZq36/1G/FIjacqvpRKeOI8NE7X8k=;
+        b=o8+Q9I59ylaej1SXedE9bHsQwv8Yk9qzHBcDxtyglscIjl3p3hJYnCP/NvfHzcmqAu
+         uzCU5LeuZFlGArC1Fs2wVv43IcyHS/GEH65W0yaWAmc5vsOsCg22LF09i9ussf2brBaY
+         pnrxX28oxDbmS6NrHHku8mgaM1s8Cl35F5iery2eCE1XF743QkSqu/utZTKszX7AbMLm
+         aCdKgwNreFt6qsJJcsiyQph644yYyLO8SkDz/1rP4v2V39ilf5r4i2rg3Z48Vvuh+g26
+         8rQWak5ZvdAyzP/OeWU9yzH90XhRhbpe0vt7d5EO4bU+hHwJjjOOWS2v6bhRQPSpn1y3
+         CpgA==
+X-Gm-Message-State: ACgBeo2BmiSzVm9I8xsVnTE7EhAOhyqENbUimP8/J6FIY3u6+bKkH/3T
+        MeYRDZTAxCUl7hVZLoaT0Jk8Nw3DJ23YxAyLm11KQA==
+X-Google-Smtp-Source: AA6agR4PlTAdeqC2iyJKsqEiHgULZROru/dhMmZdcJ+39zkNHfH8fJBcYiEkBw+PkneTzvyr+OurP/4A8B5LbF90GhY=
+X-Received: by 2002:a05:622a:8a:b0:344:5611:7a8a with SMTP id
+ o10-20020a05622a008a00b0034456117a8amr12806416qtw.565.1661823739602; Mon, 29
+ Aug 2022 18:42:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/KZqTmWIR6HoazZO_yCryzKI";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220826230639.1249436-1-yosryahmed@google.com>
+ <CA+khW7iN6hyyBBR+4ey+9pNmEyKPZS82-C9kZ2NRXKMEOXHrng@mail.gmail.com>
+ <CAJD7tkYKYv+SKhCJs2281==55sALTX_DXifaWPv1w5=xrJjqQA@mail.gmail.com> <CAJD7tkZg2jzDDR6vn5=-TS93Tm3P-YEQ+06KDsjg=Mzkt5LqsA@mail.gmail.com>
+In-Reply-To: <CAJD7tkZg2jzDDR6vn5=-TS93Tm3P-YEQ+06KDsjg=Mzkt5LqsA@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 29 Aug 2022 18:42:08 -0700
+Message-ID: <CA+khW7g-jeiXMM-K+KK7L3tzG0catFSM+x5vHKMs=PF=s+=Pag@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: simplify cgroup_hierarchical_stats selftest
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Song Liu <song@kernel.org>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,53 +78,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/KZqTmWIR6HoazZO_yCryzKI
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Mon, Aug 29, 2022 at 6:07 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+>
+> On Mon, Aug 29, 2022 at 3:15 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> >
+> > On Mon, Aug 29, 2022 at 1:08 PM Hao Luo <haoluo@google.com> wrote:
+> > >
+> > > On Fri, Aug 26, 2022 at 4:06 PM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > > >
+[...]
+> > > >
+> > > > -SEC("tp_btf/mm_vmscan_memcg_reclaim_begin")
+> > > > -int BPF_PROG(vmscan_start, int order, gfp_t gfp_flags)
+> > > > +SEC("fentry/cgroup_attach_task")
+> > >
+> > > Can we select an attachpoint that is more stable? It seems
+> > > 'cgroup_attach_task' is an internal helper function in cgroup, and its
+> > > signature can change. I'd prefer using those commonly used tracepoints
+> > > and EXPORT'ed functions. IMHO their interfaces are more stable.
+> > >
+> >
+> > Will try to find a more stable attach point. Thanks!
+>
+> Hey Hao,
+>
+> I couldn't find any suitable stable attach points under kernel/cgroup.
+> Most tracepoints are created using TRACE_CGROUP_PATH which only
+> invokes the tracepoint if the trace event is enabled, which I assume
+> is not something we can rely on. Otherwise, there is only
 
-Hi all,
+Can we explicitly enable the cgroup_attach_task event, just for this
+test? If it's not easy, I am fine with using fentry.
 
-After merging the amdgpu tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
-
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c: In function 'commit_pla=
-nes_for_stream':
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:3508:9: error: this 'if'=
- clause does not guard... [-Werror=3Dmisleading-indentation]
- 3508 |         if (update_type !=3D UPDATE_TYPE_FAST)
-      |         ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:3510:17: note: ...this s=
-tatement, but the latter is misleadingly indented as if it were guarded by =
-the 'if'
- 3510 |                 if (update_type !=3D UPDATE_TYPE_FAST)
-      |                 ^~
-cc1: all warnings being treated as errors
-
-Caused by commit
-
-  e990bd60716d ("drm/amd/display: Only commit SubVP state after pipe progra=
-mming")
-
-I have used the amdgpu tree from next-20220829 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/KZqTmWIR6HoazZO_yCryzKI
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMNas0ACgkQAVBC80lX
-0GzS+Af/XDEAZJ5n3TSpmiFRGHMR2DGBPTnEbCMXgsqXcHlQ0yKlfNVC/gZT3UMO
-gBGaAolh3uD+SLweKzztMBBr4qdEO/GaitsqtCQaWyjRkmFSJ3GGx3L7G1xjhjhB
-QM0WO/IeNvutl8SrvkLjmKoDuC1oRskUU73+URA4owsr14X0fP+h/0iFtvX4+Kde
-/ezeL1eqhyjZ7mhJOSjqMbBn8t3DcqM3/HNG3gPGH37m7EKsfcWLYfkO6iUF6JLl
-CWYa59sNfmdixeRkYWwxur7/wBRcUNqjUEZTAzbSIGXVpmOoWR4QOC8VZqo1ea2J
-DJ3hCoOgWEtXEMlo37ITqoCLMDE1ZQ==
-=RFpT
------END PGP SIGNATURE-----
-
---Sig_/KZqTmWIR6HoazZO_yCryzKI--
+> trace_cgroup_setup_root() and trace_cgroup_destroy_root() which are
+> irrelevant here. A lot of EXPORT'ed functions are not called in the
+> kernel, or cannot be invoked from userspace (the test) in a
+> straightforward way. Even if they did, future changes to such code
+> paths can also change in the future, so I don't think there is really
+> a way to guarantee that future changes don't break the test.
+>
+> Let me know what you think.
+>

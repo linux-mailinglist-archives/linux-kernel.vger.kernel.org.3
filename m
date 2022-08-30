@@ -2,115 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36D715A5CFA
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6640A5A5D01
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 09:34:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbiH3Hcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 03:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49186 "EHLO
+        id S230347AbiH3HeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 03:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230134AbiH3Hc3 (ORCPT
+        with ESMTP id S229531AbiH3Hdz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 03:32:29 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD822A431
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:32:23 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id z6so14321642lfu.9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 00:32:23 -0700 (PDT)
+        Tue, 30 Aug 2022 03:33:55 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3B8374BB6;
+        Tue, 30 Aug 2022 00:33:53 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id b5so12975862wrr.5;
+        Tue, 30 Aug 2022 00:33:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rasmusvillemoes.dk; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Eji6PfnetUxjQWQNmNTakZ0GC+nZVjefNIjiiKx7moM=;
-        b=Y0KPVd1kR1gE9M2EkCjBhgd5MvrfZDrI3sNF+dsW070vrOtJwZi7Kgk5iG9/J4M0yM
-         JbvVOarhVyapGXJWjGsZ5Y3kyLEEP15iXzXKH3xpgqJ5l3tS54r3yv9iMEiPToVToThV
-         KifmuIndpaDj5A8H3xUWm+A9aTIitNoGAPViE=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=AkyiwZAyTL+qEnClAJjmshzXLVaiiWcOqi2bEVx9lPg=;
+        b=aRJmmvilCx9hvnJwsqFDPwUjBgxD5a6DXdivTL+SL6hBqXqSgsQY6k4ALeR8FvREBs
+         29wLOX4jEh7pKEjjJOucUsyR6KsAsGxnleJB90+lIKMn0lwehPN+a28RBx4XSP0JcCpb
+         tP05S/5Bl9i9PsRfB/mpmNAHJebhPrkZO8+cqakoCF0UxM+jgP8F9hdJ7m0dJy9698Hk
+         +ix5Kdnbdj6A9npKn848lfV0UW/d3if+lSSi0fLHWNgF4jDqVxiaJ2yKNijxt2ctV/jF
+         s4qgeh3LyJrpPG0ORO8pKTQBjeYKw1FdHIWS+bg0J/Hp8DM6+qamo3RDZENkCPnTqP40
+         OTEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Eji6PfnetUxjQWQNmNTakZ0GC+nZVjefNIjiiKx7moM=;
-        b=OFT5xBNOujTK4FV1En5jbLkiaLHnn7iHvRs7hrHWFyxZuVl4sXUukfGU78qDT7kpED
-         biIikM1Ul8NwwLOHSmYvW4dFfAQJMLpl1F7apBZE2FC4W2HBKvBQ/dTebZcO0CjrHpe+
-         wo002U0uQdQ+mz0iV8j06cbsvOvsVIpXqvTzJVBXoSkCa4UDh1zfGgsLp8LtlJPdZ/oZ
-         lbONzmjRy7zoYGW2jV0ycNQJaWVQVC647E6UdJbYIORqahiZjHqBDpK+JcJZvnsSIcG0
-         Ipc0krWfy6PgoIqN0Srn/pdd2doOyjVIuJtwqMmBXfjTyeDiCTkYPF0BjqJ55vslwwva
-         h57g==
-X-Gm-Message-State: ACgBeo25pJCnVOKM+DYb6qQuDJeV/Dx9r6Gt+05toRBFm0N+bwKKssvx
-        X8HRzKL+BhV+5EliqSBavOJjcg==
-X-Google-Smtp-Source: AA6agR6M8H7ruSctbEDCn6rn2Dvz8Vl6vFaH1IXmie6+yi7qrMnkkIN957laBbOFT0OF5i1omOvd6g==
-X-Received: by 2002:a05:6512:2511:b0:493:50c:ec3 with SMTP id be17-20020a056512251100b00493050c0ec3mr7102905lfb.665.1661844741975;
-        Tue, 30 Aug 2022 00:32:21 -0700 (PDT)
-Received: from [172.16.11.74] ([81.216.59.226])
-        by smtp.gmail.com with ESMTPSA id v4-20020ac258e4000000b004946c3cf53fsm615377lfo.59.2022.08.30.00.32.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 00:32:21 -0700 (PDT)
-Message-ID: <cac2eaf0-2a56-d750-3508-7b5ed03e1eb5@rasmusvillemoes.dk>
-Date:   Tue, 30 Aug 2022 09:32:19 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=AkyiwZAyTL+qEnClAJjmshzXLVaiiWcOqi2bEVx9lPg=;
+        b=0k4nOyb+Q3QUklnZXSxwLRKNAhJh+Uqe8fko4VfyS8LQ/lsl9IN7YhCcQbUTpVgKEo
+         zulUHDMusVXjNTD7L8FOT4R2pg7zE7m3T4HA+BmRKhptf0GJ6bdKc14aGarfzXVWLSbh
+         Fb+W0p+T14YTHjqZhClMgjVRKhJ8uER0iZYIrK/ddVZz5CO+sFoA8ZByoV9i/Gan5TNH
+         6uuJzQA7Vi8Q4Cer6eHKsX94O55KZlL6pw7iHxetC0xN3N7AeVQIw+HvpupsyqxtyrA+
+         omHFYLV798T1jv11v20k/bPIbTIES03Zyv96zuuIl34Vu/h0YGMn4VkdTHu/d8jNILhT
+         y8hA==
+X-Gm-Message-State: ACgBeo31dASrLiEpLfk52hDfBDfiS5Z+ZQaa+NF6leseYPQqK3lsmcTd
+        mIZdHIfd3E5B6NtsoD2KCDQ=
+X-Google-Smtp-Source: AA6agR7M6K5NpAKHxyoBknJxWk60gWpGtre/xWrzuWyDehqu9BTVBu8aAalG/O21/110w8lPoNr+Bg==
+X-Received: by 2002:a5d:59a2:0:b0:226:e6c3:a6c2 with SMTP id p2-20020a5d59a2000000b00226e6c3a6c2mr258841wrr.236.1661844832254;
+        Tue, 30 Aug 2022 00:33:52 -0700 (PDT)
+Received: from localhost ([2a03:b0c0:1:d0::dee:c001])
+        by smtp.gmail.com with ESMTPSA id l17-20020a7bc351000000b003a5ee64cc98sm10920055wmj.33.2022.08.30.00.33.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 00:33:51 -0700 (PDT)
+Date:   Tue, 30 Aug 2022 07:33:51 +0000
+From:   Stafford Horne <shorne@gmail.com>
+To:     guoren@kernel.org
+Cc:     oleg@redhat.com, vgupta@kernel.org, linux@armlinux.org.uk,
+        monstr@monstr.eu, dinguyen@kernel.org, palmer@dabbelt.com,
+        davem@davemloft.net, arnd@arndb.de, linux-arch@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-snps-arc@lists.infradead.org, sparclinux@vger.kernel.org,
+        openrisc@lists.librecores.org, Guo Ren <guoren@linux.alibaba.com>
+Subject: Re: [PATCH 2/3] openrisc: ptrace: Remove duplicate operation
+Message-ID: <Yw29XwOoUY1Foze/@oscomms1>
+References: <20220830065316.3924938-1-guoren@kernel.org>
+ <20220830065316.3924938-3-guoren@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/2] lib/test_printf.c: Add ip6 tests
-Content-Language: en-US
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     linux-kernel@vger.kernel.org, Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-References: <20220830003119.1793219-1-kent.overstreet@linux.dev>
- <20220830003119.1793219-2-kent.overstreet@linux.dev>
- <Yw1sKTOEs1Nrdb2S@google.com>
-From:   Rasmus Villemoes <linux@rasmusvillemoes.dk>
-In-Reply-To: <Yw1sKTOEs1Nrdb2S@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830065316.3924938-3-guoren@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 03.47, Sergey Senozhatsky wrote:
-> On (22/08/29 20:31), Kent Overstreet wrote:
->> diff --git a/lib/test_printf.c b/lib/test_printf.c
->> index 4bd15a593f..6a56dbf076 100644
->> --- a/lib/test_printf.c
->> +++ b/lib/test_printf.c
->> @@ -18,6 +18,7 @@
->>  #include <linux/dcache.h>
->>  #include <linux/socket.h>
->>  #include <linux/in.h>
->> +#include <linux/in6.h>
->>  
->>  #include <linux/gfp.h>
->>  #include <linux/mm.h>
->> @@ -61,6 +62,9 @@ do_test(int bufsize, const char *expect, int elen,
->>  		pr_warn("vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d\n",
->>  			bufsize, fmt, ret, elen);
->>  		return 1;
->> +		pr_warn("vsnprintf(buf, %d, \"%s\", ...) returned %d, expected %d (%s != %s)\n",
->> +			bufsize, fmt, ret, elen, test_buffer, expect);
->> +		return 1;
->>  	}
+On Tue, Aug 30, 2022 at 02:53:15AM -0400, guoren@kernel.org wrote:
+> From: Guo Ren <guoren@linux.alibaba.com>
 > 
-> I assume you intended to replace first pr_warn() with the second one?
+> The TIF_SYSCALL_TRACE is controlled by a common code, see
+> kernel/ptrace.c and include/linux/thread.h.
+> 
+> clear_task_syscall_work(child, SYSCALL_TRACE);
+> 
+> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
 
-Probably, but that's not ok. The test framework does not trust
-vsnprintf(), especially not when it does not behave as expected. So I
-very much carefully do not treat the buffer as a nul-terminated string
-until I have verified that it does have a nul character (that's tested a
-few lines below), and then when I compare the buffer contents can I pass
-it as a %s argument. Also note how that test takes the 'we may be
-testing a truncated write' into consideration, by printing the expect
-string via %.*s.
+Acked-by: Stafford Horne <shorne@gmail.com>
 
-tl;dr, please just remove that hunk.
-
-Rasmus
+> ---
+>  arch/openrisc/kernel/ptrace.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/openrisc/kernel/ptrace.c b/arch/openrisc/kernel/ptrace.c
+> index b971740fc2aa..cc53fa676706 100644
+> --- a/arch/openrisc/kernel/ptrace.c
+> +++ b/arch/openrisc/kernel/ptrace.c
+> @@ -132,7 +132,6 @@ void ptrace_disable(struct task_struct *child)
+>  	pr_debug("ptrace_disable(): TODO\n");
+>  
+>  	user_disable_single_step(child);
+> -	clear_tsk_thread_flag(child, TIF_SYSCALL_TRACE);
+>  }
+>  
+>  long arch_ptrace(struct task_struct *child, long request, unsigned long addr,
+> -- 
+> 2.36.1
+> 

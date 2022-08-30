@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454B35A684D
-	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD695A6850
+	for <lists+linux-kernel@lfdr.de>; Tue, 30 Aug 2022 18:24:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbiH3QXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 12:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40308 "EHLO
+        id S229625AbiH3QYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 12:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230429AbiH3QXN (ORCPT
+        with ESMTP id S229453AbiH3QYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 12:23:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90375107C73;
-        Tue, 30 Aug 2022 09:22:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28AD3616EB;
-        Tue, 30 Aug 2022 16:22:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05BFBC433D6;
-        Tue, 30 Aug 2022 16:22:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661876567;
-        bh=l4ucqBG2hqOlX8Vixl+x14COoo99j5jqCteFncWM5SM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iNi5FwP0B9QTyzMqptHji6XP/P/oDrGKZxbM9Kz82YVzZeypyd3VsXoSGaGS0IRDQ
-         H1c4LI4cj9qPPPntUNgW+N6ZsJQCdyFqxdkcj5dE6ILeEQieQFeQsFD/m3BrHq4GaF
-         yhNo+2JCIEk6At/7/Vzy3w/XBpHIOVu2maiOGrEPe4O7S4byy0q1e6MLESeSkpmt6/
-         8v3lvZeOCJ7mUwz28DV3Hcaql43g5WycbgK10tqZYWLot9ZQo23XS3Of8vw2imU613
-         3q2RZEo9SvYtUem1LQ5pWTnfQ1F372eVIuaNDg/Y/Bp0xE0Xz3VqL7CPYma8sBNhBW
-         ehvlEPpVWN5nA==
-Date:   Tue, 30 Aug 2022 18:22:44 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rcu <rcu@vger.kernel.org>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
- fixes
-Message-ID: <20220830162244.GA73392@lothringen>
-References: <20220819204857.3066329-1-joel@joelfernandes.org>
- <20220829134045.GA54589@lothringen>
- <1f7dd31b-f4d0-5c1c-ce28-c27f75c17f05@joelfernandes.org>
- <20220829194622.GA58291@lothringen>
- <CAEXW_YS593n8Gget+REaD-c8vT8Ht_AzOY0kXA_uc674LOyvVw@mail.gmail.com>
- <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830105324.GA71266@lothringen>
- <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830160316.GC71266@lothringen>
+        Tue, 30 Aug 2022 12:24:51 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A9D5592;
+        Tue, 30 Aug 2022 09:24:49 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-11dca1c9c01so17967417fac.2;
+        Tue, 30 Aug 2022 09:24:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=j9hKnhcG2H74szOTuO/QuH+GdjQxo+KorbP/zhVl3Ac=;
+        b=0upfzlkea8qmRIRuCeg5G8s086EAeHeSbGgcm9SOKASa6ZxN/OME5aqqXCrCch2DGc
+         yl2Urc45L5qm6O9t9OOAWmZ9Du3TBqrG9cBEpZyt1/oxGL+kKGqAoD04VnXwneaXFufE
+         tza1SEpFYdzHwBHAXK8fXxxtb2IH9MVuEMF+ivcsg5JlmtHXkPlPcXJbLdsvcZ1eM1Re
+         vVgBxbBGLgEJ+vED+CKQo/03WuqWa2yGHEc9AKnOgLznHXObvD28lOkKI+PlXN6P3tFZ
+         jIg7Pt4Un/vDt+1meyTKZu+rAezktPml18kFcLZ581z4J6hW7kQulX7QYFu0HQV/sq6c
+         dYkg==
+X-Gm-Message-State: ACgBeo1COtzpUMfu2f+rkgQx8IMWjLaKnVEDYR8XUH8/O01sNXDv15HK
+        GKhvDoGgilMtm1lm7TNN1L13Qn7hOw==
+X-Google-Smtp-Source: AA6agR6jxGYMQy0LBcuYfgLJD84RQXshKmUJMu+IU7Y4UmXonuRzzkmsC9mh0JvtJd93YHj+REIgmw==
+X-Received: by 2002:a05:6808:1647:b0:33a:f484:2ae2 with SMTP id az7-20020a056808164700b0033af4842ae2mr9490649oib.60.1661876689162;
+        Tue, 30 Aug 2022 09:24:49 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g17-20020a544f91000000b0033a11fcb23bsm6448452oiy.27.2022.08.30.09.24.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 09:24:48 -0700 (PDT)
+Received: (nullmailer pid 1506950 invoked by uid 1000);
+        Tue, 30 Aug 2022 16:24:47 -0000
+Date:   Tue, 30 Aug 2022 11:24:47 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Lee Jones <lee@kernel.org>, Andy Gross <agross@kernel.org>,
+        linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>,
+        linux-kernel@vger.kernel.org, David Heidelberg <david@ixit.cz>
+Subject: Re: [PATCH] dt-bindings: mfd: qcom,spmi-pmic: add missing compatibles
+Message-ID: <20220830162447.GA1506864-robh@kernel.org>
+References: <20220828065123.39734-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830160316.GC71266@lothringen>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220828065123.39734-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,51 +68,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 06:03:16PM +0200, Frederic Weisbecker wrote:
-> On Tue, Aug 30, 2022 at 04:43:43AM -0700, Paul E. McKenney wrote:
-> > On Tue, Aug 30, 2022 at 12:53:24PM +0200, Frederic Weisbecker wrote:
-> > > On Mon, Aug 29, 2022 at 01:42:02PM -0700, Paul E. McKenney wrote:
-> > > > On Mon, Aug 29, 2022 at 04:36:40PM -0400, Joel Fernandes wrote:
-> > > > > On Mon, Aug 29, 2022 at 3:46 PM Frederic Weisbecker <frederic@kernel.org> wrote:
-> > > > > > On Mon, Aug 29, 2022 at 12:45:40PM -0400, Joel Fernandes wrote:
-> > > > > > > On 8/29/2022 9:40 AM, Frederic Weisbecker wrote:
-> > > > 
-> > > > [ . .  . ]
-> > > > 
-> > > > > > > > 2) NOCB implies performance issues.
-> > > > > > >
-> > > > > > > Which kinds of? There is slightly worse boot times, but I'm guessing that's do
-> > > > > > > with the extra scheduling overhead of the extra threads which is usually not a
-> > > > > > > problem except that RCU is used in the critical path of boot up (on ChromeOS).
-> > > > > >
-> > > > > > I never measured it myself but executing callbacks on another CPUs, with
-> > > > > > context switches and locking can only involve significant performance issues if callbacks
-> > > > > > are frequent. So it's a tradeoff between power and performance.
-> > > > > 
-> > > > > In my testing of benchmarks on real systems with 8-16 CPUs, the
-> > > > > performance hit is down in the noise. It is possible though that maybe
-> > > > > one can write a non-realistic synthetic test to force the performance
-> > > > > issues, but I've not seen it in the real world. Maybe on
-> > > > > networking-heavy servers with lots of cores, you'll see it but their
-> > > > > batteries if any would be pretty big :-).
-> > > > 
-> > > > To Frederic's point, if you have enough servers, even a 1% decrease in
-> > > > power consumption is a very big deal.  ;-)
-> > > 
-> > > The world has enough servers, for that matters ;-)
-> > 
-> > True enough!  Now you need only demonstrate that call_rcu_lazy() for
-> > !rcu_nocbs servers would actually deliver that 1%.  ;-)
+On Sun, 28 Aug 2022 09:51:23 +0300, Krzysztof Kozlowski wrote:
+> Conversion from TXT to DT schema lost several compatibles.
 > 
-> Well, !rcu_nocbs is not only used by server but also by pretty much
-> everything else, except android IIUC. I can't really measure the whole
-> world but I don't see how the idleness of a server/router/desktop/embedded/rt/hpc
-> device differs from the idleness of an android device.
+> Fixes: 3f5117be9584 ("dt-bindings: mfd: convert to yaml Qualcomm SPMI PMIC")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
 > 
-> But ok I'll try to measure that.
 
-Although who knows, may be some periodic file operation while idle are specific
-to Android. I'll try to trace lazy callbacks while idle and the number of grace
-periods associated.
-
-
+Acked-by: Rob Herring <robh@kernel.org>

@@ -2,158 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A58B5A7F0C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2375A7F0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:39:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230444AbiHaNih (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 09:38:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55838 "EHLO
+        id S231699AbiHaNjH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 09:39:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiHaNif (ORCPT
+        with ESMTP id S231484AbiHaNjE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 09:38:35 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40503D86;
-        Wed, 31 Aug 2022 06:38:33 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id b16so18442464edd.4;
-        Wed, 31 Aug 2022 06:38:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=WL2hbn3gfMbnUVzI30rf1ujjncBseT3Kr/X668qXOD8=;
-        b=u0jCH4Jr45szhFmu55fKEwLVufybx2TaKBMdrvFHc7WNsNt59kfZqWd5jeU5UFDYpJ
-         jWjnefXPOx59JtAUhCxiIggpTU5bHodTXX37DCiXad1oK4iN6x0RVZBvyZ6VE1Tuuzqk
-         j5Ejz/OOWltFctL0F6UCGigcYoPuR9ptlkfdW6aC/fG1ocMlYrR3PzTh7StzFJthblNp
-         MSR4tMCgp9iJx65iKUtat41fwPkndzygSWzAcglYcx/0waui+kH1dFWgdjM94XUxaC4y
-         43X7hLVaQyPq4OJM/Zxj5DKlFnYQveVyJ9zWvO5sgLs9KGAuejRmidUTi2RouG1yeW9O
-         J/kw==
-X-Gm-Message-State: ACgBeo25AF5epQ4jCRfmjZkVUX9KLav4fiU7/IihpSqTtI1jeKLzM3Wk
-        ng65w8jQElj2dA4TOX+7trg=
-X-Google-Smtp-Source: AA6agR4fNjZjLwyUTiFXetuPEZLVxhWBVl6a0DVs1VB18bCt1Abom97rGIBjpLWGl0+2PXb1d0WtiQ==
-X-Received: by 2002:aa7:c611:0:b0:447:844d:e5a2 with SMTP id h17-20020aa7c611000000b00447844de5a2mr5761820edq.10.1661953111717;
-        Wed, 31 Aug 2022 06:38:31 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-005.fbsv.net. [2a03:2880:31ff:5::face:b00c])
-        by smtp.gmail.com with ESMTPSA id uo39-20020a170907cc2700b0073da32b7db0sm2346384ejc.199.2022.08.31.06.38.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 06:38:31 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     edumazet@google.com, davem@davemloft.net, kuba@kernel.org
-Cc:     netdev@vger.kernel.org, leit@fb.com, yoshfuji@linux-ipv6.org,
-        pabeni@redhat.com, dsahern@kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND net-next] tcp: socket-specific version of WARN_ON_ONCE()
-Date:   Wed, 31 Aug 2022 06:37:58 -0700
-Message-Id: <20220831133758.3741187-1-leitao@debian.org>
-X-Mailer: git-send-email 2.30.2
+        Wed, 31 Aug 2022 09:39:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E634A6C00
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:39:01 -0700 (PDT)
+Received: from mercury (dyndsl-091-096-057-024.ewe-ip-backbone.de [91.96.57.24])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B072F66015AB;
+        Wed, 31 Aug 2022 14:38:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661953138;
+        bh=D+wIuqiZWeu7gavN5pedRVH0S1gDSqd8NQkvdp6C2jM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IE55y2Vb7Ty9a/IkmCOdZHGF/Z9j7s6sAaHhsMGr18bGZ+5ffugYMp6huKUrKQJYO
+         aEMmzoFpctXzWUrCRD9slFfU16gxIGf13nWN/t6z9esmvoLol/sbaH3oo0jkmQJspe
+         6j9ZxlxyIHSG650NrcFuxmKOMjmRKi7LNHXiR6d/c9b4rmo/MXpvI6iNmW7Im65GGz
+         yWRq9n9Nq/dDlpex/I8jddy0lKk+/Os51ecf93oDGKNd6h3/tXXFt+AI3idygkyJKA
+         wtmEIwrWujqQxaqZJ8PTMnfTI+0drHR89t3jmIHc/b8GNJf5I62F1e+55SrqrhQ+nY
+         itKXIBV/cuHcQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 90ECE10607B6; Wed, 31 Aug 2022 15:38:56 +0200 (CEST)
+Date:   Wed, 31 Aug 2022 15:38:56 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Aaro Koskinen <aaro.koskinen@iki.fi>,
+        Pavel Machek <pavel@ucw.cz>
+Subject: Re: [PATCH] HSI: cmt_speech: Pass a pointer to virt_to_page()
+Message-ID: <20220831133856.paa3v4ve3dorppdu@mercury.elektranox.org>
+References: <20220519212943.778610-1-linus.walleij@linaro.org>
+ <CACRpkdamFTCuCTYX-Y_-HHM_WBQgwDbiud1pA_Xn3V2zm2zj_w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ccex6t7vgmh6k35i"
+Content-Disposition: inline
+In-Reply-To: <CACRpkdamFTCuCTYX-Y_-HHM_WBQgwDbiud1pA_Xn3V2zm2zj_w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are cases where we need information about the socket during a
-warning, so, it could help us to find bugs that happens that do not have
-a easily repro.
 
-BPF congestion control algorithms can change socket state in unexpected
-ways, leading to WARNings. Additional information about the socket state
-is useful to identify the culprit.
+--ccex6t7vgmh6k35i
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This diff creates a TCP socket-specific version of WARN_ON_ONCE(), and
-attaches it to tcp_snd_cwnd_set().
+Hi,
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- include/net/tcp.h       |  3 ++-
- include/net/tcp_debug.h | 10 ++++++++++
- net/ipv4/tcp.c          | 30 ++++++++++++++++++++++++++++++
- 3 files changed, 42 insertions(+), 1 deletion(-)
- create mode 100644 include/net/tcp_debug.h
+On Mon, Aug 29, 2022 at 03:16:03PM +0200, Linus Walleij wrote:
+> On Thu, May 19, 2022 at 11:31 PM Linus Walleij <linus.walleij@linaro.org>=
+ wrote:
+>=20
+> > A pointer into virtual memory is represented by a (void *)
+> > not an u32, so the compiler warns:
+> >
+> > drivers/hsi/clients/cmt_speech.c:1092:35: warning: passing argument
+> >   1 of 'virt_to_pfn' makes pointer from integer without a cast
+> >   [-Wint-conversion]
+> >
+> > Fix this with an explicit cast.
+> >
+> > Cc: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> > Cc: Aaro Koskinen <aaro.koskinen@iki.fi>
+> > Cc: Pavel Machek <pavel@ucw.cz>
+> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+>=20
+> Sebastian can you apply this patch to the HSI tree please?
 
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index d10962b9f0d0..73c3970d8839 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -40,6 +40,7 @@
- #include <net/inet_ecn.h>
- #include <net/dst.h>
- #include <net/mptcp.h>
-+#include <net/tcp_debug.h>
- 
- #include <linux/seq_file.h>
- #include <linux/memcontrol.h>
-@@ -1222,7 +1223,7 @@ static inline u32 tcp_snd_cwnd(const struct tcp_sock *tp)
- 
- static inline void tcp_snd_cwnd_set(struct tcp_sock *tp, u32 val)
- {
--	WARN_ON_ONCE((int)val <= 0);
-+	TCP_SOCK_WARN_ON_ONCE(tp, (int)val <= 0);
- 	tp->snd_cwnd = val;
- }
- 
-diff --git a/include/net/tcp_debug.h b/include/net/tcp_debug.h
-new file mode 100644
-index 000000000000..50e96d87d335
---- /dev/null
-+++ b/include/net/tcp_debug.h
-@@ -0,0 +1,10 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef _LINUX_TCP_DEBUG_H
-+#define _LINUX_TCP_DEBUG_H
-+
-+void tcp_sock_warn(const struct tcp_sock *tp);
-+
-+#define TCP_SOCK_WARN_ON_ONCE(tcp_sock, condition) \
-+		DO_ONCE_LITE_IF(condition, tcp_sock_warn, tcp_sock)
-+
-+#endif  /* _LINUX_TCP_DEBUG_H */
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index bbe218753662..71771fee72f7 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -4684,6 +4684,36 @@ int tcp_abort(struct sock *sk, int err)
- }
- EXPORT_SYMBOL_GPL(tcp_abort);
- 
-+void tcp_sock_warn(const struct tcp_sock *tp)
-+{
-+	const struct sock *sk = (const struct sock *)tp;
-+	struct inet_sock *inet = inet_sk(sk);
-+	struct inet_connection_sock *icsk = inet_csk(sk);
-+
-+	WARN_ON(1);
-+
-+	if (!tp)
-+		return;
-+
-+	pr_warn("Socket Info: family=%u state=%d sport=%u dport=%u ccname=%s cwnd=%u",
-+		sk->sk_family, sk->sk_state, ntohs(inet->inet_sport),
-+		ntohs(inet->inet_dport), icsk->icsk_ca_ops->name, tcp_snd_cwnd(tp));
-+
-+	switch (sk->sk_family) {
-+	case AF_INET:
-+		pr_warn("saddr=%pI4 daddr=%pI4", &inet->inet_saddr,
-+			&inet->inet_daddr);
-+		break;
-+#if IS_ENABLED(CONFIG_IPV6)
-+	case AF_INET6:
-+		pr_warn("saddr=%pI6 daddr=%pI6", &sk->sk_v6_rcv_saddr,
-+			&sk->sk_v6_daddr);
-+		break;
-+#endif
-+	}
-+}
-+EXPORT_SYMBOL_GPL(tcp_sock_warn);
-+
- extern struct tcp_congestion_ops tcp_reno;
- 
- static __initdata unsigned long thash_entries;
--- 
-2.30.2
+Thanks for the reminder. It's queued now and already in linux-next.
 
+-- Sebastian
+
+--ccex6t7vgmh6k35i
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmMPZGQACgkQ2O7X88g7
++poXAA/+JEjkQagA5HYuy6U8hD58V8vqcoeXGYQ3TRn8XnNNu/ai4rzFkqCtDUCP
+QetfVratZTpAqaupcPKDAhWNi64HnLrPuJIsyefj9LtYvnZSAIz7gUeIWLHqookp
+a0Y7v4/+NT7Td3kuHc11ottBRCwOC5Lpj3NJYA2bnbTCHwg9XqQrhlV0xBoC6egr
+iaUVPl/hcknVBAyPJ3pLAepSqaKTi9A0HXtovbJ8IBlOxObgXEbPbFucK+DknPmu
+xd+fU7fgPwwf9d/5m1SJ332Zz85eoRYwcCCpM/XNeBiNAq/q9IiOhG1CYMewJQQk
+MNfPBaetNS4UIgjMA5uYAKQrMys7rjXL49qSMGvI6Zuk/4ud2JOGdHt2NNIfAMaJ
+ApbDLvf/qDUfuuG8DbeFrhZpFz4yxsSN63LyQ77j0PqDXCwJL/hhDq40Ljh6n/ZW
+55McjHyjIxNXJzSjSAZi2rA9cwBYS1LBdr/lWE5XHglpMk43gD7HkCSD94nMqTOZ
+9BuXKEgqEr74Pps5E+Lbn7ohD4kdxl+bfM/YYPNN323vIdd2kSwiOdYwafRzwiwR
+wj2ykTwbNuMphwtkrnEaI+93DC0TjbVqnTp01C6coW+qyw6GBpSrPPsUAigaLxp3
+2NKiUgz0zszfn7upgxvhXP6BA7NwaZjiLaxO4x92Bo7PA6ipdAM=
+=AFhS
+-----END PGP SIGNATURE-----
+
+--ccex6t7vgmh6k35i--

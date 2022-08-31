@@ -2,75 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E7E5A858C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:27:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A9F5A858E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232943AbiHaS1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58878 "EHLO
+        id S232884AbiHaS1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232930AbiHaS00 (ORCPT
+        with ESMTP id S232968AbiHaS0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:26:26 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF38352449
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:22:56 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id 73so5843423pga.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:22:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=I/i5jIe0pyAtTiwLTepRVRpt6gmHv8ChBfodrmmozEo=;
-        b=eSmUjyzYgre0PZ1K00Cfc8tvsDugBnadfNSIUOuoe+VuxkBIDN4sFvali/8YxpY2Yy
-         JIo1eombL289lhqWvm4w90+7iwbQTGS8DQI4bTYvXQ2UGf4oRT2v6ha0ViH5ugWvQM94
-         yweXGcDiRcyk17EsCOuWNdrpHURxwoyHfpaC8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=I/i5jIe0pyAtTiwLTepRVRpt6gmHv8ChBfodrmmozEo=;
-        b=jzqM32fY+FapApn5Xm7+umoIXMRElC4thlcbCLJzSpnxSrMMU4x4U3N5wsBwlUFZcP
-         iFd860NPbfF2nrFbLh2b8X1c7pHhRf/BmlSIy+2f3nC0MbQ7UsSHtzzkPq1zIDJkASXS
-         vkFqHQMpZuDY4X6KiFj/COOYr6Qi8fkGbV0VKGny9raDTPoj8oJ2YnDByIwc5F1plpeX
-         7wEDd/w7W+u2cHxKc8GHuKXHIdLlzraDQR4NeyjBXGZQvn2D/nBBpTeAlzVN94uiqQxN
-         NlSoGgXa7Ra1P0AxrLYueaDHnNa5znTgsEvtXqofFIMBze+gCh7lxWPONyopjmXBshVm
-         +s3Q==
-X-Gm-Message-State: ACgBeo3LeTNG0uKyYL/vLHV2u6vQ94hkEyQ+TvL2s5Er98irQLZBFjO7
-        To6y4kSgSXKO5YfUF9HNn3x17g==
-X-Google-Smtp-Source: AA6agR4SBpLEuXeN8GNzl9PJ01BUjf3qaampgOd1NHZi1cFWVwtFCQRkYKzxOrJcywDgmWTUMxK8Ag==
-X-Received: by 2002:a63:91ca:0:b0:42b:4847:90dd with SMTP id l193-20020a6391ca000000b0042b484790ddmr22369351pge.28.1661970176454;
-        Wed, 31 Aug 2022 11:22:56 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z15-20020aa7990f000000b0052c849d0886sm11627704pff.86.2022.08.31.11.22.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 11:22:55 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 11:22:55 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 08/21] psci: Fix the function type for psci_initcall_t
-Message-ID: <202208311122.FA0ECD5782@keescook>
-References: <20220830233129.30610-1-samitolvanen@google.com>
- <20220830233129.30610-9-samitolvanen@google.com>
+        Wed, 31 Aug 2022 14:26:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55D6F32E7;
+        Wed, 31 Aug 2022 11:23:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 56E68B8220F;
+        Wed, 31 Aug 2022 18:23:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0AF3C433D6;
+        Wed, 31 Aug 2022 18:23:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661970189;
+        bh=kSSmDw1mwdTG9dsLxK81HAvFG60qGsT4znGs6QkcCK0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LHBXEAOjpTKGVlBV2qYPEpP+dne3VcvDQdkUp3JeUAShr7mgkn7f1TAcyvFyiqUp2
+         h7GkrMWHV5SEwhSXvAhfc0lNobsR3kOrVy3DuFvbLizRKVlStxD3OWhBQfyqd6ZfBy
+         uoRyoU2qWSPOL/CyEdMBuYRtr/0UTmzv0Q7iHeuPRDKboGO0wPYa4Xm7X1mfOvbPYc
+         nTUNkRQvg8AUXUdJKKKbb+qF1M1dbrL7mdeKivUKnMzcJ8PJ+raTU6JTuEEmyEQ7ow
+         aH5mIV8IfaSyVzOwWEJka/YSShzyawHyW9Y7SK5N8cYfmquCwDv2CpcCk5ixxx7lve
+         hc/F7c9Si6QaQ==
+Date:   Wed, 31 Aug 2022 21:23:04 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     linux-sgx@vger.kernel.org,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 6/6] selftests/sgx: Add a bpftrace script for tracking
+ allocation errors
+Message-ID: <Yw+nCBVYfueEXVZK@kernel.org>
+References: <20220830031206.13449-1-jarkko@kernel.org>
+ <20220830031206.13449-7-jarkko@kernel.org>
+ <64498c9f-a6e1-6379-ca8e-d751fb239bec@intel.com>
+ <Yw7IZWHbHjdjMa/Y@kernel.org>
+ <218a5ae1-f74e-36e3-1137-c001d49126bb@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830233129.30610-9-samitolvanen@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <218a5ae1-f74e-36e3-1137-c001d49126bb@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,15 +65,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 04:31:16PM -0700, Sami Tolvanen wrote:
-> Functions called through a psci_initcall_t pointer all have
-> non-const arguments. Fix the type definition to avoid tripping
-> indirect call checks with CFI_CLANG.
+On Wed, Aug 31, 2022 at 11:10:20AM -0700, Reinette Chatre wrote:
+> Hi Jarkko,
 > 
-> Suggested-by: Mark Rutland <mark.rutland@arm.com>
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> On 8/30/2022 7:33 PM, Jarkko Sakkinen wrote:
+> > On Tue, Aug 30, 2022 at 03:57:24PM -0700, Reinette Chatre wrote:
+> >> Hi Jarkko,
+> >>
+> >> On 8/29/2022 8:12 PM, Jarkko Sakkinen wrote:
+> >>> Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
+> >>> ---
+> >>>  tools/testing/selftests/sgx/alloc-error.bt | 7 +++++++
+> >>>  1 file changed, 7 insertions(+)
+> >>>  create mode 100644 tools/testing/selftests/sgx/alloc-error.bt
+> >>>
+> >>> diff --git a/tools/testing/selftests/sgx/alloc-error.bt b/tools/testing/selftests/sgx/alloc-error.bt
+> >>> new file mode 100644
+> >>> index 000000000000..9268d50dea29
+> >>> --- /dev/null
+> >>> +++ b/tools/testing/selftests/sgx/alloc-error.bt
+> >>> @@ -0,0 +1,7 @@
+> >>> +kr:sgx_alloc_epc_page /(uint64)retval >= (uint64)(-4095)/ {
+> >>> +		 printf("sgx_alloc_epc_page: retval=%d\n", (int64)retval);
+> >>> +}
+> >>> +
+> >>> +kr:sgx_encl_page_alloc /(uint64)retval >= (uint64)(-4095)/ {
+> >>> +		 printf("sgx_encl_page_alloc: retval=%d\n", (int64)retval);
+> >>> +}
+> >>
+> >>
+> >> Could there be a snippet of comments in this new file to guide users
+> >> on how to use this script?
+> > 
+> > Do not mean to be rude but I'm not sure what there is to guide but
+> > I'm open for ideas.
+> 
+> How about something like below in comments as part of the script:
+> 
+> "bpftrace script using kretprobe to trace returns of some key functions
+>  in support of tracking allocation errors."
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+I think comments that I put (before seeing) also
+make it clear enough (not to say that what you
+had not been a valid alternative).
 
--- 
-Kees Cook
+BR, Jarkko

@@ -2,82 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404C45A87B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA015A87B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:49:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiHaUrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 16:47:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S229631AbiHaUtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 16:49:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiHaUrT (ORCPT
+        with ESMTP id S229691AbiHaUs7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 16:47:19 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50314EA30F;
-        Wed, 31 Aug 2022 13:47:18 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-11eb8b133fbso22584979fac.0;
-        Wed, 31 Aug 2022 13:47:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=zEbVbunJlre6mDmNp2IBjlatEi3ALf9EvbX8coz8GaM=;
-        b=O5245wv+m7LTIgaCxEX2UdJv8C0UHYR86YnrXWrjllsjYwz+xk5cUmGiuVfa8/XWjm
-         U26cPLj2ABQSu7nUAvr9F/cRT0dCPUfd0E2zVS/+UDsvQa/c8xdBcgKYpVZ65AVzZwHH
-         7xpixNb9EcruchFU4pDeUSY0aw8cpi+8VcgGhWnaEZu3S25H7aqiendgkiB0YmzToEO6
-         o09bUpmMjJROgMKn6ZhC+YhVJvI2ZVTKfgSMLu3yyzFq7Rr0RTcKlDCEE0dvhTC1D5Dq
-         fxRxYAnLsgFouNSfA3w0H8V5MbUWzl26p7Xb4KkzxkAsHkbgQmquGRe6oR+xuIizGbeh
-         qYoA==
-X-Gm-Message-State: ACgBeo1Z7LW+nl/qRwZrNMCEd50hUN4t2rekhharL/gEUZbAToBwdxnA
-        myqpRo2g0SJ0p9N+tKIzhfJqViXznw==
-X-Google-Smtp-Source: AA6agR62qFR4xIl27/iMdfvrciIsuXxB//hS7o7lV+FgBflwrbZCRsOpseR8UzXcrHhST6xVa8ShVg==
-X-Received: by 2002:a05:6870:a99c:b0:11c:2c37:3d03 with SMTP id ep28-20020a056870a99c00b0011c2c373d03mr2276728oab.0.1661978837570;
-        Wed, 31 Aug 2022 13:47:17 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v6-20020a4aad86000000b00448a3ecdc9dsm8541119oom.22.2022.08.31.13.47.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 13:47:16 -0700 (PDT)
-Received: (nullmailer pid 218610 invoked by uid 1000);
-        Wed, 31 Aug 2022 20:47:16 -0000
-Date:   Wed, 31 Aug 2022 15:47:16 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Marc Zyngier <maz@kernel.org>
-Subject: Re: [PATCH] dt-bindings: timer: Add missing
- (unevaluated|additional)Properties on child nodes
-Message-ID: <20220831204716.GA218548-robh@kernel.org>
-References: <20220823145649.3118479-16-robh@kernel.org>
+        Wed, 31 Aug 2022 16:48:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E78F23CC
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 13:48:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661978937;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/L4MBexlSyJbnVsUjpwEPN+8nGbH3CY4BBC56zylys8=;
+        b=a7xRDp8R8E/zKY6BccCWFM1oFfGNNeERnyYE/BEcjtrCmCmhsc8D0AYgpVK7yAiyUHKrMn
+        xXoGzNa9QRyrjItgtzDr80kUxJsC+QXVrl9vRIvtarZc2QypDA6nz/cXYGtC6nb34T/xUy
+        4Kh9DxVPjOTjneVFhDNGnLt6IJ0BaHc=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-65-CuLNu4B0MJutHIQzxWyTfw-1; Wed, 31 Aug 2022 16:48:53 -0400
+X-MC-Unique: CuLNu4B0MJutHIQzxWyTfw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 478C3800124;
+        Wed, 31 Aug 2022 20:48:52 +0000 (UTC)
+Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C507A40E7F28;
+        Wed, 31 Aug 2022 20:48:51 +0000 (UTC)
+Message-ID: <9ccb1100-295e-a99b-949b-a400f177c947@redhat.com>
+Date:   Wed, 31 Aug 2022 16:48:51 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220823145649.3118479-16-robh@kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v6 3/5] sched: Enforce user requested affinity
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+References: <20220826010119.1265764-1-longman@redhat.com>
+ <20220826010119.1265764-4-longman@redhat.com>
+ <Yw8nXttOnNjK/1y4@hirez.programming.kicks-ass.net>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <Yw8nXttOnNjK/1y4@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 23 Aug 2022 09:56:47 -0500, Rob Herring wrote:
-> In order to ensure only documented properties are present, node schemas
-> must have unevaluatedProperties or additionalProperties set to false
-> (typically).
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
->  .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml        | 1 +
->  Documentation/devicetree/bindings/timer/ingenic,tcu.yaml      | 4 ++++
->  2 files changed, 5 insertions(+)
-> 
 
-Applied, thanks!
+On 8/31/22 05:18, Peter Zijlstra wrote:
+> On Thu, Aug 25, 2022 at 09:01:17PM -0400, Waiman Long wrote:
+>
+>> @@ -9352,6 +9381,11 @@ int sched_cpu_activate(unsigned int cpu)
+>>   		sched_update_numa(cpu, true);
+>>   		sched_domains_numa_masks_set(cpu);
+>>   		cpuset_cpu_active();
+>> +		/*
+>> +		 * Preallocated scratch cpumask
+>> +		 */
+>> +		if (!rq->scratch_mask)
+>> +			rq->scratch_mask = kmalloc(cpumask_size(), GFP_KERNEL);
+>>   	}
+> this is too late; I think you'll have to add a sched_cpu_prepare() and
+> simply fail the cpu-up when the allocation fails.
+>
+That is the reason why I have a fallback allocation in 
+__set_cpus_allowed_ptr(). Thanks for the suggestion, I will looking into 
+doing that.
+
+Cheers,
+Longman
+

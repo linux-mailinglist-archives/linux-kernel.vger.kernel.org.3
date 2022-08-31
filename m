@@ -2,69 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B01B75A7386
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C41665A73A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiHaBt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 21:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50288 "EHLO
+        id S231604AbiHaBzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 21:55:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231822AbiHaBtv (ORCPT
+        with ESMTP id S229946AbiHaBzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 21:49:51 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0295EB2493
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:49:42 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 193so2156764ybc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:49:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=WBgIYiK0R8MyjOrBW9Qr0NQe4i20glZFZfsxiGjR9Js=;
-        b=UrrZ3gdP0DYEzt2tLaTueomDMpcDl9rxoco194EQny8lyNhVtuVOjWt0NhoRhkcQXf
-         MToHlti/EMdQyxSlvPHLd299yLJj/5rpKMd99Ugqaqyqp332oBu0v9TF1tStCO4Wf1pZ
-         hybPkjtxwYlWHqdBAuPxA9U3Czk1LSlkvi9cOeEfNBPmTQiGChjDHINeA9IfVG0Hw92s
-         z0dRDzENZOXd0RuKe0vP6cyFn2Fs8RWXdhLBUnCzlub4yMsxiTb4hHdJ6bQj+6KJFEm1
-         cagvjZcos4RlGUx1EOi9Liz2wC9KfP40z2qkwmEAGrX1lljSKkdJ/Tw4/VKjlJQqCLdw
-         00xQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=WBgIYiK0R8MyjOrBW9Qr0NQe4i20glZFZfsxiGjR9Js=;
-        b=SniVo5MlsE6sNOsZwpV+6B9YpBaRbSnVcAY9PO0bpmaeZsUbTg5KjRQmdAGYaAuoOB
-         IA0o9u4I9aqt+LKFD9vR2vMNpyO3uEnzq4nHT0SrDycGJ/EUxwTwMg00s7SZScuH6hHV
-         YRokEpyBrNEPqAL33rghRSD+NOZgmYlhc4EyhwKr251ni8S1jJA1+xhN2eguz2NG63rv
-         VyZVE1Qrn0KFbgP5vVOBad59C2Eu4V0zNc/lLiJInACYOiHoD3jbRyHWOP5tcEFd00Xm
-         w2ymHZT0iHfxNPsPdPbs138DtLZvYZqO/NlCSYRXGdGBEJRdrsns5rpOUkTPRNBjlOfN
-         LLZg==
-X-Gm-Message-State: ACgBeo1c0qQJ3rZ1adr5WO38DEAiGXGhDy5YY97zPDYPMYdbZ/KlSENC
-        8WW3WgdKMf/Itoq80vvJbZ2zOXoqjJVOjHcrz4Y=
-X-Google-Smtp-Source: AA6agR5v+P0bjKc/LRs/ofzxWFzyP4hxcvl7IhyadMjop5OY67JxjkkGONKU+jN+FlyzR2h3D89Cee0OXwhomiRh1XQ=
-X-Received: by 2002:a25:9948:0:b0:67b:fc24:642d with SMTP id
- n8-20020a259948000000b0067bfc24642dmr12933701ybo.42.1661910581149; Tue, 30
- Aug 2022 18:49:41 -0700 (PDT)
+        Tue, 30 Aug 2022 21:55:22 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A1618B1C;
+        Tue, 30 Aug 2022 18:55:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661910920; x=1693446920;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=l+v5nIzqNowIXrnsEe2OWOgaFIqkzsPW8wkup2CzvX4=;
+  b=ArSlX/1fGB/Ic94c5sZ73PxXA1jcnJ16nIuknjQOwF5+OOUiZ0kOUu5J
+   jvN74LBGQzBgxu8DvwetvZHzHBNtP7l1BaiAsSFJ5nUqo6MtG0ilgPubM
+   QaRNvJtTteWQ65Cfu7DAfN9F6ubVLnjwufPsiOH2y4sgpErkQWnIvWOq8
+   7oPiGo6yyUgQCnlfCxfQg8AHNmeOdu/xeiOm4rCabOcp0W4cxoaXcyT5F
+   COy7YSsaAfqezu91G5OLp+c1mKrUKA3llvglPGdeAcd9HVXj0tdmzxy6T
+   q1+nHR2bxlerGxu9M5jGIoWAh8ViMRFLDOZX1lnlzND2t5FFgOhipIVFf
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296134231"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="296134231"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 18:55:19 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="608049835"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga007.jf.intel.com with ESMTP; 30 Aug 2022 18:55:15 -0700
+Message-ID: <c46ec383-bd51-1d78-ff81-0bee064ce1cb@linux.intel.com>
+Date:   Wed, 31 Aug 2022 09:49:44 +0800
 MIME-Version: 1.0
-References: <CAM7-yPTdihLsPjDKM-0OEszxNd8n0bgeRseiEkCsSZW-uuaRvw@mail.gmail.com>
- <20220830092839.3197-1-ppbuk5246@gmail.com> <Yw49m7Hpq+NIZYWw@arm.com>
- <CAM7-yPQjjwM_fCgojYHbrhE4GFCX22VLoCiTVkorNG6hQDj9EQ@mail.gmail.com>
- <Yw62//C+LmH+BcEh@MiWiFi-R3L-srv> <CAM7-yPRKC8hGSoSe34+RbCuRDdv88QsFzD=VznM2v9yu0YZMWA@mail.gmail.com>
-In-Reply-To: <CAM7-yPRKC8hGSoSe34+RbCuRDdv88QsFzD=VznM2v9yu0YZMWA@mail.gmail.com>
-From:   Yun Levi <ppbuk5246@gmail.com>
-Date:   Wed, 31 Aug 2022 10:49:30 +0900
-Message-ID: <CAM7-yPRp7wpP1a=SrH4o2SBijF4ZfxkLTe7vpRXq_D_y1Kz-1g@mail.gmail.com>
-Subject: [PATCH v2-RESEND] arm64/kexec: Fix missing extra range for crashkres_low.
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>, will@kernel.org,
-        nramas@linux.microsoft.com, thunder.leizhen@huawei.com,
-        linux-arm-kernel@lists.infradead.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kexec@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>, Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Zhu Tony <tony.zhu@intel.com>, iommu@lists.linux.dev,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v12 07/17] iommu: Try to allocate blocking domain when
+ probing device
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
+References: <20220826121141.50743-1-baolu.lu@linux.intel.com>
+ <20220826121141.50743-8-baolu.lu@linux.intel.com>
+ <YwjeL2SVmdRpoWb6@nvidia.com>
+ <316f6575-59ea-08e3-aaaf-bc1e4f42a574@linux.intel.com>
+ <Ywz3A3tHEzY+Sf7b@nvidia.com>
+ <c7d71936-ea06-3a71-d13a-cedd108413b5@linux.intel.com>
+ <Yw4Qzif8W53ykR6K@nvidia.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <Yw4Qzif8W53ykR6K@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,33 +84,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like crashk_res, Calling crash_exclude_mem_range function with
-crashk_low_res area would need extra crash_mem range too.
+On 8/30/22 9:29 PM, Jason Gunthorpe wrote:
+> On Tue, Aug 30, 2022 at 09:46:01AM +0800, Baolu Lu wrote:
+>> On 2022/8/30 01:27, Jason Gunthorpe wrote:
+>>> On Mon, Aug 29, 2022 at 11:40:24AM +0800, Baolu Lu wrote:
+>>>> On 2022/8/26 22:52, Jason Gunthorpe wrote:
+>>>>> On Fri, Aug 26, 2022 at 08:11:31PM +0800, Lu Baolu wrote:
+>>>>>> Allocate the blocking domain when probing devices if the driver supports
+>>>>>> blocking domain allocation. Otherwise, revert to the previous behavior,
+>>>>>> that is, use UNMANAGED domain instead when the blocking domain is needed.
+>>>>>>
+>>>>>> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
+>>>>>> Tested-by: Zhangfei Gao<zhangfei.gao@linaro.org>
+>>>>>> Tested-by: Tony Zhu<tony.zhu@intel.com>
+>>>>>> ---
+>>>>>>     drivers/iommu/iommu.c | 29 +++++++++++++++++------------
+>>>>>>     1 file changed, 17 insertions(+), 12 deletions(-)
+>>>>> This seems like a lot of overhead to allocate these things for every
+>>>>> group?
+>>>>>
+>>>>> Why not add a simple refcount on the blocking domain instead and
+>>>>> allocate the domain on the pasid attach like we do for ownership?
+>>>>
+>>>> I am working towards implementing static instance of blocking domain for
+>>>> each IOMMU driver, and then, there's no much overhead to allocate it in
+>>>> the probing device path.
+>>>
+>>> Well, I thought about that and I don't think we can get
+>>> there in a short order.
+>>
+>> Yes. Fair enough.
+>>
+>>> Would rather you progress this series without
+>>> getting entangled in such a big adventure
+>>
+>> Agreed. I will drop this patch and add below code in the iommu
+>> interface:
+>>
+>> --- a/drivers/iommu/iommu.c
+>> +++ b/drivers/iommu/iommu.c
+>> @@ -3219,6 +3219,26 @@ int iommu_attach_device_pasid(struct iommu_domain
+>> *domain,
+>>                  return -ENODEV;
+>>
+>>          mutex_lock(&group->mutex);
+>> +
+>> +       /*
+>> +        * The underlying IOMMU driver needs to support blocking domain
+>> +        * allocation and the callback to block DMA transactions with a
+>> +        * specific PASID.
+>> +        */
+>> +       if (!group->blocking_domain) {
+>> +               group->blocking_domain = __iommu_domain_alloc(dev->bus,
+>> +                               IOMMU_DOMAIN_BLOCKED);
+>> +               if (!group->blocking_domain) {
+>> +                       ret = -ENODEV;
+>> +                       goto out_unlock;
+>> +               }
+>> +       }
+>> +
+>> +       if (!group->blocking_domain->ops->set_dev_pasid) {
+>> +               ret = -EOPNOTSUPP;
+>> +               goto out_unlock;
+>> +       }
+>> +
+>>          curr = xa_cmpxchg(&group->pasid_array, pasid, NULL, domain,
+>> GFP_KERNEL);
+>>          if (curr) {
+>>                  ret = xa_err(curr) ? : -EBUSY;
+>>
+>> Currently both ARM SMMUv3 and VT-d drivers use static blocking domain.
+>> Hence I didn't use a refcount for blocking domain release here.
+> 
+> I don't think that works in the general case, you can't just destroy
+> what is in group->blocking_domain..
 
-Add one more extra cmem slot in case of crashk_low_res is used.
+If I understand you correctly, we can't just free the blocking domain
+and forget about whether this domain is still set on any device?
 
-Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
-Fixes: 944a45abfabc ("arm64: kdump: Reimplement crashkernel=X")
-Cc: stable@vger.kernel.org
-Acked-by: Baoquan He <bhe@redhat.com>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
----
- arch/arm64/kernel/machine_kexec_file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Maybe all of this is just the good reason to go to a simple
+> device->ops->remove_dev_pasid() callback and forget about blocking
+> domain here.
 
-diff --git a/arch/arm64/kernel/machine_kexec_file.c
-b/arch/arm64/kernel/machine_kexec_file.c
-index 889951291cc0..a11a6e14ba89 100644
---- a/arch/arm64/kernel/machine_kexec_file.c
-+++ b/arch/arm64/kernel/machine_kexec_file.c
-@@ -47,7 +47,7 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
-  u64 i;
-  phys_addr_t start, end;
+Do you mean rolling back to what we did in v10?
 
-- nr_ranges = 1; /* for exclusion of crashkernel region */
-+ nr_ranges = 2; /* for exclusion of crashkernel region */
-  for_each_mem_range(i, &start, &end)
-  nr_ranges++;
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -262,6 +262,8 @@ struct iommu_ops {
+   * struct iommu_domain_ops - domain specific operations
+   * @attach_dev: attach an iommu domain to a device
+   * @detach_dev: detach an iommu domain from a device
++ * @set_dev_pasid: set an iommu domain to a pasid of device
++ * @block_dev_pasid: block pasid of device from using iommu domain
+   * @map: map a physically contiguous memory region to an iommu domain
+   * @map_pages: map a physically contiguous set of pages of the same 
+size to
+   *             an iommu domain.
+@@ -282,6 +284,10 @@ struct iommu_ops {
+  struct iommu_domain_ops {
+         int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
+         void (*detach_dev)(struct iommu_domain *domain, struct device 
+*dev);
++       int (*set_dev_pasid)(struct iommu_domain *domain, struct device 
+*dev,
++                            ioasid_t pasid);
++       void (*block_dev_pasid)(struct iommu_domain *domain, struct 
+device *dev,
++                               ioasid_t pasid);
 
--- 
-2.35.1
+Best regards,
+baolu

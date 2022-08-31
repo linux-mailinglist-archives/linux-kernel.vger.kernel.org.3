@@ -2,90 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 452B25A7AAA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:54:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB7A45A7AAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiHaJyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:54:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
+        id S230088AbiHaJ4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbiHaJyj (ORCPT
+        with ESMTP id S229655AbiHaJ4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:54:39 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1734D0207;
-        Wed, 31 Aug 2022 02:54:38 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id az27so17524573wrb.6;
-        Wed, 31 Aug 2022 02:54:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date;
-        bh=AjyGAORD6u0Zr3At+X7QhVbrZQwkooLQ7kUsqjrz0sg=;
-        b=m5dVv7DImPdipFQPZb6beQLx3/OErYk+jQ0h9IHZYMhtlLyjpfUN4RuJrq+mF7kbWI
-         YzrZ7e40hdsZTUT1kEWL5Ly/Be0t/j4qJTsyYtI23VZ9eOPZombfj/S7X5+N+Jhxq1OX
-         pc/SJQLfzbygJlMjiXw7l5zyColRVT4nVMQ87J2uPgNZRPE1W0DaCT7BfpWrU53kbrCo
-         R/R2pAyRuEDNcvtO204pB28tzlCS1b8eBMZ8D9zEfx9fegs2AFVH5Gb8Opmctqs2H+de
-         iFyWbClnVazOfMsCI9gUAbugBH2JzdcB/XhoMvhfbwvEpL8sjAwrv861JaCN+aDz8F/B
-         87wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=AjyGAORD6u0Zr3At+X7QhVbrZQwkooLQ7kUsqjrz0sg=;
-        b=vKDcy2zKltDSde47PAyHJUHytUj9OrlCGqR3Yh2E1Ge+gWCq30wMaU4Fs3WaxFxEgi
-         dIFNFMn9MnqVcgAHIFuDfHB1ZwOu1rho0Yq8mi8wcTjr7kJ1t17O8FwEnb4L6CSU8TOc
-         xU98DIACNXV8vpiP2h1Y9XKzVBrOt2yuPvFlxtlUqbdPmXoWjoW6DUxZ1Wtjak1lXDXP
-         MMYOjeiyr/HCfZsvTqONi2/5H/fXmPq/5XKwFiCBjzJhtKTeWKVXMdVysanTK+B//D/2
-         Jvk4xAWjLLyssS4YjoRAOhH3EZcy8CylJxdP3kjrZA1u/8VyBL/cS5pYEe3OqPTYklbh
-         BdJQ==
-X-Gm-Message-State: ACgBeo1j/j25CuKkP9GNpO7k2FtXnU/asKB9MN1DVyGkbEiTwKhyLxc7
-        ZjB7CI5fUGfyHA0BAxBgRgpRirgzd7Y=
-X-Google-Smtp-Source: AA6agR7igv2/Dwwn7uBfi3MFcxGoT++4TUW+wI/H+iDLCCI8a9jEkGiuv2ZAksN0HlepSsvTty8sDQ==
-X-Received: by 2002:a05:6000:1888:b0:222:c96d:862f with SMTP id a8-20020a056000188800b00222c96d862fmr10905639wri.706.1661939677264;
-        Wed, 31 Aug 2022 02:54:37 -0700 (PDT)
-Received: from debian ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id k1-20020adfe8c1000000b0021badf3cb26sm14140853wrn.63.2022.08.31.02.54.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 02:54:36 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 10:54:34 +0100
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
-        Russell King <rmk+kernel@armlinux.org.uk>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org
-Subject: build failure of next-20220831 due to b35b2736b43d ("ARM: 9230/1:
- Support initrd with address in boot alias region")
-Message-ID: <Yw8v2u4TM0m0l5u7@debian>
+        Wed, 31 Aug 2022 05:56:18 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5224EC482D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:56:17 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oTKS9-0000tg-GI; Wed, 31 Aug 2022 11:56:09 +0200
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oTKS8-0032Z0-Hg; Wed, 31 Aug 2022 11:56:08 +0200
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oTKS7-00HRUS-Sg; Wed, 31 Aug 2022 11:56:07 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org
+Subject: [PATCH v2 1/3] dt-bindings: iio: adc: ti,tsc2046: add vref-supply property
+Date:   Wed, 31 Aug 2022 11:55:59 +0200
+Message-Id: <20220831095601.4157195-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+Add property for the voltage reference supply.
 
-Lots of arm builds like zeus_defconfig, viper_defconfig, mv78xx0_defconfig
-have failed to build next-20220831 with the error:
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+changes v2
+- add Acked-by: Krzysztof Kozlowski
+---
+ Documentation/devicetree/bindings/iio/adc/ti,tsc2046.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-
-arm-linux-gnueabi-ld: arch/arm/mm/init.o: in function `arm_memblock_init':
-init.c:(.init.text+0x1bc): undefined reference to `phys_initrd_start'
-
-
-git bisect pointed to b35b2736b43d ("ARM: 9230/1: Support initrd with address in boot alias region")
-
-I will be happy to test any patch or provide any extra log if needed.
-
-
+diff --git a/Documentation/devicetree/bindings/iio/adc/ti,tsc2046.yaml b/Documentation/devicetree/bindings/iio/adc/ti,tsc2046.yaml
+index 601d69971d84a..7faf12b1598b9 100644
+--- a/Documentation/devicetree/bindings/iio/adc/ti,tsc2046.yaml
++++ b/Documentation/devicetree/bindings/iio/adc/ti,tsc2046.yaml
+@@ -25,6 +25,9 @@ properties:
+ 
+   spi-max-frequency: true
+ 
++  vref-supply:
++    description: Optional supply of the reference voltage
++
+   "#io-channel-cells":
+     const: 1
+ 
 -- 
-Regards
-Sudip
+2.30.2
+

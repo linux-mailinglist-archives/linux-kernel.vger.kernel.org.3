@@ -2,69 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB9885A8942
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 00:54:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C57865A8948
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 01:00:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229459AbiHaWyW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 18:54:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S232611AbiHaXAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 19:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbiHaWyT (ORCPT
+        with ESMTP id S229459AbiHaXAL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 18:54:19 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37358DDA90
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 15:54:18 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id z22-20020a056830129600b0063711f456ceso11267567otp.7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 15:54:18 -0700 (PDT)
+        Wed, 31 Aug 2022 19:00:11 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7821A1C10F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 16:00:09 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id n8-20020a17090a73c800b001fd832b54f6so755137pjk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 16:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=H+Dbnr0lM2qSTGQ+7hidHGsW70Kb++QUe/VNRx5cngs=;
-        b=jmWXSAf9CTZH11S+Aufz6k5OTyfBDLTt+cDA2ZlFd4IOZVWYRm1BMUYijce+rrJb6j
-         kMRYIN8JH5Pw8tjJVRNbei1m2kc9zbLEgVUlEq8gcu3ZiJ/TkdvuZjWBFWLerP6wukVY
-         u+zoMkQwaTllbiMQ1CrwOXcfm/iEW0QQ8XRW/BF1Qgno2Kehd+OpJpsh0I+MP1p1pfsn
-         VEnKDm4gzcwACmWJSwmt8kj5yDkhY+yKs6zn10H8BvT26UgixYNjxMKCM/ANxdGS9InI
-         eAD9LS3HE0vNfBf3X+YWXJrEFS9+A4FqgKotY2/gS2X2Ix5yIUBF7ShTPV4yAt+Tba6Z
-         pIPw==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=IgOuMiHqWLA2iCcwzMC90AOHlkqa6Cq3GBTuA+o1c04=;
+        b=cgEqInqdhqkWTwA/ULnZyBJfp9PEH1eH1PS/lrB6k7j38xAd04wbAyOE3hDOLGpb73
+         yvuZBFQPabNJekWPFja+fSKL8kn0ylBXWbjga2gNMJV01pfrbf2sCKnf1ksal1qwohzr
+         SePAsk1Xw6TQkeJXPNyOz/B+EDqXeKziBKi/c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=H+Dbnr0lM2qSTGQ+7hidHGsW70Kb++QUe/VNRx5cngs=;
-        b=hJwib8lt+ckaErGADAnx0KkplBxt9DGAswiwszPtDEvkeMUrDFsWev89g1DI4wmdZq
-         XYbEuwz+vbaRlphC0OQTFCWWvd3GOgi5IMqMJML8i0XgGet0AgWaafnJo1j87ZPH28J4
-         3Cn4QiToUT0WIZpTJ5A8TBFl4+5nj9OGwMz1kMqYJeK9yDOJe+sC+QomfjuTWqfOTsTE
-         G4K6bCw+i9T7qmXkYp9PL7frnAkg9BcjqDmHEPepT+L+/Rrpx3ayo1Rn9CgMxsyucfc3
-         u9gqUkXkGK+MIzPKpfS4K3SzBaZ+GswzYS2q4q0lWR2UlfoBn6DvBaRvfh30yBj3rFm4
-         Tw+A==
-X-Gm-Message-State: ACgBeo0R8Q0L5WcjjiSkfCXFN15VGTgbgun2hJiIhjwxFPAdF6ly+G49
-        8tlwk4TvCYvN19eGFY639wQptg==
-X-Google-Smtp-Source: AA6agR7krbrq2JIJr7SYAoPfrE6mZsKnXKxKWdoE4fOo2Z65Hupdh15XygNy4QoXSNhC/s1nqp6ClQ==
-X-Received: by 2002:a05:6830:611b:b0:639:460f:51c6 with SMTP id ca27-20020a056830611b00b00639460f51c6mr10908788otb.300.1661986457484;
-        Wed, 31 Aug 2022 15:54:17 -0700 (PDT)
-Received: from ishi ([2600:1700:5668:ac50::42])
-        by smtp.gmail.com with ESMTPSA id t10-20020a9d774a000000b006373175cde0sm9444902otl.44.2022.08.31.15.54.16
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=IgOuMiHqWLA2iCcwzMC90AOHlkqa6Cq3GBTuA+o1c04=;
+        b=iuidqZvNzTF8jNgL6ihbC/9e8smrRQ7os8ShgDJDmb/ifNSS9Wyo89URUayACIh3eC
+         2LdZQxSyq+PylxvcY6mZUkxl89QKVbK7kZFLUxZI8RNEu8ytWqC/VZxfPO2Myvd4e9yC
+         yQucpINfrqYkLqmDK1HuiQZcTxhF+SD9YUSwL+Qq4MXPrrK7aBR2I8izfK1q+0ha8SnC
+         F9dWmeM9f1cmCHF2JIt3RwU1f42FUtWr0Cir6M8G9Huyezli2B3rg2esM+5SMJTt1ypU
+         +NEvjw5c9Wm6nZUHtjaayoIjBFprdOyWtdS1/7TQBETnIIHqGz8GJV96YqeODS/PjpWk
+         4kWg==
+X-Gm-Message-State: ACgBeo2nnxAku2ZpKJw7xc8yYR6UmuxuPKXIfLSbwq7OD3fb+vvSOh61
+        0phCuXTw/hV+Ul3y/SGFIUn2Ug==
+X-Google-Smtp-Source: AA6agR57l3US+hH7GM/zud1YaBiWMN8uo19WOCfQ/nudRuF0PvwE63nfyLkf2gOLab6nHfluLIoUrQ==
+X-Received: by 2002:a17:902:ef50:b0:171:516d:d2ce with SMTP id e16-20020a170902ef5000b00171516dd2cemr26799253plx.171.1661986808784;
+        Wed, 31 Aug 2022 16:00:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id v66-20020a622f45000000b00536f0370db8sm11461917pfv.212.2022.08.31.16.00.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 15:54:16 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 18:54:15 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     brgl@bgdev.pl
-Cc:     linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH 2/6] counter: 104-quad-8: Ensure number of irq matches
- number of base
-Message-ID: <Yw/ml7qWSx2UGfjX@ishi>
-References: <cover.1660839809.git.william.gray@linaro.org>
- <9c386d163f765d00c1277c5c5c7436d1c9f6d342.1660839809.git.william.gray@linaro.org>
+        Wed, 31 Aug 2022 16:00:08 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] string: Introduce strtomem() and strtomem_pad()
+Date:   Wed, 31 Aug 2022 16:00:06 -0700
+Message-Id: <20220831230006.1016236-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="QzyqMHAoFk0Jllu1"
-Content-Disposition: inline
-In-Reply-To: <9c386d163f765d00c1277c5c5c7436d1c9f6d342.1660839809.git.william.gray@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6354; h=from:subject; bh=Ue4HVUhSOXTfDoQButwCYFrTeQ1yS7vwdL5Wrzf5M9k=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjD+f1Z2wNe+q3+lSij+gO3+HtZWfeC4Dw26NASjKa Ac0QWM6JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYw/n9QAKCRCJcvTf3G3AJlypD/ 4tSUG5z6CBMD1PmfA9qgt5vCWC0Oy5ZUOE9czOId6kWQ0ZAvIDCO4Z1vZDp29+RQUftKJOoPqHRuUg BoXKoZ5C8e9GZTCBzlFqdKKETy9Nd1e5bCR7aPWJNU5Vz0ZxaYU+SVvwMMZA+frmVfk+MzwqxNui3U 5gZLORnJ/tQ7TkT6gig9pXHHDkWwkVFMjspZla9WCeIer7gLmzaUMp4Tg9MT/O8X046+zGN1XIqD86 ij6EAdGjSnih9HjHEqxeDQ2fO+s70cKdedFRbZf9XGo0lbA/1ss5C4Ge78P8+7tF2fbX4bYzJns2jf hFi+t7WwW69SYf4bzaLdFM+EA0MnT02aB9owXQWvLdgBajdzx4esJs6tfs/T/XreDNEDq/OroTUbF7 I0bJ4peiMnEbKDU/mg3lDNRJW/AXevXSiHeymwcLIpByLoOVOfjggsXBRohT0aWEAaD2QGaajVnazC MWeNSUVKagqqkZ2L/YCJwrCLTKpEu/8FA6wpZ4quUt03NgT5oX2RDzue5i3wumrbK6BKuecISxns9h 5jhYzhopHMk3+VKZU+SeRGbd2mOwevaVRmEENCQXeM55QmcWY3ABt0+Til1pu1veYmTarb5CeEb7O5 Gp0iEF8OSSUfVu/zq18o6z8zA9GB+hTFD5+bmK9+beJf9wHG66HR4pSz20Tg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,32 +71,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+One of the "legitimate" uses of strncpy() is copying a NUL-terminated
+string into a fixed-size non-NUL-terminated character array. To avoid
+the weaknesses and ambiguity of intent when using strncpy(), provide
+replacement functions that explicitly distinguish between trailing
+padding and not, and require the destination buffer size be discoverable
+by the compiler.
 
---QzyqMHAoFk0Jllu1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+For example:
 
-On Thu, Aug 18, 2022 at 12:28:11PM -0400, William Breathitt Gray wrote:
-> The 104-quad-8 module calls devm_request_irq() for each device. If the
-> number of irq passed to the module does not match the number of base, a
-> default value of 0 is passed to devm_request_irq(). IRQ 0 is probably
-> not what the user wants, so utilize the module_isa_driver_with_irq macro
-> to ensure the number of irq matches the number of base.
->=20
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+struct obj {
+	int foo;
+	char small[4] __nonstring;
+	char big[8] __nonstring;
+	int bar;
+};
 
-Acked-by: William Breathitt Gray <william.gray@linaro.org>
+struct obj p;
 
---QzyqMHAoFk0Jllu1
-Content-Type: application/pgp-signature; name="signature.asc"
+/* This will truncate to 4 chars with no trailing NUL */
+strncpy(p.small, "hello", sizeof(p.small));
+/* p.small contains 'h', 'e', 'l', 'l' */
 
------BEGIN PGP SIGNATURE-----
+/* This will NUL pad to 8 chars. */
+strncpy(p.big, "hello", sizeof(p.big));
+/* p.big contains 'h', 'e', 'l', 'l', 'o', '\0', '\0', '\0' */
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYw/mlwAKCRC1SFbKvhIj
-KxwCAQCGn+GD+iu22RYTdFvxJU7fWqaKpeXYKrY+iJFEJnoMxAEAre3OXqNHIyTe
-wKd9hN4fLJnrKnZge8xRvonicHQSTg8=
-=gsiy
------END PGP SIGNATURE-----
+When the "__nonstring" attributes are missing, the intent of the
+programmer becomes ambiguous for whether the lack of a trailing NUL
+in the p.small copy is a bug. Additionally, it's not clear whether
+the trailing padding in the p.big copy is _needed_. Both cases
+become unambiguous with:
 
---QzyqMHAoFk0Jllu1--
+strtomem(p.small, "hello");
+strtomem_pad(p.big, "hello");
+
+See also https://github.com/KSPP/linux/issues/90
+
+Expand the memcpy KUnit tests to include these functions.
+
+Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: Nick Desaulniers <ndesaulniers@google.com>
+Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/linux/string.h | 43 ++++++++++++++++++++++++++++++++++
+ lib/memcpy_kunit.c     | 53 ++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 96 insertions(+)
+
+diff --git a/include/linux/string.h b/include/linux/string.h
+index 61ec7e4f6311..cf7607b32102 100644
+--- a/include/linux/string.h
++++ b/include/linux/string.h
+@@ -260,6 +260,49 @@ static inline const char *kbasename(const char *path)
+ void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
+ 		    int pad);
+ 
++/**
++ * strtomem_pad - Copy NUL-terminated string to non-NUL-terminated buffer
++ *
++ * @dest: Pointer of destination character array (marked as __nonstring)
++ * @src: Pointer to NUL-terminated string
++ * @pad: Padding character to fill any remaining bytes of @dest after copy
++ *
++ * This is a replacement for strncpy() uses where the destination is not
++ * a NUL-terminated string, but with bounds checking on the source size, and
++ * an explicit padding character. If padding is not required, use strtomem().
++ *
++ * Note that the size of @dest is not an argument, as the length of @dest
++ * must be discoverable by the compiler.
++ */
++#define strtomem_pad(dest, src, pad)	do {				\
++	const size_t _dest_len = __builtin_object_size(dest, 1);	\
++									\
++	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
++		     _dest_len == (size_t)-1);				\
++	memcpy_and_pad(dest, _dest_len, src, strnlen(src, _dest_len), pad); \
++} while (0)
++
++/**
++ * strtomem - Copy NUL-terminated string to non-NUL-terminated buffer
++ *
++ * @dest: Pointer of destination character array (marked as __nonstring)
++ * @src: Pointer to NUL-terminated string
++ *
++ * This is a replacement for strncpy() uses where the destination is not
++ * a NUL-terminated string, but with bounds checking on the source size, and
++ * without trailing padding. If padding is required, use strtomem_pad().
++ *
++ * Note that the size of @dest is not an argument, as the length of @dest
++ * must be discoverable by the compiler.
++ */
++#define strtomem(dest, src)	do {					\
++	const size_t _dest_len = __builtin_object_size(dest, 1);	\
++									\
++	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
++		     _dest_len == (size_t)-1);				\
++	memcpy(dest, src, min(_dest_len, strnlen(src, _dest_len)));	\
++} while (0)
++
+ /**
+  * memset_after - Set a value after a struct member to the end of a struct
+  *
+diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
+index 62f8ffcbbaa3..2aeb8643e1b0 100644
+--- a/lib/memcpy_kunit.c
++++ b/lib/memcpy_kunit.c
+@@ -272,10 +272,63 @@ static void memset_test(struct kunit *test)
+ #undef TEST_OP
+ }
+ 
++static void strtomem_test(struct kunit *test)
++{
++	static const char input[] = "hi";
++	static const char truncate[] = "this is too long";
++	struct {
++		unsigned long canary1;
++		unsigned char output[sizeof(unsigned long)] __nonstring;
++		unsigned long canary2;
++	} wrap;
++
++	memset(&wrap, 0xFF, sizeof(wrap));
++	KUNIT_EXPECT_EQ_MSG(test, wrap.canary1, -1UL,
++			    "bad initial canary value");
++	KUNIT_EXPECT_EQ_MSG(test, wrap.canary2, -1UL,
++			    "bad initial canary value");
++
++	/* Check unpadded copy leaves surroundings untouched. */
++	strtomem(wrap.output, input);
++	KUNIT_EXPECT_EQ(test, wrap.canary1, -1UL);
++	KUNIT_EXPECT_EQ(test, wrap.output[0], input[0]);
++	KUNIT_EXPECT_EQ(test, wrap.output[1], input[1]);
++	for (int i = 2; i < sizeof(wrap.output); i++)
++		KUNIT_EXPECT_EQ(test, wrap.output[i], 0xFF);
++	KUNIT_EXPECT_EQ(test, wrap.canary2, -1UL);
++
++	/* Check truncated copy leaves surroundings untouched. */
++	memset(&wrap, 0xFF, sizeof(wrap));
++	strtomem(wrap.output, truncate);
++	KUNIT_EXPECT_EQ(test, wrap.canary1, -1UL);
++	for (int i = 0; i < sizeof(wrap.output); i++)
++		KUNIT_EXPECT_EQ(test, wrap.output[i], truncate[i]);
++	KUNIT_EXPECT_EQ(test, wrap.canary2, -1UL);
++
++	/* Check padded copy leaves only string padded. */
++	memset(&wrap, 0xFF, sizeof(wrap));
++	strtomem_pad(wrap.output, input, 0xAA);
++	KUNIT_EXPECT_EQ(test, wrap.canary1, -1UL);
++	KUNIT_EXPECT_EQ(test, wrap.output[0], input[0]);
++	KUNIT_EXPECT_EQ(test, wrap.output[1], input[1]);
++	for (int i = 2; i < sizeof(wrap.output); i++)
++		KUNIT_EXPECT_EQ(test, wrap.output[i], 0xAA);
++	KUNIT_EXPECT_EQ(test, wrap.canary2, -1UL);
++
++	/* Check truncated padded copy has no padding. */
++	memset(&wrap, 0xFF, sizeof(wrap));
++	strtomem(wrap.output, truncate);
++	KUNIT_EXPECT_EQ(test, wrap.canary1, -1UL);
++	for (int i = 0; i < sizeof(wrap.output); i++)
++		KUNIT_EXPECT_EQ(test, wrap.output[i], truncate[i]);
++	KUNIT_EXPECT_EQ(test, wrap.canary2, -1UL);
++}
++
+ static struct kunit_case memcpy_test_cases[] = {
+ 	KUNIT_CASE(memset_test),
+ 	KUNIT_CASE(memcpy_test),
+ 	KUNIT_CASE(memmove_test),
++	KUNIT_CASE(strtomem_test),
+ 	{}
+ };
+ 
+-- 
+2.34.1
+

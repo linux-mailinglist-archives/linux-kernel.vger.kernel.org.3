@@ -2,119 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA0F5A80D6
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EDF5A80DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:05:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbiHaPDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:03:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36260 "EHLO
+        id S231281AbiHaPFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:05:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230060AbiHaPDa (ORCPT
+        with ESMTP id S229510AbiHaPFk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:03:30 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80050.outbound.protection.outlook.com [40.107.8.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A7CD4BC1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:03:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TsNXBjO9icOqNHAT9M1L8Fc+YoO49Ihw0kFEwqDQAx+ed3TKLS1sptAw4YoSpAP8457rHvIp7v5nMY3p5C+WaNydDj3W7PQgNndNMVc+9WhxfJRj4ofRE55iA6zme49Rlx+wKAt+GP4IoGMlwZaEIT1xJpjrp9oRmj5baiHEKk7O2GrNGq3Z5iEIukKwIQqhkPdq1ykZzXRk+CD+Bh2S+5fntgGR8DvUxhSGKJaiJ3pplnFaSmsd6QU7zsuc9srVRByNf32UecoBw6jn1n2qrmOg9/rfcxkVbCXxmRmqKI5rNftZ1ajp4/6U6+RyuT1M1tBlr7xcKCI7bAZGOtCBjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XzDNSiH+nAzQJAWhSY5QbJVBRy4D/HZ7UuuvxW11Rjo=;
- b=IwFqySC2aa46Hk0VLZ5+bbrMC+B2NGncoxOPqLh+qV3kxipBvpyPSKOZ9kr7SLsOvLkUS2xcjMTSrRUvN1/BJvnguu4yti1RsXwMTFWL2LkicS3AzjBW7i1bVLo1mCoPaH2X0mc2OQVe74f+VqNxTW+zueOU3W3vsOXhInhSnhK3wc/tRWlMJrnzqLTzG25ZndpSmclEOcdIB1sdwIlj/kwLFa7J2eiLCZw1sS0bFzFQyvlceWsTiNoyQ2YrPLWvnMlZ5FC/kT9MRtKvxJW72h3lr8DySp2Q8IG5HPn714dv3/SHURj0kySMfdbx6HcTvgr0SqlZE8d1idY9WePlfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 194.138.21.75) smtp.rcpttodomain=hotmail.com smtp.mailfrom=siemens.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=siemens.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XzDNSiH+nAzQJAWhSY5QbJVBRy4D/HZ7UuuvxW11Rjo=;
- b=xvuNekIEhNMIp6tji8v4sqymajaH6yf04Wq+2x6S2XFeGkF2XIpGg2pmJl7PDhUPp/Aeh08QefiB97/BcT9kPzNBIsFc21A6FvduAfCTxBvzuOYsByqeBtWrtdNyqfzGFf5ZYl0DxRc7oZwgumDHw1/2OW//nN09irW3EKE/O33IcTnNNX4Z7gKKznqtYm1y0lngwO81e0WIs3oyzwFAI2HuMCepQkZaz92rhgVf2Je1X81aY2VfW3dfd1Mh/hG7sJVuPiITqY5cR1nRT0H4Hdn+4PFrplgpwHDrcZaLcuFDJaepa3yYFmvsWGIbhIj7FiFyNa/DUeWEEM+OIX1omg==
-Received: from DB8PR09CA0015.eurprd09.prod.outlook.com (2603:10a6:10:a0::28)
- by DU0PR10MB5534.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:31c::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Wed, 31 Aug
- 2022 15:03:24 +0000
-Received: from DB5EUR01FT025.eop-EUR01.prod.protection.outlook.com
- (2603:10a6:10:a0:cafe::6b) by DB8PR09CA0015.outlook.office365.com
- (2603:10a6:10:a0::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10 via Frontend
- Transport; Wed, 31 Aug 2022 15:03:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 194.138.21.75)
- smtp.mailfrom=siemens.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=siemens.com;
-Received-SPF: Pass (protection.outlook.com: domain of siemens.com designates
- 194.138.21.75 as permitted sender) receiver=protection.outlook.com;
- client-ip=194.138.21.75; helo=hybrid.siemens.com; pr=C
-Received: from hybrid.siemens.com (194.138.21.75) by
- DB5EUR01FT025.mail.protection.outlook.com (10.152.4.240) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5588.10 via Frontend Transport; Wed, 31 Aug 2022 15:03:24 +0000
-Received: from DEMCHDC89XA.ad011.siemens.net (139.25.226.103) by
- DEMCHDC8VRA.ad011.siemens.net (194.138.21.75) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.12; Wed, 31 Aug 2022 17:03:23 +0200
-Received: from [139.23.74.152] (139.23.74.152) by
- DEMCHDC89XA.ad011.siemens.net (139.25.226.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.9; Wed, 31 Aug 2022 17:03:23 +0200
-Message-ID: <6baa55b4-b9d3-d28a-a2df-78e8b2200b00@siemens.com>
-Date:   Wed, 31 Aug 2022 17:03:23 +0200
+        Wed, 31 Aug 2022 11:05:40 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EFD45F74;
+        Wed, 31 Aug 2022 08:05:36 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VE0CCr001221;
+        Wed, 31 Aug 2022 15:05:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=x18tvg708tn7J2KYRgkTcJE/lEyGrtOvCh5dRw9sCT4=;
+ b=HMyw07fw7zFbVRu3wfwSl8P1jW3UI1ra1mTueWitjhbzJPbYfAm+Yb2YaF0KKOZJvL3U
+ LJMj7FAtAkzC+mJFqrG6spkrc1/CnQsnMWP8WRUdZ/V8b3cFaIP6TabIKejspvHU4bDX
+ S2leTxHUjdP3LLRjPQcuOzoKe9UGfWBRnqH0MyaaqriPWu4D+XScoUcaTcBP33yJRvls
+ rNSg6uv+PHtik1A06sBx04fWe4OYixx02hkaaGtHbgGarjQzhRxtQoDttSXRD3O8aWvX
+ UPw7RPC+2BLiUxgKSTEhx+wwkU87b3yOjyDMoV/I19YxnRMR+rnPmPQNKxqlacKaaudh tg== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j9edcn4ce-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 Aug 2022 15:05:20 +0000
+Received: from pps.filterd (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27VF5JjR030741;
+        Wed, 31 Aug 2022 15:05:19 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 3j7cbkqt8n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 Aug 2022 15:05:19 +0000
+Received: from NALASPPMTA01.qualcomm.com (NALASPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27VF0Rnt025664;
+        Wed, 31 Aug 2022 15:05:19 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (PPS) with ESMTPS id 27VF5Jdo030733
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 Aug 2022 15:05:19 +0000
+Received: from quicinc.com (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 31 Aug
+ 2022 08:05:19 -0700
+From:   Jeff Johnson <quic_jjohnson@quicinc.com>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH] wifi: ath10k: Make QMI message rules const
+Date:   Wed, 31 Aug 2022 08:05:13 -0700
+Message-ID: <20220831150513.27956-1-quic_jjohnson@quicinc.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 3/3] scripts/gdb: fix lx-timerlist for
- HRTIMER_MAX_CLOCK_BASES printing
-Content-Language: en-US
-To:     <pngliu@hotmail.com>, <kbingham@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-CC:     <linux-kernel@vger.kernel.org>, Peng Liu <liupeng17@lenovo.com>,
-        "Stephen Boyd" <swboyd@chromium.org>
-References: <20220720122711.6174-1-pngliu@hotmail.com>
- <TYYP286MB17639886A7064A1E610FB2E3C68E9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <TYYP286MB17639886A7064A1E610FB2E3C68E9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [139.23.74.152]
-X-ClientProxiedBy: DEMCHDC89XA.ad011.siemens.net (139.25.226.103) To
- DEMCHDC89XA.ad011.siemens.net (139.25.226.103)
-X-TM-AS-Product-Ver: SMEX-14.0.0.3080-8.6.1018-26680.007
-X-TM-AS-Result: No-10--15.474800-8.000000
-X-TMASE-MatchedRID: EhMq+2gclHvrOhfRe676Rzi1Yo44kiaCRDARXWeDxU72b09s2KGDsLd2
-        noO4P7rAwvc+tCu+M4yzu34v/cyxLNXLUbWM7gjibOo++6sx6CSluxoAAQHm8j8Ckw9b/GFeTJD
-        l9FKHbrmpTkI0HK8zpYhwHj/iDNtwbSL9AN4UjlvH2GckBymgCnNuQ/vAkS6eXmFVlObh0PwMq8
-        t1qGggRJsoi2XrUn/JyeMtMD9QOgAGJ4JQFnQmG7ew1twePJJBkXO9a7gpKsT6C0ePs7A07R/88
-        i/oAaoswkoC814nTNCx0Ocev7131bO7ttY60eZT0lJJ0TWC7dA=
-X-TM-AS-User-Approved-Sender: No
-X-TM-AS-User-Blocked-Sender: No
-X-TMASE-Result: 10--15.474800-8.000000
-X-TMASE-Version: SMEX-14.0.0.3080-8.6.1018-26680.007
-X-TM-SNTS-SMTP: 939CF33F2A1DEF023003496C79063334A5F46E87A4214BF0CB6D418F40FBED832000:8
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 76399693-2f39-45d9-2d60-08da8b61f3df
-X-MS-TrafficTypeDiagnostic: DU0PR10MB5534:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MgdBJfqU8YLDQ9cgzNiptomhYuTBkIiAiphkkk/PCmXhJHK5w1uCt0bPHQRcEFIsDcY4rl0cw4/FsRBlnNwODaT+RmTEaT5Kh2RO7gD+dv7teA2X0NQhN63Nb+hJ/9ROBiJOmHntjoipaR/6kQhkaNzf4bpMaeQH4FKltEZIZ6bZHm9WhK5BEnCbDT+98Nt911y22j3t1RTEnI4TdjWmqR1t9868EHHSEwMNcJr+uFjia5Orj0H0EH5by20lL+firMNYueVvMK6OzYJnn973LVwFkI7+Sk12p9+eN62/wOjpd3mSmr57mzcay3RxTVgsTayHmSW9EG6y4uBg8x4y2ztW95V1IJgRM/y10h88Oi4tBlnaZRLecb7IXAscisGNl9BN0irif/TGW77w+0Xi/Mck3p15Jn8t9rncwvPyTeFfpMT7x2GDFtF385YWiZCkmIvultw17wmVdbNdUk4iT0qLkh282boEalVMip0DourGWMblv8/sG6kW0X0VADZVEB30PT0Y2id3Gq2li8Vd+6ZiDx13y7ilqRzUphmK/Q+R+Vf4PIGNqIEFuLWXTYx6haefIp/HiCzBsFtR44K6oPQVeGP+cVEI532kIZfZBt+KqWyHh2Gl/E5AS3fVWYPG6OO/dVjBZie0v5+7shK2s2lZ2mmobyu7DbfBKzh1f2qzoiNAqfn6svoogqn7/Gn/6psALUA2IssrdBXX9c34nx/UjtKDs+UnPiCO3JLE2Wrrm1pCBL2H+ZdNqVgjHjUpFp5RhWUiALQj88vyw8m3Wxk7poqnO+GGFCoC2Bys7akpXBaoJnfTvukqzgho11U0g5dCUT6FXyHD+Tyc7zvuWj6RoBFew4W68OFb+NBTJ8u0eAncDbFV1F0mZmvXbxNW
-X-Forefront-Antispam-Report: CIP:194.138.21.75;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hybrid.siemens.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(396003)(346002)(136003)(39860400002)(36840700001)(40470700004)(40460700003)(36860700001)(32650700002)(110136005)(40480700001)(31696002)(356005)(82740400003)(82960400001)(86362001)(41300700001)(4326008)(81166007)(70206006)(70586007)(8676002)(82310400005)(54906003)(478600001)(8936002)(5660300002)(45080400002)(16576012)(2616005)(186003)(316002)(6706004)(336012)(956004)(16526019)(2906002)(53546011)(83380400001)(44832011)(26005)(36756003)(31686004)(3940600001)(36900700001)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2022 15:03:24.5186
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 76399693-2f39-45d9-2d60-08da8b61f3df
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=38ae3bcd-9579-4fd4-adda-b42e1495d55a;Ip=[194.138.21.75];Helo=[hybrid.siemens.com]
-X-MS-Exchange-CrossTenant-AuthSource: DB5EUR01FT025.eop-EUR01.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB5534
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 2AQQqq_Cx5QCT-w4jnt0Ply8s294AN7Q
+X-Proofpoint-ORIG-GUID: 2AQQqq_Cx5QCT-w4jnt0Ply8s294AN7Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-31_09,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ suspectscore=0 clxscore=1011 malwarescore=0 mlxlogscore=999 adultscore=0
+ spamscore=0 phishscore=0 priorityscore=1501 lowpriorityscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208310075
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,36 +91,1008 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 20.07.22 14:27, pngliu@hotmail.com wrote:
-> From: Peng Liu <liupeng17@lenovo.com>
-> 
-> HRTIMER_MAX_CLOCK_BASES is of enum type hrtimer_base_type. To print
-> it as an integer, HRTIMER_MAX_CLOCK_BASES should be converted first.
-> 
-> Signed-off-by: Peng Liu <liupeng17@lenovo.com>
-> ---
->  scripts/gdb/linux/timerlist.py | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/scripts/gdb/linux/timerlist.py b/scripts/gdb/linux/timerlist.py
-> index 8281da068c5b..249f0e804b24 100644
-> --- a/scripts/gdb/linux/timerlist.py
-> +++ b/scripts/gdb/linux/timerlist.py
-> @@ -188,7 +188,8 @@ class LxTimerList(gdb.Command):
->          max_clock_bases = gdb.parse_and_eval("HRTIMER_MAX_CLOCK_BASES")
->  
->          text = "Timer List Version: gdb scripts\n"
-> -        text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(max_clock_bases)
-> +        text += "HRTIMER_MAX_CLOCK_BASES: {}\n".format(
-> +            max_clock_bases.type.fields()[max_clock_bases].enumval)
->          text += "now at {} nsecs\n".format(ktime_get())
->  
->          for cpu in cpus.each_online_cpu():
+Change ff6d365898d ("soc: qcom: qmi: use const for struct
+qmi_elem_info") allows QMI message encoding/decoding rules
+to be const, so do that for ath10k.
 
-Reviewed-by: Jan Kiszka <jan.kiszka@siemens.com>
+Compile tested only.
 
-Jan
+Signed-off-by: Jeff Johnson <quic_jjohnson@quicinc.com>
+---
+Depends-on: https://git.kernel.org/pub/scm/linux/kernel/git/qcom/linux.git/commit/?h=for-next&id=ff6d365898d4d31bd557954c7fc53f38977b491c
 
+ drivers/net/wireless/ath/ath10k/qmi.c         |   2 +-
+ .../net/wireless/ath/ath10k/qmi_wlfw_v01.c    | 126 +++++++++---------
+ .../net/wireless/ath/ath10k/qmi_wlfw_v01.h    | 102 +++++++-------
+ 3 files changed, 115 insertions(+), 115 deletions(-)
+
+diff --git a/drivers/net/wireless/ath/ath10k/qmi.c b/drivers/net/wireless/ath/ath10k/qmi.c
+index d7e406916bc8..28fafc0f0254 100644
+--- a/drivers/net/wireless/ath/ath10k/qmi.c
++++ b/drivers/net/wireless/ath/ath10k/qmi.c
+@@ -618,7 +618,7 @@ static int ath10k_qmi_host_cap_send_sync(struct ath10k_qmi *qmi)
+ {
+ 	struct wlfw_host_cap_resp_msg_v01 resp = {};
+ 	struct wlfw_host_cap_req_msg_v01 req = {};
+-	struct qmi_elem_info *req_ei;
++	const struct qmi_elem_info *req_ei;
+ 	struct ath10k *ar = qmi->ar;
+ 	struct ath10k_snoc *ar_snoc = ath10k_snoc_priv(ar);
+ 	struct qmi_txn txn;
+diff --git a/drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.c b/drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.c
+index 86fcf4e1de5f..1c81e454f943 100644
+--- a/drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.c
++++ b/drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.c
+@@ -7,7 +7,7 @@
+ #include <linux/types.h>
+ #include "qmi_wlfw_v01.h"
+ 
+-static struct qmi_elem_info wlfw_ce_tgt_pipe_cfg_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_ce_tgt_pipe_cfg_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_4_BYTE,
+ 		.elem_len       = 1,
+@@ -56,7 +56,7 @@ static struct qmi_elem_info wlfw_ce_tgt_pipe_cfg_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_ce_svc_pipe_cfg_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_ce_svc_pipe_cfg_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_4_BYTE,
+ 		.elem_len       = 1,
+@@ -87,7 +87,7 @@ static struct qmi_elem_info wlfw_ce_svc_pipe_cfg_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_shadow_reg_cfg_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_shadow_reg_cfg_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_2_BYTE,
+ 		.elem_len       = 1,
+@@ -109,7 +109,7 @@ static struct qmi_elem_info wlfw_shadow_reg_cfg_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_shadow_reg_v2_cfg_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_shadow_reg_v2_cfg_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_4_BYTE,
+ 		.elem_len       = 1,
+@@ -122,7 +122,7 @@ static struct qmi_elem_info wlfw_shadow_reg_v2_cfg_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_memory_region_info_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_memory_region_info_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_8_BYTE,
+ 		.elem_len       = 1,
+@@ -153,7 +153,7 @@ static struct qmi_elem_info wlfw_memory_region_info_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_mem_cfg_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_mem_cfg_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_8_BYTE,
+ 		.elem_len       = 1,
+@@ -184,7 +184,7 @@ static struct qmi_elem_info wlfw_mem_cfg_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_mem_seg_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_mem_seg_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_4_BYTE,
+ 		.elem_len       = 1,
+@@ -225,7 +225,7 @@ static struct qmi_elem_info wlfw_mem_seg_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_mem_seg_resp_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_mem_seg_resp_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_8_BYTE,
+ 		.elem_len       = 1,
+@@ -256,7 +256,7 @@ static struct qmi_elem_info wlfw_mem_seg_resp_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_rf_chip_info_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_rf_chip_info_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_4_BYTE,
+ 		.elem_len       = 1,
+@@ -278,7 +278,7 @@ static struct qmi_elem_info wlfw_rf_chip_info_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_rf_board_info_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_rf_board_info_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_4_BYTE,
+ 		.elem_len       = 1,
+@@ -291,7 +291,7 @@ static struct qmi_elem_info wlfw_rf_board_info_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_soc_info_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_soc_info_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_4_BYTE,
+ 		.elem_len       = 1,
+@@ -304,7 +304,7 @@ static struct qmi_elem_info wlfw_soc_info_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-static struct qmi_elem_info wlfw_fw_version_info_s_v01_ei[] = {
++static const struct qmi_elem_info wlfw_fw_version_info_s_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_4_BYTE,
+ 		.elem_len       = 1,
+@@ -326,7 +326,7 @@ static struct qmi_elem_info wlfw_fw_version_info_s_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_ind_register_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_ind_register_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_OPT_FLAG,
+ 		.elem_len       = 1,
+@@ -528,7 +528,7 @@ struct qmi_elem_info wlfw_ind_register_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_ind_register_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_ind_register_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -560,15 +560,15 @@ struct qmi_elem_info wlfw_ind_register_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_fw_ready_ind_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_fw_ready_ind_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_msa_ready_ind_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_msa_ready_ind_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_pin_connect_result_ind_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_pin_connect_result_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_OPT_FLAG,
+ 		.elem_len       = 1,
+@@ -626,7 +626,7 @@ struct qmi_elem_info wlfw_pin_connect_result_ind_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_wlan_mode_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_wlan_mode_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_SIGNED_4_BYTE_ENUM,
+ 		.elem_len       = 1,
+@@ -657,7 +657,7 @@ struct qmi_elem_info wlfw_wlan_mode_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_wlan_mode_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_wlan_mode_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -671,7 +671,7 @@ struct qmi_elem_info wlfw_wlan_mode_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_wlan_cfg_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_wlan_cfg_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_OPT_FLAG,
+ 		.elem_len       = 1,
+@@ -805,7 +805,7 @@ struct qmi_elem_info wlfw_wlan_cfg_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_wlan_cfg_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_wlan_cfg_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -819,11 +819,11 @@ struct qmi_elem_info wlfw_wlan_cfg_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_cap_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_cap_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_cap_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_cap_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -949,7 +949,7 @@ struct qmi_elem_info wlfw_cap_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_bdf_download_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_bdf_download_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_1_BYTE,
+ 		.elem_len       = 1,
+@@ -1079,7 +1079,7 @@ struct qmi_elem_info wlfw_bdf_download_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_bdf_download_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_bdf_download_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1093,7 +1093,7 @@ struct qmi_elem_info wlfw_bdf_download_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_cal_report_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_cal_report_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_DATA_LEN,
+ 		.elem_len       = 1,
+@@ -1133,7 +1133,7 @@ struct qmi_elem_info wlfw_cal_report_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_cal_report_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_cal_report_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1147,7 +1147,7 @@ struct qmi_elem_info wlfw_cal_report_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_initiate_cal_download_ind_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_initiate_cal_download_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_SIGNED_4_BYTE_ENUM,
+ 		.elem_len       = 1,
+@@ -1160,7 +1160,7 @@ struct qmi_elem_info wlfw_initiate_cal_download_ind_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_cal_download_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_cal_download_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_1_BYTE,
+ 		.elem_len       = 1,
+@@ -1272,7 +1272,7 @@ struct qmi_elem_info wlfw_cal_download_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_cal_download_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_cal_download_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1286,7 +1286,7 @@ struct qmi_elem_info wlfw_cal_download_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_initiate_cal_update_ind_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_initiate_cal_update_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_SIGNED_4_BYTE_ENUM,
+ 		.elem_len       = 1,
+@@ -1308,7 +1308,7 @@ struct qmi_elem_info wlfw_initiate_cal_update_ind_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_cal_update_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_cal_update_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_SIGNED_4_BYTE_ENUM,
+ 		.elem_len       = 1,
+@@ -1330,7 +1330,7 @@ struct qmi_elem_info wlfw_cal_update_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_cal_update_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_cal_update_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1443,7 +1443,7 @@ struct qmi_elem_info wlfw_cal_update_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_msa_info_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_msa_info_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_8_BYTE,
+ 		.elem_len       = 1,
+@@ -1465,7 +1465,7 @@ struct qmi_elem_info wlfw_msa_info_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_msa_info_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_msa_info_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1498,11 +1498,11 @@ struct qmi_elem_info wlfw_msa_info_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_msa_ready_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_msa_ready_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_msa_ready_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_msa_ready_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1516,7 +1516,7 @@ struct qmi_elem_info wlfw_msa_ready_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_ini_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_ini_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_OPT_FLAG,
+ 		.elem_len       = 1,
+@@ -1538,7 +1538,7 @@ struct qmi_elem_info wlfw_ini_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_ini_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_ini_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1552,7 +1552,7 @@ struct qmi_elem_info wlfw_ini_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_athdiag_read_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_athdiag_read_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_4_BYTE,
+ 		.elem_len       = 1,
+@@ -1583,7 +1583,7 @@ struct qmi_elem_info wlfw_athdiag_read_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_athdiag_read_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_athdiag_read_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1624,7 +1624,7 @@ struct qmi_elem_info wlfw_athdiag_read_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_athdiag_write_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_athdiag_write_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_4_BYTE,
+ 		.elem_len       = 1,
+@@ -1664,7 +1664,7 @@ struct qmi_elem_info wlfw_athdiag_write_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_athdiag_write_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_athdiag_write_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1678,7 +1678,7 @@ struct qmi_elem_info wlfw_athdiag_write_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_vbatt_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_vbatt_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_8_BYTE,
+ 		.elem_len       = 1,
+@@ -1691,7 +1691,7 @@ struct qmi_elem_info wlfw_vbatt_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_vbatt_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_vbatt_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1705,7 +1705,7 @@ struct qmi_elem_info wlfw_vbatt_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_mac_addr_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_mac_addr_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_OPT_FLAG,
+ 		.elem_len       = 1,
+@@ -1727,7 +1727,7 @@ struct qmi_elem_info wlfw_mac_addr_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_mac_addr_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_mac_addr_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -1741,7 +1741,7 @@ struct qmi_elem_info wlfw_mac_addr_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_host_cap_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_host_cap_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_OPT_FLAG,
+ 		.elem_len       = 1,
+@@ -1988,7 +1988,7 @@ struct qmi_elem_info wlfw_host_cap_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_host_cap_8bit_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_host_cap_8bit_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_OPT_FLAG,
+ 		.elem_len       = 1,
+@@ -2010,7 +2010,7 @@ struct qmi_elem_info wlfw_host_cap_8bit_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_host_cap_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_host_cap_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -2024,7 +2024,7 @@ struct qmi_elem_info wlfw_host_cap_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_request_mem_ind_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_request_mem_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_DATA_LEN,
+ 		.elem_len       = 1,
+@@ -2047,7 +2047,7 @@ struct qmi_elem_info wlfw_request_mem_ind_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_respond_mem_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_respond_mem_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_DATA_LEN,
+ 		.elem_len       = 1,
+@@ -2070,7 +2070,7 @@ struct qmi_elem_info wlfw_respond_mem_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_respond_mem_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_respond_mem_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -2084,15 +2084,15 @@ struct qmi_elem_info wlfw_respond_mem_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_mem_ready_ind_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_mem_ready_ind_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_fw_init_done_ind_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_fw_init_done_ind_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_rejuvenate_ind_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_rejuvenate_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_OPT_FLAG,
+ 		.elem_len       = 1,
+@@ -2168,11 +2168,11 @@ struct qmi_elem_info wlfw_rejuvenate_ind_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_rejuvenate_ack_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_rejuvenate_ack_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_rejuvenate_ack_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_rejuvenate_ack_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -2186,7 +2186,7 @@ struct qmi_elem_info wlfw_rejuvenate_ack_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_dynamic_feature_mask_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_dynamic_feature_mask_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_OPT_FLAG,
+ 		.elem_len       = 1,
+@@ -2208,7 +2208,7 @@ struct qmi_elem_info wlfw_dynamic_feature_mask_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_dynamic_feature_mask_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_dynamic_feature_mask_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -2258,7 +2258,7 @@ struct qmi_elem_info wlfw_dynamic_feature_mask_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_m3_info_req_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_m3_info_req_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_8_BYTE,
+ 		.elem_len       = 1,
+@@ -2280,7 +2280,7 @@ struct qmi_elem_info wlfw_m3_info_req_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_m3_info_resp_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_m3_info_resp_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_STRUCT,
+ 		.elem_len       = 1,
+@@ -2294,7 +2294,7 @@ struct qmi_elem_info wlfw_m3_info_resp_msg_v01_ei[] = {
+ 	{}
+ };
+ 
+-struct qmi_elem_info wlfw_xo_cal_ind_msg_v01_ei[] = {
++const struct qmi_elem_info wlfw_xo_cal_ind_msg_v01_ei[] = {
+ 	{
+ 		.data_type      = QMI_UNSIGNED_1_BYTE,
+ 		.elem_len       = 1,
+diff --git a/drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.h b/drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.h
+index 4d107e1364a8..f0db991408dc 100644
+--- a/drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.h
++++ b/drivers/net/wireless/ath/ath10k/qmi_wlfw_v01.h
+@@ -215,7 +215,7 @@ struct wlfw_ind_register_req_msg_v01 {
+ };
+ 
+ #define WLFW_IND_REGISTER_REQ_MSG_V01_MAX_MSG_LEN 50
+-extern struct qmi_elem_info wlfw_ind_register_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_ind_register_req_msg_v01_ei[];
+ 
+ struct wlfw_ind_register_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+@@ -224,21 +224,21 @@ struct wlfw_ind_register_resp_msg_v01 {
+ };
+ 
+ #define WLFW_IND_REGISTER_RESP_MSG_V01_MAX_MSG_LEN 18
+-extern struct qmi_elem_info wlfw_ind_register_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_ind_register_resp_msg_v01_ei[];
+ 
+ struct wlfw_fw_ready_ind_msg_v01 {
+ 	char placeholder;
+ };
+ 
+ #define WLFW_FW_READY_IND_MSG_V01_MAX_MSG_LEN 0
+-extern struct qmi_elem_info wlfw_fw_ready_ind_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_fw_ready_ind_msg_v01_ei[];
+ 
+ struct wlfw_msa_ready_ind_msg_v01 {
+ 	char placeholder;
+ };
+ 
+ #define WLFW_MSA_READY_IND_MSG_V01_MAX_MSG_LEN 0
+-extern struct qmi_elem_info wlfw_msa_ready_ind_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_msa_ready_ind_msg_v01_ei[];
+ 
+ struct wlfw_pin_connect_result_ind_msg_v01 {
+ 	u8 pwr_pin_result_valid;
+@@ -250,7 +250,7 @@ struct wlfw_pin_connect_result_ind_msg_v01 {
+ };
+ 
+ #define WLFW_PIN_CONNECT_RESULT_IND_MSG_V01_MAX_MSG_LEN 21
+-extern struct qmi_elem_info wlfw_pin_connect_result_ind_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_pin_connect_result_ind_msg_v01_ei[];
+ 
+ struct wlfw_wlan_mode_req_msg_v01 {
+ 	enum wlfw_driver_mode_enum_v01 mode;
+@@ -259,14 +259,14 @@ struct wlfw_wlan_mode_req_msg_v01 {
+ };
+ 
+ #define WLFW_WLAN_MODE_REQ_MSG_V01_MAX_MSG_LEN 11
+-extern struct qmi_elem_info wlfw_wlan_mode_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_wlan_mode_req_msg_v01_ei[];
+ 
+ struct wlfw_wlan_mode_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_WLAN_MODE_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_wlan_mode_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_wlan_mode_resp_msg_v01_ei[];
+ 
+ struct wlfw_wlan_cfg_req_msg_v01 {
+ 	u8 host_version_valid;
+@@ -286,21 +286,21 @@ struct wlfw_wlan_cfg_req_msg_v01 {
+ };
+ 
+ #define WLFW_WLAN_CFG_REQ_MSG_V01_MAX_MSG_LEN 803
+-extern struct qmi_elem_info wlfw_wlan_cfg_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_wlan_cfg_req_msg_v01_ei[];
+ 
+ struct wlfw_wlan_cfg_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_WLAN_CFG_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_wlan_cfg_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_wlan_cfg_resp_msg_v01_ei[];
+ 
+ struct wlfw_cap_req_msg_v01 {
+ 	char placeholder;
+ };
+ 
+ #define WLFW_CAP_REQ_MSG_V01_MAX_MSG_LEN 0
+-extern struct qmi_elem_info wlfw_cap_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_cap_req_msg_v01_ei[];
+ 
+ struct wlfw_cap_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+@@ -319,7 +319,7 @@ struct wlfw_cap_resp_msg_v01 {
+ };
+ 
+ #define WLFW_CAP_RESP_MSG_V01_MAX_MSG_LEN 207
+-extern struct qmi_elem_info wlfw_cap_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_cap_resp_msg_v01_ei[];
+ 
+ struct wlfw_bdf_download_req_msg_v01 {
+ 	u8 valid;
+@@ -339,14 +339,14 @@ struct wlfw_bdf_download_req_msg_v01 {
+ };
+ 
+ #define WLFW_BDF_DOWNLOAD_REQ_MSG_V01_MAX_MSG_LEN 6182
+-extern struct qmi_elem_info wlfw_bdf_download_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_bdf_download_req_msg_v01_ei[];
+ 
+ struct wlfw_bdf_download_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_BDF_DOWNLOAD_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_bdf_download_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_bdf_download_resp_msg_v01_ei[];
+ 
+ struct wlfw_cal_report_req_msg_v01 {
+ 	u32 meta_data_len;
+@@ -356,21 +356,21 @@ struct wlfw_cal_report_req_msg_v01 {
+ };
+ 
+ #define WLFW_CAL_REPORT_REQ_MSG_V01_MAX_MSG_LEN 28
+-extern struct qmi_elem_info wlfw_cal_report_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_cal_report_req_msg_v01_ei[];
+ 
+ struct wlfw_cal_report_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_CAL_REPORT_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_cal_report_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_cal_report_resp_msg_v01_ei[];
+ 
+ struct wlfw_initiate_cal_download_ind_msg_v01 {
+ 	enum wlfw_cal_temp_id_enum_v01 cal_id;
+ };
+ 
+ #define WLFW_INITIATE_CAL_DOWNLOAD_IND_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_initiate_cal_download_ind_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_initiate_cal_download_ind_msg_v01_ei[];
+ 
+ struct wlfw_cal_download_req_msg_v01 {
+ 	u8 valid;
+@@ -388,14 +388,14 @@ struct wlfw_cal_download_req_msg_v01 {
+ };
+ 
+ #define WLFW_CAL_DOWNLOAD_REQ_MSG_V01_MAX_MSG_LEN 6178
+-extern struct qmi_elem_info wlfw_cal_download_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_cal_download_req_msg_v01_ei[];
+ 
+ struct wlfw_cal_download_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_CAL_DOWNLOAD_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_cal_download_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_cal_download_resp_msg_v01_ei[];
+ 
+ struct wlfw_initiate_cal_update_ind_msg_v01 {
+ 	enum wlfw_cal_temp_id_enum_v01 cal_id;
+@@ -403,7 +403,7 @@ struct wlfw_initiate_cal_update_ind_msg_v01 {
+ };
+ 
+ #define WLFW_INITIATE_CAL_UPDATE_IND_MSG_V01_MAX_MSG_LEN 14
+-extern struct qmi_elem_info wlfw_initiate_cal_update_ind_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_initiate_cal_update_ind_msg_v01_ei[];
+ 
+ struct wlfw_cal_update_req_msg_v01 {
+ 	enum wlfw_cal_temp_id_enum_v01 cal_id;
+@@ -411,7 +411,7 @@ struct wlfw_cal_update_req_msg_v01 {
+ };
+ 
+ #define WLFW_CAL_UPDATE_REQ_MSG_V01_MAX_MSG_LEN 14
+-extern struct qmi_elem_info wlfw_cal_update_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_cal_update_req_msg_v01_ei[];
+ 
+ struct wlfw_cal_update_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+@@ -429,7 +429,7 @@ struct wlfw_cal_update_resp_msg_v01 {
+ };
+ 
+ #define WLFW_CAL_UPDATE_RESP_MSG_V01_MAX_MSG_LEN 6181
+-extern struct qmi_elem_info wlfw_cal_update_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_cal_update_resp_msg_v01_ei[];
+ 
+ struct wlfw_msa_info_req_msg_v01 {
+ 	u64 msa_addr;
+@@ -437,7 +437,7 @@ struct wlfw_msa_info_req_msg_v01 {
+ };
+ 
+ #define WLFW_MSA_INFO_REQ_MSG_V01_MAX_MSG_LEN 18
+-extern struct qmi_elem_info wlfw_msa_info_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_msa_info_req_msg_v01_ei[];
+ 
+ struct wlfw_msa_info_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+@@ -446,21 +446,21 @@ struct wlfw_msa_info_resp_msg_v01 {
+ };
+ 
+ #define WLFW_MSA_INFO_RESP_MSG_V01_MAX_MSG_LEN 37
+-extern struct qmi_elem_info wlfw_msa_info_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_msa_info_resp_msg_v01_ei[];
+ 
+ struct wlfw_msa_ready_req_msg_v01 {
+ 	char placeholder;
+ };
+ 
+ #define WLFW_MSA_READY_REQ_MSG_V01_MAX_MSG_LEN 0
+-extern struct qmi_elem_info wlfw_msa_ready_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_msa_ready_req_msg_v01_ei[];
+ 
+ struct wlfw_msa_ready_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_MSA_READY_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_msa_ready_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_msa_ready_resp_msg_v01_ei[];
+ 
+ struct wlfw_ini_req_msg_v01 {
+ 	u8 enablefwlog_valid;
+@@ -468,14 +468,14 @@ struct wlfw_ini_req_msg_v01 {
+ };
+ 
+ #define WLFW_INI_REQ_MSG_V01_MAX_MSG_LEN 4
+-extern struct qmi_elem_info wlfw_ini_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_ini_req_msg_v01_ei[];
+ 
+ struct wlfw_ini_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_INI_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_ini_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_ini_resp_msg_v01_ei[];
+ 
+ struct wlfw_athdiag_read_req_msg_v01 {
+ 	u32 offset;
+@@ -484,7 +484,7 @@ struct wlfw_athdiag_read_req_msg_v01 {
+ };
+ 
+ #define WLFW_ATHDIAG_READ_REQ_MSG_V01_MAX_MSG_LEN 21
+-extern struct qmi_elem_info wlfw_athdiag_read_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_athdiag_read_req_msg_v01_ei[];
+ 
+ struct wlfw_athdiag_read_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+@@ -494,7 +494,7 @@ struct wlfw_athdiag_read_resp_msg_v01 {
+ };
+ 
+ #define WLFW_ATHDIAG_READ_RESP_MSG_V01_MAX_MSG_LEN 6156
+-extern struct qmi_elem_info wlfw_athdiag_read_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_athdiag_read_resp_msg_v01_ei[];
+ 
+ struct wlfw_athdiag_write_req_msg_v01 {
+ 	u32 offset;
+@@ -504,28 +504,28 @@ struct wlfw_athdiag_write_req_msg_v01 {
+ };
+ 
+ #define WLFW_ATHDIAG_WRITE_REQ_MSG_V01_MAX_MSG_LEN 6163
+-extern struct qmi_elem_info wlfw_athdiag_write_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_athdiag_write_req_msg_v01_ei[];
+ 
+ struct wlfw_athdiag_write_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_ATHDIAG_WRITE_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_athdiag_write_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_athdiag_write_resp_msg_v01_ei[];
+ 
+ struct wlfw_vbatt_req_msg_v01 {
+ 	u64 voltage_uv;
+ };
+ 
+ #define WLFW_VBATT_REQ_MSG_V01_MAX_MSG_LEN 11
+-extern struct qmi_elem_info wlfw_vbatt_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_vbatt_req_msg_v01_ei[];
+ 
+ struct wlfw_vbatt_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_VBATT_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_vbatt_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_vbatt_resp_msg_v01_ei[];
+ 
+ struct wlfw_mac_addr_req_msg_v01 {
+ 	u8 mac_addr_valid;
+@@ -533,14 +533,14 @@ struct wlfw_mac_addr_req_msg_v01 {
+ };
+ 
+ #define WLFW_MAC_ADDR_REQ_MSG_V01_MAX_MSG_LEN 9
+-extern struct qmi_elem_info wlfw_mac_addr_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_mac_addr_req_msg_v01_ei[];
+ 
+ struct wlfw_mac_addr_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_MAC_ADDR_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_mac_addr_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_mac_addr_resp_msg_v01_ei[];
+ 
+ #define QMI_WLFW_MAX_NUM_GPIO_V01 32
+ struct wlfw_host_cap_req_msg_v01 {
+@@ -574,15 +574,15 @@ struct wlfw_host_cap_req_msg_v01 {
+ };
+ 
+ #define WLFW_HOST_CAP_REQ_MSG_V01_MAX_MSG_LEN 189
+-extern struct qmi_elem_info wlfw_host_cap_req_msg_v01_ei[];
+-extern struct qmi_elem_info wlfw_host_cap_8bit_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_host_cap_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_host_cap_8bit_req_msg_v01_ei[];
+ 
+ struct wlfw_host_cap_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_HOST_CAP_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_host_cap_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_host_cap_resp_msg_v01_ei[];
+ 
+ struct wlfw_request_mem_ind_msg_v01 {
+ 	u32 mem_seg_len;
+@@ -590,7 +590,7 @@ struct wlfw_request_mem_ind_msg_v01 {
+ };
+ 
+ #define WLFW_REQUEST_MEM_IND_MSG_V01_MAX_MSG_LEN 564
+-extern struct qmi_elem_info wlfw_request_mem_ind_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_request_mem_ind_msg_v01_ei[];
+ 
+ struct wlfw_respond_mem_req_msg_v01 {
+ 	u32 mem_seg_len;
+@@ -598,28 +598,28 @@ struct wlfw_respond_mem_req_msg_v01 {
+ };
+ 
+ #define WLFW_RESPOND_MEM_REQ_MSG_V01_MAX_MSG_LEN 260
+-extern struct qmi_elem_info wlfw_respond_mem_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_respond_mem_req_msg_v01_ei[];
+ 
+ struct wlfw_respond_mem_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_RESPOND_MEM_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_respond_mem_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_respond_mem_resp_msg_v01_ei[];
+ 
+ struct wlfw_mem_ready_ind_msg_v01 {
+ 	char placeholder;
+ };
+ 
+ #define WLFW_MEM_READY_IND_MSG_V01_MAX_MSG_LEN 0
+-extern struct qmi_elem_info wlfw_mem_ready_ind_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_mem_ready_ind_msg_v01_ei[];
+ 
+ struct wlfw_fw_init_done_ind_msg_v01 {
+ 	char placeholder;
+ };
+ 
+ #define WLFW_FW_INIT_DONE_IND_MSG_V01_MAX_MSG_LEN 0
+-extern struct qmi_elem_info wlfw_fw_init_done_ind_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_fw_init_done_ind_msg_v01_ei[];
+ 
+ struct wlfw_rejuvenate_ind_msg_v01 {
+ 	u8 cause_for_rejuvenation_valid;
+@@ -633,21 +633,21 @@ struct wlfw_rejuvenate_ind_msg_v01 {
+ };
+ 
+ #define WLFW_REJUVENATE_IND_MSG_V01_MAX_MSG_LEN 144
+-extern struct qmi_elem_info wlfw_rejuvenate_ind_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_rejuvenate_ind_msg_v01_ei[];
+ 
+ struct wlfw_rejuvenate_ack_req_msg_v01 {
+ 	char placeholder;
+ };
+ 
+ #define WLFW_REJUVENATE_ACK_REQ_MSG_V01_MAX_MSG_LEN 0
+-extern struct qmi_elem_info wlfw_rejuvenate_ack_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_rejuvenate_ack_req_msg_v01_ei[];
+ 
+ struct wlfw_rejuvenate_ack_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_REJUVENATE_ACK_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_rejuvenate_ack_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_rejuvenate_ack_resp_msg_v01_ei[];
+ 
+ struct wlfw_dynamic_feature_mask_req_msg_v01 {
+ 	u8 mask_valid;
+@@ -655,7 +655,7 @@ struct wlfw_dynamic_feature_mask_req_msg_v01 {
+ };
+ 
+ #define WLFW_DYNAMIC_FEATURE_MASK_REQ_MSG_V01_MAX_MSG_LEN 11
+-extern struct qmi_elem_info wlfw_dynamic_feature_mask_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_dynamic_feature_mask_req_msg_v01_ei[];
+ 
+ struct wlfw_dynamic_feature_mask_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+@@ -666,7 +666,7 @@ struct wlfw_dynamic_feature_mask_resp_msg_v01 {
+ };
+ 
+ #define WLFW_DYNAMIC_FEATURE_MASK_RESP_MSG_V01_MAX_MSG_LEN 29
+-extern struct qmi_elem_info wlfw_dynamic_feature_mask_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_dynamic_feature_mask_resp_msg_v01_ei[];
+ 
+ struct wlfw_m3_info_req_msg_v01 {
+ 	u64 addr;
+@@ -674,20 +674,20 @@ struct wlfw_m3_info_req_msg_v01 {
+ };
+ 
+ #define WLFW_M3_INFO_REQ_MSG_V01_MAX_MSG_LEN 18
+-extern struct qmi_elem_info wlfw_m3_info_req_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_m3_info_req_msg_v01_ei[];
+ 
+ struct wlfw_m3_info_resp_msg_v01 {
+ 	struct qmi_response_type_v01 resp;
+ };
+ 
+ #define WLFW_M3_INFO_RESP_MSG_V01_MAX_MSG_LEN 7
+-extern struct qmi_elem_info wlfw_m3_info_resp_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_m3_info_resp_msg_v01_ei[];
+ 
+ struct wlfw_xo_cal_ind_msg_v01 {
+ 	u8 xo_cal_data;
+ };
+ 
+ #define WLFW_XO_CAL_IND_MSG_V01_MAX_MSG_LEN 4
+-extern struct qmi_elem_info wlfw_xo_cal_ind_msg_v01_ei[];
++extern const struct qmi_elem_info wlfw_xo_cal_ind_msg_v01_ei[];
+ 
+ #endif
 -- 
-Siemens AG, Technology
-Competence Center Embedded Linux
+2.37.0
+

@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F7C5A7891
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDF4C5A7880
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:06:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231166AbiHaIIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48020 "EHLO
+        id S229862AbiHaIF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:05:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiHaIIh (ORCPT
+        with ESMTP id S229765AbiHaIFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:08:37 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681816BCE8
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:08:36 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id n23-20020a7bc5d7000000b003a62f19b453so11231572wmk.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:08:36 -0700 (PDT)
+        Wed, 31 Aug 2022 04:05:47 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C19BCBE;
+        Wed, 31 Aug 2022 01:05:38 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso20349752pjk.0;
+        Wed, 31 Aug 2022 01:05:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=dgZ5OlqxSJ9OrGvG83WjC1EfyHitqCW6YeiAJ6MJi5M=;
-        b=dCi8+tthhmPPjM66AZMoyj5XX/gkd1kqgewRKrO3rM449iB/vPYkU5R3LAFwj5C85D
-         CgS2D2SEAyJm1ZeoYJYGFuECUKXXgCUWMrKGvjDziAiDRQB+4DroDINaZKUx7CSSKQPp
-         XpuoIpWzd7on2H2gq3Hy/mPvlGiFdCytkUqDZKMuOJdi8bFV/zMdgyf7/pftfl0M/1j0
-         ULrh0cRxNbAPDtUJiyJmfF2rpACMpACZxPokGzh7UpxDtGemTS4/GZFrHY5EtX7kZsme
-         mxJjxenSAw6yK/0RCW6VGVCz0yX/oNXRLLTCzoa353i8st2fv5Mzn4GRbkuC3Xu29n28
-         lKHA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=KAGqkvOKiabn/+RhA/LB35qY/OwR5Hgcx6mK/sCzhDM=;
+        b=JL/g4wLIEVjPo4DpYiDYAHm7zNH48YuwegOYKCy4jQ0xPAKnjUtOFSwPtpzY/tg+9Q
+         DV41ceVmq6X5/BJ4uBVmuBpUbCrKO7DkZdA0lJUy58K7X3bY3m5++wPdBfuN+qNphuVS
+         1RPmY/YoPCz76A9dAFA2x2LRLwmVkw8VBDGMZnrUX9c9JsCC+YrBmJq10LnREw2T2XBC
+         WKJIEyaPzbwuLqsvxm+BRPmehvz/g03wbft7dyO3bZSaFbOeFnuHZxyRcH1h0t/Q8Spe
+         ksxUiXo2B2P5rAy4Hf8wn59fsJtv+9GcuOn8yrQlwW0qKMMz3vfZnX2KBAcuSjVWjNeY
+         scKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=dgZ5OlqxSJ9OrGvG83WjC1EfyHitqCW6YeiAJ6MJi5M=;
-        b=XKlejrZlRIDXo8I3VGv4xIYyYVqaz4nHChsKXnAZQJUHDilDJZfF2YcnqRd1WE0lkj
-         bmsRP1nsMKDEw+cORwZf6XZvC3NxcGi8j8UsyQmljoeBkAJ6JDm8rm+uGOLi/DAISzB3
-         Vf42yfWw5h9XaEBSsd8kX9RUmb3Uorm4NFEwUTZbg9q08dJG81WvwLondP2S0KEbic76
-         5ErkULFxFOrLYxmhteyw181EBNrxgWD+1cMiTZljl5kUsJ+G7xR4fp54uNucW9wCKiku
-         CYOtz7o+Poee69o0YmdVZsVOvK985LUEcEHrwjuAt2SAxDA5JEFbUOtC9vduys/pzZxf
-         GAZw==
-X-Gm-Message-State: ACgBeo3HLOgnkBVF83JSREz6g3EMzpIfHnXHwhgwkOh8bC+M/6QTg4D+
-        lFkY4L7mWn7mqy7SMljXLbc2Nw==
-X-Google-Smtp-Source: AA6agR6zuzDfMk9fxKwk1F//fcR8VdIgb+NJQ/7GTu1ecWFQDKEMuYgfGOFD2p9Y12U78xhqicqkWA==
-X-Received: by 2002:a05:600c:2e47:b0:3a6:75fe:82a9 with SMTP id q7-20020a05600c2e4700b003a675fe82a9mr1159075wmf.189.1661933314602;
-        Wed, 31 Aug 2022 01:08:34 -0700 (PDT)
-Received: from localhost.localdomain (cpc92880-cmbg19-2-0-cust679.5-4.cable.virginm.net. [82.27.106.168])
-        by smtp.gmail.com with ESMTPSA id f16-20020a5d58f0000000b0021e42e7c7dbsm11418278wrd.83.2022.08.31.01.08.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 01:08:34 -0700 (PDT)
-From:   Jean-Philippe Brucker <jean-philippe@linaro.org>
-To:     broonie@kernel.org, lgirdwood@gmail.com
-Cc:     bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        agross@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        robimarko@gmail.com,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [PATCH v2] dt-bindings: regulator: Fix qcom,spmi-regulator schema
-Date:   Wed, 31 Aug 2022 09:05:04 +0100
-Message-Id: <20220831080503.17600-1-jean-philippe@linaro.org>
-X-Mailer: git-send-email 2.37.2
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=KAGqkvOKiabn/+RhA/LB35qY/OwR5Hgcx6mK/sCzhDM=;
+        b=kTpU76IIH+R48/EGmgsCKZnWeEQW2niPXj+ghWT/UJnZWpBcw5uEL0wkvALYBkN402
+         jzGciEcxFdlCjcbcNgi4VYtGXTSS2gvxJKRc9GcU7x2JX1DSkyCjUr5BsIp/GhjIgAkO
+         16DCzkcciD2y6wtuunh/WbIH9ditGSa/n8YLXqBfX9BuA+OvPz18GIeCPKT8i3z+x1ib
+         4HwlY2nTOQC3mZJ99ZEfQV78WAQUGGiXYkkrdpUlgMnpUs8sUl6SGMyJuqHCCiUK0Eqm
+         wIWEknknjxAJk6y5ti+OUZC4ItXB80Vh4USnXUmYbS6//xdWI8cDUhnd+JXF89y7fetX
+         9cWg==
+X-Gm-Message-State: ACgBeo0kH+bS0YaCNXld7W28wlRQEbqHGz4Z/PF9ixnarRz2dIpUHge/
+        eNP5J8/XVxM8YdonARPhSjw=
+X-Google-Smtp-Source: AA6agR4YoFdT7TkXbipm6o/wat/23Ik2j+mhGIsWuQAwJ9S5TDs2aIqtNWZVWufkqhz2Mpa0l3NVOA==
+X-Received: by 2002:a17:902:a58c:b0:174:3c97:d9a1 with SMTP id az12-20020a170902a58c00b001743c97d9a1mr23266345plb.22.1661933136810;
+        Wed, 31 Aug 2022 01:05:36 -0700 (PDT)
+Received: from [192.168.255.10] ([103.7.29.32])
+        by smtp.gmail.com with ESMTPSA id z24-20020aa79f98000000b00537f9e32b00sm8207498pfr.37.2022.08.31.01.05.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 01:05:36 -0700 (PDT)
+Message-ID: <f8d1275b-966a-95ed-1122-d74fa62d811a@gmail.com>
+Date:   Wed, 31 Aug 2022 16:05:27 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH RESEND v2 0/8] x86/pmu: Corner cases fixes and
+ optimization
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220823093221.38075-1-likexu@tencent.com>
+ <Yw5I3P4Vs5GGBtuJ@google.com>
+From:   Like Xu <like.xu.linux@gmail.com>
+In-Reply-To: <Yw5I3P4Vs5GGBtuJ@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DT validator reports an error in the schema:
+On 31/8/2022 1:29 am, Sean Christopherson wrote:
+> On Tue, Aug 23, 2022, Like Xu wrote:
+>> Good well-designed tests can help us find more bugs, especially when
+>> the test steps differ from the Linux kernel behaviour in terms of the
+>> timing of access to virtualized hw resources.
+>>
+>> In this patch series, there are three small optimization (006/007/008),
+>> one hardware surprise (001), and most of these fixes have stepped
+>> on my little toes.
+>>
+>> Please feel free to run tests, add more or share comments.
+>>
+>> Previous:
+>> https://lore.kernel.org/kvm/20220721103549.49543-1-likexu@tencent.com/
+>> https://lore.kernel.org/kvm/20220803130124.72340-1-likexu@tencent.com/
+>>
+>> V2 -> V2 RESEND Changelog:
+>> - The "pebs_capable" fix has been merged into tip/perf/tree tree;
+>> - Move the other two AMD vPMU optimization here;
+> 
+> This is not a RESEND.  These things very much matter because I'm sitting here
+> trying to figure out whether I need to review this "v2", which is really v3, or
+> whether I can just review the real v2.
+> 
+>    Don't add "RESEND" when you are submitting a modified version of your
+>    patch or patch series - "RESEND" only applies to resubmission of a
+>    patch or patch series which have not been modified in any way from the
+>    previous submission.
 
-Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml: ignoring, error in schema: patternProperties: ^(5vs[1-2]|(l|s)[1-9][0-9]?|lvs[1-3])$: properties
+Roger that. Thanks for your detailed comments and all of that will be applied in V3.
 
-Move the unevaluatedProperties statement out of the properties section
-to fix it.
+The new AMD vPMU testcases[1] will also help guard future related changes.
+[1] https://lore.kernel.org/kvm/20220819110939.78013-1-likexu@tencent.com/
 
-Fixes: 0b3bbd7646b0 ("regulator: qcom,spmi-regulator: Convert to dtschema")
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
----
-v2: Added Rob's reviewed-by, adding some Ccs
-v1: https://lore.kernel.org/all/20220822152224.507497-2-jean-philippe@linaro.org/
----
- .../devicetree/bindings/regulator/qcom,spmi-regulator.yaml     | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-index 8b7c4af4b551..faa4af9fd035 100644
---- a/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-+++ b/Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml
-@@ -35,6 +35,7 @@ patternProperties:
-     description: List of regulators and its properties
-     type: object
-     $ref: regulator.yaml#
-+    unevaluatedProperties: false
- 
-     properties:
-       qcom,ocp-max-retries:
-@@ -100,8 +101,6 @@ patternProperties:
-           SAW controlled gang leader. Will be configured as SAW regulator.
-         type: boolean
- 
--      unevaluatedProperties: false
--
- required:
-   - compatible
- 
--- 
-2.37.2
-
+Thanks,
+Like Xu

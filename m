@@ -2,126 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 481785A725F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E6595A7261
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:25:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbiHaAY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:24:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
+        id S231175AbiHaAZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229753AbiHaAYY (ORCPT
+        with ESMTP id S230518AbiHaAZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:24:24 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9109C9D8FD
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:24:18 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id D6EB65FD04;
-        Wed, 31 Aug 2022 03:24:14 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1661905454;
-        bh=4fl4RLZ+WkBNNFnhafSFpNfg0CMeWHUQue3HBc22HT4=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=SiK5jM35SGwe9LUWazXDkqKx1TpUnpq+JpPXpWktGTZSJsEeUxmKO2os9FEIklp64
-         klMIHk5ERntS7nxgDxzgCmatKk+ZIVYtjy9vHyJ87FJ1NZD9vL6qB5TW+pqPCA/VAh
-         pNpVAxS+76z+VyDWXNnKYVCKs7W9u+pBsIG7jvl/glfaP+64NjXHvHnOl5+AI11yuE
-         QtrtEbTGhCBNfmXkm5Z8aj+yKvsAstkpWO0ZO4jH28QU3HTrwj1XQzn/AjBA47wXqV
-         k5VgpQ958LHfaPFB/SMVbuyZVivZ01C5KiOdPkwjZSIHsrzvKOoWKIANGDxLwsvhfm
-         XG+Z6SNfK8EWQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 31 Aug 2022 03:24:06 +0300 (MSK)
-Date:   Wed, 31 Aug 2022 03:24:05 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     kernel test robot <lkp@intel.com>, <llvm@lists.linux.dev>,
-        <kbuild-all@lists.01.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [jic23-iio:testing 124/129] drivers/iio/accel/msa311.c:993:24:
- warning: format specifies type 'unsigned char' but the argument has type
- 'unsigned int'
-Message-ID: <20220831002405.m3j5sug2rz7bdz5s@Rockosov-MBP>
-References: <202208290618.wU7mHfOp-lkp@intel.com>
- <20220830110329.00000d18@huawei.com>
- <CAHp75VfA=w+Q2ccdTiQXeWRw0wSjbkUf6J3+tp-kE50mxdkTNg@mail.gmail.com>
+        Tue, 30 Aug 2022 20:25:31 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE8382CDE8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:25:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661905529; x=1693441529;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=C7FYEbYtlpQOw/iz+YDnE1icy/AvBAahWiFokyrQWzA=;
+  b=Xz0r+K/y1y67EkuyEDo2SP+wlDC2T2GImpe9rTxWB5X259uBfeNslaV3
+   quyXgU26bu3lAdnvG/zIWJ065e7rMY8V5Kzla6vMnDhthI+yVejJ1k3UY
+   M7WIMpkIXVpZfYM5xW48Uhk3kE+0UiFMqsU9D1w0MTBPLPiaTW1M6ikrR
+   AJd91sEm1SSR+9EYw5B+o1lSLkhL76b2NMnlyGKMGr1mHJmPXheE+TLq2
+   OHipSuFR72C0x/LXQRtQGBQxBtmx0ekSdPzIOYhqrgOEV0mOUIxgr2UIf
+   7tHFPgQL673QZtyhMJBj/Lvj6K7y268VStUGafAhwxYkN9JL8EA6orRTU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296123027"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="296123027"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 17:25:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="787704858"
+Received: from rhweight-mobl.amr.corp.intel.com (HELO rhweight-mobl.ra.intel.com) ([10.251.5.12])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 17:25:28 -0700
+From:   Russ Weight <russell.h.weight@intel.com>
+To:     mcgrof@kernel.org, gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     trix@redhat.com, lgoncalv@redhat.com,
+        matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        Russ Weight <russell.h.weight@intel.com>
+Subject: [PATCH v1 1/1] firmware_loader: Fix memory leak in firmware upload
+Date:   Tue, 30 Aug 2022 17:25:18 -0700
+Message-Id: <20220831002518.465274-1-russell.h.weight@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VfA=w+Q2ccdTiQXeWRw0wSjbkUf6J3+tp-kE50mxdkTNg@mail.gmail.com>
-User-Agent: NeoMutt/20220429
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/30 20:46:00 #20189978
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jonathan and Andy,
+In the case of firmware-upload, an instance of struct fw_upload is
+allocated in firmware_upload_register(). This data needs to be freed
+in fw_dev_release(). Create a new fw_upload_free() function in
+sysfs_upload.c to handle the firmware-upload specific memory frees
+and incorporate the missing kfree call for the fw_upload structure.
 
-Sorry for such a late response, a couple of days ago my daughter was born.
-So I couldn't reach my laptop :)
+Fixes: 97730bbb242c ("firmware_loader: Add firmware-upload support")
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+---
+ drivers/base/firmware_loader/sysfs.c        | 7 +++----
+ drivers/base/firmware_loader/sysfs.h        | 5 +++++
+ drivers/base/firmware_loader/sysfs_upload.c | 9 +++++++++
+ 3 files changed, 17 insertions(+), 4 deletions(-)
 
-Please find my thoughts below.
-
-> > > >> drivers/iio/accel/msa311.c:993:24: warning: format specifies type 'unsigned char' but the argument has type 'unsigned int' [-Wformat]
-> > >                                               "msa311-%hhx", partid);
-> > >                                                       ~~~~   ^~~~~~
-> > >                                                       %x
-> > >    1 warning generated.
-> 
-> > >    992                msa311->chip_name = devm_kasprintf(dev, GFP_KERNEL,
-> > >  > 993                                                   "msa311-%hhx", partid);
-> 
-> > I'm thinking intent here was to limit range of what was printed. Maybe better to use
-> > local u8 variable or cast?
-> >
-> > I can fix it up if that's fine with you - or even better send me a patch that fixes
-> > it however you prefer!
-> 
-> Looking back at what Linus said about those specifiers, I would rather
-> go with simple %x or %02x.
-> 
-> P.S. Surprisingly many C developers don't know the difference between
-> %hhx and %02x, which is easy to check by
-> 
->   char a = -1;
->   printf("%hhx <==> %02x\n", a, a);
->   a = 217;
->   printf("%hhx <==> %02x\n", a, a);
-
-Thank you for pointing to Linus answer. I have explored it at the link:
-
-https://lore.kernel.org/lkml/CAHk-=wgoxnmsj8GEVFJSvTwdnWm8wVJthefNk2n6+4TC=20e0Q@mail.gmail.com/
-
-Actually, Linus described one exception to this rule, which I have
-in my patch. I have an integer which I want to print as a char.
-I see that Linus mentions it's a bad idea. I agree with that. But
-currently %hhx => %02x replacement breaks the requested behavior, %02x
-will not shrink integer value to char. I want to say, maybe it's better
-just cast the value to u8 type and print as %x. What do you think? I can
-prepare such a patch.
-
-P.S. Andy's example to show the difference between %hhx and %02x makes
-more clear why such a replacement is not acceptable here.
-
-Output:
-ff <==> ffffffff
-d9 <==> ffffffd9
-
+diff --git a/drivers/base/firmware_loader/sysfs.c b/drivers/base/firmware_loader/sysfs.c
+index 77bad32c481a..5b66b3d1fa16 100644
+--- a/drivers/base/firmware_loader/sysfs.c
++++ b/drivers/base/firmware_loader/sysfs.c
+@@ -93,10 +93,9 @@ static void fw_dev_release(struct device *dev)
+ {
+ 	struct fw_sysfs *fw_sysfs = to_fw_sysfs(dev);
+ 
+-	if (fw_sysfs->fw_upload_priv) {
+-		free_fw_priv(fw_sysfs->fw_priv);
+-		kfree(fw_sysfs->fw_upload_priv);
+-	}
++	if (fw_sysfs->fw_upload_priv)
++		fw_upload_free(fw_sysfs);
++
+ 	kfree(fw_sysfs);
+ }
+ 
+diff --git a/drivers/base/firmware_loader/sysfs.h b/drivers/base/firmware_loader/sysfs.h
+index 5d8ff1675c79..df1d5add698f 100644
+--- a/drivers/base/firmware_loader/sysfs.h
++++ b/drivers/base/firmware_loader/sysfs.h
+@@ -106,12 +106,17 @@ extern struct device_attribute dev_attr_cancel;
+ extern struct device_attribute dev_attr_remaining_size;
+ 
+ int fw_upload_start(struct fw_sysfs *fw_sysfs);
++void fw_upload_free(struct fw_sysfs *fw_sysfs);
+ umode_t fw_upload_is_visible(struct kobject *kobj, struct attribute *attr, int n);
+ #else
+ static inline int fw_upload_start(struct fw_sysfs *fw_sysfs)
+ {
+ 	return 0;
+ }
++
++static inline void fw_upload_free(struct fw_sysfs *fw_sysfs)
++{
++}
+ #endif
+ 
+ #endif /* __FIRMWARE_SYSFS_H */
+diff --git a/drivers/base/firmware_loader/sysfs_upload.c b/drivers/base/firmware_loader/sysfs_upload.c
+index 87044d52322a..8e71cde92ea8 100644
+--- a/drivers/base/firmware_loader/sysfs_upload.c
++++ b/drivers/base/firmware_loader/sysfs_upload.c
+@@ -264,6 +264,15 @@ int fw_upload_start(struct fw_sysfs *fw_sysfs)
+ 	return 0;
+ }
+ 
++void fw_upload_free(struct fw_sysfs *fw_sysfs)
++{
++	struct fw_upload_priv *fw_upload_priv = fw_sysfs->fw_upload_priv;
++
++	free_fw_priv(fw_sysfs->fw_priv);
++	kfree(fw_upload_priv->fw_upload);
++	kfree(fw_upload_priv);
++}
++
+ /**
+  * firmware_upload_register() - register for the firmware upload sysfs API
+  * @module: kernel module of this device
 -- 
-Thank you,
-Dmitry
+2.25.1
+

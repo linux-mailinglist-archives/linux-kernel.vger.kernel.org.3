@@ -2,102 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9CA5A7B7E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 888C35A7B84
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:40:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiHaKjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 06:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
+        id S229655AbiHaKkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 06:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiHaKjf (ORCPT
+        with ESMTP id S229601AbiHaKkk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 06:39:35 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3432B99CE;
-        Wed, 31 Aug 2022 03:39:34 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id q63so13141848pga.9;
-        Wed, 31 Aug 2022 03:39:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=wOwY8itHt8uazUdkq94DxdZkg/SDR8+3Y3ahMNupefU=;
-        b=nfkSlY53P23F3x03xQrP4eu/bkO3JWBCJ9iyfQAQq4qWiJ7daGlQUwntPXT3PITeif
-         y16sWZr+GrhAwMAOp5gW3N+Y6jenP385CCPBdu6R6bGVsUmO7qCjntFspMzdVAeUMHfn
-         Z0zrxMhmvlEIC7omwrBrw26gwnStad+hRNooWWLyEcAbvsn8hfi6sIB4EhABufoYBNzh
-         qLUJv5asLy/ltrAvAF2bqRBELRXwW7psuNrQ92LDFMsX3u45Fr7kbKpQvKeuM5n74ZIi
-         Mdt0SC9Z4wxaCgmFJek8DCwm8z0lp1Uwwpa0bZvclZI0B9pEFIC6CkPEVPchF7HLOu7D
-         Xfng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=wOwY8itHt8uazUdkq94DxdZkg/SDR8+3Y3ahMNupefU=;
-        b=rwt3b/Pjf1LoqPmQReim0VXyw2/BU8XqF3ZhGsoWSeQxlb5EdzdwUVhdeJUP6i1n3h
-         Q/GqSYkPeC1woGJ/pwVFX/0LnFesYZIGORkBHtMaquRpdeeXnmXOVskHd7nrHcgRQrUR
-         CpAt1llwBxucusRand4KH0FlAXQ2Svp+oTYJ5LKeHJXx6q1IRkIQxRCsNToccRN15NrG
-         E1ip/+C06gzYV9qWX2+s/rqFwiKWhDRP3S8deK8w6tOUKpgGVT9IMN43jOuyGWLDHl0T
-         TLK/dChDOQ5hbAexxU2eq8dumdv7vpOZaMrb2nvnRCHAJnn5DtcZXDXLAKzYcBzu/P2j
-         zQ/A==
-X-Gm-Message-State: ACgBeo2Hr7rnoLK1+BCZb4jYjTj3vLiUHPqtuuMWTsvaUBMOSFRnOUh1
-        7rTNCbumxCKRJMjZikY5Gl4=
-X-Google-Smtp-Source: AA6agR64P8U6wtu7FrDxOOS6p0FSnkiFLrwL6YILZB/NVOFoS+0twPVgULY7Qms4kloVOzZ9yLqIhw==
-X-Received: by 2002:a62:2503:0:b0:538:426a:af11 with SMTP id l3-20020a622503000000b00538426aaf11mr13608844pfl.22.1661942374066;
-        Wed, 31 Aug 2022 03:39:34 -0700 (PDT)
-Received: from localhost.localdomain ([118.235.13.86])
-        by smtp.gmail.com with ESMTPSA id jj22-20020a170903049600b00172dc6e1916sm11245808plb.220.2022.08.31.03.39.29
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Wed, 31 Aug 2022 03:39:33 -0700 (PDT)
-From:   Levi Yun <ppbuk5246@gmail.com>
-To:     catalin.marinas@arm.com, bhe@redhat.com
-Cc:     will@kernel.org, nramas@linux.microsoft.com,
-        thunder.leizhen@huawei.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
-        Levi Yun <ppbuk5246@gmail.com>, stable@vger.kernel.org
-Subject: [PATCH v3] arm64/kexec: Fix missing extra range for crashkres_low.
-Date:   Wed, 31 Aug 2022 19:39:13 +0900
-Message-Id: <20220831103913.12661-1-ppbuk5246@gmail.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <CAM7-yPRp7wpP1a=SrH4o2SBijF4ZfxkLTe7vpRXq_D_y1Kz-1g@mail.gmail.com>
-References: <CAM7-yPRp7wpP1a=SrH4o2SBijF4ZfxkLTe7vpRXq_D_y1Kz-1g@mail.gmail.com>
+        Wed, 31 Aug 2022 06:40:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AFBB70E61
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 03:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661942438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=eY5LuG2wHGwxNQCbR+wrs6/M0fyvhRpWPUlG334Q3OU=;
+        b=VsEyAUCL3yipe51FlE4U0S09XbzLXHVflwIJY9JgKOa5ApxuJhqN+KHYB8zWoLkpyFdWQO
+        JN1E/9WW+87oWMNOJ1AyxdrkrlY38oZQOgyS2BsnkE1bxhmBNQL70a/ZZei+EtJgsVDS/X
+        ibfnY2FmcAN+uCuxgr2gLS80eZe9NDU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-204-w06gCvOrOduQbFnOxFDzsg-1; Wed, 31 Aug 2022 06:40:34 -0400
+X-MC-Unique: w06gCvOrOduQbFnOxFDzsg-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9CAE73800C3C;
+        Wed, 31 Aug 2022 10:40:33 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 07B4A945D7;
+        Wed, 31 Aug 2022 10:40:31 +0000 (UTC)
+Message-ID: <06375b1fe988bee627f95b54b7d224adf8fe91ec.camel@redhat.com>
+Subject: Re: [PATCH 18/19] KVM: SVM: Ignore writes to Remote Read Data on
+ AVIC write traps
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 13:40:30 +0300
+In-Reply-To: <20220831003506.4117148-19-seanjc@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-19-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Like crashk_res, Calling crash_exclude_mem_range function with
-crashk_low_res area would need extra crash_mem range too.
+On Wed, 2022-08-31 at 00:35 +0000, Sean Christopherson wrote:
+> Drop writes to APIC_RRR, a.k.a. Remote Read Data Register, on AVIC
+> unaccelerated write traps.  The register is read-only and isn't emulated
+> by KVM.  Sending the register through kvm_apic_write_nodecode() will
+> result in screaming when x2APIC is enabled due to the unexpected failure
+> to retrieve the MSR (KVM expects that only "legal" accesses will trap).
 
-Add one more extra cmem slot in case of crashk_low_res is used.
+I wonder about ESR register as well (280H), KVM doesn't seem to support it either,
+but allows 0 writes. Anyway:
 
-Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
-Fixes: 944a45abfabc ("arm64: kdump: Reimplement crashkernel=X")
-Cc: <stable@vger.kernel.org> # 5.19.x
-Acked-by: Baoquan He <bhe@redhat.com>
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
----
- arch/arm64/kernel/machine_kexec_file.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
-index 889951291cc0..a11a6e14ba89 100644
---- a/arch/arm64/kernel/machine_kexec_file.c
-+++ b/arch/arm64/kernel/machine_kexec_file.c
-@@ -47,7 +47,7 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
- 	u64 i;
- 	phys_addr_t start, end;
+Best regards,
+	Maxim Levitsky
 
--	nr_ranges = 1; /* for exclusion of crashkernel region */
-+	nr_ranges = 2; /* for exclusion of crashkernel region */
- 	for_each_mem_range(i, &start, &end)
- 		nr_ranges++;
+> 
+> Fixes: 4d1d7942e36a ("KVM: SVM: Introduce logic to (de)activate x2AVIC mode")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index dad5affe44c1..b2033a56010c 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -675,6 +675,9 @@ static int avic_unaccel_trap_write(struct kvm_vcpu *vcpu)
+>  	case APIC_DFR:
+>  		avic_handle_dfr_update(vcpu);
+>  		break;
+> +	case APIC_RRR:
+> +		/* Ignore writes to Read Remote Data, it's read-only. */
+> +		return 1;
+>  	default:
+>  		break;
+>  	}
 
---
-2.35.1
+

@@ -2,247 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D7565A8287
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59DBA5A8290
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:00:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiHaP7G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:59:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
+        id S230002AbiHaQAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 12:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiHaP7E (ORCPT
+        with ESMTP id S229476AbiHaP7y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:59:04 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A1AF2B1B0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:59:03 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id i188-20020a1c3bc5000000b003a7b6ae4eb2so6978989wma.4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:59:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=7nLvgccbq+l+f4PjDH7NTp25cyxEHdccDBKThvHtI1U=;
-        b=mruhE6GtkYYHapYUGe4e0jJuNcj1h3TYuIGN2mdsu2uOx55cJQchcF67Amh0ZIXo6s
-         pTiwh4QXJDPf/+GfK20NyTxKHf+ixVqYKcAMYOqPofjAZ87+dfyEcucdssUGmxB4Pz6y
-         9Vs4ghte/y26vvUW9aVA/DTfj2izUia5EFAgtAHpsX+pr2JCdXLW4GgQiMjDqbMf3LKA
-         KDOQCwSqvhwM5Tla2GPso9qi1Ve8NGnLMfQiho2vtYPZycbqsXuM+dLnbW2c/IXryd+e
-         8HW6Hva1tZaOyCa6/PFabMb5iqsFrnr+OjhL8Juq4dBBh+j+Lkb8Y2ZioSd0Z8ArHzux
-         BkvA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7nLvgccbq+l+f4PjDH7NTp25cyxEHdccDBKThvHtI1U=;
-        b=tfSMNss1cbx+yTuftmb0rxRNUaKkus2FxCz4SlbKiDEyNjLtpDknxHejDw8oCbTi/n
-         FM7SvUwfNwnQXw7+F4SWTGntG4aIe3UpoUkG2e5+n05HzUkvyyKkPNa/pWFqrqDqQsCu
-         eaJgVRMVSIIch955/e+XLbFyjOw6NF4vfWZjrOiOTMaDgQYHxIzCCVvoBMC3uKRU4Ytx
-         9m5D+a2ypXYUoxHOIDYPpJMNZ7R6w6bQfL4GZwD9MqzVBixwImI0RoIZUGdioNOfLaHX
-         i4zcRV8WMqXM0T4svLNtmiJwLhgWhzN8DvpMkbiAl4CWCmlz84BeMvSnVwSrv8OhBsy8
-         1I0g==
-X-Gm-Message-State: ACgBeo0oGOV1Jici2bmlfpqLQ/uCnV+6tD8J+xJe2ujsuv/COKfNJnQW
-        a6XM+NiQSMN9TsSqTbeY9+AVHLDkySz2D1sb5stIgQ==
-X-Google-Smtp-Source: AA6agR5gvDRPAv1UJhfveJqjrAC6RPkUAnUPpzuJkGOVT/QMHtOrGHczSWrfwZEzTF8SDfTrxXC/XF9P12nE3OCnXxU=
-X-Received: by 2002:a05:600c:19d3:b0:3a8:3b06:655a with SMTP id
- u19-20020a05600c19d300b003a83b06655amr2420169wmq.182.1661961541223; Wed, 31
- Aug 2022 08:59:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220830164846.401143-1-irogers@google.com> <20220830164846.401143-6-irogers@google.com>
- <Yw9y1mEW7BhNvStT@kernel.org>
-In-Reply-To: <Yw9y1mEW7BhNvStT@kernel.org>
-From:   Ian Rogers <irogers@google.com>
-Date:   Wed, 31 Aug 2022 08:58:49 -0700
-Message-ID: <CAP-5=fUxRMSJUemUEcrDuRXpUFj3qNiRFQz1S7=cQrvmfyGYew@mail.gmail.com>
-Subject: Re: [PATCH v1 5/8] perf topology: Add core_wide
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+        Wed, 31 Aug 2022 11:59:54 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A7625EB;
+        Wed, 31 Aug 2022 08:59:50 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 11:59:41 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661961589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8eQR8jMOxB0pUJLRgI0y5+reUXpRdgSKiz76DZMbpZA=;
+        b=GKQv6dESmRNVlYrhLKqHqAEupQL+NGWnc+q+XSzgFWGRhe0CnbyNV+7rNtWq5MTMG51R4C
+        l0UYS35OVMaetPyb4bctosq1HXD3sGEB3YcTrl1fFrr7arsrOVKztpQ7iNKwwum1q08tZq
+        71z4eskGeNO/LfuPYzvdz8RnP/XW/uU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Mel Gorman <mgorman@suse.de>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        John Garry <john.garry@huawei.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        perry.taylor@intel.com, caleb.biggers@intel.com,
-        kshipra.bopardikar@intel.com, Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
+        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
+        kaleshsingh@google.com, kernel-team@android.com,
+        linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <20220831155941.q5umplytbx6offku@moria.home.lan>
+References: <20220830214919.53220-1-surenb@google.com>
+ <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
+ <20220831101948.f3etturccmp5ovkl@suse.de>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831101948.f3etturccmp5ovkl@suse.de>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 7:40 AM Arnaldo Carvalho de Melo
-<acme@kernel.org> wrote:
->
-> Em Tue, Aug 30, 2022 at 09:48:43AM -0700, Ian Rogers escreveu:
-> > It is possible to optimize metrics when all SMT threads (CPUs) on a
-> > core are measuring events in system wide mode. For example, TMA
-> > metrics defines CORE_CLKS for Sandybrdige as:
-> >
-> > if SMT is disabled:
-> >   CPU_CLK_UNHALTED.THREAD
-> > if SMT is enabled and recording on all SMT threads:
-> >   CPU_CLK_UNHALTED.THREAD_ANY / 2
-> > if SMT is enabled and not recording on all SMT threads:
-> >   (CPU_CLK_UNHALTED.THREAD/2)*
-> >   (1+CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE/CPU_CLK_UNHALTED.REF_XCLK )
-> >
-> > That is two more events are necessary when not gathering counts on all
-> > SMT threads. To distinguish all SMT threads on a core vs system wide
-> > (all CPUs) call the new property core wide.  Add a core wide test that
-> > determines the property from user requested CPUs, the topology and
-> > system wide. System wide is required as other processes running on a
-> > SMT thread will change the counts.
-> >
-> > Signed-off-by: Ian Rogers <irogers@google.com>
-> > ---
-> >  tools/perf/util/cputopo.c | 46 +++++++++++++++++++++++++++++++++++++++
-> >  tools/perf/util/cputopo.h |  3 +++
-> >  tools/perf/util/smt.c     | 14 ++++++++++++
-> >  tools/perf/util/smt.h     |  7 ++++++
-> >  4 files changed, 70 insertions(+)
-> >
-> > diff --git a/tools/perf/util/cputopo.c b/tools/perf/util/cputopo.c
-> > index 511002e52714..1a3ff6449158 100644
-> > --- a/tools/perf/util/cputopo.c
-> > +++ b/tools/perf/util/cputopo.c
-> > @@ -172,6 +172,52 @@ bool cpu_topology__smt_on(const struct cpu_topology *topology)
-> >       return false;
-> >  }
-> >
-> > +bool cpu_topology__core_wide(const struct cpu_topology *topology,
-> > +                          const char *user_requested_cpu_list)
-> > +{
-> > +     struct perf_cpu_map *user_requested_cpus;
-> > +
-> > +     /*
-> > +      * If user_requested_cpu_list is empty then all CPUs are recorded and so
-> > +      * core_wide is true.
-> > +      */
-> > +     if (!user_requested_cpu_list)
-> > +             return true;
-> > +
-> > +     user_requested_cpus = perf_cpu_map__new(user_requested_cpu_list);
->
-> Don't we need a NULL test here?
+On Wed, Aug 31, 2022 at 11:19:48AM +0100, Mel Gorman wrote:
+> On Wed, Aug 31, 2022 at 04:42:30AM -0400, Kent Overstreet wrote:
+> > On Wed, Aug 31, 2022 at 09:38:27AM +0200, Peter Zijlstra wrote:
+> > > On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
+> > > > ===========================
+> > > > Code tagging framework
+> > > > ===========================
+> > > > Code tag is a structure identifying a specific location in the source code
+> > > > which is generated at compile time and can be embedded in an application-
+> > > > specific structure. Several applications of code tagging are included in
+> > > > this RFC, such as memory allocation tracking, dynamic fault injection,
+> > > > latency tracking and improved error code reporting.
+> > > > Basically, it takes the old trick of "define a special elf section for
+> > > > objects of a given type so that we can iterate over them at runtime" and
+> > > > creates a proper library for it.
+> > > 
+> > > I might be super dense this morning, but what!? I've skimmed through the
+> > > set and I don't think I get it.
+> > > 
+> > > What does this provide that ftrace/kprobes don't already allow?
+> > 
+> > You're kidding, right?
+> 
+> It's a valid question. From the description, it main addition that would
+> be hard to do with ftrace or probes is catching where an error code is
+> returned. A secondary addition would be catching all historical state and
+> not just state since the tracing started.
 
-No, NULL is a valid perf_cpu_map, one with no values in it. For
-example, see here:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/lib/perf/cpumap.c?h=perf/core#n266
-So there's no way to tell an error (ENOMEM) from an empty map. My
-suggestion is a rewrite of perf_cpu_map, I'd like to do this in a new
-"libperf2" which has a more permissive than GPL license like libbpf.
-That is out-of-scope here.
+Catching all historical state is pretty important in the case of memory
+allocation accounting, don't you think?
 
-Thanks,
-Ian
+Also, ftrace can drop events. Not really ideal if under system load your memory
+accounting numbers start to drift.
 
-> > +     /* Check that every user requested CPU is the complete set of SMT threads on a core. */
-> > +     for (u32 i = 0; i < topology->core_cpus_lists; i++) {
-> > +             const char *core_cpu_list = topology->core_cpus_list[i];
-> > +             struct perf_cpu_map *core_cpus = perf_cpu_map__new(core_cpu_list);
->
-> Here too, no?
->
-> > +             struct perf_cpu cpu;
-> > +             int idx;
-> > +             bool has_first, first = true;
-> > +
-> > +             perf_cpu_map__for_each_cpu(cpu, idx, core_cpus) {
-> > +                     if (first) {
-> > +                             has_first = perf_cpu_map__has(user_requested_cpus, cpu);
-> > +                             first = false;
-> > +                     } else {
-> > +                             /*
-> > +                              * If the first core CPU is user requested then
-> > +                              * all subsequent CPUs in the core must be user
-> > +                              * requested too. If the first CPU isn't user
-> > +                              * requested then none of the others must be
-> > +                              * too.
-> > +                              */
-> > +                             if (perf_cpu_map__has(user_requested_cpus, cpu) != has_first) {
-> > +                                     perf_cpu_map__put(core_cpus);
-> > +                                     perf_cpu_map__put(user_requested_cpus);
-> > +                                     return false;
-> > +                             }
-> > +                     }
-> > +             }
-> > +             perf_cpu_map__put(core_cpus);
-> > +     }
-> > +     perf_cpu_map__put(user_requested_cpus);
-> > +     return true;
-> > +}
-> > +
-> >  static bool has_die_topology(void)
-> >  {
-> >       char filename[MAXPATHLEN];
-> > diff --git a/tools/perf/util/cputopo.h b/tools/perf/util/cputopo.h
-> > index 469db775a13c..969e5920a00e 100644
-> > --- a/tools/perf/util/cputopo.h
-> > +++ b/tools/perf/util/cputopo.h
-> > @@ -60,6 +60,9 @@ struct cpu_topology *cpu_topology__new(void);
-> >  void cpu_topology__delete(struct cpu_topology *tp);
-> >  /* Determine from the core list whether SMT was enabled. */
-> >  bool cpu_topology__smt_on(const struct cpu_topology *topology);
-> > +/* Are the sets of SMT siblings all enabled or all disabled in user_requested_cpus. */
-> > +bool cpu_topology__core_wide(const struct cpu_topology *topology,
-> > +                          const char *user_requested_cpu_list);
-> >
-> >  struct numa_topology *numa_topology__new(void);
-> >  void numa_topology__delete(struct numa_topology *tp);
-> > diff --git a/tools/perf/util/smt.c b/tools/perf/util/smt.c
-> > index ce90c4ee4138..994e9e418227 100644
-> > --- a/tools/perf/util/smt.c
-> > +++ b/tools/perf/util/smt.c
-> > @@ -21,3 +21,17 @@ bool smt_on(const struct cpu_topology *topology)
-> >       cached = true;
-> >       return cached_result;
-> >  }
-> > +
-> > +bool core_wide(bool system_wide, const char *user_requested_cpu_list,
-> > +            const struct cpu_topology *topology)
-> > +{
-> > +     /* If not everything running on a core is being recorded then we can't use core_wide. */
-> > +     if (!system_wide)
-> > +             return false;
-> > +
-> > +     /* Cheap case that SMT is disabled and therefore we're inherently core_wide. */
-> > +     if (!smt_on(topology))
-> > +             return true;
-> > +
-> > +     return cpu_topology__core_wide(topology, user_requested_cpu_list);
-> > +}
-> > diff --git a/tools/perf/util/smt.h b/tools/perf/util/smt.h
-> > index e26999c6b8d4..ae9095f2c38c 100644
-> > --- a/tools/perf/util/smt.h
-> > +++ b/tools/perf/util/smt.h
-> > @@ -7,4 +7,11 @@ struct cpu_topology;
-> >  /* Returns true if SMT (aka hyperthreading) is enabled. */
-> >  bool smt_on(const struct cpu_topology *topology);
-> >
-> > +/*
-> > + * Returns true when system wide and all SMT threads for a core are in the
-> > + * user_requested_cpus map.
-> > + */
-> > +bool core_wide(bool system_wide, const char *user_requested_cpu_list,
-> > +            const struct cpu_topology *topology);
-> > +
-> >  #endif /* __SMT_H */
-> > --
-> > 2.37.2.672.g94769d06f0-goog
->
-> --
->
-> - Arnaldo
+> It's also unclear *who* would enable this. It looks like it would mostly
+> have value during the development stage of an embedded platform to track
+> kernel memory usage on a per-application basis in an environment where it
+> may be difficult to setup tracing and tracking. Would it ever be enabled
+> in production? Would a distribution ever enable this? If it's enabled, any
+> overhead cannot be disabled/enabled at run or boot time so anyone enabling
+> this would carry the cost without never necessarily consuming the data.
+
+The whole point of this is to be cheap enough to enable in production -
+especially the latency tracing infrastructure. There's a lot of value to
+always-on system visibility infrastructure, so that when a live machine starts
+to do something wonky the data is already there.
+
+What we've built here this is _far_ cheaper than anything that could be done
+with ftrace.
+
+> It might be an ease-of-use thing. Gathering the information from traces
+> is tricky and would need combining multiple different elements and that
+> is development effort but not impossible.
+> 
+> Whatever asking for an explanation as to why equivalent functionality
+> cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
+
+I think perhaps some of the expectation should be on the "ftrace for
+everything!" people to explain a: how their alternative could be even built and
+b: how it would compare in terms of performance and ease of use.
+
+Look, I've been a tracing user for many years, and it has its uses, but some of
+the claims I've been hearing from tracing/bpf people when any alternative
+tooling is proposed sound like vaporware and bullshitting.

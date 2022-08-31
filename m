@@ -2,69 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 266835A83A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6035A8393
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:54:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229437AbiHaQ4j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 12:56:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
+        id S230350AbiHaQy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 12:54:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiHaQ4U (ORCPT
+        with ESMTP id S229607AbiHaQyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 12:56:20 -0400
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3153FDC0AE;
-        Wed, 31 Aug 2022 09:56:16 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.228])
-        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MHqtZ2WXLz9xHvF;
-        Thu,  1 Sep 2022 00:50:46 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwBX0lxfkg9jJXIRAA--.5993S5;
-        Wed, 31 Aug 2022 17:55:46 +0100 (CET)
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, memxor@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Joanne Koong <joannelkoong@gmail.com>
-Subject: [PATCH v15 03/12] btf: Allow dynamic pointer parameters in kfuncs
-Date:   Wed, 31 Aug 2022 18:54:36 +0200
-Message-Id: <20220831165445.1071641-4-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
-References: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
+        Wed, 31 Aug 2022 12:54:53 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BB9D31FE;
+        Wed, 31 Aug 2022 09:54:43 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 12:54:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661964881;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JEP5P0FivNXzUzqKfDvRWYdY+bpNYj7QyhA+GvUOAA8=;
+        b=oy8BDHTFcP2BrlGTXifpszllUxXH86Pv/uhrb5Vvx0qLa2JoLx3g7wnt0nSOLOMYEKiDJs
+        2NCmMsw9mPuD8JADSvOWhLRPmi8UBEOqVzwFjz54BQPN6frJC8u3+q+B989+uxgznTkBGn
+        hijZJCZAL0cuRmj5HQ86K6BZfEcahIU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Coly Li <colyli@suse.de>
+Cc:     linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org
+Subject: Re: [PATCH 2/3] bcache: Convert to lib/time_stats
+Message-ID: <20220831165437.l27raas6k5nlqsdg@moria.home.lan>
+References: <20220829165344.2958640-1-kent.overstreet@linux.dev>
+ <20220829165344.2958640-3-kent.overstreet@linux.dev>
+ <14ACCED7-D24D-4AC4-8677-F7F4630A840A@suse.de>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: GxC2BwBX0lxfkg9jJXIRAA--.5993S5
-X-Coremail-Antispam: 1UD129KBjvJXoWxKrWDAF1fKw1DKr4DKrykKrg_yoW7ZFWkpF
-        4fC3s2vr4kJr4xuwnrAF45ArW5Kay0q347CrWrC34FyF17XryDXF1UKry8Z3sYkrWkC3Wx
-        Ar1Fg3y5ua4xArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUWw
-        A2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
-        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
-        W8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2
-        WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkE
-        bVWUJVW8JwACjcxG0xvY0x0EwIxGrwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7
-        AKxVW8ZVWrXwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_GFv_Wr
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
-        0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x
-        07jzE__UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj357EwAAsg
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <14ACCED7-D24D-4AC4-8677-F7F4630A840A@suse.de>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,157 +52,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, Sep 01, 2022 at 12:00:17AM +0800, Coly Li wrote:
+> 
+> 
+> > 2022年8月30日 00:53，Kent Overstreet <kent.overstreet@linux.dev> 写道：
+> > 
+> > This patch converts bcache to the new generic time_stats code
+> > lib/time_stats.c. The new code is from bcachefs, and has some changes
+> > from the version in bcache:
+> > 
+> > - we now use ktime_get_ns(), not local_clock(). When the code was
+> >   originally written multi processor systems that lacked synchronized
+> >   TSCs were still common, and so local_clock() was much cheaper than
+> >   sched_clock() (though not necessarily fully accurate, due to TSC
+> >   drift). ktime_get_ns() should be cheap enough on all common hardware
+> >   now, and more standard/correct.
+> > 
+> > - time_stats are now exported in a single file in sysfs, which means we
+> >   can improve the statistics we keep track of without changing all
+> >   users. This also means we don't have to manually specify which units
+> >   (ms, us, ns) a given time_stats should be printed in; that's handled
+> >   dynamically.
+> > 
+> > - There's a lazily-allocated percpu buffer, which now needs to be freed
+> >   with time_stats_exit().
+> > 
+> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> > Cc: Coly Li <colyli@suse.de>
+> 
+> Hi Kent,
+> 
+> Overall I am OK with the change to bcache code. You may add
+> 	Acked-by: Coly Li <colyli@suse.de>
+> in future version of this patch.
+> 
+> In bcache-tools, they don’t read the changed sysfs files (including bcache-status), IMHO changing the output format won’t be problem for upstream.
+> 
+> My only question is, how to understand the time_stats_to_text() output format,
+> count:          3
+> rate:           0/sec
+> frequency:      4 sec
+> avg duration:   4 sec
+> max duration:   4 sec
+> quantiles (ns): 0 4288669120 4288669120 5360836048 5360836048 5360836048 5360836048 5360836048 5360836048 5360836048 5360836048 5360836048 5360836048 5360836048 5360836048
+> 
+> Fro the above output, what are “rate”, “frequence” and “quantiles” for?
 
-Allow dynamic pointers (struct bpf_dynptr_kern *) to be specified as
-parameters in kfuncs. Also, ensure that dynamic pointers passed as argument
-are valid and initialized, are a pointer to the stack, and of the type
-local. More dynamic pointer types can be supported in the future.
+Rate and frequency are inverses - in this example, we're seeing 4 events per
+second.
 
-To properly detect whether a parameter is of the desired type, introduce
-the stringify_struct() macro to compare the returned structure name with
-the desired name. In addition, protect against structure renames, by
-halting the build with BUILD_BUG_ON(), so that developers have to revisit
-the code.
+The quantiles are for the duration, they give you an idea of the statistical
+distribution, see https://en.wikipedia.org/wiki/Quantile
 
-To check if a dynamic pointer passed to the kfunc is valid and initialized,
-and if its type is local, export the existing functions
-is_dynptr_reg_valid_init() and is_dynptr_type_expected().
-
-Cc: Joanne Koong <joannelkoong@gmail.com>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- include/linux/bpf_verifier.h |  5 +++++
- include/linux/btf.h          |  9 +++++++++
- kernel/bpf/btf.c             | 33 +++++++++++++++++++++++++++++++++
- kernel/bpf/verifier.c        | 10 +++++-----
- 4 files changed, 52 insertions(+), 5 deletions(-)
-
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 1fdddbf3546b..dd58dfccd025 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -571,6 +571,11 @@ int check_kfunc_mem_size_reg(struct bpf_verifier_env *env, struct bpf_reg_state
- 			     u32 regno);
- int check_mem_reg(struct bpf_verifier_env *env, struct bpf_reg_state *reg,
- 		   u32 regno, u32 mem_size);
-+bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
-+			      struct bpf_reg_state *reg);
-+bool is_dynptr_type_expected(struct bpf_verifier_env *env,
-+			     struct bpf_reg_state *reg,
-+			     enum bpf_arg_type arg_type);
- 
- /* this lives here instead of in bpf.h because it needs to dereference tgt_prog */
- static inline u64 bpf_trampoline_compute_key(const struct bpf_prog *tgt_prog,
-diff --git a/include/linux/btf.h b/include/linux/btf.h
-index ad93c2d9cc1c..f546d368ac5d 100644
---- a/include/linux/btf.h
-+++ b/include/linux/btf.h
-@@ -52,6 +52,15 @@
- #define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
- #define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
- 
-+/*
-+ * Return the name of the passed struct, if exists, or halt the build if for
-+ * example the structure gets renamed. In this way, developers have to revisit
-+ * the code using that structure name, and update it accordingly.
-+ */
-+#define stringify_struct(x)			\
-+	({ BUILD_BUG_ON(sizeof(struct x) < 0);	\
-+	   __stringify(x); })
-+
- struct btf;
- struct btf_member;
- struct btf_type;
-diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index e49b3b6d48ad..4266bff5fada 100644
---- a/kernel/bpf/btf.c
-+++ b/kernel/bpf/btf.c
-@@ -6362,15 +6362,20 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 
- 			if (is_kfunc) {
- 				bool arg_mem_size = i + 1 < nargs && is_kfunc_arg_mem_size(btf, &args[i + 1], &regs[regno + 1]);
-+				bool arg_dynptr = btf_type_is_struct(ref_t) &&
-+						  !strcmp(ref_tname,
-+							  stringify_struct(bpf_dynptr_kern));
- 
- 				/* Permit pointer to mem, but only when argument
- 				 * type is pointer to scalar, or struct composed
- 				 * (recursively) of scalars.
- 				 * When arg_mem_size is true, the pointer can be
- 				 * void *.
-+				 * Also permit initialized local dynamic pointers.
- 				 */
- 				if (!btf_type_is_scalar(ref_t) &&
- 				    !__btf_type_is_scalar_struct(log, btf, ref_t, 0) &&
-+				    !arg_dynptr &&
- 				    (arg_mem_size ? !btf_type_is_void(ref_t) : 1)) {
- 					bpf_log(log,
- 						"arg#%d pointer type %s %s must point to %sscalar, or struct with scalar\n",
-@@ -6378,6 +6383,34 @@ static int btf_check_func_arg_match(struct bpf_verifier_env *env,
- 					return -EINVAL;
- 				}
- 
-+				if (arg_dynptr) {
-+					if (reg->type != PTR_TO_STACK) {
-+						bpf_log(log, "arg#%d pointer type %s %s not to stack\n",
-+							i, btf_type_str(ref_t),
-+							ref_tname);
-+						return -EINVAL;
-+					}
-+
-+					if (!is_dynptr_reg_valid_init(env, reg)) {
-+						bpf_log(log,
-+							"arg#%d pointer type %s %s must be valid and initialized\n",
-+							i, btf_type_str(ref_t),
-+							ref_tname);
-+						return -EINVAL;
-+					}
-+
-+					if (!is_dynptr_type_expected(env, reg,
-+							ARG_PTR_TO_DYNPTR | DYNPTR_TYPE_LOCAL)) {
-+						bpf_log(log,
-+							"arg#%d pointer type %s %s points to unsupported dynamic pointer type\n",
-+							i, btf_type_str(ref_t),
-+							ref_tname);
-+						return -EINVAL;
-+					}
-+
-+					continue;
-+				}
-+
- 				/* Check for mem, len pair */
- 				if (arg_mem_size) {
- 					if (check_kfunc_mem_size_reg(env, &regs[regno + 1], regno + 1)) {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bebb64423acb..3ada6e63e2c9 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -779,8 +779,8 @@ static bool is_dynptr_reg_valid_uninit(struct bpf_verifier_env *env, struct bpf_
- 	return true;
- }
- 
--static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
--				     struct bpf_reg_state *reg)
-+bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
-+			      struct bpf_reg_state *reg)
- {
- 	struct bpf_func_state *state = func(env, reg);
- 	int spi = get_spi(reg->off);
-@@ -799,9 +799,9 @@ static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
- 	return true;
- }
- 
--static bool is_dynptr_type_expected(struct bpf_verifier_env *env,
--				    struct bpf_reg_state *reg,
--				    enum bpf_arg_type arg_type)
-+bool is_dynptr_type_expected(struct bpf_verifier_env *env,
-+			     struct bpf_reg_state *reg,
-+			     enum bpf_arg_type arg_type)
- {
- 	struct bpf_func_state *state = func(env, reg);
- 	enum bpf_dynptr_type dynptr_type;
--- 
-2.25.1
-
+In the near future, the quantiles will be removed and replaced with standard
+deviation, true and weighted - the quantiles algorithm isn't super accurate, we
+can give more accurate numbers with standard deviation.

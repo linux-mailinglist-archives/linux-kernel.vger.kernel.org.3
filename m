@@ -2,62 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DACC45A7971
+	by mail.lfdr.de (Postfix) with ESMTP id 00EB95A796E
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiHaIuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:50:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39284 "EHLO
+        id S231580AbiHaIui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:50:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231521AbiHaIu3 (ORCPT
+        with ESMTP id S231499AbiHaIu0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:50:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61F14ABF3E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:50:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661935823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XHyUtmZKTvqRsLyAaBPYNj0r2rPPf5NCNaNATfvyTPs=;
-        b=DdT74hKkZBZ+I4fV5xLSJJDiSKmR7BeZBaLDEluhGYgv1q4/HvLWNby7RSbD8W2Mpnn+rn
-        ScZOeOZWRpuRtsJPQRUJzM2w/cAvQ4K41oW7YFQBkv08KDroPuvgBgrM71ELEqwvM9me++
-        n7yIcxUuUQx9gWtw6t7avf1c5wi4wJU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-207-pEGGZMsOM7aC1VteFWclbQ-1; Wed, 31 Aug 2022 04:50:20 -0400
-X-MC-Unique: pEGGZMsOM7aC1VteFWclbQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 31 Aug 2022 04:50:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517E9A2D87;
+        Wed, 31 Aug 2022 01:50:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C131580A0B7;
+        by ams.source.kernel.org (Postfix) with ESMTPS id CC795B81EE1;
+        Wed, 31 Aug 2022 08:50:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 655BEC433D7;
         Wed, 31 Aug 2022 08:50:19 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.40.194.186])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B264FC15BB3;
-        Wed, 31 Aug 2022 08:50:17 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] KVM: selftests: Test Hyper-V invariant TSC control
-Date:   Wed, 31 Aug 2022 10:50:09 +0200
-Message-Id: <20220831085009.1627523-4-vkuznets@redhat.com>
-In-Reply-To: <20220831085009.1627523-1-vkuznets@redhat.com>
-References: <20220831085009.1627523-1-vkuznets@redhat.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661935819;
+        bh=ersuwtsoF+gz4Khk4twXBa8eC4M5FuTrZrU7bbV5xN8=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=Dx8SpLvE6OE4COgMxNM10PLOKB6/AsE4LigkheDT4bwqAegrbQvJFlzNb5UM0JpW1
+         Vr8WjxDvENv4VYwaJbPGIE/s4jZeJqx+wYRtSd+QjuWf+Pw8IsHOXx18CDF2xdQsBy
+         ULMhgowT25aDH/dubDBVH4ZZxswFQuUj4JJoKYZc7ucXS9UsVJN9EZBZtO56cwwv6y
+         4OyFIskfbQ/ZjnO9PNLbnHyrG3o+VFqMG4fqXtvHZ65w7UMvTa5oOC1DtANAjRfCgx
+         BpBzYntayKluAMAl8pFQis+NdDTKHs5X2OSRzCTyo01meXIgHlnkLpbffcIZxuJVvL
+         UsXGDJ+mm85NQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42950E924DA;
+        Wed, 31 Aug 2022 08:50:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Subject: Re: [PATCH net-next v3 00/17] net: dsa: microchip: add error handling and
+ register access validation
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166193581926.12108.13290186074515106257.git-patchwork-notify@kernel.org>
+Date:   Wed, 31 Aug 2022 08:50:19 +0000
+References: <20220826105634.3855578-1-o.rempel@pengutronix.de>
+In-Reply-To: <20220826105634.3855578-1-o.rempel@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,123 +61,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a test for the newly introduced Hyper-V invariant TSC control feature:
-- HV_X64_MSR_TSC_INVARIANT_CONTROL is not available without
- HV_ACCESS_TSC_INVARIANT CPUID bit set and available with it.
-- BIT(0) of HV_X64_MSR_TSC_INVARIANT_CONTROL controls the filtering of
-architectural invariant TSC (CPUID.80000007H:EDX[8]) bit.
+Hello:
 
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- .../selftests/kvm/x86_64/hyperv_features.c    | 67 +++++++++++++++++++
- 1 file changed, 67 insertions(+)
+This series was applied to netdev/net-next.git (master)
+by David S. Miller <davem@davemloft.net>:
 
-diff --git a/tools/testing/selftests/kvm/x86_64/hyperv_features.c b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-index 4ec4776662a4..26e8c5f7677e 100644
---- a/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-+++ b/tools/testing/selftests/kvm/x86_64/hyperv_features.c
-@@ -15,6 +15,9 @@
- 
- #define LINUX_OS_ID ((u64)0x8100 << 48)
- 
-+/* CPUID.80000007H:EDX */
-+#define X86_FEATURE_INVTSC (1 << 8)
-+
- static inline uint8_t hypercall(u64 control, vm_vaddr_t input_address,
- 				vm_vaddr_t output_address, uint64_t *hv_status)
- {
-@@ -60,6 +63,24 @@ static void guest_msr(struct msr_data *msr)
- 		GUEST_ASSERT_2(!vector, msr->idx, vector);
- 	else
- 		GUEST_ASSERT_2(vector == GP_VECTOR, msr->idx, vector);
-+
-+	/* Invariant TSC bit appears when TSC invariant control MSR is written to */
-+	if (msr->idx == HV_X64_MSR_TSC_INVARIANT_CONTROL) {
-+		u32 eax, ebx, ecx, edx;
-+
-+		cpuid(0x80000007, &eax, &ebx, &ecx, &edx);
-+
-+		/*
-+		 * TSC invariant bit is present without the feature (legacy) or
-+		 * when the feature is present and enabled.
-+		 */
-+		if ((!msr->should_not_gp && !msr->write) || (msr->write && msr->write_val == 1))
-+			GUEST_ASSERT(edx & X86_FEATURE_INVTSC);
-+		else
-+			GUEST_ASSERT(!(edx & X86_FEATURE_INVTSC));
-+	}
-+
-+
- 	GUEST_DONE();
- }
- 
-@@ -104,6 +125,15 @@ static void vcpu_reset_hv_cpuid(struct kvm_vcpu *vcpu)
- 	vcpu_clear_cpuid_entry(vcpu, HYPERV_CPUID_SYNDBG_PLATFORM_CAPABILITIES);
- }
- 
-+static bool guest_has_invtsc(void)
-+{
-+	const struct kvm_cpuid_entry2 *cpuid;
-+
-+	cpuid = kvm_get_supported_cpuid_entry(0x80000007);
-+
-+	return cpuid->edx & X86_FEATURE_INVTSC;
-+}
-+
- static void guest_test_msrs_access(void)
- {
- 	struct kvm_cpuid2 *prev_cpuid = NULL;
-@@ -115,6 +145,7 @@ static void guest_test_msrs_access(void)
- 	int stage = 0;
- 	vm_vaddr_t msr_gva;
- 	struct msr_data *msr;
-+	bool has_invtsc = guest_has_invtsc();
- 
- 	while (true) {
- 		vm = vm_create_with_one_vcpu(&vcpu, guest_msr);
-@@ -429,6 +460,42 @@ static void guest_test_msrs_access(void)
- 			break;
- 
- 		case 44:
-+			/* MSR is not available when CPUID feature bit is unset */
-+			if (!has_invtsc)
-+				continue;
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = 0;
-+			msr->should_not_gp = 0;
-+			break;
-+		case 45:
-+			/* MSR is vailable when CPUID feature bit is set */
-+			if (!has_invtsc)
-+				continue;
-+			feat->eax |= HV_ACCESS_TSC_INVARIANT;
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = 0;
-+			msr->should_not_gp = 1;
-+			break;
-+		case 46:
-+			/* Writing bits other than 0 is forbidden */
-+			if (!has_invtsc)
-+				continue;
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = 1;
-+			msr->write_val = 0xdeadbeef;
-+			msr->should_not_gp = 0;
-+			break;
-+		case 47:
-+			/* Setting bit 0 enables the feature */
-+			if (!has_invtsc)
-+				continue;
-+			msr->idx = HV_X64_MSR_TSC_INVARIANT_CONTROL;
-+			msr->write = 1;
-+			msr->write_val = 1;
-+			msr->should_not_gp = 1;
-+			break;
-+
-+		default:
- 			kvm_vm_free(vm);
- 			return;
- 		}
+On Fri, 26 Aug 2022 12:56:17 +0200 you wrote:
+> changes v4:
+> - add Reviewed-by: Vladimir Oltean <olteanv@gmail.com> to all patches
+> - fix checkpatch warnings.
+> 
+> changes v3:
+> - fix build error in the middle of the patch stack.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,v4,01/17] net: dsa: microchip: add separate struct ksz_chip_data for KSZ8563 chip
+    https://git.kernel.org/netdev/net-next/c/b44908095612
+  - [net-next,v4,02/17] net: dsa: microchip: do per-port Gbit detection instead of per-chip
+    https://git.kernel.org/netdev/net-next/c/505bf3205aaa
+  - [net-next,v4,03/17] net: dsa: microchip: don't announce extended register support on non Gbit chips
+    https://git.kernel.org/netdev/net-next/c/d7539fc2b41a
+  - [net-next,v4,04/17] net: dsa: microchip: allow to pass return values for PHY read/write accesses
+    https://git.kernel.org/netdev/net-next/c/8f4204567923
+  - [net-next,v4,05/17] net: dsa: microchip: forward error value on all ksz_pread/ksz_pwrite functions
+    https://git.kernel.org/netdev/net-next/c/d38bc3b4b8a6
+  - [net-next,v4,06/17] net: dsa: microchip: ksz9477: add error handling to ksz9477_r/w_phy
+    https://git.kernel.org/netdev/net-next/c/9da975e1bbef
+  - [net-next,v4,07/17] net: dsa: microchip: ksz8795: add error handling to ksz8_r/w_phy
+    https://git.kernel.org/netdev/net-next/c/9590fc4a2af5
+  - [net-next,v4,08/17] net: dsa: microchip: KSZ9893: do not write to not supported Output Clock Control Register
+    https://git.kernel.org/netdev/net-next/c/b5708dc6539d
+  - [net-next,v4,09/17] net: dsa: microchip: add support for regmap_access_tables
+    https://git.kernel.org/netdev/net-next/c/ec6ba50c65c1
+  - [net-next,v4,10/17] net: dsa: microchip: add regmap_range for KSZ8563 chip
+    https://git.kernel.org/netdev/net-next/c/41131bac9a9a
+  - [net-next,v4,11/17] net: dsa: microchip: ksz9477: remove MII_CTRL1000 check from ksz9477_w_phy()
+    https://git.kernel.org/netdev/net-next/c/5bd3ecd121e3
+  - [net-next,v4,12/17] net: dsa: microchip: add regmap_range for KSZ9477 chip
+    https://git.kernel.org/netdev/net-next/c/74e792b5f2dd
+  - [net-next,v4,13/17] net: dsa: microchip: ksz9477: use internal_phy instead of phy_port_cnt
+    https://git.kernel.org/netdev/net-next/c/0a7fbd514edf
+  - [net-next,v4,14/17] net: dsa: microchip: remove unused port phy variable
+    https://git.kernel.org/netdev/net-next/c/6aaa8e7d2002
+  - [net-next,v4,15/17] net: dsa: microchip: ksz9477: remove unused "on" variable
+    https://git.kernel.org/netdev/net-next/c/7d39143449ea
+  - [net-next,v4,16/17] net: dsa: microchip: remove unused sgmii variable
+    https://git.kernel.org/netdev/net-next/c/e7f695210140
+  - [net-next,v4,17/17] net: dsa: microchip: remove IS_9893 flag
+    https://git.kernel.org/netdev/net-next/c/32cbac21b9f4
+
+You are awesome, thank you!
 -- 
-2.37.2
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

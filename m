@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB9F5A7602
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:52:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C33705A7605
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:54:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbiHaFwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 01:52:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
+        id S229890AbiHaFyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 01:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiHaFwj (ORCPT
+        with ESMTP id S229484AbiHaFx7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 01:52:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A7689CD7;
-        Tue, 30 Aug 2022 22:52:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D97ACB81EB8;
-        Wed, 31 Aug 2022 05:52:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC0ABC433D6;
-        Wed, 31 Aug 2022 05:52:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661925153;
-        bh=GXJhsXioaeItELh4r9S+ygL+acNayJ70WftLbnCmEmo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=u8yz04WUOax4ApjcQdF5lGZAHeR9cAaJJ8G7+2ItW4k3pm7ubdnQMLr+R+5HI3Puq
-         5xjQsmlGqM/iponW0TmmqACSvO1/ktfDQDcS2OIZmZ62IDrYIsLeXktXLxKCuES3OZ
-         /kmrjr63Ka/8G2txhsFXTekCck7PIVOWmVP91SuGI+JBFnK48LwlbN61PfHrPYdXGF
-         FgXCdTw4o83pBrINFmj3FawhfxwOy/b8kfILw3mFF6B0gOpkJLnXQ4yXAtnwL2ioAM
-         SCQyttrLqIIxmbOUWiBqchlGi/R0Me3Y1DLwX4fHrEcgGJ82isr6e56+zIb1S6be13
-         b2dWVq70uyA2g==
-Date:   Tue, 30 Aug 2022 22:52:31 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
-        David Jander <david@protonic.nl>,
-        Luka Perkov <luka.perkov@sartura.hr>,
-        Robert Marko <robert.marko@sartura.hr>
-Subject: Re: [PATCH net-next v4 2/7] net: add framework to support Ethernet
- PSE and PDs devices
-Message-ID: <20220830225231.7d4305e4@kernel.org>
-In-Reply-To: <20220828063021.3963761-3-o.rempel@pengutronix.de>
-References: <20220828063021.3963761-1-o.rempel@pengutronix.de>
-        <20220828063021.3963761-3-o.rempel@pengutronix.de>
+        Wed, 31 Aug 2022 01:53:59 -0400
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085EB72EDB;
+        Tue, 30 Aug 2022 22:53:59 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id u9so26279751ejy.5;
+        Tue, 30 Aug 2022 22:53:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=RfU7lsDmmfAjFJAeAr5W5jIPgnbHnTsbqehO/GDS314=;
+        b=LYtSUCfIKVE7hUxbrsENPiMOAxTVoEvlHBUglhPs7Zmd0M9LMzU78oPIt+lfEc7VAh
+         ewmmwXT7XxenmAge2hOtitiDSgaXZ66TqiCg0NsgrSoEAbULumsRVVbytxjnXmTMWsIN
+         sVZIv5ZxeTDK5/OhxYssOMzsNhN3ERdiYPWXUmX/xTBGs8nm7b/N7K7313+qM3ZFqfoD
+         1CAMShQfP/rQ1rNWcFz+8aMXm5ks5RPht9YXD+8VPDNUt7z0C+9oIUSD85KX8GqpddtM
+         vXLAv7oE6varJJU4t48BRzIHQW8dTzQ87HoIvEzdwokQ4sxBzQFw2qYhi9ggu323qJAh
+         3W7g==
+X-Gm-Message-State: ACgBeo1frpn20FCSOLI/YSFsmkhxaA2AuH7u6E/0p8ESpEmxaK0JRme4
+        ITCsKbBlCszdT9FSXbJP3gY=
+X-Google-Smtp-Source: AA6agR7fF/uAJxU45HbH0NEMNHIEwlmac3AtGBLOZLw1iBXTgBUNxv9F2cxNQOOEQdv47A5gxy9o+w==
+X-Received: by 2002:a17:907:6d11:b0:730:a382:d5ba with SMTP id sa17-20020a1709076d1100b00730a382d5bamr19002264ejc.371.1661925237530;
+        Tue, 30 Aug 2022 22:53:57 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id dk1-20020a0564021d8100b0043bea0a48d0sm8436599edb.22.2022.08.30.22.53.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 22:53:57 -0700 (PDT)
+Message-ID: <3537055d-7341-fe58-938f-06975c515cee@kernel.org>
+Date:   Wed, 31 Aug 2022 07:53:55 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 5.19 000/158] 5.19.6-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220829105808.828227973@linuxfoundation.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,17 +68,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 28 Aug 2022 08:30:16 +0200 Oleksij Rempel wrote:
-> This framework was create with intention to provide support for Ethernet PSE
-> (Power Sourcing Equipment) and PDs (Powered Device).
+On 29. 08. 22, 12:57, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.6 release.
+> There are 158 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> At current step this patch implements generic PSE support for PoDL (Power over
-> Data Lines 802.3bu) specification with reserving name space for PD devices as
-> well.
+> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
+> Anything received after that time might be too late.
 > 
-> This framework can be extended to support 802.3af and 802.3at "Power via the
-> Media Dependent Interface" (or PoE/Power over Ethernet)
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.6-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
 
-scripts/kernel-doc says:
+openSUSE configs¹⁾ all green.
 
-include/linux/pse-pd/pse.h:42: warning: Function parameter or member 'lock' not described in 'pse_controller_dev'
+Tested-by: Jiri Slaby <jirislaby@kernel.org>
+
+¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
+
+-- 
+js
+suse labs
+

@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE0C5A8599
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3035A859F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232620AbiHaS3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
+        id S232846AbiHaSa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232619AbiHaS2Q (ORCPT
+        with ESMTP id S232733AbiHaSaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:28:16 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7707DF3B
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:24:01 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id u9-20020a17090a1f0900b001fde6477464so71443pja.4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:24:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=QOzTr0839E3H9tR0wkETuj4b9U9VUvaitz4KI9/r73I=;
-        b=EWOrlKJU+LjqRQ/uV9Xua9LvEAnJThp75klKQawBXR3MM0Z+lCfQZzsPiCp50MfMKn
-         RrB3LHxP6lWHR8RQlk9SL2/wueb5grQcMqwigHiPfW8os7zYwv5SeTLb6G+whxDTtkF/
-         RiTcqxJYXg7XbnnSYwkrDgauuEFFak+11Xl2A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=QOzTr0839E3H9tR0wkETuj4b9U9VUvaitz4KI9/r73I=;
-        b=yAGogi3lJQ7EnMpSWTLjYAWl2y8TRlz55VB91GTyLyl+GKOnO2amV2tnYQbJIGHTAr
-         OyzYq+Y0i4htCcTMJudC/J1rvMczkNu1ndFX3a9UwtTpQTG6XIp7+ioojVmei/i3EgVX
-         1L3oPiNFaKqwDlzslmeFKLqN4scAER58elyQNsopfiNGqdnuQpVyQTVWwcXe/fH9WaNi
-         w8Qv+RphOYrJ/3ZrprIOb0WaqnMl5jFF1Py3CNOsLcU2fmauMjMt7RW+PUWugxynaBhL
-         GZ7SUIneh+0PtszGnGrtgUzRB/GLArIHKQNf/fzs4+OXvKjdfyUGvhNFqHfv+QUT7XEM
-         OYrg==
-X-Gm-Message-State: ACgBeo2Ik2AsQsVYJL4lGmDg5JnMZluG3cI0RG4r+CsvfLjfC6IQ5AO2
-        JQLXQ53OvxydLUZhKOci1+l53Q==
-X-Google-Smtp-Source: AA6agR7ryAbaJQVqp1mJEckyrIip9baCtObI7dR5faSXw3AEvsfrQpKGzAcIiDq8Eww2LkxtypaSAQ==
-X-Received: by 2002:a17:902:b68d:b0:172:e973:82b9 with SMTP id c13-20020a170902b68d00b00172e97382b9mr27132898pls.120.1661970241179;
-        Wed, 31 Aug 2022 11:24:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z24-20020aa79f98000000b00537f9e32b00sm9156524pfr.37.2022.08.31.11.24.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 11:24:00 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 11:23:59 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 17/21] kallsyms: Drop CONFIG_CFI_CLANG workarounds
-Message-ID: <202208311123.B3B651E@keescook>
-References: <20220830233129.30610-1-samitolvanen@google.com>
- <20220830233129.30610-18-samitolvanen@google.com>
+        Wed, 31 Aug 2022 14:30:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99C7F1AF3E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661970307;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Si1iwu1R0to21pjaPNDmF4Mnk8lbHWDBxAleduKvEiQ=;
+        b=Ei2LUAod+IAMMWE3xarFs+anHkCOq0bLJbbJt/grYcUgtr7SGUtn4adl8aogASyyLzoF6R
+        uxYZkURMuG92Ce8MroLNpYl8ilyO802KTT6kKxkUC2ckxbv9gb7+Cmq4g7FE3sEqBLeQSK
+        IBkPHDEMpI8LJY6CZcM6NW7GUxX6qjU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-423-OndAVcPJPzGN_yIJL-9Dkg-1; Wed, 31 Aug 2022 14:25:03 -0400
+X-MC-Unique: OndAVcPJPzGN_yIJL-9Dkg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 089598037AA;
+        Wed, 31 Aug 2022 18:25:03 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 673DE40CF8EE;
+        Wed, 31 Aug 2022 18:25:01 +0000 (UTC)
+Message-ID: <d15e7d7e922b615fbc701ce766caa3e8c703bc6f.camel@redhat.com>
+Subject: Re: [PATCH 17/19] KVM: SVM: Handle multiple logical targets in AVIC
+ kick fastpath
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 21:25:00 +0300
+In-Reply-To: <Yw+mFbuih3rBjMV8@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-18-seanjc@google.com>
+         <ca3be5f88268f1547e6f02b01a472186566066c5.camel@redhat.com>
+         <Yw+mFbuih3rBjMV8@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830233129.30610-18-samitolvanen@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,14 +68,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 04:31:25PM -0700, Sami Tolvanen wrote:
-> With -fsanitize=kcfi, the compiler no longer renames static
-> functions with CONFIG_CFI_CLANG + ThinLTO. Drop the code that cleans
-> up the ThinLTO hash from the function names.
+On Wed, 2022-08-31 at 18:19 +0000, Sean Christopherson wrote:
+> On Wed, Aug 31, 2022, Maxim Levitsky wrote:
+> > On Wed, 2022-08-31 at 00:35 +0000, Sean Christopherson wrote:
+> > > +static void avic_kick_vcpu_by_logical_id(struct kvm *kvm, u32 *avic_logical_id_table,
+> > > +					 u32 logid_index, u32 icrl)
+> > > +{
+> > > +	u32 physical_id;
+> > > +
+> > > +	if (!avic_logical_id_table) {
+> > ^ Typo, the '!' shoudn't be there.
 > 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+> Ouch.  I suspect the tests pass because this just ends up routing events through
+> the slow path.  I try to concoct a testcase to expose this bug.
+> 
+> > > +static bool is_optimized_logical_map_enabled(struct kvm *kvm)
+> > > +{
+> > > +	struct kvm_apic_map *map;
+> > > +	bool enabled;
+> > > +
+> > > +	rcu_read_lock();
+> > > +	map = rcu_dereference(kvm->arch.apic_map);
+> > > +	enabled = map && map->logical_mode != KVM_APIC_MODE_MAP_DISABLED;
+> > > +	rcu_read_unlock();
+> > > +	return enabled;
+> > > +}
+> > 
+> > This function doesn't belong to avic, it should be in common KVM code.
+> 
+> I'll move it.  I'm not expecting any additional users, but I agree it belongs
+> elsewhere.  Actually, might be a moot point (see below).
+> 
+> > > @@ -394,50 +449,27 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
+> > >  		if (unlikely(!bitmap))
+> > >  			return 0;
+> > >  
+> > > -		if (!is_power_of_2(bitmap))
+> > > -			/* multiple logical destinations, use slow path */
+> > > +		/*
+> > > +		 * Use the slow path if more than one bit is set in the bitmap
+> > > +		 * and KVM's optimized logical map is disabled to avoid kicking
+> > > +		 * a vCPU multiple times.  If the optimized map is disabled, a
+> > > +		 * vCPU _may_ have multiple bits set in its logical ID, i.e.
+> > > +		 * may have multiple entries in the logical table.
+> > > +		 */
+> > > +		if (!is_power_of_2(bitmap) &&
+> > > +		    !is_optimized_logical_map_enabled(kvm))
+> > >  			return -EINVAL;
+> > 
+> > I hate to say it but there is another issue here, which I know about for a while
+> > but haven't gotten yet to fix.
+> > 
+> > The issue is that AVIC's logical to physical map can't cover all the corner cases
+> > that you discovered - it only supports the sane subset: for each cluster, and for each bit
+> > in the mask, it has a physical apic id - so things like logical ids with multiple bits,
+> > having same logical id for multiple vcpus and so on can't work.
+> > 
+> > In this case we need to either inhibit AVIC (I support this 100%),
+> 
+> I like the idea of inhibiting.
+> 
+> >  or clear its logical ID map, so all logicical IPIs VM exit, and then they
+> >  can be emulated.
+> > 
+> > I haven't studied it formally but the code which rebuilds the AVIC's logical ID map
+> > starts at 'avic_handle_ldr_update'.
+> 
+> I suspected there are issues here, but the new tests passed (somewhat surprisingly)
+> so I stopped trying to decipher the AVIC LDR handling.
+> 
+> Eww.  And the VM-Exit trap logic is broken too.  If the guest updates and disables
+> its LDR, SVM returns immediately and doesn't call into common APIC code, i.e. doesn't
+> recalc the optimized map.  E.g. if the guest clears its LDR, the optimized map will
+> be left as is and the vCPU will receive interrupts using its old LDR.
+> 
+> 	case APIC_LDR:
+> 		if (avic_handle_ldr_update(vcpu))
+> 			return 0;
+> 		break;
+> 
+> Rather than handling this purely in AVIC code, what if we a key off of
+> the optimized map being enabled?  E.g. drop the return from avic_handle_ldr_update()
+> and in the kvm_recalculate_apic_map() do:
+> 
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 3b6ef36b3963..6e188010b614 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -364,6 +364,11 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+>                 cluster[ldr] = apic;
+>         }
+>  out:
+> +       if (!new || new->logical_mode == KVM_APIC_MODE_MAP_DISABLED)
+> +               kvm_set_apicv_inhibit(kvm, APICV_INHIBIT_REASON_LOGICAL_MAP_DISABLED);
+> +       else
+> +               kvm_clear_apicv_inhibit(kvm, APICV_INHIBIT_REASON_LOGICAL_MAP_DISABLED);
+> +
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+This looks very good, it will even work on APICv, because the 'check_apicv_inhibit_reasons'
+will not return true for this new reason (APICv IPIv I think doesn't deal with logical destination at all);
 
--- 
-Kees Cook
+Best regards,
+	Maxim Levitsky
+
+>         old = rcu_dereference_protected(kvm->arch.apic_map,
+>                         lockdep_is_held(&kvm->arch.apic_map_lock));
+>         rcu_assign_pointer(kvm->arch.apic_map, new);
+> 
+
+

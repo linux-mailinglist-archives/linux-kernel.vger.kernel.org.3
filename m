@@ -2,70 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FDD5A7D25
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9FE5A7D26
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:21:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230443AbiHaMVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36066 "EHLO
+        id S230464AbiHaMVw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbiHaMVV (ORCPT
+        with ESMTP id S229814AbiHaMVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:21:21 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC39CE49A
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:21:19 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id og21so28000192ejc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=3deuHTbgt68FZtumNl8QakR6BCKlpcTobGFH5+SIwxQ=;
-        b=WbC/jQehX0sc3K9UA1wtLvp69wnyLXnZSWUzYC9sQqcUUUYmekRudDvToByniNhWgM
-         PJMpOc+DADLEb2mBDmHoFpl4SkOKDf7eFw7UrftOW6aZ8gaKbngMQ/wCdoEKehYn4+Hh
-         XNc0R2nF1ZsFW/spP/+ZLuJvXVfZB6owJWDhsrIaideNqm3jTOflfE8VZm0yXo2QlRqe
-         H156A/dmG177/dowVXfFewi2G16neuIXio5IuqGuSBFaUqf8J8S98Fu4BlQjSEu9YTiG
-         rKAmUz6g/zzpv3GQ/NJ7+pdIXNu6pGAOHqobQksISRIJKVebLxNmuMib/LkH8Y9qzWa4
-         ywdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=3deuHTbgt68FZtumNl8QakR6BCKlpcTobGFH5+SIwxQ=;
-        b=pf1UJX5hNI+00kqw81/Brs+0un/DexT5XP+pjHeNwBcmV6zSqGeiupo0f432Vd7RC3
-         KPjGFvPrIffsOqILnbuwYo15jYnuenXkmh5KhEGiC/9QiVzFjONViBZNZ63PU/TR2dy1
-         Wq6F0lTFUjoeNoFuRNINMVY8Izo4L6J3fvAvyWl6RP7yV29Um6k+Ij3ne0vGX84qbgoJ
-         Yt2OXjrb3UGykTwA+nzH5p3yDB/xY9I3O6VQiPjT2So0+iRF7dKhvRs1RGnR785msiTH
-         T6V10dbIwK49lwPGGixwyvXCrzp4bAV2wDTc8q18zjl/ypT2Co5deWNkmk0o/syCpbb1
-         nx/Q==
-X-Gm-Message-State: ACgBeo1XXUxaN01lDQ5Ds/ZSEu44x3pRHrkTfUWc6rVNNUeq78ot3TkJ
-        MDIk4hbC080/Wkv0jgNL86pCgQVhtlku2DehLz2wVQ==
-X-Google-Smtp-Source: AA6agR7nxBSRmXKCoQQUr1oF+8aqdDCvlAHX1BLSgaBGBA7fWJIA2GHZt1ecaCU1w9t3xRmG/zBQAqjqtkGjoN+7ruY=
-X-Received: by 2002:a17:907:7242:b0:741:770b:dfc6 with SMTP id
- ds2-20020a170907724200b00741770bdfc6mr11166567ejc.203.1661948478103; Wed, 31
- Aug 2022 05:21:18 -0700 (PDT)
+        Wed, 31 Aug 2022 08:21:49 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF34CE497;
+        Wed, 31 Aug 2022 05:21:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 15569CE1EE2;
+        Wed, 31 Aug 2022 12:21:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B69FC433D6;
+        Wed, 31 Aug 2022 12:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661948505;
+        bh=AtDBsF8xhjNjHiHKXo0UTN2kBKz8vHrgMe5WfnM0UtI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W4yYBhV8RbeQMMW98dXyD7vfhI991A4ya1jdqfMlRESB8OMYmBujw+1mFE3o9HXG0
+         z0GTUTPPvQPu29d4YUeCbI0yuXxSaKXzTdx6cxnL3yFruDQVTa4E5+rROafBPZ9ygb
+         pSILTLa9PpHccUPDFVzngGrMf42xefg6ZVuAE0x5AUZebnwIsq7iixwPc5NKi6d9Yx
+         NKVpmu5OLlVrIgNnbyAL3phSBkaBTYJjnQbG5ir1PvREZMDrEp7AspwqkyNMHebuGK
+         Dn7cXLVPEK52X0ZBtgvykvYwrbZqUEVtsDEB7x1hllMkj8wD1t+McthhyxtnMbOfpt
+         Oi6ahNewNs+kg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9FC61404A1; Wed, 31 Aug 2022 09:21:41 -0300 (-03)
+Date:   Wed, 31 Aug 2022 09:21:41 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        John Garry <john.garry@huawei.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        perry.taylor@intel.com, caleb.biggers@intel.com,
+        kshipra.bopardikar@intel.com, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 2/8] perf metric: Return early if no CPU PMU table
+ exists
+Message-ID: <Yw9SVbRWqA2u+fso@kernel.org>
+References: <20220830164846.401143-1-irogers@google.com>
+ <20220830164846.401143-3-irogers@google.com>
 MIME-Version: 1.0
-References: <20220829131553.690063-1-nuno.sa@analog.com> <20220829131553.690063-3-nuno.sa@analog.com>
-In-Reply-To: <20220829131553.690063-3-nuno.sa@analog.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 31 Aug 2022 14:21:06 +0200
-Message-ID: <CACRpkdZYNhmqGPED0ghcT+y9uCeEVsPzHRxG9GyXt=r2pAPQKg@mail.gmail.com>
-Subject: Re: [PATCH v4 02/10] gpio: gpio-adp5588: drop the driver
-To:     =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>
-Cc:     linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Hennerich <michael.hennerich@analog.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830164846.401143-3-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,15 +74,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 3:15 PM Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
+Em Tue, Aug 30, 2022 at 09:48:40AM -0700, Ian Rogers escreveu:
+> Previous behavior is to segfault if there is no CPU PMU table and a
+> metric is sought. To reproduce compile with NO_JEVENTS=1 then request
+> a metric, for example, "perf stat -M IPC true".
 
-> With commit 70466baac3de
-> ("input: keyboard: adp5588-keys: support gpi key events as 'gpio keys'"),
+Thanks, applied to perf/urgent.
 
-This commit isn't in the upstream kernel.
+- Arnaldo
 
-Are you using some Analog devices internal tree? Upstream
-those changes first.
+ 
+> Fixes: 00facc760903 ("perf jevents: Switch build to use jevents.py")
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/util/metricgroup.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+> index ad5cacdecd81..18aae040d61d 100644
+> --- a/tools/perf/util/metricgroup.c
+> +++ b/tools/perf/util/metricgroup.c
+> @@ -1655,6 +1655,9 @@ int metricgroup__parse_groups(const struct option *opt,
+>  	struct evlist *perf_evlist = *(struct evlist **)opt->value;
+>  	const struct pmu_events_table *table = pmu_events_table__find();
+>  
+> +	if (!table)
+> +		return -EINVAL;
+> +
+>  	return parse_groups(perf_evlist, str, metric_no_group,
+>  			    metric_no_merge, NULL, metric_events, table);
+>  }
+> -- 
+> 2.37.2.672.g94769d06f0-goog
 
-Yours,
-Linus Walleij
+-- 
+
+- Arnaldo

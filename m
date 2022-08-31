@@ -2,78 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2D5D5A7788
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8EE5A778A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbiHaHbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 03:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59006 "EHLO
+        id S230071AbiHaHbt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 03:31:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229908AbiHaHb1 (ORCPT
+        with ESMTP id S230050AbiHaHbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 03:31:27 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DDDBC832
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:31:25 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id s15so8567464ljp.5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=SowT+GgtM4rpf2Tm7Xdg2PLTWLyEuq4YWLGVJCfBBo4=;
-        b=eDUHucZHmNWPS4dcTDAvSB+3Gf6B84OpnmrxcPBg31ZikUd8NxfnOhl5KSqS8dqwTH
-         By91LHkdLFJWxuU3BZip5eaLMrQ3CxsdmPbKI+MBD5j0nW1JUI4YzW3nktfZKPaQBcHx
-         KtZG8TaSTS9srPQOsqMP85vqWbBerDKMiFGow/qtjx4HobjfONZP21xmc1c5FfT+xX+j
-         nIg8aDpdTtf7gCUwKdLU6g4jzLSvaiPTv8zA9dKiV3jUY+6cVOhIcxEpmKsLBKokL/TW
-         zbez57XmSuj33sarUwUCCEpvsSsp5xK9z8nlhK8VXyG0a1y862EP0dyou+0fo27AGZu0
-         Oc8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=SowT+GgtM4rpf2Tm7Xdg2PLTWLyEuq4YWLGVJCfBBo4=;
-        b=EyLwNXsOYmEefqWDTTxHKMvkhkCVbWYCvOlfBpoU/E5PtJWJilJibmzq1AZRY4aoHz
-         HUSpTPb8EdApM4rfnIFqUu8S1b+W1/zUXo4OxjDO7qO9FmYR57NaLckQSWtUqxGnQVlB
-         I6RFH98+yk4MzNM/EFHV7anCSagJ24e5kbhL9YWbbpdxqhTsXZJ7KFu5O2SEgpkWtObG
-         6k8ek6U7yEjr2bztkzAoOWCyKdfd44BK2YmyQpxGmc0EzDLURO6MI48EYlMiL1d7sJxg
-         n6lGiUIvS+FUmegQ6lximxLt37+uimtX/8C1I67DSF70bx2aj4HMlf9uRQwyaTJ2sFsZ
-         hFCw==
-X-Gm-Message-State: ACgBeo2YJOnOgnDn0SgHFcPQY9mVso+4jGl3rW2nv50O2FBpX9A6SRw1
-        IeGKEg7ZS0TSN0MJK//M4vCP+w==
-X-Google-Smtp-Source: AA6agR4/QCHMtUzdlfGAL1xvdig57DJ6Ktw8Nv3Fk/1Sl/NMSIE1w3emriDGwD5pekMf0VCiwhuuGw==
-X-Received: by 2002:a05:651c:199f:b0:261:d789:cd6c with SMTP id bx31-20020a05651c199f00b00261d789cd6cmr8281851ljb.450.1661931083551;
-        Wed, 31 Aug 2022 00:31:23 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id c7-20020a056512104700b0049468f9e697sm1135488lfb.236.2022.08.31.00.31.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 00:31:23 -0700 (PDT)
-Message-ID: <373fdedb-447e-b552-df83-737267068296@linaro.org>
-Date:   Wed, 31 Aug 2022 10:31:22 +0300
+        Wed, 31 Aug 2022 03:31:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE508BCCF1;
+        Wed, 31 Aug 2022 00:31:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 372A0618A0;
+        Wed, 31 Aug 2022 07:31:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 219D4C433D6;
+        Wed, 31 Aug 2022 07:31:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1661931094;
+        bh=d4EgKFrsrHLU78IeWOJ+tNK9WnATpRtGTtybgl+XJiQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lU28n71dtK15K68q+FEAnkh9VY4bzqIFgXscMfNqa2QbgAbbQsF9fsNdOjqdzOGXQ
+         KA65M7gFLZEZ5w0tl9vlSCtgo+rtH9n0s2li3w01XiB77bjCteytBg9y7UkZANxSV1
+         6jDAr0Vmt+/Y4yqOWZJPp+nHW3/9BD9bv0fztmc4=
+Date:   Wed, 31 Aug 2022 09:31:31 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     jflf_kernel@gmx.com
+Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: add quirks for Lenovo OneLink+ Dock
+Message-ID: <Yw8OU8hYZuuBgrnj@kroah.com>
+References: <20220824160946.10128-1-jflf_kernel@gmx.com>
+ <31aeee3c-f4f1-16a8-272b-96da5d4a565e@suse.com>
+ <d1a5f149-50a1-49fc-9a6d-eceffa23311b@gmx.com>
+ <4b92eee0-b020-9211-2039-18ac3ac72a7b@suse.com>
+ <edd97137-74a1-ee0b-d475-7c5b36197155@gmx.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: reset: syscon-reboot: Add priority
- property
-Content-Language: en-US
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Ellerman <mpe@ellerman.id.au>
-Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>
-References: <20220820102925.29476-1-pali@kernel.org>
- <20220830230012.9429-1-pali@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220830230012.9429-1-pali@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <edd97137-74a1-ee0b-d475-7c5b36197155@gmx.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,13 +55,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/08/2022 02:00, Pali Rohár wrote:
-> This new optional priority property allows to specify custom priority level
-> of reset device. Default level was always 192.
+On Tue, Aug 30, 2022 at 09:50:03PM +0200, jflf_kernel@gmx.com wrote:
+> 
+> On 30/08/2022 16.47, Oliver Neukum wrote:
+> 
+> > 1) force a reset after a resume and call reset_resume() instead of resume()
+> > 2) block autosuspend if remote wakeup is required
+> >
+> > I suspect you are actually using the second effect. Have you
+> > tested with "usbcore.autosuspend=-1" on the kernel command line.
+> 
+> After further testing, your suspicion is correct.
+> 
+> TL;DR: the two VL812 hubs don't behave well when suspended.
+> 
+> I'd like to prepare a better patch for that issue. What's the recommended strategy? The current patch works, even if only as a side effect and when there's a wakeup source downstream. It's currently in Greg KH's usb-linus branch, and will land in linux-next at some point. I'm tempted to let it be and undo it later in the better patch. Is that acceptable? Or should I ask Greg KH to pull it?
 
-You still did not explain why do we need this. You only explained what
-you did here, which is obvious and visible from the diff. What you
-should explain is why you are doing it, what problem you are solving.
+I can revert it if you want me to, just let me know.
 
-Best regards,
-Krzysztof
+thanks,
+
+greg k-h

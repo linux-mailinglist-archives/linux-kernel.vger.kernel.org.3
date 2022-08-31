@@ -2,221 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35D1A5A8269
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:55:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F4445A824B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiHaPzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38416 "EHLO
+        id S231226AbiHaPwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231419AbiHaPyn (ORCPT
+        with ESMTP id S230043AbiHaPwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:54:43 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C98E1AB4FE;
-        Wed, 31 Aug 2022 08:54:41 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=ziyangzhang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VNrdoMu_1661961264;
-Received: from localhost.localdomain(mailfrom:ZiyangZhang@linux.alibaba.com fp:SMTPD_---0VNrdoMu_1661961264)
-          by smtp.aliyun-inc.com;
-          Wed, 31 Aug 2022 23:54:37 +0800
-From:   ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-To:     ming.lei@redhat.com, axboe@kernel.dk
-Cc:     xiaoguang.wang@linux.alibaba.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, joseph.qi@linux.alibaba.com,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-Subject: [RFC PATCH V2 6/6] ublk_drv: add START_USER_RECOVERY and END_USER_RECOVERY support
-Date:   Wed, 31 Aug 2022 23:51:36 +0800
-Message-Id: <20220831155136.23434-7-ZiyangZhang@linux.alibaba.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220831155136.23434-1-ZiyangZhang@linux.alibaba.com>
-References: <20220831155136.23434-1-ZiyangZhang@linux.alibaba.com>
+        Wed, 31 Aug 2022 11:52:33 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6631A6C0F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:52:31 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3378303138bso311234217b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=DPh7ToX/xZeKd5sie6f3GwYv1dgrGEWOsdwYUdRqOV8=;
+        b=Ib8pAgAXpi66eUIrDx9HR42EQ83DMfbld1dlC8/B6EAvidr1kvmEAZeUXRt94L1+CY
+         fOk9VsOVmUuFoA3ousl8Ls9nH8k8tfM+rNhI6xbMFrdhErQiM5hQSsqd2rBTC4+hb+jz
+         x5t/VHEd7zMohGNGfLtkKMabhYYj05y3VRMNFTksjD0TxoUQD1VZClnayPhKj0nf7p9J
+         AKzTfeLiXAmgNrt2WdWSuelER8LXAcfC5HgCInP5/nDUlNIINl8G7Ik3e4I5/pB0YrkX
+         Qcp8GP0MNCkY9+ymMPvS4UyuNVxGZAw/VRq+/lxc53pSVnVgD3IP07MsNXunkZUp3HjH
+         knuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=DPh7ToX/xZeKd5sie6f3GwYv1dgrGEWOsdwYUdRqOV8=;
+        b=RBh+1lPavpR0fq0xnPkGrzZOfDOzuCbhHytiJxy/oCsp3qnAzV1Jno7FuglHwdS45D
+         zkX2ut4l2GT0Rrv0Jud3YZNaHIz+cBv7jjftn7+8vsJaiAgFwC9lur+gpi4Ccg3W/imj
+         r+p0JZ91D1h69Swx4UsDVs8lS9mR8DeHZ/WhdfRKaHZDHfNL1+PowquWON5RUmoLKq8m
+         ncJR3vJCcFqZlHigz4oMBj4Jx4hBbL2crp1iLf6T6q4cly78TR3CGPMsIZnkovSoEJET
+         sCAs+A26r28WtItYPgc/9gAYOwQGu8pCCKOCgPzdATagGkvvZYtEN3+ewwfe2tA7lsEC
+         z4hA==
+X-Gm-Message-State: ACgBeo1Wg/fopVsCFQP7rri2I9BG5pEKKtLKRcKR+e4LA0w+77Va8lEa
+        +PA0MU6AdLxs75rHz4DU+I/gnYRyWYtnGT3hn3d/0A==
+X-Google-Smtp-Source: AA6agR77ayVKimqTSvnLuFWBEKBbMWCXeZt/MyEcvQRogVe/KquV1BGkRaxT2hK9yX4AVYf+RasGcwvoXy2efvclpMo=
+X-Received: by 2002:a0d:d850:0:b0:340:d2c0:b022 with SMTP id
+ a77-20020a0dd850000000b00340d2c0b022mr16260868ywe.469.1661961150716; Wed, 31
+ Aug 2022 08:52:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-11-surenb@google.com>
+ <20220831101103.fj5hjgy3dbb44fit@suse.de> <CAJuCfpHwUUc_VphqBY9KmWvZJDrsBG6Za+kG_MW=J-abjuM4Lw@mail.gmail.com>
+In-Reply-To: <CAJuCfpHwUUc_VphqBY9KmWvZJDrsBG6Za+kG_MW=J-abjuM4Lw@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 31 Aug 2022 08:52:19 -0700
+Message-ID: <CAJuCfpGy_RrQBUy2yxvcZzAXO5cJU5BHxRko+b8p7wWLjQwXvA@mail.gmail.com>
+Subject: Re: [RFC PATCH 10/30] mm: enable page allocation tagging for
+ __get_free_pages and alloc_pages
+To:     Mel Gorman <mgorman@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-START_USER_RECOVERY and END_USER_RECOVERY are two new control commands
-to support user recovery feature.
+On Wed, Aug 31, 2022 at 8:45 AM Suren Baghdasaryan <surenb@google.com> wrote:
+>
+> On Wed, Aug 31, 2022 at 3:11 AM Mel Gorman <mgorman@suse.de> wrote:
+> >
+> > On Tue, Aug 30, 2022 at 02:48:59PM -0700, Suren Baghdasaryan wrote:
+> > > Redefine alloc_pages, __get_free_pages to record allocations done by
+> > > these functions. Instrument deallocation hooks to record object freeing.
+> > >
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > +#ifdef CONFIG_PAGE_ALLOC_TAGGING
+> > > +
+> > >  #include <linux/alloc_tag.h>
+> > >  #include <linux/page_ext.h>
+> > >
+> > > @@ -25,4 +27,37 @@ static inline void pgalloc_tag_dec(struct page *page, unsigned int order)
+> > >               alloc_tag_sub(get_page_tag_ref(page), PAGE_SIZE << order);
+> > >  }
+> > >
+> > > +/*
+> > > + * Redefinitions of the common page allocators/destructors
+> > > + */
+> > > +#define pgtag_alloc_pages(gfp, order)                                        \
+> > > +({                                                                   \
+> > > +     struct page *_page = _alloc_pages((gfp), (order));              \
+> > > +                                                                     \
+> > > +     if (_page)                                                      \
+> > > +             alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
+> > > +     _page;                                                          \
+> > > +})
+> > > +
+> >
+> > Instead of renaming alloc_pages, why is the tagging not done in
+> > __alloc_pages()? At least __alloc_pages_bulk() is also missed. The branch
+> > can be guarded with IS_ENABLED.
+>
+> Hmm. Assuming all the other allocators using __alloc_pages are inlined, that
+> should work. I'll try that and if that works will incorporate in the
+> next respin.
+> Thanks!
+>
+> I don't think IS_ENABLED is required because the tagging functions are already
+> defined as empty if the appropriate configs are not enabled. Unless I
+> misunderstood
+> your node.
+>
+> >
+> > > +#define pgtag_get_free_pages(gfp_mask, order)                                \
+> > > +({                                                                   \
+> > > +     struct page *_page;                                             \
+> > > +     unsigned long _res = _get_free_pages((gfp_mask), (order), &_page);\
+> > > +                                                                     \
+> > > +     if (_res)                                                       \
+> > > +             alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
+> > > +     _res;                                                           \
+> > > +})
+> > > +
+> >
+> > Similar, the tagging could happen in a core function instead of a wrapper.
 
-After a crash, user should send START_USER_RECOVERY, it will:
-(1) check if (a)current ublk_device is UBLK_S_DEV_RECOVERING which was
-    set by monitor_work and (b)the file struct is released. We always
-	expect crash of the ublksrv 'process', not exit of a single
-	ubq_daemon 'pthread'.
-(2) reinit all ubqs, including:
-    (a) put the dying task(thread) and reset ->ubq_daemon to NULL.
-    (b) reset all ublk_io.
-(3) reset ub->mm to NULL.
+Ack.
 
-Then, user should start a new 'process' and send FETCH_REQ on each
-ubq_daemon.
+> >
+> > > +#else /* CONFIG_PAGE_ALLOC_TAGGING */
+> > > +
+> > > +#define pgtag_alloc_pages(gfp, order) _alloc_pages(gfp, order)
+> > > +
+> > > +#define pgtag_get_free_pages(gfp_mask, order) \
+> > > +     _get_free_pages((gfp_mask), (order), NULL)
+> > > +
+> > > +#define pgalloc_tag_dec(__page, __size)              do {} while (0)
+> > > +
+> > > +#endif /* CONFIG_PAGE_ALLOC_TAGGING */
+> > > +
+> > >  #endif /* _LINUX_PGALLOC_TAG_H */
+> > > diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> > > index b73d3248d976..f7e6d9564a49 100644
+> > > --- a/mm/mempolicy.c
+> > > +++ b/mm/mempolicy.c
+> > > @@ -2249,7 +2249,7 @@ EXPORT_SYMBOL(vma_alloc_folio);
+> > >   * flags are used.
+> > >   * Return: The page on success or NULL if allocation fails.
+> > >   */
+> > > -struct page *alloc_pages(gfp_t gfp, unsigned order)
+> > > +struct page *_alloc_pages(gfp_t gfp, unsigned int order)
+> > >  {
+> > >       struct mempolicy *pol = &default_policy;
+> > >       struct page *page;
+> > > @@ -2273,7 +2273,7 @@ struct page *alloc_pages(gfp_t gfp, unsigned order)
+> > >
+> > >       return page;
+> > >  }
+> > > -EXPORT_SYMBOL(alloc_pages);
+> > > +EXPORT_SYMBOL(_alloc_pages);
+> > >
+> > >  struct folio *folio_alloc(gfp_t gfp, unsigned order)
+> > >  {
+> > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > > index e5486d47406e..165daba19e2a 100644
+> > > --- a/mm/page_alloc.c
+> > > +++ b/mm/page_alloc.c
+> > > @@ -763,6 +763,7 @@ static inline bool pcp_allowed_order(unsigned int order)
+> > >
+> > >  static inline void free_the_page(struct page *page, unsigned int order)
+> > >  {
+> > > +
+> > >       if (pcp_allowed_order(order))           /* Via pcp? */
+> > >               free_unref_page(page, order);
+> > >       else
+> >
+> > Spurious wide-space change.
 
-Finally, user should send END_USER_RECOVERY, it will:
-(1) wait for all new ubq_daemons getting ready.
-(2) unquiesce the request queue and expect incoming ublk_queue_rq()
-(3) convert state to UBLK_S_DEV_LIVE
-(4) schedule monitor_work again
+Ack.
 
-Signed-off-by: ZiyangZhang <ZiyangZhang@linux.alibaba.com>
----
- drivers/block/ublk_drv.c | 130 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 130 insertions(+)
-
-diff --git a/drivers/block/ublk_drv.c b/drivers/block/ublk_drv.c
-index 0e185d1fa2c4..2d1f3e032606 100644
---- a/drivers/block/ublk_drv.c
-+++ b/drivers/block/ublk_drv.c
-@@ -1964,6 +1964,130 @@ static int ublk_ctrl_set_params(struct io_uring_cmd *cmd)
- 	return ret;
- }
- 
-+static void ublk_queue_start_recovery(struct ublk_device *ub, struct ublk_queue *ubq)
-+{
-+	int i;
-+
-+	/* All old ioucmds have to be completed/canceled by io_uring_cmd_done(). */
-+	WARN_ON_ONCE(ubq->nr_io_ready);
-+
-+	/* old daemon is PF_EXITING, put it now */
-+	put_task_struct(ubq->ubq_daemon);
-+	/* have to set it to NULL, otherwise ub won't accept new FETCH_REQ */
-+	ubq->ubq_daemon = NULL;
-+
-+	for (i = 0; i < ubq->q_depth; i++) {
-+		struct ublk_io *io = &ubq->ios[i];
-+
-+		/* forget everything now and be ready for new FETCH_REQ */
-+		io->flags = 0;
-+		io->cmd = NULL;
-+		io->addr = 0;
-+	}
-+}
-+
-+static int ublk_ctrl_start_recovery(struct io_uring_cmd *cmd)
-+{
-+	struct ublksrv_ctrl_cmd *header = (struct ublksrv_ctrl_cmd *)cmd->cmd;
-+	struct ublk_device *ub;
-+	int ret = -EINVAL;
-+	int i;
-+
-+	ub = ublk_get_device_from_id(header->dev_id);
-+	if (!ub)
-+		return ret;
-+
-+	mutex_lock(&ub->mutex);
-+
-+	if (!ublk_can_use_recovery(ub))
-+		goto out_unlock;
-+
-+	/*
-+	 * START_RECOVERY is only allowd after:
-+	 *
-+	 * (1) UB_STATE_OPEN is not set, which means the dying process is exited
-+	 *     and related io_uring ctx is freed so file struct of /dev/ublkcX is
-+	 *     released.
-+	 *
-+	 * (2) UBLK_S_DEV_RECOVERING is set, which means the monitor_work:
-+	 *     (a)has requeued all inflight rqs whose io_flags is ACTIVE
-+	 *     (b)has requeued/aborted all inflight rqs whose io_flags is NOT ACTIVE
-+	 *     (c)has completed/camceled all ioucmds owned by ther dying process
-+	 */
-+	if (test_bit(UB_STATE_OPEN, &ub->state) ||
-+			ub->dev_info.state != UBLK_S_DEV_RECOVERING) {
-+		ret = -EBUSY;
-+		goto out_unlock;
-+	}
-+
-+	pr_devel("%s: start recovery for dev id %d.\n", __func__, header->dev_id);
-+
-+	for (i = 0; i < ub->dev_info.nr_hw_queues; i++) {
-+		struct ublk_queue *ubq = ublk_get_queue(ub, i);
-+
-+		WARN_ON_ONCE(!(ubq->ubq_daemon && ubq_daemon_is_dying(ubq)));
-+		pr_devel("%s: prepare for recovering qid %d\n", __func__, ubq->q_id);
-+		ublk_queue_start_recovery(ub, ubq);
-+	}
-+
-+	/* set to NULL, otherwise new ubq_daemon cannot mmap the io_cmd_buf */
-+	ub->mm = NULL;
-+	ub->nr_queues_ready = 0;
-+	init_completion(&ub->completion);
-+	ret = 0;
-+
-+ out_unlock:
-+	mutex_unlock(&ub->mutex);
-+	ublk_put_device(ub);
-+	return ret;
-+}
-+
-+static int ublk_ctrl_end_recovery(struct io_uring_cmd *cmd)
-+{
-+	struct ublksrv_ctrl_cmd *header = (struct ublksrv_ctrl_cmd *)cmd->cmd;
-+	int ublksrv_pid = (int)header->data[0];
-+	struct ublk_device *ub;
-+	int ret = -EINVAL;
-+
-+	ub = ublk_get_device_from_id(header->dev_id);
-+	if (!ub)
-+		return ret;
-+
-+	pr_devel("%s: Waiting for new ubq_daemon is ready, dev id %d...\n",
-+			__func__, header->dev_id);
-+	/* wait until new ubq_daemon sending all FETCH_REQ */
-+	wait_for_completion_interruptible(&ub->completion);
-+	pr_devel("%s: All new ubq_daemon is ready, dev id %d\n",
-+			__func__, header->dev_id);
-+
-+	mutex_lock(&ub->mutex);
-+
-+	if (!ublk_can_use_recovery(ub))
-+		goto out_unlock;
-+
-+	/* monitor_work should set UBLK_S_DEV_RECOVERING */
-+	if (ub->dev_info.state != UBLK_S_DEV_RECOVERING) {
-+		ret = -EBUSY;
-+		goto out_unlock;
-+	}
-+	ub->dev_info.ublksrv_pid = ublksrv_pid;
-+	pr_devel("%s: new ublksrv_pid %d, dev id %d\n",
-+			__func__, ublksrv_pid, header->dev_id);
-+	blk_mq_unquiesce_queue(ub->ub_disk->queue);
-+	pr_devel("%s: queue unquiesced, dev id %d.\n",
-+			__func__, header->dev_id);
-+
-+	ub->dev_info.state = UBLK_S_DEV_LIVE;
-+	schedule_delayed_work(&ub->monitor_work, UBLK_DAEMON_MONITOR_PERIOD);
-+	/* We are good to redo requests now */
-+	blk_mq_kick_requeue_list(ub->ub_disk->queue);
-+	ret = 0;
-+ out_unlock:
-+	mutex_unlock(&ub->mutex);
-+	ublk_put_device(ub);
-+	return ret;
-+}
-+
- static int ublk_ctrl_uring_cmd(struct io_uring_cmd *cmd,
- 		unsigned int issue_flags)
- {
-@@ -2005,6 +2129,12 @@ static int ublk_ctrl_uring_cmd(struct io_uring_cmd *cmd,
- 	case UBLK_CMD_SET_PARAMS:
- 		ret = ublk_ctrl_set_params(cmd);
- 		break;
-+	case UBLK_CMD_START_USER_RECOVERY:
-+		ret = ublk_ctrl_start_recovery(cmd);
-+		break;
-+	case UBLK_CMD_END_USER_RECOVERY:
-+		ret = ublk_ctrl_end_recovery(cmd);
-+		break;
- 	default:
- 		break;
- 	}
--- 
-2.27.0
-
+> >
+> > --
+> > Mel Gorman
+> > SUSE Labs

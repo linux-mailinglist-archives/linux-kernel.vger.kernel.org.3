@@ -2,166 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D3305A87C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:56:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 791215A87CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbiHaU4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 16:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38914 "EHLO
+        id S231992AbiHaU4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 16:56:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiHaU41 (ORCPT
+        with ESMTP id S231802AbiHaU4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 16:56:27 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FA5DD2E86;
-        Wed, 31 Aug 2022 13:56:26 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id f9so8367026qvw.11;
-        Wed, 31 Aug 2022 13:56:26 -0700 (PDT)
+        Wed, 31 Aug 2022 16:56:49 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F73DC089
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 13:56:46 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id c7so13136725wrp.11
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 13:56:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=j8UxbtDew574grRc59F86ZudDhnKYJ7sEvH/yI7OmEs=;
-        b=pLlZHUsafseS+eCvZzo2JMww4kXTSN5Q009GbouFmh6rphSQFQvi1GE/RwHfiTJKMd
-         9migLuUKejEVPejkRaYRfP7/BIf5BciS+SYPx0hw2ASIXdnkmETO1wOs6NEhfl9bLOuB
-         CtPa7JYith5/ZdRSaQvBadQYpYozjdj30GtuP9HRhzxeOodxfE83lEYOPIZlhbySw81C
-         VW3tujh7TS6fEfmWuSENg9LnaCvMgwotDGbZ2iCUXXhPWsDXE4taQvChbTf6e9jmeunl
-         CODvVln7wyQeAhYIKqsBZkpYHMGw5v/LftrW3ugq9j6T8npLQqqiDIKD1GBLhdqttybf
-         tHdA==
+         :mime-version:from:to:cc;
+        bh=Q+TlttOrTWNB3q3o6Zbb04N1wsFemMMzZbBDHk1hdbY=;
+        b=VyP3SbNsuyxc5blP2FoCVyjA1CBQu5fk1qPBiWwHnsN7KbhALhPVRs+hdxfauKkrjN
+         HjpFIvR9qflpc5b/NaZbUp4Qe+yoyJx8jmIG71feNwOicipxd4Z45zOK95SSSmFlFqg1
+         JlDxmSa+dos6d565oincRG6QsILc3r0lbpSqflqmVfv9TWNY+mQW2VINkINO6wGxloda
+         V9BbsnXdjx9TWnVhm9AxW/SNuwlNLiahxr1xh25VEX0zm/Rv6sxPCVqP3nUxZGj48fmq
+         8freUAXARJQoL1m1MzSBuxjvucYwjbHks6tBHAAViJ2OqT1E6YeDUp+dfTHOL3fNg2CJ
+         OS0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=j8UxbtDew574grRc59F86ZudDhnKYJ7sEvH/yI7OmEs=;
-        b=J/s9NmfiPYexWNaRGdMB6wvegF9yIrt47YwlxTHlPsAqwCmingqq68X5L5ut1Wl7vg
-         RjKknk86dMn+xtgsrjHuKrmvqoUBpR9sj8lKjPI55pdWV4WYsbjPqHvjORDAddB8ubwG
-         RbgzKe2kCASW9MpshwRPfSDAuzPOowCJcQFDwufXpY73/KaFuByhDPuf8F3YR5bHWLOV
-         /9ZGSmK5lCVnCxuB5+tHESXgXWKI7fgTYCJ6AB46O2tMo2R6akejFDbMKLcXTiPp0k6q
-         EOOJQFkmgr8YwmmMUyk6w6ZQUU4XiAkIa7NVsCnDMoDzLDklef5RAHY3PLSVxYhEm3wz
-         KeJA==
-X-Gm-Message-State: ACgBeo2qZxxzyg36f0jw0TGapbxWxh7JF5E8K3pXguyUED4LSJeYv0pL
-        C/W8VY9P9LZMfJGBG8qVcb/I+aWrRcN/X9E9pMW/Ffa+J7k=
-X-Google-Smtp-Source: AA6agR5Rx6JL/d53spayx5rkbH9OCbX4qUggQsXoOMq2Dsh8M4BdCXMWYm+Rx90QyjJ89vPJycmpDbRH1YmFQb8xBuo=
-X-Received: by 2002:a05:6214:27ca:b0:499:95f:6379 with SMTP id
- ge10-20020a05621427ca00b00499095f6379mr12263042qvb.82.1661979385373; Wed, 31
- Aug 2022 13:56:25 -0700 (PDT)
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Q+TlttOrTWNB3q3o6Zbb04N1wsFemMMzZbBDHk1hdbY=;
+        b=MRYTNdyBTBC6Qvj2hDX5iEBULRgnej0VxwTSVts5FrhZGUhETartKQTYff/PbfXqx2
+         xINuQ4eYUGZGkWwHjlcA1olKfzbzdlu6Kllw8HdgEKCz6MI/ErXYWwAn6l11mV2L4S2L
+         sI6jeFq+ToggsD4KqBkZ8CRahVqRHNqOqX3/yycYA2J/3sfiI4QwapD4fNT0aBZR6Qjg
+         93zZfi0Agy0zE5AgqaWmEh/o2m2krX5X8yRX7lVeKQL3mG2NZYpnLjGgc8yLe+cwjJti
+         75L+fBAe1jmcS4Nqw/LfYDJSpGp842eHKJ1iq4eoQInv/dy/KU+t+Hty3I+rW93pSU9n
+         4/zA==
+X-Gm-Message-State: ACgBeo1KIGpTaRjVhpm7VfpijQoBS+eLrjA9RZKGpo4hLYXob15VVPGa
+        V5P6jm05PmqfuzgxeiEwtmm7y8cVsk22G8hbYdCRIg==
+X-Google-Smtp-Source: AA6agR7XK78VXHUjktIpBA+ayr5Wvv6QyZC54NZbTQlygRhYLtBkkgViGprvNovg9YVhzd6mrhctznnyhI9ADAmQ4D4=
+X-Received: by 2002:a05:6000:1188:b0:220:6c20:fbf6 with SMTP id
+ g8-20020a056000118800b002206c20fbf6mr13193874wrx.372.1661979404912; Wed, 31
+ Aug 2022 13:56:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220829133923.1114555-1-martyn.welch@collabora.com> <20220829133923.1114555-4-martyn.welch@collabora.com>
-In-Reply-To: <20220829133923.1114555-4-martyn.welch@collabora.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 31 Aug 2022 23:55:49 +0300
-Message-ID: <CAHp75VcXR9=5WwZqe=juLBDT1CZnYfWHCGDb4Tp211sL2AA_Gw@mail.gmail.com>
-Subject: Re: [PATCH 4/5] gpio: pca953x: Swap if statements to save later complexity
-To:     Martyn Welch <martyn.welch@collabora.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+In-Reply-To: <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 31 Aug 2022 13:56:08 -0700
+Message-ID: <CAJD7tkaev9B=UDYj2RL6pz-1454J8tv4gEr9y-2dnCksoLK0bw@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>, dave@stgolabs.net,
+        Matthew Wilcox <willy@infradead.org>, liam.howlett@oracle.com,
+        void@manifault.com, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        Steven Rostedt <rostedt@goodmis.org>, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com,
+        Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, Linux-MM <linux-mm@kvack.org>,
+        iommu@lists.linux.dev, kasan-dev@googlegroups.com,
+        io-uring@vger.kernel.org, linux-arch@vger.kernel.org,
+        xen-devel@lists.xenproject.org, linux-bcache@vger.kernel.org,
+        linux-modules@vger.kernel.org,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 4:43 PM Martyn Welch <martyn.welch@collabora.com> wrote:
+On Wed, Aug 31, 2022 at 12:02 PM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
 >
-> A later patch in the series adds support for a further chip type that
-> shares some similarity with the PCA953X_TYPE. In order to keep the logic
-> simple,
-
-If you say so...
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
-> swap over the if and else portions where checks are made against
-> PCA953X_TYPE and instead check for PCA957X_TYPE.
+> On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
+> > On Wed 31-08-22 11:19:48, Mel Gorman wrote:
+> > > Whatever asking for an explanation as to why equivalent functionality
+> > > cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
+> >
+> > Fully agreed and this is especially true for a change this size
+> > 77 files changed, 3406 insertions(+), 703 deletions(-)
 >
-> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
-> ---
->  drivers/gpio/gpio-pca953x.c | 31 +++++++++++++++----------------
->  1 file changed, 15 insertions(+), 16 deletions(-)
+> In the case of memory allocation accounting, you flat cannot do this with ftrace
+> - you could maybe do a janky version that isn't fully accurate, much slower,
+> more complicated for the developer to understand and debug and more complicated
+> for the end user.
 >
-> diff --git a/drivers/gpio/gpio-pca953x.c b/drivers/gpio/gpio-pca953x.c
-> index 41e7ff83a735..19a8eb94a629 100644
-> --- a/drivers/gpio/gpio-pca953x.c
-> +++ b/drivers/gpio/gpio-pca953x.c
-> @@ -293,13 +293,13 @@ static bool pca953x_readable_register(struct device *dev, unsigned int reg)
->         struct pca953x_chip *chip = dev_get_drvdata(dev);
->         u32 bank;
+> But please, I invite anyone who's actually been doing this with ftrace to
+> demonstrate otherwise.
 >
-> -       if (PCA_CHIP_TYPE(chip->driver_data) == PCA953X_TYPE) {
-> -               bank = PCA953x_BANK_INPUT | PCA953x_BANK_OUTPUT |
-> -                      PCA953x_BANK_POLARITY | PCA953x_BANK_CONFIG;
-> -       } else {
-> +       if (PCA_CHIP_TYPE(chip->driver_data) == PCA957X_TYPE) {
->                 bank = PCA957x_BANK_INPUT | PCA957x_BANK_OUTPUT |
->                        PCA957x_BANK_POLARITY | PCA957x_BANK_CONFIG |
->                        PCA957x_BANK_BUSHOLD;
-> +       } else {
-> +               bank = PCA953x_BANK_INPUT | PCA953x_BANK_OUTPUT |
-> +                      PCA953x_BANK_POLARITY | PCA953x_BANK_CONFIG;
->         }
+> Ftrace just isn't the right tool for the job here - we're talking about adding
+> per callsite accounting to some of the fastest fast paths in the kernel.
 >
->         if (chip->driver_data & PCA_PCAL) {
-> @@ -316,12 +316,12 @@ static bool pca953x_writeable_register(struct device *dev, unsigned int reg)
->         struct pca953x_chip *chip = dev_get_drvdata(dev);
->         u32 bank;
+> And the size of the changes for memory allocation accounting are much more
+> reasonable:
+>  33 files changed, 623 insertions(+), 99 deletions(-)
 >
-> -       if (PCA_CHIP_TYPE(chip->driver_data) == PCA953X_TYPE) {
-> -               bank = PCA953x_BANK_OUTPUT | PCA953x_BANK_POLARITY |
-> -                       PCA953x_BANK_CONFIG;
-> -       } else {
-> +       if (PCA_CHIP_TYPE(chip->driver_data) == PCA957X_TYPE) {
->                 bank = PCA957x_BANK_OUTPUT | PCA957x_BANK_POLARITY |
->                         PCA957x_BANK_CONFIG | PCA957x_BANK_BUSHOLD;
-> +       } else {
-> +               bank = PCA953x_BANK_OUTPUT | PCA953x_BANK_POLARITY |
-> +                       PCA953x_BANK_CONFIG;
->         }
+> The code tagging library should exist anyways, it's been open coded half a dozen
+> times in the kernel already.
 >
->         if (chip->driver_data & PCA_PCAL)
-> @@ -336,10 +336,10 @@ static bool pca953x_volatile_register(struct device *dev, unsigned int reg)
->         struct pca953x_chip *chip = dev_get_drvdata(dev);
->         u32 bank;
+> And once we've got that, the time stats code is _also_ far simpler than doing it
+> with ftrace would be. If anyone here has successfully debugged latency issues
+> with ftrace, I'd really like to hear it. Again, for debugging latency issues you
+> want something that can always be on, and that's not cheap with ftrace - and
+> never mind the hassle of correlating start and end wait trace events, builting
+> up histograms, etc. - that's all handled here.
 >
-> -       if (PCA_CHIP_TYPE(chip->driver_data) == PCA953X_TYPE)
-> -               bank = PCA953x_BANK_INPUT;
-> -       else
-> +       if (PCA_CHIP_TYPE(chip->driver_data) == PCA957X_TYPE)
->                 bank = PCA957x_BANK_INPUT;
-> +       else
-> +               bank = PCA953x_BANK_INPUT;
->
->         if (chip->driver_data & PCA_PCAL)
->                 bank |= PCAL9xxx_BANK_IRQ_STAT;
-> @@ -1069,13 +1069,12 @@ static int pca953x_probe(struct i2c_client *client,
->         /* initialize cached registers from their original values.
->          * we can't share this chip with another i2c master.
->          */
-> -
-> -       if (PCA_CHIP_TYPE(chip->driver_data) == PCA953X_TYPE) {
-> -               chip->regs = &pca953x_regs;
-> -               ret = device_pca95xx_init(chip, invert);
-> -       } else {
-> +       if (PCA_CHIP_TYPE(chip->driver_data) == PCA957X_TYPE) {
->                 chip->regs = &pca957x_regs;
->                 ret = device_pca957x_init(chip, invert);
-> +       } else {
-> +               chip->regs = &pca953x_regs;
-> +               ret = device_pca95xx_init(chip, invert);
->         }
->         if (ret)
->                 goto err_exit;
-> --
-> 2.35.1
+> Cheap, simple, easy to use. What more could you want?
 >
 
-
--- 
-With Best Regards,
-Andy Shevchenko
+This is very interesting work! Do you have any data about the overhead
+this introduces, especially in a production environment? I am
+especially interested in memory allocations tracking and detecting
+leaks.
+(Sorry if you already posted this kind of data somewhere that I missed)

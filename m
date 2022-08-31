@@ -2,124 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7079C5A7BD2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DD55A7BD5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:00:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiHaK7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 06:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58622 "EHLO
+        id S229877AbiHaLAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 07:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiHaK7P (ORCPT
+        with ESMTP id S229556AbiHaLAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 06:59:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44D6CC306;
-        Wed, 31 Aug 2022 03:59:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8B368221B9;
-        Wed, 31 Aug 2022 10:59:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1661943553; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7pCrX4rJAh3LXCsMBtJxFA5ygrq1v/RFZEm6VruL38A=;
-        b=L9Mc6XUca7WIz22tD7HN+8QnY5trbdMz7pnoo1qimh9zHXmhLdpVrS+1d+15xDppkIm/jg
-        HZKW8bB7dZPhMT9IM4JtbWEh1mD1HTkg6P4n1wOHU//s1vZs0lsuMHnyT4T4iGTxO/YDhi
-        xAbsrka5InTA++kdfvn58sF5exaiSZQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1661943553;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7pCrX4rJAh3LXCsMBtJxFA5ygrq1v/RFZEm6VruL38A=;
-        b=6/tElmIZdAo0spE3ELqBpkQVsZu8tISnju6SykXxSP1E3X8SFlxwnXcITV1hVxWZEnL+7l
-        Nq97MlTgY1UVYcBw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 77A1A13A7C;
-        Wed, 31 Aug 2022 10:59:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 8iUvHQE/D2PpcAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 31 Aug 2022 10:59:13 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 141A0A067B; Wed, 31 Aug 2022 12:59:13 +0200 (CEST)
-Date:   Wed, 31 Aug 2022 12:59:13 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Zhang Yi <yi.zhang@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cluster-devel@redhat.com,
-        ntfs3@lists.linux.dev, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, jack@suse.cz, tytso@mit.edu,
-        akpm@linux-foundation.org, axboe@kernel.dk,
-        viro@zeniv.linux.org.uk, rpeterso@redhat.com, agruenba@redhat.com,
-        almaz.alexandrovich@paragon-software.com, mark@fasheh.com,
-        dushistov@mail.ru, hch@infradead.org, chengzhihao1@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH 07/14] ntfs3: replace ll_rw_block()
-Message-ID: <20220831105913.ges3eatp5buz3bkh@quack3>
-References: <20220831072111.3569680-1-yi.zhang@huawei.com>
- <20220831072111.3569680-8-yi.zhang@huawei.com>
+        Wed, 31 Aug 2022 07:00:32 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0826BD65;
+        Wed, 31 Aug 2022 04:00:31 -0700 (PDT)
+Received: from fraeml738-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MHh5g2jxVz67QPl;
+        Wed, 31 Aug 2022 18:59:51 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml738-chm.china.huawei.com (10.206.15.219) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 31 Aug 2022 13:00:29 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
+ 2022 12:00:29 +0100
+Date:   Wed, 31 Aug 2022 12:00:27 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Robert Richter <rrichter@amd.com>
+CC:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH 09/15] cxl/acpi: Determine PCI host bridge's ACPI UID
+Message-ID: <20220831120027.000017b3@huawei.com>
+In-Reply-To: <20220831081603.3415-10-rrichter@amd.com>
+References: <20220831081603.3415-1-rrichter@amd.com>
+        <20220831081603.3415-10-rrichter@amd.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831072111.3569680-8-yi.zhang@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 31-08-22 15:21:04, Zhang Yi wrote:
-> ll_rw_block() is not safe for the sync read path because it cannot
-> guarantee that submitting read IO if the buffer has been locked. We
-> could get false positive EIO after wait_on_buffer() if the buffer has
-> been locked by others. So stop using ll_rw_block() in
-> ntfs_get_block_vbo().
+On Wed, 31 Aug 2022 10:15:57 +0200
+Robert Richter <rrichter@amd.com> wrote:
+
+> The UID is needed to read the RCH's CEDT entry with the RCRB base
+> address. Determine the host's UID from its ACPI fw node.
 > 
-> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
-
-Looks good to me. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+> Signed-off-by: Robert Richter <rrichter@amd.com>
 > ---
->  fs/ntfs3/inode.c | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
+>  drivers/cxl/acpi.c | 12 ++++++++++++
+>  1 file changed, 12 insertions(+)
 > 
-> diff --git a/fs/ntfs3/inode.c b/fs/ntfs3/inode.c
-> index 51363d4e8636..bbe7d4ea1750 100644
-> --- a/fs/ntfs3/inode.c
-> +++ b/fs/ntfs3/inode.c
-> @@ -630,12 +630,9 @@ static noinline int ntfs_get_block_vbo(struct inode *inode, u64 vbo,
->  			bh->b_size = block_size;
->  			off = vbo & (PAGE_SIZE - 1);
->  			set_bh_page(bh, page, off);
-> -			ll_rw_block(REQ_OP_READ, 1, &bh);
-> -			wait_on_buffer(bh);
-> -			if (!buffer_uptodate(bh)) {
-> -				err = -EIO;
-> +			err = bh_read(bh, 0);
-> +			if (err)
->  				goto out;
-> -			}
->  			zero_user_segment(page, off + voff, off + block_size);
->  		}
+> diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> index f9cdf23a91a8..b3146b7ae922 100644
+> --- a/drivers/cxl/acpi.c
+> +++ b/drivers/cxl/acpi.c
+> @@ -368,8 +368,20 @@ struct pci_host_bridge *cxl_find_next_rch(struct pci_host_bridge *host)
+>  static int __init cxl_restricted_host_probe(struct platform_device *pdev)
+>  {
+>  	struct pci_host_bridge *host = NULL;
+> +	struct acpi_device *adev;
+> +	unsigned long long uid = ~0;
+>  
+>  	while ((host = cxl_find_next_rch(host)) != NULL) {
+> +		adev = ACPI_COMPANION(&host->dev);
+> +		if (!adev || !adev->pnp.unique_id ||
+> +			(kstrtoull(adev->pnp.unique_id, 10, &uid) < 0))
+
+There is an acpi_device_uid() accessor function that should probably be
+used here.
+
+Also, should a fialure to convert to an integer (or one within
+limits) be something we paper over?  Feels like we should fail
+hard if that happens.
+
+Admittedly I can't immediately find any spec that states that
+the _UID should be either integer or under 32 bits...
+ACPI allows a string and CXL just says it's 4 bytes long.
+
+> +			continue;
+> +
+> +		dev_dbg(&adev->dev, "host uid: %llu\n", uid);
+> +
+> +		if (uid > U32_MAX)
+> +			continue;
+> +
+>  		dev_info(&host->dev, "host supports CXL\n");
 >  	}
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+>  
+

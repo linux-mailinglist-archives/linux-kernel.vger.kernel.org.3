@@ -2,224 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F4445A824B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:52:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC4125A825A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:54:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbiHaPwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
+        id S232078AbiHaPxy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:53:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbiHaPwd (ORCPT
+        with ESMTP id S232242AbiHaPxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:52:33 -0400
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6631A6C0F
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:52:31 -0700 (PDT)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3378303138bso311234217b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:52:31 -0700 (PDT)
+        Wed, 31 Aug 2022 11:53:37 -0400
+Received: from corp-front10-corp.i.nease.net (corp-front10-corp.i.nease.net [42.186.62.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88B1AA4D6;
+        Wed, 31 Aug 2022 08:53:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=DPh7ToX/xZeKd5sie6f3GwYv1dgrGEWOsdwYUdRqOV8=;
-        b=Ib8pAgAXpi66eUIrDx9HR42EQ83DMfbld1dlC8/B6EAvidr1kvmEAZeUXRt94L1+CY
-         fOk9VsOVmUuFoA3ousl8Ls9nH8k8tfM+rNhI6xbMFrdhErQiM5hQSsqd2rBTC4+hb+jz
-         x5t/VHEd7zMohGNGfLtkKMabhYYj05y3VRMNFTksjD0TxoUQD1VZClnayPhKj0nf7p9J
-         AKzTfeLiXAmgNrt2WdWSuelER8LXAcfC5HgCInP5/nDUlNIINl8G7Ik3e4I5/pB0YrkX
-         Qcp8GP0MNCkY9+ymMPvS4UyuNVxGZAw/VRq+/lxc53pSVnVgD3IP07MsNXunkZUp3HjH
-         knuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=DPh7ToX/xZeKd5sie6f3GwYv1dgrGEWOsdwYUdRqOV8=;
-        b=RBh+1lPavpR0fq0xnPkGrzZOfDOzuCbhHytiJxy/oCsp3qnAzV1Jno7FuglHwdS45D
-         zkX2ut4l2GT0Rrv0Jud3YZNaHIz+cBv7jjftn7+8vsJaiAgFwC9lur+gpi4Ccg3W/imj
-         r+p0JZ91D1h69Swx4UsDVs8lS9mR8DeHZ/WhdfRKaHZDHfNL1+PowquWON5RUmoLKq8m
-         ncJR3vJCcFqZlHigz4oMBj4Jx4hBbL2crp1iLf6T6q4cly78TR3CGPMsIZnkovSoEJET
-         sCAs+A26r28WtItYPgc/9gAYOwQGu8pCCKOCgPzdATagGkvvZYtEN3+ewwfe2tA7lsEC
-         z4hA==
-X-Gm-Message-State: ACgBeo1Wg/fopVsCFQP7rri2I9BG5pEKKtLKRcKR+e4LA0w+77Va8lEa
-        +PA0MU6AdLxs75rHz4DU+I/gnYRyWYtnGT3hn3d/0A==
-X-Google-Smtp-Source: AA6agR77ayVKimqTSvnLuFWBEKBbMWCXeZt/MyEcvQRogVe/KquV1BGkRaxT2hK9yX4AVYf+RasGcwvoXy2efvclpMo=
-X-Received: by 2002:a0d:d850:0:b0:340:d2c0:b022 with SMTP id
- a77-20020a0dd850000000b00340d2c0b022mr16260868ywe.469.1661961150716; Wed, 31
- Aug 2022 08:52:30 -0700 (PDT)
+        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
+        Date:Message-Id:In-Reply-To:References:MIME-Version:
+        Content-Transfer-Encoding; bh=XM4UH1mSYasx7UhkavWBXkmzSfflPJwm5I
+        Uz2zhZJb0=; b=qmAhY8VbWubdGN2NlcUBlS3oa5NWjZNseIsx4DlIwoVb/+japx
+        Mke+Qa4bsG+qbqNahkhI4EYHDktYXl430i09fziPQloLZxRE2EDEQdtRJni88NrX
+        4el39mukwZ4AQ4D3a3JyBlqXyeiQvvs+JsBP1Ua69+JSXoTJ40LLVFfNg=
+Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
+        by corp-front10-corp.i.nease.net (Coremail) with SMTP id aIG_CgBXROfhgw9jRqMhAA--.39232S2;
+        Wed, 31 Aug 2022 23:53:05 +0800 (HKT)
+From:   liuyacan@corp.netease.com
+To:     tonylu@linux.alibaba.com
+Cc:     davem@davemloft.net, edumazet@google.com, kgraul@linux.ibm.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, liuyacan@corp.netease.com,
+        netdev@vger.kernel.org, ubraun@linux.vnet.ibm.com,
+        pabeni@redhat.com, wenjia@linux.ibm.com, wintera@linux.ibm.com
+Subject: [PATCH net v4] net/smc: Fix possible access to freed memory in link clear
+Date:   Wed, 31 Aug 2022 23:53:03 +0800
+Message-Id: <20220831155303.1758868-1-liuyacan@corp.netease.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <Yw4bgV6c0LQ6reMc@TonyMac-Alibaba>
+References: <Yw4bgV6c0LQ6reMc@TonyMac-Alibaba>
 MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-11-surenb@google.com>
- <20220831101103.fj5hjgy3dbb44fit@suse.de> <CAJuCfpHwUUc_VphqBY9KmWvZJDrsBG6Za+kG_MW=J-abjuM4Lw@mail.gmail.com>
-In-Reply-To: <CAJuCfpHwUUc_VphqBY9KmWvZJDrsBG6Za+kG_MW=J-abjuM4Lw@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 31 Aug 2022 08:52:19 -0700
-Message-ID: <CAJuCfpGy_RrQBUy2yxvcZzAXO5cJU5BHxRko+b8p7wWLjQwXvA@mail.gmail.com>
-Subject: Re: [RFC PATCH 10/30] mm: enable page allocation tagging for
- __get_free_pages and alloc_pages
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>, dvyukov@google.com,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: aIG_CgBXROfhgw9jRqMhAA--.39232S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3ArWUKF15AF18XFy8Gw1kGrg_yoWxGw4DpF
+        47Wr17Cr48Xr1DWF1kCFyxZw15t3W2kFyrGr9a9rn3ZFn8Jw18tF1Sgr12vFZ8JF4qga4I
+        v3y8Jw1xKrs8Xw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUULFb7IF0VCFI7km07C26c804VAKzcIF0wAFF20E14v26r4j6ryU
+        M7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM2
+        8EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAawVAFpfBj4fn0lVCYm3Zqqf926ryUJw1U
+        Kr1v6r18M2kK6xCIbVAIwIAEc20F6c8GOVW8Jr15Jr4le2I262IYc4CY6c8Ij28IcVAaY2
+        xG8wAqjxCE34x0Y48IcwAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
+        Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
+        0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lw4CE
+        c2x0rVAKj4xxMx02cVAKzwCY0x0Ix7I2Y4AK64vIr41l42xK82IYc2Ij64vIr41l4x8a64
+        kIII0Yj41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY624lx2IqxVAqx4xG67AKxVWUJVWU
+        GwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI4
+        8JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4U
+        MIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I
+        8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjTRMuWlUUUUU
+X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQAPCVt77yRp4gACsh
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 8:45 AM Suren Baghdasaryan <surenb@google.com> wrote:
->
-> On Wed, Aug 31, 2022 at 3:11 AM Mel Gorman <mgorman@suse.de> wrote:
-> >
-> > On Tue, Aug 30, 2022 at 02:48:59PM -0700, Suren Baghdasaryan wrote:
-> > > Redefine alloc_pages, __get_free_pages to record allocations done by
-> > > these functions. Instrument deallocation hooks to record object freeing.
-> > >
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > +#ifdef CONFIG_PAGE_ALLOC_TAGGING
-> > > +
-> > >  #include <linux/alloc_tag.h>
-> > >  #include <linux/page_ext.h>
-> > >
-> > > @@ -25,4 +27,37 @@ static inline void pgalloc_tag_dec(struct page *page, unsigned int order)
-> > >               alloc_tag_sub(get_page_tag_ref(page), PAGE_SIZE << order);
-> > >  }
-> > >
-> > > +/*
-> > > + * Redefinitions of the common page allocators/destructors
-> > > + */
-> > > +#define pgtag_alloc_pages(gfp, order)                                        \
-> > > +({                                                                   \
-> > > +     struct page *_page = _alloc_pages((gfp), (order));              \
-> > > +                                                                     \
-> > > +     if (_page)                                                      \
-> > > +             alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
-> > > +     _page;                                                          \
-> > > +})
-> > > +
-> >
-> > Instead of renaming alloc_pages, why is the tagging not done in
-> > __alloc_pages()? At least __alloc_pages_bulk() is also missed. The branch
-> > can be guarded with IS_ENABLED.
->
-> Hmm. Assuming all the other allocators using __alloc_pages are inlined, that
-> should work. I'll try that and if that works will incorporate in the
-> next respin.
-> Thanks!
->
-> I don't think IS_ENABLED is required because the tagging functions are already
-> defined as empty if the appropriate configs are not enabled. Unless I
-> misunderstood
-> your node.
->
-> >
-> > > +#define pgtag_get_free_pages(gfp_mask, order)                                \
-> > > +({                                                                   \
-> > > +     struct page *_page;                                             \
-> > > +     unsigned long _res = _get_free_pages((gfp_mask), (order), &_page);\
-> > > +                                                                     \
-> > > +     if (_res)                                                       \
-> > > +             alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
-> > > +     _res;                                                           \
-> > > +})
-> > > +
-> >
-> > Similar, the tagging could happen in a core function instead of a wrapper.
+From: Yacan Liu <liuyacan@corp.netease.com>
 
-Ack.
+After modifying the QP to the Error state, all RX WR would be completed
+with WC in IB_WC_WR_FLUSH_ERR status. Current implementation does not
+wait for it is done, but destroy the QP and free the link group directly.
+So there is a risk that accessing the freed memory in tasklet context.
 
-> >
-> > > +#else /* CONFIG_PAGE_ALLOC_TAGGING */
-> > > +
-> > > +#define pgtag_alloc_pages(gfp, order) _alloc_pages(gfp, order)
-> > > +
-> > > +#define pgtag_get_free_pages(gfp_mask, order) \
-> > > +     _get_free_pages((gfp_mask), (order), NULL)
-> > > +
-> > > +#define pgalloc_tag_dec(__page, __size)              do {} while (0)
-> > > +
-> > > +#endif /* CONFIG_PAGE_ALLOC_TAGGING */
-> > > +
-> > >  #endif /* _LINUX_PGALLOC_TAG_H */
-> > > diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> > > index b73d3248d976..f7e6d9564a49 100644
-> > > --- a/mm/mempolicy.c
-> > > +++ b/mm/mempolicy.c
-> > > @@ -2249,7 +2249,7 @@ EXPORT_SYMBOL(vma_alloc_folio);
-> > >   * flags are used.
-> > >   * Return: The page on success or NULL if allocation fails.
-> > >   */
-> > > -struct page *alloc_pages(gfp_t gfp, unsigned order)
-> > > +struct page *_alloc_pages(gfp_t gfp, unsigned int order)
-> > >  {
-> > >       struct mempolicy *pol = &default_policy;
-> > >       struct page *page;
-> > > @@ -2273,7 +2273,7 @@ struct page *alloc_pages(gfp_t gfp, unsigned order)
-> > >
-> > >       return page;
-> > >  }
-> > > -EXPORT_SYMBOL(alloc_pages);
-> > > +EXPORT_SYMBOL(_alloc_pages);
-> > >
-> > >  struct folio *folio_alloc(gfp_t gfp, unsigned order)
-> > >  {
-> > > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
-> > > index e5486d47406e..165daba19e2a 100644
-> > > --- a/mm/page_alloc.c
-> > > +++ b/mm/page_alloc.c
-> > > @@ -763,6 +763,7 @@ static inline bool pcp_allowed_order(unsigned int order)
-> > >
-> > >  static inline void free_the_page(struct page *page, unsigned int order)
-> > >  {
-> > > +
-> > >       if (pcp_allowed_order(order))           /* Via pcp? */
-> > >               free_unref_page(page, order);
-> > >       else
-> >
-> > Spurious wide-space change.
+Here is a crash example:
 
-Ack.
+ BUG: unable to handle page fault for address: ffffffff8f220860
+ #PF: supervisor write access in kernel mode
+ #PF: error_code(0x0002) - not-present page
+ PGD f7300e067 P4D f7300e067 PUD f7300f063 PMD 8c4e45063 PTE 800ffff08c9df060
+ Oops: 0002 [#1] SMP PTI
+ CPU: 1 PID: 0 Comm: swapper/1 Kdump: loaded Tainted: G S         OE     5.10.0-0607+ #23
+ Hardware name: Inspur NF5280M4/YZMB-00689-101, BIOS 4.1.20 07/09/2018
+ RIP: 0010:native_queued_spin_lock_slowpath+0x176/0x1b0
+ Code: f3 90 48 8b 32 48 85 f6 74 f6 eb d5 c1 ee 12 83 e0 03 83 ee 01 48 c1 e0 05 48 63 f6 48 05 00 c8 02 00 48 03 04 f5 00 09 98 8e <48> 89 10 8b 42 08 85 c0 75 09 f3 90 8b 42 08 85 c0 74 f7 48 8b 32
+ RSP: 0018:ffffb3b6c001ebd8 EFLAGS: 00010086
+ RAX: ffffffff8f220860 RBX: 0000000000000246 RCX: 0000000000080000
+ RDX: ffff91db1f86c800 RSI: 000000000000173c RDI: ffff91db62bace00
+ RBP: ffff91db62bacc00 R08: 0000000000000000 R09: c00000010000028b
+ R10: 0000000000055198 R11: ffffb3b6c001ea58 R12: ffff91db80e05010
+ R13: 000000000000000a R14: 0000000000000006 R15: 0000000000000040
+ FS:  0000000000000000(0000) GS:ffff91db1f840000(0000) knlGS:0000000000000000
+ CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+ CR2: ffffffff8f220860 CR3: 00000001f9580004 CR4: 00000000003706e0
+ DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+ DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+ Call Trace:
+  <IRQ>
+  _raw_spin_lock_irqsave+0x30/0x40
+  mlx5_ib_poll_cq+0x4c/0xc50 [mlx5_ib]
+  smc_wr_rx_tasklet_fn+0x56/0xa0 [smc]
+  tasklet_action_common.isra.21+0x66/0x100
+  __do_softirq+0xd5/0x29c
+  asm_call_irq_on_stack+0x12/0x20
+  </IRQ>
+  do_softirq_own_stack+0x37/0x40
+  irq_exit_rcu+0x9d/0xa0
+  sysvec_call_function_single+0x34/0x80
+  asm_sysvec_call_function_single+0x12/0x20
 
-> >
-> > --
-> > Mel Gorman
-> > SUSE Labs
+Fixes: bd4ad57718cc ("smc: initialize IB transport incl. PD, MR, QP, CQ, event, WR")
+Signed-off-by: Yacan Liu <liuyacan@corp.netease.com>
+
+---
+Chagen in v4:
+  -- Remove the rx_drain flag because smc_wr_rx_post() may not have been called.
+  -- Remove timeout.
+Change in v3:
+  -- Tune commit message (Signed-Off tag, Fixes tag).
+     Tune code to avoid column length exceeding.
+Change in v2:
+  -- Fix some compile warnings and errors.
+---
+ net/smc/smc_core.c | 2 ++
+ net/smc/smc_core.h | 2 ++
+ net/smc/smc_wr.c   | 9 +++++++++
+ net/smc/smc_wr.h   | 1 +
+ 4 files changed, 14 insertions(+)
+
+diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
+index ff49a11f5..f92a916e9 100644
+--- a/net/smc/smc_core.c
++++ b/net/smc/smc_core.c
+@@ -757,6 +757,7 @@ int smcr_link_init(struct smc_link_group *lgr, struct smc_link *lnk,
+ 	lnk->lgr = lgr;
+ 	smc_lgr_hold(lgr); /* lgr_put in smcr_link_clear() */
+ 	lnk->link_idx = link_idx;
++	lnk->wr_rx_id_compl = 0;
+ 	smc_ibdev_cnt_inc(lnk);
+ 	smcr_copy_dev_info_to_link(lnk);
+ 	atomic_set(&lnk->conn_cnt, 0);
+@@ -1269,6 +1270,7 @@ void smcr_link_clear(struct smc_link *lnk, bool log)
+ 	smcr_buf_unmap_lgr(lnk);
+ 	smcr_rtoken_clear_link(lnk);
+ 	smc_ib_modify_qp_error(lnk);
++	smc_wr_drain_cq(lnk);
+ 	smc_wr_free_link(lnk);
+ 	smc_ib_destroy_queue_pair(lnk);
+ 	smc_ib_dealloc_protection_domain(lnk);
+diff --git a/net/smc/smc_core.h b/net/smc/smc_core.h
+index fe8b524ad..285f9bd8e 100644
+--- a/net/smc/smc_core.h
++++ b/net/smc/smc_core.h
+@@ -115,8 +115,10 @@ struct smc_link {
+ 	dma_addr_t		wr_rx_dma_addr;	/* DMA address of wr_rx_bufs */
+ 	dma_addr_t		wr_rx_v2_dma_addr; /* DMA address of v2 rx buf*/
+ 	u64			wr_rx_id;	/* seq # of last recv WR */
++	u64			wr_rx_id_compl; /* seq # of last completed WR */
+ 	u32			wr_rx_cnt;	/* number of WR recv buffers */
+ 	unsigned long		wr_rx_tstamp;	/* jiffies when last buf rx */
++	wait_queue_head_t       wr_rx_empty_wait; /* wait for RQ empty */
+ 
+ 	struct ib_reg_wr	wr_reg;		/* WR register memory region */
+ 	wait_queue_head_t	wr_reg_wait;	/* wait for wr_reg result */
+diff --git a/net/smc/smc_wr.c b/net/smc/smc_wr.c
+index 26f8f240d..bc8793803 100644
+--- a/net/smc/smc_wr.c
++++ b/net/smc/smc_wr.c
+@@ -454,6 +454,7 @@ static inline void smc_wr_rx_process_cqes(struct ib_wc wc[], int num)
+ 
+ 	for (i = 0; i < num; i++) {
+ 		link = wc[i].qp->qp_context;
++		link->wr_rx_id_compl = wc[i].wr_id;
+ 		if (wc[i].status == IB_WC_SUCCESS) {
+ 			link->wr_rx_tstamp = jiffies;
+ 			smc_wr_rx_demultiplex(&wc[i]);
+@@ -465,6 +466,8 @@ static inline void smc_wr_rx_process_cqes(struct ib_wc wc[], int num)
+ 			case IB_WC_RNR_RETRY_EXC_ERR:
+ 			case IB_WC_WR_FLUSH_ERR:
+ 				smcr_link_down_cond_sched(link);
++				if (link->wr_rx_id_compl == link->wr_rx_id)
++					wake_up(&link->wr_rx_empty_wait);
+ 				break;
+ 			default:
+ 				smc_wr_rx_post(link); /* refill WR RX */
+@@ -631,6 +634,11 @@ static void smc_wr_init_sge(struct smc_link *lnk)
+ 	lnk->wr_reg.access = IB_ACCESS_LOCAL_WRITE | IB_ACCESS_REMOTE_WRITE;
+ }
+ 
++void smc_wr_drain_cq(struct smc_link *lnk)
++{
++	wait_event(lnk->wr_rx_empty_wait, lnk->wr_rx_id_compl == lnk->wr_rx_id);
++}
++
+ void smc_wr_free_link(struct smc_link *lnk)
+ {
+ 	struct ib_device *ibdev;
+@@ -889,6 +897,7 @@ int smc_wr_create_link(struct smc_link *lnk)
+ 	atomic_set(&lnk->wr_tx_refcnt, 0);
+ 	init_waitqueue_head(&lnk->wr_reg_wait);
+ 	atomic_set(&lnk->wr_reg_refcnt, 0);
++	init_waitqueue_head(&lnk->wr_rx_empty_wait);
+ 	return rc;
+ 
+ dma_unmap:
+diff --git a/net/smc/smc_wr.h b/net/smc/smc_wr.h
+index a54e90a11..5ca5086ae 100644
+--- a/net/smc/smc_wr.h
++++ b/net/smc/smc_wr.h
+@@ -101,6 +101,7 @@ static inline int smc_wr_rx_post(struct smc_link *link)
+ int smc_wr_create_link(struct smc_link *lnk);
+ int smc_wr_alloc_link_mem(struct smc_link *lnk);
+ int smc_wr_alloc_lgr_mem(struct smc_link_group *lgr);
++void smc_wr_drain_cq(struct smc_link *lnk);
+ void smc_wr_free_link(struct smc_link *lnk);
+ void smc_wr_free_link_mem(struct smc_link *lnk);
+ void smc_wr_free_lgr_mem(struct smc_link_group *lgr);
+-- 
+2.20.1
+

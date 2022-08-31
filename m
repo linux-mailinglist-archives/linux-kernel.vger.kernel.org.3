@@ -2,64 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F66E5A7559
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:01:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 638125A7573
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:06:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231812AbiHaFA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 01:00:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
+        id S231631AbiHaFGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 01:06:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiHaFAy (ORCPT
+        with ESMTP id S229714AbiHaFGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 01:00:54 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF524D4EF;
-        Tue, 30 Aug 2022 22:00:52 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3321c2a8d4cso297299047b3.5;
-        Tue, 30 Aug 2022 22:00:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=hP8w1oBDqJGAsXujKb/CVqCqGWT4GD4/gS/Uk4niIUc=;
-        b=U2sDz1rAezdP1Sj5bHvd6szx1iNoBX0K5Wbnu3cW5OoN0uwMug+oJaS1qFsfwIj27Y
-         9QnA5WX5EmaF5C4S9DZClPg090f0Q4WB7oj/zql033FyPO64hgVcJmz82ha61HGB9ui+
-         pGGZAhhCdk1aMih0sPm6heP7qBleYkX9JUALM3LCooawCjqTyHM6KSfN+uCFf9/+Y465
-         ZgsTK2945Bki0iqTqVbCdht/My8a+3lppMb9V5gHT6aZXzkymempomdgy715W+3ILsq0
-         s29UshM1/lOqLLXHhw15oCDzWvyVsiIV5PBYqvseqX5FI0QHzWwc5apZf7BgELpJ53hR
-         uwyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=hP8w1oBDqJGAsXujKb/CVqCqGWT4GD4/gS/Uk4niIUc=;
-        b=kpowJHSmlo2RlsdjxlEWIeaEdl9rvikxjbSRWg/sZsJNzY66stV4ia+7RV2pLVhyuC
-         NBFmyyXOpk3Z0G5QWvnYcRoXrTgh1lOvb3HKmwDkefNjC3B5k1+5oS/4yARGpQ0LyMzh
-         5f5nxztATQ7wbehOVMa1HVA7Zs1wdBnkvuyQa1oQ3C1PQ1tpj/fETjm+E+ffSMgYjO3U
-         BOCR+VAXEpZiHTB58LM1rDaXbtFgBU1ZnDvJwzeNA3NnMHb+pT50cP0prFmblcv7P3C2
-         9EEHGLu4vkXnLrPxIa6JxI4dK1ahpAANsejmkh1w85SfW7I6S7hwVZv+jTYBq5rldvxD
-         F9Yw==
-X-Gm-Message-State: ACgBeo2WKa0gElrfnGxxPgI1P7Vp36m29hGXdAA2zgtTVonc7NcgWSGt
-        Pw3vD324SDDojaZGM+rw2olqU1dRNBoGFwekNPQ=
-X-Google-Smtp-Source: AA6agR43V4aiIKKAM0zrA3bkYsgumo2YxP7cn71v6O/qFUFZ/SaxVh9+QMKJg/zVg8qU5nYEmRLd1029vhYoWUpBiJ4=
-X-Received: by 2002:a0d:d5c2:0:b0:337:5d95:8bcb with SMTP id
- x185-20020a0dd5c2000000b003375d958bcbmr16567963ywd.359.1661922051649; Tue, 30
- Aug 2022 22:00:51 -0700 (PDT)
+        Wed, 31 Aug 2022 01:06:09 -0400
+Received: from smtp.smtpout.orange.fr (smtp-19.smtpout.orange.fr [80.12.242.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A03DB5A7F
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 22:06:06 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id TFvMoqKBPGYmzTFvMo9P19; Wed, 31 Aug 2022 07:06:04 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 31 Aug 2022 07:06:04 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <aa91faa7-eec8-50c7-9e9f-9c9c83d29766@wanadoo.fr>
+Date:   Wed, 31 Aug 2022 07:06:00 +0200
 MIME-Version: 1.0
-References: <20220831033403.302184-1-ye.xingchen@zte.com.cn>
-In-Reply-To: <20220831033403.302184-1-ye.xingchen@zte.com.cn>
-From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
-Date:   Wed, 31 Aug 2022 14:00:34 +0900
-Message-ID: <CAKFNMokS2zV5hJsBkcj=wiSkOkVHiqT_jFi18aBFW_gbNHnP5w@mail.gmail.com>
-Subject: Re: [PATCH linux-next] nilfs2: Remove the unneeded result variable
-To:     cgel.zte@gmail.com
-Cc:     linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH] nfsd: Fix a memory leak in an error handling path
+To:     Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J. Bruce Fields" <bfields@redhat.com>,
+        Scott Mayhew <smayhew@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-nfs@vger.kernel.org
+References: <122a5729fdcd76e23641c7d1853de2a632f6a742.1661509473.git.christophe.jaillet@wanadoo.fr>
+ <20220826110808.GE2071@kadam>
+ <5AAB19B0-0DAB-4313-AC9A-307E79CE4527@oracle.com>
+X-Mozilla-News-Host: news://news.gmane.org
+Content-Language: en-US
+In-Reply-To: <5AAB19B0-0DAB-4313-AC9A-307E79CE4527@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,46 +52,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 12:34 PM wrote:
->
-> From: ye xingchen <ye.xingchen@zte.com.cn>
->
-> Return the value nilfs_segctor_sync() directly instead of storing it in
-> another redundant variable.
->
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
-> ---
->  fs/nilfs2/segment.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/fs/nilfs2/segment.c b/fs/nilfs2/segment.c
-> index 0afe0832c754..9abae2c9120e 100644
-> --- a/fs/nilfs2/segment.c
-> +++ b/fs/nilfs2/segment.c
-> @@ -2235,7 +2235,6 @@ int nilfs_construct_segment(struct super_block *sb)
->         struct the_nilfs *nilfs = sb->s_fs_info;
->         struct nilfs_sc_info *sci = nilfs->ns_writer;
->         struct nilfs_transaction_info *ti;
-> -       int err;
->
->         if (!sci)
->                 return -EROFS;
-> @@ -2243,8 +2242,7 @@ int nilfs_construct_segment(struct super_block *sb)
->         /* A call inside transactions causes a deadlock. */
->         BUG_ON((ti = current->journal_info) && ti->ti_magic == NILFS_TI_MAGIC);
->
-> -       err = nilfs_segctor_sync(sci);
-> -       return err;
-> +       return nilfs_segctor_sync(sci);
->  }
->
->  /**
+Le 30/08/2022 à 23:11, Chuck Lever III a écrit :
+> 
+> 
+>> On Aug 26, 2022, at 7:08 AM, Dan Carpenter <dan.carpenter-QHcLZuEGTsvQT0dZR+AlfA@public.gmane.org> wrote:
+>>
+>> On Fri, Aug 26, 2022 at 12:24:54PM +0200, Christophe JAILLET wrote:
+>>> If this memdup_user() call fails, the memory allocated in a previous call
+>>> a few lines above should be freed. Otherwise it leaks.
+>>>
+>>> Fixes: 6ee95d1c8991 ("nfsd: add support for upcall version 2")
+>>> Signed-off-by: Christophe JAILLET <christophe.jaillet-39ZsbGIQGT5GWvitb5QawA@public.gmane.org>
+>>> ---
+>>> Speculative, untested.
+>>> ---
+>>> fs/nfsd/nfs4recover.c | 4 +++-
+>>> 1 file changed, 3 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/fs/nfsd/nfs4recover.c b/fs/nfsd/nfs4recover.c
+>>> index b29d27eaa8a6..248ff9f4141c 100644
+>>> --- a/fs/nfsd/nfs4recover.c
+>>> +++ b/fs/nfsd/nfs4recover.c
+>>> @@ -815,8 +815,10 @@ __cld_pipe_inprogress_downcall(const struct cld_msg_v2 __user *cmsg,
+>>> 				princhash.data = memdup_user(
+>>> 						&ci->cc_princhash.cp_data,
+>>> 						princhashlen);
+>>> -				if (IS_ERR_OR_NULL(princhash.data))
+>>> +				if (IS_ERR_OR_NULL(princhash.data)) {
+>>> +					kfree(name.data);
+>>> 					return -EFAULT;
+>>
+>> This comment is not directed at you and is not related to your patch.
+>> But memdup_user() never returns NULL, only error pointers.  I wrote a
+>> fifteen page blog entry about NULL vs error pointers the other week.
+>> https://staticthinking.wordpress.com/2022/08/01/mixing-error-pointers-and-null/
+>> This should propagate the error code from memdup_user() instead of
+>> -EFAULT.
+> 
+> I take it then that Christophe should redrive this with your suggested
+> corrections? I haven't applied this yet because I was waiting for
+> follow-up.
+> 
+
+Ok, I'll send a small serie of 3 patches...
+
+CJ
+
+
+> 
 > --
-> 2.25.1
+> Chuck Lever
+> 
+> 
+> 
+> 
 
-The patch is not wrong though this kind of minor rewrite seems endless.
-Anyway, I would like to queue this unless there is an objection.
-
-Thanks,
-Ryusuke Konishi

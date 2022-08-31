@@ -2,127 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E885A7C32
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8095A7C35
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:32:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiHaLbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 07:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49774 "EHLO
+        id S230376AbiHaLcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 07:32:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiHaLbh (ORCPT
+        with ESMTP id S230288AbiHaLcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 07:31:37 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9FCA1A60;
-        Wed, 31 Aug 2022 04:31:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 584321F893;
-        Wed, 31 Aug 2022 11:31:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1661945495; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XrNkIM9koqnVx0iIIXA2kZMeNNiavp0FWSmtqMYA0AU=;
-        b=j090jyCm7ljBjfs584BrGreYmQ2T034+Z8td5gv5FfrZdYMc/nlY8I/aSz4C3omfWXI7/r
-        ZEOzi6UQXDB/dteLKZnnp6hc6sOMCOwq5e58CzzpQlUY6ftrhpOKAPFxsdKIx1CgNfMFzA
-        Hj4TA31NoNrPyxjPQrg5GzRWQRMIkIk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1661945495;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XrNkIM9koqnVx0iIIXA2kZMeNNiavp0FWSmtqMYA0AU=;
-        b=tPMWSP1a01IN2kwdj3whXjAztjKIlV4ffC1mOQYyySOtBL6HO9DkoW/WjMWwVHqCAYhxCh
-        O+LRuPOxKQsV1wBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 422571332D;
-        Wed, 31 Aug 2022 11:31:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id JKAjEJdGD2NefwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 31 Aug 2022 11:31:35 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id D7D52A067B; Wed, 31 Aug 2022 13:31:34 +0200 (CEST)
-Date:   Wed, 31 Aug 2022 13:31:34 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Zhang Yi <yi.zhang@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cluster-devel@redhat.com,
-        ntfs3@lists.linux.dev, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, jack@suse.cz, tytso@mit.edu,
-        akpm@linux-foundation.org, axboe@kernel.dk,
-        viro@zeniv.linux.org.uk, rpeterso@redhat.com, agruenba@redhat.com,
-        almaz.alexandrovich@paragon-software.com, mark@fasheh.com,
-        dushistov@mail.ru, hch@infradead.org, chengzhihao1@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH 08/14] ocfs2: replace ll_rw_block()
-Message-ID: <20220831113134.fdmklqore4uglz7g@quack3>
-References: <20220831072111.3569680-1-yi.zhang@huawei.com>
- <20220831072111.3569680-9-yi.zhang@huawei.com>
+        Wed, 31 Aug 2022 07:32:12 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED21DBD290;
+        Wed, 31 Aug 2022 04:32:07 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4MHhn96GbpzlBss;
+        Wed, 31 Aug 2022 19:30:37 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP1 (Coremail) with SMTP id cCh0CgDnbDCuRg9jozSvAA--.12774S3;
+        Wed, 31 Aug 2022 19:31:59 +0800 (CST)
+Subject: Re: [PATCH v9 0/4] blk-throttle bugfix
+To:     Yu Kuai <yukuai1@huaweicloud.com>, axboe@kernel.dk, tj@kernel.org,
+        mkoutny@suse.com, ming.lei@redhat.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <20220829022240.3348319-1-yukuai1@huaweicloud.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <eb7246b4-2cfe-a110-1e45-39f970e5441e@huaweicloud.com>
+Date:   Wed, 31 Aug 2022 19:31:58 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831072111.3569680-9-yi.zhang@huawei.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220829022240.3348319-1-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cCh0CgDnbDCuRg9jozSvAA--.12774S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxAw1kJr17WrWDZF1rJr4DXFb_yoW5GF4rpF
+        Z3Zr45Cw17Crn7C3y3Cw13ZFWrKw4kJr1UWr13tw1ru3WDZr1UCrn29w4Y9F92vrZ7K34I
+        qr1DtFn2kryUZ37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9014x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq
+        3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIda
+        VFxhVjvjDU0xZFpf9x0JUdHUDUUUUU=
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 31-08-22 15:21:05, Zhang Yi wrote:
-> ll_rw_block() is not safe for the sync read path because it cannot
-> guarantee that submitting read IO if the buffer has been locked. We
-> could get false positive EIO after wait_on_buffer() if the buffer has
-> been locked by others. So stop using ll_rw_block() in ocfs2.
-> 
-> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
-> ---
->  fs/ocfs2/aops.c  | 2 +-
->  fs/ocfs2/super.c | 5 +----
->  2 files changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/ocfs2/aops.c b/fs/ocfs2/aops.c
-> index af4157f61927..1d65f6ef00ca 100644
-> --- a/fs/ocfs2/aops.c
-> +++ b/fs/ocfs2/aops.c
-> @@ -636,7 +636,7 @@ int ocfs2_map_page_blocks(struct page *page, u64 *p_blkno,
->  			   !buffer_new(bh) &&
->  			   ocfs2_should_read_blk(inode, page, block_start) &&
->  			   (block_start < from || block_end > to)) {
-> -			ll_rw_block(REQ_OP_READ, 1, &bh);
-> +			bh_read_nowait(bh, 0);
->  			*wait_bh++=bh;
->  		}
->  
-> diff --git a/fs/ocfs2/super.c b/fs/ocfs2/super.c
-> index e2cc9eec287c..4050f35bbd0c 100644
-> --- a/fs/ocfs2/super.c
-> +++ b/fs/ocfs2/super.c
-> @@ -1763,10 +1763,7 @@ static int ocfs2_get_sector(struct super_block *sb,
->  	lock_buffer(*bh);
->  	if (!buffer_dirty(*bh))
->  		clear_buffer_uptodate(*bh);
-> -	unlock_buffer(*bh);
-> -	ll_rw_block(REQ_OP_READ, 1, bh);
-> -	wait_on_buffer(*bh);
-> -	if (!buffer_uptodate(*bh)) {
-> +	if (bh_read_locked(*bh, 0)) {
->  		mlog_errno(-EIO);
->  		brelse(*bh);
->  		*bh = NULL;
+Hi, Jens!
 
-I would just use bh_read() here and drop bh_read_locked() altogether...
+在 2022/08/29 10:22, Yu Kuai 写道:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> Changes in v9:
+>   - renaming the flag BIO_THROTTLED to BIO_BPS_THROTTLED, and always
+>   apply iops limit in path 1;
+>   - add tag for patch 4
+> Changes in v8:
+>   - use a new solution in patch 1
+>   - move cleanups to a separate patchset
+>   - rename bytes/io_skipped to carryover_bytes/ios in patch 4
+> Changes in v7:
+>   - add patch 5 to improve handling of re-entered bio for bps limit
+>   - as suggested by Tejun, add some comments
+>   - sdd some Acked tag by Tejun
+> Changes in v6:
+>   - rename parameter in patch 3
+>   - add comments and reviewed tag for patch 4
+> Changes in v5:
+>   - add comments in patch 4
+>   - clear bytes/io_skipped in throtl_start_new_slice_with_credit() in
+>   patch 4
+>   - and cleanup patches 5-8
+> Changes in v4:
+>   - add reviewed-by tag for patch 1
+>   - add patch 2,3
+>   - use a different way to fix io hung in patch 4
+> Changes in v3:
+>   - fix a check in patch 1
+>   - fix link err in patch 2 on 32-bit platform
+>   - handle overflow in patch 2
+> Changes in v2:
+>   - use a new solution suggested by Ming
+>   - change the title of patch 1
+>   - add patch 2
+> 
+> Patch 1 fix that blk-throttle can't work if multiple bios are throttle.
+> Patch 2 fix overflow while calculating wait time.
+> Patch 3,4 fix io hung due to configuration updates.
+> 
+> Previous version:
+> v1: https://lore.kernel.org/all/20220517134909.2910251-1-yukuai3@huawei.com/
+> v2: https://lore.kernel.org/all/20220518072751.1188163-1-yukuai3@huawei.com/
+> v3: https://lore.kernel.org/all/20220519085811.879097-1-yukuai3@huawei.com/
+> v4: https://lore.kernel.org/all/20220523082633.2324980-1-yukuai3@huawei.com/
+> v5: https://lore.kernel.org/all/20220528064330.3471000-1-yukuai3@huawei.com/
+> v6: https://lore.kernel.org/all/20220701093441.885741-1-yukuai1@huaweicloud.com/
+> v7: https://lore.kernel.org/all/20220802140415.2960284-1-yukuai1@huaweicloud.com/
+> v8: https://lore.kernel.org/all/20220823033130.874230-1-yukuai1@huaweicloud.com/
+> 
+> Yu Kuai (4):
+>    blk-throttle: fix that io throttle can only work for single bio
+>    blk-throttle: prevent overflow while calculating wait time
+>    blk-throttle: factor out code to calculate ios/bytes_allowed
+>    blk-throttle: fix io hung due to configuration updates
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Can you apply this patchset now?
+
+Thanks,
+Kuai
+> 
+>   block/bio.c               |   2 -
+>   block/blk-throttle.c      | 137 +++++++++++++++++++++++++-------------
+>   block/blk-throttle.h      |  11 ++-
+>   include/linux/bio.h       |   2 +-
+>   include/linux/blk_types.h |   2 +-
+>   5 files changed, 104 insertions(+), 50 deletions(-)
+> 
+

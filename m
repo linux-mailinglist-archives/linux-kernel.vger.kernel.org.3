@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93DB05A84FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E05225A84FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:07:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232283AbiHaSGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40748 "EHLO
+        id S232245AbiHaSHB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:07:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232140AbiHaSGe (ORCPT
+        with ESMTP id S232141AbiHaSGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 Aug 2022 14:06:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81385E3981;
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 813E8E3983;
         Wed, 31 Aug 2022 11:06:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 98E51B82272;
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0E3AB82273;
         Wed, 31 Aug 2022 18:06:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4ED4EC43142;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48530C433D6;
         Wed, 31 Aug 2022 18:06:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661969187;
-        bh=YULC0Awo0Pmc3BNtKXn9TIdi3s0Oc+2WQtMPeTYpzNg=;
+        bh=j7Vt+WhUPkmdxBzO+D24Yf2KD8/sQg3Uw1rN8AJx8XI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bQUcWmkPJrpPakJFFhALVi+buMr/rimCe9eo9vtqxMWvPwSN22Pk1+aMA52vIuQfo
-         sx/JtT95oOe+YpTicgrT362gvTmRzQGMTlZ2GzNJ5btt5A0AmJqTOPsZmouD6pkv2G
-         LTZLJXyKAEOR9sB/Le11G7SciQg0d/BmGCjlj7rxqFT6ipIjcOc0tFbL89kJ/2j/R7
-         m7uP4oouL7HJ63C+sVrEwdGfCW0JYX5cocAQLZPJJp7JbFbR1smksgbEad6GObxkGM
-         3YCT0xGfDiuiPDbYfZwkJ2b61okWEM1Cj0q5MeMYS/NioZHSmHpTmjqO+3N4i8OJ8Q
-         fM+M1Y4HFjIug==
+        b=DwI9B3r+CnqTXMKM5ybBKM/kKxZC0BwiGC+MLk85ckyYsA0g/s+tmuhe1SnCxrpBR
+         hV2j2FGREwfxQ8ySaPlnI8p9/uZHyEZgcCAXUZ3goC3ifogzdf09qKf6claChLd84S
+         ghDrcrHaOxX8iDjjfhJkTvxsbJRx8fExndJ2cL8CD2neyLxxHorM0VCGl4k6G+KNMX
+         peLDis2g5qr5G/lsXoHmOYvCgIeEZAT7ukw1D6P97jR1s0i0rt3K0oWcIfHsZ6CW1O
+         lc+BUXcJs883AbhVb07GNpibDI5K7FRJEh/YScwaBt8pVP6XAdIk21oyjAN0XxJ0ZU
+         CsoVnuiASbO6Q==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 013A65C019C; Wed, 31 Aug 2022 11:06:26 -0700 (PDT)
+        id 034755C02A9; Wed, 31 Aug 2022 11:06:27 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 2/7] doc: Call out queue_rcu_work() for blocking RCU callbacks
-Date:   Wed, 31 Aug 2022 11:06:20 -0700
-Message-Id: <20220831180625.2692892-2-paulmck@kernel.org>
+Subject: [PATCH rcu 3/7] doc: Use rcu_barrier() to rate-limit RCU callbacks
+Date:   Wed, 31 Aug 2022 11:06:21 -0700
+Message-Id: <20220831180625.2692892-3-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220831180617.GA2692480@paulmck-ThinkPad-P17-Gen-1>
 References: <20220831180617.GA2692480@paulmck-ThinkPad-P17-Gen-1>
@@ -56,30 +56,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current checklist.rst file correctly notes that RCU callbacks execute
-in BH context, and cannot block.  This commit adds words advising people
-needing callbacks to block to use workqueues, for example, by replacing
-call_rcu() with queue_rcu_work().
+The checklist.rst document advises periodic synchronize_rcu() invocations
+to prevent callback flooding.  However, rcu_barrier() is often a better
+choice.  This commit therefore adds words to this effect.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- Documentation/RCU/checklist.rst | 3 +++
- 1 file changed, 3 insertions(+)
+ Documentation/RCU/checklist.rst | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/Documentation/RCU/checklist.rst b/Documentation/RCU/checklist.rst
-index 5eedef027d922..2db206fc3465f 100644
+index 2db206fc3465f..178ca7547b987 100644
 --- a/Documentation/RCU/checklist.rst
 +++ b/Documentation/RCU/checklist.rst
-@@ -190,6 +190,9 @@ over a rather long period of time, but improvements are always welcome!
+@@ -305,7 +305,8 @@ over a rather long period of time, but improvements are always welcome!
+ 		the machine.
  
- 5.	If call_rcu() or call_srcu() is used, the callback function will
- 	be called from softirq context.  In particular, it cannot block.
-+	If you need the callback to block, run that code in a workqueue
-+	handler scheduled from the callback.  The queue_rcu_work()
-+	function does this for you in the case of call_rcu().
+ 	d.	Periodically invoke synchronize_rcu(), permitting a limited
+-		number of updates per grace period.
++		number of updates per grace period.  Better yet, periodically
++		invoke rcu_barrier() to wait for all outstanding callbacks.
  
- 6.	Since synchronize_rcu() can block, it cannot be called
- 	from any sort of irq context.  The same rule applies
+ 	The same cautions apply to call_srcu() and kfree_rcu().
+ 
 -- 
 2.31.1.189.g2e36527f23
 

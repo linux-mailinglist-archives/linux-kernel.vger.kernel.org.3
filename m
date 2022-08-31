@@ -2,357 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8929E5A73E7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:28:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 254C15A73ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:33:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiHaC2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 22:28:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
+        id S229565AbiHaCcy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 22:32:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiHaC2P (ORCPT
+        with ESMTP id S230518AbiHaCcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 22:28:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56B2C85F92;
-        Tue, 30 Aug 2022 19:28:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5A8A6184B;
-        Wed, 31 Aug 2022 02:28:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B92C7C433D6;
-        Wed, 31 Aug 2022 02:28:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661912893;
-        bh=pboAraFSmHTLt2pDZ2a1Km1/XvARb4Eezv8898dBitc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QsMUZq2B8rkCYljL3Ns/Ewx97+MHM0LLqLE13ptS6ooUAworRmVNhghkhFVZpTYxy
-         Zd9Spq9u1ElXQnSIOkNOfv6Q4c20dpXVhqp6K/6P5ocndAxnsxa7DWG3NKv33gHJLJ
-         OAHMjfkeSgKcSOSf7BfpyTuvDSD6+wreqI/CsCg6WfuTqavqxCbhLG8l7iFAss8fca
-         58HLg2M2qPbxu3X0xjQvr1sxIbJNUanNzeekivYTihQDUoUI1i/RD+skIkUqcilGjk
-         Gy4CqOdQjIpuF8bvQf2AUDjzecYrpV0E0MZyFb7TkAhQasznirZahIXd7g/0XtJeOx
-         VvmjVQ3Z87grA==
-Date:   Wed, 31 Aug 2022 05:28:08 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 4/6] selftests/sgx: Add SGX selftest
- augment_via_eaccept_long
-Message-ID: <Yw7HOIfnaO0IcDiX@kernel.org>
-References: <20220830031206.13449-1-jarkko@kernel.org>
- <20220830031206.13449-5-jarkko@kernel.org>
- <bd5285dd-d6dd-8a46-fca9-728db5e2f369@intel.com>
+        Tue, 30 Aug 2022 22:32:51 -0400
+X-Greylist: delayed 64 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 19:32:50 PDT
+Received: from esa16.fujitsucc.c3s2.iphmx.com (esa16.fujitsucc.c3s2.iphmx.com [216.71.158.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5CA19D642
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 19:32:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=fujitsu.com; i=@fujitsu.com; q=dns/txt; s=fj1;
+  t=1661913172; x=1693449172;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=YzDyGkUIoA5cspuzzXaPRJK+gZm2q5cj6UXlnG2bYWs=;
+  b=B9cLpnet4S3IcmLn6uhLrahC5OAKarIVBoZkFp0+060H7PipNiZlLskN
+   GxKRpaJqiQa8VEYexUGl1sEM/n7tWy1YGyH8L9HtAfVonNiyoOPWddPhN
+   kpqgV5bYoWcODTwmQdTN32dA9BqwGxkesW1Ape/gLYM/+5nJ6PC04O1lJ
+   Y1gyUdnTlKcYfQ9v6SeaE75PK9lcaZcbW9QbEKk7ApOZv6sfhYjfkVeRr
+   upgPZmvUgwJqrQccwefDYIlbKk5Pe+RoR+D6ekp2cpWU1XIbO81xx+YZD
+   WgKRlmlzdbQyS8u8AqW//anV44xyLzhmTal6sUIAzUfExllg8njRXlVmO
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="63852799"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654527600"; 
+   d="scan'208";a="63852799"
+Received: from mail-os0jpn01lp2104.outbound.protection.outlook.com (HELO JPN01-OS0-obe.outbound.protection.outlook.com) ([104.47.23.104])
+  by ob1.fujitsucc.c3s2.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 11:31:42 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Sf18o80k+7kXD9r/ztj3q7ipwDkriFpfbH8DUtQTbZGYmSCdhu6Xfn+DTUf7+pf99ePajgZOwdI2iRpx/uQjECyU8zXRtsXFeBMNvCEdq4TItXIqnWj4L8HdHNpKxn4NbQmA20V4E5lma9BQH9Ylow1jjgd5ggW9rXgNHutWihCY8b7Ik2fU83x0hhCzewUyCo2Qi27ICKAmB4K+78HfRgoZbw7oLP31/wuvyFVBwPlXmEOqjocfNQCE3qvFMB53linpTIhC6riPlJqAAzElnVcXyD8FFG2IOMK+2Gbyii1WhuHCZ5E96bp9eRB81SlCWOp7sC+s2yxWpF7re+3Lmw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YzDyGkUIoA5cspuzzXaPRJK+gZm2q5cj6UXlnG2bYWs=;
+ b=lYeCS4p7SAy7EUtrnxKEiTy/QjmC7VPicmeDyXXaBYIlNXVJYs5iBzDIfptcqu604ZYNewBh1xlG5WwmttJ+Pai1TW2K/4Zr7CephXbvny16r6jpSu5z10vHjF1qR5EgSMEdE2hlASa8LEkerFDYA29WYXTykxoyWZpp9NqUUTEZhX2yy50xeO1MT6CShIef0iHQuFKbXp894XhM58yEYm9tP+0zsS9lnJGUjmhSkZX6DNpqWd0uoqMxeJxX1o4h/u0xEzbClTcJ0IhQ5NfpDq1lR2J43RvN7haIORc3vOGOWd47uJrYjDJlomjzRklUpIaSrhUdru4wTeQrNRizmw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=fujitsu.com; dmarc=pass action=none header.from=fujitsu.com;
+ dkim=pass header.d=fujitsu.com; arc=none
+Received: from OS3PR01MB9499.jpnprd01.prod.outlook.com (2603:1096:604:1c8::5)
+ by OSBPR01MB4056.jpnprd01.prod.outlook.com (2603:1096:604:4c::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Wed, 31 Aug
+ 2022 02:31:38 +0000
+Received: from OS3PR01MB9499.jpnprd01.prod.outlook.com
+ ([fe80::9d81:6e2:6f1:e08e]) by OS3PR01MB9499.jpnprd01.prod.outlook.com
+ ([fe80::9d81:6e2:6f1:e08e%8]) with mapi id 15.20.5588.010; Wed, 31 Aug 2022
+ 02:31:37 +0000
+From:   "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>
+To:     "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>,
+        "bvanassche@acm.org" <bvanassche@acm.org>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>
+CC:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] RDMA/srp: Set scmnd->result only when scmnd is not NULL
+Thread-Topic: [PATCH] RDMA/srp: Set scmnd->result only when scmnd is not NULL
+Thread-Index: AQHYvNukv4zzfaSRMEm9MHXMyi33Uq3IQQAAgAAI3IA=
+Date:   Wed, 31 Aug 2022 02:31:37 +0000
+Message-ID: <e3488129-6681-55a7-3d1c-99a965a5c884@fujitsu.com>
+References: <20220831014730.17566-1-yangx.jy@fujitsu.com>
+ <a66af10e-dea5-a9ec-5eeb-641b1d7ebeec@fujitsu.com>
+In-Reply-To: <a66af10e-dea5-a9ec-5eeb-641b1d7ebeec@fujitsu.com>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=fujitsu.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 63dd83e1-c764-41c4-3721-08da8af8ee2b
+x-ms-traffictypediagnostic: OSBPR01MB4056:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: pMDSVeYNcNG6CcBEi1spUvEPFCKlCilRu/cABiVQvOO7G/K1029mX5kKJlkoYuMPwCpyNOJSD1PHDPP2eHkBFUtgDDdE5AYwbOb5OYHl2mtOxdn2gtUD8YquNFkuMYNxwXftm26gCnBHZ5SdsskM2TfLUcpeRCGoxHkQcWr7IX2ElGY7n7EaHJYJEitG8GFQ9Og9XmGLLW52CsU+zo5bo2lzxDsytb62oTiF66IjsZdSpxpNbAU5Izw2RzvzZJlqrL6BY1SsPaHTYgLpoivW/HPBZjQUcquUQgTP9onZmY7Ys46d7qOIYKmqyq8VM4hXAPTytZRIHY95TWHm9O8pOy1h09nb7tvJJEVxLJjoPNQXsHGnOkQZtMqw4iEajwsdBLcTsHw0QmLpdH7S83XxBdt534apMzJQVaLeL8CwsOufFaeSWjWtoHvFU5pSNI+RY0RA3Ntgbl+SYdZbUCRoJVom2hYbF2fVyYMQoHD679UAzVChUuIhALyci3LpU7IhCw/92fXd1WyxHTFWm4SwEattu65JkTGoL6yfOv4yeuWlptYABG4dfQTFf8T8hUDAvWLGm/csquxy7YJM2cc3kiuM5g75LMS7Y+RqGHYB2erZiaEOqilTwK2o73fGh3qGEgrN4Wla6gfUIMKz7iayZ3exuJjt+PcAE6JsRrn4+l8sBv/3VZlb3bMj2WlJo9QiOm/KMvIvApIsp2r2fJsRSiEiy6vQPgOjKaxo1DJb2t8hkHSqgaB+T7x+EEBeGRMjetkMX7M1UdPg/MNWxK5jesSurr5e5LiogU23MT26/aBgNcpErVWlRt0/WmAn5/IrESJgv4BEE35v4+uIPjjLwA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB9499.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(39860400002)(376002)(346002)(396003)(1590799006)(2906002)(38100700002)(86362001)(91956017)(31696002)(64756008)(66446008)(66476007)(66556008)(8676002)(66946007)(76116006)(4326008)(82960400001)(316002)(38070700005)(110136005)(54906003)(26005)(6512007)(2616005)(186003)(6506007)(31686004)(53546011)(5660300002)(1580799003)(4744005)(478600001)(6486002)(122000001)(71200400001)(41300700001)(85182001)(36756003)(8936002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?eWV6Q0g3b1JDbVFnaGl2YklnSUZnQk5qYys2N08rSEdyOXdwY1NhSHBoU24x?=
+ =?utf-8?B?ZzBiZ1FWczNFNE9obnhkc21RSTNuMmw2K3NiNDNqY2tOWVQvSlZwb0ZraEcr?=
+ =?utf-8?B?V2wrbEpHN2dldEQ0dUZUZUMwd0hXNWdXT1F1ZThWaUl5Ky8rb0JnQ1ZLNjhs?=
+ =?utf-8?B?YlhIOEpzRkwxajV3U1hSdUZRMHk2TXlnVW96eW5DYXBsbVlFeGMyZXBpQjRJ?=
+ =?utf-8?B?Y1lEMUNteldLbDVHY3BnWkdkTmpOV291Tng1MGhSNTBYc2toNmJpK1BKME9I?=
+ =?utf-8?B?UHlGczZrKzNVbFZGbGpFMGx6aitDVzBmeEppbXFlNmtHZS9ycVp2dDZld0ta?=
+ =?utf-8?B?SFJZZ29EUy9jWUhaOG1kT0FuSEtHSFVKNUZqZFIzOS85ZmRpSEdkNy9iQ2tr?=
+ =?utf-8?B?dENhZnkyZzM1czY4YXhxTzhrUzgvU0FpRGdReElTZEdGMVF2SWJEdjNpaisr?=
+ =?utf-8?B?SW9kQmRSNllLTzRPRFlzNlhaU2IvVnNTU1R3ZHhQZ2ZFYmV2Ty9FVC9xQTlM?=
+ =?utf-8?B?YnovSTJRQlBqU3kxcmEvTTZKNHJ3U2ZtMUpGaWtDNXBkSi8wVUFUaTdnNWxP?=
+ =?utf-8?B?dCthVHNWanVnSnNKY0N1VWNjZFMxU1ZwUThkM09Ha2JlWWJmT2lzajd3S3Vx?=
+ =?utf-8?B?UzRNNThOWHd4aTVCUW1VSW5sQkJBOUxSS0FsWGo5QjF6bGtRRWhMNjRhT2hl?=
+ =?utf-8?B?dldLR2hKUmlicUFvRFJlWVQ3ZTRuM01xNVN4OWtjZ0hUMWRXUnVqUXpqbnRY?=
+ =?utf-8?B?d2NRVEUrYkFUNTBuVGZVaU5kR0l2NzFnVTY0OHhrQXVJazV3S3Y3c1NveHZx?=
+ =?utf-8?B?YmYwaTR1QTJKSkVHQm4wYUhOSk9MWGsyclVOOGtLSTBEUmhnb2ppVWZRbVhD?=
+ =?utf-8?B?QStKZWxTbXZDN3Rwczg2NjZhUnE4d29SZm5DTHdidkFCcTNqNGM2NS9JMWZ4?=
+ =?utf-8?B?WkJMNnV1Zi9OUnBjUnhUbjRQbS9nTVB5MnlrMkpaaVpyMmo3ejFmQmZNQlc3?=
+ =?utf-8?B?ZFlBR0VmVVJlQWozUjhHMVVrYlZJcTFMRGZEbUx1MnVXK1U2Zm1taWhmUG5z?=
+ =?utf-8?B?VWZDRE8xQjEwVStRV0xpN2xqZmpaVjRoRUdtaUZhSnFnSFp0VzI1S3pPaEpP?=
+ =?utf-8?B?RHh0VnptZ0x2ZUp2RHdJU3ZueGF6cnFUM0tyN1l0cmFUc3BjdWtMOVMvNmx5?=
+ =?utf-8?B?bWh1NUFkZENsVjJhcy8wM2hod1lxbCt4MmlHNjR6Sm5uN3dHbWlLVzNsdGJn?=
+ =?utf-8?B?RDB5UW1aVkRGb3E1eldQaEFKMmNHVS9MNjIrVEpUck9hR0NsMDgyekVxRU40?=
+ =?utf-8?B?c2NyeHErczFDSVpVYlhKZVRCbVJNd2FicG9BeVlicnBXSk90b09tTmRYa1VN?=
+ =?utf-8?B?V1NUWGFmN1plaTZoSGVId2dBaTduQzlHczBIZVoyQnYyVXBjQk0vTkhXUmdt?=
+ =?utf-8?B?TmRpNzFuYmkxVmxDQ3laaWFteVBVOFNCMHB5dTZaaitBRWV3dW9FRk9HOTVK?=
+ =?utf-8?B?bmJXT2dDQnNJMjkrbnY5U2hwWXhSeWZ2cGdsbC9oUmRJc0taZmh6TWFWaTZn?=
+ =?utf-8?B?RFd2WTNycGFnYW1HNTFDMTZzMGc3SXdadFpPeTFpRDFMSXBxeTJzUWxoL2dI?=
+ =?utf-8?B?a2hWdjBScjlnYjNrRWo0QzN0eUF4YWxsN2JQQWZzVFVOWGRKVXJ1bmdDR3RU?=
+ =?utf-8?B?bkI1ejB0ZXNXM0VnZmtZTHRrYXQ2MWYwakxUZGdGTlJwcStGYWMzbG1FZEcr?=
+ =?utf-8?B?RWE2ZVZyVWdZOXVORjNzRkJyUmd1NCs1bjNkQkRSdDF5VDBQWEhwUGdkMVdQ?=
+ =?utf-8?B?OXBlZElmdUozd1lVM3d0VWc5SDgvTGRSMHZ0YXpsbW85VVFJRHBWYmpSeStK?=
+ =?utf-8?B?dlVmMGpRQ1JJZkZOQ09vTzJjNk9zblhOdGYxSURrSGxSTENqeXZROXZOdHBn?=
+ =?utf-8?B?OTVES01vSUN4OUx4c2ZuMUFOUTlVcGR0bHlZTHBNMW1hUXZzQVdWYU5DQUZI?=
+ =?utf-8?B?b05lWTIyaUozWFNhbXE2VWdrdFhFOGpqSUtFbFcxYk1jbkxMWVg2dUkweVlS?=
+ =?utf-8?B?Z2xKTHpadUdCWXpKbjYxTDVQUFlyays5UTFXSjY3am1rOUlWajl5Tytsa3FR?=
+ =?utf-8?B?WGxHeGx3VWpWYXNSZTQxaGxLOXhJMUMxOUxzVUl2TTdqaEYxRWlsSzJOdHBy?=
+ =?utf-8?B?OUE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <8B6C1DE1CF8F8F4FAE3962593A503305@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bd5285dd-d6dd-8a46-fca9-728db5e2f369@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: fujitsu.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB9499.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63dd83e1-c764-41c4-3721-08da8af8ee2b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2022 02:31:37.8522
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: a19f121d-81e1-4858-a9d8-736e267fd4c7
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 0ldK2pA28YJv+ieqKZIv5vWQ1uxl3F75jOcf0rPB8HXpHDn7r71+Uob8WE+CG8ScN4DFQmhgfuh44WOmyuJtKA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSBPR01MB4056
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 03:55:47PM -0700, Reinette Chatre wrote:
-> Hi Vijay and Jarkko,
-> 
-> On 8/29/2022 8:12 PM, Jarkko Sakkinen wrote:
-> > From: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> > 
-> > Add a new test case which is same as augment_via_eaccept but adds a
-> > larger number of EPC pages to stress test EAUG via EACCEPT.
-> > 
-> > Signed-off-by: Vijay Dhanraj <vijay.dhanraj@intel.com>
-> > Co-developed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
-> > ---
-> > v2:
-> > - Addressed Reinette's feedback:
-> >   https://lore.kernel.org/linux-sgx/24bd8e42-ff4e-0090-d9e1-cd81e4807f21@intel.com/
-> > ---
-> >  tools/testing/selftests/sgx/load.c      |   5 +-
-> >  tools/testing/selftests/sgx/main.c      | 141 +++++++++++++++++++++---
-> >  tools/testing/selftests/sgx/main.h      |   3 +-
-> >  tools/testing/selftests/sgx/sigstruct.c |   2 +-
-> >  4 files changed, 129 insertions(+), 22 deletions(-)
-> 
-> There seems to be at least three patches merged into one here:
-> 1) Update SGX selftests to create enclaves with provided size dedicated
->    to EDMM (this change causes a lot of noise and distracts from the test
->    addition).
-> 2) The mrenclave_ecreate() fix (which is still incomplete).
-> 3) The actual test addition.
-
-I would agree on this on a kernel patch but not for kselftest patch. It
-does not really give useful value here. This adds a test and that is a
-good enough granularity in my opinion, unless some major architecture
-work is required as precursory. It is not the case here.
-
-> > diff --git a/tools/testing/selftests/sgx/load.c b/tools/testing/selftests/sgx/load.c
-> > index 94bdeac1cf04..7de1b15c90b1 100644
-> > --- a/tools/testing/selftests/sgx/load.c
-> > +++ b/tools/testing/selftests/sgx/load.c
-> > @@ -171,7 +171,8 @@ uint64_t encl_get_entry(struct encl *encl, const char *symbol)
-> >  	return 0;
-> >  }
-> >  
-> > -bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
-> > +bool encl_load(const char *path, struct encl *encl, unsigned long heap_size,
-> > +			   unsigned long edmm_size)
-> >  {
-> 
-> checkpatch.pl informs about alignment issues above and also a few other places.
-
-Weird. I did run checkpatch through these. Will revisit.
-
-> 
-> >  	const char device_path[] = "/dev/sgx_enclave";
-> >  	struct encl_segment *seg;
-> > @@ -300,7 +301,7 @@ bool encl_load(const char *path, struct encl *encl, unsigned long heap_size)
-> >  
-> >  	encl->src_size = encl->segment_tbl[j].offset + encl->segment_tbl[j].size;
-> >  
-> > -	for (encl->encl_size = 4096; encl->encl_size < encl->src_size; )
-> > +	for (encl->encl_size = 4096; encl->encl_size < encl->src_size + edmm_size;)
-> >  		encl->encl_size <<= 1;
-> >  
-> >  	return true;
-> > diff --git a/tools/testing/selftests/sgx/main.c b/tools/testing/selftests/sgx/main.c
-> > index 9820b3809c69..867e98502120 100644
-> > --- a/tools/testing/selftests/sgx/main.c
-> > +++ b/tools/testing/selftests/sgx/main.c
-> > @@ -21,8 +21,15 @@
-> >  #include "../kselftest_harness.h"
-> >  #include "main.h"
-> >  
-> > +/*
-> > + * The size was chosen based on a bug report:
-> > + * https://lore.kernel.org/linux-sgx/DM8PR11MB55912A7F47A84EC9913A6352F6999@DM8PR11MB5591.namprd11.prod.outlook.com/
-> > + */
-> > +static const unsigned long EDMM_SIZE_LONG = 8L * 1024L * 1024L * 1024L; // 8 GB
-> > +static const unsigned long TIMEOUT_LONG = 900; /* seconds */
-> 
-> It is interesting that in this small snippet there are three different
-> comment styles (multi-line comment preceding code, tail comment using /**/,
-> and tail comment using //) :)
-
-Oops. Will fix.
-
-> 
-> >  static const uint64_t MAGIC = 0x1122334455667788ULL;
-> >  static const uint64_t MAGIC2 = 0x8877665544332211ULL;
-> > +
-> 
-> Addition of empty line here.
-
-Will remove.
-
-> 
-> >  vdso_sgx_enter_enclave_t vdso_sgx_enter_enclave;
-> >  
-> >  /*
-> > @@ -173,7 +180,8 @@ FIXTURE(enclave) {
-> >  };
-> >  
-> >  static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
-> > -			    struct __test_metadata *_metadata)
-> > +			    struct __test_metadata *_metadata,
-> > +			    unsigned long edmm_size)
-> >  {
-> >  	Elf64_Sym *sgx_enter_enclave_sym = NULL;
-> >  	struct vdso_symtab symtab;
-> > @@ -183,7 +191,7 @@ static bool setup_test_encl(unsigned long heap_size, struct encl *encl,
-> >  	unsigned int i;
-> >  	void *addr;
-> >  
-> > -	if (!encl_load("test_encl.elf", encl, heap_size)) {
-> > +	if (!encl_load("test_encl.elf", encl, heap_size, edmm_size)) {
-> >  		encl_delete(encl);
-> >  		TH_LOG("Failed to load the test enclave.");
-> >  		return false;
-> > @@ -284,7 +292,7 @@ TEST_F(enclave, unclobbered_vdso)
-> >  	struct encl_op_get_from_buf get_op;
-> >  	struct encl_op_put_to_buf put_op;
-> >  
-> > -	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata));
-> > +	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata, 0));
-> >  
-> >  	memset(&self->run, 0, sizeof(self->run));
-> >  	self->run.tcs = self->encl.encl_base;
-> > @@ -357,7 +365,7 @@ TEST_F(enclave, unclobbered_vdso_oversubscribed)
-> >  
-> >  	total_mem = get_total_epc_mem();
-> >  	ASSERT_NE(total_mem, 0);
-> > -	ASSERT_TRUE(setup_test_encl(total_mem, &self->encl, _metadata));
-> > +	ASSERT_TRUE(setup_test_encl(total_mem, &self->encl, _metadata, 0));
-> >  
-> 
-> The support for EDMM size and all the call site changes could be moved to a separate
-> patch to make the changes easier to parse.
-> 
-> 
-> ...
-> 
-> > @@ -1210,6 +1218,103 @@ TEST_F(enclave, augment_via_eaccept)
-> >  	munmap(addr, PAGE_SIZE);
-> >  }
-> >  
-> > +/*
-> > + * Test for the addition of large number of pages to an initialized enclave via
-> > + * a pre-emptive run of EACCEPT on every page to be added.
-> > + */
-> > +TEST_F_TIMEOUT(enclave, augment_via_eaccept_long, TIMEOUT_LONG)
-> > +{
-> > +	struct encl_op_get_from_addr get_addr_op;
-> > +	struct encl_op_put_to_addr put_addr_op;
-> > +	struct encl_op_eaccept eaccept_op;
-> > +	size_t total_size = 0;
-> > +	unsigned long i;
-> > +	void *addr;
-> > +
-> > +	if (!sgx2_supported())
-> > +		SKIP(return, "SGX2 not supported");
-> > +
-> > +	ASSERT_TRUE(setup_test_encl(ENCL_HEAP_SIZE_DEFAULT, &self->encl, _metadata,
-> > +				    EDMM_SIZE_LONG));
-> > +
-> > +	memset(&self->run, 0, sizeof(self->run));
-> > +	self->run.tcs = self->encl.encl_base;
-> > +
-> > +	for (i = 0; i < self->encl.nr_segments; i++) {
-> > +		struct encl_segment *seg = &self->encl.segment_tbl[i];
-> > +
-> > +		total_size += seg->size;
-> > +	}
-> > +
-> > +	/*
-> > +	 * mmap() every page at end of existing enclave to be used for
-> > +	 * EDMM.
-> > +	 */
-> > +	addr = mmap((void *)self->encl.encl_base + total_size, EDMM_SIZE_LONG,
-> > +			PROT_READ | PROT_WRITE | PROT_EXEC, MAP_SHARED | MAP_FIXED,
-> > +			self->encl.fd, 0);
-> > +	EXPECT_NE(addr, MAP_FAILED);
-> > +
-> > +	self->run.exception_vector = 0;
-> > +	self->run.exception_error_code = 0;
-> > +	self->run.exception_addr = 0;
-> > +
-> > +	/*
-> > +	 * Run EACCEPT on new page to trigger the #PF->EAUG->EACCEPT(again
-> > +	 * without a #PF). All should be transparent to userspace.
-> > +	 */
-> 
-> s/on new page/on every page/ ?
-
-+1
-
-> 
-> > +	eaccept_op.flags = SGX_SECINFO_R | SGX_SECINFO_W | SGX_SECINFO_REG | SGX_SECINFO_PENDING;
-> > +	eaccept_op.ret = 0;
-> > +	eaccept_op.header.type = ENCL_OP_EACCEPT;
-> > +
-> > +	for (i = 0; i < EDMM_SIZE_LONG; i += 4096) {
-> > +		eaccept_op.epc_addr = (uint64_t)(addr + i);
-> > +
-> > +		EXPECT_EQ(ENCL_CALL(&eaccept_op, &self->run, true), 0);
-> > +		if (self->run.exception_vector == 14 &&
-> > +			self->run.exception_error_code == 4 &&
-> > +			self->run.exception_addr == self->encl.encl_base) {
-> > +			munmap(addr, EDMM_SIZE_LONG);
-> > +			SKIP(return, "Kernel does not support adding pages to initialized enclave");
-> > +		}
-> > +
-> > +		EXPECT_EQ(self->run.exception_vector, 0);
-> > +		EXPECT_EQ(self->run.exception_error_code, 0);
-> > +		EXPECT_EQ(self->run.exception_addr, 0);
-> > +		ASSERT_EQ(eaccept_op.ret, 0);
-> > +		ASSERT_EQ(self->run.function, EEXIT);
-> > +	}
-> > +
-> 
-> I see that you removed all comments here after the discussion about what
-> comment would be appropriate. This may be ok but it does seem awkward that
-> there are two parts to this section and the second part still has a comment
-> while the first does not. How about the comment I provided in
-> https://lore.kernel.org/linux-sgx/69a5e350-ded9-30c9-dc41-d08c01dd05dc@intel.com/ :
-> 
-> /*
->  * Pool of pages were successfully added to enclave. Perform sanity
->  * check on first page of the pool only to ensure data can be written
->  * to and read from a dynamically added enclave page.
->  */
-
-+1
-
-> 
-> > +	put_addr_op.value = MAGIC;
-> > +	put_addr_op.addr = (unsigned long)addr;
-> > +	put_addr_op.header.type = ENCL_OP_PUT_TO_ADDRESS;
-> > +
-> > +	EXPECT_EQ(ENCL_CALL(&put_addr_op, &self->run, true), 0);
-> > +
-> > +	EXPECT_EEXIT(&self->run);
-> > +	EXPECT_EQ(self->run.exception_vector, 0);
-> > +	EXPECT_EQ(self->run.exception_error_code, 0);
-> > +	EXPECT_EQ(self->run.exception_addr, 0);
-> > +
-> > +	/*
-> > +	 * Read memory from newly added page that was just written to,
-> > +	 * confirming that data previously written (MAGIC) is present.
-> > +	 */
-> > +	get_addr_op.value = 0;
-> > +	get_addr_op.addr = (unsigned long)addr;
-> > +	get_addr_op.header.type = ENCL_OP_GET_FROM_ADDRESS;
-> > +
-> > +	EXPECT_EQ(ENCL_CALL(&get_addr_op, &self->run, true), 0);
-> > +
-> > +	EXPECT_EQ(get_addr_op.value, MAGIC);
-> > +	EXPECT_EEXIT(&self->run);
-> > +	EXPECT_EQ(self->run.exception_vector, 0);
-> > +	EXPECT_EQ(self->run.exception_error_code, 0);
-> > +	EXPECT_EQ(self->run.exception_addr, 0);
-> > +
-> > +	munmap(addr, EDMM_SIZE_LONG);
-> > +}
-> > +
-> >  /*
-> >   * SGX2 page type modification test in two phases:
-> >   * Phase 1:
-> 
-> ...
-> 
-> > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-> > index a07896a46364..decd767434d5 100644
-> > --- a/tools/testing/selftests/sgx/sigstruct.c
-> > +++ b/tools/testing/selftests/sgx/sigstruct.c
-> > @@ -349,7 +349,7 @@ bool encl_measure(struct encl *encl)
-> >  	if (!ctx)
-> >  		goto err;
-> >  
-> > -	if (!mrenclave_ecreate(ctx, encl->src_size))
-> > +	if (!mrenclave_ecreate(ctx, encl->encl_size))
-> >  		goto err;
-> >  
-> >  	for (i = 0; i < encl->nr_segments; i++) {
-> 
-> As I mentioned in feedback to previous version, even though
-> encl_size is now provided, this misses that mrenclave_ecreate()
-> continues to recompute it within.
-> 
-> Reinette
-> 
-
-I simply forgot this one, sorry. Will fix.
-
-BR, Jarkko
+T24gMjAyMi84LzMxIDk6NTksIExpIFpoaWppYW4gd3JvdGU6DQo+IA0KPiBXaGF0IGkgY2FuIHNl
+ZSBpcyB0aGF0IHdlIGhhdmUgb3RoZXIgcGxhY2VzIHRvIGRlLXJlZmVyZW5jZSBzY21uZCBhbmQN
+Cj4gDQo+IHNjbW5kID0gc3JwX2NsYWltX3JlcShjaCwgcmVxLCBOVUxMLCBzY21uZCkgaXMgcG9z
+c2libGUgdG8gcmV0dXJuIGEgTlVMTCANCj4gdG8gc2NtbmQNCg0KSGksDQoNClRoYW5rcyBmb3Ig
+eW91ciByZXZpZXcuDQoNClllcywgaXQgc2VlbXMgYmV0dGVyIHRvIGp1c3QgY2hlY2sgc2NtbmQg
+YmVmb3JlIHNldHRpbmcgc2NtbmQtPnJlc3VsdCwgDQpsaWtlIHRoaXM6DQpkaWZmIC0tZ2l0IGEv
+ZHJpdmVycy9pbmZpbmliYW5kL3VscC9zcnAvaWJfc3JwLmMgDQpiL2RyaXZlcnMvaW5maW5pYmFu
+ZC91bHAvc3JwL2liX3NycC5jDQppbmRleCA3NzIwZWEyNzBlZDguLjk5ZjVlN2Y4NTJiMyAxMDA2
+NDQNCi0tLSBhL2RyaXZlcnMvaW5maW5pYmFuZC91bHAvc3JwL2liX3NycC5jDQorKysgYi9kcml2
+ZXJzL2luZmluaWJhbmQvdWxwL3NycC9pYl9zcnAuYw0KQEAgLTE5NzIsNyArMTk3Miw5IEBAIHN0
+YXRpYyB2b2lkIHNycF9wcm9jZXNzX3JzcChzdHJ1Y3Qgc3JwX3JkbWFfY2ggDQoqY2gsIHN0cnVj
+dCBzcnBfcnNwICpyc3ApDQoNCiAgICAgICAgICAgICAgICAgICAgICAgICByZXR1cm47DQogICAg
+ICAgICAgICAgICAgIH0NCi0gICAgICAgICAgICAgICBzY21uZC0+cmVzdWx0ID0gcnNwLT5zdGF0
+dXM7DQorDQorICAgICAgICAgICAgICAgaWYgKHNjbW5kKQ0KKyAgICAgICAgICAgICAgICAgICAg
+ICAgc2NtbmQtPnJlc3VsdCA9IHJzcC0+c3RhdHVzOw0KDQpCZXN0IFJlZ2FyZHMsDQpYaWFvIFlh
+bmc=

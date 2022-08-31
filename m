@@ -2,116 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2D1D5A8722
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A44F25A8728
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232174AbiHaT50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 15:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47710 "EHLO
+        id S232114AbiHaT6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 15:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231800AbiHaT5W (ORCPT
+        with ESMTP id S229531AbiHaT6v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 15:57:22 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B952EE6A1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:57:20 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id qh18so10255416ejb.7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:57:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=3/C402UrLcFdr+55UasuTaaa+TRTdcGT9j3EBVa3jV4=;
-        b=4U2aNm2Bzl6sWFxYmpkLatmR/VIT9M4TC1wx0Hz6KqTkVCAaqUdhJHrXDM2HUeISWU
-         1gj3skkD3jlLf9mYWNLSCbFU5iqJnZUEzJRPLeBqgrWLPfK3DdFHW4F+uXR7U2I+h6Iq
-         LitD5cgW2roRNHIEh8XLMWtQ/h8iXF+zWOuHcYLxTMTT1Sa9Sf0eLeD2czf+5ijLTb3S
-         swZ2PvazSBanHogOiTiupHKA5oTBim4W05sNNoz0PS5RRM0lh1QI6rDxkjo73fQfdjW3
-         tTaXih8CgMoJ5VZwTjcjfyo0FsfiKKIgv90cljRY1FlGuaavwP93wqgZ/FfBX3lJhfyL
-         rZig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=3/C402UrLcFdr+55UasuTaaa+TRTdcGT9j3EBVa3jV4=;
-        b=P0VLZZhTYhRkyZ1ToVRAc7wkt8RZs6Jz1yMVK8NM2bSJ/BSbo+UgRJi9EgvFz3c9Vt
-         gtX1pSDDaWU8aq1NGH/THmhYVKWPdIvV8lmEH1lIpu0pfR204NItJ0IGK3bsiqSjPR5S
-         WSC68ncpcUlntLJCABrKo3wHcKb99e3yMnwYtq2hB3jjslLHTunR+Fj/fUd82WumPqjx
-         g0a15pUahxp9ba7RFNlwKzv/m08xa0fPkMa5qAhgnwCUsd5DDERga4QJiWHNIAADSFgJ
-         Pz8tk6e3gz2Nw+L7w5qCHt++3WEgska336HhXit70EXFcs3XCzSUIv8pOprpL/f2bMQY
-         Yzzg==
-X-Gm-Message-State: ACgBeo3J64G5rfQBze0lt9VNkdaTKPsxEa7pD1neBVAEr/NvROC24A4C
-        w23U/w1BjUyqRoDPeK4UCC1yHs9P4aNSZyIC8j2yVYsnvWM=
-X-Google-Smtp-Source: AA6agR4eCcEmRzF3NJLEVzxJ5LTDTqeQtu9d8ExuzstxWQae7oIVIV99F7ZjR94wAkhLZw8SM3jUdy/xwxuuxtIc+dk=
-X-Received: by 2002:a17:907:1c87:b0:741:8199:a59d with SMTP id
- nb7-20020a1709071c8700b007418199a59dmr11832796ejc.736.1661975839012; Wed, 31
- Aug 2022 12:57:19 -0700 (PDT)
+        Wed, 31 Aug 2022 15:58:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2740DEEF0E;
+        Wed, 31 Aug 2022 12:58:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6A42CB822DC;
+        Wed, 31 Aug 2022 19:58:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DADFAC433D6;
+        Wed, 31 Aug 2022 19:58:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661975927;
+        bh=sm71GH8RVOSxlkmJw9DILKfIbjQQHhnDtzuUCa7a+A0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Vej9rMn33tgVQT64mL5+CPKnapndlNftAjpvlda+Pz3I9N+p+I/q14iTsqJx976q4
+         eevdCgu1CrjQ0B5kqPbvsmoXek9099Vn80KOK2HUGQ4+kb65ogp22XWZ9fHURNmGdN
+         Ekch00ehgnJ85hzsTFx92en+IX6gh/JWuwXekQblocAfMAi9M9EdLcjyOl8EKnKgxC
+         vYwIELkJ/aVmfPd4lmrICTdPLU9Ez7XQTLAoaVIrxSWHy4C1a05XgSeeMG3uX93L/B
+         0ZpoA+++LJGJnUep8F/+u403I2aqcb3/zT/lnk0kSrNUql9cuG6Me59pPeePL59v1M
+         ag+Onf8Noz9gQ==
+Date:   Wed, 31 Aug 2022 12:58:46 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     cgel.zte@gmail.com
+Cc:     davem@davemloft.net, yoshfuji@linux-ipv6.org, dsahern@kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xu.xin16@zte.com.cn
+Subject: Re: [PATCH v3 0/3] Namespaceify two sysctls related with route
+Message-ID: <20220831125846.6bb2983a@kernel.org>
+In-Reply-To: <20220830091453.286285-1-xu.xin16@zte.com.cn>
+References: <20220830091453.286285-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-References: <20220712163345.445811-1-francesco.dolcini@toradex.com>
- <20220712163345.445811-4-francesco.dolcini@toradex.com> <20220809134836.GB44926@francesco-nb.int.toradex.com>
-In-Reply-To: <20220809134836.GB44926@francesco-nb.int.toradex.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 31 Aug 2022 21:57:08 +0200
-Message-ID: <CAMRc=McqfBSb+ZoD_WT-rWBqxqTCpogKUhO2uJr2R8dctTA1CA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] dt-bindings: gpio: stmpe: Remove node name requirement
-To:     Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc:     Lee Jones <lee.jones@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Input <linux-input@vger.kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 3:48 PM Francesco Dolcini
-<francesco.dolcini@toradex.com> wrote:
->
-> Hello Bartosz, can you pick this? Patches 1 and 2 were applied to MFD
-> tree.
->
-> On Tue, Jul 12, 2022 at 06:33:43PM +0200, Francesco Dolcini wrote:
-> > STMPE driver does not require a specific node name anymore, only the
-> > compatible is checked, update binding according to this.
-> >
-> > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
-> > ---
-> >  Documentation/devicetree/bindings/gpio/gpio-stmpe.txt | 3 +--
-> >  1 file changed, 1 insertion(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/gpio/gpio-stmpe.txt b/Documentation/devicetree/bindings/gpio/gpio-stmpe.txt
-> > index a0e4cf885213..b33f8f02c0d7 100644
-> > --- a/Documentation/devicetree/bindings/gpio/gpio-stmpe.txt
-> > +++ b/Documentation/devicetree/bindings/gpio/gpio-stmpe.txt
-> > @@ -8,8 +8,7 @@ Optional properties:
-> >   - st,norequest-mask: bitmask specifying which GPIOs should _not_ be requestable
-> >     due to different usage (e.g. touch, keypad)
-> >
-> > -Node name must be stmpe_gpio and should be child node of stmpe node to which it
-> > -belongs.
-> > +Node should be child node of stmpe node to which it belongs.
-> >
-> >  Example:
-> >       stmpe_gpio {
-> > --
-> > 2.25.1
-> >
->
+On Tue, 30 Aug 2022 09:14:53 +0000 cgel.zte@gmail.com wrote:
+> With the rise of cloud native, more and more container applications are
+> deployed. The network namespace is one of the foundations of the container.
+> The sysctls of error_cost and error_burst are important knobs to control
+> the sending frequency of ICMP_DEST_UNREACH packet for ipv4. When different
+> containers has requirements on the tuning of error_cost and error_burst,
+> for host's security, the sysctls should exist per network namespace.
+> 
+> Different netns has different requirements on the setting of error_cost
+> and error_burst, which are related with limiting the frequency of sending
+> ICMP_DEST_UNREACH packets. Enable them to be configured per netns.
 
-Sorry, I was off most of August and missed this one. Now applied.
+One last time, if v6 doesn't need it, neither should v4.
 
-Bart
+Seems like you're just trying to check a box.
+
+I'm dropping these patches from patchwork, please don't repost them
+again, unless someone from the community voices support for merging
+them.

@@ -2,556 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F165A76F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E217D5A76FD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:01:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229769AbiHaGxG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:53:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S230391AbiHaHBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 03:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiHaGxD (ORCPT
+        with ESMTP id S229538AbiHaHBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:53:03 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EDC9BB01B
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:53:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661928781; x=1693464781;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=18kO/PexrqlieiG1gwkrVuZZrV9IdV+EuhOhfubb5X0=;
-  b=jIC+oOx5IZMy0QSW/rqccDV4PmoWQ8YMPbrgTVhTjnVYA4Mx/7xcTPve
-   jTRZ4WAgnjHtMFKCtkqdQJMkBTt4d7FOb9iYTEc/sRQH94tvRUuJEzpE4
-   NTK73Oqc4P3Bn+/ToFRkeJKRqehSaP1B5S9aHXNE2DuePbrhKNX37XSgv
-   HTHbbsguosgaPDZx0BRlPovZsCreMpALoodJok6ME0sCI4P9zUXcC9KaM
-   aicw045xU4bIvxt7HHiE5A+jEb60TSC20wGiJ/9pxMgRSoBORncVWC/bs
-   Ac9DdaDiPKBLCXfqsxSgZzeU92GYl1RuZs0goJQVsQB75VuRqCJDvz8PO
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="321525252"
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="321525252"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 23:53:00 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="562940505"
-Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Aug 2022 23:52:57 -0700
-Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTHaq-00003K-2C;
-        Wed, 31 Aug 2022 06:52:56 +0000
-Date:   Wed, 31 Aug 2022 14:52:36 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-Message-ID: <202208311414.4OPuYS9K-lkp@intel.com>
+        Wed, 31 Aug 2022 03:01:41 -0400
+X-Greylist: delayed 455 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 00:01:39 PDT
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 06B1767C82
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:01:35 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowACniTqEBQ9jiJkUAg--.45336S2;
+        Wed, 31 Aug 2022 14:53:56 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     keescook@chromium.org, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] lkdtm: Add checks after calling kmalloc and vmalloc
+Date:   Wed, 31 Aug 2022 14:53:55 +0800
+Message-Id: <20220831065355.2125181-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: qwCowACniTqEBQ9jiJkUAg--.45336S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XrW3ZrykZryDJFWktFy8uFg_yoWkArb_Gr
+        4rAr17XryYya48C347KF1rZr4FkF4kXFsIkasaqwsIqFy7Jr4rJ3409r45AwsxZrWFkFnr
+        Ww4DJ3s29r12gjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbckFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVWxJr
+        0_GcWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r47
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JU24E_UUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
-commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
-date:   5 months ago
-config: powerpc-buildonly-randconfig-r003-20220830 (https://download.01.org/0day-ci/archive/20220831/202208311414.4OPuYS9K-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout f9b3cd24578401e7a392974b3353277286e49cee
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+As the potential failure of the memory allocation,
+it should be better to check the return value after
+calling kmalloc and vmalloc and skip the execute_location
+if fails.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Fixes: cc33c537c12f ("lkdtm: add "EXEC_*" triggers")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/misc/lkdtm/perms.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
->> powerpc-linux-objdump: Warning: DIE at offset 0x382c refers to abbreviation number 2753 which does not exist
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
->> powerpc-linux-objdump: Warning: DIE at offset 0x382c refers to abbreviation number 2753 which does not exist
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
->> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-   powerpc-linux-objdump: Warning: Unrecognized form: 0x22
-..
-
+diff --git a/drivers/misc/lkdtm/perms.c b/drivers/misc/lkdtm/perms.c
+index b93404d65650..9ba927d74973 100644
+--- a/drivers/misc/lkdtm/perms.c
++++ b/drivers/misc/lkdtm/perms.c
+@@ -180,14 +180,16 @@ static void lkdtm_EXEC_STACK(void)
+ static void lkdtm_EXEC_KMALLOC(void)
+ {
+ 	u32 *kmalloc_area = kmalloc(EXEC_SIZE, GFP_KERNEL);
+-	execute_location(kmalloc_area, CODE_WRITE);
++	if (kmalloc_area)
++		execute_location(kmalloc_area, CODE_WRITE);
+ 	kfree(kmalloc_area);
+ }
+ 
+ static void lkdtm_EXEC_VMALLOC(void)
+ {
+ 	u32 *vmalloc_area = vmalloc(EXEC_SIZE);
+-	execute_location(vmalloc_area, CODE_WRITE);
++	if (vmalloc_area)
++		execute_location(vmalloc_area, CODE_WRITE);
+ 	vfree(vmalloc_area);
+ }
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

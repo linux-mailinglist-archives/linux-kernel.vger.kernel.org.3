@@ -2,118 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0E55A8331
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A76AF5A833A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232004AbiHaQ15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 12:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45846 "EHLO
+        id S231259AbiHaQaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 12:30:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231920AbiHaQ1U (ORCPT
+        with ESMTP id S231733AbiHaQ37 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 12:27:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8947EC22B3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:27:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2149661987
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 16:27:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBBF4C433D6;
-        Wed, 31 Aug 2022 16:27:16 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="iGxgpTTP"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1661963235;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qc7ZMzWIg2Aa7xrlV4BdxZVrgJWRYtqIuFVeV6Gg4IE=;
-        b=iGxgpTTP1prXuHYoBzw1GJh9fg1UPFcG/IzfO5bHyAAGWLW0GO1KiftYekgo7EOAoDMpch
-        rRlNdNadAmvraop9QHI0UaXgmOLybsIb7e8apmqfAjCjVNcaRWdvvPr6L+tpeBsU6Yk4s/
-        3MI9dizyQ3LNc0LW62pbMVwZEyV+1jo=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a1da25cc (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 31 Aug 2022 16:27:15 +0000 (UTC)
-Date:   Wed, 31 Aug 2022 12:27:12 -0400
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org, tglx@linutronix.de
-Subject: Re: [PATCH] random: use raw spinlocks for use on RT
-Message-ID: <Yw+L4JT1yuXnbIbI@zx2c4.com>
-References: <20220801142530.133007-1-Jason@zx2c4.com>
- <YufkZU9kGkHHUhAK@linutronix.de>
- <YvRKm/IpbUID18FK@zx2c4.com>
- <YvSsf5uds7zGgWPX@linutronix.de>
- <YvUQJTDREXSAA9J6@zx2c4.com>
- <Yw0XRtgh2dmSM+T1@linutronix.de>
- <Yw0Z1jvwHEQQq8Zw@zx2c4.com>
- <Yw3i2N8J7yz3jnyt@linutronix.de>
- <Yw4rsdA7xu4+UrLi@zx2c4.com>
- <Yw5dqweo0bQDvPkP@linutronix.de>
+        Wed, 31 Aug 2022 12:29:59 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DECDA3C6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:29:27 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id j5so10727631plj.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:29:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ai3kla76noYultWIeYF2au+T/PVC036OnJ9JVKMm/v8=;
+        b=YhZUMHTa6jXt5s3IV+ImLKAXUKEH11NrF2K3Q2AOqc/mZ/mRMdbl6ivOPpSiMo5ZEa
+         WzKQ//BC6APOQKz42cf11UJcJD3PO2Sx5hgaIGP+tsnTGBifWStyIr7y4oJUmhqlXXpA
+         h2EkthNjTOne+KDvXveKoKZk/qZdo+zEaFlw/Uubn+NB5MEtcjD9dWF5xRJQeAvTvYd/
+         23KuedK/J/ZgS9guVkqbwimTDhLWHu/xtvmZfTdslTdQ3osyc0zEO6bOn7IzHOwTN63A
+         QwTIeDln4yXp2OgWI5RGppw2ICabisK6op1cK/eNK5KgkJ4DQiQNF2aYeo+UsQEjKLzC
+         2XYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ai3kla76noYultWIeYF2au+T/PVC036OnJ9JVKMm/v8=;
+        b=Z/VLou+QCqFuKW1cwLG62Dnp0ux0AmqjI8QFaKEXXgkUjDsbmVofFVNAaHQ2bqtDWH
+         DCrux1s1iJdfTYZn7Ka23yIa3hxLq+ZtlECGa4sMgrxTu+QLCyQCRxXBJZigQNl+yf9o
+         fKhjimgEz74tjhtfVoYJawG/TTwVtqYAL96auZ6kkU7RcYkNDg5ImF9+iudG5374cbpl
+         oKq8bcga7PCM7z1Gr2Fch3hh50E07f0i//Cjutvxo7mBodV35ygpZDgNZfHSgbf3YoE/
+         UaNjVf9Gd6YHiv5EjbBAJPfHEOVWkybINYw4sE/7AF2W7PiLxAYSmf8IzyqOTEBCoVPy
+         JyEA==
+X-Gm-Message-State: ACgBeo2u6UaoEI4boQjPC+ixk53Mj3BKqR5TLGACUlefESS4mHbcHW7n
+        r/atyqpsE3FPephapVx6dBhMBw==
+X-Google-Smtp-Source: AA6agR6lKjEFhC6HcrUUPmR6ex01FcrgT0C94jGiCFsQOzdOxbYF0sRHpOheCNhe44lAF2Xzey3eQw==
+X-Received: by 2002:a17:90b:1b49:b0:1fd:dccc:91f7 with SMTP id nv9-20020a17090b1b4900b001fddccc91f7mr4056962pjb.200.1661963365688;
+        Wed, 31 Aug 2022 09:29:25 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902e80b00b001744171a60esm10160498plg.194.2022.08.31.09.29.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 09:29:25 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 16:29:20 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Subject: Re: [PATCH 03/19] Revert "KVM: SVM: Introduce hybrid-AVIC mode"
+Message-ID: <Yw+MYLyVXvxmbIRY@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+ <20220831003506.4117148-4-seanjc@google.com>
+ <17e776dccf01e03bce1356beb8db0741e2a13d9a.camel@redhat.com>
+ <84c2e836d6ba4eae9fa20329bcbc1d19f8134b0f.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yw5dqweo0bQDvPkP@linutronix.de>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <84c2e836d6ba4eae9fa20329bcbc1d19f8134b0f.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 08:57:47PM +0200, Sebastian Andrzej Siewior wrote:
-> On 2022-08-30 11:24:33 [-0400], Jason A. Donenfeld wrote:
-> > Hi Sebastian,
-> Hi Jason,
+On Wed, Aug 31, 2022, Maxim Levitsky wrote:
+> On Wed, 2022-08-31 at 08:59 +0300, Maxim Levitsky wrote:
+> > On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
+> > > Remove SVM's so called "hybrid-AVIC mode" and reinstate the restriction
+> > > where AVIC is disabled if x2APIC is enabled.  The argument that the
+> > > "guest is not supposed to access xAPIC mmio when uses x2APIC" is flat out
+> > > wrong.  Activating x2APIC completely disables the xAPIC MMIO region,
+> > > there is nothing that says the guest must not access that address.
+> > > 
+> > > Concretely, KVM-Unit-Test's existing "apic" test fails the subtests that
+> > > expect accesses to the APIC base region to not be emulated when x2APIC is
+> > > enabled.
+> > > 
+> > > Furthermore, allowing the guest to trigger MMIO emulation in a mode where
+> > > KVM doesn't expect such emulation to occur is all kinds of dangerous.
 > 
-> > On Tue, Aug 30, 2022 at 12:13:44PM +0200, Sebastian Andrzej Siewior wrote:
-> > > The first patch did so yes. The second simply retried in two secs and
-> > > this shouldn't be problematic.
-> > 
-> > This seemed pretty bad too, because now you potentially miss up to 2
-> > seconds of messages AND it adds more complexity.
+> Also, unless I misunderstood you, the above statement is wrong.
 > 
-> It is early at boot and it could be reduced to one if it helps. I
-> remember you had a suggestion where we would lose always the first print
-> out on RT you said it is okay since you can't rely on that…
+> Leaving AVIC on, when vCPU is in x2apic mode cannot trigger extra MMIO emulation,
+> in fact the opposite - because AVIC is on, writes to 0xFEE00xxx might *not* trigger
+> MMIO emulation and instead be emulated by AVIC.
 
-I mean, the mechanism now is simple and doesn't fail. What you're
-suggesting is more complex and fails sometimes. So,
+That's even worse, because KVM is allowing the guest to exercise hardware logic
+that I highly doubt AMD has thoroughly tested.
 
-> > I'm fine with changing things up to accommodate RT, but not when the
-> > result is so obviously worse than before.
-> 
-> I don't think it is worse. This is your opinion and I did not hear any
-> other feedback so far.
+> Yes, some of these writes can trigger AVIC specific emulation vm exits, but they
+> are literaly the same as those used by x2avic, and it is really hard to see
+> why this would be dangerous (assuming that x2avic code works, and avic code
+> is aware of this 'hybrid' mode).
 
-so, I think it's beyond a matter of opinion and is actually objectively
-worse.
+The APIC_RRR thing triggered the KVM_BUG_ON() in kvm_apic_write_nodecode()
+precisely because of the AVIC trap.  At best, this gives a way for the guest to
+trigger a WARN_ON_ONCE() and thus panic the host if panic_on_warn=1.  I fixed
+the APIC_RRR case because that will be problematic for x2AVIC, but there are
+other APIC registers that are unsupported in x2APIC that can trigger the KVM_BUG_ON().
 
-And it's not like I even care particularly much about vnsprintf; as I
-said before, none of this really matters _that_ much. But I *do* very
-much object to dirtying up random bits of code and making things
-actually worse in the name of RT, especially when there are other
-solutions being considered. Namely:
+> From the guest point of view, unless the guest pokes at random MMIO area,
+> the only case when this matters is if the guest maps RAM over the 0xFEE00xxx
+> (which it of course can, the spec explictly state as you say that when x2apic
+> is enabled, the mmio is disabled), and then instead of functioning as RAM,
+> the range will still function as APIC.
 
-> > In my tests I can't see any latency difference with using raw spinlocks
-> > in random.c. Maybe I'm doing things wrong? But I'm not seeing anything
-> > change...
-> 
-> You need to look at the maximum latency that may happen. Also the other
-> thing is that there is no need to add raw_spinlock_t locking if it can
-> be avoided.
-
-I really am having trouble fashioning a test that shows a higher maximum
-latency. All the RNG critical sections are really short in the end. So I
-dunno... seems like not a big deal to me. If you're seeing different
-numbers, can you post them and how you came up with them? If I can
-reproduce it, maybe it's possible for me to do something about that
-latency. But so far I'm not seeing any latency spike...
-
-Jason
+There is no wiggle room here though, KVM is blatantly breaking the architectural
+specification.  When x2APIC is enabled, the xAPIC MMIO does not exist.

@@ -2,68 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DF865A72F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4A45A72F6
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:49:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231961AbiHaAtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:49:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
+        id S231776AbiHaAtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbiHaAtA (ORCPT
+        with ESMTP id S231876AbiHaAt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:49:00 -0400
-Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE44DA4054;
-        Tue, 30 Aug 2022 17:48:53 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VNoHDv4_1661906930;
-Received: from 30.227.181.248(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VNoHDv4_1661906930)
-          by smtp.aliyun-inc.com;
-          Wed, 31 Aug 2022 08:48:51 +0800
-Message-ID: <d81db7ff-6c5a-ff8c-ca1e-6d08474c202b@linux.alibaba.com>
-Date:   Wed, 31 Aug 2022 08:48:49 +0800
+        Tue, 30 Aug 2022 20:49:26 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9142AAFACA
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:49:15 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-11f34610d4aso10022730fac.9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:49:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=iDNoZY/hBvrGVH9LpbmO3buefvxj4JAfYTN2Wri+2DQ=;
+        b=pq9DkG8LD0vyPgq9WEPXiu3U57hBtkreyHiQfOfFNA0Cos7XvxQ/wPHSwUGtZz02d7
+         mjjT5FVEOvaJ9leHUROlbXUUna04rmTV9RqJLdb1D7sLbEdATfkgnu3GzeFgK4Sg8aVq
+         uAbYTbyCKoY2qJ4A8ENUXYx4V5na9iIYjZGy0nmKN+2lNHSf9/tGbLElX+QezcRa+mzR
+         z4ClE+aqxF2OwjmYvzM4nOBvhsbC20DofQ1+EWeet39lPKxjQJuYOFVpiviJp9vMAY/X
+         4neqjMpsnVxtABiGkzvKni1j2uTIyPyexUPhFkPzYm5/+bpGUu4iONyCLm2peGlW0lm8
+         yLKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=iDNoZY/hBvrGVH9LpbmO3buefvxj4JAfYTN2Wri+2DQ=;
+        b=RN4FlBH0s3fxRXXKWPBkhUpiErOss02Q34daAsRz8pqD30qUVgHfMdxm+qzrjAvV1a
+         CPOCRUL18znTPT1FZsU+30l0G9OheqWgU7QlJBHjdaXyhCPWnopYuSAuLSoaJkt+4VNN
+         bNPPssRL6oeg1ATHUHRSNE1Fj7rhJM8MHw0PHzCgC7Bhin/DOLvPYTaEzIbAe/v4WKrw
+         hAqa5A3jJBPZGBDKHYH0goGFv95dqwCHfhngJ1VkaiGMFhMtQqMJo/HI+V117JfoQ4RN
+         QeehIzmR5eoqfUKfgOcNBACm1Opj4UMF4epa23hOf4Z6UBpgx1VxpgBVblnxLfVFmOge
+         X+gQ==
+X-Gm-Message-State: ACgBeo3FcIcPG6ASj9xlhKAJ0Tif0r5yfsB2+R1EKbpDFvjV8oNmXuc4
+        JD9VBa+JZCd+uTgrI9GpljcQV80xkKc+/4eT3YGX
+X-Google-Smtp-Source: AA6agR7f1XUuWYsXWLmnvTy0fEROtU/LN1joOGlwOIGmh42zEcYAcEHYs30wYP49Fh5gUV322D7byAz3wqmMYGexfko=
+X-Received: by 2002:a05:6808:3a9:b0:343:4b14:ccce with SMTP id
+ n9-20020a05680803a900b003434b14cccemr262314oie.41.1661906953828; Tue, 30 Aug
+ 2022 17:49:13 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.3
-Subject: Re: [RFC PATCH] blk-mq: change bio_set_ioprio to inline
-To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <1661852746-117244-1-git-send-email-liusong@linux.alibaba.com>
- <0001ab1d-b4c0-2ac1-f902-c61216204aef@nvidia.com>
-From:   Liu Song <liusong@linux.alibaba.com>
-In-Reply-To: <0001ab1d-b4c0-2ac1-f902-c61216204aef@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220830105001.68478-1-wuchi.zero@gmail.com> <CAHC9VhSq7P8oHE5dQXdaYx33yMBFEASKgRngSZyNYMr96UYT_A@mail.gmail.com>
+ <CA+tQmHDoGjLsq74cifBpe1LvpN3MKYW0O5J9pX=vh4VVHoir8w@mail.gmail.com>
+In-Reply-To: <CA+tQmHDoGjLsq74cifBpe1LvpN3MKYW0O5J9pX=vh4VVHoir8w@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 30 Aug 2022 20:49:03 -0400
+Message-ID: <CAHC9VhSPdD_tJYhynK=a3JcuU-2ez1S2VCUXLu0DJbWCn0-8zQ@mail.gmail.com>
+Subject: Re: [PATCH] audit: remove obvious unnecessary header files
+To:     chi wu <wuchi.zero@gmail.com>
+Cc:     eparis@redhat.com, linux-audit@redhat.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/30 20:48, Chaitanya Kulkarni wrote:
-
-> On 8/30/22 02:45, Liu Song wrote:
->> From: Liu Song <liusong@linux.alibaba.com>
->>
->> Change "bio_set_ioprio" to inline to avoid calling overhead.
->>
->> Signed-off-by: Liu Song <liusong@linux.alibaba.com>
-> for performance overhead please provide quantitative data
+On Tue, Aug 30, 2022 at 8:20 PM chi wu <wuchi.zero@gmail.com> wrote:
+> Paul Moore <paul@paul-moore.com> =E4=BA=8E2022=E5=B9=B48=E6=9C=8831=E6=97=
+=A5=E5=91=A8=E4=B8=89 01:04=E5=86=99=E9=81=93=EF=BC=9A
+> >
+> >
+> > Hi Wuchi, can you explain what process you used to determine that
+> > these header file includes were unnecessary?
 >
-> -ck
->
-This is a small adjustment, and even if performance comparison data is 
-obtained
-for targeted design use cases, it is not universal. If the inline by the 
-compiler is
-successful, the number of instructions will be reduced.
+> When reading the code, if I don't found the user of the *.h in the *.c
+> file,I will think that is unnecessary. For example, #include
+> <linux/kthread.h> in the audit.c, I don't found the use of kthread* in
+> the file.
+> But, I just build that without "W=3D1 " , the after test robot show that =
+I
+> was wrong. and I don't sure that if it is true to remove some header
+> files.
 
-Thanks
+Yes, I would recommend that you focus your time and energy on other
+tasks within the Linux Kernel.  I'm very happy to see patches which
+improve the audit subsystem, but I don't believe verifying the header
+file usage is a good use of time at this point.
 
->
+--=20
+paul-moore.com

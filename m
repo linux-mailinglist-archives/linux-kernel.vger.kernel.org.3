@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00ADB5A87DF
+	by mail.lfdr.de (Postfix) with ESMTP id 774485A87E0
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:04:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiHaVEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:04:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48582 "EHLO
+        id S232075AbiHaVEM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:04:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232075AbiHaVEC (ORCPT
+        with ESMTP id S232115AbiHaVEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:04:02 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D4CEE4B0;
-        Wed, 31 Aug 2022 14:04:01 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id v5so9043019plo.9;
-        Wed, 31 Aug 2022 14:04:01 -0700 (PDT)
+        Wed, 31 Aug 2022 17:04:06 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 053E5F2D6D;
+        Wed, 31 Aug 2022 14:04:04 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id 78so1047546pgb.13;
+        Wed, 31 Aug 2022 14:04:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date;
-        bh=kvFx5eRHToWhr+zoZdy15KN5PCyIzU9FkGCgn6Qywlw=;
-        b=qf7oCb+6U7wyK/WXVyWqIxvfPRJk2TiE5FhIE3SZABQYyTMxEmRbOFfLRJhW2mZcWG
-         ha9i4oq2n/7dTIjos6v31kIR/SUn0Ip1yNXSkp5rueSw4+Rwga55OWOhL32sVQ9zH3n7
-         m+8WKr9Hq2UFAurZiCm097u98D2LEvw1AbD3NVvWT9SsBoxG/gO/qDdZ2HOE90JMSDIW
-         U+fS78v7jT0N/Wv5+8PJQOMmN1U1WzRfGSkmJMnDyVyhM5RYEES2MPHDGZ/K55EHlwek
-         F5/arKUAeDz0BGt0wPESQex1qE13+nTC7FGfuG/rEgYpUC5HEbethojfvrXoZEOVWqwu
-         YEAw==
+        bh=PljIzC2kef7tvsQZuyC5v+5hanwzmlHbh3BhWszm894=;
+        b=UuvmYcB1J1nrG5wI+zEpzL0ViJbXSxPTcJvz7g4qvlOJSZzVHm25i2E9Pjemeun2mx
+         VVEhAIw0rK/Hm8Rhk9+vQrLkRPgkuPK0hrvFLDpYShP50KLiGjf82xQ0eT22HclGeHve
+         A6QWURZ/4P7gTlb5oQv4VjMw70Ooj+rd539oEYtes96jo/BcNVvRaXp8CIK9Yu1WOhPc
+         3jwLpRG6ttG7A9GdejfVol5HwHXajjOLya/5MgNa7qnw9pUo7B/y+DrmEc4U+jatokBZ
+         zRQvOtCnnXRLABPrQlgFbP5eAUo17200Ke1B8q0aKasZvDVusfrUt6GfU1qYvjoGilv0
+         uonQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
          :to:cc:subject:date;
-        bh=kvFx5eRHToWhr+zoZdy15KN5PCyIzU9FkGCgn6Qywlw=;
-        b=vsKrKssllShHrHnCCsEYaFnRzIJknVV/ccKXi9hqsrKT3sf8oDS+m8JQWP1oYFeMws
-         D4itvYvsBApV20VoMdCmquYVYPS+Rbe40rqDblkG2ypBw4ArTu2lBdybR4hFr0/r7Vfg
-         v7zz2nNtTf4NC0kLyDoohyxmrK7UctcRnkVEzITH2PKsj1rii4brIXpfC7gciAfdHmSq
-         mPdJ4SrZPaKz5dSeHPBjKcT3B+WoOkhXaKoT2BW2rO7QUcGZQSB07jBsI4JqYxPU0vY0
-         Nf3uoB4Se2eh56S3jrr9F1NxPKdMuu2mDd3xkeztX5l2gqcnLG4qMPTsq2PiGXye7546
-         PC+A==
-X-Gm-Message-State: ACgBeo1QHHQLuNHhlsq8HfmJD9NeFp0KT0NVJct4He/3FswY6Av5RpRj
-        HzOwldujuQNJAX5CLWBuYdw=
-X-Google-Smtp-Source: AA6agR4oX6FhX+PN2QqK5aBgnFtb+zcamRp4j012AaFeHV+nP6WS/DMyOaKCIuCLkzPtrGu8PHMd6A==
-X-Received: by 2002:a17:90b:3e8b:b0:1f5:2a52:9148 with SMTP id rj11-20020a17090b3e8b00b001f52a529148mr4991608pjb.175.1661979841010;
-        Wed, 31 Aug 2022 14:04:01 -0700 (PDT)
+        bh=PljIzC2kef7tvsQZuyC5v+5hanwzmlHbh3BhWszm894=;
+        b=Tae2rSmZrDAQBiP/rs5+ZJhJqF1kC47GoyPKu31lmKr+j0q77w3QZOUoMsn5Mq8djF
+         Wp45eDUyxMXD07lXwBUipCWhG0jEzVQFn6JNe3oCcuzcnYPDNWvepakdKvgt/mtEiPFT
+         DNOknimgmsR9pnvgxw886+ogR7/vECrj0ZRDeepYwkZLT7RIn0dldbPzNGZNjBj+eFRz
+         PAi89wzrmRSPXJeKFH/eIzA1sL8uxO7RKlyYt3AE2qNl/lQlNWsZbtA/MYJAWF0e+ztL
+         9PAJAkud8DF+DJh281ar5hD1oy1e6MUDF8r0JtXqXbaNVvA3bhPe5vwles17MKzfD0bm
+         qJrg==
+X-Gm-Message-State: ACgBeo0O0GnMa9GhpsOYwm8P8yG3eEw9lJxYUwBXHYuonx34Ez5c8kN6
+        /KDy5a5zm099s18xhvFK1Fs=
+X-Google-Smtp-Source: AA6agR7sHvX1Rh3LfdsgqW5KGCobSnEu5m7T/adGfdJ3FA/cNm1anIMbtwtpuZIQMgfJEAw2PI1mGQ==
+X-Received: by 2002:a05:6a00:3306:b0:538:444d:87d3 with SMTP id cq6-20020a056a00330600b00538444d87d3mr15707684pfb.38.1661979844448;
+        Wed, 31 Aug 2022 14:04:04 -0700 (PDT)
 Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:4a6a:d1f4:9cf7:d0fb])
-        by smtp.gmail.com with ESMTPSA id e27-20020a056a0000db00b0053ae6a3c51asm528931pfj.186.2022.08.31.14.03.59
+        by smtp.gmail.com with ESMTPSA id e27-20020a056a0000db00b0053ae6a3c51asm528931pfj.186.2022.08.31.14.04.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 14:03:59 -0700 (PDT)
+        Wed, 31 Aug 2022 14:04:03 -0700 (PDT)
 Sender: Namhyung Kim <namhyung@gmail.com>
 From:   Namhyung Kim <namhyung@kernel.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
@@ -59,9 +59,9 @@ Cc:     Ingo Molnar <mingo@kernel.org>,
         Ian Rogers <irogers@google.com>,
         linux-perf-users@vger.kernel.org,
         Adrian Hunter <adrian.hunter@intel.com>
-Subject: [PATCH 2/5] perf record: Set PERF_FORMAT_LOST by default
-Date:   Wed, 31 Aug 2022 14:03:49 -0700
-Message-Id: <20220831210352.145753-3-namhyung@kernel.org>
+Subject: [PATCH 3/5] perf record: Read and inject LOST_SAMPLES events
+Date:   Wed, 31 Aug 2022 14:03:50 -0700
+Message-Id: <20220831210352.145753-4-namhyung@kernel.org>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 In-Reply-To: <20220831210352.145753-1-namhyung@kernel.org>
 References: <20220831210352.145753-1-namhyung@kernel.org>
@@ -78,63 +78,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we want to see the number of lost samples in the perf report, set the
-LOST format when it configs evsel.  On old kernels, it'd fallback to
-disable it.
+When there are lost samples, it can read the number of PERF_FORMAT_LOST and
+convert it to PERF_RECORD_LOST_SAMPLES and write to the data file at the end.
 
 Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 ---
- tools/perf/util/evsel.c | 10 +++++++++-
- tools/perf/util/evsel.h |  1 +
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ tools/perf/builtin-record.c | 60 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 60 insertions(+)
 
-diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-index e1bc76ece117..5776bfa70f11 100644
---- a/tools/perf/util/evsel.c
-+++ b/tools/perf/util/evsel.c
-@@ -1161,6 +1161,7 @@ void evsel__config(struct evsel *evsel, struct record_opts *opts,
- 	attr->sample_id_all = perf_missing_features.sample_id_all ? 0 : 1;
- 	attr->inherit	    = !opts->no_inherit;
- 	attr->write_backward = opts->overwrite ? 1 : 0;
-+	attr->read_format   = PERF_FORMAT_LOST;
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index bce8c941d558..cb9881543a07 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -10,6 +10,7 @@
  
- 	evsel__set_sample_bit(evsel, IP);
- 	evsel__set_sample_bit(evsel, TID);
-@@ -1856,6 +1857,8 @@ static int __evsel__prepare_open(struct evsel *evsel, struct perf_cpu_map *cpus,
+ #include "util/build-id.h"
+ #include <subcmd/parse-options.h>
++#include <internal/xyarray.h>
+ #include "util/parse-events.h"
+ #include "util/config.h"
  
- static void evsel__disable_missing_features(struct evsel *evsel)
- {
-+	if (perf_missing_features.read_lost)
-+		evsel->core.attr.read_format &= ~PERF_FORMAT_LOST;
- 	if (perf_missing_features.weight_struct) {
- 		evsel__set_sample_bit(evsel, WEIGHT);
- 		evsel__reset_sample_bit(evsel, WEIGHT_STRUCT);
-@@ -1907,7 +1910,12 @@ bool evsel__detect_missing_features(struct evsel *evsel)
- 	 * Must probe features in the order they were added to the
- 	 * perf_event_attr interface.
- 	 */
--	if (!perf_missing_features.weight_struct &&
-+	if (!perf_missing_features.read_lost &&
-+	    (evsel->core.attr.read_format & PERF_FORMAT_LOST)) {
-+		perf_missing_features.read_lost = true;
-+		pr_debug2("switching off PERF_FORMAT_LOST support\n");
-+		return true;
-+	} else if (!perf_missing_features.weight_struct &&
- 	    (evsel->core.attr.sample_type & PERF_SAMPLE_WEIGHT_STRUCT)) {
- 		perf_missing_features.weight_struct = true;
- 		pr_debug2("switching off weight struct support\n");
-diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-index d927713b513e..989865e16aad 100644
---- a/tools/perf/util/evsel.h
-+++ b/tools/perf/util/evsel.h
-@@ -188,6 +188,7 @@ struct perf_missing_features {
- 	bool data_page_size;
- 	bool code_page_size;
- 	bool weight_struct;
-+	bool read_lost;
- };
+@@ -1852,6 +1853,64 @@ record__switch_output(struct record *rec, bool at_exit)
+ 	return fd;
+ }
  
- extern struct perf_missing_features perf_missing_features;
++static void __record__read_lost_samples(struct record *rec, struct evsel *evsel,
++					struct perf_record_lost_samples *lost,
++					int size, int cpu_idx, int thread_idx)
++{
++	struct perf_counts_values count;
++	struct perf_sample_id *sid;
++	struct perf_sample sample = {};
++
++	if (perf_evsel__read(&evsel->core, cpu_idx, thread_idx, &count) < 0) {
++		pr_err("read LOST count failed\n");
++		return;
++	}
++
++	if (count.lost == 0)
++		return;
++
++	lost->lost = count.lost;
++	if (evsel->core.ids) {
++		sid = xyarray__entry(evsel->core.sample_id, cpu_idx, thread_idx);
++		sample.id = sid->id;
++	}
++
++	perf_event__synthesize_id_sample((void *)(lost + 1),
++					 evsel->core.attr.sample_type, &sample);
++	record__write(rec, NULL, lost, size);
++}
++
++static void record__read_lost_samples(struct record *rec)
++{
++	struct perf_session *session = rec->session;
++	struct machine *machine = &session->machines.host;
++	struct perf_record_lost_samples *lost;
++	struct evsel *evsel;
++	int size = sizeof(*lost) + machine->id_hdr_size;
++
++	lost = zalloc(size);
++	lost->header.type = PERF_RECORD_LOST_SAMPLES;
++	lost->header.size = size;
++
++	evlist__for_each_entry(session->evlist, evsel) {
++		struct xyarray *xy = evsel->core.sample_id;
++
++		if (xyarray__max_x(evsel->core.fd) != xyarray__max_x(xy) ||
++		    xyarray__max_y(evsel->core.fd) != xyarray__max_y(xy)) {
++			pr_debug("Unmatched FD vs. sample ID: skip reading LOST count\n");
++			continue;
++		}
++
++		for (int x = 0; x < xyarray__max_x(xy); x++) {
++			for (int y = 0; y < xyarray__max_y(xy); y++) {
++				__record__read_lost_samples(rec, evsel, lost,
++							    size, x, y);
++			}
++		}
++	}
++
++}
++
+ static volatile int workload_exec_errno;
+ 
+ /*
+@@ -2710,6 +2769,7 @@ static int __cmd_record(struct record *rec, int argc, const char **argv)
+ 	if (rec->off_cpu)
+ 		rec->bytes_written += off_cpu_write(rec->session);
+ 
++	record__read_lost_samples(rec);
+ 	record__synthesize(rec, true);
+ 	/* this will be recalculated during process_buildids() */
+ 	rec->samples = 0;
 -- 
 2.37.2.789.g6183377224-goog
 

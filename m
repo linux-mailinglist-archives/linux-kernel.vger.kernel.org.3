@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63C9E5A7300
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50B235A7307
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:53:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiHaAva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
+        id S231375AbiHaAx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbiHaAv1 (ORCPT
+        with ESMTP id S229557AbiHaAxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:51:27 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07D442AD9
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:51:23 -0700 (PDT)
-X-QQ-mid: bizesmtp65t1661907076t71dp7kp
+        Tue, 30 Aug 2022 20:53:22 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 705C337F82
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:53:21 -0700 (PDT)
+X-QQ-mid: bizesmtp76t1661907179tg3l23sq
 Received: from localhost.localdomain ( [182.148.13.26])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 31 Aug 2022 08:51:15 +0800 (CST)
+        id ; Wed, 31 Aug 2022 08:52:58 +0800 (CST)
 X-QQ-SSF: 01000000000000D0E000000A0000000
-X-QQ-FEAT: +Fw3Sd5mYDV3NXJYi2PUaOKmNOiSsq1mENG/uF0kFpWPZnXyZd8lJOxo46/7Y
-        z37j57He1ZFbyt74DzNB1W2ltcRgdFyte9VG+z+Mupni0VYUrY3iHxnjp62bMZkbahC00Uw
-        qy7T/E/rVtxE5ZvbXz9Hdsev+hhbzUUq8Q7LPFy8P3In4MbYVGQ/wj+VbgiDE+Zh/ZcadSq
-        d5Xgq1UG3C/YhqnE2P0PXnxQ0/vv1atGJxHW7TzGEl3Mrlql2cp5ZfotzL3A/nYDBW1HkaX
-        2LIUE+6DZSR2Yy5Kyg52YYjyqApFZPaBQ0UUNOK4t2VC8oDoKZQ75vkmhL0qPTcUCA2tmIz
-        MEdIjtOG5paTN9jMvIBLBWTDjawtF9M9DwNB8hcscKfYfSWKSI=
+X-QQ-FEAT: xqT8U4SkSpgzoaMTZ/E4s2zF0bg8XhCWtigOgoAz5Gm4Sy/x5vzrFa8GnrgmG
+        Pw8m4EqlHz4NA/RDsu+nxMgzRjyTJd2mfSaVWqu7sgjSK5BYKpKbXW/2tZQMKQYWoYyCyXt
+        8RcTDyR3uBQPZQn2495sleIAY5f1oTUNPfxZvca6p8HXdxMqFsNRT5y247H6GCK1fSBHL1c
+        Tmp8nGl4Il/Dhf2hvK/NjdtCNlnbnWSJqhcBnkVO9gLeJsF2nVwi9yKB4n+0v4+BPumEiKR
+        QAXNnfxSRCZfsJI4e7+LZ7GQ+eikynCFmw7A6xBYs/sEUq6MsxuuL9jcTozhhyDtRB+T/HK
+        Sz8z56n20rMVg2Abx0Kd3a/DDy+RhnJ4MQhPqc1j/WkUKvJz6M=
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] powerpc/mobility: fix repeated words in comments
-Date:   Wed, 31 Aug 2022 08:51:09 +0800
-Message-Id: <20220831005109.38314-1-yuanjilin@cdjrlc.com>
+To:     maz@kernel.org, james.morse@arm.com, alexandru.elisei@arm.com,
+        suzuki.poulose@arm.com, oliver.upton@linux.dev,
+        catalin.marinas@arm.com, will@kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] KVM: arm64: fix repeated words in comments
+Date:   Wed, 31 Aug 2022 08:52:51 +0800
+Message-Id: <20220831005251.39427-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
+        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *      [43.155.67.158 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
+Delete the redundant word 'to'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- arch/powerpc/platforms/pseries/mobility.c | 2 +-
+ arch/arm64/kvm/inject_fault.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
-index 3d36a8955eaf..c92c78332303 100644
---- a/arch/powerpc/platforms/pseries/mobility.c
-+++ b/arch/powerpc/platforms/pseries/mobility.c
-@@ -216,7 +216,7 @@ static int update_dt_node(struct device_node *dn, s32 scope)
- 		nprops = be32_to_cpu(upwa->nprops);
- 
- 		/* On the first call to ibm,update-properties for a node the
--		 * the first property value descriptor contains an empty
-+		 * first property value descriptor contains an empty
- 		 * property name, the property value length encoded as u32,
- 		 * and the property value is the node path being updated.
- 		 */
+diff --git a/arch/arm64/kvm/inject_fault.c b/arch/arm64/kvm/inject_fault.c
+index f32f4a2a347f..92de0f817be4 100644
+--- a/arch/arm64/kvm/inject_fault.c
++++ b/arch/arm64/kvm/inject_fault.c
+@@ -155,7 +155,7 @@ void kvm_inject_size_fault(struct kvm_vcpu *vcpu)
+ 	 * Size Fault at level 0, as if exceeding PARange.
+ 	 *
+ 	 * Non-LPAE guests will only get the external abort, as there
+-	 * is no way to to describe the ASF.
++	 * is no way to describe the ASF.
+ 	 */
+ 	if (vcpu_el1_is_32bit(vcpu) &&
+ 	    !(vcpu_read_sys_reg(vcpu, TCR_EL1) & TTBCR_EAE))
 -- 
 2.36.1
 

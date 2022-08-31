@@ -2,103 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 624715A8812
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:26:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A945A885D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232288AbiHaV0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54446 "EHLO
+        id S231731AbiHaVsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231955AbiHaV0o (ORCPT
+        with ESMTP id S231359AbiHaVsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:26:44 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 352D77B78B;
-        Wed, 31 Aug 2022 14:26:44 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id br15-20020a056830390f00b0061c9d73b8bdso11146651otb.6;
-        Wed, 31 Aug 2022 14:26:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=rIyadyeq6YLRftLRyrN0QiirUdnHJN+op5RTIIc+np8=;
-        b=luaXHk+xH0MfVZcIDVtf6jCniMVXtHxJ8UrbW3yaDth5ViJ4buBSNnmS8XKK9efFzD
-         po1fCRrxxz+g+YZbycuFvg2Zv7MRKm05Hw0doE6hOP+QwBoDbDYDOjRx+sBx9PHpGihn
-         vaA5Yk5yLdW5U8cExD3CfTvn8SnPfX7zJw68vDdKuB5JebxVfRzdaptv/9qts5jrH7ef
-         sBWxmlf74PLEzYN5q8EHaqMLZAW2Pa0UqqtUGGldWmrplpisQcYl7nyPOSoMD4XDTKHP
-         IVgIfsE3bOgW560iG7zlffs2USsoCnzrOVoLKwMLWZyZcCg9ZjgTdoT4kGtZD3Q8kl1H
-         yDXQ==
-X-Gm-Message-State: ACgBeo3vKqFoVQNDF7Llb03ZMJnYYJ712f6zysVDcH4lA08BQmte/0Bd
-        +Z/D72wFvCsXTCezZMQ5ZA==
-X-Google-Smtp-Source: AA6agR7h7g/4sGiJzr8LtSk06Zhc0E+hGHG6a643D5LCN9/i1HNmUyxP4sw3/5p5W25yVMpjgOueGw==
-X-Received: by 2002:a05:6830:929:b0:63b:25ba:dfe4 with SMTP id v41-20020a056830092900b0063b25badfe4mr8368108ott.311.1661981203420;
-        Wed, 31 Aug 2022 14:26:43 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id o139-20020a4a2c91000000b00435ae9a836asm8623117ooo.15.2022.08.31.14.26.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 14:26:43 -0700 (PDT)
-Received: (nullmailer pid 279436 invoked by uid 1000);
-        Wed, 31 Aug 2022 21:26:31 -0000
-Date:   Wed, 31 Aug 2022 16:26:31 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Simon Xue <xxm@rock-chips.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH v5 13/20] dt-bindings: PCI: dwc: Apply common schema to
- Rockchip DW PCIe nodes
-Message-ID: <20220831212631.GA277851-robh@kernel.org>
-References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
- <20220822184701.25246-14-Sergey.Semin@baikalelectronics.ru>
+        Wed, 31 Aug 2022 17:48:46 -0400
+X-Greylist: delayed 1284 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 14:48:43 PDT
+Received: from smtpout14.timeweb.ru (unknown [92.53.116.149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1E9B5A47
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:48:42 -0700 (PDT)
+Received: from [192.168.0.60] (helo=smtp.timeweb.ru)
+        by smtp-spam.timeweb.ru with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.93)
+        (envelope-from <mail@teamaa.ru>)
+        id 1oTVEy-008PQU-1I; Thu, 01 Sep 2022 00:27:16 +0300
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=teamaa.ru;
+         s=dkim; h=Message-Id:Reply-To:Date:From:To:Subject:Content-Description:
+        Content-Transfer-Encoding:MIME-Version:Content-Type:Sender:Cc:Content-ID:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=L/iBE3XRBm9q6CjlHSlI6cK+dhwMbJPzYyJVxsZnQFo=; b=gGv8T4YKS6cfTXWxlJMcEY5hnj
+        tE4Y23T+28jAPwLNBcq2RGdKEIVNMihyovb5H11TGklswzeSODpDFVwHzFYjVrmM9+AjKgh3XNlNY
+        5SYrlr4Cc7nludLE/MUnVCzeIItOeWsy7cBnIwN34kVGDUJvKtJwSrnDMUBrP1CvQAhM=;
+Received: from [84.17.42.34] (helo=[192.168.37.80])
+        by smtp.timeweb.ru with esmtpsa (TLS1.0:DHE_RSA_AES_256_CBC_SHA1:256)
+        (Exim 4.90_1)
+        (envelope-from <mail@teamaa.ru>)
+        id 1oTVEx-0000RB-Md; Thu, 01 Sep 2022 00:27:15 +0300
+Content-Type: text/plain; charset="iso-8859-1"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220822184701.25246-14-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Description: Mail message body
+Subject: PFC0032022?
+To:     Recipients <mail@teamaa.ru>
+From:   "OST Mark" <mail@teamaa.ru>
+Date:   Wed, 31 Aug 2022 14:27:08 -0700
+Reply-To: contact@panolateam.com
+Message-Id: <E1oTVEx-0000RB-Md@smtp.timeweb.ru>
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_99,BAYES_999,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR,T_SPF_TEMPERROR autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Score: 9.8 (+++++++++)
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 09:46:54PM +0300, Serge Semin wrote:
-> As the DT-bindings description states the Rockchip PCIe controller is
-> based on the DW PCIe RP IP-core thus its DT-nodes are supposed to be
-> compatible with the common DW PCIe controller schema. Let's make sure they
-> are evaluated against it by referring to the snps,dw-pcie.yaml schema in
-> the allOf sub-schemas composition.
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v3:
-> - This is a new patch created on v3 lap of the series.
-> 
-> Changelog v5:
-> - Apply snps,dw-pcie.yaml instead of the snps,dw-pcie-common.yaml schema.
-> ---
->  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+Bonjour
 
-Shouldn't this come before/after patch 7?
+Wir bieten flexible Darlehen und Finanzierungen f=FCr verschiedene Gesch=E4=
+ftsprojekte unter Umgehung der =FCblichen strengen Verfahren ohne Vorabgeb=
+=FChr.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Dieses Finanzierungsprogramm erm=F6glicht einem Kunden eine niedrige Zinsr=
+=FCckzahlung von nur 2 % pro Jahr f=FCr einen Zeitraum von 1 bis 30 Jahren =
+und eine tilgungsfreie Zeit von sechs Monaten.
+
+Sollten Sie an einer unserer Finanzierungsoptionen interessiert sein, z=F6g=
+ern Sie bitte nicht, uns f=FCr weitere Informationen zu kontaktieren.
+-------------------------------------------------------------------------
+We offer Personal/business loans at 2% interest rate without any upfront pa=
+yment. Should you be interested? Do not hesitate to contact us for more det=
+ails.
+
+Thanks, =
+
+-------------------------------------------------------------------------
+With kind regards,
+Your Sales Team

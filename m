@@ -2,61 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E29B5A7BDA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:04:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB645A7B15
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230313AbiHaLEU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 07:04:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37186 "EHLO
+        id S230243AbiHaKLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 06:11:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiHaLES (ORCPT
+        with ESMTP id S229986AbiHaKLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 07:04:18 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAEA29F8D4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 04:04:17 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27V8ja3C006870;
-        Wed, 31 Aug 2022 11:03:37 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : from :
- date : subject : to : cc; s=corp-2022-7-12;
- bh=6SXXBybf0Upt3qTKeZCZXzMIP41uMlfYtChskMKRoLE=;
- b=Bn6rmefh+Fe7KRGWxCg+8R8qDL1eYnbDZovH+H4fqQzTMY/ApklmASX0SvzKeWuFyAmM
- DilACgs1usNEqE8NcH71X+akcCgiF5ZksMFEi1oBHCHUAAmlDd9isyJOdD9/0P30N+JG
- M6X8bq5HxwByCQbmhL1IPf/8E11MJiDlspw1r9c+CUXexb+dkB6zd3JkQu06D3I2tRtM
- DmL5cVdzsHOwI+ru07kH9SwensQYVxB1kISgNG148kpJ8IamPSBOXV4F5SlPMqTI0mC0
- O5ktjX3wTjDsgGFBqP9kP7h/UYUlE02t95I/0vyKT6NpU4utVoQMAFtpebZTrkZMnc4/ Tg== 
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j7btt8v6m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 Aug 2022 11:03:37 +0000
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27VAruCR013034;
-        Wed, 31 Aug 2022 11:03:36 GMT
-Received: from oracle.com (dhcp-10-175-18-16.vpn.oracle.com [10.175.18.16])
-        by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 3j79q501j0-1;
-        Wed, 31 Aug 2022 11:03:36 +0000
-Message-Id: <ed7a508717bb8bec6273c2740418f0dc2df9eeba.1661943721.git.julian.pidancet@oracle.com>
-From:   Julian Pidancet <julian.pidancet@oracle.com>
-Date:   Tue, 30 Aug 2022 09:42:37 +0200
-Subject: [PATCH] x86/alternative: Consistently patch SMP locks in vmlinux and
- modules
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-31_06,2022-08-31_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 mlxscore=0
- spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208310054
-X-Proofpoint-ORIG-GUID: uZtfzGXumc8d34qbDwPJcrd5nVm3r1GL
-X-Proofpoint-GUID: uZtfzGXumc8d34qbDwPJcrd5nVm3r1GL
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_24_48,
-        DKIMWL_WL_MED,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        Wed, 31 Aug 2022 06:11:35 -0400
+X-Greylist: delayed 1854 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 03:11:26 PDT
+Received: from mail-m964.mail.126.com (mail-m964.mail.126.com [123.126.96.4])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09B41AEDB7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 03:11:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=qV7ak
+        zLaGXu9fGQiOMj/yV6cyOJkqSiwyUBHI4SCrYU=; b=LCSWjsF//RrnWuIz0RXeM
+        OnrYonwQWxDeOwZeNa+eJn1aPYToLOAd2fMKzsjujzJz8ttzRD3ZvUmUqDOcf27d
+        tAyrw5EFXgYd+JwS4XYdCseVyxANzevah7Go9seTtV4HM1pWCBkpFVTDRCqQafE/
+        VPzh3vXW8IVOf9q0cJy/9U=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp9 (Coremail) with SMTP id NeRpCgB3lxNPLA9jA+xpAg--.24384S2;
+        Wed, 31 Aug 2022 17:39:28 +0800 (CST)
+From:   Bing Huang <huangbing775@126.com>
+To:     rostedt@goodmis.org, dietmar.eggemann@arm.com
+Cc:     brauner@kernel.org, bristot@redhat.com, bsegall@google.com,
+        juri.lelli@redhat.com, linux-kernel@vger.kernel.org,
+        mgorman@suse.de, mingo@redhat.com, peterz@infradead.org,
+        vincent.guittot@linaro.org
+Subject: [PATCH RESEND] sched/topology: Add __init for init_defrootdomain
+Date:   Wed, 31 Aug 2022 17:39:27 +0800
+Message-Id: <20220831093927.5904-1-huangbing775@126.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NeRpCgB3lxNPLA9jA+xpAg--.24384S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cr48ury3Kw4fJw1xKr43GFg_yoW8JFyrpF
+        yq9rW5G3y8GrWqq348C3ykurW3W3sxKw4Skan8tws8Jr1rGwn0gFn0vF43CryY9r45Gr4a
+        yF4qq342y3WUtFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Undb8UUUUU=
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: xkxd0w5elqwlixv6ij2wof0z/1tbijBBur1pEJLYbywAAsB
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,76 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The alternatives_smp_module_add() function restricts patching of SMP
-lock prefixes to the text address range passed as an argument.
+From: Bing Huang <huangbing@kylinos.cn>
 
-For vmlinux, patching all the instructions located between the _text and
-_etext symbols is allowed. That includes the .text section but also
-other sections such as .text.hot and .text.unlikely.
+init_defrootdomain is only used in initialization
 
-As per the comment inside the 'struct smp_alt_module' definition, the
-original purpose of this restriction is to avoid patching the init code
-which may have been deallocated when the alternatives code run.
-
-For modules, the current code only allows patching instructions located
-inside the .text segment, excluding other sections such as .text.hot or
-.text.unlikely, which may need patching.
-
-This change aims to make patching of the kernel core and modules more
-consistent, by allowing all text sections of modules except .init.text
-to be patched in module_finalize().
-
-For that we use mod->core_layout.base/mod->core_layout.text_size as the
-address range allowed to be patched, which include all the code sections
-except the init code.
-
-Signed-off-by: Julian Pidancet <julian.pidancet@oracle.com>
+Signed-off-by: Bing Huang <huangbing@kylinos.cn>
 ---
-Public tests: https://gist.github.com/jpidancet/1ee457623426f3e3902a28edaf2c80d0 
-Related thread: https://marc.info/?t=130864398400006
+ kernel/sched/sched.h    | 2 +-
+ kernel/sched/topology.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
- arch/x86/kernel/module.c | 15 +++++++--------
- 1 file changed, 7 insertions(+), 8 deletions(-)
-
-diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
-index b1abf663417c..da22193eb5e0 100644
---- a/arch/x86/kernel/module.c
-+++ b/arch/x86/kernel/module.c
-@@ -251,14 +251,12 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		    const Elf_Shdr *sechdrs,
- 		    struct module *me)
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index b0bf2287dd9d..cd761f1fc60c 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -883,7 +883,7 @@ struct root_domain {
+ 	struct perf_domain __rcu *pd;
+ };
+ 
+-extern void init_defrootdomain(void);
++extern void __init init_defrootdomain(void);
+ extern int sched_init_domains(const struct cpumask *cpu_map);
+ extern void rq_attach_root(struct rq *rq, struct root_domain *rd);
+ extern void sched_get_rd(struct root_domain *rd);
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 8739c2a5a54e..dea9fa39e7c0 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -578,7 +578,7 @@ static int init_rootdomain(struct root_domain *rd)
+  */
+ struct root_domain def_root_domain;
+ 
+-void init_defrootdomain(void)
++void __init init_defrootdomain(void)
  {
--	const Elf_Shdr *s, *text = NULL, *alt = NULL, *locks = NULL,
--		*para = NULL, *orc = NULL, *orc_ip = NULL,
--		*retpolines = NULL, *returns = NULL, *ibt_endbr = NULL;
-+	const Elf_Shdr *s, *alt = NULL, *locks = NULL, *para = NULL,
-+		*orc = NULL, *orc_ip = NULL, *retpolines = NULL,
-+		*returns = NULL, *ibt_endbr = NULL;
- 	char *secstrings = (void *)hdr + sechdrs[hdr->e_shstrndx].sh_offset;
+ 	init_rootdomain(&def_root_domain);
  
- 	for (s = sechdrs; s < sechdrs + hdr->e_shnum; s++) {
--		if (!strcmp(".text", secstrings + s->sh_name))
--			text = s;
- 		if (!strcmp(".altinstructions", secstrings + s->sh_name))
- 			alt = s;
- 		if (!strcmp(".smp_locks", secstrings + s->sh_name))
-@@ -302,12 +300,13 @@ int module_finalize(const Elf_Ehdr *hdr,
- 		void *iseg = (void *)ibt_endbr->sh_addr;
- 		apply_ibt_endbr(iseg, iseg + ibt_endbr->sh_size);
- 	}
--	if (locks && text) {
-+	if (locks) {
- 		void *lseg = (void *)locks->sh_addr;
--		void *tseg = (void *)text->sh_addr;
-+		void *text = me->core_layout.base;
-+		void *text_end = text + me->core_layout.text_size;
- 		alternatives_smp_module_add(me, me->name,
- 					    lseg, lseg + locks->sh_size,
--					    tseg, tseg + text->sh_size);
-+					    text, text_end);
- 	}
- 
- 	if (orc && orc_ip)
 -- 
-2.37.1
+2.25.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
 

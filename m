@@ -2,123 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0225A87F9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:17:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84A2E5A87FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231941AbiHaVRI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:17:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39358 "EHLO
+        id S232063AbiHaVS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbiHaVRE (ORCPT
+        with ESMTP id S230168AbiHaVSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:17:04 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2117.outbound.protection.outlook.com [40.107.20.117])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BA1D21F7;
-        Wed, 31 Aug 2022 14:17:02 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VegpFVN/BMDAbNZP2Kzg3LpDefh/Btzp2ADYSsYN5gcXSBSZih80F8+Qt6177ykLzPtVcnVfXZHDjYQuBTJBVez4ouPz4FjaR86rn0C0kbrm/vMEtVw/R6dbL9vO/xP1t9TXN7UXSQRDjb1E+Szx2DtG3oD0co45oLdUOkdVjyHr1drLLeJ79HAElTxqEgFVSe0RlYOQCmTdrDLCHV7JQnLkOd8527jwO/WP4naJYsbaXTRbD+f+Y9EhMXdZqoijjuetQavLWK2PCBBlykMOtanLdvc9CKR8fUNlDrXV4fPZ0RSr+gI6BPQc9Ua7NqoPofLjWVK9KaqJ3MGRvvp7vw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rKsYHRNhH8ZjG9prD0jx73BlaPhssWAIDKmBR3v4yyA=;
- b=Vz7vit14ERwKDzZLjDgPBiN560FttTKr/MpyF8P501MgvglOWld6ddiXPYHg7atAwGTaGvKNHNn5txYMxD3cnqKtysAdoMsKYbIvFurdbJwlxmbOqQY36+cWZh0T+GRHolEuTXlgREGq7HZPeeKxyuU+fPgjMVEeu1d9yCg5OzgWSHSDBt5CXeBoERfZbdHNfa1mzys801NIR9y4bH1zEDjVacVL7XC46z5EurPqQlX1BN1opGiCJhvAv/M6j0dO7IwgNIsvU+/Wu/4oPKyt5uSCJ48/tSmqBbiLHp2AwCm2oq+Am1Fcduhadzc7InQ2Gwd0R4ZI/Oz3FKT+oae9Dw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=plvision.eu; dmarc=pass action=none header.from=plvision.eu;
- dkim=pass header.d=plvision.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=plvision.eu;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rKsYHRNhH8ZjG9prD0jx73BlaPhssWAIDKmBR3v4yyA=;
- b=G8ACd/QZz2+SB4qYc7R3SJVk5wV1QdbNq2kju1fv65Y8it0THaROL8SQyj9Zv0mt8DgEJm/u7m0b4fOznoqn01YH33O/vsI2fAChbNCPAzQlHaeRo+fdo5FEHMvnz0XHmn/4PdzGMpbcgiyvNHf1Z699kDL3QAVI4APr3WaOHmo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=plvision.eu;
-Received: from PAXP190MB1789.EURP190.PROD.OUTLOOK.COM (2603:10a6:102:283::6)
- by DBAP190MB0855.EURP190.PROD.OUTLOOK.COM (2603:10a6:10:1ae::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Wed, 31 Aug
- 2022 21:17:00 +0000
-Received: from PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
- ([fe80::e8ee:18d2:8c59:8ae]) by PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
- ([fe80::e8ee:18d2:8c59:8ae%7]) with mapi id 15.20.5566.021; Wed, 31 Aug 2022
- 21:17:00 +0000
-Date:   Thu, 1 Sep 2022 00:16:56 +0300
-From:   Yevhen Orlov <yevhen.orlov@plvision.eu>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     netdev@vger.kernel.org,
-        Volodymyr Mytnyk <volodymyr.mytnyk@plvision.eu>,
-        Taras Chornyi <taras.chornyi@plvision.eu>,
-        Mickey Rachamim <mickeyr@marvell.com>,
-        Serhiy Pshyk <serhiy.pshyk@plvision.eu>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        linux-kernel@vger.kernel.org, Taras Chornyi <tchornyi@marvell.com>,
-        Oleksandr Mazur <oleksandr.mazur@plvision.eu>
-Subject: Re: [PATCH net-next v4 7/9] net: marvell: prestera: add stub handler
- neighbour events
-Message-ID: <Yw/PyBkjqaTSaxzM@yorlov.ow.s>
-References: <20220825202415.16312-1-yevhen.orlov@plvision.eu>
- <20220825202415.16312-8-yevhen.orlov@plvision.eu>
- <20220830151100.10ea3800@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830151100.10ea3800@kernel.org>
-X-ClientProxiedBy: AS8PR04CA0083.eurprd04.prod.outlook.com
- (2603:10a6:20b:313::28) To PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:102:283::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: aa867362-0bfb-4e92-7788-08da8b962476
-X-MS-TrafficTypeDiagnostic: DBAP190MB0855:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: euR3wSdz5aNib6Lf4fXr1DVqbtoa+EJFje0vy86khEkCfx13fPTGFbWJEULsLK1c3+pG2WN/GV72QUJpxFVbQ4EmO8k+KDcaQ+3oM0NEYn/2lX6XutnzYUidkCX7lGpVPtHJ9COiSJEzOr2uQzdirKcOxKAJXGdJQWtHHdKmLRq/6QMIIdFAtlOO+X8FbekrWNqkh+l4CL1umZs0CYS/ZExamwGKkxXES7zWgQpWEpj27xIJhgNwmuyvl5hmUgbIp29sW+Ea7sXrMjOmbOni8BmA6r2qzDQnGbpjg/i3QyvQ0OR1KfCMCgAntITNqKL3Pw6NajCDYLjhV7tV2Mod9uvIU6Y/X8v3DaAekgBPYnL/0AbJGQYGbAR80CgdnTImupGHoEa5TBZgDCKgjE2bhRKkfbmubYDbBev1BClqgc96P6A75irDQDCraon0T6Xig6eWoEzEFuLoUIEWd2eTu/VmKvxQ94D8+gOXNwX97oh98wNmp4rieHTeSUqSoCAlH54Nmq5vloP35wzvIFN5kHy53zDlkHvXsMzYhsciWeVa0dRMG9nwoSz91K2U7KBp3MhcnNrxoqkuOjSmGLn5T56E6QLOhA6oD0XuSFh5wy3swKMGNebiiCakYhQZhvqypas0tGV9lWMcJuigR2jVtbgE4GOaz6p4GrMz3vvsa34f/EWgp4bYKvtIKa4n9NWWtUfyVsGqcrteTf+8ZSrAzjPYlmDDSz9HdPgbKCS2WrUAsYOtCat8JIL4Od1bXMEO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXP190MB1789.EURP190.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(34036004)(39830400003)(396003)(376002)(366004)(136003)(346002)(4744005)(83380400001)(2906002)(186003)(7416002)(9686003)(66946007)(41320700001)(5660300002)(44832011)(66574015)(52116002)(26005)(6512007)(8936002)(316002)(6666004)(6506007)(107886003)(66556008)(4326008)(8676002)(66476007)(38350700002)(38100700002)(6916009)(508600001)(41300700001)(54906003)(86362001)(6486002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?SNkFDX9rj22QAjz0NrIiFj0sflemiv5uhSZBLVJBHk6I5BbGFj7SvxRzXc8U?=
- =?us-ascii?Q?Ii1spEWhdZqg9MDFLgRBSlG+zFPeq3hUVJxU3HXZXEd4IhpWwhTOz/mOY9w9?=
- =?us-ascii?Q?zdjlUfoecExzFKtYMv+cZKOONEe48uZ7wzrwhMD6wpR3cOrJ36y2ibYnulv9?=
- =?us-ascii?Q?AvTkvIyni2kN6CJe/BtslR1COF7ZJf81ZHqHF80kxTxruQwei+FlJglUtO/+?=
- =?us-ascii?Q?13bhLcCngJQ/wDhO3zauNrf3+q98EcZB4tKfkdWZkSEEwRjbPVGMSXZB4+1h?=
- =?us-ascii?Q?EafQObuXEPSsEo1+NRrvpYUuLKFcyAw8eX1YCIJg4uLlszVL0l/VFfx2iqEa?=
- =?us-ascii?Q?l/Cq4MhbrFSD+bR/CmdjXsrOz97oMcDky6g2DN/wEF5jVAQs53azunGxjIVs?=
- =?us-ascii?Q?6VHlh1OH76SyKj5nq3H53Sahe1NvOSjizyDk62Cm5h0h+z1NVvfSIAgnGjYc?=
- =?us-ascii?Q?oNa7RusjW52YudX1hvnOEiMdefJW8diOfvq4xXOtLc0XiryvBKxsAGjkGOXG?=
- =?us-ascii?Q?m6DSWI7LmX6iR6d1VTDiwcHaFtTpxxzWZ9AZmdjPClo+VWfH1m1PmbLuPp5F?=
- =?us-ascii?Q?HvbOBm5h4yiRBb9CLb/qfcY7QejDJbTz5vEfHt//Ns+RvZfU3UH04cDW4evx?=
- =?us-ascii?Q?D1oLwrZ+/foNBtyHJX58n56MBoA2Eh4paNcl8gjXn0LT/xFvPmpYkkwwWbPH?=
- =?us-ascii?Q?IRv8uLKcSs5gI5EFtUF4l8F+5nJypZ231hUCOH7o/n0hKzXWIdkhsYQ6gima?=
- =?us-ascii?Q?8svZ2zTe5x0HB3/mbeTqbnqJ7JLZsd2Forr3DptKaXWg/IvXduIm44jsdApt?=
- =?us-ascii?Q?yKloAOtPmmtEqu2Cwip0PGaN3V7+1hO2qOFS5430qUWbp4tmMjAmukTujcBo?=
- =?us-ascii?Q?jMeKS3zwa+G8OfbMKt5qJ6Dt5Csa9+M3lQ2rEQNtfkPUneogKNAHH7HgM824?=
- =?us-ascii?Q?9VWNkaRQP0VoknGIa0hVenDKifGOMkmCEveldDRgCJ/BdZYP4wyLQZCW649m?=
- =?us-ascii?Q?tn+YfaUK3V+20QfgrruW4ysyWkWxqvqtHQhmczyiUz15H6zV8sMKbz9ig095?=
- =?us-ascii?Q?KPzcikbDJpUeQrxa2H7EVixLbfXi97UrGwRJhmGabxhvltKrBGq4nP7lqrdM?=
- =?us-ascii?Q?YItD9M0zyyqH6qosDMgbKfSHngH1O6colDGTjouNqzp8RbfV288jsKvufu1B?=
- =?us-ascii?Q?Sjeiwjh2DBiP1Z8Z5tBQk8ZpsBQHGbdtl7aJHxAZU1dzXytmUeoS98Nr59Bg?=
- =?us-ascii?Q?KV/dJEpNz1M52UFIzGWD0ZdETdzW6y+fIu7mUT6H/ju5ao6knG4gJeWm4S/n?=
- =?us-ascii?Q?C+AvhSoSa8KnY/wXjK9h7IshrB3Gwos7ROMKzVM3uHOIMUKDOkrolV93pjCK?=
- =?us-ascii?Q?L2hoDYnZwc3tlPchWyWR78R025CPl1MMM4D7kOa/hmJzSn2Peu7xQ0Lo3Pts?=
- =?us-ascii?Q?Wn5FX7Msy71XkbUREUAVlQhmXFAyRxMpinZQ5FYqz2Cd6iqd8TP6upHg77KE?=
- =?us-ascii?Q?akNbIq9Xzr5Eyh7tFTP/mf/oxOLWNJSIxLIMu00U9MLdaBLW4yMY2BJJvgo9?=
- =?us-ascii?Q?s/XXA5X/tPIYfsEPMaaAIu3GRUZyc8c108s2GcWsQKNzhkJbp42wnFqdoRAi?=
- =?us-ascii?Q?Og=3D=3D?=
-X-OriginatorOrg: plvision.eu
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa867362-0bfb-4e92-7788-08da8b962476
-X-MS-Exchange-CrossTenant-AuthSource: PAXP190MB1789.EURP190.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2022 21:17:00.0538
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 03707b74-30f3-46b6-a0e0-ff0a7438c9c4
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vTT8mQbuMJRvcuxAPGGIppNRQwxyMnMV107q5EgOo7N0K8T8EsUkg78flILadm56n1iexDRgHzCtA7MBwu+8QDp/gHyy/sFCIqWyHzDxLEE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAP190MB0855
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 31 Aug 2022 17:18:24 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7ACDD4DE
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:18:24 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id l9-20020a252509000000b00695eb4f1422so3047142ybl.13
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date;
+        bh=HQoamibmfiE7nHkPok6wkO/VrN3C9PG9bTmDWvCccbk=;
+        b=RM73ZeGV2Mc9trz/Y+eYzIsek+lL/FJPh0dfjJiMsD4be0IeN/45OOfjp2UtKkYxic
+         O0Sxih6/wtCvmnSMixTlF9y6oy3HW61up/wkroQyNEfgkxPbjaFghlGqejhuneShNAWy
+         SiERD6130vTyZKJBy3zfvNjSnERooNVyWeHn1GyiK9zQOdYNgZ+JpZ9G+iIMBz3djU/Z
+         u61LXYV7/iofEIviig+Dq4zqdQYQHH/uz/d1V/fdIm8Gm5I8+jtYpNiRUkMnCL6LnjGQ
+         DW3tGpe5Vp9ALSQA5wwZ4W7/yoPKIAj84M7vZuWTO1AfWEBvohQtOJH4agT0CNPMZHWD
+         +rtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=HQoamibmfiE7nHkPok6wkO/VrN3C9PG9bTmDWvCccbk=;
+        b=G0Ds6RQ5PxoJSTRA9Qbuljseb8QlnZtd29CaJIeM+R/taoQmdrgTAvSCM6jJBoYhjU
+         zONL5I90Ww/+GW++h/Tjb2gLupROhUv343wuxUI6b0a49x1FGhbX+MTB9NlGrZqA8fCP
+         SvQt5ivOPshcnXwOLRfDrsa8lCgspzcztYCZJ+/X7ATLRUwJ3m9AwVv2Z9Ry2EwWPyzg
+         O0TlDK3Yw84W07ekeQsDw3+1gt3HjJBsgJ/cha6nOzRhleeaRPDp3QrMIwyOJbrZllUk
+         YoMCzRdCNE6zpIv8xgXvlt7cFjURpLGggcjCpsiBgh9o2BnQaTXN9xC9iANYSGgNikA5
+         /khA==
+X-Gm-Message-State: ACgBeo3CocEwropiQeR6cl580YIklw45e2oRkFRgNzki4jTCC8M5UU00
+        3g0gV99QldAdpGEjA8PHzOXgy/e1MZk6Pw==
+X-Google-Smtp-Source: AA6agR6jr60mo5mSxkMIToL0MvcfQG1tk+RIJvxs7V7tT8sGusQzxjuz8oqDdBcMfbEUr7EmLw1o88hgKYolWw==
+X-Received: from loggerhead.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:29a])
+ (user=jmattson job=sendgmr) by 2002:a25:9d8d:0:b0:676:a71d:edad with SMTP id
+ v13-20020a259d8d000000b00676a71dedadmr16453866ybp.94.1661980703428; Wed, 31
+ Aug 2022 14:18:23 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 14:18:10 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
+Message-ID: <20220831211810.2575536-1-jmattson@google.com>
+Subject: [PATCH v2] x86/cpufeatures: Add macros for Intel's new fast rep
+ string features
+From:   Jim Mattson <jmattson@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     kvm@vger.kernel.org, Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -126,16 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Will recheck harder and update.
-Thank you for review.
+KVM_GET_SUPPORTED_CPUID should reflect these host CPUID bits. The bits
+are already cached in word 12. Give the bits X86_FEATURE names, so
+that they can be easily referenced. Hide these bits from
+/proc/cpuinfo, since the host kernel makes no use of them at present.
 
-On Tue, Aug 30, 2022 at 03:11:00PM -0700, Jakub Kicinski wrote:
-> On Thu, 25 Aug 2022 23:24:13 +0300 Yevhen Orlov wrote:
-> > Actual handler will be added in next patches
-> 
-> Please make sure each point in the patch set builds cleanly.
-> Here we have a warning which disappears with the next patch:
-> 
-> drivers/net/ethernet/marvell/prestera/prestera_router.c:624:26: warning: unused variable 'sw' [-Wunused-variable]
->         struct prestera_switch *sw = net_work->sw;
->                                 ^
+Signed-off-by: Jim Mattson <jmattson@google.com>
+---
+ v1 -> v2: Hide from /proc/cpuinfo [Dave Hansen]
+
+ arch/x86/include/asm/cpufeatures.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+index ef4775c6db01..454f0faa8e90 100644
+--- a/arch/x86/include/asm/cpufeatures.h
++++ b/arch/x86/include/asm/cpufeatures.h
+@@ -308,6 +308,9 @@
+ /* Intel-defined CPU features, CPUID level 0x00000007:1 (EAX), word 12 */
+ #define X86_FEATURE_AVX_VNNI		(12*32+ 4) /* AVX VNNI instructions */
+ #define X86_FEATURE_AVX512_BF16		(12*32+ 5) /* AVX512 BFLOAT16 instructions */
++#define X86_FEATURE_FZRM		(12*32+10) /* "" Fast zero-length REP MOVSB */
++#define X86_FEATURE_FSRS		(12*32+11) /* "" Fast short REP STOSB */
++#define X86_FEATURE_FSRC		(12*32+12) /* "" Fast short REP {CMPSB,SCASB} */
+ 
+ /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
+ #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
+-- 
+2.37.2.672.g94769d06f0-goog
+

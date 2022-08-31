@@ -2,60 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C000A5A8554
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C214D5A8559
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:18:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbiHaSRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:17:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56782 "EHLO
+        id S232801AbiHaSSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232767AbiHaSQo (ORCPT
+        with ESMTP id S232600AbiHaSRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:16:44 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04DA2E3432
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:13:41 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id j17so11608418qtp.12
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:13:41 -0700 (PDT)
+        Wed, 31 Aug 2022 14:17:50 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A76EF32C0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:14:15 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id f4so11463282qkl.7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:14:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=u1UVGt6PDJkRSWBfyxYzPJPgJUP53+mBBhKcycvTk2g=;
-        b=DzjeZqnBEIOpRc0mqEBl5vCuzK/sA5YrAjEOSfzzRN+NHRw/jneFNPhOXOoa0/WAz8
-         fapoH4MfjijFBac1DYoiBXKYAj6lbFwTnN5zLElx5Z71IBkIRItRnt+r6z/v1n0YsAwZ
-         6BRIDW4+nXIcwSzg4MMBOBzBPVlsll5ktae+M=
+         :mime-version:from:to:cc:subject:date;
+        bh=J57R+POjwarkhG0ohhPSH5aFm2b5W+GSzqYH/OtjluE=;
+        b=coq0jRegFak07tL9CfIRw4qNyOsmTDdAeVhAFqpTTL9xu73mkSXYqMAd+h0jjTLInR
+         YODQQ0l2SqeQrlpzTx49Z8yMSslvrqdOT3yyTgiPhTkvq/50a7Kr1TM3nT7Nz/KzlAUe
+         JQ8RoQha7mg7lJPcdNXGfesGbfZZ6bYAZUF9A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=u1UVGt6PDJkRSWBfyxYzPJPgJUP53+mBBhKcycvTk2g=;
-        b=7IHeO1SaT2mapCn/fXyCsVUSOkuFtOlvbsscsO8W3+FY/bgL1kU4pI2/M6qHVtUP3Y
-         BR2tN5GG7vAaX7Xr1na868kSTicWyCtWAI5hLryjCVG7bkYSYBqMAzaraLTcNco78YYW
-         7CgiukZPrgCDq22lUN8PxS4sD0Sve5Dsgbo/8yNWcYoUl/7kj9yeKMLSJF2QZ750Tf2c
-         DEnXC3OhJe1Q7ED+IMeA/+NlidH+T8Ua/CfCKG2Wpcms9ZvFxQMLBX7SYsYNft3EN+Qz
-         3JhusoIMbYmU9ZSOS3IiqdpMoMsfSgOe9xtCuiAW+QOouliQQd2IuzBma1hcg4J2HMD2
-         4pdQ==
-X-Gm-Message-State: ACgBeo1cqmw7OTUkyC7yQgGZayE55T2WnqwrOw+qIXM0X/bPAwnX/Eja
-        MwL5K8GlTCOcA9cO6Vv5f5kiFvSsuaZo8Sm83GA0670UyBA=
-X-Google-Smtp-Source: AA6agR5OFUtG/N/PNwq8535QjQeYjw4uWLO1JLOAsKjXkpu6+BRuCFiHCNnvFotv4A2ReBXzk2skh2SdsmxB8iMwS0g=
-X-Received: by 2002:ac8:5983:0:b0:344:5dcb:3b6b with SMTP id
- e3-20020ac85983000000b003445dcb3b6bmr20745469qte.503.1661969611308; Wed, 31
- Aug 2022 11:13:31 -0700 (PDT)
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=J57R+POjwarkhG0ohhPSH5aFm2b5W+GSzqYH/OtjluE=;
+        b=B/Y95xvrNS5lzEooD8nwmUKjyukqg25Zc3G3uDdyWd640b5X1CUYE7vQVcA9L50xrh
+         yPrrS+5ggga2bq/drn/zbgtBwa0mxLkuNZiCPKwu0X2suVon7RN+bsxjcvEy4lw4hvaX
+         /Pc4fjdijuOOhnv7bTQaGIJoECs7LiGy+NfRumJT+t9U7hHs6cTM9L3WgtUfCDF7rV9j
+         wQkszu0JnHLh1+W86rAO+EexeSpZdw5xXp6KGUXmLISLVBrs+GgqqgB4r5EcRWNLHtBK
+         twBnh/oICHVyTg5a+S4rMMFt4JtM11fzVEB53QgNROydbpybmHm+7KqqOQB2JhFmklnM
+         +qiA==
+X-Gm-Message-State: ACgBeo2Qa4jDOn0/b/fOaoDPnD1gdkXJLFVraK4Uk8gXMCxWT1kf4H6t
+        ryyDA7chh9ENK0SWa5KF5bJjzUQ5esQzOg==
+X-Google-Smtp-Source: AA6agR6pTE5GlZBKozvk3V08HA/HcxZ7l9V5Rbitq5ipHWqpEU7ylsiMUxLMpUacqjVaKRQCOB0jQw==
+X-Received: by 2002:a37:c96:0:b0:6bc:15eb:351a with SMTP id 144-20020a370c96000000b006bc15eb351amr16427702qkm.473.1661969640448;
+        Wed, 31 Aug 2022 11:14:00 -0700 (PDT)
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com. [209.85.160.178])
+        by smtp.gmail.com with ESMTPSA id u3-20020a37ab03000000b006bc68cfcdf7sm10050237qke.13.2022.08.31.11.13.57
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 11:13:58 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id y18so11635491qtv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:13:57 -0700 (PDT)
+X-Received: by 2002:ac8:5fd6:0:b0:343:4b4:1022 with SMTP id
+ k22-20020ac85fd6000000b0034304b41022mr20415702qta.616.1661969637250; Wed, 31
+ Aug 2022 11:13:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220830202018.1884851-1-pmalani@chromium.org> <Yw8frAv2pMfjmE0U@kuha.fi.intel.com>
-In-Reply-To: <Yw8frAv2pMfjmE0U@kuha.fi.intel.com>
-From:   Prashant Malani <pmalani@chromium.org>
-Date:   Wed, 31 Aug 2022 11:13:20 -0700
-Message-ID: <CACeCKae_uB6O_=A6bPGq28zUivWhhyLpvb31c7gP5vMFBSetNg@mail.gmail.com>
-Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Register partner PDOs
-To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
-        bleung@chromium.org, Guenter Roeck <groeck@chromium.org>
+References: <20220830231541.1135813-1-rrangel@chromium.org>
+ <20220830171332.1.Id022caf53d01112188308520915798f08a33cd3e@changeid> <CAJZ5v0h10wrurjYG50dA+pCfRtNDqN=c8odQ0p6HJRnOyJh7KA@mail.gmail.com>
+In-Reply-To: <CAJZ5v0h10wrurjYG50dA+pCfRtNDqN=c8odQ0p6HJRnOyJh7KA@mail.gmail.com>
+From:   Raul Rangel <rrangel@chromium.org>
+Date:   Wed, 31 Aug 2022 12:13:46 -0600
+X-Gmail-Original-Message-ID: <CAHQZ30BTYEYEAGjwsbuiYuYGhpFtQy_AEP66v3trdTzY_DRUOQ@mail.gmail.com>
+Message-ID: <CAHQZ30BTYEYEAGjwsbuiYuYGhpFtQy_AEP66v3trdTzY_DRUOQ@mail.gmail.com>
+Subject: Re: [PATCH 1/8] Input: elan_i2c - Use PM subsystem to manage wake irq
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tim Van Patten <timvp@google.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,37 +81,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the review, Heikki.
-
-On Wed, Aug 31, 2022 at 1:45 AM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
+On Wed, Aug 31, 2022 at 12:01 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 >
-> On Tue, Aug 30, 2022 at 08:20:18PM +0000, Prashant Malani wrote:
-> > The ChromeOS EC exports partner source/sink cap PDOs (Power Data
-> > Objects) to the application processor (AP). Use this information
-> > to register USB PD (Power Delivery) capabilities with the
-> > USB Type-C Power Delivery device class.
+> On Wed, Aug 31, 2022 at 1:16 AM Raul E Rangel <rrangel@chromium.org> wrote:
 > >
-> > Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Signed-off-by: Prashant Malani <pmalani@chromium.org>
+> > The Elan I2C touchpad driver is currently manually managing the wake
+> > IRQ. This change removes the explicit enable_irq_wake/disable_irq_wake
+> > and instead relies on the PM subsystem. This is done by calling
+> > dev_pm_set_wake_irq.
+> >
+> > i2c_device_probe already calls dev_pm_set_wake_irq when using device
+> > tree, so it's only required when using ACPI. The net result is that this
+> > change should be a no-op. i2c_device_remove also already calls
+> > dev_pm_clear_wake_irq, so we don't need to do that in this driver.
+> >
+> > I tested this on an ACPI system where the touchpad doesn't have _PRW
+> > defined. I verified I can still wake the system and that the wake source
+> > was the touchpad IRQ GPIO.
+> >
+> > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
 >
-> This looks good to me. One nitpick below. With that fixed, FWIW:
->
-> Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->
-> Will you later register also the port PDOs?
-Yes, that is the plan.
 
-> >       if (resp.events & PD_STATUS_EVENT_SOP_PRIME_DISC_DONE &&
-> > @@ -1006,6 +1061,7 @@ static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num
-> >                                        "Failed SOP Disc event clear, port: %d\n", port_num);
-> >               }
-> >       }
-> > +
+
+> I like this a lot, but the assumption in the wakeirq code is that the
+> IRQ in question will be dedicated for signaling wakeup.  Does it hold
+> here?
+
+The wakeirq code defines two methods: `dev_pm_set_wake_irq` and
+`dev_pm_set_dedicated_wake_irq`.
+The latter is used when you have a dedicated wakeup signal. In this
+driver it's currently assumed
+that the IRQ and the wake IRQ are the same, so I used `dev_pm_set_wake_irq`.
+
+This change in theory also fixes a bug where you define a dedicated
+wake irq in DT, but
+then the driver enables the `client->irq` as a wake source. In
+practice this doesn't happen
+since the elan touchpads only have a single IRQ line.
+
+>
+> > ---
+> >
+> >  drivers/input/mouse/elan_i2c_core.c | 12 ++++--------
+> >  1 file changed, 4 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
+> > index e1758d5ffe4218..7d997d2b56436b 100644
+> > --- a/drivers/input/mouse/elan_i2c_core.c
+> > +++ b/drivers/input/mouse/elan_i2c_core.c
+> > @@ -33,6 +33,7 @@
+> >  #include <linux/jiffies.h>
+> >  #include <linux/completion.h>
+> >  #include <linux/of.h>
+> > +#include <linux/pm_wakeirq.h>
+> >  #include <linux/property.h>
+> >  #include <linux/regulator/consumer.h>
+> >  #include <asm/unaligned.h>
+> > @@ -86,8 +87,6 @@ struct elan_tp_data {
+> >         u16                     fw_page_size;
+> >         u32                     fw_signature_address;
+> >
+> > -       bool                    irq_wake;
+> > -
+> >         u8                      min_baseline;
+> >         u8                      max_baseline;
+> >         bool                    baseline_ready;
+> > @@ -1337,8 +1336,10 @@ static int elan_probe(struct i2c_client *client,
+> >          * Systems using device tree should set up wakeup via DTS,
+> >          * the rest will configure device as wakeup source by default.
+> >          */
+> > -       if (!dev->of_node)
+> > +       if (!dev->of_node) {
+> >                 device_init_wakeup(dev, true);
+> > +               dev_pm_set_wake_irq(dev, client->irq);
+> > +       }
+> >
+> >         return 0;
 > >  }
->
-> I'm guessing that extra newline was just a typo.
-
-Yeah ,I missed it during self-review :(
-I'll fix it up while applying the patch if there is no other comment.
-Otherwise I'll fix it in v2 (if there is one).
+> > @@ -1362,8 +1363,6 @@ static int __maybe_unused elan_suspend(struct device *dev)
+> >
+> >         if (device_may_wakeup(dev)) {
+> >                 ret = elan_sleep(data);
+> > -               /* Enable wake from IRQ */
+> > -               data->irq_wake = (enable_irq_wake(client->irq) == 0);
+> >         } else {
+> >                 ret = elan_set_power(data, false);
+> >                 if (ret)
+> > @@ -1394,9 +1393,6 @@ static int __maybe_unused elan_resume(struct device *dev)
+> >                         dev_err(dev, "error %d enabling regulator\n", error);
+> >                         goto err;
+> >                 }
+> > -       } else if (data->irq_wake) {
+> > -               disable_irq_wake(client->irq);
+> > -               data->irq_wake = false;
+> >         }
+> >
+> >         error = elan_set_power(data, true);
+> > --
+> > 2.37.2.672.g94769d06f0-goog
+> >

@@ -2,93 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 193B85A77B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FE4F5A77A2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:38:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230142AbiHaHkn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 03:40:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44246 "EHLO
+        id S230023AbiHaHiq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 03:38:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230091AbiHaHkg (ORCPT
+        with ESMTP id S230075AbiHaHic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 03:40:36 -0400
-X-Greylist: delayed 66 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 00:40:32 PDT
-Received: from mta-64-228.siemens.flowmailer.net (mta-64-228.siemens.flowmailer.net [185.136.64.228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C365B69F3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:40:28 -0700 (PDT)
-Received: by mta-64-228.siemens.flowmailer.net with ESMTPSA id 20220831073924be6e54522e0d4eb31d
-        for <linux-kernel@vger.kernel.org>;
-        Wed, 31 Aug 2022 09:39:24 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=nGvVUAIr6EVotI+lAvFGhAT1Y/xk9oR6QAFXkdDhLEw=;
- b=oZui0olsoyaKWY7sY/5bHi3zMsJicM6TzSPdIdIm3NgxLhoz8IU8gqcWDcHqtBzxpyKIQw
- ljw95J1G0F30ZF1feFaean/JYoLMtO3+D90EnCxSDV53kptic3fUOcb3DwpKyWynp9q6npC9
- u5FgaM+l7xBh+cqAva+9x280PeFYo=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v3 6/6] tty: n_gsm: add debug bit for user payload
-Date:   Wed, 31 Aug 2022 09:38:00 +0200
-Message-Id: <20220831073800.7459-6-daniel.starke@siemens.com>
-In-Reply-To: <20220831073800.7459-1-daniel.starke@siemens.com>
-References: <20220831073800.7459-1-daniel.starke@siemens.com>
+        Wed, 31 Aug 2022 03:38:32 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 033A8C00C4;
+        Wed, 31 Aug 2022 00:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=gDCNZ3f2D6OuuyZZIQqudj53nBzwis7zfrQMn3P2Fjk=; b=EnH590ebi7kcvXSn/SPE4BBwaq
+        G73slZS6OdWE165F5mFPdKSb4G0pxt8J7V34L/o3IbANPaAYlBu3oBhuHuj2MBAdvo1ME/K6Ccoac
+        nqrGmxMchGvd4OTkxLT1PI9KtqB1CJcWBfQYSGjskXMfH7KHBf7y40d2hMIHXWS9EUHpb1kfShxxp
+        basAhCG9FH6k5sKGLYwSJMF9NqHHx+E2ZRj1/L0eXUCAPLbsJA2NIreXnB7LNaS6wlfiaxLs3m8Yb
+        oC9mOLy9h/8FQKMoTRveAS0JQyP4ULhWaceTADCP8huEjpocIjesjX+3GsJ4zvCVBEen8x7fa9Cw0
+        i9j+EJUw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oTIIt-0085rG-Sd; Wed, 31 Aug 2022 07:38:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8452E3002A3;
+        Wed, 31 Aug 2022 09:38:27 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 66CD32B843CC0; Wed, 31 Aug 2022 09:38:27 +0200 (CEST)
+Date:   Wed, 31 Aug 2022 09:38:27 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
+        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
+        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
+        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
+        glider@google.com, elver@google.com, dvyukov@google.com,
+        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
+        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
+        kaleshsingh@google.com, kernel-team@android.com,
+        linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+References: <20220830214919.53220-1-surenb@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830214919.53220-1-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
+> ===========================
+> Code tagging framework
+> ===========================
+> Code tag is a structure identifying a specific location in the source code
+> which is generated at compile time and can be embedded in an application-
+> specific structure. Several applications of code tagging are included in
+> this RFC, such as memory allocation tracking, dynamic fault injection,
+> latency tracking and improved error code reporting.
+> Basically, it takes the old trick of "define a special elf section for
+> objects of a given type so that we can iterate over them at runtime" and
+> creates a proper library for it.
 
-A debug bit to output a complete transmission dump exists. Sometimes only
-the user frames are relevant. Add an additional bit which limits the
-transmission dump output to user data frames if set.
+I might be super dense this morning, but what!? I've skimmed through the
+set and I don't think I get it.
 
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
----
- drivers/tty/n_gsm.c | 5 +++++
- 1 file changed, 5 insertions(+)
-
-Incorporated review comments from Jiri Slaby since v2:
-- changed (1 << n) to BIT(n) in the debug macro definitions
-
-Link: https://lore.kernel.org/all/1d8d0d72-a5b7-724e-a70a-71d9fd3330c4@kernel.org/
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index f8a8c4059907..6588b84eed96 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -69,6 +69,7 @@ module_param(debug, int, 0600);
- #define DBG_DATA	BIT(2) /* Data transmission details. */
- #define DBG_ERRORS	BIT(3) /* Details for fail conditions. */
- #define DBG_TTY		BIT(4) /* Transmission statistics for DLCI TTYs. */
-+#define DBG_PAYLOAD	BIT(5) /* Limits DBG_DUMP to payload frames. */
- 
- /* Defaults: these are from the specification */
- 
-@@ -598,6 +599,10 @@ static void gsm_print_packet(const char *hdr, int addr, int cr,
- {
- 	if (!(debug & DBG_DUMP))
- 		return;
-+	/* Only show user payload frames if debug & DBG_PAYLOAD */
-+	if (!(debug & DBG_PAYLOAD) && addr != 0)
-+		if ((control & ~PF) == UI || (control & ~PF) == UIH)
-+			return;
- 
- 	pr_info("%s %d) %c: ", hdr, addr, "RC"[cr]);
- 
--- 
-2.34.1
-
+What does this provide that ftrace/kprobes don't already allow?

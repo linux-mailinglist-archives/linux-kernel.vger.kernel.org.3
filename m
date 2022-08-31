@@ -2,215 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779375A87D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:03:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24905A87DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:04:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232050AbiHaVC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:02:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
+        id S231965AbiHaVEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:04:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231863AbiHaVCz (ORCPT
+        with ESMTP id S229619AbiHaVD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:02:55 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E001EA309;
-        Wed, 31 Aug 2022 14:02:55 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id a15so11830877qko.4;
-        Wed, 31 Aug 2022 14:02:55 -0700 (PDT)
+        Wed, 31 Aug 2022 17:03:58 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD415EC4FC;
+        Wed, 31 Aug 2022 14:03:57 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id i7-20020a17090adc0700b001fd7ccbec3cso4405196pjv.0;
+        Wed, 31 Aug 2022 14:03:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=6xlRlzGJaVR2uzullj0MIDzmAYPuB68YjTQcaZFNI8g=;
-        b=lbaU/geU/NRB9KRdtjqIdxJ8HmOiSVcT5hPwQvCxbstjnnaab4inNB0ZkXx8WBZtsq
-         HXzoklo6Z/1ZRC3VuyXorjDZ7FHbhWS3DszT23X6t2sR6fyCW7Uk9KcIMWjWxAJYsQqV
-         gT4pWaeDolhkDVsiwXRvVexP+zvf76/17vh9jFFKJC8qDy73bOFxHDLWQOJlx9YhlUSQ
-         /tr8rDXdBQ1K3N6dy4uisYMhoSRJEjdzlOTADsuhIXlQi3sdQsw0KRx50FYD36JX0rTc
-         Yg+69eiRxhkwS+AfwWJIrYXbrgS9YFybSk7HcWYdQ8CjA3RM/+uLi8Jkad9YCQS1ZvqV
-         aNjg==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=+k9PKYV37HdBoa0ru3ipdSwSlY99M5IwVy3/cgyTvZE=;
+        b=Vk30L9r82bSVM85CW3EBAWzoe0Dn+qPjJzw/Re99EZjRc/fpfaAUwIkADseQFFNHKB
+         rMuU9ux9XXtxXPAdoGqe7Oak82NOJClJyn2C17DFwrI/Ag4RmNHmp7oJoRVNAqp5tQSR
+         KhH4QeFdALJh+XFjZ9L9Aeqi98z+at4ad2JfZn1r35pW2Q9Kt6vBLKB9sMLztm712fEk
+         8mlfEp2e2riA6lEgqhiyIXCeZWlAMGGtAODiAKPA4EMX/4DfJMLHkgEGXQOx8/V3wsOV
+         ZLgQp/FEeUnvtnhbYHMxw/rHfNK93zoNqxjX9sRp3htWLdyW+WzLMKypzspuu+BpO8dM
+         tcUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=6xlRlzGJaVR2uzullj0MIDzmAYPuB68YjTQcaZFNI8g=;
-        b=dGmPHUcjYew5NDI9vWG3ZD4smw2uVoK6yyXJejaz5m+x3cIG6NKjnTA4SGmErP5kkH
-         9DiFMzFmk39o9W7Cen+4o2EPl03LHdH17mTVAh80rxQKZf9nJeCaX3otkwjAit9fjrpg
-         dAYMHMhnLcqnZMFjUevRiCcq+q50sgDJakdFmiJ+RBUYwHAGVBPRltMrOfkcW+4DiD0I
-         tpYx8lRQH4Lu9yD/virmvqSvJ8V2V+sNMkk0mM4a6CzOnVwiQP8Q8kFGSgg84Q0EnlhU
-         niuI564hTRdub1pqSm8zUSPbLHgqTHkpUrRrRwEAnCjeDNLmQVDNSi455E/XFvR0556J
-         +Cmg==
-X-Gm-Message-State: ACgBeo0aBeAHHypqFIwUJu/9C0u/GlspiUQ/EHbVQwFhRfhlUj9rvmXk
-        kcgQ8IRlfKqzZBcvIa40Khuy1fE0gs8fww9MV2k=
-X-Google-Smtp-Source: AA6agR48wNqQfz2J4gpLSBsgA5I6SjIy5C7Yw8njxQJfNsfYsmiIEotjBn6HUedNHJOt4T00J8rlLV86PaeYl2utDfU=
-X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
- v17-20020ae9e311000000b006bae711fb27mr17219247qkf.320.1661979774149; Wed, 31
- Aug 2022 14:02:54 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=+k9PKYV37HdBoa0ru3ipdSwSlY99M5IwVy3/cgyTvZE=;
+        b=S5HKQGMGkvlxTiXBDpWa2Oep1tlIvvmf9LUs+JO6maUGhLdAw1jzHDkbs+FEEDR1F7
+         dhBtFUbEwgXa1y5vKts/HS8KZYucl6pFd96cCZJmUreJxkTRPodFPezeW+cjDgqaxh2E
+         qYjxCQQHyfF586rlyBi43qcRm0s/KFU8hqz4Q+c3oB5pjAS+G1rj7RZUMNEwaLqCbcpf
+         Mo+YUwgpyytxupsUoBXb/lgj/ji9iij5Kl4WfF+21hBw8k75E6WU6ZTBDZ6FnUjsC+BF
+         +513u5UtyRq31vE3DH6a8imjhNsejqGfAh0BYeKX0rGOJd/b7ZFoWauhXtsgPqmN3cZ3
+         Ah4Q==
+X-Gm-Message-State: ACgBeo3NNp8kSpyU4Kw7tzQyXZsuKoo9CXZ5claljWhfY+aNLzkIPFGI
+        Py1gdArVgz/FBPbLg+Relc4=
+X-Google-Smtp-Source: AA6agR7gLHIavinDS7rbV1jmFJ16cc7JyDggKel336cAqm8DxZ18I1/nfOLgQGCjKG+NA31qrSP5fQ==
+X-Received: by 2002:a17:902:e945:b0:16a:1c41:f66 with SMTP id b5-20020a170902e94500b0016a1c410f66mr26908520pll.129.1661979837198;
+        Wed, 31 Aug 2022 14:03:57 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:4a6a:d1f4:9cf7:d0fb])
+        by smtp.gmail.com with ESMTPSA id e27-20020a056a0000db00b0053ae6a3c51asm528931pfj.186.2022.08.31.14.03.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 14:03:55 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: [PATCHSET 0/5] perf tools: Show per-event lost sample count (v1)
+Date:   Wed, 31 Aug 2022 14:03:47 -0700
+Message-Id: <20220831210352.145753-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-References: <20220829133923.1114555-1-martyn.welch@collabora.com> <20220829133923.1114555-5-martyn.welch@collabora.com>
-In-Reply-To: <20220829133923.1114555-5-martyn.welch@collabora.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 1 Sep 2022 00:02:18 +0300
-Message-ID: <CAHp75VfZmmDGJJ5wxM8-pbqo+npOSZrPtyJnQhuGadLUYod=3A@mail.gmail.com>
-Subject: Re: [PATCH 5/5] gpio: pca953x: Add support for PCAL6534 and compatible
-To:     Martyn Welch <martyn.welch@collabora.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Collabora Kernel ML <kernel@collabora.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 4:52 PM Martyn Welch <martyn.welch@collabora.com> wrote:
->
-> Add support for the NXP PCAL6534 and Diodes Inc. PI4IOE5V6534Q. These
-> devices, which have identical register layouts and features, are broadly a
-> 34-bit version of the PCAL6524.
->
-> However, whilst the registers are broadly what you'd expect for a 34-bit
-> version of the PCAL6524, the spacing of the registers has been
-> compacted. This has the unfortunate effect of breaking the bit shift
-> based mechanism that is employed to work out register locations used by
-> the other chips supported by this driver, resulting in special handling
-> needing to be introduced in pca953x_recalc_addr() and
-> pca953x_check_register().
+Hello,
 
-This still needs an alternative deep review. I'll do my best to get
-into it sooner than later.
+Now we have PERF_FORMAT_LOST support, add it to perf record and report so that
+it can show number of lost samples per event.  This can be useful if you want
+to reconstruct number of events from the samples like when using -c option.
 
-...
+Currently it adds PERF_RECORD_LOST_SAMPLES at the end of perf data after reading
+event values by read(2).  The perf record unconditionally sets the lost bit if
+the kernel supports it.  Users can see the number with `perf report --stat`.
 
->  #define PCA953X_TYPE           BIT(12)
->  #define PCA957X_TYPE           BIT(13)
-> +#define PCAL653X_TYPE          BIT(14)
->  #define PCA_TYPE_MASK          GENMASK(15, 12)
->
-> +
+You can get the code from 'perf/report-lost-v1' brach on
 
-Stray change.
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
 
->  #define PCA_CHIP_TYPE(x)       ((x) & PCA_TYPE_MASK)
+Thanks,
+Namhyung
 
-...
 
->  static bool pca953x_check_register(struct pca953x_chip *chip, unsigned int reg,
->                                    u32 checkbank)
->  {
-> -       int bank_shift = pca953x_bank_shift(chip);
-> -       int bank = (reg & REG_ADDR_MASK) >> bank_shift;
-> -       int offset = reg & (BIT(bank_shift) - 1);
-> +       int bank;
-> +       int offset;
-> +
-> +       if (PCA_CHIP_TYPE(chip->driver_data) == PCAL653X_TYPE) {
-> +               if (reg > 0x2f) {
-> +                       /*
-> +                        * Reserved block between 14h and 2Fh does not align on
-> +                        * expected bank boundaries like other devices.
-> +                        */
-> +                       int temp = reg - 0x30;
-> +
-> +                       bank = temp / NBANK(chip);
-> +                       offset = temp - (bank * NBANK(chip));
-> +                       bank += 8;
-> +               } else if (reg > 0x53) {
-> +                       /* Handle lack of reserved registers after output port
-> +                        * configuration register to form a bank.
-> +                        */
-> +                       int temp = reg - 0x54;
-> +
-> +                       bank = temp / NBANK(chip);
-> +                       offset = temp - (bank * NBANK(chip));
-> +                       bank += 16;
+Namhyung Kim (5):
+  perf tools: Print LOST read format in the verbose mode
+  perf record: Set PERF_FORMAT_LOST by default
+  perf record: Read and inject LOST_SAMPLES events
+  perf hist: Add nr_lost_samples to hist_stats
+  perf report: Show per-event LOST SAMPLES stat
 
-Can we rather put this into a separate function?
+ tools/perf/builtin-record.c               | 60 +++++++++++++++++++++++
+ tools/perf/builtin-report.c               | 17 +++++++
+ tools/perf/util/events_stats.h            |  1 +
+ tools/perf/util/evsel.c                   | 10 +++-
+ tools/perf/util/evsel.h                   |  1 +
+ tools/perf/util/hist.c                    |  8 +++
+ tools/perf/util/hist.h                    |  1 +
+ tools/perf/util/perf_event_attr_fprintf.c |  2 +-
+ 8 files changed, 98 insertions(+), 2 deletions(-)
 
-> +               } else {
-> +                       bank = reg / NBANK(chip);
-> +                       offset = reg - (bank * NBANK(chip));
-> +               }
-> +       } else {
-> +               int bank_shift = pca953x_bank_shift(chip);
->
-> -       /* Special PCAL extended register check. */
-> -       if (reg & REG_ADDR_EXT) {
-> -               if (!(chip->driver_data & PCA_PCAL))
-> -                       return false;
-> -               bank += 8;
-> +               bank = (reg & REG_ADDR_MASK) >> bank_shift;
-> +               offset = reg & (BIT(bank_shift) - 1);
-> +
-> +               /* Special PCAL extended register check. */
-> +               if (reg & REG_ADDR_EXT) {
-> +                       if (!(chip->driver_data & PCA_PCAL))
-> +                               return false;
-> +                       bank += 8;
-> +               }
->         }
 
-All the same, split this to be like
-
-if (current)
- do_current_things
-else
- do_new_type
-
-...
-
->  static u8 pca953x_recalc_addr(struct pca953x_chip *chip, int reg, int off)
->  {
-> -       int bank_shift = pca953x_bank_shift(chip);
-> -       int addr = (reg & PCAL_GPIO_MASK) << bank_shift;
-> -       int pinctrl = (reg & PCAL_PINCTRL_MASK) << 1;
-> -       u8 regaddr = pinctrl | addr | (off / BANK_SZ);
-> +       int addr;
-> +       int pinctrl;
-> +       u8 regaddr;
-> +
-> +       if (PCA_CHIP_TYPE(chip->driver_data) == PCAL653X_TYPE) {
-> +               /* The PCAL6534 and compatible chips have altered bank alignment that doesn't
-> +                * fit within the bit shifting scheme used for other devices.
-> +                */
-> +               addr = (reg & PCAL_GPIO_MASK) * NBANK(chip);
-> +
-> +               switch (reg) {
-> +               case PCAL953X_OUT_STRENGTH:
-> +               case PCAL953X_IN_LATCH:
-> +               case PCAL953X_PULL_EN:
-> +               case PCAL953X_PULL_SEL:
-> +               case PCAL953X_INT_MASK:
-> +               case PCAL953X_INT_STAT:
-> +               case PCAL953X_OUT_CONF:
-> +                       pinctrl = ((reg & PCAL_PINCTRL_MASK) >> 1) + 0x20;
-> +                       break;
-> +               case PCAL6524_INT_EDGE:
-> +               case PCAL6524_INT_CLR:
-> +               case PCAL6524_IN_STATUS:
-> +               case PCAL6524_OUT_INDCONF:
-> +               case PCAL6524_DEBOUNCE:
-> +                       pinctrl = ((reg & PCAL_PINCTRL_MASK) >> 1) + 0x1c;
-> +                       break;
-> +               }
-> +               regaddr = pinctrl + addr + (off / BANK_SZ);
-> +       } else {
-> +               int bank_shift = pca953x_bank_shift(chip);
-> +
-> +               addr = (reg & PCAL_GPIO_MASK) << bank_shift;
-> +               pinctrl = (reg & PCAL_PINCTRL_MASK) << 1;
-> +               regaddr = pinctrl | addr | (off / BANK_SZ);
-> +       }
-
-Looking at all these, why not add the callbacks for recalc_addr and
-check_reg and assign them in the ->probe()?
-
+base-commit: 2f4c2fbd2ff5e3176b0121443f995808ee498bd0
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.2.789.g6183377224-goog
+

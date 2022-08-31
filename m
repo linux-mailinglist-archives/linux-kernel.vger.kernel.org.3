@@ -2,89 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B145A793E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CA915A7943
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:44:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231184AbiHaInQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:43:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55304 "EHLO
+        id S230117AbiHaInz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231578AbiHaImv (ORCPT
+        with ESMTP id S231533AbiHaInw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:42:51 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCA9FC228D;
-        Wed, 31 Aug 2022 01:42:40 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 04:42:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661935359;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=mmxSzJIEbF0byhuM+VO8IRNgyEUbvUgCaJEiam4Pxpk=;
-        b=n/WRdO6wsbcgzM9IZmiTOpoQilc55+w4Qjuqwl1Dpnv4eEgQ85RLBu7SGRYgk8JFEOmxmG
-        9NkKta+Gf2utqPzv5rM3bIlfQN3qtDLursIA2MwCGrMNSc7KVtiJCfMkW0/8k5e3nZiAGS
-        tjj529y20oHTMERlcuL/JelsPUM2hZU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
-        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+        Wed, 31 Aug 2022 04:43:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51F6B654D;
+        Wed, 31 Aug 2022 01:43:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7187C619FE;
+        Wed, 31 Aug 2022 08:43:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6B32C433D6;
+        Wed, 31 Aug 2022 08:43:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661935430;
+        bh=dm+pvJSM/8LOzQK4c/qlkqG81fhAs6PnuK9pqgoP4XU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ldbpOVcqHGil33wvOXJaontPgzI7+5Q3/7q+PyDzfjzndsSgw+y0Z2O1/AsVM5Ci9
+         UUQ7pZScIFhSn9hjOzb2F94fBZYBGkWeUNtghnPTE2ksvnIUD+j013IFUPmajOp9Ei
+         4bXCzVdd63xahb1Bn1wk+tn5+SIFHXlXe+JG/QhUP/hVL1gVOtbSnpKZRDoQrr+70B
+         IoCE9ljyB52RJTjno+gWYY+n8lw/GmqG0h+EzWI1rJgbVIQ2Le0Rq9/hcrpgqXTZIJ
+         FS2wG4bvsdiQSiI6gdMQRWSkjAupz0qA2rLdv6AYd6nkVmQuUZSpLWIcOkavtQlo6K
+         hO0dXdJcbn7CQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oTJK7-0000nY-6Q; Wed, 31 Aug 2022 10:43:47 +0200
+Date:   Wed, 31 Aug 2022 10:43:47 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Jonathan Woithe <jwoithe@just42.net>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] USB: serial: ch341: fix lost character on LCR updates
+Message-ID: <Yw8fQz2amdKKYNvS@hovoldconsulting.com>
+References: <20220831081525.30557-1-johan@kernel.org>
+ <20220831081525.30557-2-johan@kernel.org>
+ <863b4190-9b38-ed5a-0a18-74505702da21@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <863b4190-9b38-ed5a-0a18-74505702da21@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 09:38:27AM +0200, Peter Zijlstra wrote:
-> On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
-> > ===========================
-> > Code tagging framework
-> > ===========================
-> > Code tag is a structure identifying a specific location in the source code
-> > which is generated at compile time and can be embedded in an application-
-> > specific structure. Several applications of code tagging are included in
-> > this RFC, such as memory allocation tracking, dynamic fault injection,
-> > latency tracking and improved error code reporting.
-> > Basically, it takes the old trick of "define a special elf section for
-> > objects of a given type so that we can iterate over them at runtime" and
-> > creates a proper library for it.
+On Wed, Aug 31, 2022 at 10:36:18AM +0200, Jiri Slaby wrote:
+> On 31. 08. 22, 10:15, Johan Hovold wrote:
+> > Disable LCR updates for pre-0x30 devices which use a different (unknown)
+> > protocol for line control and where the current register write causes
+> > the next received character to be lost.
+> > 
+> > Note that updating LCR using the INIT command has no effect on these
+> > devices either.
+> > 
+> > Reported-by: Jonathan Woithe <jwoithe@just42.net>
+> > Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
+> > Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on reconfiguration")
+> > Fixes: 55fa15b5987d ("USB: serial: ch341: fix baud rate and line-control handling")
+> > Cc: stable@vger.kernel.org      # 4.10
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+> > ---
+> >   drivers/usb/serial/ch341.c | 10 +++++++++-
+> >   1 file changed, 9 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+> > index 2798fca71261..2bcce172355b 100644
+> > --- a/drivers/usb/serial/ch341.c
+> > +++ b/drivers/usb/serial/ch341.c
+> > @@ -97,7 +97,10 @@ struct ch341_private {
+> >   	u8 mcr;
+> >   	u8 msr;
+> >   	u8 lcr;
+> > +
+> >   	unsigned long quirks;
+> > +	u8 version;
 > 
-> I might be super dense this morning, but what!? I've skimmed through the
-> set and I don't think I get it.
-> 
-> What does this provide that ftrace/kprobes don't already allow?
+> Could you move version above quirks? That would not create another 
+> 7-byte padding in here. Actually it would not make ch341_private larger 
+> on 64bit at all, if I am looking correctly.
 
-You're kidding, right?
+No, I added it after quirks on purpose as it isn't protected by the
+spinlock and doesn't change during runtime like the shadow registers.
+
+And I really don't care about saving 8 bytes on 64-bit. :)
+
+Johan

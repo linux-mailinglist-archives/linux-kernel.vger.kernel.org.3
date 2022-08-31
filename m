@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A47995A7F94
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB91D5A7F96
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbiHaOK3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:10:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
+        id S231834AbiHaOLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:11:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiHaOK0 (ORCPT
+        with ESMTP id S231855AbiHaOKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:10:26 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CFCB6D33
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:10:24 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id z25so20146298lfr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:10:24 -0700 (PDT)
+        Wed, 31 Aug 2022 10:10:54 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08ED7C0B74;
+        Wed, 31 Aug 2022 07:10:54 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id x23so14241656pll.7;
+        Wed, 31 Aug 2022 07:10:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=lGy17wvB/kP5iwD+EDbAM5mvcyJJNjGffo5dUfEtBBM=;
-        b=a4BWc5G7tpXzBSAF50gJMVl43eqh4upQt2r0vwY9eTtJUGQxVuTSndUyQk4SIvSV/Y
-         OlM6TmNwdRd44Y6BVKCAoX2LTOYFYA4dO3tOQ9Wgr2i2wJHp75hR9E8elYilPPq5PFzT
-         h7el/UEZp8hMha26p9bbNDac7sMLXWXGyc4Alg2OiIAVKkBM+IDFJSy7m/Q/VyGESOuS
-         se6ujFx3hDnJAb15DwsQ21PrCpVUdaTy0QjgmJDzpVM9K2SmjzRi2NtC7PHnIFlF0EBQ
-         hSWrM30nr9AaDnXpZ9GwaeTCVTMxYUlQs9kHMeROTei4rH/uaOxSXpap58l6fbaGVBD3
-         Ezfg==
+        bh=kboID+a4oCZLB90RjGESjjpmeonElRrw7Xrg2AJLT0Q=;
+        b=G237vnn6SJPjJ/Q2dKvBRQk+gEKFtEXFBcgFhk7UCauh/Q6Bh3gr0YgobdrGeeFCvN
+         HzqjWgnakoRCTG1GonGgfjwW2+PkpmcpoaQGFTRZtuDgXEl1vANbvHhoDE0PDXmzB0k2
+         l2tQqsdjIjU8Fff2Y5/60BRc04dxbIwgFRIsr25IDSR64pdEE6ArjnAT4sQI8heOjpyD
+         LktZ/Vq5/K4ARgqBSdLtvIGFtyuMlMnTsTPsFulFuC1RHvFROIDNov+0Bft1cAW9tgi2
+         LXnQtsX5NytByx3bCqnWHVDxr0tThWeE3+kxpGzouRVmOvPT41IZ9Y0FKW39swNAqYxy
+         mv/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=lGy17wvB/kP5iwD+EDbAM5mvcyJJNjGffo5dUfEtBBM=;
-        b=ifrh9lL+MUp87fK4F4CX/1YnCFVEjhc7E3l+CsE6yHHPnw4nN3R9cbaorEdpNZzsMT
-         U3eCOzW2cVQsT13EDcZhffOQhTRLH47WDwFDYY26RhV0C496MSMIdIksYOsZlmLhv2EE
-         Je+dUYDEZTKmuBJHI/5DHXCy39crUKkEdbkYLc+io0z8vrgU/V0EwdES4JfGUv0T2pjZ
-         ebjhhpCNVCBgphXsjhCZjEDZPr6szBFdkiWc31MP8lc0rjSxxpIUhjUlndiFCKmUMfLp
-         OeNBIwBPeKbYHvFLIAsroUyjJoQ/152Yw78cE9iJn9324bzeEGHMTyJ5EFwnaVzYejyx
-         4Cig==
-X-Gm-Message-State: ACgBeo0DzCh0HmN8QVQ6u+mOFEhDWyM22zIYPwBe7PrDbWBWJxfDLV+C
-        BaFq+5g8k/b/h6HAycDis7DYag==
-X-Google-Smtp-Source: AA6agR6A6bPOAHr5EuhM5oZnH4xaPPQ3rSxMol4RmT+ORZqxAkVPCuB9/CRkZnflf5EJYdY77FxWYw==
-X-Received: by 2002:a05:6512:e98:b0:492:cf3c:8860 with SMTP id bi24-20020a0565120e9800b00492cf3c8860mr9151601lfb.603.1661955022696;
-        Wed, 31 Aug 2022 07:10:22 -0700 (PDT)
-Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id p9-20020a2eba09000000b0025df5f38da8sm2122282lja.119.2022.08.31.07.10.21
+        bh=kboID+a4oCZLB90RjGESjjpmeonElRrw7Xrg2AJLT0Q=;
+        b=0n3SA1Ms5yFjzk8Gwlg6DqqfRogPfcR7fhgUu9R4+Nq8XCugLxCxeQ7GYMvAFfTRGT
+         lcQ+IcWnYrW4fOYOjf6txLSmm3YJwcYd9H9NwQI3jRx4EJDbhjFepc9r5gEcQh/7+KUX
+         Hli4spmcJ/pB5+V/T4Q1NmnNx38n9ylzgAKRGmt+XTblfYglDnfPdqbCoIUafoGDSTxf
+         dbMECB6jAA1gJiJ4oeet5BHlhiZdaBawlflPdqyN1UkzUUD2AXxRaRrmUHK4xr5qW1U0
+         DvHnVF+MEICXE11Rl5Qv/gGJocgELmDyfBxRjhIo2XoyflqIXC3mg3vWh32bwJMmOJgw
+         ZDnw==
+X-Gm-Message-State: ACgBeo0I8SslGmscE1LIiVqetKqQXefD6F8GcnrJnatu8XNnvY/xsEXO
+        hybbPtoJcbHHO2wTCN7YIG4=
+X-Google-Smtp-Source: AA6agR6zZs1DfYBUFLrRGp/kxkTVOOhcBnsJx3jUKapVRMAnhDXzGKMdfxYktw39QZ994YkoKW7+lQ==
+X-Received: by 2002:a17:903:4ce:b0:171:2cbb:ba27 with SMTP id jm14-20020a17090304ce00b001712cbbba27mr25703420plb.72.1661955053245;
+        Wed, 31 Aug 2022 07:10:53 -0700 (PDT)
+Received: from carlis-virtual-machine.localdomain ([156.236.96.164])
+        by smtp.gmail.com with ESMTPSA id h16-20020aa796d0000000b0053ae018a91esm365011pfq.173.2022.08.31.07.10.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 07:10:22 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: defconfig: enable newer Qualcomm SoC sound drivers
-Date:   Wed, 31 Aug 2022 17:10:20 +0300
-Message-Id: <20220831141020.515887-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 31 Aug 2022 07:10:52 -0700 (PDT)
+From:   Xuezhi Zhang <zhangxuezhi3@gmail.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com, bvanassche@acm.org,
+        johannes.thumshirn@wdc.com, himanshu.madhani@oracle.com,
+        zhangxuezhi1@coolpad.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhangxuezhi3@gmail.com
+Subject: [PATCH] scsi: csiostor: convert sysfs snprintf to sysfs_emit
+Date:   Wed, 31 Aug 2022 22:10:46 +0800
+Message-Id: <20220831141046.406837-1-zhangxuezhi3@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable sound support (machine drivers) for Qualcomm SC7180 and SC7280
-SoCs.
+From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fix up all sysfs show entries to use sysfs_emit
+
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 ---
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
+ drivers/scsi/csiostor/csio_scsi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 265454620682..644d084c6888 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -792,6 +792,8 @@ CONFIG_SND_SOC_APQ8016_SBC=m
- CONFIG_SND_SOC_MSM8996=m
- CONFIG_SND_SOC_SDM845=m
- CONFIG_SND_SOC_SM8250=m
-+CONFIG_SND_SOC_SC7180=m
-+CONFIG_SND_SOC_SC7280=m
- CONFIG_SND_SOC_ROCKCHIP=m
- CONFIG_SND_SOC_ROCKCHIP_SPDIF=m
- CONFIG_SND_SOC_ROCKCHIP_RT5645=m
+diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
+index 9aafe0002ab1..39e8c3c26a19 100644
+--- a/drivers/scsi/csiostor/csio_scsi.c
++++ b/drivers/scsi/csiostor/csio_scsi.c
+@@ -1366,9 +1366,9 @@ csio_show_hw_state(struct device *dev,
+ 	struct csio_hw *hw = csio_lnode_to_hw(ln);
+ 
+ 	if (csio_is_hw_ready(hw))
+-		return snprintf(buf, PAGE_SIZE, "ready\n");
++		return sysfs_emit(buf, "ready\n");
+ 	else
+-		return snprintf(buf, PAGE_SIZE, "not ready\n");
++		return sysfs_emit(buf,  "not ready\n");
+ }
+ 
+ /* Device reset */
+@@ -1430,7 +1430,7 @@ csio_show_dbg_level(struct device *dev,
+ {
+ 	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
+ 
+-	return snprintf(buf, PAGE_SIZE, "%x\n", ln->params.log_level);
++	return sysfs_emit(buf, "%x\n", ln->params.log_level);
+ }
+ 
+ /* Store debug level */
+@@ -1476,7 +1476,7 @@ csio_show_num_reg_rnodes(struct device *dev,
+ {
+ 	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", ln->num_reg_rnodes);
++	return sysfs_emit(buf, "%d\n", ln->num_reg_rnodes);
+ }
+ 
+ static DEVICE_ATTR(num_reg_rnodes, S_IRUGO, csio_show_num_reg_rnodes, NULL);
 -- 
-2.34.1
+2.25.1
 

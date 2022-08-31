@@ -2,67 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47BE5A7349
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:22:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E56F95A7350
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:24:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbiHaBWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 21:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
+        id S229983AbiHaBYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 21:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbiHaBWH (ORCPT
+        with ESMTP id S229645AbiHaBYr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 21:22:07 -0400
-Received: from out30-54.freemail.mail.aliyun.com (out30-54.freemail.mail.aliyun.com [115.124.30.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A54E8AC248;
-        Tue, 30 Aug 2022 18:22:06 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R731e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=3;SR=0;TI=SMTPD_---0VNo9SP._1661908923;
-Received: from 30.227.181.248(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VNo9SP._1661908923)
-          by smtp.aliyun-inc.com;
-          Wed, 31 Aug 2022 09:22:04 +0800
-Message-ID: <f13bd1a1-831a-0748-c30f-a7ae8bb91523@linux.alibaba.com>
-Date:   Wed, 31 Aug 2022 09:22:03 +0800
+        Tue, 30 Aug 2022 21:24:47 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D73AC6F
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:24:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661909085; x=1693445085;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=FkIBsb2Ip4T6JggnftCE6hDxnF+ldLX60MiuOgGrmtA=;
+  b=XTnjJuSNVZplKUWagEVA/6GlDHB+VoT8pNxxLsbhWoWH2+njkJduVWcq
+   NNm6vow08Puf0cd8RTXG4eqpkFqvuEILpL+gTk0hf+JXO0ALTLZ4cU6Sv
+   a09+Ce8Pr006JKoIHaNkwBr2+yfJMidCkJbzxGQPIwrlIuTG+6pILc7xM
+   MKd0p4ai74Z6PXNKbGm4TrCp0+4S/Ub/vu/iRnIo1MY36WqnfKHjTI0LB
+   fGj3320RfkdWrwkez7jfu48YzC1IBnWBDmjvhr/ImqX8LMDMnRkHt4HJw
+   9N9P477r85WL7m4/p0YtkJQvPmLnBFhR4giEyWqo1mL6CLIsIsPdN8HwH
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296130345"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="296130345"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 18:24:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="754262670"
+Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Aug 2022 18:24:43 -0700
+Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oTCTC-0000pn-2o;
+        Wed, 31 Aug 2022 01:24:42 +0000
+Date:   Wed, 31 Aug 2022 09:24:08 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-fixes 1/5]
+ peer_event.c:undefined reference to `icmpv6_err_convert'
+Message-ID: <202208310955.MOpvq0aG-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.0.3
-Subject: Re: [RFC PATCH] blk-mq: change bio_set_ioprio to inline
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1661852746-117244-1-git-send-email-liusong@linux.alibaba.com>
- <908d464e-e695-3a27-56f6-1ceabd727989@kernel.dk>
- <75f53b8f-30cd-23c3-1602-34d858302751@linux.alibaba.com>
- <9e093f5d-f9fb-1ed6-3598-5d4c46838a09@kernel.dk>
-From:   Liu Song <liusong@linux.alibaba.com>
-In-Reply-To: <9e093f5d-f9fb-1ed6-3598-5d4c46838a09@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-fixes
+head:   5ba1502ed90c38548d56a41156440fa70aed70ed
+commit: b445daa0f2ca96635e9620cef26a72619ce3644a [1/5] rxrpc: Fix ICMP/ICMP6 error handling
+config: m68k-randconfig-r034-20220830 (https://download.01.org/0day-ci/archive/20220831/202208310955.MOpvq0aG-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/ammarfaizi2/linux-block/commit/b445daa0f2ca96635e9620cef26a72619ce3644a
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-fixes
+        git checkout b445daa0f2ca96635e9620cef26a72619ce3644a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-On 2022/8/31 08:59, Jens Axboe wrote:
-> On 8/30/22 6:42 PM, Liu Song wrote:
->> On 2022/8/30 21:59, Jens Axboe wrote:
->>> On 8/30/22 3:45 AM, Liu Song wrote:
->>>> From: Liu Song <liusong@linux.alibaba.com>
->>>>
->>>> Change "bio_set_ioprio" to inline to avoid calling overhead.
->>> Let's not try to 2nd guess the compiler here. Most things that are
->>> marked inline should not be.
->> Agree, I think there is something wrong with the commit log written here,
->> it should be expected to reduce the call overhead, bio_set_ioprio seems
->> to be appropriate to use inline.
-> I'm sure it's worth inlining, but did you check if it isn't already?
-> If it's small I'd fully expect the compiler to inline it already,
-> without needing to add things to do so.
->
-It is indeed possible, thanks for your reply.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Thanks
+All errors (new ones prefixed by >>):
 
+   m68k-linux-ld: net/rxrpc/peer_event.o: in function `rxrpc_encap_err_rcv':
+>> peer_event.c:(.text+0x848): undefined reference to `icmpv6_err_convert'
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

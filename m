@@ -2,76 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B6E5A7EFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:36:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DF855A7F02
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiHaNgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 09:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
+        id S230332AbiHaNh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 09:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231179AbiHaNgT (ORCPT
+        with ESMTP id S229556AbiHaNhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 09:36:19 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0253167CAB
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:35:15 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id r4so18405419edi.8
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:35:14 -0700 (PDT)
+        Wed, 31 Aug 2022 09:37:08 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13ABC11A19
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:36:28 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id q16so14637379ljp.8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:36:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ILMmjKU6Icsi2CtEhA4aXyZVYS/WtQ7hgIQ3u2QLb+M=;
-        b=KK7mmQc8i7qlU4Z6etcXWe2hZp4sScQNajKhHvm5shRsxcgYGTw7Bdb6jIPcnbTA3w
-         qwQ7PNbjXLxpDC5NKnAsgncpOKtCPHVvUiCMIxlecOAQMz8zkYr3+ICA6kRljxEpecmo
-         j/VAsiXyEBtexP5UaYXWQ6MYvbpBK2Iy96+m7fPsmGNv3kHmPYcuh7LUaNNabwJmNVq4
-         EDjhZcqaGyA4O2u7TTfuaYLoTbpvmE4j89pjZggtIaM3ts44rTjmXcuf1kWIGmGhV6Di
-         ZmEX9qxGlqzM7ZZecsXdY7Tc5HE56GHOhHbnAf39XACQ9p2PVFqXc+TgaXucQ/axc4Ky
-         Kvzg==
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=gGkipS5OiOaDWG7u9ok23WWflnT/lUaJfPplZYAiYqM=;
+        b=rIgJ2niaj8guR1fs5O83kUj8QJ68k73tiR084IlVWinBwSlGua2nTLyO4+Xo+dYK6m
+         /jPSzqDBNjlGYDNcfrUOHFrBvSNqvDF0vW7CRruodQGCMwIbvYJ/6UyfdH7s1fgm3zqT
+         tgwN+CihxVRQ29p68jzJ6SMaBNxdb7BDSiovN4dKCVB+xjNtw1RgnEBb/x9oMRl8rDST
+         qhUlzz4/7Eyxyq7v6eFFnRwUbSacgm9fR8dfCjasXShYjMJW3km/IeCzluVzyAW/TP5L
+         5ygR+yIHst2ni9ru96avWjiaXQivkapvxZGrj6nwZFlXwU3X7nS7nrydxk+VJZkb4cU/
+         Tahw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ILMmjKU6Icsi2CtEhA4aXyZVYS/WtQ7hgIQ3u2QLb+M=;
-        b=0zEhVxkGYh8Yy/c7K0RI2RACmAtwMK6uOWbHW15yXR/ZAp81HslMz5+mcl7h+G88kV
-         1LshhBD79NwwI0C7ADBo1uk5WiWhwynjeoTAAeJYn/ILsc9fqRk29xwxqQGsie+TmFnj
-         Nu7MEYmjJI4Y/l1Ucycgksq+aBENi1lIgAQTJkLjuWi82mFtFHRfA4Ir7ToHBKcOatRE
-         qCETsoxDdzDsCHOlZFcmrbL7T0MtDtefEqFA3Ce2yzXprQSZX19CQCelhTHx6JWdNTZh
-         dIUq+G3dYCC8bcw2ge4J5I1c4e6vrICkP2axz5sYIGHbVDFCwAKDKSxbP5w7mutPV3lc
-         cCmA==
-X-Gm-Message-State: ACgBeo34tlJlIsSnX3rqL2csOlNUnA5cmuwajWbtevN2Mn2ZgICsU2E2
-        s2ua3uHPeImwZJzIpjm3gNCMwqkomfLopSxNGHotvFCgCAE=
-X-Google-Smtp-Source: AA6agR7Mt8+J+9C0t+E4H+SNLbKfvp6sQInXKIqgn+PeoTndSKIMBZutDhAtAgFa4DGD+hCYGDvQ2KjcehdXw9v0rCI=
-X-Received: by 2002:a05:6402:641:b0:446:d:bd64 with SMTP id
- u1-20020a056402064100b00446000dbd64mr24694639edx.32.1661952913167; Wed, 31
- Aug 2022 06:35:13 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=gGkipS5OiOaDWG7u9ok23WWflnT/lUaJfPplZYAiYqM=;
+        b=o+otoeKvQQ+JURG9wWiT9aH1CE2W9MUgRSvc+X/fEj88JkIx5uIv/lmEH6h2249mtl
+         CNBbp4zGVH9674iGjMPDp2tN7F2bZ5MPCR0Q9WwIXhRqegD2z+NXLGYJ/otfAbFOLz49
+         ftctc9PnYBNnqwzeTtJ2VyccuaWyfK95YCdsJ4muc3l7ynQYLLi8+w46sTaVbwfESH/4
+         U4/xwH+OkRL0lJgbxOaWm1YBLMvvkeOlJF5O2tMpLu0fWCZC1dVPvmdnm+5i49lN5Q3j
+         Ds09qpoYprFbva+Tf+8I6BKdCSbU9BTVGG6PgsJ7vyxqrHvm6Y0yGhhdSCGHcZ4Cm9I0
+         SS2Q==
+X-Gm-Message-State: ACgBeo2lUGpCn1OnLuY1OucztbPrA7xxwucK6wNm1SonEWp/EJNMz+Tb
+        HXz2fwVN9i3JLm5oKmI8811aWQ==
+X-Google-Smtp-Source: AA6agR4+4PSsSJU+cVCSvFtVroZCC/ZJUU3CHURUCcI2YOJxgUGe02lowT1jdYfMi/vnOpgoN1K0Hw==
+X-Received: by 2002:a2e:b74a:0:b0:25f:3f72:9210 with SMTP id k10-20020a2eb74a000000b0025f3f729210mr8647710ljo.8.1661952987193;
+        Wed, 31 Aug 2022 06:36:27 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id y20-20020a05651c107400b00261cd70e41asm1401636ljm.32.2022.08.31.06.36.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 06:36:26 -0700 (PDT)
+Message-ID: <d33607e2-42de-ac4e-7ed0-4c25504ac092@linaro.org>
+Date:   Wed, 31 Aug 2022 16:36:25 +0300
 MIME-Version: 1.0
-References: <20220818145616.3156379-1-arnd@kernel.org> <20220818145616.3156379-5-arnd@kernel.org>
- <CACRpkdbFkV1T+K9wKDyODkcwu=nhbV+4_JF=YTaA5ad_w4ggbw@mail.gmail.com>
- <CAK8P3a1PQjR2sv2rar6mFY9g4PkteAC+zgRUvnr04DETJX3K9w@mail.gmail.com> <63a630b7-9068-40f9-b7f7-d9a08f74ed13@www.fastmail.com>
-In-Reply-To: <63a630b7-9068-40f9-b7f7-d9a08f74ed13@www.fastmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 31 Aug 2022 15:35:01 +0200
-Message-ID: <CACRpkdZWhMX-16tn0sxY6TLDPeu0rJ2BRvqFunU3W_caJtTFHw@mail.gmail.com>
-Subject: Re: [PATCH] ARM: fix XIP_KERNEL dependencies
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     Arnd Bergmann <arnd@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Ard Biesheuvel <ardb@kernel.org>, Sekhar Nori <nsekhar@ti.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 1/2] bindings: iio: adc: Add max11205 documentation
+ file
+Content-Language: en-US
+To:     Ramona Bolboaca <ramona.bolboaca@analog.com>, jic23@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220831133021.215625-1-ramona.bolboaca@analog.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220831133021.215625-1-ramona.bolboaca@analog.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,22 +77,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 9:21 AM Arnd Bergmann <arnd@arndb.de> wrote:
+On 31/08/2022 16:30, Ramona Bolboaca wrote:
+> Add bindings documentation file and MAINTAINERS entry for MAX11205.
+> 
+> Signed-off-by: Ramona Bolboaca <ramona.bolboaca@analog.com>
 
-> CONFIG_XIP_KERNEL does not work with any option that involves patching
-> the read-only kernel .text.
->
-> Since at least CONFIG_SMP_ON_UP is required in certain configurations,
-> flip the dependency to always allow the .text patching options but make
-> XIP_KERNEL have the dependency instead.
->
-> This is a prerequisite for allowing CONFIG_ARCH_MULTIPLATFORM to
-> be disabled.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-OK this should work!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - maxim,max11205a
+> +      - maxim,max11205b
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  spi-max-frequency:
+> +    maximum: 5000000
+> +
+> +  spi-cpha: true
+> +
+> +  vref-supply:
+> +    description:
+> +      The regulator supply for the ADC reference voltage. This is a differential
+> +      reference. It is equal to the V_REFP - V_REFN. The maximum value is 3.6V.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - spi-max-frequency
+> +  - spi-cpha
+> +  - interrupts
+> +  - vref-supply
 
-Yours,
-Linus Walleij
+If you are going to send a new version, please put the properties here
+in the same order as they appear in top-level "properties:".
+
+In any case:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof

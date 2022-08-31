@@ -2,145 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DE795A7BFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C2325A7BFA
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:08:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230480AbiHaLIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 07:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S230455AbiHaLHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 07:07:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230459AbiHaLId (ORCPT
+        with ESMTP id S229555AbiHaLHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 07:08:33 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96953C59F3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 04:08:32 -0700 (PDT)
-Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27V8nIaZ005548;
-        Wed, 31 Aug 2022 11:07:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=SxezlB/Rh6DoQ20GDfa5XMliPrftmIz7banisZWMUJQ=;
- b=vXS6SoJvfDJA2JWw7/Pr3eDI7A5cagxMWLecOeUowy6BQWnKEjz/FMTFgROwJP5Yb8Wq
- LVByVamEQjAFTG0/0grc/sDXvOeYkOIxRgvaYfw5WyXF4cWPUo1pwdgsQCVqi623xEnq
- jxQSmHTKhBjXfi8OAX5GteZgn2S7zmEa2QyiLAjSVmVG8mkdN7eahi0ShfJXrtbY1T7Q
- urtAIrBaEuA9RzMAh+pC7xmaM8n+XBtshtk5P4OIkUUYmbgqyXbeL1H+d5tdQMeXxBwP
- q0So2V/zZp3ibDafyM+HcJtwaKKYn9MRdEI/K7Xtr7O2lB57fM31ZEPWYz83MbGHPe3x qA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j7a228vec-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 Aug 2022 11:07:54 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27VB7hrh035906;
-        Wed, 31 Aug 2022 11:07:53 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j79q56k2f-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 Aug 2022 11:07:51 +0000
+        Wed, 31 Aug 2022 07:07:47 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2E2A4B3C;
+        Wed, 31 Aug 2022 04:07:45 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HGZPwGrjQHq/ShHgCuleqF3JjQ6CAENbLUONwsfzIMu9vbDuf4nWcKlpz9oYCTe26LdjkC0dwLxQPfyeTZHa8968o6IIgRBa6BRBRnoExO5FzdJNvL+sIQIDnmHwmYq03GEKVg5d3ajVmQXaZgcdOJvHoAaBv5kjytOwt7/CiOaIG+WdNb8dnOufWmAUjRn3kOQXozjsP4vY4mAfulzHyi5nmDdDH4l/1pKtpsM3Zfkpr6kvRV9THj3Ds4nRmjTuI/Cv42tLrwBEXatCgOPlAK9E13oWNx5k6Q5dZREFsRcH0x56MlORuORb3XIx6ThOvKI1QSiev2Bk08VpYcrXcw==
+ b=i083RL7yVwlHapmYv7PNb1yZXZhhsRVmdDWcupC/CWXt6Kwr+4WiRvdps0KlHOJgvdxToE4C3B4tVxTaDPh5bI62P8aNTjJrywb+zvoLmI6f+P9wR7FtCBfteBWfsXOEIbEyNvijzYHbDWWcs5z5dG2a8em7y1iSzCGJodhh6tVO987ngVy40Njdgmb1TDOcB3c9dlZ6Bf12Ax46mup87CILtN9gDyPpjuw5Sm39XTqmXOZKSCRWpmNpvKW1pX8cyyEQMnGxqPy/YRV2pfFBik9bGWqqbqlb4MsLAAXH+TUw0hOH81Zc6A5/o/PJZlDisQz86gKQVlVrWH5KA+Gcug==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SxezlB/Rh6DoQ20GDfa5XMliPrftmIz7banisZWMUJQ=;
- b=ZGirTPGl3wzWyYbwcig6dZNCoC4bRdKm+9pYS1hVf/JxjkkZvYQ2oWVfBhXYRHmVa6rbAe0QCaWf1TDqBQJhQFDtsGZhnJKeDJ29UcP9osOADh3XS9nZg4A5mJUr1BVPUDsVGV0Au4tEGzkG4fTD8skcsl52wSD33gl5Dhz78drfDKD0OTo0GqcKjQBGNaROyTKgWNbndQf5F2p7uipOZTiRpPzZmFMuZU32q8e5SHZ6zHV96N6kS8b3iRMz5FKokhOmArULd17KAlg9tWH0R5BxnVhYN7L/WswLFjLVXxTGtBE14P/OLju5aktwG817VckfGx6H8yONUmjcw7VCAw==
+ bh=z0VYsW8GS2oeFr9IwJLul9eD+McR0vh7NYWbBPfG2nc=;
+ b=RQ6Kp2pNUSwZnz+0Sw+i5DmgUQFNRCC56fRzTyaeY7Zrtag42cOleHGAqypRutKXGD6oXzYzoXaQl8h7y0AS0Jb/3d9PSD26DPPx5jNiuHCU9IagflyEhFamFJj1fjmoh1MFO0JHP1wnfqEZ44dncufAfl4Efu4h7B2Qk4PURdms0VSN0MVbYZLGVOaf1xxmkOcR2chDOQFh1InDThE0eG/B6YqiOh4qcTqc1V3u7ePEfJ9LZxLWiIfHiwBUMHS1AX3MB1YnIym0Fopz3BCPSx029GHPpVsSzlv0DdWI8kNUSG3CDEMIuI6/3w6fz+4W5ePlDKuli2jITyri22johA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SxezlB/Rh6DoQ20GDfa5XMliPrftmIz7banisZWMUJQ=;
- b=xi0CN3ZkA7oo4UNe6xnQRv93T872/0zuUcndzwYvLqIxtFQ15/VSGTFEVD1Mc0cdjxU/iZmXrtX86VCaQo8BNyMLH19j6MgdmVVlo3sVOGtqkBEtO7DNE5PWRIP/WDCu6UVadheZIn4Ag80lxvNPo0aLwxmVU0fO/piEYeMDBe8=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by BN0PR10MB5141.namprd10.prod.outlook.com
- (2603:10b6:408:125::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Wed, 31 Aug
- 2022 11:07:49 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5566.021; Wed, 31 Aug 2022
- 11:07:48 +0000
-Date:   Wed, 31 Aug 2022 14:07:27 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     Hawkins Jiawei <yin31149@gmail.com>
-Cc:     syzbot+5f8dcabe4a3b2c51c607@syzkaller.appspotmail.com,
-        Anton Altaparmakov <anton@tuxera.com>,
-        akpm@linux-foundation.org, chenxiaosong2@huawei.com,
-        linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        syzkaller-bugs@googlegroups.com, 18801353760@163.com
-Subject: Re: [PATCH 2/3] ntfs: fix out-of-bounds read in ntfs_attr_find()
-Message-ID: <20220831110727.GK2071@kadam>
-References: <cover.1661875711.git.yin31149@gmail.com>
- <8a43c95b068e4ca404e864d64a2a44d357754e5c.1661875711.git.yin31149@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a43c95b068e4ca404e864d64a2a44d357754e5c.1661875711.git.yin31149@gmail.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: JNAP275CA0008.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:4c::13)
- To MWHPR1001MB2365.namprd10.prod.outlook.com (2603:10b6:301:2d::28)
+ bh=z0VYsW8GS2oeFr9IwJLul9eD+McR0vh7NYWbBPfG2nc=;
+ b=Nc1q02vU82hd18gV9LjWmxamsOF4QwtUac1JI44aYb3bTrdNbqy2Mw6f6wIGpvKUzZNPbZE37cGNApTCOFQPyTQHSYTFia901YYYyFzFtoBE/3MeLaB6jwalDaZi65dVQVBGIK8uq01EbZckcEkTBlz3yBnK9roz6P83sLg+4+k=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by SN7PR12MB6885.namprd12.prod.outlook.com (2603:10b6:806:263::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.19; Wed, 31 Aug
+ 2022 11:07:43 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5588.010; Wed, 31 Aug 2022
+ 11:07:43 +0000
+Message-ID: <41b495a6-d1c1-922d-ec4d-febaa01ae75c@amd.com>
+Date:   Wed, 31 Aug 2022 13:07:36 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [bug report] dma-buf: Add debug option
+Content-Language: en-US
+To:     yf.wang@mediatek.com, Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-media@vger.kernel.org
+Cc:     wsd_upstream@mediatek.com, Libo Kang <Libo.Kang@mediatek.com>,
+        Ning Li <Ning.Li@mediatek.com>, Yong Wu <Yong.Wu@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org
+References: <20220831103521.3019-1-yf.wang@mediatek.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220831103521.3019-1-yf.wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0089.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:1e::11) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ab25dc13-5650-4d01-37ae-08da8b4109bd
-X-MS-TrafficTypeDiagnostic: BN0PR10MB5141:EE_
+X-MS-Office365-Filtering-Correlation-Id: 49a69372-424e-4779-240a-08da8b4106b9
+X-MS-TrafficTypeDiagnostic: SN7PR12MB6885:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xmIrMxKMEz4PL2/eLLjQIPnadeQGqlh3+kylI4Lp+9AiCYeu0SyDs+G3d+T5SqzLK85e7TphkbhRYwfWjUNdp2zGKRHfJoGpgq2Q6sLfPki9UWsfOGW1EzzKBOWqalyTOj9DatCpUWKxqDyIlwVpr9dVtus7MCz3CmPTf4SXjQ2Bi8Of9+T/QaCFZDSFipLgpAmFNoqNK6o3LHvXt4fj6FWGnV5+H54sNmKk+IWgZu7PPFRWt0bEqan5R9+9bDNpF7t8r0VIM7J/HpANaFjldjv108cd6QzX5GM2HM3eqPqiF6vvINmw4zkX/3UNQT70iEFwRJhFJY/rwSwa5hveDRmntbKqg6UmNqMdTKWBmmbyycWyvc0mIFpYyagur8VuTX9tUi+9Jr3C70lTWhOYLyj2AxaJgxt+SxQBOk8x0pVvSj+zM+hBTdvt3BXx0MlPV/yPmQl1vF9BBbxpbu72FBcD6z9Np4szo95XYc8ELWJIZHzWNSNVdi1B0WSmRzoZDHHZLrhJ3Yulh49RKOe83hL5dHbZqW8PGvfPpf2nnBHfT8A2kzfnnseXDR9r/bc2/IUAnAUmzJaPIW5rfVhx1jeoF5EyrzoH9nsPTesYotZ8sLl5IDjAu2MYyab8/51mxbReECi0PVuwynoarUyIuSLdbzbQHbLCnxt07aAo+4cUoqzAjdIRBk9CW/SlPVKoLnowFa8LqNTKaya8M3diBPQiDv9dLc6Goba1SpINM0xi3fKumZHcyMPKhK4l6hmga6Tucw4rx7/q9A4OlR+IlVn0uUl+WCfighy/TDoK9BV3cFxYYgq2Go8QktkjVI9wjy5stAUp67sK+4BAV5j1bw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(136003)(346002)(376002)(366004)(39860400002)(396003)(33716001)(86362001)(38100700002)(38350700002)(478600001)(8676002)(66946007)(66476007)(66556008)(4326008)(6666004)(8936002)(5660300002)(966005)(6916009)(6486002)(44832011)(316002)(1076003)(83380400001)(186003)(9686003)(26005)(2906002)(6512007)(52116002)(6506007)(41300700001)(33656002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 2Ro8lHHSV0/2ld7WY8x4Tqt43PuFB+uDSUwJLNIAvkJI2MvrHXzQc+qjS8vvJ2h1Iat+1xzr+M1rNwQOwpoQnr2B0S2gLeCybra+Vkt7fKqj93/0H2HtgElRIxKpuJLGal/G1LX1D4iYGCpwohC2ALKBdpuhaWvhB2ZKSw2lPROqB1wj/FgfGC2FkikwqScu+pG3Iq2IvDdYD1rCV2MhFXsWYN+VaEYrinpJEDPX+LzBGoZmDuYZ7TM8lJCwHvgM2EbOBuGlNx4Dw2a4k6u/mksm+j9WZ4dJLd8Y0CzYtQNYhw2r1BFGTwBGEM85d9pZ3H93KLef8ahx+q3Km7IEPVFiWCyms9VdNGqQrbmXrDP47w1g2CdKoG/wprXGnj4RPoUndMnqdNGWRmRMnZPI4wyR4fpvvxb53SuTrdUEey1wVsCc4KeyaWhvWtjy8IUFBqsTFY48juQ/Gl78cQIVsPwg3eW3q5lWrMwEv1jW5F7TmVfvxgZ48rEk0p3eG6LgMqkc5gTk4M+r+lu0KcfoFCMnkNRfYzs9BsVRgg7A5GFE89YW95As4ypaSVFmjDaSW4eN2XPKdOJleYjnGn6Aae7UfH4Gc5f6R1XdbPocsp8E0zfxeEiXhsO+e9j7ZIN5BPiz+ftzpf5HkRbiXJdmVmQMKIkpENj+TJN3rM3bDT7b3/fSMCdbH38ydhoECA6LGehR5sqm9RT2eTkqjgwYcvDgX/0vc/DAF1zvauxQwfvA0qrdW3nNseIV5Vs+b0Yr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(39860400002)(396003)(376002)(136003)(346002)(316002)(66476007)(5660300002)(66556008)(36756003)(8676002)(2906002)(86362001)(66946007)(4326008)(7416002)(8936002)(31696002)(83380400001)(38100700002)(478600001)(110136005)(41300700001)(6486002)(54906003)(186003)(2616005)(6512007)(6666004)(966005)(6506007)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jgT449sH6l2LrSEy8uxjFg42GBuiW2NcJU/8prRxPikYeeoJlT78FG+fJXbR?=
- =?us-ascii?Q?LZ/mGfOr+ZiUZRCcAOcjQgfrb9O+JRrXSOTgQScE3uwevsQqxLjL3EkAtVPk?=
- =?us-ascii?Q?8PMK6CLpv72rLMgW9duQrwSx9ZWjQ4opwXTUMr6fVzp5E94xcIGiVT/hJi4x?=
- =?us-ascii?Q?UEAQ28qgKz8EhudkZKbLOE67A21THJ/Ko82COWIikDT1L9zZc3+llvAnZKjV?=
- =?us-ascii?Q?94fvDQL3BZQb3Aelxt9252uSkw4+x5vucCeQ2sHgbOfau6io9x4ohjYicatB?=
- =?us-ascii?Q?hXw1kwCIOLjsVhb30XCo+q1HJUWdNYigAOFCTJwVJsCLKokzHLW0j1tolEFI?=
- =?us-ascii?Q?SRPNp9IZxYkQ5MJRsV5LUqMqdlg9itzHiMPmJ8AoJGErkNYqzof58/sCO27i?=
- =?us-ascii?Q?W8LwR8Gt9kmc4rdi9D1Kh/bRlPi9lneJeSYDqJ9EVFycoEYuDb/bXVf1ksvC?=
- =?us-ascii?Q?3BPi12UPMnC1rThlWMaWtDBM0kjQfKH2LKiMRGI66WG5+vANkLALa9vP58Bn?=
- =?us-ascii?Q?3TpkMKtQqw+/af6PQIJSRblc6QzjtSH8d/8Y1f0Q1bA8eEcpAFEPFzYrKLuk?=
- =?us-ascii?Q?+Ab233hLLjieXWadphWxZZkiVOvQF9ehhqUphbiT/lEuAyS9KBHWaUfsK6dg?=
- =?us-ascii?Q?JMRBGO4qN7P/fzCWeV6pLmezrreAxFN2dq834xCm6E2lf4UMGapqDAcD9v5w?=
- =?us-ascii?Q?p0p7QJ85ZG+6Awwnj0lLiSNEFydKqeoHptDSY3izLtMsG1fes16QtOl6uQrd?=
- =?us-ascii?Q?7uVs4OGep1+AnWdHiIEQeT4TWGFWQWLSjQqxZeLz8Xf+upfaKNz36sFaN7V0?=
- =?us-ascii?Q?7hd5nx7isUW1240k+QYHnfFlvJ4LUAoYduCKMCWBYgkg36iIw71cgfGzSirH?=
- =?us-ascii?Q?hvQEBf0OGmhl8LMZXKiKNWTNgKULkGllK7Px2JXGYJtEtXDSbUb6OcPjUGAF?=
- =?us-ascii?Q?OZuTMypIRBPY9I7O4e/uRkBIyPqAH/B/RteGoFlrMLp1zv+26EE9mfmFN72V?=
- =?us-ascii?Q?d/qJ4dlr6MImw5KdV4Reow9qJvF2YPuiq3WsSfl+KagB91of7LoyY1pCEyvK?=
- =?us-ascii?Q?zWssNbbEcl6VeWTrJZtRcTJs+IOu9wg+iUTso9Qjw665TugZWpUSdOL6zowY?=
- =?us-ascii?Q?ji2msKL78htxS6DLwH0I1dHp1Yd/C14yWb1owR7mgF5LVq0keMSDL3vVYLHf?=
- =?us-ascii?Q?TUD283Acm6eeWNtn5cCnLIoFiOrZPgbCq4hf0dIENVQbqlEC8p6ZDW0zZrWl?=
- =?us-ascii?Q?SAazalzSl57qNFMBjf5aTeA15TE3P0tuZr2N7m1Vo0A5chYN8ybd39C2+Gv7?=
- =?us-ascii?Q?MTl3g1mEseaLjzAkA5o3RtJTH2jhcPIhkR1Uwx+zEBywws8hv/m8snv1WGzl?=
- =?us-ascii?Q?de7FnC1BcPeytjPMe+r+JVYi+pwo2PPtPfVCPFqhgPNuT/9bIelFgAn2ob8m?=
- =?us-ascii?Q?ICSi7qfxsDiGgcjuICD7iClkwWbImVWCfVUmfYibtGOitOmfQ5BPqAvt567R?=
- =?us-ascii?Q?mPU4rS+MILUp1neghaq1/fN30PitP/KsC0SFgtnpGomjinhV/5vxX/4E/SeO?=
- =?us-ascii?Q?UufnjOvK3F7RTSh4ki//qtY+oUichQHh1eQnqCAyjC+21C/yn7KVgiL8ewBw?=
- =?us-ascii?Q?6Q=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab25dc13-5650-4d01-37ae-08da8b4109bd
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?R2VTb0hDZlBvSHM1ZTE3L202QjBBR2g1SnR6bEVRNSsyZGVZQUJtYTFNOHFB?=
+ =?utf-8?B?SUtPaUc2MTFPVHhRMm9KL2tuUXNQc0I4Mkk3d3VLdFJ1T2ZQY3NyY3Q2d0tp?=
+ =?utf-8?B?MXRkdGY5OHJ3ZlNTdXZKaWtRYzdsV1ZrKy9EUDhjYmI5N3ZBb3pmajc3amts?=
+ =?utf-8?B?TDBWZ3hZWWhyZmJmWHdPVTNjK09ScnBuTXRKb2hLUGE3V1hWQ1gveTlUem4v?=
+ =?utf-8?B?WWI1WlhYdjNFb0U2QWZTdzQ5Qks0TWNoZUhvVHpPcjN2Tmh3OHMySnFJeER0?=
+ =?utf-8?B?by92QXllRVRlKytXM1BDM1k5VW9EZEJiNFlPaTBmOHhwRzMyMVhPZlkwU3pP?=
+ =?utf-8?B?eVhYTU56MVlySVc1QW5XSWxEWWx1NDllTkpSQnl1R2lodkYxUWZyUWxoa3Fr?=
+ =?utf-8?B?UzJEdFhkaEVMWVNkSWRSMUI2L0svMENidWFLdzZ0UEEvNEVlZTk2bTg0MXlD?=
+ =?utf-8?B?b2draHNNNFV6OVQzNHg2MDBYcVQreU9mZ2EwRCsxZmY2ZVJSNkxORDJYUW93?=
+ =?utf-8?B?bitqdGhKYlFOVTI2SURQcHA3YkZEZFMwZW1GOS80LzJpL2Z0bzFqdU9MU0JR?=
+ =?utf-8?B?cHdmLytQcTg1aUpldzh0UGk4bTBKM2NMVUNpOGp1NmNyRExOS21PRTZ6a0pI?=
+ =?utf-8?B?TnAvQnZZenFRWmNXdnVHbzF0Mzg0MjFiWG1EWkptYnFiTk9FbnBXMGxka2lR?=
+ =?utf-8?B?Vlg4eGd5ZkwrVTg3bm1IQWVTT2ZwSmZQNlMwb1VEbEZzbk9VSkZnMWVDOFZE?=
+ =?utf-8?B?VzE5UnB4TFowQ0NQbjkyVUh3UGllTlE2WTN4cE1Pa1lSUEl5cG5KV25kZUxK?=
+ =?utf-8?B?Z2thand0M0RMQ1dYMGtmWVdDcDZ3THVsdWpPcnYwMlFuNEE4OVp5bWZDSGFz?=
+ =?utf-8?B?SGRSQlpiNGE2SmdXeGpya09Rc2xsT01LdFlYY2VkK2tkUzlQaDMwcWRPenZL?=
+ =?utf-8?B?Z1RSbjlqZ0ExWmxDN3pEU2IxUXFGWDlkMXlJa1VuYnROcU9SMittbVlBckJG?=
+ =?utf-8?B?T0VhMk1NQU1idU5vRGZwNFBXaW5HVC8wd0h4M0xDNFArTDBGWVliS0VwMHc5?=
+ =?utf-8?B?TC9YaVUzRGV2RG9qcDJUWkptZDZERnFiTjNpRTBzdE1QU3hBcU1WVnp5UEhD?=
+ =?utf-8?B?OEY5dXlUczdKR2ZIQ3VNQ2U0ZW9vSWtQSU5ZNWhDT3ZNTW5MNlMwUDl3K2I1?=
+ =?utf-8?B?QXh6OFNMYzRnU29IN0c4RTNrbmNzR3VEM1M5YjltcHlvalRsYXFzZ1RYVkpp?=
+ =?utf-8?B?cVRTNlFiaFRQRDlaVlppWFZ3Q2lvUFVjV3lwNUhOdU1oSnlaa2Q0SGZWM21m?=
+ =?utf-8?B?aHdWdWxlbmpMMnU0ZTZ1RVlUWXVBYkNKcFpyNE51ZFoxUFM4cGRCZldVdGpn?=
+ =?utf-8?B?OWxaUW5ZWkNPYTh0bnkzOVFsSW50b3I4R0R2TlpaclNJSkJnWjlNaVFKcGI5?=
+ =?utf-8?B?UnFmUmpjYVVxdDVSY2xVOURtR1hvUWZyQk1DZ1BuTTh6VW5qUVFCbjcwcXh1?=
+ =?utf-8?B?RWdtWkZ6bkkvdkFGcWlIWFZxMzBCblNWdDR6NTR3QkI1blpPUy8ySUg4SmJh?=
+ =?utf-8?B?RVdlWFJHUlQ4a0d5dEsrdlJ1T3gzSEErYm93em5iajZra1RZUmxOQU1jU2Qy?=
+ =?utf-8?B?ZXN0T09YVkhZakZQUUtyMG5tRGpoZlJwR3RiNE1JOTdwS2NiS29HMmZvaTJY?=
+ =?utf-8?B?a1VFR2RCOUE4MjVYczdnSUxhWGpyUkNRRUVWZDFqOWY0RjY0M3d1cFB1blIz?=
+ =?utf-8?B?dGhmdUxBMXhrdExKK3NBdGQ4cVRrbTVoQ01mUnpVMjNxcER2MTBKVlVZQnZn?=
+ =?utf-8?B?aFJIWTVOa2ZzeitwSzhib0tMQTB5b2dUS3lnSjV4VUlvWkJ2TU9tWU1ZV2g2?=
+ =?utf-8?B?YTM0UkdMUnNncGVmSFdFMnpFcUtYZURsQXAzWU40MUJBM05WQVJIcXIrVkJk?=
+ =?utf-8?B?NnRUZHBXM2JEL1dtcjFiZWt1Uk9tMm9Sb0ZIN0xaakxGeGtuQ1lETTNYSms5?=
+ =?utf-8?B?UjVnUW12MHJVMTNnVHpEMllXWXZqMGo5WHRvQ0Y0QVlZd0ZCVkxwaWY4VEJK?=
+ =?utf-8?B?SE9ET2ZIbExiajRHSHg3RVFubnowUTc2amJnYUd3eGtWUHVnRUNmNFp5VGJ1?=
+ =?utf-8?B?T05PMW4yOXBSUmtlK09iMXVZOFh6N1hZZXVsRXNIeGZscFJjNnlOdkowVUdh?=
+ =?utf-8?Q?3ij4wUPokaP5H56SIfVnzoGLNiwgp6GSiBhSZzgNLROB?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 49a69372-424e-4779-240a-08da8b4106b9
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2022 11:07:48.0751
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2022 11:07:43.0309
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: W3xfwNmbhX5i/iRFoqGg5X+YxmQVuDVNevdsMYhEENy0FM7wlsscw2wq5nUfU9Le5M7Aq+3k1AmeguYnQeD1034W+XVQirLX2mQzXbL0M7g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR10MB5141
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-31_06,2022-08-31_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 spamscore=0
- adultscore=0 mlxscore=0 mlxlogscore=999 suspectscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208310055
-X-Proofpoint-GUID: z68D1ZUf8f3a9oSbRsFDijwn9ncIX4b2
-X-Proofpoint-ORIG-GUID: z68D1ZUf8f3a9oSbRsFDijwn9ncIX4b2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-MS-Exchange-CrossTenant-UserPrincipalName: QZHMjdR3JNUP/Y6QrlBp8uK+6NaInedoQD6Fp7nB4BjjilgXwBc0om0xXEwq6IsE
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6885
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -148,121 +130,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 10:43:36AM +0800, Hawkins Jiawei wrote:
-> Kernel will iterates over ATTR_RECORDs in mft record in ntfs_attr_find().
-> To ensure access on these ATTR_RECORDs are within bounds, kernel will
-> do some checking during iteration.
-> 
-> The problem is that during checking whether ATTR_RECORD's name is within
-> bounds, kernel will dereferences the ATTR_RECORD name_offset field,
-> before checking this ATTR_RECORD strcture is within bounds. This problem
-> may result out-of-bounds read in ntfs_attr_find(), reported by
-> Syzkaller:
-> 
-> ==================================================================
-> BUG: KASAN: use-after-free in ntfs_attr_find+0xc02/0xce0 fs/ntfs/attrib.c:597
-> Read of size 2 at addr ffff88807e352009 by task syz-executor153/3607
-> 
-> [...]
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
->  print_address_description mm/kasan/report.c:317 [inline]
->  print_report.cold+0x2ba/0x719 mm/kasan/report.c:433
->  kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
->  ntfs_attr_find+0xc02/0xce0 fs/ntfs/attrib.c:597
->  ntfs_attr_lookup+0x1056/0x2070 fs/ntfs/attrib.c:1193
->  ntfs_read_inode_mount+0x89a/0x2580 fs/ntfs/inode.c:1845
->  ntfs_fill_super+0x1799/0x9320 fs/ntfs/super.c:2854
->  mount_bdev+0x34d/0x410 fs/super.c:1400
->  legacy_get_tree+0x105/0x220 fs/fs_context.c:610
->  vfs_get_tree+0x89/0x2f0 fs/super.c:1530
->  do_new_mount fs/namespace.c:3040 [inline]
->  path_mount+0x1326/0x1e20 fs/namespace.c:3370
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __x64_sys_mount+0x27f/0x300 fs/namespace.c:3568
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
->  [...]
->  </TASK>
-> 
-> The buggy address belongs to the physical page:
-> page:ffffea0001f8d400 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7e350
-> head:ffffea0001f8d400 order:3 compound_mapcount:0 compound_pincount:0
-> flags: 0xfff00000010200(slab|head|node=0|zone=1|lastcpupid=0x7ff)
-> raw: 00fff00000010200 0000000000000000 dead000000000122 ffff888011842140
-> raw: 0000000000000000 0000000000040004 00000001ffffffff 0000000000000000
-> page dumped because: kasan: bad access detected
-> Memory state around the buggy address:
->  ffff88807e351f00: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
->  ffff88807e351f80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-> >ffff88807e352000: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->                       ^
->  ffff88807e352080: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
->  ffff88807e352100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
-> ==================================================================
-> 
-> This patch solves it by moving the ATTR_RECORD strcture's bounds
-> checking earlier, then checking whether ATTR_RECORD's name
-> is within bounds. What's more, this patch also add some comments
-> to improve its maintainability.
-> 
-> Reported-and-tested-by: syzbot+5f8dcabe4a3b2c51c607@syzkaller.appspotmail.com
-> Signed-off-by: chenxiaosong (A) <chenxiaosong2@huawei.com> 
-> Link: https://lore.kernel.org/all/1636796c-c85e-7f47-e96f-e074fee3c7d3@huawei.com/
-> Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com> 
-> Link: https://groups.google.com/g/syzkaller-bugs/c/t_XdeKPGTR4/m/LECAuIGcBgAJ
-> Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
-> ---
->  fs/ntfs/attrib.c | 20 ++++++++++++++++----
->  1 file changed, 16 insertions(+), 4 deletions(-)
-> 
-> diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
-> index 52615e6090e1..904734e34507 100644
-> --- a/fs/ntfs/attrib.c
-> +++ b/fs/ntfs/attrib.c
-> @@ -594,11 +594,23 @@ static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
->  	for (;;	a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))) {
->  		u8 *mrec_end = (u8 *)ctx->mrec +
->  		               le32_to_cpu(ctx->mrec->bytes_allocated);
-> -		u8 *name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
-> -			       a->name_length * sizeof(ntfschar);
-> -		if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end ||
-> -		    name_end > mrec_end)
-> +		u8 *name_end, *arec_head_end;
-> +
-> +		/* check for wrap around */
-> +		if ((u8 *)a < (u8 *)ctx->mrec)
-> +			break;
-> +
-> +		/* check whether Attribute Record Header is within bounds */
-> +		arec_head_end = (u8 *)a + sizeof(ATTR_RECORD);
-> +		if (arec_head_end < (u8 *)a || arec_head_end > mrec_end)
+Hi Yunfei,
 
-This works but I feel like it would be more natural to just check if
-a was valid and if a +  sizeof(ATTR_RECORD) was also valid.
+well it looks like system_heap_dma_buf_begin_cpu_access() is exactly 
+doing what this patch tries to prevent.
 
-	if (a > mrec_end || (u8 *)a + sizeof(ATTR_RECORD) > mrec_end)
+In other words the dma_heap implementation is doing something which it 
+shouldn't be doing. The patch from Daniel is just surfacing this.
 
-But what you have also works so if you want to go with that then that's
-fine.
+Regards,
+Christian.
 
-regards,
-dan carpenter
-
->  			break;
-> +
-> +		/* check whether ATTR_RECORD's name is within bounds */
-> +		name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
-> +			   a->name_length * sizeof(ntfschar);
-> +		if (name_end > mrec_end)
-> +			break;
-> +
->  		ctx->attr = a;
->  		if (unlikely(le32_to_cpu(a->type) > le32_to_cpu(type) ||
->  				a->type == AT_END))
+Am 31.08.22 um 12:35 schrieb yf.wang@mediatek.com:
+> Hi Daniel Vetter,
+>
+> The patch https://patchwork.freedesktop.org/patch/414455/:
+> "dma-buf: Add debug option" from Jan. 15, 2021, leads to the following expection:
+>
+> Backtrace:
+>
+> [<ffffffc0081a2258>] atomic_notifier_call_chain+0x9c/0xe8
+> [<ffffffc0081a2d54>] notify_die+0x114/0x19c
+> [<ffffffc0080348d8>] __die+0xec/0x468
+> [<ffffffc008034648>] die+0x54/0x1f8
+> [<ffffffc0080631e8>] die_kernel_fault+0x80/0xbc
+> [<ffffffc0080630fc>] __do_kernel_fault+0x268/0x2d4
+> [<ffffffc008062c4c>] do_bad_area+0x68/0x148
+> [<ffffffc00a6dab34>] do_translation_fault+0xbc/0x108
+> [<ffffffc0080619f8>] do_mem_abort+0x6c/0x1e8
+> [<ffffffc00a68f5cc>] el1_abort+0x3c/0x64
+> [<ffffffc00a68f54c>] el1h_64_sync_handler+0x5c/0xa0
+> [<ffffffc008011ae4>] el1h_64_sync+0x78/0x80
+> [<ffffffc008063b9c>] dcache_inval_poc+0x40/0x58
+> [<ffffffc009236104>] iommu_dma_sync_sg_for_cpu+0x144/0x280
+> [<ffffffc0082b4870>] dma_sync_sg_for_cpu+0xbc/0x110
+> [<ffffffc002c7538c>] system_heap_dma_buf_begin_cpu_access+0x144/0x1e0 [system_heap]
+> [<ffffffc0094154e4>] dma_buf_begin_cpu_access+0xa4/0x10c
+> [<ffffffc004888df4>] isp71_allocate_working_buffer+0x3b0/0xe8c [mtk_hcp]
+> [<ffffffc004884a20>] mtk_hcp_allocate_working_buffer+0xc0/0x108 [mtk_hcp]
+>
+> Because of CONFIG_DMABUF_DEBUG will default enable when DMA_API_DEBUG enable,
+> and when not support dma coherent, since the main function of user calling
+> dma_buf_begin_cpu_access and dma_buf_end_cpu_access is to do cache sync during
+> dma_buf_map_attachment and dma_buf_unmap_attachment, which get PA error from
+> sgtable by sg_phys(sg), this leads to the expection.
+>
+> 1.dma_buf_map_attachement()
+>   -.> mangle_sg_table(sg)  // "sg->page_link ^= ~0xffUL" to rotate PA in this patch.
+>
+> 2.dma_buf_begin_cpu_access()
+>   -.> system_heap_dma_buf_begin_cpu_access() in system_heap.c  // do cache sync if mapped attachment before
+>      -.> iommu_dma_sync_sg_for_cpu() in dma-iommu.c
+>          -.>  arch_sync_dma_for_device(sg_phys(sg), sg->length, dir) // get PA error since PA mix up
+>
+> 3.dma_buf_end_cpu_access() and dma_buf_begin_cpu_access are similar.
+>
+> 4.dma_buf_unmap_attachement()
+>         -.> mangle_sg_table(sg) // "sg->page_link ^= ~0xffUL" to rotate PA
+>
+>
+>
+> drivers/dma-buf/Kconfig:
+> config DMABUF_DEBUG
+> 	bool "DMA-BUF debug checks"
+> 	default y if DMA_API_DEBUG
+>
+>
+> drivers/dma-buf/dma-buf.c:
+> static void mangle_sg_table(struct sg_table *sg_table)
+> {
+> #ifdef CONFIG_DMABUF_DEBUG
+> 	int i;
+> 	struct scatterlist *sg;
+>
+> 	/* To catch abuse of the underlying struct page by importers mix
+> 	 * up the bits, but take care to preserve the low SG_ bits to
+> 	 * not corrupt the sgt. The mixing is undone in __unmap_dma_buf
+> 	 * before passing the sgt back to the exporter. */
+> 	for_each_sgtable_sg(sg_table, sg, i)
+> 		sg->page_link ^= ~0xffUL;
+> #endif
+> }
+>
+>
+> drivers/iommu/dma-iommu.c:
+> static void iommu_dma_sync_sg_for_cpu(struct device *dev,
+> 		struct scatterlist *sgl, int nelems,
+> 		enum dma_data_direction dir)
+> {
+> 	struct scatterlist *sg;
+> 	int i;
+>
+> 	if (dev_is_dma_coherent(dev) && !dev_is_untrusted(dev))
+> 		return;
+>
+> 	for_each_sg(sgl, sg, nelems, i) {
+> 		if (!dev_is_dma_coherent(dev))
+> 			arch_sync_dma_for_cpu(sg_phys(sg), sg->length, dir);
+>
+> 		if (is_swiotlb_buffer(sg_phys(sg)))
+> 			swiotlb_tbl_sync_single(dev, sg_phys(sg), sg->length,
+> 						dir, SYNC_FOR_CPU);
+> 	}
+> }
+>
+>
+> Thanks,
+> Yunfei.
 

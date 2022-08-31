@@ -2,175 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 912425A8606
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E0C85A860A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233117AbiHaSrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55704 "EHLO
+        id S233096AbiHaSsW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:48:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbiHaSrE (ORCPT
+        with ESMTP id S232427AbiHaSsT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:47:04 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077B120F47;
-        Wed, 31 Aug 2022 11:47:00 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 18:46:56 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661971618;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+OKUEhWIp9VKVjsnHD1yApk0+FPhgixyY4hEATs3zMU=;
-        b=F8pMMbe3NX6/NSDhzWRQDyXodohyNAhP+qy0VK53E0vZJ+Sn6boWIvi/Odpl+h5KhXWYls
-        LTcLFvA52hYdR5ttythBNptpVCoOAY9q/XiXeG0oS+J7rDHBmLzOyAR/6HZt+LBfq1WGnj
-        YBvcadmM5W2/GCUmYHcNxQNAO7vKETKXxBFBHp3m+KpArVcOWrATRZTdS7cyY4R1zFO70z
-        twiCGTrgU/bxN9NAMYejikS2ZM1J0CTjd22Z07fTrZdRWSVzjIUqxaA9pskAvKPvduEDaG
-        8gtTBb/Ds9zLEStloxUdx9hPi1Tsn5LNtrUz8L5nBir+RjHqAADkc9qcQtAiQA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661971618;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+OKUEhWIp9VKVjsnHD1yApk0+FPhgixyY4hEATs3zMU=;
-        b=30Qqdz+1NcKf0Jo4Ze8HFDIIOZrlcjCJcxXD6pGnYMyN7RypE6qaF2mQJlAHyTH4VrMewi
-        uLWqCAexiOWX3FDw==
-From:   "tip-bot2 for Kohei Tarumizu" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/cache] x86/resctrl: Fix to restore to original value when
- re-enabling hardware prefetch register
-Cc:     Kohei Tarumizu <tarumizu.kohei@fujitsu.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3Ceb660f3c2010b79a792c573c02d01e8e841206ad=2E16613?=
- =?utf-8?q?58182=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
-References: =?utf-8?q?=3Ceb660f3c2010b79a792c573c02d01e8e841206ad=2E166135?=
- =?utf-8?q?8182=2Egit=2Ereinette=2Echatre=40intel=2Ecom=3E?=
+        Wed, 31 Aug 2022 14:48:19 -0400
+Received: from mail-vk1-xa2b.google.com (mail-vk1-xa2b.google.com [IPv6:2607:f8b0:4864:20::a2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A9752FD4
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:48:16 -0700 (PDT)
+Received: by mail-vk1-xa2b.google.com with SMTP id t82so4990192vkb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:48:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=dEU++UBToH866zrJEWnx3P4LrLN/LbOdcwtLNxqEBv8=;
+        b=U9ZebKNx1Snn9CscuSDhl5p+6YnZ1po5Ug1VuOaTebdwd2Tp0Ky9d5YyfV73lbMfsu
+         klznxiFzDFWfdcWTtHFNZ8VCCZW64v5k+4XeicE0IYnJyc5dawoFqjHC8yaRQSoSdiOv
+         I0zAhUk7IXlXYMO8n39DJhY1BOKnLiTLbLcjFcswCIl1ItmgOh65lrXWRK0LSTcm3xrh
+         7rXyHWFZgnvUU/dgiBactL0WsGoddNUOgExz4ILuuCn/5MLlTQjLhyc62Shbvb8kG307
+         CoMu9pBa3U5vAlrM74NYE/nwRie61x2184yMCnrhC+q2+gr04p1s0PZmFglsRPJpFLJw
+         aV8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=dEU++UBToH866zrJEWnx3P4LrLN/LbOdcwtLNxqEBv8=;
+        b=Yqta7s/CkR26dhmxvIalWBJKHEp9ZXsWKtlPO8JFP5mzjUz/s2TT1y4imZ8sLG3Tp+
+         n0Aleq1fabRhvoMj8e9UW4tY5ohayDvWhL7uJQZgNxqQWrgXRhvFcxkO0ZRcYCe+l5ij
+         o3yxUKAl0jNIwgfB/m3+iWnZTpAnyM0aJJ5mh2VjVXxUy2RYKhwhnqmMjXVWKviOOyK1
+         bENGO5eU/+jTfFw1pkN/blJDmI+jLaUTQ81Z2671ZUTQlOOFK1pR/sPS8VaLlcjVehz/
+         CKqlHVhJ0ZgzfmdPwOLl7hPdWwavDT4aurjeFpvjUj6TvQRNWEXBYOOv6hrBjyv8AKSE
+         G0Cw==
+X-Gm-Message-State: ACgBeo3E0u9WIuFyomPxFpN9p8Q/nyDKBIZ+xApI9byr9bBOy9Z8Sv4u
+        YebMfN4X4jQyO38a3zLEdDdlrS6nWGvuUXk3CjiJig==
+X-Google-Smtp-Source: AA6agR68Q5/Um9DP/1wUPBFcazbxzIYSZ5kyi8FKvBJcKGJb+rF5p9ThPfzNKgX5rtEjjZIhEC8egXy9zVolXnf3S5s=
+X-Received: by 2002:a1f:1f49:0:b0:394:5a44:9a98 with SMTP id
+ f70-20020a1f1f49000000b003945a449a98mr5452642vkf.32.1661971695746; Wed, 31
+ Aug 2022 11:48:15 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <166197161669.401.18421704692518875233.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220818170005.747015-1-dima@arista.com> <20220818170005.747015-9-dima@arista.com>
+ <162ae93b-5589-fbde-c63b-749f21051784@gmail.com>
+In-Reply-To: <162ae93b-5589-fbde-c63b-749f21051784@gmail.com>
+From:   Dmitry Safonov <dima@arista.com>
+Date:   Wed, 31 Aug 2022 19:48:02 +0100
+Message-ID: <CAGrbwDTW4_uVD+YbsL=jnfTGKAaHGOmzNZmpkSRi4xotzyNASg@mail.gmail.com>
+Subject: Re: [PATCH 08/31] net/tcp: Introduce TCP_AO setsockopt()s
+To:     Leonard Crestez <cdleonard@gmail.com>
+Cc:     Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        David Ahern <dsahern@kernel.org>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+        linux-crypto@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/cache branch of tip:
+On 8/23/22 15:45, Leonard Crestez wrote:
+> On 8/18/22 19:59, Dmitry Safonov wrote:
+[..]
+>> +#define TCP_AO            38    /* (Add/Set MKT) */
+>> +#define TCP_AO_DEL        39    /* (Delete MKT) */
+>> +#define TCP_AO_MOD        40    /* (Modify MKT) */
+>
+> The TCP_AO_MOD sockopt doesn't actually modify and MKT, it only controls
+> per-socket properties. It is equivalent to my TCP_AUTHOPT sockopt while
+> TCP_AO is equivalent to TCP_AUTHOPT_KEY. My equivalent of TCP_AO_DEL
+> sockopt is a flag inside tcp_authopt_key.
 
-Commit-ID:     499c8bb4693d1c8d8f3d6dd38e5bdde3ff5bd906
-Gitweb:        https://git.kernel.org/tip/499c8bb4693d1c8d8f3d6dd38e5bdde3ff5bd906
-Author:        Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
-AuthorDate:    Wed, 24 Aug 2022 09:44:10 -07:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Wed, 31 Aug 2022 11:42:17 -07:00
+Fair point, the comment could be "Modify AO", rather than "Modify MKT".
+On the other side, this can later support more per-key changes than in
+the initial proposal: i.e., zero per-key counters. Password and rcv/snd
+ids can't change to follow RFC text, but non-essentials may.
+So, the comment to the command here is not really incorrect.
 
-x86/resctrl: Fix to restore to original value when re-enabling hardware prefetch register
+>> +struct tcp_ao { /* setsockopt(TCP_AO) */
+>> +    struct __kernel_sockaddr_storage tcpa_addr;
+>> +    char    tcpa_alg_name[64];
+>> +    __u16    tcpa_flags;
+>
+> This field accept TCP_AO_CMDF_CURR and TCP_AO_CMDF_NEXT which means that
+> you are combining key addition with key selection. Not clear it
+> shouldn't just always be a separate sockopt?
 
-The current pseudo_lock.c code overwrites the value of the
-MSR_MISC_FEATURE_CONTROL to 0 even if the original value is not 0.
-Therefore, modify it to save and restore the original values.
+I don't see any downside. A user can add a key and start using it immediately
+with one syscall instead of two. It's not necessary, one can do it in
+2 setsockopt()s if they want.
 
-Fixes: 018961ae5579 ("x86/intel_rdt: Pseudo-lock region creation/removal core")
-Fixes: 443810fe6160 ("x86/intel_rdt: Create debugfs files for pseudo-locking testing")
-Fixes: 8a2fc0e1bc0c ("x86/intel_rdt: More precise L2 hit/miss measurements")
-Signed-off-by: Kohei Tarumizu <tarumizu.kohei@fujitsu.com>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Reinette Chatre <reinette.chatre@intel.com>
-Link: https://lkml.kernel.org/r/eb660f3c2010b79a792c573c02d01e8e841206ad.1661358182.git.reinette.chatre@intel.com
----
- arch/x86/kernel/cpu/resctrl/pseudo_lock.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+[..]
+> I also have two fields called "recv_keyid" and "recv_rnextkeyid" which
+> inform userspace about what the remote is sending, I'm not seeing an
+> equivalent on your side.
 
-diff --git a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-index db813f8..4d83989 100644
---- a/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-+++ b/arch/x86/kernel/cpu/resctrl/pseudo_lock.c
-@@ -420,6 +420,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	struct pseudo_lock_region *plr = rdtgrp->plr;
- 	u32 rmid_p, closid_p;
- 	unsigned long i;
-+	u64 saved_msr;
- #ifdef CONFIG_KASAN
- 	/*
- 	 * The registers used for local register variables are also used
-@@ -463,6 +464,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	 * the buffer and evict pseudo-locked memory read earlier from the
- 	 * cache.
- 	 */
-+	saved_msr = __rdmsr(MSR_MISC_FEATURE_CONTROL);
- 	__wrmsr(MSR_MISC_FEATURE_CONTROL, prefetch_disable_bits, 0x0);
- 	closid_p = this_cpu_read(pqr_state.cur_closid);
- 	rmid_p = this_cpu_read(pqr_state.cur_rmid);
-@@ -514,7 +516,7 @@ static int pseudo_lock_fn(void *_rdtgrp)
- 	__wrmsr(IA32_PQR_ASSOC, rmid_p, closid_p);
- 
- 	/* Re-enable the hardware prefetcher(s) */
--	wrmsr(MSR_MISC_FEATURE_CONTROL, 0x0, 0x0);
-+	wrmsrl(MSR_MISC_FEATURE_CONTROL, saved_msr);
- 	local_irq_enable();
- 
- 	plr->thread_done = 1;
-@@ -871,6 +873,7 @@ bool rdtgroup_pseudo_locked_in_hierarchy(struct rdt_domain *d)
- static int measure_cycles_lat_fn(void *_plr)
- {
- 	struct pseudo_lock_region *plr = _plr;
-+	u32 saved_low, saved_high;
- 	unsigned long i;
- 	u64 start, end;
- 	void *mem_r;
-@@ -879,6 +882,7 @@ static int measure_cycles_lat_fn(void *_plr)
- 	/*
- 	 * Disable hardware prefetchers.
- 	 */
-+	rdmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	wrmsr(MSR_MISC_FEATURE_CONTROL, prefetch_disable_bits, 0x0);
- 	mem_r = READ_ONCE(plr->kmem);
- 	/*
-@@ -895,7 +899,7 @@ static int measure_cycles_lat_fn(void *_plr)
- 		end = rdtsc_ordered();
- 		trace_pseudo_lock_mem_latency((u32)(end - start));
- 	}
--	wrmsr(MSR_MISC_FEATURE_CONTROL, 0x0, 0x0);
-+	wrmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	local_irq_enable();
- 	plr->thread_done = 1;
- 	wake_up_interruptible(&plr->lock_thread_wq);
-@@ -940,6 +944,7 @@ static int measure_residency_fn(struct perf_event_attr *miss_attr,
- 	u64 hits_before = 0, hits_after = 0, miss_before = 0, miss_after = 0;
- 	struct perf_event *miss_event, *hit_event;
- 	int hit_pmcnum, miss_pmcnum;
-+	u32 saved_low, saved_high;
- 	unsigned int line_size;
- 	unsigned int size;
- 	unsigned long i;
-@@ -973,6 +978,7 @@ static int measure_residency_fn(struct perf_event_attr *miss_attr,
- 	/*
- 	 * Disable hardware prefetchers.
- 	 */
-+	rdmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	wrmsr(MSR_MISC_FEATURE_CONTROL, prefetch_disable_bits, 0x0);
- 
- 	/* Initialize rest of local variables */
-@@ -1031,7 +1037,7 @@ static int measure_residency_fn(struct perf_event_attr *miss_attr,
- 	 */
- 	rmb();
- 	/* Re-enable hardware prefetchers */
--	wrmsr(MSR_MISC_FEATURE_CONTROL, 0x0, 0x0);
-+	wrmsr(MSR_MISC_FEATURE_CONTROL, saved_low, saved_high);
- 	local_irq_enable();
- out_hit:
- 	perf_event_release_kernel(hit_event);
+Sounds like a good candidate for getsockopt() for logs/debugging.
+
+> The specification around send_keyid in the RFC is conflicting:
+> * User must be able to control it
+
+I don't see where you read it, care to point it out?
+I see choosing the current_key by marking the preferred key during
+an establishment of a connection, but I don't see any "MUST control
+current_key". We allow changing current_key, but that's actually
+not something required by RFC, the only thing required is to respect
+rnext_key that's asked by peer.
+
+> * Implementation must respect rnextkeyid in incoming packet
+>
+> I solved this apparent conflict by adding a
+> "TCP_AUTHOPT_FLAG_LOCK_KEYID" flag so that user can choose if it wants
+> to control the sending key or let it be controlled from the other side.
+
+That's exactly violating the above "Implementation must respect
+rnextkeyid in incoming packet". See RFC5925 (7.5.2.e).
+
+[..]
+> Only two algorithms are defined in RFC5926 and you have to treat one of
+> them as a special case. I remain convinced that generic support for
+> arbitrary algorithms is undesirable; it's better for the algorithm to be
+> specified as an enum.
+
+On contrary, I see that as a really big feature. RFC5926 was published in 2010,
+when sha1 was yet hard to break. These days sha1 is considered insecure.
+I.e., the first link from Google:
+
+> Starting with version 56, released this month, Google Chrome will mark all
+> SHA-1-signed HTTPS certificates as unsafe. Other major browser vendors
+> plan to do the same.
+> "Hopefully these new efforts of Google of making a real-world attack possible
+> will lead to vendors and infrastructure managers quickly removing SHA-1 from
+> their products and configurations as, despite it being a deprecated algorithm,
+> some vendors still sell products that do not support more modern hashing
+> algorithms or charge an extra cost to do so," [..]
+
+So, why limit a new TCP sign feature to already insecure algorithms?
+One can already use any crypto algorithms for example, in tunnels.
+And I don't see any benefit in defining new magic macros, only downside.
+
+I prefer UAPI that takes crypto algo name as a string, rather than new
+defined magic number from one of kernel headers.
+IOW,
+: strcpy(ao.tcpa_alg_name, "cmac(aes128)");
+: setsockopt(sk, IPPROTO_TCP, opt, &ao, sizeof(ao));
+is better than
+: ao.tcp_alg = TCP_AO_CMAC_MAGIC_DEFINE;
+: setsockopt(sk, IPPROTO_TCP, opt, &ao, sizeof(ao));
+
+Neither I see a point in more patches adding new
+#define TCP_AO_NEW_ALGO
+
+BTW, I had some patches to add testing in fcnal-test.sh and covered
+the following algorithms, that worked just fine (test changes not
+included in v1):
+hmac(sha1) cmac(aes128) hmac(rmd128) hmac(rmd160) hmac(sha512)
+hmac(sha384) hmac(sha256) hmac(md5) hmac(sha224) hmac(sha3-512)
+
+No point in artificially disabling them or introducing new magic #defines.
+
+Thanks,
+          Dmitry

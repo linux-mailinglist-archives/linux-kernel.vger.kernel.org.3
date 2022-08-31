@@ -2,105 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E945A76E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C92545A76F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbiHaGuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:50:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
+        id S230200AbiHaGwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229686AbiHaGuP (ORCPT
+        with ESMTP id S229599AbiHaGwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:50:15 -0400
-Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBE253006
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1661928611;
-        bh=70USwLN0cVzP/zKh6wgTroCrDHnsKsgsZzrBU5FMj9c=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=J8M9dW33G6NpWL38Dakdfk1FaAds7+8jwYyCzXG0EI25qQar3AXtJPqjoy+a6Uzq0
-         3AXlxLTYRCeYDuKPcLAYPyg2q/pHKrsoDzM38IsEU0a0mF0FLyFc/r+Zjy+3Z3c8Y8
-         pmd3z8ZIJrgVa+b1dm+czrc8EyIBRystlOC7LL8M=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 9C078667E8;
-        Wed, 31 Aug 2022 02:50:09 -0400 (EDT)
-Message-ID: <feb773a8df5d30b8d9347d1c922997c9da1fd06a.camel@xry111.site>
-Subject: Re: [PATCH 1/1] LoongArch: Fixed loongarch kernel csr_xxx implicit
- declaration.
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Yupeng Li <liyupeng@zbhlos.com>, chenhuacai@kernel.org,
-        kernel@xen0n.name, jiaxun.yang@flygoat.com
-Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        caizp2008@163.com
-Date:   Wed, 31 Aug 2022 14:50:07 +0800
-In-Reply-To: <20220831061406.431027-1-liyupeng@zbhlos.com>
-References: <20220831061406.431027-1-liyupeng@zbhlos.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.45.2 
+        Wed, 31 Aug 2022 02:52:14 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12108BB01B;
+        Tue, 30 Aug 2022 23:52:08 -0700 (PDT)
+X-UUID: 8cbad9a6adbf41e3a311077df023b96f-20220831
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=zZjVZDQq7+xjRP70G/4mz1/Tz13+LwwewsQB5MYr1aY=;
+        b=iU6zAe7w96O5/yok5Htj3g2Bc/sr8POkgi7lISwBVQufTXXgd2rWiF7MyFZBKf6E1+irrk+wpekJ7CIijyhyI9MCYr/44Hq3Bdwxdiwk1PmUfiLythwNmfZR49ShJDX3/UQ+Fre4eu0OeSgRmFgmDHKtK0atAT1hw1miUlYb+k8=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:1f7046e8-c890-4ef2-9d7d-2ce6e5f48432,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release
+        _Ham,ACTION:release,TS:95
+X-CID-INFO: VERSION:1.1.10,REQID:1f7046e8-c890-4ef2-9d7d-2ce6e5f48432,OB:0,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS98
+        1B3D,ACTION:quarantine,TS:95
+X-CID-META: VersionHash:84eae18,CLOUDID:3a801e56-e800-47dc-8adf-0c936acf4f1b,C
+        OID:84f7351a45d3,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 8cbad9a6adbf41e3a311077df023b96f-20220831
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw02.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 167975469; Wed, 31 Aug 2022 14:51:58 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
+ Wed, 31 Aug 2022 14:51:57 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 31 Aug 2022 14:51:57 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v1] arm64: dts: mediatek: Fix build warnings of mt8173 vcodec nodes
+Date:   Wed, 31 Aug 2022 14:51:00 +0800
+Message-ID: <20220831065100.27722-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,RDNS_NONE,
+        SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,
+        URIBL_CSS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-31 at 14:14 +0800, Yupeng Li wrote:
-> Loongarch CSR register operation related interface, use the
-> interface defined=C2=A0 __builtin_loongarch_xxx instead.
-> Build kernel error messages like:
+Correct the phandle of power domain node referenced by vcodec nodes.
 
-It's likely because you are using a draft version of LoongArch GCC port.
-Wrapper functions like __csrrd_w has been there in larchintrin.h since
-the first day GCC port was merged upstream
-(https://gcc.gnu.org/r12-7881).
+arch/arm64/boot/dts/mediatek/mt8173.dtsi:1450.35-1471.5: Warning (power_domains_property): /soc/vcodec@18002000: Missing property '#power-domain-cells' in node /soc/syscon@10006000 or bad phandle (referred from power-domains[0])
+arch/arm64/boot/dts/mediatek/mt8173.dtsi:1502.35-1522.5: Warning (power_domains_property): /soc/vcodec@19002000: Missing property '#power-domain-cells' in node /soc/syscon@10006000 or bad phandle (referred from power-domains[0])
 
-A quick search shows IA64 and PowerPC also use GCC ia64intrin.h and
-spu_intrinsics.h, so the use of these wrappers are not forbidden in
-kernel source.
+Fixes: d3dfd4688574 ("arm64: dts: mediatek: Update mt81xx scpsys node to align with dt-bindings")
+Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+---
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Unless there is some new good reason for the change,
+diff --git a/arch/arm64/boot/dts/mediatek/mt8173.dtsi b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+index b4d48f8b7eeb..7640b5158ff9 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8173.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8173.dtsi
+@@ -1467,7 +1467,7 @@
+ 			clock-names = "venc_sel";
+ 			assigned-clocks = <&topckgen CLK_TOP_VENC_SEL>;
+ 			assigned-clock-parents = <&topckgen CLK_TOP_VCODECPLL>;
+-			power-domains = <&scpsys MT8173_POWER_DOMAIN_VENC>;
++			power-domains = <&spm MT8173_POWER_DOMAIN_VENC>;
+ 		};
+ 
+ 		jpegdec: jpegdec@18004000 {
+@@ -1518,7 +1518,7 @@
+ 			assigned-clocks = <&topckgen CLK_TOP_VENC_LT_SEL>;
+ 			assigned-clock-parents =
+ 				 <&topckgen CLK_TOP_VCODECPLL_370P5>;
+-			power-domains = <&scpsys MT8173_POWER_DOMAIN_VENC_LT>;
++			power-domains = <&spm MT8173_POWER_DOMAIN_VENC_LT>;
+ 		};
+ 	};
+ };
+-- 
+2.18.0
 
-Nacked-by: Xi Ruoyao <xry111@xry111.site>
-
->=20
-> =C2=A0 CALL=C2=A0=C2=A0=C2=A0 scripts/atomic/check-atomics.sh
-> =C2=A0 CC=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 arch/loongarch/kernel/asm-offsets=
-.s
-> In file included from ./arch/loongarch/include/asm/cpu-info.h:11,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 from ./arch/loongarch/include/asm/processor.h:13,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 from ./arch/loongarch/include/asm/thread_info.h:15=
-,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/linux/thread_info.h:60,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/asm-generic/current.h:5,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 from
-> ./arch/loongarch/include/generated/asm/current.h:1,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/linux/sched.h:12,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 from arch/loongarch/kernel/asm-offsets.c:8:
-> ./arch/loongarch/include/asm/loongarch.h: In function 'csr_read32':
-> ./arch/loongarch/include/asm/loongarch.h:232:9: error: implicit
-> declaration of function '__csrrd_w'; did you mean '__iocsrrd_w'? [-
-> Werror=3Dimplicit-function-declaration]
-> =C2=A0 return __csrrd_w(reg);
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __iocsrrd_w
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University

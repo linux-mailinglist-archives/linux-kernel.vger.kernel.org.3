@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBD65A8588
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 141935A8580
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232787AbiHaS1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:27:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58282 "EHLO
+        id S231653AbiHaS0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiHaSZq (ORCPT
+        with ESMTP id S232855AbiHaSZi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:25:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269E21F2C2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:21:57 -0700 (PDT)
+        Wed, 31 Aug 2022 14:25:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E15FC30B
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:21:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2998B82282
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 18:21:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D974C4314B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 93ADA61CE3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 18:21:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89F5FC4314A;
         Wed, 31 Aug 2022 18:21:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661970110;
-        bh=fmmGXrtft4WY+vYxlsPoch8NfKf9311WO6goU05GNWY=;
+        bh=ji7Ed4q5NuKbjIkgjEFzkBepKawEfl7hcBFRLDYPOOE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sKiFWYHWw3ttCgjlsyc2E1INvfoTWR9OpKuHkufgBVo5RJr1haye3k19z1zICIyDb
-         Y45L3NkcrTYqzl/LkYwzg5PEUkYcD805Z7uE2apsuloFYftTH4YQzhM7j/d3XNuoeg
-         MfL5xtC8p0wpAAX4Fs3nPbsVNVt7zWosCh7uyJS3Fad2BLZJWZokgEL4qUOSu70PDc
-         9RUgK9CLEwMyHj5aXhhiZSORjNQ6LdA+Kve3cAd59VQudoFtoQJ0AxO0HHReRvjiHM
-         2fuvLc4A7HqzuLtjUP63Xr8qhwsDIrDvVXgVDm0GuyUcYzk23lmoSRE2BdoTjM/Pr/
-         fdcXIe0stWfYA==
+        b=jH5dGoI7dwzUvb9xbHnxXkdaEdEXKojiLHWsoVR+4UKLEFsutoqcSf/aLlBTn1RAb
+         XZOagUdC7E/VQz6YnquoLWV/D2+MlmKScQrKDqT3qjrQ/FH2KttbbUby/gUxS03P6e
+         eTXw/oVMp4c8QrnBabSALBpCIxcbU0InjC4PTZRUrmhHAY9hHtdmAzBuLaWzmOjUHE
+         8BlFqmVmbRcTDFBm4f/kGBc4PdN2sVebVp74GBXYgxhi1cjwIdCi6vzsouqO8HONle
+         4hcGt+cwtSCcrjXVe19CN8J2Rrcqwn0bV1YUTPCnchrTq2zuqsCxrJh/nEIMFf0faX
+         CPPrAxV66jDDw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E09525C0A6B; Wed, 31 Aug 2022 11:21:49 -0700 (PDT)
+        id E24F55C0AAE; Wed, 31 Aug 2022 11:21:49 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@fb.com, w@lwt.eu,
         Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH nolibc 08/18] selftests/nolibc: exit with poweroff on success when getpid() == 1
-Date:   Wed, 31 Aug 2022 11:21:38 -0700
-Message-Id: <20220831182148.2698489-10-paulmck@kernel.org>
+Subject: [PATCH nolibc 09/18] selftests/nolibc: on x86, support exiting with isa-debug-exit
+Date:   Wed, 31 Aug 2022 11:21:39 -0700
+Message-Id: <20220831182148.2698489-11-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220831182113.GA2697286@paulmck-ThinkPad-P17-Gen-1>
 References: <20220831182113.GA2697286@paulmck-ThinkPad-P17-Gen-1>
@@ -59,43 +59,39 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Willy Tarreau <w@1wt.eu>
 
-The idea is to ease automated testing under qemu. If the test succeeds
-while running as PID 1, indicating the system was booted with init=/test,
-let's just power off so that qemu can exit with a successful code. In
-other situations it will exit and provoke a panic, which may be caught
-for example with CONFIG_PVPANIC.
+QEMU, when started with "-device isa-debug-exit -no-reboot" will exit
+with status code 2N+1 when N is written to 0x501. This is particularly
+convenient for automated tests but this is not portable. As such we
+only enable this on x86_64 when pid==1. In addition, this requires an
+ioperm() call but in order not to have to define arch-specific syscalls
+we just perform the syscall by hand there.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index b928f099431f7..291d96bfd7c12 100644
+index 291d96bfd7c12..eeb254749239c 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -626,6 +626,20 @@ int main(int argc, char **argv, char **envp)
+@@ -638,6 +638,15 @@ int main(int argc, char **argv, char **envp)
+ 		printf("Leaving init with final status: %d\n", !!ret);
+ 		if (ret == 0)
+ 			reboot(LINUX_REBOOT_CMD_POWER_OFF);
++#if defined(__x86_64__)
++		/* QEMU started with "-device isa-debug-exit -no-reboot" will
++		 * exit with status code 2N+1 when N is written to 0x501. We
++		 * hard-code the syscall here as it's arch-dependent.
++		 */
++		else if (my_syscall3(__NR_ioperm, 0x501, 1, 1) == 0)
++			asm volatile ("outb %%al, %%dx" :: "d"(0x501), "a"(0));
++		/* if it does nothing, fall back to the regular panic */
++#endif
  	}
  
- 	printf("Total number of errors: %d\n", ret);
-+
-+	if (getpid() == 1) {
-+		/* we're running as init, there's no other process on the
-+		 * system, thus likely started from a VM for a quick check.
-+		 * Exiting will provoke a kernel panic that may be reported
-+		 * as an error by Qemu or the hypervisor, while stopping
-+		 * cleanly will often be reported as a success. This allows
-+		 * to use the output of this program for bisecting kernels.
-+		 */
-+		printf("Leaving init with final status: %d\n", !!ret);
-+		if (ret == 0)
-+			reboot(LINUX_REBOOT_CMD_POWER_OFF);
-+	}
-+
  	printf("Exiting with status %d\n", !!ret);
- 	return !!ret;
- }
 -- 
 2.31.1.189.g2e36527f23
 

@@ -2,127 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B1F5A723A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:07:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC6565A723E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:10:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbiHaAH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43948 "EHLO
+        id S230502AbiHaAKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:10:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbiHaAHZ (ORCPT
+        with ESMTP id S229740AbiHaAKJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:07:25 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1867F0A6
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:07:24 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id q14-20020a6557ce000000b0041da9c3c244so6236960pgr.22
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:07:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc;
-        bh=ibGBauM7dB+b2q4t6hN7wBjsjDMwsLdLonLhHf6UFbI=;
-        b=j/esEMEECs5PPWq+WEOufYXO0eWpHu6bcK/vZ9znIN1jActMDhRPM6oJZLrwYix5uW
-         KnmP4wBkp62lRCHYn9fyUENvwf7oKtUJCs71aKfIPTtw5m+0p8s7M0jKYzNjFBhZzkzr
-         nivtj2rGjoN89JIkZ8PWVRIT5MvNonhnZgcG2NjQ2RkavzqN8N83E6oSIp6sC3+J2IFR
-         SATvMwTEtF3kXRNlbONjHLcai/Qo/sF7v5D94IhiRTaI5/kuGpjwTljuGaxD+g6hYc3b
-         vrsxL/ks2TVT/oPkRDalO98uttR7zPQm8NozQJMsCYAHuQp/DRUWC5HV+RRD75AirGrG
-         VvpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc;
-        bh=ibGBauM7dB+b2q4t6hN7wBjsjDMwsLdLonLhHf6UFbI=;
-        b=wXz5PUpUu3Twm0m8mAPoPiom5+VMtck5vWPpWRNqCFh/GnjMdtIJampEAeSRpgL6es
-         8aiCTbYeWmySxB/BoaOGvAxutdIrRLt5vd3LPxjpF82g9rCJDLU8ehcWDUeOdPkDv67G
-         p38U62lR7YdK8wFxJl2Nyet2FqDryYy0KusvS6yuHbLrzTR4g2QJGqx1oDS1OPtYm+x6
-         5uDqDe+3grKSHgvZsVNcp0GNirXNCcziHSutpYXcWIGnvI+RkV2zK09qIWu2JnousFGD
-         PlRAp1+ih+VL/7P87yIbgfzSlGL/gSdOEl5oRZqDLtSAOGGzAcN/W+ambhXJpEELVVJd
-         lxZQ==
-X-Gm-Message-State: ACgBeo2ALkShezrgHtZYmSfbNIxPdJTxyY7/m23BQQakbRSIL8qjIrsa
-        H7q45oivU3aU+/oqPawZU8PosLUxuN0=
-X-Google-Smtp-Source: AA6agR6/bWnv23ydQU/ZUAtt/EE/KOKYUSU+9s4gBIkF4/781UMMDPK9sKLq+MjOlyHSuaze7+7KpZiBZF0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:1b66:b0:1fa:bbb5:8a5 with SMTP id
- q93-20020a17090a1b6600b001fabbb508a5mr530364pjq.216.1661904443892; Tue, 30
- Aug 2022 17:07:23 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 31 Aug 2022 00:07:21 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220831000721.4066617-1-seanjc@google.com>
-Subject: [PATCH] KVM: nVMX: Reword comments about generating nested CR0/4 read shadows
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Wang <wangborong@cdjrlc.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 30 Aug 2022 20:10:09 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FE31FCC0;
+        Tue, 30 Aug 2022 17:10:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661904608; x=1693440608;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ycqr6beUoX/Dkc6cppmDzo9xRaG5F1v6sGpb+uApczQ=;
+  b=gefjYgJBGkPdtNEw+b4lSuvdrtOSsLwtXY6uT/u18887roZw6Rp5Gd4V
+   JPqXRn8iMueEYjS6+0cP2QMyKQcfUhgD8pO53PfQm/bNPLJjchbOTdC0I
+   Tmsp57+DHQa/RQqeZnuyf1TzhvbPHCjoqQnnfaszKsqXDKtZYzzuoVJ4O
+   Q/PGyLrzLU0la5dhswhhWdFjViiaZLeFYx7sZMGTitJcwgwsPsQSJBZJP
+   pjFVg/w3tLHalGH4qTHbVc1NIsu6fjfGX2yfn305Uysmmj4znP7ljmEq/
+   8A1gMqStjb/yBtPxeznHJvmjKlL0NcDUY7MtSDicVPoyTTIYQsLwqchTf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="357052788"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="357052788"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 17:10:08 -0700
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="641625500"
+Received: from skanpuri-mobl1.amr.corp.intel.com (HELO desk) ([10.212.18.137])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 17:10:07 -0700
+Date:   Tue, 30 Aug 2022 17:10:06 -0700
+From:   Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        antonio.gomez.iglesias@linux.intel.com,
+        Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Subject: [PATCH] x86/bugs: Fix retbleed reporting "Vulnerable" when
+ spectre_v2=ibrs
+Message-ID: <bb49bdae73c993b8d7e68a8652116dc9512769a9.1661904261.git.pawan.kumar.gupta@linux.intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.3 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reword the comments that (attempt to) document nVMX's overrides of the
-CR0/4 read shadows for L2 after calling vmx_set_cr0/4().  The important
-behavior that needs to be documented is that KVM needs to override the
-shadows to account for L1's masks even though the shadows are set by the
-common helpers (and that setting the shadows first would result in the
-correct shadows being clobbered).
+With cmdline "spectre_v2=ibrs retbleed=off" sysfs reports vulnerable to
+retbleed:
 
-This also fixes a repeated "we we" reported by Jason.
+  $ cat /sys/devices/system/cpu/vulnerabilities/retbleed
+  Vulnerable
 
-Cc: Jason Wang <wangborong@cdjrlc.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Intel CPUs when IBRS or Enhanced IBRS is enabled, system is not
+vulnerable to retbleed.
+
+Even if a user has passed retbleed=off, mitigation for retbleed could be
+deployed as part of spectre_v2 mitigation. Fix retbleed reporting for
+such a case.
+
+Fixes: 6ad0ad2bf8a6 ("x86/bugs: Report Intel retbleed vulnerability")
+Reported-by: Antonio Gomez Iglesias <antonio.gomez.iglesias@linux.intel.com>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: stable@vger.kernel.org
 ---
- arch/x86/kvm/vmx/nested.c | 9 +++------
- arch/x86/kvm/vmx/nested.h | 7 ++++---
- 2 files changed, 7 insertions(+), 9 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |  4 +++-
+ arch/x86/kernel/cpu/bugs.c                    | 19 +++++++++++--------
+ 2 files changed, 14 insertions(+), 9 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index ddd4367d4826..12f57a99f725 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -2566,12 +2566,9 @@ static int prepare_vmcs02(struct kvm_vcpu *vcpu, struct vmcs12 *vmcs12,
- 		nested_ept_init_mmu_context(vcpu);
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 426fa892d311..70447979111c 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -5280,7 +5280,9 @@
+ 			cessors that support it, and mitigate SMT on processors
+ 			that don't.
  
- 	/*
--	 * This sets GUEST_CR0 to vmcs12->guest_cr0, possibly modifying those
--	 * bits which we consider mandatory enabled.
--	 * The CR0_READ_SHADOW is what L2 should have expected to read given
--	 * the specifications by L1; It's not enough to take
--	 * vmcs12->cr0_read_shadow because on our cr0_guest_host_mask we we
--	 * have more bits than L1 expected.
-+	 * Override the CR0/CR4 read shadows after setting the effective guest
-+	 * CR0/CR4.  The common helpers also set the shadows, but they don't
-+	 * account for vmcs12's cr0/4_guest_host_mask.
- 	 */
- 	vmx_set_cr0(vcpu, vmcs12->guest_cr0);
- 	vmcs_writel(CR0_READ_SHADOW, nested_read_cr0(vmcs12));
-diff --git a/arch/x86/kvm/vmx/nested.h b/arch/x86/kvm/vmx/nested.h
-index 88b00a7359e4..8b700ab4baea 100644
---- a/arch/x86/kvm/vmx/nested.h
-+++ b/arch/x86/kvm/vmx/nested.h
-@@ -79,9 +79,10 @@ static inline bool nested_ept_ad_enabled(struct kvm_vcpu *vcpu)
+-			off          - no mitigation
++			off          - no mitigation. Overridden when
++				       spectre_v2 mitigation already mitigates
++				       retbleed.
+ 			auto         - automatically select a migitation
+ 			auto,nosmt   - automatically select a mitigation,
+ 				       disabling SMT if necessary for
+diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
+index da7c361f47e0..02f4e0a2f725 100644
+--- a/arch/x86/kernel/cpu/bugs.c
++++ b/arch/x86/kernel/cpu/bugs.c
+@@ -778,6 +778,14 @@ early_param("nospectre_v1", nospectre_v1_cmdline);
+ static enum spectre_v2_mitigation spectre_v2_enabled __ro_after_init =
+ 	SPECTRE_V2_NONE;
+ 
++static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
++{
++	return mode == SPECTRE_V2_IBRS ||
++	       mode == SPECTRE_V2_EIBRS ||
++	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
++	       mode == SPECTRE_V2_EIBRS_LFENCE;
++}
++
+ #undef pr_fmt
+ #define pr_fmt(fmt)     "RETBleed: " fmt
+ 
+@@ -856,6 +864,9 @@ static void __init retbleed_select_mitigation(void)
+ 
+ 	switch (retbleed_cmd) {
+ 	case RETBLEED_CMD_OFF:
++		if (spectre_v2_in_ibrs_mode(spectre_v2_enabled) &&
++		    boot_cpu_data.x86_vendor == X86_VENDOR_INTEL)
++			goto do_cmd_auto;
+ 		return;
+ 
+ 	case RETBLEED_CMD_UNRET:
+@@ -1095,14 +1106,6 @@ spectre_v2_parse_user_cmdline(void)
+ 	return SPECTRE_V2_USER_CMD_AUTO;
  }
  
- /*
-- * Return the cr0 value that a nested guest would read. This is a combination
-- * of the real cr0 used to run the guest (guest_cr0), and the bits shadowed by
-- * its hypervisor (cr0_read_shadow).
-+ * Return the cr0/4 value that a nested guest would read. This is a combination
-+ * of L1's "real" cr0 used to run the guest (guest_cr0), and the bits shadowed
-+ * by the L1 hypervisor (cr0_read_shadow).  KVM must emulate CPU behavior as
-+ * the value+mask loaded into vmcs02 may not match the vmcs12 fields.
-  */
- static inline unsigned long nested_read_cr0(struct vmcs12 *fields)
+-static inline bool spectre_v2_in_ibrs_mode(enum spectre_v2_mitigation mode)
+-{
+-	return mode == SPECTRE_V2_IBRS ||
+-	       mode == SPECTRE_V2_EIBRS ||
+-	       mode == SPECTRE_V2_EIBRS_RETPOLINE ||
+-	       mode == SPECTRE_V2_EIBRS_LFENCE;
+-}
+-
+ static void __init
+ spectre_v2_user_select_mitigation(void)
  {
 
-base-commit: 372d07084593dc7a399bf9bee815711b1fb1bcf2
+base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
 -- 
-2.37.2.672.g94769d06f0-goog
+2.37.2
+
 

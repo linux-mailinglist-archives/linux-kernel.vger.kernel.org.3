@@ -2,172 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25F6C5A74F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 06:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDF95A74A8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 06:04:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231625AbiHaEXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 00:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42112 "EHLO
+        id S229913AbiHaEEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 00:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230350AbiHaEX1 (ORCPT
+        with ESMTP id S229457AbiHaEEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 00:23:27 -0400
-X-Greylist: delayed 9861 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 21:23:26 PDT
-Received: from dispatch1-us1.ppe-hosted.com (dispatch1-us1.ppe-hosted.com [67.231.154.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE142E4E;
-        Tue, 30 Aug 2022 21:23:26 -0700 (PDT)
-Received: from dispatch1-us1.ppe-hosted.com (localhost.localdomain [127.0.0.1])
-        by dispatch1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 70EC524B059;
-        Tue, 30 Aug 2022 22:16:28 +0000 (UTC)
-X-Virus-Scanned: Proofpoint Essentials engine
-Received: from mx1-us1.ppe-hosted.com (unknown [10.110.51.24])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTPS id CD4B1A0068;
-        Tue, 30 Aug 2022 22:16:26 +0000 (UTC)
-Received: from mail3.candelatech.com (mail2.candelatech.com [208.74.158.173])
-        by mx1-us1.ppe-hosted.com (PPE Hosted ESMTP Server) with ESMTP id 68CB63C007B;
-        Tue, 30 Aug 2022 22:16:25 +0000 (UTC)
-Received: from [192.168.100.195] (50-251-239-81-static.hfc.comcastbusiness.net [50.251.239.81])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by mail3.candelatech.com (Postfix) with ESMTPSA id 8DFE413C2B0;
-        Tue, 30 Aug 2022 15:16:24 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail3.candelatech.com 8DFE413C2B0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=candelatech.com;
-        s=default; t=1661897784;
-        bh=lSb6iPlm/e00kQHUQGYl6VDRSpB7b+OgWRMKI9nT3uU=;
-        h=Subject:To:Cc:References:From:Date:In-Reply-To:From;
-        b=CP3ZuQEG4SgFmdfJdIVeZc0bTNf4qlGF8he8eFS1a4zwosC7aG/QtHDE64dPnl7Kx
-         1p4iZp4zW85Wt1Ln6PXqCh7R5DSv+Ov5Zkp2zDGjC/9WFa5uwhRs1umjDp2r9cdZ33
-         ZwRzmX6mUxYi3CGyPC75afd2uHxfYR/7DgzMG08s=
-Subject: Re: [PATCH 5.4 182/389] PCI/portdrv: Dont disable AER reporting in
- get_port_device_capability()
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, bjorn@helgaas.com,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        Stefan Roese <sr@denx.de>, Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Yao Hongbo <yaohongbo@linux.alibaba.com>,
-        Naveen Naidu <naveennaidu479@gmail.com>,
-        Sasha Levin <sashal@kernel.org>
-References: <20220823080115.331990024@linuxfoundation.org>
- <20220823080123.228828362@linuxfoundation.org>
- <CABhMZUVycsyy76j2Z=K+C6S1fwtzKE1Lx2povXKfB80o9g0MtQ@mail.gmail.com>
- <YwXH/l37HaYQD66B@kroah.com>
- <47b775c5-57fa-5edf-b59e-8a9041ffbee7@candelatech.com>
- <20220830205832.g3lyysmgkarijkvj@pali>
- <00735f18-11f9-c6c6-4abf-002d378957df@candelatech.com>
- <20220830215532.6nnl6d4cfg55dmcl@pali>
-From:   Ben Greear <greearb@candelatech.com>
-Organization: Candela Technologies
-Message-ID: <370dee6c-919a-2f98-1404-a3feda14d1ba@candelatech.com>
-Date:   Tue, 30 Aug 2022 15:16:24 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Wed, 31 Aug 2022 00:04:52 -0400
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A0FE05;
+        Tue, 30 Aug 2022 21:04:51 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id q63so12452509pga.9;
+        Tue, 30 Aug 2022 21:04:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Ugy18ngp8TGo8D4YXWwazm/ISYgDkRHB79Dqf1WUU1E=;
+        b=M1p1G/l9omHGz7+ZYzWGcQe09vJ+q0Xm8uTcUW0CBhjcogr7KUbjsSb+/QQaHwzgJN
+         oND36CdAyR1/vQO86AdcWW6xuNOTwjdQRjB5i9ap7YaiX/g1esispDLT6nDWBr6mQSWf
+         ZeWayjdF4kcvpIjOOxWYj+19t0WMva53pbhvf87QJwm5NtM/zMgbNBRun5zbOAvl85Wh
+         uKkoeaNXMbp9jIXlrZUa8v4jvAWTOGAI/WV1Qep9Eakm5pkXoWJPVs4fHzMg/npgeqY0
+         QJ8LHygTzC4kdtyHgHSnh7mZb94x5V691lLIqT0u+30+8SjgmBBjY82g8RMWqghMuD7x
+         8z4w==
+X-Gm-Message-State: ACgBeo1hILgJuL6fT6ctMWwSBQygiSeSySBjskJCoSFF4FW42qtZD5hK
+        nQkD28z+0UJbqt0x8IZEipk=
+X-Google-Smtp-Source: AA6agR6w+lV3se8EUuvDlebbruOsx7Yf3qQA+5w1OqLzOgB2LQx/vGe5qmKXrAAZgOyUlc07yXPr+w==
+X-Received: by 2002:a65:6b8a:0:b0:42b:1eca:eef1 with SMTP id d10-20020a656b8a000000b0042b1ecaeef1mr20193646pgw.205.1661918690353;
+        Tue, 30 Aug 2022 21:04:50 -0700 (PDT)
+Received: from [172.20.0.236] ([12.219.165.6])
+        by smtp.gmail.com with ESMTPSA id s15-20020a170902ea0f00b0015e8d4eb1f7sm10348441plg.65.2022.08.30.21.04.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 21:04:49 -0700 (PDT)
+Message-ID: <ca74a481-3e80-9a7a-9db7-d766a16d8fd6@acm.org>
+Date:   Tue, 30 Aug 2022 21:04:47 -0700
 MIME-Version: 1.0
-In-Reply-To: <20220830215532.6nnl6d4cfg55dmcl@pali>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] RDMA/srp: Set scmnd->result only when scmnd is not NULL
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-MDID: 1661897787-3FcEtP5UB8oZ
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>
+Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220831014730.17566-1-yangx.jy@fujitsu.com>
+ <5daac9db-2b34-fbe5-a891-8ecf77fbe46f@acm.org>
+ <bff7565b-7159-e8f4-e8f5-711994f95056@fujitsu.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <bff7565b-7159-e8f4-e8f5-711994f95056@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/30/22 2:55 PM, Pali Rohár wrote:
-> On Tuesday 30 August 2022 14:28:14 Ben Greear wrote:
->> On 8/30/22 1:58 PM, Pali Rohár wrote:
->>> On Tuesday 30 August 2022 13:47:48 Ben Greear wrote:
->>>> On 8/23/22 11:41 PM, Greg Kroah-Hartman wrote:
->>>>> On Tue, Aug 23, 2022 at 07:20:14AM -0500, Bjorn Helgaas wrote:
->>>>>> On Tue, Aug 23, 2022, 6:35 AM Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>>>> wrote:
->>>>>>
->>>>>>> From: Stefan Roese <sr@denx.de>
->>>>>>>
->>>>>>> [ Upstream commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 ]
->>>>>>>
->>>>>>
->>>>>> There's an open regression related to this commit:
->>>>>>
->>>>>> https://bugzilla.kernel.org/show_bug.cgi?id=216373
->>>>>
->>>>> This is already in the following released stable kernels:
->>>>> 	5.10.137 5.15.61 5.18.18 5.19.2
->>>>>
->>>>> I'll go drop it from the 4.19 and 5.4 queues, but when this gets
->>>>> resolved in Linus's tree, make sure there's a cc: stable on the fix so
->>>>> that we know to backport it to the above branches as well.  Or at the
->>>>> least, a "Fixes:" tag.
->>>>
->>>> This is still in 5.19.5.  We saw some funny iwlwifi crashes in 5.19.3+
->>>> that we did not see in 5.19.0+.  I just bisected the scary looking AER errors to this
->>>> patch, though I do not know for certain if it causes the iwlwifi related crashes yet.
->>>>
->>>> In general, from reading the commit msg, this patch doesn't seem to be a great candidate
->>>> for stable in general.  Does it fix some important problem?
->>>>
->>>> In case it helps, here is example of what I see in dmesg.  The kernel crashes in iwlwifi
->>>> had to do with rx messages from the firmware, and some warnings lead me to believe that
->>>> pci messages were slow coming back and/or maybe duplicated.  So maybe this AER patch changes
->>>> timing or otherwise screws up the PCI adapter boards we use...
->>>
->>>   From that log I have feeling that issue is in that intel wifi card and
->>> it was there also before that commit. Card is crashing (or something
->>> other happens on PCIe bus) and because kernel had disabled Error
->>> Reporting for this card, nobody spotted any issue. And that commit just
->>> opened eye to kernel to see those errors.
->>>
->>> I think this issue should be reported to intel wifi card developers,
->>> maybe they comment it, why card is reporting errors.
->>
->> My main concern is not that AER messages started showing up, but that there
->> started being kernel NPE and WARNINGS showing up sometime after 5.19.0.
->>
->> Possibly this AER thing is mis-direction and the real bug is elsewhere,
->> but since the bugzilla also indicated (different) driver crashes, then
->> I am suspicious this changes things more significantly, at least in a subset
->> of hardware out there.
-> 
-> Yea, of course, this is something needed to investigate.
-> 
-> Anyway, do you see driver crashes? Or just these AER errors? And are
-> your PCIe cards working, or after seeing these messages in dmesg they
-> stopped working? It is needed to know if you are just spammed by tons of
-> lines in dmesg and otherwise everything works. Or if after AER errors
-> your PCIe devices stop working and rebooting system is required.
+On 8/30/22 20:16, yangx.jy@fujitsu.com wrote:
+> Sorry, I didn't make the right fix. I will send v2 patch.
+> I think scmnd may be set to NULL after srp_claim_req() is called and
+> then setting scmnd->result can trigger the NULL pointer dereference.
 
-We did see higher frequency of weird crashes (accessing null-ish pointer) after upgrading to 5.19.3,
-I am building kernel now with 5.19.5 and that AER patch reverted.  We will
-test to see if that solves the crashes.
+Something like this untested patch may be what you are looking for:
 
->> Also, any idea what this error in my logs is actually indicating?
-> 
-> Your PCIe controller received non-fatal, but uncorrected error. There is
-> also indication of Unsupported Request Completion Status. Unsupported
-> Request is generated by PCIe device when controller / host / kernel try
-> to do something which is not supported by device; pretty generic error.
-> PCIe base spec describe lot of scenarios when card should return this
-> error. Maybe some more detailed information are in TLP Header hexdump,
-> but I cannot decode it now.
-> 
-> Basically it is PCIe card driver who could know how fatal it is that
-> issue and how to recover from it. But as you can see intel wifi driver
-> does not implement that callback.
+diff --git a/drivers/infiniband/ulp/srp/ib_srp.c 
+b/drivers/infiniband/ulp/srp/ib_srp.c
+index 7720ea270ed8..d7f69e593a63 100644
+--- a/drivers/infiniband/ulp/srp/ib_srp.c
++++ b/drivers/infiniband/ulp/srp/ib_srp.c
+@@ -1961,7 +1961,8 @@ static void srp_process_rsp(struct srp_rdma_ch 
+*ch, struct srp_rsp *rsp)
+  		if (scmnd) {
+  			req = scsi_cmd_priv(scmnd);
+  			scmnd = srp_claim_req(ch, req, NULL, scmnd);
+-		} else {
++		}
++		if (!scmnd) {
+  			shost_printk(KERN_ERR, target->scsi_host,
+  				     "Null scmnd for RSP w/tag %#016llx received on ch %td / QP 
+%#x\n",
+  				     rsp->tag, ch - target->ch, ch->qp->qp_num);
 
-Odds of me getting a good answer on that are pretty small.
-
-Thanks,
-Ben
-
--- 
-Ben Greear <greearb@candelatech.com>
-Candela Technologies Inc  http://www.candelatech.com
-
+Bart.

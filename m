@@ -2,63 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 561025A7A10
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 354DF5A7A16
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:23:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbiHaJVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60770 "EHLO
+        id S230310AbiHaJW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiHaJVY (ORCPT
+        with ESMTP id S229658AbiHaJWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:21:24 -0400
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1170F5C971
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:21:23 -0700 (PDT)
-Received: by mail-wm1-f44.google.com with SMTP id k17so7028733wmr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:21:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=bIvDoq3XyZfHM3iEW7Cnp9MYBD396C1ne8K2ufHuQOQ=;
-        b=AaICuD/GR0Hip7+UOpbUMmhRV/2hM4yTuslw1BXR+/eVVOH2uQDGsiny1BL7ui2qvE
-         ZkEarK4jhQJy+7Tev2PPSHj0iMNCXPvehBiKpESOnjwHOrZHg71Vj1uQ+Ji6BDtB+hl/
-         EZ386d+8dyhY2MUll9nr8lA3X+XwqpXTAVw7LJwRUgFBPRS3SsBq+qhJ9LuixR52DJQG
-         LBU2kRkKxNNUP3ZBgz/EnvaDRqohbgoRrJseq3gPLPbReO4jSF7IutzMDgKSpW7Z51ur
-         uj47SFNyJ19IXPXdY7HntSs1XB3952m0s67dBvKBGE8v0S/SKpU2aBi5mmKmhswpcptS
-         2Y9Q==
-X-Gm-Message-State: ACgBeo3PdmTDRyoGPl4uGr15UOTzcB5nofbQBfZ+FXtmzVXEAEXfJgUr
-        0cQnao1G9LXeLHQoHMfynuY=
-X-Google-Smtp-Source: AA6agR70s/3uW7IVp0if83aaZwpwzndLc2myCrg6s/jXc/5klLYB8OCrFtgOYgMQGFEssx5q1J1R7A==
-X-Received: by 2002:a05:600c:20f:b0:3a5:a785:7f2a with SMTP id 15-20020a05600c020f00b003a5a7857f2amr1355720wmi.94.1661937681116;
-        Wed, 31 Aug 2022 02:21:21 -0700 (PDT)
-Received: from [10.100.102.14] (46-116-236-159.bb.netvision.net.il. [46.116.236.159])
-        by smtp.gmail.com with ESMTPSA id j6-20020a056000124600b002258956f373sm11524931wrx.95.2022.08.31.02.21.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 02:21:20 -0700 (PDT)
-Message-ID: <c12677fe-a4b9-0ee4-546d-69bfd482e13a@grimberg.me>
-Date:   Wed, 31 Aug 2022 12:21:18 +0300
+        Wed, 31 Aug 2022 05:22:55 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E4C0BE0B;
+        Wed, 31 Aug 2022 02:22:52 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.228])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MHdqS5Q52z9v7Yy;
+        Wed, 31 Aug 2022 17:17:24 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwDnY15BKA9j0y0QAA--.24163S2;
+        Wed, 31 Aug 2022 10:22:22 +0100 (CET)
+Message-ID: <e3c7321ed035f00e8e70f832915065ea67d9ef3b.camel@huaweicloud.com>
+Subject: Re: [PATCH v14 02/12] bpf: Move dynptr type check to
+ is_dynptr_type_expected()
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     Joanne Koong <joannelkoong@gmail.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
+        keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Wed, 31 Aug 2022 11:22:05 +0200
+In-Reply-To: <CAJnrk1bL2MSN81ORrkm9JcFQh3qsJ1jVGXEycSjyhk+Jv_Bz2Q@mail.gmail.com>
+References: <20220830161716.754078-1-roberto.sassu@huaweicloud.com>
+         <20220830161716.754078-3-roberto.sassu@huaweicloud.com>
+         <CAJnrk1bL2MSN81ORrkm9JcFQh3qsJ1jVGXEycSjyhk+Jv_Bz2Q@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/1] nvmet-tcp: Fix NULL pointer dereference during
- release
-Content-Language: en-US
-To:     zhenwei pi <pizhenwei@bytedance.com>, hch@lst.de
-Cc:     kch@nvidia.com, linux-nvme@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220831013402.514055-1-pizhenwei@bytedance.com>
- <20220831013402.514055-2-pizhenwei@bytedance.com>
-From:   Sagi Grimberg <sagi@grimberg.me>
-In-Reply-To: <20220831013402.514055-2-pizhenwei@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+X-CM-TRANSID: GxC2BwDnY15BKA9j0y0QAA--.24163S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3XFyxKw4xAFy5AF15XF4fKrg_yoW7AFWUpa
+        n7GayUXF4ktF42vw17tF4DAFy5KrW8WrWrCrZYva40yFn7Zr9xZF15Kr17Wr9YkFyDCw4f
+        Z340vFZ8Zw15AFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgABBF1jj3515gABsa
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,125 +73,179 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/31/22 04:34, zhenwei pi wrote:
-> nvmet-tcp frees CMD buffers in nvmet_tcp_uninit_data_in_cmds(),
-> and waits the inflight IO requests in nvmet_sq_destroy(). During wait
-> the inflight IO requests, the callback nvmet_tcp_queue_response()
-> is called from backend after IO complete, this leads a typical
-> Use-After-Free issue like this:
+On Tue, 2022-08-30 at 09:46 -0700, Joanne Koong wrote:
+> On Tue, Aug 30, 2022 at 9:18 AM Roberto Sassu
+> <roberto.sassu@huaweicloud.com> wrote:
+> > From: Roberto Sassu <roberto.sassu@huawei.com>
+> > 
+> > Move dynptr type check to is_dynptr_type_expected() from
+> > is_dynptr_reg_valid_init(), so that callers can better determine
+> > the cause
+> > of a negative result (dynamic pointer not valid/initialized,
+> > dynamic
+> > pointer of the wrong type).
+> > 
+> > Also, splitting makes the code more readable, since checking the
+> > dynamic
+> > pointer type is not necessarily related to validity and
+> > initialization.
 > 
->   BUG: kernel NULL pointer dereference, address: 0000000000000008
->   #PF: supervisor read access in kernel mode
->   #PF: error_code(0x0000) - not-present page
->   PGD 0 P4D 0
->   Oops: 0000 [#1] PREEMPT SMP NOPTI
->   CPU: 14 PID: 207 Comm: kworker/14:1H Kdump: loaded Tainted: G            E      6.0.0-rc2.bm.1-amd64 #12
->   Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
->   Workqueue: nvmet_tcp_wq nvmet_tcp_io_work [nvmet_tcp]
->   RIP: 0010:shash_ahash_digest+0x2b/0x110
->   Code: 1f 44 00 00 41 57 41 56 41 55 41 54 55 48 89 fd 53 48 89 f3 48 83 ec 08 44 8b 67 30 45 85 e4 74 1c 48 8b 57 38 b8 00 10 00 00 <44> 8b 7a 08 44 29 f8 39 42 0c 0f 46 42 0c 41 39 c4 76 43 48 8b 03
->   RSP: 0018:ffffc900006e3dd8 EFLAGS: 00010206
->   RAX: 0000000000001000 RBX: ffff888104ac1650 RCX: 0000000000000000
->   RDX: 0000000000000000 RSI: ffff888104ac1650 RDI: ffff888104ac1600
->   RBP: ffff888104ac1600 R08: ffff8881073980c8 R09: ffff8881057798b8
->   R10: 8080808080808080 R11: 0000000000000000 R12: 0000000000001000
->   R13: 0000000000000000 R14: ffff88810601a1cc R15: ffff888107398000
->   FS:  0000000000000000(0000) GS:ffff88823fd80000(0000) knlGS:0000000000000000
->   CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->   CR2: 0000000000000008 CR3: 000000010a8e8000 CR4: 0000000000350ee0
->   Call Trace:
->    <TASK>
->    nvmet_tcp_io_work+0xa1c/0xb1c [nvmet_tcp]
->    ? __switch_to+0x106/0x420
->    process_one_work+0x1ae/0x380
->    ? process_one_work+0x380/0x380
->    worker_thread+0x30/0x360
->    ? process_one_work+0x380/0x380
->    kthread+0xe6/0x110
->    ? kthread_complete_and_exit+0x20/0x20
->    ret_from_fork+0x1f/0x30
+> I think it'd be helpful to also include that btf will be using these
+> functions, which seems like the main motivation behind why this
+> change
+> is needed.
+
+Ok, added.
+
+> > Split the validity/initialization and dynamic pointer type check
+> > also in
+> > the verifier, and adjust the expected error message in the test (a
+> > test for
+> > an unexpected dynptr type passed to a helper cannot be added due to
+> > missing
+> > suitable helpers, but this case has been tested manually).
 > 
-> Suggested by Sagi, separate nvmet_tcp_uninit_data_in_cmds() into two
-> steps:
->    uninit req          <- new step 1
->    nvmet_sq_destroy();
->    free CMD buffers    <- new step 2
+> The bpf_ringbuf_submit_dynptr() and bpf_ringbuf_discard_dynptr()
+> helpers take in only ringbuf-type dynptrs, so either of these would
+> work for testing the case where an incorrect dynptr type is passed in
+> :)
+
+Uhm, that didn't work.
+
+If I initialize a local dynptr, and call bpf_ringbuf_submit_dynptr(), I
+get:
+
+arg 1 is an unacquired reference
+
+The only way to make this work was to create a custom helper, with
+OBJ_RELEASE removed.
+
+> > Cc: Joanne Koong <joannelkoong@gmail.com>
+> > Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> > ---
+> >  kernel/bpf/verifier.c                         | 35 ++++++++++++++-
+> > ----
+> >  .../testing/selftests/bpf/prog_tests/dynptr.c |  2 +-
+> >  2 files changed, 28 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> > index 0194a36d0b36..1b913db252a3 100644
+> > --- a/kernel/bpf/verifier.c
+> > +++ b/kernel/bpf/verifier.c
+> > @@ -779,8 +779,8 @@ static bool is_dynptr_reg_valid_uninit(struct
+> > bpf_verifier_env *env, struct bpf_
+> >         return true;
+> >  }
+> > 
+> > -static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+> > struct bpf_reg_state *reg,
+> > -                                    enum bpf_arg_type arg_type)
+> > +static bool is_dynptr_reg_valid_init(struct bpf_verifier_env *env,
+> > +                                    struct bpf_reg_state *reg)
+> >  {
+> >         struct bpf_func_state *state = func(env, reg);
+> >         int spi = get_spi(reg->off);
+> > @@ -796,11 +796,24 @@ static bool is_dynptr_reg_valid_init(struct
+> > bpf_verifier_env *env, struct bpf_re
+> >                         return false;
+> >         }
+> > 
+> > +       return true;
+> > +}
+> > +
+> > +static bool is_dynptr_type_expected(struct bpf_verifier_env *env,
+> > +                                   struct bpf_reg_state *reg,
+> > +                                   enum bpf_arg_type arg_type)
+> > +{
+> > +       struct bpf_func_state *state = func(env, reg);
+> > +       int spi = get_spi(reg->off);
+> > +       enum bpf_dynptr_type dynptr_type;
 > 
-> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
-> ---
->   drivers/nvme/target/tcp.c | 22 ++++++++++++++++++----
->   1 file changed, 18 insertions(+), 4 deletions(-)
+> nit: the above 2 lines should be swapped to maintain reverse
+> christmas
+> tree order of declarations
+
+Ok.
+
+Thanks
+
+Roberto
+
 > 
-> diff --git a/drivers/nvme/target/tcp.c b/drivers/nvme/target/tcp.c
-> index dc3b4dc8fe08..3bfd139b1434 100644
-> --- a/drivers/nvme/target/tcp.c
-> +++ b/drivers/nvme/target/tcp.c
-> @@ -1415,7 +1415,7 @@ static void nvmet_tcp_finish_cmd(struct nvmet_tcp_cmd *cmd)
->   	nvmet_tcp_free_cmd_buffers(cmd);
->   }
->   
-> -static void nvmet_tcp_uninit_data_in_cmds(struct nvmet_tcp_queue *queue)
-> +static void nvmet_tcp_uninit_req(struct nvmet_tcp_queue *queue)
+> > +
+> >         /* ARG_PTR_TO_DYNPTR takes any type of dynptr */
+> >         if (arg_type == ARG_PTR_TO_DYNPTR)
+> >                 return true;
+> > 
+> > -       return state->stack[spi].spilled_ptr.dynptr.type ==
+> > arg_to_dynptr_type(arg_type);
+> > +       dynptr_type = arg_to_dynptr_type(arg_type);
+> > +
+> > +       return state->stack[spi].spilled_ptr.dynptr.type ==
+> > dynptr_type;
+> >  }
+> > 
+> >  /* The reg state of a pointer or a bounded scalar was saved when
+> > @@ -6050,21 +6063,27 @@ static int check_func_arg(struct
+> > bpf_verifier_env *env, u32 arg,
+> >                         }
+> > 
+> >                         meta->uninit_dynptr_regno = regno;
+> > -               } else if (!is_dynptr_reg_valid_init(env, reg,
+> > arg_type)) {
+> > +               } else if (!is_dynptr_reg_valid_init(env, reg)) {
+> > +                       verbose(env,
+> > +                               "Expected an initialized dynptr as
+> > arg #%d\n",
+> > +                               arg + 1);
+> > +                       return -EINVAL;
+> > +               } else if (!is_dynptr_type_expected(env, reg,
+> > arg_type)) {
+> >                         const char *err_extra = "";
+> > 
+> >                         switch (arg_type & DYNPTR_TYPE_FLAG_MASK) {
+> >                         case DYNPTR_TYPE_LOCAL:
+> > -                               err_extra = "local ";
+> > +                               err_extra = "local";
+> >                                 break;
+> >                         case DYNPTR_TYPE_RINGBUF:
+> > -                               err_extra = "ringbuf ";
+> > +                               err_extra = "ringbuf";
+> >                                 break;
+> >                         default:
+> > +                               err_extra = "<unknown>";
+> >                                 break;
+> >                         }
+> > -
+> > -                       verbose(env, "Expected an initialized
+> > %sdynptr as arg #%d\n",
+> > +                       verbose(env,
+> > +                               "Expected a dynptr of type %s as
+> > arg #%d\n",
+> >                                 err_extra, arg + 1);
+> >                         return -EINVAL;
+> >                 }
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> > b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> > index bcf80b9f7c27..8fc4e6c02bfd 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/dynptr.c
+> > @@ -30,7 +30,7 @@ static struct {
+> >         {"invalid_helper2", "Expected an initialized dynptr as arg
+> > #3"},
+> >         {"invalid_write1", "Expected an initialized dynptr as arg
+> > #1"},
+> >         {"invalid_write2", "Expected an initialized dynptr as arg
+> > #3"},
+> > -       {"invalid_write3", "Expected an initialized ringbuf dynptr
+> > as arg #1"},
+> > +       {"invalid_write3", "Expected an initialized dynptr as arg
+> > #1"},
+> >         {"invalid_write4", "arg 1 is an unacquired reference"},
+> >         {"invalid_read1", "invalid read from stack"},
+> >         {"invalid_read2", "cannot pass in dynptr at an offset"},
+> > --
+> > 2.25.1
+> > 
 
-The name should reflect what it is doing, so keep it
-nvmet_tcp_uninit_data_in_cmds()
-
->   {
->   	struct nvmet_tcp_cmd *cmd = queue->cmds;
->   	int i;
-> @@ -1423,14 +1423,27 @@ static void nvmet_tcp_uninit_data_in_cmds(struct nvmet_tcp_queue *queue)
->   	for (i = 0; i < queue->nr_cmds; i++, cmd++) {
->   		if (nvmet_tcp_need_data_in(cmd))
->   			nvmet_req_uninit(&cmd->req);
-> +	}
-> +
-> +	if (!queue->nr_cmds && nvmet_tcp_need_data_in(&queue->connect)) {
-> +		/* failed in connect */
-> +		nvmet_req_uninit(&queue->connect.req);
-> +	}
-> +}
-> +
-> +static void nvmet_tcp_uninit_data_in_cmds(struct nvmet_tcp_queue *queue)
-
-Maybe name this nvmet_tcp_free_cmd_data_in_buffers()
-
-> +{
-> +	struct nvmet_tcp_cmd *cmd = queue->cmds;
-> +	int i;
->   
-> +	for (i = 0; i < queue->nr_cmds; i++, cmd++) {
-
-Lets not sweep and call this unconditionally on all cmds,
-lets just use the commands that are still waiting for
-data from the wire, other commands should complete and
-free normally.
-
->   		nvmet_tcp_unmap_pdu_iovec(cmd);
-
-You should rebase against the latest nvme tree for 6.0, this
-function no longer exists.
-
->   		nvmet_tcp_free_cmd_buffers(cmd);
->   	}
->   
->   	if (!queue->nr_cmds && nvmet_tcp_need_data_in(&queue->connect)) {
-> -		/* failed in connect */
-> -		nvmet_tcp_finish_cmd(&queue->connect);
-> +		nvmet_tcp_unmap_pdu_iovec(&queue->connect);
-> +		nvmet_tcp_free_cmd_buffers(&queue->connect);
->   	}
->   }
->   
-> @@ -1449,8 +1462,9 @@ static void nvmet_tcp_release_queue_work(struct work_struct *w)
->   	/* stop accepting incoming data */
->   	queue->rcv_state = NVMET_TCP_RECV_ERR;
->   
-> -	nvmet_tcp_uninit_data_in_cmds(queue);
-> +	nvmet_tcp_uninit_req(queue);
->   	nvmet_sq_destroy(&queue->nvme_sq);
-> +	nvmet_tcp_uninit_data_in_cmds(queue);
->   	cancel_work_sync(&queue->io_work);
->   	sock_release(queue->sock);
->   	nvmet_tcp_free_cmds(queue);

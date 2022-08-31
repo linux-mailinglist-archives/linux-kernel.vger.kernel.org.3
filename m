@@ -2,90 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A346D5A7839
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:56:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFED95A783E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiHaH4X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 03:56:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46888 "EHLO
+        id S231236AbiHaH4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 03:56:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231156AbiHaH4N (ORCPT
+        with ESMTP id S231240AbiHaH4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 03:56:13 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBF512AE4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:55:04 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id p18so10430965ljc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:55:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=EjNp+7haJJSgy95sPk2VW8hRKYlROSxGZaohd5CN+EI=;
-        b=CwqpdxtS9UCgIfqRkt6+aIZ0njmYiIrSHVdD82RbExYkj+ULE08yVapfltsyJ9hvSW
-         Rb6AyDPrPUcT6w7doSdjava+dERXsqEeqkJ/OdD9iIWnhGyYr2pbtl8OVMc5f2KR9nKS
-         Qejeur1bzAP74t/mQ82tyWDbqmUDC9AhxRI4X9KatAxvosA3H+xbR59V13PI2JEk8yY4
-         qWl8JtRsZaoZqu2Oosv2IdDv4tHuE5U72Xa7zFNCUlFfBxSJzmT7ZvD/IY2EURuy74eP
-         vqquwYSd+wYFYdE4xfwCK7GOhmxagKAy3tb2bHzXyZ0n2wc2lCB65CjuZc7jHCba/tZX
-         bOqw==
+        Wed, 31 Aug 2022 03:56:20 -0400
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4503DBD6;
+        Wed, 31 Aug 2022 00:55:59 -0700 (PDT)
+Received: by mail-ej1-f45.google.com with SMTP id fy31so26307657ejc.6;
+        Wed, 31 Aug 2022 00:55:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=EjNp+7haJJSgy95sPk2VW8hRKYlROSxGZaohd5CN+EI=;
-        b=E9ZZRJ8AT03FrpvOkv7t3GOhcyGUj4jGQ0oFgXiOolXXBXLzxTyEXa4KXxt0qqcdrH
-         GLyjikpkyYpDye/vKjRvmi+PT07o0NeqbxYkQLElbgeTpDiKZR1vnYOMSjINqFO4mSnz
-         fEdzRNuOW2PJdnw1iBSfM2lkvmyjY+sxituJChpP91HGisaeSMxuCrN0tn6ggB2Vyrj9
-         C7K2SCPJ492GqLsaXCKk17ZdA+jCHHWF4t50gV9rZEU5M48kuePoZ5W5H0gCUAWXvqnq
-         leyQcmM03tMIh8ILskkMzjd9JGWT0v8iMI0kNof4tT5NYcw9OKzxngk++xianjWWH/fT
-         kK5Q==
-X-Gm-Message-State: ACgBeo2xpYaBjo1MTBiNuF7L/Bb92fKIDqrfCZ4DCN2ze4gVbx8D7N3j
-        e5iDDp+4SJ2+svjfy94bclAcCQ==
-X-Google-Smtp-Source: AA6agR5TonQq2egwGvsmAbtSJj7KC2P5OqTK7X6niXiRLekmSFrg4NY6LC2zIVdsJmcKXe2E6Q9IwA==
-X-Received: by 2002:a2e:9d8b:0:b0:265:b87d:b43b with SMTP id c11-20020a2e9d8b000000b00265b87db43bmr3660954ljj.531.1661932501985;
-        Wed, 31 Aug 2022 00:55:01 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id bn38-20020a05651c17a600b0025e778f6f13sm2030296ljb.4.2022.08.31.00.55.00
+        bh=K87iipJyskGUTms3Hh4Q3eouXOQ7qIXcNh/72K9zLRw=;
+        b=QhW75smbf8hdKJOEi3KRrfhlwiMktrGgGcafzjet23ni2/C4GtTmj2Qba69LvSfkJX
+         So86d0W3AYTsDAyF36meYVicsYSs9Gx1d3D0OucvGVI1AnyLmrIk8clJcgxxYx58gnMC
+         1gLIVlLQkyxcEa5tzBR39FkF/SAif1fKQdQD2GQZrYKvcTeAAIZHpp6aydYS4VEy/pIY
+         AsqQ9nSc5lTgBqsf5VyLX5ymd3SnPHb4JNR3YD7HonufRFSHsYRlqxhopFHq14Db2QGp
+         dYEmH75h3MDv88tq2r5fAmO+8yYxmtZlyEeq3q+WEYC7nbqUAAYhriX39vXWdmrc3lOJ
+         s1gg==
+X-Gm-Message-State: ACgBeo0XQb7Ao9RfmAicDKJ4Ik/xwSKkDnswWGXu7YCurpjN8+e3YWGI
+        IcQ449n+3hGheGRzXekyJpC+1oAZaKZecw==
+X-Google-Smtp-Source: AA6agR4qVuwfnS2CQz4jDeWB0iNu344e5bd/jXgKf7bkufU0jn/dZoIvJ3uwto4r44/DA+gHw+8ivA==
+X-Received: by 2002:a17:907:7b8d:b0:741:9c4d:a48 with SMTP id ne13-20020a1709077b8d00b007419c4d0a48mr8284295ejc.746.1661932558065;
+        Wed, 31 Aug 2022 00:55:58 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id d13-20020a170906304d00b0073c8d4c9f38sm6935965ejd.177.2022.08.31.00.55.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 00:55:01 -0700 (PDT)
-Message-ID: <ffe0e6a8-96ba-e5ed-70c9-f7c6cd9c9ade@linaro.org>
-Date:   Wed, 31 Aug 2022 10:55:00 +0300
+        Wed, 31 Aug 2022 00:55:57 -0700 (PDT)
+Message-ID: <a3544988-5503-ae0e-3c66-a75019b673c0@kernel.org>
+Date:   Wed, 31 Aug 2022 09:55:56 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 08/14] dt-bindings: mtd: relax the nvmem compatible
- string
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: ext2/zram issue [was: Linux 5.19]
 Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
-References: <20220825214423.903672-1-michael@walle.cc>
- <20220825214423.903672-9-michael@walle.cc>
- <e0afa0fc-4718-2aa1-2555-4ebb2274850b@linaro.org>
- <c8aea3ecb0fcf08c42852f99a4f265b6@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c8aea3ecb0fcf08c42852f99a4f265b6@walle.cc>
-Content-Type: text/plain; charset=UTF-8
+To:     charlie39@cock.li
+Cc:     adilger.kernel@dilger.ca, jack@suse.com,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
+        torvalds@linux-foundation.org, tytso@mit.edu
+References: <702b3187-14bf-b733-263b-20272f53105d@kernel.org>
+ <20220830214626.26544-1-charlie39@cock.li>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220830214626.26544-1-charlie39@cock.li>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,59 +67,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/08/2022 10:48, Michael Walle wrote:
-> Am 2022-08-31 09:37, schrieb Krzysztof Kozlowski:
->> On 26/08/2022 00:44, Michael Walle wrote:
->>> The "user-otp" and "factory-otp" compatible string just depicts a
->>> generic NVMEM device. But an actual device tree node might as well
->>> contain a more specific compatible string. Make it possible to add
->>> more specific binding elsewere and just match part of the compatibles
->>
->> typo: elsewhere
->>
->>> here.
->>>
->>> Signed-off-by: Michael Walle <michael@walle.cc>
->>> ---
->>>  Documentation/devicetree/bindings/mtd/mtd.yaml | 7 ++++---
->>>  1 file changed, 4 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/Documentation/devicetree/bindings/mtd/mtd.yaml 
->>> b/Documentation/devicetree/bindings/mtd/mtd.yaml
->>> index 376b679cfc70..0291e439b6a6 100644
->>> --- a/Documentation/devicetree/bindings/mtd/mtd.yaml
->>> +++ b/Documentation/devicetree/bindings/mtd/mtd.yaml
->>> @@ -33,9 +33,10 @@ patternProperties:
->>>
->>>      properties:
->>>        compatible:
->>> -        enum:
->>> -          - user-otp
->>> -          - factory-otp
->>> +        contains:
->>> +          enum:
->>> +            - user-otp
->>> +            - factory-otp
->>
->> This does not work in the "elsewhere" place. You need to use similar
->> approach as we do for syscon or primecell.
+On 30. 08. 22, 23:46, charlie39@cock.li wrote:
+> Hi, I think i bumped on  the same issue on version 5.19.2 with ext4 on zram mounted on /tmp
+
+Only 5.19.6 contains the fix.
+
+> ```
+> # sudo dmesg -T | grep ext4
 > 
-> I'm a bit confused. Looking at
->    Documentation/devicetree/bindings/arm/primecell.yaml
-> it is done in the same way as this binding.
-
-Yes. primecell is like your mtd here. And how are other places with
-primcell (like other places with user-otp) done?
-
+> [Tue Aug 30 21:41:45 2022] EXT4-fs error (device zram1): ext4_check_bdev_write_error:218: comm kworker/u8:3: Error while
+> [Tue Aug 30 21:41:45 2022] EXT4-fs warning (device zram1): ext4_end_bio:347: I/O error 10 writing to inode 76 starting b
+> [Tue Aug 30 21:41:45 2022] EXT4-fs warning (device zram1): ext4_end_bio:347: I/O error 10 writing to inode 76 starting b
+> [Tue Aug 30 21:41:45 2022] EXT4-fs warning (device zram1): ext4_end_bio:347: I/O error 10 writing to inode 66 starting b
+> [Tue Aug 30 22:07:02 2022] EXT4-fs error (device zram1): ext4_journal_check_start:83: comm ThreadPoolForeg: Detected abo
+> [Tue Aug 30 22:07:02 2022] EXT4-fs (zram1): Remounting filesystem read-only
 > 
-> Whereas, the syscon use a "select:" on top of it. I'm
-> pretty sure, I've tested it without the select and the
-> validator picked up the constraints.
+> ```
+> Not sure what caused it, i was just updating my arch system.
 > 
-> Could you elaborate on what is wrong here? Select missing?
 
-You got warning from Rob, so run tests. I think you will see the errors,
-just like bot reported them.
+-- 
+js
 
-Best regards,
-Krzysztof

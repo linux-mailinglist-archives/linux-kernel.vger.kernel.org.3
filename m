@@ -2,115 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF4C5A7880
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:06:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 107CB5A7881
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:06:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiHaIF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        id S230460AbiHaIGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbiHaIFr (ORCPT
+        with ESMTP id S229752AbiHaIGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:05:47 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C19BCBE;
-        Wed, 31 Aug 2022 01:05:38 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso20349752pjk.0;
-        Wed, 31 Aug 2022 01:05:38 -0700 (PDT)
+        Wed, 31 Aug 2022 04:06:12 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F8B9E11F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:06:09 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id bq23so18847347lfb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:06:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=KAGqkvOKiabn/+RhA/LB35qY/OwR5Hgcx6mK/sCzhDM=;
-        b=JL/g4wLIEVjPo4DpYiDYAHm7zNH48YuwegOYKCy4jQ0xPAKnjUtOFSwPtpzY/tg+9Q
-         DV41ceVmq6X5/BJ4uBVmuBpUbCrKO7DkZdA0lJUy58K7X3bY3m5++wPdBfuN+qNphuVS
-         1RPmY/YoPCz76A9dAFA2x2LRLwmVkw8VBDGMZnrUX9c9JsCC+YrBmJq10LnREw2T2XBC
-         WKJIEyaPzbwuLqsvxm+BRPmehvz/g03wbft7dyO3bZSaFbOeFnuHZxyRcH1h0t/Q8Spe
-         ksxUiXo2B2P5rAy4Hf8wn59fsJtv+9GcuOn8yrQlwW0qKMMz3vfZnX2KBAcuSjVWjNeY
-         scKQ==
+        bh=QZM44bfiSS9YpVrNx6/y4wSlK9SGHwjcOiRmYMPRcl8=;
+        b=HvrZjBTku8djg7rscuJDEm3Hf5yikxaci8ZaupPbzblA9K7KMVdXCO168UCGPWjwOD
+         xYubgAZwE6ZmChiU6NnOy+uiIgPwcUNTsAxmaaMNOOL2aj6fgZ6YpW/vtRpsKst8Rq4s
+         dVCwMWpLOamIZHB6mia+fXd9uGqr10X8tQ9T16EFUYflrSn63m6D6wT8ONYzsCP62rrh
+         WBaoaVAJC52kH9GvqTnU2uKYTfiv7IgoZUv9D3N8jAC/42LGOOfpysgGEG9C98ftzDt4
+         5fP3EpXDlXjOpQeRfeEsj4k9RY2eBZOhxRz7bn2H5VTF2fFPbG+t+6QNhcGF+b7NyGST
+         UXyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=KAGqkvOKiabn/+RhA/LB35qY/OwR5Hgcx6mK/sCzhDM=;
-        b=kTpU76IIH+R48/EGmgsCKZnWeEQW2niPXj+ghWT/UJnZWpBcw5uEL0wkvALYBkN402
-         jzGciEcxFdlCjcbcNgi4VYtGXTSS2gvxJKRc9GcU7x2JX1DSkyCjUr5BsIp/GhjIgAkO
-         16DCzkcciD2y6wtuunh/WbIH9ditGSa/n8YLXqBfX9BuA+OvPz18GIeCPKT8i3z+x1ib
-         4HwlY2nTOQC3mZJ99ZEfQV78WAQUGGiXYkkrdpUlgMnpUs8sUl6SGMyJuqHCCiUK0Eqm
-         wIWEknknjxAJk6y5ti+OUZC4ItXB80Vh4USnXUmYbS6//xdWI8cDUhnd+JXF89y7fetX
-         9cWg==
-X-Gm-Message-State: ACgBeo0kH+bS0YaCNXld7W28wlRQEbqHGz4Z/PF9ixnarRz2dIpUHge/
-        eNP5J8/XVxM8YdonARPhSjw=
-X-Google-Smtp-Source: AA6agR4YoFdT7TkXbipm6o/wat/23Ik2j+mhGIsWuQAwJ9S5TDs2aIqtNWZVWufkqhz2Mpa0l3NVOA==
-X-Received: by 2002:a17:902:a58c:b0:174:3c97:d9a1 with SMTP id az12-20020a170902a58c00b001743c97d9a1mr23266345plb.22.1661933136810;
-        Wed, 31 Aug 2022 01:05:36 -0700 (PDT)
-Received: from [192.168.255.10] ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id z24-20020aa79f98000000b00537f9e32b00sm8207498pfr.37.2022.08.31.01.05.34
+        bh=QZM44bfiSS9YpVrNx6/y4wSlK9SGHwjcOiRmYMPRcl8=;
+        b=zSGFZQJO4YGlKUDW0ipNfA5t5L22RXskBAbE4G56xYQj3pi3/0aLIsswRtFSLiUERu
+         RcOWk/1eMWHj+rpR4JhKNM6uvleLqSsG87dGNcDVbxLhtzzzmMJEHA0PVKA3m0psuL1b
+         u/2CwCm6suRXcP6hPGkOR6f6vn6DvvV3MKrgaT/RYgfshrflKjFQ4c7m3szjdQXuV/Oi
+         dNZ/JCnE+y5a5tYVHqUeUNNbdgA6f2u7zr4ShKOHvWugGRsHUDtt/xCgyGZ/YNiLJ1bC
+         lvtdgLbqy8jp8IJfP12UY6D14zpSmLeXbQQmrsem7pNnYt+xmZ6D22i3peB9DdU6jS+J
+         GjGA==
+X-Gm-Message-State: ACgBeo1Uowlu+h+nW3jD4WeTV+vJu+bLzZ52o/kt+IO7z66m2W3Zw/Uo
+        tZ1D+ICLiL6BIy2/+CrSDBvA/Q==
+X-Google-Smtp-Source: AA6agR6dFPZ+nNkZTqf2jlM6XrNWfn68euhb8/V7wwJIzPe8Ol76LLvnYbHwPoM2qChzq4RyqxcZKQ==
+X-Received: by 2002:a05:6512:3086:b0:492:c1e7:f5be with SMTP id z6-20020a056512308600b00492c1e7f5bemr9092080lfd.454.1661933167847;
+        Wed, 31 Aug 2022 01:06:07 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id 10-20020ac2568a000000b0048a9e18ae67sm1910851lfr.84.2022.08.31.01.06.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 01:05:36 -0700 (PDT)
-Message-ID: <f8d1275b-966a-95ed-1122-d74fa62d811a@gmail.com>
-Date:   Wed, 31 Aug 2022 16:05:27 +0800
+        Wed, 31 Aug 2022 01:06:07 -0700 (PDT)
+Message-ID: <cc6374f2-dfe8-9904-1b87-fe1d18451f36@linaro.org>
+Date:   Wed, 31 Aug 2022 11:06:06 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH RESEND v2 0/8] x86/pmu: Corner cases fixes and
- optimization
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RESEND PATCH v2 2/5] firmware: qcom: scm: Optionally remove SCM
+ call serialization
 Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-References: <20220823093221.38075-1-likexu@tencent.com>
- <Yw5I3P4Vs5GGBtuJ@google.com>
-From:   Like Xu <like.xu.linux@gmail.com>
-In-Reply-To: <Yw5I3P4Vs5GGBtuJ@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     David Heidelberg <david@ixit.cz>,
+        Robert Marko <robimarko@gmail.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>
+References: <1661898311-30126-1-git-send-email-quic_gurus@quicinc.com>
+ <1661898311-30126-3-git-send-email-quic_gurus@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1661898311-30126-3-git-send-email-quic_gurus@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/8/2022 1:29 am, Sean Christopherson wrote:
-> On Tue, Aug 23, 2022, Like Xu wrote:
->> Good well-designed tests can help us find more bugs, especially when
->> the test steps differ from the Linux kernel behaviour in terms of the
->> timing of access to virtualized hw resources.
->>
->> In this patch series, there are three small optimization (006/007/008),
->> one hardware surprise (001), and most of these fixes have stepped
->> on my little toes.
->>
->> Please feel free to run tests, add more or share comments.
->>
->> Previous:
->> https://lore.kernel.org/kvm/20220721103549.49543-1-likexu@tencent.com/
->> https://lore.kernel.org/kvm/20220803130124.72340-1-likexu@tencent.com/
->>
->> V2 -> V2 RESEND Changelog:
->> - The "pebs_capable" fix has been merged into tip/perf/tree tree;
->> - Move the other two AMD vPMU optimization here;
+On 31/08/2022 01:25, Guru Das Srinagesh wrote:
+> Some firmware versions support the handling of multiple SCM calls at the
+> same time. Add a device tree boolean property which, when specified,
+> allows this to happen.
 > 
-> This is not a RESEND.  These things very much matter because I'm sitting here
-> trying to figure out whether I need to review this "v2", which is really v3, or
-> whether I can just review the real v2.
+> Signed-off-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
+> ---
+>  drivers/firmware/qcom_scm-smc.c | 8 ++++++--
+>  drivers/firmware/qcom_scm.c     | 6 ++++++
+>  drivers/firmware/qcom_scm.h     | 2 ++
+>  3 files changed, 14 insertions(+), 2 deletions(-)
 > 
->    Don't add "RESEND" when you are submitting a modified version of your
->    patch or patch series - "RESEND" only applies to resubmission of a
->    patch or patch series which have not been modified in any way from the
->    previous submission.
+> diff --git a/drivers/firmware/qcom_scm-smc.c b/drivers/firmware/qcom_scm-smc.c
+> index d111833..66193c2 100644
+> --- a/drivers/firmware/qcom_scm-smc.c
+> +++ b/drivers/firmware/qcom_scm-smc.c
+> @@ -1,5 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /* Copyright (c) 2015,2019 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
+>  
+>  #include <linux/io.h>
+> @@ -63,11 +64,14 @@ static void __scm_smc_do(const struct arm_smccc_args *smc,
+>  	}
+>  
+>  	do {
+> -		mutex_lock(&qcom_scm_lock);
+> +		if (!qcom_scm_allow_multicall)
+> +			mutex_lock(&qcom_scm_lock);
+>  
+>  		__scm_smc_do_quirk(smc, res);
+>  
+> -		mutex_unlock(&qcom_scm_lock);
+> +		if (!qcom_scm_allow_multicall)
+> +			mutex_unlock(&qcom_scm_lock);
+> +
+>  
+>  		if (res->a0 == QCOM_SCM_V2_EBUSY) {
+>  			if (retry_count++ > QCOM_SCM_EBUSY_MAX_RETRY)
+> diff --git a/drivers/firmware/qcom_scm.c b/drivers/firmware/qcom_scm.c
+> index cdbfe54..978706a 100644
+> --- a/drivers/firmware/qcom_scm.c
+> +++ b/drivers/firmware/qcom_scm.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /* Copyright (c) 2010,2015,2019 The Linux Foundation. All rights reserved.
+>   * Copyright (C) 2015 Linaro Ltd.
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
+>  #include <linux/platform_device.h>
+>  #include <linux/init.h>
+> @@ -23,6 +24,8 @@
+>  static bool download_mode = IS_ENABLED(CONFIG_QCOM_SCM_DOWNLOAD_MODE_DEFAULT);
+>  module_param(download_mode, bool, 0);
+>  
+> +bool qcom_scm_allow_multicall = false;
 
-Roger that. Thanks for your detailed comments and all of that will be applied in V3.
+No global variables. This should be part of context/state container.
 
-The new AMD vPMU testcases[1] will also help guard future related changes.
-[1] https://lore.kernel.org/kvm/20220819110939.78013-1-likexu@tencent.com/
+> +
+>  #define SCM_HAS_CORE_CLK	BIT(0)
+>  #define SCM_HAS_IFACE_CLK	BIT(1)
+>  #define SCM_HAS_BUS_CLK		BIT(2)
+> @@ -1402,6 +1405,9 @@ static int qcom_scm_probe(struct platform_device *pdev)
+>  	__scm = scm;
+>  	__scm->dev = &pdev->dev;
+>  
+> +	qcom_scm_allow_multicall = of_property_read_bool(__scm->dev->of_node,
+> +							"allow-multi-call");
+> +
+>  	__get_convention();
+>  
+>  	/*
+> diff --git a/drivers/firmware/qcom_scm.h b/drivers/firmware/qcom_scm.h
+> index 0d51eef..c0a4d6b 100644
+> --- a/drivers/firmware/qcom_scm.h
+> +++ b/drivers/firmware/qcom_scm.h
+> @@ -1,5 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0-only */
+>  /* Copyright (c) 2010-2015,2019 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
+>  #ifndef __QCOM_SCM_INT_H
+>  #define __QCOM_SCM_INT_H
+> @@ -12,6 +13,7 @@ enum qcom_scm_convention {
+>  };
+>  
+>  extern enum qcom_scm_convention qcom_scm_convention;
+> +extern bool qcom_scm_allow_multicall;
 
-Thanks,
-Like Xu
+No externs for variables. You break encapsulation.
+
+>  
+>  #define MAX_QCOM_SCM_ARGS 10
+>  #define MAX_QCOM_SCM_RETS 3
+
+
+Best regards,
+Krzysztof

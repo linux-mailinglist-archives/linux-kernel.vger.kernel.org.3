@@ -2,63 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAB705A85FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:44:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41B415A85FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:44:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233044AbiHaSof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46516 "EHLO
+        id S233065AbiHaSoj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:44:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232912AbiHaSo1 (ORCPT
+        with ESMTP id S232930AbiHaSo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:44:27 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B0625F8
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:44:20 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33dc888dc62so210024627b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:44:20 -0700 (PDT)
+        Wed, 31 Aug 2022 14:44:28 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653175F9E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:44:23 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-3363b1dffa0so210978927b3.23
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:44:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc;
-        bh=jeIDU7bkvi8qrUeCQKjSgf4R1NQDEDk5WzvSWsZHRgY=;
-        b=hx1WadVFGfM2WHW+QMiqbRpB+tGtox/ZvfK2iSj6s7TWGpw2+YfDNLd71aeLJikF5A
-         ut7591nG+1XtZZnWDLGHqvw7JJwxJ0XUqThW+DOuVmXx5U3HEA3SXJbmTWIaXpZ2woGZ
-         RTEaI3LgVK8uilz+J1vZWsPlPY0651QNaHnpsTlpgvFMVxMQjssruP9r+aB90KHTVpR/
-         SrpgK6Xxyza7FDY2erOi2mdc5Qq7aDYAg+yKZnkJsavJ/Dfs+V/FjohIVlEbMIrrrnc8
-         VTZr1169mV2GmgrWFZhOXY+DTyvlyMMDWkpUhba503fcTfGVw+anr6JRNo1wjKRsiWNd
-         VysQ==
+        bh=wE732wZm675iVXKD6yeBsDTR2gqwSJrBRBhO3wQb7iQ=;
+        b=eShEMrNUlFCTE9aYVbAg0DgI0iTQu9WfmERbirOoR6oYYyP7ijLwfq/E0+J6ooYtcE
+         hxeV/9DeC6BXMbXwjkhtDyt8TSgZSaPG4uWNHh1vS/Lm4jxju9dnHS4OACxqtaYPTOO1
+         XV4aI25xVG9jdotAUGyN/q4M+4pIaTJ7EBgTNYEDPvwKJUKn+I04yZSNYaXo7PgWY8uU
+         Neq26b8Ccc3YvSqH4Xn3np4CbJbmZ4dbr1gCWD29mDhWNarK2JjGE5RKGT+5YA2QY+MG
+         aZKL8/MPstyqcl9bPEfhUfgACivj0gAhLIQlUXFH6yDEiSnetjzQWcAS4UebJrDqCNL5
+         uhZg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=jeIDU7bkvi8qrUeCQKjSgf4R1NQDEDk5WzvSWsZHRgY=;
-        b=6gbSFYKVNUu7jzJFgDJh7G7kPgiy6mE+h5y7VHOeYOdMpWtByTc22T56X5krIrZsuv
-         pK+e91JAYWPJx6l50+er+wQ9biXuAQBbgw1z7CyvAajvye7YLOjONOZ0sz3WTEvqwtju
-         NU+e+9aFyApzqKTMDZml/T2r/PfPQ0MUWusVH397yOuZx2MjFS6sXghPINiH84omNJZY
-         Cz49P/AfMAR2XRklAtu/O4iYfRMQi/bQVmdyZeVg+i0ZLmE8ikJ+F/DvMM4wSBqsaljD
-         +1XyruXZSjr3igK/MFnIOUzEp6/2X1pVs76On5bCNAyzGz2a+462l1iUhA2yeuyE4e6J
-         8D0w==
-X-Gm-Message-State: ACgBeo1TeQNQN2PQysIOWRF8zvITAH6xPNB68bZRTsJiLZXB/v781HEt
-        5BB/YvRTlVZHFhNUO+Ph0Cl5PHjgAvfjfYaSvBs=
-X-Google-Smtp-Source: AA6agR7Ag1fKKG3WlrfE60Hng53gw5R2d8mq+Pf+nJEkCn34r/4b9t9bbknLWL4Dz5mBS6VyDJJaVwKf1/TD3gZm/D4=
+        bh=wE732wZm675iVXKD6yeBsDTR2gqwSJrBRBhO3wQb7iQ=;
+        b=ZU/tQDwb6kgMBGjpkQn2Q15+FlsEpVlycsPaMu3IV7u9bk6iJEGs6/6LbRDeMBQmfE
+         iDgx2En4irjr9A+ZbUj9QAxJqc4UQfBhPVi7uBYeOrl7sneTdEB0883nFHwafEKd66xO
+         4dhcQVorL0GXdep4zLl8v6XCEDkWEgxYRuZSqby31K3dh5NzAkTgTR9iMEw/2PJzLP50
+         6Cb3Jan7jjvrssoLsltpt5HhHh7yezp+DzRjgvY11/pCP/CXqKVxwD9+EL3WtCzX8s+9
+         GnIwaZ03qfplEZHUJRJ3yKV9suoFhBeGsQdG5GNO2zchKu2MdqoPqpb8sOBwqFwoAHMo
+         rdiQ==
+X-Gm-Message-State: ACgBeo0Tt8PRFb9yL0nalrD2Wce1FAOZk2e5ozwTUfiZOoZRRd1bLBvG
+        XuVy36V5ehVv3SVKptINQOS8byNSBsjFiojbI0w=
+X-Google-Smtp-Source: AA6agR4+Ebu40vcHAmRMaudQ83J0/q9XXte3H1wM0GkT9zrEW8Y29d4ev5N+HjYyH+Ir/SWkm0uyd9uQ2tSYFkmGf4o=
 X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:0:100e:712:5f5d:95d5:9a3:d41])
- (user=ndesaulniers job=sendgmr) by 2002:a25:7608:0:b0:694:220b:8bf6 with SMTP
- id r8-20020a257608000000b00694220b8bf6mr16732077ybc.210.1661971460048; Wed,
- 31 Aug 2022 11:44:20 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 11:44:06 -0700
+ (user=ndesaulniers job=sendgmr) by 2002:a0d:d5c2:0:b0:337:5d95:8bcb with SMTP
+ id x185-20020a0dd5c2000000b003375d958bcbmr19167887ywd.359.1661971462704; Wed,
+ 31 Aug 2022 11:44:22 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 11:44:07 -0700
 In-Reply-To: <20220831184408.2778264-1-ndesaulniers@google.com>
 Mime-Version: 1.0
 References: <20220831184408.2778264-1-ndesaulniers@google.com>
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1661971448; l=6313;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=4nrhFDfzIr6P2uEi5X9UGCfe5n7Png+PEC4jrJ9T2hY=;
- b=Asevhm76deGOJCh2wzvhWYmHcNqfB9w30KRQRslJFMSwOMNo1qdlvq1fib/n0CQt0uFs4EHOV7W4
- zd9FYCZZAcwt9VhTRml2m/KTX3mSvtSLn8veXUGEL29ZkuqxycP8
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1661971448; l=3120;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=NliQXprEuvO3t8z2w/GlA1aYI6D3EzX025tg2ksOCjQ=;
+ b=u4wE/I7MNagG4I/nE2e5f0OfGZvDcBSQ12AuaA53Y2L7ge5X1x5R2F9kOpMQ2NHWcLdZ20mpNrM4
+ +wycsrFcDvMkzcCjDBQ7pjAFIsqooWQNXvQdegA5VPqWXge0u9Kh
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220831184408.2778264-4-ndesaulniers@google.com>
-Subject: [PATCH v2 3/5] Makefile.compiler: replace cc-ifversion with
- compiler-specific macros
+Message-ID: <20220831184408.2778264-5-ndesaulniers@google.com>
+Subject: [PATCH v2 4/5] Makefile.debug: re-enable debug info for .S files
 From:   Nick Desaulniers <ndesaulniers@google.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>
 Cc:     Michal Marek <michal.lkml@markovi.net>,
@@ -70,178 +69,96 @@ Cc:     Michal Marek <michal.lkml@markovi.net>,
         Alexey Alexandrov <aalexand@google.com>,
         Bill Wendling <morbo@google.com>,
         Greg Thelen <gthelen@google.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+        Nick Desaulniers <ndesaulniers@google.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cc-ifversion is GCC specific. Replace it with compiler specific
-variants. Update the users of cc-ifversion to use these new macros.
-Provide a helper for checking compiler versions for GCC and Clang
-simultaneously, that will be used in a follow up patch.
+Alexey reported that the fraction of unknown filename instances in
+kallsyms grew from ~0.3% to ~10% recently; Bill and Greg tracked it down
+to assembler defined symbols, which regressed as a result of:
 
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
-Cc: amd-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
-Link: https://github.com/ClangBuiltLinux/linux/issues/350
-Link: https://lore.kernel.org/llvm/CAGG=3QWSAUakO42kubrCap8fp-gm1ERJJAYXTnP1iHk_wrH=BQ@mail.gmail.com/
-Suggested-by: Bill Wendling <morbo@google.com>
+commit b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
+
+In that commit, I allude to restoring debug info for assembler defined
+symbols in a follow up patch, but it seems I forgot to do so in
+
+commit a66049e2cf0e ("Kbuild: make DWARF version a choice")
+
+This patch does a few things:
+1. Add -g to KBUILD_AFLAGS. This will instruct the compiler to instruct
+   the assembler to emit debug info. But this can cause an issue for
+   folks using a newer compiler but older assembler, because the
+   implicit default DWARF version changed from v4 to v5 in gcc-11 and
+   clang-14.
+2. If the user is using CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT, use a
+   version check to explicitly set -Wa,-gdwarf-<version> for the
+   assembler. There's another problem with this; GAS only gained support
+   for explicit DWARF versions 3-5 in the 2.36 GNU binutils release.
+3. Wrap -Wa,-gdwarf-<version> in as-option call to test whether the
+   assembler supports that explicit DWARF version.
+
+Link: https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
+Fixes: b8a9092330da ("Kbuild: do not emit debug info for assembly with LLVM_IAS=1")
+Reported-by: Alexey Alexandrov <aalexand@google.com>
+Reported-by: Bill Wendling <morbo@google.com>
+Reported-by: Greg Thelen <gthelen@google.com>
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
 Changes v1 -> v2:
-* New patch.
+* Use newly added compiler-specific macros, as per Bill.
 
- Documentation/kbuild/makefiles.rst          | 44 +++++++++++++++------
- Makefile                                    |  4 +-
- drivers/gpu/drm/amd/display/dc/dml/Makefile | 12 ++----
- scripts/Makefile.compiler                   | 15 +++++--
- 4 files changed, 49 insertions(+), 26 deletions(-)
+ scripts/Makefile.debug | 22 ++++++++++++++++++----
+ 1 file changed, 18 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/kbuild/makefiles.rst b/Documentation/kbuild/makefiles.rst
-index 11a296e52d68..e46f5b45c422 100644
---- a/Documentation/kbuild/makefiles.rst
-+++ b/Documentation/kbuild/makefiles.rst
-@@ -682,22 +682,42 @@ more details, with real examples.
- 	In the above example, -Wno-unused-but-set-variable will be added to
- 	KBUILD_CFLAGS only if gcc really accepts it.
- 
--    cc-ifversion
--	cc-ifversion tests the version of $(CC) and equals the fourth parameter
--	if version expression is true, or the fifth (if given) if the version
--	expression is false.
-+    gcc-min-version
-+	gcc-min-version tests if the value of $(CONFIG_GCC_VERSION) is greater than
-+	or equal to the provided value and evaluates to y if so.
- 
- 	Example::
- 
--		#fs/reiserfs/Makefile
--		ccflags-y := $(call cc-ifversion, -lt, 0402, -O1)
-+		cflags-$(call gcc-min-version, 70100) := -foo
- 
--	In this example, ccflags-y will be assigned the value -O1 if the
--	$(CC) version is less than 4.2.
--	cc-ifversion takes all the shell operators:
--	-eq, -ne, -lt, -le, -gt, and -ge
--	The third parameter may be a text as in this example, but it may also
--	be an expanded variable or a macro.
-+	In this example, cflags-y will be assigned the value -foo if $(CC) is gcc and
-+	$(CONFIG_GCC_VERSION) is >= 7.1.
-+
-+    clang-min-version
-+	clang-min-version tests if the value of $(CONFIG_CLANG_VERSION) is greater
-+	than or equal to the provided value and evaluates to y if so.
-+
-+	Example::
-+
-+		cflags-$(call clang-min-version, 110000) := -foo
-+
-+	In this example, cflags-y will be assigned the value -foo if $(CC) is clang
-+	and $(CONFIG_CLANG_VERSION) is >= 11.0.0.
-+
-+    cc-min-version
-+	cc-min-version tests if the value of $(CONFIG_GCC_VERSION) is greater
-+	than or equal to the first value provided, or if the value of
-+	$(CONFIG_CLANG_VERSION) is greater than or equal to the second value
-+	provided, and evaluates
-+	to y if so.
-+
-+	Example::
-+
-+		cflags-$(call cc-min-version, 70100, 110000) := -foo
-+
-+	In this example, cflags-y will be assigned the value -foo if $(CC) is gcc and
-+	$(CONFIG_GCC_VERSION) is >= 7.1, or if $(CC) is clang and
-+	$(CONFIG_CLANG_VERSION) is >= 11.0.0.
- 
-     cc-cross-prefix
- 	cc-cross-prefix is used to check if there exists a $(CC) in path with
-diff --git a/Makefile b/Makefile
-index 952d354069a4..caa39ecb1136 100644
---- a/Makefile
-+++ b/Makefile
-@@ -972,7 +972,7 @@ ifdef CONFIG_CC_IS_GCC
- KBUILD_CFLAGS += -Wno-maybe-uninitialized
+diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
+index 9f39b0130551..46e88f0ca998 100644
+--- a/scripts/Makefile.debug
++++ b/scripts/Makefile.debug
+@@ -4,18 +4,32 @@ ifdef CONFIG_DEBUG_INFO_SPLIT
+ DEBUG_CFLAGS	+= -gsplit-dwarf
+ else
+ DEBUG_CFLAGS	+= -g
++KBUILD_AFLAGS	+= -g
  endif
  
--ifdef CONFIG_CC_IS_GCC
-+ifeq ($(call gcc-min-version, 90100),y)
- # The allocators already balk at large sizes, so silence the compiler
- # warnings for bounds checks involving those possible values. While
- # -Wno-alloc-size-larger-than would normally be used here, earlier versions
-@@ -984,7 +984,7 @@ ifdef CONFIG_CC_IS_GCC
- # ignored, continuing to default to PTRDIFF_MAX. So, left with no other
- # choice, we must perform a versioned check to disable this warning.
- # https://lore.kernel.org/lkml/20210824115859.187f272f@canb.auug.org.au
--KBUILD_CFLAGS += $(call cc-ifversion, -ge, 0901, -Wno-alloc-size-larger-than)
-+KBUILD_CFLAGS += -Wno-alloc-size-larger-than
- endif
- 
- # disable invalid "can't wrap" optimizations for signed / pointers
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/Makefile b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-index 86a3b5bfd699..d8ee4743b2e3 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/Makefile
-+++ b/drivers/gpu/drm/amd/display/dc/dml/Makefile
-@@ -33,20 +33,14 @@ ifdef CONFIG_PPC64
- dml_ccflags := -mhard-float -maltivec
- endif
- 
--ifdef CONFIG_CC_IS_GCC
--ifeq ($(call cc-ifversion, -lt, 0701, y), y)
--IS_OLD_GCC = 1
--endif
--endif
--
- ifdef CONFIG_X86
--ifdef IS_OLD_GCC
-+ifeq ($(call gcc-min-version, 70100),y)
-+dml_ccflags += -msse2
+-ifndef CONFIG_AS_IS_LLVM
+-KBUILD_AFLAGS	+= -Wa,-gdwarf-2
++ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
++# gcc-11+, clang-14+
++ifeq ($(call cc-min-version, 110000, 140000),y)
++dwarf-version-y := 5
 +else
- # Stack alignment mismatch, proceed with caution.
- # GCC < 7.1 cannot compile code using `double` and -mpreferred-stack-boundary=3
- # (8B stack alignment).
- dml_ccflags += -mpreferred-stack-boundary=4
--else
--dml_ccflags += -msse2
++dwarf-version-y := 4
  endif
+-
+-ifndef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
++else # !CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
+ dwarf-version-$(CONFIG_DEBUG_INFO_DWARF4) := 4
+ dwarf-version-$(CONFIG_DEBUG_INFO_DWARF5) := 5
+ DEBUG_CFLAGS	+= -gdwarf-$(dwarf-version-y)
  endif
  
-diff --git a/scripts/Makefile.compiler b/scripts/Makefile.compiler
-index d1739f0d3ce3..13dade724fa3 100644
---- a/scripts/Makefile.compiler
-+++ b/scripts/Makefile.compiler
-@@ -61,9 +61,18 @@ cc-option-yn = $(call try-run,\
- cc-disable-warning = $(call try-run,\
- 	$(CC) -Werror $(KBUILD_CPPFLAGS) $(KBUILD_CFLAGS) -W$(strip $(1)) -c -x c /dev/null -o "$$TMP",-Wno-$(strip $(1)))
- 
--# cc-ifversion
--# Usage:  EXTRA_CFLAGS += $(call cc-ifversion, -lt, 0402, -O1)
--cc-ifversion = $(shell [ $(CONFIG_GCC_VERSION)0 $(1) $(2)000 ] && echo $(3) || echo $(4))
-+# gcc-min-version
-+# Usage: cflags-$(call gcc-min-version, 70100) += -foo
-+gcc-min-version = $(shell [ $(CONFIG_GCC_VERSION) -ge $(1) ] && echo y)
++# Binutils 2.35+ (or clang) required for -gdwarf-{4|5}.
++# https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=31bf18645d98b4d3d7357353be840e320649a67d
++ifneq ($(call as-option,-Wa$(comma)-gdwarf-$(dwarf-version-y)),)
++KBUILD_AFLAGS	+= -Wa,-gdwarf-$(dwarf-version-y)
++else
++ifndef CONFIG_AS_IS_LLVM
++KBUILD_AFLAGS	+= -Wa,-gdwarf-2
++endif
++endif
 +
-+# clang-min-version
-+# Usage: cflags-$(call clang-min-version, 110000) += -foo
-+clang-min-version = $(shell [ $(CONFIG_CLANG_VERSION) -ge $(1) ] && echo y)
-+
-+# cc-min-version
-+# Usage: cflags-$(call cc-min-version, 701000, 110000)
-+#                                      ^ GCC   ^ Clang
-+cc-min-version = $(filter y, $(call gcc-min-version, $(1)), $(call clang-min-version, $(2)))
- 
- # ld-option
- # Usage: KBUILD_LDFLAGS += $(call ld-option, -X, -Y)
+ ifdef CONFIG_DEBUG_INFO_REDUCED
+ DEBUG_CFLAGS	+= -fno-var-tracking
+ ifdef CONFIG_CC_IS_GCC
 -- 
 2.37.2.672.g94769d06f0-goog
 

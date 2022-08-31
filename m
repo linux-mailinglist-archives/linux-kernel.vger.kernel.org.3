@@ -2,58 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00EB95A796E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAC315A7974
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbiHaIui (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:50:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S231667AbiHaIvg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:51:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbiHaIu0 (ORCPT
+        with ESMTP id S231547AbiHaIvS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:50:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517E9A2D87;
-        Wed, 31 Aug 2022 01:50:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 31 Aug 2022 04:51:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A042ACACA0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:51:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661935847;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BcuExXOje6YQsvLQPHuRRDjqA+jrbJ+6wXiicLOONYo=;
+        b=Lim4u0ocyvjVcdunFtcS5oPaYu+qqUUJoqOwscgeymc14OSTW6nM7kivWv1bBw9sGUDqGe
+        KZqpn2HHo283I0dPrBaa12BgcFF4YM0TsaW3ku0AjBaDWNMZoWBznEYHwHXNh/0q5menFv
+        d7eUN+jPyNyRLe7TAjC03oCj7D8SdIE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-508-MWdj9omAOaSzhl6Kj6s-nw-1; Wed, 31 Aug 2022 04:50:46 -0400
+X-MC-Unique: MWdj9omAOaSzhl6Kj6s-nw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CC795B81EE1;
-        Wed, 31 Aug 2022 08:50:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 655BEC433D7;
-        Wed, 31 Aug 2022 08:50:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661935819;
-        bh=ersuwtsoF+gz4Khk4twXBa8eC4M5FuTrZrU7bbV5xN8=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Dx8SpLvE6OE4COgMxNM10PLOKB6/AsE4LigkheDT4bwqAegrbQvJFlzNb5UM0JpW1
-         Vr8WjxDvENv4VYwaJbPGIE/s4jZeJqx+wYRtSd+QjuWf+Pw8IsHOXx18CDF2xdQsBy
-         ULMhgowT25aDH/dubDBVH4ZZxswFQuUj4JJoKYZc7ucXS9UsVJN9EZBZtO56cwwv6y
-         4OyFIskfbQ/ZjnO9PNLbnHyrG3o+VFqMG4fqXtvHZ65w7UMvTa5oOC1DtANAjRfCgx
-         BpBzYntayKluAMAl8pFQis+NdDTKHs5X2OSRzCTyo01meXIgHlnkLpbffcIZxuJVvL
-         UsXGDJ+mm85NQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 42950E924DA;
-        Wed, 31 Aug 2022 08:50:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4B9AE800124;
+        Wed, 31 Aug 2022 08:50:45 +0000 (UTC)
+Received: from localhost (ovpn-13-50.pek2.redhat.com [10.72.13.50])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 991F51415133;
+        Wed, 31 Aug 2022 08:50:42 +0000 (UTC)
+Date:   Wed, 31 Aug 2022 16:50:38 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, hch@infradead.org,
+        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
+        linux-arm-kernel@lists.infradead.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v2 09/11] s390: mm: Convert to GENERIC_IOREMAP
+Message-ID: <Yw8g3igVMrlde0QA@MiWiFi-R3L-srv>
+References: <20220820003125.353570-1-bhe@redhat.com>
+ <20220820003125.353570-10-bhe@redhat.com>
+ <376889563c9da4d6f97ea8a412697e0867a0d4bd.camel@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 00/17] net: dsa: microchip: add error handling and
- register access validation
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166193581926.12108.13290186074515106257.git-patchwork-notify@kernel.org>
-Date:   Wed, 31 Aug 2022 08:50:19 +0000
-References: <20220826105634.3855578-1-o.rempel@pengutronix.de>
-In-Reply-To: <20220826105634.3855578-1-o.rempel@pengutronix.de>
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, f.fainelli@gmail.com,
-        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <376889563c9da4d6f97ea8a412697e0867a0d4bd.camel@linux.ibm.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,60 +68,225 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Niklas,
 
-This series was applied to netdev/net-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Fri, 26 Aug 2022 12:56:17 +0200 you wrote:
-> changes v4:
-> - add Reviewed-by: Vladimir Oltean <olteanv@gmail.com> to all patches
-> - fix checkpatch warnings.
+On 08/23/22 at 02:30pm, Niklas Schnelle wrote:
+> On Sat, 2022-08-20 at 08:31 +0800, Baoquan He wrote:
+> > Add hooks arch_ioremap() and arch_iounmap() for s390's special
+> > operation when ioremap() and iounmap(), then ioremap_[wc|wt]() are
+> > converted to use ioremap_prot() from GENERIC_IOREMAP.
+> > 
+> > Signed-off-by: Baoquan He <bhe@redhat.com>
+> > Cc: Heiko Carstens <hca@linux.ibm.com>
+> > Cc: Vasily Gorbik <gor@linux.ibm.com>
+> > Cc: Alexander Gordeev <agordeev@linux.ibm.com>
+> > Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+> > Cc: Sven Schnelle <svens@linux.ibm.com>
+> > Cc: linux-s390@vger.kernel.org
+> > ---
+> >  arch/s390/Kconfig          |  1 +
+> >  arch/s390/include/asm/io.h | 26 +++++++++++------
+> >  arch/s390/pci/pci.c        | 60 +++++---------------------------------
+> >  3 files changed, 26 insertions(+), 61 deletions(-)
+> > 
+> > diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+> > index 318fce77601d..c59e1b25f59d 100644
+> > --- a/arch/s390/Kconfig
+> > +++ b/arch/s390/Kconfig
+> > @@ -135,6 +135,7 @@ config S390
+> >  	select GENERIC_SMP_IDLE_THREAD
+> >  	select GENERIC_TIME_VSYSCALL
+> >  	select GENERIC_VDSO_TIME_NS
+> > +	select GENERIC_IOREMAP
+> >  	select HAVE_ALIGNED_STRUCT_PAGE if SLUB
+> >  	select HAVE_ARCH_AUDITSYSCALL
+> >  	select HAVE_ARCH_JUMP_LABEL
+> > diff --git a/arch/s390/include/asm/io.h b/arch/s390/include/asm/io.h
+> > index e3882b012bfa..f837e20b7bbd 100644
+> > --- a/arch/s390/include/asm/io.h
+> > +++ b/arch/s390/include/asm/io.h
+> > @@ -22,11 +22,23 @@ void unxlate_dev_mem_ptr(phys_addr_t phys, void *addr);
+> >  
+> >  #define IO_SPACE_LIMIT 0
+> >  
+> > -void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot);
+> > -void __iomem *ioremap(phys_addr_t addr, size_t size);
+> > -void __iomem *ioremap_wc(phys_addr_t addr, size_t size);
+> > -void __iomem *ioremap_wt(phys_addr_t addr, size_t size);
+> > -void iounmap(volatile void __iomem *addr);
+> > +
 > 
-> changes v3:
-> - fix build error in the middle of the patch stack.
+
+Thanks a lot for reviewing, and sorry for late response.
+
+> Checkpatch nitpick, remove the empty line addition above so as not to
+> create two consecutive empty lines.
+
+Will do, thanks.
+
 > 
-> [...]
+> > +/*
+> > + * I/O memory mapping functions.
+> > + */
+> > +void __iomem *
+> > +arch_ioremap(phys_addr_t *paddr, size_t size, unsigned long *prot_val);
+> > +#define arch_ioremap arch_ioremap
+> > +
+> > +int arch_iounmap(void __iomem *addr);
+> > +#define arch_iounmap arch_iounmap
+> > +
+> > +#define _PAGE_IOREMAP pgprot_val(PAGE_KERNEL)
+> > +
+> > +#define ioremap_wc(addr, size)  \
+> > +	ioremap_prot((addr), (size), pgprot_val(pgprot_writecombine(PAGE_KERNEL)))
+> > +#define ioremap_wt(addr, size)  \
+> > +	ioremap_prot((addr), (size), pgprot_val(pgprot_writethrough(PAGE_KERNEL)))
+> >  
+> >  static inline void __iomem *ioport_map(unsigned long port, unsigned int nr)
+> >  {
+> > @@ -51,10 +63,6 @@ static inline void ioport_unmap(void __iomem *p)
+> >  #define pci_iomap_wc pci_iomap_wc
+> >  #define pci_iomap_wc_range pci_iomap_wc_range
+> >  
+> > -#define ioremap ioremap
+> > -#define ioremap_wt ioremap_wt
+> > -#define ioremap_wc ioremap_wc
+> > -
+> >  #define memcpy_fromio(dst, src, count)	zpci_memcpy_fromio(dst, src, count)
+> >  #define memcpy_toio(dst, src, count)	zpci_memcpy_toio(dst, src, count)
+> >  #define memset_io(dst, val, count)	zpci_memset_io(dst, val, count)
+> > diff --git a/arch/s390/pci/pci.c b/arch/s390/pci/pci.c
+> > index 73cdc5539384..984cad9cd5a1 100644
+> > --- a/arch/s390/pci/pci.c
+> > +++ b/arch/s390/pci/pci.c
+> > @@ -244,64 +244,20 @@ void __iowrite64_copy(void __iomem *to, const void *from, size_t count)
+> >         zpci_memcpy_toio(to, from, count);
+> >  }
+> >  
+> > -static void __iomem *__ioremap(phys_addr_t addr, size_t size, pgprot_t prot)
+> > +void __iomem *
+> > +arch_ioremap(phys_addr_t *paddr, size_t size, unsigned long *prot_val)
+> >  {
+> > -	unsigned long offset, vaddr;
+> > -	struct vm_struct *area;
+> > -	phys_addr_t last_addr;
+> > -
+> > -	last_addr = addr + size - 1;
+> > -	if (!size || last_addr < addr)
+> > -		return NULL;
+> > -
+> >  	if (!static_branch_unlikely(&have_mio))
+> > -		return (void __iomem *) addr;
+> > -
+> > -	offset = addr & ~PAGE_MASK;
+> > -	addr &= PAGE_MASK;
+> > -	size = PAGE_ALIGN(size + offset);
+> > -	area = get_vm_area(size, VM_IOREMAP);
+> > -	if (!area)
+> > -		return NULL;
+> > -
+> > -	vaddr = (unsigned long) area->addr;
+> > -	if (ioremap_page_range(vaddr, vaddr + size, addr, prot)) {
+> > -		free_vm_area(area);
+> > -		return NULL;
+> > -	}
+> > -	return (void __iomem *) ((unsigned long) area->addr + offset);
+> > -}
+> > -
+> > -void __iomem *ioremap_prot(phys_addr_t addr, size_t size, unsigned long prot)
+> > -{
+> > -	return __ioremap(addr, size, __pgprot(prot));
+> > +		return (void __iomem *) *paddr;
+> 
+> Another checkpatch nitpick no space after the cast.
 
-Here is the summary with links:
-  - [net-next,v4,01/17] net: dsa: microchip: add separate struct ksz_chip_data for KSZ8563 chip
-    https://git.kernel.org/netdev/net-next/c/b44908095612
-  - [net-next,v4,02/17] net: dsa: microchip: do per-port Gbit detection instead of per-chip
-    https://git.kernel.org/netdev/net-next/c/505bf3205aaa
-  - [net-next,v4,03/17] net: dsa: microchip: don't announce extended register support on non Gbit chips
-    https://git.kernel.org/netdev/net-next/c/d7539fc2b41a
-  - [net-next,v4,04/17] net: dsa: microchip: allow to pass return values for PHY read/write accesses
-    https://git.kernel.org/netdev/net-next/c/8f4204567923
-  - [net-next,v4,05/17] net: dsa: microchip: forward error value on all ksz_pread/ksz_pwrite functions
-    https://git.kernel.org/netdev/net-next/c/d38bc3b4b8a6
-  - [net-next,v4,06/17] net: dsa: microchip: ksz9477: add error handling to ksz9477_r/w_phy
-    https://git.kernel.org/netdev/net-next/c/9da975e1bbef
-  - [net-next,v4,07/17] net: dsa: microchip: ksz8795: add error handling to ksz8_r/w_phy
-    https://git.kernel.org/netdev/net-next/c/9590fc4a2af5
-  - [net-next,v4,08/17] net: dsa: microchip: KSZ9893: do not write to not supported Output Clock Control Register
-    https://git.kernel.org/netdev/net-next/c/b5708dc6539d
-  - [net-next,v4,09/17] net: dsa: microchip: add support for regmap_access_tables
-    https://git.kernel.org/netdev/net-next/c/ec6ba50c65c1
-  - [net-next,v4,10/17] net: dsa: microchip: add regmap_range for KSZ8563 chip
-    https://git.kernel.org/netdev/net-next/c/41131bac9a9a
-  - [net-next,v4,11/17] net: dsa: microchip: ksz9477: remove MII_CTRL1000 check from ksz9477_w_phy()
-    https://git.kernel.org/netdev/net-next/c/5bd3ecd121e3
-  - [net-next,v4,12/17] net: dsa: microchip: add regmap_range for KSZ9477 chip
-    https://git.kernel.org/netdev/net-next/c/74e792b5f2dd
-  - [net-next,v4,13/17] net: dsa: microchip: ksz9477: use internal_phy instead of phy_port_cnt
-    https://git.kernel.org/netdev/net-next/c/0a7fbd514edf
-  - [net-next,v4,14/17] net: dsa: microchip: remove unused port phy variable
-    https://git.kernel.org/netdev/net-next/c/6aaa8e7d2002
-  - [net-next,v4,15/17] net: dsa: microchip: ksz9477: remove unused "on" variable
-    https://git.kernel.org/netdev/net-next/c/7d39143449ea
-  - [net-next,v4,16/17] net: dsa: microchip: remove unused sgmii variable
-    https://git.kernel.org/netdev/net-next/c/e7f695210140
-  - [net-next,v4,17/17] net: dsa: microchip: remove IS_9893 flag
-    https://git.kernel.org/netdev/net-next/c/32cbac21b9f4
+Will fix.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> 
+> > +	return NULL;
+> >  }
+> > -EXPORT_SYMBOL(ioremap_prot);
+> >  
+> > -void __iomem *ioremap(phys_addr_t addr, size_t size)
+> > +int arch_iounmap(void __iomem *addr)
+> >  {
+> > -	return __ioremap(addr, size, PAGE_KERNEL);
+> > -}
+> > -EXPORT_SYMBOL(ioremap);
+> > -
+> > -void __iomem *ioremap_wc(phys_addr_t addr, size_t size)
+> > -{
+> > -	return __ioremap(addr, size, pgprot_writecombine(PAGE_KERNEL));
+> > -}
+> > -EXPORT_SYMBOL(ioremap_wc);
+> > -
+> > -void __iomem *ioremap_wt(phys_addr_t addr, size_t size)
+> > -{
+> > -	return __ioremap(addr, size, pgprot_writethrough(PAGE_KERNEL));
+> > -}
+> > -EXPORT_SYMBOL(ioremap_wt);
+> > -
+> > -void iounmap(volatile void __iomem *addr)
+> > -{
+> > -	if (static_branch_likely(&have_mio))
+> > -		vunmap((__force void *) ((unsigned long) addr & PAGE_MASK));
+> > +	if (!static_branch_likely(&have_mio))
+> > +		return -EINVAL;
+> 
+> As Christoph suggested this might be a good opportunity to add a
+> comment for this branch.
+> 
+> One other nitpick. The return value doesn't really matter here since
+> anything != NULL turns iounmap() into a no-op so this looks correct but
+> semantically I think returning -EINVAL wrongly suggests that addr was
+> invalid. Maybe -ENXIO would be better at conveying that there is
+> nothing to unmap.
+> 
+> Looking at your patch 1 another idea would be to have 3 kinds of return
+> values for arch_iounmap() too e.g.:
+> 
+>  arch_iounmap() return an __iomem pointer
+>    - IS_ERR means skip vunmap and return directly
+>    - NULL means continue to vunmap
+>    - a non-NULL, non-IS_ERR pointer has been unmapped successfully
 
+I agree with you, The returned -EINVAL does cause confusion.
+
+I checked all ARCHes related in this patchset, we only do the arch
+specific address filtering (or address checking), then call vunmap().
+Seems no error case or error handling in iounmap(). I'm thinking if
+we should make the return value as boolean value. Ture indicates
+address checking passed, false indicates not passed.
+
+
+> 
+> Then we would simply return addr in case of
+> !static_branch_likely(&have_mio) and NULL otherwise.
+> 
+> What do you think? Either way no strong opinion on my side,
+> functionally it makes no difference.
+> 
+> > +	return 0;
+> >  }
+> > -EXPORT_SYMBOL(iounmap);
+> >  
+> >  /* Create a virtual mapping cookie for a PCI BAR */
+> >  static void __iomem *pci_iomap_range_fh(struct pci_dev *pdev, int bar,
+> 
+> Apart from the above nitpicks and suggestion this looks good to me.
+> I did also test this with and without PCI MIO support including use of
+> PCI MIO instructions in user-space (added in rdma-core v40).
+> 
+> So feel free to add:
+> Tested-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> Acked-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> 
+> Since it looks like there will be a v3 due to other comments anyway
+> please Cc me on that directly and I'm sure I can upgrade the Acked-by
+> to Reviewed-by when we're closer to the final code.
+
+Sure, I will add you in Cc when repost. Thank again for these details.
+
+
+> 
 

@@ -2,140 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C482F5A86B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:25:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DA55A86B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231154AbiHaTZa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 15:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59300 "EHLO
+        id S231302AbiHaT0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 15:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiHaTZ2 (ORCPT
+        with ESMTP id S229499AbiHaT0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 15:25:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AC958168D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:25:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661973927;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=y3ggwS2nrH2KekbfZ8v1RY68Sf9S2v0ryOgRAbqObHY=;
-        b=MbvWZrPydzf+A6bjyFPrEKpBK8zEt+GxAabdDbdCy/mrV84tACXoblEwXB4cArEVkv5reU
-        NNPUHdCSs2MRPnUqOJVY7DRDJXEkEJXuJSL3YdPdu2hJGBdnN0BqKUQEz8YbDsB4t/SE+r
-        LcRdRLkRTtT8YEu8wimjVxdUloquSpE=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-459-fnBmVQqDMX2K8ZqcZhrPpA-1; Wed, 31 Aug 2022 15:25:25 -0400
-X-MC-Unique: fnBmVQqDMX2K8ZqcZhrPpA-1
-Received: by mail-wm1-f69.google.com with SMTP id r83-20020a1c4456000000b003a7b679981cso102072wma.6
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:25:25 -0700 (PDT)
+        Wed, 31 Aug 2022 15:26:32 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41A6E1A96
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:26:30 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id w2so15089179pld.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=6n7Eu1ta9una9qyMHFv9XMxljrhyT7+TH3jaU8Dm+Bg=;
+        b=R0t2HbSLJNz/FBnYH9ZqUSqOd9IdFL8JZFTYc43ONxL0mCwZNhyXR0B9VC5H8d8yVK
+         n/Un4rbIpG+iA94HDOKuRmtooTuVWMDk1M0NBKiVtC9VecehMvjkJ50tiK/FlWAhL5Vx
+         QIAMTgby39iRz19dr9XFJx1gC6RFfyY7btuvY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=y3ggwS2nrH2KekbfZ8v1RY68Sf9S2v0ryOgRAbqObHY=;
-        b=WeDu8Gn1wQ6BKi4z5aJ3/I2/eziitN3GqH7FSGgP8Ge+znEI7VlKZQy5C5fE0rd4Y7
-         vcSoQJEHj9mDnMHAAh7E1rc7tPQyUZkz/8TPx4N9b/WdsOCbzXk9aUGuUOD1QJ1S1M+A
-         o/pZpNXPx4qctWksRIK+a3HflV7Fz7F517I7e3WGXBCFtxwPRazVOXIJXguG9qFEhLbp
-         sx61QIZVhCXGs/uZweDzm3aYYCSQJPURf7aFt2QlQCcMHMFNkoQ4SZRYi2OsMic5eNFG
-         /LA2PBu5ojmZn9635iDEOL0k8Q2Zx0xPqoRcJEfBW/TvrzH2yT7vuBZja+rIQyZp72MA
-         N+sw==
-X-Gm-Message-State: ACgBeo1LyaxaXsMENy1qx/iegpJItSqF1KRauw80DEV+qVMnlKRyYZ2I
-        Lzd8EA0Z2a0TqgEOVg0Klze494gqqopGvBkMIvDHwwFnEonNiDWlZp8ojx9zfLiIhZq2JOrc1Z5
-        qgBa3E6YkdeIYLRfhHkcc8A42
-X-Received: by 2002:a05:6000:795:b0:226:e8d9:828c with SMTP id bu21-20020a056000079500b00226e8d9828cmr3618483wrb.464.1661973924583;
-        Wed, 31 Aug 2022 12:25:24 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4fs8by6IoJFQ787oFgJNHbEqCREzybMcTnbSuDfwQnhjlpKfAOJG3sm+OqTQ8QlSY6Go1zUQ==
-X-Received: by 2002:a05:6000:795:b0:226:e8d9:828c with SMTP id bu21-20020a056000079500b00226e8d9828cmr3618473wrb.464.1661973924345;
-        Wed, 31 Aug 2022 12:25:24 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c706:2900:1613:4308:aca3:2786? (p200300cbc706290016134308aca32786.dip0.t-ipconnect.de. [2003:cb:c706:2900:1613:4308:aca3:2786])
-        by smtp.gmail.com with ESMTPSA id n42-20020a05600c502a00b003a83ac538a1sm3030022wmr.29.2022.08.31.12.25.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 12:25:23 -0700 (PDT)
-Message-ID: <0aba2bfc-9f10-2fb1-1858-d8eb04b5d52e@redhat.com>
-Date:   Wed, 31 Aug 2022 21:25:22 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=6n7Eu1ta9una9qyMHFv9XMxljrhyT7+TH3jaU8Dm+Bg=;
+        b=JNa8CyNUAa1UvSBc6+Bq6YFAg13BHsSdUXUbI1r1I9v0a9BP7gKHTPejDCOOSA1Z8a
+         1w8cv+uiqhB5/Dg2+1tZcFgQY2dBDD9cX0ogvJsnsQMBH07CJImYRlt6ONvEuQ/cblau
+         XB9M/yvaSRzh2jGiFjb2/KJxGSnZ+NXhQOcbmlxaBZqc+3n6z/PYakXFA8tYaAfIZNfD
+         wbQv2D7LuYm6paEgtijeZ471H6GW9tqoNiuMQ6X0ZU6TQ0A1pYOtRKFiP3IyIfptwGR2
+         viJ7N6e+WBUbTez3OgVlY32s6o1EotubXj3yEq/eOVVWsgSMZ2/VVgRec+/C89UYSq8O
+         byCg==
+X-Gm-Message-State: ACgBeo1Yc3/gh54wOXKgSHVWoPA5SD69hnJJwr8h8FxB+WBh1ztrNHYQ
+        CW3ElYi3YK0MNnA8cK67Yiu58fV9INEl0g==
+X-Google-Smtp-Source: AA6agR5Ye/RIwZJ+U32GqPBUDn3wdgnISuRQaYwABtUjAZVYVrmE0NA5w+6+eHjmw8u8JtrABdVHiw==
+X-Received: by 2002:a17:902:cf0c:b0:172:a41b:63a8 with SMTP id i12-20020a170902cf0c00b00172a41b63a8mr27107308plg.161.1661973990509;
+        Wed, 31 Aug 2022 12:26:30 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q9-20020a170902bd8900b0016f035dcd75sm11878243pls.193.2022.08.31.12.26.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 12:26:29 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 12:26:28 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2][next] net/ipv4: Use __DECLARE_FLEX_ARRAY() helper
+Message-ID: <202208311226.2454C8050A@keescook>
+References: <Yw+yqpCd5A/Q1oo5@work>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 2/3] mm/gup: use gup_can_follow_protnone() also in
- GUP-fast
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Alistair Popple <apopple@nvidia.com>
-References: <20220825164659.89824-1-david@redhat.com>
- <20220825164659.89824-3-david@redhat.com>
- <1892f6de-fd22-0e8b-3ff6-4c8641e1c68e@redhat.com>
- <2e20c90d-4d1f-dd83-aa63-9d8d17021263@redhat.com>
- <Yw5a1paQJ9MNdgmW@nvidia.com>
- <9ce3aaaa-71a6-5a81-16a3-36e6763feb91@redhat.com>
- <9a4fe603-950e-785b-6281-2e309256463f@nvidia.com>
- <68b38ac4-c680-b694-21a9-1971396d63b9@redhat.com>
- <Yw+KnRTrZ74qFUAA@xz-m1.local>
- <4d067a99-1112-3b3d-bedf-35c1124904fd@redhat.com>
- <Yw+nFBgnSH9WWYHv@xz-m1.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <Yw+nFBgnSH9WWYHv@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yw+yqpCd5A/Q1oo5@work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>>> diff --git a/mm/ksm.c b/mm/ksm.c
->>>> index d7526c705081..971cf923c0eb 100644
->>>> --- a/mm/ksm.c
->>>> +++ b/mm/ksm.c
->>>> @@ -1091,6 +1091,7 @@ static int write_protect_page(struct vm_area_struct *vma, struct page *page,
->>>>  			goto out_unlock;
->>>>  		}
->>>>  
->>>> +		/* See page_try_share_anon_rmap(): clear PTE first. */
->>>>  		if (anon_exclusive && page_try_share_anon_rmap(page)) {
->>>>  			set_pte_at(mm, pvmw.address, pvmw.pte, entry);
->>>>  			goto out_unlock;
->>>> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
->>>> index 27fb37d65476..47e955212f15 100644
->>>> --- a/mm/migrate_device.c
->>>> +++ b/mm/migrate_device.c
->>>> @@ -193,20 +193,16 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
->>>>  			bool anon_exclusive;
->>>>  			pte_t swp_pte;
->>>>  
->>>
->>> flush_cache_page() missing here?
->>
->> Hmm, wouldn't that already be missing on the !anon path right now?
+On Wed, Aug 31, 2022 at 02:12:42PM -0500, Gustavo A. R. Silva wrote:
+> We now have a cleaner way to keep compatibility with user-space
+> (a.k.a. not breaking it) when we need to keep in place a one-element
+> array (for its use in user-space) together with a flexible-array
+> member (for its use in kernel-space) without making it hard to read
+> at the source level. This is through the use of the new
+> __DECLARE_FLEX_ARRAY() helper macro.
 > 
-> Yes, I think Alistair plans to fix it too in the other patchset.  So either
-> this will rebase to that or it should fix it too.  Thanks,
+> The size and memory layout of the structure is preserved after the
+> changes. See below.
 > 
+> Before changes:
+> 
+> $ pahole -C ip_msfilter net/ipv4/igmp.o
+> struct ip_msfilter {
+> 	union {
+> 		struct {
+> 			__be32     imsf_multiaddr_aux;   /*     0     4 */
+> 			__be32     imsf_interface_aux;   /*     4     4 */
+> 			__u32      imsf_fmode_aux;       /*     8     4 */
+> 			__u32      imsf_numsrc_aux;      /*    12     4 */
+> 			__be32     imsf_slist[1];        /*    16     4 */
+> 		};                                       /*     0    20 */
+> 		struct {
+> 			__be32     imsf_multiaddr;       /*     0     4 */
+> 			__be32     imsf_interface;       /*     4     4 */
+> 			__u32      imsf_fmode;           /*     8     4 */
+> 			__u32      imsf_numsrc;          /*    12     4 */
+> 			__be32     imsf_slist_flex[0];   /*    16     0 */
+> 		};                                       /*     0    16 */
+> 	};                                               /*     0    20 */
+> 
+> 	/* size: 20, cachelines: 1, members: 1 */
+> 	/* last cacheline: 20 bytes */
+> };
+> 
+> After changes:
+> 
+> $ pahole -C ip_msfilter net/ipv4/igmp.o
+> struct ip_msfilter {
+> 	__be32                     imsf_multiaddr;       /*     0     4 */
+> 	__be32                     imsf_interface;       /*     4     4 */
+> 	__u32                      imsf_fmode;           /*     8     4 */
+> 	__u32                      imsf_numsrc;          /*    12     4 */
+> 	union {
+> 		__be32             imsf_slist[1];        /*    16     4 */
+> 		struct {
+> 			struct {
+> 			} __empty_imsf_slist_flex;       /*    16     0 */
+> 			__be32     imsf_slist_flex[0];   /*    16     0 */
+> 		};                                       /*    16     0 */
+> 	};                                               /*    16     4 */
+> 
+> 	/* size: 20, cachelines: 1, members: 5 */
+> 	/* last cacheline: 20 bytes */
+> };
+> 
+> In the past, we had to duplicate the whole original structure within
+> a union, and update the names of all the members. Now, we just need to
+> declare the flexible-array member to be used in kernel-space through
+> the __DECLARE_FLEX_ARRAY() helper together with the one-element array,
+> within a union. This makes the source code more clean and easier to read.
+> 
+> Link: https://github.com/KSPP/linux/issues/193
+> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
 
-I'll include it in this patch for now, because by dropping it I would
-make the situation "worse". But most probably we want a separate fix
-upfront that we can properly backport to older kernels.
-
-Thanks!
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Kees Cook

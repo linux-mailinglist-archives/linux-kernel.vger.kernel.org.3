@@ -2,124 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE435A84CD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:54:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 959535A84D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:56:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232228AbiHaRyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:54:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
+        id S231398AbiHaRz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 13:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232058AbiHaRyA (ORCPT
+        with ESMTP id S229977AbiHaRz6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:54:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DC7DF671
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661968438;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=83UeBlTXkZlPfDjGH2tInHwryedeCfsq3pruEuPg7pU=;
-        b=FCB97MpK4Gp1i3c/kgWdZEHVNuVIGsXOSpqwN2k7MwMaP3Oqp9d8BH8vUzTuIXHxQ9JyrP
-        qmjRLXjNPk46OwrneVgZrbcoImqOiWU2V4NYssmDfs4MxeGYkdi0aBhm5bqR2NVIs00g+z
-        ZHSwJOI2EHATiwlKfQ5Ufy8cB9L+CzM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-127-W5dFUaQbPmKxvdc2-PLgIw-1; Wed, 31 Aug 2022 13:53:54 -0400
-X-MC-Unique: W5dFUaQbPmKxvdc2-PLgIw-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53494185A7B2;
-        Wed, 31 Aug 2022 17:53:54 +0000 (UTC)
-Received: from starship (unknown [10.40.194.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B177F1415117;
-        Wed, 31 Aug 2022 17:53:52 +0000 (UTC)
-Message-ID: <510a641f6393ff11c00277df58c1d2a7b6e9a696.camel@redhat.com>
-Subject: Re: [PATCH 16/19] KVM: x86: Explicitly track all possibilities for
- APIC map's logical modes
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Wed, 31 Aug 2022 20:53:51 +0300
-In-Reply-To: <Yw+Sz+5rB+QNP2Z9@google.com>
-References: <20220831003506.4117148-1-seanjc@google.com>
-         <20220831003506.4117148-17-seanjc@google.com>
-         <8d3569a8b2d1563eb3ff665118ffc5c8d7e1e2f2.camel@redhat.com>
-         <Yw+Sz+5rB+QNP2Z9@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 31 Aug 2022 13:55:58 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF87D3E65
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:55:56 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id 76so15175709pfy.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:55:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=vmx4gHJp3u58Y95b/+pQhpJVRJy7LPLrGYUILaqzP90=;
+        b=cR6Hz+GMMYCP8ejaPhssEUK/Gx3B34EwyM3LRufVEgzzzrO5yjztpWB3eb476vbXap
+         mT8BdcHIZg3Vf94818iIUNfNWKoHPsOU+gNxl7BHpIIcRQJ5RQW6jriNTwViEx7KgUW6
+         G45dwnVeLQqAJKCAO8booBUPOGUmS/V1/wgaeWJabK+dXammfkjTmWxCX/XooMXoMjbj
+         2dmF7skteetLhBWrBOGpEFSib0wakZxn4yd2T5NtZlQw1c08d+gH6tsgJmLkEJJB5fJQ
+         bbXYuYBkexBNqhVsmU7xGqhovjourbT3BbYrbN2062xgPrGh7TrApRjQtiNoLiiFu7i2
+         qGiw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=vmx4gHJp3u58Y95b/+pQhpJVRJy7LPLrGYUILaqzP90=;
+        b=JmXvrvQWrjk25jYwCkq4dx5Z+6jcRSJdwYXfU3ZqJ7gC2rBP8JEGfeKyMmAOUNNKiT
+         fmYU7px8Zsnh4a5uxtxsUg3WtN4WDojGF6y6Rqo2VTEzWkUj23YAWNnv69KoWquw3Z/i
+         kdxk2TxgpuqKnpNyOB8s4Kn7hMDwe3dsKPPb823W1TrNLJGXmenC0YSDRA9ZkAfpmOhk
+         DoqXOj5TT4U1VebqdJzkU+gbz/52MyW619ujenu4Zv3qYnmuXA3B/6c1u4Ttw/6uZGF7
+         CQ/PBMZTSFsRHaHiSnpET4cRA9pMX9oUxmzgfFkkIVwLCabQn0zDnT+xU8VK+WxRV8/R
+         VeIw==
+X-Gm-Message-State: ACgBeo2F3Uo1hTOEjUm1sMeTTHAaZQsoP19bDuwySi0xn9lBPtVfPTrg
+        aBz0yHJhInEM93q+Alf2C5dciecnUuTdLzNPCs0=
+X-Google-Smtp-Source: AA6agR7/NHH+IR98XLUgrClivA8XFdyDFCxcjCDKLVj7jfAgRPUp7YKdkpzhs8wwSbn2yp6oifmnZc80rfMAGHkfMYc=
+X-Received: by 2002:aa7:9193:0:b0:536:62e6:1a84 with SMTP id
+ x19-20020aa79193000000b0053662e61a84mr27241415pfa.20.1661968555798; Wed, 31
+ Aug 2022 10:55:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220831083024.37138-1-david@redhat.com>
+In-Reply-To: <20220831083024.37138-1-david@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Wed, 31 Aug 2022 10:55:43 -0700
+Message-ID: <CAHbLzkqeDAnCdt3q4E2RZw64QEzVaO_pseR3VaoHUhB+rZFcZQ@mail.gmail.com>
+Subject: Re: [PATCH v1] mm/ksm: update stale comment in write_protect_page()
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-31 at 16:56 +0000, Sean Christopherson wrote:
-> On Wed, Aug 31, 2022, Maxim Levitsky wrote:
-> > > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> > > index 8209caffe3ab..3b6ef36b3963 100644
-> > > --- a/arch/x86/kvm/lapic.c
-> > > +++ b/arch/x86/kvm/lapic.c
-> > > @@ -168,7 +168,12 @@ static bool kvm_use_posted_timer_interrupt(struct kvm_vcpu *vcpu)
-> > >  
-> > >  static inline bool kvm_apic_map_get_logical_dest(struct kvm_apic_map *map,
-> > >  		u32 dest_id, struct kvm_lapic ***cluster, u16 *mask) {
-> > > -	switch (map->mode) {
-> > > +	switch (map->logical_mode) {
-> > > +	case KVM_APIC_MODE_SW_DISABLED:
-> > > +		/* Arbitrarily use the flat map so that @cluster isn't NULL. */
-> > > +		*cluster = map->xapic_flat_map;
-> > > +		*mask = 0;
-> > > +		return true;
-> > Could you explain why this is needed? I probably missed something.
-> 
-> If all vCPUs leave their APIC software disabled, or leave LDR=0, then the overall
-> mode will be KVM_APIC_MODE_SW_DISABLED.  In this case, the effective "mask" is '0'
-> because there are no targets.  And this returns %true because there are no targets,
-> i.e. there's no need to go down the slow path after kvm_apic_map_get_dest_lapic().
+On Wed, Aug 31, 2022 at 1:30 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> The comment is stale, because a TLB flush is no longer sufficient and
+> required to synchronize against concurrent GUP-fast. This used to be true
+> in the past, whereby a TLB flush would have implied an IPI on architectures
+> that support GUP-fast, resulting in GUP-fast that disables local interrupts
+> from completing before completing the flush.
 
-I guess this case doesn't need optimization (although maybe some OSes do leave all LDRs to 0,
-if they don't use logical addressing, don't know)
+Hmm... it seems there might be problem for THP collapse IIUC. THP
+collapse clears and flushes pmd before doing anything on pte and
+relies on interrupt disable of fast GUP to serialize against fast GUP.
+But if TLB flush is no longer sufficient, then we may run into the
+below race IIUC:
 
-Anyway thanks, that makes sense.
+         CPU A                                                CPU B
+THP collapse                                             fast GUP
 
-> 
-> > > @@ -993,7 +1011,7 @@ static bool kvm_apic_is_broadcast_dest(struct kvm *kvm, struct kvm_lapic **src,
-> > >  {
-> > >  	if (kvm->arch.x2apic_broadcast_quirk_disabled) {
-> > >  		if ((irq->dest_id == APIC_BROADCAST &&
-> > > -				map->mode != KVM_APIC_MODE_X2APIC))
-> > > +		     map->logical_mode != KVM_APIC_MODE_X2APIC))
-> > >  			return true;
-> > >  		if (irq->dest_id == X2APIC_BROADCAST)
-> > >  			return true;
-> > 
-> > To be honest I would put that patch first, and then do all the other patches,
-> > this way you would avoid all of the hacks they do and removed here.
-> 
-> I did it this way so that I could test this patch for correctness.  Without the
-> bug fixes in place it's not really possible to verify this patch is 100% correct.
-> 
-> I completely agree that it would be a lot easier to read/understand/review if
-> this came first, but I'd rather not sacrifice the ability to easily test this patch.
-> 
+gup_pmd_range() <-- see valid pmd
 
-I am not 100% sure about this, but I won't argue about it, let it be.
+gup_pte_range() <-- work on pte
+clear pmd and flush TLB
+__collapse_huge_page_isolate()
+    isolate page <-- before GUP bump refcount
 
-Best regards,
-	Maxim Levitsky
+   pin the page
+__collapse_huge_page_copy()
+    copy data to huge page
+    clear pte (don't flush TLB)
+Install huge pmd for huge page
 
+return the obsolete page
+
+
+>
+> However, ever since general RCU GUP-fast was introduced in
+> commit 2667f50e8b81 ("mm: introduce a general RCU get_user_pages_fast()"),
+> this handling no longer applies in general. RCU primarily prevents page
+> tables from getting freed while they might still get walked by GUP-fast,
+> but we can race with GUP-fast after clearing the PTE and flushing the
+> TLB.
+>
+> Nowadays, we can see a refcount change from GUP-fast at any point in
+> time. However, GUP-fast detects concurrent PTE changes by looking up the
+> PTE, temporarily grabbing a reference, and dropping the reference again if
+> the PTE changed in the meantime.
+>
+> An explanation by Jason Gunthorpe regarding how existing memory barriers
+> should be fine to make sure that concurrent GUP-fast cannot succeed in
+> grabbing a reference with write permissions after we cleared the PTE and
+> flushed the TLB can be found at [1].
+>
+> Note that clearing PageAnonExclusive via page_try_share_anon_rmap()
+> might still need some explicit memory barriers to not have any possible
+> races with RCU GUP-fast.
+>
+> [1] https://lkml.kernel.org/r/Yw5rwIUPm49XtqOB@nvidia.com
+>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Jason Gunthorpe <jgg@nvidia.com>
+> Cc: John Hubbard <jhubbard@nvidia.com>
+> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> Cc: Hugh Dickins <hughd@google.com>
+> Cc: Peter Xu <peterx@redhat.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>  mm/ksm.c | 21 +++++++++------------
+>  1 file changed, 9 insertions(+), 12 deletions(-)
+>
+> diff --git a/mm/ksm.c b/mm/ksm.c
+> index 42ab153335a2..e88291f63461 100644
+> --- a/mm/ksm.c
+> +++ b/mm/ksm.c
+> @@ -1072,23 +1072,20 @@ static int write_protect_page(struct vm_area_struct *vma, struct page *page,
+>                 swapped = PageSwapCache(page);
+>                 flush_cache_page(vma, pvmw.address, page_to_pfn(page));
+>                 /*
+> -                * Ok this is tricky, when get_user_pages_fast() run it doesn't
+> -                * take any lock, therefore the check that we are going to make
+> -                * with the pagecount against the mapcount is racy and
+> -                * O_DIRECT can happen right after the check.
+> -                * So we clear the pte and flush the tlb before the check
+> -                * this assure us that no O_DIRECT can happen after the check
+> -                * or in the middle of the check.
+> -                *
+> -                * No need to notify as we are downgrading page table to read
+> -                * only not changing it to point to a new page.
+> +                * Especially if we're downgrading protection, make sure to
+> +                * flush the TLB now. No need to notify as we are not changing
+> +                * the PTE to point at a different page.
+>                  *
+>                  * See Documentation/mm/mmu_notifier.rst
+>                  */
+>                 entry = ptep_clear_flush(vma, pvmw.address, pvmw.pte);
+> +
+>                 /*
+> -                * Check that no O_DIRECT or similar I/O is in progress on the
+> -                * page
+> +                * Make sure that there are no unexpected references (e.g.,
+> +                * concurrent O_DIRECT). Note that while concurrent GUP-fast
+> +                * could raise the refcount temporarily to grab a write
+> +                * reference, it will observe the changed PTE and drop that
+> +                * temporary reference again.
+>                  */
+>                 if (page_mapcount(page) + 1 + swapped != page_count(page)) {
+>                         set_pte_at(mm, pvmw.address, pvmw.pte, entry);
+> --
+> 2.37.1
+>
+>

@@ -2,114 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CDE5A80B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5A25A80BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbiHaO4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52376 "EHLO
+        id S231671AbiHaO5F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:57:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230257AbiHaO4V (ORCPT
+        with ESMTP id S230474AbiHaO4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:56:21 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F17DACC32D;
-        Wed, 31 Aug 2022 07:55:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 9D33822100;
-        Wed, 31 Aug 2022 14:55:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661957745; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s6AjlAeWtcKwmBZkBON6SrodR56ivUjL6OJtH2nJbWA=;
-        b=JIUylpNW05JOiyVBi265AW5nHZI3DvkLsHtXw900NpgNlNlcUTiMa/ivHlSsAeATDm/KIJ
-        KJQGrrtZd9LEp2OkZ9lGmRir6YcExN10I9llYBHfnhSCsIHh0jq+OcCwGdGibV3XX3Mc6w
-        nFigLkrUB0iseJ3lSMRrlXRD19zHBXM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661957745;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=s6AjlAeWtcKwmBZkBON6SrodR56ivUjL6OJtH2nJbWA=;
-        b=i0V6x6gQGmnH4AZq4BwH7anJ6DOPGAbGNjpb4PbQ7W0aKjfflDqq6tdVc31SM1e/wph8/f
-        ADYRcGEViz62u9Dw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A42D313A7C;
-        Wed, 31 Aug 2022 14:55:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id q/YgHnB2D2PCXwAAMHmgww
-        (envelope-from <colyli@suse.de>); Wed, 31 Aug 2022 14:55:44 +0000
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH] bcache: bset: Fix comment typos
-From:   Coly Li <colyli@suse.de>
-In-Reply-To: <20220826100052.22945-24-jmaselbas@kalray.eu>
-Date:   Wed, 31 Aug 2022 22:55:42 +0800
-Cc:     linux-kernel@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        linux-bcache@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <FD6DF477-C5B5-482F-B237-0FC1B7CED915@suse.de>
-References: <20220826100052.22945-24-jmaselbas@kalray.eu>
-To:     Jules Maselbas <jmaselbas@kalray.eu>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
+        Wed, 31 Aug 2022 10:56:22 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6613BD399D;
+        Wed, 31 Aug 2022 07:56:14 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3378303138bso309561047b3.9;
+        Wed, 31 Aug 2022 07:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=JtKb77zNdGsRJt2tSkl+rd9dzEha879rPA4FbQ4zhmU=;
+        b=WuQII7iUZBVsy9e8duur0pmJ2mtebJ7AmHlsXVGy/0l7XmW9S8vCkFo7yYDd/EidCL
+         Ua85m+GA9AgZf8LtfwPbbbm5md1IE39GErVtVvhLprgEVroM/a2udzWTplKoO09DAAbS
+         e5yYGurmKxAZZFnyXQlzTXY5vLzDwaHCXYAoRhTlhsKwJStQAx0xCUT5lJl4+zMcjFdJ
+         1tAuAh4nDmGoJrZ6oYrPU6oXUTQh7zZbg+pPqiKE02lsQ1LnV/F9r91ASd7zzx5SkBmO
+         LF0/w7ghmRAizyAVa+g0j4pK78fFS0z/L82xjfyoPy4ySfYTB6db5ORBw5Xf3bS1Qfhm
+         SFbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=JtKb77zNdGsRJt2tSkl+rd9dzEha879rPA4FbQ4zhmU=;
+        b=FvfyaG7sKLT4MOHa7ns+Unckex5UCYt4Ohgs1epzOu6qcSrtUrQFbS9PnGOpLfDMa/
+         MruHXMyJEwOs7qjIimpH87ypBijpdLjPrB+oBEngXcyQScfcCp+13bAIFW7suoavZfxp
+         dTK2aoXJjjeoYBxQlv2EUoInoxv4jktt24ehjOvhLSm8YaPKF+6X2Qh88iEElaipYkDE
+         /c6NDvNZcSAkBQv8bGJWycZzR5kwHgtEXXaKkjn++fmBOFY8EQ2jmO2L9NGD+j5V3m25
+         uJhB+PosjIhk8JZwi3kaznQNrKhiEO8jxQx0nZTh0xagikKQ6mGNNx1OSOubB9GivWCT
+         dCpw==
+X-Gm-Message-State: ACgBeo1Z08CgCcMFZ1R72eanTIDF8OonsYUd2vA+4Imsknqzq4oRk16j
+        O5Ti8S2MSpQk+wQ9AuW/moY6R1Hvg+b8vLRQSOmH7jo38F4=
+X-Google-Smtp-Source: AA6agR4jFVMzeiWKseL0yZv0p7X9A7hbGIUKQXcA7Dr0iVXdyF0ALkr9svl6rC76U15/2Wkql44cZAjsTDpDccy6S8M=
+X-Received: by 2002:a81:49c3:0:b0:33e:da0a:cc8e with SMTP id
+ w186-20020a8149c3000000b0033eda0acc8emr18426602ywa.382.1661957773138; Wed, 31
+ Aug 2022 07:56:13 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220406072417.14185-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220406072417.14185-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Date:   Wed, 31 Aug 2022 15:55:45 +0100
+Message-ID: <CA+V-a8sZ8prbLgvg3MbqztgijQn8ZQDX_zSm5Uj6eQ8wvd7EFg@mail.gmail.com>
+Subject: Re: [PATCH] clocksource/drivers/renesas-ostm: Add support for RZ/V2L SoC
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LAK <linux-arm-kernel@lists.infradead.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Daniel,
 
-
-> 2022=E5=B9=B48=E6=9C=8826=E6=97=A5 18:00=EF=BC=8CJules Maselbas =
-<jmaselbas@kalray.eu> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Remove the redundant word `by`, correct the typo `creaated`.
->=20
-> CC: Kent Overstreet <kent.overstreet@gmail.com>
-> CC: linux-bcache@vger.kernel.org
-> Signed-off-by: Jules Maselbas <jmaselbas@kalray.eu>
-
-Added to my for-next queue. Thanks.
-
-Coly Li
-
+On Wed, Apr 6, 2022 at 8:24 AM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+>
+> The OSTM block is identical on Renesas RZ/G2L and RZ/V2L SoC's, so instead
+> of adding dependency for each SoC's add dependency on ARCH_RZG2L. The
+> ARCH_RZG2L config option is already selected by ARCH_R9A07G044 and
+> ARCH_R9A07G054.
+>
+> With the above change OSTM will be enabled on RZ/V2L SoC.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
-> drivers/md/bcache/bset.c | 2 +-
-> 1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/md/bcache/bset.c b/drivers/md/bcache/bset.c
-> index 94d38e8a59b3..2bba4d6aaaa2 100644
-> --- a/drivers/md/bcache/bset.c
-> +++ b/drivers/md/bcache/bset.c
-> @@ -1264,7 +1264,7 @@ static void __btree_sort(struct btree_keys *b, =
-struct btree_iter *iter,
-> 		 *
-> 		 * Don't worry event 'out' is allocated from mempool, it =
-can
-> 		 * still be swapped here. Because state->pool is a page =
-mempool
-> -		 * creaated by by mempool_init_page_pool(), which =
-allocates
-> +		 * created by mempool_init_page_pool(), which allocates
-> 		 * pages by alloc_pages() indeed.
-> 		 */
->=20
-> --=20
-> 2.17.1
->=20
+>  drivers/clocksource/renesas-ostm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+This patch has not been merged yet.
 
+Do you want me to resend it?
+
+Cheers,
+Prabhakar

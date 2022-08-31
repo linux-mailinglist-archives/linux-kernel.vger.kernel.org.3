@@ -2,108 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEA155A7D70
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:33:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101F05A7DAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:42:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbiHaMds (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:33:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S231356AbiHaMmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbiHaMdq (ORCPT
+        with ESMTP id S231358AbiHaMls (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:33:46 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 433B7D1E0D;
-        Wed, 31 Aug 2022 05:33:43 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id kh8so10925796qvb.1;
-        Wed, 31 Aug 2022 05:33:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=WJzy/1nFT0rKIpQxVCFdW9fFqLCzRixOrKbEu2Xp5NI=;
-        b=IfxcdONwMKB4VxhK6Hg2FQ8kn6Pg9GGLkhaaF4ljZIc72hOZLXdPchEJMkv7Oj78ZI
-         xS77kb42d3+YAz9vBWDQncCXmeOLrcf+kPgizAot2w8f7cMLLzIc6zAeSzvhB4JiPh9I
-         HUalZI0gbLNnLucNK2AZGfRg7IYNcfOQ9I+TR+XVzF0//oPIBbGx82Z45JDh5sXaPlN5
-         WOPWLbmFudFzv2ESgC4xHiRFIX0UoDear/oydi+Xj6mbQMScSIdwbXwFP4EgMuTLEXqc
-         dMOnw/CHJxNXyby9MJIdmWB/ifV62SkabytkaGPs5fIqDbm9zfNfsz3lGmHMoglmJlyZ
-         KhTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=WJzy/1nFT0rKIpQxVCFdW9fFqLCzRixOrKbEu2Xp5NI=;
-        b=ALUfSXyzn9uGEJKRPW9+4OIsmZD+PSrRN+BGmYewZvRpZWYuf4yY9gEG+Gwt0auaCE
-         L2Cj3GDC1lMWTuR9FDIV3C5+kxQpvzFUSmNCyJwcKoBQYKLARKPZ7qJCSgWvc/4QNTqY
-         lBGmdLs5EFRtXNmHI9rWA1GDv2gaWMjxJFHnlO1/IjGS19J0FxxAqNmttp+VEkihiIig
-         FAOoDVpebzOq7g97otx1AlvZVZPGOK7iaHQNDPhnL58ceDEA8GGXiVilAXD5s+jTi9Te
-         jdHOJEmhmiZU4Cwdiucp4T3/Erw2tJWoXywkSUnmklVKefgPLiEx/NBtmYKkzi62K9fs
-         28Ug==
-X-Gm-Message-State: ACgBeo3raV9E3nL46ibYAkoM5jTrRJwz0BjXPvP+U5omjnHg7+SiuEhc
-        vBk6KkMU9eTna559FwZq+8G7EaDBdssocAnFGxk=
-X-Google-Smtp-Source: AA6agR5hRcaT1OGzoc0WqIOyYpPuMWCqb0BMnTkFBjoK+voV4yeDEG3ddZNv273hvZ96Ju8BaQnZiCHY+cUeZLYm3R8=
-X-Received: by 2002:a05:6214:2022:b0:497:2c03:61 with SMTP id
- 2-20020a056214202200b004972c030061mr19621272qvf.11.1661949222422; Wed, 31 Aug
- 2022 05:33:42 -0700 (PDT)
+        Wed, 31 Aug 2022 08:41:48 -0400
+X-Greylist: delayed 506 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 05:41:46 PDT
+Received: from smtp86.iad3b.emailsrvr.com (smtp86.iad3b.emailsrvr.com [146.20.161.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7388D3E79
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
+        s=20190130-41we5z8j; t=1661949200;
+        bh=f7Ge6BqQzFFLnUBF1++YxLIJ1YH3OB0XRMTv5fP9cQc=;
+        h=Date:Subject:To:From:From;
+        b=K/crxDlTJz3YFxF6FIuw3JGVV3vC+U9Zbe1OvhOv5CHoSBijoQdVdl7TaLToBCs9p
+         07/S1aeUmXD6D2K6n6fNMnku8/d9U1KGhsRX0tVSejJO/ldL5kRrGYz31xswBHh059
+         RvEQgiawNT00NQ+bcpVwzwrV0dfQ7CLTqNsaJzGg=
+X-Auth-ID: abbotti@mev.co.uk
+Received: by smtp11.relay.iad3b.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id 36AE9400D4;
+        Wed, 31 Aug 2022 08:33:19 -0400 (EDT)
+Message-ID: <0a0e568e-e3fc-56da-8370-e4796b480fe3@mev.co.uk>
+Date:   Wed, 31 Aug 2022 13:33:18 +0100
 MIME-Version: 1.0
-References: <20220831095601.4157195-1-o.rempel@pengutronix.de> <20220831095601.4157195-3-o.rempel@pengutronix.de>
-In-Reply-To: <20220831095601.4157195-3-o.rempel@pengutronix.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 31 Aug 2022 15:33:06 +0300
-Message-ID: <CAHp75VcO=ipD8nW8CdQ18u1-SaD8GU1W=dUihCu+GqQrq3Uwcg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] iio: adc: tsc2046: silent spi_device_id warning
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH] comedi: sysfs: convert sysfs snprintf to sysfs_emit
+Content-Language: en-GB
+To:     Xuezhi Zhang <zhangxuezhi3@gmail.com>,
+        hsweeten@visionengravers.com, gregkh@linuxfoundation.org,
+        zhangxuezhi1@coolpad.com
+Cc:     linux-kernel@vger.kernel.org
+References: <20220831121456.210835-1-zhangxuezhi3@gmail.com>
+From:   Ian Abbott <abbotti@mev.co.uk>
+Organization: MEV Ltd.
+In-Reply-To: <20220831121456.210835-1-zhangxuezhi3@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Classification-ID: 0165e51f-50d6-4f1b-89cf-afbcf9ee0dca-1-1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 1:01 PM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
+On 31/08/2022 13:14, Xuezhi Zhang wrote:
+> From: zhangxuezhi1 <zhangxuezhi1@coolpad.com>
+> 
+> Fix up all sysfs show entries to use sysfs_emit
+> 
+> Signed-off-by: zhangxuezhi1 <zhangxuezhi1@coolpad.com>
 
-All below are minors (but you really need to Cc reviewers from the
-previous round(s) to pay the respect), so I leave them to IIO
-maintainers.
+The patch looks fine apart from the Signed-off-by line.  Please use a 
+proper name for the Signed-off-by line.  Generally, a romanized version 
+of the forename(s) (given name(s)) followed by the surname (family name) 
+is preferred, for example: Xuezhi Zhang.
 
-...
+Could you please post a "PATCH v2" with a proper Signed-off-by line? 
+Thanks.
 
-> Add spi_device_id to silent following kernel runtime warning:
-> "SPI driver tsc2046 has no spi_device_id for ti,tsc2046e-adc"
-
-Missed period.
-
->         dcfg = device_get_match_data(dev);
-> +       if (!dcfg) {
-
-> +               const struct spi_device_id *id;
-> +
-> +               id = spi_get_device_id(spi);
-
-You can move assignment to the definition line.
-
-> +               dcfg = (const struct tsc2046_adc_dcfg *)id->driver_data;
-> +       }
-
-> +
-
-Unneeded blank line, since these all are grouped semantically.
-
->         if (!dcfg)
->                 return -EINVAL;
+> ---
+>   drivers/comedi/comedi_fops.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/comedi/comedi_fops.c b/drivers/comedi/comedi_fops.c
+> index 55a0cae04b8d..e2114bcf815a 100644
+> --- a/drivers/comedi/comedi_fops.c
+> +++ b/drivers/comedi/comedi_fops.c
+> @@ -396,7 +396,7 @@ static ssize_t max_read_buffer_kb_show(struct device *csdev,
+>   	mutex_unlock(&dev->mutex);
+>   
+>   	comedi_dev_put(dev);
+> -	return snprintf(buf, PAGE_SIZE, "%u\n", size);
+> +	return sysfs_emit(buf, "%u\n", size);
+>   }
+>   
+>   static ssize_t max_read_buffer_kb_store(struct device *csdev,
+> @@ -452,7 +452,7 @@ static ssize_t read_buffer_kb_show(struct device *csdev,
+>   	mutex_unlock(&dev->mutex);
+>   
+>   	comedi_dev_put(dev);
+> -	return snprintf(buf, PAGE_SIZE, "%u\n", size);
+> +	return sysfs_emit(buf, "%u\n", size);
+>   }
+>   
+>   static ssize_t read_buffer_kb_store(struct device *csdev,
+> @@ -509,7 +509,7 @@ static ssize_t max_write_buffer_kb_show(struct device *csdev,
+>   	mutex_unlock(&dev->mutex);
+>   
+>   	comedi_dev_put(dev);
+> -	return snprintf(buf, PAGE_SIZE, "%u\n", size);
+> +	return sysfs_emit(buf, "%u\n", size);
+>   }
+>   
+>   static ssize_t max_write_buffer_kb_store(struct device *csdev,
+> @@ -565,7 +565,7 @@ static ssize_t write_buffer_kb_show(struct device *csdev,
+>   	mutex_unlock(&dev->mutex);
+>   
+>   	comedi_dev_put(dev);
+> -	return snprintf(buf, PAGE_SIZE, "%u\n", size);
+> +	return sysfs_emit(buf, "%u\n", size);
+>   }
+>   
+>   static ssize_t write_buffer_kb_store(struct device *csdev,
 
 -- 
-With Best Regards,
-Andy Shevchenko
+-=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
+-=( registered in England & Wales.  Regd. number: 02862268.  )=-
+-=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
+-=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-

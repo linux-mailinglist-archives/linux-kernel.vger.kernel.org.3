@@ -2,156 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C80AE5A84E2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:01:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A8095A84E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbiHaSBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
+        id S232011AbiHaSBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiHaSBJ (ORCPT
+        with ESMTP id S231845AbiHaSB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:01:09 -0400
-Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78202D4BE7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:01:07 -0700 (PDT)
-Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-11f0fa892aeso17666355fac.7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:01:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=T6Du1Lo5xImAO249U1dETl4IIbiFdjm8Fx7yNl0ICjY=;
-        b=MbYKgq9YQ6Cmkjnxo/SEbnM4RZKXJbf89tkfIphzPRlEB3rBPLNslG/zc7Fa5N37Fc
-         lhVNZA4SRNJ06uCP16o+JMRPLBbB7LZLhUmAhdDCGlpymbSMzCwQst5srlXLX+H8VtkA
-         XUAFrNIQJJI0kOzoWw7DNXGkMWcZoWg9//pcSu8QypDj4UjYgibbK79Z1QjY7pjyvltg
-         qxcihlzG1LpIR9Gb3RuZ69YrMRSOUl1bmFd7L9fhg8jqKoigPuvkaAZ1hWbqemGqF+VR
-         hXqzIImXiW+0FabsOWFDktXerKkrjF17lUaPV1+xNvHCDpkytsZXVVlzzaRlQ8JfF3zN
-         k+aA==
+        Wed, 31 Aug 2022 14:01:26 -0400
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B026DD4F8;
+        Wed, 31 Aug 2022 11:01:25 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id e71so5309948ybh.9;
+        Wed, 31 Aug 2022 11:01:25 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=T6Du1Lo5xImAO249U1dETl4IIbiFdjm8Fx7yNl0ICjY=;
-        b=YMuxNFIcY6wXxsQOVHmGfe5K5A+VVit3OEptaQa73/7co475s6JibanF6r4Ao3yu3M
-         OYaY4lQJGcE7LPq2OzDzEysGErJXy7m7IPdm/tqs++3rIvJ3iOio1AByI3ZWIRw1V8zc
-         Q6Dfu/Wo+sIauNjMIA6EuydMG46bwEoY1/6AA4bYAKycTogaOfi5QkuUg+mP9iZ1124/
-         PZhww+vwrCOGXZEm0g91JeAx5lw1jwr2UCUF9lDPinF2tTvSIsudfNRNvxS5iB/ufdDu
-         45IFBMFxD1DeObYBwi3/3Qyuz5y9uEgShUwMyHibJEHhTtCAa2SOqtxjGZ5yxJPslIqu
-         ddlg==
-X-Gm-Message-State: ACgBeo1PwLENMV//0XGnYVKnKjkVg7lVEx79LjsmellHtL1oJ6UTQsNW
-        MQPd8PiY8XwNgVacbd3KBB1OJXZZ050FyKJ1exeMhCUmqC6C2A==
-X-Google-Smtp-Source: AA6agR4nuWTt+l/HHXALlIvuHu0a36M8RihXtAB0CgHufnQWYfzsfDJoK3Av9fP0SMKZV1RXp2U8YrypIgn6ZCwEbcY=
-X-Received: by 2002:a05:6808:1641:b0:345:4f32:b30a with SMTP id
- az1-20020a056808164100b003454f32b30amr1800917oib.189.1661968866436; Wed, 31
- Aug 2022 11:01:06 -0700 (PDT)
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=VVktuC1tHcVjWphKZ83mZSdKAvpz7EcwQZEsdT73H08=;
+        b=N+mgdELDMwDQlHKiE039HU2Y7ljzhuiMpRzLxfgU86mrh+N0w57pqKPMA76CdKyE1p
+         0udP3XFtkJ49zLCx9lSGoMkegDv4S/xQYVYafq4jIqTAmovF8SNJceVhF1/wXbZIEMS2
+         ailxg8jZCdoAVqE9DjAkOg8uNGrUUryk3b1dnkPAiRcMvxe8nV+ELo/FeQvOMJP/agmj
+         K8dAOUiuNuSbjzY46DohODA+07pp8F/OohK2QqH1viSZ0KTNZEmIAifouFYDRHf84cLc
+         mRu7Py4VCsjLu/S0GsQaIDpSXTxeXdIHtoWugcI0S/uHgVOy1k213P0B91Jltq8L9TsQ
+         O90A==
+X-Gm-Message-State: ACgBeo2YyGqS9KYpjMwLo0BqvCFM+QUwdHS/pwa9BRzsrsFPHaT/mLlh
+        eSOIALHAJ3cbE93SpJ8NK1YHaRCbl5BrqTCZCT0=
+X-Google-Smtp-Source: AA6agR7n0eoCX6NQW4VMkE+zt6SHW1lUY07FER6iYtB8g617dkr4FAVyEaBzyAcpJRgvjL3G33I/yZ0KDqJpucojJI4=
+X-Received: by 2002:a25:ec0c:0:b0:690:d092:2d56 with SMTP id
+ j12-20020a25ec0c000000b00690d0922d56mr15354533ybh.622.1661968884114; Wed, 31
+ Aug 2022 11:01:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220823095915.v7.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid>
-In-Reply-To: <20220823095915.v7.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid>
-From:   Tim Van Patten <timvp@google.com>
-Date:   Wed, 31 Aug 2022 12:00:55 -0600
-Message-ID: <CANkg5ezTvzSFLkRWbhMDUqezQXW6996DYVohWMUa+cYwSB+YBw@mail.gmail.com>
-Subject: Re: [PATCH v7] platform/chrome: cros_ec_lpc: Move host command to prepare/complete
-To:     rrangel@chromium.org, robbarnes@google.com
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Tzung-Bi Shih <tzungbi@kernel.org>
+References: <20220830231541.1135813-1-rrangel@chromium.org> <20220830171332.1.Id022caf53d01112188308520915798f08a33cd3e@changeid>
+In-Reply-To: <20220830171332.1.Id022caf53d01112188308520915798f08a33cd3e@changeid>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 31 Aug 2022 20:01:12 +0200
+Message-ID: <CAJZ5v0h10wrurjYG50dA+pCfRtNDqN=c8odQ0p6HJRnOyJh7KA@mail.gmail.com>
+Subject: Re: [PATCH 1/8] Input: elan_i2c - Use PM subsystem to manage wake irq
+To:     Raul E Rangel <rrangel@chromium.org>
+Cc:     ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        timvp@google.com, "Rafael J. Wysocki" <rafael@kernel.org>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Friendly ping on this patch.
-
-
-On Tue, Aug 23, 2022 at 9:59 AM Tim Van Patten <timvp@google.com> wrote:
+On Wed, Aug 31, 2022 at 1:16 AM Raul E Rangel <rrangel@chromium.org> wrote:
 >
-> Update cros_ec_lpc_pm_ops to call cros_ec_lpc_prepare() during PM
-> .prepare() and cros_ec_lpc_complete() during .complete(). This moves the
-> host command that the AP sends and allows the EC to log entry/exit of
-> AP's suspend/resume more accurately.
+> The Elan I2C touchpad driver is currently manually managing the wake
+> IRQ. This change removes the explicit enable_irq_wake/disable_irq_wake
+> and instead relies on the PM subsystem. This is done by calling
+> dev_pm_set_wake_irq.
 >
-> Signed-off-by: Tim Van Patten <timvp@google.com>
+> i2c_device_probe already calls dev_pm_set_wake_irq when using device
+> tree, so it's only required when using ACPI. The net result is that this
+> change should be a no-op. i2c_device_remove also already calls
+> dev_pm_clear_wake_irq, so we don't need to do that in this driver.
+>
+> I tested this on an ACPI system where the touchpad doesn't have _PRW
+> defined. I verified I can still wake the system and that the wake source
+> was the touchpad IRQ GPIO.
+>
+> Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+
+I like this a lot, but the assumption in the wakeirq code is that the
+IRQ in question will be dedicated for signaling wakeup.  Does it hold
+here?
+
 > ---
 >
-> Changes in v7:
-> - Rename "host event" to "host command" in title/description.
+>  drivers/input/mouse/elan_i2c_core.c | 12 ++++--------
+>  1 file changed, 4 insertions(+), 8 deletions(-)
 >
-> Changes in v6:
-> - Fully restore fixes from v3.
+> diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
+> index e1758d5ffe4218..7d997d2b56436b 100644
+> --- a/drivers/input/mouse/elan_i2c_core.c
+> +++ b/drivers/input/mouse/elan_i2c_core.c
+> @@ -33,6 +33,7 @@
+>  #include <linux/jiffies.h>
+>  #include <linux/completion.h>
+>  #include <linux/of.h>
+> +#include <linux/pm_wakeirq.h>
+>  #include <linux/property.h>
+>  #include <linux/regulator/consumer.h>
+>  #include <asm/unaligned.h>
+> @@ -86,8 +87,6 @@ struct elan_tp_data {
+>         u16                     fw_page_size;
+>         u32                     fw_signature_address;
 >
-> Changes in v5:
-> - Restore fixes from v3.
+> -       bool                    irq_wake;
+> -
+>         u8                      min_baseline;
+>         u8                      max_baseline;
+>         bool                    baseline_ready;
+> @@ -1337,8 +1336,10 @@ static int elan_probe(struct i2c_client *client,
+>          * Systems using device tree should set up wakeup via DTS,
+>          * the rest will configure device as wakeup source by default.
+>          */
+> -       if (!dev->of_node)
+> +       if (!dev->of_node) {
+>                 device_init_wakeup(dev, true);
+> +               dev_pm_set_wake_irq(dev, client->irq);
+> +       }
 >
-> Changes in v4:
-> - Update title and description.
->
-> Changes in v3:
-> - Update cros_ec_lpc_suspend() to cros_ec_lpc_prepare()
-> - Update cros_ec_lpc_resume() to cros_ec_lpc_complete()
->
-> Changes in v2:
-> - Include cros_ec_resume() return value in dev_info() output.
-> - Guard setting .prepare/.complete with #ifdef CONFIG_PM_SLEEP.
->
->  drivers/platform/chrome/cros_ec_lpc.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-> index 7677ab3c0ead..4158bdeee197 100644
-> --- a/drivers/platform/chrome/cros_ec_lpc.c
-> +++ b/drivers/platform/chrome/cros_ec_lpc.c
-> @@ -530,23 +530,31 @@ static const struct dmi_system_id cros_ec_lpc_dmi_table[] __initconst = {
->  MODULE_DEVICE_TABLE(dmi, cros_ec_lpc_dmi_table);
->
->  #ifdef CONFIG_PM_SLEEP
-> -static int cros_ec_lpc_suspend(struct device *dev)
-> +static int cros_ec_lpc_prepare(struct device *dev)
->  {
->         struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
->
-> +       dev_info(dev, "Prepare EC suspend\n");
-> +
->         return cros_ec_suspend(ec_dev);
+>         return 0;
 >  }
+> @@ -1362,8 +1363,6 @@ static int __maybe_unused elan_suspend(struct device *dev)
 >
-> -static int cros_ec_lpc_resume(struct device *dev)
-> +static void cros_ec_lpc_complete(struct device *dev)
->  {
->         struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
-> +       int ret;
-> +
-> +       ret = cros_ec_resume(ec_dev);
+>         if (device_may_wakeup(dev)) {
+>                 ret = elan_sleep(data);
+> -               /* Enable wake from IRQ */
+> -               data->irq_wake = (enable_irq_wake(client->irq) == 0);
+>         } else {
+>                 ret = elan_set_power(data, false);
+>                 if (ret)
+> @@ -1394,9 +1393,6 @@ static int __maybe_unused elan_resume(struct device *dev)
+>                         dev_err(dev, "error %d enabling regulator\n", error);
+>                         goto err;
+>                 }
+> -       } else if (data->irq_wake) {
+> -               disable_irq_wake(client->irq);
+> -               data->irq_wake = false;
+>         }
 >
-> -       return cros_ec_resume(ec_dev);
-> +       dev_info(dev, "EC resume completed: ret = %d\n", ret);
->  }
->  #endif
->
->  static const struct dev_pm_ops cros_ec_lpc_pm_ops = {
-> -       SET_LATE_SYSTEM_SLEEP_PM_OPS(cros_ec_lpc_suspend, cros_ec_lpc_resume)
-> +#ifdef CONFIG_PM_SLEEP
-> +       .prepare = cros_ec_lpc_prepare,
-> +       .complete = cros_ec_lpc_complete
-> +#endif
->  };
->
->  static struct platform_driver cros_ec_lpc_driver = {
+>         error = elan_set_power(data, true);
 > --
-> 2.37.2.609.g9ff673ca1a-goog
+> 2.37.2.672.g94769d06f0-goog
 >
-
-
--- 
-
-Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997

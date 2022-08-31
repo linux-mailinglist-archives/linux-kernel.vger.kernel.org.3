@@ -2,142 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A545A7FFA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D05975A7FFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:21:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232075AbiHaOUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
+        id S232113AbiHaOVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232019AbiHaOUL (ORCPT
+        with ESMTP id S232067AbiHaOVj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:20:11 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B1212767;
-        Wed, 31 Aug 2022 07:20:08 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id z187so14531714pfb.12;
-        Wed, 31 Aug 2022 07:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=r5FNvAArY6+DdrbAQV5xtFM8Ev5kRn4IOzR0SYGzbj0=;
-        b=mq0v4aefcKxyHDKOrJY7nVXJonHJdssNVod4gMrwThyeGIzUXie3BRr754Ir8/Acas
-         IM6HYsYuTSvt2fp/NT37jDmpOLjpa2cY7gMbD1K5iXq/eyVQU3Ryg8sfOz2Eq3775Duh
-         8O9nO5tlAOEZxA2l6UCKQH1UO/6+HCSUv/heJ6Eg4dhBwD27YOKXktCrwDiYtOMG42TI
-         uez1usV9liro/wQYzkci59J7kqtZQoLUaS+N13yTp17pccK5qOKIHDxQCbadKzVklyI8
-         QYQsIHpl2Bb1brStypWoi15y72tr6FvcZn0+JF+NB1MpXspcou16gIyADO7VH2N3UeRT
-         JP8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=r5FNvAArY6+DdrbAQV5xtFM8Ev5kRn4IOzR0SYGzbj0=;
-        b=L70WePOkosG8T3SPjYWuElEnJwOXauhqYpwJjxNe1XGY9N50ra2iy9o5tgRb8Lgypa
-         8HrMsdKMOASShg3lg+LNel76fFVumJ04LMPvAnCF0aICHYnP6CMF14N5yc4henGWOya9
-         g+bjD4espDLtR54VcL4BrlWMgWcbJDtYH5YcXKrLoCZ4zN+bW8osACjHsxTXaE7Wo+9J
-         TUfXydNkG7bcttneeJwdtZAQU/WhY3vGzYMSCaHPAKLORssh1PnJgy1jXtThjL9Bj2Gs
-         VEO2ZxdxWQ7HBTq3QT5L9Pdeh3SOh7LP7FkeJQ3kwsvmK9UIEjx7v3kRIVbrF9wwKixj
-         6hhg==
-X-Gm-Message-State: ACgBeo3uhDx7nBR6/KJqzGc+zkQFWKS+yU7w774pD2A6qusfpdy12qn2
-        qtuJ3ZWngq4sRgr70XC+rAk=
-X-Google-Smtp-Source: AA6agR6RNWAuJ0eD9Dee7RHzeg1Cu4VYl42HG/gjhcJFDDUJwfX+y9F5CMTkRgA0RhjORZ4aAYpMAA==
-X-Received: by 2002:a65:6c10:0:b0:41b:ab8f:ff71 with SMTP id y16-20020a656c10000000b0041bab8fff71mr21921409pgu.308.1661955608030;
-        Wed, 31 Aug 2022 07:20:08 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b1-20020a17090a990100b001fdcfe9a731sm1342117pjp.50.2022.08.31.07.20.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 07:20:07 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: cui.jinpeng2@zte.com.cn
-To:     chuck.lever@oracle.com, jlayton@kernel.org
-Cc:     linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] NFSD: remove redundant variable status
-Date:   Wed, 31 Aug 2022 14:20:02 +0000
-Message-Id: <20220831142002.304176-1-cui.jinpeng2@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 31 Aug 2022 10:21:39 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B4358B07E0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:21:37 -0700 (PDT)
+Received: (qmail 191439 invoked by uid 1000); 31 Aug 2022 10:21:36 -0400
+Date:   Wed, 31 Aug 2022 10:21:36 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-usb@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: hcd: remove unused hcd_name variables
+Message-ID: <Yw9ucDxO7huIl/2W@rowland.harvard.edu>
+References: <20220831073032.1409291-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831073032.1409291-1-gregkh@linuxfoundation.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+On Wed, Aug 31, 2022 at 09:30:32AM +0200, Greg Kroah-Hartman wrote:
+> In the commit 10174220f55a ("usb: reduce kernel log spam on driver
+> registration") a lot of unneeded kernel log messages were removed, but
+> that caused a few build warnings to show up where the variable
+> `hcd_name` was being set but never used anymore.
+> 
+> Resolve this by just removing these variables as they are not needed
+> anymore
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Cc: Alan Stern <stern@rowland.harvard.edu>
+> Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Cc: Alim Akhtar <alim.akhtar@samsung.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: linux-usb@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-samsung-soc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Fixes: 10174220f55a ("usb: reduce kernel log spam on driver registration")
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  drivers/usb/host/ehci-exynos.c   | 1 -
+>  drivers/usb/host/ehci-platform.c | 2 --
+>  drivers/usb/host/ohci-platform.c | 2 --
+>  3 files changed, 5 deletions(-)
 
-Return value directly from fh_verify() do_open_permission()
-exp_pseudoroot() instead of getting value from
-redundant variable status.
+This isn't enough, as you can see from this kernel test robot excerpt:
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
----
- fs/nfsd/nfs4proc.c | 16 ++++------------
- 1 file changed, 4 insertions(+), 12 deletions(-)
+clang_recent_errors
+|-- arm-s5pv210_defconfig
+|   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ohci-exynos.c:warning:unused-variable-hcd_name
+|-- hexagon-randconfig-r024-20220830
+|   |-- drivers-usb-host-ehci-atmel.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-orion.c:warning:unused-variable-hcd_name
+|   |-- 
+drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-spear.c:warning:unused-variable-hcd_name
+|   `-- 
+drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+|-- hexagon-randconfig-r036-20220830
+|   |-- drivers-usb-host-ehci-atmel.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-npcm7xx.c:warning:unused-variable-hcd_name
+|   |-- 
+drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ehci-st.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ohci-at91.c:warning:unused-variable-hcd_name
+|   |-- 
+drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ohci-s3c2410.c:warning:unused-variable-hcd_name
+|   |-- drivers-usb-host-ohci-spear.c:warning:unused-variable-hcd_name
+|   `-- drivers-usb-host-ohci-st.c:warning:unused-variable-hcd_name
 
-diff --git a/fs/nfsd/nfs4proc.c b/fs/nfsd/nfs4proc.c
-index 757d8959f992..7055e1c91d0e 100644
---- a/fs/nfsd/nfs4proc.c
-+++ b/fs/nfsd/nfs4proc.c
-@@ -141,7 +141,6 @@ fh_dup2(struct svc_fh *dst, struct svc_fh *src)
- static __be32
- do_open_permission(struct svc_rqst *rqstp, struct svc_fh *current_fh, struct nfsd4_open *open, int accmode)
- {
--	__be32 status;
- 
- 	if (open->op_truncate &&
- 		!(open->op_share_access & NFS4_SHARE_ACCESS_WRITE))
-@@ -156,9 +155,7 @@ do_open_permission(struct svc_rqst *rqstp, struct svc_fh *current_fh, struct nfs
- 	if (open->op_share_deny & NFS4_SHARE_DENY_READ)
- 		accmode |= NFSD_MAY_WRITE;
- 
--	status = fh_verify(rqstp, current_fh, S_IFREG, accmode);
--
--	return status;
-+	return fh_verify(rqstp, current_fh, S_IFREG, accmode);
- }
- 
- static __be32 nfsd_check_obj_isreg(struct svc_fh *fh)
-@@ -454,7 +451,6 @@ static __be32
- do_open_fhandle(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate, struct nfsd4_open *open)
- {
- 	struct svc_fh *current_fh = &cstate->current_fh;
--	__be32 status;
- 	int accmode = 0;
- 
- 	/* We don't know the target directory, and therefore can not
-@@ -479,9 +475,7 @@ do_open_fhandle(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate, str
- 	if (open->op_claim_type == NFS4_OPEN_CLAIM_DELEG_CUR_FH)
- 		accmode = NFSD_MAY_OWNER_OVERRIDE;
- 
--	status = do_open_permission(rqstp, current_fh, open, accmode);
--
--	return status;
-+	return do_open_permission(rqstp, current_fh, open, accmode);
- }
- 
- static void
-@@ -668,11 +662,9 @@ static __be32
- nfsd4_putrootfh(struct svc_rqst *rqstp, struct nfsd4_compound_state *cstate,
- 		union nfsd4_op_u *u)
- {
--	__be32 status;
--
- 	fh_put(&cstate->current_fh);
--	status = exp_pseudoroot(rqstp, &cstate->current_fh);
--	return status;
-+
-+	return exp_pseudoroot(rqstp, &cstate->current_fh);
- }
- 
- static __be32
--- 
-2.25.1
+Yes, it has duplicates and your patch handles some of these.  But there 
+are others that still need to be fixed.  Also, this list is missing 
+ohci-pxa27x.c.
 
+Alan Stern

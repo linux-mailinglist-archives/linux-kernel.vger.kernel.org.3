@@ -2,102 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27A885A80D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85AE85A80D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbiHaPB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34154 "EHLO
+        id S231431AbiHaPDs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:03:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiHaPBW (ORCPT
+        with ESMTP id S229915AbiHaPDa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:01:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E414844D7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661958080;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QihsBjiZvNOELw0Rtm2S0fzDvkyeBUo3nxHPcuLxME0=;
-        b=EYvuux4Nt4lW4btKhMT41ATNrI921dKwSs8RmVQLKIUVCdvq14/lne8QDjnCBKPX2l0pN9
-        xMFlIwSK7OvUOPzJH4QiE/tyQSQwWZbck0k33Ng4UWpS38l/DxsvhSMPNysAGFg22EvMT7
-        nSvoPoLpEOY71/9NIAPL09WCp45x54w=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-517-rsAfYAwUOH212GukbWNnIg-1; Wed, 31 Aug 2022 11:01:16 -0400
-X-MC-Unique: rsAfYAwUOH212GukbWNnIg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 910051C01B34;
-        Wed, 31 Aug 2022 15:01:15 +0000 (UTC)
-Received: from [10.39.208.41] (unknown [10.39.208.41])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 37F82403344;
-        Wed, 31 Aug 2022 15:01:13 +0000 (UTC)
-Message-ID: <796c9d73-30a0-2401-e499-724aeb0f8dc6@redhat.com>
-Date:   Wed, 31 Aug 2022 17:01:11 +0200
+        Wed, 31 Aug 2022 11:03:30 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DA38D41BB
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:03:26 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id c59so12560031edf.10
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:03:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=Wvt6ITeF/X4JRSxdtK92jcKPth5+KtUlEAYbOxr/jds=;
+        b=PddbYj3qG05D1/L5GWquq87ECVO4EbUwFENnYFzNQL2UqGwNkl9svThio3fJoS1Xj2
+         mmCGnKGnMsMVQSIqJmeBWiLM/VxF5Zuftj4L8bV4+SXaMbCBlffHpWUMtqyu+kY+/v/Q
+         M9xWIbikP2nLLWQHu267ekz+EL+G1ArpvB8fs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=Wvt6ITeF/X4JRSxdtK92jcKPth5+KtUlEAYbOxr/jds=;
+        b=uJBcUoOyKeFExGjRqJHKKGJboqUwY2lqvwPyshjgPqG9yLvYXxn9ead0LSn/YvE68S
+         Kb9zkFqQByW0bGnGktgLjQRwUKlEspKinGd7uwSf7WahvNmo0snkfnjN8Xegm3yCp+/s
+         ERI3UWThm4T9xlOCvvs62BfTcKNViDHiupJdYdzp85NHTRrg8bAwG5kmuyLwU/aT3Q03
+         fe6hEO4G8YXohthB+WCjBUAvXMbyd/1038NOOJnCZNjFdck2vp4NkdH3PiCfSNo0yIop
+         DVhJsa53pRvwbl8jb0/F6WG4fnFjqdpDVMHfM2iZUlc0HpRTPs3vg2h3xNoA79aYEP0C
+         qg0Q==
+X-Gm-Message-State: ACgBeo10VO5YTcN8HIyGkxYOW4bV4Arn52bxJTLP0LJbdw1T6K+0vBhW
+        4b1H5+KY3PUE/dpS0jOr6ZyNhkIAhUizXW0ZAe8=
+X-Google-Smtp-Source: AA6agR7KxzmodC0K0yEpqRN5H5heTXBEYT3v0YQq0sbEUE1xkvQ0RSS2v08N3HG6fjuD5CEQbJ+Djg==
+X-Received: by 2002:aa7:cdcc:0:b0:447:bac0:4c20 with SMTP id h12-20020aa7cdcc000000b00447bac04c20mr24135306edw.183.1661958204375;
+        Wed, 31 Aug 2022 08:03:24 -0700 (PDT)
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com. [209.85.221.43])
+        by smtp.gmail.com with ESMTPSA id jt2-20020a170906ca0200b0072f0a9a8e6dsm7230493ejb.194.2022.08.31.08.03.23
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 08:03:23 -0700 (PDT)
+Received: by mail-wr1-f43.google.com with SMTP id u18so5991096wrq.10
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:03:23 -0700 (PDT)
+X-Received: by 2002:adf:f90d:0:b0:20c:de32:4d35 with SMTP id
+ b13-20020adff90d000000b0020cde324d35mr12130960wrr.583.1661958202933; Wed, 31
+ Aug 2022 08:03:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] vduse: prevent uninitialized memory accesses
-Content-Language: en-US
-To:     jasowang@redhat.com, Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, elic@nvidia.com,
-        guanjun@linux.alibaba.com, parav@nvidia.com,
-        gautam.dawar@xilinx.com, dan.carpenter@oracle.com,
-        xieyongji@bytedance.com, mst@redhat.com, stable@vger.kernel.org
-References: <20220829073424.5677-1-maxime.coquelin@redhat.com>
- <YwxvXFiuRqGxRgZH@kroah.com>
-From:   Maxime Coquelin <maxime.coquelin@redhat.com>
-In-Reply-To: <YwxvXFiuRqGxRgZH@kroah.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220720162314.1.Ieef5bc3848df40b71605b70bb571d6429e8978de@changeid>
+In-Reply-To: <20220720162314.1.Ieef5bc3848df40b71605b70bb571d6429e8978de@changeid>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Wed, 31 Aug 2022 08:03:11 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=WC0QUaZsHQHhc+TAV2JXT64rnxDh9OvskpVrZAXzfz=Q@mail.gmail.com>
+Message-ID: <CAD=FV=WC0QUaZsHQHhc+TAV2JXT64rnxDh9OvskpVrZAXzfz=Q@mail.gmail.com>
+Subject: Re: [PATCH] drm/panel-edp: Fix typo in kerneldoc comment (appers=>appears)
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/29/22 09:48, Greg KH wrote:
-> On Mon, Aug 29, 2022 at 09:34:24AM +0200, Maxime Coquelin wrote:
->> If the VDUSE application provides a smaller config space
->> than the driver expects, the driver may use uninitialized
->> memory from the stack.
->>
->> This patch prevents it by initializing the buffer passed by
->> the driver to store the config value.
->>
->> This fix addresses CVE-2022-2308.
->>
->> Cc: xieyongji@bytedance.com
->> Cc: stable@vger.kernel.org # v5.15+
->> Fixes: c8a6153b6c59 ("vduse: Introduce VDUSE - vDPA Device in Userspace")
->>
->> Acked-by: Jason Wang <jasowang@redhat.com>
->> Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
-> 
-> Please no blank line above the Acked-by: line here if possible.
+Sam,
 
-Sure.
+On Wed, Jul 20, 2022 at 4:23 PM Douglas Anderson <dianders@chromium.org> wrote:
+>
+> Ever since I got the spell-check working in my editor this one has
+> been bugging me. Fix it.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+>  drivers/gpu/drm/panel/panel-edp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
+> index e6645d6e9b59..07a383dff548 100644
+> --- a/drivers/gpu/drm/panel/panel-edp.c
+> +++ b/drivers/gpu/drm/panel/panel-edp.c
+> @@ -53,7 +53,7 @@ struct panel_delay {
+>          * before the HPD signal is reliable. Ideally this is 0 but some panels,
+>          * board designs, or bad pulldown configs can cause a glitch here.
+>          *
+> -        * NOTE: on some old panel data this number appers to be much too big.
+> +        * NOTE: on some old panel data this number appears to be much too big.
+>          * Presumably some old panels simply didn't have HPD hooked up and put
+>          * the hpd_absent here because this field predates the
+>          * hpd_absent. While that works, it's non-ideal.
 
-Jason, do you prefer I post a new revision with this single change or
-you will handle it while applying? Either way is fine to me.
+Maybe you'd be willing to give me an "Ack" for this stupid little
+patch so I can land it? ;-)
 
-Thanks,
-Maxime
-
-> thanks,
-> 
-> greg k-h
-> 
-
+-Doug

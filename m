@@ -2,91 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E56F95A7350
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:24:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8DF95A737B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:45:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiHaBYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 21:24:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48118 "EHLO
+        id S231450AbiHaBpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 21:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229645AbiHaBYr (ORCPT
+        with ESMTP id S229524AbiHaBpu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 21:24:47 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D73AC6F
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661909085; x=1693445085;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=FkIBsb2Ip4T6JggnftCE6hDxnF+ldLX60MiuOgGrmtA=;
-  b=XTnjJuSNVZplKUWagEVA/6GlDHB+VoT8pNxxLsbhWoWH2+njkJduVWcq
-   NNm6vow08Puf0cd8RTXG4eqpkFqvuEILpL+gTk0hf+JXO0ALTLZ4cU6Sv
-   a09+Ce8Pr006JKoIHaNkwBr2+yfJMidCkJbzxGQPIwrlIuTG+6pILc7xM
-   MKd0p4ai74Z6PXNKbGm4TrCp0+4S/Ub/vu/iRnIo1MY36WqnfKHjTI0LB
-   fGj3320RfkdWrwkez7jfu48YzC1IBnWBDmjvhr/ImqX8LMDMnRkHt4HJw
-   9N9P477r85WL7m4/p0YtkJQvPmLnBFhR4giEyWqo1mL6CLIsIsPdN8HwH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296130345"
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="296130345"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 18:24:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="754262670"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 30 Aug 2022 18:24:43 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTCTC-0000pn-2o;
-        Wed, 31 Aug 2022 01:24:42 +0000
-Date:   Wed, 31 Aug 2022 09:24:08 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     kbuild-all@lists.01.org, Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-fixes 1/5]
- peer_event.c:undefined reference to `icmpv6_err_convert'
-Message-ID: <202208310955.MOpvq0aG-lkp@intel.com>
+        Tue, 30 Aug 2022 21:45:50 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126B6A3D23
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:45:48 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 2AEF68C159D;
+        Wed, 31 Aug 2022 01:45:48 +0000 (UTC)
+Received: from pdx1-sub0-mail-a225 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 67ADB8C1249;
+        Wed, 31 Aug 2022 01:45:47 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661910347; a=rsa-sha256;
+        cv=none;
+        b=mvOgU5OXZ6LY1gtny8HH0q9dtHkp5xJJAobNsJ6ip2T6hWUmCgetI7LMwiOlYqhtaaP81N
+        sT5d7QmCc4YbkD++BoDMCUntxWrhSeb2gs5mp6OY+kVLbBZISyCVMg506LKsSJB7Br4Tv5
+        drxPbLYHsaTy3ng1twzTUmberCFTkH6oTTjx8A3dm40QrGQP0xb901gkNiigqJh5F9xBnY
+        OKIYYkq/uhi/xu8KXV6PoWtN2OCcKpe4lH3AFf6UzIub08JirsJpdS39qVtyLRlXYyAFxE
+        tIcg1HpJiOrxhXCZK8WLw0Sxnog3Yu9xbW2e8ajWg8q3Y9O5IHsDUGYqgS8R3A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661910347;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=zNLn2dHsTBceRZjkcg1LStmtB3rlWh45ayTcPyrcLHE=;
+        b=blDFoOR/GjYl0fhF3eamF93uCySUwUCk3Gb4w+3TCsQ1tdq3Gq8lQIkslxpZUPWpKGsMKZ
+        yWfTyK/3WXVWfiUCEY3pRQUqeIDw7kfFojWL5W5qN2SeryJvmXXSmGLphwoQNibT2dFcee
+        LbHNCx02KWQIptNTjrDt3Fspj8W1XvdnMcM0nr96ZvaCo51wvenDF8fZ1a02XUjM8oS8BE
+        eehG2tYRC2wdml3ZqQA0a/YsR/43FcLLfTYW30eaTrIvlDqQ1UK/sPsJYmSbFVChDaPu/9
+        oVAiWqZq6vMLL6MeeRSsOn1c1y88Q5rOK+hqrcUpJWw7JjH2D2MFVDVbTRLFJA==
+ARC-Authentication-Results: i=1;
+        rspamd-75b4464bd-b55wp;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Desert-Shade: 72b42a184c07e4b5_1661910347730_2928235378
+X-MC-Loop-Signature: 1661910347730:1075862939
+X-MC-Ingress-Time: 1661910347730
+Received: from pdx1-sub0-mail-a225 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.119.76.153 (trex/6.7.1);
+        Wed, 31 Aug 2022 01:45:47 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a225 (Postfix) with ESMTPSA id 4MHRpL59fFz85;
+        Tue, 30 Aug 2022 18:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661910347;
+        bh=zNLn2dHsTBceRZjkcg1LStmtB3rlWh45ayTcPyrcLHE=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=JseY8dJ7s16OJJFy2HwQ9tEDaX3NiudiVgFyfGZNRd1BI7JMhHBGrLCghrMa7KEn/
+         f2vpSUqAEt21tmtyHFqG9eDsjVzEB89ta9txEmllTsrcgfqroeERlv9YSrrxhN4xvp
+         88OpkqRhOTS5VifxBqwVwWdSaF9NyHBU3RviPqm1VUFPR2aFUIGmdCPK2pwS+4hcmq
+         Vy4fNKEMGL6TnW3quPQQxzCNRTasyxyGpO6zhm5KgFzD+kpJTnWAMcPO/qtRNqf0yD
+         5M20FU59iEEe+Btv7/RebyItlCbDULX60/1rHQ3NHziWDEUJj1FLLC3XL+F5V0DnWq
+         Do/db0qzFgDSQ==
+Date:   Tue, 30 Aug 2022 18:27:18 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v13 16/70] proc: remove VMA rbtree use from nommu
+Message-ID: <20220831012718.srlmcs7nbjql43nw@offworld>
+Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+ <20220822150128.1562046-17-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220822150128.1562046-17-Liam.Howlett@oracle.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-fixes
-head:   5ba1502ed90c38548d56a41156440fa70aed70ed
-commit: b445daa0f2ca96635e9620cef26a72619ce3644a [1/5] rxrpc: Fix ICMP/ICMP6 error handling
-config: m68k-randconfig-r034-20220830 (https://download.01.org/0day-ci/archive/20220831/202208310955.MOpvq0aG-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/b445daa0f2ca96635e9620cef26a72619ce3644a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-fixes
-        git checkout b445daa0f2ca96635e9620cef26a72619ce3644a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
+On Mon, 22 Aug 2022, Liam Howlett wrote:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+>From: "Matthew Wilcox (Oracle)" <willy@infradead.org>
+>
+>These users of the rbtree should probably have been walks of the linked
+>list, but convert them to use walks of the maple tree.
+>
+>Signed-off-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+>Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+>Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-All errors (new ones prefixed by >>):
-
-   m68k-linux-ld: net/rxrpc/peer_event.o: in function `rxrpc_encap_err_rcv':
->> peer_event.c:(.text+0x848): undefined reference to `icmpv6_err_convert'
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>

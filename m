@@ -2,103 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C329C5A7485
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 05:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BF725A748E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 05:42:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232280AbiHaDfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 23:35:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S230241AbiHaDkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 23:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232261AbiHaDfq (ORCPT
+        with ESMTP id S229659AbiHaDkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 23:35:46 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6432473324;
-        Tue, 30 Aug 2022 20:35:38 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id b196so2728483pga.7;
-        Tue, 30 Aug 2022 20:35:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=SIkOhpnSgF12O0JnM4QFh38Ot/jDR9kAJ4qYsNIujk4=;
-        b=eIygtkBWAQmAnn7mDNLw0of/85QWNnSdr415QP9X5+//LjjnDzLKCpsBBmv0yOooFh
-         LnowY3AunE6UFHvA4cX/K83phl4F/5Ehf7zkkgkWqjyHHWuBK9GUGO5eWOiPxe7TnUgx
-         Dtpzwh6izT6zykxRx5FDpTX3AGnrqaY00QB4hy1OgmJGuGThmeurDjMNCjl446YbXTNh
-         FHITG4J+RkHsODf459Cunkt1omY/wdntktgydSvtr5eltdnybivHRr+qCK9KqaI7faV7
-         mk4goy1bfGUsT6O5iUN0aFHc9EXecgkTSrdxc/zYSfHgu6ZGdZ1fUzgaeh4yT1Yp4RsY
-         MtQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=SIkOhpnSgF12O0JnM4QFh38Ot/jDR9kAJ4qYsNIujk4=;
-        b=WP5i9CpnpGnTYJFJOtFkDNXS6hsmv/QRTwL3ZGof7lWFreUukD/fzDOhCV6WVT5mL4
-         fw6H/Lkd8rr71qPUmM0LbQt8JumILCTOcDdTsDep63JSJ8vq0EIKH/w3y0B28lYBK4gL
-         2pSvEW0VY8yubeolTT+4fkZp3Q1dLe40Sz7AI88kmlDOxhP98MBGhnfac7tyIkkPuH+M
-         i1ytayETPM7hT924o85Bsh+Ce44Ev/W7yw+DcpjbhEYt8zDSAKuu4jdh5h4/WfzkNy4E
-         B9Z8fsC4ANe0rLg1OVsZbi72bl6LjzrHzM7SY3u1bIphSZJeO0xpXRphefSkR06Lt0q5
-         3P0Q==
-X-Gm-Message-State: ACgBeo0rorrxzxXCQydXPVnjdsimhTK0iAa8x6T+CgBnjA7mGXuHtISX
-        oEz58RfrOsk6ZaZwkdck88ZxPLkzft0=
-X-Google-Smtp-Source: AA6agR4WW6HckWjcodwy/+crBhah3Qqe7gNkOeyuE5I782puZwmdrUpF3vNcys71GOj17Uh+r9ImSw==
-X-Received: by 2002:a63:4a47:0:b0:42b:e4a4:3aec with SMTP id j7-20020a634a47000000b0042be4a43aecmr12585562pgl.512.1661916937608;
-        Tue, 30 Aug 2022 20:35:37 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id z29-20020a630a5d000000b0042b291a89bfsm2307733pgk.11.2022.08.30.20.35.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 20:35:37 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     jejb@linux.ibm.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: [PATCH linux-next] scsi: scsi_error.c: Remove the unneeded result variable
-Date:   Wed, 31 Aug 2022 03:35:28 +0000
-Message-Id: <20220831033528.302249-1-ye.xingchen@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Aug 2022 23:40:31 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E7063D5A4;
+        Tue, 30 Aug 2022 20:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661917230; x=1693453230;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4UnPxXmSAR7BcO87OaiX5jBIE02ojL3gV8lzjgFw+ek=;
+  b=MB79ibZx1zQxGuEL+NW/UTd654ri+jGvYdvDlHFmQTaq8+yH0gWR5qtX
+   eVkT5Gd7i2JZDQR/8SlAHLA68r04qRROF37aW11DCQr5mvAsT41hhRnOi
+   q8RuLcORI3FyqInvw7UZR6SBzwOVFxSoyZTNltr+mJ0MDcm4e5nj0+WWP
+   n7M8LNwuYLFaF8e1Ml0qkIcFuMUH9hfqK5rvf7gUekQh0hmxOVq5cs60F
+   sPcP6xKF1IM2VBnXoJlW3WfMYjAK08VXByJQaxZRsM6gRkV/gGLdJpY8M
+   pRqt+/aLL3GhGkXSRHCfA/SG6F3iEEWB2HPphMV+qYKtI557IC1skjsgg
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="292940295"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="292940295"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 20:40:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="673175541"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.192.207]) ([10.249.192.207])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 20:40:26 -0700
+Message-ID: <37ed6be6-bfa5-e87c-9c74-e5bdacda1600@intel.com>
+Date:   Wed, 31 Aug 2022 11:40:24 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.13.0
+Subject: Re: [PATCH v8 018/103] KVM: TDX: Stub in tdx.h with structs,
+ accessors, and VMCS helpers
+Content-Language: en-US
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Binbin Wu <binbin.wu@linux.intel.com>, isaku.yamahata@intel.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sagi Shahar <sagis@google.com>
+References: <cover.1659854790.git.isaku.yamahata@intel.com>
+ <d88e0cee35b70d86493d5a71becffa4ab5c5d97c.1659854790.git.isaku.yamahata@intel.com>
+ <651c33a5-4b9b-927f-cb04-ec20b8c3d730@linux.intel.com>
+ <YwT0+DO4AuO1xL82@google.com>
+ <20220826044817.GE2538772@ls.amr.corp.intel.com>
+From:   Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20220826044817.GE2538772@ls.amr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+On 8/26/2022 12:48 PM, Isaku Yamahata wrote:
+> On Tue, Aug 23, 2022 at 03:40:40PM +0000,
+> Sean Christopherson <seanjc@google.com> wrote:
+> 
+>> On Tue, Aug 23, 2022, Binbin Wu wrote:
+>>>
+>>> On 2022/8/8 6:01, isaku.yamahata@intel.com wrote:
+>>>> +static __always_inline void tdvps_vmcs_check(u32 field, u8 bits)
+>>>> +{
+>>>> +	BUILD_BUG_ON_MSG(__builtin_constant_p(field) && (field) & 0x1,
+>>>> +			 "Read/Write to TD VMCS *_HIGH fields not supported");
+>>>> +
+>>>> +	BUILD_BUG_ON(bits != 16 && bits != 32 && bits != 64);
+>>>> +
+>>>> +	BUILD_BUG_ON_MSG(bits != 64 && __builtin_constant_p(field) &&
+>>>> +			 (((field) & 0x6000) == 0x2000 ||
+>>>> +			  ((field) & 0x6000) == 0x6000),
+>>>> +			 "Invalid TD VMCS access for 64-bit field");
+>>>
+>>> if bits is 64 here, "bits != 64" is false, how could this check for "Invalid
+>>> TD VMCS access for 64-bit field"?
+>>
+>> Bits 14:13 of the encoding, which is extracted by "(field) & 0x6000", encodes the
+>> width of the VMCS field.  Bit 0 of the encoding, "(field) & 0x1" above, is a modifier
+>> that is only relevant when operating in 32-bit mode, and is disallowed because TDX is
+>> 64-bit only.
+>>
+>> This yields four possibilities for TDX:
+>>
+>>    (field) & 0x6000) == 0x0000 : 16-bit field
+>>    (field) & 0x6000) == 0x2000 : 64-bit field
+>>    (field) & 0x6000) == 0x4000 : 32-bit field
+>>    (field) & 0x6000) == 0x6000 : 64-bit field (technically "natural width", but
+>>                                                effectively 64-bit because TDX is
+>> 					      64-bit only)
+>>
+>> The assertion is that if the encoding indicates a 64-bit field (0x2000 or 0x6000),
+>> then the number of bits KVM is accessing must be '64'.  The below assertions do
+>> the same thing for 32-bit and 16-bit fields.
+> 
+> Thanks for explanation. I've updated it as follows to use symbolic value.
+> 
+> #define VMCS_ENC_ACCESS_TYPE_MASK	0x1UL
+> #define VMCS_ENC_ACCESS_TYPE_FULL	0x0UL
+> #define VMCS_ENC_ACCESS_TYPE_HIGH	0x1UL
+> #define VMCS_ENC_ACCESS_TYPE(field)	((field) & VMCS_ENC_ACCESS_TYPE_MASK)
+> 
+> 	/* TDX is 64bit only.  HIGH field isn't supported. */
+> 	BUILD_BUG_ON_MSG(__builtin_constant_p(field) &&
+> 			 VMCS_ENC_ACCESS_TYPE(field) == VMCS_ENC_ACCESS_TYPE_HIGH,
+> 			 "Read/Write to TD VMCS *_HIGH fields not supported");
+> 
+> 	BUILD_BUG_ON(bits != 16 && bits != 32 && bits != 64);
+> 
+> #define VMCS_ENC_WIDTH_MASK	GENMASK_UL(14, 13)
+> #define VMCS_ENC_WIDTH_16BIT	(0UL << 13)
+> #define VMCS_ENC_WIDTH_64BIT	(1UL << 13)
+> #define VMCS_ENC_WIDTH_32BIT	(2UL << 13)
+> #define VMCS_ENC_WIDTH_NATURAL	(3UL << 13)
+> #define VMCS_ENC_WIDTH(field)	((field) & VMCS_ENC_WIDTH_MASK)
+> 
+> 	/* TDX is 64bit only.  i.e. natural width = 64bit. */
+> 	BUILD_BUG_ON_MSG(bits != 64 && __builtin_constant_p(field) &&
+> 			 (VMCS_ENC_WIDTH(field) == VMCS_ENC_WIDTH_64BIT ||
+> 			  VMCS_ENC_WIDTH(field) == VMCS_ENC_WIDTH_NATURAL),
+> 			 "Invalid TD VMCS access for 64-bit field");
+> 	BUILD_BUG_ON_MSG(bits != 32 && __builtin_constant_p(field) &&
+> 			 VMCS_ENC_WIDTH(field) == VMCS_ENC_WIDTH_32BIT,
+> 			 "Invalid TD VMCS access for 32-bit field");
+> 	BUILD_BUG_ON_MSG(bits != 16 && __builtin_constant_p(field) &&
+> 			 VMCS_ENC_WIDTH(field) == VMCS_ENC_WIDTH_16BIT,
+> 			 "Invalid TD VMCS access for 16-bit field");
 
-Return the value scsi_device_online() directly instead of storing it in
-another redundant variable.
+Actually, the original code is written by me that is copied from 
+vmcs_check{16/32/64/l} in arch/x86/kvm/vmx/vmx_ops.h
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
----
- drivers/scsi/scsi_error.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+If you are going to do above change, you'd better cook a patch to change 
+it for vmx_ops.h at first and see opinion from community.
 
-diff --git a/drivers/scsi/scsi_error.c b/drivers/scsi/scsi_error.c
-index 448748e3fba5..6840bb4ab55f 100644
---- a/drivers/scsi/scsi_error.c
-+++ b/drivers/scsi/scsi_error.c
-@@ -377,13 +377,9 @@ enum blk_eh_timer_return scsi_timeout(struct request *req)
-  */
- int scsi_block_when_processing_errors(struct scsi_device *sdev)
- {
--	int online;
--
- 	wait_event(sdev->host->host_wait, !scsi_host_in_recovery(sdev->host));
- 
--	online = scsi_device_online(sdev);
--
--	return online;
-+	return scsi_device_online(sdev);
- }
- EXPORT_SYMBOL(scsi_block_when_processing_errors);
- 
--- 
-2.25.1

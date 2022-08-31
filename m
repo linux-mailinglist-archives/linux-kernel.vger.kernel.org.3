@@ -2,154 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E35E5A8975
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 01:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 948BB5A897C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 01:24:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232690AbiHaXQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 19:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
+        id S232377AbiHaXYz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 19:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232804AbiHaXQQ (ORCPT
+        with ESMTP id S230168AbiHaXYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 19:16:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05676B10;
-        Wed, 31 Aug 2022 16:15:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B092261CA0;
-        Wed, 31 Aug 2022 23:15:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C49AC43470;
-        Wed, 31 Aug 2022 23:15:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661987731;
-        bh=t5oLcB72prq3YZIUNqEPd41rqmg1WT6c81QZ9d4pP+M=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JJdmPXPkEb5KAKQK58RkRFZHp1vv/m8fBIUnjEflCbguv06gYYw1DSVpEI4f0D7LM
-         LXXQQgdNq4P0FbaVyafoFtrcaIQLnD/++c5UNeRYMmc4t73njQZZL20AgSOIeJFgkl
-         XLEJKnXc+LaBQJ9J4jRoy8xd+K6eDrET6XciWkxycpjYIuPhO9V2HKLiUroeCWzcnl
-         RnAXqbsSYpLUfHnofp6UwdE7NP/4msYxuOssnMpjz+Wb6HwCkhNh5+1YdJxysz0NXi
-         iPXyG/3KN5lwEdy5hl7ZTeLBvAqmFegAYlF2bwsnsmFYev69JvgoHFapHfFH6jNkA9
-         27YJmjiBu7Zbw==
-Received: by mail-wm1-f54.google.com with SMTP id k17so8119249wmr.2;
-        Wed, 31 Aug 2022 16:15:31 -0700 (PDT)
-X-Gm-Message-State: ACgBeo22+/pZNAmKBSY/RRf2Z4RE2GxIbxseFJ8NANd3+KG3QFZo5OwA
-        ylGYzciK19WVmI3PryXoJr+dILwCCwO1ZM7YMTE=
-X-Google-Smtp-Source: AA6agR47KiLpOQ7NE1BygeJXvnbTMo/oeCM40gdLvUbCGWvJBjgiyVkpD3aAMowLLny9he+rPkeYkuNhYvm0xzcjn34=
-X-Received: by 2002:a1c:7408:0:b0:3a5:c9c1:f226 with SMTP id
- p8-20020a1c7408000000b003a5c9c1f226mr3264966wmc.47.1661987729340; Wed, 31 Aug
- 2022 16:15:29 -0700 (PDT)
+        Wed, 31 Aug 2022 19:24:52 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57B4E0A
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 16:24:46 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id z72so13236473iof.12
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 16:24:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=8cRj+wC2SekV3g/lnG7OaUo/IWIUcAUM42NCJCbEaVU=;
+        b=SEtJIjyCH/OQa4i3YC29am3HN/68LbFFcD8vT8/EgqO7o/yoqct/Ln6fk4qC3798Fx
+         5ztkrHm3A1FboO+14txXalKKEuSSxOzdiErfBgd2jU1l0EqOoiPC3wUMhQScId2Va1sK
+         NuEAUpvc6YxwuZOjsNsdCt71L3tNBatIKZ8FA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=8cRj+wC2SekV3g/lnG7OaUo/IWIUcAUM42NCJCbEaVU=;
+        b=rzVx6QYRPvX0HAdsXF9tnKbhvartoaIh+SCuUDAx1C/wNkGZSnbPlKV16SFmEyMxx/
+         hRH+RQVY/zK4CRgSrx6aGan/KGy63Hq1OROGq+0dyFiKnkWNeGE1E/lY8hdmOmn2cH8V
+         VqLBWKDpdXckKl6lFHSGstnV/7fgLR9nILQHT9SpFQhOn3BbVxnhwzpraB4KSinZS85H
+         Ul+PdTsxTLMCIaBd6FeASJFR/4XBhU7EUKCJRaWTW5i9KOcutFu457a0BFkstMbQtr0S
+         lR+D0WSfdYa0Tlm2nORkDQcCuqAjtdsNmJjPVegbGzQnLxPDI8tQni+1lfEJZKcqwQ+D
+         72xQ==
+X-Gm-Message-State: ACgBeo0BbY8aGwESLwcCkE3ApsnxeM9u4c2QY5JCYeRJbCjVtN+RU/ab
+        MUBIAbd0KLEe/YiyLOEgKXHDZUEWR75cGg==
+X-Google-Smtp-Source: AA6agR6BSPk7/+YsbbZIlw+OGbPqkbKXQL4XEMzHSTuIGuf6xHGdNRGueexsToUvLpKCm9bGe4r6YQ==
+X-Received: by 2002:a05:6638:4197:b0:349:fc58:d66a with SMTP id az23-20020a056638419700b00349fc58d66amr15951690jab.101.1661988286255;
+        Wed, 31 Aug 2022 16:24:46 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id u190-20020a0223c7000000b00343617e8368sm7417114jau.99.2022.08.31.16.24.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 16:24:45 -0700 (PDT)
+Message-ID: <8552fc36-305f-d365-a2a0-b341bee14323@linuxfoundation.org>
+Date:   Wed, 31 Aug 2022 17:24:45 -0600
 MIME-Version: 1.0
-References: <6675f56fc8b0910f17ec506d534cf5330ff04733.1660177086.git.objelf@gmail.com>
-In-Reply-To: <6675f56fc8b0910f17ec506d534cf5330ff04733.1660177086.git.objelf@gmail.com>
-From:   Sean Wang <sean.wang@kernel.org>
-Date:   Wed, 31 Aug 2022 16:15:17 -0700
-X-Gmail-Original-Message-ID: <CAGp9LzrzfAO0_Tejjg=NLBbq-TLC7JV=e05m9t97X1wbgxZ8+w@mail.gmail.com>
-Message-ID: <CAGp9LzrzfAO0_Tejjg=NLBbq-TLC7JV=e05m9t97X1wbgxZ8+w@mail.gmail.com>
-Subject: Re: [PATCH v5] Bluetooth: btusb: mediatek: fix WMT failure during
- runtime suspend
-To:     luiz.dentz@gmail.com
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        =?UTF-8?B?U2VhbiBXYW5nICjnjovlv5fkupgp?= <sean.wang@mediatek.com>,
-        Soul Huang <Soul.Huang@mediatek.com>,
-        YN Chen <YN.Chen@mediatek.com>,
-        Leon Yen <Leon.Yen@mediatek.com>,
-        Eric-SY Chang <Eric-SY.Chang@mediatek.com>,
-        Deren Wu <Deren.Wu@mediatek.com>, KM Lin <km.lin@mediatek.com>,
-        Robin Chiu <robin.chiu@mediatek.com>, Eddie.Chen@mediatek.com,
-        CH Yeh <ch.yeh@mediatek.com>, Posh Sun <posh.sun@mediatek.com>,
-        ted.huang@mediatek.com, Stella Chang <Stella.Chang@mediatek.com>,
-        Tom.Chou@mediatek.com, steve.lee@mediatek.com, jsiuda@google.com,
-        frankgor@google.com, abhishekpandit@google.com,
-        michaelfsun@google.com, mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>,
-        lkml <linux-kernel@vger.kernel.org>,
-        Jing Cai <jing.cai@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH -next 2/5] selftests/cpu-hotplug: Replace exit with return
+Content-Language: en-US
+To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     shuah@kernel.org, akpm@linux-foundation.org,
+        akinobu.mita@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220830083028.45504-1-zhaogongyi@huawei.com>
+ <20220830083028.45504-3-zhaogongyi@huawei.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20220830083028.45504-3-zhaogongyi@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luiz,
+On 8/30/22 02:30, Zhao Gongyi wrote:
+> Replace exit with return to avoid some offline cpu
+> left when offline cpus fail.
+> 
 
-If the patch looks good to you, could you help apply the patch to
-bluetooth.git? It can fix the issue present in the stable kernel, I
-would like to backport it earlier once it appears in the Linus tree.
+Some cpus will be left in offline state when online
+function exits ...
 
-Sean
+Can you state this clearly in the change log.
 
-On Wed, Aug 10, 2022 at 5:59 PM <sean.wang@mediatek.com> wrote:
->
-> From: Sean Wang <sean.wang@mediatek.com>
->
-> WMT cmd/event doesn't follow up the generic HCI cmd/event handling, it
-> needs constantly polling control pipe until the host received the WMT
-> event, thus, we should require to specifically acquire PM counter on the
-> USB to prevent the interface from entering auto suspended while WMT
-> cmd/event in progress.
->
-> Fixes: a1c49c434e15 ("Bluetooth: btusb: Add protocol support for MediaTek
->  MT7668U USB devices")
-> Co-developed-by: Jing Cai <jing.cai@mediatek.com>
-> Signed-off-by: Jing Cai <jing.cai@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
+> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
 > ---
-> v2:
-> 1. move usb_autopm_[get, put]_interface to btusb_mtk_hci_wmt_sync whenever
-> wmt cmd is invoked.
-> 2. add the explanation why we needed the specific
-> usb_autopm_[get, put]_interface there.
->
-> v3: correct the version and there is no logic changed
-> v4: fix GitLint fail due to Title exceeds max length
-> v5: rebase to fix patches does not apply
-> ---
->  drivers/bluetooth/btusb.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index 30dd443f395f..70d61bb4a053 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -2480,15 +2480,29 @@ static int btusb_mtk_hci_wmt_sync(struct hci_dev *hdev,
->
->         set_bit(BTUSB_TX_WAIT_VND_EVT, &data->flags);
->
-> +       /* WMT cmd/event doesn't follow up the generic HCI cmd/event handling,
-> +        * it needs constantly polling control pipe until the host received the
-> +        * WMT event, thus, we should require to specifically acquire PM counter
-> +        * on the USB to prevent the interface from entering auto suspended
-> +        * while WMT cmd/event in progress.
-> +        */
-> +       err = usb_autopm_get_interface(data->intf);
-> +       if (err < 0)
-> +               goto err_free_wc;
+>   .../selftests/cpu-hotplug/cpu-on-off-test.sh        | 13 ++++++++-----
+>   1 file changed, 8 insertions(+), 5 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+> index 1169ef82b55e..19028c4c9758 100755
+> --- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+> +++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+> @@ -4,6 +4,7 @@
+>   SYSFS=
+>   # Kselftest framework requirement - SKIP code is 4.
+>   ksft_skip=4
+> +retval=0
+> 
+>   prerequisite()
+>   {
+> @@ -102,10 +103,10 @@ online_cpu_expect_success()
+> 
+>   	if ! online_cpu $cpu; then
+>   		echo $FUNCNAME $cpu: unexpected fail >&2
+> -		exit 1
+> +		let retval=$retval+1
+>   	elif ! cpu_is_online $cpu; then
+>   		echo $FUNCNAME $cpu: unexpected offline >&2
+> -		exit 1
+> +		let retval=$retval+1
+>   	fi
+>   }
+> 
+> @@ -128,10 +129,10 @@ offline_cpu_expect_success()
+> 
+>   	if ! offline_cpu $cpu; then
+>   		echo $FUNCNAME $cpu: unexpected fail >&2
+> -		exit 1
+> +		let retval=$retval+1
+>   	elif ! cpu_is_offline $cpu; then
+>   		echo $FUNCNAME $cpu: unexpected offline >&2
+> -		exit 1
+> +		let retval=$retval+1
+>   	fi
+>   }
+> 
+> @@ -201,7 +202,7 @@ if [ $allcpus -eq 0 ]; then
+>   		offline_cpu_expect_success $present_max
+>   		online_cpu $present_max
+>   	fi
+> -	exit 0
+> +	exit $retval
+>   else
+>   	echo "Full scope test: all hotplug cpus"
+>   	echo -e "\t online all offline cpus"
+> @@ -291,3 +292,5 @@ done
+> 
+>   echo 0 > $NOTIFIER_ERR_INJECT_DIR/actions/CPU_DOWN_PREPARE/error
+>   /sbin/modprobe -q -r cpu-notifier-error-inject
 > +
->         err = __hci_cmd_send(hdev, 0xfc6f, hlen, wc);
->
->         if (err < 0) {
->                 clear_bit(BTUSB_TX_WAIT_VND_EVT, &data->flags);
-> +               usb_autopm_put_interface(data->intf);
->                 goto err_free_wc;
->         }
->
->         /* Submit control IN URB on demand to process the WMT event */
->         err = btusb_mtk_submit_wmt_recv_urb(hdev);
-> +
-> +       usb_autopm_put_interface(data->intf);
-> +
->         if (err < 0)
->                 goto err_free_wc;
->
-> --
-> 2.25.1
->
+> +exit $retval
+
+This retval can be ksft_skip value if 4 of them fail. The test
+result will be incorrect in this case and will be reported as
+a skip. Let's avoid that case.
+
+thanks,
+-- Shuah

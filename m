@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B11F35A752B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 06:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35AE65A752D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 06:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiHaEdC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 00:33:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35214 "EHLO
+        id S231514AbiHaEef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 00:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229604AbiHaEdA (ORCPT
+        with ESMTP id S229604AbiHaEec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 00:33:00 -0400
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D445856BA1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 21:32:58 -0700 (PDT)
-Received: by mail-pj1-f53.google.com with SMTP id t5so13082939pjs.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 21:32:58 -0700 (PDT)
+        Wed, 31 Aug 2022 00:34:32 -0400
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 566A8A74CC
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 21:34:32 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id q9so12510138pgq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 21:34:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc;
         bh=2wlBh69S5T/T9iHDDZDeIpM5ED2QS1+ze35Ex3GUlR0=;
-        b=o2TG8IsxTiiSRyA/cXmZzMuPYEhOc3r6wd8+sqOV/QUv03LK0j0VlHggIdLyZVjJqY
-         EO8mbEd6RIEQ1FLDgCBu4L/9xr7vk6FBOxiLQImGE38nmwAgJUdn9F/2gnKya5qb4EdZ
-         wi6Xp/Y6C2lqFEfBBMw+2hKLv85uG8XZ+ATCrzj3t/v5P6AMpWW2xoi0VLbq7Lt1l72T
-         pO1QgEyNKpe+Sz7gDdEXr6Yahuo6MOEu3CLyBwJJD0970fPhMAdTaNRQ7bXgUMdg3Cfd
-         qX/pqVc2ww5lGgbl8htr+PasTuHynxAoS8oqg0xdS4mxCZHff07DTIKiSb3GtLJywmkz
-         kQAg==
-X-Gm-Message-State: ACgBeo1n8N1QKkJkqsaX+zqNmegXGTmW942k02N60FU1SiJ9uhNLXpcR
-        0gwEYR61mOUKN9/3xq7u2KQ=
-X-Google-Smtp-Source: AA6agR6GYEh50FxwD7XiaLAuWExdR2R2U+/5DGkH1XMXjpl7KZVFqoEFwzIayr/3o6De0oNi4lzmTA==
-X-Received: by 2002:a17:90a:6b0d:b0:1fa:c6fe:db6 with SMTP id v13-20020a17090a6b0d00b001fac6fe0db6mr1382049pjj.99.1661920378185;
-        Tue, 30 Aug 2022 21:32:58 -0700 (PDT)
+        b=tL/vMYZvB8ACo4GUIU5VFPZLIjFGYchlvn6fmxISYrxfl49fvaNzRE46TZgCuHPvwT
+         3wVZcVOrUoUU8qe2yt3yq++nl3pP7b1JBmmeotP7NX7oC+0SvGYmejFeNaub8/c66mKv
+         RMQgmpZpdCBKXvWdw3NZg3372rfxVR97l5y3yk046Y07r9zLiYjJSJDNrD7YEJM8Wvag
+         6Uu15G4S6dAGlqQ37+NhoX+jP5C69v4ga8FWPa7t1wDNd/3GFCIieedw/9drej+UNf2m
+         nhMp7/Yd3VmOpP9ROlPOPUjC/GIbpOypnGbzJrHrSEQ8NC2lYGjwbk7TBGJ0tOZxw7Pl
+         N5uA==
+X-Gm-Message-State: ACgBeo0ToeGdxhqXvdtcj5trjuF8hzuvj85ASWWt4gMvipWcpo0YW9w7
+        PNh6R+oa1q7puyI2mM2UiSI=
+X-Google-Smtp-Source: AA6agR4aRTLQgVsfv0pPYxAQbQfzQbA1lqOd5fp6MfoDJ0xxr78O1KzjwNP50pFkW8SiSA/HlkkMhA==
+X-Received: by 2002:a63:8a44:0:b0:42b:351d:e309 with SMTP id y65-20020a638a44000000b0042b351de309mr20133305pgd.426.1661920471855;
+        Tue, 30 Aug 2022 21:34:31 -0700 (PDT)
 Received: from karthik-strix-linux.karthek.com ([117.241.13.19])
-        by smtp.gmail.com with ESMTPSA id d11-20020a62f80b000000b0053624c50d74sm10208149pfh.126.2022.08.30.21.32.54
+        by smtp.gmail.com with ESMTPSA id q16-20020a63e950000000b0041d6d37deb5sm107851pgj.81.2022.08.30.21.34.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 21:32:57 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 10:02:51 +0530
+        Tue, 30 Aug 2022 21:34:31 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 10:04:25 +0530
 From:   Karthik Alapati <mail@karthek.com>
 To:     Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Tom Rix <trix@redhat.com>
-Cc:     =ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
+Cc:     ntfs3@lists.linux.dev, linux-kernel@vger.kernel.org,
         llvm@lists.linux.dev
 Subject: [PATCH] fs/ntfs3: fix memory leak in put_ntfs()
-Message-ID: <Yw7kc+eNDImk7+w+@karthik-strix-linux.karthek.com>
+Message-ID: <Yw7k0VQm+8l8JKWr@karthik-strix-linux.karthek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline

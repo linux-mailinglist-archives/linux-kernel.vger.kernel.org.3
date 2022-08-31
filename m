@@ -2,108 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDFF5A880A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:25:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 696055A8808
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:24:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232211AbiHaVZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
+        id S229453AbiHaVYy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:24:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiHaVZN (ORCPT
+        with ESMTP id S230478AbiHaVYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:25:13 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB197B481
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:25:11 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-11f0fa892aeso18954605fac.7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:25:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=g+LFT64nKjvFQ9xBs3ga17iSDMJNzcQHBlCbx79FOAA=;
-        b=Z4r+al+4Pp7+eTwrj0gkK1wBO8Z0CpU7HFRAFrfv4p86LXjVXcvfALv60ZlKgJxda2
-         buOcRK5++YP6s/L3n6ZjEeHdba/BWIXiWTp14xU9HOBtdXk9gdNeo41fD9jm9u8oeOTS
-         b3odhDl+/3OiWnz7H6fJQC/oFftOplAIsblpfHfw7/WhNrze0wGyl0bKOBU0PaM3u0mC
-         v2snYeD51HdMQUR0pqB99AA++xapBHElVIVCuQeBwR0/Gzc5Ag66WSfDLcshMKsLntyq
-         5SDsbDX2/7vIlG6ILnLQtms7Fy8OlV8fh9x6Th6J9i95F76zXuGnq8FlvbFEYFxjx+Sc
-         CB0w==
+        Wed, 31 Aug 2022 17:24:49 -0400
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43BCC68;
+        Wed, 31 Aug 2022 14:24:45 -0700 (PDT)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-11e9a7135easo24728203fac.6;
+        Wed, 31 Aug 2022 14:24:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=g+LFT64nKjvFQ9xBs3ga17iSDMJNzcQHBlCbx79FOAA=;
-        b=D0HCIqMaYeZNUpSAXJ4gF637ajUrzQqOU20iEyvGroTnmhWCAGf6++pP7FX/cyKxOP
-         MXgGhUhC68d/E2vFfQCOH5I0YZn/wLFNZYMJDngbwCUBwKo7WCyHt7maOzJ27Aci+f9l
-         ZJgFUr6sfgky571ylTOOGMbYi12Pg8aehHnbI6sWynT49s4SXv0oES2lT8w5pOA6pPqr
-         w5WfF5tLERVrS089zCnGI0hPE/l5kigMpJAN0mqAsIKXBJmGBldVwpuFa1H3vvEzCDnN
-         xqyBeHA/NZ4xbmqe9+HPmljSrd7hCc7ssckrjQ3l1D8kwdySUokxUKpoPl8yCjFPrXPb
-         Q8PQ==
-X-Gm-Message-State: ACgBeo12MTNNJwzPi08r8QxB/gFmOkc/KAygj/uKFKr5UKM9RBQE7MGJ
-        APB0QZzm9l93ZUWE0hGzC975HoHnWnySpaQaeqwPjA==
-X-Google-Smtp-Source: AA6agR4N+yQXPnOGxaJMFenO1Wz9ePQE4H8Up8oiR4Fnc6irTFXk/fUy8f1Iwrt05kWPuLi9Qce/XHeXKrUoHCdbHkg=
-X-Received: by 2002:a05:6870:4308:b0:10b:8cbe:c945 with SMTP id
- w8-20020a056870430800b0010b8cbec945mr2401759oah.220.1661981110841; Wed, 31
- Aug 2022 14:25:10 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ptckDRyC3NuutV/1EQwXwr/4eg6rFrtCSCG7+WQhK1U=;
+        b=OH9U6oTI9IM1ydlFk/dAVvemii05k1QdcnziLcC+kLjt0WdykZyM9dljQwepXTytcW
+         QZuoGHJkUQRj+nvVhUlN3boOGnKV0pi6g789XtEwzDVs3lvQNqpaDQafiT02jjN6sfwe
+         zBqgEs3w9MKwLhoXWLKtpX/gVORwpMQKdQVx4lw+3Cg+MvtVbOgdOvOYR6EGqgcXa+RM
+         adKx5twYT1J4REqCvSXlXMzqbX704QqJseBq+FpOgxgRJtTg2l7Pb2FnrwIsjubJ6KFv
+         LzVMN6ioJ/pLc1MsniZdp8JxXPNehRREs/VlPo+jRzmE3gvgDg9svv66nFN+oGZimsf+
+         DwUQ==
+X-Gm-Message-State: ACgBeo2KtThsJ4AImrriE/lxPfqNAHpZ+jdM+a7iyNk/k//S4swkIuXo
+        UvHc8z4xvzgjtKLDVcBqQQ==
+X-Google-Smtp-Source: AA6agR6taqPYE3ZLkGFuOohLzZadZneybxVqVYn6iJavCQbIzrZE934PA3y4+GwUZvEJRpWSE6RErA==
+X-Received: by 2002:a05:6870:f2a1:b0:122:3d83:b14d with SMTP id u33-20020a056870f2a100b001223d83b14dmr1756973oap.136.1661981084919;
+        Wed, 31 Aug 2022 14:24:44 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d15-20020a9d51cf000000b0063b1f060d25sm7451596oth.65.2022.08.31.14.24.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 14:24:44 -0700 (PDT)
+Received: (nullmailer pid 276625 invoked by uid 1000);
+        Wed, 31 Aug 2022 21:24:43 -0000
+Date:   Wed, 31 Aug 2022 16:24:43 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 09/20] dt-bindings: PCI: dwc: Add
+ interrupts/interrupt-names common properties
+Message-ID: <20220831212443.GA267718-robh@kernel.org>
+References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822184701.25246-10-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-References: <20220831211526.2743216-1-axelrasmussen@google.com>
-In-Reply-To: <20220831211526.2743216-1-axelrasmussen@google.com>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Wed, 31 Aug 2022 14:24:34 -0700
-Message-ID: <CAAa6QmRy3N9cO14AVz2g0dA_MOSatwzufQxO1PwH35J4mYPbmQ@mail.gmail.com>
-Subject: Re: [PATCH] selftest: vm: remove orphaned references to local_config.{h,mk}
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Tarun Sahu <tsahu@linux.ibm.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822184701.25246-10-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 2:16 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
->
-> Note: this commit is intended to apply to mm-unstable, the commit being
-> fixed only exists in that branch for now.
->
-> Commit b4efb234e53cc60ccdc855190be9f35918687412 ("Kselftests: remove
-> support of libhugetlbfs from kselftests") removed the rule describing
-> how to build local_config.{h,mk}, but it left two references to these
-> files lingering around. The result is, none of the selftests could be
-> built due to dependencies with no rule for how to build them.
->
-> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+On Mon, Aug 22, 2022 at 09:46:50PM +0300, Serge Semin wrote:
+> Currently the 'interrupts' and 'interrupt-names' are defined being too
+> generic to really describe any actual IRQ interface. Moreover the DW PCIe
+> End-point devices are left with no IRQ signals. All of that can be fixed
+> by adding the IRQ-related properties to the common DW PCIe DT-schema and
+> defining a common and device-specific set of the IRQ names in accordance
+> with the hardware reference manual. Seeing there are common and dedicated
+> IRQ signals for DW PCIe Root Port and End-point controllers we suggest to
+> split the IRQ names up into two sets: common definitions available in the
+> snps,dw-pcie-common.yaml schema and Root Port specific names defined in
+> the snps,dw-pcie.yaml schema. The former one will be applied to both DW
+> PCIe RP and EP controllers, while the later one - for the RP only.
+> 
+> Note since there are DW PCI-based vendor-specific DT-bindings with the
+> custom names assigned to the same IRQ resources we have no much choice but
+> to add them to the generic DT-schemas in order to have the schemas being
+> applicable for such devices. Let's mark these names as deprecated so not
+> to encourage the new DT-bindings to use them.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
 > ---
->  tools/testing/selftests/vm/Makefile | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->
-> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
-> index b52f2cc51482..4ae879f70f4c 100644
-> --- a/tools/testing/selftests/vm/Makefile
-> +++ b/tools/testing/selftests/vm/Makefile
-> @@ -1,9 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0
->  # Makefile for vm selftests
->
-> -LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
-> -
-> -include local_config.mk
-> +LOCAL_HDRS += $(top_srcdir)/mm/gup_test.h
->
->  uname_M := $(shell uname -m 2>/dev/null || echo not)
->  MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/ppc64/')
-> --
-> 2.37.2.789.g6183377224-goog
->
+> 
+> Changelog v3:
+> - This is a new patch unpinned from the next one:
+>   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
+>   by the Rob' request. (@Rob)
+> 
+> Changelog v5:
+> - Add platform-specific interrupt names, but mark them as deprecated.
+> ---
+>  .../bindings/pci/snps,dw-pcie-common.yaml     | 51 ++++++++++++++
+>  .../bindings/pci/snps,dw-pcie-ep.yaml         | 17 +++++
+>  .../devicetree/bindings/pci/snps,dw-pcie.yaml | 67 ++++++++++++++++++-
+>  3 files changed, 132 insertions(+), 3 deletions(-)
 
-Thanks Axel! Works here on latest mm-unstable
+I still don't like how you've done interrupts/clocks/reg. I'd suggest 
+dropping it if you want this series applied soonish.
 
-Tested-by: Zach O'Keefe <zokeefe@google.com>
+Rob

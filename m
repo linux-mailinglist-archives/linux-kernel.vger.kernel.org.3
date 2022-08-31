@@ -2,62 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AFF75A7A55
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:38:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 500985A7A59
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:38:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229811AbiHaJiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
+        id S229888AbiHaJiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:38:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiHaJiN (ORCPT
+        with ESMTP id S229731AbiHaJir (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:38:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1250D7DF6D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661938692;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=r6LGROry2wbR18o4LFq1Gym+CBvbwHqiSfGZ5L3Yxgg=;
-        b=TSdlkbpouOEyFUFRUwTMajRLRSjh0rIq7d+x74I6OiccmuDp+PjGLi0nuEACkHEPNuo0At
-        3dAYXdh5l6DxdupYOLsEufA+fFW7LWtYYG1xHaHEGqbYLbVmllW61/CnzsKu42H4Hdd0R4
-        lVaq772TNOh66ALLcpAyxzAbcu/f9Bw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-90-H-jyHDGsMO2P6yOH6s-wjQ-1; Wed, 31 Aug 2022 05:38:10 -0400
-X-MC-Unique: H-jyHDGsMO2P6yOH6s-wjQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6992C85A58D;
-        Wed, 31 Aug 2022 09:38:10 +0000 (UTC)
-Received: from starship (unknown [10.40.194.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C89C0403D0CC;
-        Wed, 31 Aug 2022 09:38:08 +0000 (UTC)
-Message-ID: <6c0e65417ad0f38ed4207fa38331556cea2aac9f.camel@redhat.com>
-Subject: Re: [PATCH 05/19] KVM: SVM: Compute dest based on sender's x2APIC
- status for AVIC kick
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Wed, 31 Aug 2022 12:38:07 +0300
-In-Reply-To: <20220831003506.4117148-6-seanjc@google.com>
-References: <20220831003506.4117148-1-seanjc@google.com>
-         <20220831003506.4117148-6-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 31 Aug 2022 05:38:47 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3654CCEB26;
+        Wed, 31 Aug 2022 02:38:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661938727; x=1693474727;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jonMZ3l6rEd+wV3XzXM0LDE5/eeSVv24z4EqTQlOWwg=;
+  b=J5JlDKgONMF2hTOgJV+HYtm3p5ufPYzgZErRwFNxRGomrfj2dNHYFa5I
+   wIdmNetezlizSZUjlsptjgWv9OCB4b5mWw8zBFzoLO6WDXpJppopWu49b
+   xYtYPlOVeDB9VFtL8/cI6UpL2TCp9kWqysOWBog8YEFNcTom+KbITxIOd
+   AgGLNRHbMO4y/99eBxvFT/nTAAqzovGIhazakzhzFWPY03iMW52O8ZG1z
+   SvuKxSNSVdccLjhwZw5ZH++c7kxfC5/zuZHQIkvUysNIR5YDIIjz3LE1l
+   z7aLDepUGSCh20AK/2PhPVOI6rQFjWLyi7IqncPmx/xrTxv397d9Kt13f
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296691649"
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="296691649"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:38:46 -0700
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="680371119"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:38:42 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oTKBD-006Jcd-0M;
+        Wed, 31 Aug 2022 12:38:39 +0300
+Date:   Wed, 31 Aug 2022 12:38:38 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Eliav Farber <farbere@amazon.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
+        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
+        amitlavi@amazon.com, almogbs@amazon.com, dkl@amazon.com,
+        rahul.tanwar@linux.intel.com
+Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when
+ "intel,vm-map" not defined
+Message-ID: <Yw8sHt0WLsEpL4bY@smile.fi.intel.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-3-farbere@amazon.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830192212.28570-3-farbere@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,48 +72,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
-> Compute the destination from ICRH using the sender's x2APIC status, not
-> each (potential) target's x2APIC status.
-> 
-> Fixes: c514d3a348ac ("KVM: SVM: Update avic_kick_target_vcpus to support 32-bit APIC ID")
-> Cc: Li RongQing <lirongqing@baidu.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index b59f8ee2671f..3ace0f2f52f0 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -441,6 +441,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
->  static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
->  				   u32 icrl, u32 icrh, u32 index)
->  {
-> +	u32 dest = apic_x2apic_mode(source) ? icrh : GET_XAPIC_DEST_FIELD(icrh);
->  	unsigned long i;
->  	struct kvm_vcpu *vcpu;
->  
-> @@ -456,13 +457,6 @@ static void avic_kick_target_vcpus(struct kvm *kvm, struct kvm_lapic *source,
->  	 * since entered the guest will have processed pending IRQs at VMRUN.
->  	 */
->  	kvm_for_each_vcpu(i, vcpu, kvm) {
-> -		u32 dest;
-> -
-> -		if (apic_x2apic_mode(vcpu->arch.apic))
-> -			dest = icrh;
-> -		else
-> -			dest = GET_XAPIC_DEST_FIELD(icrh);
-> -
->  		if (kvm_apic_match_dest(vcpu, source, icrl & APIC_SHORT_MASK,
->  					dest, icrl & APIC_DEST_MASK)) {
->  			vcpu->arch.apic->irr_pending = true;
+On Tue, Aug 30, 2022 at 07:21:55PM +0000, Eliav Farber wrote:
+> Bug fix - in case "intel,vm-map" is missing in device-tree ,'num' is set
+> to 0, and no voltage channel infos are allocated.
 
-I didn't notice this in a review, makes sense.
+Care to provide a Fixes tag for all fixes in your series. Also don't forget to
+start series with fixes followed by cleanups and new features..
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Best regards,
-	Maxim Levitsky
 

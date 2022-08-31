@@ -2,167 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6872D5A73AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:57:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9AB5A73AF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:58:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiHaB5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 21:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
+        id S230000AbiHaB6V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 21:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbiHaB5l (ORCPT
+        with ESMTP id S229476AbiHaB6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 21:57:41 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 46A5BB2D84
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:57:40 -0700 (PDT)
-Received: (qmail 176698 invoked by uid 1000); 30 Aug 2022 21:57:39 -0400
-Date:   Tue, 30 Aug 2022 21:57:39 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <paul.heidekrueger@in.tum.de>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: [PATCH] tools/memory-model: Weaken ctrl dependency definition in
- explanation.txt
-Message-ID: <Yw7AEx1w6oWn86cm@rowland.harvard.edu>
-References: <20220830204446.3590197-1-paul.heidekrueger@in.tum.de>
- <663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org>
- <98f2b194-1fe6-3cd8-36cf-da017c35198f@joelfernandes.org>
+        Tue, 30 Aug 2022 21:58:18 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15EDEB14FA;
+        Tue, 30 Aug 2022 18:58:17 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MHRzg6TgdzYcxL;
+        Wed, 31 Aug 2022 09:53:51 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 31 Aug 2022 09:58:14 +0800
+Subject: Re: [PATCH] kvm: x86: mmu: fix memoryleak in
+ kvm_mmu_vendor_module_init()
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220823063237.47299-1-linmiaohe@huawei.com>
+ <Yw6DsUwSInpz97IV@google.com>
+ <e1199046d184ad7210ebb100fc2f4b77d1ef4fba.camel@intel.com>
+ <Yw6UuGqIF1op5zYp@google.com>
+ <BL1PR11MB5978F8CB6B5900184C704EDEF7789@BL1PR11MB5978.namprd11.prod.outlook.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <b1d1d9f8-da38-dca4-594b-98c1c3ef302e@huawei.com>
+Date:   Wed, 31 Aug 2022 09:58:14 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <98f2b194-1fe6-3cd8-36cf-da017c35198f@joelfernandes.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <BL1PR11MB5978F8CB6B5900184C704EDEF7789@BL1PR11MB5978.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 05:12:33PM -0400, Joel Fernandes wrote:
+On 2022/8/31 9:07, Huang, Kai wrote:
+>> On Tue, Aug 30, 2022, Huang, Kai wrote:
+>>> On Tue, 2022-08-30 at 21:40 +0000, Sean Christopherson wrote:
+>>>> On Tue, Aug 23, 2022, Miaohe Lin wrote:
+>>>>> When register_shrinker() fails, we forgot to release the percpu
+>>>>> counter
+>>>
+>>>>> kvm_total_used_mmu_pages leading to memoryleak. Fix this issue by
+>>>>> calling
+>>>>> percpu_counter_destroy() when register_shrinker() fails.
+>>>>>
+>>>>> Fixes: ab271bd4dfd5 ("x86: kvm: propagate register_shrinker return
+>>>>> code")
+>>>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>>>> ---
+>>>>
+>>>> Pushed to branch `for_paolo/6.1` at:
+>>>>
+>>>>     https://github.com/sean-jc/linux.git
+>>>>
+>>>> Unless you hear otherwise, it will make its way to kvm/queue "soon".
+>>>>
+>>>> Note, the commit IDs are not guaranteed to be stable.
+>>>
+>>> Sorry for late reply.
+>>>
+>>> The commit message has "we".  Should we get rid of it?
+>>
+>> Avoiding pronouns is obviously my preference, but sometimes even I set aside
+>> my crusade to move things along :-)
 > 
+> Yeah sure.  I was replying just in case you didn't notice it :)
+
+Please ignore my previous question in another thread. I just saw this patch. ;)
+
+Many thanks.
+
 > 
-> On 8/30/2022 5:08 PM, Joel Fernandes wrote:
-> > 
-> > 
-> > On 8/30/2022 4:44 PM, Paul Heidekrüger wrote:
-> >> The current informal control dependency definition in explanation.txt is
-> >> too broad and, as dicsussed, needs to be updated.
-> >>
-> >> Consider the following example:
-> >>
-> >>> if(READ_ONCE(x))
-> >>> 	return 42;
-> >>>
-> >>> 	WRITE_ONCE(y, 42);
-> >>>
-> >>> 	return 21;
-> >>
-> >> The read event determines whether the write event will be executed "at
-> >> all" - as per the current definition - but the formal LKMM does not
-> >> recognize this as a control dependency.
-> >>
-> >> Introduce a new defintion which includes the requirement for the second
-> >> memory access event to syntactically lie within the arm of a non-loop
-> >> conditional.
-> >>
-> >> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
-> >> Cc: Marco Elver <elver@google.com>
-> >> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-> >> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-> >> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
-> >> Cc: Martin Fink <martin.fink@in.tum.de>
-> >> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-> >> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
-> >> ---
-> >>
-> >> @Alan:
-> >>
-> >> Since I got it wrong the last time, I'm adding you as a co-developer after my
-> >> SOB. I'm sorry if this creates extra work on your side due to you having to
-> >> resubmit the patch now with your SOB if I understand correctly, but since it's
-> >> based on your wording from the other thread, I definitely wanted to give you
-> >> credit.
-> >>
-> >>  tools/memory-model/Documentation/explanation.txt | 7 ++++---
-> >>  1 file changed, 4 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> >> index ee819a402b69..0bca50cac5f4 100644
-> >> --- a/tools/memory-model/Documentation/explanation.txt
-> >> +++ b/tools/memory-model/Documentation/explanation.txt
-> >> @@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
-> >>  through a pointer will depend on the value read earlier from that
-> >>  pointer.
-> >>
-> >> -Finally, a read event and another memory access event are linked by a
-> >> -control dependency if the value obtained by the read affects whether
-> >> -the second event is executed at all.  Simple example:
-> >> +Finally, a read event X and another memory access event Y are linked by
-> >> +a control dependency if Y syntactically lies within an arm of an if,
-> >> +else or switch statement and the condition guarding Y is either data or
-> >> +address-dependent on X.  Simple example:
-
-"if, else or switch" should be just "if or switch".  In C there is no 
-such thing as an "else" statement; an "else" clause is merely part of 
-an "if" statement.  In fact, maybe "body" would be more appropriate than 
-"arm", because "switch" statements don't have arms -- they have cases.
-
-> > 'conditioning guarding Y' sounds confusing to me as it implies to me that the
-> > condition's evaluation depends on Y. I much prefer Alan's wording from the
-> > linked post saying something like 'the branch condition is data or address
-> > dependent on X, and Y lies in one of the arms'.
-> > 
-> > I have to ask though, why doesn't this imply that the second instruction never
-> > executes at all? I believe that would break the MP-pattern if it were not true.
+> .
 > 
-> About my last statement, I believe your patch does not disagree with the
-> correctness of the earlier text but just wants to improve it. If that's case
-> then that's fine.
 
-The biggest difference between the original text and Paul's suggested 
-update is that the new text makes clear that Y has to lie within the 
-body of the "if" or "switch" statement.  If Y follows the end of the 
-if/else, as in the example at the top of this email, then it does have 
-not a control dependency on X (at least, not via that if/else), even 
-though the value read by X does determine whether or not Y will execute.
-
-[It has to be said that this illustrates a big weakness of the LKMM: It 
-isn't cognizant of "goto"s or "return"s.  This naturally derives from 
-limitations of the herd tool, but the situation could be improved.  So 
-for instance, I don't think it would cause trouble to say that in:
-
-	if (READ_ONCE(x) == 0)
-		return;
-	WRITE_ONCE(y, 5);
-
-there really is a control dependence from x to y, even though the 
-WRITE_ONCE is outside the body of the "if" statement.  Certainly the 
-compiler can't reorder the write before the read.  But AFAIK there's no 
-way to include a "return" statement in a litmus test for herd.  Or a 
-subroutine definition, for that matter.]
-
-I agree that "condition guarding Y" is somewhat awkward.  "the 
-condition of the if (or the expression of the switch)" might be better, 
-even though it is somewhat awkward as well.  At least it's more 
-explicit.
-
-Alan

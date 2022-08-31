@@ -2,87 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B9825A84CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBE435A84CD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:54:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbiHaRyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
+        id S232228AbiHaRyT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 13:54:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231939AbiHaRxx (ORCPT
+        with ESMTP id S232058AbiHaRyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:53:53 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B0DD3EE3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:53:52 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id 145so14809804pfw.4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:53:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=TCHXvXXfsYMY/A+ca/BPmy8pA+KX4i6MvCSQqrCuFrY=;
-        b=PrQjLxbUTyZbiLFvdw8FQEAo6f5OIhTn3sUnehV/RWerJNYqPFVObhST43ItqCNcpX
-         JCaQSfSgFZcFhr5WDeVAiJbOm1J0cV9+a5Bfv5lfPwcB1OdyzY/r2ZxmtVBqOzaK5R6j
-         VB5P+l6QjQnA4VotyG9pa0lbCuc4Olc13d/9Y=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=TCHXvXXfsYMY/A+ca/BPmy8pA+KX4i6MvCSQqrCuFrY=;
-        b=rClii1FExK/1oVo9jYgcD8QC7J6N0Q623FDWl7XTlTSBbrQ7dOk4GrY/j1mtemUX48
-         MWFp37MMEJvL5IhPbtaPS/6SVd5DIbDouP3lsMD1e5ris3NaN5wI47rZZNpoVKpiwR43
-         dqtFV+ApMlc0/PjOAvZ0koGrjLdBz8WjvZ2lHtKbFeK2Zhw3sUWPzF2sH9gPOjDWgyJC
-         5ohro9GlMZURgKp3F1FzZ7KlLyQu2D3dJArEwm2JPcenJcKTKwp4+LXUVaH3huGWb3YF
-         mAVTfXO2lmduLsCZ3Dekt0naN7asEJD047JnEqJjY8YhEQok9q6oJSdr8sGYga9hM7bK
-         JqkA==
-X-Gm-Message-State: ACgBeo0IggmTYJyXBvMzv2ocHh0sxhPgN4ESdpceQ4hhxmPmauEGe+8Z
-        WT5jeMwcsDPQEEsbjrN64+ddEw==
-X-Google-Smtp-Source: AA6agR45RigbgSbeDpZKVXLeeXze60AM0/D9DANwBTrmzYApw41B/VxEhGBL/PXNHrNGBxe4p5mVDQ==
-X-Received: by 2002:a65:5941:0:b0:41d:a203:c043 with SMTP id g1-20020a655941000000b0041da203c043mr22427221pgu.483.1661968431923;
-        Wed, 31 Aug 2022 10:53:51 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id 201-20020a6219d2000000b00537d97ec301sm10307054pfz.214.2022.08.31.10.53.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 10:53:51 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 10:53:50 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     Isabella Basso <isabbasso@riseup.net>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sander Vanheule <sander@svanheule.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yury Norov <yury.norov@gmail.com>
-Subject: Re: [PATCH 1/2] testing/selftests: Add tests for the
- is_signed_type() macro
-Message-ID: <202208311053.B1C87B1B@keescook>
-References: <20220826162116.1050972-1-bvanassche@acm.org>
- <20220826162116.1050972-2-bvanassche@acm.org>
- <74370E0B-AC37-435F-A44C-5DBAA8A38496@riseup.net>
- <3bd708e6-2cee-9177-5453-f6b152ec762c@acm.org>
+        Wed, 31 Aug 2022 13:54:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25DC7DF671
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:53:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661968438;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=83UeBlTXkZlPfDjGH2tInHwryedeCfsq3pruEuPg7pU=;
+        b=FCB97MpK4Gp1i3c/kgWdZEHVNuVIGsXOSpqwN2k7MwMaP3Oqp9d8BH8vUzTuIXHxQ9JyrP
+        qmjRLXjNPk46OwrneVgZrbcoImqOiWU2V4NYssmDfs4MxeGYkdi0aBhm5bqR2NVIs00g+z
+        ZHSwJOI2EHATiwlKfQ5Ufy8cB9L+CzM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-127-W5dFUaQbPmKxvdc2-PLgIw-1; Wed, 31 Aug 2022 13:53:54 -0400
+X-MC-Unique: W5dFUaQbPmKxvdc2-PLgIw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 53494185A7B2;
+        Wed, 31 Aug 2022 17:53:54 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id B177F1415117;
+        Wed, 31 Aug 2022 17:53:52 +0000 (UTC)
+Message-ID: <510a641f6393ff11c00277df58c1d2a7b6e9a696.camel@redhat.com>
+Subject: Re: [PATCH 16/19] KVM: x86: Explicitly track all possibilities for
+ APIC map's logical modes
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 20:53:51 +0300
+In-Reply-To: <Yw+Sz+5rB+QNP2Z9@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-17-seanjc@google.com>
+         <8d3569a8b2d1563eb3ff665118ffc5c8d7e1e2f2.camel@redhat.com>
+         <Yw+Sz+5rB+QNP2Z9@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3bd708e6-2cee-9177-5453-f6b152ec762c@acm.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,20 +68,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 08:30:54PM -0700, Bart Van Assche wrote:
-> On 8/29/22 19:33, Isabella Basso wrote:
-> > > +#include <kunit/test.h>
-> > > +#include <linux/overflow.h>
-> > 
-> > Nit: I don’t know if that makes a huge difference but you might include
-> > `<linux/compiler.h>` directly to make the final object smaller. Of course, that
-> > would ideally be a change happening in 2/2 but that was already merged :).
+On Wed, 2022-08-31 at 16:56 +0000, Sean Christopherson wrote:
+> On Wed, Aug 31, 2022, Maxim Levitsky wrote:
+> > > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> > > index 8209caffe3ab..3b6ef36b3963 100644
+> > > --- a/arch/x86/kvm/lapic.c
+> > > +++ b/arch/x86/kvm/lapic.c
+> > > @@ -168,7 +168,12 @@ static bool kvm_use_posted_timer_interrupt(struct kvm_vcpu *vcpu)
+> > >  
+> > >  static inline bool kvm_apic_map_get_logical_dest(struct kvm_apic_map *map,
+> > >  		u32 dest_id, struct kvm_lapic ***cluster, u16 *mask) {
+> > > -	switch (map->mode) {
+> > > +	switch (map->logical_mode) {
+> > > +	case KVM_APIC_MODE_SW_DISABLED:
+> > > +		/* Arbitrarily use the flat map so that @cluster isn't NULL. */
+> > > +		*cluster = map->xapic_flat_map;
+> > > +		*mask = 0;
+> > > +		return true;
+> > Could you explain why this is needed? I probably missed something.
 > 
-> Right, that could have been done in patch 2/2 but I think this can also be
-> done as a follow-up patch. I'm not sure what Kees prefers?
+> If all vCPUs leave their APIC software disabled, or leave LDR=0, then the overall
+> mode will be KVM_APIC_MODE_SW_DISABLED.  In this case, the effective "mask" is '0'
+> because there are no targets.  And this returns %true because there are no targets,
+> i.e. there's no need to go down the slow path after kvm_apic_map_get_dest_lapic().
 
-A follow-up would be easier for me. And perhaps could include Rasmus's
-suggestions too?
+I guess this case doesn't need optimization (although maybe some OSes do leave all LDRs to 0,
+if they don't use logical addressing, don't know)
 
--- 
-Kees Cook
+Anyway thanks, that makes sense.
+
+> 
+> > > @@ -993,7 +1011,7 @@ static bool kvm_apic_is_broadcast_dest(struct kvm *kvm, struct kvm_lapic **src,
+> > >  {
+> > >  	if (kvm->arch.x2apic_broadcast_quirk_disabled) {
+> > >  		if ((irq->dest_id == APIC_BROADCAST &&
+> > > -				map->mode != KVM_APIC_MODE_X2APIC))
+> > > +		     map->logical_mode != KVM_APIC_MODE_X2APIC))
+> > >  			return true;
+> > >  		if (irq->dest_id == X2APIC_BROADCAST)
+> > >  			return true;
+> > 
+> > To be honest I would put that patch first, and then do all the other patches,
+> > this way you would avoid all of the hacks they do and removed here.
+> 
+> I did it this way so that I could test this patch for correctness.  Without the
+> bug fixes in place it's not really possible to verify this patch is 100% correct.
+> 
+> I completely agree that it would be a lot easier to read/understand/review if
+> this came first, but I'd rather not sacrifice the ability to easily test this patch.
+> 
+
+I am not 100% sure about this, but I won't argue about it, let it be.
+
+Best regards,
+	Maxim Levitsky
+

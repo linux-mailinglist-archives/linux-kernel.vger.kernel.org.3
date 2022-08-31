@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DCC5A899F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 01:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27D505A89A1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 01:54:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiHaXxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 19:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S230510AbiHaXyt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 19:54:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiHaXxf (ORCPT
+        with ESMTP id S229601AbiHaXyr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 19:53:35 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35A7F14F0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 16:53:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:
-        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
-        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description;
-        bh=LTD4vkKdl/8JE62fAvhqroKwZk3JK69BSlVKTdGE7uU=; b=TwMHM0ixt8oG9zUIGNVqBosx/V
-        11RMsBEDlRZk8wO/YA8ft3p3oyQ5BtMLXZsH6B+qhlXGjP9gqSCuUyKBfl8miaYnz7jNTC53lOSfL
-        R1v/qHOzd0LweNYk+o1kzFDCQhQEn2H6F3psASXuxMwgC0AqcDph5UoDxEAIQpetk1NeczLI2V+b/
-        hNTYFZbEjRfk0/Km3ag91r/4+hh8hW9Ad27e7wxknkcGjOZn+5frSe+fQR4yZCMJqqv4FhzI49rJb
-        218F1rr8c18xejO47H+Ti+T/12EA5n2GJKoGx6NF6vOKc4JM8pGmMY/0339mv3hYTg/Q7c0SJLxU6
-        1vw00s0w==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oTXWL-00Amej-9y;
-        Wed, 31 Aug 2022 23:53:21 +0000
-Date:   Thu, 1 Sep 2022 00:53:21 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     linux-nvme@lists.infradead.org, Sagi Grimberg <sagi@grimberg.me>,
-        Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Chaitanya Kulkarni <Chaitanya.Kulkarni@wdc.com>,
-        James Smart <james.smart@broadcom.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Venkataramanan Anirudh <anirudh.venkataramanan@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Chaitanya Kulkarni <chaitanyak@nvidia.com>
-Subject: Re: [PATCH v2] nvmet-tcp: Don't map pages which can't come from
- HIGHMEM
-Message-ID: <Yw/0cZFCQQpx3hhZ@ZenIV>
-References: <20220830220533.17777-1-fmdefrancesco@gmail.com>
+        Wed, 31 Aug 2022 19:54:47 -0400
+Received: from sonic304-25.consmr.mail.ne1.yahoo.com (sonic304-25.consmr.mail.ne1.yahoo.com [66.163.191.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65ED1E0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 16:54:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1661990083; bh=/H7Jd+oscd+6HYShb/7N8CRp+JcEgiRUQWnOQ7RUjhk=; h=Date:From:Subject:To:References:From:Subject:Reply-To; b=E/jZBr1dNOxytL5JynJVpDMCyzKSnUjR1tOra+GoM6f+NS45Mhd7hrRZIVBNLlj6wce40BbIyDqCd4N4M2g4dkmncOqIEm6znCpnHpnnXpEY3/yNJeKpaE5rk1ns2BE7mCWviu7jBDsJ4dKBI0qie9mWfwtm58MM8vfTK+RTrdE=
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1661990083; bh=xR2FXzo+jTX89D9AgHRIzFz9h9h7MMvKPEaFJr8/GpV=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=jsSMfYIPTcwnS+d10PQJnSL8rFS5NXzHeQx+28s9sCdoVGUpAiCvyH7ZmUNYeN7QoLNwBd79zzkPkojJvytgK6I9Bvno47AcufhUlCB+Dk3kDlKBzS3yGO6CuYuuVcY+Hvr+rGlSf/nkkaWKF55dMllMj6CqcBBD79DC5FtdjVPlpl++JREh+ibp3W4+4BQSnSFNOgvnJOH7YwVcrQE14s3xyifeSVAoMAJTd+6bhM7kczwRVxebgaA5RmWDxUEOmBMopgryZ+4QLaUUgHbdo4OLNV5e0/ezmnBmL6LpKIlqBYMwTZyHjlcfzwPJ5lsCQ99KKoNHY+tc4PBcXTLPCg==
+X-YMail-OSG: 4FCJKeAVM1nDk6SuizjrsfA2j501SfaenAUhJUYILR1vIG.94AH4NMamL7hLZur
+ R5DPLOg3WPk.jgVClHzebhhumj1OEF12A6n3ehKELi3ivqT9Lu0i6HDSltfZxojZQ_rB5PFcjvsd
+ Qa91lc_o0n5EXwsyzemU9uUgiPym4tgH1mH2ihMetM3hg2HZv9y67WcqmTS1SElP4zotzsICsJyy
+ db0QmhSqcOJyjNjSeIXJyo7OIhqyfr_BsA_g_HafPS35GdW4UtyjsowgQLpmKb62wLmGNdZI50Or
+ HT6r4oQCVjYVESazsGXVfGTwqtQt7E9QLdJswSGB2hmELFptooRDWlAdBmj0OdV3gBsOxnhkX2r.
+ L3AJEGT3UNa_nGEQb0ab.G7lbTtMufFJ_FQO9aJ7g_NtckCHUG7sQTJ6kas5dyxMyxPpIljq01bA
+ 5j8gnINtj0j46bLbCujFD8hr.IUH24F_YK9jSdzGTJCB8Ul.ly7I6trD7VqzXpdZIJQrQ4fp41Ky
+ juBxrTzX5LuGaUHwS0N64m_HChPfwBbRiVKBZ0NHH8e9FJKxiHPbQ_XOQ92iSIi2t4LWlshniDLW
+ t.X7zCnd9cfKNaGUJTqVJ7YgTZlq9C_j2T2VVK2zMNi4NcTsBR.weZmmx4pjaQJ0hls1tGKfD7oC
+ TTMY..Mh2Avm6nBgzU68DWUaVBtrmY3P1sM1K7SgloNtuPoThFerDC74dCZnxuGQ0a7Tu133Cgef
+ 6hPRGyIpK0m53IeOE61xHEG22Qnq5XHObtgJ_6tZDAcEUonbEjs9jssV7zZ_95GLssgJYOtgpRmF
+ OyyVx6M5fUjP3w.uYtEP.ESV.GujwalTuszzHKh.36pxmL8Epth3ff7lWPZ2XMcKqewVsNSXf4_G
+ 4dUBGlF45sBnwvLB1yoeXLL9oN8vSQ4CXh3OOROOPlXWe3NPMYpScnFkolosOMG7j9B8kGgPzVQa
+ hkynaJikLMboAZij01e_4qccavhpi6_EIvrWH1FzWmoxTtKIJhsncG02cmLXAHRigMtPNbnNCYJ1
+ yrFNcfDd8TANTm9nIqS.FPC6ixYb8e9M5ynI5MxnRv1hPs1oz8SPT1wyfUBdOBj5LbnQ2iVG94qQ
+ UdCn_.FLmzGDc6ew0Ty4B_XTBdlKygWhq5YFZUzOIIQqtA7baivlYjdqw2S1V1jfRmO1mErkfFYu
+ ZI_fCKf58uIECeu5wVHoaeKaGHg.FWenMQgSUETAoH1vfEPTuhoHUfI6s1gJJmmCaqghDJIpWzig
+ sDzO3uv7xeEkSDSkd7LGgHGNd1bs2mkGQw9xdYj2j0H1jrjaEV4lrRa9ow8lcUEu1TX35rYujsj1
+ HTC1vSiWUNYjUgqxIsG6YoEa2IG9mwuTgu2oXhsR9FBBTfJ50BkkFgpbfTHvpGkWLb0CubLCD85D
+ YcCRZRsXjBmxKWUne3q574bMUugOhw.8WPUrqDDmsecUBoAKr2BpA5yxTL06QUDiKPi4deioFwaY
+ 3QP_ne88DeuJ_xzmBpDl5SS5s4gd7LXvnbu4wy3ZejjtdPaf06ujLX1UkdlI0oGAWOyBKHeUmZrS
+ Z4cgfwCUJO5OMZvIfowsLQ.06YYagLapZpwx3EAbPoavf4x8Q2l7Oz6szEUjPs.LAT7mq.H9pSnx
+ F_IpjE5TOFfV_nCIoLFCkfl89dy2f_xYrIY0SZrQVpEM9XNCTf_.Kh1OuRwv7md.p0nFrmg2yZP6
+ 7gyGllE5HKeIAZ5GnZogjwYv7vVl1uyDee5eRVcMqZttx_qJs1jCn47_4MF3bq5suRcM1NkOT00b
+ yVZXh8iBK.Kh4zsKLsPltMNGEzuaGaLFSSC.05OQ5Uah7VsSYCYGazinje9ZH0rRP1aYZn8ZAMlZ
+ CdLR2eH_Lx12g3w9sbG9_IxCIzJDlQwbFgp9XWz75_OtAX7Zj_EHzBzcqpJWRmKOjootpXPxFRCR
+ Os.dWZGhNyjpXmsR7ZWNj9x2PH7lkRaPkUWek5gy3GtBdUQTiD9ERZsqJqpunxWILVwHNT_FZIrt
+ mDAeg5jdFAALPZ0JfDxGv1eP3.siazPMQ5bvSPah4Ul7CLdu2fSIpVj5HLrGjB._L4ziWmJEF0pg
+ r0sLd.e5WKe1y8DYuxarlBZ3kqcE5PFbpegab4Un7AomANc6Uk1oeMnG9QEK4ZUHOkPOx6vFzFXX
+ e2BPT.L64nMqpIBZy9Pb4n0gSb3Wh1LM_ShaH1F.Y2T3uYuz6jyYoT6oFNFUBtvy7XcC16pZLQnB
+ PvpEW
+X-Sonic-MF: <pheonix.sja@att.net>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic304.consmr.mail.ne1.yahoo.com with HTTP; Wed, 31 Aug 2022 23:54:43 +0000
+Received: by hermes--production-gq1-8697bfdb94-5lhh5 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 5d5faa88fc4e5fa52d90bb1e9cc3acaf;
+          Wed, 31 Aug 2022 23:54:39 +0000 (UTC)
+Date:   Wed, 31 Aug 2022 19:54:31 -0400
+From:   Steven J Abner <pheonix.sja@att.net>
+Subject: configuration x86/Kconfig bug? or AMD feature request
+To:     linux-kernel@vger.kernel.org
+Message-Id: <VQ7IHR.9PMZBSNKURXU1@att.net>
+X-Mailer: geary/3.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220830220533.17777-1-fmdefrancesco@gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii; format=flowed
+References: <VQ7IHR.9PMZBSNKURXU1.ref@att.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,27 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 12:05:33AM +0200, Fabio M. De Francesco wrote:
-> kmap() is being deprecated in favor of kmap_local_page().[1]
-> 
-> There are two main problems with kmap(): (1) It comes with an overhead as
-> mapping space is restricted and protected by a global lock for
-> synchronization and (2) it also requires global TLB invalidation when the
-> kmap’s pool wraps and it might block when the mapping space is fully
-> utilized until a slot becomes available.
-> 
-> The pages which will be mapped are allocated in nvmet_tcp_map_data(),
-> using the GFP_KERNEL flag. This assures that they cannot come from
-> HIGHMEM. This imply that a straight page_address() can replace the kmap()
-> of sg_page(sg) in nvmet_tcp_map_pdu_iovec(). As a side effect, we might
-> also delete the field "nr_mapped" from struct "nvmet_tcp_cmd" because,
-> after removing the kmap() calls, there would be no longer any need of it.
-> 
-> In addition, there is no reason to use a kvec for the command receive
-> data buffers iovec, use a bio_vec instead and let iov_iter handle the
-> buffer mapping and data copy.
-> 
-> Test with blktests on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
-> HIGHMEM64GB enabled.
+Hi
+I am tailoring a kernel for AMD 2400g on ASRock B450 using 5.18.12 as 
+base.
+I found a feature I don't believe I need, and the system seems to work 
+just
+fine without it. A quick glance at the code seems like I'll be just 
+fine, too.
+In /drivers/platform/x86/Kconfig:1159  I altered the text to:
 
-Looks sane...
+config PMC_ATOM
+      bool "Intel Atom SOC Power Management Controller Driver"
+      default y
+      depends on PCI
+      select COMMON_CLK
+
+Please have a look and decide if x86 must include this code to function 
+properly.
+Nothing but being x86 selects this. 'default y' was chosen only because 
+forced y before.
+Steve
+
+I wish to be personally CC'ed the answers/comments posted to the list
+in response to my posting, please. I not part of the list.
+
+
+

@@ -2,138 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA985A8804
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DDFF5A880A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbiHaVXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
+        id S232211AbiHaVZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230478AbiHaVXa (ORCPT
+        with ESMTP id S230478AbiHaVZN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:23:30 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2528BA7AA8
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661981010; x=1693517010;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=l+xXkWuuCi6rF4D2yXyu4H40LQSFIn3eOKHFcrv/pTU=;
-  b=Le9Dh+GKOFj2Lw3bf/UALXN6TwAYOfQGVKCyHNoSafvzR/Euhf/ilF9W
-   JO/aBSZSoxACylBQ/eAV1VJIscdyGoNWGEk8fzBqhuUuXKIHsud+z0xqN
-   v835949qvLhH4/WA3b2m3QrHidH5Y7IZ006UWAAKT7u7BwInK+vRw8ErA
-   03G+7j/iKcw2O2InL5FmVBZp2ijaO+UIDz48xcDALvYAdrdhL/XSk22rw
-   +hdDNpViD2ZQXO7idftrQKBtIDZKL8KCvJYjVzGmIvlVO70kVMjqkHdCI
-   GpdzpcsRwTxqPEYJPdfVubUYcO3L0LUg7EEILvRp5BqV7EQPeilteip/n
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="275295985"
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="275295985"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 14:23:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="680577062"
-Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 31 Aug 2022 14:23:28 -0700
-Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTVBH-0000if-1W;
-        Wed, 31 Aug 2022 21:23:27 +0000
-Date:   Thu, 1 Sep 2022 05:22:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 3/3] regmap: spi-avmm: Use swabXX_array() helpers
-Message-ID: <202209010548.ZC5MnsXX-lkp@intel.com>
-References: <20220831145407.78166-3-andriy.shevchenko@linux.intel.com>
+        Wed, 31 Aug 2022 17:25:13 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB197B481
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:25:11 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-11f0fa892aeso18954605fac.7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:25:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=g+LFT64nKjvFQ9xBs3ga17iSDMJNzcQHBlCbx79FOAA=;
+        b=Z4r+al+4Pp7+eTwrj0gkK1wBO8Z0CpU7HFRAFrfv4p86LXjVXcvfALv60ZlKgJxda2
+         buOcRK5++YP6s/L3n6ZjEeHdba/BWIXiWTp14xU9HOBtdXk9gdNeo41fD9jm9u8oeOTS
+         b3odhDl+/3OiWnz7H6fJQC/oFftOplAIsblpfHfw7/WhNrze0wGyl0bKOBU0PaM3u0mC
+         v2snYeD51HdMQUR0pqB99AA++xapBHElVIVCuQeBwR0/Gzc5Ag66WSfDLcshMKsLntyq
+         5SDsbDX2/7vIlG6ILnLQtms7Fy8OlV8fh9x6Th6J9i95F76zXuGnq8FlvbFEYFxjx+Sc
+         CB0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=g+LFT64nKjvFQ9xBs3ga17iSDMJNzcQHBlCbx79FOAA=;
+        b=D0HCIqMaYeZNUpSAXJ4gF637ajUrzQqOU20iEyvGroTnmhWCAGf6++pP7FX/cyKxOP
+         MXgGhUhC68d/E2vFfQCOH5I0YZn/wLFNZYMJDngbwCUBwKo7WCyHt7maOzJ27Aci+f9l
+         ZJgFUr6sfgky571ylTOOGMbYi12Pg8aehHnbI6sWynT49s4SXv0oES2lT8w5pOA6pPqr
+         w5WfF5tLERVrS089zCnGI0hPE/l5kigMpJAN0mqAsIKXBJmGBldVwpuFa1H3vvEzCDnN
+         xqyBeHA/NZ4xbmqe9+HPmljSrd7hCc7ssckrjQ3l1D8kwdySUokxUKpoPl8yCjFPrXPb
+         Q8PQ==
+X-Gm-Message-State: ACgBeo12MTNNJwzPi08r8QxB/gFmOkc/KAygj/uKFKr5UKM9RBQE7MGJ
+        APB0QZzm9l93ZUWE0hGzC975HoHnWnySpaQaeqwPjA==
+X-Google-Smtp-Source: AA6agR4N+yQXPnOGxaJMFenO1Wz9ePQE4H8Up8oiR4Fnc6irTFXk/fUy8f1Iwrt05kWPuLi9Qce/XHeXKrUoHCdbHkg=
+X-Received: by 2002:a05:6870:4308:b0:10b:8cbe:c945 with SMTP id
+ w8-20020a056870430800b0010b8cbec945mr2401759oah.220.1661981110841; Wed, 31
+ Aug 2022 14:25:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831145407.78166-3-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220831211526.2743216-1-axelrasmussen@google.com>
+In-Reply-To: <20220831211526.2743216-1-axelrasmussen@google.com>
+From:   "Zach O'Keefe" <zokeefe@google.com>
+Date:   Wed, 31 Aug 2022 14:24:34 -0700
+Message-ID: <CAAa6QmRy3N9cO14AVz2g0dA_MOSatwzufQxO1PwH35J4mYPbmQ@mail.gmail.com>
+Subject: Re: [PATCH] selftest: vm: remove orphaned references to local_config.{h,mk}
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Tarun Sahu <tsahu@linux.ibm.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Wed, Aug 31, 2022 at 2:16 PM Axel Rasmussen <axelrasmussen@google.com> wrote:
+>
+> Note: this commit is intended to apply to mm-unstable, the commit being
+> fixed only exists in that branch for now.
+>
+> Commit b4efb234e53cc60ccdc855190be9f35918687412 ("Kselftests: remove
+> support of libhugetlbfs from kselftests") removed the rule describing
+> how to build local_config.{h,mk}, but it left two references to these
+> files lingering around. The result is, none of the selftests could be
+> built due to dependencies with no rule for how to build them.
+>
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+>  tools/testing/selftests/vm/Makefile | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/vm/Makefile b/tools/testing/selftests/vm/Makefile
+> index b52f2cc51482..4ae879f70f4c 100644
+> --- a/tools/testing/selftests/vm/Makefile
+> +++ b/tools/testing/selftests/vm/Makefile
+> @@ -1,9 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  # Makefile for vm selftests
+>
+> -LOCAL_HDRS += $(selfdir)/vm/local_config.h $(top_srcdir)/mm/gup_test.h
+> -
+> -include local_config.mk
+> +LOCAL_HDRS += $(top_srcdir)/mm/gup_test.h
+>
+>  uname_M := $(shell uname -m 2>/dev/null || echo not)
+>  MACHINE ?= $(shell echo $(uname_M) | sed -e 's/aarch64.*/arm64/' -e 's/ppc64.*/ppc64/')
+> --
+> 2.37.2.789.g6183377224-goog
+>
 
-I love your patch! Yet something to improve:
+Thanks Axel! Works here on latest mm-unstable
 
-[auto build test ERROR on broonie-regmap/for-next]
-[also build test ERROR on next-20220831]
-[cannot apply to linus/master v6.0-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/swab-Add-array-operations/20220831-225514
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
-config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20220901/202209010548.ZC5MnsXX-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/783618682b27b5d06605086a386d64d355914b38
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/swab-Add-array-operations/20220831-225514
-        git checkout 783618682b27b5d06605086a386d64d355914b38
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   drivers/base/regmap/regmap-spi-avmm.c: In function 'br_swap_words_32':
->> drivers/base/regmap/regmap-spi-avmm.c:171:22: error: passing argument 1 of 'swab32_array' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     171 |         swab32_array(buf, len / 4);
-         |                      ^~~
-         |                      |
-         |                      char *
-   In file included from include/uapi/linux/byteorder/little_endian.h:14,
-                    from include/linux/byteorder/little_endian.h:5,
-                    from arch/x86/include/uapi/asm/byteorder.h:5,
-                    from arch/x86/include/asm/orc_types.h:43,
-                    from arch/x86/include/asm/unwind_hints.h:6,
-                    from arch/x86/include/asm/nospec-branch.h:13,
-                    from arch/x86/include/asm/paravirt_types.h:40,
-                    from arch/x86/include/asm/ptrace.h:97,
-                    from arch/x86/include/asm/math_emu.h:5,
-                    from arch/x86/include/asm/processor.h:13,
-                    from arch/x86/include/asm/timex.h:5,
-                    from include/linux/timex.h:67,
-                    from include/linux/time32.h:13,
-                    from include/linux/time.h:60,
-                    from include/linux/stat.h:19,
-                    from include/linux/module.h:13,
-                    from drivers/base/regmap/regmap-spi-avmm.c:7:
-   include/linux/swab.h:32:38: note: expected 'u32 *' {aka 'unsigned int *'} but argument is of type 'char *'
-      32 | static inline void swab32_array(u32 *buf, unsigned int words)
-         |                                 ~~~~~^~~
-   cc1: some warnings being treated as errors
-
-
-vim +/swab32_array +171 drivers/base/regmap/regmap-spi-avmm.c
-
-   168	
-   169	static void br_swap_words_32(char *buf, unsigned int len)
-   170	{
- > 171		swab32_array(buf, len / 4);
-   172	}
-   173	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Tested-by: Zach O'Keefe <zokeefe@google.com>

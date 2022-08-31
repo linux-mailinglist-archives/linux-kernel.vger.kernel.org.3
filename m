@@ -2,93 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9604C5A73B4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAEA5A73B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231740AbiHaCAy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 22:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
+        id S231666AbiHaCBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 22:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiHaCAw (ORCPT
+        with ESMTP id S231811AbiHaCBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 22:00:52 -0400
-Received: from mail1.bemta37.messagelabs.com (mail1.bemta37.messagelabs.com [85.158.142.112])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBC314D817;
-        Tue, 30 Aug 2022 19:00:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
-        s=170520fj; t=1661911248; i=@fujitsu.com;
-        bh=Gl3aA44E2kcOR/hcpUwZc4GOVg1SY3WM0u9Pk2Dx4D0=;
-        h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-         In-Reply-To:Content-Type:Content-Transfer-Encoding;
-        b=zJjsqwSsleOMtQjoKpHs7xs+T2/c7Pm/Tdfx8JEeCxP5qDdn+yMjaJe4g3u1HE6bX
-         KxdnP6mmn58YQFkbQdZWd3RD2kmuUlNvSs/LffBo23EEojlbgOa7DLN14i+3qp0YM4
-         YVVpZPAn6ONy29eY9DBlk8Ja7NoexZ4JIxEPhfuhwD5U9ZoDULwLsiySQLQ0ZoWkCW
-         mt6uADdLtyQXBb2AZhiYu1PAul70u6e4rPC7WdmtmTxbpGOQYgvsiVtmYyptVJF4c9
-         FhUKulSpuEMBWB8HFRbGBD0wsawNGQ766vgCeT1GxhbQEj5fFGAAPTv4uxXyv6YpZt
-         L4/aSYSkOsu/Q==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAKsWRWlGSWpSXmKPExsViZ8MxSffCAb5
-  kgyVtXBbTPvxktrjybw+jxZRfS5ktLu+aw2bx7FAviwOrx+Ur3h6bVnWyefQ2v2Pz+LxJLoAl
-  ijUzLym/IoE1Y8W9r+wF98Qr5v+ax9zA+FK4i5GLQ0hgC6PEyr2/GCGcFUwSt6e+Y4dwtjNKb
-  Nqym7mLkZODV8BOonHpXjCbRUBV4vCEFywQcUGJkzOfgNmiAhESDx9NArOFBXwk7jx/xg5iMw
-  uIS9x6Mp8JZKiIwDJGid1nrjFCJGolGk9/ACsSErCUWPz+OdgCNgENiXstN8FqOAWsJNafuME
-  GUW8hsfjNQaih8hLNW2eD1UsIKEoc6fwLtJgDyK6UuPE4FSKsJnH13CbmCYzCs5CcOgvJSbOQ
-  TJ2FZOoCRpZVjDZJRZnpGSW5iZk5uoYGBrqGhqZA2lDX2EAvsUo3US+1VDcvv6gkQ9dQL7G8W
-  C+1uFivuDI3OSdFLy+1ZBMjMNpSilPldjAe2PdL7xCjJAeTkijvr5V8yUJ8SfkplRmJxRnxRa
-  U5qcWHGGU4OJQkeC/vBcoJFqWmp1akZeYAIx8mLcHBoyTCG7gQKM1bXJCYW5yZDpE6xWjMseH
-  Bgb3MHFNn/9vPLMSSl5+XKiXO+3U/UKkASGlGaR7cIFhCusQoKyXMy8jAwCDEU5BalJtZgir/
-  ilGcg1FJmHfJHqApPJl5JXD7XgGdwgR0ysMl3CCnlCQipKQamLxe95eEcfdlmD7d5lCwtk06a
-  GKFlYv4qUmzUu4ErphiXb3thcGl+p9p4acevEw6rfLorWZ8X115A7NLIfO2+8U1ujer2jiulS
-  /Zvnnl4f7An9LJSw6YT/Hx3Sy9j3/Lp08T9x3d8SGC+d6J5Ib13rJlq3UzQ/X/Jz6+uVX30J3
-  IMKX82ZdWx7Gf+v9X4duNeaHe0ssc1X0ez9n2XYPj5wHmE2uu3ZlqmTNl/qyeL+ts/ghwvZyQ
-  XnNh6dKbgUd+li2uLmSTOSVvna47oWNf0e6SdVE/Lde/W+f6tGP7eu5XIl/rPledVvvxU+z/4
-  Vupa1Uaw0qbXv2e8unV0jzOl03RaY5njU7F8mXfywzqmPdciaU4I9FQi7moOBEAlkwnWcMDAA
-  A=
-X-Env-Sender: lizhijian@fujitsu.com
-X-Msg-Ref: server-13.tower-728.messagelabs.com!1661911247!30716!1
-X-Originating-IP: [62.60.8.146]
-X-SYMC-ESS-Client-Auth: outbound-route-from=pass
-X-StarScan-Received: 
-X-StarScan-Version: 9.87.3; banners=-,-,-
-X-VirusChecked: Checked
-Received: (qmail 24841 invoked from network); 31 Aug 2022 02:00:48 -0000
-Received: from unknown (HELO n03ukasimr02.n03.fujitsu.local) (62.60.8.146)
-  by server-13.tower-728.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 31 Aug 2022 02:00:48 -0000
-Received: from n03ukasimr02.n03.fujitsu.local (localhost [127.0.0.1])
-        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTP id 83DA71000DC;
-        Wed, 31 Aug 2022 03:00:47 +0100 (BST)
-Received: from R01UKEXCASM223.r01.fujitsu.local (R01UKEXCASM223 [10.182.185.121])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by n03ukasimr02.n03.fujitsu.local (Postfix) with ESMTPS id 77AB9100078;
-        Wed, 31 Aug 2022 03:00:47 +0100 (BST)
-Received: from [10.167.226.45] (10.167.226.45) by
- R01UKEXCASM223.r01.fujitsu.local (10.182.185.121) with Microsoft SMTP Server
- (TLS) id 15.0.1497.32; Wed, 31 Aug 2022 03:00:43 +0100
-Message-ID: <a66af10e-dea5-a9ec-5eeb-641b1d7ebeec@fujitsu.com>
-Date:   Wed, 31 Aug 2022 09:59:52 +0800
+        Tue, 30 Aug 2022 22:01:05 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C9D551A3B;
+        Tue, 30 Aug 2022 19:01:03 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MHS2s67mTzYd10;
+        Wed, 31 Aug 2022 09:56:37 +0800 (CST)
+Received: from [10.174.179.163] (10.174.179.163) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 31 Aug 2022 10:01:01 +0800
+Message-ID: <274b54e3-d33b-b48d-011d-30a45c696db0@huawei.com>
+Date:   Wed, 31 Aug 2022 10:01:00 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] RDMA/srp: Set scmnd->result only when scmnd is not NULL
-Content-Language: en-US
-To:     "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "bvanassche@acm.org" <bvanassche@acm.org>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>
-CC:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220831014730.17566-1-yangx.jy@fujitsu.com>
-From:   Li Zhijian <lizhijian@fujitsu.com>
-In-Reply-To: <20220831014730.17566-1-yangx.jy@fujitsu.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH -next] xfs: remove "%Ld" which doesn't meet C standard
+To:     Eric Sandeen <sandeen@sandeen.net>
+CC:     <linux-xfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <djwong@kernel.org>
+References: <20220830135422.2734749-1-zengheng4@huawei.com>
+ <b19dd730-28f4-982d-2ae7-471e0c11db0e@sandeen.net>
+From:   Zeng Heng <zengheng4@huawei.com>
+In-Reply-To: <b19dd730-28f4-982d-2ae7-471e0c11db0e@sandeen.net>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.167.226.45]
-X-ClientProxiedBy: G08CNEXCHPEKD08.g08.fujitsu.local (10.167.33.83) To
- R01UKEXCASM223.r01.fujitsu.local (10.182.185.121)
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.174.179.163]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500022.china.huawei.com (7.185.36.162)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,78 +50,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+You're right, I would take the opinion into v2 and loop you.
 
 
-On 31/08/2022 09:47, yangx.jy@fujitsu.com wrote:
-> This change fixes the following kernel NULL pointer dereference
-> which is reproduced by blktests srp/007 occasionally.
+在 2022/8/30 22:51, Eric Sandeen 写道:
+> On 8/30/22 8:54 AM, Zeng Heng wrote:
+>> The "%Ld" specifier, which represents long long unsigned,
+>> doesn't meet C language standard, and even more,
+>> it makes people easily mistake with "%ld", which represent
+>> long unsigned. So replace "%Ld" with "lld".
+>>
+>> Do the same with "%Lu".
+>>
+>> Signed-off-by: Zeng Heng <zengheng4@huawei.com>
+> I think this probably makes sense, but there are many more instances of
+> %Ld and %Lu in the xfs code, so why change just these 3?
 >
-> BUG: kernel NULL pointer dereference, address: 0000000000000170
-> #PF: supervisor write access in kernel mode
-> #PF: error_code(0x0002) - not-present page
-> PGD 0 P4D 0
-> Oops: 0002 [#1] PREEMPT SMP NOPTI
-> CPU: 0 PID: 9 Comm: kworker/0:1H Kdump: loaded Not tainted 6.0.0-rc1+ #37
-> Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS rel-1.15.0-29-g6a62e0cb0dfe-prebuilt.qemu.org 04/01/2014
-> Workqueue:  0x0 (kblockd)
-> RIP: 0010:srp_recv_done+0x176/0x500 [ib_srp]
-> Code: 00 4d 85 ff 0f 84 52 02 00 00 48 c7 82 80 02 00 00 00 00 00 00 4c 89 df 4c 89 14 24 e8 53 d3 4a f6 4c 8b 14 24 41 0f b6 42 13 <41> 89 87 70 01 00 00 41 0f b6 52 12 f6 c2 02 74 44 41 8b 42 1c b9
-> RSP: 0018:ffffaef7c0003e28 EFLAGS: 00000282
-> RAX: 0000000000000000 RBX: ffff9bc9486dea60 RCX: 0000000000000000
-> RDX: 0000000000000102 RSI: ffffffffb76bbd0e RDI: 00000000ffffffff
-> RBP: ffff9bc980099a00 R08: 0000000000000001 R09: 0000000000000001
-> R10: ffff9bca53ef0000 R11: ffff9bc980099a10 R12: ffff9bc956e14000
-> R13: ffff9bc9836b9cb0 R14: ffff9bc9557b4480 R15: 0000000000000000
-> FS:  0000000000000000(0000) GS:ffff9bc97ec00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 0000000000000170 CR3: 0000000007e04000 CR4: 00000000000006f0
-> Call Trace:
->   <IRQ>
->   __ib_process_cq+0xb7/0x280 [ib_core]
->   ib_poll_handler+0x2b/0x130 [ib_core]
->   irq_poll_softirq+0x93/0x150
->   __do_softirq+0xee/0x4b8
->   irq_exit_rcu+0xf7/0x130
->   sysvec_apic_timer_interrupt+0x8e/0xc0
->   </IRQ>
+> $ cd fs/xfs
+> $ grep -r "%Lu\|%Ld" .
+> ./libxfs/xfs_inode_fork.c:	"corrupt inode %Lu (bad size %d for local fork, size = %zd).",
+> ./libxfs/xfs_inode_fork.c:		xfs_warn(mp, "corrupt inode %Lu (btree).",
+> ./libxfs/xfs_bmap.c:				xfs_warn(mp, "%s: thispa(%d) == pp(%d) %Ld",
+> ./xfs_inode.c:			"%s: Bad inode %Lu magic number 0x%x, ptr "PTR_FMT,
+> ./xfs_inode.c:				"%s: Bad regular inode %Lu, ptr "PTR_FMT,
+> ./xfs_inode.c:				"%s: Bad directory inode %Lu, ptr "PTR_FMT,
+> ./xfs_inode.c:			"%s: bad inode %Lu, forkoff 0x%x, ptr "PTR_FMT,
+> ./xfs_stats.c:	len += scnprintf(buf + len, PATH_MAX-len, "xpc %Lu %Lu %Lu\n",
+> ./cscope/csdb:, "corrupt inode %Lu (btree).",
+> ./cscope/csdb:", dino bp = "PTR_FMT", ino = %Ld",
+> ./cscope/csdb:", ino %Ld",
+> ./cscope/csdb:-len, "xpc %Lu %Lu %Lu\n",
+> ./xfs_inode_item_recover.c:	"%s: Bad inode magic number, dip = "PTR_FMT", dino bp = "PTR_FMT", ino = %Ld",
+> ./xfs_inode_item_recover.c:			"%s: Bad inode log record, rec ptr "PTR_FMT", ino %Ld",
 >
-> Fixes: aef9ec39c47f ("IB: Add SCSI RDMA Protocol (SRP) initiator")
-> Signed-off-by: Xiao Yang <yangx.jy@fujitsu.com>
-> ---
->   drivers/infiniband/ulp/srp/ib_srp.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
-> index 7720ea270ed8..528cdd0daba4 100644
-> --- a/drivers/infiniband/ulp/srp/ib_srp.c
-> +++ b/drivers/infiniband/ulp/srp/ib_srp.c
-> @@ -1961,6 +1961,7 @@ static void srp_process_rsp(struct srp_rdma_ch *ch, struct srp_rsp *rsp)
->   		if (scmnd) {
->   			req = scsi_cmd_priv(scmnd);
->   			scmnd = srp_claim_req(ch, req, NULL, scmnd);
-> +			scmnd->result = rsp->status;
->   		} else {
->   			shost_printk(KERN_ERR, target->scsi_host,
->   				     "Null scmnd for RSP w/tag %#016llx received on ch %td / QP %#x\n",
-> @@ -1972,7 +1973,6 @@ static void srp_process_rsp(struct srp_rdma_ch *ch, struct srp_rsp *rsp)
->   
->   			return;
->   		}
-> -		scmnd->result = rsp->status;
-
-What i can see is that we have other places to de-reference scmnd and
-
-scmnd = srp_claim_req(ch, req, NULL, scmnd) is possible to return a NULL to scmnd
-
-
-
-Thanks
-Zhijian
-
->   
->   		if (rsp->flags & SRP_RSP_FLAG_SNSVALID) {
->   			memcpy(scmnd->sense_buffer, rsp->data +
-                                              ^^^^
-
-
-
+>> ---
+>>   fs/xfs/xfs_inode_item_recover.c | 4 ++--
+>>   fs/xfs/xfs_stats.c              | 2 +-
+>>   2 files changed, 3 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/fs/xfs/xfs_inode_item_recover.c b/fs/xfs/xfs_inode_item_recover.c
+>> index d28ffaebd067..0e5dba2343ea 100644
+>> --- a/fs/xfs/xfs_inode_item_recover.c
+>> +++ b/fs/xfs/xfs_inode_item_recover.c
+>> @@ -321,7 +321,7 @@ xlog_recover_inode_commit_pass2(
+>>   	 */
+>>   	if (XFS_IS_CORRUPT(mp, !xfs_verify_magic16(bp, dip->di_magic))) {
+>>   		xfs_alert(mp,
+>> -	"%s: Bad inode magic number, dip = "PTR_FMT", dino bp = "PTR_FMT", ino = %Ld",
+>> +	"%s: Bad inode magic number, dip = "PTR_FMT", dino bp = "PTR_FMT", ino = %lld",
+>>   			__func__, dip, bp, in_f->ilf_ino);
+>>   		error = -EFSCORRUPTED;
+>>   		goto out_release;
+>> @@ -329,7 +329,7 @@ xlog_recover_inode_commit_pass2(
+>>   	ldip = item->ri_buf[1].i_addr;
+>>   	if (XFS_IS_CORRUPT(mp, ldip->di_magic != XFS_DINODE_MAGIC)) {
+>>   		xfs_alert(mp,
+>> -			"%s: Bad inode log record, rec ptr "PTR_FMT", ino %Ld",
+>> +			"%s: Bad inode log record, rec ptr "PTR_FMT", ino %lld",
+>>   			__func__, item, in_f->ilf_ino);
+>>   		error = -EFSCORRUPTED;
+>>   		goto out_release;
+>> diff --git a/fs/xfs/xfs_stats.c b/fs/xfs/xfs_stats.c
+>> index 70d38b77682b..90a77cd3ebad 100644
+>> --- a/fs/xfs/xfs_stats.c
+>> +++ b/fs/xfs/xfs_stats.c
+>> @@ -74,7 +74,7 @@ int xfs_stats_format(struct xfsstats __percpu *stats, char *buf)
+>>   		defer_relog += per_cpu_ptr(stats, i)->s.defer_relog;
+>>   	}
+>>   
+>> -	len += scnprintf(buf + len, PATH_MAX-len, "xpc %Lu %Lu %Lu\n",
+>> +	len += scnprintf(buf + len, PATH_MAX-len, "xpc %llu %llu %llu\n",
+>>   			xs_xstrat_bytes, xs_write_bytes, xs_read_bytes);
+>>   	len += scnprintf(buf + len, PATH_MAX-len, "defer_relog %llu\n",
+>>   			defer_relog);

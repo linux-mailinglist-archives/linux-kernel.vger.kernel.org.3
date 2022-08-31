@@ -2,89 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9330E5A75C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80F955A75C8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229697AbiHaFhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 01:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52824 "EHLO
+        id S229685AbiHaFhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 01:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiHaFhr (ORCPT
+        with ESMTP id S229647AbiHaFhh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 01:37:47 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F170B958A;
-        Tue, 30 Aug 2022 22:37:45 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MHXxz2xM6z4xGC;
-        Wed, 31 Aug 2022 15:37:43 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661924263;
-        bh=/aRn66M5U0K60iEcrvctLIfyDnWQ5Pco7UJCHiMCAd4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=Z3dPJkBJv3j7BVrcxyiMOM/dvD6/cm+hQmpeXbuAa3VVXfwZoSTe7UVTGftfoz1Xj
-         TuX4elyrP/kXrOzGsDr5sFdUWffVFWfwOVsP4FhlpAKRgBy/c9uU6qvhpNf8mC162Y
-         KqmGjuERJiv80K4xYaGIqOmp8oE5Oh7KtfVw3TWa1Xqex+AzAFvDfNc42g1YNZb611
-         W0tQAmEaoy0tRxuXYDcvE94GN2zIckeswcuMyG/1rwaEoq1JNxnKHLJYugE2LL6S0X
-         DT/7kCM2XO7mh2IP3PTbDbAfR0afbtsRTPslgHoetJVIY/2duzt7sPLFYDB5rDJUtV
-         qvfZOuwLYFbFg==
-Date:   Wed, 31 Aug 2022 15:37:42 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Michael Strauss <michael.strauss@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20220831153742.48e0289b@canb.auug.org.au>
+        Wed, 31 Aug 2022 01:37:37 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D336A8327;
+        Tue, 30 Aug 2022 22:37:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661924256; x=1693460256;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2BmY08TpmPm2CQ9+xALqSFbs0LqS5Mmsg7iZ8SDKqIM=;
+  b=LZSh2Olk2gwEBfbdp/eiNncZyrPWlqbPQiJLLoXnX0Gstv4n+QPDecUT
+   MR9mOOB9wIgCm/toUDb9bMEFF06POnQEXTJEEpAinogvDwfnDCZ9rG2vr
+   c8jRPtUxoSHhhkA41Sw4vLWCKuMolau9QO9hmB0HWjPMSEgMrJu6Yg6mp
+   VXIAS2TxX6p9bnMWx2aROnCIB1y32Q/dK83yPvOj4wrvMT0ma0xN7RpCv
+   CRyRgLKftYEuRRfi7i0HlrS1D/6B1iv5/RiGb6FDkG1fgnxReR2GIeRWP
+   liy5uwlsu/0I7lYqpTELpv8BWoTD8cNwdUmta1F+DH7fjX/vTK3dV3Wmd
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="357093844"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="357093844"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 22:37:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="715582386"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 30 Aug 2022 22:37:33 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 43556AD; Wed, 31 Aug 2022 08:37:48 +0300 (EEST)
+Date:   Wed, 31 Aug 2022 08:37:47 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v2 1/3] ACPI: PMIC: Use sizeof() instead of hard coded
+ value
+Message-ID: <Yw7zqzuTuULMR1Yy@black.fi.intel.com>
+References: <20220830171155.42962-1-andriy.shevchenko@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/UT/_47Srhp+f.58u.a08D=4";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830171155.42962-1-andriy.shevchenko@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/UT/_47Srhp+f.58u.a08D=4
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Aug 30, 2022 at 08:11:53PM +0300, Andy Shevchenko wrote:
+> It's better to use sizeof() of a given buffer than spreading
+> a hard coded value.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Hi all,
-
-After merging the amdgpu tree, today's linux-next build (htmldocs)
-produced this warning:
-
-drivers/gpu/drm/amd/display/dc/dc.h:848: warning: Function parameter or mem=
-ber 'lttpr_mode_override' not described in 'dc_debug_options'
-
-Introduced by commit
-
-  280f1884892f ("drm/amd/display: Add DC debug option to force LTTPR mode")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/UT/_47Srhp+f.58u.a08D=4
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMO86YACgkQAVBC80lX
-0GzjXgf/edcRuoP5x1NaiNaLqn+mvCOJZJPhkDv8o1Kt3iArcNdATsVcd1zLGzpg
-p96plhE81RaT6nZZMsSUVbpW5BHBtzGIUrnRHdFIG4OJ2JBP34arySIvP0YuxjY7
-ojwSXflSeo6gAUzfQGoLXuw4Dbvux1AqVY1engENpgZXbTFWCvCGX+26oyJhDcKt
-u8jCIRUi/zkldm1/tnMiq6zaWqf410sy3jVtla/HijLr1qFPnP9yTtT7uzbEpBHw
-nT0Oc9BJojgupZcZ3genBwVez2FMoRavE7TA82ZjJakX7/UQIopqvvPQpczhChrY
-aBdqKpskD9lB8JEg8+CNW1am9ZNMwA==
-=IlM1
------END PGP SIGNATURE-----
-
---Sig_/UT/_47Srhp+f.58u.a08D=4--
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>

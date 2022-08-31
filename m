@@ -2,56 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B7A05A7638
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:08:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD05C5A763A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:09:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbiHaGIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42174 "EHLO
+        id S230045AbiHaGJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiHaGIH (ORCPT
+        with ESMTP id S229827AbiHaGJM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:08:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE63BC11F;
-        Tue, 30 Aug 2022 23:08:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 31 Aug 2022 02:09:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66A23BC12D
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:09:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661926150;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=oR8XteXHX+4ai/3j0vU7EYXedgFBG0vhXvlh6RDFvTg=;
+        b=KXVAgjkKFUlvsEE9iMqbG99wdyFgMj0PsnKvtFqjwSH63vt+DhbQOT93teTGP6y+fF4wz2
+        P4AKl1/gdKMcnm4EH2Men6ypU0E1ouDzGJVGyV53kLXi5y5y9Hi6tUDiaBrBpoSBv7sPQE
+        ztspOl5DfFV5Qwsko+Dr+77nFX+6Tis=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-618-bfFlUR7aPrmA_9wacOzrOQ-1; Wed, 31 Aug 2022 02:09:09 -0400
+X-MC-Unique: bfFlUR7aPrmA_9wacOzrOQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2B2CEB81EE0;
-        Wed, 31 Aug 2022 06:08:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B2E3C433D6;
-        Wed, 31 Aug 2022 06:08:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661926083;
-        bh=HFwl/0Cowjv+KnLltLI9O5Nl+E6DY0XyDKHWc3c3gog=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=sJm2AZvkXScUbF+jKGHKK3vn4s84HZTmDs7oSdjev+xfcCdfuD55fTZVTN6giC+8K
-         auPJGT2nqXu9DKINHssl/lcB1U1Vwx+yoGmdPTQjE4DhUBvDf2W/IptKE5pW2ToW9O
-         0MvakCLGHbu/IcPwuyr1Cqv2AYEcAbEanc3xD0HJLEq3Bj5Z6Qd+NAguWh2HK68gWm
-         W2JIcsvvKYN384bWlTZV4DuVxi1nhlHYcXt8WJSYUgiJDiHtfHuFOTUq91QgyCoxbL
-         mD3jXIhx8Z2NauasAUKbF8WSpRlfhXijbG1rAQhB2kDdcdYD5iXq7UBXElunRd6a4o
-         M2Pm1XUk4r/KA==
-Date:   Wed, 31 Aug 2022 09:07:59 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: Re: linux-next: Tree for Aug 30 (net/ieee802154/nl802154.c:)
-Message-ID: <Yw76v3oYQtPDbwiz@unreal>
-References: <20220830170121.74e5ed54@canb.auug.org.au>
- <3d308d17-1c00-39ab-eb47-8fe1f62f9e7f@infradead.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EB45285A585;
+        Wed, 31 Aug 2022 06:09:08 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 54D92141511A;
+        Wed, 31 Aug 2022 06:09:07 +0000 (UTC)
+Message-ID: <7a7827ec2652a8409fccfe070659497df229211b.camel@redhat.com>
+Subject: Re: [PATCH 06/19] KVM: SVM: Get x2APIC logical dest bitmap from
+ ICRH[15:0], not ICHR[31:16]
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 09:09:06 +0300
+In-Reply-To: <20220831003506.4117148-7-seanjc@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-7-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3d308d17-1c00-39ab-eb47-8fe1f62f9e7f@infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,27 +66,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 11:29:31AM -0700, Randy Dunlap wrote:
+On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
+> When attempting a fast kick for x2AVIC, get the destination bitmap from
+> ICR[15:0], not ICHR[31:16].  The upper 16 bits contain the cluster, the
+> lower 16 bits hold the bitmap.
 > 
+> Fixes: 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
+> Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> On 8/30/22 00:01, Stephen Rothwell wrote:
-> > Hi all,
-> > 
-> > Changes since 20220829:
-> > 
-> 
-> on i386 or x86_64:
-> 
-> when # CONFIG_IEEE802154_NL802154_EXPERIMENTAL is not set
-> 
-> ../net/ieee802154/nl802154.c:2503:26: error: ‘NL802154_CMD_DEL_SEC_LEVEL’ undeclared here (not in a function); did you mean ‘NL802154_CMD_SET_CCA_ED_LEVEL’?
->  2503 |         .resv_start_op = NL802154_CMD_DEL_SEC_LEVEL + 1,
->       |                          ^~~~~~~~~~~~~~~~~~~~~~~~~~
->       |                          NL802154_CMD_SET_CCA_ED_LEVEL
-> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 3ace0f2f52f0..3c333cd2e752 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -368,7 +368,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
+>  
+>  		if (apic_x2apic_mode(source)) {
+>  			/* 16 bit dest mask, 16 bit cluster id */
+> -			bitmap = dest & 0xFFFF0000;
+> +			bitmap = dest & 0xFFFF;
+>  			cluster = (dest >> 16) << 4;
+>  		} else if (kvm_lapic_get_reg(source, APIC_DFR) == APIC_DFR_FLAT) {
+>  			/* 8 bit dest mask*/
 
-https://lore.kernel.org/all/20220830101237.22782-1-gal@nvidia.com
+I swear I have seen a patch from Suravee Suthikulpanit fixing this my mistake, I don't know why it was not
+accepted upstream.
 
-> 
-> -- 
-> ~Randy
+Best regards,
+	Maxim Levitsky
+

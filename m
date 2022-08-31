@@ -2,122 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1B15A834B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B58B5A834E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbiHaQfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 12:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S232169AbiHaQgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 12:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231403AbiHaQfi (ORCPT
+        with ESMTP id S230037AbiHaQgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 12:35:38 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 674765C350
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:35:37 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id q15so9579802pfn.11
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:35:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=aACaOYwjaK/bs9fwI2VTNHaA/NOZ1I7CvfyYxGNhpLU=;
-        b=j4g+6dBZqVdNp2C4ziwiEuAYw6KWrNKBFfazO0/nWDNwx6nYFzRv6WyBiqybX7nTc5
-         Fi5uh0F34lRD26lgeoecBkcU1fyqspTYW9FrIR8vUjY3RAWkeM5raZzysG7mtV+wXzw6
-         b4Pcg8vVt4zcVn8j3unuvBOxyrKBXWo81uNj1h+mkUCVaYeDQlUGGUMCse+V31+kUBHs
-         mInU958qZg8J2qJS+/nlNtfh6c1cRACFHcMpvSd/fGJ2DZxKsrcbHOb8Qbb2QwCmTczE
-         ocy7tpTF/dpxHLyoRW/DaBZiD0PpYn8mNuCXWUOpRKPri090sS3dwySShwPl1G4loxct
-         5v8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=aACaOYwjaK/bs9fwI2VTNHaA/NOZ1I7CvfyYxGNhpLU=;
-        b=R8C4HqNt2TddiQQdkPyUfj+2gtUJrN+B9RN8O6Vq5D+HensHvR7PzOgT1WyzIHRmFt
-         XV+emvZkvnOrIkj2Wa7rK3Xx7GCidNQDHn/oDTiidQNO66K3pDhM2GfGYES4Zb+iYkuT
-         aztEvSQqf8WnyfdfxBpn5ctrJZC4RX+jCnmKFdxusShvZP9XBoiz/z0/1zzqA64QE+le
-         jrKbNbjRrK8IibLTf4k84yI98RJ80l73fCR8kS4dMM5ankXKJgFr74YdDC11sEETKezB
-         W9+1f/GFFiR4qc55hMwyeCgx8I3Gr2+7zI2DS9duigQquZyUnkri8x8Az7q87nLcTBvv
-         p1pA==
-X-Gm-Message-State: ACgBeo261NP0Lu924ojn98C1VZ3+UG9QHJr/m7XrIqqnSFxDU8a/3NPN
-        36QXJkRLd9vMIaZT0d6zuIPesg==
-X-Google-Smtp-Source: AA6agR7z6/HXxsp30lAJFrT2o+SRXJV7qrOwdBOkVeSdamoUEFhrmJ7HNSs0jW3g3goQaWBgcLOBUQ==
-X-Received: by 2002:a05:6a00:1307:b0:53a:9663:1bd6 with SMTP id j7-20020a056a00130700b0053a96631bd6mr6014200pfu.55.1661963736839;
-        Wed, 31 Aug 2022 09:35:36 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id n15-20020a170902e54f00b0016dbaf3ff2esm6343520plf.22.2022.08.31.09.35.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 09:35:36 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 16:35:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH 06/19] KVM: SVM: Get x2APIC logical dest bitmap from
- ICRH[15:0], not ICHR[31:16]
-Message-ID: <Yw+N1BdfSansWh8h@google.com>
-References: <20220831003506.4117148-1-seanjc@google.com>
- <20220831003506.4117148-7-seanjc@google.com>
- <7a7827ec2652a8409fccfe070659497df229211b.camel@redhat.com>
- <b660f600ff5f6c107d899ced46c04de3b99c425f.camel@redhat.com>
+        Wed, 31 Aug 2022 12:36:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2ACD4BE9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:36:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 45348B821AD
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 16:36:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 293EEC433C1;
+        Wed, 31 Aug 2022 16:36:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661963791;
+        bh=KgZnsso7kF6aHFGnSIJef18Uvd0pNC/m6XSGxGYBwGA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sz1XKawN2B5HHP/sZItd+rAzx2tmHhNRckLdU7Z0JxA6uEHvfmFFvLKnsQ68F3W/i
+         SRaqC9SoHRlpYUBcOFkREKq3ZrFt/AevhKdNyluFpx4Tm0sJlXIsBePzkb6yoPvuuH
+         MAbJkzFu/3e0WZitiB9kDH7Xk8M+oEbw+Yp3LAaxCV9+14SmHgt853Fhg7+vo7oeYK
+         IEZTCDAu++Jk4o5/obZW6houyO9FPyQ3gXIkH6LL0UtByLXf/Bhgv+691IBgxjbExG
+         ic7F2diU4ZSYka8M+XnlpjkJjvlFerCQf2W6MNDVudmQ8+WZz850jyCzzRSr5m44Rc
+         UjAbG7g9a3vXw==
+Date:   Wed, 31 Aug 2022 17:36:26 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Steve Lee <steve.lee.analog@gmail.com>
+Cc:     lgirdwood@gmail.com, perex@perex.cz, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        krzk@kernel.org, ryans.lee@analog.com
+Subject: Re: [PATCH] ASoC: max98390: Remove unnecessary amp on/off conrtol
+Message-ID: <Yw+OCnOgYUOWdIEx@sirena.org.uk>
+References: <20220826023504.6183-1-steve.lee.analog@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="52dw3Ph+pKqVOnNd"
 Content-Disposition: inline
-In-Reply-To: <b660f600ff5f6c107d899ced46c04de3b99c425f.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220826023504.6183-1-steve.lee.analog@gmail.com>
+X-Cookie: It's later than you think.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022, Maxim Levitsky wrote:
-> On Wed, 2022-08-31 at 09:09 +0300, Maxim Levitsky wrote:
-> > On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
-> > > When attempting a fast kick for x2AVIC, get the destination bitmap from
-> > > ICR[15:0], not ICHR[31:16].  The upper 16 bits contain the cluster, the
-> > > lower 16 bits hold the bitmap.
-> > > 
-> > > Fixes: 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
-> > > Cc: Maxim Levitsky <mlevitsk@redhat.com>
-> > > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > > ---
-> > >  arch/x86/kvm/svm/avic.c | 2 +-
-> > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> > > index 3ace0f2f52f0..3c333cd2e752 100644
-> > > --- a/arch/x86/kvm/svm/avic.c
-> > > +++ b/arch/x86/kvm/svm/avic.c
-> > > @@ -368,7 +368,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
-> > >  
-> > >  		if (apic_x2apic_mode(source)) {
-> > >  			/* 16 bit dest mask, 16 bit cluster id */
-> > > -			bitmap = dest & 0xFFFF0000;
-> > > +			bitmap = dest & 0xFFFF;
-> > >  			cluster = (dest >> 16) << 4;
-> > >  		} else if (kvm_lapic_get_reg(source, APIC_DFR) == APIC_DFR_FLAT) {
-> > >  			/* 8 bit dest mask*/
-> > 
-> > I swear I have seen a patch from Suravee Suthikulpanit fixing this my mistake, I don't know why it was not
-> > accepted upstream.
-> 
-> This is the patch, which I guess got forgotten.
-> 
-> https://www.spinics.net/lists/kernel/msg4417427.html
 
-Ah, we just missed it, doubt there's anything more than that to the story.
+--52dw3Ph+pKqVOnNd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> Since it is literaly the same patch, you can just add credit to Suravee Suthikulpanit.
-> 
-> So with the credit added:
-> 
-> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+On Fri, Aug 26, 2022 at 11:35:04AM +0900, Steve Lee wrote:
 
-I'll grab Suravee's patch and added your review.  Thanks!
+>  The Amp is already control in userspace before trigger calibrate function.
+> Remove unnecessary control in calibrate function.
+
+I can't see anything which ensures that this is the case?  Should there
+be a check which returns an error if the output is not enabled, or
+should the function check the current state and preserve it at the end?
+I can see that this would fix problems with it being disabled when
+callibrating.
+
+--52dw3Ph+pKqVOnNd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMPjgoACgkQJNaLcl1U
+h9C4ZAgAhg2+SIaK5IfZY+hTm2eRhD88hpYBfBw5lrXth3VHn8iRgUorzGgiqSle
+VbE+t7hq4C4q11alwzR+ZdtZgfuHBb7Y3w8Xx+Dk0SxJQ9bptDT4/nb6+Y9Uogwn
+Fd07GAC8YzMUZnIjOK4VzL70N/iTLSXroGUb3MoMYWwFWnN5VeaR5eZSHa8ntyt/
+S62LthzfBXoNaqrrpx+jeXqzEYzOPfQKfNDAXVW2Imj+D00hp5W4zSvDYGofI4qR
+zfLUl6afqUqTCp/MHUncBPafhQJ1QBJVRYRTDRyvxdgFSIcBQvsZSJ4wRZhk86ot
+90friYxGNtUu2Q/VBaInZN//VEIeLQ==
+=yjS4
+-----END PGP SIGNATURE-----
+
+--52dw3Ph+pKqVOnNd--

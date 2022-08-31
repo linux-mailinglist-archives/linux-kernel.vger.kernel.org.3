@@ -2,82 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D7095A822D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2AD55A8232
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:50:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiHaPtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S231248AbiHaPt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231976AbiHaPtP (ORCPT
+        with ESMTP id S231947AbiHaPtu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:49:15 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6CDAC;
-        Wed, 31 Aug 2022 08:49:13 -0700 (PDT)
-X-QQ-mid: bizesmtp68t1661960948twaldri9
-Received: from localhost.localdomain ( [182.148.13.26])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 31 Aug 2022 23:49:06 +0800 (CST)
-X-QQ-SSF: 01000000002000B0C000B00A0000000
-X-QQ-FEAT: G46xFj+wOV/n5f2V0sXg0WXxitei3nEZS1U5Wj6HXsPhwk296M1wlIYc8AV88
-        bC8r7jGk88OWIbdHorhKSq3qXK6Zo3kuU7FVMabU8oJdy/BGPCv7GW9EwCIocpQhBtUpy1f
-        VOnGChG4nF3AFYmr1GgRXGKHgthp/0bTQgxzplN7R0zALEsuLbTcbTNONZLVNR6hjq6tOpM
-        Rsypfr5TAUek4RFadtLU58E8QUl9LJDTTcre48tGxUAOp22LVgeEZTpDbgLmSw0VWYet4jy
-        86To/LMlNFmKvXc+ypIWLSjbVin6DtO69M/mfxWuzzT7oL4VLaE0AZuNhwab9ShmleQz+s2
-        1bwie0t6WWzEd1bG9wDQ1HggIIpvlmdmrnjBrRrxYRPA/criBBjBl3cOx3US/U6kpvWAJzD
-X-QQ-GoodBg: 0
-From:   Shaomin Deng <dengshaomin@cdjrlc.com>
-To:     sre@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Shaomin Deng <dengshaomin@cdjrlc.com>
-Subject: [PATCH] power: supply: tps65217: Fix comments typo
-Date:   Wed, 31 Aug 2022 11:49:05 -0400
-Message-Id: <20220831154905.1513-1-dengshaomin@cdjrlc.com>
-X-Mailer: git-send-email 2.35.1
+        Wed, 31 Aug 2022 11:49:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EED9E0C0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:49:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661960980;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q9qyQHrk2nVMvzPYEUreuyJ0t4W+wThvROhfwSArm9k=;
+        b=ZZOC43E1oeHWy3lEKZAL9xX4gTfY9CRj2lFPvJWOnQw9N9/c8cLOmt60hOfWYC5YLl+xBU
+        RiXSq6qv87kr1Rjav/SVxDEJ1RAu/Oa2ZfY3I+Ak7+FnG9JvRRRXAdAsR+07sJg4xw4wxe
+        h3bIuCcs7f34nX68TqghnAqxl+u6n00=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-596-k-QuRm5yOhqepR0DrqmzXg-1; Wed, 31 Aug 2022 11:49:36 -0400
+X-MC-Unique: k-QuRm5yOhqepR0DrqmzXg-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DFC20185A7A4;
+        Wed, 31 Aug 2022 15:49:35 +0000 (UTC)
+Received: from max-t490s.redhat.com (unknown [10.39.208.41])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 670822026D4C;
+        Wed, 31 Aug 2022 15:49:33 +0000 (UTC)
+From:   Maxime Coquelin <maxime.coquelin@redhat.com>
+To:     linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, elic@nvidia.com,
+        guanjun@linux.alibaba.com, parav@nvidia.com,
+        gautam.dawar@xilinx.com, dan.carpenter@oracle.com,
+        xieyongji@bytedance.com, jasowang@redhat.com, mst@redhat.com
+Cc:     gregkh@linuxfoundation.org,
+        Maxime Coquelin <maxime.coquelin@redhat.com>,
+        stable@vger.kernel.org
+Subject: [PATCH v3] vduse: prevent uninitialized memory accesses
+Date:   Wed, 31 Aug 2022 17:49:23 +0200
+Message-Id: <20220831154923.97809-1-maxime.coquelin@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *      [43.155.67.158 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the unneeded word "the" in comments.
+If the VDUSE application provides a smaller config space
+than the driver expects, the driver may use uninitialized
+memory from the stack.
 
-Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
+This patch prevents it by initializing the buffer passed by
+the driver to store the config value.
+
+This fix addresses CVE-2022-2308.
+
+Cc: stable@vger.kernel.org # v5.15+
+Fixes: c8a6153b6c59 ("vduse: Introduce VDUSE - vDPA Device in Userspace")
+Reviewed-by: Xie Yongji <xieyongji@bytedance.com>
+Acked-by: Jason Wang <jasowang@redhat.com>
+Signed-off-by: Maxime Coquelin <maxime.coquelin@redhat.com>
 ---
- drivers/power/supply/tps65217_charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/vdpa/vdpa_user/vduse_dev.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/power/supply/tps65217_charger.c b/drivers/power/supply/tps65217_charger.c
-index ba33d1617e0b..a4bc9f2a10bc 100644
---- a/drivers/power/supply/tps65217_charger.c
-+++ b/drivers/power/supply/tps65217_charger.c
-@@ -50,7 +50,7 @@ static int tps65217_config_charger(struct tps65217_charger *charger)
- 	 * tps65217 rev. G, p. 31 (see p. 32 for NTC schematic)
- 	 *
- 	 * The device can be configured to support a 100k NTC (B = 3960) by
--	 * setting the the NTC_TYPE bit in register CHGCONFIG1 to 1. However it
-+	 * setting the NTC_TYPE bit in register CHGCONFIG1 to 1. However it
- 	 * is not recommended to do so. In sleep mode, the charger continues
- 	 * charging the battery, but all register values are reset to default
- 	 * values. Therefore, the charger would get the wrong temperature
+diff --git a/drivers/vdpa/vdpa_user/vduse_dev.c b/drivers/vdpa/vdpa_user/vduse_dev.c
+index 41c0b29739f1..35dceee3ed56 100644
+--- a/drivers/vdpa/vdpa_user/vduse_dev.c
++++ b/drivers/vdpa/vdpa_user/vduse_dev.c
+@@ -673,10 +673,15 @@ static void vduse_vdpa_get_config(struct vdpa_device *vdpa, unsigned int offset,
+ {
+ 	struct vduse_dev *dev = vdpa_to_vduse(vdpa);
+ 
+-	if (offset > dev->config_size ||
+-	    len > dev->config_size - offset)
++	/* Initialize the buffer in case of partial copy. */
++	memset(buf, 0, len);
++
++	if (offset > dev->config_size)
+ 		return;
+ 
++	if (len > dev->config_size - offset)
++		len = dev->config_size - offset;
++
+ 	memcpy(buf, dev->config + offset, len);
+ }
+ 
 -- 
-2.35.1
+2.37.2
 

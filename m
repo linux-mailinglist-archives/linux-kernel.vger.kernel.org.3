@@ -2,90 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1F75A7A26
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E76D35A7A28
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231859AbiHaJZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44008 "EHLO
+        id S231565AbiHaJZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbiHaJYs (ORCPT
+        with ESMTP id S229658AbiHaJZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:24:48 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1BD642E3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:24:30 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id x10so13964296ljq.4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:24:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=VI4eDETT6Huw+TXcdbmKbmIcm3NDxGv5vFpEfsxIq2o=;
-        b=BzB+y2h79du3jsoSjssbNYv8xTbQTSRuFeiLqZlVVfHai6OszIUB9Z9vyLHiW6yVC0
-         mFhcQSdm34Q70qsG1M0wyhsJNo4/chInLydmy0chTTagCzpzi3ssLByjyxwzhbNJmd/8
-         ZijvyCeY2O+BgxO2HWF3wrEBJuMo4f/EUf6ZOXYor3ya+Tk0OYf8e9pmfjXWnQ1kaX2k
-         Ifak1XhbuK3l0enEpdUuv8W8/d3iTI2d1VbGfb/a3EEtRllZcz/6FwD7ueWqITyM2gG1
-         ixN4VLOXZr9LDYMP4/wDk3Bgnb4f9IuE6r2p5QCSoDJMD2sT0T/cg44zYUDju53PrfuL
-         yC+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=VI4eDETT6Huw+TXcdbmKbmIcm3NDxGv5vFpEfsxIq2o=;
-        b=U/Y65+BnuNu/byEMUy3xzP7J5r2s8O+iv4xalFA9ihwTRj2AOnuoqtyse0Ra2A+J6M
-         vrtLCnWsRTYTgNuE4Ftv8CyllTdF4eFxQyy42FpaJdzOdPOqmUfP7LpUindzsn9Ra9nm
-         YPu/gQQr77Z4Yu6DgcO93tiu0w8+X6792NWG6624vQbQUeGCS3z9wpHSeGO0cF1gR2Tz
-         aeoLkB1OBcOV2pdBP/Df+GXBce4tIKR3iGNhi9HRTQ0tbiINm09dR4LKntU/mWOIQGS8
-         iaIIbUE68u1Ux75lPy1Vqh8LkvBiZlsTpIreh+96y6c9xhFHqNnUqGi21TjPUe3vvddi
-         0dXw==
-X-Gm-Message-State: ACgBeo3hzgjx6POe7WNt0lihLyOrDWMuBksqNKjuH835NThtSHM6I0ox
-        MN3dZIMkbM9J/ZHik9nkFTr2pw==
-X-Google-Smtp-Source: AA6agR4P4GFoVNfQygaB/IJ2Yvm/5Y5Zaf2SFn3mFBsY32pgqCAUC3wvgOs2U5P/ncXj79cCDpTOlw==
-X-Received: by 2002:a05:651c:1cf:b0:266:ec0f:6d8e with SMTP id d15-20020a05651c01cf00b00266ec0f6d8emr2450900ljn.347.1661937869103;
-        Wed, 31 Aug 2022 02:24:29 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id w23-20020a05651c119700b002666ab94a84sm822220ljo.84.2022.08.31.02.24.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 02:24:28 -0700 (PDT)
-Message-ID: <4bf16e18-1591-8bc9-7c46-649391de3761@linaro.org>
-Date:   Wed, 31 Aug 2022 12:24:27 +0300
+        Wed, 31 Aug 2022 05:25:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50CCD1F625
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:25:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661937904;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ssoc/+ImbqEK1XQddIJmGn8uecfdSMepzEcYgwttR+8=;
+        b=iyIfJ8j1RCtgpw5l8Li1ByYZVxKKN0gdSO8GkfruVBT9LMh55i8uJTAibe9o0OhgqdR+ou
+        EPM7qdOzUJIHQZsZ+YORu40U+xHeNO9g31WDUZugkJRlLkkbSX5aKwl5H0T0U9pJYi2TeO
+        s4bL1lbYzAyrOi0E3DGIdfASQ8I7zIQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-292-6qdXFAAAO4WpO4_KyGXPVw-1; Wed, 31 Aug 2022 05:25:03 -0400
+X-MC-Unique: 6qdXFAAAO4WpO4_KyGXPVw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 96D75185A7B2;
+        Wed, 31 Aug 2022 09:25:02 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EEC432026D4C;
+        Wed, 31 Aug 2022 09:25:00 +0000 (UTC)
+Message-ID: <d3a9ab2033b8dedbb0c7cb683e724ee4210bb703.camel@redhat.com>
+Subject: Re: [PATCH 02/19] KVM: SVM: Don't put/load AVIC when setting
+ virtual APIC mode
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 12:24:59 +0300
+In-Reply-To: <20220831003506.4117148-3-seanjc@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-3-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v1 09/14] dt-bindings: nvmem: add YAML schema for the sl28
- vpd layout
-Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
-References: <20220825214423.903672-1-michael@walle.cc>
- <20220825214423.903672-10-michael@walle.cc>
- <b85276ee-3e19-3adb-8077-c1e564e02eb3@linaro.org>
- <ddaf3328bc7d88c47517285a3773470f@walle.cc>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ddaf3328bc7d88c47517285a3773470f@walle.cc>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,126 +66,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/08/2022 11:17, Michael Walle wrote:
-> Am 2022-08-31 09:45, schrieb Krzysztof Kozlowski:
->> On 26/08/2022 00:44, Michael Walle wrote:
->>> Add a schema for the NVMEM layout on Kontron's sl28 boards.
->>>
->>> Signed-off-by: Michael Walle <michael@walle.cc>
->>> ---
->>>  .../nvmem/layouts/kontron,sl28-vpd.yaml       | 52 
->>> +++++++++++++++++++
->>>  1 file changed, 52 insertions(+)
->>>  create mode 100644 
->>> Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
->>>
->>> diff --git 
->>> a/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml 
->>> b/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
->>> new file mode 100644
->>> index 000000000000..e4bc2d9182db
->>> --- /dev/null
->>> +++ 
->>> b/Documentation/devicetree/bindings/nvmem/layouts/kontron,sl28-vpd.yaml
->>> @@ -0,0 +1,52 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: 
->>> http://devicetree.org/schemas/nvmem/layouts/kontron,sl28-vpd.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: NVMEM layout of the Kontron SMARC-sAL28 vital product data
->>> +
->>> +maintainers:
->>> +  - Michael Walle <michael@walle.cc>
->>> +
->>> +description:
->>> +  The vital product data (VPD) of the sl28 boards contains a serial
->>> +  number and a base MAC address. The actual MAC addresses for the
->>> +  on-board ethernet devices are derived from this base MAC address by
->>> +  adding an offset.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    items:
->>> +      - const: kontron,sl28-vpd
->>> +      - const: user-otp
->>> +
->>> +  serial-number:
->>> +    type: object
->>
->> You should define the contents of this object. I would expect this to 
->> be
->> uint32 or string. I think you also need description, as this is not
->> really standard field.
+On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
+> Move the VMCB updates from avic_refresh_apicv_exec_ctrl() into
+> avic_set_virtual_apic_mode() and invert the dependency being said
+> functions to avoid calling avic_vcpu_{load,put}() and
+> avic_set_pi_irte_mode() when "only" setting the virtual APIC mode.
 > 
-> First thing, this binding isn't like the usual ones, so it might be
-> totally wrong.
+> avic_set_virtual_apic_mode() is invoked from common x86 with preemption
+> enabled, which makes avic_vcpu_{load,put}() unhappy.  Luckily, calling
+> those and updating IRTE stuff is unnecessary as the only reason
+> avic_set_virtual_apic_mode() is called is to handle transitions between
+> xAPIC and x2APIC that don't also toggle APICv activation.  And if
+> activation doesn't change, there's no need to fiddle with the physical
+> APIC ID table or update IRTE.
 > 
-> What I'd like to achieve here is the following:
+> The "full" refresh is guaranteed to be called if activation changes in
+> this case as the only call to the "set" path is:
 > 
-> We have the nvmem-consumer dt binding where you can reference a
-> nvmem cell in a consumer node. Example:
->    nvmem-cells = <&base_mac_address 5>;
->    nvmem-cell-names = "mac-address";
+> 	kvm_vcpu_update_apicv(vcpu);
+> 	static_call_cond(kvm_x86_set_virtual_apic_mode)(vcpu);
 > 
-> On the other end of the link we have the nvmem-provider. The dt
-> bindings works well if that one has individual cell nodes, like
-> it is described in the nvmem.yaml binding. I.e. you can give the
-> cell a label and make a reference to it in the consumer just like
-> in the example above.
+> and kvm_vcpu_update_apicv() invokes the refresh if activation changes:
+> 
+> 	if (apic->apicv_active == activate)
+> 		goto out;
+> 
+> 	apic->apicv_active = activate;
+> 	kvm_apic_update_apicv(vcpu);
+> 	static_call(kvm_x86_refresh_apicv_exec_ctrl)(vcpu);
+> 
+>   WARNING: CPU: 183 PID: 49186 at arch/x86/kvm/svm/avic.c:1081 avic_vcpu_put+0xde/0xf0 [kvm_amd]
+>   CPU: 183 PID: 49186 Comm: stable Tainted: G           O       6.0.0-smp--fcddbca45f0a-sink #34
+>   Hardware name: Google, Inc. Arcadia_IT_80/Arcadia_IT_80, BIOS 10.48.0 01/27/2022
+>   RIP: 0010:avic_vcpu_put+0xde/0xf0 [kvm_amd]
+>    avic_refresh_apicv_exec_ctrl+0x142/0x1c0 [kvm_amd]
+>    avic_set_virtual_apic_mode+0x5a/0x70 [kvm_amd]
+>    kvm_lapic_set_base+0x149/0x1a0 [kvm]
+>    kvm_set_apic_base+0x8f/0xd0 [kvm]
+>    kvm_set_msr_common+0xa3a/0xdc0 [kvm]
+>    svm_set_msr+0x364/0x6b0 [kvm_amd]
+>    __kvm_set_msr+0xb8/0x1c0 [kvm]
+>    kvm_emulate_wrmsr+0x58/0x1d0 [kvm]
+>    msr_interception+0x1c/0x30 [kvm_amd]
+>    svm_invoke_exit_handler+0x31/0x100 [kvm_amd]
+>    svm_handle_exit+0xfc/0x160 [kvm_amd]
+>    vcpu_enter_guest+0x21bb/0x23e0 [kvm]
+>    vcpu_run+0x92/0x450 [kvm]
+>    kvm_arch_vcpu_ioctl_run+0x43e/0x6e0 [kvm]
+>    kvm_vcpu_ioctl+0x559/0x620 [kvm]
+> 
+> Fixes: 05c4fe8c1bd9 ("KVM: SVM: Refresh AVIC configuration when changing APIC mode")
+> Cc: stable@vger.kernel.org
+> Cc: Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
+> Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 31 +++++++++++++++----------------
+>  1 file changed, 15 insertions(+), 16 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index b1ade555e8d0..f3a74c8284cb 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -741,18 +741,6 @@ void avic_apicv_post_state_restore(struct kvm_vcpu *vcpu)
+>  	avic_handle_ldr_update(vcpu);
+>  }
+>  
+> -void avic_set_virtual_apic_mode(struct kvm_vcpu *vcpu)
+> -{
+> -	if (!lapic_in_kernel(vcpu) || avic_mode == AVIC_MODE_NONE)
+> -		return;
+> -
+> -	if (kvm_get_apic_mode(vcpu) == LAPIC_MODE_INVALID) {
+> -		WARN_ONCE(true, "Invalid local APIC state (vcpu_id=%d)", vcpu->vcpu_id);
+> -		return;
+> -	}
+> -	avic_refresh_apicv_exec_ctrl(vcpu);
+> -}
+> -
+>  static int avic_set_pi_irte_mode(struct kvm_vcpu *vcpu, bool activate)
+>  {
+>  	int ret = 0;
+> @@ -1094,17 +1082,18 @@ void avic_vcpu_put(struct kvm_vcpu *vcpu)
+>  	WRITE_ONCE(*(svm->avic_physical_id_cache), entry);
+>  }
+>  
+> -
+> -void avic_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
+> +void avic_set_virtual_apic_mode(struct kvm_vcpu *vcpu)
+>  {
+>  	struct vcpu_svm *svm = to_svm(vcpu);
+>  	struct vmcb *vmcb = svm->vmcb01.ptr;
+> -	bool activated = kvm_vcpu_apicv_active(vcpu);
+> +
+> +	if (!lapic_in_kernel(vcpu) || avic_mode == AVIC_MODE_NONE)
+> +		return;
+>  
+>  	if (!enable_apicv)
+>  		return;
+>  
+> -	if (activated) {
+> +	if (kvm_vcpu_apicv_active(vcpu)) {
+>  		/**
+>  		 * During AVIC temporary deactivation, guest could update
+>  		 * APIC ID, DFR and LDR registers, which would not be trapped
+> @@ -1118,6 +1107,16 @@ void avic_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
+>  		avic_deactivate_vmcb(svm);
+>  	}
+>  	vmcb_mark_dirty(vmcb, VMCB_AVIC);
+> +}
+> +
+> +void avic_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
+> +{
+> +	bool activated = kvm_vcpu_apicv_active(vcpu);
+> +
+> +	if (!enable_apicv)
+> +		return;
+> +
+> +	avic_set_virtual_apic_mode(vcpu);
 
-You can also achieve it with phandle argument to the nvmwm controller,
-right? Just like most of providers are doing (clocks, resets). Having
-fake (empty) nodes just for that seems like overkill.
+This call is misleading - this will usually be called
+when avic mode didn't change - I think we need a better name for
+avic_set_virtual_apic_mode.
 
-> 
-> Now comes the catch: what if there is no actual description of the
-> cell in the device tree, but is is generated during runtime. How
-> can I get a label to it.
-
-Same as clocks, resets, power-domains and everyone else.
-
-
-> Therefore, in this case, there is just
-> an empty node and the driver will associate it with the cell
-> created during runtime (see patch 10). It is not expected, that
-> is has any properties.
-
-It cannot be even referenced as it does not have #cells property...
-
-> 
->>> +
->>> +  base-mac-address:
->>
->> Fields should be rather described here, not in top-level description.
->>
->>> +    type: object
->>
->> On this level:
->>     additionalProperties: false
->>
->>> +
->>> +    properties:
->>> +      "#nvmem-cell-cells":
->>> +        const: 1
->>> +
->>
->> I also wonder why you do not have unit addresses. What if you want to
->> have two base MAC addresses?
-> 
-> That would describe an offset within the nvmem device. But the offset
-> might not be constant, depending on the content. My understanding
-> so far was that in that case, you use the "-N" suffix.
-> 
-> base-mac-address-1
-> base-mac-address-2
-> 
-> (or maybe completely different names).
-
-You do not allow "base-mac-address-1". Your binding explicitly accepts
-only "base-mac-address".
+Other than that this makes sense.
 
 Best regards,
-Krzysztof
+	Maxim Levitsky
+
+>  
+>  	if (activated)
+>  		avic_vcpu_load(vcpu, vcpu->cpu);
+
+

@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6CFC5A7DA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 949BD5A7DA5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:41:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbiHaMlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:41:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
+        id S231316AbiHaMlX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:41:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbiHaMlL (ORCPT
+        with ESMTP id S231320AbiHaMlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:41:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006349F0FB;
-        Wed, 31 Aug 2022 05:41:09 -0700 (PDT)
+        Wed, 31 Aug 2022 08:41:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77CDA9C8FE;
+        Wed, 31 Aug 2022 05:41:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A9B661973;
-        Wed, 31 Aug 2022 12:41:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32D4C433D7;
-        Wed, 31 Aug 2022 12:41:06 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4E422B82062;
+        Wed, 31 Aug 2022 12:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0365C433C1;
+        Wed, 31 Aug 2022 12:41:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661949668;
-        bh=RS0HeyihGdLib8QRN71zjMIyxfq10lHWDurkcNEVTkY=;
+        s=k20201202; t=1661949670;
+        bh=GlqPyBG/2QZHbPqaaWonjRMxL4niWdBcQJxyKEdjQSk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=msNhnat0q+bvq1KF68qIl5Fp9i1oL96k6ra3yZ8pkM35CjIGOmu/+9IKzSr5ZYVJV
-         sueRo8f4pVMTbsHHVxhxl9/v1MA1Q3uCPYm1wjcA2CPgmJ+1Z49E5G8RXUSaxPmZIm
-         iBjpCYK5U7s/0ddINHxaBIXgEzmn8J/5h8ORkkWgQ3Ac6aLV0Y6LwGKkgV6IrP2+Ap
-         TbYZW86Umwt5RB56PfJQdO4kKdqVIwnygdWmlvshji1JHni5lupyryNzvtcERQZ/p9
-         2JI2ZdsYteYWjVdu65/UvHnfqr23Q8p73CL4TgUeakGLdMGzShU7pqDgCBDDhwCxBm
-         8Z67GxULggczQ==
+        b=gNwuWskc/jXU/OrebX3y24EoJciyi62c5H6tEuPGRlLQ+alc5tVqmdzZDmAVXi3Ud
+         MTw042H61ryMiZrFzQqF28RjgkCVuMWzValPBezeBZSbkfjqhmRAS4fasfq35SMot3
+         xQtL9Q6Q+DQga6bzAe3ws6RbvHwAaaLmzlOYB0y9RDIdcyUAlxm6j/Zz7XiBaZVTF9
+         kKoUWS5XduYHs8kbhkKS2YrFa+G2TQxJt813jLoNQJg5Ene0jKdVJAiALr4OtpVuvf
+         v1Twttg65eM9lvEKG9AKDgvVhfC0WW7xBilKgwSUXNKynQq5bvBJRpmdV7d+p0q70f
+         XI0HOQftONieg==
 From:   Mark Brown <broonie@kernel.org>
-To:     sanju.mehta@amd.com, Shreeya Patel <shreeya.patel@collabora.com>
-Cc:     Lucas Tanure <tanureal@opensource.cirrus.com>,
-        krisman@collabora.com, alvaro.soliverez@collabora.com,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        linux-spi@vger.kernel.org
-In-Reply-To: <20220819123630.368462-1-shreeya.patel@collabora.com>
-References: <20220819123630.368462-1-shreeya.patel@collabora.com>
-Subject: Re: [PATCH v2] spi: amd: Configure device speed
-Message-Id: <166194966658.85432.16168252045246459215.b4-ty@kernel.org>
-Date:   Wed, 31 Aug 2022 13:41:06 +0100
+To:     linux-renesas-soc@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org
+In-Reply-To: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
+References: <20220824094327.33685-1-wsa+renesas@sang-engineering.com>
+Subject: Re: [PATCH 0/3] spi: add generic R-Car Gen4 and specific r8a779f0 support
+Message-Id: <166194966864.85432.14716335347687736430.b4-ty@kernel.org>
+Date:   Wed, 31 Aug 2022 13:41:08 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -57,14 +57,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 19 Aug 2022 18:06:30 +0530, Shreeya Patel wrote:
-> From: Lucas Tanure <tanureal@opensource.cirrus.com>
+On Wed, 24 Aug 2022 11:43:23 +0200, Wolfram Sang wrote:
+> Here are the patches to enable MSIOF on R-Car S4-8. They also introduce
+> generic Gen4 support and move V3U to Gen4 (which it really is).
 > 
-> Number of clock frequencies are supported by AMD controller
-> which are mentioned in the amd_spi_freq structure table.
-> 
-> Create mechanism to configure device clock frequency such
-> that it is strictly less than the requested frequency.
+> Wolfram Sang (3):
+>   spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
+>   spi: sh-msiof: add generic Gen4 binding
+>   spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
 > 
 > [...]
 
@@ -74,8 +74,12 @@ Applied to
 
 Thanks!
 
-[1/1] spi: amd: Configure device speed
-      commit: 3fe26121dc3a9bf64e18fe0075cd9a92c9cd1b1a
+[1/3] spi: renesas,sh-msiof: Add generic Gen4 and r8a779f0 support
+      commit: e1e62f05d5d9d7726349e00562299d829e478ce9
+[2/3] spi: sh-msiof: add generic Gen4 binding
+      commit: ea9d001550abaf2f4c75cf4fcd936ea19f932b84
+[3/3] spi: renesas,sh-msiof: R-Car V3U is R-Car Gen4
+      commit: b076fdd02133e6a31db167f8acc368edc2530cc0
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

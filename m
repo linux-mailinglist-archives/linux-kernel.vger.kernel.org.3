@@ -2,44 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6D15A73C4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79DA05A73CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:16:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231511AbiHaCFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 22:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50944 "EHLO
+        id S231873AbiHaCQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 22:16:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbiHaCFL (ORCPT
+        with ESMTP id S229589AbiHaCQI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 22:05:11 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EA8CE08;
-        Tue, 30 Aug 2022 19:05:09 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MHS8T0Z5pz1N7cZ;
-        Wed, 31 Aug 2022 10:01:29 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by dggpemm500022.china.huawei.com
- (7.185.36.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
- 2022 10:05:07 +0800
-From:   Zeng Heng <zengheng4@huawei.com>
-To:     <djwong@kernel.org>, <sandeen@sandeen.net>, <dchinner@redhat.com>,
-        <chandan.babu@oracle.com>, <allison.henderson@oracle.com>,
-        <dan.carpenter@oracle.com>
-CC:     <linux-xfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zengheng4@huawei.com>
-Subject: [PATCH v2 -next] xfs: clean up "%Ld/%Lu" which doesn't meet C standard
-Date:   Wed, 31 Aug 2022 10:12:48 +0800
-Message-ID: <20220831021248.3127300-1-zengheng4@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 30 Aug 2022 22:16:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93E8C7647E;
+        Tue, 30 Aug 2022 19:16:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A3666191C;
+        Wed, 31 Aug 2022 02:16:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E731FC433D6;
+        Wed, 31 Aug 2022 02:16:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661912164;
+        bh=Ea0i+xlOeHCTTHU9/7iuQnw+cJvR7da0sKZ4LoOMoVc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N+jLm4NoNJctmJuXBz9wntYcJM98EtBADyrRMxGY758hra9PXARJ9+f5lVWrG+2Oi
+         P2XXRnC+BgDsMmQSk2lKoGE4jxKWA2qiUo65g/ofPUXm1ELN51aDxRyaqVsoCYnjGa
+         BRsAWs78qawWa0lsng67pRu0OzdWbVq23VbcMH6tpVUio8BIPRKnwubJZb7hnQ9Y1K
+         zGJ88HJq1fwf3muYd1XR10ZlVCyoGJeG2XTOa3TgxGjcFX6ufL5W71HCRQQLT60rbQ
+         9hU/990wz6+PIoNDQq/dmCF64eh1Q8YdePTWjjgO0YD9B7cYcLBpmEYhrmvGtyPLD2
+         O5LAqYcPv6vQA==
+Date:   Wed, 31 Aug 2022 05:15:59 +0300
+From:   "jarkko@kernel.org" <jarkko@kernel.org>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
+        "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
+        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "haitao.huang@linux.intel.com" <haitao.huang@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/6] x86/sgx: Do not consider unsanitized pages an error
+Message-ID: <Yw7EX5GCrEaLzpHV@kernel.org>
+References: <20220830031206.13449-1-jarkko@kernel.org>
+ <20220830031206.13449-2-jarkko@kernel.org>
+ <1f43e7b9-c101-3872-bd1b-add66933b285@intel.com>
+ <1b3308a364317d36ad41961ea9cfee24aa122f02.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500022.china.huawei.com (7.185.36.162)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1b3308a364317d36ad41961ea9cfee24aa122f02.camel@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,132 +66,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The "%Ld" specifier, which represents long long unsigned,
-doesn't meet C language standard, and even more,
-it makes people easily mistake with "%ld", which represent
-long unsigned. So replace "%Ld" with "lld".
+On Wed, Aug 31, 2022 at 01:27:58AM +0000, Huang, Kai wrote:
+> On Tue, 2022-08-30 at 15:54 -0700, Reinette Chatre wrote:
+> > Hi Jarkko,
+> > 
+> > On 8/29/2022 8:12 PM, Jarkko Sakkinen wrote:
+> > > In sgx_init(), if misc_register() for the provision device fails, and
+> > > neither sgx_drv_init() nor sgx_vepc_init() succeeds, then ksgxd will be
+> > > prematurely stopped.
+> > 
+> > I do not think misc_register() is required to fail for the scenario to
+> > be triggered (rather use "or" than "and"?). Perhaps just
+> > "In sgx_init(), if a failure is encountered after ksgxd is started
+> > (via sgx_page_reclaimer_init()) ...".
+> 
+> IMHO "a failure" might be too vague.  For instance, failure to sgx_drv_init()
+> won't immediately result in ksgxd to stop prematurally.  As long as KVM SGX can
+> be initialized successfully, sgx_init() still returns 0.
+> 
+> Btw I was thinking whether we should move sgx_page_reclaimer_init() to the end
+> of sgx_init(), after we make sure at least one of the driver and the KVM SGX is
+> initialized successfully.  Then the code change in this patch won't be necessary
+> if I understand correctly.  AFAICT there's no good reason to start the ksgxd at
+> early stage before we are sure either the driver or KVM SGX will work.
 
-Do the same with "%Lu".
+I would focus fixing the existing flow rather than reinventing the flow.
 
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
----
- fs/xfs/libxfs/xfs_bmap.c        | 2 +-
- fs/xfs/libxfs/xfs_inode_fork.c  | 4 ++--
- fs/xfs/xfs_inode.c              | 8 ++++----
- fs/xfs/xfs_inode_item_recover.c | 4 ++--
- fs/xfs/xfs_stats.c              | 2 +-
- 5 files changed, 10 insertions(+), 10 deletions(-)
+It can be made to work, and therefore it is IMHO correct action to take.
 
-diff --git a/fs/xfs/libxfs/xfs_bmap.c b/fs/xfs/libxfs/xfs_bmap.c
-index e56723dc9cd5..49d0d4ea63fc 100644
---- a/fs/xfs/libxfs/xfs_bmap.c
-+++ b/fs/xfs/libxfs/xfs_bmap.c
-@@ -294,7 +294,7 @@ xfs_check_block(
- 			else
- 				thispa = XFS_BMBT_PTR_ADDR(mp, block, j, dmxr);
- 			if (*thispa == *pp) {
--				xfs_warn(mp, "%s: thispa(%d) == pp(%d) %Ld",
-+				xfs_warn(mp, "%s: thispa(%d) == pp(%d) %lld",
- 					__func__, j, i,
- 					(unsigned long long)be64_to_cpu(*thispa));
- 				xfs_err(mp, "%s: ptrs are equal in node\n",
-diff --git a/fs/xfs/libxfs/xfs_inode_fork.c b/fs/xfs/libxfs/xfs_inode_fork.c
-index 9327a4f39206..6b21760184d9 100644
---- a/fs/xfs/libxfs/xfs_inode_fork.c
-+++ b/fs/xfs/libxfs/xfs_inode_fork.c
-@@ -78,7 +78,7 @@ xfs_iformat_local(
- 	 */
- 	if (unlikely(size > XFS_DFORK_SIZE(dip, ip->i_mount, whichfork))) {
- 		xfs_warn(ip->i_mount,
--	"corrupt inode %Lu (bad size %d for local fork, size = %zd).",
-+	"corrupt inode %llu (bad size %d for local fork, size = %zd).",
- 			(unsigned long long) ip->i_ino, size,
- 			XFS_DFORK_SIZE(dip, ip->i_mount, whichfork));
- 		xfs_inode_verifier_error(ip, -EFSCORRUPTED,
-@@ -192,7 +192,7 @@ xfs_iformat_btree(
- 					XFS_DFORK_SIZE(dip, mp, whichfork) ||
- 		     ifp->if_nextents > ip->i_nblocks) ||
- 		     level == 0 || level > XFS_BM_MAXLEVELS(mp, whichfork)) {
--		xfs_warn(mp, "corrupt inode %Lu (btree).",
-+		xfs_warn(mp, "corrupt inode %llu (btree).",
- 					(unsigned long long) ip->i_ino);
- 		xfs_inode_verifier_error(ip, -EFSCORRUPTED,
- 				"xfs_iformat_btree", dfp, size,
-diff --git a/fs/xfs/xfs_inode.c b/fs/xfs/xfs_inode.c
-index 28493c8e9bb2..b3eeeae3afe1 100644
---- a/fs/xfs/xfs_inode.c
-+++ b/fs/xfs/xfs_inode.c
-@@ -3119,7 +3119,7 @@ xfs_iflush(
- 	if (XFS_TEST_ERROR(dip->di_magic != cpu_to_be16(XFS_DINODE_MAGIC),
- 			       mp, XFS_ERRTAG_IFLUSH_1)) {
- 		xfs_alert_tag(mp, XFS_PTAG_IFLUSH,
--			"%s: Bad inode %Lu magic number 0x%x, ptr "PTR_FMT,
-+			"%s: Bad inode %llu magic number 0x%x, ptr "PTR_FMT,
- 			__func__, ip->i_ino, be16_to_cpu(dip->di_magic), dip);
- 		goto flush_out;
- 	}
-@@ -3129,7 +3129,7 @@ xfs_iflush(
- 		    ip->i_df.if_format != XFS_DINODE_FMT_BTREE,
- 		    mp, XFS_ERRTAG_IFLUSH_3)) {
- 			xfs_alert_tag(mp, XFS_PTAG_IFLUSH,
--				"%s: Bad regular inode %Lu, ptr "PTR_FMT,
-+				"%s: Bad regular inode %llu, ptr "PTR_FMT,
- 				__func__, ip->i_ino, ip);
- 			goto flush_out;
- 		}
-@@ -3140,7 +3140,7 @@ xfs_iflush(
- 		    ip->i_df.if_format != XFS_DINODE_FMT_LOCAL,
- 		    mp, XFS_ERRTAG_IFLUSH_4)) {
- 			xfs_alert_tag(mp, XFS_PTAG_IFLUSH,
--				"%s: Bad directory inode %Lu, ptr "PTR_FMT,
-+				"%s: Bad directory inode %llu, ptr "PTR_FMT,
- 				__func__, ip->i_ino, ip);
- 			goto flush_out;
- 		}
-@@ -3158,7 +3158,7 @@ xfs_iflush(
- 	if (XFS_TEST_ERROR(ip->i_forkoff > mp->m_sb.sb_inodesize,
- 				mp, XFS_ERRTAG_IFLUSH_6)) {
- 		xfs_alert_tag(mp, XFS_PTAG_IFLUSH,
--			"%s: bad inode %Lu, forkoff 0x%x, ptr "PTR_FMT,
-+			"%s: bad inode %llu, forkoff 0x%x, ptr "PTR_FMT,
- 			__func__, ip->i_ino, ip->i_forkoff, ip);
- 		goto flush_out;
- 	}
-diff --git a/fs/xfs/xfs_inode_item_recover.c b/fs/xfs/xfs_inode_item_recover.c
-index d28ffaebd067..0e5dba2343ea 100644
---- a/fs/xfs/xfs_inode_item_recover.c
-+++ b/fs/xfs/xfs_inode_item_recover.c
-@@ -321,7 +321,7 @@ xlog_recover_inode_commit_pass2(
- 	 */
- 	if (XFS_IS_CORRUPT(mp, !xfs_verify_magic16(bp, dip->di_magic))) {
- 		xfs_alert(mp,
--	"%s: Bad inode magic number, dip = "PTR_FMT", dino bp = "PTR_FMT", ino = %Ld",
-+	"%s: Bad inode magic number, dip = "PTR_FMT", dino bp = "PTR_FMT", ino = %lld",
- 			__func__, dip, bp, in_f->ilf_ino);
- 		error = -EFSCORRUPTED;
- 		goto out_release;
-@@ -329,7 +329,7 @@ xlog_recover_inode_commit_pass2(
- 	ldip = item->ri_buf[1].i_addr;
- 	if (XFS_IS_CORRUPT(mp, ldip->di_magic != XFS_DINODE_MAGIC)) {
- 		xfs_alert(mp,
--			"%s: Bad inode log record, rec ptr "PTR_FMT", ino %Ld",
-+			"%s: Bad inode log record, rec ptr "PTR_FMT", ino %lld",
- 			__func__, item, in_f->ilf_ino);
- 		error = -EFSCORRUPTED;
- 		goto out_release;
-diff --git a/fs/xfs/xfs_stats.c b/fs/xfs/xfs_stats.c
-index 70d38b77682b..90a77cd3ebad 100644
---- a/fs/xfs/xfs_stats.c
-+++ b/fs/xfs/xfs_stats.c
-@@ -74,7 +74,7 @@ int xfs_stats_format(struct xfsstats __percpu *stats, char *buf)
- 		defer_relog += per_cpu_ptr(stats, i)->s.defer_relog;
- 	}
- 
--	len += scnprintf(buf + len, PATH_MAX-len, "xpc %Lu %Lu %Lu\n",
-+	len += scnprintf(buf + len, PATH_MAX-len, "xpc %llu %llu %llu\n",
- 			xs_xstrat_bytes, xs_write_bytes, xs_read_bytes);
- 	len += scnprintf(buf + len, PATH_MAX-len, "defer_relog %llu\n",
- 			defer_relog);
--- 
-2.25.1
+> Btw currently EPC pages assigned to KVM guest cannot be reclaimed, so
+> theoretically ksgxd can be moved to sgx_drv_init(), but who knows someday we
+> will decide to make KVM guest EPC pages to be able to be reclaimed. :)
 
+I'm open to changes but it is in my opinion out of context for this.
+
+> 
+> 
+> 
+> -- 
+> Thanks,
+> -Kai
+> 
+> 
+
+BR, Jarkko

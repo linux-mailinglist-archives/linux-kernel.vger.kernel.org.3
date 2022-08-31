@@ -2,72 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67DDC5A72E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:47:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C8135A72ED
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbiHaAru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
+        id S231704AbiHaAsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231931AbiHaAr0 (ORCPT
+        with ESMTP id S229601AbiHaAsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:47:26 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1225C636C
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:47:20 -0700 (PDT)
-X-QQ-mid: bizesmtp83t1661906833t48eao95
-Received: from localhost.localdomain ( [182.148.13.26])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 31 Aug 2022 08:47:11 +0800 (CST)
-X-QQ-SSF: 01000000000000D0E000000A0000000
-X-QQ-FEAT: hJ5650VbgwA8/tjv62vCT0tHLOwxMXc1psePX3XsSQrANH5abwqNW+o2xQi1S
-        4iV/5l6erMyETcWRD4hdmei4oTdmru4UwKRL9K2fyUgBKYgkQN5ttBNJZPdMoC/XPFUHC72
-        eUxFpcBOa4I6szeNIFyFJ9FjLP50m0UFqegvQuYih3GJciFyvqR2ZUtQif/bLxyrFzlquYP
-        LATU9Iqn2+N5pohDqSzcibRfCELeR3zlfqC0IumikXSJyeyuOJRVPAnN1yJk4+FU5+dyjeh
-        lxUmXf110J76JV5ha+RFtms1y3fgdfBLGY/WZq39fPDCdBkm4j7gkrF+Bp/SGsF7lc4q40X
-        tlN9gSgJJdxXyEACm+WnZkFoWQLGay1O0ogioq3wPjAdP8jddw=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] powerpc/xive: fix repeated words in comments
-Date:   Wed, 31 Aug 2022 08:47:06 +0800
-Message-Id: <20220831004706.35280-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 30 Aug 2022 20:48:45 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A814E601;
+        Tue, 30 Aug 2022 17:48:41 -0700 (PDT)
+Received: from localhost.localdomain (unknown [182.2.75.186])
+        by gnuweeb.org (Postfix) with ESMTPSA id 151D380909;
+        Wed, 31 Aug 2022 00:48:37 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1661906920;
+        bh=sILKrGLY87wqKpnCOwOekdL95a9T80Bo/Ge85ruxnQ8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EeelT5ehl/23HRwf0YCAVGvVDjI58b5JZ0CQuO7giI98NU8sNmW0q7zSyLdtVB308
+         hRWpLiW6Ce4eXgcMqHFRh+x0lwGi2DPpdvv1ChXnBTmh9MYjqh03Jhcfg2x0an7ySz
+         GVS1sVotWVPAblLzo4lLxEruZfNVlaWTt/mtDhXSSsmHH2UBNJWWEqGBgnLmh1llub
+         VIVsA5/K222oeokVgLUpmjFAEoL29bm06mlUxa5msl6VvfzcYdD7aBGCmyvPwHnuw/
+         AyfHFibBya611TkVO8oBTn8VLGTzvD0HD2Qg9L4OAXogLBp65O8UGSFUvWQmR0J5KX
+         Jf7JHrrEdgcTA==
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        Muhammad Rizki <kiizuha@gnuweeb.org>,
+        Kanna Scarlet <knscarlet@gnuweeb.org>,
+        io-uring Mailing List <io-uring@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
+Subject: [PATCH liburing v1 0/3] liburing updates
+Date:   Wed, 31 Aug 2022 07:48:14 +0700
+Message-Id: <20220831004449.2619220-1-ammar.faizi@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'set'.
+From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+Hi Jens,
+
+Just small liburing updates this time.
+
+1) github bot: Upgrade clang version to 16.
+
+   clang-16 is now available, use it.
+
+2) CHANGELOG update.
+
+3) Small cleanup, remove unnecessary goto and label in queue.c.
+
+Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
 ---
- arch/powerpc/sysdev/xive/common.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/sysdev/xive/common.c b/arch/powerpc/sysdev/xive/common.c
-index 61b9f98dfd4a..a289cb97c1d7 100644
---- a/arch/powerpc/sysdev/xive/common.c
-+++ b/arch/powerpc/sysdev/xive/common.c
-@@ -783,7 +783,7 @@ static int xive_irq_set_type(struct irq_data *d, unsigned int flow_type)
- 	 * the corresponding descriptor bits mind you but those will in turn
- 	 * affect the resend function when re-enabling an edge interrupt.
- 	 *
--	 * Set set the default to edge as explained in map().
-+	 * Set the default to edge as explained in map().
- 	 */
- 	if (flow_type == IRQ_TYPE_DEFAULT || flow_type == IRQ_TYPE_NONE)
- 		flow_type = IRQ_TYPE_EDGE_RISING;
+Ammar Faizi (3):
+  github bot: Upgrade clang version to 16
+  CHANGELOG: Note about `io_uring_{enter,enter2,register,setup}`
+  queue: Remove unnecessary goto and label
+
+ .github/workflows/build.yml | 6 +++---
+ CHANGELOG                   | 1 +
+ src/queue.c                 | 3 +--
+ 3 files changed, 5 insertions(+), 5 deletions(-)
+
+
+base-commit: 1ef00fc157cd0fa96d4da355ee86c977b6e4169e
 -- 
-2.36.1
+Ammar Faizi
 

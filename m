@@ -2,128 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55A645A7B3F
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5DB5A7B3E
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiHaKUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 06:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56278 "EHLO
+        id S230352AbiHaKUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 06:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbiHaKT5 (ORCPT
+        with ESMTP id S229692AbiHaKT7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 06:19:57 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2857912D3A;
-        Wed, 31 Aug 2022 03:19:56 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 4C44B1FA26;
-        Wed, 31 Aug 2022 10:19:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1661941194; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 31 Aug 2022 06:19:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18E514D10
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 03:19:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661941197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=MGhHW6rYwZ48K8Xu0V7K4ggzBnb/NvfN0ZoK0gCAlbg=;
-        b=xpV4nSzhu6hvYfjU/RLa/UyemQVmGwiOcDFsrJdhN97teD4R9U9wjv5LdPHR1gp6HxZHrR
-        FuW3p4ucqUMUwZb45aW7yTZl3JtVfhUQLK0ZspCBA49v5PTxSs3KgEJ1zQrfNzrY2q8f4S
-        /dKh99Nx5lVJ58bV5Rkgoeu5X/hmj10=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1661941194;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=MGhHW6rYwZ48K8Xu0V7K4ggzBnb/NvfN0ZoK0gCAlbg=;
-        b=MQGQw9Blw5WX5WebctrJKgEeQJwREstTopCuw8w6jMH4yRF3LbubiWsssQhgo9xhnEFLYy
-        ZeYNgM1N1XvLnJAQ==
-Received: from suse.de (unknown [10.163.43.106])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        bh=7BAfut2fqnOI2gHOJTwiv+Oolt0KrYkM0Hx7Bxxkc38=;
+        b=WX8LHXzeyyEMXZRoQvyfqwpzWDYhU8hMVlOLb8OkQ6qEj/06NSFBdid8PVVSuBSzu4xI6B
+        tTgWuInQcoXNvfk+CbAEZHrToMVX0FcmK0ZRIGhUzsx0qFnAoPpi5znfat6589NbBvlotE
+        OOF2DNRSx0pAeHtE5eCJR/hbhYTgr4M=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-648-lLZg_qBLOEyqVqzixgEHFg-1; Wed, 31 Aug 2022 06:19:53 -0400
+X-MC-Unique: lLZg_qBLOEyqVqzixgEHFg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id 085222C141;
-        Wed, 31 Aug 2022 10:19:49 +0000 (UTC)
-Date:   Wed, 31 Aug 2022 11:19:48 +0100
-From:   Mel Gorman <mgorman@suse.de>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
-        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <20220831101948.f3etturccmp5ovkl@suse.de>
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8F3723C00086;
+        Wed, 31 Aug 2022 10:19:53 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id EFA721410F3C;
+        Wed, 31 Aug 2022 10:19:51 +0000 (UTC)
+Message-ID: <7281e42323b53a016cf8545b7a4547d70d87efce.camel@redhat.com>
+Subject: Re: [PATCH 08/19] KVM: SVM: Remove redundant cluster calculation
+ that also creates a shadow
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 13:19:50 +0300
+In-Reply-To: <20220831003506.4117148-9-seanjc@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-9-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-15
-Content-Disposition: inline
-In-Reply-To: <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 04:42:30AM -0400, Kent Overstreet wrote:
-> On Wed, Aug 31, 2022 at 09:38:27AM +0200, Peter Zijlstra wrote:
-> > On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
-> > > ===========================
-> > > Code tagging framework
-> > > ===========================
-> > > Code tag is a structure identifying a specific location in the source code
-> > > which is generated at compile time and can be embedded in an application-
-> > > specific structure. Several applications of code tagging are included in
-> > > this RFC, such as memory allocation tracking, dynamic fault injection,
-> > > latency tracking and improved error code reporting.
-> > > Basically, it takes the old trick of "define a special elf section for
-> > > objects of a given type so that we can iterate over them at runtime" and
-> > > creates a proper library for it.
-> > 
-> > I might be super dense this morning, but what!? I've skimmed through the
-> > set and I don't think I get it.
-> > 
-> > What does this provide that ftrace/kprobes don't already allow?
+On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
+> Drop the redundant "cluster" calculation and its horrific shadowing in
+> the x2avic logical mode path.  The "cluster" that is declared at an outer
+> scope is derived using the exact same calculation and has performed the
+> left-shift.
+
+Actually I think we should just revert the commit 
+'KVM: SVM: Use target APIC ID to complete x2AVIC IRQs when possible'
+
+
+I know that the patch that intially introduced the the avic_kick_target_vcpus_fast had
+x2apic/x2avic code, and then it was split to avoid adding x2avic code before it was merged,
+resulting in this patch to add the x2apic specific code.
+
+But when I fixed most issues of avic_kick_target_vcpus_fast in my 
+'KVM: x86: SVM: fix avic_kick_target_vcpus_fast', I added back x2apic code because
+it was just natural to do since I had to calculate cluster/bitmap masks anyway.
+
+I expected this patch to be dropped because of this but I guess it was not noticed,
+or patches were merged in the wrong order.
+
+This is the reason of shadowing, duplicate calculations/etc.
+
+Patch 9 and 7 of your series can be dropped as well then.
+
+Best regards,
+	Maxim Levitsky
+
+
 > 
-> You're kidding, right?
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 14f567550a1e..8c9cad96008e 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -410,10 +410,9 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
+>  			 * For x2APIC logical mode, cannot leverage the index.
+>  			 * Instead, calculate physical ID from logical ID in ICRH.
+>  			 */
+> -			int cluster = (icrh & 0xffff0000) >> 16;
+>  			int apic = ffs(bitmap) - 1;
+>  
+> -			l1_physical_id = (cluster << 4) + apic;
+> +			l1_physical_id = cluster + apic;
+>  		}
+>  	}
+>  
 
-It's a valid question. From the description, it main addition that would
-be hard to do with ftrace or probes is catching where an error code is
-returned. A secondary addition would be catching all historical state and
-not just state since the tracing started.
 
-It's also unclear *who* would enable this. It looks like it would mostly
-have value during the development stage of an embedded platform to track
-kernel memory usage on a per-application basis in an environment where it
-may be difficult to setup tracing and tracking. Would it ever be enabled
-in production? Would a distribution ever enable this? If it's enabled, any
-overhead cannot be disabled/enabled at run or boot time so anyone enabling
-this would carry the cost without never necessarily consuming the data.
-
-It might be an ease-of-use thing. Gathering the information from traces
-is tricky and would need combining multiple different elements and that
-is development effort but not impossible.
-
-Whatever asking for an explanation as to why equivalent functionality
-cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
-
--- 
-Mel Gorman
-SUSE Labs

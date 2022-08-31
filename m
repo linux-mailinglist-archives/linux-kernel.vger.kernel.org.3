@@ -2,94 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3973E5A8613
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:52:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9FE85A8615
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:53:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233111AbiHaSwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:52:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35238 "EHLO
+        id S233128AbiHaSw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:52:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230002AbiHaSwL (ORCPT
+        with ESMTP id S230002AbiHaSwz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:52:11 -0400
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A9EEC0E5D;
-        Wed, 31 Aug 2022 11:52:10 -0700 (PDT)
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-33da3a391d8so316186017b3.2;
-        Wed, 31 Aug 2022 11:52:10 -0700 (PDT)
+        Wed, 31 Aug 2022 14:52:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7016C0E5D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:52:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661971973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rMGNs2YUPmBpJtRzjX0jo2J/6RpATG/lLCVwNu3BD9E=;
+        b=WzejkKiESLOMJrcqDBFAZLLakPopFL4XBbPHDKjEqcblEs5tEq8ITkPyoinxTlOt7FI2Ye
+        6Fpbdb5ZAC0QegSb9s6/eDH+ErUo7iSFyw5sfFGo8CEWwFsPmBESBC5sZB1ghqHKTOVxyR
+        Ka3m16Ek4NajYSvG3fBa9bQzaJKGf5E=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-524-lOg0AO_3MH-BuwnYYP-3Vw-1; Wed, 31 Aug 2022 14:52:52 -0400
+X-MC-Unique: lOg0AO_3MH-BuwnYYP-3Vw-1
+Received: by mail-qt1-f197.google.com with SMTP id v13-20020a05622a188d00b00343794bd1daso12023254qtc.23
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:52:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=8F+MKnc7NEx1tCUG6AjVWftljzM2XX58i00lGsYN45Y=;
-        b=CctjZ1bOnvRwvjh4SiFreXMlclQK4XpuuuhtailPid4NNwoh6NHro4fEUpwFK6BDYC
-         OMgnX+x+br+PuXNfV56b0Pm3G3wsz291lhBnD5vwWHdyqtynD6D1X6nSgI6yDZzWDCy9
-         lQB/3qpcMvmh+1WRtD2RlQEj5uVWY8t52q40srLSZyqIM0ZNwtXsX2qTrE9Ey8SpmoCk
-         PJ6itYrsoMZ9ja5JymEaNrhWldjwqRcXamczxp7IDCkucBVACD/Mhz/dBFRStwX0eQEj
-         WPIXhPJ9RM2wXfp8lP3kfCRBV9ZN1TA/y0HyU1hvShGvEOy3vE8M8dX/qroY/fftVlY/
-         +imw==
-X-Gm-Message-State: ACgBeo0CbISCRuR+3HDO1V/gKRiGfAArJ++ySEIINj8e20cKhaeX4EiU
-        1QHjO8fTlIix7x2uyLD11i+etIREG+L2w9Ep5PJQ4BG9
-X-Google-Smtp-Source: AA6agR41gg5UpOUbPB+MyjwQbY19lSM7ygPu4k+f+x/vBYfPbFREMuR+cZsss0AeJ9Q5P3hj13hfwYdNMEYlAz4yZSM=
-X-Received: by 2002:a0d:e701:0:b0:336:90d7:c67a with SMTP id
- q1-20020a0de701000000b0033690d7c67amr18993617ywe.7.1661971929512; Wed, 31 Aug
- 2022 11:52:09 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=rMGNs2YUPmBpJtRzjX0jo2J/6RpATG/lLCVwNu3BD9E=;
+        b=pAg1IkSghNbAHqRzDy7afv/vFiDlzw0tc13iYCSibRrmLr8QEjMjFornJszkeuIZLe
+         lm/pCGFCakFbtO4EwrHImMSomTr7mpjeMUdDdm6YpW5aHNqQAsgO7Wd4zTI1c/bLr943
+         iq2UEdwoEzdh/EpbTiDKV9rLhRsBsnpVpQfrPrzAZkS8jtMA7N6qySzUgkF3wzvkHjAM
+         0+sYf5Ow8Y36n0rpxSawlb11J+potg1UHlXK5RmHCx3c4eYVTSa8283o0ss4/4TAb7Gd
+         /idQDS9PZakDtMDp9IqJcEQkGUTlq3Rl4hX+E4+veZo3qa4Iy96ZGD/tqHfsE1hyw02m
+         VZBQ==
+X-Gm-Message-State: ACgBeo2ehXu7VWMqnHe39DxKiLhTFTx2fWaV1l17OcB+fd/Br12sZ3UF
+        D3/oulivdgaUIZY1s6dhNjf6lB3VMlUtqoKRp4/KQRiKrQ9+Xl36QCAyyJ6x0r6Cfp26t6KAXA1
+        euwMMbt+BRvU7u43g6ba7I0f9
+X-Received: by 2002:ac8:4e8b:0:b0:344:adaa:4fa8 with SMTP id 11-20020ac84e8b000000b00344adaa4fa8mr20523910qtp.559.1661971972122;
+        Wed, 31 Aug 2022 11:52:52 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6u6wthlC6RtruUhaUvCG/dkpgkAwvjQIxQOs6+sy6G2IJ3PdVaD/l27aq+oFT60W/b+J4WNw==
+X-Received: by 2002:ac8:4e8b:0:b0:344:adaa:4fa8 with SMTP id 11-20020ac84e8b000000b00344adaa4fa8mr20523890qtp.559.1661971971882;
+        Wed, 31 Aug 2022 11:52:51 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id d5-20020ac86685000000b00342f7beccd0sm8823057qtp.45.2022.08.31.11.52.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 11:52:51 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 14:52:49 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: Re: [PATCH v1] mm/ksm: update stale comment in write_protect_page()
+Message-ID: <Yw+uASvgWU5+9PvI@xz-m1.local>
+References: <20220831083024.37138-1-david@redhat.com>
+ <CAHbLzkqeDAnCdt3q4E2RZw64QEzVaO_pseR3VaoHUhB+rZFcZQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220804135938.7f69f5d9@endymion.delvare>
-In-Reply-To: <20220804135938.7f69f5d9@endymion.delvare>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 31 Aug 2022 20:51:58 +0200
-Message-ID: <CAJZ5v0gav_OpDE=x=yb6+_2159_F-hPd9b5BJX6PW5LE=cjysw@mail.gmail.com>
-Subject: Re: [PATCH] thermal/drivers/thermal_mmio: Drop of_match_ptr()
-To:     Jean Delvare <jdelvare@suse.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        Talel Shenhar <talel@amazon.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHbLzkqeDAnCdt3q4E2RZw64QEzVaO_pseR3VaoHUhB+rZFcZQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 4, 2022 at 1:59 PM Jean Delvare <jdelvare@suse.de> wrote:
->
-> From: Jean Delvare <jdelvare@suse.de>
-> Subject: thermal/drivers/thermal_mmio: Drop of_match_ptr()
->
-> Now that the driver depends on OF, we know what of_match_ptr() will
-> always resolve to, so we might as well save cpp some work.
->
-> Signed-off-by: Jean Delvare <jdelvare@suse.de>
-> Cc: Talel Shenhar <talel@amazon.com>
-> Cc: "Rafael J. Wysocki" <rafael@kernel.org>
-> Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
-> ---
-> This could have been folded into my previous patch, sorry for missing
-> it.
->
->  drivers/thermal/thermal_mmio.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> --- linux-5.18.orig/drivers/thermal/thermal_mmio.c      2022-05-22 21:52:31.000000000 +0200
-> +++ linux-5.18/drivers/thermal/thermal_mmio.c   2022-08-04 13:50:46.426178245 +0200
-> @@ -107,7 +107,7 @@ static struct platform_driver thermal_mm
->         .probe = thermal_mmio_probe,
->         .driver = {
->                 .name = "thermal-mmio",
-> -               .of_match_table = of_match_ptr(thermal_mmio_id_table),
-> +               .of_match_table = thermal_mmio_id_table,
->         },
->  };
->
->
->
-> --
+On Wed, Aug 31, 2022 at 10:55:43AM -0700, Yang Shi wrote:
+> On Wed, Aug 31, 2022 at 1:30 AM David Hildenbrand <david@redhat.com> wrote:
+> >
+> > The comment is stale, because a TLB flush is no longer sufficient and
+> > required to synchronize against concurrent GUP-fast. This used to be true
+> > in the past, whereby a TLB flush would have implied an IPI on architectures
+> > that support GUP-fast, resulting in GUP-fast that disables local interrupts
+> > from completing before completing the flush.
+> 
+> Hmm... it seems there might be problem for THP collapse IIUC. THP
+> collapse clears and flushes pmd before doing anything on pte and
+> relies on interrupt disable of fast GUP to serialize against fast GUP.
+> But if TLB flush is no longer sufficient, then we may run into the
+> below race IIUC:
+> 
+>          CPU A                                                CPU B
+> THP collapse                                             fast GUP
+> 
+> gup_pmd_range() <-- see valid pmd
+> 
+> gup_pte_range() <-- work on pte
+> clear pmd and flush TLB
+> __collapse_huge_page_isolate()
+>     isolate page <-- before GUP bump refcount
+> 
+>    pin the page
+> __collapse_huge_page_copy()
+>     copy data to huge page
+>     clear pte (don't flush TLB)
+> Install huge pmd for huge page
+> 
+> return the obsolete page
 
-Applied as 6.1 material, thanks!
+Maybe the pmd level tlb flush is still needed, but on pte level it's
+optional (where we can rely on fast-gup rechecking on the pte change)?
+
+-- 
+Peter Xu
+

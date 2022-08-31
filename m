@@ -2,90 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ECC55A7925
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:36:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D34D05A7928
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:36:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231200AbiHaIgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
+        id S231270AbiHaIgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:36:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbiHaIf4 (ORCPT
+        with ESMTP id S231281AbiHaIg0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:35:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0063DF52;
-        Wed, 31 Aug 2022 01:35:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EFAA619E6;
-        Wed, 31 Aug 2022 08:35:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53862C433C1;
-        Wed, 31 Aug 2022 08:35:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661934954;
-        bh=qarNLkbsovoU00cxARj4JK5LNUtmsCMbYs74KZGYTFw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xChazdSoYVW5s5aVqTj5k7pq6DpGnJDBFMofmNGZx5wsWbxkrFJB4ua/ShpHLnrfX
-         Tl3b4npNAP5E5F+GOeNE9sXyU6k2Z0ZBczu3IhP37XS2aQ9Fk/4nWU9KNhhwQUOVde
-         +CVzHjJ7r/P38SeA7+yT/N0ZsgcZrzH1ItKwOkyA=
-Date:   Wed, 31 Aug 2022 10:35:51 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     jflf_kernel@gmx.com
-Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: add quirks for Lenovo OneLink+ Dock
-Message-ID: <Yw8dZ5giK9XjVDgb@kroah.com>
-References: <20220824160946.10128-1-jflf_kernel@gmx.com>
- <31aeee3c-f4f1-16a8-272b-96da5d4a565e@suse.com>
- <d1a5f149-50a1-49fc-9a6d-eceffa23311b@gmx.com>
- <4b92eee0-b020-9211-2039-18ac3ac72a7b@suse.com>
- <edd97137-74a1-ee0b-d475-7c5b36197155@gmx.com>
- <Yw8OU8hYZuuBgrnj@kroah.com>
- <9a17ea86-079f-510d-e919-01bc53a6d09f@gmx.com>
+        Wed, 31 Aug 2022 04:36:26 -0400
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54958A6C04;
+        Wed, 31 Aug 2022 01:36:22 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id e18so9869016edj.3;
+        Wed, 31 Aug 2022 01:36:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=eoBdlz3UxAt4OJMWcqBIsQb2pG1LV+gZCLEcEgMHwN4=;
+        b=07XtgExLMSqvbaO/CTrJODH9vY4cjThLx5llHCsW0prW/5zTTzEITdwfFG68pJB+VK
+         Y0sde8gjhOuuGNtwcyw865txY5cI6SPzvzj+B5+pbxKtvwTq2J1VPQ2evOA72va30sJv
+         2UsJY89RverWKdUD1j/7n/g5s7/m9zCOe5F9FYrB3+j7R+3WerQLjmUCnTEjDJyzGhsc
+         nNHBs/UkozvZIk7zHHPkDlTSTwlSA8JJ3kGD146LLwKMWrSO1xm3TIc1HapyaVnkP44F
+         fZcSULAaFaUGtXUzufi9Aa0Qmm4SGq+3GytGOq05V7Gw71TYnuNWV+Kd2e/J+IUHM2oM
+         UzBg==
+X-Gm-Message-State: ACgBeo2/9aP8U8f1aF8Ek4ggpqhXtI/4FfUglfKbiz7Mjp7AWxTuTXOF
+        3U5e34L2vMLm5wn3yUTj/EtZv6m6UU6zjg==
+X-Google-Smtp-Source: AA6agR6cmMBIoZNnMIkivEC0hdZ5VeAguL/55mnTtG0s0HBAXx2Tpj/+yrYjFOdr5DhXEOMt2gLDSQ==
+X-Received: by 2002:a05:6402:1911:b0:448:da24:5f23 with SMTP id e17-20020a056402191100b00448da245f23mr5020370edz.61.1661934980602;
+        Wed, 31 Aug 2022 01:36:20 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id h7-20020a17090634c700b0073dde62713asm6786756ejb.89.2022.08.31.01.36.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 01:36:20 -0700 (PDT)
+Message-ID: <863b4190-9b38-ed5a-0a18-74505702da21@kernel.org>
+Date:   Wed, 31 Aug 2022 10:36:18 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a17ea86-079f-510d-e919-01bc53a6d09f@gmx.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 1/2] USB: serial: ch341: fix lost character on LCR updates
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>,
+        Jonathan Woithe <jwoithe@just42.net>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220831081525.30557-1-johan@kernel.org>
+ <20220831081525.30557-2-johan@kernel.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220831081525.30557-2-johan@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 09:43:02AM +0200, jflf_kernel@gmx.com wrote:
+On 31. 08. 22, 10:15, Johan Hovold wrote:
+> Disable LCR updates for pre-0x30 devices which use a different (unknown)
+> protocol for line control and where the current register write causes
+> the next received character to be lost.
 > 
-> On 31/08/2022 09.31, Greg KH wrote:
-> > On Tue, Aug 30, 2022 at 09:50:03PM +0200, jflf_kernel@gmx.com wrote:
-> >>
-> >> On 30/08/2022 16.47, Oliver Neukum wrote:
-> >>
-> >>> 1) force a reset after a resume and call reset_resume() instead of resume()
-> >>> 2) block autosuspend if remote wakeup is required
-> >>>
-> >>> I suspect you are actually using the second effect. Have you
-> >>> tested with "usbcore.autosuspend=-1" on the kernel command line.
-> >>
-> >> After further testing, your suspicion is correct.
-> >>
-> >> TL;DR: the two VL812 hubs don't behave well when suspended.
-> >>
-> >> I'd like to prepare a better patch for that issue. What's the recommended strategy? The current patch works, even if only as a side effect and when there's a wakeup source downstream. It's currently in Greg KH's usb-linus branch, and will land in linux-next at some point. I'm tempted to let it be and undo it later in the better patch. Is that acceptable? Or should I ask Greg KH to pull it?
-> >
-> > I can revert it if you want me to, just let me know.
-> >
-> > thanks,
-> >
-> > greg k-h
+> Note that updating LCR using the INIT command has no effect on these
+> devices either.
 > 
-> [keeping the lists in CC this time]
+> Reported-by: Jonathan Woithe <jwoithe@just42.net>
+> Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
+> Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on reconfiguration")
+> Fixes: 55fa15b5987d ("USB: serial: ch341: fix baud rate and line-control handling")
+> Cc: stable@vger.kernel.org      # 4.10
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>   drivers/usb/serial/ch341.c | 10 +++++++++-
+>   1 file changed, 9 insertions(+), 1 deletion(-)
 > 
-> Please revert if possible, and apologies for the trouble.
+> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+> index 2798fca71261..2bcce172355b 100644
+> --- a/drivers/usb/serial/ch341.c
+> +++ b/drivers/usb/serial/ch341.c
+> @@ -97,7 +97,10 @@ struct ch341_private {
+>   	u8 mcr;
+>   	u8 msr;
+>   	u8 lcr;
+> +
+>   	unsigned long quirks;
+> +	u8 version;
 
-No problem at all, now reverted.
+Could you move version above quirks? That would not create another 
+7-byte padding in here. Actually it would not make ch341_private larger 
+on 64bit at all, if I am looking correctly.
 
-greg k-h
+Other than that, looks good.
+
+thanks,
+-- 
+js
+suse labs
+

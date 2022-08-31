@@ -2,101 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47CC35A72E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 67DDC5A72E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:47:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232300AbiHaAq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44994 "EHLO
+        id S230465AbiHaAru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:47:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiHaAqf (ORCPT
+        with ESMTP id S231931AbiHaAr0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:46:35 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5535598A4E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:45:34 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id DDB465FD04;
-        Wed, 31 Aug 2022 03:45:31 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1661906731;
-        bh=n9fLKdgW9f2XXdObgGzN12Cm/zmLpIRqLh2L2kSmuVo=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=isrmR80H9bJEfe2uNnx9Yk8lrXM5pWBmjCWI1xKSkj1varZaSAgIqdbulwQQ6939t
-         Nt4M9qIqcfWNlsWMPzf5JHYCbRcunL5Rd6ImNN41uhGrfUgLIUa/CQWC/MzemrH7wv
-         1g8WzChJUy6zTqqtWxFkCTkyEifqm91xr1BqPx17cxRbZ+gf+d8i+NaRrcOzCKgrgg
-         J70jPj7otEwmW/RHGszIIOeVXrH371nQs92Pe9IeGXEv1JOJRACRvkrfIDGvfOYw7Y
-         sbObqEUEXODpGb8LoEzlkNDuBGajIn0jRvJWptskwWChJXvshuVpenIyXJRSzgR/1/
-         Y7IH8N2vIJ9sQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 31 Aug 2022 03:45:31 +0300 (MSK)
-Date:   Wed, 31 Aug 2022 03:45:30 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     "broonie@kernel.org" <broonie@kernel.org>,
-        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "jic23@kernel.org" <jic23@kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1] regmap: introduce value tracing for regmap bulk
- operations
-Message-ID: <20220831004530.zhvd7ehndqwmqgve@Rockosov-MBP>
-References: <20220816181451.5628-1-ddrokosov@sberdevices.ru>
- <CAHp75VfSOL5R1JdH-RS4PEXT1dEwuFGsmUPfkAp7zdDEMGzzjw@mail.gmail.com>
+        Tue, 30 Aug 2022 20:47:26 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1225C636C
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:47:20 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1661906833t48eao95
+Received: from localhost.localdomain ( [182.148.13.26])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 31 Aug 2022 08:47:11 +0800 (CST)
+X-QQ-SSF: 01000000000000D0E000000A0000000
+X-QQ-FEAT: hJ5650VbgwA8/tjv62vCT0tHLOwxMXc1psePX3XsSQrANH5abwqNW+o2xQi1S
+        4iV/5l6erMyETcWRD4hdmei4oTdmru4UwKRL9K2fyUgBKYgkQN5ttBNJZPdMoC/XPFUHC72
+        eUxFpcBOa4I6szeNIFyFJ9FjLP50m0UFqegvQuYih3GJciFyvqR2ZUtQif/bLxyrFzlquYP
+        LATU9Iqn2+N5pohDqSzcibRfCELeR3zlfqC0IumikXSJyeyuOJRVPAnN1yJk4+FU5+dyjeh
+        lxUmXf110J76JV5ha+RFtms1y3fgdfBLGY/WZq39fPDCdBkm4j7gkrF+Bp/SGsF7lc4q40X
+        tlN9gSgJJdxXyEACm+WnZkFoWQLGay1O0ogioq3wPjAdP8jddw=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu
+Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] powerpc/xive: fix repeated words in comments
+Date:   Wed, 31 Aug 2022 08:47:06 +0800
+Message-Id: <20220831004706.35280-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <CAHp75VfSOL5R1JdH-RS4PEXT1dEwuFGsmUPfkAp7zdDEMGzzjw@mail.gmail.com>
-User-Agent: NeoMutt/20220429
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/30 23:23:00 #20191014
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Andy,
+Delete the redundant word 'set'.
 
-Sorry for late response. I didn't have the ability to reach my laptop during
-last week.
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ arch/powerpc/sysdev/xive/common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-[...]
-
-> 
-> > +               if (val)
-> > +                       memcpy(__get_dynamic_array(buf), val, val_len);
-> 
-> I'm probably missing something, but what this condition prevents from?
-
-In general, this condition prevents memcpy from being executed when
-tracepoint is called with a null pointed buffer.
-
-[...]
-
-> > +       TP_printk("%s reg=%x val=%s", __get_str(name),
-> > +                 (unsigned int)__entry->reg,
-> 
-> Why do you need casting?
-> 
-
-To be honest, I've made it based on the already existing regmap
-tracepoints style. All of them make a cast to unsigned int type when
-printout reg number.
-
+diff --git a/arch/powerpc/sysdev/xive/common.c b/arch/powerpc/sysdev/xive/common.c
+index 61b9f98dfd4a..a289cb97c1d7 100644
+--- a/arch/powerpc/sysdev/xive/common.c
++++ b/arch/powerpc/sysdev/xive/common.c
+@@ -783,7 +783,7 @@ static int xive_irq_set_type(struct irq_data *d, unsigned int flow_type)
+ 	 * the corresponding descriptor bits mind you but those will in turn
+ 	 * affect the resend function when re-enabling an edge interrupt.
+ 	 *
+-	 * Set set the default to edge as explained in map().
++	 * Set the default to edge as explained in map().
+ 	 */
+ 	if (flow_type == IRQ_TYPE_DEFAULT || flow_type == IRQ_TYPE_NONE)
+ 		flow_type = IRQ_TYPE_EDGE_RISING;
 -- 
-Thank you,
-Dmitry
+2.36.1
+

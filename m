@@ -2,108 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FE35A740D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2BBC5A740F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:47:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231978AbiHaCpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 22:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
+        id S231478AbiHaCrh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 22:47:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231990AbiHaCpB (ORCPT
+        with ESMTP id S229608AbiHaCre (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 22:45:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FF418356;
-        Tue, 30 Aug 2022 19:44:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FB026192E;
-        Wed, 31 Aug 2022 02:44:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C52EC433C1;
-        Wed, 31 Aug 2022 02:44:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661913897;
-        bh=7akbOTuRrQCIYuRF795lZFUhzM12WJ++N4hz4TsdqRY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=imqGM4z4RM0CDiFVkP9CAajSeG7O3pvtiLwE4XSBPpDjhIYllmNoQuy8sFUFh/z6e
-         6hdhmRVf2HP3twPL5fM4yKcQ/D5YkH/FnB4XnvOiaZU4jAYrIq4CIF/lG1hEjUsD7d
-         E08h8+p+/KZnsCciLi27IY3ioGruBuY519ccNFPq7krSDFzvPhEO7QTAFVF7HcihWv
-         XazRWtMJ9Oa9aTnMnJW9jWsvCpsHwQCl4qOIKR+VhlpxA00z7G5WX0+sCMoQ8hnJ7U
-         t4ZCORE7ow2YF9HCwcjiMiFS+mdojBxe4QA1RjwBGlsnfnMpixHDBOUSRtOLNHR5s9
-         2rcHplJiRBdpg==
-Date:   Wed, 31 Aug 2022 05:44:53 +0300
-From:   "jarkko@kernel.org" <jarkko@kernel.org>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "haitao.huang@linux.intel.com" <haitao.huang@linux.intel.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/6] x86/sgx: Do not consider unsanitized pages an error
-Message-ID: <Yw7LJa7eRG+WZ0wv@kernel.org>
-References: <20220830031206.13449-1-jarkko@kernel.org>
- <20220830031206.13449-2-jarkko@kernel.org>
- <1f43e7b9-c101-3872-bd1b-add66933b285@intel.com>
- <1b3308a364317d36ad41961ea9cfee24aa122f02.camel@intel.com>
- <Yw7EX5GCrEaLzpHV@kernel.org>
- <d07577c3f0b4b3fff0ce470c56f91fb634653703.camel@intel.com>
+        Tue, 30 Aug 2022 22:47:34 -0400
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E389FB14FF;
+        Tue, 30 Aug 2022 19:47:33 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id c66so2895158pfc.10;
+        Tue, 30 Aug 2022 19:47:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=p+Lbv68LAjcpQ+zqtWIGrhsKEGgpIXQeXzdCrp4/+34=;
+        b=CL8PLz03AZFJCOaT+IitMfKDYKD9afitCNiaxSdFZXYcvPNUWljv1T65EMSjBfmZ0u
+         VPJA6ue/orHlj11de1kpQ5m5hx1cEof15zIy6lkICzUWx3DihUtpgbYGuy4SWsRYymM2
+         7DHAt94PunAMkaOidPJ7/Chay426+5LzOdoZV9oEmX5zJp2xf2vINZP5D3KC2eUfy6xu
+         bee1B9F4ojsWNWd3UPzoMIMOw+8in1pbIWdyIrqA+msAnqrXoKHQdt0fYMRepcyDsVlz
+         ZX3zMuUABwc/wUgZ5i0WuaF8Gk3/Y2fGPk/LKcJIOxVI7YAnlenIuYqJECy/1VJsWLpe
+         jaAQ==
+X-Gm-Message-State: ACgBeo3DTHtzMaiLtXOamzvg+aJADHM1eoQtOHd2lXPb+nTRTunO1bRX
+        ZUFZENdM+WRnYzNq6USPFlU=
+X-Google-Smtp-Source: AA6agR6Qq0a+yAa2nPUR+wwGGE72x+dcomD2lukW8QCYMCqlCAI4u07E4w7BomTImYWlNoV3Z7rM/w==
+X-Received: by 2002:a05:6a00:1687:b0:518:6c6b:6a9a with SMTP id k7-20020a056a00168700b005186c6b6a9amr24487002pfc.81.1661914053256;
+        Tue, 30 Aug 2022 19:47:33 -0700 (PDT)
+Received: from [172.20.0.236] ([12.219.165.6])
+        by smtp.gmail.com with ESMTPSA id w131-20020a627b89000000b00537dfd6e67esm8402100pfc.48.2022.08.30.19.47.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 19:47:32 -0700 (PDT)
+Message-ID: <5daac9db-2b34-fbe5-a891-8ecf77fbe46f@acm.org>
+Date:   Tue, 30 Aug 2022 19:47:25 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d07577c3f0b4b3fff0ce470c56f91fb634653703.camel@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] RDMA/srp: Set scmnd->result only when scmnd is not NULL
+Content-Language: en-US
+To:     "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "leon@kernel.org" <leon@kernel.org>
+Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220831014730.17566-1-yangx.jy@fujitsu.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <20220831014730.17566-1-yangx.jy@fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 02:35:53AM +0000, Huang, Kai wrote:
-> On Wed, 2022-08-31 at 05:15 +0300, jarkko@kernel.org wrote:
-> > On Wed, Aug 31, 2022 at 01:27:58AM +0000, Huang, Kai wrote:
-> > > On Tue, 2022-08-30 at 15:54 -0700, Reinette Chatre wrote:
-> > > > Hi Jarkko,
-> > > > 
-> > > > On 8/29/2022 8:12 PM, Jarkko Sakkinen wrote:
-> > > > > In sgx_init(), if misc_register() for the provision device fails, and
-> > > > > neither sgx_drv_init() nor sgx_vepc_init() succeeds, then ksgxd will be
-> > > > > prematurely stopped.
-> > > > 
-> > > > I do not think misc_register() is required to fail for the scenario to
-> > > > be triggered (rather use "or" than "and"?). Perhaps just
-> > > > "In sgx_init(), if a failure is encountered after ksgxd is started
-> > > > (via sgx_page_reclaimer_init()) ...".
-> > > 
-> > > IMHO "a failure" might be too vague.  For instance, failure to sgx_drv_init()
-> > > won't immediately result in ksgxd to stop prematurally.  As long as KVM SGX can
-> > > be initialized successfully, sgx_init() still returns 0.
-> > > 
-> > > Btw I was thinking whether we should move sgx_page_reclaimer_init() to the end
-> > > of sgx_init(), after we make sure at least one of the driver and the KVM SGX is
-> > > initialized successfully.  Then the code change in this patch won't be necessary
-> > > if I understand correctly.  AFAICT there's no good reason to start the ksgxd at
-> > > early stage before we are sure either the driver or KVM SGX will work.
-> > 
-> > I would focus fixing the existing flow rather than reinventing the flow.
-> > 
-> > It can be made to work, and therefore it is IMHO correct action to take.
-> 
-> From another perspective, the *existing flow* is the reason which causes this
-> bug.  A real fix is to fix the flow itself.
+On 8/30/22 18:47, yangx.jy@fujitsu.com wrote:
+> diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
+> index 7720ea270ed8..528cdd0daba4 100644
+> --- a/drivers/infiniband/ulp/srp/ib_srp.c
+> +++ b/drivers/infiniband/ulp/srp/ib_srp.c
+> @@ -1961,6 +1961,7 @@ static void srp_process_rsp(struct srp_rdma_ch *ch, struct srp_rsp *rsp)
+>   		if (scmnd) {
+>   			req = scsi_cmd_priv(scmnd);
+>   			scmnd = srp_claim_req(ch, req, NULL, scmnd);
+> +			scmnd->result = rsp->status;
+>   		} else {
+>   			shost_printk(KERN_ERR, target->scsi_host,
+>   				     "Null scmnd for RSP w/tag %#016llx received on ch %td / QP %#x\n",
+> @@ -1972,7 +1973,6 @@ static void srp_process_rsp(struct srp_rdma_ch *ch, struct srp_rsp *rsp)
+>   
+>   			return;
+>   		}
+> -		scmnd->result = rsp->status;
+>   
+>   		if (rsp->flags & SRP_RSP_FLAG_SNSVALID) {
+>   			memcpy(scmnd->sense_buffer, rsp->data +
 
-Any existing flow in part of the kernel can have a bug. That
-does not mean that switching flow would be proper way to fix
-a bug.
+Since there is a 'return' statement in the else branch, I don't see how 
+this patch can make a difference?
 
-BR, Jarkko
+Thanks,
+
+Bart.

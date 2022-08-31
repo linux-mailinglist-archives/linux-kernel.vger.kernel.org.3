@@ -2,202 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C83C5A813F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:29:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A01585A8141
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231739AbiHaP25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
+        id S231745AbiHaP3U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:29:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231488AbiHaP2z (ORCPT
+        with ESMTP id S231783AbiHaP3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:28:55 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC6ED91E8
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:28:52 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-340f82c77baso195106647b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=WG3L5AqBV6fri0E+FNG2tsbDp/uFyzzRTMikwR7NSY8=;
-        b=K4mZtzeFsKxJKOsvfz3u8buWcDbdHB0bPmoDat2amZVxf6i7fSAQFaeyCHfBhOW0gn
-         TYiPTPwinxH8yKQGmCabK7zsAg7t70798MwIPLUmtbWdWtkPoH8nkkd0L6+Cf/71NitT
-         pIpTm135oSjNuBnp7lYQC08Y98tRGNR+0DcT0LYO7fxV5Ng1p7CsbsO1uZH/I63XPhjj
-         LoKETIXPqOU+NyCB1s85tiwuh2e//ou8VKmFXVH3pOn419Mn7E1W55VRw4JlXGoTp7nX
-         lwPAdy+2tjWZHnwP0BxNNwETNl+fZjmT1bVCkdUM4qWebnjcYikmadptjs0201jXoXGN
-         /Wug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=WG3L5AqBV6fri0E+FNG2tsbDp/uFyzzRTMikwR7NSY8=;
-        b=i2KhSJHbZPD+ciG2vIl6BtM1bkrThgqpPdBQ/p9LkUN+G0OfaSrqZCYhH2lwihcALP
-         ulPphd5FL5P/CSaMJ5SNtfiJRyqbuzvanb9Z9E/qTALtOhwX+Kzr7OeOCKgYrOgCPBA5
-         JXgjJeTjH3voA2xku35SYMDFd5RIVSHsvALscZTeKpG83A05P5ji0SMsINcR8fYy2L+3
-         0eQeYQhlsBTy7JVJt8tpCgCeGqtZKFQ7nf8h0s+4f5oGlofFLf3V9buaz3MVTskNay7/
-         EvvTOsujAk96Da+zamYsYy15Z0u1zOUtFs+VOQreh2n+QA2NRK0iVKl+Ma6QvxtD641N
-         q7Cg==
-X-Gm-Message-State: ACgBeo2Ou2t3+9r89CHRsB9KSWHZT3dwfe1Wj3aGWfWkbXqk9Dr24qJb
-        CGpH+kERshWgGhukBP7jRcMkw0FKw2X+8Hs2eOSFcA==
-X-Google-Smtp-Source: AA6agR42WGqJyo3CQ/wsWtBH4QMjo2FwsKfgLb/Aa3jKv6m3xoE+xzdLy95JXttnzairFt+14Q8rzI0UFGuD4qoW950=
-X-Received: by 2002:a0d:d850:0:b0:340:d2c0:b022 with SMTP id
- a77-20020a0dd850000000b00340d2c0b022mr16165795ywe.469.1661959731749; Wed, 31
- Aug 2022 08:28:51 -0700 (PDT)
+        Wed, 31 Aug 2022 11:29:13 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747D3D99C5;
+        Wed, 31 Aug 2022 08:29:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 82076CE21A7;
+        Wed, 31 Aug 2022 15:29:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 429FEC433C1;
+        Wed, 31 Aug 2022 15:29:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661959748;
+        bh=/0e9C7nbz71DKqFzkdqXhV8CRACht7HcD2sJxdsJaKE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=snbQdcfE8ycbDUz+Wr0xh1fbji6KXh/SNkR+vxSjm93j3v8HYWSER83e8fteAE2GY
+         UIGB7/Ax7ndYMwrIRpb5klf3khUdRuU6uGbA8+8NNHcR183e8NH3rv5IrBhPGASkRu
+         sWVv6wnKiq82htQLGvsKgOjuE2EWTQeN8ddQIc0WsTtUuEJLuDq72Xswh54MjNRCZw
+         CIuOxUpPcVQYFyyk4Ltp9stkdhaK4iQxVMm1iZipFPH+zrGwuiolO+gGEq5MNjgQAB
+         z2iS8j6YvXKxpmjVQQZVoKZAda4FidEsQ5Olp+57qZHiZT0SNhcZbqFzzJiErebfpy
+         B3Rb49yLNeRjw==
+Date:   Wed, 31 Aug 2022 17:29:04 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Miklos Szeredi <miklos@szeredi.hu>
+Cc:     Zhang Tianci <zhangtianci.1997@bytedance.com>,
+        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amir73il@gmail.com,
+        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Subject: Re: [PATCH v2] ovl: Use current fsuid and fsgid in ovl_link()
+Message-ID: <20220831152904.efqd56kayvrxsdj6@wittgenstein>
+References: <20220825130552.29587-1-zhangtianci.1997@bytedance.com>
+ <CAJfpegsAOJmT=9FdanDVA_s5xF3iy9ccXxmin4cKW9-XxKG3xQ@mail.gmail.com>
+ <20220831134327.dria7um4bhpk62mn@wittgenstein>
+ <CAJfpegvLHV34FFU+59eH0WqPKAXy8340yNA6rxWXSmKeBbSnOA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
- <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
-In-Reply-To: <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 31 Aug 2022 08:28:40 -0700
-Message-ID: <CAJuCfpGZ==v0HGWBzZzHTgbo4B_ZBe6V6U4T_788LVWj8HhCRQ@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Mel Gorman <mgorman@suse.de>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>, dvyukov@google.com,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAJfpegvLHV34FFU+59eH0WqPKAXy8340yNA6rxWXSmKeBbSnOA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 3:47 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Wed 31-08-22 11:19:48, Mel Gorman wrote:
-> > On Wed, Aug 31, 2022 at 04:42:30AM -0400, Kent Overstreet wrote:
-> > > On Wed, Aug 31, 2022 at 09:38:27AM +0200, Peter Zijlstra wrote:
-> > > > On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
-> > > > > ===========================
-> > > > > Code tagging framework
-> > > > > ===========================
-> > > > > Code tag is a structure identifying a specific location in the source code
-> > > > > which is generated at compile time and can be embedded in an application-
-> > > > > specific structure. Several applications of code tagging are included in
-> > > > > this RFC, such as memory allocation tracking, dynamic fault injection,
-> > > > > latency tracking and improved error code reporting.
-> > > > > Basically, it takes the old trick of "define a special elf section for
-> > > > > objects of a given type so that we can iterate over them at runtime" and
-> > > > > creates a proper library for it.
+On Wed, Aug 31, 2022 at 03:53:58PM +0200, Miklos Szeredi wrote:
+> On Wed, 31 Aug 2022 at 15:43, Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Wed, Aug 31, 2022 at 03:00:18PM +0200, Miklos Szeredi wrote:
+> > > On Thu, 25 Aug 2022 at 15:08, Zhang Tianci
+> > > <zhangtianci.1997@bytedance.com> wrote:
 > > > >
-> > > > I might be super dense this morning, but what!? I've skimmed through the
-> > > > set and I don't think I get it.
+> > > > There is a wrong case of link() on overlay:
+> > > >   $ mkdir /lower /fuse /merge
+> > > >   $ mount -t fuse /fuse
+> > > >   $ mkdir /fuse/upper /fuse/work
+> > > >   $ mount -t overlay /merge -o lowerdir=/lower,upperdir=/fuse/upper,\
+> > > >     workdir=work
+> > > >   $ touch /merge/file
+> > > >   $ chown bin.bin /merge/file // the file's caller becomes "bin"
+> > > >   $ ln /merge/file /merge/lnkfile
 > > > >
-> > > > What does this provide that ftrace/kprobes don't already allow?
+> > > > Then we will get an error(EACCES) because fuse daemon checks the link()'s
+> > > > caller is "bin", it denied this request.
+> > > >
+> > > > In the changing history of ovl_link(), there are two key commits:
+> > > >
+> > > > The first is commit bb0d2b8ad296 ("ovl: fix sgid on directory") which
+> > > > overrides the cred's fsuid/fsgid using the new inode. The new inode's
+> > > > owner is initialized by inode_init_owner(), and inode->fsuid is
+> > > > assigned to the current user. So the override fsuid becomes the
+> > > > current user. We know link() is actually modifying the directory, so
+> > > > the caller must have the MAY_WRITE permission on the directory. The
+> > > > current caller may should have this permission. This is acceptable
+> > > > to use the caller's fsuid.
+> > > >
+> > > > The second is commit 51f7e52dc943 ("ovl: share inode for hard link")
+> > > > which removed the inode creation in ovl_link(). This commit move
+> > > > inode_init_owner() into ovl_create_object(), so the ovl_link() just
+> > > > give the old inode to ovl_create_or_link(). Then the override fsuid
+> > > > becomes the old inode's fsuid, neither the caller nor the overlay's
+> > > > creator! So this is incorrect.
+> > > >
+> > > > Fix this bug by using current fsuid/fsgid to do underlying fs's link().
+> > > >
+> > > > Link: https://lore.kernel.org/all/20220817102951.xnvesg3a7rbv576x@wittgenstein/T
+> > > >
+> > > > Signed-off-by: Zhang Tianci <zhangtianci.1997@bytedance.com>
+> > > > Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+> > > > Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
+> > > > ---
+> > > >  fs/overlayfs/dir.c       | 16 +++++++++++-----
+> > > >  fs/overlayfs/overlayfs.h |  2 ++
+> > > >  2 files changed, 13 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/fs/overlayfs/dir.c b/fs/overlayfs/dir.c
+> > > > index 6b03457f72bb..dd84e6fc5f6e 100644
+> > > > --- a/fs/overlayfs/dir.c
+> > > > +++ b/fs/overlayfs/dir.c
+> > > > @@ -595,8 +595,8 @@ static int ovl_create_or_link(struct dentry *dentry, struct inode *inode,
+> > > >         err = -ENOMEM;
+> > > >         override_cred = prepare_creds();
+> > > >         if (override_cred) {
+> > > > -               override_cred->fsuid = inode->i_uid;
+> > > > -               override_cred->fsgid = inode->i_gid;
+> > > > +               override_cred->fsuid = attr->fsuid;
+> > > > +               override_cred->fsgid = attr->fsgid;
+> > > >                 if (!attr->hardlink) {
+> > > >                         err = security_dentry_create_files_as(dentry,
+> > > >                                         attr->mode, &dentry->d_name, old_cred,
+> > > > @@ -646,6 +646,8 @@ static int ovl_create_object(struct dentry *dentry, int mode, dev_t rdev,
+> > > >         inode_init_owner(&init_user_ns, inode, dentry->d_parent->d_inode, mode);
+> > > >         attr.mode = inode->i_mode;
+> > > >
+> > > > +       attr.fsuid = inode->i_uid;
+> > > > +       attr.fsgid = inode->i_gid;
+> > > >         err = ovl_create_or_link(dentry, inode, &attr, false);
+> > > >         /* Did we end up using the preallocated inode? */
+> > > >         if (inode != d_inode(dentry))
+> > > > @@ -702,6 +704,7 @@ static int ovl_link(struct dentry *old, struct inode *newdir,
+> > > >  {
+> > > >         int err;
+> > > >         struct inode *inode;
+> > > > +       struct ovl_cattr attr;
+> > > >
+> > > >         err = ovl_want_write(old);
+> > > >         if (err)
+> > > > @@ -728,9 +731,12 @@ static int ovl_link(struct dentry *old, struct inode *newdir,
+> > > >         inode = d_inode(old);
+> > > >         ihold(inode);
+> > > >
+> > > > -       err = ovl_create_or_link(new, inode,
+> > > > -                       &(struct ovl_cattr) {.hardlink = ovl_dentry_upper(old)},
+> > > > -                       ovl_type_origin(old));
+> > > > +       attr = (struct ovl_cattr) {
+> > > > +               .hardlink = ovl_dentry_upper(old),
+> > > > +               .fsuid = current_fsuid(),
+> > > > +               .fsgid = current_fsgid(),
+> > > > +       };
 > > >
-> > > You're kidding, right?
+> > > Why do we need to override fsuid/fsgid for the hardlink case?
+> > >
+> > > Wouldn't it be simpler to just use the mounter's creds unmodified in
+> > > this case?   The inode is not created in this case, so overriding with
+> > > current uid/gid is not necessary, I think.
+> > >
+> > > Another way to look at it is: rename(A, B) is equivalent to an
+> > > imaginary atomic [link(A, B) + unlink(A)] pair.  But we don't override
+> > > uid/gid for rename() or unlink() so why should we for link().
 > >
-> > It's a valid question. From the description, it main addition that would
-> > be hard to do with ftrace or probes is catching where an error code is
-> > returned. A secondary addition would be catching all historical state and
-> > not just state since the tracing started.
+> > So my assumption has been that we want to override for any creation
+> > request and so for the sake of consistency I would've expected to also
+> > use that for ->link().
+> 
+> But link() is *not* a creation op.  It's a namespace manipulation op.
+
+Yeah, I know what you mean but it's borderline in so far as the
+underlying fs might still perform permission checking based on the
+caller's fs{g,u}id which together with what I'm saying below in a bit
+was what made me go oh well, we should use the caller's fs{g,u}id then
+for consistency.
+
+> 
+> > Plus, this is also what has been done before the
+> > commit  51f7e52dc943 ("ovl: share inode for hard link") iiuc.
+> 
+> It wouldn't have mattered back then either, since the upper inode was
+> linked and not copied.
+
+What I meant was back then even for link the fs{g,u}id was based on a
+newly allocated inode->i_{g,u}id that was initialized through
+inode_init_owner() with the caller's fs{g,u}id:
+
+	inode = ovl_new_inode(dentry->d_sb, mode);
+	if (!inode)
+		goto out;
+
+	err = ovl_copy_up(dentry->d_parent);
+	if (err)
+		goto out_iput;
+
+	inode_init_owner(inode, dentry->d_parent->d_inode, mode);
+	stat.mode = inode->i_mode;
+
+	old_cred = ovl_override_creds(dentry->d_sb);
+	err = -ENOMEM;
+	override_cred = prepare_creds();
+	if (override_cred) {
+		override_cred->fsuid = inode->i_uid;
+		override_cred->fsgid = inode->i_gid;
+
+and it changed after that commit to be based on old inode. So emulating
+the old behavior seemed the better approach.
+
+> 
+> > Fwiw, I would've opted for consistency and even use the caller's
+> > fs{g,u}id during ->rename() and ->unlink().
 > >
-> > It's also unclear *who* would enable this. It looks like it would mostly
-> > have value during the development stage of an embedded platform to track
-> > kernel memory usage on a per-application basis in an environment where it
-> > may be difficult to setup tracing and tracking. Would it ever be enabled
-> > in production? Would a distribution ever enable this? If it's enabled, any
-> > overhead cannot be disabled/enabled at run or boot time so anyone enabling
-> > this would carry the cost without never necessarily consuming the data.
+> > Right now the caller's fs{g,u}id - indirectly through inode_init_owner()
+> > - is used to ensure that the ownership of newly created files in the
+> > upper layer are based on the caller's not on the mounter's fs{g,u}id
+> > afaict. If we continue to only override for those cases it would really
+> > help that we document this in a good comment in ovl_create_or_link().
+> 
+> Yep.
 
-Thank you for the question.
-For memory tracking my intent is to have a mechanism that can be enabled in
-the field testing (pre-production testing on a large population of
-internal users).
-The issue that we are often facing is when some memory leaks are happening
-in the field but very hard to reproduce locally. We get a bugreport
-from the user
-which indicates it but often has not enough information to track it. Note that
-quite often these leaks/issues happen in the drivers, so even simply finding out
-where they came from is a big help.
-The way I envision this mechanism to be used is to enable the basic memory
-tracking in the field tests and have a user space process collecting
-the allocation
-statistics periodically (say once an hour). Once it detects some counter growing
-infinitely or atypically (the definition of this is left to the user
-space) it can enable
-context capturing only for that specific location, still keeping the
-overhead to the
-minimum but getting more information about potential issues. Collected stats and
-contexts are then attached to the bugreport and we get more visibility
-into the issue
-when we receive it.
-The goal is to provide a mechanism with low enough overhead that it
-can be enabled
-all the time during these field tests without affecting the device's
-performance profiles.
-Tracing is very cheap when it's disabled but having it enabled all the
-time would
-introduce higher overhead than the counter manipulations.
-My apologies, I should have clarified all this in this cover letter
-from the beginning.
-
-As for other applications, maybe I'm not such an advanced user of
-tracing but I think only
-the latency tracking application might be done with tracing, assuming
-we have all the
-right tracepoints but I don't see how we would use tracing for fault
-injections and
-descriptive error codes. Again, I might be mistaken.
-
-Thanks,
-Suren.
-
-> >
-> > It might be an ease-of-use thing. Gathering the information from traces
-> > is tricky and would need combining multiple different elements and that
-> > is development effort but not impossible.
-> >
-> > Whatever asking for an explanation as to why equivalent functionality
-> > cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
->
-> Fully agreed and this is especially true for a change this size
-> 77 files changed, 3406 insertions(+), 703 deletions(-)
->
-> --
-> Michal Hocko
-> SUSE Labs
+Sounds good.

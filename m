@@ -2,101 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA915A7943
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:44:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00615A794A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbiHaInz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55900 "EHLO
+        id S230335AbiHaIpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231533AbiHaInw (ORCPT
+        with ESMTP id S229587AbiHaIph (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:43:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51F6B654D;
-        Wed, 31 Aug 2022 01:43:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7187C619FE;
-        Wed, 31 Aug 2022 08:43:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6B32C433D6;
-        Wed, 31 Aug 2022 08:43:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661935430;
-        bh=dm+pvJSM/8LOzQK4c/qlkqG81fhAs6PnuK9pqgoP4XU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ldbpOVcqHGil33wvOXJaontPgzI7+5Q3/7q+PyDzfjzndsSgw+y0Z2O1/AsVM5Ci9
-         UUQ7pZScIFhSn9hjOzb2F94fBZYBGkWeUNtghnPTE2ksvnIUD+j013IFUPmajOp9Ei
-         4bXCzVdd63xahb1Bn1wk+tn5+SIFHXlXe+JG/QhUP/hVL1gVOtbSnpKZRDoQrr+70B
-         IoCE9ljyB52RJTjno+gWYY+n8lw/GmqG0h+EzWI1rJgbVIQ2Le0Rq9/hcrpgqXTZIJ
-         FS2wG4bvsdiQSiI6gdMQRWSkjAupz0qA2rLdv6AYd6nkVmQuUZSpLWIcOkavtQlo6K
-         hO0dXdJcbn7CQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oTJK7-0000nY-6Q; Wed, 31 Aug 2022 10:43:47 +0200
-Date:   Wed, 31 Aug 2022 10:43:47 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Jonathan Woithe <jwoithe@just42.net>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] USB: serial: ch341: fix lost character on LCR updates
-Message-ID: <Yw8fQz2amdKKYNvS@hovoldconsulting.com>
-References: <20220831081525.30557-1-johan@kernel.org>
- <20220831081525.30557-2-johan@kernel.org>
- <863b4190-9b38-ed5a-0a18-74505702da21@kernel.org>
+        Wed, 31 Aug 2022 04:45:37 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56690A2A90
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:45:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661935536; x=1693471536;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=52mxpUUNQaLZvBzTGaxL1x5UXKfcnz4QIE6O7Q2Oy1E=;
+  b=hXkawCArJEgT7X3zvTWHSxwHHKJtHqLYcpT3JKjnAw2flPBiRPGk3/Yl
+   e5quEQI/MOkx7pmpo6KtOpP/6OGVhU41amMs/yLx4cxrLrAs/WuN7qBIj
+   XaMRVK2gbX+VO78QKyxoCMnLpme1ej8KXtuUDMoL2d83OwCZh8J6TnfpI
+   bnWA3WLAaDyUtEzSA8lkcQ3zLdtYThVA4Bg7Z0BRyWe3Sk7iCuBCjqs5n
+   JB85+zVteILIGRStbQG/oj4aQS9+LVeQgDj/7A6darheiU/vVzY8eiAoM
+   GdhVxp2c2vtWNkSx60DJEYOaKjc0gqwLbXLMSKKCnX3WI/kuBAOfUwA/o
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="275152698"
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="275152698"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 01:45:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="754358827"
+Received: from kuha.fi.intel.com ([10.237.72.185])
+  by fmsmga001.fm.intel.com with SMTP; 31 Aug 2022 01:45:33 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Aug 2022 11:45:32 +0300
+Date:   Wed, 31 Aug 2022 11:45:32 +0300
+From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To:     Prashant Malani <pmalani@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev,
+        bleung@chromium.org, Guenter Roeck <groeck@chromium.org>
+Subject: Re: [PATCH] platform/chrome: cros_ec_typec: Register partner PDOs
+Message-ID: <Yw8frAv2pMfjmE0U@kuha.fi.intel.com>
+References: <20220830202018.1884851-1-pmalani@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <863b4190-9b38-ed5a-0a18-74505702da21@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220830202018.1884851-1-pmalani@chromium.org>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 10:36:18AM +0200, Jiri Slaby wrote:
-> On 31. 08. 22, 10:15, Johan Hovold wrote:
-> > Disable LCR updates for pre-0x30 devices which use a different (unknown)
-> > protocol for line control and where the current register write causes
-> > the next received character to be lost.
-> > 
-> > Note that updating LCR using the INIT command has no effect on these
-> > devices either.
-> > 
-> > Reported-by: Jonathan Woithe <jwoithe@just42.net>
-> > Link: https://lore.kernel.org/r/Ys1iPTfiZRWj2gXs@marvin.atrad.com.au
-> > Fixes: 4e46c410e050 ("USB: serial: ch341: reinitialize chip on reconfiguration")
-> > Fixes: 55fa15b5987d ("USB: serial: ch341: fix baud rate and line-control handling")
-> > Cc: stable@vger.kernel.org      # 4.10
-> > Signed-off-by: Johan Hovold <johan@kernel.org>
-> > ---
-> >   drivers/usb/serial/ch341.c | 10 +++++++++-
-> >   1 file changed, 9 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-> > index 2798fca71261..2bcce172355b 100644
-> > --- a/drivers/usb/serial/ch341.c
-> > +++ b/drivers/usb/serial/ch341.c
-> > @@ -97,7 +97,10 @@ struct ch341_private {
-> >   	u8 mcr;
-> >   	u8 msr;
-> >   	u8 lcr;
-> > +
-> >   	unsigned long quirks;
-> > +	u8 version;
+On Tue, Aug 30, 2022 at 08:20:18PM +0000, Prashant Malani wrote:
+> The ChromeOS EC exports partner source/sink cap PDOs (Power Data
+> Objects) to the application processor (AP). Use this information
+> to register USB PD (Power Delivery) capabilities with the
+> USB Type-C Power Delivery device class.
 > 
-> Could you move version above quirks? That would not create another 
-> 7-byte padding in here. Actually it would not make ch341_private larger 
-> on 64bit at all, if I am looking correctly.
+> Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Signed-off-by: Prashant Malani <pmalani@chromium.org>
 
-No, I added it after quirks on purpose as it isn't protected by the
-spinlock and doesn't change during runtime like the shadow registers.
+This looks good to me. One nitpick below. With that fixed, FWIW:
 
-And I really don't care about saving 8 bytes on 64-bit. :)
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Johan
+Will you later register also the port PDOs?
+
+> ---
+>  drivers/platform/chrome/cros_ec_typec.c | 56 +++++++++++++++++++++++++
+>  1 file changed, 56 insertions(+)
+> 
+> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
+> index 00208ffbe2e7..f84bf9659a0f 100644
+> --- a/drivers/platform/chrome/cros_ec_typec.c
+> +++ b/drivers/platform/chrome/cros_ec_typec.c
+> @@ -73,6 +73,11 @@ struct cros_typec_port {
+>  	struct ec_response_typec_discovery *disc_data;
+>  	struct list_head partner_mode_list;
+>  	struct list_head plug_mode_list;
+> +
+> +	/* PDO-related structs */
+> +	struct usb_power_delivery *partner_pd;
+> +	struct usb_power_delivery_capabilities *partner_src_caps;
+> +	struct usb_power_delivery_capabilities *partner_sink_caps;
+>  };
+>  
+>  /* Platform-specific data for the Chrome OS EC Type C controller. */
+> @@ -253,6 +258,14 @@ static void cros_typec_remove_partner(struct cros_typec_data *typec,
+>  
+>  	cros_typec_unregister_altmodes(typec, port_num, true);
+>  
+> +	typec_partner_set_usb_power_delivery(port->partner, NULL);
+> +	usb_power_delivery_unregister_capabilities(port->partner_sink_caps);
+> +	port->partner_sink_caps = NULL;
+> +	usb_power_delivery_unregister_capabilities(port->partner_src_caps);
+> +	port->partner_src_caps = NULL;
+> +	usb_power_delivery_unregister(port->partner_pd);
+> +	port->partner_pd = NULL;
+> +
+>  	cros_typec_usb_disconnect_state(port);
+>  	port->mux_flags = USB_PD_MUX_NONE;
+>  
+> @@ -939,6 +952,46 @@ static int cros_typec_send_clear_event(struct cros_typec_data *typec, int port_n
+>  			   sizeof(req), NULL, 0);
+>  }
+>  
+> +static void cros_typec_register_partner_pdos(struct cros_typec_data *typec,
+> +					     struct ec_response_typec_status *resp, int port_num)
+> +{
+> +	struct usb_power_delivery_capabilities_desc caps_desc = {};
+> +	struct usb_power_delivery_desc desc = {
+> +		.revision = (le16_to_cpu(resp->sop_revision) & 0xff00) >> 4,
+> +	};
+> +	struct cros_typec_port *port = typec->ports[port_num];
+> +
+> +	if (!port->partner || port->partner_pd)
+> +		return;
+> +
+> +	/* If no caps are available, don't bother creating a device. */
+> +	if (!resp->source_cap_count && !resp->sink_cap_count)
+> +		return;
+> +
+> +	port->partner_pd = usb_power_delivery_register(NULL, &desc);
+> +	if (IS_ERR(port->partner_pd)) {
+> +		dev_warn(typec->dev, "Failed to register partner PD device, port: %d\n", port_num);
+> +		return;
+> +	}
+> +
+> +	typec_partner_set_usb_power_delivery(port->partner, port->partner_pd);
+> +
+> +	memcpy(caps_desc.pdo, resp->source_cap_pdos, sizeof(u32) * resp->source_cap_count);
+> +	caps_desc.role = TYPEC_SOURCE;
+> +	port->partner_src_caps = usb_power_delivery_register_capabilities(port->partner_pd,
+> +									  &caps_desc);
+> +	if (IS_ERR(port->partner_src_caps))
+> +		dev_warn(typec->dev, "Failed to register source caps, port: %d\n", port_num);
+> +
+> +	memset(&caps_desc, 0, sizeof(caps_desc));
+> +	memcpy(caps_desc.pdo, resp->sink_cap_pdos, sizeof(u32) * resp->sink_cap_count);
+> +	caps_desc.role = TYPEC_SINK;
+> +	port->partner_sink_caps = usb_power_delivery_register_capabilities(port->partner_pd,
+> +									   &caps_desc);
+> +	if (IS_ERR(port->partner_sink_caps))
+> +		dev_warn(typec->dev, "Failed to register sink caps, port: %d\n", port_num);
+> +}
+> +
+>  static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num)
+>  {
+>  	struct ec_response_typec_status resp;
+> @@ -986,6 +1039,8 @@ static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num
+>  		}
+>  		if (resp.sop_connected)
+>  			typec_set_pwr_opmode(typec->ports[port_num]->port, TYPEC_PWR_MODE_PD);
+> +
+> +		cros_typec_register_partner_pdos(typec, &resp, port_num);
+>  	}
+>  
+>  	if (resp.events & PD_STATUS_EVENT_SOP_PRIME_DISC_DONE &&
+> @@ -1006,6 +1061,7 @@ static void cros_typec_handle_status(struct cros_typec_data *typec, int port_num
+>  					 "Failed SOP Disc event clear, port: %d\n", port_num);
+>  		}
+>  	}
+> +
+>  }
+
+I'm guessing that extra newline was just a typo.
+
+thanks,
+
+-- 
+heikki

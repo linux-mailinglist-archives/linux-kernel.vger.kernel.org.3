@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F42D5A8504
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0455A850A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:09:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232367AbiHaSIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:08:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S232335AbiHaSIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbiHaSIL (ORCPT
+        with ESMTP id S232286AbiHaSIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:08:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1616E3426;
-        Wed, 31 Aug 2022 11:08:08 -0700 (PDT)
+        Wed, 31 Aug 2022 14:08:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75D3FE3981;
+        Wed, 31 Aug 2022 11:08:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EA4D61BFB;
-        Wed, 31 Aug 2022 18:08:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A4FC43147;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49E7AB82272;
+        Wed, 31 Aug 2022 18:08:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 960CCC43143;
         Wed, 31 Aug 2022 18:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661969287;
-        bh=/uL5W9eLHl+SeaTGYxjhOKKa+37RcoDRIc6rSK6aGYY=;
+        bh=o9XgzRlPiWVyRgUYLtR8EAg++iHahsXyN3N9pj5GojQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Ya7lrUH6BuPPFoMDt5cTFT8U63Rj19ssY0sIun5dQA7NevNz8LavQbqDHbSFtqfk3
-         RWbx1nPgIdMjxpfJuT5T1x6xNQFl9NtkJtKfdYgR1WZz6zbeYDBIq+9ZFzM77f/J6b
-         vZ7iWq0FuBAh2NcunU4Hv2KLHTQdwli0b2VVdeMl0+zgUygvNZ0dgDe/m6KVTDJgNV
-         IXq+p21r1Ww/B6U3q47VemMbwYWCwYNALdUgUP5b/zNeu3dpugBJrKqTRD85AncDmt
-         fziOsWN4xSNi0kwUTiIk9tNZbNzlUzRBoBXhTnqHtDEusZHSOHt6RwuaB8CWP/ksf4
-         xiKWAZqiHP5aQ==
+        b=WSVrT/MWKdKtPeROyci6f6kHR0kAWFcDmm5cP62dDJshO+HkeLZA6HaQzBLIMXFnu
+         aIYHb3pEzEsfpVCNRBDj66qJJJbuXS4o2ZXtrIK7t2sI9SCjQ8AvMYPzBIsTJtGUc5
+         ufEDfC2fGiRQFRiB7Ux7U4y1mprWuWVy3nX+95r8kDJ8OGwWaW6V1x1WOglPzR2DEb
+         6j+qx/YzPUiHHmPr46a9TNcegMGCP3EChFzOy8s5kgLu46OKVdwdv2V7n75BG+NKDP
+         9Iqkh1v4REhatHOawxTqDp84fSlal0j+r5pTIElFklBQw4WGmoPCagt1VSHSrcH3Pm
+         3pWG9g9xnGshA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 022C75C0950; Wed, 31 Aug 2022 11:08:07 -0700 (PDT)
+        id 045DF5C0981; Wed, 31 Aug 2022 11:08:07 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
@@ -47,9 +47,9 @@ Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
         Daniel Bristot de Oliveira <bristot@redhat.com>,
         Valentin Schneider <vschneid@redhat.com>
-Subject: [PATCH rcu 07/10] sched/debug: Try trigger_single_cpu_backtrace(cpu) in dump_cpu_task()
-Date:   Wed, 31 Aug 2022 11:08:02 -0700
-Message-Id: <20220831180805.2693546-7-paulmck@kernel.org>
+Subject: [PATCH rcu 08/10] sched/debug: Show the registers of 'current' in dump_cpu_task()
+Date:   Wed, 31 Aug 2022 11:08:03 -0700
+Message-Id: <20220831180805.2693546-8-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220831180759.GA2693289@paulmck-ThinkPad-P17-Gen-1>
 References: <20220831180759.GA2693289@paulmck-ThinkPad-P17-Gen-1>
@@ -67,15 +67,78 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zhen Lei <thunder.leizhen@huawei.com>
 
-The trigger_all_cpu_backtrace() function attempts to send an NMI to the
-target CPU, which usually provides much better stack traces than the
-dump_cpu_task() function's approach of dumping that stack from some other
-CPU.  So much so that most calls to dump_cpu_task() only happen after
-a call to trigger_all_cpu_backtrace() has failed.  And the exception to
-this rule really should attempt to use trigger_all_cpu_backtrace() first.
+The dump_cpu_task() function does not print registers on architectures
+that do not support NMIs.  However, registers can be useful for
+debugging.  Fortunately, in the case where dump_cpu_task() is invoked
+from an interrupt handler and is dumping the current CPU's stack, the
+get_irq_regs() function can be used to get the registers.
 
-Therefore, move the trigger_all_cpu_backtrace() invocation into
-dump_cpu_task().
+Therefore, this commit makes dump_cpu_task() check to see if it is being
+asked to dump the current CPU's stack from within an interrupt handler,
+and, if so, it uses the get_irq_regs() function to obtain the registers.
+On systems that do support NMIs, this commit has the further advantage
+of avoiding a self-NMI in this case.
+
+This is an example of rcu self-detected stall on arm64, which does not
+support NMIs:
+[   27.501721] rcu: INFO: rcu_preempt self-detected stall on CPU
+[   27.502238] rcu:     0-....: (1250 ticks this GP) idle=4f7/1/0x4000000000000000 softirq=2594/2594 fqs=619
+[   27.502632]  (t=1251 jiffies g=2989 q=29 ncpus=4)
+[   27.503845] CPU: 0 PID: 306 Comm: test0 Not tainted 5.19.0-rc7-00009-g1c1a6c29ff99-dirty #46
+[   27.504732] Hardware name: linux,dummy-virt (DT)
+[   27.504947] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[   27.504998] pc : arch_counter_read+0x18/0x24
+[   27.505301] lr : arch_counter_read+0x18/0x24
+[   27.505328] sp : ffff80000b29bdf0
+[   27.505345] x29: ffff80000b29bdf0 x28: 0000000000000000 x27: 0000000000000000
+[   27.505475] x26: 0000000000000000 x25: 0000000000000000 x24: 0000000000000000
+[   27.505553] x23: 0000000000001f40 x22: ffff800009849c48 x21: 000000065f871ae0
+[   27.505627] x20: 00000000000025ec x19: ffff80000a6eb300 x18: ffffffffffffffff
+[   27.505654] x17: 0000000000000001 x16: 0000000000000000 x15: ffff80000a6d0296
+[   27.505681] x14: ffffffffffffffff x13: ffff80000a29bc18 x12: 0000000000000426
+[   27.505709] x11: 0000000000000162 x10: ffff80000a2f3c18 x9 : ffff80000a29bc18
+[   27.505736] x8 : 00000000ffffefff x7 : ffff80000a2f3c18 x6 : 00000000759bd013
+[   27.505761] x5 : 01ffffffffffffff x4 : 0002dc6c00000000 x3 : 0000000000000017
+[   27.505787] x2 : 00000000000025ec x1 : ffff80000b29bdf0 x0 : 0000000075a30653
+[   27.505937] Call trace:
+[   27.506002]  arch_counter_read+0x18/0x24
+[   27.506171]  ktime_get+0x48/0xa0
+[   27.506207]  test_task+0x70/0xf0
+[   27.506227]  kthread+0x10c/0x110
+[   27.506243]  ret_from_fork+0x10/0x20
+
+This is a marked improvement over the old output:
+[   27.944550] rcu: INFO: rcu_preempt self-detected stall on CPU
+[   27.944980] rcu:     0-....: (1249 ticks this GP) idle=cbb/1/0x4000000000000000 softirq=2610/2610 fqs=614
+[   27.945407]  (t=1251 jiffies g=2681 q=28 ncpus=4)
+[   27.945731] Task dump for CPU 0:
+[   27.945844] task:test0           state:R  running task     stack:    0 pid:  306 ppid:     2 flags:0x0000000a
+[   27.946073] Call trace:
+[   27.946151]  dump_backtrace.part.0+0xc8/0xd4
+[   27.946378]  show_stack+0x18/0x70
+[   27.946405]  sched_show_task+0x150/0x180
+[   27.946427]  dump_cpu_task+0x44/0x54
+[   27.947193]  rcu_dump_cpu_stacks+0xec/0x130
+[   27.947212]  rcu_sched_clock_irq+0xb18/0xef0
+[   27.947231]  update_process_times+0x68/0xac
+[   27.947248]  tick_sched_handle+0x34/0x60
+[   27.947266]  tick_sched_timer+0x4c/0xa4
+[   27.947281]  __hrtimer_run_queues+0x178/0x360
+[   27.947295]  hrtimer_interrupt+0xe8/0x244
+[   27.947309]  arch_timer_handler_virt+0x38/0x4c
+[   27.947326]  handle_percpu_devid_irq+0x88/0x230
+[   27.947342]  generic_handle_domain_irq+0x2c/0x44
+[   27.947357]  gic_handle_irq+0x44/0xc4
+[   27.947376]  call_on_irq_stack+0x2c/0x54
+[   27.947415]  do_interrupt_handler+0x80/0x94
+[   27.947431]  el1_interrupt+0x34/0x70
+[   27.947447]  el1h_64_irq_handler+0x18/0x24
+[   27.947462]  el1h_64_irq+0x64/0x68                       <--- the above backtrace is worthless
+[   27.947474]  arch_counter_read+0x18/0x24
+[   27.947487]  ktime_get+0x48/0xa0
+[   27.947501]  test_task+0x70/0xf0
+[   27.947520]  kthread+0x10c/0x110
+[   27.947538]  ret_from_fork+0x10/0x20
 
 Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
@@ -89,62 +152,38 @@ Cc: Mel Gorman <mgorman@suse.de>
 Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
 Cc: Valentin Schneider <vschneid@redhat.com>
 ---
- kernel/rcu/tree_stall.h | 5 ++---
- kernel/sched/core.c     | 3 +++
- kernel/smp.c            | 3 +--
- 3 files changed, 6 insertions(+), 5 deletions(-)
+ kernel/sched/core.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/kernel/rcu/tree_stall.h b/kernel/rcu/tree_stall.h
-index c3fbbcc09327f..5653560573e22 100644
---- a/kernel/rcu/tree_stall.h
-+++ b/kernel/rcu/tree_stall.h
-@@ -368,7 +368,7 @@ static void rcu_dump_cpu_stacks(void)
- 			if (rnp->qsmask & leaf_node_cpu_bit(rnp, cpu)) {
- 				if (cpu_is_offline(cpu))
- 					pr_err("Offline CPU %d blocking current GP.\n", cpu);
--				else if (!trigger_single_cpu_backtrace(cpu))
-+				else
- 					dump_cpu_task(cpu);
- 			}
- 		raw_spin_unlock_irqrestore_rcu_node(rnp, flags);
-@@ -511,8 +511,7 @@ static void rcu_check_gp_kthread_starvation(void)
- 					pr_err("RCU GP kthread last ran on offline CPU %d.\n", cpu);
- 				} else  {
- 					pr_err("Stack dump where RCU GP kthread last ran:\n");
--					if (!trigger_single_cpu_backtrace(cpu))
--						dump_cpu_task(cpu);
-+					dump_cpu_task(cpu);
- 				}
- 			}
- 			wake_up_process(gpk);
 diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index ee28253c9ac0c..e15b6a7f34f47 100644
+index e15b6a7f34f47..60fdc0faf1c9d 100644
 --- a/kernel/sched/core.c
 +++ b/kernel/sched/core.c
-@@ -11183,6 +11183,9 @@ struct cgroup_subsys cpu_cgrp_subsys = {
+@@ -73,6 +73,7 @@
+ 
+ #include <uapi/linux/sched/types.h>
+ 
++#include <asm/irq_regs.h>
+ #include <asm/switch_to.h>
+ #include <asm/tlb.h>
+ 
+@@ -11183,6 +11184,16 @@ struct cgroup_subsys cpu_cgrp_subsys = {
  
  void dump_cpu_task(int cpu)
  {
-+	if (trigger_single_cpu_backtrace(cpu))
-+		return;
++	if (cpu == smp_processor_id() && in_hardirq()) {
++		struct pt_regs *regs;
 +
- 	pr_info("Task dump for CPU %d:\n", cpu);
- 	sched_show_task(cpu_curr(cpu));
- }
-diff --git a/kernel/smp.c b/kernel/smp.c
-index 650810a6f29b3..e8cdc025a046f 100644
---- a/kernel/smp.c
-+++ b/kernel/smp.c
-@@ -370,8 +370,7 @@ static bool csd_lock_wait_toolong(struct __call_single_data *csd, u64 ts0, u64 *
- 	if (cpu >= 0) {
- 		if (static_branch_unlikely(&csdlock_debug_extended))
- 			csd_lock_print_extended(csd, cpu);
--		if (!trigger_single_cpu_backtrace(cpu))
--			dump_cpu_task(cpu);
-+		dump_cpu_task(cpu);
- 		if (!cpu_cur_csd) {
- 			pr_alert("csd: Re-sending CSD lock (#%d) IPI from CPU#%02d to CPU#%02d\n", *bug_id, raw_smp_processor_id(), cpu);
- 			arch_send_call_function_single_ipi(cpu);
++		regs = get_irq_regs();
++		if (regs) {
++			show_regs(regs);
++			return;
++		}
++	}
++
+ 	if (trigger_single_cpu_backtrace(cpu))
+ 		return;
+ 
 -- 
 2.31.1.189.g2e36527f23
 

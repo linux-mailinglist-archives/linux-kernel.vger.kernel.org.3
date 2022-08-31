@@ -2,64 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E92F5A7D9B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:40:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CFF5A7D9E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:41:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiHaMkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38702 "EHLO
+        id S230465AbiHaMlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbiHaMk3 (ORCPT
+        with ESMTP id S231304AbiHaMkv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:40:29 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB93766133
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:40:27 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id nc14so23170399ejc.4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:40:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=MCBuc3iFnBItgcwahvmF8Fyf/yByT2EhRd1eNSiQSjI=;
-        b=ZyGZdtZvlUcVjIqEYoq7QSBtvxtLU54sf8bj9ZWaAW6WJ5+bo/iDixWUKvoWzuj3ah
-         2kQSxN6F9EdAOXMasrVeA1rvNKYrJG92yU9BQUwRUSiBQOJZwY28qDThBSdcEPh09pHm
-         eaKl5K7VT5xnjIQCn2cquwL/U91c8cfvCkWezWaL11HuJp835rN+qdEJ3IN2kwz+yKk1
-         EVz8rhUXBiBGiVq16atOcvL5MJlq1zv1NNfZ5ld2Jt8MSKzFGT55/j1m3kq2GUjY0gVA
-         2jh4hutLkDQhnU+QXtX+LDVJrFEeCxa4rJzWIgx7cJX5o6n7NC1WAFTVpN6IBhbqBasa
-         aOfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=MCBuc3iFnBItgcwahvmF8Fyf/yByT2EhRd1eNSiQSjI=;
-        b=BAaZvZGbXe3fMENwEQ1eSz6QH0nNholp+JtHLvhLg1I/AOCXb/tyRT9mAewyap9VCz
-         SMqD3oH3Ebmu6PyYwsQBAk+Br4xy0nk3QV0XYE2g94oWWUgQ1xrf9WPZKOSW2pLnKe9l
-         HTEOy7qRn+DkdVpV0GhBUOU4xRWNlMsRwBtb6jCSk8YsRYChaz24zuLYQm9X33Usv78C
-         7wH0FHH1zaT0hBPK+gMXBlT/doe1e0B4VGFIyXhLQYp0485VdgDDqNL52JvoIkm4K2vq
-         edU7wmQKI5MSDBB/ylZEogF2sVoHoz+pqUs6/XarmlTfAIJMIat+IRpRLhm74VuplEBI
-         a9yg==
-X-Gm-Message-State: ACgBeo3+4fts9++w3U86X9Uwb81qZu6vepfIfOAe9rOJ2nSyapjWHpA2
-        ZH+tJE8dy17TtjhpK0enOvuJG07RQ6op3EtTKmb04A==
-X-Google-Smtp-Source: AA6agR5VjKGidDtLFEn1Gq6NqN0WGj/6ZAB+3gykERCjjCMt8W2xZ7MD4XByi6+Z9ZCivVK/Tp40Ki+UZvj+ZFT5okg=
-X-Received: by 2002:a17:907:1c89:b0:741:4453:75be with SMTP id
- nb9-20020a1709071c8900b00741445375bemr14289735ejc.208.1661949625872; Wed, 31
- Aug 2022 05:40:25 -0700 (PDT)
+        Wed, 31 Aug 2022 08:40:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C99961DA3;
+        Wed, 31 Aug 2022 05:40:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B607BB82077;
+        Wed, 31 Aug 2022 12:40:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D537BC433D7;
+        Wed, 31 Aug 2022 12:40:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661949647;
+        bh=TPSgl0I2qWuKYC5cFtJ2UDufyO2SqJMLBEL1mtc1IZ4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=K28Wx2IBN5YI4BT3HcgU5dtMPA6/Smwouty2BafiJeBXCnUipgktQ6of/M+JQH2nN
+         8lqlJnGWglNTmfvP3l6HC1B1OLyy+SKOQf6bQnkSxRTzHYIUg7Hysfw+M8Lcv0YbeB
+         EYHp/8sDD5HhJxHKl9rVI63EzEto8jzVxvCYa4lgY5lORQmyti8Y124MzSCryh/PqH
+         CbRVKG1M+jELswfW2chwNCWz9OhHyyO/g1eYrbkI91wCuH8N+N2wXZkw4gINcPBySr
+         sgOJEXYfIfnEKG9s8IMLzQ25+kGwZkaHeG68Pesf0w0e4jcXP25hu0KAVZKQvt6GCZ
+         mp98dII/CUBSA==
+From:   Jiri Olsa <jolsa@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Hongtao Yu <hoy@fb.com>, Namhyung Kim <namhyung@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>,
+        Peter Zijlstra <a.p.zijlstra@chello.nl>,
+        Ingo Molnar <mingo@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org
+Subject: [PATCH] perf script: Skip dummy event attr check
+Date:   Wed, 31 Aug 2022 14:40:41 +0200
+Message-Id: <20220831124041.219925-1-jolsa@kernel.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220825094132.1268174-1-s.hauer@pengutronix.de>
- <20220825094132.1268174-3-s.hauer@pengutronix.de> <CACRpkdYL24cJgo9F1nWYzP=8+XywdUXhSedJRQFJ16MUAx7-dQ@mail.gmail.com>
- <20220829144032.GC24324@pengutronix.de>
-In-Reply-To: <20220829144032.GC24324@pengutronix.de>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 31 Aug 2022 14:40:13 +0200
-Message-ID: <CACRpkdbA3FR_sFrj9FTH3Ui8so-j654wm=5yTMUydZttsU_HMw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: gpio: Add gpio-latch binding document
-To:     Sascha Hauer <s.hauer@pengutronix.de>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <brgl@bgdev.pl>, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,23 +58,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 4:40 PM Sascha Hauer <s.hauer@pengutronix.de> wrote:
+Hongtao Yu reported problem when displaying uregs in perf script
+for system wide perf.data:
 
-> > Hm I wanted to just call these "gpios" but that is maybe confusing.
-> > What about "latch-gpios"?
->
-> Hm, the clk input is used to latch the current state of the inputs to
-> the outputs, so "latch-gpios" might even be confused with the GPIO
-> routed to the clk unput of the latch.  Overall, the whole thing is a
-> latch, so "latch-gpios" doesn't sound like a good name to distinguish
-> the different types of inputs of a latch.  I still like data-gpios best
-> as these lines are described as "Data inputs" in my 74273 data sheet.
+  # perf script -F uregs | head -10
+  Samples for 'dummy:HG' event do not have UREGS attribute set. Cannot print 'uregs' field.
 
-How about "latched-gpios" (notice the "d")
+The problem is the extra dummy event added for system wide,
+which does not have proper sample_type setup.
 
-It makes some semantic sense.
+Skipping attr check completely for dummy event as suggested
+by Namhyung, because it does not have any samples anyway.
 
-But I will not nitpick, data is fine, just a bit unspecific.
+Reported-by: Hongtao Yu <hoy@fb.com>
+Suggested-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Jiri Olsa <jolsa@kernel.org>
+---
+ tools/perf/builtin-script.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Yours,
-Linus Walleij
+diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+index 13580a9c50b8..304d234d8e84 100644
+--- a/tools/perf/builtin-script.c
++++ b/tools/perf/builtin-script.c
+@@ -566,6 +566,8 @@ static struct evsel *find_first_output_type(struct evlist *evlist,
+ 	struct evsel *evsel;
+ 
+ 	evlist__for_each_entry(evlist, evsel) {
++		if (evsel__is_dummy_event(evsel))
++			continue;
+ 		if (output_type(evsel->core.attr.type) == (int)type)
+ 			return evsel;
+ 	}
+-- 
+2.37.2
+

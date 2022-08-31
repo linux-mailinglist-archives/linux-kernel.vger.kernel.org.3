@@ -2,57 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C022F5A7E30
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:02:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 656475A7E9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:21:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231629AbiHaNCc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 09:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51062 "EHLO
+        id S231698AbiHaNVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 09:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiHaNCa (ORCPT
+        with ESMTP id S231290AbiHaNU7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 09:02:30 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2DC6C2775
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:02:29 -0700 (PDT)
-Received: from [192.168.1.111] (91-158-154-79.elisa-laajakaista.fi [91.158.154.79])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A0E1651E;
-        Wed, 31 Aug 2022 15:02:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1661950947;
-        bh=OvMM1K/1lN614CtAJ2Sclv17YZSGjK2rbDos4DLOIOo=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=sr9UEnB1NOIZJZrvZ05ZJFZlXOtw22+ynMoKGKcbKstPM7aB/ES4IVLCD/LuhZnkR
-         +6Kzp5EFzDD3rN4q5qlTkEXrWPpLcEGb1u8hGV4qkpx5SCjnzuEo2heF4TwuDxZUuq
-         ke6OEb8QVHIfbtsThsZIKkiyCAI650AuMQ7IpHIg=
-Message-ID: <7163f30b-6496-5762-0d9d-96834fb7452d@ideasonboard.com>
-Date:   Wed, 31 Aug 2022 16:02:24 +0300
+        Wed, 31 Aug 2022 09:20:59 -0400
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F90A5FAEE;
+        Wed, 31 Aug 2022 06:20:53 -0700 (PDT)
+Received: from imsva.intranet.prolan.hu (imsva.intranet.prolan.hu [10.254.254.252])
+        by fw2.prolan.hu (Postfix) with ESMTPS id 404AF7F53D;
+        Wed, 31 Aug 2022 15:02:47 +0200 (CEST)
+Received: from imsva.intranet.prolan.hu (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2E95B34064;
+        Wed, 31 Aug 2022 15:02:47 +0200 (CEST)
+Received: from imsva.intranet.prolan.hu (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 14A9A3405A;
+        Wed, 31 Aug 2022 15:02:47 +0200 (CEST)
+Received: from fw2.prolan.hu (unknown [10.254.254.253])
+        by imsva.intranet.prolan.hu (Postfix) with ESMTPS;
+        Wed, 31 Aug 2022 15:02:47 +0200 (CEST)
+Received: from atlas.intranet.prolan.hu (atlas.intranet.prolan.hu [10.254.0.229])
+        by fw2.prolan.hu (Postfix) with ESMTPS id E04B77F53D;
+        Wed, 31 Aug 2022 15:02:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=prolan.hu; s=mail;
+        t=1661950966; bh=yHmMGWL3S8mjqUWAfdTC8rN+cSbGeS9rQTO23WI3AVM=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To:From;
+        b=FfoXSe7kUgnpcAt1Nt2fFpVvevf7l05BCeK+/MZ+QIcf3W+yzNOI2LKbuy23nOsNH
+         Ko5LTv+0tpod9l0ih89ml5ILj+hGKpP2+uMbtpsi55C8hM2ayw0UlMy2DWim5HxDnV
+         eAcojqlOrVy027r+RLR8DodtZKunUZPoWLp+M+4EoW7q5x0Z+vKjuKB3+BkPLStcUb
+         gN8K1ry2QujyrXeMlHOmsu/2urEbPugSbbtQ+JHZbc2yNBQn6Zve9fOqf4b1bMHSwC
+         lj4iSS1bDDXVCGvX+0Qm4jBqzgFrTBlycZxcw5pwiKtTMVmMnPp3uz4X+6lT8NDJ53
+         R+IxmpmeUTHSg==
+Received: from [10.254.7.28] (10.254.7.28) by atlas.intranet.prolan.hu
+ (10.254.0.229) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384_P521) id 15.1.2507.12; Wed, 31
+ Aug 2022 15:02:46 +0200
+Message-ID: <243d3362-403d-7a94-34fa-12385100cc53@prolan.hu>
+Date:   Wed, 31 Aug 2022 15:02:46 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
+Subject: Re: [PATCH AUTOSEL 5.19 24/33] fec: Restart PPS after link state
+ change
 Content-Language: en-US
-To:     Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Nikita Yushchenko <nikita.yoush@cogentembedded.com>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20211225063151.2110878-1-nikita.yoush@cogentembedded.com>
- <Yczy3UYpU2UMFQ6N@pendragon.ideasonboard.com>
- <164563304251.4066078.10022034509552549983@Monstersaurus>
- <YhZf+Fs2AP+btuJj@pendragon.ideasonboard.com>
- <164563575394.4066078.17104997030535169083@Monstersaurus>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Subject: Re: [PATCH] drm/bridge_connector: enable HPD by default if supported
-In-Reply-To: <164563575394.4066078.17104997030535169083@Monstersaurus>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+To:     Sasha Levin <sashal@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>, <netdev@vger.kernel.org>
+References: <20220830171825.580603-1-sashal@kernel.org>
+ <20220830171825.580603-24-sashal@kernel.org>
+From:   =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
+In-Reply-To: <20220830171825.580603-24-sashal@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.254.7.28]
+X-ClientProxiedBy: atlas.intranet.prolan.hu (10.254.0.229) To
+ atlas.intranet.prolan.hu (10.254.0.229)
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29971EF456637D67
+X-TM-AS-GCONF: 00
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,55 +77,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 23/02/2022 19:02, Kieran Bingham wrote:
-> Quoting Laurent Pinchart (2022-02-23 16:25:28)
->> Hello,
->>
->> On Wed, Feb 23, 2022 at 04:17:22PM +0000, Kieran Bingham wrote:
->>> Quoting Laurent Pinchart (2021-12-29 23:44:29)
->>>> On Sat, Dec 25, 2021 at 09:31:51AM +0300, Nikita Yushchenko wrote:
->>>>> Hotplug events reported by bridge drivers over drm_bridge_hpd_notify()
->>>>> get ignored unless somebody calls drm_bridge_hpd_enable(). When the
->>>>> connector for the bridge is bridge_connector, such a call is done from
->>>>> drm_bridge_connector_enable_hpd().
->>>>>
->>>>> However drm_bridge_connector_enable_hpd() is never called on init paths,
->>>>> documentation suggests that it is intended for suspend/resume paths.
->>>>
->>>> Hmmmm... I'm in two minds about this. The problem description is
->>>> correct, but I wonder if HPD should be enabled unconditionally here, or
->>>> if this should be left to display drivers to control.
->>>> drivers/gpu/drm/imx/dcss/dcss-kms.c enables HPD manually at init time,
->>>> other drivers don't.
->>>>
->>>> It feels like this should be under control of the display controller
->>>> driver, but I can't think of a use case for not enabling HPD at init
->>>> time. Any second opinion from anyone ?
->>>
->>> This patch solves an issue I have where I have recently enabled HPD on
->>> the SN65DSI86, but without this, I do not get calls to my .hpd_enable or
->>> .hpd_disable hooks that I have added to the ti_sn_bridge_funcs.
->>>
->>> So it needs to be enabled somewhere, and this seems reasonable to me?
->>> It's not directly related to the display controller - as it's a factor
->>> of the bridge?
->>>
->>> On Falcon-V3U with HPD additions to SN65DSI86:
->>> Tested-by: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
->>
->> If you think this is right, then
->>
->> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+On 2022. 08. 30. 19:18, Sasha Levin wrote:
+> From: Csókás Bence <csokas.bence@prolan.hu>
 > 
-> I do, and at the very least it works for me, and fixes Nikita's issue so
-> to me that's enough for:
+> [ Upstream commit f79959220fa5fbda939592bf91c7a9ea90419040 ]
+> 
+> On link state change, the controller gets reset,
+> causing PPS to drop out and the PHC to lose its
+> time and calibration. So we restart it if needed,
+> restoring calibration and time registers.
 
-So who disables the HPD now?
-
-Is the drm_bridge_connector_enable_hpd & 
-drm_bridge_connector_disable_hpd documentation now wrong as they talk 
-about suspend/resume handlers?
-
-  Tomi
+There is an ongoing investigation on netdev@ about a potential kernel 
+panic on kernels newer than 5.12 with this patch applied. Please hold 
+off on backporting to 5.19 until the bugfix is applied to upstream.

@@ -2,77 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51A475A769F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:31:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0ADDB5A76A1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiHaGa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:30:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
+        id S229555AbiHaGbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230318AbiHaGav (ORCPT
+        with ESMTP id S230300AbiHaGbM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:30:51 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9AA9F0FB
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:30:33 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id z29so9975621lfb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=WiaXfyuv+kgJFsOiubHH/NEcYq977WbeyAkqhNkB3Zg=;
-        b=AncO6HHbkCn20ckslrlufvxRnBrOE/deoPgwzhdWiequpJlmrGjtK2ZHzMIcuRqaCT
-         kyVggepsOBYl++4JHkkAovkE3fEngTbS8dVoyIDm+JGHINKhmDnFwTzw7kwBlE5qHJj2
-         WigKh9BdGXNouCn8ifoF+eL/R9xdvZeKDgPj9VdbuAG9LSlmy5S8VGt7vIJ4Lsw/tSrW
-         iTWUxbx90yPbObb7m009SLjnVnfdHd3uVm7zEZmckdgOTMA+1CHDDnbnqdkQ+JQ0mK0c
-         LeOu3NwwE/ecszU3taGSUYtGi4jCi/4tvsmWJN4fUJKzqSPMVCrzlDZ36/kc9dWFy39W
-         E3MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=WiaXfyuv+kgJFsOiubHH/NEcYq977WbeyAkqhNkB3Zg=;
-        b=T39NRXzFeK9TUH9byhmMEPdXOYfFRpc/1GoUn81Ad1xtgGUpZSgJ3AESnwP96U9+AJ
-         AnfG9hLEea/lj/OIjECwpzml+z7hgx3+7LUZNQb+6aWTvdupQ3YRV3imcxsNNs9IpvJc
-         RrJFm0n97V7TZVf/rK4TrzJIsFM1L4suS6gZr7wGSKy/NNBRm9ONjRf4cVbNu/Gf48Dx
-         q0bpyF7iLrseUDf2/AYiqWsUN1bTcEJq44DtLIEkvKUaqvJd+xBHbTrESJ/wPkVxjLOM
-         qX19TzaM8Qds8GEIIpB5kD4YZ9Z5ITH3awaMgMgieDfZ2oJxEEH3Zxwk8dGZ7I65oJjK
-         +nTw==
-X-Gm-Message-State: ACgBeo1svHqxfE5p7/k8LcjwFuNmUTge3KKbUNB/kubmn6pQZRM27ucg
-        qOr17TjG892xs1rSxBcXXv5C8w==
-X-Google-Smtp-Source: AA6agR7Mfb50bktOxvDNqRirNcXkEGV/f9atPFgSSc9cjp1S+7dims1dW+OAwbO4KyMLocNw1BhPXQ==
-X-Received: by 2002:a05:6512:22c2:b0:494:80e0:3315 with SMTP id g2-20020a05651222c200b0049480e03315mr1519978lfu.369.1661927431008;
-        Tue, 30 Aug 2022 23:30:31 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id m4-20020a056512114400b0048a9e899693sm1885198lfg.16.2022.08.30.23.30.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 23:30:30 -0700 (PDT)
-Message-ID: <b601f692-8283-ca10-b62f-d040f03940b4@linaro.org>
-Date:   Wed, 31 Aug 2022 09:30:29 +0300
+        Wed, 31 Aug 2022 02:31:12 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F76A5997;
+        Tue, 30 Aug 2022 23:30:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661927460; x=1693463460;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ql+yeo80Y05zchO0DvqFKkJmhw83Gp5KMkZLvvbWsnA=;
+  b=bherEi9u29PWJJD6sqzA5crZtWtbgGBJahJIRFPSuUuld1DQSR6xRUKB
+   pTdNllotQbG1TTiSjPW+VTEdsZFJ8YrAqNpwXi0OklboVFRXFc3C6TE6E
+   6wX+o6Ay5Gflki6kuthyJxLPXy0KNicU6h5yeUBJ8UXLyl89yMGBUp5zs
+   0TRRAnIAnTnuiCODYur86pQswlMmHfZNgQPAcCIkB2RBe99g7k5Nh7cUI
+   QjS7FyNV/lfF12TIsENVq0RaVSka274d9JK8PYcxAhs4ZSO+Wk5G7jB/s
+   42c9D7kmdYY7QnQZGpdPOOs9/MSwBX9lsi3TV2RFhJoAZyFsBJHr3QFWt
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="296662712"
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="296662712"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 23:30:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="754324011"
+Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 30 Aug 2022 23:30:55 -0700
+Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oTHFW-00001C-33;
+        Wed, 31 Aug 2022 06:30:54 +0000
+Date:   Wed, 31 Aug 2022 14:30:45 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Guru Das Srinagesh <quic_gurus@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, David Heidelberg <david@ixit.cz>,
+        Robert Marko <robimarko@gmail.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Guru Das Srinagesh <quic_gurus@quicinc.com>
+Subject: Re: [RESEND PATCH v2 4/5] firmware: qcom: scm: Add wait-queue helper
+ functions
+Message-ID: <202208311447.pd8ZLIWT-lkp@intel.com>
+References: <1661898311-30126-5-git-send-email-quic_gurus@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/4] dt-bindings: memory: Factor out common properties of
- LPDDR bindings
-Content-Language: en-US
-To:     Julius Werner <jwerner@chromium.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Jian-Jia Su <jjsu@google.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220831013359.1807905-1-jwerner@chromium.org>
- <20220831013359.1807905-2-jwerner@chromium.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220831013359.1807905-2-jwerner@chromium.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1661898311-30126-5-git-send-email-quic_gurus@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,23 +72,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/08/2022 04:33, Julius Werner wrote:
-> The bindings for different LPDDR versions mostly use the same kinds of
-> properties, so in order to reduce duplication when we're adding support
-> for more versions, this patch creates a new lpddr-props subschema that
-> can be referenced by the others to define these common parts. (This will
-> consider a few smaller I/O width and density numbers "legal" for LPDDR3
-> that are usually not used there, but this should be harmless.)
-> 
-> This also un-deprecates the manufacturer ID property for LPDDR3 (and
-> introduces it to LPDDR2), since it was found that having this
-> information available in a separate property can be useful in some
-> cases.
+Hi Guru,
 
-Why do you need to un-deprecate them if you have this information in
-compatible? This was not exactly the previous consensus. My statement
-was ok for un-deprecating if you cannot derive them from compatible. Now
-you can. This should be the same as USB device schema.
+Thank you for the patch! Perhaps something to improve:
 
-Best regards,
-Krzysztof
+[auto build test WARNING on next-20220830]
+[cannot apply to robh/for-next linus/master v6.0-rc3 v6.0-rc2 v6.0-rc1 v6.0-rc3]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Guru-Das-Srinagesh/SCM-Add-support-for-wait-queue-aware-firmware/20220831-063013
+base:    282342f2dc97ccf54254c5de51bcc1101229615f
+config: sparc-allyesconfig (https://download.01.org/0day-ci/archive/20220831/202208311447.pd8ZLIWT-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/ad41ee028d07c3e3e41b15e6bd8e2985f30df508
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Guru-Das-Srinagesh/SCM-Add-support-for-wait-queue-aware-firmware/20220831-063013
+        git checkout ad41ee028d07c3e3e41b15e6bd8e2985f30df508
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sparc SHELL=/bin/bash drivers/firmware/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/string.h:20,
+                    from include/linux/bitmap.h:11,
+                    from include/linux/cpumask.h:12,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/rcupdate.h:29,
+                    from include/linux/rculist.h:11,
+                    from include/linux/pid.h:5,
+                    from include/linux/sched.h:14,
+                    from include/linux/delay.h:23,
+                    from drivers/firmware/qcom_scm-smc.c:8:
+   drivers/firmware/qcom_scm-smc.c: In function 'fill_wq_resume_args':
+>> arch/sparc/include/asm/string.h:18:29: warning: 'memset' used with length equal to number of elements without multiplication by element size [-Wmemset-elt-size]
+      18 | #define memset(s, c, count) __builtin_memset(s, c, count)
+         |                             ^~~~~~~~~~~~~~~~
+   drivers/firmware/qcom_scm-smc.c:58:9: note: in expansion of macro 'memset'
+      58 |         memset(resume->args, 0, ARRAY_SIZE(resume->args));
+         |         ^~~~~~
+   drivers/firmware/qcom_scm-smc.c: In function 'fill_wq_wake_ack_args':
+>> arch/sparc/include/asm/string.h:18:29: warning: 'memset' used with length equal to number of elements without multiplication by element size [-Wmemset-elt-size]
+      18 | #define memset(s, c, count) __builtin_memset(s, c, count)
+         |                             ^~~~~~~~~~~~~~~~
+   drivers/firmware/qcom_scm-smc.c:71:9: note: in expansion of macro 'memset'
+      71 |         memset(wake_ack->args, 0, ARRAY_SIZE(wake_ack->args));
+         |         ^~~~~~
+   drivers/firmware/qcom_scm-smc.c: In function 'fill_get_wq_ctx_args':
+>> arch/sparc/include/asm/string.h:18:29: warning: 'memset' used with length equal to number of elements without multiplication by element size [-Wmemset-elt-size]
+      18 | #define memset(s, c, count) __builtin_memset(s, c, count)
+         |                             ^~~~~~~~~~~~~~~~
+   drivers/firmware/qcom_scm-smc.c:84:9: note: in expansion of macro 'memset'
+      84 |         memset(get_wq_ctx->args, 0, ARRAY_SIZE(get_wq_ctx->args));
+         |         ^~~~~~
+   drivers/firmware/qcom_scm-smc.c: At top level:
+   drivers/firmware/qcom_scm-smc.c:69:13: warning: 'fill_wq_wake_ack_args' defined but not used [-Wunused-function]
+      69 | static void fill_wq_wake_ack_args(struct arm_smccc_args *wake_ack, u32 smc_call_ctx)
+         |             ^~~~~~~~~~~~~~~~~~~~~
+   drivers/firmware/qcom_scm-smc.c:56:13: warning: 'fill_wq_resume_args' defined but not used [-Wunused-function]
+      56 | static void fill_wq_resume_args(struct arm_smccc_args *resume, u32 smc_call_ctx)
+         |             ^~~~~~~~~~~~~~~~~~~
+
+
+vim +/memset +18 arch/sparc/include/asm/string.h
+
+70a6fcf3283a0a Al Viro 2016-01-17  16  
+70a6fcf3283a0a Al Viro 2016-01-17  17  #define __HAVE_ARCH_MEMSET
+70a6fcf3283a0a Al Viro 2016-01-17 @18  #define memset(s, c, count) __builtin_memset(s, c, count)
+70a6fcf3283a0a Al Viro 2016-01-17  19  
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

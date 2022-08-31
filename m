@@ -2,104 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D4785A867D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E3095A867A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231947AbiHaTM2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 15:12:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38906 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229472AbiHaTMZ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231667AbiHaTMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 31 Aug 2022 15:12:25 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD59ED83D9;
-        Wed, 31 Aug 2022 12:12:23 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id w18so11591506qki.8;
-        Wed, 31 Aug 2022 12:12:23 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229710AbiHaTMU (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 31 Aug 2022 15:12:20 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96C344620B
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:12:19 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id l5so11143825pjy.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:12:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:from:to:cc;
-        bh=BlRf7W3x/ZYNwUL/i+8WPajC7eIKtq4rRsLFRUO00UY=;
-        b=VwDMh3hjO0mzYMUaX3Gbi5C12cnleNpGMjqWcA82t/sPm5YtWOnSoguxQgUtFIvyHj
-         3F9+/03fOnPYbWbhTGNudrydWLgzabdo5uAOFkym9KE6GN1S6Qw2Oly0JHnNVdhE4Aon
-         OUn+o5Q+rshbxHEiEteg4YJJmR3Bjm/0JPKiVycMblC1caVgs9FEgLi/5bW0vM/8bbpT
-         chLurFdKNEi3Mcb/IUB9rVKT8Qbjcp48YyFSpyfDlPl5uCXSM/ijCHlsLz2nzccyK4io
-         4gwIJew9HfMPiTUEnFMG9HOSKi3qdqlg4Frtk6kkjRbHWc+8ncSZiMevOUzU4OlXa1H8
-         Db4w==
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=iddXjcGX4OLtSyWppt8oJ6EdWZijCYZujWCWS7DqmEc=;
+        b=qkTfYfrrpXLmJZC1jVUujD709HvbEDJSseqN7rhP4nq5uPOGT7TYff6HQ91pGUjwwn
+         k/oQc1okiOi2djY6y3SyWAHmFrnSMXwBKAU4g7RisNfyDpJgeYuRWCKHPIuJYpgNfM1E
+         0pa78CqNnii0KnGImCjYVUWMPsCz40e5HXCPRqQ27TtgN0ZNYQhLbbS3/eE9XCRKpbrq
+         IE2yzUaIVismewVuW6BMKd3tsCCL3DvPwKV0ZpwujB51VZU4jcDQf+wbGu7omtMvLqzI
+         LBngoU6RtPD2tVi9jWIIrMuffN0vRzXxgxfpE+xnqUvLqxZE7XSQfeaEOim+PODG7b51
+         2gvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc;
-        bh=BlRf7W3x/ZYNwUL/i+8WPajC7eIKtq4rRsLFRUO00UY=;
-        b=qxQNQra2P7UO85sUqaRsrn2Xqo8WFEufXRCWFnPQ7I7HfiDSvuFyrFyvcQpJsmGMSs
-         p/ji2082r6V8WMEd/jP5CcnF9yGnlzJI0nUQF+lv4xfgHLtZl7ZlHi3tjs6VqDvZqkOg
-         FnYERs/od4fpWZ/v0hYhVNdjyHByXR5cvBlPf97oqmj4/Elp11yY7IB3D0POJheJFd1k
-         9T/ndEPbPLh7YetUfLwMtdqAlcWdX0Zj6q1FPiwWTyFoz8o1bewlK5wDBLAE3XHsZ3Ae
-         XnyY23/uWZA0XTIsyRruAbiVedWIHAEuhTPCIE+B/HniKBcUvPZbqdp12xIQWLD4esA/
-         Vy+w==
-X-Gm-Message-State: ACgBeo33Om2c5b2ZKOR2Xglr1AqoH/zmnqLXCBetR2sF/QiJYlom6o/u
-        V/5ErB4k/SKvJG/aH+zTX+h429Q5QBs=
-X-Google-Smtp-Source: AA6agR440czcs4X1aV4EzQ4AiT3FymTTvuCugfm3euv1cnTiNJ342KELuSCOBVZvIJrQlrR0YSdFqA==
-X-Received: by 2002:a05:620a:b02:b0:6bb:ebe:248b with SMTP id t2-20020a05620a0b0200b006bb0ebe248bmr16654670qkg.420.1661973142873;
-        Wed, 31 Aug 2022 12:12:22 -0700 (PDT)
-Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
-        by smtp.gmail.com with ESMTPSA id ge17-20020a05622a5c9100b003430589dd34sm9095655qtb.57.2022.08.31.12.12.21
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=iddXjcGX4OLtSyWppt8oJ6EdWZijCYZujWCWS7DqmEc=;
+        b=vVqoscUKhTczvMwmA9nz5x80M7Z1hxWn5UQ10i6jcUqJljvmgcYuR+ASoAsFqI/SP5
+         3+hcD7rvp9oDyNn4ybE7bmqaRfzoHdxH4PszxRHLdOkGJOacUSLmaMjAIv59mlH2oJ9Z
+         PEijQXLH+QRltvSaVM0ExkKFsVgyByToALm1WmXj/gk2g+fdW+SbViFj2Hi4DEf/nmtF
+         UPfNsPQqcFJnMJAy+pew6Ysy9INPmAIKlhoGvnQ5Vg6FbSd0oD5/lrr7qZttp26H7BrF
+         Nr51Mh9VAfhbwmgBmGHqcXH3/VnDInUs4VJpoYcUGiGpMS2A5QUl3RU1ISMUuQCZavyG
+         +M+g==
+X-Gm-Message-State: ACgBeo0LjDn8WZhq4RVt9ib6Z8R/MkKJMcsxCqy0Q1Z0ZeNuiAmi7ulr
+        4iAnte56cxJYVMtAcvTbB7rQug==
+X-Google-Smtp-Source: AA6agR4tC0o1bnljB1WKXww3mMQilcVt7Vw89+r/7sAV5FpqaSo+T1g6DgjkIEwKHmqMJwTNVlEcAg==
+X-Received: by 2002:a17:902:db07:b0:175:42e2:37f2 with SMTP id m7-20020a170902db0700b0017542e237f2mr4381848plx.13.1661973138930;
+        Wed, 31 Aug 2022 12:12:18 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z15-20020a634c0f000000b0041d9e78de05sm3663627pga.73.2022.08.31.12.12.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 12:12:22 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailauth.nyi.internal (Postfix) with ESMTP id 7DC9827C0054;
-        Wed, 31 Aug 2022 15:12:20 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Wed, 31 Aug 2022 15:12:20 -0400
-X-ME-Sender: <xms:lLIPYxB3qTvX1-AkkQAcOIBgelkbwoykY_cp_swDtqbyC87vsYoB-Q>
-    <xme:lLIPY_gt1pI0QNlxYdwk_X0gGqm0BjEdOgZ5j_EOdtickj-9rD28z_B_Rrm40qvcu
-    YuF7uYMBFBzWUF_UQ>
-X-ME-Received: <xmr:lLIPY8m6flquFM3dYY5TPOkgjgRT1PE8LCaYykB7XK8QuddW-XPfJ2m6vtM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekiedguddtjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
-    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
-    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
-    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
-    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
-    higihmvgdrnhgrmhgv
-X-ME-Proxy: <xmx:lLIPY7yJ9SfImoLUIqOW7RQSJf5ctfc76SEk4pWazSIfNQrZ6MztKw>
-    <xmx:lLIPY2RR3tpdj1xWTrdavcmzL5chOJHsilhOfVPxE8x8Y_21BMDBXw>
-    <xmx:lLIPY-Yb3y6Deh6xSc5e0RVFs4gvIAsFEv35COKTpc9qN5y5MguUAg>
-    <xmx:lLIPY9KbY3Gm4O3b5YR9NSXwm3Xa3QZHqBtELxJRzEnJt3x0ufV-tg>
-Feedback-ID: iad51458e:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 31 Aug 2022 15:12:19 -0400 (EDT)
-Date:   Wed, 31 Aug 2022 12:11:20 -0700
-From:   Boqun Feng <boqun.feng@gmail.com>
-To:     stable@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>
-Cc:     Vitaly Kuznetsov <vkuznets@redhat.com>,
-        linux-hyperv@vger.kernel.org,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, Wei Liu <wei.liu@kernel.org>
-Subject: Re: [PATCH v2 1/2] Drivers: hv: balloon: Support status report for
- larger page sizes
-Message-ID: <Yw+yWFFpU+mwT97H@boqun-archlinux>
-References: <20220325023212.1570049-1-boqun.feng@gmail.com>
- <20220325023212.1570049-2-boqun.feng@gmail.com>
+        Wed, 31 Aug 2022 12:12:18 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 19:12:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Subject: Re: [PATCH 03/19] Revert "KVM: SVM: Introduce hybrid-AVIC mode"
+Message-ID: <Yw+yjo4TMDYnyAt+@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+ <20220831003506.4117148-4-seanjc@google.com>
+ <17e776dccf01e03bce1356beb8db0741e2a13d9a.camel@redhat.com>
+ <84c2e836d6ba4eae9fa20329bcbc1d19f8134b0f.camel@redhat.com>
+ <Yw+MYLyVXvxmbIRY@google.com>
+ <59206c01da236c836c58ff96c5b4123d18a28b2b.camel@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220325023212.1570049-2-boqun.feng@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <59206c01da236c836c58ff96c5b4123d18a28b2b.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,83 +78,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-I think we also want this patch in the 5.15 stable. Without this patch,
-hv_balloon() will report incorrect memory usage to hypervisor when
-running on ARM64 with PAGE_SIZE > 4k. Only 5.15 needs this because ARM64
-support of HyperV guests arrived in 5.15.
-
-Upstream id b3d6dd09ff00fdcf4f7c0cb54700ffd5dd343502
-
-Cc: <stable@vger.kernel.org> # 5.15.x
-
-Thanks!
-
-Regards,
-Boqun
-
-On Fri, Mar 25, 2022 at 10:32:11AM +0800, Boqun Feng wrote:
-> DM_STATUS_REPORT expects the numbers of pages in the unit of 4k pages
-> (HV_HYP_PAGE) instead of guest pages, so to make it work when guest page
-> sizes are larger than 4k, convert the numbers of guest pages into the
-> numbers of HV_HYP_PAGEs.
+On Wed, Aug 31, 2022, Maxim Levitsky wrote:
+> On Wed, 2022-08-31 at 16:29 +0000, Sean Christopherson wrote:
+> > On Wed, Aug 31, 2022, Maxim Levitsky wrote:
+> > > Leaving AVIC on, when vCPU is in x2apic mode cannot trigger extra MMIO emulation,
+> > > in fact the opposite - because AVIC is on, writes to 0xFEE00xxx might *not* trigger
+> > > MMIO emulation and instead be emulated by AVIC.
+> > 
+> > That's even worse, because KVM is allowing the guest to exercise hardware logic
+> > that I highly doubt AMD has thoroughly tested.
 > 
-> Note that the numbers of guest pages are still used for tracing because
-> tracing is internal to the guest kernel.
+> Harware logic is exactly the same regarless of if KVM uses x2apic mode or not,
+> and it is better to be prepared for all kind of garbage coming from the guest.
+
+Right, I got twisted around and was thinking x2APIC enabling of the guest was
+reflected in hardware, but it's purely emulated in this mode.
+
+> Software logic, I can understand you, there could be registers that trap differently
+> in avic and x2avic mode, but it should be *very* easy to deal with it, the list
+> of registers that trap is very short.
 > 
-> Reported-by: Vitaly Kuznetsov <vkuznets@redhat.com>
-> Signed-off-by: Boqun Feng <boqun.feng@gmail.com>
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-> ---
->  drivers/hv/hv_balloon.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
+> > 
+> > > Yes, some of these writes can trigger AVIC specific emulation vm exits, but they
+> > > are literaly the same as those used by x2avic, and it is really hard to see
+> > > why this would be dangerous (assuming that x2avic code works, and avic code
+> > > is aware of this 'hybrid' mode).
+> > 
+> > The APIC_RRR thing triggered the KVM_BUG_ON() in kvm_apic_write_nodecode()
+> > precisely because of the AVIC trap.  At best, this gives a way for the guest to
+> > trigger a WARN_ON_ONCE() and thus panic the host if panic_on_warn=1.  I fixed
+> > the APIC_RRR case because that will be problematic for x2AVIC, but there are
+> > other APIC registers that are unsupported in x2APIC that can trigger the KVM_BUG_ON().
+
+> > > From the guest point of view, unless the guest pokes at random MMIO area,
+> > > the only case when this matters is if the guest maps RAM over the 0xFEE00xxx
+> > > (which it of course can, the spec explictly state as you say that when x2apic
+> > > is enabled, the mmio is disabled), and then instead of functioning as RAM,
+> > > the range will still function as APIC.
+> > 
+> > There is no wiggle room here though, KVM is blatantly breaking the architectural
+> > specification.  When x2APIC is enabled, the xAPIC MMIO does not exist.
 > 
-> diff --git a/drivers/hv/hv_balloon.c b/drivers/hv/hv_balloon.c
-> index f2d05bff4245..062156b88a87 100644
-> --- a/drivers/hv/hv_balloon.c
-> +++ b/drivers/hv/hv_balloon.c
-> @@ -17,6 +17,7 @@
->  #include <linux/slab.h>
->  #include <linux/kthread.h>
->  #include <linux/completion.h>
-> +#include <linux/count_zeros.h>
->  #include <linux/memory_hotplug.h>
->  #include <linux/memory.h>
->  #include <linux/notifier.h>
-> @@ -1130,6 +1131,7 @@ static void post_status(struct hv_dynmem_device *dm)
->  	struct dm_status status;
->  	unsigned long now = jiffies;
->  	unsigned long last_post = last_post_time;
-> +	unsigned long num_pages_avail, num_pages_committed;
->  
->  	if (pressure_report_delay > 0) {
->  		--pressure_report_delay;
-> @@ -1154,16 +1156,21 @@ static void post_status(struct hv_dynmem_device *dm)
->  	 * num_pages_onlined) as committed to the host, otherwise it can try
->  	 * asking us to balloon them out.
->  	 */
-> -	status.num_avail = si_mem_available();
-> -	status.num_committed = vm_memory_committed() +
-> +	num_pages_avail = si_mem_available();
-> +	num_pages_committed = vm_memory_committed() +
->  		dm->num_pages_ballooned +
->  		(dm->num_pages_added > dm->num_pages_onlined ?
->  		 dm->num_pages_added - dm->num_pages_onlined : 0) +
->  		compute_balloon_floor();
->  
-> -	trace_balloon_status(status.num_avail, status.num_committed,
-> +	trace_balloon_status(num_pages_avail, num_pages_committed,
->  			     vm_memory_committed(), dm->num_pages_ballooned,
->  			     dm->num_pages_added, dm->num_pages_onlined);
-> +
-> +	/* Convert numbers of pages into numbers of HV_HYP_PAGEs. */
-> +	status.num_avail = num_pages_avail * NR_HV_HYP_PAGES_IN_PAGE;
-> +	status.num_committed = num_pages_committed * NR_HV_HYP_PAGES_IN_PAGE;
-> +
->  	/*
->  	 * If our transaction ID is no longer current, just don't
->  	 * send the status. This can happen if we were interrupted
-> -- 
-> 2.35.1
-> 
+> In this case I say that there is no wiggle room for KVM to not allow
+> different APIC bases on each CPU - the spec 100% allows it, but in KVM it is
+> broken.
+
+The difference is that KVM is consistent with respect to itself in that case.
+KVM doesn't support APIC base relocation, and never has supported APIC base
+relocation.
+
+This hybrid AVIC mode means that the resulting KVM behavior will vary depending
+on whether or not AVIC is supported and enabled, whether or not x2AVIC is supported,
+and also on internal KVM state.  And we even have tests for this!  E.g. run the APIC
+unit test with AVIC disabled and it passes, run it with AVIC enabled and it fails.
+
+> If you are really hell bent on not having that MMIO exposed, then I say we
+> can just disable the AVIC memslot, and keep AVIC enabled in this case - this
+> should make us both happy.
+
+I don't think that will work though, as I don't think it's possible to tell hardware
+not to accelerate AVIC accesses.  I.e. KVM can squash the unaccelerated traps, but
+anything that is handled by hardware will still go through.
+
+> This discussion really makes me feel that you want just to force your opinion
+> on others, and its not the first time this happens. It is really frustrating
+> to work like that.  It might sound harsh but this is how I feel. Hopefully I
+> am wrong.
+
+Yes and no.  I am most definitely trying to steer KVM in a direction that I feel
+will allow KVM to scale in terms of developers, users, and workloads.  Part of
+that direction is to change people's mindset from "good enough" to "implement to
+the spec".
+
+KVM's historic "good enough" approach largely worked when KVM had a relatively
+small and stable development community, and when KVM was being used to run a
+relatively limited set of workloads.  But KVM is being used to run an ever increasing
+variety of workloads, and the development community is larger (and I hope that we
+can grow it even further).  And there is inevitably attrition, which means that
+unless we are extremely diligent in documenting KVM's quirks/errata, knowledge of
+KVM's "good enough" shortcuts will eventually be lost.
+
+E.g. it took me literally days to understand KVM's hack for forcing #PF=>#PF=>VM-Exit
+instead of #PF=>#PF=>#DF.  That mess would have been avoided if KVM had implemented
+to the spec and actually done the right thing back when the bug was first encountered.
+Ditto for the x2APIC ID hotplug hack; I stared at that code on at least three
+different occassions before I finally understood the full impact of the hack.
+
+And getting KVM to implement to the spec means not deviating from that path when
+it's inconvenient to follow, thus the hard line I am drawing.  I am sure we'll
+encounter scenarios/features where it's simply impossible for KVM to do the right
+thing, e.g. I believe virtualizing VMX's posted interrupts falls into this category.
+But IMO those should be very, very rare exceptions.
+
+So, "yes" in the sense that I am openly trying to drag people into alignment with
+my "implement to the spec" vision.  But "no" in the sense that I don't think it's
+fair to say I am forcing my opinion on others.  I am not saying "NAK" and ending
+the discussion.

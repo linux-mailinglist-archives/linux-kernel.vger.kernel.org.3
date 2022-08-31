@@ -2,88 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 246DC5A7DBA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:44:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 764455A7DC4
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiHaMoP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:44:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45084 "EHLO
+        id S231342AbiHaMpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbiHaMoL (ORCPT
+        with ESMTP id S229692AbiHaMpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:44:11 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB9AD4187;
-        Wed, 31 Aug 2022 05:44:10 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id c9so10654913qkk.6;
-        Wed, 31 Aug 2022 05:44:10 -0700 (PDT)
+        Wed, 31 Aug 2022 08:45:13 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EBF13D3C
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:45:11 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id v26so9549849lfd.10
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:45:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=m7k95wXV4EOCNB06vU0l2Ks5rIPnqD9Owq/g4RCHMIA=;
-        b=PyaMDNZ88jhRvVtr3sj/jHaigT1hOfZefsAM7tlR7FXTfh0M4D21DDTNwYnT2PylB2
-         3VF1SPSPVPCFyG2Wb7pXgQCAmcSNER6wE9WpkKEyF/D9Kx2pp0Ka7kovHKz5v8f0nFwi
-         HSdDQEb4lrPTvjl/08LTvZWP6PkQXYfhNtWYCdwVGqyeMakq2FP6NW0yX3fXOjewffJD
-         O1xRWrfevTviW38uu+tVz5kwZrirHYS6RNG1KUZuK2kj8xpD4UJqK66g6ehiq9t/osIS
-         3NtHYIy4WQhVt7i30CzEYJSTZXZ0K8nJg8ZUdV7wbBU/3j+UMhyq5OUJYEfy5AxgjJsy
-         Er8g==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ZlvVcArzagAr4I2vvJT7UKuCAyT0vmCDIdaA8AIizLU=;
+        b=O6Ejb+nYgHIBVYk0yGbYEipXFUHBDUyVoRw8f+b8olFDmd22Jc4GENZ7YaY23XdSJX
+         2cSjiJqJHuHoldUy51BEvIIPSZLc5uOurcn/cgpRC/IGfx2XMViQjcF9clWHlv83E/aM
+         HwVHvobQ4eTDwKZY/Pw5w85aOMNFPSTyMT3ipaskH6T4l9ri9GmrbSLglnmNvBRhwqiP
+         zwuuuGT98uBBwZ5QSn01V3GnvGPA5v69934ic9ral0PBx/fPKJDBELEs56r2GxWZjESt
+         +82lOvVDVgmFPigyAmk7cdhvnG3Df740QsrR7Inaf3EOhCcp6yWZD6qJT5fN01FZVuNZ
+         Mfgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=m7k95wXV4EOCNB06vU0l2Ks5rIPnqD9Owq/g4RCHMIA=;
-        b=Sw6oySGhaX7wsKhIoOtDOhQkYevdN8gRHRgOVLdqSz90owSJCafl26HljqWoRYXHww
-         WiWv7QItI5H7I7NVtckbNL3gmhqBPhD9KBhYje3gdjSWhaeiRj/cU1NtHSh+NwfpuX7I
-         zbDgY+j4bspcI99F24G9n/EaWI1Vqth2LQY8SAY4o+yoWo14kI/3EDILmsH4P4ftQWBZ
-         X6XREPlbV1lej1VniAMF+hjXd53PKiimiNP1By7BCHgTdLVrlHnVjb0XMU036w5Ob0bV
-         alX7I5qIksEO72mVnE/LzqUevuXVs6Wrw7qJ4Fb5S8BFVuboeCGirDuIv2Yr9bT2VMBw
-         nWmw==
-X-Gm-Message-State: ACgBeo3PGNfHVonZuiefk12DpMrQgLZgvpColmal+zi/5kUhN1yB771p
-        4KjgehY/wrgwxsTL/m8z5tc6oQEw+SepfdUyLVo=
-X-Google-Smtp-Source: AA6agR5Z9sXnWhOTWzx6SVSqLdH4vnii04aZrKYbs3RFmMOq9YrzEl/hu+rNfrH0v8JPBZEUi8hxadXq+CRN/npRM/c=
-X-Received: by 2002:a05:620a:288a:b0:6b8:fcfe:db02 with SMTP id
- j10-20020a05620a288a00b006b8fcfedb02mr15885972qkp.504.1661949849643; Wed, 31
- Aug 2022 05:44:09 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ZlvVcArzagAr4I2vvJT7UKuCAyT0vmCDIdaA8AIizLU=;
+        b=Rj+HQ57xwsR0LHxOs1HBXe4Hfp+e30iQp1MN3qMlXR1mlaSBZtcDqzS52zbdeU2vi5
+         lxT2tIxLxtCbedGDqLhZLvOJ3UWJl5aVblm0KVyKV6phgcdniyx/HdKASmt2RSLm3Vxo
+         zKoRm/sLK1xkjNzGvSgkNFUFyDjoVVob5+X7id/+jrd5kqBpRIB04XiIGtlhBX+m8aTu
+         BQJNYnuZIvpAMFxrd5Gydq/4Dedw8YxRh1X4qFyYMACm15R5Ms4r8GXLhaL7vVf8lrS4
+         vtMUd2J4tSHozNKbmfyj0SBeuZ+ZDHc+r327E2acltDw0hvvjXbFXSZmtX+KcUh2HCn4
+         01Lw==
+X-Gm-Message-State: ACgBeo36TyyxRpj9UO+r/z/iBwi+KIU5oqFgcsUiP/kihglHImIlUirT
+        enCVDzjb0IaRheHifDykv2az7Q==
+X-Google-Smtp-Source: AA6agR4lSit4c8jA6r7D2/gt2shb1ogNSron5gEDfosSiRi42/FneJjLCi9q5TGEEW7UxJJqWiszEg==
+X-Received: by 2002:a05:6512:2248:b0:48a:f8f9:3745 with SMTP id i8-20020a056512224800b0048af8f93745mr8537244lfu.256.1661949910192;
+        Wed, 31 Aug 2022 05:45:10 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id c22-20020ac25f76000000b004949761d330sm57429lfc.128.2022.08.31.05.45.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 05:45:09 -0700 (PDT)
+Message-ID: <651930f2-37a6-4628-e232-880d41c0997c@linaro.org>
+Date:   Wed, 31 Aug 2022 15:45:08 +0300
 MIME-Version: 1.0
-References: <20220831100506.3368103-1-vincent.whitchurch@axis.com> <20220831100506.3368103-4-vincent.whitchurch@axis.com>
-In-Reply-To: <20220831100506.3368103-4-vincent.whitchurch@axis.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Wed, 31 Aug 2022 15:43:33 +0300
-Message-ID: <CAHp75VcfjQ-sMinnpSHQ+_YYMNQ2FnzZdXGsF8dZR7dCxZ8Nhw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/5] iio: adc: mcp320x: use conv_time instead of
- device_index switch
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>, kernel <kernel@axis.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: lan9662-otpc: document Lan9662 OTPC
+Content-Language: en-US
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, UNGLinuxDriver@microchip.com
+References: <20220831064238.102267-1-horatiu.vultur@microchip.com>
+ <20220831064238.102267-2-horatiu.vultur@microchip.com>
+ <393933f5-9a87-4d12-2527-5adfa4aeccca@linaro.org>
+ <20220831104455.2oc24fokicieyh37@soft-dev3-1.localhost>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220831104455.2oc24fokicieyh37@soft-dev3-1.localhost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 1:05 PM Vincent Whitchurch
-<vincent.whitchurch@axis.com> wrote:
->
-> In mcp320x_adc_conversion(), the presence of the chip_info's conv_time
-> is used as a condition for using the conversion message.  Use that same
-> condition when initializing the conversion message and the other
-> handling for variants which need it, instead of the different condition
-> (checking of the device_index) which is used currently.
+On 31/08/2022 13:44, Horatiu Vultur wrote:
+> The 08/31/2022 10:28, Krzysztof Kozlowski wrote:
+> 
+> Hi Krzysztof,
+> 
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    oneOf:
+>>> +      - items:
+>>> +          - const: microchip,lan9662-otpc
+>>> +          - const: microchip,lan9668-otpc
+>>> +      - enum:
+>>> +          - microchip,lan9662-otpc
+>>
+>> This is not what I wrote and this does not make sense. You now listed
+>> twice 9662 and 9668 does not have its entry.
+> 
+> As you figured it out, I am quite noob at these bindings.
+> The only difference between what you wrote and what I wrote is the order
+> under items. So the order matters?
 
-...
+Yes, because it is not an enum but list. What you wrote is:
+compatible = "microchip,lan9662-otpc", "microchip,lan9668-otpc"
 
-> +       if (chip_info->conv_time) {
+and you would see the problems if you tested it with lan9668.
 
-It would be nice to have conv_time_us renamed before this change.
-
--- 
-With Best Regards,
-Andy Shevchenko
+Best regards,
+Krzysztof

@@ -2,55 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5E1E5A7EC7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:31:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED95D5A7EC5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiHaNbD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 09:31:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S231394AbiHaNa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 09:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiHaNax (ORCPT
+        with ESMTP id S229769AbiHaNax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 Aug 2022 09:30:53 -0400
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47D4C04CC;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAE1C0BF7;
         Wed, 31 Aug 2022 06:30:51 -0700 (PDT)
 Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VCNCuG026265;
-        Wed, 31 Aug 2022 09:30:44 -0400
+        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VDJ3wq026327;
+        Wed, 31 Aug 2022 09:30:45 -0400
 Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3j7d48kxj0-1
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3j7d48kxj4-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 Aug 2022 09:30:44 -0400
+        Wed, 31 Aug 2022 09:30:45 -0400
 Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 27VDUgUa021322
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 27VDUh8L021326
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 31 Aug 2022 09:30:42 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 31 Aug
- 2022 09:30:41 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Wed, 31 Aug 2022 09:30:41 -0400
+        Wed, 31 Aug 2022 09:30:44 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX8.ad.analog.com (10.64.17.5) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 31 Aug 2022 09:30:43 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 31 Aug 2022 09:30:42 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 31 Aug 2022 09:30:42 -0400
 Received: from rbolboac.ad.analog.com ([10.48.65.113])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 27VDUTRF019685;
-        Wed, 31 Aug 2022 09:30:32 -0400
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 27VDUTRG019685;
+        Wed, 31 Aug 2022 09:30:35 -0400
 From:   Ramona Bolboaca <ramona.bolboaca@analog.com>
 To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <linux-iio@vger.kernel.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
 CC:     Ramona Bolboaca <ramona.bolboaca@analog.com>
-Subject: [PATCH v2 1/2] bindings: iio: adc: Add max11205 documentation file
-Date:   Wed, 31 Aug 2022 16:30:20 +0300
-Message-ID: <20220831133021.215625-1-ramona.bolboaca@analog.com>
+Subject: [PATCH v2 2/2] iio: adc: add max11205 adc driver
+Date:   Wed, 31 Aug 2022 16:30:21 +0300
+Message-ID: <20220831133021.215625-2-ramona.bolboaca@analog.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220831133021.215625-1-ramona.bolboaca@analog.com>
+References: <20220831133021.215625-1-ramona.bolboaca@analog.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: wI204ToU81DzyZbPbV5CL3VT19ZzNk-v
-X-Proofpoint-ORIG-GUID: wI204ToU81DzyZbPbV5CL3VT19ZzNk-v
+X-Proofpoint-GUID: lHfDbKPFas_sp6UPeVGygs-LRvvlCtth
+X-Proofpoint-ORIG-GUID: lHfDbKPFas_sp6UPeVGygs-LRvvlCtth
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-31_08,2022-08-31_03,2022-06-22_01
@@ -68,115 +74,258 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bindings documentation file and MAINTAINERS entry for MAX11205.
+Adding support for max11205 16-bit single-channel ultra-low power
+delta-sigma adc.
+The MAX11205 is compatible with the 2-wire interface and uses
+SCLK and RDY/DOUT for serial communications. In this mode, all
+controls are implemented by timing the high or low phase of the SCLK.
+The 2-wire serial interface only allows for data to be read out through
+the RDY/DOUT output.
 
+Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX11205.pdf
 Signed-off-by: Ramona Bolboaca <ramona.bolboaca@analog.com>
 ---
 changes in v2:
- - reference /schemas/spi/spi-peripheral-props.yaml in allOf 
- - use unevaluatedProperties:false and remove additionalProperties:false
- - use generic node name and fix indentation in device-tree example
- - wrap lines nearer to 75-80 chars in documentation
- - add extra information to the description of the regulator
- .../bindings/iio/adc/maxim,max11205.yaml      | 69 +++++++++++++++++++
- MAINTAINERS                                   |  8 +++
- 2 files changed, 77 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/iio/adc/maxim,max11205.yaml
+ - add chip_info null pointer check
+ - add support for probing with ACPI table
+ - remove function for module removal
+ - remove irq flag from max11205_sigma_delta_info
+ - add missing commas and missing spaces
+ - remove redundant blank line
+ - wrap text to 75-80 chars
+ - removed typos in commit message
+ drivers/iio/adc/Kconfig    |  14 +++
+ drivers/iio/adc/Makefile   |   1 +
+ drivers/iio/adc/max11205.c | 183 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 198 insertions(+)
+ create mode 100644 drivers/iio/adc/max11205.c
 
-diff --git a/Documentation/devicetree/bindings/iio/adc/maxim,max11205.yaml b/Documentation/devicetree/bindings/iio/adc/maxim,max11205.yaml
-new file mode 100644
-index 000000000000..7902f82da927
---- /dev/null
-+++ b/Documentation/devicetree/bindings/iio/adc/maxim,max11205.yaml
-@@ -0,0 +1,69 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/iio/adc/maxim,max11205.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Maxim MAX11205 ADC
-+
-+maintainers:
-+  - Ramona Bolboaca <ramona.bolboaca@analog.com>
-+
-+description: |
-+  The MAX11205 is an ultra-low-power (< 300FA max active current),
-+  high-resolution, serial-output ADC.
-+
-+  https://datasheets.maximintegrated.com/en/ds/MAX11205.pdf
-+
-+allOf:
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - maxim,max11205a
-+      - maxim,max11205b
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  spi-max-frequency:
-+    maximum: 5000000
-+
-+  spi-cpha: true
-+
-+  vref-supply:
-+    description:
-+      The regulator supply for the ADC reference voltage. This is a differential
-+      reference. It is equal to the V_REFP - V_REFN. The maximum value is 3.6V.
-+
-+required:
-+  - compatible
-+  - reg
-+  - spi-max-frequency
-+  - spi-cpha
-+  - interrupts
-+  - vref-supply
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        adc@0 {
-+            compatible = "maxim,max11205a";
-+            reg = <0>;
-+            spi-max-frequency = <5000000>;
-+            spi-cpha;
-+            interrupt-parent = <&gpio>;
-+            interrupts = <19 IRQ_TYPE_EDGE_FALLING>;
-+            vref-supply = <&max11205_vref>;
-+        };
-+    };
-+...
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 96f47a7865d6..db1b5dc03988 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12341,6 +12341,14 @@ S:	Maintained
- F:	Documentation/devicetree/bindings/iio/proximity/maxbotix,mb1232.yaml
- F:	drivers/iio/proximity/mb1232.c
+diff --git a/drivers/iio/adc/Kconfig b/drivers/iio/adc/Kconfig
+index 7fe5930891e0..0c8f376b65d8 100644
+--- a/drivers/iio/adc/Kconfig
++++ b/drivers/iio/adc/Kconfig
+@@ -653,6 +653,20 @@ config MAX1118
+ 	  To compile this driver as a module, choose M here: the module will be
+ 	  called max1118.
  
-+MAXIM MAX11205 DRIVER
-+M:	Ramona Bolboaca <ramona.bolboaca@analog.com>
-+L:	linux-iio@vger.kernel.org
-+S:	Supported
-+W:	https://ez.analog.com/linux-software-drivers
-+F:	Documentation/devicetree/bindings/iio/adc/maxim,max11205.yaml
-+F:	drivers/iio/adc/max11205.c
++config MAX11205
++	tristate "Maxim max11205 ADC driver"
++	depends on SPI
++	select AD_SIGMA_DELTA
++	select IIO_BUFFER
++	select IIO_TRIGGERED_BUFFER
 +
- MAXIM MAX17040 FAMILY FUEL GAUGE DRIVERS
- R:	Iskren Chernev <iskren.chernev@gmail.com>
- R:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
++	help
++	  Say yes here to build support for Maxim max11205 16-bit, single-channel
++	  ultra-low power delta-sigma ADC.
++
++	  To compile this driver as a module, choose M here: the module will be
++	  called max11205.
++
+ config MAX1241
+ 	tristate "Maxim max1241 ADC driver"
+ 	depends on SPI_MASTER
+diff --git a/drivers/iio/adc/Makefile b/drivers/iio/adc/Makefile
+index 1772a549a3c8..bb681844e497 100644
+--- a/drivers/iio/adc/Makefile
++++ b/drivers/iio/adc/Makefile
+@@ -61,6 +61,7 @@ obj-$(CONFIG_LTC2497) += ltc2497.o ltc2497-core.o
+ obj-$(CONFIG_MAX1027) += max1027.o
+ obj-$(CONFIG_MAX11100) += max11100.o
+ obj-$(CONFIG_MAX1118) += max1118.o
++obj-$(CONFIG_MAX11205) += max11205.o
+ obj-$(CONFIG_MAX1241) += max1241.o
+ obj-$(CONFIG_MAX1363) += max1363.o
+ obj-$(CONFIG_MAX9611) += max9611.o
+diff --git a/drivers/iio/adc/max11205.c b/drivers/iio/adc/max11205.c
+new file mode 100644
+index 000000000000..68e6082e70e5
+--- /dev/null
++++ b/drivers/iio/adc/max11205.c
+@@ -0,0 +1,183 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * max11205 16-Bit Delta-Sigma ADC
++ *
++ * Datasheet: https://datasheets.maximintegrated.com/en/ds/MAX1240-max11205.pdf
++ * Copyright (C) 2022 Analog Devices, Inc.
++ * Author: Ramona Bolboaca <ramona.bolboaca@analog.com>
++ */
++
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/regulator/consumer.h>
++#include <linux/spi/spi.h>
++
++#include <linux/iio/iio.h>
++#include <linux/iio/adc/ad_sigma_delta.h>
++
++#define MAX11205_BIT_SCALE	15
++#define MAX11205A_OUT_DATA_RATE	116
++#define MAX11205B_OUT_DATA_RATE	13
++
++enum chip_type {
++	TYPE_MAX11205A,
++	TYPE_MAX11205B,
++};
++
++struct chip_info {
++	unsigned int	out_data_rate;
++	const char	*name;
++};
++
++struct max11205_state {
++	const struct chip_info	*chip_info;
++	struct regulator	*vref;
++	struct ad_sigma_delta	sd;
++};
++
++static const struct ad_sigma_delta_info max11205_sigma_delta_info = {
++	.has_registers = false,
++};
++
++static int max11205_read_raw(struct iio_dev *indio_dev,
++			     struct iio_chan_spec const *chan,
++			     int *val, int *val2, long mask)
++{
++	struct max11205_state *st = iio_priv(indio_dev);
++	int reg_mv;
++
++	switch (mask) {
++	case IIO_CHAN_INFO_RAW:
++		return ad_sigma_delta_single_conversion(indio_dev, chan, val);
++	case IIO_CHAN_INFO_SCALE:
++		reg_mv = regulator_get_voltage(st->vref);
++		if (reg_mv < 0)
++			return reg_mv;
++		reg_mv /= 1000;
++		*val = reg_mv;
++		*val2 = MAX11205_BIT_SCALE;
++		return IIO_VAL_FRACTIONAL_LOG2;
++	case IIO_CHAN_INFO_SAMP_FREQ:
++		*val = st->chip_info->out_data_rate;
++		return IIO_VAL_INT;
++	default:
++		return -EINVAL;
++	}
++}
++
++static const struct iio_info max11205_iio_info = {
++	.read_raw = max11205_read_raw,
++	.validate_trigger = ad_sd_validate_trigger,
++};
++
++static const struct iio_chan_spec max11205_channels[] = {
++	{
++		.type = IIO_VOLTAGE,
++		.indexed = 1,
++		.scan_type = {
++			.sign = 's',
++			.realbits = 16,
++			.storagebits = 16,
++			.endianness = IIO_BE
++		},
++		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
++		BIT(IIO_CHAN_INFO_SAMP_FREQ) |
++		BIT(IIO_CHAN_INFO_SCALE),
++	},
++};
++
++static const struct chip_info max11205_chip_info[] = {
++	[TYPE_MAX11205A] = {
++		.out_data_rate = MAX11205A_OUT_DATA_RATE,
++		.name = "max11205a",
++	},
++	[TYPE_MAX11205B] = {
++		.out_data_rate = MAX11205B_OUT_DATA_RATE,
++		.name = "max11205b",
++	},
++};
++
++static void max11205_reg_disable(void *reg)
++{
++	regulator_disable(reg);
++}
++
++static int max11205_probe(struct spi_device *spi)
++{
++	struct max11205_state *st;
++	struct iio_dev *indio_dev;
++	int ret;
++
++	indio_dev = devm_iio_device_alloc(&spi->dev, sizeof(*st));
++	if (!indio_dev)
++		return -ENOMEM;
++
++	st = iio_priv(indio_dev);
++
++	ad_sd_init(&st->sd, indio_dev, spi, &max11205_sigma_delta_info);
++
++	st->chip_info = device_get_match_data(&spi->dev);
++
++	if (!st->chip_info)
++		st->chip_info = (const struct chip_info *)spi_get_device_id(spi)->driver_data;
++
++	indio_dev->name = st->chip_info->name;
++	indio_dev->modes = INDIO_DIRECT_MODE;
++	indio_dev->channels = max11205_channels;
++	indio_dev->num_channels = 1;
++	indio_dev->info = &max11205_iio_info;
++
++	st->vref = devm_regulator_get(&spi->dev, "vref");
++	if (IS_ERR(st->vref))
++		return dev_err_probe(&spi->dev, PTR_ERR(st->vref),
++				     "Failed to get vref regulator\n");
++
++	ret = regulator_enable(st->vref);
++	if (ret)
++		return ret;
++
++	ret = devm_add_action_or_reset(&spi->dev, max11205_reg_disable, st->vref);
++	if (ret)
++		return ret;
++
++	ret = devm_ad_sd_setup_buffer_and_trigger(&spi->dev, indio_dev);
++	if (ret)
++		return ret;
++
++	return devm_iio_device_register(&spi->dev, indio_dev);
++}
++
++static const struct spi_device_id max11205_spi_ids[] = {
++	{ "max11205a", (kernel_ulong_t)&max11205_chip_info[TYPE_MAX11205A] },
++	{ "max11205b", (kernel_ulong_t)&max11205_chip_info[TYPE_MAX11205B] },
++	{ }
++};
++MODULE_DEVICE_TABLE(spi, max11205_spi_ids);
++
++static const struct of_device_id max11205_dt_ids[] = {
++	{
++		.compatible = "maxim,max11205a",
++		.data = &max11205_chip_info[TYPE_MAX11205A],
++	},
++	{
++		.compatible = "maxim,max11205b",
++		.data = &max11205_chip_info[TYPE_MAX11205B],
++	},
++	{ }
++};
++MODULE_DEVICE_TABLE(of, max11205_dt_ids);
++
++static struct spi_driver max11205_spi_driver = {
++	.driver = {
++		.name = "max11205",
++		.of_match_table = max11205_dt_ids,
++	},
++	.probe = max11205_probe,
++	.id_table = max11205_spi_ids,
++};
++module_spi_driver(max11205_spi_driver);
++
++MODULE_AUTHOR("Ramona Bolboaca <ramona.bolboaca@analog.com>");
++MODULE_DESCRIPTION("MAX11205 ADC driver");
++MODULE_LICENSE("GPL v2");
++MODULE_IMPORT_NS(IIO_AD_SIGMA_DELTA);
 -- 
 2.25.1
 

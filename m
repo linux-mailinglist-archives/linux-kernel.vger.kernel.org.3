@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38D05A854D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:16:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2E45A8541
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:14:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231682AbiHaSQR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:16:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56786 "EHLO
+        id S232671AbiHaSOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232340AbiHaSO4 (ORCPT
+        with ESMTP id S232151AbiHaSNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:14:56 -0400
+        Wed, 31 Aug 2022 14:13:54 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4B9ED02B;
-        Wed, 31 Aug 2022 11:12:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DAFF23C1;
+        Wed, 31 Aug 2022 11:12:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F6E961C67;
-        Wed, 31 Aug 2022 18:12:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A510C4314A;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC4D961C5B;
+        Wed, 31 Aug 2022 18:12:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 131E5C43143;
         Wed, 31 Aug 2022 18:12:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661969532;
-        bh=wGST3YDzy3o68YtlnXnYOiYlSDAYr4NnGFg4G17K0hw=;
+        bh=ZZy+CEe3X58TPi2PAPGr5aGa6z9m03nXkRDid1QaiUI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IcCxvanwi7RJ1Tw6jEy70675ckfhTiR9WefHcwRGJs6BfwIXx6pxkvjZq1GG+OyvH
-         8KJ7oakE/BkND9ASAGkwA0NKdTNn3Q6hyRPBqPUtxGyWuHSQu5FaCF/eKez+RwUxOM
-         MCe9vmu8003kBbPsjp0FSKFqzO6/eYCnPf6auXB4k+KiU7rf53e3R7a8WoE/OrSi4z
-         Osm9QpsXS5p0RnYq/N0KhJPhYbbU4fe1POMBC9Bcp10x+vbvNIqONjGwI5j4eVC6tm
-         w81/89H9Q31qSFxRteMuzXDsMPkri3LIdSdU2HzA/SP+hKsmaXUjURCUImempVjxi+
-         HJE+h8hD2k0LQ==
+        b=OGXrTPXSb4TPHXnCBLSOBtXGt0Y94oSzDImoM2jqzg1pHChP8X1dYFbLmekKt0tMv
+         8cpWdbxKCA9njeByXWmVnYRH0NLeRKRNtAQTuvwvwmztU652njMUWSsNqYSK0f33ku
+         3uSeM9RqwqfbnRxS2ccONiNqjt6T86lni0KjUf4VnUWHoQ1i/O3THV6wB62wSSHP0g
+         4C0R1sOsfdC7Il/+S/klZi8MDS9SIg5o2HlLhEKp7moOVSRDqFkgeaqaQtKyiON5Mq
+         Hu9UzQhFBgeJaVQzyDLkcF5OgkUM61gqHJfL5QlsAlZ83t8Xi0Zal6ZdRIdsmCw+Uc
+         M4JlZ8Q0m9+3Q==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 6FF295C0B07; Wed, 31 Aug 2022 11:12:11 -0700 (PDT)
+        id 71A895C0B54; Wed, 31 Aug 2022 11:12:11 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 13/25] rcu: Disable run-time single-CPU grace-period optimization
-Date:   Wed, 31 Aug 2022 11:11:58 -0700
-Message-Id: <20220831181210.2695080-13-paulmck@kernel.org>
+Subject: [PATCH rcu 14/25] rcu: Set rcu_data structures' initial ->gpwrap value to true
+Date:   Wed, 31 Aug 2022 11:11:59 -0700
+Message-Id: <20220831181210.2695080-14-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220831181207.GA2694717@paulmck-ThinkPad-P17-Gen-1>
 References: <20220831181207.GA2694717@paulmck-ThinkPad-P17-Gen-1>
@@ -56,79 +56,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The run-time single-CPU grace-period optimization applies only to
-kernels built with CONFIG_SMP=y && CONFIG_PREEMPTION=y that are running
-on a single-CPU system.  But a kernel intended for a single-CPU system
-should instead be built with CONFIG_SMP=n, and in any case, single-CPU
-systems running Linux no longer appear to be the common case.  Plus this
-optimization results in the rcu_gp_oldstate structure being half again
-larger than it needs to be.
-
-This commit therefore disables the run-time single-CPU grace-period
-optimization, so that this optimization applies only during the
-pre-scheduler portion of the boot sequence.
+It would be good do reduce the size of the rcu_gp_oldstate structure
+from three unsigned long instances to two, but this requires that the
+boot-time optimized grace periods update the various ->gp_seq fields.
+Updating these fields in the rcu_state structure and in all of the
+rcu_node structures is at least semi-reasonable, but updating them in
+all of the rcu_data structures is a bridge too far.  This means that if
+there are too many early boot-time grace periods, the ->gp_seq field in
+the rcu_data structure cannot be trusted.  This commit therefore sets
+each rcu_data structure's ->gpwrap field to provide the necessary impetus
+for a suitable level of distrust.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tree.c | 40 +++++++++-------------------------------
- 1 file changed, 9 insertions(+), 31 deletions(-)
+ kernel/rcu/tree.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 5c46c0d34ef0d..5c4ec9dd4ce70 100644
+index 5c4ec9dd4ce70..03b089184b37e 100644
 --- a/kernel/rcu/tree.c
 +++ b/kernel/rcu/tree.c
-@@ -3423,42 +3423,20 @@ void __init kfree_rcu_scheduler_running(void)
+@@ -76,6 +76,7 @@
+ /* Data structures. */
  
- /*
-  * During early boot, any blocking grace-period wait automatically
-- * implies a grace period.  Later on, this is never the case for PREEMPTION.
-+ * implies a grace period.
-  *
-- * However, because a context switch is a grace period for !PREEMPTION, any
-- * blocking grace-period wait automatically implies a grace period if
-- * there is only one CPU online at any point time during execution of
-- * either synchronize_rcu() or synchronize_rcu_expedited().  It is OK to
-- * occasionally incorrectly indicate that there are multiple CPUs online
-- * when there was in fact only one the whole time, as this just adds some
-- * overhead: RCU still operates correctly.
-+ * Later on, this could in theory be the case for kernels built with
-+ * CONFIG_SMP=y && CONFIG_PREEMPTION=y running on a single CPU, but this
-+ * is not a common case.  Furthermore, this optimization would cause
-+ * the rcu_gp_oldstate structure to expand by 50%, so this potential
-+ * grace-period optimization is ignored once the scheduler is running.
-  */
- static int rcu_blocking_is_gp(void)
- {
--	int ret;
--
--	// Invoking preempt_model_*() too early gets a splat.
--	if (rcu_scheduler_active == RCU_SCHEDULER_INACTIVE ||
--	    preempt_model_full() || preempt_model_rt())
--		return rcu_scheduler_active == RCU_SCHEDULER_INACTIVE;
-+	if (rcu_scheduler_active != RCU_SCHEDULER_INACTIVE)
-+		return false;
- 	might_sleep();  /* Check for RCU read-side critical section. */
--	preempt_disable();
--	/*
--	 * If the rcu_state.n_online_cpus counter is equal to one,
--	 * there is only one CPU, and that CPU sees all prior accesses
--	 * made by any CPU that was online at the time of its access.
--	 * Furthermore, if this counter is equal to one, its value cannot
--	 * change until after the preempt_enable() below.
--	 *
--	 * Furthermore, if rcu_state.n_online_cpus is equal to one here,
--	 * all later CPUs (both this one and any that come online later
--	 * on) are guaranteed to see all accesses prior to this point
--	 * in the code, without the need for additional memory barriers.
--	 * Those memory barriers are provided by CPU-hotplug code.
--	 */
--	ret = READ_ONCE(rcu_state.n_online_cpus) <= 1;
--	preempt_enable();
--	return ret;
-+	return true;
- }
- 
- /**
+ static DEFINE_PER_CPU_SHARED_ALIGNED(struct rcu_data, rcu_data) = {
++	.gpwrap = true,
+ #ifdef CONFIG_RCU_NOCB_CPU
+ 	.cblist.flags = SEGCBLIST_RCU_CORE,
+ #endif
 -- 
 2.31.1.189.g2e36527f23
 

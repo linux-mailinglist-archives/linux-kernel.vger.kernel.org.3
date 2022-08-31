@@ -2,87 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B59015A7F3B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:50:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A6E5A7F3F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231923AbiHaNuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 09:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47496 "EHLO
+        id S231935AbiHaNu4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 09:50:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbiHaNuL (ORCPT
+        with ESMTP id S231331AbiHaNux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 09:50:11 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AE452018B
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:50:06 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-33dba2693d0so306928387b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=64Z6Nr61BsH9podjAJYqr1emZXHxMOReLT3+pHE2NKM=;
-        b=YnplyhxhMibyQ9RtCCMLvz4mdx8AOLBMphiTn/pTAePQ87NYENtGDGJ7cdsxjn1Mwm
-         dd0a5CP+JF7M2bGNDsXes8bzYIdClsuPrJDkRrz9TZRpcO4j9p8l0cfLlXTlMHAKetOF
-         5nzRViN+UJS6yIvbIhFcA5+dIbRpiOQXsDJg8jP1+RHkZSOcfZMIFLDgJcFmEZ4tVXyn
-         UDq792bJcYDVl8dLK20x0P9u8/VhZJcAtILIyhce4CqbibDiyTlkgkTvBQGaXHWOhwA0
-         NSMDFv+3emntZXVvmHU/RqjUTn0QE3sGFqI0aPYgnvlu4R75MhvFKd3Es8zYprO3am/F
-         Tw6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=64Z6Nr61BsH9podjAJYqr1emZXHxMOReLT3+pHE2NKM=;
-        b=wYQWOeOhmQwSqs8V7rsACJ+iq0bQKVCJWJYtzHnIFZSBt7zmPndxXDmTHWCsiC7za2
-         Md67jxyGkUXFVgdIqQbXiU4kz8y2SafX9rbfQtE/SbkPJvKLeLlgAyuwZJ4cT5DNK1Kb
-         4OuCGyXzgk/DprVg+lg3SyFByll4CsHeiDp3yljPEQ+QXar/ZOnt9bZgXWlnhRYx7U43
-         FDvh6wtVlj2TwCizlMj2G2N9zl2pLpJAA2jVxEaQuRfSUt+jdKGEs21j7nny2M753Zvk
-         a0J2THIc0uP/0tj4Cn//8dNlaFmziI2tx38PwvXvrVHflbElKRjRaO0ZprgNGfaniuh8
-         ZH4A==
-X-Gm-Message-State: ACgBeo2u/nkfBS2zAwZLEUo13lF21W4RyM2R36XDKFZVc6s4Dl4lotno
-        eVaiegyGGWEzAV+IqFLNws9gamAhc7N1mvI47rVskA==
-X-Google-Smtp-Source: AA6agR7Y/SNX0LwF41mH5PHZKnKKyE3Pke4wzQt6sHVa5tSJFC4wKf2FcL7ZFoqZ3IKyD2fJDS8ZB/WsSI6sJ269sDw=
-X-Received: by 2002:a81:7cc3:0:b0:336:e83b:51fd with SMTP id
- x186-20020a817cc3000000b00336e83b51fdmr18805142ywc.457.1661953805597; Wed, 31
- Aug 2022 06:50:05 -0700 (PDT)
+        Wed, 31 Aug 2022 09:50:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44799F18A;
+        Wed, 31 Aug 2022 06:50:51 -0700 (PDT)
+Received: from [IPV6:2405:201:10:389d:42df:ae4c:c047:294c] (unknown [IPv6:2405:201:10:389d:42df:ae4c:c047:294c])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: shreeya)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 2A19266015AB;
+        Wed, 31 Aug 2022 14:50:47 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661953850;
+        bh=qrAOSFiudT5hLLoyAKQTuL5l0pWRMOhoiKTCH02kSHA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kXdIIWLqOs5QXlLV3w07O4cJu8gd8C0rqDl8/pEQKKypLt7mGZcancOeRqhM0rhEk
+         J0nJw2iSCQ02phR2J7zdxvYih4ZhzgCiAP8MOat9djBjfSuRHwews2nujiKuAj+OI0
+         F3Yk9IohyZb+eD83xQaPXpIwuPvu9XktfzQ9NnTg1bmRtM04W46XwYuBD+k+YfPQLD
+         B/S37rhAFp3gORYibum6Lz+bOuUw0Z0J7bqjtMFsBPgx0IPGBMAlWp6qy9wWt+v3ZO
+         yqMR+GR2wsRz51a/wWnzhwQEN1y6bxd5WfVQtp/MK3qJsmB0Ar3Z7ZlnITmBimfoL9
+         DTTlysGxVe+jA==
+Message-ID: <2bbbd71a-904f-2bdf-8dda-f699e38265f8@collabora.com>
+Date:   Wed, 31 Aug 2022 19:20:38 +0530
 MIME-Version: 1.0
-References: <20220816130221.885920-1-peternewman@google.com>
- <YvunKCJHSXKz/kZB@FVFF77S0Q05N> <CALPaoCjJyYW68Vn1CNbf0Asggyu1AY68DbqcoK5n5FcXqeybJA@mail.gmail.com>
-In-Reply-To: <CALPaoCjJyYW68Vn1CNbf0Asggyu1AY68DbqcoK5n5FcXqeybJA@mail.gmail.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Wed, 31 Aug 2022 15:49:54 +0200
-Message-ID: <CALPaoCiJSABEtY61Xg9dxak8NJKpTd9wSFr1qbnnaZL2outR_w@mail.gmail.com>
-Subject: Re: [PATCH v3] perf/arm: adjust hwevents mappings on boot
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        will@kernel.org, Stephane Eranian <eranian@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.0
+Subject: Re: [PATCH v2] iio: light: tsl2583: Fix module unloading
+Content-Language: en-US
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     lars@metafoo.de, krisman@collabora.com,
+        dmitry.osipenko@collabora.com, kernel@collabora.com,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+References: <20220826122352.288438-1-shreeya.patel@collabora.com>
+ <20220828173327.7949ad73@jic23-huawei>
+From:   Shreeya Patel <shreeya.patel@collabora.com>
+In-Reply-To: <20220828173327.7949ad73@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
 
-On Tue, Aug 16, 2022 at 7:00 PM Peter Newman <peternewman@google.com> wrote:
+On 28/08/22 22:03, Jonathan Cameron wrote:
+> On Fri, 26 Aug 2022 17:53:52 +0530
+> Shreeya Patel <shreeya.patel@collabora.com> wrote:
 >
-> On Tue, Aug 16, 2022 at 4:18 PM Mark Rutland <mark.rutland@arm.com> wrote:
-
-...
-
+>> tsl2583 uses devm_iio_device_register() function and
+>> calling iio_device_unregister() in remove breaks the
+>> module unloading.
+>> Fix this by using iio_device_register() instead of
+>> devm_iio_device_register() function in probe.
+> Not sure why you are wrapping at 55 chars. I rewrapped this whilst applying.
 >
-> I can confirm that your patch fixes the issue we saw.
+> Reworded it a little too as I was touching it anyway.
 >
-> Thank you for coming back with this quickly, it looks like a better
-> solution to me.
+> Applied to the fixes-togreg branch of iio.git.
 >
+>> Cc: stable@vger.kernel.org
+>> Fixes: 371894f5d1a0 ("iio: tsl2583: add runtime power management support")
+> I took a look at this patch and it introduces the issue I just pointed
+> out in replying to your v1 by dropping the
+> /* Make sure the chip is on */
+> Which was correct even with runtime pm because it covered the case of
+> runtime_pm being disabled.   We probably need to bring that back as well,
+> perhaps as part of a cleanup patch taking this fully devm_
 
-Just following up, please let me know what plans you have for your patch.
+Hi Jonathan,
 
--Peter
+I can work on fixing some of the issues with this driver in my free time.
+Thanks for taking a look at the patch and letting me know.
+
+FYI, I am also planning to work on ADT7316 driver to move out of staging.
+I have the adt7516 eval board with me which I'll be using for testing.
+
+
+Thanks,
+Shreeya Patel
+
+> This driver has another issue for working if runtime PM isn't built into
+> the kernel which is that it checks the return of pm_runtime_put_autosuspend()
+> which calls
+>
+> static inline int __pm_runtime_suspend(struct device *dev, int rpmflags)
+> {
+> 	return -ENOSYS;
+> }
+>
+> I've been meaning to do an audit for drivers that have this problem for
+> a while, but not yet gotten to it.
+>
+> An ideal IIO driver needs to work correctly whether or not CONFIG_PM is
+> enabled.
+>
+> Jonathan
+>
+>
+>> Signed-off-by: Shreeya Patel <shreeya.patel@collabora.com>
+>> ---
+>> Changes in v2
+>>    - Use iio_device_register() instead of devm_iio_device_register()
+>>    - Add fixes and stable tags
+>>
+>>   drivers/iio/light/tsl2583.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/iio/light/tsl2583.c b/drivers/iio/light/tsl2583.c
+>> index 82662dab87c0..94d75ec687c3 100644
+>> --- a/drivers/iio/light/tsl2583.c
+>> +++ b/drivers/iio/light/tsl2583.c
+>> @@ -858,7 +858,7 @@ static int tsl2583_probe(struct i2c_client *clientp,
+>>   					 TSL2583_POWER_OFF_DELAY_MS);
+>>   	pm_runtime_use_autosuspend(&clientp->dev);
+>>   
+>> -	ret = devm_iio_device_register(indio_dev->dev.parent, indio_dev);
+>> +	ret = iio_device_register(indio_dev);
+>>   	if (ret) {
+>>   		dev_err(&clientp->dev, "%s: iio registration failed\n",
+>>   			__func__);
+>

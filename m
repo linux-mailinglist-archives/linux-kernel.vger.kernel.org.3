@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 707F45A7AE3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:05:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 327735A7AE8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbiHaKFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 06:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
+        id S229629AbiHaKFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 06:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229916AbiHaKFP (ORCPT
+        with ESMTP id S230497AbiHaKFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 06:05:15 -0400
+        Wed, 31 Aug 2022 06:05:24 -0400
 Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D957818B1C;
-        Wed, 31 Aug 2022 03:05:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D9C99247;
+        Wed, 31 Aug 2022 03:05:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=axis.com; q=dns/txt; s=axis-central1; t=1661940313;
-  x=1693476313;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1661940319;
+  x=1693476319;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=OBlIcerlLMxcXOCk6lLphH5SI/cE6LX4zmms8VOffM4=;
-  b=Uf64svgJVZ6xeMde5BtURIEd2goDWo0l3Nn7MYTgidr+I64in9LfxHmI
-   FJp0UeRa1ePymE20mKiWeib45b1ZvE2exwDOvBFH0m9u2rzFP1q8avG6r
-   ytWxiaMUXdSIHUOMa66rx15UEhKQV/z6ag81lNA7nnXwVHt7js2bRKObo
-   E5vnmuQ2wMD+0Zc/j70AjaX7RFPkhiOZGHolSMScCVw1AHbOSJcNlBZZj
-   oPG+CHjsAATSg4l5/E/DHGg2IaDFJt1SfYujpGdAAXKqLc86CbMx9xlw0
-   Wl0G3g8xZmGt7sILJ2dS31uwDYFq2X5C5i9fBdYqpXwn2YGtpiAHTLdto
+  bh=XUwffz74uZ7Ute+FLoHNJJSSnt2Skf2zaVZglgR4zyk=;
+  b=RH/X2wRVDfLx6fmgYCYmq5djOa1uOrvTwBGOzUsbtS7ASb9MzPhImSpK
+   JQlaHUlplR1rdYDVn2y9rxiC5cw1v/jlnQNb1IXr6+f3oY2uhILME0S8U
+   9PgZHTLui7FUh/f5MbAa3Vu9jdc/+126ldXh0Wl/p6f8LzzCxJtYQIQNH
+   4/Tfhov/KVzml0xQLMxpNxC2Io1/QkZ3ixt7NLBIa8HKfTzooIOLoY7Vh
+   s6w/8/XtB8+k+Ors1x7BRV3q3/+brOYp+CYyUp8apBpymwNtpzTFEAtIb
+   xWJbc5L9Jk8q3b/usXzN/+9o/tE2i6WuvccTypJA9ny0U3oaoF1UZglwj
    w==;
 From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
 To:     <jic23@kernel.org>
@@ -34,9 +34,9 @@ CC:     <kernel@axis.com>,
         Vincent Whitchurch <vincent.whitchurch@axis.com>,
         <andy.shevchenko@gmail.com>, <lars@metafoo.de>,
         <linux-iio@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 2/5] iio: adc: mcp320x: remove device_index check for TX
-Date:   Wed, 31 Aug 2022 12:05:03 +0200
-Message-ID: <20220831100506.3368103-3-vincent.whitchurch@axis.com>
+Subject: [PATCH v2 3/5] iio: adc: mcp320x: use conv_time instead of device_index switch
+Date:   Wed, 31 Aug 2022 12:05:04 +0200
+Message-ID: <20220831100506.3368103-4-vincent.whitchurch@axis.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20220831100506.3368103-1-vincent.whitchurch@axis.com>
 References: <20220831100506.3368103-1-vincent.whitchurch@axis.com>
@@ -53,107 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace the device_index switch with a TX value computation based on the
-number of channels in the chip_info structure, so that the latter has
-all the information needed to handle the variants.
+In mcp320x_adc_conversion(), the presence of the chip_info's conv_time
+is used as a condition for using the conversion message.  Use that same
+condition when initializing the conversion message and the other
+handling for variants which need it, instead of the different condition
+(checking of the device_index) which is used currently.
 
 Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
 ---
- drivers/iio/adc/mcp320x.c | 46 +++++++++++++++++++--------------------
- 1 file changed, 23 insertions(+), 23 deletions(-)
+ drivers/iio/adc/mcp320x.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
 diff --git a/drivers/iio/adc/mcp320x.c b/drivers/iio/adc/mcp320x.c
-index c71d90babb39..77fb4522a378 100644
+index 77fb4522a378..8ed27df9a0bb 100644
 --- a/drivers/iio/adc/mcp320x.c
 +++ b/drivers/iio/adc/mcp320x.c
-@@ -147,29 +147,34 @@ static int mcp3550_convert_rx(struct mcp320x *adc)
- 	return (s32)raw;
- }
- 
--static int mcp320x_channel_to_tx_data(int device_index,
--			const unsigned int channel, bool differential)
-+static int mcp320x_channel_to_tx_data(const struct mcp320x_chip_info *info,
-+				      const struct iio_chan_spec *channel)
- {
- 	int start_bit = 1;
-+	bool differential = channel->differential;
-+	u8 address = channel->address;
-+	/*
-+	 * This happens to be the same as the last number of the model name for
-+	 * multi-channel MCP300X and MCP320X.
-+	 */
-+	unsigned int num_nondiff_channels = info->num_channels / 2;
+@@ -429,11 +429,7 @@ static int mcp320x_probe(struct spi_device *spi)
+ 		spi_message_init_with_transfers(&adc->msg, adc->transfer,
+ 						ARRAY_SIZE(adc->transfer));
  
 -	switch (device_index) {
--	case mcp3002:
--	case mcp3202:
-+	switch (num_nondiff_channels) {
-+	case 2:
- 		return ((start_bit << 4) | (!differential << 3) |
--							(channel << 2));
--	case mcp3004:
--	case mcp3204:
--	case mcp3008:
--	case mcp3208:
-+			(address << 2));
-+	case 4:
-+	case 8:
- 		return ((start_bit << 6) | (!differential << 5) |
--							(channel << 2));
-+			(address << 2));
- 	default:
--		return -EINVAL;
-+		return 0;
- 	}
- }
- 
--static int mcp320x_adc_conversion(struct mcp320x *adc, u8 channel,
--				  bool differential, int device_index, int *val)
-+static int mcp320x_adc_conversion(struct mcp320x *adc,
-+				  const struct iio_chan_spec *channel,
-+				  int *val)
- {
- 	const struct mcp320x_chip_info *info = adc->chip_info;
- 	int ret;
-@@ -185,8 +190,7 @@ static int mcp320x_adc_conversion(struct mcp320x *adc, u8 channel,
- 
- 	memset(&adc->rx_buf, 0, sizeof(adc->rx_buf));
- 	if (adc->chip_info->num_channels > 1)
--		adc->tx_buf = mcp320x_channel_to_tx_data(device_index, channel,
--							 differential);
-+		adc->tx_buf = mcp320x_channel_to_tx_data(info, channel);
- 
- 	ret = spi_sync(adc->spi, &adc->msg);
- 	if (ret < 0)
-@@ -203,16 +207,12 @@ static int mcp320x_read_raw(struct iio_dev *indio_dev,
- {
- 	struct mcp320x *adc = iio_priv(indio_dev);
- 	int ret = -EINVAL;
--	int device_index = 0;
- 
- 	mutex_lock(&adc->lock);
- 
--	device_index = spi_get_device_id(adc->spi)->driver_data;
--
- 	switch (mask) {
- 	case IIO_CHAN_INFO_RAW:
--		ret = mcp320x_adc_conversion(adc, channel->address,
--			channel->differential, device_index, val);
-+		ret = mcp320x_adc_conversion(adc, channel, val);
- 		if (ret < 0)
- 			goto out;
- 
-@@ -452,8 +452,8 @@ static int mcp320x_probe(struct spi_device *spi)
- 		 * conversions without delay between them resets the chip
- 		 * and ensures all subsequent conversions succeed.
- 		 */
--		mcp320x_adc_conversion(adc, 0, 1, device_index, &ret);
--		mcp320x_adc_conversion(adc, 0, 1, device_index, &ret);
-+		mcp320x_adc_conversion(adc, &chip_info->channels[0], &ret);
-+		mcp320x_adc_conversion(adc, &chip_info->channels[0], &ret);
- 	}
- 
- 	adc->reg = devm_regulator_get(&spi->dev, "vref");
+-	case mcp3550_50:
+-	case mcp3550_60:
+-	case mcp3551:
+-	case mcp3553:
++	if (chip_info->conv_time) {
+ 		/* rx len increases from 24 to 25 bit in SPI mode 0,0 */
+ 		if (!(spi->mode & SPI_CPOL))
+ 			adc->transfer[1].len++;
 -- 
 2.34.1
 

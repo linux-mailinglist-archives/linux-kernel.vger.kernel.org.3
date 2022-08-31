@@ -2,90 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFED95A783E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:56:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 697505A7842
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:58:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiHaH4h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 03:56:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51624 "EHLO
+        id S231161AbiHaH6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 03:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbiHaH4U (ORCPT
+        with ESMTP id S229800AbiHaH6T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 03:56:20 -0400
-Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4503DBD6;
-        Wed, 31 Aug 2022 00:55:59 -0700 (PDT)
-Received: by mail-ej1-f45.google.com with SMTP id fy31so26307657ejc.6;
-        Wed, 31 Aug 2022 00:55:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=K87iipJyskGUTms3Hh4Q3eouXOQ7qIXcNh/72K9zLRw=;
-        b=QhW75smbf8hdKJOEi3KRrfhlwiMktrGgGcafzjet23ni2/C4GtTmj2Qba69LvSfkJX
-         So86d0W3AYTsDAyF36meYVicsYSs9Gx1d3D0OucvGVI1AnyLmrIk8clJcgxxYx58gnMC
-         1gLIVlLQkyxcEa5tzBR39FkF/SAif1fKQdQD2GQZrYKvcTeAAIZHpp6aydYS4VEy/pIY
-         AsqQ9nSc5lTgBqsf5VyLX5ymd3SnPHb4JNR3YD7HonufRFSHsYRlqxhopFHq14Db2QGp
-         dYEmH75h3MDv88tq2r5fAmO+8yYxmtZlyEeq3q+WEYC7nbqUAAYhriX39vXWdmrc3lOJ
-         s1gg==
-X-Gm-Message-State: ACgBeo0XQb7Ao9RfmAicDKJ4Ik/xwSKkDnswWGXu7YCurpjN8+e3YWGI
-        IcQ449n+3hGheGRzXekyJpC+1oAZaKZecw==
-X-Google-Smtp-Source: AA6agR4qVuwfnS2CQz4jDeWB0iNu344e5bd/jXgKf7bkufU0jn/dZoIvJ3uwto4r44/DA+gHw+8ivA==
-X-Received: by 2002:a17:907:7b8d:b0:741:9c4d:a48 with SMTP id ne13-20020a1709077b8d00b007419c4d0a48mr8284295ejc.746.1661932558065;
-        Wed, 31 Aug 2022 00:55:58 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id d13-20020a170906304d00b0073c8d4c9f38sm6935965ejd.177.2022.08.31.00.55.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 00:55:57 -0700 (PDT)
-Message-ID: <a3544988-5503-ae0e-3c66-a75019b673c0@kernel.org>
-Date:   Wed, 31 Aug 2022 09:55:56 +0200
+        Wed, 31 Aug 2022 03:58:19 -0400
+Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4209D42AC6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:58:16 -0700 (PDT)
+Received: from YC20090004.ad.ts.tri-ad.global ([103.175.111.222])
+        by smtp.orange.fr with ESMTPA
+        id TIbgoo5DzXFXxTIbrogpIH; Wed, 31 Aug 2022 09:58:14 +0200
+X-ME-Helo: YC20090004.ad.ts.tri-ad.global
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Wed, 31 Aug 2022 09:58:14 +0200
+X-ME-IP: 103.175.111.222
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Joe Perches <joe@perches.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v6 0/2] x86/asm/bitops: optimize ff{s,z} functions for constant expressions
+Date:   Wed, 31 Aug 2022 16:57:40 +0900
+Message-Id: <20220831075742.295-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: ext2/zram issue [was: Linux 5.19]
-Content-Language: en-US
-To:     charlie39@cock.li
-Cc:     adilger.kernel@dilger.ca, jack@suse.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        minchan@kernel.org, ngupta@vflare.org, senozhatsky@chromium.org,
-        torvalds@linux-foundation.org, tytso@mit.edu
-References: <702b3187-14bf-b733-263b-20272f53105d@kernel.org>
- <20220830214626.26544-1-charlie39@cock.li>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220830214626.26544-1-charlie39@cock.li>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30. 08. 22, 23:46, charlie39@cock.li wrote:
-> Hi, I think i bumped on  the same issue on version 5.19.2 with ext4 on zram mounted on /tmp
+The compilers provide some builtin expression equivalent to the ffs(),
+__ffs() and ffz() functions of the kernel. The kernel uses optimized
+assembly which produces better code than the builtin
+functions. However, such assembly code can not be folded when used
+with constant expressions.
 
-Only 5.19.6 contains the fix.
+This series relies on __builtin_constant_p to select the optimal solution:
 
-> ```
-> # sudo dmesg -T | grep ext4
-> 
-> [Tue Aug 30 21:41:45 2022] EXT4-fs error (device zram1): ext4_check_bdev_write_error:218: comm kworker/u8:3: Error while
-> [Tue Aug 30 21:41:45 2022] EXT4-fs warning (device zram1): ext4_end_bio:347: I/O error 10 writing to inode 76 starting b
-> [Tue Aug 30 21:41:45 2022] EXT4-fs warning (device zram1): ext4_end_bio:347: I/O error 10 writing to inode 76 starting b
-> [Tue Aug 30 21:41:45 2022] EXT4-fs warning (device zram1): ext4_end_bio:347: I/O error 10 writing to inode 66 starting b
-> [Tue Aug 30 22:07:02 2022] EXT4-fs error (device zram1): ext4_journal_check_start:83: comm ThreadPoolForeg: Detected abo
-> [Tue Aug 30 22:07:02 2022] EXT4-fs (zram1): Remounting filesystem read-only
-> 
-> ```
-> Not sure what caused it, i was just updating my arch system.
-> 
+  * use kernel assembly for non constant expressions
+
+  * use compiler's __builtin function for constant expressions.
+
+
+** Statistics **
+
+Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+of __ffs() and ffz() calls (details of the calculation in each patch).
+
+
+** Changelog **
+
+v5 -> v6:
+  * Rename variable___ffs() into variable__ffs() (two underscores
+    instead of three)
+
+
+v4 -> v5:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Rewrite the commit log:
+    - Use two spaces instead of `| ' to indent code snippets.
+    - Do not use `we'.
+    - Do not use `this patch' in the commit description. Instead,
+      use imperative tone.
+  Link: https://lore.kernel.org/all/YvUZVYxbOMcZtR5G@zn.tnic/
+
+
+v3 -> v4:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Remove note and link to Nick's message in patch 1/2, c.f.:
+  Link: https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+    patch 2/2.
+
+
+v2 -> v3:
+
+  * Redacted out the instructions after ret and before next function
+    in the assembly output.
+
+  * Added a note and a link to Nick's message on the constant
+    propagation missed-optimization in clang:
+    Link: https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
+
+  * Fix copy/paste typo in statistics of patch 1/2. Number of
+    occurences before patches are 1081 and not 3607 (percentage
+    reduction of 26.7% remains correct)
+
+  * Rename the functions as follow:
+    - __varible_ffs() -> variable___ffs()
+    - __variable_ffz() -> variable_ffz()
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+    patch 1/2.
+
+Vincent Mailhol (2):
+  x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+    expressions
+  x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+    expressions
+
+ arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
+ 1 file changed, 38 insertions(+), 26 deletions(-)
 
 -- 
-js
+2.35.1
 

@@ -2,133 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26C55A7D4D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8945A7D58
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230209AbiHaMaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        id S231195AbiHaMcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiHaMaI (ORCPT
+        with ESMTP id S230490AbiHaMcA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:30:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1BABB1E3;
-        Wed, 31 Aug 2022 05:30:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 63B3C61999;
-        Wed, 31 Aug 2022 12:30:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D51DC433C1;
-        Wed, 31 Aug 2022 12:30:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661949005;
-        bh=xUAe/8husFmwnBA0zfVEAqWyrCl83ZcMIyiwRkNQ/A0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Tq+5F6knMwcUy7jvIG0XcNJ+kcjbinj3aLlcszl+ZsZjV7F6Q6DUccGBrae5H1VJp
-         MP9eanqJzI0BF5vq1V+Cy3z/NfbuCMTG5mzKrQyU9W46S/+vynmLiO5qi6JeTn9w1R
-         aLRS+eCJKey1uCkpwoi+7sCeV9TsyvoGyWHFVF/NrFBcuVj/LwSJES2Mlh3v6duLzN
-         AH7VIXkUuyOF6yMankiGQ2HAb3G+higOdsRRJIYVt9VRwfLnzyKK13mbpeZKqTI2Hs
-         Zg6SkcFPcxGg20jHsiUmHPhnX2lz3oeR5G/01wi3BkDsxBjZF9MOavScLUoNXjLQJV
-         iOkMaD/gWLyrQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 4F3DA404A1; Wed, 31 Aug 2022 09:30:03 -0300 (-03)
-Date:   Wed, 31 Aug 2022 09:30:03 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        James Clark <james.clark@arm.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        John Garry <john.garry@huawei.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        perry.taylor@intel.com, caleb.biggers@intel.com,
-        kshipra.bopardikar@intel.com, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 2/8] perf metric: Return early if no CPU PMU table
- exists
-Message-ID: <Yw9US7HG0hDsc+FA@kernel.org>
-References: <20220830164846.401143-1-irogers@google.com>
- <20220830164846.401143-3-irogers@google.com>
+        Wed, 31 Aug 2022 08:32:00 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479EBD1E0D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:31:58 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id t129so14255599pfb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:31:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=ombG7QermoyUpZgeZmIaVZjDmMrCYL6rBQrF3G0foVY=;
+        b=zSQ0FSkWy57Sy7IjyvRbxCrlzP0H9P73QhEFc9sf4E8opP3ffkYx+tkgzgRuqhbGYw
+         iAKwLn5unY7thm2wGQZe81wR5yQwvdI3bxtCrUEOst5mRMfy529/0qfiMPxkcf1Mpi2z
+         fSEjtO2WWUX8L8PWXSd6fNtU1OSLo0UF9CQ473f9yB++Wc/sv1Wh5pQPGnWvLTuVuBR3
+         QczQMJaCsYxFxfLzD4GjEn8+1UdQXjXhw+33ZkTowMwHLMFJsR+eNVe4vuVbV63mJRpy
+         6OSFMLdRw2pkFkQGk4+vH7MBGrGgEhKQ2NCjO6OVfsoDZAsKi3tUuxlOCn5j9FCPX0r3
+         YTsA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=ombG7QermoyUpZgeZmIaVZjDmMrCYL6rBQrF3G0foVY=;
+        b=nYU3aXvwXUehj2r1Lnbt3BbE9OB6Qmo1swqVQx0c1LbnmWh0d81xmQ/gahtTYqzMFV
+         ExLtGH3OnpMYpOLmnUlqJ2KP8FBsE0p1/zbIaElqrECiEgQek0qHPobXIeIVmySpUmUN
+         H8z7Axd/o1b2ukbbOQ2jZkyCyckkQ/+gX+3vIiSMRpnyxuCF2YNbt8u32bA1sjRJeeUm
+         j9f/Tm3FxxmkVcbOqF8u6Gqb8EY/JHqnhK3tARoDmCIoKhroC0Rpcw1Bs9NHJNkQjkBJ
+         RGrvjo0Um48FCteKU58A/rwlEEt8cBAUKeGG08b/9O/eQrk1vW0gkrpYEPJNTyaPFlG+
+         x5QA==
+X-Gm-Message-State: ACgBeo2frNhWGUq/U9Fr340sJTEfsF7UnTknWNEbsWHmXcae+fWfdvLz
+        UqpdJ0/gI/o7nIGCmAQCLTRZwQ==
+X-Google-Smtp-Source: AA6agR4spfWbHnX22P3rGo45qaymewHk53IiWwFvdv38QVAYNh20XM9p0B1NcDUd0UHatSUqXoE+mg==
+X-Received: by 2002:a63:525a:0:b0:42b:28a9:8a34 with SMTP id s26-20020a63525a000000b0042b28a98a34mr21320226pgl.269.1661949117772;
+        Wed, 31 Aug 2022 05:31:57 -0700 (PDT)
+Received: from C02G705SMD6V.bytedance.net ([61.120.150.76])
+        by smtp.gmail.com with ESMTPSA id n12-20020a170902e54c00b0016efad0a63csm11769896plf.100.2022.08.31.05.31.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 05:31:57 -0700 (PDT)
+From:   Jia Zhu <zhujia.zj@bytedance.com>
+To:     linux-erofs@lists.ozlabs.org, xiang@kernel.org, chao@kernel.org
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yinxin.x@bytedance.com, jefflexu@linux.alibaba.com,
+        huyue2@coolpad.com, Jia Zhu <zhujia.zj@bytedance.com>
+Subject: [RFC PATCH 0/5] Introduce erofs shared domain
+Date:   Wed, 31 Aug 2022 20:31:20 +0800
+Message-Id: <20220831123125.68693-1-zhujia.zj@bytedance.com>
+X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830164846.401143-3-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Aug 30, 2022 at 09:48:40AM -0700, Ian Rogers escreveu:
-> Previous behavior is to segfault if there is no CPU PMU table and a
-> metric is sought. To reproduce compile with NO_JEVENTS=1 then request
-> a metric, for example, "perf stat -M IPC true".
-> 
-> Fixes: 00facc760903 ("perf jevents: Switch build to use jevents.py")
-> Signed-off-by: Ian Rogers <irogers@google.com>
+[Kernel Patchset]
+===============
+Git tree:
+	https://github.com/userzj/linux.git zhujia/shared-domain-v1
+Git web:
+	https://github.com/userzj/linux/tree/zhujia/shared-domain-v1
 
-Before:
+[Background]
+============
+In ondemand read mode, we use individual volume to present an erofs
+mountpoint, cookies to present bootstrap and data blobs.
 
-  $ make -k NO_JEVENTS=1 BUILD_BPF_SKEL=1 O=/tmp/build/perf-urgent -C tools/perf install-bin
-  $ perf stat -M IPC true
-  Segmentation fault (core dumped)
-  $
+In which case, since cookies can't be shared between fscache volumes,
+even if the data blobs between different mountpoints are exactly same,
+they can't be shared.
 
-After:
+[Introduction]
+==============
+Here we introduce erofs shared domain to resolve above mentioned case.
+Several erofs filesystems can belong to one domain, and data blobs can
+be shared among these erofs filesystems of same domain.
 
-  $ perf stat -M IPC true
+[Usage]
+Users could specify 'domain_id' mount option to create or join into a
+domain which reuses the same cookies(blobs).
 
-   Usage: perf stat [<options>] [<command>]
+[Design]
+========
+1. Use pseudo mnt to manage domain's lifecycle.
+2. Use a linked list to maintain & traverse domains.
+3. Use pseudo sb to create anonymous inode for recording cookie's info
+   and manage cookies lifecycle.
 
-      -M, --metrics <metric/metric group list>
-                            monitor specified metrics or metric groups (separated by ,)
-  $
+[Flow Path]
+===========
+1. User specify a new 'domain_id' in mount option.
+   1.1 Traverse domain list, compare domain_id with existing domain.[Miss]
+   1.2 Create a new domain(volume), add it to domain list.
+   1.3 Traverse pseudo sb's inode list, compare cookie name with
+       existing cookies.[Miss]
+   1.4 Alloc new anonymous inodes and cookies.
 
-Better, but perhaps we could provide some better message as to why the
-metric provided isn't acceptable?
+2. User specify an existing 'domain_id' in mount option and the data
+   blob is existed in domain.
+   2.1 Traverse domain list, compare domain_id with existing domain.[Hit]
+   2.2 Reuse the domain and increase its refcnt.
+   2.3 Traverse pseudo sb's inode list, compare cookie name with
+   	   existing cookies.[Hit]
+   2.4 Reuse the cookie and increase its refcnt.
 
-Anyway, applied to perf/urgent.
+[Test]
+======
+Git web: (More test cases will be added.)
+	https://github.com/userzj/demand-read-cachefilesd/tree/shared-domain
 
-Thanks,
+Jia Zhu (5):
+  erofs: add 'domain_id' mount option for on-demand read sementics
+  erofs: introduce fscache-based domain
+  erofs: add 'domain_id' prefix when register sysfs
+  erofs: remove duplicated unregister_cookie
+  erofs: support fscache based shared domain
 
-- Arnaldo
-
-> ---
->  tools/perf/util/metricgroup.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-> index ad5cacdecd81..18aae040d61d 100644
-> --- a/tools/perf/util/metricgroup.c
-> +++ b/tools/perf/util/metricgroup.c
-> @@ -1655,6 +1655,9 @@ int metricgroup__parse_groups(const struct option *opt,
->  	struct evlist *perf_evlist = *(struct evlist **)opt->value;
->  	const struct pmu_events_table *table = pmu_events_table__find();
->  
-> +	if (!table)
-> +		return -EINVAL;
-> +
->  	return parse_groups(perf_evlist, str, metric_no_group,
->  			    metric_no_merge, NULL, metric_events, table);
->  }
-> -- 
-> 2.37.2.672.g94769d06f0-goog
+ fs/erofs/Makefile   |   2 +-
+ fs/erofs/domain.c   | 175 ++++++++++++++++++++++++++++++++++++++++++++
+ fs/erofs/fscache.c  |  17 ++++-
+ fs/erofs/internal.h |  34 ++++++++-
+ fs/erofs/super.c    |  45 +++++++++---
+ fs/erofs/sysfs.c    |  11 ++-
+ 6 files changed, 270 insertions(+), 14 deletions(-)
+ create mode 100644 fs/erofs/domain.c
 
 -- 
+2.20.1
 
-- Arnaldo

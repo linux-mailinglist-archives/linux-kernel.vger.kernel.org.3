@@ -2,150 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B2EB5A7EF8
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:35:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996205A7EFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:35:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbiHaNfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 09:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
+        id S230340AbiHaNfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 09:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231269AbiHaNev (ORCPT
+        with ESMTP id S229954AbiHaNfN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 09:34:51 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2699FD571A
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:33:56 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id x80so9947243pgx.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:33:56 -0700 (PDT)
+        Wed, 31 Aug 2022 09:35:13 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1D0D292F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:34:14 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id m7so11066292lfq.8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:34:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=1PE3GKnhwOhRif7fn1enjVH8DVXVUvhYKrLN724969I=;
-        b=BDicR5TJvL5oR2CfoULAhbPtsjdaQUo8LupEgctXNvDRwIdsaxZVxk3GBI3Erzm4vk
-         aCYL0FK9UAa4d751uPbhSGOVQLb0E5V+/9+zN2P+pfgn58Te4w2jJ+geGwfNLM8wQYt1
-         ruQNla7c/YWtBBlAJ8wxKBaBOsNNDhvAFLM2wkK1VEnF7sqNw4dwUyun7xT11TmgwUp9
-         rE+/GTAen/+frXJ3pcZ8s8nWEZZiu1fgC49WIdMaW+rwKMCqe19QG+uaJvutr2PnTaxH
-         C9cbKyr3IhIae0cxmQLNUUt1HhQvdiha6n8HF5vaUf7hJGsEATD/PErOya2PB4zTlQdC
-         iPeA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=OOv9GRL0nYDS2NnSyAW5EZUBMP3Ppq/0jku4f/s4o/c=;
+        b=QdPDLrA/x7FMlTinCUu5vYjwA7F7Ngughb8OukfhTvstR88QduXSLagsbySJ0wCjo0
+         im8U0V6HxLYCGTfVvOG2v7L6VAqo08s63rLA+rYOHw6KAaKKDkeoFeqq6sQ8mDkXabec
+         6ZUu99HxXrAPdOTovQOTRqRtX0qQQsvt3nPpUGpssjnb7iyhRO5TV5onmmTOw9+gJzSc
+         g0R2okf5DzGqkJ6Q4Mbi6Iq8Hcgzt06/zpQ/JRy83f7jccbljaGt6mt7AqEaYclYCmHm
+         p2YXHm51l1q6xWE2vTSeX9/qoe7pTb2frrmIMnkZVA9b0EdEkKhEvnF7tmPmZPDp/RSo
+         jGGg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=1PE3GKnhwOhRif7fn1enjVH8DVXVUvhYKrLN724969I=;
-        b=IPoT/Lk5YZOydo4/kBYNxH0RkZfvBEP/IPIHOe5lrr+TgIRRgnym2w5zTKyoxOHGwn
-         QnvO95IzRSBm78a5fhwpayGgb7ZqZsA2wBytLNRb1pXZo7O9uu41Kwc9nu8mlrquDZfa
-         5u3k0dlpWy/42FLvHKpKJ5FVC7fa4uHHcRHqOGxHN5E9fJHwYWfY+aNZlAiNehrD7sxS
-         VWKQioHKrsXxFz5Ku0nNNSfO2BAFYAGf/QHR1UrNu46ku/eXAXzNfB5jgKz3oTyLfvXQ
-         4IyUZd5VXtnRTvCUsmH+SVOorHbPYR1qc9e+I56M0vDGf9UAy/IuktT/eEjkNKGiO32c
-         YYew==
-X-Gm-Message-State: ACgBeo3iQB/p0BS65UMqIO251gqCjzHWKZwp4bUI2YT6QqxmoGSP1rOl
-        WPZNEDT2BJeV/1coRstEt9Rz1LBIonc=
-X-Google-Smtp-Source: AA6agR6KmyTMobUbdXA3xUzSjKLI551KM+BCVV/L16aTZhKH4J0yQhveyLp/PO5lreFFBmR8UrBsdA==
-X-Received: by 2002:a65:6d93:0:b0:42c:50ec:8025 with SMTP id bc19-20020a656d93000000b0042c50ec8025mr9689713pgb.62.1661952834522;
-        Wed, 31 Aug 2022 06:33:54 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id pj7-20020a17090b4f4700b001fb277223bdsm1306189pjb.2.2022.08.31.06.33.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 06:33:53 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 22:33:48 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Chao Yu <chao@kernel.org>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        linux-kernel@vger.kernel.org, jaegeuk@kernel.org,
-        Chao Yu <chao.yu@oppo.com>, stable@kernel.org,
-        syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
-Subject: Re: [PATCH] mm/slub: fix to return errno if kmalloc() fails
-Message-ID: <Yw9jPJn7uUAl6uf1@hyeyoo>
-References: <20220830141009.150075-1-chao@kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=OOv9GRL0nYDS2NnSyAW5EZUBMP3Ppq/0jku4f/s4o/c=;
+        b=nNJDL7yr7MviWV0YjvfTEmGKm4GGx7mFaeLffGfAnENzKuQcgMmvGcdmKz+XhPZK0x
+         tPbZ7RwVQmHR53Pw2CzZtAAySepk9jdt9bswup0QiJ4VE8XFm/olJuKUCoZXUljtGg2s
+         Yqh/O37jk16lEADIytvUdGnhLx7FxnYwTeKHLk9gpwmCBJ849KkjSEDkYXSWju2hqJL6
+         YOiyYt/T3p3ridFsZcMc5PFo0VJ99ynqO4vJ7C2yp2RS7hqJeeZu/gEQ79z4sF1C3w7t
+         zUaT4rXv6il0cjsL203BVlCcSsVVaXncGzCB19mWIg0joNcgEE5SZyv/v5djyjweWedZ
+         aAXw==
+X-Gm-Message-State: ACgBeo1JlP536sDhD2tyotVCSeziODP9A1KINkVQWPk71Kw5L775T+up
+        VgxtIvqCq+cdpWRPSRi5HJO/zA==
+X-Google-Smtp-Source: AA6agR6gdHh4F4Qi/xgHw6C4Xzzy9Y0m5klM5eOJmjWBapmikULSRxa/IhApr8QMEpKonI0J9UjqsA==
+X-Received: by 2002:a05:6512:e98:b0:492:cf3c:8860 with SMTP id bi24-20020a0565120e9800b00492cf3c8860mr9100260lfb.603.1661952847154;
+        Wed, 31 Aug 2022 06:34:07 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id p9-20020a2eba09000000b0025df5f38da8sm2110704lja.119.2022.08.31.06.34.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 06:34:06 -0700 (PDT)
+Message-ID: <97b256a7-670f-c681-424d-854d15145d24@linaro.org>
+Date:   Wed, 31 Aug 2022 16:34:05 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830141009.150075-1-chao@kernel.org>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 2/5] dt-bindings: gpio: pca95xx: add entry for pcal6534
+ and PI4IOE5V6534Q
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Martyn Welch <martyn.welch@collabora.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        kernel@collabora.com, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220829133923.1114555-1-martyn.welch@collabora.com>
+ <20220829133923.1114555-2-martyn.welch@collabora.com>
+ <9db9dcf8-6299-acec-c09e-603afde9a239@linaro.org>
+ <CACRpkdb1-LXwLdV3qLMc+i_VaLoJ-mTs=+0QtuJtNaQR_xVpxQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CACRpkdb1-LXwLdV3qLMc+i_VaLoJ-mTs=+0QtuJtNaQR_xVpxQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 10:10:09PM +0800, Chao Yu wrote:
-> From: Chao Yu <chao.yu@oppo.com>
+On 31/08/2022 16:26, Linus Walleij wrote:
+> On Tue, Aug 30, 2022 at 9:50 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>> On 29/08/2022 16:39, Martyn Welch wrote:
+>>> The NXP PCAL6534 is a 34-bit I2C I/O expander similar to the PCAL6524. The
+>>> Diodes PI4IOE5V6534Q is a functionally identical chip provided by Diodes
+>>> Inc.
+>>>
+>>> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+>>
+>> Then diodes should be followed by fallback (and use only one compatible
+>> to bind).
 > 
-> In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
-> out-of-memory, if it fails, return errno correctly rather than
-> triggering panic via BUG_ON();
+> Ugh I don't think we have done a very good job at providing fallbacks
+> (several compatibles) for this hardware. Just looking at the list makes
+> me suspicious.
 > 
-> kernel BUG at mm/slub.c:5893!
-> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
-> 
-> Call trace:
->  sysfs_slab_add+0x258/0x260 mm/slub.c:5973
->  __kmem_cache_create+0x60/0x118 mm/slub.c:4899
->  create_cache mm/slab_common.c:229 [inline]
->  kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
->  kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
->  f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
->  f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
->  f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
->  mount_bdev+0x1b8/0x210 fs/super.c:1400
->  f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
->  legacy_get_tree+0x30/0x74 fs/fs_context.c:610
->  vfs_get_tree+0x40/0x140 fs/super.c:1530
->  do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
->  path_mount+0x358/0x914 fs/namespace.c:3370
->  do_mount fs/namespace.c:3383 [inline]
->  __do_sys_mount fs/namespace.c:3591 [inline]
->  __se_sys_mount fs/namespace.c:3568 [inline]
->  __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
-> 
-> Cc: <stable@kernel.org>
-> Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
+> The fallback scheme is pretty hard to maintain when vendors are a bit
+> unclear on whether things are really compatible or not, and sometimes
+> they are compatible but rather not say :(
 
-Fixes: 81819f0fc8285 ("SLUB core")
+If you have specific+fallback compatible (e.g. diodes,pi4ioe5v6534q,
+nxp,pcal6534), you can always introduce changes in the driver because it
+will match to the specific one (diodes). You could even introduce
+incompatible changes, if you insist, and the effect would be the same as
+adding now two compatibles in the driver.
 
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
-> ---
->  mm/slub.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/slub.c b/mm/slub.c
-> index 862dbd9af4f5..e6f3727b9ad2 100644
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -5890,7 +5890,8 @@ static char *create_unique_id(struct kmem_cache *s)
->  	char *name = kmalloc(ID_STR_LENGTH, GFP_KERNEL);
->  	char *p = name;
->  
-> -	BUG_ON(!name);
-> +	if (!name)
-> +		return ERR_PTR(-ENOMEM);
->  
->  	*p++ = ':';
->  	/*
-> @@ -5948,6 +5949,8 @@ static int sysfs_slab_add(struct kmem_cache *s)
->  		 * for the symlinks.
->  		 */
->  		name = create_unique_id(s);
-> +		if (IS_ERR(name))
-> +			return PTR_ERR(name);
->  	}
->  
->  	s->kobj.kset = kset;
-> -- 
-> 2.25.1
-> 
-> 
+In the same time having fallback saves you useless entries in the driver
+like:
+{ .compatible = "nxp,pca9556", .data = OF_953X( 8, 0), }
+{ .compatible = "nxp,pca9557", .data = OF_953X( 8, 0), }
 
-Looks good to me.
+I mean, really, this will grow. I was not CC-ed on the driver change -
+for some reason only on some pieces of patchset - so difficult to say
+how it looks here, but judging by description ("identical chip") it is
+exactly the same as above.
 
-Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+I don't insist on it, but for most of other pieces of complex devices
+(SoC IP blocks) we follow such approach.
 
-Thanks!
-
--- 
-Thanks,
-Hyeonggon
+Best regards,
+Krzysztof

@@ -2,137 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B84F5A8404
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:10:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7FD25A840F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiHaRKC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:10:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54442 "EHLO
+        id S230151AbiHaRQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 13:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231552AbiHaRKB (ORCPT
+        with ESMTP id S231342AbiHaRQP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:10:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43998B857
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:09:59 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7B7B9ED1;
-        Wed, 31 Aug 2022 10:10:05 -0700 (PDT)
-Received: from [10.57.15.237] (unknown [10.57.15.237])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BCE7D3F766;
-        Wed, 31 Aug 2022 10:09:57 -0700 (PDT)
-Message-ID: <6cc93088-981e-5c2d-a757-90508455aa42@arm.com>
-Date:   Wed, 31 Aug 2022 18:09:52 +0100
+        Wed, 31 Aug 2022 13:16:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7FC72B191
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:15:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661966117;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3wNDRJb+y9GkEb33I7HiMe0aeP3rl6XFj5xgf5bJFgc=;
+        b=b7wsog1x/991oo6422DmCbdsN+DI1gYzVgH6IFVSYVZmv/yuUeUTX2k07JC71yPJHWS5d5
+        t4qswtBS0aGeDxu9aF8uxltfixIWCfFlEz7PBM3tRHONB2Nr8NeOho4+DlmApr1wgvqwUg
+        AF+Yih/bV5zQZu6kPkAeSSs0m/AI7Mc=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-468-ZAqGOTczOLamNWxCw6egsA-1; Wed, 31 Aug 2022 13:15:16 -0400
+X-MC-Unique: ZAqGOTczOLamNWxCw6egsA-1
+Received: by mail-il1-f198.google.com with SMTP id n13-20020a056e02140d00b002dfa5464967so10863745ilo.19
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:15:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc;
+        bh=3wNDRJb+y9GkEb33I7HiMe0aeP3rl6XFj5xgf5bJFgc=;
+        b=hfts3jeI34HVQPYXJcMU+af9Y8xE7fB1g+m0LqjCO1UUbygFlitQFZXUL9HxvpypTy
+         XscbjSbXvktYEnwZBRrfIRUOEDNtLcc6hXnxxRBzXBAkhB6VFl8jiZ/59Nq77vV3TsmC
+         W8AZZLx2JGMVjhJ7xfDJkwdwnqksN0635SVhzFCd5n47/r/qgXlPwSHotAIs9NgNK4+v
+         Xta5MH7gXfdJTQVqkfzS7TFKw7nY0Etv6Gz0hgBpflC9nVKsSVjY1dYJv5HeTn5YTOp0
+         QMUs/Q4+HlbSs0zn1GBZQtsp1fMsBMGByvY992RA6FkNPd2hknLr/3eA+t3lVLvaXd6k
+         nLQQ==
+X-Gm-Message-State: ACgBeo2Alu2lHa7vKJkZySOcjhO+qD7bztAiVTYKjrIrRlCNZthEFlPD
+        lrYJdmyIwum8R7rFdcKeEwDBigG/TBI8p9eIwRe9btPU6bNhkvEmVhth/hrDHtChQB8M8BvrbSf
+        fHRNQraDMbtOQi/U9OKJNpMGi
+X-Received: by 2002:a05:6638:dd4:b0:349:ebfd:e705 with SMTP id m20-20020a0566380dd400b00349ebfde705mr15532670jaj.4.1661966114825;
+        Wed, 31 Aug 2022 10:15:14 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7UqftyvxL/mEDNedrHFErMBY8p1pSeatls/DmKqtUta1ABwUYFXwUlUJQ1689Lfg3tEQsWAQ==
+X-Received: by 2002:a05:6638:dd4:b0:349:ebfd:e705 with SMTP id m20-20020a0566380dd400b00349ebfde705mr15532650jaj.4.1661966114600;
+        Wed, 31 Aug 2022 10:15:14 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id u190-20020a0223c7000000b00343617e8368sm7084182jau.99.2022.08.31.10.15.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 10:15:14 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 11:15:12 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        "Peter Oberparleiter" <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        "Cornelia Huck" <cohuck@redhat.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        "Shameer Kolothum" <shameerali.kolothum.thodi@huawei.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: Re: [PATCH 15/15] vfio: Add struct device to vfio_device
+Message-ID: <20220831111512.4924e152.alex.williamson@redhat.com>
+In-Reply-To: <BN9PR11MB5276BF3B8D65B66DB292CAE58C789@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220827171037.30297-1-kevin.tian@intel.com>
+        <20220827171037.30297-16-kevin.tian@intel.com>
+        <20220830161838.4aa47045.alex.williamson@redhat.com>
+        <Yw6i7btDKcUDPADP@ziepe.ca>
+        <BN9PR11MB5276BF3B8D65B66DB292CAE58C789@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: Red Hat
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 0/3] More ARM DMA ops cleanup
-Content-Language: en-GB
-To:     Yongqin Liu <yongqin.liu@linaro.org>
-Cc:     Christoph Hellwig <hch@lst.de>, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, m.szyprowski@samsung.com,
-        arnd@kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        "Bajjuri, Praneeth" <praneeth@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-References: <cover.1650539846.git.robin.murphy@arm.com>
- <20220421141300.GC20492@lst.de>
- <665d2b46-c9e2-2543-cad5-9adf022e4bcb@arm.com>
- <CAMSo37XN3PC22JK4ot-B8gUxWOhK+UD-73Zb8LqvYpgPL1Bj6g@mail.gmail.com>
- <9ec5ba90-150a-c675-d95b-b13e3a4e9e10@arm.com>
- <CAMSo37XmxGn4VJJXwOca=mjHfmgYoh-i4bOs_DpP2LdjaN87wA@mail.gmail.com>
- <5c617d66-f04b-df26-bf7a-7f479d081ac2@arm.com>
- <CAMSo37UUXd9FT1coAqgxU4urXi0NeCkONesmWqFfyrdDi+03dA@mail.gmail.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <CAMSo37UUXd9FT1coAqgxU4urXi0NeCkONesmWqFfyrdDi+03dA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-31 17:41, Yongqin Liu wrote:
-> Hi, Robin
-> 
-> On Tue, 30 Aug 2022 at 23:37, Robin Murphy <robin.murphy@arm.com> wrote:
->>
->> On 2022-08-30 16:19, Yongqin Liu wrote:
->>> Hi, Robin
->>>
->>> Thanks for the kind reply!
->>>
->>> On Tue, 30 Aug 2022 at 17:48, Robin Murphy <robin.murphy@arm.com> wrote:
->>>>
->>>> On 2022-08-27 13:24, Yongqin Liu wrote:
->>>>> Hi, Robin, Christoph
->>>>>
->>>>> With the changes landed in the mainline kernel,
->>>>> one problem is exposed with our out of tree pvr module.
->>>>> Like the source here[1], arm_dma_ops.sync_single_for_cpu is called in
->>>>> the format like the following:
->>>>>        arm_dma_ops.sync_single_for_cpu(NULL, pStart, pEnd - pStart,
->>>>> DMA_FROM_DEVICE);
->>>>>
->>>>> Not sure if you could give some suggestions on what I should do next
->>>>> to make the pvr module work again.
->>>>
->>>> Wow, that driver reinvents so many standard APIs for no apparent reason
->>>> it's not even funny.
->>>>
->>>> Anyway, from a brief look it seemingly already knows how to call the DMA
->>>> API semi-correctly, so WTF that's doing behind an #ifdef, who knows?
->>>> However it's still so completely wrong in general - fundamentally broken
->>>> AArch64 set/way cache maintenance!? - that it looks largely beyond help.
->>>> "Throw CONFIG_DMA_API_DEBUG at it and cry" is about the extent of
->>>> support I'm prepared to provide for that mess.
->>>
->>> For the moment, I do not care about the AArch64 lines, like if we only
->>> say the following two lines:
->>>       arm_dma_ops.sync_single_for_device(NULL, pStart, pEnd - pStart,
->>> DMA_TO_DEVICE);
->>>       arm_dma_ops.sync_single_for_cpu(NULL, pStart, pEnd - pStart,
->>> DMA_FROM_DEVICE);
->>>
->>> Could you please give some suggestions for that?
->>
->> Remove them. Then remove the #ifdef __arch64__ too, since the code under
->> there is doing a passable impression of generic DMA API usage, as long
->> as one ignores the bigger picture.
-> 
-> I tried with this method, and found that if I only update for the
-> pvr_flush_range
-> and the pvr_clean_range functions, the build still could boot to the
-> home screen.
-> 
-> but if I update all the pvr_flush_range, pvr_clean_range and
-> pvr_invalidate_range
-> functions with this method(remove the arm_dma_ops lines and the #ifdef
-> __arch64__ lines),
-> then a "Unable to handle kernel NULL pointer dereference at virtual
-> address 0000003c"
-> error is reported like here: http://ix.io/49gu
-> 
-> Not sure if you have any idea from the log, or could you please give
-> some suggestions
-> on how to debug it.
+On Wed, 31 Aug 2022 06:10:51 +0000
+"Tian, Kevin" <kevin.tian@intel.com> wrote:
 
-Obviously there's almost certainly going to be more work to do on top to 
-make the newly-exposed codepath actually behave as expected - I was 
-simply making a general suggestion for a starting point based on looking 
-at half a dozen lines of code in isolation.
+> > From: Jason Gunthorpe <jgg@ziepe.ca>
+> > Sent: Wednesday, August 31, 2022 7:53 AM
+> > 
+> > On Tue, Aug 30, 2022 at 04:18:38PM -0600, Alex Williamson wrote:  
+> > > On Sun, 28 Aug 2022 01:10:37 +0800
+> > > Kevin Tian <kevin.tian@intel.com> wrote:
+> > >  
+> > > > From: Yi Liu <yi.l.liu@intel.com>
+> > > >
+> > > > and replace kref. With it a 'vfio-dev/vfioX' node is created under the
+> > > > sysfs path of the parent, indicating the device is bound to a vfio
+> > > > driver, e.g.:
+> > > >
+> > > > /sys/devices/pci0000\:6f/0000\:6f\:01.0/vfio-dev/vfio0
+> > > >
+> > > > It is also a preparatory step toward adding cdev for supporting future
+> > > > device-oriented uAPI.  
+> > >
+> > > Shall we start Documentation/ABI/testing/vfio-dev now?  Thanks.  
+> > 
+> > I always thought that was something to use when adding new custom
+> > sysfs attributes?
+> > 
+> > Here we are just creating a standard struct device with its standard
+> > sysfs?
+> >   
+> 
+> There is nothing special for vfio-dev/vfioX. But from pci device p.o.v
+> this does introduce a custom node in the directory, which is probably
+> what Alex referred to?
 
-To restate the point yet again in the hope that it's clear this time, 
-the DMA ops on ARM are now effectively the same as the DMA ops on arm64, 
-and will behave the same way. Assuming the driver already works on 
-arm64, then the aim should be to unify all the ARM and arm64 codepaths 
-for things that involve the DMA API. If you don't understand the code 
-well enough to do that, please contact Imagination; I don't support 
-their driver.
+Yup, but not just for pci, we're adding a node into the device
+directory for any device bound to vfio.
 
-Thanks,
-Robin.
+> Anyway if required following can be introduced:
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-devices-vfio-dev b/Documentation/ABI/testing/sysfs-devices-vfio-dev
+> new file mode 100644
+> index 000000000000..dfe8baaf1ccb
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-devices-vfio-dev
+> @@ -0,0 +1,8 @@
+> +What:		 /sys/.../<device>/vfio-dev/vfioX/
+> +Date:		 September 2022
+> +Contact:	 Yi Liu <yi.l.liu@intel.com>
+> +Description:
+> +		 This directory is created when the device is bound to a
+> +		 vfio driver. The layout under this directory matches what
+> +		 exists for a standard 'struct device'. 'X' is a random
+> +		 number marking this device in vfio.
+
+It's not really random, it's a unique index.  Seems like a good
+starting point.
+
+> 
+> At the start I thought it might make more sense to add it into an
+> existing vfio ABI file. But looks it doesn't exist.
+> 
+> Curious why nobody asked for ABI doc for /dev/vfio/vfio, /sys/class/vfio, etc...
+
+Oversight, there should probably be a sysfs-class-vfio file.  Thanks,
+
+Alex
+

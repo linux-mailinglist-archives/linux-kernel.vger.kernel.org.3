@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A925A8537
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:14:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E0B75A854C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:16:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229842AbiHaSN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43450 "EHLO
+        id S232334AbiHaSQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232334AbiHaSN3 (ORCPT
+        with ESMTP id S232417AbiHaSOu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:13:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 243DFDD4D4;
-        Wed, 31 Aug 2022 11:12:18 -0700 (PDT)
+        Wed, 31 Aug 2022 14:14:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E74F4EA31B;
+        Wed, 31 Aug 2022 11:12:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7734CB82279;
-        Wed, 31 Aug 2022 18:12:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A208C4315B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5974861C63;
+        Wed, 31 Aug 2022 18:12:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F1FEC43160;
         Wed, 31 Aug 2022 18:12:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661969532;
-        bh=40Nnav/fNtUmhr+7K11apGq8VNSLD9p1jp36HWLtzQQ=;
+        bh=FckxDIfC5El2OqaWesfPy5RPaKRRdDuIXx9ES9lRUp8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=rwdrN3SGDh6mPT7Y+RXAIAjlKNRPsu9f3eECC/Pio7JTE7uYmovPPU8VEJnn/SaME
-         qVj08MusyyJn7qJebM4oYA78qW/1HwbG4+MrL3LosvCL4QZmKyf+JN0MQvnhdIvhrR
-         WaUjTqbCIAApySP+arURJVxjLNFTVYhdK6hqLIC5K0H1DfnsGcRQ9hZwX9D+SIm97Q
-         5Rrt/Pf6ZkPzQ+BT2KCTdr+oEwI3CSrza8ORmyHA/wN39z6YwJYBA0od8hq6zx3PaM
-         5NyxvK65qP1VsY/l9neu41lz8KDIPnoCIecti7XUipydP46KiZ+jqg5uiKauOVFksB
-         1g3Xf47QMEfZQ==
+        b=q6LUYnVSjbw66FR4A9plBc3in+qKuwp8ICUSBQ4EK4TPPxiCxyFyg3WTiH/VQ9Uk9
+         LyX91cRg5vYB+Z3N10yiHpIHpp5lObGg+upVLVUFOfmW9HiuFF68+3hhCb/pPThnSn
+         eaFm7tTqqovfFE1NRHVL0f6tICSIqdvnuFUr0kVTJfOhD8SLt3G9KhEyGndm2uUozY
+         3UjPG6AWWLITF3qWnsPfT4Uqm158AqzdGcZTSqxpQ5uOB7ltYB/95bL1qAmGJ734lA
+         KRn0+ZZjR40cXUnm4p/6EAyDtXb9C7hxQVtLmBh5OeuVo895mb4UPnSSo91ItLNup5
+         qBk21n8asI2CA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 82A365C0ED7; Wed, 31 Aug 2022 11:12:11 -0700 (PDT)
+        id 847EC5C0F13; Wed, 31 Aug 2022 11:12:11 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 24/25] rcu: Add functions to compare grace-period state values
-Date:   Wed, 31 Aug 2022 11:12:09 -0700
-Message-Id: <20220831181210.2695080-24-paulmck@kernel.org>
+Subject: [PATCH rcu 25/25] rcutorture: Limit read-side polling-API testing
+Date:   Wed, 31 Aug 2022 11:12:10 -0700
+Message-Id: <20220831181210.2695080-25-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220831181207.GA2694717@paulmck-ThinkPad-P17-Gen-1>
 References: <20220831181207.GA2694717@paulmck-ThinkPad-P17-Gen-1>
@@ -56,124 +56,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit adds same_state_synchronize_rcu() and
-same_state_synchronize_rcu_full() functions to compare grace-period state
-values, for example, those obtained from get_state_synchronize_rcu()
-and get_state_synchronize_rcu_full().  These functions allow small
-structures to omit these state values by placing them in list headers for
-lists containing structures with the same token value.  Presumably the
-per-structure list pointers are the same ones used to link the structures
-into whatever reader-accessible data structure was used.
-
-This commit also adds both NUM_ACTIVE_RCU_POLL_OLDSTATE and
-NUM_ACTIVE_RCU_POLL_FULL_OLDSTATE, which define the maximum number of
-distinct unsigned long values and rcu_gp_oldstate values, respectively,
-corresponding to not-yet-completed grace periods.  These values can be
-used to size arrays of the list headers described above.
+RCU's polled grace-period API is reasonably lightweight, but still
+contains heavyweight memory barriers.  This commit therefore limits
+testing of this API from rcutorture's readers in order to avoid the
+false negatives that these heavyweight operations could provoke.
 
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- include/linux/rcupdate.h | 21 +++++++++++++++++++++
- include/linux/rcutiny.h  | 14 ++++++++++++++
- include/linux/rcutree.h  | 28 ++++++++++++++++++++++++++++
- 3 files changed, 63 insertions(+)
+ kernel/rcu/rcutorture.c | 41 +++++++++++++++++++++++------------------
+ 1 file changed, 23 insertions(+), 18 deletions(-)
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index faaa174dfb27c..9941d5c3d5e19 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -47,6 +47,27 @@ struct rcu_gp_oldstate;
- unsigned long get_completed_synchronize_rcu(void);
- void get_completed_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp);
- 
-+// Maximum number of unsigned long values corresponding to
-+// not-yet-completed RCU grace periods.
-+#define NUM_ACTIVE_RCU_POLL_OLDSTATE 2
-+
-+/**
-+ * same_state_synchronize_rcu - Are two old-state values identical?
-+ * @oldstate1: First old-state value.
-+ * @oldstate2: Second old-state value.
-+ *
-+ * The two old-state values must have been obtained from either
-+ * get_state_synchronize_rcu(), start_poll_synchronize_rcu(), or
-+ * get_completed_synchronize_rcu().  Returns @true if the two values are
-+ * identical and @false otherwise.  This allows structures whose lifetimes
-+ * are tracked by old-state values to push these values to a list header,
-+ * allowing those structures to be slightly smaller.
-+ */
-+static inline bool same_state_synchronize_rcu(unsigned long oldstate1, unsigned long oldstate2)
-+{
-+	return oldstate1 == oldstate2;
-+}
-+
- #ifdef CONFIG_PREEMPT_RCU
- 
- void __rcu_read_lock(void);
-diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
-index 4405e9112cee8..768196a5f39d6 100644
---- a/include/linux/rcutiny.h
-+++ b/include/linux/rcutiny.h
-@@ -18,6 +18,20 @@ struct rcu_gp_oldstate {
- 	unsigned long rgos_norm;
- };
- 
-+// Maximum number of rcu_gp_oldstate values corresponding to
-+// not-yet-completed RCU grace periods.
-+#define NUM_ACTIVE_RCU_POLL_FULL_OLDSTATE 2
-+
-+/*
-+ * Are the two oldstate values the same?  See the Tree RCU version for
-+ * docbook header.
-+ */
-+static inline bool same_state_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp1,
-+						   struct rcu_gp_oldstate *rgosp2)
-+{
-+	return rgosp1->rgos_norm == rgosp2->rgos_norm;
-+}
-+
- unsigned long get_state_synchronize_rcu(void);
- 
- static inline void get_state_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp)
-diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
-index 455a03bdce152..5efb51486e8af 100644
---- a/include/linux/rcutree.h
-+++ b/include/linux/rcutree.h
-@@ -46,6 +46,34 @@ struct rcu_gp_oldstate {
- 	unsigned long rgos_exp;
- };
- 
-+// Maximum number of rcu_gp_oldstate values corresponding to
-+// not-yet-completed RCU grace periods.
-+#define NUM_ACTIVE_RCU_POLL_FULL_OLDSTATE 4
-+
-+/**
-+ * same_state_synchronize_rcu_full - Are two old-state values identical?
-+ * @rgosp1: First old-state value.
-+ * @rgosp2: Second old-state value.
-+ *
-+ * The two old-state values must have been obtained from either
-+ * get_state_synchronize_rcu_full(), start_poll_synchronize_rcu_full(),
-+ * or get_completed_synchronize_rcu_full().  Returns @true if the two
-+ * values are identical and @false otherwise.  This allows structures
-+ * whose lifetimes are tracked by old-state values to push these values
-+ * to a list header, allowing those structures to be slightly smaller.
-+ *
-+ * Note that equality is judged on a bitwise basis, so that an
-+ * @rcu_gp_oldstate structure with an already-completed state in one field
-+ * will compare not-equal to a structure with an already-completed state
-+ * in the other field.  After all, the @rcu_gp_oldstate structure is opaque
-+ * so how did such a situation come to pass in the first place?
-+ */
-+static inline bool same_state_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp1,
-+						   struct rcu_gp_oldstate *rgosp2)
-+{
-+	return rgosp1->rgos_norm == rgosp2->rgos_norm && rgosp1->rgos_exp == rgosp2->rgos_exp;
-+}
-+
- unsigned long start_poll_synchronize_rcu_expedited(void);
- void start_poll_synchronize_rcu_expedited_full(struct rcu_gp_oldstate *rgosp);
- void cond_synchronize_rcu_expedited(unsigned long oldstate);
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index fe1836aad6466..91103279d7b4f 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -1903,6 +1903,7 @@ rcutorture_loop_extend(int *readstate, struct torture_random_state *trsp,
+  */
+ static bool rcu_torture_one_read(struct torture_random_state *trsp, long myid)
+ {
++	bool checkpolling = !(torture_random(trsp) & 0xfff);
+ 	unsigned long cookie;
+ 	struct rcu_gp_oldstate cookie_full;
+ 	int i;
+@@ -1920,10 +1921,12 @@ static bool rcu_torture_one_read(struct torture_random_state *trsp, long myid)
+ 	WARN_ON_ONCE(!rcu_is_watching());
+ 	newstate = rcutorture_extend_mask(readstate, trsp);
+ 	rcutorture_one_extend(&readstate, newstate, trsp, rtrsp++);
+-	if (cur_ops->get_gp_state && cur_ops->poll_gp_state)
+-		cookie = cur_ops->get_gp_state();
+-	if (cur_ops->get_gp_state_full && cur_ops->poll_gp_state_full)
+-		cur_ops->get_gp_state_full(&cookie_full);
++	if (checkpolling) {
++		if (cur_ops->get_gp_state && cur_ops->poll_gp_state)
++			cookie = cur_ops->get_gp_state();
++		if (cur_ops->get_gp_state_full && cur_ops->poll_gp_state_full)
++			cur_ops->get_gp_state_full(&cookie_full);
++	}
+ 	started = cur_ops->get_gp_seq();
+ 	ts = rcu_trace_clock_local();
+ 	p = rcu_dereference_check(rcu_torture_current,
+@@ -1957,20 +1960,22 @@ static bool rcu_torture_one_read(struct torture_random_state *trsp, long myid)
+ 	}
+ 	__this_cpu_inc(rcu_torture_batch[completed]);
+ 	preempt_enable();
+-	if (cur_ops->get_gp_state && cur_ops->poll_gp_state)
+-		WARN_ONCE(cur_ops->poll_gp_state(cookie),
+-			  "%s: Cookie check 2 failed %s(%d) %lu->%lu\n",
+-			  __func__,
+-			  rcu_torture_writer_state_getname(),
+-			  rcu_torture_writer_state,
+-			  cookie, cur_ops->get_gp_state());
+-	if (cur_ops->get_gp_state_full && cur_ops->poll_gp_state_full)
+-		WARN_ONCE(cur_ops->poll_gp_state_full(&cookie_full),
+-			  "%s: Cookie check 6 failed %s(%d) online %*pbl\n",
+-			  __func__,
+-			  rcu_torture_writer_state_getname(),
+-			  rcu_torture_writer_state,
+-			  cpumask_pr_args(cpu_online_mask));
++	if (checkpolling) {
++		if (cur_ops->get_gp_state && cur_ops->poll_gp_state)
++			WARN_ONCE(cur_ops->poll_gp_state(cookie),
++				  "%s: Cookie check 2 failed %s(%d) %lu->%lu\n",
++				  __func__,
++				  rcu_torture_writer_state_getname(),
++				  rcu_torture_writer_state,
++				  cookie, cur_ops->get_gp_state());
++		if (cur_ops->get_gp_state_full && cur_ops->poll_gp_state_full)
++			WARN_ONCE(cur_ops->poll_gp_state_full(&cookie_full),
++				  "%s: Cookie check 6 failed %s(%d) online %*pbl\n",
++				  __func__,
++				  rcu_torture_writer_state_getname(),
++				  rcu_torture_writer_state,
++				  cpumask_pr_args(cpu_online_mask));
++	}
+ 	rcutorture_one_extend(&readstate, 0, trsp, rtrsp);
+ 	WARN_ON_ONCE(readstate);
+ 	// This next splat is expected behavior if leakpointer, especially
 -- 
 2.31.1.189.g2e36527f23
 

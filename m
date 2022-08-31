@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F56F5A857E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 00D0B5A857F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbiHaS0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:26:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57120 "EHLO
+        id S232937AbiHaS0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232755AbiHaSZh (ORCPT
+        with ESMTP id S232782AbiHaSZh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 31 Aug 2022 14:25:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 464F1A2DAC
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:21:53 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58FEEF002
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:21:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 824F6B82274
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 18:21:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 274F7C433D7;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D79FA61CD9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 18:21:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D992C4347C;
         Wed, 31 Aug 2022 18:21:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661970110;
-        bh=PbgqrlZZosHYbW1nGq71ZuCzDyWkjMJCAl8bHAx5ujs=;
+        bh=9uoF+g4LweCmuA8kE2/a+fIZkh1WmvOLh306TOxum+s=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=m2hHmhTlnhrQBP23DC4aegtGLyEdtj+cabH/135m81FavzC3rZTMlAUHM0+jOTupX
-         b5mjGnFAGF0lle8toXNjpYU4hBkGvv1Pi0g5Du3ag+bYnhfgdmSS4EeJmdb51z+CO7
-         Ni6QqW3/Z5M6xQLdJk+iRjSqjcwKr9tpR1nYKoUR+bPXe5QTK3IsElV+GCOtDDDIPV
-         GOMi4WtfuOqN3ScnYfbFWYH7D/cQqLrgLizFNGF9mF5Cnz+wbUUanCacq5vqy4ykbN
-         cR1Zt786nh3WsneWxtNbhNwr8uGftZrf9ThZfkYO/iufD4hIBLVIMyR6+wzwC/N2el
-         Ajq5eRSNJhDpg==
+        b=Z5TO/DIxTSPXgs2wk9pcL/8e82ok9w0UGdRmWpKKHvk6mWQl/toUj7HeeJ7XRjv4q
+         8Kyd3RpRGsoLgjIhI+ezj6x80BsVInfsTo8UJEuZDNrKpj+B2fRZEFM7uDRNRyDJLY
+         iXKve3NiNrTPfIGtCWlgcKGcyOgijYkQmYeOx2o9M7v3A49taA3D0Kc06Km5C6WVU1
+         qRSaQcYB4m6fiHNVD4ZDjaj3ZiBDw+7NGVCFY5Pez89s33zZH9RGNdk0V8YebyJEDh
+         AJ6u97Y1b1xFJ9xaGjZJi25g/g8s3BOt+O6h/yuaz4jXZiMxIsPuTF7UauCCAyjmgu
+         XlcLvCKkKg5kw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D35715C02A9; Wed, 31 Aug 2022 11:21:49 -0700 (PDT)
+        id D53CE5C0513; Wed, 31 Aug 2022 11:21:49 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@fb.com, w@lwt.eu,
-        Zqiang <qiang1.zhang@intel.com>,
+        Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 2/2] rcutorture: Use the barrier operation specified by cur_ops
-Date:   Wed, 31 Aug 2022 11:21:31 -0700
-Message-Id: <20220831182148.2698489-3-paulmck@kernel.org>
+Subject: [PATCH nolibc 02/18] tools/nolibc: fix build warning in sys_mmap() when my_syscall6 is not defined
+Date:   Wed, 31 Aug 2022 11:21:32 -0700
+Message-Id: <20220831182148.2698489-4-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220831182113.GA2697286@paulmck-ThinkPad-P17-Gen-1>
 References: <20220831182113.GA2697286@paulmck-ThinkPad-P17-Gen-1>
@@ -57,42 +57,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zqiang <qiang1.zhang@intel.com>
+From: Willy Tarreau <w@1wt.eu>
 
-The rcutorture_oom_notify() function unconditionally invokes
-rcu_barrier(), which is OK when the rcutorture.torture_type value is
-"rcu", but unhelpful otherwise.  The purpose of these barrier calls is to
-wait for all outstanding callback-flooding callbacks to be invoked before
-cleaning up their data.  Using the wrong barrier function therefore
-risks arbitrary memory corruption.  Thus, this commit changes these
-rcu_barrier() calls into cur_ops->cb_barrier() to make things work when
-torturing non-vanilla flavors of RCU.
+We return -ENOSYS when there's no syscall6() operation, but we must cast
+it to void* to avoid a warning.
 
-Signed-off-by: Zqiang <qiang1.zhang@intel.com>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/rcutorture.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/include/nolibc/sys.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
-index d8e1b270a065f..08b7b59d5d05b 100644
---- a/kernel/rcu/rcutorture.c
-+++ b/kernel/rcu/rcutorture.c
-@@ -2600,12 +2600,12 @@ static int rcutorture_oom_notify(struct notifier_block *self,
- 	for (i = 0; i < fwd_progress; i++)
- 		ncbs += rcu_torture_fwd_prog_cbfree(&rfp[i]);
- 	pr_info("%s: Freed %lu RCU callbacks.\n", __func__, ncbs);
--	rcu_barrier();
-+	cur_ops->cb_barrier();
- 	ncbs = 0;
- 	for (i = 0; i < fwd_progress; i++)
- 		ncbs += rcu_torture_fwd_prog_cbfree(&rfp[i]);
- 	pr_info("%s: Freed %lu RCU callbacks.\n", __func__, ncbs);
--	rcu_barrier();
-+	cur_ops->cb_barrier();
- 	ncbs = 0;
- 	for (i = 0; i < fwd_progress; i++)
- 		ncbs += rcu_torture_fwd_prog_cbfree(&rfp[i]);
+diff --git a/tools/include/nolibc/sys.h b/tools/include/nolibc/sys.h
+index 08491070387bc..b8c96878c9ce0 100644
+--- a/tools/include/nolibc/sys.h
++++ b/tools/include/nolibc/sys.h
+@@ -692,7 +692,7 @@ void *sys_mmap(void *addr, size_t length, int prot, int flags, int fd,
+ {
+ #ifndef my_syscall6
+ 	/* Function not implemented. */
+-	return -ENOSYS;
++	return (void *)-ENOSYS;
+ #else
+ 
+ 	int n;
 -- 
 2.31.1.189.g2e36527f23
 

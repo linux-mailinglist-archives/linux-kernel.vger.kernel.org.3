@@ -2,144 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D2F5A803B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECA35A803F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:32:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbiHaOb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41332 "EHLO
+        id S231236AbiHaOcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231162AbiHaObU (ORCPT
+        with ESMTP id S231263AbiHaOb7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:31:20 -0400
-Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A385F32D8A
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:31:19 -0700 (PDT)
-Received: (qmail 191749 invoked by uid 1000); 31 Aug 2022 10:31:18 -0400
-Date:   Wed, 31 Aug 2022 10:31:18 -0400
-From:   Alan Stern <stern@rowland.harvard.edu>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Patchwork Bot <patchwork-bot@kernel.org>
-Subject: Re: [PATCH v2] usb: ohci-platform: fix usb disconnect issue after s4
-Message-ID: <Yw9wtv5TtEr209j0@rowland.harvard.edu>
-References: <20220831045910.12203-1-zhuyinbo@loongson.cn>
+        Wed, 31 Aug 2022 10:31:59 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3EF39F76D;
+        Wed, 31 Aug 2022 07:31:56 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso21245209pjk.0;
+        Wed, 31 Aug 2022 07:31:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=p8kd5sCAmunxOHCaIzw+oVEEpbHVTP/hANU4lAH8jho=;
+        b=Wus1ickR71qdQxC8Jg25Ioj5BRWvFhBUYwaO9AO489DC9ccnHGvmVmGh3NQKFoRGtq
+         kwJ08r2DV7tei3U3HODe3Bq3GxkcilBLwlkWHASMT/tvOnS+akksFZd5Jb1Rye6qRyN0
+         xFsHxWqckXv4GhrHX+UM3AQWl/CnGUw6houicpB59ei3RWqh4wXR1zxZnb0OD81sKzdE
+         KGcXH70RmC1wEMoeHuX96kHTr0Rp7Fo2AP15jKo6CYvcdk33DqrpRZSj1PWMgYYCddI0
+         iQYPrwdwvlxYCLhJZvO9wzIyxF9ZRU95qbDl4L0YT1VHyH+Oo6zq6aC5Bo/WTf/8kW8L
+         FxKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=p8kd5sCAmunxOHCaIzw+oVEEpbHVTP/hANU4lAH8jho=;
+        b=Tp/+q8w7ySKqgC+dLnuPTOkJJC7xPSouFG0ztYugrs1GbwkEyQnSjPTpFZ1ozZMNMa
+         neZWgE8K89i9VX6F1itZTlC41XEk9SoVfgm9IDAGUBv6Jd6U9uv4d40YvZ1zBmHyQ2bg
+         RYJVLy4YPePQZr2AUWm+8ipaTagJeNYab5X0F5reNt3lR6rnYOIEFMfFprDAWZmiVOo/
+         6E7rEDfT3LoCeIAQx5ArFVvF1Pk1i1q99F/+fUn+LKTDI1yPMoON4FhwR+s9BN0Q4N1m
+         uqoLoDn0fle+9IixBdXO7lEN36aeU21PPLlsToaT71AUpTmtkk9gb/Gcu02/tPetQrnG
+         Yceg==
+X-Gm-Message-State: ACgBeo1OMRSlrsjcSlZ2KRmsNbwmYgKaVGbsrfqoiNGPK86oV/lGqWyJ
+        32wPuP7AILrjed/fCRaqxpU=
+X-Google-Smtp-Source: AA6agR7hg7Mx3xmKXrZqaJbyQBAsZrJhysOANkcnkQhkHU33ETi6Vo8K6P/qNVHflmLIT9P23OfmHA==
+X-Received: by 2002:a17:90b:4c8d:b0:1f5:29ef:4a36 with SMTP id my13-20020a17090b4c8d00b001f529ef4a36mr3672301pjb.127.1661956316214;
+        Wed, 31 Aug 2022 07:31:56 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id d8-20020a170903230800b0016c50179b1esm5088778plh.152.2022.08.31.07.31.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 07:31:55 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     pbonzini@redhat.com, shuah@kernel.org, seanjc@google.com
+Cc:     dmatlack@google.com, jmattson@google.com, peterx@redhat.com,
+        oupton@google.com, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] KVM: selftests: remove redundant variable tsc_val
+Date:   Wed, 31 Aug 2022 14:31:50 +0000
+Message-Id: <20220831143150.304406-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831045910.12203-1-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 12:59:10PM +0800, Yinbo Zhu wrote:
-> Avoid retaining bogus hardware states during resume-from-hibernation.
-> Previously we had reset the hardware as part of preparing to reinstate
-> the snapshot image. But we can do better now with the new PM framework,
-> since we know exactly which resume operations are from hibernation.
-> 
-> According to the commit 'cd1965db054e ("USB: ohci: move ohci_pci_{
-> suspend,resume} to ohci-hcd.c")' and commit '6ec4beb5c701 ("USB: new
-> flag for resume-from-hibernation")', the flag "hibernated" is for
-> resume-from-hibernation and it should be true when usb resume from disk.
-> 
-> When this flag "hibernated" is set, the drivers will reset the hardware
-> to get rid of any existing state and make sure resume from hibernation
-> re-enumerates everything for ohci.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
-> Change in v2:
-> 		1. Revise the commit log infomation.	
-> 		2. Wrap the ohci_platform_renew() function with two 
-> 		   helpers that are ohci_platform_renew_hibernated() 
-> 		   and ohci_platform_renew().
-> 
->  drivers/usb/host/ohci-platform.c | 49 ++++++++++++++++++++++++++++++--
->  1 file changed, 46 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-> index 0adae6265127..56cb424d3bb0 100644
-> --- a/drivers/usb/host/ohci-platform.c
-> +++ b/drivers/usb/host/ohci-platform.c
-> @@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
->  	return ret;
->  }
->  
-> -static int ohci_platform_resume(struct device *dev)
-> +static int ohci_platform_renew(struct device *dev)
->  {
->  	struct usb_hcd *hcd = dev_get_drvdata(dev);
->  	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
-> @@ -297,6 +297,7 @@ static int ohci_platform_resume(struct device *dev)
->  
->  	if (pdata->power_on) {
->  		int err = pdata->power_on(pdev);
-> +
->  		if (err < 0)
->  			return err;
->  	}
-> @@ -309,6 +310,38 @@ static int ohci_platform_resume(struct device *dev)
->  
->  	return 0;
->  }
-> +
-> +static int ohci_platform_renew_hibernated(struct device *dev)
-> +{
-> +	struct usb_hcd *hcd = dev_get_drvdata(dev);
-> +	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +
-> +	if (pdata->power_on) {
-> +		int err = pdata->power_on(pdev);
-> +
-> +		if (err < 0)
-> +			return err;
-> +	}
-> +
-> +	ohci_resume(hcd, true);
-> +
-> +	pm_runtime_disable(dev);
-> +	pm_runtime_set_active(dev);
-> +	pm_runtime_enable(dev);
-> +
-> +	return 0;
-> +}
-> +
-> +static int ohci_platform_resume(struct device *dev)
-> +{
-> +	return ohci_platform_renew(dev);
-> +}
-> +
-> +static int ohci_platform_restore(struct device *dev)
-> +{
-> +	return ohci_platform_renew_hibernated(dev);
-> +}
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-I really do not see any point in these helper routines.  Why not just 
-use these names (ohci_platform_resume and ohci_platform_restore) for the 
-actual routines and forget about the _renew names?
+Return value directly from expression instead of
+getting value from redundant variable tsc_val.
 
-Although if it were me, I'd do it more like this:
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+---
+ tools/testing/selftests/kvm/include/x86_64/processor.h | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-static int ohci_platform_resume_common(struct device *dev, bool hibernated)
-{ ... }
+diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+index 0cbc71b7af50..75920678f34d 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/processor.h
++++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+@@ -237,7 +237,6 @@ static inline uint64_t get_desc64_base(const struct desc64 *desc)
+ static inline uint64_t rdtsc(void)
+ {
+ 	uint32_t eax, edx;
+-	uint64_t tsc_val;
+ 	/*
+ 	 * The lfence is to wait (on Intel CPUs) until all previous
+ 	 * instructions have been executed. If software requires RDTSC to be
+@@ -245,8 +244,8 @@ static inline uint64_t rdtsc(void)
+ 	 * execute LFENCE immediately after RDTSC
+ 	 */
+ 	__asm__ __volatile__("lfence; rdtsc; lfence" : "=a"(eax), "=d"(edx));
+-	tsc_val = ((uint64_t)edx) << 32 | eax;
+-	return tsc_val;
++
++	return ((uint64_t)edx) << 32 | eax;
+ }
+ 
+ static inline uint64_t rdtscp(uint32_t *aux)
+-- 
+2.25.1
 
-static int ohci_platform_resume(struct device *dev)
-{
-	return ohci_platform_resume_common(dev, false);
-}
-
-static int ohci_platform_restore(struct device *dev)
-{
-	return ohci_platform_resume_common(dev, true);
-}
-
-Alan Stern

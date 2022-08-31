@@ -2,74 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3688B5A87D4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 779375A87D9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:03:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiHaVAc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:00:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45196 "EHLO
+        id S232050AbiHaVC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231645AbiHaVA1 (ORCPT
+        with ESMTP id S231863AbiHaVCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:00:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C20F6E2CF
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:00:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661979623;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UGcTaB4P4rG09gZ5dqTXkIXf7iWET+B3aqcOIfYJxtw=;
-        b=HJSLKv9ENCg2Pjj1K4pfFIr83CxUZ/P52XWyWp9mESjzzH+GyOFQPsajEcAhDfuL6wE+c0
-        hi1wv0rZaeAAfULqBM9TP+LpMp+X0ylN5RG4MMCXdTj1o3hpFAKaNApKKIrrmRQxuYoImc
-        rISoskOC06vE+T1ehvj70jd80YgqP+s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-665-fnaM24_mPqyQpu2oQxzkBA-1; Wed, 31 Aug 2022 17:00:18 -0400
-X-MC-Unique: fnaM24_mPqyQpu2oQxzkBA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B89891C06ED4;
-        Wed, 31 Aug 2022 21:00:17 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CF0E04010D2A;
-        Wed, 31 Aug 2022 21:00:16 +0000 (UTC)
-Message-ID: <4ac0cfd5-cf1e-9bcd-7476-494bfbeb1c50@redhat.com>
-Date:   Wed, 31 Aug 2022 17:00:16 -0400
+        Wed, 31 Aug 2022 17:02:55 -0400
+Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E001EA309;
+        Wed, 31 Aug 2022 14:02:55 -0700 (PDT)
+Received: by mail-qk1-x72a.google.com with SMTP id a15so11830877qko.4;
+        Wed, 31 Aug 2022 14:02:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=6xlRlzGJaVR2uzullj0MIDzmAYPuB68YjTQcaZFNI8g=;
+        b=lbaU/geU/NRB9KRdtjqIdxJ8HmOiSVcT5hPwQvCxbstjnnaab4inNB0ZkXx8WBZtsq
+         HXzoklo6Z/1ZRC3VuyXorjDZ7FHbhWS3DszT23X6t2sR6fyCW7Uk9KcIMWjWxAJYsQqV
+         gT4pWaeDolhkDVsiwXRvVexP+zvf76/17vh9jFFKJC8qDy73bOFxHDLWQOJlx9YhlUSQ
+         /tr8rDXdBQ1K3N6dy4uisYMhoSRJEjdzlOTADsuhIXlQi3sdQsw0KRx50FYD36JX0rTc
+         Yg+69eiRxhkwS+AfwWJIrYXbrgS9YFybSk7HcWYdQ8CjA3RM/+uLi8Jkad9YCQS1ZvqV
+         aNjg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=6xlRlzGJaVR2uzullj0MIDzmAYPuB68YjTQcaZFNI8g=;
+        b=dGmPHUcjYew5NDI9vWG3ZD4smw2uVoK6yyXJejaz5m+x3cIG6NKjnTA4SGmErP5kkH
+         9DiFMzFmk39o9W7Cen+4o2EPl03LHdH17mTVAh80rxQKZf9nJeCaX3otkwjAit9fjrpg
+         dAYMHMhnLcqnZMFjUevRiCcq+q50sgDJakdFmiJ+RBUYwHAGVBPRltMrOfkcW+4DiD0I
+         tpYx8lRQH4Lu9yD/virmvqSvJ8V2V+sNMkk0mM4a6CzOnVwiQP8Q8kFGSgg84Q0EnlhU
+         niuI564hTRdub1pqSm8zUSPbLHgqTHkpUrRrRwEAnCjeDNLmQVDNSi455E/XFvR0556J
+         +Cmg==
+X-Gm-Message-State: ACgBeo0aBeAHHypqFIwUJu/9C0u/GlspiUQ/EHbVQwFhRfhlUj9rvmXk
+        kcgQ8IRlfKqzZBcvIa40Khuy1fE0gs8fww9MV2k=
+X-Google-Smtp-Source: AA6agR48wNqQfz2J4gpLSBsgA5I6SjIy5C7Yw8njxQJfNsfYsmiIEotjBn6HUedNHJOt4T00J8rlLV86PaeYl2utDfU=
+X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
+ v17-20020ae9e311000000b006bae711fb27mr17219247qkf.320.1661979774149; Wed, 31
+ Aug 2022 14:02:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v6 3/5] sched: Enforce user requested affinity
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <20220826010119.1265764-1-longman@redhat.com>
- <20220826010119.1265764-4-longman@redhat.com>
- <Yw8nXttOnNjK/1y4@hirez.programming.kicks-ass.net>
- <Yw8n/Ef1NWnwmHYW@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yw8n/Ef1NWnwmHYW@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220829133923.1114555-1-martyn.welch@collabora.com> <20220829133923.1114555-5-martyn.welch@collabora.com>
+In-Reply-To: <20220829133923.1114555-5-martyn.welch@collabora.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 1 Sep 2022 00:02:18 +0300
+Message-ID: <CAHp75VfZmmDGJJ5wxM8-pbqo+npOSZrPtyJnQhuGadLUYod=3A@mail.gmail.com>
+Subject: Re: [PATCH 5/5] gpio: pca953x: Add support for PCAL6534 and compatible
+To:     Martyn Welch <martyn.welch@collabora.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Collabora Kernel ML <kernel@collabora.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,30 +69,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Aug 29, 2022 at 4:52 PM Martyn Welch <martyn.welch@collabora.com> wrote:
+>
+> Add support for the NXP PCAL6534 and Diodes Inc. PI4IOE5V6534Q. These
+> devices, which have identical register layouts and features, are broadly a
+> 34-bit version of the PCAL6524.
+>
+> However, whilst the registers are broadly what you'd expect for a 34-bit
+> version of the PCAL6524, the spacing of the registers has been
+> compacted. This has the unfortunate effect of breaking the bit shift
+> based mechanism that is employed to work out register locations used by
+> the other chips supported by this driver, resulting in special handling
+> needing to be introduced in pca953x_recalc_addr() and
+> pca953x_check_register().
 
-On 8/31/22 05:21, Peter Zijlstra wrote:
-> On Wed, Aug 31, 2022 at 11:18:22AM +0200, Peter Zijlstra wrote:
->> On Thu, Aug 25, 2022 at 09:01:17PM -0400, Waiman Long wrote:
->>
->>> @@ -9352,6 +9381,11 @@ int sched_cpu_activate(unsigned int cpu)
->>>   		sched_update_numa(cpu, true);
->>>   		sched_domains_numa_masks_set(cpu);
->>>   		cpuset_cpu_active();
->>> +		/*
->>> +		 * Preallocated scratch cpumask
->>> +		 */
->>> +		if (!rq->scratch_mask)
->>> +			rq->scratch_mask = kmalloc(cpumask_size(), GFP_KERNEL);
->>>   	}
->> this is too late; I think you'll have to add a sched_cpu_prepare() and
->> simply fail the cpu-up when the allocation fails.
-> Alternatively, waste some more memory and add yet another per-cpu
-> cpumask.
+This still needs an alternative deep review. I'll do my best to get
+into it sooner than later.
 
-A percpu cpumask is probably a better idea. However, I don't need that 
-as early as the other cpumasks like __cpu_possible_mask. Maybe I can do 
-a percpu memory allocation early in the pre-smp boot.
+...
 
-Cheers,
-Longman
+>  #define PCA953X_TYPE           BIT(12)
+>  #define PCA957X_TYPE           BIT(13)
+> +#define PCAL653X_TYPE          BIT(14)
+>  #define PCA_TYPE_MASK          GENMASK(15, 12)
+>
+> +
 
+Stray change.
+
+>  #define PCA_CHIP_TYPE(x)       ((x) & PCA_TYPE_MASK)
+
+...
+
+>  static bool pca953x_check_register(struct pca953x_chip *chip, unsigned int reg,
+>                                    u32 checkbank)
+>  {
+> -       int bank_shift = pca953x_bank_shift(chip);
+> -       int bank = (reg & REG_ADDR_MASK) >> bank_shift;
+> -       int offset = reg & (BIT(bank_shift) - 1);
+> +       int bank;
+> +       int offset;
+> +
+> +       if (PCA_CHIP_TYPE(chip->driver_data) == PCAL653X_TYPE) {
+> +               if (reg > 0x2f) {
+> +                       /*
+> +                        * Reserved block between 14h and 2Fh does not align on
+> +                        * expected bank boundaries like other devices.
+> +                        */
+> +                       int temp = reg - 0x30;
+> +
+> +                       bank = temp / NBANK(chip);
+> +                       offset = temp - (bank * NBANK(chip));
+> +                       bank += 8;
+> +               } else if (reg > 0x53) {
+> +                       /* Handle lack of reserved registers after output port
+> +                        * configuration register to form a bank.
+> +                        */
+> +                       int temp = reg - 0x54;
+> +
+> +                       bank = temp / NBANK(chip);
+> +                       offset = temp - (bank * NBANK(chip));
+> +                       bank += 16;
+
+Can we rather put this into a separate function?
+
+> +               } else {
+> +                       bank = reg / NBANK(chip);
+> +                       offset = reg - (bank * NBANK(chip));
+> +               }
+> +       } else {
+> +               int bank_shift = pca953x_bank_shift(chip);
+>
+> -       /* Special PCAL extended register check. */
+> -       if (reg & REG_ADDR_EXT) {
+> -               if (!(chip->driver_data & PCA_PCAL))
+> -                       return false;
+> -               bank += 8;
+> +               bank = (reg & REG_ADDR_MASK) >> bank_shift;
+> +               offset = reg & (BIT(bank_shift) - 1);
+> +
+> +               /* Special PCAL extended register check. */
+> +               if (reg & REG_ADDR_EXT) {
+> +                       if (!(chip->driver_data & PCA_PCAL))
+> +                               return false;
+> +                       bank += 8;
+> +               }
+>         }
+
+All the same, split this to be like
+
+if (current)
+ do_current_things
+else
+ do_new_type
+
+...
+
+>  static u8 pca953x_recalc_addr(struct pca953x_chip *chip, int reg, int off)
+>  {
+> -       int bank_shift = pca953x_bank_shift(chip);
+> -       int addr = (reg & PCAL_GPIO_MASK) << bank_shift;
+> -       int pinctrl = (reg & PCAL_PINCTRL_MASK) << 1;
+> -       u8 regaddr = pinctrl | addr | (off / BANK_SZ);
+> +       int addr;
+> +       int pinctrl;
+> +       u8 regaddr;
+> +
+> +       if (PCA_CHIP_TYPE(chip->driver_data) == PCAL653X_TYPE) {
+> +               /* The PCAL6534 and compatible chips have altered bank alignment that doesn't
+> +                * fit within the bit shifting scheme used for other devices.
+> +                */
+> +               addr = (reg & PCAL_GPIO_MASK) * NBANK(chip);
+> +
+> +               switch (reg) {
+> +               case PCAL953X_OUT_STRENGTH:
+> +               case PCAL953X_IN_LATCH:
+> +               case PCAL953X_PULL_EN:
+> +               case PCAL953X_PULL_SEL:
+> +               case PCAL953X_INT_MASK:
+> +               case PCAL953X_INT_STAT:
+> +               case PCAL953X_OUT_CONF:
+> +                       pinctrl = ((reg & PCAL_PINCTRL_MASK) >> 1) + 0x20;
+> +                       break;
+> +               case PCAL6524_INT_EDGE:
+> +               case PCAL6524_INT_CLR:
+> +               case PCAL6524_IN_STATUS:
+> +               case PCAL6524_OUT_INDCONF:
+> +               case PCAL6524_DEBOUNCE:
+> +                       pinctrl = ((reg & PCAL_PINCTRL_MASK) >> 1) + 0x1c;
+> +                       break;
+> +               }
+> +               regaddr = pinctrl + addr + (off / BANK_SZ);
+> +       } else {
+> +               int bank_shift = pca953x_bank_shift(chip);
+> +
+> +               addr = (reg & PCAL_GPIO_MASK) << bank_shift;
+> +               pinctrl = (reg & PCAL_PINCTRL_MASK) << 1;
+> +               regaddr = pinctrl | addr | (off / BANK_SZ);
+> +       }
+
+Looking at all these, why not add the callbacks for recalc_addr and
+check_reg and assign them in the ->probe()?
+
+-- 
+With Best Regards,
+Andy Shevchenko

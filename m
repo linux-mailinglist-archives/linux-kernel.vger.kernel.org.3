@@ -2,92 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 097045A7A45
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:33:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBCA5A7A50
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbiHaJdD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:33:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
+        id S229692AbiHaJfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229652AbiHaJc5 (ORCPT
+        with ESMTP id S229601AbiHaJe7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:32:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DF9CCEB1A
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:32:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3951DB81F3D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:32:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 558B2C433C1;
-        Wed, 31 Aug 2022 09:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661938367;
-        bh=QG1DyMGmqSCY6m/qOIfbt61PZ1QMvZ1UY2rmKlptMps=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=yaiR/2gVKsybGXDd/TqmywNAVa20/rZyQOsrXE3RUKpuC5U7sa4RFgTLm56e0Kyti
-         B0Zuoz3i8sIGtmu2B7Zga63uVAPF11Tnif4SCJdrwf1ubGU0LxF8yB2nGgtNcINU1S
-         q5hrsNyN9sOtxTSpDv7QLEPe5cw9b1nCTbtYGKe0=
-Date:   Wed, 31 Aug 2022 11:32:43 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-        johan@kernel.org, penguin-kernel@i-love.sakura.ne.jp,
-        zhangxuezhi1@coolpad.com, xyangxi5@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH] tty: vt: Add checks after calling kzalloc
-Message-ID: <Yw8qu1op37fWTvdi@kroah.com>
-References: <20220831090810.2175859-1-jiasheng@iscas.ac.cn>
+        Wed, 31 Aug 2022 05:34:59 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34AAD21E3B;
+        Wed, 31 Aug 2022 02:34:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661938499; x=1693474499;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=070umHQFjooRmGQhFXHyxmtD9BFsD5IdNnJ+i1kO9sE=;
+  b=NAJhfO5RqDhr673AHcICkoscoMu5l6oQnQHM6LmvTKey85H/yinYd5fp
+   rANf90K/uOlqHxTtBGlite4obPuMYcL65DBmtCcVpfn4j9eC4Dekavaqk
+   Ao72LQWoM/Wgj5IcntD3mDNgamgXcpEpFA+iHPXVZf2D/3R/sIuFInERl
+   geB3QFWix8N2WlxJ9QPg5AP835Er5mtRj5R/b/bDcFeskFfITBiVuc4sR
+   A7vcRRjaQAfF7iPcI52nLbQDKaB12kmf/LnVb+uyAw3L3c8fDzmLEaw++
+   yZspCqZXssBT7PNq1KiiM2h30KAfI6Svd3lAgSO+Fy22dWElBpTuhDO+8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="292987752"
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="292987752"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:34:58 -0700
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="562981000"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:34:56 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oTK7a-006JYQ-0R;
+        Wed, 31 Aug 2022 12:34:54 +0300
+Date:   Wed, 31 Aug 2022 12:34:53 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v2 2/3] ACPI: PMIC: Replace open coded be16_to_cpu()
+Message-ID: <Yw8rPW39Vif4yVAf@smile.fi.intel.com>
+References: <20220830171155.42962-1-andriy.shevchenko@linux.intel.com>
+ <20220830171155.42962-2-andriy.shevchenko@linux.intel.com>
+ <Yw71GqF5x7u16yom@black.fi.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831090810.2175859-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Yw71GqF5x7u16yom@black.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 05:08:10PM +0800, Jiasheng Jiang wrote:
-> On Wed, Aug 31, 2022 at 03:57:42PM +0800, Jiasheng Jiang wrote:
-> >>  	for (currcons = 0; currcons < MIN_NR_CONSOLES; currcons++) {
-> >>  		vc_cons[currcons].d = vc = kzalloc(sizeof(struct vc_data), GFP_NOWAIT);
-> >> +		if (!vc) {
-> >> +			console_unlock();
-> >> +			return -ENOMEM;
-> >> +		}
-> >>  		INIT_WORK(&vc_cons[currcons].SAK_work, vc_SAK);
-> >>  		tty_port_init(&vc->port);
-> >>  		visual_init(vc, currcons, 1);
-> >>  		/* Assuming vc->vc_{cols,rows,screenbuf_size} are sane here. */
-> >>  		vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size, GFP_NOWAIT);
-> >> +		if (!vc->vc_screenbuf) {
-> >> +			console_unlock();
-> >> +			return -ENOMEM;
-> >> +		}
-> > 
-> > This has been attempted many times in the past, sorry.  Unless you can
-> > prove that this can actually happen in real life, we are going to leave
-> > these as-is.
-> > 
-> > Please do not just do random changes like this without actually testing
-> > to see if it is possible to happen.
+On Wed, Aug 31, 2022 at 08:43:54AM +0300, Mika Westerberg wrote:
+> On Tue, Aug 30, 2022 at 08:11:54PM +0300, Andy Shevchenko wrote:
+> > -#define VR_MODE_DISABLED        0
+> > -#define VR_MODE_AUTO            BIT(0)
+> > -#define VR_MODE_NORMAL          BIT(1)
+> > -#define VR_MODE_SWITCH          BIT(2)
+> > -#define VR_MODE_ECO             (BIT(0)|BIT(1))
+> > +#define PMIC_REG_MASK		GENMASK(11, 0)
+> > +
+> > +#define VR_MODE_DISABLED        (0 << 0)
+> > +#define VR_MODE_AUTO            (1 << 0)
+> > +#define VR_MODE_NORMAL          (2 << 0)
+> > +#define VR_MODE_ECO             (3 << 0)
+> > +#define VR_MODE_SWITCH          (4 << 0)
 > 
-> As the harm of vulnerabilities is much higher than the cost of fixing them,
-> it is acceptable to add harmless security checks that guarantee the
-> vulnerabilities will never be triggered.
+> IMHO this one is worse than what it was.
 
-No, not always, many times you are adding new bugs by doing this type of
-"unneeded fixes".  We have had this happen in the vt code many times in
-the past, let's learn from our mistakes please.
+I'm not sure why. Here is obvious wrong use of BIT() macro against
+plain numbers. I can split it into a separate change with an explanation
+of why it's better. But I think it doesn't worth the churn.
 
-And where is the "vulnerability" here exactly?
+> Anyway, that's just a nitpick. The other parts look good,
+> 
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 
-thanks,
+Thanks!
 
-greg k-h
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

@@ -2,113 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62CA25A77DD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:44:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C2AC5A77DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbiHaHo1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 03:44:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46564 "EHLO
+        id S230207AbiHaHow (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 03:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbiHaHoB (ORCPT
+        with ESMTP id S230199AbiHaHoL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 03:44:01 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D823AE84A;
-        Wed, 31 Aug 2022 00:43:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1661931783;
-        bh=9ycy50m2BVzr+LR+TASn5nabN2535sy01KiW7i6O5SI=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=f5E0Y3mnOH4y5rk5REftiX/ra1cHOrSNn2EDojkZDYQ4a6n6zWNuQ6yUqv352cVoo
-         GlNrez+6fHS0CiZiAw27yIdFAIFg+xrZ3AOpmkBbsdmstxODxujF6I01Y//JNt/Abl
-         uiFRZo79VNxMzMFwL3KWbo/EW6fy2U3pkZAAV8Z4=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [192.168.0.170] ([5.147.48.164]) by mail.gmx.net (mrgmx004
- [212.227.17.184]) with ESMTPSA (Nemesis) id 1MxlzI-1pKqZV2v0A-00zBxz; Wed, 31
- Aug 2022 09:43:03 +0200
-Message-ID: <9a17ea86-079f-510d-e919-01bc53a6d09f@gmx.com>
-Date:   Wed, 31 Aug 2022 09:43:02 +0200
+        Wed, 31 Aug 2022 03:44:11 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AD7BBD286
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:43:36 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oTINi-0006fM-OU; Wed, 31 Aug 2022 09:43:26 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oTINg-0000cV-JU; Wed, 31 Aug 2022 09:43:24 +0200
+Date:   Wed, 31 Aug 2022 09:43:24 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Arun.Ramadoss@microchip.com, andrew@lunn.ch,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        vivien.didelot@gmail.com, san@skov.dk, linux@armlinux.org.uk,
+        f.fainelli@gmail.com, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        Woojung.Huh@microchip.com, davem@davemloft.net
+Subject: Re: [Patch net-next v2 0/9] net: dsa: microchip: add support for
+ phylink mac config and link up
+Message-ID: <20220831074324.GD16715@pengutronix.de>
+References: <20220724092823.24567-1-arun.ramadoss@microchip.com>
+ <20220830065533.GA18106@pengutronix.de>
+ <67690ec6367c9dc6d2df720dcf98e6e332d2105b.camel@microchip.com>
+ <20220830095830.flxd3fw4sqyn425m@skbuf>
+ <20220830160546.GB16715@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH] usb: add quirks for Lenovo OneLink+ Dock
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Oliver Neukum <oneukum@suse.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220824160946.10128-1-jflf_kernel@gmx.com>
- <31aeee3c-f4f1-16a8-272b-96da5d4a565e@suse.com>
- <d1a5f149-50a1-49fc-9a6d-eceffa23311b@gmx.com>
- <4b92eee0-b020-9211-2039-18ac3ac72a7b@suse.com>
- <edd97137-74a1-ee0b-d475-7c5b36197155@gmx.com> <Yw8OU8hYZuuBgrnj@kroah.com>
-From:   jflf_kernel@gmx.com
-In-Reply-To: <Yw8OU8hYZuuBgrnj@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:srQKQZK8ADX8KwScDmh4lqDIcInEz4EDuODcx9UEJneswEXzplT
- t896XiklipY0btbl9olZvkkYvTP4hNbU/jDhpwzUE6j1KASX10GNVMUeE8UvwL7rpum3/aV
- vKr+LR4I1APV/z6ieU0kxmBuc8CRo7Q+G5N1E5eYmG3u9n0rQHyqn6VKJwV1Lh4Q2N+5uwS
- +MuK2fFKTvALsI4hmSz3g==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:s1LCIMQoT+E=:PPssNvGUCexs+Xj4K2tnFz
- mA3mw4aYslGu1Zl05g8RDTkhW409O6BehloNq7tXfI807QzF0N6Mw1qM363sDF65zFaOhLhMZ
- Paf5NDGlc61nVsTcZMkKjPpKXFlTSkhELtuPxyuUELa6Vo8U2ZGgi4e2SFrJxIrbtLMiRLUmQ
- z0OiWyyaYBVmUQ2hT8AUDiyG7XKw+alHymCNVdlgjgPCfgWqZVhQwQ4nxumHMILD0LbATlcmM
- wYyNUBlm59oqdbaI0ouJ46y5gpj8cqOVQiHqhpaQnhr5wIXzI047Or7BjF+pstW6k9KkZ3t0s
- cIPwYZasC16j/C0UQXdeOwtdKiVvYhBcR7O/LEP3R0zJleD5nJs11v0D7mR3uR2w39ZXVUErv
- WW2PT+ywiO3qYVNrTnA5f9sS6lf+xWQOKYYlS5gF1JbaKqUghsd7ad29CinOlysDlbKnZWrWo
- g3Uwq1o10KJlsL91y8dml8BzYvDRwPzzgBjGfJSqglZbKvGS6yPA1Tjwhl2WYNCFrGmB+HwDa
- MRogB9AgYWSJGA+XPTeDodBTeMh5VuDVbUQ9ytMjKY4dKP2HnKpMhDjMVwUBJnrKJMYFd96Mp
- sA7Vat6HFSYbH/wFBDbgS5RlB5sj5g0voxA0vanQlqZaX+TNB/lCuw4xmi9r54ccQLWjQJkBN
- ldtUHQqlFyCDhJDDKpN1I6Vz9HvwL7OUIqtBePTI+mhz9ptBc3BNWOHStOv5g06QiZQQcCjdL
- C63qnYR3z5+gJ3I0WPNxefVMiZZjad0vbULfcu25hh+Y+jRS/+aPf1UGevlPRHH6oDDKQWaX8
- 6xtTNjj1rzUJgWif0+ryB71BDhN6iaE1R6P0uYy9m24OQuBAC0YzI/ZxbccD4Dkt1AD/XW2mi
- MNCzh2s5GlGiKijYDgBTlIWUuzG+mw/02i6XYEhQQ22XjllWrYZnu7f5ISOlHW2BugccuI5IK
- DsjB3M/WDKSNIgTwfyIyrbiILU6ips784EvQp7E4gW3CQ7WD1Kf8odTok2CKb7C+ZY2q8bOeE
- TAJp7W5k+R9HkWLNm0Zn1iR9kpjN0IXCQq8h/UwTZNTSZdmskdU2CzbHf6/YDEo2I/zDvi0+p
- 4kSi4aiG8Ut1oo2a7HzGwV7oYG9iylD384njK2ZFSc1fy7TFVV33Y8hiw==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220830160546.GB16715@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Aug 30, 2022 at 06:05:46PM +0200, Oleksij Rempel wrote:
+> On Tue, Aug 30, 2022 at 12:58:30PM +0300, Vladimir Oltean wrote:
+> > Hello,
+> > 
+> > On Tue, Aug 30, 2022 at 08:15:59AM +0000, Arun.Ramadoss@microchip.com wrote:
+> ...
+> > > Hi Oleksij,
+> > > Is this Bug related to fix in 
+> > > https://lore.kernel.org/lkml/20220829105810.577903823@linuxfoundation.org/
+> > > . 
+> > > It is observed in ksz8794 switch. I think after applying this bug fix
+> > > patch it should work. I don't have ksz8 series to test. I ran the
+> > > regression only for ksz9 series switches. 
+> > 
+> > I find it unlikely that the cited patch will fix a NULL pointer
+> > dereference in ksz_get_gbit(). But rather, some pointer to a structure
+> > is NULL, and we then dereference a member located at its offset 0x5, no?
+> > 
+> > My eyes are on this:
+> > 
+> > 	const u8 *bitval = dev->info->xmii_ctrl1;
+> > 
+> > 		data8 |= FIELD_PREP(P_GMII_1GBIT_M, bitval[P_GMII_NOT_1GBIT]);
+> > 							   ~~~~~~~~~~~~~~~~
+> > 							   this is coincidentally
+> > 							   also 5
+> 
+> ack.
+> 
+> > See, looking at the struct ksz_chip_data[] array element for KSZ8873
+> > that Oleksij mentions as broken, I do not see xmii_ctrl1 and xmii_ctrl2
+> > as being pointers to anything.
+> > 
+> > 	[KSZ8830] = {
+> > 		.chip_id = KSZ8830_CHIP_ID,
+> > 		.dev_name = "KSZ8863/KSZ8873",
+> > 		.num_vlans = 16,
+> > 		.num_alus = 0,
+> > 		.num_statics = 8,
+> > 		.cpu_ports = 0x4,	/* can be configured as cpu port */
+> > 		.port_cnt = 3,
+> > 		.ops = &ksz8_dev_ops,
+> > 		.mib_names = ksz88xx_mib_names,
+> > 		.mib_cnt = ARRAY_SIZE(ksz88xx_mib_names),
+> > 		.reg_mib_cnt = MIB_COUNTER_NUM,
+> > 		.regs = ksz8863_regs,
+> > 		.masks = ksz8863_masks,
+> > 		.shifts = ksz8863_shifts,
+> > 		.supports_mii = {false, false, true},
+> > 		.supports_rmii = {false, false, true},
+> > 		.internal_phy = {true, true, false},
+> > 	},
+> > 
+> > Should we point them to ksz8795_xmii_ctrl0 and ksz8795_xmii_ctrl1? I don't know.
+> > Could you find out what these should be set to?
+> 
+> xmii_ctrl0/1 are missing and it make no sense to add it.
+> KSZ8873 switch is controlling CPU port MII configuration over global,
+> not port based register.
+> 
+> I'll better define separate ops for this chip.
 
-On 31/08/2022 09.31, Greg KH wrote:
-> On Tue, Aug 30, 2022 at 09:50:03PM +0200, jflf_kernel@gmx.com wrote:
->>
->> On 30/08/2022 16.47, Oliver Neukum wrote:
->>
->>> 1) force a reset after a resume and call reset_resume() instead of res=
-ume()
->>> 2) block autosuspend if remote wakeup is required
->>>
->>> I suspect you are actually using the second effect. Have you
->>> tested with "usbcore.autosuspend=3D-1" on the kernel command line.
->>
->> After further testing, your suspicion is correct.
->>
->> TL;DR: the two VL812 hubs don't behave well when suspended.
->>
->> I'd like to prepare a better patch for that issue. What's the recommend=
-ed strategy? The current patch works, even if only as a side effect and wh=
-en there's a wakeup source downstream. It's currently in Greg KH's usb-lin=
-us branch, and will land in linux-next at some point. I'm tempted to let i=
-t be and undo it later in the better patch. Is that acceptable? Or should =
-I ask Greg KH to pull it?
->
-> I can revert it if you want me to, just let me know.
->
-> thanks,
->
-> greg k-h
+Hm, not only KSZ8830/KSZ8863/KSZ8873 are affected. ksz8795 compatible
+series with defined .xmii_ctrl0/.xmii_ctrl1 are broken too. Because it
+is writing to the global config register over ksz_pwrite8 function. It
+means, we are writing to 0xa6 instead of 0x06. And to 0xf6 instead of
+0x56.
 
-[keeping the lists in CC this time]
-
-Please revert if possible, and apologies for the trouble.
-
-Thanks!
-JF
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

@@ -2,162 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11CD75A8521
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:11:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01FED5A8526
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:12:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbiHaSLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43876 "EHLO
+        id S232577AbiHaSM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232415AbiHaSLK (ORCPT
+        with ESMTP id S232499AbiHaSME (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:11:10 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CBAE5894;
-        Wed, 31 Aug 2022 11:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661969443; x=1693505443;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=+P2jGFlhW0U954QbhxPJD7GcQOFMvMwpfEDTKRD3F6k=;
-  b=KqJg6XQfJOZNEjgcEHprlzSBEQhiyqHKrUUe+UsbaQfjddEBlRuaemR6
-   OSOsb4mwGr8OPNmNFsVd255A0u3lyFiemK0Pwh2wkWDYr+RbryQpIBAei
-   zEvRJQizxpfm5RSSqx2Nmv6/bUqOsK/t2gKHxq+ImCm12x0iOfA0A0LsZ
-   WXnaoL4+FJV2hW5EFj3A7250RF/fPCzwg6IhWQe6rDmm8f88oAPjTYd46
-   7i1ubipichb4XPJIfjXj8NeRrMYEHYEUY4L120iORfXv/gK5/RmEv4lfk
-   9fVuIWzkEdOc8zDQpvioVRT474LWCLYY2FfWdCZklNQHkeGkozZJ0mNQu
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="275260561"
-X-IronPort-AV: E=Sophos;i="5.93,278,1654585200"; 
-   d="scan'208";a="275260561"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 11:09:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,278,1654585200"; 
-   d="scan'208";a="701447461"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by FMSMGA003.fm.intel.com with ESMTP; 31 Aug 2022 11:09:26 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 31 Aug 2022 11:09:25 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 31 Aug 2022 11:09:25 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.171)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 31 Aug 2022 11:09:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lQNVXMJ3runbvAAPV8tdIVGEOWruABcc/YlDq+8ke/LfBdcxPRMOKqYuEnAeMWR/R4+/GMAlo9n/G+kN7KLxzo0TUHB7/PMcdws+wT0Oye1gwuhUdUfp0269lCOwoBMNID4iyKPjM4lvlmBRt8nedX7zTWSyRnnWNygyL9dM4JZj69fcX6pmnFIj4dxLZoK7nIzF/ZN6jf9EcaF38oE2INxfgKtmF33ewTHxF1LebpjiDQZYshuIXVlIVg3hUofRDhYQsuB25EK6/xUneBlh/9o+YahBPXE6cWIERa/x/UZybN5b7h3e20EBbiH6jA3S3pcJYb/uYjxAXaXGDDQqXA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LpELTAWHkzi+U49E1QuMCNyD/tR+9Si4THdmkaDgk28=;
- b=Zq+4mGXirITmZLrcGTWzVACoGIC9tj+cW1btfvaXJt8Hom0+rq8HvuuEmBGmZ32lK+NHAD4X3/HzqEitA0QqlclDsjaYq10NzOGlZGbKqnprHVxwbw3Rx63W6FG7zkWKv7F9hc2SS7dr4kkl5a3rAl9Zk6JKuissGCALlK/kpHrJgoRnQRwpnysXWRWBX1QIlsikYw8/T9njR/iGV1qTurqtJL5s+Lt2wHiuwFeXOc61Y/zU2YPYUhjtzRLa7bSu0H44Wiqg5SwTTIIWMCmQKas/GkZDCOlooR/wEDsvw95FR4XZMYjGEez1sjdlZ8L2G3W8kyCGanLS4xcYGiS5JQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by DM6PR11MB3146.namprd11.prod.outlook.com (2603:10b6:5:67::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 31 Aug
- 2022 18:09:24 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a824:112:52f7:5743]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a824:112:52f7:5743%11]) with mapi id 15.20.5566.021; Wed, 31 Aug 2022
- 18:09:24 +0000
-Message-ID: <c3717761-7b00-db03-117a-0b672c865fa9@intel.com>
-Date:   Wed, 31 Aug 2022 11:09:21 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.0
-Subject: Re: [PATCH 5/6] selftests/sgx: retry the ioctls returned with EAGAIN
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     <linux-sgx@vger.kernel.org>,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220830031206.13449-1-jarkko@kernel.org>
- <20220830031206.13449-6-jarkko@kernel.org>
- <5d19be91-3aef-5cbe-6063-3ff3dbd5572b@intel.com>
- <Yw7IFcnjbfm3Xgqk@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <Yw7IFcnjbfm3Xgqk@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR04CA0116.namprd04.prod.outlook.com
- (2603:10b6:303:83::31) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+        Wed, 31 Aug 2022 14:12:04 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFD4ED03E;
+        Wed, 31 Aug 2022 11:11:19 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id jm11so14846246plb.13;
+        Wed, 31 Aug 2022 11:11:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=UgxFIowahszZp3YqmiisiqrkN1WXXLGBv+HLJWO87II=;
+        b=fI5WQhRVN2gjyq/VfwgKVUUSxu94g7sATcfU8pa+n63z0kIiVGbGFnblJV01nSNpjA
+         IilbjGvM/mfscoJeAHl3+rnnyJSyViEvXi5uO3UYnQfmDK4wq0sItgJuJyslvWIuJ1xK
+         xgy4lYlx8TBhrHvYOeWLqeIlhpC0E7rOWDvjqo8vcpndgDffNyYZP6vY8HULGL3eE8mk
+         A+QpZaqX66TxUyh+lf8CD5cAwUMI1dwyk8V5ilGqGGtHTYyBFJKtgBqWyEmoLF2mOslr
+         2Mme5B5yAK4DybIKEW/XvNlw2+d1ZnsHWEgDhWPm0uWaqJyircivF3tmV3nel1qDk9bH
+         MEkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=UgxFIowahszZp3YqmiisiqrkN1WXXLGBv+HLJWO87II=;
+        b=HXKxLbq4gEVHgAFwdkoLLXx5tFNXLtrIh/lBh1Szr22RF2KncXFJYridM5hgK55R4D
+         XKAzSOzwaWf+hKvUTp1MPmLJFahcVUFnPaYF4V3Og6dEfo01Y22sn2X7OUF1PrQKRK+9
+         ukN1zT1oqaRlj+offW4tJfZf3wq+exAtuvEUXcrkpK46Jn1ueaNwQp3FnzoAipRpu3St
+         d/1wz+zlmHEqzlLRefylsWzR8uHfBy47ppspRHsNTiq7Gng5tMsQnrGror2pg/ICXs6I
+         +yUsr1Eq2uqMKWHL8slY73OhpBgaJZlW/h5NWOlNvMO7ZRVZ98FsZkb1Kfi1Pw+gx6//
+         Nh1Q==
+X-Gm-Message-State: ACgBeo1rFKWO/Qd+hrmiFOYyiN7YPCMReYMFI54CbqXUUjm4pSvkhtfF
+        +nRac90SwpwA/CyQ/miVr7c=
+X-Google-Smtp-Source: AA6agR68NCpgTVFenk7zMwhUValscToqoiIu27dAadrbzR2TvTiklXVBckP6992zWHmQtl26DJnD6g==
+X-Received: by 2002:a17:902:e748:b0:175:2ffe:927d with SMTP id p8-20020a170902e74800b001752ffe927dmr7086642plf.168.1661969414955;
+        Wed, 31 Aug 2022 11:10:14 -0700 (PDT)
+Received: from localhost.localdomain (ec2-18-117-95-84.us-east-2.compute.amazonaws.com. [18.117.95.84])
+        by smtp.gmail.com with ESMTPSA id d68-20020a621d47000000b00535e46171c1sm11418557pfd.117.2022.08.31.11.10.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 11:10:14 -0700 (PDT)
+From:   Schspa Shi <schspa@gmail.com>
+To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Schspa Shi <schspa@gmail.com>
+Subject: [PATCH] p9: trans_fd: Fix deadlock when connection cancel
+Date:   Thu,  1 Sep 2022 02:09:50 +0800
+Message-Id: <20220831180950.76907-1-schspa@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: ffb668ca-43d0-4cc4-43c0-08da8b7bef45
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3146:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 87aqLvb0cZB3daQT14JFXCzSbaTyR9EM5vHkuwp35/5bp9W9WeDiVwCdyTxzyJltNdpUfTsc/BEkKUd64m3FDs6xCku1fa/mePgUMzgg1qUpovL+HwVWHvuf0x/TRRbk3Fl/1du4HgFbETTO8IVn/VPWhaLZaN3etCybIAcctGVRGrglA0mmJyRw4TlTE7Wu0074+16N0wZ7hjBQLozGQhRuMmsAhKo8nqPHlbAvvC5ZJs1T1o1tvZK5cKhrDl1cHRi7DCJizRoHTdrgkpzk+/HyjeQz4cm5+xwlY5lrwpi9Tyjm44gjMVnK429lgWp4B1qup+oj9vOOpX1CwoshUtbMTjRmFsNTCWeTnAmrbUPby6Pm0hSNRKcyAwSNMdVqbTXbRq9jYhIzHQ1WWVAz7qsYuxvFsujEiOhnfQNYBxcJMW5DKFtdkWK0NZQMopSlUEzJo6wKxAS3DXls2Om4gE091e14EnfWgNX2CBJXN64ltLe3FtHoRO0UxL8AIZW7l43R0oa5DKOkQG9ep12KHS2kxb2hysnzaDKVLj4H/PXNiOE77j6EWPoCj5l6DmvDgpl5KbLLtaAlFG5DhLNM8216pqbwe2uFpZDQg1OR8ZOLK4qnxZvap44ABLUMBn8ZYFvg7MZQ3IpN8DTgtz/b8Vv7vWS5LQTLFzCbCY2BcfI/VBfQzOQy6dcEeppp597LSLGTQjaR1odw8YCCTgLzy9EX8APLtiPx3NcRROvQflf0gHBj1Gck9/8oY4K5htAJBmlIbMankxwoI5ws5nZhaK8jP4m5k2zxMgZ8mA/mlco=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(346002)(366004)(376002)(39860400002)(4744005)(8936002)(54906003)(41300700001)(6486002)(6666004)(38100700002)(6916009)(44832011)(6506007)(31686004)(66946007)(66556008)(4326008)(8676002)(316002)(66476007)(36756003)(5660300002)(26005)(6512007)(2906002)(2616005)(53546011)(186003)(83380400001)(478600001)(86362001)(31696002)(82960400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?K09MY1hIVUJ5NFViTjhjLzBQSitadUwyNXo1UmhYY01sN0pNcGUzbWRick1G?=
- =?utf-8?B?TEgwMmNaSFdtYUJmME04N2ROWS9VSTRVcUl6SVJjeXdQRm9Ja3cvM0pSUkRL?=
- =?utf-8?B?bFZLa2oyZzIzbDJGaG9KbE5zaUhOSzM5Nmo4cmtWZlBFYmdhVENORWcwRTlF?=
- =?utf-8?B?VE1hU3QyM3E3UlZvZHdEMHdyUjhwM0QwblZhQ3lacjUvR3dGVitzaFBlL0ww?=
- =?utf-8?B?dFkwWnlyb2NxeXd4aExTQ0g5aEx1NTFRcm9MZ2hPNzZPcjJ3RjZDVE5MNmVS?=
- =?utf-8?B?QWgzUXdGbncwK1dBbnl6SVlwWE1pejZoOW1TLzhVZU0vVXJlT3p5Szlxc2Fm?=
- =?utf-8?B?UU5panBka1E5WE9weDFSLzBaU3k4S3FPUW9qRm9WREFEeWo0YjRZNmxjclE3?=
- =?utf-8?B?SW9PQ2crMkhzOW1iZExKZGY5YkFrZWhPLyswVHRTWkFrdTVLTE4rL3JxR2g2?=
- =?utf-8?B?eU5BYXJiY2cyRngxSkU0bUhDM2NYWCtDU1d2N1Y4TlhvdlFYcFlCNlhrTFpl?=
- =?utf-8?B?Nlo0OXhEd2RmbWNVQTIyOWprK0xwVlhDVGxuZ0llS3FVeUljQk9rNUZJQVFw?=
- =?utf-8?B?U1hIMGxudmhlV1dOWW1OdHBUd1VBUVBPSUx5RFJ3WVhPVlc5TWM4cnV5LzB5?=
- =?utf-8?B?QWwvcWNBQW91NzQyQTV1QWRvUzdMQ3prdEFSWGhSWXNlb2lMdUx6Q3lUdHk4?=
- =?utf-8?B?N0tpRHFudGJhSlQ1WmZnWFhSd1RyMXVTM0hnSUZ1R0UvT2Q4TEZCaVBDaFQ1?=
- =?utf-8?B?NGhUVHFmUUREN0YxL2RndE54NWxPZ3RMMGFDd1I2NDBkWTlLM3pwTnpMODZr?=
- =?utf-8?B?NXZCYUN0VGVKWW1SakxsMWg4aUJWeC8vYUpFTmtKanlNMXhub0ZPKzk0RUVD?=
- =?utf-8?B?QmsxdzJRRHlGVnZHb2dNaU9GN3IwN2FLUXpHQTU3dGNDanFBTTB5YTh0eFFZ?=
- =?utf-8?B?RFNNMnNZWmI0WjREdkdyNGhPVXRXb3RSSzNVdVBrM1o3bHJnOHpzdlphc3Rp?=
- =?utf-8?B?TkRkUWV5YUJHMTR1TmtjbkVCa3VsZ0RpNmx1VE1GL3crUDdWR0R4L2JTdUhM?=
- =?utf-8?B?U2I3c2wzd0FHQlB6WVJ1dUg5VHJRQ09lNFU3eXlrNzNwdVp2NHdadElmTE5Z?=
- =?utf-8?B?QlNoNHdIK2daa2NxamdOR0U3cnQ3dTBYMDEyUFoyQnN1dUdoeXZRL0dkZUJ3?=
- =?utf-8?B?dDZvNll3anZsVkJ0MTkwTjN2SDhzQmZyNDkvVHVZaUJrSng2NGZERmFoY1RL?=
- =?utf-8?B?UzJwbXFqY3BQbmJ4QzNzeG9FQUUrQ3g2bXRUUTVyeE5xUVNva3FVNkRET3VI?=
- =?utf-8?B?SE9nbmgwTjlyREhVVFhDZFIvK2U4bktDSFJWMnNYWWl3VmsxbVBOdkdweTQ5?=
- =?utf-8?B?K2RxMG5sZFQxM3BZS3h0RkRqSnE4c2tFZC93akxMeHlNNlhzYjVkSEhGeDEy?=
- =?utf-8?B?U3FiRUtGbGtnSTVIK1pLWDdxNzlRTkNrWkhuNEU0eWRGekNIV2M1RVBjUmlu?=
- =?utf-8?B?Sk5yWHBxMXZZUDRKTVNZRUJzcnRyc0tLMnFzSTBkKy96WE1Zc05wN0ZhaWpw?=
- =?utf-8?B?M3ZnaVgrb1k3OHpWZU9wc3E2ZXlLSldYUzRWWUlHb3NzMWRRV2pZZ3JtRmpx?=
- =?utf-8?B?bHdzVmNxcG52MFBGWEZMN1F6TlVFSmRyNlBjKzVxUmovYVdlTURIVEVvVnZk?=
- =?utf-8?B?YzBYVU9Ib1ZNanB2dlB3MjE0ektOZzMrZU40by9mbkhPbVkvSURVZ000RTM1?=
- =?utf-8?B?WmhOUTlVQjdCM2lJL1lFK3NEd0ZNUzBBN0E1ZXpGdzNtUE00KzRHdTJsMlNW?=
- =?utf-8?B?c1RWMU9yaVF6N09oRXd6MCsvV3FFRmxrZEZJT2pjV3c4YmNxL2VFSlIyaklE?=
- =?utf-8?B?aG4vQTBrN2VFdUZ5ajlPY1NFNmY5UUh0YVN3bDJuZzZmVlFCamlJNFZHMjIy?=
- =?utf-8?B?SXdsQUFwWlBTYXV2YXBNRWFzWWQrVE45ZS8zMFQ1ZmtqZTM2NHpoUWVwTDdw?=
- =?utf-8?B?YXpKVkRSWlpTUWpQL3lSdmhDTVkreEUvbzVFRG9jaDlNMDhMM0p2RldxWXJl?=
- =?utf-8?B?cFhoSXhEZ2RLWUxCVUpMZVNCclhGSW9La1ZBS3Y5UllFSUkrZytBWHRoTVh4?=
- =?utf-8?B?RnBRMnJreFAyeGRoanRlOHlsZHJlazdMQUtRSmE5M2MxNlk5K1dyck9UKzIv?=
- =?utf-8?B?YkE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ffb668ca-43d0-4cc4-43c0-08da8b7bef45
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2022 18:09:23.9128
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZXaveEaGG5aEX1TeizzJ6jiSy48Yl2qAqF8OlbhGu+UiE4LONSj5LFjlKzruFNKibM1xZqf0oc7okUta2PoIJ5NarwMF180y6P2KtSbp7Kg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3146
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -165,39 +70,119 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
+There is a deadlock condition when connection canceled.
 
-On 8/30/2022 7:31 PM, Jarkko Sakkinen wrote:
-> On Tue, Aug 30, 2022 at 03:56:29PM -0700, Reinette Chatre wrote:
->> Hi Haitao and Jarkko,
->>
->>
->> selftests/sgx: Retry the ioctl()s returned with EAGAIN
->>
->>
->> On 8/29/2022 8:12 PM, Jarkko Sakkinen wrote:
->>> From: Haitao Huang <haitao.huang@linux.intel.com>
->>>
->>> For EMODT and EREMOVE ioctls with a large range, kernel
->>
->> ioctl()s?
-> 
-> Ioctl is common enough to be considered as noun and is
-> widely phrased like that in commit messages. I don't
-> see any added clarity.
+Please refer to the following scenarios.
+           task 0                task1
+------------------------------------------------------------------
+p9_client_rpc
+  req = p9_client_prepare_req(c, type, c->msize, fmt, ap);
+  // refcount = 2
+  err = c->trans_mod->request(c, req);
+  // req was added to unsent_req_list
+  wait_event_killable(req->wq, req->status >= REQ_STATUS_RCVD);
 
-ok. I was asked to make this change in the SGX2 patches and
-thought that I should propagate this advice :)
+                           p9_read_work
+                             // IO error happen
+                           error:
+                             p9_conn_cancel(m, err);
+                              spin_lock(&m->client->lock);
+                              // hold client->lock now
+                              p9_client_cb
+                                req->status = REQ_STATUS_ERROR;
+                                wake_up(&req->wq);
+                                // task 0 wakeup
+                                << preempted >>
 
->>> +			modt_ioc.count = 0;
->>> +		} else
->>> +			break;
->>
->> Watch out for unbalanced braces (also later in patch). This causes
->> checkpatch.pl noise.
-> 
-> Again. I did run checkpatch to all of these. Will revisit.
+reterr:
+	p9_req_put(c, req);
+    // refcount = 1 now
+                                << got scheduled >>
+                                p9_req_put
+                                  // refcount = 0
+                                  p9_tag_remove(c, r);
+                                    spin_lock_irqsave(&c->lock, flags);
+                           ------------- deadlock -------------
 
-It looks like I see it because I use "checkpatch.pl --strict".
+[  651.564169] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[  651.564176] rcu:     3-...0: (8 ticks this GP) idle=40b4/1/0x4000000000000000 softirq=1289/1290 fqs=83762
+[  651.564185]  (detected by 2, t=420047 jiffies, g=1601, q=992 ncpus=4)
+[  651.564190] Sending NMI from CPU 2 to CPUs 3:
+[  651.539301] NMI backtrace for cpu 3
+[  651.539301] CPU: 3 PID: 46 Comm: kworker/3:1 Not tainted 6.0.0-rc2-rt3-00493-g2af9a9504166 #3
+[  651.539301] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+[  651.539301] Workqueue: events p9_read_work
+[  651.539301] RIP: 0010:queued_spin_lock_slowpath+0xfc/0x590
+[  651.539301] Code: 00 00 00 65 48 2b 04 25 28 00 00 00 0f 85 a5 04 00 00 48 81 c4 88 00 00 00 5b 5d 41 5c 41 5d 41 5e 41 5f c3 cc0
+[  651.539301] RSP: 0018:ffff888002987ad8 EFLAGS: 00000002
+[  651.539301] RAX: 0000000000000000 RBX: 0000000000000001 RCX: dffffc0000000000
+[  651.539301] RDX: 0000000000000003 RSI: 0000000000000004 RDI: ffff888004adf600
+[  651.539301] RBP: ffff888004adf600 R08: ffffffff81d341a0 R09: ffff888004adf603
+[  651.539301] R10: ffffed100095bec0 R11: 0000000000000001 R12: 0000000000000001
+[  651.539301] R13: 1ffff11000530f5c R14: ffff888004adf600 R15: ffff888002987c38
+[  651.539301] FS:  0000000000000000(0000) GS:ffff888036580000(0000) knlGS:0000000000000000
+[  651.539301] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[  651.539301] CR2: 00007fe012d608dc CR3: 000000000bc16000 CR4: 0000000000350ee0
+[  651.539301] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[  651.539301] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[  651.539301] Call Trace:
+[  651.539301]  <TASK>
+[  651.539301]  ? osq_unlock+0x100/0x100
+[  651.539301]  ? ret_from_fork+0x1f/0x30
+[  651.539301]  do_raw_spin_lock+0x196/0x1a0
+[  651.539301]  ? spin_bug+0x90/0x90
+[  651.539301]  ? do_raw_spin_lock+0x114/0x1a0
+[  651.539301]  _raw_spin_lock_irqsave+0x1c/0x30
+[  651.539301]  p9_req_put+0x61/0x130
+[  651.539301]  p9_conn_cancel+0x321/0x3b0
+[  651.539301]  ? p9_conn_create+0x1f0/0x1f0
+[  651.539301]  p9_read_work+0x207/0x7d0
+[  651.539301]  ? p9_fd_create+0x1d0/0x1d0
+[  651.539301]  ? spin_bug+0x90/0x90
+[  651.539301]  ? read_word_at_a_time+0xe/0x20
+[  651.539301]  process_one_work+0x420/0x720
+[  651.539301]  worker_thread+0x2b9/0x700
+[  651.539301]  ? rescuer_thread+0x620/0x620
+[  651.539301]  kthread+0x176/0x1b0
+[  651.539301]  ? kthread_complete_and_exit+0x20/0x20
+[  651.539301]  ret_from_fork+0x1f/0x30
 
-Reinette
+To fix it, we can add extra reference counter to avoid deadlock, and
+decrease it after we unlock the client->lock.
+
+Fixes: 67dd8e445ee0 ("9p: roll p9_tag_remove into p9_req_put")
+
+Signed-off-by: Schspa Shi <schspa@gmail.com>
+---
+ net/9p/trans_fd.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/net/9p/trans_fd.c b/net/9p/trans_fd.c
+index e758978b44bee..2e4e039b38e3e 100644
+--- a/net/9p/trans_fd.c
++++ b/net/9p/trans_fd.c
+@@ -205,14 +205,19 @@ static void p9_conn_cancel(struct p9_conn *m, int err)
+ 		list_move(&req->req_list, &cancel_list);
+ 	}
+ 
+-	list_for_each_entry_safe(req, rtmp, &cancel_list, req_list) {
++	list_for_each_entry(req, &cancel_list, req_list) {
+ 		p9_debug(P9_DEBUG_ERROR, "call back req %p\n", req);
+-		list_del(&req->req_list);
+ 		if (!req->t_err)
+ 			req->t_err = err;
++		p9_req_get(req);
+ 		p9_client_cb(m->client, req, REQ_STATUS_ERROR);
+ 	}
+ 	spin_unlock(&m->client->lock);
++
++	list_for_each_entry_safe(req, rtmp, &cancel_list, req_list) {
++		list_del(&req->req_list);
++		p9_req_put(m->client, req);
++	}
+ }
+ 
+ static __poll_t
+-- 
+2.37.2
+

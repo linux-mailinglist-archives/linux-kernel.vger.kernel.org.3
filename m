@@ -2,150 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3F215A7D2F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E0F25A7D30
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:23:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiHaMXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:23:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37924 "EHLO
+        id S231138AbiHaMXx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:23:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiHaMXe (ORCPT
+        with ESMTP id S230443AbiHaMXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:23:34 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED6CCEB13;
-        Wed, 31 Aug 2022 05:23:32 -0700 (PDT)
-Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MHjst0WWpz684wN;
-        Wed, 31 Aug 2022 20:19:46 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 31 Aug 2022 14:23:30 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
- 2022 13:23:30 +0100
-Date:   Wed, 31 Aug 2022 13:23:29 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Robert Richter <rrichter@amd.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH 00/15] cxl: Add support for Restricted CXL hosts (RCD
- mode)
-Message-ID: <20220831132329.00007c46@huawei.com>
-In-Reply-To: <20220831081603.3415-1-rrichter@amd.com>
-References: <20220831081603.3415-1-rrichter@amd.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 31 Aug 2022 08:23:49 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E22D3989
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:23:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661948626; x=1693484626;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=L0YM3ONxeEizbE7TRZN3GSHlQQo2GntyFRjVX1BT5ps=;
+  b=bP4XZ67/YWymVQZ+woUax18V0STHVMHGq3jNvCRvltO9IFhIaklS1UPF
+   aiGosNDgm458OH/sQ3X9TCp7g79hXu8Z7lXBd1U2EEQOVCQ18xrRiosGU
+   TfxbHzq6sFslHie/1l8IoNXa6aG6aZJ5Zeh1tucxJHztdEdJ2Y7bNUdRk
+   9GGFEMvsJ6tbm/SuWRtxXaU28oTYUxcm7ceb9I39IAJK8AwyFf5F2xn1J
+   7bLd9sUObRBtexUz/WndUdIA71W3XZCLI1qh3Rgc1+Is/XuIKPbOCakYw
+   3Cgmqa7RklglKXN1sSsZQmpNXewcx8LvxOoIHxBS+vuFjap9qLfkz3Bau
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="296218481"
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="296218481"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 05:23:45 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="612079414"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 31 Aug 2022 05:23:43 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 80F1E174; Wed, 31 Aug 2022 15:23:58 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Shuo Liu <shuo.a.liu@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Fei Li <fei1.li@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v3 1/1] virt: acrn: Mark the uuid field as unused
+Date:   Wed, 31 Aug 2022 15:23:56 +0300
+Message-Id: <20220831122356.65544-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 Aug 2022 10:15:48 +0200
-Robert Richter <rrichter@amd.com> wrote:
+After the commits for userspace (see Link tags below) the uuid field is
+not being used in the ACRN code. Update kernel to reflect these changes.
+I.e. we do the following:
+- adding a comment explaining that it's not used anymore
+- replacing the specific type by a raw buffer
+- updating the example code accordingly
 
-> In Restricted CXL Device (RCD) mode (formerly referred to as CXL 1.1)
-> the PCIe enumeration hierarchy is different from CXL VH Enumeration
-> (formerly referred to as 2.0, for both modes see CXL spec 3.0: 9.11
-> and 9.12, [1]). This series adds support for RCD mode. It implements
-> the detection of Restricted CXL Hosts (RCHs) and its corresponding
-> Restricted CXL Devices (RCDs). It does the necessary enumeration of
-> ports and connects the endpoints. With all the plumbing an RCH/RCD
-> pair is registered at the Linux CXL bus and becomes visible in sysfs
-> in the same way as CXL VH hosts and devices do already. RCDs are
-> brought up as CXL endpoints and bound to subsequent drivers such as
-> cxl_mem.
-> 
-> For CXL VH the host driver (cxl_acpi) starts host bridge discovery
-> once the ACPI0017 CXL root device is detected and then searches for
-> ACPI0016 host bridges to enable CXL. In RCD mode an ACPI0017 device
-> might not necessarily exist and the host bridge can have a standard
-> PCIe host bridge PNP0A08 ID, there aren't any CXL port or switches in
-> the PCIe hierarchy visible. As such the RCD mode enumeration and host
-> discovery is very different from CXL VH. See patch #5 for
-> implementation details.
-> 
-> This implementation expects the host's downstream and upstream port
-> RCRBs base address being reported by firmware using the optional CEDT
-> CHBS entry of the host bridge (see CXL spec 3.0, 9.17.1.2).
-> 
-> RCD mode does not support hot-plug, so host discovery is at boot time
-> only.
-> 
-> Patches #1 to #4 are prerequisites of the series with fixes needed and
-> a rework of debug messages for port enumeration. Those are general
-> patches and could be applied earlier and independently from the rest
-> assuming there are no objections with them. Patches #5 to #15 contain
-> the actual implementation of RCD mode support.
-> 
-> [1] https://www.computeexpresslink.org/spec-landing
+The advertised field confused users and actually never been used. So
+the wrong part here is that kernel puts something which userspace never
+used and hence this may confuse a reader of this code.
 
-Hi Robert,
+Link: https://github.com/projectacrn/acrn-hypervisor/commit/da0d24326ed6
+Link: https://github.com/projectacrn/acrn-hypervisor/commit/bb0327e70097
+Fixes: 5b06931d7f8b ("sample/acrn: Introduce a sample of HSM ioctl interface usage")
+Fixes: 9c5137aedd11 ("virt: acrn: Introduce VM management interfaces")
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+v3: converted to Link tags (Rafael), explained what was wrong (Rafael)
+v2: added tag (Fei)
+ include/uapi/linux/acrn.h | 5 ++---
+ samples/acrn/vm-sample.c  | 3 ---
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-I'm curious on the aims of this work.  Given expectation for RCDs is often
-that the host firmware has set them up before the OS loads, what functionality
-do you want to gain by mapping these into the CXL 2.0+ focused infrastructure?
-
-When I did some analysis a while back on CXL 1.1 I was pretty much assuming
-that there was no real reason to let the OS know about it because it
-couldn't do much of any use with the information.  There are some corners
-like RAS where it might be useful or perhaps to enable some of the CXL 3.0
-features that are allowed to be EP only and so could be relevant for
-an older host (e.g. CPMUs).
-
-With my QEMU hat on I wasn't planning to bother with anything pre 2.0
-but it might be worth considering to let us exercise this code...
-
-Jonathan
-
-
-> 
-> Robert Richter (15):
->   cxl/core: Remove duplicate declaration of devm_cxl_iomap_block()
->   cxl/core: Check physical address before mapping it in
->     devm_cxl_iomap_block()
->   cxl: Unify debug messages when calling devm_cxl_add_port()
->   cxl: Unify debug messages when calling devm_cxl_add_dport()
->   cxl/acpi: Add probe function to detect restricted CXL hosts in RCD
->     mode
->   PCI/ACPI: Link host bridge to its ACPI fw node
->   cxl/acpi: Check RCH's PCIe Host Bridge ACPI ID
->   cxl/acpi: Check RCH's CXL DVSEC capabilities
->   cxl/acpi: Determine PCI host bridge's ACPI UID
->   cxl/acpi: Extract the RCH's RCRB base address from CEDT
->   cxl/acpi: Extract the host's component register base address from RCRB
->   cxl/acpi: Skip devm_cxl_port_enumerate_dports() when in RCD mode
->   cxl/acpi: Rework devm_cxl_enumerate_ports() to support RCD mode
->   cxl/acpi: Enumerate ports in RCD mode to enable RCHs and RCDs
->   cxl/acpi: Specify module load order dependency for the cxl_acpi module
-> 
->  drivers/acpi/pci_root.c      |   1 +
->  drivers/cxl/acpi.c           | 311 ++++++++++++++++++++++++++++++++++-
->  drivers/cxl/core/pci.c       |  22 ++-
->  drivers/cxl/core/port.c      | 103 ++++++++----
->  drivers/cxl/core/regs.c      |   3 +
->  drivers/cxl/cxl.h            |   2 -
->  drivers/cxl/mem.c            |   1 +
->  tools/testing/cxl/test/cxl.c |   8 +-
->  8 files changed, 400 insertions(+), 51 deletions(-)
-> 
+diff --git a/include/uapi/linux/acrn.h b/include/uapi/linux/acrn.h
+index ccf47ed92500..04fa83647ae5 100644
+--- a/include/uapi/linux/acrn.h
++++ b/include/uapi/linux/acrn.h
+@@ -12,7 +12,6 @@
+ #define _UAPI_ACRN_H
+ 
+ #include <linux/types.h>
+-#include <linux/uuid.h>
+ 
+ #define ACRN_IO_REQUEST_MAX		16
+ 
+@@ -186,7 +185,7 @@ struct acrn_ioreq_notify {
+  * @reserved0:		Reserved and must be 0
+  * @vcpu_num:		Number of vCPU in the VM. Return from hypervisor.
+  * @reserved1:		Reserved and must be 0
+- * @uuid:		UUID of the VM. Pass to hypervisor directly.
++ * @uuid:		Reserved (used to be UUID of the VM)
+  * @vm_flag:		Flag of the VM creating. Pass to hypervisor directly.
+  * @ioreq_buf:		Service VM GPA of I/O request buffer. Pass to
+  *			hypervisor directly.
+@@ -198,7 +197,7 @@ struct acrn_vm_creation {
+ 	__u16	reserved0;
+ 	__u16	vcpu_num;
+ 	__u16	reserved1;
+-	guid_t	uuid;
++	__u8	uuid[16];
+ 	__u64	vm_flag;
+ 	__u64	ioreq_buf;
+ 	__u64	cpu_affinity;
+diff --git a/samples/acrn/vm-sample.c b/samples/acrn/vm-sample.c
+index b2dad47a77a0..7abd68b20153 100644
+--- a/samples/acrn/vm-sample.c
++++ b/samples/acrn/vm-sample.c
+@@ -29,8 +29,6 @@ static struct acrn_io_request *io_req_buf = (struct acrn_io_request *)io_request
+ 
+ __u16 vcpu_num;
+ __u16 vmid;
+-/* POST_STANDARD_VM_UUID1, refer to https://github.com/projectacrn/acrn-hypervisor/blob/master/hypervisor/include/common/vm_uuids.h */
+-guid_t vm_uuid = GUID_INIT(0x385479d2, 0xd625, 0xe811, 0x86, 0x4e, 0xcb, 0x7a, 0x18, 0xb3, 0x46, 0x43);
+ 
+ int hsm_fd;
+ int is_running = 1;
+@@ -63,7 +61,6 @@ int main(int argc, char **argv)
+ 	}
+ 	hsm_fd = open("/dev/acrn_hsm", O_RDWR|O_CLOEXEC);
+ 
+-	memcpy(&create_vm.uuid, &vm_uuid, 16);
+ 	create_vm.ioreq_buf = (__u64)io_req_buf;
+ 	ret = ioctl(hsm_fd, ACRN_IOCTL_CREATE_VM, &create_vm);
+ 	printf("Created VM! [%d]\n", ret);
+-- 
+2.35.1
 

@@ -2,272 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5945A5A781C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:50:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A175A77FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:47:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbiHaHuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 03:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S230239AbiHaHr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 03:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230288AbiHaHtH (ORCPT
+        with ESMTP id S230143AbiHaHrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 03:49:07 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5B120C22A5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:48:58 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.2.9.158])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx9OFeEg9jNZINAA--.59415S2;
-        Wed, 31 Aug 2022 15:48:46 +0800 (CST)
-From:   Mao Bibo <maobibo@loongson.cn>
-To:     Huacai Chen <chenhuacai@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] LoongArch: Add safer signal handler for TLS access
-Date:   Wed, 31 Aug 2022 15:48:46 +0800
-Message-Id: <20220831074846.3565542-1-maobibo@loongson.cn>
-X-Mailer: git-send-email 2.27.0
-MIME-Version: 1.0
+        Wed, 31 Aug 2022 03:47:53 -0400
+Received: from EUR02-HE1-obe.outbound.protection.outlook.com (mail-eopbgr10060.outbound.protection.outlook.com [40.107.1.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B139073925;
+        Wed, 31 Aug 2022 00:47:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AAar+bQyeysuze8bYDCqgGLvW7YKBEqmRGUwmMob1aTTrrhPnp/iBdQJXlrI/7k+60BzKAL6XitubzSi0Azcp2iZBHgz/hRy8a/QpMxC+ZMRttr61G1g8ePCWonEAlS26tBhH73/32fpRarm+8JConCrm3I3Dpij/hoanrPedN70nTIkvOQxFe2ZDmfesh68qgwA+Jrca71djLT3R8TviAApn+njnOQnSoALkY3K7OWUv4mrnC8SRnZhl/EjVmS+0FH33M0L10Bvq9cgI1B9kUShZabTQSBr8qEfsyDcX09y/T2nA5XOPQ5987tffrz1Tal+lepPXaww4qgzg5Bx2w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JQPnm0cRjIP/SAAvxtZ58eU8MNiC1vLfhVz+f6Vq894=;
+ b=NLIjvKwQxBs1mn9lxkImTt6Ln6IDW4JXUuwCkCdVPjGkxlkJrrV9UeSEzXJInBWEtdPrlX53KoYtfXryvcIAvElX0+N1m03WfQAryRW+sxoHzvg8cRua3qY1n/OJUJ+SAg+a72sA6LjEnsxCyfBOboywcx34d+asI0hCD8MCIXiVXv2qFLAt0z/ZhCXEGo6MR5w30axKgsrQv+e1aP8Dwd6nekqHke77AX9vfbYW3eUCZnDwbLtPyAm2WI8QJH4ro3cdrfcshUkYSjgyZh5QWKTW8po9M4wni1GUDuz2p7yZ8PYkl4aKQ0wn/aDa69GBdm+c3OK/e6n6yiD7lUqI8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector2-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JQPnm0cRjIP/SAAvxtZ58eU8MNiC1vLfhVz+f6Vq894=;
+ b=e+Gqg8NKCXerq6EyJXe27FcnT/E5cJHpH+1lN+RKD+xJpL0BbVKytvoryaa2D/eJVFK3wqPBTBez5TGENsHmmEvujVnsuATgc5gRWbV0hldfaeS4+rZHsqQc6ocdLe6hwfpl76qiHR+BLg92hGPsJRB1LLs897gsJoAdB2qW5pE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM8PR04MB8001.eurprd04.prod.outlook.com (2603:10a6:20b:24f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Wed, 31 Aug
+ 2022 07:47:48 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::2d22:3315:6f9b:82c7]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::2d22:3315:6f9b:82c7%5]) with mapi id 15.20.5588.010; Wed, 31 Aug 2022
+ 07:47:48 +0000
+From:   "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        aisheng.dong@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH V2 0/8] arm64: dts: imx93: add several nodes
+Date:   Wed, 31 Aug 2022 15:49:15 +0800
+Message-Id: <20220831074923.3085937-1-peng.fan@oss.nxp.com>
+X-Mailer: git-send-email 2.37.1
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Cx9OFeEg9jNZINAA--.59415S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxtF1ruw18Ww4ftr4UuryrtFb_yoWxWF4rpF
-        9xAw1kArZ0kw1kAr9Fva4Dury8Gwn7Gw47uFZIka45Aa12qa1rXryv9a4DZF4Yyw4ku3W0
-        qFZ0grnxta1qqaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyKb7Iv0xC_KF4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-        0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-        A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xII
-        jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-        8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-        64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8Jw
-        Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc2xSY4AK6svPMxAIw28IcxkI
-        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
-        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY
-        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6x
-        AIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxU7eOJUUUUU
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR04CA0188.apcprd04.prod.outlook.com
+ (2603:1096:4:14::26) To DU0PR04MB9417.eurprd04.prod.outlook.com
+ (2603:10a6:10:358::11)
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a4b25a47-6a49-4b69-9d5c-08da8b251944
+X-MS-TrafficTypeDiagnostic: AM8PR04MB8001:EE_
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: J3NX4sfqGBABLxpnFU3JYsScB0hX2tAJW4nMDd3xuiA4TX5vHT4EO9jfbFbsa7gXFhp9v7P8oWDGjaCnMkfHeoUDym0bbzKrp5wxM/dKmXTgii8/p7VLDQ3g79mP5gsqjpV0yS0a8v9cPlvwzxackdUZl8sFivjfbZWhamuu1AaJrY5sHQPWuGfvKD6CetKWgu/SgMs3CGTAkUwQ/SL5oYQuTGP046baZXxD5D2CQa5ueyi0fmk21X8AmlbsBK4k1dj3xyJpmMb4Tehh1hX0orMheDcD0Qg6hGj1+ALHNjcEICz9zMzIKJ9hKcQvUbI3kd0e/D8KCyCCtIx76v3+vhTICZe7X3sd1UmpLi9U/UGS9VBNQ5qM98b7BgcXs0e6kX9F9yUlYvpCMh0+Z5HSXD1JZMFOcxnqwQ1hePIu2IrD8mDsKq4LFUj8fwozNiqqGQ+G1yHYwyRKh+9T4l7Kwhf3NDWYHWjN+myQwRBI6oOtb0GhN6hbTCGo5KtKHpJKqUDr9ee8u2kRSgm/R0EzpdoZzCxvHP6dbQCHBb8SYelxxE2YBodwZzXdIFy0wQVicY+8XUXXbZVNi/SCQyjWSmLRYuXFhEOjmBclkoBAyHmfgeImGTP9T9rDjinWHG/X7MoV4B4DNMXUODoGf60GbsybdF9vjovR6ghJ1cXvv+0wXyCQWyUm1nsZtpkSiwuEyocl9Zbh3EcGZ74andMFVdxWJEcZkbmy2m33sU7aFF73biy/dRDDO9rO6q+gEhHwGI5sOrt17K81r+wUdeDWlyDyfQKAFNxwOsvlSe97S/s90MA2mGpi/4cNMJXGIkzprhkVyeZom8SWy4tANHf/Hg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(376002)(396003)(136003)(366004)(39860400002)(83380400001)(2616005)(186003)(1076003)(6512007)(26005)(38100700002)(38350700002)(2906002)(52116002)(6506007)(316002)(6666004)(8936002)(5660300002)(66556008)(6486002)(4326008)(966005)(66476007)(8676002)(86362001)(41300700001)(478600001)(66946007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xdCbCn91dy5ZrJ3ymZpd9URtTgQo6gT8Xiao3r2pEGoAwyl148hfJynFBQp7?=
+ =?us-ascii?Q?9DZFTV9pj4as47zR5oPwQcCmUZf3jHmZaIIi/HZX8DfOGTmxGnAMtEvX7AdN?=
+ =?us-ascii?Q?ZXqMQHKqwljhTzMlZ3fYrai1lAq9KzgPnv5ne2XOmvBuwiXVrz/oVChbhL09?=
+ =?us-ascii?Q?bCdPXbR2j6kIz4ZaA4EwnfirIp6D2mqWgTkIK47SjU1qpF8nLDFohD0I/o75?=
+ =?us-ascii?Q?DjxWG2sQIHGJIfy6R4LK0VboB0cPXEckl94B76xrk0HHcGEy/tnNQDlvG3xY?=
+ =?us-ascii?Q?yrA+SKhhhVspTISoh1IlhUBPWOhUSRazoxEYh/0A818C2ewcpgyXdrpJ/sLE?=
+ =?us-ascii?Q?YnwrJKm6q5XXdqCEuHu9Tug8/4Vc05Z5gbQ1sCv89dLOgkVXmOkZzaEhp7Uc?=
+ =?us-ascii?Q?LmWS27QQhrxgCR/1XNhRRf05/urc8GihR+J9Zt1VBjbHh7narjooRUZr0get?=
+ =?us-ascii?Q?+75HNR3yjGVSvTfUKpCbYf05nilJ2fMaNHWVNDV71WYScQQ3TDDDXwesVs+s?=
+ =?us-ascii?Q?Pm+IK030hmx9kyt6UIc2M82BYqD/+8MMlX11hghcwvgN+U9+A/TJf5SwUbQ0?=
+ =?us-ascii?Q?vhRqqlOODe3w/fZgriKaRPyhnbsAL2O2maYdqMN5VGtrYgZk7VLMtJ/Yx1ql?=
+ =?us-ascii?Q?lpN4HOgpM9A8RhroKf/LBJkwZXFgcIRzk0Ep/gbvt+RcMQcepN1gWUwcO+Kl?=
+ =?us-ascii?Q?fxj3xMYTzdfdq9TnRlzGriokbUxWmsOxHkGcDY9CMwBVFPUFSGXncYctOVzp?=
+ =?us-ascii?Q?mSTfw7CneqOE4jKmiP+DKePkOka0eU0uFkhQquENUV/hIw42PH36RoUPif+X?=
+ =?us-ascii?Q?h7DAmw4dBUBQsWIFk+6aTaX4KeEzSYTSZZq1gg83m+ZK8VsTcT1JMihk4aJh?=
+ =?us-ascii?Q?9Yk7V1ql6n35sHgIU0ZFNFqKv9+5Hrpbzb14ApPb3iT1wEB+EymqvkYcSEqG?=
+ =?us-ascii?Q?0p8SLVJm5fuebm4nGgclVu/I75BtBDx4UTezj2mN+Qr1GgVg9WdFjhs+NRxF?=
+ =?us-ascii?Q?LKa5hfkad4imbiXXM7pBlwwzsclXtJ4/fHTuH+N2D6WAmifCeXPTSEYT584r?=
+ =?us-ascii?Q?y9LZLSltDXvx6YII0il29uenTP4571z95vNLbU/lkdqlNUg+VwCpIj+wgr0D?=
+ =?us-ascii?Q?krGgjY5dPxAPVcQoCLQb4PgRGI/RDj8p58TZMflEJRQLfue1ewcWAMwT1HBp?=
+ =?us-ascii?Q?TG1NNuUe5UJRite3yUEKc+S8tO2l5149IuZUYliJr+d4rENmT6sFN8mnTQbW?=
+ =?us-ascii?Q?opoWC/7fwQ3VV3GZVpbE5d3X7MeylhLARxHsNvEianD5EwNGmqgrpJJKOV2o?=
+ =?us-ascii?Q?xdIKcFUZPtNDobF9+lMVbu8fI4Mypu1+PedHV5UEsCczmgK0Fh27S3bozymu?=
+ =?us-ascii?Q?zh5l0qaTFtUYondYt/m8oPT/3m9URHVk3mrOiqnNM5FsmYEcyuAk7Bzw2s8B?=
+ =?us-ascii?Q?wav6mPDDcNPXPl34Pf4OBb3LZ5tH6ojX8Anuz9N0ru7ZG4G8CjePxFh7wJSj?=
+ =?us-ascii?Q?p6MIBWkg8fdEZL0plBELY7jH/EYnL522d/tqu8rN8S1HCKtxpucaY2e7dt87?=
+ =?us-ascii?Q?H+09uFLCF1OWF1YYDmWht4qvfewoEp6b0rSe6U2c?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a4b25a47-6a49-4b69-9d5c-08da8b251944
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2022 07:47:48.4854
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: NoiKx1FtuihHYsieUuuAqVK9p/uVNVzsM6pg0XwWANGsKFpPIa96n0ryfZdsjHFSlIeGP3nC5u4JUF+uK+/Y5g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB8001
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LoongArch uses general purpose register R2 as thread pointer(TP)
-register, signal hanlder also uses TP register to access variables
-in TLS area, such as errno and variable in TLS.
+From: Peng Fan <peng.fan@nxp.com>
 
-If GPR R2 is modified with wrong value, signal handler still uses
-the wrong TP register, so signal hanlder is insafe to access TLS
-variable.
+V2:
+ Add binding doc for aonmix/wakeupmix blk ctrl
+ Update compatible in patch 5 according to binding doc
+ The lpi2c binding doc has been accepted:
+   https://lore.kernel.org/all/Yw3hfcQ2JV248GIo@shikoro/
 
-This patch adds one arch specific syscall set_thread_area, and
-restore previoud TP value before signal handler, so that signal
-handler is safe to access TLS variable.
+V1:
+Add S4MU, BLK CTRL, PMU, LPI2C, LPSPI nodes.
+Add GPIO clk entry.
+Correct SDHC clk entry
+https://patchwork.kernel.org/project/linux-arm-kernel/cover/20220812074609.53131-1-peng.fan@oss.nxp.com/
 
-It passes to run with the following test case.
-=======8<======
- #define _GNU_SOURCE
- #include <stdio.h>
- #include <stdlib.h>
- #include <unistd.h>
- #include <string.h>
- #include <sys/syscall.h>
- #include <sys/types.h>
- #include <signal.h>
- #include <pthread.h>
- #include <asm/ucontext.h>
- #include <asm/sigcontext.h>
+Peng Fan (8):
+  dt-bindings: soc: imx: add binding for i.MX9 syscon
+  arm64: dts: imx93: correct SDHC clk entry
+  arm64: dts: imx93: add gpio clk
+  arm64: dts: imx93: add s4 mu node
+  arm64: dts: imx93: add blk ctrl node
+  arm64: dts: imx93: add a55 pmu
+  arm64: dts: imx93: add lpi2c nodes
+  arm64: dts: imx93: add lpspi nodes
 
- #define ILL_INSN ".word 0x000001f0"
-static inline long test_sigill(unsigned long fid)
-{
-        register long ret __asm__("$r4");
-        register unsigned long fun __asm__("$r4") = fid;
+ .../bindings/soc/imx/fsl,imx9-syscon.yaml     |  37 ++++
+ arch/arm64/boot/dts/freescale/imx93.dtsi      | 162 +++++++++++++++++-
+ 2 files changed, 193 insertions(+), 6 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx9-syscon.yaml
 
-        __asm__ __volatile__("move $r2, $r0 \r\n");
-        __asm__ __volatile__(
-                        ILL_INSN
-                        : "=r" (ret)
-                        : "r" (fun)
-                        : "memory"
-                        );
-
-        return ret;
-}
-
-static void set_sigill_handler(void (*fn) (int, siginfo_t *, void *))
-{
-        struct sigaction sa;
-        memset(&sa, 0, sizeof(struct sigaction));
-
-        sa.sa_sigaction = fn;
-        sa.sa_flags = SA_SIGINFO;
-        sigemptyset(&sa.sa_mask);
-        if (sigaction(SIGILL, &sa, 0) != 0) {
-                perror("sigaction");
-        }
-}
-
-void catch_sig(int sig, siginfo_t *si, void *vuc)
-{
-        struct ucontext *uc = vuc;
-        register unsigned long tls  __asm__("$r2");
-
-        uc->uc_mcontext.sc_pc +=4;
-        uc->uc_mcontext.sc_regs[2] = tls;
-        printf("catched signal %d\n", sig);
-}
-
-void *print_message_function( void *ptr )
-{
-        char *message;
-        message = (char *) ptr;
-        printf("%s \n", message);
-        test_sigill(1);
-}
-
-void pthread_test(void)
-{
-        pthread_t thread1, thread2;
-        char *message1 = "Thread 1";
-        char *message2 = "Thread 2";
-        int  iret1, iret2;
-
-        iret1 = pthread_create( &thread1, NULL, print_message_function,
-				(void*) message1);
-        iret2 = pthread_create( &thread2, NULL, print_message_function,
-				(void*) message2);
-        pthread_join( thread1, NULL);
-        pthread_join( thread2, NULL);
-        printf("Thread 1 returns: %d\n",iret1);
-        printf("Thread 2 returns: %d\n",iret2);
-        exit(0);
-}
-
-void exec_test(void) {
-        test_sigill(1);
-}
-
-void main() {
-        register unsigned long tls  __asm__("$r2");
-        int val;
-
-        val = syscall(244, tls);
-        set_sigill_handler(&catch_sig);
-        pthread_test();
-        //exec_test();
-        return;
-}
-=======8<======
-
-Signed-off-by: Mao Bibo <maobibo@loongson.cn>
----
-v1->v2:
- - Clear TP value in clone function if CLONE_SETTLS is not set 
----
- arch/loongarch/include/asm/unistd.h      |  1 +
- arch/loongarch/include/uapi/asm/unistd.h |  2 ++
- arch/loongarch/kernel/process.c          | 10 +++++++++-
- arch/loongarch/kernel/signal.c           |  5 +++++
- arch/loongarch/kernel/syscall.c          | 10 ++++++++++
- 5 files changed, 27 insertions(+), 1 deletion(-)
-
-diff --git a/arch/loongarch/include/asm/unistd.h b/arch/loongarch/include/asm/unistd.h
-index cfddb0116a8c..1581624f0115 100644
---- a/arch/loongarch/include/asm/unistd.h
-+++ b/arch/loongarch/include/asm/unistd.h
-@@ -9,3 +9,4 @@
- #include <uapi/asm/unistd.h>
- 
- #define NR_syscalls (__NR_syscalls)
-+__SYSCALL(__NR_set_thread_area, sys_set_thread_area)
-diff --git a/arch/loongarch/include/uapi/asm/unistd.h b/arch/loongarch/include/uapi/asm/unistd.h
-index fcb668984f03..b47f26b5307b 100644
---- a/arch/loongarch/include/uapi/asm/unistd.h
-+++ b/arch/loongarch/include/uapi/asm/unistd.h
-@@ -3,3 +3,5 @@
- #define __ARCH_WANT_SYS_CLONE3
- 
- #include <asm-generic/unistd.h>
-+
-+#define __NR_set_thread_area	(__NR_arch_specific_syscall + 0)
-diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/process.c
-index 660492f064e7..f513b3d845b4 100644
---- a/arch/loongarch/kernel/process.c
-+++ b/arch/loongarch/kernel/process.c
-@@ -88,6 +88,7 @@ void start_thread(struct pt_regs *regs, unsigned long pc, unsigned long sp)
- 	clear_used_math();
- 	regs->csr_era = pc;
- 	regs->regs[3] = sp;
-+	task_thread_info(current)->tp_value = 0;
- }
- 
- void exit_thread(struct task_struct *tsk)
-@@ -176,8 +177,15 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	clear_tsk_thread_flag(p, TIF_LSX_CTX_LIVE);
- 	clear_tsk_thread_flag(p, TIF_LASX_CTX_LIVE);
- 
--	if (clone_flags & CLONE_SETTLS)
-+	/*
-+	 * record tls val for cloned threads
-+	 * clear it for forked process
-+	 */
-+	if (clone_flags & CLONE_SETTLS) {
- 		childregs->regs[2] = tls;
-+		task_thread_info(p)->tp_value = tls;
-+	} else
-+		task_thread_info(p)->tp_value = 0;
- 
- 	return 0;
- }
-diff --git a/arch/loongarch/kernel/signal.c b/arch/loongarch/kernel/signal.c
-index 7f4889df4a17..9e0c9755e548 100644
---- a/arch/loongarch/kernel/signal.c
-+++ b/arch/loongarch/kernel/signal.c
-@@ -480,6 +480,9 @@ static int setup_rt_frame(void *sig_return, struct ksignal *ksig,
- 	 *
- 	 * c0_era point to the signal handler, $r3 (sp) points to
- 	 * the struct rt_sigframe.
-+	 *
-+	 * Use recorded TP to signal handler if exists since $r2 may be
-+	 * corrupted already.
- 	 */
- 	regs->regs[4] = ksig->sig;
- 	regs->regs[5] = (unsigned long) &frame->rs_info;
-@@ -487,6 +490,8 @@ static int setup_rt_frame(void *sig_return, struct ksignal *ksig,
- 	regs->regs[3] = (unsigned long) frame;
- 	regs->regs[1] = (unsigned long) sig_return;
- 	regs->csr_era = (unsigned long) ksig->ka.sa.sa_handler;
-+	if (task_thread_info(current)->tp_value)
-+		regs->regs[2] = task_thread_info(current)->tp_value;
- 
- 	DEBUGP("SIG deliver (%s:%d): sp=0x%p pc=0x%lx ra=0x%lx\n",
- 	       current->comm, current->pid,
-diff --git a/arch/loongarch/kernel/syscall.c b/arch/loongarch/kernel/syscall.c
-index 3fc4211db989..b62560d8fe24 100644
---- a/arch/loongarch/kernel/syscall.c
-+++ b/arch/loongarch/kernel/syscall.c
-@@ -29,6 +29,16 @@ SYSCALL_DEFINE6(mmap, unsigned long, addr, unsigned long, len, unsigned long,
- 	return ksys_mmap_pgoff(addr, len, prot, flags, fd, offset >> PAGE_SHIFT);
- }
- 
-+SYSCALL_DEFINE1(set_thread_area, unsigned long, addr)
-+{
-+	struct thread_info *ti   = task_thread_info(current);
-+	struct pt_regs     *regs = current_pt_regs();
-+
-+	regs->regs[2] = addr;
-+	ti->tp_value  = addr;
-+	return 0;
-+}
-+
- void *sys_call_table[__NR_syscalls] = {
- 	[0 ... __NR_syscalls - 1] = sys_ni_syscall,
- #include <asm/unistd.h>
 -- 
-2.27.0
+2.37.1
 

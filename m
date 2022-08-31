@@ -2,93 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F5025A8066
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:37:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652655A806D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231866AbiHaOhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50756 "EHLO
+        id S231913AbiHaOkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231138AbiHaOhf (ORCPT
+        with ESMTP id S229842AbiHaOkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:37:35 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF257AA4F4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:37:34 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id h21so11094457qta.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:37:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=rnLojn8m5RIM9q/IHnLgW3r82z0fH67X9Nn6XLx+iP8=;
-        b=eP2EBWEyS5OceuUNbFWUUEhT+EaDji20F6lwBwaZaBxv8WpYTOUsYf0S6rmaThA347
-         0Ueh4D1zirBcr2kZkhBlN4xIzW5pRVT+G8+yhXfqg806chDbfySODQazELVomunSOhEm
-         zQH0SOBIDUDXqHRoSK4bYuBXgvQMaAqp35YUU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=rnLojn8m5RIM9q/IHnLgW3r82z0fH67X9Nn6XLx+iP8=;
-        b=ffn1VsERbTDa3ijt84Bha+Pa7MqIclZMmziSmTG4u/84w1TR0AmT+emItshhtoOWoq
-         6PIwFIn+FUhWuVxtekcPrNRoWxOupXm6x63Crq2nl6aJqQVZPZl4b2WFjxJYyOmA1S8o
-         OIG8ey4DSXqWR80PTa0gCcLoIFn94LggEAaVOaL3VwbjIpKHptgpKAWDmf1XqUzjMcAm
-         od9hH/UGXjktnyUUG75+6oQwFszEkTJhBYmONIJ3VbykJRFdNt+bgrHBxJNFL7fAwKPV
-         k8YWAP0IBTLYFHFMYy/X/BzXuJrAFmNdPpSsgEPvU9W2xN/99C/r+cKaQcbWZXKFKBFm
-         bNCA==
-X-Gm-Message-State: ACgBeo01Ee/zv3aydd2ru+yZDbTTufP3EXoNFuS7dL141DdYXokSzMvv
-        NcBEFILr0YLV6PWC4gL0Iy8sDqL9/U5BmPmz
-X-Google-Smtp-Source: AA6agR5HvJA/wFvm1pz6fdbgWNQWZ+clEpCNbFgOlyLc4N72m9X8A0Etulpr4s0uXM0wC0ZhtXFoSw==
-X-Received: by 2002:a05:622a:103:b0:343:3ce4:c383 with SMTP id u3-20020a05622a010300b003433ce4c383mr19539589qtw.388.1661956654122;
-        Wed, 31 Aug 2022 07:37:34 -0700 (PDT)
-Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com. [209.85.222.179])
-        by smtp.gmail.com with ESMTPSA id q16-20020a05620a2a5000b006bb20e8ee70sm10056319qkp.89.2022.08.31.07.37.33
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 07:37:33 -0700 (PDT)
-Received: by mail-qk1-f179.google.com with SMTP id w18so10929083qki.8
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:37:33 -0700 (PDT)
-X-Received: by 2002:a05:620a:1650:b0:6bb:29b7:198c with SMTP id
- c16-20020a05620a165000b006bb29b7198cmr15523438qko.552.1661956642390; Wed, 31
- Aug 2022 07:37:22 -0700 (PDT)
+        Wed, 31 Aug 2022 10:40:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C14096E8B0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:40:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5DA0161BD9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:40:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9FFFC43470
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:40:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661956813;
+        bh=7jiGa1vBE/j5RxUt8dEuAHBImCYY5aG0SR6VMryy7RA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=sywG8ky5a1E6nzoaTfZ7won2Dl0eGn49RgyuvDlqn+YnIOEXoYugOxf50smACuyqe
+         kum0gXmFppTJZ1hvnD5v7oNn89ohNBsHbovxOIlXp/yitXUDsYMmTonFMpv0Vkr1qx
+         1lFk5NG0LJjqSQq3FtKkF3xdme77i/2vXaKECME4Ce8CMwseLs56So6itrdTHP5SjD
+         HwH4cz/eaMmpLDFOYufrcs2PgfmLEUk+1OcpEapSA3wRoUT1aSvuYucQMNGNaileDC
+         xwaSbmGgUPU+LOlZIioWI6lbyAJYe0xGC2v42dpQpHyt34NTZvcLRTTtJR+zZ6rU9+
+         FqxLzKwLKjEjg==
+Received: by mail-vs1-f51.google.com with SMTP id c3so14785959vsc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:40:13 -0700 (PDT)
+X-Gm-Message-State: ACgBeo03dd6VDwDm1M2V33+zfpE0t4HBJcdZx20uRGjEQdJcoHxWPTix
+        torqe054uG9K3m5oa4bNjgOHlzF39+rcd3kt5AY=
+X-Google-Smtp-Source: AA6agR6mIs5k1530qHJ6X9j9riGYENv1FmtGBR9gVZ7pjCtirFBWFE7zhnRTsMvY/P7nFTzqY8XSnjG5YJ7vu9sznlg=
+X-Received: by 2002:a05:6102:30bc:b0:390:da09:3a8c with SMTP id
+ y28-20020a05610230bc00b00390da093a8cmr5302064vsd.84.1661956812672; Wed, 31
+ Aug 2022 07:40:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220830231541.1135813-1-rrangel@chromium.org> <Yw9LdxWQMpnzgFe/@smile.fi.intel.com>
-In-Reply-To: <Yw9LdxWQMpnzgFe/@smile.fi.intel.com>
-From:   Raul Rangel <rrangel@chromium.org>
-Date:   Wed, 31 Aug 2022 08:37:11 -0600
-X-Gmail-Original-Message-ID: <CAHQZ30BemtpHiZHOh+Wvh3N9wz5SSD9VdoQHNbArKhZUmudkwQ@mail.gmail.com>
-Message-ID: <CAHQZ30BemtpHiZHOh+Wvh3N9wz5SSD9VdoQHNbArKhZUmudkwQ@mail.gmail.com>
-Subject: Re: [PATCH 0/8] acpi: i2c: Use SharedAndWake and ExclusiveAndWake to
- enable wake irq
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        linux-input <linux-input@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        Tim Van Patten <timvp@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alistair Francis <alistair@alistair23.me>,
-        Angela Czubak <acz@semihalf.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bartosz Szczepanek <bsz@semihalf.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>, Len Brown <lenb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Rob Herring <robh@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        "jingle.wu" <jingle.wu@emc.com.tw>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:I2C SUBSYSTEM HOST DRIVERS" <linux-i2c@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+References: <20220830104806.128365-1-xry111@xry111.site> <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
+ <c0ba2e23-5be3-924d-554a-2f10272c05bc@xen0n.name> <CAAhV-H7Dz21qRgwkMcJ0SnA9FNDN19E6mpa7C25LUitrO9LGeA@mail.gmail.com>
+ <5b87173faeef587a2ffaaa6f58d34e0940231067.camel@xry111.site>
+ <c53303bf-a5d2-098f-8975-efadbe0b2f2e@loongson.cn> <bc323d8578d2f6ec580066bab181788b305ae3c3.camel@xry111.site>
+In-Reply-To: <bc323d8578d2f6ec580066bab181788b305ae3c3.camel@xry111.site>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Wed, 31 Aug 2022 22:40:00 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4N_XvmP9KA1M5crU44kHr33MZUVSsMY4Ugu5wQSv_LOQ@mail.gmail.com>
+Message-ID: <CAAhV-H4N_XvmP9KA1M5crU44kHr33MZUVSsMY4Ugu5wQSv_LOQ@mail.gmail.com>
+Subject: Re: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation types
+To:     Xi Ruoyao <xry111@xry111.site>
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,87 +67,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Interesting... The patch series is here:
-https://patchwork.kernel.org/project/linux-input/cover/20220830231541.11358=
-13-1-rrangel@chromium.org/
+On Wed, Aug 31, 2022 at 4:09 PM Xi Ruoyao <xry111@xry111.site> wrote:
+>
+> On Wed, 2022-08-31 at 14:58 +0800, Jinyang He wrote:
+> > That's right. Also I am wondering why new toolchain produce .got* in
+> > kernel. It's unneeded. In the past, gcc create la.global and parsed
+> > to la.pcrel by gas, and kernel works well. Now it seems we lost this
+> > feature in gcc. I checked the x86 asm code just now. And some info
+> > follows,
+> >
+> > LoongArch64, ./net/ipv4/udp_diag.s, *have reloc hint*
+> >          pcalau12i       $r4,%got_pc_hi20(udplite_table)
+> >          ld.d    $r4,$r4,%got_pc_lo12(udplite_table)
+> >          b       udp_dump
+> >
+> > x86_64, ./net/ipv4/udp_diag.s
+> >          movq    $udplite_table, %rdi
+> >          jmp     udp_dump
+> >
+> > It seems related to -fno-PIE and -cmodel=kernel on x86_64.
+> > Hope new gcc with this feature now.
+>
+> On x86_64 -mcmodel=kernel means "all code and data are located in [-
+> 2GiB, 0) range.  We actually don't strictly require a "high" range as
+> we're mostly a PIC-friendly architecture: note that we use a
+> pcalau12i/addi.d pair for PIC addressing in [PC-2GiB, PC+2GiB, and a
+> lu12i.w/addi.d pair for "non-PIC" addressing in [-2GiB, 2GiB), both are
+> 2-insn sequence.
+>
+> If we can put the main kernel image and the modules in one 2GiB VA
+> range, we can avoid GOT completely.  But it's not possible for now
+> because main kernel image is loaded in XKPRANGE but the modules are in
+> XKVRANGE.  So the best we can achieve before implementing
+> CONFIG_RELOCATION is using GOT in modules, and avoid GOT in the main
+> kernel image (with a new code model in GCC, which will benefit both the
+> kernel and statically linked executables).
+Emmm, can you implement this new code model in the near future?
 
-I'll look into why you only got added to 2 of the emails.
-
-On Wed, Aug 31, 2022 at 5:52 AM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Tue, Aug 30, 2022 at 05:15:33PM -0600, Raul E Rangel wrote:
-> > Today, i2c drivers are making the assumption that their IRQs can also
-> > be used as wake IRQs. This isn't always the case and it can lead to
-> > spurious wakes. This has recently started to affect AMD Chromebooks.
-> > With the introduction of
-> > d62bd5ce12d7 ("pinctrl: amd: Implement irq_set_wake"), the AMD GPIO
-> > controller gained the capability to set the wake bit on each GPIO. The
-> > ACPI specification defines two ways to inform the system if a device is
-> > wake capable:
-> > 1) The _PRW object defines the GPE that can be used to wake the system.
-> > 2) Setting ExclusiveAndWake or SharedAndWake in the _CRS GpioInt.
-> >
-> > Currently only the first method is supported. The i2c drivers don't hav=
-e
-> > any indication that the IRQ is wake capable, so they guess. This causes
-> > spurious interrupts, for example:
-> > * We have an ACPI HID device that has `_PR0` and `_PR3`. It doesn't hav=
-e
-> >   `_PRW` or `ExclusiveAndWake` so that means the device can't wake the
-> >   system.
-> > * The IRQ line is active level low for this device and is pulled up by
-> >   the power resource defined in `_PR0`/`_PR3`.
-> > * The i2c driver will (incorrectly) arm the GPIO for wake by calling
-> >   `enable_irq_wake` as part of its suspend hook.
-> > * ACPI will power down the device since it doesn't have a wake GPE
-> >   associated with it.
-> > * When the device is powered down, the IRQ line will drop, and it will
-> >   trigger a wake event.
-> >
-> > See the following debug log:
-> > [   42.335804] PM: Suspending system (s2idle)
-> > [   42.340186] amd_gpio AMD0030:00: RX: Setting wake for pin 89 to enab=
-le
-> > [   42.467736]     power-0416 __acpi_power_off      : Power resource [P=
-R00] turned off
-> > [   42.467739] device_pm-0280 device_set_power      : Device [H05D] tra=
-nsitioned to D3cold
-> > [   42.475210] PM: pm_system_irq_wakeup: 11 triggered pinctrl_amd
-> > [   42.535293] PM: Wakeup unrelated to ACPI SCI
-> > [   42.535294] PM: resume from suspend-to-idle
-> >
-> > In order to fix this, we need to take into account the wake capable bit
-> > defined on the GpioInt. This is accomplished by:
-> > * Migrating some of the i2c drivers over to using the PM subsystem to
-> >   manage the wake IRQ. max8925-i2c, elants_i2c, and raydium_i2c_ts stil=
-l
-> >   need to be migrated, I can do that depending on the feedback to this
-> >   patch series.
-> > * Expose the wake_capable bit from the ACPI GpioInt resource to the
-> >   i2c core.
-> > * Use the wake_capable bit in the i2c core to call
-> >   `dev_pm_set_wake_irq`. This reuses the existing device tree flow.
-> > * Make the i2c drivers stop calling `dev_pm_set_wake_irq` since it's no=
-w
-> >   handled by the i2c core.
-> > * Make the ACPI device PM system aware of the wake_irq. This is
-> >   necessary so the device doesn't incorrectly get powered down when a
-> >   wake_irq is enabled.
-> >
-> > I've tested this code with various combinations of having _PRW,
-> > ExclusiveAndWake and power resources all defined or not defined, but it
-> > would be great if others could test this out on their hardware.
->
-> I have got only cover letter and a single patch (#3). What's going on?
->
-> Note: I'm also reviewer of I=E6=B6=8E DesignWare driver, you really have =
-to
-> fix your tools / submission process and try again. No review for this
-> series.
+Huacai
 >
 > --
-> With Best Regards,
-> Andy Shevchenko
->
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
 >

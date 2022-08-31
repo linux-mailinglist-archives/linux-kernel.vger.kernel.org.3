@@ -2,104 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 429DD5A8664
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A49D95A866A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231893AbiHaTDj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 15:03:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
+        id S231281AbiHaTGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 15:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiHaTDe (ORCPT
+        with ESMTP id S230179AbiHaTGc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 15:03:34 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0FBEBD170;
-        Wed, 31 Aug 2022 12:03:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661972612; x=1693508612;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Oc5afPBJoiKAq9k8AffdBfDU/q/uf+1J66UG/80FFUk=;
-  b=MHTZ4Xeb4dGkuPCCxias8NyyXDdBA1OzOSllAph/1IzdWprvpuxrqMSf
-   t3qwD3OvSjs/HLvP7ET5AZHoSZsfrFhQ1FWPHG8fWODT9i1fq+RwtDWXh
-   3uc9ZKNAdECuuzhFC8rnb5DY2E3kfxVX1NXKga76Mqszlnr125yFK+3Q4
-   GRtYuLQEqYkyjJBaLn0GNhHxGnF7rbrqwfFvavILUh4nLZ0MmHN/jFNyl
-   iyM7dEbgk2A2vDqb4lUxoyWnZuGbMYxORc3sYJ2arqZ/OvXcYC28ywnas
-   lVu2VlSvjqIpUL68DD2gp+1hoZMqEkjMH7VUw9bDRLzsB2hAPtUIWUXBV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="294263043"
-X-IronPort-AV: E=Sophos;i="5.93,278,1654585200"; 
-   d="scan'208";a="294263043"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 12:03:23 -0700
-X-IronPort-AV: E=Sophos;i="5.93,278,1654585200"; 
-   d="scan'208";a="680525696"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 12:03:21 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oTSze-006VQP-0a;
-        Wed, 31 Aug 2022 22:03:18 +0300
-Date:   Wed, 31 Aug 2022 22:03:17 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Jianqun Xu <jay.xu@rock-chips.com>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH v2 1/1] gpio: rockchip: Switch to use fwnode instead of
- of_node
-Message-ID: <Yw+wdUvRm8rIAK4G@smile.fi.intel.com>
-References: <20220831134516.78108-1-andriy.shevchenko@linux.intel.com>
- <CAMRc=MdQiBHr3cDPWN_PRj2nGVoG-GJJyRNrHNwTaAUvz=35ew@mail.gmail.com>
+        Wed, 31 Aug 2022 15:06:32 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1092C927D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:06:28 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id l5so11131084pjy.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:06:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=4vabnxTMH9N4kijguDzewyk8E7kS2vGaLqNfOIBWjZk=;
+        b=knfiwPAL6lej4jecmDDu4C6Ido4YLWRq7K/4z5xP8Y95HipfVhgz9D5nJlBVxO+T7m
+         rZ65frZHQeugkrkuUSyfMYi8rlLaNBqTao7nj1rIF6hA90aTFqAP4QZljRPK9W9aDkog
+         G7mP4IN5JYMqCNEm6yaf7ctHY/x9O3FT+5Z8U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=4vabnxTMH9N4kijguDzewyk8E7kS2vGaLqNfOIBWjZk=;
+        b=37k3DNhHzb2hXHP4NiiEnMbNLq6eVTzCDA+peAans2kkBKJrir7NtTmWS1Tq0G+9w2
+         UabY9Jn0mEYZpoHzbovS2dQN2jhv2MRx8MGAlZSXp4c/cTb6x089rF7gCQ0z5lfNY0QQ
+         5gt0rsNAFGLlsYGCt4Cbs1Srmq7wMSe1e8PBQz08pP7a5ayYNSexZTGrzXaic5dwKjD8
+         3a0G0RN2Eif/KxFb0PkB2bCqUdCIezBo261enuzG2ycGKtji2ifocj8c8miyfrhXlyG4
+         vYyz0LTsc7RLQqzLmgG2fgBCjacfupvPA3pJTUoAbt9ObKQCfEgYHA46LcfrN9jFJGeS
+         ZxFg==
+X-Gm-Message-State: ACgBeo3rVBc4n2vtCmBsLU0Z/0A3jMcZptBFmDmwYNEHORmBNRELNGY5
+        HEqVkn8yE4IhCtepHYFtakcXbw==
+X-Google-Smtp-Source: AA6agR6dob1FlpsurmMAaUDc1n7xLlFq+7hVuLAeZ0jGTHEY+FVp5+hXY6mm84n2BdL67uQtwFFGqA==
+X-Received: by 2002:a17:903:d5:b0:173:3307:bcf with SMTP id x21-20020a17090300d500b0017333070bcfmr27256352plc.87.1661972788232;
+        Wed, 31 Aug 2022 12:06:28 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id mh16-20020a17090b4ad000b001f8aee0d826sm1633159pjb.53.2022.08.31.12.06.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 12:06:27 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 12:06:26 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH 2/3] fortify: cosmetic cleanups to __compiletime_strlen
+Message-ID: <202208311138.2CA3E54B0D@keescook>
+References: <20220830205309.312864-1-ndesaulniers@google.com>
+ <20220830205309.312864-3-ndesaulniers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMRc=MdQiBHr3cDPWN_PRj2nGVoG-GJJyRNrHNwTaAUvz=35ew@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220830205309.312864-3-ndesaulniers@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 05:11:36PM +0200, Bartosz Golaszewski wrote:
-> On Wed, Aug 31, 2022 at 3:45 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+On Tue, Aug 30, 2022 at 01:53:08PM -0700, Nick Desaulniers wrote:
+> Two things I noticed in __compiletime_strlen:
 
-...
+Four? :)
 
-> > -       bank->clk = of_clk_get(bank->of_node, 0);
-> > +       bank->clk = of_clk_get(np, 0);
+> 1. A temporary, __p, is created+used to avoid repeated side effects from
+>    multiple evaluation of the macro parameter, but the macro parameter
+>    was being used accidentally in __builtin_object_size.
+
+__builtin_object_size(), like sizeof() but unlike __builtin_strlen(),
+will not evaluate side-effects: https://godbolt.org/z/Yaa1z7YvK
+And using bos on __p will sometimes mask the actual object, so p needs to
+stay the argument.
+
+> 2. The temporary has a curious signedness and const-less qualification.
+>    Just use __auto_type.
+
+__auto_type is pretty rare in the kernel, but does provide the removal
+of "const". Even though the kernel builds with -Wno-pointer-sign, the
+explicit case does fix a potential warnings about signedness differences,
+not just const differences, for __builtin_strlen() which requires "const
+char *", but many arguments are "unsigned char *", "u8 *", etc.
+
+Is __auto_type more readable than the explicit cast? It does seem to
+work fine.
+
+> 3. (size_t)-1 is perhaps more readable as -1UL.
+
+That's true, though I kind of prefer (size_t)-1, though yes, it appears
+to be the extreme minority in the kernel.
+
+> 4. __p_size == -1UL when __builtin_object_size can't evaluate the
+>    object size at compile time. We could just reuse __ret and use one
+>    less variable here.
+
+This seems to get entire optimized away by the compiler? I think it's
+more readable to keep the explicit variable.
+
+-Kees
+
 > 
-> Why did you stop above? Why not regular clk_get here?
-
-Indices... And there is no non-OF API for that.
-
-> >         if (IS_ERR(bank->clk))
-> >                 return PTR_ERR(bank->clk);
-> >
-> > @@ -668,7 +660,7 @@ static int rockchip_get_bank_data(struct rockchip_pin_bank *bank)
-> >         if (id == GPIO_TYPE_V2 || id == GPIO_TYPE_V2_1) {
-> >                 bank->gpio_regs = &gpio_regs_v2;
-> >                 bank->gpio_type = GPIO_TYPE_V2;
-> > -               bank->db_clk = of_clk_get(bank->of_node, 1);
-> > +               bank->db_clk = of_clk_get(np, 1);
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  include/linux/fortify-string.h | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
 > 
-> Ah, the clocks don't have names in DT? That's unfortunate...
-
-Yeah...
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+> index c5adad596a3f..aaf73575050f 100644
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@ -22,11 +22,10 @@ void __write_overflow_field(size_t avail, size_t wanted) __compiletime_warning("
+>  
+>  #define __compiletime_strlen(p)					\
+>  ({								\
+> -	unsigned char *__p = (unsigned char *)(p);		\
+> -	size_t __ret = (size_t)-1;				\
+> -	size_t __p_size = __object_size(p, 1);			\
+> -	if (__p_size != (size_t)-1) {				\
+> -		size_t __p_len = __p_size - 1;			\
+> +	__auto_type __p = (p);					\
+> +	size_t __ret = __object_size(__p, 1);			\
+> +	if (__ret != -1UL) {					\
+> +		size_t __p_len = __ret - 1;			\
+>  		if (__builtin_constant_p(__p[__p_len]) &&	\
+>  		    __p[__p_len] == '\0')			\
+>  			__ret = __builtin_strlen(__p);		\
+> -- 
+> 2.37.2.672.g94769d06f0-goog
+> 
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Kees Cook

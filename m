@@ -2,95 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930965A739C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:54:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C99D35A739B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiHaByB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 21:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58416 "EHLO
+        id S230502AbiHaBx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 21:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbiHaBx4 (ORCPT
+        with ESMTP id S229630AbiHaBxz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 21:53:56 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BE30B1B81;
-        Tue, 30 Aug 2022 18:53:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=RhkN3pjenFJ3Z4sU+BUfbopmS9x7erS/IYHXt0Yrgys=; b=QysnhHPVNUGamQ7lXkzW2eGveh
-        lrRg3+WUIjKPhlF4vYw9KekYa0WymOeuQ9HZPakLME5p5qV2twe7OuR2cUMRxXRUExVoM9Da2cXco
-        yxjaOKLwszB82khEd88lF0vcr9JboUUXxbv1iMGT6e8sXnviYouqPSuJ+bj2WkKHW8IkoHWJTYVAa
-        nyEihlkujx5tC79yFjtJBfsR8iMLwz25U0Q5QoAClOCZQUDuPmiYE4b2xfU5PgTlbLr8FZaKX/Pc6
-        90hO5RXPljYmishV1MXlptWBpBn7w9xcC6yjahtqPBxuBT6MCskGBWplJNcTqSA8jP2wkHctWyQFF
-        e1X2LPNQ==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTCv3-0036yC-Ja; Wed, 31 Aug 2022 01:53:29 +0000
-Message-ID: <241c05a3-52a2-d49f-6962-3af5a94bc3fc@infradead.org>
-Date:   Tue, 30 Aug 2022 18:53:26 -0700
+        Tue, 30 Aug 2022 21:53:55 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8943DB02A9;
+        Tue, 30 Aug 2022 18:53:54 -0700 (PDT)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MHRtd2WtszYd10;
+        Wed, 31 Aug 2022 09:49:29 +0800 (CST)
+Received: from [10.174.177.76] (10.174.177.76) by
+ canpemm500002.china.huawei.com (7.192.104.244) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 31 Aug 2022 09:53:52 +0800
+Subject: Re: [PATCH] kvm: x86: mmu: fix memoryleak in
+ kvm_mmu_vendor_module_init()
+To:     "Huang, Kai" <kai.huang@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220823063237.47299-1-linmiaohe@huawei.com>
+ <Yw6DsUwSInpz97IV@google.com>
+ <e1199046d184ad7210ebb100fc2f4b77d1ef4fba.camel@intel.com>
+From:   Miaohe Lin <linmiaohe@huawei.com>
+Message-ID: <d0ad65ec-cbfb-f8c6-121b-ac3b8f5b7aaf@huawei.com>
+Date:   Wed, 31 Aug 2022 09:53:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [RFC PATCH 27/30] Code tagging based latency tracking
+In-Reply-To: <e1199046d184ad7210ebb100fc2f4b77d1ef4fba.camel@intel.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
-Cc:     kent.overstreet@linux.dev, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
-        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
-        void@manifault.com, peterz@infradead.org, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, changbin.du@intel.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, dvyukov@google.com, shakeelb@google.com,
-        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220830214919.53220-1-surenb@google.com>
- <20220830214919.53220-28-surenb@google.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20220830214919.53220-28-surenb@google.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.177.76]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500002.china.huawei.com (7.192.104.244)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/8/31 6:42, Huang, Kai wrote:
+> On Tue, 2022-08-30 at 21:40 +0000, Sean Christopherson wrote:
+>> On Tue, Aug 23, 2022, Miaohe Lin wrote:
+>>> When register_shrinker() fails, we forgot to release the percpu counter
+> 
+>>> kvm_total_used_mmu_pages leading to memoryleak. Fix this issue by calling
+>>> percpu_counter_destroy() when register_shrinker() fails.
+>>>
+>>> Fixes: ab271bd4dfd5 ("x86: kvm: propagate register_shrinker return code")
+>>> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
+>>> ---
+>>
+>> Pushed to branch `for_paolo/6.1` at:
+>>
+>>     https://github.com/sean-jc/linux.git
+>>
+>> Unless you hear otherwise, it will make its way to kvm/queue "soon".
+>>
+>> Note, the commit IDs are not guaranteed to be stable.
+> 
+> Sorry for late reply.
+> 
+> The commit message has "we".  Should we get rid of it?
 
+Sean has kindly tweaked the commit message. Many thanks both.
 
-On 8/30/22 14:49, Suren Baghdasaryan wrote:
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index b7d03afbc808..b0f86643b8f0 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -1728,6 +1728,14 @@ config LATENCYTOP
->  	  Enable this option if you want to use the LatencyTOP tool
->  	  to find out which userspace is blocking on what kernel operations.
->  
-> +config CODETAG_TIME_STATS
-> +	bool "Code tagging based latency measuring"
-> +	depends on DEBUG_FS
-> +	select TIME_STATS
-> +	select CODE_TAGGING
-> +	help
-> +	  Enabling this option makes latency statistics available in debugfs
+BTW: Is it unsuitable to use "we" in the commit message? If so, I will try to not use it
+in later patches.
 
-Missing period at the end of the sentence.
-
--- 
-~Randy
+Thanks,
+Miaohe Lin

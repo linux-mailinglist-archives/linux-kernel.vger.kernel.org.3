@@ -2,101 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA015A87B8
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66ADD5A87B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiHaUtB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 16:49:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54350 "EHLO
+        id S231447AbiHaUtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 16:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbiHaUs7 (ORCPT
+        with ESMTP id S230143AbiHaUtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 16:48:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E78F23CC
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 13:48:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661978937;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=/L4MBexlSyJbnVsUjpwEPN+8nGbH3CY4BBC56zylys8=;
-        b=a7xRDp8R8E/zKY6BccCWFM1oFfGNNeERnyYE/BEcjtrCmCmhsc8D0AYgpVK7yAiyUHKrMn
-        xXoGzNa9QRyrjItgtzDr80kUxJsC+QXVrl9vRIvtarZc2QypDA6nz/cXYGtC6nb34T/xUy
-        4Kh9DxVPjOTjneVFhDNGnLt6IJ0BaHc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-65-CuLNu4B0MJutHIQzxWyTfw-1; Wed, 31 Aug 2022 16:48:53 -0400
-X-MC-Unique: CuLNu4B0MJutHIQzxWyTfw-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 478C3800124;
-        Wed, 31 Aug 2022 20:48:52 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C507A40E7F28;
-        Wed, 31 Aug 2022 20:48:51 +0000 (UTC)
-Message-ID: <9ccb1100-295e-a99b-949b-a400f177c947@redhat.com>
+        Wed, 31 Aug 2022 16:49:08 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A75F240B;
+        Wed, 31 Aug 2022 13:49:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661978946; x=1693514946;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=HmiW7PexacLNr8e6ySi2jlIwoco6aRi8m2ckyoKLdh0=;
+  b=jj/SBq8rAq4B0t9dDR2m6Z/0t7VuA7LQoQQ4nrJhvTbXXLOn5vyiJhUp
+   63Rc+lSNuUXzro9aJ6RFQoth66YLHoejtRiKz7vGEfOSzCN8j6mQKcuhO
+   pNsTvReiC5XpGF2ONInAxhHQpzY4yNV/iyJUUmykQ4QYspLgc3FAZ3f5X
+   dcrkhR4UNnC/3xJGbm56411KK7fpLBYn0j4ytvQIGWJSscSO1nbD8Ho94
+   /4trC05GUJJf3Eozev09JPA1oPtRFQvwQrkOBiOuO2Gq7E7UsJ7N2R2EJ
+   XwNhI7neg/W4Obiw4r4ntP2t7ejN4vhWzzoofjVLBLQ0MLjNg815qzeYK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="278558549"
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="278558549"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 13:49:04 -0700
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="589176109"
+Received: from scc823097.zsc7.intel.com ([10.148.153.229])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 13:49:04 -0700
+From:   Peter Colberg <peter.colberg@intel.com>
+To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     matthew.gerlach@linux.intel.com,
+        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
+        marpagan@redhat.com, lgoncalv@redhat.com,
+        Peter Colberg <peter.colberg@intel.com>,
+        Russ Weight <russell.h.weight@intel.com>,
+        Xu Yilun <yilun.xu@intel.com>
+Subject: [PATCH v3] uio: dfl: add IOPLL user-clock feature id
 Date:   Wed, 31 Aug 2022 16:48:51 -0400
+Message-Id: <20220831204851.4683-1-peter.colberg@intel.com>
+X-Mailer: git-send-email 2.28.0
+In-Reply-To: <20220826150116.16014-1-peter.colberg@intel.com>
+References: <20220826150116.16014-1-peter.colberg@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v6 3/5] sched: Enforce user requested affinity
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <20220826010119.1265764-1-longman@redhat.com>
- <20220826010119.1265764-4-longman@redhat.com>
- <Yw8nXttOnNjK/1y4@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yw8nXttOnNjK/1y4@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add a Device Feature List (DFL) feature id [1] for the configurable
+IOPLL user clock source, which can be used to configure the clock
+speeds that are used for RTL logic that is programmed into the
+Partial Reconfiguration (PR) region of an FPGA.
 
-On 8/31/22 05:18, Peter Zijlstra wrote:
-> On Thu, Aug 25, 2022 at 09:01:17PM -0400, Waiman Long wrote:
->
->> @@ -9352,6 +9381,11 @@ int sched_cpu_activate(unsigned int cpu)
->>   		sched_update_numa(cpu, true);
->>   		sched_domains_numa_masks_set(cpu);
->>   		cpuset_cpu_active();
->> +		/*
->> +		 * Preallocated scratch cpumask
->> +		 */
->> +		if (!rq->scratch_mask)
->> +			rq->scratch_mask = kmalloc(cpumask_size(), GFP_KERNEL);
->>   	}
-> this is too late; I think you'll have to add a sched_cpu_prepare() and
-> simply fail the cpu-up when the allocation fails.
->
-That is the reason why I have a fallback allocation in 
-__set_cpus_allowed_ptr(). Thanks for the suggestion, I will looking into 
-doing that.
+The IOPLL user-space driver [2] contains frequency tables [3]
+with the specific user clock frequencies for an implementation.
 
-Cheers,
-Longman
+For each desired frequency, the table values are produced by calling
+the quartus tool, the same tool that generates the IOPLL RTL logic.
+The quartus tool allows the RTL designer to select different options
+which can affect the table values. The table-driven, user-space
+driver allows for supporting future, modified implementations and
+provides users the ability to modify the IOPLL implementation.
+
+[1] https://github.com/OPAE/dfl-feature-id
+[2] https://github.com/OPAE/opae-sdk/blob/a494f54a9f0356d0425edbff228f0254a4c70303/libraries/plugins/xfpga/usrclk/fpga_user_clk.c
+[3] https://github.com/OPAE/opae-sdk/blob/a494f54a9f0356d0425edbff228f0254a4c70303/libraries/plugins/xfpga/usrclk/fpga_user_clk_freq.h
+
+Signed-off-by: Russ Weight <russell.h.weight@intel.com>
+Signed-off-by: Peter Colberg <peter.colberg@intel.com>
+Acked-by: Xu Yilun <yilun.xu@intel.com>
+---
+v3:
+	Reorder Signed-off-by: such that submitter is last
+	Add Acked-by: Xu Yilun
+
+v2:
+	Describe IOPLL user-space driver in commit message
+	Add Signed-off-by: Russ Weight
+---
+ drivers/uio/uio_dfl.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
+index 8f39cc8bb034..69e93f3e7faf 100644
+--- a/drivers/uio/uio_dfl.c
++++ b/drivers/uio/uio_dfl.c
+@@ -46,10 +46,12 @@ static int uio_dfl_probe(struct dfl_device *ddev)
+ 
+ #define FME_FEATURE_ID_ETH_GROUP	0x10
+ #define FME_FEATURE_ID_HSSI_SUBSYS	0x15
++#define PORT_FEATURE_ID_IOPLL_USRCLK	0x14
+ 
+ static const struct dfl_device_id uio_dfl_ids[] = {
+ 	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
+ 	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
++	{ PORT_ID, PORT_FEATURE_ID_IOPLL_USRCLK },
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
+-- 
+2.28.0
 

@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C195A744D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 05:14:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFF485A7456
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 05:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232102AbiHaDOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 23:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
+        id S229602AbiHaDQo convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 30 Aug 2022 23:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231933AbiHaDOb (ORCPT
+        with ESMTP id S232144AbiHaDQ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 23:14:31 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97AE5B248A;
-        Tue, 30 Aug 2022 20:14:28 -0700 (PDT)
-X-UUID: 8dbefa497c1644e0961e87f2053efd36-20220831
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=HdLX2cQSyS2w0LK3V/gap2eMhetpaT8GDl7EAbKntjU=;
-        b=rS4RLeDKr1jo3gRGYNWCy6XcijPp5+dHKWs1L3rgL1oPgblEnE0I5q2sqaMANJ/4KGqICj9ozWsXf06JiscyABHMPGtGcOlVNOVRY46g7uuDoOXdXQjiisqAPS4LGOe42EEYvaPUps26PFizFqSRLncJH5OUzEWzqyYEO6PqXBM=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:5fa23807-a385-4bec-b502-5692ceb1f785,OB:90,
-        LOB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Releas
-        e_Ham,ACTION:release,TS:45
-X-CID-INFO: VERSION:1.1.10,REQID:5fa23807-a385-4bec-b502-5692ceb1f785,OB:90,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:45,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:45
-X-CID-META: VersionHash:84eae18,CLOUDID:1dd620d0-20bd-4e5e-ace8-00692b7ab380,C
-        OID:5767c5659b6e,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: 8dbefa497c1644e0961e87f2053efd36-20220831
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <chunfeng.yun@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1557600996; Wed, 31 Aug 2022 11:14:23 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 31 Aug 2022 11:14:22 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 31 Aug 2022 11:14:20 +0800
-Message-ID: <d30353e4dbb785c3ce31ef54b791bfe3d23df904.camel@mediatek.com>
-Subject: Re: [PATCH v2 2/7] dt-bindings: phy: mediatek,tphy: add property to
- set pre-emphasis
-From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
-CC:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-phy@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@canonical.com>,
-        Eddie Hung <eddie.hung@mediatek.com>
-Date:   Wed, 31 Aug 2022 11:14:19 +0800
-In-Reply-To: <d1f49935-b465-7495-d345-f35bf4dea9f9@linaro.org>
-References: <20220829080830.5378-1-chunfeng.yun@mediatek.com>
-         <20220829080830.5378-2-chunfeng.yun@mediatek.com>
-         <d1f49935-b465-7495-d345-f35bf4dea9f9@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 30 Aug 2022 23:16:27 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 987E644567;
+        Tue, 30 Aug 2022 20:16:15 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 27V3EQhB4014031, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36504.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 27V3EQhB4014031
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
+        Wed, 31 Aug 2022 11:14:26 +0800
+Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
+ RTEXH36504.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 31 Aug 2022 11:14:43 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 31 Aug 2022 11:14:43 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97]) by
+ RTEXMBS04.realtek.com.tw ([fe80::d902:19b0:8613:5b97%5]) with mapi id
+ 15.01.2375.007; Wed, 31 Aug 2022 11:14:43 +0800
+From:   Hayes Wang <hayeswang@realtek.com>
+To:     Sven van Ashbrook <svenva@chromium.org>,
+        LKML <linux-kernel@vger.kernel.org>
+CC:     Alex Levin <levinale@google.com>,
+        Chithra Annegowda <chithraa@google.com>,
+        Frank Gorgenyi <frankgor@google.com>,
+        Aaron Ma <aaron.ma@canonical.com>,
+        David Ober <dober6023@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Hao Chen <chenhao288@hisilicon.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jean-Francois Le Fillatre <jflf_kernel@gmx.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH net-next v1] r8152: allow userland to disable multicast
+Thread-Topic: [PATCH net-next v1] r8152: allow userland to disable multicast
+Thread-Index: AQHYvC1hOy5hN6sTzkWIgD4dfS/00a3IUksA
+Date:   Wed, 31 Aug 2022 03:14:42 +0000
+Message-ID: <b94fb55a06cc4ea5aeb32e919e9607a1@realtek.com>
+References: <20220830045923.net-next.v1.1.I4fee0ac057083d4f848caf0fa3a9fd466fc374a0@changeid>
+In-Reply-To: <20220830045923.net-next.v1.1.I4fee0ac057083d4f848caf0fa3a9fd466fc374a0@changeid>
+Accept-Language: zh-TW, en-US
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.177.203]
+x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
+x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
+ rules found
+x-kse-antivirus-interceptor-info: scan successful
+x-kse-antivirus-info: =?us-ascii?Q?Clean,_bases:_2022/8/30_=3F=3F_11:23:00?=
+x-kse-bulkmessagesfiltering-scan-result: protection disabled
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-ServerInfo: RTEXH36504.realtek.com.tw, 9
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-KSE-Antivirus-Interceptor-Info: fallback
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-08-30 at 20:38 +0300, Krzysztof Kozlowski wrote:
-> On 29/08/2022 11:08, Chunfeng Yun wrote:
-> > Add a property to set usb2 phy's pre-emphasis, which used to widen
-> > eye
-> > opening and boost eye swing.
-> > 
-> > Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
-> > ---
-> > v2: Add more description suggested by Krzysztof
-> > ---
-> >  .../devicetree/bindings/phy/mediatek,tphy.yaml         | 10
-> > ++++++++++
-> >  1 file changed, 10 insertions(+)
-> > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > index 848edfb1f677..e0754fb44451 100644
-> > --- a/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > +++ b/Documentation/devicetree/bindings/phy/mediatek,tphy.yaml
-> > @@ -219,6 +219,16 @@ patternProperties:
-> >          minimum: 1
-> >          maximum: 15
-> >  
-> > +      mediatek,pre-emphasis:
-> > +        description:
-> > +          The level of pre-emphasis which used to widen the eye
-> > opening and
-> > +          boost eye swing, the unit step is about 4.16% increment;
-> > e.g. the
-> > +          level 1 means amplitude increases about 4.16%, the level
-> > 2 is about
-> > +          8.3% etc. (U2 phy)
-> > +        $ref: /schemas/types.yaml#/definitions/uint32
+Sven van Ashbrook <svenva@chromium.org>
+> Sent: Tuesday, August 30, 2022 1:00 PM
+[...]
+> The rtl8152 driver does not disable multicasting when userspace asks
+> it to. For example:
+>  $ ifconfig eth0 -multicast -allmulti
+>  $ tcpdump -p -i eth0  # will still capture multicast frames
 > 
-> As I proposed - use instead common units. 
-As explained before, no units for these value.
-
-> Since only three values are
-> allowed - make it an enum. 
-Ok,
-
-> These bindings are expected to be
-> usable/applicable on several devices, so units, not register values
-> which can change between devices, are the proper and reliable way to
-> describe a feature.
-I prefer to use exact level values, but not the inexact values with
-units (e.g. -percent, -microvolt).
-
-Thanks a lot
-
+> Fix by clearing the device multicast filter table when multicast and
+> allmulti are both unset.
 > 
+> Tested as follows:
+> - Set multicast on eth0 network interface
+> - verify that multicast packets are coming in:
+>   $ tcpdump -p -i eth0
+> - Clear multicast and allmulti on eth0 network interface
+> - verify that no more multicast packets are coming in:
+>   $ tcpdump -p -i eth0
 > 
-> Best regards,
-> Krzysztof
+> Signed-off-by: Sven van Ashbrook <svenva@chromium.org>
+
+Acked-by: Hayes Wang <hayeswang@realtek.com>
+
+Best Regards,
+Hayes
 

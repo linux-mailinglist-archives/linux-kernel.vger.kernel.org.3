@@ -2,168 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE2BA5A82E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:18:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1265A82E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231920AbiHaQR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 12:17:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
+        id S231737AbiHaQSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 12:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbiHaQRu (ORCPT
+        with ESMTP id S231281AbiHaQS1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 12:17:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3D4D4F72;
-        Wed, 31 Aug 2022 09:17:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E0B261958;
-        Wed, 31 Aug 2022 16:17:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6D7C433C1;
-        Wed, 31 Aug 2022 16:17:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661962665;
-        bh=2d72f6ZKuMN8oZ4S4xSp9+IUsC77vGcpoLIrln4q3HU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E/zoiqW0CXelaAIpNPabokQCPHML9pmxsjeAaHpoc9tiVZd3jKRKxr3yRVOv3bryn
-         hNfAGxDcQNLx8hEjr6PAQ4zNzsm3c/5cQzfFC4uA11MqzX1+0NVaiXDOr9w1Gs9/mL
-         9qBI+Gr6m5KH69e0y4pZO4t45IGF5h60K2INVzu8tKEhmmU/s6hqXjscz0RIkbmWjU
-         Up8lUA3GpjduwLZq0rpelh2qn2byGkKceUj2HxerzNgQZ/h/mvBF6LgoAGF2tZVcDd
-         KTMiaTHLWBorZxCuRnJc0tVviqiDEEsgwZZUNTuAx6m3GdYcpp9fKnKKoWu02gihcr
-         ANFoxeRDrjaWw==
-From:   SeongJae Park <sj@kernel.org>
-To:     Pratyush Yadav <ptyadav@amazon.de>
-Cc:     SeongJae Park <sj@kernel.org>, jgross@suse.com,
-        roger.pau@citrix.com, marmarek@invisiblethingslab.com,
-        mheyne@amazon.de, xen-devel@lists.xenproject.org, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 1/2] xen-blkback: Advertise feature-persistent as user requested
-Date:   Wed, 31 Aug 2022 16:17:43 +0000
-Message-Id: <20220831161743.93872-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220831153259.fzdkgbi76hmxa67a@yadavpratyush.com>
-References: 
+        Wed, 31 Aug 2022 12:18:27 -0400
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57B7ECEB36;
+        Wed, 31 Aug 2022 09:18:26 -0700 (PDT)
+Received: by mail-ej1-f50.google.com with SMTP id fy31so29012353ejc.6;
+        Wed, 31 Aug 2022 09:18:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=hs27A97tiJvrzqLEY67+ba99paoViVve8c+DJ3f+Pqg=;
+        b=7ZPyPyl13zsz6s+xdxlE3K2N0aCnxorUz/wVknrzi6UaziyKlsS9cJXprgkWfU5zFL
+         KrE7J7K+FEcPiPxC1sa86frQv+5H0zIOpwjoZb2JzxPh1z0k3eeLaDbWhlV+1UdKCI6G
+         6nQIXXXsmrp5E8tSJUGscVi/9GG2Fin1QVwL1ExdjX2UwKV+R6apktPQ/pEcp4HziAhm
+         i0ecyLjsYH1ybPDfR8KrJDNFrPm3bDWfeTDjr2V1Fm/E3pfOxAy2LFfTYfFj48R8+4PB
+         gQTOMwPhdgVdKIxQJrQ0ILNMSHqTBS8iqQJbIu6oE/vFSjznxn3IUoa6qqkTNjqj6H5E
+         6aNw==
+X-Gm-Message-State: ACgBeo23Yt8tGLvhfaR3vj4Uo6xnh6yAs854OTMvEtk9wB191uf7qWam
+        Jrp3DLC3cj4wNDPl7F1j8uuEUNUe0x773w==
+X-Google-Smtp-Source: AA6agR4HjXreg6GyPP2faOYPhvdwYt88YzaoF1YZO04ge0M4cM8Jr+yewDGui8ztp5XOVATFMO0Dpg==
+X-Received: by 2002:a17:907:2cd1:b0:730:a980:d593 with SMTP id hg17-20020a1709072cd100b00730a980d593mr20741096ejc.48.1661962704855;
+        Wed, 31 Aug 2022 09:18:24 -0700 (PDT)
+Received: from gmail.com (fwdproxy-cln-022.fbsv.net. [2a03:2880:31ff:16::face:b00c])
+        by smtp.gmail.com with ESMTPSA id z63-20020a509e45000000b004478fdbe190sm9242412ede.10.2022.08.31.09.18.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 09:18:24 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 09:18:18 -0700
+From:   Breno Leitao <leitao@debian.org>
+To:     cgel.zte@gmail.com
+Cc:     nayna@linux.ibm.com, pfsmorigo@gmail.com, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        herbert@gondor.apana.org.au, davem@davemloft.net,
+        linux-crypto@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] crypto: nx: remove redundant variable rc
+Message-ID: <Yw+JysFvbmW0yJL8@gmail.com>
+References: <20220831140248.303940-1-cui.jinpeng2@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831140248.303940-1-cui.jinpeng2@zte.com.cn>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pratyush,
-
-On Wed, 31 Aug 2022 15:47:50 +0000 Pratyush Yadav <ptyadav@amazon.de> wrote:
-
-> Hi,
+On Wed, Aug 31, 2022 at 02:02:48PM +0000, cgel.zte@gmail.com wrote:
+> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 > 
-> On 25/08/22 04:15PM, SeongJae Park wrote:
-> > Commit e94c6101e151 ("xen-blkback: Apply 'feature_persistent' parameter
-> > when connect") made blkback to advertise its support of the persistent
-> > grants feature only if the user sets the 'feature_persistent' parameter
-> > of the driver and the frontend advertised its support of the feature.
-> > However, following commit 402c43ea6b34 ("xen-blkfront: Apply
-> > 'feature_persistent' parameter when connect") made the blkfront to work
-> > in the same way.  That is, blkfront also advertises its support of the
-> > persistent grants feature only if the user sets the 'feature_persistent'
-> > parameter of the driver and the backend advertised its support of the
-> > feature.
-> > 
-> > Hence blkback and blkfront will never advertise their support of the
-> > feature but wait until the other advertises the support, even though
-> > users set the 'feature_persistent' parameters of the drivers.  As a
-> > result, the persistent grants feature is disabled always regardless of
-> > the 'feature_persistent' values[1].
-> > 
-> > The problem comes from the misuse of the semantic of the advertisement
-> > of the feature.  The advertisement of the feature should means only
-> > availability of the feature not the decision for using the feature.
-> > However, current behavior is working in the wrong way.
-> > 
-> > This commit fixes the issue by making the blkback advertises its support
-> > of the feature as user requested via 'feature_persistent' parameter
-> > regardless of the otherend's support of the feature.
-> > 
-> > [1] https://lore.kernel.org/xen-devel/bd818aba-4857-bc07-dc8a-e9b2f8c5f7cd@suse.com/
-> > 
-> > Fixes: e94c6101e151 ("xen-blkback: Apply 'feature_persistent' parameter when connect")
-> > Cc: <stable@vger.kernel.org> # 5.10.x
-> > Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-> > Suggested-by: Juergen Gross <jgross@suse.com>
-> > Signed-off-by: SeongJae Park <sj@kernel.org>
-> > ---
-> >  drivers/block/xen-blkback/common.h | 3 +++
-> >  drivers/block/xen-blkback/xenbus.c | 6 ++++--
-> >  2 files changed, 7 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/block/xen-blkback/common.h b/drivers/block/xen-blkback/common.h
-> > index bda5c815e441..a28473470e66 100644
-> > --- a/drivers/block/xen-blkback/common.h
-> > +++ b/drivers/block/xen-blkback/common.h
-> > @@ -226,6 +226,9 @@ struct xen_vbd {
-> >  	sector_t		size;
-> >  	unsigned int		flush_support:1;
-> >  	unsigned int		discard_secure:1;
-> > +	/* Connect-time cached feature_persistent parameter value */
-> > +	unsigned int		feature_gnt_persistent_parm:1;
-> > +	/* Persistent grants feature negotiation result */
-> >  	unsigned int		feature_gnt_persistent:1;
-> >  	unsigned int		overflow_max_grants:1;
-> >  };
-> > diff --git a/drivers/block/xen-blkback/xenbus.c b/drivers/block/xen-blkback/xenbus.c
-> > index ee7ad2fb432d..c0227dfa4688 100644
-> > --- a/drivers/block/xen-blkback/xenbus.c
-> > +++ b/drivers/block/xen-blkback/xenbus.c
-> > @@ -907,7 +907,7 @@ static void connect(struct backend_info *be)
-> >  	xen_blkbk_barrier(xbt, be, be->blkif->vbd.flush_support);
-> >  
-> >  	err = xenbus_printf(xbt, dev->nodename, "feature-persistent", "%u",
-> > -			be->blkif->vbd.feature_gnt_persistent);
-> > +			be->blkif->vbd.feature_gnt_persistent_parm);
-> >  	if (err) {
-> >  		xenbus_dev_fatal(dev, err, "writing %s/feature-persistent",
-> >  				 dev->nodename);
-> > @@ -1085,7 +1085,9 @@ static int connect_ring(struct backend_info *be)
-> >  		return -ENOSYS;
-> >  	}
-> >  
-> > -	blkif->vbd.feature_gnt_persistent = feature_persistent &&
-> > +	blkif->vbd.feature_gnt_persistent_parm = feature_persistent;
+> Return value directly from set_msg_len() instead of
+> getting value from redundant variable rc.
 > 
-> If feature_gnt_persistent_parm is always going to be equal to 
-> feature_persistent, then why introduce it at all? Why not just use 
-> feature_persistent directly? This way you avoid adding an extra flag 
-> whose purpose is not immediately clear, and you also avoid all the mess 
-> with setting this flag at the right time.
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+Reviewed-by: Breno Leitao <leitao@debian.org>
 
-Mainly because the parameter should read twice (once for advertisement, and
-once later just before the negotitation, for checking if we advertised or not),
-and the user might change the parameter value between the two reads.
-
-For the detailed available sequence of the race, you could refer to the prior
-conversation[1].
-
-[1] https://lore.kernel.org/linux-block/20200922111259.GJ19254@Air-de-Roger/
-
-
-Thanks,
-SJ
-
+> ---
+>  drivers/crypto/nx/nx-aes-ccm.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
 > 
-> > +	blkif->vbd.feature_gnt_persistent =
-> > +		blkif->vbd.feature_gnt_persistent_parm &&
-> >  		xenbus_read_unsigned(dev->otherend, "feature-persistent", 0);
-> >  
-> >  	blkif->vbd.overflow_max_grants = 0;
-> > -- 
-> > 2.25.1
-> > 
-> > 
+> diff --git a/drivers/crypto/nx/nx-aes-ccm.c b/drivers/crypto/nx/nx-aes-ccm.c
+> index 3793885f928d..c843f4c6f684 100644
+> --- a/drivers/crypto/nx/nx-aes-ccm.c
+> +++ b/drivers/crypto/nx/nx-aes-ccm.c
+> @@ -134,7 +134,6 @@ static int generate_b0(u8 *iv, unsigned int assoclen, unsigned int authsize,
+>  		       unsigned int cryptlen, u8 *b0)
+>  {
+>  	unsigned int l, lp, m = authsize;
+> -	int rc;
+>  
+>  	memcpy(b0, iv, 16);
+>  
+> @@ -148,9 +147,7 @@ static int generate_b0(u8 *iv, unsigned int assoclen, unsigned int authsize,
+>  	if (assoclen)
+>  		*b0 |= 64;
+>  
+> -	rc = set_msg_len(b0 + 16 - l, cryptlen, l);
+> -
+> -	return rc;
+> +	return set_msg_len(b0 + 16 - l, cryptlen, l);
+>  }
+>  
+>  static int generate_pat(u8                   *iv,
+> -- 
+> 2.25.1
 > 

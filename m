@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A6675A7D9F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6CFC5A7DA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:41:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiHaMlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        id S231308AbiHaMlR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:41:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229943AbiHaMk7 (ORCPT
+        with ESMTP id S230479AbiHaMlL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:40:59 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33D33ED4D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:40:58 -0700 (PDT)
+        Wed, 31 Aug 2022 08:41:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006349F0FB;
+        Wed, 31 Aug 2022 05:41:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A21F61982
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:40:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88230C433D7;
-        Wed, 31 Aug 2022 12:40:55 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A9B661973;
+        Wed, 31 Aug 2022 12:41:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32D4C433D7;
+        Wed, 31 Aug 2022 12:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661949658;
-        bh=VJzf5SMukgnOhcfk4fRzmhPNEX69oZvYp5xql0sUwi0=;
+        s=k20201202; t=1661949668;
+        bh=RS0HeyihGdLib8QRN71zjMIyxfq10lHWDurkcNEVTkY=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=hflMLsoM4EqU3I+v34GfrKGbKTnEwZVp+bhQtI8fx92UthCxDhYmcB8MiNGbl19AN
-         wd125Tn64emwO8sVfyV3i16ZNCWCzqQRshFITpVVYMQSAL9+Qx+bmE/NvM+jgJcj9k
-         L/7xwiOCD4/rfvhzWMG1wy+1PThCVULGX1KJj+0rqmrpTe3Jg6M/1uCU0dDwSl2jy4
-         dT7g/PevZM1wXs3P7KtHUVafQAw+pW7UjJQM7j9wNRu8rRMb4o9VQhb1vR2LKLMqg7
-         hSaboqse8641rFF0GA/NB+Gm8cJzfHNRL3FQ4t7xZwEI628lFgGaH8oAnNCjWOKkw6
-         UYiDjTkJz1jnw==
+        b=msNhnat0q+bvq1KF68qIl5Fp9i1oL96k6ra3yZ8pkM35CjIGOmu/+9IKzSr5ZYVJV
+         sueRo8f4pVMTbsHHVxhxl9/v1MA1Q3uCPYm1wjcA2CPgmJ+1Z49E5G8RXUSaxPmZIm
+         iBjpCYK5U7s/0ddINHxaBIXgEzmn8J/5h8ORkkWgQ3Ac6aLV0Y6LwGKkgV6IrP2+Ap
+         TbYZW86Umwt5RB56PfJQdO4kKdqVIwnygdWmlvshji1JHni5lupyryNzvtcERQZ/p9
+         2JI2ZdsYteYWjVdu65/UvHnfqr23Q8p73CL4TgUeakGLdMGzShU7pqDgCBDDhwCxBm
+         8Z67GxULggczQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     Venkata Prasad Potturu <venkataprasad.potturu@amd.com>,
-        alsa-devel@alsa-project.org
-Cc:     V sujith kumar Reddy <Vsujithkumar.Reddy@amd.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Basavaraj.Hiregoudar@amd.com, Jaroslav Kysela <perex@perex.cz>,
-        ssabakar@amd.com, vsujithkumar.reddy@amd.com,
-        Vijendar.Mukunda@amd.com, Sunil-kumar.Dommati@amd.com,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>
-In-Reply-To: <20220801063501.51439-1-venkataprasad.potturu@amd.com>
-References: <20220801063501.51439-1-venkataprasad.potturu@amd.com>
-Subject: Re: [PATCH v2] ASoC: amd: acp: Modify dai_id macros to be more generic
-Message-Id: <166194965527.85274.9760279024689489230.b4-ty@kernel.org>
-Date:   Wed, 31 Aug 2022 13:40:55 +0100
+To:     sanju.mehta@amd.com, Shreeya Patel <shreeya.patel@collabora.com>
+Cc:     Lucas Tanure <tanureal@opensource.cirrus.com>,
+        krisman@collabora.com, alvaro.soliverez@collabora.com,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        linux-spi@vger.kernel.org
+In-Reply-To: <20220819123630.368462-1-shreeya.patel@collabora.com>
+References: <20220819123630.368462-1-shreeya.patel@collabora.com>
+Subject: Re: [PATCH v2] spi: amd: Configure device speed
+Message-Id: <166194966658.85432.16168252045246459215.b4-ty@kernel.org>
+Date:   Wed, 31 Aug 2022 13:41:06 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -62,19 +57,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 1 Aug 2022 12:04:56 +0530, Venkata Prasad Potturu wrote:
-> Change dai_id macros to make I2S instances in order.
+On Fri, 19 Aug 2022 18:06:30 +0530, Shreeya Patel wrote:
+> From: Lucas Tanure <tanureal@opensource.cirrus.com>
 > 
+> Number of clock frequencies are supported by AMD controller
+> which are mentioned in the amd_spi_freq structure table.
 > 
+> Create mechanism to configure device clock frequency such
+> that it is strictly less than the requested frequency.
+> 
+> [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
 Thanks!
 
-[1/1] ASoC: amd: acp: Modify dai_id macros to be more generic
-      commit: 99a387c7818fe422fa96458f56bc74f05f263013
+[1/1] spi: amd: Configure device speed
+      commit: 3fe26121dc3a9bf64e18fe0075cd9a92c9cd1b1a
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

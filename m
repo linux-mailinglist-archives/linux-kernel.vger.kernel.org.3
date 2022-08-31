@@ -2,175 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487DD5A7555
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 06:59:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F66E5A7559
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230502AbiHaE7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 00:59:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33880 "EHLO
+        id S231812AbiHaFA4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 01:00:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiHaE73 (ORCPT
+        with ESMTP id S229523AbiHaFAy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 00:59:29 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68E49B6012;
-        Tue, 30 Aug 2022 21:59:27 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxYOKi6g5j_2UNAA--.59804S2;
-        Wed, 31 Aug 2022 12:59:20 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Alan Stern <stern@rowland.harvard.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <greg@kroah.com>,
-        Patchwork Bot <patchwork-bot@kernel.org>
-Cc:     zhuyinbo@loongson.cn
-Subject: [PATCH v2] usb: ohci-platform: fix usb disconnect issue after s4
-Date:   Wed, 31 Aug 2022 12:59:10 +0800
-Message-Id: <20220831045910.12203-1-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
+        Wed, 31 Aug 2022 01:00:54 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF524D4EF;
+        Tue, 30 Aug 2022 22:00:52 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-3321c2a8d4cso297299047b3.5;
+        Tue, 30 Aug 2022 22:00:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=hP8w1oBDqJGAsXujKb/CVqCqGWT4GD4/gS/Uk4niIUc=;
+        b=U2sDz1rAezdP1Sj5bHvd6szx1iNoBX0K5Wbnu3cW5OoN0uwMug+oJaS1qFsfwIj27Y
+         9QnA5WX5EmaF5C4S9DZClPg090f0Q4WB7oj/zql033FyPO64hgVcJmz82ha61HGB9ui+
+         pGGZAhhCdk1aMih0sPm6heP7qBleYkX9JUALM3LCooawCjqTyHM6KSfN+uCFf9/+Y465
+         ZgsTK2945Bki0iqTqVbCdht/My8a+3lppMb9V5gHT6aZXzkymempomdgy715W+3ILsq0
+         s29UshM1/lOqLLXHhw15oCDzWvyVsiIV5PBYqvseqX5FI0QHzWwc5apZf7BgELpJ53hR
+         uwyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=hP8w1oBDqJGAsXujKb/CVqCqGWT4GD4/gS/Uk4niIUc=;
+        b=kpowJHSmlo2RlsdjxlEWIeaEdl9rvikxjbSRWg/sZsJNzY66stV4ia+7RV2pLVhyuC
+         NBFmyyXOpk3Z0G5QWvnYcRoXrTgh1lOvb3HKmwDkefNjC3B5k1+5oS/4yARGpQ0LyMzh
+         5f5nxztATQ7wbehOVMa1HVA7Zs1wdBnkvuyQa1oQ3C1PQ1tpj/fETjm+E+ffSMgYjO3U
+         BOCR+VAXEpZiHTB58LM1rDaXbtFgBU1ZnDvJwzeNA3NnMHb+pT50cP0prFmblcv7P3C2
+         9EEHGLu4vkXnLrPxIa6JxI4dK1ahpAANsejmkh1w85SfW7I6S7hwVZv+jTYBq5rldvxD
+         F9Yw==
+X-Gm-Message-State: ACgBeo2WKa0gElrfnGxxPgI1P7Vp36m29hGXdAA2zgtTVonc7NcgWSGt
+        Pw3vD324SDDojaZGM+rw2olqU1dRNBoGFwekNPQ=
+X-Google-Smtp-Source: AA6agR43V4aiIKKAM0zrA3bkYsgumo2YxP7cn71v6O/qFUFZ/SaxVh9+QMKJg/zVg8qU5nYEmRLd1029vhYoWUpBiJ4=
+X-Received: by 2002:a0d:d5c2:0:b0:337:5d95:8bcb with SMTP id
+ x185-20020a0dd5c2000000b003375d958bcbmr16567963ywd.359.1661922051649; Tue, 30
+ Aug 2022 22:00:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxYOKi6g5j_2UNAA--.59804S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF47CrW3JFWUJr1rtFyxZrb_yoWrJFW3pr
-        4UJFWrtr48KF42g3y7twn7ZFWrCw4Sg3y7K348Kw1jv398tr98Jay2vFy0yFn3Xry7Gw17
-        tF4jyFWUuF4UZr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkI14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxkIecxEwVCm-wCF
-        04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r
-        18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vI
-        r41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr
-        1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvE
-        x4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220831033403.302184-1-ye.xingchen@zte.com.cn>
+In-Reply-To: <20220831033403.302184-1-ye.xingchen@zte.com.cn>
+From:   Ryusuke Konishi <konishi.ryusuke@gmail.com>
+Date:   Wed, 31 Aug 2022 14:00:34 +0900
+Message-ID: <CAKFNMokS2zV5hJsBkcj=wiSkOkVHiqT_jFi18aBFW_gbNHnP5w@mail.gmail.com>
+Subject: Re: [PATCH linux-next] nilfs2: Remove the unneeded result variable
+To:     cgel.zte@gmail.com
+Cc:     linux-nilfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Avoid retaining bogus hardware states during resume-from-hibernation.
-Previously we had reset the hardware as part of preparing to reinstate
-the snapshot image. But we can do better now with the new PM framework,
-since we know exactly which resume operations are from hibernation.
+On Wed, Aug 31, 2022 at 12:34 PM wrote:
+>
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> Return the value nilfs_segctor_sync() directly instead of storing it in
+> another redundant variable.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  fs/nilfs2/segment.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+>
+> diff --git a/fs/nilfs2/segment.c b/fs/nilfs2/segment.c
+> index 0afe0832c754..9abae2c9120e 100644
+> --- a/fs/nilfs2/segment.c
+> +++ b/fs/nilfs2/segment.c
+> @@ -2235,7 +2235,6 @@ int nilfs_construct_segment(struct super_block *sb)
+>         struct the_nilfs *nilfs = sb->s_fs_info;
+>         struct nilfs_sc_info *sci = nilfs->ns_writer;
+>         struct nilfs_transaction_info *ti;
+> -       int err;
+>
+>         if (!sci)
+>                 return -EROFS;
+> @@ -2243,8 +2242,7 @@ int nilfs_construct_segment(struct super_block *sb)
+>         /* A call inside transactions causes a deadlock. */
+>         BUG_ON((ti = current->journal_info) && ti->ti_magic == NILFS_TI_MAGIC);
+>
+> -       err = nilfs_segctor_sync(sci);
+> -       return err;
+> +       return nilfs_segctor_sync(sci);
+>  }
+>
+>  /**
+> --
+> 2.25.1
 
-According to the commit 'cd1965db054e ("USB: ohci: move ohci_pci_{
-suspend,resume} to ohci-hcd.c")' and commit '6ec4beb5c701 ("USB: new
-flag for resume-from-hibernation")', the flag "hibernated" is for
-resume-from-hibernation and it should be true when usb resume from disk.
+The patch is not wrong though this kind of minor rewrite seems endless.
+Anyway, I would like to queue this unless there is an objection.
 
-When this flag "hibernated" is set, the drivers will reset the hardware
-to get rid of any existing state and make sure resume from hibernation
-re-enumerates everything for ohci.
-
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
----
-Change in v2:
-		1. Revise the commit log infomation.	
-		2. Wrap the ohci_platform_renew() function with two 
-		   helpers that are ohci_platform_renew_hibernated() 
-		   and ohci_platform_renew().
-
- drivers/usb/host/ohci-platform.c | 49 ++++++++++++++++++++++++++++++--
- 1 file changed, 46 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/host/ohci-platform.c b/drivers/usb/host/ohci-platform.c
-index 0adae6265127..56cb424d3bb0 100644
---- a/drivers/usb/host/ohci-platform.c
-+++ b/drivers/usb/host/ohci-platform.c
-@@ -289,7 +289,7 @@ static int ohci_platform_suspend(struct device *dev)
- 	return ret;
- }
- 
--static int ohci_platform_resume(struct device *dev)
-+static int ohci_platform_renew(struct device *dev)
- {
- 	struct usb_hcd *hcd = dev_get_drvdata(dev);
- 	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
-@@ -297,6 +297,7 @@ static int ohci_platform_resume(struct device *dev)
- 
- 	if (pdata->power_on) {
- 		int err = pdata->power_on(pdev);
-+
- 		if (err < 0)
- 			return err;
- 	}
-@@ -309,6 +310,38 @@ static int ohci_platform_resume(struct device *dev)
- 
- 	return 0;
- }
-+
-+static int ohci_platform_renew_hibernated(struct device *dev)
-+{
-+	struct usb_hcd *hcd = dev_get_drvdata(dev);
-+	struct usb_ohci_pdata *pdata = dev_get_platdata(dev);
-+	struct platform_device *pdev = to_platform_device(dev);
-+
-+	if (pdata->power_on) {
-+		int err = pdata->power_on(pdev);
-+
-+		if (err < 0)
-+			return err;
-+	}
-+
-+	ohci_resume(hcd, true);
-+
-+	pm_runtime_disable(dev);
-+	pm_runtime_set_active(dev);
-+	pm_runtime_enable(dev);
-+
-+	return 0;
-+}
-+
-+static int ohci_platform_resume(struct device *dev)
-+{
-+	return ohci_platform_renew(dev);
-+}
-+
-+static int ohci_platform_restore(struct device *dev)
-+{
-+	return ohci_platform_renew_hibernated(dev);
-+}
- #endif /* CONFIG_PM_SLEEP */
- 
- static const struct of_device_id ohci_platform_ids[] = {
-@@ -325,8 +358,16 @@ static const struct platform_device_id ohci_platform_table[] = {
- };
- MODULE_DEVICE_TABLE(platform, ohci_platform_table);
- 
--static SIMPLE_DEV_PM_OPS(ohci_platform_pm_ops, ohci_platform_suspend,
--	ohci_platform_resume);
-+#ifdef CONFIG_PM_SLEEP
-+static const struct dev_pm_ops ohci_platform_pm_ops = {
-+	.suspend = ohci_platform_suspend,
-+	.resume = ohci_platform_resume,
-+	.freeze = ohci_platform_suspend,
-+	.thaw = ohci_platform_resume,
-+	.poweroff = ohci_platform_suspend,
-+	.restore = ohci_platform_restore,
-+};
-+#endif
- 
- static struct platform_driver ohci_platform_driver = {
- 	.id_table	= ohci_platform_table,
-@@ -335,7 +376,9 @@ static struct platform_driver ohci_platform_driver = {
- 	.shutdown	= usb_hcd_platform_shutdown,
- 	.driver		= {
- 		.name	= "ohci-platform",
-+#ifdef CONFIG_PM_SLEEP
- 		.pm	= &ohci_platform_pm_ops,
-+#endif
- 		.of_match_table = ohci_platform_ids,
- 		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	}
--- 
-2.31.1
-
+Thanks,
+Ryusuke Konishi

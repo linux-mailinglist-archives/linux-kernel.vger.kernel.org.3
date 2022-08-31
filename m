@@ -2,159 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79BAB5A836F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ADBC5A8371
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231453AbiHaQqe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 12:46:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44788 "EHLO
+        id S232181AbiHaQqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 12:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiHaQqc (ORCPT
+        with ESMTP id S231392AbiHaQqh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 12:46:32 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625DCD7D12
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:46:31 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id lx1so29534058ejb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:46:31 -0700 (PDT)
+        Wed, 31 Aug 2022 12:46:37 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173E9D83E7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:46:36 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id q9so13973820pgq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:46:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=c2TX4X9uyLpPzlBA8SkX7a5tu94KGH4Yf0CSb9a5La0=;
-        b=gzn7AV6FF8ujOWh5fibOQxp7+QWz/iVO85IAc9S1w2Fyk1mCJS4enw4JqKzLOSs+UZ
-         eWCx4pEMlFzayH4gm9OTAvX/QrFRL82yJU/pwgkhb3ZH9lOW3S8lNN/eqA66J3AXbLgb
-         0HHQSO0x9uYB+FObn7BeiQQQUDiWW866y5StE=
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=SJCs+zrxY5DpXGitGn76vX0CELQw1pNbtUtNVrBLdOU=;
+        b=wMacyl36WAEo0AtT4AtI+EXWpdWwqkk25xy3wZzMH3h/+BSD4YjLg/n60+tfdQ+3+K
+         i2I7XBlF/1rR9OQNQs8I4LPpJTgQKoCUkA+aqzj4vEIZAmFbOMr95XPtKg4lghRU62PN
+         C7p/vH6t8izDWJYlyheurHuPKzwW/U52i65bHHdaIxhsLjBg4jcacWYfJcGxmgRmTFTa
+         czgixQLOXDOjAb4WEsgWe6/AGxGCyJ/MWHIvduGxb6ToLehe0wkuJZVFtBPFGFQiVXB+
+         dR/upGc/MzJr6zEPMFMoh+WSt1Y+Tck/7/7skyNtOCChrK0FFASzl/yW9dL0T+GDmp38
+         uEIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=c2TX4X9uyLpPzlBA8SkX7a5tu94KGH4Yf0CSb9a5La0=;
-        b=ADuWkZ3WUgs/1pBzTZdF08QPrK758WJbnwy0ISFI9HHyyc+OesWZiMGUiXEvgJsd09
-         4Bh6REX0K3qjpXc5Z+nnLVnitTbR4WQYTbD18p13m1TRBEFpT3ksaxbdK8oMAjHIlzrU
-         V4yyUDMZ9eD9jUS/mZQ2pH0CVpfsVCCtJ6z+hkTOor9Gmb+jxzZUdW/F1vrsys5oxyqo
-         3ZxzVWClwG4lMS06a6vNBlEw6wckrdERvWze4ub4Okk+W41zAOYiGr/4F8qyVHDcQHBT
-         nXDgC3esGB3uYHskkgW6pJkW1zUkz1PL0SPk8sY5DS79mJxoeyeZhtnxQH8W+Xi0Ji2f
-         63QA==
-X-Gm-Message-State: ACgBeo3hSOsLBz56Hx9LOrlBwhYTkDVAEbf8q3svSwUVpdW5twvT20Pb
-        G64u2mDlzADYNVTA85gUfFRMouBX6OCgl9+4
-X-Google-Smtp-Source: AA6agR41K5dfHspQL3xVLe4fa62E5AgABBUDSfzf1W+WLmz81aJWiIDN/FkAECTZg+iOSAETlhpqrg==
-X-Received: by 2002:a17:906:8442:b0:73d:a2fc:a87 with SMTP id e2-20020a170906844200b0073da2fc0a87mr20657460ejy.625.1661964389362;
-        Wed, 31 Aug 2022 09:46:29 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
-        by smtp.gmail.com with ESMTPSA id c2-20020a17090618a200b0073d71b7527asm7220942ejf.151.2022.08.31.09.46.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 09:46:28 -0700 (PDT)
-Received: by mail-wm1-f46.google.com with SMTP id k17so7677199wmr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:46:28 -0700 (PDT)
-X-Received: by 2002:a7b:c399:0:b0:3a5:f3fb:85e0 with SMTP id
- s25-20020a7bc399000000b003a5f3fb85e0mr2629152wmj.38.1661964388324; Wed, 31
- Aug 2022 09:46:28 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=SJCs+zrxY5DpXGitGn76vX0CELQw1pNbtUtNVrBLdOU=;
+        b=aPemILHRPaKb8MTbeFq2LQcJwS1WPeQDsTvAS+w0oTteunPg7Tfv2GgJQl4wJrvJYY
+         BOl20n4bxbC+L9MWD1FW9CmwlRZIMbXrSGZjpie6c9JCk1DLuX8iFnBrTNOFlJU7etoO
+         f2D737Sp7TgH2FNj73D7RwzOS0PCvQemN3yM85ZxJjKG/C38e3ubg2Q13I9KWNxnaZ6V
+         A+XMKUBBpVC8duQEwJlD1pZlHtLlTrzwjPJYFLmsUVQOLIzBiXErFr4vCb8oyFpZxwiM
+         sZzV6Zg0t5oy3YOcHfjbY7SIxLNhvmmV7nf78cc8ftYeLveb4eYmmY/CPskeCXykkBPp
+         NRjA==
+X-Gm-Message-State: ACgBeo0wsW2CiFXlGCuRXt6LdYE8X7XCEosEvLhRjX9EvpwrfG0be9a7
+        ifBTSYhxJd06AoN60khvt1N3ZA==
+X-Google-Smtp-Source: AA6agR6fkZMt73sieSqzi6umyc41MUl5fXDPsH4JeaX9QXNMq9ImVUzt9Z/JpwEBqUxhvzOTb4hAlg==
+X-Received: by 2002:a63:4802:0:b0:41c:ac9e:1950 with SMTP id v2-20020a634802000000b0041cac9e1950mr23084860pga.376.1661964395560;
+        Wed, 31 Aug 2022 09:46:35 -0700 (PDT)
+Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
+        by smtp.gmail.com with ESMTPSA id j18-20020a635952000000b0042b5b036da4sm3518356pgm.68.2022.08.31.09.46.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 09:46:34 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 10:46:32 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     cgel.zte@gmail.com
+Cc:     bjorn.andersson@linaro.org, linux-remoteproc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: Re: [PATCH linux-next] rpmsg: char: Remove the unneeded result
+ variable
+Message-ID: <20220831164632.GA217472@p14s>
+References: <20220826071954.252485-1-ye.xingchen@zte.com.cn>
 MIME-Version: 1.0
-References: <Yw8L7HTZ/dE2/o9C@xsang-OptiPlex-9020>
-In-Reply-To: <Yw8L7HTZ/dE2/o9C@xsang-OptiPlex-9020>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 31 Aug 2022 09:46:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgG=mttS-m2OLcnsTwia2roHR2b-DxXXG-tbDH8_cUNiA@mail.gmail.com>
-Message-ID: <CAHk-=wgG=mttS-m2OLcnsTwia2roHR2b-DxXXG-tbDH8_cUNiA@mail.gmail.com>
-Subject: Re: d4252071b9: fxmark.ssd_ext4_no_jnl_DWTL_54_directio.works/sec
- -26.5% regression
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Mikulas Patocka <mpatocka@redhat.com>, lkp@lists.01.org,
-        lkp@intel.com, Matthew Wilcox <willy@infradead.org>,
-        linux-kernel@vger.kernel.org, ying.huang@intel.com,
-        feng.tang@intel.com, zhengjun.xing@linux.intel.com,
-        fengwei.yin@intel.com, regressions@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220826071954.252485-1-ye.xingchen@zte.com.cn>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 12:21 AM kernel test robot
-<oliver.sang@intel.com> wrote:
->
-> hi, pleased be noted that we read this patch and understand it as a fix,
-> also what we understand is, since the patch itself adds some memory barrier,
-> some regression in block IO area is kind of expected.
+Hi,
 
-Well, yes and no.
+I am fine with the patch but I need to understand who is "cgel.zte" - are we
+talking about a person or an automated bot.  In case of the former than an SoB
+from that person needs to be on this patch.  If an automated bot, than that
+needs to be changed to someone accountable for the code that can put an SoB on
+the patch.
 
-It's a memory ordering fix, but the memory ordering part is one that
-should *not* have any actual impact on x86, because the addition of
-smp_mb__before_atomic() should be a total no-op, and
-"smp_load_acquire()" should only imply a compiler scheduling barrier.
+Thanks,
+Mathieu
 
-IOW, it most definitely shouldn't cause something like this:
-
- > FYI, we noticed a -26.5% regression of
- >  fxmark.ssd_ext4_no_jnl_DWTL_54_directio.works/sec
-
-because at most it should have caused tiny perturbation of the
-instruction scheduling (obviously possibly register allocation, stack
-spill differences and and instruction choice).
-
-Except there was a change there that isn't just about memory ordering:
-
-> after more internal review, we still decided to report out to share our finding
-> in our tests, and for your information that how this patch could impact
-> performance in some cases. please let us know if you have any concern.
-
-Oh, it's absolutely interesting and unexpected.
-
-And I think the cause is obvious: our "set_buffer_uptodate()" *used*
-to use the BUFFER_FNS() macro, which does that bit setting
-conditionally.
-
-And while that isn't actually correct in an "atomic op" situation, it
-*is* fine in the case of set_buffer_uptodate(), since if the buffer
-was already uptodate, any other CPU looking at that bit will not be
-caring about what *this* CPU did.
-
-IOW, if this CPU sees the bit as having ever been uptodate before,
-then any barriers are irrelevant, because they are about the original
-setting of 'uptodate', not the new one.
-
-So I think we can just do this:
-
-  --- a/include/linux/buffer_head.h
-  +++ b/include/linux/buffer_head.h
-  @@ -137,12 +137,14 @@ BUFFER_FNS(Defer_Completion, defer_completion)
-
-   static __always_inline void set_buffer_uptodate(struct buffer_head *bh)
-   {
-  -     /*
-  -      * make it consistent with folio_mark_uptodate
-  -      * pairs with smp_load_acquire in buffer_uptodate
-  -      */
-  -     smp_mb__before_atomic();
-  -     set_bit(BH_Uptodate, &bh->b_state);
-  +     if (!test_bit(BH_Uptodate, &bh->b_state)) {
-  +             /*
-  +              * make it consistent with folio_mark_uptodate
-  +              * pairs with smp_load_acquire in buffer_uptodate
-  +              */
-  +             smp_mb__before_atomic();
-  +             set_bit(BH_Uptodate, &bh->b_state);
-  +     }
-   }
-
-   static __always_inline void clear_buffer_uptodate(struct buffer_head *bh)
-
-and re-introduce the original code (maybe extend that comment to talk
-about this "only first up-to-date matters".
-
-HOWEVER.
-
-I'd love to hear if you have a clear profile change, and to see
-exactly which set_buffer_uptodate() is *so* important. Honestly, I
-didn't expect the buffer head functions to even really matter much any
-more, with pretty much all IO being about the page cache..
-
-                          Linus
+On Fri, Aug 26, 2022 at 07:19:54AM +0000, cgel.zte@gmail.com wrote:
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+> 
+> Return the value rpmsg_chrdev_eptdev_add() directly instead of storing it
+> in another redundant variable.
+> 
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> ---
+>  drivers/rpmsg/rpmsg_char.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/rpmsg/rpmsg_char.c b/drivers/rpmsg/rpmsg_char.c
+> index 4f2189111494..0850ae34fb88 100644
+> --- a/drivers/rpmsg/rpmsg_char.c
+> +++ b/drivers/rpmsg/rpmsg_char.c
+> @@ -424,15 +424,12 @@ int rpmsg_chrdev_eptdev_create(struct rpmsg_device *rpdev, struct device *parent
+>  			       struct rpmsg_channel_info chinfo)
+>  {
+>  	struct rpmsg_eptdev *eptdev;
+> -	int ret;
+>  
+>  	eptdev = rpmsg_chrdev_eptdev_alloc(rpdev, parent);
+>  	if (IS_ERR(eptdev))
+>  		return PTR_ERR(eptdev);
+>  
+> -	ret = rpmsg_chrdev_eptdev_add(eptdev, chinfo);
+> -
+> -	return ret;
+> +	return rpmsg_chrdev_eptdev_add(eptdev, chinfo);
+>  }
+>  EXPORT_SYMBOL(rpmsg_chrdev_eptdev_create);
+>  
+> -- 
+> 2.25.1

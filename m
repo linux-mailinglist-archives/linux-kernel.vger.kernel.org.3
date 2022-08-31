@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 014265A84FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:06:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D72415A8509
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:08:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbiHaSGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40726 "EHLO
+        id S232465AbiHaSIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232131AbiHaSGd (ORCPT
+        with ESMTP id S232226AbiHaSIM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:06:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8096CE3961;
-        Wed, 31 Aug 2022 11:06:29 -0700 (PDT)
+        Wed, 31 Aug 2022 14:08:12 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BE3E397F;
+        Wed, 31 Aug 2022 11:08:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DD8B61C0D;
-        Wed, 31 Aug 2022 18:06:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A160EC4314D;
-        Wed, 31 Aug 2022 18:06:27 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id BE28ACE1EA8;
+        Wed, 31 Aug 2022 18:08:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3734EC433C1;
+        Wed, 31 Aug 2022 18:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661969187;
-        bh=rs0JwDT2NwpNg38wdlwMWQtd1f0wzKLTC7t9vHoDofY=;
+        s=k20201202; t=1661969287;
+        bh=HYR3hoM0Ydmx6dDsk73iVgFWt9139ZE43iky0FI7k8o=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GN6Vr0/SNEhlqwkE+C5hAfS6zQ5Iok6a4N2Fb5De2CM4iQb/KMMVUSP1RkrICOmDl
-         SahAKk0uFt3MD0/222qERXCycipcYwy/rm5gNF2yZyIS1ofQS6DMAk0d1sDIOC2t4y
-         vqa1JBNrMygaX51m80KrFCMxnnWJfwZ41s0dOInC82vPESXkKmsuSK/SRMpH5EYlux
-         v29dm+9+CeMbNeGjzKPavJycTB33Y77UwdTyMCbAydH7QH6T+LjBwTkDGsB7n76/HO
-         +QDw7/6HkRZb6WWty68pYAwrvH+dDDg3hNkjrldVy14arAiVrL9JXa8EaOg4j67D7+
-         ZeR0mjkoUmv9A==
+        b=E4KXR+uCJLQzTIhgXky3CODmPEstNfZhZHCvQc5yWFxrM6zvl0RBWLUzxESa3wYZ2
+         YhFK0UWPGkcmjedf+yzkE2rV14QXLv5YzDRf6cM0h7jfHYNWctzOXXef8mtdFarbH0
+         kq9QtElnBHr04r4/z4SSfRdrt/qUm/n6ynQVpf4KIQsYErvoDuso7RBfCv1caMzO/f
+         KbzprbFI84uo9PpE2q9VPhVcF00bu2YCYYO4te+9nTsB3KTLSMzRhtVQoE3YK28Vpq
+         WW7VjJovstgQSgzFMp4iBNFNtk08qyxSki8jjHre15aMk8Z/OpTeeDmEdVHcjx4vV9
+         S3m3viBbKL7TQ==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 0AD6A5C0950; Wed, 31 Aug 2022 11:06:27 -0700 (PDT)
+        id EAC195C015D; Wed, 31 Aug 2022 11:08:06 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org, Shao-Tse Hung <ccs100203@gmail.com>,
+        rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 7/7] doc/rcu: Update LWN article URLs and add 2019 article
-Date:   Wed, 31 Aug 2022 11:06:25 -0700
-Message-Id: <20220831180625.2692892-7-paulmck@kernel.org>
+Subject: [PATCH rcu 01/10] rcu: Fix rcu_read_unlock_strict() strict QS reporting
+Date:   Wed, 31 Aug 2022 11:07:56 -0700
+Message-Id: <20220831180805.2693546-1-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
-In-Reply-To: <20220831180617.GA2692480@paulmck-ThinkPad-P17-Gen-1>
-References: <20220831180617.GA2692480@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <20220831180759.GA2693289@paulmck-ThinkPad-P17-Gen-1>
+References: <20220831180759.GA2693289@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -57,44 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Shao-Tse Hung <ccs100203@gmail.com>
+From: Zqiang <qiang1.zhang@intel.com>
 
-This patch adds LWN articles about RCU APIs which were released in 2019.
-Also, HTTP URLs are replaced by HTTPS.
+Kernels built with CONFIG_PREEMPT=n and CONFIG_RCU_STRICT_GRACE_PERIOD=y
+report the quiescent state directly from the outermost rcu_read_unlock().
+However, the current CPU's rcu_data structure's ->cpu_no_qs.b.norm
+might still be set, in which case rcu_report_qs_rdp() will exit early,
+thus failing to report quiescent state.
 
-Signed-off-by: Shao-Tse Hung <ccs100203@gmail.com>
+This commit therefore causes rcu_read_unlock_strict() to clear
+CPU's rcu_data structure's ->cpu_no_qs.b.norm field before invoking
+rcu_report_qs_rdp().
+
+Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- Documentation/RCU/whatisRCU.rst | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ kernel/rcu/tree_plugin.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/RCU/whatisRCU.rst b/Documentation/RCU/whatisRCU.rst
-index 97f2d0fa84dfa..1c747ac3f2c8e 100644
---- a/Documentation/RCU/whatisRCU.rst
-+++ b/Documentation/RCU/whatisRCU.rst
-@@ -6,13 +6,15 @@ What is RCU?  --  "Read, Copy, Update"
- Please note that the "What is RCU?" LWN series is an excellent place
- to start learning about RCU:
- 
--| 1.	What is RCU, Fundamentally?  http://lwn.net/Articles/262464/
--| 2.	What is RCU? Part 2: Usage   http://lwn.net/Articles/263130/
--| 3.	RCU part 3: the RCU API      http://lwn.net/Articles/264090/
--| 4.	The RCU API, 2010 Edition    http://lwn.net/Articles/418853/
--| 	2010 Big API Table           http://lwn.net/Articles/419086/
--| 5.	The RCU API, 2014 Edition    http://lwn.net/Articles/609904/
--|	2014 Big API Table           http://lwn.net/Articles/609973/
-+| 1.	What is RCU, Fundamentally?  https://lwn.net/Articles/262464/
-+| 2.	What is RCU? Part 2: Usage   https://lwn.net/Articles/263130/
-+| 3.	RCU part 3: the RCU API      https://lwn.net/Articles/264090/
-+| 4.	The RCU API, 2010 Edition    https://lwn.net/Articles/418853/
-+| 	2010 Big API Table           https://lwn.net/Articles/419086/
-+| 5.	The RCU API, 2014 Edition    https://lwn.net/Articles/609904/
-+|	2014 Big API Table           https://lwn.net/Articles/609973/
-+| 6.	The RCU API, 2019 Edition    https://lwn.net/Articles/777036/
-+|	2019 Big API Table           https://lwn.net/Articles/777165/
- 
- 
- What is RCU?
+diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
+index 438ecae6bd7e7..86772c95ed0ae 100644
+--- a/kernel/rcu/tree_plugin.h
++++ b/kernel/rcu/tree_plugin.h
+@@ -824,6 +824,7 @@ void rcu_read_unlock_strict(void)
+ 	if (irqs_disabled() || preempt_count() || !rcu_state.gp_kthread)
+ 		return;
+ 	rdp = this_cpu_ptr(&rcu_data);
++	rdp->cpu_no_qs.b.norm = false;
+ 	rcu_report_qs_rdp(rdp);
+ 	udelay(rcu_unlock_delay);
+ }
 -- 
 2.31.1.189.g2e36527f23
 

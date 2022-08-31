@@ -2,91 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B0D5A84E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:00:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C80AE5A84E2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231939AbiHaSAY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:00:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
+        id S231226AbiHaSBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:01:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiHaSAU (ORCPT
+        with ESMTP id S229437AbiHaSBJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:00:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 695F2844E3;
-        Wed, 31 Aug 2022 11:00:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0472A61BE3;
-        Wed, 31 Aug 2022 18:00:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F71C433C1;
-        Wed, 31 Aug 2022 18:00:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661968817;
-        bh=13xJJEaIRPliXMrrJMtHCZ0PIl2SB6kc52ZdIdM97o0=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sGGYu8LsheRWbItI1n0idA86XSMhS2qbHXzrJCqG+1s224OSXW/PMM3hsxFbc/e0y
-         DgQEFnhF1wsHqUQxegZoXyOf2MyYRcC6xbV7M59+PwE4U+Ldzoj0DiigIcSq8Yi57M
-         xM0TBV/X1oiZG6/Q3xiPEsZOHtDy6vHjCPFbXbk1BldIsIRc0e9JmdJdfE/C05yxZb
-         Z6FpRQMkyhrIrcynq1HlYA+wvUR+zSj5QI3JmFEg05hSIeUcgwg0OyDBalMgx65j1s
-         p8wpYc4hdDsA5/7C6X1hFAgD4CzxR+oB8dmTJE/Ypr4BXQdlMD/hXZnq+EdcMWbNH5
-         P5fahRUzLBXhg==
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-324ec5a9e97so314479097b3.7;
-        Wed, 31 Aug 2022 11:00:17 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2Jag/WRI1LhlAPbsvtAV1e9WvzCwUVdWuYozZFkEkLUKvYN7ig
-        jTrtYYFFoizqHekzDBnnNBDN7/HPznuXi78JQZU=
-X-Google-Smtp-Source: AA6agR6xkFRRbJ54fJ5ALHKPWrTlGcsMjIJs76DZ2UCN9wjSSSpA2GUb1kwdmLik0nixwcH/+OIDtZ02ZfA2eEkMDNU=
-X-Received: by 2002:a81:a18b:0:b0:33d:c4bc:5340 with SMTP id
- y133-20020a81a18b000000b0033dc4bc5340mr19569661ywg.130.1661968816334; Wed, 31
- Aug 2022 11:00:16 -0700 (PDT)
+        Wed, 31 Aug 2022 14:01:09 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78202D4BE7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:01:07 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-11f0fa892aeso17666355fac.7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:01:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=T6Du1Lo5xImAO249U1dETl4IIbiFdjm8Fx7yNl0ICjY=;
+        b=MbYKgq9YQ6Cmkjnxo/SEbnM4RZKXJbf89tkfIphzPRlEB3rBPLNslG/zc7Fa5N37Fc
+         lhVNZA4SRNJ06uCP16o+JMRPLBbB7LZLhUmAhdDCGlpymbSMzCwQst5srlXLX+H8VtkA
+         XUAFrNIQJJI0kOzoWw7DNXGkMWcZoWg9//pcSu8QypDj4UjYgibbK79Z1QjY7pjyvltg
+         qxcihlzG1LpIR9Gb3RuZ69YrMRSOUl1bmFd7L9fhg8jqKoigPuvkaAZ1hWbqemGqF+VR
+         hXqzIImXiW+0FabsOWFDktXerKkrjF17lUaPV1+xNvHCDpkytsZXVVlzzaRlQ8JfF3zN
+         k+aA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=T6Du1Lo5xImAO249U1dETl4IIbiFdjm8Fx7yNl0ICjY=;
+        b=YMuxNFIcY6wXxsQOVHmGfe5K5A+VVit3OEptaQa73/7co475s6JibanF6r4Ao3yu3M
+         OYaY4lQJGcE7LPq2OzDzEysGErJXy7m7IPdm/tqs++3rIvJ3iOio1AByI3ZWIRw1V8zc
+         Q6Dfu/Wo+sIauNjMIA6EuydMG46bwEoY1/6AA4bYAKycTogaOfi5QkuUg+mP9iZ1124/
+         PZhww+vwrCOGXZEm0g91JeAx5lw1jwr2UCUF9lDPinF2tTvSIsudfNRNvxS5iB/ufdDu
+         45IFBMFxD1DeObYBwi3/3Qyuz5y9uEgShUwMyHibJEHhTtCAa2SOqtxjGZ5yxJPslIqu
+         ddlg==
+X-Gm-Message-State: ACgBeo1PwLENMV//0XGnYVKnKjkVg7lVEx79LjsmellHtL1oJ6UTQsNW
+        MQPd8PiY8XwNgVacbd3KBB1OJXZZ050FyKJ1exeMhCUmqC6C2A==
+X-Google-Smtp-Source: AA6agR4nuWTt+l/HHXALlIvuHu0a36M8RihXtAB0CgHufnQWYfzsfDJoK3Av9fP0SMKZV1RXp2U8YrypIgn6ZCwEbcY=
+X-Received: by 2002:a05:6808:1641:b0:345:4f32:b30a with SMTP id
+ az1-20020a056808164100b003454f32b30amr1800917oib.189.1661968866436; Wed, 31
+ Aug 2022 11:01:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220829131502.165356-1-yukuai1@huaweicloud.com>
-In-Reply-To: <20220829131502.165356-1-yukuai1@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Wed, 31 Aug 2022 11:00:05 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6pKMeaULJajDGSjDRVmBUDEd=QQdGftK_Oo0vgsEuKVg@mail.gmail.com>
-Message-ID: <CAPhsuW6pKMeaULJajDGSjDRVmBUDEd=QQdGftK_Oo0vgsEuKVg@mail.gmail.com>
-Subject: Re: [PATCH -next 0/3] md/raid10: reduce lock contention for io
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linux-raid <linux-raid@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>, yukuai3@huawei.com,
-        yi.zhang@huawei.com
+References: <20220823095915.v7.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid>
+In-Reply-To: <20220823095915.v7.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid>
+From:   Tim Van Patten <timvp@google.com>
+Date:   Wed, 31 Aug 2022 12:00:55 -0600
+Message-ID: <CANkg5ezTvzSFLkRWbhMDUqezQXW6996DYVohWMUa+cYwSB+YBw@mail.gmail.com>
+Subject: Re: [PATCH v7] platform/chrome: cros_ec_lpc: Move host command to prepare/complete
+To:     rrangel@chromium.org, robbarnes@google.com
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Tzung-Bi Shih <tzungbi@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 6:03 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->
-> From: Yu Kuai <yukuai3@huawei.com>
->
-> patch 1 is a small problem found by code review.
-> patch 2 avoid holding resync_lock in fast path.
-> patch 3 avoid holding lock in wake_up() in fast path.
->
-> Test environment:
->
-> Architecture: aarch64
-> Cpu: Huawei KUNPENG 920, there are four numa nodes
->
-> Raid10 initialize:
-> mdadm --create /dev/md0 --level 10 --bitmap none --raid-devices 4 /dev/nvme0n1 /dev/nvme1n1 /dev/nvme2n1 /dev/nvme3n1
->
-> Test cmd:
-> fio -name=0 -ioengine=libaio -direct=1 -group_reporting=1 -randseed=2022 -rwmixread=70 -refill_buffers -filename=/dev/md0 -numjobs=16 -runtime=60s -bs=4k -iodepth=256 -rw=randread
->
-> Test result:
-> before this patchset:   2.9 GiB/s
-> after this patchset:    6.6 Gib/s
+Hi,
 
-Nice work! Applied to md-next.
+Friendly ping on this patch.
 
-Thanks,
-Song
+
+On Tue, Aug 23, 2022 at 9:59 AM Tim Van Patten <timvp@google.com> wrote:
+>
+> Update cros_ec_lpc_pm_ops to call cros_ec_lpc_prepare() during PM
+> .prepare() and cros_ec_lpc_complete() during .complete(). This moves the
+> host command that the AP sends and allows the EC to log entry/exit of
+> AP's suspend/resume more accurately.
+>
+> Signed-off-by: Tim Van Patten <timvp@google.com>
+> ---
+>
+> Changes in v7:
+> - Rename "host event" to "host command" in title/description.
+>
+> Changes in v6:
+> - Fully restore fixes from v3.
+>
+> Changes in v5:
+> - Restore fixes from v3.
+>
+> Changes in v4:
+> - Update title and description.
+>
+> Changes in v3:
+> - Update cros_ec_lpc_suspend() to cros_ec_lpc_prepare()
+> - Update cros_ec_lpc_resume() to cros_ec_lpc_complete()
+>
+> Changes in v2:
+> - Include cros_ec_resume() return value in dev_info() output.
+> - Guard setting .prepare/.complete with #ifdef CONFIG_PM_SLEEP.
+>
+>  drivers/platform/chrome/cros_ec_lpc.c | 16 ++++++++++++----
+>  1 file changed, 12 insertions(+), 4 deletions(-)
+>
+> diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
+> index 7677ab3c0ead..4158bdeee197 100644
+> --- a/drivers/platform/chrome/cros_ec_lpc.c
+> +++ b/drivers/platform/chrome/cros_ec_lpc.c
+> @@ -530,23 +530,31 @@ static const struct dmi_system_id cros_ec_lpc_dmi_table[] __initconst = {
+>  MODULE_DEVICE_TABLE(dmi, cros_ec_lpc_dmi_table);
+>
+>  #ifdef CONFIG_PM_SLEEP
+> -static int cros_ec_lpc_suspend(struct device *dev)
+> +static int cros_ec_lpc_prepare(struct device *dev)
+>  {
+>         struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
+>
+> +       dev_info(dev, "Prepare EC suspend\n");
+> +
+>         return cros_ec_suspend(ec_dev);
+>  }
+>
+> -static int cros_ec_lpc_resume(struct device *dev)
+> +static void cros_ec_lpc_complete(struct device *dev)
+>  {
+>         struct cros_ec_device *ec_dev = dev_get_drvdata(dev);
+> +       int ret;
+> +
+> +       ret = cros_ec_resume(ec_dev);
+>
+> -       return cros_ec_resume(ec_dev);
+> +       dev_info(dev, "EC resume completed: ret = %d\n", ret);
+>  }
+>  #endif
+>
+>  static const struct dev_pm_ops cros_ec_lpc_pm_ops = {
+> -       SET_LATE_SYSTEM_SLEEP_PM_OPS(cros_ec_lpc_suspend, cros_ec_lpc_resume)
+> +#ifdef CONFIG_PM_SLEEP
+> +       .prepare = cros_ec_lpc_prepare,
+> +       .complete = cros_ec_lpc_complete
+> +#endif
+>  };
+>
+>  static struct platform_driver cros_ec_lpc_driver = {
+> --
+> 2.37.2.609.g9ff673ca1a-goog
+>
+
+
+-- 
+
+Tim Van Patten | ChromeOS | timvp@google.com | (720) 432-0997

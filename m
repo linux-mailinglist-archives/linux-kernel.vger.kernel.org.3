@@ -2,88 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94BD65A7E9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08DE5A7EBF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:30:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231756AbiHaNVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 09:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52782 "EHLO
+        id S231481AbiHaNaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 09:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiHaNU7 (ORCPT
+        with ESMTP id S229769AbiHaNaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 09:20:59 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792A93AB27
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:20:57 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id k18so8203139lji.13
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:20:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=gXyPGs1xzbqWLyCKCXFzzY2n7w6S19U4Yvty6n2m3xI=;
-        b=BS+iR4ydREy9MZ7gRYr2l+ma3DWnH9f+1BrJTWu2kpJujnIGn4ylhL9yE3RjvSFbs3
-         qJeKzs1i7Lq8Tz2IzKqcT+joLyZ9cnHgdOu+UMz8Lfp3JZqVTg6oc2ha464C7c1nmMld
-         fIrKQy0orkywCqiBh34WVfTq/TsyyiIgzoJhGZOap2Kp6iEtSjbQSSj4S8szXBp4G1gX
-         sfyQBFgzd3aUxXyPuscbnqzTqTLjdBq7uhoPqmJd1Qx76soaiyNL7yaRkM3iBf42g69D
-         HrMoVFeSA1yyEk512f/rdp5TL5v2k35zviPsyAd3ecqgHJyfiwbwE/qE8gNUFYObckMM
-         MV/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=gXyPGs1xzbqWLyCKCXFzzY2n7w6S19U4Yvty6n2m3xI=;
-        b=mvQEaIYN9GEJOq6BV7m9ezb74CPnICIykODedqbK962SNhuN2UVw+7PiT/mLxAvrXM
-         oZMuuy/rWNI+eHYQhJvGZoxTJOgqCdfOM2Lzw41M/L5OHpvohCtNFb6UECCQE/OUysYm
-         WbmcRGlHrF0J0mldml6qXa59MdHsCrtJ0ymFyMr4sJEbogDL6gUEj0kc99ES8pMp3kFK
-         DRN47EawtQN4/EhnswW2+yRu1w2tXdKRxdCH9kib0kYjqKTj/x6E2yc8Cbr7E5RcBKTT
-         0untdwXdIMoJHfcEJhUSrNa4Ogq5NUTgFhABxCXXWTQXG4Ecbefs5Vi9zeWGRdHnhSDu
-         PufQ==
-X-Gm-Message-State: ACgBeo1PrRz1kYCujNjQl/3Bz+MlHIWfNDE9xSsv4BxGLa3UjffNFIIK
-        0XwYsAVPyH7yZlQzDtVz5qG+vwGYVnLHV0dD
-X-Google-Smtp-Source: AA6agR68vhI8/CXEZ3hYaem0vpetajctNycqN1PQYVoVf9YCRz4ASjoY0Ha1A8CPSwcomrieT8YKWw==
-X-Received: by 2002:a05:651c:1942:b0:268:9b0d:e15c with SMTP id bs2-20020a05651c194200b002689b0de15cmr582532ljb.479.1661952055897;
-        Wed, 31 Aug 2022 06:20:55 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id u26-20020ac258da000000b00493050d6bcesm1987686lfo.122.2022.08.31.06.20.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 06:20:55 -0700 (PDT)
-Message-ID: <330d1f46-0e3c-f58e-b916-9e8644e7b4a1@linaro.org>
-Date:   Wed, 31 Aug 2022 16:20:54 +0300
+        Wed, 31 Aug 2022 09:30:03 -0400
+X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 06:29:59 PDT
+Received: from giacobini.uberspace.de (giacobini.uberspace.de [185.26.156.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7CC1A064
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:29:57 -0700 (PDT)
+Received: (qmail 15005 invoked by uid 990); 31 Aug 2022 13:23:14 -0000
+Authentication-Results: giacobini.uberspace.de;
+        auth=pass (plain)
+From:   Soenke Huster <soenke.huster@eknoes.de>
+To:     Johannes Berg <johannes@sipsolutions.net>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Soenke Huster <soenke.huster@eknoes.de>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] wifi: mac80211_hwsim: check length for virtio packets
+Date:   Wed, 31 Aug 2022 15:22:06 +0200
+Message-Id: <20220831132205.129922-1-soenke.huster@eknoes.de>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 0/4] Introduce MediaTek frequency hopping driver
-Content-Language: en-US
-To:     Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
-        angelogioacchino.delregno@collabora.com, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20220831124850.7748-1-johnson.wang@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220831124850.7748-1-johnson.wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Bar: /
+X-Rspamd-Report: R_MISSING_CHARSET(0.5) MIME_GOOD(-0.1) MID_CONTAINS_FROM(1) BAYES_HAM(-0.616589)
+X-Rspamd-Score: 0.78341
+Received: from unknown (HELO unkown) (::1)
+        by giacobini.uberspace.de (Haraka/2.8.28) with ESMTPSA; Wed, 31 Aug 2022 15:23:14 +0200
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/08/2022 15:48, Johnson Wang wrote:
-> Introduce MediaTek frequency hopping and spread spectrum clocking control
-> for MT8186.
+An invalid packet with a length shorther than the specified length in the
+netlink header can lead to use-after-frees and slab-out-of-bounds in the
+processing of the netlink attributes, such as the following:
 
-With one line introduction, you do not help us to understand this. :(
+  BUG: KASAN: slab-out-of-bounds in __nla_validate_parse+0x1258/0x2010
+  Read of size 2 at addr ffff88800ac7952c by task kworker/0:1/12
 
-Best regards,
-Krzysztof
+  Workqueue: events hwsim_virtio_rx_work
+  Call Trace:
+   <TASK>
+   dump_stack_lvl+0x45/0x5d
+   print_report.cold+0x5e/0x5e5
+   kasan_report+0xb1/0x1c0
+   __nla_validate_parse+0x1258/0x2010
+   __nla_parse+0x22/0x30
+   hwsim_virtio_handle_cmd.isra.0+0x13f/0x2d0
+   hwsim_virtio_rx_work+0x1b2/0x370
+   process_one_work+0x8df/0x1530
+   worker_thread+0x575/0x11a0
+   kthread+0x29d/0x340
+   ret_from_fork+0x22/0x30
+ </TASK>
+
+Discarding packets with an invalid length solves this.
+Therefore, skb->len must be set at reception.
+
+Signed-off-by: Soenke Huster <soenke.huster@eknoes.de>
+---
+ drivers/net/wireless/mac80211_hwsim.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/net/wireless/mac80211_hwsim.c b/drivers/net/wireless/mac80211_hwsim.c
+index 4fb8f68e5c3b..6bd9bd50071e 100644
+--- a/drivers/net/wireless/mac80211_hwsim.c
++++ b/drivers/net/wireless/mac80211_hwsim.c
+@@ -5436,6 +5436,10 @@ static int hwsim_virtio_handle_cmd(struct sk_buff *skb)
+ 
+ 	nlh = nlmsg_hdr(skb);
+ 	gnlh = nlmsg_data(nlh);
++
++	if (skb->len < nlh->nlmsg_len)
++		return -EINVAL;
++
+ 	err = genlmsg_parse(nlh, &hwsim_genl_family, tb, HWSIM_ATTR_MAX,
+ 			    hwsim_genl_policy, NULL);
+ 	if (err) {
+@@ -5478,7 +5482,8 @@ static void hwsim_virtio_rx_work(struct work_struct *work)
+ 	spin_unlock_irqrestore(&hwsim_virtio_lock, flags);
+ 
+ 	skb->data = skb->head;
+-	skb_set_tail_pointer(skb, len);
++	skb_reset_tail_pointer(skb);
++	skb_put(skb, len);
+ 	hwsim_virtio_handle_cmd(skb);
+ 
+ 	spin_lock_irqsave(&hwsim_virtio_lock, flags);
+-- 
+2.37.3
+

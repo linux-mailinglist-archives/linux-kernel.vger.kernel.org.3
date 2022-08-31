@@ -2,82 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD2355A7312
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BBF85A7314
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:59:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiHaA6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
+        id S231206AbiHaA7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:59:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiHaA6B (ORCPT
+        with ESMTP id S229481AbiHaA7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:58:01 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A44A9C0E
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:57:59 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1661907467t62nxb90
-Received: from localhost.localdomain ( [182.148.13.26])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 31 Aug 2022 08:57:46 +0800 (CST)
-X-QQ-SSF: 01000000000000D0E000000A0000000
-X-QQ-FEAT: 83ShfzFP0oDIRreUK6adz5wTVdQyShTxZeHC2bUg8eBmCdTH4bjfHfU4c2RKf
-        +pEy1ajNp1slJSLECzdbqH7duG6VnAR5XwjKwGNCTEl1qPo3/919OIiO1ONRDgKfghwpFTg
-        j6yvumPy9phSjo4D8FBrUqauSdZt6PIjmggQ/8V8kjaaU9Tlg6oHu7HoXVDjQQcihyxP9J3
-        b4IBbubYws+q38CwLpAaiuIjvcMtQbT3HPwfDJ2eLl7cVtohXm7JNCJ5QDUNXR4901o3c6R
-        uGd0WXqvLESFdtvo+xteTJmnkSPD8lYEOrr4U3SaDDL7pOOvEpcd7GowwGQ6hSctzY/Gw41
-        ezJDagp//oX2wgIrN1l8TmyFXxHblaEuN/7UzSvuKojtKAWpok=
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     nsekhar@ti.com, brgl@bgdev.pl, linux@armlinux.org.uk
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] ARM: davinci: fix repeated words in comments
-Date:   Wed, 31 Aug 2022 08:57:39 +0800
-Message-Id: <20220831005739.42648-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Tue, 30 Aug 2022 20:59:15 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C6D8AA360
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:59:14 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso19630417pjk.0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:59:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Ivk89S//3lMPfDjeDOSlX80rCHqMBFqCmhfspnuz5iE=;
+        b=yeCZaq97fhM/ZSTxMqV5eET1mcXZmeeZkxq2gBJ0hmUpy9yS3KIOkInOBkj44OMj30
+         Ioi6KanKDdn0MyqladlAsBO3YgMZ+Tkidl4ptcSE+GuSn1eq5SIL0+SNQx67ZWq6QLsO
+         I9mu8RTl8mFqaJQdrH67hxqAenTit8TMAcSuoYs9JL7W7xi/Istc8DJvFlfZJJvJeKWh
+         JWcHieAVcAmNyRsi1f+1EJC0eT6tOReNkI97GS0XpB7ETN2K8s18nEOu6al/cHUkCIzR
+         S3fWUnZ1dsS7IzPr6hq/pbZeryITlwGtcB+CKzhpR8wgW9t2xDVngBnn6KSi59gZb785
+         sCyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Ivk89S//3lMPfDjeDOSlX80rCHqMBFqCmhfspnuz5iE=;
+        b=psRU3dZhEjZdTh1Qjq43OQeBkvGHs8OwqNt0h0dbfT50hXepNX7CvSNqQfUp6IJBgZ
+         +gLAI7c88p9e3gBC0drvTQyrezVlJ89Br9wCQN6Mw3NtluAG8U6/DYoaOUezjexNj9/h
+         FZkdFQ2ztuy1OR1S0hUs5wOvBPuf2eqFBmY1ZoXRC7FUx5ODePAsZvCuIMeiZOqPWxb/
+         gFBJRpd8n5hO3cDNkNZ/RFZPJD76BFiNYjktiM+4iugEJue1QMbeUYGSsdvM59s9fscV
+         sNqS7Dl41s6gJijflcjF2WGmu3cJGiYs0DxB9eucxa+wehorXpzenEHFni9XQz4Dg64E
+         3EVw==
+X-Gm-Message-State: ACgBeo0zGp+QDc5HiZRr9M/j1sbXktLpjjGyFBV4N5CCeLXdtGlJmBIu
+        Bu1XUndN4RBXzikgfbTyq+IJrg==
+X-Google-Smtp-Source: AA6agR7t+Wdo+DUPWiV53oGE/ZgED8jOWI/E+P8+cFQnQONqC/0TUVP+Wptb7W9ds6I/aInCXgNMDw==
+X-Received: by 2002:a17:903:124f:b0:171:4c36:a6bf with SMTP id u15-20020a170903124f00b001714c36a6bfmr23508754plh.0.1661907553806;
+        Tue, 30 Aug 2022 17:59:13 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id j5-20020a170903024500b0016efe8821a3sm10348174plh.89.2022.08.30.17.59.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 17:59:13 -0700 (PDT)
+Message-ID: <9e093f5d-f9fb-1ed6-3598-5d4c46838a09@kernel.dk>
+Date:   Tue, 30 Aug 2022 18:59:12 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        *      [43.155.67.158 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [RFC PATCH] blk-mq: change bio_set_ioprio to inline
+Content-Language: en-US
+To:     Liu Song <liusong@linux.alibaba.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1661852746-117244-1-git-send-email-liusong@linux.alibaba.com>
+ <908d464e-e695-3a27-56f6-1ceabd727989@kernel.dk>
+ <75f53b8f-30cd-23c3-1602-34d858302751@linux.alibaba.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <75f53b8f-30cd-23c3-1602-34d858302751@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
+On 8/30/22 6:42 PM, Liu Song wrote:
+> 
+> On 2022/8/30 21:59, Jens Axboe wrote:
+>> On 8/30/22 3:45 AM, Liu Song wrote:
+>>> From: Liu Song <liusong@linux.alibaba.com>
+>>>
+>>> Change "bio_set_ioprio" to inline to avoid calling overhead.
+>> Let's not try to 2nd guess the compiler here. Most things that are
+>> marked inline should not be.
+> Agree, I think there is something wrong with the commit log written here,
+> it should be expected to reduce the call overhead, bio_set_ioprio seems
+> to be appropriate to use inline.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- arch/arm/mach-davinci/board-dm365-evm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'm sure it's worth inlining, but did you check if it isn't already?
+If it's small I'd fully expect the compiler to inline it already,
+without needing to add things to do so.
 
-diff --git a/arch/arm/mach-davinci/board-dm365-evm.c b/arch/arm/mach-davinci/board-dm365-evm.c
-index d8c6c360818b..cca709236ade 100644
---- a/arch/arm/mach-davinci/board-dm365-evm.c
-+++ b/arch/arm/mach-davinci/board-dm365-evm.c
-@@ -528,7 +528,7 @@ static struct vpbe_enc_mode_info dm365evm_enc_preset_timing[] = {
- 
- /*
-  * The outputs available from VPBE + ecnoders. Keep the
-- * the order same as that of encoders. First those from venc followed by that
-+ * order same as that of encoders. First those from venc followed by that
-  * from encoders. Index in the output refers to index on a particular
-  * encoder.Driver uses this index to pass it to encoder when it supports more
-  * than one output. Application uses index of the array to set an output.
 -- 
-2.36.1
+Jens Axboe
+
 

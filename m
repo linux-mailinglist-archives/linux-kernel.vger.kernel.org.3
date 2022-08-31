@@ -2,65 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C33705A7605
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:54:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1F05A760E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229890AbiHaFyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 01:54:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47678 "EHLO
+        id S229912AbiHaF6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 01:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiHaFx7 (ORCPT
+        with ESMTP id S229437AbiHaF6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 01:53:59 -0400
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085EB72EDB;
-        Tue, 30 Aug 2022 22:53:59 -0700 (PDT)
-Received: by mail-ej1-f46.google.com with SMTP id u9so26279751ejy.5;
-        Tue, 30 Aug 2022 22:53:58 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=RfU7lsDmmfAjFJAeAr5W5jIPgnbHnTsbqehO/GDS314=;
-        b=LYtSUCfIKVE7hUxbrsENPiMOAxTVoEvlHBUglhPs7Zmd0M9LMzU78oPIt+lfEc7VAh
-         ewmmwXT7XxenmAge2hOtitiDSgaXZ66TqiCg0NsgrSoEAbULumsRVVbytxjnXmTMWsIN
-         sVZIv5ZxeTDK5/OhxYssOMzsNhN3ERdiYPWXUmX/xTBGs8nm7b/N7K7313+qM3ZFqfoD
-         1CAMShQfP/rQ1rNWcFz+8aMXm5ks5RPht9YXD+8VPDNUt7z0C+9oIUSD85KX8GqpddtM
-         vXLAv7oE6varJJU4t48BRzIHQW8dTzQ87HoIvEzdwokQ4sxBzQFw2qYhi9ggu323qJAh
-         3W7g==
-X-Gm-Message-State: ACgBeo1frpn20FCSOLI/YSFsmkhxaA2AuH7u6E/0p8ESpEmxaK0JRme4
-        ITCsKbBlCszdT9FSXbJP3gY=
-X-Google-Smtp-Source: AA6agR7fF/uAJxU45HbH0NEMNHIEwlmac3AtGBLOZLw1iBXTgBUNxv9F2cxNQOOEQdv47A5gxy9o+w==
-X-Received: by 2002:a17:907:6d11:b0:730:a382:d5ba with SMTP id sa17-20020a1709076d1100b00730a382d5bamr19002264ejc.371.1661925237530;
-        Tue, 30 Aug 2022 22:53:57 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id dk1-20020a0564021d8100b0043bea0a48d0sm8436599edb.22.2022.08.30.22.53.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 22:53:57 -0700 (PDT)
-Message-ID: <3537055d-7341-fe58-938f-06975c515cee@kernel.org>
-Date:   Wed, 31 Aug 2022 07:53:55 +0200
+        Wed, 31 Aug 2022 01:58:18 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8120EBA9C0
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 22:58:17 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oTGjv-0001xa-Gs; Wed, 31 Aug 2022 07:58:15 +0200
+Received: from [2a0a:edc0:0:1101:1d::28] (helo=dude02.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oTGju-0030ae-2G; Wed, 31 Aug 2022 07:58:14 +0200
+Received: from sha by dude02.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oTGjt-0087og-AZ; Wed, 31 Aug 2022 07:58:13 +0200
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     linux-gpio@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, kernel@pengutronix.de,
+        Sascha Hauer <s.hauer@pengutronix.de>
+Subject: [PATCH v2 0/2] gpio: Add gpio-latch driver
+Date:   Wed, 31 Aug 2022 07:58:09 +0200
+Message-Id: <20220831055811.1936613-1-s.hauer@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 5.19 000/158] 5.19.6-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220829105808.828227973@linuxfoundation.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20220829105808.828227973@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,28 +53,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29. 08. 22, 12:57, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.19.6 release.
-> There are 158 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.6-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
+This adds a gpio-driver which multiplexes existing GPIOs using latches.
+Uwe asked [1] if that would be accectable as a new gpio driver, and here
+is the result. For a better description what this is all about have a
+look at the drawings in the patches.
 
-openSUSE configs¹⁾ all green.
+Sascha
 
-Tested-by: Jiri Slaby <jirislaby@kernel.org>
+[1] https://lore.kernel.org/all/CACRpkdaBO=JzokGUF6uXZc7ASVD7LjqBxTLGwX-FShM=A9gw9A@mail.gmail.com/t/
 
-¹⁾ armv6hl armv7hl arm64 i386 ppc64 ppc64le riscv64 s390x x86_64
+Changes since v1:
+    - Use gpiod_set_value_cansleep when the underlying GPIOs might sleep
+    - Move MODULE_DEVICE_TABLE near to the end
+    - Add license to binding file
+    - remove trailing whitespaces
+
+
+Sascha Hauer (2):
+  gpio: Add gpio latch driver
+  dt-bindings: gpio: Add gpio-latch binding document
+
+ .../devicetree/bindings/gpio/gpio-latch.yaml  |  84 ++++++++
+ drivers/gpio/Kconfig                          |   6 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-latch.c                     | 190 ++++++++++++++++++
+ 4 files changed, 281 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/gpio/gpio-latch.yaml
+ create mode 100644 drivers/gpio/gpio-latch.c
 
 -- 
-js
-suse labs
+2.30.2
 

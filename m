@@ -2,83 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534A75A84B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37225A84AE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231419AbiHaRsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34040 "EHLO
+        id S231315AbiHaRsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 13:48:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230355AbiHaRsL (ORCPT
+        with ESMTP id S229692AbiHaRsB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:48:11 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBBBBB914;
-        Wed, 31 Aug 2022 10:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661968091; x=1693504091;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=p/GOqKIZDQTxNG42y21N79YylwcTQ9NvOofSnfIbNdc=;
-  b=pEoTtJy1TPIdjMvt/fRNLbg709wHOEaURvXJGxgH+RVvsqQXFA7KWdar
-   ldqohTAC3A1kAisfNBLMhTlxSe8F89F6ZCUKweC7Z7WtNL4CQgYJbWSjd
-   /AWtyqrhLUe6bkiTGqxt+oOCYTYaELidbR2XqkojrjYByBkseQbH1S7jX
-   A=;
-X-IronPort-AV: E=Sophos;i="5.93,278,1654560000"; 
-   d="scan'208";a="125450026"
-Subject: Re: [PATCH v3 08/19] dt-bindings: hwmon: (mr75203) add "moortec,
- vm-active-channels" property
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1a-828bd003.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 17:47:54 +0000
-Received: from EX13D33EUA002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1a-828bd003.us-east-1.amazon.com (Postfix) with ESMTPS id 488AD80FD4;
-        Wed, 31 Aug 2022 17:47:51 +0000 (UTC)
-Received: from EX19D019EUA002.ant.amazon.com (10.252.50.84) by
- EX13D33EUA002.ant.amazon.com (10.43.165.38) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 31 Aug 2022 17:47:50 +0000
-Received: from EX13MTAUEA001.ant.amazon.com (10.43.61.82) by
- EX19D019EUA002.ant.amazon.com (10.252.50.84) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.12; Wed, 31 Aug 2022 17:47:49 +0000
-Received: from [192.168.153.206] (10.85.143.179) by mail-relay.amazon.com
- (10.43.61.243) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Wed, 31 Aug 2022 17:47:45 +0000
-Message-ID: <2508ecda-cfd2-96ba-a802-47d25f225dd0@amazon.com>
-Date:   Wed, 31 Aug 2022 20:47:44 +0300
+        Wed, 31 Aug 2022 13:48:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40F20BB914
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:48:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661968079;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ng3kNHM++fJXXW5T0+rcub8oXdzUFxLTshdz07gNM6Q=;
+        b=FYig2DCum/fdyMbCddB/EJKeeA6ELGBUjFsPSGqGB9ZeqEk4gMZ85nF23Ct4ActDwI7fRI
+        jMWeJ+/dAWYba375MtcXnNCBn+1GQ42zPajowRnKVaNKOq7dEiDkT+IBS937aDHdvvsLEO
+        Z8kiyjzdXQNT0EOE3NqDW+WUqGhnh8E=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-280-nybyaUwMO1acLZusPPq0eQ-1; Wed, 31 Aug 2022 13:47:56 -0400
+X-MC-Unique: nybyaUwMO1acLZusPPq0eQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ECF8D1C14B61;
+        Wed, 31 Aug 2022 17:47:55 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 579562026D4C;
+        Wed, 31 Aug 2022 17:47:54 +0000 (UTC)
+Message-ID: <d12df38c5b4ee493e63771000cbc4b723b4defe1.camel@redhat.com>
+Subject: Re: [PATCH 03/19] Revert "KVM: SVM: Introduce hybrid-AVIC mode"
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 20:47:53 +0300
+In-Reply-To: <Yw+KDoSSKN0xgJW0@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-4-seanjc@google.com>
+         <17e776dccf01e03bce1356beb8db0741e2a13d9a.camel@redhat.com>
+         <Yw+KDoSSKN0xgJW0@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-To:     Rob Herring <robh@kernel.org>
-CC:     <almogbs@amazon.com>, Rahul Tanwar <rtanwar@maxlinear.com>,
-        Talel Shenhar <talel@amazon.com>,
-        Linux HWMON List <linux-hwmon@vger.kernel.org>,
-        <itamark@amazon.com>, <amitlavi@amazon.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonathan Chocron <jonnyc@amazon.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>, <shellykz@amazon.com>,
-        Jean Delvare <jdelvare@suse.com>, <shorer@amazon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <dkl@amazon.com>,
-        "Hanoch, Uri" <hanochu@amazon.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        "Hawa, Hanna" <hhhawa@amazon.com>,
-        "Krupnik, Ronen" <ronenk@amazon.com>,
-        "Farber, Eliav" <farbere@amazon.com>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-9-farbere@amazon.com>
- <1661945961.480039.3614528.nullmailer@robh.at.kernel.org>
- <a8557b5a-6e27-2e66-161e-814fc0f69c1d@amazon.com>
- <CAL_Jsq+c7DaJFCgeHDsXQT8oqHmPS57S-o_EALz=nHDREhqc7g@mail.gmail.com>
-Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <CAL_Jsq+c7DaJFCgeHDsXQT8oqHmPS57S-o_EALz=nHDREhqc7g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,52 +67,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/2022 3:17 PM, Rob Herring wrote:
-> On Wed, Aug 31, 2022 at 6:53 AM Farber, Eliav <farbere@amazon.com> wrote:
->>
->> On 8/31/2022 2:39 PM, Rob Herring wrote:
->>
->> On Tue, 30 Aug 2022 19:22:01 +0000, Eliav Farber wrote:
->>
->> Add optional "moortec,vm-active-channels" property to define the number
->> of active channels per VM.
->>
->> This shall be useful to avoid exposing sysfs for reading inputs that are
->> not connected to any voltage source.
->>
->> Signed-off-by: Eliav Farber <farbere@amazon.com>
->> ---
->> V3 -> V2:
->> - Add "moortec" prefix to property name.
->> - Add explanation why this change is needed.
->>
->>  .../devicetree/bindings/hwmon/moortec,mr75203.yaml    | 11 +++++++++++
->>  1 file changed, 11 insertions(+)
->>
->>
->> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
->> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->>
->> I used dt_binding_check on my changes (I ported it to my kernel).
->> The error is related to "intel-vm-map" which I did not add.
->
-> The error is the vendor prefix is not defined in vendor-prefixes.yaml.
+On Wed, 2022-08-31 at 16:19 +0000, Sean Christopherson wrote:
+> On Wed, Aug 31, 2022, Maxim Levitsky wrote:
+> > On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
+> > > Remove SVM's so called "hybrid-AVIC mode" and reinstate the restriction
+> > > where AVIC is disabled if x2APIC is enabled.  The argument that the
+> > > "guest is not supposed to access xAPIC mmio when uses x2APIC" is flat out
+> > > wrong.  Activating x2APIC completely disables the xAPIC MMIO region,
+> > > there is nothing that says the guest must not access that address.
+> > > 
+> > > Concretely, KVM-Unit-Test's existing "apic" test fails the subtests that
+> > > expect accesses to the APIC base region to not be emulated when x2APIC is
+> > > enabled.
+> > > 
+> > > Furthermore, allowing the guest to trigger MMIO emulation in a mode where
+> > > KVM doesn't expect such emulation to occur is all kinds of dangerous.
+> > > 
+> > > Tweak the restriction so that it only inhibits AVIC if x2APIC is actually
+> > > enabled instead of inhibiting AVIC is x2APIC is exposed to the guest.
+> > > 
+> > > This reverts commit 0e311d33bfbef86da130674e8528cc23e6acfe16.
+> > 
+> > I don't agree with this patch.
+> > 
+> > When reviewing this code I did note that MMIO is left enabled which is kind
+> > of errata on KVM side, and nobody objected to this.
+> 
+> I didn't object because I didn't read the patch.  I'm very much objecting now.
+> 
 
-I fixed the vendor prefix error (will be part of v4).
+And I am *very* much objecting to reverting this patch.
 
->> I don't mind fixing it if you wish.
->> It requires changing:
->>   intel,vm-map = [03 01 04 ff ff];
->> to:
->>   intel,vm-map = /bits/8 <0x03 0x01 0x04 0xff 0xff>;
->
-> That is not the issue. The issue is the type is unknown because your
-> schema fails and we can't get the type from it. Once your schema
-> passes, this should go away.
-Even after fixing the vendor prefix error I still see this:
-moortec,mr75203.yaml: ignoring, error in schema: properties: intel,vm-map
-moortec,mr75203.example.dtb: pvt@e0680000: intel,vm-map: 
-b'\x03\x01\x04\xff\xff' is not of type 'object', 'array', 'boolean', 'null'
+Best regards,
+	Maxim Levitsky
 
---
-Regards, Eliav

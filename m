@@ -2,115 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E18FC5A73BD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:02:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C07B5A737A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:45:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231842AbiHaCCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 22:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S231477AbiHaBpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 21:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231888AbiHaCCS (ORCPT
+        with ESMTP id S229524AbiHaBpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 22:02:18 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3694B3B0A
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 19:02:16 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id BA8661224D4;
-        Wed, 31 Aug 2022 02:02:15 +0000 (UTC)
-Received: from pdx1-sub0-mail-a203.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 107B3122D75;
-        Wed, 31 Aug 2022 02:02:15 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661911335; a=rsa-sha256;
-        cv=none;
-        b=5j+Ry63NoQ6pOvBnd2/YPqMz9IBt+3CAFnKC7vFzEWFQRDyglp9JA2m22MN14c7Ai9+xH4
-        HT5Z3PCvn4Ts/B1KwnU1fKCEGLymYCkLIFh7QIE7QzRIkrQ5/tmuaT/2xrRsO/8hDCBpe6
-        FbEyBv5SQrRLmlXBGSQmdoCKVKJWByOv+KimeDBS5woKbo8MYH0P9GBUkM46U5Yy/aWeiH
-        qVS5uyvvGjmSal7iD4KWOFX0efFDmQ1zwm1yDpyV/GN8wB1Jo1v+MYrdXjtGLup5KjgUG+
-        p81c/FbG2LtMSO721aLTvPCOflkMIJ2diBBTnHDWNH4B0EaZao66CUVYTUBb8Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1661911335;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=2YbYSFZwi3oLLyj3VoHxYd0lXmJL1xiYlpzmuwgB2l4=;
-        b=PzgC5kgq+kLzDNXeBqLZlAvCFyWDKBxnJj8lxJs2HURZmsqhrTQbLCbjK4XBE8LWPClAg2
-        WIsND9RiUOwleNdvXYsqIOd0y65wxylBVvPpbA7jSxS8QcQDjgGAzX4vYrYSvgyrkCv3Fr
-        9MXfV2GXYVDffBLCqoIB0RdwwWSdT+tOU645JTvsTqQHhMCE2/gEztnkuKwYHINuW7znP0
-        nuxU0imSwFWEFwZWGjQlNgJmeueUDiAJafmmdzBB7pGZ8PCvUcKpfq2sWJvjVILny28cwy
-        rflc/y2OHZyigp3+Kaf4z/H6Jup1339FmwCYSUwy73kKruIATyolR7jBYdklOQ==
-ARC-Authentication-Results: i=1;
-        rspamd-64cc6f7466-5vgs7;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Glossy-Chief: 3d24e1ec45b94037_1661911335347_2415526723
-X-MC-Loop-Signature: 1661911335347:3241657719
-X-MC-Ingress-Time: 1661911335346
-Received: from pdx1-sub0-mail-a203.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.112.55.199 (trex/6.7.1);
-        Wed, 31 Aug 2022 02:02:15 +0000
-Received: from offworld (unknown [104.36.31.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a203.dreamhost.com (Postfix) with ESMTPSA id 4MHS9L0CS2zHZ;
-        Tue, 30 Aug 2022 19:02:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1661911334;
-        bh=2YbYSFZwi3oLLyj3VoHxYd0lXmJL1xiYlpzmuwgB2l4=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=TiSvAstqKqmIRtcNy4WU8dsWSe2iKcaUmQX1P4U4zQLoVh/Lx34LJDCNES7i4d7BZ
-         jAz31PHWeCg9HxNQ9I8Q3fYmuEvk6BuMpJzpMZb6UxpjYc9tAmemnCHu3+nQfpM1y3
-         rxCjTFgkOb5YZzkBTlq6fWnkqzdWLwFC9PeT2m2SVq2yNNWkNuxwX6e2Tq5EYpoz+I
-         J0K2qRUIer8I2M4dVImMkgYzkC7bcCB1ehOsOIvhpltmw7itdv/t5cvXz0sDGEtyJt
-         Xo51i/HckFJYOxOyFUoxGOzIotVWFY30K/G9QHPLObAntbyZ0sok9qKDKloQ/ayOBl
-         kgNrD+i2o9nGg==
-Date:   Tue, 30 Aug 2022 18:43:45 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Liam Howlett <liam.howlett@oracle.com>
-Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH v13 66/70] riscv: use vma iterator for vdso
-Message-ID: <20220831014345.4ftn4xt5qwkreguz@offworld>
-Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
-        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>
-References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
- <20220822150128.1562046-67-Liam.Howlett@oracle.com>
+        Tue, 30 Aug 2022 21:45:00 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E606112A9A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:44:57 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id j14so7604683lfu.4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:44:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:from:to:cc;
+        bh=drG6RMH0zFREgohP7fUu6e8MBztAwMPOm+LE74724sA=;
+        b=EFsFMp+canY/hKJink3xfIjzSIs5nK0ATMHsiNLvxO07lOyOzwsvad8rVyDd2wmSeg
+         cWCjphxF3TSGFFDKqyBmATL/jehCiz7Ylb6ULQwm/mKEET2IUotRhOyHBInnuwebAx/W
+         o98i4bzpAYKvvI2sU//Sa2wKHsHNlK0Ik4KVSfjlV5E7mJwynZVYZggwdjMG3KRyfVMo
+         xPbIu9xAaQjWAcnqbsVBfJmmxCjJL8AJzz30l+qNOOOt1j+HNC9Xoq1+ko3At8FQwbwc
+         GgYRNngTbp8HBenXcqfoYJexOO63aFwrEEDYhvuQd/DuP/2j454qxLb21o5XEYcIYyWs
+         Dtmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc;
+        bh=drG6RMH0zFREgohP7fUu6e8MBztAwMPOm+LE74724sA=;
+        b=XlWirZRUr14+Gfc8x89EEUEyTzd0UftJpahrvJMR8tIzN2Z9WwPBGu8X7nIyYSKzcH
+         X6mxN6+Jd2XMUNycl19jbw3MRLtuaLLSjA6WKWYOwJo/n4KqdXidAvOULkBJNtbRKfIs
+         IWrJgReQcSTUoOWYvBHqK8nOsal+iWVlAwzMxUoqAdusmabJOfSfwOrzES8lMoMtIUmh
+         wGkxcMz9rGB48jGNpHoOMPQjzYbvoqabcwNAbDmBegrT9Fgsg6GvgTDeWmCM0fRoavnd
+         aKuDwt9bbe0Oj59YE6GVCL1egSNERqTuSKwfO8uf649KjKUIamJlwsxf0BPDjwHaS5+G
+         /yAw==
+X-Gm-Message-State: ACgBeo2V0xWBfPj0GVpJXh7ilDu+o2jdCUewdR/XTMFhlleX1kQIAIPX
+        08SNdrF+K5gp0ByRzEBRjrs=
+X-Google-Smtp-Source: AA6agR5Z8V/gUf3Mh2HitGw7sMfYSuNjRXxRlM0XOW/4Yz6ST42Ov+CXOy5ZF8ScFy9ud/OgRIMt7A==
+X-Received: by 2002:ac2:4901:0:b0:494:88dc:7efc with SMTP id n1-20020ac24901000000b0049488dc7efcmr411746lfi.408.1661910295748;
+        Tue, 30 Aug 2022 18:44:55 -0700 (PDT)
+Received: from ?IPV6:2a02:a31a:a240:1700:d40b:b088:5bfe:3b81? ([2a02:a31a:a240:1700:d40b:b088:5bfe:3b81])
+        by smtp.googlemail.com with ESMTPSA id g1-20020a0565123b8100b004948f583e6bsm42248lfv.138.2022.08.30.18.44.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 18:44:55 -0700 (PDT)
+From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
+X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Message-ID: <242d272b-5b79-986c-9aaf-64e62f6b37ff@gmail.com>
+Date:   Wed, 31 Aug 2022 03:44:52 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220822150128.1562046-67-Liam.Howlett@oracle.com>
-User-Agent: NeoMutt/20220429
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.0
+Subject: Re: [PATCH v2 10/41] drm/modes: Add a function to generate analog
+ display modes
+Content-Language: pl
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022, Liam Howlett wrote:
+Hi Maxime,
 
->From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
->
->Remove the linked list use in favour of the vma iterator.
->
->Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+Wow. That's an enormous amount of effort put into this patch.
 
-Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+But I'm tempted to say that this is actually overengineered quite a bit :D
+Considering that there's no way to access all these calculations from user
+space, and I can't imagine anybody using anything else than those standard
+480i/576i (and maybe 240p/288p) modes at 13.5 MHz any time soon... I'm not
+sure if we actually need all this.
+
+But anyway, I'm not the maintainer of this subsystem, so I'm not the one to
+decide.
+
+> +enum drm_mode_analog {
+> +    DRM_MODE_ANALOG_NTSC,
+> +    DRM_MODE_ANALOG_PAL,
+> +};
+
+Using "NTSC" and "PAL" to describe the 50Hz and 60Hz analog TV modes is common,
+but strictly speaking a misnomer. Those are color encoding systems, and your
+patchset fully supports lesser used, but standard encodings for those (e.g.
+PAL-M for 60Hz and SECAM for 50Hz). I'd propose switching to some more neutral
+naming scheme. Some ideas:
+
+- DRM_MODE_ANALOG_60_HZ / DRM_MODE_ANALOG_50_HZ (after standard refresh rate)
+- DRM_MODE_ANALOG_525_LINES / DRM_MODE_ANALOG_625_LINES (after standard line
+  count)
+- DRM_MODE_ANALOG_JM / DRM_MODE_ANALOG_BDGHIKLN (after corresponding ITU System
+  Letter Designations)
+
+> +#define NTSC_HFP_DURATION_TYP_NS    1500
+> +#define NTSC_HFP_DURATION_MIN_NS    1270
+> +#define NTSC_HFP_DURATION_MAX_NS    2220
+
+You've defined those min/typ/max ranges, but you're not using the "typ" field
+for anything other than hslen. The actual "typical" value is thus always the
+midpoint, which isn't necessarily the best choice.
+
+In particular, for the standard 720px wide modes at 13.5 MHz, hsync_start
+ends up being 735 for 480i and 734 for 576i, instead of 736 and 732 requested
+by BT.601. That's all obviously within tolerances, but the image ends up
+noticeably off-center (at least on modern TVs), especially in the 576i case.
+
+> +    htotal = params->line_duration_ns * pixel_clock_hz / NSEC_PER_SEC;
+
+You're multiplying an unsigned int and an unsigned long - both types are only
+required to be 32 bit, so this is likely to overflow. You need to use a cast to
+unsigned long long, and then call do_div() for 64-bit division.
+
+This actually overflowed on me on my Pi running ARM32 kernel, resulting in
+negative horizontal porch lengths, and drm_helper_probe_add_cmdline_mode()
+taking over the mode generation (badly), and a horrible mess on screen.
+
+> +    vfp = vfp_min + (porches_rem / 2);
+> +    vbp = porches - vfp;
+
+Relative position of the vertical sync within the VBI effectively moves the
+image up and down. Adding that (porches_rem / 2) moves the image up off center
+by that many pixels. I'd keep the VFP always at minimum to keep the image
+centered.
+
+Best regards,
+Mateusz Kwiatkowski

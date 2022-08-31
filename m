@@ -2,117 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 426B75A8782
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46E2C5A87A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:40:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229916AbiHaUXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 16:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53554 "EHLO
+        id S231419AbiHaUkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 16:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiHaUXI (ORCPT
+        with ESMTP id S231440AbiHaUkb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 16:23:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BF47D99C3;
-        Wed, 31 Aug 2022 13:23:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 76521B82301;
-        Wed, 31 Aug 2022 20:23:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 563B7C433D6;
-        Wed, 31 Aug 2022 20:23:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661977383;
-        bh=5uN7nzPwfI/1N2ti9Lp5VrCgxZVrN89dYdqpAIQOF6s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CA23Eldvy/3ULld1WpL1lAnDzzQD1phusjI7CK4wIZvslO1aL8OOfNQ69a8J2Q57A
-         COq0zBpdM2bF/6wmcWgj2SMyQ+AoP83IR8EQxGFb2mtdhwuAK1YnBu2Ye7LIElOsrq
-         Lb/E943++QUC9yMiSZQoPWJalkuufXONeR4YG/3ddH0k6h2fmi6eE6k32Qf2wnpeRx
-         o1o/Ff0E0LUCfcULCF88iJ509Gy964IRaXir+h1Mf/GjC5GQSPhBSDyUJk5/s1CSpx
-         weomMrDW+vvhYUhBxrNS7l6Do6OICJRQKOVKucSNDd3DTvYe0lU+zAl/6DOoEyme3w
-         1js6ugKD51U9A==
-Date:   Wed, 31 Aug 2022 13:23:00 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev, x86@kernel.org,
-        Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-        Fangrui Song <maskray@google.com>,
-        Alexey Alexandrov <aalexand@google.com>,
-        Bill Wendling <morbo@google.com>,
-        Greg Thelen <gthelen@google.com>,
-        Andi Kleen <ak@linux.intel.com>
-Subject: Re: [PATCH v2 5/5] Makefile.debug: set -g unconditional on
- CONFIG_DEBUG_INFO_SPLIT
-Message-ID: <Yw/DJLu10nw4aUDw@dev-arch.thelio-3990X>
-References: <20220831184408.2778264-1-ndesaulniers@google.com>
- <20220831184408.2778264-6-ndesaulniers@google.com>
+        Wed, 31 Aug 2022 16:40:31 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0946844EE;
+        Wed, 31 Aug 2022 13:40:28 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id q7so21563722lfu.5;
+        Wed, 31 Aug 2022 13:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=6r7qNJQ9qhEl++Kww/F8hltPupbf7ISSLDOC2iciXcw=;
+        b=ezCb/Lqr8CabV5aQeawj6AuanSM1hkM/RPKw9RIKeJEKHBJtK5BxlVy2sZJDnNTTBS
+         wDViDDZEZX1E70OeL2HJ7xhSr1r9cj5AaWH228Di0f7sEgrVScxjrRIPTGZ6YjWmvT0y
+         bfhZA7CFgfufWKms0ORjgP+BkII3DzQCJ6ah6VJoPwL9tZFZ30iN+5ae+1LUosNZgvFx
+         VIJGCxvazX/4YrOJd6vpZJJtLtsWifVFUR5fIR+Vinti3S2X8sxrHVFiGKZDMLsC7jUS
+         gPF0Psiyr18UW2AUYGxP4CZt1MhtEiQiioylO14Zs3PuJDmoQNwAzxXM8e8jf0WbTFn4
+         jN3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=6r7qNJQ9qhEl++Kww/F8hltPupbf7ISSLDOC2iciXcw=;
+        b=pNRoVBhxcyPvutNDTBNdPnStrRNHsP48ytGX80wKvKyr60dfNA8Z5RzuoPlNMEtpvx
+         Ps3V/0EK3E8PWiL//TZ7R7k9ve/kXktHjWmiysxVMQY7aL1jyZSZ2XIAH0/RDyffhQto
+         6UQPxdVpmZzssybIX59GZLgcyAURVTkJfTYIUMTi6oeE6UTXr56XBpRrGKKnWtk9sDdc
+         PNZB0HKAIX6N+C+BzczVN+COOSCR08W8WvpbZmp0bJZ+x+7r/mTDR1jiHWQ3SBRcTdB7
+         IVatzDozGUHnf1oX8sCwWf8uriCxXBvvQcov1YgVdnlfJP2AmLiFWI1PleO7pxxiqFOL
+         gxdg==
+X-Gm-Message-State: ACgBeo3zMyYmnlivw0roLOYXQtsOe4+mvoOP5t4i8p3Qp+WKMt5huHoH
+        nZM5/oVNJc3EU27aiSEn7pT0QqqHSZC/+g==
+X-Google-Smtp-Source: AA6agR6oonOsgUC++bzNhhDhebFY1lavC6Y0gvQCkfsPEzbfHSRQSGSLieabrd4fvAh0tpi1Z6uKmw==
+X-Received: by 2002:ac2:5d6e:0:b0:494:99aa:6548 with SMTP id h14-20020ac25d6e000000b0049499aa6548mr240660lft.508.1661978427095;
+        Wed, 31 Aug 2022 13:40:27 -0700 (PDT)
+Received: from i-vetokaappi.home.lan (dsl-hkibng42-5673c7-93.dhcp.inet.fi. [86.115.199.93])
+        by smtp.gmail.com with ESMTPSA id w18-20020a05651234d200b0048acfdc8b70sm198431lfr.184.2022.08.31.13.40.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 13:40:25 -0700 (PDT)
+From:   =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     =?UTF-8?q?Matti=20Lehtim=C3=A4ki?= <matti.lehtimaki@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Brian Masney <bmasney@redhat.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ARM: qcom_defconfig: Enable MSM8226 pinctrl driver
+Date:   Wed, 31 Aug 2022 23:30:33 +0300
+Message-Id: <20220831203033.250237-1-matti.lehtimaki@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831184408.2778264-6-ndesaulniers@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 11:44:08AM -0700, Nick Desaulniers wrote:
-> Dmitrii, Fangrui, and Mashahiro note:
-> 
->   Before GCC 11 and Clang 12 -gsplit-dwarf implicitly uses -g2.
-> 
-> Fix CONFIG_DEBUG_INFO_SPLIT for gcc-11+ & clang-12+ which now need -g
-> specified in order for -gsplit-dwarf to work at all.
-> 
-> -gsplit-dwarf has been mutually exclusive with -g since support for
-> CONFIG_DEBUG_INFO_SPLIT was introduced in
-> commit 866ced950bcd ("kbuild: Support split debug info v4")
-> I don't think it ever needed to be.
-> 
-> Link: https://lore.kernel.org/lkml/20220815013317.26121-1-dmitrii.bundin.a@gmail.com/
-> Link: https://lore.kernel.org/lkml/CAK7LNARPAmsJD5XKAw7m_X2g7Fi-CAAsWDQiP7+ANBjkg7R7ng@mail.gmail.com/
-> Link: https://reviews.llvm.org/D80391
-> Cc: Andi Kleen <ak@linux.intel.com>
-> Reported-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-> Reported-by: Fangrui Song <maskray@google.com>
-> Reported-by: Masahiro Yamada <masahiroy@kernel.org>
-> Suggested-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+This config is required for QCOM APQ8026/MSM8226 based devices.
 
-Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Matti Lehtimäki <matti.lehtimaki@gmail.com>
+---
+ arch/arm/configs/qcom_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-> ---
-> Changes v1 -> v2:
-> * Add reference to 866ced950bcd, cc Andi, in commit message.
-> 
->  scripts/Makefile.debug | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-> index 46e88f0ca998..b6eb532af3cc 100644
-> --- a/scripts/Makefile.debug
-> +++ b/scripts/Makefile.debug
-> @@ -1,10 +1,8 @@
-> -DEBUG_CFLAGS	:=
-> +DEBUG_CFLAGS	:= -g
-> +KBUILD_AFLAGS	+= -g
->  
->  ifdef CONFIG_DEBUG_INFO_SPLIT
->  DEBUG_CFLAGS	+= -gsplit-dwarf
-> -else
-> -DEBUG_CFLAGS	+= -g
-> -KBUILD_AFLAGS	+= -g
->  endif
->  
->  ifdef CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-> -- 
-> 2.37.2.672.g94769d06f0-goog
-> 
+diff --git a/arch/arm/configs/qcom_defconfig b/arch/arm/configs/qcom_defconfig
+index 8a59441701a8..91572f6d0a89 100644
+--- a/arch/arm/configs/qcom_defconfig
++++ b/arch/arm/configs/qcom_defconfig
+@@ -131,6 +131,7 @@ CONFIG_PINCTRL_APQ8064=y
+ CONFIG_PINCTRL_APQ8084=y
+ CONFIG_PINCTRL_IPQ4019=y
+ CONFIG_PINCTRL_IPQ8064=y
++CONFIG_PINCTRL_MSM8226=y
+ CONFIG_PINCTRL_MSM8660=y
+ CONFIG_PINCTRL_MSM8960=y
+ CONFIG_PINCTRL_MDM9615=y
+-- 
+2.34.1
+

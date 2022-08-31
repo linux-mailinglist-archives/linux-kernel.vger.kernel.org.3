@@ -2,93 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0675A733B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:14:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB36F5A7342
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:18:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbiHaBOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 21:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36364 "EHLO
+        id S231705AbiHaBSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 21:18:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiHaBOr (ORCPT
+        with ESMTP id S229481AbiHaBSd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 21:14:47 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B59E2E7
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:14:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661908485; x=1693444485;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=xREdqX5Rgk+d9GMM+tts+tDRkRFSmHg/dgvGGKgFczg=;
-  b=MQEph7cpjOMCwoNMIVEmCP505eV5qoz2QbLn8h2AqG3ZRPn6QRRmacOc
-   VQvOruHkZdLcAbwbgyoy6hxmWdUbYrItnaCe39i4jJloPOcNEDZ8Z1aPY
-   N2ItWNOCwGAJmUrzn4IxJuL9HX7gMKojaBagCAZOpE9a71dkb3YFMGrIr
-   TOUH/6vwRvNwo07WbWoXr/rnPbwIEJJFtvBeMDA9IdhQpST5oD4nE+65O
-   N1GhAqtig/L+R6MLMmQfLOUDcFan9D3fEzrMlsKm5Ib6OyKNgY0YS1NoV
-   WFZTTJ56kjr5sfBSZ7NCTpphGhl3ubzhgKh4NmNQ/SgVokA9Mp7u5XY/W
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="294085201"
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="294085201"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 18:14:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="562872970"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 30 Aug 2022 18:14:43 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTCJW-0000pP-1A;
-        Wed, 31 Aug 2022 01:14:42 +0000
-Date:   Wed, 31 Aug 2022 09:13:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
-        linux-kernel@vger.kernel.org
-Subject: [ammarfaizi2-block:dhowells/linux-fs/rxrpc-fixes 1/5] ld.lld: error:
- undefined symbol: icmpv6_err_convert
-Message-ID: <202208310959.v4cyfQBy-lkp@intel.com>
+        Tue, 30 Aug 2022 21:18:33 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3428FAC248
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:18:32 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id z25so17895441lfr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:18:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=YdigL9mdfE/0hNS5gRz7RikDbrA/FSPnOXRX8Mw8fQo=;
+        b=h9jRoiN4Z7DMAgNwBStObbVmRqZzodsYOdu4El9wyBAcjq7ZcUcqcvor7F2ZJ6J1xG
+         kV6Ko3b2AE/t7suQuzy8Jx/1KUT8tLjl6ozSbHl7SnXnESVFrRkryFiJa7CGXK5TESV4
+         T6AD3UeKGi2VUKhbs7imHCHIUgnD5rhV/Op9pGbfC/Tmuua547PmmZW+YDL5L0tmhtfe
+         f67TELVbK7MWXgMR5lcH9F6hgB4Mc87l0KpjfwwurtyO90NBvp46XHZLbJNCJannpIVT
+         iUdxR4+iAkORS8eYebiFuJxKiVN5iRZX9FB8FMt9QTmevJQ0torYb+M7HrvCsuzRHTke
+         FfTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=YdigL9mdfE/0hNS5gRz7RikDbrA/FSPnOXRX8Mw8fQo=;
+        b=rVNbC7MaSuUgm0QjhamNYeDsEePCYaBktn4zxj3iamSxWXSndxYRVwSHRHkBFXshFw
+         1cOUu8Lf0P/kFMW/SP2IE1WTCsIf+/PNda4ejUjhaqL4isj2FWMiFe44kgt7sDOPkwnM
+         tFpfnfiLv/PnR3CHwS+bQJf8JlRnG7kUjop+P88Q1zZrcjLRNxLHGMZNIBP3kSx4hpuM
+         Sf62Cl9d7EApuMv7F2tuPHxWvPU8LRV2NcWlWgEqwXLgLABujer8xEnmwIXcbpgNTP1d
+         sXxVAzmt7cpwMCet3azDHfQtTn/B1y8+Xio3BqHaftm1bjnV8HLAvrhPCfSBFkahUgg+
+         6CvA==
+X-Gm-Message-State: ACgBeo0DdW5M3K8B+r90n02Ro+swiKi0sO4ldmqcZEEPSjUIbgLVZrWD
+        Pr8+JVCklQyjGWg8dJTSw2mrmFcmS8hwiNGed40=
+X-Google-Smtp-Source: AA6agR6TDH/k8jKRG/W42SD7AuvkaHpSGOxENbANejrv34fgKlkUKpJUDImBnURU/DFc+bEONHVvZWctpz7YP7x5QYA=
+X-Received: by 2002:ac2:4c4c:0:b0:492:bc29:e328 with SMTP id
+ o12-20020ac24c4c000000b00492bc29e328mr8065768lfk.386.1661908710335; Tue, 30
+ Aug 2022 18:18:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <ed418e43ad28b8688cfea2b7c90fce1c@ispras.ru>
+In-Reply-To: <ed418e43ad28b8688cfea2b7c90fce1c@ispras.ru>
+From:   Andrei Vagin <avagin@gmail.com>
+Date:   Tue, 30 Aug 2022 18:18:18 -0700
+Message-ID: <CANaxB-xqpZcVObpGCBsBXNVN7a2CZ7=_CaPZp4mG50Bi0oVDmA@mail.gmail.com>
+Subject: Re: Potentially undesirable interactions between vfork() and time namespaces
+To:     Alexey Izbyshev <izbyshev@ispras.ru>
+Cc:     linux-kernel@vger.kernel.org,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>, linux-mm@kvack.org,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/ammarfaizi2/linux-block dhowells/linux-fs/rxrpc-fixes
-head:   5ba1502ed90c38548d56a41156440fa70aed70ed
-commit: b445daa0f2ca96635e9620cef26a72619ce3644a [1/5] rxrpc: Fix ICMP/ICMP6 error handling
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220831/202208310959.v4cyfQBy-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/ammarfaizi2/linux-block/commit/b445daa0f2ca96635e9620cef26a72619ce3644a
-        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
-        git fetch --no-tags ammarfaizi2-block dhowells/linux-fs/rxrpc-fixes
-        git checkout b445daa0f2ca96635e9620cef26a72619ce3644a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+On Tue, Aug 30, 2022 at 12:49 PM Alexey Izbyshev <izbyshev@ispras.ru> wrote:
+>
+> Hi,
+>
+> I've looked at Andrei's patch[1] that permitted vfork() after
+> unshare(CLONE_NEWTIME) and noticed a couple of odd things that I'd like
+> to point out.
+>
+>         /*
+>          * If the new process will be in a different time namespace
+>          * do not allow it to share VM or a thread group with the forking
+> task.
+> +        *
+> +        * On vfork, the child process enters the target time namespace only
+> +        * after exec.
+>          */
+> -       if (clone_flags & (CLONE_THREAD | CLONE_VM)) {
+> +       if ((clone_flags & (CLONE_VM | CLONE_VFORK)) == CLONE_VM) {
+>                 if (nsp->time_ns != nsp->time_ns_for_children)
+>                         return ERR_PTR(-EINVAL);
+>         }
+>
+> This change permits not only a normal vfork(), but also
+> clone(CLONE_VM|CLONE_VFORK|CLONE_SIGHAND|CLONE_THREAD). I'm not sure
+> whether it can cause real harm, but it's pretty inconsistent to forbid
+> creation of normal threads after unshare(CLONE_NEWTIME), but permit such
+> weird ones, so maybe the check should be strengthened.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Good catch. I was not aware that CLONE_VFORK is allowed to be used with
+CLONE_THREAD. I will send a fix.  Thanks.
 
-All errors (new ones prefixed by >>):
+>
+> Also, if such a thread execs, no time namespace switch will happen
+> because it's vfork_done field will be cleared when its creator (a
+> sibling thread) is killed by de_thread().
+>
+> +       vfork = !!tsk->vfork_done;
+>          old_mm = current->mm;
+>          exec_mm_release(tsk, old_mm);
+>          if (old_mm)
+> @@ -1030,6 +1033,10 @@ static int exec_mmap(struct mm_struct *mm)
+>          tsk->mm->vmacache_seqnum = 0;
+>          vmacache_flush(tsk);
+>          task_unlock(tsk);
+> +
+> +       if (vfork)
+> +               timens_on_fork(tsk->nsproxy, tsk);
+> +
+>
+> Similarly, even after a normal vfork(), time namespace switch could be
+> silently skipped if the parent dies before "tsk->vfork_done" is read.
+> Again, I don't know whether anybody cares, but this behavior seems
+> non-obvious and probably unintended to me.
 
->> ld.lld: error: undefined symbol: icmpv6_err_convert
-   >>> referenced by peer_event.c
-   >>>               rxrpc/peer_event.o:(rxrpc_encap_err_rcv) in archive net/built-in.a
+This is the more interesting case. I will try to find out how we can
+handle it properly.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Thanks,
+Andrei

@@ -2,149 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EB545A84DA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCF945A84DE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:58:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbiHaR6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:58:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
+        id S229786AbiHaR6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 13:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbiHaR6R (ORCPT
+        with ESMTP id S232126AbiHaR6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:58:17 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20610.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::610])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C4BD86E6
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:58:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ir7D3vQIOCBdh+C0KSaHF9EXIqB6JlDrPr+W5drpTarhPT75WSLyQk3VvN2OD7iFBkRBqCQdnTjvOyeKgEhda/7B7edlkppNR3QdooBGdy/aZ4ETcVBAd+EYLrAYnuipEYiQnjiRZv/XgTT5Jyb5/YjpKkT/CZVXHfYFqzHivPSnQ2yanGmajXePK3yUlkjPzNmpu6KN/hihIfNukmUOCOXBXkjaFlxR8t1c1fPo2nb15pB38dbvlsxSECJG7S+DUID08AeoqDVyQW+vP0eGRSQ7Qfpkuy1JjsmUIE2f0EKVlw8mrBgRRb8Ay1cj2lKwHMmBMjkHtUj7UGHJjf3UxA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tlg/54oCv8aoG0+kt57ZzLFgxTKSvd+uJh2yJem1ct8=;
- b=QvZekJtAzt8XHcYOruXkaDwVZTv5bFNvmSdvvjPzABiYileWLQF66vaMIf1cekpz23KYah8VFeNOeSHed+j3lh//kyMzkPOYKfGmwLTsX9pW9R3VBbgfFfTU80XRnRpR0QSj4whw+H+ZHkMhCRWbzArBpUiErb13H8i76Q0lgVVrCKdg8C3QEw1AG3HiBksCEv/kRH6vU5A/TL7egpo5AXuQ2+v8UjqQboY0wGruJIhwsT7TxZzE7A89GOLw77L+cELVi6Naqth+ykKm61qAbsfQuX3SPDzy/Lqk1vUYZqp3BKlzZcsLpXe/A5s2m9v1QNSGGb7AWE2gpWy6gZcGpQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tlg/54oCv8aoG0+kt57ZzLFgxTKSvd+uJh2yJem1ct8=;
- b=XOzIY7I4YUFKDDhdcJM3KKFxZw4TLkLeUUxWfozwuGF0i8yOI10NrxlnGMmo2kgnrPEC98vlpN5SOXF8AFTtfeY8GWH+edksmbyhJA1ukMPEK3jDHGuz/CbfaUEsLk6uegyFs4XY2309/zQ6O1Dmayr6dvb2IKuqBcUCj1BV3d8=
-Received: from DS7PR03CA0248.namprd03.prod.outlook.com (2603:10b6:5:3b3::13)
- by MW3PR12MB4377.namprd12.prod.outlook.com (2603:10b6:303:55::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 31 Aug
- 2022 17:58:12 +0000
-Received: from DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b3:cafe::a6) by DS7PR03CA0248.outlook.office365.com
- (2603:10b6:5:3b3::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11 via Frontend
- Transport; Wed, 31 Aug 2022 17:58:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT032.mail.protection.outlook.com (10.13.173.93) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5588.10 via Frontend Transport; Wed, 31 Aug 2022 17:58:11 +0000
-Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 31 Aug
- 2022 12:58:08 -0500
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Jun Lei <Jun.Lei@amd.com>,
-        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
-        Alvin Lee <Alvin.Lee2@amd.com>,
-        "Martin Leung" <martin.leung@amd.com>,
-        Samson Tam <Samson.Tam@amd.com>, Alex Hung <alex.hung@amd.com>,
-        Joshua Aberback <joshua.aberback@amd.com>,
-        Wenjing Liu <wenjing.liu@amd.com>,
-        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>
-Subject: [PATCH] drm/amd/display: fix indentation in commit_planes_for_stream()
-Date:   Wed, 31 Aug 2022 13:58:07 -0400
-Message-ID: <20220831175808.100597-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.37.2
+        Wed, 31 Aug 2022 13:58:38 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9D04E0949
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:58:37 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-12243fcaa67so3281473fac.8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:58:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=mnuRXQYw+PDg4Esm1oYn5QiuF7oH3z8MEWV+uoTWof4=;
+        b=El/hH7bWJ0ULPCX/nQz1pdsFzI7+6T4+wIZsZozg6Rc0mgpkHZQnRRQAJr5JqplHno
+         hut+8KRYpSuIZuIyV7RXCB43cnaSUuLxBanbkUu4ZPik2RIQiXi3IS2+Nx/Fv3HIG8jV
+         uvxb7P7yxVecLtSg72GCnwBr/87Qk4+bb5eLzQzfhdtOb1B2XBEfkaaHX8gU2zUTdYcv
+         pEdOu9Nzmasluy3geGEO8nVVkSiRJ9NdhsT4MzYSmwsgsi7CJ+4c8lj0LHJQuCvX9a0f
+         UjiPQXm/SevmRWzST9KBFuyYFi7kvu84YLB/y8Yf39ygvDfS+TtDnH6fJYGuy++gdYfc
+         xfGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=mnuRXQYw+PDg4Esm1oYn5QiuF7oH3z8MEWV+uoTWof4=;
+        b=1vpfuBvYYY6TZiUNR9W3kjMqPECskmVV9nBG02bG+2RNXX/5DLljX4K5w82xvN5GJQ
+         OQXFBT5ecIrsI1zOs6gjT0sj/4F1JNm3O9JJe1PkaGRa4+3vI4TFDLDoLiKrzzdVACu6
+         ZsSH3M+34cAyJtz2rYHgGpGTXGHadFcYetIfkx8REIEJE7FNyLTshnoeA3fLo/hmQzPC
+         1viIndoPFKPCFdqIFR8BFKSJfmlxQ0jo8MugCKI/0op2/OW+ZxIzLQFZVwlAA+knbDYh
+         BX4ZnKMSRMXn4XPlim/bAIp6Avy953TLlEy8ubdaFv63dheN1eW44btifZhi4qiuJXSw
+         fTuQ==
+X-Gm-Message-State: ACgBeo2uKpMigvrFKxrprtPX+qb9WdDBTRUp/2dvF7UXisFXFX/GeTGq
+        BaaC5zgq3c7YuoZFyRCRGXVkah3bFzRL9tm3KnIfJg==
+X-Google-Smtp-Source: AA6agR5rmt9cw+4REXG0cF46hXLCJKclNwBs64EAGBudNASu2RctnbRhQxBD9ylrrHt06GyG4Uns4cZ/NaThP6I4P2s=
+X-Received: by 2002:a05:6870:c596:b0:101:6409:ae62 with SMTP id
+ ba22-20020a056870c59600b001016409ae62mr2022785oab.112.1661968716785; Wed, 31
+ Aug 2022 10:58:36 -0700 (PDT)
 MIME-Version: 1.0
+References: <20220831003506.4117148-1-seanjc@google.com> <20220831003506.4117148-4-seanjc@google.com>
+ <17e776dccf01e03bce1356beb8db0741e2a13d9a.camel@redhat.com>
+ <84c2e836d6ba4eae9fa20329bcbc1d19f8134b0f.camel@redhat.com>
+ <Yw+MYLyVXvxmbIRY@google.com> <59206c01da236c836c58ff96c5b4123d18a28b2b.camel@redhat.com>
+In-Reply-To: <59206c01da236c836c58ff96c5b4123d18a28b2b.camel@redhat.com>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Wed, 31 Aug 2022 10:58:25 -0700
+Message-ID: <CALMp9eRKa97GbvbML=VTrQ=Y3gaF6eZtNhrWD2UNGbL1Q8r0fA@mail.gmail.com>
+Subject: Re: [PATCH 03/19] Revert "KVM: SVM: Introduce hybrid-AVIC mode"
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 825eafe9-1848-42fe-8b05-08da8b7a5ee7
-X-MS-TrafficTypeDiagnostic: MW3PR12MB4377:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ueDAWCIwj85eToCVfFXURuIU716WPOgjMq6ZFp3YJbCP9synG9qrYMV+b+Up73gkXxBjF4ebuVVL405ptqmfM/7m2CNdON7uRuz/Y0sIWJSLv1pggpWEzWqegFgkFRPPXyxjlPtA9qu2x+DTJ+CB5dP/YmJAgKNl2aNhO1YDcJH+/lbVgWJflBi8XhPhFiMO3BnBN7bstCXBWlbDa0wSJnPcZRQEMA/dR9dahgEIHmmPaV0WvIZAuaDxARbIk+j0ull4H4UVRuWUaL6wrtGIjB2sr7s3rPSEAVwzkLKnr+wzQ4Qjox20ogV05swqSeUkeGu0I82jW74+htwz7T5CGeHzmcwGAvA5nSxaKY5EcQ+RqZm3fiO6Aw80JrWmFfuYdoLAEFWrDj6ggDBxm9YOeOlimTifIKi0nVid9h58Z6YHZ93tsNDpy15C9cz360t7HkL9sudN52nXlKW0h2zzyY833bXG5SndbyVRCRLgrIt1srOhF9Zk6f/ou4sTNqD9E6Aay39Z3u2uYpAXrX4vfi6LDtZ8m9srZHN4L3hQKNmf1nxS/T8oJMYxjcqpbJ5xrjotX+9AYyiHj+rfBXh/a1rK44OqggZ9Vxr7h88aTbfIJ8/3FfhRCfz+qjIlzXKWlQDr4C5ACLoibJ5m4Lk9ZOoV1/Oh/7Km5D0kjYbOP8LJsBjoJYglhmirPaXRA9ZlQ520JKKLhFR0A9XYmQOKx6YEPxdqooRl9TAt++1fPuzLWHR6oDxx+0hLmYajoKihjFZplbPrEHxYSnLOlSaAHiPp7knIPwaLIbL4cFs8sB0VEojVr6OqxIJXr7mdi3HySNuu58QIsnlNajmhK2PhDg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(39860400002)(376002)(136003)(46966006)(36840700001)(40470700004)(81166007)(40480700001)(82310400005)(36860700001)(356005)(40460700003)(82740400003)(86362001)(70206006)(70586007)(8676002)(41300700001)(4326008)(478600001)(5660300002)(54906003)(8936002)(316002)(426003)(6916009)(1076003)(47076005)(186003)(16526019)(2616005)(44832011)(26005)(336012)(2906002)(7696005)(36756003)(83380400001)(36900700001)(16060500005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2022 17:58:11.9756
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 825eafe9-1848-42fe-8b05-08da8b7a5ee7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4377
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Address the following warning:
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:3508:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
- 3508 |         if (update_type != UPDATE_TYPE_FAST)
-      |         ^~
-drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:3510:17: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
- 3510 |                 if (update_type != UPDATE_TYPE_FAST)
-      |                 ^~
+On Wed, Aug 31, 2022 at 10:49 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
 
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
----
- drivers/gpu/drm/amd/display/dc/core/dc.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+> In this case I say that there is no wiggle room for KVM to not allow different APIC bases
+> on each CPU - the spec 100% allows it, but in KVM it is broken.
 
-diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
-index b49237390cce..6c4948916e7e 100644
---- a/drivers/gpu/drm/amd/display/dc/core/dc.c
-+++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
-@@ -3505,11 +3505,11 @@ static void commit_planes_for_stream(struct dc *dc,
- 					top_pipe_to_program->stream_res.tg);
- 		}
- 
--	if (update_type != UPDATE_TYPE_FAST)
-+	if (update_type != UPDATE_TYPE_FAST) {
- 		dc->hwss.post_unlock_program_front_end(dc, context);
--		if (update_type != UPDATE_TYPE_FAST)
--			if (dc->hwss.commit_subvp_config)
--				dc->hwss.commit_subvp_config(dc, context);
-+		if (dc->hwss.commit_subvp_config)
-+			dc->hwss.commit_subvp_config(dc, context);
-+	}
- 
- 	/* Since phantom pipe programming is moved to post_unlock_program_front_end,
- 	 * move the SubVP lock to after the phantom pipes have been setup
--- 
-2.37.2
-
+This would actually be my first candidate for
+Documentation/virt/kvm/x86/errata.rst!

@@ -2,72 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D495A88AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:59:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2945A88B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 00:01:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232455AbiHaV7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:59:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S232229AbiHaWA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 18:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbiHaV65 (ORCPT
+        with ESMTP id S232331AbiHaWAW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:58:57 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A5D8B1C2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:58:55 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id z8so11365630edb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:58:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=gt4YLZqDImPxxMXWbC5jit4261EPZ27x3xf0AXbqt14=;
-        b=XH3ZwkOcZ0vE44eEM5xnUXdLisXlo21o34Z/QjmEN399Vo4mHGwxT2i5Mz8ubuYmuf
-         +8MYS74y47BT4LyIPM+s0MzhIgVZOCxqbA/qvKJ83N3YjAmQi9UnqtfzmFHTX8MhDrkN
-         hxvidxffzRhnm/7vSPTWJWldNvy3IDfCYbrcq9g5r0PRehYLCVTkQP/dehHTmNODMhoQ
-         2ZsK0aw1nrqlrFFkiyQV6mHuG8vBt8cU+dhw3nRwXnb3Sp/d6GN1gOSpBZ9KbTixBl1i
-         IFD2RmugDwq9j9EpfiLaGRsMiFBA2XZXLIi09L9h+vc0qTQakCP3v7SajavO73Ep47p8
-         W+CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=gt4YLZqDImPxxMXWbC5jit4261EPZ27x3xf0AXbqt14=;
-        b=W3N9nPSwalWvHR0ZQmXK0rsP37jimQLCiOmhKUIL9pNpMw1Y8bfrgfMSNpc+iKFEw5
-         kyZrZxVeASNdrpEF+rFrEUryNcSNLWsa6OnFQYJLli7d6VqaNnPZIBd/+jprCITxjd3n
-         yeQ5iVN4PyH9qceGZm8VdpTjwf+KEdRBHSPO3nP5dZLN0AEVUExN/oELnRGTEuuVoc8M
-         kv23GBzHEaJbB4+4QYy/YofpiT0NREsSF6Sd/U1Gk4XcVJD9BQvEE8WVKqyg0ixqNbhP
-         sFczrPejlbNjaFYQ3lzAecxeqwFrMkZW2eh3ainjqZIf7NYDpSaZw6Kq2YsByOJoGdYl
-         A7TA==
-X-Gm-Message-State: ACgBeo2n9c+1tCMNXHq5Hk2RLtn8JM8rMpmLdyElqGIlpYcEkdP+X+cd
-        dxUW1z+ILZgc7c4xliq+X44MUOMpg/mu9D42bf3IBg==
-X-Google-Smtp-Source: AA6agR4Ft4e2XKd4kgl1Jq3fM+RmTX3/w8LWY8e3RE3C6RHdAcTZAXd5FaWfhkmQUunK9122fbiWS4iLweLX9azJwEw=
-X-Received: by 2002:aa7:c84f:0:b0:446:2bfb:5a63 with SMTP id
- g15-20020aa7c84f000000b004462bfb5a63mr26448276edt.172.1661983133579; Wed, 31
- Aug 2022 14:58:53 -0700 (PDT)
+        Wed, 31 Aug 2022 18:00:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEAD6B8CE;
+        Wed, 31 Aug 2022 15:00:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C789861B54;
+        Wed, 31 Aug 2022 22:00:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 325C4C43140;
+        Wed, 31 Aug 2022 22:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661983217;
+        bh=0Id/y64t6cfH50JJx8vqYFk/uzNSHQPlNmuqbIiJDNc=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=L2tbZx18UUI5eb9f+nbj2OM8C65zE9IdAgVWMM0V97J/r0SyCq0frSFuyc4HQkXF1
+         AXp3mFNl1CoBp7igprBlgNyTPQK7smdSNTDoi7tHevthxgW7JMj85A+Vr6HX3/SpUK
+         8NpxeZ+tKMuvSyCH1WLQH6szonmRdAIDP3KKjsd8jz5BRDdztKOSdb4NN+flO6UFVs
+         ldPoabPd3bcesPcXcVRAv6UTpBjYXRb1Lpk4a37oI7Kl5SkiI29sLtcR3RUGNoVG7w
+         2ChZKTQT2G+d2CAE+VYnr/nBmJBmMWtGZKZwhQo1M/NNtx5nOaPBIPvVUNSh4C6vXQ
+         siLSuXk0YdA+w==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 10271E924DC;
+        Wed, 31 Aug 2022 22:00:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20220831215437.117880-1-sebastian.reichel@collabora.com> <20220831215437.117880-11-sebastian.reichel@collabora.com>
-In-Reply-To: <20220831215437.117880-11-sebastian.reichel@collabora.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 31 Aug 2022 23:58:42 +0200
-Message-ID: <CACRpkdbpD77JO8H6XnnUCfE3PO-oELpSg=ZLeuhJyDWHs6Nn7g@mail.gmail.com>
-Subject: Re: [PATCH 10/13] pinctrl: rk805: add rk806 pinctrl support
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com,
-        shengfei Xu <xsf@rock-chips.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v2 1/3] net: move from strlcpy with unused retval to strscpy
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166198321706.20200.5436138666484099605.git-patchwork-notify@kernel.org>
+Date:   Wed, 31 Aug 2022 22:00:17 +0000
+References: <20220830201457.7984-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220830201457.7984-1-wsa+renesas@sang-engineering.com>
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, j.vosburgh@gmail.com, vfalico@gmail.com,
+        andy@greyhouse.net, wg@grandegger.com, f.fainelli@gmail.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, olteanv@gmail.com,
+        kurt@linutronix.de, kys@microsoft.com, haiyangz@microsoft.com,
+        sthemmin@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        sridhar.samudrala@intel.com, jdmason@kudzu.us,
+        dave.jiang@intel.com, allenbh@gmail.com,
+        michael.hennerich@analog.com, hkallweit1@gmail.com,
+        linux@armlinux.org.uk, bcm-kernel-feedback-list@broadcom.com,
+        jiri@resnulli.us, petkan@nucleusys.com, oneukum@suse.com,
+        mst@redhat.com, jasowang@redhat.com, doshir@vmware.com,
+        pv-drivers@vmware.com, dsahern@kernel.org, netdev@vger.kernel.org,
+        linux-can@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        ntb@lists.linux.dev, linux-usb@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,23 +72,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 11:54 PM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
+Hello:
 
-> Add support for rk806 dvs pinctrl to the existing rk805
-> driver.
->
-> This has been implemented using shengfei Xu's rk806
-> specific driver from the vendor tree as reference.
->
-> Co-Developed-by: shengfei Xu <xsf@rock-chips.com>
-> Signed-off-by: shengfei Xu <xsf@rock-chips.com>
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+This series was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+On Tue, 30 Aug 2022 22:14:52 +0200 you wrote:
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+> 
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for CAN
+> 
+> [...]
 
-I suppose there are build dependencies so this needs to be
-merged into the MFD tree?
+Here is the summary with links:
+  - [v2,1/3] net: move from strlcpy with unused retval to strscpy
+    https://git.kernel.org/netdev/net-next/c/fb3ceec187e8
+  - [v2,2/3] net: wireless: move from strlcpy with unused retval to strscpy
+    (no matching commit)
+  - [v2,3/3] net: ethernet: move from strlcpy with unused retval to strscpy
+    https://git.kernel.org/netdev/net-next/c/f029c781dd6d
 
-Yours,
-Linus Walleij
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

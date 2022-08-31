@@ -2,99 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F16355A72F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DF865A72F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232084AbiHaAtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S231961AbiHaAtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231809AbiHaAsx (ORCPT
+        with ESMTP id S231992AbiHaAtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:48:53 -0400
-Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA394E601;
-        Tue, 30 Aug 2022 17:48:51 -0700 (PDT)
-Received: from localhost.localdomain (unknown [182.2.75.186])
-        by gnuweeb.org (Postfix) with ESMTPSA id EF73580B61;
-        Wed, 31 Aug 2022 00:48:47 +0000 (UTC)
-X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
-        s=default; t=1661906930;
-        bh=OvuSN9WlWf8PL/Y35ukpx0DjD7WXaKShXli1j8KSvhA=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Fff4rn4OgixjfaN/v6w2QI6tzh7s4pE+GGScnaUGulPIWvh4ogOxbCW5OQHeWGybN
-         3cg15BaZcwxDihi5q0lT5PEydcyFA+1XJeCJxDaujnDaB9bs7ouj7kQnUc5k6oPSHK
-         AJ5aQgYTeLQdN8Fb1foRT1YAiiy4fDr149v/rVtFq0rvVFHXQDnSw3Ra4KGgfZwg8+
-         zuAHzHc+iyDUsfj2fYQfjypanh5eORBopSAHvxgqLW5HpyePH1E14faFRe5uEBRnjE
-         aPRA0Wf+z3Zvqz1Qpjcf+cfzTy/B8YxtIs7k9rbKiEUXJp94Mf58K3kWhtwHVDo155
-         jELs2xHu41aNA==
-From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Ammar Faizi <ammarfaizi2@gnuweeb.org>,
-        Muhammad Rizki <kiizuha@gnuweeb.org>,
-        Kanna Scarlet <knscarlet@gnuweeb.org>,
-        io-uring Mailing List <io-uring@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>
-Subject: [PATCH liburing v1 3/3] queue: Remove unnecessary goto and label
-Date:   Wed, 31 Aug 2022 07:48:17 +0700
-Message-Id: <20220831004449.2619220-4-ammar.faizi@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220831004449.2619220-1-ammar.faizi@intel.com>
-References: <20220831004449.2619220-1-ammar.faizi@intel.com>
+        Tue, 30 Aug 2022 20:49:00 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE44DA4054;
+        Tue, 30 Aug 2022 17:48:53 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=liusong@linux.alibaba.com;NM=1;PH=DS;RN=4;SR=0;TI=SMTPD_---0VNoHDv4_1661906930;
+Received: from 30.227.181.248(mailfrom:liusong@linux.alibaba.com fp:SMTPD_---0VNoHDv4_1661906930)
+          by smtp.aliyun-inc.com;
+          Wed, 31 Aug 2022 08:48:51 +0800
+Message-ID: <d81db7ff-6c5a-ff8c-ca1e-6d08474c202b@linux.alibaba.com>
+Date:   Wed, 31 Aug 2022 08:48:49 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.0.3
+Subject: Re: [RFC PATCH] blk-mq: change bio_set_ioprio to inline
+To:     Chaitanya Kulkarni <chaitanyak@nvidia.com>
+Cc:     "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <1661852746-117244-1-git-send-email-liusong@linux.alibaba.com>
+ <0001ab1d-b4c0-2ac1-f902-c61216204aef@nvidia.com>
+From:   Liu Song <liusong@linux.alibaba.com>
+In-Reply-To: <0001ab1d-b4c0-2ac1-f902-c61216204aef@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ammar Faizi <ammarfaizi2@gnuweeb.org>
+On 2022/8/30 20:48, Chaitanya Kulkarni wrote:
 
-This 'goto done' and 'done:' label are not needed, there is no cleanup
-needed in this path. Simplify it. Just return 0 directly.
+> On 8/30/22 02:45, Liu Song wrote:
+>> From: Liu Song <liusong@linux.alibaba.com>
+>>
+>> Change "bio_set_ioprio" to inline to avoid calling overhead.
+>>
+>> Signed-off-by: Liu Song <liusong@linux.alibaba.com>
+> for performance overhead please provide quantitative data
+>
+> -ck
+>
+This is a small adjustment, and even if performance comparison data is 
+obtained
+for targeted design use cases, it is not universal. If the inline by the 
+compiler is
+successful, the number of instructions will be reduced.
 
-Signed-off-by: Ammar Faizi <ammarfaizi2@gnuweeb.org>
----
- src/queue.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Thanks
 
-diff --git a/src/queue.c b/src/queue.c
-index 277cdcc..a670a8e 100644
---- a/src/queue.c
-+++ b/src/queue.c
-@@ -158,25 +158,24 @@ again:
- 			cqes[i] = &ring->cq.cqes[(head & mask) << shift];
- 
- 		return count;
- 	}
- 
- 	if (overflow_checked)
--		goto done;
-+		return 0;
- 
- 	if (cq_ring_needs_flush(ring)) {
- 		int flags = IORING_ENTER_GETEVENTS;
- 
- 		if (ring->int_flags & INT_FLAG_REG_RING)
- 			flags |= IORING_ENTER_REGISTERED_RING;
- 		__sys_io_uring_enter(ring->enter_ring_fd, 0, 0, flags, NULL);
- 		overflow_checked = true;
- 		goto again;
- 	}
- 
--done:
- 	return 0;
- }
- 
- /*
-  * Sync internal state with kernel ring state on the SQ side. Returns the
-  * number of pending items in the SQ ring, for the shared ring.
--- 
-Ammar Faizi
-
+>

@@ -2,87 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E8735A8134
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C83C5A813F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:29:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbiHaP1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45248 "EHLO
+        id S231739AbiHaP25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231760AbiHaP10 (ORCPT
+        with ESMTP id S231488AbiHaP2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:27:26 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CD86D7D2B
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:27:24 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id kk26so29071607ejc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:27:24 -0700 (PDT)
+        Wed, 31 Aug 2022 11:28:55 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC6ED91E8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:28:52 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-340f82c77baso195106647b3.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:28:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=x8FJmt7wp3PvGNCLKViqYVQw5hHd5dJ4MBGNxXjX41M=;
-        b=JbA1a8+D7PENTWZsG96Pg/isb9YKP2i+tHlAZFscc1BsQKJwT8hrom/cUkdoM08lMo
-         0tDGu2/VwLlVij8AJ875AL9yZK/wSC3YIrMSzoBeM+zBF+yKY72MOOvBY7bcAw/5IdGn
-         mXkCbjx37RtycfmRA4clnC39FDbHSqZIbUR477Y3v4GujY9PubxhRrsIPNz/AbfqwrBB
-         MU8WkWQvDNZobuUnSdFtEBI6+PzCApkJzBoKqerpDEeIgLWXNTawqtU/42kUpAtOnfYP
-         gMJh6Wyq72W9mCxX6QZ2ZvU8yQb6VD2RoGFBWXroqRI3yTOYWVkOGfq05+e43NkiwSco
-         NF9Q==
+        bh=WG3L5AqBV6fri0E+FNG2tsbDp/uFyzzRTMikwR7NSY8=;
+        b=K4mZtzeFsKxJKOsvfz3u8buWcDbdHB0bPmoDat2amZVxf6i7fSAQFaeyCHfBhOW0gn
+         TYiPTPwinxH8yKQGmCabK7zsAg7t70798MwIPLUmtbWdWtkPoH8nkkd0L6+Cf/71NitT
+         pIpTm135oSjNuBnp7lYQC08Y98tRGNR+0DcT0LYO7fxV5Ng1p7CsbsO1uZH/I63XPhjj
+         LoKETIXPqOU+NyCB1s85tiwuh2e//ou8VKmFXVH3pOn419Mn7E1W55VRw4JlXGoTp7nX
+         lwPAdy+2tjWZHnwP0BxNNwETNl+fZjmT1bVCkdUM4qWebnjcYikmadptjs0201jXoXGN
+         /Wug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=x8FJmt7wp3PvGNCLKViqYVQw5hHd5dJ4MBGNxXjX41M=;
-        b=ajICyHm/n3L2G/XIaMgyq9IiSPt45ysUZNaDw8KKuXV+fZoNoq2OHHtIR8cWbSAdVM
-         qRKUTWB4+RN/57Lu5kSGmRjzU2d+LFtVn4bpcTT/xFFiVTpyAquBRjOzknNrfH05EyFY
-         /IM4LTtBbX9MOB0jYIGp15QdbdHcDCEnkqp4JU3I11VGJCL6if6z9DsM5VVDXuGuDzHR
-         2uL2k5aH+0qfAmP4m9bpFRdDNVOMMSrs+EyUxjwR/YbBylxKkr8l5dB8FuIzcDnXJwGz
-         cP0rk6ZO1RyhhFsn2/0dwg36pxze5lgKdFoEsJu714ym7k/KN8+KImTSFFY+Qxp8kKr1
-         /NKQ==
-X-Gm-Message-State: ACgBeo09miRUXTV7neSjmN5CrUzwGIEzlVCyUwuta8PZuR7LTaqvYhtA
-        kpL8kQPZOJIQnw/mG5p8vKqp9S+EmlvxxuL5l9bV7+OeVTU=
-X-Google-Smtp-Source: AA6agR5MfMtj/v1v7FJ13/iWi4aYgGVGRE9Bvs7PrNI+IjoOMswTCHa6aQGHRNoai3kCWekbbogSudeWywj3tpteQy0=
-X-Received: by 2002:a17:907:9816:b0:741:89cc:af19 with SMTP id
- ji22-20020a170907981600b0074189ccaf19mr10685864ejc.492.1661959643184; Wed, 31
- Aug 2022 08:27:23 -0700 (PDT)
+        bh=WG3L5AqBV6fri0E+FNG2tsbDp/uFyzzRTMikwR7NSY8=;
+        b=i2KhSJHbZPD+ciG2vIl6BtM1bkrThgqpPdBQ/p9LkUN+G0OfaSrqZCYhH2lwihcALP
+         ulPphd5FL5P/CSaMJ5SNtfiJRyqbuzvanb9Z9E/qTALtOhwX+Kzr7OeOCKgYrOgCPBA5
+         JXgjJeTjH3voA2xku35SYMDFd5RIVSHsvALscZTeKpG83A05P5ji0SMsINcR8fYy2L+3
+         0eQeYQhlsBTy7JVJt8tpCgCeGqtZKFQ7nf8h0s+4f5oGlofFLf3V9buaz3MVTskNay7/
+         EvvTOsujAk96Da+zamYsYy15Z0u1zOUtFs+VOQreh2n+QA2NRK0iVKl+Ma6QvxtD641N
+         q7Cg==
+X-Gm-Message-State: ACgBeo2Ou2t3+9r89CHRsB9KSWHZT3dwfe1Wj3aGWfWkbXqk9Dr24qJb
+        CGpH+kERshWgGhukBP7jRcMkw0FKw2X+8Hs2eOSFcA==
+X-Google-Smtp-Source: AA6agR42WGqJyo3CQ/wsWtBH4QMjo2FwsKfgLb/Aa3jKv6m3xoE+xzdLy95JXttnzairFt+14Q8rzI0UFGuD4qoW950=
+X-Received: by 2002:a0d:d850:0:b0:340:d2c0:b022 with SMTP id
+ a77-20020a0dd850000000b00340d2c0b022mr16165795ywe.469.1661959731749; Wed, 31
+ Aug 2022 08:28:51 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220819072232.8105-1-brgl@bgdev.pl> <7h1qtct8sc.fsf@baylibre.com>
-In-Reply-To: <7h1qtct8sc.fsf@baylibre.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Wed, 31 Aug 2022 17:27:12 +0200
-Message-ID: <CAMRc=MfgEbNAXSz7Ft+EmNqNv5Mz6JhQSExyG8Oqit3PDjFFxw@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: make me the maintainer of DaVinci platforms
-To:     Kevin Hilman <khilman@baylibre.com>, Sekhar Nori <nsekhar@ti.com>,
-        Arnd Bergmann <arnd@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
+In-Reply-To: <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 31 Aug 2022 08:28:40 -0700
+Message-ID: <CAJuCfpGZ==v0HGWBzZzHTgbo4B_ZBe6V6U4T_788LVWj8HhCRQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Mel Gorman <mgorman@suse.de>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 7:58 PM Kevin Hilman <khilman@baylibre.com> wrote:
+On Wed, Aug 31, 2022 at 3:47 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> Bartosz Golaszewski <brgl@bgdev.pl> writes:
->
-> > Sekhar is stepping down from supporting DaVinci. As it's quite low-volume,
-> > I will keep maintaining it.
+> On Wed 31-08-22 11:19:48, Mel Gorman wrote:
+> > On Wed, Aug 31, 2022 at 04:42:30AM -0400, Kent Overstreet wrote:
+> > > On Wed, Aug 31, 2022 at 09:38:27AM +0200, Peter Zijlstra wrote:
+> > > > On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
+> > > > > ===========================
+> > > > > Code tagging framework
+> > > > > ===========================
+> > > > > Code tag is a structure identifying a specific location in the source code
+> > > > > which is generated at compile time and can be embedded in an application-
+> > > > > specific structure. Several applications of code tagging are included in
+> > > > > this RFC, such as memory allocation tracking, dynamic fault injection,
+> > > > > latency tracking and improved error code reporting.
+> > > > > Basically, it takes the old trick of "define a special elf section for
+> > > > > objects of a given type so that we can iterate over them at runtime" and
+> > > > > creates a proper library for it.
+> > > >
+> > > > I might be super dense this morning, but what!? I've skimmed through the
+> > > > set and I don't think I get it.
+> > > >
+> > > > What does this provide that ftrace/kprobes don't already allow?
+> > >
+> > > You're kidding, right?
 > >
-> > Acked-by: Sekhar Nori <nsekhar@ti.com>
-> > Signed-off-by: Bartosz Golaszewski <brgl@bgdev.pl>
->
-> Acked-by: Kevin Hilman <khilman@baylibre.com>
->
-> Thanks Bartosz!
->
-> Kevin
+> > It's a valid question. From the description, it main addition that would
+> > be hard to do with ftrace or probes is catching where an error code is
+> > returned. A secondary addition would be catching all historical state and
+> > not just state since the tracing started.
+> >
+> > It's also unclear *who* would enable this. It looks like it would mostly
+> > have value during the development stage of an embedded platform to track
+> > kernel memory usage on a per-application basis in an environment where it
+> > may be difficult to setup tracing and tracking. Would it ever be enabled
+> > in production? Would a distribution ever enable this? If it's enabled, any
+> > overhead cannot be disabled/enabled at run or boot time so anyone enabling
+> > this would carry the cost without never necessarily consuming the data.
 
-Thanks!
+Thank you for the question.
+For memory tracking my intent is to have a mechanism that can be enabled in
+the field testing (pre-production testing on a large population of
+internal users).
+The issue that we are often facing is when some memory leaks are happening
+in the field but very hard to reproduce locally. We get a bugreport
+from the user
+which indicates it but often has not enough information to track it. Note that
+quite often these leaks/issues happen in the drivers, so even simply finding out
+where they came from is a big help.
+The way I envision this mechanism to be used is to enable the basic memory
+tracking in the field tests and have a user space process collecting
+the allocation
+statistics periodically (say once an hour). Once it detects some counter growing
+infinitely or atypically (the definition of this is left to the user
+space) it can enable
+context capturing only for that specific location, still keeping the
+overhead to the
+minimum but getting more information about potential issues. Collected stats and
+contexts are then attached to the bugreport and we get more visibility
+into the issue
+when we receive it.
+The goal is to provide a mechanism with low enough overhead that it
+can be enabled
+all the time during these field tests without affecting the device's
+performance profiles.
+Tracing is very cheap when it's disabled but having it enabled all the
+time would
+introduce higher overhead than the counter manipulations.
+My apologies, I should have clarified all this in this cover letter
+from the beginning.
 
-Sekhar: whom did you send your PRs to? Arnd?
+As for other applications, maybe I'm not such an advanced user of
+tracing but I think only
+the latency tracking application might be done with tracing, assuming
+we have all the
+right tracepoints but I don't see how we would use tracing for fault
+injections and
+descriptive error codes. Again, I might be mistaken.
 
-Bart
+Thanks,
+Suren.
+
+> >
+> > It might be an ease-of-use thing. Gathering the information from traces
+> > is tricky and would need combining multiple different elements and that
+> > is development effort but not impossible.
+> >
+> > Whatever asking for an explanation as to why equivalent functionality
+> > cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
+>
+> Fully agreed and this is especially true for a change this size
+> 77 files changed, 3406 insertions(+), 703 deletions(-)
+>
+> --
+> Michal Hocko
+> SUSE Labs

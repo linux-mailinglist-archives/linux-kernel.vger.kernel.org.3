@@ -2,104 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 520F55A7A8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:48:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D6605A7A8C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:49:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229472AbiHaJss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58218 "EHLO
+        id S230207AbiHaJsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:48:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiHaJsk (ORCPT
+        with ESMTP id S230182AbiHaJsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:48:40 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 254F9CEB13;
-        Wed, 31 Aug 2022 02:48:39 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MHfRF6VD9zkWm8;
-        Wed, 31 Aug 2022 17:44:57 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 31 Aug 2022 17:48:37 +0800
-Received: from [127.0.0.1] (10.174.177.249) by kwepemm600003.china.huawei.com
- (7.193.23.202) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
- 2022 17:48:36 +0800
-Subject: Re: [PATCH] xfs: donot need to check return value of xlog_kvmalloc()
-To:     Eric Sandeen <sandeen@sandeen.net>,
-        "Darrick J. Wong" <djwong@kernel.org>, <linux-xfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     linfeilong <linfeilong@huawei.com>,
-        wuguanghao <wuguanghao3@huawei.com>
-References: <514e5e4b-e7c8-365f-8459-75974c067993@huawei.com>
- <0ba12a13-6cc4-5f44-fa06-ead350f819d5@sandeen.net>
-From:   Zhiqiang Liu <liuzhiqiang26@huawei.com>
-Message-ID: <b83283b2-39b3-c659-1b9f-f774af47d3f8@huawei.com>
-Date:   Wed, 31 Aug 2022 17:48:35 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.2
+        Wed, 31 Aug 2022 05:48:45 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07D6CC30A;
+        Wed, 31 Aug 2022 02:48:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661939324; x=1693475324;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2vtMjEkDfe6C58t0E979hr4mW/Nq5b/VgRWuPFsFMkE=;
+  b=jwj0y5+cFi6T2BILPbNvjPEJWtPpkiRycqn3UXKAx3hOF9jf0DmcLPz2
+   I8IUjKcmhNwow0RCOXKsW/D1Avwmu9McGZN/MCrhdAN8FJr1rkHFdA7gJ
+   b+vGbwmTFEyPiDj5jMhb/Emg4E+UDeQCBQeQFvBx0ExEQ/pfvXcwvUbWs
+   BqndZUDQ4icfAgp5814kK1/W0u+j0+zeL3CVUhVSC/q2MLTzM2/EnkEc9
+   QfPHIqgEghFMH34U1/EDHpWyzQX8w5fZ9VuEWXqmQVnNKBgTdhFLOfJI1
+   RAuMqSlqrwZzxAbSBA+WPekIlCSt0ozmmXrohIlrYKvngN9T4khdeK7cP
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="282386245"
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="282386245"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:48:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
+   d="scan'208";a="715637851"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga002.fm.intel.com with ESMTP; 31 Aug 2022 02:48:42 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+        id 15101174; Wed, 31 Aug 2022 12:48:56 +0300 (EEST)
+Date:   Wed, 31 Aug 2022 12:48:56 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andy Shevchenko <andy@kernel.org>
+Subject: Re: [PATCH v2 2/3] ACPI: PMIC: Replace open coded be16_to_cpu()
+Message-ID: <Yw8uiAv95LbBh2FD@black.fi.intel.com>
+References: <20220830171155.42962-1-andriy.shevchenko@linux.intel.com>
+ <20220830171155.42962-2-andriy.shevchenko@linux.intel.com>
+ <Yw71GqF5x7u16yom@black.fi.intel.com>
+ <Yw8rPW39Vif4yVAf@smile.fi.intel.com>
+ <8989df1c-8fa7-be27-c2f0-e528604e474a@redhat.com>
 MIME-Version: 1.0
-In-Reply-To: <0ba12a13-6cc4-5f44-fa06-ead350f819d5@sandeen.net>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-Originating-IP: [10.174.177.249]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8989df1c-8fa7-be27-c2f0-e528604e474a@redhat.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 31, 2022 at 11:37:21AM +0200, Hans de Goede wrote:
+> Hi,
+> 
+> On 8/31/22 11:34, Andy Shevchenko wrote:
+> > On Wed, Aug 31, 2022 at 08:43:54AM +0300, Mika Westerberg wrote:
+> >> On Tue, Aug 30, 2022 at 08:11:54PM +0300, Andy Shevchenko wrote:
+> >>> -#define VR_MODE_DISABLED        0
+> >>> -#define VR_MODE_AUTO            BIT(0)
+> >>> -#define VR_MODE_NORMAL          BIT(1)
+> >>> -#define VR_MODE_SWITCH          BIT(2)
+> >>> -#define VR_MODE_ECO             (BIT(0)|BIT(1))
+> >>> +#define PMIC_REG_MASK		GENMASK(11, 0)
+> >>> +
+> >>> +#define VR_MODE_DISABLED        (0 << 0)
+> >>> +#define VR_MODE_AUTO            (1 << 0)
+> >>> +#define VR_MODE_NORMAL          (2 << 0)
+> >>> +#define VR_MODE_ECO             (3 << 0)
+> >>> +#define VR_MODE_SWITCH          (4 << 0)
+> >>
+> >> IMHO this one is worse than what it was.
+> > 
+> > I'm not sure why. Here is obvious wrong use of BIT() macro against
+> > plain numbers. I can split it into a separate change with an explanation
+> > of why it's better. But I think it doesn't worth the churn.
+> 
+> FWIW I'm with Andy here, the VR_MODE_ECO clearly is trying
+> to just say 3, so this is just a plain enum for values 0-4 and
+> as such should not use the BIT macros.
 
-On 2022/8/30 0:06, Eric Sandeen wrote:
-> On 8/22/22 6:46 AM, Zhiqiang Liu wrote:
->> In xfs_attri_log_nameval_alloc(), xlog_kvmalloc() is called
->> to alloc memory, which will always return
->> successfully, so we donot need to check return value.
->>
->> Signed-off-by: Zhiqiang Liu <liuzhiqiang26@huawei.com>
-> I think this is fine. xlog_kvmalloc loops until success, and its other
-> caller does not check the return value.
->
-> This isn't really strictly a fix (it's harmless) but it "fixes"
->
-> Fixes: commit 4183e4f27f402 ("xfs: share xattr name and value buffers when logging xattr updates")
->
-> Reviewed-by: Eric Sandeen <sandeen@redhat.com>
-
-Thanks for your reply.
-
-Before xlog_kvmalloc was changed to "loops until success", the sanity check was necessary.
-
-As you said, this isn't really strictly a fix, so I think we should not add the Fix tag.
-
-> That said, I think that xfs_attri_log_nameval_alloc() also cannot fail, so
-> perhaps its callers don't need checks either?
-Yes, you are right. I will clean it up in the V2 patch.
-
->> ---
->>  fs/xfs/xfs_attr_item.c | 2 --
->>  1 file changed, 2 deletions(-)
->>
->> diff --git a/fs/xfs/xfs_attr_item.c b/fs/xfs/xfs_attr_item.c
->> index 5077a7ad5646..667e151a2bca 100644
->> --- a/fs/xfs/xfs_attr_item.c
->> +++ b/fs/xfs/xfs_attr_item.c
->> @@ -86,8 +86,6 @@ xfs_attri_log_nameval_alloc(
->>  	 */
->>  	nv = xlog_kvmalloc(sizeof(struct xfs_attri_log_nameval) +
->>  					name_len + value_len);
->> -	if (!nv)
->> -		return nv;
->>
->>  	nv->name.i_addr = nv + 1;
->>  	nv->name.i_len = name_len;
-> .
-
+Yeah, enum would look better but the << 0 just makes me confused ;-)

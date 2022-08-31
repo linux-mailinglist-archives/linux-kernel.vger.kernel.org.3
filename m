@@ -2,121 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7423C5A880F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A86EA5A880D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232266AbiHaVZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:25:29 -0400
+        id S232241AbiHaVZZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:25:25 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232282AbiHaVZX (ORCPT
+        with ESMTP id S232215AbiHaVZV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:25:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 928A04DB61
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661981120;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Bk+OPu/NawbDQQta/l48V8vREhMx8JycdlrQ1DTyT80=;
-        b=fvTrvhRfw+XcjNFEAKWMbWRd7mF8zHvolxJcoDtutgoC0pb5P4MBqK+2CvrNRw+GA1wflM
-        MAzqpQ4tsX0BYOK7Gtu2Dd5xcyOfcdUjH6JT1OCWjjsGgCFMWGtqAGAazjBkX4QxG6+znX
-        /OJpJ3AEvNxG/M4cpmziel7sIpFK7uo=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-216-sTGYnmzPOG6-e8ra5mqDsw-1; Wed, 31 Aug 2022 17:25:17 -0400
-X-MC-Unique: sTGYnmzPOG6-e8ra5mqDsw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C102985A585;
-        Wed, 31 Aug 2022 21:25:16 +0000 (UTC)
-Received: from x2.localnet (unknown [10.22.33.226])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 1A3232026D4C;
-        Wed, 31 Aug 2022 21:25:16 +0000 (UTC)
-From:   Steve Grubb <sgrubb@redhat.com>
-To:     Paul Moore <paul@paul-moore.com>,
-        Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v4 3/4] fanotify,audit: Allow audit to use the full permission event response
-Date:   Wed, 31 Aug 2022 17:25:15 -0400
-Message-ID: <12063373.O9o76ZdvQC@x2>
-Organization: Red Hat
-In-Reply-To: <Yw/NjYytoMUdbxuR@madcap2.tricolour.ca>
-References: <cover.1659996830.git.rgb@redhat.com> <CAHC9VhT0D=qtaYR-Ve1hRTtQXspuC09qQZyFdESj-tQstyvMFg@mail.gmail.com> <Yw/NjYytoMUdbxuR@madcap2.tricolour.ca>
+        Wed, 31 Aug 2022 17:25:21 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E9B255082;
+        Wed, 31 Aug 2022 14:25:20 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-11f4e634072so12976308fac.13;
+        Wed, 31 Aug 2022 14:25:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=3IO7QYOx3ovoZtkLdtuGfUPure2DXDjbSLg7kimkmnk=;
+        b=M9KTKOqS5jkSj+FIbaVsG5A0B/o+cHUCcat0CJuKK6flq7WPJnC/5ipTx7YwHG1GO4
+         faDv1w9S9O7KLeS2D9PioKjRMKIVvtdxRaMJ6bUPVQGacW5Qzyfx/NUkcIeMrn7Gu9Cx
+         w8/UwloFuOle+7iNzDdtYsAvBMWz5ZC5q/DsI6/yh2tyN9pyDs32sUTR4RNIaSU9ECmb
+         SlYJOGozX16ch/16cK/51IvooDcXMbnyRag9wByBjYda83Po6hDx1mXQkTgOpIfiDNB9
+         X6y5jsK5amE5nKEpwOqI11PoA/1L7TKNafPDN+fAVn3aKklzUDC0QJBCDR4A9O9wOBxE
+         T4bg==
+X-Gm-Message-State: ACgBeo3Yo8UVQX3ZtI5fCNfLAapFVQplnsprbg+/nTWrKuJRiqZ97r5b
+        0yj5fLyjOq/Ex4if3QtDcw==
+X-Google-Smtp-Source: AA6agR5FNzao4c+d5/VDOYcbN1vLGoZj2frgIS/RF/DPtMRtmJentWXzD/8RolZiTMlRjZR7NZI+KQ==
+X-Received: by 2002:a05:6808:f89:b0:344:cab1:14e9 with SMTP id o9-20020a0568080f8900b00344cab114e9mr2076886oiw.82.1661981119631;
+        Wed, 31 Aug 2022 14:25:19 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id by6-20020a056830608600b00638e49d4cadsm9278246otb.36.2022.08.31.14.25.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 14:25:19 -0700 (PDT)
+Received: (nullmailer pid 277757 invoked by uid 1000);
+        Wed, 31 Aug 2022 21:25:18 -0000
+Date:   Wed, 31 Aug 2022 16:25:18 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        devicetree@vger.kernel.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v5 12/20] dt-bindings: PCI: dwc: Add dma-coherent property
+Message-ID: <20220831212518.GA277724-robh@kernel.org>
+References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822184701.25246-13-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822184701.25246-13-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wednesday, August 31, 2022 5:07:25 PM EDT Richard Guy Briggs wrote:
-> > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > > index 433418d73584..f000fec52360 100644
-> > > --- a/kernel/auditsc.c
-> > > +++ b/kernel/auditsc.c
-> > > @@ -64,6 +64,7 @@
-> > > #include <uapi/linux/limits.h>
-> > > #include <uapi/linux/netfilter/nf_tables.h>
-> > > #include <uapi/linux/openat2.h> // struct open_how
-> > > +#include <uapi/linux/fanotify.h>
-> > > 
-> > > #include "audit.h"
-> > > 
-> > > @@ -2899,10 +2900,34 @@ void __audit_log_kern_module(char *name)
-> > > context->type = AUDIT_KERN_MODULE;
-> > > }
-> > > 
-> > > -void __audit_fanotify(u32 response)
-> > > +void __audit_fanotify(u32 response, size_t len, char *buf)
-> > > {
-> > > -       audit_log(audit_context(), GFP_KERNEL,
-> > > -               AUDIT_FANOTIFY, "resp=%u", response);
-> > > +       struct fanotify_response_info_audit_rule *friar;
-> > > +       size_t c = len;
-> > > +       char *ib = buf;
-> > > +
-> > > +       if (!(len && buf)) {
-> > > +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> > > +                         "resp=%u fan_type=0 fan_info=?", response);
-> > > +               return;
-> > > +       }
-> > > +       while (c >= sizeof(struct fanotify_response_info_header)) {
-> > > +               friar = (struct fanotify_response_info_audit_rule
-> > > *)buf;
-> > 
-> > Since the only use of this at the moment is the
-> > fanotify_response_info_rule, why not pass the
-> > fanotify_response_info_rule struct directly into this function?  We
-> > can always change it if we need to in the future without affecting
-> > userspace, and it would simplify the code.
+On Mon, 22 Aug 2022 21:46:53 +0300, Serge Semin wrote:
+> DW PCIe EP/RP AXI- and TRGT1-master interfaces are responsible for the
+> application memory access. They are used by the RP/EP PCIe buses (MWr/MWr
+> TLPs emitted by the peripheral PCIe devices) and the eDMA block. Since all
+> of them mainly involve the system memory and basically mean DMA we can
+> expect the corresponding platforms can be designed in a way to make sure
+> the transactions are cache-coherent. As such the DW PCIe DT-nodes can have
+> the 'dma-coherent' property specified. Let's permit it in the DT-bindings
+> then.
 > 
-> Steve, would it make any sense for there to be more than one
-> FAN_RESPONSE_INFO_AUDIT_RULE header in a message?  Could there be more
-> than one rule that contributes to a notify reason?  If not, would it be
-> reasonable to return -EINVAL if there is more than one?
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v3:
+> - This is a new patch created on v3 lap of the series.
+> ---
+>  Documentation/devicetree/bindings/pci/snps,dw-pcie-common.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-I don't see a reason for sending more than one header. What is more probable 
-is the need to send additional data in that header. I was thinking of maybe 
-bit mapping it in the rule number. But I'd suggest padding the struct just in 
-case it needs expanding some day.
-
--Steev
-
-
-
+Reviewed-by: Rob Herring <robh@kernel.org>

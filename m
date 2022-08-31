@@ -2,91 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 833A95A76E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F2C35A76E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:49:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230166AbiHaGry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51926 "EHLO
+        id S230049AbiHaGtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbiHaGrv (ORCPT
+        with ESMTP id S229570AbiHaGtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:47:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B222A414;
-        Tue, 30 Aug 2022 23:47:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FBBE617B7;
-        Wed, 31 Aug 2022 06:47:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D57E5C433C1;
-        Wed, 31 Aug 2022 06:47:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661928469;
-        bh=HZIF+ZpDbGsuUfg0vvXTrqAXedY4CM7K9UO0N25BY0w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NOfhrR8PP9pKn5SL/u5aF4CK8VJX+734bfqaYFkg1XnZYnhuQ/M20BciLdqNVLFKq
-         jp6uCkk/yYS5HlvZgepLtO7S0Y685wB78jPVjQRWCX1hO3YO0DaZ9qBh1mFwBIJ5Lm
-         FO8+HJCViDLpyr3fzAdigfHjLG1iuEywlGvumfdLONhw7bRJC27CIZe3yNu49hUfIo
-         EBcP5aTuuQW9xoubzcCHeclYyjDX/0mHN/iKEszCH3+7fG7xWUsZjNbgxggX2QFajN
-         Ej3Jm0aFOndZlVgsUYl75eqLAZP5a+iQp0zWkCemwsHE9wsPCOlj2LmrGJa0cNy0Bd
-         Yy4Ar7B4Pqddg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oTHVr-0006GG-98; Wed, 31 Aug 2022 08:47:47 +0200
-Date:   Wed, 31 Aug 2022 08:47:47 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@somainline.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] arm64: dts: qcom: Fix broken regulator spec on
- RPMH boards
-Message-ID: <Yw8EE/ESDUnIRf8P@hovoldconsulting.com>
-References: <20220829164952.2672848-1-dianders@chromium.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829164952.2672848-1-dianders@chromium.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 31 Aug 2022 02:49:31 -0400
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E776EA1D57
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:49:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VNq13Hu_1661928558;
+Received: from rt2b04371.sqa.tbc.tbsite.net(mailfrom:CruzZhao@linux.alibaba.com fp:SMTPD_---0VNq13Hu_1661928558)
+          by smtp.aliyun-inc.com;
+          Wed, 31 Aug 2022 14:49:26 +0800
+From:   Cruz Zhao <CruzZhao@linux.alibaba.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH] sched/core: Fix the bug that sched_core_find() may return throttled task
+Date:   Wed, 31 Aug 2022 14:49:18 +0800
+Message-Id: <1661928558-108473-1-git-send-email-CruzZhao@linux.alibaba.com>
+X-Mailer: git-send-email 1.8.3.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 09:49:46AM -0700, Douglas Anderson wrote:
-> Prior to commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
-> get_optimum_mode(), not set_load()") several boards were able to
-> change their regulator mode even though they had nothing listed in
-> "regulator-allowed-modes". After that commit (and fixes [1]) we'll be
-> stuck at the initial mode. Discussion of this (again, see [1]) has
-> resulted in the decision that the old dts files were wrong and should
-> be fixed to fully restore old functionality.
-> 
-> This series attempts to fix everyone. I've kept each board in a
-> separate patch to make stable / backports work easier.
+When a cfs_rq is throttled, the cookie'd task in this cfs_rq wouldn't
+dequeue from the core tree, and sched_core_find() may return this task,
+which will result that the throttled task running on the cpu.
 
-Should you also update the bindings so that this can be caught during
-devicetree validation? That is, to always require
-"regulator-allowed-modes" when "regulator-allow-set-load" is specified.
+To resolve this problem, we pick the first cookie matched task and
+unthrottled task.
 
-Perhaps at least for RPMh as it seemed you found some cases were this
-wasn't currently needed (even if that sounded like an Linux-specific
-implementation detail).
+Signed-off-by: Cruz Zhao <CruzZhao@linux.alibaba.com>
+---
+ kernel/sched/core.c  | 6 ++++++
+ kernel/sched/fair.c  | 7 +++++++
+ kernel/sched/sched.h | 1 +
+ 3 files changed, 14 insertions(+)
 
-Johan
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index b604223..a34acd0 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -271,6 +271,12 @@ static struct task_struct *sched_core_find(struct rq *rq, unsigned long cookie)
+ 	struct rb_node *node;
+ 
+ 	node = rb_find_first((void *)cookie, &rq->core_tree, rb_sched_core_cmp);
++	while (node && task_throttled(__node_2_sc(node))) {
++		node = rb_next(node);
++		if (node && cookie != __node_2_sc(node)->core_cookie)
++			node = NULL;
++	}
++
+ 	/*
+ 	 * The idle task always matches any cookie!
+ 	 */
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index cf3300b..4878a25 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -11563,6 +11563,13 @@ bool cfs_prio_less(struct task_struct *a, struct task_struct *b, bool in_fi)
+ 
+ 	return delta > 0;
+ }
++
++inline int task_throttled(struct task_struct *p)
++{
++	struct cfs_rq *cfs_rq = cfs_rq_of(&p->se);
++
++	return cfs_rq_throttled(cfs_rq);
++}
+ #else
+ static inline void task_tick_core(struct rq *rq, struct task_struct *curr) {}
+ #endif
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index f616e0c..c6e3955 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1285,6 +1285,7 @@ static inline bool sched_core_enqueued(struct task_struct *p)
+ 
+ extern void sched_core_get(void);
+ extern void sched_core_put(void);
++extern int task_throttled(struct task_struct *p);
+ 
+ #else /* !CONFIG_SCHED_CORE */
+ 
+-- 
+1.8.3.1
+

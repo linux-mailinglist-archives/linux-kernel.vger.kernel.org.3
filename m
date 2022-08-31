@@ -2,207 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD0F35A868B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:15:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 732595A868D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:15:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiHaTPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 15:15:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
+        id S230056AbiHaTPc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 15:15:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231768AbiHaTO4 (ORCPT
+        with ESMTP id S232024AbiHaTPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 15:14:56 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA77B5F6D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=lFykXXuh414AMHOUrkjMCmREYuLQabBQPnrg6lAfPPY=; b=ZZ198Xf6PPUp/l53rhljFuGMcF
-        4zuRseMWeZpoj311RIFnjrUYtADjn9wuJNnEsMO5CjZC+xEdH2c5qjeG0ILG3eq0DkS+/UAuBjtmA
-        lj9MawJD7bAGX1645naLEYPOhTdWjb1DKDqwDt5sCid+4EKbwJJ+m1nntHZqZTCOwtH2m0Y9w0pvq
-        ypgdce4iD49nSDTQOHr/OQAfe1DigWSkskMg6tndHXcqQjah9nFLMqXz3YF7rBpOLW1ZK9v7rG2Lt
-        fwCHewKIgkfbPSZuTdFO+kk9VvsODXV4OOvjxUHa5qpzXfN6R8L2vlOWdmejD3IUudqW/Bg3YIvS9
-        NvG7WR9A==;
-Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=57178)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oTTAj-0002O5-TA; Wed, 31 Aug 2022 21:14:45 +0200
-Message-ID: <dab9899b-b3e5-b99f-7219-9b5efa3a3591@tronnes.org>
-Date:   Wed, 31 Aug 2022 21:14:36 +0200
+        Wed, 31 Aug 2022 15:15:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAD1D5F9A3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:15:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661973320;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=OoTRUGFCRCGqc4N4Lf1mF7m1xbctNWtbqZZ4JOPVOxM=;
+        b=LGnR6OeBtyKl7onzX80h0txogMKqpUkGM85nd6uQ5oY6DCm+ATrCwzKFxiXDyV9ipxJQKp
+        SFeREf5IkF0Zi5xCwhGeworP/bB4yUIKzSe6dwHV7eQxEXFrbK6HbFZQVfDqn8OEB5xvZu
+        cgSGCs31mUn/BQXY1oGGuAXF5CRl0xY=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-503-aUrPnzJ7Osi5o5v2Jzp6XA-1; Wed, 31 Aug 2022 15:15:13 -0400
+X-MC-Unique: aUrPnzJ7Osi5o5v2Jzp6XA-1
+Received: by mail-wm1-f70.google.com with SMTP id q10-20020a1ce90a000000b003a60123678aso34254wmc.6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:15:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=OoTRUGFCRCGqc4N4Lf1mF7m1xbctNWtbqZZ4JOPVOxM=;
+        b=4Z3irxeiWAmBX++ntaN7gLieunyZf1zajLVvx6J6Lx6cYKK4j2qkQ66rx3XNsrXD1o
+         FonFHxXpuSChKP+RS8uUwrmGk/nC7YBIg0kMlKhIM+nxJ6Vpri1vjJ7eAclME3YOmtBt
+         Mk4IfX6IQrdc+FqAr6CXusb8Z65Pnxo2BVfomfV3Ed8Pgat6qPPBYpFlJGezE7P2iGWx
+         DRrONKqlpMP47AH1lDGnvk6OYupwOkeC72/GwzbtYW9wi2yCHqv+uSOT4l5C7VdVTNiF
+         uT80D87S9sq4fqsTdkqwkT0UhJjBZ0aBKt0a6LytBGWlnmhhUf+FfX5KI6XHGZ6dY388
+         MLfw==
+X-Gm-Message-State: ACgBeo1tdAAsgZU+rdUUOD+Kitph8M2nYzva2/CqJFBQQyVCe+hIUmtP
+        RO9aDOyguqVgQnYKhGKir2oJ+Kgglj2mbecEHIvzwwCSm9AhhbsBjhT+egpbIQZszaEQhoMv3lQ
+        rWvoFz96TCr1UE3fct59N0oB/
+X-Received: by 2002:adf:a490:0:b0:225:2da4:10ff with SMTP id g16-20020adfa490000000b002252da410ffmr12717625wrb.1.1661973312084;
+        Wed, 31 Aug 2022 12:15:12 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7F7coh0iOwNSgEwYMu/hdq6HxvtLsOaJG5qGdBp234CJFc36CibInsWfni2LUDq0VSb8dTcA==
+X-Received: by 2002:adf:a490:0:b0:225:2da4:10ff with SMTP id g16-20020adfa490000000b002252da410ffmr12717610wrb.1.1661973311809;
+        Wed, 31 Aug 2022 12:15:11 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:2900:1613:4308:aca3:2786? (p200300cbc706290016134308aca32786.dip0.t-ipconnect.de. [2003:cb:c706:2900:1613:4308:aca3:2786])
+        by smtp.gmail.com with ESMTPSA id b11-20020a05600c4e0b00b003a50924f1c0sm3613727wmq.18.2022.08.31.12.15.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 12:15:11 -0700 (PDT)
+Message-ID: <ab41f458-eb0f-5edb-ccab-643bf00d5110@redhat.com>
+Date:   Wed, 31 Aug 2022 21:15:09 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 18/41] drm/connector: Add a function to lookup a TV
- mode by its name
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
-        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
-        linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-18-459522d653a7@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-18-459522d653a7@cerno.tech>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1] mm/ksm: update stale comment in write_protect_page()
+Content-Language: en-US
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20220831083024.37138-1-david@redhat.com>
+ <CAHbLzkqeDAnCdt3q4E2RZw64QEzVaO_pseR3VaoHUhB+rZFcZQ@mail.gmail.com>
+ <4845ae71-b7dd-1707-ebc3-2eb3521e7fa0@redhat.com>
+ <CAHbLzkoMMWAgai2bvgu7y5EAcKOhhx3gK+OA4v2+kOHBW4cauw@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHbLzkoMMWAgai2bvgu7y5EAcKOhhx3gK+OA4v2+kOHBW4cauw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 31.08.22 21:08, Yang Shi wrote:
+> On Wed, Aug 31, 2022 at 11:29 AM David Hildenbrand <david@redhat.com> wrote:
+>>
+>> On 31.08.22 19:55, Yang Shi wrote:
+>>> On Wed, Aug 31, 2022 at 1:30 AM David Hildenbrand <david@redhat.com> wrote:
+>>>>
+>>>> The comment is stale, because a TLB flush is no longer sufficient and
+>>>> required to synchronize against concurrent GUP-fast. This used to be true
+>>>> in the past, whereby a TLB flush would have implied an IPI on architectures
+>>>> that support GUP-fast, resulting in GUP-fast that disables local interrupts
+>>>> from completing before completing the flush.
+>>>
+>>> Hmm... it seems there might be problem for THP collapse IIUC. THP
+>>> collapse clears and flushes pmd before doing anything on pte and
+>>> relies on interrupt disable of fast GUP to serialize against fast GUP.
+>>> But if TLB flush is no longer sufficient, then we may run into the
+>>> below race IIUC:
+>>>
+>>>          CPU A                                                CPU B
+>>> THP collapse                                             fast GUP
+>>>
+>>> gup_pmd_range() <-- see valid pmd
+>>>
+>>> gup_pte_range() <-- work on pte
+>>> clear pmd and flush TLB
+>>> __collapse_huge_page_isolate()
+>>>     isolate page <-- before GUP bump refcount
+>>>
+>>>    pin the page
+>>> __collapse_huge_page_copy()
+>>>     copy data to huge page
+>>>     clear pte (don't flush TLB)
+>>> Install huge pmd for huge page
+>>>
+>>> return the obsolete page
+>>
+>> Hm, the is_refcount_suitable() check runs while the PTE hasn't been
+>> cleared yet. And we don't check if the PMD changed once we're in
+>> gup_pte_range().
+> 
+> Yes
+> 
+>>
+>> The comment most certainly should be stale as well -- unless there is
+>> some kind of an implicit IPI broadcast being done.
+>>
+>> 2667f50e8b81 mentions: "The RCU page table free logic coupled with an
+>> IPI broadcast on THP split (which is a rare event), allows one to
+>> protect a page table walker by merely disabling the interrupts during
+>> the walk."
+>>
+>> I'm not able to quickly locate that IPI broadcast -- maybe there is one
+>> being done here (in collapse) as well?
+> 
+> The TLB flush may call IPI. I'm supposed it is arch dependent, right?
+> Some do use IPI, some may not.
 
+Right, and the whole idea of the RCU GUP-fast was to support
+architectures that don't do it. x86-64 does it. IIRC, powerpc doesn't do
+it -- but maybe it does so for PMDs?
 
-Den 29.08.2022 15.11, skrev Maxime Ripard:
-> As part of the command line parsing rework coming in the next patches,
-> 
-> we'll need to lookup drm_connector_tv_mode values by their name, already
-> 
-> defined in drm_tv_mode_enum_list.
-> 
-> 
-> 
-> In order to avoid any code duplication, let's do a function that will
-> 
-> perform a lookup of a TV mode name and return its value.
-> 
-> 
-> 
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
-> 
-> 
-> 
-> diff --git a/drivers/gpu/drm/drm_connector.c b/drivers/gpu/drm/drm_connector.c
-> 
-> index b1fcacd150e8..0fe01a1c20ad 100644
-> 
-> --- a/drivers/gpu/drm/drm_connector.c
-> 
-> +++ b/drivers/gpu/drm/drm_connector.c
-> 
-> @@ -1003,6 +1003,30 @@ static const struct drm_prop_enum_list drm_tv_mode_enum_list[] = {
-> 
->  };
-> 
->  DRM_ENUM_NAME_FN(drm_get_tv_mode_name, drm_tv_mode_enum_list)
-> 
->  
-> 
-> +/**
-> 
-> + * drm_get_tv_mode_from_name - Translates a TV mode name into its enum value
-> 
-> + * @name: TV Mode name we want to convert
-> 
-> + * @len: Length of @name
-> 
-> + *
-> 
-> + * Translates @name into an enum drm_connector_tv_mode.
-> 
-> + *
-> 
-> + * Returns: the enum value on success, a negative errno otherwise.
-> 
-> + */
-> 
-> +int drm_get_tv_mode_from_name(const char *name, size_t len)
-> 
-> +{
-> 
-> +	unsigned int i;
-> 
-> +
-> 
-> +	for (i = 0; i < ARRAY_SIZE(drm_tv_mode_enum_list); i++) {
-> 
-> +		const struct drm_prop_enum_list *item = &drm_tv_mode_enum_list[i];
-> 
-> +
-> 
-> +		if (strlen(item->name) == len && !strncmp(item->name, name, len))
-> 
-> +			return item->type;
-> 
-> +	}
-> 
-> +
-> 
-> +	return -EINVAL;
-> 
-> +}
-> 
-> +EXPORT_SYMBOL(drm_get_tv_mode_from_name)
+-- 
+Thanks,
 
-Missing semicolon.
+David / dhildenb
 
-Noralf.
-
-> 
-> +
-> 
->  static const struct drm_prop_enum_list drm_tv_select_enum_list[] = {
-> 
->  	{ DRM_MODE_SUBCONNECTOR_Automatic, "Automatic" }, /* DVI-I and TV-out */
-> 
->  	{ DRM_MODE_SUBCONNECTOR_Composite, "Composite" }, /* TV-out */
-> 
-> diff --git a/include/drm/drm_connector.h b/include/drm/drm_connector.h
-> 
-> index bb39d2bb806e..49d261977d4e 100644
-> 
-> --- a/include/drm/drm_connector.h
-> 
-> +++ b/include/drm/drm_connector.h
-> 
-> @@ -1943,6 +1943,8 @@ const char *drm_get_dp_subconnector_name(int val);
-> 
->  const char *drm_get_content_protection_name(int val);
-> 
->  const char *drm_get_hdcp_content_type_name(int val);
-> 
->  
-> 
-> +int drm_get_tv_mode_from_name(const char *name, size_t len);
-> 
-> +
-> 
->  int drm_mode_create_dvi_i_properties(struct drm_device *dev);
-> 
->  void drm_connector_attach_dp_subconnector_property(struct drm_connector *connector);
-> 
->  
-> 
-> 
-> 

@@ -2,83 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EF35A76CC
+	by mail.lfdr.de (Postfix) with ESMTP id C2AD15A76CD
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:39:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230367AbiHaGjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36012 "EHLO
+        id S230373AbiHaGju (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:39:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230373AbiHaGj3 (ORCPT
+        with ESMTP id S230361AbiHaGjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:39:29 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56832BE4F8;
-        Tue, 30 Aug 2022 23:39:25 -0700 (PDT)
-X-QQ-mid: bizesmtp70t1661927959t2spadwu
-Received: from localhost.localdomain ( [182.148.13.26])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 31 Aug 2022 14:39:18 +0800 (CST)
-X-QQ-SSF: 01000000000000D0E000000A0000000
-X-QQ-FEAT: r/cTxDoDoiGYHY4msGThDPsUXtghOn+zjRYbUJrgOJwjlIpQi7JcA2FmNnlD1
-        sYmBu9fH2LVxxT4IeCLCRPmKInYl5kLN2N2pJSnUTbjI/NQjKtWgMo2P/hJ3Clp4dunxSeM
-        KXYJOaLITUENHBWnP2TgqM7d9Xzq9VFSe262BgIrNHcC6wlr6v3T5qIBsTqUtKNdZ8akUdH
-        BMhy8URWNrIjZhiYWqLkfkippA2d4FEG/Eaxv+i+7GgquMloyA2+LebPiMu9z+8I/R4ATxa
-        nzUVnvVZbAhzFWv6IHrX9ug792D3gixZtIK2PcAdgUsKwGQNnjotE+jRh+Fl++iD00W5kIL
-        vuIO3pXHOOx/4aBWJraZpau9lG/VA35oAwJ1+5JAnskcgJUxeW+ekKAESTHDQ==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com
-Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] s390/cpumf: fix repeated words in comments
-Date:   Wed, 31 Aug 2022 14:39:12 +0800
-Message-Id: <20220831063912.19738-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 31 Aug 2022 02:39:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14235BE4C5;
+        Tue, 30 Aug 2022 23:39:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 50CAA61662;
+        Wed, 31 Aug 2022 06:39:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31386C433D6;
+        Wed, 31 Aug 2022 06:39:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661927962;
+        bh=0j1TZFU3wRwvcEdOj3ffsesLckkpCIBHnhXRNCyuF7A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=De4XeRyuI6UvL8VuhBaRTNKiG2uSI4fvhDoyr8nvE0T77G1LpcIyzb7D+jMS1gZgQ
+         2eoU1VfZ/b+2KGx9VL3fgiB4dy7NIp/iQpzUWnHiNpB8sR2Kom1UvPWzVeFbJLt5Nv
+         IxTW6wpcMTG09GVS9/sOEVkUKCEvxNrKhDpUMMrTs2/cthD3ev2eH1jxroMpbZO5lF
+         3pBN1GIkWe5ionUvfrFV4MaYUrOhlizpN2FpQGi5JKKrStQU/yheWXsEA9wRCjSu9t
+         YQMWjppI3SNkbeV4BrSqjkI46xJZQb4TDgTIabw4woo/lsrYsWtuECOhNxrknype0K
+         1Y4Go4OO8m1tQ==
+Date:   Wed, 31 Aug 2022 09:39:17 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Dhanuka <wdnuka@gmail.com>
+Cc:     dave.hansen@linux.intel.com, shuah@kernel.org,
+        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/sgx: Fix OpenSSL deprecated warning for
+ ERR_get_error_line
+Message-ID: <Yw8CFRhbs8buYYnx@kernel.org>
+References: <20220828061859.181061-1-wdnuka@gmail.com>
+ <Ywyt4tvHrK4r48RK@kernel.org>
+ <Yw17hyrjX1AiELZG@kernel.org>
+ <86e2c049-b289-8b1f-9fc2-8938abefa7d4@gmail.com>
+ <Yw60DQEbmQDKka9G@kernel.org>
+ <a226891f-e589-04ea-f595-fed3d1f75691@gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [43.155.67.158 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+In-Reply-To: <a226891f-e589-04ea-f595-fed3d1f75691@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'the'.
+On Wed, Aug 31, 2022 at 06:33:26AM +0000, Dhanuka wrote:
+> On 8/31/22 01:06, Jarkko Sakkinen wrote:
+> > On Tue, Aug 30, 2022 at 11:18:03AM +0000, Dhanuka wrote:
+> > > On 8/30/22 02:52, Jarkko Sakkinen wrote:
+> > > > On Mon, Aug 29, 2022 at 03:15:30PM +0300, Jarkko Sakkinen wrote:
+> > > > > On Sun, Aug 28, 2022 at 11:48:59AM +0530, Dhanuka Warusadura wrote:
+> > > > > > These changes fix the "error: ‘ERR_get_error_line’ is deprecated:
+> > > > > > Since OpenSSL 3.0" warning.
+> > > > > > 
+> > > > > > Signed-off-by: Dhanuka Warusadura <wdnuka@gmail.com>
+> > > > > > ---
+> > > > > >    tools/testing/selftests/sgx/sigstruct.c | 2 +-
+> > > > > >    1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > > > 
+> > > > > > diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
+> > > > > > index 50c5ab1aa6fa..671d9b58e274 100644
+> > > > > > --- a/tools/testing/selftests/sgx/sigstruct.c
+> > > > > > +++ b/tools/testing/selftests/sgx/sigstruct.c
+> > > > > > @@ -136,7 +136,7 @@ static bool check_crypto_errors(void)
+> > > > > >    			break;
+> > > > > >    		had_errors = true;
+> > > > > > -		err = ERR_get_error_line(&filename, &line);
+> > > > > > +		err = ERR_peek_last_error_line(&filename, &line);
+> > > > > >    		ERR_error_string_n(err, str, sizeof(str));
+> > > > > >    		fprintf(stderr, "crypto: %s: %s:%d\n", str, filename, line);
+> > > > > >    	}
+> > > > > > -- 
+> > > > > > 2.37.2
+> > > > > > 
+> > > > > Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+> > > > Actually NAK.
+> > > > 
+> > > > This fix is not complete:
+> > > > 
+> > > > sigstruct.c: In function ‘get_modulus’:
+> > > > sigstruct.c:151:9: error: ‘RSA_get0_key’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+> > > >     151 |         RSA_get0_key(key, &n, NULL, NULL);
+> > > >         |         ^~~~~~~~~~~~
+> > > > In file included from /usr/include/openssl/x509.h:36,
+> > > >                    from /usr/include/openssl/pem.h:23,
+> > > >                    from sigstruct.c:16:
+> > > > /usr/include/openssl/rsa.h:217:28: note: declared here
+> > > >     217 | OSSL_DEPRECATEDIN_3_0 void RSA_get0_key(const RSA *r,
+> > > >         |                            ^~~~~~~~~~~~
+> > > > sigstruct.c: In function ‘gen_sign_key’:
+> > > > sigstruct.c:168:9: error: ‘PEM_read_bio_RSAPrivateKey’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declaration
+> > > > ]
+> > > >     168 |         key = PEM_read_bio_RSAPrivateKey(bio, NULL, NULL, NULL);
+> > > >         |         ^~~
+> > > > /usr/include/openssl/pem.h:447:1: note: declared here
+> > > >     447 | DECLARE_PEM_rw_cb_attr(OSSL_DEPRECATEDIN_3_0, RSAPrivateKey, RSA)
+> > > >         | ^~~~~~~~~~~~~~~~~~~~~~
+> > > > sigstruct.c: In function ‘encl_measure’:
+> > > > sigstruct.c:364:9: error: ‘RSA_sign’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+> > > >     364 |         if (!RSA_sign(NID_sha256, digest, SHA256_DIGEST_LENGTH,
+> > > >         |         ^~
+> > > > /usr/include/openssl/rsa.h:348:27: note: declared here
+> > > >     348 | OSSL_DEPRECATEDIN_3_0 int RSA_sign(int type, const unsigned char *m,
+> > > >         |                           ^~~~~~~~
+> > > > sigstruct.c:377:9: error: ‘RSA_free’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+> > > >     377 |         RSA_free(key);
+> > > >         |         ^~~~~~~~
+> > > > /usr/include/openssl/rsa.h:293:28: note: declared here
+> > > >     293 | OSSL_DEPRECATEDIN_3_0 void RSA_free(RSA *r);
+> > > >         |                            ^~~~~~~~
+> > > > sigstruct.c:382:9: error: ‘RSA_free’ is deprecated: Since OpenSSL 3.0 [-Werror=deprecated-declarations]
+> > > >     382 |         RSA_free(key);
+> > > >         |         ^~~~~~~~
+> > > > /usr/include/openssl/rsa.h:293:28: note: declared here
+> > > >     293 | OSSL_DEPRECATEDIN_3_0 void RSA_free(RSA *r);
+> > > >         |                            ^~~~~~~~
+> > > > cc1: all warnings being treated as errors
+> > > > make: *** [Makefile:39: /home/jarkko/work/linux-sgx/tools/testing/selftests/sgx/sigstruct.o] Error 1
+> > > > 
+> > > > BR, Jarkko
+> > > Thanks for the review.
+> > > 
+> > > But, my intention was to just fix the `ERR_get_error_line` deprecated
+> > > warning (as mentioned in the commit header) and not all the OpenSSL
+> > > deprecated warnings found in `sigstruct.c`
+> > > 
+> > > Do I need to fix all these OpenSSL deprecated warnings in `sigstruct.c` in
+> > > order to get this patch merged?
+> > Yes, it is incomplete as it is.
+> > 
+> > BR, Jarkko
+> 
+> Understood. Will try to resolve the remaining deprecated warnings as well.
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- arch/s390/kernel/perf_cpum_sf.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Yeah, it would be way more valuable instead of dozen
+of oneline patches. Thank you.
 
-diff --git a/arch/s390/kernel/perf_cpum_sf.c b/arch/s390/kernel/perf_cpum_sf.c
-index 332a49965130..0fda19b1e21d 100644
---- a/arch/s390/kernel/perf_cpum_sf.c
-+++ b/arch/s390/kernel/perf_cpum_sf.c
-@@ -1160,7 +1160,7 @@ static void perf_event_count_update(struct perf_event *event, u64 count)
-  * combined-sampling data entry consists of a basic- and a diagnostic-sampling
-  * data entry.	The sampling function is determined by the flags in the perf
-  * event hardware structure.  The function always works with a combined-sampling
-- * data entry but ignores the the diagnostic portion if it is not available.
-+ * data entry but ignores the diagnostic portion if it is not available.
-  *
-  * Note that the implementation focuses on basic-sampling data entries and, if
-  * such an entry is not valid, the entire combined-sampling data entry is
--- 
-2.36.1
-
+BR, Jarkko

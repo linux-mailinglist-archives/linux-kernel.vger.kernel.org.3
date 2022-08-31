@@ -2,39 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589655A72F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63C9E5A7300
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231376AbiHaAuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
+        id S231211AbiHaAva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232134AbiHaAtq (ORCPT
+        with ESMTP id S229723AbiHaAv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:49:46 -0400
+        Tue, 30 Aug 2022 20:51:27 -0400
 Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72ACED5
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:49:44 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1661906962thnq9p1l
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07D442AD9
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:51:23 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1661907076t71dp7kp
 Received: from localhost.localdomain ( [182.148.13.26])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 31 Aug 2022 08:49:21 +0800 (CST)
+        id ; Wed, 31 Aug 2022 08:51:15 +0800 (CST)
 X-QQ-SSF: 01000000000000D0E000000A0000000
-X-QQ-FEAT: E5VoqBf3byi/RxEYnkB0AwLa8zBDUlpRF2tTlzL8C1vwovpwf/jD96EJ9dEsN
-        rAUsAmOkgimCuWj+/CRH8A8bVUW58V3xWFCYyJtC/rwUlodaeg/suIDT97A9SL/710f5br5
-        sI8Nu38ci3nfLX2BIuJC44/1+c4X3f6JGHhjq+YocWXC6KQlmWEno03Wh0KWPiur/kKB+of
-        InBmTCZTKjsIm0awul/2CcgfnAZDvgdshtGvVVTw25UV27MyQ7UGFZMPFJ7urBV8bkge2uI
-        SA5qJO1qfpeA6tZZ2p1OyJ62VGsGhB6oPzSMOA28fVQur5AllFTPW4YhOBeRzGD54+yqbW2
-        Pt44f3mey/Zj2jE/kxG2d0i0IAX8PDBRTYd4dW9QMs2J6mJW5A=
+X-QQ-FEAT: +Fw3Sd5mYDV3NXJYi2PUaOKmNOiSsq1mENG/uF0kFpWPZnXyZd8lJOxo46/7Y
+        z37j57He1ZFbyt74DzNB1W2ltcRgdFyte9VG+z+Mupni0VYUrY3iHxnjp62bMZkbahC00Uw
+        qy7T/E/rVtxE5ZvbXz9Hdsev+hhbzUUq8Q7LPFy8P3In4MbYVGQ/wj+VbgiDE+Zh/ZcadSq
+        d5Xgq1UG3C/YhqnE2P0PXnxQ0/vv1atGJxHW7TzGEl3Mrlql2cp5ZfotzL3A/nYDBW1HkaX
+        2LIUE+6DZSR2Yy5Kyg52YYjyqApFZPaBQ0UUNOK4t2VC8oDoKZQ75vkmhL0qPTcUCA2tmIz
+        MEdIjtOG5paTN9jMvIBLBWTDjawtF9M9DwNB8hcscKfYfSWKSI=
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        gustavoars@kernel.org, Julia.Lawall@inria.fr
+To:     mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu
 Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] powerpc/vas: fix repeated words in comments
-Date:   Wed, 31 Aug 2022 08:49:14 +0800
-Message-Id: <20220831004914.37055-1-yuanjilin@cdjrlc.com>
+Subject: [PATCH] powerpc/mobility: fix repeated words in comments
+Date:   Wed, 31 Aug 2022 08:51:09 +0800
+Message-Id: <20220831005109.38314-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -53,22 +52,22 @@ Delete the redundant word 'the'.
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- arch/powerpc/platforms/book3s/vas-api.c | 2 +-
+ arch/powerpc/platforms/pseries/mobility.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/powerpc/platforms/book3s/vas-api.c b/arch/powerpc/platforms/book3s/vas-api.c
-index c0799fb26b6d..40f5ae5e1238 100644
---- a/arch/powerpc/platforms/book3s/vas-api.c
-+++ b/arch/powerpc/platforms/book3s/vas-api.c
-@@ -431,7 +431,7 @@ static vm_fault_t vas_mmap_fault(struct vm_fault *vmf)
- 	 * The window may be inactive due to lost credit (Ex: core
- 	 * removal with DLPAR). If the window is active again when
- 	 * the credit is available, map the new paste address at the
--	 * the window virtual address.
-+	 * window virtual address.
- 	 */
- 	if (txwin->status == VAS_WIN_ACTIVE) {
- 		paste_addr = cp_inst->coproc->vops->paste_addr(txwin);
+diff --git a/arch/powerpc/platforms/pseries/mobility.c b/arch/powerpc/platforms/pseries/mobility.c
+index 3d36a8955eaf..c92c78332303 100644
+--- a/arch/powerpc/platforms/pseries/mobility.c
++++ b/arch/powerpc/platforms/pseries/mobility.c
+@@ -216,7 +216,7 @@ static int update_dt_node(struct device_node *dn, s32 scope)
+ 		nprops = be32_to_cpu(upwa->nprops);
+ 
+ 		/* On the first call to ibm,update-properties for a node the
+-		 * the first property value descriptor contains an empty
++		 * first property value descriptor contains an empty
+ 		 * property name, the property value length encoded as u32,
+ 		 * and the property value is the node path being updated.
+ 		 */
 -- 
 2.36.1
 

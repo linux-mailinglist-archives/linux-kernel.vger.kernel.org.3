@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1FC35A7EA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5C75A7EA7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230037AbiHaNXL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 09:23:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55624 "EHLO
+        id S231544AbiHaNXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 09:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiHaNXE (ORCPT
+        with ESMTP id S231886AbiHaNXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 09:23:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57570A2211;
-        Wed, 31 Aug 2022 06:23:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 31 Aug 2022 09:23:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B2B3CB5CC
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661952217;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZECxeq+VOxz3+YhbPEZAiDDllz5WtJE1F6cO2w5XPV0=;
+        b=SBXRsQuJ9uJQOGeYQ5lbZymEha0hM0i2NZMOOzsrkPNVJK4UTwoARNQd4LECpDj8HGSgAG
+        UvX42MXT89J7cZeQM8Sr+k9b+fzYlRIDet4d5rDcdueXqm9Nk0jcUtJPEabHt5o0oYndYX
+        o+uKbzrASq8l8nTtJUEG+bVF36xvNQs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-173-GNYk6GstMAu40G4z40UUqQ-1; Wed, 31 Aug 2022 09:23:36 -0400
+X-MC-Unique: GNYk6GstMAu40G4z40UUqQ-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D28D261ABD;
-        Wed, 31 Aug 2022 13:23:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F16E0C433D6;
-        Wed, 31 Aug 2022 13:23:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661952183;
-        bh=tfMwNPtQLlX+SnAmAHcp4e9lcD14DH5x+PNXHRaF5Ao=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=tCFsvhzsLWW6kCGY3+i4jK/tTu3xmqJdqTJL94dqn8qRfB0lEhq5QIsse049NH2tl
-         ssOzp2t+EfzKyNIz/PgU+3SiEVjffEi67w8nuzmUZV/7/4cfjiiCe1hZ11URzy86bf
-         YThlRzmA7vlKp4FJN3BIC5vgKSoOsDglUFi/WOMUm+ttRM5H37JZYowQCllNsFJzZE
-         AAKL9y2sG2wsor3U/6aT6dp7HGx2FtnLCS93T4hVfCNKnrYVdK1oMPj6/pwFmq8LOg
-         D3tKYDWFyziV/wovfJJBJdz2noWulH5CVCdT6Qz9UE/SfasXWHBwh1YgrvCASugPQJ
-         KQcMOSlTj73ag==
-Date:   Wed, 31 Aug 2022 08:23:01 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Koba Ko <koba.ko@canonical.com>,
-        "David E . Box" <david.e.box@linux.intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Rajvi Jingar <rajvi.jingar@linux.intel.com>,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] PCI: Disable PTM on Upstream Ports during suspend
-Message-ID: <20220831132301.GA177609@bhelgaas>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id ADB051C07589;
+        Wed, 31 Aug 2022 13:23:35 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 186201121320;
+        Wed, 31 Aug 2022 13:23:33 +0000 (UTC)
+Message-ID: <bccb116fd8fef3da918faa2270fac3256bfb62c6.camel@redhat.com>
+Subject: Re: [PATCH 12/19] KVM: x86: Disable APIC logical map if logical ID
+ covers multiple MDAs
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 16:23:32 +0300
+In-Reply-To: <20220831003506.4117148-13-seanjc@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-13-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yw8vgYeqY6a79HDR@black.fi.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,42 +66,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Rafael, Rajvi, linux-pm]
-
-On Wed, Aug 31, 2022 at 12:53:05PM +0300, Mika Westerberg wrote:
-> On Tue, Aug 30, 2022 at 10:52:24AM -0500, Bjorn Helgaas wrote:
-> > +	type = pci_pcie_type(dev);
-> > +	if (!(type == PCI_EXP_TYPE_ROOT_PORT ||
-> > +	      type == PCI_EXP_TYPE_UPSTREAM ||
-> > +	      type == PCI_EXP_TYPE_ENDPOINT))
-> > +		return;
+On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
+> Disable the optimized APIC logical map if a logical ID covers multiple
+> MDAs, i.e. if a vCPU has multiple bits set in its ID.  In logical mode,
+> events match if "ID & MDA != 0", i.e. creating an entry for only the
+> first bit can cause interrupts to be missed.
 > 
-> Perhaps switch () instead?
+> Note, creating an entry for every bit is also wrong as KVM would generate
+> IPIs for every matching bit.  It would be possible to teach KVM to play
+> nice with this edge case, but it is very much an edge case and probably
+> not used in any real world OS, i.e. it's not worth optimizing.
 > 
-> switch (pci_pcie_type(dev)) {
-> case PCI_EXP_TYPE_ROOT_PORT:
-> case PCI_EXP_TYPE_UPSTREAM:
-> case PCI_EXP_TYPE_ENDPOINT:
-> 	break;
-> default:
-> 	return;
-> }
+> Use an impossible value for the "mode" to effectively designate that it's
+> disabled.  Don't bother adding a dedicated "invalid" value, the mode
+> handling will be cleaned up in the future and it would take just as much
+> effort to explain what value is "safe" at this time.
 > 
-> Either way,
+> Fixes: 1e08ec4a130e ("KVM: optimize apic interrupt delivery")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/lapic.c | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
 > 
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+> index 9dda989a1cf0..82278acae95b 100644
+> --- a/arch/x86/kvm/lapic.c
+> +++ b/arch/x86/kvm/lapic.c
+> @@ -300,8 +300,15 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
+>  		if (!kvm_apic_map_get_logical_dest(new, ldr, &cluster, &mask))
+>  			continue;
+>  
+> -		if (mask)
+> -			cluster[ffs(mask) - 1] = apic;
+> +		if (!mask)
+> +			continue;
+> +
+> +		if (!is_power_of_2(mask)) {
+> +			new->mode = KVM_APIC_MODE_XAPIC_FLAT |
+> +				    KVM_APIC_MODE_XAPIC_CLUSTER;
+> +			continue;
+> +		}
+> +		cluster[ffs(mask) - 1] = apic;
+>  	}
+>  out:
+>  	old = rcu_dereference_protected(kvm->arch.apic_map,
 
-Thanks!  I dropped this patch for now.  I think Rajvi's similar
-patch [1] is much better because we only need this kind of check in
-one place -- where we enable PTM.
 
-Also, we need to tighten this up so we *always* disable PTM [2].  The
-patch I posted still calls pci_disable_ptm() from
-pci_prepare_to_sleep(), which means we only do it when
-!pdev->state_saved, so we leave PTM enabled if the driver saves its
-own state.
+I was about to complain about the abuse of the invalid mode,
+but I see that this is fixed in later patch as it is said in the commit
+description, so no complains.
 
-Bjorn
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-[1] https://lore.kernel.org/r/20220830104913.1620539-2-rajvi.jingar@linux.intel.com
-[2] https://lore.kernel.org/r/CAJZ5v0iHckqia4OywKzSNWFCaq7eOkJcm5yXJdT2_sNdd36gDw@mail.gmail.com
+Best regards,
+	Maxim Levitsky
+

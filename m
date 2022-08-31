@@ -2,89 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4F905A79BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 226015A79CE
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:11:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231720AbiHaJIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43562 "EHLO
+        id S231731AbiHaJLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbiHaJIW (ORCPT
+        with ESMTP id S230085AbiHaJLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:08:22 -0400
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30CCAB7EEE
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:08:20 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-01 (Coremail) with SMTP id qwCowACnrSH7JA9jsNkiAg--.21689S2;
-        Wed, 31 Aug 2022 17:08:12 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org
-Cc:     jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-        johan@kernel.org, penguin-kernel@i-love.sakura.ne.jp,
-        zhangxuezhi1@coolpad.com, xyangxi5@gmail.com,
-        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: Re: Re: [PATCH] tty: vt: Add checks after calling kzalloc
-Date:   Wed, 31 Aug 2022 17:08:10 +0800
-Message-Id: <20220831090810.2175859-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 31 Aug 2022 05:11:07 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38D51B07D5;
+        Wed, 31 Aug 2022 02:11:04 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MHdh31k36z4xG6;
+        Wed, 31 Aug 2022 19:10:58 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661937059;
+        bh=1tJE7MMD2g/Qq/1LgzoAg1lXR0RQ30q7LvrpouAxyQ8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=hGQVMKCrWSrt0SN3zoPEpA/iHMQb9niy7yMO6fTiPe5xINojjA18nqFGYfQlAJV38
+         yaokmcQqZ55vQ4TLlvPKxWTHaiq3HNCjgFVYCTtgc+kXbBflDjZonprYqj4LKXSDTj
+         JjeWilIzmuVTkLXeCmEvmX1xWTpyBC3duF7ur3KVzKWJM2j7xRk1x/F6TKNC8GSCcQ
+         BL3nJhW38sxtzVQOq2/aCnBduqHHwvz+qhui5TJF/kaWvVNKVFUE9pvvRXQqDFgDSX
+         Ot/pVUiymexfgmK9/mIw/JaWf43cghnbfdPP6/RNOoXiV2pd1RWaJ2U9Xr7xCO6jh5
+         yE21JvgRyiP8g==
+Date:   Wed, 31 Aug 2022 19:10:55 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Russell King <linux@armlinux.org.uk>
+Cc:     Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        "kernelci.org bot" <bot@kernelci.org>
+Subject: linux-next: build failure after merge of the arm tree
+Message-ID: <20220831191055.16f85948@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: qwCowACnrSH7JA9jsNkiAg--.21689S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7GrWUCFykWF15KFy8KFW8Xrb_yoWkJFb_X3
-        yvgr4UZ3yUJas0ya1DZ345ZrZxArZ5tw1DuryUAr17t34fGFs2gF9avrs2vw13Ga1xGwsI
-        kryqvwn7Jw1YgjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbz8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
-        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
-        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
-        jxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
-        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwV
-        AFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv2
-        0xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4
-        v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E
-        14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/4vgq=gpeq8=aX8iXKTRonxY";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 03:57:42PM +0800, Jiasheng Jiang wrote:
->>  	for (currcons = 0; currcons < MIN_NR_CONSOLES; currcons++) {
->>  		vc_cons[currcons].d = vc = kzalloc(sizeof(struct vc_data), GFP_NOWAIT);
->> +		if (!vc) {
->> +			console_unlock();
->> +			return -ENOMEM;
->> +		}
->>  		INIT_WORK(&vc_cons[currcons].SAK_work, vc_SAK);
->>  		tty_port_init(&vc->port);
->>  		visual_init(vc, currcons, 1);
->>  		/* Assuming vc->vc_{cols,rows,screenbuf_size} are sane here. */
->>  		vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size, GFP_NOWAIT);
->> +		if (!vc->vc_screenbuf) {
->> +			console_unlock();
->> +			return -ENOMEM;
->> +		}
-> 
-> This has been attempted many times in the past, sorry.  Unless you can
-> prove that this can actually happen in real life, we are going to leave
-> these as-is.
-> 
-> Please do not just do random changes like this without actually testing
-> to see if it is possible to happen.
+--Sig_/4vgq=gpeq8=aX8iXKTRonxY
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-As the harm of vulnerabilities is much higher than the cost of fixing them,
-it is acceptable to add harmless security checks that guarantee the
-vulnerabilities will never be triggered.
+Hi all,
 
-Thanks,
-Jiang
+After merging the arm tree, today's linux-next build (quite a few
+including arm allnoconfig clang-16, arm allnoconfig gcc-10) failed
+like this:
 
+ld.lld: error: undefined symbol: phys_initrd_start
+   or
+init.c:(.init.text+0xd4): undefined reference to `phys_initrd_start'
+
+Caused by commit
+
+  b35b2736b43d ("ARM: 9230/1: Support initrd with address in boot alias reg=
+ion")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/4vgq=gpeq8=aX8iXKTRonxY
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMPJZ8ACgkQAVBC80lX
+0Gy9GggAgeq/7Z/OyTbEFO/IdxikYoatYEX3K5Ag+VWGPByv/zjbKbIkMK1++u2i
+uCs5MrxK6GXzwLIJ7+/IJ+kipesNeDx4zyJaV6QPcVJmQ+pnlc4lZ0O15vZmLwus
+hPsG36weL71Wiv+U8sqUZMDuzNaIqmA+ysxJuV84QWrUywmByoA2wDMjXcarKYT/
+aeeEjF/qzXkk5lDJboUfCmPVfWQJncmMMB33elhXazNPzEGcTjrMR6xy521Y8KDw
+h3neKZ6Wva1wow/0yF1e4ARO22wLSu6dZpFvR9YbZXeLbLH3Fmig/PDbjSyyoM0b
+rDU4+Qdl/KKfpnGdkl4NuWPQkt/r5w==
+=rnfl
+-----END PGP SIGNATURE-----
+
+--Sig_/4vgq=gpeq8=aX8iXKTRonxY--

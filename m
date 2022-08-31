@@ -2,65 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F3B5A8028
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:27:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 353DC5A802B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:28:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiHaO1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S231431AbiHaO1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiHaO1P (ORCPT
+        with ESMTP id S231438AbiHaO1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:27:15 -0400
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9402013D0C;
-        Wed, 31 Aug 2022 07:27:08 -0700 (PDT)
-Received: by mail-pg1-f182.google.com with SMTP id q9so13650495pgq.6;
-        Wed, 31 Aug 2022 07:27:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=DsoXuHtlvfTG8c5sK5Njdz6GsfiGSg/UbyFHXvg+7Fo=;
-        b=mLbeXQfllgXa8W0x5vsufBIVZlTkbojPRICCbC1iIOqZ5X+3DSHT5651s8LUfM/h8h
-         3xHKBa9XNIcI/c36Pu3C9GfAnVVBVQ9OsqRVeY9FTqz/4FntiNbDZ2CoemkfyM+s0R63
-         1F7NSyHXYJ0QYpt2LqsDLNFktRnJToC5fEEI31uzcYiU6geqWWJqzlotr4nutyCtCgio
-         lK0iP/nfBPLQ0JqyOR+NdaHFSyMwo4SqKwvgNUbqJJJVCOViXnAC3KmiCCGC12tyYZ0k
-         9gESYyoRMGpCknNAMmiD1oMVlXCsC3V/+h7YwXry5SloRyIcsfcLGNOeAx5WSBggkV8P
-         7yiw==
-X-Gm-Message-State: ACgBeo1PX0wC6SX2OEOyPPeGmPiXupTsqeokGz6B7dqRpjXE03jWB8gm
-        XAmikWZLAPTdxnr/dn27+C32w83MQig=
-X-Google-Smtp-Source: AA6agR5j12b8TF3UTeaeYLGzHWsCDOyDwzVD1rWm4ukluhOkv0LWVn6+93W8eWpVHzz3w5RJrAbcEg==
-X-Received: by 2002:a63:f357:0:b0:423:31a8:8d71 with SMTP id t23-20020a63f357000000b0042331a88d71mr22663162pgj.358.1661956027990;
-        Wed, 31 Aug 2022 07:27:07 -0700 (PDT)
-Received: from [172.20.0.236] ([12.219.165.6])
-        by smtp.gmail.com with ESMTPSA id k7-20020a170902c40700b00174c235e1fdsm7010894plk.199.2022.08.31.07.27.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 07:27:07 -0700 (PDT)
-Message-ID: <44fa980e-85eb-c5ff-fc22-878ad94c4431@acm.org>
-Date:   Wed, 31 Aug 2022 07:27:05 -0700
+        Wed, 31 Aug 2022 10:27:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A0632B91
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:27:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E85FB61BAD
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:27:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28459C433D6;
+        Wed, 31 Aug 2022 14:27:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661956062;
+        bh=+1mkF0vDf807PJ0H5aPT1o4EZsGPNKP9hJQmi638xpQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kctWLX660iXiGG2x075AXkNa3B0ywLam+2Mbsa+cXeAtLykW5AmmC4C9/TDTmwTyR
+         Wq/2RO0F9TsZVxZdgnZ5Yw/TimSTqwoVbudTpHdW5XjxSK+AsOzFu6K9JEhZFKZKfG
+         sQpTG47iJMgOlAXSIEkKjUhN+sBJG8ocd6ssZe9I1N5q8TWtNxEbWbFOwXlOdPXsPu
+         HMDSig9akOBsmoUYA6s7nsK44kI38FppL80ULNweYSS4/VqiUPDjMP88jT/MmKq5xq
+         Lx4HnBfz9LNkKV5ycKwjCaRfwBd0ArQwL4+XBTbAaY0rcw/N2ALSx+dKksKcwS5jrA
+         egMXCiqRKkL5Q==
+Received: by pali.im (Postfix)
+        id 65048855; Wed, 31 Aug 2022 16:27:39 +0200 (CEST)
+Date:   Wed, 31 Aug 2022 16:27:39 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: armada-38x: Add gpio-ranges for pin muxing
+Message-ID: <20220831142739.nmvi6hzhlimiyqjj@pali>
+References: <20220727131619.3056-1-pali@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] RDMA/srp: Set scmnd->result only when scmnd is not
- NULL
-Content-Language: en-US
-To:     "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "leon@kernel.org" <leon@kernel.org>
-Cc:     "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "lizhijian@fujitsu.com" <lizhijian@fujitsu.com>
-References: <20220831081626.18712-1-yangx.jy@fujitsu.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20220831081626.18712-1-yangx.jy@fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220727131619.3056-1-pali@kernel.org>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,8 +61,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/22 01:16, yangx.jy@fujitsu.com wrote:
-> This change fixes the following kernel NULL pointer dereference
-> which is reproduced by blktests srp/007 occasionally.
+PING?
 
-Acked-by: Bart Van Assche <bvanassche@acm.org>
+On Wednesday 27 July 2022 15:16:19 Pali Rohár wrote:
+> GPIOs are configured by pinmux driver, so add corresponding references.
+> 
+> Fixes: 0d3d96ab0059 ("ARM: mvebu: add Device Tree description of the Armada 380/385 SoCs")
+> Signed-off-by: Pali Rohár <pali@kernel.org>
+> ---
+>  arch/arm/boot/dts/armada-38x.dtsi | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/arm/boot/dts/armada-38x.dtsi b/arch/arm/boot/dts/armada-38x.dtsi
+> index a176898944f7..1590143c52c8 100644
+> --- a/arch/arm/boot/dts/armada-38x.dtsi
+> +++ b/arch/arm/boot/dts/armada-38x.dtsi
+> @@ -298,6 +298,7 @@
+>  				reg-names = "gpio", "pwm";
+>  				ngpios = <32>;
+>  				gpio-controller;
+> +				gpio-ranges = <&pinctrl 0 0 32>;
+>  				#gpio-cells = <2>;
+>  				#pwm-cells = <2>;
+>  				interrupt-controller;
+> @@ -316,6 +317,7 @@
+>  				reg-names = "gpio", "pwm";
+>  				ngpios = <28>;
+>  				gpio-controller;
+> +				gpio-ranges = <&pinctrl 0 32 28>;
+>  				#gpio-cells = <2>;
+>  				#pwm-cells = <2>;
+>  				interrupt-controller;
+> -- 
+> 2.20.1
+> 

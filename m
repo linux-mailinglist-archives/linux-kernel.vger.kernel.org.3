@@ -2,67 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 506E95A8567
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:22:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA7B45A856A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:23:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232529AbiHaSWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:22:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48012 "EHLO
+        id S232778AbiHaSXX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:23:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232296AbiHaSWX (ORCPT
+        with ESMTP id S232806AbiHaSW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:22:23 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0063F4903
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:18:44 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q63so14168303pga.9
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:18:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=c0XdkMbTQBSAjd8ya7e2nTusM/ZQyaf0gz9rPauUcLk=;
-        b=cxa5z0qZIgkr0yjEz6TfrwMj8uUbv5/SjZ+wYU3SK1/v9aMVa4hRTAV6iMRoF7WFxd
-         0V6hRpKxd1GHLEvwypKpGCBG+xSv344ZJiKwwjqWOYsvvsqVSxPVL9XnAQzl/GShvzAm
-         UkMTNw+DVk+mmuOP4m4pMMcqtZ3QLcJ73998k=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=c0XdkMbTQBSAjd8ya7e2nTusM/ZQyaf0gz9rPauUcLk=;
-        b=NXi45EpXz0MBpTOE9AC/EcPONXXHvos+JXSUpPEOIlv/+7RAQEdLf6p4U+zUB7vQsi
-         JutcirHHzR3Ui8VpPBCWqSgIhIUMOp7RMLRckXAP/6+BABfv/6K2JXPrUa9+UwhR5reF
-         boGi5KtTOWPyiBldeVFvrIZwhalfseAcQULBKLmKJxAVqndsNXxTQb60iHKJKepDgaX+
-         czPAT+Dznkv+Ya0zSEtagiYmwCnDhIOlwyrkjYxzd1sHnySCYQAw0oeW7QDjfBc/cOgM
-         YGq/UgkXRnf3j3MxpidDKnKw+m/zHvREcJ9bb730yD3G19X4qnzUkfqXCAjUsIpIXrOA
-         0HZQ==
-X-Gm-Message-State: ACgBeo0ku50KLoYxBIr0+NpDAkixgSp5zm107z1fsD1i0tZtR/h44n7P
-        GZtwUURXAkFgEtQVHTxyZ5ydss99ZajjiA==
-X-Google-Smtp-Source: AA6agR787O/pwqpnkZH5B+yNnV6QUTylyvzmgRNIR3phDT2SthLfCypFz0laOUUZDHU6CxJhKiZoVw==
-X-Received: by 2002:a63:83c6:0:b0:42b:bb27:91a4 with SMTP id h189-20020a6383c6000000b0042bbb2791a4mr16499829pge.61.1661969853129;
-        Wed, 31 Aug 2022 11:17:33 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w123-20020a626281000000b005383a0d9699sm6873039pfb.144.2022.08.31.11.17.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 11:17:32 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 11:17:31 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH][next] uapi: net/ipv4: Use __DECLARE_FLEX_ARRAY() helper
-Message-ID: <202208311116.62D0CD477@keescook>
-References: <Yw5H3E3a6mmpuTeT@work>
+        Wed, 31 Aug 2022 14:22:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78DCB107C6D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661969901;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wMtbO1FbesK3cKbZsffWEHVIk034aLkgY1xkmc6yWxs=;
+        b=dHwdAHksWb1HSYCdU4xB2rMOIHvNmCLkGezdmZfM1Bz0PUdQMDxV7VNrEZ4U6ZQ9rK+Esz
+        7DAK6YbDZK49AnTFRFB6Pisv/77iaFZoap5cf+gu1z2xTcO+ZASWLLOtgXagnGbipmDR18
+        2FPt8wRPn7+8nKu2spf51YljmopMgWY=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-480-pI-tEFw6MQqpS3Wk6-nY5g-1; Wed, 31 Aug 2022 14:18:16 -0400
+X-MC-Unique: pI-tEFw6MQqpS3Wk6-nY5g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4584C1C004E6;
+        Wed, 31 Aug 2022 18:18:16 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A4E0E1121314;
+        Wed, 31 Aug 2022 18:18:14 +0000 (UTC)
+Message-ID: <2543befdf757fca54d1b56b6a980159e16e1d5a6.camel@redhat.com>
+Subject: Re: [PATCH 06/19] KVM: SVM: Get x2APIC logical dest bitmap from
+ ICRH[15:0], not ICHR[31:16]
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 21:18:13 +0300
+In-Reply-To: <Yw+N1BdfSansWh8h@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-7-seanjc@google.com>
+         <7a7827ec2652a8409fccfe070659497df229211b.camel@redhat.com>
+         <b660f600ff5f6c107d899ced46c04de3b99c425f.camel@redhat.com>
+         <Yw+N1BdfSansWh8h@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Yw5H3E3a6mmpuTeT@work>
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,130 +69,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 12:24:44PM -0500, Gustavo A. R. Silva wrote:
-> We now have a cleaner way to keep compatibility with user-space
-> (a.k.a. not breaking it) when we need to keep in place a one-element
-> array (for its use in user-space) together with a flexible-array
-> member (for its use in kernel-space) without making it hard to read
-> at the source level. This is through the use of the new
-> __DECLARE_FLEX_ARRAY() helper macro.
+On Wed, 2022-08-31 at 16:35 +0000, Sean Christopherson wrote:
+> On Wed, Aug 31, 2022, Maxim Levitsky wrote:
+> > On Wed, 2022-08-31 at 09:09 +0300, Maxim Levitsky wrote:
+> > > On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
+> > > > When attempting a fast kick for x2AVIC, get the destination bitmap from
+> > > > ICR[15:0], not ICHR[31:16].  The upper 16 bits contain the cluster, the
+> > > > lower 16 bits hold the bitmap.
+> > > > 
+> > > > Fixes: 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
+> > > > Cc: Maxim Levitsky <mlevitsk@redhat.com>
+> > > > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > > > ---
+> > > >  arch/x86/kvm/svm/avic.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > 
+> > > > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> > > > index 3ace0f2f52f0..3c333cd2e752 100644
+> > > > --- a/arch/x86/kvm/svm/avic.c
+> > > > +++ b/arch/x86/kvm/svm/avic.c
+> > > > @@ -368,7 +368,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
+> > > >  
+> > > >  		if (apic_x2apic_mode(source)) {
+> > > >  			/* 16 bit dest mask, 16 bit cluster id */
+> > > > -			bitmap = dest & 0xFFFF0000;
+> > > > +			bitmap = dest & 0xFFFF;
+> > > >  			cluster = (dest >> 16) << 4;
+> > > >  		} else if (kvm_lapic_get_reg(source, APIC_DFR) == APIC_DFR_FLAT) {
+> > > >  			/* 8 bit dest mask*/
+> > > 
+> > > I swear I have seen a patch from Suravee Suthikulpanit fixing this my mistake, I don't know why it was not
+> > > accepted upstream.
+> > 
+> > This is the patch, which I guess got forgotten.
+> > 
+> > https://www.spinics.net/lists/kernel/msg4417427.html
 > 
-> The size and memory layout of the structure is preserved after the
-> changes. See below.
-> 
-> Before changes:
-> 
-> $ pahole -C ip_msfilter net/ipv4/igmp.o
-> struct ip_msfilter {
-> 	union {
-> 		struct {
-> 			__be32     imsf_multiaddr_aux;   /*     0     4 */
-> 			__be32     imsf_interface_aux;   /*     4     4 */
-> 			__u32      imsf_fmode_aux;       /*     8     4 */
-> 			__u32      imsf_numsrc_aux;      /*    12     4 */
-> 			__be32     imsf_slist[1];        /*    16     4 */
-> 		};                                       /*     0    20 */
-> 		struct {
-> 			__be32     imsf_multiaddr;       /*     0     4 */
-> 			__be32     imsf_interface;       /*     4     4 */
-> 			__u32      imsf_fmode;           /*     8     4 */
-> 			__u32      imsf_numsrc;          /*    12     4 */
-> 			__be32     imsf_slist_flex[0];   /*    16     0 */
-> 		};                                       /*     0    16 */
-> 	};                                               /*     0    20 */
-> 
-> 	/* size: 20, cachelines: 1, members: 1 */
-> 	/* last cacheline: 20 bytes */
-> };
-> 
-> After changes:
-> 
-> $ pahole -C ip_msfilter net/ipv4/igmp.o
-> struct ip_msfilter {
-> 	struct {
-> 		__be32             imsf_multiaddr;       /*     0     4 */
-> 		__be32             imsf_interface;       /*     4     4 */
-> 		__u32              imsf_fmode;           /*     8     4 */
-> 		__u32              imsf_numsrc;          /*    12     4 */
-> 		union {
-> 			__be32     imsf_slist[1];        /*    16     4 */
-> 			struct {
-> 				struct {
-> 				} __empty_imsf_slist_flex; /*    16     0 */
-> 				__be32 imsf_slist_flex[0]; /*    16     0 */
-> 			};                               /*    16     0 */
-> 		};                                       /*    16     4 */
-> 	};                                               /*     0    20 */
-> 
-> 	/* size: 20, cachelines: 1, members: 1 */
-> 	/* last cacheline: 20 bytes */
-> };
-> 
-> In the past, we had to duplicate the whole original structure within
-> a union, and update the names of all the members. Now, we just need to
-> declare the flexible-array member to be used in kernel-space through
-> the __DECLARE_FLEX_ARRAY() helper together with the one-element array,
-> within a union. This makes the source code more clean and easier to read.
-> 
-> Link: https://github.com/KSPP/linux/issues/193
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> ---
->  include/uapi/linux/in.h | 20 +++++++-------------
->  1 file changed, 7 insertions(+), 13 deletions(-)
-> 
-> diff --git a/include/uapi/linux/in.h b/include/uapi/linux/in.h
-> index 14168225cecd..fa4dc8f8f081 100644
-> --- a/include/uapi/linux/in.h
-> +++ b/include/uapi/linux/in.h
-> @@ -188,20 +188,14 @@ struct ip_mreq_source {
->  };
->  
->  struct ip_msfilter {
-> -	union {
-> -		struct {
-> -			__be32		imsf_multiaddr_aux;
-> -			__be32		imsf_interface_aux;
-> -			__u32		imsf_fmode_aux;
-> -			__u32		imsf_numsrc_aux;
-> +	struct {
+> Ah, we just missed it, doubt there's anything more than that to the story.
 
-I don't think this internal anonymous struct is needed any more?
+100% sure about it.
 
-> +		__be32		imsf_multiaddr;
-> +		__be32		imsf_interface;
-> +		__u32		imsf_fmode;
-> +		__u32		imsf_numsrc;
-> +		union {
->  			__be32		imsf_slist[1];
-> -		};
-> -		struct {
-> -			__be32		imsf_multiaddr;
-> -			__be32		imsf_interface;
-> -			__u32		imsf_fmode;
-> -			__u32		imsf_numsrc;
-> -			__be32		imsf_slist_flex[];
-> +			__DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
->  		};
->  	};
->  };
+BTW there another minor bug I need to fix which was pointed to me by Suravee Suthikulpanit,
+just so that I don't forget about it:
 
-I.e. can't this now just be:
+My code which inhibits APIC when APIC_ID != vcpu_id has a bug in regard that
+when we have more that 255 vCPUs, this condition becames always true, but it is
+to some extent wrong to inhibit the AVIC always in this case - there is a use case
+when the guest uses only 255 vCPUs, then AVIC will work.
 
-struct ip_msfilter {
-	__be32          imsf_multiaddr;
-	__be32          imsf_interface;
-	__u32           imsf_fmode;
-	__u32           imsf_numsrc;
-	union {
-		__be32          imsf_slist[1];
-		__DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
-	};
-};
+The relaxed condition for inhibit should be that APIC_ID == (vcpu_id & 0xFF), and it AVIC
+is actually used on vCPU > 255, then it will be inhibited ( I need to check if the code
+for this exists).
+
+Best regards,
+	Maxim Levitsky
 
 
-> -- 
-> 2.34.1
+
+> 
+> > Since it is literaly the same patch, you can just add credit to Suravee Suthikulpanit.
+> > 
+> > So with the credit added:
+> > 
+> > Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+> 
+> I'll grab Suravee's patch and added your review.  Thanks!
 > 
 
--- 
-Kees Cook
+

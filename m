@@ -2,181 +2,390 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959535A84D0
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:56:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF505A84D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:57:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231398AbiHaRz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51744 "EHLO
+        id S231383AbiHaR5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 13:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbiHaRz6 (ORCPT
+        with ESMTP id S230490AbiHaR5G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:55:58 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF87D3E65
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:55:56 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id 76so15175709pfy.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:55:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=vmx4gHJp3u58Y95b/+pQhpJVRJy7LPLrGYUILaqzP90=;
-        b=cR6Hz+GMMYCP8ejaPhssEUK/Gx3B34EwyM3LRufVEgzzzrO5yjztpWB3eb476vbXap
-         mT8BdcHIZg3Vf94818iIUNfNWKoHPsOU+gNxl7BHpIIcRQJ5RQW6jriNTwViEx7KgUW6
-         G45dwnVeLQqAJKCAO8booBUPOGUmS/V1/wgaeWJabK+dXammfkjTmWxCX/XooMXoMjbj
-         2dmF7skteetLhBWrBOGpEFSib0wakZxn4yd2T5NtZlQw1c08d+gH6tsgJmLkEJJB5fJQ
-         bbXYuYBkexBNqhVsmU7xGqhovjourbT3BbYrbN2062xgPrGh7TrApRjQtiNoLiiFu7i2
-         qGiw==
+        Wed, 31 Aug 2022 13:57:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F92D83FD
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:57:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661968621;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lKRE16b9MM8u6Z8O6Bdi3U8ibkp6UbNP1fi8My+b5A8=;
+        b=VYG3BHLtpT+3HSAtiCg2HvePBO+xqAACMKFW91pU+WYQMKdCy2/guomaQ0jNd+wIE6Jabn
+        eqb//43YD6bqgQFZPR+8o1XOelDwEI3vNWFPedhg6T2tKoaI+WMZZAjhxVDc3eZgDfV2nN
+        s9pF5aBI+ccvpFjz/0TrlWXz3O9yptE=
+Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
+ [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-611-ZlsuAi8AOuyChTIf4W-fvQ-1; Wed, 31 Aug 2022 13:56:58 -0400
+X-MC-Unique: ZlsuAi8AOuyChTIf4W-fvQ-1
+Received: by mail-pf1-f200.google.com with SMTP id s13-20020a056a00194d00b005385093da2dso4210854pfk.13
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:56:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=vmx4gHJp3u58Y95b/+pQhpJVRJy7LPLrGYUILaqzP90=;
-        b=JmXvrvQWrjk25jYwCkq4dx5Z+6jcRSJdwYXfU3ZqJ7gC2rBP8JEGfeKyMmAOUNNKiT
-         fmYU7px8Zsnh4a5uxtxsUg3WtN4WDojGF6y6Rqo2VTEzWkUj23YAWNnv69KoWquw3Z/i
-         kdxk2TxgpuqKnpNyOB8s4Kn7hMDwe3dsKPPb823W1TrNLJGXmenC0YSDRA9ZkAfpmOhk
-         DoqXOj5TT4U1VebqdJzkU+gbz/52MyW619ujenu4Zv3qYnmuXA3B/6c1u4Ttw/6uZGF7
-         CQ/PBMZTSFsRHaHiSnpET4cRA9pMX9oUxmzgfFkkIVwLCabQn0zDnT+xU8VK+WxRV8/R
-         VeIw==
-X-Gm-Message-State: ACgBeo2F3Uo1hTOEjUm1sMeTTHAaZQsoP19bDuwySi0xn9lBPtVfPTrg
-        aBz0yHJhInEM93q+Alf2C5dciecnUuTdLzNPCs0=
-X-Google-Smtp-Source: AA6agR7/NHH+IR98XLUgrClivA8XFdyDFCxcjCDKLVj7jfAgRPUp7YKdkpzhs8wwSbn2yp6oifmnZc80rfMAGHkfMYc=
-X-Received: by 2002:aa7:9193:0:b0:536:62e6:1a84 with SMTP id
- x19-20020aa79193000000b0053662e61a84mr27241415pfa.20.1661968555798; Wed, 31
- Aug 2022 10:55:55 -0700 (PDT)
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=lKRE16b9MM8u6Z8O6Bdi3U8ibkp6UbNP1fi8My+b5A8=;
+        b=hUkL6fHw7uzHFfexuKprU1geYJZ0Nm5ruorXR20l5MGFO7s1YBeaPCN9y8niAeulEO
+         BygbVCbgOuZrMqecGiS+JtyhMgs0CMLo7kWoBSAwmybedRSxUxoGDwAmKKKqpW7JCiWG
+         l1glCnz8xHCHVyHspSsuin4rL6GWsDiIAZq400w51yJkJXEH2LUf/Q+E4kawooXqI3lf
+         JAnPoUABTQXAZwiCi2ZCpgBR3EZZQJ4WtIw+eAs3gW/8Rf+SQ9NSCXekiG4MN56VmJKZ
+         0ts00X6SAqNt0qOCpKfrK+ToW+w7tKG3hfo4b/O919dbgu5Vmygb1ImP5ccLD5x8ERBZ
+         8BDA==
+X-Gm-Message-State: ACgBeo1NAwuvxi28G/LfE+t+p3cndf4uFocq+CxFLpbw9Y/DxUjd9bR+
+        5axIZ6nCCUDckbCWPWUULWasX+qsnbwNnhRcnAh/6INkKFpQMtJ5YDfiW35kjOX8UH3a4abRvJx
+        MI8EmLxmXYxhXlvgyiC0y2AusTuFeWmQUXixvXEkj
+X-Received: by 2002:a65:6255:0:b0:42c:87b1:485b with SMTP id q21-20020a656255000000b0042c87b1485bmr8853669pgv.491.1661968617019;
+        Wed, 31 Aug 2022 10:56:57 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7yF6XgnbUA7X7pkH/iSvWC9vC651aFLswA1iXydDYqeAQponIFLXm+j24vx9ittOajohLxG7OhhxuSOM34jyE=
+X-Received: by 2002:a65:6255:0:b0:42c:87b1:485b with SMTP id
+ q21-20020a656255000000b0042c87b1485bmr8853631pgv.491.1661968616657; Wed, 31
+ Aug 2022 10:56:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220831083024.37138-1-david@redhat.com>
-In-Reply-To: <20220831083024.37138-1-david@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 31 Aug 2022 10:55:43 -0700
-Message-ID: <CAHbLzkqeDAnCdt3q4E2RZw64QEzVaO_pseR3VaoHUhB+rZFcZQ@mail.gmail.com>
-Subject: Re: [PATCH v1] mm/ksm: update stale comment in write_protect_page()
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+References: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
+ <20220824134055.1328882-2-benjamin.tissoires@redhat.com> <CAADnVQKgkFpLh_URJn6qCiAONteA1dwZHd6=4cZn15g1JCAPag@mail.gmail.com>
+ <CAP01T75ec_T0M6DU=JE2tfNsWRZuPSMu_7JHA7ZoOBw5eDh1Bg@mail.gmail.com>
+ <CAO-hwJLd9wXx+ppccBYPKZDymO0sk++Nt2E3-R97PY7LbfJfTg@mail.gmail.com> <CAADnVQK8dS+2KbWsqktvxoNKhHtdD5UPiaWVfNu=ESdn_OHpgQ@mail.gmail.com>
+In-Reply-To: <CAADnVQK8dS+2KbWsqktvxoNKhHtdD5UPiaWVfNu=ESdn_OHpgQ@mail.gmail.com>
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Date:   Wed, 31 Aug 2022 19:56:45 +0200
+Message-ID: <CAO-hwJK9uHTWCg3_6jrPF6UKiamkNfj=cuH5mHauoLX+0udV9w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v9 01/23] bpf/verifier: allow all functions to
+ read user provided context
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Dave Marchevsky <davemarchevsky@fb.com>,
+        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 1:30 AM David Hildenbrand <david@redhat.com> wrote:
+On Wed, Aug 31, 2022 at 6:37 PM Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
 >
-> The comment is stale, because a TLB flush is no longer sufficient and
-> required to synchronize against concurrent GUP-fast. This used to be true
-> in the past, whereby a TLB flush would have implied an IPI on architectures
-> that support GUP-fast, resulting in GUP-fast that disables local interrupts
-> from completing before completing the flush.
+> On Tue, Aug 30, 2022 at 7:29 AM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > On Fri, Aug 26, 2022 at 3:51 AM Kumar Kartikeya Dwivedi
+> > <memxor@gmail.com> wrote:
+> > >
+> > > On Fri, 26 Aug 2022 at 03:42, Alexei Starovoitov
+> > > <alexei.starovoitov@gmail.com> wrote:
+> > > >
+> > > > On Wed, Aug 24, 2022 at 6:41 AM Benjamin Tissoires
+> > > > <benjamin.tissoires@redhat.com> wrote:
+> > > > >
+> > > > > When a function was trying to access data from context in a syscall eBPF
+> > > > > program, the verifier was rejecting the call unless it was accessing the
+> > > > > first element.
+> > > > > This is because the syscall context is not known at compile time, and
+> > > > > so we need to check this when actually accessing it.
+> > > > >
+> > > > > Check for the valid memory access if there is no convert_ctx callback,
+> > > > > and allow such situation to happen.
+> > > > >
+> > > > > There is a slight hiccup with subprogs. btf_check_subprog_arg_match()
+> > > > > will check that the types are matching, which is a good thing, but to
+> > > > > have an accurate result, it hides the fact that the context register may
+> > > > > be null. This makes env->prog->aux->max_ctx_offset being set to the size
+> > > > > of the context, which is incompatible with a NULL context.
+> > > > >
+> > > > > Solve that last problem by storing max_ctx_offset before the type check
+> > > > > and restoring it after.
+> > > > >
+> > > > > Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+> > > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > > >
+> > > > > ---
+> > > > >
+> > > > > changes in v9:
+> > > > > - rewrote the commit title and description
+> > > > > - made it so all functions can make use of context even if there is
+> > > > >   no convert_ctx
+> > > > > - remove the is_kfunc field in bpf_call_arg_meta
+> > > > >
+> > > > > changes in v8:
+> > > > > - fixup comment
+> > > > > - return -EACCESS instead of -EINVAL for consistency
+> > > > >
+> > > > > changes in v7:
+> > > > > - renamed access_t into atype
+> > > > > - allow zero-byte read
+> > > > > - check_mem_access() to the correct offset/size
+> > > > >
+> > > > > new in v6
+> > > > > ---
+> > > > >  kernel/bpf/btf.c      | 11 ++++++++++-
+> > > > >  kernel/bpf/verifier.c | 19 +++++++++++++++++++
+> > > > >  2 files changed, 29 insertions(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > > > > index 903719b89238..386300f52b23 100644
+> > > > > --- a/kernel/bpf/btf.c
+> > > > > +++ b/kernel/bpf/btf.c
+> > > > > @@ -6443,8 +6443,8 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+> > > > >  {
+> > > > >         struct bpf_prog *prog = env->prog;
+> > > > >         struct btf *btf = prog->aux->btf;
+> > > > > +       u32 btf_id, max_ctx_offset;
+> > > > >         bool is_global;
+> > > > > -       u32 btf_id;
+> > > > >         int err;
+> > > > >
+> > > > >         if (!prog->aux->func_info)
+> > > > > @@ -6457,9 +6457,18 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
+> > > > >         if (prog->aux->func_info_aux[subprog].unreliable)
+> > > > >                 return -EINVAL;
+> > > > >
+> > > > > +       /* subprogs arguments are not actually accessing the data, we need
+> > > > > +        * to check for the types if they match.
+> > > > > +        * Store the max_ctx_offset and restore it after btf_check_func_arg_match()
+> > > > > +        * given that this function will have a side effect of changing it.
+> > > > > +        */
+> > > > > +       max_ctx_offset = env->prog->aux->max_ctx_offset;
+> > > > > +
+> > > > >         is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
+> > > > >         err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0);
+> > > > >
+> > > > > +       env->prog->aux->max_ctx_offset = max_ctx_offset;
+> > > >
+> > > > I don't understand this.
+> > > > If we pass a ctx into a helper and it's going to
+> > > > access [0..N] bytes from it why do we need to hide it?
+> > > > max_ctx_offset will be used later raw_tp, tp, syscall progs
+> > > > to determine whether it's ok to load them.
+> > > > By hiding the actual size of access somebody can construct
+> > > > a prog that reads out of bounds.
+> > > > How is this related to NULL-ness property?
+> > >
+> > > Same question, was just typing exactly the same thing.
+> >
+> > The test I have that is failing in patch 2/23 is the following, with
+> > args being set to NULL by userspace:
+> >
+> > SEC("syscall")
+> > int kfunc_syscall_test_null(struct syscall_test_args *args)
+> > {
+> >        bpf_kfunc_call_test_mem_len_pass1(args, 0);
+> >
+> >        return 0;
+> > }
+> >
+> > Basically:
+> > if userspace declares the following:
+> >  DECLARE_LIBBPF_OPTS(bpf_test_run_opts, syscall_topts,
+> >                .ctx_in = NULL,
+> >                .ctx_size_in = 0,
+> >        );
+> >
+> > The verifier is happy with the current released kernel:
+> > kfunc_syscall_test_fail() never dereferences the ctx pointer, it just
+> > passes it around to bpf_kfunc_call_test_mem_len_pass1(), which in turn
+> > is also happy because it says it is not accessing the data at all (0
+> > size memory parameter).
+> >
+> > In the current code, check_helper_mem_access() actually returns
+> > -EINVAL, but doesn't change max_ctx_offset (it's still at the value of
+> > 0 here). The program is now marked as unreliable, but the verifier
+> > goes on.
+> >
+> > When adding this patch, if we declare a syscall eBPF (or any other
+> > function that doesn't have env->ops->convert_ctx_access), the previous
+> > "test" is failing because this ensures the syscall program has to have
+> > a valid ctx pointer.
+> > btf_check_func_arg_match() now calls check_mem_access() which
+> > basically validates the fact that the program can dereference the ctx.
+> >
+> > So now, without the max_ctx_offset store/restore, the verifier
+> > enforces that the provided ctx is not null.
+> >
+> > What I thought that would happen was that if we were to pass a NULL
+> > context from userspace, but the eBPF program dereferences it (or in
+> > that case have a subprog or a function call that dereferences it),
+> > then max_ctx_offset would still be set to the proper value because of
+> > that internal dereference, and so the verifier would reject with
+> > -EINVAL the call to the eBPF program.
+> >
+> > If I add another test that has the following ebpf prog (with ctx_in
+> > being set to NULL by the userspace):
+> >
+> > SEC("syscall")
+> > int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
+> > {
+> >        bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
+> >
+> >        return 0;
+> > }
+> >
+> > Then the call of the program is actually failing with -EINVAL, even
+> > with this patch.
+> >
+> > But again, if setting from userspace a ctx of NULL with a 0 size is
+> > not considered as valid, then we can just drop that hunk and add a
+> > test to enforce it.
+>
+> PTR_TO_CTX in the verifier always means valid pointer.
+> All code paths in the verifier assumes that it's not NULL.
+> Pointer to skb, to xdp, to pt_regs, etc.
+> The syscall prog type is little bit special, since it
+> makes sense not to pass any argument to such prog.
+> So ctx_size_in == 0 is enforced after the verification:
+> if (ctx_size_in < prog->aux->max_ctx_offset ||
+>     ctx_size_in > U16_MAX)
+>           return -EINVAL;
+> The verifier should be able to proceed assuming ctx != NULL
+> and remember max max_ctx_offset.
+> If max_ctx_offset == 4 and ctx_size_in == 0 then
+> it doesn't matter whether the actual 'ctx' pointer is NULL
+> or points to a valid memory.
+> So it's ok for the verifier to assume ctx != NULL everywhere.
 
-Hmm... it seems there might be problem for THP collapse IIUC. THP
-collapse clears and flushes pmd before doing anything on pte and
-relies on interrupt disable of fast GUP to serialize against fast GUP.
-But if TLB flush is no longer sufficient, then we may run into the
-below race IIUC:
-
-         CPU A                                                CPU B
-THP collapse                                             fast GUP
-
-gup_pmd_range() <-- see valid pmd
-
-gup_pte_range() <-- work on pte
-clear pmd and flush TLB
-__collapse_huge_page_isolate()
-    isolate page <-- before GUP bump refcount
-
-   pin the page
-__collapse_huge_page_copy()
-    copy data to huge page
-    clear pte (don't flush TLB)
-Install huge pmd for huge page
-
-return the obsolete page
-
+Ok, thanks for the detailed explanation.
 
 >
-> However, ever since general RCU GUP-fast was introduced in
-> commit 2667f50e8b81 ("mm: introduce a general RCU get_user_pages_fast()"),
-> this handling no longer applies in general. RCU primarily prevents page
-> tables from getting freed while they might still get walked by GUP-fast,
-> but we can race with GUP-fast after clearing the PTE and flushing the
-> TLB.
+> Back to the issue at hand.
+> With this patch the line:
+>     bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
+> will be seen as access_size == sizeof(*args), right?
+> So this part:
+> +                       if (access_size == 0)
+> +                               return zero_size_allowed ? 0 : -EACCES;
 >
-> Nowadays, we can see a refcount change from GUP-fast at any point in
-> time. However, GUP-fast detects concurrent PTE changes by looking up the
-> PTE, temporarily grabbing a reference, and dropping the reference again if
-> the PTE changed in the meantime.
+> will be skipped and
+> the newly added check_mem_access() will call check_ctx_access()
+> which will call syscall_prog_is_valid_access() and it will say
+> that any off < U16_MAX is fine and will simply
+> record max max_ctx_offset.
+> The ctx_size_in < prog->aux->max_ctx_offset check is done later.
+
+Yep, this is correct and this is working now, with a proper error (and
+no, this is not the error I am trying to fix, see below):
+
+eBPF prog:
+```
+  SEC("?syscall")
+  int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
+  {
+          bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
+          return 0;
+  }
+```
+
+before this patch (1/23):
+* with ctx not NULL:
+libbpf: prog 'kfunc_syscall_test_null_fail': BPF program load failed:
+Invalid argument
+R1 type=ctx expected=fp
+arg#0 arg#1 memory, len pair leads to invalid memory access
+
+ => this is not correct, we expect the program to be loaded (and it is
+expected, this is the bug that is fixed)
+
+* Same result with ctx being NULL from the caller
+
+With just the hunk in kernel/bpf/verifier.c (so without touching max_ctx_offset:
+* with ctx not NULL:
+program is loaded, and executed correctly
+
+* with ctx being NULL:
+program is now loaded, but execution returns -EINVAL, as expected
+
+So this case is fully solved by just the hunk in verifier.c
+
+With the full patch:
+same results, with or without ctx being set to NULL, so no side effects.
+
 >
-> An explanation by Jason Gunthorpe regarding how existing memory barriers
-> should be fine to make sure that concurrent GUP-fast cannot succeed in
-> grabbing a reference with write permissions after we cleared the PTE and
-> flushed the TLB can be found at [1].
+> So when you're saying:
+> "call of the program is actually failing with -EINVAL"
+> that's the check you're referring to?
+
+No. I am referring to the following eBPF program:
+```
+  SEC("syscall")
+  int kfunc_syscall_test_null(struct syscall_test_args *args)
+  {
+           return 0;
+  }
+```
+
+(no calls, just the declaration of a program)
+
+This one is supposed to be loaded and properly run whatever the
+context is, right?
+
+However, without the hunk in the btf.c file (max_ctx_offset), we have
+the following (ctx is set to NULL by the userspace):
+verify_success:FAIL:kfunc_syscall_test_null unexpected error: -22 (errno 22)
+
+The reason is that the verifier is calling
+btf_check_subprog_arg_match() on programs too, and considers that ctx
+is not NULL, and bumps the max_ctx_offset value.
+
 >
-> Note that clearing PageAnonExclusive via page_try_share_anon_rmap()
-> might still need some explicit memory barriers to not have any possible
-> races with RCU GUP-fast.
+> If so, everything works as expected.
+
+Not exactly, we can not call a syscall program with a null context
+without this hunk.
+
+> The verifier thinks that bpf_kfunc_call_test_mem_len_pass1()
+> can read that many bytes from args,
+> so it has to reject running the loaded prog in bpf_prog_test_run_syscall().
+
+Yes, that part works. I am focusing on the program declaration.
+
 >
-> [1] https://lkml.kernel.org/r/Yw5rwIUPm49XtqOB@nvidia.com
+> So what are you trying to achieve ?
+
+See above :)
+
+> Make the verifier understand that ctx can be NULL ?
+
+Nope. I am fine with the way it is. But any eBPF (sub)prog is checked
+against btf_check_subprog_arg_match(), which in turns marks all of
+these calls accessing the entire ctx, even if the ctx is null when
+that case is valid.
+
+> If so that is a probably huge undertaking.
+> Something else?
 >
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Jason Gunthorpe <jgg@nvidia.com>
-> Cc: John Hubbard <jhubbard@nvidia.com>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  mm/ksm.c | 21 +++++++++------------
->  1 file changed, 9 insertions(+), 12 deletions(-)
->
-> diff --git a/mm/ksm.c b/mm/ksm.c
-> index 42ab153335a2..e88291f63461 100644
-> --- a/mm/ksm.c
-> +++ b/mm/ksm.c
-> @@ -1072,23 +1072,20 @@ static int write_protect_page(struct vm_area_struct *vma, struct page *page,
->                 swapped = PageSwapCache(page);
->                 flush_cache_page(vma, pvmw.address, page_to_pfn(page));
->                 /*
-> -                * Ok this is tricky, when get_user_pages_fast() run it doesn't
-> -                * take any lock, therefore the check that we are going to make
-> -                * with the pagecount against the mapcount is racy and
-> -                * O_DIRECT can happen right after the check.
-> -                * So we clear the pte and flush the tlb before the check
-> -                * this assure us that no O_DIRECT can happen after the check
-> -                * or in the middle of the check.
-> -                *
-> -                * No need to notify as we are downgrading page table to read
-> -                * only not changing it to point to a new page.
-> +                * Especially if we're downgrading protection, make sure to
-> +                * flush the TLB now. No need to notify as we are not changing
-> +                * the PTE to point at a different page.
->                  *
->                  * See Documentation/mm/mmu_notifier.rst
->                  */
->                 entry = ptep_clear_flush(vma, pvmw.address, pvmw.pte);
-> +
->                 /*
-> -                * Check that no O_DIRECT or similar I/O is in progress on the
-> -                * page
-> +                * Make sure that there are no unexpected references (e.g.,
-> +                * concurrent O_DIRECT). Note that while concurrent GUP-fast
-> +                * could raise the refcount temporarily to grab a write
-> +                * reference, it will observe the changed PTE and drop that
-> +                * temporary reference again.
->                  */
->                 if (page_mapcount(page) + 1 + swapped != page_count(page)) {
->                         set_pte_at(mm, pvmw.address, pvmw.pte, entry);
-> --
-> 2.37.1
->
->
+
+Hopefully this is clearer now.
+
+Cheers,
+Benjamin
+

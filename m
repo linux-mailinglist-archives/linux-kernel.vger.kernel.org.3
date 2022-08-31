@@ -2,159 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFD35A8753
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:12:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B7C35A8756
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:12:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232209AbiHaUMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 16:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38316 "EHLO
+        id S232234AbiHaUMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 16:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiHaUM3 (ORCPT
+        with ESMTP id S230241AbiHaUMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 16:12:29 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C88286CE
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 13:12:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661976748; x=1693512748;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vn/WIXt6p2KiwXZee2jPKaJHrFuZK0viV3WvtlWXyqQ=;
-  b=djwqUrxmenXuD6Bm6uguHUn8ppWmT7rUdDbh4NReU9vZ5Q0UwUIxMGS4
-   wBaB0V9XqhajreUEN3Cn+z+Mlmth0N5gcDPZduFUXCEwc/35Fq4yDu1yp
-   OWLWRDHPCZDIUz5x7nj/ud7tVSTFKV0g4q0xQtqAO6A9GZNd2EW1QlaRw
-   HBvOa56MoOyxuo51nkDJMWLNuRRsIiZkvWr7vUPnynHqkDTvSx9nXvGiX
-   8T66MtWmgRdX+JAyxsc4t48SQgRre8XstBKV/++GFCzMzl/QdIEDqC8j3
-   cW74sRKzUTxQ0sDraPdAgDEwVxc4lbXYDVIfH2UjJ6db29zXYqnEnC0SI
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="293111665"
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="293111665"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 13:12:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="645355358"
-Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 31 Aug 2022 13:12:26 -0700
-Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTU4X-0000fW-1U;
-        Wed, 31 Aug 2022 20:12:25 +0000
-Date:   Thu, 1 Sep 2022 04:12:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 3/3] regmap: spi-avmm: Use swabXX_array() helpers
-Message-ID: <202209010444.n3YAkNP1-lkp@intel.com>
-References: <20220831145407.78166-3-andriy.shevchenko@linux.intel.com>
+        Wed, 31 Aug 2022 16:12:50 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FDF2286CE;
+        Wed, 31 Aug 2022 13:12:50 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VJnvY5021667;
+        Wed, 31 Aug 2022 20:12:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=JLTNgFiDwX8JiagmE7RbrMieN0P5Q+gsHMUA5SyYvLQ=;
+ b=PryCjWBRwI5OQFxuBR2+vmT4qjXDTU4cYfSf315WW0ayRZpLKxXVUwo/f1glNCaOgmiI
+ DYRuG4qF/ooTMsx107zAMu/Lk92SLXCVMs85XQw3cchBVutU3QI6pHcTbrTFdV/zv/J5
+ FM9nsdIn6w4Dm2LZPOoR+MM3c/rVxlq+zHFNVPTM72qxV6aQQ8R6B53MspniaFwM2zVW
+ umxJNdRPyasfHoPqReGpu0l/4ac+LjO+9OJvy3VcqeRZuirPuQvPIuIhZBf1F2lB6BFP
+ VGL8DIMbICtViM40x12Og/bbA4z3lJ/Ah3kGgkWqZdpqCb7r36XCs0uwnrvSFYEAEVWi hA== 
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jae518vf7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 Aug 2022 20:12:40 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27VK61j7030692;
+        Wed, 31 Aug 2022 20:12:38 GMT
+Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
+        by ppma05wdc.us.ibm.com with ESMTP id 3j7aw9vkfg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 31 Aug 2022 20:12:38 +0000
+Received: from b01ledav006.gho.pok.ibm.com (b01ledav006.gho.pok.ibm.com [9.57.199.111])
+        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27VKCcHl57672022
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 31 Aug 2022 20:12:38 GMT
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 287E7AC05F;
+        Wed, 31 Aug 2022 20:12:38 +0000 (GMT)
+Received: from b01ledav006.gho.pok.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B419AC059;
+        Wed, 31 Aug 2022 20:12:37 +0000 (GMT)
+Received: from li-2311da4c-2e09-11b2-a85c-c003041e9174.ibm.com.com (unknown [9.160.77.30])
+        by b01ledav006.gho.pok.ibm.com (Postfix) with ESMTP;
+        Wed, 31 Aug 2022 20:12:37 +0000 (GMT)
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+To:     iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, schnelle@linux.ibm.com,
+        pmorel@linux.ibm.com, borntraeger@linux.ibm.com, hca@linux.ibm.com,
+        gor@linux.ibm.com, gerald.schaefer@linux.ibm.com,
+        agordeev@linux.ibm.com, svens@linux.ibm.com, joro@8bytes.org,
+        will@kernel.org, robin.murphy@arm.com, jgg@nvidia.com,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] iommu/s390: fixes related to repeat attach_dev calls
+Date:   Wed, 31 Aug 2022 16:12:34 -0400
+Message-Id: <20220831201236.77595-1-mjrosato@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831145407.78166-3-andriy.shevchenko@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 0pXSEi-O0gJVAalf4W8rA_88dhO3dvlR
+X-Proofpoint-GUID: 0pXSEi-O0gJVAalf4W8rA_88dhO3dvlR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-31_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 clxscore=1015 mlxlogscore=484
+ spamscore=0 phishscore=0 bulkscore=0 adultscore=0 suspectscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208310097
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+This series contains a few fixes related to supporting multiple unmanaged
+iommu domains on s390.
 
-I love your patch! Yet something to improve:
+Changelog since v3:
+- add a 2nd patch to fix issues related to leaking s390_domain_device
 
-[auto build test ERROR on broonie-regmap/for-next]
-[also build test ERROR on next-20220831]
-[cannot apply to linus/master v6.0-rc3]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Matthew Rosato (2):
+  iommu/s390: Fix race with release_device ops
+  iommu/s390: fix leak of s390_domain_device
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Andy-Shevchenko/swab-Add-array-operations/20220831-225514
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
-config: hexagon-randconfig-r045-20220831 (https://download.01.org/0day-ci/archive/20220901/202209010444.n3YAkNP1-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 1c66bacd6cde1f37d6ac96c45b389666a1334ec0)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/783618682b27b5d06605086a386d64d355914b38
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Andy-Shevchenko/swab-Add-array-operations/20220831-225514
-        git checkout 783618682b27b5d06605086a386d64d355914b38
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/base/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/base/regmap/regmap-spi-avmm.c:8:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/base/regmap/regmap-spi-avmm.c:8:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/base/regmap/regmap-spi-avmm.c:8:
-   In file included from include/linux/regmap.h:20:
-   In file included from include/linux/iopoll.h:14:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/base/regmap/regmap-spi-avmm.c:171:15: error: incompatible pointer types passing 'char *' to parameter of type 'u32 *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
-           swab32_array(buf, len / 4);
-                        ^~~
-   include/linux/swab.h:32:38: note: passing argument to parameter 'buf' here
-   static inline void swab32_array(u32 *buf, unsigned int words)
-                                        ^
-   6 warnings and 1 error generated.
-
-
-vim +171 drivers/base/regmap/regmap-spi-avmm.c
-
-   168	
-   169	static void br_swap_words_32(char *buf, unsigned int len)
-   170	{
- > 171		swab32_array(buf, len / 4);
-   172	}
-   173	
+ arch/s390/include/asm/pci.h |  1 +
+ arch/s390/pci/pci.c         |  1 +
+ drivers/iommu/s390-iommu.c  | 62 ++++++++++++++++++++++++++++++++++---
+ 3 files changed, 59 insertions(+), 5 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.2
+

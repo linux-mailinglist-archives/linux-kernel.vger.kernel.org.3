@@ -2,103 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1A15A7678
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:20:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF24A5A7677
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:19:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbiHaGUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:20:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33126 "EHLO
+        id S230122AbiHaGT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiHaGUG (ORCPT
+        with ESMTP id S229811AbiHaGTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:20:06 -0400
-Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8227F1DA48
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:20:02 -0700 (PDT)
-Received: by mail-vs1-xe35.google.com with SMTP id b128so10024418vsc.1
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5Uji14+TdZrnvcT0vtEfCUN+mbWQ8EBkoUebh8FZEU8=;
-        b=Y2jD8zNY3VvF7yFZcZLYhg5Gfzu1o+2UpwAtIZ2QspR4u/sFWVRH4h00lTQdl/47MW
-         U5odU8htYcZ2Axj1dl79B3wZsOZ6AaAPdjRQHp0WvPY18nb6X5oZ7E/qv2UrdCqSqcvZ
-         fcm5ILO5TV8jpnS/soWNXWi/byQir7ZtOy2l6E/jPNrxOkqN9uQhq344Wv4lLGrr1sG3
-         +X5uaZ6rKLsXBsGJpEd6Qw01wUEnqrQcnhJ7fvdlYWjpk58o8N+20uN7tysYr0ICkUCb
-         aZdQZEo8jA8A1s3kXHfKh/Al/ymnrr3XYS0CpXGICVRZbwu2b/gMHYq+pxWvc293raeZ
-         +sBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5Uji14+TdZrnvcT0vtEfCUN+mbWQ8EBkoUebh8FZEU8=;
-        b=4ouK/vPlU6aTpyfqgGWRaL1vaipz6X4se65vE/l24gAoxJqHdGuK7VMkayuoP1ZMNu
-         MTperFII+I6rQOuUgZwRzeFcT9K0Dovti9vZcCSPfkpLrm77DWMRd5n25ZjqBTb3JXeP
-         mITvsyGJcv2La6sWpFaSkbUOxHEbekKmvdL60f3QfTcMKWphGsSnasSJASBNiqsAK1de
-         kl/P/2ter/w7ZEcAQ2NuZSVlZs7kYgq+m6d4i9zZmc8QyBgTl4dgHLoDRVl/Go/hgNzl
-         ghzloexylx4rNVNkKGROpRcrvC2bQEkN+Yz3Bf/nREMy8pkkSK3cVVWob/UhSrrs4UBI
-         66aw==
-X-Gm-Message-State: ACgBeo3AgZCjmvzgPpOd5EcaFTQUwHiqgbnxdIZ7AbMN+4fkFpziEoY8
-        fkiZP2jauqpWIMQ48sFjnUVO1sxBe5HBm/P5hhNs6HgmA9U=
-X-Google-Smtp-Source: AA6agR4394e/N2qvqEWV8UddKMjybUgjOSmpGyCbjDt0hIzivYq9pWESRkiTrl7QLWA8RmaV5T+80kojoXyYUB3pVqA=
-X-Received: by 2002:a05:6102:e93:b0:390:d839:9aa2 with SMTP id
- l19-20020a0561020e9300b00390d8399aa2mr5535835vst.65.1661926801397; Tue, 30
- Aug 2022 23:20:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220829232934.3277747-1-yuzhao@google.com> <202208310701.LKr1WDCh-lkp@intel.com>
-In-Reply-To: <202208310701.LKr1WDCh-lkp@intel.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Wed, 31 Aug 2022 00:19:25 -0600
-Message-ID: <CAOUHufbnaZpNZ-rarVzOE+S6Wya8OmJF5sbNF29S-Y_XLNRooQ@mail.gmail.com>
-Subject: Re: [PATCH] Revert "swiotlb: panic if nslabs is too small"
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     kbuild@lists.01.org, Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dongli Zhang <dongli.zhang@oracle.com>,
-        kernel test robot <lkp@intel.com>, kbuild-all@lists.01.org,
-        iommu@lists.linux.dev, linux-kernel <linux-kernel@vger.kernel.org>
+        Wed, 31 Aug 2022 02:19:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57294B4B8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:19:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661926792;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=q0RL9hcvSBeKbl7mI4q8jnXwWqDmenfiCErqBoOJUqQ=;
+        b=eFUUocwdXByvBz8dcu4So0O7zXVRvh2+tkhXirO88WoQPV4zPqVK692Dr4lnDOYIjg5Q1+
+        LwCndrZJlsWY5mYD8W/PZt8KTSyJFz8HpZMCETPOAfTkAUqsQwZZOyE8rkh61dqGG8Gfsn
+        MdDK4MSC/W3sEtU6/c3L80waeduyGBk=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-30-G3Vfp39vNKOo56wOZsSujQ-1; Wed, 31 Aug 2022 02:19:49 -0400
+X-MC-Unique: G3Vfp39vNKOo56wOZsSujQ-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3E153C0E20E;
+        Wed, 31 Aug 2022 06:19:48 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 203662166B26;
+        Wed, 31 Aug 2022 06:19:46 +0000 (UTC)
+Message-ID: <dd8c92855762258d87486f719bf7e52e36169ef2.camel@redhat.com>
+Subject: Re: [PATCH 07/19] KVM: SVM: Drop buggy and redundant AVIC "single
+ logical dest" check
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 09:19:45 +0300
+In-Reply-To: <20220831003506.4117148-8-seanjc@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-8-seanjc@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 12:01 AM Dan Carpenter <dan.carpenter@oracle.com> wrote:
->
-> Hi Yu,
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Yu-Zhao/Revert-swiotlb-panic-if-nslabs-is-too-small/20220830-073123
-> base:   c40e8341e3b3bb27e3a65b06b5b454626234c4f0
-> config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20220831/202208310701.LKr1WDCh-lkp@intel.com/config)
-> compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
->
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
->
-> smatch warnings:
-> kernel/dma/swiotlb.c:334 swiotlb_init_remap() error: uninitialized symbol 'nslabs'.
->
-> vim +/nslabs +334 kernel/dma/swiotlb.c
->
-> 7374153d294eb5 kernel/dma/swiotlb.c    Christoph Hellwig 2022-03-14  307  void __init swiotlb_init_remap(bool addressing_limit, unsigned int flags,
-> 7374153d294eb5 kernel/dma/swiotlb.c    Christoph Hellwig 2022-03-14  308                int (*remap)(void *tlb, unsigned long nslabs))
->                                                                                                                               ^^^^^^
->
-> abbceff7d7a884 lib/swiotlb.c           FUJITA Tomonori   2010-05-10  309  {
-> 6424e31b1c050a kernel/dma/swiotlb.c    Christoph Hellwig 2022-03-15  310        struct io_tlb_mem *mem = &io_tlb_default_mem;
-> 20347fca71a387 kernel/dma/swiotlb.c    Tianyu Lan        2022-07-08  311        unsigned long nslabs;
->                                                                                               ^^^^^^
-> Merge issue?  How does this compile?
+On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
+> Use the already-calculated-and-sanity-checked destination bitmap when
+> processing a fast AVIC kick in logical mode, and drop the logical path's
+> flawed logic.  The intent of the check is to ensure the bitmap is a power
+> of two, whereas "icrh != (1 << avic)" effectively checks that the bitmap
+> is a power of two _and_ the target cluster is '0'.
+> 
+> Note, the flawed check isn't a functional issue, it simply means that KVM
+> will go down the slow path if the target cluster is non-zero.
+> 
+> Fixes: 8c9e639da435 ("KVM: SVM: Use target APIC ID to complete x2AVIC IRQs when possible")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 10 +---------
+>  1 file changed, 1 insertion(+), 9 deletions(-)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index 3c333cd2e752..14f567550a1e 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -411,15 +411,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
+>  			 * Instead, calculate physical ID from logical ID in ICRH.
+>  			 */
+>  			int cluster = (icrh & 0xffff0000) >> 16;
+> -			int apic = ffs(icrh & 0xffff) - 1;
+> -
+> -			/*
+> -			 * If the x2APIC logical ID sub-field (i.e. icrh[15:0])
+> -			 * contains anything but a single bit, we cannot use the
+> -			 * fast path, because it is limited to a single vCPU.
+> -			 */
+> -			if (apic < 0 || icrh != (1 << apic))
+> -				return -EINVAL;
+> +			int apic = ffs(bitmap) - 1;
+>  
+>  			l1_physical_id = (cluster << 4) + apic;
+>  		}
 
-Sorry, I deleted an extra line while resolving the conflict.
+Oh, I didn't notice this bug. However isn't removing the check is wrong as well?
 
-Resending the patch.
+What if we do have multiple bits set in the bitmap? After you remove this code,
+we will set IPI only to APIC which matches the 1st bit, no?
+(The fast code only sends IPI to one vCPU)
+
+Best regards,
+	Maxim Levitsky
+

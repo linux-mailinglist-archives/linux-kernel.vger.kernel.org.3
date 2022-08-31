@@ -2,102 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B885A7FA5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:12:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E25F25A7FBD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231855AbiHaOM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57424 "EHLO
+        id S232093AbiHaOOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiHaOMY (ORCPT
+        with ESMTP id S232106AbiHaONe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:12:24 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BA0C58C6
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:12:23 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id q16so14751156ljp.8
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:12:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=gzK10rJm3kDakU95ZOzVvw37oOA+zuu1InnZT0+0zc8=;
-        b=anQU10e8+GPGyhXsYmOKXNVsuNiBAq3vGn1CRMFCzYLiizIl40pIiNmHHoYfrI5ilg
-         DOaYNSzwJFoK5Gx3jOl6YVRafg3lVDuOH7Rbf5kZE9KegehB7Kvr3ldUZy3pGSA/kIRq
-         qCQIyxz7PVY/FIobzmokwfaK/HUO/IhDpZr+x1yacobSB73dOcFFSoZo9FRzmEw37b0B
-         zimmgXZ4urYhkmRMBxPtoJNjt9zebub8jFiCGy3SyDqd5q2L4HRfmR8iDU9YuedLiak4
-         +V7qo2bRf/hdYpawdUUSKDttDRBOIZUZp1LxJ6nqKJGY3w6f/rYeRQ0TM5y47/yNaoP2
-         eWNA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=gzK10rJm3kDakU95ZOzVvw37oOA+zuu1InnZT0+0zc8=;
-        b=GRN/8sSBRWbF4jGWEt+lImTS0V11z29S6xX/a1qcQZ41LjlP+1XGlNtYzi/aGeelxN
-         k6CMIPyVdeKpOzvaAx/d1P03Icmbq+iAFUuk082E+DExbsB7VWPVSr1r05vEdxqhpBPC
-         JwZPtXa/rAJBWtgh5RMnfe2AM8Aewj/J9pZXTanuW9r+4zBn4Q9hd2L0cx78BW/72uoB
-         rkDJjU4dO8i46kROaPfRlTT9oKEWy+v1/0rdRkhRZ6wMbX+M0Oj9tWFaCl5RdXev5xVz
-         mUbY7dBMToFmZ3fvvGTM0gSXV0fwFDWNBsXSc0izs106s4EcTqTQX2xXHcKS/HMl70//
-         tZUw==
-X-Gm-Message-State: ACgBeo0QZmOs31yRdgh5w93gj/IEscOKBG3PxmCkqxXvspjZmcDEDZfx
-        lz4fCs1ntyJncc9Mr7UVf4gd3w==
-X-Google-Smtp-Source: AA6agR6Kxd376mZM7+9hyHIlzFnsCVzTl9sipNPdfLu+aWFjls/ZvCjq2m3yABlLucRA6u5J71yppg==
-X-Received: by 2002:a05:651c:901:b0:261:ca36:951a with SMTP id e1-20020a05651c090100b00261ca36951amr9030862ljq.36.1661955142051;
-        Wed, 31 Aug 2022 07:12:22 -0700 (PDT)
-Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id h5-20020ac24d25000000b00494603953b6sm1523745lfk.6.2022.08.31.07.12.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 07:12:21 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, arm@kernel.org,
-        soc@kernel.org, Olof Johansson <olof@lixom.net>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [RESEND PATCH] arm64: defconfig: enable newer Qualcomm SoC sound drivers
-Date:   Wed, 31 Aug 2022 17:12:18 +0300
-Message-Id: <20220831141218.516100-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 31 Aug 2022 10:13:34 -0400
+Received: from mail.gnudd.com (mail.gnudd.com [93.91.132.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44C23D75A2;
+        Wed, 31 Aug 2022 07:13:19 -0700 (PDT)
+Received: from dciminaghi by mail.gnudd.com with local (Exim 4.94.2)
+        (envelope-from <dciminaghi@arcana.gnudd.com>)
+        id 1oTOSL-0004O9-3A; Wed, 31 Aug 2022 16:12:37 +0200
+Date:   Wed, 31 Aug 2022 16:12:36 +0200
+From:   Davide Ciminaghi <ciminaghi@gnudd.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexandre Courbot <gnurou@gmail.com>,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>, Alessandro Rubini <rubini@gnudd.com>
+Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+Message-ID: <Yw9sVCNtaLUjZH/F@arcana.i.gnudd.com>
+References: <CAK8P3a0uuJ_z8wmNmQTW_qPNqzz7XoxZdHgqbzmK+ydtjraeHg@mail.gmail.com>
+ <CACRpkdb5ow4hD3td6agCuKWvuxptm5AV4rsCrcxNStNdXnBzrA@mail.gmail.com>
+ <87f2ff4c-3426-201c-df86-2d06d3587a20@csgroup.eu>
+ <CACRpkdYizQhiJXzXNHg7TXUVHzhkwXHFN5+e58kH4udGm1ziEA@mail.gmail.com>
+ <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
+ <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
+ <515364a9-33a1-fafa-fdce-dc7dbd5bb7fb@csgroup.eu>
+ <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
+ <Yw3DKCuDoPkCaqxE@arcana.i.gnudd.com>
+ <CACRpkdZeAAZYqV3ccd-X=ZwdnfSwRUdXchGETB-WTkgSZQL=Pw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <CACRpkdZeAAZYqV3ccd-X=ZwdnfSwRUdXchGETB-WTkgSZQL=Pw@mail.gmail.com>
+X-Face: #Q;A)@_4.#>0+_%y]7aBr:c"ndLp&#+2?]J;lkse\^)FP^Lr5@O0{)J;'nny4%74.fM'n)M
+ >ISCj.KmsL/HTxz!:Ju'pnj'Gz&.
+Sender: ciminaghi@gnudd.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable sound support (machine drivers) for Qualcomm SC7180 and SC7280
-SoCs.
+On Wed, Aug 31, 2022 at 03:32:25PM +0200, Linus Walleij wrote:
+> On Tue, Aug 30, 2022 at 9:58 AM Davide Ciminaghi <ciminaghi@gnudd.com> wrote:
+> 
+> > the sta2x11 was a chip containing AMBA peripherals and a PCIe to AMBA bridge
+> > (it is still in production as far as I know, but deprecated for new designs).
+> > It would typically be installed on x86 machines, so you needed to build and
+> > run AMBA drivers in an x86 environment. The original drivers we started from
+> > had platform data, but then we were told to switch to DTS.
+> 
+> For the record I think that was bad advice, I hope it wasn't me.
+> But the world was different back then I suppose.
+> Adding DTS to x86 which is inherently ACPI is not a good idea.
+> Especially if you look at how SBSA ACPI UARTS were done
+> in drivers/tty/serial/amba-pl011.c.
+>
+now that I think of it, ACPI was also listed as a possible choice, but the
+problem was that we didn't know much about ACPI, and took the DTS way.
+So there was no bad advice, just fear of the unknown :-)
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
-
-Resending because I missed ARM SoC maintainers and Bjorn.
-
- arch/arm64/configs/defconfig | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 265454620682..644d084c6888 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -792,6 +792,8 @@ CONFIG_SND_SOC_APQ8016_SBC=m
- CONFIG_SND_SOC_MSM8996=m
- CONFIG_SND_SOC_SDM845=m
- CONFIG_SND_SOC_SM8250=m
-+CONFIG_SND_SOC_SC7180=m
-+CONFIG_SND_SOC_SC7280=m
- CONFIG_SND_SOC_ROCKCHIP=m
- CONFIG_SND_SOC_ROCKCHIP_SPDIF=m
- CONFIG_SND_SOC_ROCKCHIP_RT5645=m
--- 
-2.34.1
-
+Thanks
+Davide

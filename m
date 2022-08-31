@@ -2,240 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC545A73F3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D155A73F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:36:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231880AbiHaCg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 22:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60128 "EHLO
+        id S231366AbiHaCgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 22:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229675AbiHaCgx (ORCPT
+        with ESMTP id S230103AbiHaCf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 22:36:53 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EE009C525
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 19:36:51 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MHSs33yVYz1N7dG;
-        Wed, 31 Aug 2022 10:33:11 +0800 (CST)
-Received: from huawei.com (10.67.174.53) by kwepemi500012.china.huawei.com
- (7.221.188.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
- 2022 10:36:49 +0800
-From:   Liao Chang <liaochang1@huawei.com>
-To:     <tglx@linutronix.de>, <maz@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <john.garry@huawei.com>
-Subject: [PATCH V2] irqchip/gic-v3-its: Reclaim the dangling bits in LPI maps
-Date:   Wed, 31 Aug 2022 10:33:32 +0800
-Message-ID: <20220831023332.191368-1-liaochang1@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 30 Aug 2022 22:35:59 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 000B79C511;
+        Tue, 30 Aug 2022 19:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661913357; x=1693449357;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=3wanf09tVKxeV5DAaMAAIZQ/+wVHUh3GTHruoz+PY2w=;
+  b=YvHSlDnVlp5tOvetJmiSTzD+QVblL0DSf7fL4nvqbBlHtTlbN1wvKqeS
+   AWUOcYcswfDXxm4erhLaMWL8GPnOgK6fbgGnx7S2L2ktV5jVmGJVWeLNi
+   B9ezBQ21qJgaV/uJG8YFdX1yDGjiJO5IlQRznkhkWpyMrsxk9Wch7NaQ4
+   SwpKmzEIKNFx5TqsVt3d8pCO+4uKise4BRy8VEZLv/LiJH9RSNWNb/bUo
+   Wp7vSi5R6L8F1i1xLMjyAM4b41/hpSgAT0Dvj+pKhuCbzdQoc49UqGCCw
+   3HuKy/5ujQEwMBFhkYSyU2Sn72UfUpHd9m4ygoqObGGtOUD6J4LulUvCK
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="275104300"
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="275104300"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:35:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
+   d="scan'208";a="641666577"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga008.jf.intel.com with ESMTP; 30 Aug 2022 19:35:56 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 30 Aug 2022 19:35:55 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 30 Aug 2022 19:35:55 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 30 Aug 2022 19:35:55 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.177)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 30 Aug 2022 19:35:55 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MyU5yV9iTIvJzMO5XvRIptJOgsAW1gG8akSjTQCUm/6BP4PtXXKRUP3lYaIa71C0m0aecViHHDzomoQO9g6OydlUvkjNc1wg5z4tY4IhLvTfoCApbVv7GLM/z24h/OVa/MKJGq33p0GukTfuDFDTxmclqmE4TpA2VkOZU9JD6IMRddmdb/0w5qGUyVtsJcKms7KIkv9qmqSjhBf0L8AW8pjHj2GnsyDgwiSaQ38BST6RnOy0rv1SqdcSWXyOpRWbO2L2Zik5rm8F6948lxp+e56lNeslABd/WO9azdYu5ft4wEKMm2gAJwhlQn5UtIY5HVvGvOEAQXRB4NFL+WEZgQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3wanf09tVKxeV5DAaMAAIZQ/+wVHUh3GTHruoz+PY2w=;
+ b=QAsVfjxJuBb8O/QuqZWYebjASfg1+RsE27o2wFGjQShQc7yR8eZ9sjxKbze6uGqGfa/BfLigOJpjJqfJSUwxzwJ+uRhJNDtByQugcPvY+ITa3Ux5i5vF6hfrjjOKF/+euJs0yejj5BKFt8Ik/y3OxmVlIGy6eYKZ5txtgUe3wwp0XegMBjNOTA2W8dhzU4BqvMh5ZgDoaVXZ7KxArSx3Be2fHzuWzIAysk8swMlKSPDQ48p5+gzP/N0vW5JZyT9L6ZNie4TNy4b80ALWTXK/heeqFzCEbI4NS2WftVL40uaJkpXIiuUZwenhGZ7/V+rOB6wtIu7Y021W8slCBFgt5Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
+ by BN6PR11MB1572.namprd11.prod.outlook.com (2603:10b6:405:e::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.19; Wed, 31 Aug
+ 2022 02:35:53 +0000
+Received: from BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::fce1:b229:d351:a708]) by BL1PR11MB5978.namprd11.prod.outlook.com
+ ([fe80::fce1:b229:d351:a708%8]) with mapi id 15.20.5588.010; Wed, 31 Aug 2022
+ 02:35:53 +0000
+From:   "Huang, Kai" <kai.huang@intel.com>
+To:     "jarkko@kernel.org" <jarkko@kernel.org>
+CC:     "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "haitao.huang@linux.intel.com" <haitao.huang@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/6] x86/sgx: Do not consider unsanitized pages an error
+Thread-Topic: [PATCH 1/6] x86/sgx: Do not consider unsanitized pages an error
+Thread-Index: AQHYvB5Zhte1gFzwtkKh12BdFyDkBa3IDqyAgAAq44CAAA1sgIAABY4A
+Date:   Wed, 31 Aug 2022 02:35:53 +0000
+Message-ID: <d07577c3f0b4b3fff0ce470c56f91fb634653703.camel@intel.com>
+References: <20220830031206.13449-1-jarkko@kernel.org>
+         <20220830031206.13449-2-jarkko@kernel.org>
+         <1f43e7b9-c101-3872-bd1b-add66933b285@intel.com>
+         <1b3308a364317d36ad41961ea9cfee24aa122f02.camel@intel.com>
+         <Yw7EX5GCrEaLzpHV@kernel.org>
+In-Reply-To: <Yw7EX5GCrEaLzpHV@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 9f766ccc-f739-4e59-16b3-08da8af986aa
+x-ms-traffictypediagnostic: BN6PR11MB1572:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Q+28ks2h+IkmqyYNvwsPhWTWxvO1z2wRouXgck4QoD8mRWuEGCx5A7H5xvmHAKuUIwDtp/sRj5R5g63B72NqMtdCDWcUpyDZ45vzNTxJlD+iZoUprpUExI6MrtZcbkOAqOuIraMJzlR1ead5XakWwgmmR7GbY18zRFJqMvbB2UXwEXOMaBqtOb1+valDC8lpNL/5FHjjXT3l+w8m8OXwPOVFDZuf51OFaNndWLcGCq7/EZwV21y0L5nvaVZw7HetN7ttsPL1XnAYqTabNtZB8q7tS6NmWPht3hWrFRENG+HKGefRSxTNUuCz1ZMaTo1QG+0HQBZlv24G5Sbj2Etg7IincMwjd9T5IbPSnAvszKus/l+LdWkEUm0GUpopxAwlPvdgUlzUy8tTAayFOZgkQS6C2KRBOs04K07hbt99zNOr5IVH7xZ3Z9+EL9HWUODB+wK9c/xB1Eu4BuCLLoLCmkRQVTDk7p7ITktVNxGEiwxtqkJHx5zRgrLfm6fzJJGjb2om7Vexs7lFfY0K8e1a05581HH0+zy2p5BAiyhKJdIxliVHmrlIqkSnwNcZ45LOIu4wXx3dtdEV908M5ToilrEEawhO0Z16sjo09ktZ9TsfF5WxkAX78moIxCX8uVYYbTVHhDJdf8FiVUPC76MVXgSb6wzptfZM21kD0EC9tu/MSODyB0z2YS0Zal/TtUUXNcokf923VIVvz9lQwoJT5bAPUY7yokDiClqqB76CPXqnZeYxe1K+koJxvIL2aO/srdAxSemuo1OGMzxLrj4rdg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(366004)(376002)(346002)(39860400002)(64756008)(6486002)(2906002)(7416002)(8936002)(71200400001)(2616005)(66556008)(6512007)(5660300002)(66446008)(53546011)(26005)(83380400001)(186003)(478600001)(41300700001)(66946007)(4326008)(66476007)(8676002)(76116006)(38100700002)(91956017)(6916009)(54906003)(316002)(6506007)(36756003)(122000001)(86362001)(38070700005)(82960400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aUYrVUxONmRiYXpGN2tDc2lUR1VXWmNJK0dwWVc5SUpCdXJNT24ycTVXcExU?=
+ =?utf-8?B?bEsvRWxpL2lVUlBXbDFPa3JVdFpZV2lIQWZ6Ulo1em9TcEhnOG56dWNYbXBC?=
+ =?utf-8?B?d1NFaHU5ZXdRTVNaQTRlR29xZklrSnZEb2Jqd3Y3czR5N2NaQ0xNYTZFenF0?=
+ =?utf-8?B?RU1PTVZ1Q2gyTWlBNVJzd0hGZDBKZzJKSmRXYUVsRTJnbGNoRFFRNGNxb1Qw?=
+ =?utf-8?B?WWVBSjhHaEZEaCtYSEpGTnR0bnV1aUpuSEhTb2lsQmZ0dnRGTTBlWlFNVVZx?=
+ =?utf-8?B?VFg2UVRwUHoyRnFpUkR3cStHY21ybjhwOUZCcnJwZ0ZiV2JIcU84dUNaQ1Zz?=
+ =?utf-8?B?cXpiMzlqcVFoRHd3Mmw4RTYwVmcwbHV1RE5NNnltNExnVUdxQmxQOERCeEU0?=
+ =?utf-8?B?cm5IRTBVQ1hzcHk1UzlPSk0vbE9xWENSVU5SS041T2ZzMkdWdE9RTXJWUWtV?=
+ =?utf-8?B?eEQrZlorQmxhMG9MNkxtQnlrWjUzb1B6aElnWXpPQm8zdjlxNFdJdUVBU0lm?=
+ =?utf-8?B?aTRKM0Z3RE9idG5ZQlhSQXpKZVc2SmQxMzhCRFkrd0ZSbVZFUzVJQWYvTTI3?=
+ =?utf-8?B?WWtDNU1KeXJYcUxGUmJOb2tQSWFuKzQwTzZmNVBFbHpmSHpYSXJlSmxNNERt?=
+ =?utf-8?B?U0l0K2pDck9ZR0g4eUNuNkRRemdOTVB2akxmajkyZ2ZCRTN6akFRMFluZnc3?=
+ =?utf-8?B?SmZRNE1KNndVSDZxMWJDT20xK0tidTNSNnYwMi9ZUWdaN012UEQ2U1ZhblBs?=
+ =?utf-8?B?MElONVBHWlFlR1JQakVVNFlVakwxV3NGVitDQm5kN1JNWkNmUHFpWG5oMVBR?=
+ =?utf-8?B?NXhYTkh4RThBWkI1TXpVUXlhVzdMOFFsWm1Fd201S3dIS1ZpTDBoa1ZNMjEz?=
+ =?utf-8?B?QzNmWmJ3d0FleFBVY2pFZ3NvRmEwNmtiMEhrR1ROOFk1cE1QTlJMKzZoMTFu?=
+ =?utf-8?B?cGJMY1B0VjN2MWxQT3NOeXJsKy9Xc2xlKytPYTF2UnhRd3ZrWDlsVE1XNXZy?=
+ =?utf-8?B?Y2E2M3NIajdRTWJqM0Y5eG9ZeU16a01nTWdUejJMY1Rka3h4ODhxZTBWS29M?=
+ =?utf-8?B?TW9ZT1A3OFRxZTJweW9xU2RXampSajVBcUJHSnlIVmQwZk9xcUZaaU9zMWVG?=
+ =?utf-8?B?VVp1QVg3bytsUldJUWhIUnROa0x2Mm9HTXVpOFd2Yk1sbnZxVXZGOWwwRzJU?=
+ =?utf-8?B?Q2loVHFiWTJVTW5iMktjM25QMnFxM3NjN3JKM2VvSFdydHNXMTdhWU81QmMx?=
+ =?utf-8?B?N05pbVNVOENSdjhaeDZUQkRuWU1paDlDTzRFZ3RMaUIzUy9QQkRiVXhySEY0?=
+ =?utf-8?B?cXhncXBGdTJBdzFDWkhUOFFWVmlCeFlsMU9scCs0RDh5dytjcGNIaXdwRnlE?=
+ =?utf-8?B?MVpyY2NxaHhPMEVHS3MzdlR0WE5uS204RFl2T0Rzc1BQR0p4TEt2aUlzUWcz?=
+ =?utf-8?B?RUxRVDNwbGRYcDVHdlEzNlIzalBoZXRJWENQSG1sSFB2ZndLQmtxaGVWR3Rv?=
+ =?utf-8?B?UnFsYTFiQnRNUDNUYXpzS3MyMFI2TFBkMzdOZllFdFJ5Z1pEdHNxeVFHVkFW?=
+ =?utf-8?B?bzlvaWRSbUltbXZkVDUzNnRwdDFZalZqYWdGRFNOQU5Cbmt6bjVLeUtwWDZ4?=
+ =?utf-8?B?SGxENUgraUFROE15L2p6dkY2MnEzNzNBdGJCeEU0MGZQMCtKTUxtWVNlbzFV?=
+ =?utf-8?B?Q1dpcXcrM3ZWUzBwK2pXbzgvQmtrYnpucUtUWjQ1SWQwSnN6Y0pPaVJGTkRr?=
+ =?utf-8?B?NlBYNWsreVlYQmMzWTFTdkJ6cGViZzBEaDQ1SFhLLzlwY05rOWgvcjlHUG9T?=
+ =?utf-8?B?SXc5U0JNRWI3TXR0U083ZERUVkwxRWZYVGFqL0kyaGl6OEs3RExod3FsQWli?=
+ =?utf-8?B?bWN6cExEMnloNGF4YytaQjhzV1JMTGJaVEhDSDdDazhHSktRNU9BRXRxNVhw?=
+ =?utf-8?B?MVhjK09DQUZhdG9uWjRuVkd2SVdrdWpPRkFvWW5oeHZOeFhCMHVBLzJIWVpM?=
+ =?utf-8?B?MzRlaWdBOUxhRGlmV1VYQytmWlpRZG91UThvZWFRSi9xWGZaM0tVVXRqMlh4?=
+ =?utf-8?B?OGhscldUVGdjZ25IOU1McWhNVzVoVkxlaGR5RndWTGUrSGJMdVQrUldpSG9F?=
+ =?utf-8?B?dE0wdVYvODRCWDhTMzdGNHFzR2U3ZXYzd0M0VVI2aXlydENneW5HaWthYWhu?=
+ =?utf-8?B?d0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <E66DB658926A13458BFFF12ED50CB663@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.53]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,PDS_BTC_ID,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f766ccc-f739-4e59-16b3-08da8af986aa
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2022 02:35:53.6818
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wfL+w2/gI5m6FUBIqCqc3heZaWfbeSXGSa8ycVlpAEtInRcpXjXUpRflApxkU/6Wgil4L7ef/h6UGDMwDkdlCg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1572
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following interrupt allocation process leads to some interrupts are
-mapped in the low-level domain(Arm ITS), but they have never mapped
-at the higher level.
-
-irq_domain_alloc_irqs_hierarchy(.., nr_irqs, ...)
-  its_irq_domain_alloc(..., nr_irqs, ...)
-    its_alloc_device_irq(..., nr_irqs, ...)
-      bitmap_find_free_region(..., get_count_order(nr_irqs))
-
-Since ITS domain finds a region of zero bits, the length of which must
-aligned to the power of two. If nr_irqs is 30, the length of zero bits
-is actually 32, but the first 30 bits are really mapped.
-
-On teardown, the low-level domain only free these interrupts that
-actually mapped, and leave last interrupts dangling in the ITS domain.
-Thus the ITS device resources are never freed. On device driver reload,
-dangling interrupts prevent ITS domain from allocating enough resource.
-
-irq_domain_free_irqs_hierarchy(..., nr_irqs, ...)
-  its_irq_domain_free(..., irq_base + i, 1)
-    bitmap_release_region(..., irq_base + i, get_count_order(1))
-
-John reported this problem to LKML and Marc provided a solution and fix
-it in the generic code, see the discussion from Link tag. Marc's patch
-fix John's problem, but does not take care of some corner case, look one
-example below.
-
-Step1: 32 interrupts allocated in LPI domain, but return the first 30 to
-higher driver.
-
-   111111111111111111111111111111 11
-  |<------------0~29------------>|30,31|
-
-Step2: interrupt #16~28 are released one by one, then #0~15 and #29~31
-still be there.
-
-   1111111111111111 0000000000000 1  11
-  |<-----0~15----->|<---16~28--->|29|30,31|
-
-Step#: on driver teardown, generic code will invoke ITS domain code
-twice. The first time, #0~15 will be released, the second one, only #29
-will be released(1 align to power of two).
-
-   0000000000000000 0000000000000 0  11
-  |<-----0~15----->|<---16~28--->|29|30,31|
-
-In short summary, the dangling problem stems from the number of released
-hwirq is less than the one of the allocated hwirq in ITS domain.
-
-In order to fix this problem, introduce dangling list for recording
-these allocated but unmapped hwirq. Whenever some LPI hwirqs are
-released, perform dangling list-travel to find out some dangling bits
-followed then release them, look back the trivial example above.
-
-Step1: record '2' into the irq_data.dangling of #29 hwirq.
-
-           111111111111111111111111111111 11
-          |<------------0~29------------>|30,31|
-dangling:  000000000000000000000000000002
-
-Step2: no change
-
-          1111111111111111 0000000000000 1  11
-         |<-----0~15----->|<---16~28--->|29|30,31|
-dangling: 0000000000000000 0000000000000 2
-
-Step3: ITS domain will release #30~31 since the irq_data.dangling of #29
-is '2'.
-
-           0000000000000000 0000000000000 0  00
-          |<-----0~15----->|<---16~28--->|29|30,31|
-dangling:  0000000000000000 0000000000000 2
-
-Fixes: 4615fbc3788dd ("genirq/irqdomain: Don't try to free an interrupt that has no mapping")
-Reported-by: John Garry <john.garry@huawei.com>
-Signed-off-by: Liao Chang <liaochang1@huawei.com>
-Link: https://lore.kernel.org/lkml/3d3d0155e66429968cb4f6b4feeae4b3@kernel.org/
----
-Changes since v1:
-- Correct grammar and spelling mistakes in commit message.
-- Refactor the fixup solution, avoid hacking generici irq code.
-
----
- drivers/irqchip/irq-gic-v3-its.c | 57 ++++++++++++++++++++++++++++++--
- 1 file changed, 54 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/irqchip/irq-gic-v3-its.c b/drivers/irqchip/irq-gic-v3-its.c
-index 5ff09de6c48f..e191491bf683 100644
---- a/drivers/irqchip/irq-gic-v3-its.c
-+++ b/drivers/irqchip/irq-gic-v3-its.c
-@@ -143,6 +143,12 @@ struct its_node {
- /* Convert page order to size in bytes */
- #define PAGE_ORDER_TO_SIZE(o)	(PAGE_SIZE << (o))
- 
-+struct dangling_lpis {
-+	struct list_head	list;
-+	irq_hw_number_t		start;
-+	irq_hw_number_t		end;
-+};
-+
- struct event_lpi_map {
- 	unsigned long		*lpi_map;
- 	u16			*col_map;
-@@ -152,6 +158,7 @@ struct event_lpi_map {
- 	struct its_vm		*vm;
- 	struct its_vlpi_map	*vlpi_maps;
- 	int			nr_vlpis;
-+	struct list_head	dangling;
- };
- 
- /*
-@@ -3414,6 +3421,7 @@ static struct its_device *its_create_device(struct its_node *its, u32 dev_id,
- 	dev->event_map.col_map = col_map;
- 	dev->event_map.lpi_base = lpi_base;
- 	dev->event_map.nr_lpis = nr_lpis;
-+	INIT_LIST_HEAD(&dev->event_map.dangling);
- 	raw_spin_lock_init(&dev->event_map.vlpi_lock);
- 	dev->device_id = dev_id;
- 	INIT_LIST_HEAD(&dev->entry);
-@@ -3443,6 +3451,8 @@ static void its_free_device(struct its_device *its_dev)
- static int its_alloc_device_irq(struct its_device *dev, int nvecs, irq_hw_number_t *hwirq)
- {
- 	int idx;
-+	int real_bits = (1 << get_count_order(nvecs));
-+	struct dangling_lpis *lpis;
- 
- 	/* Find a free LPI region in lpi_map and allocate them. */
- 	idx = bitmap_find_free_region(dev->event_map.lpi_map,
-@@ -3453,9 +3463,52 @@ static int its_alloc_device_irq(struct its_device *dev, int nvecs, irq_hw_number
- 
- 	*hwirq = dev->event_map.lpi_base + idx;
- 
-+	/*
-+	 * In order to reclaim dangling hwirq bits when module teardown,
-+	 * record all dangling hwirq here.
-+	 */
-+	if (real_bits > nvecs) {
-+		lpis = kzalloc(sizeof(*lpis), GFP_KERNEL);
-+		if (!lpis) {
-+			bitmap_release_region(dev->event_map.lpi_map,
-+					      *hwirq, get_count_order(nvecs));
-+			return -ENOMEM;
-+		}
-+		lpis->start = *hwirq + nvecs;
-+		lpis->end = *hwirq + real_bits;
-+		list_add_tail(&dev->event_map.dangling, &lpis->list);
-+	}
-+
- 	return 0;
- }
- 
-+static void its_free_device_irq(struct its_device *dev, int nvecs,
-+				irq_hw_number_t hwirq)
-+{
-+	struct dangling_lpis *entry, *temp;
-+
-+	bitmap_release_region(dev->event_map.lpi_map, hwirq,
-+			      get_count_order(nvecs));
-+
-+	/*
-+	 * If these hwirq are followed by some dangling bits, it needs to
-+	 * reclaim these dangling bits.
-+	 */
-+	list_for_each_entry_safe(entry, temp, &dev->event_map.dangling, list) {
-+		if (entry->start != hwirq + nvecs)
-+			continue;
-+
-+		while (entry->start < entry->end) {
-+			bitmap_release_region(dev->event_map.lpi_map,
-+					      entry->start, get_count_order(1));
-+			entry->start += 1;
-+		}
-+		list_del(&entry->list);
-+		kfree(entry);
-+		break;
-+	}
-+}
-+
- static int its_msi_prepare(struct irq_domain *domain, struct device *dev,
- 			   int nvec, msi_alloc_info_t *info)
- {
-@@ -3619,9 +3672,7 @@ static void its_irq_domain_free(struct irq_domain *domain, unsigned int virq,
- 	struct its_node *its = its_dev->its;
- 	int i;
- 
--	bitmap_release_region(its_dev->event_map.lpi_map,
--			      its_get_event_id(irq_domain_get_irq_data(domain, virq)),
--			      get_count_order(nr_irqs));
-+	its_free_device_irq(its_dev, nr_irqs, its_get_event_id(d));
- 
- 	for (i = 0; i < nr_irqs; i++) {
- 		struct irq_data *data = irq_domain_get_irq_data(domain,
--- 
-2.17.1
-
+T24gV2VkLCAyMDIyLTA4LTMxIGF0IDA1OjE1ICswMzAwLCBqYXJra29Aa2VybmVsLm9yZyB3cm90
+ZToNCj4gT24gV2VkLCBBdWcgMzEsIDIwMjIgYXQgMDE6Mjc6NThBTSArMDAwMCwgSHVhbmcsIEth
+aSB3cm90ZToNCj4gPiBPbiBUdWUsIDIwMjItMDgtMzAgYXQgMTU6NTQgLTA3MDAsIFJlaW5ldHRl
+IENoYXRyZSB3cm90ZToNCj4gPiA+IEhpIEphcmtrbywNCj4gPiA+IA0KPiA+ID4gT24gOC8yOS8y
+MDIyIDg6MTIgUE0sIEphcmtrbyBTYWtraW5lbiB3cm90ZToNCj4gPiA+ID4gSW4gc2d4X2luaXQo
+KSwgaWYgbWlzY19yZWdpc3RlcigpIGZvciB0aGUgcHJvdmlzaW9uIGRldmljZSBmYWlscywgYW5k
+DQo+ID4gPiA+IG5laXRoZXIgc2d4X2Rydl9pbml0KCkgbm9yIHNneF92ZXBjX2luaXQoKSBzdWNj
+ZWVkcywgdGhlbiBrc2d4ZCB3aWxsIGJlDQo+ID4gPiA+IHByZW1hdHVyZWx5IHN0b3BwZWQuDQo+
+ID4gPiANCj4gPiA+IEkgZG8gbm90IHRoaW5rIG1pc2NfcmVnaXN0ZXIoKSBpcyByZXF1aXJlZCB0
+byBmYWlsIGZvciB0aGUgc2NlbmFyaW8gdG8NCj4gPiA+IGJlIHRyaWdnZXJlZCAocmF0aGVyIHVz
+ZSAib3IiIHRoYW4gImFuZCI/KS4gUGVyaGFwcyBqdXN0DQo+ID4gPiAiSW4gc2d4X2luaXQoKSwg
+aWYgYSBmYWlsdXJlIGlzIGVuY291bnRlcmVkIGFmdGVyIGtzZ3hkIGlzIHN0YXJ0ZWQNCj4gPiA+
+ICh2aWEgc2d4X3BhZ2VfcmVjbGFpbWVyX2luaXQoKSkgLi4uIi4NCj4gPiANCj4gPiBJTUhPICJh
+IGZhaWx1cmUiIG1pZ2h0IGJlIHRvbyB2YWd1ZS4gIEZvciBpbnN0YW5jZSwgZmFpbHVyZSB0byBz
+Z3hfZHJ2X2luaXQoKQ0KPiA+IHdvbid0IGltbWVkaWF0ZWx5IHJlc3VsdCBpbiBrc2d4ZCB0byBz
+dG9wIHByZW1hdHVyYWxseS4gIEFzIGxvbmcgYXMgS1ZNIFNHWCBjYW4NCj4gPiBiZSBpbml0aWFs
+aXplZCBzdWNjZXNzZnVsbHksIHNneF9pbml0KCkgc3RpbGwgcmV0dXJucyAwLg0KPiA+IA0KPiA+
+IEJ0dyBJIHdhcyB0aGlua2luZyB3aGV0aGVyIHdlIHNob3VsZCBtb3ZlIHNneF9wYWdlX3JlY2xh
+aW1lcl9pbml0KCkgdG8gdGhlIGVuZA0KPiA+IG9mIHNneF9pbml0KCksIGFmdGVyIHdlIG1ha2Ug
+c3VyZSBhdCBsZWFzdCBvbmUgb2YgdGhlIGRyaXZlciBhbmQgdGhlIEtWTSBTR1ggaXMNCj4gPiBp
+bml0aWFsaXplZCBzdWNjZXNzZnVsbHkuICBUaGVuIHRoZSBjb2RlIGNoYW5nZSBpbiB0aGlzIHBh
+dGNoIHdvbid0IGJlIG5lY2Vzc2FyeQ0KPiA+IGlmIEkgdW5kZXJzdGFuZCBjb3JyZWN0bHkuICBB
+RkFJQ1QgdGhlcmUncyBubyBnb29kIHJlYXNvbiB0byBzdGFydCB0aGUga3NneGQgYXQNCj4gPiBl
+YXJseSBzdGFnZSBiZWZvcmUgd2UgYXJlIHN1cmUgZWl0aGVyIHRoZSBkcml2ZXIgb3IgS1ZNIFNH
+WCB3aWxsIHdvcmsuDQo+IA0KPiBJIHdvdWxkIGZvY3VzIGZpeGluZyB0aGUgZXhpc3RpbmcgZmxv
+dyByYXRoZXIgdGhhbiByZWludmVudGluZyB0aGUgZmxvdy4NCj4gDQo+IEl0IGNhbiBiZSBtYWRl
+IHRvIHdvcmssIGFuZCB0aGVyZWZvcmUgaXQgaXMgSU1ITyBjb3JyZWN0IGFjdGlvbiB0byB0YWtl
+Lg0KDQpGcm9tIGFub3RoZXIgcGVyc3BlY3RpdmUsIHRoZSAqZXhpc3RpbmcgZmxvdyogaXMgdGhl
+IHJlYXNvbiB3aGljaCBjYXVzZXMgdGhpcw0KYnVnLiAgQSByZWFsIGZpeCBpcyB0byBmaXggdGhl
+IGZsb3cgaXRzZWxmLg0KDQo+IA0KPiA+IEJ0dyBjdXJyZW50bHkgRVBDIHBhZ2VzIGFzc2lnbmVk
+IHRvIEtWTSBndWVzdCBjYW5ub3QgYmUgcmVjbGFpbWVkLCBzbw0KPiA+IHRoZW9yZXRpY2FsbHkg
+a3NneGQgY2FuIGJlIG1vdmVkIHRvIHNneF9kcnZfaW5pdCgpLCBidXQgd2hvIGtub3dzIHNvbWVk
+YXkgd2UNCj4gPiB3aWxsIGRlY2lkZSB0byBtYWtlIEtWTSBndWVzdCBFUEMgcGFnZXMgdG8gYmUg
+YWJsZSB0byBiZSByZWNsYWltZWQuIDopDQo+IA0KPiBJJ20gb3BlbiB0byBjaGFuZ2VzIGJ1dCBp
+dCBpcyBpbiBteSBvcGluaW9uIG91dCBvZiBjb250ZXh0IGZvciB0aGlzLg0KPiANCj4gDQoNClll
+YWguICBJIHdhcyBleHByZXNzaW5nIHRoZSByZWFzb24gSSBzdWdnZXN0ZWQgdG8gbW92ZSBzZ3hf
+cGFnZV9yZWNsYWltZXJfaW5pdCgpDQp0byB0aGUgZW5kIG9mIHNneF9pbml0KCksIGJ1dCBub3Qg
+dG8gc2d4X2Rydl9pbml0KCkuDQoNCkJ1dCBtb3ZpbmcgdG8gc2d4X2Rydl9pbml0KCkgYWxzbyBt
+YWtlcyBzZW5zZSB0byBtZSBnaXZlbiBLVk0gZ3Vlc3QgRVBDIHBhZ2VzDQphcmUgbm90IHJlY2xh
+aW1hYmxlIG5vdy4gIEZvciBub3cgdGhlcmUncyBubyByZWFzb24gdG8gcnVuIGtzZ3hkKCkgaWYg
+b25seQ0KdmlydHVhbCBFUEMgZHJpdmVyIGlzIGVuYWJsZWQuICBXZSBjYW4gbW92ZSBzZ3hfcGFn
+ZV9yZWNsYWltZXJfaW5pdCgpIG91dCBvZg0Kc2d4X2Rydl9pbml0KCkgd2hlbiB3ZSBhZGQgS1ZN
+IGd1ZXN0IEVQQyBwYWdlIHJlY2xhaW1pbmcgc3VwcG9ydCAoaWYgaXQgaGFwcGVucw0KaW4gdGhl
+IGZ1dHVyZSkuDQoNCi0tIA0KVGhhbmtzLA0KLUthaQ0KDQoNCg==

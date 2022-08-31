@@ -2,93 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95EEB5A7410
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:48:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E01C5A7415
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:50:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbiHaCsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 22:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45020 "EHLO
+        id S230269AbiHaCtJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 22:49:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbiHaCsb (ORCPT
+        with ESMTP id S229819AbiHaCtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 22:48:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D6AB3B23;
-        Tue, 30 Aug 2022 19:48:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 807A06192E;
-        Wed, 31 Aug 2022 02:48:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6159DC433C1;
-        Wed, 31 Aug 2022 02:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661914109;
-        bh=HDZw+4aeyhFB+8/0wyIB8tKlUh9S28kYnuv3E3uguOE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WvAG5aG/hHeV1gHfHRfEO0l7SRfA4T6lBiLKHq8jHG9DGYWURWd1pfyfNm5CpQz+i
-         CYrTD4GGdjHlZVwUWV9qM3QbbIUKg7oMfZmeSoWxbp/XNKWHCFc2UEr0aTgtjmTIO3
-         /Zi+UuDe98tzXQMQgg99DF/zS/tjB3Za0J7XsHxrFJIjKUI5+sEuObXse0Qhorigv3
-         +ks0pjNzuddDketown7oA8OKiLAZqC/Sqg5uL4clVmaustKf94RUnW9yIzgIfssWjQ
-         hMidFpB1SQGAvPIYN+Vsf0+K+MK88umRoDZFSI8G7MWXx2i68EPRIp7atJ03gfWySI
-         x6fyt+oiMgVAA==
-Date:   Wed, 31 Aug 2022 05:48:25 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Matthew Garrett <mgarrett@aurora.tech>
-Cc:     Ken Goldman <kgold@linux.ibm.com>,
-        Evan Green <evgreen@chromium.org>,
-        linux-kernel@vger.kernel.org, dlunev@google.com,
-        zohar@linux.ibm.com, jejb@linux.ibm.com,
-        linux-integrity@vger.kernel.org, corbet@lwn.net, rjw@rjwysocki.net,
-        gwendal@chromium.org, linux-pm@vger.kernel.org,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: TPM: hibernate with IMA PCR 10
-Message-ID: <Yw7L+X2cHf9qprxl@kernel.org>
-References: <20220504232102.469959-1-evgreen@chromium.org>
- <20220504161439.6.Ifff11e11797a1bde0297577ecb2f7ebb3f9e2b04@changeid>
- <deafaf6f-8e79-b193-68bf-3ab01bddd5c2@linux.ibm.com>
- <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
+        Tue, 30 Aug 2022 22:49:07 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567B2B5141
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 19:49:06 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id j9-20020a17090a3e0900b001fd9568b117so10065175pjc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 19:49:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=R0e1KmOUIwSrlRRc3FB/cF6lPx+IvbAcp8rZjan78uA=;
+        b=hP3XPdaoiN+yzpgRGBIStdo85vfckOqAbr/a8nPj+5mEFTfVW4iYHQK/pGE1/lwu1E
+         j8ADQMa5c6oFgt2pZ7vLv5CWM6PADE4OKygL8TlDWg5wE9E1ARaqI0eDqcrCUM6rxjKW
+         tHSsTQ3h75IZVp7l60bSjPshdiCD3bzvYQMkXwtbEMEUPLPQVLAE2+6Mel+xmQmmHINT
+         Iy+drZg2CjPtKdB1hB98qWAKW+s4lBnZFnut3s/WJz6U85VojArFlcExkaLqj4adIjUT
+         O2y6AnpfXmxCoNrh8IWqst2e2VzEct4cw3zHaPz4J6xStETKTSwpWXKEZEMv81CzjrLT
+         5eSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=R0e1KmOUIwSrlRRc3FB/cF6lPx+IvbAcp8rZjan78uA=;
+        b=bce0a1/vtMQ1GhFyDVyV6UuXsikq+D7F2a1L+H9rUPyU2we3Fl+nFhJAJvMVKz//m+
+         /xRXiumMugpKdKegDT/jyEuBCubFG9XgqnGlDNnuPRw0Nf7QaswtrQgLc7CvbI1dIkAo
+         /m032bkc13fEXA5h9geZFotjPRowcWTmxzuCOdOMNaJAOyyQTmOi1U65VKej9QpjPJo4
+         idNLDgt9pX/jDkRPoCsPI4wOXzhdxv3g7at6ZgEi6mP7O23uLkeyWniDOLjjYc4WDNVc
+         Ffovm+LS5p2LmqLjIg498tH3T8hDFSQHbKIEPHdPNfG+CsqKQ7yLf91a4CCPJInN0ftf
+         iB4A==
+X-Gm-Message-State: ACgBeo2vyfy7A+H+PwbpQtK3BFLNqBUiJQgM3+ZeFt75XAhxe2GXWBxS
+        VTnMxX9BWDOlTlCQAYFWCOs=
+X-Google-Smtp-Source: AA6agR53T8VHDxdlIkjE6D8zAYLO8sfhmk1bD84HCn6OfiWD/yxoKNDOGrL6cbNCMI7GafIYlgoWPQ==
+X-Received: by 2002:a17:903:244d:b0:175:3ead:4586 with SMTP id l13-20020a170903244d00b001753ead4586mr2181376pls.28.1661914145882;
+        Tue, 30 Aug 2022 19:49:05 -0700 (PDT)
+Received: from localhost ([36.112.86.8])
+        by smtp.gmail.com with ESMTPSA id p66-20020a625b45000000b0052e5bb18a41sm10047018pfb.58.2022.08.30.19.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 30 Aug 2022 19:49:05 -0700 (PDT)
+From:   Hawkins Jiawei <yin31149@gmail.com>
+To:     syzbot+5f8dcabe4a3b2c51c607@syzkaller.appspotmail.com,
+        Anton Altaparmakov <anton@tuxera.com>
+Cc:     akpm@linux-foundation.org, chenxiaosong2@huawei.com,
+        linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com, yin31149@gmail.com,
+        18801353760@163.com, Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH 3/3] ntfs: check overflow when iterates ATTR_RECORDs
+Date:   Wed, 31 Aug 2022 10:48:54 +0800
+Message-Id: <7b8b8633d921665a717734d011a92f713944d0fb.1661875711.git.yin31149@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1661875711.git.yin31149@gmail.com>
+References: <cover.1661875711.git.yin31149@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHSSk06+CNQLKS8p_jh8JH7acn6=Ck8W3W2DM75rV3paZQ+MbA@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 02:51:50PM -0700, Matthew Garrett wrote:
-> On Mon, Aug 29, 2022 at 2:45 PM Ken Goldman <kgold@linux.ibm.com> wrote:
-> >
-> > On 5/4/2022 7:20 PM, Evan Green wrote:
-> > > Enabling the kernel to be able to do encryption and integrity checks on
-> > > the hibernate image prevents a malicious userspace from escalating to
-> > > kernel execution via hibernation resume.  [snip]
-> >
-> > I have a related question.
-> >
-> > When a TPM powers up from hibernation, PCR 10 is reset.  When a
-> > hibernate image is restored:
-> >
-> > 1. Is there a design for how PCR 10 is restored?
-> 
-> I don't see anything that does that at present.
-> 
-> > 2. How are /sys/kernel/security/ima/[pseudofiles] saved and
-> > restored?
-> 
-> They're part of the running kernel state, so should re-appear without
-> any special casing. However, in the absence of anything repopulating
-> PCR 10, they'll no longer match the in-TPM value.
+Kernel will iterates over ATTR_RECORDs in mft record in ntfs_attr_find().
+Because the ATTR_RECORDs are next to each other, kernel can get the next
+ATTR_RECORD from end address of current ATTR_RECORD, through current
+ATTR_RECORD length field.
 
-This feature could still be supported, if IMA is disabled
-in the kernel configuration, which I see a non-issue as
-long as config flag checks are there.
+The problem is that during iteration, when kernel calculates the end address
+of current ATTR_RECORD, kernel may trigger an overflow bug in
+executing `a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))`. This
+may wrap, leading to a forever iteration on 32bit systems.
 
-BR, Jarkko
+This patch solves it by adding an overflow checking on calculating end address
+of current ATTR_RECORD during iteration.
+
+Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://lore.kernel.org/all/20220827105842.GM2030@kadam/
+Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
+---
+ fs/ntfs/attrib.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
+index 904734e34507..55e618c9e63e 100644
+--- a/fs/ntfs/attrib.c
++++ b/fs/ntfs/attrib.c
+@@ -617,6 +617,9 @@ static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
+ 			return -ENOENT;
+ 		if (unlikely(!a->length))
+ 			break;
++		/* check for wrap around */
++		if ((u8 *)a + le32_to_cpu(a->length) < (u8 *)a)
++			break;
+ 		if (a->type != type)
+ 			continue;
+ 		/*
+-- 
+2.25.1
+

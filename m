@@ -2,227 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D851C5A8076
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D24F25A8075
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbiHaOmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57298 "EHLO
+        id S231915AbiHaOmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbiHaOmS (ORCPT
+        with ESMTP id S230425AbiHaOmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:42:18 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC45C3F7E;
-        Wed, 31 Aug 2022 07:42:17 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 5864932007D7;
-        Wed, 31 Aug 2022 10:42:12 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 31 Aug 2022 10:42:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm3; t=
-        1661956930; x=1662043330; bh=wgddTPMrnv5MJa6nI4oUHuH16TmALCsoINA
-        DyvR3vOM=; b=bEEJXBO5F4bg/rhDlik9lU4mJq35Xq06kI/Ay8gtE9R5I/Pqg+Y
-        01K9rxdCVMbJ1Q83HaUuHcQ8km4PO68AEJnAP5OIZr0QzaZ2Et7kEDsGs1gVG/JK
-        H1ZitwxG8j0JZ+r3LvVzNpzCDjEzgwJnjXWUGK6VaXlVT24Az2DmuOtKOG59YCU/
-        ljEHx3mA/DHSN9D0HQO49dvTY2CFzWxjXKbZuOy92IR6/pYmhgiYOeBeiiCfwUAh
-        ewWzCxntg3wMwckU926xU+2bHsyp4P9KIAavrqXe4QcxokmDEKJ+DnyyTkdjiU7G
-        ohy/2eAUN6/dezcEEJmdlCpipDSs3S0m5HQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:message-id:mime-version
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1661956930; x=
-        1662043330; bh=wgddTPMrnv5MJa6nI4oUHuH16TmALCsoINADyvR3vOM=; b=4
-        B3s0nf2VTHp3uC2IkmvyWvrrLSUPEXw6ZoYAv7I2p7k9MXAojEm99iG+vS53tu3v
-        E9Mwf2lgxx2xjhKjQB0r99TakUTnsSKT34qyMAgU3UKktesWYDsxG1G1f471pWMw
-        0RP78eOBxcNBW10o3XwE6swoaMYXAeHu/rlLtlchZ+iA07gTKs8rlVRYTOE6W9zh
-        iJOaDyvsmltm4P4oAkIeYKhxk9OmixXxU5F+zzHJacRu1rjRkQZu1ZW90zfXh910
-        ZWnlPyKVjHMxrJjJGOQnSaaPO6kV1PnmDQ100Ok1BfkH/04hq3oU2nMR2yJCVpCu
-        YMa4BCbzjnNN336kNtHqQ==
-X-ME-Sender: <xms:QHMPY71THxvMOkHW22SJHYLklFaGuY8rOwTCjg5NtRC__Nu7DmE2lg>
-    <xme:QHMPY6GRxBEdCRDL8wVgLzs0WNBorLV6fdIBVfgmtJ9DFv5__oSVPMKTOVOxwZ4iy
-    XpcS10M48bih-yjODk>
-X-ME-Received: <xmr:QHMPY77_VAF5dxzZggPSTv5PqjfCzixz-mXeYVEEK2E4lmJXcLAyopR0pDgH>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekiedghedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkgggtugesthdtredttddtvdenucfhrhhomhepofgrgihimhgv
-    ucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrghtth
-    gvrhhnpedtleevgfehjeejfeekgeelffeiveektdeguddujeetiedvhfdvuedtheehvdfg
-    jeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrg
-    igihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:QHMPYw0EAbsVd68V-TNC5e1awIQ8-sFhicdPPLe5u9NTHCSNQjO_XQ>
-    <xmx:QHMPY-ErUsfwMcW2KWJbcgREzGicy3jlvT00qjicyBaxD53DqK9Hbw>
-    <xmx:QHMPYx9xu8Mq8bV3PTBSqRynUkxGmPYpsuglKfr1Fyx4mHYZkdexSw>
-    <xmx:QnMPY2RP8hNoGD0N29CeC8WE9lsiopPMjrlQ2PqF0oLUGK56HVFRBA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 31 Aug 2022 10:42:07 -0400 (EDT)
-Date:   Wed, 31 Aug 2022 16:42:05 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Arnd Bergmann <arnd@arndb.de>,
-        Olof Johansson <olof@lixom.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Martin Roukala <martin.roukala@mupuf.org>, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Tim Gover <tim.gover@raspberrypi.com>,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: RaspberryPi4 Panic in net_ns_init()
-Message-ID: <20220831144205.iirdun6bf3j5v6q4@houat>
+        Wed, 31 Aug 2022 10:42:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88F4BD2A0;
+        Wed, 31 Aug 2022 07:42:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A038BB8217B;
+        Wed, 31 Aug 2022 14:42:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAEEAC433D6;
+        Wed, 31 Aug 2022 14:42:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661956930;
+        bh=oMbQGoVTKwMbnxWochLoB76e2l7bAr3cdp+gMVYp92M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=nlMvwRJBCoZSqrbHhr+9nEmaktC3bh+Vg/LNGQglZ+Z9jZ5tPNsxO9qZu7LzHWNed
+         ICMsZLvTh4XofSQg7MEvWzd9mQrKGSuutE4oPDqLLPnONkftqTTk2lQRviS3otGdIq
+         EYO7hJqPWmExHoiTS1yKdfpTN1u85NTg7xTTNuaopCbHfX0/O+BQu8VEMjxGs4+n61
+         LGjwfD5Z2sansNCa36UkjgtDJ3Fh3ygE6OTTnA8UifJU+UEVWkPg+pndK3Zq8eDx2C
+         2mZN0gQVXBsTiU6SkgD7nGgls5rNRXZk8ZuFE5U5t/zn4IzJU6NwazaayeF8t9CcOS
+         KSiMB3zL910qg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 3C2FB404A1; Wed, 31 Aug 2022 11:42:07 -0300 (-03)
+Date:   Wed, 31 Aug 2022 11:42:07 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        James Clark <james.clark@arm.com>,
+        Miaoqian Lin <linmq006@gmail.com>,
+        John Garry <john.garry@huawei.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        perry.taylor@intel.com, caleb.biggers@intel.com,
+        kshipra.bopardikar@intel.com, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 6/8] perf stat: Delay metric parsing
+Message-ID: <Yw9zPxVqbfkSOdbu@kernel.org>
+References: <20220830164846.401143-1-irogers@google.com>
+ <20220830164846.401143-7-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220830164846.401143-7-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Em Tue, Aug 30, 2022 at 09:48:44AM -0700, Ian Rogers escreveu:
+> Having metric parsing as part of argument processing causes issues as
+> flags like metric-no-group may be specified later. It also denies the
+> opportunity to optimize the events on SMT systems where fewer events
+> may be possible if we know the target is system-wide. Move metric
+> parsing to after command line option parsing. Because of how stat runs
+> this moves the parsing after record/report which fail to work with
+> metrics currently anyway.
+> 
+> Signed-off-by: Ian Rogers <irogers@google.com>
+> ---
+>  tools/perf/builtin-stat.c     | 48 ++++++++++++++++++++++++-----------
+>  tools/perf/util/metricgroup.c |  3 +--
+>  tools/perf/util/metricgroup.h |  2 +-
+>  3 files changed, 35 insertions(+), 18 deletions(-)
+> 
+> diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
+> index 7fb81a44672d..c813b1aa7d7c 100644
+> --- a/tools/perf/builtin-stat.c
+> +++ b/tools/perf/builtin-stat.c
+> @@ -191,6 +191,7 @@ static bool			append_file;
+>  static bool			interval_count;
+>  static const char		*output_name;
+>  static int			output_fd;
+> +static char			*metrics;
+>  
+>  struct perf_stat {
+>  	bool			 record;
+> @@ -1147,14 +1148,21 @@ static int enable_metric_only(const struct option *opt __maybe_unused,
+>  	return 0;
+>  }
+>  
+> -static int parse_metric_groups(const struct option *opt,
+> +static int append_metric_groups(const struct option *opt __maybe_unused,
+>  			       const char *str,
+>  			       int unset __maybe_unused)
+>  {
+> -	return metricgroup__parse_groups(opt, str,
+> -					 stat_config.metric_no_group,
+> -					 stat_config.metric_no_merge,
+> -					 &stat_config.metric_events);
+> +	if (metrics) {
+> +		char *tmp;
+> +
+> +		if (asprintf(&tmp, "%s,%s", metrics, str) < 0)
+> +			return -ENOMEM;
 
-Sorry for the fairly broad list of recipients, I'm not entirely sure
-where the issue lies exactly, and it seems like multiple areas are
-involved.
+We check if we managed to allocate memory here, but not later at
+strdup()?
 
-Martin reported me an issue discovered with the VC4 DRM driver that
-would prevent the RaspberryPi4 from booting entirely. At boot, and
-apparently before the console initialization, the board would just die.
+> +		free(metrics);
+> +		metrics = tmp;
+> +	} else {
+> +		metrics = strdup(str);
+> +	}
+> +	return 0;
+>  }
+>  
+>  static int parse_control_option(const struct option *opt,
+> @@ -1298,7 +1306,7 @@ static struct option stat_options[] = {
+>  			"measure SMI cost"),
+>  	OPT_CALLBACK('M', "metrics", &evsel_list, "metric/metric group list",
+>  		     "monitor specified metrics or metric groups (separated by ,)",
+> -		     parse_metric_groups),
+> +		     append_metric_groups),
+>  	OPT_BOOLEAN_FLAG(0, "all-kernel", &stat_config.all_kernel,
+>  			 "Configure all used events to run in kernel space.",
+>  			 PARSE_OPT_EXCLUSIVE),
+> @@ -1791,11 +1799,9 @@ static int add_default_attributes(void)
+>  		 * on an architecture test for such a metric name.
+>  		 */
+>  		if (metricgroup__has_metric("transaction")) {
+> -			struct option opt = { .value = &evsel_list };
+> -
+> -			return metricgroup__parse_groups(&opt, "transaction",
+> +			return metricgroup__parse_groups(evsel_list, "transaction",
+>  							 stat_config.metric_no_group,
+> -							stat_config.metric_no_merge,
+> +							 stat_config.metric_no_merge,
+>  							 &stat_config.metric_events);
+>  		}
+>  
+> @@ -2260,8 +2266,6 @@ int cmd_stat(int argc, const char **argv)
+>  	argc = parse_options_subcommand(argc, argv, stat_options, stat_subcommands,
+>  					(const char **) stat_usage,
+>  					PARSE_OPT_STOP_AT_NON_OPTION);
+> -	perf_stat__collect_metric_expr(evsel_list);
+> -	perf_stat__init_shadow_stats();
+>  
+>  	if (stat_config.csv_sep) {
+>  		stat_config.csv_output = true;
+> @@ -2428,6 +2432,23 @@ int cmd_stat(int argc, const char **argv)
+>  			target.system_wide = true;
+>  	}
+>  
+> +	if ((stat_config.aggr_mode == AGGR_THREAD) && (target.system_wide))
+> +		target.per_thread = true;
+> +
+> +	/*
+> +	 * Metric parsing needs to be delayed as metrics may optimize events
+> +	 * knowing the target is system-wide.
+> +	 */
+> +	if (metrics) {
+> +		metricgroup__parse_groups(evsel_list, metrics,
+> +					stat_config.metric_no_group,
+> +					stat_config.metric_no_merge,
+> +					&stat_config.metric_events);
+> +		zfree(&metrics);
+> +	}
+> +	perf_stat__collect_metric_expr(evsel_list);
+> +	perf_stat__init_shadow_stats();
+> +
+>  	if (add_default_attributes())
+>  		goto out;
+>  
+> @@ -2447,9 +2468,6 @@ int cmd_stat(int argc, const char **argv)
+>  		}
+>  	}
+>  
+> -	if ((stat_config.aggr_mode == AGGR_THREAD) && (target.system_wide))
+> -		target.per_thread = true;
+> -
+>  	if (evlist__fix_hybrid_cpus(evsel_list, target.cpu_list)) {
+>  		pr_err("failed to use cpu list %s\n", target.cpu_list);
+>  		goto out;
+> diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+> index b144c3e35264..9151346a16ab 100644
+> --- a/tools/perf/util/metricgroup.c
+> +++ b/tools/perf/util/metricgroup.c
+> @@ -1646,13 +1646,12 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+>  	return ret;
+>  }
+>  
+> -int metricgroup__parse_groups(const struct option *opt,
+> +int metricgroup__parse_groups(struct evlist *perf_evlist,
+>  			      const char *str,
+>  			      bool metric_no_group,
+>  			      bool metric_no_merge,
+>  			      struct rblist *metric_events)
+>  {
+> -	struct evlist *perf_evlist = *(struct evlist **)opt->value;
+>  	const struct pmu_events_table *table = pmu_events_table__find();
+>  
+>  	if (!table)
+> diff --git a/tools/perf/util/metricgroup.h b/tools/perf/util/metricgroup.h
+> index 016b3b1a289a..af9ceadaec0f 100644
+> --- a/tools/perf/util/metricgroup.h
+> +++ b/tools/perf/util/metricgroup.h
+> @@ -64,7 +64,7 @@ struct metric_expr {
+>  struct metric_event *metricgroup__lookup(struct rblist *metric_events,
+>  					 struct evsel *evsel,
+>  					 bool create);
+> -int metricgroup__parse_groups(const struct option *opt,
+> +int metricgroup__parse_groups(struct evlist *perf_evlist,
+>  			      const char *str,
+>  			      bool metric_no_group,
+>  			      bool metric_no_merge,
+> -- 
+> 2.37.2.672.g94769d06f0-goog
 
-It first appeared when both DYNAMIC_DEBUG and DRM_VC4 were built-in. We
-started to look into what configuration would trigger it.
+-- 
 
-It looks like a good reproducer is:
-
-ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make -j18 defconfig mod2yesconfig
-./scripts/config -e CONFIG_DYNAMIC_DEBUG
-ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- make -j18 olddefconfig
-
-If we enable earlycon, we end up with:
-
-[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd083]
-[    0.000000] Linux version 6.0.0-rc3 (max@houat) (aarch64-linux-gnu-gcc (GCC) 12.1.1 20220507 (Red Hat Cross 12.1.1-1), GNU ld version 2.37-7.fc36) #52 SMP PREEMPT Wed Aug 31 14:28:41 CEST 2022
-[    0.000000] random: crng init done
-[    0.000000] Machine model: Raspberry Pi 4 Model B Rev 1.1
-[    0.000000] earlycon: uart8250 at MMIO32 0x00000000fe215040 (options '')
-[    0.000000] printk: bootconsole [uart8250] enabled
-[    0.000000] efi: UEFI not found.
-[    0.000000] Reserved memory: bypass linux,cma node, using cmdline CMA params instead
-[    0.000000] OF: reserved mem: node linux,cma compatible matching fail
-[    0.000000] NUMA: No NUMA configuration found
-[    0.000000] NUMA: Faking a node at [mem 0x0000000000000000-0x00000000fbffffff]
-[    0.000000] NUMA: NODE_DATA [mem 0xfb815b40-0xfb817fff]
-[    0.000000] Zone ranges:
-[    0.000000]   DMA      [mem 0x0000000000000000-0x000000003fffffff]
-[    0.000000]   DMA32    [mem 0x0000000040000000-0x00000000fbffffff]
-[    0.000000]   Normal   empty
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000000000000-0x000000003b3fffff]
-[    0.000000]   node   0: [mem 0x0000000040000000-0x00000000fbffffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x00000000fbffffff]
-[    0.000000] On node 0, zone DMA32: 19456 pages in unavailable ranges
-[    0.000000] On node 0, zone DMA32: 16384 pages in unavailable ranges
-[    0.000000] cma: Reserved 512 MiB at 0x000000000ee00000
-[    0.000000] percpu: Embedded 21 pages/cpu s48040 r8192 d29784 u86016
-[    0.000000] Detected PIPT I-cache on CPU0
-[    0.000000] CPU features: detected: Spectre-v2
-[    0.000000] CPU features: detected: Spectre-v3a
-[    0.000000] CPU features: detected: Spectre-v4
-[    0.000000] CPU features: detected: Spectre-BHB
-[    0.000000] CPU features: detected: Kernel page table isolation (KPTI)
-[    0.000000] CPU features: detected: ARM erratum 1742098
-[    0.000000] CPU features: detected: ARM errata 1165522, 1319367, or 1530923
-[    0.000000] Fallback order for Node 0: 0
-[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 996912
-[    0.000000] Policy zone: DMA32
-[    0.000000] Kernel command line: video=Composite-1:720x480@60i,margin_left=32,margin_right=32,margin_top=32,margin_bottom=32 dma.dmachans=0x37f5 bcm2709.boardrev=0xc03111 bcm2709.serial=0xb7f44626 bcm2709.uart_clock=48000000 bcm2709.disk_led_gpio=42 bcm2709.disk_led_active_low=0 smsc95xx.macaddr=DC:A6:32:0E:F7:01 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000  root=/dev/nfs nfsroot=192.168.20.10:/srv/nfs/rpi/bullseye64 rw 8250.nr_uarts=1 cma=512M ip=dhcp console=ttyS0,115200 earlycon=uart8250,mmio32,0xfe215040
-[    0.000000] Dentry cache hash table entries: 524288 (order: 10, 4194304 bytes, linear)
-[    0.000000] Inode-cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
-[    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
-[    0.000000] software IO TLB: area num 4.
-[    0.000000] software IO TLB: mapped [mem 0x0000000037400000-0x000000003b400000] (64MB)
-[    0.000000] Memory: 3312220K/4050944K available (30656K kernel code, 5924K rwdata, 18912K rodata, 11584K init, 672K bss, 214436K reserved, 524288K cma-reserved)
-[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
-[    0.000000] rcu: Preemptible hierarchical RCU implementation.
-[    0.000000] rcu: 	RCU event tracing is enabled.
-[    0.000000] rcu: 	RCU restricting CPUs from NR_CPUS=256 to nr_cpu_ids=4.
-[    0.000000] 	Trampoline variant of Tasks RCU enabled.
-[    0.000000] 	Tracing variant of Tasks RCU enabled.
-[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
-[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=4
-[    0.000000] NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
-[    0.000000] Root IRQ handler: gic_handle_irq
-[    0.000000] GIC: Using split EOI/Deactivate mode
-[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
-[    0.000000] arch_timer: cp15 timer(s) running at 54.00MHz (phys).
-[    0.000000] clocksource: arch_sys_counter: mask: 0xffffffffffffff max_cycles: 0xc743ce346, max_idle_ns: 440795203123 ns
-[    0.000001] sched_clock: 56 bits at 54MHz, resolution 18ns, wraps every 4398046511102ns
-[    0.008648] Console: colour dummy device 80x25
-[    0.013237] Calibrating delay loop (skipped), value calculated using timer frequency.. 108.00 BogoMIPS (lpj=216000)
-[    0.023803] pid_max: default: 32768 minimum: 301
-[    0.028540] LSM: Security Framework initializing
-[    0.033252] Kernel panic - not syncing: Could not allocate generic netns
-[    0.040026] CPU: 0 PID: 0 Comm: swapper/0 Not tainted 6.0.0-rc3 #52
-[    0.046363] Hardware name: Raspberry Pi 4 Model B Rev 1.1 (DT)
-[    0.052255] Call trace:
-[    0.054721]  dump_backtrace+0xe4/0x124
-[    0.058525]  show_stack+0x1c/0x5c
-[    0.061878]  dump_stack_lvl+0x64/0x80
-[    0.065582]  dump_stack+0x1c/0x38
-[    0.068932]  panic+0x170/0x328
-[    0.072020]  net_ns_init+0x88/0x134
-[    0.075548]  start_kernel+0x628/0x69c
-[    0.079251]  __primary_switched+0xbc/0xc4
-[    0.083311] ---[ end Kernel panic - not syncing: Could not allocate generic netns ]---
-
-So it seems that net_alloc_generic() fails, and the only reason I could
-see is if kzalloc() fails, so now I'm super confused.
-
-It looks like the board has plenty (~3GB) of RAM available at boot, and
-most importantly I don't see the relationship between a DRM driver,
-DYNAMIC_DEBUG, and SLAB or the network namespace.
-
-After a bit more experiments,
-
- * ./scripts/config -e CONFIG_DYNAMIC_DEBUG -d CONFIG_DRM_VC4 still has
-   that panic, so it looks like VC4 itself isn't involved.
-
- * ./scripts/config -e CONFIG_DYNAMIC_DEBUG -d CONFIG_DRM works, so DRM
-   seems to be involved somehow. It has a number of memory management
-   dependencies, so it's probably a side effect of DRM being there.
-
- * make defconfig mod2yesconfig (so without DYNAMIC_DEBUG, with DRM)
-   works too.
-
-So it looks to me like there's indeed some interaction between DRM,
-DYNAMIC_DEBUG, SLAB and/or the network namespace, but I'm not entirely
-sure where to go from there. Any ideas?
-
-Maxime
+- Arnaldo

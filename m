@@ -2,89 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AD205A8205
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91ECD5A8216
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:46:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231610AbiHaPoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S229882AbiHaPqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:46:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbiHaPnh (ORCPT
+        with ESMTP id S231627AbiHaPpx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:43:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9909CDCFDC
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:41:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A5BF261798
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 15:41:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5194C433C1;
-        Wed, 31 Aug 2022 15:41:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661960503;
-        bh=4jj0j/Dky+Nul3U5gxPx8/R2lvdkzDGMVz3x1CQBrYg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=iuhYiSBZMeIAlWain0/i9Ps3BSj7fbwp8g1mx94gcYfcJmX9RT5qo3OlcjLime/vX
-         Sru2tiIyBsMpakX3GRpT8M0AH2mTG7f0gPUufRTfJl4grMyH3HRmVDvVTAxjVNhHqt
-         0edKLEn1ZeJQB12C6wld9cZN//OpLollIBGsQMSOg2qvAHM3P7Izm77eoKjrEt9v+Y
-         sdb3woonLdAiAQI/C2Wjv4Q0pUr3vezVpr+YbTs6y9COlupsoUIugY14iu0DY+0mnT
-         dHVyKgTKhCwJGZWWQqNII0FIGZoR0OyzrGJ3iOFmCwJmg0qYVXT9U2lMDDMNdL5Gq1
-         3yTLgSt/poE/g==
-Date:   Wed, 31 Aug 2022 08:41:40 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Finn Thain <fthain@linux-m68k.org>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>
-Subject: Re: powerpc-linux-objdump: Warning: Unrecognized form: 0x23
-Message-ID: <Yw+BNAe9dXPdya0o@dev-arch.thelio-3990X>
-References: <202208311529.oy9I92hy-lkp@intel.com>
+        Wed, 31 Aug 2022 11:45:53 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A381A1573F;
+        Wed, 31 Aug 2022 08:44:31 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id m2so14497949pls.4;
+        Wed, 31 Aug 2022 08:44:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=iwpRJkKob/W9LC0CLDd5HzQIdCGXjeHo185x/cTAZsI=;
+        b=WdDFkJjGwcl3r9BG4R2MBx+nK0CNhsRjB59rgtAxJQ9JTqxP6Q8f8DqLmfmCiawEGF
+         J857+Y4unzDMWMBqgzHaGaK2rLkckylfmy8jE6nE3dU3QGEDduq8skoalE6udvKa9H4H
+         2gMnLN+aoxmXpmI+e0qi9eKYcgJxxCkXBiOwqHIEhrKkDDzPuwZYMo6oNeHol57J9UnA
+         wNsakm+GVF6gKf9P5N6T2vHHW9IuXH986J0GDH64WiYy0vi8Bx1gOkW3GeevDUpe2Nmj
+         AT74TfCAGqAhER5c8Rub7GElHBr2KKbkdYs+TZq5q8N7C0IaHEGN/wBjLNNsvFI1iyuG
+         NSjA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=iwpRJkKob/W9LC0CLDd5HzQIdCGXjeHo185x/cTAZsI=;
+        b=QKf/dyWOTOhCq9IWaNA0VL/Spt2R6RCQRblEGtCY3XuH7w9mQVDa+aVWJ3ulIqARcx
+         9iVbl49Jlc2+jEgE6Lbg8muAr6IklkuygJ5A4PdBfkh3Hz1uzOQm5sV8I92r7uT+yW59
+         d0a6CWu4F2rq0pcfBXvJOpi+lK5ha/TpU2jDkhuvKwMCVOcR8iFUZ8e7qqgkv2elCCKG
+         8wdDVpoKUEcCYPwyiBEMjJ6SwlSTmmMxr0qxcGsTicsUhbYyx9Zh1ap9IvTZnSg77UEl
+         qUKpR7AHeIDkibC264MlA5UsHO/85i6O4uGe1cnU41CIwpzZOd6SkzztHSzm96IuHer3
+         mDjw==
+X-Gm-Message-State: ACgBeo0zo1z5eA0UXV6IPemfaW2PARmCfKsWfzeWOmzoH/Y9Cz+fCr5Q
+        Wuu0PTg0iZBpHYHcFIG2ayOzrbv5vow=
+X-Google-Smtp-Source: AA6agR7lwMKcra5x2tcN49fEDSf5JdLaxR7O4DEwYKntwMdmcjJCV5xeS+XOjSoynJ1BYVRgNikpzg==
+X-Received: by 2002:a17:902:6b42:b0:172:ed37:bc55 with SMTP id g2-20020a1709026b4200b00172ed37bc55mr25821508plt.33.1661960614823;
+        Wed, 31 Aug 2022 08:43:34 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 17-20020a630311000000b0042af14719f4sm3499609pgd.51.2022.08.31.08.43.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 08:43:34 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     kuba@kernel.org, davem@davemloft.net, edumazet@google.com
+Cc:     pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] netdevsim: remove redundant variable ret
+Date:   Wed, 31 Aug 2022 15:43:29 +0000
+Message-Id: <20220831154329.305372-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202208311529.oy9I92hy-lkp@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 03:14:04PM +0800, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
-> commit: 86ce436e30d86327c9f5260f718104ae7b21f506 macintosh/via-pmu: Fix build failure when CONFIG_INPUT is disabled
-> date:   3 months ago
-> config: powerpc-buildonly-randconfig-r004-20220830 (https://download.01.org/0day-ci/archive/20220831/202208311529.oy9I92hy-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install powerpc cross compiling tool for clang build
->         # apt-get install binutils-powerpc-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=86ce436e30d86327c9f5260f718104ae7b21f506
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 86ce436e30d86327c9f5260f718104ae7b21f506
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-Sorry for the noise, seems like it is the same issue as
-https://lore.kernel.org/Yw+A+0BY26l0AC5j@dev-arch.thelio-3990X/.
+Return value directly from nsim_dev_reload_create()
+instead of getting value from redundant variable ret.
 
-Cheers,
-Nathan
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+---
+ drivers/net/netdevsim/dev.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/net/netdevsim/dev.c b/drivers/net/netdevsim/dev.c
+index efea94c27880..794fc0cc73b8 100644
+--- a/drivers/net/netdevsim/dev.c
++++ b/drivers/net/netdevsim/dev.c
+@@ -965,7 +965,6 @@ static int nsim_dev_reload_up(struct devlink *devlink, enum devlink_reload_actio
+ 			      struct netlink_ext_ack *extack)
+ {
+ 	struct nsim_dev *nsim_dev = devlink_priv(devlink);
+-	int ret;
+ 
+ 	if (nsim_dev->fail_reload) {
+ 		/* For testing purposes, user set debugfs fail_reload
+@@ -976,8 +975,8 @@ static int nsim_dev_reload_up(struct devlink *devlink, enum devlink_reload_actio
+ 	}
+ 
+ 	*actions_performed = BIT(DEVLINK_RELOAD_ACTION_DRIVER_REINIT);
+-	ret = nsim_dev_reload_create(nsim_dev, extack);
+-	return ret;
++
++	return nsim_dev_reload_create(nsim_dev, extack);
+ }
+ 
+ static int nsim_dev_info_get(struct devlink *devlink,
+-- 
+2.25.1
+

@@ -2,102 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8FE05A7ED1
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:33:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87AD25A7EF7
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 15:34:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230436AbiHaNc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 09:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
+        id S231881AbiHaNey (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 09:34:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiHaNcy (ORCPT
+        with ESMTP id S231890AbiHaNe3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 09:32:54 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC9FD2749
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:32:49 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id d12-20020a05600c34cc00b003a83d20812fso6396074wmq.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:32:49 -0700 (PDT)
+        Wed, 31 Aug 2022 09:34:29 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE73DD4F59
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:33:36 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id g5so4158281ybg.11
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 06:33:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:from:to:cc;
-        bh=JD2a/BxPdgGVFO6iAaclLZx23xJZbjT280bRPiOSCyE=;
-        b=IVS6bNNm3qqkDDuos+B1OHd6nU91G4D6TQG62Xx4rtio/KirkFRSq9W1acAyEhe/qb
-         rbz4OLuUlLNc7TouEw06Ww3bdJmZh+WIx72qmWsAZtjru47v1EupWmjoBReqtRY2DSlK
-         baq+9eTQgFj0UC3qZ3faf7zt+dFe5oriaAQuBubjtfu3rb/3102GuSQMddHyhE8695R7
-         /G7xsgqfsANe/ftvIOHpoXZmBPTUEsuOgFCwcZ54MgieX9ZXZWDMbsfmMJ0aGh5svS/F
-         zBuPnwx5eVS1rr/8dxmoj+1ghrmBndu6b9Xa0AD8kUHZDyhG4xJnuztdrcDt+nEFMTmj
-         JYag==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=0+LvJ7VjdJUJkQtLqFzy6A2FisDBtX4zU7WtR7vEfb0=;
+        b=lZE1wqPcUFTWUx2edJyH4j/xIAjV6jv2Q2oGtrj5GUNtTwzHlWPP5s6DqeZqSl9h8Y
+         5M2pjTrzgC3VMZR1TKgCMVNlFqzs6YpmNTPNQaRsVMonq17hQ26jD/H8Tz4E177fgg73
+         NhpoSy/yJx6JeJJ3hdx3YKg/Vku4dz+HPU8DXoj1Lu6i1NLgUA423Pyw9B/ZdZTJshiC
+         0mDh6vZsBBLCK+Ee0Us1bvDT2sG55h+CvEl+1b3evaLpTPUB/pNCbiPncvz2hXqSHBMG
+         ix9J/RXr86EQDoPG2G1AYL+iXKf1Eu4GvNPauyG64Q5cElBD6rPco7a1Ku2nEJgjEUMv
+         cDYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:sender
-         :reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=JD2a/BxPdgGVFO6iAaclLZx23xJZbjT280bRPiOSCyE=;
-        b=lnyH5ZHoKqSBwk9ZEN6wVraulrtqIyLSnwtTCvXtLGVa0XcKNR+PPpFsJjqMCepST8
-         1PKev4OG7vZrHaeDBn8u2oDEanIm8A1qP+Bmup5W2A3F6fiEvJusszRHIANdnSqF4966
-         xjNnfyRLN08EagEJHsGdKOacHtDEsMZ6+HeG403YGPikMfkVNL8SOUUf3siDOGmG+xpr
-         iUtNHzn42CvR2XJcq1R9LB6qyelVOjQjtLmGk0D112Sf6dZR4bSAUEpKu/IJ9SiDVQoO
-         EE2IweJueFtxcUgrMwXQIv08uzsMvDXp/bfrhrqRAS0S/ROPADy2AT9QCFtYN0Ocxouj
-         cjwg==
-X-Gm-Message-State: ACgBeo282tDV6IKels/DAClpQ8nY3QxyMngOL2x+dGZyOPCQ0JeQFL+T
-        Mw1uHZ3QW6eo/qXWbIRXxyJr++DEidxzx2cu+L4=
-X-Google-Smtp-Source: AA6agR6YmQ8BP8UY122kU+V42hN6vnFjSnQSbyGEtPeS4LqozcAwvR/vhIM/NskrCRs5/5UuztVEBWTjHEqy3vGQnoo=
-X-Received: by 2002:a05:600c:2315:b0:3a5:c2cc:1bee with SMTP id
- 21-20020a05600c231500b003a5c2cc1beemr1972584wmo.55.1661952768465; Wed, 31 Aug
- 2022 06:32:48 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=0+LvJ7VjdJUJkQtLqFzy6A2FisDBtX4zU7WtR7vEfb0=;
+        b=C39K45wIwffFM78TqlVdzyGIf1+av7WiNBDoS+/TODv1O1VD0k3CCAwRwEtE+YxzIU
+         ar/WONqEt7l4rH9HY58d1+dcHOMEPRQYdLbT4XXy51z6cQZ7RXL7FJ4OUNV67egjbC6C
+         qIgxIOb2LohODEO9l5GTrqybwMpVJlVjKNHklrNM75Zwattfukz7Z8yxXgn9UUqCqgzV
+         iTVVmhRNZcMGqJ9j/l/l+iqdM4sxKmUAkbwKooWRp2DZ9dY7MGc8M8jkYF6QD/4epu/R
+         znhC0iEMBqtwGEytJ4OBel0WgGZ2dBk8K2zINHYRE07gmgvbmh/DGCII8qtiAUWOKQZK
+         YcUQ==
+X-Gm-Message-State: ACgBeo3wbY09iLKWULo4Em7CYfCfeHvhWeVMD6Dy9W9bS6tn0D8UAJae
+        YYQpoGn5vsndb58ygyl2X9v8GCySEpFQuwDnFhLtQg==
+X-Google-Smtp-Source: AA6agR527s4sIJuqvAoe6R6bXgEbs7fsJxYB1PTbH3VZAYpcKPk/1e0D345H5OETRX62rrwgZpKJfp6B29lhrMk3Lhk=
+X-Received: by 2002:a25:bc3:0:b0:673:bc78:c095 with SMTP id
+ 186-20020a250bc3000000b00673bc78c095mr15327415ybl.376.1661952810986; Wed, 31
+ Aug 2022 06:33:30 -0700 (PDT)
 MIME-Version: 1.0
-Reply-To: jerrydosso1@hotmail.com
-Sender: pete8569joe@gmail.com
-Received: by 2002:a05:6000:184d:0:0:0:0 with HTTP; Wed, 31 Aug 2022 06:32:47
- -0700 (PDT)
-From:   Jerry Dosso <jerrydosso55@gmail.com>
-Date:   Wed, 31 Aug 2022 15:32:47 +0200
-X-Google-Sender-Auth: 6YboQs3dGngLHS-ZDRi7ou7BjNM
-Message-ID: <CAGa4MpATRdrJ0-PvDryf9HbF-XwBhoop-tUCN-4V-YxiX0mBVA@mail.gmail.com>
-Subject: Mr Jerry Dosso
-To:     undisclosed-recipients:;
+References: <20220701142310.2188015-1-glider@google.com> <20220701142310.2188015-45-glider@google.com>
+ <YsNIjwTw41y0Ij0n@casper.infradead.org> <CAG_fn=VbvbYVPfdKXrYRTq7HwmvXPQUeUDWZjwe8x8W=ttq6KA@mail.gmail.com>
+ <CAHk-=wg-LXL4ZDMveCf9M7gWWwCMDG1dHCjD7g1u_vUXsU6Bzw@mail.gmail.com>
+ <20220825215754.GI25951@gate.crashing.org> <CAHk-=wj_nfiLk_bzjD8GWFFzm17syvOYqS=Y7BOarMSTkMiamQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wj_nfiLk_bzjD8GWFFzm17syvOYqS=Y7BOarMSTkMiamQ@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 31 Aug 2022 15:32:54 +0200
+Message-ID: <CAG_fn=UFbsbM1-cSvvc3aBMmFgasAWqeBrOXpzZ7_DjwU3wT6g@mail.gmail.com>
+Subject: Re: [PATCH v4 44/45] mm: fs: initialize fsdata passed to
+ write_begin/write_end interface
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrey Konovalov <andreyknvl@google.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Christoph Hellwig <hch@lst.de>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Ingo Molnar <mingo@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Kees Cook <keescook@chromium.org>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Petr Mladek <pmladek@suse.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Vegard Nossum <vegard.nossum@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:343 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [jerrydosso1[at]hotmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [jerrydosso55[at]gmail.com]
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LS0gDQrQnNC+0Lkg0LTQvtGA0L7Qs9C+0Lkg0LTRgNGD0LMsDQoNCtCS0Ysg0L/QvtC70YPRh9C4
-0LvQuCDRgdC+0L7QsdGJ0LXQvdC40LUsINC60L7RgtC+0YDQvtC1INGPINCy0LDQvCDQvtGC0L/R
-gNCw0LLQuNC7Pw0KDQrQoSDRg9Cy0LDQttC10L3QuNC10LwsDQoNCtCzLdC9INCU0LbQtdGA0YDQ
-uCDQlNC+0YHRgdC+DQouLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLi4uLg0K
-TXkgRGVhciBGcmllbmQsDQoNCkRpZCB5b3UgcmVjZWl2ZSB0aGUgbWVzc2FnZSBpIHNlbnQgdG8g
-eW91Pw0KDQpSZWdhcmRzLA0KDQpNciBKZXJyeSBEb3Nzbw0K
+On Fri, Aug 26, 2022 at 9:41 PM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> On Thu, Aug 25, 2022 at 3:10 PM Segher Boessenkool
+> <segher@kernel.crashing.org> wrote:
+> >
+> > But UB is defined in terms of the abstract machine (like *all* of C),
+> > not in terms of the generated machine code.  Typically things will work
+> > fine if they "become invisible" by inlining, but this does not make the
+> > program a correct program ever.  Sorry :-(
+>
+> Yeah, and the abstract machine model based on "abstract syntax" is
+> just wrong, wrong, wrong.
+>
+> I really wish the C standard people had the guts to just fix it.  At
+> some point, relying on tradition when the tradition is bad is not a
+> great thing.
+>
+> It's the same problem that made all the memory ordering discussions
+> completely untenable. The language to allow the whole data dependency
+> was completely ridiculous, because it became about the C language
+> syntax and theory, not about the actual code generation and actual
+> *meaning* that the whole thing was *about*.
+>
+> Java may be a horrible language that a lot of people hate, but it
+> avoided a lot of problems by just making things about an actual
+> virtual machine and describing things within a more concrete model of
+> a virtual machine.
+>
+> Then you can just say "this code sequence generates this set of
+> operations, and the compiler can optimize it any which way it likes as
+> long as the end result is equivalent".
+>
+> Oh well.
+>
+> I will repeat: a paper standard that doesn't take reality into account
+> is less useful than toilet paper. It's scratchy and not very
+> absorbent.
+>
+> And the kernel will continue to care more about reality than about a C
+> standard that does bad things.
+>
+> Inlining makes the use of the argument go away at the call site and
+> moves the code of the function into the body. That's how things
+> *work*. That's literally the meaning of inlining.
+>
+> And inlining in C is so important because macros are weak, and other
+> facilities like templates don't exist.
+>
+> But in the kernel, we also often use it because the actual semantics
+> of "not a function call" in terms of code generation is also important
+> (ie we have literal cases where "not generating the 'call'
+> instruction" is a correctness issue).
+>
+> If the C standard thinks "undefined argument even for inlining use is
+> UB", then it's a case of that paperwork that doesn't reflect reality,
+> and we'll treat it with the deference it deserves - is less than
+> toilet paper.
+
+Just for posterity, in the case of KMSAN we are only dealing with
+cases where the function call survived inlining and dead code
+elimination.
+
+
+> We have decades of history of doing that in the kernel. Sometimes the
+> standards are just wrong, sometimes they are just too far removed from
+> reality to be relevant, and then it's just not worth worrying about
+> them.
+>
+>           Linus
+
+
+
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg

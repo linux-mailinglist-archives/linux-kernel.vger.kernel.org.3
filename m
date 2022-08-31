@@ -2,150 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E4A05A7B7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:39:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F9CA5A7B7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229529AbiHaKjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 06:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S230000AbiHaKjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 06:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiHaKjO (ORCPT
+        with ESMTP id S229591AbiHaKjf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 06:39:14 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E94E1B6029;
-        Wed, 31 Aug 2022 03:39:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 80EC221A53;
-        Wed, 31 Aug 2022 10:39:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1661942352; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D/VhxrZABrIw51+gKZ04o+QPEhbTuW7VzunFJgXY7yw=;
-        b=a2l6ug+zy4ZO2ZBVuqwRZaCOsD/JBDgWm4vBtnS2p4VqXzNejQqdVXaA/ST/D8KXLkez6H
-        QOwXmD2rKYG9+RchfM74zflc74h5E6tozat9dxBD/V6GGio2IrhB4UuYlHiBQA8GuKpc6B
-        IX9BBGsSV8qYc3kxPvDVJkw1V7ApYT4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1661942352;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D/VhxrZABrIw51+gKZ04o+QPEhbTuW7VzunFJgXY7yw=;
-        b=DvvoP4FgqltN7TSp0W4JepFamZL4CCI+xGGNoE56kVvT+VDjiBB8cQOdGEfQEqyIWhezcr
-        evs/qv/17UFQOJAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6549613A7C;
-        Wed, 31 Aug 2022 10:39:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id aB+rGFA6D2M7aAAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 31 Aug 2022 10:39:12 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E49DCA067B; Wed, 31 Aug 2022 12:39:11 +0200 (CEST)
-Date:   Wed, 31 Aug 2022 12:39:11 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Zhang Yi <yi.zhang@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cluster-devel@redhat.com,
-        ntfs3@lists.linux.dev, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, jack@suse.cz, tytso@mit.edu,
-        akpm@linux-foundation.org, axboe@kernel.dk,
-        viro@zeniv.linux.org.uk, rpeterso@redhat.com, agruenba@redhat.com,
-        almaz.alexandrovich@paragon-software.com, mark@fasheh.com,
-        dushistov@mail.ru, hch@infradead.org, chengzhihao1@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH 01/14] fs/buffer: remove __breadahead_gfp()
-Message-ID: <20220831103911.ubrkxc3yf46bdme3@quack3>
-References: <20220831072111.3569680-1-yi.zhang@huawei.com>
- <20220831072111.3569680-2-yi.zhang@huawei.com>
+        Wed, 31 Aug 2022 06:39:35 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3432B99CE;
+        Wed, 31 Aug 2022 03:39:34 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q63so13141848pga.9;
+        Wed, 31 Aug 2022 03:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=wOwY8itHt8uazUdkq94DxdZkg/SDR8+3Y3ahMNupefU=;
+        b=nfkSlY53P23F3x03xQrP4eu/bkO3JWBCJ9iyfQAQq4qWiJ7daGlQUwntPXT3PITeif
+         y16sWZr+GrhAwMAOp5gW3N+Y6jenP385CCPBdu6R6bGVsUmO7qCjntFspMzdVAeUMHfn
+         Z0zrxMhmvlEIC7omwrBrw26gwnStad+hRNooWWLyEcAbvsn8hfi6sIB4EhABufoYBNzh
+         qLUJv5asLy/ltrAvAF2bqRBELRXwW7psuNrQ92LDFMsX3u45Fr7kbKpQvKeuM5n74ZIi
+         Mdt0SC9Z4wxaCgmFJek8DCwm8z0lp1Uwwpa0bZvclZI0B9pEFIC6CkPEVPchF7HLOu7D
+         Xfng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=wOwY8itHt8uazUdkq94DxdZkg/SDR8+3Y3ahMNupefU=;
+        b=rwt3b/Pjf1LoqPmQReim0VXyw2/BU8XqF3ZhGsoWSeQxlb5EdzdwUVhdeJUP6i1n3h
+         Q/GqSYkPeC1woGJ/pwVFX/0LnFesYZIGORkBHtMaquRpdeeXnmXOVskHd7nrHcgRQrUR
+         CpAt1llwBxucusRand4KH0FlAXQ2Svp+oTYJ5LKeHJXx6q1IRkIQxRCsNToccRN15NrG
+         E1ip/+C06gzYV9qWX2+s/rqFwiKWhDRP3S8deK8w6tOUKpgGVT9IMN43jOuyGWLDHl0T
+         TLK/dChDOQ5hbAexxU2eq8dumdv7vpOZaMrb2nvnRCHAJnn5DtcZXDXLAKzYcBzu/P2j
+         zQ/A==
+X-Gm-Message-State: ACgBeo2Hr7rnoLK1+BCZb4jYjTj3vLiUHPqtuuMWTsvaUBMOSFRnOUh1
+        7rTNCbumxCKRJMjZikY5Gl4=
+X-Google-Smtp-Source: AA6agR64P8U6wtu7FrDxOOS6p0FSnkiFLrwL6YILZB/NVOFoS+0twPVgULY7Qms4kloVOzZ9yLqIhw==
+X-Received: by 2002:a62:2503:0:b0:538:426a:af11 with SMTP id l3-20020a622503000000b00538426aaf11mr13608844pfl.22.1661942374066;
+        Wed, 31 Aug 2022 03:39:34 -0700 (PDT)
+Received: from localhost.localdomain ([118.235.13.86])
+        by smtp.gmail.com with ESMTPSA id jj22-20020a170903049600b00172dc6e1916sm11245808plb.220.2022.08.31.03.39.29
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 31 Aug 2022 03:39:33 -0700 (PDT)
+From:   Levi Yun <ppbuk5246@gmail.com>
+To:     catalin.marinas@arm.com, bhe@redhat.com
+Cc:     will@kernel.org, nramas@linux.microsoft.com,
+        thunder.leizhen@huawei.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        Levi Yun <ppbuk5246@gmail.com>, stable@vger.kernel.org
+Subject: [PATCH v3] arm64/kexec: Fix missing extra range for crashkres_low.
+Date:   Wed, 31 Aug 2022 19:39:13 +0900
+Message-Id: <20220831103913.12661-1-ppbuk5246@gmail.com>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <CAM7-yPRp7wpP1a=SrH4o2SBijF4ZfxkLTe7vpRXq_D_y1Kz-1g@mail.gmail.com>
+References: <CAM7-yPRp7wpP1a=SrH4o2SBijF4ZfxkLTe7vpRXq_D_y1Kz-1g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831072111.3569680-2-yi.zhang@huawei.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 31-08-22 15:20:58, Zhang Yi wrote:
-> No one use __breadahead_gfp() and sb_breadahead_unmovable() any more,
-> remove them.
-> 
-> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+Like crashk_res, Calling crash_exclude_mem_range function with
+crashk_low_res area would need extra crash_mem range too.
 
-Looks good. Feel free to add:
+Add one more extra cmem slot in case of crashk_low_res is used.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Signed-off-by: Levi Yun <ppbuk5246@gmail.com>
+Fixes: 944a45abfabc ("arm64: kdump: Reimplement crashkernel=X")
+Cc: <stable@vger.kernel.org> # 5.19.x
+Acked-by: Baoquan He <bhe@redhat.com>
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+---
+ arch/arm64/kernel/machine_kexec_file.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-								Honza
+diff --git a/arch/arm64/kernel/machine_kexec_file.c b/arch/arm64/kernel/machine_kexec_file.c
+index 889951291cc0..a11a6e14ba89 100644
+--- a/arch/arm64/kernel/machine_kexec_file.c
++++ b/arch/arm64/kernel/machine_kexec_file.c
+@@ -47,7 +47,7 @@ static int prepare_elf_headers(void **addr, unsigned long *sz)
+ 	u64 i;
+ 	phys_addr_t start, end;
 
-> ---
->  fs/buffer.c                 | 11 -----------
->  include/linux/buffer_head.h |  8 --------
->  2 files changed, 19 deletions(-)
-> 
-> diff --git a/fs/buffer.c b/fs/buffer.c
-> index 55e762a58eb6..a0b70b3239f3 100644
-> --- a/fs/buffer.c
-> +++ b/fs/buffer.c
-> @@ -1348,17 +1348,6 @@ void __breadahead(struct block_device *bdev, sector_t block, unsigned size)
->  }
->  EXPORT_SYMBOL(__breadahead);
->  
-> -void __breadahead_gfp(struct block_device *bdev, sector_t block, unsigned size,
-> -		      gfp_t gfp)
-> -{
-> -	struct buffer_head *bh = __getblk_gfp(bdev, block, size, gfp);
-> -	if (likely(bh)) {
-> -		ll_rw_block(REQ_OP_READ | REQ_RAHEAD, 1, &bh);
-> -		brelse(bh);
-> -	}
-> -}
-> -EXPORT_SYMBOL(__breadahead_gfp);
-> -
->  /**
->   *  __bread_gfp() - reads a specified block and returns the bh
->   *  @bdev: the block_device to read from
-> diff --git a/include/linux/buffer_head.h b/include/linux/buffer_head.h
-> index 089c9ade4325..c3863c417b00 100644
-> --- a/include/linux/buffer_head.h
-> +++ b/include/linux/buffer_head.h
-> @@ -214,8 +214,6 @@ struct buffer_head *__getblk_gfp(struct block_device *bdev, sector_t block,
->  void __brelse(struct buffer_head *);
->  void __bforget(struct buffer_head *);
->  void __breadahead(struct block_device *, sector_t block, unsigned int size);
-> -void __breadahead_gfp(struct block_device *, sector_t block, unsigned int size,
-> -		  gfp_t gfp);
->  struct buffer_head *__bread_gfp(struct block_device *,
->  				sector_t block, unsigned size, gfp_t gfp);
->  void invalidate_bh_lrus(void);
-> @@ -340,12 +338,6 @@ sb_breadahead(struct super_block *sb, sector_t block)
->  	__breadahead(sb->s_bdev, block, sb->s_blocksize);
->  }
->  
-> -static inline void
-> -sb_breadahead_unmovable(struct super_block *sb, sector_t block)
-> -{
-> -	__breadahead_gfp(sb->s_bdev, block, sb->s_blocksize, 0);
-> -}
-> -
->  static inline struct buffer_head *
->  sb_getblk(struct super_block *sb, sector_t block)
->  {
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+-	nr_ranges = 1; /* for exclusion of crashkernel region */
++	nr_ranges = 2; /* for exclusion of crashkernel region */
+ 	for_each_mem_range(i, &start, &end)
+ 		nr_ranges++;
+
+--
+2.35.1

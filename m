@@ -2,126 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 424395A725B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481785A725F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiHaAWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
+        id S230350AbiHaAY2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:24:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiHaAWg (ORCPT
+        with ESMTP id S229753AbiHaAYY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:22:36 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCE129D138
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:22:34 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id cb8so9920358qtb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:22:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=Lh16XHf3++MO2LHtmJix5HtkGiD8BuHOsdyLRFTSe/A=;
-        b=XOSFBC16BR5ImEycq6Wxwt1WfjQIyjlHjo1i7V7SOlXSW7tiL+kBgt85+T6v4LbJL0
-         qpcT3EFRoQSSF59qi4Crv72crwblNLEVb88+boK4Qw0Gs/leowXS/n7K6EjwDf7a/HER
-         q2sBk9M9X08hJphAz+SsXYOzkqISAcKFgWTVN449dwieuLckpF7BA14iO5l3RzFjXP4o
-         gyl6FF0GxEX+/UPEyTric08qzhnPSPhsonOcIUIG7An6PY2X/GggY3Irn3C+2HX48htF
-         JrguD1dDyhidTXj/hx3ft/CekMn3SB332Z09qXmb7OuMbunnSgJPt4pmcsFpQLNd4Qko
-         FcRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Lh16XHf3++MO2LHtmJix5HtkGiD8BuHOsdyLRFTSe/A=;
-        b=K94XL3Ro1gW009ILHtFVP1GbXNtiHFoORphGyi3gnr0ffobxKFz28KuovWdWJhyd27
-         gb3ea2h2UempJAJ94tP/NRbkA/elLNBlxxnogbzt3i6DKCzvVrLP7qyXeDH6gEkvt4k5
-         NkZvARnT0A0jckwILJUWSVQy5/oke/IZZD42ojGGHDqFG3nDZoEmCT8TyblFM4sNzUfm
-         FiYifr8eBN5/J6WEIa1/z1N19u/phc79JICWFFph7XMKlwstWxEDEJ6JS2R/lix3Q3pE
-         dYXpvC6yEhRUWMJ2zysR8U24MuSogcwn/2p5uiX/063Au5PCm5CzaRwnRTvujFxilgoe
-         YFGQ==
-X-Gm-Message-State: ACgBeo3XkYXdeZF0O+m8gk4N1F2PCj9pKQD8UJwDd+/kKfYhDM+2h0MI
-        NoLduruvrrOkKDJQoys9b57eHQ==
-X-Google-Smtp-Source: AA6agR7GGtySRj3a31twDnb1mH9EFCJRgojy3h78HnLRKB2gSIxypXh8P0l2OQoGAZF+RRxoexfLDw==
-X-Received: by 2002:a05:622a:5c8a:b0:344:ba8f:8892 with SMTP id ge10-20020a05622a5c8a00b00344ba8f8892mr16671557qtb.297.1661905353877;
-        Tue, 30 Aug 2022 17:22:33 -0700 (PDT)
-Received: from ziepe.ca (hlfxns017vw-142-162-113-129.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.162.113.129])
-        by smtp.gmail.com with ESMTPSA id bk42-20020a05620a1a2a00b006aedb35d8a1sm9280435qkb.74.2022.08.30.17.22.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 17:22:32 -0700 (PDT)
-Received: from jgg by wakko with local (Exim 4.95)
-        (envelope-from <jgg@ziepe.ca>)
-        id 1oTBV0-0040ym-RW;
-        Tue, 30 Aug 2022 21:22:30 -0300
-Date:   Tue, 30 Aug 2022 21:22:30 -0300
-From:   Jason Gunthorpe <jgg@ziepe.ca>
-To:     Kevin Tian <kevin.tian@intel.com>
-Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Longfang Liu <liulongfang@huawei.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH 10/15] vfio/fsl-mc: Use the new device life cycle helpers
-Message-ID: <Yw6pxrS1zb5JKt8q@ziepe.ca>
-References: <20220827171037.30297-1-kevin.tian@intel.com>
- <20220827171037.30297-11-kevin.tian@intel.com>
+        Tue, 30 Aug 2022 20:24:24 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9109C9D8FD
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:24:18 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id D6EB65FD04;
+        Wed, 31 Aug 2022 03:24:14 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1661905454;
+        bh=4fl4RLZ+WkBNNFnhafSFpNfg0CMeWHUQue3HBc22HT4=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=SiK5jM35SGwe9LUWazXDkqKx1TpUnpq+JpPXpWktGTZSJsEeUxmKO2os9FEIklp64
+         klMIHk5ERntS7nxgDxzgCmatKk+ZIVYtjy9vHyJ87FJ1NZD9vL6qB5TW+pqPCA/VAh
+         pNpVAxS+76z+VyDWXNnKYVCKs7W9u+pBsIG7jvl/glfaP+64NjXHvHnOl5+AI11yuE
+         QtrtEbTGhCBNfmXkm5Z8aj+yKvsAstkpWO0ZO4jH28QU3HTrwj1XQzn/AjBA47wXqV
+         k5VgpQ958LHfaPFB/SMVbuyZVivZ01C5KiOdPkwjZSIHsrzvKOoWKIANGDxLwsvhfm
+         XG+Z6SNfK8EWQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Wed, 31 Aug 2022 03:24:06 +0300 (MSK)
+Date:   Wed, 31 Aug 2022 03:24:05 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+CC:     kernel test robot <lkp@intel.com>, <llvm@lists.linux.dev>,
+        <kbuild-all@lists.01.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [jic23-iio:testing 124/129] drivers/iio/accel/msa311.c:993:24:
+ warning: format specifies type 'unsigned char' but the argument has type
+ 'unsigned int'
+Message-ID: <20220831002405.m3j5sug2rz7bdz5s@Rockosov-MBP>
+References: <202208290618.wU7mHfOp-lkp@intel.com>
+ <20220830110329.00000d18@huawei.com>
+ <CAHp75VfA=w+Q2ccdTiQXeWRw0wSjbkUf6J3+tp-kE50mxdkTNg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220827171037.30297-11-kevin.tian@intel.com>
+In-Reply-To: <CAHp75VfA=w+Q2ccdTiQXeWRw0wSjbkUf6J3+tp-kE50mxdkTNg@mail.gmail.com>
+User-Agent: NeoMutt/20220429
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/30 20:46:00 #20189978
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 28, 2022 at 01:10:32AM +0800, Kevin Tian wrote:
-> From: Yi Liu <yi.l.liu@intel.com>
+Hello Jonathan and Andy,
+
+Sorry for such a late response, a couple of days ago my daughter was born.
+So I couldn't reach my laptop :)
+
+Please find my thoughts below.
+
+> > > >> drivers/iio/accel/msa311.c:993:24: warning: format specifies type 'unsigned char' but the argument has type 'unsigned int' [-Wformat]
+> > >                                               "msa311-%hhx", partid);
+> > >                                                       ~~~~   ^~~~~~
+> > >                                                       %x
+> > >    1 warning generated.
 > 
-> Export symbol of vfio_release_device_set() so fsl-mc @init can handle
-> the error path cleanly instead of assuming certain vfio core API can
-> help release device_set afterwards.
+> > >    992                msa311->chip_name = devm_kasprintf(dev, GFP_KERNEL,
+> > >  > 993                                                   "msa311-%hhx", partid);
+> 
+> > I'm thinking intent here was to limit range of what was printed. Maybe better to use
+> > local u8 variable or cast?
+> >
+> > I can fix it up if that's fine with you - or even better send me a patch that fixes
+> > it however you prefer!
+> 
+> Looking back at what Linus said about those specifiers, I would rather
+> go with simple %x or %02x.
+> 
+> P.S. Surprisingly many C developers don't know the difference between
+> %hhx and %02x, which is easy to check by
+> 
+>   char a = -1;
+>   printf("%hhx <==> %02x\n", a, a);
+>   a = 217;
+>   printf("%hhx <==> %02x\n", a, a);
 
-I think you should leave it as is, the "device_set" cleanup is just
-something handled completely internally to vfio
+Thank you for pointing to Linus answer. I have explored it at the link:
 
-If ops->init fails then we expect the core code to clean the
-device_set, and it does because it calls vfio_init_device() already.
+https://lore.kernel.org/lkml/CAHk-=wgoxnmsj8GEVFJSvTwdnWm8wVJthefNk2n6+4TC=20e0Q@mail.gmail.com/
 
-Having a single weirdly placed release in the driver is pretty
-confusing, IMHO.
+Actually, Linus described one exception to this rule, which I have
+in my patch. I have an integer which I want to print as a char.
+I see that Linus mentions it's a bad idea. I agree with that. But
+currently %hhx => %02x replacement breaks the requested behavior, %02x
+will not shrink integer value to char. I want to say, maybe it's better
+just cast the value to u8 type and print as %x. What do you think? I can
+prepare such a patch.
 
-Jason
+P.S. Andy's example to show the difference between %hhx and %02x makes
+more clear why such a replacement is not acceptable here.
+
+Output:
+ff <==> ffffffff
+d9 <==> ffffffd9
+
+-- 
+Thank you,
+Dmitry

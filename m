@@ -2,119 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB08F5A8081
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:45:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D83D5A8084
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiHaOpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:45:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60794 "EHLO
+        id S232058AbiHaOpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232130AbiHaOpK (ORCPT
+        with ESMTP id S231200AbiHaOpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:45:10 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3FF2F3A4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:45:08 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id p18so11541936ljc.9
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:45:08 -0700 (PDT)
+        Wed, 31 Aug 2022 10:45:36 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1F74B4A9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:45:35 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id fa2so6656503pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:45:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date;
-        bh=WfJW1iDKdU58AQ3xIWQtfybNImbhPKgKfgcmrCUP9cg=;
-        b=YY7tVS9V2XkEOlyiJpou/6RhgqXDu/e9SL00TO11lD4hAzy3DSXn0YTH17/RiFYXLk
-         GlNV9f3BqxFpbVprPhqGKrV9xVzrfqpPY7z4E5q83ziDTiaxJJ749txcrzpFWNh7H45R
-         fplsEJG78OTxoOGhT1rV5aNfDzn241puLVNEMX2NrEuCT7n50xzT8R3hdrDbPHFFUd6I
-         YA7XjIGBMPhNo9FrAaMMmAAbdK5lXoIj2LMgr6Gkat/mt8qRi9PVq1NedGV6SpZ2TC60
-         MkUYHSNFE2AZb9I44pPVzGNwsJp1M1FE/pNcxpYcxjkL1He1rWCOfz+sIZgYV47ZUtdo
-         Jj2g==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=kcg2Q/3J3Ju4dFD9SiNuiFf7WPpy0/Z3n17LeQlJ4Zk=;
+        b=HrAyq7AYwQdxuPqPF9lcKP/1LOiLbB+6lqfDjjA/ZAa6BtTUwcAtffEPCJzp4Vm7uu
+         mmKNx5FyPQFuRcTZ+h9YD8lYiK9K0+otCUArq+g1oARRy0s9uhN9Typxrzw8K+ucnWLa
+         xz8IqQwATJZD8lhQUAT0ApZ8fskyms8WXk+2QnXd1Iylf2zDykLUYGit6gQMKlA00PUN
+         cgIlYJV5zs8Y78xchFnK34F4K72XK0ibEs5OP+JCmJcVswMyq7zEjyrLzMVTUBD09ZD9
+         t+bH2zOUT0XsQUQg/E+XpwVQmn4426UdUJrfDQwfC7I9Lo7QWBP9PsHmJbzh8+oxUpIm
+         uRgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=WfJW1iDKdU58AQ3xIWQtfybNImbhPKgKfgcmrCUP9cg=;
-        b=iDcqVC/MU3LQ2MMSnBL0qTREeVCOcBbe+BpvpMWW3Ie4IG3ceQfWUGRBfUsO4CVr5S
-         FbiHo9eFEfltSbnqtRH+vO8PMNhwZ8SO/SD6u1JfzYrpuyx59Fwul48peDSVdOSGFJQQ
-         XHLztU4xh6jc2/UpSZgn4fKV1IyzZQyVqa2tT1Pnlgg8rmqNXSjFT1e5CrgtW7j0Wf8Q
-         KANOQFSxYjfOgFQlzQMpDxWOzpmbmMaeaeroCf5n6HxFPZ9z2aoABzx5Gr7D6uqxgGhI
-         U2O2BLNQTH3+Bc4EWSSmELS+WE9NT5RKKhTNeXL5ZkPt2NDXaluGqhcndw4YvORBlkU9
-         1NIg==
-X-Gm-Message-State: ACgBeo1nn88woJP9i/a4wKbiPcaiKiYDb5NkKmQm/J+7WXavlEV/4zpV
-        zYIHwNiO5rLRUhy9aK08v57N33UOjFMJz8vKqTs=
-X-Google-Smtp-Source: AA6agR6s2mfyhDM5lup7dUh9kRjDcROA4QD4PMQCTvbPmT7o4BO4hcwzRAfxoCXRWCdLE1nRREKCMrVfL8PEWD/yJSI=
-X-Received: by 2002:a2e:a801:0:b0:261:91a3:bc44 with SMTP id
- l1-20020a2ea801000000b0026191a3bc44mr8420414ljq.497.1661957106996; Wed, 31
- Aug 2022 07:45:06 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=kcg2Q/3J3Ju4dFD9SiNuiFf7WPpy0/Z3n17LeQlJ4Zk=;
+        b=dDwBFb9JcSoR3rUyLi4RIeqsoCRtBzsWT3CJVmwoT4cdxlnspch4cM8ub04p6a6mTK
+         PfGpw6Ci+GHmhKYXnKUFI7Fm+tavbgsvsQ2GfmzCqsLsEwv5zrY7IvarNneG8nMEG9EM
+         DxjBzk9vfi0DlEBV4Pri0loOwDX5GW6EiUSE1qNuZht8JTDglYkwQP4Yn/EuqZgzpt58
+         RUvq5zkMuEJW+2TTVzT9rjWuoECpQ197cNefuvcsSdb3T+/vNaB7VIrwnEQyfXrfLxHB
+         +xI0mUQUvqHe5X9rGqj3he1HnzQSZD7aspJGvqG/9Uh+OMeFVROQFuHElefeHxOUWIVH
+         nm1w==
+X-Gm-Message-State: ACgBeo25dIHDASPgWwh/1ZsOpVrFXjMTnSBlxHwOh4DI2PtyShW26jXR
+        tLKfyHS8FhT/Invy8LtUbJzJzfe3tMI=
+X-Google-Smtp-Source: AA6agR50AgP4dMzaMMUwe5EM57JCW/RS9jAv3FzrbFhfpU8Lvy8L0ALv1LgeC64QTgfbq3pamI7LuQ==
+X-Received: by 2002:a17:902:be12:b0:170:cc74:989b with SMTP id r18-20020a170902be1200b00170cc74989bmr25899146pls.88.1661957134708;
+        Wed, 31 Aug 2022 07:45:34 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id m20-20020a17090ade1400b001fad1f975casm1415835pjv.12.2022.08.31.07.45.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 07:45:34 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: cui.jinpeng2@zte.com.cn
+To:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        paskripkin@gmail.com
+Cc:     martin@kaiser.cx, straube.linux@gmail.com, abdun.nihaal@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] staging: r8188eu: remove redundant variable ret
+Date:   Wed, 31 Aug 2022 14:45:29 +0000
+Message-Id: <20220831144529.304636-1-cui.jinpeng2@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Sender: klin.mlin122@gmail.com
-Received: by 2002:a2e:a54b:0:0:0:0:0 with HTTP; Wed, 31 Aug 2022 07:45:06
- -0700 (PDT)
-From:   Aisha Al-Gaddafi <aishaalgaddafi872@gmail.com>
-Date:   Wed, 31 Aug 2022 16:45:06 +0200
-X-Google-Sender-Auth: 5l4GrNDmzKVU1xwLCHklQbM9eX0
-Message-ID: <CAMwUt-p8Ofui3O1KOxBQ2P8=-ymAB_FYxtJGwrXOwDCEps-UGg@mail.gmail.com>
-Subject: HELLO
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.9 required=5.0 tests=BAYES_99,BAYES_999,
-        DEAR_FRIEND,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,LOTS_OF_MONEY,MILLION_HUNDRED,
-        MILLION_USD,MONEY_FRAUD_5,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:22f listed in]
-        [list.dnswl.org]
-        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
-        *      [score: 1.0000]
-        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
-        *      [score: 1.0000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [klin.mlin122[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [klin.mlin122[at]gmail.com]
-        *  0.0 MILLION_HUNDRED BODY: Million "One to Nine" Hundred
-        *  0.0 MILLION_USD BODY: Talks about millions of dollars
-        *  2.6 DEAR_FRIEND BODY: Dear Friend? That's not very dear!
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.5 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-        *  0.0 MONEY_FRAUD_5 Lots of money and many fraud phrases
-X-Spam-Level: *******
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Friend,
-With sincerity of purpose I wish to communicate with you seeking your
-acceptance towards investing in your country under your Management as
-my foreign investor/business partner.
-I'm Mrs. Aisha Al-Gaddafi, the only biological Daughter of the late
-Libyan President (Late Colonel Muammar Gaddafi) I'm a single Mother
-and a widow with three Children, presently residing herein Oman the
-Southeastern coast of the Arabian Peninsula in Western Asia. I have
-investment funds worth Twenty Seven Million Five Hundred Thousand
-United State Dollars ($27.500.000.00 ) which I want to entrust to you
-for the investment project in your country.
+From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-I am willing to negotiate an investment/business profit sharing ratio
-with you based on the future investment earning profits. If you are
-willing to handle this project kindly reply urgently to enable me to
-provide you more information about the investment funds.
+Return value directly from rtw_set_wpa_ie() instead of
+getting value from redundant variable ret.
 
-Best Regards
-Mrs. Aisha Al-Gaddafi.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
+---
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+index d6b6021a4250..31a439663626 100644
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -1709,11 +1709,9 @@ static int rtw_wx_set_gen_ie(struct net_device *dev,
+ 			     struct iw_request_info *info,
+ 			     union iwreq_data *wrqu, char *extra)
+ {
+-	int ret;
+ 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
+ 
+-	ret = rtw_set_wpa_ie(padapter, extra, wrqu->data.length);
+-	return ret;
++	return rtw_set_wpa_ie(padapter, extra, wrqu->data.length);
+ }
+ 
+ static int rtw_wx_set_auth(struct net_device *dev,
+-- 
+2.25.1
+

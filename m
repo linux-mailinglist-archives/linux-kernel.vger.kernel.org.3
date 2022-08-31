@@ -2,49 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23985A7AA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:54:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 452B25A7AAA
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:54:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230264AbiHaJyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39364 "EHLO
+        id S230154AbiHaJyn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbiHaJxy (ORCPT
+        with ESMTP id S229735AbiHaJyj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:53:54 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50002D11EB;
-        Wed, 31 Aug 2022 02:53:53 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MHfYZ4p45zlWVR;
-        Wed, 31 Aug 2022 17:50:26 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 31 Aug 2022 17:53:51 +0800
-CC:     <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <xuwei5@huawei.com>
-Subject: Re: [PATCH next v2 2/2] dt-bindings: i2c: add entry for
- hisilicon,hisi-i2c
-To:     Weilong Chen <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
-        <wsa@kernel.org>
-References: <20220825092412.307052-1-chenweilong@huawei.com>
- <20220825092412.307052-2-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <ffa076ea-2675-05ab-00bb-30b77ef13cba@huawei.com>
-Date:   Wed, 31 Aug 2022 17:53:51 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Wed, 31 Aug 2022 05:54:39 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1734D0207;
+        Wed, 31 Aug 2022 02:54:38 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id az27so17524573wrb.6;
+        Wed, 31 Aug 2022 02:54:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date;
+        bh=AjyGAORD6u0Zr3At+X7QhVbrZQwkooLQ7kUsqjrz0sg=;
+        b=m5dVv7DImPdipFQPZb6beQLx3/OErYk+jQ0h9IHZYMhtlLyjpfUN4RuJrq+mF7kbWI
+         YzrZ7e40hdsZTUT1kEWL5Ly/Be0t/j4qJTsyYtI23VZ9eOPZombfj/S7X5+N+Jhxq1OX
+         pc/SJQLfzbygJlMjiXw7l5zyColRVT4nVMQ87J2uPgNZRPE1W0DaCT7BfpWrU53kbrCo
+         R/R2pAyRuEDNcvtO204pB28tzlCS1b8eBMZ8D9zEfx9fegs2AFVH5Gb8Opmctqs2H+de
+         iFyWbClnVazOfMsCI9gUAbugBH2JzdcB/XhoMvhfbwvEpL8sjAwrv861JaCN+aDz8F/B
+         87wQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=AjyGAORD6u0Zr3At+X7QhVbrZQwkooLQ7kUsqjrz0sg=;
+        b=vKDcy2zKltDSde47PAyHJUHytUj9OrlCGqR3Yh2E1Ge+gWCq30wMaU4Fs3WaxFxEgi
+         dIFNFMn9MnqVcgAHIFuDfHB1ZwOu1rho0Yq8mi8wcTjr7kJ1t17O8FwEnb4L6CSU8TOc
+         xU98DIACNXV8vpiP2h1Y9XKzVBrOt2yuPvFlxtlUqbdPmXoWjoW6DUxZ1Wtjak1lXDXP
+         MMYOjeiyr/HCfZsvTqONi2/5H/fXmPq/5XKwFiCBjzJhtKTeWKVXMdVysanTK+B//D/2
+         Jvk4xAWjLLyssS4YjoRAOhH3EZcy8CylJxdP3kjrZA1u/8VyBL/cS5pYEe3OqPTYklbh
+         BdJQ==
+X-Gm-Message-State: ACgBeo1j/j25CuKkP9GNpO7k2FtXnU/asKB9MN1DVyGkbEiTwKhyLxc7
+        ZjB7CI5fUGfyHA0BAxBgRgpRirgzd7Y=
+X-Google-Smtp-Source: AA6agR7igv2/Dwwn7uBfi3MFcxGoT++4TUW+wI/H+iDLCCI8a9jEkGiuv2ZAksN0HlepSsvTty8sDQ==
+X-Received: by 2002:a05:6000:1888:b0:222:c96d:862f with SMTP id a8-20020a056000188800b00222c96d862fmr10905639wri.706.1661939677264;
+        Wed, 31 Aug 2022 02:54:37 -0700 (PDT)
+Received: from debian ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id k1-20020adfe8c1000000b0021badf3cb26sm14140853wrn.63.2022.08.31.02.54.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 02:54:36 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 10:54:34 +0100
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Matija Glavinic Pecotic <matija.glavinic-pecotic.ext@nokia.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: build failure of next-20220831 due to b35b2736b43d ("ARM: 9230/1:
+ Support initrd with address in boot alias region")
+Message-ID: <Yw8v2u4TM0m0l5u7@debian>
 MIME-Version: 1.0
-In-Reply-To: <20220825092412.307052-2-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,89 +71,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc xuwei for device tree expertise]
+Hi All,
 
-On 2022/8/25 17:24, Weilong Chen wrote:
-> Add the new compatible for hisi common i2c.
-> 
+Lots of arm builds like zeus_defconfig, viper_defconfig, mv78xx0_defconfig
+have failed to build next-20220831 with the error:
 
-s/hisi/HiSilicon
 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> ---
->  .../bindings/i2c/hisilicon,hisi-i2c.yaml      | 50 +++++++++++++++++++
->  1 file changed, 50 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> new file mode 100644
-> index 000000000000..ea967abfe144
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,hisi-i2c.yaml
-> @@ -0,0 +1,50 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: "http://devicetree.org/schemas/i2c/hisilicon,hisi-i2c.yaml#"
-> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> +
-> +title: Hisilicon common IIC controller Device Tree Bindings
-> +
+arm-linux-gnueabi-ld: arch/arm/mm/init.o: in function `arm_memblock_init':
+init.c:(.init.text+0x1bc): undefined reference to `phys_initrd_start'
 
-It's ok to have "HiSilicon common IIC controller"
 
-> +maintainers:
-> +  - yangyicong@huawei.com
-> +
-> +allOf:
-> +  - $ref: /schemas/i2c/i2c-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: hisilicon,hisi-i2c
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  clk_rate:
-> +    maxItems: 1
-> +
-> +  clock-frequency:
-> +    default: 100000
-> +
+git bisect pointed to b35b2736b43d ("ARM: 9230/1: Support initrd with address in boot alias region")
 
-I think it misses some properties here?
+I will be happy to test any patch or provide any extra log if needed.
 
-- i2c-sda-hold-time-ns
-- sda_fall_ns
-- scl_rise_ns
-...
 
-Do we need to mention them here?
-
-Thanks.
-
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clk_rate
-> +  - clock-frequency
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c1: i2c@5038B0000{
-> +      compatible = "hisilicon,hisi-i2c";
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +      reg = <0x5 0x038B0000 0 0x10000>;
-> +      interrupts = <0x0 120 0x4>;
-> +      clk_rate = <0x0 0xEE6B280>;
-> +      clock-frequency = <400000>;
-> +    };
-> 
+-- 
+Regards
+Sudip

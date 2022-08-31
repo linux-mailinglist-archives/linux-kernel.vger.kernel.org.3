@@ -2,61 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB8E5A8742
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87B265A8748
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:10:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232185AbiHaUIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 16:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
+        id S230414AbiHaUJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 16:09:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232164AbiHaUIn (ORCPT
+        with ESMTP id S232194AbiHaUJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 16:08:43 -0400
-Received: from mailrelay3-1.pub.mailoutpod1-cph3.one.com (mailrelay3-1.pub.mailoutpod1-cph3.one.com [46.30.210.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6416CE319
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 13:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=myn8K7Qi8/yOzqs+Jb5il5/Psm+bREokbxVOA5/xdl0=;
-        b=I4Xa9Fv768l8bcDgM4yTM9p/zK1ch2r5XyV8+nWrnYMRb4gvRWzs1r/0ZEEi/YR68Q7Mvkrtc0cUx
-         KLjUAjtWdl95P5AJRPIZE7tcGzdTIGZw7IvT2enDNpAMAgUGm68ipAWnhirOmlkhCnZYyXgsIbcRJ/
-         YZP0Fbrw68cIyU8XSngrkVQbyFdn2r/wLTHaknGVcl/ZyOWUip1V+eoWQrKdgVfL7OLjPOwkX1g/Qo
-         aag8bERWsAjagIgHHg7Nyum2WABrphp8O5V44XlxdGgLMvXFXYaBEDaxr9+g+QGVtVIKhUl95t3Sxx
-         +QxmVpTxMvFkxuy3FiqJ0GQbXL7xiZQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=myn8K7Qi8/yOzqs+Jb5il5/Psm+bREokbxVOA5/xdl0=;
-        b=BnKUVLaqh4cS8vfudhOXPmvL/+IJdnLCDCYkf0pl9ZUwxE2eExuWLq8B29jBRNsYV/H5i+KoIfn8s
-         8wDjUvTBQ==
-X-HalOne-Cookie: 6f714c8eedd12f07f61baf5246cf3974683ecdd7
-X-HalOne-ID: b31eff44-2968-11ed-be88-d0431ea8bb03
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
-        id b31eff44-2968-11ed-be88-d0431ea8bb03;
-        Wed, 31 Aug 2022 20:08:38 +0000 (UTC)
-Date:   Wed, 31 Aug 2022 22:08:37 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@linux.ie>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH] drm/panel-edp: Fix typo in kerneldoc comment
- (appers=>appears)
-Message-ID: <Yw+/xRdODPBl26Eh@ravnborg.org>
-References: <20220720162314.1.Ieef5bc3848df40b71605b70bb571d6429e8978de@changeid>
- <CAD=FV=WC0QUaZsHQHhc+TAV2JXT64rnxDh9OvskpVrZAXzfz=Q@mail.gmail.com>
+        Wed, 31 Aug 2022 16:09:41 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72000EE6A4;
+        Wed, 31 Aug 2022 13:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661976570; x=1693512570;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=J+oHj258BvEFo3Hgudi6m8yyaVCBa1y6Q8ShWbl1LHw=;
+  b=m/LWOgrs1fq1Oq6+zj8kpZfJHLpdxM+SgHy69DkpdBrGe5ubsEXISsAp
+   4/6acutb5eaVRsBszuXC/c93CTL4J5OosBx79QFHlQLW9O/9DXKDU9PZH
+   yt6gSJY7LM8QnB76EXRF8pEqUdoYP5sYIcBHgj6s/PyRz6pXDlXT6l+0G
+   0cWTegW4E32e8qMlkI5HKcOo0BNbyUEMk1uQ09jZ+h46m2SsgBbeiikO5
+   rrYrkBGBQV98u0E7gwXfD/CljapCkmzYIe3PwV3G1P0Ba2rIHLBBbyT97
+   dMtKpMQnqjKx3+knYZOR/sMDl7D0AyBRgEk83hfEMrB1RwTbUMGzBheO/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="381830794"
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="381830794"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 13:09:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="787975520"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by orsmga005.jf.intel.com with ESMTP; 31 Aug 2022 13:09:15 -0700
+Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 31 Aug 2022 13:09:14 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 31 Aug 2022 13:09:14 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 31 Aug 2022 13:09:14 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 31 Aug 2022 13:09:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WZf01X5HH39okMBJp/WQGcYaIBRKaz2BLLAE0kgMI8S4DJ0mLQtsaKwBXeb6ppkONrwpbpbbfXYAe9QQkZVy+c5DizTFkQf/LiZjYytH9f3ahoSZ9/1BHyCbhbabp3jHxsa3IEpcZmTH3up8Aw5c6Nrb/nepl4OedVHUFHB88Vjy7ZEMxDG24taWa7qlu5Qw81AaBwkxrvR8BoTcKj5+vj9nm1zxjZnwtZRqbb4dubB5AMDUa2nPhqAUHVrvtGXRw9m2IY9B4hxy5Brvk0TC4hokUW975sA7QkQi5h37d52oF31G8SBq9Vz/cdx3O84dIz9UkTF+gc5n2dqMF+bznw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=GrMQtLBoI6awj8GGIRsZnIrgHQ/fa0Ex6P9BBu1E8xY=;
+ b=Ki09EH/iS/98iUDL0h5KODn8I4Wx2jhVCK7iEjBFZ4ths0B9Iy3eE5zrJTUpxu11xrBOybxzMB411oIUiDVFfZGjGZHMqSNBoqRCHGwfJCNYtDmgac2wWvQo7AxXy6DtuBmoWJybm34XxSurVXSjMR8lL2/3NoluMWwjHJX4qGFIAInSQ3PY/mnmPP24fSL51siKG7l55VLMCp81WUYhVmXpjuhBw0B8jWk4PEsaO3uc6vy7idd83OaHerEXY4fxBN8o3FZE+dZWjg2Dxiu3mok6lEMfNCW2nDtImQTm4NKJ+HVaLn8Cwf+kybuqX+2r4FyLDsa4UNeBSLWqqRi7iA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from CO1PR11MB5089.namprd11.prod.outlook.com (2603:10b6:303:9b::16)
+ by PH8PR11MB6951.namprd11.prod.outlook.com (2603:10b6:510:225::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.16; Wed, 31 Aug
+ 2022 20:09:12 +0000
+Received: from CO1PR11MB5089.namprd11.prod.outlook.com
+ ([fe80::295a:f0fd:ffeb:2115]) by CO1PR11MB5089.namprd11.prod.outlook.com
+ ([fe80::295a:f0fd:ffeb:2115%4]) with mapi id 15.20.5588.010; Wed, 31 Aug 2022
+ 20:09:11 +0000
+From:   "Keller, Jacob E" <jacob.e.keller@intel.com>
+To:     ivecera <ivecera@redhat.com>,
+        "Laba, SlawomirX" <slawomirx.laba@intel.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "Piotrowski, Patryk" <patryk.piotrowski@intel.com>,
+        Vitaly Grinberg <vgrinber@redhat.com>,
+        "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
+        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        "moderated list:INTEL ETHERNET DRIVERS" 
+        <intel-wired-lan@lists.osuosl.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH net v2] iavf: Detach device during reset task
+Thread-Topic: [PATCH net v2] iavf: Detach device during reset task
+Thread-Index: AQHYvEjk1CGq6TaBGUCRbbEbTVSolK3H64sAgACsCwCAANrVMA==
+Date:   Wed, 31 Aug 2022 20:09:11 +0000
+Message-ID: <CO1PR11MB508906BBD9F721E08C79CA8DD6789@CO1PR11MB5089.namprd11.prod.outlook.com>
+References: <20220830081627.1205872-1-ivecera@redhat.com>
+        <DM6PR11MB31134AD7D5D1CB5382A5052887799@DM6PR11MB3113.namprd11.prod.outlook.com>
+ <20220831090540.53e324af@p1.luc.cera.cz>
+In-Reply-To: <20220831090540.53e324af@p1.luc.cera.cz>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: ac5e1f9a-c76b-481c-5972-08da8b8cab72
+x-ms-traffictypediagnostic: PH8PR11MB6951:EE_
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xuXhTCUGXPTiMJkm5qH5FCQ+g4YJbHe4zKnfzkNfMftiFEO/i92fymm8rI9Z2iKEOl3FhqpIisO++D5NZmKXvtFlKKyVyR18xzR21BEHbU21vq3XZMvb210GCmr9+psQvAFAB7fFGBErJzMUEgEka/ERl+oAs8JuJWnKT/P31nvQ6lya1XAi1PRz5gtT9qMTQF2X3c4cB6MJyZVhHuaQ5aQ2xjLKvRQs9WXNdUpg6SitJGfI/TPhy8tLlrVXUPq+2XzUSyOeHfI91yezP5HS40tZ1f5zQwKAa2untmZbC5k5LWfMiL6UTtcw0F/k3eIkDpRFn2C9tC9AbQr9sBjjWpH0GjvbPQglu3YqAnHyNMqxWX740zaypLh/OCwk+4INeF7J8gIudPcYb16HMqhS0mdXxdZuP3l+BWw05Lb9VR3aZzj8ZX2CBc1KtgFYwNBBhOoxXHm8I1QgjuiWqhkiSOu6D4A/Y0bpITZSO51/il91L1uCwy7RFi7oKKUCq7TqERh/cEaMOpBttx6yQVZ85jL2mgFtBNAl0iuVmBKbXf68hJX/6OvY4o63X9PwOokgHli4Ge5UUof69TsnkEE0Zn86/z4XksHQvvrrDIKuPI28k0HT3ybYJO+H6J8fZbuquBr7CqAXwHv5sCRHbR7QmNmN4v8j97FawWgRlFPJX+cAaXiRYNQT+sJN/urifmBUF+CtbYF1HWRv0WqOX5muuCPj4xxiB6Iao4BDFgw8PtdRQx59YzyGRL4ufgw8ZQtYno++EjVqc7CA1dHt+7IlcA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5089.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(366004)(39860400002)(136003)(346002)(396003)(71200400001)(41300700001)(7696005)(9686003)(53546011)(6506007)(478600001)(38070700005)(86362001)(8936002)(33656002)(82960400001)(38100700002)(26005)(2906002)(83380400001)(186003)(122000001)(52536014)(8676002)(66476007)(66446008)(4326008)(110136005)(66946007)(55016003)(66556008)(76116006)(64756008)(5660300002)(54906003)(6636002)(316002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bi7kPp1N/Wtkj5NJjMfYcVWWfn6U/+orimyJaz4U/faq+0GCk2f9LylSh5Ye?=
+ =?us-ascii?Q?u6EX0xwziR+nDDVhhMF6997BeLi8jY1TEpL0JYf1ur3Qe1+7FcTa5EfqlFlo?=
+ =?us-ascii?Q?J0SmpcgbpaAc4n8Fl1AtaxfBan0ukyN8+PzhSINizD6kPjnB0F/8bSG4eWxr?=
+ =?us-ascii?Q?+Fce6xw9cBKKlkmUnc7tyLa7ewoNOZ+ntfcTnStuGlx+p/4Sux3R5t0zFpRO?=
+ =?us-ascii?Q?8N/59eOCQEuKmfi+gPUhjUcR8TqTVappbeBJQmPBbHTEi0xgV5I+xg2HlJ6B?=
+ =?us-ascii?Q?zYLjvlqIEJ+FlEZCkfNCZhmwT9NOm2NPeMk81l3YTsB1IvSCeynglhqgmLNZ?=
+ =?us-ascii?Q?lwQhrrWCCam5ArrT2VZJ8Mdtem7vutTdqBP92N36sCWIeUPY1eUfF6FyXgS5?=
+ =?us-ascii?Q?IDGX9sAaTOfnTETSa8fhc9oAGEUaN3UJZLWOPO4uRqRo5K+PFXrPqfv6ulzt?=
+ =?us-ascii?Q?pzT4kvdUtuveqhDKChbHN8R3zadUpK95X0BPydFIfyVD0izj23v7btSyAwEt?=
+ =?us-ascii?Q?hu5vCDqu8/d8Fih7xTGRU/cOQSK+Zp/nP3kmgVw7/LuBX0OL9beDiMJs5OZm?=
+ =?us-ascii?Q?Sjb8/jcWRqgfgZVJI7bbJ72kD2Qm/QlFNV5JEjwQQmzhnwSi5mgJsqDTBonC?=
+ =?us-ascii?Q?zqv7FoK4+JXBjUTuHlSBxG2oVp649L9cyu5ni74EGNxdzA2eRuh3SoSgJFK0?=
+ =?us-ascii?Q?HdRMRKCzkdfsVofutPBwFYHlqnm74qKmTsbbv6OokFNlS3DM/N0DPOgElsLy?=
+ =?us-ascii?Q?h7FrjssmH3HhDE1vU3l1mnBpxYCym1FmUf7DKdy2uTvrK+JpIFxuV01YZwnE?=
+ =?us-ascii?Q?XCUW14YmROJLS/RheiUHPjwuHhEKJRU9LYPM+e2ZQ1zZpcP+n8zKPLc2kqnH?=
+ =?us-ascii?Q?zn9wuRKVdDCE71jOGRsvRAlJwuGRNLie17nxYZtDltkmYcFK/qHYO/OHcySH?=
+ =?us-ascii?Q?jPGGqmJqlSGVbuFWEyH1Eh41f0GnW4wLa7LO+ZAWgjwGgWfV4IjB/GSinYLX?=
+ =?us-ascii?Q?6gYsYldapwtQWtzRBn/fRedLy857icREgMtMHVpYsMAYysJ7snwi6WNWhD40?=
+ =?us-ascii?Q?PZrWjJ0P7upa9fozcXB9JhcA55n52iNFuqaapMsT/JPLFtyfSYEU5ngTv+Ff?=
+ =?us-ascii?Q?QLE3+M2WMLoi51Q7Q/Q1zac6JE75qRVGX4sqpsjCAdsUG4FI+GYbM/uKolci?=
+ =?us-ascii?Q?zwkIfksd2iKaHWRXYL09m2grHR1waBi9a9TW/gLzZeBEuEwXF0Hamm4RgH9T?=
+ =?us-ascii?Q?qbFq7R91m0A96Xa86lyyJLl+vdz1LRylDngX04N6y7/lwy1x+IxBhPQSebQN?=
+ =?us-ascii?Q?0/6ay3dlgrhPBHXp62lPLOEQQmpTX3TZiZbRY/57oGz2R/wSTQI0Xw1gxw+O?=
+ =?us-ascii?Q?t9U4F7X5NGAOeDxzqkvGMXSv+/ua57DPygi4wv7OeCd5AzafUvfJ1gsRQ+5e?=
+ =?us-ascii?Q?mExsQ7kBpaFtPtUdk4Z38Gyr9feFgWj2LrTrtDc5mbo6ERQOcNoc5dBpckjO?=
+ =?us-ascii?Q?Dvs1DpJl+ciRUBwklGeeEBEgBcxoqVa74c42x/0ffdBLtGNU5dcy1HYsliVc?=
+ =?us-ascii?Q?ssoM8f8u9ugwfrBH+SB90N09qOccbsOhMIcvLykM?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAD=FV=WC0QUaZsHQHhc+TAV2JXT64rnxDh9OvskpVrZAXzfz=Q@mail.gmail.com>
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5089.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ac5e1f9a-c76b-481c-5972-08da8b8cab72
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2022 20:09:11.4113
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: e433GESpcDQwEeRMdzAcLGkI64xFsjblIb78VMUjrkRJz8jHUaqOoUtZn24M9LBS8DHVSambCCOtybbDlRXVq/laacvqmSY0MMLs729fFiA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6951
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,37 +165,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Douglas,
 
-On Wed, Aug 31, 2022 at 08:03:11AM -0700, Doug Anderson wrote:
-> Sam,
-> 
-> On Wed, Jul 20, 2022 at 4:23 PM Douglas Anderson <dianders@chromium.org> wrote:
+
+> -----Original Message-----
+> From: Ivan Vecera <ivecera@redhat.com>
+> Sent: Wednesday, August 31, 2022 12:06 AM
+> To: Laba, SlawomirX <slawomirx.laba@intel.com>
+> Cc: netdev@vger.kernel.org; Keller, Jacob E <jacob.e.keller@intel.com>;
+> Piotrowski, Patryk <patryk.piotrowski@intel.com>; Vitaly Grinberg
+> <vgrinber@redhat.com>; Brandeburg, Jesse <jesse.brandeburg@intel.com>;
+> Nguyen, Anthony L <anthony.l.nguyen@intel.com>; David S. Miller
+> <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub Kicinski
+> <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Jeff Kirsher
+> <jeffrey.t.kirsher@intel.com>; moderated list:INTEL ETHERNET DRIVERS <int=
+el-
+> wired-lan@lists.osuosl.org>; open list <linux-kernel@vger.kernel.org>
+> Subject: Re: [PATCH net v2] iavf: Detach device during reset task
+>=20
+> On Tue, 30 Aug 2022 20:49:54 +0000
+> "Laba, SlawomirX" <slawomirx.laba@intel.com> wrote:
+>=20
+> > Ivan, what do you think about this flow [1]? Shouldn't it also goto res=
+et_finish
+> label?
 > >
-> > Ever since I got the spell-check working in my editor this one has
-> > been bugging me. Fix it.
+> > 	if (i =3D=3D IAVF_RESET_WAIT_COMPLETE_COUNT) {
+> > 		dev_err(&adapter->pdev->dev, "Reset never finished (%x)\n",
+> > 			reg_val);
+> > 		iavf_disable_vf(adapter);
+> > 		mutex_unlock(&adapter->client_lock);
+> > 		mutex_unlock(&adapter->crit_lock);
+> > 		return; /* Do not attempt to reinit. It's dead, Jim. */
+> > 	}
 > >
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> >  drivers/gpu/drm/panel/panel-edp.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/panel/panel-edp.c b/drivers/gpu/drm/panel/panel-edp.c
-> > index e6645d6e9b59..07a383dff548 100644
-> > --- a/drivers/gpu/drm/panel/panel-edp.c
-> > +++ b/drivers/gpu/drm/panel/panel-edp.c
-> > @@ -53,7 +53,7 @@ struct panel_delay {
-> >          * before the HPD signal is reliable. Ideally this is 0 but some panels,
-> >          * board designs, or bad pulldown configs can cause a glitch here.
-> >          *
-> > -        * NOTE: on some old panel data this number appers to be much too big.
-> > +        * NOTE: on some old panel data this number appears to be much too big.
-> >          * Presumably some old panels simply didn't have HPD hooked up and put
-> >          * the hpd_absent here because this field predates the
-> >          * hpd_absent. While that works, it's non-ideal.
-> 
-> Maybe you'd be willing to give me an "Ack" for this stupid little
-> patch so I can land it? ;-)
-Certainly.
-Acked-by: Sam Ravnborg <sam@ravnborg.org>
+> > I am concerned that if the reset never finishes and iavf goes into disa=
+bled state,
+> and then for example if driver reload operation is performed, bad things =
+can
+> happen.
+>=20
+> I think we should not re-attach device back as the VF is disabled. Detach=
+ed device
+> causes that userspace (user) won't be able to configure associated interf=
+ace
+> that is correct. Driver reload won't cause anything special in this situa=
+tion
+> because during module removal the interface is unregistered.
+>=20
+> Thanks,
+> Ivan
+
+I agree. It's safe to remove a detached device.
+
+Thanks,
+Jake

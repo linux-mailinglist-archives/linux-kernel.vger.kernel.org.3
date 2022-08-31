@@ -2,189 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 371D15A7CF2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF4485A7CF5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:11:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbiHaML1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
+        id S229794AbiHaMLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbiHaMLZ (ORCPT
+        with ESMTP id S230180AbiHaMLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:11:25 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E412BCC34;
-        Wed, 31 Aug 2022 05:11:23 -0700 (PDT)
-Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MHjgW01Khz67xv7;
-        Wed, 31 Aug 2022 20:10:47 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 31 Aug 2022 14:11:20 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
- 2022 13:11:20 +0100
-Date:   Wed, 31 Aug 2022 13:11:19 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Robert Richter <rrichter@amd.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH 13/15] cxl/acpi: Rework devm_cxl_enumerate_ports() to
- support RCD mode
-Message-ID: <20220831131119.00002c7f@huawei.com>
-In-Reply-To: <20220831081603.3415-14-rrichter@amd.com>
-References: <20220831081603.3415-1-rrichter@amd.com>
-        <20220831081603.3415-14-rrichter@amd.com>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 31 Aug 2022 08:11:43 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F154C6B46
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:11:42 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id bj12so27896295ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:11:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=N9mB3LeYeeKKsLke6elSgPP7MvMdjqvIVXauRaWV/7o=;
+        b=qR63pyLB9nR/0ty9Vl30AcuGCRKsexEsdq9CxvD8rkj5INrVZaWOda9P4qr8p92K5w
+         KAIZvfnV2CRbl/C7pXXhMnyrvpAOdHMnI2uGvasnGgZz288rbN2vukDtPsyLff7HzzCx
+         G31/KfQVQOk3hfz4yjChicGfj9jVCrlWaLufcQ+nJWVY3NYi0Xr2lP6A6qrRqYGOZf0e
+         LC7NQWr4SxdqlVvbP6+FWrg43GLKqP8b2h7CN5/u2PpmC4Y8e+lO9NxGxjsfTGY/SOBI
+         16F4r58W03MdBPNdHOCGeVKLN5n0+Nxyzfj9fsoWM35eT+2RCZQBY0W8PGuT6GwHh2cG
+         e4dQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=N9mB3LeYeeKKsLke6elSgPP7MvMdjqvIVXauRaWV/7o=;
+        b=17wErzHhAjxpQxI6H/RtzQFkBxRG4bmEGq/klUoJRQbvt/nUlOzvoMFVWmq12GP1xF
+         RCWs76/I6SLFK7aXOY6jOTm0qlXGzJd0yLW1bEontKfY16CW6nwcjdA/aSTt+YHA2bD7
+         k6x78uqZ8QAJx7tZjQlN2qboBnOb2RC8a6SvvBXpiEg9KJdTMR1N1nSK3JsNoRL5a/ez
+         XgiK8IQxhtsKutMDCDCSfrmW6+wOIBbrsDIOvS9SYJutZTWyKBkPFFvGnfFoWw4/4Nld
+         K1bN1c3snyz1bSsl3xvrGHEuJhbq15jgm8cozvDHLP9fP4mhOI2NkRbJB2H7XjUhNI8U
+         sAvw==
+X-Gm-Message-State: ACgBeo3ERIxKPzI2NCYg1Qu5MCImQ2n+F2lHdDCKJdsad5ZBeMWdZJ0h
+        ZY95zZM7rwUBaJuGjxmx30RDRPpYxvkhPqeGLW+rjA==
+X-Google-Smtp-Source: AA6agR5d5aCYQeq9aXc0ikVnGMt3loQp4a2ilkHtM2rVP4a43+3+ubDzbFK03fIcT8S3PH0dPdKt4acLqApBHqywj9k=
+X-Received: by 2002:a17:907:7242:b0:741:770b:dfc6 with SMTP id
+ ds2-20020a170907724200b00741770bdfc6mr11141393ejc.203.1661947900641; Wed, 31
+ Aug 2022 05:11:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220824010605.14256-1-jeffy.chen@rock-chips.com>
+In-Reply-To: <20220824010605.14256-1-jeffy.chen@rock-chips.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 31 Aug 2022 14:11:29 +0200
+Message-ID: <CACRpkdbzcGhUAHxhRon+1iQZOhmU929EwzcasRyHBZc-mN71GA@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio/rockchip: Convert to generic_handle_domain_irq()
+To:     Jeffy Chen <jeffy.chen@rock-chips.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        linux-rockchip@lists.infradead.org,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 Aug 2022 10:16:01 +0200
-Robert Richter <rrichter@amd.com> wrote:
+On Wed, Aug 24, 2022 at 3:13 AM Jeffy Chen <jeffy.chen@rock-chips.com> wrote:
 
-> RCD mode has a different enumeration scheme other than in CXL VH mode.
-> An RCD is directly connected to an RCH without downstream and upstream
-> ports showing up in between in the PCI hierarchy. Due to the direct
-> connection of RCD and RCH, the host bridge is always the RCD's parent
-> instead of the grandparent. 
-Mentioned earlier, but that's not quite true.  There is a reference in
-the spec to allowing it to be under a root port (some sort of virtual structure
-- I'm not sure of 'why' you would that though.)(
-
-> Modify devm_cxl_enumerate_ports()
-> respectively.
-
-Don't line wrap above.
-
-> 
-> Implement this by introducing a function to determine the device's
-> downstream port. The 'for' loop is adjusted for RCD mode and in this
-> case find_cxl_port() will always find the host's associated port and
-> the loop iteration stops.
-> 
-> Signed-off-by: Robert Richter <rrichter@amd.com>
+> Follow commit dbd1c54fc820 ("gpio: Bulk conversion to
+> generic_handle_domain_irq()").
+>
+> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
 > ---
->  drivers/cxl/core/port.c | 36 ++++++++++++++++++++++++------------
->  1 file changed, 24 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
-> index 61e9915162d5..08b99423dbf8 100644
-> --- a/drivers/cxl/core/port.c
-> +++ b/drivers/cxl/core/port.c
-> @@ -1084,6 +1084,22 @@ static struct device *grandparent(struct device *dev)
->  	return NULL;
->  }
->  
-> +static struct device *cxl_mem_dport_dev(struct cxl_memdev *cxlmd)
-> +{
-> +	struct device *dev = cxlmd->dev.parent;
-> +	struct pci_dev *pdev = to_pci_dev(cxlmd->dev.parent);
+>
+> Changes in v2:
+> Use for_each_set_bit().
 
-to_pci_dev(dev);
+Pretty straight-forward!
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-> +
-> +	/*
-> +	 * An RCiEP is directly connected to the root bridge without
-> +	 * any PCI bridges/ports in between. Reduce the parent level
-> +	 * for those.
-> +	 */
-> +	if (pci_pcie_type(pdev) == PCI_EXP_TYPE_RC_END)
-> +		return dev;
-> +
-> +	return dev->parent;
-Switching from grandparent to this is a little confusing because it's
-done in two steps.  Perhaps use
-	return grandparent(cmlmd->dev);
-here to keep that connection and rename dev in this function to parent.
+I think we have a few drivers that could be simplified the same way...
 
-Far too many devices in here with similar names for it to be easy
-to read.
-
-
-> +}
-> +
->  static void delete_endpoint(void *data)
->  {
->  	struct cxl_memdev *cxlmd = data;
-> @@ -1339,7 +1355,7 @@ static int add_port_attach_ep(struct cxl_memdev *cxlmd,
->  int devm_cxl_enumerate_ports(struct cxl_memdev *cxlmd)
->  {
->  	struct device *dev = &cxlmd->dev;
-> -	struct device *iter;
-> +	struct device *dport_dev;
->  	int rc;
->  
->  	rc = devm_add_action_or_reset(&cxlmd->dev, cxl_detach_ep, cxlmd);
-> @@ -1352,25 +1368,21 @@ int devm_cxl_enumerate_ports(struct cxl_memdev *cxlmd)
->  	 * attempt fails.
->  	 */
->  retry:
-> -	for (iter = dev; iter; iter = grandparent(iter)) {
-> -		struct device *dport_dev = grandparent(iter);
-> +	for (dport_dev = cxl_mem_dport_dev(cxlmd); dport_dev;
-> +	     dport_dev = grandparent(dport_dev)) {
-
-I don't like looping for the RCD case as it relies a bit too
-much on subtle relationships between devices and parent.
-
-Perhaps better to factor out the contents of the loop, then handle
-the RCD case separately from the main loop.
-I haven't tried it, so perhaps that looks even less readable.
-
-
->  		struct device *uport_dev;
->  		struct cxl_dport *dport;
->  		struct cxl_port *port;
->  
-> -		if (!dport_dev)
-> -			return 0;
-> -
->  		uport_dev = dport_dev->parent;
->  		if (!uport_dev) {
-> -			dev_warn(dev, "at %s no parent for dport: %s\n",
-> -				 dev_name(iter), dev_name(dport_dev));
-> +			dev_warn(dev, "no parent for dport: %s\n",
-> +				 dev_name(dport_dev));
->  			return -ENXIO;
->  		}
->  
-> -		dev_dbg(dev, "scan: iter: %s dport_dev: %s parent: %s\n",
-> -			dev_name(iter), dev_name(dport_dev),
-> -			dev_name(uport_dev));
-> +		dev_dbg(dev, "scan: dport_dev: %s parent: %s\n",
-> +			dev_name(dport_dev), dev_name(uport_dev));
->  		port = find_cxl_port(dport_dev, &dport);
->  		if (port) {
->  			dev_dbg(&cxlmd->dev,
-> @@ -1418,7 +1430,7 @@ EXPORT_SYMBOL_NS_GPL(devm_cxl_enumerate_ports, CXL);
->  struct cxl_port *cxl_mem_find_port(struct cxl_memdev *cxlmd,
->  				   struct cxl_dport **dport)
->  {
-> -	return find_cxl_port(grandparent(&cxlmd->dev), dport);
-> +	return find_cxl_port(cxl_mem_dport_dev(cxlmd), dport);
->  }
->  EXPORT_SYMBOL_NS_GPL(cxl_mem_find_port, CXL);
->  
-
+Yours,
+Linus Walleij

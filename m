@@ -2,123 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7B7F5A7E11
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16AB55A7E12
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:55:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbiHaMzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37612 "EHLO
+        id S230076AbiHaMzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:55:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbiHaMy6 (ORCPT
+        with ESMTP id S231588AbiHaMzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:54:58 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D137646
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:54:56 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id br21so14060504lfb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:54:56 -0700 (PDT)
+        Wed, 31 Aug 2022 08:55:33 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046C726112
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:55:26 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id l5so10153709pjy.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:55:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=V6XUFfKw/mcf35DuShi6/x/3ymScjwY/+2rsQ4Prf54=;
-        b=g7zivDNFTvaNclQwX3j1LH1SHYCr4wqcC8y5fe/dBAYykEKVembblo+KqTFT5bQPlC
-         eEPEZK1vu91aO0KFca1bDuq4yYzLv7K+rEtn9ClvNh7s9DZs/G3SAhGUCJFfqr6Lxv73
-         QfuZnaBIEf1XvTxguE2FMO7/dUNR5FzrLLScrOP0pdSHypugDH82CbB2cQ0QDgMTSoUG
-         +Kwbldg4eXjL735BMqh79DanVIUHLdE8+kIMwhqDq9PlOlt/Ji7YyKKN2k2hGy8WGNJ6
-         cd2J/Gtyc/mu/YB7CPbEfIJjk0unZesnFscVmp6obD4+zHIczKfrabYPXMwAZnz+JVBf
-         rH5g==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=/w/LSAOeygKxkwT5iHUDM+ilY8owlgJLl7QXytX6Lek=;
+        b=dIpT48pmgBtjl+0i37xEn8tB7KY2ue6x1yVm+l3QRhjsNQivcw+wXN0p7t6hmsFWeG
+         qR0i/FPSV7jEgkbvjhKSLq4YAZehiYr9w1FOBGBnkGkDYMBJyrlLT4c3JjQbIk5pHUpj
+         7bTimAF+2CFtfREcHxgfhf5xKJauALbjjoZk+HtqvgxSYv7zCj4jj/Av6kheooujZeq5
+         LniNoLXeDypkQZ8mRw8ca7Wc2KzM+we3GfL7iGiX5uUfZaaSBbNtk8+rjwpUJs4xwk7W
+         p5K2f9BwqYlbrkNjHcLSkpNYHM7C5wTVXUK/9NDCSa+obwxnx276Rdl9FrZlWY5nv4oK
+         7fqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=V6XUFfKw/mcf35DuShi6/x/3ymScjwY/+2rsQ4Prf54=;
-        b=rVc3cxdFFpR3HYHBTQtgMHgsjzzjaJ8U9mLoqdPA53KsDYQhOOH2oF68IxcjZr5O9C
-         1W5sDuCKL89g5hPRwYh0cnOaVxyPQZA42Au2dqKHq6fyHsXX4ewWFe99kRZT+DZIqaEG
-         zCwc/DYikBQ6HQ6m3hpnBccCLx4kwbxZJcuBcuPDZUXAt0uSLlupS3ahMvKWQ22AU78e
-         J4IlFD1RLG3vW9Zeaa24ErWv3zNiV0gvxuy0a9CVRM+9QX3Kd0UmnKBajdNgAeh3MQeB
-         k/7Z2m+lcTQaI50jtwGtxcyqEEoQ0bL0e73Giiol/qLEAqNghy6k3Wfd0fwzDLBYGCqw
-         lc5Q==
-X-Gm-Message-State: ACgBeo0QVGkA/SG9R/M3kM3B4eE3VRVTkRoiIOsHZ12urSuLEntmhrKG
-        2SEMUSjErGa2LMIwnkZqgZC1ig==
-X-Google-Smtp-Source: AA6agR5xyQHInsiAmVlULA23am/aIuyUWINMG0q1CPHSOdnoZ5UvmzllUhOyOstaX6BcJx52TIzcew==
-X-Received: by 2002:a05:6512:3e0b:b0:494:735c:c7ec with SMTP id i11-20020a0565123e0b00b00494735cc7ecmr3803651lfv.373.1661950494688;
-        Wed, 31 Aug 2022 05:54:54 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id s11-20020a056512214b00b0049461118819sm1482243lfr.77.2022.08.31.05.54.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 05:54:54 -0700 (PDT)
-Message-ID: <7f8a4f33-4bde-384f-f541-f383c8e0b27d@linaro.org>
-Date:   Wed, 31 Aug 2022 15:54:53 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=/w/LSAOeygKxkwT5iHUDM+ilY8owlgJLl7QXytX6Lek=;
+        b=e9q3sEA5S4oOZo05TffxF5zqttoBfeZthbiyevbDEOoLae6umtezQOe4I8KG0XPfyt
+         mF630HhBXy+oQm7rK9CXS/QkwnVSh+7Y/NMztT+b4U6kOgM3AuxNxL+CFYE3y+llXpdt
+         tKBSWukVTVPht/+oC+d9HIrXqwWYDtBCZoJ87gC2S95Dkgqu1miazFyG9OHcgCslSnra
+         /NCX3G5LwxySG0NACtEUXKYHp8r4Dt9sznNOhdKYdRvFP0j2nST2AmswlOO80z7GKaka
+         I3jccAiUd0WWSzERzd2gC6Fg1CDoBKX2bNVkiAukIG5QJf3/A9RQam7hN8U5sx+BpPDq
+         qDsQ==
+X-Gm-Message-State: ACgBeo2SDgJ/u7HXVNemaMB1NigVIcyl65xdBPHwQznqcyUHfTcShfZx
+        cqR3NRO51eR04Pudp/yzU+0=
+X-Google-Smtp-Source: AA6agR6/pF6fiV5gNVLQcTcr27Wn3ONrtU71pJ5M3Y60W+fZlLhJ931KVRsJW2AZcpgboIPJ8ZUqKw==
+X-Received: by 2002:a17:90a:9907:b0:1f5:2318:ea6d with SMTP id b7-20020a17090a990700b001f52318ea6dmr3224402pjp.163.1661950526166;
+        Wed, 31 Aug 2022 05:55:26 -0700 (PDT)
+Received: from carlis-virtual-machine.localdomain ([156.236.96.164])
+        by smtp.gmail.com with ESMTPSA id o4-20020a17090a5b0400b001fe39bda429sm375112pji.38.2022.08.31.05.55.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 05:55:25 -0700 (PDT)
+From:   Xuezhi Zhang <zhangxuezhi3@gmail.com>
+To:     abbotti@mev.co.uk, hsweeten@visionengravers.com,
+        gregkh@linuxfoundation.org, zhangxuezhi1@coolpad.com
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v2] comedi: sysfs: convert sysfs snprintf to sysfs_emit
+Date:   Wed, 31 Aug 2022 20:55:20 +0800
+Message-Id: <20220831125520.239055-1-zhangxuezhi3@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH V2 1/8] dt-bindings: soc: imx: add binding for i.MX9
- syscon
-Content-Language: en-US
-To:     Peng Fan <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        aisheng.dong@nxp.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-References: <20220831074923.3085937-1-peng.fan@oss.nxp.com>
- <20220831074923.3085937-2-peng.fan@oss.nxp.com>
- <cb3870bc-451a-ff62-e671-f2045eecc781@linaro.org>
- <9c7854a2-bc9c-f4e6-3b37-f740e05768c5@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9c7854a2-bc9c-f4e6-3b37-f740e05768c5@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/08/2022 13:08, Peng Fan wrote:
-> 
-> 
-> On 8/31/2022 5:15 PM, Krzysztof Kozlowski wrote:
->> On 31/08/2022 10:49, Peng Fan (OSS) wrote:
->>> From: Peng Fan <peng.fan@nxp.com>
->>>
->>> Add binding doc for i.MX9 blk_ctrl_ns_aonmix and blk_ctrl_wakeupmix
->>>
->>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
->>> ---
->>>   .../bindings/soc/imx/fsl,imx9-syscon.yaml     | 37 +++++++++++++++++++
->>>   1 file changed, 37 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/soc/imx/fsl,imx9-syscon.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx9-syscon.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx9-syscon.yaml
->>> new file mode 100644
->>> index 000000000000..90c5e354f86c
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx9-syscon.yaml
->>> @@ -0,0 +1,37 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: "http://devicetree.org/schemas/soc/imx/fsl,imx9-syscon.yaml#"
->>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->>
->> One more - drop the quotes both lines above.
-> 
-> There will be dtbs_check error. I updated schema with:
-> pip3 install git+https://github.com/devicetree-org/dt-schema.git@main
-> 
-> So it is ok the drop the two quotes above? Is there
-> any new update in dt-schema that not landed in repo?
+From: zhangxuezhi1 <zhangxuezhi1@coolpad.com>
 
-This is something new to me, can you paste the error?
+Fix up all sysfs show entries to use sysfs_emit
 
-Best regards,
-Krzysztof
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+---
+v2: use a proper name for the Signed-off-by line.
+---
+ drivers/comedi/comedi_fops.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/comedi/comedi_fops.c b/drivers/comedi/comedi_fops.c
+index 55a0cae04b8d..e2114bcf815a 100644
+--- a/drivers/comedi/comedi_fops.c
++++ b/drivers/comedi/comedi_fops.c
+@@ -396,7 +396,7 @@ static ssize_t max_read_buffer_kb_show(struct device *csdev,
+ 	mutex_unlock(&dev->mutex);
+ 
+ 	comedi_dev_put(dev);
+-	return snprintf(buf, PAGE_SIZE, "%u\n", size);
++	return sysfs_emit(buf, "%u\n", size);
+ }
+ 
+ static ssize_t max_read_buffer_kb_store(struct device *csdev,
+@@ -452,7 +452,7 @@ static ssize_t read_buffer_kb_show(struct device *csdev,
+ 	mutex_unlock(&dev->mutex);
+ 
+ 	comedi_dev_put(dev);
+-	return snprintf(buf, PAGE_SIZE, "%u\n", size);
++	return sysfs_emit(buf, "%u\n", size);
+ }
+ 
+ static ssize_t read_buffer_kb_store(struct device *csdev,
+@@ -509,7 +509,7 @@ static ssize_t max_write_buffer_kb_show(struct device *csdev,
+ 	mutex_unlock(&dev->mutex);
+ 
+ 	comedi_dev_put(dev);
+-	return snprintf(buf, PAGE_SIZE, "%u\n", size);
++	return sysfs_emit(buf, "%u\n", size);
+ }
+ 
+ static ssize_t max_write_buffer_kb_store(struct device *csdev,
+@@ -565,7 +565,7 @@ static ssize_t write_buffer_kb_show(struct device *csdev,
+ 	mutex_unlock(&dev->mutex);
+ 
+ 	comedi_dev_put(dev);
+-	return snprintf(buf, PAGE_SIZE, "%u\n", size);
++	return sysfs_emit(buf, "%u\n", size);
+ }
+ 
+ static ssize_t write_buffer_kb_store(struct device *csdev,
+-- 
+2.25.1
+

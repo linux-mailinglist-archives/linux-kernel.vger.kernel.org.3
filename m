@@ -2,58 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0B35A769C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:30:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51A475A769F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:31:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiHaGaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
+        id S230294AbiHaGa5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:30:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiHaGaY (ORCPT
+        with ESMTP id S230318AbiHaGav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:30:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6DB5C36A;
-        Tue, 30 Aug 2022 23:30:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 62041B81F42;
-        Wed, 31 Aug 2022 06:30:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E863C43142;
-        Wed, 31 Aug 2022 06:30:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661927418;
-        bh=htLQg79mi3SvkoKP5SEjIUC3OCtpqE0sPOEq4nLXHS0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=QtCR3Y5RYuUnBjmhDyX8LRveCXYFTG/m9Bk6ARazxCBxysIVT09VZIBrSX8H0JI8i
-         ORaU74Q9xDjZ/B/2TCwVetW2tGYy4JCYrr67jLYH3YE1kIGZoDA2fczA9kVj5NZDIo
-         XOBP84aQcScsaHqTxEgJ8Za7clV9hTJaFZZBGK02hsfMa7bgCTCEVmSequx9QbxJQu
-         noC/KTh5PFdZbAus4JbX+1hAUwWJY6Pdq8XQe/09FWk315mZ9hxEYUfRrDux6xz9NQ
-         aSVeOUJA/m20a84WUvKmEaI3NKcpsr7ofraI+3P/myq9XLx2EbQ1SZpsYh4dTOpxzd
-         aqFQImSZqSqzg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8E53C4166F;
-        Wed, 31 Aug 2022 06:30:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 31 Aug 2022 02:30:51 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9AA9F0FB
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:30:33 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id z29so9975621lfb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:30:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=WiaXfyuv+kgJFsOiubHH/NEcYq977WbeyAkqhNkB3Zg=;
+        b=AncO6HHbkCn20ckslrlufvxRnBrOE/deoPgwzhdWiequpJlmrGjtK2ZHzMIcuRqaCT
+         kyVggepsOBYl++4JHkkAovkE3fEngTbS8dVoyIDm+JGHINKhmDnFwTzw7kwBlE5qHJj2
+         WigKh9BdGXNouCn8ifoF+eL/R9xdvZeKDgPj9VdbuAG9LSlmy5S8VGt7vIJ4Lsw/tSrW
+         iTWUxbx90yPbObb7m009SLjnVnfdHd3uVm7zEZmckdgOTMA+1CHDDnbnqdkQ+JQ0mK0c
+         LeOu3NwwE/ecszU3taGSUYtGi4jCi/4tvsmWJN4fUJKzqSPMVCrzlDZ36/kc9dWFy39W
+         E3MQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=WiaXfyuv+kgJFsOiubHH/NEcYq977WbeyAkqhNkB3Zg=;
+        b=T39NRXzFeK9TUH9byhmMEPdXOYfFRpc/1GoUn81Ad1xtgGUpZSgJ3AESnwP96U9+AJ
+         AnfG9hLEea/lj/OIjECwpzml+z7hgx3+7LUZNQb+6aWTvdupQ3YRV3imcxsNNs9IpvJc
+         RrJFm0n97V7TZVf/rK4TrzJIsFM1L4suS6gZr7wGSKy/NNBRm9ONjRf4cVbNu/Gf48Dx
+         q0bpyF7iLrseUDf2/AYiqWsUN1bTcEJq44DtLIEkvKUaqvJd+xBHbTrESJ/wPkVxjLOM
+         qX19TzaM8Qds8GEIIpB5kD4YZ9Z5ITH3awaMgMgieDfZ2oJxEEH3Zxwk8dGZ7I65oJjK
+         +nTw==
+X-Gm-Message-State: ACgBeo1svHqxfE5p7/k8LcjwFuNmUTge3KKbUNB/kubmn6pQZRM27ucg
+        qOr17TjG892xs1rSxBcXXv5C8w==
+X-Google-Smtp-Source: AA6agR7Mfb50bktOxvDNqRirNcXkEGV/f9atPFgSSc9cjp1S+7dims1dW+OAwbO4KyMLocNw1BhPXQ==
+X-Received: by 2002:a05:6512:22c2:b0:494:80e0:3315 with SMTP id g2-20020a05651222c200b0049480e03315mr1519978lfu.369.1661927431008;
+        Tue, 30 Aug 2022 23:30:31 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id m4-20020a056512114400b0048a9e899693sm1885198lfg.16.2022.08.30.23.30.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 23:30:30 -0700 (PDT)
+Message-ID: <b601f692-8283-ca10-b62f-d040f03940b4@linaro.org>
+Date:   Wed, 31 Aug 2022 09:30:29 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] net/mlx5e: Do not use err uninitialized in
- mlx5e_rep_add_meta_tunnel_rule()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166192741795.4297.2723160789044266807.git-patchwork-notify@kernel.org>
-Date:   Wed, 31 Aug 2022 06:30:17 +0000
-References: <20220825180607.2707947-1-nathan@kernel.org>
-In-Reply-To: <20220825180607.2707947-1-nathan@kernel.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     saeedm@nvidia.com, leon@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        ndesaulniers@google.com, trix@redhat.com, netdev@vger.kernel.org,
-        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/4] dt-bindings: memory: Factor out common properties of
+ LPDDR bindings
+Content-Language: en-US
+To:     Julius Werner <jwerner@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Jian-Jia Su <jjsu@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220831013359.1807905-1-jwerner@chromium.org>
+ <20220831013359.1807905-2-jwerner@chromium.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220831013359.1807905-2-jwerner@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,38 +80,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu, 25 Aug 2022 11:06:07 -0700 you wrote:
-> Clang warns:
+On 31/08/2022 04:33, Julius Werner wrote:
+> The bindings for different LPDDR versions mostly use the same kinds of
+> properties, so in order to reduce duplication when we're adding support
+> for more versions, this patch creates a new lpddr-props subschema that
+> can be referenced by the others to define these common parts. (This will
+> consider a few smaller I/O width and density numbers "legal" for LPDDR3
+> that are usually not used there, but this should be harmless.)
 > 
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
->           if (IS_ERR(flow_rule)) {
->               ^~~~~~~~~~~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:489:9: note: uninitialized use occurs here
->           return err;
->                 ^~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:2: note: remove the 'if' if its condition is always true
->           if (IS_ERR(flow_rule)) {
->           ^~~~~~~~~~~~~~~~~~~~~~~
->   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initialize the variable 'err' to silence this warning
->           int err;
->                 ^
->                   = 0
->   1 error generated.
-> 
-> [...]
+> This also un-deprecates the manufacturer ID property for LPDDR3 (and
+> introduces it to LPDDR2), since it was found that having this
+> information available in a separate property can be useful in some
+> cases.
 
-Here is the summary with links:
-  - [net-next] net/mlx5e: Do not use err uninitialized in mlx5e_rep_add_meta_tunnel_rule()
-    https://git.kernel.org/netdev/net-next/c/92f97c00f0ca
+Why do you need to un-deprecate them if you have this information in
+compatible? This was not exactly the previous consensus. My statement
+was ok for un-deprecating if you cannot derive them from compatible. Now
+you can. This should be the same as USB device schema.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Best regards,
+Krzysztof

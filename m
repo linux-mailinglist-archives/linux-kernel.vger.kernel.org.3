@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 052CA5A7C07
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED7B5A7C04
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:13:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiHaLNP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 07:13:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52478 "EHLO
+        id S230455AbiHaLNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 07:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbiHaLNL (ORCPT
+        with ESMTP id S229449AbiHaLM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 07:13:11 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA363D0228;
-        Wed, 31 Aug 2022 04:13:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661944389; x=1693480389;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZXYlj1IqxZaV4DXbBX1YoGEIIdFLaXU6ViVzynme9rE=;
-  b=EqsvE2y2OIrhxVfvacZwcJMO8qX4+Nj9bpy5TuqSYh8465koGxwd2jkH
-   gbFZ1vRJnUQLcxbpa0e+EIjQLh9rcK0ssHJERzGQfncXgG7yILrzOddEo
-   NplAgX186sw2v/jE5e++bbITaOrsagWYJynpPOl9gh8m8EEFgcNnGPQiH
-   1oJoLDjH8nyUuSPD7RxV11TUlcNjymttLha90l0etVeECfDTM9Y37aEWB
-   3zT9X+S5EHG1FsI5LZUXlT66qE/lArmik0KCQTPEx7CAg5QjqJjZcWnKU
-   DbVtlN11AgHREIKqLdbhqMZXyb07I8rP1xTHBhDGQEWicwvrRY+2e1BH6
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="359383043"
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="359383043"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 04:13:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="701332161"
-Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 31 Aug 2022 04:13:06 -0700
-Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTLeb-0000Di-1k;
-        Wed, 31 Aug 2022 11:13:05 +0000
-Date:   Wed, 31 Aug 2022 19:12:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kbuild-all@lists.01.org, Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Subject: Re: [PATCH v3 3/3] KVM: VMX: Advertise PMU LBRs if and only if perf
- supports LBRs
-Message-ID: <202208311831.zQ4oCG1b-lkp@intel.com>
-References: <20220831000051.4015031-4-seanjc@google.com>
+        Wed, 31 Aug 2022 07:12:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D7B0CEB34
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 04:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661944375;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=USB8h2BMQ0I24TO04KeG3lsFoMe632Y1I1xHU109ulU=;
+        b=Is+2FgW26NqjN67OmnLksd2BlKIHqf7cgOE4KFxc695myGjktavLbNrb0QoBFM5GakyPdu
+        E45sGUv+EOViXgeDuAVvUk9xtgUfpvBVLd29KSvGE0zPz/m6mSn+JJxxPIzKMfroCcBmIA
+        riJj5xPJwKAHfO5KfNKv3UbgDv2KP34=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-622-LVLC7euSNaebfBAg9G8_ag-1; Wed, 31 Aug 2022 07:12:54 -0400
+X-MC-Unique: LVLC7euSNaebfBAg9G8_ag-1
+Received: by mail-wm1-f69.google.com with SMTP id 203-20020a1c02d4000000b003a5f5bce876so11567901wmc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 04:12:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=USB8h2BMQ0I24TO04KeG3lsFoMe632Y1I1xHU109ulU=;
+        b=wXLGgfRe3MaU+9RJn7IEkELTm/fMHa6E2ExAB9odlMFYQy10YalyQ8yYs9egoig6QE
+         iSS1peR2W5BripNLmF4A0SXUQsrKOfaZpjNsCBFFGIVDMgqe//4YZH9GBvEMz2BFDQ8G
+         5WQTk7m/mJ0mvTz/GLuJE+P1XDUWislqkckbqQ+TxfZTKqLpcl2fX9oXvqo02W3Wz1yk
+         S4WhoAYiqH4LQJSEpTojOtx1PCxRPHnySYaw4984mP3DF+aDObYsdWa+oxdTIWAbk86V
+         kUQ9OV/IRrePX4aRMwIBQf37vSRzFlYcbZgmpKyoKrXZSXNmWZP8gAaXnvhBMw4HU4W3
+         GENw==
+X-Gm-Message-State: ACgBeo3TBhHOy/bhET1FaRy4hSJGgiYeHNy6FlmE+TZHHz7wHNt7Nqgj
+        zK7t7lhZrJpwXep+3qkmLbDP4mzKeY4t+s/MrqCWT4bQZyIryUSCxsjd7ZLtCZXcPa07xhX+2HE
+        x/gw6opdw5PnGVkIVrCWGWF3Ywfbh2g7DL6UlJsTQXyTpuA6nHQqHrtMIiadr0zSELCYE1DwXmx
+        k=
+X-Received: by 2002:a05:6000:1e18:b0:226:e095:a98c with SMTP id bj24-20020a0560001e1800b00226e095a98cmr5123175wrb.235.1661944372492;
+        Wed, 31 Aug 2022 04:12:52 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7MLzM43BMadh9MDmVHhKCnDr9/uiKXZwJnIT9SD0vG1W6oIuYqjfK3qOR+cK45WBdZ15aCwg==
+X-Received: by 2002:a05:6000:1e18:b0:226:e095:a98c with SMTP id bj24-20020a0560001e1800b00226e095a98cmr5123155wrb.235.1661944372208;
+        Wed, 31 Aug 2022 04:12:52 -0700 (PDT)
+Received: from minerva.home (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id ay19-20020a05600c1e1300b003a682354f63sm2054876wmb.11.2022.08.31.04.12.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 04:12:51 -0700 (PDT)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH] drm/simpledrm: Drop superfluous primary plane .atomic_check return logic
+Date:   Wed, 31 Aug 2022 13:12:43 +0200
+Message-Id: <20220831111243.1530620-1-javierm@redhat.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831000051.4015031-4-seanjc@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,76 +78,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+The simpledrm_primary_plane_helper_atomic_check() function is more complex
+than needed. It first checks drm_atomic_helper_check_plane_state() returns
+value to decide whether to return this or zero.
 
-I love your patch! Yet something to improve:
+But it could just return that function return value directly. It also does
+a check if new_plane_state->visible isn't set, but returns zero regardless.
 
-[auto build test ERROR on 372d07084593dc7a399bf9bee815711b1fb1bcf2]
+Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+---
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Christopherson/KVM-x86-Intel-LBR-related-perf-cleanups/20220831-080309
-base:   372d07084593dc7a399bf9bee815711b1fb1bcf2
-config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220831/202208311831.zQ4oCG1b-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-5) 11.3.0
-reproduce:
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/094f42374997562fff3f9f9637ec9aa8257490a0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sean-Christopherson/KVM-x86-Intel-LBR-related-perf-cleanups/20220831-080309
-        git checkout 094f42374997562fff3f9f9637ec9aa8257490a0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 prepare
+ drivers/gpu/drm/tiny/simpledrm.c | 15 ++++-----------
+ 1 file changed, 4 insertions(+), 11 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/x86/kernel/../kvm/vmx/vmx.h:11,
-                    from arch/x86/kernel/asm-offsets.c:22:
-   arch/x86/kernel/../kvm/vmx/capabilities.h: In function 'vmx_get_perf_capabilities':
->> arch/x86/kernel/../kvm/vmx/capabilities.h:416:9: error: implicit declaration of function 'x86_perf_get_lbr' [-Werror=implicit-function-declaration]
-     416 |         x86_perf_get_lbr(&lbr);
-         |         ^~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:117: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1207: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:222: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
-
-
-vim +/x86_perf_get_lbr +416 arch/x86/kernel/../kvm/vmx/capabilities.h
-
-   403	
-   404	static inline u64 vmx_get_perf_capabilities(void)
-   405	{
-   406		u64 perf_cap = PMU_CAP_FW_WRITES;
-   407		struct x86_pmu_lbr lbr;
-   408		u64 host_perf_cap = 0;
-   409	
-   410		if (!enable_pmu)
-   411			return 0;
-   412	
-   413		if (boot_cpu_has(X86_FEATURE_PDCM))
-   414			rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
-   415	
- > 416		x86_perf_get_lbr(&lbr);
-   417		if (lbr.nr)
-   418			perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
-   419	
-   420		if (vmx_pebs_supported()) {
-   421			perf_cap |= host_perf_cap & PERF_CAP_PEBS_MASK;
-   422			if ((perf_cap & PERF_CAP_PEBS_FORMAT) < 4)
-   423				perf_cap &= ~PERF_CAP_PEBS_BASELINE;
-   424		}
-   425	
-   426		return perf_cap;
-   427	}
-   428	
-
+diff --git a/drivers/gpu/drm/tiny/simpledrm.c b/drivers/gpu/drm/tiny/simpledrm.c
+index a81f91814595..0be47f40247a 100644
+--- a/drivers/gpu/drm/tiny/simpledrm.c
++++ b/drivers/gpu/drm/tiny/simpledrm.c
+@@ -485,21 +485,14 @@ static int simpledrm_primary_plane_helper_atomic_check(struct drm_plane *plane,
+ 	struct drm_plane_state *new_plane_state = drm_atomic_get_new_plane_state(new_state, plane);
+ 	struct drm_crtc *new_crtc = new_plane_state->crtc;
+ 	struct drm_crtc_state *new_crtc_state = NULL;
+-	int ret;
+ 
+ 	if (new_crtc)
+ 		new_crtc_state = drm_atomic_get_new_crtc_state(new_state, new_crtc);
+ 
+-	ret = drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
+-						  DRM_PLANE_NO_SCALING,
+-						  DRM_PLANE_NO_SCALING,
+-						  false, false);
+-	if (ret)
+-		return ret;
+-	else if (!new_plane_state->visible)
+-		return 0;
+-
+-	return 0;
++	return drm_atomic_helper_check_plane_state(new_plane_state, new_crtc_state,
++						   DRM_PLANE_NO_SCALING,
++						   DRM_PLANE_NO_SCALING,
++						   false, false);
+ }
+ 
+ static void simpledrm_primary_plane_helper_atomic_update(struct drm_plane *plane,
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+

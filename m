@@ -2,89 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBFD75A777B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:29:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 561235A777F
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:30:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229948AbiHaH3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 03:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52762 "EHLO
+        id S229826AbiHaHag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 03:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiHaH3O (ORCPT
+        with ESMTP id S229616AbiHaHae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 03:29:14 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B2EBC804
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:29:12 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id w8so9660797lft.12
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:29:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=2TsGK34bA5KqKqr5+etpP4SBSBDx4W1Iyg9gkSGp89Y=;
-        b=MB1Wz1/I+H8pAA/lyOwnr/Pwb9fss6od/9GDLkGMHr7ullFlxVlxDjWwvLXij+/U+h
-         /zbMQVWHxlT7YoVLgSPKXCCMCfHv23FIDQpnVk/eacv+GKfYEDky78dxqsRFCVowxAYQ
-         YFmg0W/zBxbE7JnGoO8714ypYOH1VdsUs3tu5um02iCLee5HBXBhDHb/vxilQX0Dnsxc
-         pPxoV/jFUKlbMm+Pf4ODUnJ7eHs0YBwBrFdkeIxp6gONCZRgwOfkCx3WO6tsxiN99wqe
-         NJqBq53gL395lrAHVuP4qw4LdOzwBS1W+IvAAqmGVn7Q7Ek347nixtbP1BdrhV2m1crO
-         ptmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=2TsGK34bA5KqKqr5+etpP4SBSBDx4W1Iyg9gkSGp89Y=;
-        b=mx6UZ5Y12KNVJ1ycCnZMoBgpHUs9fqeMb+4PjqPTwE+xa7p3kRkOelJde8j7SBQYKE
-         wF00VJO96r+9c6mW4vQQdr4XvLdy7Nd00l/061SAeEZvRb6q6Mgvz9eOxVgcxL0nCOl3
-         N4OpKKCK7kn16ykWFYDaWmsw8DQsTwRfjBO0RzOh9gfcvEzHIoiOFzP6Ww1iOVLGiE4s
-         2Hp+TFI7lYM92XajlXB/voV7RghdWOlRTZEzminLdG7ef1Yhc1397GbiRsSDq2wlWhsi
-         V8ELADo76VqCY1hT1RG49kRBqvaw6DOVJQP2xTNFAqajkHocMe13DADvhkOQo0GPJq3K
-         GpiA==
-X-Gm-Message-State: ACgBeo39PgSQHw7P57ERnVbO2uIokCG9xpSTYf/RZHKhEq7zgKVtLIAl
-        PVpBd19fLjzRKdO7/1A+EuMgWA==
-X-Google-Smtp-Source: AA6agR7H1+Rn7DKaC75RdA+ThF5pC+j1tHFgTLf6uGiYVF/nQ+yoG98+ucJbyfMMUxCX+IHoWcsjYg==
-X-Received: by 2002:a05:6512:230c:b0:494:8ddb:606 with SMTP id o12-20020a056512230c00b004948ddb0606mr480203lfu.44.1661930950905;
-        Wed, 31 Aug 2022 00:29:10 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id f16-20020a05651c161000b00261b175f9c4sm133548ljq.37.2022.08.31.00.29.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 00:29:10 -0700 (PDT)
-Message-ID: <1ddf261e-55fb-e30c-93b0-efb9bc0987b3@linaro.org>
-Date:   Wed, 31 Aug 2022 10:29:09 +0300
+        Wed, 31 Aug 2022 03:30:34 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3C74C613
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:30:33 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id B75465C01B1;
+        Wed, 31 Aug 2022 03:30:30 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Wed, 31 Aug 2022 03:30:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1661931030; x=
+        1662017430; bh=UvHsc3Tvg3hCau4XbftFll5OLxKu9QNVLjgp8k9+0cA=; b=e
+        rRmqe0BuX6iTdNqMVuv+KZfhF0e0ahQ5HA8pkZQi4xIxmwmKHHoRZ63kArGzkVFG
+        zMxmAoApwyxolTqzmx0ldEpk5tbA04kJV/1QarvO+fiSZBjW94nnxmsyqynQwYdo
+        SHMvuoXRQOgT9MyjVJwJgFtk3Yz7EfaHote+oDzGc3Wz/WfumhlXdmFb9Twx1/Kp
+        6itiYk2C0n0a4WMLfuRqV/fM3jM84mQgTbUTJEFxlTyJWA2vP8rlpHOvNJ61Dy2I
+        E4r69xXrS5BtSwHb9KALjy2FJFh86lVZvo2qPlxj4L8qO3/jx4KUlbCvr0BRvq40
+        C683JcjDUBF4EofDy2skQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1661931030; x=
+        1662017430; bh=UvHsc3Tvg3hCau4XbftFll5OLxKu9QNVLjgp8k9+0cA=; b=T
+        Nv5L2PRw01LnPmWBhgpDWKVXjB1112dC+BRMjUCrdM0wLrOEkSUwp285E6/ZTRu+
+        Oim2T4LczsdlkwMOqsTV2JYTYy/ZJAKmPtvumjJ8rbsTn9aGEhixGQELkXCA3RwO
+        4yNo3wJzx9PMqw0efHFj3Gid9qQnzRUT4omFiPzUa6GPdevIf4yy2kMRJKU96RMh
+        M8fuc9vRp6zyVUUWVpEbROvF4uVx5mAACnuq5503gNNfB4wpiQXr7foe2rKmKVT9
+        TeIM+n1AyQZ4VtkKUeAWE8rpVg83Ck0TOmrKv3dB/wogJmRdrhD6LetBfHdwCCbk
+        Hmy+qUBaHg6ziYKo/B87Q==
+X-ME-Sender: <xms:Fg4PY3qR9f3S861vGVnYSSN6zaC-mX4HUsk1rO9RhHoVp6jZTR0oWw>
+    <xme:Fg4PYxqpsPLWd_O8HDOG1JOJfBgEAktF-xnXfI08LTCSAWQLXb5Bs-KXDzudpomiK
+    UizT5qBRFOzJQDYPik>
+X-ME-Received: <xmr:Fg4PY0O0fXTXXaaVNU4bgh_UzPwF1wja2mKB6DkWVI-i-z6TlYzi6q86Q8k>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekgedguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthhqredttddtvdenucfhrhhomhepofgr
+    gihimhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtf
+    frrghtthgvrhhnpefhieeiheefvdekudffieefteetgeekveejvdffgedvhefgfeejudfh
+    keekteeigeenucffohhmrghinhepmhgrgidrlhhotggrlhenucevlhhushhtvghrufhiii
+    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
+    tghh
+X-ME-Proxy: <xmx:Fg4PY65eIRY6UbajnSu9BfSOFAfBup0ir2u3gYg_NTkBn3bJxPCcyA>
+    <xmx:Fg4PY25o8c8nouyazclAjzQBaNyrovATegIZUxPYkjhaTrsEDB2e1w>
+    <xmx:Fg4PYyjn6peYQbC0EFD0dsVRyNWciBPLsweMTIq8CCFO5HsugTuj8Q>
+    <xmx:Fg4PY7j2JeocrJ0sfb0R7xFtPvvdqpWBnyY9dy_e49Qqz8zUhcpFAg>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 31 Aug 2022 03:30:29 -0400 (EDT)
+Date:   Wed, 31 Aug 2022 09:30:26 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 01/41] drm/tests: Order Kunit tests in Makefile
+Message-ID: <20220831073026.rjlqkznm6qf2yri5@houat>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-1-459522d653a7@cerno.tech>
+ <f6289e5d-98e3-1a0d-f514-136e2b7978c1@tronnes.org>
+ <20220829190242.tk2hinttzzmzhnaj@meerkat.local>
+ <20220830083027.4iyi2s5r5bto4h2e@houat>
+ <20220830122217.h52zswusnlb3iggq@meerkat.local>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v3 2/2] nvmem: lan9662-otp: add support.
-Content-Language: en-US
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, UNGLinuxDriver@microchip.com
-References: <20220831064238.102267-1-horatiu.vultur@microchip.com>
- <20220831064238.102267-3-horatiu.vultur@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220831064238.102267-3-horatiu.vultur@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20220830122217.h52zswusnlb3iggq@meerkat.local>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/08/2022 09:42, Horatiu Vultur wrote:
+Hi,
 
-> +static const struct of_device_id lan9662_otp_match[] = {
-> +	{ .compatible = "microchip,lan9662-otp", },
-> +	{ .compatible = "microchip,lan9668-otp", },
+On Tue, Aug 30, 2022 at 08:22:17AM -0400, Konstantin Ryabitsev wrote:
+> (Dropping most cc's, who probably don't care about this thread.)
+>=20
+> On Tue, Aug 30, 2022 at 10:30:27AM +0200, Maxime Ripard wrote:
+> > > I noticed this, too, and I think the reason is because these patches =
+were
+> > > generated with "b4 send -o", but actually sent using git-send-email. =
+It's not
+> > > a use-case I've considered (or tested) and the breakage is because wh=
+en b4
+> > > generates patches with "-o", they are written with CRLF line endings,=
+ which is
+> > > not something git-send-email expects.
+> >=20
+> > You're right
+>=20
+> OK, the latest master should allow you to do that without causing CRLF er=
+rors
+> like this series.
 
-This is still wrong, does not match your bindings at all and still
-duplicates entries without driver data. One entry - 9662.
+Thanks
 
-Best regards,
-Krzysztof
+> > For some reason, b4 send doesn't work for my setup and I haven't had the
+> > time to look into why and let you know.
+>=20
+> Yeah, I see what the cause of it is:
+>=20
+> > Connecting to /home/max/.local/bin/msmtpq:0
+> > Failed to configure the smtp connection:
+> > [Errno -2] Name or service not known
+>=20
+> You have sendemail.smtpserver set to a path, which is supported by
+> git-sendemail, but not by b4 (yet). I'll see if I can put that in today.
+
+I saw that you fixed it in master, I'll give it a try, thanks!
+
+Another thing I noticed when using b4 send is that I'm not sure how to
+increment the version number of a series. With b4 send --dry-run it
+wasn't happening automatically, and I couldn't find anything related in
+the options (except for --force-revision but that wasn't permanent I
+think?)
+
+I ended up amending the commit json by hand to set the proper revision
+number, but I'm almost sure it isn't the right way :)
+
+Maxime

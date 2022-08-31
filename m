@@ -2,100 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABA35A7444
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 05:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0A65A7445
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 05:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbiHaDJZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 23:09:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        id S231489AbiHaDKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 23:10:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229549AbiHaDJV (ORCPT
+        with ESMTP id S230211AbiHaDKP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 23:09:21 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B893BAE847
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 20:09:19 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1661915357;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q+3ORk9w0/P8hMy0Rd0PJ5O8aOfIB0XvybrmSgQilEU=;
-        b=cPM+ReclE4FItUUB6STpSHjWCfinlVZbVvQKPf3AUXF422+uFW6nMaYvbE6JT9sFVYB5zd
-        2X5Q2JZM0pWA2Z2gG+pIM/E5yf9JFgF1pvXeRvPQ8sjkhONl7LbjIXrihB7zuTFmzvxFc2
-        kmKRyWLrmUziPibEyosNe2TTwi4WHqo=
+        Tue, 30 Aug 2022 23:10:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C248514019;
+        Tue, 30 Aug 2022 20:10:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 64B1361958;
+        Wed, 31 Aug 2022 03:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47A27C433C1;
+        Wed, 31 Aug 2022 03:10:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661915411;
+        bh=OQiPKVeqioWO/+rE4N2BPKMdkBg7d6Th1b+cLdAKenI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=efagX1rnVLCh+yQv/KJvyaZIvAg06gKRqvKMx+JL8apeNDp8UiAGsmDyBKIujtRty
+         bmG/PYq+HyR5cMZp/Cb3spqHtZXXmoHMmacQNYDzh8fOYXPYxJCvbI23rC3OsvNaRF
+         P2XKaaYsbVckMutZj8yNBfnLwc0jA7xjXrjJ1/6Rb7mOYF0Q9IYmFdMjpBLwW3uxdy
+         ZkeLxqwUnZptzCXp+JT1kSs8pgIcyO/uHJNLQZ7Qhkqk1SwJ9jEehOSGNusYO3VIN3
+         eAf7KIHpKcZAVJzUQQWhpfjiiYYQc2gwQkqxDQIgsi7t1M563tdXX0OKWlNdEuB7r8
+         xcEMuN3S4ILFg==
+Date:   Wed, 31 Aug 2022 06:10:06 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "haitao.huang@linux.intel.com" <haitao.huang@linux.intel.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/6] x86/sgx: Do not consider unsanitized pages an error
+Message-ID: <Yw7RDhRrgJZ8M2EZ@kernel.org>
+References: <20220830031206.13449-1-jarkko@kernel.org>
+ <20220830031206.13449-2-jarkko@kernel.org>
+ <1f43e7b9-c101-3872-bd1b-add66933b285@intel.com>
+ <1b3308a364317d36ad41961ea9cfee24aa122f02.camel@intel.com>
+ <Yw7EX5GCrEaLzpHV@kernel.org>
+ <d07577c3f0b4b3fff0ce470c56f91fb634653703.camel@intel.com>
+ <Yw7LJa7eRG+WZ0wv@kernel.org>
+ <c3c085d69311ed759bff5bb325a2c182d423f91f.camel@intel.com>
+ <Yw7OEh7QP8tb7BR1@kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] mm/slub: fix to return errno if kmalloc() fails
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20220830141009.150075-1-chao@kernel.org>
-Date:   Wed, 31 Aug 2022 11:09:09 +0800
-Cc:     Linux MM <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, jaegeuk@kernel.org,
-        Chao Yu <chao.yu@oppo.com>, stable@kernel.org,
-        syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <BAC9CE6A-5873-429F-ACE2-E0A9E507D807@linux.dev>
-References: <20220830141009.150075-1-chao@kernel.org>
-To:     Chao Yu <chao@kernel.org>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yw7OEh7QP8tb7BR1@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 31, 2022 at 05:57:22AM +0300, jarkko@kernel.org wrote:
+> On Wed, Aug 31, 2022 at 02:55:52AM +0000, Huang, Kai wrote:
+> > On Wed, 2022-08-31 at 05:44 +0300, jarkko@kernel.org wrote:
+> > > On Wed, Aug 31, 2022 at 02:35:53AM +0000, Huang, Kai wrote:
+> > > > On Wed, 2022-08-31 at 05:15 +0300, jarkko@kernel.org wrote:
+> > > > > On Wed, Aug 31, 2022 at 01:27:58AM +0000, Huang, Kai wrote:
+> > > > > > On Tue, 2022-08-30 at 15:54 -0700, Reinette Chatre wrote:
+> > > > > > > Hi Jarkko,
+> > > > > > > 
+> > > > > > > On 8/29/2022 8:12 PM, Jarkko Sakkinen wrote:
+> > > > > > > > In sgx_init(), if misc_register() for the provision device fails, and
+> > > > > > > > neither sgx_drv_init() nor sgx_vepc_init() succeeds, then ksgxd will be
+> > > > > > > > prematurely stopped.
+> > > > > > > 
+> > > > > > > I do not think misc_register() is required to fail for the scenario to
+> > > > > > > be triggered (rather use "or" than "and"?). Perhaps just
+> > > > > > > "In sgx_init(), if a failure is encountered after ksgxd is started
+> > > > > > > (via sgx_page_reclaimer_init()) ...".
+> > > > > > 
+> > > > > > IMHO "a failure" might be too vague.  For instance, failure to sgx_drv_init()
+> > > > > > won't immediately result in ksgxd to stop prematurally.  As long as KVM SGX can
+> > > > > > be initialized successfully, sgx_init() still returns 0.
+> > > > > > 
+> > > > > > Btw I was thinking whether we should move sgx_page_reclaimer_init() to the end
+> > > > > > of sgx_init(), after we make sure at least one of the driver and the KVM SGX is
+> > > > > > initialized successfully.  Then the code change in this patch won't be necessary
+> > > > > > if I understand correctly.  AFAICT there's no good reason to start the ksgxd at
+> > > > > > early stage before we are sure either the driver or KVM SGX will work.
+> > > > > 
+> > > > > I would focus fixing the existing flow rather than reinventing the flow.
+> > > > > 
+> > > > > It can be made to work, and therefore it is IMHO correct action to take.
+> > > > 
+> > > > From another perspective, the *existing flow* is the reason which causes this
+> > > > bug.  A real fix is to fix the flow itself.
+> > > 
+> > > Any existing flow in part of the kernel can have a bug. That
+> > > does not mean that switching flow would be proper way to fix
+> > > a bug.
+> > > 
+> > > BR, Jarkko
+> > 
+> > Yes but I think this is only true when the flow is reasonable.  If the flow
+> > itself isn't reasonable, we should fix the flow (given it's easy to fix AFAICT).
+> > 
+> > Anyway, let us also hear from others.
+> 
+> The flow can be made to work without issues, which in the
+> context of a bug fix is exactly what a bug fix should do.
+> Not more or less.
+> 
+> You don't gain any measurable value for the user with this
+> switch idea.
 
+And besides this not proper way to review patch anyway because you did
+not review the code. I'll focus on fix what is broken e.g. so that it
+is easy to backport to stable and distro kernels, and call it a day.
+It certainly does not have to make code "perfect", as long as known
+bugs are sorted out.
 
-> On Aug 30, 2022, at 22:10, Chao Yu <chao@kernel.org> wrote:
->=20
-> From: Chao Yu <chao.yu@oppo.com>
->=20
-> In create_unique_id(), kmalloc(, GFP_KERNEL) can fail due to
-> out-of-memory, if it fails, return errno correctly rather than
-> triggering panic via BUG_ON();
+You are welcome to review the next version of the patch, once I've
+resolved the issues that were pointed out by Reinette, if you still
+see some issue but this type of speculative discussion is frankly just
+wasting everyones time.
 
-I tend to agree with you. A mount operation shouldn=E2=80=99t panic the
-kernel.
+(need to check my mutt config, do not know why it is not always
+putting real name to from field)
 
->=20
-> kernel BUG at mm/slub.c:5893!
-> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP
->=20
-> Call trace:
-> sysfs_slab_add+0x258/0x260 mm/slub.c:5973
-> __kmem_cache_create+0x60/0x118 mm/slub.c:4899
-> create_cache mm/slab_common.c:229 [inline]
-> kmem_cache_create_usercopy+0x19c/0x31c mm/slab_common.c:335
-> kmem_cache_create+0x1c/0x28 mm/slab_common.c:390
-> f2fs_kmem_cache_create fs/f2fs/f2fs.h:2766 [inline]
-> f2fs_init_xattr_caches+0x78/0xb4 fs/f2fs/xattr.c:808
-> f2fs_fill_super+0x1050/0x1e0c fs/f2fs/super.c:4149
-> mount_bdev+0x1b8/0x210 fs/super.c:1400
-> f2fs_mount+0x44/0x58 fs/f2fs/super.c:4512
-> legacy_get_tree+0x30/0x74 fs/fs_context.c:610
-> vfs_get_tree+0x40/0x140 fs/super.c:1530
-> do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
-> path_mount+0x358/0x914 fs/namespace.c:3370
-> do_mount fs/namespace.c:3383 [inline]
-> __do_sys_mount fs/namespace.c:3591 [inline]
-> __se_sys_mount fs/namespace.c:3568 [inline]
-> __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
->=20
-> Cc: <stable@kernel.org>
-> Reported-by: syzbot+81684812ea68216e08c5@syzkaller.appspotmail.com
-> Signed-off-by: Chao Yu <chao.yu@oppo.com>
-
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-
-Thanks.
-
+BR, Jarkko

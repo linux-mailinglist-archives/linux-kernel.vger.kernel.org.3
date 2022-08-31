@@ -2,243 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015CD5A804A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:35:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52EB65A804C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231589AbiHaOe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:34:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
+        id S231702AbiHaOfh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbiHaOe4 (ORCPT
+        with ESMTP id S231526AbiHaOfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:34:56 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528E67674;
-        Wed, 31 Aug 2022 07:34:54 -0700 (PDT)
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VEGFOn010674;
-        Wed, 31 Aug 2022 14:34:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=F7D1k15hVYSBGLlJVM0XBPTeQvG93C28OBveQ5tzoNw=;
- b=mQ6sGd3p6bFiti/uPFlS3pMtPIPRGXiak9scj/AafwRW49DhLBINbLtDvVH0+kkmGILg
- qJwmGX/aYTn4xZ2EBlmfp8mqiOd9dvQ4ZP5yzb6L17WDaZnD7cmjNSntSmN3XUwmhZLI
- cXXXN+VGWckMeFkyLu6uLelDmdSZoVUq3s/Mp7Z3ku76evkGP7TklCmRY7EoPRH8sRdZ
- bO2KcjKzANGmUvqNUqyT8gMU35eB1EpYqWaU++cu6DUpj/xkBQkPbpzhYSL7RsbqfwMd
- 8U0viNFJmWjb9CDLuu8H9FruimwYbNMtCFLYdeOfEMJbPxFcpBVodT1Fis02JYf8hB24 mQ== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j7btt9dbs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 Aug 2022 14:34:39 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27VEN5V5022117;
-        Wed, 31 Aug 2022 14:34:38 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12lp2041.outbound.protection.outlook.com [104.47.66.41])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j79q54ets-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 Aug 2022 14:34:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I5q2xIB7JIEZrz2/79YqWPP8aVaxOJXlxAv7I7rDSVm9059DzCvDA9p98mBuLoMYhIKQM7gKF5jW1T+ruu2IxFI1pwdE2+MsSNiXTnMTCxaHuC7PRsFacPD6GMEqqcd4wo2KZ8ibbdpHi8Te9rD8bgvSXAFSxqdr5aVMgxk2Vx9egYDgiVFAMDX1J+PhWhh7PSI7k8y1076AGQZ/vMXwSjva80/yw+Z3XYUgxfVg0k0mR1x6nDrwCCwoA15PgXXOMl86v3sqL7XZreuSV0JZumONBn7TKChuJ4UdId6bfjmxH9MqmWCdd855ymBiEg5pDSXSL8LJzIP4PgZ6vcVJKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=F7D1k15hVYSBGLlJVM0XBPTeQvG93C28OBveQ5tzoNw=;
- b=PI7rjC61i3PqTWGzz3jsR8D29vqdCqAV/hPeC5G6z1s06UCvJneHN2CzAZX0poV4IggGYfpW1AMCYt71dG1qzOGtmtgGgyaHgM3WWN25JyIQ2KUhUE1tnBz4ngguBW8P0+iJg6IrySa9rxDEB0eoIqvzZvPn3xEdiT5vnxhieuJiMRfm1Q1WVaVVgNgy5LsMtvvwDQMnnwC0CVs9BVfD5v6V0Q0ugqASBBG04DwkwBBm2E0nYzif3x1JajywOqgI7yaQLu55M666foTJ0skNV6osNJ9HhWToXXochzg3LL/MHC5IjnckEg/ecypGC6B/NbfHZ//DJCbM72ozQuKwQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=F7D1k15hVYSBGLlJVM0XBPTeQvG93C28OBveQ5tzoNw=;
- b=wfHf74zawrOiV6Orzhmq5yh5EjZ6w7oJBROL3SK8QVD0dIymImALdz6f+9XZW6xcfmOaRvM8MkOgxmLyn+v6z3QVN7MU2kffxzsBmgWRczM0h62FvMZWV8FijuSt3Uq31l5D8sbD0APxjkKUYQqRtMybrAYohrRP2iM+xU0+M/4=
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com (2603:10b6:408:117::24)
- by CO6PR10MB5570.namprd10.prod.outlook.com (2603:10b6:303:145::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 31 Aug
- 2022 14:34:36 +0000
-Received: from BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::25d6:da15:34d:92fa]) by BN0PR10MB5128.namprd10.prod.outlook.com
- ([fe80::25d6:da15:34d:92fa%4]) with mapi id 15.20.5588.010; Wed, 31 Aug 2022
- 14:34:36 +0000
-From:   Chuck Lever III <chuck.lever@oracle.com>
-To:     "cgel.zte@gmail.com" <cgel.zte@gmail.com>
-CC:     Jeff Layton <jlayton@kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jinpeng Cui <cui.jinpeng2@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
-Subject: Re: [PATCH linux-next] NFSD: remove redundant variable status
-Thread-Topic: [PATCH linux-next] NFSD: remove redundant variable status
-Thread-Index: AQHYvUTILtNEN+DAvUKXygdP6dpSma3JEwuA
-Date:   Wed, 31 Aug 2022 14:34:36 +0000
-Message-ID: <A854F8D3-3FB3-4B64-9CE0-16FCAE3A7D22@oracle.com>
-References: <20220831142002.304176-1-cui.jinpeng2@zte.com.cn>
-In-Reply-To: <20220831142002.304176-1-cui.jinpeng2@zte.com.cn>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Apple Mail (2.3696.120.41.1.1)
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: f4ff0da3-0b56-45e9-a126-08da8b5dedbe
-x-ms-traffictypediagnostic: CO6PR10MB5570:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YxVZuW91BGjY64MfF/r8x4wgy5NMNTE0t4zxSPv2MjPElXdhQLV2+FZ8EQJaVan25ftaP7HqG4ddD60lRYlhsz3BjRj3KQlpdgN3oflEsTDCFQiwWN1nv6clTeWqIA7cS94yujdBN3VHVThHQ4vvqzN7RzHBVMxzmvvMFR7xmTPjai2R/hTJ6gWiCr3C+26l84juYOXaOgTyT0zxbjwo3nczjv0FVrt1QqF0I9VHDY86s7OkQPkzYotqEF2KPkDODcItWDLIiUAu7/aCp1OjRUzS4xkird01l0UK7OJhpsxSpDJVdJlfUKjoBlmE9xE5eIgO9ujFvW973lIFmplah1rbj13vCRPMZtlt8UNaNL9s2CnKhqBPYIxXTiNBvqjln9Kly5+Z2w1g3qUfLd7T27WYGe7xlGe3yLjb9cdTGt4SnkWTkLsiQUNuLh4t1GbHbAtq2m69X5zMA+Nr2T2UZrtFQMXoiJ5Smf1eIGK1QaQ1EYWlOKu+Zkvz+ZttJzKNX94jPzOm24YgVBOpn+4GsHjr24YdWolSC8Gln5A2fwVhUtUGr0Th7rMYcYUMQa8WuhjSgCGRkE70E8UaLQbYEAJkIc7FaD7BMjp32ZPMg+MK8DAHYEQOO/e0zARF9oouXssb9wxESzUQNMpktlDqdeX3DDxC7brtJu0gSqt/bOl1DZclMiaZoH1DY9p/dGQxss9Y9IdxYhijdSDkaeZWeY9wmXorOzxw8AeWzkp2e6lxm3kN51/9rQhgYvKi47x3rFZe4TBWX623OsPJnFCHJ0B3A/HcHr9vmLERYWnIw8M=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR10MB5128.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(366004)(396003)(376002)(136003)(346002)(2906002)(53546011)(66946007)(41300700001)(33656002)(8676002)(6486002)(91956017)(66446008)(6506007)(8936002)(4326008)(76116006)(66556008)(2616005)(5660300002)(83380400001)(64756008)(186003)(86362001)(478600001)(6512007)(26005)(66476007)(6916009)(38100700002)(122000001)(38070700005)(316002)(71200400001)(54906003)(36756003)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?N000BiiRl7HJ25YlY2s2KNULtQ/StoxQafua7UqKvHW6Pyomi5gnkHvHr+M8?=
- =?us-ascii?Q?nr3rUODO3b2Lqh6B0I1CtvOswFpxIAM62k00MO4QJCBD2EFon+6yC+kUG0G8?=
- =?us-ascii?Q?87NTfAGGHT8HfgvXlITUDHO8lphWlJ+L6005Cw+tzWZzPJial5ZNWANdiUHD?=
- =?us-ascii?Q?slN0OgaVYC4f2OVGIYDqeJsaD4mm42JNFf9QqXxujTukyouDRma+vkQD2QsF?=
- =?us-ascii?Q?C07V6lgL+YBmtFNkJYGLj0Oe+mCKxXy1i+Hx7jmYzgycuDOYmFMhZvtqMOcn?=
- =?us-ascii?Q?l+dMTWG1YDsJdlE78MUcsrheK87OEC1810o0tACE1UQbC3YgjtUXBWbKYoCT?=
- =?us-ascii?Q?lWmIX3KsotYAStQHbdtUWv/Piky4dnfmlQCi12AW058fHuQb/3UI8G4fX4zP?=
- =?us-ascii?Q?1nNMZl+WLec5t4yjyA79ZwHz/oB55jWJbO5l7vj2SzYxeqftsQzK+jm7PIpV?=
- =?us-ascii?Q?TZbD3kEF6qbC4/YnUgPbUou3vlSZUbrFvirYgQAyfFdCW/phXJlTwCYZLjn6?=
- =?us-ascii?Q?7QnZyRXRioWELsYocSxX/3DVpDpuaZcnJxEEzG6koO/ME2he1Jxa8Iuv6m64?=
- =?us-ascii?Q?yANL62GMFw7Rvq+qGx7Xro9x9VpQepOHiUF0PfsuuNIKwUFzAWnbnATNZ89M?=
- =?us-ascii?Q?+GsCX5LBD0ZxIbGBE7wRfTyUEhE3OPJcflcY9NQAc8sPzofQC2zhK23vfbGr?=
- =?us-ascii?Q?rpjeDWv//osyuh6iHaIvUPtQ/vBT4bGHTEMRz8VhNvuIHP+IZoakt6kNZV88?=
- =?us-ascii?Q?NDOpQvY4Kzli6yWb9+06hykvDBeB5M1F1J7aSCh+WFZ1KrHea6vpuX8mVnma?=
- =?us-ascii?Q?bKm1cMVfUz3vO3aANTLZfRpUzPcbeXzJ4oOpqtVM6+CKXAoSV5uf8ohzNhn3?=
- =?us-ascii?Q?ucthQuTwlPsxvYg4AsOzsIc2Bs1y54XQLoWpLP1cezydjZmBb0az9K4+pyIH?=
- =?us-ascii?Q?JpYKy7FKiltstQNX0dDT1fGZLQX4nGCq3Bbg3HCFxuEe4E2+Or1ZblMY+C6y?=
- =?us-ascii?Q?sS4R5d53bm83jqbxhMtJ4eYAFvZ2ND4YbuV4DMWuQ/9NgvYMAs1bjaSHndSI?=
- =?us-ascii?Q?cyE+7yluAAmcQ0rvy/qZshZTYSRICfsw2ldOG+leweLlFdbC/nNL939qrbqZ?=
- =?us-ascii?Q?+CgnInStdtTwmGWQRhJG4UB6gFM7f6XzUKCJPk6UBkj7pFM1WVrnrAZrLooj?=
- =?us-ascii?Q?9erWdc0iGe1yffZKuv1B8wtcY5J3C+JJ2ya2JBpa0syccNuHPbsFgBw6JIIS?=
- =?us-ascii?Q?/agrCFe3ww+BFZM5xobAGmr1qyZHb0wo2rgbqxjvSQEaaUf3Kn9P4XKPx6qK?=
- =?us-ascii?Q?J24T8vrKhb2Krofe7snx8MJSTeRBDt3S3fGYSE9qe1WMaGVB9uJNhASoaP2d?=
- =?us-ascii?Q?tqZ3J3clcTzBTVzupVUMAvgIcZ3s+sIWH3FDvI04mqMURRuL/KDUtf+hDle0?=
- =?us-ascii?Q?Q2C//nyu1pPFSNHmSzSEudOCI/gAT2H4NftSSnNusQ+N3pJ6vIWE1bO2mG0Z?=
- =?us-ascii?Q?LhZMrGbgO+DLVjLCEWqdeAwH/qHou2CkeyKEn7QhnSPtrz7Uahn0BK2K/EzT?=
- =?us-ascii?Q?pcfbbjg5kaeMX4meD3oFdoJrmbKuNCNIx3ee+X/WLZ1Y635tcUdoX2eq9EhI?=
- =?us-ascii?Q?Nw=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <605D035F6F4250468BC7F344B3F3AF3C@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Wed, 31 Aug 2022 10:35:34 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D596218E1F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:35:32 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id q10-20020a0566022f0a00b00688d703717bso8751375iow.9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:35:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=WXaJAZ2MWFYdF36wziQhVxf0uszdOkCCLhumYClSVQo=;
+        b=nZAIZAxFyPVhM5Xz/p5XzbtGz2KGMEfrncpr+4TW31785Ilq1cgYCPnGAKVOaQuPo/
+         hGoH4QJaJB86knURQadz3aKIHKsMF2+yQzlTOcn72IPh+APFfwwU/5paPzFJsaa5Rr0f
+         pW/JiQTc3qVNpqPQBtcBA9OUo8Q961TLB2mQVa1CNQw7GJ0rLK7Ao03BEf3A0mcYWryC
+         sx31TVLFiQW9g9SnT6lKNN+lcdpvm3Qs2xPwxiShryqlJwN0yU3Kxexfr7H/bdabHvAi
+         8QBB41mg3LOiyqpG9goOeIyyPEyIXgHyxpj0rQG6iTmS4+XEx+3IhMcBhNGGK9vNPSTH
+         J65g==
+X-Gm-Message-State: ACgBeo13G/yM1HdJF5KD2b5LE9DIQvCuvkbg7oEL5Bo2eKWjsRYyiQzJ
+        /qye/hK6qgRchGpIej0dqnodmgN9fXBYB8saCBa7QtyJjA3V
+X-Google-Smtp-Source: AA6agR4f0yfFac2l5mMkYv6Whuuyzl4KTiFvbrcUg36fBjMQ2x6ed+Jqk+DMnEhYEyciZMFHknGl4TsG83Ohkr6dhgAzjR+hX4yc
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN0PR10MB5128.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4ff0da3-0b56-45e9-a126-08da8b5dedbe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Aug 2022 14:34:36.2634
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zAHLO6A7eQjfkr24Hij3275SEQzeh2plJBN74QpVY+SXaWR790XMZKXfoQSQMNeO+fP2hpSha2UIftjON/HBAg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR10MB5570
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-31_09,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- mlxlogscore=999 adultscore=0 phishscore=0 spamscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208310073
-X-Proofpoint-ORIG-GUID: NnfUDXJfmfUmW4iv4qpi5VItuVFKf3qY
-X-Proofpoint-GUID: NnfUDXJfmfUmW4iv4qpi5VItuVFKf3qY
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:b1c5:0:b0:349:c080:b371 with SMTP id
+ u5-20020a02b1c5000000b00349c080b371mr15380892jah.136.1661956532260; Wed, 31
+ Aug 2022 07:35:32 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 07:35:32 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bcd87205e78a68d8@google.com>
+Subject: [syzbot] INFO: task hung in blk_freeze_queue (3)
+From:   syzbot <syzbot+38e6c55d4969a14c1534@syzkaller.appspotmail.com>
+To:     brauner@kernel.org, broonie@kernel.org, catalin.marinas@arm.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        madvenka@linux.microsoft.com, mark.rutland@arm.com,
+        scott@os.amperecomputing.com, syzkaller-bugs@googlegroups.com,
+        will@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=1233470b080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
+dashboard link: https://syzkaller.appspot.com/bug?extid=38e6c55d4969a14c1534
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10f59dad080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=160918e5080000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+38e6c55d4969a14c1534@syzkaller.appspotmail.com
+
+INFO: task syz-executor245:3083 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:syz-executor245 state:D stack:    0 pid: 3083 ppid:  3071 flags:0x00000001
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x570 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ blk_mq_freeze_queue_wait+0x94/0xf4 block/blk-mq.c:180
+ blk_freeze_queue+0x94/0xa8 block/blk-mq.c:207
+ blk_mq_freeze_queue+0x20/0x30 block/blk-mq.c:216
+ nbd_add_socket+0x78/0x26c drivers/block/nbd.c:1123
+ __nbd_ioctl+0x80/0x320 drivers/block/nbd.c:1464
+ nbd_ioctl+0xec/0x13c drivers/block/nbd.c:1521
+ blkdev_ioctl+0x250/0x764 block/ioctl.c:614
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+INFO: task udevd:3084 blocked for more than 143 seconds.
+      Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+task:udevd           state:D stack:    0 pid: 3084 ppid:  2560 flags:0x00000000
+Call trace:
+ __switch_to+0x180/0x28c arch/arm64/kernel/process.c:557
+ context_switch kernel/sched/core.c:5182 [inline]
+ __schedule+0x414/0x570 kernel/sched/core.c:6494
+ schedule+0x64/0xa4 kernel/sched/core.c:6570
+ io_schedule+0x38/0x104 kernel/sched/core.c:8714
+ folio_wait_bit_common+0x458/0x9f8 mm/filemap.c:1298
+ folio_put_wait_locked mm/filemap.c:1472 [inline]
+ do_read_cache_folio+0x78/0x550 mm/filemap.c:3501
+ read_cache_folio+0x40/0x54 mm/filemap.c:3551
+ read_mapping_folio include/linux/pagemap.h:762 [inline]
+ read_part_sector+0x60/0x1d8 block/partitions/core.c:714
+ adfspart_check_ICS+0x4c/0x38c block/partitions/acorn.c:360
+ check_partition block/partitions/core.c:146 [inline]
+ blk_add_partitions block/partitions/core.c:599 [inline]
+ bdev_disk_changed+0x340/0x63c block/partitions/core.c:685
+ blkdev_get_whole+0x1b0/0x1f8 block/bdev.c:684
+ blkdev_get_by_dev+0x178/0x2fc block/bdev.c:821
+ blkdev_open+0x84/0xd8 block/fops.c:485
+ do_dentry_open+0x318/0x688 fs/open.c:878
+ vfs_open+0x38/0x48 fs/open.c:1014
+ do_open fs/namei.c:3557 [inline]
+ path_openat+0xe34/0x11c4 fs/namei.c:3691
+ do_filp_open+0xdc/0x1b8 fs/namei.c:3718
+ do_sys_openat2+0xb8/0x22c fs/open.c:1311
+ do_sys_open fs/open.c:1327 [inline]
+ __do_sys_openat fs/open.c:1343 [inline]
+ __se_sys_openat fs/open.c:1338 [inline]
+ __arm64_sys_openat+0xb0/0xe0 fs/open.c:1338
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
+ el0t_64_sync+0x18c/0x190
+
+Showing all locks held in the system:
+1 lock held by rcu_tasks_kthre/10:
+ #0: ffff80000d4a3568 (rcu_tasks.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
+1 lock held by rcu_tasks_trace/11:
+ #0: ffff80000d4a3bb8 (rcu_tasks_trace.tasks_gp_mutex){+.+.}-{3:3}, at: rcu_tasks_one_gp+0x3c/0x450 kernel/rcu/tasks.h:507
+1 lock held by khungtaskd/26:
+ #0: ffff80000d4a3440 (rcu_read_lock){....}-{1:2}, at: rcu_lock_acquire+0x4/0x48 include/linux/rcupdate.h:279
+2 locks held by getty/2712:
+ #0: ffff0000c730a898 (&tty->ldisc_sem){++++}-{0:0}, at: tty_ldisc_ref_wait+0x28/0x58 drivers/tty/tty_ldisc.c:244
+ #1: ffff80000f67e2f0 (&ldata->atomic_read_lock){+.+.}-{3:3}, at: n_tty_read+0x19c/0x88c drivers/tty/n_tty.c:2177
+1 lock held by syz-executor245/3083:
+ #0: ffff0000c5ccd998 (&nbd->config_lock){+.+.}-{3:3}, at: nbd_ioctl+0x70/0x13c drivers/block/nbd.c:1514
+1 lock held by udevd/3084:
+ #0: ffff0000c5daacc8 (&disk->open_mutex){+.+.}-{3:3}, at: blkdev_get_by_dev+0xfc/0x2fc block/bdev.c:812
+
+=============================================
 
 
-> On Aug 31, 2022, at 10:20 AM, cgel.zte@gmail.com wrote:
->=20
-> From: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
->=20
-> Return value directly from fh_verify() do_open_permission()
-> exp_pseudoroot() instead of getting value from
-> redundant variable status.
->=20
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: Jinpeng Cui <cui.jinpeng2@zte.com.cn>
 
-Applied for v6.1. Thanks!
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-
-> ---
-> fs/nfsd/nfs4proc.c | 16 ++++------------
-> 1 file changed, 4 insertions(+), 12 deletions(-)
->=20
-> diff --git a/fs/nfsd/nfs4proc.c b/fs/nfsd/nfs4proc.c
-> index 757d8959f992..7055e1c91d0e 100644
-> --- a/fs/nfsd/nfs4proc.c
-> +++ b/fs/nfsd/nfs4proc.c
-> @@ -141,7 +141,6 @@ fh_dup2(struct svc_fh *dst, struct svc_fh *src)
-> static __be32
-> do_open_permission(struct svc_rqst *rqstp, struct svc_fh *current_fh, str=
-uct nfsd4_open *open, int accmode)
-> {
-> -	__be32 status;
->=20
-> 	if (open->op_truncate &&
-> 		!(open->op_share_access & NFS4_SHARE_ACCESS_WRITE))
-> @@ -156,9 +155,7 @@ do_open_permission(struct svc_rqst *rqstp, struct svc=
-_fh *current_fh, struct nfs
-> 	if (open->op_share_deny & NFS4_SHARE_DENY_READ)
-> 		accmode |=3D NFSD_MAY_WRITE;
->=20
-> -	status =3D fh_verify(rqstp, current_fh, S_IFREG, accmode);
-> -
-> -	return status;
-> +	return fh_verify(rqstp, current_fh, S_IFREG, accmode);
-> }
->=20
-> static __be32 nfsd_check_obj_isreg(struct svc_fh *fh)
-> @@ -454,7 +451,6 @@ static __be32
-> do_open_fhandle(struct svc_rqst *rqstp, struct nfsd4_compound_state *csta=
-te, struct nfsd4_open *open)
-> {
-> 	struct svc_fh *current_fh =3D &cstate->current_fh;
-> -	__be32 status;
-> 	int accmode =3D 0;
->=20
-> 	/* We don't know the target directory, and therefore can not
-> @@ -479,9 +475,7 @@ do_open_fhandle(struct svc_rqst *rqstp, struct nfsd4_=
-compound_state *cstate, str
-> 	if (open->op_claim_type =3D=3D NFS4_OPEN_CLAIM_DELEG_CUR_FH)
-> 		accmode =3D NFSD_MAY_OWNER_OVERRIDE;
->=20
-> -	status =3D do_open_permission(rqstp, current_fh, open, accmode);
-> -
-> -	return status;
-> +	return do_open_permission(rqstp, current_fh, open, accmode);
-> }
->=20
-> static void
-> @@ -668,11 +662,9 @@ static __be32
-> nfsd4_putrootfh(struct svc_rqst *rqstp, struct nfsd4_compound_state *csta=
-te,
-> 		union nfsd4_op_u *u)
-> {
-> -	__be32 status;
-> -
-> 	fh_put(&cstate->current_fh);
-> -	status =3D exp_pseudoroot(rqstp, &cstate->current_fh);
-> -	return status;
-> +
-> +	return exp_pseudoroot(rqstp, &cstate->current_fh);
-> }
->=20
-> static __be32
-> --=20
-> 2.25.1
->=20
-
---
-Chuck Lever
-
-
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

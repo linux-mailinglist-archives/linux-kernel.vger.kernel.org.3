@@ -2,178 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B8FC5A87B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:46:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404C45A87B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiHaUqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 16:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53486 "EHLO
+        id S231202AbiHaUrX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 16:47:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiHaUqq (ORCPT
+        with ESMTP id S229498AbiHaUrT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 16:46:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08FDEA317
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 13:46:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661978803;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KbwY55D9+tVzarKq94KZUxytwKNHu4drrSPlup4k9oM=;
-        b=hA1iaygBn6C3cUd3G1e1WvDmmymRjR9EhvzUfUBBusBMKIP1lFHb2/GhkRGC7Hi2Q7CT5b
-        UZvYjbMHP8yjKWyAONo5Os0OXzOFsTJEjBsR9Wz14GonYiO9XVrKsYVxzuk3t+zN3St5h4
-        oozgaBD5j1RSAgSdPbZxxK85K9m4qWA=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-356-mUvYXny0NN-Ujo9GkTDB-w-1; Wed, 31 Aug 2022 16:46:39 -0400
-X-MC-Unique: mUvYXny0NN-Ujo9GkTDB-w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 164441C05194;
-        Wed, 31 Aug 2022 20:46:39 +0000 (UTC)
-Received: from [10.18.17.215] (dhcp-17-215.bos.redhat.com [10.18.17.215])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 1C7EC909FF;
-        Wed, 31 Aug 2022 20:46:38 +0000 (UTC)
-Message-ID: <7fae45f2-e8a6-0ba7-be02-2eff8e75113e@redhat.com>
-Date:   Wed, 31 Aug 2022 16:46:37 -0400
+        Wed, 31 Aug 2022 16:47:19 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50314EA30F;
+        Wed, 31 Aug 2022 13:47:18 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-11eb8b133fbso22584979fac.0;
+        Wed, 31 Aug 2022 13:47:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=zEbVbunJlre6mDmNp2IBjlatEi3ALf9EvbX8coz8GaM=;
+        b=O5245wv+m7LTIgaCxEX2UdJv8C0UHYR86YnrXWrjllsjYwz+xk5cUmGiuVfa8/XWjm
+         U26cPLj2ABQSu7nUAvr9F/cRT0dCPUfd0E2zVS/+UDsvQa/c8xdBcgKYpVZ65AVzZwHH
+         7xpixNb9EcruchFU4pDeUSY0aw8cpi+8VcgGhWnaEZu3S25H7aqiendgkiB0YmzToEO6
+         o09bUpmMjJROgMKn6ZhC+YhVJvI2ZVTKfgSMLu3yyzFq7Rr0RTcKlDCEE0dvhTC1D5Dq
+         fxRxYAnLsgFouNSfA3w0H8V5MbUWzl26p7Xb4KkzxkAsHkbgQmquGRe6oR+xuIizGbeh
+         qYoA==
+X-Gm-Message-State: ACgBeo1Z7LW+nl/qRwZrNMCEd50hUN4t2rekhharL/gEUZbAToBwdxnA
+        myqpRo2g0SJ0p9N+tKIzhfJqViXznw==
+X-Google-Smtp-Source: AA6agR62qFR4xIl27/iMdfvrciIsuXxB//hS7o7lV+FgBflwrbZCRsOpseR8UzXcrHhST6xVa8ShVg==
+X-Received: by 2002:a05:6870:a99c:b0:11c:2c37:3d03 with SMTP id ep28-20020a056870a99c00b0011c2c373d03mr2276728oab.0.1661978837570;
+        Wed, 31 Aug 2022 13:47:17 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id v6-20020a4aad86000000b00448a3ecdc9dsm8541119oom.22.2022.08.31.13.47.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 13:47:16 -0700 (PDT)
+Received: (nullmailer pid 218610 invoked by uid 1000);
+        Wed, 31 Aug 2022 20:47:16 -0000
+Date:   Wed, 31 Aug 2022 15:47:16 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Mark Rutland <mark.rutland@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Marc Zyngier <maz@kernel.org>
+Subject: Re: [PATCH] dt-bindings: timer: Add missing
+ (unevaluated|additional)Properties on child nodes
+Message-ID: <20220831204716.GA218548-robh@kernel.org>
+References: <20220823145649.3118479-16-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v6 2/5] sched: Use user_cpus_ptr for saving user provided
- cpumask in sched_setaffinity()
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-References: <20220826010119.1265764-1-longman@redhat.com>
- <20220826010119.1265764-3-longman@redhat.com>
- <Yw8l9zhKxgUM0ulc@hirez.programming.kicks-ass.net>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <Yw8l9zhKxgUM0ulc@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220823145649.3118479-16-robh@kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 23 Aug 2022 09:56:47 -0500, Rob Herring wrote:
+> In order to ensure only documented properties are present, node schemas
+> must have unevaluatedProperties or additionalProperties set to false
+> (typically).
+> 
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  .../devicetree/bindings/timer/arm,arch_timer_mmio.yaml        | 1 +
+>  Documentation/devicetree/bindings/timer/ingenic,tcu.yaml      | 4 ++++
+>  2 files changed, 5 insertions(+)
+> 
 
-On 8/31/22 05:12, Peter Zijlstra wrote:
-> On Thu, Aug 25, 2022 at 09:01:16PM -0400, Waiman Long wrote:
->
->
->>   void relax_compatible_cpus_allowed_ptr(struct task_struct *p)
->>   {
->> -	struct cpumask *user_mask = p->user_cpus_ptr;
->> -	unsigned long flags;
->> -
->>   	/*
->> -	 * Try to restore the old affinity mask. If this fails, then
->> -	 * we free the mask explicitly to avoid it being inherited across
->> -	 * a subsequent fork().
->> +	 * Try to restore the old affinity mask with __sched_setaffinity().
->> +	 * Cpuset masking will be done there too.
->>   	 */
->> -	if (!user_mask || !__sched_setaffinity(p, user_mask))
->> -		return;
->> -
->> -	raw_spin_lock_irqsave(&p->pi_lock, flags);
->> -	user_mask = clear_user_cpus_ptr(p);
->> -	raw_spin_unlock_irqrestore(&p->pi_lock, flags);
->> -
->> -	kfree(user_mask);
->> +	__sched_setaffinity(p, task_user_cpus(p), false);
->>   }
-> We have an issue with __sched_setaffinity() failing here. I'm not sure
-> ignoring the failure is the right thing -- but I'm also not enturely
-> sure what is.
-I am not sure what we can do in case __sched_setaffinity() fails. Maybe 
-we can print a warning when this happen. What do you think?
->>   void set_task_cpu(struct task_struct *p, unsigned int new_cpu)
->> @@ -8081,10 +8046,11 @@ int dl_task_check_affinity(struct task_struct *p, const struct cpumask *mask)
->>   #endif
->>   
->>   static int
->> -__sched_setaffinity(struct task_struct *p, const struct cpumask *mask)
->> +__sched_setaffinity(struct task_struct *p, const struct cpumask *mask, bool save_mask)
->>   {
->>   	int retval;
->>   	cpumask_var_t cpus_allowed, new_mask;
->> +	struct cpumask *user_mask = NULL;
->>   
->>   	if (!alloc_cpumask_var(&cpus_allowed, GFP_KERNEL))
->>   		return -ENOMEM;
->> @@ -8100,8 +8066,22 @@ __sched_setaffinity(struct task_struct *p, const struct cpumask *mask)
->>   	retval = dl_task_check_affinity(p, new_mask);
->>   	if (retval)
->>   		goto out_free_new_mask;
->> +
->> +	/*
->> +	 * Save the user requested mask internally now and then update
->> +	 * user_cpus_ptr later after making sure this call will be
->> +	 * successful, i.e. retval == 0.
->> +	 */
->> +	if (save_mask) {
->> +		user_mask = kmalloc(cpumask_size(), GFP_KERNEL);
->> +		if (!user_mask) {
->> +			retval = -ENOMEM;
->> +			goto out_free_new_mask;
->> +		}
->> +		cpumask_copy(user_mask, mask);
->> +	}
->>   again:
->> -	retval = __set_cpus_allowed_ptr(p, new_mask, SCA_CHECK | SCA_USER);
->> +	retval = __set_cpus_allowed_ptr(p, new_mask, SCA_CHECK);
->>   	if (retval)
->>   		goto out_free_new_mask;
->>   
->> @@ -8115,7 +8095,16 @@ __sched_setaffinity(struct task_struct *p, const struct cpumask *mask)
->>   		goto again;
->>   	}
->>   
->> +	if (save_mask) {
->> +		unsigned long flags;
->> +
->> +		/* Use pi_lock to synchronize changes to user_cpus_ptr */
->> +		raw_spin_lock_irqsave(&p->pi_lock, flags);
->> +		swap(p->user_cpus_ptr, user_mask);
->> +		raw_spin_unlock_irqrestore(&p->pi_lock, flags);
->> +	}
->>   out_free_new_mask:
->> +	kfree(user_mask);
->>   	free_cpumask_var(new_mask);
->>   out_free_cpus_allowed:
->>   	free_cpumask_var(cpus_allowed);
-> I'm confused as to why it's put in this function and not in the one
-> caller that actually sets the new @save_mask true, here:
-
-Looking at this patch alone, we can certainly put mask saving in 
-sched_setaffinity(). In later patches, however, I have to make 
-user_cpus_ptr update in the same lock critical section as cpus_mask. 
-That is the reason why it is done this way here. I can certainly make 
-your suggested change in this patch and then move the saving inside in a 
-later patch.
-
-Cheers,
-Longman
-
+Applied, thanks!

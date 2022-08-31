@@ -2,95 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 259EA5A7DA8
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:41:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D5525A7DB5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:43:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbiHaMl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
+        id S230395AbiHaMnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiHaMlW (ORCPT
+        with ESMTP id S229607AbiHaMnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:41:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42B27A6AD5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:41:18 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 14:41:14 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1661949676;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b4uXfTcXJzEovtZTYHUIWB1giQlX2EAgRixcjojyZUc=;
-        b=LZdL38rlXuRLJh7odxvZiaog0QghoYrz6jGF0KjU2yYKL/MFXKyslMUh+d0OKuLAd2VNla
-        6UVXKPozdmKKRpcxqP59K7VolpFF3F/uDqvkEYsI0tzcEBC/zFCgmpUHD4gZ1+yqXBZjxK
-        2jGfrvK9xZLLK/D4XPk/Y8OXBaRboVZdClrSAEoPlhAUXe0OjKPxY7F0mfXsX+QMtrT5vt
-        256CIi0U207an6+yv7j0exucpo8IV7qVeqwKQ1+UPBOrlN3ehjYxmbCkoBsxJ8O0PUvgxk
-        Q0nK/tNEDlqb+DXP43HIwzyFT4TR/rF2dOEk7Rn4j8u+bR95rcEnNHVqiGkvgQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1661949676;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=b4uXfTcXJzEovtZTYHUIWB1giQlX2EAgRixcjojyZUc=;
-        b=noyoIPRmtDlSp2u5341YWxmR8O99J08P5w5SpEnjqzejIfnvXse6u+sK5pphZML3GgZj7N
-        zLBLvVMWNB7RylCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
-        Yangxi Xiang <xyangxi5@gmail.com>,
-        nick black <dankamongmen@gmail.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Marco Elver <elver@google.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        David Gow <davidgow@google.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-Subject: Re: [PATCH] kernel/panic: Drop unblank_screen call
-Message-ID: <Yw9W6qYo6Acg7rad@linutronix.de>
-References: <20220830145004.430545-1-daniel.vetter@ffwll.ch>
+        Wed, 31 Aug 2022 08:43:32 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4BC925CE;
+        Wed, 31 Aug 2022 05:43:30 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id f14so10685864qkm.0;
+        Wed, 31 Aug 2022 05:43:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=5tRe0udrOzgvmzmVe1TJfRXs9QUgCv6/ooryrQ8LL0E=;
+        b=GudmD5Nd8mmMc/sqJS0qDmKTlZc/qGH+NwbB+EtE9tfjZxH/7/PKo2UOJHKbR2U6NU
+         9NqXSzQr0QKZt8CEq901VRrf3y499jtMjto/7uWUFncsFkPSt3Be6Yqh+nphYXif/hOk
+         7/K4JNjm5kvean7oixyXbECcP7RoG3WR8JQI97UzcG25zhQwKXKPe0c481f9pnKRdVXP
+         KCptRWkbD23qWS6VY1J+qLmnnEWOVoFDI5bewXuaRn7nFMoy3lW1Wy0jybr0EVKfxZAb
+         H/kkebegl/FHLDrPT4f9UGM8Mz35s9vjCqzlOFByhokWczigz0eNkdgO1Hi/GQDlJ+0c
+         9MRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=5tRe0udrOzgvmzmVe1TJfRXs9QUgCv6/ooryrQ8LL0E=;
+        b=DXE1icVzAnp+7rflXxczpQ+lvNu94y9uH90bENfcr9gbUxTkjV+0obaMmi5drVlLYg
+         Fnp9zsRe5Lv9JfGg3KZDlrmFJjcFG31T21hv0/yHj0A8xpdstLkEQv3fo68tmVs3pGNO
+         8wxh4wsvwZMuEufPMU/V6ADNpe3ESQMeHlGxYUYSeIuY2QV3uUCoQfkipg4N8aq3iDFF
+         hklJLApoC8yKLYCrm1PPrXF0xSem0SU1m3/+h2DurnziEUV2gpnV5121a9URHjT/1kq0
+         xtGAiIL2qWDKWWi1eaNIReWIiwsfk7smuPd87vJ+pKz+6ZB0nIBcBWiEM3fY+sE4wjUg
+         Fmfw==
+X-Gm-Message-State: ACgBeo2BdIK1AqK1l9jhIchtSA8ezGtAvTnwuCtWw7sLUwFe7fdK+ZbJ
+        z5Jv566weIrSCqRa9B5rAS8U520idevC2xForqrGmkahGjk=
+X-Google-Smtp-Source: AA6agR5PK7pRe0Eks80SVQBsPZG5FPESZc9foSYIBUYFn36C70hyDeIVP+KIVawwKV+ML2F4ckOA5o7padIb9dv+ut4=
+X-Received: by 2002:a05:620a:254d:b0:6ab:84b8:25eb with SMTP id
+ s13-20020a05620a254d00b006ab84b825ebmr15379328qko.383.1661949809875; Wed, 31
+ Aug 2022 05:43:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220830145004.430545-1-daniel.vetter@ffwll.ch>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220831100506.3368103-1-vincent.whitchurch@axis.com> <20220831100506.3368103-3-vincent.whitchurch@axis.com>
+In-Reply-To: <20220831100506.3368103-3-vincent.whitchurch@axis.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 31 Aug 2022 15:42:54 +0300
+Message-ID: <CAHp75VeMxjwtORMBRUMk0ynEpL354WaRGczo_Mi1SjveEmGAbA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/5] iio: adc: mcp320x: remove device_index check for TX
+To:     Vincent Whitchurch <vincent.whitchurch@axis.com>
+Cc:     Jonathan Cameron <jic23@kernel.org>, kernel <kernel@axis.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-30 16:50:04 [+0200], Daniel Vetter wrote:
-> Long story short, I have no idea why the direct call to unblank_screen
-> survived for so long (the infrastructure to do it properly existed for
-> years), nor why it wasn't removed when the console_unblank() call was
-> finally added. But it makes a ton more sense to finally do that than
-> not - it's just better encapsulation to go through the console
-> functions instead of doing a direct call, so let's dare. Plus it
-> really does not make much sense to call the only unblank
-> implementation there is twice, once without, and once with appropriate
-> locking.
+On Wed, Aug 31, 2022 at 1:05 PM Vincent Whitchurch
+<vincent.whitchurch@axis.com> wrote:
+>
+> Replace the device_index switch with a TX value computation based on the
+> number of channels in the chip_info structure, so that the latter has
+> all the information needed to handle the variants.
 
-Yup, calling it twice is redundant. 
-The only difference I see is that the console implementation relies on
-CONFIG_VT_CONSOLE while the former relied only on CONFIG_VT. There
-should be no console output without CONFIG_VT_CONSOLE so no need to
-unblank it.
+...
 
-Acked-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+>                 return ((start_bit << 4) | (!differential << 3) |
+> +                       (address << 2));
 
-Sebastian
+At the same time can be put on the above line and removed couple of ().
+
+...
+
+>                 return ((start_bit << 6) | (!differential << 5) |
+> -                                                       (channel << 2));
+> +                       (address << 2));
+
+Ditto.
+
+-- 
+With Best Regards,
+Andy Shevchenko

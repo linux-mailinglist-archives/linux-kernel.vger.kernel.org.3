@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391CD5A88EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 00:20:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 900875A88EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 00:20:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232427AbiHaWUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 18:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
+        id S230340AbiHaWUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 18:20:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232286AbiHaWTz (ORCPT
+        with ESMTP id S232336AbiHaWU0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 18:19:55 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2281564DF
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 15:19:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661984390;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=rKIZ2WTLtQjucL02x9Nc2ffupTcwbvlTRvUJuSYdwkI=;
-        b=VTk5emfgK/Ef0UOFdo3O5WFqlDZdLk/ULvDTWTce37X5dvl6YlYFToNA2BAsTjwJY0+i2K
-        3adyocRV1LgDKScdc1CNknCrNqy+JAgKFovcICuCZhji+6K/MKKVh9Ae4UsEMkt19Nl5xJ
-        ydxNcpFF/ZJqN92eW1vrtPv6HNH3YDc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-67-uaDSlbJCOzS39kahpTWe3g-1; Wed, 31 Aug 2022 18:19:44 -0400
-X-MC-Unique: uaDSlbJCOzS39kahpTWe3g-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 163F038164CD;
-        Wed, 31 Aug 2022 22:19:44 +0000 (UTC)
-Received: from madcap2.tricolour.ca (unknown [10.22.48.5])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id CDF0B492C3B;
-        Wed, 31 Aug 2022 22:19:42 +0000 (UTC)
-Date:   Wed, 31 Aug 2022 18:19:40 -0400
-From:   Richard Guy Briggs <rgb@redhat.com>
-To:     Steve Grubb <sgrubb@redhat.com>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Jan Kara <jack@suse.cz>, Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v4 3/4] fanotify,audit: Allow audit to use the full
- permission event response
-Message-ID: <Yw/efLafvmimtCDq@madcap2.tricolour.ca>
-References: <cover.1659996830.git.rgb@redhat.com>
- <CAHC9VhT0D=qtaYR-Ve1hRTtQXspuC09qQZyFdESj-tQstyvMFg@mail.gmail.com>
- <Yw/NjYytoMUdbxuR@madcap2.tricolour.ca>
- <12063373.O9o76ZdvQC@x2>
+        Wed, 31 Aug 2022 18:20:26 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3A96B669;
+        Wed, 31 Aug 2022 15:20:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661984424; x=1693520424;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=vfc7ji1iF9dB6iNGPTPIhT6lU2S7gK6PEzb1TQ4te3w=;
+  b=kJw4AlXj8qGbrKisahMUr8JGhJKF4qBMK5+9nm0QFi3u4p7CmQNbLNNC
+   aKZFAWMEN9ncZM14ncPeC6PUfvZSLpG9sUcrhdaZR4KTZFRaM0VZX7QMj
+   OEePraZUfS2c2TH9UsLT6XRfFuv568gI5T57bCQG6526IV9Ck7nC98LMv
+   gZhtgDdgzZCCmQanHIMdgnNIxLUAEyGD5EWzORkTWjemcvBJOYExuI8QM
+   0Cwdu5DFwmzToxgrwhPB8u4+V9RR9RrlCqBgCbu9za2fVtEoTnQbaARaC
+   gNC6vPeoyeSWBO5bFk6x6zPEdJLMYZfnnJEHYg63dTwFYFSzCjObEqLw5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="296838376"
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="296838376"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 15:20:23 -0700
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="642053857"
+Received: from gkammela-mobl.amr.corp.intel.com (HELO [10.209.116.177]) ([10.209.116.177])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 15:20:22 -0700
+Message-ID: <60f04869-5d68-f833-5f81-a0b79abba457@linux.intel.com>
+Date:   Wed, 31 Aug 2022 15:20:01 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12063373.O9o76ZdvQC@x2>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v1] platform/x86/intel: pmc/core: Add Raptor Lake support
+ to pmc core driver
+Content-Language: en-US
+To:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        David Box <david.e.box@intel.com>
+References: <20220830182001.3693030-1-gayatri.kammela@linux.intel.com>
+ <CAE2upjQCzrFQF0B9hGMHb2LejrKJyJNNdYDjizQW2Yw=8pYMQA@mail.gmail.com>
+From:   "Kammela, Gayatri" <gayatri.kammela@linux.intel.com>
+In-Reply-To: <CAE2upjQCzrFQF0B9hGMHb2LejrKJyJNNdYDjizQW2Yw=8pYMQA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,79 +67,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-31 17:25, Steve Grubb wrote:
-> On Wednesday, August 31, 2022 5:07:25 PM EDT Richard Guy Briggs wrote:
-> > > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > > > index 433418d73584..f000fec52360 100644
-> > > > --- a/kernel/auditsc.c
-> > > > +++ b/kernel/auditsc.c
-> > > > @@ -64,6 +64,7 @@
-> > > > #include <uapi/linux/limits.h>
-> > > > #include <uapi/linux/netfilter/nf_tables.h>
-> > > > #include <uapi/linux/openat2.h> // struct open_how
-> > > > +#include <uapi/linux/fanotify.h>
-> > > > 
-> > > > #include "audit.h"
-> > > > 
-> > > > @@ -2899,10 +2900,34 @@ void __audit_log_kern_module(char *name)
-> > > > context->type = AUDIT_KERN_MODULE;
-> > > > }
-> > > > 
-> > > > -void __audit_fanotify(u32 response)
-> > > > +void __audit_fanotify(u32 response, size_t len, char *buf)
-> > > > {
-> > > > -       audit_log(audit_context(), GFP_KERNEL,
-> > > > -               AUDIT_FANOTIFY, "resp=%u", response);
-> > > > +       struct fanotify_response_info_audit_rule *friar;
-> > > > +       size_t c = len;
-> > > > +       char *ib = buf;
-> > > > +
-> > > > +       if (!(len && buf)) {
-> > > > +               audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
-> > > > +                         "resp=%u fan_type=0 fan_info=?", response);
-> > > > +               return;
-> > > > +       }
-> > > > +       while (c >= sizeof(struct fanotify_response_info_header)) {
-> > > > +               friar = (struct fanotify_response_info_audit_rule
-> > > > *)buf;
-> > > 
-> > > Since the only use of this at the moment is the
-> > > fanotify_response_info_rule, why not pass the
-> > > fanotify_response_info_rule struct directly into this function?  We
-> > > can always change it if we need to in the future without affecting
-> > > userspace, and it would simplify the code.
-> > 
-> > Steve, would it make any sense for there to be more than one
-> > FAN_RESPONSE_INFO_AUDIT_RULE header in a message?  Could there be more
-> > than one rule that contributes to a notify reason?  If not, would it be
-> > reasonable to return -EINVAL if there is more than one?
-> 
-> I don't see a reason for sending more than one header. What is more probable 
-> is the need to send additional data in that header. I was thinking of maybe 
-> bit mapping it in the rule number. But I'd suggest padding the struct just in 
-> case it needs expanding some day.
 
-This doesn't exactly answer my question about multiple rules
-contributing to one decision.
-
-The need for more as yet undefined information sounds like a good reason
-to define a new header if that happens.
-
-At this point, is it reasonable to throw an error if more than one RULE
-header appears in a message?  The way I had coded this last patchset was
-to allow for more than one RULE header and each one would get its own
-record in the event.
-
-How many rules total are likely to exist?
-
-> -Steev
-
-- RGB
-
---
-Richard Guy Briggs <rgb@redhat.com>
-Sr. S/W Engineer, Kernel Security, Base Operating Systems
-Remote, Ottawa, Red Hat Canada
-IRC: rgb, SunRaycer
-Voice: +1.647.777.2635, Internal: (81) 32635
-
+On 8/30/2022 4:09 PM, Rajneesh Bhardwaj wrote:
+> Acked-by: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
+Thank you Rajneesh!
+>
+> On Tue, Aug 30, 2022 at 2:20 PM Gayatri Kammela
+> <gayatri.kammela@linux.intel.com> wrote:
+>> Add Raptor Lake client parts (both RPL and RPL_S) support to pmc core
+>> driver. Raptor Lake client parts reuse all the Alder Lake PCH IPs.
+>>
+>> Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
+>> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>> Cc: David Box <david.e.box@intel.com>
+>> Signed-off-by: Gayatri Kammela <gayatri.kammela@linux.intel.com>
+>> ---
+>>   drivers/platform/x86/intel/pmc/core.c | 2 ++
+>>   1 file changed, 2 insertions(+)
+>>
+>> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+>> index a1fe1e0dcf4a..17ec5825d13d 100644
+>> --- a/drivers/platform/x86/intel/pmc/core.c
+>> +++ b/drivers/platform/x86/intel/pmc/core.c
+>> @@ -1914,6 +1914,8 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
+>>          X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,         &tgl_reg_map),
+>>          X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,           &adl_reg_map),
+>>          X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &tgl_reg_map),
+>> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,          &adl_reg_map),
+>> +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,        &adl_reg_map),
+>>          {}
+>>   };
+>>
+>>
+>> base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
+>> --
+>> 2.25.1
+>>
+>

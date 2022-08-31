@@ -2,38 +2,38 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11E9C5A8899
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E9455A8890
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbiHaVzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34630 "EHLO
+        id S232421AbiHaVzF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:55:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiHaVyx (ORCPT
+        with ESMTP id S232253AbiHaVyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:54:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A591F36;
-        Wed, 31 Aug 2022 14:54:46 -0700 (PDT)
+        Wed, 31 Aug 2022 17:54:54 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA161007;
+        Wed, 31 Aug 2022 14:54:47 -0700 (PDT)
 Received: from jupiter.universe (dyndsl-091-096-057-024.ewe-ip-backbone.de [91.96.57.24])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4030B6601DF0;
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5BE2B6601DF6;
         Wed, 31 Aug 2022 22:54:45 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1661982885;
-        bh=s6um36bR3kLKecIG+7jDV13ngBnOF98lUyD4ZvCww6w=;
+        bh=5S+4m0o6lH0iFlvtkGlOEp3g8stIwnHQ52TSa2RRK6c=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=aosjWFxSIx+3UhlqDgyiKIrMX/GCNjueT5Af0pdMKoBgxv3yX2+pABzoaVilebQTu
-         21Xv1nwse2kodYteSGx3OIwAf/dQuo6TWZr4seVkH7nZ4q974zHdKGOvloU41QLWW9
-         qfeMy5ymEhuyGZbtBohC8upHZDUb1b5aehJ8upa1cvOKfSJLZkPPRyCcMu5Q+TEI7/
-         +ahWMSiG3stsQWIwlA4yHPjUWJqI66rse01lhhVm1mjiq/evauZCcUlj0cwrSP6oyA
-         PjOApKFQyxY/X+DBDEKp23kXLAg1Zmbn2AUq483BPeWMJAw+lJaiqdS3UEVSlNQljF
-         3rJlXwpygs5Lw==
+        b=JaO8psS7z1SFSvVqPOp+mlLunxmGYrPVQ59onOohztFOHnnUrm9huXUNK7C0ZuZeP
+         SiPmsMV2t4cBkLTLycypG5mXWCzvXKTtF799TotVYhbSPtceq+hnygEe7E+YAprNOS
+         phS1O6fzkMbn3vptqOIcuPSS1bKOAK1VgIwiyXbVLLPwO0Bby4ZgnmndYg4CvZ7mly
+         nXJFM8L7sGGjt2CF+yijwU0B3w+lgDr4OmL6o3WtDqQWkkbiIgy0zvFadCNk7WO1u/
+         eZB7ZpU4/G8GP2GycKk+VfFta0KngLd7n0Tp6iYye2TsY3lLsuxIYviXgRVeGzPONA
+         q8Q+SkSMKeRAA==
 Received: by jupiter.universe (Postfix, from userid 1000)
-        id 347024805C3; Wed, 31 Aug 2022 23:54:43 +0200 (CEST)
+        id 368594805C4; Wed, 31 Aug 2022 23:54:43 +0200 (CEST)
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -49,9 +49,9 @@ Cc:     Michael Turquette <mturquette@baylibre.com>,
         linux-kernel@vger.kernel.org,
         Sebastian Reichel <sebastian.reichel@collabora.com>,
         kernel@collabora.com
-Subject: [PATCH 03/13] clk: RK808: reduce 'struct rk808' usage
-Date:   Wed, 31 Aug 2022 23:54:27 +0200
-Message-Id: <20220831215437.117880-4-sebastian.reichel@collabora.com>
+Subject: [PATCH 04/13] regulator: rk808: reduce 'struct rk808' usage
+Date:   Wed, 31 Aug 2022 23:54:28 +0200
+Message-Id: <20220831215437.117880-5-sebastian.reichel@collabora.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220831215437.117880-1-sebastian.reichel@collabora.com>
 References: <20220831215437.117880-1-sebastian.reichel@collabora.com>
@@ -73,123 +73,75 @@ PMICs.
 
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/clk/clk-rk808.c | 34 ++++++++++++++++------------------
- 1 file changed, 16 insertions(+), 18 deletions(-)
+ drivers/regulator/rk808-regulator.c | 20 ++++++++++++--------
+ 1 file changed, 12 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/clk/clk-rk808.c b/drivers/clk/clk-rk808.c
-index 32f833d732ed..f7412b137e5e 100644
---- a/drivers/clk/clk-rk808.c
-+++ b/drivers/clk/clk-rk808.c
-@@ -12,10 +12,9 @@
- #include <linux/slab.h>
- #include <linux/platform_device.h>
- #include <linux/mfd/rk808.h>
+diff --git a/drivers/regulator/rk808-regulator.c b/drivers/regulator/rk808-regulator.c
+index 127dc2e2e690..ce9c64cadeba 100644
+--- a/drivers/regulator/rk808-regulator.c
++++ b/drivers/regulator/rk808-regulator.c
+@@ -14,7 +14,6 @@
+ 
+ #include <linux/delay.h>
+ #include <linux/gpio.h>
 -#include <linux/i2c.h>
- 
- struct rk808_clkout {
--	struct rk808 *rk808;
-+	struct regmap		*regmap;
- 	struct clk_hw		clkout1_hw;
- 	struct clk_hw		clkout2_hw;
- };
-@@ -31,9 +30,8 @@ static int rk808_clkout2_enable(struct clk_hw *hw, bool enable)
- 	struct rk808_clkout *rk808_clkout = container_of(hw,
- 							 struct rk808_clkout,
- 							 clkout2_hw);
--	struct rk808 *rk808 = rk808_clkout->rk808;
- 
--	return regmap_update_bits(rk808->regmap, RK808_CLK32OUT_REG,
-+	return regmap_update_bits(rk808_clkout->regmap, RK808_CLK32OUT_REG,
- 				  CLK32KOUT2_EN, enable ? CLK32KOUT2_EN : 0);
- }
- 
-@@ -52,10 +50,9 @@ static int rk808_clkout2_is_prepared(struct clk_hw *hw)
- 	struct rk808_clkout *rk808_clkout = container_of(hw,
- 							 struct rk808_clkout,
- 							 clkout2_hw);
--	struct rk808 *rk808 = rk808_clkout->rk808;
- 	uint32_t val;
- 
--	int ret = regmap_read(rk808->regmap, RK808_CLK32OUT_REG, &val);
-+	int ret = regmap_read(rk808_clkout->regmap, RK808_CLK32OUT_REG, &val);
- 
- 	if (ret < 0)
- 		return ret;
-@@ -93,9 +90,8 @@ static int rk817_clkout2_enable(struct clk_hw *hw, bool enable)
- 	struct rk808_clkout *rk808_clkout = container_of(hw,
- 							 struct rk808_clkout,
- 							 clkout2_hw);
--	struct rk808 *rk808 = rk808_clkout->rk808;
- 
--	return regmap_update_bits(rk808->regmap, RK817_SYS_CFG(1),
-+	return regmap_update_bits(rk808_clkout->regmap, RK817_SYS_CFG(1),
- 				  RK817_CLK32KOUT2_EN,
- 				  enable ? RK817_CLK32KOUT2_EN : 0);
- }
-@@ -115,10 +111,9 @@ static int rk817_clkout2_is_prepared(struct clk_hw *hw)
- 	struct rk808_clkout *rk808_clkout = container_of(hw,
- 							 struct rk808_clkout,
- 							 clkout2_hw);
--	struct rk808 *rk808 = rk808_clkout->rk808;
- 	unsigned int val;
- 
--	int ret = regmap_read(rk808->regmap, RK817_SYS_CFG(1), &val);
-+	int ret = regmap_read(rk808_clkout->regmap, RK817_SYS_CFG(1), &val);
- 
- 	if (ret < 0)
- 		return 0;
-@@ -153,18 +148,21 @@ static const struct clk_ops *rkpmic_get_ops(long variant)
- static int rk808_clkout_probe(struct platform_device *pdev)
+ #include <linux/module.h>
+ #include <linux/of_device.h>
+ #include <linux/of_gpio.h>
+@@ -1286,19 +1285,23 @@ static int rk808_regulator_dt_parse_pdata(struct device *dev,
+ static int rk808_regulator_probe(struct platform_device *pdev)
  {
  	struct rk808 *rk808 = dev_get_drvdata(pdev->dev.parent);
 -	struct i2c_client *client = rk808->i2c;
--	struct device_node *node = client->dev.of_node;
-+	struct device *dev = &pdev->dev;
- 	struct clk_init_data init = {};
- 	struct rk808_clkout *rk808_clkout;
- 	int ret;
+ 	struct regulator_config config = {};
+ 	struct regulator_dev *rk808_rdev;
+ 	struct rk808_regulator_data *pdata;
+ 	const struct regulator_desc *regulators;
++	struct regmap *regmap;
+ 	int ret, i, nregulators;
  
--	rk808_clkout = devm_kzalloc(&client->dev,
-+	dev->of_node = pdev->dev.parent->of_node;
++	regmap = dev_get_regmap(pdev->dev.parent, NULL);
++	if (!regmap)
++		return -ENODEV;
 +
-+	rk808_clkout = devm_kzalloc(dev,
- 				    sizeof(*rk808_clkout), GFP_KERNEL);
- 	if (!rk808_clkout)
+ 	pdata = devm_kzalloc(&pdev->dev, sizeof(*pdata), GFP_KERNEL);
+ 	if (!pdata)
  		return -ENOMEM;
  
--	rk808_clkout->rk808 = rk808;
-+	rk808_clkout->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-+	if (!rk808_clkout->regmap)
-+		return -ENODEV;
- 
- 	init.parent_names = NULL;
- 	init.num_parents = 0;
-@@ -173,10 +171,10 @@ static int rk808_clkout_probe(struct platform_device *pdev)
- 	rk808_clkout->clkout1_hw.init = &init;
- 
- 	/* optional override of the clockname */
--	of_property_read_string_index(node, "clock-output-names",
-+	of_property_read_string_index(dev->of_node, "clock-output-names",
- 				      0, &init.name);
- 
--	ret = devm_clk_hw_register(&client->dev, &rk808_clkout->clkout1_hw);
-+	ret = devm_clk_hw_register(dev, &rk808_clkout->clkout1_hw);
- 	if (ret)
+-	ret = rk808_regulator_dt_parse_pdata(&pdev->dev, &client->dev,
+-					     rk808->regmap, pdata);
++	ret = rk808_regulator_dt_parse_pdata(&pdev->dev, pdev->dev.parent,
++					     regmap, pdata);
+ 	if (ret < 0)
  		return ret;
  
-@@ -185,10 +183,10 @@ static int rk808_clkout_probe(struct platform_device *pdev)
- 	rk808_clkout->clkout2_hw.init = &init;
+@@ -1326,21 +1329,22 @@ static int rk808_regulator_probe(struct platform_device *pdev)
+ 		nregulators = RK818_NUM_REGULATORS;
+ 		break;
+ 	default:
+-		dev_err(&client->dev, "unsupported RK8XX ID %lu\n",
++		dev_err(&pdev->dev, "unsupported RK8XX ID %lu\n",
+ 			rk808->variant);
+ 		return -EINVAL;
+ 	}
  
- 	/* optional override of the clockname */
--	of_property_read_string_index(node, "clock-output-names",
-+	of_property_read_string_index(dev->of_node, "clock-output-names",
- 				      1, &init.name);
+-	config.dev = &client->dev;
++	config.dev = &pdev->dev;
++	config.dev->of_node = pdev->dev.parent->of_node;
+ 	config.driver_data = pdata;
+-	config.regmap = rk808->regmap;
++	config.regmap = regmap;
  
--	ret = devm_clk_hw_register(&client->dev, &rk808_clkout->clkout2_hw);
-+	ret = devm_clk_hw_register(dev, &rk808_clkout->clkout2_hw);
- 	if (ret)
- 		return ret;
- 
+ 	/* Instantiate the regulators */
+ 	for (i = 0; i < nregulators; i++) {
+ 		rk808_rdev = devm_regulator_register(&pdev->dev,
+ 						     &regulators[i], &config);
+ 		if (IS_ERR(rk808_rdev)) {
+-			dev_err(&client->dev,
++			dev_err(&pdev->dev,
+ 				"failed to register %d regulator\n", i);
+ 			return PTR_ERR(rk808_rdev);
+ 		}
 -- 
 2.35.1
 

@@ -2,132 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCCF5A8160
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:37:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B565A8172
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiHaPhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:37:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
+        id S229954AbiHaPjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:39:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231819AbiHaPh2 (ORCPT
+        with ESMTP id S229723AbiHaPjR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:37:28 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159A2D8E01
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:37:27 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-33dc31f25f9so310704717b3.11
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Z5bWT124P9msiKtHJxXWtamGxGE9nU7NFSbNkXeVir4=;
-        b=q4yt7LQZaKZTdzRnqOfBDWuxDUawgahY2C4+8NClZrlVWpZiq8b8wuUtt2FXanHGEc
-         GKUHZeMZM5jPluxM3gpqfRkq+ZEpQLG+BNvz98YUVO6qqcwbNq/QfwpxfY1bBqJ/PbUe
-         qN9rURlcwiX2U8yaFrSKUwROmM3LF8ndCfS6j0AHC4HsQL8z7s2/MCCQMTRvX3Ne6rDh
-         NX1iVO84IZTdrxORhVNpFjbUB389eDGDLX9acAC39/jQL/Xkcw+zdEhsbVQSkIB5PGSl
-         3MgCLAYUQZJEhdAOCDXe/UR2KtUxqwQZuMK/LjLdJHtYQZbxs0yHQAWgM70EmS5KjdKg
-         raEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Z5bWT124P9msiKtHJxXWtamGxGE9nU7NFSbNkXeVir4=;
-        b=gMVOH7CQiePOOmJKyqh29eJODr+y1nq04vRXek2w5hARi1PEELlCHcFr+olvIo/RwK
-         9lXPlCMNDbGhgnmdUJgLplE/e7CckezRZavZx/05TR/rTsM/vS8lK5fPevC9e20qxvyT
-         Fzv9l5lzIq4hMnQGnLKIjm/I7I9WwoGqNudqTslAExVD+R3ihse6yFT+rTZA8mA1EveB
-         ENK70oJEDQAu18ntX4pVYKWWVKkdrCROfaPwcWtj0UWqtX4MC0FkWfettOB4ctC+zBG1
-         xDxcH67KQ1+CtvXsyQZGZinJxXOwUOSovZTwOvZ5bm6K59a9P2Wpnb3AGepmVeCIC4Xk
-         PgYA==
-X-Gm-Message-State: ACgBeo13hMaqEf2cvqoxtPjz9pJfDcLzlZXFKuZKU5PAD1YZblbvk0Dt
-        jLfixjD1IwSwvB2pdBi0sMr6g9lH5mtQbzPqI0yCxw==
-X-Google-Smtp-Source: AA6agR4eyfrVHwFKMQTAM4+K85p4B7I6c+zSy9tLGnKDo68fc8kY3s9yyQtJtbnPccojelXd5+hkkFEpEU7+woAq0vg=
-X-Received: by 2002:a81:7784:0:b0:33d:ca62:45f5 with SMTP id
- s126-20020a817784000000b0033dca6245f5mr18452862ywc.180.1661960245620; Wed, 31
- Aug 2022 08:37:25 -0700 (PDT)
+        Wed, 31 Aug 2022 11:39:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E311D8B07;
+        Wed, 31 Aug 2022 08:39:16 -0700 (PDT)
+Received: from dimapc.. (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 605226601DE6;
+        Wed, 31 Aug 2022 16:39:11 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661960354;
+        bh=cwgYAH7jwolcyCLtGI04FpqLq8hntubcRxLSWxfNopM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=oRfvv85zoSNQfVjXtI/ID4UDRPhD6artDtb2I5AoSEgREp4o+Jij3G0qU6jSQdbbb
+         0K7CNinJL0fj0MFBHLIzN27bJRcMu8M/V/eckdXPmxX05IV67Oy0TqwNPqwjXRrZ+y
+         Ez45hjwVwU5b5dgqxLDrh+xHa5aZa7h7zzVnWEP+PDVoKuZgWT+nJs4MPllQdgXJaA
+         n2QsFJspmF+z32Y90ucWbmDcYyaxg2SftiXkQXa6x//kOMcPGSb0MI6FBn8PhF43Il
+         vWV+hyeg1oYHO5wglYHluD5bd5Ro1QmwF3M8BYhLv64bphBv+7ZoqgFkkN4Apu2M2Y
+         UBDopC0d+lehw==
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?q?Thomas=20Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
+        Qiang Yu <yuq825@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: [PATCH v4 00/21] Move all drivers to a common dma-buf locking convention
+Date:   Wed, 31 Aug 2022 18:37:36 +0300
+Message-Id: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-4-surenb@google.com>
- <20220831100249.f2o27ri7ho4ma3pe@suse.de>
-In-Reply-To: <20220831100249.f2o27ri7ho4ma3pe@suse.de>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 31 Aug 2022 08:37:14 -0700
-Message-ID: <CAJuCfpHpBCUma_=AdTQ+UkfSkfkov2JbKfxLdp5K9_MoonkT7g@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/30] Lazy percpu counters
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>, dvyukov@google.com,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 3:02 AM Mel Gorman <mgorman@suse.de> wrote:
->
-> On Tue, Aug 30, 2022 at 02:48:52PM -0700, Suren Baghdasaryan wrote:
-> > From: Kent Overstreet <kent.overstreet@linux.dev>
-> >
-> > This patch adds lib/lazy-percpu-counter.c, which implements counters
-> > that start out as atomics, but lazily switch to percpu mode if the
-> > update rate crosses some threshold (arbitrarily set at 256 per second).
-> >
-> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
->
-> Why not use percpu_counter? It has a per-cpu counter that is synchronised
-> when a batch threshold (default 32) is exceeded and can explicitly sync
-> the counters when required assuming the synchronised count is only needed
-> when reading debugfs.
+Hello,
 
-The intent is to use atomic counters for places that are not updated very often.
-This would save memory required for the counters. Originally I had a config
-option to choose which counter type to use but with lazy counters we sacrifice
-memory for performance only when needed while keeping the other counters
-small.
+This series moves all drivers to a dynamic dma-buf locking specification.
+From now on all dma-buf importers are made responsible for holding
+dma-buf's reservation lock around all operations performed over dma-bufs
+in accordance to the locking specification. This allows us to utilize
+reservation lock more broadly around kernel without fearing of a potential
+deadlocks.
 
->
-> --
-> Mel Gorman
-> SUSE Labs
+This patchset passes all i915 selftests. It was also tested using VirtIO,
+Panfrost, Lima, Tegra, udmabuf, AMDGPU and Nouveau drivers. I tested cases
+of display+GPU, display+V4L and GPU+V4L dma-buf sharing (where appropriate),
+which covers majority of kernel drivers since rest of the drivers share
+same or similar code paths.
+
+Changelog:
+
+v4: - Added dma_buf_mmap() to the "locking convention" documentation,
+      which was missed by accident in v3.
+
+    - Added acks from Christian König, Tomasz Figa and Hans Verkuil that
+      they gave to couple v3 patches.
+
+    - Dropped the "_unlocked" postfix from function names that don't have
+      the locked variant, as was requested by Christian König.
+
+    - Factored out the per-driver preparations into separate patches
+      to ease reviewing of the changes, which is now doable without the
+      global dma-buf functions renaming.
+
+    - Factored out the dynamic locking convention enforcements into separate
+      patches which add the final dma_resv_assert_held(dmabuf->resv) to the
+      dma-buf API functions.
+
+v3: - Factored out dma_buf_mmap_unlocked() and attachment functions
+      into aseparate patches, like was suggested by Christian König.
+
+    - Corrected and factored out dma-buf locking documentation into
+      a separate patch, like was suggested by Christian König.
+
+    - Intel driver dropped the reservation locking fews days ago from
+      its BO-release code path, but we need that locking for the imported
+      GEMs because in the end that code path unmaps the imported GEM.
+      So I added back the locking needed by the imported GEMs, updating
+      the "dma-buf attachment locking specification" patch appropriately.
+
+    - Tested Nouveau+Intel dma-buf import/export combo.
+
+    - Tested udmabuf import to i915/Nouveau/AMDGPU.
+
+    - Fixed few places in Etnaviv, Panfrost and Lima drivers that I missed
+      to switch to locked dma-buf vmapping in the drm/gem: Take reservation
+      lock for vmap/vunmap operations" patch. In a result invalidated the
+      Christian's r-b that he gave to v2.
+
+    - Added locked dma-buf vmap/vunmap functions that are needed for fixing
+      vmappping of Etnaviv, Panfrost and Lima drivers mentioned above.
+      I actually had this change stashed for the drm-shmem shrinker patchset,
+      but then realized that it's already needed by the dma-buf patches.
+      Also improved my tests to better cover these code paths.
+
+v2: - Changed locking specification to avoid problems with a cross-driver
+      ww locking, like was suggested by Christian König. Now the attach/detach
+      callbacks are invoked without the held lock and exporter should take the
+      lock.
+
+    - Added "locking convention" documentation that explains which dma-buf
+      functions and callbacks are locked/unlocked for importers and exporters,
+      which was requested by Christian König.
+
+    - Added ack from Tomasz Figa to the V4L patches that he gave to v1.
+
+Dmitry Osipenko (21):
+  dma-buf: Add unlocked variant of vmapping functions
+  dma-buf: Add unlocked variant of attachment-mapping functions
+  drm/gem: Take reservation lock for vmap/vunmap operations
+  drm/prime: Prepare to dynamic dma-buf locking specification
+  drm/armada: Prepare to dynamic dma-buf locking specification
+  drm/i915: Prepare to dynamic dma-buf locking specification
+  drm/omapdrm: Prepare to dynamic dma-buf locking specification
+  drm/tegra: Prepare to dynamic dma-buf locking specification
+  drm/etnaviv: Prepare to dynamic dma-buf locking specification
+  RDMA/umem: Prepare to dynamic dma-buf locking specification
+  misc: fastrpc: Prepare to dynamic dma-buf locking specification
+  xen/gntdev: Prepare to dynamic dma-buf locking specification
+  media: videobuf2: Prepare to dynamic dma-buf locking specification
+  media: tegra-vde: Prepare to dynamic dma-buf locking specification
+  dma-buf: Move dma_buf_vmap() to dynamic locking specification
+  dma-buf: Move dma_buf_attach() to dynamic locking specification
+  dma-buf: Move dma_buf_map_attachment() to dynamic locking
+    specification
+  dma-buf: Move dma_buf_mmap() to dynamic locking specification
+  dma-buf: Document dynamic locking convention
+  media: videobuf2: Stop using internal dma-buf lock
+  dma-buf: Remove obsoleted internal lock
+
+ Documentation/driver-api/dma-buf.rst          |   6 +
+ drivers/dma-buf/dma-buf.c                     | 211 +++++++++++++++---
+ drivers/gpu/drm/armada/armada_gem.c           |   8 +-
+ drivers/gpu/drm/drm_client.c                  |   4 +-
+ drivers/gpu/drm/drm_gem.c                     |  24 ++
+ drivers/gpu/drm/drm_gem_dma_helper.c          |   6 +-
+ drivers/gpu/drm/drm_gem_framebuffer_helper.c  |   6 +-
+ drivers/gpu/drm/drm_gem_ttm_helper.c          |   9 +-
+ drivers/gpu/drm/drm_prime.c                   |   6 +-
+ drivers/gpu/drm/etnaviv/etnaviv_gem_prime.c   |   2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c    |   2 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.c    |  12 +
+ .../drm/i915/gem/selftests/i915_gem_dmabuf.c  |  16 +-
+ drivers/gpu/drm/lima/lima_sched.c             |   4 +-
+ drivers/gpu/drm/omapdrm/omap_gem_dmabuf.c     |   4 +-
+ drivers/gpu/drm/panfrost/panfrost_dump.c      |   4 +-
+ drivers/gpu/drm/panfrost/panfrost_perfcnt.c   |   6 +-
+ drivers/gpu/drm/qxl/qxl_object.c              |  17 +-
+ drivers/gpu/drm/qxl/qxl_prime.c               |   4 +-
+ drivers/gpu/drm/tegra/gem.c                   |  17 +-
+ drivers/infiniband/core/umem_dmabuf.c         |   7 +-
+ .../common/videobuf2/videobuf2-dma-contig.c   |  22 +-
+ .../media/common/videobuf2/videobuf2-dma-sg.c |  19 +-
+ .../common/videobuf2/videobuf2-vmalloc.c      |  17 +-
+ .../platform/nvidia/tegra-vde/dmabuf-cache.c  |   6 +-
+ drivers/misc/fastrpc.c                        |   6 +-
+ drivers/xen/gntdev-dmabuf.c                   |   8 +-
+ include/drm/drm_gem.h                         |   3 +
+ include/linux/dma-buf.h                       |  17 +-
+ 29 files changed, 318 insertions(+), 155 deletions(-)
+
+-- 
+2.37.2
+

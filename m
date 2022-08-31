@@ -2,117 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDFA15A75AB
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227735A75AD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiHaFUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 01:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55826 "EHLO
+        id S229502AbiHaFXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 01:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229659AbiHaFT4 (ORCPT
+        with ESMTP id S229437AbiHaFX0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 01:19:56 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C493D5E;
-        Tue, 30 Aug 2022 22:19:45 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27V5D2AI017414;
-        Wed, 31 Aug 2022 05:19:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=3h1aiXrphk5T2rqN3UBCgmzr+FGo6Il6A5/GglCrd1c=;
- b=k1QMkybIbnx2WhWPTIF0ZE2RuuHNovTdD0wXsoTKtfBGwTHwOvTVxUB2tE0fHwO1yNc6
- pdyyUHWaLXLrejCatOBwYoonVPbcpsJ/vYP5GXH58Es386FkupRhdb2gBvS/7kUdJ2PY
- F5OJTUvdfNjV9R2XKD7JtynBwiU+WCxFdgqUp33LCHUeqxv5/OmR4pRslvIpmCuj7+9p
- iN5nMROOQpLCs5+WOf/X02DYKIBLgVrTGtcaXCq6BxTAGn3Hhn6hxwwy0PvR7arDN2+5
- bGvK0UCdXOFDV+LShmyP33Aif5l9LevqrpL5sEnt0+rlXBhylb6I0AFnFIJPgBUEdP05 sg== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3j9jm4jy6q-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 Aug 2022 05:19:36 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27V5JZn6014135
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 Aug 2022 05:19:35 GMT
-Received: from hyd-lnxbld559.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Tue, 30 Aug 2022 22:19:30 -0700
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-To:     freedreno <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        "Stephen Boyd" <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     Douglas Anderson <dianders@chromium.org>,
-        <krzysztof.kozlowski@linaro.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v6 6/6] arm64: dts: qcom: sc7280: Add Reset support for gpu
-Date:   Wed, 31 Aug 2022 10:48:27 +0530
-Message-ID: <20220831104741.v6.6.I6a1fca5d53c886c05ea3e24cd4282d31c9c0cd0b@changeid>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1661923108-789-1-git-send-email-quic_akhilpo@quicinc.com>
-References: <1661923108-789-1-git-send-email-quic_akhilpo@quicinc.com>
+        Wed, 31 Aug 2022 01:23:26 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDB2B6D72
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 22:23:25 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id z72so11034102iof.12
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 22:23:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=rW4IQ+xjfRGsn6d/leXF4ApTBgqpSiBCGDBfRzUGS+g=;
+        b=mTdRK943io74C39RB7AOeX0pTzIzNk9KHFsdhRSS7UXdjybw6YeSMrgbAsnwXzTAoY
+         jXMBHrsV4W77kuZQOdG0ykGmPJqVtNbbBUQvfesR55OLJFUT5VZbtMDKtH94fJ1RI539
+         8Rt2h0ugwl8qfT8p+C6C4rnXkyx2WhokXuAewpEVxy62Ia5FBqBQBL2GVQFmrtYXxCe/
+         WB9N+Q4OPOjCU7BR3JSSIfSRSBI/0iKI+fTqtILHhJTPCtN7lD6wzhtbtVM4+37UiX/M
+         DsH3PJdFkBVSozZ/72e7v8aiiX3lNZSMWMmdg9OBRlZdMb2LZ39NffLpGosqhT/dxgEU
+         Tb8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=rW4IQ+xjfRGsn6d/leXF4ApTBgqpSiBCGDBfRzUGS+g=;
+        b=j3pDxFk8+maA4GFGEYL7VoXiWowZ0cBJzbj0z750DwK7axqEPy/KpgKzyKJTM6FHUX
+         uJ23DN5q+BPQMOvxzctkzqOctW6D0JJujibT5l6SCke6lPBmJKgrP49o2+mqL06ZJFxT
+         q5c0UOvkVQnZK9H88wh4kfUBlMmM8UvAnEgCmeIeuJBaRFOlNaYuDE9RF3dTVFjvkARa
+         eXd8LOMbE4tP6Ir9Yh+ZtcVcU0K8m/AsWaKEwr6012uzHZif9p7C8NkBp/zuY2GpMk4P
+         GBW4C+g5U6+3v+UwaET0+b+3c2V9OYV3xgho88PlubUzIBUf93sFaWpCFrUbuNq3Zk9V
+         HTfQ==
+X-Gm-Message-State: ACgBeo3/Tl2Yr6PSsq59/nm8JyyY5vZTWebKZN7uCTnKsH+vAG21VY4Q
+        /3atymqzErj0TIYvfHM9TanUsgjR4wNGCfODsBrj4YSE
+X-Google-Smtp-Source: AA6agR6axZJPbqDTTuhQksx5GAmJ4iOhDb5mUHuLTv855yduTm19vd2Lu6I5XKDIbABtpxfR7TDmDu++/lxyPo+qKh0=
+X-Received: by 2002:a02:294a:0:b0:349:fb9e:b5e0 with SMTP id
+ p71-20020a02294a000000b00349fb9eb5e0mr14284324jap.115.1661923373032; Tue, 30
+ Aug 2022 22:22:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: _rOgocCXem56kzbfs3X5mN2S0oNYw-57
-X-Proofpoint-GUID: _rOgocCXem56kzbfs3X5mN2S0oNYw-57
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-31_03,2022-08-30_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- adultscore=0 malwarescore=0 priorityscore=1501 lowpriorityscore=0
- phishscore=0 clxscore=1015 suspectscore=0 mlxscore=0 impostorscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208310025
+References: <20220829062202.3287-1-zong.li@sifive.com> <20220830082620.1680602-1-ben.dooks@sifive.com>
+ <fdec1b72-27f3-96e6-5e19-d54ded4aea68@microchip.com> <cefcf96f-5bcc-d134-fbe5-d1169313b6f3@codethink.co.uk>
+In-Reply-To: <cefcf96f-5bcc-d134-fbe5-d1169313b6f3@codethink.co.uk>
+From:   Zong Li <zongbox@gmail.com>
+Date:   Wed, 31 Aug 2022 13:22:41 +0800
+Message-ID: <CA+ZOyajWRUFppg26O1XHfRuJHWB3jk-=-i=FBV9XYgHgshuwQA@mail.gmail.com>
+Subject: Re: [PATCH] soc: sifive: ccache: reduce printing on init
+To:     Ben Dooks <ben.dooks@codethink.co.uk>
+Cc:     Conor.Dooley@microchip.com, ben.dooks@sifive.com,
+        zong.li@sifive.com, palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, greentime.hu@sifive.com,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Reset using GPUCC driver for GPU. This helps to ensure
-that GPU state is reset by making sure that CX head switch is collapsed.
+Ben Dooks <ben.dooks@codethink.co.uk> =E6=96=BC 2022=E5=B9=B48=E6=9C=8831=
+=E6=97=A5 =E9=80=B1=E4=B8=89 =E5=87=8C=E6=99=A81:04=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+>
+> On 30/08/2022 17:30, Conor.Dooley@microchip.com wrote:
+> > On 30/08/2022 09:26, Ben Dooks wrote:
+> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know=
+ the content is safe
+> >>
+> >> The driver prints out 6 lines on startup, which can easily be redcued
+> >> to two lines without losing any information.
+> >>
+> >> Note, to make the types work better, uint64_t has been replaced with
+> >> ULL to make the unsigned long long match the format in the print
+> >> statement.
+> >>
+> >> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+> >> ---
+> >>   drivers/soc/sifive/sifive_ccache.c | 25 +++++++++++--------------
+> >>   1 file changed, 11 insertions(+), 14 deletions(-)
+> >>
+> >> diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive/s=
+ifive_ccache.c
+> >> index 46ce33db7d30..65a10a6ee211 100644
+> >> --- a/drivers/soc/sifive/sifive_ccache.c
+> >> +++ b/drivers/soc/sifive/sifive_ccache.c
+> >> @@ -76,20 +76,17 @@ static void setup_sifive_debug(void)
+> >>
+> >>   static void ccache_config_read(void)
+> >>   {
+> >> -       u32 regval, val;
+> >> -
+> >> -       regval =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+> >> -       val =3D regval & 0xFF;
+> >> -       pr_info("CCACHE: No. of Banks in the cache: %d\n", val);
+> >> -       val =3D (regval & 0xFF00) >> 8;
+> >> -       pr_info("CCACHE: No. of ways per bank: %d\n", val);
+> >> -       val =3D (regval & 0xFF0000) >> 16;
+> >> -       pr_info("CCACHE: Sets per bank: %llu\n", (uint64_t)1 << val);
+> >> -       val =3D (regval & 0xFF000000) >> 24;
+> >> -       pr_info("CCACHE: Bytes per cache block: %llu\n", (uint64_t)1 <=
+< val);
+> >> -
+> >> -       regval =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+> >> -       pr_info("CCACHE: Index of the largest way enabled: %d\n", regv=
+al);
+> >> +       u32 cfg;
+> >> +
+> >> +       cfg =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+> >> +
+> >> +       pr_info("CCACHE: %u banks, %u ways, sets/bank=3D%llu, bytes/bl=
+ock=3D%llu\n",
+> >> +               (cfg & 0xff), (cfg >> 8) & 0xff,
+> >> +               1ULL << ((cfg >> 16) & 0xff),
+> >
+> > This is just BIT_ULL((cfg >> 16) & 0xff), no?
+> > Would be nice too if these were defined, so you'd have something
+> > like BIT_ULL((cfg >> SETS_PER_BANK_SHIFT) & 0xff)
+> >
+> > I do like the cleanup of the uint64_t & cutting down on the prints
+> > though :) Again, it'd be nice if you and Zong could collaborate on
+> > a combined v2.
+>
+> I think even BIT_UL() would do here, if someone is going to make a
+> cache bigger than 2GiB we'll probably be quite old by then, so v2
+> might have the last two values down as %lu.
+>
 
-Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
----
+Hi Ben,
+Thanks for your suggestion, If you don't mind, I will take this into
+my V2 patchset.
 
-(no changes since v1)
-
- arch/arm64/boot/dts/qcom/sc7280.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-index e66fc67..f5257d6 100644
---- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
-@@ -2243,6 +2243,9 @@
- 			nvmem-cells = <&gpu_speed_bin>;
- 			nvmem-cell-names = "speed_bin";
- 
-+			resets = <&gpucc GPU_CX_COLLAPSE>;
-+			reset-names = "cx_collapse";
-+
- 			gpu_opp_table: opp-table {
- 				compatible = "operating-points-v2";
- 
--- 
-2.7.4
-
+> > Thanks,
+> > Conor.
+> >
+> >> +               1ULL << ((cfg >> 24) & 0xff));
+> >> +
+> >> +       cfg =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+> >> +       pr_info("CCACHE: Index of the largest way enabled: %d\n", cfg)=
+;
+> >>   }
+> >>
+> >>   static const struct of_device_id sifive_ccache_ids[] =3D {
+> >> --
+> >> 2.35.1
+> >>
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> >
+>
+> --
+> Ben Dooks                               http://www.codethink.co.uk/
+> Senior Engineer                         Codethink - Providing Genius
+>
+> https://www.codethink.co.uk/privacy.html
+>
+>
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv

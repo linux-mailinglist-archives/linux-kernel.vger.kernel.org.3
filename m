@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59DF75A724C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:17:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234F15A7250
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:17:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231161AbiHaARN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 20:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54626 "EHLO
+        id S231641AbiHaART (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:17:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiHaARK (ORCPT
+        with ESMTP id S231185AbiHaARL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 20:17:10 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A7F78E981
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:17:09 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-340a4dcb403so171049157b3.22
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:17:09 -0700 (PDT)
+        Tue, 30 Aug 2022 20:17:11 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1469997D6A
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:17:11 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id a33-20020a630b61000000b00429d91cc649so6177533pgl.8
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:17:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date;
-        bh=E8CDFOqlCaKG90iMqEwm/LfKwcjkQWKMwvI704mam+A=;
-        b=sRSEFmv5Eq+OrHQG3bjz9zFYirORCkjJLzQnOIMBnWRXsvlU7fvBlPXYxpI9FDc2rd
-         a/dMnWyZQgek0+mvBdyUF1z0nTKA8/Z8jfLK4eJ5yIf/1+RK9bfak4wP3pwawLcZRa8Z
-         NejyAOBmxYlk+ml03JnVVb8A2J9/4eJq9/UMjnqU3XWsEUvtP36HsP5R865fdUKQKdVq
-         SFCKMPBiJg8WaXiAibhA9+mDJIme+ONB8hCAmF5pEfwMcEfZXwgCKPCDwdcwBG9ghuUP
-         FQmFT+FnN3Q5xmIkNtU5bHjLLK/W2uL9i6v1b3JVtGTGKvZ7m7a5HZai1Xcd5fiJdTKY
-         HVhw==
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc;
+        bh=inZmAldSU4aSVbi2qd8QeS7mQNQRQnMt4A+ie/z8kT4=;
+        b=fw5mYkkDqyqthv1ZRUQttXv6Rt6nsjmDZuPEL/hSLeU1qHD2O7Pudcyzxr1Eltpwap
+         VBveF2fI4xy3WgARvDqfhk0cGTyAXcKDKfw/2X4eyn8teb5Ig6p233OlvrtBmpJ6u7wE
+         yi/6ALf7NqSqSQJgVbppcAeu779Yn5Q4M74lunps77pzDcx4J8XThFxm7itG8VnqOpUP
+         7dgZGNhCGoY3KrB4T3RR+dL0APKedZRNaunchY5WFgIexJPp8YDEMIjElBU7XgOWewQ1
+         H2EwW7vghCKWVrW3jsE1i6ipr0jNdm3vAddWKajWAloOh7Qg3MpBy9Z3O5z40P0xSqAl
+         CUHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=E8CDFOqlCaKG90iMqEwm/LfKwcjkQWKMwvI704mam+A=;
-        b=1kF1gu9d7zpX6aCOYh1IjDAmIw1NmIR8IZiy0RJgJimh8k5JRlvW1hErulmFIm5d46
-         DF1mGfTMBLimndjbhJrSvmank3y7VgXNHhdCUtyemLAvjl7g4zbe5cv+lqyUYU8jZm+3
-         QT4Hp7VUUJN6GQ+KkRLejmyuJzpZgRwZ1v5CfUbFBL3X70XFJMd6M3wHkIk6FOKKK6uj
-         Aqx4bEs6g+qIXxtbBtYQ+tPYNKY4vc0dhR9WVUU2H+HsuOZe/YCkXnez0MIAdb/OxA4n
-         sk7fb33Gw3/SVwWaVK12VE2NnD1JmAk65tSjpV9KeNmlrvJhDr0XcyrM2bv0HFwEdC0c
-         OzkA==
-X-Gm-Message-State: ACgBeo0BZzNf3eFgf7jqoBM2JSzflS1TnXUKxL7bp7xkxdOLweZld9Ed
-        VIW0m0CkpTsfR95misJEuC5HiSvjMwI=
-X-Google-Smtp-Source: AA6agR7YMMnxH+GyS5OiH482L8sF/qgGgkG7TztN8IlTCjBXU6MAfEV2RmSP2UNuzGvtNEBs+Yo5GGW6HIQ=
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc;
+        bh=inZmAldSU4aSVbi2qd8QeS7mQNQRQnMt4A+ie/z8kT4=;
+        b=5Z8ZqQr4MAggz3Pa7DYFOe5VTIpBTv3Vg4/BcfEi9wxYn1AZ0fc/S4MnCCuH+f5Bze
+         VK+P5ZGCGBFbmUPkfFdq+wYstARwPda2AM+kuWbmHLmrdU366GZ8uReBWpnX40VwaZGo
+         6Zd5KrTqP0WiQjfT9x/mq762SWyxp2DCWnZngm5omjIBD9UD+TWEN90vvWtUiQn6UxyF
+         qM6qCONh8n+VPfgn6p5cTGL6Xuhp4ssswrjplLRur3bsNkSG0SLeEedbewjtpqWt+VbO
+         p0uW6LVxPBQFuCsZT9kEsxZEVzXEtXo6VSAEyUlBCp/0Tk4B5naB7APCBNkOm4eG7E/Y
+         MpHA==
+X-Gm-Message-State: ACgBeo3oq40Pw2i6kyT2AAdj2wOCagPPd1xtRXG9SHC+UoCUXiZlgSuW
+        t/LAbSn/zp3RWzc1oX6c/1v8HaLSQPs=
+X-Google-Smtp-Source: AA6agR61rRRBtVSh/bqQGKudwNlbYfL17nqG83gwCw/bfIDZc5+kB//aIfVhaX+yuKKqFlBUleMQAN1NbAM=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:c685:0:b0:692:a21b:bd54 with SMTP id
- k127-20020a25c685000000b00692a21bbd54mr13279505ybf.262.1661905028768; Tue, 30
- Aug 2022 17:17:08 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:902:edc3:b0:172:8ae3:9778 with SMTP id
+ q3-20020a170902edc300b001728ae39778mr23098814plk.72.1661905030673; Tue, 30
+ Aug 2022 17:17:10 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Wed, 31 Aug 2022 00:17:03 +0000
+Date:   Wed, 31 Aug 2022 00:17:04 +0000
+In-Reply-To: <20220831001706.4075399-1-seanjc@google.com>
 Mime-Version: 1.0
+References: <20220831001706.4075399-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Message-ID: <20220831001706.4075399-1-seanjc@google.com>
-Subject: [PATCH 0/3] KVM: x86: Clean up MSR filtering+exiting docs
+Message-ID: <20220831001706.4075399-2-seanjc@google.com>
+Subject: [PATCH 1/3] KVM: x86: Delete documentation for READ|WRITE in KVM_X86_SET_MSR_FILTER
 From:   Sean Christopherson <seanjc@google.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>
 Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -68,22 +70,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Attempt to improve the documentation for MSR filtering+exiting.  The
-existing documentation is quite verbose, but manages to avoid stating what
-KVM actually does, and unnecessarily introduces new terminology, e.g. uses
-"deflect" where KVM typically use "intercept".
+Delete the paragraph that describes the behavior when both
+KVM_MSR_FILTER_READ | KVM_MSR_FILTER_WRITE are set for a range.  There is
+nothing special about KVM's handling of this combination, whereas
+explicitly documenting the combination suggests that there is some magic
+behavior the user needs to be aware of.
 
-Sean Christopherson (3):
-  KVM: x86: Delete documentation for READ|WRITE in
-    KVM_X86_SET_MSR_FILTER
-  KVM: x86: Reword MSR filtering docs to more precisely define behavior
-  KVM: x86: Clean up KVM_CAP_X86_USER_SPACE_MSR documentation
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ Documentation/virt/kvm/api.rst | 7 -------
+ 1 file changed, 7 deletions(-)
 
- Documentation/virt/kvm/api.rst | 117 +++++++++++++++++----------------
- 1 file changed, 59 insertions(+), 58 deletions(-)
-
-
-base-commit: 2c65ad2d8ed2b4a5ddeeec2406eda74a4a4c5230
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index 236a797be71c..5148b431ed13 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -4115,13 +4115,6 @@ flags values for ``struct kvm_msr_filter_range``:
+   a write for a particular MSR should be handled regardless of the default
+   filter action.
+ 
+-``KVM_MSR_FILTER_READ | KVM_MSR_FILTER_WRITE``
+-
+-  Filter both read and write accesses to MSRs using the given bitmap. A 0
+-  in the bitmap indicates that both reads and writes should immediately fail,
+-  while a 1 indicates that reads and writes for a particular MSR are not
+-  filtered by this range.
+-
+ flags values for ``struct kvm_msr_filter``:
+ 
+ ``KVM_MSR_FILTER_DEFAULT_ALLOW``
 -- 
 2.37.2.672.g94769d06f0-goog
 

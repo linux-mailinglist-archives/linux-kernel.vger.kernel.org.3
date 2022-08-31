@@ -2,135 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B24E5A7BD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD275A7BDF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:04:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiHaLCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 07:02:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
+        id S229510AbiHaLEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 07:04:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiHaLCN (ORCPT
+        with ESMTP id S229449AbiHaLEu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 07:02:13 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C17A9F8D4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 04:02:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=MIME-Version:Content-Type:References:In-Reply-To:Date:Cc:To:
-        From:Subject:Message-ID:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=VnuzXvi/r6r6IliU1js/OsrQoTnENR453xGhcd9X4ts=; b=P0iVndoLG0wOrIgh9DfoeYddIq
-        BaKbwUYrEKwGGvM1ZuJp544fR5V2ur3rYLY4BNzLICFPFwFvMd1ZN76nPHi/pFTTGskiIfv+jcr+D
-        s2TNT4n71M41CJ3cnbSwLhJRf6Tw3UqjHSmgVjDBTNjvv4qHKs8wJbmPdQn/26NKmG+tiCXEDtBlZ
-        gftcX3YvBSa9nIN7fuK7KSo0Nhiw2VGZyNdZUuGz5+NVxg412A4MZDrRa6y5Qg5o3Y+6PQy2raBN1
-        HUwsB5xOmRXQbZ1luwc+oyThp9DfL7t7bkx/TemRdTMSioA1xcynKnmcsBxJzHuPBxzkYapKTGsrV
-        Jp0hMY9Q==;
-Received: from 1.pool85-50-22.dynamic.orange.es ([85.50.22.1] helo=[192.168.1.125])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oTLTh-005yGW-CX; Wed, 31 Aug 2022 13:01:49 +0200
-Message-ID: <16e141fc3d9cce0f46718ffb9e861e5d3b9da6ab.camel@igalia.com>
-Subject: Re: [PATCH] ipack: Check dev_set_name() return value
-From:   Samuel Iglesias =?ISO-8859-1?Q?Gons=E1lvez?= 
-        <siglesias@igalia.com>
-To:     Bo Liu <liubo03@inspur.com>, jens.taprogge@taprogge.org,
-        gregkh@linuxfoundation.org
-Cc:     industrypack-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 31 Aug 2022 13:01:38 +0200
-In-Reply-To: <20220805091057.19951-1-liubo03@inspur.com>
-References: <20220805091057.19951-1-liubo03@inspur.com>
-Content-Type: multipart/signed; micalg="pgp-sha256";
-        protocol="application/pgp-signature"; boundary="=-42SrFaz+DLoXKjPro8/p"
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 31 Aug 2022 07:04:50 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9051A614C;
+        Wed, 31 Aug 2022 04:04:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4591121E98;
+        Wed, 31 Aug 2022 11:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661943888; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7rUfy2mjgKSZvW8Hv+C3XQ3MWeegbpsZkXWtmcFePxA=;
+        b=cN2bfJUKQAFYmP5lfcBq7Xllkrj98P3EGVrNed2TEDWPt+4B+jNWMWMPYksfasqywozxQl
+        mL8EMZ6a66b5xJbd4UlfD2MNL6uTjYXxHO/9CYo89r7wcfHQeaKVaHhcVHojSU+ksOT0kk
+        +7K2U+exV2KwTs7YfMEcA1DAIvKh6uk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661943888;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7rUfy2mjgKSZvW8Hv+C3XQ3MWeegbpsZkXWtmcFePxA=;
+        b=IfQPklv0XIl0V4DwmvZuLeaWytRl8KT5euyQIi2kPBMZ6NVEGmXYMwS1+tudUmennmbg5a
+        OAGjG2rZvG7tIWCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 2E68F13A7C;
+        Wed, 31 Aug 2022 11:04:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FO5ZC1BAD2NVcwAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 31 Aug 2022 11:04:48 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 83F66A067B; Wed, 31 Aug 2022 13:04:47 +0200 (CEST)
+Date:   Wed, 31 Aug 2022 13:04:47 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Zhang Yi <yi.zhang@huawei.com>
+Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, cluster-devel@redhat.com,
+        ntfs3@lists.linux.dev, ocfs2-devel@oss.oracle.com,
+        reiserfs-devel@vger.kernel.org, jack@suse.cz, tytso@mit.edu,
+        akpm@linux-foundation.org, axboe@kernel.dk,
+        viro@zeniv.linux.org.uk, rpeterso@redhat.com, agruenba@redhat.com,
+        almaz.alexandrovich@paragon-software.com, mark@fasheh.com,
+        dushistov@mail.ru, hch@infradead.org, chengzhihao1@huawei.com,
+        yukuai3@huawei.com
+Subject: Re: [PATCH 09/14] reiserfs: replace ll_rw_block()
+Message-ID: <20220831110447.4qm5cme3kenfa5cd@quack3>
+References: <20220831072111.3569680-1-yi.zhang@huawei.com>
+ <20220831072111.3569680-10-yi.zhang@huawei.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831072111.3569680-10-yi.zhang@huawei.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed 31-08-22 15:21:06, Zhang Yi wrote:
+> ll_rw_block() is not safe for the sync read/write path because it cannot
+> guarantee that submitting read/write IO if the buffer has been locked.
+> We could get false positive EIO after wait_on_buffer() in read path if
+> the buffer has been locked by others. So stop using ll_rw_block() in
+> reiserfs. We also switch to new bh_readahead_batch() helper for the
+> buffer array readahead path.
+> 
+> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
 
---=-42SrFaz+DLoXKjPro8/p
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Looks good to me. Feel free to add:
 
-Hi Bo,
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-Thanks for your contribution!
+								Honza
 
-Patch is,
-
-Acked-by: Samuel Iglesias Gonsalvez <siglesias@igalia.com>
-
-Greg, Would you mind picking this patch series through your char-misc
-tree?
-
-Thanks!
-
-Sam
-
-On Fri, 2022-08-05 at 05:10 -0400, Bo Liu wrote:
-> It's possible that dev_set_name() returns -ENOMEM, catch and handle
-> this.
->=20
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
 > ---
-> =C2=A0drivers/ipack/ipack.c | 5 ++++-
-> =C2=A01 file changed, 4 insertions(+), 1 deletion(-)
->=20
-> diff --git a/drivers/ipack/ipack.c b/drivers/ipack/ipack.c
-> index b1c3198355e7..74d449858a61 100644
-> --- a/drivers/ipack/ipack.c
-> +++ b/drivers/ipack/ipack.c
-> @@ -429,8 +429,11 @@ int ipack_device_init(struct ipack_device *dev)
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev->dev.bus =3D &ipack_b=
-us_type;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev->dev.release =3D ipac=
-k_device_release;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev->dev.parent =3D dev->=
-bus->parent;
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0dev_set_name(&dev->dev,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D dev_set_name(&dev->dev=
-,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "ipack-dev.%u.%u", dev->bu=
-s->bus_nr, dev->slot);
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0return ret;
-> +
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0device_initialize(&dev->d=
-ev);
-> =C2=A0
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (dev->bus->ops->set_cl=
-ockrate(dev, 8))
-
-
---=-42SrFaz+DLoXKjPro8/p
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEQP+ZAvaXWkfuKXiEf/S6MvF9w0MFAmMPP5IACgkQf/S6MvF9
-w0PxkRAAv1Lv7TRm2HxWebuQY4XSlDQIM0y9z5xmw4S8GipFj/K1LWrHVa9G+Ua4
-NMVBAKm5wW31AsrAIfNlEUhwYB3UTfz3wGPdKX2fUCBVjPdUz1pjcgL+MOF3Kdj8
-ZhCYwhnhvXp5MRNTKw/UPK25Y54hux6QBllc8WddM9zvnC2ZhI+2lov6a4QIqTgh
-6fl4KQ6Pbf2u27VcNzy07X6lgQt2M2I908nG5RedjTAgd4CiiCDN7CO0ckjHRWO/
-w8Z7BxzaCTS9cQsQu0zX3IOyXHvyEWmBYGcIdjOKKOFk/+dW1J11C5MJySW4iddn
-WhNh7b/cAV6N1ohtRFHsKsSZ9T4fWxPsxQvDjtSDHnkP/cdZ+XCSs6K3+f0Bhd9b
-ijtnOkek0GDdsaNr+AX0S3jDQLevHUyf52hVadXYOEJhPZbjRLcYN6SavmeU40nv
-G0B8CtAyrDfySkJ8usq5SFkZ1fl6/MRsUhyjOoMfE1I7Wck/ZLpxIfLQbYXpoa71
-oNR7d2Lgsj3XHaVHxxE7Hn0uMSdxT6pzDhbHS7JF4c1BZI/Zjti9tkyb/uRuPlgk
-i276LneUe8/2J3TCGauV8wH6b07avppKKC7vMEogjdDMmGfX/ISa9wmVCtsh/N5M
-gVDYur8B4xXOlBQW/kcfFoWaKi6hyrUS+g/klJN8HL42lvqAJkY=
-=2Yrp
------END PGP SIGNATURE-----
-
---=-42SrFaz+DLoXKjPro8/p--
+>  fs/reiserfs/journal.c | 11 ++++++-----
+>  fs/reiserfs/stree.c   |  4 ++--
+>  fs/reiserfs/super.c   |  4 +---
+>  3 files changed, 9 insertions(+), 10 deletions(-)
+> 
+> diff --git a/fs/reiserfs/journal.c b/fs/reiserfs/journal.c
+> index 94addfcefede..699b1b8d5b73 100644
+> --- a/fs/reiserfs/journal.c
+> +++ b/fs/reiserfs/journal.c
+> @@ -868,7 +868,7 @@ static int write_ordered_buffers(spinlock_t * lock,
+>  		 */
+>  		if (buffer_dirty(bh) && unlikely(bh->b_page->mapping == NULL)) {
+>  			spin_unlock(lock);
+> -			ll_rw_block(REQ_OP_WRITE, 1, &bh);
+> +			write_dirty_buffer(bh, 0);
+>  			spin_lock(lock);
+>  		}
+>  		put_bh(bh);
+> @@ -1054,7 +1054,7 @@ static int flush_commit_list(struct super_block *s,
+>  		if (tbh) {
+>  			if (buffer_dirty(tbh)) {
+>  		            depth = reiserfs_write_unlock_nested(s);
+> -			    ll_rw_block(REQ_OP_WRITE, 1, &tbh);
+> +			    write_dirty_buffer(tbh, 0);
+>  			    reiserfs_write_lock_nested(s, depth);
+>  			}
+>  			put_bh(tbh) ;
+> @@ -2240,7 +2240,7 @@ static int journal_read_transaction(struct super_block *sb,
+>  		}
+>  	}
+>  	/* read in the log blocks, memcpy to the corresponding real block */
+> -	ll_rw_block(REQ_OP_READ, get_desc_trans_len(desc), log_blocks);
+> +	bh_read_batch(log_blocks, get_desc_trans_len(desc));
+>  	for (i = 0; i < get_desc_trans_len(desc); i++) {
+>  
+>  		wait_on_buffer(log_blocks[i]);
+> @@ -2342,10 +2342,11 @@ static struct buffer_head *reiserfs_breada(struct block_device *dev,
+>  		} else
+>  			bhlist[j++] = bh;
+>  	}
+> -	ll_rw_block(REQ_OP_READ, j, bhlist);
+> +	bh = bhlist[0];
+> +	bh_read_nowait(bh, 0);
+> +	bh_readahead_batch(&bhlist[1], j - 1, 0);
+>  	for (i = 1; i < j; i++)
+>  		brelse(bhlist[i]);
+> -	bh = bhlist[0];
+>  	wait_on_buffer(bh);
+>  	if (buffer_uptodate(bh))
+>  		return bh;
+> diff --git a/fs/reiserfs/stree.c b/fs/reiserfs/stree.c
+> index 9a293609a022..84c12a1947b2 100644
+> --- a/fs/reiserfs/stree.c
+> +++ b/fs/reiserfs/stree.c
+> @@ -579,7 +579,7 @@ static int search_by_key_reada(struct super_block *s,
+>  		if (!buffer_uptodate(bh[j])) {
+>  			if (depth == -1)
+>  				depth = reiserfs_write_unlock_nested(s);
+> -			ll_rw_block(REQ_OP_READ | REQ_RAHEAD, 1, bh + j);
+> +			bh_readahead(bh[j], REQ_RAHEAD);
+>  		}
+>  		brelse(bh[j]);
+>  	}
+> @@ -685,7 +685,7 @@ int search_by_key(struct super_block *sb, const struct cpu_key *key,
+>  			if (!buffer_uptodate(bh) && depth == -1)
+>  				depth = reiserfs_write_unlock_nested(sb);
+>  
+> -			ll_rw_block(REQ_OP_READ, 1, &bh);
+> +			bh_read_nowait(bh, 0);
+>  			wait_on_buffer(bh);
+>  
+>  			if (depth != -1)
+> diff --git a/fs/reiserfs/super.c b/fs/reiserfs/super.c
+> index c88cd2ce0665..8b1db82b6949 100644
+> --- a/fs/reiserfs/super.c
+> +++ b/fs/reiserfs/super.c
+> @@ -1702,9 +1702,7 @@ static int read_super_block(struct super_block *s, int offset)
+>  /* after journal replay, reread all bitmap and super blocks */
+>  static int reread_meta_blocks(struct super_block *s)
+>  {
+> -	ll_rw_block(REQ_OP_READ, 1, &SB_BUFFER_WITH_SB(s));
+> -	wait_on_buffer(SB_BUFFER_WITH_SB(s));
+> -	if (!buffer_uptodate(SB_BUFFER_WITH_SB(s))) {
+> +	if (bh_read(SB_BUFFER_WITH_SB(s), 0)) {
+>  		reiserfs_warning(s, "reiserfs-2504", "error reading the super");
+>  		return 1;
+>  	}
+> -- 
+> 2.31.1
+> 
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

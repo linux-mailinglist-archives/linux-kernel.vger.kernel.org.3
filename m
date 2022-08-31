@@ -2,87 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E4E5A8696
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:17:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAEF5A869C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:18:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiHaTRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 15:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
+        id S230064AbiHaTSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 15:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiHaTRq (ORCPT
+        with ESMTP id S229839AbiHaTSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 15:17:46 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1CFDAA0A;
-        Wed, 31 Aug 2022 12:17:44 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-33dc31f25f9so316349677b3.11;
-        Wed, 31 Aug 2022 12:17:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=IeKc8Sl/UbzolBc4HIfYvc0Z0mGSys/TxO53fWi2waE=;
-        b=mNre9lpvaZXtGZRgNWlu+b1Ls21UT/pUY9IWuKfuVOnEvbNxtqd8syJvuhBy78QDlh
-         7eEEzy80W6sCcCcW5wuOBPHA4fXp2VIK1gbLM6/abxbxdBxl3mXiCfF6p6PDXovEupSB
-         uuh8E0SKFERiqlQRoZtetZ9fKJBbGetbDmdSdYa2SPzZdupWKy0rNKX8MjxL5Q/ooYSV
-         Y7vFHEq4Q7h5muxB2TMc1pFKYxV7ch9ay8/Eh6aG+HvrJz9d/hUhacG4Kh3rtsnSUwel
-         IXvFe5oEKnTldqeXM17YMzYG7l0ydNkYB81MXqtNhGovtlOuktIIZNGXnwOWIEBAvsL5
-         ag9Q==
-X-Gm-Message-State: ACgBeo2injkKH1maw3TKVIgzqNTTp+8/c8pzTgYmFGWQObFZHMDqckPo
-        xdm//YSNWyUOjIgtQfHiHNLNFS0xuLUUorUxxeGlWfv8
-X-Google-Smtp-Source: AA6agR7tcY3bgvO94O9ypmvOMg6GvQ70DA8QcJJF1cSsOUKj8jXRLPIdk/L1SBe2cxn4U+wKIWk1ItkTeBHFjpZ8+fI=
-X-Received: by 2002:a0d:cdc2:0:b0:335:debd:2b3d with SMTP id
- p185-20020a0dcdc2000000b00335debd2b3dmr18997247ywd.19.1661973463707; Wed, 31
- Aug 2022 12:17:43 -0700 (PDT)
+        Wed, 31 Aug 2022 15:18:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86A9FDA3E5;
+        Wed, 31 Aug 2022 12:18:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32D93B822A8;
+        Wed, 31 Aug 2022 19:18:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 908DAC433D6;
+        Wed, 31 Aug 2022 19:18:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661973521;
+        bh=lw0bo/aZdnQkaSTwIVjalMQkB0iCNZeNMZ8fT7exdk4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VS2Q1eXxkLF++1IUNqg4fZY4nP38EWxOhGf97KAha/GumvwszW8XHileui+WDkvo3
+         0pAGsb2z/lDku3W9YkC3b5edKmUYuXhTbFNYjN4DVe4PnAaXl4To/EScClstO7ZzrX
+         LUFIe60ZeyL0l5rmYMJR5uoo9CxZKqWW/XpyLCIXXInbWfSuQO2BsDLaAxXGh3qpyR
+         W6uzF3YuG+sSdAz7gbMyYiMgk+mhjaM0Jdebpr/JIki5qyvEKOP7mXpcHiBHlHr3+v
+         h9s61ssLLv9xtwQUfzquK49N62Evr1Kw6TlRFRiytvx3fGOldwogBp7qu0UggTo/RO
+         13PuHYTv4V4/Q==
+Date:   Wed, 31 Aug 2022 12:18:40 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     =?UTF-8?B?QW5kcsOp?= Apitzsch <git@apitzsch.eu>
+Cc:     Aaron Ma <aaron.ma@canonical.com>, linux-usb@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] r8152: Add MAC passthrough support for Lenovo Travel
+ Hub
+Message-ID: <20220831121840.293837df@kernel.org>
+In-Reply-To: <20220827184729.15121-1-git@apitzsch.eu>
+References: <20220827184729.15121-1-git@apitzsch.eu>
 MIME-Version: 1.0
-References: <20220818210156.8143-1-wsa+renesas@sang-engineering.com> <20220818210156.8143-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20220818210156.8143-2-wsa+renesas@sang-engineering.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Wed, 31 Aug 2022 21:17:32 +0200
-Message-ID: <CAJZ5v0jt6XWU1_O0f_M8TeV6DukujgsjcX1oam_34HJ31Xb_bQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PM: move from strlcpy with unused retval to strscpy
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 18, 2022 at 11:05 PM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
->
-> Follow the advice of the below link and prefer 'strscpy' in this
-> subsystem. Conversion is 1:1 because the return value is not used.
-> Generated by a coccinelle script.
->
-> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->  include/linux/suspend.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
-> index 70f2921e2e70..23a253df7f6b 100644
-> --- a/include/linux/suspend.h
-> +++ b/include/linux/suspend.h
-> @@ -75,7 +75,7 @@ extern struct suspend_stats suspend_stats;
->
->  static inline void dpm_save_failed_dev(const char *name)
->  {
-> -       strlcpy(suspend_stats.failed_devs[suspend_stats.last_failed_dev],
-> +       strscpy(suspend_stats.failed_devs[suspend_stats.last_failed_dev],
->                 name,
->                 sizeof(suspend_stats.failed_devs[0]));
->         suspend_stats.last_failed_dev++;
-> --
+On Sat, 27 Aug 2022 20:47:29 +0200 Andr=C3=A9 Apitzsch wrote:
+> The Lenovo USB-C Travel Hub supports MAC passthrough.
+>=20
+> Signed-off-by: Andr=C3=A9 Apitzsch <git@apitzsch.eu>
 
-Applied as 6.1 material, thanks!
+Which tree did you base this patch on?
+
+Please rebase on top of net-next [1] and repost with [PATCH net-next] in
+the subject.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git/

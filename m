@@ -2,148 +2,688 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C77655A8256
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:53:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0532F5A823E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232127AbiHaPxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36196 "EHLO
+        id S231844AbiHaPv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:51:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232126AbiHaPxI (ORCPT
+        with ESMTP id S231226AbiHaPvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:53:08 -0400
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99CA3AED89;
-        Wed, 31 Aug 2022 08:53:01 -0700 (PDT)
+        Wed, 31 Aug 2022 11:51:24 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F01FA00FB
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:51:22 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-33dce2d4bc8so311224977b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:51:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1661961181; x=1693497181;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=vyta+/0lDuDRefxlgv1vkaHwbgOICyXw1l+oC05BEd8=;
-  b=mafclWGesZ3jvzZETYDcjf4bC8djX5xdvQtADiiwinehnSIOaHFjnWWZ
-   kL0FB0QgYZ/4JyASV4c37L0KekWDItM20Fdmcl3qDKPCVrzSH02NfqVcC
-   Jg73Ppls/v0U6UjP8rqEVSD9pZUNXXlTFbbDWVhnVzmZ7gLiHZsVKL0u1
-   c=;
-X-IronPort-AV: E=Sophos;i="5.93,278,1654560000"; 
-   d="scan'208";a="125407135"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1e-0bfdb89e.us-east-1.amazon.com) ([10.25.36.214])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 15:50:53 +0000
-Received: from EX13D08EUB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1e-0bfdb89e.us-east-1.amazon.com (Postfix) with ESMTPS id C7B80E00BA;
-        Wed, 31 Aug 2022 15:50:49 +0000 (UTC)
-Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
- EX13D08EUB002.ant.amazon.com (10.43.166.232) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 31 Aug 2022 15:50:48 +0000
-Received: from dev-dsk-ptyadav-1c-613f0921.eu-west-1.amazon.com (10.15.8.155)
- by mail-relay.amazon.com (10.43.161.249) with Microsoft SMTP Server id
- 15.0.1497.38 via Frontend Transport; Wed, 31 Aug 2022 15:50:47 +0000
-Received: by dev-dsk-ptyadav-1c-613f0921.eu-west-1.amazon.com (Postfix, from userid 23027615)
-        id 0804D25976; Wed, 31 Aug 2022 15:50:45 +0000 (UTC)
-Date:   Wed, 31 Aug 2022 15:50:45 +0000
-From:   Pratyush Yadav <ptyadav@amazon.de>
-To:     SeongJae Park <sj@kernel.org>
-CC:     <jgross@suse.com>, <roger.pau@citrix.com>,
-        <marmarek@invisiblethingslab.com>, <mheyne@amazon.de>,
-        <xen-devel@lists.xenproject.org>, <axboe@kernel.dk>,
-        <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <stable@vger.kernel.org>
-Subject: Re: [PATCH 2/2] xen-blkfront: Advertise feature-persistent as user
- requested
-Message-ID: <20220831155045.kxopdchlc67fmi5n@yadavpratyush.com>
-References: <20220825161511.94922-1-sj@kernel.org>
- <20220825161511.94922-3-sj@kernel.org>
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=3PvMR/XycqORFlizT6CxByuKDuIxggxJlBTQLJTuWPk=;
+        b=Gmi2UWcvzrmJ8zqM8a6qsIyzbaP0psVzRrmiTQDUFQ+boYUpfinXOhH3kKBy2TxbXZ
+         ygeIkKnogCEEVHtGen8PFLpJpXJGU25o+NTwvzI5jnj72uy5Cjchmk9EqNZ81045MM9h
+         yDzJSkpnZyziYqR1UQHXQzYV+X7WIdCFOpC8nEcu7lVMc9hTpLbs9tE+UmhjTrN9guKQ
+         3p6amlVDRlBQ5pch2LYuRNd6kUSpn4yqk5Fz4R7rna8xmxeC2DA0L1p+VaF6BXU7aFkO
+         GgWG+nRtC8kNNs87CPZsk886FgCnJcaZKKpO+18aXX3VN29LAEX04NpAfjzZUKRWKsQN
+         tnsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3PvMR/XycqORFlizT6CxByuKDuIxggxJlBTQLJTuWPk=;
+        b=tzZicH7NYoD2YkfC8nLU/5DLjlEdbDy9L6PxtmA7WrR6szh5StlFmQtjFQjEZ9uvn0
+         OUQJGIopzu0iDMuBsyb/jJRmNeIlcxNL2CSfpuzEGr1TFGJz71qk7a6wRd9GSKKHBn9t
+         F+NXODDHY7AoSKmGmJKt8CoLF1tPrI7uYZr9tRmSaj5jyW15Wu8nYH+aELN6bN/OE5Ep
+         AAzws4dT38cUcGk2ZV9HmNwC6qwfyaqUi3kiwbl9zTUzU9DGQnAGDf0KsYvr01jULWIy
+         n3wC8AxsM9b8mFkxqjuSVmH3CJkRDHoDLhimkYvEz2rvk5aDYxSBpqpHAOH5f3Jz/AGk
+         ZnzA==
+X-Gm-Message-State: ACgBeo3PeVXctvC+lGDoRKjrUf5R97gBYpjzNsSUYuJ53doEN8dkYrcr
+        HXeZAq1z+MkKdKYkgFL0d39PkI25F1KAONqkc3Z0Bw==
+X-Google-Smtp-Source: AA6agR4/rLQr0otczemJmDvQiUx5/CSiDqYtOQdmANq0z9zivATwFqNAF4tlP4F5nNTDABcpDpeH4KIX3SY4Iha+WMk=
+X-Received: by 2002:a0d:cd02:0:b0:341:a401:4630 with SMTP id
+ p2-20020a0dcd02000000b00341a4014630mr4588576ywd.293.1661961081082; Wed, 31
+ Aug 2022 08:51:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220825161511.94922-3-sj@kernel.org>
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-23-surenb@google.com>
+ <CACT4Y+ZX3U1=cAPXPhoOy6xrngSCfSmyFagXK-9fWtWWODfsew@mail.gmail.com>
+In-Reply-To: <CACT4Y+ZX3U1=cAPXPhoOy6xrngSCfSmyFagXK-9fWtWWODfsew@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 31 Aug 2022 08:51:10 -0700
+Message-ID: <CAJuCfpEQJe7HiNXhv+fH3auvr_-M6VpxhgWTj9q6e5GLkd+8Uw@mail.gmail.com>
+Subject: Re: [RFC PATCH 22/30] Code tagging based fault injection
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Mel Gorman <mgorman@suse.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 25/08/22 04:15PM, SeongJae Park wrote:
-> Commit e94c6101e151 ("xen-blkback: Apply 'feature_persistent' parameter
-> when connect") made blkback to advertise its support of the persistent
-> grants feature only if the user sets the 'feature_persistent' parameter
-> of the driver and the frontend advertised its support of the feature.
-> However, following commit 402c43ea6b34 ("xen-blkfront: Apply
-> 'feature_persistent' parameter when connect") made the blkfront to work
-> in the same way.  That is, blkfront also advertises its support of the
-> persistent grants feature only if the user sets the 'feature_persistent'
-> parameter of the driver and the backend advertised its support of the
-> feature.
-> 
-> Hence blkback and blkfront will never advertise their support of the
-> feature but wait until the other advertises the support, even though
-> users set the 'feature_persistent' parameters of the drivers.  As a
-> result, the persistent grants feature is disabled always regardless of
-> the 'feature_persistent' values[1].
-> 
-> The problem comes from the misuse of the semantic of the advertisement
-> of the feature.  The advertisement of the feature should means only
-> availability of the feature not the decision for using the feature.
-> However, current behavior is working in the wrong way.
-> 
-> This commit fixes the issue by making the blkfront advertises its
-> support of the feature as user requested via 'feature_persistent'
-> parameter regardless of the otherend's support of the feature.
-> 
-> [1] https://lore.kernel.org/xen-devel/bd818aba-4857-bc07-dc8a-e9b2f8c5f7cd@suse.com/
-> 
-> Fixes: 402c43ea6b34 ("xen-blkfront: Apply 'feature_persistent' parameter when connect")
-> Cc: <stable@vger.kernel.org> # 5.10.x
-> Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
-> Suggested-by: Juergen Gross <jgross@suse.com>
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
->  drivers/block/xen-blkfront.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/block/xen-blkfront.c b/drivers/block/xen-blkfront.c
-> index 8e56e69fb4c4..dfae08115450 100644
-> --- a/drivers/block/xen-blkfront.c
-> +++ b/drivers/block/xen-blkfront.c
-> @@ -213,6 +213,9 @@ struct blkfront_info
->  	unsigned int feature_fua:1;
->  	unsigned int feature_discard:1;
->  	unsigned int feature_secdiscard:1;
-> +	/* Connect-time cached feature_persistent parameter */
-> +	unsigned int feature_persistent_parm:1;
-> +	/* Persistent grants feature negotiation result */
->  	unsigned int feature_persistent:1;
->  	unsigned int bounce:1;
->  	unsigned int discard_granularity;
-> @@ -1848,7 +1851,7 @@ static int talk_to_blkback(struct xenbus_device *dev,
->  		goto abort_transaction;
->  	}
->  	err = xenbus_printf(xbt, dev->nodename, "feature-persistent", "%u",
-> -			info->feature_persistent);
-> +			info->feature_persistent_parm);
->  	if (err)
->  		dev_warn(&dev->dev,
->  			 "writing persistent grants feature to xenbus");
-> @@ -2281,7 +2284,8 @@ static void blkfront_gather_backend_features(struct blkfront_info *info)
->  	if (xenbus_read_unsigned(info->xbdev->otherend, "feature-discard", 0))
->  		blkfront_setup_discard(info);
->  
-> -	if (feature_persistent)
-> +	info->feature_persistent_parm = feature_persistent;
+On Wed, Aug 31, 2022 at 3:37 AM Dmitry Vyukov <dvyukov@google.com> wrote:
+>
+> On Tue, 30 Aug 2022 at 23:50, Suren Baghdasaryan <surenb@google.com> wrote:
+> >
+> > From: Kent Overstreet <kent.overstreet@linux.dev>
+> >
+> > This adds a new fault injection capability, based on code tagging.
+> >
+> > To use, simply insert somewhere in your code
+> >
+> >   dynamic_fault("fault_class_name")
+> >
+> > and check whether it returns true - if so, inject the error.
+> > For example
+> >
+> >   if (dynamic_fault("init"))
+> >       return -EINVAL;
+>
+> Hi Suren,
+>
+> If this is going to be used by mainline kernel, it would be good to
+> integrate this with fail_nth systematic fault injection:
+> https://elixir.bootlin.com/linux/latest/source/lib/fault-inject.c#L109
+>
+> Otherwise these dynamic sites won't be tested by testing systems doing
+> systematic fault injection testing.
 
-Same question as before. Why not just use feature_persistent directly?
+Hi Dmitry,
+Thanks for the information! Will look into it and try to integrate.
+Suren.
 
-> +	if (info->feature_persistent_parm)
->  		info->feature_persistent =
->  			!!xenbus_read_unsigned(info->xbdev->otherend,
->  					       "feature-persistent", 0);
-
-Aside: IMO this would look nicer as below:
-
-	info->feature_persistent = feature_persistent && !!xenbus_read_unsigned();
+>
+>
+> > There's no need to define faults elsewhere, as with
+> > include/linux/fault-injection.h. Faults show up in debugfs, under
+> > /sys/kernel/debug/dynamic_faults, and can be selected based on
+> > file/module/function/line number/class, and enabled permanently, or in
+> > oneshot mode, or with a specified frequency.
+> >
+> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+> > ---
+> >  include/asm-generic/codetag.lds.h |   3 +-
+> >  include/linux/dynamic_fault.h     |  79 +++++++
+> >  include/linux/slab.h              |   3 +-
+> >  lib/Kconfig.debug                 |   6 +
+> >  lib/Makefile                      |   2 +
+> >  lib/dynamic_fault.c               | 372 ++++++++++++++++++++++++++++++
+> >  6 files changed, 463 insertions(+), 2 deletions(-)
+> >  create mode 100644 include/linux/dynamic_fault.h
+> >  create mode 100644 lib/dynamic_fault.c
+> >
+> > diff --git a/include/asm-generic/codetag.lds.h b/include/asm-generic/codetag.lds.h
+> > index 64f536b80380..16fbf74edc3d 100644
+> > --- a/include/asm-generic/codetag.lds.h
+> > +++ b/include/asm-generic/codetag.lds.h
+> > @@ -9,6 +9,7 @@
+> >         __stop_##_name = .;
+> >
+> >  #define CODETAG_SECTIONS()             \
+> > -       SECTION_WITH_BOUNDARIES(alloc_tags)
+> > +       SECTION_WITH_BOUNDARIES(alloc_tags)             \
+> > +       SECTION_WITH_BOUNDARIES(dynamic_fault_tags)
+> >
+> >  #endif /* __ASM_GENERIC_CODETAG_LDS_H */
+> > diff --git a/include/linux/dynamic_fault.h b/include/linux/dynamic_fault.h
+> > new file mode 100644
+> > index 000000000000..526a33209e94
+> > --- /dev/null
+> > +++ b/include/linux/dynamic_fault.h
+> > @@ -0,0 +1,79 @@
+> > +/* SPDX-License-Identifier: GPL-2.0 */
+> > +
+> > +#ifndef _LINUX_DYNAMIC_FAULT_H
+> > +#define _LINUX_DYNAMIC_FAULT_H
+> > +
+> > +/*
+> > + * Dynamic/code tagging fault injection:
+> > + *
+> > + * Originally based on the dynamic debug trick of putting types in a special elf
+> > + * section, then rewritten using code tagging:
+> > + *
+> > + * To use, simply insert a call to dynamic_fault("fault_class"), which will
+> > + * return true if an error should be injected.
+> > + *
+> > + * Fault injection sites may be listed and enabled via debugfs, under
+> > + * /sys/kernel/debug/dynamic_faults.
+> > + */
+> > +
+> > +#ifdef CONFIG_CODETAG_FAULT_INJECTION
+> > +
+> > +#include <linux/codetag.h>
+> > +#include <linux/jump_label.h>
+> > +
+> > +#define DFAULT_STATES()                \
+> > +       x(disabled)             \
+> > +       x(enabled)              \
+> > +       x(oneshot)
+> > +
+> > +enum dfault_enabled {
+> > +#define x(n)   DFAULT_##n,
+> > +       DFAULT_STATES()
+> > +#undef x
+> > +};
+> > +
+> > +union dfault_state {
+> > +       struct {
+> > +               unsigned int            enabled:2;
+> > +               unsigned int            count:30;
+> > +       };
+> > +
+> > +       struct {
+> > +               unsigned int            v;
+> > +       };
+> > +};
+> > +
+> > +struct dfault {
+> > +       struct codetag          tag;
+> > +       const char              *class;
+> > +       unsigned int            frequency;
+> > +       union dfault_state      state;
+> > +       struct static_key_false enabled;
+> > +};
+> > +
+> > +bool __dynamic_fault_enabled(struct dfault *df);
+> > +
+> > +#define dynamic_fault(_class)                          \
+> > +({                                                     \
+> > +       static struct dfault                            \
+> > +       __used                                          \
+> > +       __section("dynamic_fault_tags")                 \
+> > +       __aligned(8) df = {                             \
+> > +               .tag    = CODE_TAG_INIT,                \
+> > +               .class  = _class,                       \
+> > +               .enabled = STATIC_KEY_FALSE_INIT,       \
+> > +       };                                              \
+> > +                                                       \
+> > +       static_key_false(&df.enabled.key) &&            \
+> > +               __dynamic_fault_enabled(&df);           \
+> > +})
+> > +
+> > +#else
+> > +
+> > +#define dynamic_fault(_class)  false
+> > +
+> > +#endif /* CODETAG_FAULT_INJECTION */
+> > +
+> > +#define memory_fault()         dynamic_fault("memory")
+> > +
+> > +#endif /* _LINUX_DYNAMIC_FAULT_H */
+> > diff --git a/include/linux/slab.h b/include/linux/slab.h
+> > index 89273be35743..4be5a93ed15a 100644
+> > --- a/include/linux/slab.h
+> > +++ b/include/linux/slab.h
+> > @@ -17,6 +17,7 @@
+> >  #include <linux/types.h>
+> >  #include <linux/workqueue.h>
+> >  #include <linux/percpu-refcount.h>
+> > +#include <linux/dynamic_fault.h>
+> >
+> >
+> >  /*
+> > @@ -468,7 +469,7 @@ static inline void slab_tag_dec(const void *ptr) {}
+> >
+> >  #define krealloc_hooks(_p, _do_alloc)                                  \
+> >  ({                                                                     \
+> > -       void *_res = _do_alloc;                                         \
+> > +       void *_res = !memory_fault() ? _do_alloc : NULL;                \
+> >         slab_tag_add(_p, _res);                                         \
+> >         _res;                                                           \
+> >  })
+> > diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> > index 2790848464f1..b7d03afbc808 100644
+> > --- a/lib/Kconfig.debug
+> > +++ b/lib/Kconfig.debug
+> > @@ -1982,6 +1982,12 @@ config FAULT_INJECTION_STACKTRACE_FILTER
+> >         help
+> >           Provide stacktrace filter for fault-injection capabilities
+> >
+> > +config CODETAG_FAULT_INJECTION
+> > +       bool "Code tagging based fault injection"
+> > +       select CODE_TAGGING
+> > +       help
+> > +         Dynamic fault injection based on code tagging
+> > +
+> >  config ARCH_HAS_KCOV
+> >         bool
+> >         help
+> > diff --git a/lib/Makefile b/lib/Makefile
+> > index 99f732156673..489ea000c528 100644
+> > --- a/lib/Makefile
+> > +++ b/lib/Makefile
+> > @@ -231,6 +231,8 @@ obj-$(CONFIG_CODE_TAGGING) += codetag.o
+> >  obj-$(CONFIG_ALLOC_TAGGING) += alloc_tag.o
+> >  obj-$(CONFIG_PAGE_ALLOC_TAGGING) += pgalloc_tag.o
+> >
+> > +obj-$(CONFIG_CODETAG_FAULT_INJECTION) += dynamic_fault.o
+> > +
+> >  lib-$(CONFIG_GENERIC_BUG) += bug.o
+> >
+> >  obj-$(CONFIG_HAVE_ARCH_TRACEHOOK) += syscall.o
+> > diff --git a/lib/dynamic_fault.c b/lib/dynamic_fault.c
+> > new file mode 100644
+> > index 000000000000..4c9cd18686be
+> > --- /dev/null
+> > +++ b/lib/dynamic_fault.c
+> > @@ -0,0 +1,372 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +
+> > +#include <linux/ctype.h>
+> > +#include <linux/debugfs.h>
+> > +#include <linux/dynamic_fault.h>
+> > +#include <linux/kernel.h>
+> > +#include <linux/module.h>
+> > +#include <linux/seq_buf.h>
+> > +
+> > +static struct codetag_type *cttype;
+> > +
+> > +bool __dynamic_fault_enabled(struct dfault *df)
+> > +{
+> > +       union dfault_state old, new;
+> > +       unsigned int v = df->state.v;
+> > +       bool ret;
+> > +
+> > +       do {
+> > +               old.v = new.v = v;
+> > +
+> > +               if (new.enabled == DFAULT_disabled)
+> > +                       return false;
+> > +
+> > +               ret = df->frequency
+> > +                       ? ++new.count >= df->frequency
+> > +                       : true;
+> > +               if (ret)
+> > +                       new.count = 0;
+> > +               if (ret && new.enabled == DFAULT_oneshot)
+> > +                       new.enabled = DFAULT_disabled;
+> > +       } while ((v = cmpxchg(&df->state.v, old.v, new.v)) != old.v);
+> > +
+> > +       if (ret)
+> > +               pr_debug("returned true for %s:%u", df->tag.filename, df->tag.lineno);
+> > +
+> > +       return ret;
+> > +}
+> > +EXPORT_SYMBOL(__dynamic_fault_enabled);
+> > +
+> > +static const char * const dfault_state_strs[] = {
+> > +#define x(n)   #n,
+> > +       DFAULT_STATES()
+> > +#undef x
+> > +       NULL
+> > +};
+> > +
+> > +static void dynamic_fault_to_text(struct seq_buf *out, struct dfault *df)
+> > +{
+> > +       codetag_to_text(out, &df->tag);
+> > +       seq_buf_printf(out, "class:%s %s \"", df->class,
+> > +                      dfault_state_strs[df->state.enabled]);
+> > +}
+> > +
+> > +struct dfault_query {
+> > +       struct codetag_query q;
+> > +
+> > +       bool            set_enabled:1;
+> > +       unsigned int    enabled:2;
+> > +
+> > +       bool            set_frequency:1;
+> > +       unsigned int    frequency;
+> > +};
+> > +
+> > +/*
+> > + * Search the tables for _dfault's which match the given
+> > + * `query' and apply the `flags' and `mask' to them.  Tells
+> > + * the user which dfault's were changed, or whether none
+> > + * were matched.
+> > + */
+> > +static int dfault_change(struct dfault_query *query)
+> > +{
+> > +       struct codetag_iterator ct_iter;
+> > +       struct codetag *ct;
+> > +       unsigned int nfound = 0;
+> > +
+> > +       codetag_lock_module_list(cttype, true);
+> > +       codetag_init_iter(&ct_iter, cttype);
+> > +
+> > +       while ((ct = codetag_next_ct(&ct_iter))) {
+> > +               struct dfault *df = container_of(ct, struct dfault, tag);
+> > +
+> > +               if (!codetag_matches_query(&query->q, ct, ct_iter.cmod, df->class))
+> > +                       continue;
+> > +
+> > +               if (query->set_enabled &&
+> > +                   query->enabled != df->state.enabled) {
+> > +                       if (query->enabled != DFAULT_disabled)
+> > +                               static_key_slow_inc(&df->enabled.key);
+> > +                       else if (df->state.enabled != DFAULT_disabled)
+> > +                               static_key_slow_dec(&df->enabled.key);
+> > +
+> > +                       df->state.enabled = query->enabled;
+> > +               }
+> > +
+> > +               if (query->set_frequency)
+> > +                       df->frequency = query->frequency;
+> > +
+> > +               pr_debug("changed %s:%d [%s]%s #%d %s",
+> > +                        df->tag.filename, df->tag.lineno, df->tag.modname,
+> > +                        df->tag.function, query->q.cur_index,
+> > +                        dfault_state_strs[df->state.enabled]);
+> > +
+> > +               nfound++;
+> > +       }
+> > +
+> > +       pr_debug("dfault: %u matches", nfound);
+> > +
+> > +       codetag_lock_module_list(cttype, false);
+> > +
+> > +       return nfound ? 0 : -ENOENT;
+> > +}
+> > +
+> > +#define DFAULT_TOKENS()                \
+> > +       x(disable,      0)      \
+> > +       x(enable,       0)      \
+> > +       x(oneshot,      0)      \
+> > +       x(frequency,    1)
+> > +
+> > +enum dfault_token {
+> > +#define x(name, nr_args)       TOK_##name,
+> > +       DFAULT_TOKENS()
+> > +#undef x
+> > +};
+> > +
+> > +static const char * const dfault_token_strs[] = {
+> > +#define x(name, nr_args)       #name,
+> > +       DFAULT_TOKENS()
+> > +#undef x
+> > +       NULL
+> > +};
+> > +
+> > +static unsigned int dfault_token_nr_args[] = {
+> > +#define x(name, nr_args)       nr_args,
+> > +       DFAULT_TOKENS()
+> > +#undef x
+> > +};
+> > +
+> > +static enum dfault_token str_to_token(const char *word, unsigned int nr_words)
+> > +{
+> > +       int tok = match_string(dfault_token_strs, ARRAY_SIZE(dfault_token_strs), word);
+> > +
+> > +       if (tok < 0) {
+> > +               pr_debug("unknown keyword \"%s\"", word);
+> > +               return tok;
+> > +       }
+> > +
+> > +       if (nr_words < dfault_token_nr_args[tok]) {
+> > +               pr_debug("insufficient arguments to \"%s\"", word);
+> > +               return -EINVAL;
+> > +       }
+> > +
+> > +       return tok;
+> > +}
+> > +
+> > +static int dfault_parse_command(struct dfault_query *query,
+> > +                               enum dfault_token tok,
+> > +                               char *words[], size_t nr_words)
+> > +{
+> > +       unsigned int i = 0;
+> > +       int ret;
+> > +
+> > +       switch (tok) {
+> > +       case TOK_disable:
+> > +               query->set_enabled = true;
+> > +               query->enabled = DFAULT_disabled;
+> > +               break;
+> > +       case TOK_enable:
+> > +               query->set_enabled = true;
+> > +               query->enabled = DFAULT_enabled;
+> > +               break;
+> > +       case TOK_oneshot:
+> > +               query->set_enabled = true;
+> > +               query->enabled = DFAULT_oneshot;
+> > +               break;
+> > +       case TOK_frequency:
+> > +               query->set_frequency = 1;
+> > +               ret = kstrtouint(words[i++], 10, &query->frequency);
+> > +               if (ret)
+> > +                       return ret;
+> > +
+> > +               if (!query->set_enabled) {
+> > +                       query->set_enabled = 1;
+> > +                       query->enabled = DFAULT_enabled;
+> > +               }
+> > +               break;
+> > +       }
+> > +
+> > +       return i;
+> > +}
+> > +
+> > +static int dynamic_fault_store(char *buf)
+> > +{
+> > +       struct dfault_query query = { NULL };
+> > +#define MAXWORDS 9
+> > +       char *tok, *words[MAXWORDS];
+> > +       int ret, nr_words, i = 0;
+> > +
+> > +       buf = codetag_query_parse(&query.q, buf);
+> > +       if (IS_ERR(buf))
+> > +               return PTR_ERR(buf);
+> > +
+> > +       while ((tok = strsep_no_empty(&buf, " \t\r\n"))) {
+> > +               if (nr_words == ARRAY_SIZE(words))
+> > +                       return -EINVAL; /* ran out of words[] before bytes */
+> > +               words[nr_words++] = tok;
+> > +       }
+> > +
+> > +       while (i < nr_words) {
+> > +               const char *tok_str = words[i++];
+> > +               enum dfault_token tok = str_to_token(tok_str, nr_words - i);
+> > +
+> > +               if (tok < 0)
+> > +                       return tok;
+> > +
+> > +               ret = dfault_parse_command(&query, tok, words + i, nr_words - i);
+> > +               if (ret < 0)
+> > +                       return ret;
+> > +
+> > +               i += ret;
+> > +               BUG_ON(i > nr_words);
+> > +       }
+> > +
+> > +       pr_debug("q->function=\"%s\" q->filename=\"%s\" "
+> > +                "q->module=\"%s\" q->line=%u-%u\n q->index=%u-%u",
+> > +                query.q.function, query.q.filename, query.q.module,
+> > +                query.q.first_line, query.q.last_line,
+> > +                query.q.first_index, query.q.last_index);
+> > +
+> > +       ret = dfault_change(&query);
+> > +       if (ret < 0)
+> > +               return ret;
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +struct dfault_iter {
+> > +       struct codetag_iterator ct_iter;
+> > +
+> > +       struct seq_buf          buf;
+> > +       char                    rawbuf[4096];
+> > +};
+> > +
+> > +static int dfault_open(struct inode *inode, struct file *file)
+> > +{
+> > +       struct dfault_iter *iter;
+> > +
+> > +       iter = kzalloc(sizeof(*iter), GFP_KERNEL);
+> > +       if (!iter)
+> > +               return -ENOMEM;
+> > +
+> > +       codetag_lock_module_list(cttype, true);
+> > +       codetag_init_iter(&iter->ct_iter, cttype);
+> > +       codetag_lock_module_list(cttype, false);
+> > +
+> > +       file->private_data = iter;
+> > +       seq_buf_init(&iter->buf, iter->rawbuf, sizeof(iter->rawbuf));
+> > +       return 0;
+> > +}
+> > +
+> > +static int dfault_release(struct inode *inode, struct file *file)
+> > +{
+> > +       struct dfault_iter *iter = file->private_data;
+> > +
+> > +       kfree(iter);
+> > +       return 0;
+> > +}
+> > +
+> > +struct user_buf {
+> > +       char __user             *buf;   /* destination user buffer */
+> > +       size_t                  size;   /* size of requested read */
+> > +       ssize_t                 ret;    /* bytes read so far */
+> > +};
+> > +
+> > +static int flush_ubuf(struct user_buf *dst, struct seq_buf *src)
+> > +{
+> > +       if (src->len) {
+> > +               size_t bytes = min_t(size_t, src->len, dst->size);
+> > +               int err = copy_to_user(dst->buf, src->buffer, bytes);
+> > +
+> > +               if (err)
+> > +                       return err;
+> > +
+> > +               dst->ret        += bytes;
+> > +               dst->buf        += bytes;
+> > +               dst->size       -= bytes;
+> > +               src->len        -= bytes;
+> > +               memmove(src->buffer, src->buffer + bytes, src->len);
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static ssize_t dfault_read(struct file *file, char __user *ubuf,
+> > +                          size_t size, loff_t *ppos)
+> > +{
+> > +       struct dfault_iter *iter = file->private_data;
+> > +       struct user_buf buf = { .buf = ubuf, .size = size };
+> > +       struct codetag *ct;
+> > +       struct dfault *df;
+> > +       int err;
+> > +
+> > +       codetag_lock_module_list(iter->ct_iter.cttype, true);
+> > +       while (1) {
+> > +               err = flush_ubuf(&buf, &iter->buf);
+> > +               if (err || !buf.size)
+> > +                       break;
+> > +
+> > +               ct = codetag_next_ct(&iter->ct_iter);
+> > +               if (!ct)
+> > +                       break;
+> > +
+> > +               df = container_of(ct, struct dfault, tag);
+> > +               dynamic_fault_to_text(&iter->buf, df);
+> > +               seq_buf_putc(&iter->buf, '\n');
+> > +       }
+> > +       codetag_lock_module_list(iter->ct_iter.cttype, false);
+> > +
+> > +       return err ?: buf.ret;
+> > +}
+> > +
+> > +/*
+> > + * File_ops->write method for <debugfs>/dynamic_fault/conrol.  Gathers the
+> > + * command text from userspace, parses and executes it.
+> > + */
+> > +static ssize_t dfault_write(struct file *file, const char __user *ubuf,
+> > +                           size_t len, loff_t *offp)
+> > +{
+> > +       char tmpbuf[256];
+> > +
+> > +       if (len == 0)
+> > +               return 0;
+> > +       /* we don't check *offp -- multiple writes() are allowed */
+> > +       if (len > sizeof(tmpbuf)-1)
+> > +               return -E2BIG;
+> > +       if (copy_from_user(tmpbuf, ubuf, len))
+> > +               return -EFAULT;
+> > +       tmpbuf[len] = '\0';
+> > +       pr_debug("read %zu bytes from userspace", len);
+> > +
+> > +       dynamic_fault_store(tmpbuf);
+> > +
+> > +       *offp += len;
+> > +       return len;
+> > +}
+> > +
+> > +static const struct file_operations dfault_ops = {
+> > +       .owner  = THIS_MODULE,
+> > +       .open   = dfault_open,
+> > +       .release = dfault_release,
+> > +       .read   = dfault_read,
+> > +       .write  = dfault_write
+> > +};
+> > +
+> > +static int __init dynamic_fault_init(void)
+> > +{
+> > +       const struct codetag_type_desc desc = {
+> > +               .section = "dynamic_fault_tags",
+> > +               .tag_size = sizeof(struct dfault),
+> > +       };
+> > +       struct dentry *debugfs_file;
+> > +
+> > +       cttype = codetag_register_type(&desc);
+> > +       if (IS_ERR_OR_NULL(cttype))
+> > +               return PTR_ERR(cttype);
+> > +
+> > +       debugfs_file = debugfs_create_file("dynamic_faults", 0666, NULL, NULL, &dfault_ops);
+> > +       if (IS_ERR(debugfs_file))
+> > +               return PTR_ERR(debugfs_file);
+> > +
+> > +       return 0;
+> > +}
+> > +module_init(dynamic_fault_init);
+> > --
+> > 2.37.2.672.g94769d06f0-goog
+> >

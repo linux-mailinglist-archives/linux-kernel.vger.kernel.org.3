@@ -2,390 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF505A84D7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:57:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB545A84DA
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:58:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiHaR5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:57:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S231775AbiHaR6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 13:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230490AbiHaR5G (ORCPT
+        with ESMTP id S231398AbiHaR6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:57:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F92D83FD
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:57:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661968621;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lKRE16b9MM8u6Z8O6Bdi3U8ibkp6UbNP1fi8My+b5A8=;
-        b=VYG3BHLtpT+3HSAtiCg2HvePBO+xqAACMKFW91pU+WYQMKdCy2/guomaQ0jNd+wIE6Jabn
-        eqb//43YD6bqgQFZPR+8o1XOelDwEI3vNWFPedhg6T2tKoaI+WMZZAjhxVDc3eZgDfV2nN
-        s9pF5aBI+ccvpFjz/0TrlWXz3O9yptE=
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com
- [209.85.210.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-611-ZlsuAi8AOuyChTIf4W-fvQ-1; Wed, 31 Aug 2022 13:56:58 -0400
-X-MC-Unique: ZlsuAi8AOuyChTIf4W-fvQ-1
-Received: by mail-pf1-f200.google.com with SMTP id s13-20020a056a00194d00b005385093da2dso4210854pfk.13
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:56:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=lKRE16b9MM8u6Z8O6Bdi3U8ibkp6UbNP1fi8My+b5A8=;
-        b=hUkL6fHw7uzHFfexuKprU1geYJZ0Nm5ruorXR20l5MGFO7s1YBeaPCN9y8niAeulEO
-         BygbVCbgOuZrMqecGiS+JtyhMgs0CMLo7kWoBSAwmybedRSxUxoGDwAmKKKqpW7JCiWG
-         l1glCnz8xHCHVyHspSsuin4rL6GWsDiIAZq400w51yJkJXEH2LUf/Q+E4kawooXqI3lf
-         JAnPoUABTQXAZwiCi2ZCpgBR3EZZQJ4WtIw+eAs3gW/8Rf+SQ9NSCXekiG4MN56VmJKZ
-         0ts00X6SAqNt0qOCpKfrK+ToW+w7tKG3hfo4b/O919dbgu5Vmygb1ImP5ccLD5x8ERBZ
-         8BDA==
-X-Gm-Message-State: ACgBeo1NAwuvxi28G/LfE+t+p3cndf4uFocq+CxFLpbw9Y/DxUjd9bR+
-        5axIZ6nCCUDckbCWPWUULWasX+qsnbwNnhRcnAh/6INkKFpQMtJ5YDfiW35kjOX8UH3a4abRvJx
-        MI8EmLxmXYxhXlvgyiC0y2AusTuFeWmQUXixvXEkj
-X-Received: by 2002:a65:6255:0:b0:42c:87b1:485b with SMTP id q21-20020a656255000000b0042c87b1485bmr8853669pgv.491.1661968617019;
-        Wed, 31 Aug 2022 10:56:57 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7yF6XgnbUA7X7pkH/iSvWC9vC651aFLswA1iXydDYqeAQponIFLXm+j24vx9ittOajohLxG7OhhxuSOM34jyE=
-X-Received: by 2002:a65:6255:0:b0:42c:87b1:485b with SMTP id
- q21-20020a656255000000b0042c87b1485bmr8853631pgv.491.1661968616657; Wed, 31
- Aug 2022 10:56:56 -0700 (PDT)
+        Wed, 31 Aug 2022 13:58:17 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on20610.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5b::610])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C4BD86E6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:58:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ir7D3vQIOCBdh+C0KSaHF9EXIqB6JlDrPr+W5drpTarhPT75WSLyQk3VvN2OD7iFBkRBqCQdnTjvOyeKgEhda/7B7edlkppNR3QdooBGdy/aZ4ETcVBAd+EYLrAYnuipEYiQnjiRZv/XgTT5Jyb5/YjpKkT/CZVXHfYFqzHivPSnQ2yanGmajXePK3yUlkjPzNmpu6KN/hihIfNukmUOCOXBXkjaFlxR8t1c1fPo2nb15pB38dbvlsxSECJG7S+DUID08AeoqDVyQW+vP0eGRSQ7Qfpkuy1JjsmUIE2f0EKVlw8mrBgRRb8Ay1cj2lKwHMmBMjkHtUj7UGHJjf3UxA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tlg/54oCv8aoG0+kt57ZzLFgxTKSvd+uJh2yJem1ct8=;
+ b=QvZekJtAzt8XHcYOruXkaDwVZTv5bFNvmSdvvjPzABiYileWLQF66vaMIf1cekpz23KYah8VFeNOeSHed+j3lh//kyMzkPOYKfGmwLTsX9pW9R3VBbgfFfTU80XRnRpR0QSj4whw+H+ZHkMhCRWbzArBpUiErb13H8i76Q0lgVVrCKdg8C3QEw1AG3HiBksCEv/kRH6vU5A/TL7egpo5AXuQ2+v8UjqQboY0wGruJIhwsT7TxZzE7A89GOLw77L+cELVi6Naqth+ykKm61qAbsfQuX3SPDzy/Lqk1vUYZqp3BKlzZcsLpXe/A5s2m9v1QNSGGb7AWE2gpWy6gZcGpQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tlg/54oCv8aoG0+kt57ZzLFgxTKSvd+uJh2yJem1ct8=;
+ b=XOzIY7I4YUFKDDhdcJM3KKFxZw4TLkLeUUxWfozwuGF0i8yOI10NrxlnGMmo2kgnrPEC98vlpN5SOXF8AFTtfeY8GWH+edksmbyhJA1ukMPEK3jDHGuz/CbfaUEsLk6uegyFs4XY2309/zQ6O1Dmayr6dvb2IKuqBcUCj1BV3d8=
+Received: from DS7PR03CA0248.namprd03.prod.outlook.com (2603:10b6:5:3b3::13)
+ by MW3PR12MB4377.namprd12.prod.outlook.com (2603:10b6:303:55::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Wed, 31 Aug
+ 2022 17:58:12 +0000
+Received: from DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:3b3:cafe::a6) by DS7PR03CA0248.outlook.office365.com
+ (2603:10b6:5:3b3::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11 via Frontend
+ Transport; Wed, 31 Aug 2022 17:58:12 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DM6NAM11FT032.mail.protection.outlook.com (10.13.173.93) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5588.10 via Frontend Transport; Wed, 31 Aug 2022 17:58:11 +0000
+Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 31 Aug
+ 2022 12:58:08 -0500
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Jun Lei <Jun.Lei@amd.com>,
+        Meenakshikumar Somasundaram <meenakshikumar.somasundaram@amd.com>,
+        Alvin Lee <Alvin.Lee2@amd.com>,
+        "Martin Leung" <martin.leung@amd.com>,
+        Samson Tam <Samson.Tam@amd.com>, Alex Hung <alex.hung@amd.com>,
+        Joshua Aberback <joshua.aberback@amd.com>,
+        Wenjing Liu <wenjing.liu@amd.com>,
+        <amd-gfx@lists.freedesktop.org>, <dri-devel@lists.freedesktop.org>
+Subject: [PATCH] drm/amd/display: fix indentation in commit_planes_for_stream()
+Date:   Wed, 31 Aug 2022 13:58:07 -0400
+Message-ID: <20220831175808.100597-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220824134055.1328882-1-benjamin.tissoires@redhat.com>
- <20220824134055.1328882-2-benjamin.tissoires@redhat.com> <CAADnVQKgkFpLh_URJn6qCiAONteA1dwZHd6=4cZn15g1JCAPag@mail.gmail.com>
- <CAP01T75ec_T0M6DU=JE2tfNsWRZuPSMu_7JHA7ZoOBw5eDh1Bg@mail.gmail.com>
- <CAO-hwJLd9wXx+ppccBYPKZDymO0sk++Nt2E3-R97PY7LbfJfTg@mail.gmail.com> <CAADnVQK8dS+2KbWsqktvxoNKhHtdD5UPiaWVfNu=ESdn_OHpgQ@mail.gmail.com>
-In-Reply-To: <CAADnVQK8dS+2KbWsqktvxoNKhHtdD5UPiaWVfNu=ESdn_OHpgQ@mail.gmail.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 31 Aug 2022 19:56:45 +0200
-Message-ID: <CAO-hwJK9uHTWCg3_6jrPF6UKiamkNfj=cuH5mHauoLX+0udV9w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v9 01/23] bpf/verifier: allow all functions to
- read user provided context
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Dave Marchevsky <davemarchevsky@fb.com>,
-        Joe Stringer <joe@cilium.io>, Jonathan Corbet <corbet@lwn.net>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-        Network Development <netdev@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 825eafe9-1848-42fe-8b05-08da8b7a5ee7
+X-MS-TrafficTypeDiagnostic: MW3PR12MB4377:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ueDAWCIwj85eToCVfFXURuIU716WPOgjMq6ZFp3YJbCP9synG9qrYMV+b+Up73gkXxBjF4ebuVVL405ptqmfM/7m2CNdON7uRuz/Y0sIWJSLv1pggpWEzWqegFgkFRPPXyxjlPtA9qu2x+DTJ+CB5dP/YmJAgKNl2aNhO1YDcJH+/lbVgWJflBi8XhPhFiMO3BnBN7bstCXBWlbDa0wSJnPcZRQEMA/dR9dahgEIHmmPaV0WvIZAuaDxARbIk+j0ull4H4UVRuWUaL6wrtGIjB2sr7s3rPSEAVwzkLKnr+wzQ4Qjox20ogV05swqSeUkeGu0I82jW74+htwz7T5CGeHzmcwGAvA5nSxaKY5EcQ+RqZm3fiO6Aw80JrWmFfuYdoLAEFWrDj6ggDBxm9YOeOlimTifIKi0nVid9h58Z6YHZ93tsNDpy15C9cz360t7HkL9sudN52nXlKW0h2zzyY833bXG5SndbyVRCRLgrIt1srOhF9Zk6f/ou4sTNqD9E6Aay39Z3u2uYpAXrX4vfi6LDtZ8m9srZHN4L3hQKNmf1nxS/T8oJMYxjcqpbJ5xrjotX+9AYyiHj+rfBXh/a1rK44OqggZ9Vxr7h88aTbfIJ8/3FfhRCfz+qjIlzXKWlQDr4C5ACLoibJ5m4Lk9ZOoV1/Oh/7Km5D0kjYbOP8LJsBjoJYglhmirPaXRA9ZlQ520JKKLhFR0A9XYmQOKx6YEPxdqooRl9TAt++1fPuzLWHR6oDxx+0hLmYajoKihjFZplbPrEHxYSnLOlSaAHiPp7knIPwaLIbL4cFs8sB0VEojVr6OqxIJXr7mdi3HySNuu58QIsnlNajmhK2PhDg==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(39860400002)(376002)(136003)(46966006)(36840700001)(40470700004)(81166007)(40480700001)(82310400005)(36860700001)(356005)(40460700003)(82740400003)(86362001)(70206006)(70586007)(8676002)(41300700001)(4326008)(478600001)(5660300002)(54906003)(8936002)(316002)(426003)(6916009)(1076003)(47076005)(186003)(16526019)(2616005)(44832011)(26005)(336012)(2906002)(7696005)(36756003)(83380400001)(36900700001)(16060500005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2022 17:58:11.9756
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 825eafe9-1848-42fe-8b05-08da8b7a5ee7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT032.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR12MB4377
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 6:37 PM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Aug 30, 2022 at 7:29 AM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > On Fri, Aug 26, 2022 at 3:51 AM Kumar Kartikeya Dwivedi
-> > <memxor@gmail.com> wrote:
-> > >
-> > > On Fri, 26 Aug 2022 at 03:42, Alexei Starovoitov
-> > > <alexei.starovoitov@gmail.com> wrote:
-> > > >
-> > > > On Wed, Aug 24, 2022 at 6:41 AM Benjamin Tissoires
-> > > > <benjamin.tissoires@redhat.com> wrote:
-> > > > >
-> > > > > When a function was trying to access data from context in a syscall eBPF
-> > > > > program, the verifier was rejecting the call unless it was accessing the
-> > > > > first element.
-> > > > > This is because the syscall context is not known at compile time, and
-> > > > > so we need to check this when actually accessing it.
-> > > > >
-> > > > > Check for the valid memory access if there is no convert_ctx callback,
-> > > > > and allow such situation to happen.
-> > > > >
-> > > > > There is a slight hiccup with subprogs. btf_check_subprog_arg_match()
-> > > > > will check that the types are matching, which is a good thing, but to
-> > > > > have an accurate result, it hides the fact that the context register may
-> > > > > be null. This makes env->prog->aux->max_ctx_offset being set to the size
-> > > > > of the context, which is incompatible with a NULL context.
-> > > > >
-> > > > > Solve that last problem by storing max_ctx_offset before the type check
-> > > > > and restoring it after.
-> > > > >
-> > > > > Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-> > > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > > > >
-> > > > > ---
-> > > > >
-> > > > > changes in v9:
-> > > > > - rewrote the commit title and description
-> > > > > - made it so all functions can make use of context even if there is
-> > > > >   no convert_ctx
-> > > > > - remove the is_kfunc field in bpf_call_arg_meta
-> > > > >
-> > > > > changes in v8:
-> > > > > - fixup comment
-> > > > > - return -EACCESS instead of -EINVAL for consistency
-> > > > >
-> > > > > changes in v7:
-> > > > > - renamed access_t into atype
-> > > > > - allow zero-byte read
-> > > > > - check_mem_access() to the correct offset/size
-> > > > >
-> > > > > new in v6
-> > > > > ---
-> > > > >  kernel/bpf/btf.c      | 11 ++++++++++-
-> > > > >  kernel/bpf/verifier.c | 19 +++++++++++++++++++
-> > > > >  2 files changed, 29 insertions(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > > > index 903719b89238..386300f52b23 100644
-> > > > > --- a/kernel/bpf/btf.c
-> > > > > +++ b/kernel/bpf/btf.c
-> > > > > @@ -6443,8 +6443,8 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
-> > > > >  {
-> > > > >         struct bpf_prog *prog = env->prog;
-> > > > >         struct btf *btf = prog->aux->btf;
-> > > > > +       u32 btf_id, max_ctx_offset;
-> > > > >         bool is_global;
-> > > > > -       u32 btf_id;
-> > > > >         int err;
-> > > > >
-> > > > >         if (!prog->aux->func_info)
-> > > > > @@ -6457,9 +6457,18 @@ int btf_check_subprog_arg_match(struct bpf_verifier_env *env, int subprog,
-> > > > >         if (prog->aux->func_info_aux[subprog].unreliable)
-> > > > >                 return -EINVAL;
-> > > > >
-> > > > > +       /* subprogs arguments are not actually accessing the data, we need
-> > > > > +        * to check for the types if they match.
-> > > > > +        * Store the max_ctx_offset and restore it after btf_check_func_arg_match()
-> > > > > +        * given that this function will have a side effect of changing it.
-> > > > > +        */
-> > > > > +       max_ctx_offset = env->prog->aux->max_ctx_offset;
-> > > > > +
-> > > > >         is_global = prog->aux->func_info_aux[subprog].linkage == BTF_FUNC_GLOBAL;
-> > > > >         err = btf_check_func_arg_match(env, btf, btf_id, regs, is_global, 0);
-> > > > >
-> > > > > +       env->prog->aux->max_ctx_offset = max_ctx_offset;
-> > > >
-> > > > I don't understand this.
-> > > > If we pass a ctx into a helper and it's going to
-> > > > access [0..N] bytes from it why do we need to hide it?
-> > > > max_ctx_offset will be used later raw_tp, tp, syscall progs
-> > > > to determine whether it's ok to load them.
-> > > > By hiding the actual size of access somebody can construct
-> > > > a prog that reads out of bounds.
-> > > > How is this related to NULL-ness property?
-> > >
-> > > Same question, was just typing exactly the same thing.
-> >
-> > The test I have that is failing in patch 2/23 is the following, with
-> > args being set to NULL by userspace:
-> >
-> > SEC("syscall")
-> > int kfunc_syscall_test_null(struct syscall_test_args *args)
-> > {
-> >        bpf_kfunc_call_test_mem_len_pass1(args, 0);
-> >
-> >        return 0;
-> > }
-> >
-> > Basically:
-> > if userspace declares the following:
-> >  DECLARE_LIBBPF_OPTS(bpf_test_run_opts, syscall_topts,
-> >                .ctx_in = NULL,
-> >                .ctx_size_in = 0,
-> >        );
-> >
-> > The verifier is happy with the current released kernel:
-> > kfunc_syscall_test_fail() never dereferences the ctx pointer, it just
-> > passes it around to bpf_kfunc_call_test_mem_len_pass1(), which in turn
-> > is also happy because it says it is not accessing the data at all (0
-> > size memory parameter).
-> >
-> > In the current code, check_helper_mem_access() actually returns
-> > -EINVAL, but doesn't change max_ctx_offset (it's still at the value of
-> > 0 here). The program is now marked as unreliable, but the verifier
-> > goes on.
-> >
-> > When adding this patch, if we declare a syscall eBPF (or any other
-> > function that doesn't have env->ops->convert_ctx_access), the previous
-> > "test" is failing because this ensures the syscall program has to have
-> > a valid ctx pointer.
-> > btf_check_func_arg_match() now calls check_mem_access() which
-> > basically validates the fact that the program can dereference the ctx.
-> >
-> > So now, without the max_ctx_offset store/restore, the verifier
-> > enforces that the provided ctx is not null.
-> >
-> > What I thought that would happen was that if we were to pass a NULL
-> > context from userspace, but the eBPF program dereferences it (or in
-> > that case have a subprog or a function call that dereferences it),
-> > then max_ctx_offset would still be set to the proper value because of
-> > that internal dereference, and so the verifier would reject with
-> > -EINVAL the call to the eBPF program.
-> >
-> > If I add another test that has the following ebpf prog (with ctx_in
-> > being set to NULL by the userspace):
-> >
-> > SEC("syscall")
-> > int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
-> > {
-> >        bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
-> >
-> >        return 0;
-> > }
-> >
-> > Then the call of the program is actually failing with -EINVAL, even
-> > with this patch.
-> >
-> > But again, if setting from userspace a ctx of NULL with a 0 size is
-> > not considered as valid, then we can just drop that hunk and add a
-> > test to enforce it.
->
-> PTR_TO_CTX in the verifier always means valid pointer.
-> All code paths in the verifier assumes that it's not NULL.
-> Pointer to skb, to xdp, to pt_regs, etc.
-> The syscall prog type is little bit special, since it
-> makes sense not to pass any argument to such prog.
-> So ctx_size_in == 0 is enforced after the verification:
-> if (ctx_size_in < prog->aux->max_ctx_offset ||
->     ctx_size_in > U16_MAX)
->           return -EINVAL;
-> The verifier should be able to proceed assuming ctx != NULL
-> and remember max max_ctx_offset.
-> If max_ctx_offset == 4 and ctx_size_in == 0 then
-> it doesn't matter whether the actual 'ctx' pointer is NULL
-> or points to a valid memory.
-> So it's ok for the verifier to assume ctx != NULL everywhere.
+Address the following warning:
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:3508:9: warning: this ‘if’ clause does not guard... [-Wmisleading-indentation]
+ 3508 |         if (update_type != UPDATE_TYPE_FAST)
+      |         ^~
+drivers/gpu/drm/amd/amdgpu/../display/dc/core/dc.c:3510:17: note: ...this statement, but the latter is misleadingly indented as if it were guarded by the ‘if’
+ 3510 |                 if (update_type != UPDATE_TYPE_FAST)
+      |                 ^~
 
-Ok, thanks for the detailed explanation.
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+ drivers/gpu/drm/amd/display/dc/core/dc.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
->
-> Back to the issue at hand.
-> With this patch the line:
->     bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
-> will be seen as access_size == sizeof(*args), right?
-> So this part:
-> +                       if (access_size == 0)
-> +                               return zero_size_allowed ? 0 : -EACCES;
->
-> will be skipped and
-> the newly added check_mem_access() will call check_ctx_access()
-> which will call syscall_prog_is_valid_access() and it will say
-> that any off < U16_MAX is fine and will simply
-> record max max_ctx_offset.
-> The ctx_size_in < prog->aux->max_ctx_offset check is done later.
-
-Yep, this is correct and this is working now, with a proper error (and
-no, this is not the error I am trying to fix, see below):
-
-eBPF prog:
-```
-  SEC("?syscall")
-  int kfunc_syscall_test_null_fail(struct syscall_test_args *args)
-  {
-          bpf_kfunc_call_test_mem_len_pass1(args, sizeof(*args));
-          return 0;
-  }
-```
-
-before this patch (1/23):
-* with ctx not NULL:
-libbpf: prog 'kfunc_syscall_test_null_fail': BPF program load failed:
-Invalid argument
-R1 type=ctx expected=fp
-arg#0 arg#1 memory, len pair leads to invalid memory access
-
- => this is not correct, we expect the program to be loaded (and it is
-expected, this is the bug that is fixed)
-
-* Same result with ctx being NULL from the caller
-
-With just the hunk in kernel/bpf/verifier.c (so without touching max_ctx_offset:
-* with ctx not NULL:
-program is loaded, and executed correctly
-
-* with ctx being NULL:
-program is now loaded, but execution returns -EINVAL, as expected
-
-So this case is fully solved by just the hunk in verifier.c
-
-With the full patch:
-same results, with or without ctx being set to NULL, so no side effects.
-
->
-> So when you're saying:
-> "call of the program is actually failing with -EINVAL"
-> that's the check you're referring to?
-
-No. I am referring to the following eBPF program:
-```
-  SEC("syscall")
-  int kfunc_syscall_test_null(struct syscall_test_args *args)
-  {
-           return 0;
-  }
-```
-
-(no calls, just the declaration of a program)
-
-This one is supposed to be loaded and properly run whatever the
-context is, right?
-
-However, without the hunk in the btf.c file (max_ctx_offset), we have
-the following (ctx is set to NULL by the userspace):
-verify_success:FAIL:kfunc_syscall_test_null unexpected error: -22 (errno 22)
-
-The reason is that the verifier is calling
-btf_check_subprog_arg_match() on programs too, and considers that ctx
-is not NULL, and bumps the max_ctx_offset value.
-
->
-> If so, everything works as expected.
-
-Not exactly, we can not call a syscall program with a null context
-without this hunk.
-
-> The verifier thinks that bpf_kfunc_call_test_mem_len_pass1()
-> can read that many bytes from args,
-> so it has to reject running the loaded prog in bpf_prog_test_run_syscall().
-
-Yes, that part works. I am focusing on the program declaration.
-
->
-> So what are you trying to achieve ?
-
-See above :)
-
-> Make the verifier understand that ctx can be NULL ?
-
-Nope. I am fine with the way it is. But any eBPF (sub)prog is checked
-against btf_check_subprog_arg_match(), which in turns marks all of
-these calls accessing the entire ctx, even if the ctx is null when
-that case is valid.
-
-> If so that is a probably huge undertaking.
-> Something else?
->
-
-Hopefully this is clearer now.
-
-Cheers,
-Benjamin
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc.c b/drivers/gpu/drm/amd/display/dc/core/dc.c
+index b49237390cce..6c4948916e7e 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc.c
+@@ -3505,11 +3505,11 @@ static void commit_planes_for_stream(struct dc *dc,
+ 					top_pipe_to_program->stream_res.tg);
+ 		}
+ 
+-	if (update_type != UPDATE_TYPE_FAST)
++	if (update_type != UPDATE_TYPE_FAST) {
+ 		dc->hwss.post_unlock_program_front_end(dc, context);
+-		if (update_type != UPDATE_TYPE_FAST)
+-			if (dc->hwss.commit_subvp_config)
+-				dc->hwss.commit_subvp_config(dc, context);
++		if (dc->hwss.commit_subvp_config)
++			dc->hwss.commit_subvp_config(dc, context);
++	}
+ 
+ 	/* Since phantom pipe programming is moved to post_unlock_program_front_end,
+ 	 * move the SubVP lock to after the phantom pipes have been setup
+-- 
+2.37.2
 

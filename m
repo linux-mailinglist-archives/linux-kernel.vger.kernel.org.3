@@ -2,105 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E01D5A7D90
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B754C5A7D93
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:38:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230479AbiHaMiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:38:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        id S231292AbiHaMiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231288AbiHaMhz (ORCPT
+        with ESMTP id S230496AbiHaMiV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:37:55 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA0CC59D7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:37:53 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id b44so18176967edf.9
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:37:53 -0700 (PDT)
+        Wed, 31 Aug 2022 08:38:21 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334EDC59D7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:38:19 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id og21so28091325ejc.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:38:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=Fuu2JI5A+wpqBRcbGTVNrKjUHyua0GPAJlLMkrI8qfM=;
-        b=DncXsye6bDUGM3ZIlLj8XaqyFahtrLvWtKE5nsSgLN9rz+zuBJr8w2nCpnng1T7Ull
-         HGATaLn6yjkxmIGp9wf1ULad1lWWo59GbeZV7/Xa4IWOtpa8AahuoTZltyQvyK4k5Kz3
-         qsXuN3+8mCqPoRtcd3cLOzs01jdB4GHRnNMHbJAt+bhPEP+0p8ABJfvoL63QGX1Tz8YF
-         G21U5UD92CSv9NIb6NAk41FKefscQhcq+CP4V/YabLsp0ux5sjk6kwXAhgwZ1T63MVd/
-         lw3sTwerL9dFL1hk0QymcSLvcY+bKvu9UZw3Z0V366w4964qiIdpDuylQEvmqfPe+9tU
-         j3jw==
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Nw0EBkOY83iYP+XsN3p7xZie4SqaMCFMbmxIx0k38js=;
+        b=EbrxVY5nmWOEeuFzz8xCaJqiVAvdtpUvBA09CA8hlz6jVkKBBrR/cUoroforFFsHgH
+         8CTqzGo6sJLLleJ3EjHWNW7S4C9EqAo1GspjvLhY8kAI7KH6NE3SU88Zhg/0YBD8/cIM
+         CAreXFBsW7QgLcRnUd4MXZc8zjptdubpZ4HnrliE5Rob4mZOYDfsHDF8unLHjql30KkR
+         x1aayH3bv59OYuOO3e+EpxZrQipMhrTsMThjsrzdpqBp75vSrWDvv0YbeHIaw0asdmh0
+         /tX2jReNXg/+GLMwAV1WwNtcn/7lUzkMmHljQ2GeLcZYUN1CC3evGFqk0UiehrPdd0xO
+         kVBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=Fuu2JI5A+wpqBRcbGTVNrKjUHyua0GPAJlLMkrI8qfM=;
-        b=rYhWDEzbX/5HuuvPTSXhVdcX3fRcOChOPxK+yVz6xdHyT1fGiZzTTfvnGaEbWR5O3C
-         CayDWrSlKeNolLvvWK2+AO5rYBeXoJg+ERvclEpwX5qLLA2DM6Syft/xvv//P6/jKCa8
-         v9LMIDztiLMyCYosfGPiDmLABudo4f2rVWiA+O6M9hEVkBP2y+Rw9vQGFaOmunHWoPxe
-         ykNaimoLtU3UE5kz6AJ7Kk6eP5SQY6mRcTykd6Ni9HqBxktrqy4b6H48rf38J6Pa34UO
-         Z8OadZlc0YuEwZ6eDxxuBGrp3R6CqiBpZSgEVgilSqIY/rm7uPfEBj/aEGJHpRYRkpW+
-         JfQA==
-X-Gm-Message-State: ACgBeo1UpladuwpMmEB4Se8OQASBXf+1XEyobd3usYQy8t303qF3lbmP
-        XGvS9ttJhk9PRmgPGRiCuMbMJR8Lcrf7KPjumB5owoZxhck=
-X-Google-Smtp-Source: AA6agR6omxyBZo7cfhMeYIlGj9RWba4kt4+v9Lqw1rabWR1KY7hd2NaWUKr76TcAnNwZ6YcyK7Qa6NIvNPVVvf0g0aQ=
-X-Received: by 2002:aa7:c84f:0:b0:446:2bfb:5a63 with SMTP id
- g15-20020aa7c84f000000b004462bfb5a63mr24625165edt.172.1661949471929; Wed, 31
- Aug 2022 05:37:51 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Nw0EBkOY83iYP+XsN3p7xZie4SqaMCFMbmxIx0k38js=;
+        b=DorGOWu2JxHvEB0jlqrCq7VwqLg6VntySkGerEMK8ptjm/Pya1vfVKW9Gn6lhbgXaZ
+         J+QhHvuOZlu4BEgFWVs4+G3AJKSRAKOzDvjNEFyjdFtWw+++VX5lJRXVWdMj5DyYks3S
+         TALw0eFEiZVvWw+UP0b9wpAlVf5mS2lXzgr9rLYnvl6ptk+BuAA6VG0zLT5eLmzeZ93A
+         E9hu2791ZAgXbzAPjxen7txx2ydtYt4QGH/z7Zg0R+skHkPkYOI53c+P3DhOqTOhqIJI
+         dglGOaRFpkAPvORFBD5ZUA+LLYaA628kw8SJmelp6AFwOHEReCrFuxcZzg66u092jYmP
+         uhrQ==
+X-Gm-Message-State: ACgBeo3it0/ChKsOHYIOe0rni+STbTZSKhQEVNKT46yTQ85M0tTjpssp
+        6/FfffgdR0T27MGBUa9BTjLlnSeUO1xwfPX62pB6Mg==
+X-Google-Smtp-Source: AA6agR6oyyPbMlYFtb5NpTtsjpRebaLkWf/bYtJDx2BFFBYm0+SoT8VLAlPWsAw1NQyFyIQ8k9S6mB877Ji41iDBZww=
+X-Received: by 2002:a17:906:9bf3:b0:741:6900:61a5 with SMTP id
+ de51-20020a1709069bf300b00741690061a5mr11441223ejc.286.1661949497747; Wed, 31
+ Aug 2022 05:38:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220829131553.690063-1-nuno.sa@analog.com> <20220829131553.690063-2-nuno.sa@analog.com>
-In-Reply-To: <20220829131553.690063-2-nuno.sa@analog.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Wed, 31 Aug 2022 14:37:40 +0200
-Message-ID: <CACRpkdaxfgf6T4EcWKG8_y4LmZPggQHGjHcq6f_5YkgGWv5vcA@mail.gmail.com>
-Subject: Re: [PATCH v4 01/10] input: keyboard: adp5588-keys: support gpi key
- events as 'gpio keys'
-To:     =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>
-Cc:     linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Hennerich <michael.hennerich@analog.com>
+References: <20220824010605.14256-1-jeffy.chen@rock-chips.com>
+In-Reply-To: <20220824010605.14256-1-jeffy.chen@rock-chips.com>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Wed, 31 Aug 2022 14:38:07 +0200
+Message-ID: <CAMRc=MdOdeqkRKMdyX2H3QYTeHkL4mrzWD6=tuo=cH46xxKGFw@mail.gmail.com>
+Subject: Re: [PATCH v2] gpio/rockchip: Convert to generic_handle_domain_irq()
+To:     Jeffy Chen <jeffy.chen@rock-chips.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        "open list:ARM/Rockchip SoC..." <linux-rockchip@lists.infradead.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 3:15 PM Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
+On Wed, Aug 24, 2022 at 3:13 AM Jeffy Chen <jeffy.chen@rock-chips.com> wrote:
+>
+> Follow commit dbd1c54fc820 ("gpio: Bulk conversion to
+> generic_handle_domain_irq()").
+>
+> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+> ---
 
-> This change replaces the support for GPIs as key event generators.
-> Instead of reporting the events directly, we add a gpio based irqchip
-> so that these events can be consumed by keys defined in the gpio-keys
-> driver (as it's goal is indeed for keys on GPIOs capable of generating
-> interrupts). With this, the gpio-adp5588 driver can also be dropped.
->
-> The basic idea is that all the pins that are not being used as part of
-> the keymap matrix can be possibly requested as GPIOs by gpio-keys
-> (it's also fine to use these pins as plain interrupts though that's not
-> really the point).
->
-> Since the gpiochip now also has irqchip capabilities, we should only
-> remove it after we free the device interrupt (otherwise we could, in
-> theory, be handling GPIs interrupts while the gpiochip is concurrently
-> removed). Thus the call 'adp5588_gpio_add()' is moved and since the
-> setup phase also needs to come before making the gpios visible, we also
-> need to move 'adp5588_setup()'.
->
-> While at it, always select GPIOLIB so that we don't need to use #ifdef
-> guards.
->
-> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
+Applied, thanks!
 
-Makes the world simpler so:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-Yours,
-Linus Walleij
+Bart

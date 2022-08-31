@@ -2,176 +2,385 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E41735A856D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:24:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 739775A8572
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:25:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232313AbiHaSYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:24:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46010 "EHLO
+        id S229735AbiHaSZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232923AbiHaSXm (ORCPT
+        with ESMTP id S232750AbiHaSYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:23:42 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4310210D4CD
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:19:43 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id c2so14895851plo.3
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:19:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=81cxqnbCXs4IvcPvB7D0eLT2L7c7/05/+jBHEgh8YbI=;
-        b=Al5khbiMiE91Wy0qYXl9rLmk69PiKN9UYLVA5bheW2gKrSXvKUWMwgGFkl6Kz94Lnj
-         jpktS5izu0x2o9CxveFFRSFxFRTEeP6fDBlZWikTqKvkjdOajhZkOkM6U5ozaO6iberV
-         CaR8vtyJFdZPFK157DioeqeomRzuyW/m3AY3YPFfIIQ3xXA8Gcw5JxK7FAauSEY7PoSt
-         v9TUkK6EDSRYMO4T2FjyDEnhT6Idm0iJeL7CSX6pjyFP2iPYK3+8Hky1obcrt141syYs
-         19oqOMc3ExUoWBtVbCBlAZrzD3NOIA8T/cu0GAerrbY0tT7Lt92tSfFraHIweRFE2agC
-         2VFg==
+        Wed, 31 Aug 2022 14:24:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D942A5730
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:20:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661969968;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fuWmRIFXw6Kcx2QVIeEOdLQrgVopjQQArfDzeESZeK0=;
+        b=Z82mZ2tBIu14J1xwdIsMU1n6OhuXslBlMnBjXTNxh1/5sXkuDHcOfhT3BRnBONlC0AyPaP
+        53HtSleqhwzxNsmNF9Bb18fPPOSYJTCKqdxcvYpzi8VnHTmOMlu+05KNJZM6iQlbQF7ZTv
+        W8LhmZ3RLRvmwtudQhYbKL9erTuP0lU=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-140-wOgOFFnbN4ayrMb6z0MpDg-1; Wed, 31 Aug 2022 14:19:27 -0400
+X-MC-Unique: wOgOFFnbN4ayrMb6z0MpDg-1
+Received: by mail-ed1-f69.google.com with SMTP id h6-20020aa7de06000000b004483647900fso8010928edv.21
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:19:27 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=81cxqnbCXs4IvcPvB7D0eLT2L7c7/05/+jBHEgh8YbI=;
-        b=lIviZpjHqz/kI+ti1cqrKLhwa5UMvn/Lxgfm77lyKsGYfgIURGsXb79mNL93OAfSIO
-         gH0VB1bVhd9Qp3wpfVJ++M50ZNPWSlHAwe0bSTR+892EDN0Q8DkdmtJarn4yTvFBMGqx
-         N4rPYcBZdzgs5hur4S6v8bgVhGArClZiBO/DbrzS1nCpBeYrnnygaOUO+Vjm3lOG63+V
-         RoBJKZCUFuBLnTt9vX6YdmDI8RC5hu8m54OssXUjI8bH++l5LQiv/H6xJMfBQPNqu6ME
-         v3hU1S7fJNJErARYS2/NDTkmVY70qbTMLj8iOEzFn3T4WkBYchrajf+k/r0Fs7p3Lweo
-         UNBg==
-X-Gm-Message-State: ACgBeo1yeFKhnwh5hbw77EMvZFn2u84605fzgBqV6Swgb/wWOu8NJo4s
-        n/XjnIY5xM/cQXNLfog2EM1HIw==
-X-Google-Smtp-Source: AA6agR6JakllMeX5LmRTVr5HK8mAyZUnOIwMOcY8w1XZC5rVQAU2d/3uhIXxGvht95N46CX0BxfdeQ==
-X-Received: by 2002:a17:90a:2e12:b0:1fb:a4d4:be3f with SMTP id q18-20020a17090a2e1200b001fba4d4be3fmr4504751pjd.237.1661969945597;
-        Wed, 31 Aug 2022 11:19:05 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d2-20020a170902f14200b00173368e9dedsm8755331plb.252.2022.08.31.11.19.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 11:19:05 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 18:19:01 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH 17/19] KVM: SVM: Handle multiple logical targets in AVIC
- kick fastpath
-Message-ID: <Yw+mFbuih3rBjMV8@google.com>
-References: <20220831003506.4117148-1-seanjc@google.com>
- <20220831003506.4117148-18-seanjc@google.com>
- <ca3be5f88268f1547e6f02b01a472186566066c5.camel@redhat.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=fuWmRIFXw6Kcx2QVIeEOdLQrgVopjQQArfDzeESZeK0=;
+        b=D0x2XVbts76HY7D13vDtQrKXt5tsLZmWdaq6PfvNdmzpJgLq+uTcTQO+vNtLhBjVvt
+         ZQLL+siZxMPlRLBMmwKWl6e/9Ua+MG1WXhZt/gsNdQnnEf6dBUP9QDHecPOgyYaxj086
+         eiWAztunQ9GJPTdNBv6Kw0aqKVexYKZZsNCrziGZnwd6uGD25yhWwh/47WL8j21xRftV
+         BdROaQ3vHkAPi91P+H3xtrsh3q3ZbTdlI4Fz8xugQx362lDfkaNbcCl2v/N6/RGYgjWw
+         LCUEEETW2u9ZURXph31Z4weRU2K39+9WsLivb7tbUFHihxRcnK7pBiffS6/LMlF1nsOR
+         drWw==
+X-Gm-Message-State: ACgBeo3v/RBbAYQygn+svoZ62N6rqa2UR8XxBX4AcuOghPBD3+6AQ6oN
+        ZZPdjxZeMgUDKzcdUe+cEyq/Nbpudh49kKBaGFxQFBA/MSSAXDb2TehBuSu6qCG+nD92TWrNGp9
+        IWzTE8gRZhPuuwFCciSqLV7TC
+X-Received: by 2002:a17:907:271b:b0:730:aa8e:74eb with SMTP id w27-20020a170907271b00b00730aa8e74ebmr21498423ejk.478.1661969965347;
+        Wed, 31 Aug 2022 11:19:25 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6QPZk+7Ics045VzKPECvzAAPIToksBM93AHo5H6j0ow5wPCe8uGoWPAWEdacvZugQ4Y4ZWpw==
+X-Received: by 2002:a17:907:271b:b0:730:aa8e:74eb with SMTP id w27-20020a170907271b00b00730aa8e74ebmr21498411ejk.478.1661969965088;
+        Wed, 31 Aug 2022 11:19:25 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id z23-20020aa7d417000000b0044687e93f74sm9340737edq.43.2022.08.31.11.19.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 11:19:24 -0700 (PDT)
+Message-ID: <4f388bda-b991-0ab6-4098-4f5dbabe57fb@redhat.com>
+Date:   Wed, 31 Aug 2022 20:19:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ca3be5f88268f1547e6f02b01a472186566066c5.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 2/3] ACPI: PMIC: Replace open coded be16_to_cpu()
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>, Andy Shevchenko <andy@kernel.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20220831135749.78743-1-andriy.shevchenko@linux.intel.com>
+ <20220831135749.78743-2-andriy.shevchenko@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220831135749.78743-2-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022, Maxim Levitsky wrote:
-> On Wed, 2022-08-31 at 00:35 +0000, Sean Christopherson wrote:
-> > +static void avic_kick_vcpu_by_logical_id(struct kvm *kvm, u32 *avic_logical_id_table,
-> > +					 u32 logid_index, u32 icrl)
-> > +{
-> > +	u32 physical_id;
-> > +
-> > +	if (!avic_logical_id_table) {
-> ^ Typo, the '!' shoudn't be there.
+Hi,
 
-Ouch.  I suspect the tests pass because this just ends up routing events through
-the slow path.  I try to concoct a testcase to expose this bug.
-
-> > +static bool is_optimized_logical_map_enabled(struct kvm *kvm)
-> > +{
-> > +	struct kvm_apic_map *map;
-> > +	bool enabled;
-> > +
-> > +	rcu_read_lock();
-> > +	map = rcu_dereference(kvm->arch.apic_map);
-> > +	enabled = map && map->logical_mode != KVM_APIC_MODE_MAP_DISABLED;
-> > +	rcu_read_unlock();
-> > +	return enabled;
-> > +}
+On 8/31/22 15:57, Andy Shevchenko wrote:
+> It's easier to understand the nature of a data type when
+> it's written explicitly. With that, replace open coded
+> endianess conversion.
 > 
-> This function doesn't belong to avic, it should be in common KVM code.
-
-I'll move it.  I'm not expecting any additional users, but I agree it belongs
-elsewhere.  Actually, might be a moot point (see below).
-
-> > @@ -394,50 +449,27 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
-> >  		if (unlikely(!bitmap))
-> >  			return 0;
-> >  
-> > -		if (!is_power_of_2(bitmap))
-> > -			/* multiple logical destinations, use slow path */
-> > +		/*
-> > +		 * Use the slow path if more than one bit is set in the bitmap
-> > +		 * and KVM's optimized logical map is disabled to avoid kicking
-> > +		 * a vCPU multiple times.  If the optimized map is disabled, a
-> > +		 * vCPU _may_ have multiple bits set in its logical ID, i.e.
-> > +		 * may have multiple entries in the logical table.
-> > +		 */
-> > +		if (!is_power_of_2(bitmap) &&
-> > +		    !is_optimized_logical_map_enabled(kvm))
-> >  			return -EINVAL;
+> As a side effect it fixes the returned value of
+> intel_crc_pmic_update_aux() since ACPI PMIC core code
+> expects negative or zero and never uses positive one.
 > 
+> While at it, use macros from bits.h to reduce a room for mistake.
 > 
-> I hate to say it but there is another issue here, which I know about for a while
-> but haven't gotten yet to fix.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> ---
+> v3: added tag (Mika)
+>  drivers/acpi/pmic/intel_pmic_bxtwc.c    | 50 +++++++++++--------------
+>  drivers/acpi/pmic/intel_pmic_bytcrc.c   | 20 +++++++---
+>  drivers/acpi/pmic/intel_pmic_chtdc_ti.c | 13 ++++---
+>  drivers/acpi/pmic/intel_pmic_xpower.c   | 10 +++--
+>  4 files changed, 51 insertions(+), 42 deletions(-)
 > 
-> The issue is that AVIC's logical to physical map can't cover all the corner cases
-> that you discovered - it only supports the sane subset: for each cluster, and for each bit
-> in the mask, it has a physical apic id - so things like logical ids with multiple bits,
-> having same logical id for multiple vcpus and so on can't work.
-> 
-> In this case we need to either inhibit AVIC (I support this 100%),
+> diff --git a/drivers/acpi/pmic/intel_pmic_bxtwc.c b/drivers/acpi/pmic/intel_pmic_bxtwc.c
+> index e247615189fa..90a2e62a37e4 100644
+> --- a/drivers/acpi/pmic/intel_pmic_bxtwc.c
+> +++ b/drivers/acpi/pmic/intel_pmic_bxtwc.c
+> @@ -7,19 +7,20 @@
+>  
+>  #include <linux/init.h>
+>  #include <linux/acpi.h>
+> +#include <linux/bits.h>
+> +#include <linux/byteorder/generic.h>
+>  #include <linux/mfd/intel_soc_pmic.h>
+>  #include <linux/regmap.h>
+>  #include <linux/platform_device.h>
+>  #include "intel_pmic.h"
+>  
+> -#define WHISKEY_COVE_ALRT_HIGH_BIT_MASK 0x0F
+> -#define WHISKEY_COVE_ADC_HIGH_BIT(x)	(((x & 0x0F) << 8))
+> -#define WHISKEY_COVE_ADC_CURSRC(x)	(((x & 0xF0) >> 4))
+> -#define VR_MODE_DISABLED        0
+> -#define VR_MODE_AUTO            BIT(0)
+> -#define VR_MODE_NORMAL          BIT(1)
+> -#define VR_MODE_SWITCH          BIT(2)
+> -#define VR_MODE_ECO             (BIT(0)|BIT(1))
+> +#define PMIC_REG_MASK		GENMASK(11, 0)
+> +
+> +#define VR_MODE_DISABLED        (0 << 0)
+> +#define VR_MODE_AUTO            (1 << 0)
+> +#define VR_MODE_NORMAL          (2 << 0)
+> +#define VR_MODE_ECO             (3 << 0)
+> +#define VR_MODE_SWITCH          (4 << 0)
+>  #define VSWITCH2_OUTPUT         BIT(5)
+>  #define VSWITCH1_OUTPUT         BIT(4)
+>  #define VUSBPHY_CHARGE          BIT(1)
+> @@ -297,25 +298,20 @@ static int intel_bxtwc_pmic_update_power(struct regmap *regmap, int reg,
+>  
+>  static int intel_bxtwc_pmic_get_raw_temp(struct regmap *regmap, int reg)
+>  {
+> -	unsigned int val, adc_val, reg_val;
+> -	u8 temp_l, temp_h, cursrc;
+>  	unsigned long rlsb;
+>  	static const unsigned long rlsb_array[] = {
+>  		0, 260420, 130210, 65100, 32550, 16280,
+>  		8140, 4070, 2030, 0, 260420, 130210 };
+> +	unsigned int adc_val, reg_val;
+> +	__be16 buf;
+>  
+> -	if (regmap_read(regmap, reg, &val))
+> +	if (regmap_bulk_read(regmap, reg - 1, &buf, sizeof(buf)))
+>  		return -EIO;
+> -	temp_l = (u8) val;
+>  
+> -	if (regmap_read(regmap, (reg - 1), &val))
+> -		return -EIO;
+> -	temp_h = (u8) val;
 
-I like the idea of inhibiting.
+Hmm, you are changing the order of the register
+reads here. The old code is doing:
 
->  or clear its logical ID map, so all logicical IPIs VM exit, and then they
->  can be emulated.
-> 
-> I haven't studied it formally but the code which rebuilds the AVIC's logical ID map
-> starts at 'avic_handle_ldr_update'.
+	read(reg);
+	read(reg -1);
 
-I suspected there are issues here, but the new tests passed (somewhat surprisingly)
-so I stopped trying to decipher the AVIC LDR handling.
+Where as the new code is doing:
 
-Eww.  And the VM-Exit trap logic is broken too.  If the guest updates and disables
-its LDR, SVM returns immediately and doesn't call into common APIC code, i.e. doesn't
-recalc the optimized map.  E.g. if the guest clears its LDR, the optimized map will
-be left as is and the vCPU will receive interrupts using its old LDR.
+	read(reg -1);
+	read(reg);
 
-	case APIC_LDR:
-		if (avic_handle_ldr_update(vcpu))
-			return 0;
-		break;
+The order matters since typically upon reading the
+low byte, the high bits will get latched so that
+the next read of the high bytes uses the bits
+from the same x-bits value as the low 8 bits.
 
-Rather than handling this purely in AVIC code, what if we a key off of
-the optimized map being enabled?  E.g. drop the return from avic_handle_ldr_update()
-and in the kvm_recalculate_apic_map() do:
+This avoids things like:
 
-diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-index 3b6ef36b3963..6e188010b614 100644
---- a/arch/x86/kvm/lapic.c
-+++ b/arch/x86/kvm/lapic.c
-@@ -364,6 +364,11 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
-                cluster[ldr] = apic;
-        }
- out:
-+       if (!new || new->logical_mode == KVM_APIC_MODE_MAP_DISABLED)
-+               kvm_set_apicv_inhibit(kvm, APICV_INHIBIT_REASON_LOGICAL_MAP_DISABLED);
-+       else
-+               kvm_clear_apicv_inhibit(kvm, APICV_INHIBIT_REASON_LOGICAL_MAP_DISABLED);
-+
-        old = rcu_dereference_protected(kvm->arch.apic_map,
-                        lockdep_is_held(&kvm->arch.apic_map_lock));
-        rcu_assign_pointer(kvm->arch.apic_map, new);
+1. Entire register value (all bits) 0x0ff
+2. Read reg with low 8 bits, read 0x0ff
+3. Entire register value becomes 0x100
+4. Read reg with high bits
+5. Combined value now reads as 0x1ff
+
+I have no idea if the bxtwc PMIC latches
+the bits, but giving the lack of documentation
+it would IMHO be better to not change the reading order.
+
+Regards,
+
+Hans
+
+
+
+
+> +	reg_val = be16_to_cpu(buf);
+>  
+> -	reg_val = temp_l | WHISKEY_COVE_ADC_HIGH_BIT(temp_h);
+> -	cursrc = WHISKEY_COVE_ADC_CURSRC(temp_h);
+> -	rlsb = rlsb_array[cursrc];
+> -	adc_val = reg_val * rlsb / 1000;
+> +	rlsb = rlsb_array[reg_val >> 12];
+> +	adc_val = (reg_val & PMIC_REG_MASK) * rlsb / 1000;
+>  
+>  	return adc_val;
+>  }
+> @@ -325,7 +321,9 @@ intel_bxtwc_pmic_update_aux(struct regmap *regmap, int reg, int raw)
+>  {
+>  	u32 bsr_num;
+>  	u16 resi_val, count = 0, thrsh = 0;
+> -	u8 alrt_h, alrt_l, cursel = 0;
+> +	u16 mask = PMIC_REG_MASK;
+> +	__be16 buf;
+> +	u8 cursel;
+>  
+>  	bsr_num = raw;
+>  	bsr_num /= (1 << 5);
+> @@ -336,15 +334,11 @@ intel_bxtwc_pmic_update_aux(struct regmap *regmap, int reg, int raw)
+>  	thrsh = raw / (1 << (4 + cursel));
+>  
+>  	resi_val = (cursel << 9) | thrsh;
+> -	alrt_h = (resi_val >> 8) & WHISKEY_COVE_ALRT_HIGH_BIT_MASK;
+> -	if (regmap_update_bits(regmap,
+> -				reg - 1,
+> -				WHISKEY_COVE_ALRT_HIGH_BIT_MASK,
+> -				alrt_h))
+> -		return -EIO;
+>  
+> -	alrt_l = (u8)resi_val;
+> -	return regmap_write(regmap, reg, alrt_l);
+> +	if (regmap_bulk_read(regmap, reg - 1, &buf, sizeof(buf)))
+> +		return -EIO;
+> +	buf = cpu_to_be16((be16_to_cpu(buf) & ~mask) | (resi_val & mask));
+> +	return regmap_bulk_write(regmap, reg - 1, &buf, sizeof(buf));
+>  }
+>  
+>  static int
+> diff --git a/drivers/acpi/pmic/intel_pmic_bytcrc.c b/drivers/acpi/pmic/intel_pmic_bytcrc.c
+> index 9ea79f210965..ce647bc46978 100644
+> --- a/drivers/acpi/pmic/intel_pmic_bytcrc.c
+> +++ b/drivers/acpi/pmic/intel_pmic_bytcrc.c
+> @@ -6,6 +6,8 @@
+>   */
+>  
+>  #include <linux/acpi.h>
+> +#include <linux/bits.h>
+> +#include <linux/byteorder/generic.h>
+>  #include <linux/init.h>
+>  #include <linux/mfd/intel_soc_pmic.h>
+>  #include <linux/platform_device.h>
+> @@ -14,6 +16,8 @@
+>  
+>  #define PWR_SOURCE_SELECT	BIT(1)
+>  
+> +#define PMIC_REG_MASK		GENMASK(9, 0)
+> +
+>  #define PMIC_A0LOCK_REG		0xc5
+>  
+>  static struct pmic_table power_table[] = {
+> @@ -219,23 +223,27 @@ static int intel_crc_pmic_update_power(struct regmap *regmap, int reg,
+>  
+>  static int intel_crc_pmic_get_raw_temp(struct regmap *regmap, int reg)
+>  {
+> -	int temp_l, temp_h;
+> +	__be16 buf;
+>  
+>  	/*
+>  	 * Raw temperature value is 10bits: 8bits in reg
+>  	 * and 2bits in reg-1: bit0,1
+>  	 */
+> -	if (regmap_read(regmap, reg, &temp_l) ||
+> -	    regmap_read(regmap, reg - 1, &temp_h))
+> +	if (regmap_bulk_read(regmap, reg - 1, &buf, sizeof(buf)))
+>  		return -EIO;
+>  
+> -	return temp_l | (temp_h & 0x3) << 8;
+> +	return be16_to_cpu(buf) & PMIC_REG_MASK;
+>  }
+>  
+>  static int intel_crc_pmic_update_aux(struct regmap *regmap, int reg, int raw)
+>  {
+> -	return regmap_write(regmap, reg, raw) ||
+> -		regmap_update_bits(regmap, reg - 1, 0x3, raw >> 8) ? -EIO : 0;
+> +	u16 mask = PMIC_REG_MASK;
+> +	__be16 buf;
+> +
+> +	if (regmap_bulk_read(regmap, reg - 1, &buf, sizeof(buf)))
+> +		return -EIO;
+> +	buf = cpu_to_be16((be16_to_cpu(buf) & ~mask) | (raw & mask));
+> +	return regmap_bulk_write(regmap, reg - 1, &buf, sizeof(buf));
+>  }
+>  
+>  static int intel_crc_pmic_get_policy(struct regmap *regmap,
+> diff --git a/drivers/acpi/pmic/intel_pmic_chtdc_ti.c b/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
+> index 6c2a6da430ed..1e80969c4d89 100644
+> --- a/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
+> +++ b/drivers/acpi/pmic/intel_pmic_chtdc_ti.c
+> @@ -8,12 +8,16 @@
+>   */
+>  
+>  #include <linux/acpi.h>
+> +#include <linux/bits.h>
+> +#include <linux/byteorder/generic.h>
+>  #include <linux/init.h>
+>  #include <linux/mfd/intel_soc_pmic.h>
+>  #include <linux/platform_device.h>
+>  #include "intel_pmic.h"
+>  
+>  /* registers stored in 16bit BE (high:low, total 10bit) */
+> +#define PMIC_REG_MASK		GENMASK(9, 0)
+> +
+>  #define CHTDC_TI_VBAT		0x54
+>  #define CHTDC_TI_DIETEMP	0x56
+>  #define CHTDC_TI_BPTHERM	0x58
+> @@ -73,7 +77,7 @@ static int chtdc_ti_pmic_get_power(struct regmap *regmap, int reg, int bit,
+>  	if (regmap_read(regmap, reg, &data))
+>  		return -EIO;
+>  
+> -	*value = data & 1;
+> +	*value = data & BIT(0);
+>  	return 0;
+>  }
+>  
+> @@ -85,13 +89,12 @@ static int chtdc_ti_pmic_update_power(struct regmap *regmap, int reg, int bit,
+>  
+>  static int chtdc_ti_pmic_get_raw_temp(struct regmap *regmap, int reg)
+>  {
+> -	u8 buf[2];
+> +	__be16 buf;
+>  
+> -	if (regmap_bulk_read(regmap, reg, buf, sizeof(buf)))
+> +	if (regmap_bulk_read(regmap, reg, &buf, sizeof(buf)))
+>  		return -EIO;
+>  
+> -	/* stored in big-endian */
+> -	return ((buf[0] & 0x03) << 8) | buf[1];
+> +	return be16_to_cpu(buf) & PMIC_REG_MASK;
+>  }
+>  
+>  static const struct intel_pmic_opregion_data chtdc_ti_pmic_opregion_data = {
+> diff --git a/drivers/acpi/pmic/intel_pmic_xpower.c b/drivers/acpi/pmic/intel_pmic_xpower.c
+> index 33c5e85294cd..3c7380ec8203 100644
+> --- a/drivers/acpi/pmic/intel_pmic_xpower.c
+> +++ b/drivers/acpi/pmic/intel_pmic_xpower.c
+> @@ -6,11 +6,15 @@
+>   */
+>  
+>  #include <linux/acpi.h>
+> +#include <linux/bits.h>
+> +#include <linux/byteorder/generic.h>
+>  #include <linux/init.h>
+>  #include <linux/mfd/axp20x.h>
+>  #include <linux/regmap.h>
+>  #include <linux/platform_device.h>
+> +
+>  #include <asm/iosf_mbi.h>
+> +
+>  #include "intel_pmic.h"
+>  
+>  #define XPOWER_GPADC_LOW	0x5b
+> @@ -218,7 +222,7 @@ static int intel_xpower_pmic_update_power(struct regmap *regmap, int reg,
+>  static int intel_xpower_pmic_get_raw_temp(struct regmap *regmap, int reg)
+>  {
+>  	int ret, adc_ts_pin_ctrl;
+> -	u8 buf[2];
+> +	__be16 buf;
+>  
+>  	/*
+>  	 * The current-source used for the battery temp-sensor (TS) is shared
+> @@ -255,9 +259,9 @@ static int intel_xpower_pmic_get_raw_temp(struct regmap *regmap, int reg)
+>  	if (ret)
+>  		return ret;
+>  
+> -	ret = regmap_bulk_read(regmap, AXP288_GP_ADC_H, buf, sizeof(buf));
+> +	ret = regmap_bulk_read(regmap, AXP288_GP_ADC_H, &buf, sizeof(buf));
+>  	if (ret == 0)
+> -		ret = (buf[0] << 4) + ((buf[1] >> 4) & 0x0f);
+> +		ret = be16_to_cpu(buf) >> 4;
+>  
+>  	if (adc_ts_pin_ctrl & AXP288_ADC_TS_CURRENT_ON_OFF_MASK) {
+>  		regmap_update_bits(regmap, AXP288_ADC_TS_PIN_CTRL,
+

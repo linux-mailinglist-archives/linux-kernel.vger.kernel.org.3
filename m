@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C02085A8801
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:19:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4A325A8820
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232201AbiHaVTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:19:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
+        id S232384AbiHaV3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232211AbiHaVTk (ORCPT
+        with ESMTP id S232367AbiHaV3p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:19:40 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E43F5CC4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:19:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661980769; x=1693516769;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nden09wHw+7qvxDuZ4teofu7WMUZp3ya1vYxeeSmh34=;
-  b=WoAlr9+bcNXUhAiK+OVeKKuftgy7myyrfOn9sE1yN4UXsvNavnhs9WPF
-   QaKr+jaALO8b9rY7qcSVLclxbVWIyqfMpCOgGAykhRIP/LqEVeMSO1CjN
-   PfHGZA5NWRpXmPo31YbqQs6jxUW1VESZ5DZzBwoQwJSy46VpS8mpchuxe
-   UwKyNROgL6cGO6j9ew+ILfEXhwfBnJcd8h0+fYSTY5XyiNxQSI1heVkP8
-   yE76BasgZ7x52BfVn7N+n7Q8FwdvWhVsx2gQElHf3f9ShFIyPgv75F8P1
-   vNh7IJgfoS6cx9HoXw92MFx2ACCEqnjzNWaaVK3pt5AE8mXFKRuPYhGcg
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="275295439"
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="275295439"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 14:19:29 -0700
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="701498490"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 14:19:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oTV7L-006Zl7-0J;
-        Thu, 01 Sep 2022 00:19:23 +0300
-Date:   Thu, 1 Sep 2022 00:19:22 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v1 3/3] regmap: spi-avmm: Use swabXX_array() helpers
-Message-ID: <Yw/QWshWH9L/+Hwp@smile.fi.intel.com>
-References: <20220831145407.78166-3-andriy.shevchenko@linux.intel.com>
- <202209010444.n3YAkNP1-lkp@intel.com>
+        Wed, 31 Aug 2022 17:29:45 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87C312AD5;
+        Wed, 31 Aug 2022 14:19:56 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 21:19:52 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1661980794;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XzhVrNi6J1T5m/BEp6srs+QkCTsVaCof0plMFx3wRs8=;
+        b=jAOcWl/MR9qE63zK4l19mNAvRuoD3Yzj8JohkwGufEQF/5Jz8oJxlXum2x4cmr2MCWyoQ4
+        QCgRIfl+tdrq85LaVoVj+6zIa5KdJdjmpnnIgJH7XqXLg+Qfmt4Syl1ff4exOb8CrmCqMJ
+        EnyWALF/Iu2RUYuUKUpKIo2i2gN3magNAMH/UEAQ/hxELvrOXkv6w82NOzCE+8rNHtnn+R
+        J8BlV0k1qPZAuYE5x6yVBsXrPCJlMCzAUNGDOEHg2WWm2+gfoFL7z/9e/AbN0sUp8YGwqZ
+        VLotpCl48hJKtbCds3HnwM+Xu0v0auOxR2jMJ9Mu4M65CEbKIQucflz9Anm30A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1661980794;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XzhVrNi6J1T5m/BEp6srs+QkCTsVaCof0plMFx3wRs8=;
+        b=59sI/aopzGXxBoFE0/UkPEy61NHgx6Kmp9s4lPepxnTgMEYmi51Y7NZrmGeb/E0zv+ig7K
+        VOSCsInkiL+DH2CQ==
+From:   "tip-bot2 for Tony Luck" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/urgent] x86/cpu: Add CPU model numbers for Meteor Lake
+Cc:     Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20220824175718.232384-1-tony.luck@intel.com>
+References: <20220824175718.232384-1-tony.luck@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202209010444.n3YAkNP1-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Message-ID: <166198079277.401.11078019641098059546.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,32 +65,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 04:12:01AM +0800, kernel test robot wrote:
+The following commit has been merged into the x86/urgent branch of tip:
 
-...
+Commit-ID:     5515d21c6817bc27b0b13c61edf22b09b58bc647
+Gitweb:        https://git.kernel.org/tip/5515d21c6817bc27b0b13c61edf22b09b58bc647
+Author:        Tony Luck <tony.luck@intel.com>
+AuthorDate:    Wed, 24 Aug 2022 10:57:18 -07:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Wed, 31 Aug 2022 14:17:00 -07:00
 
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/base/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All errors (new ones prefixed by >>):
+x86/cpu: Add CPU model numbers for Meteor Lake
 
-Indeed, I compiled only first two patches on x86.
+Add model numbers for client and mobile parts.
 
-> >> drivers/base/regmap/regmap-spi-avmm.c:171:15: error: incompatible pointer types passing 'char *' to parameter of type 'u32 *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
->            swab32_array(buf, len / 4);
->                         ^~~
->    include/linux/swab.h:32:38: note: passing argument to parameter 'buf' here
->    static inline void swab32_array(u32 *buf, unsigned int words)
->                                         ^
->    6 warnings and 1 error generated.
+Signed-off-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Link: https://lkml.kernel.org/r/20220824175718.232384-1-tony.luck@intel.com
+---
+ arch/x86/include/asm/intel-family.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-While error message is valid, I believe the warnings are not related to the
-patch in question and were before it.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
+index aeb3802..5d75fe2 100644
+--- a/arch/x86/include/asm/intel-family.h
++++ b/arch/x86/include/asm/intel-family.h
+@@ -115,6 +115,9 @@
+ #define INTEL_FAM6_RAPTORLAKE_P		0xBA
+ #define INTEL_FAM6_RAPTORLAKE_S		0xBF
+ 
++#define INTEL_FAM6_METEORLAKE		0xAC
++#define INTEL_FAM6_METEORLAKE_L		0xAA
++
+ /* "Small Core" Processors (Atom) */
+ 
+ #define INTEL_FAM6_ATOM_BONNELL		0x1C /* Diamondville, Pineview */

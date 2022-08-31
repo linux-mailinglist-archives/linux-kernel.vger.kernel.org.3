@@ -2,50 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C3C45A78E5
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D41535A78EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231450AbiHaIVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S231542AbiHaIWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230469AbiHaIVQ (ORCPT
+        with ESMTP id S231424AbiHaIVz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:21:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F11F1BEA7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:20:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F36D6B81FB0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:18:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E69EAC433D6;
-        Wed, 31 Aug 2022 08:18:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1661933937;
-        bh=oQEpIl02Caai0Z7pk6Qje2yeMx2zYiGnfAAL0WZGH8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Vo87sU8KdVcbAx/l5U40sexiMuEH77Cc3O9ceqiSlCV4rGPBqUqZcMQvkoGrGX4ZR
-         45EX6wDTl64HVIfnoznHLu2a3TU+hzEaB/WKIZiNkSyandmbo/UrIIZADM+KDlDvLg
-         0D8JvJ0lT/2tQuGx0oPt8obpJ9GBz9yrFlUfZf28=
-Date:   Wed, 31 Aug 2022 10:19:13 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Cc:     jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com,
-        johan@kernel.org, penguin-kernel@i-love.sakura.ne.jp,
-        zhangxuezhi1@coolpad.com, xyangxi5@gmail.com,
+        Wed, 31 Aug 2022 04:21:55 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A586C6FDE
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:20:35 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 72so13713806pfx.9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:20:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=tpUhGp+/TcjTBnxv5sQ0z4PHoyY+irmj8KbJJl11ccM=;
+        b=iMAwBFaw6EdZxqqed1nCkV30ufKckKqtfv14GQkzuHkbeID8fP1+8ejU2Gx+oSor8M
+         G2GYEc/NZ4m3uJzVpyTR2vhlTtIKicq6vDq4BkUp0FFWFyAfFb7Wr/k+HyrFDhdLbLWL
+         5V8JvYuBZaXq3y18OD0IZrmli+wHRmEbmk30GQwVw125ye6O3lHJ9khpCt5Nnbh5g5af
+         ypJawaSYknzfwGwCQ0x7zWZzzQ78GhtJq89wSdEArHJNK5N/BSnuSeIpxhv2YE3/8akU
+         DUOC2vsEDMB9kz1x9G+QeKtLnPq8xKhUy6eXis3YE61oB9X5Skzt3uHCs+AEw47LDC41
+         z07Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=tpUhGp+/TcjTBnxv5sQ0z4PHoyY+irmj8KbJJl11ccM=;
+        b=R0/OnWLPsOlOpNG/HdLQZYmPLC+zovl0UUlltRyYb8XoD4nLg9BpWCGOL8Y88Sw/RV
+         VjsDJjPxwDspjhKUx5047McGWaabfMeXX2Jl9rPmeSc7Z1u+8/9D3BkG+KWorq2FNFjZ
+         UkB+Bas4z+Z+yBysPb9AJu1wWCrdEAGn2YH5h1hTtAkfjaHnso1PLP4B5P4fTUlXHw31
+         D59jhnvHkme7Q+4MhY9Nk5Z0Z8XBFaiSXs+PjNi9ONGw8ggyK65BMA0l9MHkmQ2cxNhI
+         CnLl+FeSWldMjW70k2i52l/LqVHLYHS1kNkGeTLVKd84MdNesZoLdwFQyd4R8knFap2i
+         7N6Q==
+X-Gm-Message-State: ACgBeo1l24rmib4RBFOD3WPVNIwc2iLCL7I8U5ebLv3klc1UcTpeZMV2
+        tpZHi3f7rrRzoGpk77jIwtghcCHTOJEL
+X-Google-Smtp-Source: AA6agR6U8HuxmeEmOg2xKiG5EaLZptlqRvTU/96KVbdgF9UNJQZOAhDc3wv92IWVBNw06nO0sGNPAA==
+X-Received: by 2002:a63:9dca:0:b0:429:c235:8b3b with SMTP id i193-20020a639dca000000b00429c2358b3bmr20478788pgd.567.1661934032448;
+        Wed, 31 Aug 2022 01:20:32 -0700 (PDT)
+Received: from thinkpad ([117.217.182.234])
+        by smtp.gmail.com with ESMTPSA id d9-20020a170902cec900b001753654d9c5sm656123plg.95.2022.08.31.01.20.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 01:20:31 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 13:50:25 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Kishon Vijay Abraham I <kishon@ti.com>
+Cc:     lpieralisi@kernel.org, bhelgaas@google.com, kw@linux.com,
+        robh@kernel.org, vidyas@nvidia.com, linux-pci@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tty: vt: Add checks after calling kzalloc
-Message-ID: <Yw8ZgVojT0HsZO5t@kroah.com>
-References: <20220831075742.2175792-1-jiasheng@iscas.ac.cn>
+Subject: Re: [PATCH 2/2] PCI: endpoint: Use link_up() callback in place of
+ LINK_UP notifier
+Message-ID: <20220831082025.GC5076@thinkpad>
+References: <20220811094237.77632-1-manivannan.sadhasivam@linaro.org>
+ <20220811094237.77632-3-manivannan.sadhasivam@linaro.org>
+ <c200a544-31fe-b660-82bb-4bbed5acf135@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220831075742.2175792-1-jiasheng@iscas.ac.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c200a544-31fe-b660-82bb-4bbed5acf135@ti.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,52 +77,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 03:57:42PM +0800, Jiasheng Jiang wrote:
-> As the potential failure of the memory allocation,
-> it should be better to check the return value after
-> calling kzalloc and return error if fails.
+On Thu, Aug 25, 2022 at 03:47:10PM +0530, Kishon Vijay Abraham I wrote:
+> Hi Mani,
 > 
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
-> ---
->  drivers/tty/vt/vt.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> On 11/08/22 15:12, Manivannan Sadhasivam wrote:
+> > As a part of the transition towards callback mechanism for signalling the
+> > events from EPC to EPF, let's use the link_up() callback in the place of
+> > the LINK_UP notifier. This also removes the notifier support completely
+> > from the PCI endpoint framework.
+> > 
+> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> > ---
+> >  drivers/pci/endpoint/functions/pci-epf-test.c | 33 ++++++-------------
+> >  drivers/pci/endpoint/pci-epc-core.c           |  8 +++--
+> >  include/linux/pci-epc.h                       |  8 -----
+> >  include/linux/pci-epf.h                       |  8 ++---
+> >  4 files changed, 18 insertions(+), 39 deletions(-)
+> > 
 > 
-> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-> index ae9c926acd6f..a4d59f3a3ce0 100644
-> --- a/drivers/tty/vt/vt.c
-> +++ b/drivers/tty/vt/vt.c
-> @@ -3519,11 +3519,19 @@ static int __init con_init(void)
->  
->  	for (currcons = 0; currcons < MIN_NR_CONSOLES; currcons++) {
->  		vc_cons[currcons].d = vc = kzalloc(sizeof(struct vc_data), GFP_NOWAIT);
-> +		if (!vc) {
-> +			console_unlock();
-> +			return -ENOMEM;
-> +		}
->  		INIT_WORK(&vc_cons[currcons].SAK_work, vc_SAK);
->  		tty_port_init(&vc->port);
->  		visual_init(vc, currcons, 1);
->  		/* Assuming vc->vc_{cols,rows,screenbuf_size} are sane here. */
->  		vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size, GFP_NOWAIT);
-> +		if (!vc->vc_screenbuf) {
-> +			console_unlock();
-> +			return -ENOMEM;
-> +		}
->  		vc_init(vc, vc->vc_rows, vc->vc_cols,
->  			currcons || !vc->vc_sw->con_save_screen);
->  	}
-> -- 
-> 2.25.1
+> .
+> .
+> <snip>
+> .
+> .
+> > diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
+> > index 805f3d64f93b..a51ba9f158c3 100644
+> > --- a/drivers/pci/endpoint/pci-epc-core.c
+> > +++ b/drivers/pci/endpoint/pci-epc-core.c
+> > @@ -690,10 +690,15 @@ EXPORT_SYMBOL_GPL(pci_epc_remove_epf);
+> >   */
+> >  void pci_epc_linkup(struct pci_epc *epc)
+> >  {
+> > +	struct pci_epf *epf;
+> > +
+> >  	if (!epc || IS_ERR(epc))
+> >  		return;
+> >  
+> > -	atomic_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
+> > +	list_for_each_entry(epf, &epc->pci_epf, list) {
+> > +		if (epf->event_ops->link_up)
+> > +			epf->event_ops->link_up(epf);
+> > +	}
+> 
+> how do you ensure there is no race while invoking the call back
+> functions during add/remove of epf?
 > 
 
-This has been attempted many times in the past, sorry.  Unless you can
-prove that this can actually happen in real life, we are going to leave
-these as-is.
+Good catch! These should be guarded by epf->lock.
 
-Please do not just do random changes like this without actually testing
-to see if it is possible to happen.
+Thanks,
+Mani
 
-thanks,
+> Thanks,
+> Kishon
 
-greg k-h
+-- 
+மணிவண்ணன் சதாசிவம்

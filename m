@@ -2,76 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCF875A7633
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:06:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1815A7635
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229653AbiHaGGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:06:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
+        id S230027AbiHaGHW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229599AbiHaGG0 (ORCPT
+        with ESMTP id S229599AbiHaGHU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:06:26 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8C7BBA78
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:06:24 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id by6so13524806ljb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=ANWBqxWkat4oQFVKGRhdNPZ9ZiKYZ296HDF9WbmQQ+8=;
-        b=TbZpycTA3AqHS1/7eFvv9gYFRLluNX0H7KoZ9Yoy3jmt09xOepWw774eJiYL7WS7uw
-         7LVC5U8tnfxTbUNXoVCdBLSf3Ao4ByC6cEs+tbmBSq9MJuBUV7rrvZJtrUGjYwKjwQxC
-         G2a/4fk+EwasMBZU8VBFamTdQ9qcK0GvR9ZxK5uVMvEW4vVFixcS6tzpRI2dyvX2Xad0
-         MCNDp8I797KzzZP0DAPZvCA7PdWJb/7o+Dj/G9lKMWi6jxk0+++iBNGVsp+JYzHn6r4x
-         YEok1Pkf0QRmH8VgbIaulRZT+V05dFyjB4nTVLuDVSzwCmxRVEivjFs2G3feZVANrufc
-         F8Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=ANWBqxWkat4oQFVKGRhdNPZ9ZiKYZ296HDF9WbmQQ+8=;
-        b=zJapZqrYbStgdM8/XtYEkMhlkdcjsRcYKAJ6Yb+3zER7ul2t5P/2joQ7G1qSPuUH6r
-         rIcJuFUPPHldK+xxJ4bqn78llkEPY//tVBdDDTB/aWooLLaj3sTFnIBAAyjjP/Z+6ozL
-         vlL/E4qgA/qzUritLPfpWg7GdnQeF8g+JV9PJNoAqjR+aJ7FaDFMwCjUWCKWRmrIlvDj
-         V5i8CdR7xBbQs/BnFHUOqC+v0OqQmgHWgkYWxNWVPa4o02QAG5RCDKx6cWccju0sfFlJ
-         z20L8iI1tk/h1ZIMSV77m7Kl0JXC2WXvwhOX0NVGZhbpTf0+Es1GYD0MwzAc3kaKQy7e
-         fG5Q==
-X-Gm-Message-State: ACgBeo22Nk71I7eXNATeeMxDwcCk4ivYWLRf6YYJ9hEsCVU4onT2lI14
-        NUocY5L2FBvIfZORZ3uWVQh0PQ==
-X-Google-Smtp-Source: AA6agR4QWoZyhAAEzosHUW29HjdzdM6WXVR3nCVWVK7p9w1Z5PugZ8sseAxrpNPkz7l7u4HkxqZT7g==
-X-Received: by 2002:a2e:b987:0:b0:268:4772:8e41 with SMTP id p7-20020a2eb987000000b0026847728e41mr1034144ljp.458.1661925982704;
-        Tue, 30 Aug 2022 23:06:22 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id e15-20020a05651c038f00b00264bb2351e8sm569511ljp.7.2022.08.30.23.06.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 30 Aug 2022 23:06:22 -0700 (PDT)
-Message-ID: <daf497c5-4422-b8ce-1bbe-f2722962715c@linaro.org>
-Date:   Wed, 31 Aug 2022 09:06:21 +0300
+        Wed, 31 Aug 2022 02:07:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D62E9AFD4
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:07:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661926038;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=28ym5xn5CncpI4sc7VXIv13Zg85Y3cioTTzu0mfpAeI=;
+        b=c++KBbk8rdjZPyKwmDrS8d/6mAUouMZqLapYb1J3KCYd7ckdesQh1EEnJhaAP/BbDSHofw
+        CaqBZUaB8Qet6A7e/4pQl3WJMZIvuOd7Vs1eeF6Il1HVh2Wb3I6GICxvD/Lqy/l6JyExOE
+        5H651q4sZJA1Cw5+T1LuysxmYvG9fYk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-fuK6VMlWONKxGmZlQLnjvQ-1; Wed, 31 Aug 2022 02:07:15 -0400
+X-MC-Unique: fuK6VMlWONKxGmZlQLnjvQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BDD0F811E80;
+        Wed, 31 Aug 2022 06:07:14 +0000 (UTC)
+Received: from starship (unknown [10.40.194.96])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 26F69141512E;
+        Wed, 31 Aug 2022 06:07:12 +0000 (UTC)
+Message-ID: <fd349966a87ef3cb93fe1670e91cf6d2142ed442.camel@redhat.com>
+Subject: Re: [PATCH 19/19] Revert "KVM: SVM: Do not throw warning when
+ calling avic_vcpu_load on a running vcpu"
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Date:   Wed, 31 Aug 2022 09:07:11 +0300
+In-Reply-To: <20220831003506.4117148-20-seanjc@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+         <20220831003506.4117148-20-seanjc@google.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v5 2/2] dts: arm: at91: Add SAMA5D3-EDS board
-Content-Language: en-US
-To:     Jerry.Ray@microchip.com, robh+dt@kernel.org,
-        Nicolas.Ferre@microchip.com, alexandre.belloni@bootlin.com,
-        Ludovic.Desroches@microchip.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220830152428.12625-1-jerry.ray@microchip.com>
- <20220830152428.12625-2-jerry.ray@microchip.com>
- <92c213de-872c-bc0b-382c-c9940309f272@linaro.org>
- <MWHPR11MB169397E1C572642536803951EF799@MWHPR11MB1693.namprd11.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <MWHPR11MB169397E1C572642536803951EF799@MWHPR11MB1693.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,27 +66,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/08/2022 23:16, Jerry.Ray@microchip.com wrote:
->>
->>> +
->>> +     chosen {
->>> +             stdout-path = "serial0:115200n8";
->>> +     };
->>> +
->>> +     clocks {
->>> +             slow_xtal {
->>
->> No underscores in node names. Generic node names, so at least add some generic prefix or suffix, e.g.: "slow-xtal-clock"
->>
+On Wed, 2022-08-31 at 00:35 +0000, Sean Christopherson wrote:
+> Turns out that some warnings exist for good reasons.  Restore the warning
+> in avic_vcpu_load() that guards against calling avic_vcpu_load() on a
+> running vCPU now that KVM avoids doing so when switching between x2APIC
+> and xAPIC.  The entire point of the WARN is to highlight that KVM should
+> not be reloading an AVIC.
 > 
-> I'm not at liberty to change these names.  Pre-existing drivers are counting on them.
-> The hardware leverages the SAMA5D3-xplained board.
-> I'm leveraging the at91-sama5d3_xplained.dts.
-> The board will not boot up if I modify the names.
+> Opportunistically convert the WARN_ON() to WARN_ON_ONCE() to avoid
+> spamming the kernel if it does fire.
+> 
+> This reverts commit c0caeee65af3944b7b8abbf566e7cc1fae15c775.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/svm/avic.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
+> index b2033a56010c..3c300113d40b 100644
+> --- a/arch/x86/kvm/svm/avic.c
+> +++ b/arch/x86/kvm/svm/avic.c
+> @@ -1080,6 +1080,7 @@ void avic_vcpu_load(struct kvm_vcpu *vcpu, int cpu)
+>  		return;
+>  
+>  	entry = READ_ONCE(*(svm->avic_physical_id_cache));
+> +	WARN_ON_ONCE(entry & AVIC_PHYSICAL_ID_ENTRY_IS_RUNNING_MASK);
+>  
+>  	entry &= ~AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK;
+>  	entry |= (h_physical_id & AVIC_PHYSICAL_ID_ENTRY_HOST_PHYSICAL_ID_MASK);
 
-For custom names you have clock-output-names... But anyway it seems you
-override existing nodes, so this should be override by label, not by
-entire path.
+Note that this warning was removed because it would trigger wheh x2avic code would switch
+between xapic and x2apic.
+
+I do agree 100% that this warning is useful.
 
 Best regards,
-Krzysztof
+	Maxim Levitsky
+

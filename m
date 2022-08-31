@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82D175A85D6
+	by mail.lfdr.de (Postfix) with ESMTP id 39A1E5A85D5
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232901AbiHaSia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59114 "EHLO
+        id S233038AbiHaSiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233037AbiHaSiA (ORCPT
+        with ESMTP id S233019AbiHaSh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:38:00 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D1213D3C
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:34:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=qXmrCnpitzVik2ZwdtpGRAJ60eJb5DPfzzZ5ouE/xSM=; b=F1HPRY50KyFQ1m4Fm249FFJryG
-        HdFlbL6Subz/RRlIK6Sn8ZJlMTVBHCcULdA/W9QKh5LDaNqtOI7yWHEM4E+fiPmtK9QL0fBO3doAa
-        UeBy/73QQ9C5vYDWaTCYyL90q2EakS/dJqkY6OTB9Yk19OkgigiXManT588KhsjrNPcwyc/mv+FMv
-        ebVIoMZft/Zyo0mzE7KnDoqaixblffjcBxlgGx+5RhSaaDjr/Zlq3UaTKEVgUcwfEpxPMFIIY5PT5
-        y0tDH/Q8msYyuT5BTmqO6Xj67zWnmiCL/jyYS+L3HWaS5TKwlHf4YTjmZ1HsLMjoH/XKNAS0U7UmZ
-        9oVVDGSA==;
-Received: from [2601:1c0:6280:3f0::a6b3]
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTSYD-007csW-Ts; Wed, 31 Aug 2022 18:34:57 +0000
-Message-ID: <e61a6903-550d-df70-6297-f49cc2750244@infradead.org>
-Date:   Wed, 31 Aug 2022 11:34:56 -0700
+        Wed, 31 Aug 2022 14:37:58 -0400
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3825A13E00
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:35:00 -0700 (PDT)
+Received: by mail-pg1-x529.google.com with SMTP id r22so14227807pgm.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:35:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=BF6HZWh0lIO6JP7Iahnyp/DPpNq7NYWD0O6mpa00wm0=;
+        b=WMT7IblMUP6IbINyxYOTTk3/5C/SsZwEz/PStR1GnxNGEiTOBTx0H0bcoX7mtTZOFs
+         vW/nmQVoxpVJGmhXtPihBudI7bs7hFhQ7NNkMHCNvfgh40a1jYEzzES0ocdqAzWF06W6
+         ereG8wftpqUi6FJJpbNpjoGm7QbHY6Odaz8Fw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=BF6HZWh0lIO6JP7Iahnyp/DPpNq7NYWD0O6mpa00wm0=;
+        b=lRx9iC+wbj0+VTPqhleogjFS9IrwXqTU3Hi9v96jHmwXTaGHuI87e9xNzO12E3QN9k
+         e4MjNOWiK8cnbcNDpqfTwbdKJwFgO7+cO1fjcrb0lPfZ8Sdonrl+iIN8+SIlaFx1h6N6
+         2U3EIbQU+BYq6GwenO6883oclnqIahYJn5jvf3B7Bc+JANObpjV7KN+tz6HfhnWqsbfq
+         v1CtlkqCEBqM+C3Tz0KiFG3IXI4CIzPTACXiMuPBfub6mv5cqWkz7wEGUaKH/x1x5lq1
+         CprZB16Oll37p2UBb8cwQD6Xi13k+82TNuJJWMzvQUpPhqGYy/q20i0OXFIPdZM7xiJM
+         ngdA==
+X-Gm-Message-State: ACgBeo2pDvTkAWu84Clljb9xK9Ao5cc7p+jFbGv9BITN8EYbVPusbs8b
+        9sm6FnF1YzeZzOht4BleGJtzwA==
+X-Google-Smtp-Source: AA6agR7fo6VejIBMks/yQH9zBQhqvzOQ/jVgBeELe620QEE3MIqxdQctdFNdrpDaTK8wEGiOq4adhA==
+X-Received: by 2002:a05:6a00:a90:b0:530:2f3c:da43 with SMTP id b16-20020a056a000a9000b005302f3cda43mr27374922pfl.50.1661970899675;
+        Wed, 31 Aug 2022 11:34:59 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id bm26-20020a656e9a000000b0042bd73400b6sm3642659pgb.87.2022.08.31.11.34.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 11:34:59 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 11:34:58 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>, Tom Rix <trix@redhat.com>,
+        linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-input@vger.kernel.org, Masahiro Yamada <masahiroy@kernel.org>
+Subject: Re: [PATCH 1/3] fortify: use __builtin_dynamic_object_size in
+ __compiletime_strlen
+Message-ID: <202208311132.27EE59B@keescook>
+References: <20220830205309.312864-1-ndesaulniers@google.com>
+ <20220830205309.312864-2-ndesaulniers@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2] drm/scheduler: quieten kernel-doc warnings
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        linux-kernel@vger.kernel.org
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Nayan Deshmukh <nayan26deshmukh@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        Jiawei Gu <Jiawei.Gu@amd.com>, dri-devel@lists.freedesktop.org,
-        airlied@gmail.com
-References: <20220404213040.12912-1-rdunlap@infradead.org>
- <68961bab-6448-9a98-8916-9c3cb0c5d020@amd.com>
-Content-Language: en-US
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <68961bab-6448-9a98-8916-9c3cb0c5d020@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220830205309.312864-2-ndesaulniers@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,98 +72,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ping?
-
-On 4/4/22 14:58, Andrey Grodzovsky wrote:
-> Reviewed-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
-> Andrey
+On Tue, Aug 30, 2022 at 01:53:07PM -0700, Nick Desaulniers wrote:
+> With CONFIG_FORTIFY=y and CONFIG_UBSAN_LOCAL_BOUNDS=y enabled, we
+> observe a runtime panic while running Android's Compatibility Test
+> Suite's (CTS) android.hardware.input.cts.tests.  This is stemming from a
+> strlen() call in hidinput_allocate().
 > 
-> On 2022-04-04 17:30, Randy Dunlap wrote:
->> Fix kernel-doc warnings in gpu_scheduler.h and sched_main.c.
->>
->> Quashes these warnings:
->>
->> include/drm/gpu_scheduler.h:332: warning: missing initial short description on line:
->>   * struct drm_sched_backend_ops
->> include/drm/gpu_scheduler.h:412: warning: missing initial short description on line:
->>   * struct drm_gpu_scheduler
->> include/drm/gpu_scheduler.h:461: warning: Function parameter or member 'dev' not described in 'drm_gpu_scheduler'
->>
->> drivers/gpu/drm/scheduler/sched_main.c:201: warning: missing initial short description on line:
->>   * drm_sched_dependency_optimized
->> drivers/gpu/drm/scheduler/sched_main.c:995: warning: Function parameter or member 'dev' not described in 'drm_sched_init'
->>
->> Fixes: 2d33948e4e00 ("drm/scheduler: add documentation")
->> Fixes: 8ab62eda177b ("drm/sched: Add device pointer to drm_gpu_scheduler")
->> Fixes: 542cff7893a3 ("drm/sched: Avoid lockdep spalt on killing a processes")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
->> Cc: David Airlie <airlied@linux.ie>
->> Cc: Daniel Vetter <daniel@ffwll.ch>
->> Cc: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
->> Cc: Nayan Deshmukh <nayan26deshmukh@gmail.com>
->> Cc: Alex Deucher <alexander.deucher@amd.com>
->> Cc: Christian König <christian.koenig@amd.com>
->> Cc: Jiawei Gu <Jiawei.Gu@amd.com>
->> Cc: dri-devel@lists.freedesktop.org
->> Acked-by: Christian König <christian.koenig@amd.com>
->> ---
->> Feel free to make changes or suggest changes...
->>
->> v2: drop @work description (already done by Andrey)
->>
->>   drivers/gpu/drm/scheduler/sched_main.c |    3 ++-
->>   include/drm/gpu_scheduler.h            |    9 +++++----
->>   2 files changed, 7 insertions(+), 5 deletions(-)
->>
->> --- linux-next-20220404.orig/drivers/gpu/drm/scheduler/sched_main.c
->> +++ linux-next-20220404/drivers/gpu/drm/scheduler/sched_main.c
->> @@ -198,7 +198,7 @@ static void drm_sched_job_done_cb(struct
->>   }
->>     /**
->> - * drm_sched_dependency_optimized
->> + * drm_sched_dependency_optimized - test if the dependency can be optimized
->>    *
->>    * @fence: the dependency fence
->>    * @entity: the entity which depends on the above fence
->> @@ -984,6 +984,7 @@ static int drm_sched_main(void *param)
->>    *        used
->>    * @score: optional score atomic shared with other schedulers
->>    * @name: name used for debugging
->> + * @dev: target &struct device
->>    *
->>    * Return 0 on success, otherwise error code.
->>    */
->> --- linux-next-20220404.orig/include/drm/gpu_scheduler.h
->> +++ linux-next-20220404/include/drm/gpu_scheduler.h
->> @@ -328,10 +328,10 @@ enum drm_gpu_sched_stat {
->>   };
->>     /**
->> - * struct drm_sched_backend_ops
->> + * struct drm_sched_backend_ops - Define the backend operations
->> + *    called by the scheduler
->>    *
->> - * Define the backend operations called by the scheduler,
->> - * these functions should be implemented in driver side.
->> + * These functions should be implemented in the driver side.
->>    */
->>   struct drm_sched_backend_ops {
->>       /**
->> @@ -408,7 +408,7 @@ struct drm_sched_backend_ops {
->>   };
->>     /**
->> - * struct drm_gpu_scheduler
->> + * struct drm_gpu_scheduler - scheduler instance-specific data
->>    *
->>    * @ops: backend operations provided by the driver.
->>    * @hw_submission_limit: the max size of the hardware queue.
->> @@ -434,6 +434,7 @@ struct drm_sched_backend_ops {
->>    * @_score: score used when the driver doesn't provide one
->>    * @ready: marks if the underlying HW is ready to work
->>    * @free_guilty: A hit to time out handler to free the guilty job.
->> + * @dev: system &struct device
->>    *
->>    * One scheduler is implemented for each hardware ring.
->>    */
+> __compiletime_strlen is implemented in terms of __builtin_object_size(),
+> then does an array access to check for NUL-termination. A quirk of
+> __builtin_object_size() is that for strings whose values are runtime
+> dependent, __builtin_object_size(str, 1 or 0) returns the maximum size
+> of possible values when those sizes are determinable at compile time.
+> Example:
+> 
+>   static const char *v = "FOO BAR";
+>   static const char *y = "FOO BA";
+>   unsigned long x (int z) {
+>       // Returns 8, which is:
+>       // max(__builtin_object_size(v, 1), __builtin_object_size(y, 1))
+>       return __builtin_object_size(z ? v : y, 1);
+>   }
+> 
+> So when FORTIFY is enabled, the current implementation of
+> __compiletime_strlen will try to access beyond the end of y at runtime
+> using the size of v. Mixed with UBSAN_LOCAL_BOUNDS we get a fault.
+> 
+> hidinput_allocate() has a local C string whose value is control flow
+> dependent on a switch statement, so __builtin_object_size(str, 1)
+> evaluates to the maximum string length, making all other cases fault on
+> the last character check. hidinput_allocate() could be cleaned up to
+> avoid runtime calls to strlen() since the local variable can only have
+> literal values, so there's no benefit to trying to fortify the strlen
+> call site there.
+> 
+> Add a Kconfig check for __builtin_dynamic_object_size(), then use that
+> when available (gcc-12+, all supported versions of clang) which avoids
+> this surprising behavior.
+> 
+> Suggested-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+> ---
+>  include/linux/fortify-string.h | 8 +++++++-
+>  init/Kconfig                   | 3 +++
+>  2 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+> index 3b401fa0f374..c5adad596a3f 100644
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@ -14,11 +14,17 @@ void __read_overflow2_field(size_t avail, size_t wanted) __compiletime_warning("
+>  void __write_overflow(void) __compiletime_error("detected write beyond size of object (1st parameter)");
+>  void __write_overflow_field(size_t avail, size_t wanted) __compiletime_warning("detected write beyond size of field (1st parameter); maybe use struct_group()?");
+>  
+> +#ifdef CONFIG_CC_HAS_BUILTIN_DYNAMIC_OBJECT_SIZE
+> +#define __object_size __builtin_dynamic_object_size
+> +#else
+> +#define __object_size __builtin_object_size
+> +#endif
+
+Instead of a Kconfig, how about just:
+
+#if __has_builtin(__builtin_dynamic_object_size)
+# define __object_size __builtin_dynamic_object_size
+#else
+# define __object_size __builtin_object_size
+#endif
+
+?
+
+> +
+>  #define __compiletime_strlen(p)					\
+>  ({								\
+>  	unsigned char *__p = (unsigned char *)(p);		\
+>  	size_t __ret = (size_t)-1;				\
+> -	size_t __p_size = __builtin_object_size(p, 1);		\
+> +	size_t __p_size = __object_size(p, 1);			\
+>  	if (__p_size != (size_t)-1) {				\
+>  		size_t __p_len = __p_size - 1;			\
+>  		if (__builtin_constant_p(__p[__p_len]) &&	\
+
+The fact that __builtin_object_size() will actually span control flow,
+and produce a size-inclusive result on the possible inputs is ...
+surprising and potentially quite problematic. But I'm satisfied that
+bdos appears to fix it here (since the "compiletime"ness will still get
+filtered by the __builtin_constant_p() check).
+
+-Kees
 
 -- 
-~Randy
+Kees Cook

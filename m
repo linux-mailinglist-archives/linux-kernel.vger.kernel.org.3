@@ -2,102 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5055A847B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30935A847D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:36:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbiHaRgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:36:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45212 "EHLO
+        id S231393AbiHaRgx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 13:36:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230431AbiHaRgf (ORCPT
+        with ESMTP id S231418AbiHaRgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:36:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E4BA7A8C;
-        Wed, 31 Aug 2022 10:36:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7B99DB82208;
-        Wed, 31 Aug 2022 17:36:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25C83C43470;
-        Wed, 31 Aug 2022 17:36:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661967391;
-        bh=yJab6UBBzoP5rTwF37tjjwA+4IJ1+TuOLBp6YmYoMMM=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=rNuVikaxps84sU1IM55mD06HmOXr7hFInyNzWXmrmQLDA0g3Q+phCmeOWCBK+3Gxl
-         Gjp6tqTOptOUUKsOB7aZA09F28tCwUC4bwaS8N3+HGl0mHNlRGpZ9tktZGF+ApB/2S
-         CjYd48kDu1xhMIPgdEFDn9PIif8YTfdKJumS8VSiUBHzHtj++1xm62apEZGNyGwPEM
-         VZ/S18tiCKB/5P8rl+ho+eeb2MROWXyBVaUj7xytk9tYhZudRc8/MCMvAFGAF0dpgw
-         Uz7hRINOerE/E4gu+ukB4TG5RgIvHnqx87HQ7qWfjooR0thnwwrWdTgZBNRyxUAdEV
-         0688vxKWqw5EA==
-Content-Type: text/plain; charset="utf-8"
+        Wed, 31 Aug 2022 13:36:45 -0400
+Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B7A4B7EF1;
+        Wed, 31 Aug 2022 10:36:43 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 13:36:39 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1661967401;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=NBRMm1N3TN2sW5l8lmaOsP+pOHJybKZQLg5sV5Bi+Vs=;
+        b=JlOCFCHLrsWklrXM0385YM6w7ONHaEPAHe9rbKLQa6iwi3TeZ6LGh6EG0D5RUZ8bAEay85
+        TAGsGzcCQGLMFTxoEaZr7aTw2maxHxNvr+IE3uFEdinyqTaPDARIxnAdsqWHY3hSd8p5Eu
+        OEYdA4Gxpjs4b1sPxYJbnA0/z/KA/Fw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Coly Li <colyli@suse.de>
+Cc:     linux-kernel@vger.kernel.org, linux-bcache@vger.kernel.org
+Subject: Re: [PATCH 2/3] bcache: Convert to lib/time_stats
+Message-ID: <20220831173639.sb6bhg5xvn4gbkiu@moria.home.lan>
+References: <20220829165344.2958640-1-kent.overstreet@linux.dev>
+ <20220829165344.2958640-3-kent.overstreet@linux.dev>
+ <14ACCED7-D24D-4AC4-8677-F7F4630A840A@suse.de>
+ <20220831165437.l27raas6k5nlqsdg@moria.home.lan>
+ <1F91055C-4253-42CD-8A4A-8B8EA2CF1D6E@suse.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <1655004286-11493-9-git-send-email-quic_fenglinw@quicinc.com>
-References: <1655004286-11493-1-git-send-email-quic_fenglinw@quicinc.com> <1655004286-11493-9-git-send-email-quic_fenglinw@quicinc.com>
-Subject: Re: [RESEND PATCH v6 08/10] dt-bindings: spmi: spmi-pmic-arb: make interrupt properties as optional
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     quic_collinsd@quicinc.com, quic_subbaram@quicinc.com,
-        quic_fenglinw@quicinc.com, tglx@linutronix.de, maz@kernel.org,
-        David Collins <collinsd@codeaurora.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Fenglin Wu <quic_fenglinw@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 31 Aug 2022 10:36:29 -0700
-User-Agent: alot/0.10
-Message-Id: <20220831173631.25C83C43470@smtp.kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1F91055C-4253-42CD-8A4A-8B8EA2CF1D6E@suse.de>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Fenglin Wu (2022-06-11 20:24:44)
-> From: David Collins <collinsd@codeaurora.org>
->=20
-> Make all interrupt related properties as optional instead of
-> required.  Some boards do not required PMIC IRQ support and it
-> isn't needed to handle SPMI bus transactions, so specify it as
-> optional.
->=20
-> Signed-off-by: David Collins <collinsd@codeaurora.org>
-> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
-> Acked-by: Rob Herring <robh@kernel.org>
-> ---
->  Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml | 3 ---
->  1 file changed, 3 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.ya=
-ml b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-> index 55d379c..fee4f0e 100644
-> --- a/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-> +++ b/Documentation/devicetree/bindings/spmi/qcom,spmi-pmic-arb.yaml
-> @@ -88,9 +88,6 @@ properties:
->  required:
->    - compatible
->    - reg-names
-> -  - interrupts
-> -  - interrupt-names
-> -  - '#interrupt-cells'
+On Thu, Sep 01, 2022 at 01:02:37AM +0800, Coly Li wrote:
+> Can I understand that rate = 1/frequency ?  Then frequency 4 is around to rate 0.
 
-Let me clarify my comment on the next driver patch here. It looks like
-we're making the properties optional here so that the driver can choose
-to create or not create the irqchip based on the presence of the
-property. Are there PMIC arbiters that don't have irq support? Or is it
-only that some board designs don't use interrupt support of the PMIC,
-because all the devices that use interrupts on the PMIC aren't enabled
-(status =3D "okay")?
+Correct, rate = 1/frequency.
 
-We shouldn't get into a situation where we're removing the interrupt
-properties because we want the driver to skip creating the irqchip. That
-makes the binding too loose, where we can't validate existing DT files.
-It also makes it confusing to include the DTS files when the device
-always supports interrupt capabilities, just we don't want to use it.
+> > The quantiles are for the duration, they give you an idea of the statistical
+> > distribution, see https://en.wikipedia.org/wiki/Quantile
+> 
+> I wanted to ask how to read the quantiles line. Does it mean that 1 ns is
+> equally divided by 15 segments, and the counter values are for the divided
+> 1/15 ns segments?
+
+It is the 15 boundaries between 16 equal segments, yes.
+
+> Quantiles are much humane, standard deviation is scared… Just FYI LOL.
+
+That's valuable feedback then, maybe we'll keep both. The more expensive part of
+time stats is just ingesting data points, but we've got a percpu buffer frontend
+for that - just doing a bit more moth doesn't cost much.

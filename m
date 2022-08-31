@@ -2,121 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE6D5A7D8C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:37:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E01D5A7D90
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbiHaMhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
+        id S230479AbiHaMiB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:38:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbiHaMho (ORCPT
+        with ESMTP id S231288AbiHaMhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:37:44 -0400
-Received: from out28-148.mail.aliyun.com (out28-148.mail.aliyun.com [115.124.28.148])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC2F0167D9
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:37:42 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07722721|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.0675243-0.00153387-0.930942;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047198;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.P4QJDlq_1661949456;
-Received: from 192.168.220.136(mailfrom:victor@allwinnertech.com fp:SMTPD_---.P4QJDlq_1661949456)
-          by smtp.aliyun-inc.com;
-          Wed, 31 Aug 2022 20:37:39 +0800
-Message-ID: <dda053b1-2d4f-153b-b811-78021eae3882@allwinnertech.com>
-Date:   Wed, 31 Aug 2022 20:37:36 +0800
+        Wed, 31 Aug 2022 08:37:55 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA0CC59D7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:37:53 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id b44so18176967edf.9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:37:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=Fuu2JI5A+wpqBRcbGTVNrKjUHyua0GPAJlLMkrI8qfM=;
+        b=DncXsye6bDUGM3ZIlLj8XaqyFahtrLvWtKE5nsSgLN9rz+zuBJr8w2nCpnng1T7Ull
+         HGATaLn6yjkxmIGp9wf1ULad1lWWo59GbeZV7/Xa4IWOtpa8AahuoTZltyQvyK4k5Kz3
+         qsXuN3+8mCqPoRtcd3cLOzs01jdB4GHRnNMHbJAt+bhPEP+0p8ABJfvoL63QGX1Tz8YF
+         G21U5UD92CSv9NIb6NAk41FKefscQhcq+CP4V/YabLsp0ux5sjk6kwXAhgwZ1T63MVd/
+         lw3sTwerL9dFL1hk0QymcSLvcY+bKvu9UZw3Z0V366w4964qiIdpDuylQEvmqfPe+9tU
+         j3jw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=Fuu2JI5A+wpqBRcbGTVNrKjUHyua0GPAJlLMkrI8qfM=;
+        b=rYhWDEzbX/5HuuvPTSXhVdcX3fRcOChOPxK+yVz6xdHyT1fGiZzTTfvnGaEbWR5O3C
+         CayDWrSlKeNolLvvWK2+AO5rYBeXoJg+ERvclEpwX5qLLA2DM6Syft/xvv//P6/jKCa8
+         v9LMIDztiLMyCYosfGPiDmLABudo4f2rVWiA+O6M9hEVkBP2y+Rw9vQGFaOmunHWoPxe
+         ykNaimoLtU3UE5kz6AJ7Kk6eP5SQY6mRcTykd6Ni9HqBxktrqy4b6H48rf38J6Pa34UO
+         Z8OadZlc0YuEwZ6eDxxuBGrp3R6CqiBpZSgEVgilSqIY/rm7uPfEBj/aEGJHpRYRkpW+
+         JfQA==
+X-Gm-Message-State: ACgBeo1UpladuwpMmEB4Se8OQASBXf+1XEyobd3usYQy8t303qF3lbmP
+        XGvS9ttJhk9PRmgPGRiCuMbMJR8Lcrf7KPjumB5owoZxhck=
+X-Google-Smtp-Source: AA6agR6omxyBZo7cfhMeYIlGj9RWba4kt4+v9Lqw1rabWR1KY7hd2NaWUKr76TcAnNwZ6YcyK7Qa6NIvNPVVvf0g0aQ=
+X-Received: by 2002:aa7:c84f:0:b0:446:2bfb:5a63 with SMTP id
+ g15-20020aa7c84f000000b004462bfb5a63mr24625165edt.172.1661949471929; Wed, 31
+ Aug 2022 05:37:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] ARM: mmu: fix access to illegal address when using
- earlycon & memblock=debug
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>, linux@armlinux.org.uk,
-        rmk+kernel@armlinux.org.uk, linus.walleij@linaro.org,
-        yanfei.xu@windriver.com, ardb@kernel.org, tglx@linutronix.de,
-        mirq-linux@rere.qmqm.pl, arnd@arndb.de
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220316023356.120595-1-victor@allwinnertech.com>
- <CGME20220831115257eucas1p20d37a01c51e42767860920a936255bd7@eucas1p2.samsung.com>
- <9a425a51-9460-6c4d-e331-5cd5873f8a43@samsung.com>
-From:   Victor Hassan <victor@allwinnertech.com>
-In-Reply-To: <9a425a51-9460-6c4d-e331-5cd5873f8a43@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+References: <20220829131553.690063-1-nuno.sa@analog.com> <20220829131553.690063-2-nuno.sa@analog.com>
+In-Reply-To: <20220829131553.690063-2-nuno.sa@analog.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Wed, 31 Aug 2022 14:37:40 +0200
+Message-ID: <CACRpkdaxfgf6T4EcWKG8_y4LmZPggQHGjHcq6f_5YkgGWv5vcA@mail.gmail.com>
+Subject: Re: [PATCH v4 01/10] input: keyboard: adp5588-keys: support gpi key
+ events as 'gpio keys'
+To:     =?UTF-8?B?TnVubyBTw6E=?= <nuno.sa@analog.com>
+Cc:     linux-kernel@vger.kernel.org, Bartosz Golaszewski <brgl@bgdev.pl>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Hennerich <michael.hennerich@analog.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/2022 7:52 PM, Marek Szyprowski wrote:
-> Hi Victor,
-> 
-> On 16.03.2022 03:33, Victor Hassan wrote:
->> earlycon uses fixmap to create a memory map,
->> So we need to close earlycon before closing fixmap,
->> otherwise printk will access illegal addresses.
->> After creating a new memory map, we open earlycon again.
->>
->> Signed-off-by: Victor Hassan <victor@allwinnertech.com>
-> 
-> This patch landed in linux next-20220831 as commit a76886d117cb ("ARM:
-> 9223/1: mmu: fix access to illegal address when using earlycon &
-> memblock=debug"). Unfortunately it breaks booting of all my test boards
-> which *do not* use earlycon. It can be easily reproduced even with QEMU.
-> 
-> With kernel compiled from multi_v7_defconfig the following setup boots:
-> 
-> $ qemu-system-arm -nographic -kernel arch/arm/boot/zImage -append
-> "console=ttyAMA0 earlycon" -M virt -smp 2 -m 512
-> 
-> while this one doesn't:
-> 
-> $ qemu-system-arm -nographic -kernel arch/arm/boot/zImage -append
-> "console=ttyAMA0" -M virt -smp 2 -m 512
-> 
-> 
->> ---
->>    arch/arm/mm/mmu.c | 7 +++++++
->>    1 file changed, 7 insertions(+)
->>
->> diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
->> index 274e4f73fd33..f3511f07a7d0 100644
->> --- a/arch/arm/mm/mmu.c
->> +++ b/arch/arm/mm/mmu.c
->> @@ -14,6 +14,7 @@
->>    #include <linux/fs.h>
->>    #include <linux/vmalloc.h>
->>    #include <linux/sizes.h>
->> +#include <linux/console.h>
->>    
->>    #include <asm/cp15.h>
->>    #include <asm/cputype.h>
->> @@ -1695,6 +1696,9 @@ static void __init early_fixmap_shutdown(void)
->>    	pmd_clear(fixmap_pmd(va));
->>    	local_flush_tlb_kernel_page(va);
->>    
->> +#ifdef CONFIG_FIX_EARLYCON_MEM
->> +	console_stop(console_drivers);
->> +#endif
->>    	for (i = 0; i < __end_of_permanent_fixed_addresses; i++) {
->>    		pte_t *pte;
->>    		struct map_desc map;
->> @@ -1713,6 +1717,9 @@ static void __init early_fixmap_shutdown(void)
->>    
->>    		create_mapping(&map);
->>    	}
->> +#ifdef CONFIG_FIX_EARLYCON_MEM
->> +	console_start(console_drivers);
->> +#endif
->>    }
->>    
->>    /*
-> 
-> Best regards
+On Mon, Aug 29, 2022 at 3:15 PM Nuno S=C3=A1 <nuno.sa@analog.com> wrote:
 
-Dear Marek,
-Thank you for the notice. I'll figure it out and feed back to you as 
-soon as possible.
+> This change replaces the support for GPIs as key event generators.
+> Instead of reporting the events directly, we add a gpio based irqchip
+> so that these events can be consumed by keys defined in the gpio-keys
+> driver (as it's goal is indeed for keys on GPIOs capable of generating
+> interrupts). With this, the gpio-adp5588 driver can also be dropped.
+>
+> The basic idea is that all the pins that are not being used as part of
+> the keymap matrix can be possibly requested as GPIOs by gpio-keys
+> (it's also fine to use these pins as plain interrupts though that's not
+> really the point).
+>
+> Since the gpiochip now also has irqchip capabilities, we should only
+> remove it after we free the device interrupt (otherwise we could, in
+> theory, be handling GPIs interrupts while the gpiochip is concurrently
+> removed). Thus the call 'adp5588_gpio_add()' is moved and since the
+> setup phase also needs to come before making the gpios visible, we also
+> need to move 'adp5588_setup()'.
+>
+> While at it, always select GPIOLIB so that we don't need to use #ifdef
+> guards.
+>
+> Signed-off-by: Nuno S=C3=A1 <nuno.sa@analog.com>
 
-Regards,
-Victor
+Makes the world simpler so:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours,
+Linus Walleij

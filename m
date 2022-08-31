@@ -2,105 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1296D5A8821
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B23BE5A8827
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:35:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232371AbiHaVaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60162 "EHLO
+        id S232362AbiHaVfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232329AbiHaVaV (ORCPT
+        with ESMTP id S231955AbiHaVfc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:30:21 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4746EF13
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:30:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661981420; x=1693517420;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rSnUoGMhuC5zlijS2vBa0BR4NHyX4MpKBuKfLDQV5ng=;
-  b=jEE0mtnw0yyzTn/dBLUX6Pnzuh+O/TP2c5WGGdBQaLVuRAuu2DvJb/s9
-   qS60Ylj/ZloilwOSCc7n8Ww2b9iTrhNYU9Jkjr5jzmLouuL39mv2WV2kP
-   r6EILR8huNkYHzEMFl4/Sq3aCFme6Unv0mY7sDSWPYufJyW8BeNvQVY95
-   ecB9FJYC2ygCB2VCDvJIyHQpNOw03DHpouKepPhkeQFYRAYYiw+/cKDQk
-   HHTqG2i83ih3yrJrdGNG9wJeTKIhv9frwcsvoy8+P+CYavEp3hJ8tPGnq
-   8hkN3GumsvoqLcN6LFfm/t6/3Sao848IxPEEe9fPA3TpKQclUwwb4euNR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="357266532"
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="357266532"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 14:30:20 -0700
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="680579063"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 14:30:18 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oTVHs-006Zzf-1N;
-        Thu, 01 Sep 2022 00:30:16 +0300
-Date:   Thu, 1 Sep 2022 00:30:16 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] regmap: mmio: Fix rebase error
-Message-ID: <Yw/S6NjDcd/JeZCG@smile.fi.intel.com>
-References: <20220831141303.501548-1-linus.walleij@linaro.org>
+        Wed, 31 Aug 2022 17:35:32 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B944332E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:35:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FDF8B8237D
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 21:35:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A55C433D6;
+        Wed, 31 Aug 2022 21:35:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661981727;
+        bh=uoI059YsN7b/dpj3ZD0QOsRMOtclPxUh1slTPJ2ZPxQ=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=dxovCY//gkKD6LeZ3Wk6zUjUQpowCKkcMQ/ZDLrNt0D9bCeAWnDVa+rVWA0lEqAJt
+         DttYSCtHkRXMlpD94JOIhoYU7276PyU2sKUqg/fC3iNkZgJHbXDk1CICHN7SDUI97m
+         LgS2c+IMYYsmawPnonUbpfCj5JTEc/z9FgJeerW9X9IKnvB/hPR7aeip43LXo61vbH
+         x7lCYhhxooP/htEo0fscWX3WlcLCuz2pHvVeTEbh/51f7OYUSM9m915Li0eHAKqTGG
+         Z4Dp9pR8zOqonrz2AoMJTSeEcB2I8N0vVaB9b/6gO9gSqkt1ixh0MzanmvvmGtWOFO
+         kuctIHMg+0CqQ==
+Message-ID: <4c7f9d2b46a02324dd4467144edaf3b2a34720b2.camel@kernel.org>
+Subject: Re: [PATCH v4 0/5] tracing/hist: Add percentage histogram suffixes
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Cc:     Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Date:   Wed, 31 Aug 2022 16:35:25 -0500
+In-Reply-To: <166157298537.348924.2537162090505397377.stgit@devnote2>
+References: <166157298537.348924.2537162090505397377.stgit@devnote2>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831141303.501548-1-linus.walleij@linaro.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 04:13:03PM +0200, Linus Walleij wrote:
-> A dangling pointless "ret 0" was left in and some unneeded
-> whitespace can go too.
-
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-> Fixes: 81c0386c1376 ("regmap: mmio: Support accelerared noinc operations")
-> Reported-by: Andy Shevchenko <andriy.shevchenko@intel.com>
-> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> ---
->  drivers/base/regmap/regmap-mmio.c | 3 ---
->  1 file changed, 3 deletions(-)
-> 
-> diff --git a/drivers/base/regmap/regmap-mmio.c b/drivers/base/regmap/regmap-mmio.c
-> index e8d2675463ac..b47ee3e8d050 100644
-> --- a/drivers/base/regmap/regmap-mmio.c
-> +++ b/drivers/base/regmap/regmap-mmio.c
-> @@ -410,14 +410,11 @@ static int regmap_mmio_noinc_read(void *context, unsigned int reg,
->  		}
->  	}
->  
-> -
->  out_clk:
->  	if (!IS_ERR(ctx->clk))
->  		clk_disable(ctx->clk);
->  
->  	return ret;
-> -
-> -	return 0;
->  }
->  
->  
-> -- 
-> 2.37.2
-> 
-
--- 
-With Best Regards,
-Andy Shevchenko
-
+SGkgTWFzYW1pLAoKT24gU2F0LCAyMDIyLTA4LTI3IGF0IDEzOjAzICswOTAwLCBNYXNhbWkgSGly
+YW1hdHN1IChHb29nbGUpIHdyb3RlOgo+IEhpLAo+IAo+IEhlcmUgaXMgdGhlIDR0aCB2ZXJzaW9u
+IG9mIC5wZXJjZW50IGFuZCAuZ3JhcGggc3VmZml4ZXMgZm9yIGhpc3RvZ3JhbQo+IHRyaWdnZXIg
+dG8gc2hvdyB0aGUgdmFsdWUgaW4gcGVyY2VudGFnZSBhbmQgaW4gYmFyLWdyYXBoCj4gcmVzcGVj
+dGl2ZWx5Lgo+IAo+IEkndmUgcmViYXNlZCBvbiBUb20ncyBoaXRjb3VudCBwYXRjaFsxLzVdIG9u
+IHRoZSBzZXJpZXMgYW5kIGFkZGVkIGEKPiBwYXRjaAo+IGZvciBzdXByZXNzaW5nIGRpc3BsYXkg
+b2YgaGl0Y291bnRbNS81XSBpbiB0aGlzIHZlcnNpb24uCgpUaGlzIGlzIGEgdmVyeSBuaWNlIHBh
+dGNoc2V0IG92ZXJhbGwgLSB0aGUgb25seSBxdWVzdGlvbiBJIGhhdmUKY29uY2VybnMgcGF0Y2gg
+NSBmb3Igc3VwcHJlc3NpbmcgdGhlIGhpdGNvdW50LiAgSSBhY3R1YWxseSB0aGluayB0aGUKcGF0
+Y2ggaXMgZmluZSBhbmQgZG9lcyB3aGF0IGl0IHNheXMgbmljZWx5IChhbmQgcHJvYmFibHkgc2hv
+dWxkIGhhdmUKYmVlbiBkb25lIHRoYXQgd2F5IHRvIGJlZ2luIHdpdGgpIGJ1dCBpdCBsb29rcyBs
+aWtlIGl0IHdvdWxkIGNhdXNlCnByb2JsZW1zIGZvciBhbnlvbmUgYWxyZWFkeSBkb2luZyBwb3N0
+cHJvY2Vzc2luZyBhbmQgd2hvc2Ugc2NyaXB0cwp3b3VsZCBiZSBleHBlY3RpbmcgdGhlIGhpdGNv
+dW50IHRvIGJlIHRoZXJlLiAgU28gY2hhbmdpbmcgdGhlIGRlZmF1bHQKYmVoYXZpb3Igd291bGQg
+cmVxdWlyZSB0aGVpciBzY3JpcHRzIHRvIGNoYW5nZSwgYW5kIGFsc28gbm93IHRoYXQgSQpsb29r
+IGF0IGl0LCB0aGUgZXhhbXBsZSBvdXRwdXQgaW4gRG9jdW1lbnRhdGlvbi8gYXMgd2VsbC4KCkhv
+dyBhYm91dCBhZGRpbmcgYW4gb3B0aW9uIGxpa2UgJ25vaGl0Y291bnQnIGFuZCBoYXZpbmcgdGhh
+dCBwYXRjaCBkbwp3aGF0IGl0IGRvZXMgYnV0IG9ubHkgaWYgdGhhdCBvcHRpb24gaXMgc2V0PwoK
+QW55d2F5LCBmb3IgdGhlIG90aGVyIG9uZXMsIHBhdGNoZXMgMi00LAoKICBTaWduZWQtb2ZmLWJ5
+OiBUb20gWmFudXNzaSA8emFudXNzaUBrZXJuZWwub3JnPgogIFRlc3RlZC1ieTogVG9tIFphbnVz
+c2kgPHphbnVzc2lAa2VybmVsLm9yZwoKVGhhbmtzIQoKVG9tCgo+IAo+IFRoaXMgd2lsbCBoZWxw
+IHVzIHRvIGNoZWNrIHRoZSB0cmVuZCBvZiB0aGUgaGlzdG9ncmFtIGluc3RhbnRseQo+IHdpdGhv
+dXQgYW55IHBvc3QgcHJvY2Vzc2luZyB0b29sLgo+IAo+IEhlcmUgc2hvd3MgYW4gZXhhbXBsZSBv
+ZiB0aGUgcGVyY2VudGFnZSBhbmQgdGhlIGJhciBncmFwaCBvZgo+IHRoZSBoaXRjb3VudCBvZiB0
+aGUgcnVubmluZyB0YXNrcy4KPiAKPiDCoCAjIGNkIC9zeXMva2VybmVsL2RlYnVnL3RyYWNpbmcv
+Cj4gwqAgIyBlY2hvIGhpc3Q6a2V5cz1waWQ6dmFscz1oaXRjb3VudC5wZXJjZW50LGhpdGNvdW50
+LmdyYXBoOnNvcnQ9cGlkCj4gPiBcCj4gwqDCoMKgwqDCoMKgwqAgZXZlbnRzL3NjaGVkL3NjaGVk
+X3N0YXRfcnVudGltZS90cmlnZ2VyCj4gwqAgIyBzbGVlcCAxMAo+IMKgICMgY2F0IGV2ZW50cy9z
+Y2hlZC9zY2hlZF9zdGF0X3J1bnRpbWUvaGlzdAo+IMKgIyBldmVudCBoaXN0b2dyYW0KPiDCoCMK
+PiDCoCMgdHJpZ2dlciBpbmZvOgo+IGhpc3Q6a2V5cz1waWQ6dmFscz1oaXRjb3VudC5wZXJjZW50
+LGhpdGNvdW50LmdyYXBoOnNvcnQ9cGlkOnNpemU9MjA0OAo+IFthY3RpdmVdCj4gwqAjCj4gCj4g
+wqB7IHBpZDrCoMKgwqDCoMKgwqDCoMKgIDE0IH0gaGl0Y291bnQgKCUpOsKgwqAgNC42OMKgIGhp
+dGNvdW50Ogo+ICMjI8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIAo+IMKgeyBwaWQ6
+wqDCoMKgwqDCoMKgwqDCoCAxNiB9IGhpdGNvdW50ICglKTrCoCAxNy4xOMKgIGhpdGNvdW50Ogo+
+ICMjIyMjIyMjIyMjwqDCoMKgwqDCoMKgwqDCoCAKPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAg
+NTcgfSBoaXRjb3VudCAoJSk6wqDCoCA3LjgxwqAgaGl0Y291bnQ6Cj4gIyMjIyPCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIAo+IMKgeyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCA2MSB9IGhpdGNv
+dW50ICglKTrCoCAzMS4yNcKgIGhpdGNvdW50Ogo+ICMjIyMjIyMjIyMjIyMjIyMjIyMjCj4gwqB7
+IHBpZDrCoMKgwqDCoMKgwqDCoMKgIDcwIH0gaGl0Y291bnQgKCUpOsKgwqAgNC42OMKgIGhpdGNv
+dW50Ogo+ICMjI8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIAo+IMKgeyBwaWQ6wqDC
+oMKgwqDCoMKgwqDCoCA3NyB9IGhpdGNvdW50ICglKTrCoMKgIDEuNTbCoCBoaXRjb3VudDoKPiAj
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIAo+IMKgeyBwaWQ6wqDCoMKgwqDC
+oMKgwqAgMTQ1IH0gaGl0Y291bnQgKCUpOsKgIDE4Ljc1wqAgaGl0Y291bnQ6Cj4gIyMjIyMjIyMj
+IyMjwqDCoMKgwqDCoMKgwqAgCj4gwqB7IHBpZDrCoMKgwqDCoMKgwqDCoCAxNTEgfSBoaXRjb3Vu
+dCAoJSk6wqDCoCA5LjM3wqAgaGl0Y291bnQ6Cj4gIyMjIyMjwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqAgCj4gwqB7IHBpZDrCoMKgwqDCoMKgwqDCoCAxNTIgfSBoaXRjb3VudCAoJSk6wqDCoCA0
+LjY4wqAgaGl0Y291bnQ6Cj4gIyMjwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgCj4g
+Cj4gwqBUb3RhbHM6Cj4gwqDCoMKgwqAgSGl0czogNjQKPiDCoMKgwqDCoCBFbnRyaWVzOiA5Cj4g
+wqDCoMKgwqAgRHJvcHBlZDogMAo+IAo+IE9mIGNvdXJzZSBpZiB5b3UgZXhwbGljaXRseSBzcGVj
+aWZ5IHRoZSBoaXRjb3VudCwgaXQgY2FuIHNob3cgdGhlCj4gaGl0Y291bnQgYXMgYmVsb3c7Cj4g
+Cj4gwqAgIyBjZCAvc3lzL2tlcm5lbC9kZWJ1Zy90cmFjaW5nLwo+IMKgICMgZWNobyBoaXN0Omtl
+eXM9cGlkOnZhbHM9aGl0Y291bnQscnVudGltZTpzb3J0PXBpZCA+IFwKPiDCoMKgwqDCoMKgwqDC
+oCBldmVudHMvc2NoZWQvc2NoZWRfc3RhdF9ydW50aW1lL3RyaWdnZXIKPiDCoCAjIHNsZWVwIDEw
+Cj4gwqAgIyBjYXQgZXZlbnRzL3NjaGVkL3NjaGVkX3N0YXRfcnVudGltZS9oaXN0Cj4gwqAjIGV2
+ZW50IGhpc3RvZ3JhbQo+IMKgIwo+IMKgIyB0cmlnZ2VyIGluZm86Cj4gaGlzdDprZXlzPXBpZDp2
+YWxzPWhpdGNvdW50LHJ1bnRpbWU6c29ydD1waWQ6c2l6ZT0yMDQ4IFthY3RpdmVdCj4gwqAjCj4g
+Cj4gwqB7IHBpZDrCoMKgwqDCoMKgwqDCoMKgIDE0IH0gaGl0Y291bnQ6wqDCoMKgwqDCoMKgwqDC
+oMKgIDLCoCBydW50aW1lOsKgwqDCoMKgIDMwNDg3Ngo+IMKgeyBwaWQ6wqDCoMKgwqDCoMKgwqDC
+oCAxNiB9IGhpdGNvdW50OsKgwqDCoMKgwqDCoMKgwqDCoCA4wqAgcnVudGltZTrCoMKgwqDCoCAz
+MDA1NzQKPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgMjYgfSBoaXRjb3VudDrCoMKgwqDCoMKg
+wqDCoMKgwqAgMsKgIHJ1bnRpbWU6wqDCoMKgwqDCoCAxNTU3OAo+IMKgeyBwaWQ6wqDCoMKgwqDC
+oMKgwqDCoCAzMiB9IGhpdGNvdW50OsKgwqDCoMKgwqDCoMKgwqDCoCAywqAgcnVudGltZTrCoMKg
+wqDCoCAyMTkxODYKPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgNTcgfSBoaXRjb3VudDrCoMKg
+wqDCoMKgwqDCoMKgwqAgM8KgIHJ1bnRpbWU6wqDCoMKgwqAgNTA2MDAzCj4gwqB7IHBpZDrCoMKg
+wqDCoMKgwqDCoMKgIDYxIH0gaGl0Y291bnQ6wqDCoMKgwqDCoMKgwqDCoCAyMMKgIHJ1bnRpbWU6
+wqDCoMKgIDE2ODE0NzMKPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgNjkgfSBoaXRjb3VudDrC
+oMKgwqDCoMKgwqDCoMKgwqAgM8KgIHJ1bnRpbWU6wqDCoMKgwqAgMjAxNzg1Cj4gwqB7IHBpZDrC
+oMKgwqDCoMKgwqDCoMKgIDcwIH0gaGl0Y291bnQ6wqDCoMKgwqDCoMKgwqDCoMKgIDTCoCBydW50
+aW1lOsKgwqDCoMKgIDM2MDYwOAo+IMKgeyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCA3NyB9IGhpdGNv
+dW50OsKgwqDCoMKgwqDCoMKgwqDCoCA4wqAgcnVudGltZTrCoMKgwqAgNDE0NjkzNQo+IMKgeyBw
+aWQ6wqDCoMKgwqDCoMKgwqAgMTQ1IH0gaGl0Y291bnQ6wqDCoMKgwqDCoMKgwqDCoCAxM8KgIHJ1
+bnRpbWU6wqDCoMKgIDc1Mzc5OTQKPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgIDE1NSB9IGhpdGNv
+dW50OsKgwqDCoMKgwqDCoMKgwqDCoCA0wqAgcnVudGltZTrCoMKgwqAgMjUxMTkzNwo+IMKgeyBw
+aWQ6wqDCoMKgwqDCoMKgwqAgMTU2IH0gaGl0Y291bnQ6wqDCoMKgwqDCoMKgwqDCoMKgIDLCoCBy
+dW50aW1lOsKgwqDCoCAxMzk4ODg2Cj4gCj4gwqBUb3RhbHM6Cj4gwqDCoMKgwqAgSGl0czogNzEK
+PiDCoMKgwqDCoCBFbnRyaWVzOiAxMgo+IMKgwqDCoMKgIERyb3BwZWQ6IDAKPiAKPiAKPiBUaGFu
+ayB5b3UsCj4gCj4gLS0tCj4gCj4gTWFzYW1pIEhpcmFtYXRzdSAoR29vZ2xlKSAoNCk6Cj4gwqDC
+oMKgwqDCoCB0cmFjaW5nOiBGaXggdG8gY2hlY2sgZXZlbnRfbXV0ZXggaXMgaGVsZCB3aGlsZSBh
+Y2Nlc3NpbmcKPiB0cmlnZ2VyIGxpc3QKPiDCoMKgwqDCoMKgIHRyYWNpbmc6IEFkZCAucGVyY2Vu
+dCBzdWZmaXggb3B0aW9uIHRvIGhpc3RvZ3JhbSB2YWx1ZXMKPiDCoMKgwqDCoMKgIHRyYWNpbmc6
+IEFkZCAuZ3JhcGggc3VmZml4IG9wdGlvbiB0byBoaXN0b2dyYW0gdmFsdWUKPiDCoMKgwqDCoMKg
+IHRyYWNpbmc6IFNob3cgaGl0Y291bnQgdmFsdWUgb25seSB3aGVuIHNwZWNpZmllZAo+IAo+IFRv
+bSBaYW51c3NpICgxKToKPiDCoMKgwqDCoMKgIHRyYWNpbmc6IEFsbG93IG11bHRpcGxlIGhpdGNv
+dW50IHZhbHVlcyBpbiBoaXN0b2dyYW1zCj4gCj4gCj4gwqBrZXJuZWwvdHJhY2UvdHJhY2UuY8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoMKgIDMgLQo+IMKga2VybmVsL3RyYWNl
+L3RyYWNlX2V2ZW50c19oaXN0LmPCoMKgwqAgfMKgIDE3Ngo+ICsrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKy0tLS0tCj4gwqBrZXJuZWwvdHJhY2UvdHJhY2VfZXZlbnRzX3RyaWdnZXIuYyB8
+wqDCoMKgIDMgLQo+IMKgMyBmaWxlcyBjaGFuZ2VkLCAxNTYgaW5zZXJ0aW9ucygrKSwgMjYgZGVs
+ZXRpb25zKC0pCj4gCj4gLS0KPiBNYXNhbWkgSGlyYW1hdHN1IChHb29nbGUpIDxtaGlyYW1hdEBr
+ZXJuZWwub3JnPgoK
 

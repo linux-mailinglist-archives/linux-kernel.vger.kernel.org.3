@@ -2,46 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA9115A79DB
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:14:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9955A79DF
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:14:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiHaJOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:14:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50284 "EHLO
+        id S230181AbiHaJOr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230516AbiHaJOA (ORCPT
+        with ESMTP id S230416AbiHaJOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:14:00 -0400
-Received: from fornost.hmeau.com (helcar.hmeau.com [216.24.177.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2CC7C0E4D;
-        Wed, 31 Aug 2022 02:13:59 -0700 (PDT)
-Received: from gwarestrin.arnor.me.apana.org.au ([192.168.103.7])
-        by fornost.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1oTJnF-00H6FV-EG; Wed, 31 Aug 2022 19:13:54 +1000
-Received: by gwarestrin.arnor.me.apana.org.au (sSMTP sendmail emulation); Wed, 31 Aug 2022 17:13:53 +0800
-Date:   Wed, 31 Aug 2022 17:13:53 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com,
-        Steffen Klassert <steffen.klassert@secunet.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] xfrm: Don't increase scratch users if allocation fails
-Message-ID: <Yw8mUVCdov6l3Cun@gondor.apana.org.au>
-References: <00000000000092839d0581fd74ad@google.com>
- <20220831014126.6708-1-khalid.masum.92@gmail.com>
+        Wed, 31 Aug 2022 05:14:43 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D1ADB959F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:14:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=GFz5iOxIbBoTaBFwG7z+teOGvv89yKvEwyJQ2cSoFzc=; b=D4zzVGFeJjxoIM9PhRE79Psysy
+        L4dFtyScAG6Wa48YuDOjM+fJbgDNWzZyPe368/WcSPOg7RGLC1Du+pMHJoKqIWkuQWlmH0YH7KzEK
+        MpurqE66sfdNtecXb8kohhx0B2OmsCM2Csy6deuk1fO9E8RzNF7GCI9jHjt8X2HeN8AhzSX8GeJ3T
+        RIBoCzr3dHoGLfsqtBvzNl78Xq8KRApeWubuMraMMehdP3mkUuiGpIn7VbgCQupUHwKtFky2PWw0S
+        CjGSvUDh4iDqW7FKfnHRJwgtu2tlKr54Z8WAiaGcRS+iiXLNZuWl8P1KX8e5cf7yUaajDCMWWEC8v
+        7D9hAWww==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oTJno-004xPS-44; Wed, 31 Aug 2022 09:14:28 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id ACFEB300137;
+        Wed, 31 Aug 2022 11:14:25 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 930052B84630D; Wed, 31 Aug 2022 11:14:25 +0200 (CEST)
+Date:   Wed, 31 Aug 2022 11:14:25 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: Re: [PATCH v6 3/5] sched: Enforce user requested affinity
+Message-ID: <Yw8mcbgYThZGpMfN@hirez.programming.kicks-ass.net>
+References: <20220826010119.1265764-1-longman@redhat.com>
+ <20220826010119.1265764-4-longman@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831014126.6708-1-khalid.masum.92@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20220826010119.1265764-4-longman@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,50 +69,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 07:41:26AM +0600, Khalid Masum wrote:
-> ipcomp_alloc_scratches() routine increases ipcomp_scratch_users count
-> even if it fails to allocate memory. Therefore, ipcomp_free_scratches()
-> routine, when triggered, tries to vfree() non existent percpu 
-> ipcomp_scratches.
-> 
-> To fix this breakage, do not increase scratch users count if
-> ipcomp_alloc_scratches() fails to allocate scratches.
-> 
-> Reported-and-tested-by: syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com
-> Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
-> ---
->  net/xfrm/xfrm_ipcomp.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/xfrm/xfrm_ipcomp.c b/net/xfrm/xfrm_ipcomp.c
-> index cb40ff0ff28d..af9097983139 100644
-> --- a/net/xfrm/xfrm_ipcomp.c
-> +++ b/net/xfrm/xfrm_ipcomp.c
-> @@ -210,13 +210,15 @@ static void * __percpu *ipcomp_alloc_scratches(void)
->  	void * __percpu *scratches;
->  	int i;
+On Thu, Aug 25, 2022 at 09:01:17PM -0400, Waiman Long wrote:
+
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index ac2b103d69dc..1c2f548e5369 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -2928,11 +2928,40 @@ static int __set_cpus_allowed_ptr_locked(struct task_struct *p,
+>  static int __set_cpus_allowed_ptr(struct task_struct *p,
+>  				  const struct cpumask *new_mask, u32 flags)
+>  {
+> +	struct cpumask *alloc_mask = NULL;
+>  	struct rq_flags rf;
+>  	struct rq *rq;
+> +	int ret;
 >  
-> -	if (ipcomp_scratch_users++)
-> +	if (ipcomp_scratch_users) {
-> +		ipcomp_scratch_users++;
->  		return ipcomp_scratches;
-> -
-> +	}
->  	scratches = alloc_percpu(void *);
->  	if (!scratches)
->  		return NULL;
->  
-> +	ipcomp_scratch_users++;
->  	ipcomp_scratches = scratches;
+>  	rq = task_rq_lock(p, &rf);
+> -	return __set_cpus_allowed_ptr_locked(p, new_mask, flags, rq, &rf);
+> +	if (p->user_cpus_ptr) {
+> +
+> +		/*
+> +		 * A scratch cpumask is allocated on the percpu runqueues
+> +		 * to enable additional masking with user_cpus_ptr. This
+> +		 * cpumask, once allocated, will not be freed.
+> +		 */
+> +		if (unlikely(!rq->scratch_mask)) {
+> +			alloc_mask = kmalloc(cpumask_size(), GFP_ATOMIC);
 
-This patch is broken because on error we will always call
-ipcomp_free_scratches which frees any partially allocated memory
-and restores ipcomp_scratch_users to zero.
-
-With this patch ipcomp_scratch_users will turn negative on error.
-
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+This -- absolutely not. You can't have allocations under a
+raw_spinlock_t.

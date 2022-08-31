@@ -2,66 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C625A82E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:17:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE2BA5A82E5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:18:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231878AbiHaQRz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 12:17:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
+        id S231920AbiHaQR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 12:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbiHaQRs (ORCPT
+        with ESMTP id S231755AbiHaQRu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 12:17:48 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04ACED5711
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:17:42 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id bx38so15132750ljb.10
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:17:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=cKBGsEaj4oQkEiZ75eQ0nd+cq+8A2N09JqV8gHiJ4+Q=;
-        b=tMgFRqslaUaliYOxYH0dYUK2/uIP7BKLWbF+I6IKNsjCJinHeYlZHRVMu1TRfw18Wp
-         bUUkrsR36U9exIiOTQm6OmML0i/o8y2PcqqRp5BB8Nr2aaU0hNDmnhYE+52sHOujL6Vt
-         1edd5Gm891k0Nu5Fsw1IyJvFBxknVve9eMr9QIBaqtPqLZjmLfNcGdJqcnrwyXclrZrA
-         K9X6jK+IPOdS3ljtzFzBXEnpyCtnp6lopK0QmsQNQFcBrE2nqL3pllJCwOEwf0SimD2e
-         LzLBsew2A2CtBjjxVQ9pqWnVFcUCtYQn0uJKMIvISBauaVlJIsJxLbwth/pDtYdLqjiJ
-         h8ig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=cKBGsEaj4oQkEiZ75eQ0nd+cq+8A2N09JqV8gHiJ4+Q=;
-        b=jeyuLM4sRNPq6wJJTdzVLBEypqAIEu58mZZ9JtTa+uR4nj5F4xkYbjO2jBsuWXTk2Y
-         1qZ0mbT4qwO0Oyn2V0Row1sADxTb+2T1xdGiHxW7DuN+mvgWNSz6HyK4OkEhYfNRw2Zb
-         x0HbUy+yCkx+ithHtUk4aloXhhdrppXPiZibMzWETEzIceauSdYdLI7lEhh2uXG+izRi
-         Sdrwgc9rpW2zExKsHjY1d2bnqbfymGnhhQwPW8KH06u78HWc5f/Ex4g1q9Q7pMqcxoPM
-         P7lMQ48kC2bWBc9NWYG57u568o5g5c7Edr2l16ojcuAkYXN5CgJc5OMiPPPsGVUfdaiI
-         MUng==
-X-Gm-Message-State: ACgBeo3SB76v1wGSPJhoiAjjFf+Y397NdZouz7yhKGtUq/isCi0muptR
-        KYOs4+VnGmufg8joLBE/en4MXQ==
-X-Google-Smtp-Source: AA6agR4XliYALSJxmaQxjIWvOpSmc8kb/s83quW2sIBceAg8gUtAGNVFHuJ2Z38TzPn8KPwBT6uGuA==
-X-Received: by 2002:a05:651c:905:b0:261:d00c:e71 with SMTP id e5-20020a05651c090500b00261d00c0e71mr8699218ljq.407.1661962661016;
-        Wed, 31 Aug 2022 09:17:41 -0700 (PDT)
-Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id s2-20020a056512214200b004917a30c82bsm306338lfr.153.2022.08.31.09.17.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 09:17:40 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] remoteproc: report firmware name on load failures
-Date:   Wed, 31 Aug 2022 19:17:36 +0300
-Message-Id: <20220831161736.749932-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 31 Aug 2022 12:17:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE3D4D4F72;
+        Wed, 31 Aug 2022 09:17:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E0B261958;
+        Wed, 31 Aug 2022 16:17:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6D7C433C1;
+        Wed, 31 Aug 2022 16:17:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661962665;
+        bh=2d72f6ZKuMN8oZ4S4xSp9+IUsC77vGcpoLIrln4q3HU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=E/zoiqW0CXelaAIpNPabokQCPHML9pmxsjeAaHpoc9tiVZd3jKRKxr3yRVOv3bryn
+         hNfAGxDcQNLx8hEjr6PAQ4zNzsm3c/5cQzfFC4uA11MqzX1+0NVaiXDOr9w1Gs9/mL
+         9qBI+Gr6m5KH69e0y4pZO4t45IGF5h60K2INVzu8tKEhmmU/s6hqXjscz0RIkbmWjU
+         Up8lUA3GpjduwLZq0rpelh2qn2byGkKceUj2HxerzNgQZ/h/mvBF6LgoAGF2tZVcDd
+         KTMiaTHLWBorZxCuRnJc0tVviqiDEEsgwZZUNTuAx6m3GdYcpp9fKnKKoWu02gihcr
+         ANFoxeRDrjaWw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Pratyush Yadav <ptyadav@amazon.de>
+Cc:     SeongJae Park <sj@kernel.org>, jgross@suse.com,
+        roger.pau@citrix.com, marmarek@invisiblethingslab.com,
+        mheyne@amazon.de, xen-devel@lists.xenproject.org, axboe@kernel.dk,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] xen-blkback: Advertise feature-persistent as user requested
+Date:   Wed, 31 Aug 2022 16:17:43 +0000
+Message-Id: <20220831161743.93872-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220831153259.fzdkgbi76hmxa67a@yadavpratyush.com>
+References: 
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,42 +58,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remoteproc error messages like:
-  remoteproc remoteproc0: request_firmware failed: -2
-  remoteproc remoteproc1: request_firmware failed: -2
-are difficult to debug as one actually have no clue which device
-reported it and which firmware is missing.  Be verbose and print the
-name of the failed firmware.
+Hi Pratyush,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/remoteproc/remoteproc_core.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On Wed, 31 Aug 2022 15:47:50 +0000 Pratyush Yadav <ptyadav@amazon.de> wrote:
 
-diff --git a/drivers/remoteproc/remoteproc_core.c b/drivers/remoteproc/remoteproc_core.c
-index e5279ed9a8d7..71cd7ed7a970 100644
---- a/drivers/remoteproc/remoteproc_core.c
-+++ b/drivers/remoteproc/remoteproc_core.c
-@@ -1923,7 +1923,8 @@ int rproc_trigger_recovery(struct rproc *rproc)
- 	/* load firmware */
- 	ret = request_firmware(&firmware_p, rproc->firmware, dev);
- 	if (ret < 0) {
--		dev_err(dev, "request_firmware failed: %d\n", ret);
-+		dev_err(dev, "request_firmware %s failed: %d\n",
-+			rproc->firmware, ret);
- 		goto unlock_mutex;
- 	}
- 
-@@ -2023,7 +2024,8 @@ int rproc_boot(struct rproc *rproc)
- 		/* load firmware */
- 		ret = request_firmware(&firmware_p, rproc->firmware, dev);
- 		if (ret < 0) {
--			dev_err(dev, "request_firmware failed: %d\n", ret);
-+			dev_err(dev, "request_firmware %s failed: %d\n",
-+				rproc->firmware, ret);
- 			goto downref_rproc;
- 		}
- 
--- 
-2.34.1
+> Hi,
+> 
+> On 25/08/22 04:15PM, SeongJae Park wrote:
+> > Commit e94c6101e151 ("xen-blkback: Apply 'feature_persistent' parameter
+> > when connect") made blkback to advertise its support of the persistent
+> > grants feature only if the user sets the 'feature_persistent' parameter
+> > of the driver and the frontend advertised its support of the feature.
+> > However, following commit 402c43ea6b34 ("xen-blkfront: Apply
+> > 'feature_persistent' parameter when connect") made the blkfront to work
+> > in the same way.  That is, blkfront also advertises its support of the
+> > persistent grants feature only if the user sets the 'feature_persistent'
+> > parameter of the driver and the backend advertised its support of the
+> > feature.
+> > 
+> > Hence blkback and blkfront will never advertise their support of the
+> > feature but wait until the other advertises the support, even though
+> > users set the 'feature_persistent' parameters of the drivers.  As a
+> > result, the persistent grants feature is disabled always regardless of
+> > the 'feature_persistent' values[1].
+> > 
+> > The problem comes from the misuse of the semantic of the advertisement
+> > of the feature.  The advertisement of the feature should means only
+> > availability of the feature not the decision for using the feature.
+> > However, current behavior is working in the wrong way.
+> > 
+> > This commit fixes the issue by making the blkback advertises its support
+> > of the feature as user requested via 'feature_persistent' parameter
+> > regardless of the otherend's support of the feature.
+> > 
+> > [1] https://lore.kernel.org/xen-devel/bd818aba-4857-bc07-dc8a-e9b2f8c5f7cd@suse.com/
+> > 
+> > Fixes: e94c6101e151 ("xen-blkback: Apply 'feature_persistent' parameter when connect")
+> > Cc: <stable@vger.kernel.org> # 5.10.x
+> > Reported-by: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+> > Suggested-by: Juergen Gross <jgross@suse.com>
+> > Signed-off-by: SeongJae Park <sj@kernel.org>
+> > ---
+> >  drivers/block/xen-blkback/common.h | 3 +++
+> >  drivers/block/xen-blkback/xenbus.c | 6 ++++--
+> >  2 files changed, 7 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/block/xen-blkback/common.h b/drivers/block/xen-blkback/common.h
+> > index bda5c815e441..a28473470e66 100644
+> > --- a/drivers/block/xen-blkback/common.h
+> > +++ b/drivers/block/xen-blkback/common.h
+> > @@ -226,6 +226,9 @@ struct xen_vbd {
+> >  	sector_t		size;
+> >  	unsigned int		flush_support:1;
+> >  	unsigned int		discard_secure:1;
+> > +	/* Connect-time cached feature_persistent parameter value */
+> > +	unsigned int		feature_gnt_persistent_parm:1;
+> > +	/* Persistent grants feature negotiation result */
+> >  	unsigned int		feature_gnt_persistent:1;
+> >  	unsigned int		overflow_max_grants:1;
+> >  };
+> > diff --git a/drivers/block/xen-blkback/xenbus.c b/drivers/block/xen-blkback/xenbus.c
+> > index ee7ad2fb432d..c0227dfa4688 100644
+> > --- a/drivers/block/xen-blkback/xenbus.c
+> > +++ b/drivers/block/xen-blkback/xenbus.c
+> > @@ -907,7 +907,7 @@ static void connect(struct backend_info *be)
+> >  	xen_blkbk_barrier(xbt, be, be->blkif->vbd.flush_support);
+> >  
+> >  	err = xenbus_printf(xbt, dev->nodename, "feature-persistent", "%u",
+> > -			be->blkif->vbd.feature_gnt_persistent);
+> > +			be->blkif->vbd.feature_gnt_persistent_parm);
+> >  	if (err) {
+> >  		xenbus_dev_fatal(dev, err, "writing %s/feature-persistent",
+> >  				 dev->nodename);
+> > @@ -1085,7 +1085,9 @@ static int connect_ring(struct backend_info *be)
+> >  		return -ENOSYS;
+> >  	}
+> >  
+> > -	blkif->vbd.feature_gnt_persistent = feature_persistent &&
+> > +	blkif->vbd.feature_gnt_persistent_parm = feature_persistent;
+> 
+> If feature_gnt_persistent_parm is always going to be equal to 
+> feature_persistent, then why introduce it at all? Why not just use 
+> feature_persistent directly? This way you avoid adding an extra flag 
+> whose purpose is not immediately clear, and you also avoid all the mess 
+> with setting this flag at the right time.
 
+Mainly because the parameter should read twice (once for advertisement, and
+once later just before the negotitation, for checking if we advertised or not),
+and the user might change the parameter value between the two reads.
+
+For the detailed available sequence of the race, you could refer to the prior
+conversation[1].
+
+[1] https://lore.kernel.org/linux-block/20200922111259.GJ19254@Air-de-Roger/
+
+
+Thanks,
+SJ
+
+> 
+> > +	blkif->vbd.feature_gnt_persistent =
+> > +		blkif->vbd.feature_gnt_persistent_parm &&
+> >  		xenbus_read_unsigned(dev->otherend, "feature-persistent", 0);
+> >  
+> >  	blkif->vbd.overflow_max_grants = 0;
+> > -- 
+> > 2.25.1
+> > 
+> > 
+> 

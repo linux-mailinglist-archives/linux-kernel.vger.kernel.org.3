@@ -2,106 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3C3C5A7A1F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:24:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9742D5A7A1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229756AbiHaJYM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:24:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42846 "EHLO
+        id S231857AbiHaJX7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:23:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231302AbiHaJYF (ORCPT
+        with ESMTP id S231831AbiHaJX5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:24:05 -0400
-Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB76B941B;
-        Wed, 31 Aug 2022 02:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1661937845; x=1693473845;
-  h=message-id:date:mime-version:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=OxRHe00tIu+wEnbpDdPcwB/UKvS8htw1fOMgAij8ARk=;
-  b=tpwZEk2Bds5NbQUrZ/uiIoTnMesbKPuXqGBzA6y8xzyOW8wbkjxMRV+e
-   AWlapD/nWUIxcmbgghCDRA+zy7YLQRKJGw8g/qb3c6nzFpjQUo+1c4REX
-   K046vEpnuayCgqh62t9vrFBPmmT9kKVyY4d1rbkgfXdUN0b8K1FPvTNQR
-   w=;
-Subject: Re: [PATCH v3 14/19] dt-bindings: hwmon: (mr75203) add "moortec,
- ts-series" property
-Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-d803d33a.us-west-2.amazon.com) ([10.43.8.2])
-  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 09:23:52 +0000
-Received: from EX13D37EUA001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-d803d33a.us-west-2.amazon.com (Postfix) with ESMTPS id B8C9B8550C;
-        Wed, 31 Aug 2022 09:23:51 +0000 (UTC)
-Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
- EX13D37EUA001.ant.amazon.com (10.43.165.212) with Microsoft SMTP Server (TLS)
- id 15.0.1497.38; Wed, 31 Aug 2022 09:23:50 +0000
-Received: from [192.168.153.206] (10.85.143.179) by mail-relay.amazon.com
- (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
- Transport; Wed, 31 Aug 2022 09:23:45 +0000
-Message-ID: <f49558fa-e987-145c-425e-0e8a7a9fba5f@amazon.com>
-Date:   Wed, 31 Aug 2022 12:23:44 +0300
+        Wed, 31 Aug 2022 05:23:57 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762B961134
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:23:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661937835;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v9MBC0+HRTTRIrHOS8VrK5mulNhNcGXVJqHWWS9TPvA=;
+        b=R6BTpMFxDWW0tmP2/jFAluJE4z9j/A6LIBNvZ+IrDegoOKKvsnfV5FSzvUrMlo9bRYuPOZ
+        u4PQ6aqj72Zw+MM+AigIFisUShoY7P1DK55lEu7Ll8YlI/7TU42+JG1qujje9OKWJ47IkE
+        00ybKeeOi2aNvDz05oikouVjMn1oD8E=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-192-zQIDFSfzN4yuLRfsj82NLw-1; Wed, 31 Aug 2022 05:23:53 -0400
+X-MC-Unique: zQIDFSfzN4yuLRfsj82NLw-1
+Received: by mail-ed1-f70.google.com with SMTP id q18-20020a056402519200b0043dd2ff50feso9159729edd.9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:23:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=v9MBC0+HRTTRIrHOS8VrK5mulNhNcGXVJqHWWS9TPvA=;
+        b=RRQEF5dct3x04ZnUfT6KFmdN5hMWmLEu8vqcmjjMsMDeF+YTYOoL9H7HdvKgekF/L/
+         doW8najUKln7Iw0PpT9YIiONylPs3XfO/913UvZmyZ0gEuEqB4+G+dOLB4V2A5Rv0eQw
+         Vdq40OQkfv3GSzD0HuACW/69dM8px0ue66Qz5RufJCmc/ewDVlJ2+ICTuD0NtXZwM4tx
+         Qw6970ib5n2ObeuWouUq1GQqT+06xJmZeQNv2u8MGaouVToD6wFtskH4gNBpK1ZEJTTr
+         wSbzJX/a2P9tBfljM9AVrJJBr1+IS2pXgjv+SrobzUOhEYVD6P23PunNXjNEj+X+Cf9l
+         ap4g==
+X-Gm-Message-State: ACgBeo0yCJ39bNa2i8h9Sgp1/4+kAB4saIWmH3oFXQBakcjv41Ifgmnc
+        Up3f4Hu3HnmeUGzF72Lf+/0hCD3g+Y4/biv8gLcRis302uZto7NTT6/BbBCzqFl/S/8VAcOoNWv
+        mdqPBq3Ca+XtMZqcNMtjWdmAa
+X-Received: by 2002:a05:6402:14c6:b0:448:e27:5974 with SMTP id f6-20020a05640214c600b004480e275974mr17524101edx.53.1661937832793;
+        Wed, 31 Aug 2022 02:23:52 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7M10atCkawoz+1c+roQ5xwuTbIzFrhGmsKOV4BuPlYOMza0LHC5T9uy+haK+SWO+gUym+XaQ==
+X-Received: by 2002:a05:6402:14c6:b0:448:e27:5974 with SMTP id f6-20020a05640214c600b004480e275974mr17524082edx.53.1661937832550;
+        Wed, 31 Aug 2022 02:23:52 -0700 (PDT)
+Received: from [192.168.0.198] (host-87-8-60-205.retail.telecomitalia.it. [87.8.60.205])
+        by smtp.gmail.com with ESMTPSA id qq12-20020a17090720cc00b0073dcdf9b0bcsm7073059ejb.17.2022.08.31.02.23.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 02:23:52 -0700 (PDT)
+Message-ID: <95f8c01c-12b2-5f2e-bc8f-288f16bfa5d3@redhat.com>
+Date:   Wed, 31 Aug 2022 11:23:51 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.0
-To:     Philipp Zabel <p.zabel@pengutronix.de>, <jdelvare@suse.com>,
-        <linux@roeck-us.net>, <robh+dt@kernel.org>,
-        <rtanwar@maxlinear.com>, <linux-hwmon@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <talel@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
-        <hanochu@amazon.com>, <ronenk@amazon.com>, <itamark@amazon.com>,
-        <shellykz@amazon.com>, <shorer@amazon.com>, <amitlavi@amazon.com>,
-        <almogbs@amazon.com>, <dkl@amazon.com>,
-        <andriy.shevchenko@intel.com>, "Farber, Eliav" <farbere@amazon.com>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-15-farbere@amazon.com>
- <89806ee9a80652d5877ef5c4a86574e82af48da4.camel@pengutronix.de>
+Subject: Re: [PATCH] sched/deadline: Add should_push_task_away helper
+To:     Shang XiaoJing <shangxiaojing@huawei.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        vschneid@redhat.com, linux-kernel@vger.kernel.org
+References: <20220829100533.19153-1-shangxiaojing@huawei.com>
 Content-Language: en-US
-From:   "Farber, Eliav" <farbere@amazon.com>
-In-Reply-To: <89806ee9a80652d5877ef5c4a86574e82af48da4.camel@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Daniel Bristot de Oliveira <bristot@redhat.com>
+In-Reply-To: <20220829100533.19153-1-shangxiaojing@huawei.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/2022 11:23 AM, Philipp Zabel wrote:
-> On Di, 2022-08-30 at 19:22 +0000, Eliav Farber wrote:
->> Add optional "moortec,ts-series" property to define the temperature
->> equation and coefficients that shall be used to convert the digital
->> output to value in milli-Celsius.
->> Supported series: 5 (default) and 6.
->
-> Is this the difference between mr75xxx and mr76xxx series?
-> If so, should be a compatible "moortec,mr76006" instead?
-> If the temperature equation could be derived from the compatible, this
-> property would not be necessary.
-The PVT (Process, Voltage, Temperature) monitoring logic can be
-constructed from many different sub-blocks:
-*) CONTROLLER (mr75203) - controlling TS, PD and VM.
-*) TS (mr74137) - for measuring temperature in ring.
-*) PD (mr74139) - for measuring IO based transistors.
-*) VM (mr74138) - for measuring voltage rails across the SoC.
-*) Ring oscillators (mr76007/mr76008)
-*) Pre-scalers (mr76006)
+On 8/29/22 12:05, Shang XiaoJing wrote:
+> +static inline bool should_push_task_away(struct task_struct *a,
+> +					  struct task_struct *b)
 
-Besides mr75203 which is digital all other IPs are analog.
-There is a single mr75203 and there can be several or none of the other
-units.
+static inline bool should_push_task_dl(struct task_struct *curr, struct task_struct *p)
 
-The kernel driver is only for the controller (mr75203).
-The series 5 or 6 is relevant for the TS (mr74137) and not for the
-controller (mr75203).
-Each of the analog units can have a different series number (for example
-we use series 3 of the VM).
+a and b are not good variable names, and add the _dl suffix (instead of away).
 
-That is why I didn't change the compatible of mr75203, and instead added
-a TS-series parameter.
+> +{
+> +	return unlikely(dl_task(a)) &&
+> +	       (a->nr_cpus_allowed < 2 ||
+> +		!dl_entity_preempt(&b->dl, &a->dl)) &&
+> +	       b->nr_cpus_allowed > 1;
+> +}
+> +
 
---
-Regards, Eliav
+-- Daniel
+

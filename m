@@ -2,98 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2BA5A8857
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1299B5A8861
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiHaVsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
+        id S232228AbiHaVtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:49:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbiHaVsM (ORCPT
+        with ESMTP id S232050AbiHaVtI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:48:12 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C8BF61AD;
-        Wed, 31 Aug 2022 14:48:11 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-11f11d932a8so18958878fac.3;
-        Wed, 31 Aug 2022 14:48:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=JD82AHGx84kMfXbfehKRODVwT5PdMYhij9FNOZzBHYc=;
-        b=U7fymrrzN329Sf5bfjRw9duInxROWaO4+CJHSU+cSx+XyJY75RcmUVpTQ33/7BRZhb
-         H0q+ENPjZU0tRkuvFXr4afxNI+b/vzp0XqjRKOxCHRJpMDVLykPE68lhf+Kl9AACUGP8
-         4/P23eYzdJwM091bPGL+DuBV0qxw44g1fs9CoPVncaz2WrD4shqOjqwRp3MtQibRMTOM
-         X8WHVDrIk+/wqtM0TlxCvsPiyG8SMRFKYQDl8tYjTOiTwvfZ78mT+uqAd6rQhNxnRxjd
-         M3dHg8MGBYLmfZjpX2NROKt/W+i+pn0xaLs3OZOD9hZ1CdzA/dutRprY0nUEX5hk5Yyz
-         SARw==
-X-Gm-Message-State: ACgBeo1Z4ttzgq4zHqrIt99K4Fc8/byYFv0J6+BR/235SrS4HSlILFxZ
-        Hs6f4jEQlNxD93m2uXbMJA==
-X-Google-Smtp-Source: AA6agR42CMQBtttjZ/zkx4w8wd0niU7A9WHNAhfgLAJFh/npgcOzrKIbttMD5OzwceY42pFmKqe7lw==
-X-Received: by 2002:a05:6808:1491:b0:343:7543:1a37 with SMTP id e17-20020a056808149100b0034375431a37mr2191781oiw.106.1661982491138;
-        Wed, 31 Aug 2022 14:48:11 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id p81-20020acad854000000b00342ded07a75sm7875032oig.18.2022.08.31.14.48.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 14:48:10 -0700 (PDT)
-Received: (nullmailer pid 310004 invoked by uid 1000);
-        Wed, 31 Aug 2022 21:48:09 -0000
-Date:   Wed, 31 Aug 2022 16:48:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH v1 08/14] dt-bindings: mtd: relax the nvmem compatible
- string
-Message-ID: <20220831214809.GA282739-robh@kernel.org>
-References: <20220825214423.903672-1-michael@walle.cc>
- <20220825214423.903672-9-michael@walle.cc>
+        Wed, 31 Aug 2022 17:49:08 -0400
+Received: from mail.gnudd.com (mail.gnudd.com [93.91.132.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559EDF72CB;
+        Wed, 31 Aug 2022 14:49:04 -0700 (PDT)
+Received: from dciminaghi by mail.gnudd.com with local (Exim 4.94.2)
+        (envelope-from <dciminaghi@arcana.gnudd.com>)
+        id 1oTVZO-0004bU-3K; Wed, 31 Aug 2022 23:48:22 +0200
+Date:   Wed, 31 Aug 2022 23:48:22 +0200
+From:   Davide Ciminaghi <ciminaghi@gnudd.com>
+Sender: ciminaghi@gnudd.com
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Alexandre Courbot <gnurou@gmail.com>,
+        Alexandre Courbot <acourbot@nvidia.com>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>, Alessandro Rubini <rubini@gnudd.com>
+Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
+Message-ID: <Yw/XJstLR++AuULV@arcana.i.gnudd.com>
+References: <87f2ff4c-3426-201c-df86-2d06d3587a20@csgroup.eu>
+ <CACRpkdYizQhiJXzXNHg7TXUVHzhkwXHFN5+e58kH4udGm1ziEA@mail.gmail.com>
+ <f76dbc49-526f-6dc7-2ef1-558baea5848b@csgroup.eu>
+ <CACRpkdZpwdP+1VitohznqRfhFGcLT2f+sQnmsRWwMBB3bobwAw@mail.gmail.com>
+ <515364a9-33a1-fafa-fdce-dc7dbd5bb7fb@csgroup.eu>
+ <CAK8P3a36qbRW8hd+1Uhi88kh+-KTjDMT-Zr8Jq9h_G3zQLfzgw@mail.gmail.com>
+ <Yw3DKCuDoPkCaqxE@arcana.i.gnudd.com>
+ <CACRpkdZeAAZYqV3ccd-X=ZwdnfSwRUdXchGETB-WTkgSZQL=Pw@mail.gmail.com>
+ <Yw9sVCNtaLUjZH/F@arcana.i.gnudd.com>
+ <CAHp75Vff0GUQXD8zstEFwXNcnbxKEc7Gqahoo_kZp69MyKWskg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220825214423.903672-9-michael@walle.cc>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAHp75Vff0GUQXD8zstEFwXNcnbxKEc7Gqahoo_kZp69MyKWskg@mail.gmail.com>
+X-Face: #Q;A)@_4.#>0+_%y]7aBr:c"ndLp&#+2?]J;lkse\^)FP^Lr5@O0{)J;'nny4%74.fM'n)M
+ >ISCj.KmsL/HTxz!:Ju'pnj'Gz&.
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 11:44:17PM +0200, Michael Walle wrote:
-> The "user-otp" and "factory-otp" compatible string just depicts a
-> generic NVMEM device. But an actual device tree node might as well
-> contain a more specific compatible string. Make it possible to add
-> more specific binding elsewere and just match part of the compatibles
-> here.
+On Thu, Sep 01, 2022 at 12:07:26AM +0300, Andy Shevchenko wrote:
+> On Wed, Aug 31, 2022 at 5:14 PM Davide Ciminaghi <ciminaghi@gnudd.com> wrote:
+> > On Wed, Aug 31, 2022 at 03:32:25PM +0200, Linus Walleij wrote:
+> > > On Tue, Aug 30, 2022 at 9:58 AM Davide Ciminaghi <ciminaghi@gnudd.com> wrote:
+> > >
+> > > > the sta2x11 was a chip containing AMBA peripherals and a PCIe to AMBA bridge
+> > > > (it is still in production as far as I know, but deprecated for new designs).
+> > > > It would typically be installed on x86 machines, so you needed to build and
+> > > > run AMBA drivers in an x86 environment. The original drivers we started from
+> > > > had platform data, but then we were told to switch to DTS.
+> > >
+> > > For the record I think that was bad advice, I hope it wasn't me.
+> > > But the world was different back then I suppose.
+> > > Adding DTS to x86 which is inherently ACPI is not a good idea.
+> > > Especially if you look at how SBSA ACPI UARTS were done
+> > > in drivers/tty/serial/amba-pl011.c.
+> > >
+> > now that I think of it, ACPI was also listed as a possible choice, but the
+> > problem was that we didn't know much about ACPI, and took the DTS way.
+> > So there was no bad advice, just fear of the unknown :-)
 > 
-> Signed-off-by: Michael Walle <michael@walle.cc>
-> ---
->  Documentation/devicetree/bindings/mtd/mtd.yaml | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
+> Feel free to ask, we have experts in the mailing list(s).
+>
+Thanks ! I'll keep that in mind in case I need some ACPI advice.
+I'm afraid it's too late for the sta2x11, though. Its kernel is now a
+downstream one, and it's been freezed, as the SOC has been deprecated
+for new designs.
+As Alessandro said, we'll submit (or ack) patches for removal.
 
-In hindsight it looks like we are mixing 2 different purposes of 'which 
-instance is this' and 'what is this'. 'compatible' is supposed to be the 
-latter.
 
-Maybe there's a better way to handle user/factory? There's a similar 
-need with partitions for A/B or factory/update.
 
-Rob
+Thanks again and regards
+Davide

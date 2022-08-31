@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A2A5A735F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 426C85A7361
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiHaBeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 21:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58400 "EHLO
+        id S231185AbiHaBeL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 21:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiHaBeH (ORCPT
+        with ESMTP id S230092AbiHaBeI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 21:34:07 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE0E9E886
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:34:06 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id i5-20020a17090a2a0500b001fd8708ffdfso10477181pjd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:34:06 -0700 (PDT)
+        Tue, 30 Aug 2022 21:34:08 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B14FBAF0E5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:34:07 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id j5so8904039plj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:34:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=IZI6y2vpGGRc3o8pF0wlrPeZMh7+YaVLfgMLYc70b3U=;
-        b=b421CmE4QFudEqjDuwm1n1tYJC3aFMO+SOoooowmFErKgi1c09IfhM73eNone9SW1b
-         kWL6Y3gFz9xcabYIQAnoGmHFogCJxAKKWzySCaLSLktF9eTEwkFdeuYhJnikgkIqok9g
-         3bvjJ/rNDtcWDKPvtMQ2NV5s47K3elHZ5qdr8=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=CHQeXnfRhV+Rl/DeGa69lUaZqdL0Qy5Wbepw7R/N8is=;
+        b=JFl8XnRbLljUJynLreUl04vCtzctmfXmKsx6wlwtcEd5cdNQF8pPpjd0d8t8c3UYNc
+         6bJzNv6YeHMOutmI/UCsemxB8wZYi7kMiCd5zw8Ctse1yNBJk6WLCIFAWGBHLpFHLWAx
+         QWZKzBmIpaLFVB42DEZwsyOo/dyW9goHB5QDY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=IZI6y2vpGGRc3o8pF0wlrPeZMh7+YaVLfgMLYc70b3U=;
-        b=e9diVV8hO8aIcXZgA+zqPJm5uLn2Wl22hGW2Mcz9Iww+i9UeeO21l+uZCs822usmed
-         92Zk5C8dSPY6c6xHNhNzcOfYPynAEvtjJcOzTMVDn5Mbl6f9Run9HSY/lX+0QPF4B0+P
-         M44gtLBIoAtY/wE1iTnfKZYDjlsottFMKfIuvgEsU4EJVbfg+Vz+TVR4lh1s3Q3mAW8y
-         ILA8xSzpsWQvjXtvRhGlRX4zH2N3ePzHMRl+h3dy5voo69FBurmxCTLMLfD/y3R+2uqs
-         66NCc4AVfreRWPZ6aV9LGKbfRcepgI9aajaPSD4kKKa7iQ7ZXSgH0FheDkStEhwtFa92
-         3yXg==
-X-Gm-Message-State: ACgBeo1g+jl54+nIWLY5GW5GmqlonobVdSsZB73hAK1b2IrfhQirsT7Q
-        YwLqFCmrkmo9nzmP+3ENmXgkv77JCcBhEw==
-X-Google-Smtp-Source: AA6agR7mpdg1vbBqN796ynpGeGt9okldi2pzxGODXLnNGQmqID0Ch1/jXEBAdj0guf36Q1gUg2rsVQ==
-X-Received: by 2002:a17:902:bb95:b0:16e:e3f4:8195 with SMTP id m21-20020a170902bb9500b0016ee3f48195mr23384954pls.130.1661909646268;
-        Tue, 30 Aug 2022 18:34:06 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=CHQeXnfRhV+Rl/DeGa69lUaZqdL0Qy5Wbepw7R/N8is=;
+        b=wPx8nuvTsOWY0l5BOx3jyri6TaQxOuUDBbLihcaUpqCDqkygif/e5ZB1F2BN7O7ZVL
+         mFUzIRoFJHih2NTINpHz9yjjEfNox4szVNS3u96AfPBBLgsuO8FihRM9wWjnztP1rCKz
+         fMOoAth1zAoLHRjo6qXGDy++nIcH2KoI0XVvESbH2HYV66iQs5bYx397i/Iv4MUNWCQp
+         jVo2tEvOVe+muZIRpZBUDJgqkLgaZ7owlhEfZLhsSFmMzfKNHALQW1z9ttOSavw9OTOs
+         5AGod12OVQHjKBUiLMwsf+ehS98thckg7ekS1XZPJRXdNFJY40CCsxpQi8CbyvC8sWtm
+         qwGQ==
+X-Gm-Message-State: ACgBeo1NGZF0zHZPre405ZcRnsixlVxKZrxJHdLSBW9H62e5niJEAUhg
+        zqLf+CrSIQW5N2G/E2awRnoJog==
+X-Google-Smtp-Source: AA6agR5taYArk1YOKro99OTHpX33r4AG9UeMtVVV+fib3gIKgXtUyF6plgJVOC6YsJ2fc3Ydlt3aAQ==
+X-Received: by 2002:a17:902:cec1:b0:172:e677:553b with SMTP id d1-20020a170902cec100b00172e677553bmr23672198plg.99.1661909647189;
+        Tue, 30 Aug 2022 18:34:07 -0700 (PDT)
 Received: from jwerner-p920.mtv.corp.google.com ([2620:15c:202:201:2e75:b9a4:fb1:b1b8])
-        by smtp.gmail.com with ESMTPSA id t10-20020a170902e84a00b00174f4316c24sm4261382plg.245.2022.08.30.18.34.05
+        by smtp.gmail.com with ESMTPSA id t10-20020a170902e84a00b00174f4316c24sm4261382plg.245.2022.08.30.18.34.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 18:34:05 -0700 (PDT)
+        Tue, 30 Aug 2022 18:34:06 -0700 (PDT)
 From:   Julius Werner <jwerner@chromium.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -52,10 +52,12 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         Doug Anderson <dianders@chromium.org>,
         Jian-Jia Su <jjsu@google.com>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, Julius Werner <jwerner@chromium.org>
-Subject: [PATCH 0/4] dt-bindings: memory: Describing LPDDR topology
-Date:   Tue, 30 Aug 2022 18:33:55 -0700
-Message-Id: <20220831013359.1807905-1-jwerner@chromium.org>
+Subject: [PATCH 1/4] dt-bindings: memory: Factor out common properties of LPDDR bindings
+Date:   Tue, 30 Aug 2022 18:33:56 -0700
+Message-Id: <20220831013359.1807905-2-jwerner@chromium.org>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+In-Reply-To: <20220831013359.1807905-1-jwerner@chromium.org>
+References: <20220831013359.1807905-1-jwerner@chromium.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -68,34 +70,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series implements a proposal previously discussed on the
-mailing list under the topic `[RFC] Correct memory layout reporting for
-"jedec,lpddr2" and related bindings`. It adds a new jedec,lpddr-channel
-binding which should be used to group nodes of the existing jedec,lpddr
-bindings to describe their relative topology on the system and the
-amount of chips wired in parallel on each channel, as well as their
-different ranks. This also adds bindings for LPDDR4 and LPDDR5 memory
-types and deduplicates some common schema elements between different
-LPDDR types.
+The bindings for different LPDDR versions mostly use the same kinds of
+properties, so in order to reduce duplication when we're adding support
+for more versions, this patch creates a new lpddr-props subschema that
+can be referenced by the others to define these common parts. (This will
+consider a few smaller I/O width and density numbers "legal" for LPDDR3
+that are usually not used there, but this should be harmless.)
 
-Julius Werner (4):
-  dt-bindings: memory: Factor out common properties of LPDDR bindings
-  dt-bindings: memory: Add numeric LPDDR compatible string variant
-  dt-bindings: memory: Add jedec,lpddr4 and jedec,lpddr5 bindings
-  dt-bindings: memory: Add jedec,lpddrX-channel binding
+This also un-deprecates the manufacturer ID property for LPDDR3 (and
+introduces it to LPDDR2), since it was found that having this
+information available in a separate property can be useful in some
+cases.
 
- .../ddr/jedec,lpddr-channel.yaml              | 116 ++++++++++++++++++
- .../ddr/jedec,lpddr-props.yaml                |  82 +++++++++++++
- .../memory-controllers/ddr/jedec,lpddr2.yaml  |  48 ++------
- .../memory-controllers/ddr/jedec,lpddr3.yaml  |  51 ++------
- .../memory-controllers/ddr/jedec,lpddr4.yaml  |  36 ++++++
- .../memory-controllers/ddr/jedec,lpddr5.yaml  |  48 ++++++++
- 6 files changed, 303 insertions(+), 78 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-channel.yaml
+Signed-off-by: Julius Werner <jwerner@chromium.org>
+---
+ .../ddr/jedec,lpddr-props.yaml                | 60 +++++++++++++++++++
+ .../memory-controllers/ddr/jedec,lpddr2.yaml  | 40 ++-----------
+ .../memory-controllers/ddr/jedec,lpddr3.yaml  | 39 ++----------
+ 3 files changed, 68 insertions(+), 71 deletions(-)
  create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr4.yaml
- create mode 100644 Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr5.yaml
 
+diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
+new file mode 100644
+index 00000000000000..8b31c60ea2435b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr-props.yaml
+@@ -0,0 +1,60 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/memory-controllers/ddr/jedec,lpddr-props.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Common properties for LPDDR types
++
++description:
++  Different LPDDR types generally use the same properties and only differ in the
++  range of legal values for each. This file defines the common parts that can be
++  reused for each type.
++
++maintainers:
++  - Krzysztof Kozlowski <krzk@kernel.org>
++
++properties:
++  manufacturer-id:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Manufacturer ID read from Mode Register 5.
++    minimum: 0
++    maximum: 255
++
++  revision-id:
++    $ref: /schemas/types.yaml#/definitions/uint32-array
++    description:
++      Revision IDs read from Mode Register 6 and 7. One byte per uint32 cell (i.e. <MR6 MR7>).
++    minItems: 2
++    maxItems: 2
++    items:
++      minimum: 0
++      maximum: 255
++
++  density:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      Density in megabits of SDRAM chip. Decoded from Mode Register 8.
++    enum:
++      - 64
++      - 128
++      - 256
++      - 512
++      - 1024
++      - 2048
++      - 4096
++      - 8192
++      - 16384
++      - 32768
++
++  io-width:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    description:
++      IO bus width in bits of SDRAM chip. Decoded from Mode Register 8.
++    enum:
++      - 32
++      - 16
++      - 8
++
++additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
+index 9d78f140609b6c..63c47235cb9896 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr2.yaml
+@@ -6,6 +6,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: LPDDR2 SDRAM compliant to JEDEC JESD209-2
+ 
++allOf:
++  - $ref: "jedec,lpddr-props.yaml#"
++
+ maintainers:
+   - Krzysztof Kozlowski <krzk@kernel.org>
+ 
+@@ -41,41 +44,6 @@ properties:
+       Property is deprecated, use revision-id instead.
+     deprecated: true
+ 
+-  revision-id:
+-    $ref: /schemas/types.yaml#/definitions/uint32-array
+-    description: |
+-      Revision IDs read from Mode Register 6 and 7. One byte per uint32 cell (i.e. <MR6 MR7>).
+-    minItems: 2
+-    maxItems: 2
+-    items:
+-      minimum: 0
+-      maximum: 255
+-
+-  density:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
+-      Density in megabits of SDRAM chip. Obtained from device datasheet.
+-    enum:
+-      - 64
+-      - 128
+-      - 256
+-      - 512
+-      - 1024
+-      - 2048
+-      - 4096
+-      - 8192
+-      - 16384
+-      - 32768
+-
+-  io-width:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
+-      IO bus width in bits of SDRAM chip. Obtained from device datasheet.
+-    enum:
+-      - 32
+-      - 16
+-      - 8
+-
+   tRRD-min-tck:
+     $ref: /schemas/types.yaml#/definitions/uint32
+     maximum: 16
+@@ -168,7 +136,7 @@ required:
+   - density
+   - io-width
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr3.yaml b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr3.yaml
+index 48908a19473c3f..5969166cdc9e0f 100644
+--- a/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr3.yaml
++++ b/Documentation/devicetree/bindings/memory-controllers/ddr/jedec,lpddr3.yaml
+@@ -6,6 +6,9 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+ title: LPDDR3 SDRAM compliant to JEDEC JESD209-3
+ 
++allOf:
++  - $ref: "jedec,lpddr-props.yaml#"
++
+ maintainers:
+   - Krzysztof Kozlowski <krzk@kernel.org>
+ 
+@@ -20,40 +23,6 @@ properties:
+     const: 1
+     deprecated: true
+ 
+-  density:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
+-      Density in megabits of SDRAM chip.
+-    enum:
+-      - 4096
+-      - 8192
+-      - 16384
+-      - 32768
+-
+-  io-width:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
+-      IO bus width in bits of SDRAM chip.
+-    enum:
+-      - 32
+-      - 16
+-
+-  manufacturer-id:
+-    $ref: /schemas/types.yaml#/definitions/uint32
+-    description: |
+-      Manufacturer ID value read from Mode Register 5.  The property is
+-      deprecated, manufacturer should be derived from the compatible.
+-    deprecated: true
+-
+-  revision-id:
+-    $ref: /schemas/types.yaml#/definitions/uint32-array
+-    minItems: 2
+-    maxItems: 2
+-    items:
+-      maximum: 255
+-    description: |
+-      Revision value of SDRAM chip read from Mode Registers 6 and 7.
+-
+   '#size-cells':
+     const: 0
+     deprecated: true
+@@ -206,7 +175,7 @@ required:
+   - density
+   - io-width
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
 -- 
 2.31.0
 

@@ -2,59 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FBE15A78F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:23:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E8FD5A78F5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:23:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231357AbiHaIXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:23:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S231527AbiHaIXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiHaIWy (ORCPT
+        with ESMTP id S231459AbiHaIXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:22:54 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D587434B;
-        Wed, 31 Aug 2022 01:22:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661934122; x=1693470122;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dMx5gQK4P0/43L/ocP4Db4yCGe9lHBrO7/00ZiSt77M=;
-  b=SBe5SzDYjFnfU1u+Vj9gnVb1ek6lm8Xea5yPfNITuye1qEA3IuXWbuun
-   02NNxZnGWlFmWW6NVJIQaoz1JufGcsKh7GrD+lbVN4aO5pRJP9E7eQn3I
-   sIDl+e/4EoI07hZkuw7bglQyKjBI7hlXLp+yCr575p5vu9idywI88qRzf
-   VNcDi2G4wFjaKmptstoBKGs0/oo0A4Y42AIqI/1EQMO9kfJcsEbK8oqz2
-   mo47XOSuW+ciITwG83h8LCgYgKheBfuxnlRK/bnokYvi1oxOQx+TH5Hcj
-   SQSAs6HR6KKHLjFqTq4dZFo40VYkLX9VP+jnWR4YYkj/1GoXRoD3mjT09
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="292977629"
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="292977629"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 01:22:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="754352948"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 31 Aug 2022 01:22:00 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 31 Aug 2022 11:21:59 +0300
-Date:   Wed, 31 Aug 2022 11:21:59 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     zhaoxiao <zhaoxiao@uniontech.com>
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb:mux:intel_pmc_mux: Use the helper
- acpi_dev_get_memory_resources()
-Message-ID: <Yw8aJ8QC1BtBNBfx@kuha.fi.intel.com>
-References: <20220831061126.25172-1-zhaoxiao@uniontech.com>
+        Wed, 31 Aug 2022 04:23:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3BBC57BB;
+        Wed, 31 Aug 2022 01:22:25 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id BD1126601A13;
+        Wed, 31 Aug 2022 09:22:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1661934144;
+        bh=icm/XqsM9PV/fPpno6t23gERjpfmgfqXHBCT1ID9Gfc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lqdhmblp+a9HG/yl8wGkOvItUJSUOxTeTWLQ3ziPLN/7YSmANMWsXqNifudme6opp
+         FBV4wSuXMocnCZW55OEnyHjHyO4qCzJNgdZTn8FWrSkB+M5Ab0sJYiRPG0srQRGPvr
+         TZh6iCqOZU8YVoaaVR0vu83c/aClGaY4AW0Y8wkwSl1ILKAPSVQW6ygBmkeju3diYj
+         etw4+YyRnDRi2ggOAjTRUlwapUVc3dwbSj7Zc00vLkAj4TtyprYXKkAFwp0Rb3uYAC
+         4WM7c7kmCWEVtgz5IwdTKmakWhLCR1k/HU9b8hS7PLZ65AEkZ2HFZ2kJutbwXRd4nA
+         +2n5u1DltHBLg==
+Message-ID: <de5ea5b4-1fe3-0e83-7620-f039bcb75bd2@collabora.com>
+Date:   Wed, 31 Aug 2022 10:22:21 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831061126.25172-1-zhaoxiao@uniontech.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 4/7] phy: phy-mtk-tphy: disable hardware efuse when set
+ INTR
+Content-Language: en-US
+To:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>
+Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
+        Eddie Hung <eddie.hung@mediatek.com>
+References: <20220829080830.5378-1-chunfeng.yun@mediatek.com>
+ <20220829080830.5378-4-chunfeng.yun@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20220829080830.5378-4-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,51 +67,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 02:11:26PM +0800, zhaoxiao wrote:
-> It removes the need to check the resource data type separately.
+Il 29/08/22 10:08, Chunfeng Yun ha scritto:
+> INTR's value is able autoload from hardware efuse by default, when
+> software tries to update its value, should disable hardware efuse
+> firstly.
 > 
-> Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Was this patch generated by yet another bot?
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-If that's the case, then I would appreciated that you clearly state
-that here somehow, just like the other projects.
-
-thanks,
-
-> ---
->  drivers/usb/typec/mux/intel_pmc_mux.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-> index 47b733f78fb0..6207c8f54240 100644
-> --- a/drivers/usb/typec/mux/intel_pmc_mux.c
-> +++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-> @@ -569,13 +569,6 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
->  	return ret;
->  }
->  
-> -static int is_memory(struct acpi_resource *res, void *data)
-> -{
-> -	struct resource r;
-> -
-> -	return !acpi_dev_resource_memory(res, &r);
-> -}
-> -
->  /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
->  static const struct acpi_device_id iom_acpi_ids[] = {
->  	/* TigerLake */
-> @@ -606,7 +599,7 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
->  		return -ENODEV;
->  
->  	INIT_LIST_HEAD(&resource_list);
-> -	ret = acpi_dev_get_resources(adev, &resource_list, is_memory, NULL);
-> +	ret = acpi_dev_get_memory_resources(adev, &resource_list);
->  	if (ret < 0)
->  		return ret;
->  
-> -- 
-> 2.20.1
-
--- 
-heikki

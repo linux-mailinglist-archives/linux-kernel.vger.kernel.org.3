@@ -2,114 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550435A87FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C02085A8801
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:19:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232191AbiHaVSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
+        id S232201AbiHaVTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232176AbiHaVSm (ORCPT
+        with ESMTP id S232211AbiHaVTk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:18:42 -0400
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49F6EE48A;
-        Wed, 31 Aug 2022 14:18:39 -0700 (PDT)
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1225219ee46so2499978fac.2;
-        Wed, 31 Aug 2022 14:18:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=9m98NxU5A86KuWXY2vovcqY79lYhHDupa0B+1XAZNXI=;
-        b=J5itwN7e9LGnhrm23Fwvv/OcJpHHDiOEza+6QLGn8Y7B2air9FdCxPKYfZj9Xzg2qo
-         S5PdhgNsf760yQcnRXWf0cH3/xjExzQy6goOqrADeHUfPA8YtLDnzJYN2QlGN6LwaWrZ
-         Fw5kHEgwA7uODQ0qPp5BOqksgLmyb+ImJHkw4NnzwCywNl6KrIYQVjlhREG7Emr+FIgt
-         0ikjwoT2NkNhl+qEO9oZBQap5sKEl9QHuny1ZNSiAeikS1dJuZJ18JXt1Ws7I7B8yNlJ
-         Vt9+65zEEM1al1O5Mv6cvp0XuIeIUQ48f2d22W3LAjyqNHDELu75IPmHoRyGr7r1PZon
-         1gEw==
-X-Gm-Message-State: ACgBeo0vJQgKwKA6YvJWYvyOwfc7rPTpW3xqqcUZ5HepEFGDoiL9Tj6B
-        7ydlUoa6GhnTQMU8PDKKNSNyzHS8/A==
-X-Google-Smtp-Source: AA6agR5mjzuCT804Od3ar0hVSJxntEJNibVpbFZ3mWYBSrWp0nknR6FsyV22UkQZ3NpMXCOUl9XgoQ==
-X-Received: by 2002:aca:5bc3:0:b0:345:30a2:89da with SMTP id p186-20020aca5bc3000000b0034530a289damr1973244oib.3.1661980719096;
-        Wed, 31 Aug 2022 14:18:39 -0700 (PDT)
-Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g10-20020acab60a000000b0034516ca90dcsm7962802oif.23.2022.08.31.14.18.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 14:18:38 -0700 (PDT)
-Received: (nullmailer pid 267582 invoked by uid 1000);
-        Wed, 31 Aug 2022 21:18:37 -0000
-Date:   Wed, 31 Aug 2022 16:18:37 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        linux-kernel@vger.kernel.org, Frank Li <Frank.Li@nxp.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        devicetree@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        linux-pci@vger.kernel.org,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Rob Herring <robh+dt@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
-Subject: Re: [PATCH v5 07/20] dt-bindings: PCI: dwc: Apply generic schema for
- generic device only
-Message-ID: <20220831211837.GA267498-robh@kernel.org>
-References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
- <20220822184701.25246-8-Sergey.Semin@baikalelectronics.ru>
+        Wed, 31 Aug 2022 17:19:40 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8E43F5CC4
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:19:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661980769; x=1693516769;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nden09wHw+7qvxDuZ4teofu7WMUZp3ya1vYxeeSmh34=;
+  b=WoAlr9+bcNXUhAiK+OVeKKuftgy7myyrfOn9sE1yN4UXsvNavnhs9WPF
+   QaKr+jaALO8b9rY7qcSVLclxbVWIyqfMpCOgGAykhRIP/LqEVeMSO1CjN
+   PfHGZA5NWRpXmPo31YbqQs6jxUW1VESZ5DZzBwoQwJSy46VpS8mpchuxe
+   UwKyNROgL6cGO6j9ew+ILfEXhwfBnJcd8h0+fYSTY5XyiNxQSI1heVkP8
+   yE76BasgZ7x52BfVn7N+n7Q8FwdvWhVsx2gQElHf3f9ShFIyPgv75F8P1
+   vNh7IJgfoS6cx9HoXw92MFx2ACCEqnjzNWaaVK3pt5AE8mXFKRuPYhGcg
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="275295439"
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="275295439"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 14:19:29 -0700
+X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
+   d="scan'208";a="701498490"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 14:19:26 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oTV7L-006Zl7-0J;
+        Thu, 01 Sep 2022 00:19:23 +0300
+Date:   Thu, 1 Sep 2022 00:19:22 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+Subject: Re: [PATCH v1 3/3] regmap: spi-avmm: Use swabXX_array() helpers
+Message-ID: <Yw/QWshWH9L/+Hwp@smile.fi.intel.com>
+References: <20220831145407.78166-3-andriy.shevchenko@linux.intel.com>
+ <202209010444.n3YAkNP1-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220822184701.25246-8-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <202209010444.n3YAkNP1-lkp@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022 21:46:48 +0300, Serge Semin wrote:
-> Having the generic compatible strings constraints with the 'any'+'generic
-> string' semantic implicitly encourages either to add new DW PCIe-based
-> DT-bindings with the generic compatible string attached or just forget
-> about adding new DT-bindings since the corresponding DT-node will be
-> evaluated anyway. Moreover having that semantic implemented in the
-> generic DT-schema causes the DT-validation tool to apply the schema twice:
-> first by implicit compatible-string-based selection and second by means of
-> the 'allOf: [ $ref ]' statement. Let's fix all of that by dropping the
-> compatible property constraints and selecting the generic DT-schema only
-> for the purely generic DW PCIe DT-nodes. The later is required since there
-> is a driver for such devices. (Though there are no such DT-nodes currently
-> defined in the kernel DT sources.)
-> 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> 
-> ---
-> 
-> Changelog v3:
-> - This is a new patch unpinned from the next one:
->   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
->   by the Rob' request. (@Rob)
-> - Fix compatible property schema so one would work as expected: string
->   must contain either generic DW PCIe IP-core name or both generic and
->   equipped with IP-core version names.
-> 
-> Changelog v5:
-> - Switch the patch from not-selecting the generic schemas to applying
->   them to the generic DW PCIe device nodes only.
-> - Drop the generic compatible string used as fallback. (@Rob)
-> ---
->  .../devicetree/bindings/pci/snps,dw-pcie-ep.yaml | 16 ++++++++++------
->  .../devicetree/bindings/pci/snps,dw-pcie.yaml    | 16 ++++++++++------
->  2 files changed, 20 insertions(+), 12 deletions(-)
-> 
+On Thu, Sep 01, 2022 at 04:12:01AM +0800, kernel test robot wrote:
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+...
+
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/base/
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+
+Indeed, I compiled only first two patches on x86.
+
+> >> drivers/base/regmap/regmap-spi-avmm.c:171:15: error: incompatible pointer types passing 'char *' to parameter of type 'u32 *' (aka 'unsigned int *') [-Werror,-Wincompatible-pointer-types]
+>            swab32_array(buf, len / 4);
+>                         ^~~
+>    include/linux/swab.h:32:38: note: passing argument to parameter 'buf' here
+>    static inline void swab32_array(u32 *buf, unsigned int words)
+>                                         ^
+>    6 warnings and 1 error generated.
+
+While error message is valid, I believe the warnings are not related to the
+patch in question and were before it.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

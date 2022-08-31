@@ -2,168 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B99A95A7A66
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B62445A7A73
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:44:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiHaJnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:43:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48226 "EHLO
+        id S230053AbiHaJoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:44:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiHaJnE (ORCPT
+        with ESMTP id S229961AbiHaJns (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:43:04 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0ED8C6FF5;
-        Wed, 31 Aug 2022 02:43:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661938980; x=1693474980;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=e5BXTTbEN9oyaXeHXCdrLZklrN/YmuZpv91NpQyVSl4=;
-  b=Aj8PYwmYazVIKc7i9u470gnHZi3c1d9w4/T8MtCIxlmGpAsXA/IPZv94
-   It07wZoT3DxZzi+bxBa+flqjpLcdlN0/9sOWgsv1v7GPLamRQ+bnxgEUy
-   it8UQI4u1uGw2Wr0+QKq1nTEKWsr/fn+GZF85dH7EXvZ/n8JaCjWCuGZk
-   qBSDMdZqQSFF/4JFf6waVDLP/koGVJAgAs8M6iDZJ8vLW+pXbvJzXR8yx
-   CSvn0CwwKI9QgjSa7mUI5c+QSU/qPNQxmFbK8UnGPh3xghZA9E887ne13
-   /iy8TfR+Y12ccJ6OuWnASCMA+mR+ahicCr+GqveB8MFRdtM3zSH9l2qN1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="278429089"
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="278429089"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:42:59 -0700
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="673282687"
-Received: from adott-mobl1.ger.corp.intel.com ([10.252.43.127])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:42:53 -0700
-Date:   Wed, 31 Aug 2022 12:42:48 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>, andy.shevchenko@gmail.com,
-        u.kleine-koenig@pengutronix.de, johan@kernel.org,
-        wander@redhat.com, etremblay@distech-controls.com,
-        macro@orcam.me.uk, geert+renesas@glider.be, jk@ozlabs.org,
-        phil.edworthy@renesas.com, Lukas Wunner <lukas@wunner.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        UNGLinuxDriver@microchip.com
-Subject: Re: [PATCH v1 tty-next 1/2] 8250: microchip: pci1xxxx: Add driver
- for the quad-uart function in the  multi-function endpoint of pci1xxxx
- device.
-In-Reply-To: <20220830180054.1998296-2-kumaravel.thiagarajan@microchip.com>
-Message-ID: <bea049b-69d-a097-ddeb-737cdd485e@linux.intel.com>
-References: <20220830180054.1998296-1-kumaravel.thiagarajan@microchip.com> <20220830180054.1998296-2-kumaravel.thiagarajan@microchip.com>
+        Wed, 31 Aug 2022 05:43:48 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21479CEB3C;
+        Wed, 31 Aug 2022 02:43:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1661939025; x=1693475025;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=dhx4/HWDxIlBVqlYs4wS13lU72P1ArGL4LVJwKr7dkU=;
+  b=TTMP7HZ9z6Y6IqgOHUtTUqu/0crjIpthYwXk8qaQeJ+j880DewWmBiiB
+   MfQXH2McS5urK5E7EdDTC9DUDGdGMpwlkj/9uuq9jy3g9fykPf8pepCR8
+   dUTPDRhkvdKi7SJSC1QxcUmFnWLyun47EAMsX1RI4SHwJAh9t8yM0u11T
+   0=;
+Subject: Re: [PATCH v3 04/19] dt-bindings: hwmon: (mr75203) change "reset" property
+ to be optional
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-f20e0c8b.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 09:43:33 +0000
+Received: from EX13D41EUB002.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-f20e0c8b.us-east-1.amazon.com (Postfix) with ESMTPS id 0E82680268;
+        Wed, 31 Aug 2022 09:43:30 +0000 (UTC)
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D41EUB002.ant.amazon.com (10.43.166.132) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Wed, 31 Aug 2022 09:43:29 +0000
+Received: from [192.168.153.206] (10.85.143.179) by mail-relay.amazon.com
+ (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Wed, 31 Aug 2022 09:43:24 +0000
+Message-ID: <671a0ee8-9b0d-b417-19ff-013681cc73d8@amazon.com>
+Date:   Wed, 31 Aug 2022 12:43:24 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Content-Language: en-US
+To:     Philipp Zabel <p.zabel@pengutronix.de>, <jdelvare@suse.com>,
+        <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <rtanwar@maxlinear.com>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <talel@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
+        <hanochu@amazon.com>, <ronenk@amazon.com>, <itamark@amazon.com>,
+        <shellykz@amazon.com>, <shorer@amazon.com>, <amitlavi@amazon.com>,
+        <almogbs@amazon.com>, <dkl@amazon.com>,
+        <andriy.shevchenko@intel.com>, "Farber, Eliav" <farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-5-farbere@amazon.com>
+ <3bd5f46dff622e375c4f60140f479bf6ee483aec.camel@pengutronix.de>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <3bd5f46dff622e375c4f60140f479bf6ee483aec.camel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Aug 2022, Kumaravel Thiagarajan wrote:
+On 8/31/2022 11:21 AM, Philipp Zabel wrote:
+> On Di, 2022-08-30 at 19:21 +0000, Eliav Farber wrote:
+>> Change "reset" property to be optional instead of required, for SOCs 
+>> that
+>> don't support a reset controller.
+>>
+>> Signed-off-by: Eliav Farber <farbere@amazon.com>
+>> ---
+>> V3 -> v2:
+>> - Change "reset" property to be optional instead of adding new
+>>   "reset-control-skip" property.
+>>
+>>  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
+>>  1 file changed, 1 deletion(-)
+>>
+>> diff --git 
+>> a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml 
+>> b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>> index 6abde48b746e..2ec4b9da4b92 100644
+>> --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>> +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+>> @@ -49,7 +49,6 @@ required:
+>>    - reg
+>>    - reg-names
+>>    - clocks
+>> -  - resets
+>
+> Is this just for mr76006? Or does mr75203 work without reset as well?
+>
+> If it is the former, maybe a new compatible should be added and resets
+> should be kept required
 
-> pci1xxxx is a PCIe switch with a multi-function endpoint on one of its
-> downstream ports. Quad-uart is one of the functions in the
-> multi-function endpoint. This driver loads for the quad-uart and
-> enumerates single or multiple instances of uart based on the PCIe
-> subsystem device ID.
-> 
-> Signed-off-by: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>
-> ---
+mr75203 also works without a reset.
+As I replied in PATCH v3 14/19, series 5/6 is relevant only for the
+temperature sensor.
+The “reset” property is relevant to the controller.
 
-> +static int mchp_pci1xxxx_rs485_config(struct uart_port *port,
-> +				      struct ktermios *termios,
-> +				      struct serial_rs485 *rs485)
-> +{
-> +	u8 data = 0;
-> +
-> +	memset(rs485->padding, 0, sizeof(rs485->padding));
-> +	rs485->flags &= SER_RS485_ENABLED | SER_RS485_RTS_ON_SEND;
-> +
-> +	if (rs485->flags & SER_RS485_ENABLED) {
-> +		data = ADCL_CFG_EN | ADCL_CFG_PIN_SEL;
-> +		if (!(rs485->flags & SER_RS485_RTS_ON_SEND)) {
-> +			data |= ADCL_CFG_POL_SEL;
-> +			rs485->flags |=  SER_RS485_RTS_AFTER_SEND;
-> +		}
-> +	}
-> +
-> +	rs485->delay_rts_after_send = 0;
-> +	rs485->delay_rts_before_send = 0;
-> +	writeb(data, (port->membase + ADCL_CFG_REG));
-> +	port->rs485 = *rs485;
-
-Most of this will be handled for by the core so don't duplicate it in
-the driver.
-
-These days, you also need to provide rs485_supported.
-
-> +	return 0;
-> +}
-> +
-> +static void mchp_pci1xxxx_set_termios(struct uart_port *port,
-> +				      struct ktermios *termios,
-> +				      struct ktermios *old)
-> +{
-> +	const unsigned int standard_baud_list[] = {50, 75, 110, 134, 150, 300,
-> +						600, 1200, 1800, 2000, 2400, 3600,
-> +						4800, 7200, 9600, 19200, 38400, 57600,
-> +						115200, 125000, 136400, 150000, 166700,
-> +						187500, 214300, 250000, 300000, 375000,
-> +						500000, 750000, 1000000, 1500000};
-> +	unsigned int baud = tty_termios_baud_rate(termios);
-> +	unsigned int baud_clock;
-> +	unsigned int quot;
-> +	unsigned int frac;
-> +	unsigned int i;
-> +
-> +	baud = tty_termios_baud_rate(termios);
-
-Either this or the one at the declaration is redundant.
-
-> +	serial8250_do_set_termios(port, termios, NULL);
-> +
-> +	if (baud == 38400 && (port->flags & UPF_SPD_MASK) == UPF_SPD_CUST) {
-> +		writel((port->custom_divisor & 0x3FFFFFFF),
-> +		       (port->membase + CLK_DIVISOR_REG));
-> +	} else {
-> +		for (i = 0; i < ARRAY_SIZE(standard_baud_list); i++) {
-> +			if (baud == standard_baud_list[i])
-> +				return;
-
-Did you mean to break here instead?
-
-> +		}
-> +		tty_termios_encode_baud_rate(termios, baud, baud);
-> +
-> +		baud = uart_get_baud_rate(port, termios, old,
-> +					  50, 1500000);
-> +		baud_clock = readb(port->membase + CLK_SEL_REG);
-> +
-> +		if ((baud_clock & CLK_SEL_MASK) == CLK_SEL_500MHZ) {
-> +			quot = 500000000 / (16 * baud);
-> +			writel(quot, (port->membase + CLK_DIVISOR_REG));
-> +		} else if ((baud_clock & CLK_SEL_MASK) == CLK_SEL_166MHZ) {
-> +			quot = (166667 * 1000) / (16 * baud);
-> +			writel(quot, (port->membase + CLK_DIVISOR_REG));
-> +		} else {
-> +			quot = ((1000000000) / (baud * UART_BIT_SAMPLE_CNT));
-> +			frac = (((1000000000 - (quot * baud *
-> +				UART_BIT_SAMPLE_CNT)) / UART_BIT_SAMPLE_CNT)
-> +				* 255) / baud;
-> +			writel(frac | (quot << 8),
-> +			       (port->membase + CLK_DIVISOR_REG));
-> +		}
-
-Please check ->[gs]et_divisor() out.
+--
+Regards, Eliav
 
 
--- 
- i.
 

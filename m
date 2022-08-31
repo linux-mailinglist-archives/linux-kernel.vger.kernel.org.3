@@ -2,196 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F725A7845
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A665A7841
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 09:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiHaH6h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 03:58:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54016 "EHLO
+        id S229954AbiHaH6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 03:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbiHaH61 (ORCPT
+        with ESMTP id S229766AbiHaH6H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 03:58:27 -0400
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55FC75FF9
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:58:22 -0700 (PDT)
-Received: from YC20090004.ad.ts.tri-ad.global ([103.175.111.222])
-        by smtp.orange.fr with ESMTPA
-        id TIbgoo5DzXFXxTIc2ogpKK; Wed, 31 Aug 2022 09:58:20 +0200
-X-ME-Helo: YC20090004.ad.ts.tri-ad.global
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 31 Aug 2022 09:58:20 +0200
-X-ME-IP: 103.175.111.222
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        Joe Perches <joe@perches.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v6 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant expressions
-Date:   Wed, 31 Aug 2022 16:57:41 +0900
-Message-Id: <20220831075742.295-2-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220831075742.295-1-mailhol.vincent@wanadoo.fr>
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220831075742.295-1-mailhol.vincent@wanadoo.fr>
+        Wed, 31 Aug 2022 03:58:07 -0400
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7BCFFD12F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 00:57:57 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-01 (Coremail) with SMTP id qwCowACXnyN3FA9jmHgbAg--.2751S2;
+        Wed, 31 Aug 2022 15:57:44 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        ilpo.jarvinen@linux.intel.com, johan@kernel.org,
+        penguin-kernel@I-love.SAKURA.ne.jp, zhangxuezhi1@coolpad.com,
+        xyangxi5@gmail.com
+Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] tty: vt: Add checks after calling kzalloc
+Date:   Wed, 31 Aug 2022 15:57:42 +0800
+Message-Id: <20220831075742.2175792-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: qwCowACXnyN3FA9jmHgbAg--.2751S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7XrW3ZrykuFW5tw13tF4UCFg_yoWkZwb_Ca
+        4xXr13Xw18G3yYy3Wqq34fCrWFyF4vvF1DuFW2qrZxJ398Wrs2qas2vrZ5Xw1UGa1xA3Z0
+        kryqvr97JrnrGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbzxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_
+        Gr1UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For x86_64, the current ffs() implementation does not produce
-optimized code when called with a constant expression. On the
-contrary, the __builtin_ffs() function of both GCC and clang is able
-to fold the expression into a single instruction.
+As the potential failure of the memory allocation,
+it should be better to check the return value after
+calling kzalloc and return error if fails.
 
-** Example **
-
-Let's consider two dummy functions foo() and bar() as below:
-
-  #include <linux/bitops.h>
-  #define CONST 0x01000000
-
-  unsigned int foo(void)
-  {
-  	return ffs(CONST);
-  }
-
-  unsigned int bar(void)
-  {
-  	return __builtin_ffs(CONST);
-  }
-
-GCC would produce below assembly code:
-
-  0000000000000000 <foo>:
-     0:	ba 00 00 00 01       	mov    $0x1000000,%edx
-     5:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
-     a:	0f bc c2             	bsf    %edx,%eax
-     d:	83 c0 01             	add    $0x1,%eax
-    10:	c3                   	ret
-  <Instructions after ret and before next function were redacted>
-
-  0000000000000020 <bar>:
-    20:	b8 19 00 00 00       	mov    $0x19,%eax
-    25:	c3                   	ret
-
-And clang would produce:
-
-  0000000000000000 <foo>:
-     0:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
-     5:	0f bc 05 00 00 00 00 	bsf    0x0(%rip),%eax        # c <foo+0xc>
-     c:	83 c0 01             	add    $0x1,%eax
-     f:	c3                   	ret
-
-  0000000000000010 <bar>:
-    10:	b8 19 00 00 00       	mov    $0x19,%eax
-    15:	c3                   	ret
-
-Both examples clearly demonstrate the benefit of using __builtin_ffs()
-instead of the kernel's asm implementation for constant expressions.
-
-However, for non constant expressions, the ffs() asm version of the
-kernel remains better for x86_64 because, contrary to GCC, it doesn't
-emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
-able optimize out the CMOV call).
-
-Use __builtin_constant_p() to select between the kernel's ffs() and
-the __builtin_ffs() depending on whether the argument is constant or
-not.
-
-As a side benefit, replacing the ffs() function declaration by a macro
-also removes below -Wshadow warning:
-
-  ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
-    283 | static __always_inline int ffs(int x)
-
-** Statistics **
-
-On a allyesconfig, before...:
-
-  $ objdump -d vmlinux.o | grep bsf | wc -l
-  1081
-
-...and after:
-
-  $ objdump -d vmlinux.o | grep bsf | wc -l
-  792
-
-So, roughly 26.7% of the calls to ffs() were using constant
-expressions and could be optimized out.
-
-(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
-
-[1] commit ca3d30cc02f7 ("x86_64, asm: Optimise fls(), ffs() and fls64()")
-Link: http://lkml.kernel.org/r/20111213145654.14362.39868.stgit@warthog.procyon.org.uk
-
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- arch/x86/include/asm/bitops.h | 26 ++++++++++++++------------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+ drivers/tty/vt/vt.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index a288ecd230ab..6ed979547086 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -269,18 +269,7 @@ static __always_inline unsigned long __fls(unsigned long word)
- #undef ADDR
+diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+index ae9c926acd6f..a4d59f3a3ce0 100644
+--- a/drivers/tty/vt/vt.c
++++ b/drivers/tty/vt/vt.c
+@@ -3519,11 +3519,19 @@ static int __init con_init(void)
  
- #ifdef __KERNEL__
--/**
-- * ffs - find first set bit in word
-- * @x: the word to search
-- *
-- * This is defined the same way as the libc and compiler builtin ffs
-- * routines, therefore differs in spirit from the other bitops.
-- *
-- * ffs(value) returns 0 if value is 0 or the position of the first
-- * set bit if value is nonzero. The first (least significant) bit
-- * is at position 1.
-- */
--static __always_inline int ffs(int x)
-+static __always_inline int variable_ffs(int x)
- {
- 	int r;
- 
-@@ -310,6 +299,19 @@ static __always_inline int ffs(int x)
- 	return r + 1;
- }
- 
-+/**
-+ * ffs - find first set bit in word
-+ * @x: the word to search
-+ *
-+ * This is defined the same way as the libc and compiler builtin ffs
-+ * routines, therefore differs in spirit from the other bitops.
-+ *
-+ * ffs(value) returns 0 if value is 0 or the position of the first
-+ * set bit if value is nonzero. The first (least significant) bit
-+ * is at position 1.
-+ */
-+#define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
-+
- /**
-  * fls - find last set bit in word
-  * @x: the word to search
+ 	for (currcons = 0; currcons < MIN_NR_CONSOLES; currcons++) {
+ 		vc_cons[currcons].d = vc = kzalloc(sizeof(struct vc_data), GFP_NOWAIT);
++		if (!vc) {
++			console_unlock();
++			return -ENOMEM;
++		}
+ 		INIT_WORK(&vc_cons[currcons].SAK_work, vc_SAK);
+ 		tty_port_init(&vc->port);
+ 		visual_init(vc, currcons, 1);
+ 		/* Assuming vc->vc_{cols,rows,screenbuf_size} are sane here. */
+ 		vc->vc_screenbuf = kzalloc(vc->vc_screenbuf_size, GFP_NOWAIT);
++		if (!vc->vc_screenbuf) {
++			console_unlock();
++			return -ENOMEM;
++		}
+ 		vc_init(vc, vc->vc_rows, vc->vc_cols,
+ 			currcons || !vc->vc_sw->con_save_screen);
+ 	}
 -- 
-2.35.1
+2.25.1
 

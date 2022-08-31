@@ -2,201 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 180175A75C6
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:37:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C40C65A75C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:37:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229659AbiHaFhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 01:37:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51554 "EHLO
+        id S229692AbiHaFhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 01:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbiHaFgz (ORCPT
+        with ESMTP id S229656AbiHaFhH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 01:36:55 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE4BAB1B4
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 22:36:53 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id gb36so5324599ejc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 22:36:53 -0700 (PDT)
+        Wed, 31 Aug 2022 01:37:07 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB89B99F4;
+        Tue, 30 Aug 2022 22:37:02 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id j5so9285670plj.5;
+        Tue, 30 Aug 2022 22:37:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=NOfWrLgk4XJRp02V6wb7t4ERG9KLrIB6EWwKvEYmHTY=;
-        b=q3vo1pdqO4MDUp085vbr/x74o8yV1M3oVtMKQW32IH8QET4vp46nOdZFsgZYnlE4Eq
-         DFUR8Mr0ujsg3pohQ9bHyeyxshmDK2QOG9zRxpVIS8cpmnUo9RHxE8AWKb2OV/OGQRuf
-         YpStHVKowJWICs+AI/mEEpZY5KL4ucAVNow7choyKjB/iXJWjDW2x5v3gcC29WHLepXd
-         YnGrNJz3MU7kkYV0aqw3+HrLsiRyRJNa8pv9pF5Z+ObNZWwWCN93zTqRDnrkfaBeSYub
-         2hlsR2Slqzv16wC7abn0/wNoJuzjbLtUalTkSgiZoIEKVxCJcscNYwb6FMmlUaHg7DTo
-         lZCQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=LeiPzwymSVIZVw3GRt09ThxmaQUoR04VQqbMh5D0t2k=;
+        b=onEPhCpuvi78PPkxj/K41vDrmpqAt0GbARq29lE4i9OY1lZlf1Vxti6vCDikGwvYqL
+         a3WrutZCHGSGAeOTBb1WWY9BQu0cm86TIwjV4p5QnR0pb7IcM6c1OnobCBez8hm35JgV
+         lZieVby+J8SaRDLF5p3JRVDHj8LZptS+eMraHjtJxaFQsipeFjFtvbDLfSMyzt6RzYP5
+         jiBeBEd0KftPkMryhFMXDT6suNqIzn3iG7TSTH3CGcNzXbWlLMz6ZcWM7DGgHpVFduZy
+         J1Q8Dp+F5GpI0U1DHSUCnb2xJ6UN4s7CuL/W6yLXSXQdSK2zk7ZS7nJ1PcObPZJ0U1MV
+         tpXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=NOfWrLgk4XJRp02V6wb7t4ERG9KLrIB6EWwKvEYmHTY=;
-        b=pqOu43fn9JN4rJi972xTAk34wmESsEoCpQ/AOrleIJC3CEouwVkWkSiM906UcuKNfG
-         ET/pxBJtHiaRNhGhGUllZrT8UGIWCiyjLlsC6vofcQH/sHu0P2iFCaijqPdEmd9TgV+Y
-         kSwPpy2ecgEazYXeEFQoyEqhw4G/VZMH1Y9Besc/56ZwxazsgOkUCywfl1xBkgsXnZz6
-         aTf6MFi8Ag4obvl+VE1QR1fCJG3IOtyiBUvhsia0dQNFv85psv5vurw8eVfpSyYsMnIM
-         FzgA+yz+AEwDX28735IXk4nIIxFHaqoZvXkS5umGCi+Cv/2R5cpsIG2Iyxxn1/iIPxIe
-         WI6g==
-X-Gm-Message-State: ACgBeo2XAzsOaxGcu9PauCQrp8SzYU2ep7LaRvmoUb4xoOCRIbaUtMN6
-        eAragjgNVIe6g9B/ONalclg=
-X-Google-Smtp-Source: AA6agR4yPeXKBgBg73i/NeASyese1jidXLXvrRg8eV8eAKCsgMOWDQpIFf5czudGRXrYTShs23uDiQ==
-X-Received: by 2002:a17:907:2cef:b0:741:4fbf:4628 with SMTP id hz15-20020a1709072cef00b007414fbf4628mr11490511ejc.334.1661924212448;
-        Tue, 30 Aug 2022 22:36:52 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb89.dynamic.kabel-deutschland.de. [95.90.187.137])
-        by smtp.gmail.com with ESMTPSA id gh21-20020a1709073c1500b0073a644ef803sm6610135ejc.101.2022.08.30.22.36.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 22:36:52 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 2/2] staging: r8188eu: remove os_dep/mlme_linux.c
-Date:   Wed, 31 Aug 2022 07:36:39 +0200
-Message-Id: <20220831053639.8559-3-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220831053639.8559-1-straube.linux@gmail.com>
-References: <20220831053639.8559-1-straube.linux@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=LeiPzwymSVIZVw3GRt09ThxmaQUoR04VQqbMh5D0t2k=;
+        b=hUJmkpVMkoG2E/EGYsmmp4Kq0Eo8qaPssiTuEdpyXNdhBqDveNC6lQ7IedSvvOY1Bt
+         iH/VquPwPdun7BJyOI7cRErfRuIH+Dlv1dwBaA2sFmWfU4bVO3DpXwZdw9WStYprRo+M
+         4+AHVuxWPxWSy6TD4KfHnji58SNzoUWe06UYcKW8p0h2SYEjoDP0uQrIE4SJgoc0KZc0
+         Vgt160wNCZNqIE3MELnJJJv652Xmbh3LY19YCZGvqYVlPP6owFvzg6xe5okMwBY7Bryz
+         bY2C4fHPxct4qXdJY0w/M4YnEuX1h2MwfybyZyh3Ee5eiZiVANeFVCULUlSx/lNd96Kq
+         5mqg==
+X-Gm-Message-State: ACgBeo0qq59sTpgeILSPG4aUbH9R8pCleebCscI7ccrYTpgvW0fuEJ3G
+        IVrUGpZFjpbBBMT6/vMXl2M=
+X-Google-Smtp-Source: AA6agR6g7jbkSaI6vo48mt68MtByBJcgFVXFcEpsT6bh5wmeLv9rRla4CDEld9U/ToG4gytmX6FkAg==
+X-Received: by 2002:a17:902:d4c4:b0:173:1206:cee7 with SMTP id o4-20020a170902d4c400b001731206cee7mr23963000plg.142.1661924221538;
+        Tue, 30 Aug 2022 22:37:01 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id t9-20020a170902e84900b0016eea511f2dsm10948677plg.242.2022.08.30.22.36.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 22:37:00 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <cddebb5a-3b83-e89d-db00-9a59ddbd6741@roeck-us.net>
+Date:   Tue, 30 Aug 2022 22:36:58 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when
+ "intel,vm-map" not defined
+Content-Language: en-US
+To:     Eliav Farber <farbere@amazon.com>, jdelvare@suse.com,
+        robh+dt@kernel.org, p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     talel@amazon.com, hhhawa@amazon.com, jonnyc@amazon.com,
+        hanochu@amazon.com, ronenk@amazon.com, itamark@amazon.com,
+        shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
+        almogbs@amazon.com, dkl@amazon.com, rahul.tanwar@linux.intel.com,
+        andriy.shevchenko@intel.com
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-3-farbere@amazon.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220830192212.28570-3-farbere@amazon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function rtw_init_mlme_timer() is only used in core/rtw_mlme.c.
-Move rtw_init_mlme_timer(), including the static functions it calls,
-to core/rtw_mlme.c and make it static. Remove the now empty file
-os_dep/mlme_linux.c.
+On 8/30/22 12:21, Eliav Farber wrote:
+> Bug fix - in case "intel,vm-map" is missing in device-tree ,'num' is set
+> to 0, and no voltage channel infos are allocated.
+> 
+> Signed-off-by: Eliav Farber <farbere@amazon.com>
+> ---
+>   drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
+>   1 file changed, 12 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+> index 046523d47c29..0e29877a1a9c 100644
+> --- a/drivers/hwmon/mr75203.c
+> +++ b/drivers/hwmon/mr75203.c
+> @@ -580,8 +580,6 @@ static int mr75203_probe(struct platform_device *pdev)
+>   	}
+>   
+>   	if (vm_num) {
+> -		u32 num = vm_num;
+> -
+>   		ret = pvt_get_regmap(pdev, "vm", pvt);
+>   		if (ret)
+>   			return ret;
+> @@ -594,30 +592,28 @@ static int mr75203_probe(struct platform_device *pdev)
+>   		ret = device_property_read_u8_array(dev, "intel,vm-map",
+>   						    pvt->vm_idx, vm_num);
+>   		if (ret) {
+> -			num = 0;
+> +			/*
+> +			 * Incase intel,vm-map property is not defined, we
+> +			 * assume incremental channel numbers.
+> +			 */
+> +			for (i = 0; i < vm_num; i++)
+> +				pvt->vm_idx[i] = i;
+>   		} else {
+>   			for (i = 0; i < vm_num; i++)
+>   				if (pvt->vm_idx[i] >= vm_num ||
+> -				    pvt->vm_idx[i] == 0xff) {
+> -					num = i;
+> +				    pvt->vm_idx[i] == 0xff)
+>   					break;
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/Makefile             |  1 -
- drivers/staging/r8188eu/core/rtw_mlme.c      | 31 ++++++++++++++++
- drivers/staging/r8188eu/include/mlme_osdep.h |  2 -
- drivers/staging/r8188eu/os_dep/mlme_linux.c  | 39 --------------------
- 4 files changed, 31 insertions(+), 42 deletions(-)
- delete mode 100644 drivers/staging/r8188eu/os_dep/mlme_linux.c
+So all vm_idx values from 0x00 to 0xfe would be acceptable ?
+Does the chip really have that many registers (0x200 + 0x40 + 0x200 * 0xfe) ?
+Is that documented somewhere ?
 
-diff --git a/drivers/staging/r8188eu/Makefile b/drivers/staging/r8188eu/Makefile
-index afafe6957155..f5091a3ed4d2 100644
---- a/drivers/staging/r8188eu/Makefile
-+++ b/drivers/staging/r8188eu/Makefile
-@@ -22,7 +22,6 @@ r8188eu-y = \
- 		hal/usb_halinit.o \
- 		hal/usb_ops_linux.o \
- 		os_dep/ioctl_linux.o \
--		os_dep/mlme_linux.o \
- 		os_dep/os_intfs.o \
- 		os_dep/osdep_service.o \
- 		os_dep/usb_intf.o \
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index bb317ba4bcd5..8f21d34a317f 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -189,6 +189,37 @@ u8 *rtw_get_beacon_interval_from_ie(u8 *ie)
- 	return ie + 8;
- }
- 
-+static void rtw_join_timeout_handler(struct timer_list *t)
-+{
-+	struct adapter *adapter = from_timer(adapter, t, mlmepriv.assoc_timer);
-+
-+	_rtw_join_timeout_handler(adapter);
-+}
-+
-+static void _rtw_scan_timeout_handler(struct timer_list *t)
-+{
-+	struct adapter *adapter = from_timer(adapter, t, mlmepriv.scan_to_timer);
-+
-+	rtw_scan_timeout_handler(adapter);
-+}
-+
-+static void _dynamic_check_timer_handlder(struct timer_list *t)
-+{
-+	struct adapter *adapter = from_timer(adapter, t, mlmepriv.dynamic_chk_timer);
-+
-+	rtw_dynamic_check_timer_handlder(adapter);
-+	_set_timer(&adapter->mlmepriv.dynamic_chk_timer, 2000);
-+}
-+
-+static void rtw_init_mlme_timer(struct adapter *padapter)
-+{
-+	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
-+
-+	timer_setup(&pmlmepriv->assoc_timer, rtw_join_timeout_handler, 0);
-+	timer_setup(&pmlmepriv->scan_to_timer, _rtw_scan_timeout_handler, 0);
-+	timer_setup(&pmlmepriv->dynamic_chk_timer, _dynamic_check_timer_handlder, 0);
-+}
-+
- int rtw_init_mlme_priv(struct adapter *padapter)/* struct	mlme_priv *pmlmepriv) */
- {
- 	int	i;
-diff --git a/drivers/staging/r8188eu/include/mlme_osdep.h b/drivers/staging/r8188eu/include/mlme_osdep.h
-index d5e367e2d0de..1fa66c5e3c9c 100644
---- a/drivers/staging/r8188eu/include/mlme_osdep.h
-+++ b/drivers/staging/r8188eu/include/mlme_osdep.h
-@@ -7,8 +7,6 @@
- #include "osdep_service.h"
- #include "drv_types.h"
- 
--void rtw_init_mlme_timer(struct adapter *padapter);
--
- void indicate_wx_scan_complete_event(struct adapter *padapter);
- 
- #endif	/* _MLME_OSDEP_H_ */
-diff --git a/drivers/staging/r8188eu/os_dep/mlme_linux.c b/drivers/staging/r8188eu/os_dep/mlme_linux.c
-deleted file mode 100644
-index 2f8f866d5362..000000000000
---- a/drivers/staging/r8188eu/os_dep/mlme_linux.c
-+++ /dev/null
-@@ -1,39 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--/* Copyright(c) 2007 - 2011 Realtek Corporation. i*/
--
--#define _MLME_OSDEP_C_
--
--#include "../include/osdep_service.h"
--#include "../include/drv_types.h"
--#include "../include/mlme_osdep.h"
--
--static void rtw_join_timeout_handler(struct timer_list *t)
--{
--	struct adapter *adapter = from_timer(adapter, t, mlmepriv.assoc_timer);
--
--	_rtw_join_timeout_handler(adapter);
--}
--
--static void _rtw_scan_timeout_handler(struct timer_list *t)
--{
--	struct adapter *adapter = from_timer(adapter, t, mlmepriv.scan_to_timer);
--
--	rtw_scan_timeout_handler(adapter);
--}
--
--static void _dynamic_check_timer_handlder(struct timer_list *t)
--{
--	struct adapter *adapter = from_timer(adapter, t, mlmepriv.dynamic_chk_timer);
--
--	rtw_dynamic_check_timer_handlder(adapter);
--	_set_timer(&adapter->mlmepriv.dynamic_chk_timer, 2000);
--}
--
--void rtw_init_mlme_timer(struct adapter *padapter)
--{
--	struct	mlme_priv *pmlmepriv = &padapter->mlmepriv;
--
--	timer_setup(&pmlmepriv->assoc_timer, rtw_join_timeout_handler, 0);
--	timer_setup(&pmlmepriv->scan_to_timer, _rtw_scan_timeout_handler, 0);
--	timer_setup(&pmlmepriv->dynamic_chk_timer, _dynamic_check_timer_handlder, 0);
--}
--- 
-2.37.2
+Thanks,
+Guenter
+
+> -				}
+> -		}
+>   
+> -		/*
+> -		 * Incase intel,vm-map property is not defined, we assume
+> -		 * incremental channel numbers.
+> -		 */
+> -		for (i = num; i < vm_num; i++)
+> -			pvt->vm_idx[i] = i;
+> +			vm_num = i;
+> +		}
+>   
+> -		in_config = devm_kcalloc(dev, num + 1,
+> +		in_config = devm_kcalloc(dev, vm_num + 1,
+>   					 sizeof(*in_config), GFP_KERNEL);
+>   		if (!in_config)
+>   			return -ENOMEM;
+>   
+> -		memset32(in_config, HWMON_I_INPUT, num);
+> -		in_config[num] = 0;
+> +		memset32(in_config, HWMON_I_INPUT, vm_num);
+> +		in_config[vm_num] = 0;
+>   		pvt_in.config = in_config;
+>   
+>   		pvt_info[index++] = &pvt_in;
 

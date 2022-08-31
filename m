@@ -2,129 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4459F5A789B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:12:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE4E5A7861
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:02:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbiHaIMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54788 "EHLO
+        id S231255AbiHaICw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbiHaIM2 (ORCPT
+        with ESMTP id S229449AbiHaICp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:12:28 -0400
-X-Greylist: delayed 1983 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 01:12:27 PDT
-Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA669BD1E4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:12:26 -0700 (PDT)
-Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 202208310739224fcaf1b96c86e54dc0
-        for <linux-kernel@vger.kernel.org>;
-        Wed, 31 Aug 2022 09:39:23 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
- d=siemens.com; i=daniel.starke@siemens.com;
- h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc:References:In-Reply-To;
- bh=xPAHuyCcauRzXbU2F0wSMbyCkn9ZpPEPIcMeTRGYZX4=;
- b=RcmqXxPyY3VqVsNVXTbfPf8J7fUnCgEgBxrG1ryuOhv+flTFlG0IkLZSL2rDN0l7WtKr+A
- 329i7qK7y2CunAv4rjuBT7uj3HQZQgen7ThvZSSzdAtN2GTHLbKms8lBucvGspaULvduW31A
- OK8YQD3+4Er+fpMr97mBlIgI0pnpE=;
-From:   "D. Starke" <daniel.starke@siemens.com>
-To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Daniel Starke <daniel.starke@siemens.com>
-Subject: [PATCH v3 4/6] tty: n_gsm: introduce gsm_control_command() function
-Date:   Wed, 31 Aug 2022 09:37:58 +0200
-Message-Id: <20220831073800.7459-4-daniel.starke@siemens.com>
-In-Reply-To: <20220831073800.7459-1-daniel.starke@siemens.com>
-References: <20220831073800.7459-1-daniel.starke@siemens.com>
+        Wed, 31 Aug 2022 04:02:45 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1146B99D3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:02:44 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B043CED1;
+        Wed, 31 Aug 2022 01:02:50 -0700 (PDT)
+Received: from [10.57.15.237] (unknown [10.57.15.237])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 13CBF3F766;
+        Wed, 31 Aug 2022 01:03:11 -0700 (PDT)
+Message-ID: <19a47bae-91ff-648c-c407-759468b8af6a@arm.com>
+Date:   Wed, 31 Aug 2022 09:02:35 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Flowmailer-Platform: Siemens
-Feedback-ID: 519:519-314044:519-21489:flowmailer
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] swiotlb: fix a typo
+Content-Language: en-GB
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+        hch@infradead.org, m.szyprowski@samsung.com
+References: <20220826095046.880626-1-chao.gao@intel.com>
+ <cd53526d-2564-996b-7b0d-d1fe9f114590@arm.com> <Yw7iFQGpStC6YodP@gao-cwp>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <Yw7iFQGpStC6YodP@gao-cwp>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Daniel Starke <daniel.starke@siemens.com>
+On 2022-08-31 05:22, Chao Gao wrote:
+> On Tue, Aug 30, 2022 at 10:23:51AM +0100, Robin Murphy wrote:
+>> On 2022-08-26 10:50, Chao Gao wrote:
+>>> "overwirte" isn't a word. It should be "overwrite".
+>>>
+>>> Signed-off-by: Chao Gao <chao.gao@intel.com>
+>>> ---
+>>> BTW, I am wondering if copying the original buffer to the tlb buffer
+>>> unconditionally will leak the original buffer to the VMM, especially
+>>> when VMM isn't trusted e.g., by confidential VMs. Would it be better
+>>> to zero the tlb buffer for dir == DMA_FROM_DEVICE?
+>>
+>> No, at the point of dma_map(), the buffer contents are owned by the caller,
+>> so if parts of that buffer are sensitive and shouldn't be exposed to DMA,
+>> then don't map the whole buffer for DMA. There are more DMA API
+>> implementations than SWIOTLB.
+>>
+> 
+> I am not sure if all existing drivers ensure that all buffers allocated
+> for DMA_FROM_DEVICE are zeroed/poisoned so that they don't have sensitive
+> data before dma_map(). If that isn't the case, bouncing the original contents
+> (left by the previous user of the buffer) effectively makes the contents
+> visible to host/VMM. I am afraid it may be a concern for confidential VMs.
 
-Move the content of gsm_control_transmit() to a new function
-gsm_control_command() with a more generic signature and analog to
-gsm_control_reply(). Use this within gsm_control_transmit().
+Sure, and in a scheme where pages can be dynamically shared in-place 
+instead of using SWIOTLB to bounce through a pre-shared buffer, then 
+those same drivers will still expose the same stale data. Similarly, a 
+driver could massively over-map with DMA_TO_DEVICE or DMA_BIDIRECTIONAL 
+and expose all manner of potential secrets that way. It's a concern that 
+cannot be addressed at the DMA API level. Anyone who wants to completely 
+trust drivers not to do anything stupid in a confidential compute 
+scenario is going to have to audit and possibly fix those drivers.
 
-This is needed to simplify upcoming functional additions.
-
-Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
----
- drivers/tty/n_gsm.c | 33 ++++++++++++++++++++++++++-------
- 1 file changed, 26 insertions(+), 7 deletions(-)
-
-Incorporated review comments from Jiri Slaby since v2:
-- leading changed tab to space in function comment of gsm_control_command()
-- made function parameter data to const in gsm_control_command()
-- added extra line-feeds in gsm_control_command()
-- kept signess and constness of other parameters in gsm_control_command()
-  to align with gsm_control_reply() as stated in the commit message;
-  possible changes here are subject to a different commit which should
-  keep the changes in alignment to the signature of gsm_control_reply()
-
-Link: https://lore.kernel.org/all/fe014b7b-a1d2-9be9-625b-2f630934c56c@kernel.org/
-
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index 9d0b4f79b65a..e050d76385ba 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -1316,6 +1316,31 @@ static void gsm_dlci_data_kick(struct gsm_dlci *dlci)
-  */
- 
- 
-+/**
-+ * gsm_control_command	-	send a command frame to a control
-+ * @gsm: gsm channel
-+ * @cmd: the command to use
-+ * @data: data to follow encoded info
-+ * @dlen: length of data
-+ *
-+ * Encode up and queue a UI/UIH frame containing our command.
-+ */
-+static int gsm_control_command(struct gsm_mux *gsm, int cmd, const u8 *data,
-+			       int dlen)
-+{
-+	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, dlen + 2, gsm->ftype);
-+
-+	if (msg == NULL)
-+		return -ENOMEM;
-+
-+	msg->data[0] = (cmd << 1) | CR | EA;	/* Set C/R */
-+	msg->data[1] = (dlen << 1) | EA;
-+	memcpy(msg->data + 2, data, dlen);
-+	gsm_data_queue(gsm->dlci[0], msg);
-+
-+	return 0;
-+}
-+
- /**
-  *	gsm_control_reply	-	send a response frame to a control
-  *	@gsm: gsm channel
-@@ -1621,13 +1646,7 @@ static void gsm_control_response(struct gsm_mux *gsm, unsigned int command,
- 
- static void gsm_control_transmit(struct gsm_mux *gsm, struct gsm_control *ctrl)
- {
--	struct gsm_msg *msg = gsm_data_alloc(gsm, 0, ctrl->len + 2, gsm->ftype);
--	if (msg == NULL)
--		return;
--	msg->data[0] = (ctrl->cmd << 1) | CR | EA;	/* command */
--	msg->data[1] = (ctrl->len << 1) | EA;
--	memcpy(msg->data + 2, ctrl->data, ctrl->len);
--	gsm_data_queue(gsm->dlci[0], msg);
-+	gsm_control_command(gsm, ctrl->cmd, ctrl->data, ctrl->len);
- }
- 
- /**
--- 
-2.34.1
-
+Robin.

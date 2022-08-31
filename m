@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53A355A7B68
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 830995A7B75
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 12:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229712AbiHaKhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 06:37:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53264 "EHLO
+        id S230479AbiHaKiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 06:38:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229658AbiHaKhU (ORCPT
+        with ESMTP id S231233AbiHaKh6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 06:37:20 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4C62B24A9
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 03:37:18 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id u18so5004276wrq.10
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 03:37:18 -0700 (PDT)
+        Wed, 31 Aug 2022 06:37:58 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77A63C32D0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 03:37:51 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id qh18so7213496ejb.7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 03:37:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=qmSDVvWPmXjsEoLB/yy4dBeFNE6LDECdPTKFlVF1PoE=;
-        b=sjv1ud0NJToWCCz5mpoI1XXv7VRN42nSodi+vU6HqC3fe4/RDdH9q78MztUStUg3tz
-         Xc2VH//pGT74lRB34bGeve8JkG1qnn0+IqPnock9NFdhh6qZlnaCkIyowzKTRT7FJxji
-         z/GR4fNB9q+235VImiHhUj3qtbmxYAGPA6OWg32iyZY+RWa1WOllcMXAW5Ypa+UHJ8jW
-         8xs5JdrK3PiKkOFMlLV0DL+qhh48j42QQnv6mKDYipwbJKuU6YxKUw7q3wlwpZcq+q8X
-         TT/+nZgkSnsztlClPhtaZpJBrpVs5ezXDDOxx5Tro2hYIsNMiKVkIvoSrdqaMCZkKMyS
-         wVgA==
+        d=szeredi.hu; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=4gYrLsowmI5GGuWghJMX58bQcBEnYZGfYoQ7YKZR6lk=;
+        b=MG4erCNWjYHuSIEvvO741xtOx0OQLZr92W0tZx5zcIBAPX8bM6MALAcK3TActnS/CL
+         onIOi9HOixErTpAkKfRcwfw9Iw6xjtu1vuufU5pwP3Eu8HphBTU/vxZRmM2vQsrnytBp
+         v88VVo5ZXt/1O0WGeHz/QV+AY5566xeU1JoAI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=qmSDVvWPmXjsEoLB/yy4dBeFNE6LDECdPTKFlVF1PoE=;
-        b=LVO47FSKV3gSvtaGvlwwtPbfDhcz6giVtPvZketNcwwDipTfySSRFUwBWf3gj6D6Y+
-         NFkdZJ8x9oRuEbINpyuQIbQkX2u/jBhPm3hMFzpm5UngJ8Vcr3rtJwqDro0oOyzZ9XxF
-         MTwdratv4Wbf7w3Y8VtYqfR9acE/8+3wY6s2ZDaKIsykzk0XXAGisGgI0HAseHnQlRy/
-         TuQosXiwgvFe4Vgg9ppphA+T4ZZsuUsPUaupK/WvT2vXIaNLKE14w4UMMUtMeCmvRruH
-         LeJqNEsz9sL5WeKCX5ZxZCYmQC1WvJJI+OIoT+WxEMp8dTCAumfdYupDjwLT7sthKhv8
-         gt0g==
-X-Gm-Message-State: ACgBeo2uDb2kEdKpfG1iE7zqjiwdjVuZMwvYeIzjxsucWyTO8A0zbYVt
-        OCDm1TVUNhRqyWwTwW4V8yRSBg==
-X-Google-Smtp-Source: AA6agR7zq/2i3kOzfh+ND3aVSosKcimESlsCtfJ9TPLHCMLrzMvYwqw/Dz65I9sh80Ti/NbGaa+m0w==
-X-Received: by 2002:a05:6000:144a:b0:220:7181:9283 with SMTP id v10-20020a056000144a00b0022071819283mr10935127wrx.158.1661942237422;
-        Wed, 31 Aug 2022 03:37:17 -0700 (PDT)
-Received: from [192.168.86.238] (cpc90716-aztw32-2-0-cust825.18-1.cable.virginm.net. [86.26.103.58])
-        by smtp.googlemail.com with ESMTPSA id e3-20020adfe383000000b0021ef34124ebsm12377427wrm.11.2022.08.31.03.37.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Aug 2022 03:37:16 -0700 (PDT)
-Message-ID: <a4562481-780b-585f-01a5-d447040fbd0a@linaro.org>
-Date:   Wed, 31 Aug 2022 11:37:15 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=4gYrLsowmI5GGuWghJMX58bQcBEnYZGfYoQ7YKZR6lk=;
+        b=tvouyjWT7uVjyLsy1HQwfmdWBsuALesTT9ucDH/Dn3CItALarA1VwiYh4/7nbACVJW
+         +kxuN9VXc9f1ZELqrSoqJS040t0xi2pfc6yb/0fw8hEu8ztfOInp0IJMhUkZcgxbOI3V
+         7toRjc9Pc/Tcp8ThmwVL6D5JgAsPAZJsgam1aPLmr8rV3D7xfbcDL7dac9u2LeOsfT15
+         96nEyXMzBd+wHbcOQXpLNnp0/uqr8CaojCwEIRoxY1gCtFjOKSfd6c7Lf9yoiLft9KDX
+         Qgznw56E3rzfe5BGXraopnv45vVBc3BR61USj7clZAghfwSabtQmH+lChj3HWNOnx7Jo
+         r1sA==
+X-Gm-Message-State: ACgBeo0/3Ml3gMP1WEtMTzeaQUMVTdWnRycWwaCN+OSJxBDr5359G6lL
+        EWWXH/P8M3Sly+aFC6yu+Wy7nAa56zUjEs9v7NHMtw==
+X-Google-Smtp-Source: AA6agR7DfkXT6qMIySIpM4SIr/GNRsiXgpnVMta7acmws5dJJtJteiwRbajkuBZzOw4S3rQpjWNqEBu6Ojdoat2ykNY=
+X-Received: by 2002:a17:906:8a4e:b0:740:2450:d69a with SMTP id
+ gx14-20020a1709068a4e00b007402450d69amr15687098ejc.523.1661942269622; Wed, 31
+ Aug 2022 03:37:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 2/6] ASoC: codecs: wsa-macro: add support for sm8450 and
- sc8280xp
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     broonie@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com,
-        linux-arm-msm@vger.kernel.org, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220818134619.3432-1-srinivas.kandagatla@linaro.org>
- <20220818134619.3432-3-srinivas.kandagatla@linaro.org>
- <20220818171222.GG1978870-robh@kernel.org>
- <9c9226d9-8470-6672-d8ce-3fb1e4df3fda@linaro.org>
- <5da6171a-4949-9cc7-2967-6cc39a7955c8@linaro.org>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <5da6171a-4949-9cc7-2967-6cc39a7955c8@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20220831041843.973026-1-jhubbard@nvidia.com> <20220831041843.973026-8-jhubbard@nvidia.com>
+In-Reply-To: <20220831041843.973026-8-jhubbard@nvidia.com>
+From:   Miklos Szeredi <miklos@szeredi.hu>
+Date:   Wed, 31 Aug 2022 12:37:38 +0200
+Message-ID: <CAJfpegvdTqdk9rs-yaEp1aqav4=t9qSpQri7gW8zzb+t7+_88A@mail.gmail.com>
+Subject: Re: [PATCH v2 7/7] fuse: convert direct IO paths to use FOLL_PIN
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -84,68 +73,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 31 Aug 2022 at 06:19, John Hubbard <jhubbard@nvidia.com> wrote:
+>
+> Convert the fuse filesystem to use pin_user_pages_fast() and
+> unpin_user_page(), instead of get_user_pages_fast() and put_page().
+>
+> The user of pin_user_pages_fast() depends upon:
+>
+> 1) CONFIG_BLK_USE_PIN_USER_PAGES_FOR_DIO, and
+>
+> 2) User-space-backed pages or ITER_BVEC pages.
+>
+> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+> ---
+>  fs/fuse/dev.c    | 11 +++++++++--
+>  fs/fuse/file.c   | 32 +++++++++++++++++++++-----------
+>  fs/fuse/fuse_i.h |  1 +
+>  3 files changed, 31 insertions(+), 13 deletions(-)
+>
+> diff --git a/fs/fuse/dev.c b/fs/fuse/dev.c
+> index 51897427a534..5de98a7a45b1 100644
+> --- a/fs/fuse/dev.c
+> +++ b/fs/fuse/dev.c
+> @@ -675,7 +675,12 @@ static void fuse_copy_finish(struct fuse_copy_state *cs)
+>                         flush_dcache_page(cs->pg);
+>                         set_page_dirty_lock(cs->pg);
+>                 }
+> -               put_page(cs->pg);
+> +               if (!cs->pipebufs &&
+> +                   (user_backed_iter(cs->iter) || iov_iter_is_bvec(cs->iter)))
+> +                       dio_w_unpin_user_page(cs->pg);
+> +
+> +               else
+> +                       put_page(cs->pg);
 
+Why not move the logic into a helper and pass a "bool pinned" argument?
 
-On 31/08/2022 10:19, Krzysztof Kozlowski wrote:
-> On 31/08/2022 12:17, Srinivas Kandagatla wrote:
->>
->>
->> On 18/08/2022 18:12, Rob Herring wrote:
->>> On Thu, Aug 18, 2022 at 02:46:15PM +0100, Srinivas Kandagatla wrote:
->>>> Add compatible for sm8450 and sc8280xp.
->>>>
->>>> Signed-off-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
->>>> ---
->>>>    sound/soc/codecs/lpass-wsa-macro.c | 2 ++
->>>>    1 file changed, 2 insertions(+)
->>>>
->>>> diff --git a/sound/soc/codecs/lpass-wsa-macro.c b/sound/soc/codecs/lpass-wsa-macro.c
->>>> index 27da6c6c3c5a..f82c297ea3ab 100644
->>>> --- a/sound/soc/codecs/lpass-wsa-macro.c
->>>> +++ b/sound/soc/codecs/lpass-wsa-macro.c
->>>> @@ -2561,6 +2561,8 @@ static const struct dev_pm_ops wsa_macro_pm_ops = {
->>>>    static const struct of_device_id wsa_macro_dt_match[] = {
->>>>    	{.compatible = "qcom,sc7280-lpass-wsa-macro"},
->>>>    	{.compatible = "qcom,sm8250-lpass-wsa-macro"},
->>>> +	{.compatible = "qcom,sm8450-lpass-wsa-macro"},
->>>> +	{.compatible = "qcom,sc8280xp-lpass-wsa-macro" },
->>>
->>> Looks like these are backwards compatible with the existing versions,
->>> why not reflect that in the binding?
->> Backward compatibility is not always true, some of the registers and
->> there defaults tend to change across SoCs. Having SoC specific
->> compatible could help us deal with this and also make code more inline
->> with other codec macros in LPASS IP.
-> 
-> I am not saying that there should be no SoC specific compatible. This
-> one is a must, but the question why duplicating the entries and not
-> using fallback?
+>         }
+>         cs->pg = NULL;
+>  }
+> @@ -730,7 +735,9 @@ static int fuse_copy_fill(struct fuse_copy_state *cs)
+>                 }
+>         } else {
+>                 size_t off;
+> -               err = iov_iter_get_pages2(cs->iter, &page, PAGE_SIZE, 1, &off);
+> +
+> +               err = dio_w_iov_iter_pin_pages(cs->iter, &page, PAGE_SIZE, 1,
+> +                                              &off);
+>                 if (err < 0)
+>                         return err;
+>                 BUG_ON(!err);
+> diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+> index 1a3afd469e3a..01da38928d0b 100644
+> --- a/fs/fuse/file.c
+> +++ b/fs/fuse/file.c
+> @@ -625,14 +625,19 @@ void fuse_read_args_fill(struct fuse_io_args *ia, struct file *file, loff_t pos,
+>  }
+>
+>  static void fuse_release_user_pages(struct fuse_args_pages *ap,
+> -                                   bool should_dirty)
+> +                                   bool should_dirty, bool is_user_or_bvec)
+>  {
+>         unsigned int i;
+>
+> -       for (i = 0; i < ap->num_pages; i++) {
+> -               if (should_dirty)
+> -                       set_page_dirty_lock(ap->pages[i]);
+> -               put_page(ap->pages[i]);
+> +       if (is_user_or_bvec) {
+> +               dio_w_unpin_user_pages_dirty_lock(ap->pages, ap->num_pages,
+> +                                                 should_dirty);
+> +       } else {
+> +               for (i = 0; i < ap->num_pages; i++) {
+> +                       if (should_dirty)
+> +                               set_page_dirty_lock(ap->pages[i]);
+> +                       put_page(ap->pages[i]);
+> +               }
 
-You mean using fallback compatible "qcom,sc7280-lpass-wsa-macro" in 
-sc8280xp devicetree and not add new compatibles in the driver?
+Same here.
 
-The reason for adding this new compatible strings is that macros in this 
-lpass codec that differ form each SoC.
-ex: [PATCH 6/6] ASoC: codecs: tx-macro: add support for sm8450 and 
-sc8280xp and there is a pending patch on va-macro that has soundwire 
-controller frame sync and reset control which is moved from tx-macro to 
-va-macro.
+>         }
+>  }
+>
+> @@ -733,7 +738,7 @@ static void fuse_aio_complete_req(struct fuse_mount *fm, struct fuse_args *args,
+>         struct fuse_io_priv *io = ia->io;
+>         ssize_t pos = -1;
+>
+> -       fuse_release_user_pages(&ia->ap, io->should_dirty);
+> +       fuse_release_user_pages(&ia->ap, io->should_dirty, io->is_user_or_bvec);
+>
+>         if (err) {
+>                 /* Nothing */
+> @@ -1414,10 +1419,10 @@ static int fuse_get_user_pages(struct fuse_args_pages *ap, struct iov_iter *ii,
+>         while (nbytes < *nbytesp && ap->num_pages < max_pages) {
+>                 unsigned npages;
+>                 size_t start;
+> -               ret = iov_iter_get_pages2(ii, &ap->pages[ap->num_pages],
+> -                                       *nbytesp - nbytes,
+> -                                       max_pages - ap->num_pages,
+> -                                       &start);
+> +               ret = dio_w_iov_iter_pin_pages(ii, &ap->pages[ap->num_pages],
+> +                                              *nbytesp - nbytes,
+> +                                              max_pages - ap->num_pages,
+> +                                              &start);
+>                 if (ret < 0)
+>                         break;
+>
+> @@ -1483,6 +1488,10 @@ ssize_t fuse_direct_io(struct fuse_io_priv *io, struct iov_iter *iter,
+>                 fl_owner_t owner = current->files;
+>                 size_t nbytes = min(count, nmax);
+>
+> +               /* For use in fuse_release_user_pages(): */
+> +               io->is_user_or_bvec = user_backed_iter(iter) ||
+> +                                     iov_iter_is_bvec(iter);
+> +
 
-so DT might endup with mix of compatibles for same LPASS Codec like this:
+How about io->is_pinned?  And a iov_iter_is_pinned() helper?
 
-"qcom,sc7280-lpass-wsa-macro"
-"qcom,sc8280xp-lpass-va-macro"
-"qcom,sc8280xp-lpass-tx-macro"
-"qcom,sc8280xp-lpass-rx-macro"
-
-AFAIU, the fallback thing will work for things that are identical but in 
-this case they differ across SoCs, and having SoC specific compatibles 
-in now would help handle this.
-
-
-thanks,
-srini
-
-> 
-> Best regards,
-> Krzysztof
+Thanks,
+Miklos

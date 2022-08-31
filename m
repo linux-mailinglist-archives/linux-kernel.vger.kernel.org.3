@@ -2,71 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D324F5A7A93
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:50:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 662195A7A98
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiHaJuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60410 "EHLO
+        id S230154AbiHaJvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiHaJuI (ORCPT
+        with ESMTP id S229453AbiHaJvR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:50:08 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6145313D14;
-        Wed, 31 Aug 2022 02:50:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661939406; x=1693475406;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=w8dohBsUnNgNN5IHL66P9ft9i1qrWZxpzUPmgsUyMx4=;
-  b=AxuD2o3jER0cNKyCdZg6dRpjPX6ragzmECxiB5wPA6S905oav/U2fE7H
-   ZFCWCAHbDjBiIUXtWa2l5xOH4gaOC6Df4YhXt1BQRnLgvJH5Mu38RYBe/
-   7dsmsnRkYgU6CDS7UjtzJJjnfHHOVCNrZUVw5J4zjM8JNqsSFOQOfVrmO
-   /FrwZRnlMSbNgo4nH42wv9HwtlYJRltUKdE8HFqaF6nBIdvK9s5wai05H
-   o7oJH7IqpCfQfcix3Qh8S5xobAn+NQEGfZPChbe86YgdbVfruJoVM6CtG
-   9VdGOMIgBBxSAbfYwsWnBWYOo/0FugU13MzJtE42UcmjcBWvw9DUuIAUx
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="321552591"
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="321552591"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 02:50:05 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="645177250"
-Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 31 Aug 2022 02:50:02 -0700
-Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTKMD-0000BB-1x;
-        Wed, 31 Aug 2022 09:50:01 +0000
-Date:   Wed, 31 Aug 2022 17:49:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
-Subject: Re: [PATCH v3 3/3] KVM: VMX: Advertise PMU LBRs if and only if perf
- supports LBRs
-Message-ID: <202208311746.VAzmtgNx-lkp@intel.com>
-References: <20220831000051.4015031-4-seanjc@google.com>
+        Wed, 31 Aug 2022 05:51:17 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D85BCA0311;
+        Wed, 31 Aug 2022 02:51:15 -0700 (PDT)
+Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.3ffe.de (Postfix) with ESMTPSA id 95E94380;
+        Wed, 31 Aug 2022 11:51:13 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
+        t=1661939473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WLs6Onq3yh9Op5LQpak2LFOaNZmEuURyI/Mr9UssDGM=;
+        b=pzSJm8uj7k/uDv24llR5/V99GkQF/kfK5TdL8JcOrWl/AhMpxLuc76fCbi45d1NgJJu97Q
+        Xrf49LxwmSS+VNXizVhFJeZBc5zzihSfK67AIXTJc3qzjeKLs9z19rRDgwUkkFTjE2HWV8
+        qsb/xVGgAfBbvUNFV8hXJfpzzNOXKUePz5DedALi9WVd0nheojAEhcaCfqHLmrti9Vk4ia
+        ocLIfVA6aM7+lRfJV/Mk6IoJSbelvbrsGIgannZQgPpaEv4dExdFjnJTrGl2VW6D3Qhfxy
+        H0L2oXQavQCwT+xAqzCrZcIA7DNyY22IAO4twrvDUqGZbcIJPfO64hMMC3glLA==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831000051.4015031-4-seanjc@google.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Date:   Wed, 31 Aug 2022 11:51:13 +0200
+From:   Michael Walle <michael@walle.cc>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v1 09/14] dt-bindings: nvmem: add YAML schema for the sl28
+ vpd layout
+In-Reply-To: <4bf16e18-1591-8bc9-7c46-649391de3761@linaro.org>
+References: <20220825214423.903672-1-michael@walle.cc>
+ <20220825214423.903672-10-michael@walle.cc>
+ <b85276ee-3e19-3adb-8077-c1e564e02eb3@linaro.org>
+ <ddaf3328bc7d88c47517285a3773470f@walle.cc>
+ <4bf16e18-1591-8bc9-7c46-649391de3761@linaro.org>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <1b06716690b0070c0c2b0985577763e3@walle.cc>
+X-Sender: michael@walle.cc
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,75 +76,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+Am 2022-08-31 11:24, schrieb Krzysztof Kozlowski:
+> On 31/08/2022 11:17, Michael Walle wrote:
 
-I love your patch! Yet something to improve:
+>> First thing, this binding isn't like the usual ones, so it might be
+>> totally wrong.
+>> 
+>> What I'd like to achieve here is the following:
+>> 
+>> We have the nvmem-consumer dt binding where you can reference a
+>> nvmem cell in a consumer node. Example:
+>>    nvmem-cells = <&base_mac_address 5>;
+>>    nvmem-cell-names = "mac-address";
+>> 
+>> On the other end of the link we have the nvmem-provider. The dt
+>> bindings works well if that one has individual cell nodes, like
+>> it is described in the nvmem.yaml binding. I.e. you can give the
+>> cell a label and make a reference to it in the consumer just like
+>> in the example above.
+> 
+> You can also achieve it with phandle argument to the nvmwm controller,
+> right? Just like most of providers are doing (clocks, resets). Having
+> fake (empty) nodes just for that seems like overkill.
 
-[auto build test ERROR on 372d07084593dc7a399bf9bee815711b1fb1bcf2]
+You mean like
+  nvmem-cells = <&nvmem_device SERIAL_NUMBER>;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Christopherson/KVM-x86-Intel-LBR-related-perf-cleanups/20220831-080309
-base:   372d07084593dc7a399bf9bee815711b1fb1bcf2
-config: x86_64-randconfig-a012 (https://download.01.org/0day-ci/archive/20220831/202208311746.VAzmtgNx-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/094f42374997562fff3f9f9637ec9aa8257490a0
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sean-Christopherson/KVM-x86-Intel-LBR-related-perf-cleanups/20220831-080309
-        git checkout 094f42374997562fff3f9f9637ec9aa8257490a0
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 prepare
+I'm not sure about the implications for now, because one is
+referencing the device and not individal cells. Putting that
+aside for now, there seems to be a problem with the index for
+the base mac address: You will have different number of arguments
+for the phandle. That doesn't work, right?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+nvmem-cells = <&nvmem_device SERIAL_NUMBER>;
+nvmem-cells = <&nvmem_device BASE_MAC_ADDRESS 1>;
 
-All errors (new ones prefixed by >>):
+>> Now comes the catch: what if there is no actual description of the
+>> cell in the device tree, but is is generated during runtime. How
+>> can I get a label to it.
+> 
+> Same as clocks, resets, power-domains and everyone else.
 
-   In file included from arch/x86/kernel/asm-offsets.c:22:
-   In file included from arch/x86/kernel/../kvm/vmx/vmx.h:11:
->> arch/x86/kernel/../kvm/vmx/capabilities.h:416:2: error: implicit declaration of function 'x86_perf_get_lbr' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
-           x86_perf_get_lbr(&lbr);
-           ^
-   1 error generated.
-   make[2]: *** [scripts/Makefile.build:117: arch/x86/kernel/asm-offsets.s] Error 1
-   make[2]: Target '__build' not remade because of errors.
-   make[1]: *** [Makefile:1207: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:222: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+See
+https://git.kernel.org/torvalds/c/084973e944bec21804f8afb0515b25434438699a
 
+And I guess this discussion is relevant here:
+https://lore.kernel.org/linux-devicetree/20220124160300.25131-1-zajec5@gmail.com/
 
-vim +/x86_perf_get_lbr +416 arch/x86/kernel/../kvm/vmx/capabilities.h
+>> Therefore, in this case, there is just
+>> an empty node and the driver will associate it with the cell
+>> created during runtime (see patch 10). It is not expected, that
+>> is has any properties.
+> 
+> It cannot be even referenced as it does not have #cells property...
 
-   403	
-   404	static inline u64 vmx_get_perf_capabilities(void)
-   405	{
-   406		u64 perf_cap = PMU_CAP_FW_WRITES;
-   407		struct x86_pmu_lbr lbr;
-   408		u64 host_perf_cap = 0;
-   409	
-   410		if (!enable_pmu)
-   411			return 0;
-   412	
-   413		if (boot_cpu_has(X86_FEATURE_PDCM))
-   414			rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
-   415	
- > 416		x86_perf_get_lbr(&lbr);
-   417		if (lbr.nr)
-   418			perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
-   419	
-   420		if (vmx_pebs_supported()) {
-   421			perf_cap |= host_perf_cap & PERF_CAP_PEBS_MASK;
-   422			if ((perf_cap & PERF_CAP_PEBS_FORMAT) < 4)
-   423				perf_cap &= ~PERF_CAP_PEBS_BASELINE;
-   424		}
-   425	
-   426		return perf_cap;
-   427	}
-   428	
+You mean "#nvmem-cell-cells"? See patch #2. None of the nvmem
+cells had such a property for now.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>>>> +
+>>>> +  base-mac-address:
+>>> 
+>>> Fields should be rather described here, not in top-level description.
+>>> 
+>>>> +    type: object
+>>> 
+>>> On this level:
+>>>     additionalProperties: false
+>>> 
+>>>> +
+>>>> +    properties:
+>>>> +      "#nvmem-cell-cells":
+>>>> +        const: 1
+>>>> +
+>>> 
+>>> I also wonder why you do not have unit addresses. What if you want to
+>>> have two base MAC addresses?
+>> 
+>> That would describe an offset within the nvmem device. But the offset
+>> might not be constant, depending on the content. My understanding
+>> so far was that in that case, you use the "-N" suffix.
+>> 
+>> base-mac-address-1
+>> base-mac-address-2
+>> 
+>> (or maybe completely different names).
+> 
+> You do not allow "base-mac-address-1". Your binding explicitly accepts
+> only "base-mac-address".
+
+Because the binding matches the driver, which matches the driver
+which matches the VPD data and there is only one base mac address.
+Thus, no need for different ones.
+
+-michael

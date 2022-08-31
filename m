@@ -2,57 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02165A792D
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:37:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 609D15A7930
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:38:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231442AbiHaIg5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:36:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47258 "EHLO
+        id S230521AbiHaIiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiHaIg4 (ORCPT
+        with ESMTP id S229583AbiHaIiQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:36:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12E50A8CFC;
-        Wed, 31 Aug 2022 01:36:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E24E7ED1;
-        Wed, 31 Aug 2022 01:37:00 -0700 (PDT)
-Received: from [10.57.15.237] (unknown [10.57.15.237])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE5C23F766;
-        Wed, 31 Aug 2022 01:36:51 -0700 (PDT)
-Message-ID: <63a54a1b-66ba-9739-8217-13f75e602cd5@arm.com>
-Date:   Wed, 31 Aug 2022 09:36:46 +0100
+        Wed, 31 Aug 2022 04:38:16 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FFD19BB70
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:38:15 -0700 (PDT)
+Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MHcsw1khDz67mY4;
+        Wed, 31 Aug 2022 16:34:28 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 31 Aug 2022 10:38:12 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
+ 2022 09:38:11 +0100
+Date:   Wed, 31 Aug 2022 09:38:10 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
+CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        kernel test robot <lkp@intel.com>, <llvm@lists.linux.dev>,
+        <kbuild-all@lists.01.org>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [jic23-iio:testing 124/129] drivers/iio/accel/msa311.c:993:24:
+ warning: format specifies type 'unsigned char' but the argument has type
+ 'unsigned int'
+Message-ID: <20220831093810.00006112@huawei.com>
+In-Reply-To: <20220831002405.m3j5sug2rz7bdz5s@Rockosov-MBP>
+References: <202208290618.wU7mHfOp-lkp@intel.com>
+        <20220830110329.00000d18@huawei.com>
+        <CAHp75VfA=w+Q2ccdTiQXeWRw0wSjbkUf6J3+tp-kE50mxdkTNg@mail.gmail.com>
+        <20220831002405.m3j5sug2rz7bdz5s@Rockosov-MBP>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v5 20/20] PCI: dwc: Add Baikal-T1 PCIe controller support
-Content-Language: en-GB
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, willmcvicker@google.com
-References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
- <20220822184701.25246-21-Sergey.Semin@baikalelectronics.ru>
- <YwzbARMkb/69+l2d@lpieralisi>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YwzbARMkb/69+l2d@lpieralisi>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="US-ASCII"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,44 +59,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-29 16:28, Lorenzo Pieralisi wrote:
-[...]
->> +static int bt1_pcie_add_port(struct bt1_pcie *btpci)
->> +{
->> +	struct device *dev = &btpci->pdev->dev;
->> +	int ret;
->> +
->> +	/*
->> +	 * DW PCIe Root Port controller is equipped with eDMA capable of
->> +	 * working with the 64-bit memory addresses.
->> +	 */
->> +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
->> +	if (ret)
->> +		return ret;
-> 
-> Is this the right place to set the DMA mask for the host controller
-> embedded DMA controller (actually, the dev pointer is the _host_
-> controller device) ?
-> 
-> How this is going to play when combined with:
-> 
-> https://lore.kernel.org/linux-pci/1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com
-> 
-> It is getting a bit confusing. I believe the code in the link
-> above sets the mask so that through the DMA API we are capable
-> of getting an MSI doorbell virtual address whose physical address
-> can be addressed by the endpoint; this through the DMA API.
-> 
-> This patch is setting the DMA mask for a different reason, namely
-> setting the host controller embedded DMA controller addressing
-> capabilities.
-> 
-> AFAICS - both approaches set the mask for the same device - now
-> the question is about which one is legitimate and how to handle
-> the other.
+On Wed, 31 Aug 2022 03:24:05 +0300
+Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 
-Assuming the dw-edma-pcie driver is the relevant one, that already sets 
-its own masks on its own device, so I also don't see why this is here.
+> Hello Jonathan and Andy,
+> 
+> Sorry for such a late response, a couple of days ago my daughter was born.
+> So I couldn't reach my laptop :)
 
-Thanks,
-Robin.
+Congratulations and good luck! :)
+
+> 
+> Please find my thoughts below.
+> 
+> > > > >> drivers/iio/accel/msa311.c:993:24: warning: format specifies type 'unsigned char' but the argument has type 'unsigned int' [-Wformat]  
+> > > >                                               "msa311-%hhx", partid);
+> > > >                                                       ~~~~   ^~~~~~
+> > > >                                                       %x
+> > > >    1 warning generated.  
+> >   
+> > > >    992                msa311->chip_name = devm_kasprintf(dev, GFP_KERNEL,  
+> > > >  > 993                                                   "msa311-%hhx", partid);  
+> >   
+> > > I'm thinking intent here was to limit range of what was printed. Maybe better to use
+> > > local u8 variable or cast?
+> > >
+> > > I can fix it up if that's fine with you - or even better send me a patch that fixes
+> > > it however you prefer!  
+> > 
+> > Looking back at what Linus said about those specifiers, I would rather
+> > go with simple %x or %02x.
+> > 
+> > P.S. Surprisingly many C developers don't know the difference between
+> > %hhx and %02x, which is easy to check by
+> > 
+> >   char a = -1;
+> >   printf("%hhx <==> %02x\n", a, a);
+> >   a = 217;
+> >   printf("%hhx <==> %02x\n", a, a);  
+> 
+> Thank you for pointing to Linus answer. I have explored it at the link:
+> 
+> https://lore.kernel.org/lkml/CAHk-=wgoxnmsj8GEVFJSvTwdnWm8wVJthefNk2n6+4TC=20e0Q@mail.gmail.com/
+> 
+> Actually, Linus described one exception to this rule, which I have
+> in my patch. I have an integer which I want to print as a char.
+> I see that Linus mentions it's a bad idea. I agree with that. But
+> currently %hhx => %02x replacement breaks the requested behavior, %02x
+> will not shrink integer value to char. I want to say, maybe it's better
+> just cast the value to u8 type and print as %x. What do you think? I can
+> prepare such a patch.
+> 
+> P.S. Andy's example to show the difference between %hhx and %02x makes
+> more clear why such a replacement is not acceptable here.
+> 
+> Output:
+> ff <==> ffffffff
+> d9 <==> ffffffd9
+> 
+In this case the storage is an unsigned int, not an unsigned char.
+Hence the value will be small and positive.  So I'm fairly sure you
+won't hit the above because it's
+
+0x000000ff --> ff
+0x000000d9 --> d9
+
+The range is limited to 8 bits because that's all the underlying register
+holds.
+
+Jonathan
+
+

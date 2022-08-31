@@ -2,141 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F5BA5A8694
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:17:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E4E5A8696
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:17:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiHaTRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 15:17:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47436 "EHLO
+        id S229824AbiHaTRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 15:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiHaTRX (ORCPT
+        with ESMTP id S229787AbiHaTRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 15:17:23 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C67BDA3F4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:17:20 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id j5so11137265plj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:17:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=zHM07eO+Ah42PE786kyCsTV2son2tBDz1ynwCBNBtXk=;
-        b=dIuoJFUP2Y35KD6v2SGjH0spplZBk1M2V7nqufMQvhuEkgyTgSu2+wraTtkMlK48IC
-         6NUbU3PkmZa9bko5OkmBvssxs5z2dLx8nTFKXl4QVUHrUI0NKpu036zIzrkcNsNDBPKP
-         VPXyiVJsrcwpcriAABRQDVYN6cpOq51do4YRgaQwjSsNFTosilC/AUspFeScVKQsnSwE
-         EHPlYKc+7SD92shbf8Uf25zKXW04xG31u0pO5Kr93F/UZoUM7KZjkT3RYAgz4oPw3gbC
-         Q9ta6BaKg2pZUx/LsJqSyTOsbmkWsDsYESUvBAbIaD1PBpkkZPomOQNOPNKeWktfZhMG
-         NYaw==
+        Wed, 31 Aug 2022 15:17:46 -0400
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE1CFDAA0A;
+        Wed, 31 Aug 2022 12:17:44 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-33dc31f25f9so316349677b3.11;
+        Wed, 31 Aug 2022 12:17:44 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=zHM07eO+Ah42PE786kyCsTV2son2tBDz1ynwCBNBtXk=;
-        b=sz+dwPUeWIfyEITy0+eHJWNcSzxvuM4aKLCuONfvqDWCSyTr7Ng8067pR+bJQYBtjn
-         F2bMoh8jrZ5WtfMHBu+0fj5Xf/t63Iz371exgGXNWNVnVltifnofOMRsC0RKMvl976gG
-         YXPtbCgubLc1hMML9oJGKNy9ckwqAoHloMwnCxs7TZbGUWfrkUEa3oWFclxrIKC0jhUU
-         CZyKYvhVxdw9EtrRTATedh/NXBusvxqQXhJKxMdd2U+KEzabgvefgBBuDFJ/Q3QO84x8
-         wUs5R+Lnx9aZnKwHuVKy+vW50vBdsMqJQIDVYb05A38hZdPyfRRb0nwYIPS5c0lGygsD
-         xSMw==
-X-Gm-Message-State: ACgBeo3lTyKF6w6a+/5yLvKk0Bqh8WrL/TyDlMWsVbnEaDeG+yeyjgpg
-        /qDOuh+vfTOpZ+MSEencxno13A==
-X-Google-Smtp-Source: AA6agR6D+KF1IWd7yIWhXMaEh2E5+FoLRnVXYppi7/t7piE4uUH0lkBIjo14g9fUhKsgIuQQWwcczg==
-X-Received: by 2002:a17:90a:ec05:b0:1fd:9368:2c8 with SMTP id l5-20020a17090aec0500b001fd936802c8mr4641721pjy.183.1661973439925;
-        Wed, 31 Aug 2022 12:17:19 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f9-20020aa79689000000b00528a097aeffsm11604082pfk.118.2022.08.31.12.17.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 12:17:18 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 19:17:15 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH 16/19] KVM: x86: Explicitly track all possibilities for
- APIC map's logical modes
-Message-ID: <Yw+zu3t6Gob4uq1K@google.com>
-References: <20220831003506.4117148-1-seanjc@google.com>
- <20220831003506.4117148-17-seanjc@google.com>
- <9c3e126bdee38bc4a0fa03eec994878aca4f3b3e.camel@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=IeKc8Sl/UbzolBc4HIfYvc0Z0mGSys/TxO53fWi2waE=;
+        b=mNre9lpvaZXtGZRgNWlu+b1Ls21UT/pUY9IWuKfuVOnEvbNxtqd8syJvuhBy78QDlh
+         7eEEzy80W6sCcCcW5wuOBPHA4fXp2VIK1gbLM6/abxbxdBxl3mXiCfF6p6PDXovEupSB
+         uuh8E0SKFERiqlQRoZtetZ9fKJBbGetbDmdSdYa2SPzZdupWKy0rNKX8MjxL5Q/ooYSV
+         Y7vFHEq4Q7h5muxB2TMc1pFKYxV7ch9ay8/Eh6aG+HvrJz9d/hUhacG4Kh3rtsnSUwel
+         IXvFe5oEKnTldqeXM17YMzYG7l0ydNkYB81MXqtNhGovtlOuktIIZNGXnwOWIEBAvsL5
+         ag9Q==
+X-Gm-Message-State: ACgBeo2injkKH1maw3TKVIgzqNTTp+8/c8pzTgYmFGWQObFZHMDqckPo
+        xdm//YSNWyUOjIgtQfHiHNLNFS0xuLUUorUxxeGlWfv8
+X-Google-Smtp-Source: AA6agR7tcY3bgvO94O9ypmvOMg6GvQ70DA8QcJJF1cSsOUKj8jXRLPIdk/L1SBe2cxn4U+wKIWk1ItkTeBHFjpZ8+fI=
+X-Received: by 2002:a0d:cdc2:0:b0:335:debd:2b3d with SMTP id
+ p185-20020a0dcdc2000000b00335debd2b3dmr18997247ywd.19.1661973463707; Wed, 31
+ Aug 2022 12:17:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9c3e126bdee38bc4a0fa03eec994878aca4f3b3e.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220818210156.8143-1-wsa+renesas@sang-engineering.com> <20220818210156.8143-2-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220818210156.8143-2-wsa+renesas@sang-engineering.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 31 Aug 2022 21:17:32 +0200
+Message-ID: <CAJZ5v0jt6XWU1_O0f_M8TeV6DukujgsjcX1oam_34HJ31Xb_bQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM: move from strlcpy with unused retval to strscpy
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022, Maxim Levitsky wrote:
-> On Wed, 2022-08-31 at 00:35 +0000, Sean Christopherson wrote:
-> > diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> > index 8209caffe3ab..3b6ef36b3963 100644
-> > --- a/arch/x86/kvm/lapic.c
-> > +++ b/arch/x86/kvm/lapic.c
-> > @@ -168,7 +168,12 @@ static bool kvm_use_posted_timer_interrupt(struct kvm_vcpu *vcpu)
-> >  
-> >  static inline bool kvm_apic_map_get_logical_dest(struct kvm_apic_map *map,
-> >  		u32 dest_id, struct kvm_lapic ***cluster, u16 *mask) {
-> > -	switch (map->mode) {
-> > +	switch (map->logical_mode) {
-> > +	case KVM_APIC_MODE_SW_DISABLED:
-> > +		/* Arbitrarily use the flat map so that @cluster isn't NULL. */
-> > +		*cluster = map->xapic_flat_map;
-> > +		*mask = 0;
-> > +		return true;
-> >  	case KVM_APIC_MODE_X2APIC: {
-> >  		u32 offset = (dest_id >> 16) * 16;
-> >  		u32 max_apic_id = map->max_apic_id;
-> > @@ -193,8 +198,10 @@ static inline bool kvm_apic_map_get_logical_dest(struct kvm_apic_map *map,
-> >  		*cluster = map->xapic_cluster_map[(dest_id >> 4) & 0xf];
-> >  		*mask = dest_id & 0xf;
-> >  		return true;
-> > +	case KVM_APIC_MODE_MAP_DISABLED:
-> > +		return false;
-> >  	default:
-> > -		/* Not optimized. */
-> > +		WARN_ON_ONCE(1);
-> 
-> BTW unless I am mistaken, this warning is guest triggerable, and thus as you
-> say when 'panic_on_warn=1', this will panic the host kernel.
+On Thu, Aug 18, 2022 at 11:05 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+>
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  include/linux/suspend.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+> index 70f2921e2e70..23a253df7f6b 100644
+> --- a/include/linux/suspend.h
+> +++ b/include/linux/suspend.h
+> @@ -75,7 +75,7 @@ extern struct suspend_stats suspend_stats;
+>
+>  static inline void dpm_save_failed_dev(const char *name)
+>  {
+> -       strlcpy(suspend_stats.failed_devs[suspend_stats.last_failed_dev],
+> +       strscpy(suspend_stats.failed_devs[suspend_stats.last_failed_dev],
+>                 name,
+>                 sizeof(suspend_stats.failed_devs[0]));
+>         suspend_stats.last_failed_dev++;
+> --
 
-If it's guest triggerable then it's a bug in this patch.  The "default" case was
-reachable with the old approach of OR-ing in bits, but the intent of this patch
-is to fully enumerate all values of map->logical_mode and make the "default" case
-impossible.
-
-And I don't think it's reachable.  The case statements are:
-
-	case KVM_APIC_MODE_SW_DISABLED:
-	case KVM_APIC_MODE_X2APIC:
-	case KVM_APIC_MODE_XAPIC_FLAT:
-	case KVM_APIC_MODE_XAPIC_CLUSTER:
-	case KVM_APIC_MODE_MAP_DISABLED:
-	default:
-
-which covers all of the possible enum values.
-
-	enum kvm_apic_logical_mode {
-		KVM_APIC_MODE_SW_DISABLED,
-		KVM_APIC_MODE_XAPIC_CLUSTER,
-		KVM_APIC_MODE_XAPIC_FLAT,
-		KVM_APIC_MODE_X2APIC,
-		KVM_APIC_MODE_MAP_DISABLED,
-	};
-
-The map is explicitly initialized to KVM_APIC_MODE_SW_DISABLED (to avoid relying
-on KVM_APIC_MODE_SW_DISABLED==0)
-
-	new->logical_mode = KVM_APIC_MODE_SW_DISABLED;
-
-so unless I've missed a "logical_mode |= ..." somewhere, reaching "default" should
-be impossible.
+Applied as 6.1 material, thanks!

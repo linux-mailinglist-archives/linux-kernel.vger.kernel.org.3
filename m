@@ -2,65 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC3275A84B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:49:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC64F5A84B5
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:49:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231681AbiHaRtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:49:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231531AbiHaRtQ (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231502AbiHaRtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 31 Aug 2022 13:49:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80174D51C8
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:49:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661968151;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=DeI1SmKit0K3Fr9de4qL5NqdwvAZGkC6KqoGn3Aeuzo=;
-        b=IRsKDLZXT7uSxZilWmgxJFqUbkI7Ixg7Ok6yom4JSQMirre5wpw4DSMmxovjnRH+ZWMF5F
-        5exqcmWr9BsCNsaxgbeQ3/0W170yw0gg+H/2Z+hRlUjv4MvwjBsYz70ODoO3PVSMxOZIFA
-        q78xAi0/MhS0UGjvnvWZQB3duibkltQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-356-mDrMJF4KNvWKar9XXcUx9w-1; Wed, 31 Aug 2022 13:49:07 -0400
-X-MC-Unique: mDrMJF4KNvWKar9XXcUx9w-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E0135185A7BA;
-        Wed, 31 Aug 2022 17:49:05 +0000 (UTC)
-Received: from starship (unknown [10.40.194.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 4AC9BC15BB3;
-        Wed, 31 Aug 2022 17:49:04 +0000 (UTC)
-Message-ID: <ffdd3daf51e1e192a260b2824842730ecfe124b3.camel@redhat.com>
-Subject: Re: [PATCH 10/19] KVM: SVM: Document that vCPU ID == APIC ID in
- AVIC kick fastpatch
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Wed, 31 Aug 2022 20:49:03 +0300
-In-Reply-To: <Yw+JZODiHgvZVsAN@google.com>
-References: <20220831003506.4117148-1-seanjc@google.com>
-         <20220831003506.4117148-11-seanjc@google.com>
-         <29542724f23fd15745bd137b99153bf8629907f0.camel@redhat.com>
-         <Yw+JZODiHgvZVsAN@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231421AbiHaRtM (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 31 Aug 2022 13:49:12 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B27D0756
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:49:09 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id 145so14797139pfw.4
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:49:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=VFkJurdbJUTCWb5htdv9XL8GXl+ooHeGwTuU6qvLebw=;
+        b=VostS88Kk2T9x6tzKXLo0TDqNIb1gPQ3/yzR073wKLNexwMTG22DFuQ+O6EvlCnOd/
+         OgcP5p9wktNxFostue0wrRjsLrG7khl70oMXkKD0a01OaDu6xqWF9GcUVBxHL22V6uPZ
+         SzGoOnicvDtJasw1c4prIQQ8Lu5uYdlCrU2WA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=VFkJurdbJUTCWb5htdv9XL8GXl+ooHeGwTuU6qvLebw=;
+        b=M6tFHDVe0g3mIafoQrPZfHn5iX5qHeF3kRG7xE3sFp0G33OlsUQlpx2FEP6lleavnP
+         nwIdDFPtJvPc9P5i9u6xg++cKV9utUKJt5lhNNw6SWnX9XRnbripSssgHJk0Mp9qNYxr
+         vR/IkNQAeWNQrD/3Zu2ahxybN1qiWrbx8A1rZx09YpceIDi6MMpVMZZ3rbZX3TBZRm0S
+         C3Plef/MTJ4Zb4kL0wWDEufEp9k1+c/VTXe444V4GZWb+FwqXj1+GkQDcTfFPN99Rvj8
+         QyYbTcSNR9i1RBW9clLoytlOOAkQlYqRQpra7DDSvf9GwZZqCmzuRab8K+C1Q4FseVmd
+         3T9w==
+X-Gm-Message-State: ACgBeo0hLSpBop5nOW6vumDJ+1TXciQ0BmcEaGGMBXDpmGhaiuaGb4AD
+        pv3hgP/eIwjpkOHpGC1gbWju/A==
+X-Google-Smtp-Source: AA6agR6daGH4O55c1EA2PgDANyYrLnYplMbFqZwe+Sa2xZJSfsxf22bpjN5zJ9lCWZGLXIpgNqWdKw==
+X-Received: by 2002:a63:f011:0:b0:42c:7687:7322 with SMTP id k17-20020a63f011000000b0042c76877322mr9329970pgh.126.1661968148965;
+        Wed, 31 Aug 2022 10:49:08 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id c8-20020a170903234800b0016d3935eff0sm10016902plh.176.2022.08.31.10.49.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 10:49:08 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 10:49:07 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-hardening@vger.kernel.org,
+        Daniel Latypov <dlatypov@google.com>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] overflow: Allow mixed type arguments
+Message-ID: <202208311040.C6CA8253@keescook>
+References: <20220830192147.47069-1-keescook@chromium.org>
+ <787894a0-b1b7-43c2-c509-f246f94f58f7@rasmusvillemoes.dk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <787894a0-b1b7-43c2-c509-f246f94f58f7@rasmusvillemoes.dk>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,60 +74,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-31 at 16:16 +0000, Sean Christopherson wrote:
-> On Wed, Aug 31, 2022, Maxim Levitsky wrote:
-> > On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
-> > > Document that AVIC is inhibited if any vCPU's APIC ID diverges from its
-> > > vCPU ID, i.e. that there's no need to check for a destination match in
-> > > the AVIC kick fast path.
-> > > 
-> > > Opportunistically tweak comments to remove "guest bug", as that suggests
-> > > KVM is punting on error handling, which is not the case.  Targeting a
-> > > non-existent vCPU or no vCPUs _may_ be a guest software bug, but whether
-> > > or not it's a guest bug is irrelevant.  Such behavior is architecturally
-> > > legal and thus needs to faithfully emulated by KVM (and it is).
-> > 
-> > I don't want to pick a fight,
+On Tue, Aug 30, 2022 at 09:52:32PM +0200, Rasmus Villemoes wrote:
+> On 30/08/2022 21.21, Kees Cook wrote:
+> > [...]
+> > + * *@d holds the results of the attempted addition, but is not considered
+> > + * "safe for use" on a non-zero return value, which indicates that the
+> > + * sum has overflowed or been truncated.
 > 
-> Please don't hesitate to push back, I would much rather discuss points of contention
-> than have an ongoing, silent battle through patches.
-> 
-> > but personally these things *are* guest bugs / improper usage of APIC, and I
-> > don't think it is wrong to document them as such.
-> 
-> If the guest is intentionally exercising an edge case, e.g. KUT or selftests, then
-> from the guest's perspective its code/behavior isn't buggy.
-> 
-> I completely agree that abusing/aliasing logical IDs is improper usage and arguably
-> out of spec, but the scenarios here are very much in spec, e.g. a bitmap of '0'
-> isn't expressly forbidden and both Intel and AMD specs very clearly state that
-> APICs discard interrupt messages if they are not the destination.
-> 
-> But that's somewhat beside the point, as I have no objection to documenting scenarios
-> that are out-of-spec or undefined.  What I object to is documenting such scenarios as
-> "guest bugs".  If the CPU/APIC/whatever behavior is undefined, then document it
-> as undefined.  Saying "guest bug" doesn't help future readers understand what is
-> architecturally supposed to happen, whereas a comment like
-> 
-> 	/*
-> 	 * Logical IDs are architecturally "required" to be unique, i.e. this is
-> 	 * technically undefined behavior.  Disable the optimized logical map so
-> 	 * that KVM is consistent with itself, as the non-optimized matching
-> 	 * logic with accept interrupts on all CPUs with the logical ID.
-> 	 */
-> 
-> anchors KVM's behavior to the specs and explains why KVM does XYZ in response to
-> undefined behavior.
-> 
-> I feel very strongly about "guest bug" because KVM has a history of disregarding
-> architectural correctness and using a "good enough" approach.  Simply stating
-> "guest bug" makes it all the more difficult to differentiate between KVM handling
-> architecturally undefined behavior, versus KVM deviating from the spec because
-> someone decided that KVM's partial emulation/virtualziation was "good enough".
-> 
+> I don't like that wording. It makes it sound like there's some ambiguity
+> or (implementation|un)-definedness involved in what the destination
+> holds on overflow. The gcc documentation is perfectly clear that the
+> result is the infinite-precision result truncated to N bits, with N
+> being the bitwidth of d.
 
-All right, I agree with you.
+Hm, well, I think use of *d should be strongly discouraged on overflow.
+How about just adding the specifics to the end?
 
-Best regards,
-	Maxim Levitsky
+ * *@d holds the result of the attempted addition, but is not considered
+ * "safe for use" on a non-zero return value, which indicates that the
+ * sum has overflowed or been truncated. (*@d will contain the
+ * infinite-precision result truncated to the bitwidth of *@d.)
 
+-- 
+Kees Cook

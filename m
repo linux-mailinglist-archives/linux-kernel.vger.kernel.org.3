@@ -2,107 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54AD45A7A85
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:48:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E965A7A8D
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:49:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229556AbiHaJsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:48:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57916 "EHLO
+        id S230239AbiHaJtE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 31 Aug 2022 05:49:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbiHaJsL (ORCPT
+        with ESMTP id S230183AbiHaJst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:48:11 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CEA2CE469
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:48:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Cf9TnC387IwylnNLFGlULWkgPWH/rPct++G8BVlv86g=; b=n1LtHZnGkloKyDttaheg6s8LlQ
-        EFm0uswU6Dlgx2QtbcwuSJUAQqRNDAq/qt+tQte1ZyZ0cAbQYQt1m7BsSTp2Rvv9G19wnW/O1zJsA
-        gwfr7Dr7L+8jLco0d9Kg9TO5YBD2ZVgWhxVh9vI2pKUjSqqFAPN4QhJThNLgXrvRJC1ngw9mPbTrB
-        jQz/zfdkrEWwCyWOettyc46Kw5PWtAschgjEQXlrH8bG5OhTl7U2qZBo9LFEabsCnqAKuuY+vDau4
-        jMgM2leoCwq7Swxrb5dWGOwjGaJf7mv2wRztBsAieVd0d5Udi/aW5+tLjzoHCfzz1ZB3GZcMEHr74
-        HORX1eVw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTKKE-004yjN-Bn; Wed, 31 Aug 2022 09:47:58 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DF2803002AF;
-        Wed, 31 Aug 2022 11:47:55 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id BBBA62B846314; Wed, 31 Aug 2022 11:47:55 +0200 (CEST)
-Date:   Wed, 31 Aug 2022 11:47:55 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [PATCH v6 4/5] sched: Handle set_cpus_allowed_ptr() &
- sched_setaffinity() race
-Message-ID: <Yw8uS0Ibavb/5s4D@hirez.programming.kicks-ass.net>
-References: <20220826010119.1265764-1-longman@redhat.com>
- <20220826010119.1265764-5-longman@redhat.com>
+        Wed, 31 Aug 2022 05:48:49 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772F3D0207
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:48:47 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oTKKn-0008Mh-Ti; Wed, 31 Aug 2022 11:48:33 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oTKKm-0032YJ-UX; Wed, 31 Aug 2022 11:48:32 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oTKKm-0004eS-AC; Wed, 31 Aug 2022 11:48:32 +0200
+Message-ID: <92cdeaeb8aebb22852e7a5079f41216852c27de9.camel@pengutronix.de>
+Subject: Re: [PATCH v3 04/19] dt-bindings: hwmon: (mr75203) change "reset"
+ property to be optional
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     "Farber, Eliav" <farbere@amazon.com>, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     talel@amazon.com, hhhawa@amazon.com, jonnyc@amazon.com,
+        hanochu@amazon.com, ronenk@amazon.com, itamark@amazon.com,
+        shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
+        almogbs@amazon.com, dkl@amazon.com, andriy.shevchenko@intel.com
+Date:   Wed, 31 Aug 2022 11:48:32 +0200
+In-Reply-To: <671a0ee8-9b0d-b417-19ff-013681cc73d8@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+         <20220830192212.28570-5-farbere@amazon.com>
+         <3bd5f46dff622e375c4f60140f479bf6ee483aec.camel@pengutronix.de>
+         <671a0ee8-9b0d-b417-19ff-013681cc73d8@amazon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220826010119.1265764-5-longman@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 25, 2022 at 09:01:18PM -0400, Waiman Long wrote:
-> @@ -2722,6 +2734,7 @@ static int affine_move_task(struct rq *rq, struct task_struct *p, struct rq_flag
->  			complete = true;
->  		}
->  
-> +		swap_user_cpus_ptr(p, puser_mask);
->  		task_rq_unlock(rq, p, rf);
->  
->  		if (push_task) {
-> @@ -2793,6 +2806,7 @@ static int affine_move_task(struct rq *rq, struct task_struct *p, struct rq_flag
->  		if (flags & SCA_MIGRATE_ENABLE)
->  			p->migration_flags &= ~MDF_PUSH;
->  
-> +		swap_user_cpus_ptr(p, puser_mask);
->  		task_rq_unlock(rq, p, rf);
->  
->  		if (!stop_pending) {
-> @@ -2813,6 +2827,8 @@ static int affine_move_task(struct rq *rq, struct task_struct *p, struct rq_flag
->  				complete = true;
->  			}
->  		}
-> +
-> +		swap_user_cpus_ptr(p, puser_mask);
->  		task_rq_unlock(rq, p, rf);
->  
->  		if (complete)
+On Mi, 2022-08-31 at 12:43 +0300, Farber, Eliav wrote:
+> On 8/31/2022 11:21 AM, Philipp Zabel wrote:
+> > On Di, 2022-08-30 at 19:21 +0000, Eliav Farber wrote:
+> > > Change "reset" property to be optional instead of required, for SOCs 
+> > > that
+> > > don't support a reset controller.
+> > > 
+> > > Signed-off-by: Eliav Farber <farbere@amazon.com>
+> > > ---
+> > > V3 -> v2:
+> > > - Change "reset" property to be optional instead of adding new
+> > >   "reset-control-skip" property.
+> > > 
+> > >  Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml | 1 -
+> > >  1 file changed, 1 deletion(-)
+> > > 
+> > > diff --git 
+> > > a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml 
+> > > b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> > > index 6abde48b746e..2ec4b9da4b92 100644
+> > > --- a/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> > > +++ b/Documentation/devicetree/bindings/hwmon/moortec,mr75203.yaml
+> > > @@ -49,7 +49,6 @@ required:
+> > >    - reg
+> > >    - reg-names
+> > >    - clocks
+> > > -  - resets
+> > 
+> > Is this just for mr76006? Or does mr75203 work without reset as well?
+> > 
+> > If it is the former, maybe a new compatible should be added and resets
+> > should be kept required
+> 
+> mr75203 also works without a reset.
+> As I replied in PATCH v3 14/19, series 5/6 is relevant only for the
+> temperature sensor.
+> The “reset” property is relevant to the controller.
 
-I'm not at all sure about those.
+In that case,
 
-Would it not be much simpler to keep the update of cpus_mask and
-cpus_user_mask together, always ensuring that cpus_user_mask is a strict
-superset of cpus_mask ? That is, set_cpus_allowed_common() seems like
-the right place to me.
+Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
-I'm thinking this also means blowing away user_mask when we do a full
-reset of the cpus_mask when we do an affnity break.
+regards
+Philipp

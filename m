@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3E45A76E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40E945A76E9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiHaGto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52716 "EHLO
+        id S229849AbiHaGuT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:50:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbiHaGtk (ORCPT
+        with ESMTP id S229686AbiHaGuP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:49:40 -0400
-Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E9CBBFC41
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:49:38 -0700 (PDT)
-Received: by mail-vk1-xa2c.google.com with SMTP id u11so3649943vkk.0
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:49:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ELRucgG8m2V6r9SU9tGEGft3z5bvHcQ3jF1PQm77q5o=;
-        b=ZIrJ0tiWVVU8nNYRXiO3Lt9VsXHRDLWdE5Bh0KzQsIXXK+UzqwyDpMbHKxs3/Wr4aW
-         /qG7tMyfQqVmu770gH5NRRXP08axADzKP/VcbXYsYfAlaTfRtJtAEuwNsxtYArO1XMmJ
-         0MjAwBgtGmYbWmZPUPnZHehmIdHslq+rVKeTIt8dDbCWhSsHZ8jaieKkEPkLYOLlxaWp
-         im5Zn2v4nKnng5agsxl4X2BnoxCWJJlKU59ROaLV8fH45Zlq843TAu336vZjBYvdxP3U
-         g+s+En2zaOriGxPxdI7xFw8NrypejQQSfuEgY0uExCsRmBX9mvLv0XZEOLoVwmE6vlOY
-         3vbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ELRucgG8m2V6r9SU9tGEGft3z5bvHcQ3jF1PQm77q5o=;
-        b=zlIlC3lGEKAivxZA2EV5COHvMREIrgBOg3Qo/O2LFmjAHhxB8fLbXuH07/Pt1pRk/U
-         Hvok7D4hhJzHHAYgJaXuDAa+UF6ZshBH15e6lSYnmzPcyOVBkFGmro6WDdiv99XtPJDz
-         5w0YnY/b2YG21piJTyHokqTOQl+5GvxysafRl5Oqac2bDXm3XTUqQPaAtChvLoOY4nat
-         Bhb5Y7Ms9ucH1fJDLVeRVjwCzKts6vIhsVPvGYRa/D1hWNaggvERLXk1568WweQ3IhJH
-         tgSfgGzy8V6v7F4sLY0z/5S6eH9hAjYW2nsJk4OxZAqDXSYEPIqEMOS7aDVTMLkDQ9ll
-         1wGQ==
-X-Gm-Message-State: ACgBeo1gtiSTMFrEetVveaEgWSwHY4NgPwvGiBiFLFHM61LPmiOWssRL
-        jFF6bgdh24BIYtztJ9ZA6p8m1oby9AnnPZ2bLOby+Uzzj7I=
-X-Google-Smtp-Source: AA6agR62/mUooJshCxkFnyDJ75P1vapplxRXV0b6l25K3vzkllJy7I5QW4YaBfRyeK+UCLofKDsuyap3Iw8oEyJA7io=
-X-Received: by 2002:a1f:2f43:0:b0:381:9296:91d4 with SMTP id
- v64-20020a1f2f43000000b00381929691d4mr5924656vkv.33.1661928577338; Tue, 30
- Aug 2022 23:49:37 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220831064046.20936-1-yuanjilin@cdjrlc.com>
-In-Reply-To: <20220831064046.20936-1-yuanjilin@cdjrlc.com>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Tue, 30 Aug 2022 23:49:27 -0700
-Message-ID: <CAMo8BfLv5Ppz_Kq_krCBwqYqqFL+GKX2+Tmzzw3PS=Bmm4Gghg@mail.gmail.com>
-Subject: Re: [PATCH] xtensa: fix repeated words in comments
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     chris@zankel.net, linux-xtensa@linux-xtensa.org,
-        linux-kernel@vger.kernel.org
+        Wed, 31 Aug 2022 02:50:15 -0400
+Received: from xry111.site (xry111.site [IPv6:2001:470:683e::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DBE253006
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:50:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1661928611;
+        bh=70USwLN0cVzP/zKh6wgTroCrDHnsKsgsZzrBU5FMj9c=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=J8M9dW33G6NpWL38Dakdfk1FaAds7+8jwYyCzXG0EI25qQar3AXtJPqjoy+a6Uzq0
+         3AXlxLTYRCeYDuKPcLAYPyg2q/pHKrsoDzM38IsEU0a0mF0FLyFc/r+Zjy+3Z3c8Y8
+         pmd3z8ZIJrgVa+b1dm+czrc8EyIBRystlOC7LL8M=
+Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 9C078667E8;
+        Wed, 31 Aug 2022 02:50:09 -0400 (EDT)
+Message-ID: <feb773a8df5d30b8d9347d1c922997c9da1fd06a.camel@xry111.site>
+Subject: Re: [PATCH 1/1] LoongArch: Fixed loongarch kernel csr_xxx implicit
+ declaration.
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Yupeng Li <liyupeng@zbhlos.com>, chenhuacai@kernel.org,
+        kernel@xen0n.name, jiaxun.yang@flygoat.com
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        caizp2008@163.com
+Date:   Wed, 31 Aug 2022 14:50:07 +0800
+In-Reply-To: <20220831061406.431027-1-liyupeng@zbhlos.com>
+References: <20220831061406.431027-1-liyupeng@zbhlos.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.45.2 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 11:40 PM Jilin Yuan <yuanjilin@cdjrlc.com> wrote:
->
-> Delete the redundant word 'that'.
->
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
-> ---
->  arch/xtensa/kernel/traps.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/xtensa/kernel/traps.c b/arch/xtensa/kernel/traps.c
-> index 0c25e035ff10..998299debbf5 100644
-> --- a/arch/xtensa/kernel/traps.c
-> +++ b/arch/xtensa/kernel/traps.c
-> @@ -322,7 +322,7 @@ static void do_illegal_instruction(struct pt_regs *regs)
->          * When call0 application encounters an illegal instruction fast
->          * exception handler will attempt to set PS.WOE and retry failing
->          * instruction.
-> -        * If we get here we know that that instruction is also illegal
-> +        * If we get here we know that instruction is also illegal
+On Wed, 2022-08-31 at 14:14 +0800, Yupeng Li wrote:
+> Loongarch CSR register operation related interface, use the
+> interface defined=C2=A0 __builtin_loongarch_xxx instead.
+> Build kernel error messages like:
 
-I'd say that the sentence is correct.
-It says that (we know that) (that instruction is also illegal).
+It's likely because you are using a draft version of LoongArch GCC port.
+Wrapper functions like __csrrd_w has been there in larchintrin.h since
+the first day GCC port was merged upstream
+(https://gcc.gnu.org/r12-7881).
 
--- 
-Thanks.
--- Max
+A quick search shows IA64 and PowerPC also use GCC ia64intrin.h and
+spu_intrinsics.h, so the use of these wrappers are not forbidden in
+kernel source.
+
+Unless there is some new good reason for the change,
+
+Nacked-by: Xi Ruoyao <xry111@xry111.site>
+
+>=20
+> =C2=A0 CALL=C2=A0=C2=A0=C2=A0 scripts/atomic/check-atomics.sh
+> =C2=A0 CC=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 arch/loongarch/kernel/asm-offsets=
+.s
+> In file included from ./arch/loongarch/include/asm/cpu-info.h:11,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./arch/loongarch/include/asm/processor.h:13,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./arch/loongarch/include/asm/thread_info.h:15=
+,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/linux/thread_info.h:60,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/asm-generic/current.h:5,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from
+> ./arch/loongarch/include/generated/asm/current.h:1,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from ./include/linux/sched.h:12,
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 from arch/loongarch/kernel/asm-offsets.c:8:
+> ./arch/loongarch/include/asm/loongarch.h: In function 'csr_read32':
+> ./arch/loongarch/include/asm/loongarch.h:232:9: error: implicit
+> declaration of function '__csrrd_w'; did you mean '__iocsrrd_w'? [-
+> Werror=3Dimplicit-function-declaration]
+> =C2=A0 return __csrrd_w(reg);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^~~~~~~~~
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 __iocsrrd_w
+
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University

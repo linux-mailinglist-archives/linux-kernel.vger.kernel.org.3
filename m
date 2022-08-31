@@ -2,165 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAEC65A73C7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:06:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B3B75A73DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 04:26:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbiHaCFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 22:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54370 "EHLO
+        id S231450AbiHaC0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 22:26:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229602AbiHaCFw (ORCPT
+        with ESMTP id S229589AbiHaC0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 22:05:52 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1043758DF3;
-        Tue, 30 Aug 2022 19:05:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661911551; x=1693447551;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cttn7y6UHHWNipIRdPvVFXvVg0LWj2i77s/Uz1a/IWk=;
-  b=BzvEsG0Q2segwRAdRGwTq9/cHpkCtKs1Ql4N0PU/8pjyoGxx0z119UZZ
-   38wLXwmjvAhpUyc2yvqhT0Vdm/azBJrcIhxg38XRHkttGE6LTZRrzLGGj
-   DtZsiNslE6cyLeujEoaLBru5fT4yWxMBPQcbIjeFipDS76zfIwlaSmuQT
-   kvpjjpgVYaX1khvIhWgfhep31r8cJUNva+3q4jhunlI41Efrne1ePuv1K
-   4Mbvp3bKo4FjONm43gE+Be3L3WAEyUy4XSD8HZOVXgs+kc/Dh//W/RNse
-   x10VgxlJ0a6w3jYs87Wl39sZpuhw03IFKtPSHpFVuLWgdO00Rd/vp938t
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="294092185"
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="294092185"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 19:05:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="787723001"
-Received: from lkp-server02.sh.intel.com (HELO 77b6d4e16fc5) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 30 Aug 2022 19:05:46 -0700
-Received: from kbuild by 77b6d4e16fc5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTD6w-0000rn-0O;
-        Wed, 31 Aug 2022 02:05:46 +0000
-Date:   Wed, 31 Aug 2022 10:04:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sean Anderson <sean.anderson@seco.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, linux-doc@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-phy@lists.infradead.org,
-        "David S . Miller" <davem@davemloft.net>,
-        linux-kernel@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
-        Sean Anderson <sean.anderson@seco.com>
-Subject: Re: [net-next PATCH v2] net: phy: Add 1000BASE-KX interface mode
-Message-ID: <202208311035.zXZ42EG5-lkp@intel.com>
-References: <20220830214241.596985-1-sean.anderson@seco.com>
+        Tue, 30 Aug 2022 22:26:22 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C197D1D5
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 19:26:20 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 31D9C501C88;
+        Wed, 31 Aug 2022 02:26:20 +0000 (UTC)
+Received: from pdx1-sub0-mail-a286 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id A3086501B81;
+        Wed, 31 Aug 2022 02:26:19 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1661912779; a=rsa-sha256;
+        cv=none;
+        b=qSs1sFZR4x8DIgQbdNLouiQsjxWBaa/BVIOL4o13VFGqjSoXEIVfFDkquzFQKukmriQElW
+        9z54LfWTt7mgih6F4ghqCyFpL3SX7b+1HYQf+0xEyjxD4ofetRPLaSWsv4bkizJmW3PYHT
+        3JsAI8R50EYsjfWe3HJKo/J8oBulvZ9eXrY2MLg6IXSIl/xEeqvfwZo0k0RAo5e1DrBpnR
+        J4KEE4J04yZwowFlWdqu6hSIcDy8WRe4+cskngWvTYf7jQKMK9lRSdaMcZv9IzLWiD392l
+        bJ5g7ImLVWdKnQGmuVPXIADR9pKW2TL2wx+v2xtpx7lc1dntj6jTmnEbY5uAVg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1661912779;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=VvE4ZsdvZLF5CYxD7ACa9PoJ5fs9o6RjEP34R3OhrvM=;
+        b=BEGQaOf3HvurQOiX73k5YtM9dt3Vmx+cogUrzpfhpMOaZGqtkaKaz40qhQEUmMwh1kP7zL
+        Tz6XkGtTdFDSxeFAVMcSR/zMsK1WHFWCZH+f8FVF4g2vV2IgycQOjhu4pPbuZNbejZo1Bv
+        O0xSwkuBcOWQEbnoylWkQEA/ZxdQlaoSx4pyUrbCrGXmgei5PnShab8fXNDvL+cvibKWIx
+        9SMtCBIkh7CpJFQM78ja3NnO+5WmHH4/YBI6d/j01RD3uq3bxKUgmMxDezKCj75e1gKLqj
+        4NzHaQLX45OJWqSvgPA7HN9Qa/3qn5o2v030ZGBg2sr2l6uLnC+AnjtsoCjOKQ==
+ARC-Authentication-Results: i=1;
+        rspamd-75b4464bd-rh2ch;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Celery-Celery: 38020fae0cd0ad55_1661912779929_1465910556
+X-MC-Loop-Signature: 1661912779929:3545059006
+X-MC-Ingress-Time: 1661912779928
+Received: from pdx1-sub0-mail-a286 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.119.194.207 (trex/6.7.1);
+        Wed, 31 Aug 2022 02:26:19 +0000
+Received: from offworld (unknown [104.36.31.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a286 (Postfix) with ESMTPSA id 4MHSj65wHfz64;
+        Tue, 30 Aug 2022 19:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1661912779;
+        bh=VvE4ZsdvZLF5CYxD7ACa9PoJ5fs9o6RjEP34R3OhrvM=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=bgYZc4Ao4NxtQjmSpP0BhPKMuGvW77xWe/3Dt24MuyG60fp53n1oMfjHzhvbMWDLJ
+         b1RaTNKBMpJhhC58tHwVhJqbG6vHdaRW5vbAKw4uH3YRRSj20h5t7I5W9OC1Q4MszL
+         sEYZesz2+lZD3O3K9zI1LIg0wkHdnLmxPEIjaPRBWlql1aZ+hoAjsSMxrusplAIpuT
+         AwPCpYbHtMokS8O+rIYCj+qA6XGY+sikNVxjyj3j1piZykoNstQ0VH+s5pUDk2SQwk
+         OVJmFtPqklds+bgIM1tBFmR/4YxyDXnQyUER8gGxoS/8HcuHZvWZ0MqbTt/euefDjy
+         RGsF5pGcq5pJQ==
+Date:   Tue, 30 Aug 2022 19:07:49 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v13 63/70] mm/swapfile: use vma iterator instead of vma
+ linked list
+Message-ID: <20220831020749.qezg5hp2udxzqtg2@offworld>
+Mail-Followup-To: Liam Howlett <liam.howlett@oracle.com>,
+        "maple-tree@lists.infradead.org" <maple-tree@lists.infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>
+References: <20220822150128.1562046-1-Liam.Howlett@oracle.com>
+ <20220822150128.1562046-64-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20220830214241.596985-1-sean.anderson@seco.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220822150128.1562046-64-Liam.Howlett@oracle.com>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
+On Mon, 22 Aug 2022, Liam Howlett wrote:
 
-I love your patch! Perhaps something to improve:
+>From: "Liam R. Howlett" <Liam.Howlett@Oracle.com>
+>
+>unuse_mm() no longer needs to reference the linked list.
+>
+>Signed-off-by: Liam R. Howlett <Liam.Howlett@Oracle.com>
+>Acked-by: Vlastimil Babka <vbabka@suse.cz>
 
-[auto build test WARNING on net-next/master]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Sean-Anderson/net-phy-Add-1000BASE-KX-interface-mode/20220831-054425
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/davem/net-next.git 146ecbac1d327e7ed2153cfb3ef880166dc2b312
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220831/202208311035.zXZ42EG5-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/96d58b1eb1e74558860112250f067f5ff250e31f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sean-Anderson/net-phy-Add-1000BASE-KX-interface-mode/20220831-054425
-        git checkout 96d58b1eb1e74558860112250f067f5ff250e31f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/net/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
-   drivers/net/phy/phy-core.c: In function 'phy_interface_num_ports':
->> drivers/net/phy/phy-core.c:86:9: warning: enumeration value 'PHY_INTERFACE_MODE_1000BASEKX' not handled in switch [-Wswitch]
-      86 |         switch (interface) {
-         |         ^~~~~~
-
-
-vim +/PHY_INTERFACE_MODE_1000BASEKX +86 drivers/net/phy/phy-core.c
-
-da4625ac2637e4 Russell King      2017-07-25   76  
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   77  /**
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   78   * phy_interface_num_ports - Return the number of links that can be carried by
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   79   *			     a given MAC-PHY physical link. Returns 0 if this is
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   80   *			     unknown, the number of links else.
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   81   *
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   82   * @interface: The interface mode we want to get the number of ports
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   83   */
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   84  int phy_interface_num_ports(phy_interface_t interface)
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   85  {
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  @86  	switch (interface) {
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   87  	case PHY_INTERFACE_MODE_NA:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   88  		return 0;
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   89  	case PHY_INTERFACE_MODE_INTERNAL:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   90  	case PHY_INTERFACE_MODE_MII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   91  	case PHY_INTERFACE_MODE_GMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   92  	case PHY_INTERFACE_MODE_TBI:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   93  	case PHY_INTERFACE_MODE_REVMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   94  	case PHY_INTERFACE_MODE_RMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   95  	case PHY_INTERFACE_MODE_REVRMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   96  	case PHY_INTERFACE_MODE_RGMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   97  	case PHY_INTERFACE_MODE_RGMII_ID:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   98  	case PHY_INTERFACE_MODE_RGMII_RXID:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17   99  	case PHY_INTERFACE_MODE_RGMII_TXID:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  100  	case PHY_INTERFACE_MODE_RTBI:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  101  	case PHY_INTERFACE_MODE_XGMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  102  	case PHY_INTERFACE_MODE_XLGMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  103  	case PHY_INTERFACE_MODE_MOCA:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  104  	case PHY_INTERFACE_MODE_TRGMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  105  	case PHY_INTERFACE_MODE_USXGMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  106  	case PHY_INTERFACE_MODE_SGMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  107  	case PHY_INTERFACE_MODE_SMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  108  	case PHY_INTERFACE_MODE_1000BASEX:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  109  	case PHY_INTERFACE_MODE_2500BASEX:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  110  	case PHY_INTERFACE_MODE_5GBASER:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  111  	case PHY_INTERFACE_MODE_10GBASER:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  112  	case PHY_INTERFACE_MODE_25GBASER:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  113  	case PHY_INTERFACE_MODE_10GKR:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  114  	case PHY_INTERFACE_MODE_100BASEX:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  115  	case PHY_INTERFACE_MODE_RXAUI:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  116  	case PHY_INTERFACE_MODE_XAUI:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  117  		return 1;
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  118  	case PHY_INTERFACE_MODE_QSGMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  119  	case PHY_INTERFACE_MODE_QUSGMII:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  120  		return 4;
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  121  	case PHY_INTERFACE_MODE_MAX:
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  122  		WARN_ONCE(1, "PHY_INTERFACE_MODE_MAX isn't a valid interface mode");
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  123  		return 0;
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  124  	}
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  125  	return 0;
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  126  }
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  127  EXPORT_SYMBOL_GPL(phy_interface_num_ports);
-c04ade27cb7b95 Maxime Chevallier 2022-08-17  128  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>

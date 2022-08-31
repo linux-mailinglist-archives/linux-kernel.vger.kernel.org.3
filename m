@@ -2,123 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16AB55A7E12
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:55:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E59BF5A7E14
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230076AbiHaMzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40150 "EHLO
+        id S230218AbiHaM4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:56:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231588AbiHaMzd (ORCPT
+        with ESMTP id S231594AbiHaMzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:55:33 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046C726112
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:55:26 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id l5so10153709pjy.5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:55:26 -0700 (PDT)
+        Wed, 31 Aug 2022 08:55:44 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 749F6760F5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:55:43 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id s15so9386015ljp.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:55:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=/w/LSAOeygKxkwT5iHUDM+ilY8owlgJLl7QXytX6Lek=;
-        b=dIpT48pmgBtjl+0i37xEn8tB7KY2ue6x1yVm+l3QRhjsNQivcw+wXN0p7t6hmsFWeG
-         qR0i/FPSV7jEgkbvjhKSLq4YAZehiYr9w1FOBGBnkGkDYMBJyrlLT4c3JjQbIk5pHUpj
-         7bTimAF+2CFtfREcHxgfhf5xKJauALbjjoZk+HtqvgxSYv7zCj4jj/Av6kheooujZeq5
-         LniNoLXeDypkQZ8mRw8ca7Wc2KzM+we3GfL7iGiX5uUfZaaSBbNtk8+rjwpUJs4xwk7W
-         p5K2f9BwqYlbrkNjHcLSkpNYHM7C5wTVXUK/9NDCSa+obwxnx276Rdl9FrZlWY5nv4oK
-         7fqA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=+IhED3teTri0Sdttoc4/S6GHg1CUzlM2Szl6JMF0ZGE=;
+        b=OzYzmD+sLQOnLPZP20pPdgfq60bsFJikIaHMujhKVxUVf0aZ1RR+WNQDb84u3Sixdj
+         o+tMmdcRWDnzKwZAOenMWIKrsbBRaUxR4MsXyXsL/qIBoCFXRHh1/HloUgS4AOrvii5b
+         j8KNikXuOYXoOboODCxG1RRuXTC+76keOUlv3Nha5KTHomEWzrCh+CbYPnfmLioa9k0C
+         +bqONKe1mA3Jkh4UNUi2MCjT7+dzTcI4Pq8aCM1sjVFcUoAGzg23JdjVRJwjWxgRns0Z
+         Rn1pq7PbdA+CjqXUXtgpfJ6s4GsSYqlsi4q2BcWjRKcQaONCWuGkJViJNB5E+mj592gu
+         8ZGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=/w/LSAOeygKxkwT5iHUDM+ilY8owlgJLl7QXytX6Lek=;
-        b=e9q3sEA5S4oOZo05TffxF5zqttoBfeZthbiyevbDEOoLae6umtezQOe4I8KG0XPfyt
-         mF630HhBXy+oQm7rK9CXS/QkwnVSh+7Y/NMztT+b4U6kOgM3AuxNxL+CFYE3y+llXpdt
-         tKBSWukVTVPht/+oC+d9HIrXqwWYDtBCZoJ87gC2S95Dkgqu1miazFyG9OHcgCslSnra
-         /NCX3G5LwxySG0NACtEUXKYHp8r4Dt9sznNOhdKYdRvFP0j2nST2AmswlOO80z7GKaka
-         I3jccAiUd0WWSzERzd2gC6Fg1CDoBKX2bNVkiAukIG5QJf3/A9RQam7hN8U5sx+BpPDq
-         qDsQ==
-X-Gm-Message-State: ACgBeo2SDgJ/u7HXVNemaMB1NigVIcyl65xdBPHwQznqcyUHfTcShfZx
-        cqR3NRO51eR04Pudp/yzU+0=
-X-Google-Smtp-Source: AA6agR6/pF6fiV5gNVLQcTcr27Wn3ONrtU71pJ5M3Y60W+fZlLhJ931KVRsJW2AZcpgboIPJ8ZUqKw==
-X-Received: by 2002:a17:90a:9907:b0:1f5:2318:ea6d with SMTP id b7-20020a17090a990700b001f52318ea6dmr3224402pjp.163.1661950526166;
-        Wed, 31 Aug 2022 05:55:26 -0700 (PDT)
-Received: from carlis-virtual-machine.localdomain ([156.236.96.164])
-        by smtp.gmail.com with ESMTPSA id o4-20020a17090a5b0400b001fe39bda429sm375112pji.38.2022.08.31.05.55.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 05:55:25 -0700 (PDT)
-From:   Xuezhi Zhang <zhangxuezhi3@gmail.com>
-To:     abbotti@mev.co.uk, hsweeten@visionengravers.com,
-        gregkh@linuxfoundation.org, zhangxuezhi1@coolpad.com
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2] comedi: sysfs: convert sysfs snprintf to sysfs_emit
-Date:   Wed, 31 Aug 2022 20:55:20 +0800
-Message-Id: <20220831125520.239055-1-zhangxuezhi3@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=+IhED3teTri0Sdttoc4/S6GHg1CUzlM2Szl6JMF0ZGE=;
+        b=4waB0qBHIzd8yBrxd0xbjmJVHk4iu9CrFim85AmXI6dXrRWadyC4yya+3Fd5hLCGDA
+         rtOiQ6YT3pJx4qB/S9LaFWkMzjSx6CpfYs3cXHK9DYFM3m6GVgeg55hVOeZmIy5lprSP
+         Midaf6o2WyFJw35SLrmteBsekbFpTunaxPE3p9drHZ5XLv3OaKlJ8QAmJlwh/SsDG4Qk
+         JPLRlEgQG4orHHAfc6w/vu5ZYSKtclbFpnH62BbcQwm3jtwkkjRlfhh6JJOA59bc/lK+
+         dpjy+zPLAPhReh87qWAjh19sDgU30MJeZA3v/2icXaWGzzCw1iKkYidWuGkqdQeNTJYP
+         Kihw==
+X-Gm-Message-State: ACgBeo2KdCisz3Q/CkeIseJN5ctoAiDOg3SCvWlBQHaWC27axKqe8BXf
+        P+T+knkRNgQIuw27U6QOyVsP9g==
+X-Google-Smtp-Source: AA6agR6KAU8wxt9S98ZVuhf8zTiWWTGQq8/4ks5sCWoxwjkmMs5ZQSN0HTj4fXW7TguKtKrAN5xxpA==
+X-Received: by 2002:a2e:aa13:0:b0:264:eb98:b7fd with SMTP id bf19-20020a2eaa13000000b00264eb98b7fdmr4237305ljb.26.1661950541595;
+        Wed, 31 Aug 2022 05:55:41 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id k8-20020a2ea268000000b0025e304903f5sm2124285ljm.6.2022.08.31.05.55.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 05:55:41 -0700 (PDT)
+Message-ID: <e2eb36e0-d28b-25b5-3e09-3ea19a2f5ae4@linaro.org>
+Date:   Wed, 31 Aug 2022 15:55:40 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 5/6] arm64: dts: imx8ulp: add mailbox node
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        aisheng.dong@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+References: <20220831100016.3649852-1-peng.fan@oss.nxp.com>
+ <20220831100016.3649852-6-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220831100016.3649852-6-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhangxuezhi1 <zhangxuezhi1@coolpad.com>
+On 31/08/2022 13:00, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add Sentinel (MU)Message Unit, Generic MU nodes.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8ulp.dtsi | 26 ++++++++++++++++++++++
+>  1 file changed, 26 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> index abec8ad4a8de..54ccf31896b7 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8ulp.dtsi
+> @@ -152,6 +152,15 @@ soc: soc@0 {
+>  		#size-cells = <1>;
+>  		ranges = <0x0 0x0 0x0 0x40000000>;
+>  
+> +		s4muap: mailbox@27020000 {
+> +			compatible = "fsl,imx8ulp-mu-s4";
+> +			reg = <0x27020000 0x10000>;
+> +			interrupts = <GIC_SPI 79 IRQ_TYPE_LEVEL_HIGH>;
+> +			#mbox-cells = <2>;
+> +			status = "okay";
 
-Fix up all sysfs show entries to use sysfs_emit
 
-Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
----
-v2: use a proper name for the Signed-off-by line.
----
- drivers/comedi/comedi_fops.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+This is not needed.
 
-diff --git a/drivers/comedi/comedi_fops.c b/drivers/comedi/comedi_fops.c
-index 55a0cae04b8d..e2114bcf815a 100644
---- a/drivers/comedi/comedi_fops.c
-+++ b/drivers/comedi/comedi_fops.c
-@@ -396,7 +396,7 @@ static ssize_t max_read_buffer_kb_show(struct device *csdev,
- 	mutex_unlock(&dev->mutex);
- 
- 	comedi_dev_put(dev);
--	return snprintf(buf, PAGE_SIZE, "%u\n", size);
-+	return sysfs_emit(buf, "%u\n", size);
- }
- 
- static ssize_t max_read_buffer_kb_store(struct device *csdev,
-@@ -452,7 +452,7 @@ static ssize_t read_buffer_kb_show(struct device *csdev,
- 	mutex_unlock(&dev->mutex);
- 
- 	comedi_dev_put(dev);
--	return snprintf(buf, PAGE_SIZE, "%u\n", size);
-+	return sysfs_emit(buf, "%u\n", size);
- }
- 
- static ssize_t read_buffer_kb_store(struct device *csdev,
-@@ -509,7 +509,7 @@ static ssize_t max_write_buffer_kb_show(struct device *csdev,
- 	mutex_unlock(&dev->mutex);
- 
- 	comedi_dev_put(dev);
--	return snprintf(buf, PAGE_SIZE, "%u\n", size);
-+	return sysfs_emit(buf, "%u\n", size);
- }
- 
- static ssize_t max_write_buffer_kb_store(struct device *csdev,
-@@ -565,7 +565,7 @@ static ssize_t write_buffer_kb_show(struct device *csdev,
- 	mutex_unlock(&dev->mutex);
- 
- 	comedi_dev_put(dev);
--	return snprintf(buf, PAGE_SIZE, "%u\n", size);
-+	return sysfs_emit(buf, "%u\n", size);
- }
- 
- static ssize_t write_buffer_kb_store(struct device *csdev,
--- 
-2.25.1
+> +		};
+> +
+> +
 
+Just one blank line.
+
+>  		per_bridge3: bus@29000000 {
+>  			compatible = "simple-bus";
+>  			reg = <0x29000000 0x800000>;
+> @@ -159,6 +168,23 @@ per_bridge3: bus@29000000 {
+>  			#size-cells = <1>;
+>  			ranges;
+>  
+Best regards,
+Krzysztof

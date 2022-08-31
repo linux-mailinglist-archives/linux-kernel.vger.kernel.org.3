@@ -2,82 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA86E5A7692
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:30:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0B35A769C
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:30:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229453AbiHaGaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47364 "EHLO
+        id S230280AbiHaGaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230181AbiHaGaI (ORCPT
+        with ESMTP id S230244AbiHaGaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:30:08 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 592A018344;
-        Tue, 30 Aug 2022 23:30:05 -0700 (PDT)
-X-QQ-mid: bizesmtp90t1661927397tim9ya37
-Received: from localhost.localdomain ( [182.148.13.26])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 31 Aug 2022 14:29:55 +0800 (CST)
-X-QQ-SSF: 01000000000000D0E000000A0000000
-X-QQ-FEAT: xqT8U4SkSpjl2BYBjpdXeIHxB6l763bCgnuv/RMHG+IiW8h7mRfk3zCKX2TA1
-        8QPD8aSRHUfhX9cbUzIIqBn6j3940Pt178XqyPBBjjG4v4kWfeC7IwOrYR4PZzTssdl+JRb
-        ZQ1tl1wOvDC+B85pfcXB4EVJiDxzCNtgOrzsUg173YjUC3CzxdNNXXIn4EDSYwYisn+Swk8
-        kJ6rRsfDrNuO0W3rBWgEYAV3LEWeyYGhpv/J+lKaqZtogw6HSEU4OGwOdTB6Jqi+N5dxXBe
-        qFDLvsV3A1B0irj+cDLcS5WB+InPzuHQB00hpkL6Q0BlXtzslbn4xSx64yJOSx6DLRpdop/
-        qdrUX9iHQFokOEF4mAjBzaAFVQykmr3TSd+pxz0x2poR9o6h9yx7kos5e0NFwYXtHxWSS6V
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     tony@atomide.com, linux@armlinux.org.uk
-Cc:     linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] ARM: OMAP2+: fix repeated words in comments
-Date:   Wed, 31 Aug 2022 14:29:49 +0800
-Message-Id: <20220831062949.12369-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 31 Aug 2022 02:30:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6DB5C36A;
+        Tue, 30 Aug 2022 23:30:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 62041B81F42;
+        Wed, 31 Aug 2022 06:30:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E863C43142;
+        Wed, 31 Aug 2022 06:30:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661927418;
+        bh=htLQg79mi3SvkoKP5SEjIUC3OCtpqE0sPOEq4nLXHS0=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=QtCR3Y5RYuUnBjmhDyX8LRveCXYFTG/m9Bk6ARazxCBxysIVT09VZIBrSX8H0JI8i
+         ORaU74Q9xDjZ/B/2TCwVetW2tGYy4JCYrr67jLYH3YE1kIGZoDA2fczA9kVj5NZDIo
+         XOBP84aQcScsaHqTxEgJ8Za7clV9hTJaFZZBGK02hsfMa7bgCTCEVmSequx9QbxJQu
+         noC/KTh5PFdZbAus4JbX+1hAUwWJY6Pdq8XQe/09FWk315mZ9hxEYUfRrDux6xz9NQ
+         aSVeOUJA/m20a84WUvKmEaI3NKcpsr7ofraI+3P/myq9XLx2EbQ1SZpsYh4dTOpxzd
+         aqFQImSZqSqzg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E8E53C4166F;
+        Wed, 31 Aug 2022 06:30:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        *      [43.155.67.158 listed in zen.spamhaus.org]
-        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+Subject: Re: [PATCH net-next] net/mlx5e: Do not use err uninitialized in
+ mlx5e_rep_add_meta_tunnel_rule()
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166192741795.4297.2723160789044266807.git-patchwork-notify@kernel.org>
+Date:   Wed, 31 Aug 2022 06:30:17 +0000
+References: <20220825180607.2707947-1-nathan@kernel.org>
+In-Reply-To: <20220825180607.2707947-1-nathan@kernel.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     saeedm@nvidia.com, leon@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        ndesaulniers@google.com, trix@redhat.com, netdev@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Delete the redundant word 'from'.
+Hello:
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- arch/arm/mach-omap2/cm33xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+This patch was applied to netdev/net-next.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-diff --git a/arch/arm/mach-omap2/cm33xx.c b/arch/arm/mach-omap2/cm33xx.c
-index d61fa06117b4..c824d4e3db63 100644
---- a/arch/arm/mach-omap2/cm33xx.c
-+++ b/arch/arm/mach-omap2/cm33xx.c
-@@ -5,7 +5,7 @@
-  * Copyright (C) 2011-2012 Texas Instruments Incorporated - https://www.ti.com/
-  * Vaibhav Hiremath <hvaibhav@ti.com>
-  *
-- * Reference taken from from OMAP4 cminst44xx.c
-+ * Reference taken from OMAP4 cminst44xx.c
-  */
- 
- #include <linux/kernel.h>
+On Thu, 25 Aug 2022 11:06:07 -0700 you wrote:
+> Clang warns:
+> 
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:6: error: variable 'err' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
+>           if (IS_ERR(flow_rule)) {
+>               ^~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:489:9: note: uninitialized use occurs here
+>           return err;
+>                 ^~~
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:481:2: note: remove the 'if' if its condition is always true
+>           if (IS_ERR(flow_rule)) {
+>           ^~~~~~~~~~~~~~~~~~~~~~~
+>   drivers/net/ethernet/mellanox/mlx5/core/en_rep.c:474:9: note: initialize the variable 'err' to silence this warning
+>           int err;
+>                 ^
+>                   = 0
+>   1 error generated.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next] net/mlx5e: Do not use err uninitialized in mlx5e_rep_add_meta_tunnel_rule()
+    https://git.kernel.org/netdev/net-next/c/92f97c00f0ca
+
+You are awesome, thank you!
 -- 
-2.36.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

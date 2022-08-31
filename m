@@ -2,106 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA2245A802F
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:28:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D884B5A8030
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 16:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbiHaO2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 10:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35058 "EHLO
+        id S230443AbiHaO3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 10:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbiHaO2N (ORCPT
+        with ESMTP id S229481AbiHaO3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 10:28:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92F013D0C;
-        Wed, 31 Aug 2022 07:28:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 75AA261B74;
-        Wed, 31 Aug 2022 14:28:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC4D0C433C1;
-        Wed, 31 Aug 2022 14:28:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661956091;
-        bh=1QA5Gwy5yM74XPHFPpRTyh0noC8OOgttdPqN/fIeYDQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cNL1O9CENaxh2v8eefT7iJYEyjWCcuShXRxpfxS0qWn2PtGGK8mtGuwxSVRvBFtTl
-         E+IOUipjsmOzWL7lFlw+Gc+d8XlsU9Rn6gUE1p9URYzAQi3TwVYYTUIIE1FriRkjM1
-         z9yQtyg/nh7zBqE+IOgKmL9JSV6QnEyatA2KL1B5iPSdbuwsU+B8sJgMwc0ML/ZPjX
-         fXIUyJU5pBzH5Ebb6OP0Jdu2CedtgHHntigVNnUDvMK1ISlsmEdfOOhMBkb1InjtfG
-         ygL+cipmfwOy2shhkhBTTvKnzPgbZnFMt/AJxjejy1dL6Wgo2E1e3LVxqB6ziNuzj9
-         GPyEgGe5CemLg==
-Received: by pali.im (Postfix)
-        id 1B45A855; Wed, 31 Aug 2022 16:28:09 +0200 (CEST)
-Date:   Wed, 31 Aug 2022 16:28:09 +0200
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marek Behun <marek.behun@nic.cz>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: turris-omnia: Add mcu node
-Message-ID: <20220831142809.lcmnv3l4rnulo522@pali>
-References: <20220819131152.6513-1-pali@kernel.org>
+        Wed, 31 Aug 2022 10:29:36 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AD6BF6C
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 07:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1661956175; x=1693492175;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qyWaJgg5ZlMcEtWvcwD0jtBBUGQG4+nXNDb6LrRQaGU=;
+  b=hEev4SDwWxzP6U8xs0dRkJLWRmfvBgG8+vw2oqbdx4Wjl7vPqJ8Irzo7
+   2BLmu2/Tn6bKjXNmVO5s4h9QgAR9eABxiW8UQhIT8iRNSwLznJLbBhyIB
+   AKfhgWyz/ZANApXp6sOGjfG1RO/rmkKCR7LiKdPDv0iRfGp4O96ehse0N
+   snF8x4PQgx6PQ+Trg//FgkA9DhgHFEbSDTDvgJrlCT7jiAIqWREW1p8Zf
+   5zllOTP7kjATXeTNpbAMb4pXpg/lrBAF4Np9nBj0dN24wld5CDl8CCqpJ
+   QYq4yCRK84wQ9ZI6ZgJi+DZu4NwEJnqS0w/cPyeRlgyU16rABj/FvFCGj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="296243199"
+X-IronPort-AV: E=Sophos;i="5.93,278,1654585200"; 
+   d="scan'208";a="296243199"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 07:29:35 -0700
+X-IronPort-AV: E=Sophos;i="5.93,278,1654585200"; 
+   d="scan'208";a="645246916"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 07:29:33 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oTOih-006Q3S-0a;
+        Wed, 31 Aug 2022 17:29:31 +0300
+Date:   Wed, 31 Aug 2022 17:29:30 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2 v5] regmap: Support accelerated noinc operations
+Message-ID: <Yw9wSoMUhZVqVhkw@smile.fi.intel.com>
+References: <20220816204832.265837-1-linus.walleij@linaro.org>
+ <Yw46t9Y1PYoMLSKq@smile.fi.intel.com>
+ <CACRpkdZEVYDAPbBkATr=6sea8gu6JmuAjU_sDRV=ZgswfhD-Kg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220819131152.6513-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CACRpkdZEVYDAPbBkATr=6sea8gu6JmuAjU_sDRV=ZgswfhD-Kg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PING?
+On Wed, Aug 31, 2022 at 03:53:15PM +0200, Linus Walleij wrote:
+> On Tue, Aug 30, 2022 at 6:36 PM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+> > On Tue, Aug 16, 2022 at 10:48:31PM +0200, Linus Walleij wrote:
 
-On Friday 19 August 2022 15:11:52 Pali Rohár wrote:
-> At i2c address 0x2a is MCU command interface which provides access to GPIOs
-> connected to Turris Omnia MCU. So define mcu node in Turris Omnia DTS file.
+...
+
+> > > +             dev_info(map->dev, "%x %s [", reg, write ? "<=" : "=>");
+> > > +             for (i = 0; i < val_len; i++) {
+> > > +                     switch (val_bytes) {
+> > > +                     case 1:
+> > > +                             pr_cont("%x", u8p[i]);
+> > > +                             break;
+> > > +                     case 2:
+> > > +                             pr_cont("%x", u16p[i]);
+> > > +                             break;
+> > > +                     case 4:
+> > > +                             pr_cont("%x", u32p[i]);
+> > > +                             break;
+> > > +#ifdef CONFIG_64BIT
+> > > +                     case 8:
+> > > +                             pr_cont("%llx", u64p[i]);
+> > > +                             break;
+> > > +#endif
+> > > +                     default:
+> > > +                             break;
+> > > +                     }
+> > > +                     if (i == (val_len - 1))
+> > > +                             pr_cont("]\n");
+> > > +                     else
+> > > +                             pr_cont(",");
+> > > +             }
+> >
+> > I'm wondering why we can't use hex_dump_to_buffer() approach? Or even better,
+> > introduce eventually dev_hex_dump() (as it's done for seq_file and printk)
+> > and use it.
 > 
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> 
-> ---
-> Same change was already sent to U-Boot project together with driver. As
-> Turris Omnia DTS file is shared between Linux kernel U-Boot, I'm sending
-> this change also in Linux. There is a plan to write also Linux driver for
-> Turris Omnia MCU, like there is already in U-Boot.
-> 
-> https://source.denx.de/u-boot/u-boot/-/commit/832738974806e6264a3d0ac2aaa92d0f662fd128
-> https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/gpio/turris_omnia_mcu.c
-> ---
->  arch/arm/boot/dts/armada-385-turris-omnia.dts | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> index f4878df39753..f655e9229d68 100644
-> --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> @@ -184,7 +184,13 @@
->  			#size-cells = <0>;
->  			reg = <0>;
->  
-> -			/* STM32F0 command interface at address 0x2a */
-> +			/* MCU command i2c API */
-> +			mcu: mcu@2a {
-> +				compatible = "cznic,turris-omnia-mcu";
-> +				reg = <0x2a>;
-> +				gpio-controller;
-> +				#gpio-cells = <3>;
-> +			};
->  
->  			led-controller@2b {
->  				compatible = "cznic,turris-omnia-leds";
-> -- 
-> 2.20.1
-> 
+> Hmmmmm this is under regmap_should_log() which turns on
+> dev_info() simple prints like x <= y and y => x to the console.
+> e.g. dev_info(map->dev, "%x <= %x\n", reg, val);
+> It would be rather print_hex_dump() the problem being
+> that hex_dump_* accessors assumes line oriented
+> linebufs "must be 16 or 32" (values per line), and here we probably
+> don't want that:
+> we want to show what we shoehorned into the FIFO.
+
+Perhaps we may add a modifier to %ph (like 2,4,8) to group together several
+bytes and use it here instead?
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+

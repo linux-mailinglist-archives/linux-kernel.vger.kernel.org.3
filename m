@@ -2,96 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E805A8981
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 01:30:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1ABF15A8983
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 01:33:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229713AbiHaXaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 19:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33768 "EHLO
+        id S231802AbiHaXc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 19:32:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbiHaXaR (ORCPT
+        with ESMTP id S230184AbiHaXcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 19:30:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600E479EDA;
-        Wed, 31 Aug 2022 16:30:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EBF6461CA4;
-        Wed, 31 Aug 2022 23:30:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 470A5C433D7;
-        Wed, 31 Aug 2022 23:30:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661988615;
-        bh=CbM8i5pqI5d7io1Cbk/QR8oz21S+sd2XFL/3nw9UKWQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=GiI2HLi61IqdwaTwp3vtqAs8kGFLHSfn34VaFUiBEuhSTfgFVOmi7PlXlTRTOzJZx
-         O9UnjDkNawmBQIGLQlT/gjZz95rdBixXCbTUCZbvtJpki0cNAuMIDrIsp14QGdqn0Z
-         0ClbugYQpF3y1y1TiZJm9Oncx9Kj3tMQVmqcVp673O/oPOGb5rS7M+xXhevya+zPCc
-         T11Ii/xawFGJXgWzO0X5P3mVc1DJBqhaxFlnCrOI0O//SAmN30m+DXbSdDHYcqGjH9
-         cPXm9ajOtH74XsqwzA+IKbhOyZPqm1MmiceqYZGiR0fwOfHMhepuGKJXW7tE7CWZO/
-         GtuxAPY3wsP3w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 28B3EE924D6;
-        Wed, 31 Aug 2022 23:30:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Wed, 31 Aug 2022 19:32:54 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4F6E68C9
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 16:32:53 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-11e7e0a63e2so26999739fac.4
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 16:32:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Ogeaj4/rQI298p/BADarmzrOcFA0fwNfK92i/ULTfFg=;
+        b=ZweDwQk10QrYBEDjHiMYDmRQtjwYnUzgonUGz5ZR430VZk0hZdZAiXRKKtHlAIDehy
+         +QJpvDrZkY32lifNAeVL2FcHl7JhtiFefL7uVQlLWKdoSyVVZxQX7vL7EB4J1GmaYgnc
+         JPIwI7KWACD3udn2oJhkuNE2OAmA10FAcBEik=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Ogeaj4/rQI298p/BADarmzrOcFA0fwNfK92i/ULTfFg=;
+        b=bfCRpjeWhca0fDE7fSvLnPcQ2GsfOP2asJpaH/gqivnqEbYyvB/nEdJC6IrtfOumU3
+         C+NVIXgDKoM32RTVIqUUSWofA6o0bbp0+p4Fxkc/eNM00lgqmyrQlsabav0gm6PEQDEh
+         +Ki3MAqjpXTsI3Mtrxbr06ggx6GN84QunDos2E8y7YmUe6uSH4OHn18fLdQsGJ8KEkVS
+         yRaF4RmFm6nGamJWUBvJlseiwLYrE9NJBq2dR7S+puLGEI6zmuWONTXAyRfYWMapaFNz
+         sN5ba564j3mHt/3XAEnKyqRBc5crC4dcH66DBN6l3MKoZ6k9pe74I4H2FS0x9vMAIDDc
+         ojgQ==
+X-Gm-Message-State: ACgBeo2LZp167zyyiRp0A13Z+v9P79iVpexFCxcm0IGxkbNcu0JUQghN
+        MmoEoFVMCqkXbscS8SXjZDwEjw==
+X-Google-Smtp-Source: AA6agR7gjrv4SZv6qQ6ra1AxQVJiB18C+lGX1hyTzmjgrLU98OFcAcEbkNAGyk+kxp8Lvv8Gdw5NwQ==
+X-Received: by 2002:a05:6870:2046:b0:11e:525d:ef9f with SMTP id l6-20020a056870204600b0011e525def9fmr2641628oad.163.1661988772369;
+        Wed, 31 Aug 2022 16:32:52 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id c8-20020a544e88000000b0034536748843sm7976371oiy.3.2022.08.31.16.32.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 16:32:52 -0700 (PDT)
+Message-ID: <61795f45-bc48-7be8-5787-cdf6ec4b761c@linuxfoundation.org>
+Date:   Wed, 31 Aug 2022 17:32:51 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v5] Bluetooth: btusb: mediatek: fix WMT failure during runtime
- suspend
-From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <166198861515.30343.13576995414925272614.git-patchwork-notify@kernel.org>
-Date:   Wed, 31 Aug 2022 23:30:15 +0000
-References: <6675f56fc8b0910f17ec506d534cf5330ff04733.1660177086.git.objelf@gmail.com>
-In-Reply-To: <6675f56fc8b0910f17ec506d534cf5330ff04733.1660177086.git.objelf@gmail.com>
-To:     Sean Wang <sean.wang@mediatek.com>
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        Soul.Huang@mediatek.com, YN.Chen@mediatek.com,
-        Leon.Yen@mediatek.com, Eric-SY.Chang@mediatek.com,
-        Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, posh.sun@mediatek.com, ted.huang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        mcchou@chromium.org, shawnku@google.com,
-        linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        jing.cai@mediatek.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH -next 3/5] selftests/cpu-hotplug: Delete fault injection
+ related code
+Content-Language: en-US
+To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     shuah@kernel.org, akpm@linux-foundation.org,
+        akinobu.mita@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20220830083028.45504-1-zhaogongyi@huawei.com>
+ <20220830083028.45504-4-zhaogongyi@huawei.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20220830083028.45504-4-zhaogongyi@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to bluetooth/bluetooth-next.git (master)
-by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
-
-On Thu, 11 Aug 2022 08:49:07 +0800 you wrote:
-> From: Sean Wang <sean.wang@mediatek.com>
+On 8/30/22 02:30, Zhao Gongyi wrote:
+> Delete fault injection related code since the module has been deleted.
 > 
-> WMT cmd/event doesn't follow up the generic HCI cmd/event handling, it
-> needs constantly polling control pipe until the host received the WMT
-> event, thus, we should require to specifically acquire PM counter on the
-> USB to prevent the interface from entering auto suspended while WMT
-> cmd/event in progress.
+> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
+> ---
+>   tools/testing/selftests/cpu-hotplug/config    |   1 -
+>   .../selftests/cpu-hotplug/cpu-on-off-test.sh  | 105 +-----------------
+>   2 files changed, 2 insertions(+), 104 deletions(-)
+>   delete mode 100644 tools/testing/selftests/cpu-hotplug/config
 > 
-> [...]
+> diff --git a/tools/testing/selftests/cpu-hotplug/config b/tools/testing/selftests/cpu-hotplug/config
+> deleted file mode 100644
+> index d4aca2ad5069..000000000000
+> --- a/tools/testing/selftests/cpu-hotplug/config
+> +++ /dev/null
+> @@ -1 +0,0 @@
+> -CONFIG_NOTIFIER_ERROR_INJECTION=y
+> diff --git a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+> index 19028c4c9758..ade75d920cd6 100755
+> --- a/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+> +++ b/tools/testing/selftests/cpu-hotplug/cpu-on-off-test.sh
+> @@ -110,19 +110,6 @@ online_cpu_expect_success()
+>   	fi
+>   }
+> 
+> -online_cpu_expect_fail()
+> -{
+> -	local cpu=$1
+> -
+> -	if online_cpu $cpu 2> /dev/null; then
+> -		echo $FUNCNAME $cpu: unexpected success >&2
+> -		exit 1
+> -	elif ! cpu_is_offline $cpu; then
+> -		echo $FUNCNAME $cpu: unexpected online >&2
+> -		exit 1
+> -	fi
+> -}
+> -
 
-Here is the summary with links:
-  - [v5] Bluetooth: btusb: mediatek: fix WMT failure during runtime suspend
-    https://git.kernel.org/bluetooth/bluetooth-next/c/177978b29426
+Keep this code - this could be useful to test the case of running
+online test on cpu that is online and expect that to fail.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>   offline_cpu_expect_success()
+>   {
+>   	local cpu=$1
+> @@ -136,22 +123,7 @@ offline_cpu_expect_success()
+>   	fi
+>   }
+> 
+> -offline_cpu_expect_fail()
+> -{
+> -	local cpu=$1
+> -
+> -	if offline_cpu $cpu 2> /dev/null; then
+> -		echo $FUNCNAME $cpu: unexpected success >&2
+> -		exit 1
+> -	elif ! cpu_is_online $cpu; then
+> -		echo $FUNCNAME $cpu: unexpected offline >&2
+> -		exit 1
+> -	fi
+> -}
+> -
 
+Keep this code - this could be useful to test the case of running
+offline test on cpu that is offline and expect that to fail.
 
+Remove just the fault injection code and these aren't really specific
+to fault injection even though they are currently being used by the
+fault injection path.
+
+thanks,
+-- Shuah

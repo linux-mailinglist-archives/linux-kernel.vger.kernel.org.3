@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691A95A76A2
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:31:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B01395A76A9
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:31:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiHaGbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:31:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51770 "EHLO
+        id S230302AbiHaGbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230285AbiHaGbZ (ORCPT
+        with ESMTP id S229712AbiHaGb2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:31:25 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B546D5F202;
-        Tue, 30 Aug 2022 23:31:23 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id h11-20020a17090a470b00b001fbc5ba5224so14060030pjg.2;
-        Tue, 30 Aug 2022 23:31:23 -0700 (PDT)
+        Wed, 31 Aug 2022 02:31:28 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37F5CB4EB4;
+        Tue, 30 Aug 2022 23:31:26 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id mj6so8178417pjb.1;
+        Tue, 30 Aug 2022 23:31:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=YWAShV8YZfHBQ9V1KHBqygpSP4XqwbQ+bpPaH2e34wI=;
-        b=cIr1uW4eW+yIwc2E1wmBEGnJFerOPvUXYtY/5kq08xIDgJRiKLsTFDENxkR4wisYzj
-         NhvaQhvXAcFNqOwL6D8XxJIXaiWIhzCFjyY8HPS48D+8pCKlC+fvEqXMEPCpAFrs1QHC
-         Qb4ExIaxqo5Do+RxwZs5LbOiCpMRibzMDqql6FWbBl0E6rYLlfZmsUvLtDX8Bm6HH/fc
-         6BIWX2CrrjSthXGQgCmHU0Tmgv/+wjnibEqa4dhI6sg50FrubZ2/jrXfpJfh0BfgBb/d
-         HZNRp3bluju0pSv4/sVZ+gYzaxxDs1/hCT5SlEkLJ6Mt+ASCqIpYboEeo7vVt7YWNbdS
-         kF4w==
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc;
+        bh=q2CGYVvZJHebKb3NsH/50oGHEhc189ycTOR07ytpgm8=;
+        b=qdFaE0028T/JAnbIfaI9jP6AxwYtymj0fZexLpE5kDMpM+IBVuHCH0aqlDzY+tAEx0
+         PEHkP34Pa9/su2dlDpIMrSRlhG+4tU5U+IPwEPbQBa7/2JFhWQZt1ZkZFnjeS61rdA/X
+         W8wAoOyhgiCuSGdTXrhWz5GBimjOE0CSbXv+MOC+wu7luE6mg8IPkw3AClsxiSIIcJwI
+         oXefuZEkGiLI74t6qtTn/ydxzc8mH7RhPpMRzWBKRhpbGMirVy0Wg3QJYmB+2m7ffE6X
+         QEWeyrg5dytB25q6cRd8XiZeIoLF9Gd7zoLMpzV914TPr6lwTZkdqfNdxn81hDWbbzEj
+         AvGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=YWAShV8YZfHBQ9V1KHBqygpSP4XqwbQ+bpPaH2e34wI=;
-        b=wHT43Q5sk7KUVwOBjV4s1XyViJDMkUfNNThWAt/gufnoZ6wsrNkLI1tCBRmTh/hpce
-         lFkzpU/39Y2j62S+dKE3VeecZACigbl9gdDbztd9zHhb/HRyyu7N7Sd7B5CZHeKQBPq+
-         dgcTp57dtBg3nbb4gwVm6eqENuC2PFukBfHTOFmnSiwad2DdOu9z/B6TT4ByY49GSIgH
-         dUFu0qrRoszIgIg2ftOLzPxuyVvh1pW/SlmczaKln6jFR496xNtWgoRdVsjIu1J0TD0G
-         4FpevZ6K8J4yYmgSMKwDDZCzmm8729OpYLnpjrlyY7plrvc5FSo7ZWQJhPQEX0BLecR9
-         TMBQ==
-X-Gm-Message-State: ACgBeo3E3fn0pPNRDpY87XCVSmml6YfzHe61jL9BqyrhFbi+IHNOHvZ4
-        VvvcczeXDvszAwFrh7OecRI=
-X-Google-Smtp-Source: AA6agR4t/Q7VZV1gHbT89eFvrAoVkSrvnR+hJ5W1paPb/Isz6yHWshgR/UJHztM68o9vekevUVTGzA==
-X-Received: by 2002:a17:902:7b86:b0:174:231f:b6bf with SMTP id w6-20020a1709027b8600b00174231fb6bfmr24592003pll.172.1661927482370;
-        Tue, 30 Aug 2022 23:31:22 -0700 (PDT)
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc;
+        bh=q2CGYVvZJHebKb3NsH/50oGHEhc189ycTOR07ytpgm8=;
+        b=7qHgu44U6gTLkAsODRHGRHwfZCrTRhk9lOhhfx8kP7Mbcc/uVhT0mndCgg4BBitpov
+         bKLQOPfeHkFWhsjpU9ApQ5a4ck9XfLQ73lBFqGbEJtz2EJ9rFP3pXZowVwEgd1xguElv
+         z0Bw0G6sBgvNBb6eJOXcGW9brDLxrH71vrNa25yH07H8iKnfWCwdG++eizbzYlTJVKiz
+         TD+4cihGHF/SveqhhUsUcdpQuEcusqMm6RojBm8cLvAOPImT9nt1ocd4TYXKNqdR5PN7
+         o6oP8JATtqxoYRCKYQdGmxY9BmM4BBZsvmjyPhTjPoP5jGliWDvxr0VMdXKMqbP05SR2
+         KDCQ==
+X-Gm-Message-State: ACgBeo07K6X14DoS+y9dWz9LPRHhl+qBp61Tj6yd5ZvDYMm5ZHYXlro3
+        ZJzPsLGH/0Q5t859BCTjrN8=
+X-Google-Smtp-Source: AA6agR469xBKb6C0MPbyxGhM33H7XJlAu+6n6rzggrXGSokOZ/98ops87x3A8hFBFFrOClCzRhffDQ==
+X-Received: by 2002:a17:902:c94f:b0:175:298:377a with SMTP id i15-20020a170902c94f00b001750298377amr9168511pla.133.1661927485338;
+        Tue, 30 Aug 2022 23:31:25 -0700 (PDT)
 Received: from localhost.localdomain ([115.99.190.245])
-        by smtp.gmail.com with ESMTPSA id z30-20020a62d11e000000b0052d24402e52sm10362220pfg.79.2022.08.30.23.31.19
+        by smtp.gmail.com with ESMTPSA id z30-20020a62d11e000000b0052d24402e52sm10362220pfg.79.2022.08.30.23.31.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Aug 2022 23:31:21 -0700 (PDT)
+        Tue, 30 Aug 2022 23:31:24 -0700 (PDT)
 From:   Jagath Jog J <jagathjog1996@gmail.com>
 To:     jic23@kernel.org, andy.shevchenko@gmail.com, hadess@hadess.net,
         hdegoede@redhat.com
 Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 0/2] iio: Add single and double tap events support
-Date:   Wed, 31 Aug 2022 12:01:15 +0530
-Message-Id: <20220831063117.4141-1-jagathjog1996@gmail.com>
+Subject: [PATCH v4 1/2] iio: Add new event type gesture and use direction for single and double tap
+Date:   Wed, 31 Aug 2022 12:01:16 +0530
+Message-Id: <20220831063117.4141-2-jagathjog1996@gmail.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220831063117.4141-1-jagathjog1996@gmail.com>
+References: <20220831063117.4141-1-jagathjog1996@gmail.com>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -64,73 +68,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds new event type for tap called gesture and direction
-is used to differentiate single and double tap. This series adds single
-and double tap support for bma400 accelerometer device driver.
+Add new event type for tap called gesture and the direction can be used
+to differentiate single and double tap. This may be used by accelerometer
+sensors to express single and double tap events. For directional tap,
+modifiers like IIO_MOD_(X/Y/Z) can be used along with singletap and
+doubletap direction.
 
-Changes since v3
-1. Added a macro for the length of the tap configuration arrays.
-2. Corrected a grammar mistake.
-3. Arranged the local variables in reverse Xmas tree order.
+Signed-off-by: Jagath Jog J <jagathjog1996@gmail.com>
+---
+ Documentation/ABI/testing/sysfs-bus-iio | 69 +++++++++++++++++++++++++
+ drivers/iio/industrialio-event.c        |  7 ++-
+ include/linux/iio/types.h               |  2 +
+ include/uapi/linux/iio/types.h          |  3 ++
+ tools/iio/iio_event_monitor.c           |  8 ++-
+ 5 files changed, 87 insertions(+), 2 deletions(-)
 
-Changes since v2
-1. Replaced doubletap_tap_2min to doubletap_tap2_min.
-2. Added ABI docs for available attributes which lists tap configurations
-   values.
-3. Added 'tap' in the naming of available attributes which are related to
-   tap configurations.
-5. Added check for channel type in _read_event_value() and
-   _write_event_value().
-6. KernelVersion changed to 6.1.
-7. Corrected typos.
-
-Changes since v1
-1. Included headers in alphabetical order.
-2. Changing tap_event_en variable name to tap_event_en_bitmask since it is
-   used in bit manipulation operation.
-3. Assigning boolean value to step_event_en and activity_event_en instead
-   of 0, since they are boolean type members.
-4. Using local variable for regmap_read() instead for *val itself.
-5. Correcting typos.
-6. Remove of IIO_EV_INFO_PERIOD.
-7. Now all 4 tap controls like threshold, quiet, tics_dt and quiet_dt can
-   be configured from the userspace.
-8. Introducing new event info IIO_EV_INFO_RESET_TIMEOUT, and
-   IIO_EV_INFO_TAP_2MIN_DELAY into iio_event_info.
-9. Creating custom read/write attributes for tics_dt called
-   in_accel_gesture_maxtomin_time.
-10. Time based tap controls can be configured in seconds instead of raw
-    values.
-11. Provided all available values for time base tap controls in seconds.
-12. Adding one more MODULE_AUTHOR().
-
-Changes since RFC
-1. Corrected the "quite" typo to "quiet".
-2. Added proper reference and name of the section from datasheet.
-3. Changed the ABI documentation to make it more generic.
-4. Added ABI documentation for double tap quiet period.
-5. Added available list by registering new event attribute for tap
-   threshold values and double tap quiet period values.
-6. Sending both single and double tap events separately.
-8. Removed checking for tap enabled while changing data rate.
-9. Returning invalid with error message if the input data rate is not
-   200Hz while enabling tap interrupts.
-7. Added datasheet reference for interrupt engine overrun.
-
-Jagath Jog J (2):
-  iio: Add new event type gesture and use direction for single and
-    double tap
-  iio: accel: bma400: Add support for single and double tap events
-
- Documentation/ABI/testing/sysfs-bus-iio |  69 +++++
- drivers/iio/accel/bma400.h              |  14 +
- drivers/iio/accel/bma400_core.c         | 343 +++++++++++++++++++++++-
- drivers/iio/industrialio-event.c        |   7 +-
- include/linux/iio/types.h               |   2 +
- include/uapi/linux/iio/types.h          |   3 +
- tools/iio/iio_event_monitor.c           |   8 +-
- 7 files changed, 434 insertions(+), 12 deletions(-)
-
+diff --git a/Documentation/ABI/testing/sysfs-bus-iio b/Documentation/ABI/testing/sysfs-bus-iio
+index e81ba6f5e1c8..4035173030b7 100644
+--- a/Documentation/ABI/testing/sysfs-bus-iio
++++ b/Documentation/ABI/testing/sysfs-bus-iio
+@@ -2038,3 +2038,72 @@ Description:
+ 		Available range for the forced calibration value, expressed as:
+ 
+ 		- a range specified as "[min step max]"
++
++What:		/sys/.../events/in_accel_gesture_singletap_en
++What:		/sys/.../events/in_accel_gesture_doubletap_en
++KernelVersion:	6.1
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Device generates an event on a single or double tap.
++
++What:		/sys/.../events/in_accel_gesture_singletap_value
++What:		/sys/.../events/in_accel_gesture_doubletap_value
++KernelVersion:	6.1
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Specifies the threshold value that the device is comparing
++		against to generate the tap gesture event. The lower
++		threshold value increases the sensitivity of tap detection.
++		Units and the exact meaning of value are device-specific.
++
++What:		/sys/.../events/in_accel_gesture_tap_value_available
++KernelVersion:	6.1
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Lists all available threshold values which can be used to
++		modify the sensitivity of the tap detection.
++
++What:		/sys/.../events/in_accel_gesture_singletap_reset_timeout
++What:		/sys/.../events/in_accel_gesture_doubletap_reset_timeout
++KernelVersion:	6.1
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Specifies the timeout value in seconds for the tap detector
++		to not to look for another tap event after the event as
++		occurred. Basically the minimum quiet time between the two
++		single-tap's or two double-tap's.
++
++What:		/sys/.../events/in_accel_gesture_tap_reset_timeout_available
++KernelVersion:	6.1
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Lists all available tap reset timeout values. Units in seconds.
++
++What:		/sys/.../events/in_accel_gesture_doubletap_tap2_min_delay
++KernelVersion:	6.1
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Specifies the minimum quiet time in seconds between the two
++		taps of a double tap.
++
++What:		/sys/.../events/in_accel_gesture_doubletap_tap2_min_delay_available
++KernelVersion:	6.1
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Lists all available delay values between two taps in the double
++		tap. Units in seconds.
++
++What:		/sys/.../events/in_accel_gesture_tap_maxtomin_time
++KernelVersion:	6.1
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Specifies the maximum time difference allowed between upper
++		and lower peak of tap to consider it as the valid tap event.
++		Units in seconds.
++
++What:		/sys/.../events/in_accel_gesture_tap_maxtomin_time_available
++KernelVersion:	6.1
++Contact:	linux-iio@vger.kernel.org
++Description:
++		Lists all available time values between upper peak to lower
++		peak. Units in seconds.
+diff --git a/drivers/iio/industrialio-event.c b/drivers/iio/industrialio-event.c
+index b5e059e15b0a..65ef0fc3be23 100644
+--- a/drivers/iio/industrialio-event.c
++++ b/drivers/iio/industrialio-event.c
+@@ -231,12 +231,15 @@ static const char * const iio_ev_type_text[] = {
+ 	[IIO_EV_TYPE_MAG_ADAPTIVE] = "mag_adaptive",
+ 	[IIO_EV_TYPE_CHANGE] = "change",
+ 	[IIO_EV_TYPE_MAG_REFERENCED] = "mag_referenced",
++	[IIO_EV_TYPE_GESTURE] = "gesture",
+ };
+ 
+ static const char * const iio_ev_dir_text[] = {
+ 	[IIO_EV_DIR_EITHER] = "either",
+ 	[IIO_EV_DIR_RISING] = "rising",
+-	[IIO_EV_DIR_FALLING] = "falling"
++	[IIO_EV_DIR_FALLING] = "falling",
++	[IIO_EV_DIR_SINGLETAP] = "singletap",
++	[IIO_EV_DIR_DOUBLETAP] = "doubletap",
+ };
+ 
+ static const char * const iio_ev_info_text[] = {
+@@ -247,6 +250,8 @@ static const char * const iio_ev_info_text[] = {
+ 	[IIO_EV_INFO_HIGH_PASS_FILTER_3DB] = "high_pass_filter_3db",
+ 	[IIO_EV_INFO_LOW_PASS_FILTER_3DB] = "low_pass_filter_3db",
+ 	[IIO_EV_INFO_TIMEOUT] = "timeout",
++	[IIO_EV_INFO_RESET_TIMEOUT] = "reset_timeout",
++	[IIO_EV_INFO_TAP2_MIN_DELAY] = "tap2_min_delay",
+ };
+ 
+ static enum iio_event_direction iio_ev_attr_dir(struct iio_dev_attr *attr)
+diff --git a/include/linux/iio/types.h b/include/linux/iio/types.h
+index a7aa91f3a8dc..4716a4b3d614 100644
+--- a/include/linux/iio/types.h
++++ b/include/linux/iio/types.h
+@@ -17,6 +17,8 @@ enum iio_event_info {
+ 	IIO_EV_INFO_HIGH_PASS_FILTER_3DB,
+ 	IIO_EV_INFO_LOW_PASS_FILTER_3DB,
+ 	IIO_EV_INFO_TIMEOUT,
++	IIO_EV_INFO_RESET_TIMEOUT,
++	IIO_EV_INFO_TAP2_MIN_DELAY,
+ };
+ 
+ #define IIO_VAL_INT 1
+diff --git a/include/uapi/linux/iio/types.h b/include/uapi/linux/iio/types.h
+index 472cead10d8d..913864221ac4 100644
+--- a/include/uapi/linux/iio/types.h
++++ b/include/uapi/linux/iio/types.h
+@@ -105,6 +105,7 @@ enum iio_event_type {
+ 	IIO_EV_TYPE_MAG_ADAPTIVE,
+ 	IIO_EV_TYPE_CHANGE,
+ 	IIO_EV_TYPE_MAG_REFERENCED,
++	IIO_EV_TYPE_GESTURE,
+ };
+ 
+ enum iio_event_direction {
+@@ -112,6 +113,8 @@ enum iio_event_direction {
+ 	IIO_EV_DIR_RISING,
+ 	IIO_EV_DIR_FALLING,
+ 	IIO_EV_DIR_NONE,
++	IIO_EV_DIR_SINGLETAP,
++	IIO_EV_DIR_DOUBLETAP,
+ };
+ 
+ #endif /* _UAPI_IIO_TYPES_H_ */
+diff --git a/tools/iio/iio_event_monitor.c b/tools/iio/iio_event_monitor.c
+index 2f4581658859..b3b3ea399f67 100644
+--- a/tools/iio/iio_event_monitor.c
++++ b/tools/iio/iio_event_monitor.c
+@@ -69,12 +69,15 @@ static const char * const iio_ev_type_text[] = {
+ 	[IIO_EV_TYPE_MAG_ADAPTIVE] = "mag_adaptive",
+ 	[IIO_EV_TYPE_CHANGE] = "change",
+ 	[IIO_EV_TYPE_MAG_REFERENCED] = "mag_referenced",
++	[IIO_EV_TYPE_GESTURE] = "gesture",
+ };
+ 
+ static const char * const iio_ev_dir_text[] = {
+ 	[IIO_EV_DIR_EITHER] = "either",
+ 	[IIO_EV_DIR_RISING] = "rising",
+-	[IIO_EV_DIR_FALLING] = "falling"
++	[IIO_EV_DIR_FALLING] = "falling",
++	[IIO_EV_DIR_SINGLETAP] = "singletap",
++	[IIO_EV_DIR_DOUBLETAP] = "doubletap",
+ };
+ 
+ static const char * const iio_modifier_names[] = {
+@@ -227,6 +230,7 @@ static bool event_is_known(struct iio_event_data *event)
+ 	case IIO_EV_TYPE_THRESH_ADAPTIVE:
+ 	case IIO_EV_TYPE_MAG_ADAPTIVE:
+ 	case IIO_EV_TYPE_CHANGE:
++	case IIO_EV_TYPE_GESTURE:
+ 		break;
+ 	default:
+ 		return false;
+@@ -236,6 +240,8 @@ static bool event_is_known(struct iio_event_data *event)
+ 	case IIO_EV_DIR_EITHER:
+ 	case IIO_EV_DIR_RISING:
+ 	case IIO_EV_DIR_FALLING:
++	case IIO_EV_DIR_SINGLETAP:
++	case IIO_EV_DIR_DOUBLETAP:
+ 	case IIO_EV_DIR_NONE:
+ 		break;
+ 	default:
 -- 
 2.17.1
 

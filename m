@@ -2,111 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40E4E5A7A6E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:44:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8875A7A74
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 11:44:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiHaJnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 05:43:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49288 "EHLO
+        id S230076AbiHaJoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 05:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbiHaJng (ORCPT
+        with ESMTP id S230014AbiHaJnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 05:43:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEF0D0753
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 02:43:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661939012;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1/RPC3U8/B6XhFjkMnHWjczBI3bfZVPLGSzFqMJ48tc=;
-        b=YXf20ScTzg5CDoxc6AVXlPpUn02q20zhT6fC2KVLQ+8GvmMxQpu0G4SGXmPHf+yPERjdqO
-        T7k6HHT5WTuG6LdQ8Rvho5no58nJzclhpSD8YoTw7lZ4OuhQ9rfzpsGdDkPkS/VPbnE7La
-        jk98eCa1dxm0tdPGgC0gM4a0RnoK//8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-626-Ql1lswLhOi2iFE_xz4Xl3Q-1; Wed, 31 Aug 2022 05:43:28 -0400
-X-MC-Unique: Ql1lswLhOi2iFE_xz4Xl3Q-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Wed, 31 Aug 2022 05:43:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606A8CE4BC;
+        Wed, 31 Aug 2022 02:43:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4246C85A589;
-        Wed, 31 Aug 2022 09:43:28 +0000 (UTC)
-Received: from starship (unknown [10.40.194.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A1BB94010FA0;
-        Wed, 31 Aug 2022 09:43:26 +0000 (UTC)
-Message-ID: <b660f600ff5f6c107d899ced46c04de3b99c425f.camel@redhat.com>
-Subject: Re: [PATCH 06/19] KVM: SVM: Get x2APIC logical dest bitmap from
- ICRH[15:0], not ICHR[31:16]
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Wed, 31 Aug 2022 12:43:24 +0300
-In-Reply-To: <7a7827ec2652a8409fccfe070659497df229211b.camel@redhat.com>
-References: <20220831003506.4117148-1-seanjc@google.com>
-         <20220831003506.4117148-7-seanjc@google.com>
-         <7a7827ec2652a8409fccfe070659497df229211b.camel@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CD2992226F;
+        Wed, 31 Aug 2022 09:43:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1661939029; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wf21pEEc2qn4pGtb/SmWthvBwjNCurQ6Mq3fuLKCgXM=;
+        b=ZCv8hkQMv8VLUCjw+uWsF2LGUYsHrCxsVqq3OQGJcExeJM0/HRGBDw8+/sxrpshYy2Oa6v
+        2swiTLpvpZjw3UzuYHRoCD3p8cxabr9zKD9K0aRKKqOX8D3uLDV5eAFnU9JbpejhZ7Ws3a
+        iDt5IueX4Sm74kxBss2tlSq3x1auDNg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1661939029;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Wf21pEEc2qn4pGtb/SmWthvBwjNCurQ6Mq3fuLKCgXM=;
+        b=dbelnQ/VdnnD4iu+J0ymYt3LS1MSca1P78Kt0qZxPB51wzUaPAjopEjwqz/m9HSF/ZLIPg
+        JDWp+J0k//jhQACg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B6DDE1332D;
+        Wed, 31 Aug 2022 09:43:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id FXOYLFUtD2PMTAAAMHmgww
+        (envelope-from <jack@suse.cz>); Wed, 31 Aug 2022 09:43:49 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 2F5D0A067B; Wed, 31 Aug 2022 11:43:49 +0200 (CEST)
+Date:   Wed, 31 Aug 2022 11:43:49 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Jan Kara <jack@suse.cz>, Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/6] NFS: direct-io: convert to FOLL_PIN pages
+Message-ID: <20220831094349.boln4jjajkdtykx3@quack3>
+References: <20220827083607.2345453-1-jhubbard@nvidia.com>
+ <20220827083607.2345453-6-jhubbard@nvidia.com>
+ <YwqfWoAE2Awp4YvT@ZenIV>
+ <353f18ac-0792-2cb7-6675-868d0bd41d3d@nvidia.com>
+ <Ywq5ILRNxsbWvFQe@ZenIV>
+ <Ywq5VrSrY341UVpL@ZenIV>
+ <217b4a17-1355-06c5-291e-7980c0d3cea6@nvidia.com>
+ <20220829160808.rwkkiuelipr3huxk@quack3>
+ <a53b2d14-687a-16c9-2f63-4f94876f8b3c@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a53b2d14-687a-16c9-2f63-4f94876f8b3c@nvidia.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-31 at 09:09 +0300, Maxim Levitsky wrote:
-> On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
-> > When attempting a fast kick for x2AVIC, get the destination bitmap from
-> > ICR[15:0], not ICHR[31:16].  The upper 16 bits contain the cluster, the
-> > lower 16 bits hold the bitmap.
+On Mon 29-08-22 12:59:26, John Hubbard wrote:
+> On 8/29/22 09:08, Jan Kara wrote:
+> >> However, the core block/bio conversion in patch 4 still does depend upon
+> >> a key assumption, which I got from a 2019 email discussion with
+> >> Christoph Hellwig and others here [1], which says:
+> >>
+> >>     "All pages released by bio_release_pages should come from
+> >>      get_get_user_pages...".
+> >>
+> >> I really hope that still holds true. Otherwise this whole thing is in
+> >> trouble.
+> >>
+> >> [1] https://lore.kernel.org/kvm/20190724053053.GA18330@infradead.org/
 > > 
-> > Fixes: 603ccef42ce9 ("KVM: x86: SVM: fix avic_kick_target_vcpus_fast")
-> > Cc: Maxim Levitsky <mlevitsk@redhat.com>
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >  arch/x86/kvm/svm/avic.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> > index 3ace0f2f52f0..3c333cd2e752 100644
-> > --- a/arch/x86/kvm/svm/avic.c
-> > +++ b/arch/x86/kvm/svm/avic.c
-> > @@ -368,7 +368,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
-> >  
-> >  		if (apic_x2apic_mode(source)) {
-> >  			/* 16 bit dest mask, 16 bit cluster id */
-> > -			bitmap = dest & 0xFFFF0000;
-> > +			bitmap = dest & 0xFFFF;
-> >  			cluster = (dest >> 16) << 4;
-> >  		} else if (kvm_lapic_get_reg(source, APIC_DFR) == APIC_DFR_FLAT) {
-> >  			/* 8 bit dest mask*/
+> > Well as far as I've checked that discussion, Christoph was aware of pipe
+> > pages etc. (i.e., bvecs) entering direct IO code. But he had some patches
+> > [2] which enabled GUP to work for bvecs as well (using the kernel mapping
+> > under the hood AFAICT from a quick glance at the series). I suppose we
+> > could also handle this in __iov_iter_get_pages_alloc() by grabbing pin
+> > reference instead of plain get_page() for the case of bvec iter. That way
+> > we should have only pinned pages in bio_release_pages() even for the bvec
+> > case.
 > 
-> I swear I have seen a patch from Suravee Suthikulpanit fixing this my mistake, I don't know why it was not
-> accepted upstream.
+> OK, thanks, that looks viable. So, that approach assumes that the
+> remaining two cases in __iov_iter_get_pages_alloc() will never end up
+> being released via bio_release_pages():
+> 
+>     iov_iter_is_pipe(i)
+>     iov_iter_is_xarray(i)
+> 
+> I'm actually a little worried about ITER_XARRAY, which is a recent addition.
+> It seems to be used in ways that are similar to ITER_BVEC, and cephfs is
+> using it. It's probably OK for now, for this series, which doesn't yet
+> convert cephfs.
 
-This is the patch, which I guess got forgotten.
+So after looking into that a bit more, I think a clean approach would be to
+provide iov_iter_pin_pages2() and iov_iter_pages_alloc2(), under the hood
+in __iov_iter_get_pages_alloc() make sure we use pin_user_page() instead of
+get_page() in all the cases (using this in pipe_get_pages() and
+iter_xarray_get_pages() is easy) and then make all bio handling use the
+pinning variants for iters. I think at least iov_iter_is_pipe() case needs
+to be handled as well because as I wrote above, pipe pages can enter direct
+IO code e.g. for splice(2).
 
-https://www.spinics.net/lists/kernel/msg4417427.html
+Also I think that all iov_iter_get_pages2() (or the _alloc2 variant) users
+actually do want the "pin page" semantics in the end (they are accessing
+page contents) so eventually we should convert them all to
+iov_iter_pin_pages2() and remove iov_iter_get_pages2() altogether. But this
+will take some more conversion work with networking etc. so I'd start with
+converting bios only.
 
-Since it is literaly the same patch, you can just add credit to Suravee Suthikulpanit.
-
-So with the credit added:
-
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-
-Best regards,
-	Maxim Levitsky
-
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

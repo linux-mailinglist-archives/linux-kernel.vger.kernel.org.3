@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87D35A85AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A8775A85B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232014AbiHaSce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44120 "EHLO
+        id S230480AbiHaSeH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:34:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232816AbiHaScP (ORCPT
+        with ESMTP id S231784AbiHaSd3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:32:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6909E11B3CA;
-        Wed, 31 Aug 2022 11:27:44 -0700 (PDT)
+        Wed, 31 Aug 2022 14:33:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9747F10401C;
+        Wed, 31 Aug 2022 11:28:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFA5DB82276;
-        Wed, 31 Aug 2022 18:27:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96713C433C1;
-        Wed, 31 Aug 2022 18:27:23 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED65D61CD4;
+        Wed, 31 Aug 2022 18:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0491AC433D7;
+        Wed, 31 Aug 2022 18:28:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661970443;
-        bh=oEHypOLBHy6WPhJaawTtdgVBGVSPkKMoNZ/Oavk7OLs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=IT+XEBuox1oVQ9wF5uoF1KW3YETq3IrGjd6OjgqiKtwdgK+yhkIaYsm3p0Wuh0k6Q
-         65IR3kFEVnM/phw4px+XbMr/5gEuBp2AdSJMmqFU/mJ/26UMRuT50cKZoWL7t9VEvt
-         kgIiyxeY8uIbSFNMlAFSlv/ZTpOi9HxbomS6kVdDDpg3qagfV0glTFZcDMCb4s0CGV
-         tCV3dvbRXEG7CnwHb+Ux0EKhGZObFgrdb71oEo3AJGna1NDZybAY+7AXmpIDkNXaMu
-         n7oJ3vwiI3ssCclreEa8WfbZ09aqc4SJACYRmIobP9770Jv0UgXH1mtELVLkDn50cI
-         y8NdqKyZJ1Opg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 402D35C015D; Wed, 31 Aug 2022 11:27:23 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 11:27:23 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Alan Stern <stern@rowland.harvard.edu>
-Cc:     Paul =?iso-8859-1?Q?Heidekr=FCger?= <Paul.Heidekrueger@in.tum.de>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Andrea Parri <parri.andrea@gmail.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        David Howells <dhowells@redhat.com>,
-        Jade Alglave <j.alglave@ucl.ac.uk>,
-        Luc Maranget <luc.maranget@inria.fr>,
-        Akira Yokosawa <akiyks@gmail.com>,
-        Daniel Lustig <dlustig@nvidia.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Marco Elver <elver@google.com>,
-        Charalampos Mainas <charalampos.mainas@gmail.com>,
-        Pramod Bhatotia <pramod.bhatotia@in.tum.de>,
-        Soham Chakraborty <s.s.chakraborty@tudelft.nl>,
-        Martin Fink <martin.fink@in.tum.de>
-Subject: Re: [PATCH] tools/memory-model: Weaken ctrl dependency definition in
- explanation.txt
-Message-ID: <20220831182723.GM6159@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220830204446.3590197-1-paul.heidekrueger@in.tum.de>
- <663d568d-a343-d44b-d33d-29998bff8f70@joelfernandes.org>
- <98f2b194-1fe6-3cd8-36cf-da017c35198f@joelfernandes.org>
- <Yw7AEx1w6oWn86cm@rowland.harvard.edu>
- <935D3930-C369-4B0E-ACDC-5BFDFA85AA72@in.tum.de>
- <Yw+cm+awhfi6IUHr@rowland.harvard.edu>
+        s=k20201202; t=1661970507;
+        bh=+ENo/svJBBC8Oy4/G43ZPL5LzEhYc0IYqehWhykl2uQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rAoVdWs61ULAlNVAt01rj/N33V4akfFULiD7EYlyIwssgT2ZKXJDGWU2EAkD8zhMH
+         1VflqdgaiooFjmthhZ/iRz0umOa+4Vnj1YsL8KOuTcC6acXmka4to+u7XSAjBx0QVB
+         UpYqVZqOmXazQw+TnhE82NS/E0UxEBtHinl144vltTzkNgQNpv1hTLUs+ZLrjO4VLw
+         f5n0qP6EtZik5PxRxhmSkYj79/t2iFWcojSxPrEfl4CAeYneblrt3NZrKQp2WNg8WU
+         E1y+EivfKecc1G7jjN9tl2GSQ0fkmRONTJnXzekju8OzR5B7M8jGmaFjMkeZd/Bgbx
+         HLu0dAuA6Nc/w==
+Date:   Wed, 31 Aug 2022 21:28:23 +0300
+From:   "jarkko@kernel.org" <jarkko@kernel.org>
+To:     Haitao Huang <haitao.huang@linux.intel.com>
+Cc:     "Huang, Kai" <kai.huang@intel.com>,
+        "pmenzel@molgen.mpg.de" <pmenzel@molgen.mpg.de>,
+        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "Dhanraj, Vijay" <vijay.dhanraj@intel.com>,
+        "Chatre, Reinette" <reinette.chatre@intel.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "bp@alien8.de" <bp@alien8.de>, "hpa@zytor.com" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/6] x86/sgx: Do not consider unsanitized pages an error
+Message-ID: <Yw+oR3FKlwbeOl6I@kernel.org>
+References: <20220830031206.13449-2-jarkko@kernel.org>
+ <1f43e7b9-c101-3872-bd1b-add66933b285@intel.com>
+ <1b3308a364317d36ad41961ea9cfee24aa122f02.camel@intel.com>
+ <Yw7EX5GCrEaLzpHV@kernel.org>
+ <d07577c3f0b4b3fff0ce470c56f91fb634653703.camel@intel.com>
+ <Yw7LJa7eRG+WZ0wv@kernel.org>
+ <c3c085d69311ed759bff5bb325a2c182d423f91f.camel@intel.com>
+ <Yw7OEh7QP8tb7BR1@kernel.org>
+ <a91f65ad5c392b6e34f07bc6d3f35c89a76a98db.camel@intel.com>
+ <op.1rrt4aecwjvjmi@hhuan26-mobl1.mshome.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Yw+cm+awhfi6IUHr@rowland.harvard.edu>
+In-Reply-To: <op.1rrt4aecwjvjmi@hhuan26-mobl1.mshome.net>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -81,155 +72,100 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 01:38:35PM -0400, Alan Stern wrote:
-> On Wed, Aug 31, 2022 at 06:42:05PM +0200, Paul Heidekrüger wrote:
-> > On 31. Aug 2022, at 03:57, Alan Stern <stern@rowland.harvard.edu> wrote:
-> > 
-> > > On Tue, Aug 30, 2022 at 05:12:33PM -0400, Joel Fernandes wrote:
-> > >> On 8/30/2022 5:08 PM, Joel Fernandes wrote:
-> > >>> On 8/30/2022 4:44 PM, Paul Heidekrüger wrote:
-> > >>>> The current informal control dependency definition in explanation.txt is
-> > >>>> too broad and, as dicsussed, needs to be updated.
-> > >>>> 
-> > >>>> Consider the following example:
-> > >>>> 
-> > >>>>> if(READ_ONCE(x))
-> > >>>>> 	return 42;
-> > >>>>> 
-> > >>>>> 	WRITE_ONCE(y, 42);
-> > >>>>> 
-> > >>>>> 	return 21;
-> > >>>> 
-> > >>>> The read event determines whether the write event will be executed "at
-> > >>>> all" - as per the current definition - but the formal LKMM does not
-> > >>>> recognize this as a control dependency.
-> > >>>> 
-> > >>>> Introduce a new defintion which includes the requirement for the second
-> > >>>> memory access event to syntactically lie within the arm of a non-loop
-> > >>>> conditional.
-> > >>>> 
-> > >>>> Link: https://lore.kernel.org/all/20220615114330.2573952-1-paul.heidekrueger@in.tum.de/
-> > >>>> Cc: Marco Elver <elver@google.com>
-> > >>>> Cc: Charalampos Mainas <charalampos.mainas@gmail.com>
-> > >>>> Cc: Pramod Bhatotia <pramod.bhatotia@in.tum.de>
-> > >>>> Cc: Soham Chakraborty <s.s.chakraborty@tudelft.nl>
-> > >>>> Cc: Martin Fink <martin.fink@in.tum.de>
-> > >>>> Signed-off-by: Paul Heidekrüger <paul.heidekrueger@in.tum.de>
-> > >>>> Co-developed-by: Alan Stern <stern@rowland.harvard.edu>
-> > >>>> ---
-> > >>>> 
-> > >>>> @Alan:
-> > >>>> 
-> > >>>> Since I got it wrong the last time, I'm adding you as a co-developer after my
-> > >>>> SOB. I'm sorry if this creates extra work on your side due to you having to
-> > >>>> resubmit the patch now with your SOB if I understand correctly, but since it's
-> > >>>> based on your wording from the other thread, I definitely wanted to give you
-> > >>>> credit.
-> > >>>> 
-> > >>>> tools/memory-model/Documentation/explanation.txt | 7 ++++---
-> > >>>> 1 file changed, 4 insertions(+), 3 deletions(-)
-> > >>>> 
-> > >>>> diff --git a/tools/memory-model/Documentation/explanation.txt b/tools/memory-model/Documentation/explanation.txt
-> > >>>> index ee819a402b69..0bca50cac5f4 100644
-> > >>>> --- a/tools/memory-model/Documentation/explanation.txt
-> > >>>> +++ b/tools/memory-model/Documentation/explanation.txt
-> > >>>> @@ -464,9 +464,10 @@ to address dependencies, since the address of a location accessed
-> > >>>> through a pointer will depend on the value read earlier from that
-> > >>>> pointer.
-> > >>>> 
-> > >>>> -Finally, a read event and another memory access event are linked by a
-> > >>>> -control dependency if the value obtained by the read affects whether
-> > >>>> -the second event is executed at all.  Simple example:
-> > >>>> +Finally, a read event X and another memory access event Y are linked by
-> > >>>> +a control dependency if Y syntactically lies within an arm of an if,
-> > >>>> +else or switch statement and the condition guarding Y is either data or
-> > >>>> +address-dependent on X.  Simple example:
-> > 
-> > Thank you both for commenting!
-> > 
-> > > "if, else or switch" should be just "if or switch".  In C there is no 
-> > > such thing as an "else" statement; an "else" clause is merely part of 
-> > > an "if" statement.  In fact, maybe "body" would be more appropriate than 
-> > > "arm", because "switch" statements don't have arms -- they have cases.
-> > 
-> > Right. What do you think of "branch"? "Body" to me suggests that there's
-> > only one and therefore that the else clause isn't included.
-> > 
-> > Would it be fair to say that switch statements have branches? I guess
-> > because switch statements are a convenient way of writing goto's, i.e.
-> > jumps, it's a stretch and basically the same as saying "arm"?
-> > 
-> > Maybe we can avoid the arm / case clash by just having a definition for if
-> > statements and appending something like "similarly for switch statements"?
+On Wed, Aug 31, 2022 at 10:18:00AM -0500, Haitao Huang wrote:
+> Hi Kai
+> On Tue, 30 Aug 2022 22:17:08 -0500, Huang, Kai <kai.huang@intel.com> wrote:
 > 
-> That sounds good.
+> > On Wed, 2022-08-31 at 05:57 +0300, jarkko@kernel.org wrote:
+> > > On Wed, Aug 31, 2022 at 02:55:52AM +0000, Huang, Kai wrote:
+> > > > On Wed, 2022-08-31 at 05:44 +0300, jarkko@kernel.org wrote:
+> > > > > On Wed, Aug 31, 2022 at 02:35:53AM +0000, Huang, Kai wrote:
+> > > > > > On Wed, 2022-08-31 at 05:15 +0300, jarkko@kernel.org wrote:
+> > > > > > > On Wed, Aug 31, 2022 at 01:27:58AM +0000, Huang, Kai wrote:
+> > > > > > > > On Tue, 2022-08-30 at 15:54 -0700, Reinette Chatre wrote:
+> > > > > > > > > Hi Jarkko,
+> > > > > > > > >
+> > > > > > > > > On 8/29/2022 8:12 PM, Jarkko Sakkinen wrote:
+> > > > > > > > > > In sgx_init(), if misc_register() for the provision
+> > > device fails, and
+> > > > > > > > > > neither sgx_drv_init() nor sgx_vepc_init() succeeds,
+> > > then ksgxd will be
+> > > > > > > > > > prematurely stopped.
+> > > > > > > > >
+> > > > > > > > > I do not think misc_register() is required to fail for
+> > > the scenario to
+> > > > > > > > > be triggered (rather use "or" than "and"?). Perhaps just
+> > > > > > > > > "In sgx_init(), if a failure is encountered after ksgxd
+> > > is started
+> > > > > > > > > (via sgx_page_reclaimer_init()) ...".
+> > > > > > > >
+> > > > > > > > IMHO "a failure" might be too vague.  For instance,
+> > > failure to sgx_drv_init()
+> > > > > > > > won't immediately result in ksgxd to stop prematurally.
+> > > As long as KVM SGX can
+> > > > > > > > be initialized successfully, sgx_init() still returns 0.
+> > > > > > > >
+> > > > > > > > Btw I was thinking whether we should move
+> > > sgx_page_reclaimer_init() to the end
+> > > > > > > > of sgx_init(), after we make sure at least one of the
+> > > driver and the KVM SGX is
+> > > > > > > > initialized successfully.  Then the code change in this
+> > > patch won't be necessary
+> > > > > > > > if I understand correctly.  AFAICT there's no good reason
+> > > to start the ksgxd at
+> > > > > > > > early stage before we are sure either the driver or KVM
+> > > SGX will work.
+> > > > > > >
+> > > > > > > I would focus fixing the existing flow rather than
+> > > reinventing the flow.
+> > > > > > >
+> > > > > > > It can be made to work, and therefore it is IMHO correct
+> > > action to take.
+> > > > > >
+> > > > > > From another perspective, the *existing flow* is the reason
+> > > which causes this
+> > > > > > bug.  A real fix is to fix the flow itself.
+> > > > >
+> > > > > Any existing flow in part of the kernel can have a bug. That
+> > > > > does not mean that switching flow would be proper way to fix
+> > > > > a bug.
+> > > > >
+> > > > > BR, Jarkko
+> > > >
+> > > > Yes but I think this is only true when the flow is reasonable.  If
+> > > the flow
+> > > > itself isn't reasonable, we should fix the flow (given it's easy
+> > > to fix AFAICT).
+> > > >
+> > > > Anyway, let us also hear from others.
+> > > 
+> > > The flow can be made to work without issues, which in the
+> > > context of a bug fix is exactly what a bug fix should do.
+> > > Not more or less.
+> > 
+> > No. To me the flow itself is buggy.  There's no reason to start ksgxd()
+> > before
+> > at least SGX driver is initialized to work.
+> > 
 > 
-> > >>> 'conditioning guarding Y' sounds confusing to me as it implies to me that the
-> > >>> condition's evaluation depends on Y. I much prefer Alan's wording from the
-> > >>> linked post saying something like 'the branch condition is data or address
-> > >>> dependent on X, and Y lies in one of the arms'.
-> > >>> 
-> > >>> I have to ask though, why doesn't this imply that the second instruction never
-> > >>> executes at all? I believe that would break the MP-pattern if it were not true.
-> > >> 
-> > >> About my last statement, I believe your patch does not disagree with the
-> > >> correctness of the earlier text but just wants to improve it. If that's case
-> > >> then that's fine.
-> > > 
-> > > The biggest difference between the original text and Paul's suggested 
-> > > update is that the new text makes clear that Y has to lie within the 
-> > > body of the "if" or "switch" statement.  If Y follows the end of the 
-> > > if/else, as in the example at the top of this email, then it does have 
-> > > not a control dependency on X (at least, not via that if/else), even 
-> > > though the value read by X does determine whether or not Y will execute.
-> > > 
-> > > [It has to be said that this illustrates a big weakness of the LKMM: It 
-> > > isn't cognizant of "goto"s or "return"s.  This naturally derives from 
-> > > limitations of the herd tool, but the situation could be improved.  So 
-> > > for instance, I don't think it would cause trouble to say that in:
-> > > 
-> > > 	if (READ_ONCE(x) == 0)
-> > > 		return;
-> > > 	WRITE_ONCE(y, 5);
-> > > 
-> > > there really is a control dependence from x to y, even though the 
-> > > WRITE_ONCE is outside the body of the "if" statement.  Certainly the 
-> > > compiler can't reorder the write before the read.  But AFAIK there's no 
-> > > way to include a "return" statement in a litmus test for herd.  Or a 
-> > > subroutine definition, for that matter.]
-> > > 
-> > > I agree that "condition guarding Y" is somewhat awkward.  "the 
-> > > condition of the if (or the expression of the switch)" might be better, 
-> > > even though it is somewhat awkward as well.  At least it's more 
-> > > explicit.
-> > 
-> > Maybe we can reuse the wording from the data and address dependency
-> > definition here and say "affects"?
-> > 
-> > Putting it all together:
-> > 
-> > > Finally, a read event X and another memory access event Y are linked by a
-> > > control dependency if Y syntactically lies within a branch of an if or
-> > > switch statement and X affects the evaluation of that statement's
-> > > condition via a data or address dependency.
-> > 
-> > Alternatively without the arm / case clash:
-> > 
-> > > Finally, a read event X and another memory access event Y are linked by a
-> > > control dependency if Y syntactically lies within an arm of an if
-> > > statement and X affects the evaluation of the if condition via a data or
-> > > address dependency.  Similarly for switch statements.
-> > 
-> > What do you think?
-> 
-> I like the second one.  How about combining the last two sentences?  
-> 
-> 	... via a data or address dependency (or similarly for a switch 
-> 	statement).
-> 
-> Now I suppose someone will pipe up and ask about the conditional 
-> expressions in "for", "while" and "do" statements...  :-)
+> Will it cause racing if we expose dev nodes to user space before
+> ksgxd is started and sensitization done?
 
-What?  You don't like setjmp() and longjmp()?  ;-)
+I'll to explain this.
 
-							Thanx, Paul
+So the point is to fix the issue at hand, and fix it locally.
+
+Changing initialization order is simply out of context. It's
+not really an argument for or against changing it
+
+We are fixing sanitization here, and only that with zero
+side-effects to any other semantics.
+
+It's dictated by the development process [*] but more
+importantly it's also just plain common sense.
+
+[*] https://www.kernel.org/doc/html/v5.19/process/submitting-patches.html#separate-your-changes
+
+BR, Jarkko
+
+

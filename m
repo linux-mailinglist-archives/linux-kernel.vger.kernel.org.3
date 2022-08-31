@@ -2,167 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74A75A87E3
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A9895A87E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:05:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbiHaVFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49928 "EHLO
+        id S232244AbiHaVFi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231329AbiHaVFA (ORCPT
+        with ESMTP id S231875AbiHaVFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:05:00 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99356F72D4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:04:43 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 89B055FD05;
-        Thu,  1 Sep 2022 00:04:40 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1661979880;
-        bh=HhElJvUhitJ5nxGObCO2CCVplpp0m7vWmHMrypvXYVo=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=eUGEVMDm3cm1G+rwNMmJS7QVYT3EMMAZsc8lX5UsXEO+dnIyD9RZ/xAUZVzarjCnI
-         AJ4G3Mj3sb8wi5g0ZusonbDdM7amDOynMwlsGbYi+5AV+MKc44fce+YtoyMHEFt69T
-         Rv3FOTzrz8jLhJlfnWvG1sTbGVCbHOsIa1MFL1oJe4kOwA5zxMsCo0KF9NqrrCN3yM
-         zbgoz+zUCde2wfw+I6i7FnpzRR//C4A7lC5Uv938XGr5PdbbM7+HTLt9UOReQPN0SB
-         7a42sPlsijDbQEhyTTI2FiVMwPUUmmgpz12BRalHqKhbQWI6rkI565siArD0ffeksB
-         nd0+Mt98VqstQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu,  1 Sep 2022 00:04:35 +0300 (MSK)
-Date:   Thu, 1 Sep 2022 00:04:35 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        kernel test robot <lkp@intel.com>, <llvm@lists.linux.dev>,
-        <kbuild-all@lists.01.org>, <kernel@sberdevices.ru>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [jic23-iio:testing 124/129] drivers/iio/accel/msa311.c:993:24:
- warning: format specifies type 'unsigned char' but the argument has type
- 'unsigned int'
-Message-ID: <20220831210435.uon3bder7ooeulfd@Rockosov-MBP>
-References: <202208290618.wU7mHfOp-lkp@intel.com>
- <20220830110329.00000d18@huawei.com>
- <CAHp75VfA=w+Q2ccdTiQXeWRw0wSjbkUf6J3+tp-kE50mxdkTNg@mail.gmail.com>
- <20220831002405.m3j5sug2rz7bdz5s@Rockosov-MBP>
- <20220831093810.00006112@huawei.com>
+        Wed, 31 Aug 2022 17:05:17 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44034481DD;
+        Wed, 31 Aug 2022 14:05:16 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id w4so11803645qvs.4;
+        Wed, 31 Aug 2022 14:05:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=+lTGIa6eGb9hONAiLy7EzL9iAjtgjfpY29k3SCr3Lw8=;
+        b=iM7AcVcIWutz/Qg74Dp3o1RiGNUjn02FcrCIKgMYx5rUSnEQed0U2SYpcb/iFIPWVu
+         sceCKEHtFe9RPX+zQoJx4d5vFSG4jY7rPDMMnvafq9d+UVFbBCnPcNyZOj+cKoJLhoIL
+         XJMx7+lZ1Dsc/vXv1k/k4wBG6nVwmI9Iz5ADAfywHUEtZydGLOQqXu8Ua17qvmTPa9sJ
+         OOL9icmWoiKVAkA7WTFttpJkg2sNx4c4oL+nR6EoPyxsT1l2+fC3olx+qGnVZDX4qhNv
+         OLKYxmRcLwD4NwzjcGnNvmeBNVNrDn6XtGU4Z+nRcVGzZcLCVeWTtM9d7BlcNF8jVHC9
+         kHTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=+lTGIa6eGb9hONAiLy7EzL9iAjtgjfpY29k3SCr3Lw8=;
+        b=WrcTPJCcykSO0ciyhFOTJ2PBx0YbiM7FIruG2sOW2steZux6UGJR5OPtz1syXbOHvr
+         PZBeNurtSmuzbJUL+jqe75cLZmho6eKM1VdaOMQu/MQRKq/cwhhIdxdk3aikQuKaUF/d
+         vIS2I9ORGr3p8a8xTqxPg/ffjU1rmK4iYPRSxLSCseqis5uyq/ve0Qf9xf1zDQkWSLkB
+         887uwQESG5vPiiSZEUgc2XLoaLs4A3xo+tVPdTRE0/37kO+6uwzonwIRtzHrtcYwTvhf
+         4Ab4RsTAREy3j4/PtTWrgfqM62dzLT9GEzLnxscFDQV66PjR5mznVYaMBBdpBSvaDEo7
+         ddDw==
+X-Gm-Message-State: ACgBeo3hNwRy4R6SZgbF6d0qm/hj7RnpM+nfr797yA9G03fzC5h77z5J
+        wWPFUJkMaICJl8+eJRP1AriLAnIEzG7UhiAWdtw=
+X-Google-Smtp-Source: AA6agR5qQAhLTgxav6dOwBNu1281hzGRPk4FTa0c/tyqw82+8CL4iE6OOOtudGsgpC8BavrAUE9pJg/tv0RT/T5WCjs=
+X-Received: by 2002:a05:6214:2022:b0:497:2c03:61 with SMTP id
+ 2-20020a056214202200b004972c030061mr21792656qvf.11.1661979915969; Wed, 31 Aug
+ 2022 14:05:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220831093810.00006112@huawei.com>
-User-Agent: NeoMutt/20220429
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/31 14:19:00 #20193471
-X-KSMG-AntiVirus-Status: Clean, skipped
+References: <20220815120834.1562544-1-lewis.hanly@microchip.com>
+ <20220815120834.1562544-2-lewis.hanly@microchip.com> <CACRpkdbk_ZqYnDzXgmbnAxhs+mEe9f2X-y++9HDS-O=UO_tUmg@mail.gmail.com>
+In-Reply-To: <CACRpkdbk_ZqYnDzXgmbnAxhs+mEe9f2X-y++9HDS-O=UO_tUmg@mail.gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 1 Sep 2022 00:04:40 +0300
+Message-ID: <CAHp75Vc4cMGBdJpOsRMDLWU+6+eYwbsF3-Mz40-KazLGhwkHMA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/1] gpio: mpfs: add polarfire soc gpio support
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     lewis.hanly@microchip.com,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Marc Zyngier <maz@kernel.org>, conor.dooley@microchip.com,
+        daire.mcnamara@microchip.com
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 09:38:10AM +0100, Jonathan Cameron wrote:
-> On Wed, 31 Aug 2022 03:24:05 +0300
-> Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> 
-> > Hello Jonathan and Andy,
-> > 
-> > Sorry for such a late response, a couple of days ago my daughter was born.
-> > So I couldn't reach my laptop :)
-> 
-> Congratulations and good luck! :)
+On Mon, Aug 22, 2022 at 2:30 PM Linus Walleij <linus.walleij@linaro.org> wrote:
+> On Mon, Aug 15, 2022 at 2:08 PM <lewis.hanly@microchip.com> wrote:
 
-Thank you! :)
+...
 
-> > > > > >> drivers/iio/accel/msa311.c:993:24: warning: format specifies type 'unsigned char' but the argument has type 'unsigned int' [-Wformat]  
-> > > > >                                               "msa311-%hhx", partid);
-> > > > >                                                       ~~~~   ^~~~~~
-> > > > >                                                       %x
-> > > > >    1 warning generated.  
-> > >   
-> > > > >    992                msa311->chip_name = devm_kasprintf(dev, GFP_KERNEL,  
-> > > > >  > 993                                                   "msa311-%hhx", partid);  
-> > >   
-> > > > I'm thinking intent here was to limit range of what was printed. Maybe better to use
-> > > > local u8 variable or cast?
-> > > >
-> > > > I can fix it up if that's fine with you - or even better send me a patch that fixes
-> > > > it however you prefer!  
-> > > 
-> > > Looking back at what Linus said about those specifiers, I would rather
-> > > go with simple %x or %02x.
-> > > 
-> > > P.S. Surprisingly many C developers don't know the difference between
-> > > %hhx and %02x, which is easy to check by
-> > > 
-> > >   char a = -1;
-> > >   printf("%hhx <==> %02x\n", a, a);
-> > >   a = 217;
-> > >   printf("%hhx <==> %02x\n", a, a);  
-> > 
-> > Thank you for pointing to Linus answer. I have explored it at the link:
-> > 
-> > https://lore.kernel.org/lkml/CAHk-=wgoxnmsj8GEVFJSvTwdnWm8wVJthefNk2n6+4TC=20e0Q@mail.gmail.com/
-> > 
-> > Actually, Linus described one exception to this rule, which I have
-> > in my patch. I have an integer which I want to print as a char.
-> > I see that Linus mentions it's a bad idea. I agree with that. But
-> > currently %hhx => %02x replacement breaks the requested behavior, %02x
-> > will not shrink integer value to char. I want to say, maybe it's better
-> > just cast the value to u8 type and print as %x. What do you think? I can
-> > prepare such a patch.
-> > 
-> > P.S. Andy's example to show the difference between %hhx and %02x makes
-> > more clear why such a replacement is not acceptable here.
-> > 
-> > Output:
-> > ff <==> ffffffff
-> > d9 <==> ffffffd9
-> > 
-> In this case the storage is an unsigned int, not an unsigned char.
-> Hence the value will be small and positive.  So I'm fairly sure you
-> won't hit the above because it's
-> 
-> 0x000000ff --> ff
-> 0x000000d9 --> d9
-> 
-> The range is limited to 8 bits because that's all the underlying register
-> holds.
+> This looks like  textbook example of a driver that can use
+> CONFIG_GPIO_GENERIC
 
-From "data" format point of view you are right. We have regmap over I2C
-and register values will be limited to 8 bits only. But in general
-unsigned int value bigger than 0xff formatted by %02x will not be
-limited by two positions only. In other words, we can use a simple %x
-with the same success.
-I want to say if our goal is shrinking the unsigned int value to first
-byte in hex format w/o %hhx using, we need to cast unsigned int value to
-unsigned char and printout it using simple %x or %02x.
+> See e.g. drivers/gpio/gpio-ftgpio010.c for an example
+> of how to use bgpio_init() to set up the helper library to handle
+> the GPIO side of things and combine it with an irqchip.
+> You get get/set_multiple() for free with this approach.
+> Also see documentation for bgpio_init() in
+> drivers/gpio/gpio-mmio.c.
 
-For example, in my opinion, in the below code snippet, only first and
-third printout formatting are correct. Currently, we are using the
-second in the merged patchset.
-
->>>
-    unsigned int a = 0xDEADBEEF;
-    printf("%hhx <==> %02x (uint8_t:%02x)\n", a, a, (unsigned char)a);
-<<<
-Output:
-ef <==> deadbeef (uint8_t:ef)
-===
-
-Anyway, regmap over I2C abstraction limits our value to the 8-bit range,
-so functionally %02x is working well here.
+I would also suggest looking at gpio-regmap.c.
 
 -- 
-Thank you,
-Dmitry
+With Best Regards,
+Andy Shevchenko

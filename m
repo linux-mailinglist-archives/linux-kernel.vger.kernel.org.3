@@ -2,114 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF8245A743E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 05:04:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF175A7442
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 05:05:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiHaDEE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 23:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
+        id S231310AbiHaDF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 23:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232101AbiHaDDt (ORCPT
+        with ESMTP id S229637AbiHaDFV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 23:03:49 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64161B0B17;
-        Tue, 30 Aug 2022 20:03:46 -0700 (PDT)
-X-UUID: 1098c322613046dfa9cbe8e796440dd2-20220831
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=PEdXpcWRw+A+QutbjbtjgcTym0ecB1EdaaG/G32Mcxo=;
-        b=TH3sLwgr5c0CDrxgk3cXvX1HgaEUoB3T6eC5cq41TkDKvg+lmFvRodZ4JW/tkQdgUAvvZOuz2EqQrAY8UUgYd03LxUQPvVM6v21BIapLtpa7C42kmThRXzRNgYT3rBBkv79ttXF1sML0Zvhw66b6lNEyEQc1gQ/OL/YzoqVBo9I=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:e780a1e9-85dc-4e71-929a-e2363f31ca26,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:0
-X-CID-META: VersionHash:84eae18,CLOUDID:d95d20d0-20bd-4e5e-ace8-00692b7ab380,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 1098c322613046dfa9cbe8e796440dd2-20220831
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <kewei.xu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 774427402; Wed, 31 Aug 2022 11:03:41 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Wed, 31 Aug 2022 11:03:41 +0800
-Received: from mhfsdcap04 (10.17.3.154) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Wed, 31 Aug 2022 11:03:40 +0800
-Message-ID: <b77553ac2c9c934abcf3b5e5b5083ad695584c42.camel@mediatek.com>
-Subject: Re: [PATCH v2 1/1] dt-binding: serial: mediatek,uart: update
- bingding for MT8188
-From:   Kewei Xu <kewei.xu@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <srv_heupstream@mediatek.com>, <leilk.liu@mediatek.com>,
-        <qii.wang@mediatek.com>, <liguo.zhang@mediatek.com>,
-        <caiyu.chen@mediatek.com>, <david-yh.chiu@mediatek.com>
-Date:   Wed, 31 Aug 2022 11:03:37 +0800
-In-Reply-To: <f8a391de-dd47-1eb9-0e15-e6a651517a6f@gmail.com>
-References: <20220809084457.31381-1-kewei.xu@mediatek.com>
-         <f8a391de-dd47-1eb9-0e15-e6a651517a6f@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Tue, 30 Aug 2022 23:05:21 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAB32C66B;
+        Tue, 30 Aug 2022 20:05:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 08CFCCE1CF6;
+        Wed, 31 Aug 2022 03:05:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00040C433D6;
+        Wed, 31 Aug 2022 03:05:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661915114;
+        bh=dVup0T/Gm724oVjCg6gv0zTexmWsoNH4XnK67lgI7vE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=bQ30ftyUYj4WNesdVZUK9vAqMkE3skgwTYdXxXPOBfBzazE8a93xVE4JGmbGcPvEb
+         PB6qBqbBZaTTb21dHtzVekH9LPpziKxNQF9fLI9dQFsVqicqg3Hly3XL95+KA6dLp+
+         brMfAWgTDhPNB8aogrWkaTA/qO5fXLC5/7+qk8SuoVzSY9nUqYkywc5Cu+hkKNkI4v
+         NOV5W8zpZ47zcxAtHwfkyICuzMvzhGLdOpy9eR2RgH5hR8qsRYmYroiEUvX5P8Hyqc
+         Rl2XWH8wLl4ivgj/a3Z7tepiOmLG7lhvBr98cOs7BaxVL5B42V5xi9NkbXu9kmtH7M
+         Su6HC6623/5mQ==
+Date:   Tue, 30 Aug 2022 20:05:12 -0700
+From:   Jaegeuk Kim <jaegeuk@kernel.org>
+To:     Chao Yu <chao@kernel.org>
+Cc:     syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net
+Subject: Re: [f2fs-dev] [PATCH] f2fs: fix missing mapping caused by the
+ mount/umount race
+Message-ID: <Yw7P6BkNZmqxji3B@google.com>
+References: <20220829215206.3082124-1-jaegeuk@kernel.org>
+ <cbc4bfe5-14f9-a4e0-c9c5-6b6b06437d5d@kernel.org>
+ <Yw55Ebk8zLIgBFfn@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yw55Ebk8zLIgBFfn@google.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-24 at 15:59 +0200, Matthias Brugger wrote:
-> 
-> On 09/08/2022 10:44, kewei.xu@mediatek.com wrote:
-> > From: Kewei Xu <kewei.xu@mediatek.com>
+On 08/30, Jaegeuk Kim wrote:
+> On 08/30, Chao Yu wrote:
+> > On 2022/8/30 5:52, Jaegeuk Kim wrote:
+> > > Sometimes we can get a cached meta_inode which has no aops yet. Let's set it
+> > > all the time to fix the below panic.
+> > > 
+> > > Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+> > > Mem abort info:
+> > >    ESR = 0x0000000086000004
+> > >    EC = 0x21: IABT (current EL), IL = 32 bits
+> > >    SET = 0, FnV = 0
+> > >    EA = 0, S1PTW = 0
+> > >    FSC = 0x04: level 0 translation fault
+> > > user pgtable: 4k pages, 48-bit VAs, pgdp=0000000109ee4000
+> > > [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+> > > Internal error: Oops: 86000004 [#1] PREEMPT SMP
+> > > Modules linked in:
+> > > CPU: 1 PID: 3045 Comm: syz-executor330 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> > > pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> > > pc : 0x0
+> > > lr : folio_mark_dirty+0xbc/0x208 mm/page-writeback.c:2748
+> > > sp : ffff800012783970
+> > > x29: ffff800012783970 x28: 0000000000000000 x27: ffff800012783b08
+> > > x26: 0000000000000001 x25: 0000000000000400 x24: 0000000000000001
+> > > x23: ffff0000c736e000 x22: 0000000000000045 x21: 05ffc00000000015
+> > > x20: ffff0000ca7403b8 x19: fffffc00032ec600 x18: 0000000000000181
+> > > x17: ffff80000c04d6bc x16: ffff80000dbb8658 x15: 0000000000000000
+> > > x14: 0000000000000000 x13: 0000000000000000 x12: 0000000000000000
+> > > x11: ff808000083e9814 x10: 0000000000000000 x9 : ffff8000083e9814
+> > > x8 : 0000000000000000 x7 : 0000000000000000 x6 : 0000000000000000
+> > > x5 : ffff0000cbb19000 x4 : ffff0000cb3d2000 x3 : ffff0000cbb18f80
+> > > x2 : fffffffffffffff0 x1 : fffffc00032ec600 x0 : ffff0000ca7403b8
+> > > Call trace:
+> > >   0x0
+> > >   set_page_dirty+0x38/0xbc mm/folio-compat.c:62
+> > >   f2fs_update_meta_page+0x80/0xa8 fs/f2fs/segment.c:2369
+> > >   do_checkpoint+0x794/0xea8 fs/f2fs/checkpoint.c:1522
+> > >   f2fs_write_checkpoint+0x3b8/0x568 fs/f2fs/checkpoint.c:1679
+> > > 
+> > > Cc: stable@vger.kernel.org
+> > > Reported-by: syzbot+775a3440817f74fddb8c@syzkaller.appspotmail.com
+> > > Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
+> > > ---
+> > >   fs/f2fs/inode.c | 13 ++++++++-----
+> > >   1 file changed, 8 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
+> > > index 6d11c365d7b4..1feb0a8a699e 100644
+> > > --- a/fs/f2fs/inode.c
+> > > +++ b/fs/f2fs/inode.c
+> > > @@ -490,10 +490,7 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+> > >   	if (!inode)
+> > >   		return ERR_PTR(-ENOMEM);
+> > > -	if (!(inode->i_state & I_NEW)) {
+> > > -		trace_f2fs_iget(inode);
+> > > -		return inode;
+> > > -	}
+> > > +	/* We can see an old cached inode. Let's set the aops all the time. */
 > > 
-> > Add a DT binding documentation for the MT8188 soc.
-> > 
-> > Signed-off-by: Kewei Xu <kewei.xu@mediatek.com>
+> > Why an old cached inode (has no I_NEW flag) has NULL a_ops pointer? If it is a bad
+> > inode, it should be unhashed before unlock_new_inode().
 > 
-> Reviewed-by: Matthias Brugger <matthias.bgg@gmail.com>
+> I'm trying to dig further tho, it's not a bad inode, nor I_FREEING | I_CLEAR.
+> It's very werid that thie meta inode is found in newly created superblock by
+> the global hash table. I've checked that the same superblock pointer was used
+> in the previous tests, but inode was evictied all the time.
+
+I'll drop this patch, since it turned out there is a bug in reiserfs which
+doesn't free the root inode (ino=2). That leads f2fs to find an ino=2 with
+the previous superblock point used by reiserfs. That stale inode has no valid
+inode that f2fs can use. I tried to find where the root cause is in reiserfs,
+but it seems quite hard to catch one.
+
+- reiserfs_fill_super
+ - reiserfs_xattr_init
+  - create_privroot
+   - xattr_mkdir
+    - reiserfs_new_inode
+     - reiserfs_get_unused_objectid returned 0 due to map crash
+
+It seems the error path doesn't handle the root inode properly.
+
 > 
-> > ---
-> > v2: Resumbit the patch based on the linux-next branch.
-> > ---
-> >   Documentation/devicetree/bindings/serial/mediatek,uart.yaml | 1 +
-> >   1 file changed, 1 insertion(+)
 > > 
-> > diff --git
-> > a/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-> > b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-> > index 4ff27d6d4d5b..fe098d98af6e 100644
-> > --- a/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-> > +++ b/Documentation/devicetree/bindings/serial/mediatek,uart.yaml
-> > @@ -42,6 +42,7 @@ properties:
-> >                 - mediatek,mt8173-uart
-> >                 - mediatek,mt8183-uart
-> >                 - mediatek,mt8186-uart
-> > +              - mediatek,mt8188-uart
-> >                 - mediatek,mt8192-uart
-> >                 - mediatek,mt8195-uart
-> >                 - mediatek,mt8516-uart
-
-Hi gregkh,
-
-Just a gentle ping on this.
-Could you please give me some suggestion on this patch?
-
-Thank you very much~
-
-BRs,
-Kewei Xu
-
-
+> > Thanks,
+> > 
+> > >   	if (ino == F2FS_NODE_INO(sbi) || ino == F2FS_META_INO(sbi))
+> > >   		goto make_now;
+> > > @@ -502,6 +499,11 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+> > >   		goto make_now;
+> > >   #endif
+> > > +	if (!(inode->i_state & I_NEW)) {
+> > > +		trace_f2fs_iget(inode);
+> > > +		return inode;
+> > > +	}
+> > > +
+> > >   	ret = do_read_inode(inode);
+> > >   	if (ret)
+> > >   		goto bad_inode;
+> > > @@ -557,7 +559,8 @@ struct inode *f2fs_iget(struct super_block *sb, unsigned long ino)
+> > >   		file_dont_truncate(inode);
+> > >   	}
+> > > -	unlock_new_inode(inode);
+> > > +	if (inode->i_state & I_NEW)
+> > > +		unlock_new_inode(inode);
+> > >   	trace_f2fs_iget(inode);
+> > >   	return inode;
+> 
+> 
+> _______________________________________________
+> Linux-f2fs-devel mailing list
+> Linux-f2fs-devel@lists.sourceforge.net
+> https://lists.sourceforge.net/lists/listinfo/linux-f2fs-devel

@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72415A8509
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E375A8502
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:08:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232465AbiHaSIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42980 "EHLO
+        id S232302AbiHaSIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:08:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiHaSIM (ORCPT
+        with ESMTP id S232131AbiHaSIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:08:12 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75BE3E397F;
-        Wed, 31 Aug 2022 11:08:10 -0700 (PDT)
+        Wed, 31 Aug 2022 14:08:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40B06E1AA7;
+        Wed, 31 Aug 2022 11:08:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id BE28ACE1EA8;
-        Wed, 31 Aug 2022 18:08:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3734EC433C1;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D522161C14;
+        Wed, 31 Aug 2022 18:08:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41D48C433D7;
         Wed, 31 Aug 2022 18:08:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661969287;
-        bh=HYR3hoM0Ydmx6dDsk73iVgFWt9139ZE43iky0FI7k8o=;
+        bh=IINFzSXV050MZ7p39aFiCw3ksGDcAruZYr0+y+xvqvE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E4KXR+uCJLQzTIhgXky3CODmPEstNfZhZHCvQc5yWFxrM6zvl0RBWLUzxESa3wYZ2
-         YhFK0UWPGkcmjedf+yzkE2rV14QXLv5YzDRf6cM0h7jfHYNWctzOXXef8mtdFarbH0
-         kq9QtElnBHr04r4/z4SSfRdrt/qUm/n6ynQVpf4KIQsYErvoDuso7RBfCv1caMzO/f
-         KbzprbFI84uo9PpE2q9VPhVcF00bu2YCYYO4te+9nTsB3KTLSMzRhtVQoE3YK28Vpq
-         WW7VjJovstgQSgzFMp4iBNFNtk08qyxSki8jjHre15aMk8Z/OpTeeDmEdVHcjx4vV9
-         S3m3viBbKL7TQ==
+        b=nitWNXI+In3pEwI/3JSH9oJN/skv/4jMUZfznb0dIKMjmHkxKYHR0NYhuQ+sWQHmm
+         dm3GRPHd7xNUr3NUzGn1dgxFuZcZbrub5L5XCOvSafld81VyrIWWH0TjtqDMwr8Fzo
+         vKSF1F64wiz6kbXk+fX5kZlEm3Q4rCwOeX733xQd5Mx3rYufF6mpDQAoY86d39QUDZ
+         pUz88AwlWFBSyw4oJdmB2s7guG1pYH8pbd5y8nO0tD9DTMOVDxQQOzBYoWvPWsEzwM
+         d8vPu3GMorxk2sYeWSDX1cfaiMgRApkc+NF2I3trBJyWyKNqtujMzlawVUCfkIynq8
+         eLqnRSyz6x9XA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id EAC195C015D; Wed, 31 Aug 2022 11:08:06 -0700 (PDT)
+        id ECEAA5C019C; Wed, 31 Aug 2022 11:08:06 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
         rostedt@goodmis.org, Zqiang <qiang1.zhang@intel.com>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 01/10] rcu: Fix rcu_read_unlock_strict() strict QS reporting
-Date:   Wed, 31 Aug 2022 11:07:56 -0700
-Message-Id: <20220831180805.2693546-1-paulmck@kernel.org>
+Subject: [PATCH rcu 02/10] rcu: Update rcu_preempt_deferred_qs() comments for !PREEMPT kernels
+Date:   Wed, 31 Aug 2022 11:07:57 -0700
+Message-Id: <20220831180805.2693546-2-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220831180759.GA2693289@paulmck-ThinkPad-P17-Gen-1>
 References: <20220831180759.GA2693289@paulmck-ThinkPad-P17-Gen-1>
@@ -59,34 +59,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zqiang <qiang1.zhang@intel.com>
 
-Kernels built with CONFIG_PREEMPT=n and CONFIG_RCU_STRICT_GRACE_PERIOD=y
-report the quiescent state directly from the outermost rcu_read_unlock().
-However, the current CPU's rcu_data structure's ->cpu_no_qs.b.norm
-might still be set, in which case rcu_report_qs_rdp() will exit early,
-thus failing to report quiescent state.
-
-This commit therefore causes rcu_read_unlock_strict() to clear
-CPU's rcu_data structure's ->cpu_no_qs.b.norm field before invoking
-rcu_report_qs_rdp().
+In non-premptible kernels, tasks never do context switches within
+RCU read-side critical sections.  Therefore, in such kernels, each
+leaf rcu_node structure's ->blkd_tasks list will always be empty.
+The comment on the non-preemptible version of rcu_preempt_deferred_qs()
+confuses this point, so this commit therefore fixes it.
 
 Signed-off-by: Zqiang <qiang1.zhang@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/tree_plugin.h | 1 +
- 1 file changed, 1 insertion(+)
+ kernel/rcu/tree_plugin.h | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/rcu/tree_plugin.h b/kernel/rcu/tree_plugin.h
-index 438ecae6bd7e7..86772c95ed0ae 100644
+index 86772c95ed0ae..4152816dd29f6 100644
 --- a/kernel/rcu/tree_plugin.h
 +++ b/kernel/rcu/tree_plugin.h
-@@ -824,6 +824,7 @@ void rcu_read_unlock_strict(void)
- 	if (irqs_disabled() || preempt_count() || !rcu_state.gp_kthread)
- 		return;
- 	rdp = this_cpu_ptr(&rcu_data);
-+	rdp->cpu_no_qs.b.norm = false;
- 	rcu_report_qs_rdp(rdp);
- 	udelay(rcu_unlock_delay);
+@@ -932,10 +932,13 @@ static notrace bool rcu_preempt_need_deferred_qs(struct task_struct *t)
+ 	return false;
  }
+ 
+-// Except that we do need to respond to a request by an expedited grace
+-// period for a quiescent state from this CPU.  Note that requests from
+-// tasks are handled when removing the task from the blocked-tasks list
+-// below.
++// Except that we do need to respond to a request by an expedited
++// grace period for a quiescent state from this CPU.  Note that in
++// non-preemptible kernels, there can be no context switches within RCU
++// read-side critical sections, which in turn means that the leaf rcu_node
++// structure's blocked-tasks list is always empty.  is therefore no need to
++// actually check it.  Instead, a quiescent state from this CPU suffices,
++// and this function is only called from such a quiescent state.
+ notrace void rcu_preempt_deferred_qs(struct task_struct *t)
+ {
+ 	struct rcu_data *rdp = this_cpu_ptr(&rcu_data);
 -- 
 2.31.1.189.g2e36527f23
 

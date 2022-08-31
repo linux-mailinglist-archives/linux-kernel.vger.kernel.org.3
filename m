@@ -2,54 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7092D5A760A
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB9F5A7602
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 07:52:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiHaF5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 01:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53440 "EHLO
+        id S229878AbiHaFwl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 01:52:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbiHaF5T (ORCPT
+        with ESMTP id S229498AbiHaFwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 01:57:19 -0400
-X-Greylist: delayed 310 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 30 Aug 2022 22:57:16 PDT
-Received: from mout-u-107.mailbox.org (mout-u-107.mailbox.org [IPv6:2001:67c:2050:101:465::107])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CFBBA9C0;
-        Tue, 30 Aug 2022 22:57:16 -0700 (PDT)
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 31 Aug 2022 01:52:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A7689CD7;
+        Tue, 30 Aug 2022 22:52:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-u-107.mailbox.org (Postfix) with ESMTPS id 4MHYGV3p7Zz9sSJ;
-        Wed, 31 Aug 2022 07:52:02 +0200 (CEST)
-Message-ID: <cdcf3377-c3fe-f22b-6f43-8ae8cb889da3@denx.de>
-Date:   Wed, 31 Aug 2022 07:52:00 +0200
+        by ams.source.kernel.org (Postfix) with ESMTPS id D97ACB81EB8;
+        Wed, 31 Aug 2022 05:52:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC0ABC433D6;
+        Wed, 31 Aug 2022 05:52:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661925153;
+        bh=GXJhsXioaeItELh4r9S+ygL+acNayJ70WftLbnCmEmo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u8yz04WUOax4ApjcQdF5lGZAHeR9cAaJJ8G7+2ItW4k3pm7ubdnQMLr+R+5HI3Puq
+         5xjQsmlGqM/iponW0TmmqACSvO1/ktfDQDcS2OIZmZ62IDrYIsLeXktXLxKCuES3OZ
+         /kmrjr63Ka/8G2txhsFXTekCck7PIVOWmVP91SuGI+JBFnK48LwlbN61PfHrPYdXGF
+         FgXCdTw4o83pBrINFmj3FawhfxwOy/b8kfILw3mFF6B0gOpkJLnXQ4yXAtnwL2ioAM
+         SCQyttrLqIIxmbOUWiBqchlGi/R0Me3Y1DLwX4fHrEcgGJ82isr6e56+zIb1S6be13
+         b2dWVq70uyA2g==
+Date:   Tue, 30 Aug 2022 22:52:31 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-doc@vger.kernel.org,
+        David Jander <david@protonic.nl>,
+        Luka Perkov <luka.perkov@sartura.hr>,
+        Robert Marko <robert.marko@sartura.hr>
+Subject: Re: [PATCH net-next v4 2/7] net: add framework to support Ethernet
+ PSE and PDs devices
+Message-ID: <20220830225231.7d4305e4@kernel.org>
+In-Reply-To: <20220828063021.3963761-3-o.rempel@pengutronix.de>
+References: <20220828063021.3963761-1-o.rempel@pengutronix.de>
+        <20220828063021.3963761-3-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-Subject: Re: [PATCH 5.4 182/389] PCI/portdrv: Dont disable AER reporting in
- get_port_device_capability()
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Ben Greear <greearb@candelatech.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, bjorn@helgaas.com,
-        LKML <linux-kernel@vger.kernel.org>, stable@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Bharat Kumar Gogada <bharat.kumar.gogada@xilinx.com>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Yao Hongbo <yaohongbo@linux.alibaba.com>,
-        Naveen Naidu <naveennaidu479@gmail.com>,
-        Sasha Levin <sashal@kernel.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        linux-wireless@vger.kernel.org
-References: <20220830221159.GA132418@bhelgaas>
-From:   Stefan Roese <sr@denx.de>
-In-Reply-To: <20220830221159.GA132418@bhelgaas>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4MHYGV3p7Zz9sSJ
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NEUTRAL,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,121 +68,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.08.22 00:11, Bjorn Helgaas wrote:
-> [+cc Gregory, linux-wireless for iwlwifi issue]
+On Sun, 28 Aug 2022 08:30:16 +0200 Oleksij Rempel wrote:
+> This framework was create with intention to provide support for Ethernet PSE
+> (Power Sourcing Equipment) and PDs (Powered Device).
 > 
-> On Tue, Aug 30, 2022 at 01:47:48PM -0700, Ben Greear wrote:
->> On 8/23/22 11:41 PM, Greg Kroah-Hartman wrote:
->>> On Tue, Aug 23, 2022 at 07:20:14AM -0500, Bjorn Helgaas wrote:
->>>> On Tue, Aug 23, 2022, 6:35 AM Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>>> wrote:
->>>>
->>>>> From: Stefan Roese <sr@denx.de>
->>>>>
->>>>> [ Upstream commit 8795e182b02dc87e343c79e73af6b8b7f9c5e635 ]
->>>>>
->>>>
->>>> There's an open regression related to this commit:
->>>>
->>>> https://bugzilla.kernel.org/show_bug.cgi?id=216373
->>>
->>> This is already in the following released stable kernels:
->>> 	5.10.137 5.15.61 5.18.18 5.19.2
->>>
->>> I'll go drop it from the 4.19 and 5.4 queues, but when this gets
->>> resolved in Linus's tree, make sure there's a cc: stable on the fix so
->>> that we know to backport it to the above branches as well.  Or at the
->>> least, a "Fixes:" tag.
->>
->> This is still in 5.19.5.  We saw some funny iwlwifi crashes in 5.19.3+
->> that we did not see in 5.19.0+.  I just bisected the scary looking
->> AER errors to this patch, though I do not know for certain if it
->> causes the iwlwifi related crashes yet.
->>
->> In general, from reading the commit msg, this patch doesn't seem to
->> be a great candidate for stable in general.  Does it fix some
->> important problem?
+> At current step this patch implements generic PSE support for PoDL (Power over
+> Data Lines 802.3bu) specification with reserving name space for PD devices as
+> well.
 > 
-> I agree, I don't think this is a good candidate for stable.  It has
-> already exposed latent amdgpu issues and we'll likely find more.  It's
-> good to find and fix these things, but I'd rather do it in -rc than in
-> stable kernels.
+> This framework can be extended to support 802.3af and 802.3at "Power via the
+> Media Dependent Interface" (or PoE/Power over Ethernet)
 
-I also agree. It was not my intention to have this patch added to
-the stable branches. Frankly I missed intervening when seeing the
-mails about the integration into stable a few weeks ago.
+scripts/kernel-doc says:
 
-Still I find it very interesting to see, if and what now pops up with
-full AER enabled in such more complex (PCIe wise) systems. I expect to
-see more users detecting PCIe related problems in their system now.
-This will definitely help fixing some bug, as already seen in the
-AMD GPU thread. But again not really stable material but better -next
-and -rc.
-
-Thanks,
-Stefan
-
-> It would be interesting to know whether similar crashes or AER reports
-> occur in v6.0-rc.
-> 
->> In case it helps, here is example of what I see in dmesg.  The
->> kernel crashes in iwlwifi had to do with rx messages from the
->> firmware, and some warnings lead me to believe that pci messages
->> were slow coming back and/or maybe duplicated.  So maybe this AER
->> patch changes timing or otherwise screws up the PCI adapter boards
->> we use...
-> 
-> It shouldn't.  This looks like a latent issue that happened before but
-> was ignored because we didn't have AER enabled at the switch that
-> detected the error.
-> 
->> [   50.905809] iwlwifi 0000:04:00.0: AER: can't recover (no error_detected callback)
->> [   50.905830] pcieport 0000:03:01.0: AER: device recovery failed
->> [   50.905831] pcieport 0000:00:1c.0: AER: Uncorrected (Non-Fatal) error received: 0000:03:01.0
->> [   50.905845] pcieport 0000:03:01.0: PCIe Bus Error: severity=Uncorrected (Non-Fatal), type=Transaction Layer, (Requester ID)
->> [   50.915679] pcieport 0000:03:01.0:   device [10b5:8619] error status/mask=00100000/00000000
->> [   50.922735] pcieport 0000:03:01.0:    [20] UnsupReq               (First)
->> [   50.928230] pcieport 0000:03:01.0: AER:   TLP Header: 34000000 04001f10 00000000 88c888c8
-> 
-> This is an LTR message (Message Code 0x10), Requester ID 04:00.0.  I
-> think the iwlwifi device at 04:00.0 sent the LTR message, and 03:01.0
-> (probably a Switch Downstream Port leading to bus 04) received it but
-> had LTR disabled.  In that case, 03:01.0 would treat the LTR message
-> as an Unsupported Request.
-> 
-> The other errors below are the same but from different devices.
-> 
-> Does this happen during or after a suspend/resume?  I assume no
-> hotplug involved.  Can you collect the output of "sudo lspci -vv" so
-> we can see the LTR config for the entire path?
-> 
-> You can boot with "pci=noaer" to shut up the AER messages (that
-> shouldn't affect the parts of lspci output I'm interested in).  Would
-> be interesting to know whether "pci=noaer" affects the iwlwifi
-> crashes, though.
-> 
->> [   51.331638] ACPI: \: failed to evaluate _DSM bf0212f2-788f-c64d-a5b3-1f738e285ade (0x1001)
->> [   51.345413] ACPI: \: failed to evaluate _DSM bf0212f2-788f-c64d-a5b3-1f738e285ade (0x1001)
-> 
-> These look like they're from iwlwifi:
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/wireless/intel/iwlwifi/fw/acpi.c?id=v5.19#n13
-> 
-> No idea what this is about.  Maybe unrelated, but the fact that Google
-> can't find anything with that UUID makes me think it might actually be
-> related.  The UUID was only added to the message in v5.19-rc1 by
-> 06eb8dc097b3 ("ACPI: utils: include UUID in _DSM evaluation warning"),
-> but that should be enough time to see some for a common device like
-> iwlwifi.
-> 
-> Too bad we print the GUID in a different byte order than GUID_INIT
-> takes, which makes it hard to search for, even in the Linux source.
-> 
-> Bjorn
-
-Viele Grüße,
-Stefan Roese
-
--- 
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-51 Fax: (+49)-8142-66989-80 Email: sr@denx.de
+include/linux/pse-pd/pse.h:42: warning: Function parameter or member 'lock' not described in 'pse_controller_dev'

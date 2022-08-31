@@ -2,182 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCF05A8120
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D18DD5A8121
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiHaPWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
+        id S230456AbiHaPWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231731AbiHaPWN (ORCPT
+        with ESMTP id S229689AbiHaPWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:22:13 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5455DD8B3C;
-        Wed, 31 Aug 2022 08:22:11 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VFG4kL029622;
-        Wed, 31 Aug 2022 15:21:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : in-reply-to : references : mime-version :
- content-type : content-transfer-encoding; s=pp1;
- bh=8lifCs+Vpucok23R/oaopnqzvPUcXxy686872IvWQRg=;
- b=Hsvxt+Y8oHC1HP0GTafFfOpH23ifsV61oFm1bptOaHxSIp9Tkyj0Wa/Vx8YXYt3NFMcn
- rK4+YVBNHQDnXtRGSjdpHOPhe/CmcHVj+XAIy29nkMpbUr2oONx2LAxhC+877oCUUQX9
- pMoydvOW8R/0meWT8YabpJ/uVzilQ1I20i0QK2U3jd2oYfbKTtaOSkFi2FpoPHBpguvT
- ZYjJ8tjyyUkQ562D57RG8MGyz5bImCOFIen9PqKJ/vlwR5bZiQ5BPdQyCnLpjNEEg2Xj
- SlpXZxD0ZGf//gfVNF+ENq9/KDhq0azhXoORB3MPIQICyH0PnyfPXjFvVKptZe57nlY6 Kw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jaa4jg5uw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 Aug 2022 15:21:59 +0000
-Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27VFGpbx031663;
-        Wed, 31 Aug 2022 15:21:58 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jaa4jg5ud-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 Aug 2022 15:21:58 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27VFK67d018086;
-        Wed, 31 Aug 2022 15:21:56 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3j7ahhuy84-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 31 Aug 2022 15:21:56 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27VFLrLS39846274
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 31 Aug 2022 15:21:53 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 458E74C04A;
-        Wed, 31 Aug 2022 15:21:53 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9C2AE4C040;
-        Wed, 31 Aug 2022 15:21:52 +0000 (GMT)
-Received: from p-imbrenda (unknown [9.145.11.79])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 31 Aug 2022 15:21:52 +0000 (GMT)
-Date:   Wed, 31 Aug 2022 17:21:51 +0200
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Sven Schnelle <svens@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] KVM: s390: Pass initialized arg even if unused
-Message-ID: <20220831172151.3e04c64c@p-imbrenda>
-In-Reply-To: <20220825192540.1560559-1-scgl@linux.ibm.com>
-References: <20220825192540.1560559-1-scgl@linux.ibm.com>
-Organization: IBM
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Wed, 31 Aug 2022 11:22:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3349DD8E23
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:22:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 18FD16126C
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 15:22:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8951C433C1;
+        Wed, 31 Aug 2022 15:22:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661959351;
+        bh=UUV4vyceD/4fkQRfY+VTKvh+YKjgTH1+99icf+D7VkY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VBT0WXEsGnhXjac2NaN8BpBswK4wiw/tBVQqrXjG3zfx1Hq+Ni96+UMRPmLtA+sms
+         agS7a7naAO4sxcDDMm+aLV8gg57LSICO1XyAz0EdAYq12BZroMqaxXEXkBJ9xWWGl6
+         UESCZ3qQ8DiOcdbO4D56hBtywPEfdbdY4trbtWSQYubow0bd4WYz/fylqoJwGyRQG0
+         IeNOTLD68ug592FDSZHP6x837FcFXOoKdArXDzIZ322dJJVLcfbS2mkmjPhLeb8/Ys
+         02QzeGvk2Q6XQ9ZLZqp2CFJ7SiR4AG8xYbz4GNhzGX8v3oqYW5nZQqDDFiKbeQmiY0
+         v+zGylo06no8g==
+Date:   Wed, 31 Aug 2022 08:22:29 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     kernel test robot <lkp@intel.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alex Shi <alexs@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Miguel Ojeda <ojeda@kernel.org>
+Subject: Re: arch/powerpc/math-emu/math_efp.c:927:1: error: type specifier
+ missing, defaults to 'int'; ISO C99 and later do not support implicit int
+Message-ID: <Yw98tcXEu0kgbrKE@dev-arch.thelio-3990X>
+References: <202208310702.3iydJVg0-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: LWcHmtMXlv8RqadyvTO4zIR9mrj7I-te
-X-Proofpoint-GUID: lXWEMvgH9t1hMSF6tmvW_9iJy-22h1GI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-31_09,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- impostorscore=0 clxscore=1011 adultscore=0 bulkscore=0 malwarescore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 phishscore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208310075
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202208310702.3iydJVg0-lkp@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 25 Aug 2022 21:25:40 +0200
-Janis Schoetterl-Glausch <scgl@linux.ibm.com> wrote:
-
-> This silences smatch warnings reported by kbuild bot:
-> arch/s390/kvm/gaccess.c:859 guest_range_to_gpas() error: uninitialized symbol 'prot'.
-> arch/s390/kvm/gaccess.c:1064 access_guest_with_key() error: uninitialized symbol 'prot'.
+On Wed, Aug 31, 2022 at 07:10:39AM +0800, kernel test robot wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
+> commit: e8c07082a810fbb9db303a2b66b66b8d7e588b53 Kbuild: move to -std=gnu11
+> date:   6 months ago
+> config: powerpc-tqm8560_defconfig (https://download.01.org/0day-ci/archive/20220831/202208310702.3iydJVg0-lkp@intel.com/config)
+> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+> reproduce (this is a W=1 build):
+>         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>         chmod +x ~/bin/make.cross
+>         # install powerpc cross compiling tool for clang build
+>         # apt-get install binutils-powerpc-linux-gnu
+>         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e8c07082a810fbb9db303a2b66b66b8d7e588b53
+>         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>         git fetch --no-tags linus master
+>         git checkout e8c07082a810fbb9db303a2b66b66b8d7e588b53
+>         # save the config file
+>         mkdir build_dir && cp config build_dir/.config
+>         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/math-emu/
 > 
-> This is because it cannot tell that the value is not used in this case.
-> The trans_exc* only examine prot if code is PGM_PROTECTION.
-> Pass a dummy value for other codes.
-> 
+> If you fix the issue, kindly add following tag where applicable
 > Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Janis Schoetterl-Glausch <scgl@linux.ibm.com>
-
-Reviewed-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-
-> ---
-> v1 -> v2
->  * drop unlikely, WARN_ON_ONCE instead of WARN (thanks Heiko)
 > 
->  arch/s390/kvm/gaccess.c | 16 +++++++++++++---
->  1 file changed, 13 insertions(+), 3 deletions(-)
+> All errors (new ones prefixed by >>):
 > 
-> diff --git a/arch/s390/kvm/gaccess.c b/arch/s390/kvm/gaccess.c
-> index 082ec5f2c3a5..0243b6e38d36 100644
-> --- a/arch/s390/kvm/gaccess.c
-> +++ b/arch/s390/kvm/gaccess.c
-> @@ -489,6 +489,8 @@ enum prot_type {
->  	PROT_TYPE_ALC  = 2,
->  	PROT_TYPE_DAT  = 3,
->  	PROT_TYPE_IEP  = 4,
-> +	/* Dummy value for passing an initialized value when code != PGM_PROTECTION */
-> +	PROT_NONE,
->  };
->  
->  static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva, u8 ar,
-> @@ -504,6 +506,10 @@ static int trans_exc_ending(struct kvm_vcpu *vcpu, int code, unsigned long gva,
->  	switch (code) {
->  	case PGM_PROTECTION:
->  		switch (prot) {
-> +		case PROT_NONE:
-> +			/* We should never get here, acts like termination */
-> +			WARN_ON_ONCE(1);
-> +			break;
->  		case PROT_TYPE_IEP:
->  			tec->b61 = 1;
->  			fallthrough;
-> @@ -968,8 +974,10 @@ static int guest_range_to_gpas(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->  				return rc;
->  		} else {
->  			gpa = kvm_s390_real_to_abs(vcpu, ga);
-> -			if (kvm_is_error_gpa(vcpu->kvm, gpa))
-> +			if (kvm_is_error_gpa(vcpu->kvm, gpa)) {
->  				rc = PGM_ADDRESSING;
-> +				prot = PROT_NONE;
-> +			}
->  		}
->  		if (rc)
->  			return trans_exc(vcpu, rc, ga, ar, mode, prot);
-> @@ -1112,8 +1120,6 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->  		if (rc == PGM_PROTECTION && try_storage_prot_override)
->  			rc = access_guest_page_with_key(vcpu->kvm, mode, gpas[idx],
->  							data, fragment_len, PAGE_SPO_ACC);
-> -		if (rc == PGM_PROTECTION)
-> -			prot = PROT_TYPE_KEYC;
->  		if (rc)
->  			break;
->  		len -= fragment_len;
-> @@ -1123,6 +1129,10 @@ int access_guest_with_key(struct kvm_vcpu *vcpu, unsigned long ga, u8 ar,
->  	if (rc > 0) {
->  		bool terminate = (mode == GACC_STORE) && (idx > 0);
->  
-> +		if (rc == PGM_PROTECTION)
-> +			prot = PROT_TYPE_KEYC;
-> +		else
-> +			prot = PROT_NONE;
->  		rc = trans_exc_ending(vcpu, rc, ga, ar, mode, prot, terminate);
->  	}
->  out_unlock:
+> >> arch/powerpc/math-emu/math_efp.c:927:1: error: type specifier missing, defaults to 'int'; ISO C99 and later do not support implicit int [-Wimplicit-int]
+>    module_init(spe_mathemu_init);
+>    ^
+>    int
+>    arch/powerpc/math-emu/math_efp.c:927:13: error: a parameter list without types is only allowed in a function definition
+>    module_init(spe_mathemu_init);
+>                ^
+>    2 errors generated.
 
+Thanks for the report, I've sent a fix:
+
+https://lore.kernel.org/20220831152014.3501664-1-nathan@kernel.org/
+
+Cheers,
+Nathan

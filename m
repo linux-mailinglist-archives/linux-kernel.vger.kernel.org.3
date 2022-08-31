@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F905A82BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B0895A82C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 18:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbiHaQKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 12:10:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41476 "EHLO
+        id S230474AbiHaQMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 12:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231844AbiHaQKV (ORCPT
+        with ESMTP id S231356AbiHaQM1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 12:10:21 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 849942ED45
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:10:18 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id u22so14546466plq.12
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:10:18 -0700 (PDT)
+        Wed, 31 Aug 2022 12:12:27 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BC3D11F1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:12:21 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id q15so9513978pfn.11
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 09:12:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=4pMeQuRxUA4sCzJCghAwEQf5YcBaqNznD8iKlcxAEsI=;
-        b=ZW5n/VNKtMeCnrNfUEkM02JH3CQLPvcl/tphaCIbzQfiqX4ORSiLoXlvdsvna+3luA
-         gQ8aI08KV2Q2TW0HSBKQ/geqYYQ1CVhNFWxZpXVoPlfylAilZJ2isUhZoOSes5mTdb13
-         DheulF28IqqpDlxL8Vx7fhIUAiwMiPccmGiG1yU6JZsvs7SQw85/ppbdodyd8l/XVNn5
-         oD4LXEvcIS+22qs17UscpL4q+eZep9+fcop4Fxs4oEPiXJ4VYvTAU1ex0a9lhsw42uqa
-         PLSu+d7nbfJJG9j24MR8p7+wvF6Tu8i74JTCVHoUR0Mh8Hn/f7Bsa0gJlpToadfM6Wv/
-         2uBg==
+        bh=f8MgvGh+ksHn1mHkWpjvZ43exvRjNzmYkYNUVIU3dnI=;
+        b=N9vsfmbi93IeCMV0maJHVIvMTC6H2nPgQxnlPoOFJFEQzYYzYI3FxpE9EKxTENxN76
+         HlxRpRUP0AlmAskrDYhxf9LUQ+I+eFP/e5H+lB6j01dDuB0FubyTBGhLoMrrub7ZPXer
+         uYyc/gmNhT7dZQiyUTV59Fc2p6/i59TEQrVLfeTnC1WlIckL3GOIsGOvZD91mLeZjIrE
+         8Gy2V5wsSUBmoJdZfftBrHRu+snegVnG4Hc2v2DkEOZPqfEpb1nnaD1amm3of49arl+U
+         Mq9mSbSq5VQhT8uDrUjkwj19rYYW9qdkg6Xx4o6t5pX3XD3JoCv1zvrxMlL/MWIb9ET+
+         ohEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=4pMeQuRxUA4sCzJCghAwEQf5YcBaqNznD8iKlcxAEsI=;
-        b=QjWWDD8MUqCxAFfn27La3gyM4pMJqpGw8EeSCEYQb1SS+l4q8dHtIrciVTuYnTAwQI
-         TfBszqZxHfPY0g26xWuZIfck9ndFURJ4kfYkyi1/XSUqJzeAOxeLA+PBOM+MVvno71Kp
-         1Ode+4o0o6PGACitGhrAbcHewdvRywmVgnV0gPTmoow530KNM/E2J1fRBipzvlczp0HB
-         FMWcBAJqejVh8ycGrKP3as5IEulvmo4cNgLjOTzf3ESM8sGG+/oGWxte9uHp6ORbbW2I
-         KifCOtupAbAYXRHvlcAlmQt5w5rEW2TWSpHTkSOthhxo3e0z2N+dzJEJIbGVH0Ajlbu0
-         lEww==
-X-Gm-Message-State: ACgBeo2Jh0JUXQRP8aZ2Kg6bsBI7a47rmMdPNeEdzqLFJ/13eK2bnO/H
-        uXf7LvnF+ulTmSks9ja+qc0=
-X-Google-Smtp-Source: AA6agR4V2e603NEmJy3e5DlPlSXFOe9LB4Sy9cffc/75mfo5/I5984KoBvX7yP8apOB8Ih4JhMp4kA==
-X-Received: by 2002:a17:902:ef46:b0:168:bac3:2fd4 with SMTP id e6-20020a170902ef4600b00168bac32fd4mr26105222plx.132.1661962217929;
-        Wed, 31 Aug 2022 09:10:17 -0700 (PDT)
+        bh=f8MgvGh+ksHn1mHkWpjvZ43exvRjNzmYkYNUVIU3dnI=;
+        b=Qdn+ZvFOXvugQf9X0NgFPUD3U2GzWQ0ujso9pk/yfnE/s8t8+fXOSl4X1s/CrJNELn
+         qEN2SXFs8VK5BYqO8mCNzPSrQ6TSG4+bBdvtNH9DmjH+narGwjaIsxRqpRukN2J/3GwT
+         z+VgUF6jWcbujJzzj6mYrNlBJMlWdB1XLJRcv48k2Kvuk3t2WvzY/XHrz0JOmaY5AzfH
+         OGWwdWosDd0FbNTc9tkQZX+gDRgpBYKrNQHmlh2wmac+/nRPRecrq2G4tBETOBpfV0mE
+         GzVFSvwvOFrBRmphDUM1uZu4fyazf1+xgSEEkff99QiGwVtjl/k8VXb3ens3ZgLJ2uOn
+         SVlA==
+X-Gm-Message-State: ACgBeo1/KDHbHbwlnF49Gsf4f9K2vYMZmLOoLnlqpX+CajiA81KmoQKu
+        I25XDeveNgT9VtGijuc1Kzc=
+X-Google-Smtp-Source: AA6agR5sUHH4T3dAKze9jkp5hKoKpRegW3m0w6N5czp+D02Q+Qy6zxLre8UGpdUtsxYF5C5OthN1DQ==
+X-Received: by 2002:a63:256:0:b0:42f:b14b:2085 with SMTP id 83-20020a630256000000b0042fb14b2085mr6104065pgc.189.1661962341421;
+        Wed, 31 Aug 2022 09:12:21 -0700 (PDT)
 Received: from localhost ([36.112.195.70])
-        by smtp.gmail.com with ESMTPSA id g11-20020a170902d5cb00b00172b27404a2sm11747194plh.120.2022.08.31.09.10.16
+        by smtp.gmail.com with ESMTPSA id x11-20020a17090ab00b00b001fbc0e9edafsm1470409pjq.56.2022.08.31.09.12.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 09:10:17 -0700 (PDT)
+        Wed, 31 Aug 2022 09:12:21 -0700 (PDT)
 From:   Hawkins Jiawei <yin31149@gmail.com>
 To:     syzbot+5f8dcabe4a3b2c51c607@syzkaller.appspotmail.com,
         Anton Altaparmakov <anton@tuxera.com>
 Cc:     akpm@linux-foundation.org, chenxiaosong2@huawei.com,
         linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
         syzkaller-bugs@googlegroups.com, yin31149@gmail.com,
-        18801353760@163.com
-Subject: [PATCH v2 1/3] ntfs: fix use-after-free in ntfs_attr_find()
-Date:   Thu,  1 Sep 2022 00:09:34 +0800
-Message-Id: <20220831160935.3409-2-yin31149@gmail.com>
+        18801353760@163.com, Dan Carpenter <dan.carpenter@oracle.com>
+Subject: [PATCH v2 2/3] ntfs: fix out-of-bounds read in ntfs_attr_find()
+Date:   Thu,  1 Sep 2022 00:09:36 +0800
+Message-Id: <20220831160935.3409-3-yin31149@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220831160935.3409-1-yin31149@gmail.com>
 References: <20220831160935.3409-1-yin31149@gmail.com>
@@ -74,7 +74,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzkaller reported use-after-free read as follows:
+Kernel will iterates over ATTR_RECORDs in mft record in ntfs_attr_find().
+To ensure access on these ATTR_RECORDs are within bounds, kernel will
+do some checking during iteration.
+
+The problem is that during checking whether ATTR_RECORD's name is within
+bounds, kernel will dereferences the ATTR_RECORD name_offset field,
+before checking this ATTR_RECORD strcture is within bounds. This problem
+may result out-of-bounds read in ntfs_attr_find(), reported by
+Syzkaller:
+
 ==================================================================
 BUG: KASAN: use-after-free in ntfs_attr_find+0xc02/0xce0 fs/ntfs/attrib.c:597
 Read of size 2 at addr ffff88807e352009 by task syz-executor153/3607
@@ -122,46 +131,57 @@ Memory state around the buggy address:
  ffff88807e352100: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
 ==================================================================
 
-Kernel will loads $MFT/$DATA's first mft record in
-ntfs_read_inode_mount().
+This patch solves it by moving the ATTR_RECORD strcture's bounds
+checking earlier, then checking whether ATTR_RECORD's name
+is within bounds. What's more, this patch also add some comments
+to improve its maintainability.
 
-Yet the problem is that after loading, kernel doesn't check whether
-attrs_offset field is a valid value.
-
-To be more specific, if attrs_offset field is larger
-than bytes_allocated field, then it may trigger the out-of-bounds read
-bug(reported as use-after-free bug) in ntfs_attr_find(), when kernel
-tries to access the corresponding mft record's attribute.
-
-This patch solves it by adding the sanity check between attrs_offset
-field and bytes_allocated field, after loading the first mft record.
-
+Reported-and-tested-by: syzbot+5f8dcabe4a3b2c51c607@syzkaller.appspotmail.com
+Signed-off-by: chenxiaosong (A) <chenxiaosong2@huawei.com>
+Link: https://lore.kernel.org/all/1636796c-c85e-7f47-e96f-e074fee3c7d3@huawei.com/
+Signed-off-by: Dan Carpenter <dan.carpenter@oracle.com>
+Link: https://groups.google.com/g/syzkaller-bugs/c/t_XdeKPGTR4/m/LECAuIGcBgAJ
 Signed-off-by: Hawkins Jiawei <yin31149@gmail.com>
 ---
 v1->v2:
- * No change.
+ * Refactor check on Attribute Record Header
+suggested by Dan Carpenter.
 
- fs/ntfs/inode.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ fs/ntfs/attrib.c | 20 ++++++++++++++++----
+ 1 file changed, 16 insertions(+), 4 deletions(-)
 
-diff --git a/fs/ntfs/inode.c b/fs/ntfs/inode.c
-index db0f1995aedd..08c659332e26 100644
---- a/fs/ntfs/inode.c
-+++ b/fs/ntfs/inode.c
-@@ -1829,6 +1829,13 @@ int ntfs_read_inode_mount(struct inode *vi)
- 		goto err_out;
- 	}
- 
-+	/* Sanity check offset to the first attribute */
-+	if (le16_to_cpu(m->attrs_offset) >= le32_to_cpu(m->bytes_allocated)) {
-+		ntfs_error(sb, "Incorrect mft offset to the first attribute %u in superblock.",
-+			       le16_to_cpu(m->attrs_offset));
-+		goto err_out;
-+	}
+diff --git a/fs/ntfs/attrib.c b/fs/ntfs/attrib.c
+index 52615e6090e1..cec4be2a2d23 100644
+--- a/fs/ntfs/attrib.c
++++ b/fs/ntfs/attrib.c
+@@ -594,11 +594,23 @@ static int ntfs_attr_find(const ATTR_TYPE type, const ntfschar *name,
+ 	for (;;	a = (ATTR_RECORD*)((u8*)a + le32_to_cpu(a->length))) {
+ 		u8 *mrec_end = (u8 *)ctx->mrec +
+ 		               le32_to_cpu(ctx->mrec->bytes_allocated);
+-		u8 *name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
+-			       a->name_length * sizeof(ntfschar);
+-		if ((u8*)a < (u8*)ctx->mrec || (u8*)a > mrec_end ||
+-		    name_end > mrec_end)
++		u8 *name_end;
 +
- 	/* Need this to sanity check attribute list references to $MFT. */
- 	vi->i_generation = ni->seq_no = le16_to_cpu(m->sequence_number);
- 
++		/* check whether ATTR_RECORD wrap */
++		if ((u8 *)a < (u8 *)ctx->mrec)
++			break;
++
++		/* check whether Attribute Record Header is within bounds */
++		if ((u8 *)a > mrec_end ||
++		    (u8 *)a + sizeof(ATTR_RECORD) > mrec_end)
+ 			break;
++
++		/* check whether ATTR_RECORD's name is within bounds */
++		name_end = (u8 *)a + le16_to_cpu(a->name_offset) +
++			   a->name_length * sizeof(ntfschar);
++		if (name_end > mrec_end)
++			break;
++
+ 		ctx->attr = a;
+ 		if (unlikely(le32_to_cpu(a->type) > le32_to_cpu(type) ||
+ 				a->type == AT_END))
 -- 
 2.25.1
 

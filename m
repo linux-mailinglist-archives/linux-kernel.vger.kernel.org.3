@@ -2,70 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FF65A8901
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 00:31:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73B375A8904
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 00:31:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232529AbiHaWbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 18:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
+        id S232576AbiHaWbb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 18:31:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232286AbiHaWbN (ORCPT
+        with ESMTP id S232506AbiHaWbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 18:31:13 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 502051F2E6;
-        Wed, 31 Aug 2022 15:30:05 -0700 (PDT)
-Received: from 3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        Wed, 31 Aug 2022 18:31:15 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7222C88AC;
+        Wed, 31 Aug 2022 15:30:48 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id E54E22126;
-        Thu,  1 Sep 2022 00:30:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1661985003;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=5A2fJzkWuA9bifn4MudMipTvJqlngyg+cza0sDoxRl0=;
-        b=1WhjYa1SzJ9k71JE6p5vX6/cBxrlqc3zVmEflXmNFqmEOewjxP7vYZ5kejmmfbdUuFffva
-        G5MGC5GocP7DeNNm2jloqcbS3K8jEK7+APKukF/on/RZyvWTWlzQ+O2GbnISR6g5HgbBe2
-        v/7Gw8TZ/BWs1cK1ugiVP11fu0GG3CYQEiRxSWXQTKD6dcUF2+etuwGRuPN4RQEku0pQi8
-        lDK/gKjJ3rrFMpBgFFjiFOCqCIy8HjTEcfHgUX+McVPwmCBkD9mullNKk9yc+pzsVKNa5K
-        xhoVWUhDcO/Tc+9roHAPCHg2y8YiwqAJLfdfLAbhY8wXtCijfOrq1muQmyISxw==
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MHzQt0l1Sz4x7X;
+        Thu,  1 Sep 2022 08:30:45 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1661985047;
+        bh=Bc3NQtTdiy0mM/KoLALrGOdg7/ZKLU77iFNl0zvZdK0=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=DDyZqKKR2zMINQFb5VM8eTcgaR7RXiWq9gY/PDHhKXPoTT+88y9ah0GtNoReLBL1/
+         qAiRoyYv29/xU+SZRDPk+EaFSH6DW8Msl44FKUPpApbLtlCbo5KQXFF3brXfUL20h7
+         6HN5ns1CEBVbMxwQYD+NzyQpX8xOA4q/BEEMCzvr/2HODHlJwanx1chfgk5bM1CFnn
+         EkcIf1gzDT5B4+TMC0B9ttmnL3nVrR0k1oCjv6aSiHzN4XYqKje6brY1JUXUJ1IEJf
+         Oj0awHYA76OReSTw0d5eMET8+mPw0+445Lg53tJ7WRvPkkDTtHyb7Kz4wyUQGw3+KP
+         rW3mt2Hs0Ichg==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Joe Lawrence <joe.lawrence@redhat.com>, Song Liu <song@kernel.org>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+        pmladek@suse.com, x86@kernel.org, linuxppc-dev@lists.ozlabs.org,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v5] livepatch: Clear relocation targets on a module removal
+In-Reply-To: <Yw+4xxiONngOTqin@redhat.com>
+References: <20220830185313.76402-1-song@kernel.org>
+ <Yw+4xxiONngOTqin@redhat.com>
+Date:   Thu, 01 Sep 2022 08:30:44 +1000
+Message-ID: <875yi8uju3.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Date:   Thu, 01 Sep 2022 00:30:02 +0200
-From:   Michael Walle <michael@walle.cc>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?Q?Rafa=C5=82_Mi=C5=82ecki?= <rafal@milecki.pl>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH v1 08/14] dt-bindings: mtd: relax the nvmem compatible
- string
-In-Reply-To: <20220831214809.GA282739-robh@kernel.org>
-References: <20220825214423.903672-1-michael@walle.cc>
- <20220825214423.903672-9-michael@walle.cc>
- <20220831214809.GA282739-robh@kernel.org>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <60308ba420cdd072ea19e11e2e5e7d4b@walle.cc>
-X-Sender: michael@walle.cc
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +54,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 2022-08-31 23:48, schrieb Rob Herring:
-> On Thu, Aug 25, 2022 at 11:44:17PM +0200, Michael Walle wrote:
->> The "user-otp" and "factory-otp" compatible string just depicts a
->> generic NVMEM device. But an actual device tree node might as well
->> contain a more specific compatible string. Make it possible to add
->> more specific binding elsewere and just match part of the compatibles
->> here.
+Joe Lawrence <joe.lawrence@redhat.com> writes:
+> On Tue, Aug 30, 2022 at 11:53:13AM -0700, Song Liu wrote:
+>> From: Miroslav Benes <mbenes@suse.cz>
 >> 
->> Signed-off-by: Michael Walle <michael@walle.cc>
->> ---
->>  Documentation/devicetree/bindings/mtd/mtd.yaml | 7 ++++---
->>  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> In hindsight it looks like we are mixing 2 different purposes of 'which
-> instance is this' and 'what is this'. 'compatible' is supposed to be 
-> the
-> latter.
-> 
-> Maybe there's a better way to handle user/factory? There's a similar
-> need with partitions for A/B or factory/update.
+>> Josh reported a bug:
+>> 
+>>   When the object to be patched is a module, and that module is
+>>   rmmod'ed and reloaded, it fails to load with:
+>> 
+>>   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+>>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+>> 
+>>   The livepatch module has a relocation which references a symbol
+>>   in the _previous_ loading of nfsd. When apply_relocate_add()
+>>   tries to replace the old relocation with a new one, it sees that
+>>   the previous one is nonzero and it errors out.
+>> 
+>>   On ppc64le, we have a similar issue:
+>> 
+>>   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+>>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+>>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+...
+>> 
+>
+> Hi Song,
+>
+> Applying your patch on top of my latest klp-convert-tree branch [1], I
+> modified a few of its late module patching tests
+> (tools/testing/selftests/livepatch/test-song.sh) such that:
+>
+>  1 - A livepatch module is loaded
+>    - this module contains klp-relocations to objects in (2)
+>  2 - A target test module is loaded
+>  3 - Unload the test target module
+>    - Clear klp-relocations in (1)
+>  4 - Repeat target module load (2) / unload (3) a few times
+>  5 - Unload livepatch module
 
-I'm not sure I understand what you mean. It has nothing to with
-user and factory provisionings.
+If you push that test code somewhere I could test it on ppc64le.
 
-SPI flashes have a user programmable and a factory programmable
-area, some have just one of them. Whereas with A/B you (as in the
-user or the board manufacturer) defines an area within a memory device
-to be either slot A or slot B. But here the flash dictates what's
-factory and what's user storage. It's in the datasheet.
+> The results:
+>
+>  x86_64  : pass
+>  s390x   : pass
+>  ppc64le : crash
+>
+> I suspect Power 32-bit would suffer the same fate, but I don't have
+> hardware to verify.  See the kernel log from the crash below...
+>
+>
+> ===== TEST: klp-convert symbols (late module patching) =====
+> % modprobe test_klp_convert1
+> test_klp_convert1: tainting kernel with TAINT_LIVEPATCH
+> livepatch: enabling patch 'test_klp_convert1'
+> livepatch: 'test_klp_convert1': starting patching transition
+> livepatch: 'test_klp_convert1': patching complete
+> % modprobe test_klp_convert_mod
+> livepatch: applying patch 'test_klp_convert1' to loading module 'test_klp_convert_mod'
+> test_klp_convert1: saved_command_line, 0: BOOT_IMAGE=(ieee1275//vdevice/v-scsi@30000003/disk@8100000000000000,msdos2)/vmlinuz-5.19.0+ root=/dev/mapper/rhel_ibm--p9z--18--lp7-root ro crashkernel=2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G rd.lvm.lv=rhel_ibm-p9z-18-lp7/root rd.lvm.lv=rhel_ibm-p9z-18-lp7/swap
+> test_klp_convert1: driver_name, 0: test_klp_convert_mod
+> test_klp_convert1: test_klp_get_driver_name(), 0: test_klp_convert_mod
+> test_klp_convert1: homonym_string, 1: homonym string A
+> test_klp_convert1: get_homonym_string(), 1: homonym string A
+> test_klp_convert1: klp_string.12345 = lib/livepatch/test_klp_convert_mod_a.c static string
+> test_klp_convert1: klp_string.67890 = lib/livepatch/test_klp_convert_mod_b.c static string
+> % rmmod test_klp_convert_mod
+> livepatch: reverting patch 'test_klp_convert1' on unloading module 'test_klp_convert_mod'
+> module_64: Clearing ADD relocate section 48 to 6
+> BUG: Unable to handle kernel data access on write at 0xc008000002140150
+> Faulting instruction address: 0xc00000000005659c
+> Oops: Kernel access of bad area, sig: 11 [#1]
+> LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
+> Modules linked in: test_klp_convert_mod(-) test_klp_convert1(K) bonding tls rfkill pseries_rng drm fuse drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sg ibmvscsi ibmveth scsi_transport_srp vmx_crypto dm_mirror dm_region_hash dm_log dm_mod
+> CPU: 6 PID: 4766 Comm: rmmod Kdump: loaded Tainted: G              K   5.19.0+ #1
+> NIP:  c00000000005659c LR: c000000000056590 CTR: 0000000000000024
+> REGS: c000000007223840 TRAP: 0300   Tainted: G              K    (5.19.0+)
+> MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 48008282  XER: 0000000a
+> CFAR: c0000000000a87e0 DAR: c008000002140150 DSISR: 0a000000 IRQMASK: 0
 
-HTH
--michael
+This is saying you don't have permissions to write at that address.
+
+> GPR00: c000000000056568 c000000007223ae0 c000000002a68a00 0000000000000001 
+> GPR04: c0080000021706f0 000000000000002d 0000000000000000 0000000000000000 
+> GPR08: 0000000000000066 0000001200000010 0000000000000000 0000000000008000 
+> GPR12: 0000000000000000 c00000000ffca080 0000000000000000 0000000000000000 
+> GPR16: 0000010005bf1810 000000010c0f7370 c0000000011b7e50 c0000000011b7e68 
+> GPR20: c0080000021501c8 c008000002150228 0000000000000030 0000000060000000 
+> GPR24: c008000002160380 c000000056b43000 000000000000ff20 c000000056b43c00 
+> GPR28: aaaaaaaaaaaaaaab c000000056b43b40 0000000000000000 c00800000214014c 
+> NIP [c00000000005659c] clear_relocate_add+0x11c/0x1c0
+> LR [c000000000056590] clear_relocate_add+0x110/0x1c0
+> Call Trace:
+> [c000000007223ae0] [ffffffffffffffff] 0xffffffffffffffff (unreliable)
+> [c000000007223ba0] [c00000000021e3a8] klp_cleanup_module_patches_limited+0x448/0x480
+> [c000000007223cb0] [c000000000220278] klp_module_going+0x68/0x94
+> [c000000007223ce0] [c00000000022f480] __do_sys_delete_module.constprop.0+0x1d0/0x390
+> [c000000007223db0] [c00000000002f004] system_call_exception+0x164/0x340
+> [c000000007223e10] [c00000000000be68] system_call_vectored_common+0xe8/0x278
+> --- interrupt: 3000 at 0x7fffa178fb6c
+> NIP:  00007fffa178fb6c LR: 0000000000000000 CTR: 0000000000000000
+> REGS: c000000007223e80 TRAP: 3000   Tainted: G              K    (5.19.0+)
+> MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 48002482  XER: 00000000
+> IRQMASK: 0 
+> GPR00: 0000000000000081 00007ffff2d1b720 00007fffa1887200 0000010005bf1878 
+> GPR04: 0000000000000800 000000000000000a 0000000000000000 00000000000000da 
+> GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000 
+> GPR12: 0000000000000000 00007fffa201c540 0000000000000000 0000000000000000 
+> GPR16: 0000010005bf1810 000000010c0f7370 000000010c0f8090 000000010c0f8078 
+> GPR20: 000000010c0f8050 000000010c0f80a8 000000010c0f7518 000000010c0f80d0 
+> GPR24: 00007ffff2d1b830 00007ffff2d1efbb 0000000000000000 0000010005bf02a0 
+> GPR28: 00007ffff2d1be50 0000000000000000 0000010005bf1810 0000000000100000 
+> NIP [00007fffa178fb6c] 0x7fffa178fb6c
+> LR [0000000000000000] 0x0
+> --- interrupt: 3000
+> Instruction dump:
+> 40820044 813b002c 7ff5f82a 79293664 7d394a14 e9290010 7c69f82e 7fe9fa14 
+> 48052235 60000000 2c030000 41820008 <92ff0004> eadb0020 60000000 60000000 
+> ---[ end trace 0000000000000000 ]---
+>
+> $ addr2line 0xc00000000005659c -e vmlinux
+> /root/klp-convert-tree/arch/powerpc/kernel/module_64.c:785
+>
+> 743 void clear_relocate_add(Elf64_Shdr *sechdrs,
+> 744                        const char *strtab,
+> 745                        unsigned int symindex,
+> 746                        unsigned int relsec,
+> 747                        struct module *me)
+> 748 {
+> ...
+> 759         for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
+> ...
+> 785                 *instruction = PPC_RAW_NOP();
+> 786         }
+
+Has the module text been marked RW prior to this? I suspect not?
+
+In which case you need to use patch_instruction() here.
+
+cheers

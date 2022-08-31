@@ -2,51 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75EC5A87FF
+	by mail.lfdr.de (Postfix) with ESMTP id 550435A87FD
 	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:18:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232170AbiHaVSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39866 "EHLO
+        id S232191AbiHaVSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:18:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232153AbiHaVSd (ORCPT
+        with ESMTP id S232176AbiHaVSm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:18:33 -0400
-Received: from server.lespinasse.org (server.lespinasse.org [63.205.204.226])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24794E0FC5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:18:32 -0700 (PDT)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
- d=lespinasse.org; i=@lespinasse.org; q=dns/txt; s=srv-83-ed;
- t=1661980711; h=date : from : to : cc : subject : message-id :
- mime-version : content-type : from;
- bh=EIkkMFs4sIWKssfSNTOzhO+kTBYbdsRJaTCSHYW0Ch0=;
- b=gSqVZ+SmMaoPDYgt8MdFoinD5wP2S76LO+D+5R3+tCR+K8W97mMxuJrFxurggN0TH6h+L
- UnlcgWe/a81okHOBw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lespinasse.org;
- i=@lespinasse.org; q=dns/txt; s=srv-83-rsa; t=1661980710; h=date :
- from : to : cc : subject : message-id : mime-version : content-type :
- from; bh=EIkkMFs4sIWKssfSNTOzhO+kTBYbdsRJaTCSHYW0Ch0=;
- b=HzO+HykJrTNDbxNUrHxNGpGNqrAoK1HtMmSgKfX5LdehdR1852JhlcR9ehGn0/XCkxV0w
- m8Pmi7AKxIXNTzBOo8JVPiegR/GLYCE9jX81fpmUSYUELOHBhsslef4f9NX0Orox7hKecPn
- 4XNg+TVm1pf9G/tBiGtnQfOGGdMgG1FZM4w5CJQXfb11YGHaGWDGKwEs8TIjLMxFWnfGyNO
- yJAhqGR7h0z/tb7XjaO6cS9M4BeMke5rk5uK6RT9ykrmtvj5kXMLm/juX2SvdRbow9+mLup
- pnkdwIvyXITEYQne7hN0FgtAiIYD69MOEVSsvchpt5+HvEz0T078jhne7Q3Q==
-Received: by server.lespinasse.org (Postfix, from userid 1000)
-        id ED80F160522; Wed, 31 Aug 2022 14:18:30 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 14:18:30 -0700
-From:   Michel Lespinasse <michel@lespinasse.org>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Michel Lespinasse <michel@lespinasse.org>
-Subject: [PATCH] Remove unused variable i in process_mem_region()
-Message-ID: <20220831211830.GA16578@lespinasse.org>
+        Wed, 31 Aug 2022 17:18:42 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D49F6EE48A;
+        Wed, 31 Aug 2022 14:18:39 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-1225219ee46so2499978fac.2;
+        Wed, 31 Aug 2022 14:18:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=9m98NxU5A86KuWXY2vovcqY79lYhHDupa0B+1XAZNXI=;
+        b=J5itwN7e9LGnhrm23Fwvv/OcJpHHDiOEza+6QLGn8Y7B2air9FdCxPKYfZj9Xzg2qo
+         S5PdhgNsf760yQcnRXWf0cH3/xjExzQy6goOqrADeHUfPA8YtLDnzJYN2QlGN6LwaWrZ
+         Fw5kHEgwA7uODQ0qPp5BOqksgLmyb+ImJHkw4NnzwCywNl6KrIYQVjlhREG7Emr+FIgt
+         0ikjwoT2NkNhl+qEO9oZBQap5sKEl9QHuny1ZNSiAeikS1dJuZJ18JXt1Ws7I7B8yNlJ
+         Vt9+65zEEM1al1O5Mv6cvp0XuIeIUQ48f2d22W3LAjyqNHDELu75IPmHoRyGr7r1PZon
+         1gEw==
+X-Gm-Message-State: ACgBeo0vJQgKwKA6YvJWYvyOwfc7rPTpW3xqqcUZ5HepEFGDoiL9Tj6B
+        7ydlUoa6GhnTQMU8PDKKNSNyzHS8/A==
+X-Google-Smtp-Source: AA6agR5mjzuCT804Od3ar0hVSJxntEJNibVpbFZ3mWYBSrWp0nknR6FsyV22UkQZ3NpMXCOUl9XgoQ==
+X-Received: by 2002:aca:5bc3:0:b0:345:30a2:89da with SMTP id p186-20020aca5bc3000000b0034530a289damr1973244oib.3.1661980719096;
+        Wed, 31 Aug 2022 14:18:39 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id g10-20020acab60a000000b0034516ca90dcsm7962802oif.23.2022.08.31.14.18.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 14:18:38 -0700 (PDT)
+Received: (nullmailer pid 267582 invoked by uid 1000);
+        Wed, 31 Aug 2022 21:18:37 -0000
+Date:   Wed, 31 Aug 2022 16:18:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        linux-kernel@vger.kernel.org, Frank Li <Frank.Li@nxp.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        devicetree@vger.kernel.org,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        linux-pci@vger.kernel.org,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Rob Herring <robh+dt@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Subject: Re: [PATCH v5 07/20] dt-bindings: PCI: dwc: Apply generic schema for
+ generic device only
+Message-ID: <20220831211837.GA267498-robh@kernel.org>
+References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822184701.25246-8-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <20220822184701.25246-8-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,33 +76,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tiny fix for a build warning. Could you get this queued ?
+On Mon, 22 Aug 2022 21:46:48 +0300, Serge Semin wrote:
+> Having the generic compatible strings constraints with the 'any'+'generic
+> string' semantic implicitly encourages either to add new DW PCIe-based
+> DT-bindings with the generic compatible string attached or just forget
+> about adding new DT-bindings since the corresponding DT-node will be
+> evaluated anyway. Moreover having that semantic implemented in the
+> generic DT-schema causes the DT-validation tool to apply the schema twice:
+> first by implicit compatible-string-based selection and second by means of
+> the 'allOf: [ $ref ]' statement. Let's fix all of that by dropping the
+> compatible property constraints and selecting the generic DT-schema only
+> for the purely generic DW PCIe DT-nodes. The later is required since there
+> is a driver for such devices. (Though there are no such DT-nodes currently
+> defined in the kernel DT sources.)
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v3:
+> - This is a new patch unpinned from the next one:
+>   https://lore.kernel.org/linux-pci/20220503214638.1895-2-Sergey.Semin@baikalelectronics.ru/
+>   by the Rob' request. (@Rob)
+> - Fix compatible property schema so one would work as expected: string
+>   must contain either generic DW PCIe IP-core name or both generic and
+>   equipped with IP-core version names.
+> 
+> Changelog v5:
+> - Switch the patch from not-selecting the generic schemas to applying
+>   them to the generic DW PCIe device nodes only.
+> - Drop the generic compatible string used as fallback. (@Rob)
+> ---
+>  .../devicetree/bindings/pci/snps,dw-pcie-ep.yaml | 16 ++++++++++------
+>  .../devicetree/bindings/pci/snps,dw-pcie.yaml    | 16 ++++++++++------
+>  2 files changed, 20 insertions(+), 12 deletions(-)
+> 
 
----------------------------- 8< -----------------------------------
-
-This avoids a build warning when CONFIG_MEMORY_HOTREMOVE or CONFIG_ACPI
-are unset.
-
-Signed-off-by: Michel Lespinasse <michel@lespinasse.org>
----
- arch/x86/boot/compressed/kaslr.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/x86/boot/compressed/kaslr.c b/arch/x86/boot/compressed/kaslr.c
-index 4a3f223973f4..5ae2ecb16ad7 100644
---- a/arch/x86/boot/compressed/kaslr.c
-+++ b/arch/x86/boot/compressed/kaslr.c
-@@ -624,7 +624,9 @@ static bool process_mem_region(struct mem_vector *region,
- 			       unsigned long minimum,
- 			       unsigned long image_size)
- {
-+#if defined(CONFIG_MEMORY_HOTREMOVE) && defined(CONFIG_ACPI)
- 	int i;
-+#endif
- 	/*
- 	 * If no immovable memory found, or MEMORY_HOTREMOVE disabled,
- 	 * use @region directly.
-
-base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
--- 
-2.20.1
+Reviewed-by: Rob Herring <robh@kernel.org>

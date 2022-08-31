@@ -2,74 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F23565A8590
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:28:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9215F5A8594
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:28:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232812AbiHaS2V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:28:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S233033AbiHaS2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbiHaS1q (ORCPT
+        with ESMTP id S232838AbiHaS2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:27:46 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC8987091
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:23:36 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id o4so14933886pjp.4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=fS7xlk8exOPxYXHFLdn8iabPIslSYjRlhaKGdRBrbZw=;
-        b=MNJusS+5Xh80LA5c1pprHLLub+S28s+9/p/b/OOz7IAJSptPqkqQlXfv5FO9nna7My
-         MOnGz7gea2rJeQf4IClBH2ymUQoF910kZAFSn4Op4vV9G0z3m5++AuppB6fHkfzGO741
-         uZaElfhQRXmG5iRG0vhJY3t97cmpA8p041qGk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=fS7xlk8exOPxYXHFLdn8iabPIslSYjRlhaKGdRBrbZw=;
-        b=CLm/XU1bAJSM/Xfkmxv8/6XkthJ2JyVQ+ZPX+Rpgn7GtYxS5Gc1KUfwlQQwcZVZ++b
-         ptK/Fex2nvO/awQS0P6q5jad+yWAvMo/+AAfl50wd2ksBGz/NmQ1mc4IDYYIfDKIZKM5
-         U3wSNKqFXGCb5IolpqLAW8vON/solSmvQOIr5/aUtbYEEi84uo+5t12LATH6tV2LteAC
-         eDBSqozAxsKxQAQc+biweTDVClta8MOPoMsLBw4IfFcJMz2u9etnPNJM5SAKsM9dFSWq
-         rfBXEY3biJZWwXdxvAJxqRZVttSl9Or8bNg9BldYjyWxzKFP3o38Jiiw6rdmGw4X8n0b
-         ILIw==
-X-Gm-Message-State: ACgBeo1CSkhJ8BtJiTGB+8S5NWK2lVPbVGaWvzcQY+1pWp/Vt8E12JIC
-        YuWMZzxv6y4J5C4wsHwORgQvNQ==
-X-Google-Smtp-Source: AA6agR6p0pm5G+0tEg3FHLipUz0PBlM7zrfbRO94La2RKxHAydUxfZxpVV8PdPYV5O1NMEFkLbhxJA==
-X-Received: by 2002:a17:90b:3803:b0:1fa:ebea:e90e with SMTP id mq3-20020a17090b380300b001faebeae90emr4544973pjb.111.1661970215991;
-        Wed, 31 Aug 2022 11:23:35 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id z9-20020a17090a170900b001fe136b4930sm1590311pjd.50.2022.08.31.11.23.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 11:23:35 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 11:23:34 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Sami Tolvanen <samitolvanen@google.com>
-Cc:     linux-kernel@vger.kernel.org, Josh Poimboeuf <jpoimboe@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Joao Moreira <joao@overdrivepizza.com>,
-        Sedat Dilek <sedat.dilek@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-hardening@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, llvm@lists.linux.dev
-Subject: Re: [PATCH v4 16/21] objtool: Disable CFI warnings
-Message-ID: <202208311123.CFD2B1B9@keescook>
-References: <20220830233129.30610-1-samitolvanen@google.com>
- <20220830233129.30610-17-samitolvanen@google.com>
+        Wed, 31 Aug 2022 14:28:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4571898CA2;
+        Wed, 31 Aug 2022 11:23:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D51F7B82221;
+        Wed, 31 Aug 2022 18:23:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F301C433D7;
+        Wed, 31 Aug 2022 18:23:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661970230;
+        bh=fYCQfnEwpOVlVfS6btj2u1SLUquTKDlCgujlhLw9hfw=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=qSMznd5Gn4hO+P4O38SY7qplTUw2JZT81sSR78p2mP2AjcJVXdxIEyfDiSTc+5SjK
+         SNxYnM4bjQx53UhoDIXMrUV3zVDZ91R1RzC5p7Vom5QWQ/JL6M7KucXPXsrQkiMMEt
+         v1dkbbglno7CplMM/QvQ4hBXTwLTQZ63D16TbMmGV9YNPIpL0S9uDwr7eEyIsARj47
+         IiCLsU1mTKqHyaZIbAH9u/mk/ZgyutiDO9kF/VtxGiyZrYRKaq6x8r34VAM94z8c+k
+         aqGnE2Gh7xGXGA73Kbyq28qNCrPc0QSTH0SQipO0Hxo/QWyGCACKmEE30st4Vb8bOn
+         MSvulrQWIG1vA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2491F5C015D; Wed, 31 Aug 2022 11:23:50 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 11:23:50 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        kernel-team@fb.com, mingo@kernel.org
+Cc:     stern@rowland.harvard.edu, parri.andrea@gmail.com, will@kernel.org,
+        peterz@infradead.org, boqun.feng@gmail.com, npiggin@gmail.com,
+        dhowells@redhat.com, j.alglave@ucl.ac.uk, luc.maranget@inria.fr,
+        akiyks@gmail.com
+Subject: [PATCH memory-model 0/3] Linux-kernel memory model updates for v6.1
+Message-ID: <20220831182350.GA2698943@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220830233129.30610-17-samitolvanen@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,26 +58,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 04:31:24PM -0700, Sami Tolvanen wrote:
-> The __cfi_ preambles contain a mov instruction that embeds the KCFI
-> type identifier in the following format:
-> 
->   ; type preamble
->   __cfi_function:
->     mov <id>, %eax
->   function:
->     ...
-> 
-> While the preamble symbols are STT_FUNC and contain valid
-> instructions, they are never executed and always fall through. Skip
-> the warning for them.
-> 
-> .kcfi_traps sections point to CFI traps in text sections. Also skip
-> the warning about them referencing !ENDBR instructions.
-> 
-> Signed-off-by: Sami Tolvanen <samitolvanen@google.com>
+Hello!
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+This series provides a few updates and fixes for LKMM documentation:
 
--- 
-Kees Cook
+1.	docs/memory-barriers.txt: Fix confusing name of 'data dependency
+	barrier', courtesy of Akira Yokosawa.
+
+2.	docs/memory-barriers.txt: Fixup long lines, courtesy of Akira
+	Yokosawa.
+
+3.	tools/memory-model: Clarify LKMM's limitations in
+	litmus-tests.txt, courtesy of =?UTF-8?q?Paul=20Heidekr=C3=BCger?=.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ Documentation/memory-barriers.txt                   |   93 ++++++++--------
+ b/Documentation/memory-barriers.txt                 |  116 +++++++++++---------
+ b/tools/memory-model/Documentation/litmus-tests.txt |   37 ++++--
+ 3 files changed, 138 insertions(+), 108 deletions(-)

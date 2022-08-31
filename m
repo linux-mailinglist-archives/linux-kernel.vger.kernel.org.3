@@ -2,63 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF24A5A7677
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:19:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F29B05A767E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:23:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiHaGT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:19:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
+        id S230144AbiHaGX2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:23:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229811AbiHaGTy (ORCPT
+        with ESMTP id S229786AbiHaGXZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:19:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57294B4B8
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:19:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661926792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=q0RL9hcvSBeKbl7mI4q8jnXwWqDmenfiCErqBoOJUqQ=;
-        b=eFUUocwdXByvBz8dcu4So0O7zXVRvh2+tkhXirO88WoQPV4zPqVK692Dr4lnDOYIjg5Q1+
-        LwCndrZJlsWY5mYD8W/PZt8KTSyJFz8HpZMCETPOAfTkAUqsQwZZOyE8rkh61dqGG8Gfsn
-        MdDK4MSC/W3sEtU6/c3L80waeduyGBk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-30-G3Vfp39vNKOo56wOZsSujQ-1; Wed, 31 Aug 2022 02:19:49 -0400
-X-MC-Unique: G3Vfp39vNKOo56wOZsSujQ-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B3E153C0E20E;
-        Wed, 31 Aug 2022 06:19:48 +0000 (UTC)
-Received: from starship (unknown [10.40.194.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 203662166B26;
-        Wed, 31 Aug 2022 06:19:46 +0000 (UTC)
-Message-ID: <dd8c92855762258d87486f719bf7e52e36169ef2.camel@redhat.com>
-Subject: Re: [PATCH 07/19] KVM: SVM: Drop buggy and redundant AVIC "single
- logical dest" check
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Wed, 31 Aug 2022 09:19:45 +0300
-In-Reply-To: <20220831003506.4117148-8-seanjc@google.com>
-References: <20220831003506.4117148-1-seanjc@google.com>
-         <20220831003506.4117148-8-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 31 Aug 2022 02:23:25 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8B0BD107
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:23:24 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id g7so1578616lfe.11
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:23:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=sG8qQX99gFK4yoHoKn1Te6zMXWrXBOfDL+SjtxXraow=;
+        b=VLeRXkSI9xzluqbrtoexL6/woaBxAqAt86KOLzWX2tiaEbNAu7jebpt79pR+gAyIXH
+         rMrki1qaEQxEQVFIUqx2laUPLlU+yiqsrj3/9YIctsuKMt+oWIV3ruqkYazPSmqr3YFN
+         gfCjS/3wSyIOu2gTKsqF684/JK1PEu4XNmM7QiyQt1qqgEBHdRQu8hgqAI6MgXcGaToq
+         STmaE2cO2BVkejVzfGqJIc9NVfIdyKCtJnoBcTNwbo7ZhqvzB36T3rCS+CFQndf82Iz7
+         4I9BnepR+SKDA1MaUkQiqzNfDIw+IzX+AitTllmE32OWBWEr0VoUfH2SrB7Xs0G7S5Qv
+         W4KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=sG8qQX99gFK4yoHoKn1Te6zMXWrXBOfDL+SjtxXraow=;
+        b=6byyTrGSs8tPOCdwjL2HOBfhGimJ4mOoKky3925qr07N2YwD5IhJPvgBOWuulQiSzF
+         fKiG+svGX/kaEGzgycpPNABlJHbO0vh2MXwH1qHu3hIXLpKv0PuIPoh66Y7y9ygIxIF9
+         K64piXFhHZ9EtxdDAMd3ap/pYluXKqxAMbmygENTdCIwLTAYZQabGdbx8Te9WOzSWw45
+         ZNafbNrOkMHs2Lc+UqamKroFekfYP468YNAFI6bKg0KdjklPIA6nX7oLyJ0DFkRQfVYt
+         fBuAhA0Qj+rHMgogbSHFFNVbfhp90LBuTwKUWqVgP7vVBQjpwofp8EGXTe/fHzdTgIjz
+         BeCA==
+X-Gm-Message-State: ACgBeo2FEf+Tgf0N5pkJmjFjPaDW0PYfqepc5RFpcOiv63SAIL/JH1tc
+        I+w88H6C8E2WmDebjSiJc70Rmw==
+X-Google-Smtp-Source: AA6agR5BmtOnQlEfLdxdo+dKqIZi/cCEsfH7kp1nabWPpiU2DtSDu1l5/8vzYaNFyjpJVl4vA8Nx+g==
+X-Received: by 2002:a19:e00d:0:b0:492:e5a5:588b with SMTP id x13-20020a19e00d000000b00492e5a5588bmr8309119lfg.243.1661927002695;
+        Tue, 30 Aug 2022 23:23:22 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id f13-20020a056512092d00b00492ed031aacsm1868997lft.173.2022.08.30.23.23.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 30 Aug 2022 23:23:21 -0700 (PDT)
+Message-ID: <ad8da366-0eec-fb23-b30f-0fe20d709104@linaro.org>
+Date:   Wed, 31 Aug 2022 09:23:21 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 2/4] dt-bindings: memory: Add numeric LPDDR compatible
+ string variant
+Content-Language: en-US
+To:     Julius Werner <jwerner@chromium.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Jian-Jia Su <jjsu@google.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220831013359.1807905-1-jwerner@chromium.org>
+ <20220831013359.1807905-3-jwerner@chromium.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220831013359.1807905-3-jwerner@chromium.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,50 +80,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
-> Use the already-calculated-and-sanity-checked destination bitmap when
-> processing a fast AVIC kick in logical mode, and drop the logical path's
-> flawed logic.  The intent of the check is to ensure the bitmap is a power
-> of two, whereas "icrh != (1 << avic)" effectively checks that the bitmap
-> is a power of two _and_ the target cluster is '0'.
-> 
-> Note, the flawed check isn't a functional issue, it simply means that KVM
-> will go down the slow path if the target cluster is non-zero.
-> 
-> Fixes: 8c9e639da435 ("KVM: SVM: Use target APIC ID to complete x2AVIC IRQs when possible")
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/svm/avic.c | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/arch/x86/kvm/svm/avic.c b/arch/x86/kvm/svm/avic.c
-> index 3c333cd2e752..14f567550a1e 100644
-> --- a/arch/x86/kvm/svm/avic.c
-> +++ b/arch/x86/kvm/svm/avic.c
-> @@ -411,15 +411,7 @@ static int avic_kick_target_vcpus_fast(struct kvm *kvm, struct kvm_lapic *source
->  			 * Instead, calculate physical ID from logical ID in ICRH.
->  			 */
->  			int cluster = (icrh & 0xffff0000) >> 16;
-> -			int apic = ffs(icrh & 0xffff) - 1;
-> -
-> -			/*
-> -			 * If the x2APIC logical ID sub-field (i.e. icrh[15:0])
-> -			 * contains anything but a single bit, we cannot use the
-> -			 * fast path, because it is limited to a single vCPU.
-> -			 */
-> -			if (apic < 0 || icrh != (1 << apic))
-> -				return -EINVAL;
-> +			int apic = ffs(bitmap) - 1;
->  
->  			l1_physical_id = (cluster << 4) + apic;
->  		}
+On 31/08/2022 04:33, Julius Werner wrote:
+> This patch allows a new kind of compatible string for LPDDR parts in the
+> device tree bindings, in addition to the existing hardcoded
+> <vendor>,<part-number> strings. The new format contains manufacturer and
+> part (revision) information in numerical form, such as lpddr3-ff,0201
+> for an LPDDR3 part with manufacturer ID ff and revision ID 0201. This
+> helps cases where LPDDR parts are probed at runtime by boot firmware and
+> cannot be matched to hardcoded part numbers.
 
-Oh, I didn't notice this bug. However isn't removing the check is wrong as well?
-
-What if we do have multiple bits set in the bitmap? After you remove this code,
-we will set IPI only to APIC which matches the 1st bit, no?
-(The fast code only sends IPI to one vCPU)
+Please describe your case here as example.
 
 Best regards,
-	Maxim Levitsky
-
+Krzysztof

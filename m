@@ -2,77 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB725A7C85
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:52:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 838B45A7C8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbiHaLwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 07:52:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47210 "EHLO
+        id S229959AbiHaLxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 07:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiHaLwe (ORCPT
+        with ESMTP id S229652AbiHaLxJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 07:52:34 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EED1C7F9B;
-        Wed, 31 Aug 2022 04:52:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661946753; x=1693482753;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=oYuQNupbwHPTjXRmzQFBh8aoIsFuQZttcSqIKJea66Q=;
-  b=QRV3Jv+j7MLrNcNHqkaby2wDLNxDt7p6S9PHNFUMl63LncRJq1piAQ1P
-   2nd+hCnGrdyHwsARqtRFIOzufec7XekLWJRn4UVPzKx3yG4D9KwKIejNX
-   2owyaLHENW3zZOkBJygFvvMhtboXbVYQ6nhjSbf+IGwJxOzXGHiEfzVPV
-   PrHaXi/omd2eqVRNyN/1W2yIUHrlshBv4JPTIw+frbX/J7jIKYb4ndQub
-   sgwZjwE5ZIyMBYZoDAVZz1LbopItG/6AcWtcZkjK08kTwHl/g96tawRC1
-   oINxwd8gF0Nxfgyg1b5gHNoeeq8QqsNcXD62c+dIQvmZwf59wbUj5aENb
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="275831600"
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="275831600"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 04:52:33 -0700
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="680398895"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 04:52:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oTMGe-006MMJ-07;
-        Wed, 31 Aug 2022 14:52:24 +0300
-Date:   Wed, 31 Aug 2022 14:52:23 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Raul E Rangel <rrangel@chromium.org>
-Cc:     linux-acpi@vger.kernel.org, linux-input@vger.kernel.org,
-        hdegoede@redhat.com, mario.limonciello@amd.com, timvp@google.com,
-        rafael@kernel.org, Alistair Francis <alistair@alistair23.me>,
-        Angela Czubak <acz@semihalf.com>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bartosz Szczepanek <bsz@semihalf.com>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Jiri Kosina <jikos@kernel.org>, Len Brown <lenb@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Rob Herring <robh@kernel.org>, Wolfram Sang <wsa@kernel.org>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        "jingle.wu" <jingle.wu@emc.com.tw>, linux-gpio@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/8] acpi: i2c: Use SharedAndWake and ExclusiveAndWake to
- enable wake irq
-Message-ID: <Yw9LdxWQMpnzgFe/@smile.fi.intel.com>
-References: <20220830231541.1135813-1-rrangel@chromium.org>
+        Wed, 31 Aug 2022 07:53:09 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFA5C7F9B
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 04:53:05 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220831115258euoutp01711728c076d00ae9f805a79ff1516340~Qa8o6w21P3194731947euoutp01k
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:52:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220831115258euoutp01711728c076d00ae9f805a79ff1516340~Qa8o6w21P3194731947euoutp01k
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1661946778;
+        bh=Nxlfym3ND6i/YRJglggezX4ww7hOMachCwDzRO1d2yI=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=lyKfTnmjoKXjfIqJwFrgtTajFsmL9zOHZpwNF3QtXqJ49hMaw3N0dreGNQDrhyoaD
+         b5X/CJwnoRxd0nuOYEAiICiYnNdDJMXxIERKUFuqFGupJsvOAyViDyiVULdnkwHbly
+         YbGRaNZ498oAozrcxAx17eo6ffCbxTa4FsQR51Fk=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20220831115258eucas1p2096c19867288ec5578b4199c5e2c62fc~Qa8olfodV3267932679eucas1p2W;
+        Wed, 31 Aug 2022 11:52:58 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 36.80.07817.A9B4F036; Wed, 31
+        Aug 2022 12:52:58 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220831115257eucas1p20d37a01c51e42767860920a936255bd7~Qa8oCEOoU2649726497eucas1p2b;
+        Wed, 31 Aug 2022 11:52:57 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220831115257eusmtrp14866fa61df5b58b1cf2cd02726e27927~Qa8oBIECS0765907659eusmtrp1L;
+        Wed, 31 Aug 2022 11:52:57 +0000 (GMT)
+X-AuditID: cbfec7f4-8abff70000011e89-cf-630f4b9a8237
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 02.33.07473.99B4F036; Wed, 31
+        Aug 2022 12:52:57 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220831115257eusmtip106c11b8029e14f7219082ce264467265~Qa8nR2dEv1207712077eusmtip1R;
+        Wed, 31 Aug 2022 11:52:57 +0000 (GMT)
+Message-ID: <9a425a51-9460-6c4d-e331-5cd5873f8a43@samsung.com>
+Date:   Wed, 31 Aug 2022 13:52:57 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220830231541.1135813-1-rrangel@chromium.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0)
+        Gecko/20100101 Thunderbird/91.13.0
+Subject: Re: [PATCH] ARM: mmu: fix access to illegal address when using
+ earlycon & memblock=debug
+Content-Language: en-US
+To:     Victor Hassan <victor@allwinnertech.com>, linux@armlinux.org.uk,
+        rmk+kernel@armlinux.org.uk, linus.walleij@linaro.org,
+        yanfei.xu@windriver.com, ardb@kernel.org, tglx@linutronix.de,
+        mirq-linux@rere.qmqm.pl, arnd@arndb.de
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        allwinner-opensource-support@allwinnertech.com
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <20220316023356.120595-1-victor@allwinnertech.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrHKsWRmVeSWpSXmKPExsWy7djP87qzvPmTDXbfFbM49beX0eLnl/eM
+        Fn8nHWO3mPJnOZPFpsfXWC0u75rDZnFo6l5Gi2/PTzFaXOqfyGSxedNUZovvP+ayWmy4/IDN
+        gcfjVdszJo/L1y4ye/z+NYnRY9OqTjaPO9f2sHm8O3eO3WPzknqPWW372Dw+b5LzWL9lK1MA
+        VxSXTUpqTmZZapG+XQJXRufMJ6wFX/grdvV1sDcwPuLpYuTkkBAwkTg+/z9TFyMXh5DACkaJ
+        xR9nMUM4Xxgl+uZuZYdwPjNKTH/+hQ2m5dasP1Atyxkl3rztZYFwPjJKnDrXxARSxStgJ/Gy
+        5yELiM0ioCqx89pHVoi4oMTJmU/A4qICyRKzjh1jBLGFgewfjV1gNcwC4hK3nswH2yAi8JRR
+        4knzdzaIRIXEu/Y9YA1sAoYSXW+7wOKcAvYSt5ctZISokZfY/nYO2BMSAvM5Ja683MoMcbeL
+        xNntcxkhbGGJV8e3sEPYMhKnJ/cAXcQBZOdL/J1hDBGukLj2eg1Uq7XEnXO/2EBKmAU0Jdbv
+        0ocIO0os2/uPGaKTT+LGW0GIC/gkJm2bDhXmlehoE4KoVpOYdXwd3M6DFy4xT2BUmoUUKLOQ
+        PD8LyS+zEPYuYGRZxSieWlqcm55abJSXWq5XnJhbXJqXrpecn7uJEZjkTv87/mUH4/JXH/UO
+        MTJxMB5ilOBgVhLh/X6OJ1mINyWxsiq1KD++qDQntfgQozQHi5I4b3LmhkQhgfTEktTs1NSC
+        1CKYLBMHp1QDk4R4Ss0Wdp7+4rmne/QstJLWvZyw91wPn+jF1wc4F164MVMpZ2Meu0cs0xpb
+        y6/LUs998Vl7/RxzWjCHB5vOkTttl9rXpcX7V31ZkLf7X4bCM4Yl355qut3Zcuwpw4dIBv6D
+        K0+HMOxbuPRk2Awhg8bTVSynNh3UXvpC9OXbB4dn+5UyXPFXWfx/cti2T38W5UT9vfqq6nDZ
+        jE1erTNyihOvcrqfNXWYcLXnmNBHMWs/gUNFuwKy97Dc/f9wsWOC0pczp80blD6VPV1yt1/J
+        vV304Kyv2THFmy6qs1a6X4o0O7ilOOnyMePNm1v1F8U/z9avOpS3SoJdNGzJ/srlz73nX5ta
+        sHryytaXLnderc9UYinOSDTUYi4qTgQAoWrH8uEDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrEIsWRmVeSWpSXmKPExsVy+t/xu7ozvfmTDb7d0LY49beX0eLnl/eM
+        Fn8nHWO3mPJnOZPFpsfXWC0u75rDZnFo6l5Gi2/PTzFaXOqfyGSxedNUZovvP+ayWmy4/IDN
+        gcfjVdszJo/L1y4ye/z+NYnRY9OqTjaPO9f2sHm8O3eO3WPzknqPWW372Dw+b5LzWL9lK1MA
+        V5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+XYJeRufM
+        J6wFX/grdvV1sDcwPuLpYuTkkBAwkbg16w9TFyMXh5DAUkaJ+7+bmCASMhInpzWwQtjCEn+u
+        dbFBFL1nlJjatpAZJMErYCfxsuchC4jNIqAqsfPaR1aIuKDEyZlPwOKiAskSSxrug8WFgewf
+        jV1gNrOAuMStJ/PBNosIPGWUONZ4jA0iUSExY91BsGYhoAW7Tr4DW8YmYCjR9bYLrIZTwF7i
+        9rKFjBD1ZhJdW7ugbHmJ7W/nME9gFJqF5I5ZSPbNQtIyC0nLAkaWVYwiqaXFuem5xYZ6xYm5
+        xaV56XrJ+bmbGIGRve3Yz807GOe9+qh3iJGJg/EQowQHs5II7/dzPMlCvCmJlVWpRfnxRaU5
+        qcWHGE2BgTGRWUo0OR+YWvJK4g3NDEwNTcwsDUwtzYyVxHk9CzoShQTSE0tSs1NTC1KLYPqY
+        ODilGpjMvY6xq2+8ai8ay7BaY1nOnOtXxfYyP7qYeCfhGLuhYrnkEuEF8d7durnRh2Ye3fTr
+        lv/MdWc3Muzz4ebbaf2gPkONRXsab3E0T7LNvr8vfbl7t3tO+BLJJVlsr3fR66Gc4cOs944n
+        r2nv5Pj623+2Tdlnm4v3vlzbE/3swNIFB8LM51wXNs/c3tLb5SUz+++2R26mHNYmJ+6xX74V
+        OmHCjK+Sf9Luvm/jPBZl47ijSlHOf6aUq/lBdTNbfh+T6Kd/LMqPXJjeu3ujz834pAKTz8s+
+        Ky32Mug5aOEZszvOcKnZ89WbFc85aZ5OXRlZtCiflWH3raVCE1LEZA/3qy/2sFD8r3D++I8e
+        nZTrKu5KLMUZiYZazEXFiQCm24zRdQMAAA==
+X-CMS-MailID: 20220831115257eucas1p20d37a01c51e42767860920a936255bd7
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20220831115257eucas1p20d37a01c51e42767860920a936255bd7
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220831115257eucas1p20d37a01c51e42767860920a936255bd7
+References: <20220316023356.120595-1-victor@allwinnertech.com>
+        <CGME20220831115257eucas1p20d37a01c51e42767860920a936255bd7@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,70 +119,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 05:15:33PM -0600, Raul E Rangel wrote:
-> Today, i2c drivers are making the assumption that their IRQs can also
-> be used as wake IRQs. This isn't always the case and it can lead to
-> spurious wakes. This has recently started to affect AMD Chromebooks.
-> With the introduction of
-> d62bd5ce12d7 ("pinctrl: amd: Implement irq_set_wake"), the AMD GPIO
-> controller gained the capability to set the wake bit on each GPIO. The
-> ACPI specification defines two ways to inform the system if a device is
-> wake capable:
-> 1) The _PRW object defines the GPE that can be used to wake the system.
-> 2) Setting ExclusiveAndWake or SharedAndWake in the _CRS GpioInt.
-> 
-> Currently only the first method is supported. The i2c drivers don't have
-> any indication that the IRQ is wake capable, so they guess. This causes
-> spurious interrupts, for example:
-> * We have an ACPI HID device that has `_PR0` and `_PR3`. It doesn't have
->   `_PRW` or `ExclusiveAndWake` so that means the device can't wake the
->   system.
-> * The IRQ line is active level low for this device and is pulled up by
->   the power resource defined in `_PR0`/`_PR3`.
-> * The i2c driver will (incorrectly) arm the GPIO for wake by calling
->   `enable_irq_wake` as part of its suspend hook.
-> * ACPI will power down the device since it doesn't have a wake GPE
->   associated with it.
-> * When the device is powered down, the IRQ line will drop, and it will
->   trigger a wake event.
-> 
-> See the following debug log:
-> [   42.335804] PM: Suspending system (s2idle)
-> [   42.340186] amd_gpio AMD0030:00: RX: Setting wake for pin 89 to enable
-> [   42.467736]     power-0416 __acpi_power_off      : Power resource [PR00] turned off
-> [   42.467739] device_pm-0280 device_set_power      : Device [H05D] transitioned to D3cold
-> [   42.475210] PM: pm_system_irq_wakeup: 11 triggered pinctrl_amd
-> [   42.535293] PM: Wakeup unrelated to ACPI SCI
-> [   42.535294] PM: resume from suspend-to-idle
-> 
-> In order to fix this, we need to take into account the wake capable bit
-> defined on the GpioInt. This is accomplished by:
-> * Migrating some of the i2c drivers over to using the PM subsystem to
->   manage the wake IRQ. max8925-i2c, elants_i2c, and raydium_i2c_ts still
->   need to be migrated, I can do that depending on the feedback to this
->   patch series.
-> * Expose the wake_capable bit from the ACPI GpioInt resource to the
->   i2c core.
-> * Use the wake_capable bit in the i2c core to call
->   `dev_pm_set_wake_irq`. This reuses the existing device tree flow.
-> * Make the i2c drivers stop calling `dev_pm_set_wake_irq` since it's now
->   handled by the i2c core.
-> * Make the ACPI device PM system aware of the wake_irq. This is
->   necessary so the device doesn't incorrectly get powered down when a
->   wake_irq is enabled.
-> 
-> I've tested this code with various combinations of having _PRW,
-> ExclusiveAndWake and power resources all defined or not defined, but it
-> would be great if others could test this out on their hardware.
+Hi Victor,
 
-I have got only cover letter and a single patch (#3). What's going on?
+On 16.03.2022 03:33, Victor Hassan wrote:
+> earlycon uses fixmap to create a memory map,
+> So we need to close earlycon before closing fixmap,
+> otherwise printk will access illegal addresses.
+> After creating a new memory map, we open earlycon again.
+>
+> Signed-off-by: Victor Hassan <victor@allwinnertech.com>
 
-Note: I'm also reviewer of I²C DesignWare driver, you really have to
-fix your tools / submission process and try again. No review for this
-series.
+This patch landed in linux next-20220831 as commit a76886d117cb ("ARM: 
+9223/1: mmu: fix access to illegal address when using earlycon & 
+memblock=debug"). Unfortunately it breaks booting of all my test boards 
+which *do not* use earlycon. It can be easily reproduced even with QEMU.
 
+With kernel compiled from multi_v7_defconfig the following setup boots:
+
+$ qemu-system-arm -nographic -kernel arch/arm/boot/zImage -append 
+"console=ttyAMA0 earlycon" -M virt -smp 2 -m 512
+
+while this one doesn't:
+
+$ qemu-system-arm -nographic -kernel arch/arm/boot/zImage -append 
+"console=ttyAMA0" -M virt -smp 2 -m 512
+
+
+> ---
+>   arch/arm/mm/mmu.c | 7 +++++++
+>   1 file changed, 7 insertions(+)
+>
+> diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
+> index 274e4f73fd33..f3511f07a7d0 100644
+> --- a/arch/arm/mm/mmu.c
+> +++ b/arch/arm/mm/mmu.c
+> @@ -14,6 +14,7 @@
+>   #include <linux/fs.h>
+>   #include <linux/vmalloc.h>
+>   #include <linux/sizes.h>
+> +#include <linux/console.h>
+>   
+>   #include <asm/cp15.h>
+>   #include <asm/cputype.h>
+> @@ -1695,6 +1696,9 @@ static void __init early_fixmap_shutdown(void)
+>   	pmd_clear(fixmap_pmd(va));
+>   	local_flush_tlb_kernel_page(va);
+>   
+> +#ifdef CONFIG_FIX_EARLYCON_MEM
+> +	console_stop(console_drivers);
+> +#endif
+>   	for (i = 0; i < __end_of_permanent_fixed_addresses; i++) {
+>   		pte_t *pte;
+>   		struct map_desc map;
+> @@ -1713,6 +1717,9 @@ static void __init early_fixmap_shutdown(void)
+>   
+>   		create_mapping(&map);
+>   	}
+> +#ifdef CONFIG_FIX_EARLYCON_MEM
+> +	console_start(console_drivers);
+> +#endif
+>   }
+>   
+>   /*
+
+Best regards
 -- 
-With Best Regards,
-Andy Shevchenko
-
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 

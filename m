@@ -2,129 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA8F5A8101
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708AE5A8103
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:16:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbiHaPQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55354 "EHLO
+        id S231488AbiHaPQw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:16:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229453AbiHaPP5 (ORCPT
+        with ESMTP id S229453AbiHaPQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:15:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AEBD7C194
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:15:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F38DF61052
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 15:15:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CED7BC433D6;
-        Wed, 31 Aug 2022 15:15:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661958955;
-        bh=R7EXO46M5qFjicJi09WHTFPA6AYwOQpIYMdt1O//+is=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o7d+iH2Jp76tnUZZGZp3y/mCdP/BiWmflvKS3gpSbmCixTlU6JB5bqnoGhzIxyidD
-         9V+fTsZPtR/2ToNv8QUi3bkRbT4wVlJwvcv0H1qv0on/gTLgc+bsxtgRFt6DDUuGQ8
-         W3b3Ir2JGMVSACG/ClcYLL62Kz0xh1hfY9CPKAMvKr6iPJBUqpZXEvGbuTWN1JbWq2
-         roanbd7pZkUtIoa3+37iP0a14uunDZQ876Zw97wa/R6aqeR2lfTRIhSrQJArL/BnxN
-         DVPNKl2jIifkZMmYEyAfxuoFbCqmwFtP7nYNRcO/MQZRHUxa3fp7ZFzrJcl5Avuat8
-         Lqy3xEUurPBtw==
-Date:   Wed, 31 Aug 2022 18:15:41 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Rebecca Mckeever <remckee0@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v2 1/4] memblock tests: add simulation of physical memory
- with multiple NUMA nodes
-Message-ID: <Yw97HVSRW4+pkemb@kernel.org>
-References: <cover.1660897864.git.remckee0@gmail.com>
- <0cfb3c69ba6ca9ff55e1fc2528d18d108416ba57.1660897864.git.remckee0@gmail.com>
+        Wed, 31 Aug 2022 11:16:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E00287E00A
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661959008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=e0xifggWWVXyqkkAAWgCH5K33dRfapcSInzbE22dq0k=;
+        b=R4f3+iOEzqadFqHa8cjyFa55pcu1S4/LvFe/afyP46K40OhwMk8sb8hyG20YRbAJoo7rl7
+        eBXFWKpkUzdnOWqTH0aQu1cvnBzzrCLC0z/WwduWX85WdeUU/iauWq5MKIo3mDCb4Yj2oV
+        eBNvsKlL6zWdOmONBjSoIoJoTTR1H7k=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-625-nqhWktEAONeIwgEzRN5r0w-1; Wed, 31 Aug 2022 11:16:46 -0400
+X-MC-Unique: nqhWktEAONeIwgEzRN5r0w-1
+Received: by mail-ed1-f71.google.com with SMTP id r11-20020a05640251cb00b004484ec7e3a4so6911448edd.8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:16:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=e0xifggWWVXyqkkAAWgCH5K33dRfapcSInzbE22dq0k=;
+        b=3pYWqoDXBaiLRh/gl4z5FzgDyEUucDfZmG9GjBNJg1+hYlKSZDmZ8gWzVdYkqHSxeJ
+         ZQN1r0OiIRtCCoxsnuArbvwchbmbN5pUBf6RCSuqHmRYMmh/T5NHCG29TmPxfRHUNymK
+         mh6m1MtfFuXJvKAo9w1c8ZwMqGFX2cmPA3AbsArIDfSuHMN1OpMMxBX/+jT7A9bw9M3x
+         7Kkvm899RqFQeGtR0p2v3xdkMB1wQpRODiy1fJ6p4Imr0ZhWSdG/YPUSP6EXbn7NguHH
+         2c4HrraXTYoB1cUstR/+Pf4g7LVKYgSSV+Ch562YMFadqsv3QhzSKi7vxd/qy+DSerr0
+         CANQ==
+X-Gm-Message-State: ACgBeo1buqrfuYNQsDs/pqKl/W4UoWkCQM3sKmRMgNb2i9vVAucZrQVW
+        eQvQxHYLbEUY/fAhhCyef2qImJn9PX/zdfTq3/f1+0OIkeTTEggY5zZJjx01576aEqbQZZBnp26
+        U3U8oow1i+4bQ9CIEvC06CoOK
+X-Received: by 2002:a17:907:968d:b0:741:5d55:e501 with SMTP id hd13-20020a170907968d00b007415d55e501mr13353104ejc.449.1661959005203;
+        Wed, 31 Aug 2022 08:16:45 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6V+akHnnsYaO06t426lFF4ZrUc7b7phUa9GsHReHWCCzfJw8cqILu7eNd1LmGLN4cBIMbY9g==
+X-Received: by 2002:a17:907:968d:b0:741:5d55:e501 with SMTP id hd13-20020a170907968d00b007415d55e501mr13353095ejc.449.1661959005024;
+        Wed, 31 Aug 2022 08:16:45 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id rl26-20020a170907217a00b0073db043a6f7sm7206294ejb.210.2022.08.31.08.16.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 08:16:44 -0700 (PDT)
+Message-ID: <8b4547ca-6859-20b8-595b-759830bbe54a@redhat.com>
+Date:   Wed, 31 Aug 2022 17:16:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0cfb3c69ba6ca9ff55e1fc2528d18d108416ba57.1660897864.git.remckee0@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 1/1] platform/x86: intel_cht_int33fe: Fix comment
+ according to the code flow
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Gross <markgross@kernel.org>
+References: <20220824152115.88012-1-andriy.shevchenko@linux.intel.com>
+ <Yw9tIAObVXvLcg+v@smile.fi.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <Yw9tIAObVXvLcg+v@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 19, 2022 at 02:05:31AM -0700, Rebecca Mckeever wrote:
-> Add functions setup_numa_memblock_generic() and setup_numa_memblock()
-> for setting up a memory layout with multiple NUMA nodes in a previously
-> allocated dummy physical memory. These functions can be used in place of
-> setup_memblock() in tests that need to simulate a NUMA system.
-> 
-> setup_numa_memblock_generic():
-> - allows for setting up a custom memory layout by specifying the amount
->   of memory in each node, the number of nodes, and a factor that will be
->   used to scale the memory in each node
-> 
-> setup_numa_memblock():
-> - allows for setting up a default memory layout
-> 
-> Introduce constant MEM_FACTOR, which is used to scale the default memory
-> layout based on MEM_SIZE.
-> 
-> Set CONFIG_NODES_SHIFT to 4 when building with NUMA=1 to allow for up to
-> 16 NUMA nodes.
-> 
-> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> ---
->  .../testing/memblock/scripts/Makefile.include |  2 +-
->  tools/testing/memblock/tests/common.c         | 38 +++++++++++++++++++
->  tools/testing/memblock/tests/common.h         |  9 ++++-
->  3 files changed, 47 insertions(+), 2 deletions(-)
+Hi,
 
-...
-  
-> +/**
-> + * setup_numa_memblock_generic:
-> + * Set up a memory layout with multiple NUMA nodes in a previously allocated
-> + * dummy physical memory.
-> + * @nodes: an array containing the amount of memory in each node
-> + * @node_cnt: the size of @nodes
-> + * @factor: a factor that will be used to scale the memory in each node
-> + *
-> + * The nids will be set to 0 through node_cnt - 1.
-> + */
-> +void setup_numa_memblock_generic(const phys_addr_t nodes[],
-> +				 int node_cnt, int factor)
+On 8/31/22 16:16, Andy Shevchenko wrote:
+> On Wed, Aug 24, 2022 at 06:21:15PM +0300, Andy Shevchenko wrote:
+>> We don't use software_node_register_nodes() in the code, fix the comment.
+> 
+> Any comments?
 
-I only had time for a quick look and it seems this function is never used
-on its own.
-Let's fold it into setup_numa_memblock() for now.
+No, I just have a bit of a patch backlog to process,
+I'm trying to process the backlog in FIFO order and
+I have not gotten around to this one yet.
 
-> +{
-> +	phys_addr_t base;
-> +	int flags;
-> +
-> +	reset_memblock_regions();
-> +	base = (phys_addr_t)memory_block.base;
-> +	flags = (movable_node_is_enabled()) ? MEMBLOCK_NONE : MEMBLOCK_HOTPLUG;
-> +
-> +	for (int i = 0; i < node_cnt; i++) {
-> +		phys_addr_t size = factor * nodes[i];
-> +
-> +		memblock_add_node(base, size, i, flags);
-> +		base += size;
-> +	}
-> +	fill_memblock();
-> +}
-> +
-> +void setup_numa_memblock(void)
-> +{
-> +	setup_numa_memblock_generic(node_sizes, NUMA_NODES, MEM_FACTOR);
-> +}
-> +
+Regards,
 
--- 
-Sincerely yours,
-Mike.
+Hans
+

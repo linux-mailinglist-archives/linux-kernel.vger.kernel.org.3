@@ -2,86 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D125A7C00
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F86F5A7C02
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 13:12:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230023AbiHaLJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 07:09:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S230202AbiHaLMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 07:12:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiHaLJy (ORCPT
+        with ESMTP id S229498AbiHaLMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 07:09:54 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8DF510E0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 04:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1661944191;
-        bh=8XbdqaONtZ7pmuAJ5DQX8N6I8PArVUZF81z1ZRwruLg=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=eFRdaJVMKl8xAVHztJPif52LbxIx1i2fOFYxYXqKWIUc83IH/cQAlxpsVhJvrBuP9
-         G4nvJxSj2uorsllgHVjC2mmEU7RSZVIqtMWGsm+RQYYoXXzJ2l4J5ZZp0l/3IJ/yAj
-         rvtQrHZXd4UjqWnf0g6hL/riObYm6p5JVSkytoOk=
-Received: from localhost.localdomain (xry111.site [IPv6:2001:470:683e::1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id C6D8766841;
-        Wed, 31 Aug 2022 07:09:49 -0400 (EDT)
-Message-ID: <eb77b42f8ec4b67c1554dfac4a8efdfd8a4168c6.camel@xry111.site>
-Subject: Re: [PATCH 1/1] LoongArch: Fixed loongarch kernel csr_xxx implicit
- declaration.
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     =?gb2312?Q?=C0=EE=D3=EE=C5=F4?= <liyupeng@zbhlos.com>
-Cc:     chenhuacai <chenhuacai@kernel.org>, kernel <kernel@xen0n.name>,
-        "jiaxun.yang" <jiaxun.yang@flygoat.com>,
-        loongarch <loongarch@lists.linux.dev>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        caizp2008 <caizp2008@163.com>
-Date:   Wed, 31 Aug 2022 19:09:47 +0800
-In-Reply-To: <AGcAvgDYFKf5CnvlznsCy4ok.3.1661932466929.Hmail.liyupeng@zbhlos.com>
-References: <feb773a8df5d30b8d9347d1c922997c9da1fd06a.camel@xry111.site>
-         <AGcAvgDYFKf5CnvlznsCy4ok.3.1661932466929.Hmail.liyupeng@zbhlos.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.45.2 
+        Wed, 31 Aug 2022 07:12:19 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EC36CEB26
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 04:12:18 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-11f0fa892aeso15007178fac.7
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 04:12:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sartura.hr; s=sartura;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=sJH+8p5AtjeeuMnWmoPAbxDcXoEr/hihkiuokZEt+xs=;
+        b=KiHcHM7+/5UKpbapOwznFZR+Awj8ouNl6UC4vXytttIEdsVgifeBzD2mFOC0nysXjy
+         j+LfgrC0EMFd1d+rpQJlfSQv+v+iy8RUPqvtBJkMzH4K6zpq845PiL5bm+fsundOZtlg
+         7CH3Aq/njUBZHYZDr2Y9vlA6bX12QAX/wTU/NSGTCikvSk6j0+5Le//qA6sSuYZghXsU
+         yOqKhMJaSwLlMXZ9emDmLZE3yUB2VfZbLCRZdaEhngusL7vIIWe7Ougj247KuHxdnv04
+         +9ZrYV0aWbsuuifnhkg5PtIm35Sa7qp1UqLPEl2qVNKSlZ47KPgtFzp7Ghq+xj/8HVVx
+         MgcQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=sJH+8p5AtjeeuMnWmoPAbxDcXoEr/hihkiuokZEt+xs=;
+        b=gcwOepJnOBQSLfYWGOr1GgUnbffrzfdYYaauPS0gVE0L1OYwITE66WIYiP1LcUc0rR
+         BQmfdpWG9Jba7sYdx6d2SqYtABKtGUesfiKH3VdMQfAeaZ7iH2NLoR0o/Lr0KPk/Qg7e
+         nj4/Q47o+63dfKLpf1TGtd173fVcKhJ5EpS9SMmAbibwtLb/LHVzKyPWlPYp0srWhbRf
+         Ci5/cLFySeG46zCBDLiO27HoQUbwwfvo1psvcEoH/KXJqc4xQTYz9YNiBowyAKqnCoCY
+         1ugvg0ugSh7RFCkgbgTP+mq1KLE4LjBxIhyaPpK6N55S7ixiM5A0rFuLvqPOJmxtoB10
+         CjVA==
+X-Gm-Message-State: ACgBeo2Mxi173uRhtJKxwHMkWn/uy2P3yBDxwMGrYj03j4bOzyM+uFCE
+        lvfDEnf0BuBJwTdrSJczGiHTKINAn0sEFsfJHNlY5g==
+X-Google-Smtp-Source: AA6agR6Otmzk4Kk/s43tJZQHK9B9/4L56sa/82Eewo7SR4MuZgVfgMuFa/XtqxbidkOI8YYMGIiazDGLGbxY19x9ouk=
+X-Received: by 2002:a05:6870:783:b0:11c:7d1c:6ede with SMTP id
+ en3-20020a056870078300b0011c7d1c6edemr1091545oab.239.1661944337671; Wed, 31
+ Aug 2022 04:12:17 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20220516124828.45144-1-robert.marko@sartura.hr>
+ <20220516124828.45144-10-robert.marko@sartura.hr> <CA+HBbNF2R--984SdB0v42GMQOwAx4pTEz_FHifTtebN05ELU-Q@mail.gmail.com>
+ <87mtbm5gaf.fsf@BL-laptop>
+In-Reply-To: <87mtbm5gaf.fsf@BL-laptop>
+From:   Robert Marko <robert.marko@sartura.hr>
+Date:   Wed, 31 Aug 2022 13:12:06 +0200
+Message-ID: <CA+HBbNG13dspUspWMrT=LWpCnMCZ-r-K8zR4RaoLf8HxhzStSQ@mail.gmail.com>
+Subject: Re: [PATCH v4 10/10] arm64: dts: marvell: add support for Methode eDPU
+To:     Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andrew@lunn.ch, sebastian.hesselbarth@gmail.com,
+        kostap@marvell.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-31 at 15:54 +0800, =E6=9D=8E=E5=AE=87=E9=B9=8F wrote:
->=20
-> thank you for your reply=E3=80=82
-> I used the latest gcc tool on the official website of loongson,gcc-
-> 8.3.0.
-> http://www.loongnix.cn/zh/toolchain/GNU/
+On Tue, Aug 30, 2022 at 9:42 AM Gregory CLEMENT
+<gregory.clement@bootlin.com> wrote:
+>
+> Robert Marko <robert.marko@sartura.hr> writes:
+>
+> > On Mon, May 16, 2022 at 2:48 PM Robert Marko <robert.marko@sartura.hr> wrote:
+> >>
+> >> Methode eDPU is an Armada 3720 powered board based on the Methode uDPU.
+> >>
+> >> They feature the same CPU, RAM, and storage as well as the form factor.
+> >>
+> >> However, eDPU only has one SFP slot plus a copper G.hn port.
+> >>
+> >> Signed-off-by: Robert Marko <robert.marko@sartura.hr>
+> >> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >> ---
+> >> Changes in v2:
+> >> * Make the DTS split a separate commit
+> >> ---
+> >>  arch/arm64/boot/dts/marvell/Makefile             |  1 +
+> >>  arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts | 14 ++++++++++++++
+> >>  2 files changed, 15 insertions(+)
+> >>  create mode 100644 arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+> >>
+> >> diff --git a/arch/arm64/boot/dts/marvell/Makefile b/arch/arm64/boot/dts/marvell/Makefile
+> >> index 1c794cdcb8e6..104d7d7e8215 100644
+> >> --- a/arch/arm64/boot/dts/marvell/Makefile
+> >> +++ b/arch/arm64/boot/dts/marvell/Makefile
+> >> @@ -1,6 +1,7 @@
+> >>  # SPDX-License-Identifier: GPL-2.0
+> >>  # Mvebu SoC Family
+> >>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-db.dtb
+> >> +dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-eDPU.dtb
+> >>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin.dtb
+> >>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-emmc.dtb
+> >>  dtb-$(CONFIG_ARCH_MVEBU) += armada-3720-espressobin-ultra.dtb
+> >> diff --git a/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+> >> new file mode 100644
+> >> index 000000000000..57fc698e55d0
+> >> --- /dev/null
+> >> +++ b/arch/arm64/boot/dts/marvell/armada-3720-eDPU.dts
+> >> @@ -0,0 +1,14 @@
+> >> +// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+> >> +
+> >> +/dts-v1/;
+> >> +
+> >> +#include "armada-3720-uDPU.dtsi"
+> >> +
+> >> +/ {
+> >> +       model = "Methode eDPU Board";
+> >> +       compatible = "methode,edpu", "marvell,armada3720", "marvell,armada3710";
+> >> +};
+> >> +
+> >> +&eth0 {
+> >> +       phy-mode = "2500base-x";
+> >> +};
+> >> --
+> >> 2.36.1
+> >>
+> >
+> > Hi Gregory,
+> Hello Roberto,
+>
+> > Is there something else that I can improve in the series?
+>
+> Sorry for having missed this series. At first view it seems OK, I am
+> going to have a closer look this week.
 
-Vanilla kernel cannot work with Loongnix:
+Thanks, that sounds good.
 
-1. In Loongnix, GRUB loads pass the essential information to the kernel
-following "Loongson Firmware-Kernel Interface Specification".  Vanilla
-kernel does not support it and will never support it.
-2. In Loongnix, the syscall numbers are different and the layout of some
-data structures used in kernel UAPI is different.  Any Loongnix
-application invoking a syscall will likely blow up immediately on a
-vanilla kernel.
+Regards,
+Robert
+>
+> Gregory
+>
+>
+> >
+> > Regards,
+> > Robert
+> >
+> > --
+> > Robert Marko
+> > Staff Embedded Linux Engineer
+> > Sartura Ltd.
+> > Lendavska ulica 16a
+> > 10000 Zagreb, Croatia
+> > Email: robert.marko@sartura.hr
+> > Web: www.sartura.hr
+>
+> --
+> Gregory Clement, Bootlin
+> Embedded Linux and Kernel engineering
+> http://bootlin.com
 
-These two problems are very difficult.  There is some plan to insert
-compatibility layers to work around them, but not even one line of code
-has been written AFAIK.
 
-So if you want to build a kernel for Loongnix, don't use the vanilla
-kernel.  If you just want to build a vanilla kernel with a pre-built
-cross toolchain, use the toolchain from
-https://kernel.org/pub/tools/crosstool/.
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+
+-- 
+Robert Marko
+Staff Embedded Linux Engineer
+Sartura Ltd.
+Lendavska ulica 16a
+10000 Zagreb, Croatia
+Email: robert.marko@sartura.hr
+Web: www.sartura.hr

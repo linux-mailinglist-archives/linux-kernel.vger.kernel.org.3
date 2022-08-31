@@ -2,163 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 713355A8683
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:13:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB975A8689
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:14:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbiHaTNG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 15:13:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39514 "EHLO
+        id S232152AbiHaTOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 15:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232002AbiHaTMw (ORCPT
+        with ESMTP id S232059AbiHaTOv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 15:12:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFD5D99D9;
-        Wed, 31 Aug 2022 12:12:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57012B8229F;
-        Wed, 31 Aug 2022 19:12:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E19D9C433D7;
-        Wed, 31 Aug 2022 19:12:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661973169;
-        bh=ZlVKgKTrX1x0CLe8TUlE5hyyKfAJCRY7X7EjuH+f/KY=;
-        h=Date:From:To:Cc:Subject:From;
-        b=NauY8gKc395GmXMkKYgRYOcanRSq67fKagRo2SsvKcny8F8tUOcJ97RH2mV0YmFdU
-         adZHHr0yAzJofxtXBoBcKL/5uVgavG6GwYz3NSJ+oWLqQmAsFnz5an6jrH1saD1sOt
-         g/3GFcT/qwULN8B1WK5V3g0/4086v0pf5F4dCDSmZE2Kh7/ooVp5IlbK1DzPtN+33e
-         Q9C8KpeK6ezNrDX61tTutZgNoVEUE5sKDK8geUvV1MtGcnRc4t8DIw1yOExUIh0yA8
-         2M14x2n+/2B+Er96OdP9IHsBjWy2aBfP9pBi1WtxM2kS/g4fP+ZVyMPyykMXrCyAsS
-         jx6wLNeBuqPoQ==
-Date:   Wed, 31 Aug 2022 14:12:42 -0500
-From:   "Gustavo A. R. Silva" <gustavoars@kernel.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        linux-hardening@vger.kernel.org, Kees Cook <keescook@chromium.org>
-Subject: [PATCH v2][next] net/ipv4: Use __DECLARE_FLEX_ARRAY() helper
-Message-ID: <Yw+yqpCd5A/Q1oo5@work>
+        Wed, 31 Aug 2022 15:14:51 -0400
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF1A5FFA;
+        Wed, 31 Aug 2022 12:14:47 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-33da3a391d8so316719947b3.2;
+        Wed, 31 Aug 2022 12:14:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=UxHlOQMugDaVV7UYDxc+0l2BNrOEmI2OzpGjB/xQSeE=;
+        b=KPEpGC5LW7EPfpTob6218KVmECEFQ65Xfny28XIXibr5QgSYBVo2ocQPEjMS4/hrW8
+         HAPmWq2NAGaXy2wie7Zkwpy65/hHJdPgWP0WkU9uF0eDoXFYzCGtAgVqkjM4oPvSCIbN
+         +ZSeoAWs8mTv7bxm7l5n5OucPip2g9XPb6fAX5D+T21/T9hAGHNA0f6nHh+gCAkpDShJ
+         j6/v/PMTI+TqoFRc9DH3O95L7nKtRYemGJ2o9i1Gzi05wjCvFeUSJeKVIGw1oDIEurh9
+         ZwjhhJKIyVmDNFnVsyuYZxe9bQC1PDTxBM3oCLSxOb6CJNWxFpWrwVAlN8HVMr2YEs/8
+         OQ8g==
+X-Gm-Message-State: ACgBeo1osmv2hjbM1Xmu8Nzu6koLr96ZAQjViXuu13l88xJkvR6bA+RX
+        fpBpOKbi3WTD4gxasWj4ZuEmIVTDegMYnZwStZY=
+X-Google-Smtp-Source: AA6agR4X2lbZBMaghLfgyNowdP9lOcQ6HAeNQ4uR6Oz5Tos4Jt6Evl+deqp1CGEumSkeFvgbOL5EDLMKZpyBfZUOpO4=
+X-Received: by 2002:a81:4850:0:b0:33c:922b:5739 with SMTP id
+ v77-20020a814850000000b0033c922b5739mr19198053ywa.515.1661973286804; Wed, 31
+ Aug 2022 12:14:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220818210111.7445-1-wsa+renesas@sang-engineering.com>
+In-Reply-To: <20220818210111.7445-1-wsa+renesas@sang-engineering.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 31 Aug 2022 21:14:35 +0200
+Message-ID: <CAJZ5v0hBsSA9aeE1divdaTxXUu8bT23tx8f+J+=pZPcP4viGjQ@mail.gmail.com>
+Subject: Re: [PATCH] thermal: move from strlcpy with unused retval to strscpy
+To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We now have a cleaner way to keep compatibility with user-space
-(a.k.a. not breaking it) when we need to keep in place a one-element
-array (for its use in user-space) together with a flexible-array
-member (for its use in kernel-space) without making it hard to read
-at the source level. This is through the use of the new
-__DECLARE_FLEX_ARRAY() helper macro.
+On Thu, Aug 18, 2022 at 11:03 PM Wolfram Sang
+<wsa+renesas@sang-engineering.com> wrote:
+>
+> Follow the advice of the below link and prefer 'strscpy' in this
+> subsystem. Conversion is 1:1 because the return value is not used.
+> Generated by a coccinelle script.
+>
+> Link: https://lore.kernel.org/r/CAHk-=wgfRnXz0W3D37d01q3JFkr_i_uTL=V6A6G1oUZcprmknw@mail.gmail.com/
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
+>  drivers/thermal/thermal_core.c  | 2 +-
+>  drivers/thermal/thermal_hwmon.c | 2 +-
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 6a5d0ae5d7a4..0d1dae4ed7f6 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -1239,7 +1239,7 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
+>         }
+>
+>         tz->id = id;
+> -       strlcpy(tz->type, type, sizeof(tz->type));
+> +       strscpy(tz->type, type, sizeof(tz->type));
+>
+>         result = dev_set_name(&tz->device, "thermal_zone%d", tz->id);
+>         if (result)
+> diff --git a/drivers/thermal/thermal_hwmon.c b/drivers/thermal/thermal_hwmon.c
+> index 09e49ec8b6f4..f53f4ceb6a5d 100644
+> --- a/drivers/thermal/thermal_hwmon.c
+> +++ b/drivers/thermal/thermal_hwmon.c
+> @@ -147,7 +147,7 @@ int thermal_add_hwmon_sysfs(struct thermal_zone_device *tz)
+>                 return -ENOMEM;
+>
+>         INIT_LIST_HEAD(&hwmon->tz_list);
+> -       strlcpy(hwmon->type, tz->type, THERMAL_NAME_LENGTH);
+> +       strscpy(hwmon->type, tz->type, THERMAL_NAME_LENGTH);
+>         strreplace(hwmon->type, '-', '_');
+>         hwmon->device = hwmon_device_register_for_thermal(&tz->device,
+>                                                           hwmon->type, hwmon);
+> --
 
-The size and memory layout of the structure is preserved after the
-changes. See below.
-
-Before changes:
-
-$ pahole -C ip_msfilter net/ipv4/igmp.o
-struct ip_msfilter {
-	union {
-		struct {
-			__be32     imsf_multiaddr_aux;   /*     0     4 */
-			__be32     imsf_interface_aux;   /*     4     4 */
-			__u32      imsf_fmode_aux;       /*     8     4 */
-			__u32      imsf_numsrc_aux;      /*    12     4 */
-			__be32     imsf_slist[1];        /*    16     4 */
-		};                                       /*     0    20 */
-		struct {
-			__be32     imsf_multiaddr;       /*     0     4 */
-			__be32     imsf_interface;       /*     4     4 */
-			__u32      imsf_fmode;           /*     8     4 */
-			__u32      imsf_numsrc;          /*    12     4 */
-			__be32     imsf_slist_flex[0];   /*    16     0 */
-		};                                       /*     0    16 */
-	};                                               /*     0    20 */
-
-	/* size: 20, cachelines: 1, members: 1 */
-	/* last cacheline: 20 bytes */
-};
-
-After changes:
-
-$ pahole -C ip_msfilter net/ipv4/igmp.o
-struct ip_msfilter {
-	__be32                     imsf_multiaddr;       /*     0     4 */
-	__be32                     imsf_interface;       /*     4     4 */
-	__u32                      imsf_fmode;           /*     8     4 */
-	__u32                      imsf_numsrc;          /*    12     4 */
-	union {
-		__be32             imsf_slist[1];        /*    16     4 */
-		struct {
-			struct {
-			} __empty_imsf_slist_flex;       /*    16     0 */
-			__be32     imsf_slist_flex[0];   /*    16     0 */
-		};                                       /*    16     0 */
-	};                                               /*    16     4 */
-
-	/* size: 20, cachelines: 1, members: 5 */
-	/* last cacheline: 20 bytes */
-};
-
-In the past, we had to duplicate the whole original structure within
-a union, and update the names of all the members. Now, we just need to
-declare the flexible-array member to be used in kernel-space through
-the __DECLARE_FLEX_ARRAY() helper together with the one-element array,
-within a union. This makes the source code more clean and easier to read.
-
-Link: https://github.com/KSPP/linux/issues/193
-Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
----
-Changes in v2:
- - Remove unnecessary internal anonymous struct. (Kees)
-
- include/uapi/linux/in.h | 20 ++++++--------------
- 1 file changed, 6 insertions(+), 14 deletions(-)
-
-diff --git a/include/uapi/linux/in.h b/include/uapi/linux/in.h
-index 14168225cecd..578daa6f816b 100644
---- a/include/uapi/linux/in.h
-+++ b/include/uapi/linux/in.h
-@@ -188,21 +188,13 @@ struct ip_mreq_source {
- };
- 
- struct ip_msfilter {
-+	__be32		imsf_multiaddr;
-+	__be32		imsf_interface;
-+	__u32		imsf_fmode;
-+	__u32		imsf_numsrc;
- 	union {
--		struct {
--			__be32		imsf_multiaddr_aux;
--			__be32		imsf_interface_aux;
--			__u32		imsf_fmode_aux;
--			__u32		imsf_numsrc_aux;
--			__be32		imsf_slist[1];
--		};
--		struct {
--			__be32		imsf_multiaddr;
--			__be32		imsf_interface;
--			__u32		imsf_fmode;
--			__u32		imsf_numsrc;
--			__be32		imsf_slist_flex[];
--		};
-+		__be32		imsf_slist[1];
-+		__DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
- 	};
- };
- 
--- 
-2.34.1
-
+Applied as 6.1 material, thanks!

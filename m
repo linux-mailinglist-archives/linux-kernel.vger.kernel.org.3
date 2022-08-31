@@ -2,68 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D250B5A794C
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:46:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 046345A792E
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiHaIqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60564 "EHLO
+        id S231150AbiHaIhB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230314AbiHaIp4 (ORCPT
+        with ESMTP id S231281AbiHaIg5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:45:56 -0400
-X-Greylist: delayed 568 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 01:45:54 PDT
-Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEE91A59BC
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:45:54 -0700 (PDT)
-Received: by isilmar-4.linta.de (Postfix, from userid 1000)
-        id 7B6122013F1; Wed, 31 Aug 2022 08:36:23 +0000 (UTC)
-Date:   Wed, 31 Aug 2022 10:36:23 +0200
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     Jilin Yuan <yuanjilin@cdjrlc.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pcmcia: fix repeated words in comments
-Message-ID: <20220831083623.GA25639@isilmar-4.linta.de>
-References: <20220830151648.10335-1-yuanjilin@cdjrlc.com>
+        Wed, 31 Aug 2022 04:36:57 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51E75A8CFC
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 01:36:56 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oTJDE-0008Cf-KV; Wed, 31 Aug 2022 10:36:40 +0200
+Message-ID: <cbf7cc48acb1c772bea8594aa4017f56b4d1074e.camel@pengutronix.de>
+Subject: Re: [PATCH v5 5/7] soc: imx: imx8mp-blk-ctrl: handle PCIe PHY resets
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Richard Zhu <hongxing.zhu@nxp.com>, p.zabel@pengutronix.de,
+        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
+        shawnguo@kernel.org, vkoul@kernel.org,
+        alexander.stein@ew.tq-group.com, marex@denx.de,
+        richard.leitner@linux.dev
+Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Date:   Wed, 31 Aug 2022 10:36:39 +0200
+In-Reply-To: <1661845564-11373-6-git-send-email-hongxing.zhu@nxp.com>
+References: <1661845564-11373-1-git-send-email-hongxing.zhu@nxp.com>
+         <1661845564-11373-6-git-send-email-hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830151648.10335-1-yuanjilin@cdjrlc.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 11:16:48PM +0800, Jilin Yuan wrote:
-> Delete the redundant word 'really'.
+Am Dienstag, dem 30.08.2022 um 15:46 +0800 schrieb Richard Zhu:
+> From: Lucas Stach <l.stach@pengutronix.de>
 > 
-> Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+> Dessert the PHY reset when powering up the domain and put it back
+> into reset when the domain is powered down.
+> 
+> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+
+According to patch submission guidelines you need to add your own sign-
+off when integrating this patch into your series. Please add in the
+next revision.
+
+Regards,
+Lucas
+
 > ---
->  drivers/pcmcia/ds.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/soc/imx/imx8mp-blk-ctrl.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> diff --git a/drivers/pcmcia/ds.c b/drivers/pcmcia/ds.c
-> index ace133b9f7d4..05d18614f6b4 100644
-> --- a/drivers/pcmcia/ds.c
-> +++ b/drivers/pcmcia/ds.c
-> @@ -1304,7 +1304,7 @@ static int pcmcia_bus_early_resume(struct pcmcia_socket *skt)
->   * physically present, even if the call to this function returns
->   * non-NULL. Furthermore, the device driver most likely is unbound
->   * almost immediately, so the timeframe where pcmcia_dev_present
-> - * returns NULL is probably really really small.
-> + * returns NULL is probably really small.
->   */
->  struct pcmcia_device *pcmcia_dev_present(struct pcmcia_device *_p_dev)
->  {
+> diff --git a/drivers/soc/imx/imx8mp-blk-ctrl.c b/drivers/soc/imx/imx8mp-blk-ctrl.c
+> index 4ca2ede6871b..6c939d68ba9a 100644
+> --- a/drivers/soc/imx/imx8mp-blk-ctrl.c
+> +++ b/drivers/soc/imx/imx8mp-blk-ctrl.c
+> @@ -18,6 +18,8 @@
+>  #define GPR_REG0		0x0
+>  #define  PCIE_CLOCK_MODULE_EN	BIT(0)
+>  #define  USB_CLOCK_MODULE_EN	BIT(1)
+> +#define  PCIE_PHY_APB_RST	BIT(4)
+> +#define  PCIE_PHY_INIT_RST	BIT(5)
+>  
+>  struct imx8mp_blk_ctrl_domain;
+>  
+> @@ -75,6 +77,10 @@ static void imx8mp_hsio_blk_ctrl_power_on(struct imx8mp_blk_ctrl *bc,
+>  	case IMX8MP_HSIOBLK_PD_PCIE:
+>  		regmap_set_bits(bc->regmap, GPR_REG0, PCIE_CLOCK_MODULE_EN);
+>  		break;
+> +	case IMX8MP_HSIOBLK_PD_PCIE_PHY:
+> +		regmap_set_bits(bc->regmap, GPR_REG0,
+> +				PCIE_PHY_APB_RST | PCIE_PHY_INIT_RST);
+> +		break;
+>  	default:
+>  		break;
+>  	}
+> @@ -90,6 +96,10 @@ static void imx8mp_hsio_blk_ctrl_power_off(struct imx8mp_blk_ctrl *bc,
+>  	case IMX8MP_HSIOBLK_PD_PCIE:
+>  		regmap_clear_bits(bc->regmap, GPR_REG0, PCIE_CLOCK_MODULE_EN);
+>  		break;
+> +	case IMX8MP_HSIOBLK_PD_PCIE_PHY:
+> +		regmap_clear_bits(bc->regmap, GPR_REG0,
+> +				  PCIE_PHY_APB_RST | PCIE_PHY_INIT_RST);
+> +		break;
+>  	default:
+>  		break;
+>  	}
 
-Thanks for your patch. However, the duplication here is on purpose
 
-	https://en.wikipedia.org/wiki/Epizeuxis
-
-Thanks,
-	Dominik

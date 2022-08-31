@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 921A55A7990
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:56:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A0F5A7994
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 10:56:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiHaIz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 04:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S231779AbiHaI4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 04:56:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231695AbiHaIzi (ORCPT
+        with ESMTP id S231777AbiHaI4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 04:55:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86A921F2C5;
-        Wed, 31 Aug 2022 01:54:55 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 013B1ED1;
-        Wed, 31 Aug 2022 01:54:30 -0700 (PDT)
-Received: from [10.57.15.237] (unknown [10.57.15.237])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0A32D3F71A;
-        Wed, 31 Aug 2022 01:54:20 -0700 (PDT)
-Message-ID: <98179709-1ece-61ab-d43a-fc38a4fd3f67@arm.com>
-Date:   Wed, 31 Aug 2022 09:54:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v5 20/20] PCI: dwc: Add Baikal-T1 PCIe controller support
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh+dt@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wed, 31 Aug 2022 04:56:13 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5ED08284F;
+        Wed, 31 Aug 2022 01:55:18 -0700 (PDT)
+Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.201])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MHdFH4x0qz6802Q;
+        Wed, 31 Aug 2022 16:51:15 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 31 Aug 2022 10:54:59 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
+ 2022 09:54:59 +0100
+Date:   Wed, 31 Aug 2022 09:54:58 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Robert Richter <rrichter@amd.com>
+CC:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, willmcvicker@google.com
-References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
- <20220822184701.25246-21-Sergey.Semin@baikalelectronics.ru>
- <YwzbARMkb/69+l2d@lpieralisi> <63a54a1b-66ba-9739-8217-13f75e602cd5@arm.com>
-In-Reply-To: <63a54a1b-66ba-9739-8217-13f75e602cd5@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH 01/15] cxl/core: Remove duplicate declaration of
+ devm_cxl_iomap_block()
+Message-ID: <20220831095458.0000454a@huawei.com>
+In-Reply-To: <20220831081603.3415-2-rrichter@amd.com>
+References: <20220831081603.3415-1-rrichter@amd.com>
+        <20220831081603.3415-2-rrichter@amd.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,50 +61,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-31 09:36, Robin Murphy wrote:
-> On 2022-08-29 16:28, Lorenzo Pieralisi wrote:
-> [...]
->>> +static int bt1_pcie_add_port(struct bt1_pcie *btpci)
->>> +{
->>> +    struct device *dev = &btpci->pdev->dev;
->>> +    int ret;
->>> +
->>> +    /*
->>> +     * DW PCIe Root Port controller is equipped with eDMA capable of
->>> +     * working with the 64-bit memory addresses.
->>> +     */
->>> +    ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(64));
->>> +    if (ret)
->>> +        return ret;
->>
->> Is this the right place to set the DMA mask for the host controller
->> embedded DMA controller (actually, the dev pointer is the _host_
->> controller device) ?
->>
->> How this is going to play when combined with:
->>
->> https://lore.kernel.org/linux-pci/1e63a581-14ae-b4b5-a5bf-ca8f09c33af6@arm.com
->>
->> It is getting a bit confusing. I believe the code in the link
->> above sets the mask so that through the DMA API we are capable
->> of getting an MSI doorbell virtual address whose physical address
->> can be addressed by the endpoint; this through the DMA API.
->>
->> This patch is setting the DMA mask for a different reason, namely
->> setting the host controller embedded DMA controller addressing
->> capabilities.
->>
->> AFAICS - both approaches set the mask for the same device - now
->> the question is about which one is legitimate and how to handle
->> the other.
+On Wed, 31 Aug 2022 10:15:49 +0200
+Robert Richter <rrichter@amd.com> wrote:
+
+> The function devm_cxl_iomap_block() is only used in the core
+> code. There are two declarations in header files of it, in
+> drivers/cxl/core/core.h and drivers/cxl/cxl.h. Remove its unused
+> declaration in drivers/cxl/cxl.h.
 > 
-> Assuming the dw-edma-pcie driver is the relevant one, that already sets 
-> its own masks on its own device, so I also don't see why this is here.
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Ah, I just found the patch at [1], which further implies that this is 
-indeed completely bogus.
+The wonders of code evolution leaving signs behind ;)
 
-Robin.
+> ---
+>  drivers/cxl/cxl.h | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+> index f680450f0b16..ac8998b627b5 100644
+> --- a/drivers/cxl/cxl.h
+> +++ b/drivers/cxl/cxl.h
+> @@ -218,8 +218,6 @@ int cxl_map_device_regs(struct pci_dev *pdev,
+>  enum cxl_regloc_type;
+>  int cxl_find_regblock(struct pci_dev *pdev, enum cxl_regloc_type type,
+>  		      struct cxl_register_map *map);
+> -void __iomem *devm_cxl_iomap_block(struct device *dev, resource_size_t addr,
+> -				   resource_size_t length);
+>  
+>  #define CXL_RESOURCE_NONE ((resource_size_t) -1)
+>  #define CXL_TARGET_STRLEN 20
 
-[1] 
-https://lore.kernel.org/dmaengine/20220822185332.26149-23-Sergey.Semin@baikalelectronics.ru/

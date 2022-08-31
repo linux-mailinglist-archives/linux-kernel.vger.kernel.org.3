@@ -2,141 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1DA55A86B7
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB845A86B8
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 21:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbiHaT0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 15:26:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33146 "EHLO
+        id S231359AbiHaT2F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 15:28:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbiHaT0c (ORCPT
+        with ESMTP id S229499AbiHaT2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 15:26:32 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41A6E1A96
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:26:30 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id w2so15089179pld.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:26:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=6n7Eu1ta9una9qyMHFv9XMxljrhyT7+TH3jaU8Dm+Bg=;
-        b=R0t2HbSLJNz/FBnYH9ZqUSqOd9IdFL8JZFTYc43ONxL0mCwZNhyXR0B9VC5H8d8yVK
-         n/Un4rbIpG+iA94HDOKuRmtooTuVWMDk1M0NBKiVtC9VecehMvjkJ50tiK/FlWAhL5Vx
-         QIAMTgby39iRz19dr9XFJx1gC6RFfyY7btuvY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=6n7Eu1ta9una9qyMHFv9XMxljrhyT7+TH3jaU8Dm+Bg=;
-        b=JNa8CyNUAa1UvSBc6+Bq6YFAg13BHsSdUXUbI1r1I9v0a9BP7gKHTPejDCOOSA1Z8a
-         1w8cv+uiqhB5/Dg2+1tZcFgQY2dBDD9cX0ogvJsnsQMBH07CJImYRlt6ONvEuQ/cblau
-         XB9M/yvaSRzh2jGiFjb2/KJxGSnZ+NXhQOcbmlxaBZqc+3n6z/PYakXFA8tYaAfIZNfD
-         wbQv2D7LuYm6paEgtijeZ471H6GW9tqoNiuMQ6X0ZU6TQ0A1pYOtRKFiP3IyIfptwGR2
-         viJ7N6e+WBUbTez3OgVlY32s6o1EotubXj3yEq/eOVVWsgSMZ2/VVgRec+/C89UYSq8O
-         byCg==
-X-Gm-Message-State: ACgBeo1Yc3/gh54wOXKgSHVWoPA5SD69hnJJwr8h8FxB+WBh1ztrNHYQ
-        CW3ElYi3YK0MNnA8cK67Yiu58fV9INEl0g==
-X-Google-Smtp-Source: AA6agR5Ye/RIwZJ+U32GqPBUDn3wdgnISuRQaYwABtUjAZVYVrmE0NA5w+6+eHjmw8u8JtrABdVHiw==
-X-Received: by 2002:a17:902:cf0c:b0:172:a41b:63a8 with SMTP id i12-20020a170902cf0c00b00172a41b63a8mr27107308plg.161.1661973990509;
-        Wed, 31 Aug 2022 12:26:30 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q9-20020a170902bd8900b0016f035dcd75sm11878243pls.193.2022.08.31.12.26.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 12:26:29 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 12:26:28 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2][next] net/ipv4: Use __DECLARE_FLEX_ARRAY() helper
-Message-ID: <202208311226.2454C8050A@keescook>
-References: <Yw+yqpCd5A/Q1oo5@work>
+        Wed, 31 Aug 2022 15:28:03 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0632CDEB6B
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:28:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=COXA0nr8/oFAjzYFNBlfqg/PG216/XGX105MCvhb76o=; b=c2R+78d5nQboEOwjI+D7fNgadm
+        kOANFOyyNZaHtxf7w5U4oXxDxFwJtrijKZ0ghhTjhKdRYLR0XgZ2jIwR7U1/1ZunGTMrw7UVtTTnJ
+        2CGIZXx/i3lEZvBL8iLrXVUU7CE+teYQHeOf9VSthRiAYY58leHEdeWrWW+F1YjkQkw7kr0SGEBjr
+        ykIbWde2mJlgmeoGb2/XyvM3oYWq62W/rBoTD1KRNshtYM9xapcQlGaLxeMnbsCNtICbXBRa3Seaw
+        7Y73cwY9+zukhORcaLFUhaD33909paXr3eO8T9f7nkYh5ZQ4kffgafRDyH5TcolvPENUGHTjCAw/a
+        cp2xZ9OA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oTTNW-005NTh-4E; Wed, 31 Aug 2022 19:27:58 +0000
+Date:   Wed, 31 Aug 2022 20:27:58 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Peter Xu <peterx@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: [PATCH v2] hugetlb: use mm.h instead of mm_types.h
+Message-ID: <Yw+2PrIzebUbVYQR@casper.infradead.org>
+References: <20220831185739.21400-1-rdunlap@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Yw+yqpCd5A/Q1oo5@work>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220831185739.21400-1-rdunlap@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 02:12:42PM -0500, Gustavo A. R. Silva wrote:
-> We now have a cleaner way to keep compatibility with user-space
-> (a.k.a. not breaking it) when we need to keep in place a one-element
-> array (for its use in user-space) together with a flexible-array
-> member (for its use in kernel-space) without making it hard to read
-> at the source level. This is through the use of the new
-> __DECLARE_FLEX_ARRAY() helper macro.
-> 
-> The size and memory layout of the structure is preserved after the
-> changes. See below.
-> 
-> Before changes:
-> 
-> $ pahole -C ip_msfilter net/ipv4/igmp.o
-> struct ip_msfilter {
-> 	union {
-> 		struct {
-> 			__be32     imsf_multiaddr_aux;   /*     0     4 */
-> 			__be32     imsf_interface_aux;   /*     4     4 */
-> 			__u32      imsf_fmode_aux;       /*     8     4 */
-> 			__u32      imsf_numsrc_aux;      /*    12     4 */
-> 			__be32     imsf_slist[1];        /*    16     4 */
-> 		};                                       /*     0    20 */
-> 		struct {
-> 			__be32     imsf_multiaddr;       /*     0     4 */
-> 			__be32     imsf_interface;       /*     4     4 */
-> 			__u32      imsf_fmode;           /*     8     4 */
-> 			__u32      imsf_numsrc;          /*    12     4 */
-> 			__be32     imsf_slist_flex[0];   /*    16     0 */
-> 		};                                       /*     0    16 */
-> 	};                                               /*     0    20 */
-> 
-> 	/* size: 20, cachelines: 1, members: 1 */
-> 	/* last cacheline: 20 bytes */
-> };
-> 
-> After changes:
-> 
-> $ pahole -C ip_msfilter net/ipv4/igmp.o
-> struct ip_msfilter {
-> 	__be32                     imsf_multiaddr;       /*     0     4 */
-> 	__be32                     imsf_interface;       /*     4     4 */
-> 	__u32                      imsf_fmode;           /*     8     4 */
-> 	__u32                      imsf_numsrc;          /*    12     4 */
-> 	union {
-> 		__be32             imsf_slist[1];        /*    16     4 */
-> 		struct {
-> 			struct {
-> 			} __empty_imsf_slist_flex;       /*    16     0 */
-> 			__be32     imsf_slist_flex[0];   /*    16     0 */
-> 		};                                       /*    16     0 */
-> 	};                                               /*    16     4 */
-> 
-> 	/* size: 20, cachelines: 1, members: 5 */
-> 	/* last cacheline: 20 bytes */
-> };
-> 
-> In the past, we had to duplicate the whole original structure within
-> a union, and update the names of all the members. Now, we just need to
-> declare the flexible-array member to be used in kernel-space through
-> the __DECLARE_FLEX_ARRAY() helper together with the one-element array,
-> within a union. This makes the source code more clean and easier to read.
-> 
-> Link: https://github.com/KSPP/linux/issues/193
-> Signed-off-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+On Wed, Aug 31, 2022 at 11:57:39AM -0700, Randy Dunlap wrote:
+> mm_types.h does not have zap_flags_t in it so use mm.h instead
+> in hugetlb.h.
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+... my copy of mm_types.h has zap_flags_t in it.  Was it recently moved?
+Perhaps moving it back is a better solution to this problem?
 
--- 
-Kees Cook
+> Fixes this build error:
+> 
+> In file included from ../drivers/virt/nitro_enclaves/ne_misc_dev.c:16:0:
+> ../include/linux/hugetlb.h:414:4: error: unknown type name ‘zap_flags_t’; did you mean ‘vm_flags_t’?
+>     zap_flags_t zap_flags)
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Peter Xu <peterx@redhat.com>
+> Cc: Mike Kravetz <mike.kravetz@oracle.com>
+> Cc: linux-mm@kvack.org
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> ---
+> Fixes: mm-hugetlb-only-drop-uffd-wp-special-pte-if-required-fix.patch
+> v2: add Rev-by: Peter
+>     drop the bogus S-o-b: in Cc: Peter Xu
+> 
+>  include/linux/hugetlb.h |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -2,7 +2,7 @@
+>  #ifndef _LINUX_HUGETLB_H
+>  #define _LINUX_HUGETLB_H
+>  
+> -#include <linux/mm_types.h>
+> +#include <linux/mm.h>
+>  #include <linux/mmdebug.h>
+>  #include <linux/fs.h>
+>  #include <linux/hugetlb_inline.h>
+> 

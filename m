@@ -2,95 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EBFF5A8819
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:28:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D35DC5A881A
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 23:28:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232359AbiHaV2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 17:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
+        id S232346AbiHaV21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 17:28:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232369AbiHaV2J (ORCPT
+        with ESMTP id S232329AbiHaV2N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 17:28:09 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72251F72F7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 14:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661981284; x=1693517284;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=musxV+pJle43WpmKf3ovzZDYsRJYWlBwZEp2XM5jFQA=;
-  b=VrBtpBHUu9D3twDekLQzFTgxqCnGNNomqgB0FG1togzXr8bE4r6ru2uL
-   HCXYK7XDditK0mFeoSUTFZn9HGJa5jJ21tb1WxnhG81PCTxOV4Jc8Ggfm
-   vAIJQfScFht9uGqXmtrO7iErX29MJINejAQ9N9tME6+QMFplhBqKAcgR5
-   ttjhHmh5hYAf1Dda4LqQpos+q8BZ76Zvqi/GoX2jHlwH4jugpM5lCOTMm
-   kTpaG4B18L0Zu5LDKlKBhMBS8GwOj+kjacf7N00+XvUi05aJ8Yn8YDy6h
-   C3EnuE8mK2rEswkRZv35p9FpqG9cerTxI3uGCgSYC4Bd4KvLsmrDZHvb3
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="278565983"
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="278565983"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 14:28:03 -0700
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="612236338"
-Received: from nkrobins-mobl2.amr.corp.intel.com (HELO [10.212.220.19]) ([10.212.220.19])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 14:28:03 -0700
-Message-ID: <0dc761fe-3d98-8c80-8ee3-01804843e8f9@intel.com>
-Date:   Wed, 31 Aug 2022 14:28:02 -0700
+        Wed, 31 Aug 2022 17:28:13 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 951CFF5CD9;
+        Wed, 31 Aug 2022 14:28:12 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-11ee4649dfcso20806117fac.1;
+        Wed, 31 Aug 2022 14:28:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=BoUUi7kWOmFUAVbHliHcyPkiOOsEv0Tfz2biE6Fi4Zg=;
+        b=at9Il2zMlbvubGxbjmP/SaPE5TfcI14/aFBEyGunhL3zhIdIgbz9Cbtm6sgiECWP4q
+         vIkzafrMSp+3faRyIx2mD3nKb37bF//uJA0r6CahxToyU6oGKBc3gKcEa5a6ezfHQUgQ
+         695Sc8Evysk55rUvqOHV8SK4SgVbtoecW+04pU8qYU9X4pUkEqG9YEkGQiwNzXWO229E
+         Yzs2aCdTJmUdf6xdC9YR67C63p1IBf15kMTjoDYiYzYlduppoRdf9DYWqiXI3cImzXVs
+         8rsGwtk/TbhZxLDyr6nYjD5Dc/0Ld9zhCqvIfo3SR2a11pT3vZf6oS9kqVk/h9xhP3+K
+         Bx9A==
+X-Gm-Message-State: ACgBeo36FdRL8dI/pPZKnKpUK5ZBsI8bYVTFA/mVUYvEHOKN9GK+abtc
+        WqV/8Opdbpps/7AbwuzTqg==
+X-Google-Smtp-Source: AA6agR5sp6p3AvzhZHhB9FeGpft2IMHe5ZJ8L92p23FHf81Lu9EK5XaNvhZVgX0cC/OE9O9JFzRN3w==
+X-Received: by 2002:a05:6871:10d:b0:11e:d761:2781 with SMTP id y13-20020a056871010d00b0011ed7612781mr2398877oab.263.1661981291916;
+        Wed, 31 Aug 2022 14:28:11 -0700 (PDT)
+Received: from robh.at.kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id u34-20020a056870d5a200b00122520b2176sm507366oao.31.2022.08.31.14.28.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 14:28:11 -0700 (PDT)
+Received: (nullmailer pid 281996 invoked by uid 1000);
+        Wed, 31 Aug 2022 21:28:10 -0000
+Date:   Wed, 31 Aug 2022 16:28:10 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Frank Li <Frank.Li@nxp.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        linux-pci@vger.kernel.org,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v5 14/20] dt-bindings: PCI: dwc: Add Baikal-T1 PCIe Root
+ Port bindings
+Message-ID: <20220831212810.GA281963-robh@kernel.org>
+References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822184701.25246-15-Sergey.Semin@baikalelectronics.ru>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/acrn: Set up timekeeping
-Content-Language: en-US
-To:     Fei Li <fei1.li@intel.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org
-Cc:     gregkh@linuxfoundation.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        yu1.wang@intel.com, conghui.chen@intel.com
-References: <20220804055903.365211-1-fei1.li@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220804055903.365211-1-fei1.li@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220822184701.25246-15-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/3/22 22:59, Fei Li wrote:
-> +static inline unsigned long acrn_get_tsc_khz(void)
-> +{
-> +	return cpuid_eax(ACRN_CPUID_TIMING_INFO);
-> +}
-> +
->  /*
->   * Hypercalls for ACRN
->   *
-> diff --git a/arch/x86/kernel/cpu/acrn.c b/arch/x86/kernel/cpu/acrn.c
-> index 23f5f27b5a02..485441b7f030 100644
-> --- a/arch/x86/kernel/cpu/acrn.c
-> +++ b/arch/x86/kernel/cpu/acrn.c
-> @@ -28,6 +28,9 @@ static void __init acrn_init_platform(void)
->  {
->  	/* Setup the IDT for ACRN hypervisor callback */
->  	alloc_intr_gate(HYPERVISOR_CALLBACK_VECTOR, asm_sysvec_acrn_hv_callback);
-> +
-> +	x86_platform.calibrate_tsc = acrn_get_tsc_khz;
-> +	x86_platform.calibrate_cpu = acrn_get_tsc_khz;
->  }
+On Mon, 22 Aug 2022 21:46:55 +0300, Serge Semin wrote:
+> Baikal-T1 SoC is equipped with DWC PCIe v4.60a Root Port controller, which
+> link can be trained to work on up to Gen.3 speed over up to x4 lanes. The
+> controller is supposed to be fed up with four clock sources: DBI
+> peripheral clock, AXI application Tx/Rx clocks and external PHY/core
+> reference clock generating the 100MHz signal. In addition to that the
+> platform provide a way to reset each part of the controller:
+> sticky/non-sticky bits, host controller core, PIPE interface, PCS/PHY and
+> Hot/Power reset signal. The Root Port controller is equipped with multiple
+> IRQ lines like MSI, system AER, PME, HP, Bandwidth change, Link
+> equalization request and eDMA ones. The registers space is accessed over
+> the DBI interface. There can be no more than four inbound or outbound iATU
+> windows configured.
+> 
+> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> 
+> ---
+> 
+> Changelog v2:
+> - Rename 'syscon' property to 'baikal,bt1-syscon'.
+> - Fix the 'compatible' property definition to being more specific about
+>   what strings are supposed to be used. Due to that we had to add the
+>   select property to evaluate the schema against the Baikal-T1 PCIe DT
+>   nodes only.
+> 
+> Changelog v5:
+> - Drop generic fallback names from the compatible property constraints.
+>   (@Rob)
+> - Define ordered {reg,interrupt,clock,reset}-names properties. (@Rob)
+> - Drop minItems from the clocks and reset properties, since it equals
+>   to the maxItems for them.
+> - Drop num-ob-windows and num-ib-windows properties constraint. (@Rob)
+> ---
+>  .../bindings/pci/baikal,bt1-pcie.yaml         | 153 ++++++++++++++++++
+>  1 file changed, 153 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
+> 
 
-Could you take a sec and consider what 'static inline' does and means
-and also what setting:
-
-	x86_platform.calibrate_cpu = acrn_get_tsc_khz;
-
-does?
-
-Using 'static inline' might compile, but it doesn't make sense.
+Reviewed-by: Rob Herring <robh@kernel.org>

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00CDE5A84BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:50:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7666F5A84BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbiHaRue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36266 "EHLO
+        id S232012AbiHaRur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 13:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231766AbiHaRuI (ORCPT
+        with ESMTP id S231966AbiHaRuR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:50:08 -0400
+        Wed, 31 Aug 2022 13:50:17 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B9C13F6D
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:50:06 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id y81-20020a253254000000b0069339437485so2636433yby.5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:50:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA781AF11
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:50:14 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id x27-20020a25ac9b000000b0069140cfbbd9so2655271ybi.8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:50:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=UUVPQFoHB4SWNXVjnYdqps9D8vjoKXb+eUEK4kYsPDY=;
-        b=JrYRHr4aq2pvt/jT3CJxChuXVG1yWjglVjUr4IcK2lA1iP2BWrEYb6kfEFOQ0X8hK0
-         HjhkT6DdkBGkBE19qTOtOksK23eRhES60mmOI7bECIRPADVAZxE0N3RzVZjoXDfhslJa
-         gX18RBo/FahJpDTaMAOR5fkJhXuUyBbxRw/rEdceSQ61OoLbG3sBJ79retLkBJmdl7vi
-         eD1gYFizJUzbNaMhdqugTp/JxS0yf0ploA6kQm6obpEEA6nqYL1ObpVofVpvIAzRVBjK
-         IM9iX7CLinOXzuh9n2hAC70G2CVuog1NXqY8JTFGuyZA8s6bdLEnLzOyGXDc4yfMd/lv
-         VirA==
+        bh=DV+gDUOPXsEDpKSEUMrteZ0JJtXsJvhmDLffo2hWpR8=;
+        b=HBb+XvmRItArfa2t5gRHf8PcZ1GxONOZ475mZIhqV15S9MNKFUVIiybXVFMVncm9hy
+         SamFWQCwqiU70VJ2JltGjOim0xPwkz80VlPOKbJAxiQ1WVYrNm6SXSGOJ4XQ6vHDEd/R
+         po8Y0+m643ma3R85P6d41Ax67a11/2yjBmJuaVO/M6knVwv5motiuEctD+MzCmjkaDPO
+         d1g+2EVSAsBC1KQ09LRFYCZ1K28n15tqvhg1nQbN2w+C5uyHSeG59ajSer2ytjROK8NY
+         OyZ3oRgpsAyEZApj2PM4+z6L2nmCk1h3WxB1ApSxzcHd1AcV4p5bNnWSkV/V8eM9mqFW
+         iC1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=UUVPQFoHB4SWNXVjnYdqps9D8vjoKXb+eUEK4kYsPDY=;
-        b=8GkN9/lYhiHioPBkEO/qCDw/LaoB+6QuZQI/RP9vms0CoxuCgjtCwNrfU4rgJ9atgn
-         9GEf7ti8uczPxX2jqDH1IEmeVLi+ZVEotYgT93PmRCpvndR9mHb2cj8Zq4CEKJ2RZqaw
-         rf3/5HarT4brxRMdICCRSHJmF0L5zodDzZ6L7INwm7mw2GNhCr0r1zRzSN/9eno6eOWP
-         XBd3CCgnrvQODGm5ZQT8d2Q/6SepkJm+jJt8e3KIoGfHJ3g65cz9pftR8yKO8082a6Gn
-         qr8Ykt9r4zjUf4fz4DZwLFn79FNehu5WYk8H5VZtZa2tLlVUYaqpFE1hAA2TnEwRmN1x
-         IIfQ==
-X-Gm-Message-State: ACgBeo0+01y/tYfXwrBphrOfXpuluWHjBQXTO9lxZt/wvLHGiBID5WN7
-        7TyziDbqw4uMEXzqfXscZEos7pchRgsI
-X-Google-Smtp-Source: AA6agR44v0jFvcrWOLFGTfGpkKrtvGQ22d0LOEWZXg2fcGQnCUyWj0LegXOpa743x+92Mbi0zFwQNowItNng
+        bh=DV+gDUOPXsEDpKSEUMrteZ0JJtXsJvhmDLffo2hWpR8=;
+        b=iNr1PHI3axaXrRSNrPJq+nnph2B2pbL55rcDa1tvNJR0BdIIWxhlq9r6VaR57xYDzC
+         mzljcpZ8c7zJyZsnlspAme57qCmDfXSou6z0xJm7iqipEFyP27ETKzDIxsKtvjA2svTt
+         MTeV0YQFVXmt/PMqHSXd3amsyKznHPBkAr067OvGSEF39byC/DS/syPUcB8T9IA6b1YU
+         F8y389+0KVCxGEBeKqSOVTJf9QFrRI1lXmqQPsW+O9fZpknisifVMxs/82qKdax8KBmu
+         U0RxyBN4YP/OGbOUT9ZghEtow9FGontk1b6zN/S13N8fDZV8yTq3z05qwCYQtrUTT2ED
+         9I5A==
+X-Gm-Message-State: ACgBeo1CpUsIQAyDPCUBcWdTPKiOAhI54cy8/5AwzbtQV5LxyXDSmo74
+        pLCr/G+/EbSIVgV3xLI5fx2VcUxhowpI
+X-Google-Smtp-Source: AA6agR7KHG0Q/Eku109go1TslC6JmYdAv6tQ1sws4sdXYpB85CQ5uLYs8ghrj+5NvhzsJTTbeRyiDeP2FiMq
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:c8e4:a3e5:9d09:d3d4])
- (user=irogers job=sendgmr) by 2002:a81:6d16:0:b0:340:bbed:a2a9 with SMTP id
- i22-20020a816d16000000b00340bbeda2a9mr17159002ywc.367.1661968205425; Wed, 31
- Aug 2022 10:50:05 -0700 (PDT)
-Date:   Wed, 31 Aug 2022 10:49:22 -0700
+ (user=irogers job=sendgmr) by 2002:a25:cf8b:0:b0:695:79fa:14c2 with SMTP id
+ f133-20020a25cf8b000000b0069579fa14c2mr16824533ybg.636.1661968213868; Wed, 31
+ Aug 2022 10:50:13 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 10:49:23 -0700
 In-Reply-To: <20220831174926.579643-1-irogers@google.com>
-Message-Id: <20220831174926.579643-4-irogers@google.com>
+Message-Id: <20220831174926.579643-5-irogers@google.com>
 Mime-Version: 1.0
 References: <20220831174926.579643-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.2.672.g94769d06f0-goog
-Subject: [PATCH v2 3/7] perf smt: Compute SMT from topology
+Subject: [PATCH v2 4/7] perf topology: Add core_wide
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -85,254 +85,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The topology records sibling threads. Rather than computing SMT using
-siblings in sysfs, reuse the values in topology. This only applies
-when the file smt/active isn't available.
+It is possible to optimize metrics when all SMT threads (CPUs) on a
+core are measuring events in system wide mode. For example, TMA
+metrics defines CORE_CLKS for Sandybrdige as:
+
+if SMT is disabled:
+  CPU_CLK_UNHALTED.THREAD
+if SMT is enabled and recording on all SMT threads:
+  CPU_CLK_UNHALTED.THREAD_ANY / 2
+if SMT is enabled and not recording on all SMT threads:
+  (CPU_CLK_UNHALTED.THREAD/2)*
+  (1+CPU_CLK_UNHALTED.ONE_THREAD_ACTIVE/CPU_CLK_UNHALTED.REF_XCLK )
+
+That is two more events are necessary when not gathering counts on all
+SMT threads. To distinguish all SMT threads on a core vs system wide
+(all CPUs) call the new property core wide.  Add a core wide test that
+determines the property from user requested CPUs, the topology and
+system wide. System wide is required as other processes running on a
+SMT thread will change the counts.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/tests/expr.c   | 24 ++++++----
- tools/perf/util/cputopo.c | 15 +++++++
- tools/perf/util/cputopo.h |  2 +
- tools/perf/util/expr.c    |  9 ++--
- tools/perf/util/smt.c     | 95 ++++-----------------------------------
- tools/perf/util/smt.h     |  5 ++-
- 6 files changed, 49 insertions(+), 101 deletions(-)
+ tools/perf/util/cputopo.c | 46 +++++++++++++++++++++++++++++++++++++++
+ tools/perf/util/cputopo.h |  3 +++
+ tools/perf/util/smt.c     | 14 ++++++++++++
+ tools/perf/util/smt.h     |  7 ++++++
+ 4 files changed, 70 insertions(+)
 
-diff --git a/tools/perf/tests/expr.c b/tools/perf/tests/expr.c
-index 7ca5e37de560..db736ed49556 100644
---- a/tools/perf/tests/expr.c
-+++ b/tools/perf/tests/expr.c
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include "util/cputopo.h"
- #include "util/debug.h"
- #include "util/expr.h"
- #include "util/header.h"
-@@ -154,15 +155,20 @@ static int test__expr(struct test_suite *t __maybe_unused, int subtest __maybe_u
- 						    (void **)&val_ptr));
- 
- 	/* Only EVENT1 or EVENT2 need be measured depending on the value of smt_on. */
--	expr__ctx_clear(ctx);
--	TEST_ASSERT_VAL("find ids",
--			expr__find_ids("EVENT1 if #smt_on else EVENT2",
--				NULL, ctx) == 0);
--	TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
--	TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
--						  smt_on() ? "EVENT1" : "EVENT2",
--						  (void **)&val_ptr));
--
-+	{
-+		struct cpu_topology *topology = cpu_topology__new();
-+		bool smton = smt_on(topology);
-+
-+		cpu_topology__delete(topology);
-+		expr__ctx_clear(ctx);
-+		TEST_ASSERT_VAL("find ids",
-+				expr__find_ids("EVENT1 if #smt_on else EVENT2",
-+					NULL, ctx) == 0);
-+		TEST_ASSERT_VAL("find ids", hashmap__size(ctx->ids) == 1);
-+		TEST_ASSERT_VAL("find ids", hashmap__find(ctx->ids,
-+							  smton ? "EVENT1" : "EVENT2",
-+							  (void **)&val_ptr));
-+	}
- 	/* The expression is a constant 1.0 without needing to evaluate EVENT1. */
- 	expr__ctx_clear(ctx);
- 	TEST_ASSERT_VAL("find ids",
 diff --git a/tools/perf/util/cputopo.c b/tools/perf/util/cputopo.c
-index d275d843c155..511002e52714 100644
+index 511002e52714..1a3ff6449158 100644
 --- a/tools/perf/util/cputopo.c
 +++ b/tools/perf/util/cputopo.c
-@@ -157,6 +157,21 @@ void cpu_topology__delete(struct cpu_topology *tp)
- 	free(tp);
+@@ -172,6 +172,52 @@ bool cpu_topology__smt_on(const struct cpu_topology *topology)
+ 	return false;
  }
  
-+bool cpu_topology__smt_on(const struct cpu_topology *topology)
++bool cpu_topology__core_wide(const struct cpu_topology *topology,
++			     const char *user_requested_cpu_list)
 +{
-+	for (u32 i = 0; i < topology->core_cpus_lists; i++) {
-+		const char *cpu_list = topology->core_cpus_list[i];
++	struct perf_cpu_map *user_requested_cpus;
 +
-+		/*
-+		 * If there is a need to separate siblings in a core then SMT is
-+		 * enabled.
-+		 */
-+		if (strchr(cpu_list, ',') || strchr(cpu_list, '-'))
-+			return true;
++	/*
++	 * If user_requested_cpu_list is empty then all CPUs are recorded and so
++	 * core_wide is true.
++	 */
++	if (!user_requested_cpu_list)
++		return true;
++
++	user_requested_cpus = perf_cpu_map__new(user_requested_cpu_list);
++	/* Check that every user requested CPU is the complete set of SMT threads on a core. */
++	for (u32 i = 0; i < topology->core_cpus_lists; i++) {
++		const char *core_cpu_list = topology->core_cpus_list[i];
++		struct perf_cpu_map *core_cpus = perf_cpu_map__new(core_cpu_list);
++		struct perf_cpu cpu;
++		int idx;
++		bool has_first, first = true;
++
++		perf_cpu_map__for_each_cpu(cpu, idx, core_cpus) {
++			if (first) {
++				has_first = perf_cpu_map__has(user_requested_cpus, cpu);
++				first = false;
++			} else {
++				/*
++				 * If the first core CPU is user requested then
++				 * all subsequent CPUs in the core must be user
++				 * requested too. If the first CPU isn't user
++				 * requested then none of the others must be
++				 * too.
++				 */
++				if (perf_cpu_map__has(user_requested_cpus, cpu) != has_first) {
++					perf_cpu_map__put(core_cpus);
++					perf_cpu_map__put(user_requested_cpus);
++					return false;
++				}
++			}
++		}
++		perf_cpu_map__put(core_cpus);
 +	}
-+	return false;
++	perf_cpu_map__put(user_requested_cpus);
++	return true;
 +}
 +
  static bool has_die_topology(void)
  {
  	char filename[MAXPATHLEN];
 diff --git a/tools/perf/util/cputopo.h b/tools/perf/util/cputopo.h
-index 854e18f9041e..469db775a13c 100644
+index 469db775a13c..969e5920a00e 100644
 --- a/tools/perf/util/cputopo.h
 +++ b/tools/perf/util/cputopo.h
-@@ -58,6 +58,8 @@ struct hybrid_topology {
- 
- struct cpu_topology *cpu_topology__new(void);
+@@ -60,6 +60,9 @@ struct cpu_topology *cpu_topology__new(void);
  void cpu_topology__delete(struct cpu_topology *tp);
-+/* Determine from the core list whether SMT was enabled. */
-+bool cpu_topology__smt_on(const struct cpu_topology *topology);
+ /* Determine from the core list whether SMT was enabled. */
+ bool cpu_topology__smt_on(const struct cpu_topology *topology);
++/* Are the sets of SMT siblings all enabled or all disabled in user_requested_cpus. */
++bool cpu_topology__core_wide(const struct cpu_topology *topology,
++			     const char *user_requested_cpu_list);
  
  struct numa_topology *numa_topology__new(void);
  void numa_topology__delete(struct numa_topology *tp);
-diff --git a/tools/perf/util/expr.c b/tools/perf/util/expr.c
-index 00bde682e743..8aa7dafa18b3 100644
---- a/tools/perf/util/expr.c
-+++ b/tools/perf/util/expr.c
-@@ -412,11 +412,6 @@ double expr__get_literal(const char *literal)
- 	static struct cpu_topology *topology;
- 	double result = NAN;
- 
--	if (!strcasecmp("#smt_on", literal)) {
--		result = smt_on() > 0 ? 1.0 : 0.0;
--		goto out;
--	}
--
- 	if (!strcmp("#num_cpus", literal)) {
- 		result = cpu__max_present_cpu().cpu;
- 		goto out;
-@@ -440,6 +435,10 @@ double expr__get_literal(const char *literal)
- 			goto out;
- 		}
- 	}
-+	if (!strcasecmp("#smt_on", literal)) {
-+		result = smt_on(topology) ? 1.0 : 0.0;
-+		goto out;
-+	}
- 	if (!strcmp("#num_packages", literal)) {
- 		result = topology->package_cpus_lists;
- 		goto out;
 diff --git a/tools/perf/util/smt.c b/tools/perf/util/smt.c
-index 8fed03283c85..ce90c4ee4138 100644
+index ce90c4ee4138..994e9e418227 100644
 --- a/tools/perf/util/smt.c
 +++ b/tools/perf/util/smt.c
-@@ -1,100 +1,23 @@
- // SPDX-License-Identifier: GPL-2.0-only
--#include <stdio.h>
--#include <stdlib.h>
--#include <unistd.h>
--#include <linux/bitops.h>
-+#include <string.h>
- #include "api/fs/fs.h"
-+#include "cputopo.h"
- #include "smt.h"
- 
--/**
-- * hweight_str - Returns the number of bits set in str. Stops at first non-hex
-- *	       or ',' character.
-- */
--static int hweight_str(char *str)
--{
--	int result = 0;
--
--	while (*str) {
--		switch (*str++) {
--		case '0':
--		case ',':
--			break;
--		case '1':
--		case '2':
--		case '4':
--		case '8':
--			result++;
--			break;
--		case '3':
--		case '5':
--		case '6':
--		case '9':
--		case 'a':
--		case 'A':
--		case 'c':
--		case 'C':
--			result += 2;
--			break;
--		case '7':
--		case 'b':
--		case 'B':
--		case 'd':
--		case 'D':
--		case 'e':
--		case 'E':
--			result += 3;
--			break;
--		case 'f':
--		case 'F':
--			result += 4;
--			break;
--		default:
--			goto done;
--		}
--	}
--done:
--	return result;
--}
--
--int smt_on(void)
-+bool smt_on(const struct cpu_topology *topology)
- {
- 	static bool cached;
--	static int cached_result;
--	int cpu;
--	int ncpu;
-+	static bool cached_result;
-+	int fs_value;
- 
- 	if (cached)
- 		return cached_result;
- 
--	if (sysfs__read_int("devices/system/cpu/smt/active", &cached_result) >= 0) {
--		cached = true;
--		return cached_result;
--	}
--
--	cached_result = 0;
--	ncpu = sysconf(_SC_NPROCESSORS_CONF);
--	for (cpu = 0; cpu < ncpu; cpu++) {
--		unsigned long long siblings;
--		char *str;
--		size_t strlen;
--		char fn[256];
-+	if (sysfs__read_int("devices/system/cpu/smt/active", &fs_value) >= 0)
-+		cached_result = (fs_value == 1);
-+	else
-+		cached_result = cpu_topology__smt_on(topology);
- 
--		snprintf(fn, sizeof fn,
--			"devices/system/cpu/cpu%d/topology/thread_siblings", cpu);
--		if (sysfs__read_str(fn, &str, &strlen) < 0) {
--			snprintf(fn, sizeof fn,
--				"devices/system/cpu/cpu%d/topology/core_cpus", cpu);
--			if (sysfs__read_str(fn, &str, &strlen) < 0)
--				continue;
--		}
--		/* Entry is hex, but does not have 0x, so need custom parser */
--		siblings = hweight_str(str);
--		free(str);
--		if (siblings > 1) {
--			cached_result = 1;
--			break;
--		}
--	}
+@@ -21,3 +21,17 @@ bool smt_on(const struct cpu_topology *topology)
  	cached = true;
  	return cached_result;
  }
++
++bool core_wide(bool system_wide, const char *user_requested_cpu_list,
++	       const struct cpu_topology *topology)
++{
++	/* If not everything running on a core is being recorded then we can't use core_wide. */
++	if (!system_wide)
++		return false;
++
++	/* Cheap case that SMT is disabled and therefore we're inherently core_wide. */
++	if (!smt_on(topology))
++		return true;
++
++	return cpu_topology__core_wide(topology, user_requested_cpu_list);
++}
 diff --git a/tools/perf/util/smt.h b/tools/perf/util/smt.h
-index a98d65808f6a..e26999c6b8d4 100644
+index e26999c6b8d4..ae9095f2c38c 100644
 --- a/tools/perf/util/smt.h
 +++ b/tools/perf/util/smt.h
-@@ -2,6 +2,9 @@
- #ifndef __SMT_H
- #define __SMT_H 1
+@@ -7,4 +7,11 @@ struct cpu_topology;
+ /* Returns true if SMT (aka hyperthreading) is enabled. */
+ bool smt_on(const struct cpu_topology *topology);
  
--int smt_on(void);
-+struct cpu_topology;
++/*
++ * Returns true when system wide and all SMT threads for a core are in the
++ * user_requested_cpus map.
++ */
++bool core_wide(bool system_wide, const char *user_requested_cpu_list,
++	       const struct cpu_topology *topology);
 +
-+/* Returns true if SMT (aka hyperthreading) is enabled. */
-+bool smt_on(const struct cpu_topology *topology);
- 
  #endif /* __SMT_H */
 -- 
 2.37.2.672.g94769d06f0-goog

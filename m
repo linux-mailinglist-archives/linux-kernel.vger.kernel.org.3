@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B2AA5A7321
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 03:03:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD2355A7312
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 02:58:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiHaBDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 30 Aug 2022 21:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49720 "EHLO
+        id S230249AbiHaA6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 30 Aug 2022 20:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42358 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231834AbiHaBDD (ORCPT
+        with ESMTP id S229481AbiHaA6B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 30 Aug 2022 21:03:03 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82CD6AF499
-        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 18:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661907769; x=1693443769;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4g2unoSDN1ukBbO1EGZvQu17z9pHdUQ6vWbPZmoPISc=;
-  b=eSxiGgIfpsRk/Q90oXLeo5gCViRQ2ixb2jwZoIfwtD2So79+Jgr0cIor
-   1BmHmJiIF3hQ2YxE7RsPSoRFhq8wjZtZ1y7EYkZSjUdpPbccBSJzALr28
-   gM1JPwdO5P6pHuFZluC4lHtvt7jCa5tmzUv/OVV6081HNf4Bh/2LiHhgI
-   wzUK0L3jUQG4HLTVDz5fbDPqxuX5pC5wkJAe+WT9NneYvPlBJh+nUxrwq
-   0EQODSGKHIYZo4Y2960yq4axjaZHxNdo7pKwIjhuR2Ghahgzg1mojWBFo
-   VDiggp4tRAvPBOGSpaY2+GZ/OkDkhjrGrgskIYu/qjJ2Hzew8jMGIxKrH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="275744292"
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="275744292"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2022 18:02:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,276,1654585200"; 
-   d="scan'208";a="608040973"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by orsmga007.jf.intel.com with ESMTP; 30 Aug 2022 18:02:35 -0700
-Message-ID: <3aa28716-9d91-321a-0e52-58ae425ac598@linux.intel.com>
-Date:   Wed, 31 Aug 2022 08:57:05 +0800
+        Tue, 30 Aug 2022 20:58:01 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8A44A9C0E
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 17:57:59 -0700 (PDT)
+X-QQ-mid: bizesmtp86t1661907467t62nxb90
+Received: from localhost.localdomain ( [182.148.13.26])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 31 Aug 2022 08:57:46 +0800 (CST)
+X-QQ-SSF: 01000000000000D0E000000A0000000
+X-QQ-FEAT: 83ShfzFP0oDIRreUK6adz5wTVdQyShTxZeHC2bUg8eBmCdTH4bjfHfU4c2RKf
+        +pEy1ajNp1slJSLECzdbqH7duG6VnAR5XwjKwGNCTEl1qPo3/919OIiO1ONRDgKfghwpFTg
+        j6yvumPy9phSjo4D8FBrUqauSdZt6PIjmggQ/8V8kjaaU9Tlg6oHu7HoXVDjQQcihyxP9J3
+        b4IBbubYws+q38CwLpAaiuIjvcMtQbT3HPwfDJ2eLl7cVtohXm7JNCJ5QDUNXR4901o3c6R
+        uGd0WXqvLESFdtvo+xteTJmnkSPD8lYEOrr4U3SaDDL7pOOvEpcd7GowwGQ6hSctzY/Gw41
+        ezJDagp//oX2wgIrN1l8TmyFXxHblaEuN/7UzSvuKojtKAWpok=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     nsekhar@ti.com, brgl@bgdev.pl, linux@armlinux.org.uk
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] ARM: davinci: fix repeated words in comments
+Date:   Wed, 31 Aug 2022 08:57:39 +0800
+Message-Id: <20220831005739.42648-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     baolu.lu@linux.intel.com, Raj Ashok <ashok.raj@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
-Subject: Re: [PATCH 2/2] iommu: Use the user PGD for SVA if PTI is enabled
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        x86@kernel.org, Joerg Roedel <joro@8bytes.org>
-References: <20220822201213.352289-1-jacob.jun.pan@linux.intel.com>
- <20220822201213.352289-3-jacob.jun.pan@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220822201213.352289-3-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
+        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        *      [43.155.67.158 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/23/22 4:12 AM, Jacob Pan wrote:
-> With page table isolation, the kernel manages two sets of page tables
-> for each process: one for user one for kernel. When enabling SVA, the
-> current x86 IOMMU drivers bind device and PASID with the kernel copy
-> of the process page table.
-> 
-> While there is no known "Meltdown" type of DMA attack, exposing
-> kernel mapping to DMA intended for userspace makes the system vulnerable
-> unnecessarily. It also breaks the intention of PTI.
-> 
-> This patch replaces kernel page table PGD with the user counterpart,
-> thus fulfill the promise of PTI on the DMA side.
-> 
-> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
+Delete the redundant word 'the'.
 
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ arch/arm/mach-davinci/board-dm365-evm.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-baolu
+diff --git a/arch/arm/mach-davinci/board-dm365-evm.c b/arch/arm/mach-davinci/board-dm365-evm.c
+index d8c6c360818b..cca709236ade 100644
+--- a/arch/arm/mach-davinci/board-dm365-evm.c
++++ b/arch/arm/mach-davinci/board-dm365-evm.c
+@@ -528,7 +528,7 @@ static struct vpbe_enc_mode_info dm365evm_enc_preset_timing[] = {
+ 
+ /*
+  * The outputs available from VPBE + ecnoders. Keep the
+- * the order same as that of encoders. First those from venc followed by that
++ * order same as that of encoders. First those from venc followed by that
+  * from encoders. Index in the output refers to index on a particular
+  * encoder.Driver uses this index to pass it to encoder when it supports more
+  * than one output. Application uses index of the array to set an output.
+-- 
+2.36.1
+

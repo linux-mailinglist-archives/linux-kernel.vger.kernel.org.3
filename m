@@ -2,251 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04FBC5A821B
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:46:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0EFB5A8221
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 17:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232072AbiHaPqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 11:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
+        id S231917AbiHaPrT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 11:47:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229911AbiHaPqB (ORCPT
+        with ESMTP id S231873AbiHaPq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 11:46:01 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E47722A41B;
-        Wed, 31 Aug 2022 08:44:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id DFDDA2199A;
-        Wed, 31 Aug 2022 15:43:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1661960639; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=3yrYAWdBoy31kX+Qe1EoE7Uurbd/80U+VpqsfDJ+/94=;
-        b=Ml9yC086UCw1N9YLeQ/ewgEYRQklA/m3wWbB0ec4AYp1moM28bA478xtCH/y2hHNRbuXqC
-        n1xfjY3C5P1+tM0HKiw3ofr2WUA5dURXFiQ1BillQ7KJpEkaq3alPZjI9tv6DPjn2gpqWX
-        xN379Vzr1DhVio/DWxLP50Z+ixQUiRA=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A73E13A7C;
-        Wed, 31 Aug 2022 15:43:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 1f6CHL6BD2NTcwAAMHmgww
-        (envelope-from <jgross@suse.com>); Wed, 31 Aug 2022 15:43:58 +0000
-Message-ID: <9c9bb842-c4ce-021c-4be6-be7f13f277d9@suse.com>
-Date:   Wed, 31 Aug 2022 17:43:58 +0200
+        Wed, 31 Aug 2022 11:46:56 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F98390C4F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:45:28 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id c9so4745912ybf.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 08:45:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Yg5lEIxwkC8L9g2KyGsqswRBhk4gAo50nJ7nWIpcdXc=;
+        b=f3+0Eh/W8OX4KuooBQ0WgBNbVwjJbAXBKTWgD/1rnSxw8Or+o0OJFGSWtlhyJfP9gD
+         QCFEtC0rc3uk17x5AtGX0ukxT/fwVuDehIBS7C3A9pMG33oU0ZJGMmly+vrXS5p4by0+
+         jDT69+FR9RtMW6e1SjrFZnroYNBot0xZKZX0R51jheU+mrpvrFLrGntTcPsTHaijk6mV
+         iKPavpo7jboK8+tsNQ9Az/YAZSJr40a0Ai7H69DS5U2PS7wmYchRHvmW2/w/UajBDN7Y
+         I8Esb137FVo77guaGTuDVZBl6klQw58Xua4rWyO6cGYeV+DdQ1NJpxEpQh+0pcY1wICS
+         8E3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Yg5lEIxwkC8L9g2KyGsqswRBhk4gAo50nJ7nWIpcdXc=;
+        b=noT4Ygy/BLqC83zk3myWLuPfcYX/6Fmk5lcmdOmBAorIwc/rr5HmsK1+eJUDQOfXo/
+         5J+oxQar1kBiV4HV51W+8VCTMnHbRRhU8Ho61jQd9SgKatAdRmfsGC9sr9pUYOwj7nWa
+         DrG998ksupNofWxpxOQUKfDaJ7o/pt5Hiwkf7+EtmbQSE7LRNYteksUp1Lo18qPACNYn
+         P89aJRjyLWDxEUIUpjIrCPsqcfhul/Ka84Ee45aIubJel6ydLpj3uBUpKC4n1liAm6KE
+         GxQWi9EmC0nGNjCeO+p49H2j7grtJyoyn1TZya5wBFr7er2ZCwvvPAGRlMdUFkoSdD1f
+         4VlQ==
+X-Gm-Message-State: ACgBeo2EdHh4Rqj5E5sTy/zPqc6KVOBiXUrp0mLZTHOUrRUbgh7s8KIq
+        PbMw/YsK4NQamRJP5CZbM5yZBC260nmfXetugYBtiQ==
+X-Google-Smtp-Source: AA6agR7eJQcze4oyVJ5u+oBz3mWkBzYq0MHuMfNSxceWOgOVlxBCkZ6NIfrADtyTqEPi+FGZK0IDnHN5ZKC4stom7pQ=
+X-Received: by 2002:a05:6902:705:b0:695:b3b9:41bc with SMTP id
+ k5-20020a056902070500b00695b3b941bcmr16070987ybt.426.1661960727041; Wed, 31
+ Aug 2022 08:45:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 12/21] xen/gntdev: Prepare to dynamic dma-buf locking
- specification
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
- <20220831153757.97381-13-dmitry.osipenko@collabora.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220831153757.97381-13-dmitry.osipenko@collabora.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------G6Hfo1qgQ46O6AttifejsfyG"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-11-surenb@google.com>
+ <20220831101103.fj5hjgy3dbb44fit@suse.de>
+In-Reply-To: <20220831101103.fj5hjgy3dbb44fit@suse.de>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 31 Aug 2022 08:45:16 -0700
+Message-ID: <CAJuCfpHwUUc_VphqBY9KmWvZJDrsBG6Za+kG_MW=J-abjuM4Lw@mail.gmail.com>
+Subject: Re: [RFC PATCH 10/30] mm: enable page allocation tagging for
+ __get_free_pages and alloc_pages
+To:     Mel Gorman <mgorman@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------G6Hfo1qgQ46O6AttifejsfyG
-Content-Type: multipart/mixed; boundary="------------lypUeJqL5gtL0yFztu3gk66a";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Dmitry Osipenko <dmitry.osipenko@collabora.com>,
- David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
- Gurchetan Singh <gurchetansingh@chromium.org>, Chia-I Wu
- <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
- Daniel Almeida <daniel.almeida@collabora.com>,
- Gert Wollny <gert.wollny@collabora.com>,
- Gustavo Padovan <gustavo.padovan@collabora.com>,
- Daniel Stone <daniel@fooishbar.org>,
- Tomeu Vizoso <tomeu.vizoso@collabora.com>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- Rob Clark <robdclark@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
- "Pan, Xinhui" <Xinhui.Pan@amd.com>, Thierry Reding
- <thierry.reding@gmail.com>, Tomasz Figa <tfiga@chromium.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Mauro Carvalho Chehab <mchehab@kernel.org>,
- Alex Deucher <alexander.deucher@amd.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>,
- Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
- =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
- Qiang Yu <yuq825@gmail.com>,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Amol Maheshwari <amahesh@qti.qualcomm.com>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- Tomi Valkeinen <tomba@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Lucas Stach <l.stach@pengutronix.de>,
- Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
- Dmitry Osipenko <digetx@gmail.com>, linux-media@vger.kernel.org,
- linaro-mm-sig@lists.linaro.org, amd-gfx@lists.freedesktop.org,
- intel-gfx@lists.freedesktop.org, kernel@collabora.com,
- virtualization@lists.linux-foundation.org, linux-rdma@vger.kernel.org,
- linux-arm-msm@vger.kernel.org
-Message-ID: <9c9bb842-c4ce-021c-4be6-be7f13f277d9@suse.com>
-Subject: Re: [PATCH v4 12/21] xen/gntdev: Prepare to dynamic dma-buf locking
- specification
-References: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
- <20220831153757.97381-13-dmitry.osipenko@collabora.com>
-In-Reply-To: <20220831153757.97381-13-dmitry.osipenko@collabora.com>
+On Wed, Aug 31, 2022 at 3:11 AM Mel Gorman <mgorman@suse.de> wrote:
+>
+> On Tue, Aug 30, 2022 at 02:48:59PM -0700, Suren Baghdasaryan wrote:
+> > Redefine alloc_pages, __get_free_pages to record allocations done by
+> > these functions. Instrument deallocation hooks to record object freeing.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > +#ifdef CONFIG_PAGE_ALLOC_TAGGING
+> > +
+> >  #include <linux/alloc_tag.h>
+> >  #include <linux/page_ext.h>
+> >
+> > @@ -25,4 +27,37 @@ static inline void pgalloc_tag_dec(struct page *page, unsigned int order)
+> >               alloc_tag_sub(get_page_tag_ref(page), PAGE_SIZE << order);
+> >  }
+> >
+> > +/*
+> > + * Redefinitions of the common page allocators/destructors
+> > + */
+> > +#define pgtag_alloc_pages(gfp, order)                                        \
+> > +({                                                                   \
+> > +     struct page *_page = _alloc_pages((gfp), (order));              \
+> > +                                                                     \
+> > +     if (_page)                                                      \
+> > +             alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
+> > +     _page;                                                          \
+> > +})
+> > +
+>
+> Instead of renaming alloc_pages, why is the tagging not done in
+> __alloc_pages()? At least __alloc_pages_bulk() is also missed. The branch
+> can be guarded with IS_ENABLED.
 
---------------lypUeJqL5gtL0yFztu3gk66a
-Content-Type: multipart/mixed; boundary="------------ZWUad5gqJZJlvL38yNtpOUye"
+Hmm. Assuming all the other allocators using __alloc_pages are inlined, that
+should work. I'll try that and if that works will incorporate in the
+next respin.
+Thanks!
 
---------------ZWUad5gqJZJlvL38yNtpOUye
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+I don't think IS_ENABLED is required because the tagging functions are already
+defined as empty if the appropriate configs are not enabled. Unless I
+misunderstood
+your node.
 
-T24gMzEuMDguMjIgMTc6MzcsIERtaXRyeSBPc2lwZW5rbyB3cm90ZToNCj4gUHJlcGFyZSBn
-bnRkZXYgZHJpdmVyIHRvIHRoZSBjb21tb24gZHluYW1pYyBkbWEtYnVmIGxvY2tpbmcgY29u
-dmVudGlvbg0KPiBieSBzdGFydGluZyB0byB1c2UgdGhlIHVubG9ja2VkIHZlcnNpb25zIG9m
-IGRtYS1idWYgQVBJIGZ1bmN0aW9ucy4NCj4gDQo+IFNpZ25lZC1vZmYtYnk6IERtaXRyeSBP
-c2lwZW5rbyA8ZG1pdHJ5Lm9zaXBlbmtvQGNvbGxhYm9yYS5jb20+DQoNCkFja2VkLWJ5OiBK
-dWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQoNCg0KSnVlcmdlbg0K
---------------ZWUad5gqJZJlvL38yNtpOUye
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------ZWUad5gqJZJlvL38yNtpOUye--
-
---------------lypUeJqL5gtL0yFztu3gk66a--
-
---------------G6Hfo1qgQ46O6AttifejsfyG
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMPgb4FAwAAAAAACgkQsN6d1ii/Ey+D
-8Af9EoFfR34QuXUPOWdkfHrwdTH5BQ9JUu7MI+fPHT/BbpvHP1KNO6dUIir1KSN0Ngy5hyMmv4or
-0G90PYpMrubAXjRlgD8uOsTsLwB1ymxFNA/9C8x+QdAqUSxLH2XcT0ja7kCH6zIEJ1T7//+Nnoyn
-ieoDNKkBGgSdHURfCbXSEYaJYxvUWibR2S7EyL1eTJWzxkSy8RC3M1iPgTjkwIYDnvqd/8Nrj7a6
-27pmswL+U3zJsR/DFOYdIW7/u1exr1RHagcJUdrBXW4f15alyN9hS/sIop3C0yaB0bqiEDKLLFdl
-ibIU0gFydFqt+p6qnmM8QBmFzL292hkN89U1YVgTuw==
-=QW6/
------END PGP SIGNATURE-----
-
---------------G6Hfo1qgQ46O6AttifejsfyG--
+>
+> > +#define pgtag_get_free_pages(gfp_mask, order)                                \
+> > +({                                                                   \
+> > +     struct page *_page;                                             \
+> > +     unsigned long _res = _get_free_pages((gfp_mask), (order), &_page);\
+> > +                                                                     \
+> > +     if (_res)                                                       \
+> > +             alloc_tag_add(get_page_tag_ref(_page), PAGE_SIZE << (order));\
+> > +     _res;                                                           \
+> > +})
+> > +
+>
+> Similar, the tagging could happen in a core function instead of a wrapper.
+>
+> > +#else /* CONFIG_PAGE_ALLOC_TAGGING */
+> > +
+> > +#define pgtag_alloc_pages(gfp, order) _alloc_pages(gfp, order)
+> > +
+> > +#define pgtag_get_free_pages(gfp_mask, order) \
+> > +     _get_free_pages((gfp_mask), (order), NULL)
+> > +
+> > +#define pgalloc_tag_dec(__page, __size)              do {} while (0)
+> > +
+> > +#endif /* CONFIG_PAGE_ALLOC_TAGGING */
+> > +
+> >  #endif /* _LINUX_PGALLOC_TAG_H */
+> > diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> > index b73d3248d976..f7e6d9564a49 100644
+> > --- a/mm/mempolicy.c
+> > +++ b/mm/mempolicy.c
+> > @@ -2249,7 +2249,7 @@ EXPORT_SYMBOL(vma_alloc_folio);
+> >   * flags are used.
+> >   * Return: The page on success or NULL if allocation fails.
+> >   */
+> > -struct page *alloc_pages(gfp_t gfp, unsigned order)
+> > +struct page *_alloc_pages(gfp_t gfp, unsigned int order)
+> >  {
+> >       struct mempolicy *pol = &default_policy;
+> >       struct page *page;
+> > @@ -2273,7 +2273,7 @@ struct page *alloc_pages(gfp_t gfp, unsigned order)
+> >
+> >       return page;
+> >  }
+> > -EXPORT_SYMBOL(alloc_pages);
+> > +EXPORT_SYMBOL(_alloc_pages);
+> >
+> >  struct folio *folio_alloc(gfp_t gfp, unsigned order)
+> >  {
+> > diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+> > index e5486d47406e..165daba19e2a 100644
+> > --- a/mm/page_alloc.c
+> > +++ b/mm/page_alloc.c
+> > @@ -763,6 +763,7 @@ static inline bool pcp_allowed_order(unsigned int order)
+> >
+> >  static inline void free_the_page(struct page *page, unsigned int order)
+> >  {
+> > +
+> >       if (pcp_allowed_order(order))           /* Via pcp? */
+> >               free_unref_page(page, order);
+> >       else
+>
+> Spurious wide-space change.
+>
+> --
+> Mel Gorman
+> SUSE Labs

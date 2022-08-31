@@ -2,68 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A830E5A8539
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3E65A853B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:14:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232584AbiHaSOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:14:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44210 "EHLO
+        id S232523AbiHaSOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:14:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232226AbiHaSN3 (ORCPT
+        with ESMTP id S232623AbiHaSNo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:13:29 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08046DEB7C
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:12:16 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id x19so13349961pfr.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:12:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=+FPB2MKL9v7GjxeLAYremS8ZtsqDh2bdF2F8eQQvlHs=;
-        b=CYlpSIKhg8hDCBcboi29/Tvqjb5Zm+ig8Gn4tZQB3FViqP9YJhm18fpJtHyMewumi8
-         ZmMrFb8Ex7elICsdEpfFFP587DTF3CguVWX5J9nKZb3i/KeuMl78n53t4NUkiA8zge+o
-         ZO5iXNYktQsIsVsidn6zw/2DR5J7zeZhMDRx0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=+FPB2MKL9v7GjxeLAYremS8ZtsqDh2bdF2F8eQQvlHs=;
-        b=o16LPWyX5BnBNOqgBPtSZARmlnFYKF1z0jNnl9DQrchutUbh/SAhoURspTwwZCzie/
-         HP/LorYiD/ITjllZD8U8r9HvX8WgdqTNg9rviEa9PXhziNynOlBi3ulVkbbCkCot83zI
-         yQmxKbM4KSxUYZDZsY9fELffRU+4j/punCsbHLQYUXPuBdI+EKDt9kHoT9xtLp2GAu2W
-         cxeK/UJ2N5dlu/a48rRV0k7/uIYcN5bdELz05PGHzL5ArFMz4V0sHJkxvN/0y6wsCil5
-         GX4lVbkXKBBc/VPDyLqlqTaTJojvtFichAP/C7PHVgxFtoUZbV9ooQn372vme16mfpwK
-         Md4w==
-X-Gm-Message-State: ACgBeo2kF+7o6qSpJQbiy+gA++jVY9FF4rdAhERKSrm8Du23BUX7Svre
-        PWgAoj0jaqx6CKJbkCpD7s2hww==
-X-Google-Smtp-Source: AA6agR7W4Dv7enr2z0bknULBTBjIm5oAx4DbBhIBhQBExJIPLPWpvbDYeUSUhnCIKTQRQakEiLNqeA==
-X-Received: by 2002:aa7:8742:0:b0:537:ee75:601a with SMTP id g2-20020aa78742000000b00537ee75601amr21484748pfo.37.1661969503067;
-        Wed, 31 Aug 2022 11:11:43 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id u15-20020a170902714f00b0017532e01e3fsm3216199plm.276.2022.08.31.11.11.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 11:11:42 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Vitor Massaru Iha <vitor@massaru.org>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        kernel test robot <lkp@intel.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH] overflow: Split up kunit tests for smaller stack frames
-Date:   Wed, 31 Aug 2022 11:11:40 -0700
-Message-Id: <20220831181140.842093-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 31 Aug 2022 14:13:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F6BEA324;
+        Wed, 31 Aug 2022 11:12:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3728F61C2F;
+        Wed, 31 Aug 2022 18:12:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 962E4C433D6;
+        Wed, 31 Aug 2022 18:12:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661969531;
+        bh=v7yYUjYkw2p9AIgEWjIca4+sC4Wrp4YQLNStAinHtuw=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uU3/9oeCtiLmY3BeUxgqBGLQozhfkzEgEfkxp9Zieqil7lOW+RvPiB58/xcOwOGjp
+         cykaGIA1GRhfLTgc6nOF46The/C0HWqRQqzBzpuxda33XVzTMZvZ1/QqbD/XWgKUoP
+         I9BsfshWebdbyHZO+blkMZh0HDBpmtVjrn93aFEF378PMdJ0/tMV8eohcoavwjaSoL
+         VHrH4/RyfDTnbJoUlsoZpCEN38R94+ytulPRGQqAcGMaUqxfMW1hOaQcUgWI0IvPWo
+         +u5snDqeI/HjlujdgPF0CbLEdQEH4wARjb62d/s0jm9Xjjqi1mXF70r1nncax66EYs
+         mbMwXtcHq4OOQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 586545C015D; Wed, 31 Aug 2022 11:12:11 -0700 (PDT)
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 01/25] rcu: Add full-sized polling for get_completed*() and poll_state*()
+Date:   Wed, 31 Aug 2022 11:11:46 -0700
+Message-Id: <20220831181210.2695080-1-paulmck@kernel.org>
+X-Mailer: git-send-email 2.31.1.189.g2e36527f23
+In-Reply-To: <20220831181207.GA2694717@paulmck-ThinkPad-P17-Gen-1>
+References: <20220831181207.GA2694717@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5672; h=from:subject; bh=aj59+gqQXAf9s4qeTET5coAedgx0HGyX/RR0nO+aMCg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjD6Rchk49aYbAVzrBbHrkVerP3JFcTIXd/Ju/I8M5 krdGx5uJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYw+kXAAKCRCJcvTf3G3AJhqbD/ 9PObfsj8WgoVsDigCEuZwwuNVZs46+b4s3foKgS53KwcT5KBkWAQp6Uj5QmgHNhme/QSRjWuDlwEmY Lsv107Je+2my3uzD1yiUht/1YU1e9C2hC0CdQ3vffy0PndLTtBb9Sp0r4Qfn+U96FNASYPESrRCDjc ro5P6tO/cXty84WWSodvIF2JSPWGnQ2JnSdDh40x+AxDMgFky00FLL6wl5y2QzCv0R+f0DemCZuMNg U7f2zU+m8rNjSI8AAL7NXFPnhrZHpcmMIVoaYkaE0p3jTOA8EjPfV/yp+FxAJNOAoVRn4AuvdMV4B5 3oXuoWcyTw6GMQ6pGYhcgIFt6fk1wAcXAeG6ZGWalUIbQ08ljadInIT/LbjHKHpbnHoWs+6SAvqu6l 5UDPGMNpV/bsEhSJ44Co0ZiYUvlJYnLz5eFdJJ8HhNuBQgT7H5BfFJD7Ex1lAM1o6ZSJBHPGgAztJu Ow4VKVFV87h7aJsNmZ55B8Lb4k4GqJNeKgM5pk0iqzOK7EeIC10unXnBV7gWiRbQZAO+fOloeYndzv TqUf9gdkmjl4AxEJKMuEaTbvU53e5y13LKUrI98Yg+ARNnhF7uQDul4O1PvsLCgRosYbX/2z07n2fj fU40fzWJNgaVVpjG6rL2V686sroIKdt7SpQSUBF6s6NVa3JY9moiSgVU5S0w==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -72,161 +56,267 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Under some pathological 32-bit configs, the shift overflow KUnit tests
-create huge stack frames. Split up the function to avoid this,
-separating by rough shift overflow cases.
+The get_completed_synchronize_rcu() and poll_state_synchronize_rcu()
+APIs compress the combined expedited and normal grace-period states into a
+single unsigned long, which conserves storage, but can miss grace periods
+in certain cases involving overlapping normal and expedited grace periods.
+Missing the occasional grace period is usually not a problem, but there
+are use cases that care about each and every grace period.
 
-Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc: Daniel Latypov <dlatypov@google.com>
-Cc: Vitor Massaru Iha <vitor@massaru.org>
-Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Reported-by: kernel test robot <lkp@intel.com>
-Link: https://lore.kernel.org/lkml/202208301850.iuv9VwA8-lkp@intel.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
+This commit therefore adds the first members of the full-state RCU
+grace-period polling API, namely the get_completed_synchronize_rcu_full()
+and poll_state_synchronize_rcu_full() functions.  These use up to three
+times the storage (rcu_gp_oldstate structure instead of unsigned long),
+but which are guaranteed not to miss grace periods, at least in situations
+where the single-CPU grace-period optimization does not apply.
+
+Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- lib/overflow_kunit.c | 78 +++++++++++++++++++++++++++++---------------
- 1 file changed, 51 insertions(+), 27 deletions(-)
+ include/linux/rcupdate.h |  3 ++
+ include/linux/rcutiny.h  |  9 +++++
+ include/linux/rcutree.h  |  8 +++++
+ kernel/rcu/rcutorture.c  |  9 +++++
+ kernel/rcu/tiny.c        | 10 ++++++
+ kernel/rcu/tree.c        | 76 +++++++++++++++++++++++++++++++++++++---
+ 6 files changed, 111 insertions(+), 4 deletions(-)
 
-diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
-index 0d98c9bc75da..f385ca652b74 100644
---- a/lib/overflow_kunit.c
-+++ b/lib/overflow_kunit.c
-@@ -304,10 +304,6 @@ DEFINE_TEST_ARRAY_TYPED(int, int, u8) = {
- };
- DEFINE_TEST_FUNC_TYPED(int_int__u8, u8, "%d");
- 
--static void overflow_shift_test(struct kunit *test)
--{
--	int count = 0;
--
- /* Args are: value, shift, type, expected result, overflow expected */
- #define TEST_ONE_SHIFT(a, s, t, expect, of)	do {			\
- 	typeof(a) __a = (a);						\
-@@ -331,6 +327,10 @@ static void overflow_shift_test(struct kunit *test)
- 	count++;							\
- } while (0)
- 
-+static void shift_sane_test(struct kunit *test)
-+{
-+	int count = 0;
+diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+index f527f27e64387..faaa174dfb27c 100644
+--- a/include/linux/rcupdate.h
++++ b/include/linux/rcupdate.h
+@@ -42,7 +42,10 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func);
+ void rcu_barrier_tasks(void);
+ void rcu_barrier_tasks_rude(void);
+ void synchronize_rcu(void);
 +
- 	/* Sane shifts. */
- 	TEST_ONE_SHIFT(1, 0, u8, 1 << 0, false);
- 	TEST_ONE_SHIFT(1, 4, u8, 1 << 4, false);
-@@ -373,6 +373,13 @@ static void overflow_shift_test(struct kunit *test)
- 	TEST_ONE_SHIFT(0, 30, s32, 0, false);
- 	TEST_ONE_SHIFT(0, 62, s64, 0, false);
++struct rcu_gp_oldstate;
+ unsigned long get_completed_synchronize_rcu(void);
++void get_completed_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp);
  
-+	kunit_info(test, "%d sane shift tests finished\n", count);
+ #ifdef CONFIG_PREEMPT_RCU
+ 
+diff --git a/include/linux/rcutiny.h b/include/linux/rcutiny.h
+index 62815c0a2dcef..1fbff8600d92d 100644
+--- a/include/linux/rcutiny.h
++++ b/include/linux/rcutiny.h
+@@ -14,10 +14,19 @@
+ 
+ #include <asm/param.h> /* for HZ */
+ 
++struct rcu_gp_oldstate {
++	unsigned long rgos_norm;
++};
++
+ unsigned long get_state_synchronize_rcu(void);
+ unsigned long start_poll_synchronize_rcu(void);
+ bool poll_state_synchronize_rcu(unsigned long oldstate);
+ 
++static inline bool poll_state_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp)
++{
++	return poll_state_synchronize_rcu(rgosp->rgos_norm);
 +}
 +
-+static void shift_overflow_test(struct kunit *test)
-+{
-+	int count = 0;
+ static inline void cond_synchronize_rcu(unsigned long oldstate)
+ {
+ 	might_sleep();
+diff --git a/include/linux/rcutree.h b/include/linux/rcutree.h
+index 47eaa4cb0df72..4ccbc3aa9dc20 100644
+--- a/include/linux/rcutree.h
++++ b/include/linux/rcutree.h
+@@ -40,11 +40,19 @@ bool rcu_eqs_special_set(int cpu);
+ void rcu_momentary_dyntick_idle(void);
+ void kfree_rcu_scheduler_running(void);
+ bool rcu_gp_might_be_stalled(void);
 +
- 	/* Overflow: shifted the bit off the end. */
- 	TEST_ONE_SHIFT(1, 8, u8, 0, true);
- 	TEST_ONE_SHIFT(1, 16, u16, 0, true);
-@@ -420,6 +427,13 @@ static void overflow_shift_test(struct kunit *test)
- 	/* 0100000100001000001000000010000001000010000001000100010001001011 */
- 	TEST_ONE_SHIFT(4686030735197619275LL, 2, s64, 0, true);
++struct rcu_gp_oldstate {
++	unsigned long rgos_norm;
++	unsigned long rgos_exp;
++	unsigned long rgos_polled;
++};
++
+ unsigned long start_poll_synchronize_rcu_expedited(void);
+ void cond_synchronize_rcu_expedited(unsigned long oldstate);
+ unsigned long get_state_synchronize_rcu(void);
+ unsigned long start_poll_synchronize_rcu(void);
+ bool poll_state_synchronize_rcu(unsigned long oldstate);
++bool poll_state_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp);
+ void cond_synchronize_rcu(unsigned long oldstate);
  
-+	kunit_info(test, "%d overflow shift tests finished\n", count);
-+}
-+
-+static void shift_truncate_test(struct kunit *test)
-+{
-+	int count = 0;
-+
- 	/* Overflow: values larger than destination type. */
- 	TEST_ONE_SHIFT(0x100, 0, u8, 0, true);
- 	TEST_ONE_SHIFT(0xFF, 0, s8, 0, true);
-@@ -431,6 +445,33 @@ static void overflow_shift_test(struct kunit *test)
- 	TEST_ONE_SHIFT(0xFFFFFFFFUL, 0, int, 0, true);
- 	TEST_ONE_SHIFT(0xFFFFFFFFFFFFFFFFULL, 0, s64, 0, true);
- 
-+	/* Overflow: shifted at or beyond entire type's bit width. */
-+	TEST_ONE_SHIFT(0, 8, u8, 0, true);
-+	TEST_ONE_SHIFT(0, 9, u8, 0, true);
-+	TEST_ONE_SHIFT(0, 8, s8, 0, true);
-+	TEST_ONE_SHIFT(0, 9, s8, 0, true);
-+	TEST_ONE_SHIFT(0, 16, u16, 0, true);
-+	TEST_ONE_SHIFT(0, 17, u16, 0, true);
-+	TEST_ONE_SHIFT(0, 16, s16, 0, true);
-+	TEST_ONE_SHIFT(0, 17, s16, 0, true);
-+	TEST_ONE_SHIFT(0, 32, u32, 0, true);
-+	TEST_ONE_SHIFT(0, 33, u32, 0, true);
-+	TEST_ONE_SHIFT(0, 32, int, 0, true);
-+	TEST_ONE_SHIFT(0, 33, int, 0, true);
-+	TEST_ONE_SHIFT(0, 32, s32, 0, true);
-+	TEST_ONE_SHIFT(0, 33, s32, 0, true);
-+	TEST_ONE_SHIFT(0, 64, u64, 0, true);
-+	TEST_ONE_SHIFT(0, 65, u64, 0, true);
-+	TEST_ONE_SHIFT(0, 64, s64, 0, true);
-+	TEST_ONE_SHIFT(0, 65, s64, 0, true);
-+
-+	kunit_info(test, "%d truncate shift tests finished\n", count);
-+}
-+
-+static void shift_nonsense_test(struct kunit *test)
-+{
-+	int count = 0;
-+
- 	/* Nonsense: negative initial value. */
- 	TEST_ONE_SHIFT(-1, 0, s8, 0, true);
- 	TEST_ONE_SHIFT(-1, 0, u8, 0, true);
-@@ -455,26 +496,6 @@ static void overflow_shift_test(struct kunit *test)
- 	TEST_ONE_SHIFT(0, -30, s64, 0, true);
- 	TEST_ONE_SHIFT(0, -30, u64, 0, true);
- 
--	/* Overflow: shifted at or beyond entire type's bit width. */
--	TEST_ONE_SHIFT(0, 8, u8, 0, true);
--	TEST_ONE_SHIFT(0, 9, u8, 0, true);
--	TEST_ONE_SHIFT(0, 8, s8, 0, true);
--	TEST_ONE_SHIFT(0, 9, s8, 0, true);
--	TEST_ONE_SHIFT(0, 16, u16, 0, true);
--	TEST_ONE_SHIFT(0, 17, u16, 0, true);
--	TEST_ONE_SHIFT(0, 16, s16, 0, true);
--	TEST_ONE_SHIFT(0, 17, s16, 0, true);
--	TEST_ONE_SHIFT(0, 32, u32, 0, true);
--	TEST_ONE_SHIFT(0, 33, u32, 0, true);
--	TEST_ONE_SHIFT(0, 32, int, 0, true);
--	TEST_ONE_SHIFT(0, 33, int, 0, true);
--	TEST_ONE_SHIFT(0, 32, s32, 0, true);
--	TEST_ONE_SHIFT(0, 33, s32, 0, true);
--	TEST_ONE_SHIFT(0, 64, u64, 0, true);
--	TEST_ONE_SHIFT(0, 65, u64, 0, true);
--	TEST_ONE_SHIFT(0, 64, s64, 0, true);
--	TEST_ONE_SHIFT(0, 65, s64, 0, true);
--
- 	/*
- 	 * Corner case: for unsigned types, we fail when we've shifted
- 	 * through the entire width of bits. For signed types, we might
-@@ -490,9 +511,9 @@ static void overflow_shift_test(struct kunit *test)
- 	TEST_ONE_SHIFT(0, 31, s32, 0, false);
- 	TEST_ONE_SHIFT(0, 63, s64, 0, false);
- 
--	kunit_info(test, "%d shift tests finished\n", count);
--#undef TEST_ONE_SHIFT
-+	kunit_info(test, "%d nonsense shift tests finished\n", count);
+ bool rcu_is_idle_cpu(int cpu);
+diff --git a/kernel/rcu/rcutorture.c b/kernel/rcu/rcutorture.c
+index d8e1b270a065f..b31e6ed64d1b9 100644
+--- a/kernel/rcu/rcutorture.c
++++ b/kernel/rcu/rcutorture.c
+@@ -336,8 +336,10 @@ struct rcu_torture_ops {
+ 	void (*cond_sync_exp)(unsigned long oldstate);
+ 	unsigned long (*get_gp_state)(void);
+ 	unsigned long (*get_gp_completed)(void);
++	void (*get_gp_completed_full)(struct rcu_gp_oldstate *rgosp);
+ 	unsigned long (*start_gp_poll)(void);
+ 	bool (*poll_gp_state)(unsigned long oldstate);
++	bool (*poll_gp_state_full)(struct rcu_gp_oldstate *rgosp);
+ 	void (*cond_sync)(unsigned long oldstate);
+ 	call_rcu_func_t call;
+ 	void (*cb_barrier)(void);
+@@ -503,8 +505,10 @@ static struct rcu_torture_ops rcu_ops = {
+ 	.exp_sync		= synchronize_rcu_expedited,
+ 	.get_gp_state		= get_state_synchronize_rcu,
+ 	.get_gp_completed	= get_completed_synchronize_rcu,
++	.get_gp_completed_full	= get_completed_synchronize_rcu_full,
+ 	.start_gp_poll		= start_poll_synchronize_rcu,
+ 	.poll_gp_state		= poll_state_synchronize_rcu,
++	.poll_gp_state_full	= poll_state_synchronize_rcu_full,
+ 	.cond_sync		= cond_synchronize_rcu,
+ 	.get_gp_state_exp	= get_state_synchronize_rcu,
+ 	.start_gp_poll_exp	= start_poll_synchronize_rcu_expedited,
+@@ -1212,6 +1216,7 @@ rcu_torture_writer(void *arg)
+ 	bool boot_ended;
+ 	bool can_expedite = !rcu_gp_is_expedited() && !rcu_gp_is_normal();
+ 	unsigned long cookie;
++	struct rcu_gp_oldstate cookie_full;
+ 	int expediting = 0;
+ 	unsigned long gp_snap;
+ 	int i;
+@@ -1277,6 +1282,10 @@ rcu_torture_writer(void *arg)
+ 				}
+ 				cur_ops->readunlock(idx);
+ 			}
++			if (cur_ops->get_gp_completed_full && cur_ops->poll_gp_state_full) {
++				cur_ops->get_gp_completed_full(&cookie_full);
++				WARN_ON_ONCE(!cur_ops->poll_gp_state_full(&cookie_full));
++			}
+ 			switch (synctype[torture_random(&rand) % nsynctypes]) {
+ 			case RTWS_DEF_FREE:
+ 				rcu_torture_writer_state = RTWS_DEF_FREE;
+diff --git a/kernel/rcu/tiny.c b/kernel/rcu/tiny.c
+index f0561ee16b9c2..435edc785412c 100644
+--- a/kernel/rcu/tiny.c
++++ b/kernel/rcu/tiny.c
+@@ -183,6 +183,16 @@ void call_rcu(struct rcu_head *head, rcu_callback_t func)
  }
-+#undef TEST_ONE_SHIFT
+ EXPORT_SYMBOL_GPL(call_rcu);
  
++/*
++ * Store a grace-period-counter "cookie".  For more information,
++ * see the Tree RCU header comment.
++ */
++void get_completed_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp)
++{
++	rgosp->rgos_norm = RCU_GET_STATE_COMPLETED;
++}
++EXPORT_SYMBOL_GPL(get_completed_synchronize_rcu_full);
++
  /*
-  * Deal with the various forms of allocator arguments. See comments above
-@@ -703,7 +724,10 @@ static struct kunit_case overflow_test_cases[] = {
- 	KUNIT_CASE(u32_u32__int_overflow_test),
- 	KUNIT_CASE(u8_u8__int_overflow_test),
- 	KUNIT_CASE(int_int__u8_overflow_test),
--	KUNIT_CASE(overflow_shift_test),
-+	KUNIT_CASE(shift_sane_test),
-+	KUNIT_CASE(shift_overflow_test),
-+	KUNIT_CASE(shift_truncate_test),
-+	KUNIT_CASE(shift_nonsense_test),
- 	KUNIT_CASE(overflow_allocation_test),
- 	KUNIT_CASE(overflow_size_helpers_test),
- 	{}
+  * Return a grace-period-counter "cookie".  For more information,
+  * see the Tree RCU header comment.
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index 79aea7df4345e..d47c9b6d81066 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -3522,6 +3522,22 @@ void synchronize_rcu(void)
+ }
+ EXPORT_SYMBOL_GPL(synchronize_rcu);
+ 
++/**
++ * get_completed_synchronize_rcu_full - Return a full pre-completed polled state cookie
++ * @rgosp: Place to put state cookie
++ *
++ * Stores into @rgosp a value that will always be treated by functions
++ * like poll_state_synchronize_rcu_full() as a cookie whose grace period
++ * has already completed.
++ */
++void get_completed_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp)
++{
++	rgosp->rgos_norm = RCU_GET_STATE_COMPLETED;
++	rgosp->rgos_exp = RCU_GET_STATE_COMPLETED;
++	rgosp->rgos_polled = RCU_GET_STATE_COMPLETED;
++}
++EXPORT_SYMBOL_GPL(get_completed_synchronize_rcu_full);
++
+ /**
+  * get_state_synchronize_rcu - Snapshot current RCU state
+  *
+@@ -3580,7 +3596,7 @@ unsigned long start_poll_synchronize_rcu(void)
+ EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu);
+ 
+ /**
+- * poll_state_synchronize_rcu - Conditionally wait for an RCU grace period
++ * poll_state_synchronize_rcu - Has the specified RCU grace period completed?
+  *
+  * @oldstate: value from get_state_synchronize_rcu() or start_poll_synchronize_rcu()
+  *
+@@ -3595,9 +3611,10 @@ EXPORT_SYMBOL_GPL(start_poll_synchronize_rcu);
+  * But counter wrap is harmless.  If the counter wraps, we have waited for
+  * more than a billion grace periods (and way more on a 64-bit system!).
+  * Those needing to keep oldstate values for very long time periods
+- * (many hours even on 32-bit systems) should check them occasionally
+- * and either refresh them or set a flag indicating that the grace period
+- * has completed.
++ * (many hours even on 32-bit systems) should check them occasionally and
++ * either refresh them or set a flag indicating that the grace period has
++ * completed.  Alternatively, they can use get_completed_synchronize_rcu()
++ * to get a guaranteed-completed grace-period state.
+  *
+  * This function provides the same memory-ordering guarantees that
+  * would be provided by a synchronize_rcu() that was invoked at the call
+@@ -3615,6 +3632,57 @@ bool poll_state_synchronize_rcu(unsigned long oldstate)
+ }
+ EXPORT_SYMBOL_GPL(poll_state_synchronize_rcu);
+ 
++/**
++ * poll_state_synchronize_rcu_full - Has the specified RCU grace period completed?
++ * @rgosp: value from get_state_synchronize_rcu_full() or start_poll_synchronize_rcu_full()
++ *
++ * If a full RCU grace period has elapsed since the earlier call from
++ * which *rgosp was obtained, return @true, otherwise return @false.
++ * If @false is returned, it is the caller's responsibility to invoke this
++ * function later on until it does return @true.  Alternatively, the caller
++ * can explicitly wait for a grace period, for example, by passing @rgosp
++ * to cond_synchronize_rcu() or by directly invoking synchronize_rcu().
++ *
++ * Yes, this function does not take counter wrap into account.
++ * But counter wrap is harmless.  If the counter wraps, we have waited
++ * for more than a billion grace periods (and way more on a 64-bit
++ * system!).  Those needing to keep rcu_gp_oldstate values for very
++ * long time periods (many hours even on 32-bit systems) should check
++ * them occasionally and either refresh them or set a flag indicating
++ * that the grace period has completed.  Alternatively, they can use
++ * get_completed_synchronize_rcu_full() to get a guaranteed-completed
++ * grace-period state.
++ *
++ * This function provides the same memory-ordering guarantees that would
++ * be provided by a synchronize_rcu() that was invoked at the call to
++ * the function that provided @rgosp, and that returned at the end of this
++ * function.  And this guarantee requires that the root rcu_node structure's
++ * ->gp_seq field be checked instead of that of the rcu_state structure.
++ * The problem is that the just-ending grace-period's callbacks can be
++ * invoked between the time that the root rcu_node structure's ->gp_seq
++ * field is updated and the time that the rcu_state structure's ->gp_seq
++ * field is updated.  Therefore, if a single synchronize_rcu() is to
++ * cause a subsequent poll_state_synchronize_rcu_full() to return @true,
++ * then the root rcu_node structure is the one that needs to be polled.
++ */
++bool poll_state_synchronize_rcu_full(struct rcu_gp_oldstate *rgosp)
++{
++	struct rcu_node *rnp = rcu_get_root();
++
++	smp_mb(); // Order against root rcu_node structure grace-period cleanup.
++	if (rgosp->rgos_norm == RCU_GET_STATE_COMPLETED ||
++	    rcu_seq_done_exact(&rnp->gp_seq, rgosp->rgos_norm) ||
++	    rgosp->rgos_exp == RCU_GET_STATE_COMPLETED ||
++	    rcu_seq_done_exact(&rcu_state.expedited_sequence, rgosp->rgos_exp) ||
++	    rgosp->rgos_polled == RCU_GET_STATE_COMPLETED ||
++	    rcu_seq_done_exact(&rcu_state.gp_seq_polled, rgosp->rgos_polled)) {
++		smp_mb(); /* Ensure GP ends before subsequent accesses. */
++		return true;
++	}
++	return false;
++}
++EXPORT_SYMBOL_GPL(poll_state_synchronize_rcu_full);
++
+ /**
+  * cond_synchronize_rcu - Conditionally wait for an RCU grace period
+  *
 -- 
-2.34.1
+2.31.1.189.g2e36527f23
 

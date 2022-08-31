@@ -2,48 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A6C5A7E00
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:53:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 292125A7E06
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:53:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231522AbiHaMw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35076 "EHLO
+        id S231571AbiHaMxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiHaMwz (ORCPT
+        with ESMTP id S231538AbiHaMxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:52:55 -0400
+        Wed, 31 Aug 2022 08:53:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21FBE2D1D2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 05:52:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51835B8A54;
+        Wed, 31 Aug 2022 05:53:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A9AF61A27
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 12:52:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 333E1C433C1;
-        Wed, 31 Aug 2022 12:52:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E7F8A61A27;
+        Wed, 31 Aug 2022 12:53:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08D36C4314B;
+        Wed, 31 Aug 2022 12:52:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1661950373;
-        bh=DyeODZ+gC0WuqPypGEZqeNPo3/H5VBEkRk78HqWNBbc=;
+        s=k20201202; t=1661950382;
+        bh=dGvlxWA+Q7QU9nq7L7VQgKMY4srrIa1uYv+f3xokFnU=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=tS37nHwKrpgZlmSwgPfLXMSXc8KLzYFsqw+PhEjNt0e2w3YH4RgR+wIgOngkK87CG
-         5JmLeXUHkBLmRBLx3JSf6F9RG5qEnRlKObLNnPRW5JH5UJAerzAGtOAfK6vCyta4BB
-         0PAJTU81Vfnud1G65ol5o/j0GNR0ta/usYz0XB7gsYrNK5r0xN/AHnaT5l3e3xWVuB
-         5Sl3opk0OtAQFZw2HxiTAd5PUbwJzEdKJf+2K0zBHGOl+jwtcMYEIet5Z1BYmg7TH6
-         KeNce0NR4tiiEL8MR7R0SoXk2Pv7m3gHcyLcjG+xCMnElGdgaO5In27yNIgDokrEyF
-         YsaGiLk5V78yQ==
+        b=aIQvwTntpJHXV3hd+ksJeY0N2s/A5bfTvXwwPShHyhcz+dRW0xaLI+OAzEjOgig1Y
+         lFMmGdaiA14oiC35gSK/Ac8A+pljsvWcvyhIE3n/g8Av+UFDZqatU4HhhvMw9nSYQD
+         vNQW5P5gIeaSzL4heUkARWiIMtbpctHvq0MR/DfU0JoiYlKkQnMv0X2Fqf4/JPQTch
+         A+FIIDakjHzaUUOTBBom98xddR2t/hoNUuQ9FaH7Eh4l2v8uY4nFf8AGLyMKMV8hU8
+         LHjweaOF4e4eSaeFXNH0s5S/bLXWWPAa1twXHLQNBovb4f0PmU5x6elDsejaSrnDpV
+         ZtRuOGa7vr1uA==
 From:   Mark Brown <broonie@kernel.org>
-To:     alsa-devel@alsa-project.org,
-        Laurentiu Mihalcea <laurentiu.mihalcea@nxp.com>
-Cc:     yung-chuan.liao@linux.intel.com, lgirdwood@gmail.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        peter.ujfalusi@linux.intel.com,
-        pierre-louis.bossart@linux.intel.com, linux-kernel@vger.kernel.org
-In-Reply-To: <20220822101502.17644-1-laurentiu.mihalcea@nxp.com>
-References: <20220822101502.17644-1-laurentiu.mihalcea@nxp.com>
-Subject: Re: [PATCH 0/2] ASoC: SOF: compress: Add support for timestamp on capture
-Message-Id: <166195037191.99184.7695234970678699743.b4-ty@kernel.org>
-Date:   Wed, 31 Aug 2022 13:52:51 +0100
+To:     Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        lgirdwood@gmail.com
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        robh+dt@kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, agross@kernel.org,
+        konrad.dybcio@somainline.org, bjorn.andersson@linaro.org,
+        robimarko@gmail.com, krzysztof.kozlowski+dt@linaro.org
+In-Reply-To: <20220831080503.17600-1-jean-philippe@linaro.org>
+References: <20220831080503.17600-1-jean-philippe@linaro.org>
+Subject: Re: [PATCH v2] dt-bindings: regulator: Fix qcom,spmi-regulator schema
+Message-Id: <166195037974.99335.15195185114132333580.b4-ty@kernel.org>
+Date:   Wed, 31 Aug 2022 13:52:59 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -58,29 +59,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 22 Aug 2022 13:15:00 +0300, Laurentiu Mihalcea wrote:
-> The purpose of this patch series is to add support for
-> timestamping on capture direction using the compress
-> API.
+On Wed, 31 Aug 2022 09:05:04 +0100, Jean-Philippe Brucker wrote:
+> The DT validator reports an error in the schema:
 > 
-> This is simply done by splitting sof_compr_copy into 2
-> functions: sof_compr_copy_playback and sof_compr_copy_capture.
-> Each of these functions handles one of the possible directions:
-> capture or playback and is called in sof_compr_copy based on
-> the stream's direction.
+> Documentation/devicetree/bindings/regulator/qcom,spmi-regulator.yaml: ignoring, error in schema: patternProperties: ^(5vs[1-2]|(l|s)[1-9][0-9]?|lvs[1-3])$: properties
+> 
+> Move the unevaluatedProperties statement out of the properties section
+> to fix it.
 > 
 > [...]
 
 Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 
 Thanks!
 
-[1/2] ASoC: SOF: compress: Move sof_compr_copy functionality
-      commit: 272ff8828f35658aace17e3227624fbbd68a6bcf
-[2/2] ASoC: SOF: compress: Add copy function for capture case
-      commit: 1a01e19278022cd2f7daa7a065ed47c5022dbad9
+[1/1] dt-bindings: regulator: Fix qcom,spmi-regulator schema
+      commit: 475043fabe8c58fb18c32c7942d8754897bd11fa
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during

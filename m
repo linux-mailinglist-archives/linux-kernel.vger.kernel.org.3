@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779295A8446
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F0385A8447
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 19:25:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232038AbiHaRZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 13:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S232100AbiHaRZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 13:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231743AbiHaRZH (ORCPT
+        with ESMTP id S231894AbiHaRZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 13:25:07 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A692E1C137
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:25:04 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so8390116wmb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:25:03 -0700 (PDT)
+        Wed, 31 Aug 2022 13:25:08 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E5463C8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:25:05 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id k9so19217694wri.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 10:25:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=lCJ0X4MxUytr04uLAZfmQJHTkCXKEdN4OMX7NFuLbu4=;
-        b=Q3S1nbqunZ84BvgZwdQEX9PqqmrAQNvv4jEpzOY6BxlVLuE1IoEXXKjtROg5F47oGL
-         Qmgb6STeBCzOkRHYA4Ne5LCR3shk0edN6ixDwGEOmpVeXYkQhvljK6DgLIDriZudG/l4
-         R9kRylrw4IRf/Ik/VfxbiZA7Vy6m9O2+VhVX84kEIIicDRd+XVGOY1skq4e9sJgwxeE1
-         qVa5vU7B03fD0XKY5xDRIbfjgSA4ghgQfLYadm9VzUvb01KPQA0/WWKsFPyCYIfs7y8t
-         t1ZrwnVoScEV5jD9tVG+ndJ/vE1kWpH5HtV+yjsHgiQyd2lQ2hKESKqN4qEb5xIPtW0n
-         qC7A==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=DdNOmnay44tpamKMrs1LwErqXxNdYL1hnnIQ+CjZ7QA=;
+        b=MG0rBr2wWp2+FARb5OnChcQ4x0S23ZL60h95CnzB7VjDZ/H2HzOa4qhBqJfaUhg+bl
+         HH5NMuPrPw4BBMJ3GKz++cbp+aJPSUUdP776VpS+lgLuEgUKtZt18gnVv3ooY7nKDzxl
+         vwmrQATtXcj1hDSk4rrVBtBx0sqkrypO3+3VGt8gksRuuwORrUdhboPgeoODeKhpbVqp
+         W4+J069NjrhutbCY/qVWI0Pk5r3H8/XFTGFFdVfn7/SHsW0aszphuwKoa5PaZPpGYZQM
+         WiwK8bGL1chbaM/cM+VZ5grJrVGRBHGb/OYSZDQwgm1s2MBXHEJqrvVJx8SRmoWWtlrg
+         bViA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=lCJ0X4MxUytr04uLAZfmQJHTkCXKEdN4OMX7NFuLbu4=;
-        b=3x8pndULRfxXfGAAD3+pYqhXPrlfxrLEPiCe3s1DFLN0c+6BGIfsJIiUq7nrt2wLBq
-         O/NU1aAzKhvHUUEWmliaVEQiV9jYhO8IdjtjhwnmKQxZAoDkRfcPhz0X1FOU6V03fppT
-         MbEMg16jqZ2rMiJwThZsMzKejBrEtQkvopVPNgICmKbIvtMrl6l25a5NFTkb6tN8wiGN
-         ZMc7CDqwStRRg2w8gwbZGoDxkgBjS1vPRCqRL4tvegYm55c0kLAeoyzFI/JaPWcLaFS9
-         by4QIXF7ndQZiJm0D4ztXxDJa5C2eYlWG8fq/m7QYOMbhX3h+BjICSg7CXL0tHyYMgw5
-         lhqw==
-X-Gm-Message-State: ACgBeo1iWVnh8JhNxSWaz3i8AHrg6zAQtHf+mK8TwOrbeOraH9KH0smo
-        Pwxi/27DyUkPsZdmugkH0PWbIg==
-X-Google-Smtp-Source: AA6agR7AG0MhMcCgUXxNj/1M4XOFv1/Vik4cv/p81wTY7rbGynK6w5HUZOKiGVN2hPE63IiOUAeS0g==
-X-Received: by 2002:a7b:ce09:0:b0:3a6:6561:d9d5 with SMTP id m9-20020a7bce09000000b003a66561d9d5mr2664876wmc.62.1661966702341;
-        Wed, 31 Aug 2022 10:25:02 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=DdNOmnay44tpamKMrs1LwErqXxNdYL1hnnIQ+CjZ7QA=;
+        b=k0LGZmilDGwnb9LFq1BKr0iKFPON/8nvhzQKb2ecJwmNYgYLwcN3Mr35zsFgpffEuX
+         /oSW7RgFP+mijQwX19DZry9ks+3eyFZUJQS/33rNuyGINm6/EstqvtknLlwDPHMDDH7Q
+         dzhOPmBKL7iAl86699uHUgQ58/NFQLVbznx3UgpnVI43Ht9ZZJFiW8RMcF0vbxTKk+yA
+         ByWuIKWnx5CwZeC7a5/Wan8wlhMbEy4foMn9RTpu0ZyHq5+MtciEAHgB6GArBW4oweu5
+         rxcUhdEtd4TLuJDoxBBWAGh4F/3qzX9+/yNYd1wJoBdMHRoFTGSvFzFk6qWFnNaP/QnC
+         SWjA==
+X-Gm-Message-State: ACgBeo2xqQMbQZLPH7FM/SbA/LyIddjGfCDPWM0Axu+GFSE0Ztn/vZao
+        alHYjhRVY/1MyPFUmIHhIgHPxQ==
+X-Google-Smtp-Source: AA6agR4D9tdHfJxgAr4odD2uA9lewMl1R3XYhjjgYG/X1gSRjA2gExwl6O2ex2Vl5wzSh024Cw+XvQ==
+X-Received: by 2002:adf:d1c5:0:b0:222:cbe8:f9fa with SMTP id b5-20020adfd1c5000000b00222cbe8f9famr12286408wrd.383.1661966703923;
+        Wed, 31 Aug 2022 10:25:03 -0700 (PDT)
 Received: from localhost (cst2-173-67.cust.vodafone.cz. [31.30.173.67])
-        by smtp.gmail.com with ESMTPSA id da12-20020a056000408c00b0021ee65426a2sm13746758wrb.65.2022.08.31.10.25.01
+        by smtp.gmail.com with ESMTPSA id u18-20020a05600c19d200b003a5a5069107sm2618214wmq.24.2022.08.31.10.25.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 10:25:01 -0700 (PDT)
+        Wed, 31 Aug 2022 10:25:03 -0700 (PDT)
 From:   Andrew Jones <ajones@ventanamicro.com>
 To:     linux-riscv@lists.infradead.org, kvm-riscv@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, paul.walmsley@sifive.com,
         palmer@dabbelt.com, aou@eecs.berkeley.edu, anup@brainfault.org,
         mchitale@ventanamicro.com, heiko@sntech.de
-Subject: [PATCH v2 0/4] riscv: Introduce support for defining instructions
-Date:   Wed, 31 Aug 2022 19:24:56 +0200
-Message-Id: <20220831172500.752195-1-ajones@ventanamicro.com>
+Subject: [PATCH v2 1/4] riscv: Add X register names to gpr-nums
+Date:   Wed, 31 Aug 2022 19:24:57 +0200
+Message-Id: <20220831172500.752195-2-ajones@ventanamicro.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220831172500.752195-1-ajones@ventanamicro.com>
+References: <20220831172500.752195-1-ajones@ventanamicro.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
@@ -70,47 +72,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When compiling with toolchains that haven't yet been taught about
-new instructions we need to encode them ourselves. This series
-creates a new file where support for instruction definitions can
-evolve. For starters the file is initiated with a macro for R-type
-encodings. The series then applies the R-type encoding macro to all
-instances of hard coded instruction definitions in KVM.
+When encoding instructions it's sometimes necessary to set a
+register field to a precise number. This is easiest to do using
+the x<num> naming.
 
-Not only should using instruction encoding macros improve readability
-and maintainability of code, but we should also gain potential for
-more optimized code after compilation as the compiler will have control
-over the input and output registers used, which may provide more
-opportunities for inlining.
+Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
+Reviewed-by: Anup Patel <anup@brainfault.org>
+---
+ arch/riscv/include/asm/gpr-num.h | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-I grepped for other places we may want to use these macros and the
-only place I found was ALT_CMO_OP(), but I didn't dare touch it :-)
-I do suggest we apply this to the Svinal support [1] as we won't
-want to frustrate the compiler's inlining efforts with hard coded
-register selection.
-
-[1] https://lore.kernel.org/linux-riscv/20220812042921.14508-1-mchitale@ventanamicro.com/
-
-v2:
- - Cleaned up some whitespace issues pointed out by Anup, myself
-   and checkpatch and dropped some {}
- - Pushed the quoting of register tokens into the macros
- - Picked up Anup's r-b's
-
-Andrew Jones (4):
-  riscv: Add X register names to gpr-nums
-  riscv: Introduce support for defining instructions
-  riscv: KVM: Apply insn-def to hfence encodings
-  riscv: KVM: Apply insn-def to hlv encodings
-
- arch/riscv/Kconfig                |   3 +
- arch/riscv/include/asm/gpr-num.h  |   8 ++
- arch/riscv/include/asm/insn-def.h | 113 ++++++++++++++++++++++++++
- arch/riscv/kvm/tlb.c              | 129 ++++--------------------------
- arch/riscv/kvm/vcpu_exit.c        |  29 ++-----
- 5 files changed, 146 insertions(+), 136 deletions(-)
- create mode 100644 arch/riscv/include/asm/insn-def.h
-
+diff --git a/arch/riscv/include/asm/gpr-num.h b/arch/riscv/include/asm/gpr-num.h
+index dfee2829fc7c..efeb5edf8a3a 100644
+--- a/arch/riscv/include/asm/gpr-num.h
++++ b/arch/riscv/include/asm/gpr-num.h
+@@ -3,6 +3,11 @@
+ #define __ASM_GPR_NUM_H
+ 
+ #ifdef __ASSEMBLY__
++
++	.irp	num,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
++	.equ	.L__gpr_num_x\num, \num
++	.endr
++
+ 	.equ	.L__gpr_num_zero,	0
+ 	.equ	.L__gpr_num_ra,		1
+ 	.equ	.L__gpr_num_sp,		2
+@@ -39,6 +44,9 @@
+ #else /* __ASSEMBLY__ */
+ 
+ #define __DEFINE_ASM_GPR_NUMS					\
++"	.irp	num,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31\n" \
++"	.equ	.L__gpr_num_x\\num, \\num\n"			\
++"	.endr\n"						\
+ "	.equ	.L__gpr_num_zero,	0\n"			\
+ "	.equ	.L__gpr_num_ra,		1\n"			\
+ "	.equ	.L__gpr_num_sp,		2\n"			\
 -- 
 2.37.2
 

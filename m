@@ -2,46 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3984B5A8584
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:26:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91D015A857B
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231645AbiHaS0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60306 "EHLO
+        id S232913AbiHaS0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232791AbiHaSZp (ORCPT
+        with ESMTP id S232739AbiHaSZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:25:45 -0400
+        Wed, 31 Aug 2022 14:25:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26B88FBA7E
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:21:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45EE4FB294
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:21:52 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 65A1D61CDA
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6377861CDE
         for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 18:21:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E56EC43148;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CFE2C43145;
         Wed, 31 Aug 2022 18:21:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1661970110;
-        bh=lb42YBMvLlJW4lhYMw9xjWvBOmbnubrtUFTuevru2ro=;
+        bh=SQPsyy9Vw1zAhKnxU2HPB0epktjeTQk3RDWN/C0VtjM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cFqs+jXql95dhNhsLgp/E6VykkPUTD3fs0WXfOsZfDFEkra8Gd/eyNwUDvSIrDf63
-         c3x34MVYx7EiM/qw2CMIiEfY/kRThs0L/KjcySwSUABqc/apZ/rDtaBZvFwCx2b3Dz
-         nbZ+Eoy13AU4LIFECFwPPXuKOoTuIok3YUyDIspTrHDd2NPToVDv/a063RD/ntbMCV
-         6A59fYamRPZNywb/lPJQOooOmIj+HibhC8biw8c8vjDIG2XBP3vUAWmovnl/avxPdX
-         qCx4epYJDsXtJK2BLiItnrKDIkVS8NczIV9P8VeImjxItL9TZppRYeUjsnJZ6JGT5W
-         fbkMyefLIcOAw==
+        b=uTzY4pGiBFNhDe/LhkJfWLA/OI5kQxPv6QKYYcFwxRtIUjY78yHG37at6JH/4OW5g
+         +w7eektmCnuAFAfpVKmj/Uf6icornAmMnfLXnsrTYFwwQVrGfQf0CM88Wjjejz4xG/
+         DYcV7RpnyMbd8/gFqdlTXecUV201Qeq76KsFMdkter6gv3OtI8H1NR/pG33P2b32UW
+         PhuwFc8PrinDnU43L1je4T7tJ4Fw3qVRi24lMbt377VtcvOghQZvVM8vtyUaSciG+I
+         nq7kR3RNOl4F0r07WO5TvC24Zhd9y7wSLfj011I38LqXq0mGLwMATJLMhyI9ahGNFK
+         a1oJ/gRaG9cnw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id D905F5C090A; Wed, 31 Aug 2022 11:21:49 -0700 (PDT)
+        id DBBD65C0950; Wed, 31 Aug 2022 11:21:49 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     gwml@vger.gnuweeb.org, kernel-team@fb.com, w@lwt.eu,
         Willy Tarreau <w@1wt.eu>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH nolibc 04/18] selftests/nolibc: add basic infrastructure to ease creation of nolibc tests
-Date:   Wed, 31 Aug 2022 11:21:34 -0700
-Message-Id: <20220831182148.2698489-6-paulmck@kernel.org>
+Subject: [PATCH nolibc 05/18] selftests/nolibc: support a test definition format
+Date:   Wed, 31 Aug 2022 11:21:35 -0700
+Message-Id: <20220831182148.2698489-7-paulmck@kernel.org>
 X-Mailer: git-send-email 2.31.1.189.g2e36527f23
 In-Reply-To: <20220831182113.GA2697286@paulmck-ThinkPad-P17-Gen-1>
 References: <20220831182113.GA2697286@paulmck-ThinkPad-P17-Gen-1>
@@ -59,498 +59,146 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Willy Tarreau <w@1wt.eu>
 
-This creates a "nolibc" selftest that intends to test various parts of
-the nolibc component, both in terms of build and execution for a given
-architecture.
+It now becomes possible to pass a string either in argv[1] or in the
+NOLIBC_TEST environment variable (the former having precedence), to
+specify which tests to run. The format is:
 
-The aim is for it to be as simple to run as a kernel build, by just
-passing the compiler (for the build) and the ARCH (for kernel and
-execution).
+   testname[:range]*[,testname...]
 
-It brings a basic squeleton made of a single C file that will ease testing
-and error reporting. The code will be arranged so that it remains easy to
-add basic tests for syscalls or library calls that may rely on a condition
-to be executed, and whose result is compared to a value or to an error
-with a specific errno value.
-
-Tests will just use a relative line number in switch/case statements as
-an index, saving the user from having to maintain arrays and complicated
-functions which can often just be one-liners.
-
-MAINTAINERS was updated.
+Where a range is either a single value or the min and max numbers of the
+test IDs in a sequence, delimited by a dash. Multiple ranges are possible.
+This should provide enough flexibility to focus on certain failing parts
+just by playing with the boot command line in a boot loader or in qemu
+depending on what is accessible.
 
 Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- MAINTAINERS                                  |   1 +
- tools/testing/selftests/nolibc/Makefile      |  43 ++
- tools/testing/selftests/nolibc/nolibc-test.c | 395 +++++++++++++++++++
- 3 files changed, 439 insertions(+)
- create mode 100644 tools/testing/selftests/nolibc/Makefile
- create mode 100644 tools/testing/selftests/nolibc/nolibc-test.c
+ tools/testing/selftests/nolibc/nolibc-test.c | 91 ++++++++++++++++++++
+ 1 file changed, 91 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8a5012ba6ff98..89f939ad19963 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14444,6 +14444,7 @@ M:	Willy Tarreau <w@1wt.eu>
- S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/wtarreau/nolibc.git
- F:	tools/include/nolibc/
-+F:	tools/testing/selftests/nolibc/
- 
- NSDEPS
- M:	Matthias Maennich <maennich@google.com>
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-new file mode 100644
-index 0000000000000..fd0a670823340
---- /dev/null
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Makefile for nolibc tests
-+include ../../../scripts/Makefile.include
-+
-+# we're in ".../tools/testing/selftests/nolibc"
-+ifeq ($(srctree),)
-+srctree := $(patsubst %/tools/testing/selftests/,%,$(dir $(CURDIR)))
-+endif
-+
-+ifeq ($(ARCH),)
-+include $(srctree)/scripts/subarch.include
-+ARCH = $(SUBARCH)
-+endif
-+
-+# OUTPUT is only set when run from the main makefile, otherwise
-+# it defaults to this nolibc directory.
-+OUTPUT ?= $(CURDIR)/
-+
-+ifeq ($(V),1)
-+Q=
-+else
-+Q=@
-+endif
-+
-+CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables
-+LDFLAGS := -s
-+
-+all: nolibc-test
-+
-+nolibc-test: nolibc-test.c
-+	$(QUIET_CC)$(CC) $(CFLAGS) $(LDFLAGS) -o $@ \
-+	  -nostdlib -static -include ../../../include/nolibc/nolibc.h $^ -lgcc
-+
-+initramfs: nolibc-test
-+	$(QUIET_MKDIR)mkdir -p initramfs
-+	$(call QUIET_INSTALL, initramfs/init)
-+	$(Q)cp nolibc-test initramfs/init
-+
-+clean:
-+	$(call QUIET_CLEAN, nolibc-test)
-+	$(Q)rm -f nolibc-test
-+	$(call QUIET_CLEAN, initramfs)
-+	$(Q)rm -rf initramfs
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-new file mode 100644
-index 0000000000000..6c050d4381fec
---- /dev/null
+index 6c050d4381fec..49177ea9943cc 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -0,0 +1,395 @@
-+// SPDX-License-Identifier: GPL-2.0
+@@ -17,6 +17,12 @@
+ /* will be used by nolibc by getenv() */
+ char **environ;
+ 
++/* definition of a series of tests */
++struct test {
++	const char *name;              // test name
++	int (*func)(int min, int max); // handler
++};
 +
-+/* platform-specific include files coming from the compiler */
-+#include <limits.h>
+ #define CASE_ERR(err) \
+ 	case err: return #err
+ 
+@@ -376,19 +382,104 @@ static int expect_strne(const char *expr, int llen, const char *cmp)
+ 	return ret;
+ }
+ 
 +
-+/* libc-specific include files
-+ * The program may be built in 2 ways:
-+ *   $(CC) -nostdlib -include /path/to/nolibc.h => NOLIBC already defined
-+ *   $(CC) -nostdlib -I/path/to/nolibc/sysroot
-+ */
-+#ifndef NOLIBC
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#endif
+ /* declare tests based on line numbers. There must be exactly one test per line. */
+ #define CASE_TEST(name) \
+ 	case __LINE__: llen += printf("%d %s", test, #name);
+ 
+ 
++/* This is the definition of known test names, with their functions */
++static struct test test_names[] = {
++	/* add new tests here */
++	{ 0 }
++};
 +
-+/* will be used by nolibc by getenv() */
-+char **environ;
+ int main(int argc, char **argv, char **envp)
+ {
+ 	int min = 0;
+ 	int max = __INT_MAX__;
+ 	int ret = 0;
++	int err;
++	int idx;
++	char *test;
+ 
+ 	environ = envp;
+ 
++	/* the definition of a series of tests comes from either argv[1] or the
++	 * "NOLIBC_TEST" environment variable. It's made of a comma-delimited
++	 * series of test names and optional ranges:
++	 *    syscall:5-15[:.*],stdlib:8-10
++	 */
++	test = argv[1];
++	if (!test)
++		test = getenv("NOLIBC_TEST");
 +
-+#define CASE_ERR(err) \
-+	case err: return #err
++	if (test) {
++		char *comma, *colon, *dash, *value;
 +
-+/* returns the error name (e.g. "ENOENT") for common errors, "SUCCESS" for 0,
-+ * or the decimal value for less common ones.
-+ */
-+const char *errorname(int err)
-+{
-+	switch (err) {
-+	case 0: return "SUCCESS";
-+	CASE_ERR(EPERM);
-+	CASE_ERR(ENOENT);
-+	CASE_ERR(ESRCH);
-+	CASE_ERR(EINTR);
-+	CASE_ERR(EIO);
-+	CASE_ERR(ENXIO);
-+	CASE_ERR(E2BIG);
-+	CASE_ERR(ENOEXEC);
-+	CASE_ERR(EBADF);
-+	CASE_ERR(ECHILD);
-+	CASE_ERR(EAGAIN);
-+	CASE_ERR(ENOMEM);
-+	CASE_ERR(EACCES);
-+	CASE_ERR(EFAULT);
-+	CASE_ERR(ENOTBLK);
-+	CASE_ERR(EBUSY);
-+	CASE_ERR(EEXIST);
-+	CASE_ERR(EXDEV);
-+	CASE_ERR(ENODEV);
-+	CASE_ERR(ENOTDIR);
-+	CASE_ERR(EISDIR);
-+	CASE_ERR(EINVAL);
-+	CASE_ERR(ENFILE);
-+	CASE_ERR(EMFILE);
-+	CASE_ERR(ENOTTY);
-+	CASE_ERR(ETXTBSY);
-+	CASE_ERR(EFBIG);
-+	CASE_ERR(ENOSPC);
-+	CASE_ERR(ESPIPE);
-+	CASE_ERR(EROFS);
-+	CASE_ERR(EMLINK);
-+	CASE_ERR(EPIPE);
-+	CASE_ERR(EDOM);
-+	CASE_ERR(ERANGE);
-+	CASE_ERR(ENOSYS);
-+	default:
-+		return itoa(err);
-+	}
-+}
++		do {
++			comma = strchr(test, ',');
++			if (comma)
++				*(comma++) = '\0';
 +
-+static int pad_spc(int llen, int cnt, const char *fmt, ...)
-+{
-+	va_list args;
-+	int len;
-+	int ret;
++			colon = strchr(test, ':');
++			if (colon)
++				*(colon++) = '\0';
 +
-+	for (len = 0; len < cnt - llen; len++)
-+		putchar(' ');
++			for (idx = 0; test_names[idx].name; idx++) {
++				if (strcmp(test, test_names[idx].name) == 0)
++					break;
++			}
 +
-+	va_start(args, fmt);
-+	ret = vfprintf(stdout, fmt, args);
-+	va_end(args);
-+	return ret < 0 ? ret : ret + len;
-+}
++			if (test_names[idx].name) {
++				/* The test was named, it will be called at least
++				 * once. We may have an optional range at <colon>
++				 * here, which defaults to the full range.
++				 */
++				do {
++					min = 0; max = __INT_MAX__;
++					value = colon;
++					if (value && *value) {
++						colon = strchr(value, ':');
++						if (colon)
++							*(colon++) = '\0';
 +
-+/* The tests below are intended to be used by the macroes, which evaluate
-+ * expression <expr>, print the status to stdout, and update the "ret"
-+ * variable to count failures. The functions themselves return the number
-+ * of failures, thus either 0 or 1.
-+ */
++						dash = strchr(value, '-');
++						if (dash)
++							*(dash++) = '\0';
 +
-+#define EXPECT_ZR(cond, expr)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_zr(expr, llen); } while (0)
++						/* support :val: :min-max: :min-: :-max: */
++						if (*value)
++							min = atoi(value);
++						if (!dash)
++							max = min;
++						else if (*dash)
++							max = atoi(dash);
 +
-+static int expect_zr(int expr, int llen)
-+{
-+	int ret = !(expr == 0);
++						value = colon;
++					}
 +
-+	llen += printf(" = %d ", expr);
-+	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
-+	return ret;
-+}
++					/* now's time to call the test */
++					printf("Running test '%s'\n", test_names[idx].name);
++					err = test_names[idx].func(min, max);
++					ret += err;
++					printf("Errors during this test: %d\n\n", err);
++				} while (colon && *colon);
++			} else
++				printf("Ignoring unknown test name '%s'\n", test);
 +
-+
-+#define EXPECT_NZ(cond, expr, val)			\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_nz(expr, llen; } while (0)
-+
-+static int expect_nz(int expr, int llen)
-+{
-+	int ret = !(expr != 0);
-+
-+	llen += printf(" = %d ", expr);
-+	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
-+	return ret;
-+}
-+
-+
-+#define EXPECT_EQ(cond, expr, val)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_eq(expr, llen, val); } while (0)
-+
-+static int expect_eq(int expr, int llen, int val)
-+{
-+	int ret = !(expr == val);
-+
-+	llen += printf(" = %d ", expr);
-+	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
-+	return ret;
-+}
-+
-+
-+#define EXPECT_NE(cond, expr, val)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_ne(expr, llen, val); } while (0)
-+
-+static int expect_ne(int expr, int llen, int val)
-+{
-+	int ret = !(expr != val);
-+
-+	llen += printf(" = %d ", expr);
-+	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
-+	return ret;
-+}
-+
-+
-+#define EXPECT_GE(cond, expr, val)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_ge(expr, llen, val); } while (0)
-+
-+static int expect_ge(int expr, int llen, int val)
-+{
-+	int ret = !(expr >= val);
-+
-+	llen += printf(" = %d ", expr);
-+	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
-+	return ret;
-+}
-+
-+
-+#define EXPECT_GT(cond, expr, val)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_gt(expr, llen, val); } while (0)
-+
-+static int expect_gt(int expr, int llen, int val)
-+{
-+	int ret = !(expr > val);
-+
-+	llen += printf(" = %d ", expr);
-+	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
-+	return ret;
-+}
-+
-+
-+#define EXPECT_LE(cond, expr, val)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_le(expr, llen, val); } while (0)
-+
-+static int expect_le(int expr, int llen, int val)
-+{
-+	int ret = !(expr <= val);
-+
-+	llen += printf(" = %d ", expr);
-+	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
-+	return ret;
-+}
-+
-+
-+#define EXPECT_LT(cond, expr, val)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_lt(expr, llen, val); } while (0)
-+
-+static int expect_lt(int expr, int llen, int val)
-+{
-+	int ret = !(expr < val);
-+
-+	llen += printf(" = %d ", expr);
-+	pad_spc(llen, 40, ret ? "[FAIL]\n" : " [OK]\n");
-+	return ret;
-+}
-+
-+
-+#define EXPECT_SYSZR(cond, expr)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_syszr(expr, llen); } while (0)
-+
-+static int expect_syszr(int expr, int llen)
-+{
-+	int ret = 0;
-+
-+	if (expr) {
-+		ret = 1;
-+		llen += printf(" = %d %s ", expr, errorname(errno));
-+		llen += pad_spc(llen, 40, "[FAIL]\n");
++			test = comma;
++		} while (test && *test);
 +	} else {
-+		llen += printf(" = %d ", expr);
-+		llen += pad_spc(llen, 40, " [OK]\n");
++		/* no test mentioned, run everything */
++		for (idx = 0; test_names[idx].name; idx++) {
++			printf("Running test '%s'\n", test_names[idx].name);
++			err = test_names[idx].func(min, max);
++			ret += err;
++			printf("Errors during this test: %d\n\n", err);
++		}
 +	}
-+	return ret;
-+}
 +
-+
-+#define EXPECT_SYSEQ(cond, expr, val)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_syseq(expr, llen, val); } while (0)
-+
-+static int expect_syseq(int expr, int llen, int val)
-+{
-+	int ret = 0;
-+
-+	if (expr != val) {
-+		ret = 1;
-+		llen += printf(" = %d %s ", expr, errorname(errno));
-+		llen += pad_spc(llen, 40, "[FAIL]\n");
-+	} else {
-+		llen += printf(" = %d ", expr);
-+		llen += pad_spc(llen, 40, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+
-+#define EXPECT_SYSNE(cond, expr, val)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_sysne(expr, llen, val); } while (0)
-+
-+static int expect_sysne(int expr, int llen, int val)
-+{
-+	int ret = 0;
-+
-+	if (expr == val) {
-+		ret = 1;
-+		llen += printf(" = %d %s ", expr, errorname(errno));
-+		llen += pad_spc(llen, 40, "[FAIL]\n");
-+	} else {
-+		llen += printf(" = %d ", expr);
-+		llen += pad_spc(llen, 40, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+
-+#define EXPECT_SYSER(cond, expr, expret, experr)			\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_syserr(expr, expret, experr, llen); } while (0)
-+
-+static int expect_syserr(int expr, int expret, int experr, int llen)
-+{
-+	int ret = 0;
-+	int _errno = errno;
-+
-+	llen += printf(" = %d %s ", expr, errorname(_errno));
-+	if (expr != expret || _errno != experr) {
-+		ret = 1;
-+		llen += printf(" != (%d %s) ", expret, errorname(experr));
-+		llen += pad_spc(llen, 40, "[FAIL]\n");
-+	} else {
-+		llen += pad_spc(llen, 40, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+
-+#define EXPECT_PTRZR(cond, expr)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_ptrzr(expr, llen); } while (0)
-+
-+static int expect_ptrzr(const void *expr, int llen)
-+{
-+	int ret = 0;
-+
-+	llen += printf(" = <%p> ", expr);
-+	if (expr) {
-+		ret = 1;
-+		llen += pad_spc(llen, 40, "[FAIL]\n");
-+	} else {
-+		llen += pad_spc(llen, 40, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+
-+#define EXPECT_PTRNZ(cond, expr)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_ptrnz(expr, llen); } while (0)
-+
-+static int expect_ptrnz(const void *expr, int llen)
-+{
-+	int ret = 0;
-+
-+	llen += printf(" = <%p> ", expr);
-+	if (!expr) {
-+		ret = 1;
-+		llen += pad_spc(llen, 40, "[FAIL]\n");
-+	} else {
-+		llen += pad_spc(llen, 40, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+
-+#define EXPECT_STRZR(cond, expr)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_strzr(expr, llen); } while (0)
-+
-+static int expect_strzr(const char *expr, int llen)
-+{
-+	int ret = 0;
-+
-+	llen += printf(" = <%s> ", expr);
-+	if (expr) {
-+		ret = 1;
-+		llen += pad_spc(llen, 40, "[FAIL]\n");
-+	} else {
-+		llen += pad_spc(llen, 40, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+
-+#define EXPECT_STRNZ(cond, expr)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_strnz(expr, llen); } while (0)
-+
-+static int expect_strnz(const char *expr, int llen)
-+{
-+	int ret = 0;
-+
-+	llen += printf(" = <%s> ", expr);
-+	if (!expr) {
-+		ret = 1;
-+		llen += pad_spc(llen, 40, "[FAIL]\n");
-+	} else {
-+		llen += pad_spc(llen, 40, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+
-+#define EXPECT_STREQ(cond, expr, cmp)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_streq(expr, llen, cmp); } while (0)
-+
-+static int expect_streq(const char *expr, int llen, const char *cmp)
-+{
-+	int ret = 0;
-+
-+	llen += printf(" = <%s> ", expr);
-+	if (strcmp(expr, cmp) != 0) {
-+		ret = 1;
-+		llen += pad_spc(llen, 40, "[FAIL]\n");
-+	} else {
-+		llen += pad_spc(llen, 40, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+
-+#define EXPECT_STRNE(cond, expr, cmp)				\
-+	do { if (!cond) pad_spc(llen, 40, "[SKIPPED]\n"); else ret += expect_strne(expr, llen, cmp); } while (0)
-+
-+static int expect_strne(const char *expr, int llen, const char *cmp)
-+{
-+	int ret = 0;
-+
-+	llen += printf(" = <%s> ", expr);
-+	if (strcmp(expr, cmp) == 0) {
-+		ret = 1;
-+		llen += pad_spc(llen, 40, "[FAIL]\n");
-+	} else {
-+		llen += pad_spc(llen, 40, " [OK]\n");
-+	}
-+	return ret;
-+}
-+
-+/* declare tests based on line numbers. There must be exactly one test per line. */
-+#define CASE_TEST(name) \
-+	case __LINE__: llen += printf("%d %s", test, #name);
-+
-+
-+int main(int argc, char **argv, char **envp)
-+{
-+	int min = 0;
-+	int max = __INT_MAX__;
-+	int ret = 0;
-+
-+	environ = envp;
-+
-+	printf("Total number of errors: %d\n", ret);
-+	printf("Exiting with status %d\n", !!ret);
-+	return !!ret;
-+}
+ 	printf("Total number of errors: %d\n", ret);
+ 	printf("Exiting with status %d\n", !!ret);
+ 	return !!ret;
 -- 
 2.31.1.189.g2e36527f23
 

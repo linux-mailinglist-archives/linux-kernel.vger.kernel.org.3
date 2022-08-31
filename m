@@ -2,86 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A005A764E
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:13:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9045A7654
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 08:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiHaGM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 02:12:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50904 "EHLO
+        id S230083AbiHaGOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 02:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiHaGM5 (ORCPT
+        with ESMTP id S229572AbiHaGOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 02:12:57 -0400
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015F4BCC0D;
-        Tue, 30 Aug 2022 23:12:52 -0700 (PDT)
-X-QQ-mid: bizesmtp63t1661926291twgncv13
-Received: from localhost.localdomain ( [123.114.60.34])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 31 Aug 2022 14:11:30 +0800 (CST)
-X-QQ-SSF: 01400000000000D0U000000A0000000
-X-QQ-FEAT: jQKiaYrAUW4ZlxG/h6O0gpeDTaMLfo5pIe2W1kqFQ22usg+63OAX2iOgoePpB
-        WCl1i88e5zaPk/hx1uae+M6BW+4iLGBZitEZBalO5/Oxc6hMJ4PCjv0eTd67eVmB/9MlP56
-        v4pwGdztY2szTp1l7wx1x6ILpZ+J9I6uXIKt8x1M/itDdfZcC9Rj2vY4T+7YMORwHp2Jg+B
-        MTXEgODeOIPdb6ufH6GeD1qGvhzKzqUaB7Az4CcnhaT6lhbFF/3/IIVm0B9eAN4ht8CJVM9
-        cZWZWVsUCb/nMXq8Ln8R7UnQ03BbAQOZAODJ486ofIJEJsBrTpZVaHLWceHN1h6WIU8UYcr
-        2+ldp5CHySPGNbvT7ZYRpBKvUN1HZRryUpQ0ykC
-X-QQ-GoodBg: 1
-From:   zhaoxiao <zhaoxiao@uniontech.com>
-To:     heikki.krogerus@linux.intel.com
-Cc:     gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhaoxiao <zhaoxiao@uniontech.com>
-Subject: [PATCH] usb:mux:intel_pmc_mux: Use the helper acpi_dev_get_memory_resources()
-Date:   Wed, 31 Aug 2022 14:11:26 +0800
-Message-Id: <20220831061126.25172-1-zhaoxiao@uniontech.com>
-X-Mailer: git-send-email 2.20.1
+        Wed, 31 Aug 2022 02:14:16 -0400
+Received: from mail-m11877.qiye.163.com (mail-m11877.qiye.163.com [115.236.118.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C59BCC17
+        for <linux-kernel@vger.kernel.org>; Tue, 30 Aug 2022 23:14:14 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPV6:240e:36a:1401:7900:28fe:18b4:1216:17dd])
+        by mail-m11877.qiye.163.com (Hmail) with ESMTPA id 508564007A5;
+        Wed, 31 Aug 2022 14:14:12 +0800 (CST)
+From:   Yupeng Li <liyupeng@zbhlos.com>
+To:     chenhuacai@kernel.org, kernel@xen0n.name, jiaxun.yang@flygoat.com
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        caizp2008@163.com, Yupeng Li <liyupeng@zbhlos.com>
+Subject: [PATCH 1/1] LoongArch: Fixed loongarch kernel csr_xxx implicit declaration.
+Date:   Wed, 31 Aug 2022 14:14:06 +0800
+Message-Id: <20220831061406.431027-1-liyupeng@zbhlos.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr1
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlDTB4eVk1IGB8YTx0dHkMZGFUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUlPSx5BSE0aQUpPS0pBTEJLS0FJQx0eQUpDGU9BSklKTUFKTB8fWVdZFhoPEhUdFF
+        lBWU9LSFVKSktISkxVSktLWQY+
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nwg6STo*Fz0#Tk41OE09GjQ*
+        CjUwC0pVSlVKTU1KQklNT05JQ0pOVTMWGhIXVRcSAg4LHhUcOwEZExcUCFUYFBZFWVdZEgtZQVlJ
+        T0seQUhNGkFKT0tKQUxCS0tBSUMdHkFKQxlPQUpJSk1BSkwfH1lXWQgBWUFNSklDNwY+
+X-HM-Tid: 0a82f2892cf02eb3kusn508564007a5
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It removes the need to check the resource data type separately.
+Loongarch CSR register operation related interface, use the
+interface defined  __builtin_loongarch_xxx instead.
+Build kernel error messages like:
 
-Signed-off-by: zhaoxiao <zhaoxiao@uniontech.com>
+  CALL    scripts/atomic/check-atomics.sh
+  CC      arch/loongarch/kernel/asm-offsets.s
+In file included from ./arch/loongarch/include/asm/cpu-info.h:11,
+                 from ./arch/loongarch/include/asm/processor.h:13,
+                 from ./arch/loongarch/include/asm/thread_info.h:15,
+                 from ./include/linux/thread_info.h:60,
+                 from ./include/asm-generic/current.h:5,
+                 from ./arch/loongarch/include/generated/asm/current.h:1,
+                 from ./include/linux/sched.h:12,
+                 from arch/loongarch/kernel/asm-offsets.c:8:
+./arch/loongarch/include/asm/loongarch.h: In function 'csr_read32':
+./arch/loongarch/include/asm/loongarch.h:232:9: error: implicit declaration of function '__csrrd_w'; did you mean '__iocsrrd_w'? [-Werror=implicit-function-declaration]
+  return __csrrd_w(reg);
+         ^~~~~~~~~
+         __iocsrrd_w
+./arch/loongarch/include/asm/loongarch.h: In function 'csr_read64':
+./arch/loongarch/include/asm/loongarch.h:237:9: error: implicit declaration of function '__csrrd_d'; did you mean '__iocsrrd_d'? [-Werror=implicit-function-declaration]
+  return __csrrd_d(reg);
+         ^~~~~~~~~
+         __iocsrrd_d
+./arch/loongarch/include/asm/loongarch.h: In function 'csr_write32':
+./arch/loongarch/include/asm/loongarch.h:242:2: error: implicit declaration of function '__csrwr_w'; did you mean '__iocsrwr_w'? [-Werror=implicit-function-declaration]
+  __csrwr_w(val, reg);
+  ^~~~~~~~~
+  __iocsrwr_w
+./arch/loongarch/include/asm/loongarch.h: In function 'csr_write64':
+./arch/loongarch/include/asm/loongarch.h:247:2: error: implicit declaration of function '__csrwr_d'; did you mean '__iocsrwr_d'? [-Werror=implicit-function-declaration]
+  __csrwr_d(val, reg);
+  ^~~~~~~~~
+  __iocsrwr_d
+./arch/loongarch/include/asm/loongarch.h: In function 'csr_xchg32':
+./arch/loongarch/include/asm/loongarch.h:252:9: error: implicit declaration of function '__csrxchg_w'; did you mean '__cmpxchg'? [-Werror=implicit-function-declaration]
+  return __csrxchg_w(val, mask, reg);
+         ^~~~~~~~~~~
+         __cmpxchg
+./arch/loongarch/include/asm/loongarch.h: In function 'csr_xchg64':
+./arch/loongarch/include/asm/loongarch.h:257:9: error: implicit declaration of function '__csrxchg_d'; did you mean '__cmpxchg'? [-Werror=implicit-function-declaration]
+  return __csrxchg_d(val, mask, reg);
+         ^~~~~~~~~~~
+         __cmpxchg
+cc1: all warnings being treated as errors
+make[1]: *** [scripts/Makefile.build:117：arch/loongarch/kernel/asm-offsets.s] 错误 1
+make: *** [Makefile:1205：prepare0] 错误 2
+
+Signed-off-by: Yupeng Li <liyupeng@zbhlos.com>
+Signed-off-by: Caicai <caizp2008@163.com>
 ---
- drivers/usb/typec/mux/intel_pmc_mux.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ arch/loongarch/include/asm/loongarch.h | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
-index 47b733f78fb0..6207c8f54240 100644
---- a/drivers/usb/typec/mux/intel_pmc_mux.c
-+++ b/drivers/usb/typec/mux/intel_pmc_mux.c
-@@ -569,13 +569,6 @@ static int pmc_usb_register_port(struct pmc_usb *pmc, int index,
- 	return ret;
+diff --git a/arch/loongarch/include/asm/loongarch.h b/arch/loongarch/include/asm/loongarch.h
+index 3ba4f7e87cd2..576ec266d9fc 100644
+--- a/arch/loongarch/include/asm/loongarch.h
++++ b/arch/loongarch/include/asm/loongarch.h
+@@ -10,7 +10,6 @@
+ #include <linux/types.h>
+ 
+ #ifndef __ASSEMBLY__
+-#include <larchintrin.h>
+ 
+ /*
+  * parse_r var, r - Helper assembler macro for parsing register names.
+@@ -58,7 +57,7 @@ __asm__(".macro	parse_r var r\n\t"
+ /* CPUCFG */
+ static inline u32 read_cpucfg(u32 reg)
+ {
+-	return __cpucfg(reg);
++	return __builtin_loongarch_cpucfg(reg);
  }
  
--static int is_memory(struct acpi_resource *res, void *data)
--{
--	struct resource r;
--
--	return !acpi_dev_resource_memory(res, &r);
--}
--
- /* IOM ACPI IDs and IOM_PORT_STATUS_OFFSET */
- static const struct acpi_device_id iom_acpi_ids[] = {
- 	/* TigerLake */
-@@ -606,7 +599,7 @@ static int pmc_usb_probe_iom(struct pmc_usb *pmc)
- 		return -ENODEV;
+ #endif /* !__ASSEMBLY__ */
+@@ -229,53 +228,53 @@ static inline u32 read_cpucfg(u32 reg)
+ /* CSR */
+ static __always_inline u32 csr_read32(u32 reg)
+ {
+-	return __csrrd_w(reg);
++	return __builtin_loongarch_csrrd(reg);
+ }
  
- 	INIT_LIST_HEAD(&resource_list);
--	ret = acpi_dev_get_resources(adev, &resource_list, is_memory, NULL);
-+	ret = acpi_dev_get_memory_resources(adev, &resource_list);
- 	if (ret < 0)
- 		return ret;
+ static __always_inline u64 csr_read64(u32 reg)
+ {
+-	return __csrrd_d(reg);
++	return __builtin_loongarch_csrrd(reg);
+ }
  
+ static __always_inline void csr_write32(u32 val, u32 reg)
+ {
+-	__csrwr_w(val, reg);
++	__builtin_loongarch_csrwr(val, reg);
+ }
+ 
+ static __always_inline void csr_write64(u64 val, u32 reg)
+ {
+-	__csrwr_d(val, reg);
++	__builtin_loongarch_csrwr(val, reg);
+ }
+ 
+ static __always_inline u32 csr_xchg32(u32 val, u32 mask, u32 reg)
+ {
+-	return __csrxchg_w(val, mask, reg);
++	return __builtin_loongarch_csrxchg(val, mask, reg);
+ }
+ 
+ static __always_inline u64 csr_xchg64(u64 val, u64 mask, u32 reg)
+ {
+-	return __csrxchg_d(val, mask, reg);
++	return __builtin_loongarch_csrxchg(val, mask, reg);
+ }
+ 
+ /* IOCSR */
+ static __always_inline u32 iocsr_read32(u32 reg)
+ {
+-	return __iocsrrd_w(reg);
++	return __builtin_loongarch_iocsrrd_w(reg);
+ }
+ 
+ static __always_inline u64 iocsr_read64(u32 reg)
+ {
+-	return __iocsrrd_d(reg);
++	return __builtin_loongarch_iocsrrd_d(reg);
+ }
+ 
+ static __always_inline void iocsr_write32(u32 val, u32 reg)
+ {
+-	__iocsrwr_w(val, reg);
++	__builtin_loongarch_iocsrwr_w(val, reg);
+ }
+ 
+ static __always_inline void iocsr_write64(u64 val, u32 reg)
+ {
+-	__iocsrwr_d(val, reg);
++	__builtin_loongarch_iocsrwr_d(val, reg);
+ }
+ 
+ #endif /* !__ASSEMBLY__ */
 -- 
-2.20.1
+2.34.1
 

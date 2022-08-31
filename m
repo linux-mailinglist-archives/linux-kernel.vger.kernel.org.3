@@ -2,120 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66ADD5A87B9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:49:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7A5A5A87BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 22:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiHaUtM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 16:49:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
+        id S230078AbiHaUva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 16:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230143AbiHaUtI (ORCPT
+        with ESMTP id S229631AbiHaUv1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 16:49:08 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A75F240B;
-        Wed, 31 Aug 2022 13:49:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661978946; x=1693514946;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HmiW7PexacLNr8e6ySi2jlIwoco6aRi8m2ckyoKLdh0=;
-  b=jj/SBq8rAq4B0t9dDR2m6Z/0t7VuA7LQoQQ4nrJhvTbXXLOn5vyiJhUp
-   63Rc+lSNuUXzro9aJ6RFQoth66YLHoejtRiKz7vGEfOSzCN8j6mQKcuhO
-   pNsTvReiC5XpGF2ONInAxhHQpzY4yNV/iyJUUmykQ4QYspLgc3FAZ3f5X
-   dcrkhR4UNnC/3xJGbm56411KK7fpLBYn0j4ytvQIGWJSscSO1nbD8Ho94
-   /4trC05GUJJf3Eozev09JPA1oPtRFQvwQrkOBiOuO2Gq7E7UsJ7N2R2EJ
-   XwNhI7neg/W4Obiw4r4ntP2t7ejN4vhWzzoofjVLBLQ0MLjNg815qzeYK
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="278558549"
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="278558549"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 13:49:04 -0700
-X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="589176109"
-Received: from scc823097.zsc7.intel.com ([10.148.153.229])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 13:49:04 -0700
-From:   Peter Colberg <peter.colberg@intel.com>
-To:     Wu Hao <hao.wu@intel.com>, Tom Rix <trix@redhat.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-fpga@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     matthew.gerlach@linux.intel.com,
-        basheer.ahmed.muddebihal@intel.com, tianfei.zhang@intel.com,
-        marpagan@redhat.com, lgoncalv@redhat.com,
-        Peter Colberg <peter.colberg@intel.com>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Xu Yilun <yilun.xu@intel.com>
-Subject: [PATCH v3] uio: dfl: add IOPLL user-clock feature id
-Date:   Wed, 31 Aug 2022 16:48:51 -0400
-Message-Id: <20220831204851.4683-1-peter.colberg@intel.com>
-X-Mailer: git-send-email 2.28.0
-In-Reply-To: <20220826150116.16014-1-peter.colberg@intel.com>
-References: <20220826150116.16014-1-peter.colberg@intel.com>
+        Wed, 31 Aug 2022 16:51:27 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04182F14F0;
+        Wed, 31 Aug 2022 13:51:24 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id q8so12014044qvr.9;
+        Wed, 31 Aug 2022 13:51:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=F77ZSMjukIX1htEAuPVZavphrGy3kQNsKQQbF8+npDM=;
+        b=NXj8J5KNtB1xYx+f13xUMw7aGumHqDF3nK9EZZnacnmQhiz6vPl5kHqVXZbOydNbYJ
+         XMAQDyHyt6vKaRQeH+yV6z+K+eIC7id6NAB/7COEIkM1BTDOC9EjwwaNiuvW+wdAjY0l
+         dKpV1Tl5ChwADCOAyYBF9fvDKZQF0KTSWr91lW0h+BojNDMFuXYRFVTeBdL9UGbewrXn
+         hRxxKPBljR5zzZWuuGawiJRUH1S2we8mSEOHwmYMgPDM/v/+fm2mmMLGs6zOqwVgQ/qv
+         xktlK9j0x2zTy1I4ImVbXZU4U04FZovhERko4AFaBRjHK1rtDEyDSRbIJYBx/G3PIaGg
+         ut/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=F77ZSMjukIX1htEAuPVZavphrGy3kQNsKQQbF8+npDM=;
+        b=dIsZfId2qhHTBcQMxOr6qyVweYqS/fAAzvCyJTvfUQX2yXwLZUVVd0pBMN0i/nytJv
+         MNdlsyUe+k3XmEhL3j/cTMvk+P+GTIdHHtLC1CZgCMQf19uC0YV4yWIzf+r90LHx9RlG
+         3BlZ2L9cRdd2E9KrjclzHkg37Q22DwHRU+lKeS6n8ugGnTv1ao+9+SXjp/mm9YuSgJtJ
+         1ql4V7l/YQxl4EDVYMZjK11/b9YfGg9uWCpTalyt55k+XspHJJ3xWaeKPEYQqB8x6vha
+         Iz5YBHtJn3Hxe3o9nmuZaI/daDAR5czLgv92CnhhI+R6VJkggttJILiAmlZdBGa+DiYK
+         7gdQ==
+X-Gm-Message-State: ACgBeo1YZ0e9ASEh3DYafztgJiznc5WLaZEKOz3dJ7tcHRybKYji48fW
+        8NvwDNf+l/NqtrjqZDpEpbCGsxooIfZhD2eSWno=
+X-Google-Smtp-Source: AA6agR7jKZCSkySuQI5yd5EAlqxDIg6pm0Hq2U8udUCfBuUjwlEC5WO9UaPKj+mZJQ9RqKYBx79+LVIbtlBvEH9I9I4=
+X-Received: by 2002:a05:6214:27ca:b0:499:95f:6379 with SMTP id
+ ge10-20020a05621427ca00b00499095f6379mr12248607qvb.82.1661979083135; Wed, 31
+ Aug 2022 13:51:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220831055811.1936613-1-s.hauer@pengutronix.de> <20220831055811.1936613-2-s.hauer@pengutronix.de>
+In-Reply-To: <20220831055811.1936613-2-s.hauer@pengutronix.de>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Wed, 31 Aug 2022 23:50:47 +0300
+Message-ID: <CAHp75Vd6LCv1wcxV58Q3Pa=eBRdEK6XusbfeDQtm8+R0hAAyWg@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] gpio: Add gpio latch driver
+To:     Sascha Hauer <s.hauer@pengutronix.de>
+Cc:     "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sascha Hauer <kernel@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a Device Feature List (DFL) feature id [1] for the configurable
-IOPLL user clock source, which can be used to configure the clock
-speeds that are used for RTL logic that is programmed into the
-Partial Reconfiguration (PR) region of an FPGA.
+On Wed, Aug 31, 2022 at 9:02 AM Sascha Hauer <s.hauer@pengutronix.de> wrote:
+>
+> This driver implements a GPIO multiplexer based on latches connected to
+> other GPIOs. A set of data GPIOs is connected to the data input of
+> multiple latches. The clock input of each latch is driven by another
+> set of GPIOs. With two 8-bit latches 10 GPIOs can be multiplexed into
+> 16 GPIOs. GPOs might be a better term as in fact the multiplexed pins
+> are output only.
 
-The IOPLL user-space driver [2] contains frequency tables [3]
-with the specific user clock frequencies for an implementation.
+I'm still unsure it shouldn't be a part of the (not yet in upstream)
+driver that I have mentioned before. But let's leave this apart right
+now.
 
-For each desired frequency, the table values are produced by calling
-the quartus tool, the same tool that generates the IOPLL RTL logic.
-The quartus tool allows the RTL designer to select different options
-which can affect the table values. The table-driven, user-space
-driver allows for supporting future, modified implementations and
-provides users the ability to modify the IOPLL implementation.
+...
 
-[1] https://github.com/OPAE/dfl-feature-id
-[2] https://github.com/OPAE/opae-sdk/blob/a494f54a9f0356d0425edbff228f0254a4c70303/libraries/plugins/xfpga/usrclk/fpga_user_clk.c
-[3] https://github.com/OPAE/opae-sdk/blob/a494f54a9f0356d0425edbff228f0254a4c70303/libraries/plugins/xfpga/usrclk/fpga_user_clk_freq.h
+> +#include <linux/err.h>
+> +#include <linux/module.h>
 
-Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-Signed-off-by: Peter Colberg <peter.colberg@intel.com>
-Acked-by: Xu Yilun <yilun.xu@intel.com>
----
-v3:
-	Reorder Signed-off-by: such that submitter is last
-	Add Acked-by: Xu Yilun
+> +#include <linux/of_device.h>
 
-v2:
-	Describe IOPLL user-space driver in commit message
-	Add Signed-off-by: Russ Weight
----
- drivers/uio/uio_dfl.c | 2 ++
- 1 file changed, 2 insertions(+)
+Why?
+It seems you misplaced it instead of mod_devicetable.h.
 
-diff --git a/drivers/uio/uio_dfl.c b/drivers/uio/uio_dfl.c
-index 8f39cc8bb034..69e93f3e7faf 100644
---- a/drivers/uio/uio_dfl.c
-+++ b/drivers/uio/uio_dfl.c
-@@ -46,10 +46,12 @@ static int uio_dfl_probe(struct dfl_device *ddev)
- 
- #define FME_FEATURE_ID_ETH_GROUP	0x10
- #define FME_FEATURE_ID_HSSI_SUBSYS	0x15
-+#define PORT_FEATURE_ID_IOPLL_USRCLK	0x14
- 
- static const struct dfl_device_id uio_dfl_ids[] = {
- 	{ FME_ID, FME_FEATURE_ID_ETH_GROUP },
- 	{ FME_ID, FME_FEATURE_ID_HSSI_SUBSYS },
-+	{ PORT_ID, PORT_FEATURE_ID_IOPLL_USRCLK },
- 	{ }
- };
- MODULE_DEVICE_TABLE(dfl, uio_dfl_ids);
+> +#include <linux/gpio/driver.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/gpio/consumer.h>
+
+Keep above sorted?
+
+...
+
+> +       struct mutex mutex;
+> +       spinlock_t spinlock;
+
+Checkpatch usually complains if locks are not commented. Looking at
+the below code, why it's not an (anonymous) union?
+
+...
+
+> +       if (val)
+> +               priv->shadow[latch] |= BIT(offset % priv->n_pins);
+> +       else
+> +               priv->shadow[latch] &= ~BIT(offset % priv->n_pins);
+
+I believe shadow should be defined as unsigned long * and hence normal
+bit operations can be applied. For example here is assign_bit().
+
+...
+
+> +       priv->shadow = devm_kcalloc(&pdev->dev, priv->n_ports, sizeof(*priv->shadow),
+> +                                   GFP_KERNEL);
+
+bitmap_zalloc()
+
+> +       if (!priv->shadow)
+> +               return -ENOMEM;
+
+...
+
+> +       priv->gc.parent = &pdev->dev;
+
+> +       priv->gc.of_node = pdev->dev.of_node;
+
+Redundant as repeating parent above.
+
+...
+
+> +static const struct of_device_id gpio_latch_ids[] = {
+> +       {
+> +               .compatible     = "gpio-latch",
+> +       }, {
+> +               /* sentinel */
+> +       }
+
+You may compress this to the 2 LoCs.
+
+> +};
+
 -- 
-2.28.0
-
+With Best Regards,
+Andy Shevchenko

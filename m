@@ -2,239 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01315A85E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DEA5A85EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 20:43:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232837AbiHaSnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 14:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43328 "EHLO
+        id S233007AbiHaSne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 14:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232482AbiHaSnB (ORCPT
+        with ESMTP id S233099AbiHaSnF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 14:43:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F0552622
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 11:42:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661971334;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=bSO3yGBv6o2ftJ8n+2sbUGawaPifKr8wIkuEWc2hHFA=;
-        b=RRHjWndGeGb8fSf/ujOjYJncqkX6Wd7Uyg3tM0+4I2vjoTM9srmosuiHJqaiooNWWr+rFD
-        WT3huulLL16fYJez9+0i4lGYRZ59FU7eEimer2I1vrtIVaSY6z6MGzIUFUchHrxSZt5ee9
-        0SUqBepcxBj+xVJIrB9w8XudAZi8I8s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-587-y70-O1cSN32KWCKrvfc_iA-1; Wed, 31 Aug 2022 14:42:12 -0400
-X-MC-Unique: y70-O1cSN32KWCKrvfc_iA-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 6BFAD3810D21;
-        Wed, 31 Aug 2022 18:42:12 +0000 (UTC)
-Received: from starship (unknown [10.40.194.96])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C9F72945D2;
-        Wed, 31 Aug 2022 18:42:10 +0000 (UTC)
-Message-ID: <9c3e126bdee38bc4a0fa03eec994878aca4f3b3e.camel@redhat.com>
-Subject: Re: [PATCH 16/19] KVM: x86: Explicitly track all possibilities for
- APIC map's logical modes
-From:   Maxim Levitsky <mlevitsk@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Date:   Wed, 31 Aug 2022 21:42:09 +0300
-In-Reply-To: <20220831003506.4117148-17-seanjc@google.com>
-References: <20220831003506.4117148-1-seanjc@google.com>
-         <20220831003506.4117148-17-seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+        Wed, 31 Aug 2022 14:43:05 -0400
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD25260C6;
+        Wed, 31 Aug 2022 11:42:48 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id 193so5453713ybc.10;
+        Wed, 31 Aug 2022 11:42:48 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=xzoGBbwJ3ZwrByKi856TIQu0OrENwqVUhnhirrGF5H4=;
+        b=LfVse99iLmoMvSxqMbl686kNuMq/rDAS4UUXmVTpzLNJAYy/J2GDCWAbnPlmPiXp0t
+         lbgeLK9j2DfpHqa4nSBzy5guSEiYoJEZAf2bSAIB1HlPrVeOeHYo2N2Y+wbVcy85+n4s
+         wJ4MwfYHziTGAE8MJUTasRZfQ06LXtZ3yOXSe78l3qgFXym7G0JhHiTuUaamwmF1I7O+
+         /dfHFN4kkTP/VXUXs46WGMli3WPxGp9HTGfa8Dz729bOpIIQBSPgpyCWdL5rEF7q6g+O
+         SbLts6MNZwa+741fvM5wV0ZdL35BIWnVwFUkoS2Kr07pfUQ5m+66ACbsBJQMOxbJBL76
+         x5hA==
+X-Gm-Message-State: ACgBeo1NtiC3ZoxlxBLLdhCOuC8arwEDgVLcHAqXD/7L97oqV9yh9E3u
+        0p+jbKE/y5S7OF+zVNGfkMESkJCnY74DDjTYPyY=
+X-Google-Smtp-Source: AA6agR5JV1SYkvRX2LsVp9PLMmZQmg2hGokpEhZ7ZDChQbEa3WUq26eyLEcZjnDVTue2K3C+snPMP2110a5dT5nsZjY=
+X-Received: by 2002:a25:2785:0:b0:69b:b1d2:fd05 with SMTP id
+ n127-20020a252785000000b0069bb1d2fd05mr12156875ybn.81.1661971367951; Wed, 31
+ Aug 2022 11:42:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220830231541.1135813-1-rrangel@chromium.org>
+ <20220830171332.1.Id022caf53d01112188308520915798f08a33cd3e@changeid>
+ <CAJZ5v0h10wrurjYG50dA+pCfRtNDqN=c8odQ0p6HJRnOyJh7KA@mail.gmail.com> <CAHQZ30BTYEYEAGjwsbuiYuYGhpFtQy_AEP66v3trdTzY_DRUOQ@mail.gmail.com>
+In-Reply-To: <CAHQZ30BTYEYEAGjwsbuiYuYGhpFtQy_AEP66v3trdTzY_DRUOQ@mail.gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Wed, 31 Aug 2022 20:42:36 +0200
+Message-ID: <CAJZ5v0gS6U6v-CEPNhgoj=f5E3q1T_Z8vOe2qokyHw4qeVhTsQ@mail.gmail.com>
+Subject: Re: [PATCH 1/8] Input: elan_i2c - Use PM subsystem to manage wake irq
+To:     Raul Rangel <rrangel@chromium.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        linux-input <linux-input@vger.kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Tim Van Patten <timvp@google.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        "jingle.wu" <jingle.wu@emc.com.tw>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Tony Lindgren <tony@atomide.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-31 at 00:35 +0000, Sean Christopherson wrote:
-> Track all possibilities for the optimized APIC map's logical modes
-> instead of overloading the pseudo-bitmap and treating any "unknown" value
-> as "invalid".
-> 
-> As documented by the now-stale comment above the mode values, the values
-> did have meaning when the optimized map was originally added.  That
-> dependent logical was removed by commit e45115b62f9a ("KVM: x86: use
-> physical LAPIC array for logical x2APIC"), but the obfuscated behavior
-> and its comment were left behind.
-> 
-> Opportunistically rename "mode" to "logical_mode", partly to make it
-> clear that the "disabled" case applies only to the logical map, but also
-> to prove that there is no lurking code that expects "mode" to be a bitmap.
-> 
-> Functionally, this is a glorified nop.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 21 ++++++++++--------
->  arch/x86/kvm/lapic.c            | 38 ++++++++++++++++++++++++---------
->  2 files changed, 40 insertions(+), 19 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 1f51411f3112..0184e64ab555 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -955,19 +955,22 @@ struct kvm_arch_memory_slot {
->  };
->  
->  /*
-> - * We use as the mode the number of bits allocated in the LDR for the
-> - * logical processor ID.  It happens that these are all powers of two.
-> - * This makes it is very easy to detect cases where the APICs are
-> - * configured for multiple modes; in that case, we cannot use the map and
-> - * hence cannot use kvm_irq_delivery_to_apic_fast either.
-> + * Track the mode of the optimized logical map, as the rules for decoding the
-> + * destination vary per mode.  Enabling the optimized logical map requires all
-> + * software-enabled local APIs to be in the same mode, each addressable APIC to
-> + * be mapped to only one MDA, and each MDA to map to at most one APIC.
->   */
-> -#define KVM_APIC_MODE_XAPIC_CLUSTER          4
-> -#define KVM_APIC_MODE_XAPIC_FLAT             8
-> -#define KVM_APIC_MODE_X2APIC                16
-> +enum kvm_apic_logical_mode {
-> +	KVM_APIC_MODE_SW_DISABLED,
-> +	KVM_APIC_MODE_XAPIC_CLUSTER,
-> +	KVM_APIC_MODE_XAPIC_FLAT,
-> +	KVM_APIC_MODE_X2APIC,
-> +	KVM_APIC_MODE_MAP_DISABLED,
-> +};
->  
->  struct kvm_apic_map {
->  	struct rcu_head rcu;
-> -	u8 mode;
-> +	enum kvm_apic_logical_mode logical_mode;
->  	u32 max_apic_id;
->  	union {
->  		struct kvm_lapic *xapic_flat_map[8];
-> diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
-> index 8209caffe3ab..3b6ef36b3963 100644
-> --- a/arch/x86/kvm/lapic.c
-> +++ b/arch/x86/kvm/lapic.c
-> @@ -168,7 +168,12 @@ static bool kvm_use_posted_timer_interrupt(struct kvm_vcpu *vcpu)
->  
->  static inline bool kvm_apic_map_get_logical_dest(struct kvm_apic_map *map,
->  		u32 dest_id, struct kvm_lapic ***cluster, u16 *mask) {
-> -	switch (map->mode) {
-> +	switch (map->logical_mode) {
-> +	case KVM_APIC_MODE_SW_DISABLED:
-> +		/* Arbitrarily use the flat map so that @cluster isn't NULL. */
-> +		*cluster = map->xapic_flat_map;
-> +		*mask = 0;
-> +		return true;
->  	case KVM_APIC_MODE_X2APIC: {
->  		u32 offset = (dest_id >> 16) * 16;
->  		u32 max_apic_id = map->max_apic_id;
-> @@ -193,8 +198,10 @@ static inline bool kvm_apic_map_get_logical_dest(struct kvm_apic_map *map,
->  		*cluster = map->xapic_cluster_map[(dest_id >> 4) & 0xf];
->  		*mask = dest_id & 0xf;
->  		return true;
-> +	case KVM_APIC_MODE_MAP_DISABLED:
-> +		return false;
->  	default:
-> -		/* Not optimized. */
-> +		WARN_ON_ONCE(1);
+On Wed, Aug 31, 2022 at 8:14 PM Raul Rangel <rrangel@chromium.org> wrote:
+>
+> On Wed, Aug 31, 2022 at 12:01 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+> >
+> > On Wed, Aug 31, 2022 at 1:16 AM Raul E Rangel <rrangel@chromium.org> wrote:
+> > >
+> > > The Elan I2C touchpad driver is currently manually managing the wake
+> > > IRQ. This change removes the explicit enable_irq_wake/disable_irq_wake
+> > > and instead relies on the PM subsystem. This is done by calling
+> > > dev_pm_set_wake_irq.
+> > >
+> > > i2c_device_probe already calls dev_pm_set_wake_irq when using device
+> > > tree, so it's only required when using ACPI. The net result is that this
+> > > change should be a no-op. i2c_device_remove also already calls
+> > > dev_pm_clear_wake_irq, so we don't need to do that in this driver.
+> > >
+> > > I tested this on an ACPI system where the touchpad doesn't have _PRW
+> > > defined. I verified I can still wake the system and that the wake source
+> > > was the touchpad IRQ GPIO.
+> > >
+> > > Signed-off-by: Raul E Rangel <rrangel@chromium.org>
+> >
+>
+>
+> > I like this a lot, but the assumption in the wakeirq code is that the
+> > IRQ in question will be dedicated for signaling wakeup.  Does it hold
+> > here?
+>
+> The wakeirq code defines two methods: `dev_pm_set_wake_irq` and
+> `dev_pm_set_dedicated_wake_irq`.
+> The latter is used when you have a dedicated wakeup signal. In this
+> driver it's currently assumed
+> that the IRQ and the wake IRQ are the same, so I used `dev_pm_set_wake_irq`.
+>
+> This change in theory also fixes a bug where you define a dedicated
+> wake irq in DT, but
+> then the driver enables the `client->irq` as a wake source. In
+> practice this doesn't happen
+> since the elan touchpads only have a single IRQ line.
 
-BTW unless I am mistaken, this warning is guest triggerable, and thus as you say when
-'panic_on_warn=1', this will panic the host kernel.
+OK, thanks!
 
+Please feel free to add
 
-Best regards,
-	Maxim Levitsky
+Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
+to the patch.
 
->  		return false;
->  	}
->  }
-> @@ -256,10 +263,12 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
->  		goto out;
->  
->  	new->max_apic_id = max_id;
-> +	new->logical_mode = KVM_APIC_MODE_SW_DISABLED;
->  
->  	kvm_for_each_vcpu(i, vcpu, kvm) {
->  		struct kvm_lapic *apic = vcpu->arch.apic;
->  		struct kvm_lapic **cluster;
-> +		enum kvm_apic_logical_mode logical_mode;
->  		u32 x2apic_id, physical_id;
->  		u16 mask;
->  		u32 ldr;
-> @@ -314,7 +323,8 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
->  			new->phys_map[physical_id] = apic;
->  		}
->  
-> -		if (!kvm_apic_sw_enabled(apic))
-> +		if (new->logical_mode == KVM_APIC_MODE_MAP_DISABLED ||
-> +		    !kvm_apic_sw_enabled(apic))
->  			continue;
->  
->  		ldr = kvm_lapic_get_reg(apic, APIC_LDR);
-> @@ -322,25 +332,33 @@ void kvm_recalculate_apic_map(struct kvm *kvm)
->  			continue;
->  
->  		if (apic_x2apic_mode(apic)) {
-> -			new->mode |= KVM_APIC_MODE_X2APIC;
-> +			logical_mode = KVM_APIC_MODE_X2APIC;
->  		} else {
->  			ldr = GET_APIC_LOGICAL_ID(ldr);
->  			if (kvm_lapic_get_reg(apic, APIC_DFR) == APIC_DFR_FLAT)
-> -				new->mode |= KVM_APIC_MODE_XAPIC_FLAT;
-> +				logical_mode = KVM_APIC_MODE_XAPIC_FLAT;
->  			else
-> -				new->mode |= KVM_APIC_MODE_XAPIC_CLUSTER;
-> +				logical_mode = KVM_APIC_MODE_XAPIC_CLUSTER;
->  		}
-> +		if (new->logical_mode != KVM_APIC_MODE_SW_DISABLED &&
-> +		    new->logical_mode != logical_mode) {
-> +			new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
-> +			continue;
-> +		}
-> +		new->logical_mode = logical_mode;
->  
-> -		if (!kvm_apic_map_get_logical_dest(new, ldr, &cluster, &mask))
-> +		if (WARN_ON_ONCE(!kvm_apic_map_get_logical_dest(new, ldr,
-> +								&cluster, &mask))) {
-> +			new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
->  			continue;
-> +		}
->  
->  		if (!mask)
->  			continue;
->  
->  		ldr = ffs(mask) - 1;
->  		if (!is_power_of_2(mask) || cluster[ldr]) {
-> -			new->mode = KVM_APIC_MODE_XAPIC_FLAT |
-> -				    KVM_APIC_MODE_XAPIC_CLUSTER;
-> +			new->logical_mode = KVM_APIC_MODE_MAP_DISABLED;
->  			continue;
->  		}
->  		cluster[ldr] = apic;
-> @@ -993,7 +1011,7 @@ static bool kvm_apic_is_broadcast_dest(struct kvm *kvm, struct kvm_lapic **src,
->  {
->  	if (kvm->arch.x2apic_broadcast_quirk_disabled) {
->  		if ((irq->dest_id == APIC_BROADCAST &&
-> -				map->mode != KVM_APIC_MODE_X2APIC))
-> +		     map->logical_mode != KVM_APIC_MODE_X2APIC))
->  			return true;
->  		if (irq->dest_id == X2APIC_BROADCAST)
->  			return true;
-
-
+> >
+> > > ---
+> > >
+> > >  drivers/input/mouse/elan_i2c_core.c | 12 ++++--------
+> > >  1 file changed, 4 insertions(+), 8 deletions(-)
+> > >
+> > > diff --git a/drivers/input/mouse/elan_i2c_core.c b/drivers/input/mouse/elan_i2c_core.c
+> > > index e1758d5ffe4218..7d997d2b56436b 100644
+> > > --- a/drivers/input/mouse/elan_i2c_core.c
+> > > +++ b/drivers/input/mouse/elan_i2c_core.c
+> > > @@ -33,6 +33,7 @@
+> > >  #include <linux/jiffies.h>
+> > >  #include <linux/completion.h>
+> > >  #include <linux/of.h>
+> > > +#include <linux/pm_wakeirq.h>
+> > >  #include <linux/property.h>
+> > >  #include <linux/regulator/consumer.h>
+> > >  #include <asm/unaligned.h>
+> > > @@ -86,8 +87,6 @@ struct elan_tp_data {
+> > >         u16                     fw_page_size;
+> > >         u32                     fw_signature_address;
+> > >
+> > > -       bool                    irq_wake;
+> > > -
+> > >         u8                      min_baseline;
+> > >         u8                      max_baseline;
+> > >         bool                    baseline_ready;
+> > > @@ -1337,8 +1336,10 @@ static int elan_probe(struct i2c_client *client,
+> > >          * Systems using device tree should set up wakeup via DTS,
+> > >          * the rest will configure device as wakeup source by default.
+> > >          */
+> > > -       if (!dev->of_node)
+> > > +       if (!dev->of_node) {
+> > >                 device_init_wakeup(dev, true);
+> > > +               dev_pm_set_wake_irq(dev, client->irq);
+> > > +       }
+> > >
+> > >         return 0;
+> > >  }
+> > > @@ -1362,8 +1363,6 @@ static int __maybe_unused elan_suspend(struct device *dev)
+> > >
+> > >         if (device_may_wakeup(dev)) {
+> > >                 ret = elan_sleep(data);
+> > > -               /* Enable wake from IRQ */
+> > > -               data->irq_wake = (enable_irq_wake(client->irq) == 0);
+> > >         } else {
+> > >                 ret = elan_set_power(data, false);
+> > >                 if (ret)
+> > > @@ -1394,9 +1393,6 @@ static int __maybe_unused elan_resume(struct device *dev)
+> > >                         dev_err(dev, "error %d enabling regulator\n", error);
+> > >                         goto err;
+> > >                 }
+> > > -       } else if (data->irq_wake) {
+> > > -               disable_irq_wake(client->irq);
+> > > -               data->irq_wake = false;
+> > >         }
+> > >
+> > >         error = elan_set_power(data, true);
+> > > --
+> > > 2.37.2.672.g94769d06f0-goog
+> > >

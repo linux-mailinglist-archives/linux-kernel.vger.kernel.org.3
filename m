@@ -2,138 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A27D5A7CEB
-	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:09:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 371D15A7CF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 31 Aug 2022 14:11:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiHaMI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 08:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44392 "EHLO
+        id S230111AbiHaML1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 08:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbiHaMI4 (ORCPT
+        with ESMTP id S229449AbiHaMLZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 08:08:56 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D9DD2E9E;
-        Wed, 31 Aug 2022 05:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661947735; x=1693483735;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=4hh3TdvWLOW9de6yNRQgeeSpBmX7eKRJxoqCdgzzroE=;
-  b=N3ZBePJvnRrN/Pv5iNXD+ppB4TPwUbFAvvYCg+SmdXhHaufRXM63+vVO
-   jJvzEHsqmo7cB4k0MWnpeuJslL2yBvKNDKZpCLeJk6oE+hbmzWh9uvmLF
-   JSUSICZYhV4uJ9uXpp0U49gRCYLhgf/kgjbKomeCpgvA69NGBeEyz+9Mo
-   CkLXbigLJA4jXWXhTf/O/5NaWbPlZPm40B8OkaFLd1vVrL2FXiK2m3aFF
-   IjKll/Bg1yBlJyXbo+C86A78rb+AVapI7wqpAkzFVpyspL3R57NLT3942
-   7W/pCFNIe2CLpPwyl6MUGTchi2KwxSHPbEKJ2D0wxti5QSbxP7YVixugM
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10455"; a="293007841"
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="293007841"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 05:08:55 -0700
-X-IronPort-AV: E=Sophos;i="5.93,277,1654585200"; 
-   d="scan'208";a="738085100"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 05:08:50 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oTMWU-006Meb-2i;
-        Wed, 31 Aug 2022 15:08:46 +0300
-Date:   Wed, 31 Aug 2022 15:08:46 +0300
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Eliav Farber <farbere@amazon.com>
-Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
-        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
-        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
-        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
-        amitlavi@amazon.com, almogbs@amazon.com, dkl@amazon.com,
-        rahul.tanwar@linux.intel.com
-Subject: Re: [PATCH v3 15/19] hwmon: (mr75203) add support for series 6
- temperature equation
-Message-ID: <Yw9PTobSRlkh/0i4@smile.fi.intel.com>
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-16-farbere@amazon.com>
+        Wed, 31 Aug 2022 08:11:25 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E412BCC34;
+        Wed, 31 Aug 2022 05:11:23 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MHjgW01Khz67xv7;
+        Wed, 31 Aug 2022 20:10:47 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 31 Aug 2022 14:11:20 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 31 Aug
+ 2022 13:11:20 +0100
+Date:   Wed, 31 Aug 2022 13:11:19 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Robert Richter <rrichter@amd.com>
+CC:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH 13/15] cxl/acpi: Rework devm_cxl_enumerate_ports() to
+ support RCD mode
+Message-ID: <20220831131119.00002c7f@huawei.com>
+In-Reply-To: <20220831081603.3415-14-rrichter@amd.com>
+References: <20220831081603.3415-1-rrichter@amd.com>
+        <20220831081603.3415-14-rrichter@amd.com>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220830192212.28570-16-farbere@amazon.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 07:22:08PM +0000, Eliav Farber wrote:
-> The current equation used in code is aligned to series 5:
-> T = G + H * (n / cal5 - 0.5) + J * F
-> Where:
-> G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
+On Wed, 31 Aug 2022 10:16:01 +0200
+Robert Richter <rrichter@amd.com> wrote:
+
+> RCD mode has a different enumeration scheme other than in CXL VH mode.
+> An RCD is directly connected to an RCH without downstream and upstream
+> ports showing up in between in the PCI hierarchy. Due to the direct
+> connection of RCD and RCH, the host bridge is always the RCD's parent
+> instead of the grandparent. 
+Mentioned earlier, but that's not quite true.  There is a reference in
+the spec to allowing it to be under a root port (some sort of virtual structure
+- I'm not sure of 'why' you would that though.)(
+
+> Modify devm_cxl_enumerate_ports()
+> respectively.
+
+Don't line wrap above.
+
 > 
-> Series 6 has a slightly different equation:
-> T = G + H * (n / cal5 - 0.5)
-> and a different set of coefficients:
-> G = 57.4, H = 249.4, cal5 = 4096
+> Implement this by introducing a function to determine the device's
+> downstream port. The 'for' loop is adjusted for RCD mode and in this
+> case find_cxl_port() will always find the host's associated port and
+> the loop iteration stops.
 > 
-> This change supports equation and coefficients for both series.
-> (for series 6, J is set to 0).
+> Signed-off-by: Robert Richter <rrichter@amd.com>
+> ---
+>  drivers/cxl/core/port.c | 36 ++++++++++++++++++++++++------------
+>  1 file changed, 24 insertions(+), 12 deletions(-)
 > 
-> The series is determined according to “ts-series” property in device
-> tree.
-> If absent, series 5 is assumed to be the default.
+> diff --git a/drivers/cxl/core/port.c b/drivers/cxl/core/port.c
+> index 61e9915162d5..08b99423dbf8 100644
+> --- a/drivers/cxl/core/port.c
+> +++ b/drivers/cxl/core/port.c
+> @@ -1084,6 +1084,22 @@ static struct device *grandparent(struct device *dev)
+>  	return NULL;
+>  }
+>  
+> +static struct device *cxl_mem_dport_dev(struct cxl_memdev *cxlmd)
+> +{
+> +	struct device *dev = cxlmd->dev.parent;
+> +	struct pci_dev *pdev = to_pci_dev(cxlmd->dev.parent);
 
-...
+to_pci_dev(dev);
 
-> -#define PVT_H_CONST		200000
-> -#define PVT_G_CONST		60000
-> -#define PVT_J_CONST		-100
-> -#define PVT_CAL5_CONST		4094
-
-You just introduced them patch before. Please, avoid ping-pong style in
-the same series.
-
-...
-
-> +	ret = of_property_read_u32(np, "moortec,ts-series", &series);
-
-of_ ?!
-
-Be consistent. Either you use OF everywhere, or device property APIs.
-
-...
-
-> +	if (ret)
-> +		series = TEMPERATURE_SENSOR_SERIES_5;
 > +
-> +	if (series == TEMPERATURE_SENSOR_SERIES_5) {
-> +		ts_coeff->h = PVT_SERIES5_H_CONST;
-> +		ts_coeff->g = PVT_SERIES5_G_CONST;
-> +		ts_coeff->j = PVT_SERIES5_J_CONST;
-> +		ts_coeff->cal5 = PVT_SERIES5_CAL5_CONST;
-> +	} else if (series == TEMPERATURE_SENSOR_SERIES_6) {
-> +		ts_coeff->h = PVT_SERIES6_H_CONST;
-> +		ts_coeff->g = PVT_SERIES6_G_CONST;
-> +		ts_coeff->j = PVT_SERIES6_J_CONST;
-> +		ts_coeff->cal5 = PVT_SERIES6_CAL5_CONST;
-> +	} else {
-> +		dev_err(dev, "invalid temperature sensor series (%u)\n",
-> +			series);
-> +		return -EINVAL;
-> +	}
+> +	/*
+> +	 * An RCiEP is directly connected to the root bridge without
+> +	 * any PCI bridges/ports in between. Reduce the parent level
+> +	 * for those.
+> +	 */
+> +	if (pci_pcie_type(pdev) == PCI_EXP_TYPE_RC_END)
+> +		return dev;
+> +
+> +	return dev->parent;
+Switching from grandparent to this is a little confusing because it's
+done in two steps.  Perhaps use
+	return grandparent(cmlmd->dev);
+here to keep that connection and rename dev in this function to parent.
 
-switch-case?
+Far too many devices in here with similar names for it to be easy
+to read.
 
--- 
-With Best Regards,
-Andy Shevchenko
 
+> +}
+> +
+>  static void delete_endpoint(void *data)
+>  {
+>  	struct cxl_memdev *cxlmd = data;
+> @@ -1339,7 +1355,7 @@ static int add_port_attach_ep(struct cxl_memdev *cxlmd,
+>  int devm_cxl_enumerate_ports(struct cxl_memdev *cxlmd)
+>  {
+>  	struct device *dev = &cxlmd->dev;
+> -	struct device *iter;
+> +	struct device *dport_dev;
+>  	int rc;
+>  
+>  	rc = devm_add_action_or_reset(&cxlmd->dev, cxl_detach_ep, cxlmd);
+> @@ -1352,25 +1368,21 @@ int devm_cxl_enumerate_ports(struct cxl_memdev *cxlmd)
+>  	 * attempt fails.
+>  	 */
+>  retry:
+> -	for (iter = dev; iter; iter = grandparent(iter)) {
+> -		struct device *dport_dev = grandparent(iter);
+> +	for (dport_dev = cxl_mem_dport_dev(cxlmd); dport_dev;
+> +	     dport_dev = grandparent(dport_dev)) {
+
+I don't like looping for the RCD case as it relies a bit too
+much on subtle relationships between devices and parent.
+
+Perhaps better to factor out the contents of the loop, then handle
+the RCD case separately from the main loop.
+I haven't tried it, so perhaps that looks even less readable.
+
+
+>  		struct device *uport_dev;
+>  		struct cxl_dport *dport;
+>  		struct cxl_port *port;
+>  
+> -		if (!dport_dev)
+> -			return 0;
+> -
+>  		uport_dev = dport_dev->parent;
+>  		if (!uport_dev) {
+> -			dev_warn(dev, "at %s no parent for dport: %s\n",
+> -				 dev_name(iter), dev_name(dport_dev));
+> +			dev_warn(dev, "no parent for dport: %s\n",
+> +				 dev_name(dport_dev));
+>  			return -ENXIO;
+>  		}
+>  
+> -		dev_dbg(dev, "scan: iter: %s dport_dev: %s parent: %s\n",
+> -			dev_name(iter), dev_name(dport_dev),
+> -			dev_name(uport_dev));
+> +		dev_dbg(dev, "scan: dport_dev: %s parent: %s\n",
+> +			dev_name(dport_dev), dev_name(uport_dev));
+>  		port = find_cxl_port(dport_dev, &dport);
+>  		if (port) {
+>  			dev_dbg(&cxlmd->dev,
+> @@ -1418,7 +1430,7 @@ EXPORT_SYMBOL_NS_GPL(devm_cxl_enumerate_ports, CXL);
+>  struct cxl_port *cxl_mem_find_port(struct cxl_memdev *cxlmd,
+>  				   struct cxl_dport **dport)
+>  {
+> -	return find_cxl_port(grandparent(&cxlmd->dev), dport);
+> +	return find_cxl_port(cxl_mem_dport_dev(cxlmd), dport);
+>  }
+>  EXPORT_SYMBOL_NS_GPL(cxl_mem_find_port, CXL);
+>  
 

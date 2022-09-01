@@ -2,101 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9522F5A9019
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0355A8F4E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:07:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbiIAHZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:25:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
+        id S233479AbiIAHHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233913AbiIAHZW (ORCPT
+        with ESMTP id S233582AbiIAHGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:25:22 -0400
-Received: from smtp-out.kfki.hu (smtp-out.kfki.hu [148.6.0.48])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D278F1223A8;
-        Thu,  1 Sep 2022 00:24:21 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by smtp2.kfki.hu (Postfix) with ESMTP id DBD36CC00FE;
-        Thu,  1 Sep 2022 09:06:06 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at smtp2.kfki.hu
-Received: from smtp2.kfki.hu ([127.0.0.1])
-        by localhost (smtp2.kfki.hu [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP; Thu,  1 Sep 2022 09:06:04 +0200 (CEST)
-Received: from blackhole.kfki.hu (blackhole.szhk.kfki.hu [148.6.240.2])
-        by smtp2.kfki.hu (Postfix) with ESMTP id 96B81CC00FF;
-        Thu,  1 Sep 2022 09:06:03 +0200 (CEST)
-Received: by blackhole.kfki.hu (Postfix, from userid 1000)
-        id 90DC13431DF; Thu,  1 Sep 2022 09:06:03 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by blackhole.kfki.hu (Postfix) with ESMTP id 8F2813431DE;
-        Thu,  1 Sep 2022 09:06:03 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 09:06:03 +0200 (CEST)
-From:   Jozsef Kadlecsik <kadlec@netfilter.org>
-To:     Kees Cook <keescook@chromium.org>
-cc:     Jakub Kicinski <kuba@kernel.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] netlink: Bounds-check struct nlmsgerr creation
-In-Reply-To: <20220901064858.1417126-1-keescook@chromium.org>
-Message-ID: <5aad4860-b1c3-d78f-583d-26281626a49@netfilter.org>
-References: <20220901064858.1417126-1-keescook@chromium.org>
+        Thu, 1 Sep 2022 03:06:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A48E120334
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:06:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662015979;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eeBUu9nEhT4Kc4CwsZdP2lrb/xjOrC7tj07BpY9X5O8=;
+        b=EATUQ3E4DoZl7J6tJivXQUEpa0kea3pdhJAC2cpdd0lXyhiWK1Lv+6Y6/O7IVo7e5GpmdP
+        nh9Mi6tMsTP+n0N4dJ49V5nekDHrTlLuJsqYJDyrl7l6Kqpx+oLoYPOCvdGcUXYTLXVhS5
+        odivWudvfTx0J56m7rYWxMMnCceiBpQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-620-2PaaNq9yOrG3TBDajA1iqw-1; Thu, 01 Sep 2022 03:06:15 -0400
+X-MC-Unique: 2PaaNq9yOrG3TBDajA1iqw-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CDC8485A58A;
+        Thu,  1 Sep 2022 07:06:14 +0000 (UTC)
+Received: from T590 (ovpn-8-28.pek2.redhat.com [10.72.8.28])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 4AE802026D4C;
+        Thu,  1 Sep 2022 07:06:09 +0000 (UTC)
+Date:   Thu, 1 Sep 2022 15:06:08 +0800
+From:   Ming Lei <ming.lei@redhat.com>
+To:     Dusty Mabe <dusty@dustymabe.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hch@lst.de,
+        linux-raid@vger.kernel.org
+Subject: Re: regression caused by block: freeze the queue earlier in
+ del_gendisk
+Message-ID: <YxBZ4BBjxvAkvI2A@T590>
+References: <017845ae-fbae-70f6-5f9e-29aff2742b8c@dustymabe.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <017845ae-fbae-70f6-5f9e-29aff2742b8c@dustymabe.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Dusty,
 
-On Wed, 31 Aug 2022, Kees Cook wrote:
-
-> For 32-bit systems, it might be possible to wrap lnmsgerr content
-> lengths beyond SIZE_MAX. Explicitly test for all overflows, and mark the
-> memcpy() as being unable to internally diagnose overflows.
+On Fri, Aug 26, 2022 at 12:15:22PM -0400, Dusty Mabe wrote:
+> Hey All,
 > 
-> This also excludes netlink from the coming runtime bounds check on
-> memcpy(), since it's an unusual case of open-coded sizing and
-> allocation. Avoid this future run-time warning:
+> I think I've found a regression introduced by:
 > 
->   memcpy: detected field-spanning write (size 32) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
+> a09b314 o block: freeze the queue earlier in del_gendisk
 > 
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-> Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
-> Cc: Florian Westphal <fw@strlen.de>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: syzbot <syzkaller@googlegroups.com>
-> Cc: netfilter-devel@vger.kernel.org
-> Cc: coreteam@netfilter.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
-> ---
-> v2: Rebased to -next
-> v1: https://lore.kernel.org/lkml/20220901030610.1121299-3-keescook@chromium.org
-> ---
->  net/netlink/af_netlink.c | 81 +++++++++++++++++++++++++---------------
->  1 file changed, 51 insertions(+), 30 deletions(-)
+> In Fedora CoreOS we have tests that set up RAID1 on the /boot/ and /root/ partitions
+> and then subsequently removes one of the disks to simulate a failure. Sometime recently
 
-Could you add back the net/netfilter/ipset/ip_set_core.c part? Thanks!
+Do you have test case which doesn't need raid1 over /boot or /root? such
+as by create raid1 over two disks, then mount & remove one of device, ...
 
-Best regards,
-Jozsef
--
-E-mail  : kadlec@blackhole.kfki.hu, kadlecsik.jozsef@wigner.hu
-PGP key : https://wigner.hu/~kadlec/pgp_public_key.txt
-Address : Wigner Research Centre for Physics
-          H-1525 Budapest 114, POB. 49, Hungary
+It isn't easy to setup/observe such test case and observe what is wrong.
+
+> this test started timing out occasionally. Looking a bit closer it appears instances are
+> getting stuck during reboot with a bunch of looping messages:
+> 
+> ```
+> [   17.978854] block device autoloading is deprecated and will be removed.
+> [   17.982555] block device autoloading is deprecated and will be removed.
+> [   17.985537] block device autoloading is deprecated and will be removed.
+> [   17.987546] block device autoloading is deprecated and will be removed.
+> [   17.989540] block device autoloading is deprecated and will be removed.
+> [   17.991547] block device autoloading is deprecated and will be removed.
+> [   17.993555] block device autoloading is deprecated and will be removed.
+> [   17.995539] block device autoloading is deprecated and will be removed.
+> [   17.997577] block device autoloading is deprecated and will be removed.
+> [   17.999544] block device autoloading is deprecated and will be removed.
+> [   22.979465] blkdev_get_no_open: 1666 callbacks suppressed
+> ...
+> ...
+> ...
+> [  618.221270] blkdev_get_no_open: 1664 callbacks suppressed
+> [  618.221273] block device autoloading is deprecated and will be removed.
+> [  618.224274] block device autoloading is deprecated and will be removed.
+> [  618.227267] block device autoloading is deprecated and will be removed.
+> [  618.229274] block device autoloading is deprecated and will be removed.
+> [  618.231277] block device autoloading is deprecated and will be removed.
+> [  618.233277] block device autoloading is deprecated and will be removed.
+> [  618.235282] block device autoloading is deprecated and will be removed.
+> [  618.237370] block device autoloading is deprecated and will be removed.
+> [  618.239356] block device autoloading is deprecated and will be removed.
+> [  618.241290] block device autoloading is deprecated and will be removed.
+> ```
+> 
+> Using the Fedora kernels I narrowed it down to being introduced between 
+> `kernel-5.19.0-0.rc3.27.fc37` (good) and `kernel-5.19.0-0.rc4.33.fc37` (bad).
+> 
+> I then did a bisect and found:
+> 
+> ```
+> $ git bisect bad
+> a09b314005f3a0956ebf56e01b3b80339df577cc is the first bad commit
+> commit a09b314005f3a0956ebf56e01b3b80339df577cc
+> Author: Christoph Hellwig <hch@lst.de>
+> Date:   Tue Jun 14 09:48:27 2022 +0200
+> 
+>     block: freeze the queue earlier in del_gendisk
+
+It is a bit hard to associate the above commit with reported issue.
+
+
+Thanks,
+Ming
+

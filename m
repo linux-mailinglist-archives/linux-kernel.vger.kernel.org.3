@@ -2,146 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B77A5A9F5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:47:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A5755A9F73
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232776AbiIASqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
+        id S232418AbiIAS4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiIASqj (ORCPT
+        with ESMTP id S233291AbiIAS4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:46:39 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240F4B498;
-        Thu,  1 Sep 2022 11:46:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=XRAc12CEffd6UPewH7ccY0GIxlcGsZ0nDr5uMann2po=; b=LrIm/0Nee/5kQPChCwKM5mR7cS
-        x/tkmOjSOkF21LeaUXzbtHiYXJ2G2eDB6PjOHrdhA2NLbODRKysIiHWX2Po/jLSxA73LX6AIjwYpo
-        uCDMRwWffp9Kg0N64hh/CRmZC7fZcdH3jRzGf/QBtsIG+2D62NB6yaZUbjUg7yneBzT2wipVCed1D
-        4DmdJ7Vqo2DmckjAUvu07vzR3BOLdjqRWCUSL4VI7ycxabym8A6kaMOb9fBZJNXoFafQWFaltEg6v
-        r6IJYn+myeJlTUWsnMrHYZukWw90sMtyav3tRe2tTXpkn07uGfn8Uu7z8pyTHbB1qq7eVnevSVL4u
-        KuIgAf0Q==;
-Received: from 189-69-202-182.dial-up.telesp.net.br ([189.69.202.182] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oTpCz-007tqI-1P; Thu, 01 Sep 2022 20:46:33 +0200
-Message-ID: <b050f00b-6c3a-a0d9-a3c1-175a724faf1c@igalia.com>
-Date:   Thu, 1 Sep 2022 15:46:17 -0300
+        Thu, 1 Sep 2022 14:56:13 -0400
+Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF395F10F;
+        Thu,  1 Sep 2022 11:55:44 -0700 (PDT)
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-11e9a7135easo31359922fac.6;
+        Thu, 01 Sep 2022 11:55:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=HpWmElkb3R8nLlh0+N2tUY+L3VStUb6ARl+EPTzp0N4=;
+        b=YW42FbChuGrGb1pkeoWD3/7AQF0Hizr94VwlNqc9xOG7GOabCZPTf/jslLWIn7N4Om
+         44mUmiGuOy54NuW3UQl6VqmOwDktDGvkzqMRJr51QlDqgovT+9/a8ezH1XQIRpOQR6lO
+         +3TfDi8Vi/Iw4jL+16EMfjMTNOTri8OaZ88CkIc65gimSmiq/WigZMcRi5zNnliHNDpa
+         NdM2MdgY+U58IrymZA1Fq01I06R/9cSsdJ9uuRB92I9izgicZlbDkw/j0NL5AEZbp/37
+         kNgSyQyf0Qy3JMsokH2imJBdWUrBBQ3qwHWdAQuRP9vuUDQkl4AL5roeFK+YdL2WdpM6
+         acAA==
+X-Gm-Message-State: ACgBeo3n7nvOLGlRM0ml2MR6EXyyXOOGQwlxwNeHw1UovlzVcHQwnvjv
+        UldJ/G8onbHP5f9pSH6xmg==
+X-Google-Smtp-Source: AA6agR4D9pq4NyfWjraGzlzw87ULKE55HAZBZgcBs7+Ik3FYQNdM8Ow4WFUtGSA8GA16Z/Y81W6+mQ==
+X-Received: by 2002:a05:6870:c350:b0:11c:cd92:3fdd with SMTP id e16-20020a056870c35000b0011ccd923fddmr297621oak.85.1662058543586;
+        Thu, 01 Sep 2022 11:55:43 -0700 (PDT)
+Received: from xps15.. (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.googlemail.com with ESMTPSA id u5-20020a056830118500b0063ade5856f2sm930otq.64.2022.09.01.11.55.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 11:55:43 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Cc:     James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] perf: Ignore format attributes with an unknown perf_event_attr field
+Date:   Thu,  1 Sep 2022 13:47:10 -0500
+Message-Id: <20220901184709.2179309-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V3] firmware: google: Test spinlock on panic path to avoid
- lockups
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     evgreen@chromium.org, arnd@arndb.de, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@gpiccoli.net, ardb@kernel.org,
-        davidgow@google.com, jwerner@chromium.org,
-        Petr Mladek <pmladek@suse.com>
-References: <20220819155059.451674-1-gpiccoli@igalia.com>
- <YxDVPqVkdgQbAIvY@kroah.com>
- <f89cd87c-7d1c-d8e6-ed95-6876f0201872@igalia.com>
- <YxDX9+p+58q2sip2@kroah.com>
- <6bc5dbc3-2cdd-5cb8-1632-11de2008a85a@igalia.com>
- <YxDhiSDs4YcUrqV5@kroah.com>
- <85683284-db85-7e3a-57bd-750e1c204e3e@igalia.com>
- <YxD56RTI9v/P2QOL@kroah.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YxD56RTI9v/P2QOL@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 15:28, Greg KH wrote:
-> [...]
->> I honestly didn't understand exactly what you're suggesting Greg...
->> Mind clarifying?
-> 
-> Something like this totally untested code:
-> 
-> diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
-> index adaa492c3d2d..6ad41b22671c 100644
-> --- a/drivers/firmware/google/gsmi.c
-> +++ b/drivers/firmware/google/gsmi.c
-> @@ -19,6 +19,7 @@
->  #include <linux/dma-mapping.h>
->  #include <linux/fs.h>
->  #include <linux/slab.h>
-> +#include <linux/panic.h>
->  #include <linux/panic_notifier.h>
->  #include <linux/ioctl.h>
->  #include <linux/acpi.h>
-> @@ -611,6 +612,11 @@ static const struct attribute *gsmi_attrs[] = {
->  	NULL,
->  };
->  
-> +static bool panic_in_progress(void)
-> +{
-> +	return unlikely(atomic_read(&panic_cpu) != PANIC_CPU_INVALID);
-> +}
-> +
->  static int gsmi_shutdown_reason(int reason)
->  {
->  	struct gsmi_log_entry_type_1 entry = {
-> @@ -629,7 +635,8 @@ static int gsmi_shutdown_reason(int reason)
->  	if (saved_reason & (1 << reason))
->  		return 0;
->  
-> -	spin_lock_irqsave(&gsmi_dev.lock, flags);
-> +	if (!panic_in_progress())
-> +		spin_lock_irqsave(&gsmi_dev.lock, flags);
->  
->  	saved_reason |= (1 << reason);
->  
-> @@ -644,7 +651,8 @@ static int gsmi_shutdown_reason(int reason)
->  
->  	rc = gsmi_exec(GSMI_CALLBACK, GSMI_CMD_SET_EVENT_LOG);
->  
-> -	spin_unlock_irqrestore(&gsmi_dev.lock, flags);
-> +	if (!panic_in_progress())
-> +		spin_unlock_irqrestore(&gsmi_dev.lock, flags);
->  
->  	if (rc < 0)
->  		printk(KERN_ERR "gsmi: Log Shutdown Reason failed\n");
-> 
-> 
->
+If the kernel exposes a new perf_event_attr field in a format attr, perf
+will return an error stating the specified PMU can't be found. For
+example, a format attr with 'config3:0-63' causes an error if config3 is
+unknown to perf. This causes a compatibility issue between a newer
+kernel and an older perf tool.
 
-Thanks! Personally, I feel the approach a bit more complex than mine,
-and...racy!
-Imagine CPU0 runs your tests, right after the if (!panic_in_progress())
-is done, spinlock is taken and boom - panic on CPU1. This would cause
-the same issue...
+The addition here makes any attr string up to the ':' ignored, but
+still checks the 'bits' portion.
 
-My approach is zero racy, since it checks if spinlock was taken in a
-moment that the machine is like a no-SMP, only a single CPU running...
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+This is the YACC mud I threw and seems to stick. Maybe there's a better 
+way to handle this. It doesn't seem like there's a way to do wildcards 
+(i.e. config.*) in YACC.
 
+This is needed for this series[1]. Unfortunately the best we do to avoid 
+the issue is applying this to stable. I think there's some time before 
+v8.7 h/w is deployed, too.
 
-> That being said, are you sure spinlocks are still held in the panic
-> notifier?  What about the call to bust_spinlocks() that is called in
-> panic() already?  Wouldn't that have already dropped whatever you were
-> worried about here?
+Rob
 
-This function is very weird. Basically, the call of "bust_spinlocks(1);"
-in panic effectively means "++oops_in_progress;" IIUC.
-So, I still think we can have lockups in panic notifiers with locks
-previously taken =)
+[1] https://lore.kernel.org/all/20220825-arm-spe-v8-7-v1-0-c75b8d92e692@kernel.org/
 
-Cheers,
+ tools/perf/util/pmu.y | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/tools/perf/util/pmu.y b/tools/perf/util/pmu.y
+index bfd7e8509869..3096864ec9b9 100644
+--- a/tools/perf/util/pmu.y
++++ b/tools/perf/util/pmu.y
+@@ -60,6 +60,9 @@ PP_CONFIG2 ':' bits
+ 				      PERF_PMU_FORMAT_VALUE_CONFIG2,
+ 				      $3));
+ }
++|
++error ':' bits
++{}
+ 
+ bits:
+ bits ',' bit_term
+-- 
+2.34.1
 
-Guilherme

@@ -2,226 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3D65AA062
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:50:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A78035AA06A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:51:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbiIATuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:50:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
+        id S234642AbiIATvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:51:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234618AbiIATt6 (ORCPT
+        with ESMTP id S233483AbiIATvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:49:58 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBEB1094
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:49:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662061796; x=1693597796;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=yYgBD3dEtOYwCyHEs1WR6swv/1/GzneYq7e8RSs+6H0=;
-  b=Q171PAePavzfvrACk1mFvAU19PZiSHsqWHArZSmQN0JgJxgsiqspipPG
-   UKYTk6g18ByoZcjZj+OObWiLRY6te31zScbR5ii2KbeXoG+pUGKU9BFVl
-   YO0oJznKcMp3x50JnWhO+xkw3tReuDIrpf3ovyeHjkaR8faAS4iph53wM
-   z8cBIzaHqnuOgbr1EFJ4pn3QNVYyxQH/mwzQ/BgDGUgbUWIBRiYVOQ8F4
-   7RzsAYEFx9wpOewl5ckgRPy+2HCQmS8vtha/Pv5/qXVYxTWAhVGzpd6vR
-   a6IspLtKiFPlQXJmiHoqLZMuNiZfhBMlZCckYHwiMKyTGKnuQmWldYfdl
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="296596847"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="296596847"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:49:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="589687196"
-Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 01 Sep 2022 12:49:53 -0700
-Received: from kbuild by b138c9e8658c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTqCG-0000hR-2q;
-        Thu, 01 Sep 2022 19:49:52 +0000
-Date:   Fri, 2 Sep 2022 03:49:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Vetter <daniel.vetter@ffwll.ch>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Sean Paul <seanpaul@chromium.org>,
-        =?iso-8859-1?Q?St=E9phane?= Marchesin <marcheu@chromium.org>,
-        "Kristian H. Kristensen" <hoegsberg@chromium.org>
-Subject: [jsarha:topic/cros-sof-v4.19 1155/6555]
- drivers/gpu/drm/drm_atomic_uapi.c:1297: Error: unrecognized opcode `csrs
- sstatus,s8'
-Message-ID: <202209020320.DEOLa6AV-lkp@intel.com>
+        Thu, 1 Sep 2022 15:51:08 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E027A27FC5;
+        Thu,  1 Sep 2022 12:51:04 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281Jopnd029250;
+        Thu, 1 Sep 2022 19:50:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7GuCFAoovORTcSpNtNYYzOR3vGaNMS7KdBKlD9RkxfU=;
+ b=N0xFMFZ3j9qZGc72DcoI3ok/oFy96h7s4x+bE2LvpsX3b1cdYoExaXPfpYvOt7GvjmK0
+ fV8BGpMaOLguVM0qziFZscV1epSASU68yiNHxQ6OX6B0TO2z9DvT0ecwwyS0Iv1NTVGc
+ RtNC0IFZaxvIOO1L6Pl/VFZkuDL2dhqJz3RpIoDYYQpynHGrlDPupXQLW30n6hSINQHq
+ B0f7m2TjnbVmYJJ5oxM0mogjayF71CkTHJXazBlq07QjGFOnYM7+Awg9L+im2zGHOaxc
+ hgZqZdQlkTLyN4Yj577tFPmLLGEU3ODV4YaP5Q/K+sXNd6cOWYl7Arn28XdM+ecjjJxC zA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jashfa5q3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 19:50:51 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 281Jonhd001892
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Sep 2022 19:50:49 GMT
+Received: from [10.216.21.90] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 1 Sep 2022
+ 12:50:44 -0700
+Message-ID: <c00b9174-c4b4-1324-5e5a-121fe463ba14@quicinc.com>
+Date:   Fri, 2 Sep 2022 01:20:40 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [Freedreno] [PATCH v6 2/6] clk: qcom: Allow custom reset ops
+Content-Language: en-US
+To:     Philipp Zabel <p.zabel@pengutronix.de>
+CC:     Stephen Boyd <sboyd@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        <dri-devel@lists.freedesktop.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        <krzysztof.kozlowski@linaro.org>, Rob Clark <robdclark@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        freedreno <freedreno@lists.freedesktop.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1661923108-789-1-git-send-email-quic_akhilpo@quicinc.com>
+ <20220831104741.v6.2.I75baff799a363bbb960376539e3a0f737377c3f1@changeid>
+ <20220901101734.GA32271@pengutronix.de>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20220901101734.GA32271@pengutronix.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Yo4DIjGhol3YIwhVzINeDvANwqw8jInw
+X-Proofpoint-ORIG-GUID: Yo4DIjGhol3YIwhVzINeDvANwqw8jInw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
+ malwarescore=0 impostorscore=0 phishscore=0 clxscore=1015 mlxscore=0
+ bulkscore=0 mlxlogscore=999 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209010086
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jsarha/linux topic/cros-sof-v4.19
-head:   d7a3e91d8d16d1ef8653deec5a1fffc4de034a0c
-commit: dfdec43d0411076dc70591a0496a0824a8620695 [1155/6555] UPSTREAM: drm: extract drm_atomic_uapi.c
-config: riscv-randconfig-r042-20220901 (https://download.01.org/0day-ci/archive/20220902/202209020320.DEOLa6AV-lkp@intel.com/config)
-compiler: riscv64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/jsarha/linux/commit/dfdec43d0411076dc70591a0496a0824a8620695
-        git remote add jsarha https://github.com/jsarha/linux
-        git fetch --no-tags jsarha topic/cros-sof-v4.19
-        git checkout dfdec43d0411076dc70591a0496a0824a8620695
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash M=drivers/gpu/drm
+On 9/1/2022 3:47 PM, Philipp Zabel wrote:
+> Hi Akhil,
+>
+> On Wed, Aug 31, 2022 at 10:48:23AM +0530, Akhil P Oommen wrote:
+>> Allow soc specific clk drivers to specify a custom reset operation. We
+>> will use this in an upcoming patch to allow gpucc driver to specify a
+>> differet reset operation for cx_gdsc.
+>>
+>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>> ---
+>>
+>> (no changes since v3)
+>>
+>> Changes in v3:
+>> - Use pointer to const for "struct qcom_reset_ops" in qcom_reset_map (Krzysztof)
+>>
+>> Changes in v2:
+>> - Return error when a particular custom reset op is not implemented. (Dmitry)
+>>
+>>   drivers/clk/qcom/reset.c | 27 +++++++++++++++++++++++++++
+>>   drivers/clk/qcom/reset.h |  8 ++++++++
+>>   2 files changed, 35 insertions(+)
+>>
+>> diff --git a/drivers/clk/qcom/reset.c b/drivers/clk/qcom/reset.c
+>> index 819d194..b7ae4a3 100644
+>> --- a/drivers/clk/qcom/reset.c
+>> +++ b/drivers/clk/qcom/reset.c
+>> @@ -13,6 +13,21 @@
+>>   
+>>   static int qcom_reset(struct reset_controller_dev *rcdev, unsigned long id)
+>>   {
+>> +	struct qcom_reset_controller *rst;
+>> +	const struct qcom_reset_map *map;
+>> +
+>> +	rst = to_qcom_reset_controller(rcdev);
+>> +	map = &rst->reset_map[id];
+>> +
+>> +	if (map->ops && map->ops->reset)
+>> +		return map->ops->reset(map->priv);
+>> +	/*
+>> +	 * If custom ops is implemented but just not this callback, return
+>> +	 * error
+>> +	 */
+>> +	else if (map->ops)
+>> +		return -EOPNOTSUPP;
+>> +
+> It doesn't seem necessary to stack reset_ops -> qcom_reset_ops for what
+> you need here.
+> Just add an optional const struct reset_ops * to qcom_cc_desc and feed
+> that into qcom_cc_really_probe to replace &qcom_reset_ops.
+>
+> [...]
+>> +struct qcom_reset_ops {
+>> +	int (*reset)(void *priv);
+>> +	int (*assert)(void *priv);
+>> +	int (*deassert)(void *priv);
+> Why add assert and deassert ops? There doesn't seem to be any user.
+I had a more minimal implementation in v1. But this makes it more 
+complete and make it less prone to trip up ourselves in future.
+>
+>> +};
+>> +
+>>   struct qcom_reset_map {
+>>   	unsigned int reg;
+>>   	u8 bit;
+>> +	const struct qcom_reset_ops *ops;
+>> +	void *priv;
+> Adding per-reset ops + priv counters seems excessive to me.
+>
+> Are you expecting different reset controls in the same reset controller
+> to have completely different ops at some point? If so, I would wonder
+> whether it wouldn't be better to split the reset controller in that
+> case. Either way, for the GDSC collapse workaround this does not seem
+> to be required at all.
+Yes, like I responded in patch 4, we need different ops for the same 
+reset controller in some gpucc implementations.
+For eg: 
+https://elixir.bootlin.com/linux/v6.0-rc3/source/drivers/clk/qcom/gpucc-sdm660.c
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+-Akhil
+>
+> regards
+> Philipp
 
-All errors (new ones prefixed by >>):
-
-   drivers/gpu/drm/drm_atomic_uapi.c: In function 'complete_signaling':
-   drivers/gpu/drm/drm_atomic_uapi.c:1193:26: warning: variable 'crtc' set but not used [-Wunused-but-set-variable]
-    1193 |         struct drm_crtc *crtc;
-         |                          ^~~~
-   drivers/gpu/drm/drm_atomic_uapi.c: Assembler messages:
-   drivers/gpu/drm/drm_atomic_uapi.c:1230: Error: unrecognized opcode `csrs sstatus,s7'
-   drivers/gpu/drm/drm_atomic_uapi.c:1230: Error: unrecognized opcode `csrc sstatus,s7'
-   drivers/gpu/drm/drm_atomic_uapi.c:1052: Error: unrecognized opcode `csrs sstatus,a3'
-   drivers/gpu/drm/drm_atomic_uapi.c:1052: Error: unrecognized opcode `csrc sstatus,a3'
-   drivers/gpu/drm/drm_atomic_uapi.c:466: Error: unrecognized opcode `csrs sstatus,a3'
-   drivers/gpu/drm/drm_atomic_uapi.c:466: Error: unrecognized opcode `csrc sstatus,a3'
-   drivers/gpu/drm/drm_atomic_uapi.c:366: Error: unrecognized opcode `csrs sstatus,a3'
-   drivers/gpu/drm/drm_atomic_uapi.c:366: Error: unrecognized opcode `csrc sstatus,a3'
->> drivers/gpu/drm/drm_atomic_uapi.c:1297: Error: unrecognized opcode `csrs sstatus,s8'
->> drivers/gpu/drm/drm_atomic_uapi.c:1297: Error: unrecognized opcode `csrc sstatus,s8'
-   drivers/gpu/drm/drm_atomic_uapi.c:1314: Error: unrecognized opcode `csrs sstatus,s8'
-   drivers/gpu/drm/drm_atomic_uapi.c:1314: Error: unrecognized opcode `csrc sstatus,s8'
-   drivers/gpu/drm/drm_atomic_uapi.c:1327: Error: unrecognized opcode `csrs sstatus,s4'
-   drivers/gpu/drm/drm_atomic_uapi.c:1327: Error: unrecognized opcode `csrc sstatus,s4'
-
-
-vim +1297 drivers/gpu/drm/drm_atomic_uapi.c
-
-  1186	
-  1187	static void complete_signaling(struct drm_device *dev,
-  1188				       struct drm_atomic_state *state,
-  1189				       struct drm_out_fence_state *fence_state,
-  1190				       unsigned int num_fences,
-  1191				       bool install_fds)
-  1192	{
-  1193		struct drm_crtc *crtc;
-  1194		struct drm_crtc_state *crtc_state;
-  1195		int i;
-  1196	
-  1197		if (install_fds) {
-  1198			for (i = 0; i < num_fences; i++)
-  1199				fd_install(fence_state[i].fd,
-  1200					   fence_state[i].sync_file->file);
-  1201	
-  1202			kfree(fence_state);
-  1203			return;
-  1204		}
-  1205	
-  1206		for_each_new_crtc_in_state(state, crtc, crtc_state, i) {
-  1207			struct drm_pending_vblank_event *event = crtc_state->event;
-  1208			/*
-  1209			 * Free the allocated event. drm_atomic_helper_setup_commit
-  1210			 * can allocate an event too, so only free it if it's ours
-  1211			 * to prevent a double free in drm_atomic_state_clear.
-  1212			 */
-  1213			if (event && (event->base.fence || event->base.file_priv)) {
-  1214				drm_event_cancel_free(dev, &event->base);
-  1215				crtc_state->event = NULL;
-  1216			}
-  1217		}
-  1218	
-  1219		if (!fence_state)
-  1220			return;
-  1221	
-  1222		for (i = 0; i < num_fences; i++) {
-  1223			if (fence_state[i].sync_file)
-  1224				fput(fence_state[i].sync_file->file);
-  1225			if (fence_state[i].fd >= 0)
-  1226				put_unused_fd(fence_state[i].fd);
-  1227	
-  1228			/* If this fails log error to the user */
-  1229			if (fence_state[i].out_fence_ptr &&
-> 1230			    put_user(-1, fence_state[i].out_fence_ptr))
-  1231				DRM_DEBUG_ATOMIC("Couldn't clear out_fence_ptr\n");
-  1232		}
-  1233	
-  1234		kfree(fence_state);
-  1235	}
-  1236	
-  1237	int drm_mode_atomic_ioctl(struct drm_device *dev,
-  1238				  void *data, struct drm_file *file_priv)
-  1239	{
-  1240		struct drm_mode_atomic *arg = data;
-  1241		uint32_t __user *objs_ptr = (uint32_t __user *)(unsigned long)(arg->objs_ptr);
-  1242		uint32_t __user *count_props_ptr = (uint32_t __user *)(unsigned long)(arg->count_props_ptr);
-  1243		uint32_t __user *props_ptr = (uint32_t __user *)(unsigned long)(arg->props_ptr);
-  1244		uint64_t __user *prop_values_ptr = (uint64_t __user *)(unsigned long)(arg->prop_values_ptr);
-  1245		unsigned int copied_objs, copied_props;
-  1246		struct drm_atomic_state *state;
-  1247		struct drm_modeset_acquire_ctx ctx;
-  1248		struct drm_out_fence_state *fence_state;
-  1249		int ret = 0;
-  1250		unsigned int i, j, num_fences;
-  1251	
-  1252		/* disallow for drivers not supporting atomic: */
-  1253		if (!drm_core_check_feature(dev, DRIVER_ATOMIC))
-  1254			return -EINVAL;
-  1255	
-  1256		/* disallow for userspace that has not enabled atomic cap (even
-  1257		 * though this may be a bit overkill, since legacy userspace
-  1258		 * wouldn't know how to call this ioctl)
-  1259		 */
-  1260		if (!file_priv->atomic)
-  1261			return -EINVAL;
-  1262	
-  1263		if (arg->flags & ~DRM_MODE_ATOMIC_FLAGS)
-  1264			return -EINVAL;
-  1265	
-  1266		if (arg->reserved)
-  1267			return -EINVAL;
-  1268	
-  1269		if ((arg->flags & DRM_MODE_PAGE_FLIP_ASYNC) &&
-  1270				!dev->mode_config.async_page_flip)
-  1271			return -EINVAL;
-  1272	
-  1273		/* can't test and expect an event at the same time. */
-  1274		if ((arg->flags & DRM_MODE_ATOMIC_TEST_ONLY) &&
-  1275				(arg->flags & DRM_MODE_PAGE_FLIP_EVENT))
-  1276			return -EINVAL;
-  1277	
-  1278		drm_modeset_acquire_init(&ctx, DRM_MODESET_ACQUIRE_INTERRUPTIBLE);
-  1279	
-  1280		state = drm_atomic_state_alloc(dev);
-  1281		if (!state)
-  1282			return -ENOMEM;
-  1283	
-  1284		state->acquire_ctx = &ctx;
-  1285		state->allow_modeset = !!(arg->flags & DRM_MODE_ATOMIC_ALLOW_MODESET);
-  1286	
-  1287	retry:
-  1288		copied_objs = 0;
-  1289		copied_props = 0;
-  1290		fence_state = NULL;
-  1291		num_fences = 0;
-  1292	
-  1293		for (i = 0; i < arg->count_objs; i++) {
-  1294			uint32_t obj_id, count_props;
-  1295			struct drm_mode_object *obj;
-  1296	
-> 1297			if (get_user(obj_id, objs_ptr + copied_objs)) {
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

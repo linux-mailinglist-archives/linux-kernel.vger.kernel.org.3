@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C705A93CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:02:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 615E65A93D6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:02:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233545AbiIAKCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41092 "EHLO
+        id S233781AbiIAKCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233386AbiIAKCV (ORCPT
+        with ESMTP id S233588AbiIAKC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:02:21 -0400
+        Thu, 1 Sep 2022 06:02:27 -0400
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF1017071;
-        Thu,  1 Sep 2022 03:02:20 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA44F138588;
+        Thu,  1 Sep 2022 03:02:26 -0700 (PDT)
 Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
- (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MV6ct-1otOmR3avt-00YQm9;
- Thu, 01 Sep 2022 12:02:07 +0200
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M2bMR-1pLne83i0j-00sKCn;
+ Thu, 01 Sep 2022 12:02:10 +0200
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
@@ -31,31 +31,31 @@ Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/4] arm64: dts: verdin-imx8mm: introduce hdmi-connector
-Date:   Thu,  1 Sep 2022 12:01:50 +0200
-Message-Id: <20220901100151.1378709-4-marcel@ziswiler.com>
+Subject: [PATCH v1 4/4] arm64: dts: imx8mm-verdin: extend pmic voltages
+Date:   Thu,  1 Sep 2022 12:01:51 +0200
+Message-Id: <20220901100151.1378709-5-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220901100151.1378709-1-marcel@ziswiler.com>
 References: <20220901100151.1378709-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:LXOmTNdFKPJxuWZHGqYmHqJ1VtSMGz/vML/YNY05KiJW//e4MhF
- DeRx7Gvdt+tibbVuMiOuU3T4dIPcqxek/at5lRUgFRN0ZW6R0XqZPsNFEu1sYGqPLsNy7Ik
- XUEnoWfLDgeWpDFXrg8PatFpwq7HsmQCUQBbx8duAVbq3Rx/nLF6UAvV/u7jL5RQbNwbbGg
- 3cU4nPOCbcMUqBLyRioyg==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:qvCXlYxqcUs=:/v0MSBpll8TpqkOxtdyESx
- kgGxk4o7GtLCTR83v+r9K1SvS35Mw11ufdz/U/Ssq5T7fQ1DwUB46Uchl8Au5As+eihvKl+61
- X1nJOqreCec6YBdTmxTHv1LS5m6xkCRCbgDvJeRPfybjBk2cEm4K/xI9pmS+SvoG8Psq+IZzn
- Y5cEZICT2XvEU6roSKRnfzfGqs/ad1zzUPAQ6kHHYmmxaQbBgRZXz6ZHAoQW1+JoMxXNgsXbB
- jQAk7S/T467EKcguudi2oXxmsJpLZjYQsTAmrz1Uls9BUwyul2ji/hxDsSOvS3v8QIKKvlPpX
- 2Pkuk6jEdU+BzCciiKI9QPd0aL22FL565bnXt9AybLiBV/MNllN76PbcDekI7KDotgBSe2z1H
- in3bw2MN2Uc1ZWDcHfCvjSXUZLmbqHKVYc25XRfiPPFYX4i5agP9BtLjnXh/G7/yEUH+VYUYD
- JOHZQG72zl3kTRjeT9ycZatKPGc16rbho1x5VjoL+QOuzQU4jNU9/XqFq12R3YlA+34jFbqkt
- WLQ2NV9Z/MtvlPyjQTynBXhsS2p3XkxYOFd9IroQk04NR3TpeQ4q0gb1lyWRdhtTGbgT1UjGm
- 19JjuoshZjVA/5A4D43fRpzqUhnAhZ101FEIVPVbp3752s/oga/LN4sJsiuJlAAfaWeGOeiKi
- +Ru3kQfk6CuLonRFNzVnbJi+gE5E9njYRwYD3KemyUT7x03hoaZ+l0QbSRuVdmH6VnZNwYajq
- VzxlWfmrJb8LHRKMypFDviERCqE3qmi8QPYpjAFY3TNC+zkNkJGKjOyPvkc7VeG6p8DosZ/kX
- SBEzpmE
+X-Provags-ID: V03:K1:ck71v7fRyPLBiFThJtJididV1+76UsfTyHqUsC/9z2lYVhLX1Ps
+ naMbE+vSKyKWmYdh3BC/17/qzX2JbzmITGQX9EBQWOkrf2/MNTAt/EuTLt4pnDdK5uvZ5s6
+ Pj5gkFp7OroJfVSp8QuwwTAI/GScvh6xzDVvP5cDNUvf+9Rhmdq6a5wWWDBjVM2mANhpiMJ
+ qWqccT3TwpFZn2TWfmbtg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:VFyxj7Xo8xA=:6EPKEFePkeGBB6/DSPJ3e8
+ hNpXOMZh7Vcj0hO3QjJZTwmKBbpzh7UE0bBXyC/duR2IG9xameSAO67inzOSS5zea4YDyLfCM
+ 9zete9kgi6XOryLtEzsvwHMREQOtYI7nWMz503SMDaVPIOnEVk61lSVcmJi2ogIqJ8DhJvFBn
+ dEvGiMr4vtEEu82KKEAu95ncwgV+JMp3Wrx7gEgYqK31jDlvAvMR2aZUulXlBAZgGM8IHQvKm
+ foN8ftiiOhcvCL91SfEF5yru5MuA5Az//0Ja36+Uj90aQ8yem5LMSgdfuuKOr9T6HJyR+FjXQ
+ 6psVfj1aceLJ2zKqMAvp42DNKkVdtDOYZia+5mVIJfvteXRV8KJFaobWjgXD+FJzsVMInJUOS
+ 7+IyZMibBjzQSM7vPiF7TgOEpn0+tDsyJ/O1r0vQ5PYyOnxLbacTLb/Oq4MvimnAEVX+yeFi0
+ MBXSHH4FTvawRYoOi9qhEkb5EkJSNZHhNfSIuxjd1Gd/NHPsnwbFsPzFShcpQ7sxGozEhtjz6
+ 4nCqmx8VIl78ndlflFxWIgwZ3WCJn23mpesEHzm4ztoEXgdldMszv8TZ987VKFeRCG7FUfDqc
+ PQ7uNxJqwCMxOdOmZcZufFGzw6p2MOXSqIR1+62baFnS5dhAzp9qnHx9fsu7PZDfF0dyXJ4LV
+ //89vExYQLOO4jC1RsK/quJr8AadAEZPAlpuPOqrf+stc3wmkATvkyX+Sx7zvBYcZ4q1Dvaii
+ ZRuIybdeudqOaTinioZszismRLajDe0vAklKxGRwcsUBgQo1frOCa/thaKxIazUtD2ZiPUJCi
+ h2m3t8H
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -67,35 +67,75 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Philippe Schenker <philippe.schenker@toradex.com>
 
-The Lontium LT8912B driver needs a HDMI connector to be connected to
-port 1. Introduce this connector to be enabled in a device tree overlay.
+Currently, we limited the voltages from the PMIC very strictly. This
+causes an issue with one Toradex SKU that uses a consumer-grade chip
+that is capable of going up to 1.8GHz at 1.00V.
 
+Extend the ranges to min/max values of the SoC operating ranges (table
+10) in the datasheet. Detailed explanation as follows:
+
+BUCK2:
+  - As already described above, the SKU with the consumer-grade chip
+    needs a voltage of at least 1.00V. 1.05V is chosen now as this is
+    listed as the maximum. Both industrial and consumer-grade chips have
+    an absolute maximum rating of 1.15V which makes it still safe to put
+    1.05V
+  - Lower the regulator-min value to the smallest value allowed from the
+    Quad-A53, 1.2GHz version of the SoC
+
+BUCK3:
+  - This regulator is used for SoC input voltages VDD_GPU, VDD_VPU and
+    VDD_DRAM.
+  - Use the smallest value of these three inputs as the regulator-min
+  - Use the largest value of these three inputs as the regulator-max
+
+LDO2:
+  - This LDO is used for VDD_SNVS_0P8 SoC input voltage. As this has a
+    single nominal input voltage just put this in the middle of 0.8V.
+
+Fixes: commit 6a57f224f734 ("arm64: dts: freescale: add initial support for verdin imx8m mini")
 Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-index ca1c087e7c29..ef105c0745eb 100644
+index ef105c0745eb..2eb72a607139 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
-@@ -53,6 +53,14 @@ key-wakeup {
- 		};
- 	};
+@@ -382,8 +382,8 @@ reg_vdd_arm: BUCK2 {
+ 				nxp,dvs-standby-voltage = <850000>;
+ 				regulator-always-on;
+ 				regulator-boot-on;
+-				regulator-max-microvolt = <950000>;
+-				regulator-min-microvolt = <850000>;
++				regulator-max-microvolt = <1050000>;
++				regulator-min-microvolt = <805000>;
+ 				regulator-name = "On-module +VDD_ARM (BUCK2)";
+ 				regulator-ramp-delay = <3125>;
+ 			};
+@@ -391,8 +391,8 @@ reg_vdd_arm: BUCK2 {
+ 			reg_vdd_dram: BUCK3 {
+ 				regulator-always-on;
+ 				regulator-boot-on;
+-				regulator-max-microvolt = <950000>;
+-				regulator-min-microvolt = <850000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-min-microvolt = <805000>;
+ 				regulator-name = "On-module +VDD_GPU_VPU_DDR (BUCK3)";
+ 			};
  
-+	hdmi_connector: hdmi-connector {
-+		compatible = "hdmi-connector";
-+		ddc-i2c-bus = <&i2c2>;
-+		label = "hdmi";
-+		type = "a";
-+		status = "disabled";
-+	};
-+
- 	panel_lvds: panel-lvds {
- 		compatible = "panel-lvds";
- 		backlight = <&backlight>;
+@@ -431,7 +431,7 @@ reg_nvcc_snvs: LDO1 {
+ 			reg_vdd_snvs: LDO2 {
+ 				regulator-always-on;
+ 				regulator-boot-on;
+-				regulator-max-microvolt = <900000>;
++				regulator-max-microvolt = <800000>;
+ 				regulator-min-microvolt = <800000>;
+ 				regulator-name = "On-module +V0.8_SNVS (LDO2)";
+ 			};
 -- 
 2.36.1
 

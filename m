@@ -2,134 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56BBB5A906E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:37:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E4EF5A9074
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:37:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbiIAHhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:37:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S233208AbiIAHhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233837AbiIAHhH (ORCPT
+        with ESMTP id S233057AbiIAHhK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:37:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D59AF8FD6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:37:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662017823;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w/uTT8lnpogUVhwkYNDxdhGZzOyBXG3eWWImkgPiyoM=;
-        b=DgayC5dyfaeGXWgqcGu/YcLeWOxlSxKhLpPoQminM/M3pGbY73WxztkrhpaiegTmoZhNJ8
-        izs+WXb28e8YU80Odx6KsPd3FU1KYrTVx+iSPIcqidvGBQAiflWSAlmYLqzBNBPGWuxK7P
-        3MPhtjSRmJCu6jTPnEFblE1h4PJh5q8=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-339--v-pdaKdOjC7W9Saxlpu3A-1; Thu, 01 Sep 2022 03:37:02 -0400
-X-MC-Unique: -v-pdaKdOjC7W9Saxlpu3A-1
-Received: by mail-ed1-f69.google.com with SMTP id w17-20020a056402269100b0043da2189b71so10959947edd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:37:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=w/uTT8lnpogUVhwkYNDxdhGZzOyBXG3eWWImkgPiyoM=;
-        b=SsnVfE8nbCHSdqUQS63WVgJ9VFS/rs91OP14FG+h2lRAFVXUQYTrrrJsrSOV7NIoGI
-         Zfy9rVYdytIhyzitTopQJX48O+BmzyZwAybi5OGS3xGauDC22qPKV6yODrK4RAdmBuAM
-         KR5wXC6oFzn95yfngfVsIru3U02QY5hh5iaoGT4SZ9dKVxtkdYfc3DzAVCWqc3GJh5Ya
-         oZ7UYBMPJqRraljf31wR1kABtnT5zq+NutoB0Yp/51/0xWz6xiLZCUPHvNKs9RFqeJ0j
-         6boKaiuHvG/kv9S808SafGN0RVDxRjJQKCWNahrQ0jxMEFyj8bmcn9O96RY+e9+Sq6xJ
-         t+/A==
-X-Gm-Message-State: ACgBeo2fh7XPwotHxBzmg/o0LBi+FoqCLupTTDWZtEavfleogiDkxO46
-        srSWCyx/g+wAg841AKcXVMYK/ZnP2RfQzu6bLMqvebUHUyqAVw8nJtQvXgT4YhJwom7vQzTbyFy
-        p0hvG9ykZl6h/AjIJ4VsXnY1Y
-X-Received: by 2002:aa7:d90e:0:b0:447:986d:b71e with SMTP id a14-20020aa7d90e000000b00447986db71emr27210713edr.235.1662017821493;
-        Thu, 01 Sep 2022 00:37:01 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6JkW4ed1WqDsotybL6CAAiG40VbkLtzaIPBaAypGnjlWDX5j26Jhqen11PzZwUzZ8Rc1KOjQ==
-X-Received: by 2002:aa7:d90e:0:b0:447:986d:b71e with SMTP id a14-20020aa7d90e000000b00447986db71emr27210669edr.235.1662017821253;
-        Thu, 01 Sep 2022 00:37:01 -0700 (PDT)
-Received: from [192.168.0.198] (host-87-8-60-205.retail.telecomitalia.it. [87.8.60.205])
-        by smtp.gmail.com with ESMTPSA id u24-20020aa7d998000000b0043a61f6c389sm898086eds.4.2022.09.01.00.36.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 00:37:00 -0700 (PDT)
-Message-ID: <37a66a8d-859d-5a8b-e298-d0c32e2028e7@redhat.com>
-Date:   Thu, 1 Sep 2022 09:36:58 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+        Thu, 1 Sep 2022 03:37:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EC1109081;
+        Thu,  1 Sep 2022 00:37:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662017830; x=1693553830;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=E0tjURMAVeo957WRs0WKwNwl2PPLitzga8gvJwF55UY=;
+  b=fk/4JKuV+KGp1ilBGEL7TIpJeACQWPxNljbNpPP6VTUGKDH6lzfpCWJI
+   V0C15kbgqkAoS5azcSZbelknvqVQsGDNfqa9ZoN0yiZg8SkjvwVE9B19y
+   ho6vufehOyeibZZ6gkZ/TezhnGFw67HV1LyZOxpN9Pa6PRuMuNEwqh7YN
+   wWxdlpPd1CBxPjqBI2O4vbtIZzcnUWY3cKoSHT5tQcVR5xzHP+pJ2Y8Z5
+   16FfZq+sPHmzl3j8fOegJMgEstmnfz+dxk4fvGBU2qGsaKHUogHE0hzAw
+   grRZBkuoa8Iv6kUDjOQXSqP7cA6NufML3R/hyxZ0ES2DSjOlst/NpRoQ9
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="278660945"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="278660945"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 00:37:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="857736439"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga006.fm.intel.com with ESMTP; 01 Sep 2022 00:37:08 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 1 Sep 2022 00:37:08 -0700
+Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 1 Sep 2022 00:37:07 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Thu, 1 Sep 2022 00:37:07 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Thu, 1 Sep 2022 00:37:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=G5j+gGloIt26NQDRyZfrDNP6h5aGNqeiVeOU1I2qfOOE0w/L+QjpOtrebARe3BIWPSMUgcHyzw1L1xd0tRiQaN96h1hAaKEmLuZ7y+P0H9O1NnTBzSxz9qxtor4xOzElkEJLygZps1HOh9/kvkVd/e+M4emkpyPVqCdXeMbsYZC8rpJMt1ldTnGRO2EA1nPKd/wMVMhcZy1S9uyWr4h19pI9rEVaOYH6syJPhfeP95M39v34tcIrgb3RB/SOqBz7c3pGUAQdcpPrKQYmff02MmecRYfll7yEQH41TYtsI6Ppfmkyx93sA9ZUML3+Ln42kqEYFd29FPohbJBlqY1i9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=E0tjURMAVeo957WRs0WKwNwl2PPLitzga8gvJwF55UY=;
+ b=k74RRWt4Blal0gwr2e0betc4agQw6Xao9BHk0rNQbj9VGoN3EECBSuaQMVS5Mfg1gi0+YW/2RnJ35Ts7yTw2jWglT+u7ceUyAekC2JjFK5e/S9OvpTJQU+GykO0Az3N9CvwAORL7xE2F5NVA01AefF3RpJKW1HQLBndKHK2Xayn/rdwAoEsveM7Vln/X10cvntEFkOlQfMOOpyqtPgnbNxZTYdXEW+DBxm+s9cmM9RwfIH9YEq2Ah0fYkDS8U3zilRTDqQSVKP7ra/F8t5SnzAxrzvHPQzq+GsNt+0ZmaVXAAt89o0tFMArPsO7C0olOl6WRXcTW2ZqE9E+a3uJ8zQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BN6PR11MB1428.namprd11.prod.outlook.com (2603:10b6:405:a::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
+ 2022 07:37:06 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::a435:3eff:aa83:73d7]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::a435:3eff:aa83:73d7%5]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
+ 07:37:06 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        "Peter Oberparleiter" <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        "Alex Williamson" <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        "Kirti Wankhede" <kwankhede@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        "Abhishek Sahu" <abhsahu@nvidia.com>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+CC:     "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: RE: [PATCH v2 12/15] vfio/amba: Use the new device life cycle helpers
+Thread-Topic: [PATCH v2 12/15] vfio/amba: Use the new device life cycle
+ helpers
+Thread-Index: AQHYvdM1bc3iXCaPfUypseokfXt+uq3KL2kA
+Date:   Thu, 1 Sep 2022 07:37:05 +0000
+Message-ID: <BN9PR11MB52760EBD9E07701E1C5D651D8C7B9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220901143747.32858-1-kevin.tian@intel.com>
+ <20220901143747.32858-13-kevin.tian@intel.com>
+In-Reply-To: <20220901143747.32858-13-kevin.tian@intel.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Mel Gorman <mgorman@suse.de>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, dvyukov@google.com, shakeelb@google.com,
-        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de>
- <20220831155941.q5umplytbx6offku@moria.home.lan>
- <YxBZv1pZ6N2vwcP3@hirez.programming.kicks-ass.net>
-From:   Daniel Bristot de Oliveira <bristot@redhat.com>
-In-Reply-To: <YxBZv1pZ6N2vwcP3@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 63b2371a-9553-4af5-ffd5-08da8becc4e9
+x-ms-traffictypediagnostic: BN6PR11MB1428:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ymBu+g1eutbSWViypK9xrL0zxsPdlOKgvQW7l7bwPJRHUFjhc6dRbXaTCVLXRqJxCpRKOvdEPauVnHXthJMD+Jk8aPol8Xxt2g6HPbti05VKlt3j7TiH25diFQuZa1sLlFObSGMNMCOXCtSMkZJjGgbiuPEckbes4JrUUup4adUqVYg8aE2ibDhBriwHMPI1n5wMi2WiVO15ndylabMogdUGUtViFM87YaJZOty0E0/UT8KpgbrdivIdgLP/XhLct4JWu55sohatJk56CPf+aWKX+IHfTx2VktHYo7g16vODS4l0CAJP8FE9qYfV5tTDyqHNleOQxANFbqZr1S0+ul8B6n4f00ph0MgvlXz8UCeHK1B0fXpJXRg7GTw2F7mSS8urf0UqQtn71KS0nCzjvq/NZnbrqSrt3FUic2n3oV+98AL1xqJaQXu28FN3KqXRD39NwCEizdozA71bcUkr7XhKlxsR9kralDMpjiyeVPqX+xqc5uUbrPvUR0Rp0DFNPOHb+2xZcxokeGgsRINZ/0zQbofXhKZp9cypmieAT9C0IeZxzIQr/iRrFv/P55qktHzKR2JDcMk5fpULkNFurLsxNwlyOJdtdeosDGN/d3eT378lOH9K8H6HfFSkO022g0TfUB+NnxWDQq+NxhKwq4aqGtJpWy2CBaDWXnyuyIK02k87TuIvTM3RDU0zNmaDhPIuRipXYX8aZDet/SwMhK9zuxxu5dGPS9vMoQZbQZCoHR75wNOpoVAjmXVJPea3Oht1bZ4rmiAFN5G+O5ORnIhc1MoXQlhnOZjeICHN2gg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39860400002)(396003)(136003)(346002)(366004)(558084003)(6506007)(7696005)(55016003)(110136005)(316002)(4326008)(8676002)(64756008)(66476007)(76116006)(66946007)(66556008)(38070700005)(52536014)(8936002)(66446008)(33656002)(921005)(478600001)(38100700002)(71200400001)(7416002)(7406005)(122000001)(82960400001)(86362001)(9686003)(2906002)(5660300002)(41300700001)(26005)(186003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Be7RFIdTO0SP6shqnlo47Wxy96SjStKV4AM/jcbVDgAecTT37m8ySty9G5OE?=
+ =?us-ascii?Q?zXOb0FvMlSc33ozlHYnz5UTN7ifi+skE7dONerYlydfrCVaTuzlNgQ3HS/lB?=
+ =?us-ascii?Q?cw+lF3NBuQn1bCx8x4yO2eAP1YUWhu55zaN/yo9GXUs4dKLWN1I70VBmAVi1?=
+ =?us-ascii?Q?idrRZkQNyO+tLbLlYkgSK1Gi3YN6WudE9EwdV+trR2Tyh/hpEPhhhPxQlHPT?=
+ =?us-ascii?Q?/+e4ABEtU/JmWDildjwiH4ar4C/dx8aWyka7vkZBBQzw0Bxj+jycCnmAxOYh?=
+ =?us-ascii?Q?wCQ5+H9CZ7qZXSBxdC539gmdsy4v6sE86njJOeB6YLn4t0Xk3Q+Kvw69tdf2?=
+ =?us-ascii?Q?J8Q8z2VMzEa5rWWneC/Em2VNXZ0FwkzP3xuQ0cclBmAceGdSgpMMLSO6MVeZ?=
+ =?us-ascii?Q?vi/HiuGZhMk5Wuc2aYbvI1Sw8Ucdlg+AM186scUUlm/G7e7H5akWPdD3Osz1?=
+ =?us-ascii?Q?Ktew3eGvlegH0LNW+dD95egECi0aS3/uInkn/D4gpCABVOJ0zsOqAe27Py49?=
+ =?us-ascii?Q?vomEbXQZ0XBtJLZovr+T/qUDZr4gxyGRgmELudFtKbPGalblWwBTuGhw2efL?=
+ =?us-ascii?Q?HL2ar3GYw8BIi8KWXVOpSzkRKBzFSFBiG0svBsJEC1ckmO88ZaDvxD5r56uc?=
+ =?us-ascii?Q?v0ajmas2492m1Twdmq+DQ1y7Z8QjmPHlQdkfO3Q3XzQrxnk6O/A+UdvRPPKJ?=
+ =?us-ascii?Q?y5krKg/UJquBCuQF5m2obONqERZPvJPoiSRBnVegsQ0cfdX37LRhE/+1Vyg+?=
+ =?us-ascii?Q?Bf6Kimn5Esw/O3snVuNEzWH7GnU8u44TAM3RZkEIPtqTtTEUWlE0/xOpPABC?=
+ =?us-ascii?Q?UyYCluVWP31QlBUUC5CIuDXp224DbtDb71MTSQmV+kB+VPvQ5mEYF96uFvF/?=
+ =?us-ascii?Q?GcFnxR63ct1u/8tCii+bCcLUdeGvKe2IZ1cdDpMnD+jTgLwUrqnDv0dkKXMa?=
+ =?us-ascii?Q?G1qyA8cDH/a/Sob10OsFuTLJJwRb29vM9rj30Wi9xKcaFobi4QnDeUXNQfxd?=
+ =?us-ascii?Q?3gdQpxJRxE4yz3X7C20Lzty6bn0qfHGshzW8M3MzPpQr35qTtaTFRN9lPSO1?=
+ =?us-ascii?Q?jFEn423CmXKtWj9JkI0Ru1NwSFVSfcG1kgEEBLhUaj82jfxsNS3qPt5AaOKO?=
+ =?us-ascii?Q?q5Wd0xzwpwK/TLyTPwkkrd2b3oik2tU3EsXJDDvwjDgt3P642CZFuBH6+Qyc?=
+ =?us-ascii?Q?++nUFjMZPLzlofUs+CCuiz49IPX+slHTUArlhj+HLps8uMTk3eZqoQiLMcGl?=
+ =?us-ascii?Q?j415ERtq3kFKgIIbszyZePzhft+LTId5PqVVqHZudeEBs3rg0WhT3ELfO2Lq?=
+ =?us-ascii?Q?/LcM/EeR5HMo1t5oyGFe9NhRIms+p0ksvJxy8hqxt5ENq1G3UyyvP3sNMb8n?=
+ =?us-ascii?Q?8iwma1smFMRBG4aFSLQL6aHZeNLIyFRFD/G7PiV1ZwUtviDUupOCT+8Yy7Bn?=
+ =?us-ascii?Q?pvD6195eZZ+4TufgDYOkijESEZPrYgFZCO9hnj7NYDa2tJRCq69LH5ZhLLci?=
+ =?us-ascii?Q?Dw3IhMFYWtNB7AfvAs0iYFC7ZtHwuXP5klYwdvF6sthIQZUGj3uPmaKYXS94?=
+ =?us-ascii?Q?jVtH4KDBrsOQGZuSFNk98l68skTvFBKuChyo8GyX?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63b2371a-9553-4af5-ffd5-08da8becc4e9
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2022 07:37:05.8245
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: zDo1E8A3rFj8efaTFcC55Lw1jW2142olW9b6nrhfFwD6eFdBT07SkHu3H4ksKXnTQ9Q8tqFe63Rn3+pP1DcWyQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1428
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/1/22 09:05, Peter Zijlstra wrote:
->> Also, ftrace can drop events. Not really ideal if under system load your memory
->> accounting numbers start to drift.
-> You could attach custom handlers to tracepoints. If you were to replace
-> these unconditional code hooks of yours with tracepoints then you could
-> conditionally (say at boot) register custom handlers that do the
-> accounting you want.
+> From: Tian, Kevin <kevin.tian@intel.com>
+> Sent: Thursday, September 1, 2022 10:38 PM
+>=20
+> +static const struct vfio_device_ops vfio_amba_ops=3D {
 
-That is strategy in RV (kernel/trace/rv/). It is in C, but I am also
-adding support for monitors in bpf. The osnoise/timerlat tracers work this
-way too, and they are enabled on Fedora/Red Hat/SUSE... production. They
-will also be enabled in Ubuntu and Debian (the interwebs say).
-
-The overhead of attaching code to tracepoints (or any "attachable thing") and
-processing data in kernel is often lower than consuming it in user-space.
-Obviously, when it is possible, e.g., when you respect locking rules, etc.
-
-This paper (the basis for RV) shows a little comparison:
-https://bristot.me/wp-content/uploads/2019/09/paper.pdf
-
-By doing so, we also avoid problems of losing events... and you can also
-generate other events from your attached code.
-
-(It is also way easier to convince a maintainer to add a tracepoints or a trace
-events than to add arbitrary code... ;-)
-
--- Daniel
-
+Above missed a space after vfio_amba_ops.

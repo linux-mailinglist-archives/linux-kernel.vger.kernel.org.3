@@ -2,107 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E0A05AA39D
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 01:18:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDEB85AA39F
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 01:18:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235045AbiIAXSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 19:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42844 "EHLO
+        id S233250AbiIAXS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 19:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235076AbiIAXRr (ORCPT
+        with ESMTP id S234804AbiIAXSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 19:17:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66304A1D2F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:17:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662074249;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Up7P4fQPv3QO96X8W5CWpvLvhg+1IhrQIUpviyNAatM=;
-        b=KqOTvoR4V3OgcCQipF1wf7q84V+Lg06EJ2UMHbNvZNelUjqrT8zUERB9UpfXplPZTkXHKN
-        gwdgJBB8VObiR+9bk21W1jCtCPhm2y/CR/9mhUf7pgmWEOIQN842qd3Z/pWqreFtpOA98t
-        2fIXhAA0A1X0SUcv2GM1jSQNHlk1cWE=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-503-XmFb60JeN4y2p7YbEWngYA-1; Thu, 01 Sep 2022 19:17:27 -0400
-X-MC-Unique: XmFb60JeN4y2p7YbEWngYA-1
-Received: by mail-ej1-f72.google.com with SMTP id xh12-20020a170906da8c00b007413144e87fso106474ejb.14
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 16:17:27 -0700 (PDT)
+        Thu, 1 Sep 2022 19:18:00 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D04EA3D1B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:17:46 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id j204so933366ybj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 16:17:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=LLe4P0CDKZNu2y/iLQFOmqm2xVCa1+xC0+/2UAKABJs=;
+        b=E800dH7PG7qGduh6oSah7WQAwmrsM+wQmDZjjqdBAR60RvrxBZHO23f04n2iXHj6B6
+         JP4sBRMEb5m0iPCXbYazGmBCzu7qChwl/ipzAmIhLadRiKX3Y0zySsPNlYd0h+LcoxL8
+         5FNxATVqNyLa1BoYf6Cxlq+XP5qZplVJPHSMPHn1kfsbAjFzQxAMb9VoJYRqdqVYgEwr
+         U+TKjEqBLNEszFZU9PUc/x9OXZ/4B2ib6Q/EZSxGRaxVsTNJo0XeGgkfBjLjXtDUFglC
+         Q2eTqe1FllFFqOAiwsRUf4TETNOa1mHZ6WH7dmCthCaB5IO6/fwVnji8K+vdyqp3MbuZ
+         tFcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=Up7P4fQPv3QO96X8W5CWpvLvhg+1IhrQIUpviyNAatM=;
-        b=yzudIKMDGEKDayX0+kk23T4bqkxEYzgXOZlM5hkzZ1AVaq+S8y9Gv4axeWGnCkCNee
-         JsvhObbv6CxuQv3g5b8Td7APDZx9uHN0CQx9HwWdfWLrfzJIdPOm8UMW4wP7BH+JmqJg
-         kXp8llo4K4b6tRn/Pi3G/fIWkk4avq+cV+GjqPHVm9INs4sYrwszVe2b4HZ4M0063Yed
-         tAT5+vHklt1ZVX51r1vez42ud/nM92bdVzhhmtIP2Umq0qC5dDnQBRKoqTTuVpuQ3/qD
-         kLv/lW2JDxHUyDJoxzG+vwsaQqDr0NzM/b0L5UQ5IwDC+AhXDsvtNWuzek+o6/MMmcdE
-         0zmg==
-X-Gm-Message-State: ACgBeo05keNJxi9c351J27HBllAgjsx1DgauZMOeqsowBUfsgxgpGqUs
-        hmfxBfeWmUbxFe2/wL44bCN//Cn2UDFqRtfYO01nOqPB/ALI6+pn0dbhHEORrrNU+0cYpzS3pvE
-        Ou8YLtdwCcqiJV5znRNUmpxP+
-X-Received: by 2002:a17:907:6d16:b0:731:17b5:699 with SMTP id sa22-20020a1709076d1600b0073117b50699mr27462594ejc.23.1662074246837;
-        Thu, 01 Sep 2022 16:17:26 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6y4K1beuBiz4jt6PFGYmDzMiS8qZdf7rIE6G6RXdSmbOqLz+3jUKKZmGZUaP7ftlVLFR0z2A==
-X-Received: by 2002:a17:907:6d16:b0:731:17b5:699 with SMTP id sa22-20020a1709076d1600b0073117b50699mr27462584ejc.23.1662074246676;
-        Thu, 01 Sep 2022 16:17:26 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id h6-20020a170906828600b0073d6234ceebsm286510ejx.160.2022.09.01.16.17.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 16:17:26 -0700 (PDT)
-Message-ID: <5f15a3a0-446f-59a4-6bef-8be0e5630f5b@redhat.com>
-Date:   Fri, 2 Sep 2022 01:17:21 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=LLe4P0CDKZNu2y/iLQFOmqm2xVCa1+xC0+/2UAKABJs=;
+        b=1O5wEOrmQHvgjAB5S724WzhRUU7W9sNLuFubbBP/acKn+to1xZE2TXkVpBxtWrWLnp
+         EG0GKwURFB/Lg0bVF5gfG5S8dg1yRnY/10L5/8HDOvrLHTNqvwy+FmZV8rsYIA4wx4Ua
+         nunl8zArXU1t34pwgD4UseineVn3OCzAoc+azEGr/AW36gCqIs7h3b8dl0OpGwMeMK/a
+         7TmJTwJj8WarM8B9N04lHYS57ab7JMX9h/O3vU4dvAZVfSCgzD2zRQEOB/jsHwn9aEug
+         fLUZjFT35q7cd5Q6gMHUDzCTdwWQU2/74nR3yareT6PjSY7z8/PmyxCBTlZ4IBCcbI5a
+         vb3A==
+X-Gm-Message-State: ACgBeo1RS8zJ1P619XntaNZF4cpndHgvmetTS1U6DZAoxpaM6lAe5AL3
+        qlXht9Duqva+uFDUpyPTHsDNKG4+xb3QR61dh75iFg==
+X-Google-Smtp-Source: AA6agR6jFuUOVZTVV0+XfDd0He4Hrb9XV2PsfvVugkFPyYicaO90qEw/qesq5yP63n03v6KmDubjqCQiaNOXXMGy9zw=
+X-Received: by 2002:a05:6902:705:b0:695:b3b9:41bc with SMTP id
+ k5-20020a056902070500b00695b3b941bcmr21131741ybt.426.1662074264903; Thu, 01
+ Sep 2022 16:17:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] KVM: fix memoryleak in kvm_init()
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Miaohe Lin <linmiaohe@huawei.com>
-Cc:     vkuznets@redhat.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220823063414.59778-1-linmiaohe@huawei.com>
- <Yw6C+tBZrbP5IX+e@google.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <Yw6C+tBZrbP5IX+e@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-24-surenb@google.com>
+ <20220901202052.xfaeuhmosheml2gz@moria.home.lan>
+In-Reply-To: <20220901202052.xfaeuhmosheml2gz@moria.home.lan>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 1 Sep 2022 16:17:33 -0700
+Message-ID: <CAJuCfpEJxxm17fFJ1YVkOTBJbP5ce9ey90q_mCk_pkyTdHkrUg@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND 23/28] x86/mm: define ARCH_SUPPORTS_PER_VMA_LOCK
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michel Lespinasse <michel@lespinasse.org>,
+        Jerome Glisse <jglisse@google.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Mel Gorman <mgorman@suse.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Laurent Dufour <laurent.dufour@fr.ibm.com>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Song Liu <songliubraving@fb.com>, Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>, dhowells@redhat.com,
+        Hugh Dickins <hughd@google.com>, bigeasy@linutronix.de,
+        David Rientjes <rientjes@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Joel Fernandes <joelaf@google.com>,
+        Minchan Kim <minchan@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/30/22 23:36, Sean Christopherson wrote:
-> On Tue, Aug 23, 2022, Miaohe Lin wrote:
->> When alloc_cpumask_var_node() fails for a certain cpu, there might be some
->> allocated cpumasks for percpu cpu_kick_mask. We should free these cpumasks
->> or memoryleak will occur.
->>
->> Fixes: baff59ccdc65 ("KVM: Pre-allocate cpumasks for kvm_make_all_cpus_request_except()")
->> Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
->> ---
-> 
-> Pushed to branch `for_paolo/6.1` at:
-> 
->      https://github.com/sean-jc/linux.git
-> 
-> Unless you hear otherwise, it will make its way to kvm/queue "soon".
-> 
-> Note, the commit IDs are not guaranteed to be stable.
+On Thu, Sep 1, 2022 at 1:21 PM Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+>
+> On Thu, Sep 01, 2022 at 10:35:11AM -0700, Suren Baghdasaryan wrote:
+> > Set ARCH_SUPPORTS_PER_VMA_LOCK so that the per-VMA lock support can be
+> > compiled on this architecture.
+> >
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  arch/x86/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index f9920f1341c8..ee19de020b27 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -27,6 +27,7 @@ config X86_64
+> >       # Options that are inherently 64-bit kernel only:
+> >       select ARCH_HAS_GIGANTIC_PAGE
+> >       select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
+> > +     select ARCH_SUPPORTS_PER_VMA_LOCK
+> >       select ARCH_USE_CMPXCHG_LOCKREF
+> >       select HAVE_ARCH_SOFT_DIRTY
+> >       select MODULES_USE_ELF_RELA
+>
+> I think you could combine this with the previous path (and similarly on other
+> architectures) - they logically go together.
 
-Hmm, I was going to merge these memory leak fixes for 6.0, but no big 
-deal since they're mostly theoretical anyway.
-
-Paolo
-
+Thanks for the feedback! I see no downside to that, so unless there
+are objections I will combine them in the next version.

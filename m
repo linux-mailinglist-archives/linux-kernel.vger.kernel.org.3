@@ -2,295 +2,358 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E595A8EEE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:58:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10775A8EE6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233312AbiIAG60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:58:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
+        id S233188AbiIAG56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233038AbiIAG6V (ORCPT
+        with ESMTP id S229706AbiIAG5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:58:21 -0400
-Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC7AD11E5;
-        Wed, 31 Aug 2022 23:58:18 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.18.147.227])
-        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MJBZ93wPyz9v7Hg;
-        Thu,  1 Sep 2022 14:52:49 +0800 (CST)
-Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
-        by APP2 (Coremail) with SMTP id GxC2BwA3s13fVxBjZcATAA--.7637S2;
-        Thu, 01 Sep 2022 07:57:48 +0100 (CET)
-Message-ID: <2b2242f8d09378fbec49d4f7e29960d5e50d0a68.camel@huaweicloud.com>
-Subject: Re: [PATCH v15 12/12] selftests/bpf: Add tests for dynamic pointers
- parameters in kfuncs
-From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
-To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org
-Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        deso@posteo.net, memxor@gmail.com,
-        Roberto Sassu <roberto.sassu@huawei.com>
-Date:   Thu, 01 Sep 2022 08:57:30 +0200
-In-Reply-To: <20220831165445.1071641-13-roberto.sassu@huaweicloud.com>
-References: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
-         <20220831165445.1071641-13-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Thu, 1 Sep 2022 02:57:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD13120F8F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:57:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662015471;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WGBsp8/YfADsG+07MiqOBFMVvtF7ThPtdD2L04nbutQ=;
+        b=U5obhlaKHwwSs+tBbUABighj/UtYPRRLghJ4b3/U9XOLMx29pZnB+Uavnzux4LdMIFPQHK
+        6u1hSUi5wSmPZRsXl09+/R5tVNyOuKhFDMvzdCYUGw/gVBQtcsBR+Nnlq07ncjYHCsDVNu
+        hu7o5Gl5C4XI4D8O7qCduWrbV8gZiek=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-76-U8DWIaq7PO2OkgfPv9mfGA-1; Thu, 01 Sep 2022 02:57:49 -0400
+X-MC-Unique: U8DWIaq7PO2OkgfPv9mfGA-1
+Received: by mail-wr1-f72.google.com with SMTP id h16-20020adfaa90000000b00226e36cc014so1445723wrc.8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:57:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=WGBsp8/YfADsG+07MiqOBFMVvtF7ThPtdD2L04nbutQ=;
+        b=lgaa9bBsugahRGz3I/IyRXFMpQ+7w2eJTq7WochTNpSR5sjSOsF3VzsEEkyBbsNnXT
+         YpOdXnAfVCpAz50Dcsgexn3ODNmgtT3yioqkC27/jSSl+4c/a8lFEL52BBUVqOHw1sed
+         NXbI7SL3GE5OFAlpEIgmZm3cEt4XsOsK1cF9yw10BOOgJyT4p5ZrRj3Kjtjg7JGCiR7D
+         Hcnq3hVPyrfvxdB3rWERxixw5OPQiJTdEvTheaJga3M+K6LuOQE8AZGS5SVoPrJsUyp6
+         92Bc3DW8TQZIxIICj2Scvt3fwZoxnB05EQyxpHMYNqvrD1Hmg+BJjeOZ0ZUTZSJrINPo
+         sZLA==
+X-Gm-Message-State: ACgBeo3garZf2ACMIVmUUgqM87npgW91EzIJJuVUbhnF0VvISyvMYjDj
+        azudKwbxN1GO/heHOD5DE2dzFyJA6Py0uxoWfxaEbEjct68HAOBdSQdgh7rMJMApz7mycbgYd8x
+        yCE71TAqhU0t4ChIRFcAjyGDZ
+X-Received: by 2002:a05:6000:1563:b0:222:c827:1a19 with SMTP id 3-20020a056000156300b00222c8271a19mr13328997wrz.705.1662015468678;
+        Wed, 31 Aug 2022 23:57:48 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5mJHY5ht5hskPoGrlBOujfn7oZJGESLD9rrJV6B+HJOGJDhQH/AR12e1myIPVQZaDeiRqDyw==
+X-Received: by 2002:a05:6000:1563:b0:222:c827:1a19 with SMTP id 3-20020a056000156300b00222c8271a19mr13328976wrz.705.1662015468281;
+        Wed, 31 Aug 2022 23:57:48 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:9e00:fec0:7e96:15cb:742? (p200300cbc7079e00fec07e9615cb0742.dip0.t-ipconnect.de. [2003:cb:c707:9e00:fec0:7e96:15cb:742])
+        by smtp.gmail.com with ESMTPSA id i19-20020a05600c355300b003a6125562e1sm4787902wmq.46.2022.08.31.23.57.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 31 Aug 2022 23:57:47 -0700 (PDT)
+Message-ID: <a4275591-46bc-009b-c67d-8a474a57d2d6@redhat.com>
+Date:   Thu, 1 Sep 2022 08:57:46 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: GxC2BwA3s13fVxBjZcATAA--.7637S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3AF4kCF18Zr4UJrWUKr1kAFb_yoWxGF13pa
-        yrGFy29rWIq3W7Wr13XF4IvF4fKr48Zr1akrZFq34xAr1DXryxWF48Kr45Jwn5K395Xw45
-        Zw1Sgr4rCr4Uta7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgACBF1jj3589gAEsF
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Muchun Song <muchun.song@linux.dev>
+Cc:     Muchun Song <songmuchun@bytedance.com>,
+        Greg KH <gregkh@linuxfoundation.org>, rafael@kernel.org,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Oscar Salvador <osalvador@suse.de>, andi@firstfloor.org,
+        linux-kernel@vger.kernel.org, Linux MM <linux-mm@kvack.org>,
+        David Rientjes <rientjes@google.com>
+References: <20220819080029.12241-1-songmuchun@bytedance.com>
+ <60933ffc-b850-976c-78a0-0ee6e0ea9ef0@redhat.com>
+ <685F3238-D727-4C1F-9BA4-36651ABCD91A@linux.dev>
+ <E4D5CD53-99A9-479E-AF4C-6653852D8A98@linux.dev>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH RESEND] mm: hugetlb: simplify per-node sysfs creation and
+ removal
+In-Reply-To: <E4D5CD53-99A9-479E-AF4C-6653852D8A98@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-31 at 18:54 +0200, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+On 01.09.22 08:35, Muchun Song wrote:
 > 
-> Add tests to ensure that only supported dynamic pointer types are
-> accepted,
-> that the passed argument is actually a dynamic pointer, and that the
-> passed
-> argument is a pointer to the stack.
-
-Sorry, forgot to add this test to the deny list of s390.
-
-I also rebased to the latest commit.
-
-Let me know if I should resend.
-
-Thanks
-
-Roberto
-
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  .../bpf/prog_tests/kfunc_dynptr_param.c       | 102
-> ++++++++++++++++++
->  .../bpf/progs/test_kfunc_dynptr_param.c       |  57 ++++++++++
->  2 files changed, 159 insertions(+)
->  create mode 100644
-> tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
->  create mode 100644
-> tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
 > 
-> diff --git
-> a/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
-> b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
-> new file mode 100644
-> index 000000000000..732897faf36b
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
-> @@ -0,0 +1,102 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 Facebook
-> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> + */
-> +
-> +#include <test_progs.h>
-> +#include "test_kfunc_dynptr_param.skel.h"
-> +
-> +static size_t log_buf_sz = 1048576; /* 1 MB */
-> +static char obj_log_buf[1048576];
-> +
-> +static struct {
-> +	const char *prog_name;
-> +	const char *expected_err_msg;
-> +} kfunc_dynptr_tests[] = {
-> +	{"dynptr_type_not_supp",
-> +	 "arg#0 pointer type STRUCT bpf_dynptr_kern points to
-> unsupported dynamic pointer type"},
-> +	{"not_valid_dynptr",
-> +	 "arg#0 pointer type STRUCT bpf_dynptr_kern must be valid and
-> initialized"},
-> +	{"not_ptr_to_stack", "arg#0 pointer type STRUCT bpf_dynptr_kern
-> not to stack"},
-> +};
-> +
-> +static bool kfunc_not_supported;
-> +
-> +static int libbpf_print_cb(enum libbpf_print_level level, const char
-> *fmt,
-> +			   va_list args)
-> +{
-> +	if (strcmp(fmt, "libbpf: extern (func ksym) '%s': not found in
-> kernel or module BTFs\n"))
-> +		return 0;
-> +
-> +	if (strcmp(va_arg(args, char *), "bpf_verify_pkcs7_signature"))
-> +		return 0;
-> +
-> +	kfunc_not_supported = true;
-> +	return 0;
-> +}
-> +
-> +static void verify_fail(const char *prog_name, const char
-> *expected_err_msg)
-> +{
-> +	struct test_kfunc_dynptr_param *skel;
-> +	LIBBPF_OPTS(bpf_object_open_opts, opts);
-> +	libbpf_print_fn_t old_print_cb;
-> +	struct bpf_program *prog;
-> +	int err;
-> +
-> +	opts.kernel_log_buf = obj_log_buf;
-> +	opts.kernel_log_size = log_buf_sz;
-> +	opts.kernel_log_level = 1;
-> +
-> +	skel = test_kfunc_dynptr_param__open_opts(&opts);
-> +	if (!ASSERT_OK_PTR(skel, "test_kfunc_dynptr_param__open_opts"))
-> +		goto cleanup;
-> +
-> +	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-> +	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
-> +		goto cleanup;
-> +
-> +	bpf_program__set_autoload(prog, true);
-> +
-> +	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
-> +
-> +	kfunc_not_supported = false;
-> +
-> +	old_print_cb = libbpf_set_print(libbpf_print_cb);
-> +	err = test_kfunc_dynptr_param__load(skel);
-> +	libbpf_set_print(old_print_cb);
-> +
-> +	if (err < 0 && kfunc_not_supported) {
-> +		fprintf(stderr,
-> +		  "%s:SKIP:bpf_verify_pkcs7_signature() kfunc not
-> supported\n",
-> +		  __func__);
-> +		test__skip();
-> +		goto cleanup;
-> +	}
-> +
-> +	if (!ASSERT_ERR(err, "unexpected load success"))
-> +		goto cleanup;
-> +
-> +	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg),
-> "expected_err_msg")) {
-> +		fprintf(stderr, "Expected err_msg: %s\n",
-> expected_err_msg);
-> +		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
-> +	}
-> +
-> +cleanup:
-> +	test_kfunc_dynptr_param__destroy(skel);
-> +}
-> +
-> +void test_kfunc_dynptr_param(void)
-> +{
-> +	int i;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(kfunc_dynptr_tests); i++) {
-> +		if
-> (!test__start_subtest(kfunc_dynptr_tests[i].prog_name))
-> +			continue;
-> +
-> +		verify_fail(kfunc_dynptr_tests[i].prog_name,
-> +			    kfunc_dynptr_tests[i].expected_err_msg);
-> +	}
-> +}
-> diff --git
-> a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> new file mode 100644
-> index 000000000000..2f09f91a1576
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
-> @@ -0,0 +1,57 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
-> + *
-> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> + */
-> +
-> +#include "vmlinux.h"
-> +#include <errno.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +struct bpf_dynptr {
-> +	__u64 :64;
-> +	__u64 :64;
-> +} __attribute__((aligned(8)));
-> +
-> +extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
-> +				      struct bpf_dynptr *sig_ptr,
-> +				      struct bpf_key *trusted_keyring)
-> __ksym;
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_RINGBUF);
-> +} ringbuf SEC(".maps");
-> +
-> +char _license[] SEC("license") = "GPL";
-> +
-> +SEC("?lsm.s/bpf")
-> +int BPF_PROG(dynptr_type_not_supp, int cmd, union bpf_attr *attr,
-> +	     unsigned int size)
-> +{
-> +	char write_data[64] = "hello there, world!!";
-> +	struct bpf_dynptr ptr;
-> +
-> +	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(write_data), 0,
-> &ptr);
-> +
-> +	return bpf_verify_pkcs7_signature(&ptr, &ptr, NULL);
-> +}
-> +
-> +SEC("?lsm.s/bpf")
-> +int BPF_PROG(not_valid_dynptr, int cmd, union bpf_attr *attr,
-> unsigned int size)
-> +{
-> +	unsigned long val;
-> +
-> +	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)&val,
-> +					  (struct bpf_dynptr *)&val,
-> NULL);
-> +}
-> +
-> +SEC("?lsm.s/bpf")
-> +int BPF_PROG(not_ptr_to_stack, int cmd, union bpf_attr *attr,
-> unsigned int size)
-> +{
-> +	unsigned long val;
-> +
-> +	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)val,
-> +					  (struct bpf_dynptr *)val,
-> NULL);
-> +}
+>> On Aug 24, 2022, at 11:23, Muchun Song <muchun.song@linux.dev> wrote:
+>>
+>>
+>>
+>>> On Aug 23, 2022, at 18:21, David Hildenbrand <david@redhat.com> wrote:
+>>>
+>>> On 19.08.22 10:00, Muchun Song wrote:
+>>>> The following commit offload per-node sysfs creation and removal to a kworker and
+>>>> did not say why it is needed.  And it also said "I don't know that this is
+>>>> absolutely required".  It seems like the author was not sure as well.  Since it
+>>>> only complicates the code, this patch will revert the changes to simplify the code.
+>>>>
+>>>> 39da08cb074c ("hugetlb: offload per node attribute registrations")
+>>>>
+>>>> We could use memory hotplug notifier to do per-node sysfs creation and removal
+>>>> instead of inserting those operations to node registration and unregistration.
+>>>> Then, it can reduce the code coupling between node.c and hugetlb.c.  Also, it can
+>>>> simplify the code.
+>>>>
+>>>> Signed-off-by: Muchun Song <songmuchun@bytedance.com>
+>>>
+>>>
+>>> [...]
+>>>
+>>>> @@ -683,7 +626,6 @@ static int register_node(struct node *node, int num)
+>>>> void unregister_node(struct node *node)
+>>>> {
+>>>> 	compaction_unregister_node(node);
+>>>> -	hugetlb_unregister_node(node);		/* no-op, if memoryless node */
+>>>> 	node_remove_accesses(node);
+>>>> 	node_remove_caches(node);
+>>>> 	device_unregister(&node->dev);
+>>>> @@ -905,74 +847,8 @@ void register_memory_blocks_under_node(int nid, unsigned long start_pfn,
+>>>> 			   (void *)&nid, func);
+>>>> 	return;
+>>>> }
+>>>
+>>> [...]
+>>>
+>>>> 	/*
+>>>> 	 * Create all node devices, which will properly link the node
+>>>> 	 * to applicable memory block devices and already created cpu devices.
+>>>> diff --git a/include/linux/node.h b/include/linux/node.h
+>>>> index 40d641a8bfb0..ea817b507f54 100644
+>>>> --- a/include/linux/node.h
+>>>> +++ b/include/linux/node.h
+>>>> @@ -2,15 +2,15 @@
+>>>> /*
+>>>> * include/linux/node.h - generic node definition
+>>>> *
+>>>> - * This is mainly for topological representation. We define the 
+>>>> - * basic 'struct node' here, which can be embedded in per-arch 
+>>>> + * This is mainly for topological representation. We define the
+>>>> + * basic 'struct node' here, which can be embedded in per-arch
+>>>> * definitions of processors.
+>>>> *
+>>>> * Basic handling of the devices is done in drivers/base/node.c
+>>>> - * and system devices are handled in drivers/base/sys.c. 
+>>>> + * and system devices are handled in drivers/base/sys.c.
+>>>> *
+>>>> * Nodes are exported via driverfs in the class/node/devices/
+>>>> - * directory. 
+>>>> + * directory.
+>>>
+>>> Unrelated changes.
+>>
+>> Yep, a minor cleanup BTW.
+>>
+>>>
+>>>> */
+>>>> #ifndef _LINUX_NODE_H_
+>>>> #define _LINUX_NODE_H_
+>>>> @@ -18,7 +18,6 @@
+>>>> #include <linux/device.h>
+>>>> #include <linux/cpumask.h>
+>>>> #include <linux/list.h>
+>>>> -#include <linux/workqueue.h>
+>>>>
+>>>> /**
+>>>> * struct node_hmem_attrs - heterogeneous memory performance attributes
+>>>> @@ -84,10 +83,6 @@ static inline void node_set_perf_attrs(unsigned int nid,
+>>>> struct node {
+>>>> 	struct device	dev;
+>>>> 	struct list_head access_list;
+>>>> -
+>>>> -#if defined(CONFIG_MEMORY_HOTPLUG) && defined(CONFIG_HUGETLBFS)
+>>>> -	struct work_struct	node_work;
+>>>> -#endif
+>>>> #ifdef CONFIG_HMEM_REPORTING
+>>>> 	struct list_head cache_attrs;
+>>>> 	struct device *cache_dev;
+>>>> @@ -96,7 +91,6 @@ struct node {
+>>>>
+>>>> struct memory_block;
+>>>> extern struct node *node_devices[];
+>>>> -typedef  void (*node_registration_func_t)(struct node *);
+>>>>
+>>>> #if defined(CONFIG_MEMORY_HOTPLUG) && defined(CONFIG_NUMA)
+>>>> void register_memory_blocks_under_node(int nid, unsigned long start_pfn,
+>>>> @@ -144,11 +138,6 @@ extern void unregister_memory_block_under_nodes(struct memory_block *mem_blk);
+>>>> extern int register_memory_node_under_compute_node(unsigned int mem_nid,
+>>>> 						   unsigned int cpu_nid,
+>>>> 						   unsigned access);
+>>>> -
+>>>> -#ifdef CONFIG_HUGETLBFS
+>>>> -extern void register_hugetlbfs_with_node(node_registration_func_t doregister,
+>>>> -					 node_registration_func_t unregister);
+>>>> -#endif
+>>>> #else
+>>>> static inline void node_dev_init(void)
+>>>> {
+>>>> @@ -176,11 +165,6 @@ static inline int unregister_cpu_under_node(unsigned int cpu, unsigned int nid)
+>>>> static inline void unregister_memory_block_under_nodes(struct memory_block *mem_blk)
+>>>> {
+>>>> }
+>>>> -
+>>>> -static inline void register_hugetlbfs_with_node(node_registration_func_t reg,
+>>>> -						node_registration_func_t unreg)
+>>>> -{
+>>>> -}
+>>>> #endif
+>>>>
+>>>> #define to_node(device) container_of(device, struct node, dev)
+>>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>>> index 536a52c29035..9a72499486c1 100644
+>>>> --- a/mm/hugetlb.c
+>>>> +++ b/mm/hugetlb.c
+>>>> @@ -33,6 +33,7 @@
+>>>> #include <linux/migrate.h>
+>>>> #include <linux/nospec.h>
+>>>> #include <linux/delayacct.h>
+>>>> +#include <linux/memory.h>
+>>>>
+>>>> #include <asm/page.h>
+>>>> #include <asm/pgalloc.h>
+>>>> @@ -3967,19 +3968,19 @@ static void hugetlb_unregister_node(struct node *node)
+>>>> * Register hstate attributes for a single node device.
+>>>> * No-op if attributes already registered.
+>>>> */
+>>>> -static void hugetlb_register_node(struct node *node)
+>>>> +static int hugetlb_register_node(struct node *node)
+>>>> {
+>>>> 	struct hstate *h;
+>>>> 	struct node_hstate *nhs = &node_hstates[node->dev.id];
+>>>> 	int err;
+>>>>
+>>>> 	if (nhs->hugepages_kobj)
+>>>> -		return;		/* already allocated */
+>>>> +		return 0;		/* already allocated */
+>>>>
+>>>> 	nhs->hugepages_kobj = kobject_create_and_add("hugepages",
+>>>> 							&node->dev.kobj);
+>>>> 	if (!nhs->hugepages_kobj)
+>>>> -		return;
+>>>> +		return -ENOMEM;
+>>>>
+>>>> 	for_each_hstate(h) {
+>>>> 		err = hugetlb_sysfs_add_hstate(h, nhs->hugepages_kobj,
+>>>> @@ -3989,9 +3990,28 @@ static void hugetlb_register_node(struct node *node)
+>>>> 			pr_err("HugeTLB: Unable to add hstate %s for node %d\n",
+>>>> 				h->name, node->dev.id);
+>>>> 			hugetlb_unregister_node(node);
+>>>> -			break;
+>>>> +			return -ENOMEM;
+>>>> 		}
+>>>> 	}
+>>>> +	return 0;
+>>>> +}
+>>>> +
+>>>> +static int __meminit hugetlb_memory_callback(struct notifier_block *self,
+>>>> +					     unsigned long action, void *arg)
+>>>> +{
+>>>> +	int ret = 0;
+>>>> +	struct memory_notify *mnb = arg;
+>>>> +	int nid = mnb->status_change_nid;
+>>>> +
+>>>> +	if (nid == NUMA_NO_NODE)
+>>>> +		return NOTIFY_DONE;
+>>>> +
+>>>> +	if (action == MEM_GOING_ONLINE)
+>>>> +		ret = hugetlb_register_node(node_devices[nid]);
+>>>> +	else if (action == MEM_CANCEL_ONLINE || action == MEM_OFFLINE)
+>>>> +		hugetlb_unregister_node(node_devices[nid]);
+>>>> +
+>>>> +	return notifier_from_errno(ret);
+>>>> }
+>>>>
+>>>> /*
+>>>> @@ -4003,18 +4023,11 @@ static void __init hugetlb_register_all_nodes(void)
+>>>> {
+>>>> 	int nid;
+>>>>
+>>>> -	for_each_node_state(nid, N_MEMORY) {
+>>>> -		struct node *node = node_devices[nid];
+>>>> -		if (node->dev.id == nid)
+>>>> -			hugetlb_register_node(node);
+>>>> -	}
+>>>> -
+>>>> -	/*
+>>>> -	 * Let the node device driver know we're here so it can
+>>>> -	 * [un]register hstate attributes on node hotplug.
+>>>> -	 */
+>>>> -	register_hugetlbfs_with_node(hugetlb_register_node,
+>>>> -				     hugetlb_unregister_node);
+>>>> +	get_online_mems();
+>>>> +	hotplug_memory_notifier(hugetlb_memory_callback, 0);
+>>>> +	for_each_node_state(nid, N_MEMORY)
+>>>> +		hugetlb_register_node(node_devices[nid]);
+>>>> +	put_online_mems();
+>>>> }
+>>>> #else	/* !CONFIG_NUMA */
+>>>
+>>> Do we really *need* the memory hotplug notifier and the added complexity
+>>> due for handling memory-less nodes?
+> 
+> Hi David,
+> 
+
+Hi,
+
+thanks for playing with the idea.
+
+> After some tries, I think it may not reduce the complexity. node_dev_init()
+> is called at early stage before hugetlb_register_all_nodes(). So we need to
+> add a mechanism to detect if the hugetlb subsystem finishes initialization
+> in node_dev_init() so that it can determine to help hugetlb create /sysfs
+> files, the mechanism is similar with the changes in drivers/base/node.c of
+> commit 9a30523066cd ("hugetlb: add per node hstate attributes”). This approach
+
+If I'm not wrong, all you need is a single call from node_dev_init()
+into hugetlb code.
+
+There, you create the hugetlb sysfs if hugetlb was already initialized,
+otherwise it's a NOP as you initialize when hugetlb gets initialized.
+
+When initializing hugetlb, you go over all added nodes and create
+hugetlb sysfs.
+
+Testing/remembering if hugetlb was initialized should be easy, no?
+
+What's the complicated part I am missing?
+
+> may add more code than the memory-notify-based approach like this patch
+> implemented. And it also add the code coupling between node.c and hugetlb.c.
+> So I tend to use memory hotplug notifier. What’s your opinion?
+
+We have hugetlb special casing all over the place, it's an integral MM
+part -- not some random driver where we'd really want decoupling.
+
+So I don't see why the decouling would be beneficial here and how using
+the memory notifier is any better then a simple callback.
+
+
+But again, I did not look into the details of the necessary implementation.
+
+Thanks!
+
+
+-- 
+Thanks,
+
+David / dhildenb
 

@@ -2,222 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE7285AA259
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:10:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F735AA2AC
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234909AbiIAWGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:06:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S233034AbiIAWOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234910AbiIAWE3 (ORCPT
+        with ESMTP id S235139AbiIAWNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:04:29 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF6B9D661;
-        Thu,  1 Sep 2022 15:03:08 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id p18so94146plr.8;
-        Thu, 01 Sep 2022 15:03:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=HQUrfRdnfiMPUlTfezXhcqX7GV4m5M0rlOnnNapCheA=;
-        b=AZ1Gh+wOtBhSiXkUQoUoHrl/CllEH0S/F6SZN+G8cU8utWIxzXrnoFihXwwy0eoaqG
-         ZtZ6nYtih0NHVOG/x9bUxgLJC0EeQZankUp2pEA7g6KYwaTJf9CocEAG7w7ibYh1DFhx
-         2HQQyt2JiKisIfFxLEcRmhLgtYoadDjglGDJ/UnVuA3tBxC76X4AHHv5Kq+Ie9VJwofJ
-         AspbI9B41dZhIaTKwUcp4Vr/pjxO1RO2X+wSsB0xbuIWNYtsF5wtGAA1UbZGQNpu9lWz
-         7b8hoU1c9a8OqeUDqCd00/2NCsmjk5Y7NtnPYtn8ybzFuBSqIhxSE2lBKoRWqNV7Eixi
-         EGTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=HQUrfRdnfiMPUlTfezXhcqX7GV4m5M0rlOnnNapCheA=;
-        b=k4/DRufdCHs1kZeA0ieEv6dshzOlVXk/TV8F6AKV0sWZmUbCuzKHvRQim1l2ADkgXh
-         qDFFzb59B/bhCA2zwX7aQVC+gsFPowxOYJ++uqO+3GBxeuEYPExggvSpaRR098AgPwgs
-         ygWw5ZfY6nwUX+q4VGRwI6NNVvXECflgTs5oB/WPzSqk2WJc+JeIXaD7UegxdSvv7ThY
-         2gYH4Tr6lgUet7J3/XbonvnvHV5I2dgisoJ3KgaFFcoU+J2AkE1+gkVLIFZeatDIWfk1
-         MIjGx/z4FmVaN62BMvTvANegvfw/gRStwxhYVPEV5tqxEUH+SkZVPhNUGqGxQiRzIieh
-         JjZw==
-X-Gm-Message-State: ACgBeo39yKClnbkN+m77DGhKksneN4K5o8Q10ZWvYRUxAzB0xynfidBo
-        eqlbAD2x3hL4CY2WwCgypGHVXvZ/TAbizw==
-X-Google-Smtp-Source: AA6agR6M4KV1/uy50J3RjGncA9GjGMYBIQY9N46Ltdjsdv79/QyPq5LWrP53sFKtBy9pAOIegAIevw==
-X-Received: by 2002:a17:903:41d0:b0:174:d8e0:b0f1 with SMTP id u16-20020a17090341d000b00174d8e0b0f1mr19365682ple.74.1662069787634;
-        Thu, 01 Sep 2022 15:03:07 -0700 (PDT)
-Received: from vmfolio.. (c-73-189-111-8.hsd1.ca.comcast.net. [73.189.111.8])
-        by smtp.googlemail.com with ESMTPSA id fv4-20020a17090b0e8400b001fb350026f1sm128894pjb.4.2022.09.01.15.03.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 15:03:07 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     linux-fsdevel@vger.kernel.org
-Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
-        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH 23/23] filemap: Remove find_get_pages_range_tag()
-Date:   Thu,  1 Sep 2022 15:01:38 -0700
-Message-Id: <20220901220138.182896-24-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220901220138.182896-1-vishal.moola@gmail.com>
-References: <20220901220138.182896-1-vishal.moola@gmail.com>
+        Thu, 1 Sep 2022 18:13:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E4C9E8A6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:11:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17E6DB8293B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 22:11:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33180C433C1;
+        Thu,  1 Sep 2022 22:11:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662070276;
+        bh=WDvJ3Aw5/YU5cd0We3VfgYovx44WWXpFzrZWrtvdMSU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=nvPbtEZO6oCywzq47J+suo4kevn6aIltTY0j4eLYEjRP26rw1OdMsunlow7un4loO
+         tH9/wWBlsc81WQcFjt5/66ERjdfe0WCMWzzFjVM6bWk5RiqZII6+c9vG7+tNZwJaTd
+         2U2ieXT7QC77JGVAnDdo4T5CpemJOiBR8gk70lZmRtWjqrsFHrrVs4OrwNME5Mi1ME
+         InQ7bSHL7Av9HFQx5GMILsZboS7EPmSLXiKAhl3L85PbxuOJSuL5zdCv7rngDhl9Ny
+         KZUUHzjxa0vkZsc4cKxGy9ahA3QS8ZsGdCQy7G02ZzJ72kVkMVtChfiijRBePd1p39
+         hd6GRR/cIUvHQ==
+From:   SeongJae Park <sj@kernel.org>
+To:     Barry Song <21cnbao@gmail.com>
+Cc:     SeongJae Park <sj@kernel.org>, Yu Zhao <yuzhao@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, damon@lists.linux.dev,
+        linux-mm@kvack.org
+Subject: Re: [PATCH 7/8] mm/damon: introduce DAMON-based LRU-lists Sorting
+Date:   Thu,  1 Sep 2022 22:11:14 +0000
+Message-Id: <20220901221114.81601-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <CAGsJ_4w=NKr-NOg2TLycx=ka1OpzmzC2dpq0Z1EUXaXDMM8uVQ@mail.gmail.com>
+References: 
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All callers to find_get_pages_range_tag(), find_get_pages_tag(),
-pagevec_lookup_range_tag(), and pagevec_lookup_tag() have been removed.
+On Fri, 2 Sep 2022 09:40:10 +1200 Barry Song <21cnbao@gmail.com> wrote:
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- include/linux/pagemap.h | 10 -------
- include/linux/pagevec.h |  8 ------
- mm/filemap.c            | 60 -----------------------------------------
- mm/swap.c               | 10 -------
- 4 files changed, 88 deletions(-)
+> On Fri, Sep 2, 2022 at 5:11 AM SeongJae Park <sj@kernel.org> wrote:
+> >
+> > Hi Barry,
+> >
+> >
+> > On Thu, 1 Sep 2022 14:21:21 +1200 Barry Song <21cnbao@gmail.com> wrote:
+> >
+> > > On Thu, Sep 1, 2022 at 2:03 PM Barry Song <21cnbao@gmail.com> wrote:
+> > > >
+> > > > On Tue, Jun 14, 2022 at 10:01 AM SeongJae Park <sj@kernel.org> wrote:
+> > > > >
+> > > > > Users can do data access-aware LRU-lists sorting using 'LRU_PRIO' and
+> > > > > 'LRU_DEPRIO' DAMOS actions.  However, finding best parameters including
+> > > > > the hotness/coldness thresholds, CPU quota, and watermarks could be
+> > > > > challenging for some users.  To make the scheme easy to be used without
+> > > > > complex tuning for common situations, this commit implements a static
+> > > > > kernel module called 'DAMON_LRU_SORT' using the 'LRU_PRIO' and
+> > > > > 'LRU_DEPRIO' DAMOS actions.
+> > > > >
+> > > > > It proactively sorts LRU-lists using DAMON with conservatively chosen
+> > > > > default values of the parameters.  That is, the module under its default
+> > > > > parameters will make no harm for common situations but provide some
+> > > > > level of efficiency improvements for systems having clear hot/cold
+> > > > > access pattern under a level of memory pressure while consuming only a
+> > > > > limited small portion of CPU time.
+> > > >
+> > >
+> > > Hi SeongJae,
+> > > While I believe DAMON pro-active reclamation and LRU-SORT can benefit the system
+> > > by either swapping out cold pages earlier and sorting LRU lists before
+> > > system has high
+> > > memory pressure, I am still not convinced the improvement really comes from the
+> > > identification of cold and hot pages by DAMON.
+> > >
+> > > My guess is that even if we randomly pick some regions in memory and do the same
+> > > thing in the kernel, we can also see the improvement.
+> > >
+> > > As we actually depend on two facts to benefit from DAMON
+> > > 1. locality
+> > > while virtual address might have some locality, physical address seems
+> > > not. for example,
+> > > address A might be mapped by facebook, address A + 4096 could be
+> > > mapped by youtube.
+> > > There is nothing which can stop contiguous physical addresses from
+> > > being mapped by
+> > > completely irrelevant applications. so regions based on paddr seems pointless.
+> > >
+> > > 2. accuration
+> > > As I have reported it is very hard for damon to accurately track
+> > > virtual address since
+> > > virtual space is so huge:
+> > > https://lore.kernel.org/lkml/CAGsJ_4x_k9009HwpTswEq1ut_co8XYdpZ9k0BVW=0=HRiifxkA@mail.gmail.com/
+> > > I believe it is also true for paddr since paddr has much worse
+> > > locality than vaddr.
+> > > so we probably need a lot of regions, ideally, one region for each page.
+> > >
+> > > To me, it seems neither of these two facts are true.  So I am more
+> > > willing to believe
+> > > that the benefits come from areas  picked randomly.
+> > >
+> > > Am I missing something?
+> >
+> > Thank you for the questions.
+> >
+> > As you mentioned, DAMON assumes spatial and temporal locality, to trade
+> > accuracy for lower overhead[1].  That is, DAMON believes some memory regions
+> > would have pages that accessed in similar frequency for similar time duration.
+> > Therefore if the access pattern of the system is really chaotic, that is, if
+> > every adjacent page have very different access frequency or the access
+> > frequency changes very frequently, DAMON's accuracy would be bad.  But, would
+> > such access pattern really common in the real world?  Given the Pareto
+> > principle[2], I think that's not always true.  After all, many of kernel
+> > mechanisms including the pseudo-LRU-based reclamation and the readahead assumes
+> > some locality and makes good effect.
+> 
+> + yu zhao
+> 
+> I do believe we have some locality in virtual addresses as they are in
+> the same application.
+> that is why we can "exploit locality in rmap" here:
+> https://lore.kernel.org/linux-mm/20220815071332.627393-8-yuzhao@google.com/
+> 
+> But for paddr, i doubt it is true as processes use page faults to get
+> pages from buddy
+> mainly in low order like zero.
 
-diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
-index 85cc96c82c2c..b8ea33751a66 100644
---- a/include/linux/pagemap.h
-+++ b/include/linux/pagemap.h
-@@ -742,16 +742,6 @@ unsigned find_get_pages_contig(struct address_space *mapping, pgoff_t start,
- 			       unsigned int nr_pages, struct page **pages);
- unsigned filemap_get_folios_tag(struct address_space *mapping, pgoff_t *start,
- 		pgoff_t end, xa_mark_t tag, struct folio_batch *fbatch);
--unsigned find_get_pages_range_tag(struct address_space *mapping, pgoff_t *index,
--			pgoff_t end, xa_mark_t tag, unsigned int nr_pages,
--			struct page **pages);
--static inline unsigned find_get_pages_tag(struct address_space *mapping,
--			pgoff_t *index, xa_mark_t tag, unsigned int nr_pages,
--			struct page **pages)
--{
--	return find_get_pages_range_tag(mapping, index, (pgoff_t)-1, tag,
--					nr_pages, pages);
--}
- 
- struct page *grab_cache_page_write_begin(struct address_space *mapping,
- 			pgoff_t index);
-diff --git a/include/linux/pagevec.h b/include/linux/pagevec.h
-index 215eb6c3bdc9..a520632297ac 100644
---- a/include/linux/pagevec.h
-+++ b/include/linux/pagevec.h
-@@ -26,14 +26,6 @@ struct pagevec {
- };
- 
- void __pagevec_release(struct pagevec *pvec);
--unsigned pagevec_lookup_range_tag(struct pagevec *pvec,
--		struct address_space *mapping, pgoff_t *index, pgoff_t end,
--		xa_mark_t tag);
--static inline unsigned pagevec_lookup_tag(struct pagevec *pvec,
--		struct address_space *mapping, pgoff_t *index, xa_mark_t tag)
--{
--	return pagevec_lookup_range_tag(pvec, mapping, index, (pgoff_t)-1, tag);
--}
- 
- static inline void pagevec_init(struct pagevec *pvec)
- {
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 435fc53b3f2f..b986f246a6ae 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -2309,66 +2309,6 @@ unsigned filemap_get_folios_tag(struct address_space *mapping, pgoff_t *start,
- }
- EXPORT_SYMBOL(filemap_get_folios_tag);
- 
--/**
-- * find_get_pages_range_tag - Find and return head pages matching @tag.
-- * @mapping:	the address_space to search
-- * @index:	the starting page index
-- * @end:	The final page index (inclusive)
-- * @tag:	the tag index
-- * @nr_pages:	the maximum number of pages
-- * @pages:	where the resulting pages are placed
-- *
-- * Like find_get_pages_range(), except we only return head pages which are
-- * tagged with @tag.  @index is updated to the index immediately after the
-- * last page we return, ready for the next iteration.
-- *
-- * Return: the number of pages which were found.
-- */
--unsigned find_get_pages_range_tag(struct address_space *mapping, pgoff_t *index,
--			pgoff_t end, xa_mark_t tag, unsigned int nr_pages,
--			struct page **pages)
--{
--	XA_STATE(xas, &mapping->i_pages, *index);
--	struct folio *folio;
--	unsigned ret = 0;
--
--	if (unlikely(!nr_pages))
--		return 0;
--
--	rcu_read_lock();
--	while ((folio = find_get_entry(&xas, end, tag))) {
--		/*
--		 * Shadow entries should never be tagged, but this iteration
--		 * is lockless so there is a window for page reclaim to evict
--		 * a page we saw tagged.  Skip over it.
--		 */
--		if (xa_is_value(folio))
--			continue;
--
--		pages[ret] = &folio->page;
--		if (++ret == nr_pages) {
--			*index = folio->index + folio_nr_pages(folio);
--			goto out;
--		}
--	}
--
--	/*
--	 * We come here when we got to @end. We take care to not overflow the
--	 * index @index as it confuses some of the callers. This breaks the
--	 * iteration when there is a page at index -1 but that is already
--	 * broken anyway.
--	 */
--	if (end == (pgoff_t)-1)
--		*index = (pgoff_t)-1;
--	else
--		*index = end + 1;
--out:
--	rcu_read_unlock();
--
--	return ret;
--}
--EXPORT_SYMBOL(find_get_pages_range_tag);
--
- /*
-  * CD/DVDs are error prone. When a medium error occurs, the driver may fail
-  * a _large_ part of the i/o request. Imagine the worst scenario:
-diff --git a/mm/swap.c b/mm/swap.c
-index 9cee7f6a3809..7b8c1c8024a1 100644
---- a/mm/swap.c
-+++ b/mm/swap.c
-@@ -1055,16 +1055,6 @@ void folio_batch_remove_exceptionals(struct folio_batch *fbatch)
- 	fbatch->nr = j;
- }
- 
--unsigned pagevec_lookup_range_tag(struct pagevec *pvec,
--		struct address_space *mapping, pgoff_t *index, pgoff_t end,
--		xa_mark_t tag)
--{
--	pvec->nr = find_get_pages_range_tag(mapping, index, end, tag,
--					PAGEVEC_SIZE, pvec->pages);
--	return pagevec_count(pvec);
--}
--EXPORT_SYMBOL(pagevec_lookup_range_tag);
--
- /*
-  * Perform any setup for the swap system
-  */
--- 
-2.36.1
+Well, what I can tell for now is that it would depend on the specific system
+and workload, but I found some production systems that have such kind of
+physical address space locality.
 
+> 
+> >
+> > If your system has too low locality and therefore DAMON doesn't provide good
+> > enough accuracy, you could increase the accuracy by setting the upperbound of
+> > the monitoring overhead higher.  For DAMOS schemes like DAMON_RECLAIM or
+> > DAMON_LRU_SORT, you could also increase the minimum age of the target access
+> > pattern.  If the access pattern is really chaotic, DAMON wouldn't show the
+> > regions having the specific access pattern for long time.  Actually, definition
+> > of the age and use of it means you believe the system's access pattern is not
+> > that chaotic but has at least temporal locality.
+> >
+> > It's true that DAMON doesn't monitor access pattern in page granularity, and
+> > therefore it could report some cold pages as hot, and vice versa.  However, I'd
+> > say the benefit of making right decision for huge number of pages outweighs the
+> > risk of making wrong decision for few pages in many cases.
+> >
+> > After all, it shows some benefit on my test environments and some production
+> > systems.  I haven't compared that against random pageout or random lru sorting,
+> > though.
+> >
+> > Nevertheless, DAMON has so many rooms for improvement, including the accuracy.
+> > I want to improve the accuracy while keeping the overhead low.  Also, I know
+> > that there are people who willing to do page-granularity monitoring though it
+> > could incur high monitoring overhead.  As a part of the DAMON accuracy
+> > improvement plan, to use that as a comparison target, and to convince such
+> > people, I added the page granularity monitoring feature of DAMON to my todo
+> > list.  I haven't had a time for prioritizing that yet, though, as I haven't
+> > heard some clear voice of users for that.  I hope the DAMON Beer/Coffee/Tea
+> > Chat Series to be a place to hear such voices.
+> 
+> is it possible for us to leverage the idea from  "mm: multi-gen LRU:
+> support page table walks"
+> 
+> https://lore.kernel.org/linux-mm/20220815071332.627393-9-yuzhao@google.com/
+> 
+> we pro-actively scan the virtual address space of those processes
+> which have been really
+> executed then get LRU sorted earlier?
+
+I didn't read MGLRU patchset thoroughly, but, maybe?
+
+
+Thanks,
+SJ
+
+> 
+> >
+> > [1] https://docs.kernel.org/mm/damon/design.html#address-space-independent-core-mechanisms
+> > [2] https://en.wikipedia.org/wiki/Pareto_principle
+> >
+> >
+> > Thanks,
+> > SJ
+> 
+> Thanks
+> Barry

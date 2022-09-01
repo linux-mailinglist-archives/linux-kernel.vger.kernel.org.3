@@ -2,145 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7315A96A7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 018565A969B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:20:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233336AbiIAMXb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:23:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
+        id S233480AbiIAMUj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:20:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232313AbiIAMX3 (ORCPT
+        with ESMTP id S233470AbiIAMUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:23:29 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA6A11E80F;
-        Thu,  1 Sep 2022 05:23:27 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MJKqN5Ty9z1N7kk;
-        Thu,  1 Sep 2022 20:19:44 +0800 (CST)
-Received: from [10.174.178.165] (10.174.178.165) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+        Thu, 1 Sep 2022 08:20:18 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C1A2474F7;
+        Thu,  1 Sep 2022 05:20:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662034807; x=1693570807;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=53b9EBspOpKrf/YGZr2ZNHUm/X4axsD5jzJZykL/iEU=;
+  b=IWtpa9QjZEnDwWqIXDFHxQu5whIj89DJipdapaNPbBTpJ1cwOiM45QKB
+   1dtJl4i4o3TeRAAeYSYKGPO7ytAYuScrwlgNth599BHhZjqiButw9KjDw
+   F6XyoJuTUCQfaC7hm00+WHFxTUQJjiSxgDTx1pMEJpjpPi5jRxBO1LL6i
+   4jHFcDvEY1R1qKvRcqU+9QQ/L7RSaTas3PQcYYPGQJdusMTECqgun7OFL
+   0DKcYdR9CPQpYR8+s9ypB+5jqXk9vINiqcjG6cia5+ciIDvLYu4bHOruM
+   2DZAt/VTpW+R0zZYbxirz73O2l9foB2qdOBkMHYltcaZ1bzFsO/pXaTXn
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="111735865"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Sep 2022 05:19:56 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 1 Sep 2022 20:23:25 +0800
-Subject: Re: [PATCH -next 0/4] spi: Introduce BPF based SPI mockup controller
-To:     Mark Brown <broonie@kernel.org>
-CC:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>, <linux-kernel@vger.kernel.org>,
-        <linux-spi@vger.kernel.org>
-References: <20220826144341.532265-1-weiyongjun1@huawei.com>
- <Yw5gSElhbYwoXrfw@sirena.org.uk>
-From:   "weiyongjun (A)" <weiyongjun1@huawei.com>
-Message-ID: <b9ed9b35-2992-b9f4-2e9c-f69c13d9dce3@huawei.com>
-Date:   Thu, 1 Sep 2022 20:23:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+ 15.1.2507.12; Thu, 1 Sep 2022 05:19:56 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 1 Sep 2022 05:19:54 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux@armlinux.org.uk>,
+        <UNGLinuxDriver@microchip.com>, <maxime.chevallier@bootlin.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: lan966x: Extend lan966x with RGMII support
+Date:   Thu, 1 Sep 2022 14:23:46 +0200
+Message-ID: <20220901122346.245786-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-In-Reply-To: <Yw5gSElhbYwoXrfw@sirena.org.uk>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.178.165]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Extend lan966x with RGMII support. The MAC supports all RGMII_* modes.
 
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/net/ethernet/microchip/lan966x/lan966x_main.c    | 8 ++++++++
+ drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c | 3 +++
+ 2 files changed, 11 insertions(+)
 
-On 2022/8/31 3:08, Mark Brown wrote:
-> On Fri, Aug 26, 2022 at 02:43:37PM +0000, Wei Yongjun wrote:
->> This series Introduce a BPF based SPI mockup controller, which can be
->> used for testing SPI drivers without real device.
->>
->> The testsuite for SPI drivers will be post in other series, with also
->> support for I2C and PCI bus device drivers.
-> 
-> I replied to some of the individual patches here with some more
-> detailed issues but I do have some big picture reservations with
-> this approach as well.  One big one is that this seems like it's
-> only going to be able to handle emulation of devices that are
-> purely synchronous - I don't see any sensible direction here for
-> extending to devices that need an interrupt line as well.  That
-> seems like a major limitation.  It's fine not to immediately
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+index 1d6e3b641b2e..e2d250ed976b 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
+@@ -772,6 +772,14 @@ static int lan966x_probe_port(struct lan966x *lan966x, u32 p,
+ 
+ 	__set_bit(PHY_INTERFACE_MODE_MII,
+ 		  port->phylink_config.supported_interfaces);
++	__set_bit(PHY_INTERFACE_MODE_RGMII,
++		  port->phylink_config.supported_interfaces);
++	__set_bit(PHY_INTERFACE_MODE_RGMII_ID,
++		  port->phylink_config.supported_interfaces);
++	__set_bit(PHY_INTERFACE_MODE_RGMII_RXID,
++		  port->phylink_config.supported_interfaces);
++	__set_bit(PHY_INTERFACE_MODE_RGMII_TXID,
++		  port->phylink_config.supported_interfaces);
+ 	__set_bit(PHY_INTERFACE_MODE_GMII,
+ 		  port->phylink_config.supported_interfaces);
+ 	__set_bit(PHY_INTERFACE_MODE_SGMII,
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
+index 38a7e95d69b4..fb6aee509656 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
+@@ -59,6 +59,9 @@ static void lan966x_phylink_mac_link_up(struct phylink_config *config,
+ 	port_config->pause |= tx_pause ? MLO_PAUSE_TX : 0;
+ 	port_config->pause |= rx_pause ? MLO_PAUSE_RX : 0;
+ 
++	if (phy_interface_mode_is_rgmii(interface))
++		phy_set_speed(port->serdes, speed);
++
+ 	lan966x_port_config_up(port);
+ }
+ 
+-- 
+2.33.0
 
-
-We can use gpio-sim as the interrupt controller which always exists
-with some tiny fix, I had posted them and can be found from link:
-
-https://www.spinics.net/lists/linux-gpio/msg74949.html
-
-
-> implement everything but it should be fairly clear how that would
-> be done when someone needs it and some of the BPF design goals I
-> understood seem to conflict with that.
-> 
-> I'm also not clear what the BPF environment is like when it comes
-> to extensible frameworks, as soon as you start thinking about the
-> problem space there are some obvious extensions with things like
-> more detailed register map descriptions and validating that the
-> operations that the driver is doing to the device are actually in
-> spec for the device or trying to stimulate race conditions or
-> error paths in the driver.
-
-
-The bpftool in kernel still need some works, I am still working on
-fix comments from maintainers, which can be found at:
-
-https://lore.kernel.org/bpf/b942bf8f-204b-6bf1-7847-ec5f11c50ca0@isovalent.com/
-
-> 
-> There's also the issue with getting the BPF userspace tooling
-> that I mentioned in reply to one of the individual patches.
-> 
-> Basically while this does look very simple from a kernel point of
-> view I worry that BPF might not be the right tool for the job and
-> could be a bit of a blind alley, with people rapidly running into
-> issues trying to do anything non-trivial.
-> 
-
-Base on BPF's map, we can using wrap for read/write registers as
-the device's requirement. And it is possible to control each register
-and runtime.
-
-For example, simple write data to MTD device, and check whether
-the data is write to registers:
-
-def test_write_data(self):
-    with self.device() as dev:
-         self.device_write_bytes(dev, [1, 2, 3, 4]) <- write to /dev/mtd
-         data = self.read_regs(0x00, 4)
-         self.assertEqual(data, [1, 2, 3, 4])
-
-I am working on a light weight framework which just 400 loc's python
-code, and can do similar tests to roadtest.
-
-Once I finished the bpftool, I will post a proposal.
-
-> There was a series in the past year or so from someone
-> implementing a similarish idea but rather than using BPF they
-> provided a framework for writing device emulations in qemu with
-> a simplified Python framework.  That seemed like a more obvious
-> direction here.  They were initially focusing on I2C but it's a
-> similar space.  Unfortunately I'm drawing a blank on who was
-> working on it or the name of the framework so I can't give a
-> useful reference here.  Their direction was towards having
-> something that could also be used to validate what the driver was
-> doing to the device from the device's perspective.  I do know it
-> was written up on LWN.  Hopefully someone else will remember what
-> I'm talking about from this vauge description.
-> 
-
-I saw your other mail, and know you mean roatest, which is based on
-virtio as the backend.
-
-The bpf backend can be easily integrate to roadtest.
-
-
-Regards,
-Wei Yongjun

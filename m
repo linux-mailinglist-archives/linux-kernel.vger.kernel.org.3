@@ -2,117 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C78C5A92BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:08:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 492145A92C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:08:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234486AbiIAJIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56688 "EHLO
+        id S232963AbiIAJIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234228AbiIAJHh (ORCPT
+        with ESMTP id S233527AbiIAJHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:07:37 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19D6912BC3B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:06:01 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 11EECD6E;
-        Thu,  1 Sep 2022 02:06:07 -0700 (PDT)
-Received: from [10.162.43.7] (unknown [10.162.43.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B994B3F766;
-        Thu,  1 Sep 2022 02:05:58 -0700 (PDT)
-Message-ID: <11ee1311-7473-475b-faf5-e7f554830c6c@arm.com>
-Date:   Thu, 1 Sep 2022 14:35:56 +0530
+        Thu, 1 Sep 2022 05:07:55 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2ED13419C;
+        Thu,  1 Sep 2022 02:06:30 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 6291022302;
+        Thu,  1 Sep 2022 09:06:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1662023189; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=50nRSQyk1QI9hFhV212TIh+r/CdBOfcrQIb/TCXpMNg=;
+        b=O5vzmoJzcxlCgyu6A22ZqfiRq7FtslJRe5nEwyx+iAICCIY83IOVAxbUJR77VZsi6zzjxV
+        5ABgsatN6KiutI+2xWkckWKoXanoQYyAEm3Zd1SRjFP4B5YTacLniMUHhVShxLwfJFQJoD
+        5oNnxBJhsCs2TM4gNQGyC0f6354K8qY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1662023189;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=50nRSQyk1QI9hFhV212TIh+r/CdBOfcrQIb/TCXpMNg=;
+        b=HQd7tUGwjFXnUO3Le+M69ODGktLs4sIBlRIsKKJJIc9SQdO/yGlCDjqrzs3lQAqqyPs/o8
+        FW6Ih0TJiB7zoaCA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F61F13A79;
+        Thu,  1 Sep 2022 09:06:29 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id IKtVExV2EGPoRAAAMHmgww
+        (envelope-from <jack@suse.cz>); Thu, 01 Sep 2022 09:06:29 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id DC9BFA067C; Thu,  1 Sep 2022 11:06:28 +0200 (CEST)
+Date:   Thu, 1 Sep 2022 11:06:28 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jan Kara <jack@suse.cz>, John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/6] NFS: direct-io: convert to FOLL_PIN pages
+Message-ID: <20220901090628.h4debwejkirrhqtj@quack3>
+References: <20220827083607.2345453-6-jhubbard@nvidia.com>
+ <YwqfWoAE2Awp4YvT@ZenIV>
+ <353f18ac-0792-2cb7-6675-868d0bd41d3d@nvidia.com>
+ <Ywq5ILRNxsbWvFQe@ZenIV>
+ <Ywq5VrSrY341UVpL@ZenIV>
+ <217b4a17-1355-06c5-291e-7980c0d3cea6@nvidia.com>
+ <20220829160808.rwkkiuelipr3huxk@quack3>
+ <a53b2d14-687a-16c9-2f63-4f94876f8b3c@nvidia.com>
+ <20220831094349.boln4jjajkdtykx3@quack3>
+ <Yw/+/U9GFaNnARdk@ZenIV>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] mm: kill is_memblock_offlined()
-Content-Language: en-US
-To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220827112043.187028-1-wangkefeng.wang@huawei.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220827112043.187028-1-wangkefeng.wang@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yw/+/U9GFaNnARdk@ZenIV>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/27/22 16:50, Kefeng Wang wrote:
-> Directly check state of struct memory_block, no need a single function.
+On Thu 01-09-22 01:38:21, Al Viro wrote:
+> On Wed, Aug 31, 2022 at 11:43:49AM +0200, Jan Kara wrote:
 > 
-> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-> ---
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-
->  drivers/base/memory.c          | 6 ------
->  include/linux/memory_hotplug.h | 2 --
->  mm/memory_hotplug.c            | 3 +--
->  3 files changed, 1 insertion(+), 10 deletions(-)
+> > So after looking into that a bit more, I think a clean approach would be to
+> > provide iov_iter_pin_pages2() and iov_iter_pages_alloc2(), under the hood
+> > in __iov_iter_get_pages_alloc() make sure we use pin_user_page() instead of
+> > get_page() in all the cases (using this in pipe_get_pages() and
+> > iter_xarray_get_pages() is easy) and then make all bio handling use the
+> > pinning variants for iters. I think at least iov_iter_is_pipe() case needs
+> > to be handled as well because as I wrote above, pipe pages can enter direct
+> > IO code e.g. for splice(2).
+> > 
+> > Also I think that all iov_iter_get_pages2() (or the _alloc2 variant) users
+> > actually do want the "pin page" semantics in the end (they are accessing
+> > page contents) so eventually we should convert them all to
+> > iov_iter_pin_pages2() and remove iov_iter_get_pages2() altogether. But this
+> > will take some more conversion work with networking etc. so I'd start with
+> > converting bios only.
 > 
-> diff --git a/drivers/base/memory.c b/drivers/base/memory.c
-> index bc60c9cd3230..9aa0da991cfb 100644
-> --- a/drivers/base/memory.c
-> +++ b/drivers/base/memory.c
-> @@ -869,12 +869,6 @@ void remove_memory_block_devices(unsigned long start, unsigned long size)
->  	}
->  }
->  
-> -/* return true if the memory block is offlined, otherwise, return false */
-> -bool is_memblock_offlined(struct memory_block *mem)
-> -{
-> -	return mem->state == MEM_OFFLINE;
-> -}
-> -
->  static struct attribute *memory_root_attrs[] = {
->  #ifdef CONFIG_ARCH_MEMORY_PROBE
->  	&dev_attr_probe.attr,
-> diff --git a/include/linux/memory_hotplug.h b/include/linux/memory_hotplug.h
-> index 409196ef8038..de87545eabe9 100644
-> --- a/include/linux/memory_hotplug.h
-> +++ b/include/linux/memory_hotplug.h
-> @@ -11,7 +11,6 @@ struct page;
->  struct zone;
->  struct pglist_data;
->  struct mem_section;
-> -struct memory_block;
->  struct memory_group;
->  struct resource;
->  struct vmem_altmap;
-> @@ -352,7 +351,6 @@ extern void move_pfn_range_to_zone(struct zone *zone, unsigned long start_pfn,
->  extern void remove_pfn_range_from_zone(struct zone *zone,
->  				       unsigned long start_pfn,
->  				       unsigned long nr_pages);
-> -extern bool is_memblock_offlined(struct memory_block *mem);
->  extern int sparse_add_section(int nid, unsigned long pfn,
->  		unsigned long nr_pages, struct vmem_altmap *altmap,
->  		struct dev_pagemap *pgmap);
-> diff --git a/mm/memory_hotplug.c b/mm/memory_hotplug.c
-> index 2fd45ccbce45..9ae1f98548b1 100644
-> --- a/mm/memory_hotplug.c
-> +++ b/mm/memory_hotplug.c
-> @@ -1969,11 +1969,10 @@ int __ref offline_pages(unsigned long start_pfn, unsigned long nr_pages,
->  
->  static int check_memblock_offlined_cb(struct memory_block *mem, void *arg)
->  {
-> -	int ret = !is_memblock_offlined(mem);
->  	int *nid = arg;
->  
->  	*nid = mem->nid;
-> -	if (unlikely(ret)) {
-> +	if (unlikely(mem->state != MEM_OFFLINE)) {
->  		phys_addr_t beginpa, endpa;
->  
->  		beginpa = PFN_PHYS(section_nr_to_pfn(mem->start_section_nr));
+> Not sure, TBH...
+> 
+> FWIW, quite a few of the callers of iov_iter_get_pages2() do *NOT* need to
+> grab any references for BVEC/XARRAY/PIPE cases.  What's more, it would be
+> bloody useful to have a variant that doesn't grab references for
+> !iter->user_backed case - that could be usable for KVEC as well, simplifying
+> several callers.
+> 
+> Requirements:
+> 	* recepients of those struct page * should have a way to make
+> dropping the page refs conditional (obviously); bio machinery can be told
+> to do so.
+> 	* callers should *NOT* do something like
+> 	"set an ITER_BVEC iter, with page references grabbed and stashed in
+> bio_vec array, call async read_iter() and drop the references in array - the
+> refs we grab in dio will serve"
+> Note that for sync IO that pattern is fine whether we grab/drop anything
+> inside read_iter(); for async we could take depopulating the bio_vec
+> array to the IO completion or downstream of that.
+> 	* the code dealing with the references returned by iov_iter_..._pages
+> should *NOT* play silly buggers with refcounts - something like "I'll grab
+> a reference, start DMA and report success; page will stay around until I
+> get around to dropping the ref and callers don't need to wait for that" deep
+> in the bowels of infinibad stack (or something equally tasteful) is seriously
+> asking for trouble.
+
+I agree we could get away without grabbing references in some cases. But it
+is a performance vs robustness tradeoff I'd say. E.g. with XARRAY case I
+can see people feeding pages from struct address_space and it is unclear
+what else than page reference would protect them from being freed by
+reclaim. Furthermore if e.g. writeback can happen for such struct
+address_space (or other filesystem operations requiring stable data), we
+really need a full page pin and not just page reference to signal that the
+page may be under DMA and may be changing under your hands. So I'm not
+against having some special cases that avoid grabbing page reference / page
+pin but I think it is justified only in performance sensitive cases and
+when we can make sure filesystem backed page (because of above mentioned
+data stability issues) or anon page (because of cow handling) cannot
+possibly enter this path.
+
+								Honza
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

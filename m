@@ -2,84 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA38E5A9203
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:22:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30FAC5A9208
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:24:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234212AbiIAIV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36070 "EHLO
+        id S234149AbiIAIYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 04:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234236AbiIAIVn (ORCPT
+        with ESMTP id S233850AbiIAIYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:21:43 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1309E8B5;
-        Thu,  1 Sep 2022 01:21:40 -0700 (PDT)
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 2818LPGK013562;
-        Thu, 1 Sep 2022 17:21:26 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 2818LPGK013562
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1662020486;
-        bh=pNu2mRekQdnmjRBKbAVVw81nkqpftwyn7RqAHAETuOg=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RSpN2UH7Zsbo9e7veyXT6kJwwNCl2wLMqttWfei6bNRPgmNcIfArZXK7dk4bCNbLz
-         +nKR/hWtMZU5+VoWsNosvYifg/AxHutqQXypTHkZf1b7S0B7dVp1WveVVruO7Kw8mS
-         SvqAQaxBFU2SrXbpOApyfhlOTve1tXyBrCc6BQ7e0IqghxWff2ZIjs5PqVpuiPKISv
-         hiA+Ft6pdo/lrsSOK8dRrPxy/mEEUOsYvWSOce39WWB62VFj9Q/5sdrdrCV77kV1Lq
-         Hr7ekZBiB8FT1h4tsFkTZ37mvvA5F2ceQWj6DxGr//ji7sPGgHGdS5wsRME5CLkZt6
-         dfF1TOTJ4EF4g==
-X-Nifty-SrcIP: [209.85.160.52]
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-11f34610d4aso19066482fac.9;
-        Thu, 01 Sep 2022 01:21:25 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2hUSkJlv4ayKdAwoAXuiHB7NlHzCIp1+DW0JNeomhyZSGWatFx
-        +1KBJx/GJsYwJAVwCi8h94Mpm6DFyG84qvdbKjg=
-X-Google-Smtp-Source: AA6agR6wHVcvBE38npDjxrhrkbQsogGCuTbd+PGzpdXi8/QMAPLEyKyXahO+1XD/k1+ekV0tQ5Y7XPXxj/R1+fXeCmY=
-X-Received: by 2002:a05:6808:1189:b0:33a:34b3:6788 with SMTP id
- j9-20020a056808118900b0033a34b36788mr2805155oil.194.1662020484891; Thu, 01
- Sep 2022 01:21:24 -0700 (PDT)
+        Thu, 1 Sep 2022 04:24:50 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C5F5D2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:24:44 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oTfUw-00010N-Eh; Thu, 01 Sep 2022 10:24:26 +0200
+Received: from mfe by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <mfe@pengutronix.de>)
+        id 1oTfUv-00020Z-SE; Thu, 01 Sep 2022 10:24:25 +0200
+Date:   Thu, 1 Sep 2022 10:24:25 +0200
+From:   Marco Felsch <m.felsch@pengutronix.de>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andy.shevchenko@gmail.com>,
+        kernel@pengutronix.de
+Subject: Re: [PATCH v3 2/3] iio: adc: tsc2046: add vref support
+Message-ID: <20220901082425.ra7sa3ap6bf76kfe@pengutronix.de>
+References: <20220901041146.3652287-1-o.rempel@pengutronix.de>
+ <20220901041146.3652287-2-o.rempel@pengutronix.de>
 MIME-Version: 1.0
-References: <CAK7LNATbAVE8QY_QZQkiaNy9UZb2tH30eP50n0TNpgsHVrTKJQ@mail.gmail.com>
- <YxBZ5wcGUSQ/VeHD@rli9-MOBL1.ccr.corp.intel.com>
-In-Reply-To: <YxBZ5wcGUSQ/VeHD@rli9-MOBL1.ccr.corp.intel.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Thu, 1 Sep 2022 17:20:48 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQYiRr2-m73bBK-Ly8Tg35SK+nJw5bxULhuFh1vG=nN8g@mail.gmail.com>
-Message-ID: <CAK7LNAQYiRr2-m73bBK-Ly8Tg35SK+nJw5bxULhuFh1vG=nN8g@mail.gmail.com>
-Subject: Re: [LKP] Fix make.cross for 0day bot
-To:     Philip Li <philip.li@intel.com>
-Cc:     lkp@lists.01.org, 0day robot <lkp@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901041146.3652287-2-o.rempel@pengutronix.de>
+User-Agent: NeoMutt/20180716
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: mfe@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 4:06 PM Philip Li <philip.li@intel.com> wrote:
->
-> On Thu, Sep 01, 2022 at 03:55:52PM +0900, Masahiro Yamada wrote:
-> > Hello,  maintainers of Intel 0day bot,
-> >
-> > make.cross is supposed to use the latest GCC by default
-> > (according to the comment "use highest available version")
-> > but actually chooses GCC 9.3.0 rather than gcc-12.1.0.
->
-> thanks a lot for pointing out the issue and fixing it. Do you mind to send
-> a PR to https://github.com/intel/lkp-tests, or you suggest we composing
-> a patch based on your fix below?
->
+Hi Oleksij,
+
+sorry for jumping in, please see below.
+
+On 22-09-01, Oleksij Rempel wrote:
+> If VREF pin is attached, we should use external VREF source instead of
+> the internal. Otherwise we will get wrong measurements on some of channel
+> types.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>  drivers/iio/adc/ti-tsc2046.c | 64 +++++++++++++++++++++++++++++++-----
+>  1 file changed, 55 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
+> index 0d9436a69cbfb..bbc8b4137b0b1 100644
+> --- a/drivers/iio/adc/ti-tsc2046.c
+> +++ b/drivers/iio/adc/ti-tsc2046.c
+> @@ -8,6 +8,7 @@
+>  #include <linux/bitfield.h>
+>  #include <linux/delay.h>
+>  #include <linux/module.h>
+> +#include <linux/regulator/consumer.h>
+>  #include <linux/spi/spi.h>
+>  
+>  #include <asm/unaligned.h>
+> @@ -175,6 +176,9 @@ struct tsc2046_adc_priv {
+>  	u32 time_per_bit_ns;
+>  
+>  	struct tsc2046_adc_ch_cfg ch_cfg[TI_TSC2046_MAX_CHAN];
+> +	bool use_internal_vref;
+> +	unsigned int vref_mv;
+
+We wouldn't need those members if we just enable/disable the regulator
+on demand. This would also be more power efficient.
+
+> +	struct regulator *vref_reg;
+>  };
+>  
+>  #define TI_TSC2046_V_CHAN(index, bits, name)			\
+> @@ -252,7 +256,9 @@ static u8 tsc2046_adc_get_cmd(struct tsc2046_adc_priv *priv, int ch_idx,
+>  	case TI_TSC2046_ADDR_AUX:
+>  	case TI_TSC2046_ADDR_VBAT:
+>  	case TI_TSC2046_ADDR_TEMP0:
+> -		pd |= TI_TSC2046_SER | TI_TSC2046_PD1_VREF_ON;
+> +		pd |= TI_TSC2046_SER;
+> +		if (priv->use_internal_vref)
+> +			pd |= TI_TSC2046_PD1_VREF_ON;
+
+Then this line would become:
+
++		if (!priv->vref_reg)
++			pd |= TI_TSC2046_PD1_VREF_ON;
 
 
-Sure, I will make a PR.
-Thanks.
+>  	}
+>  
+>  	return TI_TSC2046_START | FIELD_PREP(TI_TSC2046_ADDR, ch_idx) | pd;
+> @@ -468,7 +474,7 @@ static int tsc2046_adc_read_raw(struct iio_dev *indio_dev,
 
+This function needs to enable the vref_reg before the switch-case and
+disable it afterwards.
 
--- 
-Best Regards
-Masahiro Yamada
+>  		 * So, it is better to use external voltage-divider driver
+>  		 * instead, which is calculating complete chain.
+>  		 */
+> -		*val = TI_TSC2046_INT_VREF;
+> +		*val = priv->vref_mv;
+>  		*val2 = chan->scan_type.realbits;
+>  		return IIO_VAL_FRACTIONAL_LOG2;
+>  	}
+> @@ -781,22 +787,42 @@ static int tsc2046_adc_probe(struct spi_device *spi)
+>  	indio_dev->num_channels = dcfg->num_channels;
+>  	indio_dev->info = &tsc2046_adc_info;
+>  
+> +	priv->vref_reg = devm_regulator_get_optional(&spi->dev, "vref");
+
+This line would be enough and we could drop
+
+> +	if (!IS_ERR(priv->vref_reg)) {
+> +		ret = regulator_enable(priv->vref_reg);
+> +		if (ret)
+> +			return ret;
+> +
+> +		ret = regulator_get_voltage(priv->vref_reg);
+> +		if (ret < 0)
+> +			goto err_regulator_disable;
+> +
+> +		priv->vref_mv = ret / 1000;
+> +		priv->use_internal_vref = false;
+> +	} else {
+> +		/* Use internal reference */
+> +		priv->vref_mv = TI_TSC2046_INT_VREF;
+> +		priv->use_internal_vref = true;
+> +	}
+> +
+
+this part.
+
+>  	tsc2046_adc_parse_fwnode(priv);
+>  
+>  	ret = tsc2046_adc_setup_spi_msg(priv);
+>  	if (ret)
+> -		return ret;
+> +		goto err_regulator_disable;
+>  
+>  	mutex_init(&priv->slock);
+>  
+>  	ret = devm_request_irq(dev, spi->irq, &tsc2046_adc_irq,
+>  			       IRQF_NO_AUTOEN, indio_dev->name, indio_dev);
+>  	if (ret)
+> -		return ret;
+> +		goto err_regulator_disable;
+>  
+>  	trig = devm_iio_trigger_alloc(dev, "touchscreen-%s", indio_dev->name);
+> -	if (!trig)
+> -		return -ENOMEM;
+> +	if (!trig) {
+> +		ret = -ENOMEM;
+> +		goto err_regulator_disable;
+> +	}
+>  
+>  	priv->trig = trig;
+>  	iio_trigger_set_drvdata(trig, indio_dev);
+> @@ -811,20 +837,39 @@ static int tsc2046_adc_probe(struct spi_device *spi)
+>  	ret = devm_iio_trigger_register(dev, trig);
+>  	if (ret) {
+>  		dev_err(dev, "failed to register trigger\n");
+> -		return ret;
+> +		goto err_regulator_disable;
+>  	}
+>  
+>  	ret = devm_iio_triggered_buffer_setup(dev, indio_dev, NULL,
+>  					      &tsc2046_adc_trigger_handler, NULL);
+>  	if (ret) {
+>  		dev_err(dev, "Failed to setup triggered buffer\n");
+> -		return ret;
+> +		goto err_regulator_disable;
+>  	}
+>  
+>  	/* set default trigger */
+>  	indio_dev->trig = iio_trigger_get(priv->trig);
+>  
+> -	return devm_iio_device_register(dev, indio_dev);
+> +	ret = devm_iio_device_register(dev, indio_dev);
+> +	if (ret)
+> +		goto err_regulator_disable;
+> +
+> +	return 0;
+> +
+> +err_regulator_disable:
+> +	if (!IS_ERR(priv->vref_reg))
+> +		regulator_disable(priv->vref_reg);
+> +
+> +	return ret;
+
+As well as the whole new error handling and
+
+> +}
+> +
+> +static void tsc2046_adc_remove(struct spi_device *spi)
+> +{
+> +	struct iio_dev *indio_dev = spi_get_drvdata(spi);
+> +	struct tsc2046_adc_priv *priv = iio_priv(indio_dev);
+> +
+> +	if (!IS_ERR(priv->vref_reg))
+> +		regulator_disable(priv->vref_reg);
+>  }
+
+the remove callback.
+
+Regards,
+  Marco
+
+>  static const struct of_device_id ads7950_of_table[] = {
+> @@ -839,6 +884,7 @@ static struct spi_driver tsc2046_adc_driver = {
+>  		.of_match_table = ads7950_of_table,
+>  	},
+>  	.probe = tsc2046_adc_probe,
+> +	.remove = tsc2046_adc_remove,
+>  };
+>  module_spi_driver(tsc2046_adc_driver);
+>  
+> -- 
+> 2.30.2
+> 
+> 
+> 

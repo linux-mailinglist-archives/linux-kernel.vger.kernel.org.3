@@ -2,120 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C64B25A946C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5E305A946F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:24:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233070AbiIAKXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
+        id S234107AbiIAKXw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:23:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233943AbiIAKXb (ORCPT
+        with ESMTP id S234031AbiIAKXj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:23:31 -0400
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7FD1360AA;
-        Thu,  1 Sep 2022 03:23:30 -0700 (PDT)
-Received: by mail-yb1-xb33.google.com with SMTP id 193so7948829ybc.10;
-        Thu, 01 Sep 2022 03:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=zuIt814uy8cH66N+75Ycqn2FRBkniQjebN0QWbVfWcw=;
-        b=S3g3LWq85ULTjqeOQKMoyjkoDB34kTgQTpXBC5dt+O/7OmNyhkfXpin84jkIR37dfT
-         8H7K1rvi/OEysJAj6cbE+dChbxEx5lPWOrDisPe0moP/KCmP7/8sC3PFgm3cBc9jqpYB
-         gC2i2vlaI69tOmgt/3z3AlJ2o6kdwP3DQndybSYaO74gzXvFxE7gnGcFwE8XrttAXER6
-         NFkGbFAO/mmQN+3S3Wsnp29MffqpEPZ25qiommPsr3vlvjAQbBU4yb4X/59L6EwTovge
-         BK8ukxe0YAsneVoIRbvb6SmIHGNfp81bbOjSoCxdLRNyDPVdm2EEeyEgOQKwRr2FCwpd
-         +qsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=zuIt814uy8cH66N+75Ycqn2FRBkniQjebN0QWbVfWcw=;
-        b=AwMLa26sx12+ZOeNcCzfMTfqNMTSc8fhUZPovwNUavpOTJK6wWVhRcRNRCQCSBH0pY
-         Y/eWzhhM5l1vJYT2ITDH3U/on4nN1s5rF7KE1JsRO0ZdZjKaDTNG70P8f8bOOoi0qOlj
-         rogptLkU13eGB7qZ0Af0LRxROHw3X3/EaVgRsoYKYOz0tmvAAxpxML5lyt61vwpQf/Xo
-         nYayNumk4CMOCwCVh4U8YCWjVET4+ZfpCmg0ToJUa1A3FR/kKdKJpO8KRoKFopRhWAwL
-         6YNNVEzhP9zTv56cI4NZxOm2OegPKMjNBdCbeVTyDyH21n41Ohdw3tqFmynEMD4WKn75
-         w7lg==
-X-Gm-Message-State: ACgBeo3RQDI/vsdA0hxLlFlyCcIZ6pnHUxyPJ2YD7B8wjpLOjrgIx0Pq
-        OvNQEcANZ893W0p9xGBHO0aqiwh8rZr60kbTbaw=
-X-Google-Smtp-Source: AA6agR5QKMlivKE09ufpKBkhb+dXPLWiv4LXo3V9uv2CGz8tRLYiYIO9Y5CKTKiYsO9HUg82jjatDHUkzn44LiPpBAc=
-X-Received: by 2002:a5b:845:0:b0:683:6ed7:b3b6 with SMTP id
- v5-20020a5b0845000000b006836ed7b3b6mr18096646ybq.183.1662027809868; Thu, 01
- Sep 2022 03:23:29 -0700 (PDT)
+        Thu, 1 Sep 2022 06:23:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85BD51360A7
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:23:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662027816;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wcELDvI8lz+P8fQWhkWVynVIxW+VnN22dIpeCjTRvjE=;
+        b=KDsIoQL0VpMP111iADP+9PsmRo3Qz3vshsz9Dwpf06Vyjorc19Lw91QawIZaHeLfrG3E6B
+        JcswM0RZwcJBCmTESHeoMZCakL1tqSogk80B0D6ubvNFxZ7gqThSU0Olwj/Z0CDVOGoSH7
+        s/0tx8S5/GdA5kJHdTqK/WfzVnH3nG4=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-633-OmJ1robpO4aXG49sZf7weQ-1; Thu, 01 Sep 2022 06:23:33 -0400
+X-MC-Unique: OmJ1robpO4aXG49sZf7weQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 203E4805B9A;
+        Thu,  1 Sep 2022 10:23:33 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 637C8492C3B;
+        Thu,  1 Sep 2022 10:23:32 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <166201964443.3817988.12088441548413332725.stgit@warthog.procyon.org.uk>
+References: <166201964443.3817988.12088441548413332725.stgit@warthog.procyon.org.uk>
+To:     netdev@vger.kernel.org
+Cc:     dhowells@redhat.com, Marc Dionne <marc.dionne@auristor.com>,
+        linux-afs@lists.infradead.org,
+        Jeffrey E Altman <jaltman@auristor.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net 0/6] rxrpc: Miscellaneous fixes
 MIME-Version: 1.0
-References: <20220829105804.609007228@linuxfoundation.org> <CADVatmOLoaGgAW951JqEk3v88EA7mn3qur84Xd30QJWP21+eVg@mail.gmail.com>
- <YxB/ZPFEQG9zS+wa@kroah.com>
-In-Reply-To: <YxB/ZPFEQG9zS+wa@kroah.com>
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Date:   Thu, 1 Sep 2022 11:22:53 +0100
-Message-ID: <CADVatmPxfdEA3yi9KGHtvmQA2n-mA=ekBidqU+keGrBsL+rFeQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/136] 5.15.64-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <4129910.1662027811.1@warthog.procyon.org.uk>
+Date:   Thu, 01 Sep 2022 11:23:31 +0100
+Message-ID: <4129912.1662027811@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 10:46 AM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Mon, Aug 29, 2022 at 09:11:28PM +0100, Sudip Mukherjee wrote:
-> > Hi Greg,
-> >
-> > On Mon, Aug 29, 2022 at 12:00 PM Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 5.15.64 release.
-> > > There are 136 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
-> > > Anything received after that time might be too late.
-> >
-> > My builds are still running, but just an initial report for gcc-12. (I
-> > know v5.15.y still does not build completely with gcc-12).
-> >
-> > x86_64 and arm64 allmodconfig build fails with gcc-12, with the error:
-> >
+Please don't pull this.  The kernel test robot spotted a bug in it.
 
-<snip>
+David
 
-> >
-> > Introduced in v5.15.61 due to 2711bedab26c ("Bluetooth: L2CAP: Fix
-> > l2cap_global_chan_by_psm regression").
-> > But v5.19.y and mainline does not show the build failure as they also
-> > have 41b7a347bf14 ("powerpc: Book3S 64-bit outline-only KASAN
-> > support").
->
-> Ick, ok, what to do here?  I can't really backport 41b7a347bf14 to 5.15
-> easily as it's huge and a new feature.  Any other ideas?
-
-Yeah.
-https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=b840304fb46cdf7012722f456bce06f151b3e81b
-will fix the it for mips and csky failure in mainline and v5.19.y. And
-I just verified that it will fix for powerpc also in v5.15.y. So, we
-just need to wait for now.
-
-
--- 
-Regards
-Sudip

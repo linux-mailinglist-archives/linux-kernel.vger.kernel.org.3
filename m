@@ -2,66 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36AB75A9827
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:11:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5205A982C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:13:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233539AbiIANLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:11:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
+        id S233663AbiIANLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233962AbiIANLL (ORCPT
+        with ESMTP id S233286AbiIANLM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:11:11 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920825F50;
-        Thu,  1 Sep 2022 06:06:04 -0700 (PDT)
-X-UUID: 9e3a0af748b64ffba4c6e809486fd1ff-20220901
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=9qzHLV2C1qM7HQeRv+rphvEHCRtfLmuNYiUYd4EBH0I=;
-        b=PrBlLy/V8BbN0qluDCdU2j62GQHeffIk/xKnIDW7hExwJqwDZptBzxi2rwDHp9hIPag3f+XjgJfK8uTLdL8ZSue72RF1TIWI11rbpyBUPx7zKnszAczotsHsjT3/+XWiV9JcX6yRbUTRjZI3F49tv93IrXSQk7AdlhUstr8aMpo=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:927f338f-7fab-4e8a-a992-4d1cd4017020,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Releas
-        e_Ham,ACTION:release,TS:100
-X-CID-INFO: VERSION:1.1.10,REQID:927f338f-7fab-4e8a-a992-4d1cd4017020,OB:0,LOB
-        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS9
-        81B3D,ACTION:quarantine,TS:100
-X-CID-META: VersionHash:84eae18,CLOUDID:0553d420-1c20-48a5-82a0-25f9c331906d,C
-        OID:ce31018120e2,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 9e3a0af748b64ffba4c6e809486fd1ff-20220901
-Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
-        (envelope-from <chui-hao.chiu@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 961441172; Thu, 01 Sep 2022 21:05:58 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 1 Sep 2022 21:05:57 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 1 Sep 2022 21:05:57 +0800
-From:   Peter Chiu <chui-hao.chiu@mediatek.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-CC:     <devicetree@vger.kernel.org>, Ryder Lee <ryder.Lee@mediatek.com>,
-        Evelyn Tsai <evelyn.tsai@mediatek.com>,
-        Sam Shih <sam.shih@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        Peter Chiu <chui-hao.chiu@mediatek.com>
-Subject: [PATCH v5] arm64: dts: mt7986: add built-in Wi-Fi device nodes
-Date:   Thu, 1 Sep 2022 21:05:52 +0800
-Message-ID: <20220901130552.26234-1-chui-hao.chiu@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Thu, 1 Sep 2022 09:11:12 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41A68A1FA;
+        Thu,  1 Sep 2022 06:06:12 -0700 (PDT)
+Received: from dggpeml500023.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MJLlk58jDzYd63;
+        Thu,  1 Sep 2022 21:01:38 +0800 (CST)
+Received: from [10.67.110.112] (10.67.110.112) by
+ dggpeml500023.china.huawei.com (7.185.36.114) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 1 Sep 2022 21:06:03 +0800
+Subject: Re: [PATCH -next v2 3/6] landlock: add chmod and chown support
+To:     =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
+CC:     <paul@paul-moore.com>, <jmorris@namei.org>, <serge@hallyn.com>,
+        <shuah@kernel.org>, <corbet@lwn.net>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+References: <20220827111215.131442-1-xiujianfeng@huawei.com>
+ <20220827111215.131442-4-xiujianfeng@huawei.com> <Ywpw66EYRDTQIyTx@nuc>
+ <de8834b6-0ff2-1a81-f2d3-af33103e9942@huawei.com>
+ <de4620d2-3268-b3cc-71dd-acbbd204435e@digikod.net>
+From:   xiujianfeng <xiujianfeng@huawei.com>
+Message-ID: <2f286496-f4f8-76f7-2fb6-cc3dd5ffdeaa@huawei.com>
+Date:   Thu, 1 Sep 2022 21:06:02 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+In-Reply-To: <de4620d2-3268-b3cc-71dd-acbbd204435e@digikod.net>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.110.112]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500023.china.huawei.com (7.185.36.114)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,173 +56,127 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This enables built-in 802.11ax Wi-Fi support.
+Hi,
 
-Reviewed-by: Sam Shih <sam.shih@mediatek.com>
-Reviewed-by: Ryder Lee <ryder.lee@mediatek.com>
-Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
+在 2022/8/30 0:01, Mickaël Salaün 写道:
+> 
+> On 29/08/2022 03:17, xiujianfeng wrote:
+>>
+>> Hi,
+>>
+>> 在 2022/8/28 3:30, Günther Noack 写道:
+>>> Hello!
+>>>
+>>> the mapping between Landlock rights to LSM hooks is now as follows in
+>>> your patch set:
+>>>
+>>> * LANDLOCK_ACCESS_FS_CHMOD controls hook_path_chmod
+>>> * LANDLOCK_ACCESS_FS_CHGRP controls hook_path_chown
+>>>     (this hook can restrict both the chown(2) and chgrp(2) syscalls)
+>>>
+>>> Is this the desired mapping?
+>>>
+>>> The previous discussion I found on the topic was in
+>>>
+>>> [1] 
+>>> https://lore.kernel.org/all/5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net/ 
+>>>
+>>> [2] 
+>>> https://lore.kernel.org/all/b1d69dfa-6d93-2034-7854-e2bc4017d20e@schaufler-ca.com/ 
+>>>
+>>> [3] 
+>>> https://lore.kernel.org/all/c369c45d-5aa8-3e39-c7d6-b08b165495fd@digikod.net/ 
+>>>
+>>>
+>>> In my understanding the main arguments were the ones in [2] and [3].
+>>>
+>>> There were no further responses to [3], so I was under the impression
+>>> that we were gravitating towards an approach where the
+>>> file-metadata-modification operations were grouped more coarsely?
+>>>
+>>> For example with the approach suggested in [3], which would be to
+>>> group the operations coarsely into (a) one Landlock right for
+>>> modifying file metadata that is used in security contexts, and (b) one
+>>> Landlock right for modifying metadata that was used in non-security
+>>> contexts. That would mean that there would be:
+>>>
+>>> (a) LANDLOCK_ACCESS_FS_MODIFY_SECURITY_ATTRIBUTES to control the
+>>> following operations:
+>>>     * chmod(2)-variants through hook_path_chmod,
+>>>     * chown(2)-variants and chgrp(2)-variants through hook_path_chown,
+>>>     * setxattr(2)-variants and removexattr(2)-variants for extended
+>>>       attributes that are not "user extended attributes" as described in
+>>>       xattr(7) through hook_inode_setxattr and hook_inode_removexattr
+>>>
+>>> (b) LANDLOCK_ACCESS_FS_MODIFY_NON_SECURITY_ATTRIBUTES to control the
+>>> following operations:
+>>>     * utimes(2) and other operations for setting other non-security
+>>>       sensitive attributes, probably through hook_inode_setattr(?)
+>>>     * xattr modifications like above, but for the "user extended
+>>>       attributes", though hook_inode_setxattr and hook_inode_removexattr
+>>>
+>>> In my mind, this would be a sensible grouping, and it would also help
+>>> to decouple the userspace-exposed API from the underlying
+>>> implementation, as Casey suggested to do in [2].
+>>>
+>>> Specifically for this patch set, if you want to use this grouping, you
+>>> would only need to add one new Landlock right
+>>> (LANDLOCK_ACCESS_FS_MODIFY_SECURITY_ATTRIBUTES) as described above
+>>> under (a) (and maybe we can find a shorter name for it... :))?
+>>>
+>>> Did I miss any operations here that would be necessary to restrict?
+>>>
+>>> Would that make sense to you? Xiu, what is your opinion on how this
+>>> should be grouped? Do you have use cases in mind where a more
+>>> fine-grained grouping would be required?
+>>
+>> I apologize I may missed that discussion when I prepared v2:(
+>>
+>> Yes, agreed, this grouping is more sensible and resonnable. so in this
+>> patchset only one right will be added, and I suppose the first commit
+>> which expand access_mask_t to u32 can be droped.
+>>
+>>>
+>>> —Günther
+>>>
+>>> P.S.: Regarding utimes: The hook_inode_setattr hook *also* gets called
+>>> on a variety on attribute changes including file ownership, file size
+>>> and file mode, so it might potentially interact with a bunch of other
+>>> existing Landlock rights. Maybe that is not the right approach. In any
+>>> case, it seems like it might require more thinking and it might be
+>>> sensible to do that in a separate patch set IMHO.
+>>
+>> Thanks for you reminder, that seems it's more complicated to support
+>> utimes, so I think we'd better not support it in this patchset.
+> 
+> The issue with this approach is that it makes it impossible to properly 
+> group such access rights. Indeed, to avoid inconsistencies and much more 
+> complexity, we cannot extend a Landlock access right once it is defined.
+> 
+> We also need to consider that file ownership and permissions have a 
+> default (e.g. umask), which is also a way to set them. How to 
+> consistently manage that? What if the application wants to protect its 
+> files with chmod 0400?
 
----
-v2: add clocks and clock-names.
-v3: rename wmac to wifi and change underscores to dash in node names.
-v4: rebase to the latest codebase.
-v5: remove useless pins in wf_dbdc_pins node.
----
- arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 38 +++++++++++++++++++
- arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 23 +++++++++++
- arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 40 ++++++++++++++++++++
- 3 files changed, 101 insertions(+)
+what do you mean by this? do you mean that we should have a set of 
+default permissions for files created by applications within the 
+sandbox, so that it can update metadata of its own file.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-index 882277a52b69..afe37b702eef 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
-@@ -115,6 +115,13 @@
- 	status = "okay";
- };
- 
-+&wifi {
-+	status = "okay";
-+	pinctrl-names = "default", "dbdc";
-+	pinctrl-0 = <&wf_2g_5g_pins>;
-+	pinctrl-1 = <&wf_dbdc_pins>;
-+};
-+
- &pio {
- 	uart1_pins: uart1-pins {
- 		mux {
-@@ -129,4 +136,35 @@
- 			groups = "uart2";
- 		};
- 	};
-+
-+	wf_2g_5g_pins: wf-2g-5g-pins {
-+		mux {
-+			function = "wifi";
-+			groups = "wf_2g", "wf_5g";
-+		};
-+		conf {
-+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
-+			drive-strength = <4>;
-+		};
-+	};
-+
-+	wf_dbdc_pins: wf-dbdc-pins {
-+		mux {
-+			function = "wifi";
-+			groups = "wf_dbdc";
-+		};
-+		conf {
-+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-+			       "WF0_TOP_CLK", "WF0_TOP_DATA";
-+			drive-strength = <4>;
-+		};
-+	};
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-index e3a407d03551..890ded0efc51 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
-@@ -7,6 +7,7 @@
- #include <dt-bindings/interrupt-controller/irq.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/clock/mt7986-clk.h>
-+#include <dt-bindings/reset/mt7986-resets.h>
- 
- / {
- 	interrupt-parent = <&gic>;
-@@ -70,6 +71,11 @@
- 			reg = <0 0x43000000 0 0x30000>;
- 			no-map;
- 		};
-+
-+		wmcpu_emi: wmcpu-reserved@4fc00000 {
-+			no-map;
-+			reg = <0 0x4fc00000 0 0x00100000>;
-+		};
- 	};
- 
- 	timer {
-@@ -261,6 +267,23 @@
- 			#size-cells = <0>;
- 			status = "disabled";
- 		};
-+
-+		wifi: wifi@18000000 {
-+			compatible = "mediatek,mt7986-wmac";
-+			resets = <&watchdog MT7986_TOPRGU_CONSYS_SW_RST>;
-+			reset-names = "consys";
-+			clocks = <&topckgen CLK_TOP_CONN_MCUSYS_SEL>,
-+				 <&topckgen CLK_TOP_AP2CNN_HOST_SEL>;
-+			clock-names = "mcu", "ap2conn";
-+			reg = <0 0x18000000 0 0x1000000>,
-+			      <0 0x10003000 0 0x1000>,
-+			      <0 0x11d10000 0 0x1000>;
-+			interrupts = <GIC_SPI 213 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 214 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 216 IRQ_TYPE_LEVEL_HIGH>;
-+			memory-region = <&wmcpu_emi>;
-+		};
- 	};
- 
- };
-diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-index 0f49d5764ff3..3443013b5971 100644
---- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
-@@ -98,3 +98,43 @@
- 		};
- 	};
- };
-+
-+&wifi {
-+	status = "okay";
-+	pinctrl-names = "default", "dbdc";
-+	pinctrl-0 = <&wf_2g_5g_pins>;
-+	pinctrl-1 = <&wf_dbdc_pins>;
-+};
-+
-+&pio {
-+	wf_2g_5g_pins: wf-2g-5g-pins {
-+		mux {
-+			function = "wifi";
-+			groups = "wf_2g", "wf_5g";
-+		};
-+		conf {
-+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-+			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
-+			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
-+			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
-+			       "WF1_TOP_CLK", "WF1_TOP_DATA";
-+			drive-strength = <4>;
-+		};
-+	};
-+
-+	wf_dbdc_pins: wf-dbdc-pins {
-+		mux {
-+			function = "wifi";
-+			groups = "wf_dbdc";
-+		};
-+		conf {
-+			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
-+			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
-+			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
-+			       "WF0_TOP_CLK", "WF0_TOP_DATA";
-+			drive-strength = <4>;
-+		};
-+	};
-+};
--- 
-2.18.0
+> 
+> About the naming, I think we can start with:
+> - LANDLOCK_ACCESS_FS_READ_METADATA (read any file/dir metadata);
+> - LANDLOCK_ACCESS_FS_WRITE_SAFE_METADATA: change file times, user xattr;
 
+do you mean we should have permission controls on metadata level or 
+operation level? e.g. should we allow update on user xattr but deny 
+update on security xattr? or should we disallow update on any xattr?
+
+> - LANDLOCK_ACCESS_FS_WRITE_UNSAFE_METADATA: interpreted by the kernel 
+> (could change non-Landlock DAC or MAC, which could be considered as a 
+> policy bypass; or other various xattr that might be interpreted by 
+> filesystems), this should be denied most of the time.
+
+do you mean FS_WRITE_UNSAFE_METADATA is security-related? and 
+FS_WRITE_SAFE_METADATA is non-security-related?
+
+> .

@@ -2,76 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54DC85A9D62
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5160F5A9D67
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235011AbiIAQnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
+        id S233277AbiIAQpP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:45:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbiIAQng (ORCPT
+        with ESMTP id S234384AbiIAQpH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:43:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CFD489902
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:43:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662050614;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=PrJ4ySHIrP8ROBjoDBorg1jCunJZhbH8/S5JcvsTtFM=;
-        b=O4UYm8rq9j8Xi1EWpEjr+/y7UMd928G0VvVCuwKAYUk/0FSJDhHwzcGGT5n3qpB989y20J
-        wNOvNxuXufItRKucfUO9gSxikBVt5Z5L3mPOJDENUNqyeMXMya1nF/LXnmR/JOBS38Ldm2
-        Hj03cHPYR12r4w/TLRoIOLzT0DwgA3I=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-635-6WkrmYpjO8uHupbQEGsV5Q-1; Thu, 01 Sep 2022 12:43:33 -0400
-X-MC-Unique: 6WkrmYpjO8uHupbQEGsV5Q-1
-Received: by mail-ed1-f71.google.com with SMTP id t13-20020a056402524d00b0043db1fbefdeso12042788edd.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:43:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date;
-        bh=PrJ4ySHIrP8ROBjoDBorg1jCunJZhbH8/S5JcvsTtFM=;
-        b=K/B0rgio+uIdwO4ExXyAZdC92oH2emO0kgW5KMzlZ/YOFUkMYzB0y+eU4twmG5iIA6
-         +AMS1tfsH0QgvaDo2ulO4obe0QEz1x/CuHy6nH9LZOxkuf9YvAkzQiktc4mnnOEnkaQA
-         kdGyBOPbFI9juJx1v/T6Hs30Dbk34k/3Pg7LY6VwTDgtHendeE9n4AcQSmeaqzm8cFIR
-         P34KowaJdLZNOrCA1Fvm84yG6PXwI+Nnfqkvu/2B98gCFLYF64dRyBElauLrkpH2IrPD
-         xnrFqt1pd6BIqYGOzECL5OEjqgvZgMgoaHYyhh+ZSgGM/D8hu7cwdTZcea8f4uGMqaeH
-         ppiA==
-X-Gm-Message-State: ACgBeo0ol34jpbTUuPX/TwMUeoyRE21t7h6yVZTQIBvKHQ2nAZQItGiR
-        DlGiaA8Y9ds5v6duOKSPydq4v8J7RMhxUWmdQ5ahKIOg4bewW5NZLI69x8Njz3qIfnmkDr3fI2s
-        EnAyvbbWLM6HezkSA1qW32HF5
-X-Received: by 2002:a17:907:7678:b0:730:e1ad:b128 with SMTP id kk24-20020a170907767800b00730e1adb128mr25179595ejc.67.1662050612026;
-        Thu, 01 Sep 2022 09:43:32 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5NrGqkbyyZ0fwizjhE35YmoDlfDgv524Gsk/uveADS0YNnu8WYkhS9FzPvX7l7wwMqul5mtQ==
-X-Received: by 2002:a17:907:7678:b0:730:e1ad:b128 with SMTP id kk24-20020a170907767800b00730e1adb128mr25179578ejc.67.1662050611763;
-        Thu, 01 Sep 2022 09:43:31 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id h10-20020a0564020e8a00b004478be33bddsm1583098eda.15.2022.09.01.09.43.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 09:43:31 -0700 (PDT)
-Message-ID: <3766fb4c-d7fa-564c-abeb-c746cdf12526@redhat.com>
-Date:   Thu, 1 Sep 2022 18:43:30 +0200
+        Thu, 1 Sep 2022 12:45:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1574E30561;
+        Thu,  1 Sep 2022 09:45:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 63117B82844;
+        Thu,  1 Sep 2022 16:45:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 886E4C433C1;
+        Thu,  1 Sep 2022 16:44:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662050701;
+        bh=WTVoLyArljMwvj6zU+m2L6cOF0xZFcbBpY3XVPZOeBU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Kf92I5lzjXCibPDPWmxIHXKuoDoS+UwpSkVq3OFDFg9hc+aE6t0CRar10bQx6lRpP
+         LwLi3pZm1yHhBgRj77UycglMGL1AUhHSoP06PsLM6vrT7rbENbsa4cmPQv8jUDN/xo
+         2pQB7bA0s91jdt8UopkLwsPIzulsc/XcWERrrmTE=
+Date:   Thu, 1 Sep 2022 18:44:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     evgreen@chromium.org, arnd@arndb.de, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@gpiccoli.net, ardb@kernel.org,
+        davidgow@google.com, jwerner@chromium.org,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH V3] firmware: google: Test spinlock on panic path to
+ avoid lockups
+Message-ID: <YxDhiSDs4YcUrqV5@kroah.com>
+References: <20220819155059.451674-1-gpiccoli@igalia.com>
+ <YxDVPqVkdgQbAIvY@kroah.com>
+ <f89cd87c-7d1c-d8e6-ed95-6876f0201872@igalia.com>
+ <YxDX9+p+58q2sip2@kroah.com>
+ <6bc5dbc3-2cdd-5cb8-1632-11de2008a85a@igalia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-From:   Hans de Goede <hdegoede@redhat.com>
-Subject: [GIT PULL] platform-drivers-x86 for 6.0-2
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mark Gross <mgross@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6bc5dbc3-2cdd-5cb8-1632-11de2008a85a@igalia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,105 +58,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Sep 01, 2022 at 01:24:46PM -0300, Guilherme G. Piccoli wrote:
+> On 01/09/2022 13:04, Greg KH wrote:
+> > [...]
+> >>> What happens if the lock is grabbed right after testing for it?
+> >>> Shouldn't you use lockdep_assert_held() instead as the documentation
+> >>> says to?
+> >>
+> >> How, if in this point only a single CPU (this one, executing the code)
+> >> is running?
+> > 
+> > How are we supposed to know this here?
+> > 
+> 
+> Reading the code?
+> Or you mean, in the commit description this should be mentioned?
 
-Here is the first round of fixes for platform-drivers-x86 for 6.0,
-nothing special to report just various small fixes and hardware-id
-additions.
+Yes, and in the comment as this type of call is very rare and should
+almost never be used.
 
-Regards,
+> >> other CPUs, except this one executing the code. So, either the lock was
+> >> taken (and we bail), or it wasn't and it's safe to continue.
+> > 
+> > Then who else could have taken the lock?  And if all other CPUs are
+> > stopped, who cares about the lock at all?  Just don't grab it (you
+> > should check for that when you want to grab it) and then you can work
+> > properly at that point in time.
+> > 
+> 
+> I don't think it is so simple - we are in the panic path.
 
-Hans
+Great, then the lock doesn't matter :)
 
+> So, imagine the lock was taken in CPU0, where GSMI is doing some
+> operation. During that operation, CPU1 panics!
+> 
+> When that happens, panic() executes in CPU1, disabling CPU0 through
+> "strong" mechanisms (NMI). So, CPU0 had the lock, it is now off, and
+> when CPU1 goes through the panic notifiers, it'll eventually wait
+> forever for this lock in the GSMI handler, unless we have this patch
+> that would prevent the handler to run in such case.
+> Makes sense?
 
-The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+I'm trying to say "if you are in panic, never grab the lock in the first
+place".  So change the place when you grab the lock, not here.
 
-  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+thanks,
 
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-v6.0-2
-
-for you to fetch changes up to 647e82dbf85124697be59a4b4cf00c0d38177dcb:
-
-  platform/x86: p2sb: Fix UAF when caller uses resource name (2022-09-01 17:51:34 +0200)
-
-----------------------------------------------------------------
-platform-drivers-x86 for v6.0-2
-
-Various small fixes and hardware-id additions.
-
-The following is an automated git shortlog grouped by driver:
-
-acer-wmi:
- -  Acer Aspire One AOD270/Packard Bell Dot keymap fixes
-
-asus-wmi:
- -  Increase FAN_CURVE_BUF_LEN to 32
- -  Fix the name of the mic-mute LED classdev
-
-p2sb:
- -  Fix UAF when caller uses resource name
-
-platform/mellanox:
- -  Remove redundant 'NULL' check
- -  Remove unnecessary code
- -  mlxreg-lc: Fix locking issue
- -  mlxreg-lc: Fix coverity warning
-
-platform/surface:
- -  aggregator_registry: Add HID devices for sensors and UCSI client to SP8
- -  aggregator_registry: Rename HID device nodes based on new findings
- -  aggregator_registry: Rename HID device nodes based on their function
- -  aggregator_registry: Add support for Surface Laptop Go 2
-
-pmc_atom:
- -  Fix SLP_TYPx bitfield mask
-
-thinkpad_acpi:
- -  Explicitly set to balanced mode on startup
-
-x86-android-tablets:
- -  Fix broken touchscreen on Chuwi Hi8 with Windows BIOS
-
-----------------------------------------------------------------
-Andy Shevchenko (2):
-      platform/x86: pmc_atom: Fix SLP_TYPx bitfield mask
-      platform/x86: p2sb: Fix UAF when caller uses resource name
-
-Hans de Goede (2):
-      platform/x86: x86-android-tablets: Fix broken touchscreen on Chuwi Hi8 with Windows BIOS
-      platform/x86: acer-wmi: Acer Aspire One AOD270/Packard Bell Dot keymap fixes
-
-Luke D. Jones (1):
-      platform/x86: asus-wmi: Increase FAN_CURVE_BUF_LEN to 32
-
-Mario Limonciello (1):
-      platform/x86: thinkpad_acpi: Explicitly set to balanced mode on startup
-
-Maximilian Luz (4):
-      platform/surface: aggregator_registry: Add support for Surface Laptop Go 2
-      platform/surface: aggregator_registry: Rename HID device nodes based on their function
-      platform/surface: aggregator_registry: Rename HID device nodes based on new findings
-      platform/surface: aggregator_registry: Add HID devices for sensors and UCSI client to SP8
-
-PaddyKP_Yao (1):
-      platform/x86: asus-wmi: Fix the name of the mic-mute LED classdev
-
-Vadim Pasternak (4):
-      platform/mellanox: mlxreg-lc: Fix coverity warning
-      platform/mellanox: mlxreg-lc: Fix locking issue
-      platform/mellanox: Remove unnecessary code
-      platform/mellanox: Remove redundant 'NULL' check
-
- drivers/platform/mellanox/mlxreg-lc.c              | 53 +++++++++++++---------
- .../platform/surface/surface_aggregator_registry.c | 47 ++++++++++---------
- drivers/platform/x86/acer-wmi.c                    |  9 +++-
- drivers/platform/x86/asus-wmi.c                    | 11 ++---
- drivers/platform/x86/p2sb.c                        | 18 +++++++-
- drivers/platform/x86/pmc_atom.c                    |  2 +-
- drivers/platform/x86/thinkpad_acpi.c               |  7 ++-
- drivers/platform/x86/x86-android-tablets.c         | 14 ++++++
- include/linux/platform_data/x86/pmc_atom.h         |  6 ++-
- 9 files changed, 108 insertions(+), 59 deletions(-)
-
+greg k-h

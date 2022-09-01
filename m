@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540AF5A91D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:13:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CFFE5A91D3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233996AbiIAINQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
+        id S234085AbiIAINV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 04:13:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233832AbiIAIMt (ORCPT
+        with ESMTP id S233875AbiIAIMu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:12:49 -0400
+        Thu, 1 Sep 2022 04:12:50 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 656D51299E6;
-        Thu,  1 Sep 2022 01:12:47 -0700 (PDT)
-Date:   Thu, 01 Sep 2022 08:12:44 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FAF012BF63;
+        Thu,  1 Sep 2022 01:12:48 -0700 (PDT)
+Date:   Thu, 01 Sep 2022 08:12:45 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662019965;
+        s=2020; t=1662019967;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nfuQ0Vwg/5vIFBggno4nVA/RHScWxPWw8paaD15Yw48=;
-        b=CuAYgNsVsdGuN8NWMi/Ki+8QbtH6/trpvSK9DPwHY1RU4EyTEzgK6q6k5rnlZiohrFI7bD
-        hbSHZqUP1oS+bJB8taYMberDGpS4jiWjAAld79kDu73xJRBe9R/lhFktGmqvu+jrszIKWh
-        jQhByxM7u1QWS9oSiXm8DJa1ZkFTHjdj6hcWN5PTtjyMNC5Zz3JfC3W4TLuHVPPovrKWvS
-        7Lniv/fqK4T4Tw4hP5X7Rry0WAzV970MLK5WlEUtvEmlU6hnjByc4qcLid6gPBmzueVwZX
-        M4+lyOxNfshc92fR14QFzCDk8UwzZBhpBNvCpx7KQZ2cnZzpnsioScsn1PjzvQ==
+        bh=1UFSJOyVKjNHHGUv9Qm+HPhrOiBuH5OGF6uz/mfXBcE=;
+        b=LOoO2+nTpQGNWMNlhr/7SLoOd7hXD2zS2Tg7Webd0k6wF7qZLf2V5LIX6g3JVN0iA998nK
+        73vito8fbEJQckGnnwlRM7+kd1m9+zbjMjbn4flfmRJkWU9wexRqP8PDdXxmZ3dWisjNfA
+        s14t3BOfmVABOmJc6vhVibXzvpZUnXsRqaw2iMLkUHCbA472EikZi7bL7ClpU5uuz04lx8
+        ZIFQAfkuQDMXAUZsoDaezXWGz9fQ+/x4j3oIlyy/pZmIFZJGzxYBYN5yqaxYYMDBp1NfcE
+        5plIbaBYV9VY7VMzOLI78VwGsXyii2W6L8WtQRPRL5AwEL7ACY9BtEBiwMcyjw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662019965;
+        s=2020e; t=1662019967;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nfuQ0Vwg/5vIFBggno4nVA/RHScWxPWw8paaD15Yw48=;
-        b=c6YDvWlE+JLmMiw7hDGzEQFF9S+bVZMhYPzHc9JRC/n6a5qTN0lTvEuWzWR1kgbmxsil8W
-        x0S0vxGEJh+mlrAw==
+        bh=1UFSJOyVKjNHHGUv9Qm+HPhrOiBuH5OGF6uz/mfXBcE=;
+        b=DzQ1tUfEnwt+wALGeFzLfsyyZ0LV6d9IN+WJ6ptL4eMqej5B2f1iWDsIZsLWa0eHxcmjRN
+        oPVTMa3AmXN79LDA==
 From:   "tip-bot2 for Marco Elver" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/core] powerpc/hw_breakpoint: Avoid relying on caller
- synchronization
-Cc:     Dmitry Vyukov <dvyukov@google.com>, Marco Elver <elver@google.com>,
+Subject: [tip: perf/core] perf/hw_breakpoint: Remove useless code related to
+ flexible breakpoints
+Cc:     Marco Elver <elver@google.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
         Ian Rogers <irogers@google.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20220829124719.675715-10-elver@google.com>
-References: <20220829124719.675715-10-elver@google.com>
+In-Reply-To: <20220829124719.675715-9-elver@google.com>
+References: <20220829124719.675715-9-elver@google.com>
 MIME-Version: 1.0
-Message-ID: <166201996465.401.14227071145123098066.tip-bot2@tip-bot2>
+Message-ID: <166201996577.401.1852531279033258686.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -69,189 +70,151 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/core branch of tip:
 
-Commit-ID:     f95e5a3d59011eec1257d0e76de1e1f8969d426f
-Gitweb:        https://git.kernel.org/tip/f95e5a3d59011eec1257d0e76de1e1f8969d426f
+Commit-ID:     24198ad373ad1e30b638aa147142dc21ab5757e7
+Gitweb:        https://git.kernel.org/tip/24198ad373ad1e30b638aa147142dc21ab5757e7
 Author:        Marco Elver <elver@google.com>
-AuthorDate:    Mon, 29 Aug 2022 14:47:14 +02:00
+AuthorDate:    Mon, 29 Aug 2022 14:47:13 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 30 Aug 2022 10:56:23 +02:00
+CommitterDate: Tue, 30 Aug 2022 10:56:22 +02:00
 
-powerpc/hw_breakpoint: Avoid relying on caller synchronization
+perf/hw_breakpoint: Remove useless code related to flexible breakpoints
 
-Internal data structures (cpu_bps, task_bps) of powerpc's hw_breakpoint
-implementation have relied on nr_bp_mutex serializing access to them.
+Flexible breakpoints have never been implemented, with
+bp_cpuinfo::flexible always being 0. Unfortunately, they still occupy 4
+bytes in each bp_cpuinfo and bp_busy_slots, as well as computing the max
+flexible count in fetch_bp_busy_slots().
 
-Before overhauling synchronization of kernel/events/hw_breakpoint.c,
-introduce 2 spinlocks to synchronize cpu_bps and task_bps respectively,
-thus avoiding reliance on callers synchronizing powerpc's hw_breakpoint.
+This again causes suboptimal code generation, when we always know that
+`!!slots.flexible` will be 0.
 
-Reported-by: Dmitry Vyukov <dvyukov@google.com>
+Just get rid of the flexible "placeholder" and remove all real code
+related to it. Make a note in the comment related to the constraints
+algorithm but don't remove them from the algorithm, so that if in future
+flexible breakpoints need supporting, it should be trivial to revive
+them (along with reverting this change).
+
 Signed-off-by: Marco Elver <elver@google.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Dmitry Vyukov <dvyukov@google.com>
+Reviewed-by: Dmitry Vyukov <dvyukov@google.com>
 Acked-by: Ian Rogers <irogers@google.com>
-Link: https://lore.kernel.org/r/20220829124719.675715-10-elver@google.com
+Link: https://lore.kernel.org/r/20220829124719.675715-9-elver@google.com
 ---
- arch/powerpc/kernel/hw_breakpoint.c | 53 +++++++++++++++++++++-------
- 1 file changed, 40 insertions(+), 13 deletions(-)
+ kernel/events/hw_breakpoint.c | 57 ++++++++++------------------------
+ 1 file changed, 17 insertions(+), 40 deletions(-)
 
-diff --git a/arch/powerpc/kernel/hw_breakpoint.c b/arch/powerpc/kernel/hw_breakpoint.c
-index 2669f80..8db1a15 100644
---- a/arch/powerpc/kernel/hw_breakpoint.c
-+++ b/arch/powerpc/kernel/hw_breakpoint.c
-@@ -15,6 +15,7 @@
- #include <linux/kernel.h>
- #include <linux/sched.h>
- #include <linux/smp.h>
-+#include <linux/spinlock.h>
- #include <linux/debugfs.h>
- #include <linux/init.h>
- 
-@@ -129,7 +130,14 @@ struct breakpoint {
- 	bool ptrace_bp;
+diff --git a/kernel/events/hw_breakpoint.c b/kernel/events/hw_breakpoint.c
+index 9c9bf17..8b40fca 100644
+--- a/kernel/events/hw_breakpoint.c
++++ b/kernel/events/hw_breakpoint.c
+@@ -45,8 +45,6 @@ struct bp_cpuinfo {
+ #else
+ 	unsigned int	*tsk_pinned;
+ #endif
+-	/* Number of non-pinned cpu/task breakpoints in a cpu */
+-	unsigned int	flexible; /* XXX: placeholder, see fetch_this_slot() */
  };
  
-+/*
-+ * While kernel/events/hw_breakpoint.c does its own synchronization, we cannot
-+ * rely on it safely synchronizing internals here; however, we can rely on it
-+ * not requesting more breakpoints than available.
-+ */
-+static DEFINE_SPINLOCK(cpu_bps_lock);
- static DEFINE_PER_CPU(struct breakpoint *, cpu_bps[HBP_NUM_MAX]);
-+static DEFINE_SPINLOCK(task_bps_lock);
- static LIST_HEAD(task_bps);
+ static DEFINE_PER_CPU(struct bp_cpuinfo, bp_cpuinfo[TYPE_MAX]);
+@@ -67,12 +65,6 @@ static const struct rhashtable_params task_bps_ht_params = {
  
- static struct breakpoint *alloc_breakpoint(struct perf_event *bp)
-@@ -174,7 +182,9 @@ static int task_bps_add(struct perf_event *bp)
- 	if (IS_ERR(tmp))
- 		return PTR_ERR(tmp);
+ static bool constraints_initialized __ro_after_init;
  
-+	spin_lock(&task_bps_lock);
- 	list_add(&tmp->list, &task_bps);
-+	spin_unlock(&task_bps_lock);
- 	return 0;
- }
+-/* Gather the number of total pinned and un-pinned bp in a cpuset */
+-struct bp_busy_slots {
+-	unsigned int pinned;
+-	unsigned int flexible;
+-};
+-
+ /* Serialize accesses to the above constraints */
+ static DEFINE_MUTEX(nr_bp_mutex);
  
-@@ -182,6 +192,7 @@ static void task_bps_remove(struct perf_event *bp)
- {
- 	struct list_head *pos, *q;
- 
-+	spin_lock(&task_bps_lock);
- 	list_for_each_safe(pos, q, &task_bps) {
- 		struct breakpoint *tmp = list_entry(pos, struct breakpoint, list);
- 
-@@ -191,6 +202,7 @@ static void task_bps_remove(struct perf_event *bp)
- 			break;
- 		}
- 	}
-+	spin_unlock(&task_bps_lock);
+@@ -190,14 +182,14 @@ static const struct cpumask *cpumask_of_bp(struct perf_event *bp)
  }
  
  /*
-@@ -200,12 +212,17 @@ static void task_bps_remove(struct perf_event *bp)
- static bool all_task_bps_check(struct perf_event *bp)
+- * Report the number of pinned/un-pinned breakpoints we have in
+- * a given cpu (cpu > -1) or in all of them (cpu = -1).
++ * Returns the max pinned breakpoint slots in a given
++ * CPU (cpu > -1) or across all of them (cpu = -1).
+  */
+-static void
+-fetch_bp_busy_slots(struct bp_busy_slots *slots, struct perf_event *bp,
+-		    enum bp_type_idx type)
++static int
++max_bp_pinned_slots(struct perf_event *bp, enum bp_type_idx type)
  {
- 	struct breakpoint *tmp;
-+	bool ret = false;
+ 	const struct cpumask *cpumask = cpumask_of_bp(bp);
++	int pinned_slots = 0;
+ 	int cpu;
  
-+	spin_lock(&task_bps_lock);
- 	list_for_each_entry(tmp, &task_bps, list) {
--		if (!can_co_exist(tmp, bp))
--			return true;
-+		if (!can_co_exist(tmp, bp)) {
-+			ret = true;
-+			break;
-+		}
+ 	for_each_cpu(cpu, cpumask) {
+@@ -210,24 +202,10 @@ fetch_bp_busy_slots(struct bp_busy_slots *slots, struct perf_event *bp,
+ 		else
+ 			nr += task_bp_pinned(cpu, bp, type);
+ 
+-		if (nr > slots->pinned)
+-			slots->pinned = nr;
+-
+-		nr = info->flexible;
+-		if (nr > slots->flexible)
+-			slots->flexible = nr;
++		pinned_slots = max(nr, pinned_slots);
  	}
--	return false;
-+	spin_unlock(&task_bps_lock);
-+	return ret;
- }
- 
- /*
-@@ -215,13 +232,18 @@ static bool all_task_bps_check(struct perf_event *bp)
- static bool same_task_bps_check(struct perf_event *bp)
- {
- 	struct breakpoint *tmp;
-+	bool ret = false;
- 
-+	spin_lock(&task_bps_lock);
- 	list_for_each_entry(tmp, &task_bps, list) {
- 		if (tmp->bp->hw.target == bp->hw.target &&
--		    !can_co_exist(tmp, bp))
--			return true;
-+		    !can_co_exist(tmp, bp)) {
-+			ret = true;
-+			break;
-+		}
- 	}
--	return false;
-+	spin_unlock(&task_bps_lock);
-+	return ret;
- }
- 
- static int cpu_bps_add(struct perf_event *bp)
-@@ -234,6 +256,7 @@ static int cpu_bps_add(struct perf_event *bp)
- 	if (IS_ERR(tmp))
- 		return PTR_ERR(tmp);
- 
-+	spin_lock(&cpu_bps_lock);
- 	cpu_bp = per_cpu_ptr(cpu_bps, bp->cpu);
- 	for (i = 0; i < nr_wp_slots(); i++) {
- 		if (!cpu_bp[i]) {
-@@ -241,6 +264,7 @@ static int cpu_bps_add(struct perf_event *bp)
- 			break;
- 		}
- 	}
-+	spin_unlock(&cpu_bps_lock);
- 	return 0;
- }
- 
-@@ -249,6 +273,7 @@ static void cpu_bps_remove(struct perf_event *bp)
- 	struct breakpoint **cpu_bp;
- 	int i = 0;
- 
-+	spin_lock(&cpu_bps_lock);
- 	cpu_bp = per_cpu_ptr(cpu_bps, bp->cpu);
- 	for (i = 0; i < nr_wp_slots(); i++) {
- 		if (!cpu_bp[i])
-@@ -260,19 +285,25 @@ static void cpu_bps_remove(struct perf_event *bp)
- 			break;
- 		}
- 	}
-+	spin_unlock(&cpu_bps_lock);
- }
- 
- static bool cpu_bps_check(int cpu, struct perf_event *bp)
- {
- 	struct breakpoint **cpu_bp;
-+	bool ret = false;
- 	int i;
- 
-+	spin_lock(&cpu_bps_lock);
- 	cpu_bp = per_cpu_ptr(cpu_bps, cpu);
- 	for (i = 0; i < nr_wp_slots(); i++) {
--		if (cpu_bp[i] && !can_co_exist(cpu_bp[i], bp))
--			return true;
-+		if (cpu_bp[i] && !can_co_exist(cpu_bp[i], bp)) {
-+			ret = true;
-+			break;
-+		}
- 	}
--	return false;
-+	spin_unlock(&cpu_bps_lock);
-+	return ret;
- }
- 
- static bool all_cpu_bps_check(struct perf_event *bp)
-@@ -286,10 +317,6 @@ static bool all_cpu_bps_check(struct perf_event *bp)
- 	return false;
- }
+-}
  
 -/*
-- * We don't use any locks to serialize accesses to cpu_bps or task_bps
-- * because are already inside nr_bp_mutex.
+- * For now, continue to consider flexible as pinned, until we can
+- * ensure no flexible event can ever be scheduled before a pinned event
+- * in a same cpu.
 - */
- int arch_reserve_bp_slot(struct perf_event *bp)
+-static void
+-fetch_this_slot(struct bp_busy_slots *slots, int weight)
+-{
+-	slots->pinned += weight;
++	return pinned_slots;
+ }
+ 
+ /*
+@@ -298,7 +276,12 @@ __weak void arch_unregister_hw_breakpoint(struct perf_event *bp)
+ }
+ 
+ /*
+- * Constraints to check before allowing this new breakpoint counter:
++ * Constraints to check before allowing this new breakpoint counter.
++ *
++ * Note: Flexible breakpoints are currently unimplemented, but outlined in the
++ * below algorithm for completeness.  The implementation treats flexible as
++ * pinned due to no guarantee that we currently always schedule flexible events
++ * before a pinned event in a same CPU.
+  *
+  *  == Non-pinned counter == (Considered as pinned for now)
+  *
+@@ -340,8 +323,8 @@ __weak void arch_unregister_hw_breakpoint(struct perf_event *bp)
+  */
+ static int __reserve_bp_slot(struct perf_event *bp, u64 bp_type)
  {
+-	struct bp_busy_slots slots = {0};
+ 	enum bp_type_idx type;
++	int max_pinned_slots;
+ 	int weight;
  	int ret;
+ 
+@@ -357,15 +340,9 @@ static int __reserve_bp_slot(struct perf_event *bp, u64 bp_type)
+ 	type = find_slot_idx(bp_type);
+ 	weight = hw_breakpoint_weight(bp);
+ 
+-	fetch_bp_busy_slots(&slots, bp, type);
+-	/*
+-	 * Simulate the addition of this breakpoint to the constraints
+-	 * and see the result.
+-	 */
+-	fetch_this_slot(&slots, weight);
+-
+-	/* Flexible counters need to keep at least one slot */
+-	if (slots.pinned + (!!slots.flexible) > hw_breakpoint_slots_cached(type))
++	/* Check if this new breakpoint can be satisfied across all CPUs. */
++	max_pinned_slots = max_bp_pinned_slots(bp, type) + weight;
++	if (max_pinned_slots > hw_breakpoint_slots_cached(type))
+ 		return -ENOSPC;
+ 
+ 	ret = arch_reserve_bp_slot(bp);

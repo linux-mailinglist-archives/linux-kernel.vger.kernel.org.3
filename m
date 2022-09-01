@@ -2,150 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4984F5A9607
+	by mail.lfdr.de (Postfix) with ESMTP id 91EC75A9608
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233159AbiIALtx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 07:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
+        id S233195AbiIALt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233208AbiIALtW (ORCPT
+        with ESMTP id S233212AbiIALtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 07:49:22 -0400
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B689139F5E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 04:49:17 -0700 (PDT)
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-        by localhost (Postfix) with ESMTP id 4MJK7y0s3xz9spG;
-        Thu,  1 Sep 2022 13:49:02 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 9C26P2oxqw8L; Thu,  1 Sep 2022 13:49:02 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-        by pegase2.c-s.fr (Postfix) with ESMTP id 4MJK7t34jDz9spJ;
-        Thu,  1 Sep 2022 13:48:58 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id 4FD718B780;
-        Thu,  1 Sep 2022 13:48:58 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-        with ESMTP id EuLa8HTRY4s9; Thu,  1 Sep 2022 13:48:58 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.131])
-        by messagerie.si.c-s.fr (Postfix) with ESMTP id AD9DC8B781;
-        Thu,  1 Sep 2022 13:48:57 +0200 (CEST)
-Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 281BmseE1768901
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
-        Thu, 1 Sep 2022 13:48:54 +0200
-Received: (from chleroy@localhost)
-        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 281Bmsgp1768900;
-        Thu, 1 Sep 2022 13:48:54 +0200
-X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>, sv@linux.ibm.com,
-        bgray@linux.ibm.com, agust@denx.de, jpoimboe@kernel.org,
-        peterz@infradead.org, jbaron@akamai.com, rostedt@goodmis.org,
-        ardb@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com
-Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        x86@kernel.org, chenzhongjin@huawei.com
-Subject: [PATCH v3 6/6] powerpc/static_call: Implement inline static calls
-Date:   Thu,  1 Sep 2022 13:48:25 +0200
-Message-Id: <73de83279d8a8cdcffa411a525d60eb8e1901bf5.1662032631.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <cover.1662032631.git.christophe.leroy@csgroup.eu>
-References: <cover.1662032631.git.christophe.leroy@csgroup.eu>
+        Thu, 1 Sep 2022 07:49:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC6F13BB10
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 04:49:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 456DAB825C9
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 11:49:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66A99C4347C;
+        Thu,  1 Sep 2022 11:49:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662032956;
+        bh=oQcRcueyeZGLd5NpjwzZcahqf+ZvA/FTegc8Z5bzuu4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=UasUgYzlJUCsMJUVfP4vW6me6slI0D+PxO1y/0Ze2IqeSPEvUS+w6RW+loPT4Li8t
+         NVZBJXqkUWcMKTxqVPL4MQ6WqXOlXE7visxBosES2VstcaoW4dc6R4PKco/P8c+NKb
+         T58g3LdhKp4VKIJSXWehQ2e9xw2j3cUp/8mul1Wwn4bGPiLtm0sMOQOFC35Asjae8v
+         0chGz/4Y7lQj9w/l4vgUtL2YOetrewcoB/hevdaMlbGZdeGzN/oV4XUut4kXT5XCJ7
+         u5VZmxVc7OzWNQAiKkH1GWOMZ+0XXAgOTnx+N6gs0Ub7mSAmoivPYJwDxSkhnNK6HG
+         mmfgzWeirOK8w==
+From:   Mark Brown <broonie@kernel.org>
+To:     alsa-devel@alsa-project.org, Takashi Iwai <tiwai@suse.com>,
+        linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     kernel test robot <lkp@intel.com>
+In-Reply-To: <20220901101458.365354-1-krzysztof.kozlowski@linaro.org>
+References: <20220901101458.365354-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/2] ASoC: codecs: wcd934x: add Slimbus dependency
+Message-Id: <166203295512.40681.12809849481799379505.b4-ty@kernel.org>
+Date:   Thu, 01 Sep 2022 12:49:15 +0100
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1662032901; l=2913; s=20211009; h=from:subject:message-id; bh=TvtmX4ECN9pg2ZGuTVxGQDwg0x2MKLzYnuieB2MCpwA=; b=+rUtG7bfs80qmRGzX7EsUv8yDVc6/0BPG5hLed+TUPAQfCOIjHWiG98lGSXdtrXkGM44BmnWmx3h R/eZNgA8DY5eQrY3gY3fAf8SfAaetBeNtvlUn+jNC72Vbye+XXg9
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Mailer: b4 0.10.0-dev-0c1df
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement inline static calls:
-- Put a 'bl' to the destination function ('b' if tail call)
-- Put a 'nop' when the destination function is NULL ('blr' if tail call)
-- Put a 'li r3,0' when the destination is the RET0 function and not
-a tail call.
+On Thu, 1 Sep 2022 13:14:57 +0300, Krzysztof Kozlowski wrote:
+> The WCD934X codec is a Slimbus driver, so it must depend on SLIMBUS,
+> also for compile tests:
+> 
+>   ERROR: modpost: "slim_stream_prepare" [sound/soc/codecs/snd-soc-wcd934x.ko] undefined!
+> 
+> 
 
-If the destination is too far (over the 32Mb limit), go via the
-trampoline.
+Applied to
 
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
- arch/powerpc/Kconfig                   |  1 +
- arch/powerpc/include/asm/static_call.h |  2 ++
- arch/powerpc/kernel/static_call.c      | 24 +++++++++++++++++++++++-
- 3 files changed, 26 insertions(+), 1 deletion(-)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 6be2e68fa9eb..9deb97c28304 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -251,6 +251,7 @@ config PPC
- 	select HAVE_STACKPROTECTOR		if PPC32 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r2)
- 	select HAVE_STACKPROTECTOR		if PPC64 && $(cc-option,-mstack-protector-guard=tls -mstack-protector-guard-reg=r13)
- 	select HAVE_STATIC_CALL			if PPC32
-+	select HAVE_STATIC_CALL_INLINE		if PPC32
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select HAVE_VIRT_CPU_ACCOUNTING
- 	select HUGETLB_PAGE_SIZE_VARIABLE	if PPC_BOOK3S_64 && HUGETLB_PAGE
-diff --git a/arch/powerpc/include/asm/static_call.h b/arch/powerpc/include/asm/static_call.h
-index de1018cc522b..e3d5d3823dac 100644
---- a/arch/powerpc/include/asm/static_call.h
-+++ b/arch/powerpc/include/asm/static_call.h
-@@ -26,4 +26,6 @@
- #define ARCH_DEFINE_STATIC_CALL_NULL_TRAMP(name)	__PPC_SCT(name, "blr")
- #define ARCH_DEFINE_STATIC_CALL_RET0_TRAMP(name)	__PPC_SCT(name, "b .+20")
- 
-+#define CALL_INSN_SIZE		4
-+
- #endif /* _ASM_POWERPC_STATIC_CALL_H */
-diff --git a/arch/powerpc/kernel/static_call.c b/arch/powerpc/kernel/static_call.c
-index 97765b9e1c5b..ba59e987f92d 100644
---- a/arch/powerpc/kernel/static_call.c
-+++ b/arch/powerpc/kernel/static_call.c
-@@ -15,7 +15,29 @@ void arch_static_call_transform(void *site, void *tramp, void *func, bool tail)
- 
- 	mutex_lock(&text_mutex);
- 
--	if (tramp) {
-+	if (site && tail) {
-+		if (!func)
-+			err = patch_instruction(site, ppc_inst(PPC_RAW_BLR()));
-+		else if (is_ret0)
-+			err = patch_branch(site, _ret0, 0);
-+		else if (is_short)
-+			err = patch_branch(site, _func, 0);
-+		else if (tramp)
-+			err = patch_branch(site, _tramp, 0);
-+		else
-+			err = 0;
-+	} else if (site) {
-+		if (!func)
-+			err = patch_instruction(site, ppc_inst(PPC_RAW_NOP()));
-+		else if (is_ret0)
-+			err = patch_instruction(site, ppc_inst(PPC_RAW_LI(_R3, 0)));
-+		else if (is_short)
-+			err = patch_branch(site, _func, BRANCH_SET_LINK);
-+		else if (tramp)
-+			err = patch_branch(site, _tramp, BRANCH_SET_LINK);
-+		else
-+			err = 0;
-+	} else if (tramp) {
- 		if (func && !is_short) {
- 			err = patch_instruction(tramp + PPC_SCT_DATA, ppc_inst(_func));
- 			if (err)
--- 
-2.37.1
+Thanks!
 
+[1/2] ASoC: codecs: wcd934x: add Slimbus dependency
+      commit: 9815746c48ebbd38d32a7a1dade7fa1e3948c54d
+[2/2] ASoC: codecs: rk817: drop I2C dependencies
+      commit: 69e3e537ec8a2e345f72f65ff24d3486d4764d83
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark

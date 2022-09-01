@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D155A976F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:54:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 335935A9774
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:55:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232813AbiIAMy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
+        id S233249AbiIAMzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiIAMy0 (ORCPT
+        with ESMTP id S233059AbiIAMy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:54:26 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5ADC2DC3;
-        Thu,  1 Sep 2022 05:54:25 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso2382514pjk.0;
-        Thu, 01 Sep 2022 05:54:25 -0700 (PDT)
+        Thu, 1 Sep 2022 08:54:59 -0400
+Received: from corp-front07-corp.i.nease.net (corp-front07-corp.i.nease.net [59.111.134.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E967D87;
+        Thu,  1 Sep 2022 05:54:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ZBXyYbYjQ1AsjxuVxx4OCp5VVoXL3nUBzDg8QRR75Cw=;
-        b=WnHhs39GjiACyx1YZGfcMNOiD+GKbXQiXCm71Qomry9SIGHoGWdN+80ZFj9VXdhEYI
-         dq7PMFNY+y9281NgJD+VbB2thOod2gj5nTmUx+7c9QiZY+d3l3jDo/lYLaqJ+LcKPrY3
-         ZuNo0bmvR4FWCpJh3yhmCTKvIY0ZdKoEB4lvhqYdlftEWIjesaQEi6Y4ExeIqDkVSW0y
-         TE5o5gIzY3KT2nFpFOGXyXJwWydTTGPKmS2n98hr20yKyvZZJvoxNi+4BVkfu+v5IOZF
-         eOm4ObIPC29EcBd8mn+3tB8eiwzQN/5IDQIaz3+uiFtTCHL15yM7PB2l4ecCsvgP+XsK
-         SIbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZBXyYbYjQ1AsjxuVxx4OCp5VVoXL3nUBzDg8QRR75Cw=;
-        b=Df7YmwS/8fBxd5jYlHTbxVV7P0kCK2RRQUHRtf3UvcEqtp1XI0jLP3dx2RLY/SDR07
-         Ni1gaA2iTrggppsTlD5lOAe8mVtWXg+UQtHJZf8FrTZ2Y7w5WJl/Ufl2vBVOKQAhZBuQ
-         Zy+btVucgj0lwNF4zasnkq+5rAJ5TbL+BNE81lL4puhR+HEX91HCtLpdSo8oNT8Il3g1
-         l6rirxxvYpxpThfQTDJgXAbt5uzCuZsAkgwsDmr6VbNNxyoqART7VFIj1csFRwM4Xq2R
-         0zFmIX6NFKlXs6jtJJDB9KxnYRtrBdB8lOYMUE1H3kF5/pO1N/A1dRoqfLzrmGt7hu2h
-         Ebxw==
-X-Gm-Message-State: ACgBeo2a5CAvUXO0iHqHv39VklKtsAJJoQ3mZUu+FcgYwSW5svyzhZjM
-        CvQL6d0S9nna9BFtLF5fCwA=
-X-Google-Smtp-Source: AA6agR66J9l8BTovYfePaPwqu67KsA/hbYWIKHaprzXv47is6c5uEGMxUGnkuVOEjfvcyxQuY1Xg6w==
-X-Received: by 2002:a17:902:e552:b0:16d:2a83:e751 with SMTP id n18-20020a170902e55200b0016d2a83e751mr29383363plf.39.1662036865113;
-        Thu, 01 Sep 2022 05:54:25 -0700 (PDT)
-Received: from localhost ([166.111.139.139])
-        by smtp.gmail.com with ESMTPSA id lj13-20020a17090b344d00b001fac8076cd8sm1507048pjb.46.2022.09.01.05.54.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 05:54:23 -0700 (PDT)
-From:   Zixuan Fu <r33s3n6@gmail.com>
-To:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
-        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
-        Zixuan Fu <r33s3n6@gmail.com>,
-        TOTE Robot <oslab@tsinghua.edu.cn>
-Subject: [PATCH] scsi: megaraid: fix a possible double-free bug caused by incorrect error handling in megasas_alloc_cmdlist_fusion()
-Date:   Thu,  1 Sep 2022 20:54:18 +0800
-Message-Id: <20220901125418.2323348-1-r33s3n6@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        d=corp.netease.com; s=s210401; h=Received:From:To:Cc:Subject:
+        Date:Message-Id:In-Reply-To:References:MIME-Version:
+        Content-Transfer-Encoding; bh=HO4P1Pj/1v7dm3Or8hk520xvDIfxZ2pa2V
+        2zOmASKbc=; b=Si4FyFaIlZGnQrN1z3PuPiOYa2Q162Bl4jtGs4GoXCvz4FMjmd
+        Mc9pYSYyd5tEwZcSH6zzvLmy8nE8dos+YRCV3lJN5vMnOF5ZMu13qc9URr+KzinK
+        05UeXWUQ0ZeKA6YW/D40ak3oSoypL1RQIDcRlFcHDdMXjH94uwi/xfk34=
+Received: from pubt1-k8s74.yq.163.org (unknown [115.238.122.38])
+        by corp-front07-corp.i.nease.net (Coremail) with SMTP id nRDICgCX6+eHqxBjAc0VAA--.40399S2;
+        Thu, 01 Sep 2022 20:54:31 +0800 (HKT)
+From:   liuyacan@corp.netease.com
+To:     wenjia@linux.ibm.com, alibuda@linux.alibaba.com
+Cc:     davem@davemloft.net, edumazet@google.com, kgraul@linux.ibm.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-s390@vger.kernel.org, liuyacan@corp.netease.com,
+        netdev@vger.kernel.org, pabeni@redhat.com,
+        tonylu@linux.alibaba.com, ubraun@linux.vnet.ibm.com,
+        wintera@linux.ibm.com
+Subject: Re: [PATCH net v4] net/smc: Fix possible access to freed memory in link clear
+Date:   Thu,  1 Sep 2022 20:54:31 +0800
+Message-Id: <20220901125431.1782967-1-liuyacan@corp.netease.com>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <e86caa18-e416-f6ef-3eb3-f25b5c85a19a@linux.ibm.com>
+References: <e86caa18-e416-f6ef-3eb3-f25b5c85a19a@linux.ibm.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-CM-TRANSID: nRDICgCX6+eHqxBjAc0VAA--.40399S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3ArWUKrWkGr4fCw4xWw13twb_yoW3ZrWDpF
+        W8JF47CF48Xr1UXF109F1FvFnxtw12yFykWr97Kas5AF98t3W8JF1Sqryj9FyDAr4qg3WI
+        v348Jw1Skrn8J3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUXab7IF0VCFI7km07C26c804VAKzcIF0wAFF20E14v26r4j6ryU
+        M7CY07I20VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2
+        IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84AC
+        jcxK6xIIjxv20xvEc7CjxVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84
+        ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2kK67ZEXf0FJ3sC6x9vy-n0Xa0_Xr1Utr1k
+        JwI_Jr4ln4vEF7Iv6F18KVAqrcv_GVWUtr1rJF1ln4vEF7Iv6F18KVAqrcv_XVWUtr1rJF
+        1ln4vE4IxY62xKV4CY8xCE548m6r4UJryUGwAa7VCY0VAaVVAqrcv_Jw1UWr13M2AIxVAI
+        cxkEcVAq07x20xvEncxIr21l57IF6s8CjcxG0xyl5I8CrVACY4xI64kE6c02F40Ex7xfMc
+        Ij6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_
+        Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I
+        0E8cxan2IY04v7M4kE6xkIj40Ew7xC0wCjxxvEw4Wlc2IjII80xcxEwVAKI48JMxAIw28I
+        cxkI7VAKI48JMxCjnVAK0II2c7xJMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbVAxMI8I3I
+        0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWU
+        tVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcV
+        CY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAF
+        wI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa
+        7sRiE_M7UUUUU==
+X-CM-SenderInfo: 5olx5txfdqquhrush05hwht23hof0z/1tbiBQAQCVt77zCWdAAWsX
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,62 +72,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In megasas_alloc_cmdlist_fusion(), when kzalloc() fails, it frees
-fusion->cmd_list but does not clear it. Then, the error is propagated to
-its caller megasas_alloc_cmds_fusion(), which calls
-megasas_free_cmds_fusion(). In megasas_free_cmds_fusion(), it frees
-fusion->cmd_list again, which causes a double-free bug.
+> >>> From: Yacan Liu <liuyacan@corp.netease.com>
+> >>>
+> >>> After modifying the QP to the Error state, all RX WR would be completed
+> >>> with WC in IB_WC_WR_FLUSH_ERR status. Current implementation does not
+> >>> wait for it is done, but destroy the QP and free the link group directly.
+> >>> So there is a risk that accessing the freed memory in tasklet context.
+> >>>
+> >>> Here is a crash example:
+> >>>
+> >>>    BUG: unable to handle page fault for address: ffffffff8f220860
+> >>>    #PF: supervisor write access in kernel mode
+> >>>    #PF: error_code(0x0002) - not-present page
+> >>>    PGD f7300e067 P4D f7300e067 PUD f7300f063 PMD 8c4e45063 PTE 800ffff08c9df060
+> >>>    Oops: 0002 [#1] SMP PTI
+> >>>    CPU: 1 PID: 0 Comm: swapper/1 Kdump: loaded Tainted: G S         OE     5.10.0-0607+ #23
+> >>>    Hardware name: Inspur NF5280M4/YZMB-00689-101, BIOS 4.1.20 07/09/2018
+> >>>    RIP: 0010:native_queued_spin_lock_slowpath+0x176/0x1b0
+> >>>    Code: f3 90 48 8b 32 48 85 f6 74 f6 eb d5 c1 ee 12 83 e0 03 83 ee 01 48 c1 e0 05 48 63 f6 48 05 00 c8 02 00 48 03 04 f5 00 09 98 8e <48> 89 10 8b 42 08 85 c0 75 09 f3 90 8b 42 08 85 c0 74 f7 48 8b 32
+> >>>    RSP: 0018:ffffb3b6c001ebd8 EFLAGS: 00010086
+> >>>    RAX: ffffffff8f220860 RBX: 0000000000000246 RCX: 0000000000080000
+> >>>    RDX: ffff91db1f86c800 RSI: 000000000000173c RDI: ffff91db62bace00
+> >>>    RBP: ffff91db62bacc00 R08: 0000000000000000 R09: c00000010000028b
+> >>>    R10: 0000000000055198 R11: ffffb3b6c001ea58 R12: ffff91db80e05010
+> >>>    R13: 000000000000000a R14: 0000000000000006 R15: 0000000000000040
+> >>>    FS:  0000000000000000(0000) GS:ffff91db1f840000(0000) knlGS:0000000000000000
+> >>>    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> >>>    CR2: ffffffff8f220860 CR3: 00000001f9580004 CR4: 00000000003706e0
+> >>>    DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> >>>    DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> >>>    Call Trace:
+> >>>     <IRQ>
+> >>>     _raw_spin_lock_irqsave+0x30/0x40
+> >>>     mlx5_ib_poll_cq+0x4c/0xc50 [mlx5_ib]
+> >>>     smc_wr_rx_tasklet_fn+0x56/0xa0 [smc]
+> >>>     tasklet_action_common.isra.21+0x66/0x100
+> >>>     __do_softirq+0xd5/0x29c
+> >>>     asm_call_irq_on_stack+0x12/0x20
+> >>>     </IRQ>
+> >>>     do_softirq_own_stack+0x37/0x40
+> >>>     irq_exit_rcu+0x9d/0xa0
+> >>>     sysvec_call_function_single+0x34/0x80
+> >>>     asm_sysvec_call_function_single+0x12/0x20
+> >>>
+> >>> Fixes: bd4ad57718cc ("smc: initialize IB transport incl. PD, MR, QP, CQ, event, WR")
+> >>> Signed-off-by: Yacan Liu <liuyacan@corp.netease.com>
+> >>>
+> >>> ---
+> >>> Chagen in v4:
+> >>>     -- Remove the rx_drain flag because smc_wr_rx_post() may not have been called.
+> >>>     -- Remove timeout.
+> >>> Change in v3:
+> >>>     -- Tune commit message (Signed-Off tag, Fixes tag).
+> >>>        Tune code to avoid column length exceeding.
+> >>> Change in v2:
+> >>>     -- Fix some compile warnings and errors.
+> >>> ---
+> >>>    net/smc/smc_core.c | 2 ++
+> >>>    net/smc/smc_core.h | 2 ++
+> >>>    net/smc/smc_wr.c   | 9 +++++++++
+> >>>    net/smc/smc_wr.h   | 1 +
+> >>>    4 files changed, 14 insertions(+)
+> >>>
+> >>> diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
+> >>> index ff49a11f5..f92a916e9 100644
+> >>> --- a/net/smc/smc_core.c
+> >>> +++ b/net/smc/smc_core.c
+> >>> @@ -757,6 +757,7 @@ int smcr_link_init(struct smc_link_group *lgr, struct smc_link *lnk,
+> >>>    	lnk->lgr = lgr;
+> >>>    	smc_lgr_hold(lgr); /* lgr_put in smcr_link_clear() */
+> >>>    	lnk->link_idx = link_idx;
+> >>> +	lnk->wr_rx_id_compl = 0;
+> >>>    	smc_ibdev_cnt_inc(lnk);
+> >>>    	smcr_copy_dev_info_to_link(lnk);
+> >>>    	atomic_set(&lnk->conn_cnt, 0);
+> >>> @@ -1269,6 +1270,7 @@ void smcr_link_clear(struct smc_link *lnk, bool log)
+> >>>    	smcr_buf_unmap_lgr(lnk);
+> >>>    	smcr_rtoken_clear_link(lnk);
+> >>>    	smc_ib_modify_qp_error(lnk);
+> >>> +	smc_wr_drain_cq(lnk);
+> >>>    	smc_wr_free_link(lnk);
+> >>>    	smc_ib_destroy_queue_pair(lnk);
+> >>>    	smc_ib_dealloc_protection_domain(lnk);
+> >>> diff --git a/net/smc/smc_core.h b/net/smc/smc_core.h
+> >>> index fe8b524ad..285f9bd8e 100644
+> >>> --- a/net/smc/smc_core.h
+> >>> +++ b/net/smc/smc_core.h
+> >>> @@ -115,8 +115,10 @@ struct smc_link {
+> >>>    	dma_addr_t		wr_rx_dma_addr;	/* DMA address of wr_rx_bufs */
+> >>>    	dma_addr_t		wr_rx_v2_dma_addr; /* DMA address of v2 rx buf*/
+> >>>    	u64			wr_rx_id;	/* seq # of last recv WR */
+> >>> +	u64			wr_rx_id_compl; /* seq # of last completed WR */
+> >>>    	u32			wr_rx_cnt;	/* number of WR recv buffers */
+> >>>    	unsigned long		wr_rx_tstamp;	/* jiffies when last buf rx */
+> >>> +	wait_queue_head_t       wr_rx_empty_wait; /* wait for RQ empty */
+> >>>    
+> >>>    	struct ib_reg_wr	wr_reg;		/* WR register memory region */
+> >>>    	wait_queue_head_t	wr_reg_wait;	/* wait for wr_reg result */
+> >>> diff --git a/net/smc/smc_wr.c b/net/smc/smc_wr.c
+> >>> index 26f8f240d..bc8793803 100644
+> >>> --- a/net/smc/smc_wr.c
+> >>> +++ b/net/smc/smc_wr.c
+> >>> @@ -454,6 +454,7 @@ static inline void smc_wr_rx_process_cqes(struct ib_wc wc[], int num)
+> >>>    
+> >>>    	for (i = 0; i < num; i++) {
+> >>>    		link = wc[i].qp->qp_context;
+> >>> +		link->wr_rx_id_compl = wc[i].wr_id;
+> >>>    		if (wc[i].status == IB_WC_SUCCESS) {
+> >>>    			link->wr_rx_tstamp = jiffies;
+> >>>    			smc_wr_rx_demultiplex(&wc[i]);
+> >>> @@ -465,6 +466,8 @@ static inline void smc_wr_rx_process_cqes(struct ib_wc wc[], int num)
+> >>>    			case IB_WC_RNR_RETRY_EXC_ERR:
+> >>>    			case IB_WC_WR_FLUSH_ERR:
+> >>>    				smcr_link_down_cond_sched(link);
+> >>> +				if (link->wr_rx_id_compl == link->wr_rx_id)
+> >>> +					wake_up(&link->wr_rx_empty_wait);
+> >>>    				break;
+> >>>    			default:
+> >>>    				smc_wr_rx_post(link); /* refill WR RX */
+> >>> @@ -631,6 +634,11 @@ static void smc_wr_init_sge(struct smc_link *lnk)
+> >>>    	lnk->wr_reg.access = IB_ACCESS_LOCAL_WRITE | IB_ACCESS_REMOTE_WRITE;
+> >>>    }
+> >>>    
+> >>> +void smc_wr_drain_cq(struct smc_link *lnk)
+> >>> +{
+> >>> +	wait_event(lnk->wr_rx_empty_wait, lnk->wr_rx_id_compl == lnk->wr_rx_id);
+> >>> +}
+> >>> +
+> >>>    void smc_wr_free_link(struct smc_link *lnk)
+> >>>    {
+> >>>    	struct ib_device *ibdev;
+> >>> @@ -889,6 +897,7 @@ int smc_wr_create_link(struct smc_link *lnk)
+> >>>    	atomic_set(&lnk->wr_tx_refcnt, 0);
+> >>>    	init_waitqueue_head(&lnk->wr_reg_wait);
+> >>>    	atomic_set(&lnk->wr_reg_refcnt, 0);
+> >>> +	init_waitqueue_head(&lnk->wr_rx_empty_wait);
+> >>>    	return rc;
+> >>>    
+> >>>    dma_unmap:
+> >>> diff --git a/net/smc/smc_wr.h b/net/smc/smc_wr.h
+> >>> index a54e90a11..5ca5086ae 100644
+> >>> --- a/net/smc/smc_wr.h
+> >>> +++ b/net/smc/smc_wr.h
+> >>> @@ -101,6 +101,7 @@ static inline int smc_wr_rx_post(struct smc_link *link)
+> >>>    int smc_wr_create_link(struct smc_link *lnk);
+> >>>    int smc_wr_alloc_link_mem(struct smc_link *lnk);
+> >>>    int smc_wr_alloc_lgr_mem(struct smc_link_group *lgr);
+> >>> +void smc_wr_drain_cq(struct smc_link *lnk);
+> >>>    void smc_wr_free_link(struct smc_link *lnk);
+> >>>    void smc_wr_free_link_mem(struct smc_link *lnk);
+> >>>    void smc_wr_free_lgr_mem(struct smc_link_group *lgr);
+> >>
+> >> Thank you @Yacan for the effort to improve our code! And Thank you @Tony
+> >> for such valuable suggestions and testing!
+> >> I like the modification of this version. However, this is not a fix
+> >> patch to upstream, since the patches "[PATCH net-next v2 00/10] optimize
+> >> the parallelism of SMC-R connections" are still not applied. My
+> >> sugguestions:
+> >> - Please talk to the author (D. Wythe <alibuda@linux.alibaba.com>) of
+> >> those patches I mentioned above, and ask if he can take your patch as a
+> >> part of the patch serie
+> >> - Fix patches should go to net-next
+> >> - Please send always send your new version separately, rather than as
+> >> reply to your previous version. That makes people confused.
+> > 
+> > @Wenjia, Thanks a lot for your suggestions and guidance !
+> > 
+> > @D. Wythe, Can you include this patch in your series of patches if it is
+> > convenient?
+> > 
+> > Regards,
+> > Yacan
+> > 
+> One point I was confused, fixes should goto net, sorry!
 
-To fix this possible bug, in megasas_alloc_cmdlist_fusion(),
-fusion->cmd_list should be cleared after it is freed.
+Well, @D. Wythe, please ignore the above emails, sorry!
 
-The error log in our fault-injection testing is shown as follows:
-
-[ 4152.707452][   T21] BUG: KASAN: use-after-free in megasas_free_cmds_fusion+0x2d0/0x1294 [megaraid_sas]
-...
-[ 4152.756117][   T21] Call trace:
-...
-[ 4152.795950][   T21]  megasas_free_cmds_fusion+0x2d0/0x1294 [megaraid_sas]
-[ 4152.803329][   T21]  megasas_alloc_cmds_fusion+0x4de0/0x53bc [megaraid_sas]
-[ 4152.810887][   T21]  megasas_init_adapter_fusion+0xab4/0x30dc [megaraid_sas]
-[ 4152.818539][   T21]  megasas_init_fw+0x4874/0x925c [megaraid_sas]
-[ 4152.825245][   T21]  megasas_probe_one+0x978/0x2dd4 [megaraid_sas]
-...
-[ 4152.864486][   T21] Allocated by task 21:
-...
-[ 4152.883339][   T21]  megasas_alloc_cmds_fusion+0x2a40/0x53bc [megaraid_sas]
-[ 4152.890796][   T21]  megasas_init_adapter_fusion+0xab4/0x30dc [megaraid_sas]
-[ 4152.898331][   T21]  megasas_init_fw+0x4874/0x925c [megaraid_sas]
-[ 4152.904901][   T21]  megasas_probe_one+0x978/0x2dd4 [megaraid_sas]
-...
-[ 4152.943038][   T21] Freed by task 21:
-...
-[ 4152.972830][   T21]  kfree+0x100/0x374
-[ 4152.976998][   T21]  megasas_alloc_cmds_fusion+0x45c4/0x53bc [megaraid_sas]
-[ 4152.984379][   T21]  megasas_init_adapter_fusion+0xab4/0x30dc [megaraid_sas]
-[ 4152.991856][   T21]  megasas_init_fw+0x4874/0x925c [megaraid_sas]
-[ 4152.998384][   T21]  megasas_probe_one+0x978/0x2dd4 [megaraid_sas]
-
-
-Fixes: 70c54e210ee9a ("scsi: megaraid_sas: fix memleak in megasas_alloc_cmdlist_fusion")
-Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
-Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
----
- drivers/scsi/megaraid/megaraid_sas_fusion.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-index 09c5fe37754c..238103e7a028 100644
---- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
-+++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
-@@ -613,6 +613,7 @@ megasas_alloc_cmdlist_fusion(struct megasas_instance *instance)
- 			for (j = 0; j < i; j++)
- 				kfree(fusion->cmd_list[j]);
- 			kfree(fusion->cmd_list);
-+			fusion->cmd_list = NULL;
- 			dev_err(&instance->pdev->dev,
- 				"Failed from %s %d\n",  __func__, __LINE__);
- 			return -ENOMEM;
--- 
-2.25.1
+Regards,
+Yacan
 

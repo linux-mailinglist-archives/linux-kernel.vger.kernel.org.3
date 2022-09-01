@@ -2,88 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 951E65A8EB7
+	by mail.lfdr.de (Postfix) with ESMTP id 4BF495A8EB6
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:51:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233397AbiIAGuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58506 "EHLO
+        id S233190AbiIAGum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232995AbiIAGuU (ORCPT
+        with ESMTP id S232685AbiIAGug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:50:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663CF61103;
-        Wed, 31 Aug 2022 23:50:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 445F0B82475;
-        Thu,  1 Sep 2022 06:50:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B91D0C433D6;
-        Thu,  1 Sep 2022 06:50:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662015014;
-        bh=h1oiY9w4cNEx8MJKBHCH3T5N0k2k5oJzR61LVSvcHrg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=Gd1ErZ+q7NwGcGtyf0/rwW8SeFcTxhoG3P2PscNUUIDHNPRY0GY7jRPRmgSkbfm7R
-         MWImIKeOBKRi+jkEtTu93tVyGo3lNdXRJAa2rJra0XbzY6i2COrhYtl2oKRufpc0Fc
-         cAJkAjY9ritbMKxxNEksik3bI8vthjl3TXQ8wrtLhhkgx6cAt6avSRt7Pmp8yJsbvA
-         t3PycBJYozJtPtYli7bc37GdzLJpGkPhu/VscGcLHHeB2vVjqQacpf1IS+9ohKqvbk
-         3Ibu3qrxueRRbMAuRlBC3N8XCre1VuTNCDQ4k4pjtIkFO/9Ip0GLqcUDTrmRaSDnpV
-         D1dr+TiPtf3EA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9538DE924DA;
-        Thu,  1 Sep 2022 06:50:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 1 Sep 2022 02:50:36 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 420869E6A5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:50:34 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7E98D6E;
+        Wed, 31 Aug 2022 23:50:39 -0700 (PDT)
+Received: from [10.162.43.7] (unknown [10.162.43.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C0B673F7B4;
+        Wed, 31 Aug 2022 23:50:59 -0700 (PDT)
+Message-ID: <feb27c46-1713-ddf0-c3fb-fdaa68b7f191@arm.com>
+Date:   Thu, 1 Sep 2022 12:20:28 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next,v2] net: sched: remove redundant NULL check in change
- hook function
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166201501460.7647.7189614631931905429.git-patchwork-notify@kernel.org>
-Date:   Thu, 01 Sep 2022 06:50:14 +0000
-References: <20220829071219.208646-1-shaozhengchao@huawei.com>
-In-Reply-To: <20220829071219.208646-1-shaozhengchao@huawei.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org, toke@toke.dk,
-        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, stephen@networkplumber.org,
-        cake@lists.bufferbloat.net, weiyongjun1@huawei.com,
-        yuehaibing@huawei.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] mm: memory-failure: kill __soft_offline_page()
+Content-Language: en-US
+To:     20220830071514.GA1106752@hori.linux.bs1.fc.nec.co.jp,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Cc:     linux-kernel@vger.kernel.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>
+References: <20220830104654.28234-1-wangkefeng.wang@huawei.com>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <20220830104654.28234-1-wangkefeng.wang@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
-
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Mon, 29 Aug 2022 15:12:19 +0800 you wrote:
-> Currently, the change function can be called by two ways. The one way is
-> that qdisc_change() will call it. Before calling change function,
-> qdisc_change() ensures tca[TCA_OPTIONS] is not empty. The other way is
-> that .init() will call it. The opt parameter is also checked before
-> calling change function in .init(). Therefore, it's no need to check the
-> input parameter opt in change function.
+On 8/30/22 16:16, Kefeng Wang wrote:
+> Squash the __soft_offline_page() into soft_offline_in_use_page() and kill
+> __soft_offline_page().
 > 
-> [...]
+> Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+> Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+> Acked-by: Naoya Horiguchi <naoya.horiguchi@nec.com>
 
-Here is the summary with links:
-  - [net-next,v2] net: sched: remove redundant NULL check in change hook function
-    https://git.kernel.org/netdev/net-next/c/a102c8973db7
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> ---
+> v2: update hpage when try_to_split_thp_page() success
+> 
+>  mm/memory-failure.c | 25 ++++++++++---------------
+>  1 file changed, 10 insertions(+), 15 deletions(-)
+> 
+> diff --git a/mm/memory-failure.c b/mm/memory-failure.c
+> index b61f2de9f2a1..df54a6bc9bef 100644
+> --- a/mm/memory-failure.c
+> +++ b/mm/memory-failure.c
+> @@ -2434,11 +2434,11 @@ static bool isolate_page(struct page *page, struct list_head *pagelist)
+>  }
+>  
+>  /*
+> - * __soft_offline_page handles hugetlb-pages and non-hugetlb pages.
+> + * soft_offline_in_use_page handles hugetlb-pages and non-hugetlb pages.
+>   * If the page is a non-dirty unmapped page-cache page, it simply invalidates.
+>   * If the page is mapped, it migrates the contents over.
+>   */
+> -static int __soft_offline_page(struct page *page)
+> +static int soft_offline_in_use_page(struct page *page)
+>  {
+>  	long ret = 0;
+>  	unsigned long pfn = page_to_pfn(page);
+> @@ -2451,6 +2451,14 @@ static int __soft_offline_page(struct page *page)
+>  		.gfp_mask = GFP_USER | __GFP_MOVABLE | __GFP_RETRY_MAYFAIL,
+>  	};
+>  
+> +	if (!huge && PageTransHuge(hpage)) {
+> +		if (try_to_split_thp_page(page)) {
+> +			pr_info("soft offline: %#lx: thp split failed\n", pfn);
+> +			return -EBUSY;
+> +		}
+> +		hpage = page;
+> +	}
+> +
+>  	lock_page(page);
+>  	if (!PageHuge(page))
+>  		wait_on_page_writeback(page);
+> @@ -2500,19 +2508,6 @@ static int __soft_offline_page(struct page *page)
+>  	return ret;
+>  }
+>  
+> -static int soft_offline_in_use_page(struct page *page)
+> -{
+> -	struct page *hpage = compound_head(page);
+> -
+> -	if (!PageHuge(page) && PageTransHuge(hpage))
+> -		if (try_to_split_thp_page(page) < 0) {
+> -			pr_info("soft offline: %#lx: thp split failed\n",
+> -				page_to_pfn(page));
+> -			return -EBUSY;
+> -		}
+> -	return __soft_offline_page(page);
+> -}
+> -
+>  static void put_ref_page(struct page *page)
+>  {
+>  	if (page)

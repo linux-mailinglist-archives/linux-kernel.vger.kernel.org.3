@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F2A45A9E35
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:38:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D87EF5A9E30
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbiIARhl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:37:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S235076AbiIARhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:37:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234735AbiIARgL (ORCPT
+        with ESMTP id S234586AbiIARgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:36:11 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E28E103C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:36:04 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id g9-20020a17090a290900b001fd59cc2c14so1628490pjd.7
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:36:04 -0700 (PDT)
+        Thu, 1 Sep 2022 13:36:14 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6704F2B63C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:36:07 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id n18-20020a25d612000000b0069661a1dc48so4978157ybg.20
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:36:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=VpPGH26B3JaNkIfQAA8lk0M2gmgFVNCTIjkTHyeGjq0=;
-        b=pbMRwoSFwQraZzGGZr7x5dEEGoBSSezJwWCkFmGpQHOK/gJ9jZl7heInRLvxfZubEx
-         Wj7mEqLcXRU9xxWHf3t+7qSl6CnhQuuJSVxfC2zOp1biHU7QYf19J34qbstjhGHRGexS
-         HGkcltAazUrmNYZt5EcV0prllxXaFrscwVZ4MeMfR5YBnXhADmsl05WrPEXFggi7Gjas
-         iHFv8bsKjSzXGdd4TTCY9kFoj2NTn7nIEkBcfDuEl9YbNXUKLbiljFvk9VYo3diziCwb
-         KLzO8tBeRwrd5fwSMEAfN7AuoAZXQe3a89hFtIYEbzmUJ/R7GnSkDta2dkqtwJ/Rto29
-         WT6Q==
+        bh=b/hqij6YMtUKn07CMMZGWuY0xy+IpIQzVd6D2LweKqw=;
+        b=KRAo4osvkXfti83dlr7pDy0khew3B+/GxQjWEAl6TnacUwl+mtLybx0YLCFQUFV0lg
+         sqmNuGzCNSRuL2SViXVJ2r0wrXOlXyxs3u9yAmqqg3AvKB9F3JJSO7rq3ZQJpqtxodOF
+         i7G/Yua6+zv1pQayP4MuTvdM1yGvpgFJMwTj6dIMUAQKUS2ErYsxnukeEQ3tr0wanncl
+         yMd9bQqlR0P+NMVZ/l+rGeUj3MMbqQRN0a5ORe8qDMpkAqtMCeKLfNSS6669H06w2E3e
+         HhGcmv1HGm3kJoo9dZc+gF0PSVEl7OpLVCRJfkfc6aws3/7f1ZLX+WRY47T74JB1rzMb
+         smKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=VpPGH26B3JaNkIfQAA8lk0M2gmgFVNCTIjkTHyeGjq0=;
-        b=O82uCkXwoDsKSKgrNbehXGVZ7VqNZe2WShBCi7tPMmPxdTDuZrHGXR0pS70lw9sTlg
-         myRA4dOHdxxC+0ywCGjt+oEfH9aohSrIKQpe+pbLyUUejTIoNLRau+qI96EK7QFpxnIg
-         WSdTMGroJ12Sp0Jgw2SnCuroDuNsnIvs8odZVc8jlAulFFsSNCyOzWwceqEB43Gye1ot
-         LPlQthj6sBq3nc/5hs7XNANsXCj7p2g5lYWPeyPbNYM8odoDCGoz44d1zA4Zje6z29cD
-         ltf0P65WH0j/Qb1Ms2RWdcoelNVOXq/hlfhXGRB3cbxrrP4tHKlnP99c3MrAeKtnl9M+
-         m7+w==
-X-Gm-Message-State: ACgBeo0Hqo13rHUAT+6smWiez6As+uoSXnpiTytBKvxe6HF9UT3l4X6j
-        hOK2RPPjKSFRyT+9a4UmUizGzEkJOZM=
-X-Google-Smtp-Source: AA6agR5wOS2QTAVmPmwy5O8cxRkpTpms/e+UYL0OyAuyLY0hN8kJNMUzvy3oLdSFlDJRhvwngVhT3DguUUM=
+        bh=b/hqij6YMtUKn07CMMZGWuY0xy+IpIQzVd6D2LweKqw=;
+        b=gbbb2IZAe/l6jLZhvz4cpuw+sIyYhF2oQbXuapOHTSV/bs2YG3QlDX3Sfq3q+3GVx+
+         VZemq0SWar2A9/5hTI2DYHAna/tVbyg9fjlubqibUs9Lyhiw3Wq08shtB0Bd2BM39UMe
+         RIF42CIhS2OVKtpl6dQpQLDQh228WwST85CbwFT1eVTafxUxjxhX3kTHcAP8ZgASDnPu
+         DnT5CunwgL90cUnvUTAb9jjDqiAS86cIjRZsaox5YzVD9ZlBA5kihbnjKfSVmuMIGFLL
+         BXUt3Qa9qks5zMHoU9Wd9iObCKWRitSVotAgrxD2iwAMIIRwAUQ6pWcsIFWAP//bYbGO
+         ep6w==
+X-Gm-Message-State: ACgBeo1Nw+/FxTYQ7gBAUDoRMRpM/KYJOPTbUIl7s1N3as3e2jirirGX
+        +qg6cO4D5q3/+zVpU7aC9KC1WxDFzGE=
+X-Google-Smtp-Source: AA6agR5jEvG/zgKOeD87JHuYvOxB9Vp8GPj5NQSbzUKBEagOp3ZLZ7YArxKySukyQ3HnfRTZ0d7o3HLJ11s=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:1bfc:e7ee:6530:4449])
- (user=surenb job=sendgmr) by 2002:a63:b250:0:b0:422:e3a6:47f2 with SMTP id
- t16-20020a63b250000000b00422e3a647f2mr4539554pgo.478.1662053763882; Thu, 01
- Sep 2022 10:36:03 -0700 (PDT)
-Date:   Thu,  1 Sep 2022 10:35:04 -0700
+ (user=surenb job=sendgmr) by 2002:a05:6902:91d:b0:672:e583:9ed9 with SMTP id
+ bu29-20020a056902091d00b00672e5839ed9mr20010197ybb.225.1662053766633; Thu, 01
+ Sep 2022 10:36:06 -0700 (PDT)
+Date:   Thu,  1 Sep 2022 10:35:05 -0700
 In-Reply-To: <20220901173516.702122-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220901173516.702122-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220901173516.702122-17-surenb@google.com>
-Subject: [RFC PATCH RESEND 16/28] kernel/fork: assert no VMA readers during
- its destruction
+Message-ID: <20220901173516.702122-18-surenb@google.com>
+Subject: [RFC PATCH RESEND 17/28] mm/mmap: prevent pagefault handler from
+ racing with mmu_notifier registration
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -80,54 +80,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Assert there are no holders of VMA lock for reading when it is about to be
-destroyed.
+Pagefault handlers might need to fire MMU notifications while a new
+notifier is being registered. Modify mm_take_all_locks to mark all VMAs
+as locked and prevent this race with fault handlers that would hold VMA
+locks.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/mm.h | 8 ++++++++
- kernel/fork.c      | 2 ++
- 2 files changed, 10 insertions(+)
+ mm/mmap.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index dc72be923e5b..0d9c1563c354 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -676,6 +676,13 @@ static inline void vma_assert_write_locked(struct vm_area_struct *vma, int pos)
- 	VM_BUG_ON_VMA(vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq), vma);
- }
+diff --git a/mm/mmap.c b/mm/mmap.c
+index b31cc97c2803..1edfcd384f5e 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -3538,6 +3538,7 @@ static void vm_lock_mapping(struct mm_struct *mm, struct address_space *mapping)
+  *     hugetlb mapping);
+  *   - all i_mmap_rwsem locks;
+  *   - all anon_vma->rwseml
++ *   - all vmas marked locked
+  *
+  * We can take all locks within these types randomly because the VM code
+  * doesn't nest them and we protected from parallel mm_take_all_locks() by
+@@ -3579,6 +3580,7 @@ int mm_take_all_locks(struct mm_struct *mm)
+ 		if (vma->anon_vma)
+ 			list_for_each_entry(avc, &vma->anon_vma_chain, same_vma)
+ 				vm_lock_anon_vma(mm, avc->anon_vma);
++		vma_mark_locked(vma);
+ 	}
  
-+static inline void vma_assert_no_reader(struct vm_area_struct *vma)
-+{
-+	VM_BUG_ON_VMA(rwsem_is_locked(&vma->lock) &&
-+		      vma->vm_lock_seq != READ_ONCE(vma->vm_mm->mm_lock_seq),
-+		      vma);
-+}
-+
- #else /* CONFIG_PER_VMA_LOCK */
+ 	return 0;
+@@ -3636,6 +3638,7 @@ void mm_drop_all_locks(struct mm_struct *mm)
+ 	mmap_assert_write_locked(mm);
+ 	BUG_ON(!mutex_is_locked(&mm_all_locks_mutex));
  
- static inline void vma_init_lock(struct vm_area_struct *vma) {}
-@@ -685,6 +692,7 @@ static inline bool vma_read_trylock(struct vm_area_struct *vma)
- static inline void vma_read_unlock(struct vm_area_struct *vma) {}
- static inline void vma_assert_locked(struct vm_area_struct *vma) {}
- static inline void vma_assert_write_locked(struct vm_area_struct *vma, int pos) {}
-+static inline void vma_assert_no_reader(struct vm_area_struct *vma) {}
- 
- #endif /* CONFIG_PER_VMA_LOCK */
- 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 1872ad549fed..b443ba3a247a 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -487,6 +487,8 @@ static void __vm_area_free(struct rcu_head *head)
- {
- 	struct vm_area_struct *vma = container_of(head, struct vm_area_struct,
- 						  vm_rcu);
-+	/* The vma should either have no lock holders or be write-locked. */
-+	vma_assert_no_reader(vma);
- 	kmem_cache_free(vm_area_cachep, vma);
- }
- #endif
++	vma_mark_unlocked_all(mm);
+ 	for (vma = mm->mmap; vma; vma = vma->vm_next) {
+ 		if (vma->anon_vma)
+ 			list_for_each_entry(avc, &vma->anon_vma_chain, same_vma)
 -- 
 2.37.2.789.g6183377224-goog
 

@@ -2,135 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F055A9434
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:21:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D0C5A9438
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:22:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233625AbiIAKVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        id S233814AbiIAKWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:22:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233522AbiIAKVS (ORCPT
+        with ESMTP id S233544AbiIAKWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:21:18 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B25381090A0
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:21:16 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-33dc31f25f9so331871977b3.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:21:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=dq57C6wCfbAHbefKG8GYTmvvjyg3019DyyLHKt8zuMQ=;
-        b=aimEc3ftsqVQXvwxk2Z52xTHES+wz28tfiscVQ0z7FBJ9dpEGOvABsWukvxWBNRo4e
-         Q1Xj1HusZkX0PzlyaFjWF9UlXKMqWqIiSabeK1XHSuoEEYxzwMIx1HHD6PE+60lzQahP
-         joa7YSF3kMMAg8b2LFENixzbJ1aaBidTxLRIKdfsG4YK669Nk+dR1xg9bbNQ8uG/WBnD
-         ppomJK6w8Kp7ZzKGDzH1Vrin9NN37FuwfCe4tk2Vr6QXdcM9PRiSHeicck4mog0yVA87
-         DiZG6i2OI684wxiVTO0vVEF9IkM1+mMQCqz/49OOSsOQj8zfAmpdSg3NSO5dlOnea3MN
-         3ONw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=dq57C6wCfbAHbefKG8GYTmvvjyg3019DyyLHKt8zuMQ=;
-        b=rI9wTae2wL9OmZ/4/JKRC06xg3dBWjYH6gHycAHuUa5c7IASi4touRjVpvll8tjXKV
-         m01dm8RmzqmEMjVT48oG3Qs/BzPyWeAvoFq5rAvWJ9N1x++tUHLiDBLEDBYWSfMsQJJh
-         QDfCvFHKyFLgLM/D2e371Ai7uLsWAtJP8LfxM2yDnbcHJ3qiI8mF7DBprt09uRbetoab
-         IlO7S7DEk1lBdO6a+X5QMhNg5CjVcLvcsZpXSVjcTc+Igj4nio5wikNESjXirFbsB36e
-         VSBRr797mwO1Wn8UoqCx0va+vNOt5ucIlrd9IznWx/oiAh2sYnohstLAkFvmLReHF22C
-         tJHA==
-X-Gm-Message-State: ACgBeo0b+4Wf9FKGRu6y4iz+KB5Nvx//J6GqR4be8W3NpO1fuQoHA0nt
-        KHRPJh7JOf1VYl16vwwWGbJdX76uByfxlJaFTGhr3g==
-X-Google-Smtp-Source: AA6agR4Um8kqsGPdBIvP1swla9DgQaPBT3/UgvHQhsdZBmoYuNHGh9OLWio0Xv2J0qrgmFaURwUd/dglFe3GTtDGF+U=
-X-Received: by 2002:a81:bb41:0:b0:328:fd1b:5713 with SMTP id
- a1-20020a81bb41000000b00328fd1b5713mr22919241ywl.238.1662027675106; Thu, 01
- Sep 2022 03:21:15 -0700 (PDT)
+        Thu, 1 Sep 2022 06:22:11 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9C0136085;
+        Thu,  1 Sep 2022 03:22:09 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 894856601DF7;
+        Thu,  1 Sep 2022 11:22:07 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662027728;
+        bh=vliuj8fpj7caeOIuls2yuQlrUTuHergsba1k5t5Te4U=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PlFNHJHi3Pc8I8/yuffbHpgB2Mp8/1YNeEcHtJ4RBVgo388GApwZVRJg93+qUCxaV
+         1sWua+xRUiftYNLLPhLf/IOM2yce0KI9QxbII+bM3SHCwnTukMFnfJqbpEqjjgx5D1
+         ioctp29KCItY3T2lBy5ljx8HJ60kHHThRxZJpGA9fDGWmfgi5lC+hZYXTOjKjVaXVe
+         iXojg9dJ3IijmOExWQ97jLKwgFG+svVMAOE50YUU8jrPYzFBSLUorJCALTubsL0fFc
+         UcvJpswf5PTL6AiKVQh9soSiglZ0XAqYM7TQRjk87+IZDzEWeV5n33Blb2wDI09rkZ
+         NftQoWbh2wJVA==
+Message-ID: <955f7200-9d08-0d21-2d1a-5ccbd0f3a8af@collabora.com>
+Date:   Thu, 1 Sep 2022 12:22:05 +0200
 MIME-Version: 1.0
-References: <20220901044249.4624-1-osalvador@suse.de> <20220901044249.4624-2-osalvador@suse.de>
- <YxBsWu36eqUw03Dy@elver.google.com> <YxBvcDFSsLqn3i87@dhcp22.suse.cz>
- <CANpmjNNjkgibnBcp7ZOWGC5CcBJ=acgrRKo0cwZG0xOB5OCpLw@mail.gmail.com> <YxCC7zoc3wX3ieMR@dhcp22.suse.cz>
-In-Reply-To: <YxCC7zoc3wX3ieMR@dhcp22.suse.cz>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 1 Sep 2022 12:20:38 +0200
-Message-ID: <CANpmjNO0wzGBOcj1NH+O7AG2c31Q=-ZDwYZENmYmzUQcPZhQEw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] lib/stackdepot: Add a refcount field in stack_record
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 2/4] dt-bindings: arm: mediatek: Add new bindings of
+ MediaTek frequency hopping
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        Edward-JW Yang <edward-jw.yang@mediatek.com>
+References: <20220831124850.7748-1-johnson.wang@mediatek.com>
+ <20220831124850.7748-3-johnson.wang@mediatek.com>
+ <b1296c37-5283-81f7-1939-7ea20e1f4d0d@linaro.org>
+ <1fae0c47-fff9-89e9-c849-536d167d741d@collabora.com>
+ <38910de5-89ad-e7a1-261f-18b51c8e7877@linaro.org>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <38910de5-89ad-e7a1-261f-18b51c8e7877@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Sept 2022 at 12:01, Michal Hocko <mhocko@suse.com> wrote:
->
-> On Thu 01-09-22 11:18:19, Marco Elver wrote:
-> > On Thu, 1 Sept 2022 at 10:38, Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Thu 01-09-22 10:24:58, Marco Elver wrote:
-> > > > On Thu, Sep 01, 2022 at 06:42AM +0200, Oscar Salvador wrote:
-> > > [...]
-> > > > > diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> > > > > index 5ca0d086ef4a..aeb59d3557e2 100644
-> > > > > --- a/lib/stackdepot.c
-> > > > > +++ b/lib/stackdepot.c
-> > > > > @@ -63,6 +63,7 @@ struct stack_record {
-> > > > >     u32 hash;                       /* Hash in the hastable */
-> > > > >     u32 size;                       /* Number of frames in the stack */
-> > > > >     union handle_parts handle;
-> > > > > +   refcount_t count;               /* Number of the same repeated stacks */
-> > > >
-> > > > This will increase stack_record size for every user, even if they don't
-> > > > care about the count.
-> > >
-> > > Couldn't this be used for garbage collection?
-> >
-> > Only if we can precisely figure out at which point a stack is no
-> > longer going to be needed.
-> >
-> > But more realistically, stack depot was designed to be simple. Right
-> > now it can allocate new stacks (from an internal pool), but giving the
-> > memory back to that pool isn't supported. Doing garbage collection
-> > would effectively be a redesign of stack depot.
->
-> Fair argument.
->
-> > And for the purpose
-> > for which stack depot was designed (debugging tools), memory has never
-> > been an issue (note that stack depot also has a fixed upper bound on
-> > memory usage).
->
-> Is the increased size really a blocker then? I see how it sucks to
-> maintain a counter when it is not used by anything but page_owner but
-> storing that counte externally would just add more complexity AFAICS
-> (more allocations, more tracking etc.).
+Il 01/09/22 11:42, Krzysztof Kozlowski ha scritto:
+> On 01/09/2022 11:04, AngeloGioacchino Del Regno wrote:
+>> Il 31/08/22 15:19, Krzysztof Kozlowski ha scritto:
+>>> On 31/08/2022 15:48, Johnson Wang wrote:
+>>>> Add the new binding documentation for MediaTek frequency hopping
+>>>> and spread spectrum clocking control.
+>>>>
+>>>> Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+>>>> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
+>>>> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
+>>>> ---
+>>>>    .../bindings/arm/mediatek/mediatek,fhctl.yaml | 49 +++++++++++++++++++
+>>>>    1 file changed, 49 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..c5d76410538b
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
+>>>> @@ -0,0 +1,49 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,fhctl.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: MediaTek frequency hopping and spread spectrum clocking control
+>>>> +
+>>>> +maintainers:
+>>>> +  - Edward-JW Yang <edward-jw.yang@mediatek.com>
+>>>> +
+>>>> +description: |
+>>>> +  Frequency hopping control (FHCTL) is a piece of hardware that control
+>>>> +  some PLLs to adopt "hopping" mechanism to adjust their frequency.
+>>>> +  Spread spectrum clocking (SSC) is another function provided by this hardware.
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: mediatek,fhctl
+>>>
+>>> You need SoC/device specific compatibles. Preferably only SoC specific,
+>>> without generic fallback, unless you can guarantee (while representing
+>>> MediaTek), that generic fallback will cover all of their SoCs?
+>>>
+>>>> +
+>>>> +  reg:
+>>>> +    maxItems: 1
+>>>> +
+>>>> +  mediatek,hopping-ssc-percents:
+>>>> +    description: |
+>>>> +      Determine the enablement of frequency hopping feature and the percentage
+>>>> +      of spread spectrum clocking for PLLs.
+>>>> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
+>>>> +    items:
+>>>> +      items:
+>>>> +        - description: PLL id that is expected to enable frequency hopping.
+>>>
+>>> So the clocks are indices from some specific, yet unnamed
+>>> clock-controller? This feels hacky. You should rather take here clock
+>>> phandles (1) or integrate it into specific clock controller (2). The
+>>> reason is that either your device does something on top of existing
+>>> clocks (option 1, thus it takes clock as inputs) or it modifies existing
+>>> clocks (option 2, thus it is integral part of clock-controller).
+>>>
+>>
+>> FHCTL is a MCU that handles (some, or all, depending on what's supported on the
+>> SoC and what's needed by the board) PLL frequency setting, doing it in steps and
+>> avoiding overshooting and other issues.
+>>
+>> We had a pretty big conversation about this a while ago and the indices instead
+>> of phandles is actually my fault, that happened because I initially proposed your
+>> option 2 but then for a number of reasons we went with this kind of solution.
+>>
+>> I know it's going to be a long read, but the entire conversation is on the list [1]
+>>
+> 
+> Sorry, but it's a hacky architecture where one device (which is a clock
+> provider) and second device have no relationship in hardware description
+> but both play with each other resources.
 
-Right, I think keeping it simple is better.
+Yes, that's exactly how it is hardware-side. Except, just to be as clear as
+possible, FHCTL plays with the clock provider, but *not* vice-versa.
 
-> Maybe the counter can be conditional on the page_owner which would add
-> some complexity as well (variable size structure) but at least the
-> external allocation stuff could be avoided.
+> That's simply not a proper
+> hardware description, so again:
+> 
+> 1. If this is separate device (as you indicated), then it needs
+> expressing the dependencies and uses of other device resources.
 
-Not sure it's needed - I just checked the size of stack_record on a
-x86-64 build, and it's 24 bytes. Because 'handle_parts' is 4 bytes,
-and refcount_t is 4 bytes, and the alignment of 'entries' being 8
-bytes, even with the refcount_t, stack_record is still 24 bytes. :-)
+Agreed. In this case, what about...
 
-And for me that's good enough. Maybe mentioning this in the commit
-message is worthwhile. Of course 32-bit builds still suffer a little,
-but I think we can live with that.
+mediatek,hopping-ssc-percents = <&provider CLK_SOMEPLL 3>;
+
+or would it be better to specify the clocks in a separated property?
+
+clocks = <&provider CLK_SOMEPLL>, <&provider CLK_SOME_OTHER_PLL>;
+mediatek,hopping-ssc-percents = <3>, <5>;
+
+Thanks,
+Angelo
+
+> 
+> 2. If this is not a separate device, but integral part of clock
+> controller, then it would be fine but then probably should be child of
+> that device.
+> 
+> Best regards,
+> Krzysztof
+
+

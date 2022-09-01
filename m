@@ -2,162 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C79FE5A8B79
+	by mail.lfdr.de (Postfix) with ESMTP id 386205A8B77
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:31:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232808AbiIAC3o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 22:29:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
+        id S232874AbiIACaD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 22:30:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232465AbiIAC3i (ORCPT
+        with ESMTP id S232847AbiIAC36 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 22:29:38 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A7710B967
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1661999377; x=1693535377;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AmAbtgwvf10cQiM7/CdK9N2i6a9/rk3f8YXqb8N5pFo=;
-  b=rZXQdsIegvmL/e1t0qdA0dMxqwZxlIwvqfpmMeXGtFM73fuRtqG6GP/r
-   QFJsL0Cle643fxtKZQEXDagkxv5Y1pWr2tGy3wYOj+SOzGd6tqaRV1vUB
-   OwlyLSy7rTTAoRhJK+xp87RH06c2taHGlMlVjIbYx5CHD1suh9r3q0Cz5
-   7b2WVuz7M2n2G/ydBETA9x+GqIQ5bfHwIySoX1ri1U4jiY6Xjhuh9cAax
-   43EU+hOEyJ9fsypH8ol9dE2z/UEW4RTMspfNAfV/GWzIMp5nKAIKN1tHQ
-   74apAae9QQyltTTL9KWcHAUB2bP7JbgdEJWIufKfRRbnpv1Soc0gtVT31
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,279,1654531200"; 
-   d="scan'208";a="322292690"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 01 Sep 2022 10:29:34 +0800
-IronPort-SDR: /l/GKtqo4DV7FEFP39rVVV59z4Wnv9vddXwoxRQRqbNd6x1wuLt969h+fjlkjYs1Mg0Mxqrgs0
- UqF+zFiPUieX7UEkRIk2d4+Qq4XuKIxwKUA4m26UTHZbbYrsLh5e67Pd7OucCrsKloE7+yrhHc
- GYqpBDBnOlvZRO69YLYmAEM4G/cAm5hGV1nylzj1k9PXPTAKzt7YaF0w4N14Eoj6gn/FaZAFM5
- QtbGiinXKGI21vK+H+q0MfRJr71xl1ga1a3cvON8wSYLkL5ukrUsoXFfesQW+/Yox4XxEgLZ05
- Y4/SMDSv7dmzOlDCj2V7ZOKK
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Aug 2022 18:50:03 -0700
-IronPort-SDR: 7chTr04vTzUYIan+ddSPxBjAzdL75R12ze3ZwJkph4hpHPQUUTANgp3fk/LrRYyMi9UNepxv5e
- bVfalTXIZntB/EWumUdSLDzZA048FVXLJPFQEzBLlrAmKRO+iKmUXeys9hrm6dlWdbNNjemh0Q
- CUJlMCcsgp7qTeytPkMwO1ohMDsR+rEP6eeuNklutLnQgTN9W5L+nCQAiQyTwi1qyJBILvEN6F
- OEBVXjJGijgJQGZH1io59J08nHxLJvmpzNCxtWIJkh5AxOLnGxSR8tYCSfcHDG9KUstPi8dSAC
- mVo=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Aug 2022 19:29:35 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MJ4kP74Nlz1RvTp
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:29:33 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1661999373; x=1664591374; bh=AmAbtgwvf10cQiM7/CdK9N2i6a9/rk3f8YX
-        qb8N5pFo=; b=Mz5wRbcJtzaU52xyP+271zksFtmgPwaTj9PY3o2+USGg6JYXYsC
-        +4asGD2yhJexB3onnuvbjLyeb/SWM5zqCW0YsUoxjEJfHgTlGKxGUOn6IpKKdUmx
-        vZucAPdR0ZT/B4xMG/VPyR1lbO2k2gv4CyDQ3l11pEm01oZjPyB89Am9PenI5Z0R
-        nEo9kBxVIrRuF9UdV4PK8yVs2iQ4dgqU/jI765siK8wmAQIycQdCDNQ8kqclwoD0
-        Rk3SjZQf989tjeg4HT/xSt7dkq0xEzH9r6yd99JA8tbkhhnwEFGx02PH7E14kTqh
-        T/03iMnBb+bsaXMcVWIsDZX4xXlvuYkgbHw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id vxjmvswvxzIC for <linux-kernel@vger.kernel.org>;
-        Wed, 31 Aug 2022 19:29:33 -0700 (PDT)
-Received: from [10.225.163.56] (unknown [10.225.163.56])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MJ4kM478Gz1RvLy;
-        Wed, 31 Aug 2022 19:29:31 -0700 (PDT)
-Message-ID: <8c61be8b-61dc-5b90-43a4-bed15d6a6b8d@opensource.wdc.com>
-Date:   Thu, 1 Sep 2022 11:29:30 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+        Wed, 31 Aug 2022 22:29:58 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01olkn2073.outbound.protection.outlook.com [40.92.98.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FC251161
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:29:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GCS5I890xdyaQenxexb1HMdXUKwTXGkHSwCCTIxOQfm9W5wYBjvbQnwBh4WwqPlj9/npBbfpfaNbHaGXNTsczOIdtj7z4TjDDY+jp6085KeLLxeq3QWAsSs5nNcQH4FRX/r4mlfnY3p1DV3f4SjIfya6vHp/J3WfxSgu09lWY7sJ2dVJ/AddYoh/1O6JOFa2gwhe8nkaLU7Ac/h3Ck489+dwivch95Xm/tf8abMKEAic07fv8WKbzZ5lpNwYwKar6zwUJmJ2ixYzsOnrP5k1gZfHv1fWtTcMs3YFg1+rcQg49J5EojWI5n8/KhUZEBA2nWCAjE/H30Cnskrgj4AonQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0ZFxxa02a+VLXe96fLWHks9CQi6CDfmQ/1JltT0zmu8=;
+ b=h8NfKEw9rqlSsbYpMGdcrm9dXcv5r36BkL1G32NuGiv0LJrjlU/3RB/tklanJBBvh4+fvFFouIeC7GyR34N2wqgBbEWMwUlESdK7lZDSNUS9HeVHQuC5DGqG76MUKyCLa0e8qIb3Cg3ZXtgV1RUnHXaqQRH2j4OLZqIJhMyZHJKob1BY062qPnkgm6GmwNlMMZVYrR30R98f8KOQylgq74fDaE4v15GckrHot36ijxn69y+RoXVyZD2hyEJvgGMzaa6f0SgJ3ji1FfTAxaYQgxwXlr3T5LJHIpPzp6fVLW/qS3Laa6MPgp+9JUgS9Z9qiqlrQstPOpm6C8Ivh7avKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0ZFxxa02a+VLXe96fLWHks9CQi6CDfmQ/1JltT0zmu8=;
+ b=A+JoZi9zOVbQjQf8Dj2zGXDfOd55YGf0PyJq5pUZJAcq6mCPnBb2x8Cjx0awKWLdaCqBPS//f9qb/dgbAMTmzu9ET7ntkmZyQ8tRCubDiCTGNh0NWL1pPaDBN64SmZfMqxutP9pYMs9OeoMRtPRNeN7IhtTqDBsEn+yOCQs3FHP6XdigXQzzwNuBKO5kS3CSCuB1WQqeXN1n/SSWtKZ4Rz8oBTIZq7bfTUUGIBIi4e2uZtcKjw6BamcMI1WMwIQ9uJwERWuhXfQYEQkD1C5+5bQQY/L+EyaTblbX/ziqz76SWHiG2ShB2x4Hk8isauXbJaeXmHlptJD0IVKHyC4Eww==
+Received: from TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:158::13)
+ by TYYP286MB1360.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:dc::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
+ 2022 02:29:50 +0000
+Received: from TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ecbb:5892:bd41:fe91]) by TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::ecbb:5892:bd41:fe91%5]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
+ 02:29:49 +0000
+Message-ID: <TYCP286MB2146BEA44B0B645B08372D24C67B9@TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM>
+Date:   Thu, 1 Sep 2022 10:29:44 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.0
-Subject: Re: [PATCH v3] scsi: csiostor: convert sysfs snprintf to sysfs_emit
+Subject: Re: [PATCH 2/3] scripts/gdb: fix lx-timerlist for Python3
 Content-Language: en-US
-To:     Xuezhi Zhang <zhangxuezhi3@gmail.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, bvanassche@acm.org,
-        johannes.thumshirn@wdc.com, himanshu.madhani@oracle.com,
-        zhangxuezhi1@coolpad.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220901015130.419307-1-zhangxuezhi3@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220901015130.419307-1-zhangxuezhi3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Jan Kiszka <jan.kiszka@siemens.com>, kbingham@kernel.org,
+        Stephen Boyd <swboyd@chromium.org>
+Cc:     linux-kernel@vger.kernel.org, Peng Liu <liupeng17@lenovo.com>
+References: <20220720122711.6174-1-pngliu@hotmail.com>
+ <TYYP286MB17630AE047E8AD679B37C77AC68E9@TYYP286MB1763.JPNP286.PROD.OUTLOOK.COM>
+ <07c91a50-bfb0-acc2-f4aa-cb7bf53a3b50@siemens.com>
+From:   Peng Liu <pngliu@hotmail.com>
+In-Reply-To: <07c91a50-bfb0-acc2-f4aa-cb7bf53a3b50@siemens.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-TMN:  [hNn9SHPpHgLULNEt2TshZu78O8hVZYhN]
+X-ClientProxiedBy: SG2PR06CA0252.apcprd06.prod.outlook.com
+ (2603:1096:4:ac::36) To TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:158::13)
+X-Microsoft-Original-Message-ID: <e6443d4f-9ac8-226b-ed67-428e8ea06fc0@hotmail.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: da610196-33cf-468f-49bb-08da8bc1d7f7
+X-MS-TrafficTypeDiagnostic: TYYP286MB1360:EE_
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: uy5YKuX8lXsSCgO/Jeo8nyY6ML9ZTsE13GrI2GeQTr3ldSL432sdgw34rGn/WqS9s/v9z+QI8+K7NCfzcdNRVWzAaPW6CcxynBSqyS5EhLM6qZjj7w0qEHzend1xNVIAqZPmzkUttx5F7JamuWdWoOpdevOv2J/VpI9g/qJuxvqX68I7F6j6mZtXr93G8Ij6xqGI3GW7NG0CKv1vyIBFJbmyjXyqohnE2idgjk4Wh/do5Fml9rcZPKwYbissXK/uKiinTDIDOOUw03CI7BuzMbfLuhtiNLnvox1aNx/35yfhBSqh9va3SBpMz2vVaKmmwtisWdyfd9/NHAz5v6JnHkEIYqDUZad9uTER8oXzPlrQlSWQxESfh7noSECEEkEVANmJuNvcrPYS8C7tdozGbKXTi2NHxK1RyZGB/BHokrQqhKMYFt/ezC4e6TXa0LNXnFSe/aAqzDK4+VzG3eOVgz4dWZdYACbfKaiVriKcZ/unSZh1o9IgSqwgUjpp8UrGDukdNGBIbwaeRIlN/ChZPVV1q/c9fXMfVVscDCrtjLmMFr7hri5yWZfpWsy5c3CyEgzMvf0eXheHmV/QJeZi+NlMllswmrVss8H2NdTEIiEJfblROk28XF3HcX7Wea1TDNStbbbihYQ2zYaV0c1RxmcbZvogdeU5+S0KJA/td22lmBmRTqycooOgfloKSLY5
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VmVXckR5QUlnOHVMb3ROcldtVmt0bzZBdGRRTGJmVEg4NU5tVXRSb0E4Mkky?=
+ =?utf-8?B?Ylk3eEwwTS9vS0dkSjY2QmdVSHZIczlTSHRsR2ZQUnVZcWpJZk8wd0NhNmN4?=
+ =?utf-8?B?bEhjMkZML09lVXJPbHRENkxLMkpHQ01aWmY5OGVzRnVWM1doWlFJaFVtT00w?=
+ =?utf-8?B?Yi90Rk1ab3AxcnRqcXp1aGJNdmkwOUFMZTUycjNxOElOR0kwMnhmREp6enlp?=
+ =?utf-8?B?RkFsVlZZRWJ5dUZBV0Y0OTlBNFRjZVcwNEEzeXhDVEoxa1pxVitJczlQcFdB?=
+ =?utf-8?B?WXMvVDdpMG1qbmxFMkRPc3NNV1NYcE14TjZJNThTV1p5RG16dnkwWit6N1A2?=
+ =?utf-8?B?VDJLUllWcGdPTjlUdkpKVVpXeEV6WWwxQm5DR0pVOFdiTzhjNkthN0p0Mk91?=
+ =?utf-8?B?Zld3dXRLYVpzSVRhMDhSLy9TeEtpV0E4c2NYelhnUkd1NVRFMXBqVkJicjhY?=
+ =?utf-8?B?UTFnbWdsbFZxV0VTREFyd3pIV3EzeFRiY2IzUlptTzZDOFZPS05nU3pzN1JQ?=
+ =?utf-8?B?L1d0eDhqTDd6bE10ZWF2bzc5U2VrVmdpZDF0TExNNkhrU1NPbmJiU2tBQVlI?=
+ =?utf-8?B?cXJ1SVBRVDRIVlQ0TGQ3Q3B2UjhUZjhLcGNyUExGQWJ0ZXZIZzlpYStYVDFq?=
+ =?utf-8?B?N2hPQVRIWWpDQ1hQSzNEZDBGMVJ1NlNtOVk3alNRUkIyVlRvM2Q3Z1UrSnh5?=
+ =?utf-8?B?ejNEWGVLMkJsdW1USjBidHZuV2RTeEI3d3lFQlRnakgxcnJ1MTdyd3hJeDl2?=
+ =?utf-8?B?WjJ4Yzl0MHZTLzUrek9xZUdwamZaMGZ1aHpJNzRaOGNVME1IRXkyMG5jemVY?=
+ =?utf-8?B?R0RFTUF3NnhYajBSS1dVTmpFUDl4VHp4SlJTdmhpa01LSnpDT1crYWlUdnVH?=
+ =?utf-8?B?MWRxeTFZdm1MOGdoOE5wQlNteFpDdnpwSGVpTm5SRFRES3ZhbnVLeUpzQlVs?=
+ =?utf-8?B?Ni9hRXArQnp1dDFOdGtRV1pzaDErcjBXQ1FoZEVmTGVNYlNTVHRNSWJiY0tv?=
+ =?utf-8?B?RUxZbUE5ZkU0Q29kb0RQYzE5cHdnL3lLSUwvSzA0NU9oMUZyd0ZUVzJDWWNV?=
+ =?utf-8?B?TU1XalJWQzJ0cWE0dkRrVWlyQnZmdHhhTmRvTEdQSXFKeFExazM4YnN1eEFr?=
+ =?utf-8?B?L3pldmt2Z2c0V2p2VnFveG5QeDB3aE84MWFDOENhNUpnTmZtUzNuM3hEd3N3?=
+ =?utf-8?B?b3dzNHNvdS9iT2JmWlVIL3FmbmVKUVB2akNnM0NMWWJtNFNHbWFVMGtxNlBy?=
+ =?utf-8?B?SjRBMmMzVnFFNU1kNFNUd2xKSDdCM3d6Y2o1eHBRalBLSVhqQWE4eTZMUFh5?=
+ =?utf-8?B?Wlc1aXZiODQvdngzWnBTQldMdnM5U3pTYTJsalQ0N0RLNmwvVG1KK3F6eno2?=
+ =?utf-8?B?RmFiUXM3Uk5CcjNPckVvenRuaEVqUlNsanhCNDR6alBJMWlYVjhmQ1pkUDhY?=
+ =?utf-8?B?aGt5TFNDc2N3cklSYWpsL3FxQWN1Nk1pdXN4eS9ZY1dhZE1VTDYwOVMyZnEv?=
+ =?utf-8?B?N1NhZC9NZ2EwK3lBUENqMG90ZkVEeUF2VmNhR0VVRW9rSDkvaHhCNUMvTWdl?=
+ =?utf-8?B?MDVEOXhoUHhEbS9RdllrYkduWXZXQ1R3LzhHbThIQmlRNzdhYVRUTlI0dk9B?=
+ =?utf-8?B?S3VGVHE3KytUbHRPZmxhd054ak1SYnBWbDM2UTk5U0Fvcms4TkJzRThCUGlY?=
+ =?utf-8?Q?IOiCdtkpo+Scprgm2Xkl?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-05f45.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: da610196-33cf-468f-49bb-08da8bc1d7f7
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2146.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 02:29:49.9133
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYP286MB1360
+X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/1/22 10:51, Xuezhi Zhang wrote:
-> From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> 
-> Follow the advice of the Documentation/filesystems/sysfs.rst
-> and show() should only use sysfs_emit() or sysfs_emit_at()
-> when formatting the value to be returned to user space.
-> 
-> Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 
-Looks OK.
-
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
-
-> ---
-> v2: delete 'else' and extra space.
-> v3: delete extra configs in patch v2
->     and use a new changelog.
-> ---
->  drivers/scsi/csiostor/csio_scsi.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
-> index 9aafe0002ab1..05e1a63e00c3 100644
-> --- a/drivers/scsi/csiostor/csio_scsi.c
-> +++ b/drivers/scsi/csiostor/csio_scsi.c
-> @@ -1366,9 +1366,9 @@ csio_show_hw_state(struct device *dev,
->  	struct csio_hw *hw = csio_lnode_to_hw(ln);
->  
->  	if (csio_is_hw_ready(hw))
-> -		return snprintf(buf, PAGE_SIZE, "ready\n");
-> -	else
-> -		return snprintf(buf, PAGE_SIZE, "not ready\n");
-> +		return sysfs_emit(buf, "ready\n");
-> +
-> +	return sysfs_emit(buf, "not ready\n");
->  }
->  
->  /* Device reset */
-> @@ -1430,7 +1430,7 @@ csio_show_dbg_level(struct device *dev,
->  {
->  	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
->  
-> -	return snprintf(buf, PAGE_SIZE, "%x\n", ln->params.log_level);
-> +	return sysfs_emit(buf, "%x\n", ln->params.log_level);
->  }
->  
->  /* Store debug level */
-> @@ -1476,7 +1476,7 @@ csio_show_num_reg_rnodes(struct device *dev,
->  {
->  	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
->  
-> -	return snprintf(buf, PAGE_SIZE, "%d\n", ln->num_reg_rnodes);
-> +	return sysfs_emit(buf, "%d\n", ln->num_reg_rnodes);
->  }
->  
->  static DEVICE_ATTR(num_reg_rnodes, S_IRUGO, csio_show_num_reg_rnodes, NULL);
-
--- 
-Damien Le Moal
-Western Digital Research
-
+On 2022/8/31 23:01, Jan Kiszka wrote:
+> On 20.07.22 14:27, pngliu@hotmail.com wrote:
+>> From: Peng Liu <liupeng17@lenovo.com>
+>>
+>> Below incompatibilities between Python2 and Python3 made lx-timerlist
+>> fail to run under Python3.
+>>
+>> o xrange() is replaced by range() in Python3
+>> o bytes and str are different types in Python3
+>> o the return value of Inferior.read_memory() is memoryview object in
+>>    Python3
+> Means this only ever worked with Python2? And we now hard-switch it to
+> Python3? Not voting against this, just confused if it was like this so far.
+>
+> Jan
+I think so. I tried the other gdb scripts and they worked for both python2
+and python3. I guess timerlist.py was initially tested only with a gdb
+with python2 support built in but not one with python3 support built in.
+>> Signed-off-by: Peng Liu <liupeng17@lenovo.com>
+>> ---
+>>   scripts/gdb/linux/timerlist.py | 4 +++-
+>>   scripts/gdb/linux/utils.py     | 5 ++++-
+>>   2 files changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/scripts/gdb/linux/timerlist.py b/scripts/gdb/linux/timerlist.py
+>> index 44e39dc3eb64..8281da068c5b 100644
+>> --- a/scripts/gdb/linux/timerlist.py
+>> +++ b/scripts/gdb/linux/timerlist.py
+>> @@ -72,7 +72,7 @@ def print_cpu(hrtimer_bases, cpu, max_clock_bases):
+>>       ts = cpus.per_cpu(tick_sched_ptr, cpu)
+>>   
+>>       text = "cpu: {}\n".format(cpu)
+>> -    for i in xrange(max_clock_bases):
+>> +    for i in range(max_clock_bases):
+>>           text += " clock {}:\n".format(i)
+>>           text += print_base(cpu_base['clock_base'][i])
+>>   
+>> @@ -157,6 +157,8 @@ def pr_cpumask(mask):
+>>       num_bytes = (nr_cpu_ids + 7) / 8
+>>       buf = utils.read_memoryview(inf, bits, num_bytes).tobytes()
+>>       buf = binascii.b2a_hex(buf)
+>> +    if type(buf) is not str:
+>> +        buf=buf.decode()
+>>   
+>>       chunks = []
+>>       i = num_bytes
+>> diff --git a/scripts/gdb/linux/utils.py b/scripts/gdb/linux/utils.py
+>> index ff7c1799d588..db59f986c7fd 100644
+>> --- a/scripts/gdb/linux/utils.py
+>> +++ b/scripts/gdb/linux/utils.py
+>> @@ -89,7 +89,10 @@ def get_target_endianness():
+>>   
+>>   
+>>   def read_memoryview(inf, start, length):
+>> -    return memoryview(inf.read_memory(start, length))
+>> +    m = inf.read_memory(start, length)
+>> +    if type(m) is memoryview:
+>> +        return m
+>> +    return memoryview(m)
+>>   
+>>   
+>>   def read_u16(buffer, offset):

@@ -2,87 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDCF45A9591
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:19:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB1395A959D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:22:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234206AbiIALT1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 07:19:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38236 "EHLO
+        id S231484AbiIALVr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:21:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233114AbiIALTY (ORCPT
+        with ESMTP id S234472AbiIALVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 07:19:24 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08BBE1275DF;
-        Thu,  1 Sep 2022 04:19:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662031164; x=1693567164;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=UjpVOtpMNTn8a2g9tUjix6AHloEUqxCpowEEZFoDF+g=;
-  b=llpeSeZo0LZnxmwgRt0iSdEpj3IAxrfd2AcxwhMvQaXObyN9M3afbeyV
-   oVSW5J+KuzlA1PpPRmt6Qa5E7lSl0e332oQMdz2Y/hhHcyPz7d+yziiNM
-   6OisqgcREb/YxUISDDMwh5vzCOopE4runesJQNXu1YYiPxBDCgJC9FBT7
-   oQchpIENDYfHaLzj8rhFQf4RC0Yskb7I5zTQC/hkhS4ZD80PXotNrST+s
-   TbEinPu324NRCQ7JZqDAdSec/ae3ULCNaMmZXn2kOFAsue2xO3cvNOW4q
-   2xya6CBfH+LVxuwAoE0/J2gfGE22cX6M+5P7k5zGfTmjzJkBm01xgOscV
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="293266248"
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="293266248"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 04:19:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="754785221"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 01 Sep 2022 04:19:21 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 01 Sep 2022 14:19:20 +0300
-Date:   Thu, 1 Sep 2022 14:19:20 +0300
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     =?utf-8?B?6LW15pmT?= <zhaoxiao@uniontech.com>
-Cc:     Greg KH <gregkh@linuxfoundation.org>,
-        linux-usb <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] usb:mux:intel_pmc_mux: Use the helper
- acpi_dev_get_memory_resources()
-Message-ID: <YxCVOHuaOQGKNf7X@kuha.fi.intel.com>
-References: <20220831061126.25172-1-zhaoxiao@uniontech.com>
- <Yw8aJ8QC1BtBNBfx@kuha.fi.intel.com>
- <Yw8c0Qdelk8XecV5@kroah.com>
- <tencent_4E7B2E1523A5D8801223AAB6@qq.com>
+        Thu, 1 Sep 2022 07:21:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A218A12649E;
+        Thu,  1 Sep 2022 04:21:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C58861DBA;
+        Thu,  1 Sep 2022 11:21:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5674C433D6;
+        Thu,  1 Sep 2022 11:21:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662031288;
+        bh=Y1ObXWZoAPO9a3cVwM+9DOIhRMb2NN2/YlncxX1cYIA=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=g8HIcvDfJ7+Kvvz7+2WkqooremfBKbH+fzUyNPoCCJ2aYsc9DWatob971V4yk03CO
+         CF6JpCsGQDyY0QDjoCeC8LtYUjVtluTRQnHT+In0odOoTv1u/fhLc26r3d+JtsKvMH
+         5PuERM7bTHJjhKOVQZCMjMVa45wyctq94eCQtHyhw46Akh48FlQ6jSlJYP6T8kKM3x
+         RugJdDoqIJ3L6xxhrT6ZYLyWIG8ao+H+lluQYn4OM88a8h3sfyWsoFA+/06aPUwOym
+         RBlIYrKDULw2WTZ7K3lmhXwcE94QUucjPYFUeWQRUAZXqT0Kxu8vaaotXrYDElSDNc
+         VVGWuzmYv6mxw==
+Message-ID: <5c5d87f8329e44275bda36657be4de2390f065d4.camel@kernel.org>
+Subject: Re: [PATCH v2 1/3] nfsd: Fix a memory leak in an error handling path
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        "J. Bruce Fields" <bfields@redhat.com>,
+        Scott Mayhew <smayhew@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-nfs@vger.kernel.org
+Date:   Thu, 01 Sep 2022 07:21:26 -0400
+In-Reply-To: <14d802144c88da0eb9e201b3acbf4bde376b2473.1662009844.git.christophe.jaillet@wanadoo.fr>
+References: <14d802144c88da0eb9e201b3acbf4bde376b2473.1662009844.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <tencent_4E7B2E1523A5D8801223AAB6@qq.com>
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 11:39:17AM +0800, 赵晓 wrote:
-> No generated by yet another bot, The patch refer to the below:&nbsp;
-> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/commit/?h=linux-next&amp;id=6505e452371d44be00fe321996f1de248a7606a2
+On Thu, 2022-09-01 at 07:27 +0200, Christophe JAILLET wrote:
+> If this memdup_user() call fails, the memory allocated in a previous call
+> a few lines above should be freed. Otherwise it leaks.
+>=20
+> Fixes: 6ee95d1c8991 ("nfsd: add support for upcall version 2")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>  fs/nfsd/nfs4recover.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/fs/nfsd/nfs4recover.c b/fs/nfsd/nfs4recover.c
+> index b29d27eaa8a6..248ff9f4141c 100644
+> --- a/fs/nfsd/nfs4recover.c
+> +++ b/fs/nfsd/nfs4recover.c
+> @@ -815,8 +815,10 @@ __cld_pipe_inprogress_downcall(const struct cld_msg_=
+v2 __user *cmsg,
+>  				princhash.data =3D memdup_user(
+>  						&ci->cc_princhash.cp_data,
+>  						princhashlen);
+> -				if (IS_ERR_OR_NULL(princhash.data))
+> +				if (IS_ERR_OR_NULL(princhash.data)) {
+> +					kfree(name.data);
+>  					return -EFAULT;
+> +				}
+>  				princhash.len =3D princhashlen;
+>  			} else
+>  				princhash.len =3D 0;
 
-I don't know what are you trying to point at with that, but I'm
-guessing you are trying to refer to this patch series [1] that Rafael
-indeed picked to his PM tree - mostly. The first patch was taken by
-Greg, though now that I look at his linux-usb tree, it's not there?
-
-In any case, your patch will create a conflict with that first patch
-in that series. There is a proper solution in that very same series,
-but it can only be applied after the first patch becomes available.
-
-[1] https://lore.kernel.org/linux-usb/20220816101629.69054-1-heikki.krogerus@linux.intel.com/
-
-thanks,
-
--- 
-heikki
+Reviewed-by: Jeff Layton <jlayton@kernel.org>

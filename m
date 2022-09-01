@@ -2,164 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16C345A94C1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EC885A94C2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:36:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiIAKgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:36:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
+        id S234146AbiIAKgj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:36:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbiIAKgK (ORCPT
+        with ESMTP id S233622AbiIAKgg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:36:10 -0400
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2071.outbound.protection.outlook.com [40.107.100.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2ADDFB7A;
-        Thu,  1 Sep 2022 03:36:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CfxaWdes4PUs+oPZDs8VZyzYdw1VjpI6EpsE0tRKBdhfYGQWARDqwseyl1c8GjRRPHxc1M+iHa6KoxZYKakDUNoFeCQTINOt/YjNBQ2vmTIQXWKjCVOuXOsx/apLQVtdftJ68hIGrMpaxo2oDhbiLQ1+AFTR9o9cIGmo4rZ4caXkjGb+B++c03fu/Fy/Yzv7G4QVD5qUk0zqaafsCQ/1xho7E+KCF1ezU3f6XNJl/feKkSaim2nvSyRexGB09lTl7d7DMn6MVD7Zbpo9t9qWihdN5ws92sBN9+9MjkAIGUM0/mNzKLMRLvHRXt6nsZLlB3aDe68k5aV4J97iY0FT0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nH92cuMwS6n/ybagev9dAYT5CUWIIHJy5czEC6iAMTQ=;
- b=VLkbLxfoLcH3/19S2WpFYn9WocbYS3c/GolCKDXA6KvNLd+mDgwoht0Dq2TIC5X8SwgONskHu2SDisS4a/x/gKnuDgJ7Lz4ElMt3k2dh4IUR1exNfVUht898WNKYaj5QkvVMsoZH7EiN3wrRxqVw4xRbIQkQXUjd78mkcLLsq63G5qL1UNnObOiJ/IGMFrFtXNoBO+V0jWmsZ2ewfGds5813RcnzssAOBMwzbHhpoTUrJQIY1YL4Z3ZCl8mlAfCiebYTxTQAJzs7pi/kVAaYX/Tae07nrFbpKOAU+XkmemLAPKiOTL04msNrWCg5D2FDWlHrTW8irkdnsgBBIbEcmw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=nH92cuMwS6n/ybagev9dAYT5CUWIIHJy5czEC6iAMTQ=;
- b=GtS6RylsV7rn+rxiDiF7irjqGW8fxQqXUzytMZuXB/GNZ7jrQNJnxacaLTStNEN1sP9+Mecf8F1MHIUszidqlOfbiJYC/Ml420FhtJonWKwSeeKF3HJryC3na/QlU+4hhhL46fg4RucZU4EMvzLRVpH/35TzQCTgN9GuAgAr5KY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
- by IA1PR12MB6627.namprd12.prod.outlook.com (2603:10b6:208:3a1::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 1 Sep
- 2022 10:36:06 +0000
-Received: from PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::d058:d925:c09b:de2]) by PH7PR12MB6588.namprd12.prod.outlook.com
- ([fe80::d058:d925:c09b:de2%5]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
- 10:36:06 +0000
-Message-ID: <c5a6aea9-4f3a-495e-78fa-e426de9b0496@amd.com>
-Date:   Thu, 1 Sep 2022 16:05:53 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] perf: Rewrite core context handling
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     acme@kernel.org, alexander.shishkin@linux.intel.com,
-        jolsa@redhat.com, namhyung@kernel.org, songliubraving@fb.com,
-        eranian@google.com, ak@linux.intel.com, mark.rutland@arm.com,
-        frederic@kernel.org, maddy@linux.ibm.com, irogers@google.com,
-        will@kernel.org, robh@kernel.org, mingo@redhat.com,
-        catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
-        linux-perf-users@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
-        sandipan.das@amd.com, ananth.narayan@amd.com, kim.phillips@amd.com,
-        santosh.shukla@amd.com, ravi.bangoria@amd.com
-References: <20220829113347.295-1-ravi.bangoria@amd.com>
- <YwyrUYS30gVbxc2D@hirez.programming.kicks-ass.net>
- <YwzP+AFWCx4Ni/kx@hirez.programming.kicks-ass.net>
-From:   Ravi Bangoria <ravi.bangoria@amd.com>
-In-Reply-To: <YwzP+AFWCx4Ni/kx@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN3PR01CA0002.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:95::22) To PH7PR12MB6588.namprd12.prod.outlook.com
- (2603:10b6:510:210::10)
+        Thu, 1 Sep 2022 06:36:36 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED55117AE0
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:36:34 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oThYh-0001V1-JV; Thu, 01 Sep 2022 12:36:27 +0200
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1oThYf-0000mU-Q7; Thu, 01 Sep 2022 12:36:25 +0200
+Date:   Thu, 1 Sep 2022 12:36:25 +0200
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@fb.com, rostedt@goodmis.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>, kernel@pengutronix.de
+Subject: Re: [PATCH rcu 04/32] rcu-tasks: Drive synchronous grace periods
+ from calling task
+Message-ID: <20220901103625.GA1658@pengutronix.de>
+References: <20220620225402.GA3842369@paulmck-ThinkPad-P17-Gen-1>
+ <20220620225411.3842519-4-paulmck@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9820242a-ec4c-45c0-324f-08da8c05c6a5
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6627:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: DxNvT0ZbL46OdXy17Cs7f7+Cdf0Sto6jdvhgd2RBDb6QSiSktiRT2s+ZXEFQlc/3vH+fgGugAdMR3wQ5URwk9WNZ/4/JH4/GSgBOZkJdyRiEE8Ys0Gr0DfXLVI9x9jA6vrJT9IJjgyIitgiVM0SZtprKS6d0boOz9k69UvMJeHQFUpLHMuIr0Z/BkdFZDA7+W/ZWzD8dQ4wAlt2KMq9TVt1jJL70xjWh+hXwPNiVvLeH6sTl5uTsqGmNs5iznm8g967kCe07GJCBm7UIZLrMGDzFTyCtYX9A+Nyz43N94LCdJ8JuLGa+j0hzobcik+0xculLhu7HAhKBPqOXJapIejfRLLFZGk6gAcVroI3dltuhTFZ8XchAMupIAnZYOzMhv6ozwQUsDp3/zCImIDBMejxjlEO4mrr6vs1Sr0ximsUkxhNlbMWzB0ShAIjdWNcivL35CnO7jNOwcjAP/GVmDuFdHJtMcCFvFohHbb2bnYc89TEyhzh8nSFNgegcycn0QzpXFsxyfHg7wGyNAkr3YTc61veDZgAcR+5yTEBSgS0UhAbGte4OVge7JDt3y4LqVUume0j1vlcS980C/L8rwVpGoZwGYErMRr9ny3xjlfYMhkX3ZpJ2ylwCVggjvzNWTCgDXjV0xHGHduLPgllg6Wh+dEkwNtVv2SyLWaksji0Hwu9wjRLsoHDTN3kIYKFY5pBbYrBLt6E0L7RxLuUfQHhYFcXGwDLlxQklr6N1eGTt65coJWdeOwAnMrgQFuyI4xmPXU96C03LfVa+66UnjsoSWX5h1HkfiDhKRkMSkudNsz/ilDhar6D003EVXvVp
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(136003)(376002)(346002)(366004)(8936002)(53546011)(6506007)(186003)(41300700001)(478600001)(6916009)(83380400001)(6512007)(5660300002)(2616005)(6666004)(7416002)(2906002)(44832011)(316002)(8676002)(4326008)(38100700002)(31696002)(66946007)(26005)(66556008)(6486002)(66476007)(36756003)(31686004)(4744005)(86362001)(21314003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L1d6QUNweEtJVFRiRU1MZERtZ3ZyUElLVVZEL1o4NzRJellleGZkaVhmaU91?=
- =?utf-8?B?aWtMVDdpQmhyVHB6YUxRQk5vVEphQ1ROVjE1SW5UVUdaUWJLNnkvdHdNTHpp?=
- =?utf-8?B?L3JlMlpqQ1VHMG8xdDhCcTJJSTBLWFlWWWtGZmRhbGFlNnd4SG41L0hxM2dE?=
- =?utf-8?B?alN4bnM1WTRaZ04vNlN1YXJrUm9EVzJiSVV5ZzUvaHZERHpSamRvMEQ5MVcv?=
- =?utf-8?B?bFJ6c0crZnRCL0RnSnhLQUFrdnk5TXVuaHFyc0VxdXpnR0FnV2R3MkRCcDls?=
- =?utf-8?B?OFpnSTdWcXY0dVNiVlpMZG1nbUl4MnQxbTNSZWtzZDRPVWliOFJXdjI4QVp2?=
- =?utf-8?B?aEMzV2pXbW9yM2ZEQ3ZUVzlGakdIMytNbjJVM3pPQ1pMRm9uSmtOM1pxOWN1?=
- =?utf-8?B?SU4rMDQxYkdiSFhQVXN6cFlEVWI5WkdmWUNleUZTNE9IYTF4UElLQ0djWFpI?=
- =?utf-8?B?T1VUNXk2eEhMZXpUM2tRa2t0aS81VjVOblgxTDUvamNJSng1NDl3OVZHWGR3?=
- =?utf-8?B?S1BUeEkrVG9FbVliSGxCRTZyeGRzaEtVMmpwU2lTQURxWDYvMUhkK3ZQdG1a?=
- =?utf-8?B?dmZzSUhsbmg0TFBMRCtCSHNHSmxPVyt5U3dvQ2VBWmFXSHp3a0FnQWJacGVP?=
- =?utf-8?B?OHZSR2FibW13MGZWY3FDbFRIVDNYcnJDbkNZVzNBMEkyWFRvSTBMLzcwZUR2?=
- =?utf-8?B?MDN3ZVVYQzFlcCtEeDZDaFJIUkM0VVVPUE1XZWhHT01rKy9FQ3N5WGMvUk9K?=
- =?utf-8?B?b2ovM3JRenhZV3pKdEJaRWZwc2tIcmFjakJWOHRNcDVvd2EyU25KanFCaDY3?=
- =?utf-8?B?WDI1RmxlSDZtaU51eGlmKzBxR1dUMUY0d3pyK00wTHgwVEhNZ2JlRDYwT2dw?=
- =?utf-8?B?akRlY3RjWVg4WjZ3VHF3VG9OblRDMno2VDhUb2Nvc1RVYzBLMi9YdkJDRkRj?=
- =?utf-8?B?UEUwcmRFZWpSRExxSXc2anA0TVV0V1FWbEZkaDhtUnUwYnZBZ3lqZ3RyZTh5?=
- =?utf-8?B?ZmV6MUlCOC9hNWJUK2ZIMTJLZzhENHFXc2E4dXMwUUx4R2FReUM4TzZHSDhX?=
- =?utf-8?B?M0dGZzlxaDROWForY1FnUjlSOThOUmNSRnJObnhXME5taDZhRWZUVTI5QVlw?=
- =?utf-8?B?UktXYlRmSExVS0NBUG9xVTJ1VU1ZNkIxRlE2ZWJIczlBN08vdmJYbnRqM1Bx?=
- =?utf-8?B?S2M0SW4xVHpCM3ZqK2N0ampiWjFscHhXNjRrcVRIRmg1b3NKb1RTYk5HSXdk?=
- =?utf-8?B?UWRHaU5pRWZPcTJ2VXUrZGpWZ1RoMnF5cys0NjlXcWRaZjlKOWQxUk1ocWd2?=
- =?utf-8?B?bmQvMUVFY01YeTVHc1U0RGM5bVJYYTZtYVRqL3RjbnJpazlLWWlwUUE0a2Js?=
- =?utf-8?B?WU1BN2VxalpVeUtsd2JNb0RUK0d1SVJ6LzNIMWRQL2FrZHhKOEJjZnBpSUtB?=
- =?utf-8?B?NlNHVG92K04yU1d4ZDNCdXRwbXBIdk5CY1FmbWM1U3diY2F4UW1jc1dVeDNZ?=
- =?utf-8?B?dmdRU25tdjdVRkJTN0dkcjBtNkl5QnRLS0J0NXdONkY5YUEyT29ob1dsK3JP?=
- =?utf-8?B?N2owSHZaNm5vcVo0aFp3UytqN2JTQU8xUmJ6ZHdvVmdzMmZrM0NEY1pMSjdw?=
- =?utf-8?B?a2FwRVE2UG9IdUdWZ3UxMUJuUWNhdy9za2EvQmRoUUppOGVqMUR4SE54Q0lv?=
- =?utf-8?B?MUNHZnprRTBNbnNQOSt6eXhlQU91bUQvb1NwWkxCNkYydS9Fa2lJa1ZvRk5x?=
- =?utf-8?B?eTVWT2hFZjJVcEM4emZxSGtya2Jrd2syVDhkaXBFajRFekljZDJEbWZmZFBP?=
- =?utf-8?B?Q3JZL0xyUGI4UmVsaENMdnk0VisxWkVrZDF2SFNnWTJNNnBiNmZQM2lWdTNB?=
- =?utf-8?B?OEUra1pFZ2MwTUMrWi9uUzVBeDUzWG5tbzJQWkJXWWZvcGdoQk5xMUE2Y05o?=
- =?utf-8?B?WnowcndrWk0wSFlWMEh2cldGSm1uVU0vSDFqYzRYWjVRb2JaWnAzK1hPS2tj?=
- =?utf-8?B?eVpKTXhMemVkaWV2TnFzY0ovdWxZR3FJTkpHeUsrdWlZRXBzS2U3RUdNMjBE?=
- =?utf-8?B?L25ocnp2SWlMU3FpczRpY1dVZ0RHTGNEUktJN3JndXUrWldJNjN0U1BGVHdk?=
- =?utf-8?Q?sOSMKVuFuPuaRdFwyANqOocRp?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9820242a-ec4c-45c0-324f-08da8c05c6a5
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 10:36:06.5848
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: l3dzTv12C+49+QVg52kTGhInCHr30ol5JLdW++VHzCBozPrYzkmd0PkLttTguFVkOJeDKOhPZn2CHTMaPAYt3w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6627
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220620225411.3842519-4-paulmck@kernel.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+From:   Sascha Hauer <sha@pengutronix.de>
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29-Aug-22 8:10 PM, Peter Zijlstra wrote:
-> On Mon, Aug 29, 2022 at 02:04:33PM +0200, Peter Zijlstra wrote:
->> On Mon, Aug 29, 2022 at 05:03:47PM +0530, Ravi Bangoria wrote:
->>> @@ -12598,6 +12590,7 @@ EXPORT_SYMBOL_GPL(perf_event_create_kernel_counter);
->>>  
->>>  void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu)
->>>  {
->>> +#if 0 // XXX buggered - cpu hotplug, who cares
->>>  	struct perf_event_context *src_ctx;
->>>  	struct perf_event_context *dst_ctx;
->>>  	struct perf_event *event, *tmp;
->>> @@ -12658,6 +12651,7 @@ void perf_pmu_migrate_context(struct pmu *pmu, int src_cpu, int dst_cpu)
->>>  	}
->>>  	mutex_unlock(&dst_ctx->mutex);
->>>  	mutex_unlock(&src_ctx->mutex);
->>> +#endif
->>>  }
->>>  EXPORT_SYMBOL_GPL(perf_pmu_migrate_context);
->>>  
->>
->> Note to self; fix this :-) I'll see if I have time for that later today.
+Hi Paul,
+
+On Mon, Jun 20, 2022 at 03:53:43PM -0700, Paul E. McKenney wrote:
+> This commit causes synchronous grace periods to be driven from the task
+> invoking synchronize_rcu_*(), allowing these functions to be invoked from
+> the mid-boot dead zone extending from when the scheduler was initialized
+> to to point that the various RCU tasks grace-period kthreads are spawned.
+> This change will allow the self-tests to run in a consistent manner.
 > 
-> Urgh, while going through that it appears the whole refcounting thing
-> isn't fully done either.
+> Reported-by: Matthew Wilcox <willy@infradead.org>
+> Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 
-Not sure I follow. Can you please elaborate.
+This commit (appeared in mainline as 4a8cc433b8bf) breaks booting my
+ARMv7 based i.MX6ul board when CONFIG_PROVE_RCU is enabled. Reverting
+this patch on v6.0-rc3 makes my board boot again. See below for a boot
+log. The last message is "Running RCU-tasks wait API self tests", after
+that the board hangs. Any idea what goes wrong here?
 
-Thanks,
-Ravi
+Sascha
+
+----------------------------8<-----------------------------
+
+[    0.000000] Booting Linux on physical CPU 0x0
+[    0.000000] Linux version 5.19.0-rc3-00004-g4a8cc433b8bf (sha@dude02) (arm-v7a-linux-gnueabihf-gcc (OSELAS.Toolchain-2021.07.0 11-20210703) 11.1.1 20210703, GNU ld (GNU Binutils) 2.36.1) #229 SMP Thu Sep 1 12:00:07 CEST 2022
+[    0.000000] CPU: ARMv7 Processor [410fc075] revision 5 (ARMv7), cr=10c5387d
+[    0.000000] CPU: div instructions available: patching division code
+[    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
+[    0.000000] OF: fdt: Machine model: IDS CU33X
+[    0.000000] earlycon: ec_imx6q0 at MMIO 0x02020000 (options '')
+[    0.000000] printk: bootconsole [ec_imx6q0] enabled
+[    0.000000] Memory policy: Data cache writealloc
+[    0.000000] cma: Reserved 64 MiB at 0x8c000000
+[    0.000000] Zone ranges:
+[    0.000000]   Normal   [mem 0x0000000080000000-0x000000008fffffff]
+[    0.000000]   HighMem  empty
+[    0.000000] Movable zone start for each node
+[    0.000000] Early memory node ranges
+[    0.000000]   node   0: [mem 0x0000000080000000-0x000000008fffffff]
+[    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x000000008fffffff]
+[    0.000000] percpu: Embedded 17 pages/cpu s38068 r8192 d23372 u69632
+[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 65024
+[    0.000000] Kernel command line: console=ttymxc0,115200n8 earlycon ip=dhcp root=/dev/nfs nfsroot=192.168.8.12:/hom
+e/sha/nfsroot/cu33x,v3,tcp
+[    0.000000] Dentry cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
+[    0.000000] Inode-cache hash table entries: 16384 (order: 4, 65536 bytes, linear)
+[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
+[    0.000000] Memory: 162600K/262144K available (15360K kernel code, 2146K rwdata, 5472K rodata, 1024K init, 6681K b
+ss, 34008K reserved, 65536K cma-reserved, 0K highmem)
+[    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
+[    0.000000] trace event string verifier disabled
+[    0.000000] Running RCU self tests
+[    0.000000] rcu: Hierarchical RCU implementation.
+[    0.000000] rcu:     RCU event tracing is enabled.
+[    0.000000] rcu:     RCU lockdep checking is enabled.
+[    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=4 to nr_cpu_ids=1.
+[    0.000000]  Tracing variant of Tasks RCU enabled.
+[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
+[    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
+[    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
+[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+[    0.000000] Switching to timer-based delay loop, resolution 41ns
+[    0.000003] sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns
+[    0.007810] clocksource: mxc_timer1: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 79635851949 ns
+[    0.021748] Console: colour dummy device 80x30
+[    0.023488] Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
+[    0.032009] ... MAX_LOCKDEP_SUBCLASSES:  8
+[    0.035282] ... MAX_LOCK_DEPTH:          48
+[    0.039445] ... MAX_LOCKDEP_KEYS:        8192
+[    0.043886] ... CLASSHASH_SIZE:          4096
+[    0.048127] ... MAX_LOCKDEP_ENTRIES:     32768
+[    0.052552] ... MAX_LOCKDEP_CHAINS:      65536
+[    0.057069] ... CHAINHASH_SIZE:          32768
+[    0.061405]  memory used by lock dependency info: 4061 kB
+[    0.066788]  memory used for stack traces: 2112 kB
+[    0.071645]  per task-struct memory footprint: 1536 bytes
+[    0.077138] Calibrating delay loop (skipped), value calculated using timer frequency.. 48.00 BogoMIPS (lpj=240000)
+[    0.087384] pid_max: default: 32768 minimum: 301
+[    0.093527] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.099327] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
+[    0.116798] CPU: Testing write buffer coherency: ok
+[    0.122036] CPU0: update cpu_capacity 1024
+[    0.123381] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
+[    0.137390] cblist_init_generic: Setting adjustable number of callback queues.
+[    0.142282] cblist_init_generic: Setting shift to 0 and lim to 1.
+[    0.149333] Running RCU-tasks wait API self tests
+
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

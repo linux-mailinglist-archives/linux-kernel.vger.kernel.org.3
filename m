@@ -2,64 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7F305A9FC3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:18:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A23005A9FCB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233953AbiIATSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:18:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60318 "EHLO
+        id S233750AbiIATT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233919AbiIATSe (ORCPT
+        with ESMTP id S233979AbiIATTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:18:34 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2CB8983A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:18:32 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Thu, 1 Sep 2022 15:19:53 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA07FFCC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:19:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=degmQsdmDYi+b3tN8qVEdHxJOY/qjnlNSPHaWQEAiVY=; b=FGrf9IAJiAVOym9p1GhlvSefrj
+        EMAcQXYDwUSKtr3BnhOlXDOKlieUHY8Rf5w4GBxy6pUtJXDBSk4Xn7ZMN/AP7n6rX6/XldRwjmvwE
+        DoBmFfceTOkmSAbOQYn1Rsv5p2QUjxlvaz5RqsL+Pbb3P8Gqja+Tg/y12zx1409yfsmVj7aMRdPr6
+        hMZ+0cUQPpBKNz/Nn4xWgwWRa+Xp6Rz+T+I0qHhX5jq07S4kdDuhqiz2wa/7Yndts8BYg1YWPr4J0
+        0WCaY/2kKQ+8ds+R95hPgbalGQXcoAUKZexjYQAULb0jkNLjv1G4R4oVwhwr2nj59cO47RKIXVby3
+        gU20bt+Q==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oTpiv-006IOv-Qp; Thu, 01 Sep 2022 19:19:33 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 90CAE33755;
-        Thu,  1 Sep 2022 19:18:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662059910; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UFcrc/UJOT2kK6zHMZQySOwNe/Miq+xxPRe6+0lgG/k=;
-        b=QzrCF2VvdUGGEdAHTIYe+W8NaZ02hQLHwMvfPQVoUSuUDjN0RbEvycquJq6nki301gknLP
-        z5xDtdb8MxPFGkyfe4df8UB8Ym4ieIT3yRshjHzu5oKl1v2Qe0NWhNxJDTKIvJQAMkPXgV
-        FxtluHEcLtfnCR6sM0z7ZXfyJhfzHbQ=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 721C313A79;
-        Thu,  1 Sep 2022 19:18:30 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id LYfVGIYFEWOEWAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 01 Sep 2022 19:18:30 +0000
-Date:   Thu, 1 Sep 2022 21:18:29 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     linux-mm@kvack.org, Christoph Hellwig <hch@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH] mm: reduce noise in show_mem for lowmem allocations
-Message-ID: <YxEFhVcKS8gBeIcf@dhcp22.suse.cz>
-References: <YwScVmVofIZkopkF@dhcp22.suse.cz>
- <Yw29bmJTIkKogTiW@dhcp22.suse.cz>
- <efa7bebf-b977-dea1-de1a-cbdaffaa165b@suse.cz>
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 438AD30010B;
+        Thu,  1 Sep 2022 21:19:32 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 350C22B8D5A25; Thu,  1 Sep 2022 21:19:32 +0200 (CEST)
+Date:   Thu, 1 Sep 2022 21:19:32 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Sathvika Vasireddy <sv@linux.ibm.com>
+Cc:     linuxppc-dev@lists.ozlabs.org, jpoimboe@redhat.com,
+        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
+        mingo@redhat.com, christophe.leroy@csgroup.eu, rostedt@goodmis.org,
+        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
+        naveen.n.rao@linux.vnet.ibm.com
+Subject: Re: [PATCH v2 07/16] powerpc: Skip objtool from running on VDSO files
+Message-ID: <YxEFxJk+2fog+oRx@hirez.programming.kicks-ass.net>
+References: <20220829055223.24767-1-sv@linux.ibm.com>
+ <20220829055223.24767-8-sv@linux.ibm.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <efa7bebf-b977-dea1-de1a-cbdaffaa165b@suse.cz>
+In-Reply-To: <20220829055223.24767-8-sv@linux.ibm.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,33 +62,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 01-09-22 16:14:39, Vlastimil Babka wrote:
-> On 8/30/22 09:34, Michal Hocko wrote:
-> > [Cc Dan]
-> > Dan has brought up[1] that the use of gfp mask has confused his static
-> > analyzer which assumes that GFP_HIGHUSER_MOVABLE implies a sleeping
-> > allocation and that wouldn't be a great idea from the panic path. I
-> > would add that most callers of this function would be really bad to
-> > allocate.
-> > 
-> > The report itself is a false positive but it made me think a bit about
-> > this. Even if the check is too simplistic I guess it resembles how many
-> > developers are thinking (including me). If I see GFP_HIGHUSER_MOVABLE or
-> > GF_KERNEL I automatically assume a sleeping allocation down the road.
-> > And who know somebody might add one in the future even into show_mem
-> > because the gfp parameter would be too tempting to not (ab)use.
-> > 
-> > My original intention was to use a natural allocation speak but this can
-> > backfire so maybe it would be better to give the argument its real
-> > meaning and that is the high_zone_idx. This is cryptic for code outside
-> > of MM but that is not all that many callers and we can hide this fact
-> > from them. In other words does the thing below looks better (incremental
-> > for illustration, I will make it a proper patch if yes)?
+On Mon, Aug 29, 2022 at 11:22:14AM +0530, Sathvika Vasireddy wrote:
+> Do not run objtool on VDSO files, by using
+> OBJECT_FILES_NON_STANDARD
 > 
-> Yeah, looks better to me this way. Thanks!
+> Suggested-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
+> ---
+>  arch/powerpc/kernel/vdso/Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
+> index 096b0bf1335f..a49a0d6a1c53 100644
+> --- a/arch/powerpc/kernel/vdso/Makefile
+> +++ b/arch/powerpc/kernel/vdso/Makefile
+> @@ -102,3 +102,5 @@ quiet_cmd_vdso64ld_and_check = VDSO64L $@
+>        cmd_vdso64ld_and_check = $(VDSOCC) $(c_flags) $(CC64FLAGS) -o $@ -Wl,-T$(filter %.lds,$^) $(filter %.o,$^) ; $(cmd_vdso_check)
+>  quiet_cmd_vdso64as = VDSO64A $@
+>        cmd_vdso64as = $(VDSOCC) $(a_flags) $(CC64FLAGS) $(AS64FLAGS) -c -o $@ $<
+> +
+> +OBJECT_FILES_NON_STANDARD := y
 
-Thanks for looking into this. Unless somebody objects I will send a
-consolidated patch early next week.
--- 
-Michal Hocko
-SUSE Labs
+Just to clarify; your linker script will place the VDSO in .rodata or a
+similar !.text section, right?

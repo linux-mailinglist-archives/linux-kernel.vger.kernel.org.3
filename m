@@ -2,73 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 077525A9F35
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:38:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E619F5A9F3D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:41:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234745AbiIASh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:37:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        id S232699AbiIASlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:41:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234684AbiIAShX (ORCPT
+        with ESMTP id S231484AbiIASlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:37:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B29C4CA0E;
-        Thu,  1 Sep 2022 11:36:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A19F61CF7;
-        Thu,  1 Sep 2022 18:36:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68479C433D6;
-        Thu,  1 Sep 2022 18:36:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662057404;
-        bh=4EGc98ePtGVoW/OVpl29pIB0Xv/vWLpMdUFKeCItABY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xFeGxXLUUQuSqZdVXhkzgw5JZFhnJkqiyA7MU8ELHe3FJve40mXqCLp9o6Fh+/lAf
-         yijiTz3pzHkV1ZEn5hg/537CIQ4D8j2AVuE8Pd8EnOW7zd0tEDyU+ODP2GX+/Dt8iD
-         Xilxi4k7yFbvYeFd6jE9lPw3HjO8pop87qrBfh24=
-Date:   Thu, 1 Sep 2022 20:36:41 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
-        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Don Dutile <ddutile@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Minturn Dave B <dave.b.minturn@intel.com>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Xiong Jianxin <jianxin.xiong@intel.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Martin Oliveira <martin.oliveira@eideticom.com>,
-        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        Stephen Bates <sbates@raithlin.com>
-Subject: Re: [PATCH v9 7/8] PCI/P2PDMA: Allow userspace VMA allocations
- through sysfs
-Message-ID: <YxD7uZYaV75gJS9d@kroah.com>
-References: <20220825152425.6296-1-logang@deltatee.com>
- <20220825152425.6296-8-logang@deltatee.com>
- <YxDb2MyRx6o/wDAz@kroah.com>
- <4a4bca1e-bebf-768f-92d4-92eb8ae714e1@deltatee.com>
- <YxDhEO9ycZDTnbZm@kroah.com>
- <cc9a24a8-dd3a-9d21-d9a7-5ee4b0ad7a57@deltatee.com>
+        Thu, 1 Sep 2022 14:41:04 -0400
+Received: from smtp-fw-9102.amazon.com (smtp-fw-9102.amazon.com [207.171.184.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9214BD13;
+        Thu,  1 Sep 2022 11:41:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1662057663; x=1693593663;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=/6J77/LlQgbg1hQnSjTTdcGsFBy61d+Z4bCGNjtV06A=;
+  b=AMVS6eOrBgEaS4vLTxrVrLN+U3PzNNXhMFLeviITsgfHfH1Im56IX5ss
+   OMQQ5iEmytKDsSHuUquS0pnc8ERbcjzWycPLJuD0xv6Hwmqe/zynSzGQY
+   t0aY0ZOjvmELwPCHgkmrX5oRIZyTrOvbpeocxJkXr/6msmfB18CeNXCkw
+   g=;
+X-IronPort-AV: E=Sophos;i="5.93,281,1654560000"; 
+   d="scan'208";a="255294431"
+Subject: Re: [PATCH v3 19/19] hwmon: (mr75203) fix coding style space errors
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com) ([10.25.36.210])
+  by smtp-border-fw-9102.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 18:40:48 +0000
+Received: from EX13D37EUB002.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
+        by email-inbound-relay-pdx-2a-11a39b7d.us-west-2.amazon.com (Postfix) with ESMTPS id CBD2B450B2;
+        Thu,  1 Sep 2022 18:40:47 +0000 (UTC)
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX13D37EUB002.ant.amazon.com (10.43.166.116) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 1 Sep 2022 18:40:46 +0000
+Received: from [192.168.93.228] (10.85.143.172) by mail-relay.amazon.com
+ (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Thu, 1 Sep 2022 18:40:42 +0000
+Message-ID: <ea7061b8-5779-6bfe-db3a-8670aeebed32@amazon.com>
+Date:   Thu, 1 Sep 2022 21:40:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cc9a24a8-dd3a-9d21-d9a7-5ee4b0ad7a57@deltatee.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     Andy Shevchenko <andriy.shevchenko@intel.com>, <jdelvare@suse.com>,
+        <robh+dt@kernel.org>, <p.zabel@pengutronix.de>,
+        <rtanwar@maxlinear.com>, <linux-hwmon@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <talel@amazon.com>, <hhhawa@amazon.com>, <jonnyc@amazon.com>,
+        <hanochu@amazon.com>, <ronenk@amazon.com>, <itamark@amazon.com>,
+        <shellykz@amazon.com>, <shorer@amazon.com>, <amitlavi@amazon.com>,
+        <almogbs@amazon.com>, <dkl@amazon.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-20-farbere@amazon.com>
+ <Yw9Q5krebHnb73vC@smile.fi.intel.com>
+ <0074475d-04bc-153a-2df8-dd5f7d014c97@amazon.com>
+ <20220901144633.GC3477025@roeck-us.net>
+ <2d907196-02c5-ea25-4438-04de77282e75@amazon.com>
+ <4337076c-9585-9650-5646-ee3f90bd5787@roeck-us.net>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <4337076c-9585-9650-5646-ee3f90bd5787@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-14.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,47 +77,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 12:14:25PM -0600, Logan Gunthorpe wrote:
-> 
-> 
-> 
-> On 2022-09-01 10:42, Greg Kroah-Hartman wrote:
-> > On Thu, Sep 01, 2022 at 10:32:55AM -0600, Logan Gunthorpe wrote:
-> >> On 2022-09-01 10:20, Greg Kroah-Hartman wrote:
-> >>> On Thu, Aug 25, 2022 at 09:24:24AM -0600, Logan Gunthorpe wrote:
-> >>>> +	/*
-> >>>> +	 * Removing the alloc attribute from sysfs will call
-> >>>> +	 * unmap_mapping_range() on the inode, teardown any existing userspace
-> >>>> +	 * mappings and prevent new ones from being created.
-> >>>> +	 */
-> >>>> +	sysfs_remove_file_from_group(&pdev->dev.kobj, &p2pmem_alloc_attr.attr,
-> >>>> +				     p2pmem_group.name);
-> >>>
-> >>> Wait, why are you manually removing the sysfs file here?  It's part of
-> >>> the group, if you do this then it is gone for forever, right?  Why
-> >>> manually do this the sysfs core should handle this for you if the device
-> >>> is removed.
-> >>
-> >> We have to make sure the mappings are all removed before the cleanup of
-> >> devm_memremap_pages() which will wait for all the pages to be freed.
-> > 
-> > Then don't use devm_ functions.  Why not just use the manual functions
-> > instead as you know when you want to tear this down.
-> 
-> Well we haven't plugged in a remove call into p2pdma, that would be more
-> work and more interfaces touching the PCI code. Note: this code isn't a
-> driver but a set of PCI helpers available to other PCI drivers.
-> Everything that's setup is using the devm interfaces and gets torn down
-> with the same. So I don't really see the benefit of making the change
-> you propose.
+On 9/1/2022 8:09 PM, Guenter Roeck wrote:
+> On 9/1/22 08:31, Farber, Eliav wrote:
+>> On 9/1/2022 5:46 PM, Guenter Roeck wrote:
+>>> On Thu, Sep 01, 2022 at 05:21:43PM +0300, Farber, Eliav wrote:
+>>>> On 8/31/2022 3:15 PM, Andy Shevchenko wrote:
+>>>> > On Tue, Aug 30, 2022 at 07:22:12PM +0000, Eliav Farber wrote:
+>>>> > > Fix: "ERROR: space required before the open parenthesis '('"
+>>>> >
+>>>> > This patch may have other fixes like adding new blank lines 
+>>>> (noted in one
+>>>> > of the patches in the series), etc.
+>>>> This patch fixed a specific space error which existed before my 
+>>>> changes
+>>>> and repeated many time.
+>>>> I fixed the blank line I added a previous patch (but is it isn’t an 
+>>>> error
+>>>> reported by checkpatch).
+>>>
+>>> That should really be fixed where it was introduced, not be introduced
+>>> and fixed here.
+>>
+>>
+>> So what do you suggest?
+>> I can drop the patch from this series and ignore it or move it to be the
+>> first patch in the series, or publish it separately later on.
+>> I had it because it was annoying seeing existing checkpatch errors when
+>> I came to check my change.
+>>
+>
+> Sorry, you lost me. I referred to "I fixed the blank line I added
+> a previous patch". That should not be fixed in this patch but be dropped
+> from the patch where you introduced it. Did I misunderstand your 
+> comment ?
 
-The issue is the classic one with the devm helpers.  They do not lend
-themselves to resource management issues that require ordering or other
-sort of dependencies.  Please do not use them here, just put in a remove
-callback as you eventually will need it anyway, as you have a strong
-requirement for what gets freed when, and the devm api does not provide
-for that well.
 
-thanks,
+Indeed I fixed the blank line in the original patch in which it was
+introduced.
+Patch #19 only addresses previously existing space related checkpatch
+errors.
 
-greg k-h
+--
+Thanks, Eliav
+

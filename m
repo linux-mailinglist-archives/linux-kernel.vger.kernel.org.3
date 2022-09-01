@@ -2,82 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF87A5A9563
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:07:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7455A9570
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:08:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233383AbiIALHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 07:07:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50838 "EHLO
+        id S233589AbiIALHQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:07:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232723AbiIALHH (ORCPT
+        with ESMTP id S233671AbiIALHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 07:07:07 -0400
+        Thu, 1 Sep 2022 07:07:08 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E05421314F2;
-        Thu,  1 Sep 2022 04:07:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D9211321E8;
+        Thu,  1 Sep 2022 04:07:07 -0700 (PDT)
 Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out1.suse.de (Postfix) with ESMTP id 7DBAA22683;
-        Thu,  1 Sep 2022 11:07:05 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTP id 28A8822685;
+        Thu,  1 Sep 2022 11:07:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662030425; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6vjzxB4Ibfz0o69w/iYdHIKC07ztQav3fh9etcwaWjY=;
-        b=ze76PvxNMXHs0p67rsZvuOtSORxr4tU2rpdVRqGyuAP81aKL8DmS/kGvKNsY6RY8uvnWMu
-        YJoPGfnBY2vHOHtd+vLrjKQkqDKBQ6s6c3MM168LF39SqI1XTRvp1ujJuvNSOVrhO+kDLE
-        XPXm6VJpwBx7mO6z7PLD50m3bzTrQ7c=
+        t=1662030426; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6xhXqxiB9OvJti0BiVcQUaA8ec/RM1KadmGL+YamEp0=;
+        b=xbl28LfvEIg5H4LJOcwRZ94mlhm986g2KcWJtnrFZCZAWRRogJcotTjLWDGWEswGvZLp4f
+        gg8qQnemXaCWlgcPlCBejqnuQSoosG2WlBtzuViGAbSmISdimhuq3Ku3PiCM9GDiJpGHEg
+        8A2ocox/2UsYMRC7oETLvtCDUsp/9yY=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662030425;
+        s=susede2_ed25519; t=1662030426;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=6vjzxB4Ibfz0o69w/iYdHIKC07ztQav3fh9etcwaWjY=;
-        b=HPG/QyiFf7fFFkcSakpYQGSHOUTV37lDISPLRMSlqVOde56PoUsDZ2lbHs8eXNjQts9vNy
-        pkNd+ZRY+++hXaDQ==
+         mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6xhXqxiB9OvJti0BiVcQUaA8ec/RM1KadmGL+YamEp0=;
+        b=CXnNMDABF6QeBz1OE5PrvppS4p8DZ1EhnC72taOC7LzvwS4MB+IM39IyyHcAuZ39ivhhC6
+        vwzZJ4kDmV8UUwCg==
 Received: from localhost.localdomain (unknown [10.100.208.98])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A6C3B2C145;
-        Thu,  1 Sep 2022 11:07:01 +0000 (UTC)
+        by relay2.suse.de (Postfix) with ESMTPS id ABC1F2C142;
+        Thu,  1 Sep 2022 11:07:05 +0000 (UTC)
 From:   Jiri Slaby <jslaby@suse.cz>
 To:     gregkh@linuxfoundation.org
 Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Slaby <jslaby@suse.cz>,
-        Tobias Klauser <tklauser@distanz.ch>,
-        Richard Genoud <richard.genoud@gmail.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com,
-        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
-        Kevin Cernekee <cernekee@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang7@gmail.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        linux-riscv@lists.infradead.org
-Subject: [PATCH v2 0/3] tty: TX helpers
-Date:   Thu,  1 Sep 2022 13:06:54 +0200
-Message-Id: <20220901110657.3305-1-jslaby@suse.cz>
+        Jiri Slaby <jslaby@suse.cz>
+Subject: [PATCH v2 1/3] tty: serial: introduce transmit helper generators
+Date:   Thu,  1 Sep 2022 13:06:55 +0200
+Message-Id: <20220901110657.3305-2-jslaby@suse.cz>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220901110657.3305-1-jslaby@suse.cz>
+References: <20220901110657.3305-1-jslaby@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
@@ -88,82 +63,164 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series introduces DEFINE_UART_PORT_TX_HELPER +
-DEFINE_UART_PORT_TX_HELPER_LIMITED TX helpers. See PATCH 1/3 for the
-details. Comments welcome.
+Many serial drivers do the same thing:
+* send x_char if set
+* keep sending from the xmit circular buffer until either
+  - the loop reaches the end of the xmit buffer
+  - TX is stopped
+  - HW fifo is full
+* check for pending characters and:
+  - wake up tty writers to fill for more data into xmit buffer
+  - stop TX if there is nothing in the xmit buffer
 
-Then it switches drivers to use them. First, to
-DEFINE_UART_PORT_TX_HELPER() in 2/3 and then
-DEFINE_UART_PORT_TX_HELPER_LIMITED() in 3/3.
+The only differences are:
+* how to write the character to the HW fifo
+* the check of the end condition:
+  - is the HW fifo full?
+  - is limit of the written characters reached?
 
-The diffstat of patches 2+3 is as follows:
- 26 files changed, 191 insertions(+), 823 deletions(-)
-which appears to be nice.
+So unify the above into two helper generators:
+* DEFINE_UART_PORT_TX_HELPER_LIMITED() -- it performs the above taking
+  the written characters limit into account, and
+* DEFINE_UART_PORT_TX_HELPER() -- the same as above, except it only
+  checks the HW readiness, not the characters limit.
 
-Cc: Tobias Klauser <tklauser@distanz.ch>
-Cc: Richard Genoud <richard.genoud@gmail.com>
-Cc: Nicolas Ferre <nicolas.ferre@microchip.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Claudiu Beznea <claudiu.beznea@microchip.com>
-Cc: Vladimir Zapolskiy <vz@mleia.com>
-Cc: Liviu Dudau <liviu.dudau@arm.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Sascha Hauer <s.hauer@pengutronix.de>
-Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
-Cc: Fabio Estevam <festevam@gmail.com>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: "Andreas Färber" <afaerber@suse.de>
-Cc: Manivannan Sadhasivam <mani@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Cc: bcm-kernel-feedback-list@broadcom.com
-Cc: "Pali Rohár" <pali@kernel.org>
-Cc: Kevin Cernekee <cernekee@gmail.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Orson Zhai <orsonzhai@gmail.com>
-Cc: Baolin Wang <baolin.wang7@gmail.com>
-Cc: Chunyan Zhang <zhang.lyra@gmail.com>
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>
-Cc: linux-riscv@lists.infradead.org
+The HW specific operations (as stated as "differences" above) are passed
+as arguments to the macros. They are:
+* tx_ready() -- returns true if HW can accept more data.
+* put_char() -- write a character to the device.
+* tx_done() -- when the write loop is done, perform arbitrary action
+  before potential invocation of ops->stop_tx() happens.
 
-Jiri Slaby (3):
-  tty: serial: introduce transmit helper generators
-  tty: serial: use DEFINE_UART_PORT_TX_HELPER()
-  tty: serial: use DEFINE_UART_PORT_TX_HELPER_LIMITED()
+Note that the above macros are generators. This means the code is
+generated in place and the above 3 arguments are "inlined". I.e. no
+added penalty by generating call instructions for every single
+character. Nor any indirect calls. (As in previous versions of this
+patchset.)
+
+Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+---
+
+Notes:
+    [v2] instead of a function (uart_port_tx_limit()) in serial_core,
+         generate these in-place using macros. Thus eliminating "call"
+         penalty.
 
  Documentation/driver-api/serial/driver.rst |  3 +
- drivers/tty/serial/21285.c                 | 33 ++-------
- drivers/tty/serial/altera_jtaguart.c       | 42 +++--------
- drivers/tty/serial/altera_uart.c           | 37 ++--------
- drivers/tty/serial/amba-pl010.c            | 37 ++--------
- drivers/tty/serial/apbuart.c               | 36 ++-------
- drivers/tty/serial/atmel_serial.c          | 29 ++------
- drivers/tty/serial/bcm63xx_uart.c          | 47 +++---------
- drivers/tty/serial/fsl_lpuart.c            | 38 +++-------
- drivers/tty/serial/lantiq.c                | 44 +++--------
- drivers/tty/serial/lpc32xx_hs.c            | 38 ++--------
- drivers/tty/serial/mcf.c                   | 27 ++-----
- drivers/tty/serial/mpc52xx_uart.c          | 44 +----------
- drivers/tty/serial/mps2-uart.c             | 29 +-------
- drivers/tty/serial/mux.c                   | 46 ++++--------
- drivers/tty/serial/mvebu-uart.c            | 40 ++--------
- drivers/tty/serial/mxs-auart.c             | 31 ++------
- drivers/tty/serial/omap-serial.c           | 47 +++---------
- drivers/tty/serial/owl-uart.c              | 35 +--------
- drivers/tty/serial/pxa.c                   | 39 +++-------
- drivers/tty/serial/rp2.c                   | 36 ++-------
- drivers/tty/serial/sa1100.c                | 49 +++++-------
- drivers/tty/serial/serial_txx9.c           | 37 ++--------
- drivers/tty/serial/sifive.c                | 45 ++---------
- drivers/tty/serial/sprd_serial.c           | 38 ++--------
- drivers/tty/serial/st-asc.c                | 50 ++-----------
- drivers/tty/serial/vt8500_serial.c         | 40 ++--------
  include/linux/serial_core.h                | 86 ++++++++++++++++++++++
- 28 files changed, 280 insertions(+), 823 deletions(-)
+ 2 files changed, 89 insertions(+)
 
+diff --git a/Documentation/driver-api/serial/driver.rst b/Documentation/driver-api/serial/driver.rst
+index 23c6b956cd90..25775bf1fcc6 100644
+--- a/Documentation/driver-api/serial/driver.rst
++++ b/Documentation/driver-api/serial/driver.rst
+@@ -78,6 +78,9 @@ Other functions
+            uart_get_lsr_info uart_handle_dcd_change uart_handle_cts_change
+            uart_try_toggle_sysrq uart_get_console
+ 
++.. kernel-doc:: include/linux/serial_core.h
++   :identifiers: DEFINE_UART_PORT_TX_HELPER_LIMITED DEFINE_UART_PORT_TX_HELPER
++
+ Other notes
+ -----------
+ 
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+index 6e4f4765d209..715778160ae1 100644
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -646,6 +646,92 @@ struct uart_driver {
+ 
+ void uart_write_wakeup(struct uart_port *port);
+ 
++#define __DEFINE_UART_PORT_TX_HELPER(name, port, ch, tx_ready, put_char,  \
++		tx_done, for_test, for_post, ...)			  \
++unsigned int name(struct uart_port *port __VA_OPT__(,) __VA_ARGS__)	  \
++{									  \
++	struct circ_buf *xmit = &port->state->xmit;			  \
++	unsigned int pending;						  \
++	u8 ch;								  \
++									  \
++	for (; (for_test) && (tx_ready); (for_post), port->icount.tx++) { \
++		if (port->x_char) {					  \
++			ch = port->x_char;				  \
++			(put_char);					  \
++			port->x_char = 0;				  \
++			continue;					  \
++		}							  \
++									  \
++		if (uart_circ_empty(xmit) || uart_tx_stopped(port))	  \
++			break;						  \
++									  \
++		ch = xmit->buf[xmit->tail];				  \
++		(put_char);						  \
++		xmit->tail = (xmit->tail + 1) % UART_XMIT_SIZE;		  \
++	}								  \
++									  \
++	(tx_done);							  \
++									  \
++	pending = uart_circ_chars_pending(xmit);			  \
++	if (pending < WAKEUP_CHARS) {					  \
++		uart_write_wakeup(port);				  \
++									  \
++		if (pending == 0)					  \
++			port->ops->stop_tx(port);			  \
++	}								  \
++									  \
++	return pending;							  \
++}
++
++/**
++ * DEFINE_UART_PORT_TX_HELPER_LIMITED -- generate transmit helper for uart_port
++ *	with count limiting
++ * @name: name of the helper to generate
++ * @port: name of variable holding uart_port
++ * @ch: name of variable holding a character to write
++ * @tx_ready: can HW accept more data function
++ * @put_char: function to write a character
++ * @tx_done: function to call after the loop is done
++ *
++ * This macro generates a function @name. The generated function is meant as a
++ * helper to transmit characters from the xmit buffer to the hardware using
++ * @put_char(). It does so until count (passed to @name) characters are sent
++ * and while @tx_ready() still returns non-zero (if non-NULL).
++ *
++ * The generated function returns the number of characters in the xmit buffer
++ * when done.
++ *
++ * The functions in parameters shall be designed as follows:
++ *  * **tx_ready(port):** the function shall return true if the HW can accept
++ *    more data to be sent. This function can be %NULL, which means the HW is
++ *    always ready.
++ *  * **put_char(port, ch):** the function shall write @ch to the device.
++ *  * **tx_done(port):** when the write loop is done, this function can
++ *    perform arbitrary action before potential invocation of ops->stop_tx()
++ *    happens. This function can be %NULL.
++ *
++ * For all of them, @port->lock is held, interrupts are locally disabled and
++ * the functions must not sleep.
++ */
++#define DEFINE_UART_PORT_TX_HELPER_LIMITED(name, port, ch, tx_ready, put_char, \
++		                tx_done)				       \
++	__DEFINE_UART_PORT_TX_HELPER(name, port, ch, tx_ready, put_char,       \
++			tx_done, count, count--, unsigned int count)
++
++/**
++ * DEFINE_UART_PORT_TX_HELPER -- generate transmit helper for uart_port
++ * @name: name of the helper to generate
++ * @port: name of variable holding uart_port
++ * @ch: name of variable holding a character to write
++ * @tx_ready: can HW accept more data function
++ * @put_char: function to write a character
++ *
++ * See DEFINE_UART_PORT_TX_HELPER_LIMITED() for more details.
++ */
++#define DEFINE_UART_PORT_TX_HELPER(name, port, ch, tx_ready, put_char)	 \
++	__DEFINE_UART_PORT_TX_HELPER(name, port, ch, tx_ready, put_char, \
++			({}), true, ({}))
++
+ /*
+  * Baud rate helpers.
+  */
 -- 
 2.37.2
 

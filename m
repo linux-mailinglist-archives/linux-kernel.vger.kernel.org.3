@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B435A9E37
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 375DD5A9E3F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:40:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234948AbiIARiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44638 "EHLO
+        id S234463AbiIARiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:38:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234907AbiIARgs (ORCPT
+        with ESMTP id S234717AbiIARhB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:36:48 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F82C9A9FE
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:36:17 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-33dc888dc62so234887347b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:36:17 -0700 (PDT)
+        Thu, 1 Sep 2022 13:37:01 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F585B797
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:36:20 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id k13-20020a056902024d00b0066fa7f50b97so4872160ybs.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:36:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=BJfct7EED8CP836t+WrOyNhtwjRjF3r9ZgkUbpnfoug=;
-        b=eEZ4BqXkAmPCIUFHBPa2tHlcApvv3HMidc3eCYWOXuAzHrpAN0HS0lhYeZxby9RzBR
-         0w6QoRpV+iKQz37VUGml6Y4ETbNA7OPStJ8QApy5HYv7GzeLDO7+EvEq5dUOIcaM6UVC
-         7rLgM8Qnok81T8RLLnPTDqNW3fzyiOCIgOk9erIOBMCvX1CoI/RbBp7yoBH88B/Pqkwt
-         H8ojE/1F974lnPVAUpGISzyJjuOBuorgNT9VfkfOyqVqOEVMNKxpaqT01PsyXu4rsbpt
-         stRow1K+x3Cpkks4NKMTKIZbGi9T2v1db4rNZMcbp4CaDTkAzPc4JsqrDHDLe5K5oO1C
-         a6Wg==
+        bh=TUk3GnQXnzjX+dOXwqqLb3j5iouD0aWKTRx7OYILWmo=;
+        b=YQqRrP1cOBMmwt/q5otvkRLq5UlRi5nXamV0kPAgq/Llb+F9rrwouZsmTwkjFMW1zs
+         mWLW2S110jPh4eYPUbnJWz9aEFHyDND9nIDA90HkjT5HQ91YMufxWCmYs0WU2ooUk8Du
+         wzdtu/YDYEQeIpF7CzLVtbR6weBauuj1l4a8qgmBNwRm70UISBCLpd93jjiqNIdE0vgs
+         06VcH4KM5paek23OhAbPGd46WTDb6+CqL4Pyf7E1NmlU70RTzjmiFKgXWz0xeqjkJr9W
+         NG4J3tGGklDETuONG3YWLZrzk72gi/1u5qstFzrzMP1bg8GyXe5bAXne0/Fv+EFg0xsd
+         ouLg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=BJfct7EED8CP836t+WrOyNhtwjRjF3r9ZgkUbpnfoug=;
-        b=WE6lNI/69d0HM7gp0xQnYa5aUMIH8gBwWzlwEwJdlB4hqNPW0uLL1ZbdQEzSR/vRnV
-         rZVmJoEXOgHMisXTlzTbv7ZgOb1bu8fa4yh35v4ZE13KnT8Fbaver6MeZcihhoceGp5a
-         QURe+J8H7bwSj3MjQJXiWiONm1C6JcSUKU1CnjREMvJDu6gOgx4Qs9bXwYtoIslX5P1p
-         /VUAsEQjFpcgJ/h5cHCzfG1IfJPqDabV7G5OdOTZDG2hKCV04pm5Jgf8lScOEQd0bB6u
-         Gsiga2xVoy6EV7uncu5mcvdkvWAQF6MhggIlrpSJaeYsN2qniQ0d5dc9v3QUt4GiHKZB
-         3D1A==
-X-Gm-Message-State: ACgBeo3b4oyDFS1CJuDKudKas98FWhTeV6gzzWgbiS72qAk9QT6t5Gn5
-        6cWVzHoDT1TzMw56F9umMoCF1OdGaH0=
-X-Google-Smtp-Source: AA6agR7n//3fxGZjvfyML08bNSpeGfau+aTgkZu5QxUJzLJc9oUWAiawZA1UWbNFrnWa2xxdQVaE06YdPF8=
+        bh=TUk3GnQXnzjX+dOXwqqLb3j5iouD0aWKTRx7OYILWmo=;
+        b=sw2eOP6ZJ0/aa++mzys4MoIzaGA+r5IuUT6Cdik81GttmKAwUqIo9QrWAOFNAWl7o0
+         YM2rc1tV8meCQXCL7qG+swr7M83+8/hRe9y5yei1PuvhCWAiixHRbovMvXZbGP4SlZ9V
+         9qHAFMdT4eunBQVLPrRfx1z7Ub1yvVTfEcSjPexAZC3rqW2FUncx7ihUnKAYTudpGzzo
+         65CnQgQYkLSkfTS/5a0qtpk9mN5ZGQy46vhA+pNFzWSwolPOyJ1FEnvzqBvaBtcXkb7b
+         68jDbqFdzUF3LyZ/qyRToyYpFw0vSpeiksTXquwJElsHzUbIiqZRjQI/kY8XuILup2HE
+         A+uw==
+X-Gm-Message-State: ACgBeo0bvqAO8aVBmJRMOKJVEGetFeObeZov241n55mwqIdexvv+qPvF
+        ESfHdcwrJC/4z8KkYBFxNf2t2iUMlCU=
+X-Google-Smtp-Source: AA6agR5HFIn9x2Nfihxx+X7rvP9mQrh+0fzYESFNay7KqUAMxXqLyyvr7HgjmPtUD/1VpOxvT+Ik33q1JvQ=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:1bfc:e7ee:6530:4449])
- (user=surenb job=sendgmr) by 2002:a05:6902:18c:b0:695:9d04:c3e with SMTP id
- t12-20020a056902018c00b006959d040c3emr19907526ybh.58.1662053776523; Thu, 01
- Sep 2022 10:36:16 -0700 (PDT)
-Date:   Thu,  1 Sep 2022 10:35:09 -0700
+ (user=surenb job=sendgmr) by 2002:a25:5f10:0:b0:6a3:7eb:762 with SMTP id
+ t16-20020a255f10000000b006a307eb0762mr718810ybb.85.1662053778908; Thu, 01 Sep
+ 2022 10:36:18 -0700 (PDT)
+Date:   Thu,  1 Sep 2022 10:35:10 -0700
 In-Reply-To: <20220901173516.702122-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220901173516.702122-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220901173516.702122-22-surenb@google.com>
-Subject: [RFC PATCH RESEND 21/28] mm: introduce find_and_lock_anon_vma to be
- used from arch-specific code
+Message-ID: <20220901173516.702122-23-surenb@google.com>
+Subject: [RFC PATCH RESEND 22/28] x86/mm: try VMA lock-based page fault
+ handling first
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -80,89 +80,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce find_and_lock_anon_vma function to lookup and lock an anonymous
-VMA during page fault handling. When VMA is not found, can't be locked
-or changes after being locked, the function returns NULL. The lookup is
-performed under RCU protection to prevent the found VMA from being
-destroyed before the VMA lock is acquired. VMA lock statistics are
-updated according to the results.
+Attempt VMA lock-based page fault handling first, and fall back to the
+existing mmap_lock-based handling if that fails.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/mm.h |  3 +++
- mm/memory.c        | 45 +++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 48 insertions(+)
+ arch/x86/mm/fault.c | 36 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 36 insertions(+)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 7c3190eaabd7..a3cbaa7b9119 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -684,6 +684,9 @@ static inline void vma_assert_no_reader(struct vm_area_struct *vma)
- 		      vma);
- }
+diff --git a/arch/x86/mm/fault.c b/arch/x86/mm/fault.c
+index fa71a5d12e87..35e74e3dc2c1 100644
+--- a/arch/x86/mm/fault.c
++++ b/arch/x86/mm/fault.c
+@@ -19,6 +19,7 @@
+ #include <linux/uaccess.h>		/* faulthandler_disabled()	*/
+ #include <linux/efi.h>			/* efi_crash_gracefully_on_page_fault()*/
+ #include <linux/mm_types.h>
++#include <linux/mm.h>			/* find_and_lock_vma() */
  
-+struct vm_area_struct *find_and_lock_anon_vma(struct mm_struct *mm,
-+					      unsigned long address);
-+
- #else /* CONFIG_PER_VMA_LOCK */
- 
- static inline void vma_init_lock(struct vm_area_struct *vma) {}
-diff --git a/mm/memory.c b/mm/memory.c
-index 29d2f49f922a..bf557f7056de 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -5183,6 +5183,51 @@ vm_fault_t handle_mm_fault(struct vm_area_struct *vma, unsigned long address,
- }
- EXPORT_SYMBOL_GPL(handle_mm_fault);
+ #include <asm/cpufeature.h>		/* boot_cpu_has, ...		*/
+ #include <asm/traps.h>			/* dotraplinkage, ...		*/
+@@ -1323,6 +1324,38 @@ void do_user_addr_fault(struct pt_regs *regs,
+ 	}
+ #endif
  
 +#ifdef CONFIG_PER_VMA_LOCK
-+static inline struct vm_area_struct *find_vma_under_rcu(struct mm_struct *mm,
-+							unsigned long address)
-+{
-+	struct vm_area_struct *vma = __find_vma(mm, address);
++	if (!(flags & FAULT_FLAG_USER) || atomic_read(&mm->mm_users) == 1)
++		goto lock_mmap;
 +
-+	if (!vma || vma->vm_start > address)
-+		return NULL;
++	vma = find_and_lock_anon_vma(mm, address);
++	if (!vma)
++		goto lock_mmap;
 +
-+	if (!vma_is_anonymous(vma))
-+		return NULL;
-+
-+	if (!vma_read_trylock(vma)) {
-+		count_vm_vma_lock_event(VMA_LOCK_ABORT);
-+		return NULL;
-+	}
-+
-+	/* Check if the VMA got isolated after we found it */
-+	if (RB_EMPTY_NODE(&vma->vm_rb)) {
++	if (unlikely(access_error(error_code, vma))) {
 +		vma_read_unlock(vma);
-+		count_vm_vma_lock_event(VMA_LOCK_MISS);
-+		return NULL;
++		goto lock_mmap;
 +	}
++	fault = handle_mm_fault(vma, address, flags | FAULT_FLAG_VMA_LOCK, regs);
++	vma_read_unlock(vma);
 +
-+	return vma;
-+}
++	if (!(fault & VM_FAULT_RETRY)) {
++		count_vm_vma_lock_event(VMA_LOCK_SUCCESS);
++		goto done;
++	}
++	count_vm_vma_lock_event(VMA_LOCK_RETRY);
 +
-+/*
-+ * Lookup and lock and anonymous VMA. Returned VMA is guaranteed to be stable
-+ * and not isolated. If the VMA is not found of is being modified the function
-+ * returns NULL.
-+ */
-+struct vm_area_struct *find_and_lock_anon_vma(struct mm_struct *mm,
-+					      unsigned long address)
-+{
-+	struct vm_area_struct *vma;
-+
-+	rcu_read_lock();
-+	vma = find_vma_under_rcu(mm, address);
-+	rcu_read_unlock();
-+
-+	return vma;
-+}
++	/* Quick path to respond to signals */
++	if (fault_signal_pending(fault, regs)) {
++		if (!user_mode(regs))
++			kernelmode_fixup_or_oops(regs, error_code, address,
++						 SIGBUS, BUS_ADRERR,
++						 ARCH_DEFAULT_PKEY);
++		return;
++	}
++lock_mmap:
 +#endif /* CONFIG_PER_VMA_LOCK */
 +
- #ifndef __PAGETABLE_P4D_FOLDED
- /*
-  * Allocate p4d page table.
+ 	/*
+ 	 * Kernel-mode access to the user address space should only occur
+ 	 * on well-defined single instructions listed in the exception
+@@ -1423,6 +1456,9 @@ void do_user_addr_fault(struct pt_regs *regs,
+ 	}
+ 
+ 	mmap_read_unlock(mm);
++#ifdef CONFIG_PER_VMA_LOCK
++done:
++#endif
+ 	if (likely(!(fault & VM_FAULT_ERROR)))
+ 		return;
+ 
 -- 
 2.37.2.789.g6183377224-goog
 

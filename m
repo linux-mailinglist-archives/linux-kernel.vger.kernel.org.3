@@ -2,98 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA3575A89E0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 066B85A89E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiIAAjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 20:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58828 "EHLO
+        id S230111AbiIAAnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 20:43:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIAAjV (ORCPT
+        with ESMTP id S229459AbiIAAm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 20:39:21 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADFFFE819;
-        Wed, 31 Aug 2022 17:39:18 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id b16so12663693wru.7;
-        Wed, 31 Aug 2022 17:39:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=CVfG3OZHSQeL/ZXooertYMXI000OU/UMRXwtJHlA8e8=;
-        b=oZhKlUlP7bcmm1JTX638nCKlWyaX01Vhtppq9VGZfVhTV0BXY0vgLoYhgnLNptZ9bb
-         RQPtHSN97ojezdYz3/TQa3uS53e0hBv1BaqEdE6DC6XuCIwez4oBg1d4tK8XVoiJT46f
-         KIPP9XHq3zhWjMhHcbdUxwwdbDctIOCqnFEK3fpiJQAHTItlksUJZfwg08pL6ULDb2zF
-         MdaJnOmuegcoOmCaWNgSah7HUSysZqawTd7ZK0l14EjZM/7HqB067ESK1wuM37ccC1V8
-         oiQ0xa3wz9G4hR9I7gdTLyWPJdnrb4VMaiffmOWzN1aU65q2EOkDv1tLX3ZvB+VXpDCT
-         lwIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=CVfG3OZHSQeL/ZXooertYMXI000OU/UMRXwtJHlA8e8=;
-        b=b+CypC85AolfHY7OIB0ljek68cCi6xkXro0T/Uti9THQhLq2kaCMnoXNPSSQbPEsSI
-         UzXtvubmG/+tc0LPyEIbGo9EI5Dp8Ev6rHbCjhegC52N9RvljKYhpUheINIG36DneukI
-         ql9lbiI84H9E3gv1NxpUTWTY7DG2p+xKb8uQHv2cz5VNkgV23FwRyMyBfpafx7XmMsUH
-         ivswSM9LNFuePCDS39C1YLbvXSqLrEHVqfVIQBqjdNZye/zrbJGaZO4uQtJcjJMECmea
-         /LyPaodVh7bbRZq4f12pqEN/F9ks5R5USWHbQsXTRqIOZGKuiylqQWi2d/OtRZG49k4R
-         gakw==
-X-Gm-Message-State: ACgBeo34NZPp50HXAajZqnmIosJGDPtE7TTwLKq7O6ywrgBoFKxLZnso
-        NBNO+R1Ci/E/71q9C0adzzx5qeMNa6qXg1IQY8WJBwjP
-X-Google-Smtp-Source: AA6agR6zpz1DhRQx7BF1x+tzBCkVPbBe8kZrT6e+1BYPVKk6LnNiqKwtUD2qV5mqxx4Y22230tIm/WdSBSnCIgGJ3YA=
-X-Received: by 2002:adf:f647:0:b0:226:1c05:933a with SMTP id
- x7-20020adff647000000b002261c05933amr12540470wrp.121.1661992757012; Wed, 31
- Aug 2022 17:39:17 -0700 (PDT)
+        Wed, 31 Aug 2022 20:42:59 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33645E0976;
+        Wed, 31 Aug 2022 17:42:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=C7e5gupx7uxhb230xCd10coToUBiCKDWQPIlevGdY80=; b=hOmLMP+ugUyeMF+6QA09PjcGfu
+        0tRtPHTBgl7z0s+0RBcR5HuECX6vysi72oyqb9nKg5wfcAeYH/E5qvTZmEwzNP02MAz3qPXJ2urMq
+        QOEo7VxYgfOzukB5+Q1xXyGnNcYh1a5f1Ccjj4umz03kPQ8jMURb+pUCnQE0CQCv6lLQOzQmYKqLs
+        Wjx2NxdOHt3j+kmpXPmv2ZJZKZWFhn7QqvE02d6Oenv6a0u53D681c/AL6Ll/H2pW8+77KFGmiFSo
+        uefabYiIChsmUAUy82RL56+vUhGqlH10rlzlzMZwSYk+7CP8NtmpA4CSnqdXla4EwnXtAff+Ztcj8
+        HY+Qicmw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oTYIA-00AnSf-7D;
+        Thu, 01 Sep 2022 00:42:46 +0000
+Date:   Thu, 1 Sep 2022 01:42:46 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     John Hubbard <jhubbard@nvidia.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>, Jan Kara <jack@suse.cz>,
+        David Hildenbrand <david@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 4/7] iov_iter: new iov_iter_pin_pages*() routines
+Message-ID: <YxAABm0BljO0aP2h@ZenIV>
+References: <20220831041843.973026-1-jhubbard@nvidia.com>
+ <20220831041843.973026-5-jhubbard@nvidia.com>
 MIME-Version: 1.0
-References: <1660100142-32493-1-git-send-email-u0084500@gmail.com>
- <1660100142-32493-4-git-send-email-u0084500@gmail.com> <Yw/lC9rjnbFW3ORC@google.com>
-In-Reply-To: <Yw/lC9rjnbFW3ORC@google.com>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Thu, 1 Sep 2022 08:39:05 +0800
-Message-ID: <CADiBU38AuVW9yeFisKvK=_080tQzn-1PUxsDXH4p0QrA2AUSww@mail.gmail.com>
-Subject: Re: [PATCH v4 3/3] input: misc: rt5120: Add power key support
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>, cy_huang <cy_huang@richtek.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>,
-        linux-input@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831041843.973026-5-jhubbard@nvidia.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dmitry Torokhov <dmitry.torokhov@gmail.com> =E6=96=BC 2022=E5=B9=B49=E6=9C=
-=881=E6=97=A5 =E9=80=B1=E5=9B=9B =E6=B8=85=E6=99=A86:47=E5=AF=AB=E9=81=93=
-=EF=BC=9A
->
-> Hi ChiYuan,
->
-> On Wed, Aug 10, 2022 at 10:55:42AM +0800, cy_huang wrote:
-> > +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-> > +MODULE_DESCRIPTION("Richtek RT5120 power key driver");
-> > +MODULE_LICENSE("GPL v2");
->
-> I changed this to be simply "GPL" (per checkpatch.pl, see commit
-> 'bf7fbeeae6db module: Cure the MODULE_LICENSE "GPL" vs. "GPL v2"
-> bogosity' for details) + did a couple of minor edits, and applied, thank
-> you.
->
-Ok, got it.
-Old "GPL" text as GPL v2 or "later", and  the "later" keyword is the proble=
-m.
-This patch is to fix it.
+On Tue, Aug 30, 2022 at 09:18:40PM -0700, John Hubbard wrote:
+> Provide two new wrapper routines that are intended for user space pages
+> only:
+> 
+>     iov_iter_pin_pages()
+>     iov_iter_pin_pages_alloc()
+> 
+> Internally, these routines call pin_user_pages_fast(), instead of
+> get_user_pages_fast(), for user_backed_iter(i) and iov_iter_bvec(i)
+> cases.
+> 
+> As always, callers must use unpin_user_pages() or a suitable FOLL_PIN
+> variant, to release the pages, if they actually were acquired via
+> pin_user_pages_fast().
+> 
+> This is a prerequisite to converting bio/block layers over to use
+> pin_user_pages_fast().
 
-How about the SPDX license string? The same definition?
-
-> --
-> Dmitry
+What of ITER_PIPE (splice from O_DIRECT fd to a to pipe, for filesystem
+that uses generic_file_splice_read())?

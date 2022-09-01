@@ -2,160 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45A695A931E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E1355A932B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233465AbiIAJ3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35732 "EHLO
+        id S233875AbiIAJdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:33:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232762AbiIAJ3m (ORCPT
+        with ESMTP id S233751AbiIAJcy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:29:42 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D884F12FDE2;
-        Thu,  1 Sep 2022 02:29:41 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id f12so16375808plb.11;
-        Thu, 01 Sep 2022 02:29:41 -0700 (PDT)
+        Thu, 1 Sep 2022 05:32:54 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 619761314F4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:32:51 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id z25so23571726lfr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 02:32:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=3Wz1KflW1ILG3Pq+DP9aZDEh0r6i7cgP45ZCq1Y8CGg=;
-        b=Hra04quTE6sUhn5Xr24EZxLwfH6GYmGsYSbr/mz4XmwAoPHjlFDBktkDeWfQREKUJu
-         qnEZBfAXinuimJIqeMDH/PbWTfRTEFqe+O1/vH0oUdP8RsD1zy2RRpUE2gx2JsauiNIY
-         9EnbcX+KreJ/zxVilb766L0sW4BcFoQZmnq4fwH5lXid4UE3CjLAe13FTzb4I3kCZ+/s
-         s7q6DRs2w9WGPeqtiWMpzJStbPuKVJegEqhimn697eIGuwFkZymso5aJ5feE9kYOVSTk
-         PvjC+FgYzIGFSmIQ+l3ZaVYtkJ+o2jBivVVFjkKtDX4rlkF6RxmRTk10uo+fDwpKvDH9
-         N3OA==
+         :to:from:from:to:cc;
+        bh=3iiGf3Tyr91E8vi4eGA9o6oUupAxAC01vXvdnh+gkz8=;
+        b=Mpv4J11i3z5RjI7+6xVGZBsrAFUaRE3AwnOmijKMdvqzXI56Fv7REz0ErWRZ9+RweZ
+         2jHzCGPH4Y71YrLvXTkpWvEl5lfJRHLZXHAXBQVuBnAb9P+akMcdhaTa338OuDIrjqRW
+         8w0QYF2dWbbfQ5LzNl9wyboWk3efHS+iD0i7Eh2dZf2x+RLVruP3QW94vMlkleZUr8Id
+         6HEei4lj8PoFrqPtTcBVA7/Eu4wlEDVEyPOKjDhYBzLFQzLIwfp9BTxZaLXiBopaUc3d
+         vfKftnHKeRtrhEEkqjEb2sQUdd5abSqbDO4WjZKwJ4IyCBFCeULydtR7UGHj7IZfS5yh
+         UZ5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=3Wz1KflW1ILG3Pq+DP9aZDEh0r6i7cgP45ZCq1Y8CGg=;
-        b=lG4QqMbvi+sywWjxQc/HdU73k8/VU3OtAsu/+I2yu6Oj8ERp/OTkryjAEER/Y0TVYf
-         BwqF9iGWWvF5JDyZd2HGncy5U4UYlT1BRX9GQfYEOUgA2O43Yj4BaEax6S+312h+DpCL
-         PsSdG2LinvuSCMQr/JmQv7DcmVQfML8kFTk837v3GFxfp3dl7XkkpBbWgezfeNct9GdU
-         AFfNCZjI/fiZg1Qxd7LlbKcG6siWud8WUwUAhVLf92qARv/h1aseVciECLxh4v/mxvai
-         E48crmciqOsT617QPjmxrgbZJ9J6JBy69Pgjqtxn8feuA9eu/aIa41he/wbOH3YFDp8Q
-         0y5A==
-X-Gm-Message-State: ACgBeo3+fOhvHsvJKlp+T5aJxq8nlxuqvVOW9KdnNB12k4TOR2R1I7H2
-        Of5fgyZQuoNHTDTJBbRWsiY=
-X-Google-Smtp-Source: AA6agR5OXOMQCTWaZK2LXhyS/PxMY0gQAYq6ou0xC+YzIGeHi24Y3Dpz7zqzMjpxEA9BjiZ8PTfnrQ==
-X-Received: by 2002:a17:903:110e:b0:171:3afa:e68c with SMTP id n14-20020a170903110e00b001713afae68cmr29439655plh.12.1662024581136;
-        Thu, 01 Sep 2022 02:29:41 -0700 (PDT)
-Received: from harry-home.bne.opengear.com (193-116-86-5.tpgi.com.au. [193.116.86.5])
-        by smtp.gmail.com with ESMTPSA id i15-20020a17090a2a0f00b001fddb3a5481sm2820350pjd.49.2022.09.01.02.29.38
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=3iiGf3Tyr91E8vi4eGA9o6oUupAxAC01vXvdnh+gkz8=;
+        b=rCnVzhdMNywB7ANqOIuuaPrrtlaygRARqfr9srh+MaNkToRKZsQlyouzpiKYUW+tx+
+         ExVsruE6Ez32U4dGnOBkr3wZ1otdxuSpEy9Oh/1PJkJbM36W9bdQEEjDPxl4a60O1Srb
+         SI+IE58aL/F8uR6Csaa8PdvBBfe/CJetygm4Zp+qU7vJhPLR86LYnCSIoY6L/gY9s8+c
+         cQA6zqixVmW5Rk0bLCm9mSIwGukV2mE88PfucgAchrYryfi/mf3SkPoktawR6w9j8P6B
+         rQYjwn50nu6F4Frg7CeNHqdkoCLsKSIpDws5OBeXEy0Pa4rIsCnVcTewO2Zh5Tx7c12J
+         V89g==
+X-Gm-Message-State: ACgBeo1QZxhkmQnww+i0McqcSQnSpW9pXQX9B0QizMB7cSQYERe/Hvum
+        4xgYaaYmE0Z6W+/2a507ndhwCw==
+X-Google-Smtp-Source: AA6agR7omwfon1PMfnUt3KRiqvGUUOqs0Bxw4whpKcnQjmOyQ5XFbVbNM52giGUfqOdolzDzWE9+BA==
+X-Received: by 2002:a05:6512:b12:b0:492:8943:c813 with SMTP id w18-20020a0565120b1200b004928943c813mr9803065lfu.143.1662024769717;
+        Thu, 01 Sep 2022 02:32:49 -0700 (PDT)
+Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id e14-20020a2e984e000000b0025e57b40009sm2442960ljj.89.2022.09.01.02.32.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 02:29:40 -0700 (PDT)
-From:   Qingtao Cao <qingtao.cao.au@gmail.com>
-Cc:     qingtao.cao.au@gmail.com, nathan@nathanrossi.com,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] gpio: exar: access MPIO registers on slave chips
-Date:   Thu,  1 Sep 2022 19:29:21 +1000
-Message-Id: <20220901092922.1024311-1-qingtao.cao.au@gmail.com>
+        Thu, 01 Sep 2022 02:32:49 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH RFT v2 1/4] dt-bindings: soc: qcom: smd-rpm: add PMIC regulators nodes
+Date:   Thu,  1 Sep 2022 12:32:40 +0300
+Message-Id: <20220901093243.134288-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When EXAR xr17v35x chips are cascaded in order to access the MPIO registers
-(part of the Device Configuration Registers) of the slave chips, an offset
-needs to be applied based on the number of master chip's UART channels.
+The Qualcomm RPM over SMD contains devices for one or two PMIC
+regulators - already used in several DTS files.
 
-Signed-off-by: Qingtao Cao <qingtao.cao.au@gmail.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 ---
- drivers/gpio/gpio-exar.c | 37 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 32 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/gpio/gpio-exar.c b/drivers/gpio/gpio-exar.c
-index d37de78247a6..1110c8f92c58 100644
---- a/drivers/gpio/gpio-exar.c
-+++ b/drivers/gpio/gpio-exar.c
-@@ -20,6 +20,7 @@
- #define EXAR_OFFSET_MPIOSEL_LO 0x93
- #define EXAR_OFFSET_MPIOLVL_HI 0x96
- #define EXAR_OFFSET_MPIOSEL_HI 0x99
-+#define EXAR_UART_CHANNEL_SIZE 0x400
+Changes since v1:
+1. None
+---
+ Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+index 09d5bfa920f2..deccc637b6d4 100644
+--- a/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
++++ b/Documentation/devicetree/bindings/soc/qcom/qcom,smd-rpm.yaml
+@@ -61,6 +61,11 @@ properties:
+     items:
+       - const: rpm_requests
  
- #define DRIVER_NAME "gpio_exar"
- 
-@@ -31,26 +32,37 @@ struct exar_gpio_chip {
- 	int index;
- 	char name[20];
- 	unsigned int first_pin;
-+	/*
-+	 * The offset to the slave device's (if existing)
-+	 * Device Configuration Registers
-+	 */
-+	unsigned int slave_offset;
- };
- 
- static unsigned int
- exar_offset_to_sel_addr(struct exar_gpio_chip *exar_gpio, unsigned int offset)
- {
--	return (offset + exar_gpio->first_pin) / 8 ? EXAR_OFFSET_MPIOSEL_HI
--						   : EXAR_OFFSET_MPIOSEL_LO;
-+	int addr;
++patternProperties:
++  "^regulators(-[01])?$":
++    $ref: /schemas/regulator/qcom,smd-rpm-regulator.yaml#
++    unevaluatedProperties: false
 +
-+	addr = (offset % 16 + exar_gpio->first_pin) / 8 ? EXAR_OFFSET_MPIOSEL_HI
-+							: EXAR_OFFSET_MPIOSEL_LO;
-+	return offset / 16 ? addr + exar_gpio->slave_offset : addr;
- }
- 
- static unsigned int
- exar_offset_to_lvl_addr(struct exar_gpio_chip *exar_gpio, unsigned int offset)
- {
--	return (offset + exar_gpio->first_pin) / 8 ? EXAR_OFFSET_MPIOLVL_HI
--						   : EXAR_OFFSET_MPIOLVL_LO;
-+	int addr;
-+
-+	addr = (offset % 16 + exar_gpio->first_pin) / 8 ? EXAR_OFFSET_MPIOLVL_HI
-+							: EXAR_OFFSET_MPIOLVL_LO;
-+	return offset / 16 ? addr + exar_gpio->slave_offset : addr;
- }
- 
- static unsigned int
- exar_offset_to_bit(struct exar_gpio_chip *exar_gpio, unsigned int offset)
- {
--	return (offset + exar_gpio->first_pin) % 8;
-+	return (offset % 16 + exar_gpio->first_pin) % 8;
- }
- 
- static int exar_get_direction(struct gpio_chip *chip, unsigned int offset)
-@@ -153,6 +165,21 @@ static int gpio_exar_probe(struct platform_device *pdev)
- 	if (!exar_gpio)
- 		return -ENOMEM;
- 
-+	if (pcidev->device & 0xf000) {
-+		/*
-+		 * xr17v354 or xr17v358 slaves have the same amount of
-+		 * MPIOs as the master
-+		 */
-+		ngpios += ngpios;
-+
-+		/*
-+		 * The last 4 bits of the master's PCI Device ID is
-+		 * the number of its UART channels
-+		 */
-+		exar_gpio->slave_offset = (pcidev->device & 0xf) *
-+				EXAR_UART_CHANNEL_SIZE;
-+	}
-+
- 	/*
- 	 * We don't need to check the return values of mmio regmap operations (unless
- 	 * the regmap has a clock attached which is not the case here).
+ if:
+   properties:
+     compatible:
 -- 
-2.17.1
+2.34.1
 

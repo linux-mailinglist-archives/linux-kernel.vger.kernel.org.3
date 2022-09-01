@@ -2,103 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 240B75A9179
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28D0F5A8F9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233290AbiIAICF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50778 "EHLO
+        id S233578AbiIAHRh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:17:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232762AbiIAICB (ORCPT
+        with ESMTP id S232562AbiIAHRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:02:01 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FA99121424
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:01:59 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id m7so14339963lfq.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 01:01:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=JE5EdXExU9KB2vgJJhQ6V2iSs8d1y3Mi7fJ+Qjt9Auc=;
-        b=aB2V/BErUKMHkn2ek+qBlKawiRb+bkfxMbWiz40Nt14zziORYJF95FPu6AP71lX8e9
-         Dq+xkIoWRMeRwuCQ8sRA0XAnX/tNVCIEHAHmbBph4/o0bT5/AIy1KXewrl85KZf+i1KH
-         2AC7ylvXvi3i611Q/YagrkP2nGljcjbRuIgE8RboPsabxMUUg+xBA/IWYfNruvRijGIa
-         H96paO6sca481TlKtsgLNNR4bk0LF5MYZJPtztf/D9KOfX0wy/T1JTSRf7GFSntFIRrj
-         xUmfOFScRCWDls5Df7UlbH96vkkEkJxequIlOIqRi+256pFmoDr7stoBXjvLiBt5Y08P
-         Go4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=JE5EdXExU9KB2vgJJhQ6V2iSs8d1y3Mi7fJ+Qjt9Auc=;
-        b=f/c9jMFYPlgAUCXglxGCSdsGy+lVHbzMihN4wR6vRe+1pE+WvD77BKX66nqdJp6OEI
-         z7BSbMBceyYmBYOGDEo4XSJ9i2U/yJbLmyTBSJtN0JKGF+LUSjoU88eBqqfon9eYaRwg
-         xIhSiseu2lmM6+vGoqe5XtrjGtyAZtJ2pvAvL2gvgH7buWSO8dt31B6gm4/ZEbV3/naf
-         DRVjxlFIOYVQnHyInQPWAjKhdErPtklp6xlmf2vjKLyl3qhW6K9ZG++DVKKAG7l9VGs6
-         kyrjV1HGMwbh76FV4+xz6WS1graEjZWYrhEzC1VlIrdyqU0iHHRPtumvlfrLdHb4YO+k
-         gYTQ==
-X-Gm-Message-State: ACgBeo3mHIS3ME41oDDgy8/PTCDyH2SWUv+t8TJV/VjD8zZM+kWEe5YZ
-        zgS+ghOHoWHc+w6zQCEnZVHjcA==
-X-Google-Smtp-Source: AA6agR6Gt8vZPLOFDKLLdZvIJqwp7OXLZ31OJ5pouoSLNqUfk7zi/LbFjh2q00ET/ZGzDHMbeKn86Q==
-X-Received: by 2002:a05:6512:3dac:b0:494:903a:1f9b with SMTP id k44-20020a0565123dac00b00494903a1f9bmr1877630lfv.498.1662019317892;
-        Thu, 01 Sep 2022 01:01:57 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id l19-20020a2e9093000000b0025d5eb5dde7sm2344768ljg.104.2022.09.01.01.01.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 01:01:57 -0700 (PDT)
-Message-ID: <9863bdfc-1de2-62fb-19da-44a68bea3607@linaro.org>
-Date:   Thu, 1 Sep 2022 11:01:56 +0300
+        Thu, 1 Sep 2022 03:17:35 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A65124847;
+        Thu,  1 Sep 2022 00:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662016654; x=1693552654;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=/oWozjlSYSNeOLAebOKD/bZQo3WvQOnbYJ2YF9ryPU4=;
+  b=BDtUxsYB3+SUBZFugfUuAzh1tm4VThi66OehwHL/D7EyxOYUgVi/n68N
+   4vyrQGNoKCAYhYV6mX8TngeMyyN/blfHVtRS9P7B5xMGtrut9s5XV82Y3
+   t8F1IaxXxcDP4VyJbrYTUNXahzJ+EB1M1xWUAbb0hkw6xok6/rm481T+c
+   xHAltlJhdVpOjUjtnqZfRSc9XjZxC8ND/FPWYqvKQKItgyfBHNwWj1W1i
+   Am/9+Fo8Nc7BgN+49qrV1GKYjayvSX9MQ4FcL3lRqqf3kBCqM6/CYuG0O
+   kgDn2gDDInxaA9p1SXcje3Z2z8lA+4FObXvuvm22C+RIP9SfmH5Lt1zKc
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="294378000"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="294378000"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 00:17:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="673719782"
+Received: from sqa-gate.sh.intel.com (HELO michael.clx.dev.tsp.org) ([10.239.48.212])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Sep 2022 00:17:25 -0700
+From:   Kevin Tian <kevin.tian@intel.com>
+To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Cc:     Yi Liu <yi.l.liu@intel.com>
+Subject: [PATCH v2 00/15] Tidy up vfio_device life cycle
+Date:   Thu,  1 Sep 2022 22:37:32 +0800
+Message-Id: <20220901143747.32858-1-kevin.tian@intel.com>
+X-Mailer: git-send-email 2.21.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 7/7] spi: spi-zynqmp-gqspi: Add tap delay support for
- GQSPI controller on Versal platform
-Content-Language: en-US
-To:     Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>,
-        broonie@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     git@amd.com, michal.simek@amd.com, linux-spi@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, akumarma@amd.com,
-        Naga Sureshkumar Relli <nagasure@xilinx.com>
-References: <20220901054731.7705-1-amit.kumar-mahapatra@xilinx.com>
- <20220901054731.7705-8-amit.kumar-mahapatra@xilinx.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220901054731.7705-8-amit.kumar-mahapatra@xilinx.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 08:47, Amit Kumar Mahapatra wrote:
-> @@ -1165,6 +1214,7 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
->  	struct spi_controller *ctlr;
->  	struct zynqmp_qspi *xqspi;
->  	struct device *dev = &pdev->dev;
-> +	const struct of_device_id *match;
->  	struct device_node *np = dev->of_node;
->  
->  	ctlr = spi_alloc_master(&pdev->dev, sizeof(*xqspi));
-> @@ -1176,6 +1226,13 @@ static int zynqmp_qspi_probe(struct platform_device *pdev)
->  	xqspi->ctlr = ctlr;
->  	platform_set_drvdata(pdev, xqspi);
->  
-> +	match = of_match_node(zynqmp_qspi_of_match, pdev->dev.of_node);
-> +	if (match) {
-> +		const struct qspi_platform_data *p_data = match->data;
+The idea is to let vfio core manage the vfio_device life cycle instead
+of duplicating the logic cross drivers. Besides cleaner code in driver
+side this also allows adding struct device to vfio_device as the first
+step toward adding cdev uAPI in the future. Another benefit is that
+user can now look at sysfs to decide whether a device is bound to
+vfio [1], e.g.:
 
-There is a helper for that. Use it.
+	/sys/devices/pci0000\:6f/0000\:6f\:01.0/vfio-dev/vfio0
 
-Best regards,
-Krzysztof
+Though most drivers can fit the new model naturally:
+
+ - vfio_alloc_device() to allocate and initialize vfio_device
+ - vfio_put_device() to release vfio_device
+ - dev_ops->init() for driver private initialization
+ - dev_ops->release() for driver private cleanup
+
+vfio-ccw is the only exception due to a life cycle mess that its private
+structure mixes both parent and mdev info hence must be alloc/freed
+outside of the life cycle of vfio device.
+
+Per prior discussions this won't be fixed in short term by IBM folks [2].
+
+Instead of waiting this series introduces a few tricks to move forward:
+
+ - vfio_init_device() to initialize a pre-allocated device structure;
+
+ - require *EVERY* driver to implement @release and free vfio_device
+   inside. Then vfio-ccw can use a completion mechanism to delay the
+   free to css driver;
+
+The second trick is not a real burden to other drivers because they
+all require a @release for private cleanup anyay. Later once the ccw
+mess is fixed a simple cleanup can be done by moving free from @release
+to vfio core.
+
+v2:
+ - rebase to 6.0-rc3
+ - fix build warnings (lkp)
+ - patch1: remove unnecessary forward reference (Jason)
+ - patch10: leave device_set released by vfio core (Jason)
+ - patch13: add Suggested-by
+ - patch15: add ABI file sysfs-devices-vfio-dev (Alex)
+ - patch15: rename 'vfio' to 'vfio_group' in procfs (Jason)
+v1: https://lore.kernel.org/lkml/20220827171037.30297-1-kevin.tian@intel.com/
+
+--
+@Alex, before knowing your merging preference this is only rebased to
+6.0-rc3.
+
+There is no conflict with:
+
+ - Remove private items from linux/vfio_pci_core.h
+ - Break up ioctl dispatch functions to one function per ioctl
+
+But conflict exists with Jason's two series:
+
+ - Allow MMIO regions to be exported through dma-buf
+ - vfio: Split the container code into a clean layer and dedicated file
+
+Thanks
+Kevin
+
+[1] https://listman.redhat.com/archives/libvir-list/2022-August/233482.html
+[2] https://lore.kernel.org/all/0ee29bd6583f17f0ee4ec0769fa50e8ea6703623.camel@linux.ibm.com/
+
+Kevin Tian (6):
+  vfio: Add helpers for unifying vfio_device life cycle
+  drm/i915/gvt: Use the new device life cycle helpers
+  vfio/platform: Use the new device life cycle helpers
+  vfio/amba: Use the new device life cycle helpers
+  vfio/ccw: Use the new device life cycle helpers
+  vfio: Rename vfio_device_put() and vfio_device_try_get()
+
+Yi Liu (9):
+  vfio/pci: Use the new device life cycle helpers
+  vfio/mlx5: Use the new device life cycle helpers
+  vfio/hisi_acc: Use the new device life cycle helpers
+  vfio/mdpy: Use the new device life cycle helpers
+  vfio/mtty: Use the new device life cycle helpers
+  vfio/mbochs: Use the new device life cycle helpers
+  vfio/ap: Use the new device life cycle helpers
+  vfio/fsl-mc: Use the new device life cycle helpers
+  vfio: Add struct device to vfio_device
+
+ .../ABI/testing/sysfs-devices-vfio-dev        |   8 +
+ drivers/gpu/drm/i915/gvt/gvt.h                |   5 +-
+ drivers/gpu/drm/i915/gvt/kvmgt.c              |  52 ++++--
+ drivers/gpu/drm/i915/gvt/vgpu.c               |  33 ++--
+ drivers/s390/cio/vfio_ccw_ops.c               |  52 +++++-
+ drivers/s390/cio/vfio_ccw_private.h           |   3 +
+ drivers/s390/crypto/vfio_ap_ops.c             |  50 +++---
+ drivers/vfio/fsl-mc/vfio_fsl_mc.c             |  85 +++++----
+ .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    |  80 ++++-----
+ drivers/vfio/pci/mlx5/main.c                  |  49 +++--
+ drivers/vfio/pci/vfio_pci.c                   |  20 +--
+ drivers/vfio/pci/vfio_pci_core.c              |  23 ++-
+ drivers/vfio/platform/vfio_amba.c             |  72 ++++++--
+ drivers/vfio/platform/vfio_platform.c         |  66 +++++--
+ drivers/vfio/platform/vfio_platform_common.c  |  71 +++-----
+ drivers/vfio/platform/vfio_platform_private.h |  18 +-
+ drivers/vfio/vfio_main.c                      | 167 +++++++++++++++---
+ include/linux/vfio.h                          |  28 ++-
+ include/linux/vfio_pci_core.h                 |   6 +-
+ samples/vfio-mdev/mbochs.c                    |  73 +++++---
+ samples/vfio-mdev/mdpy.c                      |  81 +++++----
+ samples/vfio-mdev/mtty.c                      |  67 ++++---
+ 22 files changed, 729 insertions(+), 380 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-devices-vfio-dev
+
+
+base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
+-- 
+2.21.3

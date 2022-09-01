@@ -2,286 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD40E5A9FBD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2F085A9FC0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:17:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233222AbiIATQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
+        id S233875AbiIATRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiIATQZ (ORCPT
+        with ESMTP id S232301AbiIATRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:16:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E56B6DAF4;
-        Thu,  1 Sep 2022 12:16:19 -0700 (PDT)
-Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281Hr3RM031475;
-        Thu, 1 Sep 2022 19:16:11 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=ZC2UVu/GUdhoryRm/9ws29SQmBKepw4YphqXAcfe6qQ=;
- b=hLqu2Xfgz9Y6HoimVTvoeTT0afBBSWzaSjF2WZm6fqh507UCxpVY76V8iyi9f+jcGbW4
- JzCTUEWjFjY7TtQGzxcdlXORHywuDuGw9yo+lQXfBdEczPyu6dWvAxQyfPXynlNevF2k
- ERrew0lZa18hoyslKGlsejutCMS5Dk0LA7pAEsEKNFnEJFWyuFRtbv17ytp/bKRFZhia
- TB1Hm2Im/xB4pT8KF64JZIvZlhw+4kd3tJDHUlUDd00Xl5J9X+hPKRVAHNPhW9qvH2k1
- PhMjLsf8CHkr/ybusAAG1pcpSBvfLhA34N9KvmHK9fD7XdrGEKSf6y6lBaKHKjBU5ULy eQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jb1hdjqh9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 19:16:10 +0000
-Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 281J8jWk012724;
-        Thu, 1 Sep 2022 19:16:10 GMT
-Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jb1hdjqgn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 19:16:10 +0000
-Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
-        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 281J57Rg021880;
-        Thu, 1 Sep 2022 19:16:09 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma01dal.us.ibm.com with ESMTP id 3j7awac29r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 19:16:09 +0000
-Received: from b03ledav001.gho.boulder.ibm.com (b03ledav001.gho.boulder.ibm.com [9.17.130.232])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 281JG8f312386988
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Sep 2022 19:16:08 GMT
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8D7EA6E054;
-        Thu,  1 Sep 2022 19:16:07 +0000 (GMT)
-Received: from b03ledav001.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 617136E052;
-        Thu,  1 Sep 2022 19:16:05 +0000 (GMT)
-Received: from [9.211.148.222] (unknown [9.211.148.222])
-        by b03ledav001.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Sep 2022 19:16:05 +0000 (GMT)
-Message-ID: <5b65eb6b-5ab2-1e6c-10d6-c25e66fa82f4@linux.ibm.com>
-Date:   Thu, 1 Sep 2022 21:16:04 +0200
+        Thu, 1 Sep 2022 15:17:05 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EA1075FCF;
+        Thu,  1 Sep 2022 12:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=mn3VERy0s8rwu2J3nmnzKseb1Xv+6b55gPqcv2R29Do=; b=YzaqHznkMBYAnCSOLqSHdegCox
+        YKGC4eoem9/8GT5zgWrOSDaNjktJxP8yRvpJYQxa1Z8TVgSJMiKxRYBzMwVpxfst2k9K0nTOV1HBS
+        g+ph5690L3SgBn1e1YgO7JjiEYivUW+H3wpACNHc9roxwPBpKqP9k77Y82r0mkv/FNfPaaPUHfTvB
+        p4qZfGw6uCBlrSY263wg1z6zYHA/Re3+5UA8DJ6RvGYmERMmO74bYgDyuhsaCDe3OouNe43APnOcv
+        6drCz4JVkp2sBvXA1RP/eGJ/WdeAGxetZaWgUxT+1aOmV3OaCU44xJq4EEu+L4J8FIFcXmhtYUgpU
+        1D7gy7Vw==;
+Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1oTpgS-00Dx2S-Se; Thu, 01 Sep 2022 13:17:01 -0600
+Message-ID: <fb9d7948-43fe-87c5-5275-70f280181ad1@deltatee.com>
+Date:   Thu, 1 Sep 2022 13:16:54 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.13.0
-Subject: Re: [PATCH net v4] net/smc: Fix possible access to freed memory in
- link clear
-To:     liuyacan@corp.netease.com, alibuda@linux.alibaba.com
-Cc:     davem@davemloft.net, edumazet@google.com, kgraul@linux.ibm.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, tonylu@linux.alibaba.com,
-        ubraun@linux.vnet.ibm.com, wintera@linux.ibm.com
-References: <e86caa18-e416-f6ef-3eb3-f25b5c85a19a@linux.ibm.com>
- <20220901125431.1782967-1-liuyacan@corp.netease.com>
-From:   Wenjia Zhang <wenjia@linux.ibm.com>
-In-Reply-To: <20220901125431.1782967-1-liuyacan@corp.netease.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Content-Language: en-CA
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+References: <20220825152425.6296-1-logang@deltatee.com>
+ <20220825152425.6296-8-logang@deltatee.com> <YxDb2MyRx6o/wDAz@kroah.com>
+ <4a4bca1e-bebf-768f-92d4-92eb8ae714e1@deltatee.com>
+ <YxDhEO9ycZDTnbZm@kroah.com>
+ <cc9a24a8-dd3a-9d21-d9a7-5ee4b0ad7a57@deltatee.com>
+ <YxD7uZYaV75gJS9d@kroah.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <YxD7uZYaV75gJS9d@kroah.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: GKWzp-ZeW01myidBdu4hgjgl07OjI_Tc
-X-Proofpoint-GUID: dRi01TvaH2d5IZWcLv8gWirogU-j36jd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- phishscore=0 bulkscore=0 adultscore=0 mlxlogscore=999 priorityscore=1501
- mlxscore=0 spamscore=0 suspectscore=0 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209010082
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 24.64.144.200
+X-SA-Exim-Rcpt-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, hch@lst.de, dan.j.williams@intel.com, jgg@ziepe.ca, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, sbates@raithlin.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v9 7/8] PCI/P2PDMA: Allow userspace VMA allocations
+ through sysfs
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 01.09.22 14:54, liuyacan@corp.netease.com wrote:
->>>>> From: Yacan Liu <liuyacan@corp.netease.com>
->>>>>
->>>>> After modifying the QP to the Error state, all RX WR would be completed
->>>>> with WC in IB_WC_WR_FLUSH_ERR status. Current implementation does not
->>>>> wait for it is done, but destroy the QP and free the link group directly.
->>>>> So there is a risk that accessing the freed memory in tasklet context.
->>>>>
->>>>> Here is a crash example:
->>>>>
->>>>>     BUG: unable to handle page fault for address: ffffffff8f220860
->>>>>     #PF: supervisor write access in kernel mode
->>>>>     #PF: error_code(0x0002) - not-present page
->>>>>     PGD f7300e067 P4D f7300e067 PUD f7300f063 PMD 8c4e45063 PTE 800ffff08c9df060
->>>>>     Oops: 0002 [#1] SMP PTI
->>>>>     CPU: 1 PID: 0 Comm: swapper/1 Kdump: loaded Tainted: G S         OE     5.10.0-0607+ #23
->>>>>     Hardware name: Inspur NF5280M4/YZMB-00689-101, BIOS 4.1.20 07/09/2018
->>>>>     RIP: 0010:native_queued_spin_lock_slowpath+0x176/0x1b0
->>>>>     Code: f3 90 48 8b 32 48 85 f6 74 f6 eb d5 c1 ee 12 83 e0 03 83 ee 01 48 c1 e0 05 48 63 f6 48 05 00 c8 02 00 48 03 04 f5 00 09 98 8e <48> 89 10 8b 42 08 85 c0 75 09 f3 90 8b 42 08 85 c0 74 f7 48 8b 32
->>>>>     RSP: 0018:ffffb3b6c001ebd8 EFLAGS: 00010086
->>>>>     RAX: ffffffff8f220860 RBX: 0000000000000246 RCX: 0000000000080000
->>>>>     RDX: ffff91db1f86c800 RSI: 000000000000173c RDI: ffff91db62bace00
->>>>>     RBP: ffff91db62bacc00 R08: 0000000000000000 R09: c00000010000028b
->>>>>     R10: 0000000000055198 R11: ffffb3b6c001ea58 R12: ffff91db80e05010
->>>>>     R13: 000000000000000a R14: 0000000000000006 R15: 0000000000000040
->>>>>     FS:  0000000000000000(0000) GS:ffff91db1f840000(0000) knlGS:0000000000000000
->>>>>     CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->>>>>     CR2: ffffffff8f220860 CR3: 00000001f9580004 CR4: 00000000003706e0
->>>>>     DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->>>>>     DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->>>>>     Call Trace:
->>>>>      <IRQ>
->>>>>      _raw_spin_lock_irqsave+0x30/0x40
->>>>>      mlx5_ib_poll_cq+0x4c/0xc50 [mlx5_ib]
->>>>>      smc_wr_rx_tasklet_fn+0x56/0xa0 [smc]
->>>>>      tasklet_action_common.isra.21+0x66/0x100
->>>>>      __do_softirq+0xd5/0x29c
->>>>>      asm_call_irq_on_stack+0x12/0x20
->>>>>      </IRQ>
->>>>>      do_softirq_own_stack+0x37/0x40
->>>>>      irq_exit_rcu+0x9d/0xa0
->>>>>      sysvec_call_function_single+0x34/0x80
->>>>>      asm_sysvec_call_function_single+0x12/0x20
->>>>>
->>>>> Fixes: bd4ad57718cc ("smc: initialize IB transport incl. PD, MR, QP, CQ, event, WR")
->>>>> Signed-off-by: Yacan Liu <liuyacan@corp.netease.com>
->>>>>
->>>>> ---
->>>>> Chagen in v4:
->>>>>      -- Remove the rx_drain flag because smc_wr_rx_post() may not have been called.
->>>>>      -- Remove timeout.
->>>>> Change in v3:
->>>>>      -- Tune commit message (Signed-Off tag, Fixes tag).
->>>>>         Tune code to avoid column length exceeding.
->>>>> Change in v2:
->>>>>      -- Fix some compile warnings and errors.
->>>>> ---
->>>>>     net/smc/smc_core.c | 2 ++
->>>>>     net/smc/smc_core.h | 2 ++
->>>>>     net/smc/smc_wr.c   | 9 +++++++++
->>>>>     net/smc/smc_wr.h   | 1 +
->>>>>     4 files changed, 14 insertions(+)
->>>>>
->>>>> diff --git a/net/smc/smc_core.c b/net/smc/smc_core.c
->>>>> index ff49a11f5..f92a916e9 100644
->>>>> --- a/net/smc/smc_core.c
->>>>> +++ b/net/smc/smc_core.c
->>>>> @@ -757,6 +757,7 @@ int smcr_link_init(struct smc_link_group *lgr, struct smc_link *lnk,
->>>>>     	lnk->lgr = lgr;
->>>>>     	smc_lgr_hold(lgr); /* lgr_put in smcr_link_clear() */
->>>>>     	lnk->link_idx = link_idx;
->>>>> +	lnk->wr_rx_id_compl = 0;
->>>>>     	smc_ibdev_cnt_inc(lnk);
->>>>>     	smcr_copy_dev_info_to_link(lnk);
->>>>>     	atomic_set(&lnk->conn_cnt, 0);
->>>>> @@ -1269,6 +1270,7 @@ void smcr_link_clear(struct smc_link *lnk, bool log)
->>>>>     	smcr_buf_unmap_lgr(lnk);
->>>>>     	smcr_rtoken_clear_link(lnk);
->>>>>     	smc_ib_modify_qp_error(lnk);
->>>>> +	smc_wr_drain_cq(lnk);
->>>>>     	smc_wr_free_link(lnk);
->>>>>     	smc_ib_destroy_queue_pair(lnk);
->>>>>     	smc_ib_dealloc_protection_domain(lnk);
->>>>> diff --git a/net/smc/smc_core.h b/net/smc/smc_core.h
->>>>> index fe8b524ad..285f9bd8e 100644
->>>>> --- a/net/smc/smc_core.h
->>>>> +++ b/net/smc/smc_core.h
->>>>> @@ -115,8 +115,10 @@ struct smc_link {
->>>>>     	dma_addr_t		wr_rx_dma_addr;	/* DMA address of wr_rx_bufs */
->>>>>     	dma_addr_t		wr_rx_v2_dma_addr; /* DMA address of v2 rx buf*/
->>>>>     	u64			wr_rx_id;	/* seq # of last recv WR */
->>>>> +	u64			wr_rx_id_compl; /* seq # of last completed WR */
->>>>>     	u32			wr_rx_cnt;	/* number of WR recv buffers */
->>>>>     	unsigned long		wr_rx_tstamp;	/* jiffies when last buf rx */
->>>>> +	wait_queue_head_t       wr_rx_empty_wait; /* wait for RQ empty */
->>>>>     
->>>>>     	struct ib_reg_wr	wr_reg;		/* WR register memory region */
->>>>>     	wait_queue_head_t	wr_reg_wait;	/* wait for wr_reg result */
->>>>> diff --git a/net/smc/smc_wr.c b/net/smc/smc_wr.c
->>>>> index 26f8f240d..bc8793803 100644
->>>>> --- a/net/smc/smc_wr.c
->>>>> +++ b/net/smc/smc_wr.c
->>>>> @@ -454,6 +454,7 @@ static inline void smc_wr_rx_process_cqes(struct ib_wc wc[], int num)
->>>>>     
->>>>>     	for (i = 0; i < num; i++) {
->>>>>     		link = wc[i].qp->qp_context;
->>>>> +		link->wr_rx_id_compl = wc[i].wr_id;
->>>>>     		if (wc[i].status == IB_WC_SUCCESS) {
->>>>>     			link->wr_rx_tstamp = jiffies;
->>>>>     			smc_wr_rx_demultiplex(&wc[i]);
->>>>> @@ -465,6 +466,8 @@ static inline void smc_wr_rx_process_cqes(struct ib_wc wc[], int num)
->>>>>     			case IB_WC_RNR_RETRY_EXC_ERR:
->>>>>     			case IB_WC_WR_FLUSH_ERR:
->>>>>     				smcr_link_down_cond_sched(link);
->>>>> +				if (link->wr_rx_id_compl == link->wr_rx_id)
->>>>> +					wake_up(&link->wr_rx_empty_wait);
->>>>>     				break;
->>>>>     			default:
->>>>>     				smc_wr_rx_post(link); /* refill WR RX */
->>>>> @@ -631,6 +634,11 @@ static void smc_wr_init_sge(struct smc_link *lnk)
->>>>>     	lnk->wr_reg.access = IB_ACCESS_LOCAL_WRITE | IB_ACCESS_REMOTE_WRITE;
->>>>>     }
->>>>>     
->>>>> +void smc_wr_drain_cq(struct smc_link *lnk)
->>>>> +{
->>>>> +	wait_event(lnk->wr_rx_empty_wait, lnk->wr_rx_id_compl == lnk->wr_rx_id);
->>>>> +}
->>>>> +
->>>>>     void smc_wr_free_link(struct smc_link *lnk)
->>>>>     {
->>>>>     	struct ib_device *ibdev;
->>>>> @@ -889,6 +897,7 @@ int smc_wr_create_link(struct smc_link *lnk)
->>>>>     	atomic_set(&lnk->wr_tx_refcnt, 0);
->>>>>     	init_waitqueue_head(&lnk->wr_reg_wait);
->>>>>     	atomic_set(&lnk->wr_reg_refcnt, 0);
->>>>> +	init_waitqueue_head(&lnk->wr_rx_empty_wait);
->>>>>     	return rc;
->>>>>     
->>>>>     dma_unmap:
->>>>> diff --git a/net/smc/smc_wr.h b/net/smc/smc_wr.h
->>>>> index a54e90a11..5ca5086ae 100644
->>>>> --- a/net/smc/smc_wr.h
->>>>> +++ b/net/smc/smc_wr.h
->>>>> @@ -101,6 +101,7 @@ static inline int smc_wr_rx_post(struct smc_link *link)
->>>>>     int smc_wr_create_link(struct smc_link *lnk);
->>>>>     int smc_wr_alloc_link_mem(struct smc_link *lnk);
->>>>>     int smc_wr_alloc_lgr_mem(struct smc_link_group *lgr);
->>>>> +void smc_wr_drain_cq(struct smc_link *lnk);
->>>>>     void smc_wr_free_link(struct smc_link *lnk);
->>>>>     void smc_wr_free_link_mem(struct smc_link *lnk);
->>>>>     void smc_wr_free_lgr_mem(struct smc_link_group *lgr);
->>>>
->>>> Thank you @Yacan for the effort to improve our code! And Thank you @Tony
->>>> for such valuable suggestions and testing!
->>>> I like the modification of this version. However, this is not a fix
->>>> patch to upstream, since the patches "[PATCH net-next v2 00/10] optimize
->>>> the parallelism of SMC-R connections" are still not applied. My
->>>> sugguestions:
->>>> - Please talk to the author (D. Wythe <alibuda@linux.alibaba.com>) of
->>>> those patches I mentioned above, and ask if he can take your patch as a
->>>> part of the patch serie
->>>> - Fix patches should go to net-next
->>>> - Please send always send your new version separately, rather than as
->>>> reply to your previous version. That makes people confused.
->>>
->>> @Wenjia, Thanks a lot for your suggestions and guidance !
->>>
->>> @D. Wythe, Can you include this patch in your series of patches if it is
->>> convenient?
->>>
->>> Regards,
->>> Yacan
->>>
->> One point I was confused, fixes should goto net, sorry!
+On 2022-09-01 12:36, Greg Kroah-Hartman wrote:
+> On Thu, Sep 01, 2022 at 12:14:25PM -0600, Logan Gunthorpe wrote:
+>> Well we haven't plugged in a remove call into p2pdma, that would be more
+>> work and more interfaces touching the PCI code. Note: this code isn't a
+>> driver but a set of PCI helpers available to other PCI drivers.
+>> Everything that's setup is using the devm interfaces and gets torn down
+>> with the same. So I don't really see the benefit of making the change
+>> you propose.
 > 
-> Well, @D. Wythe, please ignore the above emails, sorry!
-> 
-> Regards,
-> Yacan
-> 
-oh no, I didn't mean that. I think I didn't say clearly. What I mean is 
-that the patch should go to net as a seperate patch if the patch serie 
-from D. Wythe is already applied. But now the patch serie is still not 
-applied, so you can still ask D. Wythe to take your patch as a part of 
-this serie. (Just a suggestion)
+> The issue is the classic one with the devm helpers.  They do not lend
+> themselves to resource management issues that require ordering or other
+> sort of dependencies.  Please do not use them here, just put in a remove
+> callback as you eventually will need it anyway, as you have a strong
+> requirement for what gets freed when, and the devm api does not provide
+> for that well.
+
+This surprises me. Can you elaborate on this classic issue?
+
+I've definitely seen uses of devm that expect the calls will be torn
+down in reverse order they are added. The existing p2pdma code will
+certainly fail quite significantly if a devm_kzalloc() releases its
+memory before the devm_memmap_pages() cleans up. There's also already an
+action that is used to cleanup before the last devm_kzalloc() call
+happens. If ordering is not guaranteed, then devm seems fairly broken
+and unusable and I'd have to drop all uses from this code and go back to
+the error prone method. Also what's the point of
+devm_add_action_or_reset() if it doesn't guarantee the ordering or the
+release?
+
+But if it's that important I can make the change to these patches for v10.
+
+Logan

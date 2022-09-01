@@ -2,124 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276325A8A9E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:27:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD7725A8A5C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:12:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbiIAB1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 21:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44286 "EHLO
+        id S232209AbiIABMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 21:12:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiIAB1F (ORCPT
+        with ESMTP id S232178AbiIABMB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 21:27:05 -0400
-X-Greylist: delayed 905 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 18:27:03 PDT
-Received: from m13124.mail.163.com (m13124.mail.163.com [220.181.13.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5807DF8ED0;
-        Wed, 31 Aug 2022 18:27:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=wklvF
-        McU6a1O/ieCwawStIn4ZJ23CQ5U9F/SjOyVnuQ=; b=fndzgPbnVx87DSou+W9fF
-        KtD5VtGjL6M3UXMjr2mTfqjyvHuN9l8nmGydOl2rizSr613GyD9C+sxq3qJ1G5b3
-        5aOIT1dVmYBPKvz5cQP/nIoPFWaBp061lhQpT8ZYvW6GM7vfkua2lQ6umhzEWZ7m
-        wf7kKrZhT4eRK0EiimIGss=
-Received: from 15815827059$163.com ( [116.128.244.169] ) by
- ajax-webmail-wmsvr124 (Coremail) ; Thu, 1 Sep 2022 09:11:13 +0800 (CST)
-X-Originating-IP: [116.128.244.169]
-Date:   Thu, 1 Sep 2022 09:11:13 +0800 (CST)
-From:   huhai <15815827059@163.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     sathya.prakash@broadcom.com, sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huhai <huhai@kylinos.cn>,
-        stable@vger.kernel.org, "Jackie Liu" <liuyun01@kylinos.cn>
-Subject: Re:[PATCH] scsi: mpt3sas: Fix NULL pointer crash due to missing
- check device hostdata
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <20220825092645.326953-1-15815827059@163.com>
-References: <20220825092645.326953-1-15815827059@163.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Wed, 31 Aug 2022 21:12:01 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2626C11C179
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 18:12:00 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso536533wmb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 18:12:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=oiRKibOWnwcDr9MycfE0W4welp6qByX+iDD5DjNb+M8=;
+        b=neSWI5SrQVJX2N0BbmSZyD5btOBzGyzzq9dar/Rs/7HVXdqflXxQVTzZW4tz/x68yg
+         r+AHr/uCx+rIWgEfog9OtwRSD5jt1ThIhg0oeWbCr+6h2bshtUaWJFCguJRnGsHxtCS/
+         PVBmHnKRmocIlDNChnjM8tr/3sDYKVaX7fc1A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=oiRKibOWnwcDr9MycfE0W4welp6qByX+iDD5DjNb+M8=;
+        b=XqXOsOYKD/vL/+NkltPdhH265aVrIya+dRRgKzUEqf8XJFEYf/W0xbO5huyWIpKElY
+         6QmypzNzGpURqmIQja5DzKLuQfqNB/QVkRj2X1QP07QVQYZ8TlspzOgjfh80ks0c/ntd
+         wEfFYA+WU8lILIWQYVccOZHaGCZzwP77ekHl9BKrkoXvqfQ7KO71kx+0H8KOKsT19+G3
+         eSUomS3IU/xqEz7CaIaNVk4NGeEdXMfaBP7tBAZt4MwYcxxclmgXXt+TbQa80uO98Q2b
+         oDCuBJWxBNOMM3nEMTaHsrjt+mcYu2acLZ50xB5NLmOFUnWhngoe6E4vO+tfLeUcoQ67
+         hHpQ==
+X-Gm-Message-State: ACgBeo0Tec1kuPijrRlGKCgsNUrRgoC33HcsbOUFb25rUBJS/4jOnQes
+        IH78dry0HyJSDSQnuYcvqdYko2Yjq6lZINJfeFXbspF3nO4=
+X-Google-Smtp-Source: AA6agR5GatofRchhs7w0hTPqWcUW7vhKebjxJj5Hfk40e0mwziDDMVQLZapn8Hj+iaDsM8K/3zxb/1M/PJhxuPFZUUY=
+X-Received: by 2002:a05:600c:3b10:b0:3a5:3357:ecf4 with SMTP id
+ m16-20020a05600c3b1000b003a53357ecf4mr3457812wms.193.1661994718395; Wed, 31
+ Aug 2022 18:11:58 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <49b0768d.96d.182f69a26f6.Coremail.15815827059@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: fMGowAB3OWGyBhBjz2NIAA--.53649W
-X-CM-SenderInfo: rprvmiivyslimvzbiqqrwthudrp/1tbiHQ9phWI66iLJ0wACs2
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220831013359.1807905-1-jwerner@chromium.org>
+ <20220831013359.1807905-5-jwerner@chromium.org> <63c350a0-2393-208b-4fab-94db050407c2@linaro.org>
+In-Reply-To: <63c350a0-2393-208b-4fab-94db050407c2@linaro.org>
+From:   Julius Werner <jwerner@chromium.org>
+Date:   Wed, 31 Aug 2022 18:11:46 -0700
+Message-ID: <CAODwPW-9njhmjf1jEYsm68-StqciovgXo8VFBYksrdmqDJGC7g@mail.gmail.com>
+Subject: Re: [PATCH 4/4] dt-bindings: memory: Add jedec,lpddrX-channel binding
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Julius Werner <jwerner@chromium.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Jian-Jia Su <jjsu@google.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJpZW5kbHkgcGluZy4KCgpBdCAyMDIyLTA4LTI1IDE3OjI2OjQ1LCAiaHVoYWkiIDwxNTgxNTgy
-NzA1OUAxNjMuY29tPiB3cm90ZToKPkZyb206IGh1aGFpIDxodWhhaUBreWxpbm9zLmNuPgo+Cj5J
-ZiBfc2NzaWhfaW9fZG9uZSgpIGlzIGNhbGxlZCB3aXRoIHNjbWQtPmRldmljZS0+aG9zdGRhdGE9
-TlVMTCwgaXQgY2FuIGxlYWQKPnRvIHRoZSBmb2xsb3dpbmcgcGFuaWM6Cj4KPiAgQlVHOiB1bmFi
-bGUgdG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2UgYXQgMDAwMDAwMDAw
-MDAwMDAxOAo+ICBQR0QgNDU0N2E0MDY3IFA0RCA0NTQ3YTQwNjcgUFVEIDAKPiAgT29wczogMDAw
-MiBbIzFdIFNNUCBOT1BUSQo+ICBDUFU6IDYyIFBJRDogMCBDb21tOiBzd2FwcGVyLzYyIEtkdW1w
-OiBsb2FkZWQgTm90IHRhaW50ZWQgNC4xOS45MC0yNC40LnYyMTAxLmt5MTAueDg2XzY0ICMxCj4g
-IEhhcmR3YXJlIG5hbWU6IFN0b3JhZ2UgU2VydmVyLzY1TjMyLVVTLCBCSU9TIFNRTDEwNDEyMTcg
-MDUvMzAvMjAyMgo+ICBSSVA6IDAwMTA6X3Njc2loX3NldF9zYXRsX3BlbmRpbmcrMHgyZC8weDUw
-IFttcHQzc2FzXQo+ICBDb2RlOiAwMCAwMCA0OCA4YiA4NyA2MCAwMSAwMCAwMCAwZiBiNiAxMCA4
-MCBmYSBhMSA3NCAwOSAzMSBjMCA4MCBmYSA4NSA3NCAwMiBmMyBjMyA0OCA4YiA0NyAzOCA0MCA4
-NCBmNiA0OCA4YiA4MCA5OCAwMCAwMCAwMCA3NSAwOCA8ZjA+IDgwIDYwIDE4IGZlIDMxIGMwIGMz
-IGYwIDQ4IDBmIGJhIDY4IDE4IDAwIDBmIDkyIGMwIDBmIGI2IGMwIGMzCj4gIFJTUDogMDAxODpm
-ZmZmOGVjMjJmYzAzZTAwIEVGTEFHUzogMDAwMTAwNDYKPiAgUkFYOiAwMDAwMDAwMDAwMDAwMDAw
-IFJCWDogZmZmZjhlYmExYjA3MjUxOCBSQ1g6IDAwMDAwMDAwMDAwMDAwMDEKPiAgUkRYOiAwMDAw
-MDAwMDAwMDAwMDg1IFJTSTogMDAwMDAwMDAwMDAwMDAwMCBSREk6IGZmZmY4ZWJhMWIwNzI1MTgK
-PiAgUkJQOiAwMDAwMDAwMDAwMDAwZGJkIFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IDAwMDAw
-MDAwMDAwMjk3MDAKPiAgUjEwOiBmZmZmOGVjMjJmYzAzZjgwIFIxMTogMDAwMDAwMDAwMDAwMDAw
-MCBSMTI6IGZmZmY4ZWJlMmQzNjA5ZTgKPiAgUjEzOiBmZmZmOGViZTJhNzJiNjAwIFIxNDogZmZm
-ZjhlY2E0NzI3MDdlMCBSMTU6IDAwMDAwMDAwMDAwMDAwMjAKPiAgRlM6ICAwMDAwMDAwMDAwMDAw
-MDAwKDAwMDApIEdTOmZmZmY4ZWMyMmZjMDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAw
-MAo+ICBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzCj4g
-IENSMjogMDAwMDAwMDAwMDAwMDAxOCBDUjM6IDAwMDAwMDA0NmU1ZjYwMDAgQ1I0OiAwMDAwMDAw
-MDAwMzQwNmUwCj4gIENhbGwgVHJhY2U6Cj4gICA8SVJRPgo+ICAgX3Njc2loX2lvX2RvbmUrMHg0
-YS8weDlmMCBbbXB0M3Nhc10KPiAgIF9iYXNlX2ludGVycnVwdCsweDIzZi8weGUxMCBbbXB0M3Nh
-c10KPiAgIF9faGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHg0MC8weDE5MAo+ICAgaGFuZGxlX2ly
-cV9ldmVudF9wZXJjcHUrMHgzMC8weDcwCj4gICBoYW5kbGVfaXJxX2V2ZW50KzB4MzYvMHg2MAo+
-ICAgaGFuZGxlX2VkZ2VfaXJxKzB4N2UvMHgxOTAKPiAgIGhhbmRsZV9pcnErMHhhOC8weDExMAo+
-ICAgZG9fSVJRKzB4NDkvMHhlMAo+Cj5GaXggaXQgYnkgbW92ZSBzY21kLT5kZXZpY2UtPmhvc3Rk
-YXRhIGNoZWNrIGJlZm9yZSBfc2NzaWhfc2V0X3NhdGxfcGVuZGluZwo+Y2FsbGVkLgo+Cj5PdGhl
-ciBjaGFuZ2VzOgo+LSBJdCBsb29rcyBjbGVhciB0byBtb3ZlIGdldCBtcGlfcmVwbHkgdG8gbmVh
-ciBpdHMgY2hlY2suCj4KPkZpeGVzOiBmZmI1ODQ1NjU4OTQgKCJzY3NpOiBtcHQzc2FzOiBmaXgg
-aGFuZyBvbiBhdGEgcGFzc3Rocm91Z2ggY29tbWFuZHMiKQo+Q2M6IDxzdGFibGVAdmdlci5rZXJu
-ZWwub3JnPiAjIHY0LjkrCj5Dby1kZXZlbG9wZWQtYnk6IEphY2tpZSBMaXUgPGxpdXl1bjAxQGt5
-bGlub3MuY24+Cj5TaWduZWQtb2ZmLWJ5OiBKYWNraWUgTGl1IDxsaXV5dW4wMUBreWxpbm9zLmNu
-Pgo+U2lnbmVkLW9mZi1ieTogaHVoYWkgPGh1aGFpQGt5bGlub3MuY24+Cj4tLS0KPiBkcml2ZXJz
-L3Njc2kvbXB0M3Nhcy9tcHQzc2FzX3Njc2loLmMgfCAxNSArKysrKysrLS0tLS0tLS0KPiAxIGZp
-bGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9ucygtKQo+Cj5kaWZmIC0tZ2l0
-IGEvZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0M3Nhc19zY3NpaC5jIGIvZHJpdmVycy9zY3NpL21w
-dDNzYXMvbXB0M3Nhc19zY3NpaC5jCj5pbmRleCBkZWYzN2E3ZTU5ODAuLjg1ZjU3NDlhMDQyMSAx
-MDA2NDQKPi0tLSBhL2RyaXZlcnMvc2NzaS9tcHQzc2FzL21wdDNzYXNfc2NzaWguYwo+KysrIGIv
-ZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0M3Nhc19zY3NpaC5jCj5AQCAtNTcwNCwyNyArNTcwNCwy
-NiBAQCBfc2NzaWhfaW9fZG9uZShzdHJ1Y3QgTVBUM1NBU19BREFQVEVSICppb2MsIHUxNiBzbWlk
-LCB1OCBtc2l4X2luZGV4LCB1MzIgcmVwbHkpCj4gCXN0cnVjdCBNUFQzU0FTX0RFVklDRSAqc2Fz
-X2RldmljZV9wcml2X2RhdGE7Cj4gCXUzMiByZXNwb25zZV9jb2RlID0gMDsKPiAKPi0JbXBpX3Jl
-cGx5ID0gbXB0M3Nhc19iYXNlX2dldF9yZXBseV92aXJ0X2FkZHIoaW9jLCByZXBseSk7Cj4tCj4g
-CXNjbWQgPSBtcHQzc2FzX3Njc2loX3Njc2lfbG9va3VwX2dldChpb2MsIHNtaWQpOwo+IAlpZiAo
-c2NtZCA9PSBOVUxMKQo+IAkJcmV0dXJuIDE7Cj4gCj4rCXNhc19kZXZpY2VfcHJpdl9kYXRhID0g
-c2NtZC0+ZGV2aWNlLT5ob3N0ZGF0YTsKPisJaWYgKCFzYXNfZGV2aWNlX3ByaXZfZGF0YSB8fCAh
-c2FzX2RldmljZV9wcml2X2RhdGEtPnNhc190YXJnZXQgfHwKPisJICAgICBzYXNfZGV2aWNlX3By
-aXZfZGF0YS0+c2FzX3RhcmdldC0+ZGVsZXRlZCkgewo+KwkJc2NtZC0+cmVzdWx0ID0gRElEX05P
-X0NPTk5FQ1QgPDwgMTY7Cj4rCQlnb3RvIG91dDsKPisJfQo+IAlfc2NzaWhfc2V0X3NhdGxfcGVu
-ZGluZyhzY21kLCBmYWxzZSk7Cj4gCj4gCW1waV9yZXF1ZXN0ID0gbXB0M3Nhc19iYXNlX2dldF9t
-c2dfZnJhbWUoaW9jLCBzbWlkKTsKPiAKPisJbXBpX3JlcGx5ID0gbXB0M3Nhc19iYXNlX2dldF9y
-ZXBseV92aXJ0X2FkZHIoaW9jLCByZXBseSk7Cj4gCWlmIChtcGlfcmVwbHkgPT0gTlVMTCkgewo+
-IAkJc2NtZC0+cmVzdWx0ID0gRElEX09LIDw8IDE2Owo+IAkJZ290byBvdXQ7Cj4gCX0KPiAKPi0J
-c2FzX2RldmljZV9wcml2X2RhdGEgPSBzY21kLT5kZXZpY2UtPmhvc3RkYXRhOwo+LQlpZiAoIXNh
-c19kZXZpY2VfcHJpdl9kYXRhIHx8ICFzYXNfZGV2aWNlX3ByaXZfZGF0YS0+c2FzX3RhcmdldCB8
-fAo+LQkgICAgIHNhc19kZXZpY2VfcHJpdl9kYXRhLT5zYXNfdGFyZ2V0LT5kZWxldGVkKSB7Cj4t
-CQlzY21kLT5yZXN1bHQgPSBESURfTk9fQ09OTkVDVCA8PCAxNjsKPi0JCWdvdG8gb3V0Owo+LQl9
-Cj4gCWlvY19zdGF0dXMgPSBsZTE2X3RvX2NwdShtcGlfcmVwbHktPklPQ1N0YXR1cyk7Cj4gCj4g
-CS8qCj4tLSAKPjIuMjcuMAo+Cj4KPk5vIHZpcnVzIGZvdW5kCj4JCUNoZWNrZWQgYnkgSGlsbHN0
-b25lIE5ldHdvcmsgQW50aVZpcnVzCg==
+> > +description:
+> > +  An LPDDR channel is a completely independent set of LPDDR pins (DQ, CA, CS,
+> > +  CK, etc.) that connect one or more LPDDR chips to a host system. The main
+> > +  purpose of this node is to overall LPDDR topology of the system, including the
+> > +  amount of individual LPDDR chips and the ranks per chip.
+>
+> "channel" in this context confuses me a bit, because usually everyone is
+> talking about DDR controller channels, not memory channels. I think this
+> actually maps to a DDR controller channel?
+
+I'm not really sure what you mean by "memory channel" here (that would
+be different from the DDR controller channel)? According to my
+understanding there's only one kind of "channel" in the context of
+main memory, that's the DDR controller channel (i.e. each separate
+complete set of DDR pins coming out of the controller, as I tried to
+explain in the description).
+
+> > +    lpddr-channel1 {
+> > +      #address-cells = <1>;
+> > +      #size-cells = <0>;
+> > +      compatible = "jedec,lpddr4-channel";
+> > +      io-width = <32>;
+>
+> I wonder now, how does it exactly work - channel is 32 bits, two ranks
+> each with 32 bit IO bus. Your description said that:
+>
+> total_ram = (rank0 + rank1) * (channel_width / chip_width)
+> so for this case: (4+2)*(32/32) = 6 Mbit
+>
+> If channel io-width = <64>, then memories are stacked in parallel and
+> according to your description total RAM would be: (4+2)*(64/32) = 12 Mbit
+> I wonder why stacking memories in parallel increases their size?
+
+Well, stacking in parallel just means you have more of them? In the
+original example, you have a single LPDDR chip with two ranks, one
+4Gbit rank and one 2Gbit rank. That chip is directly hooked up to the
+LPDDR controller and that's the only chip you have, so you have 4+2 =
+6Gbit total memory in the system.
+
+In your next example, the LPDDR controller has a 64 bit wide channel,
+but you're still using that same 6Gbit LPDDR chip that only has 32 DQ
+pins. The only way to fill out that 64 bit channel with this kind of
+chip is to have two of them in parallel (one connected to DQ[0:31] and
+one connected to DQ[32:63]). So we infer from the mismatch in io-width
+that we have two chips. Each chip still has 6Gbit of memory, so the
+total system would have 12Gbit.

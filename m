@@ -2,305 +2,300 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DDBB5AA328
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:34:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77DC55AA325
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234693AbiIAWe0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:34:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
+        id S235128AbiIAWeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235135AbiIAWeX (ORCPT
+        with ESMTP id S233374AbiIAWeJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:34:23 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BB735F83;
-        Thu,  1 Sep 2022 15:34:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662071662; x=1693607662;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=GTxNO5+2cFkg1rsjctWTb2l1oTsL4H0JRMZ8J6VSM0k=;
-  b=Js71ka1qMUJb+ldmxck4laWq+ws9buO+Pna8qkoDLyW+cKbgf+/c/AWY
-   hsa2ig6vZYeg33jok5BJMAu05R6s44OM5U2TUSnVLN725BzZM99cU5rba
-   RmSz9nS4icsMuQaVmcyp0q+nSMLpDxoceZYF+QEN+u8p1dm/hdtoO+N6Q
-   WbA1hDKULNLZVAAgumjLbLBpVK/ExYlVM50XnzF+Vv4GqbrJzxbBbCCmY
-   3h/fwADsXlBx2IgaU/FqPSpu0mUmTaBj42mv/Nwb7Dq9dY1Qvf//S24xr
-   060v5//8HRhV0mtUBNdyizTGjHRrX5HySvamBla8NeGgUjrRPa76bbb6P
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="293420796"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="293420796"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 15:34:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="642583139"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga008.jf.intel.com with ESMTP; 01 Sep 2022 15:34:21 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 15:34:20 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 1 Sep 2022 15:34:20 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 1 Sep 2022 15:34:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oZjt2rN9paKIqV99g/ObGPCfBj/yMp+eNg8AT/0iZt/IPUrLqKVL//MkKYWtdsgMRFKJW+d3Ijxp61RDFC2baRQsOpJjoq4Rxcj8L82qu03NKUw3GAjmenyRetWc3Saux+PseJminmir7mfdexKObgQrGHccJ6bjqDOSQVrnBDLxO3jpDwRM2aswVo57aDr2NUg4A4B4xrEeASUDgnoDljo/Wi6aROaMI7d/1PGgCwintc9HV4hx/Bwy8j3XNYB6tNIr72QNiU7cbvfbYD2B+3Tl2Hf54DMVLFkDZGvpLirZuBhEe0Mr8TTgd3JsfOgyegtigUcT3scNVUdAF4q6kA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=onkhyCH7zaOSMfcZOSImPWlxfvJPyt/8e3JXTXSNHW0=;
- b=FbF8vV/fx+oKpmvXtDD737CGKlbQ6L+uu938KYFG0UX+TomeuNP43TP+3qtMwnKq3kPobzc6pjB0wxXbpGKw5PWOewfR4yB5aqgSexckBaKAVwePr2oUCSJRJ/dikEW3ZxpUfA2BKWvLFtKS998Wo30IFlVkQSHxovQAf0u4CLscpTuM0klvY/4eKAfIfKKXrMuzM5pSBdZUsqAoVGG5X2J6BNj/HFH/FKZ/5rfthubzpmtFYtGNz+l+n0qVoPpB1hZJHp7hrtbDQPqxYjyGkSGS5OX+Y9K5zv5Pep7C14KFa8DrDPQB9ziVWsKjLbHs4uuiFG1seHu9iqHu0u68Yg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com (2603:10b6:903:124::18)
- by BN8PR11MB3572.namprd11.prod.outlook.com (2603:10b6:408:82::32) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 1 Sep
- 2022 22:34:13 +0000
-Received: from CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a824:112:52f7:5743]) by CY4PR11MB1862.namprd11.prod.outlook.com
- ([fe80::a824:112:52f7:5743%11]) with mapi id 15.20.5566.023; Thu, 1 Sep 2022
- 22:34:13 +0000
-Message-ID: <84b8eb06-7b77-675f-5bc8-292fe27dd2f5@intel.com>
-Date:   Thu, 1 Sep 2022 15:34:10 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.0
-Subject: Re: [PATCH v2 2/6] x86/sgx: Do not consider unsanitized pages an
- error
-Content-Language: en-US
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     <linux-sgx@vger.kernel.org>,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, <stable@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-References: <20220831173829.126661-1-jarkko@kernel.org>
- <20220831173829.126661-3-jarkko@kernel.org>
- <24906e57-461f-6c94-9e78-0d8507df01bb@intel.com>
- <YxEp8Ji+ukLBoNE+@kernel.org>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <YxEp8Ji+ukLBoNE+@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR04CA0006.namprd04.prod.outlook.com
- (2603:10b6:a03:1d0::16) To CY4PR11MB1862.namprd11.prod.outlook.com
- (2603:10b6:903:124::18)
+        Thu, 1 Sep 2022 18:34:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90F7D11D;
+        Thu,  1 Sep 2022 15:34:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3B02BB82962;
+        Thu,  1 Sep 2022 22:34:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9A46C433C1;
+        Thu,  1 Sep 2022 22:33:59 +0000 (UTC)
+Date:   Thu, 1 Sep 2022 18:34:30 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, bristot@redhat.com, vschneid@redhat.com,
+        cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com,
+        42.hyeyoo@gmail.com, glider@google.com, elver@google.com,
+        dvyukov@google.com, shakeelb@google.com, songmuchun@bytedance.com,
+        arnd@arndb.de, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 27/30] Code tagging based latency tracking
+Message-ID: <20220901183430.120311ce@gandalf.local.home>
+In-Reply-To: <20220901215438.gy3bgqa4ghhm6ztm@moria.home.lan>
+References: <20220830214919.53220-1-surenb@google.com>
+        <20220830214919.53220-28-surenb@google.com>
+        <20220901173844.36e1683c@gandalf.local.home>
+        <20220901215438.gy3bgqa4ghhm6ztm@moria.home.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a19f658a-d5ae-4858-1fc3-08da8c6a189f
-X-MS-TrafficTypeDiagnostic: BN8PR11MB3572:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: m6xBxQdRKngbFG5BO4XSRc1OY9QitTV5yAZVpraRzCMAM3Eo9OG56JvOuh8CaYhSBoe3Sa0OYAd3/5XRJkoNKKH1nc4FALNCa3AfKIUItk4u6zEcfZntXAwAjtB8b9517kvULaP7eJEhaHz6DFkycJ1DymWMjOFKt+82AXNpiiSVIS5bk7jMm9OPQi9WTJf3zDU5VxXmsvugTBS5qOmOjP/MPnbISawgq1clFqagRCvrYPi2OdkG2AL/wGGu4a+qB12lRu1ZT+wWdStlJpX+T3HQ8icbXKBJyvoVBTSsUdTw1mO1KIueggGkjNssuUtQEg/vu7nxtxMbAvSiENSDP5DRGdCXR3P9g3pfI/JSvaDEUIPj5kmuisdnmAmtlJtqyq45ORXrykju+07sYtZckNOOWPrBMUXtbykejnHXWIGgqsDh+okXRR76Hza1QU7ewIh27snE+wSgQTlj1Tx1Sqfz3e6vWFevKfwyuyAgzkYJuSX3Z8TqXj8avu/hq4xcj197FcX7QddqowDo/qDzVcxV05Occk0DEhH9mXas0Kp7OHiAK2Zv6JhxYeGaK8PNEL3KYzbnOgsgra81sDbT+jl4WHn32uRo0aebraT/ttzNmAYRR5/GYsD80NHjLQOwc7WD2ekOEtc6msmYNq4P7ZQ453RERqH4LUn5aecA8dr2gK6fIavbQ2ZBUa5u2/lJf1EpIF4ySDDE7Vt0q187ZZpQobby1wE//ODXjHyqPLwCl5B2wXP08yTUbmIDhgnx+IWZiR43HW3biq2j9G2ksb4wOQuBxD/LQlsbYSnRLGw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY4PR11MB1862.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(136003)(39860400002)(376002)(396003)(53546011)(6506007)(86362001)(26005)(36756003)(41300700001)(2616005)(31686004)(186003)(82960400001)(31696002)(6486002)(6512007)(83380400001)(478600001)(54906003)(316002)(7416002)(8676002)(6916009)(66476007)(66556008)(38100700002)(66946007)(8936002)(5660300002)(4326008)(44832011)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M01VazF0eFJNK0QzU3BDTUlQUm5sWmlWbzI4Y1dldkRlY29haXdoek5xWmxF?=
- =?utf-8?B?SzMvN1k2SjJHbi9jMnpWSzJIQzNvZkFGTVdRYTRIUlhORjVIUXBtRm11MENP?=
- =?utf-8?B?RjZZajUvQ2RyM0R6WnZZV053ZzhDWmprMFRPN2xxMmhodVZqYUNtd0UyY1J4?=
- =?utf-8?B?dzVXVllXcE9DaUFnT0NDR295SlZoM1U4dnBzazNGdUo1c1NrV3h2bHFGT2dj?=
- =?utf-8?B?bTdEUkNLTUpZbFBjZHNIK1UyOGo3Q1VjUEtGcXdERVNZdXdRdEhSYkJiejQ1?=
- =?utf-8?B?YXNROFlJd2dLaWF3V2pOODlxRlQ3bGRWamJXcHdWVU15NkROMGxzc3NWOFdY?=
- =?utf-8?B?WDhGQkdRN2ZlTStWZFhpRW1BZTVyejByNWZqSmxuVGZ1YWtaY2NjMjJvdmd0?=
- =?utf-8?B?M2VZYi9GVWE2WDZ4c21wREdNU0VNWFdnM2tIL0w4WEtPVE5taEo3dTRUc3FI?=
- =?utf-8?B?bCs2L3NRWExDNG5SSk9uT2ExOVh1dlRRQ09Hc1JjQng0NEFSNUd2dTdtczIv?=
- =?utf-8?B?Y3F0QVRGcUZpbGdGMkZjMFpVZ1hrSFFUMXozcnJKT3VlZHlwbXBNcE8xWjMy?=
- =?utf-8?B?cTNvTmJWVS9zRC9tMWR2RTVPdFdqdG14d1RoVFVuOHc5K0pVdVZ6Tk5JdlQr?=
- =?utf-8?B?RnZUWEo4Y05ZV0NmU1A0VDdkRCtSVDY4SkUwemVlMHJER1JuNDRxQTE2RnZV?=
- =?utf-8?B?NWF6YWxuTkw4Z2hDV2JlNk5vTnV3NkVuSE9pYUZLdjRuRUNDNTNpb2NoclZK?=
- =?utf-8?B?VEVuMGNmT0VFQ1A1UzRjM2E5WE8xT3Z3RStGTlVqc1JvK2pQQWFMMDY1RUN6?=
- =?utf-8?B?dHRVWkFMc1JXdEJ6bjlmRytpWXlsdXg5cDl1YlI2TWJLU2c0emNOQkJPRkRa?=
- =?utf-8?B?SXBUdUhQa3Y2RlMyYk5aeG53M1F0UlMyaU81OWZBeVk2clpFYlhZTzcwd3N2?=
- =?utf-8?B?NUtNa2ZjV2tsVkZsSnRhWnMzTFRoQWpNVkl5NVc3aVhESWRrc3p0dzJiNG80?=
- =?utf-8?B?RWJHZ3Z3Zk1wdUVZLzBSOE11U2FFWWErVTJZcEc3d2tFM0diUDJ6dmN6ZGRs?=
- =?utf-8?B?YmpoZ0FXaXJQTFBnWnQwZGZWbnp5VkZiRzZDUkh5OWgxemQ0bUwrZCs1UE1D?=
- =?utf-8?B?YnhmRVVKR083OTN5TjF5cXBrU2ZZaldDTkUzS0lZUitiVzVIOWh5RXVWWUMy?=
- =?utf-8?B?QllkWTgzaCtvNVM5WVBSSHFxS2IzS3hGUTFPbzZTeVJua2h3eCthNVZXWlFC?=
- =?utf-8?B?d1BSQ0tDRWM1dnpKNmQvVi8vOEdIRTlwaUVSNlB4Q0V6K3YwVU44OURHN0lS?=
- =?utf-8?B?RkZ4UXBCNTVrcDB3eUNtWjFCS2VKQ2czTC9HSWlTWElhMmtJZHg4eW42NWJx?=
- =?utf-8?B?aG1GVmVsSHFPMU42ejVmL29COTFFZW5xVjdmUVZsaytUMU5IRSt4NnYvalRQ?=
- =?utf-8?B?NGdrOUgrOVk5WFk0cjcxY0IyL0ttNHJVKzFUdnRINWVlcXZvS0hIUXlMVThK?=
- =?utf-8?B?bHUxdm5tK2ZaRm43cmI3cUR3QlhvdmZXQ3FvN09ON0ovaDEzMytacFM5Z1R1?=
- =?utf-8?B?MlhjVkhJcVBpdURrajJqc1dQS3NyUE95aUFlMnBMd2J6YzRtUm9Jck9mYktu?=
- =?utf-8?B?YjVPUWtVUXJGNmFzREltdkZnS05zamNiY2drVzZLZ0NCL1c4cUZINENvLzhl?=
- =?utf-8?B?TnVFd21hdG96WnMyOUtJS2pURjRXSEJCNXdHT1FuSGluZmIzcDZzeTBHcWsw?=
- =?utf-8?B?Z2RRSGhoYUQ2ZE9Pa1RPNElsZDFudS9YUWpTQkRmUlpwL2NsS0pXOU1HU0RJ?=
- =?utf-8?B?NXJ3TUVMd3JkYjNBaURxSWs4eVJaOUp4b2xCUGx4cmRwQ0pvWTR2VnZOcHlh?=
- =?utf-8?B?c1lUZHFSd0dYVXVKYkF6enhPamFQa0JvSUorakxyUlZrRkgreGpJVm1OZHV1?=
- =?utf-8?B?bFRvYXY5QjBSOHJTaUY2dnNrUUtDdjh4RjIzdDZheFJtYWdKRFRqWnJ2WE9v?=
- =?utf-8?B?NitQN1JlZ0F2UEQ1QUtKQ0ZEbFJmYTh6SWpMbzUwUEhrbmFQRGZ5V3ZUYnJO?=
- =?utf-8?B?QVRGQXlpVm9Mb1Y0Z0pSemlvUUx5OHZMRTFVckh6VmExb29JMjBjNmJuaURN?=
- =?utf-8?B?ekQ2N25CVUNhMDhzdGQ5elU4WVZjK3NkNDhmNmpSSXpMcEVpMEw0OFJSUmcx?=
- =?utf-8?B?eGc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a19f658a-d5ae-4858-1fc3-08da8c6a189f
-X-MS-Exchange-CrossTenant-AuthSource: CY4PR11MB1862.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 22:34:13.5412
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Flb1lGiTam958TqikzeJxXTJ6MiZbA7rxZtgOcDNSHf55EHU8zKsrUiXRDnvTjptR+Mo/yX2Q/Tqd8UiKd4ZaRCHgfYRR1/5q+iggJ1TOvo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR11MB3572
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jarkko,
-
-On 9/1/2022 2:53 PM, Jarkko Sakkinen wrote:
-> On Wed, Aug 31, 2022 at 01:39:53PM -0700, Reinette Chatre wrote:
->> On 8/31/2022 10:38 AM, Jarkko Sakkinen wrote:
-
->> I think I am missing something here. A lot of logic is added here but I
->> do not see why it is necessary.  ksgxd() knows via kthread_should_stop() if
->> the reclaimer was canceled. I am thus wondering, could the above not be
->> simplified to something similar to V1:
->>
->> @@ -388,6 +393,8 @@ void sgx_reclaim_direct(void)
->>  
->>  static int ksgxd(void *p)
->>  {
->> +	unsigned long left_dirty;
->> +
->>  	set_freezable();
->>  
->>  	/*
->> @@ -395,10 +402,10 @@ static int ksgxd(void *p)
->>  	 * required for SECS pages, whose child pages blocked EREMOVE.
->>  	 */
->>  	__sgx_sanitize_pages(&sgx_dirty_page_list);
+On Thu, 1 Sep 2022 17:54:38 -0400
+Kent Overstreet <kent.overstreet@linux.dev> wrote:
 > 
-> IMHO, would make sense also to have here:
+> So this looks like it's gotten better since I last looked, but it's still not
+> there yet.
 > 
->         if (!kthread_should_stop())
->                 return 0;
+> Part of the problem is that the tracepoints themselves are in the wrong place:
+> your end event is when a task is woken up, but that means spurious wakeups will
+
+The end event is when a task is scheduled onto the CPU. The start event is
+the first time it is woken up.
+
+> cause one wait_event() call to be reported as multiple smaller waits, not one
+> long wait - oops, now I can't actually find the thing that's causing my
+> multi-second delay.
 > 
+> Also, in your example you don't have it broken out by callsite. That would be
+> the first thing I'd need for any real world debugging.
 
-Would this not prematurely stop the thread when it should not be?
+OK, how about this (currently we can only have 3 keys, but you can create
+multiple histograms on the same event).
 
->> -	__sgx_sanitize_pages(&sgx_dirty_page_list);
->>  
->> -	/* sanity check: */
->> -	WARN_ON(!list_empty(&sgx_dirty_page_list));
->> +	left_dirty = __sgx_sanitize_pages(&sgx_dirty_page_list);
->> +	if (left_dirty && !kthread_should_stop())
->> +		pr_err("%lu unsanitized pages\n", left_dirty);
+ # echo 'hist:keys=comm,stacktrace,delta.buckets=10:sort=delta' > /sys/kernel/tracing/events/synthetic/wakeup_lat/trigger
+
+(notice the "stacktrace" in the keys)
+
+# cat /sys/kernel/tracing/events/synthetic/wakeup_lat/hist
+# event histogram
+#
+# trigger info: hist:keys=comm,stacktrace,delta.buckets=10:vals=hitcount:sort=delta.buckets=10:size=2048 [active]
+#
+
+{ comm: migration/2                                       , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule_idle+0x26/0x40
+         do_idle+0xb4/0xd0
+         cpu_startup_entry+0x19/0x20
+         secondary_startup_64_no_verify+0xc2/0xcb
+, delta: ~ 10-19} hitcount:          7
+{ comm: migration/5                                       , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule_idle+0x26/0x40
+         do_idle+0xb4/0xd0
+         cpu_startup_entry+0x19/0x20
+         secondary_startup_64_no_verify+0xc2/0xcb
+, delta: ~ 10-19} hitcount:          7
+{ comm: migration/1                                       , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule_idle+0x26/0x40
+         do_idle+0xb4/0xd0
+         cpu_startup_entry+0x19/0x20
+         secondary_startup_64_no_verify+0xc2/0xcb
+, delta: ~ 10-19} hitcount:          7
+{ comm: migration/7                                       , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule_idle+0x26/0x40
+         do_idle+0xb4/0xd0
+         cpu_startup_entry+0x19/0x20
+         secondary_startup_64_no_verify+0xc2/0xcb
+, delta: ~ 10-19} hitcount:          7
+{ comm: migration/0                                       , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule_idle+0x26/0x40
+         do_idle+0xb4/0xd0
+         cpu_startup_entry+0x19/0x20
+         start_kernel+0x595/0x5be
+         secondary_startup_64_no_verify+0xc2/0xcb
+, delta: ~ 10-19} hitcount:          7
+{ comm: migration/4                                       , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule_idle+0x26/0x40
+         do_idle+0xb4/0xd0
+         cpu_startup_entry+0x19/0x20
+         secondary_startup_64_no_verify+0xc2/0xcb
+, delta: ~ 10-19} hitcount:          7
+{ comm: rtkit-daemon                                      , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         preempt_schedule_common+0x2d/0x70
+         preempt_schedule_thunk+0x16/0x18
+         _raw_spin_unlock_irq+0x2e/0x40
+         eventfd_write+0xc8/0x290
+         vfs_write+0xc0/0x2a0
+         ksys_write+0x5f/0xe0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+, delta: ~ 10-19} hitcount:          1
+{ comm: migration/6                                       , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule_idle+0x26/0x40
+         do_idle+0xb4/0xd0
+         cpu_startup_entry+0x19/0x20
+         secondary_startup_64_no_verify+0xc2/0xcb
+, delta: ~ 10-19} hitcount:          7
+{ comm: rtkit-daemon                                      , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule_idle+0x26/0x40
+         do_idle+0xb4/0xd0
+         cpu_startup_entry+0x19/0x20
+         secondary_startup_64_no_verify+0xc2/0xcb
+, delta: ~ 20-29} hitcount:          1
+{ comm: rtkit-daemon                                      , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         preempt_schedule_common+0x2d/0x70
+         preempt_schedule_thunk+0x16/0x18
+         _raw_spin_unlock_irq+0x2e/0x40
+         eventfd_write+0xc8/0x290
+         vfs_write+0xc0/0x2a0
+         ksys_write+0x5f/0xe0
+         do_syscall_64+0x3b/0x90
+         entry_SYSCALL_64_after_hwframe+0x61/0xcb
+, delta: ~ 30-39} hitcount:          1
+{ comm: rtkit-daemon                                      , stacktrace:
+         event_hist_trigger+0x290/0x2b0
+         event_triggers_call+0x52/0xe0
+         trace_event_buffer_commit+0x193/0x240
+         trace_event_raw_event_sched_switch+0x120/0x180
+         __traceiter_sched_switch+0x39/0x50
+         __schedule+0x310/0x700
+         schedule_idle+0x26/0x40
+         do_idle+0xb4/0xd0
+         cpu_startup_entry+0x19/0x20
+         secondary_startup_64_no_verify+0xc2/0xcb
+, delta: ~ 40-49} hitcount:          1
+
+Totals:
+    Hits: 53
+    Entries: 11
+    Dropped: 0
+
+
+Not the prettiest thing to read. But hey, we got the full stack of where
+these latencies happened!
+
+Yes, it adds some overhead when the events are triggered due to the
+stacktrace code, but it's extremely useful information.
+
 > 
-> That would be incorrect, if the function returned
-> because of kthread stopped.
+> So, it looks like tracing has made some progress over the past 10 years,
+> but for debugging latency issues it's still not there yet in general. I
+
+I call BS on that statement. Just because you do not know what has been
+added to the kernel in the last 10 years (like you had no idea about
+seq_buf and that was added in 2014) means to me that you are totally
+clueless on what tracing can and can not do.
+
+It appears to me that you are too focused on inventing your own wheel that
+does exactly what you want before looking to see how things are today. Just
+because something didn't fit your needs 10 years ago doesn't mean that it
+can't fit your needs today.
 
 
-I should have highlighted this but in my example I changed
-left_dirty to be "unsigned long" with the intention that the
-"return -ECANCELED" is replaced with "return 0".
+> will definitely remember function latency tracing the next time I'm doing
+> performance work, but I expect that to be far too heavy to enable on a
+> live server.
 
-__sgx_sanitize_pages() returns 0 when it exits because of
-kthread stopped.
+I run it on production machines all the time. With the filtering in place
+it has very little overhead. Mostly in the noise. The best part is that it
+has practically zero overhead (but can add some cache pressure) when it's
+off, and can be turned on at run time.
 
-To elaborate I was thinking about:
+The tracing infrastructure is very modular, you can use parts of it that
+you need, without the overhead of other parts. Like you found out this week
+that tracepoints are not the same as trace events. Because tracepoints are
+just a hook in the code that anything can attach to (that's what Daniel's
+RV work does). Trace events provide the stored data to be recorded.
 
-+static unsigned long __sgx_sanitize_pages(struct list_head *dirty_page_list)
- {
-+	unsigned long left_dirty = 0;
- 	struct sgx_epc_page *page;
- 	LIST_HEAD(dirty);
- 	int ret;
- 
--	/* dirty_page_list is thread-local, no need for a lock: */
- 	while (!list_empty(dirty_page_list)) {
- 		if (kthread_should_stop())
--			return;
-+			return 0;
- 
- 		page = list_first_entry(dirty_page_list, struct sgx_epc_page, list);
- 
-@@ -92,12 +95,14 @@ static void __sgx_sanitize_pages(struct list_head *dirty_page_list)
- 		} else {
- 			/* The page is not yet clean - move to the dirty list. */
- 			list_move_tail(&page->list, &dirty);
-+			left_dirty++;
- 		}
- 
- 		cond_resched();
- 	}
- 
- 	list_splice(&dirty, dirty_page_list);
-+	return left_dirty;
- }
+I will note that the current histogram code overhead has increased due to
+retpolines, but I have code to convert them from indirect calls to direct
+calls via a switch statement which drops the overhead by 20%!
 
-
-and then with what I had in previous email the checks should work:
-
-@@ -388,6 +393,8 @@ void sgx_reclaim_direct(void)
- 
- static int ksgxd(void *p)
- {
-+	unsigned long left_dirty;
-+
- 	set_freezable();
- 
- 	/*
-@@ -395,10 +402,10 @@ static int ksgxd(void *p)
- 	 * required for SECS pages, whose child pages blocked EREMOVE.
- 	 */
- 	__sgx_sanitize_pages(&sgx_dirty_page_list);
--	__sgx_sanitize_pages(&sgx_dirty_page_list);
- 
--	/* sanity check: */
--	WARN_ON(!list_empty(&sgx_dirty_page_list));
-+	left_dirty = __sgx_sanitize_pages(&sgx_dirty_page_list);
-+	if (left_dirty && !kthread_should_stop())
-+		pr_err("%lu unsanitized pages\n", left_dirty);
- 
- 	while (!kthread_should_stop()) {
- 		if (try_to_freeze())
+  https://lore.kernel.org/all/20220823214606.344269352@goodmis.org/
 
 
 > 
-> If you do the check here you already have a window
-> where kthread could have been stopped anyhow.
-> 
-> So even this would be less correct:
-> 
->         if (kthreas_should_stop()) {
->                 return 0;
->         }  else if (left_dirty) {
->                 pr_err("%lu unsanitized pages\n", left_dirty);
->         }
-> 
-> So in the end you end as complicated and less correct
-> fix. This all is explained in the commit message.
-> 
-> If you unconditionally print error, you don't have
-> a meaning for the number of unsanitized pags.
+> This thing is only a couple hundred lines of code though, so perhaps
+> tracing shouldn't be the only tool in our toolbox :)
 
-Understood that the goal is to only print the
-number of unsanitized pages if ksgxd has not been
-stopped prematurely.
+I'm already getting complaints from customers/users that are saying there's
+too many tools in the toolbox already. (Do we use ftrace/perf/bpf?). The
+idea is to have the tools using mostly the same infrastructure, and not be
+100% off on its own, unless there's a clear reason to invent a new wheel
+that several people are asking for, not just one or two.
 
-Reinette 
-
+-- Steve

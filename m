@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7A7A5A9BAC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:29:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A8B5A9BA9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:29:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234324AbiIAP23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:28:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38800 "EHLO
+        id S232790AbiIAP2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:28:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234246AbiIAP2M (ORCPT
+        with ESMTP id S234506AbiIAP2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:28:12 -0400
-Received: from kylie.crudebyte.com (kylie.crudebyte.com [5.189.157.229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91B37331A;
-        Thu,  1 Sep 2022 08:28:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=crudebyte.com; s=kylie; h=Content-Type:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:
-        Content-ID:Content-Description;
-        bh=iVZmXkRo7BKC/ObnBuv9eAWgxqprDCQYopbDV0cm8ZA=; b=R+861XU5V5SAXZ6YWA8ropbfi1
-        ZuvDKzYCbOhxZvRdUPuqyNRMmwBCmRE+eYTUGjXOCnC9kwk9L8ldpNkP7E41txt+kfyIlI4AskHiQ
-        /mA3ZiLe6noHRotbtsARf/0ttGGJNC25YrILvQbJlFyiRLcXxVNQ2TwYIPMejFR/e28K5/7jXtuFX
-        Ol2ngJ4ODZY+OCeFb0RXKMmSdajColXb3alNeSASgAFUeLvv9PvNX5Qej/aMEAN0wXfjv/INOaDCL
-        rP9pcDsPpHRukUR4RNAWMXGLCiFb9vRWCmhiyoBvM+MJtgQJJxpg0Jz6c674sjVIlLXbeOMUmpXE/
-        NBaRJWOhumtC8IV2lDBSdugPhNguo7rH0l2pdS3qlPIwTUUPPXXPfU6AND4hIBH1OsCAKaSZql42h
-        P29kr0ZVK2j4dCAEe0YOXS2LFhARIvUIf/8hHRfk53oA8FmlWMkgYWdbA0qUcb8nwsLwOXgYy8zj2
-        utkUOTarINxD40ClcNNmk1G8hn1Ay0gdFG47A+z8wzhCb4U9CBN6ghh7mLOnHQklCOE88998/TSMb
-        H17fX4p6wuy8osELaHFJy2gM13884RKYjjKlkMS6epGR8lT6rhgAkiA33JAArWIq0U4vypd3w/Gvo
-        oQ5DVn5LlzunLTQEPSdSdBHUTrDRsPDixuM6lqFvQ=;
-From:   Christian Schoenebeck <linux_oss@crudebyte.com>
-To:     asmadeus@codewreck.org, Schspa Shi <schspa@gmail.com>
-Cc:     ericvh@gmail.com, lucho@ionkov.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] p9: trans_fd: Fix deadlock when connection cancel
-Date:   Thu, 01 Sep 2022 17:27:53 +0200
-Message-ID: <2739602.9NfmOOc9RC@silver>
-In-Reply-To: <m2bkrz7qc8.fsf@gmail.com>
-References: <20220831180950.76907-1-schspa@gmail.com> <Yw/HmHcmXBVIg/SW@codewreck.org>
- <m2bkrz7qc8.fsf@gmail.com>
+        Thu, 1 Sep 2022 11:28:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CAD074DF1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:28:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B383861E9E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D30BC433D6;
+        Thu,  1 Sep 2022 15:28:22 +0000 (UTC)
+Date:   Thu, 1 Sep 2022 11:28:53 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: Re: [PATCH v1 2/3] regmap: trace: Remove explicit castings
+Message-ID: <20220901112853.641cc67a@gandalf.local.home>
+In-Reply-To: <YxDGqdzv3uvEgALv@sirena.org.uk>
+References: <20220901132336.33234-1-andriy.shevchenko@linux.intel.com>
+        <20220901132336.33234-2-andriy.shevchenko@linux.intel.com>
+        <YxC0SYShl14TSw2o@sirena.org.uk>
+        <CAHp75VcrBS=+bxXz62HB6joB3+6meVK9YJtJOYSS3PNrY13AVg@mail.gmail.com>
+        <20220901104601.01773fb8@gandalf.local.home>
+        <YxDGqdzv3uvEgALv@sirena.org.uk>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,47 +53,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Donnerstag, 1. September 2022 04:55:36 CEST Schspa Shi wrote:
-> asmadeus@codewreck.org writes:
-> > Schspa Shi wrote on Thu, Sep 01, 2022 at 02:09:50AM +0800:
-> >> To fix it, we can add extra reference counter to avoid deadlock, and
-> >> decrease it after we unlock the client->lock.
-> > 
-> > Thanks for the patch!
-> > 
-> > Unfortunately I already sent a slightly different version to the list,
-> > hidden in another syzbot thread, here:
-> > https://lkml.kernel.org/r/YvyD053bdbGE9xoo@codewreck.org
-> > 
-> > (yes, sorry, not exactly somewhere I'd expect someone to find it... 9p
-> > hasn't had many contributors recently)
-> > 
-> > 
-> > Basically instead of taking an extra lock I just released the client
-> > lock before calling p9_client_cb, so it shouldn't hang anymore.
-> > 
-> > We don't need the lock to call the cb as in p9_conn_cancel we already
-> > won't accept any new request and by this point the requests are in a
-> > local list that isn't shared anywhere.
+On Thu, 1 Sep 2022 15:50:17 +0100
+Mark Brown <broonie@kernel.org> wrote:
+
+> > fb2736bbaee0e ("regmap: Add basic tracepoints")  
 > 
-> Ok, thank you for pointing that out.
-> 
-> > If you have a test setup, would you mind testing my patch?
-> > That's the main reason I was delaying pushing it.
-> 
-> I have test it with my enviroment, it not hang anymore.
+> Right, they were added in the original commit because as far as I could
+> tell at that time they were needed for things to build (or possibly
+> build cleanly, it's been a while).
 
-Are you fine with that Dominique, or do you want me to test your linked patch 
-as well?
+I'm guessing what happened as things were probably a bit confusing back
+then, it was something else that didn't build, and you probably tried all
+sorts of things and when it worked, you just left it as is ;-)
 
-You can also explicitly tell me if you need something to be reviewed/tested.
-
-> > Since you went out of your way to make this patch if you agree with my
-> > approach I don't mind adding your sign off or another mark of having
-> > worked on it.
-> > 
-> > Thank you,
-
-
-
-
+-- Steve

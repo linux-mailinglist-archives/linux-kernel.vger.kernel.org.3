@@ -2,116 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08AC65A92F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:19:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 369D45A930B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:23:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234017AbiIAJTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
+        id S232599AbiIAJXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbiIAJS7 (ORCPT
+        with ESMTP id S234171AbiIAJXp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:18:59 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BBD11EB43
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:18:56 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3378303138bso330615577b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 02:18:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ofyTx4HKrXBAG7we5X7Qai/eK2K43C5jxgUz5nh/Yro=;
-        b=DNWL+HfERAfAtjtdicaVsZrEdzV4N3Vw5nQ7XoQB5JVkpg5p8Lsx+iFTSKvtyCFj5u
-         BAfxBIvqMTTrW79mMYA44nyO0vqrbHf0Mc0d6NIllyaZ+83qZ0DGOTlWDkqrmDfiFUBg
-         Uarv4p7UHZor3SU51nWN/bvVjMMHzk7sZhJB6O0Y6OqzyJhhnhBEpTygZ6N+7k/hbIST
-         vZ2QhDDBCROSeFX8TMsw8gkqJpObIOjwYdFIC5Hx0mayX6/hIUz5nT4hj1yABlepUqM4
-         1PjoU84RkgqZApPhBtpAkTXjpToOqeRjtEv9GgqlCBJXqeaEu4nsMq3SJXKWs4bw2g9v
-         EQZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ofyTx4HKrXBAG7we5X7Qai/eK2K43C5jxgUz5nh/Yro=;
-        b=JoGgnMUWSjyFTgqljphc/jVSa7ZW9IoYF25ZoPLk/gkbgnYzCGFQyD8/1RDffef3nx
-         utqof6gUckCW50xN1RfaPVIQBivlPjD0iWIySGFHK7J59ljnYOkzTW3I3Vcs27ipJMhW
-         376HxrxyPml3+90Bx8vnIKGJ34w5EYJRZ5Z4s9wy2B6XF3k/OGXLmWPZLbGfnI+pmkjK
-         y8GEtL3XL5Yv8mX7IrudioN4ftV1bhRIGEYRQBCn1A219K8RPhHCrmP3yDe/oejSrX+R
-         AJwh60mfnXPcX+bT/120Gcg7lDO4KLZuJH0FKlbqUznzRRNJxFPAYEtjvk7qlsMdaGx+
-         N+hA==
-X-Gm-Message-State: ACgBeo1vtP9rKoSz/kd9D1Ir4/OXyWB9YSUCodjYsQEGj57inEGZQaej
-        x90akL9A1FNx9xlWmTKb8TBr7MXVTbWgqCPJtu0VFMgw0Kxmzw==
-X-Google-Smtp-Source: AA6agR4YzkMcE//RozLPe3AlZMR1RsPsbQRd1aguh7fbGIubS9uQzS9d0L0VXutUFfemJr0JfjfopiWBTfT/BVDRmY8=
-X-Received: by 2002:a0d:ea49:0:b0:33d:bce7:25c2 with SMTP id
- t70-20020a0dea49000000b0033dbce725c2mr21912903ywe.267.1662023935298; Thu, 01
- Sep 2022 02:18:55 -0700 (PDT)
+        Thu, 1 Sep 2022 05:23:45 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA6612D532;
+        Thu,  1 Sep 2022 02:23:41 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2818oTDk007722;
+        Thu, 1 Sep 2022 09:23:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=oSpC5mfTK/eTWZhpCaXSlm6QucnN1qjlhlAhzjYSCDA=;
+ b=lkPKs22EYOgbXnJIrshh6Ab9d8Ui1y5c5rtXlhCY4lXzlb6H7cTAGeVyd2Ew2/8LHrGe
+ 08XkvABk1MyZplmP1F7aa2nb4Y5tfD3lQL0ryBaNorLVp9PSEXARUTlTm7uBDQwfra/x
+ RHRF3icGVmWL9BS1jFqTsSQzT0bUAcjduUdtG2/JG+otLAxA+thRYMABIh+niskWrTs5
+ Jx+dmW5vi083Y5iPXoovqq4xvPyz2L1zWOaAxgoVrtQEBDCjnunIPnjSHFultP+4OIDQ
+ En3z8zE36x/fTL7+1xeK7EfbtcTISXp4Imrm9YN11HM6BKXgSupMEycCoEDOP6VgMrnZ +w== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jask195en-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 09:23:31 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28190mY8022084;
+        Thu, 1 Sep 2022 09:23:31 GMT
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jask195dj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 09:23:31 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2819MLJa017370;
+        Thu, 1 Sep 2022 09:23:28 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06fra.de.ibm.com with ESMTP id 3j7ahhvrsu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 09:23:28 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2819NPSi32244048
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 1 Sep 2022 09:23:25 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5A78AA404D;
+        Thu,  1 Sep 2022 09:23:25 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A31BAA4053;
+        Thu,  1 Sep 2022 09:23:22 +0000 (GMT)
+Received: from tarunpc.ibmuc.com (unknown [9.43.6.31])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  1 Sep 2022 09:23:22 +0000 (GMT)
+From:   Tarun Sahu <tsahu@linux.ibm.com>
+To:     akpm@linux-foundation.org, shuah@kernel.org,
+        axelrasmussen@google.com
+Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, aneesh.kumar@linux.ibm.com,
+        Tarun Sahu <tsahu@linux.ibm.com>
+Subject: [PATCH] selftest: vm: remove deleted local_config.* from .gitignore
+Date:   Thu,  1 Sep 2022 14:53:15 +0530
+Message-Id: <20220901092315.33619-1-tsahu@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20220901044249.4624-1-osalvador@suse.de> <20220901044249.4624-2-osalvador@suse.de>
- <YxBsWu36eqUw03Dy@elver.google.com> <YxBvcDFSsLqn3i87@dhcp22.suse.cz>
-In-Reply-To: <YxBvcDFSsLqn3i87@dhcp22.suse.cz>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 1 Sep 2022 11:18:19 +0200
-Message-ID: <CANpmjNNjkgibnBcp7ZOWGC5CcBJ=acgrRKo0cwZG0xOB5OCpLw@mail.gmail.com>
-Subject: Re: [PATCH 1/3] lib/stackdepot: Add a refcount field in stack_record
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rsrvjOzlMhuFJjMrWE2gRcX6unwHEljk
+X-Proofpoint-GUID: CjDuGkUjmAorZRs14t50ojyzlRmXt3kg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_06,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ spamscore=0 phishscore=0 bulkscore=0 mlxlogscore=762 mlxscore=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209010040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Sept 2022 at 10:38, Michal Hocko <mhocko@suse.com> wrote:
->
-> On Thu 01-09-22 10:24:58, Marco Elver wrote:
-> > On Thu, Sep 01, 2022 at 06:42AM +0200, Oscar Salvador wrote:
-> [...]
-> > > diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> > > index 5ca0d086ef4a..aeb59d3557e2 100644
-> > > --- a/lib/stackdepot.c
-> > > +++ b/lib/stackdepot.c
-> > > @@ -63,6 +63,7 @@ struct stack_record {
-> > >     u32 hash;                       /* Hash in the hastable */
-> > >     u32 size;                       /* Number of frames in the stack */
-> > >     union handle_parts handle;
-> > > +   refcount_t count;               /* Number of the same repeated stacks */
-> >
-> > This will increase stack_record size for every user, even if they don't
-> > care about the count.
->
-> Couldn't this be used for garbage collection?
+Commit d2d6cba5d6623245a80cc151008cce825c8b6248 ("selftest: vm: remove
+orphaned references to local_config.{h,mk}") took care of removing
+orphaned references. This commit remove local_config from .gitignore.
 
-Only if we can precisely figure out at which point a stack is no
-longer going to be needed.
+Parent Patch
+Commit 69007f156ba7aead6c75b0046958ad3396f5aed1 ("Kselftests: remove
+support of libhugetlbfs from kselftests")
 
-But more realistically, stack depot was designed to be simple. Right
-now it can allocate new stacks (from an internal pool), but giving the
-memory back to that pool isn't supported. Doing garbage collection
-would effectively be a redesign of stack depot. And for the purpose
-for which stack depot was designed (debugging tools), memory has never
-been an issue (note that stack depot also has a fixed upper bound on
-memory usage).
 
-We had talked (in the context of KASAN) about bounded stack storage,
-but the preferred solution is usually a cache-based design which
-allows evictions (in the simplest case a ring buffer), because
-figuring out (and relying on) where precisely a stack will
-definitively no longer be required in bug reports is complex and does
-not guarantee the required bound on memory usage. Andrey has done the
-work on this for tag-based KASAN modes:
-https://lore.kernel.org/all/cover.1658189199.git.andreyknvl@google.com/
+Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
+---
+ tools/testing/selftests/vm/.gitignore | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
+index 31e5eea2a9b9..7b9dc2426f18 100644
+--- a/tools/testing/selftests/vm/.gitignore
++++ b/tools/testing/selftests/vm/.gitignore
+@@ -30,7 +30,6 @@ map_fixed_noreplace
+ write_to_hugetlbfs
+ hmm-tests
+ memfd_secret
+-local_config.*
+ soft-dirty
+ split_huge_page_test
+ ksm_tests
+-- 
+2.31.1
+

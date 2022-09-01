@@ -2,134 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CC85A9BEF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD1E25A9BFB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:45:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231211AbiIAPnR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:43:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40606 "EHLO
+        id S232489AbiIAPnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:43:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbiIAPnJ (ORCPT
+        with ESMTP id S232994AbiIAPnf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:43:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB8E8A6F5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:43:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662046986;
+        Thu, 1 Sep 2022 11:43:35 -0400
+Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E261719AC;
+        Thu,  1 Sep 2022 08:43:31 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 11:43:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1662047009;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=zPoitkGieiA519AGfM1lLFH3EIE6WMP8WybuQF7XBQY=;
-        b=h1JO7pzNRNoT/LJ2oR54Hsi157Zg1Y7q/U4HMv3fN5RSqPvTp9An2BOW5CxDmptVWuvEWW
-        enOodz28rZhovAxwZP2TvCEBiC6tUWAnootiqAGgza/QQzb9q58hqHyeELV+pwTD1ShUhe
-        602kfwHVCBQyRCIFck9pZp9KFdpvKxw=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-30-DWxklDMuMPy6Bggc1VKaEA-1; Thu, 01 Sep 2022 11:43:05 -0400
-X-MC-Unique: DWxklDMuMPy6Bggc1VKaEA-1
-Received: by mail-ej1-f71.google.com with SMTP id qa35-20020a17090786a300b0073d4026a97dso7017133ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:43:05 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=zPoitkGieiA519AGfM1lLFH3EIE6WMP8WybuQF7XBQY=;
-        b=cvuVDlQmOd1fH8sZPf908TRfueh0h1vILjKWZGr2ndOLN+KH+V2nabJYliPxqUyyON
-         jcuHzmTx92HJfzVeV6+ymNPn4BV8Pr4zIY7vI2tK1VoWiTFnZ+LYW3TtV93g6NYmqp/T
-         D1obK2KM6oGnXUklYD7aQwtHs7AfwSa1MmAlrLWNKp/v3llxm6rDuXgXpNVzUVS0U/4v
-         nUTdRflNkJu3/t5YdvRERRHcRi/pa//en4gjnAFsJ3q+hsqee2joTqv4CHmL88S9uRTa
-         sp7rrKaB0yWHelEoZqL3bly0KFIBQFeBSAEo4x0p9XmVMqn6LZ7mYIft/dRGl9lPeNv5
-         ebtA==
-X-Gm-Message-State: ACgBeo03Sokd9KSBLRP+10zrtRTqELVKZUw3nAr8ODn/+V86igyFZ5tu
-        pA9N00uXXmpNKpWSgvWgH6nxZI78lPbS4ARZFJpIt4iEuDkKKwyLNNuK9tXV1SyGOfD31wNLI+H
-        8YYT3WXlEnvPqVwM4zknNxJC/
-X-Received: by 2002:a17:906:9b09:b0:741:879e:fa with SMTP id eo9-20020a1709069b0900b00741879e00famr13609768ejc.573.1662046984748;
-        Thu, 01 Sep 2022 08:43:04 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5skRuTJgjGK/5n5XrmzssooAjFbQ1CE9Ph1X052a+kR7D00THN55FR8+GL484EgzVxktcOKw==
-X-Received: by 2002:a17:906:9b09:b0:741:879e:fa with SMTP id eo9-20020a1709069b0900b00741879e00famr13609754ejc.573.1662046984592;
-        Thu, 01 Sep 2022 08:43:04 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id vp10-20020a17090712ca00b0072b1bc9b37fsm8612934ejb.22.2022.09.01.08.43.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 08:43:04 -0700 (PDT)
-Message-ID: <b8a5038b-3d3a-4a2c-8fca-32b47f11e85c@redhat.com>
-Date:   Thu, 1 Sep 2022 17:43:03 +0200
+        bh=OCuFL4N5GVZjONQAdChOE7OJr7ThTUJDCIIbzLkwFEk=;
+        b=Zug2Ft4Qd/net99BOTd8W8Yfuju//gSHL3gkzYXZLEVciKsEhf1UkIyXgrPgVXlVt/CoSK
+        WIJngXjsqZ/WvBYvq+hwDukTtw4VIC1L39QDy0ARuz5vTfzc62/XGVpvD13hkozhflqLO3
+        W0o6TaATn9DtFDXStAFl/opHuur0FVU=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        void@manifault.com, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, bristot@redhat.com, vschneid@redhat.com,
+        cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com,
+        42.hyeyoo@gmail.com, glider@google.com, elver@google.com,
+        dvyukov@google.com, shakeelb@google.com, songmuchun@bytedance.com,
+        arnd@arndb.de, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 03/30] Lazy percpu counters
+Message-ID: <20220901154321.apyq7246srkjthfr@moria.home.lan>
+References: <20220830214919.53220-1-surenb@google.com>
+ <20220830214919.53220-4-surenb@google.com>
+ <YxBWczNCbZbj+reQ@hirez.programming.kicks-ass.net>
+ <20220901143219.n7jg7cbp47agqnwn@moria.home.lan>
+ <20220901104839.5691e1c9@gandalf.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1] platform/x86/intel: pmc/core: Add Raptor Lake support
- to pmc core driver
-Content-Language: en-US
-To:     Gayatri Kammela <gayatri.kammela@linux.intel.com>
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, irenic.rajneesh@gmail.com,
-        Srinivas Pandruvada <srinivas.pandruvada@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Box <david.e.box@intel.com>
-References: <20220830182001.3693030-1-gayatri.kammela@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220830182001.3693030-1-gayatri.kammela@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901104839.5691e1c9@gandalf.local.home>
+X-Migadu-Flow: FLOW_OUT
+X-Migadu-Auth-User: linux.dev
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 8/30/22 20:20, Gayatri Kammela wrote:
-> Add Raptor Lake client parts (both RPL and RPL_S) support to pmc core
-> driver. Raptor Lake client parts reuse all the Alder Lake PCH IPs.
+On Thu, Sep 01, 2022 at 10:48:39AM -0400, Steven Rostedt wrote:
+> On Thu, 1 Sep 2022 10:32:19 -0400
+> Kent Overstreet <kent.overstreet@linux.dev> wrote:
 > 
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@intel.com>
-> Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Cc: David Box <david.e.box@intel.com>
-> Signed-off-by: Gayatri Kammela <gayatri.kammela@linux.intel.com>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/platform/x86/intel/pmc/core.c | 2 ++
->  1 file changed, 2 insertions(+)
+> > On Thu, Sep 01, 2022 at 08:51:31AM +0200, Peter Zijlstra wrote:
+> > > On Tue, Aug 30, 2022 at 02:48:52PM -0700, Suren Baghdasaryan wrote:  
+> > > > +static void lazy_percpu_counter_switch_to_pcpu(struct raw_lazy_percpu_counter *c)
+> > > > +{
+> > > > +	u64 __percpu *pcpu_v = alloc_percpu_gfp(u64, GFP_ATOMIC|__GFP_NOWARN);  
+> > > 
+> > > Realize that this is incorrect when used under a raw_spinlock_t.  
+> > 
+> > Can you elaborate?
 > 
-> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-> index a1fe1e0dcf4a..17ec5825d13d 100644
-> --- a/drivers/platform/x86/intel/pmc/core.c
-> +++ b/drivers/platform/x86/intel/pmc/core.c
-> @@ -1914,6 +1914,8 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
->  	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,		&tgl_reg_map),
->  	X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,		&adl_reg_map),
->  	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,        &tgl_reg_map),
-> +	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,		&adl_reg_map),
-> +	X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,	&adl_reg_map),
->  	{}
->  };
->  
+> All allocations (including GFP_ATOMIC) grab normal spin_locks. When
+> PREEMPT_RT is configured, normal spin_locks turn into a mutex, where as
+> raw_spinlock's do not.
 > 
-> base-commit: b90cb1053190353cc30f0fef0ef1f378ccc063c5
+> Thus, if this is done within a raw_spinlock with PREEMPT_RT configured, it
+> can cause a schedule while holding a spinlock.
 
+Thanks, I think we should be good here but I'll document it anyways.

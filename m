@@ -2,101 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220BF5A93C5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D56D5A93C7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:01:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232538AbiIAKBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:01:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
+        id S233523AbiIAKBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:01:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232229AbiIAKBP (ORCPT
+        with ESMTP id S233301AbiIAKBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:01:15 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7424F134898
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:01:12 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id z25so23668248lfr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:01:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=UqgiLV0VjUKBJcxnLyNLTyV9eN+dAh8A/iqAACf8+dA=;
-        b=qPDLCIYOwEP0VD55mNFupQq6wIzbcFHFLZrCcDkTOwZfolZtzzlbTrHWZw0t5twFX5
-         n9c09BxM7QSkWWhf/UiZWT487FfYr3P3XwJmwA85RkmDNZtjyzzQ8AiuutpZPQ6jAylS
-         zunBK3n56GFzJqUxmPK1Jfcrr/edXsq7xeuynlO0EBCoC96oVfwIEOE+NaB+xJkG9dbI
-         Dh5Lcf3ZSKgtuUINz57lr69alOiT14+7aLnSRn76hD5IQbDyAZZgPRCrL1lDPnkL0nRT
-         wkxUZjmCkcFtOYpT1ivhU0nD5yGrMGaJd/hL5gY5WhUgfSzDdraY7mhrIoHFQOIjwgER
-         wluA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=UqgiLV0VjUKBJcxnLyNLTyV9eN+dAh8A/iqAACf8+dA=;
-        b=x8AFKdu5qbIaIf6BoAFlqZSCZ2Xo1SVqPEDlkdQZ3yUGkL2RMSqdqGU6hYPAfqNGID
-         IRVkF6GGns39INYWFPo8eOySvvFDwuH9arsP6DVRS4OmeJFtog4AP/+qAelmg0t9Ldt1
-         4Y+m9WY7VJuJBVa9LOZB4NDmhTlEfDflKj4d6Nxsf5OyowEFxXJFedNNPVpkI4g2uYdB
-         JoxH1fw2A1memHcyy2ZL7NzNE3+aTHbHc65cWtd4EfoT9YXGC/lJtxDgbGxdkQFAHyP9
-         5hpN34VoM4HNLs4kEsoH2KYy/G5pwYFhxu1tTCUfnCb5tNn9vYeufPB1XvERwT5SCunI
-         ScMA==
-X-Gm-Message-State: ACgBeo0BPyFPfYInFFauUGbdFuaJfyF6AinHeVEmGXETVqOP/MhR413h
-        glm1ro68l7P9sXEdUQgTfk2FqA==
-X-Google-Smtp-Source: AA6agR6g+J6hbZWE8D79tqnXYT/J1Z+BYuCIbp6i4arwcPiX+TtniNK3fPjXn3edpb61J1WeKy8VoQ==
-X-Received: by 2002:a19:5e01:0:b0:492:c03a:aa8e with SMTP id s1-20020a195e01000000b00492c03aaa8emr11392646lfb.139.1662026470851;
-        Thu, 01 Sep 2022 03:01:10 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id f24-20020a2eb5b8000000b0025e5cd1620fsm1627599ljn.57.2022.09.01.03.01.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 03:01:10 -0700 (PDT)
-Message-ID: <cae05f4d-57af-7923-58e5-c4bf06a8a3c8@linaro.org>
-Date:   Thu, 1 Sep 2022 13:01:09 +0300
+        Thu, 1 Sep 2022 06:01:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB86134898
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:01:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id C7512219F1;
+        Thu,  1 Sep 2022 10:01:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662026480; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=pUkZJWp2nQ4dbOBqWBuaF5RJwLtyXngvDW9UF32VZDE=;
+        b=qKa4+SljwPi5zCaniT9NpUQnkosVRVt7giTvOKUpwsXKorMmAxQewzjtYbLbBdGPJ3Isuk
+        yqbtgGqvo/AMBanDVSdZICG5/GeuXneHiiibqQ2mgUR60pgTiQM2Ffm7mcCEHJnX6p30rD
+        D64G/Oo5iJ6um4ICyQ+S6C4NGOgXzSw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A4B7D13A89;
+        Thu,  1 Sep 2022 10:01:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id m67wJfCCEGMyXwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 01 Sep 2022 10:01:20 +0000
+Date:   Thu, 1 Sep 2022 12:01:19 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Marco Elver <elver@google.com>
+Cc:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
+Subject: Re: [PATCH 1/3] lib/stackdepot: Add a refcount field in stack_record
+Message-ID: <YxCC7zoc3wX3ieMR@dhcp22.suse.cz>
+References: <20220901044249.4624-1-osalvador@suse.de>
+ <20220901044249.4624-2-osalvador@suse.de>
+ <YxBsWu36eqUw03Dy@elver.google.com>
+ <YxBvcDFSsLqn3i87@dhcp22.suse.cz>
+ <CANpmjNNjkgibnBcp7ZOWGC5CcBJ=acgrRKo0cwZG0xOB5OCpLw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: sc7280: Add device tree for
- herobrine evoker
-Content-Language: en-US
-To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     mka@chromium.org, dianders@chromium.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20220901091253.93333-1-sheng-liang.pan@quanta.corp-partner.google.com>
- <20220901170958.1.I7dd7a79c4cc5fe91c3feb004473feb3b34b7b2d8@changeid>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220901170958.1.I7dd7a79c4cc5fe91c3feb004473feb3b34b7b2d8@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANpmjNNjkgibnBcp7ZOWGC5CcBJ=acgrRKo0cwZG0xOB5OCpLw@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 12:12, Sheng-Liang Pan wrote:
-> Add a basic device tree for the herobrine evoker board.
+On Thu 01-09-22 11:18:19, Marco Elver wrote:
+> On Thu, 1 Sept 2022 at 10:38, Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Thu 01-09-22 10:24:58, Marco Elver wrote:
+> > > On Thu, Sep 01, 2022 at 06:42AM +0200, Oscar Salvador wrote:
+> > [...]
+> > > > diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+> > > > index 5ca0d086ef4a..aeb59d3557e2 100644
+> > > > --- a/lib/stackdepot.c
+> > > > +++ b/lib/stackdepot.c
+> > > > @@ -63,6 +63,7 @@ struct stack_record {
+> > > >     u32 hash;                       /* Hash in the hastable */
+> > > >     u32 size;                       /* Number of frames in the stack */
+> > > >     union handle_parts handle;
+> > > > +   refcount_t count;               /* Number of the same repeated stacks */
+> > >
+> > > This will increase stack_record size for every user, even if they don't
+> > > care about the count.
+> >
+> > Couldn't this be used for garbage collection?
 > 
-> Signed-off-by: Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
-> ---
+> Only if we can precisely figure out at which point a stack is no
+> longer going to be needed.
+> 
+> But more realistically, stack depot was designed to be simple. Right
+> now it can allocate new stacks (from an internal pool), but giving the
+> memory back to that pool isn't supported. Doing garbage collection
+> would effectively be a redesign of stack depot.
 
-And this is third v1? At least this is what your subject is suggesting.
-Patches should be properly versioned. Git format-patch helps in that,
-but you can use any other tools if you wish.
+Fair argument. 
 
-I pointed you to documentation you must read before posting. You can
-keep ignoring it, so we keep ignoring your patch.
+> And for the purpose
+> for which stack depot was designed (debugging tools), memory has never
+> been an issue (note that stack depot also has a fixed upper bound on
+> memory usage).
 
-That's a NAK :(
+Is the increased size really a blocker then? I see how it sucks to
+maintain a counter when it is not used by anything but page_owner but
+storing that counte externally would just add more complexity AFAICS
+(more allocations, more tracking etc.).
 
-Best regards,
-Krzysztof
+Maybe the counter can be conditional on the page_owner which would add
+some complexity as well (variable size structure) but at least the
+external allocation stuff could be avoided.
+-- 
+Michal Hocko
+SUSE Labs

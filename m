@@ -2,108 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501A25AA148
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 23:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA5E55AA14D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 23:01:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235157AbiIAU70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 16:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
+        id S235043AbiIAVA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 17:00:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235031AbiIAU6n (ORCPT
+        with ESMTP id S234925AbiIAVAa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 16:58:43 -0400
-Received: from out2.migadu.com (out2.migadu.com [188.165.223.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2949A9C1DA
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:58:31 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 16:58:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662065909;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4hkUsmhoc/mtitBsMEKBISOd/1pAkSpFc2P/cfXQtjM=;
-        b=GBx/osHm3HGi4Ds4wKNlfh+0rOeAjSc5fMxjCY9+prDg46Our7ah2+T4UCkEyoyjGAR3Ey
-        DNyFdaH7yElNXaYOG7p+DGMlnJB29QeQAVtRk4yNGTDim3sXPR4Q5JwB92gpqpAdtQY8uE
-        Z2Ok6tGIN+Dib9yzL+1nMDwaoBKyC1E=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, laurent.dufour@fr.ibm.com,
-        paulmck@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        kernel-team@android.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH RESEND 00/28] per-VMA locks proposal
-Message-ID: <20220901205819.emxnnschszqv4ahy@moria.home.lan>
-References: <20220901173516.702122-1-surenb@google.com>
+        Thu, 1 Sep 2022 17:00:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 007CB9A99A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:59:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CD0FEB82935
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 20:59:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A8B6C433C1;
+        Thu,  1 Sep 2022 20:59:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662065970;
+        bh=nrOp7eEjU0cKcTZJHYcmDtjDVN6HB7LRJnaIzjZdPa0=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=hS0iGPDct9F7wFVZN/alBvY4qwciMf4Yy7RSmwgCBrorxYbw0LtVA5vc3WXN3bxHs
+         pkuhVrli84E3EyGkgAgeCybzgIkLJYO+z3Snom7zch3WHlSzoFs3aG+1vHkGkQ04mP
+         kzDcID0oMB8nInf2Zewukqdw7i4fmtx82H/w+VEZk0nJMcZ9xW5qD+2AfH9FFYLl2Q
+         Nnx8/TQOtn7bjxhUUzEn1KRCrbLkEQnpWOS6Rj1QGZ0JwxGo+WZR70fPQQ+iRlaEkm
+         /kKQe4iYArvra3RHyJLkayzqe4FLKOFs7RToFHEhrO7z3dQadxgebQFBbZqhta++9I
+         YWJG/DH9BkesA==
+Message-ID: <4b556b3292c18d793ff19e4f129200138045e4a6.camel@kernel.org>
+Subject: Re: [PATCH v4 0/5] tracing/hist: Add percentage histogram suffixes
+From:   Tom Zanussi <zanussi@kernel.org>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org
+Date:   Thu, 01 Sep 2022 15:59:28 -0500
+In-Reply-To: <20220901080235.20db3793534a64475a3db7be@kernel.org>
+References: <166157298537.348924.2537162090505397377.stgit@devnote2>
+         <4c7f9d2b46a02324dd4467144edaf3b2a34720b2.camel@kernel.org>
+         <20220901080235.20db3793534a64475a3db7be@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220901173516.702122-1-surenb@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:34:48AM -0700, Suren Baghdasaryan wrote:
-> Resending to fix the issue with the In-Reply-To tag in the original
-> submission at [4].
-> 
-> This is a proof of concept for per-vma locks idea that was discussed
-> during SPF [1] discussion at LSF/MM this year [2], which concluded with
-> suggestion that “a reader/writer semaphore could be put into the VMA
-> itself; that would have the effect of using the VMA as a sort of range
-> lock. There would still be contention at the VMA level, but it would be an
-> improvement.” This patchset implements this suggested approach.
-> 
-> When handling page faults we lookup the VMA that contains the faulting
-> page under RCU protection and try to acquire its lock. If that fails we
-> fall back to using mmap_lock, similar to how SPF handled this situation.
-> 
-> One notable way the implementation deviates from the proposal is the way
-> VMAs are marked as locked. Because during some of mm updates multiple
-> VMAs need to be locked until the end of the update (e.g. vma_merge,
-> split_vma, etc). Tracking all the locked VMAs, avoiding recursive locks
-> and other complications would make the code more complex. Therefore we
-> provide a way to "mark" VMAs as locked and then unmark all locked VMAs
-> all at once. This is done using two sequence numbers - one in the
-> vm_area_struct and one in the mm_struct. VMA is considered locked when
-> these sequence numbers are equal. To mark a VMA as locked we set the
-> sequence number in vm_area_struct to be equal to the sequence number
-> in mm_struct. To unlock all VMAs we increment mm_struct's seq number.
-> This allows for an efficient way to track locked VMAs and to drop the
-> locks on all VMAs at the end of the update.
+T24gVGh1LCAyMDIyLTA5LTAxIGF0IDA4OjAyICswOTAwLCBNYXNhbWkgSGlyYW1hdHN1IHdyb3Rl
+Ogo+IE9uIFdlZCwgMzEgQXVnIDIwMjIgMTY6MzU6MjUgLTA1MDAKPiBUb20gWmFudXNzaSA8emFu
+dXNzaUBrZXJuZWwub3JnPiB3cm90ZToKPiAKPiA+IEhpIE1hc2FtaSwKPiA+IAo+ID4gT24gU2F0
+LCAyMDIyLTA4LTI3IGF0IDEzOjAzICswOTAwLCBNYXNhbWkgSGlyYW1hdHN1IChHb29nbGUpIHdy
+b3RlOgo+ID4gPiBIaSwKPiA+ID4gCj4gPiA+IEhlcmUgaXMgdGhlIDR0aCB2ZXJzaW9uIG9mIC5w
+ZXJjZW50IGFuZCAuZ3JhcGggc3VmZml4ZXMgZm9yCj4gPiA+IGhpc3RvZ3JhbQo+ID4gPiB0cmln
+Z2VyIHRvIHNob3cgdGhlIHZhbHVlIGluIHBlcmNlbnRhZ2UgYW5kIGluIGJhci1ncmFwaAo+ID4g
+PiByZXNwZWN0aXZlbHkuCj4gPiA+IAo+ID4gPiBJJ3ZlIHJlYmFzZWQgb24gVG9tJ3MgaGl0Y291
+bnQgcGF0Y2hbMS81XSBvbiB0aGUgc2VyaWVzIGFuZCBhZGRlZAo+ID4gPiBhCj4gPiA+IHBhdGNo
+Cj4gPiA+IGZvciBzdXByZXNzaW5nIGRpc3BsYXkgb2YgaGl0Y291bnRbNS81XSBpbiB0aGlzIHZl
+cnNpb24uCj4gPiAKPiA+IFRoaXMgaXMgYSB2ZXJ5IG5pY2UgcGF0Y2hzZXQgb3ZlcmFsbCAtIHRo
+ZSBvbmx5IHF1ZXN0aW9uIEkgaGF2ZQo+ID4gY29uY2VybnMgcGF0Y2ggNSBmb3Igc3VwcHJlc3Np
+bmcgdGhlIGhpdGNvdW50LsKgIEkgYWN0dWFsbHkgdGhpbmsKPiA+IHRoZQo+ID4gcGF0Y2ggaXMg
+ZmluZSBhbmQgZG9lcyB3aGF0IGl0IHNheXMgbmljZWx5IChhbmQgcHJvYmFibHkgc2hvdWxkCj4g
+PiBoYXZlCj4gPiBiZWVuIGRvbmUgdGhhdCB3YXkgdG8gYmVnaW4gd2l0aCkgYnV0IGl0IGxvb2tz
+IGxpa2UgaXQgd291bGQgY2F1c2UKPiA+IHByb2JsZW1zIGZvciBhbnlvbmUgYWxyZWFkeSBkb2lu
+ZyBwb3N0cHJvY2Vzc2luZyBhbmQgd2hvc2Ugc2NyaXB0cwo+ID4gd291bGQgYmUgZXhwZWN0aW5n
+IHRoZSBoaXRjb3VudCB0byBiZSB0aGVyZS7CoCBTbyBjaGFuZ2luZyB0aGUKPiA+IGRlZmF1bHQK
+PiA+IGJlaGF2aW9yIHdvdWxkIHJlcXVpcmUgdGhlaXIgc2NyaXB0cyB0byBjaGFuZ2UsIGFuZCBh
+bHNvIG5vdyB0aGF0IEkKPiA+IGxvb2sgYXQgaXQsIHRoZSBleGFtcGxlIG91dHB1dCBpbiBEb2N1
+bWVudGF0aW9uLyBhcyB3ZWxsLgo+IAo+IEdvb2QgY2F0Y2ghIFllYWgsIHRoaXMgdHlwZSBvZiBj
+aGFuZ2Ugd2lsbCBuZWVkIHRvIHVwZGF0ZSB0aGUgZG9jcy4KPiBJIG1pc3NlZCB0aGF0Lgo+IAo+
+ID4gCj4gPiBIb3cgYWJvdXQgYWRkaW5nIGFuIG9wdGlvbiBsaWtlICdub2hpdGNvdW50JyBhbmQg
+aGF2aW5nIHRoYXQgcGF0Y2gKPiA+IGRvCj4gPiB3aGF0IGl0IGRvZXMgYnV0IG9ubHkgaWYgdGhh
+dCBvcHRpb24gaXMgc2V0Pwo+IAo+IEFncmVlZC4gU28gc29tZXRoaW5nIGxpa2UgdGhpcz8KPiAK
+PiBlY2hvIGhpc3Q6a2V5cz1waWQ6dmFscz1ydW50aW1lLmdyYXBoOm5vaGl0Y291bnQgKG9yIE5P
+SEMgZm9yIHNob3J0KQo+IAo+IE1heWJlIHdlIGNhbiBhbHNvIGFkZCBhbiBvcHRpb24gdW5kZXIg
+PHRyYWNlZnMvPm9wdGlvbnMvCgpZZWFoLCBtYWtlcyBzZW5zZSB0byBtZS4KClRoYW5rcywKClRv
+bQoKPiAKPiA+IAo+ID4gQW55d2F5LCBmb3IgdGhlIG90aGVyIG9uZXMsIHBhdGNoZXMgMi00LAo+
+ID4gCj4gPiDCoCBTaWduZWQtb2ZmLWJ5OiBUb20gWmFudXNzaSA8emFudXNzaUBrZXJuZWwub3Jn
+Pgo+ID4gwqAgVGVzdGVkLWJ5OiBUb20gWmFudXNzaSA8emFudXNzaUBrZXJuZWwub3JnCj4gCj4g
+VGhhbmsgeW91IQo+IAo+ID4gCj4gPiBUaGFua3MhCj4gPiAKPiA+IFRvbQo+ID4gCj4gPiA+IAo+
+ID4gPiBUaGlzIHdpbGwgaGVscCB1cyB0byBjaGVjayB0aGUgdHJlbmQgb2YgdGhlIGhpc3RvZ3Jh
+bSBpbnN0YW50bHkKPiA+ID4gd2l0aG91dCBhbnkgcG9zdCBwcm9jZXNzaW5nIHRvb2wuCj4gPiA+
+IAo+ID4gPiBIZXJlIHNob3dzIGFuIGV4YW1wbGUgb2YgdGhlIHBlcmNlbnRhZ2UgYW5kIHRoZSBi
+YXIgZ3JhcGggb2YKPiA+ID4gdGhlIGhpdGNvdW50IG9mIHRoZSBydW5uaW5nIHRhc2tzLgo+ID4g
+PiAKPiA+ID4gwqAgIyBjZCAvc3lzL2tlcm5lbC9kZWJ1Zy90cmFjaW5nLwo+ID4gPiDCoCAjIGVj
+aG8KPiA+ID4gaGlzdDprZXlzPXBpZDp2YWxzPWhpdGNvdW50LnBlcmNlbnQsaGl0Y291bnQuZ3Jh
+cGg6c29ydD1waWQKPiA+ID4gPiBcCj4gPiA+IMKgwqDCoMKgwqDCoMKgIGV2ZW50cy9zY2hlZC9z
+Y2hlZF9zdGF0X3J1bnRpbWUvdHJpZ2dlcgo+ID4gPiDCoCAjIHNsZWVwIDEwCj4gPiA+IMKgICMg
+Y2F0IGV2ZW50cy9zY2hlZC9zY2hlZF9zdGF0X3J1bnRpbWUvaGlzdAo+ID4gPiDCoCMgZXZlbnQg
+aGlzdG9ncmFtCj4gPiA+IMKgIwo+ID4gPiDCoCMgdHJpZ2dlciBpbmZvOgo+ID4gPiBoaXN0Omtl
+eXM9cGlkOnZhbHM9aGl0Y291bnQucGVyY2VudCxoaXRjb3VudC5ncmFwaDpzb3J0PXBpZDpzaXpl
+PQo+ID4gPiAyMDQ4Cj4gPiA+IFthY3RpdmVdCj4gPiA+IMKgIwo+ID4gPiAKPiA+ID4gwqB7IHBp
+ZDrCoMKgwqDCoMKgwqDCoMKgIDE0IH0gaGl0Y291bnQgKCUpOsKgwqAgNC42OMKgIGhpdGNvdW50
+Ogo+ID4gPiAjIyPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAKPiA+ID4gwqB7IHBp
+ZDrCoMKgwqDCoMKgwqDCoMKgIDE2IH0gaGl0Y291bnQgKCUpOsKgIDE3LjE4wqAgaGl0Y291bnQ6
+Cj4gPiA+ICMjIyMjIyMjIyMjwqDCoMKgwqDCoMKgwqDCoCAKPiA+ID4gwqB7IHBpZDrCoMKgwqDC
+oMKgwqDCoMKgIDU3IH0gaGl0Y291bnQgKCUpOsKgwqAgNy44McKgIGhpdGNvdW50Ogo+ID4gPiAj
+IyMjI8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgCj4gPiA+IMKgeyBwaWQ6wqDCoMKgwqDC
+oMKgwqDCoCA2MSB9IGhpdGNvdW50ICglKTrCoCAzMS4yNcKgIGhpdGNvdW50Ogo+ID4gPiAjIyMj
+IyMjIyMjIyMjIyMjIyMjIwo+ID4gPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgNzAgfSBoaXRj
+b3VudCAoJSk6wqDCoCA0LjY4wqAgaGl0Y291bnQ6Cj4gPiA+ICMjI8KgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIAo+ID4gPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgNzcgfSBoaXRj
+b3VudCAoJSk6wqDCoCAxLjU2wqAgaGl0Y291bnQ6Cj4gPiA+ICPCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgCj4gPiA+IMKgeyBwaWQ6wqDCoMKgwqDCoMKgwqAgMTQ1IH0gaGl0
+Y291bnQgKCUpOsKgIDE4Ljc1wqAgaGl0Y291bnQ6Cj4gPiA+ICMjIyMjIyMjIyMjI8KgwqDCoMKg
+wqDCoMKgIAo+ID4gPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgIDE1MSB9IGhpdGNvdW50ICglKTrC
+oMKgIDkuMzfCoCBoaXRjb3VudDoKPiA+ID4gIyMjIyMjwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgCj4gPiA+IMKgeyBwaWQ6wqDCoMKgwqDCoMKgwqAgMTUyIH0gaGl0Y291bnQgKCUpOsKgwqAg
+NC42OMKgIGhpdGNvdW50Ogo+ID4gPiAjIyPCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCAKPiA+ID4gCj4gPiA+IMKgVG90YWxzOgo+ID4gPiDCoMKgwqDCoCBIaXRzOiA2NAo+ID4gPiDC
+oMKgwqDCoCBFbnRyaWVzOiA5Cj4gPiA+IMKgwqDCoMKgIERyb3BwZWQ6IDAKPiA+ID4gCj4gPiA+
+IE9mIGNvdXJzZSBpZiB5b3UgZXhwbGljaXRseSBzcGVjaWZ5IHRoZSBoaXRjb3VudCwgaXQgY2Fu
+IHNob3cgdGhlCj4gPiA+IGhpdGNvdW50IGFzIGJlbG93Owo+ID4gPiAKPiA+ID4gwqAgIyBjZCAv
+c3lzL2tlcm5lbC9kZWJ1Zy90cmFjaW5nLwo+ID4gPiDCoCAjIGVjaG8gaGlzdDprZXlzPXBpZDp2
+YWxzPWhpdGNvdW50LHJ1bnRpbWU6c29ydD1waWQgPiBcCj4gPiA+IMKgwqDCoMKgwqDCoMKgIGV2
+ZW50cy9zY2hlZC9zY2hlZF9zdGF0X3J1bnRpbWUvdHJpZ2dlcgo+ID4gPiDCoCAjIHNsZWVwIDEw
+Cj4gPiA+IMKgICMgY2F0IGV2ZW50cy9zY2hlZC9zY2hlZF9zdGF0X3J1bnRpbWUvaGlzdAo+ID4g
+PiDCoCMgZXZlbnQgaGlzdG9ncmFtCj4gPiA+IMKgIwo+ID4gPiDCoCMgdHJpZ2dlciBpbmZvOgo+
+ID4gPiBoaXN0OmtleXM9cGlkOnZhbHM9aGl0Y291bnQscnVudGltZTpzb3J0PXBpZDpzaXplPTIw
+NDggW2FjdGl2ZV0KPiA+ID4gwqAjCj4gPiA+IAo+ID4gPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKg
+wqAgMTQgfSBoaXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgwqAgMsKgIHJ1bnRpbWU6wqDCoMKgwqAg
+MzA0ODc2Cj4gPiA+IMKgeyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCAxNiB9IGhpdGNvdW50OsKgwqDC
+oMKgwqDCoMKgwqDCoCA4wqAgcnVudGltZTrCoMKgwqDCoCAzMDA1NzQKPiA+ID4gwqB7IHBpZDrC
+oMKgwqDCoMKgwqDCoMKgIDI2IH0gaGl0Y291bnQ6wqDCoMKgwqDCoMKgwqDCoMKgIDLCoCBydW50
+aW1lOsKgwqDCoMKgwqAgMTU1NzgKPiA+ID4gwqB7IHBpZDrCoMKgwqDCoMKgwqDCoMKgIDMyIH0g
+aGl0Y291bnQ6wqDCoMKgwqDCoMKgwqDCoMKgIDLCoCBydW50aW1lOsKgwqDCoMKgIDIxOTE4Ngo+
+ID4gPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgNTcgfSBoaXRjb3VudDrCoMKgwqDCoMKgwqDC
+oMKgwqAgM8KgIHJ1bnRpbWU6wqDCoMKgwqAgNTA2MDAzCj4gPiA+IMKgeyBwaWQ6wqDCoMKgwqDC
+oMKgwqDCoCA2MSB9IGhpdGNvdW50OsKgwqDCoMKgwqDCoMKgwqAgMjDCoCBydW50aW1lOsKgwqDC
+oCAxNjgxNDczCj4gPiA+IMKgeyBwaWQ6wqDCoMKgwqDCoMKgwqDCoCA2OSB9IGhpdGNvdW50OsKg
+wqDCoMKgwqDCoMKgwqDCoCAzwqAgcnVudGltZTrCoMKgwqDCoCAyMDE3ODUKPiA+ID4gwqB7IHBp
+ZDrCoMKgwqDCoMKgwqDCoMKgIDcwIH0gaGl0Y291bnQ6wqDCoMKgwqDCoMKgwqDCoMKgIDTCoCBy
+dW50aW1lOsKgwqDCoMKgIDM2MDYwOAo+ID4gPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgwqAgNzcg
+fSBoaXRjb3VudDrCoMKgwqDCoMKgwqDCoMKgwqAgOMKgIHJ1bnRpbWU6wqDCoMKgIDQxNDY5MzUK
+PiA+ID4gwqB7IHBpZDrCoMKgwqDCoMKgwqDCoCAxNDUgfSBoaXRjb3VudDrCoMKgwqDCoMKgwqDC
+oMKgIDEzwqAgcnVudGltZTrCoMKgwqAgNzUzNzk5NAo+ID4gPiDCoHsgcGlkOsKgwqDCoMKgwqDC
+oMKgIDE1NSB9IGhpdGNvdW50OsKgwqDCoMKgwqDCoMKgwqDCoCA0wqAgcnVudGltZTrCoMKgwqAg
+MjUxMTkzNwo+ID4gPiDCoHsgcGlkOsKgwqDCoMKgwqDCoMKgIDE1NiB9IGhpdGNvdW50OsKgwqDC
+oMKgwqDCoMKgwqDCoCAywqAgcnVudGltZTrCoMKgwqAgMTM5ODg4Ngo+ID4gPiAKPiA+ID4gwqBU
+b3RhbHM6Cj4gPiA+IMKgwqDCoMKgIEhpdHM6IDcxCj4gPiA+IMKgwqDCoMKgIEVudHJpZXM6IDEy
+Cj4gPiA+IMKgwqDCoMKgIERyb3BwZWQ6IDAKPiA+ID4gCj4gPiA+IAo+ID4gPiBUaGFuayB5b3Us
+Cj4gPiA+IAo+ID4gPiAtLS0KPiA+ID4gCj4gPiA+IE1hc2FtaSBIaXJhbWF0c3UgKEdvb2dsZSkg
+KDQpOgo+ID4gPiDCoMKgwqDCoMKgIHRyYWNpbmc6IEZpeCB0byBjaGVjayBldmVudF9tdXRleCBp
+cyBoZWxkIHdoaWxlIGFjY2Vzc2luZwo+ID4gPiB0cmlnZ2VyIGxpc3QKPiA+ID4gwqDCoMKgwqDC
+oCB0cmFjaW5nOiBBZGQgLnBlcmNlbnQgc3VmZml4IG9wdGlvbiB0byBoaXN0b2dyYW0gdmFsdWVz
+Cj4gPiA+IMKgwqDCoMKgwqAgdHJhY2luZzogQWRkIC5ncmFwaCBzdWZmaXggb3B0aW9uIHRvIGhp
+c3RvZ3JhbSB2YWx1ZQo+ID4gPiDCoMKgwqDCoMKgIHRyYWNpbmc6IFNob3cgaGl0Y291bnQgdmFs
+dWUgb25seSB3aGVuIHNwZWNpZmllZAo+ID4gPiAKPiA+ID4gVG9tIFphbnVzc2kgKDEpOgo+ID4g
+PiDCoMKgwqDCoMKgIHRyYWNpbmc6IEFsbG93IG11bHRpcGxlIGhpdGNvdW50IHZhbHVlcyBpbiBo
+aXN0b2dyYW1zCj4gPiA+IAo+ID4gPiAKPiA+ID4gwqBrZXJuZWwvdHJhY2UvdHJhY2UuY8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB8wqDCoMKgIDMgLQo+ID4gPiDCoGtlcm5lbC90cmFj
+ZS90cmFjZV9ldmVudHNfaGlzdC5jwqDCoMKgIHzCoCAxNzYKPiA+ID4gKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrLS0tLS0KPiA+ID4gwqBrZXJuZWwvdHJhY2UvdHJhY2VfZXZlbnRzX3Ry
+aWdnZXIuYyB8wqDCoMKgIDMgLQo+ID4gPiDCoDMgZmlsZXMgY2hhbmdlZCwgMTU2IGluc2VydGlv
+bnMoKyksIDI2IGRlbGV0aW9ucygtKQo+ID4gPiAKPiA+ID4gLS0KPiA+ID4gTWFzYW1pIEhpcmFt
+YXRzdSAoR29vZ2xlKSA8bWhpcmFtYXRAa2VybmVsLm9yZz4KPiA+IAo+IAo+IAoK
 
-I like it - the sequence numbers are a stroke of genuius. For what it's doing
-the patchset seems almost small.
-
-Two complaints so far:
- - I don't like the vma_mark_locked() name. To me it says that the caller
-   already took or is taking the lock and this function is just marking that
-   we're holding the lock, but it's really taking a different type of lock. But
-   this function can block, it really is taking a lock, so it should say that.
-   
-   This is AFAIK a new concept, not sure I'm going to have anything good either,
-   but perhaps vma_lock_multiple()?
-
- - I don't like the #ifdef and the separate fallback path in the fault handlers.
-
-   Can we make find_and_lock_anon_vma() do the right thing, and not fail unless
-   e.g. there isn't a vma at that address? Just have it wait for vm_lock_seq to
-   change and then retry if needed.

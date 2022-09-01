@@ -2,146 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 848575A987F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F1245A98D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:29:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbiIANYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52220 "EHLO
+        id S234510AbiIANZT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:25:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232405AbiIANX1 (ORCPT
+        with ESMTP id S234316AbiIANYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:23:27 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4850C2ACE
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:23:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662038605; x=1693574605;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TkYap6N2nVl+fHdzmVAB+UZ9ohSv0PHB/25HC4xpAyo=;
-  b=JwDwlaOTAH0cfr5fndjxWp4oQsH5gvf3ERgRJUdLY19comGjpPJG1onH
-   zVwEIq9UMH6SX1RPNjgyhHx0b/lRYh/RJnrWp48cxRG/GNRjYXROAOZyb
-   c1zuhDkh5EvGGQPmzYKl2+Jq778cqFA24OHwI2Gtt+gBBoDCC0hsQ0asG
-   VdwLTfuDd2APGJ7tCrrOUdzqn7P0fP4HMzEdxfOATA8jyoDjAkf5YkqEd
-   Ke1UPZg0TFvsMLNbnvwQsAkyRyYgOcpfAU6T+Uh/TLhvHG8AdD6FLHjqX
-   mKjIrZVkSLD+CWS7nK7+Ntrr0cqjm0OP85IJk13lTFd6iuIeB4dxJdg/4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="295719710"
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="295719710"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 06:23:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="615333919"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Sep 2022 06:23:23 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 7A69B1C3; Thu,  1 Sep 2022 16:23:38 +0300 (EEST)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        linux-kernel@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: [PATCH v1 3/3] regmap: trace: Remove unneeded blank lines
-Date:   Thu,  1 Sep 2022 16:23:36 +0300
-Message-Id: <20220901132336.33234-3-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220901132336.33234-1-andriy.shevchenko@linux.intel.com>
-References: <20220901132336.33234-1-andriy.shevchenko@linux.intel.com>
+        Thu, 1 Sep 2022 09:24:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97EF12CE09
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662038651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=GtRrZhfcr+HBskb37rMCSyo0Md1DArbhaGxGxxH8GQE=;
+        b=AwqEiXvrgU+J0nq1kBrZUh9m7PSY92lrIastG66Cc6OscYa69UXSLhRj1mNs9LD1v19rjq
+        xAFOK08UUGpUy2QiN2ndvfNgyIeD7LO1Bctz4gbXUrU2K/71uGbgYPa1mJk+cme47gxEw/
+        h1IBQgGZYlfnxv62yqyuOwBkTJ9GVDE=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-479-VevDvbQJPBuqR9Pw8Omr5Q-1; Thu, 01 Sep 2022 09:24:10 -0400
+X-MC-Unique: VevDvbQJPBuqR9Pw8Omr5Q-1
+Received: by mail-qt1-f197.google.com with SMTP id o21-20020ac87c55000000b00344646ea2ccso13484749qtv.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:24:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:subject:cc:from:references:to
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=GtRrZhfcr+HBskb37rMCSyo0Md1DArbhaGxGxxH8GQE=;
+        b=ZncZpSYYFwxz+HKuq4VkhsPycQZ96MV/rrrh8WDqQGnrwup4nDnN8nPJqys3C9i723
+         23VN7HIjHDJ/+aESrVsi8IuIAx+52Tg/erc9O1HMtk7S51NcHeMbtDN70ky0cMl9DNY4
+         0DVDiIp0/mSICan62L+GVkgkSyfijBYEdn0U0M703NYHxR0U/3CJ5Nsq+g7x5bEVFbCd
+         DwcnG43+QjYAJY7/9NrXo8fgEsZ9Dyw7rVx2O0cOzZIA+xbGeeRrf8cpG56mpBTS5BXm
+         j2o9tsVb9W2SI2vq4zAVrZjscP5c2i2EAqubkVl24fHeOxbLtz9E9lbsy3fpg/QIuQ3p
+         +ezA==
+X-Gm-Message-State: ACgBeo3m/d1Rj3TLUNhj9eXrdzoFbLLnWkMJ8cRQ7peYDhcDTnt/6MKG
+        +TC3NSMT5Ikc6EO4hvNtUrWFY/WWtI4TNBhS+a2ejQYI5c4Y//UYvTJU4KD1zQACBprCskjZlCt
+        548b/7VU1k1zf1E3hfk8qvk45
+X-Received: by 2002:a05:6214:5091:b0:496:dad0:6361 with SMTP id kk17-20020a056214509100b00496dad06361mr23925858qvb.81.1662038650193;
+        Thu, 01 Sep 2022 06:24:10 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4qoveEwai/Y3kskQEd+SFMIH7fGAf1B2jYVOWFiPGDe4ghdoizdDD4y7znxlpDIOI8OXv/Dw==
+X-Received: by 2002:a05:6214:5091:b0:496:dad0:6361 with SMTP id kk17-20020a056214509100b00496dad06361mr23925835qvb.81.1662038649901;
+        Thu, 01 Sep 2022 06:24:09 -0700 (PDT)
+Received: from [192.168.1.9] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
+        by smtp.gmail.com with ESMTPSA id m27-20020a05620a13bb00b006bbf85cad0fsm11311431qki.20.2022.09.01.06.24.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 06:24:09 -0700 (PDT)
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+References: <20220901022706.813-1-thunder.leizhen@huawei.com>
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>, linux-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org
+Subject: Re: [PATCH] livepatch: Move error print out of lock protection in
+ klp_enable_patch()
+Message-ID: <65fe1978-60da-5bd4-9559-fddec13f03bf@redhat.com>
+Date:   Thu, 1 Sep 2022 09:24:07 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
+In-Reply-To: <20220901022706.813-1-thunder.leizhen@huawei.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a few unneeded blank lines in some of event definitions,
-remove them in order to make those definitions consistent with
-the rest.
+On 8/31/22 10:27 PM, Zhen Lei wrote:
+> The patch->mod is not a protected object of mutex_lock(&klp_mutex). Since
+> it's in the error handling branch, it might not be helpful to reduce lock
+> conflicts, but it can reduce some code size.
+> 
+> Before:
+>    text    data     bss     dec     hex filename
+>   10330     464       8   10802    2a32 kernel/livepatch/core.o
+> 
+> After:
+>    text    data     bss     dec     hex filename
+>   10307     464       8   10779    2a1b kernel/livepatch/core.o
+> 
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/base/regmap/trace.h | 8 --------
- 1 file changed, 8 deletions(-)
+Is a size change expected, or is it just compiler fall out from
+shuffling the code around a little bit?
 
-diff --git a/drivers/base/regmap/trace.h b/drivers/base/regmap/trace.h
-index a0f83e44a9d1..704e106e5dbd 100644
---- a/drivers/base/regmap/trace.h
-+++ b/drivers/base/regmap/trace.h
-@@ -41,7 +41,6 @@ DEFINE_EVENT(regmap_reg, regmap_reg_write,
- 		 unsigned int val),
- 
- 	TP_ARGS(map, reg, val)
--
- );
- 
- DEFINE_EVENT(regmap_reg, regmap_reg_read,
-@@ -50,7 +49,6 @@ DEFINE_EVENT(regmap_reg, regmap_reg_read,
- 		 unsigned int val),
- 
- 	TP_ARGS(map, reg, val)
--
- );
- 
- DEFINE_EVENT(regmap_reg, regmap_reg_read_cache,
-@@ -59,7 +57,6 @@ DEFINE_EVENT(regmap_reg, regmap_reg_read_cache,
- 		 unsigned int val),
- 
- 	TP_ARGS(map, reg, val)
--
- );
- 
- DECLARE_EVENT_CLASS(regmap_bulk,
-@@ -199,7 +196,6 @@ DEFINE_EVENT(regmap_bool, regmap_cache_only,
- 	TP_PROTO(struct regmap *map, bool flag),
- 
- 	TP_ARGS(map, flag)
--
- );
- 
- DEFINE_EVENT(regmap_bool, regmap_cache_bypass,
-@@ -207,7 +203,6 @@ DEFINE_EVENT(regmap_bool, regmap_cache_bypass,
- 	TP_PROTO(struct regmap *map, bool flag),
- 
- 	TP_ARGS(map, flag)
--
- );
- 
- DECLARE_EVENT_CLASS(regmap_async,
-@@ -239,7 +234,6 @@ DEFINE_EVENT(regmap_async, regmap_async_io_complete,
- 	TP_PROTO(struct regmap *map),
- 
- 	TP_ARGS(map)
--
- );
- 
- DEFINE_EVENT(regmap_async, regmap_async_complete_start,
-@@ -247,7 +241,6 @@ DEFINE_EVENT(regmap_async, regmap_async_complete_start,
- 	TP_PROTO(struct regmap *map),
- 
- 	TP_ARGS(map)
--
- );
- 
- DEFINE_EVENT(regmap_async, regmap_async_complete_done,
-@@ -255,7 +248,6 @@ DEFINE_EVENT(regmap_async, regmap_async_complete_done,
- 	TP_PROTO(struct regmap *map),
- 
- 	TP_ARGS(map)
--
- );
- 
- TRACE_EVENT(regcache_drop_region,
+I see some arches do a little better, some a little worse with gcc-9.3.0
+cross compilers:
+
+Before
+------
+   text    data     bss     dec     hex filename
+   8490     600       8    9098    238a arm64/kernel/livepatch/core.o
+   9424     680       8   10112    2780 s390/kernel/livepatch/core.o
+   9802     228       4   10034    2732 ppc32/kernel/livepatch/core.o
+  13746     456       8   14210    3782 ppc64le/kernel/livepatch/core.o
+  10443     464       8   10915    2aa3 x86_64/kernel/livepatch/core.o
+
+
+After
+-----
+   text    data     bss     dec     hex filename
+   8514     600       8    9122    23a2 arm64/kernel/livepatch/core.o
+   9424     680       8   10112    2780 s390/kernel/livepatch/core.o
+   9818     228       4   10050    2742 ppc32/kernel/livepatch/core.o
+  13762     456       8   14226    3792 ppc64le/kernel/livepatch/core.o
+  10446     464       8   10918    2aa6 x86_64/kernel/livepatch/core.o
+
+In which case, I'd just omit the size savings from the commit msg.
+
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
+>  kernel/livepatch/core.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+> index 42f7e716d56bf72..cb7abc821a50584 100644
+> --- a/kernel/livepatch/core.c
+> +++ b/kernel/livepatch/core.c
+> @@ -1041,9 +1041,9 @@ int klp_enable_patch(struct klp_patch *patch)
+>  	mutex_lock(&klp_mutex);
+>  
+>  	if (!klp_is_patch_compatible(patch)) {
+> +		mutex_unlock(&klp_mutex);
+>  		pr_err("Livepatch patch (%s) is not compatible with the already installed livepatches.\n",
+>  			patch->mod->name);
+> -		mutex_unlock(&klp_mutex);
+>  		return -EINVAL;
+>  	}
+>  
+> 
+
+That said, I don't see anything obviously wrong about the change (we
+don't need to sync our error msgs, right?) so:
+
+Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
+
 -- 
-2.35.1
+Joe
 

@@ -2,98 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E9535A9A52
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:30:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D0915A9A57
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234759AbiIAO37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 10:29:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
+        id S234773AbiIAOay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 10:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234743AbiIAO3y (ORCPT
+        with ESMTP id S234451AbiIAOas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 10:29:54 -0400
-Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F55DB05;
-        Thu,  1 Sep 2022 07:29:46 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 10:29:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662042584;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=M1aDaZlKYEwz8CxoGUE2hJszPL7mnQtqrJRQw3RcAgQ=;
-        b=IK9QhIOZDhvhIHgjJAvozZeyNVUxpRDuv2a80UYwf9PmUNDsSXvx244cHMitGbjR3T3iGp
-        7sTtqClKi3PdI+46+oiLp/x5eTOLPULJGYd7PsGYsaj8KjDdrdJudl3cyWqngQc55MFiX/
-        TzPtdYtHcCsYBcEyFw2g+cdlpMBvH8I=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Mel Gorman <mgorman@suse.de>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
-        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <20220901142937.vsnq62e6gqytyth2@moria.home.lan>
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de>
- <YxBYgcyP7IvMLJwq@hirez.programming.kicks-ass.net>
+        Thu, 1 Sep 2022 10:30:48 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBF95D0C8;
+        Thu,  1 Sep 2022 07:30:45 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 281EUcQf018430;
+        Thu, 1 Sep 2022 09:30:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1662042638;
+        bh=KYdHbEnyxMM66nrg4RaqhIx0Xvm/moQdRY3+IxpilL4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=k/j9DvkhowjIl8KLU3muWV+eJyrReSa+Q+ewIK51HupXVD2uSeKdI8ea9Oa9Xcv6M
+         e8HsvB+Q2K4kNnqRVu0SWpYeAS2VarlWKl+LnFpyUqkYlhWedVt1IMLaMJytW7ymDs
+         0QfF5JpRWx9IlaLty7dDhHAQktPL6maXQuulb36o=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 281EUcfq031708
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 1 Sep 2022 09:30:38 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 1 Sep
+ 2022 09:30:38 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 1 Sep 2022 09:30:38 -0500
+Received: from [172.24.145.182] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 281EUZVe119406;
+        Thu, 1 Sep 2022 09:30:36 -0500
+Message-ID: <08364d72-891f-4e21-25ac-2e77f1873374@ti.com>
+Date:   Thu, 1 Sep 2022 20:00:35 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxBYgcyP7IvMLJwq@hirez.programming.kicks-ass.net>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 2/2] arm64: dts: ti: k3-am64-main: fix RNG node clock id
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <f29e2c65dc7310a926af8a676651592afac04b03.1659981162.git.danielrparks@ti.com>
+ <7961aebd737de637fa98bc6a8478380be8449b46.1659981162.git.danielrparks@ti.com>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <7961aebd737de637fa98bc6a8478380be8449b46.1659981162.git.danielrparks@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 09:00:17AM +0200, Peter Zijlstra wrote:
-> On Wed, Aug 31, 2022 at 11:19:48AM +0100, Mel Gorman wrote:
-> 
-> > It's also unclear *who* would enable this. It looks like it would mostly
-> > have value during the development stage of an embedded platform to track
-> > kernel memory usage on a per-application basis in an environment where it
-> > may be difficult to setup tracing and tracking. Would it ever be enabled
-> > in production? 
-> 
-> Afaict this is developer only; it is all unconditional code.
-> 
-> > Would a distribution ever enable this? 
-> 
-> I would sincerely hope not. Because:
-> 
-> > If it's enabled, any overhead cannot be disabled/enabled at run or
-> > boot time so anyone enabling this would carry the cost without never
-> > necessarily consuming the data.
-> 
-> this.
 
-We could make it a boot parameter, with the alternatives infrastructure - with a
-bit of refactoring there'd be a single function call to nop out, and then we
-could also drop the elf sections as well, so that when built in but disabled the
-overhead would be practically nil.
+
+On 09/08/22 00:02, Daniel Parks wrote:
+> The RNG node for this platform claims pka_in_clk. Change it to claim the
+> correct clock x1_clk. [1]
+> 
+> This patch depends on "[PATCH v2 0/2] Enable SA2UL support on AM64X" [2]
+> 
+> [1]: https://downloads.ti.com/tisci/esd/latest/5_soc_doc/am64x/clocks.html#clocks-for-sa2-ul0-device
+> [2]: https://lore.kernel.org/linux-arm-kernel/20220711085743.10128-1-j-choudhary@ti.com/
+
+I folded below patch into [2] when applying.
+
+> 
+> Signed-off-by: Daniel Parks <danielrparks@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
+> index 293b6b8e8fb2..aa3b43c515d2 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
+> @@ -1324,7 +1324,7 @@
+>  			compatible = "inside-secure,safexcel-eip76";
+>  			reg = <0x00 0x40910000 0x00 0x7d>;
+>  			interrupts = <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>;
+> -			clocks = <&k3_clks 133 0>;
+> +			clocks = <&k3_clks 133 1>;
+>  			status = "disabled"; /* Used by OP-TEE */
+>  		};
+>  	};
+
+-- 
+Regards
+Vignesh

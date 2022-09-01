@@ -2,182 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3715A8A14
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BF75A8A18
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiIAAzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 20:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
+        id S229813AbiIAA4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 20:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbiIAAzT (ORCPT
+        with ESMTP id S229713AbiIAA4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 20:55:19 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFC82124B;
-        Wed, 31 Aug 2022 17:55:16 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MJ2dZ3stgz4x2c;
-        Thu,  1 Sep 2022 10:55:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1661993714;
-        bh=lOso3jPWVpnln6y1wBI3LkdpK6yTA2MDzgGIYggkxPo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=mQV98eckJWqvPTFSooGrxQzy3oyHElfSdQStgwxB9/RW+cdCEm9CK1SAxC4Ui2gRY
-         fwKPgvWl6HgxbD1lb9nutnCJZZlt0GNniRiMXm8Sgq67pYciNVJYB7BKTnJCI+sFGp
-         C7iL/KQVoAMz85l3AjebHrLdsFB+BJ1kJm6Njs/9znV2I6cXbDevV/q4pXUdgDKSEX
-         En9ToziohAD6p2mIRKr8thKWmBr6LPmvhQHNhsw+awGbNTH5/gLUhXD+wGq06ZDJ8x
-         TQUxeeop6y1cG8AIX15d5r3cBLliQkqrJzqHc9QrEQdke5JpS1PW5lScRG732PCJXH
-         YJOsXMzbMAqDA==
-Date:   Thu, 1 Sep 2022 10:55:12 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>,
-        Networking <netdev@vger.kernel.org>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joanne Koong <joannelkoong@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20220901105512.177ed27d@canb.auug.org.au>
+        Wed, 31 Aug 2022 20:56:04 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9291F7EFD6;
+        Wed, 31 Aug 2022 17:56:02 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d12so15658629plr.6;
+        Wed, 31 Aug 2022 17:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=yMzz1umAxMQ2stZ48UvACqRJNFBhww/PsqlmKyKiAZ4=;
+        b=HunG3LjnCcWHMsupfD5Lgaeb1mZoWbGg9t8p+a0IsNln0hO0dugF7yYMikQmZXTm6A
+         8geokvxSR2ZPEt9CHEoxB5p1d5OhNdVN1zL47+/l6jaIB/A6zSXI2AX4QH3yQMMnzJ9f
+         INRg9WHwg0/0IeIqvlmIfPu05F2eLVstuw6aoeni+PcTdcjJfNauoWCNqUwoxvDk/lgt
+         K2UjCSihqaX0qNP8x87Xx7gL95a/R9zIDNaRAKzdEyPOUk1pYAH0mfzUuH6EuNe3sqn7
+         /jyawY6SMJmb8pU0ElS5TnkSr6EalbDx37oL47j8IhbtRr0K3nVtEV3yJI8ectrjNIg+
+         hkhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=yMzz1umAxMQ2stZ48UvACqRJNFBhww/PsqlmKyKiAZ4=;
+        b=hWi9MVqWU+lltU/tsw//VzbaGi4koutCKkfFkwzxRyiwKJP73B1Nn8talWp4vGswyy
+         c67Cgy1IgTTELzo9xUJF+dGNkg6U77z8DfwKRSk7u1zp3SFrrr+UGYeqgYpPSn/gGFMw
+         UicaYRy2qE0kNo//DRWyz10ndITtm3uEba2lDq15m6ETpue2OxLuawC5+hLDITnUX379
+         aZkxrk3M+/sVhcmkoin3ona2aS1lBsTtZseJYuLbl447Dss4sXLTX7x9obIr8Aafbb0o
+         Pu8wwU3nu0JvogxynDmt9VmW9V06W9Vru9NupqvaaTI48duO0H3Mx4Oj1+2+tX4I7i8g
+         HzhA==
+X-Gm-Message-State: ACgBeo2FA3lKkH6zde6c2sIhQm5z9Ns58EO/tmg7dBRId2Ooa3gvbXLe
+        Cw+sNGVcprJYt7qOFZENatc=
+X-Google-Smtp-Source: AA6agR5sUewNkFuKs0kGGACrcDiZRim1JmGeHJnQTRBqTrGHDkNhZG97U9X3X7YgamirQWMbGDW3Aw==
+X-Received: by 2002:a17:90a:bd02:b0:1fd:d9b5:c6ce with SMTP id y2-20020a17090abd0200b001fdd9b5c6cemr5780349pjr.219.1661993762121;
+        Wed, 31 Aug 2022 17:56:02 -0700 (PDT)
+Received: from carlis-virtual-machine.localdomain ([156.236.96.164])
+        by smtp.gmail.com with ESMTPSA id 198-20020a6216cf000000b0052b84ca900csm11939019pfw.62.2022.08.31.17.55.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 17:56:01 -0700 (PDT)
+From:   Xuezhi Zhang <zhangxuezhi3@gmail.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com, bvanassche@acm.org,
+        johannes.thumshirn@wdc.com, himanshu.madhani@oracle.com,
+        zhangxuezhi1@coolpad.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        zhangxuezhi3@gmail.com
+Subject: [PATCH v2] scsi: csiostor: convert sysfs snprintf to sysfs_emit
+Date:   Thu,  1 Sep 2022 08:55:54 +0800
+Message-Id: <20220901005554.417043-1-zhangxuezhi3@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/qwdtSox3rF/po_GVulbNPzX";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/qwdtSox3rF/po_GVulbNPzX
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
 
-Hi all,
+Fix up all sysfs show entries to use sysfs_emit
 
-Today's linux-next merge of the net-next tree got a conflict in:
+Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
+---
+v2: delete 'else' and extra space.
+---
+ arch/arm64/configs/defconfig      |  2 ++
+ drivers/scsi/csiostor/csio_scsi.c | 10 +++++-----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-  tools/testing/selftests/net/.gitignore
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index 91e58cf59c99..6a0af8a5a8b2 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1328,3 +1328,5 @@ CONFIG_DEBUG_FS=y
+ # CONFIG_DEBUG_PREEMPT is not set
+ # CONFIG_FTRACE is not set
+ CONFIG_MEMTEST=y
++CONFIG_SCSI_CHELSIO_FCOE=y
++CONFIG_MEGARAID_MAILBOX=y
+diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
+index 9aafe0002ab1..05e1a63e00c3 100644
+--- a/drivers/scsi/csiostor/csio_scsi.c
++++ b/drivers/scsi/csiostor/csio_scsi.c
+@@ -1366,9 +1366,9 @@ csio_show_hw_state(struct device *dev,
+ 	struct csio_hw *hw = csio_lnode_to_hw(ln);
+ 
+ 	if (csio_is_hw_ready(hw))
+-		return snprintf(buf, PAGE_SIZE, "ready\n");
+-	else
+-		return snprintf(buf, PAGE_SIZE, "not ready\n");
++		return sysfs_emit(buf, "ready\n");
++
++	return sysfs_emit(buf, "not ready\n");
+ }
+ 
+ /* Device reset */
+@@ -1430,7 +1430,7 @@ csio_show_dbg_level(struct device *dev,
+ {
+ 	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
+ 
+-	return snprintf(buf, PAGE_SIZE, "%x\n", ln->params.log_level);
++	return sysfs_emit(buf, "%x\n", ln->params.log_level);
+ }
+ 
+ /* Store debug level */
+@@ -1476,7 +1476,7 @@ csio_show_num_reg_rnodes(struct device *dev,
+ {
+ 	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
+ 
+-	return snprintf(buf, PAGE_SIZE, "%d\n", ln->num_reg_rnodes);
++	return sysfs_emit(buf, "%d\n", ln->num_reg_rnodes);
+ }
+ 
+ static DEVICE_ATTR(num_reg_rnodes, S_IRUGO, csio_show_num_reg_rnodes, NULL);
+-- 
+2.25.1
 
-between commit:
-
-  5a3a59981027 ("selftests: net: sort .gitignore file")
-
-from the net tree and commits:
-
-  c35ecb95c448 ("selftests/net: Add test for timing a bind request to a por=
-t with a populated bhash entry")
-  1be9ac87a75a ("selftests/net: Add sk_bind_sendto_listen and sk_connect_ze=
-ro_addr")
-
-from the net-next tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc tools/testing/selftests/net/.gitignore
-index de7d5cc15f85,bec5cf96984c..000000000000
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@@ -1,15 -1,7 +1,16 @@@
-  # SPDX-License-Identifier: GPL-2.0-only
-++bind_bhash
- +cmsg_sender
- +fin_ack_lat
- +gro
- +hwtstamp_config
- +ioam6_parser
- +ip_defrag
-  ipsec
- +ipv6_flowlabel
- +ipv6_flowlabel_mgr
-  msg_zerocopy
- -socket
- +nettest
-  psock_fanout
-  psock_snd
-  psock_tpacket
-@@@ -20,23 -11,35 +21,25 @@@ reuseport_bp
-  reuseport_bpf_cpu
-  reuseport_bpf_numa
-  reuseport_dualstack
- -reuseaddr_conflict
- -tcp_mmap
- -udpgso
- -udpgso_bench_rx
- -udpgso_bench_tx
- -tcp_inq
- -tls
- -txring_overwrite
- -ip_defrag
- -ipv6_flowlabel
- -ipv6_flowlabel_mgr
- -so_txtime
- -tcp_fastopen_backup_key
- -nettest
- -fin_ack_lat
- -reuseaddr_ports_exhausted
- -hwtstamp_config
-  rxtimestamp
-- socket
- -timestamping
- -txtimestamp
-++sk_bind_sendto_listen
-++sk_connect_zero_addr
-  so_netns_cookie
- +so_txtime
-++socket
- +stress_reuseport_listen
- +tap
- +tcp_fastopen_backup_key
- +tcp_inq
- +tcp_mmap
-  test_unix_oob
- -gro
- -ioam6_parser
- +timestamping
- +tls
-  toeplitz
-  tun
- -cmsg_sender
- +txring_overwrite
- +txtimestamp
- +udpgso
- +udpgso_bench_rx
- +udpgso_bench_tx
-  unix_connect
- -tap
- -bind_bhash
- -sk_bind_sendto_listen
- -sk_connect_zero_addr
-
---Sig_/qwdtSox3rF/po_GVulbNPzX
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMQAvAACgkQAVBC80lX
-0GyYCgf/TaoHbLkMm37PGBGviO4EeqEyfN5OLvZ4LB7tC/CE62ENE2zjCaJtq3lD
-bCo8IBVnqTyJrQ7hw6UoxlOAq+u3RD8fXqQfn+2IWMtkjC8T0RlKCrBIiVnRNiqI
-00zwY7EBNx5DuXcP9D+YVM1E9HjA5DcOCtZ6f2gA3rG3amEWSdGl6SCPVTsCY4p1
-Tj3X51FkGPJNh98HBrlX189OZiR0yhQ7+LhWCHCCvfQ6NwvPro2UvCklxHqdDfT0
-p7i+7W/gLitYP0dr7FaQ3XOIbnX318awQDgXrJPTqpNZM8vIUevIPERFoE3Q3J8d
-/orBjhuDdS4oT+PxD9ZortXMQ/SG1g==
-=Jc1Y
------END PGP SIGNATURE-----
-
---Sig_/qwdtSox3rF/po_GVulbNPzX--

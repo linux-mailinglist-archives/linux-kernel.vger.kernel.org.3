@@ -2,52 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F1BC5A9BE9
+	by mail.lfdr.de (Postfix) with ESMTP id D86C45A9BEA
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234500AbiIAPlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
+        id S233480AbiIAPle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234186AbiIAPlD (ORCPT
+        with ESMTP id S233604AbiIAPlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:41:03 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B67A3E760;
-        Thu,  1 Sep 2022 08:41:02 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id se27so27807718ejb.8;
-        Thu, 01 Sep 2022 08:41:02 -0700 (PDT)
+        Thu, 1 Sep 2022 11:41:24 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466926C116;
+        Thu,  1 Sep 2022 08:41:22 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id r4so23098226edi.8;
+        Thu, 01 Sep 2022 08:41:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=UdAxssIJlstCZGaS8Jok9Kgh/CUKOzKmjtPHBIyHVi4=;
-        b=LaVUqW7/5aaJGtTFd8WDfW48b8Qa3G6lf0BGE9xuAuERoiEANky9qxVZm7B7nbg/PB
-         pvHYeUVIf0jAmSkWvMlXKCx/JgRcynWB9tmgqIgDWhp9nvlpOrKRn7vR8HqfYpEY543m
-         LniA9a7v3HwM4P3OeHI1QwJy3f/ODBs7Qq/AE6ssGZ4pMgbGisGYbDDqw3IqLx4e1FS5
-         tt9BemVlDg0NDtR8ws4vb9Y78mGlVzOzG7SIyJFkFqhfAJjSN+7pSdC1t4WfXhEipnKE
-         jmzd0N1eXK3N9tKytuxq7V5czetDpxZlzBnOc1p3bx0hfHG8/J3CTPDN8kCVaoRXNRBx
-         vYTw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=JxxplVChk1fR4jdUMTZHm2J51GYz2+D62Sgb2oOFN0I=;
+        b=EJpmZxcV/H0wdtJOHcmfSa0JYUz8JFHgBxllCr4dkL9P+Z2xJCFsfuhgZwVKf3zGyU
+         xdtDMW3KiC9F5TnnHgd8bzmfq18rJrvP+DBCUnOPgUUrRgvM7o5hL9NKVtbjVZtH04gS
+         4kLMe29soL72dRGtpf+YWQUdWMgV4PEu6NXj5QKsvRKrluV+Z+uzpQR3Vy4UAnNjpM9n
+         6aTrkGVJSh4nQDWkO6twoswkD1SrcHdwp+ZiR5jR43kWQJgpYwxELNRjVhJ80NcATCQZ
+         8XGVDbMBYDEmWzNS251D6PL1rip5YGjs7DVBaI6ZrmUeKhns8Z8CrY3M7koY58Az6EH0
+         DkLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=UdAxssIJlstCZGaS8Jok9Kgh/CUKOzKmjtPHBIyHVi4=;
-        b=1OS5UGb/HCEIscM2yQJIR23X5H9/IkCTtm/oS2n4p6X38XNFurAc9O15IIFAA3C8hQ
-         5y8qnxzQ3bxV0b9w4/AgGfVUrhM3eyJ70ZP55222b1qGHHWAbbFZBoRmqEo2AtCMK4DX
-         Xa7yVnsM0l6vdt3HcNElnGn87JzJ/1+CZ6tl9TZg147EjthUmS5JVMa28vomsUA1yWUU
-         MoiYQ5/2yqpqSvfUCPGQLxD/4ot91jSaxD62D435zSB3j3PGnyS+pJas0xCvwppOCS+2
-         YGwfEIhn6JOOPCs3Rp01xU7fodIPrJ9FlTYloZHs+O8EB285QgmOAzQ5jk3gY8PEOECb
-         u6hA==
-X-Gm-Message-State: ACgBeo0a3XZ1GAj+LRkyABSF5DgXw6D+mtwogY2JWmoux9zEup6xohH8
-        0uXheqloLHhjEkopN1u2oSo=
-X-Google-Smtp-Source: AA6agR6iDpQf1r7dRyqoRN8uoo+/0JfYGnx+uIepyVxknKh4bMh1Ff/C5w/BfILcoRJIi1boOhDMKA==
-X-Received: by 2002:a17:906:9b89:b0:73d:6a55:c489 with SMTP id dd9-20020a1709069b8900b0073d6a55c489mr24666187ejc.406.1662046861059;
-        Thu, 01 Sep 2022 08:41:01 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=JxxplVChk1fR4jdUMTZHm2J51GYz2+D62Sgb2oOFN0I=;
+        b=gje4n8Gdjzn/iGXmLxqsb5Rss9DtJmdPZbsyRElbuQiIXBA49hR31Qu+REyHpw2Ddu
+         CaKjSyDstJWifxxUiudvw9nT7uYyr9DTMnFLTIRe86bc3Z6s34b7kLBFLn3EMFnvF5YR
+         /gSB7lINZ1n9qJjmBhEFlhDW/o7s/oXM8U/asDsOmhNIKlNcgPJHtI/V7b7GBcwINpuW
+         POrYfY6y1bqLb3ssAW1uKHBFBPjr7w35Oxh+CrEzgGVCU0Sg4vFycDzU3y1mIeab0Enm
+         xl50OSJHghix0vnerkUF0zfR/+dRZjgIUChNmlkrz7PIIF8E74yvh2SKIKCMeRowViGu
+         UE7g==
+X-Gm-Message-State: ACgBeo3ezcaP8TX88JCfwj0XkQmV23PlMe9dWesTFg/UvMkmcblbIgFU
+        MM7TZszWG4UOsPUSkvGPwYQ=
+X-Google-Smtp-Source: AA6agR5Y7RlBE4VSvJQJlhfWWkThmcA/jGMUGDj69duBgecT3jkrk873qDBX7ZNFh/J0rbUal4Zm6A==
+X-Received: by 2002:aa7:cdcc:0:b0:447:bac0:4c20 with SMTP id h12-20020aa7cdcc000000b00447bac04c20mr28510923edw.183.1662046880512;
+        Thu, 01 Sep 2022 08:41:20 -0700 (PDT)
 Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
-        by smtp.gmail.com with ESMTPSA id c25-20020a056402159900b00447b1772a26sm1543103edv.12.2022.09.01.08.41.00
+        by smtp.gmail.com with ESMTPSA id c25-20020a056402159900b00447b1772a26sm1543103edv.12.2022.09.01.08.41.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 08:41:00 -0700 (PDT)
+        Thu, 01 Sep 2022 08:41:20 -0700 (PDT)
 From:   Max Krummenacher <max.oss.09@gmail.com>
 To:     Max Krummenacher <max.krummenacher@toradex.com>
 Cc:     Fabio Estevam <festevam@gmail.com>,
@@ -61,10 +62,12 @@ Cc:     Fabio Estevam <festevam@gmail.com>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] arm64: dts: imx8mp-verdin: add dsi to hdmi functionality
-Date:   Thu,  1 Sep 2022 17:40:50 +0200
-Message-Id: <20220901154051.1885509-1-max.oss.09@gmail.com>
+Subject: [PATCH 2/2] arm64: dts: imx8mp-verdin: add dsi to lvds functionality
+Date:   Thu,  1 Sep 2022 17:40:51 +0200
+Message-Id: <20220901154051.1885509-2-max.oss.09@gmail.com>
 X-Mailer: git-send-email 2.35.3
+In-Reply-To: <20220901154051.1885509-1-max.oss.09@gmail.com>
+References: <20220901154051.1885509-1-max.oss.09@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,36 +82,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Add the hdmi connector present on the dsi to hdmi adapter now
-required by the upstream lontium bridge driver.
-The dsi to hdmi adapter is enabled in an device tree overlay.
+Add a panel-lvds node and use the correct dsi to lvds chip name.
+Both to be later extended in a dt overlay according to the exact
+board HW configuration.
 
 Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-
 ---
 
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-index 76cc89296150..bd84a0d135dc 100644
+index bd84a0d135dc..a3e20c7add3e 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-@@ -59,6 +59,14 @@ button-wakeup {
- 		};
+@@ -67,6 +67,13 @@ hdmi_connector: hdmi-connector {
+ 		status = "disabled";
  	};
  
-+	hdmi_connector: hdmi-connector {
-+		compatible = "hdmi-connector";
-+		ddc-i2c-bus = <&i2c2>;
-+		label = "hdmi";
-+		type = "a";
++	panel_lvds: panel-lvds {
++		compatible = "panel-lvds";
++		backlight = <&backlight>;
++		data-mapping = "vesa-24";
 +		status = "disabled";
 +	};
 +
  	/* Carrier Board Supplies */
  	reg_1p8v: regulator-1p8v {
  		compatible = "regulator-fixed";
+@@ -690,8 +697,8 @@ gpio_expander_21: gpio-expander@21 {
+ 		status = "disabled";
+ 	};
+ 
+-	lvds_ti_sn65dsi83: bridge@2c {
+-		compatible = "ti,sn65dsi83";
++	lvds_ti_sn65dsi84: bridge@2c {
++		compatible = "ti,sn65dsi84";
+ 		/* Verdin GPIO_9_DSI (SN65DSI84 IRQ, SODIMM 17, unused) */
+ 		/* Verdin GPIO_10_DSI (SODIMM 21) */
+ 		enable-gpios = <&gpio4 28 GPIO_ACTIVE_HIGH>;
 -- 
 2.35.3
 

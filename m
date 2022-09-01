@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1A25A9631
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:02:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4186E5A962F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:02:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbiIAMCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53580 "EHLO
+        id S233285AbiIAMCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:02:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233033AbiIAMBI (ORCPT
+        with ESMTP id S232229AbiIAMBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Sep 2022 08:01:08 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA17666A66
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9E0E66A4A
         for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:01:07 -0700 (PDT)
-Received: from canpemm500002.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MJKKd12W2z1N7f0;
-        Thu,  1 Sep 2022 19:57:25 +0800 (CST)
+Received: from canpemm500002.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MJKM22D0KznTw3;
+        Thu,  1 Sep 2022 19:58:38 +0800 (CST)
 Received: from huawei.com (10.175.124.27) by canpemm500002.china.huawei.com
  (7.192.104.244) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 1 Sep
@@ -27,9 +27,9 @@ To:     <akpm@linux-foundation.org>, <mike.kravetz@oracle.com>,
         <songmuchun@bytedance.com>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <linmiaohe@huawei.com>
-Subject: [PATCH v2 09/10] hugetlb: remove meaningless BUG_ON(huge_pte_none())
-Date:   Thu, 1 Sep 2022 20:00:29 +0800
-Message-ID: <20220901120030.63318-10-linmiaohe@huawei.com>
+Subject: [PATCH v2 10/10] hugetlb: make hugetlb depends on SYSFS  or SYSCTL
+Date:   Thu, 1 Sep 2022 20:00:30 +0800
+Message-ID: <20220901120030.63318-11-linmiaohe@huawei.com>
 X-Mailer: git-send-email 2.23.0
 In-Reply-To: <20220901120030.63318-1-linmiaohe@huawei.com>
 References: <20220901120030.63318-1-linmiaohe@huawei.com>
@@ -49,27 +49,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When code reaches here, invalid page would have been accessed if huge pte
-is none. So this BUG_ON(huge_pte_none()) is meaningless. Remove it.
+If CONFIG_SYSFS and CONFIG_SYSCTL are both undefined, hugetlb doesn't work
+now as there's no way to set max huge pages. Make sure at least one of the
+above configs is defined to make hugetlb works as expected.
 
 Signed-off-by: Miaohe Lin <linmiaohe@huawei.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 ---
- mm/hugetlb.c | 1 -
- 1 file changed, 1 deletion(-)
+ fs/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 2ba45addcdeb..9178ab521c74 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -5379,7 +5379,6 @@ static vm_fault_t hugetlb_wp(struct mm_struct *mm, struct vm_area_struct *vma,
- 			u32 hash;
- 
- 			put_page(old_page);
--			BUG_ON(huge_pte_none(pte));
- 			/*
- 			 * Drop hugetlb_fault_mutex and vma_lock before
- 			 * unmapping.  unmapping needs to hold vma_lock
+diff --git a/fs/Kconfig b/fs/Kconfig
+index a547307c1ae8..2685a4d0d353 100644
+--- a/fs/Kconfig
++++ b/fs/Kconfig
+@@ -235,6 +235,7 @@ config ARCH_SUPPORTS_HUGETLBFS
+ config HUGETLBFS
+ 	bool "HugeTLB file system support"
+ 	depends on X86 || IA64 || SPARC64 || ARCH_SUPPORTS_HUGETLBFS || BROKEN
++	depends on (SYSFS || SYSCTL)
+ 	help
+ 	  hugetlbfs is a filesystem backing for HugeTLB pages, based on
+ 	  ramfs. For architectures that support it, say Y here and read
 -- 
 2.23.0
 

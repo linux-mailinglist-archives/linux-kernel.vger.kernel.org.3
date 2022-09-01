@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 763C15A9E32
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:38:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 905FC5A9E2F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235090AbiIARhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51680 "EHLO
+        id S234729AbiIARh4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:37:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234775AbiIARgU (ORCPT
+        with ESMTP id S234684AbiIARgV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:36:20 -0400
+        Thu, 1 Sep 2022 13:36:21 -0400
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2F394ED5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:36:09 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-33dc390f26cso233048367b3.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:36:09 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94EF64D251
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:36:12 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-335420c7bfeso234911327b3.16
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:36:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date;
-        bh=CCIJQkAZ/MO9EmT200FCEP3Pgl0ISbihE0u87lNvTtM=;
-        b=TDQRkBpQdXfWEYFjLGi7wwliNZ+aP0KfPsImVIZlXY8UjoGX+0qAFXnFV7XGW8IS6l
-         y3VXrf+I2v9M7dPJOYegMdSPcyR+aiyAikKkPyRgRG+NjsroPpw9/4EU6cvNjVuOFM2u
-         OAT4KFsNKXknM9gpAanaNp2m/7ee5CO2zFw2akG6RhT79MTZBIfrWOjgSBLIXLwhTrek
-         2rRbzNpBpA/qCfbKpI1w2r4GCLJvz7pk5sgu4I7rxGww2tvEjHalildILdcL14mqDmo6
-         PZNZoe3Kcvw46z9n2HY12LGtvHVlCAmPyMAI6EOC1YQSkgyXm1pQjGEvvxRKe2fezN+L
-         aw6Q==
+        bh=OeaHSvnl3LkKr4l31U2Volg5xaVk+RMFLZSi6dgjePI=;
+        b=YWMUacgHyaw45xClfelut3B8D4opaNKe1Jn1EvQGqzRnq9IAzY1SbxxDOw3yyYq+BA
+         clLIFH+vCJyTvZqkcuk+nPAAVvk+cIcjjJaBgcqIDZI820XVBHBVS4HV09O0+jx02gz/
+         GF82/kOz5NOA2SL5LGwa69qRF4uUvf5PcNaP24Dp6cprq2xiDwA1y9+n/C6LME/0C0u+
+         LXVRqnwXAQFfakRcmYHnZMbYxKQr/xy2mJHdmdiugDAKPQMxfZlI1xF8c8WSAaPgs+Sf
+         8cODiZAHBJrDioo32O0YL9A9GYzXrzP7oLTKiCYFarAedegbhpTrR5084qGw0ahgqNnD
+         Ah8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date;
-        bh=CCIJQkAZ/MO9EmT200FCEP3Pgl0ISbihE0u87lNvTtM=;
-        b=GmVTpz2vZl4YMJC+pHkOA36S0GwrGU0UnVwNzcHQgilLJjRm30ZHKaTlk2gWpnEuIu
-         8FtfebCa4aa0PwV88M/h71zK3DhHHj6W6nrkmgDZyjZoybNf2F4kRRZMDsIxgF3prax9
-         9NtPIoqT2TiBEaJfbAD0zQ0c/V1CY+QKexCmuBh7ZS0DE+I7LDxjGKvT9OhhTTtZbeOg
-         CXbGtsSFo7THQ8tkKATgYzpAoXp1GAgkZc984kQs+EwwD5/Va3bNe1PqIVYYQv86ayf0
-         7HXDVLY9aqx6ej259Gso1tEd6XVvBQetVLeI5WYHM1l42coElCnhHxSGn2+3KJEdBmkG
-         YwMw==
-X-Gm-Message-State: ACgBeo0XBrGADVL2d9bra9jZrW0MUF5GzHLLaUC47Yw1aIlEtnq3bQ1A
-        dmNaNwzGNlFJlFX5ndaQxZgiiPi92tU=
-X-Google-Smtp-Source: AA6agR4qr6moVIHZv2YyIMkU4NbM3gllPWtVCICGpkk6fJrsf7LoBe2Q5GLKhj1E2SNlSJehbfJ330C873A=
+        bh=OeaHSvnl3LkKr4l31U2Volg5xaVk+RMFLZSi6dgjePI=;
+        b=SrCdPFex/VHfsUMQ/QjiBxqSCEze6iFsHcsIa3uzDYNXl1nDgRo5EyeIFkpyboG+Zp
+         tGd3nWyy1DnSQRV4Qez5MbOk2zVcKHE/SvbqcBeDc1Unb9IQFsGwXBWzg/HcmoeB3GCD
+         8eIGCF9SGtKWKH6GMXgusvR2q9jgYGgS8PlUQVLcLuF2PeqE8okeuv6tFB9Jt5c0p3Yq
+         DhnUXRx20TwsmL9heHE5k3DSNrH2kgKHOwOyC1RKgW1pl1XN1EHwm2dBSo3GG0ItjVEU
+         KyY2agRZFrw5zWW4OsZBSfrtj69HMTaCktYpnUy3Bgx9Xhuad/G3U7taO1huYJHmclxw
+         YB3Q==
+X-Gm-Message-State: ACgBeo3mbndfTgfv/kj8fGMsc/hmjNM0R6XL+6bDciLWEVyt4pnMtMhi
+        94SXN+a95MmKJFCyfeSCKgBKS2EN4TI=
+X-Google-Smtp-Source: AA6agR5WRy5fZ7FOeYwPAz+MoQjsxloN5BfCZpV2SaYdV4girws1lZ0WYC4kcT46D4arwsdXcJqkq+Ln5bw=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:200:1bfc:e7ee:6530:4449])
- (user=surenb job=sendgmr) by 2002:a81:94e:0:b0:33d:bfb0:ff55 with SMTP id
- 75-20020a81094e000000b0033dbfb0ff55mr23236112ywj.322.1662053769056; Thu, 01
- Sep 2022 10:36:09 -0700 (PDT)
-Date:   Thu,  1 Sep 2022 10:35:06 -0700
+ (user=surenb job=sendgmr) by 2002:a25:6744:0:b0:696:52a9:2d84 with SMTP id
+ b65-20020a256744000000b0069652a92d84mr20473184ybc.256.1662053771488; Thu, 01
+ Sep 2022 10:36:11 -0700 (PDT)
+Date:   Thu,  1 Sep 2022 10:35:07 -0700
 In-Reply-To: <20220901173516.702122-1-surenb@google.com>
 Mime-Version: 1.0
 References: <20220901173516.702122-1-surenb@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220901173516.702122-19-surenb@google.com>
-Subject: [RFC PATCH RESEND 18/28] mm: add FAULT_FLAG_VMA_LOCK flag
+Message-ID: <20220901173516.702122-20-surenb@google.com>
+Subject: [RFC PATCH RESEND 19/28] mm: disallow do_swap_page to handle page
+ faults under VMA lock
 From:   Suren Baghdasaryan <surenb@google.com>
 To:     akpm@linux-foundation.org
 Cc:     michel@lespinasse.org, jglisse@google.com, mhocko@suse.com,
@@ -79,41 +80,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a new flag to distinguish page faults handled under protection of
-per-vma lock.
+Due to the possibility of do_swap_page dropping mmap_lock, abort fault
+handling under VMA lock and retry holding mmap_lock. This can be handled
+more gracefully in the future.
 
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
- include/linux/mm.h       | 3 ++-
- include/linux/mm_types.h | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
+ mm/memory.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 0d9c1563c354..7c3190eaabd7 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -466,7 +466,8 @@ static inline bool fault_flag_allow_retry_first(enum fault_flag flags)
- 	{ FAULT_FLAG_USER,		"USER" }, \
- 	{ FAULT_FLAG_REMOTE,		"REMOTE" }, \
- 	{ FAULT_FLAG_INSTRUCTION,	"INSTRUCTION" }, \
--	{ FAULT_FLAG_INTERRUPTIBLE,	"INTERRUPTIBLE" }
-+	{ FAULT_FLAG_INTERRUPTIBLE,	"INTERRUPTIBLE" }, \
-+	{ FAULT_FLAG_VMA_LOCK,		"VMA_LOCK" }
+diff --git a/mm/memory.c b/mm/memory.c
+index 9ac9944e8c62..29d2f49f922a 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3738,6 +3738,11 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
+ 	vm_fault_t ret = 0;
+ 	void *shadow = NULL;
  
- /*
-  * vm_fault is filled by the pagefault handler and passed to the vma's
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 6a03f59c1e78..36562e702baf 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -886,6 +886,7 @@ enum fault_flag {
- 	FAULT_FLAG_INTERRUPTIBLE =	1 << 9,
- 	FAULT_FLAG_UNSHARE =		1 << 10,
- 	FAULT_FLAG_ORIG_PTE_VALID =	1 << 11,
-+	FAULT_FLAG_VMA_LOCK =		1 << 12,
- };
++	if (vmf->flags & FAULT_FLAG_VMA_LOCK) {
++		ret = VM_FAULT_RETRY;
++		goto out;
++	}
++
+ 	if (!pte_unmap_same(vmf))
+ 		goto out;
  
- typedef unsigned int __bitwise zap_flags_t;
 -- 
 2.37.2.789.g6183377224-goog
 

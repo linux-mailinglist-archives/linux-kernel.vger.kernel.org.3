@@ -2,85 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E02E5A8D1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:11:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12D375A8D0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:05:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbiIAFLC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 01:11:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44428 "EHLO
+        id S232757AbiIAFFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 01:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiIAFK7 (ORCPT
+        with ESMTP id S232718AbiIAFFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 01:10:59 -0400
-X-Greylist: delayed 343 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 31 Aug 2022 22:10:57 PDT
-Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA7F810853F;
-        Wed, 31 Aug 2022 22:10:57 -0700 (PDT)
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-X-isilmar-external: YES
-Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
-        by isilmar-4.linta.de (Postfix) with ESMTPSA id 668752000AD;
-        Thu,  1 Sep 2022 05:05:13 +0000 (UTC)
-Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
-        id CD4E08084B; Thu,  1 Sep 2022 07:05:01 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 07:05:01 +0200
-From:   Dominik Brodowski <linux@dominikbrodowski.net>
-To:     Sven van Ashbrook <svenva@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Alex Levin <levinale@google.com>,
-        Rajat Jain <rajatja@google.com>,
-        Andrey Pronin <apronin@google.com>,
-        Stephen Boyd <swboyd@google.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        Olivia Mackall <olivia@selenic.com>,
-        Petr Mladek <pmladek@suse.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Theodore Ts'o <tytso@mit.edu>, linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] random: make add_hwgenerator_randomness() more
- flexible
-Message-ID: <YxA9fTXqVFrHvyTj@owl.dominikbrodowski.net>
-References: <20220831172024.1613208-1-svenva@chromium.org>
+        Thu, 1 Sep 2022 01:05:42 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5185FF9957
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 22:05:40 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3321c2a8d4cso326159737b3.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 22:05:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ktZOhU9M+eiBxoPfSKrBwsk5VZxY64ML34Vei/rqz2s=;
+        b=UnvyXVMIRiciK0rqi4Rla4SS9BjEhBuxvGCuhtbiGji3fDuHUeDlC2C4TbCLRZRSwR
+         +328Kj0pV/r/xNPqU1581dA9M6WZOvrs39FcqOg6hNQT5ifEu0MLEP+Zz/2G+jRm7WMN
+         7axpEQrwYULoaAc5UOWeK4pidUhWzYApn91X0NwQTEXfOOrYw3wXsfjb2f2S21BvY7t3
+         Zg1V8M6rEvRQMEwY0dY+iYzvNIKUl0aPxff0C2lbwvD8YaEzrAOwphxkhABpA5cqFwfx
+         wpTyALvpTmRkdUhm9RVjdaatnoaqYeLhUBKhA4+4MYeMDI/E+7MF6YajUpv+RJVJmtfD
+         MOWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ktZOhU9M+eiBxoPfSKrBwsk5VZxY64ML34Vei/rqz2s=;
+        b=FgDPwt5ITBZXYtC/9G/3wijDcv2UT628+22TeUWzJ+kE92Ok2aFF3+PIU5L1XFRU0q
+         DeWtiu6hJUOkvg6Lk2A14rhWRX6HniXrXqDQquxKQiS4uEB2lvu7gTu/aNO1c0RqwEjO
+         BHjSh74Z9CabQr4KjtWUqzQcJKU1NVVg+mP7jNhQ3zcD9OzUZ7gX6njDs87RPJzV/oML
+         6PWoKFF+6sU+6X5IJmNovnuoXi3Ui+/FaCYuU0loAQBeqbkOK1b8tAgHTWK85EkjMGKU
+         vXr1P5tH1f7zsDqkFf0ouSlN9XqDJ3tEQwOA+I/jRGuqA+a8c0+hd3EXoIothKbRBgF6
+         FZEg==
+X-Gm-Message-State: ACgBeo3YQ5tc5eCvuuKtSUvYoIFyHsrUXDUw/7Ba53Ql9kHt7MdSbIPl
+        SBv1tWYxUA9piu1rq1Qyjb6M6TswaYBfZQsO+x5lqA==
+X-Google-Smtp-Source: AA6agR6X7FU4pvrjt5vMDUM/DC2IsE6vILG7I4DBJ25hoCu+6BelY82RpFQkl53Zm+EyPsuJsyRbi+nPLdvdkyesITk=
+X-Received: by 2002:a81:a04c:0:b0:340:4c27:dfc6 with SMTP id
+ x73-20020a81a04c000000b003404c27dfc6mr20996289ywg.507.1662008739346; Wed, 31
+ Aug 2022 22:05:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831172024.1613208-1-svenva@chromium.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220830214919.53220-1-surenb@google.com> <YxA6pCu0YNIiXkHf@localhost.localdomain>
+In-Reply-To: <YxA6pCu0YNIiXkHf@localhost.localdomain>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 31 Aug 2022 22:05:28 -0700
+Message-ID: <CAJuCfpGxB0z1V1Vau3bXF9eHZVHnANdA7keMzCLUK+_gN6+HeA@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Kent Overstreet <kent.overstreet@linux.dev>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Mel Gorman <mgorman@suse.de>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, ytcoode@gmail.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Aug 31, 2022 at 9:52 PM Oscar Salvador <osalvador@suse.de> wrote:
+>
+> On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
+> > ===========================
+> > Code tagging framework
+> > ===========================
+> > Code tag is a structure identifying a specific location in the source code
+> > which is generated at compile time and can be embedded in an application-
+> > specific structure. Several applications of code tagging are included in
+> > this RFC, such as memory allocation tracking, dynamic fault injection,
+> > latency tracking and improved error code reporting.
+> > Basically, it takes the old trick of "define a special elf section for
+> > objects of a given type so that we can iterate over them at runtime" and
+> > creates a proper library for it.
+> >
+> > ===========================
+> > Memory allocation tracking
+> > ===========================
+> > The goal for using codetags for memory allocation tracking is to minimize
+> > performance and memory overhead. By recording only the call count and
+> > allocation size, the required operations are kept at the minimum while
+> > collecting statistics for every allocation in the codebase. With that
+> > information, if users are interested in mode detailed context for a
+> > specific allocation, they can enable more in-depth context tracking,
+> > which includes capturing the pid, tgid, task name, allocation size,
+> > timestamp and call stack for every allocation at the specified code
+> > location.
+> > Memory allocation tracking is implemented in two parts:
+> >
+> > part1: instruments page and slab allocators to record call count and total
+> > memory allocated at every allocation in the source code. Every time an
+> > allocation is performed by an instrumented allocator, the codetag at that
+> > location increments its call and size counters. Every time the memory is
+> > freed these counters are decremented. To decrement the counters upon free,
+> > allocated object needs a reference to its codetag. Page allocators use
+> > page_ext to record this reference while slab allocators use memcg_data of
+> > the slab page.
+> > The data is exposed to the user space via a read-only debugfs file called
+> > alloc_tags.
+>
+> Hi Suren,
+>
+> I just posted a patch [1] and reading through your changelog and seeing your PoC,
+> I think we have some kind of overlap.
+> My patchset aims to give you the stacktrace <-> relationship information and it is
+> achieved by a little amount of extra code mostly in page_owner.c/ and lib/stackdepot.
+>
+> Of course, your works seems to be more complete wrt. the information you get.
+>
+> I CCed you in case you want to have a look
+>
+> [1] https://lkml.org/lkml/2022/9/1/36
 
-Am Wed, Aug 31, 2022 at 05:20:23PM +0000 schrieb Sven van Ashbrook:
-> add_hwgenerator_randomness() currently blocks until more entropy
-> is needed. But, the required delay function will depend on the
-> the caller: e.g. freezable kthreads have their own freezable_XXX()
-> APIs; and delayed_work might prefer to use mod_delayed_work().
-> 
-> To accommodate these requirements, remove the blocking wait, and
-> let the function return the delay needed until more entropy is needed.
-
-AFAICS, there's only one caller in the kernel, and its specific requirements
-are currently met by the callee. So the rationale for this patch is wanting,
-yet you may wish to justify this patch more explicitly as a preparation for
-the second patch.
-
+Hi Oscar,
+Thanks for the note. I'll take a look most likely on Friday and will
+follow up with you.
 Thanks,
-	Dominik
+Suren.
+
+>
+> Thanks
+>
+>
+> --
+> Oscar Salvador
+> SUSE Labs

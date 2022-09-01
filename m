@@ -2,82 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF5E5A9CF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:20:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 503F65A9CFC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:22:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233260AbiIAQUk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:20:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S234994AbiIAQVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232902AbiIAQUZ (ORCPT
+        with ESMTP id S234893AbiIAQVG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:20:25 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85AE92F3B0
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:20:23 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id m7so16267650lfq.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:20:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=m+FhuVC9zsmBuPqczl82iep7EQ0hRYQKXXieJt5VGZg=;
-        b=dcWnJRXDU4JrUZbK/QiyBi/v6boEp5WzmqeDKimaZ8Dm4sQC/tY9/GHF6Dawf1FLuw
-         LvJO3UXXbRBGsdxkWdMUmFtTdLKgALBmHeF7uYdTPmrSj9dBdMo84GWuW/wC2MRdmBKH
-         Iq+9zKsJht1IK15bGi7xc0px+D+WIDXOT+O5F8NgUIFSKarDyfKGRyyf7JH2jrxMYXtT
-         qj5WzBq8f7Z2mFVIHSQM4ILDmKDKbhCTfG5MpCza5Em5vbQ0bBS4xYQ6jDR2Gfvw6TzA
-         Y/a7EElMMLP14jP9wVCn1tW8OkTJr+8leMQkyVwcPlGAjoiqqDKN+XocCw8asbT8CJMb
-         YDBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=m+FhuVC9zsmBuPqczl82iep7EQ0hRYQKXXieJt5VGZg=;
-        b=Jxtq9RlvpCWJCaZfi1EA+UsInNmqAiIZBdAqzUJvD6mcIu6QQMBVFY6jBiIdg27+fW
-         KV2iuls7ijyQYh1tuZ9+whTE+iSWPvqOsbuLLPB1VWwbWCDmjNaI62j973HFFGx9lKV6
-         lYfrhcMjjI351qgSJrxZYRIobBYBmwVFcn+HUtsG04RvXPR3EyDftjtXqk6QKU62yEWd
-         mN+690HPdCYVKfUVIYBqEbN2eIl1pPZL8CHed1HDNw/GIZHjhuelkmwZrNnyD3P6jI8/
-         vKb1rHTy2st2MR47KLgK0bMYEt9JPvz9F8dAl0+GxGe/WeiIZ3eWsdebAMrncMNsanz+
-         wAjA==
-X-Gm-Message-State: ACgBeo0enjC7/iLsfPqhDMzgTPkkIY2MB5jjfgKH3MgOlHtKBC3Qt8+H
-        cgJ+dzpTb9H2IetzvW62sMy2gQ==
-X-Google-Smtp-Source: AA6agR7qj8UkAxIk7Zimk3Lo5Lwb7oBdWKWEyGYjaKKWTeBaWKdcQuL65WY5fr/iOVNtxuivNVxKow==
-X-Received: by 2002:a05:6512:3b87:b0:494:9a8d:f74f with SMTP id g7-20020a0565123b8700b004949a8df74fmr1292105lfv.8.1662049221843;
-        Thu, 01 Sep 2022 09:20:21 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id y20-20020a05651c107400b00261cd70e41asm1850937ljm.32.2022.09.01.09.20.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 09:20:20 -0700 (PDT)
-Message-ID: <ccd72f2b-911e-c4fd-7bbc-ce21e5a34c68@linaro.org>
-Date:   Thu, 1 Sep 2022 19:20:19 +0300
+        Thu, 1 Sep 2022 12:21:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404602182D;
+        Thu,  1 Sep 2022 09:20:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFFFDB8287D;
+        Thu,  1 Sep 2022 16:20:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAD89C433D6;
+        Thu,  1 Sep 2022 16:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662049245;
+        bh=8+Ufxd0ZeQIcRIkMaVktXtLXIDs+9Fo+XQkJNZvrJhc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=O26oNRNv+afH5XLwiCZ/5lVcZBDAhCuQegmSgrSoxCC+Xm6QgBB22wESFI3E5KkHO
+         JkIHxjZcIEUJUYFgdzr+1NRcgKVqy4MbDy768/I4feKyG8qEnKNFdlYwVEd0Z9Puni
+         rZvgXR7niNrSh21C2VEJVJrbpaPmyt4Jupyoc57c=
+Date:   Thu, 1 Sep 2022 18:20:40 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+Subject: Re: [PATCH v9 7/8] PCI/P2PDMA: Allow userspace VMA allocations
+ through sysfs
+Message-ID: <YxDb2MyRx6o/wDAz@kroah.com>
+References: <20220825152425.6296-1-logang@deltatee.com>
+ <20220825152425.6296-8-logang@deltatee.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 14/14] arm64: dts: qcom: sm4250: Add support for
- oneplus-billie2
-Content-Language: en-US
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>, linux-kernel@vger.kernel.org
-References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
- <20220901072414.1923075-15-iskren.chernev@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220901072414.1923075-15-iskren.chernev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825152425.6296-8-logang@deltatee.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,153 +72,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 10:24, Iskren Chernev wrote:
-> Add initial support for OnePlus Nord N100, based on SM4250. Currently
-> working:
-> - boots
-> - usb
-> - buildin flash storage (UFS)
-> - SD card reader
+On Thu, Aug 25, 2022 at 09:24:24AM -0600, Logan Gunthorpe wrote:
+> Create a sysfs bin attribute called "allocate" under the existing
+> "p2pmem" group. The only allowable operation on this file is the mmap()
+> call.
 > 
-> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+> When mmap() is called on this attribute, the kernel allocates a chunk of
+> memory from the genalloc and inserts the pages into the VMA. The
+> dev_pagemap .page_free callback will indicate when these pages are no
+> longer used and they will be put back into the genalloc.
+> 
+> On device unbind, remove the sysfs file before the memremap_pages are
+> cleaned up. This ensures unmap_mapping_range() is called on the files
+> inode and no new mappings can be created.
+> 
+> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
 > ---
->  .../boot/dts/qcom/sm4250-oneplus-billie2.dts  | 240 ++++++++++++++++++
->  1 file changed, 240 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
+>  drivers/pci/p2pdma.c | 124 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 124 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> new file mode 100644
-> index 000000000000..c1cf0288aa5f
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> @@ -0,0 +1,240 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2021, Iskren Chernev <iskren.chernev@gmail.com>
-> + */
+> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
+> index 4496a7c5c478..a6ed6bbca214 100644
+> --- a/drivers/pci/p2pdma.c
+> +++ b/drivers/pci/p2pdma.c
+> @@ -89,6 +89,90 @@ static ssize_t published_show(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(published);
+>  
+> +static int p2pmem_alloc_mmap(struct file *filp, struct kobject *kobj,
+> +		struct bin_attribute *attr, struct vm_area_struct *vma)
+> +{
+> +	struct pci_dev *pdev = to_pci_dev(kobj_to_dev(kobj));
+> +	size_t len = vma->vm_end - vma->vm_start;
+> +	struct pci_p2pdma *p2pdma;
+> +	struct percpu_ref *ref;
+> +	unsigned long vaddr;
+> +	void *kaddr;
+> +	int ret;
 > +
-> +/dts-v1/;
+> +	/* prevent private mappings from being established */
+> +	if ((vma->vm_flags & VM_MAYSHARE) != VM_MAYSHARE) {
+> +		pci_info_ratelimited(pdev,
+> +				     "%s: fail, attempted private mapping\n",
+> +				     current->comm);
+> +		return -EINVAL;
+> +	}
 > +
-> +#include "sm4250.dtsi"
+> +	if (vma->vm_pgoff) {
+> +		pci_info_ratelimited(pdev,
+> +				     "%s: fail, attempted mapping with non-zero offset\n",
+> +				     current->comm);
+> +		return -EINVAL;
+> +	}
 > +
-> +/ {
-> +	model = "OnePlus Nord N100";
-> +	compatible = "oneplus,billie2", "qcom,sm4250";
+> +	rcu_read_lock();
+> +	p2pdma = rcu_dereference(pdev->p2pdma);
+> +	if (!p2pdma) {
+> +		ret = -ENODEV;
+> +		goto out;
+> +	}
 > +
-> +	/* required for bootloader to select correct board */
-> +	qcom,msm-id = <0x1a1 0x10000 0x1bc 0x10000>;
-> +	qcom,board-id = <0x1000b 0x00>;
+> +	kaddr = (void *)gen_pool_alloc_owner(p2pdma->pool, len, (void **)&ref);
+> +	if (!kaddr) {
+> +		ret = -ENOMEM;
+> +		goto out;
+> +	}
 > +
-> +	aliases {
-> +	};
+> +	/*
+> +	 * vm_insert_page() can sleep, so a reference is taken to mapping
+> +	 * such that rcu_read_unlock() can be done before inserting the
+> +	 * pages
+> +	 */
+> +	if (unlikely(!percpu_ref_tryget_live_rcu(ref))) {
+> +		ret = -ENODEV;
+> +		goto out_free_mem;
+> +	}
+> +	rcu_read_unlock();
 > +
-> +	chosen {
-> +		bootargs = "earlycon=tty0 console=tty0 clk_ignore_unused pd_ignore_unused";
-
-No bootargs. They are not suitable for wide-use.
-
+> +	for (vaddr = vma->vm_start; vaddr < vma->vm_end; vaddr += PAGE_SIZE) {
+> +		ret = vm_insert_page(vma, vaddr, virt_to_page(kaddr));
+> +		if (ret) {
+> +			gen_pool_free(p2pdma->pool, (uintptr_t)kaddr, len);
+> +			return ret;
+> +		}
+> +		percpu_ref_get(ref);
+> +		put_page(virt_to_page(kaddr));
+> +		kaddr += PAGE_SIZE;
+> +		len -= PAGE_SIZE;
+> +	}
 > +
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
+> +	percpu_ref_put(ref);
 > +
-> +		stdout-path = "framebuffer0";
+> +	return 0;
+> +out_free_mem:
+> +	gen_pool_free(p2pdma->pool, (uintptr_t)kaddr, len);
+> +out:
+> +	rcu_read_unlock();
+> +	return ret;
+> +}
 > +
-> +		framebuffer0: framebuffer@9d400000 {
-> +			compatible = "simple-framebuffer";
-> +			reg = <0 0x5c000000 0 (1600 * 720 * 4)>;
-> +			width = <720>;
-> +			height = <1600>;
-> +			stride = <(720 * 4)>;
-> +			format = "a8r8g8b8";
-> +			status= "okay";
-
-No need for status in new nodes.
-
-> +		};
-> +	};
-> +
-> +	reserved-memory {
-> +		mtp_mem: memory@cc300000 {
-> +			reg = <0x00 0xcc300000 0x00 0xb00000>;
-> +			no-map;
-> +		};
-> +
-> +		param_mem: memory@cc200000 {
-> +			reg = <0x00 0xcc200000 0x00 0x100000>;
-> +			no-map;
-> +		};
-> +
-> +		bootloader_log_mem: memory@5fff7000 {
-> +			reg = <0x00 0x5fff7000 0x00 0x8000>;
-> +			no-map;
-> +		};
-> +
-> +		ramoops@cbe00000 {
-> +			compatible = "ramoops";
-> +			reg = <0x0 0xcbe00000 0x0 0x400000>;
-> +			record-size = <0x40000>;
-> +			pmsg-size = <0x200000>;
-> +			console-size = <0x40000>;
-> +			ftrace-size = <0x40000>;
-> +		};
-> +	};
+> +static struct bin_attribute p2pmem_alloc_attr = {
+> +	.attr = { .name = "allocate", .mode = 0660 },
+> +	.mmap = p2pmem_alloc_mmap,
+> +	/*
+> +	 * Some places where we want to call mmap (ie. python) will check
+> +	 * that the file size is greater than the mmap size before allowing
+> +	 * the mmap to continue. To work around this, just set the size
+> +	 * to be very large.
+> +	 */
+> +	.size = SZ_1T,
 > +};
 > +
-> +&usb3 {
-> +	status = "okay";
+>  static struct attribute *p2pmem_attrs[] = {
+>  	&dev_attr_size.attr,
+>  	&dev_attr_available.attr,
+> @@ -96,11 +180,32 @@ static struct attribute *p2pmem_attrs[] = {
+>  	NULL,
+>  };
+>  
+> +static struct bin_attribute *p2pmem_bin_attrs[] = {
+> +	&p2pmem_alloc_attr,
+> +	NULL,
 > +};
 > +
-> +&hsusb_phy {
-> +	status = "okay";
-
-Status is the last property. Also in other places.
-
-> +	vdd-supply = <&vreg_l4a>;
-> +	vdda-pll-supply = <&vreg_l12a>;
-> +	vdda-phy-dpdm-supply = <&vreg_l15a>;
+>  static const struct attribute_group p2pmem_group = {
+>  	.attrs = p2pmem_attrs,
+> +	.bin_attrs = p2pmem_bin_attrs,
+>  	.name = "p2pmem",
+>  };
+>  
+> +static void p2pdma_page_free(struct page *page)
+> +{
+> +	struct pci_p2pdma_pagemap *pgmap = to_p2p_pgmap(page->pgmap);
+> +	struct percpu_ref *ref;
 > +
+> +	gen_pool_free_owner(pgmap->provider->p2pdma->pool,
+> +			    (uintptr_t)page_to_virt(page), PAGE_SIZE,
+> +			    (void **)&ref);
+> +	percpu_ref_put(ref);
+> +}
+> +
+> +static const struct dev_pagemap_ops p2pdma_pgmap_ops = {
+> +	.page_free = p2pdma_page_free,
 > +};
 > +
-> +&tlmm {
-> +	gpio-reserved-ranges = <14 4>;
-> +};
+>  static void pci_p2pdma_release(void *data)
+>  {
+>  	struct pci_dev *pdev = data;
+> @@ -152,6 +257,19 @@ static int pci_p2pdma_setup(struct pci_dev *pdev)
+>  	return error;
+>  }
+>  
+> +static void pci_p2pdma_unmap_mappings(void *data)
+> +{
+> +	struct pci_dev *pdev = data;
 > +
-> +&sdhc_2 {
-> +	status = "okay";
-> +	vmmc-supply = <&vreg_l22a>;
-> +	vqmmc-supply = <&vreg_l5a>;
-> +
-> +	cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>;
-> +
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&sdc2_state_on>;
-> +	pinctrl-1 = <&sdc2_state_off>;
-> +};
-> +
-> +&ufs_mem_hc {
-> +	status = "okay";
-> +	vcc-supply = <&vreg_l24a>;
-> +	vcc-max-microamp = <600000>;
-> +	vccq2-supply = <&vreg_l11a>;
-> +	vccq2-max-microamp = <600000>;
-> +};
-> +
-> +&ufs_mem_phy {
-> +	status = "okay";
-> +	vdda-phy-supply = <&vreg_l4a>;
-> +	vdda-pll-supply = <&vreg_l12a>;
-> +	vddp-ref-clk-supply = <&vreg_l18a>;
-> +};
-> +
-> +&rpm_requests {
-> +	pm6125-regulators {
+> +	/*
+> +	 * Removing the alloc attribute from sysfs will call
+> +	 * unmap_mapping_range() on the inode, teardown any existing userspace
+> +	 * mappings and prevent new ones from being created.
+> +	 */
+> +	sysfs_remove_file_from_group(&pdev->dev.kobj, &p2pmem_alloc_attr.attr,
+> +				     p2pmem_group.name);
 
-regulators
+Wait, why are you manually removing the sysfs file here?  It's part of
+the group, if you do this then it is gone for forever, right?  Why
+manually do this the sysfs core should handle this for you if the device
+is removed.
 
-> +		compatible = "qcom,rpm-pm6125-regulators";
-> +
+And worst case, just pass in the device, not the pci device.
 
+thanks,
 
-Best regards,
-Krzysztof
+greg k-h

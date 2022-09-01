@@ -2,140 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 750B15A8E9C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12C505A8EA0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233330AbiIAGs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54838 "EHLO
+        id S233365AbiIAGtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232572AbiIAGs1 (ORCPT
+        with ESMTP id S232840AbiIAGtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:48:27 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 319C612140F;
-        Wed, 31 Aug 2022 23:48:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662014907; x=1693550907;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=peHiaVdSwJ7TxmlSyI5wXME33FtW6AAZToRTJ8ib9Zk=;
-  b=T9ez8zbgUsjCA/kVYPdGUz4sKarrprqAzC7E4NRnudlMDKseisafZF0D
-   2uLSfqXbTWefLoOxlxfSD2p8c5BzCL7Z0mwYqv1h5Cgc3diz29zZBMNfS
-   CHwByY1RtSraD3o1tdTq/kldAAckpvONMfuZXsJqRrrsJst11pAOfL9To
-   dbLcH4m2aIn4iTz3a6ixrY9jAzQT16MO2/q3162ZUY6Z1iS7beAaVFlTb
-   ELPutnXIMSNfLVfQIHe4SyDiwxiP0iVwCtrU8mHCZltfQs7S8rjfzr3lz
-   Zdj6b9HzoftC5/NxNWzZ94K8GKxWralcywwqWFKFBZFQLBL4H94eZvErv
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="296416412"
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="296416412"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 23:48:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="857720767"
-Received: from yy-desk-7060.sh.intel.com (HELO localhost) ([10.239.159.76])
-  by fmsmga006.fm.intel.com with ESMTP; 31 Aug 2022 23:48:24 -0700
-Date:   Thu, 1 Sep 2022 14:48:24 +0800
-From:   Yuan Yao <yuan.yao@linux.intel.com>
-To:     isaku.yamahata@intel.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-Subject: Re: [PATCH v8 038/103] KVM: x86/tdp_mmu: refactor kvm_tdp_mmu_map()
-Message-ID: <20220901064824.mpjd3xpgal3d3ynu@yy-desk-7060>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
- <021cf72b904933f23743d74b2a67341298ae5328.1659854790.git.isaku.yamahata@intel.com>
+        Thu, 1 Sep 2022 02:49:04 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF15121430
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:49:02 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id t129so16630184pfb.6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:49:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=ZN0wlf/8I2US3eM7pqsH0yFkY6GDu2IDTHDWieRp2po=;
+        b=X/CJF0Tr5QeNRrDvXvoVRBol7+/ExtpCIaUOem2xX6N7aXB60RtHYcKxwjMH6Vty9F
+         NOQvGNdQVhvTFtGDc8xAODwnJvcxAxQyjyHd7InhTwWL9bZeIVFGpCBq76Rqb5hvYFJ8
+         zcomzqblXd+aht5XULk69wevTCaYmnptDe7mg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=ZN0wlf/8I2US3eM7pqsH0yFkY6GDu2IDTHDWieRp2po=;
+        b=eYbxwYYHOlTNyppJ1KZ2SiTRgWfHEhSgWFSa02YqwSqzZlhCaq34ZBeKzxbAcTGieI
+         sxL2cK12ZITsMYKFUobhpDH4XPwkAgKM9n+/6PC7eLr3bJ5HnU7a5fjesW8VCIq0GTWn
+         qtBEsU4i0QMzT0mwY6qbJXDV10jmsal+oZ+Ye9SPw3qIEA4jrs3dk+Ur9uC8SzvWzoDd
+         rPKEZLgAYrdUsvvq8X+qdlob/YucnLO5Lq482PhorE/G4UMkf3rXyZRVjePp5aFWpoYU
+         rIOrzXI/pMBsXltOjar6iEBPme+tujl3AmUBx/n1gLgBPDifXK6ENdf183rfJGOjmFz+
+         Oh4g==
+X-Gm-Message-State: ACgBeo3pzTOBh0IQ1IZqtnGNug0diA8SSZBONvHgWq7giJZQPHLIdDs1
+        m9/WbRwhwDmvjWlrVbmd8ZwVSA0GN+OvGw==
+X-Google-Smtp-Source: AA6agR5Q403qJEV6Lfi3M3NQrLbZNuHS84/xKnEfJUrk+AQUgpa/ica9Wop9P5cEQBd2i673E/jetg==
+X-Received: by 2002:a63:6e09:0:b0:430:663:7757 with SMTP id j9-20020a636e09000000b0043006637757mr7319766pgc.340.1662014942305;
+        Wed, 31 Aug 2022 23:49:02 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w8-20020a1709026f0800b00172c298ba42sm1183219plk.28.2022.08.31.23.49.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 23:49:01 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH v2] netlink: Bounds-check struct nlmsgerr creation
+Date:   Wed, 31 Aug 2022 23:48:58 -0700
+Message-Id: <20220901064858.1417126-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <021cf72b904933f23743d74b2a67341298ae5328.1659854790.git.isaku.yamahata@intel.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5452; h=from:subject; bh=8yuSgL8t29LfBBmN/bpYmo03naVR7KsUIBiIJrZifO0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjEFXZHG0g03slkKZAfp1i1tVcHkNwSK+Q/MIEK8Pi 0ZNnt3CJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxBV2QAKCRCJcvTf3G3AJsmiD/ wJTp0r9y/BO4058/6vDENLnnoGFoC+r21uBcF3NIhXeMOmdPmT2z9jj/0KG7fE9ioheBknqClFywq5 tzEXntFpVSgzz/ve19Xc+0GrRFu5sC/n6eFFpOAtutaBFPngsQl9xLS4U15U5SSOMkiN0XGITpqqUK gL871NId+UsPPuWpbcX413rgxFFT30ekWQElg8UKlScStGzKygaTuK+sa7C9pCyQMxg0SlSIvL8DOp AXWHH6UQtq5/gTT5/Se3VXmcH+iMgEgj3sUtx/1QsImFoFqr0AxnvCeLOsZMR+bkRkEZGo5ID/Q9bA 1SwMFKbVDAXWvJyQS4zcajisUvZm5oLJnJb5xre2KPoS8LDg2c62xnzm/XJqfyDyWoRYEALpXuORGq Ix3Q2kg+E2vzGiQpfCvBasuyuY+lJyYWFIA4+fuRbK6DAsuqNshCU+0243DCrI3ctsRB7d0z8UQ4ji HHzNftkzyoOGhmbdEwBRkVTZ7rG83RwhkXU3tpv0TAyVG2mxG1XYABVgLB7RK/C7MyMoNVAI0go/PZ bh2YxAOUUHAHI7GrhPfA6anPg6Tpvb+dmGvBumWdnrf0+lnOM48U2J45XFwwLfkcxyDuzngsFmX6n4 fM0TxICZEQqj+oyBvM9k/i25vREXb98a0q9fhTORiJpGMayayLs+ZbALCohA==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 07, 2022 at 03:01:23PM -0700, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> Factor out non-leaf SPTE population logic from kvm_tdp_mmu_map().  MapGPA
-> hypercall needs to populate non-leaf SPTE to record which GPA, private or
-> shared, is allowed in the leaf EPT entry.
->
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->  arch/x86/kvm/mmu/tdp_mmu.c | 26 +++++++++++++++++++-------
->  1 file changed, 19 insertions(+), 7 deletions(-)
->
-> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
-> index 8bc3a8d1803e..90b468a3a1a2 100644
-> --- a/arch/x86/kvm/mmu/tdp_mmu.c
-> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
-> @@ -1145,6 +1145,24 @@ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
->  	return 0;
->  }
->
-> +static int tdp_mmu_populate_nonleaf(
-> +	struct kvm_vcpu *vcpu, struct tdp_iter *iter, bool account_nx)
-> +{
-> +	struct kvm_mmu_page *sp;
-> +	int ret;
-> +
-> +	WARN_ON(is_shadow_present_pte(iter->old_spte));
-> +	WARN_ON(is_removed_spte(iter->old_spte));
+For 32-bit systems, it might be possible to wrap lnmsgerr content
+lengths beyond SIZE_MAX. Explicitly test for all overflows, and mark the
+memcpy() as being unable to internally diagnose overflows.
 
-Why these 2 WARN_ON are necessary here ?
+This also excludes netlink from the coming runtime bounds check on
+memcpy(), since it's an unusual case of open-coded sizing and
+allocation. Avoid this future run-time warning:
 
-In TPD MMU the changes of PTE with shared lock is not surprised and
-should be handle properly (e.g. the page is freed below for this
-case), or this function will be called without checking the present
-and removed state of the pte ?
+  memcpy: detected field-spanning write (size 32) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
 
-> +
-> +	sp = tdp_mmu_alloc_sp(vcpu);
-> +	tdp_mmu_init_child_sp(sp, iter);
-> +
-> +	ret = tdp_mmu_link_sp(vcpu->kvm, iter, sp, account_nx, true);
-> +	if (ret)
-> +		tdp_mmu_free_sp(sp);
-> +	return ret;
-> +}
-> +
->  /*
->   * Handle a TDP page fault (NPT/EPT violation/misconfiguration) by installing
->   * page tables and SPTEs to translate the faulting guest physical address.
-> @@ -1153,7 +1171,6 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  {
->  	struct kvm_mmu *mmu = vcpu->arch.mmu;
->  	struct tdp_iter iter;
-> -	struct kvm_mmu_page *sp;
->  	int ret;
->
->  	kvm_mmu_hugepage_adjust(vcpu, fault);
-> @@ -1199,13 +1216,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
->  			if (is_removed_spte(iter.old_spte))
->  				break;
->
-> -			sp = tdp_mmu_alloc_sp(vcpu);
-> -			tdp_mmu_init_child_sp(sp, &iter);
-> -
-> -			if (tdp_mmu_link_sp(vcpu->kvm, &iter, sp, account_nx, true)) {
-> -				tdp_mmu_free_sp(sp);
-> +			if (tdp_mmu_populate_nonleaf(vcpu, &iter, account_nx))
->  				break;
-> -			}
->  		}
->  	}
->
-> --
-> 2.25.1
->
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
+Cc: Florian Westphal <fw@strlen.de>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: syzbot <syzkaller@googlegroups.com>
+Cc: netfilter-devel@vger.kernel.org
+Cc: coreteam@netfilter.org
+Cc: netdev@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+v2: Rebased to -next
+v1: https://lore.kernel.org/lkml/20220901030610.1121299-3-keescook@chromium.org
+---
+ net/netlink/af_netlink.c | 81 +++++++++++++++++++++++++---------------
+ 1 file changed, 51 insertions(+), 30 deletions(-)
+
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index f89ba302ac6e..1285779d9ab6 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -2400,35 +2400,44 @@ int __netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
+ }
+ EXPORT_SYMBOL(__netlink_dump_start);
+ 
+-static size_t
++/* Returns false on overflow */
++static bool __must_check
+ netlink_ack_tlv_len(struct netlink_sock *nlk, int err,
+-		    const struct netlink_ext_ack *extack)
++		    const struct netlink_ext_ack *extack,
++		    size_t *tlvlen)
+ {
+-	size_t tlvlen;
++	*tlvlen = 0;
+ 
+ 	if (!extack || !(nlk->flags & NETLINK_F_EXT_ACK))
+-		return 0;
++		return true;
+ 
+-	tlvlen = 0;
+-	if (extack->_msg)
+-		tlvlen += nla_total_size(strlen(extack->_msg) + 1);
+-	if (extack->cookie_len)
+-		tlvlen += nla_total_size(extack->cookie_len);
++	if (extack->_msg &&
++	    check_add_overflow(*tlvlen, nla_total_size(strlen(extack->_msg) + 1), tlvlen))
++		return false;
++
++	if (extack->cookie_len &&
++	    check_add_overflow(*tlvlen, nla_total_size(extack->cookie_len), tlvlen))
++		return false;
+ 
+ 	/* Following attributes are only reported as error (not warning) */
+ 	if (!err)
+-		return tlvlen;
++		return true;
+ 
+-	if (extack->bad_attr)
+-		tlvlen += nla_total_size(sizeof(u32));
+-	if (extack->policy)
+-		tlvlen += netlink_policy_dump_attr_size_estimate(extack->policy);
+-	if (extack->miss_type)
+-		tlvlen += nla_total_size(sizeof(u32));
+-	if (extack->miss_nest)
+-		tlvlen += nla_total_size(sizeof(u32));
++	if (extack->bad_attr &&
++	    check_add_overflow(*tlvlen, nla_total_size(sizeof(u32)), tlvlen))
++		return false;
++	if (extack->policy &&
++	    check_add_overflow(*tlvlen, netlink_policy_dump_attr_size_estimate(extack->policy),
++			       tlvlen))
++		return false;
++	if (extack->miss_type &&
++	    check_add_overflow(*tlvlen, nla_total_size(sizeof(u32)), tlvlen))
++		return false;
++	if (extack->miss_nest &&
++	    check_add_overflow(*tlvlen, nla_total_size(sizeof(u32)), tlvlen))
++		return false;
+ 
+-	return tlvlen;
++	return true;
+ }
+ 
+ static void
+@@ -2472,33 +2481,39 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
+ 	size_t payload = sizeof(*errmsg);
+ 	struct netlink_sock *nlk = nlk_sk(NETLINK_CB(in_skb).sk);
+ 	unsigned int flags = 0;
+-	size_t tlvlen;
++	size_t alloc_size, tlvlen = 0;
+ 
+ 	/* Error messages get the original request appened, unless the user
+ 	 * requests to cap the error message, and get extra error data if
+ 	 * requested.
+ 	 */
+-	if (err && !(nlk->flags & NETLINK_F_CAP_ACK))
+-		payload += nlmsg_len(nlh);
++	if (err && !(nlk->flags & NETLINK_F_CAP_ACK) &&
++	    check_add_overflow(payload, (size_t)nlmsg_len(nlh), &payload))
++		goto failure;
+ 	else
+ 		flags |= NLM_F_CAPPED;
+ 
+-	tlvlen = netlink_ack_tlv_len(nlk, err, extack);
++	if (!netlink_ack_tlv_len(nlk, err, extack, &tlvlen))
++		goto failure;
+ 	if (tlvlen)
+ 		flags |= NLM_F_ACK_TLVS;
+ 
+-	skb = nlmsg_new(payload + tlvlen, GFP_KERNEL);
+-	if (!skb) {
+-		NETLINK_CB(in_skb).sk->sk_err = ENOBUFS;
+-		sk_error_report(NETLINK_CB(in_skb).sk);
+-		return;
+-	}
++	if (check_add_overflow(payload, tlvlen, &alloc_size))
++		goto failure;
++
++	skb = nlmsg_new(alloc_size, GFP_KERNEL);
++	if (!skb)
++		goto failure;
+ 
+ 	rep = __nlmsg_put(skb, NETLINK_CB(in_skb).portid, nlh->nlmsg_seq,
+ 			  NLMSG_ERROR, payload, flags);
+ 	errmsg = nlmsg_data(rep);
+ 	errmsg->error = err;
+-	memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg) ? nlh->nlmsg_len : sizeof(*nlh));
++	unsafe_memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg)
++					 ?  nlh->nlmsg_len : sizeof(*nlh),
++		      /* "payload" was bounds checked against nlh->nlmsg_len,
++		       * and overflow-checked as tlvlen was constructed.
++		       */);
+ 
+ 	if (tlvlen)
+ 		netlink_ack_tlv_fill(in_skb, skb, nlh, err, extack);
+@@ -2506,6 +2521,12 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
+ 	nlmsg_end(skb, rep);
+ 
+ 	nlmsg_unicast(in_skb->sk, skb, NETLINK_CB(in_skb).portid);
++	return;
++
++failure:
++	NETLINK_CB(in_skb).sk->sk_err = ENOBUFS;
++	sk_error_report(NETLINK_CB(in_skb).sk);
++	return;
+ }
+ EXPORT_SYMBOL(netlink_ack);
+ 
+-- 
+2.34.1
+

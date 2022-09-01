@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDEB85AA39F
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 01:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2230B5AA3A0
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 01:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233250AbiIAXS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 19:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42760 "EHLO
+        id S235196AbiIAXSl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 19:18:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234804AbiIAXSA (ORCPT
+        with ESMTP id S235230AbiIAXST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 19:18:00 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D04EA3D1B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:17:46 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id j204so933366ybj.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 16:17:46 -0700 (PDT)
+        Thu, 1 Sep 2022 19:18:19 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44E69C1F2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:18:16 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-33da3a391d8so2136017b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 16:18:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=LLe4P0CDKZNu2y/iLQFOmqm2xVCa1+xC0+/2UAKABJs=;
-        b=E800dH7PG7qGduh6oSah7WQAwmrsM+wQmDZjjqdBAR60RvrxBZHO23f04n2iXHj6B6
-         JP4sBRMEb5m0iPCXbYazGmBCzu7qChwl/ipzAmIhLadRiKX3Y0zySsPNlYd0h+LcoxL8
-         5FNxATVqNyLa1BoYf6Cxlq+XP5qZplVJPHSMPHn1kfsbAjFzQxAMb9VoJYRqdqVYgEwr
-         U+TKjEqBLNEszFZU9PUc/x9OXZ/4B2ib6Q/EZSxGRaxVsTNJo0XeGgkfBjLjXtDUFglC
-         Q2eTqe1FllFFqOAiwsRUf4TETNOa1mHZ6WH7dmCthCaB5IO6/fwVnji8K+vdyqp3MbuZ
-         tFcA==
+        bh=rjiF9dcJ/mORZlmNTO18kEduhbATdpbM6SHMK6U+ruY=;
+        b=miInjSJE+fzo5gS/eKt5cfKejZWjk/URgt0UsOF5yFYhBi4SW0mjlLLL/BxcWNS7q1
+         ZbX9dW3k1PQz07RhMq4TY0IKX8uDz5gqWib15fn/ENu8F4BQEoeMpBqRR4aXJyehSLYL
+         rlX+s6DOoRRQDDNJOyrdh0XgYf16gCuBQ8/5nYMEbXay2V4G5ElxQsF4iKh7ls3v0nku
+         D6GH4AzNn0lGwU6+bKnN6gfpnyUHAp3BKdNloRCyIKDJYsKSeK4d/tInEIryGNWiC42i
+         SC0dR4U7pJvq0mNT8d7KhoSD0pTCfW3Ka8zPz/CWyWvVkBglY+I9aRF6ESuk5tijxW2i
+         1vog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=LLe4P0CDKZNu2y/iLQFOmqm2xVCa1+xC0+/2UAKABJs=;
-        b=1O5wEOrmQHvgjAB5S724WzhRUU7W9sNLuFubbBP/acKn+to1xZE2TXkVpBxtWrWLnp
-         EG0GKwURFB/Lg0bVF5gfG5S8dg1yRnY/10L5/8HDOvrLHTNqvwy+FmZV8rsYIA4wx4Ua
-         nunl8zArXU1t34pwgD4UseineVn3OCzAoc+azEGr/AW36gCqIs7h3b8dl0OpGwMeMK/a
-         7TmJTwJj8WarM8B9N04lHYS57ab7JMX9h/O3vU4dvAZVfSCgzD2zRQEOB/jsHwn9aEug
-         fLUZjFT35q7cd5Q6gMHUDzCTdwWQU2/74nR3yareT6PjSY7z8/PmyxCBTlZ4IBCcbI5a
-         vb3A==
-X-Gm-Message-State: ACgBeo1RS8zJ1P619XntaNZF4cpndHgvmetTS1U6DZAoxpaM6lAe5AL3
-        qlXht9Duqva+uFDUpyPTHsDNKG4+xb3QR61dh75iFg==
-X-Google-Smtp-Source: AA6agR6jFuUOVZTVV0+XfDd0He4Hrb9XV2PsfvVugkFPyYicaO90qEw/qesq5yP63n03v6KmDubjqCQiaNOXXMGy9zw=
-X-Received: by 2002:a05:6902:705:b0:695:b3b9:41bc with SMTP id
- k5-20020a056902070500b00695b3b941bcmr21131741ybt.426.1662074264903; Thu, 01
- Sep 2022 16:17:44 -0700 (PDT)
+        bh=rjiF9dcJ/mORZlmNTO18kEduhbATdpbM6SHMK6U+ruY=;
+        b=YgxDvZ6pIMrMbgBIlUCtPrM54HGtOwABj/x+L3DnNizHzKIVdkGDLAHMZu7S/PaNll
+         7AmUk/9GroyS4/7vXoz5a3itjeaJKIAZSB62RjjEfT2dK4TSuow9yYUiYJPAfuVqQLca
+         nFsiVxlT0SjZmVAuLGO4/VKqULO4u8TKGB3oBL56KXq8pJ+giwkzI6dnLWZOlatjDV3N
+         6SzVv8G1qiakLIMFBu+NbMdHrXaukXJw1SjV40tsqr0v1qnp9D38NpBnHkTnfnxgjeP4
+         owi4lmEgTAHvG/sNPd1UGO3kqU6mGj6Bp27Div5uRYzKm/7ulI+hU+K7a2QtXV+eY7H0
+         Nzqg==
+X-Gm-Message-State: ACgBeo2aXrFWTpTd+SwbC++a+9ffoHRt/ey4rYGrsSqD+iOszYsrMJ7+
+        0QYPnLrRjrrvs8/wBQRMQ2rX2eTdxs4X5sjGi18KKg==
+X-Google-Smtp-Source: AA6agR6m7scNwFemz6Af1WoGTDIcSPP5pnTPi8sC0t6BGCdPYrcUbrHz9JxtFN2qOLjSTkeI4M1Lodd/jngX9vslX64=
+X-Received: by 2002:a0d:c981:0:b0:330:dc03:7387 with SMTP id
+ l123-20020a0dc981000000b00330dc037387mr25164956ywd.380.1662074295806; Thu, 01
+ Sep 2022 16:18:15 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-24-surenb@google.com>
- <20220901202052.xfaeuhmosheml2gz@moria.home.lan>
-In-Reply-To: <20220901202052.xfaeuhmosheml2gz@moria.home.lan>
+References: <20220901173516.702122-1-surenb@google.com> <20220901173516.702122-4-surenb@google.com>
+ <20220901202239.tnnzlbermiyvkmih@moria.home.lan>
+In-Reply-To: <20220901202239.tnnzlbermiyvkmih@moria.home.lan>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 1 Sep 2022 16:17:33 -0700
-Message-ID: <CAJuCfpEJxxm17fFJ1YVkOTBJbP5ce9ey90q_mCk_pkyTdHkrUg@mail.gmail.com>
-Subject: Re: [RFC PATCH RESEND 23/28] x86/mm: define ARCH_SUPPORTS_PER_VMA_LOCK
+Date:   Thu, 1 Sep 2022 16:18:04 -0700
+Message-ID: <CAJuCfpFqK+Gfd100C8s8jnJci+UCt9y6dqsn=eqYin6g-VVx6Q@mail.gmail.com>
+Subject: Re: [RFC PATCH RESEND 03/28] mm: introduce __find_vma to be used
+ without mmap_lock protection
 To:     Kent Overstreet <kent.overstreet@linux.dev>
 Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Michel Lespinasse <michel@lespinasse.org>,
@@ -93,33 +94,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 1:21 PM Kent Overstreet
+On Thu, Sep 1, 2022 at 1:22 PM Kent Overstreet
 <kent.overstreet@linux.dev> wrote:
 >
-> On Thu, Sep 01, 2022 at 10:35:11AM -0700, Suren Baghdasaryan wrote:
-> > Set ARCH_SUPPORTS_PER_VMA_LOCK so that the per-VMA lock support can be
-> > compiled on this architecture.
-> >
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  arch/x86/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index f9920f1341c8..ee19de020b27 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -27,6 +27,7 @@ config X86_64
-> >       # Options that are inherently 64-bit kernel only:
-> >       select ARCH_HAS_GIGANTIC_PAGE
-> >       select ARCH_SUPPORTS_INT128 if CC_HAS_INT128
-> > +     select ARCH_SUPPORTS_PER_VMA_LOCK
-> >       select ARCH_USE_CMPXCHG_LOCKREF
-> >       select HAVE_ARCH_SOFT_DIRTY
-> >       select MODULES_USE_ELF_RELA
+> On Thu, Sep 01, 2022 at 10:34:51AM -0700, Suren Baghdasaryan wrote:
+> > Add __find_vma function to be used for VMA lookup under rcu protection.
 >
-> I think you could combine this with the previous path (and similarly on other
-> architectures) - they logically go together.
+> So it was news to me that the rb tree code can be used for lockless lookups -
+> not having looked at lib/rbtree.c in over 10 years :) - I still think it should
+> be mentioned in the commit message that that's what you're doing and why it's
+> safe, because it's not exactly common knowledge and lockless stuff deserves
+> extra scrutiny.
+>
+> Probably worth a comment, too.
 
-Thanks for the feedback! I see no downside to that, so unless there
-are objections I will combine them in the next version.
+Ack.
+
+>
+> Reviewed-by: Kent Overstreet <kent.overstreet@linux.dev>
+
+Thanks!
+
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an email to kernel-team+unsubscribe@android.com.
+>

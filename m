@@ -2,105 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B74DC5AA07E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:55:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 307555AA084
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:58:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbiIATzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:55:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
+        id S234301AbiIAT5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbiIATzU (ORCPT
+        with ESMTP id S233218AbiIAT5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:55:20 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915DD3A4BF
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:55:19 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id r141so15532359iod.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 12:55:19 -0700 (PDT)
+        Thu, 1 Sep 2022 15:57:43 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0251F883E0;
+        Thu,  1 Sep 2022 12:57:43 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id i5-20020a17090a2a0500b001fd8708ffdfso3456301pjd.2;
+        Thu, 01 Sep 2022 12:57:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=seI1koEC25ypVGd7T1UjIwUU3cFD+MV5D0arikaOKag=;
-        b=mzcebpbWdcmzlubeGcDuaw+53g7e5bWwmRlay5XuQCuH3R/t0JaasCCMwM64OhQ8C0
-         Qj8qMRkKOagiQjpH+nVAooZugFtBFIZcSUg/ZoOIEeiF+ewsGDfW5Xojf9q5HCf4t956
-         PFhD3GO7Z/XVxDSRp5TuShiPr/FFsO9VDyAwZ7plwo+K5WQ0gFWxLBD/6x4a2LKPbz8j
-         BiFNQ+f/1SKSq9n+C1xM3Zej61fBZKP0ddqpVHJJoDvqdQbB82KS514IxM3cVsORj0X6
-         2qGXWXJrP3ahNVwr4ON0I31cXTL/f6Up+m0FJxwLrZnqHmDuAmgHF8t8sj+xxtUA1yzv
-         H7Gg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date;
+        bh=Bd+rXb3069I5Z5vldvEZpgf/hYsFoBoCUXm5L5yp/BY=;
+        b=jcht6nBIKryIds7W6HMSeIt+XUi9hXl2sA8c0gFTbSRjKEGRI2US6JQfwMff5avJRs
+         cUP8kUhK99YSAkyEXoSjizcSJdU+/Fi+P/jt3wFhShMNwFZyzufJcmfL9bBlHEJHvgJP
+         vpWdGRqgDX4Ae+0rhAXQSB691cHvXNxR6tuwnZ3J1goer/jceohRv528INPgwe1VvDF5
+         o2Ngu5bXOrCYYh9f6WLi/++INlhYB1/0veeT/+WIYbDo95NDcPVBKqBvw0RDmwJ5M0Tp
+         e0Rc1pCa1tnA5FRmPe4+yBetAF71YUl0HsfG8NHzLtgN4pLeozftaXnq02UJ2tcTr6a1
+         3YOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=seI1koEC25ypVGd7T1UjIwUU3cFD+MV5D0arikaOKag=;
-        b=Xv5B4yGyWMpftSg+OTJiSbsQhiBPFqyD3m1etKxDmu+Qw1GMzSxCkdhE9RNHU2C1Yj
-         /k73dA5oz8fjFxpwPOWGtUF+pbMdXbxZVGv1ZELx5+0ahRhhhkj/RwVr9TXwE/HhsPPv
-         CUPisyKjTepXrx8OavWkXjJvydkwalpTAXSJnJ93OhDS67CkduLHK6xhUuCl4P7gd/f+
-         8VYizunYzOxjEJAQ7ssG/AvjnjsYvtZJz9Q9g17GjmJrhoWOy7uhmKeUzZR5GNqQzYWz
-         5Xh6ZPrL9l3Y/QMA0U4Dm2qgxqp5HGh78ewmaJ3PjNIghQv10Hk7MjJhfUh3RHc8pCGs
-         cjJw==
-X-Gm-Message-State: ACgBeo0afe9Sox7VgeIqCMS0JPvvMkJQyQp9nbG7bqOUjlxmdU69ILP6
-        psMUJsmTb0O3ZseS7zTUZZ7dxrfbj7gNGriB01yamA==
-X-Google-Smtp-Source: AA6agR6E8CWIjgzNAAEwAB1E6jFOLB0toIoj0r0vr72SzwiSp/lagdot9Pv8Elb1B+6+1/bL+SDvb2Xedw6RH/MYQ+o=
-X-Received: by 2002:a5d:8b47:0:b0:689:a436:81d2 with SMTP id
- c7-20020a5d8b47000000b00689a43681d2mr15417264iot.138.1662062118567; Thu, 01
- Sep 2022 12:55:18 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=Bd+rXb3069I5Z5vldvEZpgf/hYsFoBoCUXm5L5yp/BY=;
+        b=B8Yy496r5C219m1Q7q0Eet/bZGvSnFY3haOV0sgtuQLEepNPEwPHkwLkV/Dsfe6oUx
+         JF+IUWHdzpehZIQ1Ax/b9RjlMYIHnqTRnWPp2k+EP2AkDMYvRBn83Dzj6frJGQ7JP97w
+         Ed0lY5P+uqLeczAqq0hM3ap5KLqghgNWno9gxVQABzXNzCVxRN91Wi7fuV1uiUZcn7VN
+         0TIaYdDYcNr6qdQFxcKn63u1SpzQ/p/EpE7sUzBfLQeLq/f6uRWHtuNcX/jCL2jwibYD
+         uhFmz2yWAPR2KNJyGZYTnrPcY65a5UjaEeJ6Syw6r+ezys1yAQpnr9JAGrlS9IeHVxfp
+         WHDg==
+X-Gm-Message-State: ACgBeo21uu6jI/nw/XpT8KP7XTChgQG/ab8vvE9e9JOplqzLDjdEJxQc
+        xnongjcWNAZVdjyviVpppJY=
+X-Google-Smtp-Source: AA6agR5WgfOwMQzuWcuYT0sAq4P/AdNPcYqQfh15cyWdgzC/xe7q8/dgNRK1kVZLe6YkaHKMSEH7qA==
+X-Received: by 2002:a17:902:bd48:b0:172:bb9d:d6d5 with SMTP id b8-20020a170902bd4800b00172bb9dd6d5mr31869287plx.59.1662062262410;
+        Thu, 01 Sep 2022 12:57:42 -0700 (PDT)
+Received: from youngsil.svl.corp.google.com ([2620:15c:2d4:203:87ff:65c0:eb6a:d2b3])
+        by smtp.gmail.com with ESMTPSA id z10-20020a17090a1fca00b001fb23c28e9asm3728500pjz.2.2022.09.01.12.57.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 12:57:41 -0700 (PDT)
+Sender: Namhyung Kim <namhyung@gmail.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
+        Adrian Hunter <adrian.hunter@intel.com>
+Subject: [PATCHSET 0/5] perf tools: Show per-event lost sample count (v2)
+Date:   Thu,  1 Sep 2022 12:57:34 -0700
+Message-Id: <20220901195739.668604-1-namhyung@kernel.org>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-References: <20220901092315.33619-1-tsahu@linux.ibm.com>
-In-Reply-To: <20220901092315.33619-1-tsahu@linux.ibm.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 1 Sep 2022 12:54:42 -0700
-Message-ID: <CAJHvVciwa4x8sQag0a5dmq2GbmpMs3bYEVCW4g_Ro_o_GVtQTg@mail.gmail.com>
-Subject: Re: [PATCH] selftest: vm: remove deleted local_config.* from .gitignore
-To:     Tarun Sahu <tsahu@linux.ibm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
-        Linuxkselftest <linux-kselftest@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, aneesh.kumar@linux.ibm.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for the cleanup! For what it's worth:
+Hello,
 
-Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
+Now we have PERF_FORMAT_LOST support, add it to perf record and report so that
+it can show number of lost samples per event.  This can be useful if you want
+to reconstruct number of events from the samples like when using -c option.
 
-On Thu, Sep 1, 2022 at 2:23 AM Tarun Sahu <tsahu@linux.ibm.com> wrote:
->
-> Commit d2d6cba5d6623245a80cc151008cce825c8b6248 ("selftest: vm: remove
-> orphaned references to local_config.{h,mk}") took care of removing
-> orphaned references. This commit remove local_config from .gitignore.
->
-> Parent Patch
-> Commit 69007f156ba7aead6c75b0046958ad3396f5aed1 ("Kselftests: remove
-> support of libhugetlbfs from kselftests")
->
->
-> Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
-> ---
->  tools/testing/selftests/vm/.gitignore | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-> index 31e5eea2a9b9..7b9dc2426f18 100644
-> --- a/tools/testing/selftests/vm/.gitignore
-> +++ b/tools/testing/selftests/vm/.gitignore
-> @@ -30,7 +30,6 @@ map_fixed_noreplace
->  write_to_hugetlbfs
->  hmm-tests
->  memfd_secret
-> -local_config.*
->  soft-dirty
->  split_huge_page_test
->  ksm_tests
-> --
-> 2.31.1
->
+Changes in v2)
+ * fix id_hdr_size calculation  (Adrian)
+ * fix a memory leak
+ * display lost samples even if no samples
+ 
+ 
+Currently it adds PERF_RECORD_LOST_SAMPLES at the end of perf data after reading
+event values by read(2).  The perf record unconditionally sets the lost bit if
+the kernel supports it.  Users can see the number with `perf report --stat`.
+
+You can get the code from 'perf/report-lost-v2' brach on
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
+
+Thanks,
+Namhyung
+
+Namhyung Kim (5):
+  perf tools: Print LOST read format in the verbose mode
+  perf record: Set PERF_FORMAT_LOST by default
+  perf record: Read and inject LOST_SAMPLES events
+  perf hist: Add nr_lost_samples to hist_stats
+  perf report: Show per-event LOST SAMPLES stat
+
+ tools/perf/builtin-record.c               | 64 +++++++++++++++++++++++
+ tools/perf/builtin-report.c               | 17 ++++++
+ tools/perf/util/events_stats.h            |  1 +
+ tools/perf/util/evsel.c                   | 10 +++-
+ tools/perf/util/evsel.h                   |  1 +
+ tools/perf/util/hist.c                    | 15 ++++--
+ tools/perf/util/hist.h                    |  1 +
+ tools/perf/util/perf_event_attr_fprintf.c |  2 +-
+ 8 files changed, 106 insertions(+), 5 deletions(-)
+
+
+base-commit: 6c3bd8d3e01d9014312caa52e4ef1c29d5249648
+-- 
+2.37.2.789.g6183377224-goog
+

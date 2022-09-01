@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA995A89D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AECCB5A89DD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:38:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbiIAAcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 20:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51746 "EHLO
+        id S232122AbiIAAio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 20:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiIAAcA (ORCPT
+        with ESMTP id S232112AbiIAAil (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 20:32:00 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B340112E4E9
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 17:31:28 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id t129so16006479pfb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 17:31:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=fvDQMxNZIv6hw6AbESq/vbcgXuymsRN4QUVLdGE1Nvo=;
-        b=bvuyxn8QDYEpREdEC0OyjtHGo7RiROSYE6ipfcmbdb0Zn9VTPONozNrWTV0JgdBCC+
-         Bx2kWll3Eg24v1Ig9sSgFQ1xWvRM7B5mmBi5lfl21IB1sPFHqEp3/ZzfOcnflmc3h9WE
-         TRd6TtN8pySoz4/KT4x3bwZfZ5hTLPw+twnHg3rsuFg8ORTEcwXB8QCYrymUFXTELJzN
-         Mo6n3oNBCSwzRDpcbz3NRB/MPUICFXY9c3WuUmTHmNmw0/o2QVY14snMlm9wpSRZFWnA
-         +YdZhMSwg/uqMyh5UFplftW1N+d6DTCuT+pgg3GtUTdSOxYGeIojTQ89/MmsvIS9ykPd
-         TY7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=fvDQMxNZIv6hw6AbESq/vbcgXuymsRN4QUVLdGE1Nvo=;
-        b=Y9Ne+ct2GJKQ1M9PXnrNwxShbcVTcumZLXWrK/mBO2rr3aEVGk/RtdIvbFMC9+JF1m
-         9XhiiqD0mprqYLt/UkijX4anX8E8YJHvUzRCQsyt4Hkwbt+NiwkWbAXkF1CXjlxEav3N
-         12CK1DNLzSjIeWx0ldZEqOoZz6vQj595kVJ/sAUNAfPE2QeCZhngQnSFiEw000bCcak0
-         /IYusHfVEJAradE7I8w0isRNu6tXBD+7VkjyKRqWutD0F4f266rC9+W3hjobRNEqsWUx
-         IWcPUFTiaE+p4I8m5cpF1yml2VV6VHza3mjm4IkETEIIKMmfuKDVRQylIZfd9GlPj1iH
-         mQ7A==
-X-Gm-Message-State: ACgBeo2TwOGV9t0Z85UqpeDDjQHQAFB++Yg2J0OXRcG0lQSzmfq8C82M
-        AZzuT1m+HbkTZuz0bxGEcdOgYgTq/sw=
-X-Google-Smtp-Source: AA6agR65Eb3x5vZic2TqYN5/OVxoLVaMV4eQaEE/MiRwXITzS7LwbsfQXqM8y1P6Te20S6bWKIERuA==
-X-Received: by 2002:a05:6a00:1991:b0:53a:8bd9:d36c with SMTP id d17-20020a056a00199100b0053a8bd9d36cmr8482205pfl.81.1661992288157;
-        Wed, 31 Aug 2022 17:31:28 -0700 (PDT)
-Received: from localhost.localdomain ([139.177.225.255])
-        by smtp.gmail.com with ESMTPSA id o18-20020a63e352000000b0042c4d257083sm3926930pgj.25.2022.08.31.17.31.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 17:31:27 -0700 (PDT)
-From:   wuchi <wuchi.zero@gmail.com>
-To:     hch@lst.de, akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] profile: simplify redundant code in profile_setup
-Date:   Thu,  1 Sep 2022 08:31:21 +0800
-Message-Id: <20220901003121.53597-1-wuchi.zero@gmail.com>
-X-Mailer: git-send-email 2.32.1 (Apple Git-133)
+        Wed, 31 Aug 2022 20:38:41 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69DDAFE057;
+        Wed, 31 Aug 2022 17:38:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=pAUCRheD7HEjVi/ypvCmDmDlGNpLzHPc+8Ry1BLGL5Y=; b=Kkt/ouct9XIMw6tkOmsU6S4gh0
+        m0aJRIol5LWmRPlMQj6EEcUbBd6CL+yJgxrzADT1Wf4exlM1w2B2Y+elhLK/xDSiNb5IXf9nRPHgD
+        QjwWzunxbAmTwk68UOmqRMuAV2798RKPDIsqzqeinPmWVr0BEr8hXs4WNMYw9ptH/PlsoIgQ2VtRa
+        QfsfNpmxbm5W0JGnHVtKlwXEKt33ktMGCPx2QvIKidb3ZAUk4/ImLf5Z3IP3dx7GZWeM1jAx2DZ88
+        vGTWM4OPiRSVC5Pkow1cvRVGFwb/9rxFEgEAcWniGihBMrZSR6pHMtXNYHrf9fmx7BSpC/ZX1TGME
+        nUdUtbPQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oTYDt-00AnMP-NE;
+        Thu, 01 Sep 2022 00:38:21 +0000
+Date:   Thu, 1 Sep 2022 01:38:21 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Jan Kara <jack@suse.cz>
+Cc:     John Hubbard <jhubbard@nvidia.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Christoph Hellwig <hch@infradead.org>,
+        "Darrick J . Wong" <djwong@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/6] NFS: direct-io: convert to FOLL_PIN pages
+Message-ID: <Yw/+/U9GFaNnARdk@ZenIV>
+References: <20220827083607.2345453-1-jhubbard@nvidia.com>
+ <20220827083607.2345453-6-jhubbard@nvidia.com>
+ <YwqfWoAE2Awp4YvT@ZenIV>
+ <353f18ac-0792-2cb7-6675-868d0bd41d3d@nvidia.com>
+ <Ywq5ILRNxsbWvFQe@ZenIV>
+ <Ywq5VrSrY341UVpL@ZenIV>
+ <217b4a17-1355-06c5-291e-7980c0d3cea6@nvidia.com>
+ <20220829160808.rwkkiuelipr3huxk@quack3>
+ <a53b2d14-687a-16c9-2f63-4f94876f8b3c@nvidia.com>
+ <20220831094349.boln4jjajkdtykx3@quack3>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220831094349.boln4jjajkdtykx3@quack3>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,76 +69,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code to parse option string "schedule/sleep/kvm" of cmdline in
-function profile_setup is redundant, so simplify that.
+On Wed, Aug 31, 2022 at 11:43:49AM +0200, Jan Kara wrote:
 
-Signed-off-by: wuchi <wuchi.zero@gmail.com>
----
- kernel/profile.c | 32 ++++++++++++++------------------
- 1 file changed, 14 insertions(+), 18 deletions(-)
+> So after looking into that a bit more, I think a clean approach would be to
+> provide iov_iter_pin_pages2() and iov_iter_pages_alloc2(), under the hood
+> in __iov_iter_get_pages_alloc() make sure we use pin_user_page() instead of
+> get_page() in all the cases (using this in pipe_get_pages() and
+> iter_xarray_get_pages() is easy) and then make all bio handling use the
+> pinning variants for iters. I think at least iov_iter_is_pipe() case needs
+> to be handled as well because as I wrote above, pipe pages can enter direct
+> IO code e.g. for splice(2).
+> 
+> Also I think that all iov_iter_get_pages2() (or the _alloc2 variant) users
+> actually do want the "pin page" semantics in the end (they are accessing
+> page contents) so eventually we should convert them all to
+> iov_iter_pin_pages2() and remove iov_iter_get_pages2() altogether. But this
+> will take some more conversion work with networking etc. so I'd start with
+> converting bios only.
 
-diff --git a/kernel/profile.c b/kernel/profile.c
-index 7ea01ba30e75..8a77769bc4b4 100644
---- a/kernel/profile.c
-+++ b/kernel/profile.c
-@@ -59,43 +59,39 @@ int profile_setup(char *str)
- 	static const char schedstr[] = "schedule";
- 	static const char sleepstr[] = "sleep";
- 	static const char kvmstr[] = "kvm";
-+	const char *select = NULL;
- 	int par;
- 
- 	if (!strncmp(str, sleepstr, strlen(sleepstr))) {
- #ifdef CONFIG_SCHEDSTATS
- 		force_schedstat_enabled();
- 		prof_on = SLEEP_PROFILING;
--		if (str[strlen(sleepstr)] == ',')
--			str += strlen(sleepstr) + 1;
--		if (get_option(&str, &par))
--			prof_shift = clamp(par, 0, BITS_PER_LONG - 1);
--		pr_info("kernel sleep profiling enabled (shift: %u)\n",
--			prof_shift);
-+		select = sleepstr;
- #else
- 		pr_warn("kernel sleep profiling requires CONFIG_SCHEDSTATS\n");
- #endif /* CONFIG_SCHEDSTATS */
- 	} else if (!strncmp(str, schedstr, strlen(schedstr))) {
- 		prof_on = SCHED_PROFILING;
--		if (str[strlen(schedstr)] == ',')
--			str += strlen(schedstr) + 1;
--		if (get_option(&str, &par))
--			prof_shift = clamp(par, 0, BITS_PER_LONG - 1);
--		pr_info("kernel schedule profiling enabled (shift: %u)\n",
--			prof_shift);
-+		select = schedstr;
- 	} else if (!strncmp(str, kvmstr, strlen(kvmstr))) {
- 		prof_on = KVM_PROFILING;
--		if (str[strlen(kvmstr)] == ',')
--			str += strlen(kvmstr) + 1;
--		if (get_option(&str, &par))
--			prof_shift = clamp(par, 0, BITS_PER_LONG - 1);
--		pr_info("kernel KVM profiling enabled (shift: %u)\n",
--			prof_shift);
-+		select = kvmstr;
- 	} else if (get_option(&str, &par)) {
- 		prof_shift = clamp(par, 0, BITS_PER_LONG - 1);
- 		prof_on = CPU_PROFILING;
- 		pr_info("kernel profiling enabled (shift: %u)\n",
- 			prof_shift);
- 	}
-+
-+	if (select) {
-+		if (str[strlen(select)] == ',')
-+			str += strlen(select) + 1;
-+		if (get_option(&str, &par))
-+			prof_shift = clamp(par, 0, BITS_PER_LONG - 1);
-+		pr_info("kernel %s profiling enabled (shift: %u)\n",
-+			select, prof_shift);
-+	}
-+
- 	return 1;
- }
- __setup("profile=", profile_setup);
--- 
-2.20.1
+Not sure, TBH...
 
+FWIW, quite a few of the callers of iov_iter_get_pages2() do *NOT* need to
+grab any references for BVEC/XARRAY/PIPE cases.  What's more, it would be
+bloody useful to have a variant that doesn't grab references for
+!iter->user_backed case - that could be usable for KVEC as well, simplifying
+several callers.
+
+Requirements:
+	* recepients of those struct page * should have a way to make
+dropping the page refs conditional (obviously); bio machinery can be told
+to do so.
+	* callers should *NOT* do something like
+	"set an ITER_BVEC iter, with page references grabbed and stashed in
+bio_vec array, call async read_iter() and drop the references in array - the
+refs we grab in dio will serve"
+Note that for sync IO that pattern is fine whether we grab/drop anything
+inside read_iter(); for async we could take depopulating the bio_vec
+array to the IO completion or downstream of that.
+	* the code dealing with the references returned by iov_iter_..._pages
+should *NOT* play silly buggers with refcounts - something like "I'll grab
+a reference, start DMA and report success; page will stay around until I
+get around to dropping the ref and callers don't need to wait for that" deep
+in the bowels of infinibad stack (or something equally tasteful) is seriously
+asking for trouble.
+
+Future plans from the last cycle included iov_iter_find_pages{,_alloc}() that
+would *not* grab references on anything other than IOVEC and UBUF (would advance
+the iterator, same as iov_iter_get_pages2(), though). Then iov_iter_get_...()
+would become a wrapper for that.  After that - look into switching the users
+of ..._get_... to ..._find_....   Hadn't done much in that direction yet,
+though - need to redo the analysis first.
+
+That primitive might very well do FOLL_PIN instead of FOLL_GET for IOVEC and
+UBUF...

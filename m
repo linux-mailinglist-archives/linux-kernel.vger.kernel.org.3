@@ -2,50 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE20B5A9B13
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:01:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07DD45A9B24
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:04:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234361AbiIAPBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:01:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49392 "EHLO
+        id S234519AbiIAPD7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234107AbiIAPBE (ORCPT
+        with ESMTP id S234227AbiIAPDz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:01:04 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1199342AC6;
-        Thu,  1 Sep 2022 08:01:00 -0700 (PDT)
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oTlgg-00071t-Tm; Thu, 01 Sep 2022 17:00:58 +0200
-Received: from [85.1.206.226] (helo=linux-4.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oTlgg-000QVV-Nf; Thu, 01 Sep 2022 17:00:58 +0200
-Subject: Re: [RFC bpf-next 1/2] bpf: tnums: warn against the usage of
- tnum_in(tnum_range(), ...)
-To:     Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>
-References: <20220831031907.16133-1-shung-hsi.yu@suse.com>
- <20220831031907.16133-2-shung-hsi.yu@suse.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <0f6d7f97-8cd9-d513-368b-39706dd6b06a@iogearbox.net>
-Date:   Thu, 1 Sep 2022 17:00:58 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Thu, 1 Sep 2022 11:03:55 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACF9083BE5;
+        Thu,  1 Sep 2022 08:03:53 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id s11so22930722edd.13;
+        Thu, 01 Sep 2022 08:03:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=vcK8Y9RIhCFnLAHNF1ma+eBloNnCb12iQrkaA2RWwss=;
+        b=CLVGkKkq/LgD+cnFQOBUzqNyMDKzqCmneML9igIGH21aL1qaB01IR1MGTfUeaE+mkC
+         P0Bqs5Hm2jJX4LghL1s25mvHgPqhSusaATiSomUqcmb5pyZ+Ut59gpyDQvfGacFJokdx
+         zL46/UrTEHe1u6MiaxkzdjZZFP8bN24zSYxvcOVV+sEpteyIik5m4Ot6jLpL4O1xS1Ci
+         3LHN0Xuchj4i1ranV/AIN7UQR9JYaovQJ903/yHm3bEVhAwtc73gMdwiTWTITKWITJBZ
+         clsHHPSng+BYK9GNC4JOrZb96p4jjl8m0+6QRH/+Pl4m16Qde9xKgZOqn9abEW6UOcYq
+         Hk7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=vcK8Y9RIhCFnLAHNF1ma+eBloNnCb12iQrkaA2RWwss=;
+        b=Q5tM1knmNpefvTpECdUpQZ14L7p4R/sGEjFsLo56ojjAmCmCJKhg+WBMiPCHoDuO2I
+         a6zFGKyq9wr+c7Af+pP7uDgf8LzHH8UJ5JwLzMgUspWfowm20Lzc4JCh3Go7Dcwouh/H
+         Yr0WFl+WjZrcfYECBgQQhmGkURG4yQlV/WECuoTNjSWgNrTnMalMC1AIMrBnsWSaTxyn
+         jwDi77CbD0ayvqKHQfOpD7J9ozAxiUNQGl/0F4Mr3caHyvWpzA4c198n/rl36efi1kNS
+         phfqxUPxPlqgvrUKsdJ7Mxy2XZTUpkC+98iBBYBYdsRtTGsNDtXSFdNtVSXl75Uqw/nP
+         FxZQ==
+X-Gm-Message-State: ACgBeo2vQDtRkoBqvrow7sT/7VQHJY1orR8MU3hUg4zMBSZ14W7KtXm+
+        /AVBJxtCAsMG+V29hLv4ePE=
+X-Google-Smtp-Source: AA6agR6ecAmWtCB5BI8iMnmqsmfam7Lue/g0foYnFCgWMZksqtn0CBXZVzGuccTxeDYuPlKSHE2oAg==
+X-Received: by 2002:a05:6402:268b:b0:446:381d:7b45 with SMTP id w11-20020a056402268b00b00446381d7b45mr29179355edd.372.1662044632304;
+        Thu, 01 Sep 2022 08:03:52 -0700 (PDT)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id o18-20020a170906601200b007314a01766asm8545273ejj.211.2022.09.01.08.02.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 08:03:51 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 17:01:18 +0200
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     David Miller <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        David Ahern <dsahern@kernel.org>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        Martin KaFai Lau <kafai@fb.com>,
+        netdev <netdev@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, linux-wpan@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: Re: [PATCH 3/4] net-next: frags: add inetpeer frag_mem tracking
+Message-ID: <20220901150115.GB31767@debian>
+References: <20220829114648.GA2409@debian>
+ <CANn89iLkfMUK8n5w00naST9J+KrLaAqqg2r0X9Sd-L0XzpLzSQ@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20220831031907.16133-2-shung-hsi.yu@suse.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26645/Thu Sep  1 09:52:28 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANn89iLkfMUK8n5w00naST9J+KrLaAqqg2r0X9Sd-L0XzpLzSQ@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,62 +87,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/22 5:19 AM, Shung-Hsi Yu wrote:
-> Commit a657182a5c51 ("bpf: Don't use tnum_range on array range checking
-> for poke descriptors") has shown that using tnum_range() as argument to
-> tnum_in() can lead to misleading code that looks like tight bound check
-> when in fact the actual allowed range is much wider.
+On Mon, Aug 29, 2022 at 03:15:47PM -0700, Eric Dumazet wrote:
+> We tried to get rid of any dependence over inetpeer, which is not
+> resistant against DDOS attacks.
 > 
-> Document such behavior to warn against its usage in general, and suggest
-> some scenario where result can be trusted.
-> 
-> Link: https://lore.kernel.org/bpf/984b37f9fdf7ac36831d2137415a4a915744c1b6.1661462653.git.daniel@iogearbox.net/
-> Link: https://www.openwall.com/lists/oss-security/2022/08/26/1
-> Signed-off-by: Shung-Hsi Yu <shung-hsi.yu@suse.com>
+> So I would not add a new dependency.
 
-Any objections from your side if I merge this? Thanks for adding doc. :)
+I see your point. What do you suggest doing differently?
 
-> ---
->   include/linux/tnum.h | 20 ++++++++++++++++++--
->   1 file changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/include/linux/tnum.h b/include/linux/tnum.h
-> index 498dbcedb451..0ec4cda9e174 100644
-> --- a/include/linux/tnum.h
-> +++ b/include/linux/tnum.h
-> @@ -21,7 +21,12 @@ struct tnum {
->   struct tnum tnum_const(u64 value);
->   /* A completely unknown value */
->   extern const struct tnum tnum_unknown;
-> -/* A value that's unknown except that @min <= value <= @max */
-> +/* An unknown value that is a superset of @min <= value <= @max.
-> + *
-> + * Could including values outside the range of [@min, @max].
-> + * For example tnum_range(0, 2) is represented by {0, 1, 2, *3*}, rather than
-> + * the intended set of {0, 1, 2}.
-> + */
->   struct tnum tnum_range(u64 min, u64 max);
->   
->   /* Arithmetic and logical ops */
-> @@ -73,7 +78,18 @@ static inline bool tnum_is_unknown(struct tnum a)
->    */
->   bool tnum_is_aligned(struct tnum a, u64 size);
->   
-> -/* Returns true if @b represents a subset of @a. */
-> +/* Returns true if @b represents a subset of @a.
-> + *
-> + * Note that using tnum_range() as @a requires extra cautions as tnum_in() may
-> + * return true unexpectedly due to tnum limited ability to represent tight
-> + * range, e.g.
-> + *
-> + *   tnum_in(tnum_range(0, 2), tnum_const(3)) == true
-> + *
-> + * As a rule of thumb, if @a is explicitly coded rather than coming from
-> + * reg->var_off, it should be in form of tnum_const(), tnum_range(0, 2**n - 1),
-> + * or tnum_range(2**n, 2**(n+1) - 1).
-> + */
->   bool tnum_in(struct tnum a, struct tnum b);
->   
->   /* Formatting functions.  These have snprintf-like semantics: they will write
-> 
-
+The inetpeer mechanism is used for IPv4 frags. If it isn't resistant
+against DDoS attacks, can it perhaps be improved?

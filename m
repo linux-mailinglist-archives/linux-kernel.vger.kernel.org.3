@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F8A35A9DEC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF155A9DF2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:24:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233979AbiIARVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57762 "EHLO
+        id S233814AbiIARYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiIARVd (ORCPT
+        with ESMTP id S230136AbiIARYQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:21:33 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980CD5A3DB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:21:32 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id e18so15960497edj.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:21:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=GdKSrjYfMkwK9rUKg3FKiVa8IZKeoeUMaRJ6T28HaBQ=;
-        b=Yw5T74k57lHXMjiqqC3YAyoxM8dkwdEtHHADOFOHEXWGvqT6pa4lJ9OInlJsqPoo08
-         Porv/pR8ZvOvlgAxZErz3x+wB8GvAu0fq2CpPZk6oeTWEAcwRtiqNYnCcpRtyVSGtbfF
-         zA8G7HXpLN10qQTp6JYC8y+9TK+beIZAP/NMhS+HrHb1Ko7bbnR77viZsMUO3fhN+XZv
-         2836L8+Lq7SSqQpAEjItvhqGNFgBsRmxpeiDTX3LbsPjSP1MppAvkAPbEsfy4e5Nye9D
-         Gzn2hT8rk1fXzRI6OojWGIlLMo5dvRGjdSSnuhwsvOpC+eE9JKOyfVszRK/BmVEbeyQV
-         I9FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=GdKSrjYfMkwK9rUKg3FKiVa8IZKeoeUMaRJ6T28HaBQ=;
-        b=16OMfDvvFCRXHH0WU8im8c7vEWgoi1Xg4RF+OMc2t11ijOxMTUnLVESkCl8CYlJBO2
-         hsTCcpHk7XXuxZexE0pEPoS0zlMFL/R5BWj+hQ4XtjqfBE1i2xoN1ewvDVuUsqQTIZ89
-         36kTIDXz9PvQ1xH2z0FdPvVzMjF1W7puXcGiY2StymIQYcgFIAzndL++YxYEWwNaSEsI
-         RTOaw0amLJXmXu60IpcBwD3xxsCOqa7Bpp2rKV9h5Fexmb8/GEzdEjXrZDYz1fxSsoeN
-         Yk9enFXOJK0yPsoWs7tsEuir4jhzhoZhibp6/Czz8LQXMKKHuXY2LYnEoBt+mTKDI5YX
-         Odnw==
-X-Gm-Message-State: ACgBeo0Ia8MZC5xvTXUktHTyEyTPid7NAtCrEcWViXq2tJrMLYB2qsVb
-        0UcBkxd43CJnJZ5znM1ocZY=
-X-Google-Smtp-Source: AA6agR7GgF9V4riY+CvNwpp4tsyE9Mo/MUaLpZkeZ7ENpwX0eCU6Hclub33HqW/SRLLIBQ8szB9CMg==
-X-Received: by 2002:aa7:dcd6:0:b0:448:bddd:d562 with SMTP id w22-20020aa7dcd6000000b00448bdddd562mr12506696edu.365.1662052891022;
-        Thu, 01 Sep 2022 10:21:31 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb63.dynamic.kabel-deutschland.de. [95.90.187.99])
-        by smtp.gmail.com with ESMTPSA id r16-20020a170906705000b00732e3d94f4fsm8645992ejj.124.2022.09.01.10.21.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 10:21:30 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH] staging: r8188eu: remove mlme_osdep.h
-Date:   Thu,  1 Sep 2022 19:21:20 +0200
-Message-Id: <20220901172120.8485-1-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Thu, 1 Sep 2022 13:24:16 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58F15A174;
+        Thu,  1 Sep 2022 10:24:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662053055; x=1693589055;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=E8rFsh3cOY6TR7v1pVGIy4bcSAYXEqYJdeSl8HkWbzs=;
+  b=MaOl98FUSw0hEb3jtBozOS1jfe62pdGnYqW4S07aGdaboozrf4SB08Q6
+   pMaDlhrNIZxc0HCIBKvnOtN2TIicl8vpUaaiUA4p2Z8XOO7ZQefENu9+Q
+   I95zN3U+iHyKOfaSgBIV7Di10v9OS+LQHH84OLauzVai5TcSZNEz2TGIS
+   1Xdq0EkpJc9xNlzn3AWEIasCseFDVCxoQukbvjp5PU6gpi6lWWXDMcYTh
+   Bp5IYBeTnIPRbcW3NXboJ6YoGAEyHIvnsSy29fC20PkePFbPceroQJqyW
+   Z4AoQm9TAOkar6tPZZy8z5FXB9VfGlX0qsBdvo3xhKyK78KEukrCpkwD1
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="382075432"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="382075432"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 10:24:15 -0700
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="612589501"
+Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.209.165.86]) ([10.209.165.86])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 10:24:14 -0700
+Message-ID: <2450a184-3a97-f45e-b56a-b5e0ae85df19@intel.com>
+Date:   Thu, 1 Sep 2022 10:24:13 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.0
+Subject: Re: [PATCH v5 6/7] dmaengine: idxd: Support device_tx_status
+To:     Ben Walker <benjamin.walker@intel.com>, vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Fenghua Yu <fenghua.yu@intel.com>
+References: <20220622193753.3044206-1-benjamin.walker@intel.com>
+ <20220829203537.30676-1-benjamin.walker@intel.com>
+ <20220829203537.30676-7-benjamin.walker@intel.com>
+Content-Language: en-US
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20220829203537.30676-7-benjamin.walker@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,152 +64,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function indicate_wx_scan_complete_event() is declared multiple
-times. That is not needed. Remove redundant declarations to clean up
-the driver code and remove the now empty header mlme_osdep.h.
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_cmd.c       |  1 -
- drivers/staging/r8188eu/core/rtw_ioctl_set.c |  2 --
- drivers/staging/r8188eu/core/rtw_mlme.c      |  1 -
- drivers/staging/r8188eu/core/rtw_mlme_ext.c  |  1 -
- drivers/staging/r8188eu/core/rtw_recv.c      |  1 -
- drivers/staging/r8188eu/core/rtw_sta_mgt.c   |  1 -
- drivers/staging/r8188eu/hal/rtl8188e_cmd.c   |  1 -
- drivers/staging/r8188eu/include/hal_intf.h   |  1 -
- drivers/staging/r8188eu/include/mlme_osdep.h | 12 ------------
- drivers/staging/r8188eu/include/rtw_mlme.h   |  1 -
- 10 files changed, 22 deletions(-)
- delete mode 100644 drivers/staging/r8188eu/include/mlme_osdep.h
+On 8/29/2022 1:35 PM, Ben Walker wrote:
+> This can now be supported even for devices that complete operations out
+> of order. Add support for directly polling transactions.
+>
+> Cc: Dave Jiang <dave.jiang@intel.com>
+> Cc: Fenghua Yu <fenghua.yu@intel.com>
+> Signed-off-by: Ben Walker <benjamin.walker@intel.com>
+> ---
+>   drivers/dma/idxd/device.c |  1 +
+>   drivers/dma/idxd/dma.c    | 85 ++++++++++++++++++++++++++++++++++++++-
+>   drivers/dma/idxd/idxd.h   |  1 +
+>   3 files changed, 85 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
+> index 5a8cc52c1abfd..752544bef4551 100644
+> --- a/drivers/dma/idxd/device.c
+> +++ b/drivers/dma/idxd/device.c
+> @@ -148,6 +148,7 @@ int idxd_wq_alloc_resources(struct idxd_wq *wq)
+>   			desc->iax_completion = &wq->iax_compls[i];
+>   		desc->compl_dma = wq->compls_addr + idxd->data->compl_size * i;
+>   		desc->id = i;
+> +		desc->gen = 1;
+>   		desc->wq = wq;
+>   		desc->cpu = -1;
+>   	}
+> diff --git a/drivers/dma/idxd/dma.c b/drivers/dma/idxd/dma.c
+> index e0874cb4721c8..dda5342d273f4 100644
+> --- a/drivers/dma/idxd/dma.c
+> +++ b/drivers/dma/idxd/dma.c
+> @@ -12,6 +12,23 @@
+>   #include "registers.h"
+>   #include "idxd.h"
+>   
+> +
+> +#define DMA_COOKIE_BITS (sizeof(dma_cookie_t) * 8)
+> +/*
+> + * The descriptor id takes the lower 16 bits of the cookie.
+> + */
+> +#define DESC_ID_BITS 16
+> +#define DESC_ID_MASK ((1 << DESC_ID_BITS) - 1)
+> +/*
+> + * The 'generation' is in the upper half of the cookie. But dma_cookie_t
+> + * is signed, so we leave the upper-most bit for the sign. Further, we
+> + * need to flag whether a cookie corresponds to an operation that is
+> + * being completed via interrupt to avoid polling it, which takes
+> + * the second most upper bit. So we subtract two bits from the upper half.
+> + */
+> +#define DESC_GEN_MAX ((1 << (DMA_COOKIE_BITS - DESC_ID_BITS - 2)) - 1)
+> +#define DESC_INTERRUPT_FLAG (1 << (DMA_COOKIE_BITS - 2))
+> +
+>   static inline struct idxd_wq *to_idxd_wq(struct dma_chan *c)
+>   {
+>   	struct idxd_dma_chan *idxd_chan;
+> @@ -158,13 +175,67 @@ static void idxd_dma_free_chan_resources(struct dma_chan *chan)
+>   		idxd_wq_refcount(wq));
+>   }
+>   
+> +
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index 5b6a891b5d67..d690337ea74b 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -6,7 +6,6 @@
- #include "../include/osdep_service.h"
- #include "../include/drv_types.h"
- #include "../include/recv_osdep.h"
--#include "../include/mlme_osdep.h"
- #include "../include/rtw_br_ext.h"
- #include "../include/rtw_mlme_ext.h"
- #include "../include/rtl8188e_dm.h"
-diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-index 17f6bcbeebf4..d859f2d8a0c8 100644
---- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-+++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
-@@ -11,8 +11,6 @@
- #include "../include/usb_osintf.h"
- #include "../include/usb_ops.h"
- 
--extern void indicate_wx_scan_complete_event(struct adapter *padapter);
--
- u8 rtw_do_join(struct adapter *padapter)
- {
- 	struct list_head *plist, *phead;
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme.c b/drivers/staging/r8188eu/core/rtw_mlme.c
-index 8f21d34a317f..d2ea2659d58e 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme.c
-@@ -7,7 +7,6 @@
- #include "../include/drv_types.h"
- #include "../include/recv_osdep.h"
- #include "../include/hal_intf.h"
--#include "../include/mlme_osdep.h"
- #include "../include/sta_info.h"
- #include "../include/wifi.h"
- #include "../include/wlan_bssdef.h"
-diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-index 893dac30e8e6..86906a726941 100644
---- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-+++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
-@@ -9,7 +9,6 @@
- #include "../include/wifi.h"
- #include "../include/rtw_mlme_ext.h"
- #include "../include/wlan_bssdef.h"
--#include "../include/mlme_osdep.h"
- #include "../include/recv_osdep.h"
- #include "../include/rtl8188e_xmit.h"
- #include "../include/rtl8188e_dm.h"
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index ee3817c3e1fd..353c7468367a 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -7,7 +7,6 @@
- #include "../include/osdep_service.h"
- #include "../include/drv_types.h"
- #include "../include/recv_osdep.h"
--#include "../include/mlme_osdep.h"
- #include "../include/usb_ops.h"
- #include "../include/wifi.h"
- #include "../include/rtl8188e_recv.h"
-diff --git a/drivers/staging/r8188eu/core/rtw_sta_mgt.c b/drivers/staging/r8188eu/core/rtw_sta_mgt.c
-index 2d61cc9169c8..b5dd28a10e5b 100644
---- a/drivers/staging/r8188eu/core/rtw_sta_mgt.c
-+++ b/drivers/staging/r8188eu/core/rtw_sta_mgt.c
-@@ -6,7 +6,6 @@
- #include "../include/osdep_service.h"
- #include "../include/drv_types.h"
- #include "../include/recv_osdep.h"
--#include "../include/mlme_osdep.h"
- #include "../include/sta_info.h"
- 
- static void _rtw_init_stainfo(struct sta_info *psta)
-diff --git a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-index b01ee1695fee..a7ac9f62459f 100644
---- a/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188e_cmd.c
-@@ -6,7 +6,6 @@
- #include "../include/osdep_service.h"
- #include "../include/drv_types.h"
- #include "../include/recv_osdep.h"
--#include "../include/mlme_osdep.h"
- #include "../include/rtw_ioctl_set.h"
- 
- #include "../include/rtl8188e_hal.h"
-diff --git a/drivers/staging/r8188eu/include/hal_intf.h b/drivers/staging/r8188eu/include/hal_intf.h
-index fd8e792958ce..ac6e3f95c5b7 100644
---- a/drivers/staging/r8188eu/include/hal_intf.h
-+++ b/drivers/staging/r8188eu/include/hal_intf.h
-@@ -39,7 +39,6 @@ void rtw_hal_update_ra_mask(struct adapter *padapter, u32 mac_id, u8 level);
- void	rtw_hal_clone_data(struct adapter *dst_adapt,
- 			   struct adapter *src_adapt);
- 
--void indicate_wx_scan_complete_event(struct adapter *padapter);
- u8 rtw_do_join(struct adapter *padapter);
- 
- #endif /* __HAL_INTF_H__ */
-diff --git a/drivers/staging/r8188eu/include/mlme_osdep.h b/drivers/staging/r8188eu/include/mlme_osdep.h
-deleted file mode 100644
-index 1fa66c5e3c9c..000000000000
---- a/drivers/staging/r8188eu/include/mlme_osdep.h
-+++ /dev/null
-@@ -1,12 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause */
--/* Copyright(c) 2007 - 2011 Realtek Corporation. */
--
--#ifndef	__MLME_OSDEP_H_
--#define __MLME_OSDEP_H_
--
--#include "osdep_service.h"
--#include "drv_types.h"
--
--void indicate_wx_scan_complete_event(struct adapter *padapter);
--
--#endif	/* _MLME_OSDEP_H_ */
-diff --git a/drivers/staging/r8188eu/include/rtw_mlme.h b/drivers/staging/r8188eu/include/rtw_mlme.h
-index d827ea7d841b..5dc2fe74b7b7 100644
---- a/drivers/staging/r8188eu/include/rtw_mlme.h
-+++ b/drivers/staging/r8188eu/include/rtw_mlme.h
-@@ -5,7 +5,6 @@
- #define __RTW_MLME_H_
- 
- #include "osdep_service.h"
--#include "mlme_osdep.h"
- #include "drv_types.h"
- #include "wlan_bssdef.h"
- 
--- 
-2.37.2
+Stray blank line
 
+DJ
+
+>   static enum dma_status idxd_dma_tx_status(struct dma_chan *dma_chan,
+>   					  dma_cookie_t cookie,
+>   					  struct dma_tx_state *txstate)
+>   {
+> -	return DMA_OUT_OF_ORDER;
+> +	u8 status;
+> +	struct idxd_wq *wq;
+> +	struct idxd_desc *desc;
+> +	u32 idx;
+> +
+> +	memset(txstate, 0, sizeof(*txstate));
+> +
+> +	if (dma_submit_error(cookie))
+> +		return DMA_ERROR;
+> +
+> +	wq = to_idxd_wq(dma_chan);
+> +
+> +	idx = cookie & DESC_ID_MASK;
+> +	if (idx >= wq->num_descs)
+> +		return DMA_ERROR;
+> +
+> +	desc = wq->descs[idx];
+> +
+> +	if (desc->txd.cookie != cookie) {
+> +		/*
+> +		 * The user asked about an old transaction
+> +		 */
+> +		return DMA_COMPLETE;
+> +	}
+> +
+> +	/*
+> +	 * For descriptors completed via interrupt, we can't go
+> +	 * look at the completion status directly because it races
+> +	 * with the IRQ handler recyling the descriptor. However,
+> +	 * since in this case we can rely on the interrupt handler
+> +	 * to invalidate the cookie when the command completes we
+> +	 * know that if we get here, the command is still in
+> +	 * progress.
+> +	 */
+> +	if ((cookie & DESC_INTERRUPT_FLAG) != 0)
+> +		return DMA_IN_PROGRESS;
+> +
+> +	status = desc->completion->status & DSA_COMP_STATUS_MASK;
+> +
+> +	if (status) {
+> +		/*
+> +		 * Check against the original status as ABORT is software defined
+> +		 * and 0xff, which DSA_COMP_STATUS_MASK can mask out.
+> +		 */
+> +		if (unlikely(desc->completion->status == IDXD_COMP_DESC_ABORT))
+> +			idxd_dma_complete_txd(desc, IDXD_COMPLETE_ABORT, true);
+> +		else
+> +			idxd_dma_complete_txd(desc, IDXD_COMPLETE_NORMAL, true);
+> +
+> +		return DMA_COMPLETE;
+> +	}
+> +
+> +	return DMA_IN_PROGRESS;
+>   }
+>   
+> +
+>   /*
+>    * issue_pending() does not need to do anything since tx_submit() does the job
+>    * already.
+> @@ -181,7 +252,17 @@ static dma_cookie_t idxd_dma_tx_submit(struct dma_async_tx_descriptor *tx)
+>   	int rc;
+>   	struct idxd_desc *desc = container_of(tx, struct idxd_desc, txd);
+>   
+> -	cookie = dma_cookie_assign(tx);
+> +	cookie = (desc->gen << DESC_ID_BITS) | (desc->id & DESC_ID_MASK);
+> +
+> +	if ((desc->hw->flags & IDXD_OP_FLAG_RCI) != 0)
+> +		cookie |= DESC_INTERRUPT_FLAG;
+> +
+> +	if (desc->gen == DESC_GEN_MAX)
+> +		desc->gen = 1;
+> +	else
+> +		desc->gen++;
+> +
+> +	tx->cookie = cookie;
+>   
+>   	rc = idxd_submit_desc(wq, desc);
+>   	if (rc < 0) {
+> diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
+> index bd93ada32c89d..d4f0227895075 100644
+> --- a/drivers/dma/idxd/idxd.h
+> +++ b/drivers/dma/idxd/idxd.h
+> @@ -326,6 +326,7 @@ struct idxd_desc {
+>   	struct llist_node llnode;
+>   	struct list_head list;
+>   	u16 id;
+> +	u16 gen;
+>   	int cpu;
+>   	struct idxd_wq *wq;
+>   };

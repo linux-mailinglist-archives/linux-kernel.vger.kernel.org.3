@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1FD15AA342
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:44:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DEFA5AA349
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233272AbiIAWoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:44:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47214 "EHLO
+        id S234259AbiIAWqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:46:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234971AbiIAWnu (ORCPT
+        with ESMTP id S229584AbiIAWqM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:43:50 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1000067CBE;
-        Thu,  1 Sep 2022 15:43:49 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 76C1E5FD02;
-        Fri,  2 Sep 2022 01:43:47 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1662072227;
-        bh=tiivwTGQBmCxotgiy0V8eJaCuzD7tL79bR3lZGF2GrU=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=OyFLhiazQM0FRzeBxxUxs7FyRzcMBEjWiuHTjfnpZKiY0iizu1IyOiCbQAsoV8wSX
-         L+Mfxfo+UM9DncvdoaLace1Gjvl3rDNVOvbqMSWdQu58pb2cyMeHs/9eJ70JqqmbpI
-         UneJPZsC4S1rhAtM3yGGORhymI17rYg2lsK0fnpdqYdtJSKAo8SWJhYOoadRSjvdKk
-         x7nIYWlZfX4Gz2TXpAm8uDzLobNw8wFIe5bIOM3UugVRebJKU6O/1jpIgz/CBw+T24
-         DwRe9xMzuH8T+oBJPDpS8d2NThhfbPyj8o1ptkDRKO9BYSUyAanOTR48J4M6dIX7dI
-         1PcsoxO1D1ocQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Fri,  2 Sep 2022 01:43:46 +0300 (MSK)
-Date:   Fri, 2 Sep 2022 01:43:45 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Martin Kurbanov <mmkurbanov@sberdevices.ru>,
-        Pavel Machek <pavel@ucw.cz>,
-        Raphael Teysseyre <rteysseyre@gmail.com>,
-        Baolin Wang <baolin.wang@linaro.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>
-Subject: Re: [PATCH v1] leds: trigger: pattern: notify userpace if pattern
- finished
-Message-ID: <20220901224345.fy6xvbpdn4axtlks@Rockosov-MBP>
-References: <20220824114927.79231-1-mmkurbanov@sberdevices.ru>
- <CAHp75VeQX_8niAu4uORW1YEfjxhLJFWsnm_JccECfAOAzAh32A@mail.gmail.com>
+        Thu, 1 Sep 2022 18:46:12 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65C136E2E3;
+        Thu,  1 Sep 2022 15:46:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+        Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+        In-Reply-To:References; bh=x+DgUFgLazTEoxlPi4eum/VL9xjskp/JstZFrST/B9g=; b=gK
+        9s9hu0hoHMStg5UiyZLEtEPOId0/wrYSDd6UCfZSQ7fTllz/ewwbA/ENucjHAtpvBxTWGbXlHUky2
+        8TwJ7vmEuBRvOLI+iLMDySES1qYFU4osEo6ngGn1LLpzl6NCGtZ+5I2u+3O43bmhW7t52ysyLInTg
+        A70CEKK6iu25zN4=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oTswg-00FLOQ-Uj; Fri, 02 Sep 2022 00:45:58 +0200
+Date:   Fri, 2 Sep 2022 00:45:58 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
+Cc:     Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marek Behun <marek.behun@nic.cz>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ARM: dts: turris-omnia: Add mcu node
+Message-ID: <YxE2JqJutZ0ilghH@lunn.ch>
+References: <20220819131152.6513-1-pali@kernel.org>
+ <20220831142809.lcmnv3l4rnulo522@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <CAHp75VeQX_8niAu4uORW1YEfjxhLJFWsnm_JccECfAOAzAh32A@mail.gmail.com>
-User-Agent: NeoMutt/20220429
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/09/01 19:49:00 #20211246
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220831142809.lcmnv3l4rnulo522@pali>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,46 +55,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[...]
-
-> > +static int pattern_trig_add_pattern_ended(struct led_classdev *led_cdev)
-> > +{
-> > +       struct pattern_trig_data *data = led_get_trigger_data(led_cdev);
-> > +       struct device *dev = led_cdev->dev;
-> > +       int ret;
-> > +
-> > +       ret = device_create_file(dev, &dev_attr_pattern_ended);
-> > +       if (ret) {
-> > +               dev_err(dev,
-> > +                       "Error creating pattern_ended (%pe)\n", ERR_PTR(ret));
-> > +               return ret;
-> > +       }
-> > +
-> > +       data->pattern_ended = sysfs_get_dirent(dev->kobj.sd, "pattern_ended");
-> > +       if (!data->pattern_ended) {
-> > +               dev_err(dev, "Error getting pattern_ended kernelfs\n");
-> > +               device_remove_file(dev, &dev_attr_pattern_ended);
-> > +               return -ENXIO;
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static void pattern_trig_remove_pattern_ended(struct led_classdev *led_cdev)
-> > +{
-> > +       struct pattern_trig_data *data = led_get_trigger_data(led_cdev);
-> > +
-> > +       sysfs_put(data->pattern_ended);
-> > +       device_remove_file(led_cdev->dev, &dev_attr_pattern_ended);
-> > +}
+On Wed, Aug 31, 2022 at 04:28:09PM +0200, Pali Rohár wrote:
+> PING?
 > 
-> I'm wondering if you can always have a file and instead provide a
-> value there, so user space may use epoll() mechanism on that. It will
-> simplify your code here.
+> On Friday 19 August 2022 15:11:52 Pali Rohár wrote:
+> > At i2c address 0x2a is MCU command interface which provides access to GPIOs
+> > connected to Turris Omnia MCU. So define mcu node in Turris Omnia DTS file.
+> > 
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > 
+> > ---
+> > Same change was already sent to U-Boot project together with driver. As
+> > Turris Omnia DTS file is shared between Linux kernel U-Boot, I'm sending
+> > this change also in Linux. There is a plan to write also Linux driver for
+> > Turris Omnia MCU, like there is already in U-Boot.
+> > 
+> > https://source.denx.de/u-boot/u-boot/-/commit/832738974806e6264a3d0ac2aaa92d0f662fd128
+> > https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/gpio/turris_omnia_mcu.c
+> > ---
+> >  arch/arm/boot/dts/armada-385-turris-omnia.dts | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+> > index f4878df39753..f655e9229d68 100644
+> > --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
+> > +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
+> > @@ -184,7 +184,13 @@
+> >  			#size-cells = <0>;
+> >  			reg = <0>;
+> >  
+> > -			/* STM32F0 command interface at address 0x2a */
+> > +			/* MCU command i2c API */
+> > +			mcu: mcu@2a {
+> > +				compatible = "cznic,turris-omnia-mcu";
+> > +				reg = <0x2a>;
+> > +				gpio-controller;
+> > +				#gpio-cells = <3>;
+> > +			};
 
-Could you please explain what you mean? In the current implementation
-userspace can use epoll() already.
+Please document the binding, preferably in yaml.
 
--- 
-Thank you,
-Dmitry
+I'm also not sure what the DT people will say about the node name mcu.
+I don't see any examples of that in the binding documentation. They
+might request you rename it to gpio-controller, unless it does more
+than GPIO? And if it does do more than GPIO we are then into mfd
+territory, and the binding then becomes much more interesting. Then we
+start the questions, are you defining a ABI now, before there is even
+a driver for it?
+
+       Andrew

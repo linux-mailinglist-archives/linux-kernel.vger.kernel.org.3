@@ -2,114 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0F75A9986
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A7B5A9988
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233295AbiIAN4u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:56:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S233368AbiIAN50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:57:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232864AbiIAN4r (ORCPT
+        with ESMTP id S231802AbiIAN5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:56:47 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F4A54CA2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:56:46 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-11f11d932a8so23325944fac.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:56:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=I6b2BpVPciHMhVZH7YUBZEI4uoChzNOCc33KlKxQssU=;
-        b=UfYagmTCEAKlJiF5vi9Lr4zhbHBYRckggijCHnrDqm9tdNhJroir28h2rwqGdpX+sk
-         bM9G4RF1NQXxJkb+WSLhb+DNdA4zYtWHOeKkoUJU/gn4R7xXldKgldHrvGWKm0MgsszT
-         JNLT7Fipig6CmtfO5qF57rUTh1wjU8SW2aleHywPOZBU4t9AxJy3qSN12N44DvWvqnQI
-         qq6IKO+Fz/J1QlCe4s+BhLxonUQdOgBEJQYs4Haq/9MkDWXxBCHkJDIO3z2qDjGcvPQN
-         MZ0z0P6jfZILZbGYcWu7kfSNnvvXZB5FPoKcZvG7LNetYcf96Dl398fGyrxEPN5HT1tW
-         wHBg==
+        Thu, 1 Sep 2022 09:57:20 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8E92AE18
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:57:18 -0700 (PDT)
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0D1C03F0C3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:57:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1662040636;
+        bh=eatamg8KEOTO7jgHDtGKXWunmQpTPYEKBxdi9CxrfRQ=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=itGmv9SFZm2qXuKbr7XXoIlJ4E9xCTAtWm+liiA+QDAmuq0x7ocwzb9A3dBIYlXlr
+         qsuaUCtgneXQvcd6YFpd7PcNH16hoWCKhpIJFRBuzlbpMk5AHqDZaSnw7hcjNzm916
+         iQk2cwl71ymj8d0SRi6h2zZD0P/BzDHYSRthUzACk/clL8tGK7QmL844th2hICnqWm
+         y3lM7l9BrCS/MLwARp2BdgZiaiyOJAqL14l/zlkZoEF+yrN6i8/ozJe0N5w4hcA5ch
+         NC6aRkBYkde8vzbC4vVbPhecg2PnHoKWB6B/UvMfgOzPetBC6rqcItBl3CS6YBqYvg
+         Z3veD64S+SL6w==
+Received: by mail-ej1-f70.google.com with SMTP id ho13-20020a1709070e8d00b00730a655e173so6883509ejc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:57:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=I6b2BpVPciHMhVZH7YUBZEI4uoChzNOCc33KlKxQssU=;
-        b=LI67KRUyNablrFOI0AcMG+FvIvqYDqHZSZnlaLdMPzmVYNIjEkpCUASvqF7r1wLM7W
-         7VBZbF/hiYCePXWzID4nHrVicaO3JZ8OltJQg01Z+uOIFwra4Z+mZppg2VKIbSYYJCzL
-         VjBurojOg/t2HSJPVd3aHdshStQsbWsJE/1av2JhgeBJLq1yWW54U9IGmHlINbJYRVez
-         UJ9kfPDYfb3SykPzFVF+0ImCyZBw4zhWuqD7TWCUIIgOdJFrUrzDN/6OiMTFTYMetuyC
-         DFK4lHi6tAy6DRf8M9dkgS2/cJ7e4h3bUiTWb2f7LIDiDXKvGebBP5pWqkCcFiML/jug
-         IWSw==
-X-Gm-Message-State: ACgBeo3SYckA1S+8km+X5gcrJGB+nLfylfFcHyfXHCi2jtEiWhLGv82+
-        kQPRu4f8dAowGuhn9rGAEqtkcwM7ZWNBhnZn3gm9B1ZDWQ==
-X-Google-Smtp-Source: AA6agR6sJmqeUCe9RB5vYfnF5hulI5nC7gPvNmZKeMuLtjUoo0UVYScgBw5MsE89TbGdAZbxgapbu7NuE7Gc4/ZtmGk=
-X-Received: by 2002:a05:6808:bd1:b0:345:da59:d3ae with SMTP id
- o17-20020a0568080bd100b00345da59d3aemr3525523oik.136.1662040605439; Thu, 01
- Sep 2022 06:56:45 -0700 (PDT)
+        bh=eatamg8KEOTO7jgHDtGKXWunmQpTPYEKBxdi9CxrfRQ=;
+        b=7Gdr5AGc0wQc6OoHEFxlwTRzp1IT05QkH/pvnOjHOUMtSzxvus1bpKyG7jV/J3wN3G
+         UW9tpK+EuGT8WEaCQyZllwyS44rMVZBPEYdnZhhYBtbEd1TYjMvYgV32hhAAdS0E0ac7
+         01X7pwiXjb2gDzGIIvzsvNvmucWYjAot/vrXoRNFWNjDrhfoKBg09aYhaoyC/HcYXwQU
+         HyEXAoy6bKVEzkc+64vv5p7g9UCTkIAlbz2kQFQaP7JW/mUEtvEXkpkI0ZgNbU11bdcT
+         CzUj7Pdnt1TA1cWafxmuaxDz6/9lX/VyUTDW4xOFQ8KtTtpvTbxbbB3FJA60kVlGbv/v
+         9+SQ==
+X-Gm-Message-State: ACgBeo0kA+CFmX8PJvMZ0EWjmV/ssNEwioRjxlgDNaLRMqLqTiwAijbm
+        FA88Tvh1PA4RaEF87p4/3i2wtonFS8c+pIr7EDOMMl+J6kbgJThweeDtI+KOpOTaHiPGwQ/j/iD
+        4aI1diBaZ0wTy6BWVZ/y3X4hNtBMkEqJiiIx8vLGHxK1fvYxABug91i406Q==
+X-Received: by 2002:a50:fe91:0:b0:43d:c97d:1b93 with SMTP id d17-20020a50fe91000000b0043dc97d1b93mr29907573edt.67.1662040633957;
+        Thu, 01 Sep 2022 06:57:13 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4pjZ4PvM9dADBtZDfV/dC1vl9LAgpRNbNaP8opEFR0qd/BGnVwJ1XzicJH6Wlr5JB2yCtqu7vb3pn5KKjrzVI=
+X-Received: by 2002:a50:fe91:0:b0:43d:c97d:1b93 with SMTP id
+ d17-20020a50fe91000000b0043dc97d1b93mr29907548edt.67.1662040633618; Thu, 01
+ Sep 2022 06:57:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220901122739.6d1a54ef@canb.auug.org.au>
-In-Reply-To: <20220901122739.6d1a54ef@canb.auug.org.au>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 1 Sep 2022 09:56:34 -0400
-Message-ID: <CAHC9VhQV2qW3o_bPnabhfdN_YoY7n7ncU1-8cUpVHhPZ1iLWQw@mail.gmail.com>
-Subject: Re: linux-next: manual merge of the security tree with Linus' tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Frederick Lawler <fred@cloudflare.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
+References: <20220901021628.1130985-1-koba.ko@canonical.com> <a15ab3e6-249d-af48-b4d5-25840b72a933@amd.com>
+In-Reply-To: <a15ab3e6-249d-af48-b4d5-25840b72a933@amd.com>
+From:   Koba Ko <koba.ko@canonical.com>
+Date:   Thu, 1 Sep 2022 21:57:02 +0800
+Message-ID: <CAJB-X+V-D0Es+5=KJQYdv6DKVK48jYzyU_4y6qvfY=H55y6oHQ@mail.gmail.com>
+Subject: Re: [PATCH V2] crypto: ccp - Release dma channels before dmaengine unrgister
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     John Allen <john.allen@amd.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 10:27 PM Stephen Rothwell <sfr@canb.auug.org.au> wrote:
-> Hi all,
+On Thu, Sep 1, 2022 at 9:42 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
 >
-> Today's linux-next merge of the security tree got a conflict in:
+> On 8/31/22 21:16, Koba Ko wrote:
+> > A warning is shown during shutdown,
+> >
+> > __dma_async_device_channel_unregister called while 2 clients hold a reference
+> > WARNING: CPU: 15 PID: 1 at drivers/dma/dmaengine.c:1110 __dma_async_device_channel_unregister+0xb7/0xc0
+> >
+> > Call dma_release_channel for occupied channles before dma_async_device_unregister.
+> >
+> > Fixes: 4cbe9bc34ed0 ("crypto: ccp - ccp_dmaengine_unregister release dma channels")
 >
->   security/selinux/include/classmap.h
+> I can't find this Fixes: tag. I did find:
 >
-> between commit:
+> 54cce8ecb925 ("crypto: ccp - ccp_dmaengine_unregister release dma channels")
 >
->   f4d653dcaa4e ("selinux: implement the security_uring_cmd() LSM hook")
->
-> from Linus' tree and commit:
->
->   ed5d44d42c95 ("selinux: Implement userns_create hook")
->
-> from the security tree.
->
-> I fixed it up (see below) and can carry the fix as necessary. This
-> is now fixed as far as linux-next is concerned, but any non trivial
-> conflicts should be mentioned to your upstream maintainer when your tree
-> is submitted for merging.  You may also want to consider cooperating
-> with the maintainer of the conflicting tree to minimise any particularly
-> complex conflicts.
->
-> --
-> Cheers,
-> Stephen Rothwell
->
-> diff --cc security/selinux/include/classmap.h
-> index 1c2f41ff4e55,0bff55bb9cde..000000000000
-> --- a/security/selinux/include/classmap.h
-> +++ b/security/selinux/include/classmap.h
-> @@@ -253,7 -253,9 +253,9 @@@ const struct security_class_mapping sec
->         { "anon_inode",
->           { COMMON_FILE_PERMS, NULL } },
->         { "io_uring",
->  -        { "override_creds", "sqpoll", NULL } },
->  +        { "override_creds", "sqpoll", "cmd", NULL } },
-> +       { "user_namespace",
-> +         { "create", NULL } },
->         { NULL }
->     };
+> Not sure if Herbert can take care of that or if you'll need a v3.
 
-Thanks Stephen, that looks correct.
+Sorry, it should be 54cce8ecb925("crypto: ccp -
+ccp_dmaengine_unregister release dma channels")
 
--- 
-paul-moore.com
+>
+> With the change to the Fixes: tag
+>
+> Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
+>
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Koba Ko <koba.ko@canonical.com>
+> > ---
+> > V2: Fix the unused warning
+> > ---
+> >   drivers/crypto/ccp/ccp-dmaengine.c | 6 +++++-
+> >   1 file changed, 5 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/crypto/ccp/ccp-dmaengine.c b/drivers/crypto/ccp/ccp-dmaengine.c
+> > index 7d4b4ad1db1f3..9f753cb4f5f18 100644
+> > --- a/drivers/crypto/ccp/ccp-dmaengine.c
+> > +++ b/drivers/crypto/ccp/ccp-dmaengine.c
+> > @@ -641,6 +641,10 @@ static void ccp_dma_release(struct ccp_device *ccp)
+> >       for (i = 0; i < ccp->cmd_q_count; i++) {
+> >               chan = ccp->ccp_dma_chan + i;
+> >               dma_chan = &chan->dma_chan;
+> > +
+> > +             if (dma_chan->client_count)
+> > +                     dma_release_channel(dma_chan);
+> > +
+> >               tasklet_kill(&chan->cleanup_tasklet);
+> >               list_del_rcu(&dma_chan->device_node);
+> >       }
+> > @@ -766,8 +770,8 @@ void ccp_dmaengine_unregister(struct ccp_device *ccp)
+> >       if (!dmaengine)
+> >               return;
+> >
+> > -     dma_async_device_unregister(dma_dev);
+> >       ccp_dma_release(ccp);
+> > +     dma_async_device_unregister(dma_dev);
+> >
+> >       kmem_cache_destroy(ccp->dma_desc_cache);
+> >       kmem_cache_destroy(ccp->dma_cmd_cache);

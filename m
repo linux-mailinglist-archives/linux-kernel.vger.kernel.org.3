@@ -2,61 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 319295A9D0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:29:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5D575A9D15
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:30:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234995AbiIAQ3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48376 "EHLO
+        id S235011AbiIAQaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234533AbiIAQ3F (ORCPT
+        with ESMTP id S234817AbiIAQaM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:29:05 -0400
+        Thu, 1 Sep 2022 12:30:12 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCCAB844C0
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:29:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39A82B1A4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:30:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662049741;
+        s=mimecast20190719; t=1662049809;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Ss+788P3BPmasfJtALEqRKNF7dmBsC3V1B9rlxVbN7E=;
-        b=J99b2zoJPqzq02cOxk9sezlOGfACIsFq9T9oSFkI7/u2k6Zxw15AJqgiGiKckJ2PpXT//X
-        FONFr/9wmUJiDOgkyqhWQnwBKRZrKbXtKDHCZ/4JkzhoVBQ8Ngltc/leXVMj9ms8JQ3NKX
-        DWUPpTDYm+/dT8BOSokSWfrza36CHy8=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=fLuHDLzRcMC/7r5bScPI3onM/CzOE/9m3NqNJ3imxUc=;
+        b=c2npPZb1P8vtt/oudm9vgbPXpeR1D5225HEu3X7lTQSctcckOkcf8ELuqEZezS42HwnQYW
+        a4QbiX5zLiZY4BrNMk/x6nUqKLr7Jh5ZeRa+ynUTS6afEqztpvafiaXbsOzpn2LGfM1VP1
+        7HooZ/N7QviPgzWKnsVhnrF+19nGrSY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-312-Nhr3XpbaOGer2HkqMvs42A-1; Thu, 01 Sep 2022 12:29:00 -0400
-X-MC-Unique: Nhr3XpbaOGer2HkqMvs42A-1
-Received: by mail-qv1-f71.google.com with SMTP id b16-20020ad45190000000b004972d2dbdbcso11462091qvp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:28:59 -0700 (PDT)
+ us-mta-126-65aOLhJ9OAuIfSwc1NkFqg-1; Thu, 01 Sep 2022 12:30:08 -0400
+X-MC-Unique: 65aOLhJ9OAuIfSwc1NkFqg-1
+Received: by mail-wm1-f72.google.com with SMTP id v67-20020a1cac46000000b003a615c4893dso10062528wme.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:30:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=Ss+788P3BPmasfJtALEqRKNF7dmBsC3V1B9rlxVbN7E=;
-        b=WEy3vpYVnupl5HE3hH4zxYqifcs2qMWlkjoN+qx8pr3IBZ3VgesNqMzHqtFQR8Mz6d
-         pT61CZ8chdVkSUhk+USvbhihRkhcx2aWjWqRghG6Z1yLwyFPu6hQ4xFUDTmRv4WgkvrY
-         u2EbthqpvKckMkywnmQcGpmqjTwKZIeBDs4Y5w8zcdfIw82o0gTORT4OgXtrT+fRr+kI
-         OVqnnkRY2Oku+Ooxl7DssozFFgljoqQ1T2bABcAvpUjkmp03hMG1lp6u+wV8+L2h/pyq
-         bsmY48nUKPO7WmRYAtA23ell6Sm9d8b73lPPGz39GabeH172YCNCrCfQxvLlsdijRDrD
-         50Hw==
-X-Gm-Message-State: ACgBeo0gGLbA5n/YxpvbIUqtuWPRzTwoUIXhZFmwwFXB2AnLMmJqxN00
-        UmsLuzDTZgQPuczZ6K9NQ6AaSVQRGNv/u52O/IN1mqxeKWV0fEsSJEF2GgT3aoe0gqfGmTNWHjG
-        k35gcb80CiF8xiniqxShfMXBD
-X-Received: by 2002:ac8:5a49:0:b0:343:6d5a:43ba with SMTP id o9-20020ac85a49000000b003436d5a43bamr25466056qta.63.1662049739572;
-        Thu, 01 Sep 2022 09:28:59 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5bxi3Vv6LuaC5ccFEhqjmnWsgxKw/LoMgvfdtqekeyRAG6cPfjRpPDsUg2NwAOhLCxkWUOvQ==
-X-Received: by 2002:ac8:5a49:0:b0:343:6d5a:43ba with SMTP id o9-20020ac85a49000000b003436d5a43bamr25466026qta.63.1662049739359;
-        Thu, 01 Sep 2022 09:28:59 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id w2-20020a05622a134200b0034454d0c8f3sm11036763qtk.93.2022.09.01.09.28.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 09:28:58 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 12:28:57 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=fLuHDLzRcMC/7r5bScPI3onM/CzOE/9m3NqNJ3imxUc=;
+        b=hk5u8wFXz2s2AW+jHdKtZCSp7l/CPM0kySfYNYcDatA1AH//kpKfENldKifmMKLWV1
+         6rWvtfAaxyYgqbdyKQc+73Sj7niek1oVuSFdpl+hflXJ+8dTL+LnIjivt7luiZN871A9
+         OSvyBWqWI154RxCgWLYuAJ0J7pQLz0shpa6M7yCuowojnMINXEHn/4H4r+OK8Q71lFEx
+         BZ8OCg0yLjEoAG1gPXv0s9JZKF99WArIL5ciZ91bbKJaMdyBl/3lyPw1C209vPL5LlN5
+         BUndgW9Sgw0qfZMINgL9Bs6Kuzew04Xs4LXRreaphgJIJSmqS7xyX9hAt5MjCzCgmhk1
+         Bd3g==
+X-Gm-Message-State: ACgBeo3QcEMDXixGrAXs2Wdq50jgdR9Exa7jybf2FXJWb0K5KowRhDwQ
+        Nj2cB9W93biF763G0QdGBF4rZH3iKcar1s0EfOwk17LBHmtQcViifTi/CU/bHwBlLZbBV4HXut1
+        0NPfcz4lR67LTE7U1hrHiHtVt
+X-Received: by 2002:adf:ea51:0:b0:226:dd73:8b88 with SMTP id j17-20020adfea51000000b00226dd738b88mr10662029wrn.175.1662049806702;
+        Thu, 01 Sep 2022 09:30:06 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5NJHbqnyKjsbcgDD2m9PqfCb+kWWILrc8Jstl6MuxgmJZniixWAO/kTIg/6AMvhAbZ+lXBcQ==
+X-Received: by 2002:adf:ea51:0:b0:226:dd73:8b88 with SMTP id j17-20020adfea51000000b00226dd738b88mr10662013wrn.175.1662049806449;
+        Thu, 01 Sep 2022 09:30:06 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:9e00:fec0:7e96:15cb:742? (p200300cbc7079e00fec07e9615cb0742.dip0.t-ipconnect.de. [2003:cb:c707:9e00:fec0:7e96:15cb:742])
+        by smtp.gmail.com with ESMTPSA id r7-20020a05600c35c700b003a5b6086381sm6575410wmq.48.2022.09.01.09.30.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 09:30:05 -0700 (PDT)
+Message-ID: <8e566857-d552-86f4-cbbb-5eed9de6acca@redhat.com>
+Date:   Thu, 1 Sep 2022 18:30:04 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Jason Gunthorpe <jgg@nvidia.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
         Sasha Levin <sasha.levin@oracle.com>,
@@ -65,68 +71,80 @@ Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Jerome Marchand <jmarchan@redhat.com>,
         Andrea Arcangeli <aarcange@redhat.com>,
         Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
         John Hubbard <jhubbard@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
-Message-ID: <YxDdycTur733hMgt@xz-m1.local>
+        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>
 References: <20220901072119.37588-1-david@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220901072119.37588-1-david@redhat.com>
+ <YxDZ86XW3hPcJtPX@nvidia.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
+In-Reply-To: <YxDZ86XW3hPcJtPX@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 09:21:19AM +0200, David Hildenbrand wrote:
-> commit 4b471e8898c3 ("mm, thp: remove infrastructure for handling splitting
-> PMDs") didn't remove all details about the THP split requirements for
-> RCU GUP-fast.
+On 01.09.22 18:12, Jason Gunthorpe wrote:
+> On Thu, Sep 01, 2022 at 09:21:19AM +0200, David Hildenbrand wrote:
+>> commit 4b471e8898c3 ("mm, thp: remove infrastructure for handling splitting
+>> PMDs") didn't remove all details about the THP split requirements for
+>> RCU GUP-fast.
+>>
+>> IPI broeadcasts on THP split are no longer required.
+>>
+>> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>> Cc: Sasha Levin <sasha.levin@oracle.com>
+>> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.vnet.ibm.com>
+>> Cc: Vlastimil Babka <vbabka@suse.cz>
+>> Cc: Jerome Marchand <jmarchan@redhat.com>
+>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+>> Cc: Hugh Dickins <hughd@google.com>
+>> Cc: Jason Gunthorpe <jgg@nvidia.com>
+>> Cc: John Hubbard <jhubbard@nvidia.com>
+>> Cc: Peter Xu <peterx@redhat.com>
+>> Cc: Yang Shi <shy828301@gmail.com>
+>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>> ---
+>>  mm/gup.c | 5 ++---
+>>  1 file changed, 2 insertions(+), 3 deletions(-)
 > 
-> IPI broeadcasts on THP split are no longer required.
+> The comment a bit above seems to need touching to:
 > 
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Cc: Sasha Levin <sasha.levin@oracle.com>
-> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.vnet.ibm.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Jerome Marchand <jmarchan@redhat.com>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Jason Gunthorpe <jgg@nvidia.com>
-> Cc: John Hubbard <jhubbard@nvidia.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->  mm/gup.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 5abdaf487460..cfe71f422787 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -2309,9 +2309,8 @@ EXPORT_SYMBOL(get_user_pages_unlocked);
->   *
->   * Another way to achieve this is to batch up page table containing pages
->   * belonging to more than one mm_user, then rcu_sched a callback to free those
-> - * pages. Disabling interrupts will allow the fast_gup walker to both block
-> - * the rcu_sched callback, and an IPI that we broadcast for splitting THPs
-> - * (which is a relatively rare event). The code below adopts this strategy.
-> + * pages. Disabling interrupts will allow the fast_gup walker to block the
-> + * rcu_sched callback.
+>  * protected from page table pages being freed from under it, and should
+>  * block any THP splits.
 
-This is the comment for fast-gup in general but not only for thp split.
+Ah right. Will drop it as well -- thanks!
 
-I can understand that we don't need IPI for thp split, but isn't the IPIs
-still needed for thp collapse (aka pmdp_collapse_flush)?
+> 
+> What is the current situation for THP splits anyhow? Is there are
+> comment in the fast pmd code explaining it?
+
+Not aware of a comment, I think it just works naturally by always
+re-routing references taken on tail pages to the head page refcount.
+
+Before that, we had "Tail page refcounting", which -- as I understand --
+was a mess.
+
+ddc58f27f9eee9117219936f77e90ad5b2e00e96 contains some comments.
+
+> 
+> But this seems OK too
+> 
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> 
+> Jason
+> 
+
 
 -- 
-Peter Xu
+Thanks,
+
+David / dhildenb
 

@@ -2,66 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EF5F5AA2C8
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95F205AA2B8
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:18:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235255AbiIAWTr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:19:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
+        id S234824AbiIAWSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234947AbiIAWSm (ORCPT
+        with ESMTP id S234445AbiIAWSB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:18:42 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C786B8F2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:18:11 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id w28so224295qtc.7
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 15:18:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=8gmIjQiZKF8ycgdoC5ApOjU5UIrSl/T2FqJa/TgPO1I=;
-        b=Gi604wSkIg+z78h4KmndskftB7f3p4DdvyE1ILism9RQ5yjlyt75A9qW/StOXfb+fU
-         pDy5O0BpNJsnx5TS3sl3liH6GLjNaUxC14UjaYlRGEFOLzqWV+fbldv/OdhgigmrP6sa
-         icbHfTEFZStTZC5sYgXRiVe8Q6pqgB7yD7VlM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=8gmIjQiZKF8ycgdoC5ApOjU5UIrSl/T2FqJa/TgPO1I=;
-        b=HzFBGvM4KYE8hTVtaXlQFlalw+xq3m2rOxgVIhc95fNc47i5b0qeOUXfXEjdjFVFZE
-         nsrB+TBjLOGB2lyf42R8SjOiKh0ROjPEU/ymVRCc+EDhfy15xI4ZGGqfk2tXxWr71ToU
-         wcaaTBkWVyEz7xvkiGZr8QogVDe5LrJ+uZtnshCg6sW9OssCwg9aojkWDGHv4Wiq7P2Q
-         /ntMVGisSqwycZWcNabppft8OrnC6uKWZYYYYjDcL/uoKneEG+MqxTdi+2YBQsJUl1U6
-         /XF6bgNUh729VGJ8qAHbi1VUMQkqo38TpWGe8w4Q3HtWqP4eiLaQ69n7w0Ap32TTNor7
-         jl6g==
-X-Gm-Message-State: ACgBeo1yeO/G882omDGq8GL0np0AY5nkfkTVVP7Bjfw7P87+n51YuJkY
-        HVpm2T6/iWjcHkMiWKcM9acOjw5kBeIyOA==
-X-Google-Smtp-Source: AA6agR7ds55vxuronbAkhPvG+w3tnnySL6akfA2/bMY5WcFbqrnJ09MHDN2EqtY3lODJWuD4wHe3wA==
-X-Received: by 2002:a05:622a:198b:b0:344:7de5:c516 with SMTP id u11-20020a05622a198b00b003447de5c516mr25834335qtc.7.1662070690604;
-        Thu, 01 Sep 2022 15:18:10 -0700 (PDT)
-Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id s16-20020ac85290000000b0034305a91aaesm11060794qtn.83.2022.09.01.15.18.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 15:18:10 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     rcu@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        urezki@gmail.com, neeraj.iitr10@gmail.com, frederic@kernel.org,
-        paulmck@kernel.org, rostedt@goodmis.org, vineeth@bitbyteword.org,
-        boqun.feng@gmail.com,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: [PATCH v5 18/18] fork: Move thread_stack_free_rcu() to call_rcu_lazy()
-Date:   Thu,  1 Sep 2022 22:17:20 +0000
-Message-Id: <20220901221720.1105021-19-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-In-Reply-To: <20220901221720.1105021-1-joel@joelfernandes.org>
-References: <20220901221720.1105021-1-joel@joelfernandes.org>
+        Thu, 1 Sep 2022 18:18:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BF354C81;
+        Thu,  1 Sep 2022 15:18:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F059061FD1;
+        Thu,  1 Sep 2022 22:17:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05276C433B5;
+        Thu,  1 Sep 2022 22:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662070679;
+        bh=EOBK6AGpSj2ywhzuceDEQ5nVOfuQCv60bd7TDIbLEIM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oEJ9DKeXW7ZC9Mchwjg3FoUpW6m4j/2cSQc0mYk9eX4c4o51wMJhUkQjqgxBU9Epk
+         peUKDT43BQy101QDd4skU7eYs6XL0qIGG6IDa2XjSJcCo96E8eP7Y9O7bN7iqG87l4
+         zITWk98d/Qvxo1FmFhcvTcIWyijHfP9IzSa7Mgctgk0jyXtgAzOHtRo6A5ZCpOyAJ5
+         kpKYNTBgBK/3HdseQwtQ29JDrJz41Xy/09X317X4Uxh9b2psRjIw9fSfMWzRDWKcpU
+         pSvgt/f8HktQm2ai8nsbbvq84aU6Gdi3s5rFprbWoqRAzsrZ1OSM9O/ZG9b/D2ItQL
+         aUk150/UqCp/A==
+Date:   Fri, 2 Sep 2022 01:17:54 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     linux-sgx@vger.kernel.org,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/6] selftests/sgx: retry the ioctls returned with EAGAIN
+Message-ID: <YxEvkp3RNpZmLr6b@kernel.org>
+References: <20220830031206.13449-1-jarkko@kernel.org>
+ <20220830031206.13449-6-jarkko@kernel.org>
+ <5d19be91-3aef-5cbe-6063-3ff3dbd5572b@intel.com>
+ <Yw7IFcnjbfm3Xgqk@kernel.org>
+ <c3717761-7b00-db03-117a-0b672c865fa9@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c3717761-7b00-db03-117a-0b672c865fa9@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,45 +64,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is required to prevent callbacks triggering RCU machinery too
-quickly and too often, which adds more power to the system.
+On Wed, Aug 31, 2022 at 11:09:21AM -0700, Reinette Chatre wrote:
+> Hi Jarkko,
+> 
+> On 8/30/2022 7:31 PM, Jarkko Sakkinen wrote:
+> > On Tue, Aug 30, 2022 at 03:56:29PM -0700, Reinette Chatre wrote:
+> >> Hi Haitao and Jarkko,
+> >>
+> >>
+> >> selftests/sgx: Retry the ioctl()s returned with EAGAIN
+> >>
+> >>
+> >> On 8/29/2022 8:12 PM, Jarkko Sakkinen wrote:
+> >>> From: Haitao Huang <haitao.huang@linux.intel.com>
+> >>>
+> >>> For EMODT and EREMOVE ioctls with a large range, kernel
+> >>
+> >> ioctl()s?
+> > 
+> > Ioctl is common enough to be considered as noun and is
+> > widely phrased like that in commit messages. I don't
+> > see any added clarity.
+> 
+> ok. I was asked to make this change in the SGX2 patches and
+> thought that I should propagate this advice :)
 
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- kernel/fork.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I can use the other form too, np.
 
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 90c85b17bf69..08a2298b1f94 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -226,7 +226,7 @@ static void thread_stack_delayed_free(struct task_struct *tsk)
- 	struct vm_stack *vm_stack = tsk->stack;
- 
- 	vm_stack->stack_vm_area = tsk->stack_vm_area;
--	call_rcu(&vm_stack->rcu, thread_stack_free_rcu);
-+	call_rcu_lazy(&vm_stack->rcu, thread_stack_free_rcu);
- }
- 
- static int free_vm_stack_cache(unsigned int cpu)
-@@ -353,7 +353,7 @@ static void thread_stack_delayed_free(struct task_struct *tsk)
- {
- 	struct rcu_head *rh = tsk->stack;
- 
--	call_rcu(rh, thread_stack_free_rcu);
-+	call_rcu_lazy(rh, thread_stack_free_rcu);
- }
- 
- static int alloc_thread_stack_node(struct task_struct *tsk, int node)
-@@ -388,7 +388,7 @@ static void thread_stack_delayed_free(struct task_struct *tsk)
- {
- 	struct rcu_head *rh = tsk->stack;
- 
--	call_rcu(rh, thread_stack_free_rcu);
-+	call_rcu_lazy(rh, thread_stack_free_rcu);
- }
- 
- static int alloc_thread_stack_node(struct task_struct *tsk, int node)
--- 
-2.37.2.789.g6183377224-goog
+> 
+> >>> +			modt_ioc.count = 0;
+> >>> +		} else
+> >>> +			break;
+> >>
+> >> Watch out for unbalanced braces (also later in patch). This causes
+> >> checkpatch.pl noise.
+> > 
+> > Again. I did run checkpatch to all of these. Will revisit.
+> 
+> It looks like I see it because I use "checkpatch.pl --strict".
 
+Thanks BTW for pointing this out :-)
+
+> Reinette
+
+BR, Jarkko

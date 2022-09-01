@@ -2,351 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0AB5A9971
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:53:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C24A55A9974
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233933AbiIANw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:52:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45410 "EHLO
+        id S233994AbiIANxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiIANw0 (ORCPT
+        with ESMTP id S231351AbiIANxe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:52:26 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C17B2B1;
-        Thu,  1 Sep 2022 06:52:24 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5841B6CD;
-        Thu,  1 Sep 2022 15:52:21 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662040341;
-        bh=QVzoAzaz3GTAjNVTOX5jOaSXOuRfzLUAuyiuEq31tlo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hlo9wOT8LVJydnzj0RbPsLTWbas4Hoc6uW/T1QVIPkGmmH0D7kfVl1Ta7BmvmBl8j
-         /ajGLnUeEBFE3VL7Yt1CCjunUcj8pci79NsuS5IBHIxMknzpTMyfX75lFsHkucSuP3
-         7i/yEEReI+l8A7rIYg6h28qc2QTA8tJHjRfw5+uM=
-Date:   Thu, 1 Sep 2022 16:52:09 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?utf-8?B?S8OpdmluIEwnaMO0cGl0YWw=?= <kevin.lhopital@bootlin.com>
-Subject: Re: [PATCH NOT FOR MERGE v5 6/6] ARM: dts: sun8i: a83t: bananapi-m3:
- Enable MIPI CSI-2 with OV8865
-Message-ID: <YxC5CWCdGFHTgKbD@pendragon.ideasonboard.com>
-References: <20220826182803.604563-1-paul.kocialkowski@bootlin.com>
- <20220826182803.604563-7-paul.kocialkowski@bootlin.com>
- <YwkaFC2tm96X5qon@pendragon.ideasonboard.com>
- <YxCqZ8GhiTJlZ8MC@aptenodytes>
- <YxCs4fhx+Qx7uCAF@pendragon.ideasonboard.com>
- <YxCyGgfNVHGIJlMz@aptenodytes>
+        Thu, 1 Sep 2022 09:53:34 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB84B311
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:53:32 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id n65-20020a17090a5ac700b001fbb4fad865so2641948pji.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:53:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=ErJ0HYTeWtEwPWkKjxUMjvfOzkq3x7pnzQs4DfaztQI=;
+        b=gVBhlXo+kWUOUAdPW/8QSC/spoR7aDlJ+7CKxJMA9X4LfDMCbY0jOUYmO6zAh3erUc
+         oDX28M1zm7XifH6YMEdep0LvM0DAR1RzZHK1dKgbF41FQwrbtMpSsXNHw8GmdWQmPLoR
+         feQD2gsEzTxU2EY8Nh9t0hdI4ycnocSPLPo1OcTMrlIpjH6dPDOFTlzq+GCed9ZkdD7O
+         2QH4VVZY1+/PuOV8c/EZxWWqQTLedlbdpCU4hEVh2OKSofLAKmn/mCoi53a+yjT8c/Kj
+         z+FG2shz1RwkAqnaACpuZdnx6ThYZcxNI1PMQxDakoPYcFYBvOhi+ZLBfGSZ+ygoClXr
+         2mHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=ErJ0HYTeWtEwPWkKjxUMjvfOzkq3x7pnzQs4DfaztQI=;
+        b=iwk19bbmfzEIN/AvxCKgq33P7jGULspxMcrpnfCV9I4mxjijWr/c4ZzcEOHFkFzjUQ
+         W7ufrHCwtIO3LmdNwU076rMBIUxUYpverdxm6RnMD7Rlhl99e2jXrXHCUdGw1B/LkpTn
+         sa+rw97Dt8+TpZai6a94XMk4StMZ9muHstv4xxisiMIEo+0T1t2UEcd8yeKxipzB9eHs
+         8z44cGevyjg6asNT/MnCS+cZUYCNLRsulWmrlrbulkrtk5cK1RzxD6u1PcXv1yGyIuXf
+         fx1+GzgbrtIfBEsKHryyDWaJTnY0QybToAOKRruMmLb6z4zMgzzsexpDlYXw/xPPhyU7
+         mYQQ==
+X-Gm-Message-State: ACgBeo3sysQO7Ce1kMcYozMf700ae3jQ0yaMbVsEwIOeLW1tn9wJI8jX
+        DHquWDeYZqM9pWl/qFD7Q8xMz1ydyKHQYQ==
+X-Google-Smtp-Source: AA6agR4Z7Z7RmmgguQab7+M3a9D+IP8AxhQm8Xs9dhC8dxIBwXv55n3Xcy8OAa6q4QCV1g5i38p46g==
+X-Received: by 2002:a17:902:7845:b0:16e:d647:a66c with SMTP id e5-20020a170902784500b0016ed647a66cmr29779570pln.64.1662040412275;
+        Thu, 01 Sep 2022 06:53:32 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id k88-20020a17090a3ee100b001fd86f8dc03sm3359852pjc.8.2022.09.01.06.53.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 06:53:31 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 13:53:28 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Subject: Re: [PATCH 03/19] Revert "KVM: SVM: Introduce hybrid-AVIC mode"
+Message-ID: <YxC5WI9BW+dVyXw/@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+ <20220831003506.4117148-4-seanjc@google.com>
+ <17e776dccf01e03bce1356beb8db0741e2a13d9a.camel@redhat.com>
+ <84c2e836d6ba4eae9fa20329bcbc1d19f8134b0f.camel@redhat.com>
+ <Yw+MYLyVXvxmbIRY@google.com>
+ <59206c01da236c836c58ff96c5b4123d18a28b2b.camel@redhat.com>
+ <Yw+yjo4TMDYnyAt+@google.com>
+ <c6e9a565d60fb602a9f4fc48f2ce635bf658f1ea.camel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YxCyGgfNVHGIJlMz@aptenodytes>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c6e9a565d60fb602a9f4fc48f2ce635bf658f1ea.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
+On Thu, Sep 01, 2022, Maxim Levitsky wrote:
+> There was actually a patch series that was fixing it, but you said, just like me,
+> that it is not worth it, better to have an errata in KVM, since guest should not use
+> this info anyway. I didn't object to it, and neither I do now, but as you see,
+> you also sometimes agree that going 100% to the spec is not worth it.
+> 
+> 
+> I hope you understand me.
 
-On Thu, Sep 01, 2022 at 03:22:34PM +0200, Paul Kocialkowski wrote:
-> On Thu 01 Sep 22, 16:00, Laurent Pinchart wrote:
-> > On Thu, Sep 01, 2022 at 02:49:43PM +0200, Paul Kocialkowski wrote:
-> > > On Fri 26 Aug 22, 22:08, Laurent Pinchart wrote:
-> > > > On Fri, Aug 26, 2022 at 08:28:03PM +0200, Paul Kocialkowski wrote:
-> > > > > From: Kévin L'hôpital <kevin.lhopital@bootlin.com>
-> > > > > 
-> > > > > The Bananapi M3 supports a camera module which includes an OV8865 sensor
-> > > > > connected via the parallel CSI interface and an OV8865 sensor connected
-> > > > > via MIPI CSI-2.
-> > > > > 
-> > > > > The I2C2 bus is shared by the two sensors as well as the (active-low)
-> > > > > reset signal, but each sensor has it own shutdown line.
-> > > > 
-> > > > I see a single sensor in this file, am I missing something ?
-> > > 
-> > > Indeed this patch only adds the OV8865, not the OV5640 which is also present
-> > > on the same camera board extension.
-> > > 
-> > > A patch was submitted some time ago adding support for (only) the OV5640:
-> > > https://lore.kernel.org/lkml/20190408165744.11672-7-wens@kernel.org/
-> > 
-> > OK. That's fine, let's just reword the commit message.
-> 
-> Sure.
-> 
-> > > > Sounds like a perfect candidate for an overlay, it could then be merged
-> > > > upstream.
-> > > 
-> > > Do we have an upstream place to merge device-tree overlays now?
-> > 
-> > They're accepted in the upstream kernel as far as I know, a git grep for
-> > /plugin/ in .dts files produces 18 matches.
-> 
-> Oh okay, definitely good to know thanks!
-> 
-> > > I'll check if it's possible to describe both sensors together and actually
-> > > be able to select one or the other properly from userspace. Last time I tried
-> > > this wasn't possible: there's at least the shared reset GPIO used by both
-> > > sensors, which cannot be requested by the two drivers in parallel.
-> > > 
-> > > To be honest this is very poor hardware design and it was almost certainly
-> > > designed with the idea that only one sensor will be configured per boot.
-> > > See https://wiki.banana-pi.org/Camera and
-> > > https://drive.google.com/file/d/0B4PAo2nW2KfnOEFTMjZ2aEVGUVU/view?usp=sharing
-> > > for the schematics pdf
-> > 
-> > It's not great indeed, but not that uncommon either (unfortunately). I
-> > wonder if we need some kind of reset GPIO API, but that would be a hack
-> > at most I think.
-> 
-> Yeah I don't see any obvious clean solution here.
-> But that could still be two separate dt overlays for now.
-> 
-> > > > > Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
-> > > > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > > > ---
-> > > > >  arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts | 102 +++++++++++++++++++
-> > > > >  1 file changed, 102 insertions(+)
-> > > > > 
-> > > > > diff --git a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> > > > > index 5a7e1bd5f825..80fd99cf24b2 100644
-> > > > > --- a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> > > > > +++ b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> > > > > @@ -85,6 +85,30 @@ led-1 {
-> > > > >  		};
-> > > > >  	};
-> > > > >  
-> > > > > +	reg_ov8865_avdd: ov8865-avdd {
-> > > > > +		compatible = "regulator-fixed";
-> > > > > +		regulator-name = "ov8865-avdd";
-> > > > > +		regulator-min-microvolt = <2800000>;
-> > > > > +		regulator-max-microvolt = <2800000>;
-> > > > > +		vin-supply = <&reg_dldo4>;
-> > > > > +	};
-> > > > > +
-> > > > > +	reg_ov8865_dovdd: ov8865-dovdd {
-> > > > > +		compatible = "regulator-fixed";
-> > > > > +		regulator-name = "ov8865-dovdd";
-> > > > > +		regulator-min-microvolt = <2800000>;
-> > > > > +		regulator-max-microvolt = <2800000>;
-> > > > > +		vin-supply = <&reg_dldo4>;
-> > > > > +	};
-> > > > > +
-> > > > > +	reg_ov8865_dvdd: ov8865-dvdd {
-> > > > > +		compatible = "regulator-fixed";
-> > > > > +		regulator-name = "ov8865-dvdd";
-> > > > > +		regulator-min-microvolt = <1200000>;
-> > > > > +		regulator-max-microvolt = <1200000>;
-> > > > > +		vin-supply = <&reg_eldo1>;
-> > > > > +	};
-> > > > 
-> > > > Are those three regulators on the Banana Pi, or on the camera module ?
-> > > 
-> > > That's on the camera module.
-> > > 
-> > > > > +
-> > > > >  	reg_usb1_vbus: reg-usb1-vbus {
-> > > > >  		compatible = "regulator-fixed";
-> > > > >  		regulator-name = "usb1-vbus";
-> > > > > @@ -115,6 +139,23 @@ &cpu100 {
-> > > > >  	cpu-supply = <&reg_dcdc3>;
-> > > > >  };
-> > > > >  
-> > > > > +&csi {
-> > > > > +	status = "okay";
-> > > > > +
-> > > > > +	ports {
-> > > > > +		#address-cells = <1>;
-> > > > > +		#size-cells = <0>;
-> > > > > +
-> > > > > +		port@1 {
-> > > > > +			reg = <1>;
-> > > > 
-> > > > All of this (except the status = "okay") should go to sun8i-a83t.dtsi.
-> > > > 
-> > > > > +
-> > > > > +			csi_in_mipi_csi2: endpoint {
-> > > > > +				remote-endpoint = <&mipi_csi2_out_csi>;
-> > > > > +			};
-> > > > 
-> > > > This too actually, once the issue mentioned in patch 5/6 gets fixed.
-> > > > 
-> > > > > +		};
-> > > > > +	};
-> > > > > +};
-> > > > > +
-> > > > >  &de {
-> > > > >  	status = "okay";
-> > > > >  };
-> > > > > @@ -147,6 +188,36 @@ hdmi_out_con: endpoint {
-> > > > >  	};
-> > > > >  };
-> > > > >  
-> > > > > +&i2c2 {
-> > > > > +	pinctrl-names = "default";
-> > > > > +	pinctrl-0 = <&i2c2_pe_pins>;
-> > > > 
-> > > > This looks like a candidate for upstreaming in
-> > > > sun8i-a83t-bananapi-m3.dts, it shouldn't be in the overlay.
-> > > 
-> > > I2C2 is actually also exported in the PH pins, which is available on the board
-> > > header, so it's not obvious that using the PE pins should be the default.
-> > > 
-> > > The context is that Allwinner SoCs usually have a dedicated I2C controller for
-> > > cameras, but also route a "generic" I2C controller on the same pins.
-> > 
-> > Out of curiosity, what features do those dedicated camera I2C
-> > controllers provide, compared to "normal" I2C controllers ?
-> 
-> IIRC there's some feature to send i2c messages synced with the camera interface
-> vsync signal, to have some kind of hardware atomic mechanism for reconfiguring
-> a sensor.
-> 
-> Not sure that's very relevant for us and an implementation for it would probably
-> just support regular I2C. We can probably achieve simialr results with the
-> request API.
+Yep.
 
-This hardware feature would be very useful to improve compliance with
-the real-time requirements of the camera sensor. It's something that I
-would really like to be supported in Linux, but we'll need to design a
-new API for it.
+And rereading what I wrote...  I didn't intend to imply that you personally aren't
+operating in "good faith" or whatever is the right terminology.  What I was trying
+to explain is why I sometimes speak in absolutes.  When there is a bug/regression
+and KVM is clearly violating spec, it's not a matter of opinion; KVM is broken and
+needs to be fixed.
 
-> > > Here that's on the PE14/15 pins. Since we don't have mainline support for this
-> > > camera-dedicated I2C controller, we end up routing the generic one to the PE
-> > > pins, which are routed to the camera connector.
-> > 
-> > OK.
-> > 
-> > > In the future we could add support for this camera-dedicated controller, which
-> > > would then allow routing i2c2 to the PH pins independently. This is what the
-> > > downstream Allwinner BSP kernel does.
-> > > 
-> > > > > +	status = "okay";
-> > > > > +
-> > > > > +	ov8865: camera@36 {
-> > > > > +		compatible = "ovti,ov8865";
-> > > > > +		reg = <0x36>;
-> > > > > +		pinctrl-names = "default";
-> > > > > +		pinctrl-0 = <&csi_mclk_pin>;
-> > > > > +		clocks = <&ccu CLK_CSI_MCLK>;
-> > > > > +		assigned-clocks = <&ccu CLK_CSI_MCLK>;
-> > > > > +		assigned-clock-rates = <24000000>;
-> > > > > +		avdd-supply = <&reg_ov8865_avdd>;
-> > > > > +		dovdd-supply = <&reg_ov8865_dovdd>;
-> > > > > +		dvdd-supply = <&reg_ov8865_dvdd>;
-> > > > > +		powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
-> > > > > +		reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
-> > > > > +
-> > > > > +		port {
-> > > > > +			ov8865_out_mipi_csi2: endpoint {
-> > > > > +				data-lanes = <1 2 3 4>;
-> > > > > +				link-frequencies = /bits/ 64 <360000000>;
-> > > > > +
-> > > > > +				remote-endpoint = <&mipi_csi2_in_ov8865>;
-> > > > > +			};
-> > > > > +		};
-> > > > > +	};
-> > > > > +};
-> > > > > +
-> > > > >  &mdio {
-> > > > >  	rgmii_phy: ethernet-phy@1 {
-> > > > >  		compatible = "ethernet-phy-ieee802.3-c22";
-> > > > > @@ -154,6 +225,24 @@ rgmii_phy: ethernet-phy@1 {
-> > > > >  	};
-> > > > >  };
-> > > > >  
-> > > > > +&mipi_csi2 {
-> > > > > +	status = "okay";
-> > > > > +};
-> > > > > +
-> > > > > +&mipi_csi2_in {
-> > > > > +	mipi_csi2_in_ov8865: endpoint {
-> > > > > +		data-lanes = <1 2 3 4>;
-> > > > > +
-> > > > > +		remote-endpoint = <&ov8865_out_mipi_csi2>;
-> > > > > +	};
-> > > > > +};
-> > > > > +
-> > > > > +&mipi_csi2_out {
-> > > > > +	mipi_csi2_out_csi: endpoint {
-> > > > > +		remote-endpoint = <&csi_in_mipi_csi2>;
-> > > > > +	};
-> > > > > +};
-> > > > > +
-> > > > >  &mmc0 {
-> > > > >  	pinctrl-names = "default";
-> > > > >  	pinctrl-0 = <&mmc0_pins>;
-> > > > > @@ -327,11 +416,24 @@ &reg_dldo3 {
-> > > > >  	regulator-name = "vcc-pd";
-> > > > >  };
-> > > > >  
-> > > > > +&reg_dldo4 {
-> > > > > +	regulator-always-on;
-> > > > 
-> > > > Does it have to be always on ?
-> > > 
-> > > Mhh so I realize the regulators handling here is quite messy.
-> > > I guess I didn't do such a good review of this patch internally.
-> > > 
-> > > The situation is that the regulators on the camera board all have their
-> > > enable pin tied to the DLDO4 output, but that would be best described as
-> > > a vin-supply of the ov8865 regulators above. Their real vin supply is an
-> > > always-on board-wide power source but I don't think we can represent another
-> > > regulator acting as enable signal in a better way.
-> > 
-> > That's right. I've modeled that as a parent regulator in the past, even
-> > if it doesn't reflect the exact hardware topology, it's functionally
-> > equivalent.
-> 
-> Sounds good, I'll change it that way.
-> 
-> > > Now beware that the camera board schematics are confusing as they show resistors
-> > > (R17, R18, R19, R20, R23) connecting some power lines together, but they are not
-> > > populated on the board (I guess the point is to make a variant of the design
-> > > without regulators on the camera board and to use ones from the PMU instead).
-> > > This probably confused Kevin and I back when this patch was made.
-> > > 
-> > > > > +	regulator-min-microvolt = <2800000>;
-> > > > > +	regulator-max-microvolt = <2800000>;
-> > > > > +	regulator-name = "avdd-csi";
-> > > > 
-> > > > Doesn't this belong to the base board .dts ? Same below.
-> > > > 
-> > > > > +};
-> > > > > +
-> > > > >  &reg_drivevbus {
-> > > > >  	regulator-name = "usb0-vbus";AVDD-CSI
-> > > > >  	status = "okay";
-> > > > >  };
-> > > > >  
-> > > > > +&reg_eldo1 {
-> > > > > +	regulator-min-microvolt = <1200000>;
-> > > > > +	regulator-max-microvolt = <1200000>;
-> > > > > +	regulator-name = "dvdd-csi-r";
-> > > > > +};
-> > > > > +
-> > > > >  &reg_fldo1 {
-> > > > >  	regulator-min-microvolt = <1080000>;
-> > > > >  	regulator-max-microvolt = <1320000>;
-
--- 
-Regards,
-
-Laurent Pinchart
+Of course, one could argue that that's an opinion in and of itself...

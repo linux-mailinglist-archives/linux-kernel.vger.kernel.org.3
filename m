@@ -2,139 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D07A5A8AFC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 332275A89B6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232994AbiIABiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 21:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34412 "EHLO
+        id S229602AbiIAAGv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 20:06:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbiIABhN (ORCPT
+        with ESMTP id S230148AbiIAAGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 21:37:13 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 361DC15C352;
-        Wed, 31 Aug 2022 18:37:12 -0700 (PDT)
+        Wed, 31 Aug 2022 20:06:47 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAD5E116D;
+        Wed, 31 Aug 2022 17:06:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1661996232; x=1693532232;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=+sz4qCGDcJYgZIdr5901G2HgOpmFGac0nu48tJ2pZNA=;
-  b=DQRPjDlFFIVgE+UvyxEMWa6afFV8Kv2lWAUrrxewkcQIDDB/gOkYGaFZ
-   FSp10jzqHQTTvkkjedAKEMa9bFLQrPAJf/qEDuBBa8VMtdVIZvUO8zSZO
-   8cIWXaCf2bHQpWb52ciS+wqntfAd8GMAVz3uoJWp5LZ+Onk/2ty2Yfvbd
-   2fe2rFWUGfB2m55QXbis+CosrpEzBlOPYzh9wsTBoY1LAvIApWNuHm5Zn
-   nuuJJ6EDmACAEtkbzcPIlYI0Q26FnBbzlbq1yoazFRGtpm9zDjFyXV1rT
-   8eMTDMaeYTZ7LByNfajEYMasOuttRNo5/GwvRfxoAVJrcCbW1Lviokop9
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="321735109"
+  t=1661990806; x=1693526806;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=wBCLAwrJD3CoNKwwccz6dz0/r9Pa/erMe9NtEN4fRG4=;
+  b=DETrs/VudlaCcoJhaaPwIPvGtTGH75QUPGJnb9GqhJm1rSVT7ytTg0vJ
+   ObiR9jxie1LXn6w0ByqA4jGP0kBeUjFtBhxkZqNkG0r4ZrBHC+gv93U3s
+   Z28sJQHu2doiTbzP4N9WPwGDMvQ+e89bkO6jJM7kgcSXprertLM2YXsJD
+   +4G4UYDMSr933nR+2nY/uGQ7szQKRNkYKaQMbIKadVQT4AYpFrAd7hdCJ
+   uHIMBw+a7chDfsrDp6h2zMto2GWiZZ3R8EXU+iqdxUv9cbrDUbIRZfay3
+   /1V1AFR7tniqiUoK5XH111XeDaZh2DLPAxwOL2XSqCl/8EzcjDFUAXu7e
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="359539345"
 X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="321735109"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 18:37:03 -0700
+   d="scan'208";a="359539345"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 17:06:46 -0700
 X-IronPort-AV: E=Sophos;i="5.93,279,1654585200"; 
-   d="scan'208";a="754626059"
-Received: from embargo.jf.intel.com ([10.165.9.183])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 18:37:03 -0700
-From:   Yang Weijiang <weijiang.yang@intel.com>
-To:     pbonzini@redhat.com, seanjc@google.com, kvm@vger.kernel.org
-Cc:     like.xu.linux@gmail.com, kan.liang@linux.intel.com,
-        wei.w.wang@intel.com, linux-kernel@vger.kernel.org
-Subject: [PATCH 15/15] KVM: x86/cpuid: Advertise Arch LBR feature in CPUID
-Date:   Wed, 31 Aug 2022 18:34:38 -0400
-Message-Id: <20220831223438.413090-16-weijiang.yang@intel.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220831223438.413090-1-weijiang.yang@intel.com>
-References: <20220831223438.413090-1-weijiang.yang@intel.com>
+   d="scan'208";a="612283388"
+Received: from jholm-mobl2.amr.corp.intel.com (HELO vcostago-mobl3) ([10.209.119.42])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 17:06:45 -0700
+From:   Vinicius Costa Gomes <vinicius.gomes@intel.com>
+To:     Zhengchao Shao <shaozhengchao@huawei.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        jhs@mojatatu.com, xiyou.wangcong@gmail.com, jiri@resnulli.us
+Cc:     weiyongjun1@huawei.com, yuehaibing@huawei.com,
+        shaozhengchao@huawei.com
+Subject: Re: [PATCH net-next] net: sched: etf: remove true check in
+ etf_enable_offload()
+In-Reply-To: <20220831092919.146149-1-shaozhengchao@huawei.com>
+References: <20220831092919.146149-1-shaozhengchao@huawei.com>
+Date:   Wed, 31 Aug 2022 17:06:45 -0700
+Message-ID: <87wnaohsa2.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add Arch LBR feature bit in CPU cap-mask to expose the feature.
-Only max LBR depth is supported for guest, and it's consistent
-with host Arch LBR settings.
+Zhengchao Shao <shaozhengchao@huawei.com> writes:
 
-Co-developed-by: Like Xu <like.xu@linux.intel.com>
-Signed-off-by: Like Xu <like.xu@linux.intel.com>
-Signed-off-by: Yang Weijiang <weijiang.yang@intel.com>
-Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
-Message-Id: <20220517154100.29983-17-weijiang.yang@intel.com>
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/cpuid.c | 36 +++++++++++++++++++++++++++++++++++-
- 1 file changed, 35 insertions(+), 1 deletion(-)
+> etf_enable_offload() is only called when q->offload is false in
+> etf_init(). So remove true check in etf_enable_offload().
+>
+> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> ---
 
-diff --git a/arch/x86/kvm/cpuid.c b/arch/x86/kvm/cpuid.c
-index 9ca592e969e3..cf2a0b28c239 100644
---- a/arch/x86/kvm/cpuid.c
-+++ b/arch/x86/kvm/cpuid.c
-@@ -134,6 +134,19 @@ static int kvm_check_cpuid(struct kvm_vcpu *vcpu,
- 		if (vaddr_bits != 48 && vaddr_bits != 57 && vaddr_bits != 0)
- 			return -EINVAL;
- 	}
-+	if (kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR)) {
-+		best = cpuid_entry2_find(entries, nent, 0x1c, 0);
-+		if (best) {
-+			unsigned int eax, ebx, ecx, edx;
-+
-+			/* Reject user-space CPUID if depth is different from host's.*/
-+			cpuid_count(0x1c, 0, &eax, &ebx, &ecx, &edx);
-+
-+			if ((eax & 0xff) &&
-+			    (best->eax & 0xff) != BIT(fls(eax & 0xff) - 1))
-+				return -EINVAL;
-+		}
-+	}
- 
- 	/*
- 	 * Exposing dynamic xfeatures to the guest requires additional
-@@ -631,7 +644,7 @@ void kvm_set_cpu_caps(void)
- 		F(SPEC_CTRL_SSBD) | F(ARCH_CAPABILITIES) | F(INTEL_STIBP) |
- 		F(MD_CLEAR) | F(AVX512_VP2INTERSECT) | F(FSRM) |
- 		F(SERIALIZE) | F(TSXLDTRK) | F(AVX512_FP16) |
--		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16)
-+		F(AMX_TILE) | F(AMX_INT8) | F(AMX_BF16) | F(ARCH_LBR)
- 	);
- 
- 	/* TSC_ADJUST and ARCH_CAPABILITIES are emulated in software. */
-@@ -1055,6 +1068,27 @@ static inline int __do_cpuid_func(struct kvm_cpuid_array *array, u32 function)
- 				goto out;
- 		}
- 		break;
-+	/* Architectural LBR */
-+	case 0x1c: {
-+		u32 lbr_depth_mask = entry->eax & 0xff;
-+
-+		if (!lbr_depth_mask ||
-+		    !kvm_cpu_cap_has(X86_FEATURE_ARCH_LBR)) {
-+			entry->eax = entry->ebx = entry->ecx = entry->edx = 0;
-+			break;
-+		}
-+		/*
-+		 * KVM only exposes the maximum supported depth, which is the
-+		 * fixed value used on the host side.
-+		 * KVM doesn't allow VMM userspace to adjust LBR depth because
-+		 * guest LBR emulation depends on the configuration of host LBR
-+		 * driver.
-+		 */
-+		lbr_depth_mask = BIT((fls(lbr_depth_mask) - 1));
-+		entry->eax &= ~0xff;
-+		entry->eax |= lbr_depth_mask;
-+		break;
-+	}
- 	/* Intel AMX TILE */
- 	case 0x1d:
- 		if (!kvm_cpu_cap_has(X86_FEATURE_AMX_TILE)) {
+Acked-by: Vinicius Costa Gomes <vinicius.gomes@intel.com>
+
+
 -- 
-2.27.0
-
+Vinicius

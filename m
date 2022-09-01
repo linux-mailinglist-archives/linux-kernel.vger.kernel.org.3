@@ -2,89 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A491C5A8A83
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 034C05A8A85
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:20:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbiIABUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 21:20:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S232474AbiIABUm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 21:20:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbiIABUQ (ORCPT
+        with ESMTP id S232329AbiIABUi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 21:20:16 -0400
-Received: from smtpbg.qq.com (bg4.exmail.qq.com [43.155.67.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EC8F2DAA4;
-        Wed, 31 Aug 2022 18:20:10 -0700 (PDT)
-X-QQ-mid: bizesmtp71t1661995206t3v7x6o2
-Received: from localhost.localdomain ( [182.148.14.80])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 01 Sep 2022 09:20:05 +0800 (CST)
-X-QQ-SSF: 01000000000000D0F000000A0000000
-X-QQ-FEAT: 4rCmCcmdMHfaY1WQWesDmjP4jvXA66jlw2+1CTnfx5ssoXmG6o5kmyrWaDmto
-        Ny6qgLaw2s0aaRdK0m3f5m0LWgRsZVZ5+4YhyfgtANlk+ES9p0ksz54jPtL0vvTbu6JJ8Zk
-        zJDYB1VlP0edJLEXlOwl4nxfS/DGAdZC4ArbkEW9oKcA1mkPSErvBuYpURv0NyfdPDg96G7
-        JtrIluaoYqtYGUdVZR0XfCcAIw/Gx5GsFA8F4laZ8VGG5Jc4YUSvAcsAQe2t94DqATD61tw
-        T70QBMs+nHmWQLwiI5MGQIF27DKnRnaJHfX/SIKUz8T77ujtWCowbHBqw+j8z4du4f4kvqY
-        pbezeCOQRDW4xbf6nLNmCRghNjcY1sPe96HJbfWo8Qnb7LMYlGqSS+/vhHPIg==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] media: videobuf2: Use 'unsigned int' instead of just 'unsigned'.
-Date:   Thu,  1 Sep 2022 09:19:58 +0800
-Message-Id: <20220901011958.26027-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 31 Aug 2022 21:20:38 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64C6181690;
+        Wed, 31 Aug 2022 18:20:37 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id 76so16103646pfy.3;
+        Wed, 31 Aug 2022 18:20:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=j6hcngYlpvs5vhfu0mW47DQwHIYzAccUtyEnKVrv4bk=;
+        b=Ig9Jz4jFpQYi8elhuz6NJZGp+7tykwAd+nejNRkApGgSCIGRxS9VSxgP40TfiKEoXH
+         jVEGavejFbJKhMGtTtw6DgNifjj4+qZMIN+G/LNuLMf1grvfxCFz1bTjy8ZV3vyowdSv
+         fhR+7g4wulbwNCcPK6RUiqXS0MdUJ6QoA27l8UJMy+5Wi4rexR/yDBcz/IrUcBkrZlvq
+         oP1iDMKbU4KCvvmfrcrqwQ7rAraaU48gkzG0opBzFQSdzWGSaAhTFyTY4yAam+v6dZ+o
+         xpYxDlTtusVBFCqjMWkOAZDTgaQjYjsJVqxQjWUzfGnHhEtXc52amf6gQHHeISjvtulj
+         7GIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=j6hcngYlpvs5vhfu0mW47DQwHIYzAccUtyEnKVrv4bk=;
+        b=o84xAQ4vEnEUQecRTIk9Zlt2avPO0QxbiYBqLXr+H3FcM9Wl8Vo+4beMLTd2irWFs2
+         O1zCNP/iwHUZapvfAgG1f7BwxBXp6kwpMQvG87MDH9752RYRRfrc0QAwGOfGKW/ECRRp
+         P+raAAyQ4oRTicEOZ4nKyb/1E2I9FFdSx9RWPPyBrS1h36UyjORQ8+CMt58Kjushhezu
+         9RXOYaaNvG0bNTpZ/HkNuXyfdfn2Ux/VAR7vJv2P05YFmLwnIUhVGfF9KN509a6IUtiD
+         m1DeInJBBV1mtH3nWIwOPbUWHthjgHLBG7ZjFvpuVYWaUO9hfoKnq28Ptn7HjZ0xeFSA
+         AD4A==
+X-Gm-Message-State: ACgBeo2bbs3hs2SCNKyIsin3e6t3xxlkoX8gEjS8HG8h2LqCkMmF79Mf
+        CrKvxG3GCgJebQDw1rwAqUE=
+X-Google-Smtp-Source: AA6agR6davf04hg04CsbracjQnxa6NDVqvhJ2bCajCUXxLblO7l7GGadazUwNB0kHWiXtXbDC293Og==
+X-Received: by 2002:a63:1043:0:b0:429:fd41:b7cb with SMTP id 3-20020a631043000000b00429fd41b7cbmr23574082pgq.442.1661995236799;
+        Wed, 31 Aug 2022 18:20:36 -0700 (PDT)
+Received: from localhost ([192.55.55.51])
+        by smtp.gmail.com with ESMTPSA id y11-20020a17090322cb00b00172dd10f64fsm6473650plg.263.2022.08.31.18.20.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 18:20:36 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 18:20:34 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sagi Shahar <sagis@google.com>
+Cc:     linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Ryan Afranji <afranji@google.com>,
+        Roger Wang <runanwang@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Ben Gardon <bgardon@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Peter Xu <peterx@redhat.com>, Oliver Upton <oupton@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Yang Zhong <yang.zhong@intel.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Yanan Wang <wangyanan55@huawei.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Like Xu <like.xu@linux.intel.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        isaku.yamahata@gmail.com
+Subject: Re: [RFC PATCH v2 02/17] KVM: selftest: Add helper functions to
+ create TDX VMs
+Message-ID: <20220901012034.GD2711697@ls.amr.corp.intel.com>
+References: <20220830222000.709028-1-sagis@google.com>
+ <20220830222000.709028-3-sagis@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
-        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
-        *      [43.155.67.158 listed in zen.spamhaus.org]
-        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
-        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
-        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
-        *      [score: 0.0000]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 T_SPF_HELO_TEMPERROR SPF: test of HELO record failed
-        *      (temperror)
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220830222000.709028-3-sagis@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'unsigned int' should be clearer than 'unsigned'.
+On Tue, Aug 30, 2022 at 10:19:45PM +0000,
+Sagi Shahar <sagis@google.com> wrote:
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/media/common/videobuf2/videobuf2-v4l2.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> index f35626df1dea..2a6e28c769f2 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> @@ -8,6 +8,7 @@
+>  #include "test_util.h"
+>  #include "kvm_util.h"
+>  #include "processor.h"
+> +#include "tdx.h"
+>  
+>  #ifndef NUM_INTERRUPTS
+>  #define NUM_INTERRUPTS 256
+> @@ -641,6 +642,32 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
+>  	return vcpu;
+>  }
+>  
+> +/*
+> + * Adds a vCPU to a TD (Trusted Domain) with minimum  defaults. It will not set
+> + * up any general purpose registers as they will be initialized by the TDX. In
+> + * TDX, vCPUs RIP is set to 0xFFFFFFF0. See Intel TDX EAS Section "Initial State
+> + * of Guest GPRs" for more information on vCPUs initial register values when
+> + * entering the TD first time.
+> + *
+> + * Input Args:
+> + *   vm - Virtual Machine
+> + *   vcpuid - The id of the VCPU to add to the VM.
+> + */
+> +struct kvm_vcpu *vm_vcpu_add_tdx(struct kvm_vm *vm, uint32_t vcpu_id)
+> +{
+> +	struct kvm_mp_state mp_state;
+> +	struct kvm_vcpu *vcpu;
+> +
+> +	vcpu = __vm_vcpu_add(vm, vcpu_id);
+> +	initialize_td_vcpu(vcpu);
+> +
+> +	/* Setup the MP state */
+> +	mp_state.mp_state = 0;
+> +	vcpu_mp_state_set(vcpu, &mp_state);
+> +
+> +	return vcpu;
+> +}
+> +
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-v4l2.c b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-index f26cb8586bd4..2e1adf88aa55 100644
---- a/drivers/media/common/videobuf2/videobuf2-v4l2.c
-+++ b/drivers/media/common/videobuf2/videobuf2-v4l2.c
-@@ -754,11 +754,11 @@ EXPORT_SYMBOL_GPL(vb2_prepare_buf);
+It's better to use symbolic value.  I know this is copied from vmx version, though.
+
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index 3bb7dc5a55ea..4009bc926e33 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -636,7 +636,7 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
+        vcpu_regs_set(vcpu, &regs);
  
- int vb2_create_bufs(struct vb2_queue *q, struct v4l2_create_buffers *create)
- {
--	unsigned requested_planes = 1;
--	unsigned requested_sizes[VIDEO_MAX_PLANES];
-+	unsigned int requested_planes = 1;
-+	unsigned int requested_sizes[VIDEO_MAX_PLANES];
- 	struct v4l2_format *f = &create->format;
- 	int ret = vb2_verify_memory_type(q, create->memory, f->type);
--	unsigned i;
-+	unsigned int i;
+        /* Setup the MP state */
+-       mp_state.mp_state = 0;
++       mp_state.mp_state = KVM_MP_STATE_RUNNABLE;
+        vcpu_mp_state_set(vcpu, &mp_state);
  
- 	fill_buf_caps(q, &create->capabilities);
- 	validate_memory_flags(q, create->memory, &create->flags);
+        return vcpu;
+@@ -662,7 +662,7 @@ struct kvm_vcpu *vm_vcpu_add_tdx(struct kvm_vm *vm, uint32_t vcpu_id)
+        initialize_td_vcpu(vcpu);
+ 
+        /* Setup the MP state */
+-       mp_state.mp_state = 0;
++       mp_state.mp_state = KVM_MP_STATE_RUNNABLE;
+        vcpu_mp_state_set(vcpu, &mp_state);
+ 
+        return vcpu;
+
+
 -- 
-2.36.1
-
+Isaku Yamahata <isaku.yamahata@gmail.com>

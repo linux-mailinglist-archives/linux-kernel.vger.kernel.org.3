@@ -2,63 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2535AA05F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:49:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 136655AA061
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:50:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234435AbiIATtX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:49:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59124 "EHLO
+        id S229892AbiIATtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233456AbiIATtT (ORCPT
+        with ESMTP id S234623AbiIATtk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:49:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57399C21D;
-        Thu,  1 Sep 2022 12:49:18 -0700 (PDT)
+        Thu, 1 Sep 2022 15:49:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574E09CCDC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:49:36 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 492C261E58;
-        Thu,  1 Sep 2022 19:49:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CBD8C433C1;
-        Thu,  1 Sep 2022 19:49:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662061757;
-        bh=DtcurkmNbe3mZsUd1jvvBGlCULoNGj3rYq35TfQpP1Q=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9B47AB825DC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 19:49:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B39C433D6;
+        Thu,  1 Sep 2022 19:49:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1662061774;
+        bh=dg+ppRmkii5agmo19wFs2/RQZz+ZaDfIvg57CDdj8ok=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dxNzcJKVGgwLiqhieRIUxxlMR/sJQ1gBJbYk0YgNiiFDg0RH9Qg+jr1SB/801Ai37
-         tpea3dZ4Ff9fnnhbW7NSnp0zobEJmnW/fd6j0spU2DgzJqnVbmqeICfLWil/YsHReT
-         96hax3xvTsZyoVQzRFrG+n2/1lvOZmkqzFpHjgHAVIRIaOqM9U/AsjVthwrfuA8aTL
-         jWieYQsv2PCVBvOkvDxNfpsvSeiAZNstWucyEiQS4UD1UfMWwcVogwrGfVBHap6q8j
-         jbox5XDnEVlHSeYyQUaJAwe+t8BEi851KFLdxVIBCGnBOKnr+7O8asEIWfvA/OX0Nk
-         XwV6r0dkacKtw==
-Date:   Thu, 1 Sep 2022 12:49:15 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        syzbot <syzkaller@googlegroups.com>,
-        Yajun Deng <yajun.deng@linux.dev>, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 1/2] netlink: Bounds-check nlmsg_len()
-Message-ID: <20220901124915.24ebc067@kernel.org>
-In-Reply-To: <202208312324.F2F8B28CA@keescook>
-References: <20220901030610.1121299-1-keescook@chromium.org>
-        <20220901030610.1121299-2-keescook@chromium.org>
-        <20220831201825.378d748d@kernel.org>
-        <202208312324.F2F8B28CA@keescook>
-MIME-Version: 1.0
+        b=GLJWpoiIXh0uhBMuWBX6kmylUDxLAOU3NwISOFteCLQqVRHeChODXilCN9pJ9w5al
+         t/EY5KiXLLvkuClEHs1FsGmXKt+EpIbeJadCwnV1i+bMgc0gwhapul4qNu3ADoeQEB
+         xjmfN3OQG/n74smWZociDjoWUOUJJRAFsfbIwRHI=
+Date:   Thu, 1 Sep 2022 12:49:33 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc:     mike.kravetz@oracle.com, songmuchun@bytedance.com,
+        david@redhat.com, linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm/hugetlb: fix races when looking up a CONT-PTE/PMD
+ size hugetlb page
+Message-Id: <20220901124933.57ccd5f7c8dd8611ab667c3c@linux-foundation.org>
+In-Reply-To: <635f43bdd85ac2615a58405da82b4d33c6e5eb05.1662017562.git.baolin.wang@linux.alibaba.com>
+References: <635f43bdd85ac2615a58405da82b4d33c6e5eb05.1662017562.git.baolin.wang@linux.alibaba.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -67,21 +53,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 31 Aug 2022 23:27:08 -0700 Kees Cook wrote:
-> This would catch corrupted values...
+On Thu,  1 Sep 2022 18:41:31 +0800 Baolin Wang <baolin.wang@linux.alibaba.com> wrote:
+
+> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+> hugetlb, which means it can support not only PMD/PUD size hugetlb
+> (2M and 1G), but also CONT-PTE/PMD size(64K and 32M) if a 4K page size
+> specified.
 > 
-> Is the concern the growth in image size? The check_sub_overflow() isn't
-> large at all -- it's just adding a single overflow bit test. The WARNs
-> are heavier, but they're all out-of-line.
+> So when looking up a CONT-PTE size hugetlb page by follow_page(), it
+> will use pte_offset_map_lock() to get the pte entry lock for the CONT-PTE
+> size hugetlb in follow_page_pte(). However this pte entry lock is incorrect
+> for the CONT-PTE size hugetlb, since we should use huge_pte_lock() to
+> get the correct lock, which is mm->page_table_lock.
+> 
+> That means the pte entry of the CONT-PTE size hugetlb under current
+> pte lock is unstable in follow_page_pte(), we can continue to migrate
+> or poison the pte entry of the CONT-PTE size hugetlb, which can cause
+> some potential race issues, even though they are under the 'pte lock'.
+> 
+> For example, suppose thread A is trying to look up a CONT-PTE size
+> hugetlb page by move_pages() syscall under the lock, however antoher
+> thread B can migrate the CONT-PTE hugetlb page at the same time, which
+> will cause thread A to get an incorrect page, if thread A also wants to
+> do page migration, then data inconsistency error occurs.
+> 
+> Moreover we have the same issue for CONT-PMD size hugetlb in
+> follow_huge_pmd().
+> 
+> To fix above issues, rename the follow_huge_pmd() as follow_huge_pmd_pte()
+> to handle PMD and PTE level size hugetlb, which uses huge_pte_lock() to
+> get the correct pte entry lock to make the pte entry stable.
+> 
+> Cc: <stable@vger.kernel.org>
 
-It turns the most obvious function into a noodle bar :(
+Are we able to think of a Fixes: for this?
 
-Looking at this function in particular is quite useful, because 
-it clearly indicates that the nlmsg_len includes the header.
+> Mike, please fold this patch into your series. Thanks.
 
-How about we throw in a
+As this is cc:stable I'll be looking to get this into mainline during
+this -rc cycle, so it shouldn't be part of a for-next-rc patch series.
 
-	WARN_ON_ONCE(nlh->nlmsg_len < NLMSG_HDRLEN ||
-		     nlh->nlmsg_len > INT_MAX);
-
-but leave the actual calculation human readable C?

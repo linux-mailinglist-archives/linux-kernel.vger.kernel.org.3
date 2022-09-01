@@ -2,100 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18855A96E7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:30:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24D6A5A96E9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:31:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233291AbiIAMaI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:30:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46382 "EHLO
+        id S233749AbiIAMaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:30:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiIAM3k (ORCPT
+        with ESMTP id S233625AbiIAM3r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:29:40 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AE312854B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:29:11 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id x23so16936435pll.7
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 05:29:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc:subject:date;
-        bh=aBsoS0QuUIR4yp4rLOJVkfypVxrX3Q3pjq4+QsYnonc=;
-        b=fp+Bg01x33ywOQVFcAISjLwJXZDzRVIyAmYhnbHDBrmm0veX1QWtKRdfLoA4c5Pc2+
-         rQw4uMAbpUI0MOaR9QKHhrqAzKdBjm2gVNYVcBrY53FcS7bTtGbO2HdWue5Li9Ki9lu1
-         Gv/OmF/OV3hrqe/j+2QdJZ6QFyo7YPRRS5KjWVdxeTSFwu2MQmc5p8X30LgrJpOVFi8Y
-         eAPKfezjI6uEtcHpPdE1lzv7GK22j33adpJ4s+i/2ilvYOpA5vLKk3L+xqPSLQdvd+29
-         CUM1nNQwIf0Ej5pgQzFEIikwi9zUVeC8hSVpByHh0QyCte+lmU7PM7bUSthmoaPMOyGt
-         kfvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=aBsoS0QuUIR4yp4rLOJVkfypVxrX3Q3pjq4+QsYnonc=;
-        b=uthI+q/nBHzt9Ynn5KMCUHSZFVbpDDIXRmgWIlPxBgSIhHutMcftXpWdDGszjNlqoW
-         KnIYDB0UUmScdTatTFrglRKac2WK63bWJ6T8KiqbHx7jdHh6Q3100lTF3HOE3M8KWNE1
-         8/cJ2hbINuHgEStocvnMfokZFppGAHvdcTQ0+0zTBRwtE6WWWO6IskZGDO2pYlfjy0jL
-         WGX9GX7aezh8p0Tk57hunEGegUS1IaVy6WxxWCToih6l4uB+SEYz4NUAnFmS5xgnDspo
-         Ooz8fLhhuv9n6rdSjpWkflQLk3lhOdhWLmFZrEdxicfwfzJi3FoPtSjCwid81pIr4m50
-         9dWw==
-X-Gm-Message-State: ACgBeo36zRH3ItkVaK8bewAkInEypQoBNjtwNacsjBAJuamCFJPSOP2n
-        Sh5UV/PVfqUgfnayLdN8NuRrclBGBSbww/w1+80=
-X-Google-Smtp-Source: AA6agR6bBqmKKs2nJfeCB9YXSK2+F/KGsQ3W+U1pnrVHUuk+KBX3PzmSdvLyKRGPXLyb+uowOU0fV+L7letPYYEqiT8=
-X-Received: by 2002:a17:902:ebd2:b0:172:8eee:80f5 with SMTP id
- p18-20020a170902ebd200b001728eee80f5mr30754959plg.9.1662035350723; Thu, 01
- Sep 2022 05:29:10 -0700 (PDT)
+        Thu, 1 Sep 2022 08:29:47 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B836C386;
+        Thu,  1 Sep 2022 05:29:44 -0700 (PDT)
+Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1oTjKI-0006cC-AN; Thu, 01 Sep 2022 14:29:42 +0200
+Message-ID: <c4a244e0-1be3-9be9-a56f-6dfb0c5c5d88@leemhuis.info>
+Date:   Thu, 1 Sep 2022 14:29:41 +0200
 MIME-Version: 1.0
-Received: by 2002:a05:6a10:4b08:b0:2d6:ebbb:dd20 with HTTP; Thu, 1 Sep 2022
- 05:29:10 -0700 (PDT)
-Reply-To: michellegoodman45@gmail.com
-From:   Michelle Goodman <michellegoodman358@gmail.com>
-Date:   Thu, 1 Sep 2022 12:29:10 +0000
-Message-ID: <CAAnwc9sTj0r6wJxKNggoFGKBf6T2rxN8yDKqpJfGKbzP43YPJQ@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:62a listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4994]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [michellegoodman358[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [michellegoodman358[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [michellegoodman45[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Content-Language: en-US, de-DE
+To:     regressions@lists.linux.dev
+Cc:     lkp@lists.01.org, lkp@intel.com, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org
+References: <20220830030032.GA2884@inn2.lkp.intel.com>
+ <eb352106-5a3c-63fe-2409-494cf0a31bfc@intel.com>
+ <4b5d1c96-44c5-e8bb-01d8-9f9c72621d0d@intel.com>
+ <CAL3q7H78qPSp4O=ZrCCNFwX+6L4gZgn-A5q3VydvhTfkVDEUDQ@mail.gmail.com>
+From:   Thorsten Leemhuis <regressions@leemhuis.info>
+Subject: Re: [LKP] [btrfs] ca6dee6b79:
+ fxmark.ssd_btrfs_MWRM_72_bufferedio.works/sec -8.4% regression #forregzbot
+In-Reply-To: <CAL3q7H78qPSp4O=ZrCCNFwX+6L4gZgn-A5q3VydvhTfkVDEUDQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1662035384;e9a49214;
+X-HE-SMSGID: 1oTjKI-0006cC-AN
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-15TXmdeZLCDXp9eZ15HXnNeqINeQ16og15TXnteZ15nXnCDXlNen15XXk9edINep15zXmT8NCg0K
-15TXmdeZISDXkdeV15Ag16DXm9eZ16gg15DXl9eTINeQ16og15TXqdeg15kNCteQ16DXmSDXkNeX
-15vXlA0K157Xmdep15wNCg==
+TWIMC: this mail is primarily send for documentation purposes and for
+regzbot, my Linux kernel regression tracking bot. These mails usually
+contain '#forregzbot' in the subject, to make them easy to spot and filter.
+
+On 30.08.22 12:21, Filipe Manana wrote:
+> On Tue, Aug 30, 2022 at 7:58 AM Yujie Liu <yujie.liu@intel.com> wrote:
+>>
+>> We noticed that this case was reported when the patch was in linux-next.
+>> Thanks for your comment that it is an expected result due to heavy rename.
+>>
+>> https://lore.kernel.org/all/Ysb4T7Z8hKgdvPRk@xsang-OptiPlex-9020/
+>>
+>> This report is due to the patch being merged into mainline, if it is still
+>> the same case, please ignore this duplicate report. Sorry for the inconvenience.
+> 
+> Yes, it's the same.
+
+In that case:
+
+#regzbot invalid: kinda expected, as explained in
+https://lore.kernel.org/all/Ysb4T7Z8hKgdvPRk@xsang-OptiPlex-9020/
+
+>> On 8/30/2022 11:17, kernel test robot wrote:
+>>> Greeting,
+>>>
+>>> FYI, we noticed a -8.4% regression of fxmark.ssd_btrfs_MWRM_72_bufferedio.works/sec due to commit:
+>>>
+>>>
+>>> commit: ca6dee6b7946794fa340a7290ca399a50b61705f ("btrfs: balance btree dirty pages and delayed items after a rename")
+>>> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+>>>
+>>> in testcase: fxmark
+>>> on test machine: 128 threads 2 sockets Intel(R) Xeon(R) Platinum 8358 CPU @ 2.60GHz (Ice Lake) with 128G memory
+>>> with following parameters:
+>>>
+>>>      disk: 1SSD
+>>>      media: ssd
+>>>      test: MWRM
+>>>      fstype: btrfs
+>>>      directio: bufferedio
+>>>      cpufreq_governor: performance
+>>>      ucode: 0xd000363
+>>>
+>>> test-description: FxMark is a filesystem benchmark that test multicore scalability.
+>>> test-url: https://github.com/sslab-gatech/fxmark
+>>>
+>>>
+>>> =========================================================================================
+>>> compiler/cpufreq_governor/directio/disk/fstype/kconfig/media/rootfs/tbox_group/test/testcase/ucode:
+>>>    gcc-11/performance/bufferedio/1SSD/btrfs/x86_64-rhel-8.3/ssd/debian-11.1-x86_64-20220510.cgz/lkp-icl-2sp5/MWRM/fxmark/0xd000363
+>>>
+>>> commit:
+>>>    b8bea09a45 ("btrfs: add trace event for submitted RAID56 bio")
+>>>    ca6dee6b79 ("btrfs: balance btree dirty pages and delayed items after a rename")
+>>>
+>>> b8bea09a456fc31a ca6dee6b7946794fa340a7290ca
+>>> ---------------- ---------------------------
+>>>           %stddev     %change         %stddev
+>>>               \          |                \
+>>>     1821853           -13.9%    1568247 ±  3%  fxmark.ssd_btrfs_MWRM_36_bufferedio.works
+>>>       36436           -13.9%      31362 ±  3%  fxmark.ssd_btrfs_MWRM_36_bufferedio.works/sec
+>>>     1675102           -14.0%    1439994 ±  7%  fxmark.ssd_btrfs_MWRM_54_bufferedio.works
+>>>       33497           -14.0%      28796 ±  7%  fxmark.ssd_btrfs_MWRM_54_bufferedio.works/sec
+>>>     1572332            -8.4%    1440600 ±  6%  fxmark.ssd_btrfs_MWRM_72_bufferedio.works
+>>>       31445            -8.4%      28809 ±  6%  fxmark.ssd_btrfs_MWRM_72_bufferedio.works/sec
+>>>      356010           +80.0%     640832        fxmark.time.involuntary_context_switches
+>>>       68.50           -24.1%      52.00        fxmark.time.percent_of_cpu_this_job_got
+>>>      630.47           -24.0%     479.23        fxmark.time.system_time
+>>>   1.335e+10           +49.8%      2e+10        cpuidle..time
+>>>        1045 ±  4%     +11.8%       1168        uptime.idle
+>>>       31.54           +50.2%      47.37        iostat.cpu.idle
+>>>       64.16           -24.7%      48.29        iostat.cpu.system
+>>>       31.17           +50.3%      46.83        vmstat.cpu.id
+>>>       12.83 ±  5%     -55.8%       5.67 ±  8%  vmstat.procs.r
+>>>       32.13           +15.8       47.95        mpstat.cpu.all.idle%
+>>>        0.47 ±  7%      +0.1        0.53 ±  3%  mpstat.cpu.all.iowait%
+>>>       63.37           -16.1       47.31        mpstat.cpu.all.sys%
+>>>       10.04 ±  3%     +13.5%      11.39 ±  3%  perf-stat.i.metric.K/sec
+>>>      869.81 ± 10%     -16.2%     728.74 ± 15%  perf-stat.i.node-loads
+>>>      871.23 ± 10%     -16.2%     730.49 ± 15%  perf-stat.ps.node-loads
+>>>        3004 ±  8%     -52.1%       1440 ±  6%  numa-meminfo.node0.Active(anon)
+>>>     1218568           -10.8%    1086453        numa-meminfo.node0.Inactive
+>>>      351812 ±  3%     -29.0%     249640 ± 12%  numa-meminfo.node0.Inactive(anon)
+>>>      120150           -79.3%      24861 ±  3%  numa-meminfo.node0.Shmem
+>>>        3489 ±  8%     -45.0%       1919 ±  2%  meminfo.Active(anon)
+>>>      492107           -19.0%     398809        meminfo.Committed_AS
+>>>      382253           -24.6%     288151        meminfo.Inactive(anon)
+>>>      124727           -76.8%      28886 ±  2%  meminfo.Shmem
+>>>        2050 ±  4%     -10.5%       1834 ±  5%  meminfo.Writeback
+>>>      750.83 ±  8%     -52.1%     360.00 ±  6%  numa-vmstat.node0.nr_active_anon
+>>>       87951 ±  3%     -29.0%      62408 ± 12%  numa-vmstat.node0.nr_inactive_anon
+>>>       30038           -79.3%       6216 ±  3%  numa-vmstat.node0.nr_shmem
+>>>      750.83 ±  8%     -52.1%     360.00 ±  6%  numa-vmstat.node0.nr_zone_active_anon
+>>>       87951 ±  3%     -29.0%      62408 ± 12%  numa-vmstat.node0.nr_zone_inactive_anon
+>>>     7554028 ±  3%     -71.2%    2174126 ±  5%  sched_debug.cfs_rq:/.min_vruntime.avg
+>>>     7640393 ±  3%     -70.5%    2254050 ±  5%  sched_debug.cfs_rq:/.min_vruntime.max
+>>>     7291209 ±  3%     -73.6%    1926973 ±  5%  sched_debug.cfs_rq:/.min_vruntime.min
+>>>      873.62 ±  7%     -19.2%     705.68 ± 10%  sched_debug.cfs_rq:/.runnable_avg.avg
+>>>      790.32 ±  7%     -21.4%     621.34 ± 12%  sched_debug.cfs_rq:/.runnable_avg.min
+>>>      747.11 ±  3%     -22.7%     577.37 ±  3%  sched_debug.cfs_rq:/.util_avg.avg
+>>>      670.92 ±  5%     -25.2%     501.70 ±  2%  sched_debug.cfs_rq:/.util_avg.min
+>>>      409.44 ±  9%     -35.1%     265.80 ± 21%  sched_debug.cfs_rq:/.util_est_enqueued.avg
+>>>      789.44 ±  3%     -20.1%     630.53 ±  5%  sched_debug.cfs_rq:/.util_est_enqueued.max
+>>>        0.00 ± 13%     -67.3%       0.00 ± 22%  sched_debug.cpu.next_balance.stddev
+>>>      872.67 ±  8%     -45.0%     479.83 ±  2%  proc-vmstat.nr_active_anon
+>>>     1801345            -1.7%    1771330        proc-vmstat.nr_file_pages
+>>>       95550           -24.6%      72037        proc-vmstat.nr_inactive_anon
+>>>        8752            -3.7%       8426        proc-vmstat.nr_mapped
+>>>       31169           -76.8%       7221 ±  2%  proc-vmstat.nr_shmem
+>>>      872.67 ±  8%     -45.0%     479.83 ±  2%  proc-vmstat.nr_zone_active_anon
+>>>       95550           -24.6%      72037        proc-vmstat.nr_zone_inactive_anon
+>>>        9553 ± 10%     -16.8%       7950 ±  3%  proc-vmstat.numa_hint_faults
+>>>    18886391            -3.6%   18207624        proc-vmstat.numa_hit
+>>>    18770999            -3.6%   18091363        proc-vmstat.numa_local
+>>>     7398756            -4.0%    7105675        proc-vmstat.pgactivate
+>>>    18885154            -3.6%   18206666        proc-vmstat.pgalloc_normal
+>>>     7248262            -4.3%    6933915 ±  2%  proc-vmstat.pgdeactivate
+>>>    18894473            -3.4%   18243898        proc-vmstat.pgfree
+>>>     7829962            -3.0%    7596447 ±  2%  proc-vmstat.pgrotated
+>>>
+>>>
+>>> If you fix the issue, kindly add following tag
+>>> Reported-by: kernel test robot <yujie.liu@intel.com>
+>>>
+>>>
+>>> To reproduce:
+>>>
+>>>          git clone https://github.com/intel/lkp-tests.git
+>>>          cd lkp-tests
+>>>          sudo bin/lkp install job.yaml           # job file is attached in this email
+>>>          bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
+>>>          sudo bin/lkp run generated-yaml-file
+>>>
+>>>          # if come across any failure that blocks the test,
+>>>          # please remove ~/.lkp and /lkp dir to run from a clean state.
+>>>
+>>>
+>>> Disclaimer:
+>>> Results have been estimated based on internal Intel analysis and are provided
+>>> for informational purposes only. Any difference in system hardware or software
+>>> design or configuration may affect actual performance.
+>>>
+>>>
+>>> #regzbot introduced: ca6dee6b79
+>>>
+>>>
+>>>
+>>> _______________________________________________
+>>> LKP mailing list -- lkp@lists.01.org
+>>> To unsubscribe send an email to lkp-leave@lists.01.org
+> 
+> 

@@ -2,61 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A105A99B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:06:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D9AA5A99B7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbiIAOFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 10:05:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40414 "EHLO
+        id S234291AbiIAOHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 10:07:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbiIAOEw (ORCPT
+        with ESMTP id S230136AbiIAOHf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 10:04:52 -0400
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 913EBDF6;
-        Thu,  1 Sep 2022 07:04:47 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 52F5BE0002;
-        Thu,  1 Sep 2022 14:04:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1662041084;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Lw/b6gMufWECAX3seoCAwz85Lfff7SY9MngeM/poOiQ=;
-        b=pVXCmuvw0nSzp9uwaVdKCDH5ubtCP4d/S619ihZ+U1Y4k648ZQ2pF6sZ4Mfn/ZsCMyPDtT
-        CMPArZ6NtwlnZvElQt/WgcUxuQZj4QfzKHujzswTjfvc5CWXQHNV2cU/0SF38RgjCBh6nW
-        09LD6GOR2M5umPsd7TF4ep+4Fo4Vdp2E2C+V+1vhdiSTjJkmg33WWcDSJWL8eE2ATV389M
-        LyD3s6GyBc3XHVUI72FFBn4znnvrN8jYpfqSWMgd/ttEcSse5NPg6z1sfpYGJoXWHfSwac
-        PL1d33OqXLyLcxMNFgXM4ODh6B92GFqI9hwbikk+oFQRO3vL9XDGvtjfiaqHtQ==
-Date:   Thu, 1 Sep 2022 16:04:40 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v5 5/6] ARM: dts: sun8i: a83t: Add MIPI CSI-2 controller
- node
-Message-ID: <YxC7+Pi4v3Bc1oXc@aptenodytes>
-References: <20220826182803.604563-1-paul.kocialkowski@bootlin.com>
- <20220826182803.604563-6-paul.kocialkowski@bootlin.com>
- <YwkYKcffdRGnq+pK@pendragon.ideasonboard.com>
+        Thu, 1 Sep 2022 10:07:35 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C707140B8
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 07:07:30 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id D31BB5C01A9;
+        Thu,  1 Sep 2022 10:07:29 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Thu, 01 Sep 2022 10:07:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1662041249; x=1662127649; bh=ZH
+        1W9SzAvh365K3LsTeS4Fe2O1mpetLxMk2nvupx0cI=; b=ReDzDKUSFmoBHeUVs5
+        oy45ls0RS0FkKtQVRQ22Y6d5x1CM4rs6/B6MDtVWrmOYi82xBdNe3m70AzcyTzTD
+        aOVcIqAwZiniIXiXJ8mPz52kHTM7oARoAvGYynD5q3cJp0rGIfgZ1tL7HZarG9Xi
+        vPTw1nxU3ZeXC3xrWiPX7IlBdzfa5J0PieioNGE2lInlvyZVok5mY7nsLqoHja+a
+        Wt3u6RqbhrQjYPe5Xw1FbpG+OdHZVEBQz4ZBNMLF2TPkaIxdP8rRQI2I48pOzrQm
+        /hvsYAN/CdaOb9QVSmutWlCieENoKNoEwbf257EpsRIN+IBGg5tkLhI+u9fW99o2
+        eW5w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1662041249; x=1662127649; bh=ZH1W9SzAvh365
+        K3LsTeS4Fe2O1mpetLxMk2nvupx0cI=; b=RUn40TsnsjcJduv2QkpQqzCwQIvJZ
+        A8qDnomtL1c6VNXXnst17TqLiCNW52UlPz+7ogsfQGSqSRJHhu/x59iWP38QXkca
+        N/e91jC+VmDVePN9KUraDDRHxccBM6HOrxeBg+o/inIndkOyXTR26dotdUOXFD3c
+        mR1a6Fu3We/Aw6n5KBJGdDchV5GnLGtdKKRWBY5VOQM65tJ7A5YAG3hJ04igcMYu
+        JI2QzwsSZf3e/VgW1hDbFEc+uOx68PvEOFMQitRnURhbcqjvYJCC9IKl90WyuqF2
+        Sy67fC1sc07WyUbFlmllVyR+OsjA0H0TGGFKIoZ3c9//0IJgo7FlOsLAg==
+X-ME-Sender: <xms:oLwQY6zWV5cbVyhBknSFjfYzJ26o90uYKatJsqA_NwygcTsoGOWIMw>
+    <xme:oLwQY2QLy7E8sBZFEAybNfHH4uFYuI06vAc2ABpKdndEOsDFk5q9AMQdQ1YwocdMb
+    sO2vOkeka7Qnw45zqU>
+X-ME-Received: <xmr:oLwQY8UJQE-FyXnilAd6t5VezOj-TlxSjXEtdOIeIM6T0d7qtRKu-gqZxuvS8iat26rieWIl>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekkedgjeegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepvfihtghh
+    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
+    grthhtvghrnhepvdegffehledvleejvdethffgieefveevhfeigefffffgheeguedtieek
+    tdeigeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epthihtghhohesthihtghhohdrphhiiiiirg
+X-ME-Proxy: <xmx:oLwQYwiTimP6_gPdve45MuKXavDLWc8aRJyOYzRKSmByUKmFu66qew>
+    <xmx:oLwQY8COvZlwAuxafeK_H_o9qjFDwHz-uAfvf1EaOPWUnEfIOagDLQ>
+    <xmx:oLwQYxLk3F2GFMsqu4IZXBXzLZNor1rGh2DYajlvlAF5FmjNEbex3Q>
+    <xmx:obwQY_9dTEbqhKnOrk2YgR2x808l0HdqrLCuUWZIY2d0fFhBEW6dGw>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 1 Sep 2022 10:07:27 -0400 (EDT)
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Miklos Szeredi <miklos@szeredi.hu>,
+        Eric Biederman <ebiederm@xmission.com>
+Cc:     linux-kernel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
+        Tycho Andersen <tycho@tycho.pizza>,
+        "Serge E. Hallyn" <serge@hallyn.com>
+Subject: [PATCH] fuse: In fuse_flush only wait if someone wants the return code
+Date:   Thu,  1 Sep 2022 08:06:47 -0600
+Message-Id: <20220901140647.1125079-1-tycho@tycho.pizza>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <YvpRLJ79GRWYjLdf@tycho.pizza>
+References: <YvpRLJ79GRWYjLdf@tycho.pizza>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="IMztB6PSZ8uhBkMR"
-Content-Disposition: inline
-In-Reply-To: <YwkYKcffdRGnq+pK@pendragon.ideasonboard.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,120 +86,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: "Eric W. Biederman" <ebiederm@xmission.com>
 
---IMztB6PSZ8uhBkMR
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In my very light testing this resolves a hang where a thread of the
+fuse server was accessing the fuse filesystem (the fuse server is
+serving up), when the fuse server is killed.
 
-Hi Laurent,
+The practical problem is that the fuse server file descriptor was
+being closed after the file descriptor into the fuse filesystem so
+that the fuse filesystem operations were being blocked for instead of
+being aborted.  Simply skipping the unnecessary wait resolves this
+issue.
 
-On Fri 26 Aug 22, 21:59, Laurent Pinchart wrote:
-> Hi Paul,
->=20
-> Thank you for the patch.
->=20
-> On Fri, Aug 26, 2022 at 08:28:02PM +0200, Paul Kocialkowski wrote:
-> > MIPI CSI-2 is supported on the A83T with a dedicated controller that
-> > covers both the protocol and D-PHY. It can be connected to the CSI
-> > interface as a V4L2 subdev through the fwnode graph.
-> >=20
-> > This is not done by default since connecting the bridge without a
-> > subdev attached to it will cause a failure on the CSI driver.
->=20
-> No urgency, but would it be possible to fix this so that the CSI-2
-> receiver can be connected to the CSI unconditionally in DT ? The
-> connection exists at the hardware level in the SoC, and should thus
-> exist here too, regardless of whether or not a sensor is connected.
+This is just a proof of concept and someone should look to see if the
+fuse max_background limit could cause a problem with this approach.
 
-Yes it's true that having the link always would be legitimate.
+Additionally testing PF_EXITING is a very crude way to tell if someone
+wants the return code from the vfs flush operation.  As such in the
+long run it probably makes sense to get some direct vfs support for
+knowing if flush needs to block until all of the flushing is complete
+and a status/return code can be returned.
 
-For the context, this CSI controller can be switched between the MIPI CSI-2
-controller and a parallel sensor input (i.e. it's not dedicated to one or t=
-he
-other like on the V3).
+Unless I have missed something this is a generic optimization that can
+apply to many network filesystems.
 
-Last time I tried, having the connection between the two always there resul=
-ted
-in the unability to use a parallel sensor when no sensor is attached to the
-mipi csi-2 receiver. Probably because the async notifier never completes si=
-nce
-the mipi csi-2's subdev is never registered without a sensor subdev attache=
-d.
+Al, vfs folks? (igrab/iput sorted so as not to be distractions).
 
-Do you see a way to handle this case properly?
+Perhaps a .flush_async method without a return code and a
+filp_close_async function without a return code to take advantage of
+this in the general sense.
 
-Thanks,
+Waiting potentially indefinitely for user space in do_exit seems like a
+bad idea.  Especially when all that the wait is for is to get a return
+code that will never be examined.
 
-Paul
+Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
+[tycho: small fixups for releasing fuse file + nocred flag]
+Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
+Reported-by: Tycho Andersen <tycho@tycho.pizza>
+Tested-by: "Serge E. Hallyn" <serge@hallyn.com>
+---
+ fs/fuse/file.c | 64 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > ---
-> >  arch/arm/boot/dts/sun8i-a83t.dtsi | 26 ++++++++++++++++++++++++++
-> >  1 file changed, 26 insertions(+)
-> >=20
-> > diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8=
-i-a83t.dtsi
-> > index 82fdb04122ca..ecf9f3b2c0c0 100644
-> > --- a/arch/arm/boot/dts/sun8i-a83t.dtsi
-> > +++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
-> > @@ -1064,6 +1064,32 @@ csi: camera@1cb0000 {
-> >  			status =3D "disabled";
-> >  		};
-> > =20
-> > +		mipi_csi2: csi@1cb1000 {
-> > +			compatible =3D "allwinner,sun8i-a83t-mipi-csi2";
-> > +			reg =3D <0x01cb1000 0x1000>;
-> > +			interrupts =3D <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> > +			clocks =3D <&ccu CLK_BUS_CSI>,
-> > +				 <&ccu CLK_CSI_SCLK>,
-> > +				 <&ccu CLK_MIPI_CSI>,
-> > +				 <&ccu CLK_CSI_MISC>;
-> > +			clock-names =3D "bus", "mod", "mipi", "misc";
-> > +			resets =3D <&ccu RST_BUS_CSI>;
-> > +			status =3D "disabled";
-> > +
-> > +			ports {
-> > +				#address-cells =3D <1>;
-> > +				#size-cells =3D <0>;
-> > +
-> > +				mipi_csi2_in: port@0 {
-> > +					reg =3D <0>;
-> > +				};
-> > +
-> > +				mipi_csi2_out: port@1 {
-> > +					reg =3D <1>;
-> > +				};
-> > +			};
-> > +		};
-> > +
-> >  		hdmi: hdmi@1ee0000 {
-> >  			compatible =3D "allwinner,sun8i-a83t-dw-hdmi";
-> >  			reg =3D <0x01ee0000 0x10000>;
->=20
-> --=20
-> Regards,
->=20
-> Laurent Pinchart
+diff --git a/fs/fuse/file.c b/fs/fuse/file.c
+index 05caa2b9272e..da45fb2dd740 100644
+--- a/fs/fuse/file.c
++++ b/fs/fuse/file.c
+@@ -464,6 +464,67 @@ static void fuse_sync_writes(struct inode *inode)
+ 	fuse_release_nowrite(inode);
+ }
+ 
++struct fuse_flush_args {
++	struct fuse_args args;
++	struct fuse_flush_in inarg;
++	struct inode *inode;
++	struct fuse_file *ff;
++};
++
++static void fuse_flush_end(struct fuse_mount *fm, struct fuse_args *args, int err)
++{
++	struct fuse_flush_args *fa = container_of(args, typeof(*fa), args);
++
++	if (err == -ENOSYS) {
++		fm->fc->no_flush = 1;
++		err = 0;
++	}
++
++	/*
++	 * In memory i_blocks is not maintained by fuse, if writeback cache is
++	 * enabled, i_blocks from cached attr may not be accurate.
++	 */
++	if (!err && fm->fc->writeback_cache)
++		fuse_invalidate_attr_mask(fa->inode, STATX_BLOCKS);
++
++
++	iput(fa->inode);
++	fuse_file_put(fa->ff, false, false);
++	kfree(fa);
++}
++
++static int fuse_flush_async(struct file *file, fl_owner_t id)
++{
++	struct inode *inode = file_inode(file);
++	struct fuse_mount *fm = get_fuse_mount(inode);
++	struct fuse_file *ff = file->private_data;
++	struct fuse_flush_args *fa;
++	int err;
++
++	fa = kzalloc(sizeof(*fa), GFP_KERNEL);
++	if (!fa)
++		return -ENOMEM;
++
++	fa->inarg.fh = ff->fh;
++	fa->inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
++	fa->args.opcode = FUSE_FLUSH;
++	fa->args.nodeid = get_node_id(inode);
++	fa->args.in_numargs = 1;
++	fa->args.in_args[0].size = sizeof(fa->inarg);
++	fa->args.in_args[0].value = &fa->inarg;
++	fa->args.force = true;
++	fa->args.nocreds = true;
++	fa->args.end = fuse_flush_end;
++	fa->inode = igrab(inode);
++	fa->ff = fuse_file_get(ff);
++
++	err = fuse_simple_background(fm, &fa->args, GFP_KERNEL);
++	if (err)
++		fuse_flush_end(fm, &fa->args, err);
++
++	return err;
++}
++
+ static int fuse_flush(struct file *file, fl_owner_t id)
+ {
+ 	struct inode *inode = file_inode(file);
+@@ -495,6 +556,9 @@ static int fuse_flush(struct file *file, fl_owner_t id)
+ 	if (fm->fc->no_flush)
+ 		goto inval_attr_out;
+ 
++	if (current->flags & PF_EXITING)
++		return fuse_flush_async(file, id);
++
+ 	memset(&inarg, 0, sizeof(inarg));
+ 	inarg.fh = ff->fh;
+ 	inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
 
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
+base-commit: 3d7cb6b04c3f3115719235cc6866b10326de34cd
+-- 
+2.34.1
 
---IMztB6PSZ8uhBkMR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmMQu/gACgkQ3cLmz3+f
-v9FfGgf/bUMOB5DarPNVlB6cB7ecutOIL2h9YZR6cAqSwT3S9OzsDPTgN+b8AuP6
-x9K6FblBxuQQKeysoJmym088qRKSIozBsf++zfGtAPu6aORTI0ACT9oYX0ZekSAa
-3mc9QM6ALIgGaahDFz5K3Vr5c5pMt5z+r7FPL1zNYwHDwuE5J2b38/cLh723rVaU
-MtdiA1Rw8BymidVxPbcInyeQ7FtS7DbIlq1T0wtK7qhRO6Pjf8V6sRGOgUKA4+DO
-R5miZyF62faENsnijrnnZ5YhrFJ+z/wzyAqdvPFuKxoeDCFaJLUQrZH9nz5F9UvC
-LdyBeOjbv+I1iyJW+76mQgLz6nAtNQ==
-=Id0r
------END PGP SIGNATURE-----
-
---IMztB6PSZ8uhBkMR--

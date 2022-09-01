@@ -2,75 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B45715A9C5C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 566B55A9C6A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:00:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234750AbiIAP7R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:59:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S234770AbiIAQAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234733AbiIAP7P (ORCPT
+        with ESMTP id S233568AbiIAQAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:59:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7DF8E0F8;
-        Thu,  1 Sep 2022 08:59:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6F8A321B35;
-        Thu,  1 Sep 2022 15:59:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662047952; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KBfsBLjkBk+MOp0nQfi/nmYmADNsHmXsxHUoLjnY3bA=;
-        b=eTkuxs55IxFpE7hDRb6Zude0PNe42Rg2iDMXK6ovgOmLJ8ol+1hu0xPXSwQoqG9TGCaDc3
-        i42+WNdKtbB6Lfrn3L5KkY4OhWhqvQdspBys/xSEJGbnPDDd/Ub0fAQLxecq4hpNU8HyuG
-        G6/KF4WT3KI1yrz/XlU9iNhXieN8XTA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662047952;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KBfsBLjkBk+MOp0nQfi/nmYmADNsHmXsxHUoLjnY3bA=;
-        b=Z4hcUx2ha2YSNK1fJxrz+uxnK+d2neX9kSNscLfnZg2OLnp020u8KVt2k2u2P+l6DPBLZE
-        LGa6Pt9b/QN5juCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5C72C13A89;
-        Thu,  1 Sep 2022 15:59:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XmaNFtDWEGMSCAAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 01 Sep 2022 15:59:12 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id E1C2BA067C; Thu,  1 Sep 2022 17:59:11 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 17:59:11 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Zhang Yi <yi.zhang@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cluster-devel@redhat.com,
-        ntfs3@lists.linux.dev, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, jack@suse.cz, tytso@mit.edu,
-        akpm@linux-foundation.org, axboe@kernel.dk,
-        viro@zeniv.linux.org.uk, rpeterso@redhat.com, agruenba@redhat.com,
-        almaz.alexandrovich@paragon-software.com, mark@fasheh.com,
-        dushistov@mail.ru, hch@infradead.org, chengzhihao1@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v2 11/14] ufs: replace ll_rw_block()
-Message-ID: <20220901155911.fbdsdn26kaj7ehjb@quack3>
-References: <20220901133505.2510834-1-yi.zhang@huawei.com>
- <20220901133505.2510834-12-yi.zhang@huawei.com>
+        Thu, 1 Sep 2022 12:00:04 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D82C1402C;
+        Thu,  1 Sep 2022 08:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=oaaEzGe48rQOZZkPwbRabi4a7HwDoRcH1qyMGnreP6o=; b=TNeAKdDphsY167amWFDivtvHcx
+        QOkff0372Cyn1lw7ET6tMcbvafqkTEugQHob8Zrge9n4lDOjCa+LdHXg1VvoPv28XZE/EC28GzBKv
+        OY1LUmCmgF9oXxmBaelyaP4OEl+ud3lR0TQkmH3cfFiQKoW0tx8SplmtuI3eqfRUbBtJipnMpchYk
+        YhpVIhWI9FRx1Vbx1HKF0SUgl6hT6aDiJVBhBkP9dQcC8F9wY4sRQl6VvQlT9UqbYNNPaocpyufti
+        Lil932NQEs/8A3YtMSPRPZU9HHkFANEivFIW6nPwc95q2WVtIGx/LA8q1b6dBodk1ojG01dbLMaKa
+        fQD4Lfsg==;
+Received: from 189-69-202-182.dial-up.telesp.net.br ([189.69.202.182] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oTmbh-007pDD-Iz; Thu, 01 Sep 2022 17:59:53 +0200
+Message-ID: <f89cd87c-7d1c-d8e6-ed95-6876f0201872@igalia.com>
+Date:   Thu, 1 Sep 2022 12:59:36 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901133505.2510834-12-yi.zhang@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V3] firmware: google: Test spinlock on panic path to avoid
+ lockups
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>, evgreen@chromium.org
+Cc:     arnd@arndb.de, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@gpiccoli.net, ardb@kernel.org,
+        davidgow@google.com, jwerner@chromium.org,
+        Petr Mladek <pmladek@suse.com>
+References: <20220819155059.451674-1-gpiccoli@igalia.com>
+ <YxDVPqVkdgQbAIvY@kroah.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YxDVPqVkdgQbAIvY@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,50 +60,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 01-09-22 21:35:02, Zhang Yi wrote:
-> ll_rw_block() is not safe for the sync read path because it cannot
-> guarantee that submitting read IO if the buffer has been locked. We
-> could get false positive EIO after wait_on_buffer() if the buffer has
-> been locked by others. So stop using ll_rw_block() in ufs.
++ Petr, since this was extensively discussed in the original thread [0]
+and maybe he can help with the argument.
+
+[0]
+https://lore.kernel.org/lkml/20220427224924.592546-1-gpiccoli@igalia.com/
+
+
+On 01/09/2022 12:52, Greg KH wrote:
+> [...]
+
+>> +	 * Perform the lock check before effectively trying
+>> +	 * to acquire it on gsmi_shutdown_reason() to avoid
+>> +	 * potential lockups in atomic context.
+>> +	 */
+>> +	if (spin_is_locked(&gsmi_dev.lock))
+>> +		return NOTIFY_DONE;
+>> +
 > 
-> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+> What happens if the lock is grabbed right after testing for it?
+> Shouldn't you use lockdep_assert_held() instead as the documentation
+> says to?
 
-Looks good to me. Feel free to add:
+How, if in this point only a single CPU (this one, executing the code)
+is running?
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Remember this is the panic path - before this point we disabled all
+other CPUs, except this one executing the code. So, either the lock was
+taken (and we bail), or it wasn't and it's safe to continue.
 
-								Honza
-
-> ---
->  fs/ufs/balloc.c | 12 ++++--------
->  1 file changed, 4 insertions(+), 8 deletions(-)
-> 
-> diff --git a/fs/ufs/balloc.c b/fs/ufs/balloc.c
-> index bd810d8239f2..2436e3f82147 100644
-> --- a/fs/ufs/balloc.c
-> +++ b/fs/ufs/balloc.c
-> @@ -295,14 +295,10 @@ static void ufs_change_blocknr(struct inode *inode, sector_t beg,
->  
->  			if (!buffer_mapped(bh))
->  					map_bh(bh, inode->i_sb, oldb + pos);
-> -			if (!buffer_uptodate(bh)) {
-> -				ll_rw_block(REQ_OP_READ, 1, &bh);
-> -				wait_on_buffer(bh);
-> -				if (!buffer_uptodate(bh)) {
-> -					ufs_error(inode->i_sb, __func__,
-> -						  "read of block failed\n");
-> -					break;
-> -				}
-> +			if (bh_read(bh, 0) < 0) {
-> +				ufs_error(inode->i_sb, __func__,
-> +					  "read of block failed\n");
-> +				break;
->  			}
->  
->  			UFSD(" change from %llu to %llu, pos %u\n",
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR

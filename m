@@ -2,119 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 369D45A930B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:23:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17D025A9311
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232599AbiIAJXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57766 "EHLO
+        id S233435AbiIAJ0V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:26:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234171AbiIAJXp (ORCPT
+        with ESMTP id S229514AbiIAJ0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:23:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA6612D532;
-        Thu,  1 Sep 2022 02:23:41 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2818oTDk007722;
-        Thu, 1 Sep 2022 09:23:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=oSpC5mfTK/eTWZhpCaXSlm6QucnN1qjlhlAhzjYSCDA=;
- b=lkPKs22EYOgbXnJIrshh6Ab9d8Ui1y5c5rtXlhCY4lXzlb6H7cTAGeVyd2Ew2/8LHrGe
- 08XkvABk1MyZplmP1F7aa2nb4Y5tfD3lQL0ryBaNorLVp9PSEXARUTlTm7uBDQwfra/x
- RHRF3icGVmWL9BS1jFqTsSQzT0bUAcjduUdtG2/JG+otLAxA+thRYMABIh+niskWrTs5
- Jx+dmW5vi083Y5iPXoovqq4xvPyz2L1zWOaAxgoVrtQEBDCjnunIPnjSHFultP+4OIDQ
- En3z8zE36x/fTL7+1xeK7EfbtcTISXp4Imrm9YN11HM6BKXgSupMEycCoEDOP6VgMrnZ +w== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jask195en-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 09:23:31 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28190mY8022084;
-        Thu, 1 Sep 2022 09:23:31 GMT
-Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3jask195dj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 09:23:31 +0000
-Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
-        by ppma06fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2819MLJa017370;
-        Thu, 1 Sep 2022 09:23:28 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma06fra.de.ibm.com with ESMTP id 3j7ahhvrsu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 09:23:28 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2819NPSi32244048
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 1 Sep 2022 09:23:25 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5A78AA404D;
-        Thu,  1 Sep 2022 09:23:25 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id A31BAA4053;
-        Thu,  1 Sep 2022 09:23:22 +0000 (GMT)
-Received: from tarunpc.ibmuc.com (unknown [9.43.6.31])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Thu,  1 Sep 2022 09:23:22 +0000 (GMT)
-From:   Tarun Sahu <tsahu@linux.ibm.com>
-To:     akpm@linux-foundation.org, shuah@kernel.org,
-        axelrasmussen@google.com
-Cc:     linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, aneesh.kumar@linux.ibm.com,
-        Tarun Sahu <tsahu@linux.ibm.com>
-Subject: [PATCH] selftest: vm: remove deleted local_config.* from .gitignore
-Date:   Thu,  1 Sep 2022 14:53:15 +0530
-Message-Id: <20220901092315.33619-1-tsahu@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
+        Thu, 1 Sep 2022 05:26:18 -0400
+Received: from mail-vs1-xe43.google.com (mail-vs1-xe43.google.com [IPv6:2607:f8b0:4864:20::e43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524D312AE1F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:26:17 -0700 (PDT)
+Received: by mail-vs1-xe43.google.com with SMTP id b128so13510718vsc.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 02:26:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date;
+        bh=lSK2Psj9elc1lSMOhcFg17TXysE+aTBO+i5mVz4IQ+E=;
+        b=VyLhJgEaa7U76nGC1qqM/vuyFurpkj+zHOdimq+dQYoW+rKt0uJUzd0Ve433sJ0yCZ
+         ODuDIzCQCOHC95lngiz8cDflhbKLfG7JEFzhQ7cogPvKEAp4ACgkberh2Du1+BkSDLSI
+         xviStqh0tOwXbKBuj1J93DgfM6n14PLZBOU58sdig6ZwL7534IPUlQF+yCkWpoLxdgzb
+         sgo+kdjFy2UKw41AgvUa1Ru7ako9pGHiolQNLq0xJB15XEt8bQEDlOJyIVAYTz4NmHIh
+         5I8R6oTAg6DX5d+wifLg5SPNaSmkFBf0virEyuIUg3vc3LOd1DxhfnBol5Ni9aPTfxH6
+         5yig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=lSK2Psj9elc1lSMOhcFg17TXysE+aTBO+i5mVz4IQ+E=;
+        b=FNSam/wBEkdmkNTbo2N3PbsF/7ET87QUxhRwbo+lqnPjfcN2Y1Z4EyacIXGdqvPRh/
+         tDSbuIoLlJ6f40RwMbKDLNjXjXQrxNqY3o83so0q/dci+aN2qKkcmRN4ra2STiAgl3h2
+         jtD1Pka6z+sf5TPP/YHHLBQ7ER8bbGFLuRxULxmpKozlrob+0mVLtMIPQ9o/Lt/9+Zkf
+         ck6UXrZdTcYZpqqqxfLzzPctefTXyfu1pwD4gUHfK+pvLQfQLv7rNwtiZ4/+0Sa26Gbq
+         SU8uhBOsMa3mlkkFI5nSB1PkV3yE4q5t5hQS1r9/pVc60D/GfxTDckZ1vEnTeUES5q1V
+         1ysA==
+X-Gm-Message-State: ACgBeo3NrZuzGOYLsmzJzCep7AwuSqNI2xdmxLCCJTLQ/rhRePvaEghi
+        0w4Tjxja4i9YXg1+z5knv52vbA4rVr9iyYoBkh8=
+X-Google-Smtp-Source: AA6agR4j9q1TXf1zGs+pzyexpWBL0n1e+m6Yv/+A6q//1FA50I07aBkArh4H6/Nj4BZsalgubb3WBUd8RSOOM3b4AMg=
+X-Received: by 2002:a05:6102:1da:b0:390:e9ad:2b05 with SMTP id
+ s26-20020a05610201da00b00390e9ad2b05mr5772267vsq.28.1662024376507; Thu, 01
+ Sep 2022 02:26:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: rsrvjOzlMhuFJjMrWE2gRcX6unwHEljk
-X-Proofpoint-GUID: CjDuGkUjmAorZRs14t50ojyzlRmXt3kg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_06,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
- spamscore=0 phishscore=0 bulkscore=0 mlxlogscore=762 mlxscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209010040
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a59:b8c3:0:b0:2de:d5df:173a with HTTP; Thu, 1 Sep 2022
+ 02:26:16 -0700 (PDT)
+Reply-To: vb6832716@gmail.com
+From:   victoria benson <barristeralexandrakojo2987@gmail.com>
+Date:   Thu, 1 Sep 2022 09:26:16 +0000
+Message-ID: <CAKM58LUeMiyrdLM8KOOayjUH0mOqYebNeJvm_kRBCxQi4Aj7RA@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e43 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4897]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [barristeralexandrakojo2987[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [barristeralexandrakojo2987[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [vb6832716[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit d2d6cba5d6623245a80cc151008cce825c8b6248 ("selftest: vm: remove
-orphaned references to local_config.{h,mk}") took care of removing
-orphaned references. This commit remove local_config from .gitignore.
+i am still waiting for your last message regarding my message to you.
+please get back to me and tell me your interest.
 
-Parent Patch
-Commit 69007f156ba7aead6c75b0046958ad3396f5aed1 ("Kselftests: remove
-support of libhugetlbfs from kselftests")
+Regards
 
-
-Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
----
- tools/testing/selftests/vm/.gitignore | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
-index 31e5eea2a9b9..7b9dc2426f18 100644
---- a/tools/testing/selftests/vm/.gitignore
-+++ b/tools/testing/selftests/vm/.gitignore
-@@ -30,7 +30,6 @@ map_fixed_noreplace
- write_to_hugetlbfs
- hmm-tests
- memfd_secret
--local_config.*
- soft-dirty
- split_huge_page_test
- ksm_tests
--- 
-2.31.1
-
+ victoria

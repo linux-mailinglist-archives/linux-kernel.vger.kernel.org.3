@@ -2,221 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 210225A9BBF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:33:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B36195A9BC8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233249AbiIAPb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
+        id S233602AbiIAPdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:33:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233820AbiIAPbq (ORCPT
+        with ESMTP id S233865AbiIAPde (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:31:46 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C57A23177
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:31:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662046305; x=1693582305;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=rqCbRmgxIwy9hvPmItW0K4BPaFoxz13hYVBhgAFaNrQ=;
-  b=Oe5thLXoengSjsz5cUzDJb/SUKed12M/CMPXRlenSDdZPC8r2Kqc0yNH
-   UCLAGJCZA1wvfNiKp6CyykeDD9VjHDm1rcbIiTpk/wxhruI3mfQinysRa
-   QOegK7edI3jJeH5mGMNkYO+PxPG3aSJ9Ed53xi4S40knoAhSL37MIwcaF
-   FbKRoBq4zww61O7wncn5N2VfC6tMv4wUH3bJHD9UJdHpgK47ofKTX1Nm4
-   wTbkpPsCvGNmeVAyGot/42BbNwZLhxkQftlN3Juqj1eL9OrRyzBJsv8sS
-   70birmmTmAcbH4TZ/qw5nuX8Me4DdMT1+LyUnbFMw/6IHVmR2DdEkzLbU
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="293323586"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="293323586"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 08:31:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="857884709"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Sep 2022 08:31:44 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 08:31:44 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 1 Sep 2022 08:31:44 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 1 Sep 2022 08:31:43 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iUcXi6KmoM8pCfkSxvpff4PxchOWfBScJvgtA0d/OWm8AqPhQKRgFf6mPavXrU+Nzrc+fvRQtFocdDNw6UABO6xo+Q5IvjWMbraua77QVEoAdMHQU8GFJQo6dntUBO+n348z8l0/oVRqFbmZcx1vcT+K2+jxUo2IosXZ9AYAFlHHsEYvGmWroXTycfpWiQA+vpQKN0qbggPqaDq27MmDW5cHtRyeB6v2PCtuHhwf/lw14pofqmPiV2+GJOtS8r07kF6LuR+lsocoRdXtmy4GEslJkpnnLka+zjkBd5Dnt4pNY6I9dE9V6UtzjWX589SApQidsLrUJB3ny2m0hW053g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kkik8e7tbDdCH3fQ6mIyC6+8nTtI5cC92UiyDhcA5OA=;
- b=fTgv+GSQqbQWMC1z6tX5kFEwpF/4s9RHsI2xv5jNo+fbxpSf7tcctJKB0nqLudmS+Q8uXTRX2TyBNVTrEgu5yWEYgLiwoIiKnI1QXBLhloA+zO/kbpN1R2uQjz43ivqK9XK1kryIKBfk9TwZJICDmHAnBj3tG94xhPV9crluxIruHrilQMW6gxTKtx4ddxBnvPVN2NNBYiboCooIGUlMjqyTA2m8AmYQd9wr4Zy3BwP0Z50QmO1DXfs/cbfji3AoMsIMPJ2A+VZxu48WpAkc0LJiPeR4EyFGgTZlkZBhUY9FzbFd1EqUQ64FmG3iFlVAnEvEsI1vnxLe8BqUjBodAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5488.namprd11.prod.outlook.com (2603:10b6:5:39d::5) by
- DM5PR1101MB2156.namprd11.prod.outlook.com (2603:10b6:4:51::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5566.19; Thu, 1 Sep 2022 15:31:42 +0000
-Received: from DM4PR11MB5488.namprd11.prod.outlook.com
- ([fe80::1977:59e7:5a28:24e1]) by DM4PR11MB5488.namprd11.prod.outlook.com
- ([fe80::1977:59e7:5a28:24e1%9]) with mapi id 15.20.5588.012; Thu, 1 Sep 2022
- 15:31:42 +0000
-Message-ID: <6009c921-0133-f83b-fbce-1c5ee55cb733@intel.com>
-Date:   Thu, 1 Sep 2022 08:31:39 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [Intel-gfx] [PATCH v7 05/15] drm/i915/gsc: add GSC XeHP SDV
- platform definition
-Content-Language: en-US
-To:     Tomas Winkler <tomas.winkler@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     <intel-gfx@lists.freedesktop.org>,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>
-References: <20220806122636.43068-1-tomas.winkler@intel.com>
- <20220806122636.43068-6-tomas.winkler@intel.com>
-From:   "Ceraolo Spurio, Daniele" <daniele.ceraolospurio@intel.com>
-In-Reply-To: <20220806122636.43068-6-tomas.winkler@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0390.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::35) To DM4PR11MB5488.namprd11.prod.outlook.com
- (2603:10b6:5:39d::5)
+        Thu, 1 Sep 2022 11:33:34 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F5488DDB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:33:31 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id l196so9127305ybl.12
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:33:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=cuZ+nGX7dbAKHVSMzM9WDnRxW6f4Hrbmbun1Vl7XZUY=;
+        b=nPy2aaUnPlKN9168rAezb9LSPcW4fo9+X5T3qYP77vPFcpzl+GhEzMZUxcz6J/8TiE
+         IizY0PKy2tILVlboBx4hOHtK6o3BgdgdGqsyzqTvhnIsClaTwjg++DGXEdjbBPa8JR6s
+         MIO2ZCktfdOzY88zke9nN4gcVwpbigx1IRCHgdE2F2Mq1597r9VFdc/4HIbMkV/CeG8x
+         zsKr4C+BAyJ34f5F1Hb/vV3IvHxRb8IEQg4iOBO9diUXfW6M3nrOExLvEuVNGqzKErqg
+         hzqElImWPPWWViyded2pBo3h+cgyvOivEpW732ttVGvmx+I0KmbeGYZvy64qW3Me0ncH
+         pw1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=cuZ+nGX7dbAKHVSMzM9WDnRxW6f4Hrbmbun1Vl7XZUY=;
+        b=Qm4uEG7np3ZTSgdON6J1iNFseDwY2RmYnGFLatpsg10Ozqw/gvlc/NuobKSIaxPDJg
+         ZbQOk1ulSH8hc7uUCy/jpldT1RI7sUY4N2OLc3/fsdAL85CkSngQ/utIUu9Rah9M5rPz
+         SwuNEjG+qy+g2TKZqqeL9oA1gfDkInuMDmvsOY11+mdbjqSiJf23AlMwx8KiyBGQlVpl
+         szfPo98+YAzfCIsJn+ePCk1x3Ee2HXVp2yJhzI9K+oryIedlROEuGvZTBfdTigAAkqMi
+         SJ0f1K+AH5EHOyVtVYSUhFjjQGZWSCAcDHZsSwPmtQxzY0UNFtp2Pl/KXlCIM0T/klvm
+         dmaQ==
+X-Gm-Message-State: ACgBeo2gdMwCaBeLBRnX7Iaz/HE5ESG5VMhl3aP7beT1EZPub6OUHv/w
+        CL4Q03u3eLgFEhyQbUj36DXJdYtYqE/Q2fTIdBTzTw==
+X-Google-Smtp-Source: AA6agR7nkVcaAE7evofOhQO8CQyYLS6FGoseisRuE7p9aju3ICNx4/ZUVa/hlS8HLwBhdw8j7iOCWiWLZKuRzYzC+BI=
+X-Received: by 2002:a05:6902:705:b0:695:b3b9:41bc with SMTP id
+ k5-20020a056902070500b00695b3b941bcmr19699146ybt.426.1662046410779; Thu, 01
+ Sep 2022 08:33:30 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 98c92f99-c899-44bb-a845-08da8c2f11b1
-X-MS-TrafficTypeDiagnostic: DM5PR1101MB2156:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: OnVAkcNrgm+rFzBhoGsWMh3VfPTFfBJk113r3z1YciI62EQdItLMg0SKAK3us3moDUYrQPcBcLbsWbQS2etrBrqZwKxt+q4/1jk5pW/yBjOfD0ywiv8BG8UtBa85MkdCBvUUBO/ZYR9rSMVSn4UE2rdGacPeeax7DRF3MFTeXlg61RlkqbkQ4jk7m3eiiAJcYV374XR/+zJcPJDYF4/SOPWDI249EqbS5XWAOJSfuTsQKgwwHluHTt9ZkpC6iDrbOV0UFUW/1bWAhsFSTjkTMarD84tLSdKbb2aIIkNlYY7hrgoj2HYHwt5uc7UT+NdahQSMrj2im1Xakyt53ZUWUlZpCnDQB+P+6ev68FeYqZ4uz0G0TABJyR3fGZd5Voa3xq03IMERoH+eetAGo7Gpmk7uFhFeMW7B8DJSX+GdCa7G4W4KG/YCsI+PTbP1u0EMDPf4cT9xLAH43qv0mPYo8hdhgrMuuU6b4J3ia4vXk+wqe0M8UKgKtBAib0HJ/+RCNdJ8N8HKbYG8YfYOwqBvbjOV+C4PM5EP5Em/6donoxilwcW/GbxbWrwFWtVJUXxnoY6++OJkR42le7g1zsQ9noSH3kZmGYAbd+dOg6W8uL90l6sM3YDNAQNsoQG4M24gTSVcZA+ZNiXUu84Av9zzOPwDS3KhMczlD1C26+3rwzNLU9inx9OVyL7rxD4CGGYD/Nl0vDuB5lJTFdsINJkcDPyXNnCbpdIyysarvL9msbS+XDaUmRlqs/cgoT+FN+nMVKYQKOCbzm5kunEB9SHY2qyO2u8BaOI2i5vWTa/LlkQ=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5488.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(396003)(346002)(376002)(366004)(136003)(2906002)(8676002)(38100700002)(53546011)(6506007)(6666004)(26005)(107886003)(2616005)(83380400001)(6512007)(66946007)(31696002)(110136005)(4326008)(66476007)(6486002)(66556008)(316002)(31686004)(54906003)(186003)(86362001)(36756003)(8936002)(41300700001)(5660300002)(478600001)(82960400001)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d1R3UjBVZ3ZuS3JQU1FnSHFtQy9TdldpLzlsNkZ0ZlFtTkVvbWc0VFc3NGhi?=
- =?utf-8?B?TlV4STdnMDdEakV3cHBHUlppVlkwemswZys0TFRPNEtHRDF5WE5lOGFTM3FI?=
- =?utf-8?B?R0F6bVYxcXd5dDg0cWMvekg1dWRnaFR6c1pIVTUxMmdEdGlGUlZkSW1uNjVm?=
- =?utf-8?B?aVo4dHVFNi8vZS80U3pYWjN0WHZVRHgyTGZiSUIwc0UvZGNsWE5nSFQ4UWh5?=
- =?utf-8?B?ZzRtK3ZpYWJLa3lsY2wxaUFISGhpT29lSHlZK09wR2cvTnU3d2FPM3Q0eDJx?=
- =?utf-8?B?d2ZyMFM2Z1JNL1RzYmw1Y09oRkN2ZEdnZnYyV2hjSDlxcHlLL3NpOFhQOE4w?=
- =?utf-8?B?b3RONjUvYXMyWVdTbFNhTkh5WnNqNW13SUVKRGllVjlIZnhDMTVHTys0Zm1C?=
- =?utf-8?B?OHlQSkN1NFozS2RXdm4yNXpocFdlcHR5c29vOU11M25XQUFEU1ljaFYvWFB3?=
- =?utf-8?B?REpnbzFJRlhCcG9CZ1pkTk55LzY4YU9GUXMvWlZzY01mVXpEczNDZjU1Kzk0?=
- =?utf-8?B?K29IYW9Ea2Q3UDhFYnJNWU1xdDVYdkdsM1pGZytlb3NzU1h6R054ajRqekFM?=
- =?utf-8?B?cGdNNVlNcUhQUXJPNnpHSlFnU09yYzZyeko2enNYeCs3Nk9QY0l6TVg0ajkx?=
- =?utf-8?B?NXZmcm1lUWVsRDJzMGxweGdMNENTNVNGNzNTR2VnRFNNOW5DOHZKeFVxb0w3?=
- =?utf-8?B?YXJJeE9uM2xKL2lwdXNiUWR3SHV2RWFlMUlIa05jUHd5NDBJdEdWbVB6QVFI?=
- =?utf-8?B?blYxME1xZUU5SnNKRUlJUmNoekRQUHQzT3JhRWx0ck13cFliQmV6WWpsdkgr?=
- =?utf-8?B?bkNJeTZyWmZDU1dRenlPZjNzRkN3NG1wcUR4RStNOWFod3ZLa1hxdzBKSVMw?=
- =?utf-8?B?a2tkdkZiV0JvNThQbFhLQmU0aUZQZU81QXJDSkt4SnpYWkFFQlRGRHlyVFBD?=
- =?utf-8?B?Q1VpczlqbDJ4NXdzTFhSNmh2NENYL0FDNW5ZTWRDaHpqTTFJTzV3UHUvczBl?=
- =?utf-8?B?c2xBOVI4clVnZm4zOUZSSG8vM1d2RGo5VWlONzB3V3owWkdnSTlyazZzanJG?=
- =?utf-8?B?TTNRbzlnYzBSY0dyVUxaUWRWdVJuN2JQcFZoK2MzaERLMVlxaXJuYzRrdDQv?=
- =?utf-8?B?MGs0VVloUFVxakhOTGFkeHo3Vzd0Vk13UjN5djI3TWljTk5VYnp2MTRZSlg4?=
- =?utf-8?B?cG9GQlhlc3p0RG9BMTFtTCtKTGsyUCs1Z0JWeml2cHRqcjVWYlBmdkdaYjA4?=
- =?utf-8?B?YkFCaVA1U0RYNkxWd0kxUzZNR1VuR0RWNWtLNitjWW90L1Irczk4N0Z0cThD?=
- =?utf-8?B?QUNzVzRmK25MMm1OcmZDTUxKVDAyaFBxMTNDWHBQRzM3d3U4K09wTG9kMXpC?=
- =?utf-8?B?emhrU1BSbUNySWJZU04wZzcwNDhnUG5nQ3dSVjRXSmJBUTVmQStIKzA0NFUv?=
- =?utf-8?B?b3ZPWW14dE1QZmpiaFdkdXExTUU5ZnE5UTNWcU5MRk03MDc0OG1RQVZtV3FQ?=
- =?utf-8?B?Rk54QnNqdzhJcGZQOE9mODkxV2xEVXZFMnViQXhOVEdtL0g2M0pid0RxeEhr?=
- =?utf-8?B?bTI0RWpqaVA4WFVCb2Uyd0RGSmxlcmNEN0tNaDBzVHRBcjluSkEyNlhnVUU5?=
- =?utf-8?B?dlhQeng3U0liaEVYdHRGQnY4VkZzTzhxRlZkMSt4WmJSbU4rVm00SUNWbm9D?=
- =?utf-8?B?VmxYcmZZZFpLOFN0QzlBWHJoLzFqdnZweHJ1TVVMNjNuQ1pzUmtNMklmcjFX?=
- =?utf-8?B?MllHejBvMjJBYW93WTlLT3pUbzY2TS9od1hFbkFnNngwM3ZoMEI1QXZnYVlp?=
- =?utf-8?B?Wkt0eVdVdHNOdEE5VlQrQ09mL0hyS2VuMG1BbUEyMHJ5ay9SNDJxZUZTNEdU?=
- =?utf-8?B?RGorTS9OTEUyZC9xKzJrK2VxanpySy93V0lheFBDcXZpT3J2VFFWYXVGWTZo?=
- =?utf-8?B?VTNscElHY1BENGdVOVowdTlUdjdsbXI1dXduUGtvYjJ3dW1nM291NzBZMVZn?=
- =?utf-8?B?L2FOM00yaW9GYTRXRS8vU2RaRWVFVWxpLzdqYWVyVEVZWG1IbXEzT21qOVFV?=
- =?utf-8?B?S0tLazg0Q2dDQXpMYkVZc2RhOTM3Q1hnb250N1lJYXdHaTJsMm9uSllmVGQ3?=
- =?utf-8?B?SEt0QzFEMEJsVy9pZ2tlQUc1TWgzbktEeER0YkpHZFVpMnNySk1aSG8wZkFv?=
- =?utf-8?Q?u6WLuhM2bSc+AL0fXFVN0HA=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98c92f99-c899-44bb-a845-08da8c2f11b1
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5488.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 15:31:41.9253
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yIoLlhbBYq1LPvnX8crxClVbQfxPjBS+FA3sSgCgmWsUcbg7cfNeSodguRRKSS7yb3z1KbHnsrEWFCdJNp70V23QCsSlQtMbPNgNk3GnH1k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR1101MB2156
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+ <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
+In-Reply-To: <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 1 Sep 2022 08:33:19 -0700
+Message-ID: <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>, dvyukov@google.com,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/6/2022 5:26 AM, Tomas Winkler wrote:
-> From: Alexander Usyskin <alexander.usyskin@intel.com>
+On Thu, Sep 1, 2022 at 12:18 AM Michal Hocko <mhocko@suse.com> wrote:
 >
-> Define GSC on XeHP SDV (Intel(R) dGPU without display)
+> On Wed 31-08-22 15:01:54, Kent Overstreet wrote:
+> > On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
+> > > On Wed 31-08-22 11:19:48, Mel Gorman wrote:
+> > > > Whatever asking for an explanation as to why equivalent functionality
+> > > > cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
+> > >
+> > > Fully agreed and this is especially true for a change this size
+> > > 77 files changed, 3406 insertions(+), 703 deletions(-)
+> >
+> > In the case of memory allocation accounting, you flat cannot do this with ftrace
+> > - you could maybe do a janky version that isn't fully accurate, much slower,
+> > more complicated for the developer to understand and debug and more complicated
+> > for the end user.
+> >
+> > But please, I invite anyone who's actually been doing this with ftrace to
+> > demonstrate otherwise.
+> >
+> > Ftrace just isn't the right tool for the job here - we're talking about adding
+> > per callsite accounting to some of the fastest fast paths in the kernel.
+> >
+> > And the size of the changes for memory allocation accounting are much more
+> > reasonable:
+> >  33 files changed, 623 insertions(+), 99 deletions(-)
+> >
+> > The code tagging library should exist anyways, it's been open coded half a dozen
+> > times in the kernel already.
+> >
+> > And once we've got that, the time stats code is _also_ far simpler than doing it
+> > with ftrace would be. If anyone here has successfully debugged latency issues
+> > with ftrace, I'd really like to hear it. Again, for debugging latency issues you
+> > want something that can always be on, and that's not cheap with ftrace - and
+> > never mind the hassle of correlating start and end wait trace events, builting
+> > up histograms, etc. - that's all handled here.
+> >
+> > Cheap, simple, easy to use. What more could you want?
 >
-> XeHP SDV uses the same hardware settings as DG1, but uses polling
-> instead of interrupts and runs the firmware in slow pace due to
-> hardware limitations.
+> A big ad on a banner. But more seriously.
 >
-> Signed-off-by: Vitaly Lubart <vitaly.lubart@intel.com>
-> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+> This patchset is _huge_ and touching a lot of different areas. It will
+> be not only hard to review but even harder to maintain longterm. So
+> it is completely reasonable to ask for potential alternatives with a
+> smaller code footprint. I am pretty sure you are aware of that workflow.
 
-Reviewed-by: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+The patchset is huge because it introduces a reusable part (the first
+6 patches introducing code tagging) and 6 different applications in
+very different areas of the kernel. We wanted to present all of them
+in the RFC to show the variety of cases this mechanism can be reused
+for. If the code tagging is accepted, each application can be posted
+separately to the appropriate group of people. Hopefully that makes it
+easier to review. Those first 6 patches are not that big and are quite
+isolated IMHO:
 
-Daniele
+ include/linux/codetag.h             |  83 ++++++++++
+ include/linux/lazy-percpu-counter.h |  67 ++++++++
+ include/linux/module.h              |   1 +
+ kernel/module/internal.h            |   1 -
+ kernel/module/main.c                |   4 +
+ lib/Kconfig                         |   3 +
+ lib/Kconfig.debug                   |   4 +
+ lib/Makefile                        |   3 +
+ lib/codetag.c                       | 248 ++++++++++++++++++++++++++++
+ lib/lazy-percpu-counter.c           | 141 ++++++++++++++++
+ lib/string_helpers.c                |   3 +-
+ scripts/kallsyms.c                  |  13 ++
 
-> ---
->   drivers/gpu/drm/i915/gt/intel_gsc.c | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
 >
-> diff --git a/drivers/gpu/drm/i915/gt/intel_gsc.c b/drivers/gpu/drm/i915/gt/intel_gsc.c
-> index 73498c2574c8..e1040c8f2fd3 100644
-> --- a/drivers/gpu/drm/i915/gt/intel_gsc.c
-> +++ b/drivers/gpu/drm/i915/gt/intel_gsc.c
-> @@ -56,6 +56,19 @@ static const struct gsc_def gsc_def_dg1[] = {
->   	}
->   };
->   
-> +static const struct gsc_def gsc_def_xehpsdv[] = {
-> +	{
-> +		/* HECI1 not enabled on the device. */
-> +	},
-> +	{
-> +		.name = "mei-gscfi",
-> +		.bar = DG1_GSC_HECI2_BASE,
-> +		.bar_size = GSC_BAR_LENGTH,
-> +		.use_polling = true,
-> +		.slow_firmware = true,
-> +	}
-> +};
-> +
->   static const struct gsc_def gsc_def_dg2[] = {
->   	{
->   		.name = "mei-gsc",
-> @@ -107,6 +120,8 @@ static void gsc_init_one(struct drm_i915_private *i915,
->   
->   	if (IS_DG1(i915)) {
->   		def = &gsc_def_dg1[intf_id];
-> +	} else if (IS_XEHPSDV(i915)) {
-> +		def = &gsc_def_xehpsdv[intf_id];
->   	} else if (IS_DG2(i915)) {
->   		def = &gsc_def_dg2[intf_id];
->   	} else {
+> So I find Peter's question completely appropriate while your response to
+> that not so much! Maybe ftrace is not the right tool for the intented
+> job. Maybe there are other ways and it would be really great to show
+> that those have been evaluated and they are not suitable for a), b) and
+> c) reasons.
 
+That's fair.
+For memory tracking I looked into using kmemleak and page_owner which
+can't match the required functionality at an overhead acceptable for
+production and pre-production testing environments. traces + BPF I
+haven't evaluated myself but heard from other members of my team who
+tried using that in production environment with poor results. I'll try
+to get more specific information on that.
+
+>
+> E.g. Oscar has been working on extending page_ext to track number of
+> allocations for specific calltrace[1]. Is this 1:1 replacement? No! But
+> it can help in environments where page_ext can be enabled and it is
+> completely non-intrusive to the MM code.
+
+Thanks for pointing out this work. I'll need to review and maybe
+profile it before making any claims.
+
+>
+> If the page_ext overhead is not desirable/acceptable then I am sure
+> there are other options. E.g. kprobes/LivePatching framework can hook
+> into functions and alter their behavior. So why not use that for data
+> collection? Has this been evaluated at all?
+
+I'm not sure how I can hook into say alloc_pages() to find out where
+it was called from without capturing the call stack (which would
+introduce an overhead at every allocation). Would love to discuss this
+or other alternatives if they can be done with low enough overhead.
+Thanks,
+Suren.
+
+>
+> And please note that I am not claiming the presented work is approaching
+> the problem from a wrong direction. It might very well solve multiple
+> problems in a single go _but_ the long term code maintenance burden
+> really has to to be carefully evaluated and if we can achieve a
+> reasonable subset of the functionality with an existing infrastructure
+> then I would be inclined to sacrifice some portions with a considerably
+> smaller code footprint.
+>
+> [1] http://lkml.kernel.org/r/20220901044249.4624-1-osalvador@suse.de
+>
+> --
+> Michal Hocko
+> SUSE Labs

@@ -2,101 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599BF5A9BDE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:40:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2D415A9BE5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234460AbiIAPkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
+        id S234533AbiIAPkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234399AbiIAPkF (ORCPT
+        with ESMTP id S234432AbiIAPkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Sep 2022 11:40:05 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC1713E8A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:40:00 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id y197so9155334yby.13
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:40:00 -0700 (PDT)
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10A1413D4F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:40:02 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id q9so16735659pgq.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:40:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=3cE853tliEpPWpHjkdjBsm55bguibJ1NOZ2l+ytqvIs=;
-        b=CNR1NtmysqZN43aw5siPQxQB15yoyKxn0UtAt1eFrCVSTrqVXrck0MJQ5rF0EE8Iqy
-         FECYDZNtaf4xFqIfRFeGfncBEzgsXCtgfPFQ9NnPdVRFkAf7PTRy+isa8Q/3u9s63jFF
-         Bkv08GJGttRtk8ihR4u9G9sfgOvnbQBOURRSewgh7NzkPEQgVbW8k9NY5ToRU0fk16sO
-         KDQeEwKDvn2AZgblfu2tmDll7zNnUGlKeUzAPAS8k31d+CGKhmmtzNe2LpeGY2e9A3T2
-         OyHR4dbvshaM9SSwkyP8U36LLaknoM2MMTtTCDpp5f48zXa2ecNcsCYbrEUZ3+gtqLOE
-         C5XA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=vuo/t6RdovOf0Lb/pPMYcgQcOB4sKN3+auDmHvyqSTU=;
+        b=XpVO7FXKl+VH+69yTJtdYHvIXoeFp5TqgPV2b0jvkYsISm5Pne4PuGD7boNxZ62Fze
+         uVPkehRYViCp+qjACgYd5KvIUy515pyejazu7wUMBFNjDl6tCAuyzVdF57H4cUBupGmJ
+         DrtxP2uybPgMAKEEP0orVMlreGdzUDHto+GTPgY6LhM7uVkhSYGckNhOjaYTPPHH6m6y
+         eMYFj5V0AI1IrKLhmLzfhhfftJqf3uOUjkhcr3Tp2BsMZ/M5hL0gTwhd+lqJ2pjjzeFn
+         BS8r/unO/eue5g1kcvou99QnE/C4TUuzIY6kQB/WDjLYmo31GVqfmvLneibSxc6Pz9j2
+         h6KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=3cE853tliEpPWpHjkdjBsm55bguibJ1NOZ2l+ytqvIs=;
-        b=ZsZ+jDvIrxQM3jggHAkUmz8FS1bFbwlpz4m2NWoQbUt2Q8l9HA7Wii11Bg7xfLGAwn
-         OpQdy1OOZGk+iwlbkqr+CvO49xGE8JZ4DmAWDZ82w7YvBdqczF8h7kXTMyZQ3tdIBzyS
-         f07Mk47zDHFfc2Gk8XbuTo25E8t0uzRGrt8pdusj4gqZvE8r0wGe/tOUqu4GfhbC3Maa
-         n/Akc6HbdC+nSBaaXrOI+626L/Zzoz3dy2Z0H1PQdBEORG3s6dqW2t0deuiWuWAiL8wz
-         TAWYHms5AbusapjeknHZMB8s09wF4BoOvzkXT6BoU5kPyZqebZK9zMfxrHldpF2DQSuH
-         XiiQ==
-X-Gm-Message-State: ACgBeo0swB0Ih2Kie66ZHdiFKRkpgZd9Cp9XFqhHkBNZ5+ir1je5UVB0
-        PI4T5KbikMtrbZbT7GdyzCjPT3aHC+cI3hwv4DwWDg==
-X-Google-Smtp-Source: AA6agR5aFHV5oWy3bOo2eVd0PIajtlCyUMrAF/y9Oh7oqrhvwnrJM9jnSE6k3ZmfRfh8uK89oJZlft1zkj3aGLobpWw=
-X-Received: by 2002:a25:b983:0:b0:695:d8b4:a5a3 with SMTP id
- r3-20020a25b983000000b00695d8b4a5a3mr20405655ybg.553.1662046799565; Thu, 01
- Sep 2022 08:39:59 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=vuo/t6RdovOf0Lb/pPMYcgQcOB4sKN3+auDmHvyqSTU=;
+        b=fjeddsVvN0qRTYxdDdOT5GS2C65I5SBvejsFEaKpX0BPHYrOVmqpdt5nJo5RA1RUSg
+         xVBRBCCgbpStlx0+qbndu94UniJGy5yEyJcflPSinxGeVIXUWyoWO6o8TRzgDg1wUGFw
+         nYav8AB9SqDHENHu621Q3XQ6XYaryynwnnZfnrZPNhjXrq8SJBIiVHOkAvyaqR+9dJi0
+         AyqnA17gEbZ266jm28KPEMEARlsD964+EDihVacOH8vs5mEBU2bCOBAYuWa/r4ItvNom
+         DArXUCuH+DhdigT4L4qHExG4ZA2ojMiZOKxMp0blyHdmSnanbuJAYdO1Wl1m77w8AHyL
+         3H6w==
+X-Gm-Message-State: ACgBeo2m2Wnq5yX1t69U/6O5UKhrs/i/2mTYdXDvXXB5xx1Fc0Ij5TlD
+        6inrCgNTXT4acle8Z3/RYFbazIIaKM0VkA==
+X-Google-Smtp-Source: AA6agR4MVXrWR5O63dX0D75ziQ25pFm/DkjiUDe7FjKOVlNiB35U1e8vs1MDXK715VXi0qwzZha4LQ==
+X-Received: by 2002:a05:6a02:20d:b0:430:3886:59e8 with SMTP id bh13-20020a056a02020d00b00430388659e8mr6326358pgb.516.1662046801264;
+        Thu, 01 Sep 2022 08:40:01 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id g12-20020a65594c000000b003fdc16f5de2sm5436516pgu.15.2022.09.01.08.40.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 08:40:00 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 15:39:57 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Subject: Re: [PATCH] KVM/VMX: Do not declare vmread_error asmlinkage
+Message-ID: <YxDSTU+pWBdZgs/Q@google.com>
+References: <20220817144045.3206-1-ubizjak@gmail.com>
 MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
- <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
- <404e947a-e1b2-0fae-8b4f-6f2e3ba6328d@redhat.com> <20220901142345.agkfp2d5lijdp6pt@moria.home.lan>
- <78e55029-0eaf-b4b3-7e86-1086b97c60c6@redhat.com>
-In-Reply-To: <78e55029-0eaf-b4b3-7e86-1086b97c60c6@redhat.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 1 Sep 2022 08:39:48 -0700
-Message-ID: <CAJuCfpEgWx4mmiSCvcMOF0+Luyw1w-hVyLV-cvhbxnwsN6qg0g@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
-        changbin.du@intel.com, ytcoode@gmail.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220817144045.3206-1-ubizjak@gmail.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -108,75 +71,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 8:07 AM David Hildenbrand <david@redhat.com> wrote:
->
-> On 01.09.22 16:23, Kent Overstreet wrote:
-> > On Thu, Sep 01, 2022 at 10:05:03AM +0200, David Hildenbrand wrote:
-> >> On 31.08.22 21:01, Kent Overstreet wrote:
-> >>> On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
-> >>>> On Wed 31-08-22 11:19:48, Mel Gorman wrote:
-> >>>>> Whatever asking for an explanation as to why equivalent functionality
-> >>>>> cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
-> >>>>
-> >>>> Fully agreed and this is especially true for a change this size
-> >>>> 77 files changed, 3406 insertions(+), 703 deletions(-)
-> >>>
-> >>> In the case of memory allocation accounting, you flat cannot do this with ftrace
-> >>> - you could maybe do a janky version that isn't fully accurate, much slower,
-> >>> more complicated for the developer to understand and debug and more complicated
-> >>> for the end user.
-> >>>
-> >>> But please, I invite anyone who's actually been doing this with ftrace to
-> >>> demonstrate otherwise.
-> >>>
-> >>> Ftrace just isn't the right tool for the job here - we're talking about adding
-> >>> per callsite accounting to some of the fastest fast paths in the kernel.
-> >>>
-> >>> And the size of the changes for memory allocation accounting are much more
-> >>> reasonable:
-> >>>  33 files changed, 623 insertions(+), 99 deletions(-)
-> >>>
-> >>> The code tagging library should exist anyways, it's been open coded half a dozen
-> >>> times in the kernel already.
-> >>
-> >> Hi Kent,
-> >>
-> >> independent of the other discussions, if it's open coded already, does
-> >> it make sense to factor that already-open-coded part out independently
-> >> of the remainder of the full series here?
-> >
-> > It's discussed in the cover letter, that is exactly how the patch series is
-> > structured.
->
-> Skimming over the patches (that I was CCed on) and skimming over the
-> cover letter, I got the impression that everything after patch 7 is
-> introducing something new instead of refactoring something out.
+On Wed, Aug 17, 2022, Uros Bizjak wrote:
+> There is no need to declare vmread_error asmlinkage, its arguments
+> can be passed via registers for both, 32-bit and 64-bit targets.
+> Function argument registers are considered call-clobbered registers,
+> they are saved in the trampoline just before the function call and
+> restored afterwards.
+> 
+> Note that asmlinkage and __attribute__((regparm(0))) have no effect
+> on 64-bit targets. The trampoline is called from the assembler glue
+> code that implements its own stack-passing function calling convention,
+> so the attribute on the trampoline declaration does not change anything
+> for 64-bit as well as 32-bit targets. We can declare it asmlinkage for
+> documentation purposes.
 
-Hi David,
-Yes, you are right, the RFC does incorporate lots of parts which can
-be considered separately. They are sent together to present the
-overall scope of the proposal but I do intend to send them separately
-once we decide if it's worth working on.
-Thanks,
-Suren.
+...
 
->
-> >
-> >> [I didn't immediately spot if this series also attempts already to
-> >> replace that open-coded part]
-> >
-> > Uh huh.
-> >
-> > Honestly, some days it feels like lkml is just as bad as slashdot, with people
-> > wanting to get in their two cents without actually reading...
->
-> ... and of course you had to reply like that. I should just have learned
-> from my last upstream experience with you and kept you on my spam list.
->
-> Thanks, bye
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+> diff --git a/arch/x86/kvm/vmx/vmx_ops.h b/arch/x86/kvm/vmx/vmx_ops.h
+> index 5cfc49ddb1b4..550a89394d9f 100644
+> --- a/arch/x86/kvm/vmx/vmx_ops.h
+> +++ b/arch/x86/kvm/vmx/vmx_ops.h
+> @@ -10,9 +10,9 @@
+>  #include "vmcs.h"
+>  #include "../x86.h"
+>  
+> -asmlinkage void vmread_error(unsigned long field, bool fault);
+> -__attribute__((regparm(0))) void vmread_error_trampoline(unsigned long field,
+> -							 bool fault);
+> +void vmread_error(unsigned long field, bool fault);
+> +asmlinkage void vmread_error_trampoline(unsigned long field,
+> +					bool fault);
+>  void vmwrite_error(unsigned long field, unsigned long value);
+>  void vmclear_error(struct vmcs *vmcs, u64 phys_addr);
+>  void vmptrld_error(struct vmcs *vmcs, u64 phys_addr);
+
+If it's ok with you, I'll split this into two patches.  One to drop asmlinkage
+from vmread_error(), and one to convert the open coded regparm to asmlinkage.

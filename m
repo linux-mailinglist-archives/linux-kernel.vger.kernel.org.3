@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F6B5A9F02
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:34:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD035A9F14
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:34:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234433AbiIASeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39628 "EHLO
+        id S234571AbiIASeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234017AbiIASd5 (ORCPT
+        with ESMTP id S234245AbiIASeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:33:57 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F057E81F;
-        Thu,  1 Sep 2022 11:33:54 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id f4so13967336qkl.7;
-        Thu, 01 Sep 2022 11:33:54 -0700 (PDT)
+        Thu, 1 Sep 2022 14:34:06 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 578407EFD9;
+        Thu,  1 Sep 2022 11:33:57 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id b9so10871qka.2;
+        Thu, 01 Sep 2022 11:33:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=WQ1Q0mz9FFzqj4DZ/mjMEZ15Ws6UL1GezqnQ2p7zS64=;
-        b=UM51+arlg6z/CCre6QPOKyXnLdhVedrQVQT4q1qYMERqndsL0vqFdZxRK6fHfiD5vR
-         p2fGC+qIRw4yd8hPKMl2PY3J+TlLj9VkJeaJT4YMYVUEMjAZIVsr8WJCYJUeIcKJTHPY
-         OgH0c4LuWAsGoBl4pSAjTW6sYKAxngaN9pvI/OvElZRVZtCmni5xQ7RUhlRHBNSpPKF8
-         lXwbef53MF/0m5so3LokRkX6+dwrY0kRhRGPHvDUwJL0R//qkAHISL4wsGXTk5aMDlLQ
-         sKz0jlc7893EdDWW0QOKXdEmgsMBBLv/kri1qptyani3GrXl8V86UwQ9/aFb0kX0icqj
-         Y1gw==
+        bh=Tv2a7wU2lhgN97bYzJfah37NqTdtlxQ5678kEaFGvZM=;
+        b=F4sesasecjX/JIjBPB1nFlGezzl2EeRQ8PgoBgGj3g4d6Ns1fXzIk41ieUigoQ+yjT
+         0uFYW0xf/DD7010ylr5FjsS0DHRTt0g9rGc7hL90W5t9Welnd3LBoB25th+9/3oIYE0G
+         sC5Ssv8s0j1vMM1VASi2/yVOZ5U+HHy6j2Ji8RM9k1O/DueagTExMiqdtnESMfTTO3xe
+         UTUjFxEZJ0ecmo+4nnv2/HuDfWjdvhzFkMudTqcPZNnn5xpgDshWi0CNWZmkXrr8oXcR
+         ZXH4vXPeTqEpK99/4uvTo5ZOoRkn171FhULAPIIOL0kxJOPOsQeNM8m8jt6fRLw+Bzrp
+         ohtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=WQ1Q0mz9FFzqj4DZ/mjMEZ15Ws6UL1GezqnQ2p7zS64=;
-        b=JnJfWYMvVRTteFyHk57OfRvlUFD7OtlOLgCA4iaYe3avSV2aZIxd690T6rKxu+jXbA
-         iYoP+f6r1qe+aUFJAEgso/NOtUH45FRC8aijd0ff3MWo/xISnZUUzoGMRZ80aJWitTLU
-         kQADc4Z5cfIZEvIMrQpqp95nCaORNL2rQ5B7zALlTIK79H25qcpEYjIUQBL4TfqMwCEx
-         2beedAXnkQrBd7dsmNoaAKH1bkGbJbNHVH3omqRgu4oEkUEyCHCihhyAkf6V3lt4gzGW
-         6Z2tlPJJQCghO40gctF6HllVtCq8WQgmXlcysF82g5yJWUM8RbQD9S3wak14hxx4Dq0a
-         7qLg==
-X-Gm-Message-State: ACgBeo0eNgHG8vRJj9q2Netrm3l10bnRLcuV2Kr21RQ1wjpoqjE8FNwk
-        Didtfncsojny1Ic/fXAfQ2U=
-X-Google-Smtp-Source: AA6agR6pT51eIYfYIyYoIomfGEmepLPuLA7x8eDUHmhlaEnFi4XboSuLFgKSOOhCsW5nCmXv4bc7Ew==
-X-Received: by 2002:a05:620a:c50:b0:6b9:6e6:428d with SMTP id u16-20020a05620a0c5000b006b906e6428dmr20469297qki.280.1662057233500;
-        Thu, 01 Sep 2022 11:33:53 -0700 (PDT)
+        bh=Tv2a7wU2lhgN97bYzJfah37NqTdtlxQ5678kEaFGvZM=;
+        b=nApxgRrcT95dzxCzZGw/j1USa2awSlaP+j7jnq/LC7J40pqWBeLWv72hhoVuignOQn
+         7qBQ3E+m14ZKyxJi6ZHt2d4NRiR9A9zkk8W0E3dd3j4NJ5UnpSp5csNTtt+stFZVaibI
+         V2E0mFnBa25kewt3qkjVO9q7dmT8Nxv0QDoMDcjw0qE5zh2CALeAPJq96ewdFX1OqxgL
+         ZfmoDB56Kvw87JNZJ5wJazTJONRAZQIcH0Z6vsXFys1jDD0QjDs6TS3YRh6lmVPM1gtc
+         DQO8GufPnvAYXSq1q5iBdBr25m3ze33xScPcKikqtPn3QwW1KOKpIEUz+G0lohlwXRZM
+         BGpw==
+X-Gm-Message-State: ACgBeo3hrzJm/9oyLuzqeA8XMAmhXquBcLwQ7pVbNKMdXSEMwwjF6AJY
+        fjcqv4X1oheNd6gavAeMJmk=
+X-Google-Smtp-Source: AA6agR7f87gfbRhIG1C0yYL3bG7qyjKY2RU+B86kNZIwcfhp5tMMsI2JVVyb5GHrZ2AsPNa+rWfgIg==
+X-Received: by 2002:a05:620a:2890:b0:6bc:6ecd:2c4a with SMTP id j16-20020a05620a289000b006bc6ecd2c4amr20912427qkp.603.1662057235658;
+        Thu, 01 Sep 2022 11:33:55 -0700 (PDT)
 Received: from jesse-desktop.jtp-bos.lab (146-115-144-188.s4282.c3-0.nwt-cbr1.sbo-nwt.ma.cable.rcncustomer.com. [146.115.144.188])
-        by smtp.gmail.com with ESMTPSA id u20-20020ac87514000000b00342e86b3bdasm10563343qtq.12.2022.09.01.11.33.51
+        by smtp.gmail.com with ESMTPSA id u20-20020ac87514000000b00342e86b3bdasm10563343qtq.12.2022.09.01.11.33.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 11:33:52 -0700 (PDT)
+        Thu, 01 Sep 2022 11:33:54 -0700 (PDT)
 From:   Jesse Taube <mr.bossman075@gmail.com>
 X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
 To:     linux-imx@nxp.com
@@ -64,9 +64,9 @@ Cc:     robh+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-gpio@vger.kernel.org, Rob Herring <robh@kernel.org>
-Subject: [PATCH v6 03/10] dt-bindings: mmc: fsl-imx-esdhc: add i.MXRT1170 compatible
-Date:   Thu,  1 Sep 2022 14:33:36 -0400
-Message-Id: <20220901183343.3188903-4-Mr.Bossman075@gmail.com>
+Subject: [PATCH v6 04/10] dt-bindings: serial: fsl-lpuart: add i.MXRT1170 compatible
+Date:   Thu,  1 Sep 2022 14:33:37 -0400
+Message-Id: <20220901183343.3188903-5-Mr.Bossman075@gmail.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
 References: <20220901183343.3188903-1-Mr.Bossman075@gmail.com>
@@ -85,36 +85,34 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Add i.MXRT1170 compatible string to Documentation.
 
 Cc: Giulio Benetti <giulio.benetti@benettiengineering.com>
-Acked-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
 V1 -> V2:
  - New commit to fix dtbs_check
 V2 -> V3:
- - Fix typo
- - Remove unused const
-V3 -> V4:
  - Nothing done
+V3 -> V4:
+ - Fix rebase artifact
 V4 -> V5:
  - Nothing done
 V5 -> V6:
  - Nothing done
 ---
- Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml | 4 ++++
- 1 file changed, 4 insertions(+)
+ Documentation/devicetree/bindings/serial/fsl-lpuart.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-index 29339d0196ec..0e7833478869 100644
---- a/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-+++ b/Documentation/devicetree/bindings/mmc/fsl-imx-esdhc.yaml
-@@ -75,6 +75,10 @@ properties:
-           - const: fsl,imx8qxp-usdhc
-           - const: fsl,imx7d-usdhc
-         deprecated: true
+diff --git a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+index 30eaa62e1aed..2c2f3c97a125 100644
+--- a/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
++++ b/Documentation/devicetree/bindings/serial/fsl-lpuart.yaml
+@@ -32,6 +32,9 @@ properties:
+               - fsl,imx8qm-lpuart
+               - fsl,imx8dxl-lpuart
+           - const: fsl,imx8qxp-lpuart
 +      - items:
-+          - enum:
-+              - fsl,imxrt1170-usdhc
-+          - const: fsl,imxrt1050-usdhc
++          - const: fsl,imxrt1170-lpuart
++          - const: fsl,imxrt1050-lpuart
  
    reg:
      maxItems: 1

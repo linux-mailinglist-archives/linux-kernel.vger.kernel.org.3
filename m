@@ -2,65 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E4B05A98F8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:35:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26F325A9900
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234078AbiIANfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
+        id S234349AbiIANgP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:36:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234065AbiIANeh (ORCPT
+        with ESMTP id S234057AbiIANfj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:34:37 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A882265D0
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:32:44 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id p16so31575161ejb.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:32:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=GkqcXxkxbiGAUS3mDZ9ZIlXaqo2ypwaG4SLF3IzWGD4=;
-        b=tkpJ8P7txLgCLaajgTyWxraKpmNbXD2ahq6miX/0cQFc3LKU8YlP5w+LoFTWnFrfVO
-         6yDZzgrZy/mlnubTM6WmNE3Gg8dIXrU0W62XZwsPa/TpuK7QzdU2JYGZIc43/FjL+W+C
-         dIjx9ZRnVsHA3w8p0yKeS7RZ6UvAyLDq4bs6/WjQ0JaMb9a0nNuiyzMd0RpPCKfH7w88
-         NcZ6N6GM+wioxWFJox4PZT/Bxgq/vErFeHY6dfOupzUPmXNSpR/2p9TkbVGWI5FeBoDd
-         MBpx/zeJmfQBdUZZjgNw2H9/AeTHjWtmm4a5/x+RA9DkkH2CCDWDI62VorgsACZe7AOc
-         6dKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=GkqcXxkxbiGAUS3mDZ9ZIlXaqo2ypwaG4SLF3IzWGD4=;
-        b=nQZ781UcEPL1nCeMd+gLB31anEODaV184gWclOCYb5t1vq8x72tNw4RO4eCU1Fgf7N
-         H5DRhytAq11JdqINFHbk45bCPmonLXIDV1TlNLQ1B3HpKKYO7Hk/YkXrLXA+eDAbVJFZ
-         yHDuYb08EMcpX1Xv7i70X37jNLsyRMArrRQDEJoSkqRDauZP31sIDtIoQcSsGdM4CXqG
-         CTaEi/xR5O4+xu8BOsLzIEUp5uzN5P+dkeAGS0POf6Aiftuh79W4IHI9hOxhsg59+jbN
-         6AoPHqrkOAAvlVv38HZjQ5m1JSZ8ZYJNHT8CPdRL+l8AxjskK2SEDS8UTBPcQ0L3h0Lo
-         Hu2A==
-X-Gm-Message-State: ACgBeo2UZ/zcsPTjIbk2hAlxQRn45CDvIETdj6ys5i0M7A2qu6iOUVb5
-        0Q5jvTGr3szT7xJKsgUzIx7jFNeYG2UDw1vd7/2QUQ==
-X-Google-Smtp-Source: AA6agR7EMbR1VhzyEbx3KwgyWcAgNnqnpvQizf8d4bjXBqesyVusbdQz6O0joQ2RKwf/Kfu2EXgvGVOlU4GQMZ6WMtQ=
-X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
- e8-20020a17090658c800b006fe91d518d2mr24160316ejs.190.1662039163171; Thu, 01
- Sep 2022 06:32:43 -0700 (PDT)
+        Thu, 1 Sep 2022 09:35:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801766262;
+        Thu,  1 Sep 2022 06:33:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C163B82622;
+        Thu,  1 Sep 2022 13:33:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 533DAC433D6;
+        Thu,  1 Sep 2022 13:33:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662039221;
+        bh=X05rer4E7Vrs6fmpGuILpb3YeS1Pl/B7CuPAsThsJlQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TvCWq4/PpnS3BKsuQFnijcM2qQ5+1M5XiW6pL9G3Vg+nvaO+1kHPoQVxWgP3QJ6Dc
+         tQ6HM6XZJFK+PyMRcF2yD2iN0WlHErtq8WOfKdqyhro9q85xHzfcq5hCli0t4Z5BY+
+         03xcPvl11GtoEUO93ND6OYfZFkB9B2n9KCMWEl5mpRwA7sYLQBy0xYMaw8fS2geWgF
+         GrNDWp7dfqO3JiquEDNxcJUOum5sM6ILnLIgC6hmHksm0kqKo69Ht9KHWxW/LLBIZP
+         8bSM7HgwPDCxu3rbHXbdmPkYItCiqDVGg7AGFyrTQ/OVowZqioRr9aAYp79CP3u9hY
+         bFuD+EGigh0LQ==
+Date:   Thu, 1 Sep 2022 14:33:35 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, acme@kernel.org,
+        leo.yan@linaro.org, john.garry@huawei.com, catalin.marinas@arm.com,
+        will@kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Mark Rutland <mark.rutland@arm.com>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] arm64/sve: Add Perf extensions documentation
+Message-ID: <YxC0r6RCffBXXllT@sirena.org.uk>
+References: <20220901132658.1024635-1-james.clark@arm.com>
+ <20220901132658.1024635-3-james.clark@arm.com>
 MIME-Version: 1.0
-References: <SA0PR15MB3919F42FFE3C2FBF09D08026997B9@SA0PR15MB3919.namprd15.prod.outlook.com>
-In-Reply-To: <SA0PR15MB3919F42FFE3C2FBF09D08026997B9@SA0PR15MB3919.namprd15.prod.outlook.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 1 Sep 2022 15:32:31 +0200
-Message-ID: <CACRpkdZd17c-0h=LLep71LEtLtc9iqv54kEMF+TbXx-K5tPcQw@mail.gmail.com>
-Subject: Re: [PATCH] RDMA/siw: Solve the error of compiling the 32BIT mips
- kernel when enable CONFIG_RDMA_SIW
-To:     Bernard Metzler <BMT@zurich.ibm.com>
-Cc:     jianghaoran <jianghaoran@kylinos.cn>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>, "leon@kernel.org" <leon@kernel.org>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="1A0ScQ3wnA1aHvzl"
+Content-Disposition: inline
+In-Reply-To: <20220901132658.1024635-3-james.clark@arm.com>
+X-Cookie: This bag is recyclable.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,14 +60,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 9:05 AM Bernard Metzler <BMT@zurich.ibm.com> wrote:
 
-> We discussed same thing a few days ago - see PATCH from Linus:
-> '[PATCH] RDMA/siw: Pass a pointer to virt_to_page()'
-(...)
-> Could one of you two re-send?
+--1A0ScQ3wnA1aHvzl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I updated and resent my patch now!
+On Thu, Sep 01, 2022 at 02:26:58PM +0100, James Clark wrote:
 
-Yours,
-Linus Walleij
+> Document that the VG register is available in Perf samples
+
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+--1A0ScQ3wnA1aHvzl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMQtK8ACgkQJNaLcl1U
+h9BVKgf/eYlwFhdS4iCAem8v1b27aPMGcA20gbkv0QPE1EOEANQSFXHqASc892k2
+HILdKyxxXbwDdeEySiiVquI1vYeZPTlRp7uoj3ZkxvwfLIJFoT4yuLOBf6Nz8Pwi
+pgG9hnHG94O8dvJp46fxyawg0OJC28OGhO2SziYNRW4HDLKvMdQcnOhWi7+G4g3Y
+/XjjtzafhmqW6L2Su0kc5+Gqoyt3PdLVp2boeZLpp0DMoJd7XSITOO/1VQWN4RJF
+kwq+n9oZFQF7sDZo/RdbB7BnYTTifNruOqTj5saKwPUEn2hOOocvtjPF62jyQ584
+PS/n+8PfRLuqK3vqsdpHjIu+cENLGw==
+=S2Mp
+-----END PGP SIGNATURE-----
+
+--1A0ScQ3wnA1aHvzl--

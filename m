@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBEDA5A902D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEA75A9033
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:26:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbiIAH0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:26:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46168 "EHLO
+        id S234073AbiIAH0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233958AbiIAHZp (ORCPT
+        with ESMTP id S232470AbiIAHZq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:25:45 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFA7CD7;
-        Thu,  1 Sep 2022 00:24:47 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so867380wms.5;
-        Thu, 01 Sep 2022 00:24:46 -0700 (PDT)
+        Thu, 1 Sep 2022 03:25:46 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60F5E51;
+        Thu,  1 Sep 2022 00:24:48 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id az27so21107512wrb.6;
+        Thu, 01 Sep 2022 00:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=cY+l91tY+B7VM/dwzAL+zzuJF29Y5udGdyhz4umwy4c=;
-        b=JMBTTuo92KjqPR1nvLS7pzREKSahOWSc59GZOXo6jLd42B8esThrfa6K0hDo3alo2s
-         Od/aXaTam70uLvGtpyqd/qF0Diaz+xx0vyookpI9wDKyd45zoFpnTNjJZqmCk7TBY0Fz
-         uUyzMqTGcAGpLoarv2Y9l5iqaS5lIw6LEWJJDem5mz9++3NABZNJObnAjq7uy8U0gS5b
-         kfLsSOPyuHZ1jz5EaKOEH+/m/+sFdsytwlIVZiQDarH9mM5ndjyqIkdgAdqSPKHAzykw
-         9J9Z62jF5oAU3YyJtFLBP4AuewKXwQ3rp9PYRzN8hbiLxBWpGx3HTxU55pDhntfGLPTh
-         DnUg==
+        bh=W4sHhBFT7l0RZw3UjJyqKYPr5puCq7omf6aKnnWND30=;
+        b=JQZZvUi6O0ekBj3q+z2Stpq3f90RJSDx3xoOvdXfAF8N0rSyGrLOA7leU6sDOpvgoO
+         50fduhhKDz94Yq/r9Z47JHLiyKu7sYX9pxM6CAk16dTsxL7oGIcsn1nGjO53Sv7l1X/+
+         wWDz3gEFby1KyOlMgu9+Urc3i5XFOA64jDY4Yqo3TTqyIVYvHTyyQ+355sjPNsLOY7Mb
+         nlEiEjI3FfWhofbgEqCCw7AdaGgb4GKr7+/D5exkDgxhZbbJ1TVyyYW0/2g/8HdMGEhv
+         0plb1kZ4T+rlBgOfx7Qo5hGJeylsBNcBFsQZlAhLjMr3XG3KmNY/KpQgJnox/qe+yXpj
+         EpNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=cY+l91tY+B7VM/dwzAL+zzuJF29Y5udGdyhz4umwy4c=;
-        b=Z6kL2P3tRIUHJyI/jIR1Ec879/cGUl2wcLg5UifZ8M0S4BpFO+ywdSukHqpaIYyilb
-         vM5bPhApNrkLaLDTtFyeWKXyd/d37InASh7yz5sOOQVN1hMjVZJ6JThINOMfVdBxCzPA
-         mw3LMCqGwCINTMDV5UqMw6JpLeePVqdbP3mIjUmQFIvkMH7o12Mj4no+ZLfCjmHZDpcH
-         3Y9WUe/EFTPvMrU+Of+jt3MCAG99gzfAWuPH2mmiiYAm1GTdZjAtfhcSSYSv7PMMa0BH
-         t7ZKp1kWgb7vRYfCTbEeN+KWePJkuFGSVJepIXbVnQOl2fYtS/nQ2Zh/KLdhqQJTJUSm
-         B2Tg==
-X-Gm-Message-State: ACgBeo2VhGjYNIK/H+5LXWqggT5jvEf8g6V0MsCHCu+CFZ3wiO+kp/R2
-        l4MrHTaKzvMt4ducsmoH8eY=
-X-Google-Smtp-Source: AA6agR5IOp0jyrkB6srkGByyAJaQ8JbsPW7iUCbNEpviTFAoIvUnxByzaCjG+dWybZU8uW4Dvgk7mg==
-X-Received: by 2002:a05:600c:4ec6:b0:3a5:ff4e:54d4 with SMTP id g6-20020a05600c4ec600b003a5ff4e54d4mr4153923wmq.25.1662017085601;
-        Thu, 01 Sep 2022 00:24:45 -0700 (PDT)
+        bh=W4sHhBFT7l0RZw3UjJyqKYPr5puCq7omf6aKnnWND30=;
+        b=cslRbQgLzAHjfGwLBsKqG8reeIxfCtrM1Zp4Kj0Z3tNfkLJgyB6h4yMyEMhIAW9khd
+         U0DBYCULDZVtmYeHP9/MnbXZQIe5rrdbS05z/A+UAs57epaoLnfdsYOETkU7oLzP4EHc
+         ZWm090IFG1jVFTVmhoYy4VKXDoArGXIANKuPUuPazWWQxy/Bkzz+EX2P06vIp+me1Oa/
+         +bUIl2AUquXFbcVenPu8kD7FFbaFRLiwgO/a9WixUBOAZL0zMWhYq7dt+fKUSFW3KIT5
+         PNly91QXCtr/2YGqUsiXxLrxzKapHrpBMp7UF/316AUzmLKYbrioTiuzMHXbcfJbev9w
+         FUPg==
+X-Gm-Message-State: ACgBeo1qtIpwubKYWqQdz3iZjUgDDgRqQYC8z6vcb98BzExldsa4mkWh
+        kzStRIk3m8BDuvTR6Hbb+nc=
+X-Google-Smtp-Source: AA6agR5UAfAyP88xhdAn5WyYEnMT6lPL1ngs0NcfIIBlVKw6XqsJlHInPx6Gie40IB9NPz5vECUixA==
+X-Received: by 2002:a05:6000:904:b0:21a:3dca:4297 with SMTP id bz4-20020a056000090400b0021a3dca4297mr13599962wrb.487.1662017088630;
+        Thu, 01 Sep 2022 00:24:48 -0700 (PDT)
 Received: from localhost (87-126-55-15.ip.btc-net.bg. [87.126.55.15])
-        by smtp.gmail.com with ESMTPSA id n18-20020a05600c501200b003a32251c3f9sm5173723wmr.5.2022.09.01.00.24.43
+        by smtp.gmail.com with ESMTPSA id x14-20020a5d60ce000000b002252e5a6841sm13952561wrt.57.2022.09.01.00.24.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 00:24:45 -0700 (PDT)
+        Thu, 01 Sep 2022 00:24:48 -0700 (PDT)
 From:   Iskren Chernev <iskren.chernev@gmail.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -57,14 +57,11 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Iskren Chernev <iskren.chernev@gmail.com>,
         Andy Gross <agross@kernel.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 08/14] dt-bindings: ufs: qcom: Add sm6115 binding
-Date:   Thu,  1 Sep 2022 10:24:07 +0300
-Message-Id: <20220901072414.1923075-9-iskren.chernev@gmail.com>
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 09/14] arm64: dts: qcom: sm6115: Add UFS nodes
+Date:   Thu,  1 Sep 2022 10:24:08 +0300
+Message-Id: <20220901072414.1923075-10-iskren.chernev@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220901072414.1923075-1-iskren.chernev@gmail.com>
 References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
@@ -80,57 +77,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SM6115 UFS to DT schema.
+The SM6115 comes with UFS support, so add the related UFS and UFS PHY
+nodes.
 
 Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 ---
- .../devicetree/bindings/ufs/qcom,ufs.yaml     | 26 +++++++++++++++++++
- 1 file changed, 26 insertions(+)
+ arch/arm64/boot/dts/qcom/sm6115.dtsi | 70 ++++++++++++++++++++++++++++
+ 1 file changed, 70 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-index f2d6298d926c..7c5f6e2e6d4c 100644
---- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-+++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-@@ -28,6 +28,7 @@ properties:
-           - qcom,msm8998-ufshc
-           - qcom,sc8280xp-ufshc
-           - qcom,sdm845-ufshc
-+          - qcom,sm6115-ufshc
-           - qcom,sm6350-ufshc
-           - qcom,sm8150-ufshc
-           - qcom,sm8250-ufshc
-@@ -178,6 +179,31 @@ allOf:
-           minItems: 1
-           maxItems: 1
+diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+index cde963c56ac9..491fffff8aa1 100644
+--- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
++++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+@@ -620,6 +620,76 @@ opp-202000000 {
+ 			};
+ 		};
  
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sm6115-ufshc
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 8
-+          maxItems: 8
-+        clock-names:
-+          items:
-+            - const: core_clk
-+            - const: bus_aggr_clk
-+            - const: iface_clk
-+            - const: core_clk_unipro
-+            - const: core_clk_ice
-+            - const: ref_clk
-+            - const: tx_lane0_sync_clk
-+            - const: rx_lane0_sync_clk
-+        reg:
-+          minItems: 1
-+          maxItems: 1
++		ufs_mem_hc: ufshc@4804000 {
++			compatible = "qcom,sm6115-ufshc", "qcom,ufshc",
++				     "jedec,ufs-2.0";
++			reg = <0x4804000 0x3000>, <0x4810000 0x8000>;
++			reg-names = "std", "ice";
++			interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
++			phys = <&ufs_mem_phy_lanes>;
++			phy-names = "ufsphy";
++			lanes-per-direction = <1>;
++			#reset-cells = <1>;
++			resets = <&gcc GCC_UFS_PHY_BCR>;
++			reset-names = "rst";
 +
-     # TODO: define clock bindings for qcom,msm8994-ufshc
- 
- unevaluatedProperties: false
++			power-domains = <&gcc GCC_UFS_PHY_GDSC>;
++			iommus = <&apps_smmu 0x100 0>;
++
++			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
++				 <&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
++				 <&gcc GCC_UFS_PHY_AHB_CLK>,
++				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
++				 <&gcc GCC_UFS_PHY_ICE_CORE_CLK>,
++				 <&rpmcc RPM_SMD_XO_CLK_SRC>,
++				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
++				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>;
++			clock-names = "core_clk",
++				      "bus_aggr_clk",
++				      "iface_clk",
++				      "core_clk_unipro",
++				      "core_clk_ice",
++				      "ref_clk",
++				      "tx_lane0_sync_clk",
++				      "rx_lane0_sync_clk";
++
++			freq-table-hz = <50000000 200000000>,
++					<0 0>,
++					<0 0>,
++					<37500000 150000000>,
++					<75000000 300000000>,
++					<0 0>,
++					<0 0>,
++					<0 0>;
++
++			non-removable;
++			status = "disabled";
++		};
++
++		ufs_mem_phy: phy@4807000 {
++			compatible = "qcom,sm6115-qmp-ufs-phy";
++			reg = <0x4807000 0x1c4>;
++			#address-cells = <1>;
++			#size-cells = <1>;
++			ranges;
++
++			clocks = <&gcc GCC_UFS_CLKREF_CLK>,
++				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
++			clock-names = "ref", "ref_aux";
++
++			resets = <&ufs_mem_hc 0>;
++			reset-names = "ufsphy";
++			status = "disabled";
++
++			ufs_mem_phy_lanes: lanes@4807400 {
++				reg = <0x4807400 0x098>,
++				      <0x4807600 0x130>,
++				      <0x4807c00 0x16c>;
++				#phy-cells = <0>;
++			};
++		};
++
++
+ 		usb3: usb@4ef8800 {
+ 			compatible = "qcom,sm6115-dwc3", "qcom,dwc3";
+ 			reg = <0x04ef8800 0x400>;
 -- 
 2.37.2
 

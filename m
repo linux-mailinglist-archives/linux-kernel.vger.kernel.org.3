@@ -2,86 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42B6E5AA07D
+	by mail.lfdr.de (Postfix) with ESMTP id B74DC5AA07E
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234733AbiIATyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        id S233284AbiIATzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231936AbiIATyf (ORCPT
+        with ESMTP id S231936AbiIATzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:54:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623216A48E;
-        Thu,  1 Sep 2022 12:54:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00D8FB82934;
-        Thu,  1 Sep 2022 19:54:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5AE0C433D6;
-        Thu,  1 Sep 2022 19:54:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662062071;
-        bh=YH1Y50y+aIWGJPESEAGpE11vQpdK/FiX3f4PxACu/lI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=e190hmZgGNV2kzXNTjhOh2R6yto1hDszS2MYqhvM6ISoM0OPu9sbZ/iuGKKqgyNya
-         MQcWNnE74qWqj5l3/Pi2imRO4m7CZwKvlxpXfhITNrBKwLhMW7JWqnU/188cyR8NHY
-         /JM/oj6AKmbanv/4zUjhtU3ArZoeyjN8ddZ1T7rQrWq+83wlHMnD1FCQT+IDssDR7N
-         vGyp3L0v2aKmeeiu1iV8lKCw3VMcKLceBJYxNU5Sh5+kmhkcM7tIhDelv6TlOGRJSz
-         b9E1wcKKQbl1OJbrMcEUQxxxlf47tNK/0CziKvOeLe1DCfFJ4PvlqxGtVJoZ7kL6j1
-         Gx2rxo97L+EOg==
-Date:   Thu, 1 Sep 2022 12:54:30 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Michael Walle <michael@walle.cc>
-Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH v1 01/14] net: add helper eth_addr_add()
-Message-ID: <20220901125430.5dd9e586@kernel.org>
-In-Reply-To: <1682967feab905d06402d0f8402799a8@walle.cc>
-References: <20220825214423.903672-1-michael@walle.cc>
-        <20220825214423.903672-2-michael@walle.cc>
-        <1682967feab905d06402d0f8402799a8@walle.cc>
+        Thu, 1 Sep 2022 15:55:20 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915DD3A4BF
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:55:19 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id r141so15532359iod.4
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 12:55:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=seI1koEC25ypVGd7T1UjIwUU3cFD+MV5D0arikaOKag=;
+        b=mzcebpbWdcmzlubeGcDuaw+53g7e5bWwmRlay5XuQCuH3R/t0JaasCCMwM64OhQ8C0
+         Qj8qMRkKOagiQjpH+nVAooZugFtBFIZcSUg/ZoOIEeiF+ewsGDfW5Xojf9q5HCf4t956
+         PFhD3GO7Z/XVxDSRp5TuShiPr/FFsO9VDyAwZ7plwo+K5WQ0gFWxLBD/6x4a2LKPbz8j
+         BiFNQ+f/1SKSq9n+C1xM3Zej61fBZKP0ddqpVHJJoDvqdQbB82KS514IxM3cVsORj0X6
+         2qGXWXJrP3ahNVwr4ON0I31cXTL/f6Up+m0FJxwLrZnqHmDuAmgHF8t8sj+xxtUA1yzv
+         H7Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=seI1koEC25ypVGd7T1UjIwUU3cFD+MV5D0arikaOKag=;
+        b=Xv5B4yGyWMpftSg+OTJiSbsQhiBPFqyD3m1etKxDmu+Qw1GMzSxCkdhE9RNHU2C1Yj
+         /k73dA5oz8fjFxpwPOWGtUF+pbMdXbxZVGv1ZELx5+0ahRhhhkj/RwVr9TXwE/HhsPPv
+         CUPisyKjTepXrx8OavWkXjJvydkwalpTAXSJnJ93OhDS67CkduLHK6xhUuCl4P7gd/f+
+         8VYizunYzOxjEJAQ7ssG/AvjnjsYvtZJz9Q9g17GjmJrhoWOy7uhmKeUzZR5GNqQzYWz
+         5Xh6ZPrL9l3Y/QMA0U4Dm2qgxqp5HGh78ewmaJ3PjNIghQv10Hk7MjJhfUh3RHc8pCGs
+         cjJw==
+X-Gm-Message-State: ACgBeo0afe9Sox7VgeIqCMS0JPvvMkJQyQp9nbG7bqOUjlxmdU69ILP6
+        psMUJsmTb0O3ZseS7zTUZZ7dxrfbj7gNGriB01yamA==
+X-Google-Smtp-Source: AA6agR6E8CWIjgzNAAEwAB1E6jFOLB0toIoj0r0vr72SzwiSp/lagdot9Pv8Elb1B+6+1/bL+SDvb2Xedw6RH/MYQ+o=
+X-Received: by 2002:a5d:8b47:0:b0:689:a436:81d2 with SMTP id
+ c7-20020a5d8b47000000b00689a43681d2mr15417264iot.138.1662062118567; Thu, 01
+ Sep 2022 12:55:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220901092315.33619-1-tsahu@linux.ibm.com>
+In-Reply-To: <20220901092315.33619-1-tsahu@linux.ibm.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 1 Sep 2022 12:54:42 -0700
+Message-ID: <CAJHvVciwa4x8sQag0a5dmq2GbmpMs3bYEVCW4g_Ro_o_GVtQTg@mail.gmail.com>
+Subject: Re: [PATCH] selftest: vm: remove deleted local_config.* from .gitignore
+To:     Tarun Sahu <tsahu@linux.ibm.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Linux MM <linux-mm@kvack.org>,
+        Linuxkselftest <linux-kselftest@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, aneesh.kumar@linux.ibm.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 01 Sep 2022 18:26:39 +0200 Michael Walle wrote:
-> Am 2022-08-25 23:44, schrieb Michael Walle:
-> > Add a helper to add an offset to a ethernet address. This comes in 
-> > handy
-> > if you have a base ethernet address for multiple interfaces.
-> > 
-> > Signed-off-by: Michael Walle <michael@walle.cc>  
-> 
-> Would it be possible to get an Ack for this patch, so I don't have
-> to repost this large (and still growing) series to netdev every time?
-> 
-> I guess it would be ok to have this go through another tree?
+Thanks for the cleanup! For what it's worth:
 
-Andrew's ack is strong enough, but in case there's any doubt:
+Reviewed-by: Axel Rasmussen <axelrasmussen@google.com>
 
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+On Thu, Sep 1, 2022 at 2:23 AM Tarun Sahu <tsahu@linux.ibm.com> wrote:
+>
+> Commit d2d6cba5d6623245a80cc151008cce825c8b6248 ("selftest: vm: remove
+> orphaned references to local_config.{h,mk}") took care of removing
+> orphaned references. This commit remove local_config from .gitignore.
+>
+> Parent Patch
+> Commit 69007f156ba7aead6c75b0046958ad3396f5aed1 ("Kselftests: remove
+> support of libhugetlbfs from kselftests")
+>
+>
+> Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
+> ---
+>  tools/testing/selftests/vm/.gitignore | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/vm/.gitignore b/tools/testing/selftests/vm/.gitignore
+> index 31e5eea2a9b9..7b9dc2426f18 100644
+> --- a/tools/testing/selftests/vm/.gitignore
+> +++ b/tools/testing/selftests/vm/.gitignore
+> @@ -30,7 +30,6 @@ map_fixed_noreplace
+>  write_to_hugetlbfs
+>  hmm-tests
+>  memfd_secret
+> -local_config.*
+>  soft-dirty
+>  split_huge_page_test
+>  ksm_tests
+> --
+> 2.31.1
+>

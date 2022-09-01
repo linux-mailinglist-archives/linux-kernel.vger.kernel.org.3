@@ -2,151 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7BFA5A9E54
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6DA85A9E5D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:44:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234890AbiIARmi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:42:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38098 "EHLO
+        id S234687AbiIARnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234759AbiIARmT (ORCPT
+        with ESMTP id S235115AbiIARnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:42:19 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C689E1E3D6;
-        Thu,  1 Sep 2022 10:40:16 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 966B332009CB;
-        Thu,  1 Sep 2022 13:39:15 -0400 (EDT)
-Received: from imap47 ([10.202.2.97])
-  by compute2.internal (MEProxy); Thu, 01 Sep 2022 13:39:16 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1662053955; x=1662140355; bh=K0
-        PySzeYRj1ESNvfGlD4cjnNfqWN52DtgIAV14TgWck=; b=uYBYecRB/4RUS4pgH2
-        kjGUEnaWa0SBVmhZry7Vm/2RtraTn/+/ZFWrNwozvIQXIyZ7IGndDvybY0SZ4aXd
-        T+LCGDB0timXorhMuDM8gmo8yjl23NVAed86hk2oq6olqGwllZE9v6AE7Gm/npnu
-        kqjfNmiJpc/z0dV3+tKmbWYC82oe6WPXlDvI3ysSwQacffH1Fd+cumxiK1bptUj8
-        NJBUkSp1NzrXbOH+3fQY+y0IrxloR7UUV5+7pnNxq8zMhewSOWdeMG6niDfDGVAG
-        VrlGr9rhrCsciGy3Yox+2VwsiKTkaYoD0aB63FS/QGZRgWo1VTlB9yZfBnFe0/Yh
-        MCew==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1662053955; x=1662140355; bh=K0PySzeYRj1ESNvfGlD4cjnNfqWN
-        52DtgIAV14TgWck=; b=x6METu9GZD6tP+qGai7qs12DJ/3C7y92eKLbDUXqiDyP
-        PErmImk4lZWiqHYJCR2ZBZm7qq62Bj5C+U0eBt8hlkhpjyXSCCclcLsUPEMVM9Sp
-        EqiQPxi6LVo0EuioHPsDuBU1jxr39ZJiONXiuEKofS2Mql8zmDr2dRF/CPJRarzt
-        KXLF/B5rNtQCFjVso2ROVjHXzhwqJbfXYt/xgTbyRex/TyFmeYSo33+RIYEoFja0
-        UOjQkUL7m4fsxfFr+A5ugASwjDssWMnxEgHlifjyWMLmxJ82n/PisT4MTF7XkvV9
-        O986EjnI4H8cRh1M91QTFBGi8wfJR1oxfsS6XorYbw==
-X-ME-Sender: <xms:Qu4QY3BiXX6MF2jzzvaqiY6kPh0GQnHL58ex1PMIBmuUjTx2ORPyEw>
-    <xme:Qu4QY9iladtoMG7GxIA84Rrz5FO4DfBFXCRyaXZwKfj8YR-sTJwy-DmFpotSeW-97
-    7eDy1guGatxqWgxMbA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekkedguddujecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdfu
-    vhgvnhcurfgvthgvrhdfuceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtf
-    frrghtthgvrhhnpeelvefggeffheevtdeivefhkeehfeettdejteduveeiheevveeilefg
-    hfeiveeiueenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehsvhgvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:Qu4QYykFfIGCsFHPqJyGh514Buv-oPTW_1o3JIH04IizaYn3qiuHcQ>
-    <xmx:Qu4QY5x0ICNZeqZuo67dXOOFG3cXqwrwWIuGsfD-aHhUfbTWf90Dvg>
-    <xmx:Qu4QY8SSqSEpIzvk6XvD59e6_8PdmgP868H-Om65d7SJOc44rGFSTg>
-    <xmx:Q-4QYxKDrLNwPxA2TgRO7i2Smuq-zWqP4j0iK8YTsP08KUFEibirtw>
-Feedback-ID: i51094778:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 8BD49A6007C; Thu,  1 Sep 2022 13:39:14 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <8fc4eb4b-25c4-4d4c-8203-1e5c314436b3@www.fastmail.com>
-In-Reply-To: <20220901083446.3799754-1-william.wu@rock-chips.com>
-References: <20220901083446.3799754-1-william.wu@rock-chips.com>
-Date:   Thu, 01 Sep 2022 19:38:53 +0200
-From:   "Sven Peter" <sven@svenpeter.dev>
-To:     "William Wu" <william.wu@rock-chips.com>,
-        "Felipe Balbi" <balbi@kernel.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Fabio Aiuto" <fabioaiuto83@gmail.com>, frank.wang@rock-chips.com,
-        jianwei.zheng@rock-chips.com
-Subject: Re: [PATCH] usb: dwc3: core: leave default DMA if the controller does not
- support 64-bit DMA
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 1 Sep 2022 13:43:07 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1769F8EC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:40:58 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id t129so18128264pfb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=b0H9B0FRwbPM5Cz+4QjPTjCFU3PLC04eS989QmgK6OY=;
+        b=SLXbEaDl+m0WNW1mdPDM1JtgiXI2fq5Ahl2hAk+1/2KblOlCwZQ27c5OI3iOPG0aeV
+         jC73JvdnF0WDCP0VTMr7X/+IkartYastE/3OjD4t5EyGGynnNHX5TQco0hAHHE6zk7/G
+         7njhGCkfe6HH19n8JFQo2ce+Eg/V2GnSL9aEKHrN6du2K9QBSB16Hxx8esgENcDuGuxG
+         ZJKJhsbWYspdEHAQIHKfo8D4Mtjmxd7CSz0Qtp5icSOBzjQRD1UxNka1xGvbZCQD2k1n
+         8tS73TtJOA+1XWXPO3Dru+oORzI1CqlyMUyBAKCr6zNVRYwirwpv1Zs8XAMOs8leAGGl
+         u8Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=b0H9B0FRwbPM5Cz+4QjPTjCFU3PLC04eS989QmgK6OY=;
+        b=nu4bh39eriiWOS1mHkEjZbK24n0W+phUwRPf3rx6f0Ihd53HPPBzhHaVxTy5Ros+M4
+         BjazZ98iKeHpWgyvePDzBSpu+CCb4n8kED0yjpu4M59q85PBH4LAhAjmeoCCMLsS0/XU
+         ezCRMwJUviKuTGvm4sasSjL2Vi/Wj6CtS/SuYlpkuzBJldZo05let4PeaMTtsTUnlOmE
+         ZrF8tD96Ds5RbNOkTxY6TEZsYqb1P/IaxM7X7RvqrhDShV8SKtx8JaL7r3RXrrEE3GQC
+         lVMKsI8EFJSW8L2ZzdNmxpnVM1bxzr7UiSHJSRFmRCIePA2UVT/n8oOo84tYHzYyiiJK
+         rgVA==
+X-Gm-Message-State: ACgBeo2qiQPqBgapux3cbnwoMDxMqETl897yfn0B41qXnLcoXk/6QNgb
+        cv9yMq9xcmpAhRGALKD5NzGlZtKTwpeGMrOvyFU=
+X-Google-Smtp-Source: AA6agR70Xdh8a0e1gFvCSjjLJRyRMUbqTHe5xl2eniat52M1jOZH+rSLT5JNyscu9FMW2Gi3BF+0eQ9CMccIMC7cVus=
+X-Received: by 2002:a63:de01:0:b0:42b:31f7:b6ea with SMTP id
+ f1-20020a63de01000000b0042b31f7b6eamr26540720pgg.587.1662054043593; Thu, 01
+ Sep 2022 10:40:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220831083024.37138-1-david@redhat.com> <CAHbLzkqeDAnCdt3q4E2RZw64QEzVaO_pseR3VaoHUhB+rZFcZQ@mail.gmail.com>
+ <4845ae71-b7dd-1707-ebc3-2eb3521e7fa0@redhat.com> <CAHbLzkoMMWAgai2bvgu7y5EAcKOhhx3gK+OA4v2+kOHBW4cauw@mail.gmail.com>
+ <ab41f458-eb0f-5edb-ccab-643bf00d5110@redhat.com> <CAHbLzkpFqSBTv3HVye4UCKj93NPW8VRqCGZO1p5hk_wfNA_GtQ@mail.gmail.com>
+ <94c3217d-df73-2b6b-21f0-95baf117c584@redhat.com> <CAHbLzkp+HNmz7hGS5uDrfDDW0HpSj5Z+xmmkRbwvgn1qYk8Btg@mail.gmail.com>
+ <CAHbLzkqM5qj7AZRpeCemsA56oKuHo2T51chTbh1pkGrr0wRFDQ@mail.gmail.com> <a5277667-1b41-dabe-837a-19afd0a68fd1@redhat.com>
+In-Reply-To: <a5277667-1b41-dabe-837a-19afd0a68fd1@redhat.com>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 1 Sep 2022 10:40:30 -0700
+Message-ID: <CAHbLzkrd5RZ3S88LmeyFoTURxd2=GGMXOjowVQVWW9W8+ncXRg@mail.gmail.com>
+Subject: Re: [PATCH v1] mm/ksm: update stale comment in write_protect_page()
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Thu, Sep 1, 2022, at 10:34, William Wu wrote:
-> On some DWC3 controllers (e.g. Rockchip SoCs), the DWC3 core
-> doesn't support 64-bit DMA address width. In this case, this
-> driver should use the default 32-bit mask. Otherwise, the DWC3
-> controller will break if it runs on above 4GB physical memory
-> environment.
+On Wed, Aug 31, 2022 at 11:58 PM David Hildenbrand <david@redhat.com> wrote:
 >
-> This patch reads the DWC_USB3_AWIDTH bits of GHWPARAMS0 which
-> used for the DMA address width, and only configure 64-bit DMA
-> mask if the DWC_USB3_AWIDTH is 64.
+> On 01.09.22 00:18, Yang Shi wrote:
+> > On Wed, Aug 31, 2022 at 12:43 PM Yang Shi <shy828301@gmail.com> wrote:
+> >>
+> >> On Wed, Aug 31, 2022 at 12:36 PM David Hildenbrand <david@redhat.com> wrote:
+> >>>
+> >>> On 31.08.22 21:34, Yang Shi wrote:
+> >>>> On Wed, Aug 31, 2022 at 12:15 PM David Hildenbrand <david@redhat.com> wrote:
+> >>>>>
+> >>>>> On 31.08.22 21:08, Yang Shi wrote:
+> >>>>>> On Wed, Aug 31, 2022 at 11:29 AM David Hildenbrand <david@redhat.com> wrote:
+> >>>>>>>
+> >>>>>>> On 31.08.22 19:55, Yang Shi wrote:
+> >>>>>>>> On Wed, Aug 31, 2022 at 1:30 AM David Hildenbrand <david@redhat.com> wrote:
+> >>>>>>>>>
+> >>>>>>>>> The comment is stale, because a TLB flush is no longer sufficient and
+> >>>>>>>>> required to synchronize against concurrent GUP-fast. This used to be true
+> >>>>>>>>> in the past, whereby a TLB flush would have implied an IPI on architectures
+> >>>>>>>>> that support GUP-fast, resulting in GUP-fast that disables local interrupts
+> >>>>>>>>> from completing before completing the flush.
+> >>>>>>>>
+> >>>>>>>> Hmm... it seems there might be problem for THP collapse IIUC. THP
+> >>>>>>>> collapse clears and flushes pmd before doing anything on pte and
+> >>>>>>>> relies on interrupt disable of fast GUP to serialize against fast GUP.
+> >>>>>>>> But if TLB flush is no longer sufficient, then we may run into the
+> >>>>>>>> below race IIUC:
+> >>>>>>>>
+> >>>>>>>>          CPU A                                                CPU B
+> >>>>>>>> THP collapse                                             fast GUP
+> >>>>>>>>
+> >>>>>>>> gup_pmd_range() <-- see valid pmd
+> >>>>>>>>
+> >>>>>>>> gup_pte_range() <-- work on pte
+> >>>>>>>> clear pmd and flush TLB
+> >>>>>>>> __collapse_huge_page_isolate()
+> >>>>>>>>     isolate page <-- before GUP bump refcount
+> >>>>>>>>
+> >>>>>>>>    pin the page
+> >>>>>>>> __collapse_huge_page_copy()
+> >>>>>>>>     copy data to huge page
+> >>>>>>>>     clear pte (don't flush TLB)
+> >>>>>>>> Install huge pmd for huge page
+> >>>>>>>>
+> >>>>>>>> return the obsolete page
+> >>>>>>>
+> >>>>>>> Hm, the is_refcount_suitable() check runs while the PTE hasn't been
+> >>>>>>> cleared yet. And we don't check if the PMD changed once we're in
+> >>>>>>> gup_pte_range().
+> >>>>>>
+> >>>>>> Yes
+> >>>>>>
+> >>>>>>>
+> >>>>>>> The comment most certainly should be stale as well -- unless there is
+> >>>>>>> some kind of an implicit IPI broadcast being done.
+> >>>>>>>
+> >>>>>>> 2667f50e8b81 mentions: "The RCU page table free logic coupled with an
+> >>>>>>> IPI broadcast on THP split (which is a rare event), allows one to
+> >>>>>>> protect a page table walker by merely disabling the interrupts during
+> >>>>>>> the walk."
+> >>>>>>>
+> >>>>>>> I'm not able to quickly locate that IPI broadcast -- maybe there is one
+> >>>>>>> being done here (in collapse) as well?
+> >>>>>>
+> >>>>>> The TLB flush may call IPI. I'm supposed it is arch dependent, right?
+> >>>>>> Some do use IPI, some may not.
+> >>>>>
+> >>>>> Right, and the whole idea of the RCU GUP-fast was to support
+> >>>>> architectures that don't do it. x86-64 does it. IIRC, powerpc doesn't do
+> >>>>> it -- but maybe it does so for PMDs?
+> >>>>
+> >>>> It looks powerpc does issue IPI for pmd flush. But arm64 doesn't IIRC.
+> >>>>
+> >>>> So maybe we should implement pmdp_collapse_flush() for those arches to
+> >>>> issue IPI.
+> >>>
+> >>> ... or find another way to detect and handle this in GUP-fast?
+> >>>
+> >>> Not sure if, for handling PMDs, it could be sufficient to propagate the
+> >>> pmdp pointer + value and double check that the values didn't change.
+> >>
+> >> Should work too, right before pinning the page.
+> >
+> > I actually mean the same place for checking pte. So, something like:
+> >
+> > diff --git a/mm/gup.c b/mm/gup.c
+> > index 5abdaf487460..2b0703403902 100644
+> > --- a/mm/gup.c
+> > +++ b/mm/gup.c
+> > @@ -2392,7 +2392,8 @@ static int gup_pte_range(pmd_t pmd, unsigned
+> > long addr, unsigned long end,
+> >                         goto pte_unmap;
+> >                 }
+> >
+> > -               if (unlikely(pte_val(pte) != pte_val(*ptep))) {
+> > +               if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
+> > +                   unlikely(pte_val(pte) != pte_val(*ptep))) {
+> >                         gup_put_folio(folio, 1, flags);
+> >                         goto pte_unmap;
+> >                 }
+> >
+> > It doesn't build, just shows the idea.
 >
-> Fixes: 45d39448b4d0 ("usb: dwc3: support 64 bit DMA in platform driver")
-> Signed-off-by: William Wu <william.wu@rock-chips.com>
+> Exactly what I had in mind. We should add a comment spelling out that
+> this is for handling huge PMD collapse.
 
-Reviewed-by: Sven Peter <sven@svenpeter.dev>
+Yeah, I will prepare a patch soon.
 
-> ---
->  drivers/usb/dwc3/core.c | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
 >
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index c5c238ab3083..2fcbd05b2af1 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1751,12 +1751,6 @@ static int dwc3_probe(struct platform_device *pdev)
-> 
->  	dwc3_get_properties(dwc);
-> 
-> -	if (!dwc->sysdev_is_parent) {
-> -		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
-> -		if (ret)
-> -			return ret;
-> -	}
-> -
->  	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
->  	if (IS_ERR(dwc->reset))
->  		return PTR_ERR(dwc->reset);
-> @@ -1823,6 +1817,13 @@ static int dwc3_probe(struct platform_device 
-> *pdev)
->  	dwc3_cache_hwparams(dwc);
->  	device_init_wakeup(&pdev->dev, of_property_read_bool(dev->of_node, 
-> "wakeup-source"));
-> 
-> +	if (!dwc->sysdev_is_parent &&
-> +	    DWC3_GHWPARAMS0_AWIDTH(dwc->hwparams.hwparams0) == 64) {
-> +		ret = dma_set_mask_and_coherent(dwc->sysdev, DMA_BIT_MASK(64));
-> +		if (ret)
-> +			goto disable_clks;
-> +	}
-
-I guess you could also create the mask from DWC3_GHWPARAMS0_AWIDTH(dwc->hwparams.hwparams0)
-directly instead of hardcoding it to 64bit here. Probably doesn't matter though unless
-there are some weird systems where dwc3 can only do 48bit DMA but there's actually memory
-above that.
-
-
-
-Sven
-
-
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>

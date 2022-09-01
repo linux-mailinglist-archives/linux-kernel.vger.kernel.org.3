@@ -2,160 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BE0B5A8D81
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:46:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FFC85A8D84
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233130AbiIAFqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 01:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
+        id S229555AbiIAFrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 01:47:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbiIAFqf (ORCPT
+        with ESMTP id S233038AbiIAFrn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 01:46:35 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16891166CD;
-        Wed, 31 Aug 2022 22:46:34 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2814rY4G011867;
-        Thu, 1 Sep 2022 05:46:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=sRKo7gVcdBGY7W+F+Mm6xDnO7j85vrVM+3Sm1aNdMBg=;
- b=Rf0RE67szHwXBlQT0+LhnyhYyMUwFeHPls2HtGaU9STboipearH62PI3qOXwcRVs7Rre
- dL9WQacewrEFl8auCdwijbSOicyBFOgHUBYGc7UWYUAXwP742eUN8gsg63Z6AhcaenGY
- smDh9AZYgHxN1G/fUWfWEy6CKvxQVtD33LRwEWiUCPtPH9IQaBQVL4MARfU0vqTYcinN
- HTS7z51rTvkGJEkjczVrNNKp0IIs25O+DBSj+2eJt4ehVUYKfw7+v2SB68tlnwde3Wew
- ZDM9CyDH7xEPpnakqV+L2V1D8zvacm4pWY5ECCbNkYSef+8nNvnbHxrkRqnGJGJvu+QW mg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jabqk1x67-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 05:46:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2815kJ7T021064
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Sep 2022 05:46:19 GMT
-Received: from [10.216.20.19] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 31 Aug
- 2022 22:46:14 -0700
-Message-ID: <095d3acb-b04f-3d24-3f00-b8974bdc2648@quicinc.com>
-Date:   Thu, 1 Sep 2022 11:16:10 +0530
+        Thu, 1 Sep 2022 01:47:43 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2079.outbound.protection.outlook.com [40.107.94.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9044F1166D8;
+        Wed, 31 Aug 2022 22:47:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AHD81yRLhFEO1M2HeX4qmRmlWRHdBam2I9XmybqWQiwqVyz4NEjLcueWIfSlTGb54Kw2S4sIOEus0Ja0rSDfgnz3hLttVSNEtRy+70MneGaTtI1IYTSJpwLbfO0L8FgQpm8BA7LE6xrR6ZoJGJqMAYtFxXg4+TULOMILKwRSnjfdpSHWd+jrJSnIkI1gx5J8A0R05RpOJ8LaMdapmH2Fg4Dv7uwBtWB+Loo9+NG63eQIRUMTCNpiODRBVep5j0pgVSVdOMUmnlDQTcMwhgLhJATdL7IeuXf1eZ5wtpycVhJj2/l9EYRzzf6SJuA5S7/lmQKYjL62hoKsInlUr5Rsuw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rlf+q62Tu3DzaaDyHQDmvQijGnenPLWxUFobuI0mhKg=;
+ b=CtWCEoSTBuiIOyeklIu25/4hQcwBzgh9m/mlPZoIXc1gHbYbHWgirRMLwAGH7utLT7Z+vAy5HfYeGo0a5LeQqeL7pfyE7I36kCNLMQW/kFE+MYw67c1r5NPZCCW8k2ylLwuvTtyjBxmeXf8nDRCXlUfRnUyqjn2Y36wou8E9/P/2eDJuq1BUje8eSEuJI2+CH/eflXze+Xyk2T+YqzaDwXD4Z0gtutyQCnXHVHbQ5YbkrnZEDtJFZXhcmmlB4e+b/A5mGGbstjfD4yVgjl1xDqX/ZbloXI0r0OfYjEPkmyPbGeiyEk0ihCAmEpzeZcv/9+USycf+BqzP0IwIFfy55w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 149.199.62.198) smtp.rcpttodomain=kernel.org smtp.mailfrom=xilinx.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=xilinx.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=xilinx.onmicrosoft.com; s=selector2-xilinx-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rlf+q62Tu3DzaaDyHQDmvQijGnenPLWxUFobuI0mhKg=;
+ b=Sy4PMwRHBXpIFV0NE9UxS/OlKEICPZsmoTNMhzltt+TFLlHriYibpRwnVCYxPn7Ehhqcq26DrwaL5VliFkaF7+ma1ReC+7lCvtFI8yHKQW0NvUqqkniYyrXKLp/JY8KK/oGZNhE8PIwTkFKEAMT79BNhutCPZxD5z34OB23KiIc=
+Received: from SA1P222CA0064.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:2c1::15)
+ by SN4PR0201MB3454.namprd02.prod.outlook.com (2603:10b6:803:4f::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
+ 2022 05:47:38 +0000
+Received: from SN1NAM02FT0034.eop-nam02.prod.protection.outlook.com
+ (2603:10b6:806:2c1:cafe::e) by SA1P222CA0064.outlook.office365.com
+ (2603:10b6:806:2c1::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10 via Frontend
+ Transport; Thu, 1 Sep 2022 05:47:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 149.199.62.198)
+ smtp.mailfrom=xilinx.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=xilinx.com;
+Received-SPF: Pass (protection.outlook.com: domain of xilinx.com designates
+ 149.199.62.198 as permitted sender) receiver=protection.outlook.com;
+ client-ip=149.199.62.198; helo=xsj-pvapexch02.xlnx.xilinx.com; pr=C
+Received: from xsj-pvapexch02.xlnx.xilinx.com (149.199.62.198) by
+ SN1NAM02FT0034.mail.protection.outlook.com (10.97.5.90) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5588.10 via Frontend Transport; Thu, 1 Sep 2022 05:47:38 +0000
+Received: from xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.6; Wed, 31 Aug 2022 22:47:36 -0700
+Received: from smtp.xilinx.com (172.19.127.96) by
+ xsj-pvapexch02.xlnx.xilinx.com (172.19.86.41) with Microsoft SMTP Server id
+ 15.1.2507.6 via Frontend Transport; Wed, 31 Aug 2022 22:47:36 -0700
+Envelope-to: broonie@kernel.org,
+ robh+dt@kernel.org,
+ krzysztof.kozlowski+dt@linaro.org,
+ git@amd.com,
+ michal.simek@amd.com,
+ linux-spi@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ akumarma@amd.com
+Received: from [10.140.6.18] (port=60724 helo=xhdlakshmis40.xilinx.com)
+        by smtp.xilinx.com with esmtp (Exim 4.90)
+        (envelope-from <amit.kumar-mahapatra@xilinx.com>)
+        id 1oTd3A-000Eqz-98; Wed, 31 Aug 2022 22:47:36 -0700
+From:   Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+To:     <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <git@amd.com>, <michal.simek@amd.com>, <linux-spi@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <akumarma@amd.com>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@xilinx.com>
+Subject: [PATCH 0/7] spi: spi-zyqnmp-gqspi: Add tap delay and Versal platform support
+Date:   Thu, 1 Sep 2022 11:17:24 +0530
+Message-ID: <20220901054731.7705-1-amit.kumar-mahapatra@xilinx.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/2] clk: qcom: gcc-sc7180: Keep the USB GDSC always on
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        <linux-clk@vger.kernel.org>,
-        "Krishna Kurapati" <quic_kriskura@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-References: <20220825182152.v2.1.I45235b7c40997bc2abf813e4722b4dcdd6aecf6b@changeid>
- <20220826024003.qpqtdmdohdmpcskt@baldur>
- <5ff21b1e-3af9-36ef-e13e-fa33f526d0e3@quicinc.com>
- <20220830213533.7C4FCC433C1@smtp.kernel.org>
-From:   Rajendra Nayak <quic_rjendra@quicinc.com>
-In-Reply-To: <20220830213533.7C4FCC433C1@smtp.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: mwyw4FGOe0iGPJxgTstQ6Af0hLE5x5Bs
-X-Proofpoint-ORIG-GUID: mwyw4FGOe0iGPJxgTstQ6Af0hLE5x5Bs
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_03,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
- impostorscore=0 mlxscore=0 priorityscore=1501 adultscore=0
- lowpriorityscore=0 malwarescore=0 spamscore=0 phishscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209010024
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 88436e2b-3532-47fd-1995-08da8bdd7a6a
+X-MS-TrafficTypeDiagnostic: SN4PR0201MB3454:EE_
+X-Auto-Response-Suppress: DR, RN, NRN, OOF, AutoReply
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zQLl5V34EnB8O7iipAHPFAO3gL1M+lo1zVfCcuCkgnZN3RUuFM8KqJ451IQbYlNppYN30ITnlC0YCont4Y+dkQdlSlYzuu4gU0Uf8W5CBrx4inW31n+pPurer715etG+mzJ3eF/ZL/IP7/KwKbT0zRM07Fo4Z9kIiubKBh7eev4rEulcv5bYXA3siBgYakGJYMoi0qOLhJ91kPQntaIyugS1RasugsX0nIXtQ6//ZQbjeaTBowGYQcN7e6zotvvfTsm5WAfYTRGAvFw/ZSXlQwCcIliRrmskwyS+uOXxsiA+csaJnGNvxhoXrzNF1drMl4xhjIS6JskTOyrxoOhQiB+J3u8AvT2ufOwjSuU5ENlO8IBsLK6AvDURSxs1bZ4RhKs/4TWf12sNpVYN6iJ7D+m7+SlLNQhQnHFn4U0mxQSuh6pH1JKQykjwF0OkCHuBJlSpTs3dFjyhrxQ++liNu2PhsO+3578EINzvXMzAos0E44z10bsY7mwtnPLfdyMkh4QFfM2DzV21mDUkvefSOo4HM0lrpd0hEMxK4JUoTlO4mnXzUTnqvgoWGV5HIW7nBFp0vE22UzzGa4HSlUhXomnt88/YbpMWU5raIIILzWQB7CI+rMRfchocWgBAQt/ZZS2gx4B1mbSdvSVXL2Q4C+AO4hwqB4sRrPpPuWqgQMovxTNocN+kPv78BiNgkW/2wXFub9k4UcQDchwEJOdNmu4YrM3hoT4W4s8tVBzWlUwn4C8G5i3grpvkAn2ltCJIvX/09yEl0AZuMFZMRNVUQA5bfM0jgPycuI4GD94M9Uw=
+X-Forefront-Antispam-Report: CIP:149.199.62.198;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:xsj-pvapexch02.xlnx.xilinx.com;PTR:unknown-62-198.xilinx.com;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(376002)(346002)(39860400002)(40470700004)(46966006)(36840700001)(7416002)(107886003)(6666004)(2906002)(82740400003)(40480700001)(336012)(54906003)(110136005)(41300700001)(47076005)(426003)(7696005)(316002)(83380400001)(40460700003)(7636003)(82310400005)(1076003)(2616005)(356005)(4326008)(186003)(36860700001)(36756003)(8936002)(9786002)(5660300002)(70206006)(26005)(478600001)(8676002)(70586007)(102446001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: xilinx.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 05:47:38.3059
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 88436e2b-3532-47fd-1995-08da8bdd7a6a
+X-MS-Exchange-CrossTenant-Id: 657af505-d5df-48d0-8300-c31994686c5c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=657af505-d5df-48d0-8300-c31994686c5c;Ip=[149.199.62.198];Helo=[xsj-pvapexch02.xlnx.xilinx.com]
+X-MS-Exchange-CrossTenant-AuthSource: SN1NAM02FT0034.eop-nam02.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR0201MB3454
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This patch series:
+- Fixes kernel-doc warnings in GQSPI driver.
+- Avoids setting CPOL, CPHA & baud rate multiple times.
+- Adds Versal platform support in GQSPI driver.
+- Adds tap delay support in GQSPI driver.
+---
+BRANCH: mtd/next
+---
+Amit Kumar Mahapatra (5):
+  spi: spi-zynqmp-gqspi: Fix kernel-doc warnings
+  spi: spi-zynqmp-gqspi: Set CPOL and CPHA during hardware init
+  spi: spi-zynqmp-gqspi: Avoid setting baud rate multiple times for same
+    SPI frequency
+  dt-bindings: spi: spi-zynqmp-qspi: Add support for Xilinx Versal QSPI
+  spi: spi-zynqmp-gqspi: Add tap delay support for GQSPI controller on
+    Versal platform
 
+Naga Sureshkumar Relli (1):
+  spi: spi-zynqmp-gqspi: Add tap delay support for ZynqMP GQSPI
+    Controller
 
-On 8/31/2022 3:05 AM, Stephen Boyd wrote:
-> Quoting Rajendra Nayak (2022-08-29 01:12:02)
->> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
->> index d3244006c661..0fe017ba901b 100644
->> --- a/drivers/clk/qcom/gdsc.c
->> +++ b/drivers/clk/qcom/gdsc.c
->> @@ -368,6 +368,10 @@ static int _gdsc_disable(struct gdsc *sc)
->>           if (sc->pwrsts & PWRSTS_OFF)
->>                   gdsc_clear_mem_on(sc);
->>
->> +       /* If the GDSC supports RET, do not explicitly power it off */
->> +       if (sc->pwrsts & PWRSTS_RET)
->> +               return 0;
->> +
->>           ret = gdsc_toggle_logic(sc, GDSC_OFF);
->>           if (ret)
->>                   return ret;
->>
->>
->> So with that change, we would then not need the ALWAYS_ON flag set for usb gdsc,
->> instead we would update the .pwrsts to PWRSTS_RET_ON instead of PWRSTS_OFF_ON,
->> and that should make both usb wake-ups to work and we can still have the usb_gdsc as
->> a subdomain of CX for performance state voting.
-> 
-> To clarify, usb_gdsc is not setup as a subdomain of CX so far, right?
-> Just that eventually we'll make usb_gdsc a subdomain of CX so that
-> dev_pm_opp_set_rate() can target the CX domain instead of the usb one?
+Rajan Vaja (1):
+  firmware: xilinx: Add qspi firmware interface
 
-Thats right,
+ .../bindings/spi/spi-zynqmp-qspi.yaml         |   6 +-
+ drivers/firmware/xilinx/zynqmp.c              |   7 +
+ drivers/spi/spi-zynqmp-gqspi.c                | 193 ++++++++++++++----
+ include/linux/firmware/xlnx-zynqmp.h          |  19 ++
+ 4 files changed, 188 insertions(+), 37 deletions(-)
 
-> 
->> Does that sounds like a reasonable solution?
-> 
-> It sounds good to me. What about the existing users of PWRSTS_RET
-
-hmm, I thought no ones been actually using PWRSTS_RET but looks like
-there is *one* user on msm8974, I'll need to dig up how this change would
-affect it,
-
-> though? If I understand correctly this flag means the domain will never
-> be turned off, instead it will hit retention during low power modes.
-
-right,
-
-> 
-> While you're crafting this patch can you also document the PWRSTS_*
-> defines so that we know what they mean? I can guess that PWRSTS_RET
-> means "retention" but I don't know what it really means. I guess it
-> means "Deepest power off state is retention of memory cells".
-
-Sure I will update the PWRSTS_RET description. The definition of 'retention'
-here I think remains the same, it means memory is retained (if RETAIN_MEM is set)
-or memory *and* some part of logic is retained (if both RETAIN_MEM and RETAIN_PERIPH
-are set) in Deepest power off state, however there is a disconnected in terms of
-'how to enter the retention state' for a given domain.
-There is no SW control to enter the retention state and this happens in HW when the
-parent domain/rail transitions to low power. Either the parents lowest power state
-is also retention (like is the case with sc7180/sc7280 for usb with cx as parent) or the
-parent makes sure it hands the domain over to another parent (CX to MX in some cases)
-to support retention.
-
-
-
-
-   
+-- 
+2.17.1
 

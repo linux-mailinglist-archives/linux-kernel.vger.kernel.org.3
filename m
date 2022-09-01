@@ -2,132 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6BE25A9C34
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970B05A9C3B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233291AbiIAPvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:51:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        id S234718AbiIAPvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234417AbiIAPvJ (ORCPT
+        with ESMTP id S234654AbiIAPvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:51:09 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC2580E81;
-        Thu,  1 Sep 2022 08:51:07 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id E8EA9201E1;
-        Thu,  1 Sep 2022 15:51:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662047465; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 1 Sep 2022 11:51:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3716BCCA
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:51:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662047473;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=5I0mKqUw3QSCLqCj5YIpAi2jtZ5obLRbYrhgg3fEUoY=;
-        b=U7Un8DCOE4vHaNWAjnV1RHJvIkAJvwVTD1iy5tLgzFzn0yi3st4XwSnjHZ/fW2kX5uI0R+
-        8giwSrL7sQmTu8X13dL0oCRXv81or0G6HiV5h4tVqsSN1kkb7nNO8hOshvQBw2Jv9VtVKb
-        asX++mLhndXWdZAcD15WQ2NnJi/AApA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662047465;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5I0mKqUw3QSCLqCj5YIpAi2jtZ5obLRbYrhgg3fEUoY=;
-        b=Yk5d8GzmcdpIlqYUaOt3CYZpv7xi85ztTzS8BwutP7VVFVQTqz0Tihub+VeK5FtVBlJBXC
-        wJZX9dP1SI+QWQDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D724C13A89;
-        Thu,  1 Sep 2022 15:51:05 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Ux2CNOnUEGNsBAAAMHmgww
-        (envelope-from <jack@suse.cz>); Thu, 01 Sep 2022 15:51:05 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 44971A067C; Thu,  1 Sep 2022 17:51:05 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 17:51:05 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Zhang Yi <yi.zhang@huawei.com>
-Cc:     linux-ext4@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cluster-devel@redhat.com,
-        ntfs3@lists.linux.dev, ocfs2-devel@oss.oracle.com,
-        reiserfs-devel@vger.kernel.org, jack@suse.cz, tytso@mit.edu,
-        akpm@linux-foundation.org, axboe@kernel.dk,
-        viro@zeniv.linux.org.uk, rpeterso@redhat.com, agruenba@redhat.com,
-        almaz.alexandrovich@paragon-software.com, mark@fasheh.com,
-        dushistov@mail.ru, hch@infradead.org, chengzhihao1@huawei.com,
-        yukuai3@huawei.com
-Subject: Re: [PATCH v2 08/14] ocfs2: replace ll_rw_block()
-Message-ID: <20220901155105.q56thxo7hcudwgrx@quack3>
-References: <20220901133505.2510834-1-yi.zhang@huawei.com>
- <20220901133505.2510834-9-yi.zhang@huawei.com>
+        bh=ceLO303KUmrfBpUmDlWW6bfcpSkbAE/shqJJVjKA2W8=;
+        b=SbnDKYkDQcxDIFRyc7dyLbfTgkopZT4KX/sfXAzTDNed56LCSjTbDgVDGeluzDDnhhB8wV
+        fPwCUHojOdXl1BFa1nvjZTPhjlI9NRJJCZsCy8j+FtPd5poVjGN+1wsVr3vx0XRQhNrd9t
+        uAIh98sE3r0h5bdZzE4gzYY4GKAGOs4=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-564-Ai_WT7FFNAuiTWxcwhIvVQ-1; Thu, 01 Sep 2022 11:51:12 -0400
+X-MC-Unique: Ai_WT7FFNAuiTWxcwhIvVQ-1
+Received: by mail-ed1-f71.google.com with SMTP id w19-20020a05640234d300b004482dd03feeso9978918edc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:51:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=ceLO303KUmrfBpUmDlWW6bfcpSkbAE/shqJJVjKA2W8=;
+        b=PAX+up21qe3GTBpVC2Qd0edmfrH23+KefHWypXEE2wI4Tvjq3BHdrZKLox+qfvxOE6
+         6zsPSSvOl9pqKc6qjEyW8NMe05q3VVX+3V1r0ImJL1CfT94Va5kxcpQ08CYy/T0/sWpF
+         bM7g2sFZL94lg5gU722aRnHFYHHJU7ScpqcEKEtEaNgg+oT+WmbeyAjk94KMlTtOublf
+         wP32Lnlp+tL4rherskWZ1BX+Krf4B9oXGlhY8CZvPKp7fCcYQ8k0UPJFhNjAbPpO7zpb
+         Pq0bjSt5k5izb2dOTgQ/Adtf2uueYgwKaL81t1fJSqLguMgJp8YIPtBOASums5Awj2IG
+         Ev1Q==
+X-Gm-Message-State: ACgBeo0Dmt63PPm+TNNaMkx5lP73J+ErTx3BhXPj+1ysYe+Xdf1C7Ktd
+        840ttreOThGV5J4hIk/5miGqqu3O8W2uxPDZBXUvoRXl4Y9n//kVGEyNvgl6fiwtLzWdeWSrH4h
+        eMVGn0G20c+qGG5g67vcM4/JA
+X-Received: by 2002:a17:906:974b:b0:733:10e:b940 with SMTP id o11-20020a170906974b00b00733010eb940mr24299164ejy.326.1662047471324;
+        Thu, 01 Sep 2022 08:51:11 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR53q/rSRkk/xrOhhO7q/AleiPEgKRnSsOD8nQB0CtaGMstmT1apyYCnltjwPvPvF8H99yYDqA==
+X-Received: by 2002:a17:906:974b:b0:733:10e:b940 with SMTP id o11-20020a170906974b00b00733010eb940mr24299146ejy.326.1662047471079;
+        Thu, 01 Sep 2022 08:51:11 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id eh22-20020a0564020f9600b0044792480994sm1525249edb.68.2022.09.01.08.51.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 08:51:10 -0700 (PDT)
+Message-ID: <42bb615d-995a-5bcb-d481-f0d6054d4398@redhat.com>
+Date:   Thu, 1 Sep 2022 17:51:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901133505.2510834-9-yi.zhang@huawei.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1 1/1] platform/x86: p2sb: Fix UAF when caller uses
+ resource name
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Gross <markgross@kernel.org>,
+        kernel test robot <oliver.sang@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20220901113406.65876-1-andriy.shevchenko@linux.intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220901113406.65876-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 01-09-22 21:34:59, Zhang Yi wrote:
-> ll_rw_block() is not safe for the sync read path because it cannot
-> guarantee that submitting read IO if the buffer has been locked. We
-> could get false positive EIO after wait_on_buffer() if the buffer has
-> been locked by others. So stop using ll_rw_block() in ocfs2.
+Hi,
+
+On 9/1/22 13:34, Andy Shevchenko wrote:
+> We have to copy only selected fields from the original resource.
+> Because a PCI device will be removed immediately after getting
+> its resources, we may not use any allocated data, hence we may
+> not copy any pointers.
 > 
-> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
+> Consider the following scenario:
+> 
+>   1/ a caller of p2sb_bar() gets the resource;
+> 
+>   2/ the resource has been copied by platform_device_add_data()
+>      in order to create a platform device;
+> 
+>   3/ the platform device creation will call for the device driver's
+>      ->probe() as soon as a match found;
+> 
+>   4/ the ->probe() takes given resources (see 2/) and tries to
+>      access one of its field, i.e. 'name', in the
+>      __devm_ioremap_resource() to create a pretty looking output;
+> 
+>   5/ but the 'name' is a dangling pointer because p2sb_bar()
+>      removed a PCI device, which 'name' had been copied to
+>      the caller's memory.
+> 
+>   6/ UAF (Use-After-Free) as a result.
+> 
+> Kudos to Mika for the initial analisys of the issue.
+> 
+> Fixes: 9745fb07474f ("platform/x86/intel: Add Primary to Sideband (P2SB) bridge support")
+> Reported-by: kernel test robot <oliver.sang@intel.com>
+> Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Link: https://lore.kernel.org/linux-i2c/YvPCbnKqDiL2XEKp@xsang-OptiPlex-9020/
+> Link: https://lore.kernel.org/linux-i2c/YtjAswDKfiuDfWYs@xsang-OptiPlex-9020/
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Looks good to me. Feel free to add:
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-								Honza
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
+
+Regards,
+
+Hans
+
+
 
 > ---
->  fs/ocfs2/aops.c  | 2 +-
->  fs/ocfs2/super.c | 4 +---
->  2 files changed, 2 insertions(+), 4 deletions(-)
+>  drivers/platform/x86/p2sb.c | 18 ++++++++++++++++--
+>  1 file changed, 16 insertions(+), 2 deletions(-)
 > 
-> diff --git a/fs/ocfs2/aops.c b/fs/ocfs2/aops.c
-> index af4157f61927..1d65f6ef00ca 100644
-> --- a/fs/ocfs2/aops.c
-> +++ b/fs/ocfs2/aops.c
-> @@ -636,7 +636,7 @@ int ocfs2_map_page_blocks(struct page *page, u64 *p_blkno,
->  			   !buffer_new(bh) &&
->  			   ocfs2_should_read_blk(inode, page, block_start) &&
->  			   (block_start < from || block_end > to)) {
-> -			ll_rw_block(REQ_OP_READ, 1, &bh);
-> +			bh_read_nowait(bh, 0);
->  			*wait_bh++=bh;
->  		}
+> diff --git a/drivers/platform/x86/p2sb.c b/drivers/platform/x86/p2sb.c
+> index fb2e141f3eb8..384d0962ae93 100644
+> --- a/drivers/platform/x86/p2sb.c
+> +++ b/drivers/platform/x86/p2sb.c
+> @@ -42,10 +42,24 @@ static int p2sb_get_devfn(unsigned int *devfn)
+>  	return 0;
+>  }
 >  
-> diff --git a/fs/ocfs2/super.c b/fs/ocfs2/super.c
-> index e2cc9eec287c..26b4c2bfee49 100644
-> --- a/fs/ocfs2/super.c
-> +++ b/fs/ocfs2/super.c
-> @@ -1764,9 +1764,7 @@ static int ocfs2_get_sector(struct super_block *sb,
->  	if (!buffer_dirty(*bh))
->  		clear_buffer_uptodate(*bh);
->  	unlock_buffer(*bh);
-> -	ll_rw_block(REQ_OP_READ, 1, bh);
-> -	wait_on_buffer(*bh);
-> -	if (!buffer_uptodate(*bh)) {
-> +	if (bh_read(*bh, 0) < 0) {
->  		mlog_errno(-EIO);
->  		brelse(*bh);
->  		*bh = NULL;
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> +/* Copy resource from the first BAR of the device in question */
+>  static int p2sb_read_bar0(struct pci_dev *pdev, struct resource *mem)
+>  {
+> -	/* Copy resource from the first BAR of the device in question */
+> -	*mem = pdev->resource[0];
+> +	struct resource *bar0 = &pdev->resource[0];
+> +
+> +	/* Make sure we have no dangling pointers in the output */
+> +	memset(mem, 0, sizeof(*mem));
+> +
+> +	/*
+> +	 * We copy only selected fields from the original resource.
+> +	 * Because a PCI device will be removed soon, we may not use
+> +	 * any allocated data, hence we may not copy any pointers.
+> +	 */
+> +	mem->start = bar0->start;
+> +	mem->end = bar0->end;
+> +	mem->flags = bar0->flags;
+> +	mem->desc = bar0->desc;
+> +
+>  	return 0;
+>  }
+>  
+

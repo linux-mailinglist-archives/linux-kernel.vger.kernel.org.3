@@ -2,166 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAD675A90D3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF6035A90EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:44:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234129AbiIAHnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
+        id S234230AbiIAHoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233593AbiIAHnI (ORCPT
+        with ESMTP id S233898AbiIAHnH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:43:08 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7358125BB4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:43:06 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id j9-20020a17090a3e0900b001fd9568b117so1716899pjc.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:43:06 -0700 (PDT)
+        Thu, 1 Sep 2022 03:43:07 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC105125BAC;
+        Thu,  1 Sep 2022 00:43:04 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id h188so310531pgc.12;
+        Thu, 01 Sep 2022 00:43:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=xAasCrPyDcJjNZEv/g1ZViJ/obKRI3obPhi8OuWR/Jg=;
-        b=fTQzVN2+a+Qmud5WL/Hkyqm4dpv+bd0N/1hRwrASuIUQ/9dV5WH0AyeQ+shXU/3C70
-         C5L98tomT5S4qR8eUdya9eEH2+7GhhLAC6Z2r9l7EAk5kmdavbx5VXxKhYw0DtMYb9lh
-         y+Ccr0qtQJDj1sJebYGpQV7l1qj4bMFLSUEMrMcuB45js1fxldKtTxv00Udx9P+2krPk
-         yB4crUqo2OhwKOqjckLMjf2bRxsd8zf9freqzuhk0Lfi3ERHz6gmfEdxl5oqqt1cnAzq
-         4aE+4nTrco/e1sKWleF24HR1JiEsKxipXAmN/+aIfV5FIoEkw3yf+8laRNiEm+y/3TaP
-         MaiA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=bHV5ouZifV/jcwNOTNxjisEeKz6ACGz2OJcHGOBwl+A=;
+        b=O8My5ZUfglGldxoE5TU9Z4/cLx6KOSf+Zqg3yAsgEZt447wueyM2TNfnvo0y/tQrq5
+         ECbCehiGfKz0Rng39PXFSeD2yz5jRj6w73bCGT3mD800BWpYCPpyhhgmKIvWkx3kPcRF
+         5qcOz8RqSilp3LWMrXMqD/RbbWPOgMwVVjLyQACys95YZmxYLqSkZHNNvhFVSquhTWMK
+         46tb6AOpCGvFAiLpeRwpHT+INxcz7xXAdvXoC9weBWxvia1zouuWiD85ScDtwbItKJAa
+         HoqaM3Twx4ks4SvtmCt+fhCKHxjZMHEbX29N518ovwwuql81xlUEX0oY3rWedEXg7FFo
+         O/WQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=xAasCrPyDcJjNZEv/g1ZViJ/obKRI3obPhi8OuWR/Jg=;
-        b=6gmlak7ITIqvTAJyBO4e4kl8G/Ztl8FXeLqEoylJeVe+ub60+0Fe8utsQjIhfKwe4O
-         ORhto2c8i2PvWVOzQcMVD6mfz9QOFuNfj+8XZw4d0HVbokSAVQb7t2MGZEQ+EfJrTri8
-         a7CsYzIrJANej+bzBgvc8Vj9Hn/6iwdYjnAFZWs5BKutLOxL141/1q+cgCZqadtJ2tmr
-         R4CQxHB/j9O+kSMaT9FJsA2d0tmqqDtlVpJ4HTwovIyRpCRQqEkNC/faWDpe7Kla/HB2
-         GdE6FUOp91r0eQy4p13JT6lmcbkebXt985nhepDWEx5MD37f+mSkHwBDd+DEkAh/G5LQ
-         KPuQ==
-X-Gm-Message-State: ACgBeo1d3BhBAP9DR+0E8qKuXh8ffJmYQnOPqKqAY33tWD2MBc1k/b0x
-        e3yJ0VTAEKEoyb68iyH9hfi4IkFBc8Y4ZXeqxBpUzLgunrSnbw==
-X-Google-Smtp-Source: AA6agR51xRKfsuWzY7TjERjWz9bBX6piO4b74yFoMwPCvR8u0J7qUSxcNyUHR07wO2nUzAieCaeTmJ9wR4tmzNizLgQ=
-X-Received: by 2002:a17:902:d505:b0:175:5313:2a3f with SMTP id
- b5-20020a170902d50500b0017553132a3fmr3939626plg.70.1662018186293; Thu, 01 Sep
- 2022 00:43:06 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=bHV5ouZifV/jcwNOTNxjisEeKz6ACGz2OJcHGOBwl+A=;
+        b=giGcVsVowlUhhXr39zlyDOa7gNbqfwNdHtmMGHTI4mTcovRdfDi3TOBdLp0NzRXAAu
+         gpyPGlc7CaGl7Llj5TFK5pcZEU+ofUo0MpJJuAsYOD1P/WBv6dLz1eRoJaMiqMNnfUUs
+         rsrkPBZJ4leXI3DPpd9VYAHgUR/aIfwOpT1h7m2XYHdNCFpRlAon8QX330xRzKWfX3US
+         kplGe9ody7sVz0kYcOeB7eM/zPsDcj0esd9FgxZ71K0pHLlhdc+dQGkLPqHg0HSfIyk0
+         CRko/yC+BiFVb/9/ZGh1FDZtCSr4b42gaTg/i4U0+F58+sEJuxdo5nZZ8aOZT//94Zdd
+         h05w==
+X-Gm-Message-State: ACgBeo1CjhFH2pS2FISXyloLxgHihClM4i/dn12gw35Gf0KwGt8R25pC
+        5HGiI/4f0ibaVkWx+FWTsNr/WwMTTyE=
+X-Google-Smtp-Source: AA6agR7WE2VsK4EzSu4PSFqO/PYkg9RDnbC8duVg/ZZphtIPEZOiQtTFszLHs9JOF2amYqlGlR7GWw==
+X-Received: by 2002:a63:8b4c:0:b0:42c:65f5:29c3 with SMTP id j73-20020a638b4c000000b0042c65f529c3mr12581184pge.397.1662018183584;
+        Thu, 01 Sep 2022 00:43:03 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id a85-20020a621a58000000b00537bdc9c2f2sm13041642pfa.170.2022.09.01.00.43.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 00:43:03 -0700 (PDT)
+From:   cgel.zte@gmail.com
+X-Google-Original-From: ye.xingchen@zte.com.cn
+To:     miklos@szeredi.hu
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Subject: [PATCH linux-next] fuse: Remove the unneeded result variable
+Date:   Thu,  1 Sep 2022 07:42:59 +0000
+Message-Id: <20220901074259.313062-1-ye.xingchen@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220830100700.344594-1-sudeep.holla@arm.com> <20220830100700.344594-2-sudeep.holla@arm.com>
-In-Reply-To: <20220830100700.344594-2-sudeep.holla@arm.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Thu, 1 Sep 2022 09:42:55 +0200
-Message-ID: <CAHUa44E8q27hy2i+sckuWd5GahGg=QxgLUWLAMQwCrxhUGNrNQ@mail.gmail.com>
-Subject: Re: [PATCH 1/9] firmware: arm_ffa: Add pointer to the ffa_dev_ops in
- struct ffa_dev
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Marc Bonnici <marc.bonnici@arm.com>,
-        Achin Gupta <achin.gupta@arm.com>,
-        Valentin Laurent <valentin.laurent@trustonic.com>,
-        Lukas Hanel <lukas.hanel@trustonic.com>,
-        Coboy Chen <coboy.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 12:07 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> Currently ffa_dev_ops_get() is the way to fetch the ffa_dev_ops pointer.
-> It checks if the ffa_dev structure pointer is valid before returning the
-> ffa_dev_ops pointer.
->
-> Instead, the pointer can be made part of the ffa_dev structure and since
-> the core driver is incharge of creating ffa_device for each identified
-> partition, there is no need to check for the validity explicitly if the
-> pointer is embedded in the structure.
->
-> Add the pointer to the ffa_dev_ops in the ffa_dev structure itself and
-> initialise the same as part of creation of the device.
->
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  drivers/firmware/arm_ffa/bus.c    | 4 +++-
->  drivers/firmware/arm_ffa/driver.c | 2 +-
->  include/linux/arm_ffa.h           | 7 +++++--
->  3 files changed, 9 insertions(+), 4 deletions(-)
+From: ye xingchen <ye.xingchen@zte.com.cn>
 
-Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+Return the value fuse_dev_release() directly instead of storing it in
+another redundant variable.
 
->
-> diff --git a/drivers/firmware/arm_ffa/bus.c b/drivers/firmware/arm_ffa/bus.c
-> index 641a91819088..69328041fbc3 100644
-> --- a/drivers/firmware/arm_ffa/bus.c
-> +++ b/drivers/firmware/arm_ffa/bus.c
-> @@ -167,7 +167,8 @@ bool ffa_device_is_valid(struct ffa_device *ffa_dev)
->         return valid;
->  }
->
-> -struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id)
-> +struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
-> +                                      const struct ffa_dev_ops *ops)
->  {
->         int ret;
->         struct device *dev;
-> @@ -183,6 +184,7 @@ struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id)
->         dev_set_name(&ffa_dev->dev, "arm-ffa-%04x", vm_id);
->
->         ffa_dev->vm_id = vm_id;
-> +       ffa_dev->ops = ops;
->         uuid_copy(&ffa_dev->uuid, uuid);
->
->         ret = device_register(&ffa_dev->dev);
-> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-> index ec731e9e942b..213665e5ad0e 100644
-> --- a/drivers/firmware/arm_ffa/driver.c
-> +++ b/drivers/firmware/arm_ffa/driver.c
-> @@ -688,7 +688,7 @@ static void ffa_setup_partitions(void)
->                  * as part of the discovery API, we need to pass the
->                  * discovered UUID here instead.
->                  */
-> -               ffa_dev = ffa_device_register(&uuid_null, tpbuf->id);
-> +               ffa_dev = ffa_device_register(&uuid_null, tpbuf->id, &ffa_ops);
->                 if (!ffa_dev) {
->                         pr_err("%s: failed to register partition ID 0x%x\n",
->                                __func__, tpbuf->id);
-> diff --git a/include/linux/arm_ffa.h b/include/linux/arm_ffa.h
-> index e5c76c1ef9ed..91b47e42b73d 100644
-> --- a/include/linux/arm_ffa.h
-> +++ b/include/linux/arm_ffa.h
-> @@ -17,6 +17,7 @@ struct ffa_device {
->         bool mode_32bit;
->         uuid_t uuid;
->         struct device dev;
-> +       const struct ffa_dev_ops *ops;
->  };
->
->  #define to_ffa_dev(d) container_of(d, struct ffa_device, dev)
-> @@ -47,7 +48,8 @@ static inline void *ffa_dev_get_drvdata(struct ffa_device *fdev)
->  }
->
->  #if IS_REACHABLE(CONFIG_ARM_FFA_TRANSPORT)
-> -struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id);
-> +struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
-> +                                      const struct ffa_dev_ops *ops);
->  void ffa_device_unregister(struct ffa_device *ffa_dev);
->  int ffa_driver_register(struct ffa_driver *driver, struct module *owner,
->                         const char *mod_name);
-> @@ -57,7 +59,8 @@ const struct ffa_dev_ops *ffa_dev_ops_get(struct ffa_device *dev);
->
->  #else
->  static inline
-> -struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id)
-> +struct ffa_device *ffa_device_register(const uuid_t *uuid, int vm_id,
-> +                                      const struct ffa_dev_ops *ops)
->  {
->         return NULL;
->  }
-> --
-> 2.37.2
->
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+---
+ fs/fuse/cuse.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/fs/fuse/cuse.c b/fs/fuse/cuse.c
+index c7d882a9fe33..a06fbb1a8a5b 100644
+--- a/fs/fuse/cuse.c
++++ b/fs/fuse/cuse.c
+@@ -545,7 +545,6 @@ static int cuse_channel_release(struct inode *inode, struct file *file)
+ {
+ 	struct fuse_dev *fud = file->private_data;
+ 	struct cuse_conn *cc = fc_to_cc(fud->fc);
+-	int rc;
+ 
+ 	/* remove from the conntbl, no more access from this point on */
+ 	mutex_lock(&cuse_lock);
+@@ -560,9 +559,7 @@ static int cuse_channel_release(struct inode *inode, struct file *file)
+ 		cdev_del(cc->cdev);
+ 	}
+ 
+-	rc = fuse_dev_release(inode, file);	/* puts the base reference */
+-
+-	return rc;
++	return fuse_dev_release(inode, file);
+ }
+ 
+ static struct file_operations cuse_channel_fops; /* initialized during init */
+-- 
+2.25.1

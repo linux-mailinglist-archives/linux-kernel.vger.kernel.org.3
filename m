@@ -2,163 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F4CC5A9451
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64B25A946C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:24:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233936AbiIAKX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
+        id S233070AbiIAKXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233918AbiIAKXX (ORCPT
+        with ESMTP id S233943AbiIAKXb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:23:23 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A031360A4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:23:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662027802; x=1693563802;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=jh6f2qse35WzAgNQ5WBVrMVUwxK7H1xPD4xrnVBxlDA=;
-  b=GBP4xnm6WlIzsOudwphz2o2jQfUIABuE40nB0jariyDBCu+PxGz6STpG
-   1UlLLHhCfn5dCt8qxXpjKP6s5G2npAfRCvRO0OidNsYF6OVoQAzt0Te+x
-   X83Lp+JAnM1vBkJv6doMnMiKmWl1TvEr5soghIrMdG9YeydipZHrUyQaG
-   +AF8u4QE1GGkjxOYo3aetjhXouLtBvL30f0x+soyk3O7GPHYbm263NQOY
-   7a437IhtqeDAftdNfj9MqON2diOcR+Dc7p5AwtiZtbjsljK92cEj/B10A
-   VxYcHktZReUao0Rqtu0MfJYHRu9wzfuuzR7Z1ZV7s0ie2b6uocw4/ctZ6
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="357396137"
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="357396137"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 03:23:21 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="563405026"
-Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 01 Sep 2022 03:23:20 -0700
-Received: from kbuild by b138c9e8658c with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oThLz-0000AR-2U;
-        Thu, 01 Sep 2022 10:23:19 +0000
-Date:   Thu, 01 Sep 2022 18:22:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:x86/misc] BUILD SUCCESS
- 7987448ffc34f41590bae5b28cd23ca0b8c93291
-Message-ID: <631087e8.AQN9QJzOy6wUjqAQ%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Thu, 1 Sep 2022 06:23:31 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7FD1360AA;
+        Thu,  1 Sep 2022 03:23:30 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 193so7948829ybc.10;
+        Thu, 01 Sep 2022 03:23:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=zuIt814uy8cH66N+75Ycqn2FRBkniQjebN0QWbVfWcw=;
+        b=S3g3LWq85ULTjqeOQKMoyjkoDB34kTgQTpXBC5dt+O/7OmNyhkfXpin84jkIR37dfT
+         8H7K1rvi/OEysJAj6cbE+dChbxEx5lPWOrDisPe0moP/KCmP7/8sC3PFgm3cBc9jqpYB
+         gC2i2vlaI69tOmgt/3z3AlJ2o6kdwP3DQndybSYaO74gzXvFxE7gnGcFwE8XrttAXER6
+         NFkGbFAO/mmQN+3S3Wsnp29MffqpEPZ25qiommPsr3vlvjAQbBU4yb4X/59L6EwTovge
+         BK8ukxe0YAsneVoIRbvb6SmIHGNfp81bbOjSoCxdLRNyDPVdm2EEeyEgOQKwRr2FCwpd
+         +qsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=zuIt814uy8cH66N+75Ycqn2FRBkniQjebN0QWbVfWcw=;
+        b=AwMLa26sx12+ZOeNcCzfMTfqNMTSc8fhUZPovwNUavpOTJK6wWVhRcRNRCQCSBH0pY
+         Y/eWzhhM5l1vJYT2ITDH3U/on4nN1s5rF7KE1JsRO0ZdZjKaDTNG70P8f8bOOoi0qOlj
+         rogptLkU13eGB7qZ0Af0LRxROHw3X3/EaVgRsoYKYOz0tmvAAxpxML5lyt61vwpQf/Xo
+         nYayNumk4CMOCwCVh4U8YCWjVET4+ZfpCmg0ToJUa1A3FR/kKdKJpO8KRoKFopRhWAwL
+         6YNNVEzhP9zTv56cI4NZxOm2OegPKMjNBdCbeVTyDyH21n41Ohdw3tqFmynEMD4WKn75
+         w7lg==
+X-Gm-Message-State: ACgBeo3RQDI/vsdA0hxLlFlyCcIZ6pnHUxyPJ2YD7B8wjpLOjrgIx0Pq
+        OvNQEcANZ893W0p9xGBHO0aqiwh8rZr60kbTbaw=
+X-Google-Smtp-Source: AA6agR5QKMlivKE09ufpKBkhb+dXPLWiv4LXo3V9uv2CGz8tRLYiYIO9Y5CKTKiYsO9HUg82jjatDHUkzn44LiPpBAc=
+X-Received: by 2002:a5b:845:0:b0:683:6ed7:b3b6 with SMTP id
+ v5-20020a5b0845000000b006836ed7b3b6mr18096646ybq.183.1662027809868; Thu, 01
+ Sep 2022 03:23:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220829105804.609007228@linuxfoundation.org> <CADVatmOLoaGgAW951JqEk3v88EA7mn3qur84Xd30QJWP21+eVg@mail.gmail.com>
+ <YxB/ZPFEQG9zS+wa@kroah.com>
+In-Reply-To: <YxB/ZPFEQG9zS+wa@kroah.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Thu, 1 Sep 2022 11:22:53 +0100
+Message-ID: <CADVatmPxfdEA3yi9KGHtvmQA2n-mA=ekBidqU+keGrBsL+rFeQ@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/136] 5.15.64-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/misc
-branch HEAD: 7987448ffc34f41590bae5b28cd23ca0b8c93291  x86/Kconfig: Specify idle=poll instead of no-hlt
+On Thu, Sep 1, 2022 at 10:46 AM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Mon, Aug 29, 2022 at 09:11:28PM +0100, Sudip Mukherjee wrote:
+> > Hi Greg,
+> >
+> > On Mon, Aug 29, 2022 at 12:00 PM Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org> wrote:
+> > >
+> > > This is the start of the stable review cycle for the 5.15.64 release.
+> > > There are 136 patches in this series, all will be posted as a response
+> > > to this one.  If anyone has any issues with these being applied, please
+> > > let me know.
+> > >
+> > > Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
+> > > Anything received after that time might be too late.
+> >
+> > My builds are still running, but just an initial report for gcc-12. (I
+> > know v5.15.y still does not build completely with gcc-12).
+> >
+> > x86_64 and arm64 allmodconfig build fails with gcc-12, with the error:
+> >
 
-elapsed time: 728m
+<snip>
 
-configs tested: 81
-configs skipped: 78
+> >
+> > Introduced in v5.15.61 due to 2711bedab26c ("Bluetooth: L2CAP: Fix
+> > l2cap_global_chan_by_psm regression").
+> > But v5.19.y and mainline does not show the build failure as they also
+> > have 41b7a347bf14 ("powerpc: Book3S 64-bit outline-only KASAN
+> > support").
+>
+> Ick, ok, what to do here?  I can't really backport 41b7a347bf14 to 5.15
+> easily as it's huge and a new feature.  Any other ideas?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Yeah.
+https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=b840304fb46cdf7012722f456bce06f151b3e81b
+will fix the it for mips and csky failure in mainline and v5.19.y. And
+I just verified that it will fix for powerpc also in v5.15.y. So, we
+just need to wait for now.
 
-gcc tested configs:
-x86_64                              defconfig
-x86_64                               rhel-8.3
-x86_64                           allyesconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-x86_64                        randconfig-a006
-i386                                defconfig
-i386                          randconfig-a014
-i386                          randconfig-a012
-i386                          randconfig-a016
-x86_64                    rhel-8.3-kselftests
-i386                             allyesconfig
-x86_64                          rhel-8.3-func
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                         rhel-8.3-kunit
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a015
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-um                           x86_64_defconfig
-um                             i386_defconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-s390                 randconfig-r044-20220831
-riscv                randconfig-r042-20220831
-arc                           tb10x_defconfig
-arm                       multi_v4t_defconfig
-parisc64                            defconfig
-powerpc                      cm5200_defconfig
-sh                   sh7724_generic_defconfig
-sparc                       sparc32_defconfig
-sh                          rsk7203_defconfig
-sh                               alldefconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-arm64                            allyesconfig
-arm                                 defconfig
-arm                              allyesconfig
-powerpc                      pcm030_defconfig
-sh                   rts7751r2dplus_defconfig
-powerpc                     rainier_defconfig
-arm                      jornada720_defconfig
-csky                              allnoconfig
-alpha                             allnoconfig
-arc                               allnoconfig
-riscv                             allnoconfig
-mips                         cobalt_defconfig
-mips                           xway_defconfig
-xtensa                         virt_defconfig
-powerpc                        warp_defconfig
-arm                        multi_v7_defconfig
-arm64                            alldefconfig
-i386                          randconfig-c001
-mips                      loongson3_defconfig
-sh                          r7780mp_defconfig
-sh                           se7705_defconfig
-sh                          lboxre2_defconfig
-
-clang tested configs:
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a003
-i386                          randconfig-a013
-i386                          randconfig-a011
-x86_64                        randconfig-a014
-i386                          randconfig-a015
-x86_64                        randconfig-a016
-x86_64                        randconfig-a012
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-hexagon              randconfig-r045-20220831
-hexagon              randconfig-r041-20220831
-arm                         socfpga_defconfig
-arm                        vexpress_defconfig
-x86_64                        randconfig-k001
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards
+Sudip

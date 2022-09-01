@@ -2,129 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3B75A9BD3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:39:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 599BF5A9BDE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:40:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232448AbiIAPjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:39:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S234460AbiIAPkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233249AbiIAPi7 (ORCPT
+        with ESMTP id S234399AbiIAPkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:38:59 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3050E7B2A6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:38:57 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oTmHO-0005mr-3g; Thu, 01 Sep 2022 17:38:54 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <apatel@ventanamicro.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>
-Subject: Re: [PATCH v2 3/4] RISC-V: Implement arch specific PMEM APIs
-Date:   Thu, 01 Sep 2022 17:38:53 +0200
-Message-ID: <13199249.VsHLxoZxqI@diego>
-In-Reply-To: <20220830044642.566769-4-apatel@ventanamicro.com>
-References: <20220830044642.566769-1-apatel@ventanamicro.com> <20220830044642.566769-4-apatel@ventanamicro.com>
+        Thu, 1 Sep 2022 11:40:05 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFC1713E8A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:40:00 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id y197so9155334yby.13
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=3cE853tliEpPWpHjkdjBsm55bguibJ1NOZ2l+ytqvIs=;
+        b=CNR1NtmysqZN43aw5siPQxQB15yoyKxn0UtAt1eFrCVSTrqVXrck0MJQ5rF0EE8Iqy
+         FECYDZNtaf4xFqIfRFeGfncBEzgsXCtgfPFQ9NnPdVRFkAf7PTRy+isa8Q/3u9s63jFF
+         Bkv08GJGttRtk8ihR4u9G9sfgOvnbQBOURRSewgh7NzkPEQgVbW8k9NY5ToRU0fk16sO
+         KDQeEwKDvn2AZgblfu2tmDll7zNnUGlKeUzAPAS8k31d+CGKhmmtzNe2LpeGY2e9A3T2
+         OyHR4dbvshaM9SSwkyP8U36LLaknoM2MMTtTCDpp5f48zXa2ecNcsCYbrEUZ3+gtqLOE
+         C5XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=3cE853tliEpPWpHjkdjBsm55bguibJ1NOZ2l+ytqvIs=;
+        b=ZsZ+jDvIrxQM3jggHAkUmz8FS1bFbwlpz4m2NWoQbUt2Q8l9HA7Wii11Bg7xfLGAwn
+         OpQdy1OOZGk+iwlbkqr+CvO49xGE8JZ4DmAWDZ82w7YvBdqczF8h7kXTMyZQ3tdIBzyS
+         f07Mk47zDHFfc2Gk8XbuTo25E8t0uzRGrt8pdusj4gqZvE8r0wGe/tOUqu4GfhbC3Maa
+         n/Akc6HbdC+nSBaaXrOI+626L/Zzoz3dy2Z0H1PQdBEORG3s6dqW2t0deuiWuWAiL8wz
+         TAWYHms5AbusapjeknHZMB8s09wF4BoOvzkXT6BoU5kPyZqebZK9zMfxrHldpF2DQSuH
+         XiiQ==
+X-Gm-Message-State: ACgBeo0swB0Ih2Kie66ZHdiFKRkpgZd9Cp9XFqhHkBNZ5+ir1je5UVB0
+        PI4T5KbikMtrbZbT7GdyzCjPT3aHC+cI3hwv4DwWDg==
+X-Google-Smtp-Source: AA6agR5aFHV5oWy3bOo2eVd0PIajtlCyUMrAF/y9Oh7oqrhvwnrJM9jnSE6k3ZmfRfh8uK89oJZlft1zkj3aGLobpWw=
+X-Received: by 2002:a25:b983:0:b0:695:d8b4:a5a3 with SMTP id
+ r3-20020a25b983000000b00695d8b4a5a3mr20405655ybg.553.1662046799565; Thu, 01
+ Sep 2022 08:39:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+ <404e947a-e1b2-0fae-8b4f-6f2e3ba6328d@redhat.com> <20220901142345.agkfp2d5lijdp6pt@moria.home.lan>
+ <78e55029-0eaf-b4b3-7e86-1086b97c60c6@redhat.com>
+In-Reply-To: <78e55029-0eaf-b4b3-7e86-1086b97c60c6@redhat.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 1 Sep 2022 08:39:48 -0700
+Message-ID: <CAJuCfpEgWx4mmiSCvcMOF0+Luyw1w-hVyLV-cvhbxnwsN6qg0g@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Anup,
+On Thu, Sep 1, 2022 at 8:07 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> On 01.09.22 16:23, Kent Overstreet wrote:
+> > On Thu, Sep 01, 2022 at 10:05:03AM +0200, David Hildenbrand wrote:
+> >> On 31.08.22 21:01, Kent Overstreet wrote:
+> >>> On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
+> >>>> On Wed 31-08-22 11:19:48, Mel Gorman wrote:
+> >>>>> Whatever asking for an explanation as to why equivalent functionality
+> >>>>> cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
+> >>>>
+> >>>> Fully agreed and this is especially true for a change this size
+> >>>> 77 files changed, 3406 insertions(+), 703 deletions(-)
+> >>>
+> >>> In the case of memory allocation accounting, you flat cannot do this with ftrace
+> >>> - you could maybe do a janky version that isn't fully accurate, much slower,
+> >>> more complicated for the developer to understand and debug and more complicated
+> >>> for the end user.
+> >>>
+> >>> But please, I invite anyone who's actually been doing this with ftrace to
+> >>> demonstrate otherwise.
+> >>>
+> >>> Ftrace just isn't the right tool for the job here - we're talking about adding
+> >>> per callsite accounting to some of the fastest fast paths in the kernel.
+> >>>
+> >>> And the size of the changes for memory allocation accounting are much more
+> >>> reasonable:
+> >>>  33 files changed, 623 insertions(+), 99 deletions(-)
+> >>>
+> >>> The code tagging library should exist anyways, it's been open coded half a dozen
+> >>> times in the kernel already.
+> >>
+> >> Hi Kent,
+> >>
+> >> independent of the other discussions, if it's open coded already, does
+> >> it make sense to factor that already-open-coded part out independently
+> >> of the remainder of the full series here?
+> >
+> > It's discussed in the cover letter, that is exactly how the patch series is
+> > structured.
+>
+> Skimming over the patches (that I was CCed on) and skimming over the
+> cover letter, I got the impression that everything after patch 7 is
+> introducing something new instead of refactoring something out.
 
-Am Dienstag, 30. August 2022, 06:46:41 CEST schrieb Anup Patel:
-> The NVDIMM PMEM driver expects arch specific APIs for cache maintenance
-> and if arch does not provide these APIs then NVDIMM PMEM driver will
-> always use MEMREMAP_WT to map persistent memory which in-turn maps as
-> UC memory type defined by the RISC-V Svpbmt specification.
-> 
-> Now that the Svpbmt and Zicbom support is available in RISC-V kernel,
-> we implement PMEM APIs using ALT_CMO_OP() macros so that the NVDIMM
-> PMEM driver can use MEMREMAP_WB to map persistent memory.
+Hi David,
+Yes, you are right, the RFC does incorporate lots of parts which can
+be considered separately. They are sent together to present the
+overall scope of the proposal but I do intend to send them separately
+once we decide if it's worth working on.
+Thanks,
+Suren.
 
-Zicbom is detected at runtime, though that kconfig setting changes the
-behaviour for the memremap-type at compile-time. So what happens on
-systems not using zicbom (or another cmo-variant) ?
-
-
-Heiko
-
-> Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/Kconfig     |  1 +
->  arch/riscv/mm/Makefile |  1 +
->  arch/riscv/mm/pmem.c   | 21 +++++++++++++++++++++
->  3 files changed, 23 insertions(+)
->  create mode 100644 arch/riscv/mm/pmem.c
-> 
-> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-> index 0ebd8da388d8..37d6370d29c3 100644
-> --- a/arch/riscv/Kconfig
-> +++ b/arch/riscv/Kconfig
-> @@ -25,6 +25,7 @@ config RISCV
->  	select ARCH_HAS_GIGANTIC_PAGE
->  	select ARCH_HAS_KCOV
->  	select ARCH_HAS_MMIOWB
-> +	select ARCH_HAS_PMEM_API
->  	select ARCH_HAS_PTE_SPECIAL
->  	select ARCH_HAS_SET_DIRECT_MAP if MMU
->  	select ARCH_HAS_SET_MEMORY if MMU
-> diff --git a/arch/riscv/mm/Makefile b/arch/riscv/mm/Makefile
-> index d76aabf4b94d..3b368e547f83 100644
-> --- a/arch/riscv/mm/Makefile
-> +++ b/arch/riscv/mm/Makefile
-> @@ -31,3 +31,4 @@ endif
->  
->  obj-$(CONFIG_DEBUG_VIRTUAL) += physaddr.o
->  obj-$(CONFIG_RISCV_DMA_NONCOHERENT) += dma-noncoherent.o
-> +obj-$(CONFIG_ARCH_HAS_PMEM_API) += pmem.o
-> diff --git a/arch/riscv/mm/pmem.c b/arch/riscv/mm/pmem.c
-> new file mode 100644
-> index 000000000000..089df92ae876
-> --- /dev/null
-> +++ b/arch/riscv/mm/pmem.c
-> @@ -0,0 +1,21 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Ventana Micro Systems Inc.
-> + */
-> +
-> +#include <linux/export.h>
-> +#include <linux/libnvdimm.h>
-> +
-> +#include <asm/cacheflush.h>
-> +
-> +void arch_wb_cache_pmem(void *addr, size_t size)
-> +{
-> +	ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size);
-> +}
-> +EXPORT_SYMBOL_GPL(arch_wb_cache_pmem);
-> +
-> +void arch_invalidate_pmem(void *addr, size_t size)
-> +{
-> +	ALT_CMO_OP(inval, addr, size, riscv_cbom_block_size);
-> +}
-> +EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
-> 
-
-
-
-
+>
+> >
+> >> [I didn't immediately spot if this series also attempts already to
+> >> replace that open-coded part]
+> >
+> > Uh huh.
+> >
+> > Honestly, some days it feels like lkml is just as bad as slashdot, with people
+> > wanting to get in their two cents without actually reading...
+>
+> ... and of course you had to reply like that. I should just have learned
+> from my last upstream experience with you and kept you on my spam list.
+>
+> Thanks, bye
+>
+> --
+> Thanks,
+>
+> David / dhildenb
+>

@@ -2,180 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40475A9215
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:29:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 219115A921A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:31:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiIAI3p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:29:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47358 "EHLO
+        id S233373AbiIAIbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 04:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiIAI3m (ORCPT
+        with ESMTP id S229798AbiIAIbK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:29:42 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C71061243EE
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:29:37 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id j5so12542568plj.5
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 01:29:37 -0700 (PDT)
+        Thu, 1 Sep 2022 04:31:10 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F091257E5
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:31:10 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id q3so13235107pjg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 01:31:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date;
-        bh=Z8mNRx0q7JkHyItbYSH6ZMDmLisieuEpSm8lhGlJd7Y=;
-        b=M/zIvRwXEziAmG7s8UKFmRMZRr3Tec5uiWycNvfqiGrKkEL1QoRfWCquYsc1vYdEnC
-         SqcLAjZVEFmbPzNmWFNvdGa7WmyxIZ5yEBhh9CjlQ+d+YoTzJe7ZatTvuMt8uSTuu9Dz
-         vbkmiwFzS3dHfas7sXUSKgA+vTItoznGH9P5QkLMJvdLsDTM1WubQvIYIIm0ZZCxYnkD
-         +lKT87/GSuiEOc/fRnGuzX4lg5290fuuQ0W+f3vuvXkxy3iq4n7FmbHFYpabEtv4Byww
-         ytoNMSY/BaQ1jdybXJEya7H0qEGEJw7hmjRDLUzUgk/Piv0dz6UicBmjTG9TkjcjQVny
-         Nx7g==
+        bh=h9K1JdCkfGUyld5oIiQQ6btcB74MqVy0ViUrjJEnwXc=;
+        b=SCRGIWyselNx78NUYI2j5XKcbA5kANz3bKh54mV1XuswqQunJhY2OyslqIc8AP+TA1
+         HOijRM9uo7ZA+nlNSAu6U+0Bg98ImbCj6Vf1pkq8gKJHvJdZEjAjmEjAAlpFWPfjE/WA
+         hpKK+LGnkrsyHU9s4lPMbTOqCn7ZOfVTgwfXOc+k8b2//k+lKMuYz0V5xmPT0YOTn725
+         wF+rG6eCD/jJltU/vWhadu3uzhIhZGvfygDKz8ueBzhkp9t6VF6e/g8LOUpEDuYgVSwv
+         G1AR0w0YeFWvtttpZjSLo+zJGOQDUfjrrvPsoSgnwwdihiE4WisjYWOebM/8+EBBpE8L
+         CAvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=Z8mNRx0q7JkHyItbYSH6ZMDmLisieuEpSm8lhGlJd7Y=;
-        b=IaUn5GNVrI3SYHGXupgwcOzfxumXx2eF2uFn1wvMxHro15hiKaGBqCkWvB8k9rBlY7
-         sMhKicRS3AQY3kA2TC5os1V5VfgnkoubHcAhxN5CoSjfQIuB2AcxqMR2hf7ZbZ0dqth+
-         5PRI2Z0L1zJuLGKuebaVtkA+XFG7JsUH6Hzs98aozIZkMYU9koKlQQaP3xKva3zzJEKI
-         CRJguXw2dHPo5Qew40+Zr8qYhni0I0Qr4UCQN6LdZ+vXIMgYV3NeU0yqXrwp3FCZZCnH
-         kkfwu3e6O9y0qsCOKggfD+G/XCMu/Uao4cBIubUYSAay8b8lUL9nm9J5PRlC1hIOVT0O
-         r1Sw==
-X-Gm-Message-State: ACgBeo1wFkEHcP7kxHb+yfx3gXirfATaF/wGaZObEHTkUDhh2XHiN+W7
-        FFAYCmdMNxX8UQLN/jh80CAR7Q==
-X-Google-Smtp-Source: AA6agR4ZveHbdLnn20Sv5BWxz37Fsce4HodHVlJOfFj2kXaZohJIOmCDdV2znOy5vkho9v4dOoxUbw==
-X-Received: by 2002:a17:90a:e293:b0:1fd:7a55:9e1d with SMTP id d19-20020a17090ae29300b001fd7a559e1dmr7573587pjz.113.1662020977270;
-        Thu, 01 Sep 2022 01:29:37 -0700 (PDT)
-Received: from J23WFD767R.bytedance.net ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id ij8-20020a170902ab4800b00172e19c5f8bsm5354889plb.168.2022.09.01.01.29.34
+        bh=h9K1JdCkfGUyld5oIiQQ6btcB74MqVy0ViUrjJEnwXc=;
+        b=WqD8FHrA85X4iErfnBfrtNPpQ1zpw561xyPcPER0S4KY+duZeEzV14WBTIMEC0gBVU
+         tgvyjy3eXzgdYTdcdi2V7AsLpkZscaWeUNXDSkO0ipPSDk2w+oVOEJjuOEYfUFQMDUK/
+         mCmZcE27WceB2zXrCRU3m/BRI8Di2oiHmh7iUt5iyMwaHS2hiHcOT9wSHpzAC9wLYiSC
+         xC0agmrv2Efc0sRT2bevt/tE/Ys5AHSk4H5BkVWjNa8+PDMqkgPKNoMnL8Oc//hYezhh
+         iOk2I4zkc3Qc3VabAPkUgcccNQYKk4IJcoIuaIwnWXJmTt9FNtGv2yKDEzIPb2FAvb9w
+         MTFA==
+X-Gm-Message-State: ACgBeo1ZZVAWSuwJGN7AxMYOARUKk3qPoywgr0/8qQ2KcyD+HDuMUVVF
+        bfEu3WeGc4Uy8n+AOJYDK55ykg==
+X-Google-Smtp-Source: AA6agR7gwi9Ox6nBbUQXNu8ESlA4qDXfc+ORyLUyKeccgLh1pRlns6P3HS//eZlalJOgWuK0cmDSUQ==
+X-Received: by 2002:a17:903:2cb:b0:171:4f0d:beb6 with SMTP id s11-20020a17090302cb00b001714f0dbeb6mr29255338plk.53.1662021069616;
+        Thu, 01 Sep 2022 01:31:09 -0700 (PDT)
+Received: from PXLDJ45XCM.bytedance.net ([139.177.225.247])
+        by smtp.gmail.com with ESMTPSA id 30-20020a630a1e000000b0041d70c03da5sm4666074pgk.60.2022.09.01.01.31.03
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 01 Sep 2022 01:29:36 -0700 (PDT)
-From:   Zhang Tianci <zhangtianci.1997@bytedance.com>
-To:     miklos@szeredi.hu
-Cc:     Zhang Tianci <zhangtianci.1997@bytedance.com>,
-        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amir73il@gmail.com, brauner@kernel.org,
-        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Subject: [PATCH v3] ovl: Use ovl mounter's fsuid and fsgid in ovl_link()
-Date:   Thu,  1 Sep 2022 16:29:29 +0800
-Message-Id: <20220901082929.66831-1-zhangtianci.1997@bytedance.com>
+        Thu, 01 Sep 2022 01:31:09 -0700 (PDT)
+From:   Muchun Song <songmuchun@bytedance.com>
+To:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        mike.kravetz@oracle.com, songmuchun@bytedance.com,
+        akpm@linux-foundation.org, osalvador@suse.de, david@redhat.com,
+        ying.huang@intel.com, aneesh.kumar@linux.ibm.com,
+        rientjes@google.com
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH] mm: hugetlb: eliminate memory-less nodes handling
+Date:   Thu,  1 Sep 2022 16:30:23 +0800
+Message-Id: <20220901083023.42319-1-songmuchun@bytedance.com>
 X-Mailer: git-send-email 2.32.1 (Apple Git-133)
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a wrong case of link() on overlay:
-  $ mkdir /lower /fuse /merge
-  $ mount -t fuse /fuse
-  $ mkdir /fuse/upper /fuse/work
-  $ mount -t overlay /merge -o lowerdir=/lower,upperdir=/fuse/upper,\
-    workdir=work
-  $ touch /merge/file
-  $ chown bin.bin /merge/file // the file's caller becomes "bin"
-  $ ln /merge/file /merge/lnkfile
+The memory-notify-based approach aims to handle meory-less nodes, however, it just adds
+the complexity of code as pointed by David in thread [1].  The handling of memory-less
+nodes is introduced by commit 4faf8d950ec4 ("hugetlb: handle memory hot-plug events").
+From its commit message, we cannot find any necessity of handling this case. So, we can
+simply register/unregister sysfs entries in register_node/unregister_node to simlify the
+code.
 
-Then we will get an error(EACCES) because fuse daemon checks the link()'s
-caller is "bin", it denied this request.
-
-In the changing history of ovl_link(), there are two key commits:
-
-The first is commit bb0d2b8ad296 ("ovl: fix sgid on directory") which
-overrides the cred's fsuid/fsgid using the new inode. The new inode's
-owner is initialized by inode_init_owner(), and inode->fsuid is
-assigned to the current user. So the override fsuid becomes the
-current user. We know link() is actually modifying the directory, so
-the caller must have the MAY_WRITE permission on the directory. The
-current caller may should have this permission. This is acceptable
-to use the caller's fsuid.
-
-The second is commit 51f7e52dc943 ("ovl: share inode for hard link")
-which removed the inode creation in ovl_link(). This commit move
-inode_init_owner() into ovl_create_object(), so the ovl_link() just
-give the old inode to ovl_create_or_link(). Then the override fsuid
-becomes the old inode's fsuid, neither the caller nor the overlay's
-mounter! So this is incorrect.
-
-Fix this bug by using ovl mounter's fsuid/fsgid to do underlying
-fs's link().
-
-v1: https://lore.kernel.org/all/20220817102952.xnvesg3a7rbv576x@wittgenstein/T
-v2: https://lore.kernel.org/lkml/20220825130552.29587-1-zhangtianci.1997@bytedance.com/t
-
-Signed-off-by: Zhang Tianci <zhangtianci.1997@bytedance.com>
-Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+https://lore.kernel.org/linux-mm/60933ffc-b850-976c-78a0-0ee6e0ea9ef0@redhat.com/ [1]
+Suggested-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Muchun Song <songmuchun@bytedance.com>
 ---
- fs/overlayfs/dir.c | 46 ++++++++++++++++++++++++++++++----------------
- 1 file changed, 30 insertions(+), 16 deletions(-)
+ drivers/base/node.c  |  7 +++++--
+ include/linux/node.h |  5 +++++
+ mm/hugetlb.c         | 37 ++++++++++---------------------------
+ 3 files changed, 20 insertions(+), 29 deletions(-)
 
-diff --git a/fs/overlayfs/dir.c b/fs/overlayfs/dir.c
-index 6b03457f72bb..c3032cef391e 100644
---- a/fs/overlayfs/dir.c
-+++ b/fs/overlayfs/dir.c
-@@ -592,28 +592,42 @@ static int ovl_create_or_link(struct dentry *dentry, struct inode *inode,
- 			goto out_revert_creds;
- 	}
+diff --git a/drivers/base/node.c b/drivers/base/node.c
+index ed391cb09999..cf115d5a9b8a 100644
+--- a/drivers/base/node.c
++++ b/drivers/base/node.c
+@@ -608,10 +608,12 @@ static int register_node(struct node *node, int num)
+ 	node->dev.groups = node_dev_groups;
+ 	error = device_register(&node->dev);
  
--	err = -ENOMEM;
--	override_cred = prepare_creds();
--	if (override_cred) {
-+	if (!attr->hardlink) {
-+		err = -ENOMEM;
-+		override_cred = prepare_creds();
-+		if (!override_cred)
-+			goto out_revert_creds;
-+		/*
-+		 * In the creation cases(create, mkdir, mknod, symlink),
-+		 * ovl should transfer current's fs{u,g}id to underlying
-+		 * fs. Because underlying fs want to initialize its new
-+		 * inode owner using current's fs{u,g}id. And in this
-+		 * case, the @inode is a new inode that is initialized
-+		 * in inode_init_owner() to current's fs{u,g}id. So use
-+		 * the inode's i_{u,g}id to override the cred's fs{u,g}id.
-+		 *
-+		 * But in the other hardlink case, ovl_link() does not
-+		 * create a new inode, so just use the ovl mounter's
-+		 * fs{u,g}id.
-+		 */
- 		override_cred->fsuid = inode->i_uid;
- 		override_cred->fsgid = inode->i_gid;
--		if (!attr->hardlink) {
--			err = security_dentry_create_files_as(dentry,
--					attr->mode, &dentry->d_name, old_cred,
--					override_cred);
--			if (err) {
--				put_cred(override_cred);
--				goto out_revert_creds;
--			}
-+		err = security_dentry_create_files_as(dentry,
-+				attr->mode, &dentry->d_name, old_cred,
-+				override_cred);
-+		if (err) {
-+			put_cred(override_cred);
-+			goto out_revert_creds;
+-	if (error)
++	if (error) {
+ 		put_device(&node->dev);
+-	else
++	} else {
++		hugetlb_register_node(node);
+ 		compaction_register_node(node);
++	}
+ 
+ 	return error;
+ }
+@@ -625,6 +627,7 @@ static int register_node(struct node *node, int num)
+  */
+ void unregister_node(struct node *node)
+ {
++	hugetlb_unregister_node(node);
+ 	compaction_unregister_node(node);
+ 	node_remove_accesses(node);
+ 	node_remove_caches(node);
+diff --git a/include/linux/node.h b/include/linux/node.h
+index 427a5975cf40..f5d41498c2bf 100644
+--- a/include/linux/node.h
++++ b/include/linux/node.h
+@@ -138,6 +138,11 @@ extern void unregister_memory_block_under_nodes(struct memory_block *mem_blk);
+ extern int register_memory_node_under_compute_node(unsigned int mem_nid,
+ 						   unsigned int cpu_nid,
+ 						   unsigned access);
++
++#ifdef CONFIG_HUGETLBFS
++void hugetlb_register_node(struct node *node);
++void hugetlb_unregister_node(struct node *node);
++#endif
+ #else
+ static inline void node_dev_init(void)
+ {
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index d0617d64d718..722e862bb6be 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -3898,6 +3898,7 @@ static void __init hugetlb_sysfs_init(void)
+ }
+ 
+ #ifdef CONFIG_NUMA
++static bool hugetlb_initialized __ro_after_init;
+ 
+ /*
+  * node_hstate/s - associate per node hstate attributes, via their kobjects,
+@@ -3953,7 +3954,7 @@ static struct hstate *kobj_to_node_hstate(struct kobject *kobj, int *nidp)
+  * Unregister hstate attributes from a single node device.
+  * No-op if no hstate attributes attached.
+  */
+-static void hugetlb_unregister_node(struct node *node)
++void hugetlb_unregister_node(struct node *node)
+ {
+ 	struct hstate *h;
+ 	struct node_hstate *nhs = &node_hstates[node->dev.id];
+@@ -3983,19 +3984,22 @@ static void hugetlb_unregister_node(struct node *node)
+  * Register hstate attributes for a single node device.
+  * No-op if attributes already registered.
+  */
+-static int hugetlb_register_node(struct node *node)
++void hugetlb_register_node(struct node *node)
+ {
+ 	struct hstate *h;
+ 	struct node_hstate *nhs = &node_hstates[node->dev.id];
+ 	int err;
+ 
++	if (!hugetlb_initialized)
++		return;
++
+ 	if (nhs->hugepages_kobj)
+-		return 0;		/* already allocated */
++		return;		/* already allocated */
+ 
+ 	nhs->hugepages_kobj = kobject_create_and_add("hugepages",
+ 							&node->dev.kobj);
+ 	if (!nhs->hugepages_kobj)
+-		return -ENOMEM;
++		return;
+ 
+ 	for_each_hstate(h) {
+ 		err = hugetlb_sysfs_add_hstate(h, nhs->hugepages_kobj,
+@@ -4005,28 +4009,9 @@ static int hugetlb_register_node(struct node *node)
+ 			pr_err("HugeTLB: Unable to add hstate %s for node %d\n",
+ 				h->name, node->dev.id);
+ 			hugetlb_unregister_node(node);
+-			return -ENOMEM;
++			break;
  		}
- 		put_cred(override_creds(override_cred));
- 		put_cred(override_cred);
--
--		if (!ovl_dentry_is_whiteout(dentry))
--			err = ovl_create_upper(dentry, inode, attr);
--		else
--			err = ovl_create_over_whiteout(dentry, inode, attr);
  	}
-+
-+	if (!ovl_dentry_is_whiteout(dentry))
-+		err = ovl_create_upper(dentry, inode, attr);
-+	else
-+		err = ovl_create_over_whiteout(dentry, inode, attr);
-+
- out_revert_creds:
- 	revert_creds(old_cred);
- 	return err;
+-	return 0;
+-}
+-
+-static int __meminit hugetlb_memory_callback(struct notifier_block *self,
+-					     unsigned long action, void *arg)
+-{
+-	int ret = 0;
+-	struct memory_notify *mnb = arg;
+-	int nid = mnb->status_change_nid;
+-
+-	if (nid == NUMA_NO_NODE)
+-		return NOTIFY_DONE;
+-
+-	if (action == MEM_GOING_ONLINE)
+-		ret = hugetlb_register_node(node_devices[nid]);
+-	else if (action == MEM_CANCEL_ONLINE || action == MEM_OFFLINE)
+-		hugetlb_unregister_node(node_devices[nid]);
+-
+-	return notifier_from_errno(ret);
+ }
+ 
+ /*
+@@ -4038,11 +4023,9 @@ static void __init hugetlb_register_all_nodes(void)
+ {
+ 	int nid;
+ 
+-	get_online_mems();
+-	hotplug_memory_notifier(hugetlb_memory_callback, 0);
++	hugetlb_initialized = true;
+ 	for_each_node_state(nid, N_MEMORY)
+ 		hugetlb_register_node(node_devices[nid]);
+-	put_online_mems();
+ }
+ #else	/* !CONFIG_NUMA */
+ 
 -- 
-2.32.1 (Apple Git-133)
+2.11.0
 

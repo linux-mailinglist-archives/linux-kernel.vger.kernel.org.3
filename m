@@ -2,152 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA4565A9EC7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:17:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 086855A9EE0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233919AbiIASRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:17:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41640 "EHLO
+        id S233136AbiIASWm convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Sep 2022 14:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234131AbiIASRJ (ORCPT
+        with ESMTP id S232008AbiIASWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:17:09 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21CDD7A755;
-        Thu,  1 Sep 2022 11:17:07 -0700 (PDT)
-Date:   Thu, 01 Sep 2022 18:17:03 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662056225;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y9GQDEkFf5qaOjyHLJiXUYg9GaIW5Sg6K87UHYjPCYo=;
-        b=dU7MnFyPjGmuH8zo3HO4uLOjZpg5QHuPgGQeO+TjYgu/NPvQepxw5SywqtmGHDyIN+SmIT
-        G6i2QMV7nCoh4MBgWb4QMQQwD4gsnDdh7LNpHt1yPhbk5/RVvxfNpg6G6QZEruYtIoKsC4
-        TpkF5waVFVAH8chrE/WulUjaFdqSsD3weKmVGtyC06MVXMfvWlpJ38tDgb2xjHeiovX473
-        k1LWykNKkMUwnVYvUkUGLGvPEB3EwdL9Quv8NIl1YyPydg7BPKZTgYwrVuXxQL5jW5Sbb0
-        35Gcc+G5JhZWHcbVLJ+d79ReFzKk5PHyr6zY730X15F9QImGtgtvhQOY/jQyKA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662056225;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Y9GQDEkFf5qaOjyHLJiXUYg9GaIW5Sg6K87UHYjPCYo=;
-        b=3mF8+8JENQFaB6yxPlV94/J/n7fhTNj5SKVcOnznecH4Fd8Slk6T6bdwuZ9Y7IvdoS2OA/
-        mMaCtVHtRs33NzAw==
-From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Refuse W^X violations
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net>
-References: <YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net>
+        Thu, 1 Sep 2022 14:22:39 -0400
+Received: from relay.hostedemail.com (smtprelay0013.hostedemail.com [216.40.44.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267127C1F6;
+        Thu,  1 Sep 2022 11:22:38 -0700 (PDT)
+Received: from omf01.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 944CC140976;
+        Thu,  1 Sep 2022 18:22:36 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf01.hostedemail.com (Postfix) with ESMTPA id 088A260018;
+        Thu,  1 Sep 2022 18:22:34 +0000 (UTC)
+Message-ID: <b028cf83798fd562f5d1b992d2651d53e21acaa2.camel@perches.com>
+Subject: Re: [RFC PATCH v1] checkpatch: Handle FILE pointer type
+From:   Joe Perches <joe@perches.com>
+To:     =?ISO-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Andy Whitcroft <apw@canonical.com>
+Cc:     Dwaipayan Ray <dwaipayanray1@gmail.com>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Jerome Forissier <jerome.forissier@linaro.org>
+Date:   Thu, 01 Sep 2022 14:22:33 -0400
+In-Reply-To: <4f958a0c7c0aa2fce613371348477c002aa58e90.camel@perches.com>
+References: <20220901145948.1456353-1-mic@digikod.net>
+         <4f958a0c7c0aa2fce613371348477c002aa58e90.camel@perches.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Message-ID: <166205622353.401.14415663682148720649.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: 088A260018
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Stat-Signature: aabajss4g3getbegx3b3irk4mhjrigwe
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/ZVDONQtBCY6C8xUN1pjZq3eaTFxSEfyg=
+X-HE-Tag: 1662056554-387444
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/mm branch of tip:
+On Thu, 2022-09-01 at 11:49 -0400, Joe Perches wrote:
+> On Thu, 2022-09-01 at 16:59 +0200, Mickaël Salaün wrote:
+> > When using a "FILE *" type, checkpatch considers this an error.  Fix
+> > this by explicitly defining "FILE" as a common type.
+> []
+> > Another error may be throw when we use FIXTURE_{DATA,VARIANT}() structs,
+> > as defined in kselftest_harness.h .
+> []
+> > diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
+> []
+> > @@ -576,10 +576,17 @@ our $typeKernelTypedefs = qr{(?x:
+> >  	(?:__)?(?:u|s|be|le)(?:8|16|32|64)|
+> >  	atomic_t
+> >  )};
+> > +our $typeStdioTypedefs = qr{(?x:
+> > +	FILE
+> > +)};
+> 
+> I'm fine with this.
+> 
+> > +# our $typeKselftestHarnessTypedefs = qr{(?x:
+> > +# 	FIXTURE_(?:DATA|VARIANT)\($Ident\)
+> > +# )};
+> 
+> But not this.  Random userspace typedefs should likely
+> be kept in some local version of checkpatch.
+> 
+> Or maybe add a command line option like --additional_typedefs=<file>.
 
-Commit-ID:     652c5bf380ad018e15006a7f8349800245ddbbad
-Gitweb:        https://git.kernel.org/tip/652c5bf380ad018e15006a7f8349800245ddbbad
-Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Mon, 29 Aug 2022 12:18:03 +02:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Thu, 01 Sep 2022 11:10:19 -07:00
+Oops.  I forgot it already exists:
 
-x86/mm: Refuse W^X violations
+  --typedefsfile             Read additional types from this file
 
-x86 has STRICT_*_RWX, but not even a warning when someone violates it.
+commit 75ad8c575a5ad105e2afc2051c68abceb9c65431
+Author: Jerome Forissier <jerome.forissier@linaro.org>
+Date:   Mon May 8 15:56:00 2017 -0700
 
-Add this warning and fully refuse the transition.
+    checkpatch: add --typedefsfile
+    
+    When using checkpatch on out-of-tree code, it may occur that some
+    project-specific types are used, which will cause spurious warnings.
+    Add the --typedefsfile option as a way to extend the known types and
+    deal with this issue.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Link: https://lkml.kernel.org/r/YwySW3ROc21hN7g9@hirez.programming.kicks-ass.net
----
- arch/x86/mm/pat/set_memory.c | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
-
-diff --git a/arch/x86/mm/pat/set_memory.c b/arch/x86/mm/pat/set_memory.c
-index 6a9043b..1a2d637 100644
---- a/arch/x86/mm/pat/set_memory.c
-+++ b/arch/x86/mm/pat/set_memory.c
-@@ -580,6 +580,33 @@ static inline pgprot_t static_protections(pgprot_t prot, unsigned long start,
- }
- 
- /*
-+ * Validate and enforce strict W^X semantics.
-+ */
-+static inline pgprot_t verify_rwx(pgprot_t old, pgprot_t new, unsigned long start,
-+				  unsigned long pfn, unsigned long npg)
-+{
-+	unsigned long end;
-+
-+	if (!cpu_feature_enabled(X86_FEATURE_NX))
-+		return new;
-+
-+	if (!((pgprot_val(old) ^ pgprot_val(new)) & (_PAGE_RW | _PAGE_NX)))
-+		return new;
-+
-+	if ((pgprot_val(new) & (_PAGE_RW | _PAGE_NX)) != _PAGE_RW)
-+		return new;
-+
-+	end = start + npg * PAGE_SIZE - 1;
-+	WARN_ONCE(1, "CPA refuse W^X violation: %016llx -> %016llx range: 0x%016lx - 0x%016lx PFN %lx\n",
-+		  (unsigned long long)pgprot_val(old),
-+		  (unsigned long long)pgprot_val(new),
-+		  start, end, pfn);
-+
-+	/* refuse the transition into WX */
-+	return old;
-+}
-+
-+/*
-  * Lookup the page table entry for a virtual address in a specific pgd.
-  * Return a pointer to the entry and the level of the mapping.
-  */
-@@ -885,6 +912,8 @@ static int __should_split_large_page(pte_t *kpte, unsigned long address,
- 	new_prot = static_protections(req_prot, lpaddr, old_pfn, numpages,
- 				      psize, CPA_DETECT);
- 
-+	new_prot = verify_rwx(old_prot, new_prot, lpaddr, old_pfn, numpages);
-+
- 	/*
- 	 * If there is a conflict, split the large page.
- 	 *
-@@ -1525,6 +1554,7 @@ repeat:
- 
- 	if (level == PG_LEVEL_4K) {
- 		pte_t new_pte;
-+		pgprot_t old_prot = pte_pgprot(old_pte);
- 		pgprot_t new_prot = pte_pgprot(old_pte);
- 		unsigned long pfn = pte_pfn(old_pte);
- 
-@@ -1536,6 +1566,8 @@ repeat:
- 		new_prot = static_protections(new_prot, address, pfn, 1, 0,
- 					      CPA_PROTECT);
- 
-+		new_prot = verify_rwx(old_prot, new_prot, address, pfn, 1);
-+
- 		new_prot = pgprot_clear_protnone_bits(new_prot);
- 
- 		/*

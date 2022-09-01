@@ -2,102 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 420C65A9DFE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:30:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D734F5A9DFF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:30:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233588AbiIARaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        id S234107AbiIARaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:30:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231244AbiIAR35 (ORCPT
+        with ESMTP id S233849AbiIARaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:29:57 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECDB3E099
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:29:54 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id c66so7841800pfc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:29:54 -0700 (PDT)
+        Thu, 1 Sep 2022 13:30:06 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B4761C93F;
+        Thu,  1 Sep 2022 10:30:05 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id j1so13973767qvv.8;
+        Thu, 01 Sep 2022 10:30:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=aEdHMfIGdtLpgQABmHB5FAb5y4ZWlHDUTnfIlMSvXfY=;
-        b=BYFUvve325d13qmtzzWxYDe2qdOVUiCzyah59NhIi3R4+yxdWwUUsCx/IgGmZVBFGL
-         E97lIyPk0InE4KS8d1W8wmOHAGdghOCobSx2/Ghy/c8mZ959oaMWMEJ6u7ic7wA9H6lG
-         jq2ivBKrZAfnI7+LpLTlpUy62ULMyrpMG6Fe4=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=GkylslPFTMwq6t+BAI0pQVTra1XCe56WX0A+ZZ/Atbc=;
+        b=LzdynfRMZ3UCQSxfNo+QaeNjQBRMXMKTv3w1Xpls6L96wEjSZDzINf6+1/nbK3TchF
+         bved2M/tiQlbgAdftqMo2ldcW8F9HbAwjw3ukdU98JJ6sZuJj9z5+/SZr4dKpjdkZb+5
+         BkXqIqAFezeONC1kxzGmWIXYzpPXqqA5TnlDAwktXXlQl6HN1fpKpBuF9vxKwRwLdVRo
+         HdhNJ+e5zc1vdWbRayn2Pqxz7VHo1d7a4d0H9lDr3q7QXhpVN3iVdWD1L6+ceMDBCjqL
+         /LNh0Q0BbHXMZbV6m81k80YhsKWo3kr+4ejzCqFn/5Osufgjmh9OG8zI1cruOxJ9GQnc
+         TkKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=aEdHMfIGdtLpgQABmHB5FAb5y4ZWlHDUTnfIlMSvXfY=;
-        b=zcyn9aYRDy2hMmzl6w3zvXrram990aa/nFttGsc+Ggtk8PPmMfvEU/IP3fpA/KSDVA
-         zlXqOTNdPQg3M1v3PYD5mKT82aCn7EhESQH2XY/evQ82KsXXkqhyruVf7W8zD7YFxw3i
-         Z0tgX386/dADewfjIpGil9Zl5LLZc7Z9xd7nn32j7eDRtiBHFa7QG1rwdCkIPrkgFuZH
-         mNr/tPGqjFrbW23bzIPK9yuHupCCRbLWk8GV/LAn1wqUYW6nbBn4aVXfIYIqjkNyiJ1k
-         j4W2ZFutAzz2RvGZ606g/dVr7iTYF2Lv3FQ62LSCgaYCAFjuICgAvuGbiyjkxqWyBl5o
-         +jHw==
-X-Gm-Message-State: ACgBeo3+lGtW4WEPgy9tKfIhU4VV1/tsFScttO2orwEcyOe5N/xPNodB
-        tb6lXk34fgpGOlQ4w38TY8h2/g==
-X-Google-Smtp-Source: AA6agR41hr8BNob0m3jPe5drjS5xktzGPZfgiELVke4qhZdqfmbWfo9tbzS0Vle0ZWaUXbrGOVCA2w==
-X-Received: by 2002:a65:5889:0:b0:428:90f3:6257 with SMTP id d9-20020a655889000000b0042890f36257mr27637380pgu.590.1662053394413;
-        Thu, 01 Sep 2022 10:29:54 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:34cd:3659:c11f:5d05])
-        by smtp.gmail.com with UTF8SMTPSA id f5-20020a170902684500b00172f6726d8esm14193442pln.277.2022.09.01.10.29.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 10:29:54 -0700 (PDT)
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        linux-arm-msm@vger.kernel.org,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH v2] arm64: dts: qcom: sc7180: Configure USB as wakeup source
-Date:   Thu,  1 Sep 2022 10:29:50 -0700
-Message-Id: <20220901102946.v2.1.I347ea409ee3134bd32a29e33fecd1a6ef32085a0@changeid>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=GkylslPFTMwq6t+BAI0pQVTra1XCe56WX0A+ZZ/Atbc=;
+        b=ivj4+9cDUVdVIeYe0fXbyM2+MKXhUO7pq7Ska58gbKWk5zjorGI5XOR+6fBdWz1BjZ
+         y/XmmFylsHCSx7Q+zwG4/TMv2tAkCFj+82UZFpwMk/Drko2OpRBjo0HmgHfoifqkey5V
+         bXE1x3QWPUTG7HXkZsCB8Koy4zcK2aXsYDpXYYdExBvV0lXbJFTWGoX0hxDfGfx8MEEs
+         SCiNs4nkqTHbKkQCVXgJXwzXkxze2QvD4jlm49hRDmgdGJFrK8ScSxobalPpKytbIou8
+         2ar/BErTVislX1bFJGFK0/dopR5xxhGSphUuh9lOegfKdif9Yybd7xRu2T3AjN0cZ5QD
+         lgnw==
+X-Gm-Message-State: ACgBeo3dVgpxtQimuiHOmdsrNkDn8PQVxnB6BzY9kYWSQ5K6W0Y5VmJt
+        IGNJJzdqgY7Gj1VTCWZ8PJeVVfJr+usPq6zj1cm2Dc+V
+X-Google-Smtp-Source: AA6agR7BRXQTg7UnbGniLx1eXXjWX4hwKgyIIHfJBm2RvJ/EqRdPvJZ3he6VGda0JXz3CGLXSJqv9tctSQ8dCYaILQI=
+X-Received: by 2002:a0c:e30b:0:b0:498:f13a:8eb1 with SMTP id
+ s11-20020a0ce30b000000b00498f13a8eb1mr25796051qvl.125.1662053404255; Thu, 01
+ Sep 2022 10:30:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220817144045.3206-1-ubizjak@gmail.com> <YxDSTU+pWBdZgs/Q@google.com>
+In-Reply-To: <YxDSTU+pWBdZgs/Q@google.com>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Thu, 1 Sep 2022 19:29:53 +0200
+Message-ID: <CAFULd4aQvHczwv1rZz6QJ6wEfjd0ORB_3rQdmP-PtfasNxe3rw@mail.gmail.com>
+Subject: Re: [PATCH] KVM/VMX: Do not declare vmread_error asmlinkage
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dwc3 USB controller of the sc7180 supports USB remote
-wakeup, configure it as a wakeup source.
+On Thu, Sep 1, 2022 at 5:40 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Aug 17, 2022, Uros Bizjak wrote:
+> > There is no need to declare vmread_error asmlinkage, its arguments
+> > can be passed via registers for both, 32-bit and 64-bit targets.
+> > Function argument registers are considered call-clobbered registers,
+> > they are saved in the trampoline just before the function call and
+> > restored afterwards.
+> >
+> > Note that asmlinkage and __attribute__((regparm(0))) have no effect
+> > on 64-bit targets. The trampoline is called from the assembler glue
+> > code that implements its own stack-passing function calling convention,
+> > so the attribute on the trampoline declaration does not change anything
+> > for 64-bit as well as 32-bit targets. We can declare it asmlinkage for
+> > documentation purposes.
+>
+> ...
+>
+> > diff --git a/arch/x86/kvm/vmx/vmx_ops.h b/arch/x86/kvm/vmx/vmx_ops.h
+> > index 5cfc49ddb1b4..550a89394d9f 100644
+> > --- a/arch/x86/kvm/vmx/vmx_ops.h
+> > +++ b/arch/x86/kvm/vmx/vmx_ops.h
+> > @@ -10,9 +10,9 @@
+> >  #include "vmcs.h"
+> >  #include "../x86.h"
+> >
+> > -asmlinkage void vmread_error(unsigned long field, bool fault);
+> > -__attribute__((regparm(0))) void vmread_error_trampoline(unsigned long field,
+> > -                                                      bool fault);
+> > +void vmread_error(unsigned long field, bool fault);
+> > +asmlinkage void vmread_error_trampoline(unsigned long field,
+> > +                                     bool fault);
+> >  void vmwrite_error(unsigned long field, unsigned long value);
+> >  void vmclear_error(struct vmcs *vmcs, u64 phys_addr);
+> >  void vmptrld_error(struct vmcs *vmcs, u64 phys_addr);
+>
+> If it's ok with you, I'll split this into two patches.  One to drop asmlinkage
+> from vmread_error(), and one to convert the open coded regparm to asmlinkage.
 
-Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
----
+Sure, please go ahead.
 
-Changes in v2:
-- use qcom/arm64-for-6.1 as base, v1 was unintendedly based on a
-  downstream branch that was used for testing
-
- arch/arm64/boot/dts/qcom/sc7180.dtsi | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-index e8debb0da411..af5bab27eaf3 100644
---- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-@@ -2782,6 +2782,8 @@ usb_1: usb@a6f8800 {
- 					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3 0>;
- 			interconnect-names = "usb-ddr", "apps-usb";
- 
-+			wakeup-source;
-+
- 			usb_1_dwc3: usb@a600000 {
- 				compatible = "snps,dwc3";
- 				reg = <0 0x0a600000 0 0xe000>;
--- 
-2.37.2.789.g6183377224-goog
-
+Thanks,
+Uros.

@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B1E5A9923
+	by mail.lfdr.de (Postfix) with ESMTP id 024875A9922
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233233AbiIANiP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:38:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58286 "EHLO
+        id S233926AbiIANiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234319AbiIANhE (ORCPT
+        with ESMTP id S233262AbiIANhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:37:04 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBC232A711;
-        Thu,  1 Sep 2022 06:35:13 -0700 (PDT)
+        Thu, 1 Sep 2022 09:37:06 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00CE93C8E0;
+        Thu,  1 Sep 2022 06:35:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662039315; x=1693575315;
+  t=1662039319; x=1693575319;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rZMihXhOLlKxYs0tCwQAUj7e9S0faqqljRoP4WeBM6o=;
-  b=PVNMjdYFLLN+uzYPkizEFXD2YjRg5t3IoZhZIwxYtSC+d2U0K0NOJkBW
-   2XaCLYO9Qksqo80GIANSUEElKHRCh2Q8eopX4SkSRTrw1i9jLiDewabrd
-   j+GzeiXEHNBpPAhK+o6a2I/SEvAVRsqrjXzyZtzP+HlPxjhYSonf/efZi
-   5pPPIKkCdAP9wZWeRT1O4O7IoE/6SWJW3s1Q92J33/cELg8IX2O9u988N
-   s4uh2T1bYb9RTzX+tZ+LAKqpQthk6WXNpByttexn2qoLBH7tUTzQdHczT
-   HgQ2NNoVEyfDmkL0fQIAj8PLWfNAqKT5Pk/yt+LevwBQw5+sSomOylpEe
-   w==;
+  bh=JmSuLtaQ7npJNIq92yZ3LYXqo64TxloECUbCfR2Jr/8=;
+  b=GfWTUY9Foz7SEo+kDZ4DOCTKYO3/wUi+XYXAGSvPoOtw8swjscqmlivd
+   iKcsQjtaUglpHGAKedzdaIh4vKss4wjg1hjYWJA+KcvxcBUPm98FJR37I
+   HbVG0/QwpKW53yXqsRwMzpZyABt8MtQqgJgXq6oOzFRi0xe9fgj2WTjDg
+   2m6f8noJxsdRavy0XBRd0ZvpWEbm/OHq1BaHTRIVGXilIUIFcpO1OQz1X
+   otWQxsy9UY91mqcb72Vz5QKOnKaa/44Xu2WmJCDmDygJny6naaRi4znIN
+   m3M2r2QQMwNgQOjIg+hhLW2yytK+fpY067801Bpucl7CjQ2s4BdD/EcCc
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="178641861"
+   d="scan'208";a="171970625"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Sep 2022 06:35:13 -0700
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Sep 2022 06:35:18 -0700
 Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Thu, 1 Sep 2022 06:35:07 -0700
+ 15.1.2507.12; Thu, 1 Sep 2022 06:35:11 -0700
 Received: from wendy.microchip.com (10.10.115.15) by chn-vm-ex03.mchp-main.com
  (10.10.85.151) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Thu, 1 Sep 2022 06:35:04 -0700
+ Transport; Thu, 1 Sep 2022 06:35:07 -0700
 From:   Conor Dooley <conor.dooley@microchip.com>
 To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -55,9 +55,9 @@ CC:     Paul Walmsley <paul.walmsley@sifive.com>,
         Hugh Breslin <hugh.breslin@microchip.com>,
         <devicetree@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 7/9] riscv: dts: microchip: icicle: re-jig fabric peripheral addresses
-Date:   Thu, 1 Sep 2022 14:34:02 +0100
-Message-ID: <20220901133403.3392291-8-conor.dooley@microchip.com>
+Subject: [PATCH v3 8/9] riscv: dts: microchip: add sevkit device tree
+Date:   Thu, 1 Sep 2022 14:34:03 +0100
+Message-ID: <20220901133403.3392291-9-conor.dooley@microchip.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20220901133403.3392291-1-conor.dooley@microchip.com>
 References: <20220901133403.3392291-1-conor.dooley@microchip.com>
@@ -74,44 +74,244 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When users try to add onto the reference design, they find that the
-current addresses that peripherals connected to Fabric InterConnect
-(FIC) 3 use are restrictive. For the v2022.09 reference design, the
-peripherals have been shifted down, leaving more contiguous address
-space for their custom IP/peripherals.
+From: Vattipalli Praveen <praveen.kumar@microchip.com>
 
+Add a basic dts for the Microchip Smart Embedded Vision dev kit.
+The SEV kit is an upcoming first party board, featuring an MPFS250T and:
+- Dual Sony Camera Sensors (IMX334)
+- IEEE 802.11 b/g/n 20MHz (1x1) Wi-Fi
+- Bluetooth 5 Low Energy
+- 4 GB DDR4 x64
+- 2 GB LPDDR4 x32
+- 1 GB SPI Flash
+- 8 GB eMMC flash & SD card slot (multiplexed)
+- HDMI2.0 Video Input/Output
+- MIPI DSI Output
+- MIPI CSI-2 Input
+
+Link: https://onlinedocs.microchip.com/pr/GUID-404D3738-DC76-46BA-8683-6A77E837C2DD-en-US-1/index.html?GUID-065AEBEE-7B2C-4895-8579-B1D73D797F06
+Signed-off-by: Vattipalli Praveen <praveen.kumar@microchip.com>
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/riscv/boot/dts/microchip/Makefile        |   1 +
+ .../dts/microchip/mpfs-sev-kit-fabric.dtsi    |  45 ++++++
+ .../riscv/boot/dts/microchip/mpfs-sev-kit.dts | 145 ++++++++++++++++++
+ 3 files changed, 191 insertions(+)
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi
+ create mode 100644 arch/riscv/boot/dts/microchip/mpfs-sev-kit.dts
 
-diff --git a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
-index 32d51c4a5b0c..98f04be0dc6b 100644
---- a/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
-+++ b/arch/riscv/boot/dts/microchip/mpfs-icicle-kit-fabric.dtsi
-@@ -6,18 +6,18 @@ / {
- 	compatible = "microchip,mpfs-icicle-reference-rtlv2209", "microchip,mpfs-icicle-kit",
- 		     "microchip,mpfs";
- 
--	core_pwm0: pwm@41000000 {
-+	core_pwm0: pwm@40000000 {
- 		compatible = "microchip,corepwm-rtl-v4";
--		reg = <0x0 0x41000000 0x0 0xF0>;
-+		reg = <0x0 0x40000000 0x0 0xF0>;
- 		microchip,sync-update-mask = /bits/ 32 <0>;
- 		#pwm-cells = <2>;
- 		clocks = <&fabric_clk3>;
- 		status = "disabled";
- 	};
- 
--	i2c2: i2c@44000000 {
-+	i2c2: i2c@40000200 {
- 		compatible = "microchip,corei2c-rtl-v7";
--		reg = <0x0 0x44000000 0x0 0x1000>;
-+		reg = <0x0 0x40000200 0x0 0x1000>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
- 		clocks = <&fabric_clk3>;
+diff --git a/arch/riscv/boot/dts/microchip/Makefile b/arch/riscv/boot/dts/microchip/Makefile
+index 39aae7b04f1c..f18477b2e86d 100644
+--- a/arch/riscv/boot/dts/microchip/Makefile
++++ b/arch/riscv/boot/dts/microchip/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-icicle-kit.dtb
+ dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-polarberry.dtb
++dtb-$(CONFIG_SOC_MICROCHIP_POLARFIRE) += mpfs-sev-kit.dtb
+ obj-$(CONFIG_BUILTIN_DTB) += $(addsuffix .o, $(dtb-y))
+diff --git a/arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi b/arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi
+new file mode 100644
+index 000000000000..8545baf4d129
+--- /dev/null
++++ b/arch/riscv/boot/dts/microchip/mpfs-sev-kit-fabric.dtsi
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/* Copyright (c) 2022 Microchip Technology Inc */
++
++/ {
++	fabric_clk3: fabric-clk3 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <0>;
++	};
++
++	fabric_clk1: fabric-clk1 {
++		compatible = "fixed-clock";
++		#clock-cells = <0>;
++		clock-frequency = <125000000>;
++	};
++
++	pcie: pcie@2000000000 {
++		compatible = "microchip,pcie-host-1.0";
++		#address-cells = <0x3>;
++		#interrupt-cells = <0x1>;
++		#size-cells = <0x2>;
++		device_type = "pci";
++		reg = <0x20 0x0 0x0 0x8000000>, <0x0 0x43000000 0x0 0x10000>;
++		reg-names = "cfg", "apb";
++		bus-range = <0x0 0x7f>;
++		interrupt-parent = <&plic>;
++		interrupts = <119>;
++		interrupt-map = <0 0 0 1 &pcie_intc 0>,
++				<0 0 0 2 &pcie_intc 1>,
++				<0 0 0 3 &pcie_intc 2>,
++				<0 0 0 4 &pcie_intc 3>;
++		interrupt-map-mask = <0 0 0 7>;
++		clocks = <&fabric_clk1>, <&fabric_clk1>, <&fabric_clk3>;
++		clock-names = "fic0", "fic1", "fic3";
++		ranges = <0x3000000 0x0 0x8000000 0x20 0x8000000 0x0 0x80000000>;
++		msi-parent = <&pcie>;
++		msi-controller;
++		status = "disabled";
++		pcie_intc: interrupt-controller {
++			#address-cells = <0>;
++			#interrupt-cells = <1>;
++			interrupt-controller;
++		};
++	};
++};
+diff --git a/arch/riscv/boot/dts/microchip/mpfs-sev-kit.dts b/arch/riscv/boot/dts/microchip/mpfs-sev-kit.dts
+new file mode 100644
+index 000000000000..013cb666c72d
+--- /dev/null
++++ b/arch/riscv/boot/dts/microchip/mpfs-sev-kit.dts
+@@ -0,0 +1,145 @@
++// SPDX-License-Identifier: (GPL-2.0 OR MIT)
++/* Copyright (c) 2022 Microchip Technology Inc */
++
++/dts-v1/;
++
++#include "mpfs.dtsi"
++#include "mpfs-sev-kit-fabric.dtsi"
++
++/* Clock frequency (in Hz) of the rtcclk */
++#define MTIMER_FREQ		1000000
++
++/ {
++	#address-cells = <2>;
++	#size-cells = <2>;
++	model = "Microchip PolarFire-SoC SEV Kit";
++	compatible = "microchip,mpfs-sev-kit", "microchip,mpfs";
++
++	aliases {
++		ethernet0 = &mac1;
++		serial0 = &mmuart0;
++		serial1 = &mmuart1;
++		serial2 = &mmuart2;
++		serial3 = &mmuart3;
++		serial4 = &mmuart4;
++	};
++
++	chosen {
++		stdout-path = "serial1:115200n8";
++	};
++
++	cpus {
++		timebase-frequency = <MTIMER_FREQ>;
++	};
++
++	reserved-memory {
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		fabricbuf0ddrc: buffer@80000000 {
++			compatible = "shared-dma-pool";
++			reg = <0x0 0x80000000 0x0 0x2000000>;
++		};
++
++		fabricbuf1ddrnc: buffer@c4000000 {
++			compatible = "shared-dma-pool";
++			reg = <0x0 0xc4000000 0x0 0x4000000>;
++		};
++
++		fabricbuf2ddrncwcb: buffer@d4000000 {
++			compatible = "shared-dma-pool";
++			reg = <0x0 0xd4000000 0x0 0x4000000>;
++		};
++	};
++
++	ddrc_cache: memory@1000000000 {
++		device_type = "memory";
++		reg = <0x10 0x0 0x0 0x76000000>;
++	};
++};
++
++&i2c0 {
++	status = "okay";
++};
++
++&gpio2 {
++	interrupts = <53>, <53>, <53>, <53>,
++		     <53>, <53>, <53>, <53>,
++		     <53>, <53>, <53>, <53>,
++		     <53>, <53>, <53>, <53>,
++		     <53>, <53>, <53>, <53>,
++		     <53>, <53>, <53>, <53>,
++		     <53>, <53>, <53>, <53>,
++		     <53>, <53>, <53>, <53>;
++	status = "okay";
++};
++
++&mac0 {
++	status = "okay";
++	phy-mode = "sgmii";
++	phy-handle = <&phy0>;
++	phy1: ethernet-phy@9 {
++		reg = <9>;
++	};
++	phy0: ethernet-phy@8 {
++		reg = <8>;
++	};
++};
++
++&mac1 {
++	status = "okay";
++	phy-mode = "sgmii";
++	phy-handle = <&phy1>;
++};
++
++&mbox {
++	status = "okay";
++};
++
++&mmc {
++	status = "okay";
++	bus-width = <4>;
++	disable-wp;
++	cap-sd-highspeed;
++	cap-mmc-highspeed;
++	mmc-ddr-1_8v;
++	mmc-hs200-1_8v;
++	sd-uhs-sdr12;
++	sd-uhs-sdr25;
++	sd-uhs-sdr50;
++	sd-uhs-sdr104;
++};
++
++&mmuart1 {
++	status = "okay";
++};
++
++&mmuart2 {
++	status = "okay";
++};
++
++&mmuart3 {
++	status = "okay";
++};
++
++&mmuart4 {
++	status = "okay";
++};
++
++&refclk {
++	clock-frequency = <125000000>;
++};
++
++&rtc {
++	status = "okay";
++};
++
++&syscontroller {
++	status = "okay";
++};
++
++&usb {
++	status = "okay";
++	dr_mode = "otg";
++};
 -- 
 2.36.1
 

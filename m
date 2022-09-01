@@ -2,115 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B1705A8DBA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:55:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E0D95A8DAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:52:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233196AbiIAFzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 01:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
+        id S232635AbiIAFwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 01:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233157AbiIAFzC (ORCPT
+        with ESMTP id S229682AbiIAFwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 01:55:02 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A99CEF;
-        Wed, 31 Aug 2022 22:54:52 -0700 (PDT)
-X-UUID: 1c4bb7b35c3f4b39934073075f8d7343-20220901
-X-CPASD-INFO: e866358f380b453c9e91ee249368a376@rohwVmBnZpZfWHKug3h-nVmWaWGVkVK
-        De21WaY9jY1aVhH5xTV5uYFV9fWtVXmJdY2RgVHh0bFJgZmJeZXabg3JqUIdiYXlRqH6FeG1VaZRj
-X-CLOUD-ID: e866358f380b453c9e91ee249368a376
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:1.0,URL:-5,TVAL:173.
-        0,ESV:0.0,ECOM:-5.0,ML:-10.0,FD:0.0,CUTS:283.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:
-        -5.0,SPF:4.0,EDMS:-5,IPLABEL:4992.0,FROMTO:0,AD:0,FFOB:1.0,CFOB:1.0,SPC:0,SIG
-        :-5,AUF:2,DUF:3755,ACD:67,DCD:67,SL:0,EISP:0,AG:0,CFC:0.229,CFSR:0.159,UAT:0,
-        RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0
-        ,EAF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 1c4bb7b35c3f4b39934073075f8d7343-20220901
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 1c4bb7b35c3f4b39934073075f8d7343-20220901
-X-User: jianghaoran@kylinos.cn
-Received: from localhost.localdomain [(210.12.40.82)] by mailgw
-        (envelope-from <jianghaoran@kylinos.cn>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES128-GCM-SHA256 128/128)
-        with ESMTP id 594133427; Thu, 01 Sep 2022 13:55:08 +0800
-From:   jianghaoran <jianghaoran@kylinos.cn>
-To:     bmt@zurich.ibm.com
-Cc:     jgg@ziepe.ca, leon@kernel.org, linux-rdma@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] RDMA/siw: Solve the error of compiling the 32BIT mips kernel when enable CONFIG_RDMA_SIW
-Date:   Thu,  1 Sep 2022 13:51:38 +0800
-Message-Id: <20220901055138.1704755-1-jianghaoran@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Sep 2022 01:52:49 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 742BD1178F2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 22:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662011568; x=1693547568;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=uRo9p3jFlj0FmuG121IKZKYM2BdiNLm74eHX8SYd4d8=;
+  b=I0yjYPMGr7G1gdi0OCr70zoKk1+6wbwPj9NAHJkrpYG/ZyIQAFGiFm8Z
+   GjTlkHilREz65GIH1Wrldb2fLn8HHyP/qCx9jyHXrpTq/OJK9pu5Mdj5Y
+   dPwtU+trThSoS6KKmJzDeUPO/7hCOjiyaTFbCjH+Aw3SYD46xCts16yyu
+   6EWOsoLQdJJH4HY8MC1lK7aWWbOv21fvA99DdjbZO4MweUo9xDNA2ztEO
+   W0R4zmM7ZMy1CJBGRQpF4KmzTRZqLV4mpBmTt4hqPrpZ8e8fkdjq0LV0o
+   xtvU0McFoyyZkAHjhvcMzECnG9YOiQKNzcsT2st3unM1uAMc4RSHQmMWn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="296407715"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="296407715"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 22:52:48 -0700
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="673691146"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.213.173]) ([10.254.213.173])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 22:52:45 -0700
+Subject: Re: [kbuild-all] Re: powerpc-linux-objdump: Warning: Unrecognized
+ form: 0x23
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nathan Chancellor <nathan@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+References: <202208311414.4OPuYS9K-lkp@intel.com>
+ <Yw+A+0BY26l0AC5j@dev-arch.thelio-3990X>
+ <b0b8fecd-4041-d04e-9a11-2c7947e5d5a0@intel.com>
+ <YxAS9NBjBI/vi0XK@dev-arch.thelio-3990X>
+ <8d2c3aef-aa4f-1f4d-dc89-622554ffda31@intel.com>
+ <9d77cb93-2eff-d87d-6554-1636d5e7d5ec@csgroup.eu>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <0acfb209-a792-a47b-0261-9fb29824e4b9@intel.com>
+Date:   Thu, 1 Sep 2022 13:52:42 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <9d77cb93-2eff-d87d-6554-1636d5e7d5ec@csgroup.eu>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cross-compilation environment：
-ubuntu 20.04
-mips-linux-gnu-gcc (Ubuntu 10.3.0-1ubuntu1~20.04) 10.3.0
 
-generate a configuration file by make randconfig:
-CONFIG_32BIT=y
-CONFIG_RDMA_SIW=y
 
-the error message as follows：
-In file included from ../arch/mips/include/asm/page.h:270,
-                 from ../arch/mips/include/asm/io.h:29,
-                 from ../arch/mips/include/asm/mmiowb.h:5,
-                 from ../include/linux/spinlock.h:64,
-                 from ../include/linux/wait.h:9,
-                 from ../include/linux/net.h:19,
-                 from ../drivers/infiniband/sw/siw/siw_qp_tx.c:8:
-../drivers/infiniband/sw/siw/siw_qp_tx.c: In function ‘siw_tx_hdt’:
-../arch/mips/include/asm/page.h:255:53: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]
-  255 | #define virt_to_pfn(kaddr)    PFN_DOWN(virt_to_phys((void *)(kaddr)))
-      |                                                     ^
-../include/asm-generic/memory_model.h:18:41: note: in definition of macro ‘__pfn_to_page’
-   18 | #define __pfn_to_page(pfn) (mem_map + ((pfn) - ARCH_PFN_OFFSET))
-      |                                         ^~~
-../arch/mips/include/asm/page.h:255:31: note: in expansion of macro ‘PFN_DOWN’
-  255 | #define virt_to_pfn(kaddr)    PFN_DOWN(virt_to_phys((void *)(kaddr)))
-      |                               ^~~~~~~~
-../arch/mips/include/asm/page.h:256:41: note: in expansion of macro ‘virt_to_pfn’
-  256 | #define virt_to_page(kaddr) pfn_to_page(virt_to_pfn(kaddr))
-      |                                         ^~~~~~~~~~~
-../drivers/infiniband/sw/siw/siw_qp_tx.c:538:23: note: in expansion of macro ‘virt_to_page’
-  538 |     page_array[seg] = virt_to_page(va & PAGE_MASK);
-      |                       ^~~~~~~~~~~~
-cc1: all warnings being treated as errors
-make[5]: *** [../scripts/Makefile.build:249: drivers/infiniband/sw/siw/siw_qp_tx.o] Error 1
-make[4]: *** [../scripts/Makefile.build:465: drivers/infiniband/sw/siw] Error 2
-make[3]: *** [../scripts/Makefile.build:465: drivers/infiniband/sw] Error 2
-make[3]: *** Waiting for unfinished jobs....
+On 9/1/2022 1:45 PM, Christophe Leroy wrote:
+> 
+> 
+> Le 01/09/2022 à 06:59, Chen, Rong A a écrit :
+>>
+>>
+>> On 9/1/2022 10:03 AM, Nathan Chancellor wrote:
+>>> Hi Rong,
+>>>
+>>> On Thu, Sep 01, 2022 at 09:15:58AM +0800, Chen, Rong A wrote:
+>>>>
+>>>>
+>>>> On 8/31/2022 11:40 PM, Nathan Chancellor wrote:
+>>>>> On Wed, Aug 31, 2022 at 02:52:36PM +0800, kernel test robot wrote:
+>>>>>> tree:
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>>>> master
+>>>>>> head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
+>>>>>> commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug:
+>>>>>> make DEBUG_INFO selectable from a choice
+>>>>>> date:   5 months ago
+>>>>>> config: powerpc-buildonly-randconfig-r003-20220830
+>>>>>> (https://download.01.org/0day-ci/archive/20220831/202208311414.4OPuYS9K-lkp@intel.com/config)
+>>>>>> compiler: clang version 16.0.0
+>>>>>> (https://github.com/llvm/llvm-project
+>>>>>> c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+>>>>>> reproduce (this is a W=1 build):
+>>>>>>            wget
+>>>>>> https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>>>>            chmod +x ~/bin/make.cross
+>>>>>>            # install powerpc cross compiling tool for clang build
+>>>>>>            # apt-get install binutils-powerpc-linux-gnu
+>>>>>>            #
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
+>>>>>>            git remote add linus
+>>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>>>>            git fetch --no-tags linus master
+>>>>>>            git checkout f9b3cd24578401e7a392974b3353277286e49cee
+>>>>>>            # save the config file
+>>>>>>            mkdir build_dir && cp config build_dir/.config
+>>>>>>            COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang
+>>>>>> make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+>>>>>>
+>>>>>> If you fix the issue, kindly add following tag where applicable
+>>>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>>>
+>>>>>> All warnings (new ones prefixed by >>):
+>>>>>>
+>>>>>>>> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
+>>>>>
+>>>>> Given this is clang 16.0.0 with
+>>>>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y, which uses DWARF5 by
+>>>>> default instead of DWARF4, it looks like older binutils not
+>>>>> understanding DWARF5. What version of binutils is being used by the
+>>>>> bot?
+>>>>
+>>>> Hi Nathan,
+>>>>
+>>>> We're using binutils v2.38.90.20220713-2
+>>>>
+>>>> ||/ Name           Version            Architecture Description
+>>>> +++-==============-==================-============-==========================================
+>>>> ii  binutils       2.38.90.20220713-2 amd64        GNU assembler,
+>>>> linker and binary utilities
+>>>
+>>> Thanks for chiming in! This looks like the output of 'dpkg -l', right? I
+>>
+>> Hi Nathan,
+>>
+>> oh, yes, I misunderstood, it's not related to this package.
+>>
+>>> noticed on second glance that the tuple for the objdump warning above is
+>>> 'powerpc-linux-', which leads me to believe that a kernel.org toolchain
+>>> (or a self compiled one) is being used. I would expect the tuple to be
+>>> 'powerpc-linux-gnu-' if Debian's package was being used. Is that
+>>> possible?
+>>
+>> you are right, we used a self-compiled toolchain, we'll try the binutils
+>> from debian package.
+> 
+> Can you first tell us the version you are using ?
+> 
+> 	powerpc-linux-objdump -v
+> 
+> That will tell you the version.
 
-Reported-by: k2ci <kernel-bot@kylinos.cn>
-Signed-off-by: jianghaoran <jianghaoran@kylinos.cn>
----
- drivers/infiniband/sw/siw/siw_qp_tx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Hi Christophe,
 
-diff --git a/drivers/infiniband/sw/siw/siw_qp_tx.c b/drivers/infiniband/sw/siw/siw_qp_tx.c
-index 1f4e60257700..55ed0c27f449 100644
---- a/drivers/infiniband/sw/siw/siw_qp_tx.c
-+++ b/drivers/infiniband/sw/siw/siw_qp_tx.c
-@@ -533,7 +533,7 @@ static int siw_tx_hdt(struct siw_iwarp_tx *c_tx, struct socket *s)
- 					kunmap_local(kaddr);
- 				}
- 			} else {
--				u64 va = sge->laddr + sge_off;
-+				unsigned long va = sge->laddr + sge_off;
- 
- 				page_array[seg] = virt_to_page(va & PAGE_MASK);
- 				if (do_crc)
--- 
-2.25.1
+the version is v2.38:
 
+$ ./powerpc-linux-objdump -v
+GNU objdump (GNU Binutils) 2.38
+Copyright (C) 2022 Free Software Foundation, Inc.
+This program is free software; you may redistribute it under the terms of
+the GNU General Public License version 3 or (at your option) any later 
+version.
+This program has absolutely no warranty.
+
+Best Regards,
+Rong Chen
+
+> 
+> Thanks
+> Christophe
+> _______________________________________________
+> kbuild-all mailing list -- kbuild-all@lists.01.org
+> To unsubscribe send an email to kbuild-all-leave@lists.01.org
+> 

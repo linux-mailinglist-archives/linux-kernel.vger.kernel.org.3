@@ -2,75 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC7E5AA03A
+	by mail.lfdr.de (Postfix) with ESMTP id 290EA5AA039
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:39:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234626AbiIATjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:39:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43030 "EHLO
+        id S234659AbiIATja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:39:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234628AbiIATjS (ORCPT
+        with ESMTP id S234595AbiIATjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:39:18 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF769A9B4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:39:17 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id h22so14309064qtu.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 12:39:17 -0700 (PDT)
+        Thu, 1 Sep 2022 15:39:25 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B6C59A98B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:39:23 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-33dc31f25f9so347061627b3.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 12:39:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=caA/FC3GwEIv5k9saHBJim4xjLc8yHfbXgArB9Vpu9o=;
-        b=KOA+pEkUTKh6NEiZvW0bhOuMsKMrHRq0GZiZppZfrIzhJJlf/cNhMT5nKA3TMNP8r3
-         Wo6rhkS0WvSoCvTy65pQrh2rO+8OEqebCcaPd40uEpi3IO0luDF8LcQ9/0tQ2BqMelYi
-         7KKGmUWZbiv3yUcuuoNFr+RhkGCla80rI/V6FLXc2KuqKCeGFT7WsqixGlO6IdDJJCeE
-         hPRCBX5Tc3zbkoRnFBueyUKt3BDNeSo7y5IZFPkqhhUWlTe0EZKfzobTpmLOrXExn8Mk
-         zK0oQRfAldkCNbAo9cRUG2hIAUFxJRbNQ4uCNeDc6iwrGB7z55hO5EJKxzJF4X8ZJCWO
-         kTRQ==
+        bh=rw5PRlxl7tO0yi2f42RcudRuneYpC4HLzAgnvXZWG5E=;
+        b=lG3CtwEra2JQqN/veO23yk3cgaTJHFCiebuuRZY/xNehRm+m0fM4bIsWwBppGA+dxf
+         mGwrLGImeNf4NmD+qiiJAgJrRcvEAfMmmsjPutkxq2y7CzoFE7qGuyTBDkwrYwo0ghp+
+         DIdTURnQpZf4mS51OcBm4/JauLAis6X1OUJhsFMZ1Eii1uGdRpU21Q08G5BpjTO5hJLN
+         9L5Fsbu9o5yfqdUojSVuS9kjs1tQfCEVguOYiQkyDJxdrNwv3a8BIeLV7PQsB1938bTI
+         TTsL41uELqXnesIe6dBtowmfUnvD7Y1/Zc9uEXdIILlsmZXFDiVnDH9hCWWOHKwToPd1
+         MnoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=caA/FC3GwEIv5k9saHBJim4xjLc8yHfbXgArB9Vpu9o=;
-        b=eaghx7NbJaN+V0w0oD6nNTAsK5SU2R5M43SgDlxvTui3LZnKV0TGmBNhPtWjtrpOP+
-         BMwD/WDuxSRcfqdaGozHWfH0l4waGG7zee6a/9/5c+IW9oXb4tqsSy1aXqJhnm4D5m22
-         6cg8uopMbtPpYkNf9szNw/wd8997plAcT0Wy7E/n52lNiMpUgLZCHBCS70p74Hk0Nd9o
-         gTEySiisn0W+zsVJ/Aosw+YzLj467yomaoduFFDP+203zOBiI25Dmbc5jBu/O8SElu9X
-         thVgjaAGmf0mq94TY/JRAg/KypnO6q4ft/15m8v/c+SWQlMQgeW1WR/qJtcpsXm6yKoG
-         c1fA==
-X-Gm-Message-State: ACgBeo0uc2K3SbGF7i8nu4/QAx65caiyK1QegEKxpXQ0TjWxrWRU9OLv
-        53zdbpNHEBWPomFM6ta2tLDrpY6MhbnSpB0Ikso=
-X-Google-Smtp-Source: AA6agR7ycdrj03TpdN1pNIKGGZ9QWs6zk+zelMKiqHJgiCa6yv0iI9OO+AGRoQEK0SvmHRtqi1edNJROMh8PLIAu4EE=
-X-Received: by 2002:ac8:5786:0:b0:343:3051:170d with SMTP id
- v6-20020ac85786000000b003433051170dmr25052426qta.429.1662061156594; Thu, 01
- Sep 2022 12:39:16 -0700 (PDT)
+        bh=rw5PRlxl7tO0yi2f42RcudRuneYpC4HLzAgnvXZWG5E=;
+        b=bWNkzZG9iJ6buoH0Ac5qdBaVoEvU7M3m4ZOfv/h4YEqkZWE57yvEC6I5Ua5OxLxqt5
+         yLImqqhnQGCXiLX2PVHJwvDis2zrYsRhiAeYRDcucbgu932SHBLreafahWkq6ZAyQIZ6
+         GKRES0o3cVeK9Gi3UYtXBBLhWGNZzn7DruY2ktMlKayM3irdGd0pE7fA2l+EnBlPc+cj
+         LskQGqf2YB/+sgzx33QYHz/pp+/7TE1Ae8B/75/AKsH1pLBPJZWxlwZUdBvyWpvKNxWU
+         poYIi7RdPXHt8CwVENAu7NRchF6zCrK7MOXRK1fZ1DEp/n2x8U6hAErNgoRsnUw6dcer
+         WgGw==
+X-Gm-Message-State: ACgBeo0BwDtUMMSQnvx7Qa3eSAEtYj2CxR/spjdp6uxGUgToic1/X/yV
+        pem35TDPlNzsFSyRmjFzOwbQIZSh57QO6HGMfU903A==
+X-Google-Smtp-Source: AA6agR43mbcplTcd3Q6E6SWUR/a0QzgezQxqYw6L8vriq8koQ7chGwVsb4h58VmaT16qZLx9mcJbzjGRj/xFE0GH57Q=
+X-Received: by 2002:a0d:d850:0:b0:340:d2c0:b022 with SMTP id
+ a77-20020a0dd850000000b00340d2c0b022mr21758237ywe.469.1662061162404; Thu, 01
+ Sep 2022 12:39:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220901175022.334824-1-cezary.rojewski@intel.com> <20220901175022.334824-3-cezary.rojewski@intel.com>
-In-Reply-To: <20220901175022.334824-3-cezary.rojewski@intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 1 Sep 2022 22:38:40 +0300
-Message-ID: <CAHp75VdVqRyA=J0-HsHtgiAZhd8XxqxmMddTyV2u29TxvV9=Cw@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] ASoC: SOF: Remove strsplit_u32() and tokenize_input()
-To:     Cezary Rojewski <cezary.rojewski@intel.com>
-Cc:     ALSA Development Mailing List <alsa-devel@alsa-project.org>,
-        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        amadeuszx.slawinski@linux.intel.com,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Andy Shevchenko <andy@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>
+References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
+ <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
+ <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+ <YxBc1xuGbB36f8zC@dhcp22.suse.cz> <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
+ <YxEE1vOwRPdzKxoq@dhcp22.suse.cz>
+In-Reply-To: <YxEE1vOwRPdzKxoq@dhcp22.suse.cz>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Thu, 1 Sep 2022 12:39:11 -0700
+Message-ID: <CAJuCfpHuzJGTA_-m0Jfawc7LgJLt4GztUUY4K9N9-7bFqJuXnw@mail.gmail.com>
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        Mel Gorman <mgorman@suse.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        David Vernet <void@manifault.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Laurent Dufour <ldufour@linux.ibm.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
+        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
+        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Benjamin Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christopher Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
+        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
+        Minchan Kim <minchan@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        kernel-team <kernel-team@android.com>,
+        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,49 +109,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 8:40 PM Cezary Rojewski
-<cezary.rojewski@intel.com> wrote:
+On Thu, Sep 1, 2022 at 12:15 PM Michal Hocko <mhocko@suse.com> wrote:
 >
-> Make use of global user input tokenization helper instead of the
-> internal one as both serve same purpose. With that, both strsplit_u32()
+> On Thu 01-09-22 08:33:19, Suren Baghdasaryan wrote:
+> > On Thu, Sep 1, 2022 at 12:18 AM Michal Hocko <mhocko@suse.com> wrote:
+> [...]
+> > > So I find Peter's question completely appropriate while your response to
+> > > that not so much! Maybe ftrace is not the right tool for the intented
+> > > job. Maybe there are other ways and it would be really great to show
+> > > that those have been evaluated and they are not suitable for a), b) and
+> > > c) reasons.
+> >
+> > That's fair.
+> > For memory tracking I looked into using kmemleak and page_owner which
+> > can't match the required functionality at an overhead acceptable for
+> > production and pre-production testing environments.
+>
+> Being more specific would be really helpful. Especially when your cover
+> letter suggests that you rely on page_owner/memcg metadata as well to
+> match allocation and their freeing parts.
 
-the same
+kmemleak is known to be slow and it's even documented [1], so I hope I
+can skip that part. For page_owner to provide the comparable
+information we would have to capture the call stacks for all page
+allocations unlike our proposal which allows to do that selectively
+for specific call sites. I'll post the overhead numbers of call stack
+capturing once I'm finished with profiling the latest code, hopefully
+sometime tomorrow, in the worst case after the long weekend.
 
-> and tokenize_input() become unused so remove them.
+>
+> > traces + BPF I
+> > haven't evaluated myself but heard from other members of my team who
+> > tried using that in production environment with poor results. I'll try
+> > to get more specific information on that.
+>
+> That would be helpful as well.
 
-...
+Ack.
 
->  #include <linux/debugfs.h>
->  #include <linux/module.h>
->  #include <linux/pm_runtime.h>
-> +#include <linux/string_helpers.h>
+>
+> > > E.g. Oscar has been working on extending page_ext to track number of
+> > > allocations for specific calltrace[1]. Is this 1:1 replacement? No! But
+> > > it can help in environments where page_ext can be enabled and it is
+> > > completely non-intrusive to the MM code.
+> >
+> > Thanks for pointing out this work. I'll need to review and maybe
+> > profile it before making any claims.
+> >
+> > >
+> > > If the page_ext overhead is not desirable/acceptable then I am sure
+> > > there are other options. E.g. kprobes/LivePatching framework can hook
+> > > into functions and alter their behavior. So why not use that for data
+> > > collection? Has this been evaluated at all?
+> >
+> > I'm not sure how I can hook into say alloc_pages() to find out where
+> > it was called from without capturing the call stack (which would
+> > introduce an overhead at every allocation). Would love to discuss this
+> > or other alternatives if they can be done with low enough overhead.
+>
+> Yes, tracking back the call trace would be really needed. The question
+> is whether this is really prohibitively expensive. How much overhead are
+> we talking about? There is no free lunch here, really.  You either have
+> the overhead during runtime when the feature is used or on the source
+> code level for all the future development (with a maze of macros and
+> wrappers).
 
-I believe either blank line needs to be here (to split the sound / SOF
-group of headers) or this should be put after 'so*'-ones
+Will post the overhead numbers soon.
+What I hear loud and clear is that we need a kernel command-line kill
+switch that mitigates the overhead for having this feature. That seems
+to be the main concern.
+Thanks,
+Suren.
 
->  #include <sound/soc.h>
->  #include <sound/sof/header.h>
->  #include "sof-client.h"
+[1] https://docs.kernel.org/dev-tools/kmemleak.html#limitations-and-drawbacks
 
-...
-
->         struct sof_probes_priv *priv = cdev->data;
->         struct device *dev = &cdev->auxdev.dev;
->         struct sof_probe_point_desc *desc;
-> -       size_t num_tkns, bytes;
-> -       u32 *tkns;
-> +       size_t bytes;
-> +       u32 num_tkns, *tkns;
-
-I would expect a longer line first.
-
->         int ret, err;
-
-...
-
-With the above addressed
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-
--- 
-With Best Regards,
-Andy Shevchenko
+>
+> Thanks!
+> --
+> Michal Hocko
+> SUSE Labs

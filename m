@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6467F5A9F98
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 346115A9F9B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:10:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233671AbiIATKB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:10:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45368 "EHLO
+        id S231244AbiIATKS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:10:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbiIATJ6 (ORCPT
+        with ESMTP id S233800AbiIATKL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:09:58 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DD9165B3
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:09:55 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id q3so14815843pjg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 12:09:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=rmhnaxQfwN1McE4B6m4Z6oqL1MRBI2ssnsG/A4hbweI=;
-        b=E5MyDImbdL8E/T862MbS3GPy8IndR86HbVZO+HTuE2qenj8Ij1hGVD0qOgX+iJAQ9C
-         RJun2L/ro45JuctTlr69CDBjQgT2B5zXgMli9zoFHR7Upifgl+ZutOM7qFYtGnfEDQDL
-         S7un5iXyXJPp/2w9DdwsweQWkC/NriFrQU5q8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=rmhnaxQfwN1McE4B6m4Z6oqL1MRBI2ssnsG/A4hbweI=;
-        b=XJYR0AxfAx8uX+hyvptP+rfqzJfbMvIgDEjyyTou2T4HlL4Icb/65Vo8xjliBTLbLq
-         7e6uEAh9VqZ6B4g2ptcr/WO9dm04Tbwshmfev2xeM7a5cIdsZ27PvoK62axwBE7X803R
-         +/FhIWCzwX3k5YG8IcUHkjw7cYpR9fDYslXN+PZjCdW0mmLTniRRAAz6W1U16Nt4l3Ad
-         2kgTzyHNQ0YHKj1NrEbpXgGfpUlcK+zD/mq/51io4y7Lv1EeVyVNZi/Rs3qJJS5I2muf
-         t+GZOMrQeVHcWvxQ0IKiUJu5vEVvmVYvNb7oIicPJYtuyBebSnrIcwK3cgca4DtFZa5d
-         oy9A==
-X-Gm-Message-State: ACgBeo3xtJm6dczbtLqqavdR9IsF4rcBJTK5Y4no2X+bU3iVOPWqsoG+
-        0qfLoCX5hgA6NTKJuTtTMW6tpw==
-X-Google-Smtp-Source: AA6agR7tJ/cbV52rdYs3d2bZ07wOzydTl7VLmGdNX7pIOkk2dCEOIYb1ZWPq/BbE3Tp794QSwfOYKQ==
-X-Received: by 2002:a17:90b:2496:b0:1ef:a94:7048 with SMTP id nt22-20020a17090b249600b001ef0a947048mr626469pjb.244.1662059394673;
-        Thu, 01 Sep 2022 12:09:54 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id t20-20020a62d154000000b0052dbad1ea2esm13685785pfl.6.2022.09.01.12.09.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 12:09:54 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Len Baker <len.baker@gmx.com>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Francis Laniel <laniel_francis@privacyrequired.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] string: Introduce strtomem() and strtomem_pad()
-Date:   Thu,  1 Sep 2022 12:09:52 -0700
-Message-Id: <20220901190952.2229696-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 1 Sep 2022 15:10:11 -0400
+Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDA111EC7F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:10:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
+        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=rhtT+Sp0vnxRpNP0XY9ZvDI6DsH8ZajxXNPr63C7SlI=; b=LttpzivC3NSHhWeg3Re8l/llhP
+        wan5/B9sFOajMVmEqto29kJYIXKu0rCD5fNcU4t4bb+NFAHhEsv2gPbe0DwjD18+niwwF6IYTptay
+        +0D1M3hPbz/arkPbQDHU1IGIlt8HDLH4YrWX3d2tvEV28zE7SaauVdjtUC9cI51yfK52tlmx6xiNY
+        3vknyOIgFocH9z9HwMX7qOK6vNyvTBpq0+NMu9VP2RbcD/RxCi0dcsSqhqWiwNsB3qsRYIpK2Ooyw
+        qHy+rW/jxYlyS39UKbLiVx4tdh7cwmIibN9rTam/TFM3P+qiwfZOXTqJHe/o79MWzW+5UQOf+HhYH
+        qRdLRkKA==;
+Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=51554)
+        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <noralf@tronnes.org>)
+        id 1oTpZj-0004zo-Nc; Thu, 01 Sep 2022 21:10:03 +0200
+Message-ID: <6bbd14d3-74df-57f5-c8b1-d559f53f9248@tronnes.org>
+Date:   Thu, 1 Sep 2022 21:09:55 +0200
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10264; h=from:subject; bh=u0Wr8M6AT07QJos7oxfIVjMj8ajuDyzF1jmHlbzlirs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjEQOAmYjTS71e0epMnCq0v8rFPmeBlr1KIn2pg4cB X/IwMByJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxEDgAAKCRCJcvTf3G3AJua0D/ 9UdsHrVqL+qP3/3ynvjxBpXXV6wW65Jj0Dkbhz2bkaHur4hSlyxcxsniuVg9HaS5U0s/o5G6cjhfOW IRfBw9bPdKZV3CXO/5pdxtJ4D2iZS2qBYglxai5pTcSmW9g2wsGLvTWlbYthKr9DYjpbK4XnX84eyH RhjH8KLtXnpIq2xPxkCHdhJcrl6adLeh5+1Q+6l6B9ljKZ8hcslWyuY+fSt9k9N4taarbPlnZbgn2H B3mzqbnNpDJkqp8VejVXObt/AKa0oeC74Dh/Ky4/OwcvllUTeRdLD/aeRUKV6WBWmgRwyF89rHJeus Y8tJPdanL9YzSUC+gjhPGCNHBbgcrxXa5A9i+T9dYUuyB5tPuj5PPUuJ8JcZhEoGD+/uJyJRNeMllv aIWukbgGzx1/mX9E35ZJK6XubxrCc6FbcRvSnji4kuR8DlfvU046Gurk4O1AfYJmoCXKvfIntmnRSH Gaq85av/eQPk0mSQblBejEpcv6N10rockW4GWUgiLbooiK5ackbV8hMHqXOiJvZH79M3W954wpGDlD AHe45rsnGcm3gXou9881eQ7+vxK3o1wWwbIGu+xgj7VIgC5RBejGHMxepNMHRilM1HovGZ/o1/6NGt Mzr0aqK885opJbuBIa6DhWXH4ZWvYjlbQ/J8bMdkayB8xvtYs3sbSYycNsSA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v2 10/41] drm/modes: Add a function to generate analog
+ display modes
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
+From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v2-10-459522d653a7@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,256 +82,1338 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-One of the "legitimate" uses of strncpy() is copying a NUL-terminated
-string into a fixed-size non-NUL-terminated character array. To avoid
-the weaknesses and ambiguity of intent when using strncpy(), provide
-replacement functions that explicitly distinguish between trailing
-padding and not, and require the destination buffer size be discoverable
-by the compiler.
 
-For example:
 
-struct obj {
-	int foo;
-	char small[4] __nonstring;
-	char big[8] __nonstring;
-	int bar;
-};
+Den 29.08.2022 15.11, skrev Maxime Ripard:
+> Multiple drivers (meson, vc4, sun4i) define analog TV 525-lines and
+> 
+> 625-lines modes in their drivers.
+> 
+> 
+> 
+> Since those modes are fairly standard, and that we'll need to use them
+> 
+> in more places in the future, it makes sense to move their definition
+> 
+> into the core framework.
+> 
+> 
+> 
+> However, analog display usually have fairly loose timings requirements,
+> 
+> the only discrete parameters being the total number of lines and pixel
+> 
+> clock frequency. Thus, we created a function that will create a display
+> 
+> mode from the standard, the pixel frequency and the active area.
+> 
+> 
+> 
+> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
 
-struct obj p;
+On a 32-bit build I'm getting bogus modes:
 
-/* This will truncate to 4 chars with no trailing NUL */
-strncpy(p.small, "hello", sizeof(p.small));
-/* p.small contains 'h', 'e', 'l', 'l' */
+[  249.599997] [drm:drm_helper_probe_single_connector_modes]
+[CONNECTOR:45:Composite-1]
+[  249.600198] [drm:drm_mode_debug_printmodeline] Modeline "720x480i":
+17143 13500 720 308 372 3 480 499 505 525 0x40 0x1a
+[  249.600292] [drm:drm_mode_prune_invalid] Not using 720x480i mode:
+H_ILLEGAL
+[  249.600317] [drm:drm_mode_debug_printmodeline] Modeline "720x576i": 0
+13500 720 302 366 0 576 597 603 625 0x40 0x1a
+[  249.600349] [drm:drm_mode_prune_invalid] Not using 720x576i mode:
+H_ILLEGAL
+[  249.600374] [drm:drm_helper_probe_single_connector_modes]
+[CONNECTOR:45:Composite-1] probed modes :
+[  249.600453] [drm:drm_mode_debug_printmodeline] Modeline "720x240i":
+60 27800 720 736 808 896 240 241 244 516 0x20 0x6
 
-/* This will NUL pad to 8 chars. */
-strncpy(p.big, "hello", sizeof(p.big));
-/* p.big contains 'h', 'e', 'l', 'l', 'o', '\0', '\0', '\0' */
+It's fine on 64-bit.
 
-When the "__nonstring" attributes are missing, the intent of the
-programmer becomes ambiguous for whether the lack of a trailing NUL
-in the p.small copy is a bug. Additionally, it's not clear whether
-the trailing padding in the p.big copy is _needed_. Both cases
-become unambiguous with:
+Noralf.
 
-strtomem(p.small, "hello");
-strtomem_pad(p.big, "hello", 0);
-
-See also https://github.com/KSPP/linux/issues/90
-
-Expand the memcpy KUnit tests to include these functions.
-
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v2:
- - updated deprecated.rst to include strtomem*()
- - added kerndoc and replacement table to strncpy()
- - switched to ULONG_MAX in KUnit tests (Geert)
- - fix typo in commit log example (Geert)
-v1: https://lore.kernel.org/lkml/20220831230006.1016236-1-keescook@chromium.org
----
- Documentation/process/deprecated.rst | 11 +++---
- include/linux/fortify-string.h       | 30 ++++++++++++++++
- include/linux/string.h               | 43 ++++++++++++++++++++++
- lib/memcpy_kunit.c                   | 53 ++++++++++++++++++++++++++++
- 4 files changed, 133 insertions(+), 4 deletions(-)
-
-diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
-index a6e36d9c3d14..783b0488cf4d 100644
---- a/Documentation/process/deprecated.rst
-+++ b/Documentation/process/deprecated.rst
-@@ -138,17 +138,20 @@ be NUL terminated. This can lead to various linear read overflows and
- other misbehavior due to the missing termination. It also NUL-pads
- the destination buffer if the source contents are shorter than the
- destination buffer size, which may be a needless performance penalty
--for callers using only NUL-terminated strings. The safe replacement is
-+for callers using only NUL-terminated strings.
-+
-+When the destination is required to be NUL-terminated, the replacement is
- strscpy(), though care must be given to any cases where the return value
- of strncpy() was used, since strscpy() does not return a pointer to the
- destination, but rather a count of non-NUL bytes copied (or negative
- errno when it truncates). Any cases still needing NUL-padding should
- instead use strscpy_pad().
- 
--If a caller is using non-NUL-terminated strings, strncpy() can
--still be used, but destinations should be marked with the `__nonstring
-+If a caller is using non-NUL-terminated strings, strtomem() should be
-+be used, and the destinations should be marked with the `__nonstring
- <https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html>`_
--attribute to avoid future compiler warnings.
-+attribute to avoid future compiler warnings. For cases still needing
-+NUL-padding, strtomem_pad() can be used.
- 
- strlcpy()
- ---------
-diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
-index 3b401fa0f374..eed2119b23c5 100644
---- a/include/linux/fortify-string.h
-+++ b/include/linux/fortify-string.h
-@@ -77,6 +77,36 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
- #define POS	__pass_object_size(1)
- #define POS0	__pass_object_size(0)
- 
-+/** strncpy - Copy a string to memory with non-guaranteed NUL padding
-+ *
-+ * @p: pointer to destination of copy
-+ * @q: pointer to NUL-terminated source string to copy
-+ * @size: bytes to write at @p
-+ *
-+ * If strlen(@q) >= @size, the copy of @q will stop after @size bytes,
-+ * and @p will NOT be NUL-terminated
-+ *
-+ * If strlen(@q) < @size, following the copy of @q, trailing NUL bytes
-+ * will be written to @p until @size total bytes have been written.
-+ *
-+ * Do not use this function. While FORTIFY_SOURCE tries to avoid
-+ * over-reads of @q, it cannot defend against writing unterminated
-+ * results to @p. Using strncpy() remains ambiguous and fragile.
-+ * Instead, please choose an alternative, so that the expectation
-+ * of @p's contents is unambiguous:
-+ *
-+ * @p needs to be:     | padded to @size | not padded
-+ * --------------------+-----------------+------------+
-+ *      NUL-terminated | strscpy_pad()   | strscpy()  |
-+ * --------------------+-----------------+------------+
-+ *  not NUL-terminated | strtomem_pad()  | strtomem() |
-+ * --------------------+-----------------+------------+
-+ *
-+ * Note strscpy*()'s differing return values for detecting truncation,
-+ * and strtomem*()'s expectation that the destination is marked with
-+ * __nonstring when it is a character array.
-+ *
-+ */
- __FORTIFY_INLINE __diagnose_as(__builtin_strncpy, 1, 2, 3)
- char *strncpy(char * const POS p, const char *q, __kernel_size_t size)
- {
-diff --git a/include/linux/string.h b/include/linux/string.h
-index 61ec7e4f6311..cf7607b32102 100644
---- a/include/linux/string.h
-+++ b/include/linux/string.h
-@@ -260,6 +260,49 @@ static inline const char *kbasename(const char *path)
- void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
- 		    int pad);
- 
-+/**
-+ * strtomem_pad - Copy NUL-terminated string to non-NUL-terminated buffer
-+ *
-+ * @dest: Pointer of destination character array (marked as __nonstring)
-+ * @src: Pointer to NUL-terminated string
-+ * @pad: Padding character to fill any remaining bytes of @dest after copy
-+ *
-+ * This is a replacement for strncpy() uses where the destination is not
-+ * a NUL-terminated string, but with bounds checking on the source size, and
-+ * an explicit padding character. If padding is not required, use strtomem().
-+ *
-+ * Note that the size of @dest is not an argument, as the length of @dest
-+ * must be discoverable by the compiler.
-+ */
-+#define strtomem_pad(dest, src, pad)	do {				\
-+	const size_t _dest_len = __builtin_object_size(dest, 1);	\
-+									\
-+	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
-+		     _dest_len == (size_t)-1);				\
-+	memcpy_and_pad(dest, _dest_len, src, strnlen(src, _dest_len), pad); \
-+} while (0)
-+
-+/**
-+ * strtomem - Copy NUL-terminated string to non-NUL-terminated buffer
-+ *
-+ * @dest: Pointer of destination character array (marked as __nonstring)
-+ * @src: Pointer to NUL-terminated string
-+ *
-+ * This is a replacement for strncpy() uses where the destination is not
-+ * a NUL-terminated string, but with bounds checking on the source size, and
-+ * without trailing padding. If padding is required, use strtomem_pad().
-+ *
-+ * Note that the size of @dest is not an argument, as the length of @dest
-+ * must be discoverable by the compiler.
-+ */
-+#define strtomem(dest, src)	do {					\
-+	const size_t _dest_len = __builtin_object_size(dest, 1);	\
-+									\
-+	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
-+		     _dest_len == (size_t)-1);				\
-+	memcpy(dest, src, min(_dest_len, strnlen(src, _dest_len)));	\
-+} while (0)
-+
- /**
-  * memset_after - Set a value after a struct member to the end of a struct
-  *
-diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
-index 62f8ffcbbaa3..598f5f7dadf4 100644
---- a/lib/memcpy_kunit.c
-+++ b/lib/memcpy_kunit.c
-@@ -272,10 +272,63 @@ static void memset_test(struct kunit *test)
- #undef TEST_OP
- }
- 
-+static void strtomem_test(struct kunit *test)
-+{
-+	static const char input[] = "hi";
-+	static const char truncate[] = "this is too long";
-+	struct {
-+		unsigned long canary1;
-+		unsigned char output[sizeof(unsigned long)] __nonstring;
-+		unsigned long canary2;
-+	} wrap;
-+
-+	memset(&wrap, 0xFF, sizeof(wrap));
-+	KUNIT_EXPECT_EQ_MSG(test, wrap.canary1, ULONG_MAX,
-+			    "bad initial canary value");
-+	KUNIT_EXPECT_EQ_MSG(test, wrap.canary2, ULONG_MAX,
-+			    "bad initial canary value");
-+
-+	/* Check unpadded copy leaves surroundings untouched. */
-+	strtomem(wrap.output, input);
-+	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
-+	KUNIT_EXPECT_EQ(test, wrap.output[0], input[0]);
-+	KUNIT_EXPECT_EQ(test, wrap.output[1], input[1]);
-+	for (int i = 2; i < sizeof(wrap.output); i++)
-+		KUNIT_EXPECT_EQ(test, wrap.output[i], 0xFF);
-+	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
-+
-+	/* Check truncated copy leaves surroundings untouched. */
-+	memset(&wrap, 0xFF, sizeof(wrap));
-+	strtomem(wrap.output, truncate);
-+	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
-+	for (int i = 0; i < sizeof(wrap.output); i++)
-+		KUNIT_EXPECT_EQ(test, wrap.output[i], truncate[i]);
-+	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
-+
-+	/* Check padded copy leaves only string padded. */
-+	memset(&wrap, 0xFF, sizeof(wrap));
-+	strtomem_pad(wrap.output, input, 0xAA);
-+	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
-+	KUNIT_EXPECT_EQ(test, wrap.output[0], input[0]);
-+	KUNIT_EXPECT_EQ(test, wrap.output[1], input[1]);
-+	for (int i = 2; i < sizeof(wrap.output); i++)
-+		KUNIT_EXPECT_EQ(test, wrap.output[i], 0xAA);
-+	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
-+
-+	/* Check truncated padded copy has no padding. */
-+	memset(&wrap, 0xFF, sizeof(wrap));
-+	strtomem(wrap.output, truncate);
-+	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
-+	for (int i = 0; i < sizeof(wrap.output); i++)
-+		KUNIT_EXPECT_EQ(test, wrap.output[i], truncate[i]);
-+	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
-+}
-+
- static struct kunit_case memcpy_test_cases[] = {
- 	KUNIT_CASE(memset_test),
- 	KUNIT_CASE(memcpy_test),
- 	KUNIT_CASE(memmove_test),
-+	KUNIT_CASE(strtomem_test),
- 	{}
- };
- 
--- 
-2.34.1
-
+> 
+> 
+> diff --git a/drivers/gpu/drm/drm_modes.c b/drivers/gpu/drm/drm_modes.c
+> 
+> index 304004fb80aa..ee581ee17171 100644
+> 
+> --- a/drivers/gpu/drm/drm_modes.c
+> 
+> +++ b/drivers/gpu/drm/drm_modes.c
+> 
+> @@ -116,6 +116,459 @@ void drm_mode_probed_add(struct drm_connector *connector,
+> 
+>  }
+> 
+>  EXPORT_SYMBOL(drm_mode_probed_add);
+> 
+>  
+> 
+> +enum drm_mode_analog {
+> 
+> +	DRM_MODE_ANALOG_NTSC,
+> 
+> +	DRM_MODE_ANALOG_PAL,
+> 
+> +};
+> 
+> +
+> 
+> +/*
+> 
+> + * The timings come from:
+> 
+> + * - https://web.archive.org/web/20220406232708/http://www.kolumbus.fi/pami1/video/pal_ntsc.html
+> 
+> + * - https://web.archive.org/web/20220406124914/http://martin.hinner.info/vga/pal.html
+> 
+> + * - https://web.archive.org/web/20220609202433/http://www.batsocks.co.uk/readme/video_timing.htm
+> 
+> + */
+> 
+> +#define NTSC_LINE_DURATION_NS		63556U
+> 
+> +#define NTSC_LINES_NUMBER		525
+> 
+> +
+> 
+> +#define NTSC_HBLK_DURATION_TYP_NS	10900U
+> 
+> +#define NTSC_HBLK_DURATION_MIN_NS	(NTSC_HBLK_DURATION_TYP_NS - 200)
+> 
+> +#define NTSC_HBLK_DURATION_MAX_NS	(NTSC_HBLK_DURATION_TYP_NS + 200)
+> 
+> +
+> 
+> +#define NTSC_HACT_DURATION_TYP_NS	(NTSC_LINE_DURATION_NS - NTSC_HBLK_DURATION_TYP_NS)
+> 
+> +#define NTSC_HACT_DURATION_MIN_NS	(NTSC_LINE_DURATION_NS - NTSC_HBLK_DURATION_MAX_NS)
+> 
+> +#define NTSC_HACT_DURATION_MAX_NS	(NTSC_LINE_DURATION_NS - NTSC_HBLK_DURATION_MIN_NS)
+> 
+> +
+> 
+> +#define NTSC_HFP_DURATION_TYP_NS	1500
+> 
+> +#define NTSC_HFP_DURATION_MIN_NS	1270
+> 
+> +#define NTSC_HFP_DURATION_MAX_NS	2220
+> 
+> +
+> 
+> +#define NTSC_HSLEN_DURATION_TYP_NS	4700
+> 
+> +#define NTSC_HSLEN_DURATION_MIN_NS	(NTSC_HSLEN_DURATION_TYP_NS - 100)
+> 
+> +#define NTSC_HSLEN_DURATION_MAX_NS	(NTSC_HSLEN_DURATION_TYP_NS + 100)
+> 
+> +
+> 
+> +#define NTSC_HBP_DURATION_TYP_NS	4700
+> 
+> +
+> 
+> +/*
+> 
+> + * I couldn't find the actual tolerance for the back porch, so let's
+> 
+> + * just reuse the sync length ones.
+> 
+> + */
+> 
+> +#define NTSC_HBP_DURATION_MIN_NS	(NTSC_HBP_DURATION_TYP_NS - 100)
+> 
+> +#define NTSC_HBP_DURATION_MAX_NS	(NTSC_HBP_DURATION_TYP_NS + 100)
+> 
+> +
+> 
+> +#define PAL_LINE_DURATION_NS		64000U
+> 
+> +#define PAL_LINES_NUMBER		625
+> 
+> +
+> 
+> +#define PAL_HACT_DURATION_TYP_NS	51950U
+> 
+> +#define PAL_HACT_DURATION_MIN_NS	(PAL_HACT_DURATION_TYP_NS - 100)
+> 
+> +#define PAL_HACT_DURATION_MAX_NS	(PAL_HACT_DURATION_TYP_NS + 400)
+> 
+> +
+> 
+> +#define PAL_HBLK_DURATION_TYP_NS	(PAL_LINE_DURATION_NS - PAL_HACT_DURATION_TYP_NS)
+> 
+> +#define PAL_HBLK_DURATION_MIN_NS	(PAL_LINE_DURATION_NS - PAL_HACT_DURATION_MAX_NS)
+> 
+> +#define PAL_HBLK_DURATION_MAX_NS	(PAL_LINE_DURATION_NS - PAL_HACT_DURATION_MIN_NS)
+> 
+> +
+> 
+> +#define PAL_HFP_DURATION_TYP_NS		1650
+> 
+> +#define PAL_HFP_DURATION_MIN_NS		(PAL_HFP_DURATION_TYP_NS - 100)
+> 
+> +#define PAL_HFP_DURATION_MAX_NS		(PAL_HFP_DURATION_TYP_NS + 400)
+> 
+> +
+> 
+> +#define PAL_HSLEN_DURATION_TYP_NS	4700
+> 
+> +#define PAL_HSLEN_DURATION_MIN_NS	(PAL_HSLEN_DURATION_TYP_NS - 200)
+> 
+> +#define PAL_HSLEN_DURATION_MAX_NS	(PAL_HSLEN_DURATION_TYP_NS + 200)
+> 
+> +
+> 
+> +#define PAL_HBP_DURATION_TYP_NS		5700
+> 
+> +#define PAL_HBP_DURATION_MIN_NS		(PAL_HBP_DURATION_TYP_NS - 200)
+> 
+> +#define PAL_HBP_DURATION_MAX_NS		(PAL_HBP_DURATION_TYP_NS + 200)
+> 
+> +
+> 
+> +#define PAL_VFP_INTERLACE_LINES		5
+> 
+> +#define PAL_VSLEN_INTERLACE_LINES	5
+> 
+> +
+> 
+> +#define PAL_SHORT_SYNC_DURATION_NS	((2 + 30) * NSEC_PER_USEC)
+> 
+> +#define PAL_LONG_SYNC_DURATION_NS	((30 + 2) * NSEC_PER_USEC)
+> 
+> +
+> 
+> +struct analog_param_field {
+> 
+> +	unsigned int even, odd;
+> 
+> +};
+> 
+> +
+> 
+> +#define PARAM_FIELD(_odd, _even)		\
+> 
+> +	{ .even = _even, .odd = _odd }
+> 
+> +
+> 
+> +struct analog_param_range {
+> 
+> +	unsigned int	min, typ, max;
+> 
+> +};
+> 
+> +
+> 
+> +#define PARAM_RANGE(_min, _typ, _max)		\
+> 
+> +	{ .min = _min, .typ = _typ, .max = _max }
+> 
+> +
+> 
+> +struct analog_parameters {
+> 
+> +	unsigned int			num_lines;
+> 
+> +	unsigned int			line_duration_ns;
+> 
+> +
+> 
+> +	struct analog_param_range	hact_ns;
+> 
+> +	struct analog_param_range	hfp_ns;
+> 
+> +	struct analog_param_range	hslen_ns;
+> 
+> +	struct analog_param_range	hbp_ns;
+> 
+> +	struct analog_param_range	hblk_ns;
+> 
+> +
+> 
+> +	struct analog_param_field	vfp_lines;
+> 
+> +	struct analog_param_field	vslen_lines;
+> 
+> +	struct analog_param_field	vbp_lines;
+> 
+> +};
+> 
+> +
+> 
+> +#define TV_MODE_PARAMETER(_mode, _lines, _line_dur, _hact, _hfp, _hslen, _hbp, _hblk, _vfp, _vslen, _vbp) \
+> 
+> +	[_mode] = {							\
+> 
+> +		.num_lines = _lines,					\
+> 
+> +		.line_duration_ns = _line_dur,				\
+> 
+> +		.hact_ns = _hact,					\
+> 
+> +		.hfp_ns = _hfp,						\
+> 
+> +		.hslen_ns = _hslen,					\
+> 
+> +		.hbp_ns = _hbp,						\
+> 
+> +		.hblk_ns = _hblk,					\
+> 
+> +		.vfp_lines = _vfp,					\
+> 
+> +		.vslen_lines = _vslen,					\
+> 
+> +		.vbp_lines = _vbp,					\
+> 
+> +	}
+> 
+> +
+> 
+> +const static struct analog_parameters tv_modes_parameters[] = {
+> 
+> +	TV_MODE_PARAMETER(DRM_MODE_ANALOG_NTSC,
+> 
+> +			  NTSC_LINES_NUMBER,
+> 
+> +			  NTSC_LINE_DURATION_NS,
+> 
+> +			  PARAM_RANGE(NTSC_HACT_DURATION_MIN_NS,
+> 
+> +				      NTSC_HACT_DURATION_TYP_NS,
+> 
+> +				      NTSC_HACT_DURATION_MAX_NS),
+> 
+> +			  PARAM_RANGE(NTSC_HFP_DURATION_MIN_NS,
+> 
+> +				      NTSC_HFP_DURATION_TYP_NS,
+> 
+> +				      NTSC_HFP_DURATION_MAX_NS),
+> 
+> +			  PARAM_RANGE(NTSC_HSLEN_DURATION_MIN_NS,
+> 
+> +				      NTSC_HSLEN_DURATION_TYP_NS,
+> 
+> +				      NTSC_HSLEN_DURATION_MAX_NS),
+> 
+> +			  PARAM_RANGE(NTSC_HBP_DURATION_MIN_NS,
+> 
+> +				      NTSC_HBP_DURATION_TYP_NS,
+> 
+> +				      NTSC_HBP_DURATION_MAX_NS),
+> 
+> +			  PARAM_RANGE(NTSC_HBLK_DURATION_MIN_NS,
+> 
+> +				      NTSC_HBLK_DURATION_TYP_NS,
+> 
+> +				      NTSC_HBLK_DURATION_MAX_NS),
+> 
+> +			  PARAM_FIELD(3, 3),
+> 
+> +			  PARAM_FIELD(3, 3),
+> 
+> +			  PARAM_FIELD(3, 3)),
+> 
+> +	TV_MODE_PARAMETER(DRM_MODE_ANALOG_PAL,
+> 
+> +			  PAL_LINES_NUMBER,
+> 
+> +			  PAL_LINE_DURATION_NS,
+> 
+> +			  PARAM_RANGE(PAL_HACT_DURATION_MIN_NS,
+> 
+> +				      PAL_HACT_DURATION_TYP_NS,
+> 
+> +				      PAL_HACT_DURATION_MAX_NS),
+> 
+> +			  PARAM_RANGE(PAL_HFP_DURATION_MIN_NS,
+> 
+> +				      PAL_HFP_DURATION_TYP_NS,
+> 
+> +				      PAL_HFP_DURATION_MAX_NS),
+> 
+> +			  PARAM_RANGE(PAL_HSLEN_DURATION_MIN_NS,
+> 
+> +				      PAL_HSLEN_DURATION_TYP_NS,
+> 
+> +				      PAL_HSLEN_DURATION_MAX_NS),
+> 
+> +			  PARAM_RANGE(PAL_HBP_DURATION_MIN_NS,
+> 
+> +				      PAL_HBP_DURATION_TYP_NS,
+> 
+> +				      PAL_HBP_DURATION_MAX_NS),
+> 
+> +			  PARAM_RANGE(PAL_HBLK_DURATION_MIN_NS,
+> 
+> +				      PAL_HBLK_DURATION_TYP_NS,
+> 
+> +				      PAL_HBLK_DURATION_MAX_NS),
+> 
+> +
+> 
+> +			  /*
+> 
+> +			   * The front porch is actually 6 short sync
+> 
+> +			   * pulses for the even field, and 5 for the
+> 
+> +			   * odd field. Each sync takes half a life so
+> 
+> +			   * the odd field front porch is shorter by
+> 
+> +			   * half a line.
+> 
+> +			   *
+> 
+> +			   * In progressive, we're supposed to use 6
+> 
+> +			   * pulses, so we're fine there
+> 
+> +			   */
+> 
+> +			  PARAM_FIELD(3, 2),
+> 
+> +
+> 
+> +			  /*
+> 
+> +			   * The vsync length is 5 long sync pulses,
+> 
+> +			   * each field taking half a line. We're
+> 
+> +			   * shorter for both fields by half a line.
+> 
+> +			   *
+> 
+> +			   * In progressive, we're supposed to use 5
+> 
+> +			   * pulses, so we're off by half
+> 
+> +			   * a line.
+> 
+> +			   *
+> 
+> +			   * In interlace, we're now off by half a line
+> 
+> +			   * for the even field and one line for the odd
+> 
+> +			   * field.
+> 
+> +			   */
+> 
+> +			  PARAM_FIELD(3, 3),
+> 
+> +
+> 
+> +			  /*
+> 
+> +			   * The back porch is actually 5 short sync
+> 
+> +			   * pulses for the even field, 4 for the odd
+> 
+> +			   * field. In progressive, it's 5 short syncs.
+> 
+> +			   *
+> 
+> +			   * In progressive, we thus have 2.5 lines,
+> 
+> +			   * plus the 0.5 line we were missing
+> 
+> +			   * previously, so we should use 3 lines.
+> 
+> +			   *
+> 
+> +			   * In interlace, the even field is in the
+> 
+> +			   * exact same case than progressive. For the
+> 
+> +			   * odd field, we should be using 2 lines but
+> 
+> +			   * we're one line short, so we'll make up for
+> 
+> +			   * it here by using 3.
+> 
+> +			   */
+> 
+> +			  PARAM_FIELD(3, 3)),
+> 
+> +};
+> 
+> +
+> 
+> +static int fill_analog_mode(struct drm_display_mode *mode,
+> 
+> +			    const struct analog_parameters *params,
+> 
+> +			    unsigned long pixel_clock_hz,
+> 
+> +			    unsigned int hactive,
+> 
+> +			    unsigned int vactive,
+> 
+> +			    bool interlace)
+> 
+> +{
+> 
+> +	unsigned long pixel_duration_ns = NSEC_PER_SEC / pixel_clock_hz;
+> 
+> +	unsigned long long htotal;
+> 
+> +	unsigned int vtotal;
+> 
+> +	unsigned int max_hact, hact_duration_ns;
+> 
+> +	unsigned int hblk, hblk_duration_ns;
+> 
+> +	unsigned int hfp, hfp_min, hfp_duration_ns;
+> 
+> +	unsigned int hslen, hslen_duration_ns;
+> 
+> +	unsigned int hbp, hbp_min, hbp_duration_ns;
+> 
+> +	unsigned int porches, porches_duration_ns;
+> 
+> +	unsigned int vfp, vfp_min;
+> 
+> +	unsigned int vbp, vbp_min;
+> 
+> +	unsigned int vslen;
+> 
+> +	int porches_rem;
+> 
+> +	bool strict = true;
+> 
+> +
+> 
+> +	max_hact = params->hact_ns.max / pixel_duration_ns;
+> 
+> +	if (pixel_clock_hz == 13500000 && hactive > max_hact && hactive <= 720)
+> 
+> +		strict = false;
+> 
+> +
+> 
+> +	/*
+> 
+> +	 * Our pixel duration is going to be round down by the division,
+> 
+> +	 * so rounding up is probably going to introduce even more
+> 
+> +	 * deviation.
+> 
+> +	 */
+> 
+> +	htotal = params->line_duration_ns * pixel_clock_hz / NSEC_PER_SEC;
+> 
+> +
+> 
+> +	hact_duration_ns = hactive * pixel_duration_ns;
+> 
+> +	if (strict &&
+> 
+> +	    (hact_duration_ns < params->hact_ns.min ||
+> 
+> +	     hact_duration_ns > params->hact_ns.max)) {
+> 
+> +		DRM_ERROR("Invalid horizontal active area duration: %uns (min: %u, max %u)\n",
+> 
+> +			  hact_duration_ns, params->hact_ns.min, params->hact_ns.max);
+> 
+> +		return -EINVAL;
+> 
+> +	}
+> 
+> +
+> 
+> +	hblk = htotal - hactive;
+> 
+> +	hblk_duration_ns = hblk * pixel_duration_ns;
+> 
+> +	if (strict &&
+> 
+> +	    (hblk_duration_ns < params->hblk_ns.min ||
+> 
+> +	     hblk_duration_ns > params->hblk_ns.max)) {
+> 
+> +		DRM_ERROR("Invalid horizontal blanking duration: %uns (min: %u, max %u)\n",
+> 
+> +			  hblk_duration_ns, params->hblk_ns.min, params->hblk_ns.max);
+> 
+> +		return -EINVAL;
+> 
+> +	}
+> 
+> +
+> 
+> +	hslen = DIV_ROUND_UP(params->hslen_ns.typ, pixel_duration_ns);
+> 
+> +	hslen_duration_ns = hslen * pixel_duration_ns;
+> 
+> +	if (strict &&
+> 
+> +	    (hslen_duration_ns < params->hslen_ns.min ||
+> 
+> +	     hslen_duration_ns > params->hslen_ns.max)) {
+> 
+> +		DRM_ERROR("Invalid horizontal sync duration: %uns (min: %u, max %u)\n",
+> 
+> +			  hslen_duration_ns, params->hslen_ns.min, params->hslen_ns.max);
+> 
+> +		return -EINVAL;
+> 
+> +	}
+> 
+> +
+> 
+> +	porches = hblk - hslen;
+> 
+> +	porches_duration_ns = porches * pixel_duration_ns;
+> 
+> +	if (strict &&
+> 
+> +	    (porches_duration_ns > (params->hfp_ns.max + params->hbp_ns.max) ||
+> 
+> +	     porches_duration_ns < (params->hfp_ns.min + params->hbp_ns.min))) {
+> 
+> +		DRM_ERROR("Invalid horizontal porches duration: %uns\n", porches_duration_ns);
+> 
+> +		return -EINVAL;
+> 
+> +	}
+> 
+> +
+> 
+> +	hfp_min = DIV_ROUND_UP(params->hfp_ns.min, pixel_duration_ns);
+> 
+> +	hbp_min = DIV_ROUND_UP(params->hbp_ns.min, pixel_duration_ns);
+> 
+> +	porches_rem = porches - hfp_min - hbp_min;
+> 
+> +
+> 
+> +	hfp = hfp_min + DIV_ROUND_UP(porches_rem, 2);
+> 
+> +	hfp_duration_ns = hfp * pixel_duration_ns;
+> 
+> +	if (strict &&
+> 
+> +	    (hfp_duration_ns < params->hfp_ns.min ||
+> 
+> +	     hfp_duration_ns > params->hfp_ns.max)) {
+> 
+> +		DRM_ERROR("Invalid horizontal front porch duration: %uns (min: %u, max %u)\n",
+> 
+> +			  hfp_duration_ns, params->hfp_ns.min, params->hfp_ns.max);
+> 
+> +		return -EINVAL;
+> 
+> +	}
+> 
+> +
+> 
+> +	hbp = porches - hfp;
+> 
+> +	hbp_duration_ns = hbp * pixel_duration_ns;
+> 
+> +	if (strict &&
+> 
+> +	    (hbp_duration_ns < params->hbp_ns.min ||
+> 
+> +	     hbp_duration_ns > params->hbp_ns.max)) {
+> 
+> +		DRM_ERROR("Invalid horizontal back porch duration: %uns (min: %u, max %u)\n",
+> 
+> +			  hbp_duration_ns, params->hbp_ns.min, params->hbp_ns.max);
+> 
+> +		return -EINVAL;
+> 
+> +	}
+> 
+> +
+> 
+> +	if (htotal != (hactive + hfp + hslen + hbp))
+> 
+> +		return -EINVAL;
+> 
+> +
+> 
+> +	mode->clock = pixel_clock_hz / 1000;
+> 
+> +	mode->hdisplay = hactive;
+> 
+> +	mode->hsync_start = hactive + hfp;
+> 
+> +	mode->hsync_end = hactive + hfp + hslen;
+> 
+> +	mode->htotal = hactive + hfp + hslen + hbp;
+> 
+> +
+> 
+> +	if (interlace) {
+> 
+> +		vfp_min = params->vfp_lines.even + params->vfp_lines.odd;
+> 
+> +		vbp_min = params->vbp_lines.even + params->vbp_lines.odd;
+> 
+> +		vslen = params->vslen_lines.even + params->vslen_lines.odd;
+> 
+> +	} else {
+> 
+> +		/*
+> 
+> +		 * By convention, NSTC (aka 525/60) systems start with
+> 
+> +		 * the even field, but PAL (aka 625/50) systems start
+> 
+> +		 * with the odd one.
+> 
+> +		 *
+> 
+> +		 * PAL systems also have asymetric timings between the
+> 
+> +		 * even and odd field, while NTSC is symetric.
+> 
+> +		 *
+> 
+> +		 * Moreover, if we want to create a progressive mode for
+> 
+> +		 * PAL, we need to use the odd field timings.
+> 
+> +		 *
+> 
+> +		 * Since odd == even for NTSC, we can just use the odd
+> 
+> +		 * one all the time to simplify the code a bit.
+> 
+> +		 */
+> 
+> +		vfp_min = params->vfp_lines.odd;
+> 
+> +		vbp_min = params->vbp_lines.odd;
+> 
+> +		vslen = params->vslen_lines.odd;
+> 
+> +	}
+> 
+> +
+> 
+> +	porches = params->num_lines - vactive - vslen;
+> 
+> +	porches_rem = porches - vfp_min - vbp_min;
+> 
+> +
+> 
+> +	vfp = vfp_min + (porches_rem / 2);
+> 
+> +	vbp = porches - vfp;
+> 
+> +
+> 
+> +	vtotal = vactive + vfp + vslen + vbp;
+> 
+> +	if (params->num_lines != vtotal) {
+> 
+> +		DRM_ERROR("Invalid vertical total: %upx (expected %upx)\n",
+> 
+> +			  vtotal, params->num_lines);
+> 
+> +		return -EINVAL;
+> 
+> +	}
+> 
+> +
+> 
+> +	mode->vdisplay = vactive;
+> 
+> +	mode->vsync_start = vactive + vfp;
+> 
+> +	mode->vsync_end = vactive + vfp + vslen;
+> 
+> +	mode->vtotal = vactive + vfp + vslen + vbp;
+> 
+> +
+> 
+> +	mode->type = DRM_MODE_TYPE_DRIVER;
+> 
+> +	mode->flags = DRM_MODE_FLAG_NVSYNC | DRM_MODE_FLAG_NHSYNC;
+> 
+> +	if (interlace)
+> 
+> +		mode->flags |= DRM_MODE_FLAG_INTERLACE;
+> 
+> +
+> 
+> +	drm_mode_set_name(mode);
+> 
+> +
+> 
+> +	if (mode->vtotal != params->num_lines)
+> 
+> +		return -EINVAL;
+> 
+> +
+> 
+> +	return 0;
+> 
+> +}
+> 
+> +
+> 
+> +/**
+> 
+> + * drm_analog_tv_mode - create a display mode for an analog TV
+> 
+> + * @dev: drm device
+> 
+> + * @tv_mode: TV Mode standard to create a mode for. See DRM_MODE_TV_MODE_*.
+> 
+> + * @pixel_clock_hz: Pixel Clock Frequency, in Hertz
+> 
+> + * @hdisplay: hdisplay size
+> 
+> + * @vdisplay: vdisplay size
+> 
+> + * @interlace: whether to compute an interlaced mode
+> 
+> + *
+> 
+> + * This function creates a struct drm_display_mode instance suited for
+> 
+> + * an analog TV output, for one of the usual analog TV mode.
+> 
+> + *
+> 
+> + * Note that @hdisplay is larger than the usual constraints for the PAL
+> 
+> + * and NTSC timings, and we'll choose to ignore most timings constraints
+> 
+> + * to reach those resolutions.
+> 
+> + *
+> 
+> + * Returns:
+> 
+> + *
+> 
+> + * A pointer to the mode, allocated with drm_mode_create(). Returns NULL
+> 
+> + * on error.
+> 
+> + */
+> 
+> +struct drm_display_mode *drm_analog_tv_mode(struct drm_device *dev,
+> 
+> +					    enum drm_connector_tv_mode tv_mode,
+> 
+> +					    unsigned long pixel_clock_hz,
+> 
+> +					    unsigned int hdisplay,
+> 
+> +					    unsigned int vdisplay,
+> 
+> +					    bool interlace)
+> 
+> +{
+> 
+> +	struct drm_display_mode *mode;
+> 
+> +	enum drm_mode_analog analog;
+> 
+> +	int ret;
+> 
+> +
+> 
+> +	switch (tv_mode) {
+> 
+> +	case DRM_MODE_TV_MODE_NTSC_443:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_NTSC_J:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_NTSC_M:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_PAL_60:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_PAL_M:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_SECAM_60:
+> 
+> +		analog = DRM_MODE_ANALOG_NTSC;
+> 
+> +		break;
+> 
+> +
+> 
+> +	case DRM_MODE_TV_MODE_PAL_B:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_PAL_D:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_PAL_G:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_PAL_H:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_PAL_I:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_PAL_N:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_PAL_NC:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_SECAM_B:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_SECAM_D:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_SECAM_G:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_SECAM_K:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_SECAM_K1:
+> 
+> +		fallthrough;
+> 
+> +	case DRM_MODE_TV_MODE_SECAM_L:
+> 
+> +		analog = DRM_MODE_ANALOG_PAL;
+> 
+> +		break;
+> 
+> +
+> 
+> +	default:
+> 
+> +		return NULL;
+> 
+> +	}
+> 
+> +
+> 
+> +	mode = drm_mode_create(dev);
+> 
+> +	if (!mode)
+> 
+> +		return NULL;
+> 
+> +
+> 
+> +	ret = fill_analog_mode(mode,
+> 
+> +			       &tv_modes_parameters[analog],
+> 
+> +			       pixel_clock_hz, hdisplay, vdisplay, interlace);
+> 
+> +	if (ret)
+> 
+> +		goto err_free_mode;
+> 
+> +
+> 
+> +	return mode;
+> 
+> +
+> 
+> +err_free_mode:
+> 
+> +	drm_mode_destroy(dev, mode);
+> 
+> +	return NULL;
+> 
+> +}
+> 
+> +EXPORT_SYMBOL(drm_analog_tv_mode);
+> 
+> +
+> 
+>  /**
+> 
+>   * drm_cvt_mode -create a modeline based on the CVT algorithm
+> 
+>   * @dev: drm device
+> 
+> diff --git a/drivers/gpu/drm/tests/Makefile b/drivers/gpu/drm/tests/Makefile
+> 
+> index b29ef1085cad..b22ac96fdd65 100644
+> 
+> --- a/drivers/gpu/drm/tests/Makefile
+> 
+> +++ b/drivers/gpu/drm/tests/Makefile
+> 
+> @@ -10,5 +10,6 @@ obj-$(CONFIG_DRM_KUNIT_TEST) += \
+> 
+>  	drm_framebuffer_test.o \
+> 
+>  	drm_kunit_helpers.o \
+> 
+>  	drm_mm_test.o \
+> 
+> +	drm_modes_test.o \
+> 
+>  	drm_plane_helper_test.o \
+> 
+>  	drm_rect_test.o
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_modes_test.c b/drivers/gpu/drm/tests/drm_modes_test.c
+> 
+> new file mode 100644
+> 
+> index 000000000000..87d398fcb99e
+> 
+> --- /dev/null
+> 
+> +++ b/drivers/gpu/drm/tests/drm_modes_test.c
+> 
+> @@ -0,0 +1,131 @@
+> 
+> +// SPDX-License-Identifier: GPL-2.0
+> 
+> +/*
+> 
+> + * Kunit test for drm_modes functions
+> 
+> + */
+> 
+> +
+> 
+> +#include <kunit/test.h>
+> 
+> +
+> 
+> +#include <drm/drm_modes.h>
+> 
+> +
+> 
+> +#include "drm_kunit_helpers.h"
+> 
+> +
+> 
+> +struct drm_modes_test_priv {
+> 
+> +	struct drm_device *drm;
+> 
+> +};
+> 
+> +
+> 
+> +static int drm_modes_test_init(struct kunit *test)
+> 
+> +{
+> 
+> +	struct drm_modes_test_priv *priv;
+> 
+> +
+> 
+> +	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
+> 
+> +	if (!priv)
+> 
+> +		return -ENOMEM;
+> 
+> +	test->priv = priv;
+> 
+> +
+> 
+> +	priv->drm = drm_kunit_device_init("drm-modes-test");
+> 
+> +	if (IS_ERR(priv->drm))
+> 
+> +		return PTR_ERR(priv->drm);
+> 
+> +
+> 
+> +	return 0;
+> 
+> +}
+> 
+> +
+> 
+> +static void drm_modes_test_exit(struct kunit *test)
+> 
+> +{
+> 
+> +	struct drm_modes_test_priv *priv = test->priv;
+> 
+> +
+> 
+> +	drm_kunit_device_exit(priv->drm);
+> 
+> +}
+> 
+> +
+> 
+> +static void drm_modes_analog_tv_ntsc_480i(struct kunit *test)
+> 
+> +{
+> 
+> +	struct drm_modes_test_priv *priv = test->priv;
+> 
+> +	struct drm_display_mode *mode;
+> 
+> +
+> 
+> +	mode = drm_analog_tv_mode(priv->drm,
+> 
+> +				  DRM_MODE_TV_MODE_NTSC_M,
+> 
+> +				  13500 * 1000, 720, 480,
+> 
+> +				  true);
+> 
+> +	KUNIT_ASSERT_NOT_NULL(test, mode);
+> 
+> +
+> 
+> +	KUNIT_EXPECT_EQ(test, drm_mode_vrefresh(mode), 60);
+> 
+> +	KUNIT_EXPECT_EQ(test, mode->hdisplay, 720);
+> 
+> +
+> 
+> +	/* 63.556us * 13.5MHz = 858 pixels */
+> 
+> +	KUNIT_EXPECT_EQ(test, mode->htotal, 858);
+> 
+> +	KUNIT_EXPECT_EQ(test, mode->vdisplay, 480);
+> 
+> +	KUNIT_EXPECT_EQ(test, mode->vtotal, 525);
+> 
+> +}
+> 
+> +
+> 
+> +static void drm_modes_analog_tv_ntsc_480i_inlined(struct kunit *test)
+> 
+> +{
+> 
+> +	struct drm_modes_test_priv *priv = test->priv;
+> 
+> +	struct drm_display_mode *expected, *mode;
+> 
+> +
+> 
+> +	expected = drm_analog_tv_mode(priv->drm,
+> 
+> +				      DRM_MODE_TV_MODE_NTSC_M,
+> 
+> +				      13500 * 1000, 720, 480,
+> 
+> +				      true);
+> 
+> +	KUNIT_ASSERT_NOT_NULL(test, expected);
+> 
+> +
+> 
+> +	mode = drm_mode_analog_ntsc_480i(priv->drm);
+> 
+> +	KUNIT_ASSERT_NOT_NULL(test, mode);
+> 
+> +
+> 
+> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(expected, mode));
+> 
+> +}
+> 
+> +
+> 
+> +static void drm_modes_analog_tv_pal_576i(struct kunit *test)
+> 
+> +{
+> 
+> +	struct drm_modes_test_priv *priv = test->priv;
+> 
+> +	struct drm_display_mode *mode;
+> 
+> +
+> 
+> +	mode = drm_analog_tv_mode(priv->drm,
+> 
+> +				  DRM_MODE_TV_MODE_PAL_B,
+> 
+> +				  13500 * 1000, 720, 576,
+> 
+> +				  true);
+> 
+> +	KUNIT_ASSERT_NOT_NULL(test, mode);
+> 
+> +
+> 
+> +	KUNIT_EXPECT_EQ(test, drm_mode_vrefresh(mode), 50);
+> 
+> +	KUNIT_EXPECT_EQ(test, mode->hdisplay, 720);
+> 
+> +
+> 
+> +	/* 64us * 13.5MHz = 864 pixels */
+> 
+> +	KUNIT_EXPECT_EQ(test, mode->htotal, 864);
+> 
+> +	KUNIT_EXPECT_EQ(test, mode->vdisplay, 576);
+> 
+> +	KUNIT_EXPECT_EQ(test, mode->vtotal, 625);
+> 
+> +}
+> 
+> +
+> 
+> +static void drm_modes_analog_tv_pal_576i_inlined(struct kunit *test)
+> 
+> +{
+> 
+> +	struct drm_modes_test_priv *priv = test->priv;
+> 
+> +	struct drm_display_mode *expected, *mode;
+> 
+> +
+> 
+> +	expected = drm_analog_tv_mode(priv->drm,
+> 
+> +				      DRM_MODE_TV_MODE_PAL_B,
+> 
+> +				      13500 * 1000, 720, 576,
+> 
+> +				      true);
+> 
+> +	KUNIT_ASSERT_NOT_NULL(test, expected);
+> 
+> +
+> 
+> +	mode = drm_mode_analog_pal_576i(priv->drm);
+> 
+> +	KUNIT_ASSERT_NOT_NULL(test, mode);
+> 
+> +
+> 
+> +	KUNIT_EXPECT_TRUE(test, drm_mode_equal(expected, mode));
+> 
+> +}
+> 
+> +
+> 
+> +static struct kunit_case drm_modes_analog_tv_tests[] = {
+> 
+> +	KUNIT_CASE(drm_modes_analog_tv_ntsc_480i),
+> 
+> +	KUNIT_CASE(drm_modes_analog_tv_ntsc_480i_inlined),
+> 
+> +	KUNIT_CASE(drm_modes_analog_tv_pal_576i),
+> 
+> +	KUNIT_CASE(drm_modes_analog_tv_pal_576i_inlined),
+> 
+> +	{ }
+> 
+> +};
+> 
+> +
+> 
+> +static struct kunit_suite drm_modes_analog_tv_test_suite = {
+> 
+> +	.name = "drm_modes_analog_tv",
+> 
+> +	.init = drm_modes_test_init,
+> 
+> +	.exit = drm_modes_test_exit,
+> 
+> +	.test_cases = drm_modes_analog_tv_tests,
+> 
+> +};
+> 
+> +
+> 
+> +kunit_test_suites(
+> 
+> +	&drm_modes_analog_tv_test_suite
+> 
+> +);
+> 
+> +MODULE_LICENSE("GPL v2");
+> 
+> diff --git a/include/drm/drm_modes.h b/include/drm/drm_modes.h
+> 
+> index a80ae9639e96..5ccf3d51d313 100644
+> 
+> --- a/include/drm/drm_modes.h
+> 
+> +++ b/include/drm/drm_modes.h
+> 
+> @@ -443,6 +443,23 @@ bool drm_mode_is_420_also(const struct drm_display_info *display,
+> 
+>  bool drm_mode_is_420(const struct drm_display_info *display,
+> 
+>  		     const struct drm_display_mode *mode);
+> 
+>  
+> 
+> +struct drm_display_mode *drm_analog_tv_mode(struct drm_device *dev,
+> 
+> +					    enum drm_connector_tv_mode mode,
+> 
+> +					    unsigned long pixel_clock_hz,
+> 
+> +					    unsigned int hdisplay,
+> 
+> +					    unsigned int vdisplay,
+> 
+> +					    bool interlace);
+> 
+> +
+> 
+> +static inline struct drm_display_mode *drm_mode_analog_ntsc_480i(struct drm_device *dev)
+> 
+> +{
+> 
+> +	return drm_analog_tv_mode(dev, DRM_MODE_TV_MODE_NTSC_M, 13500000, 720, 480, true);
+> 
+> +}
+> 
+> +
+> 
+> +static inline struct drm_display_mode *drm_mode_analog_pal_576i(struct drm_device *dev)
+> 
+> +{
+> 
+> +	return drm_analog_tv_mode(dev, DRM_MODE_TV_MODE_PAL_B, 13500000, 720, 576, true);
+> 
+> +}
+> 
+> +
+> 
+>  struct drm_display_mode *drm_cvt_mode(struct drm_device *dev,
+> 
+>  				      int hdisplay, int vdisplay, int vrefresh,
+> 
+>  				      bool reduced, bool interlaced,
+> 
+> 
+> 

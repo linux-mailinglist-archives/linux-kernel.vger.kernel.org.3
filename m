@@ -2,44 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047BA5A96FC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B28D55A9701
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:38:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbiIAMgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:36:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
+        id S232994AbiIAMia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbiIAMgn (ORCPT
+        with ESMTP id S229679AbiIAMi2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:36:43 -0400
-Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291FEDFC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:36:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=protonic.nl; s=202111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
-         from;
-        bh=B+SehaGXwjYGSf7G+iS3bDh795Izby0gHEeRvgWvOao=;
-        b=Mq2fqu2v/VS1Y035laNkKVWwmBHA/cN2S5Ry+YweGLphHxf2RRku9b045PHCOffUEiR2acDHXWxxC
-         1/a1bDlXcO7Wg7af0ezpok0HMpkg8SmaiEdxnbChwEWeSZyBZiuR1fGum2f57XkH5VisTY3Z6PeEt8
-         jRgr7DlR7R/aEKYNiG6l4ynzpA8oD/bfoPjJMJ53qZ1E0s8aatPaDx90poNLb97x7P+6B0LGZnlW0+
-         c+M8ayfxwKpgigzu8fy66wff/ZWGKV+6ldFffR0dgGNBHIYzdgBwyIKc6uzDnfc0OEwYD8gzasCLyI
-         DfgH3jIyMbQ4JLoZYlK6YVoBltKlp9g==
-X-MSG-ID: b9ca1510-29f2-11ed-9051-0050569d2c73
-From:   David Jander <david@protonic.nl>
-To:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Casper Andersson <casper.casan@gmail.com>,
-        David Jander <david@protonic.nl>
-Subject: [PATCH] spi: spi.c: Fix queue hang if previous transfer failed
-Date:   Thu,  1 Sep 2022 14:36:30 +0200
-Message-Id: <20220901123630.1098433-1-david@protonic.nl>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Thu, 1 Sep 2022 08:38:28 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94866DF2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:38:22 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 3B3EC1FE17;
+        Thu,  1 Sep 2022 12:38:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662035901; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5aHnvpxKXtvoC+dCkAemXBA0d+yOcIeXMa3oaNXoEmg=;
+        b=oH7YCTbkpGjK8ry3y9onrFcDubGO17vu3B7h7eed/UtPfvVwdnlWVvqUrfIxKPJOhTsOAp
+        qvx9k0vR6hmRZJHOuzLtWGFSI5LPgcHo26/BQj1URP8UArFm8X2HIUWttuaF6AXVNBAMAP
+        jVwnlbSfU8OgarTsOl61r80bvcISEa8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662035901;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5aHnvpxKXtvoC+dCkAemXBA0d+yOcIeXMa3oaNXoEmg=;
+        b=EyAY5ANeE3+s4oPiSwjmWdk6+/a48ByCklRfzPje3yGAm5bsS3rQr5MWcAlgFEb3xfJ9HW
+        hhrVKU4GacR4OKDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 13FBE13A89;
+        Thu,  1 Sep 2022 12:38:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /MUqBL2nEGM1KQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Thu, 01 Sep 2022 12:38:21 +0000
+Date:   Thu, 01 Sep 2022 14:38:20 +0200
+Message-ID: <87bkrzxoar.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Valentina Goncharenko <goncharenko.vp@ispras.ru>
+Cc:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Eliot Blennerhassett <eblennerhassett@audioscience.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        ldv-project@linuxtesting.org
+Subject: Re: [PATCH] ALSA: asihpi - Remove useless code in hpi_meter_get_peak()
+In-Reply-To: <20220901102814.131855-1-goncharenko.vp@ispras.ru>
+References: <20220901102814.131855-1-goncharenko.vp@ispras.ru>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,37 +70,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The queue worker always needs to be kicked one final time after a transfer
-is done in order to transition to idle (ctlr->busy = false).
+On Thu, 01 Sep 2022 12:28:14 +0200,
+Valentina Goncharenko wrote:
+> 
+> The hpi_meter_get_peak() function contains the expression
+> "hm.obj_index = hm.obj_index", which does not carry any semantic load.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+> 
+> Fixes: 719f82d3987a ("ALSA: Add support of AudioScience ASI boards")
+> Signed-off-by: Valentina Goncharenko <goncharenko.vp@ispras.ru>
 
-Commit 69fa95905d40 ("spi: Ensure the io_mutex is held until
-spi_finalize_current_message()") moved this code into
-__spi_pump_messages(), but it was executed only if the transfer was
-successful. This condition check causes ctlr-busy to stay true in case of
-a failed transfer.
-This in turn causes that no new work is ever scheduled to the work queue.
+Thanks, applied.
 
-Fixes: 69fa95905d40 ("spi: Ensure the io_mutex is held until spi_finalize_current_message()")
-Reported-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
-Signed-off-by: David Jander <david@protonic.nl>
----
- drivers/spi/spi.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 83da8862b8f2..7355f4ac4e33 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -1727,8 +1727,7 @@ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
- 	spin_unlock_irqrestore(&ctlr->queue_lock, flags);
- 
- 	ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
--	if (!ret)
--		kthread_queue_work(ctlr->kworker, &ctlr->pump_messages);
-+	kthread_queue_work(ctlr->kworker, &ctlr->pump_messages);
- 
- 	ctlr->cur_msg = NULL;
- 	ctlr->fallback = false;
--- 
-2.34.1
-
+Takashi

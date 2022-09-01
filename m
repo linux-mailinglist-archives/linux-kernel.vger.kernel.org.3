@@ -2,136 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980095A9A1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:24:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21D25A9A26
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:24:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234642AbiIAOWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 10:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48860 "EHLO
+        id S234665AbiIAOWF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 10:22:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234577AbiIAOVp (ORCPT
+        with ESMTP id S234652AbiIAOVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 10:21:45 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4DA07170D;
-        Thu,  1 Sep 2022 07:21:26 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id e28so13499212qts.1;
-        Thu, 01 Sep 2022 07:21:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=2guHmUXUEgWXxY+gDQPqQNXNAZmLdx374eGlGLm8JNw=;
-        b=a8+nJXBWvMhetvStRLQPqahJmbFu7Dao9kOOfWM86IQXi8DH3BFzjepBnqbbEA653i
-         9oU5l1U2WPuFJ0V15f4G6OZklMqGb8r3YWIBOdNYxKYqhUi4//ATYWy/sXa04Sv9sASg
-         FIlujEr1uXU+SsAzDwufG5Pw0F5lekxMciTGb1/a25LxOkawDHkUcpoZDxMZFz1HCWfm
-         K9JlSzEpPuN2ulZvEkthvMp7ZYf80tzZQPua69Unb8XWUdsL7PZCS2H60IFIauE0cnRs
-         AGOWzsdBm/h/BOCm9sySjCfi8evVGHOEO7p6nYfQMI++yXnKj22f8Wqdry2pV2HMKwpW
-         Fj5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=2guHmUXUEgWXxY+gDQPqQNXNAZmLdx374eGlGLm8JNw=;
-        b=LsPkwHI7XUA7FekJ5GMfuqJPWcppc5hZl0QVR+pk/5TuxJWWRJW70dVhUyUmZIAiKT
-         1EQwvkbUHZkkvy4hlEzzM0WaklH1xSniXmGeFHWwT5zkkyNduvmbgWXKoLEUfE4Lp/Dm
-         ylE8n16PufRHdSl0No1mdVBoMDAureTadW4mOCRgsq2xTyI+t9LjIDxT0McTxeIB8MNI
-         ZA8Nd0+Yoso+U15rlfnDWuW0RIPI0VRKRWWXVJJ3tCOfDl8gjDjMUqxRFPOhU4FQ0hKt
-         huNtBD9gA7OR8P1QEVPtHVq9Hd0bmz6g1eGhy6Cu5rPwYHcQGOO23qnw2mDTypEk+m7p
-         zevw==
-X-Gm-Message-State: ACgBeo0VZPdTvUREaqUZEUyyAtxEJ078zVQr+UplrZUyOS00566Z6uzm
-        vLzoenL2HD0AzWtBp6joV5fLh8WQkcpY8yo4fGs=
-X-Google-Smtp-Source: AA6agR7tDKBNZvk98n4eDs3dYrIf0a4H7sAbgfySK+duWCSFYdeYrDXJ7C5A15IlzUcI1brpxEFUWkcd9arrf4p/w+o=
-X-Received: by 2002:a05:622a:40a:b0:343:77ba:727f with SMTP id
- n10-20020a05622a040a00b0034377ba727fmr24092510qtx.481.1662042085616; Thu, 01
- Sep 2022 07:21:25 -0700 (PDT)
+        Thu, 1 Sep 2022 10:21:49 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918CC72ECA;
+        Thu,  1 Sep 2022 07:21:30 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2B4846CD;
+        Thu,  1 Sep 2022 16:21:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662042088;
+        bh=A5gkBR9bPfI62fiXWS9MBQdkIPuX3rhZB6oxYtEU7sc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UpYA6BFhSUdU8txv9sZ2xFyWokhbwkCjKKCPikq1hPctQaIdop/y9Nj3Jl5fR5sVJ
+         kzTb1dap0tPiMNh+RDtJUVq8vTpicd2AvWEzo0dXqKbNhE6Iwc7TzOVnRdR4auWExG
+         ty4J+5/QDmMW8XyiY1cCWC9TbkvdSB4NFvSN6dxg=
+Date:   Thu, 1 Sep 2022 17:21:16 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v5 5/6] ARM: dts: sun8i: a83t: Add MIPI CSI-2 controller
+ node
+Message-ID: <YxC/3KLfJHpld+jx@pendragon.ideasonboard.com>
+References: <20220826182803.604563-1-paul.kocialkowski@bootlin.com>
+ <20220826182803.604563-6-paul.kocialkowski@bootlin.com>
+ <YwkYKcffdRGnq+pK@pendragon.ideasonboard.com>
+ <YxC7+Pi4v3Bc1oXc@aptenodytes>
 MIME-Version: 1.0
-References: <20220901041146.3652287-1-o.rempel@pengutronix.de> <20220901041146.3652287-3-o.rempel@pengutronix.de>
-In-Reply-To: <20220901041146.3652287-3-o.rempel@pengutronix.de>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 1 Sep 2022 17:20:49 +0300
-Message-ID: <CAHp75VcXS0inektGRKPCgqHv81c8gL29iiJSQKOL-c4u9kcz6A@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] iio: adc: tsc2046: silent spi_device_id warning
-To:     Oleksij Rempel <o.rempel@pengutronix.de>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <kernel@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-iio <linux-iio@vger.kernel.org>,
-        devicetree <devicetree@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YxC7+Pi4v3Bc1oXc@aptenodytes>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 7:12 AM Oleksij Rempel <o.rempel@pengutronix.de> wrote:
->
-> Add spi_device_id to silent following kernel runtime warning:
-> "SPI driver tsc2046 has no spi_device_id for ti,tsc2046e-adc".
+On Thu, Sep 01, 2022 at 04:04:40PM +0200, Paul Kocialkowski wrote:
+> Hi Laurent,
+> 
+> On Fri 26 Aug 22, 21:59, Laurent Pinchart wrote:
+> > Hi Paul,
+> > 
+> > Thank you for the patch.
+> > 
+> > On Fri, Aug 26, 2022 at 08:28:02PM +0200, Paul Kocialkowski wrote:
+> > > MIPI CSI-2 is supported on the A83T with a dedicated controller that
+> > > covers both the protocol and D-PHY. It can be connected to the CSI
+> > > interface as a V4L2 subdev through the fwnode graph.
+> > > 
+> > > This is not done by default since connecting the bridge without a
+> > > subdev attached to it will cause a failure on the CSI driver.
+> > 
+> > No urgency, but would it be possible to fix this so that the CSI-2
+> > receiver can be connected to the CSI unconditionally in DT ? The
+> > connection exists at the hardware level in the SoC, and should thus
+> > exist here too, regardless of whether or not a sensor is connected.
+> 
+> Yes it's true that having the link always would be legitimate.
+> 
+> For the context, this CSI controller can be switched between the MIPI CSI-2
+> controller and a parallel sensor input (i.e. it's not dedicated to one or the
+> other like on the V3).
+> 
+> Last time I tried, having the connection between the two always there resulted
+> in the unability to use a parallel sensor when no sensor is attached to the
+> mipi csi-2 receiver. Probably because the async notifier never completes since
+> the mipi csi-2's subdev is never registered without a sensor subdev attached.
+> 
+> Do you see a way to handle this case properly?
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+It sounds like an issue in the CSI-2 receiver driver. If there's no
+input device attached to it, it should register its subdev directly,
+without its own async notifier.
 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
-> changes v3:
-> - add missing point
-> - remove unneeded blank line
-> - assignment id at the definition line
-> changes v2:
-> - attach actual driver_data
-> - use spi_get_device_id fallback
-> ---
->  drivers/iio/adc/ti-tsc2046.c | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
->
-> diff --git a/drivers/iio/adc/ti-tsc2046.c b/drivers/iio/adc/ti-tsc2046.c
-> index bbc8b4137b0b1..d5d799972fefd 100644
-> --- a/drivers/iio/adc/ti-tsc2046.c
-> +++ b/drivers/iio/adc/ti-tsc2046.c
-> @@ -762,6 +762,11 @@ static int tsc2046_adc_probe(struct spi_device *spi)
->         }
->
->         dcfg = device_get_match_data(dev);
-> +       if (!dcfg) {
-> +               const struct spi_device_id *id = spi_get_device_id(spi);
-> +
-> +               dcfg = (const struct tsc2046_adc_dcfg *)id->driver_data;
-> +       }
->         if (!dcfg)
->                 return -EINVAL;
->
-> @@ -878,11 +883,18 @@ static const struct of_device_id ads7950_of_table[] = {
->  };
->  MODULE_DEVICE_TABLE(of, ads7950_of_table);
->
-> +static const struct spi_device_id tsc2046_adc_spi_ids[] = {
-> +       { "tsc2046e-adc", (unsigned long)&tsc2046_adc_dcfg_tsc2046e },
-> +       { }
-> +};
-> +MODULE_DEVICE_TABLE(spi, tsc2046_adc_spi_ids);
-> +
->  static struct spi_driver tsc2046_adc_driver = {
->         .driver = {
->                 .name = "tsc2046",
->                 .of_match_table = ads7950_of_table,
->         },
-> +       .id_table = tsc2046_adc_spi_ids,
->         .probe = tsc2046_adc_probe,
->         .remove = tsc2046_adc_remove,
->  };
-> --
-> 2.30.2
->
-
+> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > > ---
+> > >  arch/arm/boot/dts/sun8i-a83t.dtsi | 26 ++++++++++++++++++++++++++
+> > >  1 file changed, 26 insertions(+)
+> > > 
+> > > diff --git a/arch/arm/boot/dts/sun8i-a83t.dtsi b/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > > index 82fdb04122ca..ecf9f3b2c0c0 100644
+> > > --- a/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > > +++ b/arch/arm/boot/dts/sun8i-a83t.dtsi
+> > > @@ -1064,6 +1064,32 @@ csi: camera@1cb0000 {
+> > >  			status = "disabled";
+> > >  		};
+> > >  
+> > > +		mipi_csi2: csi@1cb1000 {
+> > > +			compatible = "allwinner,sun8i-a83t-mipi-csi2";
+> > > +			reg = <0x01cb1000 0x1000>;
+> > > +			interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> > > +			clocks = <&ccu CLK_BUS_CSI>,
+> > > +				 <&ccu CLK_CSI_SCLK>,
+> > > +				 <&ccu CLK_MIPI_CSI>,
+> > > +				 <&ccu CLK_CSI_MISC>;
+> > > +			clock-names = "bus", "mod", "mipi", "misc";
+> > > +			resets = <&ccu RST_BUS_CSI>;
+> > > +			status = "disabled";
+> > > +
+> > > +			ports {
+> > > +				#address-cells = <1>;
+> > > +				#size-cells = <0>;
+> > > +
+> > > +				mipi_csi2_in: port@0 {
+> > > +					reg = <0>;
+> > > +				};
+> > > +
+> > > +				mipi_csi2_out: port@1 {
+> > > +					reg = <1>;
+> > > +				};
+> > > +			};
+> > > +		};
+> > > +
+> > >  		hdmi: hdmi@1ee0000 {
+> > >  			compatible = "allwinner,sun8i-a83t-dw-hdmi";
+> > >  			reg = <0x01ee0000 0x10000>;
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Regards,
+
+Laurent Pinchart

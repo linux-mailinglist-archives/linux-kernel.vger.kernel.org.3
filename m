@@ -2,73 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 264005A9675
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:14:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDC65A9665
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:10:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232830AbiIAMO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:14:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
+        id S233320AbiIAMKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:10:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231737AbiIAMOW (ORCPT
+        with ESMTP id S233296AbiIAMKt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:14:22 -0400
-Received: from sonic308-11.consmr.mail.ne1.yahoo.com (sonic308-11.consmr.mail.ne1.yahoo.com [66.163.187.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D67F112EFB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:14:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=att.net; s=s1024; t=1662034461; bh=1hNsVfqCY6LT7YTLp21HTSPBwyvmKxE/8qy+3OfbQzY=; h=Date:From:Subject:To:Cc:In-Reply-To:References:From:Subject:Reply-To; b=D5jqyRJcbm5ODwpKTfncxYUZqGUgSrHuEyIpQ9HJJwxPBT7mfGMy2rl4paE0vUzxoDYvQWtxlFbTFGO1uNNv0TnVu7Kr3tOaBe6t/sHqQcJ0qj5gM5bmPu1p4EfeOc/wg2azuFMkPPza7yfLR/fkGPVTitAaoctoE0M42sTHXvM=
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1662034461; bh=DGrXafvk06r5mx0Q9a9Vt2y9Y+hIhdCXStTis9GBvit=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=W1VQD2o9naV4tRQ6PXMzwy2suGaM/dyDypWjFHQ08g1DWoRO7y9hwz7dZPYJ4GepjvmI/j1q4MWHWq4zbk72YJU3aM2qrviTHmPb3/3CooQ2BipWBn5DWfQg0GdIp9Rh+ZtBrXEAGQbUjmnsSEgZbj8NSVJula0zO0WX06SvLLrqF7qvdRzDloHvNkgGQGNOvyBl8zwbgdWoWQk7d5Jk2yhRW0idsGN6LWj5GKZzVrnn6QgiSS6TpjhlB/G37dXNA8QoGNJVFnxkrM5dp/uoiOLn2bY5eyX25SuvzUibxOve0lQ91/pLN3eBTMhcC7KT+LZiuqnpkFStXOWO4MgwIg==
-X-YMail-OSG: KQIpQUwVM1lf43XIzdjnAhO08irtbFnwvjF0cRQ8JQhQ.INm64rfYIxm_4X.RA4
- kTYuaKLGe2jon0KLudI03wh1bq2s6gqxkp0G6ev8P4IKSUVqPwJzpqB4wBge1ueIkY7tSokRPMFP
- RaX.5oSb89DIgt4CrXFBvsRPhn.Jl5RWGzlon6ND3WcbGiDGdoXG3uWC5PtbT_x.2oZib2_r7Znc
- PRe.p0BHHcmQC0z6FVmb9PemQhTzoZ2nJhsUTYxjzTTr3HqH16ES6UAqrmxD4uakLixmoBY2eNWF
- GqXB8kom.t1n0YDiFF9WqbSzJCf3.8SS9QCUdA9nJuUp3jJKZRFDOq6yeCakmWqfN9zwqsaPxkMP
- r8wPgX_3MxanRFFPSZgjMuGYVydbBWo2lNECRUDMHms9cUC58YFP4DTckP.4LbyB2uSbLPneTreH
- ViqLc95HgZBvTDI9VUO76e.km7pLIfkoH6vJMmdv9ENEw6YYEyY5HcScERIzfhcvXBL1sWYRH6OM
- 5y5lesT5PutmlvnjzbQUV2gx2lbp0iLhfv_JFcUE4Z9kwNeE7ivN3DXbGdrN6kibut3NOjKIQqpD
- X_mqZxK1FNQSx95raSVDpQNqdWD_mcGH_ujpXsguI70OH0mB.ppqbJXD52ZjkjM0nxstAVz_jNM4
- oXKBaNhsxbxXiKFmpwvaBP1unw5gvK5_55c8EJDO17wqv_cJDfdKokXwKbDkQGRmCj2zOp1EBrjL
- FAjq0En2Bv4Yxd9t7sza9v8ID3re1b56xfFiXzNncYglY3hbwdfRRj0kNcivwsCTJbnUm3p2tZd0
- PvxXuEu795ntY4ypDjjD4A7zucIKK3ZcyA9Xi0HLmIQgaX4z_yzYcksCbCjTY1Cr6aZxHjEr5710
- uCuf1Lp_sVrZye5C4UstnUm_DZhm9svk7cy..Px8o4CAAZkXaiPFbtGoaMOR2DR36cNLrIA6Ny7l
- ZpuTp9ZTx7omWhzSPVaj5rBqmiSVMi7kRyKy1KJcCR_KvSdgMUUa7jhGbV5DxXdGC.ZGlyKXpOl2
- ET5rdqh18gYs7GG1j61DMZIaBrA8k4hgsQx0zMXk3EAzfo9vxGkYW65Ym8W_pd5x.y.HqI8P_q56
- kvH0t9BYgVc0neHynukGKSfcox6sO0ebPN.zHw6y6pKgQiaq_dejssHjDq9Xd5pNgtWoM9n45jpY
- xre_4qBuEZNMjuHkPpO1aIzEnYjngsBhNjwGOu8hFm2ZGQ7wuLbGUxELEjVXoRXCa1R1dpY6xa1n
- DqOmu4Ncf10M5rNEt_MUNpIykxg5zXIPGY11uBRjzQwaV_ayUl8oI7njerZpad5wZhoc6qXIGTkp
- 8PnsZosqY5XhVDye7poZrvkE67aBo7qW7w_ZRNMONlRgFhpXoKhobsBEpN3tKAR_BpK3HIVLTySo
- xzUpeoiF5nQP0Kmxpc_qCbS73ft7YxvptQk9JosONu42uQAMfDDF5.aTvLl9DgO8Jp61Re0YIpGB
- KTvaq3SKWYzeOYiuVC.DICIZ5XCaDodVkCjjFC6I.YGZUpR7wjwS9zynPnSZdo9RhQtzDrqo_2Fv
- iOzI9hB5pjw3Pqsawkj6oIQwMtxwcmzmDYh50PdS5PjMQ9VnIJWAD4mnth8YtpJjELaQ5Qv6fNNB
- XGUV_bLJ9sVyD8LtIOoLy6iRwE7UilMJxJ7WpaldZG40G0eWwdrQ5WUmSgEI1BgCtiBj2CGigq1b
- Jr7kW_URHbyxBV.YygCaTn5WrBWa0FZ51uqRLZiMOErA_VOWNjOMNTcmSlPje2bh9rKusTbVoiqB
- 0VpDNJoKZ62C1YphElWufc9vjSjDrf3wppA9cBn_AT9BKGFQC9x8SBZq3xY8hG.6QvAE3hQ4pJj4
- wSVyRFTrtmgaxuclusH9TZKNn.l6L972UEC.aqHDlq.4z9DjBQKwxe5mEzUZQ34K.lcp6DJQdyGv
- 4yz15e3c1IJIR_27QUEnrFxgaeNRyKt34JiPgnZMj4rmH2nghFJ9o2J3vWWeAoUuf39Usno15I69
- kFWzj1NkFTyeE8v5FWR9jAaG8
-X-Sonic-MF: <pheonix.sja@att.net>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.ne1.yahoo.com with HTTP; Thu, 1 Sep 2022 12:14:21 +0000
-Received: by hermes--production-ne1-7fdb795c57-j45rv (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID a9daef07438b8223431cc67a31a2c457;
-          Thu, 01 Sep 2022 12:14:18 +0000 (UTC)
-Date:   Thu, 01 Sep 2022 08:14:11 -0400
-From:   Steven J Abner <pheonix.sja@att.net>
-Subject: Re: thermal driver patch
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, Linux PM <linux-pm@vger.kernel.org>
-Message-Id: <NZ5JHR.JGO592OT0D961@att.net>
-In-Reply-To: <be354f9e-47c7-bd6e-c570-e7364858ced4@linaro.org>
-References: <DL9RGR.8W3XFSCFFYXI2.ref@att.net> <DL9RGR.8W3XFSCFFYXI2@att.net>
-        <0f961ea6-4948-0b7a-e01d-d62ca4065af8@infradead.org>
-        <L9MDHR.JVBXTJ2L6TPP2@att.net>
-        <cf3a3cbd-c189-a120-124f-98d6adac058d@infradead.org>
-        <be354f9e-47c7-bd6e-c570-e7364858ced4@linaro.org>
-X-Mailer: geary/3.36.1
+        Thu, 1 Sep 2022 08:10:49 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491ECDF658
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662034246; x=1693570246;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RIo2pBaslBQzwR75AbcPm8a1ycfCen3KShSxpD0kInc=;
+  b=wHhC3LmTHXbwUW5XuRrYFijd2YusLgLFvr/tzay3AY8jcAICYMoG/TqQ
+   iNPWYdxC6uwHal+sSk3Jv9SLyAdPiC2RQsgHVLxS/aKRIU2Y1sFZLpw0b
+   2NBybzvX5FqzI7ExhVqOeCf5FaqGIbzFPhXcJ5IBrHfl1ftJ66HDd1bHI
+   pkbKtjpTAk7ThBdO/wMLsex/gPhZV/hdLjixKwTIQjoopSxv8E3K5jo6V
+   Bn+DlHwnRjMC983p3i00ylM39BwVFWAh3RXb54at4XYrEG2V6jKtPqVIy
+   gHRuy0I/Hcy+Y/lU/Bmv+xw8D9T8ie+8TFijKhQoJbqaZ4ssBELePD1OY
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="188977520"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Sep 2022 05:10:43 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 1 Sep 2022 05:10:41 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Thu, 1 Sep 2022 05:10:40 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     <kishon@ti.com>, <vkoul@kernel.org>, <rmk+kernel@armlinux.org.uk>,
+        <UNGLinuxDriver@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH] phy: Add RGMII support on lan966x
+Date:   Thu, 1 Sep 2022 14:14:55 +0200
+Message-ID: <20220901121455.245103-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,88 +61,213 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The serdes driver contains also a mux to decide which interface type to
+use. Currently the driver supports GMII/SGMII/QSGMII and partially RGMII.
+As it doesn't support all the other RGMII interfaces like
+RGMII_TXID/RXID/ID and it could run only at 1G.
+Therefore extend this for all the other speeds(10/100) and also allow
+the other interfaces.
 
-On Thu, Sep 1, 2022 at 05:59, Daniel Lezcano 
-<daniel.lezcano@linaro.org> wrote:
-> Could it be related to this bug?
-> 
-> https://bugzilla.kernel.org/show_bug.cgi?id=201761
-> 
-> Is it possible to give the thermal zone 'type'
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ drivers/phy/microchip/lan966x_serdes.c      | 99 ++++++++++++++++++---
+ drivers/phy/microchip/lan966x_serdes_regs.h | 42 +++++++++
+ 2 files changed, 129 insertions(+), 12 deletions(-)
 
-Did verify that that my thermal_zone0 is my wifi:
-used lm-sensor and cat /sys/class/thermal/thermal_zone0/temp
-along with wifi load to heat to temps different then others to check 
-outputs.
-The above mentioned bug page could have lead to this, I can't say or 
-track.
-
-Prefix the following with I'm not an expert, just info provider:
-
-My guess is not supposed to be calling function during initial kernel 
-loading, based on following:
-
-from thermal_core.c:
-18:
-#include <linux/thermal.h>
-
-397:
-static void update_temperature(struct thermal_zone_device *tz)
-{
-	int temp, ret;
-
-	ret = thermal_zone_get_temp(tz, &temp);
-	if (ret) {
-		if (ret != -EAGAIN)
-			dev_warn(&tz->device,
-				 "failed to read out thermal zone (%d)\n",
-				 ret);
-		return;
-	}
-
-	mutex_lock(&tz->lock);
-	tz->last_temperature = tz->temperature;
-	tz->temperature = temp;
-	mutex_unlock(&tz->lock);
-
-	trace_thermal_temperature(tz);
-
-	thermal_genl_sampling_temp(tz->id, temp);
-}
-
-from linux/thermal.h:
-429:
-static inline int thermal_zone_get_temp(
-		struct thermal_zone_device *tz, int *temp)
-{ return -ENODEV; }
-
-
-compiler should then read:
-static void update_temperature(struct thermal_zone_device *tz)
-{
-	int temp, ret;
-
-	ret = -ENODEV;
-	if (ret) {
-		if (ret != -EAGAIN)
-			dev_warn(&tz->device,
-				 "failed to read out thermal zone (%d)\n",
-				 ret);
-		return;
-	}
-
-however did find with extra search:
-in /drivers/thermal/thermal_helpers.c:
-78:
-int thermal_zone_get_temp(struct thermal_zone_device *tz, int *temp)
-and
-115:
-EXPORT_SYMBOL_GPL(thermal_zone_get_temp);
-
-
-so is this bootup vs system hand off?
-where bootup call thermal_zone_get_temp() shouldn't occur?
-
-Steve
-
+diff --git a/drivers/phy/microchip/lan966x_serdes.c b/drivers/phy/microchip/lan966x_serdes.c
+index e86a879b92b5..fbc725ffa4ab 100644
+--- a/drivers/phy/microchip/lan966x_serdes.c
++++ b/drivers/phy/microchip/lan966x_serdes.c
+@@ -42,7 +42,10 @@
+ #define SERDES_MUX_QSGMII(i, p, m, c) \
+ 	SERDES_MUX(i, p, PHY_MODE_ETHERNET, PHY_INTERFACE_MODE_QSGMII, m, c)
+ #define SERDES_MUX_RGMII(i, p, m, c) \
+-	SERDES_MUX(i, p, PHY_MODE_ETHERNET, PHY_INTERFACE_MODE_RGMII, m, c)
++	SERDES_MUX(i, p, PHY_MODE_ETHERNET, PHY_INTERFACE_MODE_RGMII, m, c), \
++	SERDES_MUX(i, p, PHY_MODE_ETHERNET, PHY_INTERFACE_MODE_RGMII_TXID, m, c), \
++	SERDES_MUX(i, p, PHY_MODE_ETHERNET, PHY_INTERFACE_MODE_RGMII_RXID, m, c), \
++	SERDES_MUX(i, p, PHY_MODE_ETHERNET, PHY_INTERFACE_MODE_RGMII_ID, m, c)
+ 
+ static void lan_rmw_(u32 val, u32 mask, void __iomem *mem, u32 offset)
+ {
+@@ -94,21 +97,29 @@ static const struct serdes_mux lan966x_serdes_muxes[] = {
+ 			 HSIO_HW_CFG_SD6G_1_CFG_SET(1)),
+ 
+ 	SERDES_MUX_RGMII(RGMII(0), 2, HSIO_HW_CFG_RGMII_0_CFG |
+-			 HSIO_HW_CFG_RGMII_ENA,
+-			 HSIO_HW_CFG_RGMII_0_CFG_SET(BIT(0)) |
+-			 HSIO_HW_CFG_RGMII_ENA_SET(BIT(0))),
++			 HSIO_HW_CFG_RGMII_ENA |
++			 HSIO_HW_CFG_GMII_ENA,
++			 HSIO_HW_CFG_RGMII_0_CFG_SET(0) |
++			 HSIO_HW_CFG_RGMII_ENA_SET(BIT(0)) |
++			 HSIO_HW_CFG_GMII_ENA_SET(BIT(2))),
+ 	SERDES_MUX_RGMII(RGMII(1), 3, HSIO_HW_CFG_RGMII_1_CFG |
+-			 HSIO_HW_CFG_RGMII_ENA,
+-			 HSIO_HW_CFG_RGMII_1_CFG_SET(BIT(0)) |
+-			 HSIO_HW_CFG_RGMII_ENA_SET(BIT(1))),
++			 HSIO_HW_CFG_RGMII_ENA |
++			 HSIO_HW_CFG_GMII_ENA,
++			 HSIO_HW_CFG_RGMII_1_CFG_SET(0) |
++			 HSIO_HW_CFG_RGMII_ENA_SET(BIT(1)) |
++			 HSIO_HW_CFG_GMII_ENA_SET(BIT(3))),
+ 	SERDES_MUX_RGMII(RGMII(0), 5, HSIO_HW_CFG_RGMII_0_CFG |
+-			 HSIO_HW_CFG_RGMII_ENA,
++			 HSIO_HW_CFG_RGMII_ENA |
++			 HSIO_HW_CFG_GMII_ENA,
+ 			 HSIO_HW_CFG_RGMII_0_CFG_SET(BIT(0)) |
+-			 HSIO_HW_CFG_RGMII_ENA_SET(BIT(0))),
++			 HSIO_HW_CFG_RGMII_ENA_SET(BIT(0)) |
++			 HSIO_HW_CFG_GMII_ENA_SET(BIT(5))),
+ 	SERDES_MUX_RGMII(RGMII(1), 6, HSIO_HW_CFG_RGMII_1_CFG |
+-			 HSIO_HW_CFG_RGMII_ENA,
++			 HSIO_HW_CFG_RGMII_ENA |
++			 HSIO_HW_CFG_GMII_ENA,
+ 			 HSIO_HW_CFG_RGMII_1_CFG_SET(BIT(0)) |
+-			 HSIO_HW_CFG_RGMII_ENA_SET(BIT(1))),
++			 HSIO_HW_CFG_RGMII_ENA_SET(BIT(1)) |
++			 HSIO_HW_CFG_GMII_ENA_SET(BIT(6))),
+ };
+ 
+ struct serdes_ctrl {
+@@ -382,6 +393,67 @@ static int lan966x_sd6g40_setup(struct serdes_macro *macro, u32 idx, int mode)
+ 	return lan966x_sd6g40_setup_lane(macro, conf, idx);
+ }
+ 
++static int lan966x_rgmii_setup(struct serdes_macro *macro, u32 idx, int mode)
++{
++	bool tx_delay = false;
++	bool rx_delay = false;
++
++	/* Configure RGMII */
++	lan_rmw(HSIO_RGMII_CFG_RGMII_RX_RST_SET(0) |
++		HSIO_RGMII_CFG_RGMII_TX_RST_SET(0) |
++		HSIO_RGMII_CFG_TX_CLK_CFG_SET(macro->speed == SPEED_1000 ? 1 :
++					      macro->speed == SPEED_100 ? 2 :
++					      macro->speed == SPEED_10 ? 3 : 0),
++		HSIO_RGMII_CFG_RGMII_RX_RST |
++		HSIO_RGMII_CFG_RGMII_TX_RST |
++		HSIO_RGMII_CFG_TX_CLK_CFG,
++		macro->ctrl->regs, HSIO_RGMII_CFG(idx));
++
++	if (mode == PHY_INTERFACE_MODE_RGMII ||
++	    mode == PHY_INTERFACE_MODE_RGMII_TXID)
++		rx_delay = true;
++
++	if (mode == PHY_INTERFACE_MODE_RGMII ||
++	    mode == PHY_INTERFACE_MODE_RGMII_RXID)
++		tx_delay = true;
++
++	/* Setup DLL configuration */
++	lan_rmw(HSIO_DLL_CFG_DLL_RST_SET(0) |
++		HSIO_DLL_CFG_DLL_ENA_SET(rx_delay),
++		HSIO_DLL_CFG_DLL_RST |
++		HSIO_DLL_CFG_DLL_ENA,
++		macro->ctrl->regs, HSIO_DLL_CFG(idx == 0 ? 0x0 : 0x2));
++
++	lan_rmw(HSIO_DLL_CFG_DELAY_ENA_SET(rx_delay),
++		HSIO_DLL_CFG_DELAY_ENA,
++		macro->ctrl->regs, HSIO_DLL_CFG(idx == 0 ? 0x0 : 0x2));
++
++	lan_rmw(HSIO_DLL_CFG_DLL_RST_SET(0) |
++		HSIO_DLL_CFG_DLL_ENA_SET(tx_delay),
++		HSIO_DLL_CFG_DLL_RST |
++		HSIO_DLL_CFG_DLL_ENA,
++		macro->ctrl->regs, HSIO_DLL_CFG(idx == 0 ? 0x1 : 0x3));
++
++	lan_rmw(HSIO_DLL_CFG_DELAY_ENA_SET(tx_delay),
++		HSIO_DLL_CFG_DELAY_ENA,
++		macro->ctrl->regs, HSIO_DLL_CFG(idx == 0 ? 0x1 : 0x3));
++
++	return 0;
++}
++
++static int serdes_set_speed(struct phy *phy, int speed)
++{
++	struct serdes_macro *macro = phy_get_drvdata(phy);
++
++	if (!phy_interface_mode_is_rgmii(macro->mode))
++		return 0;
++
++	macro->speed = speed;
++	lan966x_rgmii_setup(macro, macro->idx - (SERDES6G_MAX + 1), macro->mode);
++
++	return 0;
++}
++
+ static int serdes_set_mode(struct phy *phy, enum phy_mode mode, int submode)
+ {
+ 	struct serdes_macro *macro = phy_get_drvdata(phy);
+@@ -424,7 +496,9 @@ static int serdes_set_mode(struct phy *phy, enum phy_mode mode, int submode)
+ 						    macro->mode);
+ 
+ 		if (macro->idx < RGMII_MAX)
+-			return 0;
++			return lan966x_rgmii_setup(macro,
++						   macro->idx - (SERDES6G_MAX + 1),
++						   macro->mode);
+ 
+ 		return -EOPNOTSUPP;
+ 	}
+@@ -434,6 +508,7 @@ static int serdes_set_mode(struct phy *phy, enum phy_mode mode, int submode)
+ 
+ static const struct phy_ops serdes_ops = {
+ 	.set_mode	= serdes_set_mode,
++	.set_speed	= serdes_set_speed,
+ 	.owner		= THIS_MODULE,
+ };
+ 
+diff --git a/drivers/phy/microchip/lan966x_serdes_regs.h b/drivers/phy/microchip/lan966x_serdes_regs.h
+index ea30f64ffd5c..ac54cd01fea6 100644
+--- a/drivers/phy/microchip/lan966x_serdes_regs.h
++++ b/drivers/phy/microchip/lan966x_serdes_regs.h
+@@ -206,4 +206,46 @@ enum lan966x_target {
+ #define HSIO_HW_CFG_QSGMII_ENA_GET(x)\
+ 	FIELD_GET(HSIO_HW_CFG_QSGMII_ENA, x)
+ 
++/*      HSIO:HW_CFGSTAT:RGMII_CFG */
++#define HSIO_RGMII_CFG(r)         __REG(TARGET_HSIO, 0, 1, 104, 0, 1, 52, 20, r, 2, 4)
++
++#define HSIO_RGMII_CFG_TX_CLK_CFG                GENMASK(4, 2)
++#define HSIO_RGMII_CFG_TX_CLK_CFG_SET(x)\
++	FIELD_PREP(HSIO_RGMII_CFG_TX_CLK_CFG, x)
++#define HSIO_RGMII_CFG_TX_CLK_CFG_GET(x)\
++	FIELD_GET(HSIO_RGMII_CFG_TX_CLK_CFG, x)
++
++#define HSIO_RGMII_CFG_RGMII_TX_RST              BIT(1)
++#define HSIO_RGMII_CFG_RGMII_TX_RST_SET(x)\
++	FIELD_PREP(HSIO_RGMII_CFG_RGMII_TX_RST, x)
++#define HSIO_RGMII_CFG_RGMII_TX_RST_GET(x)\
++	FIELD_GET(HSIO_RGMII_CFG_RGMII_TX_RST, x)
++
++#define HSIO_RGMII_CFG_RGMII_RX_RST              BIT(0)
++#define HSIO_RGMII_CFG_RGMII_RX_RST_SET(x)\
++	FIELD_PREP(HSIO_RGMII_CFG_RGMII_RX_RST, x)
++#define HSIO_RGMII_CFG_RGMII_RX_RST_GET(x)\
++	FIELD_GET(HSIO_RGMII_CFG_RGMII_RX_RST, x)
++
++/*      HSIO:HW_CFGSTAT:DLL_CFG */
++#define HSIO_DLL_CFG(r)           __REG(TARGET_HSIO, 0, 1, 104, 0, 1, 52, 36, r, 4, 4)
++
++#define HSIO_DLL_CFG_DELAY_ENA                   BIT(2)
++#define HSIO_DLL_CFG_DELAY_ENA_SET(x)\
++	FIELD_PREP(HSIO_DLL_CFG_DELAY_ENA, x)
++#define HSIO_DLL_CFG_DELAY_ENA_GET(x)\
++	FIELD_GET(HSIO_DLL_CFG_DELAY_ENA, x)
++
++#define HSIO_DLL_CFG_DLL_ENA                     BIT(1)
++#define HSIO_DLL_CFG_DLL_ENA_SET(x)\
++	FIELD_PREP(HSIO_DLL_CFG_DLL_ENA, x)
++#define HSIO_DLL_CFG_DLL_ENA_GET(x)\
++	FIELD_GET(HSIO_DLL_CFG_DLL_ENA, x)
++
++#define HSIO_DLL_CFG_DLL_RST                     BIT(0)
++#define HSIO_DLL_CFG_DLL_RST_SET(x)\
++	FIELD_PREP(HSIO_DLL_CFG_DLL_RST, x)
++#define HSIO_DLL_CFG_DLL_RST_GET(x)\
++	FIELD_GET(HSIO_DLL_CFG_DLL_RST, x)
++
+ #endif /* _LAN966X_HSIO_REGS_H_ */
+-- 
+2.33.0
 

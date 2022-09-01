@@ -2,141 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2945A8E3C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:24:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA3A5A8E3E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233306AbiIAGYT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
+        id S233343AbiIAGZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:25:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232114AbiIAGYR (ORCPT
+        with ESMTP id S232114AbiIAGZT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:24:17 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2046.outbound.protection.outlook.com [40.107.244.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B119111AFAF;
-        Wed, 31 Aug 2022 23:24:16 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h4zau6MD8xmkZCgro9LHty6TXUbJBXO6GL4KTQx9Y9kz9V+Pp4TOJyBIPBP3/YDpUFKCyQiJMCeef45nDMruWD8NfVjcUhFDtFOKAjLh93sXlBNz9W6BCzyU09ncDCpMM8i1KGzIVBoB5av7VHwK6R6HIij8iTbhJ/U79P/qMLL5Di5agkw99nXPKHoBFPlZIZo8CSWX/1hfYjA8Qic/adesTByXe3LIYRmZxVlCQ9Q/Y4Yy74UtwpOjxfn7SUFCe0+VdAwULi/lD4r4mWLqJ+dwnHQmw6RXVPBSgbKlkq+Q4dQUYcqwfQGX5YWHveItIAaZY4ldvTAfdVdbIRhg0Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vkuaAv4UXJ5EQ79iScbI5DysMLgCHeSTwXsE7xg2Nh0=;
- b=ioJaQE4KbTfdSuJVHoepDtXnxSF6O7vu+HhkCnLBCCfFibe2bmW6WvK9MMtaC0reCym6Vwvyh1qRIXiAjOXAqkM/+97lu2arEVJDXh40qYAhJ2Ua4SDHU3Tu2zmrpylhppwF6MlkOevsmDzn6RJggBT63yyRKjlCWcoZ2iVm3NP4EbNSpvpQj9WARJxof4GW4E3kLY/J8XEluGgm7xiAwLgex4/u8ygX7GyP0jvnM6GHkVfWBnOcWaW90PhWw/3a2jNST/hmJ0b4shp8oVKAfxcfV4cQyilSMZ3n8S9ugiJDNEPp0ePnnWDpH7MzCcjKVXqHVUAZv/CU+KE5zyIEgw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vkuaAv4UXJ5EQ79iScbI5DysMLgCHeSTwXsE7xg2Nh0=;
- b=Kj2c1ruILA8RrMBb5YroJADGZhErR8S2zBgofgkAwxsFPTfhlQqdhJsKt9VRiPyVVdXFvT0/EjjTOvTzWXoL1xVEElqj3swsbtrTRt+aNFqaIaHmtJiS0KDDnrWq//R0vDuCnqq9G+Xb9LZYWM4kRh0SbxIBvx5ZE3kl+7mHYyA=
-Received: from BN9P220CA0014.NAMP220.PROD.OUTLOOK.COM (2603:10b6:408:13e::19)
- by BL0PR12MB4868.namprd12.prod.outlook.com (2603:10b6:208:1c4::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
- 2022 06:24:14 +0000
-Received: from BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13e:cafe::f8) by BN9P220CA0014.outlook.office365.com
- (2603:10b6:408:13e::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12 via Frontend
- Transport; Thu, 1 Sep 2022 06:24:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT029.mail.protection.outlook.com (10.13.177.68) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5588.10 via Frontend Transport; Thu, 1 Sep 2022 06:24:13 +0000
-Received: from aerithdevpyuan.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 1 Sep
- 2022 01:24:05 -0500
-From:   Perry Yuan <Perry.Yuan@amd.com>
-To:     <rafael.j.wysocki@intel.com>, <ray.huang@amd.com>,
-        <viresh.kumar@linaro.org>
-CC:     <Deepak.Sharma@amd.com>, <Mario.Limonciello@amd.com>,
-        <Nathan.Fontenot@amd.com>, <Alexander.Deucher@amd.com>,
-        <Jinzhou.Su@amd.com>, <Shimmer.Huang@amd.com>,
-        <Xiaojian.Du@amd.com>, <Li.Meng@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Perry Yuan <Perry.Yuan@amd.com>
-Subject: [PATCH v6] cpufreq: amd-pstate: cleanup the unused and duplicated headers declaration
-Date:   Thu, 1 Sep 2022 14:23:39 +0800
-Message-ID: <20220901062339.2357552-1-Perry.Yuan@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 1 Sep 2022 02:25:19 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4430B32EF8
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:25:17 -0700 (PDT)
+Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 28166KZL006068;
+        Thu, 1 Sep 2022 06:24:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=QQhCb+FskmjfqMLGykfJhvDY+A7IPLRr+13M5HvxOgs=;
+ b=Htb8quhdnDGbqIWUfHELpGZxxgu1sEaqYfr46FAtY8xeNZE6K43RHZFct69e37NK5xW0
+ gUv4+L7GpPVphcJJ/OBUjzFGuHlz68FEIHJkVFPW3yd6KO3IIajqg42vZjCcIaiTxo0e
+ MWhfOQxz9REJerFJJE/osBrGkzldTsBHkjB7KwrH+UM84BpuLKz8G9UC1fUsfEb7+4F4
+ vCXM9wVgiYqLRHabJ7vT+3K+9s88a/94nNLd7he3ZQWdvsxDDYyBv54STZAzlBNg1TUN
+ 1Nvy/1NWHctDmfW/39lLhCA9YOc/aigsyIIlM1oChymt4qmo02fdHegfMTYaE4VsNYDh ZA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jaq660k56-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 06:24:53 +0000
+Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 28166x7O009721;
+        Thu, 1 Sep 2022 06:24:53 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3jaq660k4f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 06:24:53 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2816LpR9010778;
+        Thu, 1 Sep 2022 06:24:51 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma03ams.nl.ibm.com with ESMTP id 3j7aw968um-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 06:24:51 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2816OmQs40108362
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 1 Sep 2022 06:24:49 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id DF4AE4C040;
+        Thu,  1 Sep 2022 06:24:48 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 18E214C046;
+        Thu,  1 Sep 2022 06:24:44 +0000 (GMT)
+Received: from [9.43.54.15] (unknown [9.43.54.15])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  1 Sep 2022 06:24:43 +0000 (GMT)
+Message-ID: <c484fb58-6bc2-1103-a95d-1587232f56ba@linux.ibm.com>
+Date:   Thu, 1 Sep 2022 11:54:42 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5e969928-cefd-4725-10f2-08da8be296f6
-X-MS-TrafficTypeDiagnostic: BL0PR12MB4868:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QhHokv8zdCzOQDeZqdLJgH3tAvF/1bWNFZqHwgBx3Nkx8DyBEAAdF75qtdXAmO4wRpmttHTKD215NmUqfdwcR8dfc2dx3AOEHHJVDjd9Oxij1N6eXR2cjkbkiH5pFTdQYXVthlS+DkdmoLSc69YGr3zb9EWjRc83fbrWx9cuHdStuOHmZVbIbSzy1GJRymoNc5iMPCd4Pgi30ff2z+iQXIjNi+YvrZYI8h06uZ+ikBnNLoETLcQGqwcxZIqWmq8AJEejE/IvTj+FzaDoP8EG7FaMIGSOW1nFftcVbFCu/p0Cvdq33g0zvqj7zhETxOGLIEcWCT26FVjDW1Yn8ZZUYMs3twnW703cTwOZy3aRAzkMM9vLuds0Gd+3US/PPfQ4Iz7zKMKARVzqCx56OrcBAd+VO5apZ6OmT4kA81WOEFJJUClNnYG5XGtbQP5NT3dLxC7YRgZ3WFFY8ahvLAg8EiQhOcSGLYxqDUQFhp6rIF65Tp6FpU9dKJlBn1eENsZv+gDbMk1uKmTy3Vzq2dUFsfYv91hN+dyce7LDuMX5MAYOrZoUnr6m23ac/biY1xziW8fb3f+1w9zU7qGWjsP0nreXbTmQbhKRaVH36bvOhrWB5aSKOdReJ5mxex/8rMNhQxmsotx6wdrwkMtE+rQHfl4KGbJxE9sIQHTnOCjj151jJ4w0HiGyUYVVzzTAFNSEPGRwRDPcmyCJ/P17w0DZiLWFcvw2ZTZKXwPLr+1uwXJWG/I5Fj8dQWvpTjxlQkigGDA03mfqeA3Hwc8F8khwwj4ik/TyvRPXiUXRVLeX+X4KOa/Ol8VBkB1/uwSDD7G/cjXfR8f2r0n5fY+d2u7kNw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(396003)(136003)(376002)(36840700001)(46966006)(40470700004)(478600001)(36756003)(70586007)(4326008)(7696005)(82310400005)(70206006)(54906003)(316002)(41300700001)(8936002)(5660300002)(8676002)(6666004)(2906002)(110136005)(2616005)(336012)(1076003)(26005)(47076005)(16526019)(186003)(426003)(83380400001)(356005)(40480700001)(86362001)(40460700003)(36860700001)(82740400003)(81166007)(36900700001)(2101003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 06:24:13.7299
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5e969928-cefd-4725-10f2-08da8be296f6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR12MB4868
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH mm-unstable] mm/demotion: Assign correct memory type for
+ multiple dax devices with the same node affinity
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>
+References: <20220826100224.542312-1-aneesh.kumar@linux.ibm.com>
+ <87a67j1uyk.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <87a67j1uyk.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: FRb_FSmd90YHyCtg5qXfIeO1w_Rb5Vto
+X-Proofpoint-ORIG-GUID: ry5pEToQ3QWddUNlKrXvMEnPQHl_4ERG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_03,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ suspectscore=0 impostorscore=0 spamscore=0 adultscore=0 bulkscore=0
+ clxscore=1015 priorityscore=1501 phishscore=0 mlxlogscore=999
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209010025
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cleanup the headers declaration which are not used
-actually and some duplicated declaration which is declarated in some
-other headers already, it will help to simplify the header part.
+On 9/1/22 11:45 AM, Huang, Ying wrote:
+> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+> 
+>> With multiple dax devices having the same node affinity, the kernel wrongly assigned
+>> default_dram memory type to some devices after the memory hotplug operation. Fix this by
+>> not clearing node_memory_types on the dax device remove.
+> 
+> Sorry for late reply.
+> 
+> Just for confirmation.  There are multiple dax devices in one NUMA node?
+> 
+> If you can show the bug reproducing steps, that will make it even easier
+> to understand.
+> 
 
-Reviewed-by: Huang Rui <ray.huang@amd.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 4 ----
- 1 file changed, 4 deletions(-)
+NUMA nodes are assigned per region and you can have multiple devdax namespace with same NUMA node affinity. 
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 9ac75c1cde9c..9cf7bc162e7c 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -31,19 +31,15 @@
- #include <linux/compiler.h>
- #include <linux/dmi.h>
- #include <linux/slab.h>
--#include <linux/acpi.h>
- #include <linux/io.h>
- #include <linux/delay.h>
- #include <linux/uaccess.h>
- #include <linux/static_call.h>
- 
--#include <acpi/processor.h>
- #include <acpi/cppc_acpi.h>
- 
- #include <asm/msr.h>
- #include <asm/processor.h>
--#include <asm/cpufeature.h>
--#include <asm/cpu_device_id.h>
- #include "amd-pstate-trace.h"
- 
- #define AMD_PSTATE_TRANSITION_LATENCY	0x20000
--- 
-2.34.1
+dax0.1 and dax0.2 are examples. To recreate you can follow the below steps
+
+
+root@ubuntu-guest:/sys/devices/system/node/node3# ls
+compact  cpumap    meminfo   memory34  memory36  memory38  memory41  memory43  memory45  memory47  memory50  memory52  memory54  numastat   uevent
+cpulist  distance  memory33  memory35  memory37  memory39  memory42  memory44  memory46  memory49  memory51  memory53  memory55  subsystem  vmstat
+root@ubuntu-guest:/sys/devices/system/node/node3#
+root@ubuntu-guest:/sys/devices/system/node/node3# for mem in memory*; do echo 0 > $mem/online; done
+root@ubuntu-guest:/sys/devices/system/node/node3# cd /sys/bus/dax/drivers
+root@ubuntu-guest:/sys/bus/dax/drivers# echo dax0.0  > kmem/unbind
+root@ubuntu-guest:/sys/bus/dax/drivers# cd /sys/devices/system/node/node3/
+root@ubuntu-guest:/sys/devices/system/node/node3# ls
+compact  cpumap    meminfo   memory42  memory44  memory46  memory49  memory51  memory53  memory55  subsystem  vmstat
+cpulist  distance  memory41  memory43  memory45  memory47  memory50  memory52  memory54  numastat  uevent
+root@ubuntu-guest:/sys/devices/system/node/node3# for mem in memory*; do echo 1 > $mem/online; done
+
+
+-aneesh
 

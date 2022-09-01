@@ -2,97 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88665A9507
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3D475A950D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233869AbiIAKrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:47:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
+        id S234043AbiIAKt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiIAKrS (ORCPT
+        with ESMTP id S234088AbiIAKtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:47:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB3026122;
-        Thu,  1 Sep 2022 03:47:17 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F1A86601E0A;
-        Thu,  1 Sep 2022 11:47:13 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662029236;
-        bh=601JQW1vRODbZW3nXgrYwKwIYLdatGO7bqQS64cjbC8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gvIVOPIBzWZGuD6NygXzh1sohbyafn5m4zlspwSvOk7AqMsde4hQLAfTpZRLGT/Xg
-         tZCPVrVupNm/ycsQg0HqK9JAnd7gStXHbCQs/hnoLYCspCe/qIfCqS3tgCPNdjs6sS
-         6ns55hsCsiGqdQjsubmEAVFEAIr1tWG+6jF0V0SgiLyirr7LqTX8z2z8vQEx25L7xu
-         2xXzrL/ZUdOZB7ntAgCtSMwR/pQbOLBKNp236a2yKz2+EFYW2nQ4gkKtpamcIbbFgE
-         dA/wt53VbNU8A3PjajlEJ4BJ2/tgJLW7ng1Zhlr12NCwAZ4urG6dRbPgfbiRq0WfC9
-         7rk9NN0l3hsgQ==
-Message-ID: <532eedc8-b468-4409-1887-8fff264a6486@collabora.com>
-Date:   Thu, 1 Sep 2022 13:47:10 +0300
+        Thu, 1 Sep 2022 06:49:42 -0400
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 809831314CD
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:49:36 -0700 (PDT)
+Received: by mail-wr1-f44.google.com with SMTP id c7so15134666wrp.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:49:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=WjC5MMmeXT3QbFNucFQXnhs+/PC/vM67wXqw/sIvdOk=;
+        b=Fjb9MFmyIEwe6BedeBlXuvpiWm3+dZtgijrHSCz03QwuRuJep/UzhiubG0yjH6wTmr
+         SWbnoIWOgZ9FOTLi+VhBH9/4zfT4Pvwvbn8lT+H9ByIFvSVcLEvUmYsWTMLVQd0+ZuEd
+         DSIoXB94IcM9/pecc9XoD3a51cM0Yr/m7keedVX0kIYw4EZV7SP8hhvK5cxdzfeapV9B
+         N6ji7Ctz8o9g3QnzUMsgQLyt6V28BZehShiwdj2s4sgkqaoSJblZ4KHZe1EKdWtztBdA
+         sX797DvG3a6pob5BhWjctDWURHpgV2w8q1MMkB6/4qT+XuKkeqaYvVcXFvORON2FkwXW
+         uZXQ==
+X-Gm-Message-State: ACgBeo1xg+9HuYAG9G6AJo0+NXQ46y4KJj2ngOcKZPQgtzNDqJoior+2
+        G/bcu+apORITOzRQwg86+8rID0YRHDs=
+X-Google-Smtp-Source: AA6agR6XN6fPghRY6m4UvfSO/a5VgaXvSdaPKgEJQvnTeiC3Bbq5mbrSMkaXumOd0Qm7oJF4IfpbCQ==
+X-Received: by 2002:adf:f911:0:b0:21e:c0f6:fd26 with SMTP id b17-20020adff911000000b0021ec0f6fd26mr14153824wrr.361.1662029375141;
+        Thu, 01 Sep 2022 03:49:35 -0700 (PDT)
+Received: from [192.168.64.104] (bzq-219-42-90.isdn.bezeqint.net. [62.219.42.90])
+        by smtp.gmail.com with ESMTPSA id q28-20020a056000137c00b002205cbc1c74sm14250469wrz.101.2022.09.01.03.49.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 03:49:33 -0700 (PDT)
+Message-ID: <62e78a2f-998a-b340-9dcd-7d5c12c96fe9@grimberg.me>
+Date:   Thu, 1 Sep 2022 13:49:32 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 00/21] Move all drivers to a common dma-buf locking
- convention
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] drivers/nvme/host: Fix namespace duplication check
+ rule
 Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
- <8322099f-4ef3-6a5d-4a66-27c4b3329884@amd.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <8322099f-4ef3-6a5d-4a66-27c4b3329884@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+To:     sungup.moon@samsung.com, "kbusch@kernel.org" <kbusch@kernel.org>,
+        "axboe@fb.com" <axboe@fb.com>, "hch@lst.de" <hch@lst.de>
+Cc:     "linux-nvme@lists.infradead.org" <linux-nvme@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <CGME20220901002815epcms2p6ae137d9de49bef5764f19c0fa7f3536e@epcms2p4>
+ <20220901004941epcms2p4e5e1c53484889619f050a02d8e671eca@epcms2p4>
+From:   Sagi Grimberg <sagi@grimberg.me>
+In-Reply-To: <20220901004941epcms2p4e5e1c53484889619f050a02d8e671eca@epcms2p4>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,32 +67,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Christian,
 
-On 9/1/22 10:49, Christian König wrote:
-> Hi Dmitry,
+
+On 9/1/22 03:49, Sungup Moon wrote:
+> Some NVMe device, use EUI64 and NGUID, has fixed value EUI64 on a
+> sub-system because of the bit size of ID. Current kernel check the
+> all IDs should have unique value in a sub-system and globally.
+> However, if an namespace has duplicate IDs (not all) in a sub-system,
+> current kernel raise "duplicate IDs in subsystem for nsid" error. But
+> NVMe Specification defines the namespace unique identifier like this:
 > 
-> I've gone over this multiple times now and while it is still possible
-> that we missed something I think that this should land now.
+> When creating a namespace, the controller shall indicate a globally
+> unique value in one or more of the following:
+> a) the EUI64 field;
+> b) the NGUID field; or
+> c) a Namespace Identification Descriptor with the Namespace Identifier
+> Type field set to 3h
+> (reference: 7.11 Unique Identifier; NVM Express 1.4c spec)
+> 
+> So, I suggest the modified nvme_subsys_check_duplicate_ids function
+> checking uniqueness from all IDS to one more IDs.
+> 
+> I missed the initializing of "duplicated" variable, so I reissue the
+> version2 patch.
+> 
+> Signed-off-by: Sungup Moon <sungup.moon@samsung.com>
+> ---
+>   drivers/nvme/host/core.c | 25 ++++++++++++++++++-------
+>   1 file changed, 18 insertions(+), 7 deletions(-)
+> 
+> diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+> index af367b22871b..8c2faa2881a4 100644
+> --- a/drivers/nvme/host/core.c
+> +++ b/drivers/nvme/host/core.c
+> @@ -3902,24 +3902,35 @@ static struct nvme_ns_head *nvme_find_ns_head(struct nvme_ctrl *ctrl,
+>          return NULL;
+>   }
+> 
+> +#define IDS_EQUAL(A, B) (memcmp(&(A), &(B), sizeof(A)) == 0)
 
-Thank you very much for the review!
+No need for this macro IMO.
 
-> The whole topic is just to complicated that we can 100% sure guarantee
-> that there isn't anything wrong with the locking, but lockdep and driver
-> testing should allow us to quickly find remaining issues.
+> +
+>   static int nvme_subsys_check_duplicate_ids(struct nvme_subsystem *subsys,
+>                  struct nvme_ns_ids *ids)
+>   {
+>          bool has_uuid = !uuid_is_null(&ids->uuid);
+>          bool has_nguid = memchr_inv(ids->nguid, 0, sizeof(ids->nguid));
+>          bool has_eui64 = memchr_inv(ids->eui64, 0, sizeof(ids->eui64));
+> +       bool duplicated;
+>          struct nvme_ns_head *h;
+> 
+>          lockdep_assert_held(&subsys->lock);
+> 
+>          list_for_each_entry(h, &subsys->nsheads, entry) {
+> -               if (has_uuid && uuid_equal(&ids->uuid, &h->ids.uuid))
+> -                       return -EINVAL;
+> -               if (has_nguid &&
+> -                   memcmp(&ids->nguid, &h->ids.nguid, sizeof(ids->nguid)) == 0)
+> -                       return -EINVAL;
+> -               if (has_eui64 &&
+> -                   memcmp(&ids->eui64, &h->ids.eui64, sizeof(ids->eui64)) == 0)
+> +               duplicated = has_uuid || has_nguid || has_eui64;
+> +
+> +               if (has_uuid)
+> +                       duplicated = duplicated &&
+> +                               uuid_equal(&ids->uuid, &h->ids.uuid);
+> +
+> +               if (has_nguid)
+> +                       duplicated = duplicated &&
+> +                               IDS_EQUAL(ids->nguid, h->ids.nguid);
+> +
+> +               if (has_eui64)
+> +                       duplicated = duplicated &&
+> +                               IDS_EQUAL(ids->eui64, h->ids.eui64);
+> +
+> +               if (duplicated)
+>                          return -EINVAL;
 
-At least the most popular drivers should be okay. If anyone will find
-issue introduced by this series, then indeed shouldn't be a problem to
-fix it later on.
+That is very confusing.
 
-> Do you have commit rights to drm-misc-next or should I push it?
+So a ns can have an identifier that does not have to be unique? or that
+every identifier that exist should be unique but at least one identifier
+should exist?
 
-I got the drm-misc commit right two weeks ago, haven't pushed anything
-there yet. Please let me try to do the push. I'll let you know if any
-kind of help will be needed from you.
-
-I'll wait for more acks/r-bs and then do the push.
-
--- 
-Best regards,
-Dmitry
+The former seems weird...

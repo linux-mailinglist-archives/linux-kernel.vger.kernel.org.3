@@ -2,51 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B6F15A9F45
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 088845A9F56
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233925AbiIASnf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:43:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59718 "EHLO
+        id S234369AbiIASpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiIASnd (ORCPT
+        with ESMTP id S233729AbiIASp0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:43:33 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A76B558F3
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 11:43:31 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id z9-20020a056e02088900b002e35dba878cso13649422ils.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 11:43:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=tSm8RJxZnQES9hrhXTPiqnJb2qljBW6PGF4rDckYcBU=;
-        b=KW7fDfak49USHHrUu4I6jsucFeIHli07s21oYdsgD9K3p0j7ijvXEQTwNA9lt1amfJ
-         WieymR8ATqahckJo3XXg7/ydGHVBztRuQ1rKl0iQXrRyI5vDixntFsUAX/GiyoyCbMSA
-         Jh/O09y3AQP7C8ZyHDTvX++lIrnCnstVqBsVsxquJO3hsrzaaGCEsQVeq0uyiJF8iuzK
-         mAEPto8f+dEToDCvJlgFIIyvc21pjPMcgWFsXX9xoARf0wVD61iefu0QkhE+YbFzk3nr
-         +7jsmJmoU5gWlOq2V6Rq5MBexYdEJvlCUMmvaIUwueG7zm6nNl+M1rb6TbDwz4JUlQuf
-         FA9A==
-X-Gm-Message-State: ACgBeo3JQNQ16sstA58YO7u7vEj7VGkOZJPJd6+Fwp7oQeI1bsO7wcV2
-        sesvMlFT8Csu2kNg5ChXI8vFJ2fm1rEmhl3kh+U6AiQFzLvN
-X-Google-Smtp-Source: AA6agR6ql9AjVH9LUPRZ2P8yA8RUqQd1MM1pz0LeQkxKH9hEtNfnFWcqV2+JI9Nodvy0fRGhQbv0Qt5qi/CHOPcXa90sPkYqb7VE
+        Thu, 1 Sep 2022 14:45:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8A714019;
+        Thu,  1 Sep 2022 11:44:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 20876B82793;
+        Thu,  1 Sep 2022 18:44:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DB16C433C1;
+        Thu,  1 Sep 2022 18:44:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662057889;
+        bh=s/op9FxbvGkr2I6H/gC1I7p8DUVgJEM5L483+D42ThM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rrR749S74PopAnNaIl3UW/gVusvXahy69L9YlvBrwa9bniUwUOjmOrXYEmE6THWjt
+         6yvBKINFol2Lq3pIfEOwKWMqO30c8RgV97y8ZpRTPVsdtcYfuXPsfNh1hpiiW2eJtm
+         i2pk8gb3osKsuKC7eqxlsyWKsPblR1FloGxcMzJmQFk1cgTKRJ59VUT0rM27+TRpYL
+         T+fqb2uxggsrTAkLJv59C0zOBNJAnfo/NHsXa9TYpGP3maP32SFfk+Imy30iLnZSxc
+         lKqlHeczWoDerw2YcldhdoLdPHfXIOskL+jwjsW3SxV8BMEhrcQA8GJpFmCv0z4ppE
+         KOsqIXGqeJXPQ==
+Date:   Thu, 1 Sep 2022 19:44:43 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     Max Krummenacher <max.oss.09@gmail.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>
+Subject: Re: [PATCH] arm64: dts: imx8mp-verdin: board regulators: add
+ always-on
+Message-ID: <YxD9m7sELdTUFFZ3@sirena.org.uk>
+References: <20220901110422.1859621-1-max.oss.09@gmail.com>
+ <YxD5+RCYtzcxEdjj@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:580e:0:b0:689:af21:6f3f with SMTP id
- m14-20020a6b580e000000b00689af216f3fmr16490897iob.116.1662057810886; Thu, 01
- Sep 2022 11:43:30 -0700 (PDT)
-Date:   Thu, 01 Sep 2022 11:43:30 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006a06a005e7a1fd95@google.com>
-Subject: [syzbot] WARNING in floppy_shutdown
-From:   syzbot <syzbot+046fef2eab0d7c657ca0@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, efremov@linux.com, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="DpOOspaFS25XZtxY"
+Content-Disposition: inline
+In-Reply-To: <YxD5+RCYtzcxEdjj@pendragon.ideasonboard.com>
+X-Cookie: This bag is recyclable.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,58 +69,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
+--DpOOspaFS25XZtxY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-HEAD commit:    10d4879f9ef0 Merge tag 'thermal-6.0-rc3' of git://git.kern..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=13ba5d33080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=312be25752c7fe30
-dashboard link: https://syzkaller.appspot.com/bug?extid=046fef2eab0d7c657ca0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+On Thu, Sep 01, 2022 at 09:29:13PM +0300, Laurent Pinchart wrote:
+> On Thu, Sep 01, 2022 at 01:04:22PM +0200, Max Krummenacher wrote:
+> > From: Max Krummenacher <max.krummenacher@toradex.com>
 
-Unfortunately, I don't have any reproducer for this issue yet.
+> > These regulators are switched on by HW during power up and can not
+> > be influenced by SW.
+> > Set the always-on property.
+>=20
+> Is this needed ? When a fixed regulator has no control GPIO or clock, as
+> is the case here, I would expect the driver and/or regulator core to
+> understand that it's always on, as the alternative is always-off, which
+> is pointless :-) Mark, Liam, what do you think ?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+046fef2eab0d7c657ca0@syzkaller.appspotmail.com
+If there's no physical control setting always-on does nothing.
 
-------------[ cut here ]------------
-WARNING: CPU: 2 PID: 3723 at drivers/block/floppy.c:999 schedule_bh drivers/block/floppy.c:999 [inline]
-WARNING: CPU: 2 PID: 3723 at drivers/block/floppy.c:999 process_fd_request drivers/block/floppy.c:2847 [inline]
-WARNING: CPU: 2 PID: 3723 at drivers/block/floppy.c:999 floppy_shutdown.cold+0x7b/0xaa drivers/block/floppy.c:1892
-Modules linked in:
-CPU: 2 PID: 3723 Comm: kworker/u16:3 Not tainted 6.0.0-rc2-syzkaller-00283-g10d4879f9ef0 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
-Workqueue: floppy floppy_shutdown
-RIP: 0010:schedule_bh drivers/block/floppy.c:999 [inline]
-RIP: 0010:process_fd_request drivers/block/floppy.c:2847 [inline]
-RIP: 0010:floppy_shutdown.cold+0x7b/0xaa drivers/block/floppy.c:1892
-Code: 05 7e 95 f9 07 20 66 63 8a e8 99 37 77 f8 48 8b 1d 72 43 60 03 31 ff 83 e3 01 89 de e8 16 8b 2b f8 84 db 74 07 e8 8d 8e 2b f8 <0f> 0b e8 86 8e 2b f8 48 8b 35 0f 94 f9 07 bf 08 00 00 00 48 c7 c2
-RSP: 0018:ffffc90003147d00 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000001 RCX: 0000000000000000
-RDX: ffff888014c16080 RSI: ffffffff894fab83 RDI: 0000000000000001
-RBP: 0000000000000282 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
-R13: ffffc90003147da8 R14: ffff888014efd100 R15: ffff888011875800
-FS:  0000000000000000(0000) GS:ffff88802c800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000563743531680 CR3: 000000001a5d6000 CR4: 0000000000150ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+--DpOOspaFS25XZtxY
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMQ/ZoACgkQJNaLcl1U
+h9Ah7Af/eClop9S6c76OEyEBONEjDIhgOGDj3ZrMnv/zOT+QFavuVcsAQp3uWx9c
+sPQ7hXEh6etyMD6WxBO6JcEpOQr7zIZT5aOZELo9zw7wbsW9j/lRt427s/5xh3kM
+4wkPYNeKzJKHeGQ6IplTC6M+U9avCVDudzPGJ0oymvFqHjyZpoYZZkYZ6lnpre7E
+xIVjs9/60+XQuGWILbnc0I82AWZMBPzmmfXj74I9mMa9lXHHoPo3+e19c61+O6+u
+SHIWv/wX6TSyfp1X78NdjfgFhMENwFC5U/FlNGVtfmNyQjrWp0wnA57JdNFzaQjX
+GmoNzkdXrb8g/YAbrGoScayspR83Jw==
+=F2cr
+-----END PGP SIGNATURE-----
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+--DpOOspaFS25XZtxY--

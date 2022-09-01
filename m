@@ -2,78 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E79C5A8F3F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:06:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9522F5A9019
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233606AbiIAHGo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:06:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59268 "EHLO
+        id S233977AbiIAHZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233601AbiIAHGJ (ORCPT
+        with ESMTP id S233913AbiIAHZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:06:09 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88F7A9252;
-        Thu,  1 Sep 2022 00:05:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PMcMlRof4aBmW9ZRc+eOO/2dgQwguo+jd6/zOIwkXz4=; b=CRTVAsmAK2cWYW898rb6ABFc5M
-        uLACuGzlIMyaVe8YmnHdnMTCzaRgU/yORC/GoxdMYsKfSqUkdBcV9CHFquRDxtBp1mrHH1Ek8iUcr
-        mn1JgrUbBdWhUq0dshggnSScCFSCXwzSSm1KuWPF7x5mOnsP+VDfpzlLoRknLlMRFYgTP9KQNHlgH
-        CH7qbZF+ZmtxkOzs27I6vkqhMH23AuEUp5/xcLcIfVX3lpAkPrSHOObJikPLlUvDymQfq9PPQJW2d
-        ahsXPS2phTb5F2Rtarg5EDnzM/T3m8B4GVcztEaB4FRglzTR7JDiDhZuuZYYAbZtb5/Iw4ZAPbP6X
-        Wmout+LA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTeGf-005oq2-M2; Thu, 01 Sep 2022 07:05:37 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2996330010B;
-        Thu,  1 Sep 2022 09:05:36 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 110AE20981381; Thu,  1 Sep 2022 09:05:36 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 09:05:35 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Mel Gorman <mgorman@suse.de>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
-        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <YxBZv1pZ6N2vwcP3@hirez.programming.kicks-ass.net>
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de>
- <20220831155941.q5umplytbx6offku@moria.home.lan>
+        Thu, 1 Sep 2022 03:25:22 -0400
+Received: from smtp-out.kfki.hu (smtp-out.kfki.hu [148.6.0.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D278F1223A8;
+        Thu,  1 Sep 2022 00:24:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by smtp2.kfki.hu (Postfix) with ESMTP id DBD36CC00FE;
+        Thu,  1 Sep 2022 09:06:06 +0200 (CEST)
+X-Virus-Scanned: Debian amavisd-new at smtp2.kfki.hu
+Received: from smtp2.kfki.hu ([127.0.0.1])
+        by localhost (smtp2.kfki.hu [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP; Thu,  1 Sep 2022 09:06:04 +0200 (CEST)
+Received: from blackhole.kfki.hu (blackhole.szhk.kfki.hu [148.6.240.2])
+        by smtp2.kfki.hu (Postfix) with ESMTP id 96B81CC00FF;
+        Thu,  1 Sep 2022 09:06:03 +0200 (CEST)
+Received: by blackhole.kfki.hu (Postfix, from userid 1000)
+        id 90DC13431DF; Thu,  1 Sep 2022 09:06:03 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by blackhole.kfki.hu (Postfix) with ESMTP id 8F2813431DE;
+        Thu,  1 Sep 2022 09:06:03 +0200 (CEST)
+Date:   Thu, 1 Sep 2022 09:06:03 +0200 (CEST)
+From:   Jozsef Kadlecsik <kadlec@netfilter.org>
+To:     Kees Cook <keescook@chromium.org>
+cc:     Jakub Kicinski <kuba@kernel.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        syzbot <syzkaller@googlegroups.com>,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] netlink: Bounds-check struct nlmsgerr creation
+In-Reply-To: <20220901064858.1417126-1-keescook@chromium.org>
+Message-ID: <5aad4860-b1c3-d78f-583d-26281626a49@netfilter.org>
+References: <20220901064858.1417126-1-keescook@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831155941.q5umplytbx6offku@moria.home.lan>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,16 +58,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 11:59:41AM -0400, Kent Overstreet wrote:
+Hi,
 
-> Also, ftrace can drop events. Not really ideal if under system load your memory
-> accounting numbers start to drift.
+On Wed, 31 Aug 2022, Kees Cook wrote:
 
-You could attach custom handlers to tracepoints. If you were to replace
-these unconditional code hooks of yours with tracepoints then you could
-conditionally (say at boot) register custom handlers that do the
-accounting you want.
+> For 32-bit systems, it might be possible to wrap lnmsgerr content
+> lengths beyond SIZE_MAX. Explicitly test for all overflows, and mark the
+> memcpy() as being unable to internally diagnose overflows.
+> 
+> This also excludes netlink from the coming runtime bounds check on
+> memcpy(), since it's an unusual case of open-coded sizing and
+> allocation. Avoid this future run-time warning:
+> 
+>   memcpy: detected field-spanning write (size 32) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
+> 
+> Cc: Jakub Kicinski <kuba@kernel.org>
+> Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+> Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
+> Cc: Florian Westphal <fw@strlen.de>
+> Cc: "David S. Miller" <davem@davemloft.net>
+> Cc: Eric Dumazet <edumazet@google.com>
+> Cc: Paolo Abeni <pabeni@redhat.com>
+> Cc: syzbot <syzkaller@googlegroups.com>
+> Cc: netfilter-devel@vger.kernel.org
+> Cc: coreteam@netfilter.org
+> Cc: netdev@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v2: Rebased to -next
+> v1: https://lore.kernel.org/lkml/20220901030610.1121299-3-keescook@chromium.org
+> ---
+>  net/netlink/af_netlink.c | 81 +++++++++++++++++++++++++---------------
+>  1 file changed, 51 insertions(+), 30 deletions(-)
 
-Nobody is mandating you use the ftrace ringbuffer to consume tracepoints.
-Many people these days attach eBPF scripts to them and do whatever they
-want.
+Could you add back the net/netfilter/ipset/ip_set_core.c part? Thanks!
+
+Best regards,
+Jozsef
+-
+E-mail  : kadlec@blackhole.kfki.hu, kadlecsik.jozsef@wigner.hu
+PGP key : https://wigner.hu/~kadlec/pgp_public_key.txt
+Address : Wigner Research Centre for Physics
+          H-1525 Budapest 114, POB. 49, Hungary

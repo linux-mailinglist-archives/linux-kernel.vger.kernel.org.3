@@ -2,90 +2,352 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EDB5A9519
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBC775A9550
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:03:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234044AbiIAKya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:54:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S233296AbiIALDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233399AbiIAKy1 (ORCPT
+        with ESMTP id S229798AbiIALDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:54:27 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9D6130A12;
-        Thu,  1 Sep 2022 03:54:27 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4MJHrh6JYJz1N7k9;
-        Thu,  1 Sep 2022 18:50:44 +0800 (CST)
-Received: from huawei.com (10.175.103.91) by dggpemm500022.china.huawei.com
- (7.185.36.162) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 1 Sep
- 2022 18:54:25 +0800
-From:   Zeng Heng <zengheng4@huawei.com>
-To:     <djwong@kernel.org>
-CC:     <linux-xfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zengheng4@huawei.com>
-Subject: [PATCH -next] xfs: missing space in xfs trace log
-Date:   Thu, 1 Sep 2022 19:02:05 +0800
-Message-ID: <20220901110205.565167-1-zengheng4@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Sep 2022 07:03:10 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC26745077;
+        Thu,  1 Sep 2022 04:03:07 -0700 (PDT)
+X-UUID: 0aca0395703f49f68b4f39bc7a8ce050-20220901
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=zGXbG85OwSaQ9RW6b5zZ9K/RY/riE4Y898TbFDyAPXs=;
+        b=YoUGhJ8SdaP2ws2KsiR0idhrElWngUVmnVilK9LryiVP5lW2L45OcvN0zeaTC43oyyk4PdDcz2P2XNP8XgMt6GVxwsv/MB0jEd2CXKBUCsv2Q97qNCbXArIfF9/cJ0cGg5zDeny6N4GqnZL17SQzBvBPWgbe44T+XrFZAraVo3Q=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:fa68c62d-6813-4884-9845-3ee0925c8edb,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:84eae18,CLOUDID:c112d220-1c20-48a5-82a0-25f9c331906d,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 0aca0395703f49f68b4f39bc7a8ce050-20220901
+Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
+        (envelope-from <chui-hao.chiu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1245573146; Thu, 01 Sep 2022 19:03:01 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 1 Sep 2022 19:03:00 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 1 Sep 2022 19:03:00 +0800
+Message-ID: <28d62f85365b2a718e143cf5bd0c1230bee8168f.camel@mediatek.com>
+Subject: Re: [PATCH v4] arm64: dts: mt7986: add built-in Wi-Fi device nodes
+From:   Peter Chiu <chui-hao.chiu@mediatek.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     <devicetree@vger.kernel.org>, Ryder Lee <ryder.Lee@mediatek.com>,
+        "Evelyn Tsai" <evelyn.tsai@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Date:   Thu, 1 Sep 2022 19:03:00 +0800
+In-Reply-To: <079c023c-fa2d-1a5a-41ec-6d364067eb7d@gmail.com>
+References: <20220630094909.8014-1-chui-hao.chiu@mediatek.com>
+         <b6524da2-34d6-cb7b-c8bf-19809e8932ed@gmail.com>
+         <deb84c968ba615201619e5c4ef0445f09de6fc7e.camel@mediatek.com>
+         <079c023c-fa2d-1a5a-41ec-6d364067eb7d@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500022.china.huawei.com (7.185.36.162)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add space between arguments would help someone
-to locate the key words they want, so break
-quoted strings at a space character.
+On Thu, 2022-09-01 at 10:13 +0200, Matthias Brugger wrote:
+> 
+> On 01/09/2022 05:47, Peter Chiu wrote:
+> > On Tue, 2022-08-30 at 10:43 +0200, Matthias Brugger wrote:
+> > > 
+> > > On 30/06/2022 11:49, Peter Chiu wrote:
+> > > > This enables built-in 802.11ax Wi-Fi support.
+> > > > 
+> > > > Reviewed-by: Sam Shih <sam.shih@mediatek.com>
+> > > > Reviewed-by: Ryder Lee <ryder.lee@mediatek.com>
+> > > > Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
+> > > > ---
+> > > > v2: add clocks and clock-names.
+> > > > v3: rename wmac to wifi and change underscores to dash in node
+> > > > names.
+> > > > v4: rebase to the latest codebase.
+> > > > ---
+> > > >    arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 41
+> > > > +++++++++++++++++++
+> > > >    arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 23
+> > > > +++++++++++
+> > > >    arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 43
+> > > > ++++++++++++++++++++
+> > > >    3 files changed, 107 insertions(+)
+> > > > 
+> > > > diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+> > > > b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+> > > > index 882277a..28cd168 100644
+> > > > --- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+> > > > +++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+> > > > @@ -115,6 +115,13 @@ &uart2 {
+> > > >    	status = "okay";
+> > > >    };
+> > > >    
+> > > > +&wifi {
+> > > > +	status = "okay";
+> > > > +	pinctrl-names = "default", "dbdc";
+> > > > +	pinctrl-0 = <&wf_2g_5g_pins>;
+> > > > +	pinctrl-1 = <&wf_dbdc_pins>;
+> > > > +};
+> > > > +
+> > > >    &pio {
+> > > >    	uart1_pins: uart1-pins {
+> > > >    		mux {
+> > > > @@ -129,4 +136,38 @@ mux {
+> > > >    			groups = "uart2";
+> > > >    		};
+> > > >    	};
+> > > > +
+> > > > +	wf_2g_5g_pins: wf-2g-5g-pins {
+> > > > +		mux {
+> > > > +			function = "wifi";
+> > > > +			groups = "wf_2g", "wf_5g";
+> > > 
+> > > yaml says:
+> > >            - if:
+> > >                 properties:
+> > >                   function:
+> > >                     const: wifi
+> > >               then:
+> > >                 properties:
+> > >                   groups:
+> > >                     enum: [wf_2g, wf_5g, wf_dbdc]
+> > > 
+> > > 
+> > > Did you run the binding checker against this DTS?
+> > 
+> > The binding checker showed the groups setting is too long. We will
+> > send
+> > a patch to fix yaml by setting groups as string-array.
+> > 
+> 
+> Wait, does this mean the binding was wrong in the first place, as you
+> can't set 
+> all three groups in one node?
 
-Such as below:
-[Before]
-kworker/1:0-280     [001] .....   600.782135: xfs_bunmap:
-dev 7:0 ino 0x85 disize 0x0 fileoff 0x0 fsbcount 0x400000001fffffflags ATTRFORK ...
+Yes, we need to set two groups in a node for the board which supports
+wifi 2g and wifi 5g simultaneously. The bindings lack the following
+code which set groups to string-array.
+$ref: /schemas/types.yaml#/definitions/string-array
 
-[After]
-kworker/1:2-564     [001] ..... 23817.906160: xfs_bunmap:
-dev 7:0 ino 0x85 disize 0x0 fileoff 0x0 fsbcount 0x400000001fffff flags ATTRFORK ...
+> 
+> > > Why can't we just merge wf_2g_5g_pins with wf_dbdc_pins?
+> > 
+> > Since they use different pinmux settings on the same pin, we need
+> > to
+> > distinguish them.
+> > 
+> 
+> wf-2g-5g-pins and wf-dbdc-pins set the same drive-strength to the
+> very same 
+> group of pins. What do you mean exactly? Sorry I'm not an expert on
+> the pinctrl 
+> infrastructure.
 
-Signed-off-by: Zeng Heng <zengheng4@huawei.com>
----
- fs/xfs/xfs_trace.h | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+wf-2g-5g-pins and wf-dbdc-pins use different functions by setting
+different groups. But I set useless drive-strength in the wf-dbdc-pins
+node. I will remove them in the next version.
 
-diff --git a/fs/xfs/xfs_trace.h b/fs/xfs/xfs_trace.h
-index f9057af6e0c8..cb7c81ba7fa3 100644
---- a/fs/xfs/xfs_trace.h
-+++ b/fs/xfs/xfs_trace.h
-@@ -1170,7 +1170,7 @@ DECLARE_EVENT_CLASS(xfs_dqtrx_class,
- 		__entry->ino_res_used = qtrx->qt_ino_res_used;
- 		__entry->icount_delta = qtrx->qt_icount_delta;
- 	),
--	TP_printk("dev %d:%d dquot id 0x%x type %s flags %s"
-+	TP_printk("dev %d:%d dquot id 0x%x type %s flags %s "
- 		  "blk_res %llu bcount_delta %lld delbcnt_delta %lld "
- 		  "rtblk_res %llu rtblk_res_used %llu rtbcount_delta %lld delrtb_delta %lld "
- 		  "ino_res %llu ino_res_used %llu icount_delta %lld",
-@@ -1602,7 +1602,7 @@ TRACE_EVENT(xfs_bunmap,
- 		__entry->caller_ip = caller_ip;
- 		__entry->flags = flags;
- 	),
--	TP_printk("dev %d:%d ino 0x%llx disize 0x%llx fileoff 0x%llx fsbcount 0x%llx"
-+	TP_printk("dev %d:%d ino 0x%llx disize 0x%llx fileoff 0x%llx fsbcount 0x%llx "
- 		  "flags %s caller %pS",
- 		  MAJOR(__entry->dev), MINOR(__entry->dev),
- 		  __entry->ino,
--- 
-2.25.1
+Best Regards,
+Peter Chiu
+
+> 
+> Regards,
+> Matthias
+> 
+> 
+> > Best Regards,
+> > Peter Chiu
+> > > 
+> > > Regards,
+> > > Matthias
+> > > 
+> > > > +		};
+> > > > +		conf {
+> > > > +			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3",
+> > > > "WF0_HB4",
+> > > > +			       "WF0_HB0", "WF0_HB0_B",
+> > > > "WF0_HB5",
+> > > > "WF0_HB6",
+> > > > +			       "WF0_HB7", "WF0_HB8", "WF0_HB9",
+> > > > "WF0_HB10",
+> > > > +			       "WF0_TOP_CLK", "WF0_TOP_DATA",
+> > > > "WF1_HB1",
+> > > > +			       "WF1_HB2", "WF1_HB3", "WF1_HB4",
+> > > > "WF1_HB0",
+> > > > +			       "WF1_HB5", "WF1_HB6", "WF1_HB7",
+> > > > "WF1_HB8",
+> > > > +			       "WF1_TOP_CLK", "WF1_TOP_DATA";
+> > > > +			drive-strength = <4>;
+> > > > +		};
+> > > > +	};
+> > > > +
+> > > > +	wf_dbdc_pins: wf-dbdc-pins {
+> > > > +		mux {
+> > > > +			function = "wifi";
+> > > > +			groups = "wf_dbdc";
+> > > > +		};
+> > > > +		conf {
+> > > > +			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3",
+> > > > "WF0_HB4",
+> > > > +			       "WF0_HB0", "WF0_HB0_B",
+> > > > "WF0_HB5",
+> > > > "WF0_HB6",
+> > > > +			       "WF0_HB7", "WF0_HB8", "WF0_HB9",
+> > > > "WF0_HB10",
+> > > > +			       "WF0_TOP_CLK", "WF0_TOP_DATA",
+> > > > "WF1_HB1",
+> > > > +			       "WF1_HB2", "WF1_HB3", "WF1_HB4",
+> > > > "WF1_HB0",
+> > > > +			       "WF1_HB5", "WF1_HB6", "WF1_HB7",
+> > > > "WF1_HB8",
+> > > > +			       "WF1_TOP_CLK", "WF1_TOP_DATA";
+> > > > +			drive-strength = <4>;
+> > > > +		};
+> > > > +	};
+> > > >    };
+> > > > diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+> > > > b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+> > > > index e3a407d..890ded0 100644
+> > > > --- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+> > > > +++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+> > > > @@ -7,6 +7,7 @@
+> > > >    #include <dt-bindings/interrupt-controller/irq.h>
+> > > >    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > > >    #include <dt-bindings/clock/mt7986-clk.h>
+> > > > +#include <dt-bindings/reset/mt7986-resets.h>
+> > > >    
+> > > >    / {
+> > > >    	interrupt-parent = <&gic>;
+> > > > @@ -70,6 +71,11 @@ secmon_reserved: secmon@43000000 {
+> > > >    			reg = <0 0x43000000 0 0x30000>;
+> > > >    			no-map;
+> > > >    		};
+> > > > +
+> > > > +		wmcpu_emi: wmcpu-reserved@4fc00000 {
+> > > > +			no-map;
+> > > > +			reg = <0 0x4fc00000 0 0x00100000>;
+> > > > +		};
+> > > >    	};
+> > > >    
+> > > >    	timer {
+> > > > @@ -261,6 +267,23 @@ eth: ethernet@15100000 {
+> > > >    			#size-cells = <0>;
+> > > >    			status = "disabled";
+> > > >    		};
+> > > > +
+> > > > +		wifi: wifi@18000000 {
+> > > > +			compatible = "mediatek,mt7986-wmac";
+> > > > +			resets = <&watchdog
+> > > > MT7986_TOPRGU_CONSYS_SW_RST>;
+> > > > +			reset-names = "consys";
+> > > > +			clocks = <&topckgen
+> > > > CLK_TOP_CONN_MCUSYS_SEL>,
+> > > > +				 <&topckgen
+> > > > CLK_TOP_AP2CNN_HOST_SEL>;
+> > > > +			clock-names = "mcu", "ap2conn";
+> > > > +			reg = <0 0x18000000 0 0x1000000>,
+> > > > +			      <0 0x10003000 0 0x1000>,
+> > > > +			      <0 0x11d10000 0 0x1000>;
+> > > > +			interrupts = <GIC_SPI 213
+> > > > IRQ_TYPE_LEVEL_HIGH>,
+> > > > +				     <GIC_SPI 214
+> > > > IRQ_TYPE_LEVEL_HIGH>,
+> > > > +				     <GIC_SPI 215
+> > > > IRQ_TYPE_LEVEL_HIGH>,
+> > > > +				     <GIC_SPI 216
+> > > > IRQ_TYPE_LEVEL_HIGH>;
+> > > > +			memory-region = <&wmcpu_emi>;
+> > > > +		};
+> > > >    	};
+> > > >    
+> > > >    };
+> > > > diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+> > > > b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+> > > > index 0f49d57..7f21b10 100644
+> > > > --- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+> > > > +++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+> > > > @@ -98,3 +98,46 @@ fixed-link {
+> > > >    		};
+> > > >    	};
+> > > >    };
+> > > > +
+> > > > +&wifi {
+> > > > +	status = "okay";
+> > > > +	pinctrl-names = "default", "dbdc";
+> > > > +	pinctrl-0 = <&wf_2g_5g_pins>;
+> > > > +	pinctrl-1 = <&wf_dbdc_pins>;
+> > > > +};
+> > > > +
+> > > > +&pio {
+> > > > +	wf_2g_5g_pins: wf-2g-5g-pins {
+> > > > +		mux {
+> > > > +			function = "wifi";
+> > > > +			groups = "wf_2g", "wf_5g";
+> > > > +		};
+> > > > +		conf {
+> > > > +			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3",
+> > > > "WF0_HB4",
+> > > > +			       "WF0_HB0", "WF0_HB0_B",
+> > > > "WF0_HB5",
+> > > > "WF0_HB6",
+> > > > +			       "WF0_HB7", "WF0_HB8", "WF0_HB9",
+> > > > "WF0_HB10",
+> > > > +			       "WF0_TOP_CLK", "WF0_TOP_DATA",
+> > > > "WF1_HB1",
+> > > > +			       "WF1_HB2", "WF1_HB3", "WF1_HB4",
+> > > > "WF1_HB0",
+> > > > +			       "WF1_HB5", "WF1_HB6", "WF1_HB7",
+> > > > "WF1_HB8",
+> > > > +			       "WF1_TOP_CLK", "WF1_TOP_DATA";
+> > > > +			drive-strength = <4>;
+> > > > +		};
+> > > > +	};
+> > > > +
+> > > > +	wf_dbdc_pins: wf-dbdc-pins {
+> > > > +		mux {
+> > > > +			function = "wifi";
+> > > > +			groups = "wf_dbdc";
+> > > > +		};
+> > > > +		conf {
+> > > > +			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3",
+> > > > "WF0_HB4",
+> > > > +			       "WF0_HB0", "WF0_HB0_B",
+> > > > "WF0_HB5",
+> > > > "WF0_HB6",
+> > > > +			       "WF0_HB7", "WF0_HB8", "WF0_HB9",
+> > > > "WF0_HB10",
+> > > > +			       "WF0_TOP_CLK", "WF0_TOP_DATA",
+> > > > "WF1_HB1",
+> > > > +			       "WF1_HB2", "WF1_HB3", "WF1_HB4",
+> > > > "WF1_HB0",
+> > > > +			       "WF1_HB5", "WF1_HB6", "WF1_HB7",
+> > > > "WF1_HB8",
+> > > > +			       "WF1_TOP_CLK", "WF1_TOP_DATA";
+> > > > +			drive-strength = <4>;
+> > > > +		};
+> > > > +	};
+> > > > +};
 

@@ -2,110 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD4E5A983A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 984355A9848
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233501AbiIANN7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:13:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
+        id S234280AbiIANNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:13:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbiIANM1 (ORCPT
+        with ESMTP id S233055AbiIANM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:12:27 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8037723155
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:11:50 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id c2so17047698plo.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=jrbuE/+Ki3PbZbNcc+gY70rLAJkl8Sw712gHyc15u3Q=;
-        b=czhXlRSGpf/3sG2PqjUxt6KUDdlUTHLKRhX+0yZVBn9EtBj1Wh01Jl4oIZCuJnRSfo
-         jI03NbKS53hTGPMfdZtEgngQC2EK/cd2hmugISFhAYB+puJCiF410U37RlYr6INUs5Qj
-         Se12+Y/dQ9Re8vwTbDu41YEVoejhZ/zQElHzTN0Kx104mL71A+3WGh2ZUnQbHTcxvhX5
-         oHxKnwmYLs2AbrQN3CEaBbUokQaNrOs5evevb4J4xMCb72B/kqIhpbYAIU1/loUpJRqf
-         6MgObQOLGk9/iiaNEMOuqESTd3+em2o24Hp/+m38z1gw1ZfAnDNk6qMWy3yraARv1+0z
-         ogiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=jrbuE/+Ki3PbZbNcc+gY70rLAJkl8Sw712gHyc15u3Q=;
-        b=ONvUJA5+x2LSdrM7Lf6HNURq3BrVFbfXPGeFkNQVkJSRbc1dPFeubNVnBYL/aZJ2mM
-         qjgknNf2kkP7BobTvUBUFO6PQ1Sj8qY+ocLvQChZB61dmr06IKjHwNEaYqCCwGv+N0TC
-         lzwPKSi+Vo3T+r6gNFXOiuOTWRxkY+vntoC1fT+RApZLrkQls7DwlvxzvUK/1P4DHvD4
-         oAC62ktSO6tAIJR935P4MUP+F8JBEy+yYKAUzxYo4wG1oew40t6TUb3mQiUH7O11lRxd
-         zEf454KvnkHernsiuqKBKCuha1+Ns564X4ZLlynF9cX0DNhvD61YWsE7NWoHOzetvH4P
-         +LGw==
-X-Gm-Message-State: ACgBeo2ioCJ8/cpamIw/NcH67o49AGy3+vZE81w50LIeJ46gMiLLVH/K
-        Gqa2JH6FkFnWHY1ufeQwJS1bJQ==
-X-Google-Smtp-Source: AA6agR7jV26HzGGFgsPMNqY9/XaF5jVGK7niPYOthK/Z60GC610rUZL0LyfbShLwK6d3COucqIMerQ==
-X-Received: by 2002:a17:903:22c4:b0:175:41bc:9596 with SMTP id y4-20020a17090322c400b0017541bc9596mr8376411plg.112.1662037909653;
-        Thu, 01 Sep 2022 06:11:49 -0700 (PDT)
-Received: from C02DV8HUMD6R.bytedance.net ([139.177.225.252])
-        by smtp.gmail.com with ESMTPSA id b4-20020a170902d50400b00175111a277dsm6221156plg.185.2022.09.01.06.11.46
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 01 Sep 2022 06:11:49 -0700 (PDT)
-From:   Abel Wu <wuyun.abel@bytedance.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
-        Yicong Yang <yangyicong@huawei.com>,
-        linux-kernel@vger.kernel.org, Abel Wu <wuyun.abel@bytedance.com>
-Subject: [PATCH v2 5/5] sched/fair: cleanup for SIS_PROP
-Date:   Thu,  1 Sep 2022 21:11:07 +0800
-Message-Id: <20220901131107.71785-5-wuyun.abel@bytedance.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220901131107.71785-1-wuyun.abel@bytedance.com>
-References: <20220901131107.71785-1-wuyun.abel@bytedance.com>
+        Thu, 1 Sep 2022 09:12:26 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A8B2F649
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:11:46 -0700 (PDT)
+Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MJLv738TNzkWj8;
+        Thu,  1 Sep 2022 21:08:03 +0800 (CST)
+Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
+ dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 1 Sep 2022 21:11:44 +0800
+Received: from [10.67.101.90] (10.67.101.90) by dggpeml500002.china.huawei.com
+ (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 1 Sep
+ 2022 21:11:44 +0800
+Subject: Re: [PATCH v9 0/2] Add support for UltraSoc System Memory Buffer
+To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
+        <mike.leach@linaro.org>, <leo.yan@linaro.org>
+References: <20220818132231.28240-1-hejunhao3@huawei.com>
+CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
+        <rdunlap@infradead.org>, <liuqi115@huawei.com>,
+        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>
+From:   hejunhao <hejunhao3@huawei.com>
+Message-ID: <ab129d55-9b4f-1685-d102-fd963ed447bc@huawei.com>
+Date:   Thu, 1 Sep 2022 21:11:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
+ Thunderbird/45.7.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220818132231.28240-1-hejunhao3@huawei.com>
+Content-Type: text/plain; charset="windows-1252"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.101.90]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpeml500002.china.huawei.com (7.185.36.158)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sched-domain of this cpu is only used when SIS_PROP is enabled,
-and it should be irrelevant whether the local sd_llc is valid or
-not, since all we care about is target sd_llc if !SIS_PROP.
+Gentle ping. Any comment or suggestion is appreciated.
 
-Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
----
- kernel/sched/fair.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+thanks.
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 23b020c3d3a0..3561b18bfe9f 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -6399,16 +6399,16 @@ static int select_idle_cpu(struct task_struct *p, struct sched_domain *sd, bool
- 	struct sched_domain *this_sd;
- 	u64 time = 0;
- 
--	this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
--	if (!this_sd)
--		return -1;
--
- 	cpumask_and(cpus, sched_domain_span(sd), p->cpus_ptr);
- 
- 	if (sched_feat(SIS_PROP) && !has_idle_core) {
- 		u64 avg_cost, avg_idle, span_avg;
- 		unsigned long now = jiffies;
- 
-+		this_sd = rcu_dereference(*this_cpu_ptr(&sd_llc));
-+		if (!this_sd)
-+			return -1;
-+
- 		/*
- 		 * If we're busy, the assumption that the last idle period
- 		 * predicts the future is flawed; age away the remaining
--- 
-2.31.1
+On 2022/8/18 21:22, Junhao He wrote:
+> Add support for UltraSoc System Memory Buffer.
+>
+> Change since v8:
+> - Insert a blank line at the end of the config tag in Kconfig.
+> - Fix the "llseek" initialization.
+> - Link: https://lore.kernel.org/linux-arm-kernel/20220816131634.38195-1-hejunhao3@huawei.com/
+>
+> Change since v7:
+> - Use the macros for register bit flags and numbers of resource.
+> - Fix punctuation.
+> - Update the Date tag and the KernelVersion tag in the document.
+> - Link: https://lore.kernel.org/lkml/20220712091353.34540-1-hejunhao3@huawei.com/
+>
+> Change since v6:
+> - Modify the code style and driver description according to Suzuki's comment.
+> - Modify configuration of "drvdata->reading", to void problems in open/read
+>    concurrency scenario.
+> - Rename the macro of "SMB_FLOW_MASK".
+> - Use the "handle->head" to determine the page number and offset.
+> - Link: https://lore.kernel.org/linux-arm-kernel/20220606130223.57354-1-liuqi115@huawei.com/
+>
+> Change since v5:
+> - Address the comments from Suzuki, add some comments in SMB document, and modify
+>    configuration of "drvdata->reading", to void problems in multi-core concurrency scenario
+> - Link: https://lore.kernel.org/linux-arm-kernel/20220416083953.52610-1-liuqi115@huawei.com/
+>
+> Change since v4:
+> - Add a simple document of SMB driver according to Suzuki's comment.
+> - Address the comments from Suzuki.
+> - Link: https://lore.kernel.org/linux-arm-kernel/20220128061755.31909-1-liuqi115@huawei.com/
+>
+> Change since v3:
+> - Modify the file header according to community specifications.
+> - Address the comments from Mathieu.
+> - Link: https://lore.kernel.org/linux-arm-kernel/20211118110016.40398-1-liuqi115@huawei.com/
+>
+> Change since v2:
+> - Move ultrasoc driver to drivers/hwtracing/coresight.
+> - Link: https://lists.linaro.org/pipermail/coresight/2021-November/007310.html
+>
+> Change since v1:
+> - Drop the document of UltraSoc according to Mathieu's comment.
+> - Add comments to explain some private hardware settings.
+> - Address the comments from Mathieu.
+> - Link: https://lists.linaro.org/pipermail/coresight/2021-August/006842.html
+>
+> Change since RFC:
+> - Move driver to drivers/hwtracing/coresight/ultrasoc.
+> - Remove ultrasoc-axi-com.c, as AXI-COM doesn't need to be configured in
+>    basic tracing function.
+> - Remove ultrasoc.c as SMB does not need to register with the ultrasoc core.
+> - Address the comments from Mathieu and Suzuki.
+> - Link: https://lists.linaro.org/pipermail/coresight/2021-June/006535.html
+>
+> Qi Liu (2):
+>    drivers/coresight: Add UltraSoc System Memory Buffer driver
+>    Documentation: Add document for UltraSoc SMB drivers
+>
+>   .../sysfs-bus-coresight-devices-ultra_smb     |  31 +
+>   .../trace/coresight/ultrasoc-smb.rst          |  80 +++
+>   drivers/hwtracing/coresight/Kconfig           |  11 +
+>   drivers/hwtracing/coresight/Makefile          |   1 +
+>   drivers/hwtracing/coresight/ultrasoc-smb.c    | 636 ++++++++++++++++++
+>   drivers/hwtracing/coresight/ultrasoc-smb.h    | 115 ++++
+>   6 files changed, 874 insertions(+)
+>   create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+>   create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+>   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
+>   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
+>
 

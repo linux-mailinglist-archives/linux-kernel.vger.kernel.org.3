@@ -2,67 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A438B5AA119
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C155AA136
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:58:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbiIAU5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 16:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S235063AbiIAU6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 16:58:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232088AbiIAU5d (ORCPT
+        with ESMTP id S234561AbiIAU6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 16:57:33 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B0480531
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:57:32 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id p18so18172816plr.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 13:57:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=6bNaco3dz7IXQ11OXE5kaxXCKtEGcZVScgtt1VLo0BY=;
-        b=lz9bmAcSmJgqr7GHx+GhotVgFEl7+NLMUFsxU/Z8181ZKalwXzq956AcPOKxCTD6fS
-         5EyA5gCbMzEjufG7GCMLoVPUiKr6r3Ua1lDVdOrMmzUG6PjXUgoSqajP6vOAef2Ssjww
-         VXIx89M/XqRQw5ntFMdvGg93Oj8t/Z/2Ubc8M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=6bNaco3dz7IXQ11OXE5kaxXCKtEGcZVScgtt1VLo0BY=;
-        b=mrraZQSypOgbFhb0HZQss+C4xh31nTgWS5Co78Zqd97ka6jVnNYy3/Shy97wJ4NsQF
-         TLkUoLzu+h4hy+luUQK3CybKhApd6hOYIV5rU1N4KiPBOxuXuTBd4Lo/RkjKBGJ2vfVc
-         yvaOs8K6k6ZvULd2AD5fUev98hn9tR02I3MzrBCcr0MDcEzNAjCVo969Dh6MuxHfHa+A
-         rUJlwUE1Yt0PQ0zmPOesVfA0L368LghQnjckl0NsNkSvf6fG5qEiSuh0lzvAWzDOUmdD
-         IJjd9NBe4QWBLhafB+3XgIwp1Cp8Hkvigv3KamiCLBNbTNGEXBf6G5q6PLTm2Km/emHQ
-         iIVA==
-X-Gm-Message-State: ACgBeo00HeSsESctX/Vohalxy2NfsyE5MJu9wZCZaEJxMzejIgx9lZty
-        trdH0DOScc4IU93vwJ2jX7iObFHUF1Wm5w==
-X-Google-Smtp-Source: AA6agR7iYr8HTflzB5me0MkRmvnvfYeC6NEJ6l7HP5sKFbAtQiONSlkryqRFPN1gOjYeKmeUHaOT2Q==
-X-Received: by 2002:a17:902:e549:b0:174:d234:6116 with SMTP id n9-20020a170902e54900b00174d2346116mr19871188plf.131.1662065852382;
-        Thu, 01 Sep 2022 13:57:32 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id k6-20020aa79d06000000b005379dd2deb5sm26442pfp.137.2022.09.01.13.57.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 13:57:31 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Bradley Grove <linuxdrivers@attotech.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] esas2r: Use flex array destination for memcpy()
-Date:   Thu,  1 Sep 2022 13:57:29 -0700
-Message-Id: <20220901205729.2260982-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 1 Sep 2022 16:58:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBAB099268
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:58:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662065902;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=mHTwsNDN8zfszdHXZRdpSjJLNg46frqqa+bSRa3s8Mc=;
+        b=O4Pc42YADBbcZKs/NPhxVtwHCFs9WdmTycbWrobEl8PrTurmleQ5vSJE0kbwdySYF8QPOk
+        RvC57K7oDTqenpxOVCDWCefbXysasWngRdE66VzD++VHCOw/bh5ZtIhQyD8gryOGlnK6NH
+        /ByqZMPcbIRiASWjvWcUK51Ki5CadZE=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-219--MY6BnuoN7KGdbCG9cwjjw-1; Thu, 01 Sep 2022 16:58:16 -0400
+X-MC-Unique: -MY6BnuoN7KGdbCG9cwjjw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A7D42803916;
+        Thu,  1 Sep 2022 20:58:15 +0000 (UTC)
+Received: from llong.com (unknown [10.22.17.199])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A49381410DD5;
+        Thu,  1 Sep 2022 20:58:14 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Phil Auld <pauld@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v12 00/10] cgroup/cpuset: cpu partition code fixes & enhancements
+Date:   Thu,  1 Sep 2022 16:57:35 -0400
+Message-Id: <20220901205745.323326-1-longman@redhat.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1755; h=from:subject; bh=oUzuUGbXdkp1+ygGE/o7VtLMEMLuK7W2INwNNN66ZAM=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjERy4i+Rf8Ayy4CrbV48DD/6X4DpAkroVm50Cj5uh sv71xE2JAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxEcuAAKCRCJcvTf3G3AJpDzEA Cd8W1sY7X84DJ0FrmFfuLa+ZjlQQUatfnd7b0ruJ68IJaDPeOBHvXksHzTL/lgsx7soHMIkKWKCSPu RrqxHmvFixKDblA8BpS7hbIIJeegU7sBtdnAki9ia8p9FApIdmXhPFyMMz2fM4FA3CyZgfnRayc48+ 6Smxu+Q99NPoleFhpCsmXinnnJTDd503wTO4NiGpTbcDWrPYeJ5e0x8GnUEAVROhULxlkRlbxpHqI3 6gqMM5Ph1XMND9OCIXJfZcYeLz7SvsMGOEHRmd4w8IhVI//X9y58Q2Cbsx8mY+wIVUgqOCfp85Dg6G m7W2S5lHhnXDb05xNwS5YGl7mS8ThrQ7nJE7lD33AfHhJJlYYgJn2gNah6DT4106PKIO6UcZaVByJE 8PWIl91PWIQ4QNPUqv0n/mnp6B/NP/Mg74OSl2CY0WJaDtHATF/jd20/8QyF4XZB+LlN9ET110uehr lSz3IVpK9tAaZFo0fceOl5ugCL817Up04qN0w+QP5s+DwzvfW5Pg/VgtL2SRHh7vz6odv0UTLW/t5H EuKeL51g+Fr4i1v/AUseF/TmkBqIbnSbs1a9skbGAqagXtVVvITH51oRMKmQYiTe2fICbLIuMHoaw+ A4CNBWPQU66jahnexI3eWPFDQFN/axCMKgHgkMo7CDFwpzIFY1NwOe8EebMw==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,53 +68,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for FORTIFY_SOURCE performing run-time destination buffer
-bounds checking for memcpy(), specify the destination output buffer
-explicitly, instead of asking memcpy() to write past the end of what
-looked like a fixed-size object. Silences future run-time warning:
+v12:
+ - Change patch 1 to enable update_tasks_cpumask() for top_cpuset except
+   for percpu kthreads.
+ - Add 2 more patches to make exclusivity rule violations invalidate the
+   partition and its siblings instead of failing the change to make it
+   consistent with other cpuset changes.
+ - Update documentation and test script accordingly.
 
-  memcpy: detected field-spanning write (size 80) of single field "trc + 1" (size 64)
+v11:
+ - Fix incorrect spacing in patch 7 and include documentation suggestions
+   by Michal.
+ - Move partition_is_populated() check to the last one in list of
+   conditions to be checked.
 
-There is no binary code output differences from this change.
+v10:
+ - Relax constraints for changes made to "cpuset.cpus"
+   and "cpuset.cpus.partition" as suggested. Now almost all changes
+   are allowed.
+ - Add patch 1 to signal that we may need to do additional work in
+   the future to relax the constraint that tasks' cpumask may need
+   some adjustment if child partitions are present.
+ - Add patch 2 for miscellaneous cleanups.
 
-Cc: Bradley Grove <linuxdrivers@attotech.com>
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>
-Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: linux-scsi@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/scsi/esas2r/atioctl.h      | 1 +
- drivers/scsi/esas2r/esas2r_ioctl.c | 3 +--
- 2 files changed, 2 insertions(+), 2 deletions(-)
+The first patch fixes the problem that tasks in the top_cpuset
+will not have its cpus_mask properly set to reflect the reduced
+set of cpus available in the top_cpuset when a partition is enabled.
 
-diff --git a/drivers/scsi/esas2r/atioctl.h b/drivers/scsi/esas2r/atioctl.h
-index ff2ad9b38575..dd3437412ffc 100644
---- a/drivers/scsi/esas2r/atioctl.h
-+++ b/drivers/scsi/esas2r/atioctl.h
-@@ -831,6 +831,7 @@ struct __packed atto_hba_trace {
- 	u32 total_length;
- 	u32 trace_mask;
- 	u8 reserved2[48];
-+	u8 contents[];
- };
- 
- #define ATTO_FUNC_SCSI_PASS_THRU     0x04
-diff --git a/drivers/scsi/esas2r/esas2r_ioctl.c b/drivers/scsi/esas2r/esas2r_ioctl.c
-index 08f4e43c7d9e..e003d923acbf 100644
---- a/drivers/scsi/esas2r/esas2r_ioctl.c
-+++ b/drivers/scsi/esas2r/esas2r_ioctl.c
-@@ -947,10 +947,9 @@ static int hba_ioctl_callback(struct esas2r_adapter *a,
- 					break;
- 				}
- 
--				memcpy(trc + 1,
-+				memcpy(trc->contents,
- 				       a->fw_coredump_buff + offset,
- 				       len);
--
- 				hi->data_length = len;
- 			} else if (trc->trace_func == ATTO_TRC_TF_RESET) {
- 				memset(a->fw_coredump_buff, 0,
+This patchset also includes the following enhancements to the cpuset
+v2 partition code.
+
+ 1) Allow partitions that have no task to have empty effective cpus.
+ 2) Relax the constraints on what changes are allowed in cpuset.cpus
+    and cpuset.cpus.partition. However, the partition remain invalid
+    until the constraints of a valid partition root is satisfied.
+ 3) Add a new "isolated" partition type for partitions with no load
+    balancing which is available in v1 but not yet in v2.
+ 4) Allow the reading of cpuset.cpus.partition to include a reason
+    string as to why the partition remain invalid.
+
+In addition, the cgroup-v2.rst documentation file is updated and a self
+test is added to verify the correctness the partition code.
+
+Waiman Long (10):
+  cgroup/cpuset: Enable update_tasks_cpumask() on top_cpuset
+  cgroup/cpuset: Miscellaneous cleanups & add helper functions
+  cgroup/cpuset: Allow no-task partition to have empty
+    cpuset.cpus.effective
+  cgroup/cpuset: Relax constraints to partition & cpus changes
+  cgroup/cpuset: Add a new isolated cpus.partition type
+  cgroup/cpuset: Show invalid partition reason string
+  cgroup/cpuset: Relocate a code block in validate_change()
+  cgroup/cpuset: Make partition invalid if cpumask change violates
+    exclusivity rule
+  cgroup/cpuset: Update description of cpuset.cpus.partition in
+    cgroup-v2.rst
+  kselftest/cgroup: Add cpuset v2 partition root state test
+
+ Documentation/admin-guide/cgroup-v2.rst       | 150 ++--
+ kernel/cgroup/cpuset.c                        | 817 ++++++++++++------
+ tools/testing/selftests/cgroup/.gitignore     |   1 +
+ tools/testing/selftests/cgroup/Makefile       |   5 +-
+ .../selftests/cgroup/test_cpuset_prs.sh       | 674 +++++++++++++++
+ tools/testing/selftests/cgroup/wait_inotify.c |  87 ++
+ 6 files changed, 1385 insertions(+), 349 deletions(-)
+ create mode 100755 tools/testing/selftests/cgroup/test_cpuset_prs.sh
+ create mode 100644 tools/testing/selftests/cgroup/wait_inotify.c
+
 -- 
-2.34.1
+2.31.1
 

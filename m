@@ -2,323 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87BB5A9819
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:08:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36AB75A9827
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233309AbiIANHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49614 "EHLO
+        id S233539AbiIANLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:11:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233831AbiIANHV (ORCPT
+        with ESMTP id S233962AbiIANLL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:07:21 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89B50BA9F9;
-        Thu,  1 Sep 2022 06:01:46 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id A3C356D1;
-        Thu,  1 Sep 2022 15:00:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662037228;
-        bh=Ek9xvHUgwJfU0sGMBKk7EZKPxBzprp7PA6EP8DsGhOM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=P0jnZzLba+sh/JxiGcynNr6Vl2uXafSKWfXEH/m69Ns2VWCAdnEAh5n81ie2KJRsl
-         xS4pJtVkL0kjnKyvUl0lXMou8TR3kVUrq6dchX6x7N3TPgLaWqnhjCy2u2muFaTBG8
-         iBYagt0uTj2QOdJ9rvFqQcps3RsA+K4Xk/DGvwv0=
-Date:   Thu, 1 Sep 2022 16:00:17 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?utf-8?B?S8OpdmluIEwnaMO0cGl0YWw=?= <kevin.lhopital@bootlin.com>
-Subject: Re: [PATCH NOT FOR MERGE v5 6/6] ARM: dts: sun8i: a83t: bananapi-m3:
- Enable MIPI CSI-2 with OV8865
-Message-ID: <YxCs4fhx+Qx7uCAF@pendragon.ideasonboard.com>
-References: <20220826182803.604563-1-paul.kocialkowski@bootlin.com>
- <20220826182803.604563-7-paul.kocialkowski@bootlin.com>
- <YwkaFC2tm96X5qon@pendragon.ideasonboard.com>
- <YxCqZ8GhiTJlZ8MC@aptenodytes>
+        Thu, 1 Sep 2022 09:11:11 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920825F50;
+        Thu,  1 Sep 2022 06:06:04 -0700 (PDT)
+X-UUID: 9e3a0af748b64ffba4c6e809486fd1ff-20220901
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=9qzHLV2C1qM7HQeRv+rphvEHCRtfLmuNYiUYd4EBH0I=;
+        b=PrBlLy/V8BbN0qluDCdU2j62GQHeffIk/xKnIDW7hExwJqwDZptBzxi2rwDHp9hIPag3f+XjgJfK8uTLdL8ZSue72RF1TIWI11rbpyBUPx7zKnszAczotsHsjT3/+XWiV9JcX6yRbUTRjZI3F49tv93IrXSQk7AdlhUstr8aMpo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.10,REQID:927f338f-7fab-4e8a-a992-4d1cd4017020,OB:0,L
+        OB:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Releas
+        e_Ham,ACTION:release,TS:100
+X-CID-INFO: VERSION:1.1.10,REQID:927f338f-7fab-4e8a-a992-4d1cd4017020,OB:0,LOB
+        :0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS9
+        81B3D,ACTION:quarantine,TS:100
+X-CID-META: VersionHash:84eae18,CLOUDID:0553d420-1c20-48a5-82a0-25f9c331906d,C
+        OID:ce31018120e2,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 9e3a0af748b64ffba4c6e809486fd1ff-20220901
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw02.mediatek.com
+        (envelope-from <chui-hao.chiu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 961441172; Thu, 01 Sep 2022 21:05:58 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 1 Sep 2022 21:05:57 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 1 Sep 2022 21:05:57 +0800
+From:   Peter Chiu <chui-hao.chiu@mediatek.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <devicetree@vger.kernel.org>, Ryder Lee <ryder.Lee@mediatek.com>,
+        Evelyn Tsai <evelyn.tsai@mediatek.com>,
+        Sam Shih <sam.shih@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Peter Chiu <chui-hao.chiu@mediatek.com>
+Subject: [PATCH v5] arm64: dts: mt7986: add built-in Wi-Fi device nodes
+Date:   Thu, 1 Sep 2022 21:05:52 +0800
+Message-ID: <20220901130552.26234-1-chui-hao.chiu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YxCqZ8GhiTJlZ8MC@aptenodytes>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 02:49:43PM +0200, Paul Kocialkowski wrote:
-> On Fri 26 Aug 22, 22:08, Laurent Pinchart wrote:
-> > On Fri, Aug 26, 2022 at 08:28:03PM +0200, Paul Kocialkowski wrote:
-> > > From: Kévin L'hôpital <kevin.lhopital@bootlin.com>
-> > > 
-> > > The Bananapi M3 supports a camera module which includes an OV8865 sensor
-> > > connected via the parallel CSI interface and an OV8865 sensor connected
-> > > via MIPI CSI-2.
-> > > 
-> > > The I2C2 bus is shared by the two sensors as well as the (active-low)
-> > > reset signal, but each sensor has it own shutdown line.
-> > 
-> > I see a single sensor in this file, am I missing something ?
-> 
-> Indeed this patch only adds the OV8865, not the OV5640 which is also present
-> on the same camera board extension.
-> 
-> A patch was submitted some time ago adding support for (only) the OV5640:
-> https://lore.kernel.org/lkml/20190408165744.11672-7-wens@kernel.org/
+This enables built-in 802.11ax Wi-Fi support.
 
-OK. That's fine, let's just reword the commit message.
+Reviewed-by: Sam Shih <sam.shih@mediatek.com>
+Reviewed-by: Ryder Lee <ryder.lee@mediatek.com>
+Signed-off-by: Peter Chiu <chui-hao.chiu@mediatek.com>
 
-> > Sounds like a perfect candidate for an overlay, it could then be merged
-> > upstream.
-> 
-> Do we have an upstream place to merge device-tree overlays now?
+---
+v2: add clocks and clock-names.
+v3: rename wmac to wifi and change underscores to dash in node names.
+v4: rebase to the latest codebase.
+v5: remove useless pins in wf_dbdc_pins node.
+---
+ arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts | 38 +++++++++++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi    | 23 +++++++++++
+ arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts | 40 ++++++++++++++++++++
+ 3 files changed, 101 insertions(+)
 
-They're accepted in the upstream kernel as far as I know, a git grep for
-/plugin/ in .dts files produces 18 matches.
-
-> I'll check if it's possible to describe both sensors together and actually
-> be able to select one or the other properly from userspace. Last time I tried
-> this wasn't possible: there's at least the shared reset GPIO used by both
-> sensors, which cannot be requested by the two drivers in parallel.
-> 
-> To be honest this is very poor hardware design and it was almost certainly
-> designed with the idea that only one sensor will be configured per boot.
-> See https://wiki.banana-pi.org/Camera and
-> https://drive.google.com/file/d/0B4PAo2nW2KfnOEFTMjZ2aEVGUVU/view?usp=sharing
-> for the schematics pdf
-
-It's not great indeed, but not that uncommon either (unfortunately). I
-wonder if we need some kind of reset GPIO API, but that would be a hack
-at most I think.
-
-> > > Signed-off-by: Kévin L'hôpital <kevin.lhopital@bootlin.com>
-> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > ---
-> > >  arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts | 102 +++++++++++++++++++
-> > >  1 file changed, 102 insertions(+)
-> > > 
-> > > diff --git a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> > > index 5a7e1bd5f825..80fd99cf24b2 100644
-> > > --- a/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> > > +++ b/arch/arm/boot/dts/sun8i-a83t-bananapi-m3.dts
-> > > @@ -85,6 +85,30 @@ led-1 {
-> > >  		};
-> > >  	};
-> > >  
-> > > +	reg_ov8865_avdd: ov8865-avdd {
-> > > +		compatible = "regulator-fixed";
-> > > +		regulator-name = "ov8865-avdd";
-> > > +		regulator-min-microvolt = <2800000>;
-> > > +		regulator-max-microvolt = <2800000>;
-> > > +		vin-supply = <&reg_dldo4>;
-> > > +	};
-> > > +
-> > > +	reg_ov8865_dovdd: ov8865-dovdd {
-> > > +		compatible = "regulator-fixed";
-> > > +		regulator-name = "ov8865-dovdd";
-> > > +		regulator-min-microvolt = <2800000>;
-> > > +		regulator-max-microvolt = <2800000>;
-> > > +		vin-supply = <&reg_dldo4>;
-> > > +	};
-> > > +
-> > > +	reg_ov8865_dvdd: ov8865-dvdd {
-> > > +		compatible = "regulator-fixed";
-> > > +		regulator-name = "ov8865-dvdd";
-> > > +		regulator-min-microvolt = <1200000>;
-> > > +		regulator-max-microvolt = <1200000>;
-> > > +		vin-supply = <&reg_eldo1>;
-> > > +	};
-> > 
-> > Are those three regulators on the Banana Pi, or on the camera module ?
-> 
-> That's on the camera module.
-> 
-> > > +
-> > >  	reg_usb1_vbus: reg-usb1-vbus {
-> > >  		compatible = "regulator-fixed";
-> > >  		regulator-name = "usb1-vbus";
-> > > @@ -115,6 +139,23 @@ &cpu100 {
-> > >  	cpu-supply = <&reg_dcdc3>;
-> > >  };
-> > >  
-> > > +&csi {
-> > > +	status = "okay";
-> > > +
-> > > +	ports {
-> > > +		#address-cells = <1>;
-> > > +		#size-cells = <0>;
-> > > +
-> > > +		port@1 {
-> > > +			reg = <1>;
-> > 
-> > All of this (except the status = "okay") should go to sun8i-a83t.dtsi.
-> > 
-> > > +
-> > > +			csi_in_mipi_csi2: endpoint {
-> > > +				remote-endpoint = <&mipi_csi2_out_csi>;
-> > > +			};
-> > 
-> > This too actually, once the issue mentioned in patch 5/6 gets fixed.
-> > 
-> > > +		};
-> > > +	};
-> > > +};
-> > > +
-> > >  &de {
-> > >  	status = "okay";
-> > >  };
-> > > @@ -147,6 +188,36 @@ hdmi_out_con: endpoint {
-> > >  	};
-> > >  };
-> > >  
-> > > +&i2c2 {
-> > > +	pinctrl-names = "default";
-> > > +	pinctrl-0 = <&i2c2_pe_pins>;
-> > 
-> > This looks like a candidate for upstreaming in
-> > sun8i-a83t-bananapi-m3.dts, it shouldn't be in the overlay.
-> 
-> I2C2 is actually also exported in the PH pins, which is available on the board
-> header, so it's not obvious that using the PE pins should be the default.
-> 
-> The context is that Allwinner SoCs usually have a dedicated I2C controller for
-> cameras, but also route a "generic" I2C controller on the same pins.
-
-Out of curiosity, what features do those dedicated camera I2C
-controllers provide, compared to "normal" I2C controllers ?
-
-> Here that's on the PE14/15 pins. Since we don't have mainline support for this
-> camera-dedicated I2C controller, we end up routing the generic one to the PE
-> pins, which are routed to the camera connector.
-
-OK.
-
-> In the future we could add support for this camera-dedicated controller, which
-> would then allow routing i2c2 to the PH pins independently. This is what the
-> downstream Allwinner BSP kernel does.
-> 
-> > > +	status = "okay";
-> > > +
-> > > +	ov8865: camera@36 {
-> > > +		compatible = "ovti,ov8865";
-> > > +		reg = <0x36>;
-> > > +		pinctrl-names = "default";
-> > > +		pinctrl-0 = <&csi_mclk_pin>;
-> > > +		clocks = <&ccu CLK_CSI_MCLK>;
-> > > +		assigned-clocks = <&ccu CLK_CSI_MCLK>;
-> > > +		assigned-clock-rates = <24000000>;
-> > > +		avdd-supply = <&reg_ov8865_avdd>;
-> > > +		dovdd-supply = <&reg_ov8865_dovdd>;
-> > > +		dvdd-supply = <&reg_ov8865_dvdd>;
-> > > +		powerdown-gpios = <&pio 4 17 GPIO_ACTIVE_LOW>; /* PE17 */
-> > > +		reset-gpios = <&pio 4 16 GPIO_ACTIVE_LOW>; /* PE16 */
-> > > +
-> > > +		port {
-> > > +			ov8865_out_mipi_csi2: endpoint {
-> > > +				data-lanes = <1 2 3 4>;
-> > > +				link-frequencies = /bits/ 64 <360000000>;
-> > > +
-> > > +				remote-endpoint = <&mipi_csi2_in_ov8865>;
-> > > +			};
-> > > +		};
-> > > +	};
-> > > +};
-> > > +
-> > >  &mdio {
-> > >  	rgmii_phy: ethernet-phy@1 {
-> > >  		compatible = "ethernet-phy-ieee802.3-c22";
-> > > @@ -154,6 +225,24 @@ rgmii_phy: ethernet-phy@1 {
-> > >  	};
-> > >  };
-> > >  
-> > > +&mipi_csi2 {
-> > > +	status = "okay";
-> > > +};
-> > > +
-> > > +&mipi_csi2_in {
-> > > +	mipi_csi2_in_ov8865: endpoint {
-> > > +		data-lanes = <1 2 3 4>;
-> > > +
-> > > +		remote-endpoint = <&ov8865_out_mipi_csi2>;
-> > > +	};
-> > > +};
-> > > +
-> > > +&mipi_csi2_out {
-> > > +	mipi_csi2_out_csi: endpoint {
-> > > +		remote-endpoint = <&csi_in_mipi_csi2>;
-> > > +	};
-> > > +};
-> > > +
-> > >  &mmc0 {
-> > >  	pinctrl-names = "default";
-> > >  	pinctrl-0 = <&mmc0_pins>;
-> > > @@ -327,11 +416,24 @@ &reg_dldo3 {
-> > >  	regulator-name = "vcc-pd";
-> > >  };
-> > >  
-> > > +&reg_dldo4 {
-> > > +	regulator-always-on;
-> > 
-> > Does it have to be always on ?
-> 
-> Mhh so I realize the regulators handling here is quite messy.
-> I guess I didn't do such a good review of this patch internally.
-> 
-> The situation is that the regulators on the camera board all have their
-> enable pin tied to the DLDO4 output, but that would be best described as
-> a vin-supply of the ov8865 regulators above. Their real vin supply is an
-> always-on board-wide power source but I don't think we can represent another
-> regulator acting as enable signal in a better way.
-
-That's right. I've modeled that as a parent regulator in the past, even
-if it doesn't reflect the exact hardware topology, it's functionally
-equivalent.
-
-> Now beware that the camera board schematics are confusing as they show resistors
-> (R17, R18, R19, R20, R23) connecting some power lines together, but they are not
-> populated on the board (I guess the point is to make a variant of the design
-> without regulators on the camera board and to use ones from the PMU instead).
-> This probably confused Kevin and I back when this patch was made.
-> 
-> > > +	regulator-min-microvolt = <2800000>;
-> > > +	regulator-max-microvolt = <2800000>;
-> > > +	regulator-name = "avdd-csi";
-> > 
-> > Doesn't this belong to the base board .dts ? Same below.
-> > 
-> > > +};
-> > > +
-> > >  &reg_drivevbus {
-> > >  	regulator-name = "usb0-vbus";AVDD-CSI
-> > >  	status = "okay";
-> > >  };
-> > >  
-> > > +&reg_eldo1 {
-> > > +	regulator-min-microvolt = <1200000>;
-> > > +	regulator-max-microvolt = <1200000>;
-> > > +	regulator-name = "dvdd-csi-r";
-> > > +};
-> > > +
-> > >  &reg_fldo1 {
-> > >  	regulator-min-microvolt = <1080000>;
-> > >  	regulator-max-microvolt = <1320000>;
-
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+index 882277a52b69..afe37b702eef 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986a-rfb.dts
+@@ -115,6 +115,13 @@
+ 	status = "okay";
+ };
+ 
++&wifi {
++	status = "okay";
++	pinctrl-names = "default", "dbdc";
++	pinctrl-0 = <&wf_2g_5g_pins>;
++	pinctrl-1 = <&wf_dbdc_pins>;
++};
++
+ &pio {
+ 	uart1_pins: uart1-pins {
+ 		mux {
+@@ -129,4 +136,35 @@
+ 			groups = "uart2";
+ 		};
+ 	};
++
++	wf_2g_5g_pins: wf-2g-5g-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_2g", "wf_5g";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++
++	wf_dbdc_pins: wf-dbdc-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_dbdc";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+index e3a407d03551..890ded0efc51 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt7986a.dtsi
+@@ -7,6 +7,7 @@
+ #include <dt-bindings/interrupt-controller/irq.h>
+ #include <dt-bindings/interrupt-controller/arm-gic.h>
+ #include <dt-bindings/clock/mt7986-clk.h>
++#include <dt-bindings/reset/mt7986-resets.h>
+ 
+ / {
+ 	interrupt-parent = <&gic>;
+@@ -70,6 +71,11 @@
+ 			reg = <0 0x43000000 0 0x30000>;
+ 			no-map;
+ 		};
++
++		wmcpu_emi: wmcpu-reserved@4fc00000 {
++			no-map;
++			reg = <0 0x4fc00000 0 0x00100000>;
++		};
+ 	};
+ 
+ 	timer {
+@@ -261,6 +267,23 @@
+ 			#size-cells = <0>;
+ 			status = "disabled";
+ 		};
++
++		wifi: wifi@18000000 {
++			compatible = "mediatek,mt7986-wmac";
++			resets = <&watchdog MT7986_TOPRGU_CONSYS_SW_RST>;
++			reset-names = "consys";
++			clocks = <&topckgen CLK_TOP_CONN_MCUSYS_SEL>,
++				 <&topckgen CLK_TOP_AP2CNN_HOST_SEL>;
++			clock-names = "mcu", "ap2conn";
++			reg = <0 0x18000000 0 0x1000000>,
++			      <0 0x10003000 0 0x1000>,
++			      <0 0x11d10000 0 0x1000>;
++			interrupts = <GIC_SPI 213 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 214 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 215 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 216 IRQ_TYPE_LEVEL_HIGH>;
++			memory-region = <&wmcpu_emi>;
++		};
+ 	};
+ 
+ };
+diff --git a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+index 0f49d5764ff3..3443013b5971 100644
+--- a/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
++++ b/arch/arm64/boot/dts/mediatek/mt7986b-rfb.dts
+@@ -98,3 +98,43 @@
+ 		};
+ 	};
+ };
++
++&wifi {
++	status = "okay";
++	pinctrl-names = "default", "dbdc";
++	pinctrl-0 = <&wf_2g_5g_pins>;
++	pinctrl-1 = <&wf_dbdc_pins>;
++};
++
++&pio {
++	wf_2g_5g_pins: wf-2g-5g-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_2g", "wf_5g";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA", "WF1_HB1",
++			       "WF1_HB2", "WF1_HB3", "WF1_HB4", "WF1_HB0",
++			       "WF1_HB5", "WF1_HB6", "WF1_HB7", "WF1_HB8",
++			       "WF1_TOP_CLK", "WF1_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++
++	wf_dbdc_pins: wf-dbdc-pins {
++		mux {
++			function = "wifi";
++			groups = "wf_dbdc";
++		};
++		conf {
++			pins = "WF0_HB1", "WF0_HB2", "WF0_HB3", "WF0_HB4",
++			       "WF0_HB0", "WF0_HB0_B", "WF0_HB5", "WF0_HB6",
++			       "WF0_HB7", "WF0_HB8", "WF0_HB9", "WF0_HB10",
++			       "WF0_TOP_CLK", "WF0_TOP_DATA";
++			drive-strength = <4>;
++		};
++	};
++};
 -- 
-Regards,
+2.18.0
 
-Laurent Pinchart

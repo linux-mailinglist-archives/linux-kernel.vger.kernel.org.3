@@ -2,126 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50B3F5A9ACB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04125A9AD2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:48:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233739AbiIAOrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 10:47:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52770 "EHLO
+        id S233617AbiIAOsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 10:48:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbiIAOrW (ORCPT
+        with ESMTP id S231484AbiIAOsQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 10:47:22 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B666B75CF8
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 07:47:20 -0700 (PDT)
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 1 Sep 2022 10:48:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEBB47B2B1;
+        Thu,  1 Sep 2022 07:48:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6869D3F470
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 14:47:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1662043638;
-        bh=QWY8to+d00rWq/rJi5teSMWyNnP44XxPpW2JtoKQAbY=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=Wm15ImLzGdsawfNoZL9U8ef2/THt7sViN5sWKlv/yjZR8ViGYcH7Y89a9oYlOyD3C
-         LC69XOE8KHAsj4GoosFDiy8csyytCDmFGK+ziYqIKMaCPePKwevD/gue78GRqnj3CR
-         Vq38mkLdIdW/3gBzeAgsqvkG1V03NyjTvQVgcGp9wSDSj31arwFPWApLZZlhWEcuY+
-         q/j7zbtTA+Uh5c09yEkrUCpQh07kQwOY1rcbfTqSCtm74SjZGWjvwmyX7fFcRrbirc
-         JuI+e7JRXUuy9qEVVTQ78bZSYFaKDJDWeKDavPwJGtooNdkf+QSiUIaAiYpSQlou5l
-         vRPdnRMaD5Dxg==
-Received: by mail-pl1-f198.google.com with SMTP id q6-20020a17090311c600b0017266460b8fso11906826plh.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 07:47:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date;
-        bh=QWY8to+d00rWq/rJi5teSMWyNnP44XxPpW2JtoKQAbY=;
-        b=Ts5ghb2bOzjT9DcVPean4Wmc87uLXbnqUlVDsQLPS0k4xYuqgFyGyFAT97bwxPhWTl
-         NS0csFcL9WORFeZPKYKfi2aYzKNjRqbWFAjh6TQOg9riALlhPrO4Q48Px9CyfLNQFNOo
-         slbU7NIfbMmr1PeJar1C2kYUkEkNyOpI4YYOC02fkcII1+tYIIhwlykiwAGokOaW7+AY
-         AfUJQyXD6dG5rB0faLoD56BQu5yC14o8UQHpt6SoPBbpZJzg7Yyq1+Gci2wO3gekrYBB
-         jWYkH6YK3LtcN95yquKcpD+5Xtivg9YMLdV+KeZoqvTF+cgPxaiWVPl8KCSd6TYfpbXw
-         Y8nQ==
-X-Gm-Message-State: ACgBeo04UuYhPL2nK0E/GmG/wZVA3zKv7EwrAQrjYJ9Kvtfn1UKNQBdq
-        kknyIq+urPhuuG9442/wdGpFKMVoNrnJPDEWLun+59H7Z/Oadh0tp4cMBnjjUWVoqb0U+Za7Aog
-        qr2XGbZih7/ZXuyXosrapH6Rq5x2lqPiaZXirC+VixQ==
-X-Received: by 2002:a17:902:dac1:b0:172:eae4:950c with SMTP id q1-20020a170902dac100b00172eae4950cmr30535505plx.70.1662043637047;
-        Thu, 01 Sep 2022 07:47:17 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6D73TGKIDAtbJOYiBqwerHebexcmncChBbOyBvPScbeazLBElHcQjrwdL0UBiVzWm7alkZ3g==
-X-Received: by 2002:a17:902:dac1:b0:172:eae4:950c with SMTP id q1-20020a170902dac100b00172eae4950cmr30535477plx.70.1662043636582;
-        Thu, 01 Sep 2022 07:47:16 -0700 (PDT)
-Received: from canonical.com (2001-b011-3815-31f6-fb99-d5df-1120-3f91.dynamic-ip6.hinet.net. [2001:b011:3815:31f6:fb99:d5df:1120:3f91])
-        by smtp.gmail.com with ESMTPSA id g16-20020aa796b0000000b005385555e647sm7717029pfk.155.2022.09.01.07.47.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 07:47:14 -0700 (PDT)
-From:   Koba Ko <koba.ko@canonical.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V3] crypto: ccp - Release dma channels before dmaengine unrgister
-Date:   Thu,  1 Sep 2022 22:47:12 +0800
-Message-Id: <20220901144712.1192698-1-koba.ko@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id AFD09B82799;
+        Thu,  1 Sep 2022 14:48:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DDEAC433D6;
+        Thu,  1 Sep 2022 14:48:08 +0000 (UTC)
+Date:   Thu, 1 Sep 2022 10:48:39 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
+        hannes@cmpxchg.org, roman.gushchin@linux.dev, mgorman@suse.de,
+        dave@stgolabs.net, willy@infradead.org, liam.howlett@oracle.com,
+        void@manifault.com, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        bsegall@google.com, bristot@redhat.com, vschneid@redhat.com,
+        cl@linux.com, penberg@kernel.org, iamjoonsoo.kim@lge.com,
+        42.hyeyoo@gmail.com, glider@google.com, elver@google.com,
+        dvyukov@google.com, shakeelb@google.com, songmuchun@bytedance.com,
+        arnd@arndb.de, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 03/30] Lazy percpu counters
+Message-ID: <20220901104839.5691e1c9@gandalf.local.home>
+In-Reply-To: <20220901143219.n7jg7cbp47agqnwn@moria.home.lan>
+References: <20220830214919.53220-1-surenb@google.com>
+        <20220830214919.53220-4-surenb@google.com>
+        <YxBWczNCbZbj+reQ@hirez.programming.kicks-ass.net>
+        <20220901143219.n7jg7cbp47agqnwn@moria.home.lan>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A warning is shown during shutdown,
+On Thu, 1 Sep 2022 10:32:19 -0400
+Kent Overstreet <kent.overstreet@linux.dev> wrote:
 
-__dma_async_device_channel_unregister called while 2 clients hold a reference
-WARNING: CPU: 15 PID: 1 at drivers/dma/dmaengine.c:1110 __dma_async_device_channel_unregister+0xb7/0xc0
+> On Thu, Sep 01, 2022 at 08:51:31AM +0200, Peter Zijlstra wrote:
+> > On Tue, Aug 30, 2022 at 02:48:52PM -0700, Suren Baghdasaryan wrote:  
+> > > +static void lazy_percpu_counter_switch_to_pcpu(struct raw_lazy_percpu_counter *c)
+> > > +{
+> > > +	u64 __percpu *pcpu_v = alloc_percpu_gfp(u64, GFP_ATOMIC|__GFP_NOWARN);  
+> > 
+> > Realize that this is incorrect when used under a raw_spinlock_t.  
+> 
+> Can you elaborate?
 
-Call dma_release_channel for occupied channles before dma_async_device_unregister.
+All allocations (including GFP_ATOMIC) grab normal spin_locks. When
+PREEMPT_RT is configured, normal spin_locks turn into a mutex, where as
+raw_spinlock's do not.
 
-Fixes: 54cce8ecb925 ("crypto: ccp - ccp_dmaengine_unregister release dma channels")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Koba Ko <koba.ko@canonical.com>
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
+Thus, if this is done within a raw_spinlock with PREEMPT_RT configured, it
+can cause a schedule while holding a spinlock.
 
----
-V2: Fix the unused warning
-V3: Fix the Fixes: tag.
----
- drivers/crypto/ccp/ccp-dmaengine.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/crypto/ccp/ccp-dmaengine.c b/drivers/crypto/ccp/ccp-dmaengine.c
-index 7d4b4ad1db1f3..9f753cb4f5f18 100644
---- a/drivers/crypto/ccp/ccp-dmaengine.c
-+++ b/drivers/crypto/ccp/ccp-dmaengine.c
-@@ -641,6 +641,10 @@ static void ccp_dma_release(struct ccp_device *ccp)
- 	for (i = 0; i < ccp->cmd_q_count; i++) {
- 		chan = ccp->ccp_dma_chan + i;
- 		dma_chan = &chan->dma_chan;
-+
-+		if (dma_chan->client_count)
-+			dma_release_channel(dma_chan);
-+
- 		tasklet_kill(&chan->cleanup_tasklet);
- 		list_del_rcu(&dma_chan->device_node);
- 	}
-@@ -766,8 +770,8 @@ void ccp_dmaengine_unregister(struct ccp_device *ccp)
- 	if (!dmaengine)
- 		return;
- 
--	dma_async_device_unregister(dma_dev);
- 	ccp_dma_release(ccp);
-+	dma_async_device_unregister(dma_dev);
- 
- 	kmem_cache_destroy(ccp->dma_desc_cache);
- 	kmem_cache_destroy(ccp->dma_cmd_cache);
--- 
-2.25.1
-
+-- Steve

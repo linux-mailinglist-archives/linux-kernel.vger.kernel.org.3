@@ -2,217 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9AA5A99B7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:08:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72CF85A99BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234291AbiIAOHr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 10:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47090 "EHLO
+        id S233492AbiIAOIy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 10:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiIAOHf (ORCPT
+        with ESMTP id S233513AbiIAOIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 10:07:35 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C707140B8
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 07:07:30 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id D31BB5C01A9;
-        Thu,  1 Sep 2022 10:07:29 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Thu, 01 Sep 2022 10:07:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1662041249; x=1662127649; bh=ZH
-        1W9SzAvh365K3LsTeS4Fe2O1mpetLxMk2nvupx0cI=; b=ReDzDKUSFmoBHeUVs5
-        oy45ls0RS0FkKtQVRQ22Y6d5x1CM4rs6/B6MDtVWrmOYi82xBdNe3m70AzcyTzTD
-        aOVcIqAwZiniIXiXJ8mPz52kHTM7oARoAvGYynD5q3cJp0rGIfgZ1tL7HZarG9Xi
-        vPTw1nxU3ZeXC3xrWiPX7IlBdzfa5J0PieioNGE2lInlvyZVok5mY7nsLqoHja+a
-        Wt3u6RqbhrQjYPe5Xw1FbpG+OdHZVEBQz4ZBNMLF2TPkaIxdP8rRQI2I48pOzrQm
-        /hvsYAN/CdaOb9QVSmutWlCieENoKNoEwbf257EpsRIN+IBGg5tkLhI+u9fW99o2
-        eW5w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1662041249; x=1662127649; bh=ZH1W9SzAvh365
-        K3LsTeS4Fe2O1mpetLxMk2nvupx0cI=; b=RUn40TsnsjcJduv2QkpQqzCwQIvJZ
-        A8qDnomtL1c6VNXXnst17TqLiCNW52UlPz+7ogsfQGSqSRJHhu/x59iWP38QXkca
-        N/e91jC+VmDVePN9KUraDDRHxccBM6HOrxeBg+o/inIndkOyXTR26dotdUOXFD3c
-        mR1a6Fu3We/Aw6n5KBJGdDchV5GnLGtdKKRWBY5VOQM65tJ7A5YAG3hJ04igcMYu
-        JI2QzwsSZf3e/VgW1hDbFEc+uOx68PvEOFMQitRnURhbcqjvYJCC9IKl90WyuqF2
-        Sy67fC1sc07WyUbFlmllVyR+OsjA0H0TGGFKIoZ3c9//0IJgo7FlOsLAg==
-X-ME-Sender: <xms:oLwQY6zWV5cbVyhBknSFjfYzJ26o90uYKatJsqA_NwygcTsoGOWIMw>
-    <xme:oLwQY2QLy7E8sBZFEAybNfHH4uFYuI06vAc2ABpKdndEOsDFk5q9AMQdQ1YwocdMb
-    sO2vOkeka7Qnw45zqU>
-X-ME-Received: <xmr:oLwQY8UJQE-FyXnilAd6t5VezOj-TlxSjXEtdOIeIM6T0d7qtRKu-gqZxuvS8iat26rieWIl>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekkedgjeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepvfihtghh
-    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
-    grthhtvghrnhepvdegffehledvleejvdethffgieefveevhfeigefffffgheeguedtieek
-    tdeigeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epthihtghhohesthihtghhohdrphhiiiiirg
-X-ME-Proxy: <xmx:oLwQYwiTimP6_gPdve45MuKXavDLWc8aRJyOYzRKSmByUKmFu66qew>
-    <xmx:oLwQY8COvZlwAuxafeK_H_o9qjFDwHz-uAfvf1EaOPWUnEfIOagDLQ>
-    <xmx:oLwQYxLk3F2GFMsqu4IZXBXzLZNor1rGh2DYajlvlAF5FmjNEbex3Q>
-    <xmx:obwQY_9dTEbqhKnOrk2YgR2x808l0HdqrLCuUWZIY2d0fFhBEW6dGw>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Sep 2022 10:07:27 -0400 (EDT)
-From:   Tycho Andersen <tycho@tycho.pizza>
-To:     Miklos Szeredi <miklos@szeredi.hu>,
-        Eric Biederman <ebiederm@xmission.com>
-Cc:     linux-kernel@vger.kernel.org, fuse-devel@lists.sourceforge.net,
-        Tycho Andersen <tycho@tycho.pizza>,
-        "Serge E. Hallyn" <serge@hallyn.com>
-Subject: [PATCH] fuse: In fuse_flush only wait if someone wants the return code
-Date:   Thu,  1 Sep 2022 08:06:47 -0600
-Message-Id: <20220901140647.1125079-1-tycho@tycho.pizza>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <YvpRLJ79GRWYjLdf@tycho.pizza>
-References: <YvpRLJ79GRWYjLdf@tycho.pizza>
+        Thu, 1 Sep 2022 10:08:49 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CB4263
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 07:08:48 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id r22so16490995pgm.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 07:08:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=8OIlXCHvB4xFMaL/mDUpyfIfwwt9XTn35CLPOt6No9g=;
+        b=Mirx+GpK5brNlklKegbj57qMFDT0WS3jhLqeAJ6CABTHIjyltYjsE4LVhiihcZqAlz
+         grOTlXQxy0O9y9Ix8MfWUzBetsq6EuEvUFFzErJuwGMRgNVeObjJMDZC7V21h1I4nyhX
+         wnZGkOmJwLHCgMxZEDaHqwSzn5T55ext3J2VSdcxB/aSdVZqvk/b0htPdLzXbmjQhkVZ
+         XQj37YCqwppEojKZJ12H8q9gWUwOFHjBaYzzZRmRLMo2AEUaUkfhG4YhNzBjFcF40XPW
+         grSsTh8Ith4w/+OQSIIQ5K/ioY4cIEm8rwBS61GA/mBrFHTjNuAD/qKkkQ5wpdPhTtyl
+         d31Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=8OIlXCHvB4xFMaL/mDUpyfIfwwt9XTn35CLPOt6No9g=;
+        b=pO2bbS0EGfUzYPI7fsdq18zWkNiv5OOwVLuZ1/Ygaiabsyt+sAb4+vi95p3cfyOpUQ
+         m19Mn6iZqvw9oiFsk9QADzEO9IVAeUSwxkmj+2IMW114Ju12t4PEY1Ucv++Sh9bO+7+6
+         AneHcW6EMyZCqk1lo0NUnIlnkpEVWlBjHRZKFogXnG1WnyOguF3j4AJL178PbGIBl52w
+         slRU+HSvGXHQp9Mw/wdTT8+90zZ3uQ+4KRfJOa6lyJGEi2qS7zczNYyRnKPxyNqo61Tl
+         PjwnIORwuMJUtZQbWw9eOdPhhUr7cU6vYFJcgQF4b1XoT8MaKeBHOXHkD0YNCb6v8X+X
+         4XrQ==
+X-Gm-Message-State: ACgBeo0ycG3C85ghIse43lev+rho5qP+uEFS/bdNv0uuOX2Qivs6p6bU
+        pSK1ej5+uodo6AJ52WwA7wGL1A==
+X-Google-Smtp-Source: AA6agR5uOjmgTy4O1qhe9HGGTufAnBFjacBMwS5xEm17ssf+rVSPK2WbbPewBD0dEEFGlQHAco9eaw==
+X-Received: by 2002:a63:d16:0:b0:41d:fe52:1d2f with SMTP id c22-20020a630d16000000b0041dfe521d2fmr26882977pgl.416.1662041327419;
+        Thu, 01 Sep 2022 07:08:47 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 80-20020a621453000000b00535c4b7f1eesm13346694pfu.87.2022.09.01.07.08.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 07:08:46 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 14:08:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v8 003/103] KVM: Refactor CPU compatibility check on
+ module initialization
+Message-ID: <YxC865e8sfEvp7Iw@google.com>
+References: <cover.1659854790.git.isaku.yamahata@intel.com>
+ <4092a37d18f377003c6aebd9ced1280b0536c529.1659854790.git.isaku.yamahata@intel.com>
+ <d36802ee3d96d0fdac00d2c11be341f94a362ef9.camel@intel.com>
+ <YvU+6fdkHaqQiKxp@google.com>
+ <87y1v3v54b.wl-maz@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87y1v3v54b.wl-maz@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Eric W. Biederman" <ebiederm@xmission.com>
+On Thu, Sep 01, 2022, Marc Zyngier wrote:
+> Sean,
+> 
+> On Thu, 11 Aug 2022 18:39:53 +0100,
+> Sean Christopherson <seanjc@google.com> wrote:
+> > 
+> > +Will (for arm crud)
+> 
+> When it comes to KVM/arm64, I'd appreciate if you could Cc me.
 
-In my very light testing this resolves a hang where a thread of the
-fuse server was accessing the fuse filesystem (the fuse server is
-serving up), when the fuse server is killed.
+Sorry, will do.
 
-The practical problem is that the fuse server file descriptor was
-being closed after the file descriptor into the fuse filesystem so
-that the fuse filesystem operations were being blocked for instead of
-being aborted.  Simply skipping the unnecessary wait resolves this
-issue.
+> > arm64 is also quite evil and circumvents KVM's hardware enabling
+> > logic to some extent.  kvm_arch_init() => init_subsystems()
+> > unconditionally enables hardware, and for pKVM _leaves_ hardware
+> > enabled.  And then hyp_init_cpu_pm_notifier() disables/enables
+> > hardware across lower power enter+exit, except if pKVM is enabled.
+> > The icing on the cake is "disabling" hardware doesn't even do
+> > anything (AFAICT) if the kernel is running at EL2 (which I think is
+> > nVHE + not-pKVM?).
+> 
+> In the cases where disabling doesn't do anything (which are the exact
+> opposite of the cases you describe), that's because there is
+> absolutely *nothing* to do:
 
-This is just a proof of concept and someone should look to see if the
-fuse max_background limit could cause a problem with this approach.
+Yes, I know.
 
-Additionally testing PF_EXITING is a very crude way to tell if someone
-wants the return code from the vfs flush operation.  As such in the
-long run it probably makes sense to get some direct vfs support for
-knowing if flush needs to block until all of the flushing is complete
-and a status/return code can be returned.
+> - If VHE, the kernel is the bloody hypervisor: disable virtualisation,
+>   kill the kernel.
+> 
+> - if pKVM, the kernel is basically a guest, and has no business
+>   touching anything at all.
+> 
+> So much the 'evil' behaviour.
 
-Unless I have missed something this is a generic optimization that can
-apply to many network filesystems.
+The colorful language is tongue-in-cheek.
 
-Al, vfs folks? (igrab/iput sorted so as not to be distractions).
+I get the impression that you feel I am attacking ARM.  That is very much not what
+I intended.  If anything, I'm attacking x86 for forcing its quirks on everyone else.
 
-Perhaps a .flush_async method without a return code and a
-filp_close_async function without a return code to take advantage of
-this in the general sense.
-
-Waiting potentially indefinitely for user space in do_exit seems like a
-bad idea.  Especially when all that the wait is for is to get a return
-code that will never be examined.
-
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
-[tycho: small fixups for releasing fuse file + nocred flag]
-Signed-off-by: Tycho Andersen <tycho@tycho.pizza>
-Reported-by: Tycho Andersen <tycho@tycho.pizza>
-Tested-by: "Serge E. Hallyn" <serge@hallyn.com>
----
- fs/fuse/file.c | 64 ++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 64 insertions(+)
-
-diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-index 05caa2b9272e..da45fb2dd740 100644
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -464,6 +464,67 @@ static void fuse_sync_writes(struct inode *inode)
- 	fuse_release_nowrite(inode);
- }
- 
-+struct fuse_flush_args {
-+	struct fuse_args args;
-+	struct fuse_flush_in inarg;
-+	struct inode *inode;
-+	struct fuse_file *ff;
-+};
-+
-+static void fuse_flush_end(struct fuse_mount *fm, struct fuse_args *args, int err)
-+{
-+	struct fuse_flush_args *fa = container_of(args, typeof(*fa), args);
-+
-+	if (err == -ENOSYS) {
-+		fm->fc->no_flush = 1;
-+		err = 0;
-+	}
-+
-+	/*
-+	 * In memory i_blocks is not maintained by fuse, if writeback cache is
-+	 * enabled, i_blocks from cached attr may not be accurate.
-+	 */
-+	if (!err && fm->fc->writeback_cache)
-+		fuse_invalidate_attr_mask(fa->inode, STATX_BLOCKS);
-+
-+
-+	iput(fa->inode);
-+	fuse_file_put(fa->ff, false, false);
-+	kfree(fa);
-+}
-+
-+static int fuse_flush_async(struct file *file, fl_owner_t id)
-+{
-+	struct inode *inode = file_inode(file);
-+	struct fuse_mount *fm = get_fuse_mount(inode);
-+	struct fuse_file *ff = file->private_data;
-+	struct fuse_flush_args *fa;
-+	int err;
-+
-+	fa = kzalloc(sizeof(*fa), GFP_KERNEL);
-+	if (!fa)
-+		return -ENOMEM;
-+
-+	fa->inarg.fh = ff->fh;
-+	fa->inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
-+	fa->args.opcode = FUSE_FLUSH;
-+	fa->args.nodeid = get_node_id(inode);
-+	fa->args.in_numargs = 1;
-+	fa->args.in_args[0].size = sizeof(fa->inarg);
-+	fa->args.in_args[0].value = &fa->inarg;
-+	fa->args.force = true;
-+	fa->args.nocreds = true;
-+	fa->args.end = fuse_flush_end;
-+	fa->inode = igrab(inode);
-+	fa->ff = fuse_file_get(ff);
-+
-+	err = fuse_simple_background(fm, &fa->args, GFP_KERNEL);
-+	if (err)
-+		fuse_flush_end(fm, &fa->args, err);
-+
-+	return err;
-+}
-+
- static int fuse_flush(struct file *file, fl_owner_t id)
- {
- 	struct inode *inode = file_inode(file);
-@@ -495,6 +556,9 @@ static int fuse_flush(struct file *file, fl_owner_t id)
- 	if (fm->fc->no_flush)
- 		goto inval_attr_out;
- 
-+	if (current->flags & PF_EXITING)
-+		return fuse_flush_async(file, id);
-+
- 	memset(&inarg, 0, sizeof(inarg));
- 	inarg.fh = ff->fh;
- 	inarg.lock_owner = fuse_lock_owner_id(fm->fc, id);
-
-base-commit: 3d7cb6b04c3f3115719235cc6866b10326de34cd
--- 
-2.34.1
-
+What am trying to point out here is that ARM and other architectures are not
+well-served by KVM's current hardware enabling/disabling infrastructure.  I am not
+saying that ARM is broken and needs to be fixed, I am saying that KVM is broken and
+needs to be fixed, and that ARM is a victim of KVM's x86-centric origins.

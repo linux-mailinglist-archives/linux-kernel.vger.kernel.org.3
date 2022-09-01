@@ -2,59 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9B535A8F29
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:05:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 498945A8F2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:05:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233505AbiIAHEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S233639AbiIAHFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233271AbiIAHEW (ORCPT
+        with ESMTP id S232853AbiIAHEb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:04:22 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB15A6C115;
-        Thu,  1 Sep 2022 00:04:08 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 09:04:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1662015847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+6TS55y82TYJlsjJwC1/zBEVFCDtqxUms69ssI0wGGA=;
-        b=3RxOlbonJl5WFm8YJXSc0uAQRFGPk+DSXUCw++ela5eCvo5xJkEVEUbMFxjkRyt19MarwZ
-        DNPfLMrc24rrP9cADg9WhtlDUH6D5/PLLhdIz0NBges7lyBseRZRYTfcJvMhwU5BukTgcj
-        Qkk+/yYaiT1ncZcPjrLdFt457h+D1Q6GEFoPPsoEmThVEozsGEjuWS+sS3soDzXHd1a43A
-        dgejUhFMJAQ3RGqwdu3fieeFS22nB1+g+aMmCins0gGqPEumNbs5hm3ZU3rb4FW6BLdtIK
-        rfO0argpb218v1MWsH+roKH4nSfLKhYboE/AEt+Wjj88GouOyYLDeNyhzyd4LQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1662015847;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+6TS55y82TYJlsjJwC1/zBEVFCDtqxUms69ssI0wGGA=;
-        b=0lKMXKwZ85CHlGzucCsfuA1C4+BIzcDZjLS7nOki0RRQQtjslBtagCDNvKZIOeW3XCncam
-        fnw0X6HxbUgwxXAQ==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 0/5] riscv: add PREEMPT_RT support
-Message-ID: <YxBZZWopVftK/WBk@linutronix.de>
-References: <20220831175920.2806-1-jszhang@kernel.org>
+        Thu, 1 Sep 2022 03:04:31 -0400
+Received: from smtp2.axis.com (smtp2.axis.com [195.60.68.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48FDF12269C;
+        Thu,  1 Sep 2022 00:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=axis.com; q=dns/txt; s=axis-central1; t=1662015867;
+  x=1693551867;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=B35oMFhDMKzvzRhhioWCKHFgJQhO941LvgwXlwMswl4=;
+  b=S64KEHFY8uXZGYa4rWPIsqintFKOpy4F+JgI6U5q9OGODldjXEKst40+
+   jmaNNt8tUQRThnU4XitjffmsImioz2PPi/tTLal35MXN31NOLyGytMHfG
+   3nZKKmjhmX8E49Pbg2LIp1v6CxeT5CDWFer/hfUUA/Uh1XK9oRulAaBrv
+   4urDJ3CfWqleE90iEt2ATv6rts2UEuLZ9RR+8lZSG/k/adjBOYjdZFZdf
+   aMI+VVrzvfpgsSG4alTKWfS/pdnv7ifgCnxXvgEFpGyDhDa6F+8k+LYbN
+   d1OFsNDCEHQDYSz9gbEuPglLFDv3qAsPx4g1DJBySno2bdZftQFkc7WkC
+   Q==;
+Date:   Thu, 1 Sep 2022 09:04:23 +0200
+From:   Vincent Whitchurch <vincent.whitchurch@axis.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+CC:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        kernel <kernel@axis.com>, Lars-Peter Clausen <lars@metafoo.de>,
+        linux-iio <linux-iio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] iio: buffer: Silence lock nesting splat
+Message-ID: <YxBZd9Ivg5+zGUEb@axis.com>
+References: <20220816080828.1218667-1-vincent.whitchurch@axis.com>
+ <CAHp75VebQfdHrfYTmF0w9M556ZV8fG5jJ2rAN5a3mrB1mbvOQw@mail.gmail.com>
+ <20220820120800.519b5eb5@jic23-huawei>
+ <YwSLhWFbGb26B3mx@axis.com>
+ <20220828163247.3d6417d9@jic23-huawei>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20220831175920.2806-1-jszhang@kernel.org>
+In-Reply-To: <20220828163247.3d6417d9@jic23-huawei>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,15 +56,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-01 01:59:15 [+0800], Jisheng Zhang wrote:
-> I assume patch1, patch2 and patch3 can be reviewed and merged for
-> riscv-next, patch4 and patch5 can be reviewed and maintained in rt tree,
-> and finally merged once the remaining patches in rt tree are all
-> mainlined.
+On Sun, Aug 28, 2022 at 05:32:47PM +0200, Jonathan Cameron wrote:
+> Any plans to post updated roadtest soon?  I'm keen to add more test cases
+> and use it to cleanup the remaining staging drivers.  Very helpful tool,
+> but I don't want to be developing test sets against an old version if
+> it's going to be costly to forward port it.
 
-I would say so, yes.
+I don't think it's ready for a new posting, but I pushed the version I
+currently have here:
 
-What about JUMP_LABEL support? Do you halt all CPUs while patching the
-code?
+ https://github.com/vwax/linux/commits/roadtest/devel
 
-Sebastian
+The tests only pass on v5.19 since there are a couple of regressions
+(which affect real hardware too) in mainline:
+
+ https://lore.kernel.org/all/a48011b9-a551-3547-34b6-98b10e7ff2eb@redhat.com/
+ https://lore.kernel.org/all/YxBX4bXG02E4lSUW@axis.com/

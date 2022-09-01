@@ -2,99 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1DF75A9F7C
+	by mail.lfdr.de (Postfix) with ESMTP id E8E155A9F7D
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:59:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233225AbiIAS73 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56970 "EHLO
+        id S231304AbiIAS7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231484AbiIAS71 (ORCPT
+        with ESMTP id S232418AbiIAS71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Sep 2022 14:59:27 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17B374E21;
-        Thu,  1 Sep 2022 11:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qo1Y7wjVRM1IPrvgDfwSP6kiSpx5CHm6THH/U/nXDvQ=; b=Cn40tdhd1E1TwjC2GqnrK/VMBS
-        bok5IW5dPqC9b0Puyc5kB0GIPwBvnyb6nAzkLqRz8cvGe+hZxxiWfH5MRjXqCuiD8wRV3vAuxJP+J
-        rBin1pHHm0PdKxLBfMtFhMb+NWLGsCy4r7eBzhOiR3RJwsipcHoCKo1LbfkIAxXUeO3hEsfIiXhrq
-        k8QoRcUNeRFsus+I7Ba6wWsVhV63eeopBg9ahpU9S/Ox/FDoVHSGM37kZ29behPJVXZzWay4XLu5T
-        q0+gdXxrW0zeerMoRET2yGibvMP6RcQg1rpJRDmnkL9WKUV+AjGLfBnI/ialwweB0bUk0PRwtZdkh
-        fjN9qgsg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTpPN-008Swu-S9; Thu, 01 Sep 2022 18:59:22 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 8B62B3002A3;
-        Thu,  1 Sep 2022 20:59:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 729172B8B840F; Thu,  1 Sep 2022 20:59:20 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 20:59:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
-        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 03/30] Lazy percpu counters
-Message-ID: <YxEBCCA4qaMbbKYA@hirez.programming.kicks-ass.net>
-References: <20220830214919.53220-1-surenb@google.com>
- <20220830214919.53220-4-surenb@google.com>
- <YxBWczNCbZbj+reQ@hirez.programming.kicks-ass.net>
- <20220901143219.n7jg7cbp47agqnwn@moria.home.lan>
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06AE753AB;
+        Thu,  1 Sep 2022 11:59:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 81C23B828F0;
+        Thu,  1 Sep 2022 18:59:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98892C433D6;
+        Thu,  1 Sep 2022 18:59:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662058764;
+        bh=5fU70Ychqi0YYh788VsTJeDlLacntWYEQlFqq4z4IZQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qFlsCqygHYWv9aKauP3+SSgNjBuZyoilzR7aFbL2d8WrJ+SmjrXbGBhpw+8+PuiEL
+         1qLfZ5lrLz1yL6FAJrGUtj86Pov+pkGp8bkCRETnMkIvOa/iSRkFHHry0Tmmvfj0lW
+         cNTGV/ZTmukuQK1Tafr/1QJW7WB2XKYQjQVQ/pN4=
+Date:   Thu, 1 Sep 2022 20:59:21 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     evgreen@chromium.org, arnd@arndb.de, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@gpiccoli.net, ardb@kernel.org,
+        davidgow@google.com, jwerner@chromium.org,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH V3] firmware: google: Test spinlock on panic path to
+ avoid lockups
+Message-ID: <YxEBCVRgWE8VTZaf@kroah.com>
+References: <20220819155059.451674-1-gpiccoli@igalia.com>
+ <YxDVPqVkdgQbAIvY@kroah.com>
+ <f89cd87c-7d1c-d8e6-ed95-6876f0201872@igalia.com>
+ <YxDX9+p+58q2sip2@kroah.com>
+ <6bc5dbc3-2cdd-5cb8-1632-11de2008a85a@igalia.com>
+ <YxDhiSDs4YcUrqV5@kroah.com>
+ <85683284-db85-7e3a-57bd-750e1c204e3e@igalia.com>
+ <YxD56RTI9v/P2QOL@kroah.com>
+ <b050f00b-6c3a-a0d9-a3c1-175a724faf1c@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220901143219.n7jg7cbp47agqnwn@moria.home.lan>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <b050f00b-6c3a-a0d9-a3c1-175a724faf1c@igalia.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:32:19AM -0400, Kent Overstreet wrote:
-> On Thu, Sep 01, 2022 at 08:51:31AM +0200, Peter Zijlstra wrote:
-> > On Tue, Aug 30, 2022 at 02:48:52PM -0700, Suren Baghdasaryan wrote:
-> > > +static void lazy_percpu_counter_switch_to_pcpu(struct raw_lazy_percpu_counter *c)
-> > > +{
-> > > +	u64 __percpu *pcpu_v = alloc_percpu_gfp(u64, GFP_ATOMIC|__GFP_NOWARN);
+On Thu, Sep 01, 2022 at 03:46:17PM -0300, Guilherme G. Piccoli wrote:
+> On 01/09/2022 15:28, Greg KH wrote:
+> > [...]
+> >> I honestly didn't understand exactly what you're suggesting Greg...
+> >> Mind clarifying?
 > > 
-> > Realize that this is incorrect when used under a raw_spinlock_t.
+> > Something like this totally untested code:
+> > 
+> > diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
+> > index adaa492c3d2d..6ad41b22671c 100644
+> > --- a/drivers/firmware/google/gsmi.c
+> > +++ b/drivers/firmware/google/gsmi.c
+> > @@ -19,6 +19,7 @@
+> >  #include <linux/dma-mapping.h>
+> >  #include <linux/fs.h>
+> >  #include <linux/slab.h>
+> > +#include <linux/panic.h>
+> >  #include <linux/panic_notifier.h>
+> >  #include <linux/ioctl.h>
+> >  #include <linux/acpi.h>
+> > @@ -611,6 +612,11 @@ static const struct attribute *gsmi_attrs[] = {
+> >  	NULL,
+> >  };
+> >  
+> > +static bool panic_in_progress(void)
+> > +{
+> > +	return unlikely(atomic_read(&panic_cpu) != PANIC_CPU_INVALID);
+> > +}
+> > +
+> >  static int gsmi_shutdown_reason(int reason)
+> >  {
+> >  	struct gsmi_log_entry_type_1 entry = {
+> > @@ -629,7 +635,8 @@ static int gsmi_shutdown_reason(int reason)
+> >  	if (saved_reason & (1 << reason))
+> >  		return 0;
+> >  
+> > -	spin_lock_irqsave(&gsmi_dev.lock, flags);
+> > +	if (!panic_in_progress())
+> > +		spin_lock_irqsave(&gsmi_dev.lock, flags);
+> >  
+> >  	saved_reason |= (1 << reason);
+> >  
+> > @@ -644,7 +651,8 @@ static int gsmi_shutdown_reason(int reason)
+> >  
+> >  	rc = gsmi_exec(GSMI_CALLBACK, GSMI_CMD_SET_EVENT_LOG);
+> >  
+> > -	spin_unlock_irqrestore(&gsmi_dev.lock, flags);
+> > +	if (!panic_in_progress())
+> > +		spin_unlock_irqrestore(&gsmi_dev.lock, flags);
+> >  
+> >  	if (rc < 0)
+> >  		printk(KERN_ERR "gsmi: Log Shutdown Reason failed\n");
+> > 
+> > 
+> >
 > 
-> Can you elaborate?
+> Thanks! Personally, I feel the approach a bit more complex than mine,
+> and...racy!
+> Imagine CPU0 runs your tests, right after the if (!panic_in_progress())
+> is done, spinlock is taken and boom - panic on CPU1. This would cause
+> the same issue...
 
-required lock order: raw_spinlock_t < spinlock_t < mutex
+True, it would, but so would yours if the unlock happens and then your
+test passes and then this lock is taken and then a panic happens.
 
-allocators lives at spinlock_t.
+There's no "race free" way here perhaps.  The joys of notifier chains (I
+hate the things...)
 
-Also see CONFIG_PROVE_RAW_LOCK_NESTING and there might be a document
-mentioning all this somewhere.
+> My approach is zero racy, since it checks if spinlock was taken in a
+> moment that the machine is like a no-SMP, only a single CPU running...
 
-Additionally, this (obviously) also isn't NMI safe.
+Ah, I missed that this path is only called if an panic is happening.
+Well, also a reboot.
+
+Ick, I don't know, this all feels odd.  I want someone else to review
+this and give their ack on the patch before I'll take it so someone else
+can share in the blame :)
+
+thanks,
+
+greg k-h

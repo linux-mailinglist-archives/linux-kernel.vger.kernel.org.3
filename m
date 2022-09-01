@@ -2,219 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A23E5A8C9D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 06:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED65E5A8C23
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 06:03:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231737AbiIAEaO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 00:30:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38738 "EHLO
+        id S230080AbiIAEDW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 00:03:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232638AbiIAE3t (ORCPT
+        with ESMTP id S229473AbiIAEDU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 00:29:49 -0400
-Received: from inva021.nxp.com (inva021.nxp.com [92.121.34.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F2AC2760;
-        Wed, 31 Aug 2022 21:20:37 -0700 (PDT)
-Received: from inva021.nxp.com (localhost [127.0.0.1])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id EC6132026B4;
-        Thu,  1 Sep 2022 06:20:35 +0200 (CEST)
-Received: from aprdc01srsp001v.ap-rdc01.nxp.com (aprdc01srsp001v.ap-rdc01.nxp.com [165.114.16.16])
-        by inva021.eu-rdc02.nxp.com (Postfix) with ESMTP id 8BB272026B2;
-        Thu,  1 Sep 2022 06:20:35 +0200 (CEST)
-Received: from localhost.localdomain (shlinux2.ap.freescale.net [10.192.224.44])
-        by aprdc01srsp001v.ap-rdc01.nxp.com (Postfix) with ESMTP id 5550A181D0CA;
-        Thu,  1 Sep 2022 12:20:33 +0800 (+08)
-From:   Richard Zhu <hongxing.zhu@nxp.com>
-To:     p.zabel@pengutronix.de, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com, robh@kernel.org,
-        shawnguo@kernel.org, vkoul@kernel.org,
-        alexander.stein@ew.tq-group.com, marex@denx.de,
-        richard.leitner@linux.dev
-Cc:     linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
-        linux-imx@nxp.com, Richard Zhu <hongxing.zhu@nxp.com>
-Subject: [PATCH v6 7/7] PCI: imx6: Add i.MX8MP PCIe support
-Date:   Thu,  1 Sep 2022 12:02:40 +0800
-Message-Id: <1662004960-14071-8-git-send-email-hongxing.zhu@nxp.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1662004960-14071-1-git-send-email-hongxing.zhu@nxp.com>
-References: <1662004960-14071-1-git-send-email-hongxing.zhu@nxp.com>
-X-Virus-Scanned: ClamAV using ClamSMTP
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 1 Sep 2022 00:03:20 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D093F15C358;
+        Wed, 31 Aug 2022 21:03:19 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id v4so15230389pgi.10;
+        Wed, 31 Aug 2022 21:03:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
+        bh=F9QtJAGWPoUgH7EvqJ23+lTBvakIaZr8r8lhECGqmaE=;
+        b=d64/i3z1FUn8zNdfN8J8FhbvakCDJCdMPkNHvz0Bt1yYZv1GM8BkfI4dgZ3d7Pllik
+         35KUqmi061lX1aX65uVNCgs4vVXWH0eM4Ib4NecIz3pFyL1dI00eW2nc/mGSnt/xpF7J
+         9YIJepXyJ9TGSzDlzkh9oWxsb8Q9epItsfX1vXOLddLfbo+bEWJunkYOs8ma0N8nvySK
+         NvmBpiA/9ZDr1qEXosJdw+fxb+TZCd0IQnQZJ8MKPQZC+KdOvK377587RyLzwvV+rMnk
+         TJP/W6cao+iw26Xn8QrppTV7r5UmpwE0s17shi08OhsLFUpJ7DPTww3jfncA49IDEVm3
+         q+3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date;
+        bh=F9QtJAGWPoUgH7EvqJ23+lTBvakIaZr8r8lhECGqmaE=;
+        b=2X0RlmTacqRCVoOyPWGj8diadfad4xCj69p+7F5iwr4JE9HikRjb/CEJ/f5zoGrbrU
+         YRIa/61w4MTbqdbTT1ZBYDZY093xmjQpP/aj4iW95aNo93okghRX0A9lxrKrhZksHOeg
+         hDoFBuPkX2rw/MG2YIACjU2oKX3+3bIJPD3UkHBSPVRC1PctdFqP/RDvDhLOAmqAq6V0
+         WxSvnHuSvqirjpg5Rmt0hBy1z4hRHc1m7q7qjSS/5euEb3Hp4EtbEMPK1GYA+0aR7U/7
+         fdnm8tWqG4hANs2Pg8JZnx069UFhdu/Mb4G3ZzxWd4PAe4tkZCmHnQuNcje+qVcfiUOt
+         MjxQ==
+X-Gm-Message-State: ACgBeo3UOCiSLHvZxAX+8YdD/9adzjKb1wkga1oFO76dk7J+GC4Ogo0Q
+        GtTxuoxCWeQnh3/mLcaDqg/QsV7ZA9GaWw==
+X-Google-Smtp-Source: AA6agR58KSuDpzMdMOpcxDCt3iSfeiaVaetz4buEsvO5bR9uEvOxLcA9OpDX0lWd7olfI0grktg1Lw==
+X-Received: by 2002:a05:6a00:228a:b0:538:47a7:706 with SMTP id f10-20020a056a00228a00b0053847a70706mr16938794pfe.62.1662004999307;
+        Wed, 31 Aug 2022 21:03:19 -0700 (PDT)
+Received: from fedora.. ([103.159.189.150])
+        by smtp.gmail.com with ESMTPSA id f9-20020aa79689000000b00528a097aeffsm12110215pfk.118.2022.08.31.21.03.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 21:03:18 -0700 (PDT)
+From:   Khalid Masum <khalid.masum.92@gmail.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com,
+        Khalid Masum <khalid.masum.92@gmail.com>
+Subject: [PATCH v3] xfrm: Update ipcomp_scratches with NULL if not allocated
+Date:   Thu,  1 Sep 2022 10:03:07 +0600
+Message-Id: <20220901040307.4674-1-khalid.masum.92@gmail.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <00000000000092839d0581fd74ad@google.com>
+References: <00000000000092839d0581fd74ad@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add i.MX8MP PCIe support.
-To avoid codes duplication when find the syscon regmap, add the iomux
-gpr syscon compatible into drvdata.
+Currently if ipcomp_alloc_scratches() fails to allocate memory
+ipcomp_scratches holds obsolete address. So when we try to free the
+percpu scratches using ipcomp_free_scratches() it tries to vfree non
+existent vm area. Described below:
 
-Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-Tested-by: Marek Vasut <marex@denx.de>
-Tested-by: Richard Leitner <richard.leitner@skidata.com>
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+static void * __percpu *ipcomp_alloc_scratches(void)
+{
+        ...
+        scratches = alloc_percpu(void *);
+        if (!scratches)
+                return NULL;
+ipcomp_scratches does not know about this allocation failure.
+Therefore holding the old obsolete address.
+        ...
+}
+
+So when we free,
+
+static void ipcomp_free_scratches(void)
+{
+        ...
+        scratches = ipcomp_scratches;
+Assigning obsolete addresses from ipcomp_scratches
+
+        if (!scratches)
+                return;
+
+        for_each_possible_cpu(i)
+               vfree(*per_cpu_ptr(scratches, i));
+Trying to free non existent page, causing warning: trying to vfree
+existent vm area.
+        ...
+}
+
+
+Fix this breakage by: 
+(1) Update ipcomp_scratches with NULL if the above mentioned 
+allocation fails.
+(2) Update ipcomp_scrtches with NULL when scratches is freed
+
+Reported-by: syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com
+Tested-by: syzbot+5ec9bb042ddfe9644773@syzkaller.appspotmail.com
+Signed-off-by: Khalid Masum <khalid.masum.92@gmail.com>
 ---
- drivers/pci/controller/dwc/pci-imx6.c | 27 +++++++++++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+Changes since v2:
+- Set ipcomp_scratches to NULL when scratches is freed.
+- Update commit message.
+- v2 Link: https://lore.kernel.org/lkml/20220831142938.5882-1-khalid.masum.92@gmail.com/
 
-diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-index 6e5debdbc55b..3018f9d1c1b8 100644
---- a/drivers/pci/controller/dwc/pci-imx6.c
-+++ b/drivers/pci/controller/dwc/pci-imx6.c
-@@ -51,6 +51,7 @@ enum imx6_pcie_variants {
- 	IMX7D,
- 	IMX8MQ,
- 	IMX8MM,
-+	IMX8MP,
- };
+Changes since v1:
+- Instead of altering usercount, update ipcomp_scratches to NULL
+- Update commit message.
+- v1 Link: https://lore.kernel.org/lkml/20220831014126.6708-1-khalid.masum.92@gmail.com/
+
+diff --git a/net/xfrm/xfrm_ipcomp.c b/net/xfrm/xfrm_ipcomp.c
+index cb40ff0ff28d..3774d07c5819 100644
+--- a/net/xfrm/xfrm_ipcomp.c
++++ b/net/xfrm/xfrm_ipcomp.c
+@@ -203,6 +203,7 @@ static void ipcomp_free_scratches(void)
+ 		vfree(*per_cpu_ptr(scratches, i));
  
- #define IMX6_PCIE_FLAG_IMX6_PHY			BIT(0)
-@@ -61,6 +62,7 @@ struct imx6_pcie_drvdata {
- 	enum imx6_pcie_variants variant;
- 	u32 flags;
- 	int dbi_length;
-+	char gpr[128];
- };
- 
- struct imx6_pcie {
-@@ -150,7 +152,8 @@ struct imx6_pcie {
- static unsigned int imx6_pcie_grp_offset(const struct imx6_pcie *imx6_pcie)
- {
- 	WARN_ON(imx6_pcie->drvdata->variant != IMX8MQ &&
--		imx6_pcie->drvdata->variant != IMX8MM);
-+		imx6_pcie->drvdata->variant != IMX8MM &&
-+		imx6_pcie->drvdata->variant != IMX8MP);
- 	return imx6_pcie->controller_id == 1 ? IOMUXC_GPR16 : IOMUXC_GPR14;
+ 	free_percpu(scratches);
++	ipcomp_scratches = NULL;
  }
  
-@@ -301,6 +304,7 @@ static void imx6_pcie_init_phy(struct imx6_pcie *imx6_pcie)
- {
- 	switch (imx6_pcie->drvdata->variant) {
- 	case IMX8MM:
-+	case IMX8MP:
- 		/*
- 		 * The PHY initialization had been done in the PHY
- 		 * driver, break here directly.
-@@ -558,6 +562,7 @@ static int imx6_pcie_enable_ref_clk(struct imx6_pcie *imx6_pcie)
- 		break;
- 	case IMX8MM:
- 	case IMX8MQ:
-+	case IMX8MP:
- 		ret = clk_prepare_enable(imx6_pcie->pcie_aux);
- 		if (ret) {
- 			dev_err(dev, "unable to enable pcie_aux clock\n");
-@@ -602,6 +607,7 @@ static void imx6_pcie_disable_ref_clk(struct imx6_pcie *imx6_pcie)
- 		break;
- 	case IMX8MM:
- 	case IMX8MQ:
-+	case IMX8MP:
- 		clk_disable_unprepare(imx6_pcie->pcie_aux);
- 		break;
- 	default:
-@@ -669,6 +675,7 @@ static void imx6_pcie_assert_core_reset(struct imx6_pcie *imx6_pcie)
- 		reset_control_assert(imx6_pcie->pciephy_reset);
- 		fallthrough;
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_assert(imx6_pcie->apps_reset);
- 		break;
- 	case IMX6SX:
-@@ -744,6 +751,7 @@ static int imx6_pcie_deassert_core_reset(struct imx6_pcie *imx6_pcie)
- 		break;
- 	case IMX6Q:		/* Nothing to do */
- 	case IMX8MM:
-+	case IMX8MP:
- 		break;
- 	}
+ static void * __percpu *ipcomp_alloc_scratches(void)
+@@ -215,7 +216,7 @@ static void * __percpu *ipcomp_alloc_scratches(void)
  
-@@ -793,6 +801,7 @@ static void imx6_pcie_ltssm_enable(struct device *dev)
- 	case IMX7D:
- 	case IMX8MQ:
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_deassert(imx6_pcie->apps_reset);
- 		break;
- 	}
-@@ -812,6 +821,7 @@ static void imx6_pcie_ltssm_disable(struct device *dev)
- 	case IMX7D:
- 	case IMX8MQ:
- 	case IMX8MM:
-+	case IMX8MP:
- 		reset_control_assert(imx6_pcie->apps_reset);
- 		break;
- 	}
-@@ -1179,6 +1189,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
- 		}
- 		break;
- 	case IMX8MM:
-+	case IMX8MP:
- 		imx6_pcie->pcie_aux = devm_clk_get(dev, "pcie_aux");
- 		if (IS_ERR(imx6_pcie->pcie_aux))
- 			return dev_err_probe(dev, PTR_ERR(imx6_pcie->pcie_aux),
-@@ -1216,7 +1227,7 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+ 	scratches = alloc_percpu(void *);
+ 	if (!scratches)
+-		return NULL;
++		return ipcomp_scratches = NULL;
  
- 	/* Grab GPR config register range */
- 	imx6_pcie->iomuxc_gpr =
--		 syscon_regmap_lookup_by_compatible("fsl,imx6q-iomuxc-gpr");
-+		 syscon_regmap_lookup_by_compatible(imx6_pcie->drvdata->gpr);
- 	if (IS_ERR(imx6_pcie->iomuxc_gpr)) {
- 		dev_err(dev, "unable to find iomuxc registers\n");
- 		return PTR_ERR(imx6_pcie->iomuxc_gpr);
-@@ -1295,12 +1306,14 @@ static const struct imx6_pcie_drvdata drvdata[] = {
- 		.flags = IMX6_PCIE_FLAG_IMX6_PHY |
- 			 IMX6_PCIE_FLAG_IMX6_SPEED_CHANGE,
- 		.dbi_length = 0x200,
-+		.gpr = "fsl,imx6q-iomuxc-gpr",
- 	},
- 	[IMX6SX] = {
- 		.variant = IMX6SX,
- 		.flags = IMX6_PCIE_FLAG_IMX6_PHY |
- 			 IMX6_PCIE_FLAG_IMX6_SPEED_CHANGE |
- 			 IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
-+		.gpr = "fsl,imx6q-iomuxc-gpr",
- 	},
- 	[IMX6QP] = {
- 		.variant = IMX6QP,
-@@ -1308,17 +1321,26 @@ static const struct imx6_pcie_drvdata drvdata[] = {
- 			 IMX6_PCIE_FLAG_IMX6_SPEED_CHANGE |
- 			 IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
- 		.dbi_length = 0x200,
-+		.gpr = "fsl,imx6q-iomuxc-gpr",
- 	},
- 	[IMX7D] = {
- 		.variant = IMX7D,
- 		.flags = IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
-+		.gpr = "fsl,imx7d-iomuxc-gpr",
- 	},
- 	[IMX8MQ] = {
- 		.variant = IMX8MQ,
-+		.gpr = "fsl,imx8mq-iomuxc-gpr",
- 	},
- 	[IMX8MM] = {
- 		.variant = IMX8MM,
- 		.flags = IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
-+		.gpr = "fsl,imx8mm-iomuxc-gpr",
-+	},
-+	[IMX8MP] = {
-+		.variant = IMX8MP,
-+		.flags = IMX6_PCIE_FLAG_SUPPORTS_SUSPEND,
-+		.gpr = "fsl,imx8mp-iomuxc-gpr",
- 	},
- };
+ 	ipcomp_scratches = scratches;
  
-@@ -1329,6 +1351,7 @@ static const struct of_device_id imx6_pcie_of_match[] = {
- 	{ .compatible = "fsl,imx7d-pcie",  .data = &drvdata[IMX7D],  },
- 	{ .compatible = "fsl,imx8mq-pcie", .data = &drvdata[IMX8MQ], },
- 	{ .compatible = "fsl,imx8mm-pcie", .data = &drvdata[IMX8MM], },
-+	{ .compatible = "fsl,imx8mp-pcie", .data = &drvdata[IMX8MP], },
- 	{},
- };
- 
--- 
-2.25.1
-

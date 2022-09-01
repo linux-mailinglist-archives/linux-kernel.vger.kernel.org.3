@@ -2,180 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2D0C5A9438
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:22:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4CC5A9451
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:23:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbiIAKWP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:22:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45918 "EHLO
+        id S233936AbiIAKX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:23:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233544AbiIAKWL (ORCPT
+        with ESMTP id S233918AbiIAKXX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:22:11 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD9C0136085;
-        Thu,  1 Sep 2022 03:22:09 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 894856601DF7;
-        Thu,  1 Sep 2022 11:22:07 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662027728;
-        bh=vliuj8fpj7caeOIuls2yuQlrUTuHergsba1k5t5Te4U=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=PlFNHJHi3Pc8I8/yuffbHpgB2Mp8/1YNeEcHtJ4RBVgo388GApwZVRJg93+qUCxaV
-         1sWua+xRUiftYNLLPhLf/IOM2yce0KI9QxbII+bM3SHCwnTukMFnfJqbpEqjjgx5D1
-         ioctp29KCItY3T2lBy5ljx8HJ60kHHThRxZJpGA9fDGWmfgi5lC+hZYXTOjKjVaXVe
-         iXojg9dJ3IijmOExWQ97jLKwgFG+svVMAOE50YUU8jrPYzFBSLUorJCALTubsL0fFc
-         UcvJpswf5PTL6AiKVQh9soSiglZ0XAqYM7TQRjk87+IZDzEWeV5n33Blb2wDI09rkZ
-         NftQoWbh2wJVA==
-Message-ID: <955f7200-9d08-0d21-2d1a-5ccbd0f3a8af@collabora.com>
-Date:   Thu, 1 Sep 2022 12:22:05 +0200
+        Thu, 1 Sep 2022 06:23:23 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A031360A4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:23:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662027802; x=1693563802;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=jh6f2qse35WzAgNQ5WBVrMVUwxK7H1xPD4xrnVBxlDA=;
+  b=GBP4xnm6WlIzsOudwphz2o2jQfUIABuE40nB0jariyDBCu+PxGz6STpG
+   1UlLLHhCfn5dCt8qxXpjKP6s5G2npAfRCvRO0OidNsYF6OVoQAzt0Te+x
+   X83Lp+JAnM1vBkJv6doMnMiKmWl1TvEr5soghIrMdG9YeydipZHrUyQaG
+   +AF8u4QE1GGkjxOYo3aetjhXouLtBvL30f0x+soyk3O7GPHYbm263NQOY
+   7a437IhtqeDAftdNfj9MqON2diOcR+Dc7p5AwtiZtbjsljK92cEj/B10A
+   VxYcHktZReUao0Rqtu0MfJYHRu9wzfuuzR7Z1ZV7s0ie2b6uocw4/ctZ6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="357396137"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="357396137"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 03:23:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="563405026"
+Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 01 Sep 2022 03:23:20 -0700
+Received: from kbuild by b138c9e8658c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oThLz-0000AR-2U;
+        Thu, 01 Sep 2022 10:23:19 +0000
+Date:   Thu, 01 Sep 2022 18:22:32 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/misc] BUILD SUCCESS
+ 7987448ffc34f41590bae5b28cd23ca0b8c93291
+Message-ID: <631087e8.AQN9QJzOy6wUjqAQ%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH 2/4] dt-bindings: arm: mediatek: Add new bindings of
- MediaTek frequency hopping
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Edward-JW Yang <edward-jw.yang@mediatek.com>
-References: <20220831124850.7748-1-johnson.wang@mediatek.com>
- <20220831124850.7748-3-johnson.wang@mediatek.com>
- <b1296c37-5283-81f7-1939-7ea20e1f4d0d@linaro.org>
- <1fae0c47-fff9-89e9-c849-536d167d741d@collabora.com>
- <38910de5-89ad-e7a1-261f-18b51c8e7877@linaro.org>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <38910de5-89ad-e7a1-261f-18b51c8e7877@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/09/22 11:42, Krzysztof Kozlowski ha scritto:
-> On 01/09/2022 11:04, AngeloGioacchino Del Regno wrote:
->> Il 31/08/22 15:19, Krzysztof Kozlowski ha scritto:
->>> On 31/08/2022 15:48, Johnson Wang wrote:
->>>> Add the new binding documentation for MediaTek frequency hopping
->>>> and spread spectrum clocking control.
->>>>
->>>> Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
->>>> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
->>>> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
->>>> ---
->>>>    .../bindings/arm/mediatek/mediatek,fhctl.yaml | 49 +++++++++++++++++++
->>>>    1 file changed, 49 insertions(+)
->>>>    create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
->>>> new file mode 100644
->>>> index 000000000000..c5d76410538b
->>>> --- /dev/null
->>>> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
->>>> @@ -0,0 +1,49 @@
->>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>> +%YAML 1.2
->>>> +---
->>>> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,fhctl.yaml#
->>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>> +
->>>> +title: MediaTek frequency hopping and spread spectrum clocking control
->>>> +
->>>> +maintainers:
->>>> +  - Edward-JW Yang <edward-jw.yang@mediatek.com>
->>>> +
->>>> +description: |
->>>> +  Frequency hopping control (FHCTL) is a piece of hardware that control
->>>> +  some PLLs to adopt "hopping" mechanism to adjust their frequency.
->>>> +  Spread spectrum clocking (SSC) is another function provided by this hardware.
->>>> +
->>>> +properties:
->>>> +  compatible:
->>>> +    const: mediatek,fhctl
->>>
->>> You need SoC/device specific compatibles. Preferably only SoC specific,
->>> without generic fallback, unless you can guarantee (while representing
->>> MediaTek), that generic fallback will cover all of their SoCs?
->>>
->>>> +
->>>> +  reg:
->>>> +    maxItems: 1
->>>> +
->>>> +  mediatek,hopping-ssc-percents:
->>>> +    description: |
->>>> +      Determine the enablement of frequency hopping feature and the percentage
->>>> +      of spread spectrum clocking for PLLs.
->>>> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
->>>> +    items:
->>>> +      items:
->>>> +        - description: PLL id that is expected to enable frequency hopping.
->>>
->>> So the clocks are indices from some specific, yet unnamed
->>> clock-controller? This feels hacky. You should rather take here clock
->>> phandles (1) or integrate it into specific clock controller (2). The
->>> reason is that either your device does something on top of existing
->>> clocks (option 1, thus it takes clock as inputs) or it modifies existing
->>> clocks (option 2, thus it is integral part of clock-controller).
->>>
->>
->> FHCTL is a MCU that handles (some, or all, depending on what's supported on the
->> SoC and what's needed by the board) PLL frequency setting, doing it in steps and
->> avoiding overshooting and other issues.
->>
->> We had a pretty big conversation about this a while ago and the indices instead
->> of phandles is actually my fault, that happened because I initially proposed your
->> option 2 but then for a number of reasons we went with this kind of solution.
->>
->> I know it's going to be a long read, but the entire conversation is on the list [1]
->>
-> 
-> Sorry, but it's a hacky architecture where one device (which is a clock
-> provider) and second device have no relationship in hardware description
-> but both play with each other resources.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/misc
+branch HEAD: 7987448ffc34f41590bae5b28cd23ca0b8c93291  x86/Kconfig: Specify idle=poll instead of no-hlt
 
-Yes, that's exactly how it is hardware-side. Except, just to be as clear as
-possible, FHCTL plays with the clock provider, but *not* vice-versa.
+elapsed time: 728m
 
-> That's simply not a proper
-> hardware description, so again:
-> 
-> 1. If this is separate device (as you indicated), then it needs
-> expressing the dependencies and uses of other device resources.
+configs tested: 81
+configs skipped: 78
 
-Agreed. In this case, what about...
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-mediatek,hopping-ssc-percents = <&provider CLK_SOMEPLL 3>;
+gcc tested configs:
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+i386                                defconfig
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                    rhel-8.3-kselftests
+i386                             allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a015
+x86_64                           rhel-8.3-syz
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+um                           x86_64_defconfig
+um                             i386_defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+s390                 randconfig-r044-20220831
+riscv                randconfig-r042-20220831
+arc                           tb10x_defconfig
+arm                       multi_v4t_defconfig
+parisc64                            defconfig
+powerpc                      cm5200_defconfig
+sh                   sh7724_generic_defconfig
+sparc                       sparc32_defconfig
+sh                          rsk7203_defconfig
+sh                               alldefconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+powerpc                      pcm030_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                     rainier_defconfig
+arm                      jornada720_defconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+mips                         cobalt_defconfig
+mips                           xway_defconfig
+xtensa                         virt_defconfig
+powerpc                        warp_defconfig
+arm                        multi_v7_defconfig
+arm64                            alldefconfig
+i386                          randconfig-c001
+mips                      loongson3_defconfig
+sh                          r7780mp_defconfig
+sh                           se7705_defconfig
+sh                          lboxre2_defconfig
 
-or would it be better to specify the clocks in a separated property?
+clang tested configs:
+x86_64                        randconfig-a005
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a013
+i386                          randconfig-a011
+x86_64                        randconfig-a014
+i386                          randconfig-a015
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+hexagon              randconfig-r045-20220831
+hexagon              randconfig-r041-20220831
+arm                         socfpga_defconfig
+arm                        vexpress_defconfig
+x86_64                        randconfig-k001
 
-clocks = <&provider CLK_SOMEPLL>, <&provider CLK_SOME_OTHER_PLL>;
-mediatek,hopping-ssc-percents = <3>, <5>;
-
-Thanks,
-Angelo
-
-> 
-> 2. If this is not a separate device, but integral part of clock
-> controller, then it would be fine but then probably should be child of
-> that device.
-> 
-> Best regards,
-> Krzysztof
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

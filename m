@@ -2,86 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD3585A8EFB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30C25A8F0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233412AbiIAHA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47568 "EHLO
+        id S233477AbiIAHCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233341AbiIAHAA (ORCPT
+        with ESMTP id S232891AbiIAHBA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:00:00 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C2B612779;
-        Wed, 31 Aug 2022 23:59:49 -0700 (PDT)
-Received: from nazgul.tnic (unknown [84.201.196.28])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3C72F1EC0409;
-        Thu,  1 Sep 2022 08:59:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1662015583;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=mZKc6wmNg1eKrRkSc0tVYSpR5yDgCQZI71NJKLH/SRY=;
-        b=DzUVkwEI1DtVr+EOHpO+sOLT2Iej7olVzcv9IKdxyOonl9C4m2P7qqv5eNpqofQATP+lMY
-        o9rYL01guwcnuzUyQnJjUHI0FmTViAPgNqTlr7GQZITddfrsHVzNXlR/tvJktZ+dwTS5F+
-        xxVBliA1IAcQRbWFYPIvVl6iN/TwliI=
-Date:   Thu, 1 Sep 2022 08:59:49 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Rob Herring <robh@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tony Luck <tony.luck@intel.com>,
-        James Morse <james.morse@arm.com>,
-        Robert Richter <rric@kernel.org>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Michail Ivanov <Michail.Ivanov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Punnaiah Choudary Kalluri 
-        <punnaiah.choudary.kalluri@xilinx.com>,
-        Manish Narani <manish.narani@xilinx.com>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 12/20] EDAC/mc: Replace spaces with tabs in memtype flags
- definition
-Message-ID: <YxBYWeIywtpblJ+h@nazgul.tnic>
-References: <20220822190730.27277-1-Sergey.Semin@baikalelectronics.ru>
- <20220822190730.27277-13-Sergey.Semin@baikalelectronics.ru>
+        Thu, 1 Sep 2022 03:01:00 -0400
+Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237221928D;
+        Thu,  1 Sep 2022 00:00:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4MJBcz4dNGz9v7HB;
+        Thu,  1 Sep 2022 14:55:15 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP1 (Coremail) with SMTP id LxC2BwD3n5N0WBBjL7ITAA--.38593S2;
+        Thu, 01 Sep 2022 08:00:16 +0100 (CET)
+Message-ID: <af509503e534dfbb5b4943d97fbdb27f3e8914fc.camel@huaweicloud.com>
+Subject: Re: [PATCH v15 05/12] KEYS: Move KEY_LOOKUP_ to include/linux/key.h
+ and define KEY_LOOKUP_ALL
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 01 Sep 2022 09:00:00 +0200
+In-Reply-To: <20220831165445.1071641-6-roberto.sassu@huaweicloud.com>
+References: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
+         <20220831165445.1071641-6-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220822190730.27277-13-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: LxC2BwD3n5N0WBBjL7ITAA--.38593S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7uF1DurW8Zr4DXrW5KrWkCrg_yoW8KryrpF
+        WDC3WFkryjyry293s7GanFya1Fk398Gr12kF9Fgwn0vFsag34xtr1xKF4ruF1FyrW7ur12
+        grsF9ayUuw4DA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUk0b4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
+        0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
+        6I80ewAv7VC0I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
+        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxAIw28IcxkI
+        7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxV
+        Cjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY
+        6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcV
+        CF04k26cxKx2IYs7xG6Fyj6rWUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv
+        6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUOlksDUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQACBF1jj4J80AAAsY
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 22, 2022 at 10:07:22PM +0300, Serge Semin wrote:
-> Currently the memory type macros are partly defined with the multiple
-> spaces between the macro name and its definition. Let's replace the spaces
-> with tabs as the kernel coding style requires.
+On Wed, 2022-08-31 at 18:54 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> In preparation for the patch that introduces the
+> bpf_lookup_user_key() eBPF
+> kfunc, move KEY_LOOKUP_ definitions to include/linux/key.h, to be
+> able to
+> validate the kfunc parameters. Add them to enum key_lookup_flag, so
+> that
+> all the current ones and the ones defined in the future are
+> automatically
+> exported through BTF and available to eBPF programs.
+> 
+> Also, add KEY_LOOKUP_ALL to the enum, to facilitate checking whether
+> a
+> variable contains only defined flags.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Reviewed-by: KP Singh <kpsingh@kernel.org>
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+
+Jarkko, I kept your ack although the code slightly changed to use the
+enum instead of #define.
+
+If you have more comments/suggestions, please let me know.
+
+Thanks
+
+Roberto
+
 > ---
->  include/linux/edac.h | 30 +++++++++++++++---------------
->  1 file changed, 15 insertions(+), 15 deletions(-)
+>  include/linux/key.h      | 6 ++++++
+>  security/keys/internal.h | 2 --
+>  2 files changed, 6 insertions(+), 2 deletions(-)
+> 
+> diff --git a/include/linux/key.h b/include/linux/key.h
+> index 7febc4881363..d84171f90cbd 100644
+> --- a/include/linux/key.h
+> +++ b/include/linux/key.h
+> @@ -88,6 +88,12 @@ enum key_need_perm {
+>  	KEY_DEFER_PERM_CHECK,	/* Special: permission check is
+> deferred */
+>  };
+>  
+> +enum key_lookup_flag {
+> +	KEY_LOOKUP_CREATE = 0x01,	/* Create special keyrings if they
+> don't exist */
+> +	KEY_LOOKUP_PARTIAL = 0x02,	/* Permit partially
+> constructed keys to be found */
+> +	KEY_LOOKUP_ALL = (KEY_LOOKUP_CREATE | KEY_LOOKUP_PARTIAL), /*
+> OR of previous flags */
+> +};
+> +
+>  struct seq_file;
+>  struct user_struct;
+>  struct signal_struct;
+> diff --git a/security/keys/internal.h b/security/keys/internal.h
+> index 9b9cf3b6fcbb..3c1e7122076b 100644
+> --- a/security/keys/internal.h
+> +++ b/security/keys/internal.h
+> @@ -165,8 +165,6 @@ extern struct key *request_key_and_link(struct
+> key_type *type,
+>  
+>  extern bool lookup_user_key_possessed(const struct key *key,
+>  				      const struct key_match_data
+> *match_data);
+> -#define KEY_LOOKUP_CREATE	0x01
+> -#define KEY_LOOKUP_PARTIAL	0x02
+>  
+>  extern long join_session_keyring(const char *name);
+>  extern void key_change_session_keyring(struct callback_head *twork);
 
-Applied, thanks.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

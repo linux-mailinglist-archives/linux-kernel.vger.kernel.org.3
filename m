@@ -2,83 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 536755A92F6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:18:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08AC65A92F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:19:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbiIAJSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
+        id S234017AbiIAJTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233957AbiIAJSZ (ORCPT
+        with ESMTP id S233998AbiIAJS7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:18:25 -0400
-Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5ED8125E9A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:18:23 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.138.126])
-        by APP-05 (Coremail) with SMTP id zQCowACXyLXZeBBjFW0DAA--.9809S2;
-        Thu, 01 Sep 2022 17:18:17 +0800 (CST)
-From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
-To:     gregkh@linuxfoundation.org
-Cc:     hdegoede@redhat.com, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        Jiasheng Jiang <jiasheng@iscas.ac.cn>
-Subject: [PATCH 2/2] virt: vbox: Remove unproper information
-Date:   Thu,  1 Sep 2022 17:18:15 +0800
-Message-Id: <20220901091815.3474147-1-jiasheng@iscas.ac.cn>
-X-Mailer: git-send-email 2.25.1
+        Thu, 1 Sep 2022 05:18:59 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BBD11EB43
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:18:56 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3378303138bso330615577b3.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 02:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=ofyTx4HKrXBAG7we5X7Qai/eK2K43C5jxgUz5nh/Yro=;
+        b=DNWL+HfERAfAtjtdicaVsZrEdzV4N3Vw5nQ7XoQB5JVkpg5p8Lsx+iFTSKvtyCFj5u
+         BAfxBIvqMTTrW79mMYA44nyO0vqrbHf0Mc0d6NIllyaZ+83qZ0DGOTlWDkqrmDfiFUBg
+         Uarv4p7UHZor3SU51nWN/bvVjMMHzk7sZhJB6O0Y6OqzyJhhnhBEpTygZ6N+7k/hbIST
+         vZ2QhDDBCROSeFX8TMsw8gkqJpObIOjwYdFIC5Hx0mayX6/hIUz5nT4hj1yABlepUqM4
+         1PjoU84RkgqZApPhBtpAkTXjpToOqeRjtEv9GgqlCBJXqeaEu4nsMq3SJXKWs4bw2g9v
+         EQZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=ofyTx4HKrXBAG7we5X7Qai/eK2K43C5jxgUz5nh/Yro=;
+        b=JoGgnMUWSjyFTgqljphc/jVSa7ZW9IoYF25ZoPLk/gkbgnYzCGFQyD8/1RDffef3nx
+         utqof6gUckCW50xN1RfaPVIQBivlPjD0iWIySGFHK7J59ljnYOkzTW3I3Vcs27ipJMhW
+         376HxrxyPml3+90Bx8vnIKGJ34w5EYJRZ5Z4s9wy2B6XF3k/OGXLmWPZLbGfnI+pmkjK
+         y8GEtL3XL5Yv8mX7IrudioN4ftV1bhRIGEYRQBCn1A219K8RPhHCrmP3yDe/oejSrX+R
+         AJwh60mfnXPcX+bT/120Gcg7lDO4KLZuJH0FKlbqUznzRRNJxFPAYEtjvk7qlsMdaGx+
+         N+hA==
+X-Gm-Message-State: ACgBeo1vtP9rKoSz/kd9D1Ir4/OXyWB9YSUCodjYsQEGj57inEGZQaej
+        x90akL9A1FNx9xlWmTKb8TBr7MXVTbWgqCPJtu0VFMgw0Kxmzw==
+X-Google-Smtp-Source: AA6agR4YzkMcE//RozLPe3AlZMR1RsPsbQRd1aguh7fbGIubS9uQzS9d0L0VXutUFfemJr0JfjfopiWBTfT/BVDRmY8=
+X-Received: by 2002:a0d:ea49:0:b0:33d:bce7:25c2 with SMTP id
+ t70-20020a0dea49000000b0033dbce725c2mr21912903ywe.267.1662023935298; Thu, 01
+ Sep 2022 02:18:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: zQCowACXyLXZeBBjFW0DAA--.9809S2
-X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4DKw43uFW5KFW3CF4UArb_yoWDJwc_uF
-        yqvF9FgrWkArn5tr1qvwnxur9YqFsFq3WfWF13tFyrX347KrnxCFyxur13X343Zw48AFW5
-        tr4DJry8Zr1rujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4f
-        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
-        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
-        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
-        W8JwCI42IY6xAIw20EY4v20xvaj40_Gr0_Zr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
-        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUj_WrJUUUUU==
-X-Originating-IP: [124.16.138.126]
-X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220901044249.4624-1-osalvador@suse.de> <20220901044249.4624-2-osalvador@suse.de>
+ <YxBsWu36eqUw03Dy@elver.google.com> <YxBvcDFSsLqn3i87@dhcp22.suse.cz>
+In-Reply-To: <YxBvcDFSsLqn3i87@dhcp22.suse.cz>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 1 Sep 2022 11:18:19 +0200
+Message-ID: <CANpmjNNjkgibnBcp7ZOWGC5CcBJ=acgrRKo0cwZG0xOB5OCpLw@mail.gmail.com>
+Subject: Re: [PATCH 1/3] lib/stackdepot: Add a refcount field in stack_record
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Oscar Salvador <osalvador@suse.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When drivers are working properly, they are quiet.
-Therefore, the vbg_info() should be removed.
+On Thu, 1 Sept 2022 at 10:38, Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Thu 01-09-22 10:24:58, Marco Elver wrote:
+> > On Thu, Sep 01, 2022 at 06:42AM +0200, Oscar Salvador wrote:
+> [...]
+> > > diff --git a/lib/stackdepot.c b/lib/stackdepot.c
+> > > index 5ca0d086ef4a..aeb59d3557e2 100644
+> > > --- a/lib/stackdepot.c
+> > > +++ b/lib/stackdepot.c
+> > > @@ -63,6 +63,7 @@ struct stack_record {
+> > >     u32 hash;                       /* Hash in the hastable */
+> > >     u32 size;                       /* Number of frames in the stack */
+> > >     union handle_parts handle;
+> > > +   refcount_t count;               /* Number of the same repeated stacks */
+> >
+> > This will increase stack_record size for every user, even if they don't
+> > care about the count.
+>
+> Couldn't this be used for garbage collection?
 
-Fixes: 0ba002bc4393 ("virt: Add vboxguest driver for Virtual Box Guest integration")
-Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
----
- drivers/virt/vboxguest/vboxguest_linux.c | 4 ----
- 1 file changed, 4 deletions(-)
+Only if we can precisely figure out at which point a stack is no
+longer going to be needed.
 
-diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
-index 2fb9a6d91b53..2c484c3a9c09 100644
---- a/drivers/virt/vboxguest/vboxguest_linux.c
-+++ b/drivers/virt/vboxguest/vboxguest_linux.c
-@@ -398,10 +398,6 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
- 	if (ret)
- 		goto err_remove_file_features;
- 
--	vbg_info("vboxguest: misc device minor %d, IRQ %d, I/O port %x, MMIO at %pap (size %pap)\n",
--		 gdev->misc_device.minor, pci->irq, gdev->io_port,
--		 &mmio, &mmio_len);
--
- 	return 0;
- 
- err_remove_file_features:
--- 
-2.25.1
+But more realistically, stack depot was designed to be simple. Right
+now it can allocate new stacks (from an internal pool), but giving the
+memory back to that pool isn't supported. Doing garbage collection
+would effectively be a redesign of stack depot. And for the purpose
+for which stack depot was designed (debugging tools), memory has never
+been an issue (note that stack depot also has a fixed upper bound on
+memory usage).
 
+We had talked (in the context of KASAN) about bounded stack storage,
+but the preferred solution is usually a cache-based design which
+allows evictions (in the simplest case a ring buffer), because
+figuring out (and relying on) where precisely a stack will
+definitively no longer be required in bug reports is complex and does
+not guarantee the required bound on memory usage. Andrey has done the
+work on this for tag-based KASAN modes:
+https://lore.kernel.org/all/cover.1658189199.git.andreyknvl@google.com/

@@ -2,105 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2229A5AA2EE
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8CC5AA305
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235357AbiIAWW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
+        id S234938AbiIAW3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:29:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234968AbiIAWWH (ORCPT
+        with ESMTP id S235240AbiIAW2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:22:07 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E8167962F;
-        Thu,  1 Sep 2022 15:19:33 -0700 (PDT)
-Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 1 Sep 2022 18:28:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20F9AA353;
+        Thu,  1 Sep 2022 15:26:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id EF3D62221;
-        Fri,  2 Sep 2022 00:19:15 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
-        t=1662070756;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KKvaxDezpVglQbvUlzzvJIhuhv9lpFlXJWy0f0xohsQ=;
-        b=hSJiAoEqoFLiXl618NYj5ODCGWBKsRSBRjJyZajQCq7YvEFL7TUa2cRG0rF0YAxW3ml3S/
-        kYWFF/sQeJvRRn0RC1oJALu4df2WuE3VFELUQnzMrOYG2cJzE4LMOL9VVILuduncXO+Pxz
-        cCBvFy+vBwKEeKaSkAxyKbmuEX8H7PE6pRXJ9fbIRbwEG0jFZqOGjXlKqaw6Ix4Ria98Zc
-        TXdV4OVehj8MT25E3CPtFPX0oyfokMnHje+BuQCyHbzHTCF0uB1QGvqagVu/3+xSy4PrH6
-        eQNhkvXMJ01RqVJAYFYBhBIhl7gdB8E10UYdrz/Ex6JNy2QkgvTxiMjV1Fk9jA==
-From:   Michael Walle <michael@walle.cc>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
-        =?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>,
-        Frank Rowand <frowand.list@gmail.com>
-Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Walle <michael@walle.cc>
-Subject: [RFC PATCH v2 20/20] nvmem: layouts: u-boot-env: add device node
-Date:   Fri,  2 Sep 2022 00:18:57 +0200
-Message-Id: <20220901221857.2600340-21-michael@walle.cc>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220901221857.2600340-1-michael@walle.cc>
-References: <20220901221857.2600340-1-michael@walle.cc>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A4F7FB8293B;
+        Thu,  1 Sep 2022 22:20:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCEA0C433C1;
+        Thu,  1 Sep 2022 22:20:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662070814;
+        bh=mbIy7pC35PrOJa2CP0A6d4IoNVjQHLiiPSWGzJbKUYc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hl0CIhIp4usg8pqBMh8S2ZUpSRS3y4VBReRIf2IlwmJwXyw+4ucaKSiGccSheTR1C
+         nsmhZUJBJxNS/U0jEN8Bj8kQXmCnvUVaf0Ss6AE6n1wWh1PMlFWI22i/oddI/SQszd
+         OSIrF9Rs2+LUHc4P9QwnJcHy5vZvbzskmHznWleANbB5MDCHXMxHmJ4We0RcG7zswL
+         qt3FZkvj+JCtcYsZcS/9YxrXfOzK14tF9UeBK8U2ogHibHnF8Md3fsARcVn2YCFLt4
+         sBvO7zfNcP4d21Ayt0HaONSb6sMc6t9E+SIxMK4jTDUdLVwYkDNkJksyAUsNYhljf/
+         SrE5zGMClGY8g==
+Date:   Fri, 2 Sep 2022 01:20:09 +0300
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     linux-sgx@vger.kernel.org,
+        Haitao Huang <haitao.huang@linux.intel.com>,
+        Vijay Dhanraj <vijay.dhanraj@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 6/6] selftests/sgx: Add a bpftrace script for tracking
+ allocation errors
+Message-ID: <YxEwGU2bkM272+QA@kernel.org>
+References: <20220830031206.13449-1-jarkko@kernel.org>
+ <20220830031206.13449-7-jarkko@kernel.org>
+ <e870df49-77ed-3222-086d-ae929107f33b@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam: Yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e870df49-77ed-3222-086d-ae929107f33b@intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register the device node so we can actually make use of the cells from
-within the device tree.
+On Wed, Aug 31, 2022 at 11:23:55AM -0700, Dave Hansen wrote:
+> On 8/29/22 20:12, Jarkko Sakkinen wrote:
+> > diff --git a/tools/testing/selftests/sgx/alloc-error.bt b/tools/testing/selftests/sgx/alloc-error.bt
+> > new file mode 100644
+> > index 000000000000..9268d50dea29
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/sgx/alloc-error.bt
+> > @@ -0,0 +1,7 @@
+> > +kr:sgx_alloc_epc_page /(uint64)retval >= (uint64)(-4095)/ {
+> > +		 printf("sgx_alloc_epc_page: retval=%d\n", (int64)retval);
+> > +}
+> > +
+> > +kr:sgx_encl_page_alloc /(uint64)retval >= (uint64)(-4095)/ {
+> > +		 printf("sgx_encl_page_alloc: retval=%d\n", (int64)retval);
+> > +}
+> 
+> I guess this doesn't _hurt_, but it's also not exactly the easiest way
+> to get this done.  You need a whole bpf toolchain.  You could also just do:
+> 
+> 	perf probe 'sgx_encl_page_alloc%return $retval'
+> 
+> Even *that* can be replicated in a few scant lines of shell code echoing
+> into /sys/kernel/debug/tracing.
 
-This obviously only works if the environment variable name can be mapped
-to the device node, which isn't always the case. Think of "_" vs "-".
-But for simple things like ethaddr, this will work.
+Thanks, I have not used perf that much. What if I replace
+this with a shell script using perf? How do you use that
+for two kretprobes?
 
-Signed-off-by: Michael Walle <michael@walle.cc>
----
-changes since v1:
- - none
-
- drivers/nvmem/layouts/u-boot-env.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/nvmem/layouts/u-boot-env.c b/drivers/nvmem/layouts/u-boot-env.c
-index f184d1424b1e..d2adc246c93a 100644
---- a/drivers/nvmem/layouts/u-boot-env.c
-+++ b/drivers/nvmem/layouts/u-boot-env.c
-@@ -8,6 +8,7 @@
- #include <linux/device.h>
- #include <linux/nvmem-consumer.h>
- #include <linux/nvmem-provider.h>
-+#include <linux/of.h>
- #include <linux/slab.h>
- 
- enum u_boot_env_format {
-@@ -47,6 +48,7 @@ static int u_boot_env_add_cells(struct device *dev,
- 		info.name = var;
- 		info.offset = data_offset + value - data;
- 		info.bytes = strlen(value);
-+		info.np = of_get_child_by_name(dev->of_node, var);
- 
- 		err = nvmem_add_one_cell(nvmem, &info);
- 		if (err)
--- 
-2.30.2
-
+BR, Jarkko

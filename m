@@ -2,157 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EC45A8FE1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:20:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA7F95A8FFF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:22:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232203AbiIAHTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33714 "EHLO
+        id S233779AbiIAHV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:21:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233906AbiIAHSv (ORCPT
+        with ESMTP id S233867AbiIAHVd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:18:51 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7B58125347;
-        Thu,  1 Sep 2022 00:18:49 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 4AAED22276;
-        Thu,  1 Sep 2022 07:18:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662016728; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=syKqR2otOp+SJa2emYsY57+bVX7vmPgl46yq0SOCcY4=;
-        b=XxPpqvq/CprurzzyArGBkJW5SqAQWQkVT69xczpmMcnZD1oRn53SBe3Vor5qXAepnNw6HZ
-        eJdNzUUUyBCLltPNTrvvxdfpcBBHT8aPch+MIclCvWmw3ouoq0E0fd3IBYzv+2TVw5SAGP
-        eKsPIajcu9OwC55K4pFTrVjv2HlxcBc=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 098CC13A89;
-        Thu,  1 Sep 2022 07:18:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HuA6ANhcEGMwCAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 01 Sep 2022 07:18:47 +0000
-Date:   Thu, 1 Sep 2022 09:18:47 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, void@manifault.com, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, peterx@redhat.com, david@redhat.com,
-        axboe@kernel.dk, mcgrof@kernel.org, masahiroy@kernel.org,
-        nathan@kernel.org, changbin.du@intel.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, dvyukov@google.com, shakeelb@google.com,
-        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de>
- <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
- <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+        Thu, 1 Sep 2022 03:21:33 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 576E3BB6A6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:20:20 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id bq23so23145549lfb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:20:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=iAjJ7YXrX4dY+khgJ0CvZFUwoSGJiVC2yG+JBLcRLOs=;
+        b=fLWwUhHvPyto5H3nuIWvqJPMNvmWOB004/EKKa2V47PhZjWX58wky1TPW9KCu0SFig
+         8d0o67kBt3PyANHrQ6WwuTiJtIMHIHbH7rwT9RJjsFcsUvCiDfo3mwdriq1zL4a6OS36
+         VtWY9yGEEO5z5kdRf0j3O953oqkpWYjltrRHw4np1NPtTrOIVF4b954l3eZ1Qz8VUeIl
+         vAN6ue2tgabtHJ5PX4nMvGJlRbeUMg5H6dOnuHgWq2g4aJZ1xDmndzzvb82dNGgGsUzx
+         12zAEYUmOBl+HrL1VeMRv/QfRwFEpyOph8nx7WSD+8TtBgoz+NhfhcYDj4B1xWsjo+zA
+         NBEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=iAjJ7YXrX4dY+khgJ0CvZFUwoSGJiVC2yG+JBLcRLOs=;
+        b=l4gukejrw4O2LeZyrTQkrRM7Ke8qfy8EUdG2G2cdgKPdqKv/M4ePFymnP2hwP9VyTU
+         An82qaxzJMPR/dgcfAAUal5PN3vh/jpQYZTTKcyfOea1Pr3YbuM8ScFSyeZ35ENohR4M
+         4HOX9YNmdzmgNolJ27lrthVHIUA+cS2LRXaeOJBAcd8GeBv5rpWBw1aFNnh7m0tUoHMR
+         eFAGmSkFrl4L0dUBnxF7TqJNy6AmlHqxnKDZDRT4mKD0upcrqEMsvH5D9nYymI7CEy2k
+         zIfT34r/IE4YZkNiYedPzchVN+c8bEtGEAoDiVVlhUky7BERujkxkrkK2hZs0e6DSV/X
+         EW4Q==
+X-Gm-Message-State: ACgBeo2QU68Jvt5qUYiZDQq2EHTfiVH0Ls0phIFer4ZdtduQYx8rgngJ
+        pn8WFYQ4Dcg1s9mvt1YTqvhOrw==
+X-Google-Smtp-Source: AA6agR7p9hZ4KeN5ZMThv3ZJ9FdSHYAb/sKypVOmRnbR+PSR6S3byZbXwveJtyu3K7crCSdR8rrTdA==
+X-Received: by 2002:a05:6512:230c:b0:494:8ddb:606 with SMTP id o12-20020a056512230c00b004948ddb0606mr1844510lfu.44.1662016814560;
+        Thu, 01 Sep 2022 00:20:14 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id r26-20020a2e80da000000b0025e49aaae10sm1575867ljg.12.2022.09.01.00.20.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 00:20:14 -0700 (PDT)
+Message-ID: <936c5623-07b9-c49d-e113-fc056a4eb9bc@linaro.org>
+Date:   Thu, 1 Sep 2022 10:20:12 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v6 06/17] dt-bindings: mfd: amd,pensando-elbasr: Add AMD
+ Pensando Elba System Resource chip
+Content-Language: en-US
+To:     "Larson, Bradley" <Bradley.Larson@amd.com>,
+        Rob Herring <robh@kernel.org>, Brad Larson <brad@pensando.io>
+Cc:     "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
+        "alcooperx@gmail.com" <alcooperx@gmail.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "brijeshkumar.singh@amd.com" <brijeshkumar.singh@amd.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "gsomlo@gmail.com" <gsomlo@gmail.com>,
+        "gerg@linux-m68k.org" <gerg@linux-m68k.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "lee.jones@linaro.org" <lee.jones@linaro.org>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "yamada.masahiro@socionext.com" <yamada.masahiro@socionext.com>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "piotrs@cadence.com" <piotrs@cadence.com>,
+        "p.yadav@ti.com" <p.yadav@ti.com>,
+        "rdunlap@infradead.org" <rdunlap@infradead.org>,
+        "samuel@sholland.org" <samuel@sholland.org>,
+        "fancer.lancer@gmail.com" <fancer.lancer@gmail.com>,
+        "Suthikulpanit, Suravee" <Suravee.Suthikulpanit@amd.com>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "will@kernel.org" <will@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+References: <20220820195750.70861-1-brad@pensando.io>
+ <20220820195750.70861-7-brad@pensando.io>
+ <20220822142544.GA3770388-robh@kernel.org>
+ <554f33b4-d235-5516-e8ff-5bf80d63a9b9@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <554f33b4-d235-5516-e8ff-5bf80d63a9b9@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 31-08-22 15:01:54, Kent Overstreet wrote:
-> On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
-> > On Wed 31-08-22 11:19:48, Mel Gorman wrote:
-> > > Whatever asking for an explanation as to why equivalent functionality
-> > > cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
-> > 
-> > Fully agreed and this is especially true for a change this size
-> > 77 files changed, 3406 insertions(+), 703 deletions(-)
+On 01/09/2022 02:01, Larson, Bradley wrote:
 > 
-> In the case of memory allocation accounting, you flat cannot do this with ftrace
-> - you could maybe do a janky version that isn't fully accurate, much slower,
-> more complicated for the developer to understand and debug and more complicated
-> for the end user.
+>>> +  is implemented by a sub-device reset-controller which accesses
+>>> +  a CS0 control register.
+>>> +
+>>> +maintainers:
+>>> +  - Brad Larson <blarson@amd.com>
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - amd,pensando-elbasr
+>>> +
+>>> +  spi-max-frequency:
+>>> +    description: Maximum SPI frequency of the device in Hz.
+>> No need for generic descriptions of common properties.
 > 
-> But please, I invite anyone who's actually been doing this with ftrace to
-> demonstrate otherwise.
+> Changed to "spi-max-frequency: true" and moved to end of properties.
+
+Then you should rather reference spi-peripheral-props just like other
+SPI devices.
+
 > 
-> Ftrace just isn't the right tool for the job here - we're talking about adding
-> per callsite accounting to some of the fastest fast paths in the kernel.
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  '#address-cells':
+>>> +    const: 1
+>>> +
+>>> +  '#size-cells':
+>>> +    const: 0
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - spi-max-frequency
+>>> +
+>>> +patternProperties:
+>>> +  '^reset-controller@[a-f0-9]+$':
+>>> +    $ref: /schemas/reset/amd,pensando-elbasr-reset.yaml
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>> +
+>>> +    spi {
+>>> +        #address-cells = <1>;
+>>> +        #size-cells = <0>;
+>>> +        num-cs = <4>;
+>>> +
+>>> +        sysc: system-controller@0 {
+>>> +            compatible = "amd,pensando-elbasr";
+>>> +            reg = <0>;
+>>> +            #address-cells = <1>;
+>>> +            #size-cells = <0>;
+>>> +            spi-max-frequency = <12000000>;
+>>> +
+>>> +            rstc: reset-controller@0 {
+>>> +                compatible = "amd,pensando-elbasr-reset";
+>>> +                reg = <0>;
+>> What does 0 represent here? A register address within 'elbasr' device?
 > 
-> And the size of the changes for memory allocation accounting are much more
-> reasonable:
->  33 files changed, 623 insertions(+), 99 deletions(-)
+> Removed, I recall a check threw a warning or error without reg.
 > 
-> The code tagging library should exist anyways, it's been open coded half a dozen
-> times in the kernel already.
+>> Why do you need a child node for this? Are there other sub-devices and
+>> your binding is incomplete? Just put '#reset-cells' in the parent.
 > 
-> And once we've got that, the time stats code is _also_ far simpler than doing it
-> with ftrace would be. If anyone here has successfully debugged latency issues
-> with ftrace, I'd really like to hear it. Again, for debugging latency issues you
-> want something that can always be on, and that's not cheap with ftrace - and
-> never mind the hassle of correlating start and end wait trace events, builting
-> up histograms, etc. - that's all handled here.
-> 
-> Cheap, simple, easy to use. What more could you want?
+> Without a reset-controller node and booting the function 
+> __of_reset_control_get(...) fails to find a match in the list here
 
-A big ad on a banner. But more seriously.
+That's not actually the answer to the question. There was no concerns
+whether you need or not reset controller. The question was why do you
+need a child device instead of elbasr being the reset controller.
 
-This patchset is _huge_ and touching a lot of different areas. It will
-be not only hard to review but even harder to maintain longterm. So
-it is completely reasonable to ask for potential alternatives with a
-smaller code footprint. I am pretty sure you are aware of that workflow.
+Your answer does not cover this at all, so again - why do you need a
+child for this?
 
-So I find Peter's question completely appropriate while your response to
-that not so much! Maybe ftrace is not the right tool for the intented
-job. Maybe there are other ways and it would be really great to show
-that those have been evaluated and they are not suitable for a), b) and
-c) reasons.
-
-E.g. Oscar has been working on extending page_ext to track number of
-allocations for specific calltrace[1]. Is this 1:1 replacement? No! But
-it can help in environments where page_ext can be enabled and it is
-completely non-intrusive to the MM code.
-
-If the page_ext overhead is not desirable/acceptable then I am sure
-there are other options. E.g. kprobes/LivePatching framework can hook
-into functions and alter their behavior. So why not use that for data
-collection? Has this been evaluated at all?
-
-And please note that I am not claiming the presented work is approaching
-the problem from a wrong direction. It might very well solve multiple
-problems in a single go _but_ the long term code maintenance burden
-really has to to be carefully evaluated and if we can achieve a
-reasonable subset of the functionality with an existing infrastructure
-then I would be inclined to sacrifice some portions with a considerably
-smaller code footprint.
-
-[1] http://lkml.kernel.org/r/20220901044249.4624-1-osalvador@suse.de
-
--- 
-Michal Hocko
-SUSE Labs
+Best regards,
+Krzysztof

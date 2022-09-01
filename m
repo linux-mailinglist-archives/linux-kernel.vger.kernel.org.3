@@ -2,91 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C545A8CF2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 06:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EAA65A8CF8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 06:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232590AbiIAEwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 00:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47778 "EHLO
+        id S232664AbiIAExD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 00:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbiIAEwp (ORCPT
+        with ESMTP id S232638AbiIAEw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 00:52:45 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED488114C63
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 21:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662007963; x=1693543963;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=2JFUzA9PnB8sENrXT/Oe6aXThGhndWfqeuAE7z3EbmU=;
-  b=QGVi7+B8JlHqpa7xqrPohCnirMOxhCTOCFHc7h37wKcG161oirmzlzm3
-   Toy6WTEEGd5PgFv/VVOaLSJlN+lKaNySgn6k+iwLlZiZ6mNl/e9aurkrp
-   ICboO7o3OE84GSOS01uj1mlKOpxcD5/ntQzi9Es4bvLEUNDw7citYNTtO
-   xfWtUiXI/3wZARcWtPaHX85OpOSp4c8t/nIp4lUIvtnMudPT7Tk0AF0SE
-   O+Hio/i8E47Fe4O6FkAbytrTTnXgXeGlnp9AYcIK9xCwyfL4B9PcSYHH4
-   jY63BtUKnT8T7K8dkjmswsSgZCGptl/6h1UQ5kEPwPms3fD5Iy2Eusptd
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="321760234"
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="321760234"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 21:52:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="645490834"
-Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 31 Aug 2022 21:52:41 -0700
-Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oTcC1-00017G-0K;
-        Thu, 01 Sep 2022 04:52:41 +0000
-Date:   Thu, 1 Sep 2022 12:51:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [stable:linux-5.15.y 9126/9999] ERROR: modpost:
- "devm_drm_of_get_bridge" [drivers/gpu/drm/vc4/vc4.ko] undefined!
-Message-ID: <202209011256.zvBzxcpP-lkp@intel.com>
+        Thu, 1 Sep 2022 00:52:59 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCF4114C6C;
+        Wed, 31 Aug 2022 21:52:58 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 3D059221FD;
+        Thu,  1 Sep 2022 04:52:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1662007977; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eTDe59i5UNhXbLPqqFo4WrMbXbqRlxGLfSkkAQ8Fk/c=;
+        b=MXuVo2yVstAVCBS1varMecEXswz7FuXIDAQoWezwenAAYl9Y3PpRhbQ5He3NmYqXLh+xPX
+        jn8EotqxdKlpoHsOLAGA9/hldaOwN5qgNQ9dGNBfKhsAkMyZOy8dG2wdiqd/dEPEUn2GH3
+        2GWaydR4UCkectkbjmLF+pOVJTedvZg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1662007977;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=eTDe59i5UNhXbLPqqFo4WrMbXbqRlxGLfSkkAQ8Fk/c=;
+        b=g2uWhOe8Agl2O5OiQ5uOLDZi7V4xateLoucVNLb1+2O63J77RwR9Dmx9Wxfg3YF3VCD9bc
+        vcZMMEi8r2KuRXCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 67DE3139C4;
+        Thu,  1 Sep 2022 04:52:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id E7aqFqY6EGPsewAAMHmgww
+        (envelope-from <osalvador@suse.de>); Thu, 01 Sep 2022 04:52:54 +0000
+Date:   Thu, 1 Sep 2022 06:52:52 +0200
+From:   Oscar Salvador <osalvador@suse.de>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, dvyukov@google.com, shakeelb@google.com,
+        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
+        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
+Message-ID: <YxA6pCu0YNIiXkHf@localhost.localdomain>
+References: <20220830214919.53220-1-surenb@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220830214919.53220-1-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   1ded0ef2419e8f83a17d65594523ec3aeb2e3d0f
-commit: 3d722c01d628d17a37cf2820195f15cfc9a6a332 [9126/9999] drm/vc4: Use of_device_get_match_data()
-config: parisc-randconfig-c034-20220831 (https://download.01.org/0day-ci/archive/20220901/202209011256.zvBzxcpP-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=3d722c01d628d17a37cf2820195f15cfc9a6a332
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.15.y
-        git checkout 3d722c01d628d17a37cf2820195f15cfc9a6a332
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
+On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
+> ===========================
+> Code tagging framework
+> ===========================
+> Code tag is a structure identifying a specific location in the source code
+> which is generated at compile time and can be embedded in an application-
+> specific structure. Several applications of code tagging are included in
+> this RFC, such as memory allocation tracking, dynamic fault injection,
+> latency tracking and improved error code reporting.
+> Basically, it takes the old trick of "define a special elf section for
+> objects of a given type so that we can iterate over them at runtime" and
+> creates a proper library for it.
+> 
+> ===========================
+> Memory allocation tracking
+> ===========================
+> The goal for using codetags for memory allocation tracking is to minimize
+> performance and memory overhead. By recording only the call count and
+> allocation size, the required operations are kept at the minimum while
+> collecting statistics for every allocation in the codebase. With that
+> information, if users are interested in mode detailed context for a
+> specific allocation, they can enable more in-depth context tracking,
+> which includes capturing the pid, tgid, task name, allocation size,
+> timestamp and call stack for every allocation at the specified code
+> location.
+> Memory allocation tracking is implemented in two parts:
+> 
+> part1: instruments page and slab allocators to record call count and total
+> memory allocated at every allocation in the source code. Every time an
+> allocation is performed by an instrumented allocator, the codetag at that
+> location increments its call and size counters. Every time the memory is
+> freed these counters are decremented. To decrement the counters upon free,
+> allocated object needs a reference to its codetag. Page allocators use
+> page_ext to record this reference while slab allocators use memcg_data of
+> the slab page.
+> The data is exposed to the user space via a read-only debugfs file called
+> alloc_tags.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Suren,
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+I just posted a patch [1] and reading through your changelog and seeing your PoC,
+I think we have some kind of overlap.
+My patchset aims to give you the stacktrace <-> relationship information and it is
+achieved by a little amount of extra code mostly in page_owner.c/ and lib/stackdepot.
 
->> ERROR: modpost: "devm_drm_of_get_bridge" [drivers/gpu/drm/vc4/vc4.ko] undefined!
+Of course, your works seems to be more complete wrt. the information you get.
+
+I CCed you in case you want to have a look
+
+[1] https://lkml.org/lkml/2022/9/1/36
+
+Thanks
+
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Oscar Salvador
+SUSE Labs

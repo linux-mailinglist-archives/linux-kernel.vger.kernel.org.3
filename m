@@ -2,104 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B36195A9BC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:33:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF9725A9BCB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:35:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233602AbiIAPdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
+        id S233865AbiIAPe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:34:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233865AbiIAPde (ORCPT
+        with ESMTP id S233646AbiIAPev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:33:34 -0400
-Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9F5488DDB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:33:31 -0700 (PDT)
-Received: by mail-yb1-xb35.google.com with SMTP id l196so9127305ybl.12
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:33:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=cuZ+nGX7dbAKHVSMzM9WDnRxW6f4Hrbmbun1Vl7XZUY=;
-        b=nPy2aaUnPlKN9168rAezb9LSPcW4fo9+X5T3qYP77vPFcpzl+GhEzMZUxcz6J/8TiE
-         IizY0PKy2tILVlboBx4hOHtK6o3BgdgdGqsyzqTvhnIsClaTwjg++DGXEdjbBPa8JR6s
-         MIO2ZCktfdOzY88zke9nN4gcVwpbigx1IRCHgdE2F2Mq1597r9VFdc/4HIbMkV/CeG8x
-         zsKr4C+BAyJ34f5F1Hb/vV3IvHxRb8IEQg4iOBO9diUXfW6M3nrOExLvEuVNGqzKErqg
-         hzqElImWPPWWViyded2pBo3h+cgyvOivEpW732ttVGvmx+I0KmbeGYZvy64qW3Me0ncH
-         pw1g==
+        Thu, 1 Sep 2022 11:34:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4952F5
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:34:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662046486;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EdU6kcxk31+NfDy/R26HslGdp1j7dLdIqqiHO/JJmC8=;
+        b=XUVMCgmIt7zgb1iQZn7DdvpuhJrMbmVssMFRazT7OQzsFvSO2M31mnm9UMiwfyF1ku4uay
+        QIp13hWRg61FUeF5nIc6kds+VGfLT1OpQznMn96BArBP/ZrY2guSRcAeyUDu5QYPpST1UU
+        cXvWuOHn4gjBh2IYnwYcq+S+2rzvi+I=
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
+ [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-341-f114iezFNdqHo0w8Tg7lpQ-1; Thu, 01 Sep 2022 11:34:45 -0400
+X-MC-Unique: f114iezFNdqHo0w8Tg7lpQ-1
+Received: by mail-ej1-f71.google.com with SMTP id sb14-20020a1709076d8e00b0073d48a10e10so7098545ejc.16
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:34:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=cuZ+nGX7dbAKHVSMzM9WDnRxW6f4Hrbmbun1Vl7XZUY=;
-        b=Qm4uEG7np3ZTSgdON6J1iNFseDwY2RmYnGFLatpsg10Ozqw/gvlc/NuobKSIaxPDJg
-         ZbQOk1ulSH8hc7uUCy/jpldT1RI7sUY4N2OLc3/fsdAL85CkSngQ/utIUu9Rah9M5rPz
-         SwuNEjG+qy+g2TKZqqeL9oA1gfDkInuMDmvsOY11+mdbjqSiJf23AlMwx8KiyBGQlVpl
-         szfPo98+YAzfCIsJn+ePCk1x3Ee2HXVp2yJhzI9K+oryIedlROEuGvZTBfdTigAAkqMi
-         SJ0f1K+AH5EHOyVtVYSUhFjjQGZWSCAcDHZsSwPmtQxzY0UNFtp2Pl/KXlCIM0T/klvm
-         dmaQ==
-X-Gm-Message-State: ACgBeo2gdMwCaBeLBRnX7Iaz/HE5ESG5VMhl3aP7beT1EZPub6OUHv/w
-        CL4Q03u3eLgFEhyQbUj36DXJdYtYqE/Q2fTIdBTzTw==
-X-Google-Smtp-Source: AA6agR7nkVcaAE7evofOhQO8CQyYLS6FGoseisRuE7p9aju3ICNx4/ZUVa/hlS8HLwBhdw8j7iOCWiWLZKuRzYzC+BI=
-X-Received: by 2002:a05:6902:705:b0:695:b3b9:41bc with SMTP id
- k5-20020a056902070500b00695b3b941bcmr19699146ybt.426.1662046410779; Thu, 01
- Sep 2022 08:33:30 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=EdU6kcxk31+NfDy/R26HslGdp1j7dLdIqqiHO/JJmC8=;
+        b=RuBrheUg6ZjMss4vyliSqKCjzAszdds0MPRr79bMxSZoH6dMDqIGXT09W6qqMC+qQb
+         /rPiasfzUMHP94+zdrmqvBmyp8Xq9fzAObL0AislaketPHbvvFY3aCEs6t/xogq7eDGg
+         IMrgJBRF9qt8l6M+YRBJ/75yOal3SWG/ba4GjoHH2+t316n84kifUHkLYecrO91L+U9/
+         4l+ouRWJwghMxIEp+aJG+od6SN1EaihJAaS1L91v3a9s/N44C1vJDwrTH9c4WpKVlDdF
+         1jAvwkaM93S+kMOty/hZQoh4LZM+EPKO/rZegcodpWN6S7/7x7aZsJMpENlRtlunV0HV
+         VDPA==
+X-Gm-Message-State: ACgBeo2Z8I8vt5FOt/BdvXZ2/KxyQ5powWjfA+32azUIvwt1QtUDp9pk
+        hAktW3OHvPlgnK7fASRw1Ih1eQnemmWMeFcdqblQUAnKz6H0UC+R1xJuBk+5MuqJldK3j3OJrOK
+        dGPPFTFp1M1G3ZJhcrEo4wPX9
+X-Received: by 2002:a17:907:3e06:b0:733:693:600e with SMTP id hp6-20020a1709073e0600b007330693600emr22714944ejc.410.1662046484224;
+        Thu, 01 Sep 2022 08:34:44 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6CGvsVadtU/FKpog77yx9E+0aH5YULUA3W4O38vGBKP5LbcMpEQQEm87QgPg9ZZYddq9+tLA==
+X-Received: by 2002:a17:907:3e06:b0:733:693:600e with SMTP id hp6-20020a1709073e0600b007330693600emr22714935ejc.410.1662046484002;
+        Thu, 01 Sep 2022 08:34:44 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id dy17-20020a05640231f100b0043cc66d7accsm1518518edb.36.2022.09.01.08.34.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 08:34:43 -0700 (PDT)
+Message-ID: <c23819ae-f7be-d07d-65bc-ea2c56a85b58@redhat.com>
+Date:   Thu, 1 Sep 2022 17:34:42 +0200
 MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan> <20220831101948.f3etturccmp5ovkl@suse.de>
- <Yw88RFuBgc7yFYxA@dhcp22.suse.cz> <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
- <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
-In-Reply-To: <YxBc1xuGbB36f8zC@dhcp22.suse.cz>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 1 Sep 2022 08:33:19 -0700
-Message-ID: <CAJuCfpGhwPFYdkOLjwwD4ra9JxPqq1T5d1jd41Jy3LJnVnhNdg@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>, dvyukov@google.com,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] asus-wmi: Increase FAN_CURVE_BUF_LEN to 32
+Content-Language: en-US
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, markgross@kernel.org
+References: <20220828074638.5473-1-luke@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220828074638.5473-1-luke@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,121 +81,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 12:18 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Wed 31-08-22 15:01:54, Kent Overstreet wrote:
-> > On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
-> > > On Wed 31-08-22 11:19:48, Mel Gorman wrote:
-> > > > Whatever asking for an explanation as to why equivalent functionality
-> > > > cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
-> > >
-> > > Fully agreed and this is especially true for a change this size
-> > > 77 files changed, 3406 insertions(+), 703 deletions(-)
-> >
-> > In the case of memory allocation accounting, you flat cannot do this with ftrace
-> > - you could maybe do a janky version that isn't fully accurate, much slower,
-> > more complicated for the developer to understand and debug and more complicated
-> > for the end user.
-> >
-> > But please, I invite anyone who's actually been doing this with ftrace to
-> > demonstrate otherwise.
-> >
-> > Ftrace just isn't the right tool for the job here - we're talking about adding
-> > per callsite accounting to some of the fastest fast paths in the kernel.
-> >
-> > And the size of the changes for memory allocation accounting are much more
-> > reasonable:
-> >  33 files changed, 623 insertions(+), 99 deletions(-)
-> >
-> > The code tagging library should exist anyways, it's been open coded half a dozen
-> > times in the kernel already.
-> >
-> > And once we've got that, the time stats code is _also_ far simpler than doing it
-> > with ftrace would be. If anyone here has successfully debugged latency issues
-> > with ftrace, I'd really like to hear it. Again, for debugging latency issues you
-> > want something that can always be on, and that's not cheap with ftrace - and
-> > never mind the hassle of correlating start and end wait trace events, builting
-> > up histograms, etc. - that's all handled here.
-> >
-> > Cheap, simple, easy to use. What more could you want?
->
-> A big ad on a banner. But more seriously.
->
-> This patchset is _huge_ and touching a lot of different areas. It will
-> be not only hard to review but even harder to maintain longterm. So
-> it is completely reasonable to ask for potential alternatives with a
-> smaller code footprint. I am pretty sure you are aware of that workflow.
+Hi,
 
-The patchset is huge because it introduces a reusable part (the first
-6 patches introducing code tagging) and 6 different applications in
-very different areas of the kernel. We wanted to present all of them
-in the RFC to show the variety of cases this mechanism can be reused
-for. If the code tagging is accepted, each application can be posted
-separately to the appropriate group of people. Hopefully that makes it
-easier to review. Those first 6 patches are not that big and are quite
-isolated IMHO:
+On 8/28/22 09:46, Luke D. Jones wrote:
+> Fix for TUF laptops returning with an -ENOSPC on calling
+> asus_wmi_evaluate_method_buf() when fetching default curves. The TUF method
+> requires at least 32 bytes space.
+> 
+> This also moves and changes the pr_debug() in fan_curve_check_present() to
+> pr_warn() in fan_curve_get_factory_default() so that there is at least some
+> indication in logs of why it fails.
+> 
+> Signed-off-by: Luke D. Jones <luke@ljones.dev>
 
- include/linux/codetag.h             |  83 ++++++++++
- include/linux/lazy-percpu-counter.h |  67 ++++++++
- include/linux/module.h              |   1 +
- kernel/module/internal.h            |   1 -
- kernel/module/main.c                |   4 +
- lib/Kconfig                         |   3 +
- lib/Kconfig.debug                   |   4 +
- lib/Makefile                        |   3 +
- lib/codetag.c                       | 248 ++++++++++++++++++++++++++++
- lib/lazy-percpu-counter.c           | 141 ++++++++++++++++
- lib/string_helpers.c                |   3 +-
- scripts/kallsyms.c                  |  13 ++
+Thank you for your patch, I've applied this patch to my review-hans 
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
 
->
-> So I find Peter's question completely appropriate while your response to
-> that not so much! Maybe ftrace is not the right tool for the intented
-> job. Maybe there are other ways and it would be really great to show
-> that those have been evaluated and they are not suitable for a), b) and
-> c) reasons.
+Note it will show up in my review-hans branch once I've pushed my
+local branch there, which might take a while.
 
-That's fair.
-For memory tracking I looked into using kmemleak and page_owner which
-can't match the required functionality at an overhead acceptable for
-production and pre-production testing environments. traces + BPF I
-haven't evaluated myself but heard from other members of my team who
-tried using that in production environment with poor results. I'll try
-to get more specific information on that.
+Once I've run some tests on this branch the patches there will be
+added to the platform-drivers-x86/for-next branch and eventually
+will be included in the pdx86 pull-request to Linus for the next
+merge-window.
 
->
-> E.g. Oscar has been working on extending page_ext to track number of
-> allocations for specific calltrace[1]. Is this 1:1 replacement? No! But
-> it can help in environments where page_ext can be enabled and it is
-> completely non-intrusive to the MM code.
+Regards,
 
-Thanks for pointing out this work. I'll need to review and maybe
-profile it before making any claims.
+Hans
 
->
-> If the page_ext overhead is not desirable/acceptable then I am sure
-> there are other options. E.g. kprobes/LivePatching framework can hook
-> into functions and alter their behavior. So why not use that for data
-> collection? Has this been evaluated at all?
 
-I'm not sure how I can hook into say alloc_pages() to find out where
-it was called from without capturing the call stack (which would
-introduce an overhead at every allocation). Would love to discuss this
-or other alternatives if they can be done with low enough overhead.
-Thanks,
-Suren.
+> ---
+>  drivers/platform/x86/asus-wmi.c | 9 ++++-----
+>  1 file changed, 4 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
+> index 3d9fd58573f9..11203213e00d 100644
+> --- a/drivers/platform/x86/asus-wmi.c
+> +++ b/drivers/platform/x86/asus-wmi.c
+> @@ -108,7 +108,7 @@ module_param(fnlock_default, bool, 0444);
+>  #define WMI_EVENT_MASK			0xFFFF
+>  
+>  #define FAN_CURVE_POINTS		8
+> -#define FAN_CURVE_BUF_LEN		(FAN_CURVE_POINTS * 2)
+> +#define FAN_CURVE_BUF_LEN		32
+>  #define FAN_CURVE_DEV_CPU		0x00
+>  #define FAN_CURVE_DEV_GPU		0x01
+>  /* Mask to determine if setting temperature or percentage */
+> @@ -2383,8 +2383,10 @@ static int fan_curve_get_factory_default(struct asus_wmi *asus, u32 fan_dev)
+>  	curves = &asus->custom_fan_curves[fan_idx];
+>  	err = asus_wmi_evaluate_method_buf(asus->dsts_id, fan_dev, mode, buf,
+>  					   FAN_CURVE_BUF_LEN);
+> -	if (err)
+> +	if (err) {
+> +		pr_warn("%s (0x%08x) failed: %d\n", __func__, fan_dev, err);
+>  		return err;
+> +	}
+>  
+>  	fan_curve_copy_from_buf(curves, buf);
+>  	curves->device_id = fan_dev;
+> @@ -2402,9 +2404,6 @@ static int fan_curve_check_present(struct asus_wmi *asus, bool *available,
+>  
+>  	err = fan_curve_get_factory_default(asus, fan_dev);
+>  	if (err) {
+> -		pr_debug("fan_curve_get_factory_default(0x%08x) failed: %d\n",
+> -			 fan_dev, err);
+> -		/* Don't cause probe to fail on devices without fan-curves */
+>  		return 0;
+>  	}
+>  
 
->
-> And please note that I am not claiming the presented work is approaching
-> the problem from a wrong direction. It might very well solve multiple
-> problems in a single go _but_ the long term code maintenance burden
-> really has to to be carefully evaluated and if we can achieve a
-> reasonable subset of the functionality with an existing infrastructure
-> then I would be inclined to sacrifice some portions with a considerably
-> smaller code footprint.
->
-> [1] http://lkml.kernel.org/r/20220901044249.4624-1-osalvador@suse.de
->
-> --
-> Michal Hocko
-> SUSE Labs

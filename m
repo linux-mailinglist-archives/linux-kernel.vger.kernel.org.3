@@ -2,150 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC3195A921F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:32:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DA75A9224
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:35:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233357AbiIAIcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54178 "EHLO
+        id S233501AbiIAIe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 04:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233109AbiIAIcp (ORCPT
+        with ESMTP id S232974AbiIAIex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:32:45 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A85AFC7FB4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:32:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A6CED1FA04;
-        Thu,  1 Sep 2022 08:32:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662021161; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=5hZJdKvZSq/cAGjCksiQPWfxol38eNcxRTKoapUoi84=;
-        b=UQPhO/Bte5iI5JqU+YSl94RuZjt+GPlGBGjfi1LqL9gtD0+3SkAqd15042zZMgpMYdE7r/
-        9ceszmg2z0N9KxOxJL4xEh/jiewiwzpL/dPCgpkRVVFQvFSs1a/5y5Z9SQ/2QMoFoatDhw
-        yBBlLq4nTB7ghTDHuHcmpOgj2WGudVY=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 87A2C13A79;
-        Thu,  1 Sep 2022 08:32:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id h0rBHiluEGORNQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 01 Sep 2022 08:32:41 +0000
-Date:   Thu, 1 Sep 2022 10:32:40 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Oscar Salvador <osalvador@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>
-Subject: Re: [PATCH 0/3] page_owner: print stacks and their counter
-Message-ID: <YxBuKHHJyk1AABbM@dhcp22.suse.cz>
-References: <20220901044249.4624-1-osalvador@suse.de>
+        Thu, 1 Sep 2022 04:34:53 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E35E128566
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:34:43 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id z6so23358167lfu.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 01:34:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=zdKf2GU/029X1i1nZhbauxVm45u7tJ/0ih6Hx+pKrBM=;
+        b=iOTyDaA5qBzZnGKmfEPl6ByrywxzC3nZx51SmMXhUfMrmY6jTAN2IP9XaqlTqPAZY5
+         sGOGDQybEEmjb8cSKMeNvpmp0rPrNdrr+q3NCw0KcSw1CYx6GwEZGl7+w5xQGiX6/UEY
+         Oc+zXTM1XlKZrHiBpe2ZnbvZc5w2EjffeyHUBd+54dUPwHLO6gEp9SzakxCaDSKv0m96
+         ps0UWCnyKV2P5W8vonTulb0AN5SgHNIL59C/8kwGc7sURgINVqA0sRWHylxw/PRH9/s4
+         kaUaGihYtSdwyvtFmbEqgwQujsp9Uibh3fCPD5V1DZi7TVnqc4nbE0eXc35AwOURCF+F
+         wPKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=zdKf2GU/029X1i1nZhbauxVm45u7tJ/0ih6Hx+pKrBM=;
+        b=cDSHbaj3InHC5bcSzKkLJwRKhSJymx7j6INyS/OpOhWgj5wZBjhvxUIeC3ThfaATC8
+         PPf8luPOhJjj3oXcP7gDAjTWnu5ejMIPW3uR1BOBrS13PexONdQSaW3i+ixJWPqzrw7n
+         Cpw47OMb2NtU4+mvgk0UfEOvfN/7ma3UK3O6USsGmErvo53MSNTeMs0moE/Npppj5Jgp
+         +t1rxy2H3YPi8WUA9SKI11yL10udo4IbbVKs3UwgNEzVyDffA6/HimE01hNlqMxa5wZC
+         Qnz6KggqDF11cX2KBD3S/Jq+kGpBS//aH6+QjCFGU4xYkXRwLFuk0z0O6npWbxv4WZFh
+         e4AA==
+X-Gm-Message-State: ACgBeo14Nt528U/8Sl5GeNVyHJOcFYL09e1hct7cIqZUYpYz8cr22ZMq
+        ca3BbafAYuRFK2/TC4ttap4anFBAL1ThNHfUH7ILr0joQDY=
+X-Google-Smtp-Source: AA6agR5jhatVHrFF5q4/HGpIxNLUhMCeUtZerrvXfmtwEERfpvOC2i4/nXoAxEFMPqvotHuMz5YVI5UiC5lkKkfAt7U=
+X-Received: by 2002:a05:6512:c0c:b0:48d:1e9d:aa14 with SMTP id
+ z12-20020a0565120c0c00b0048d1e9daa14mr11136553lfu.322.1662021281851; Thu, 01
+ Sep 2022 01:34:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901044249.4624-1-osalvador@suse.de>
+References: <20220829062202.3287-1-zong.li@sifive.com> <20220830082620.1680602-1-ben.dooks@sifive.com>
+ <fdec1b72-27f3-96e6-5e19-d54ded4aea68@microchip.com> <cefcf96f-5bcc-d134-fbe5-d1169313b6f3@codethink.co.uk>
+ <CA+ZOyajWRUFppg26O1XHfRuJHWB3jk-=-i=FBV9XYgHgshuwQA@mail.gmail.com> <e9132264-bec6-0f39-ff42-d8b6e95b2492@sifive.com>
+In-Reply-To: <e9132264-bec6-0f39-ff42-d8b6e95b2492@sifive.com>
+From:   Zong Li <zong.li@sifive.com>
+Date:   Thu, 1 Sep 2022 16:34:30 +0800
+Message-ID: <CANXhq0qzqUHkWWAT3puANMt2HCDE38QFYYyAcpZuiQW_Umgueg@mail.gmail.com>
+Subject: Re: [PATCH] soc: sifive: ccache: reduce printing on init
+To:     Ben Dooks <ben.dooks@sifive.com>
+Cc:     Zong Li <zongbox@gmail.com>, Ben Dooks <ben.dooks@codethink.co.uk>,
+        Conor Dooley <Conor.Dooley@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        "linux-kernel@vger.kernel.org List" <linux-kernel@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 01-09-22 06:42:46, Oscar Salvador wrote:
-> Hi,
-> 
-> page_owner is a great debug functionality tool that gets us to know
-> about all pages that have been allocated/freed and their stacktrace.
-> This comes very handy when e.g: debugging leaks, as with some scripting
-> we might be able to see those stacktraces that are allocating pages
-> but not freeing theme.
-> 
-> In my experience, that is one of the most useful cases, but it can get
-> really tedious to screen through all pages aand try to reconstruct the
-> stack <-> allocated/freed relationship. There is a lot of noise
-> to cancel off.
-> 
-> This patch aims to fix that by adding a new functionality into page_owner.
-> What this does is to create a new read-only file "page_owner_stacks",
-> which prints only the allocating stacktraces and their counting, being that
-> the times the stacktrace has allocated - the times it has freed.
-> 
-> So we have a clear overview of stacks <-> allocated/freed relationship
-> without the need to fiddle with pages and trying to match free stacktraces
-> with allocated stacktraces.
-> 
-> This is achieved by adding a new refcount_t field in the stack_record struct,
-> incrementing that refcount_t everytime the same stacktrace allocates,
-> and decrementing it when it frees a page. Details can be seen in the
-> respective patches.
-> 
-> We also create another file called "page_owner_threshold", which let us
-> specify a threshold, so when when reading from "page_owner_stacks",
-> we will only see those stacktraces which counting goes beyond the
-> threshold we specified.
-> 
-> A PoC can be found below:
-> 
-> # cat /sys/kernel/debug/page_owner_threshold
->  0
-> # cat /sys/kernel/debug/page_owner_stacks > stacks_full.txt
-> # head -32 stacks_full.txt
->  prep_new_page+0x10d/0x180
->  get_page_from_freelist+0x1bd6/0x1e10
->  __alloc_pages+0x194/0x360
->  alloc_page_interleave+0x13/0x90
->  new_slab+0x31d/0x530
->  ___slab_alloc+0x5d7/0x720
->  __slab_alloc.isra.85+0x4a/0x90
->  kmem_cache_alloc+0x455/0x4a0
->  acpi_ps_alloc_op+0x57/0x8f
->  acpi_ps_create_scope_op+0x12/0x23
->  acpi_ps_execute_method+0x102/0x2c1
->  acpi_ns_evaluate+0x343/0x4da
->  acpi_evaluate_object+0x1cb/0x392
->  acpi_run_osc+0x135/0x260
->  acpi_init+0x165/0x4ed
->  do_one_initcall+0x3e/0x200
-> stack count: 2
+On Wed, Aug 31, 2022 at 11:55 PM Ben Dooks <ben.dooks@sifive.com> wrote:
+>
+> On 31/08/2022 06:22, Zong Li wrote:
+> > Ben Dooks <ben.dooks@codethink.co.uk> =E6=96=BC 2022=E5=B9=B48=E6=9C=88=
+31=E6=97=A5 =E9=80=B1=E4=B8=89 =E5=87=8C=E6=99=A81:04=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+> >>
+> >> On 30/08/2022 17:30, Conor.Dooley@microchip.com wrote:
+> >>> On 30/08/2022 09:26, Ben Dooks wrote:
+> >>>> EXTERNAL EMAIL: Do not click links or open attachments unless you kn=
+ow the content is safe
+> >>>>
+> >>>> The driver prints out 6 lines on startup, which can easily be redcue=
+d
+> >>>> to two lines without losing any information.
+> >>>>
+> >>>> Note, to make the types work better, uint64_t has been replaced with
+> >>>> ULL to make the unsigned long long match the format in the print
+> >>>> statement.
+> >>>>
+> >>>> Signed-off-by: Ben Dooks <ben.dooks@sifive.com>
+> >>>> ---
+> >>>>    drivers/soc/sifive/sifive_ccache.c | 25 +++++++++++--------------
+> >>>>    1 file changed, 11 insertions(+), 14 deletions(-)
+> >>>>
+> >>>> diff --git a/drivers/soc/sifive/sifive_ccache.c b/drivers/soc/sifive=
+/sifive_ccache.c
+> >>>> index 46ce33db7d30..65a10a6ee211 100644
+> >>>> --- a/drivers/soc/sifive/sifive_ccache.c
+> >>>> +++ b/drivers/soc/sifive/sifive_ccache.c
+> >>>> @@ -76,20 +76,17 @@ static void setup_sifive_debug(void)
+> >>>>
+> >>>>    static void ccache_config_read(void)
+> >>>>    {
+> >>>> -       u32 regval, val;
+> >>>> -
+> >>>> -       regval =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+> >>>> -       val =3D regval & 0xFF;
+> >>>> -       pr_info("CCACHE: No. of Banks in the cache: %d\n", val);
+> >>>> -       val =3D (regval & 0xFF00) >> 8;
+> >>>> -       pr_info("CCACHE: No. of ways per bank: %d\n", val);
+> >>>> -       val =3D (regval & 0xFF0000) >> 16;
+> >>>> -       pr_info("CCACHE: Sets per bank: %llu\n", (uint64_t)1 << val)=
+;
+> >>>> -       val =3D (regval & 0xFF000000) >> 24;
+> >>>> -       pr_info("CCACHE: Bytes per cache block: %llu\n", (uint64_t)1=
+ << val);
+> >>>> -
+> >>>> -       regval =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+> >>>> -       pr_info("CCACHE: Index of the largest way enabled: %d\n", re=
+gval);
+> >>>> +       u32 cfg;
+> >>>> +
+> >>>> +       cfg =3D readl(ccache_base + SIFIVE_CCACHE_CONFIG);
+> >>>> +
+> >>>> +       pr_info("CCACHE: %u banks, %u ways, sets/bank=3D%llu, bytes/=
+block=3D%llu\n",
+> >>>> +               (cfg & 0xff), (cfg >> 8) & 0xff,
+> >>>> +               1ULL << ((cfg >> 16) & 0xff),
+> >>>
+> >>> This is just BIT_ULL((cfg >> 16) & 0xff), no?
+> >>> Would be nice too if these were defined, so you'd have something
+> >>> like BIT_ULL((cfg >> SETS_PER_BANK_SHIFT) & 0xff)
+> >>>
+> >>> I do like the cleanup of the uint64_t & cutting down on the prints
+> >>> though :) Again, it'd be nice if you and Zong could collaborate on
+> >>> a combined v2.
+> >>
+> >> I think even BIT_UL() would do here, if someone is going to make a
+> >> cache bigger than 2GiB we'll probably be quite old by then, so v2
+> >> might have the last two values down as %lu.
+> >>
+> >
+> > Hi Ben,
+> > Thanks for your suggestion, If you don't mind, I will take this into
+> > my V2 patchset.
+>
+> Thanks.
+>
+> I may well post v2 of this tomorrow with the BIT_ULL() suggestions
+> from Conor, or even down to BIT_UL() and use %lu as noted.
+>
 
-This is very nice and useful! I guess some people would prefer to have
-Memory usage: XYZ kB
-dumped instead but looking at the code this would require to track
-number of pages rather than calls with stacks and that would be more code
-and somehow alien to the concept as well. Practically speaking, when
-looking into leakers high stack count should be indicative enough IMHO.
+No problem Ben. Could you please also add me in the thread of your v2,
+then I can take it and send out my v2 patchset. Thanks.
 
-[...]
-> Oscar Salvador (3):
->   lib/stackdepot: Add a refcount field in stack_record
->   mm, page_owner: Add page_owner_stacks file to print out only stacks
->     and their counter
->   mm,page_owner: Filter out stacks by a threshold counter
-> 
->  include/linux/stackdepot.h |  16 ++++-
->  lib/stackdepot.c           | 121 ++++++++++++++++++++++++++++++++-----
->  mm/kasan/common.c          |   3 +-
->  mm/page_owner.c            | 102 +++++++++++++++++++++++++++++--
->  4 files changed, 222 insertions(+), 20 deletions(-)
-
-The code footprint is also rather low. I am no expert in neither
-stackdepot nor page owner but from a very quick glance nothing really
-jumped at me.
-
-Thanks!
--- 
-Michal Hocko
-SUSE Labs
+> >
+> >>> Thanks,
+> >>> Conor.
+> >>>
+> >>>> +               1ULL << ((cfg >> 24) & 0xff));
+> >>>> +
+> >>>> +       cfg =3D readl(ccache_base + SIFIVE_CCACHE_WAYENABLE);
+> >>>> +       pr_info("CCACHE: Index of the largest way enabled: %d\n", cf=
+g);
+> >>>>    }
+> >>>>
+> >>>>    static const struct of_device_id sifive_ccache_ids[] =3D {
+> >>>> --
+> >>>> 2.35.1
+> >>>>
+> >>>
+> >>> _______________________________________________
+> >>> linux-riscv mailing list
+> >>> linux-riscv@lists.infradead.org
+> >>> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> >>>
+> >>
+> >> --
+> >> Ben Dooks                               http://www.codethink.co.uk/
+> >> Senior Engineer                         Codethink - Providing Genius
+> >>
+> >> https://www.codethink.co.uk/privacy.html
+> >>
+> >>
+> >> _______________________________________________
+> >> linux-riscv mailing list
+> >> linux-riscv@lists.infradead.org
+> >> http://lists.infradead.org/mailman/listinfo/linux-riscv
+>

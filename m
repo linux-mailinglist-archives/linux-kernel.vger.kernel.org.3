@@ -2,170 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC375A976D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:53:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A3D155A976F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:54:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiIAMx3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:53:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43130 "EHLO
+        id S232813AbiIAMy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:54:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiIAMx1 (ORCPT
+        with ESMTP id S229555AbiIAMy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:53:27 -0400
-Received: from out28-194.mail.aliyun.com (out28-194.mail.aliyun.com [115.124.28.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C42DB7C9
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:53:23 -0700 (PDT)
-X-Alimail-AntiSpam: AC=CONTINUE;BC=0.07441293|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_news_journal|0.0137863-0.000745102-0.985469;FP=0|0|0|0|0|-1|-1|-1;HT=ay29a033018047190;MF=victor@allwinnertech.com;NM=1;PH=DS;RN=11;RT=11;SR=0;TI=SMTPD_---.P5JnUS1_1662036799;
-Received: from 192.168.220.144(mailfrom:victor@allwinnertech.com fp:SMTPD_---.P5JnUS1_1662036799)
-          by smtp.aliyun-inc.com;
-          Thu, 01 Sep 2022 20:53:20 +0800
-Message-ID: <6c14e174-cdb6-c1fc-58cc-d579111d2328@allwinnertech.com>
-Date:   Thu, 1 Sep 2022 20:53:19 +0800
+        Thu, 1 Sep 2022 08:54:26 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5ADC2DC3;
+        Thu,  1 Sep 2022 05:54:25 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso2382514pjk.0;
+        Thu, 01 Sep 2022 05:54:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=ZBXyYbYjQ1AsjxuVxx4OCp5VVoXL3nUBzDg8QRR75Cw=;
+        b=WnHhs39GjiACyx1YZGfcMNOiD+GKbXQiXCm71Qomry9SIGHoGWdN+80ZFj9VXdhEYI
+         dq7PMFNY+y9281NgJD+VbB2thOod2gj5nTmUx+7c9QiZY+d3l3jDo/lYLaqJ+LcKPrY3
+         ZuNo0bmvR4FWCpJh3yhmCTKvIY0ZdKoEB4lvhqYdlftEWIjesaQEi6Y4ExeIqDkVSW0y
+         TE5o5gIzY3KT2nFpFOGXyXJwWydTTGPKmS2n98hr20yKyvZZJvoxNi+4BVkfu+v5IOZF
+         eOm4ObIPC29EcBd8mn+3tB8eiwzQN/5IDQIaz3+uiFtTCHL15yM7PB2l4ecCsvgP+XsK
+         SIbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=ZBXyYbYjQ1AsjxuVxx4OCp5VVoXL3nUBzDg8QRR75Cw=;
+        b=Df7YmwS/8fBxd5jYlHTbxVV7P0kCK2RRQUHRtf3UvcEqtp1XI0jLP3dx2RLY/SDR07
+         Ni1gaA2iTrggppsTlD5lOAe8mVtWXg+UQtHJZf8FrTZ2Y7w5WJl/Ufl2vBVOKQAhZBuQ
+         Zy+btVucgj0lwNF4zasnkq+5rAJ5TbL+BNE81lL4puhR+HEX91HCtLpdSo8oNT8Il3g1
+         l6rirxxvYpxpThfQTDJgXAbt5uzCuZsAkgwsDmr6VbNNxyoqART7VFIj1csFRwM4Xq2R
+         0zFmIX6NFKlXs6jtJJDB9KxnYRtrBdB8lOYMUE1H3kF5/pO1N/A1dRoqfLzrmGt7hu2h
+         Ebxw==
+X-Gm-Message-State: ACgBeo2a5CAvUXO0iHqHv39VklKtsAJJoQ3mZUu+FcgYwSW5svyzhZjM
+        CvQL6d0S9nna9BFtLF5fCwA=
+X-Google-Smtp-Source: AA6agR66J9l8BTovYfePaPwqu67KsA/hbYWIKHaprzXv47is6c5uEGMxUGnkuVOEjfvcyxQuY1Xg6w==
+X-Received: by 2002:a17:902:e552:b0:16d:2a83:e751 with SMTP id n18-20020a170902e55200b0016d2a83e751mr29383363plf.39.1662036865113;
+        Thu, 01 Sep 2022 05:54:25 -0700 (PDT)
+Received: from localhost ([166.111.139.139])
+        by smtp.gmail.com with ESMTPSA id lj13-20020a17090b344d00b001fac8076cd8sm1507048pjb.46.2022.09.01.05.54.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 05:54:23 -0700 (PDT)
+From:   Zixuan Fu <r33s3n6@gmail.com>
+To:     kashyap.desai@broadcom.com, sumit.saxena@broadcom.com,
+        shivasharan.srikanteshwara@broadcom.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com
+Cc:     megaraidlinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, baijiaju1990@gmail.com,
+        Zixuan Fu <r33s3n6@gmail.com>,
+        TOTE Robot <oslab@tsinghua.edu.cn>
+Subject: [PATCH] scsi: megaraid: fix a possible double-free bug caused by incorrect error handling in megasas_alloc_cmdlist_fusion()
+Date:   Thu,  1 Sep 2022 20:54:18 +0800
+Message-Id: <20220901125418.2323348-1-r33s3n6@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH] ARM: mmu: fix access to illegal address when using
- earlycon & memblock=debug
-Content-Language: en-US
-From:   Victor Hassan <victor@allwinnertech.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>, linux@armlinux.org.uk,
-        rmk+kernel@armlinux.org.uk, linus.walleij@linaro.org,
-        yanfei.xu@windriver.com, ardb@kernel.org, tglx@linutronix.de,
-        mirq-linux@rere.qmqm.pl, arnd@arndb.de
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20220316023356.120595-1-victor@allwinnertech.com>
- <CGME20220831115257eucas1p20d37a01c51e42767860920a936255bd7@eucas1p2.samsung.com>
- <9a425a51-9460-6c4d-e331-5cd5873f8a43@samsung.com>
- <dda053b1-2d4f-153b-b811-78021eae3882@allwinnertech.com>
-In-Reply-To: <dda053b1-2d4f-153b-b811-78021eae3882@allwinnertech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In megasas_alloc_cmdlist_fusion(), when kzalloc() fails, it frees
+fusion->cmd_list but does not clear it. Then, the error is propagated to
+its caller megasas_alloc_cmds_fusion(), which calls
+megasas_free_cmds_fusion(). In megasas_free_cmds_fusion(), it frees
+fusion->cmd_list again, which causes a double-free bug.
+
+To fix this possible bug, in megasas_alloc_cmdlist_fusion(),
+fusion->cmd_list should be cleared after it is freed.
+
+The error log in our fault-injection testing is shown as follows:
+
+[ 4152.707452][   T21] BUG: KASAN: use-after-free in megasas_free_cmds_fusion+0x2d0/0x1294 [megaraid_sas]
+...
+[ 4152.756117][   T21] Call trace:
+...
+[ 4152.795950][   T21]  megasas_free_cmds_fusion+0x2d0/0x1294 [megaraid_sas]
+[ 4152.803329][   T21]  megasas_alloc_cmds_fusion+0x4de0/0x53bc [megaraid_sas]
+[ 4152.810887][   T21]  megasas_init_adapter_fusion+0xab4/0x30dc [megaraid_sas]
+[ 4152.818539][   T21]  megasas_init_fw+0x4874/0x925c [megaraid_sas]
+[ 4152.825245][   T21]  megasas_probe_one+0x978/0x2dd4 [megaraid_sas]
+...
+[ 4152.864486][   T21] Allocated by task 21:
+...
+[ 4152.883339][   T21]  megasas_alloc_cmds_fusion+0x2a40/0x53bc [megaraid_sas]
+[ 4152.890796][   T21]  megasas_init_adapter_fusion+0xab4/0x30dc [megaraid_sas]
+[ 4152.898331][   T21]  megasas_init_fw+0x4874/0x925c [megaraid_sas]
+[ 4152.904901][   T21]  megasas_probe_one+0x978/0x2dd4 [megaraid_sas]
+...
+[ 4152.943038][   T21] Freed by task 21:
+...
+[ 4152.972830][   T21]  kfree+0x100/0x374
+[ 4152.976998][   T21]  megasas_alloc_cmds_fusion+0x45c4/0x53bc [megaraid_sas]
+[ 4152.984379][   T21]  megasas_init_adapter_fusion+0xab4/0x30dc [megaraid_sas]
+[ 4152.991856][   T21]  megasas_init_fw+0x4874/0x925c [megaraid_sas]
+[ 4152.998384][   T21]  megasas_probe_one+0x978/0x2dd4 [megaraid_sas]
 
 
-On 2022/8/31 20:37, Victor Hassan wrote:
-> On 8/31/2022 7:52 PM, Marek Szyprowski wrote:
->> Hi Victor,
->>
->> On 16.03.2022 03:33, Victor Hassan wrote:
->>> earlycon uses fixmap to create a memory map,
->>> So we need to close earlycon before closing fixmap,
->>> otherwise printk will access illegal addresses.
->>> After creating a new memory map, we open earlycon again.
->>>
->>> Signed-off-by: Victor Hassan <victor@allwinnertech.com>
->>
->> This patch landed in linux next-20220831 as commit a76886d117cb ("ARM:
->> 9223/1: mmu: fix access to illegal address when using earlycon &
->> memblock=debug"). Unfortunately it breaks booting of all my test boards
->> which *do not* use earlycon. It can be easily reproduced even with QEMU.
->>
->> With kernel compiled from multi_v7_defconfig the following setup boots:
->>
->> $ qemu-system-arm -nographic -kernel arch/arm/boot/zImage -append
->> "console=ttyAMA0 earlycon" -M virt -smp 2 -m 512
->>
->> while this one doesn't:
->>
->> $ qemu-system-arm -nographic -kernel arch/arm/boot/zImage -append
->> "console=ttyAMA0" -M virt -smp 2 -m 512
->>
->>
->>> ---
->>>    arch/arm/mm/mmu.c | 7 +++++++
->>>    1 file changed, 7 insertions(+)
->>>
->>> diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
->>> index 274e4f73fd33..f3511f07a7d0 100644
->>> --- a/arch/arm/mm/mmu.c
->>> +++ b/arch/arm/mm/mmu.c
->>> @@ -14,6 +14,7 @@
->>>    #include <linux/fs.h>
->>>    #include <linux/vmalloc.h>
->>>    #include <linux/sizes.h>
->>> +#include <linux/console.h>
->>>    #include <asm/cp15.h>
->>>    #include <asm/cputype.h>
->>> @@ -1695,6 +1696,9 @@ static void __init early_fixmap_shutdown(void)
->>>        pmd_clear(fixmap_pmd(va));
->>>        local_flush_tlb_kernel_page(va);
->>> +#ifdef CONFIG_FIX_EARLYCON_MEM
->>> +    console_stop(console_drivers);
->>> +#endif
->>>        for (i = 0; i < __end_of_permanent_fixed_addresses; i++) {
->>>            pte_t *pte;
->>>            struct map_desc map;
->>> @@ -1713,6 +1717,9 @@ static void __init early_fixmap_shutdown(void)
->>>            create_mapping(&map);
->>>        }
->>> +#ifdef CONFIG_FIX_EARLYCON_MEM
->>> +    console_start(console_drivers);
->>> +#endif
->>>    }
->>>    /*
->>
->> Best regards
-> 
-> Dear Marek,
-> Thank you for the notice. I'll figure it out and feed back to you as 
-> soon as possible.
-> 
-> Regards,
-> Victor
+Fixes: 70c54e210ee9a ("scsi: megaraid_sas: fix memleak in megasas_alloc_cmdlist_fusion")
+Reported-by: TOTE Robot <oslab@tsinghua.edu.cn>
+Signed-off-by: Zixuan Fu <r33s3n6@gmail.com>
+---
+ drivers/scsi/megaraid/megaraid_sas_fusion.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Hi Marek,
+diff --git a/drivers/scsi/megaraid/megaraid_sas_fusion.c b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+index 09c5fe37754c..238103e7a028 100644
+--- a/drivers/scsi/megaraid/megaraid_sas_fusion.c
++++ b/drivers/scsi/megaraid/megaraid_sas_fusion.c
+@@ -613,6 +613,7 @@ megasas_alloc_cmdlist_fusion(struct megasas_instance *instance)
+ 			for (j = 0; j < i; j++)
+ 				kfree(fusion->cmd_list[j]);
+ 			kfree(fusion->cmd_list);
++			fusion->cmd_list = NULL;
+ 			dev_err(&instance->pdev->dev,
+ 				"Failed from %s %d\n",  __func__, __LINE__);
+ 			return -ENOMEM;
+-- 
+2.25.1
 
-Sorry, didn't take into account that console_drivers is NULL when 
-earlycon is not used.
-
-Here is the patch-v2. Please review:
-
-diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
-index a49f0b9..a240f38 100644
---- a/arch/arm/mm/mmu.c
-+++ b/arch/arm/mm/mmu.c
-@@ -14,6 +14,7 @@
-  #include <linux/fs.h>
-  #include <linux/vmalloc.h>
-  #include <linux/sizes.h>
-+#include <linux/console.h>
-
-  #include <asm/cp15.h>
-  #include <asm/cputype.h>
-@@ -1730,6 +1731,10 @@
-  	pmd_clear(fixmap_pmd(va));
-  	local_flush_tlb_kernel_page(va);
-
-+#ifdef CONFIG_FIX_EARLYCON_MEM
-+	if (console_drivers)
-+		console_stop(console_drivers);
-+#endif
-  	for (i = 0; i < __end_of_permanent_fixed_addresses; i++) {
-  		pte_t *pte;
-  		struct map_desc map;
-@@ -1748,6 +1753,10 @@
-
-  		create_mapping(&map);
-  	}
-+#ifdef CONFIG_FIX_EARLYCON_MEM
-+	if (console_drivers)
-+		console_start(console_drivers);
-+#endif
-  }
-
-BTW, should I resend the patch-v2 through the site 
-(https://www.armlinux.org.uk/developer/patches/add.php), or should I 
-send the patch-v2 through E-mail to Linux-Mainline?
-
-Thanks you.
-
-Regards,
-Victor

@@ -2,113 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB1B85A9BD5
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3B75A9BD3
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:39:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234049AbiIAPiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58208 "EHLO
+        id S232448AbiIAPjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:39:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234227AbiIAPiO (ORCPT
+        with ESMTP id S233249AbiIAPi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:38:14 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7887AC34;
-        Thu,  1 Sep 2022 08:38:10 -0700 (PDT)
-Received: (Authenticated sender: maxime.chevallier@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 5B4136000C;
-        Thu,  1 Sep 2022 15:38:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1662046689;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o0DY5K2tOv8e0L2U0j2bDRtdMUYfu9YOVYg6PMh7/YM=;
-        b=HR+WbvK59Zo16aCJfnTS4MAgS6YyKOdg5H7R5CHTmrWCJlbegHj25cxRfDpzu5CD/L0C/E
-        IkZ1UrSDrDViRtDjnOLxHX02TJ4LgKl8sEp2pbJ+DPWh7LFTpLjoU1KCI02ijvXGRGSfnX
-        QxxiT/hpn7cnWI8pNRNn2Ozw5djDHZfrSOPfZU/E8VlB/srUIfNicdKWrPy7qBN+rYEb52
-        Ke/411iZfoDLzAxYufTmEEnou8RITgQhHFm6kSfqUeVQJmjy6fafYO/fiaijH+KMkc327/
-        SuDpezv9RJps58PJCaogJ/VMcwbX+763jnc+/e7sphfb0yx0mPz/3YPHx2L7TQ==
-Date:   Thu, 1 Sep 2022 17:38:07 +0200
-From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
-To:     Horatiu Vultur <horatiu.vultur@microchip.com>
-Cc:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <linux@armlinux.org.uk>,
-        <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next] net: lan966x: Extend lan966x with RGMII
- support
-Message-ID: <20220901173807.79c2e996@pc-10.home>
-In-Reply-To: <20220901122346.245786-1-horatiu.vultur@microchip.com>
-References: <20220901122346.245786-1-horatiu.vultur@microchip.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+        Thu, 1 Sep 2022 11:38:59 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3050E7B2A6
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:38:57 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oTmHO-0005mr-3g; Thu, 01 Sep 2022 17:38:54 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <apatel@ventanamicro.com>
+Cc:     Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Anup Patel <apatel@ventanamicro.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>
+Subject: Re: [PATCH v2 3/4] RISC-V: Implement arch specific PMEM APIs
+Date:   Thu, 01 Sep 2022 17:38:53 +0200
+Message-ID: <13199249.VsHLxoZxqI@diego>
+In-Reply-To: <20220830044642.566769-4-apatel@ventanamicro.com>
+References: <20220830044642.566769-1-apatel@ventanamicro.com> <20220830044642.566769-4-apatel@ventanamicro.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Horatiu,
+Hi Anup,
 
-On Thu, 1 Sep 2022 14:23:46 +0200
-Horatiu Vultur <horatiu.vultur@microchip.com> wrote:
-
-> Extend lan966x with RGMII support. The MAC supports all RGMII_* modes.
+Am Dienstag, 30. August 2022, 06:46:41 CEST schrieb Anup Patel:
+> The NVDIMM PMEM driver expects arch specific APIs for cache maintenance
+> and if arch does not provide these APIs then NVDIMM PMEM driver will
+> always use MEMREMAP_WT to map persistent memory which in-turn maps as
+> UC memory type defined by the RISC-V Svpbmt specification.
 > 
-> Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+> Now that the Svpbmt and Zicbom support is available in RISC-V kernel,
+> we implement PMEM APIs using ALT_CMO_OP() macros so that the NVDIMM
+> PMEM driver can use MEMREMAP_WB to map persistent memory.
+
+Zicbom is detected at runtime, though that kconfig setting changes the
+behaviour for the memremap-type at compile-time. So what happens on
+systems not using zicbom (or another cmo-variant) ?
+
+
+Heiko
+
+> Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+> Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > ---
->  drivers/net/ethernet/microchip/lan966x/lan966x_main.c    | 8 ++++++++
->  drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c | 3 +++
->  2 files changed, 11 insertions(+)
+>  arch/riscv/Kconfig     |  1 +
+>  arch/riscv/mm/Makefile |  1 +
+>  arch/riscv/mm/pmem.c   | 21 +++++++++++++++++++++
+>  3 files changed, 23 insertions(+)
+>  create mode 100644 arch/riscv/mm/pmem.c
 > 
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c
-> b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c index
-> 1d6e3b641b2e..e2d250ed976b 100644 ---
-> a/drivers/net/ethernet/microchip/lan966x/lan966x_main.c +++
-> b/drivers/net/ethernet/microchip/lan966x/lan966x_main.c @@ -772,6
-> +772,14 @@ static int lan966x_probe_port(struct lan966x *lan966x, u32
-> p, __set_bit(PHY_INTERFACE_MODE_MII,
->  		  port->phylink_config.supported_interfaces);
-> +	__set_bit(PHY_INTERFACE_MODE_RGMII,
-> +		  port->phylink_config.supported_interfaces);
-> +	__set_bit(PHY_INTERFACE_MODE_RGMII_ID,
-> +		  port->phylink_config.supported_interfaces);
-> +	__set_bit(PHY_INTERFACE_MODE_RGMII_RXID,
-> +		  port->phylink_config.supported_interfaces);
-> +	__set_bit(PHY_INTERFACE_MODE_RGMII_TXID,
-> +		  port->phylink_config.supported_interfaces);
-
-Instead of defining each individual variant, you can use :
-
-	phy_interface_set_rgmii(port->phylink_config.supported_interfaces);
-
->  	__set_bit(PHY_INTERFACE_MODE_GMII,
->  		  port->phylink_config.supported_interfaces);
->  	__set_bit(PHY_INTERFACE_MODE_SGMII,
-> diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c
-> b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c index
-> 38a7e95d69b4..fb6aee509656 100644 ---
-> a/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c +++
-> b/drivers/net/ethernet/microchip/lan966x/lan966x_phylink.c @@ -59,6
-> +59,9 @@ static void lan966x_phylink_mac_link_up(struct
-> phylink_config *config, port_config->pause |= tx_pause ? MLO_PAUSE_TX
-> : 0; port_config->pause |= rx_pause ? MLO_PAUSE_RX : 0; 
-> +	if (phy_interface_mode_is_rgmii(interface))
-> +		phy_set_speed(port->serdes, speed);
-> +
->  	lan966x_port_config_up(port);
->  }
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index 0ebd8da388d8..37d6370d29c3 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -25,6 +25,7 @@ config RISCV
+>  	select ARCH_HAS_GIGANTIC_PAGE
+>  	select ARCH_HAS_KCOV
+>  	select ARCH_HAS_MMIOWB
+> +	select ARCH_HAS_PMEM_API
+>  	select ARCH_HAS_PTE_SPECIAL
+>  	select ARCH_HAS_SET_DIRECT_MAP if MMU
+>  	select ARCH_HAS_SET_MEMORY if MMU
+> diff --git a/arch/riscv/mm/Makefile b/arch/riscv/mm/Makefile
+> index d76aabf4b94d..3b368e547f83 100644
+> --- a/arch/riscv/mm/Makefile
+> +++ b/arch/riscv/mm/Makefile
+> @@ -31,3 +31,4 @@ endif
 >  
+>  obj-$(CONFIG_DEBUG_VIRTUAL) += physaddr.o
+>  obj-$(CONFIG_RISCV_DMA_NONCOHERENT) += dma-noncoherent.o
+> +obj-$(CONFIG_ARCH_HAS_PMEM_API) += pmem.o
+> diff --git a/arch/riscv/mm/pmem.c b/arch/riscv/mm/pmem.c
+> new file mode 100644
+> index 000000000000..089df92ae876
+> --- /dev/null
+> +++ b/arch/riscv/mm/pmem.c
+> @@ -0,0 +1,21 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Ventana Micro Systems Inc.
+> + */
+> +
+> +#include <linux/export.h>
+> +#include <linux/libnvdimm.h>
+> +
+> +#include <asm/cacheflush.h>
+> +
+> +void arch_wb_cache_pmem(void *addr, size_t size)
+> +{
+> +	ALT_CMO_OP(clean, addr, size, riscv_cbom_block_size);
+> +}
+> +EXPORT_SYMBOL_GPL(arch_wb_cache_pmem);
+> +
+> +void arch_invalidate_pmem(void *addr, size_t size)
+> +{
+> +	ALT_CMO_OP(inval, addr, size, riscv_cbom_block_size);
+> +}
+> +EXPORT_SYMBOL_GPL(arch_invalidate_pmem);
+> 
 
-Best regards,
 
-Maxime
+
+

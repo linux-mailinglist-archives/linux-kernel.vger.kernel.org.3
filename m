@@ -2,195 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F24D5A9EF3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:31:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B54945A9EF6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:33:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233808AbiIASbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
+        id S233871AbiIASdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiIASbO (ORCPT
+        with ESMTP id S232641AbiIASdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:31:14 -0400
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3995165810
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 11:31:13 -0700 (PDT)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-11eab59db71so29779501fac.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 11:31:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=DWclz0cI2Qzp/WFkCaK+AoAFDfwG7DzVDaialA7WOVA=;
-        b=VQUzR7mE00Iv3vCd3+i0WpUYdn9aP59Pbv4I9ZtntuyG5+07xtyFGsIU9XPMhmJPQr
-         Ue7O44guqoWzlr4kDQi/hLdYLyqJcLni8d4CJ5cyhLLZs7PWSroE+/LZLEeSn3ntnXey
-         Kvg0CseM0umyM7HTJ2dBL9aK5wP1d1u5vBhRJarQfoIYVPX6pSjlSg5w6Po9NrwG8UYg
-         EXN+lx18gHnkJ3659AigDLSmbuPI7SVGfTghpLXw6CZfg9Ij1AYksDyipHc2bH/yZYtV
-         K96X+tdewpVSHI+/WIJjuWa5PBRKhYN16yRtsEv3AihoiAGB6IqqgUUB7etOCOCv8dI/
-         PMlA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=DWclz0cI2Qzp/WFkCaK+AoAFDfwG7DzVDaialA7WOVA=;
-        b=IFyS+FnNRCYsMpD7VGDyHRPMpp6nD+73vLvW8cu7HT8cSXKdndl9ZkYsy1fwgsY7c/
-         bZaRfkTqM2zUTZIuG/eA6A5hyhKgtvZAP2j6vh7SP3BLJnp7iMBbENdLK4iUQyJn9iq8
-         nzaPhnUWqkt7+APWo6BmzsFWYO/eVQ7dm1nCYhyp0mocdDxi3WrCQRI98tjgj2KcMoMC
-         eqSrrRgNHWRB7CQ1D1yMqvzkCdlRnA47CPhqpgkMXgvlow79N5Q7rqPeFDjfgRrzDfxP
-         qsbsD85ZeXSbe3y6zbhJx47k4zIjJ7XcLtyQJloMjV5Jhgb5WFMFYohPTRnBPFqXeV7C
-         ujJg==
-X-Gm-Message-State: ACgBeo2/XfEHHr7FupSw57UNxI3u+JmrfAAuiAMo4eyLa6e5Sivp3SUH
-        EY4VPabpreS+08UGH+BZKD4Eb82ZG4tYKtT6q94o
-X-Google-Smtp-Source: AA6agR4QcciaJ+V9DEP2dfhKeqL/C3Zg9FMWfYLckt6vpWX3sm1XllSrF7qtjHTDSSSTbXuSk2/ZxnQ2UHLplKdsUxo=
-X-Received: by 2002:a05:6871:796:b0:11e:b92e:731e with SMTP id
- o22-20020a056871079600b0011eb92e731emr269638oap.41.1662057072424; Thu, 01 Sep
- 2022 11:31:12 -0700 (PDT)
+        Thu, 1 Sep 2022 14:33:10 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85C327E02F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 11:33:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=B7YWWxgdwGX8fRegL9+nqJ6tES+1V/k9HDc5eItCkcg=; b=pSQXXM1gehMmdnG/Cim3BGcgZl
+        eQCMHcBzm9rbMcB9oUMUo3PHghTlt9WYtJ40Ff33BGnGch3Sa59pqeIyDvy6ian+lHYPvcbaoqqw0
+        nePch6kTIX+Ymk2gdMOkjyKGRr/gHm1N7XC/KyE0cbul6hGhPYj+fX1xteafiNP1osAl1gCbA2lIv
+        /+0wv+4Xyq9v/CsNZIMI6amJN4fCk8DLdHCLe6WcT14vpKlee/LGZtbSlH4ohWbTzF0vmHUh9gD9q
+        0EIwHhJnDUvu0dZnGFIzDT1eoo7RIm89rqJ7ikdZ6ATm4NT71UocMO+80/wHw/N90MSZqtmPagt1D
+        ki9OgsjQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oTozr-006GDQ-H9; Thu, 01 Sep 2022 18:32:59 +0000
+Date:   Thu, 1 Sep 2022 19:32:59 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Sidhartha Kumar <sidhartha.kumar@oracle.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        akpm@linux-foundation.org, songmuchun@bytedance.com,
+        vbabka@suse.cz, william.kucharski@oracle.com, dhowells@redhat.com,
+        peterx@redhat.com, arnd@arndb.de, ccross@google.com,
+        hughd@google.com, ebiederm@xmission.com
+Subject: Re: [PATCH 2/7] mm: add private field of first tail to struct page
+ and struct folio
+Message-ID: <YxD6215MS+L+tGLc@casper.infradead.org>
+References: <20220829230014.384722-1-sidhartha.kumar@oracle.com>
+ <20220829230014.384722-3-sidhartha.kumar@oracle.com>
+ <YxDsu8Ol/yOg7sMV@monkey>
 MIME-Version: 1.0
-References: <cover.1659996830.git.rgb@redhat.com> <12063373.O9o76ZdvQC@x2>
- <Yw/efLafvmimtCDq@madcap2.tricolour.ca> <5600292.DvuYhMxLoT@x2>
- <CAHC9VhSPS7dRXLU9eV3Ne6Q7q=GPpak+=QRYLa_8Z4i-fESz8w@mail.gmail.com> <20220901075158.jqwaz3pklf3rqc6q@quack3>
-In-Reply-To: <20220901075158.jqwaz3pklf3rqc6q@quack3>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Thu, 1 Sep 2022 14:31:01 -0400
-Message-ID: <CAHC9VhStnE9vGu9h5tHnS58eyb8vm8rMN4miXpLAG6fFnidD=w@mail.gmail.com>
-Subject: Re: [PATCH v4 3/4] fanotify,audit: Allow audit to use the full
- permission event response
-To:     Jan Kara <jack@suse.cz>, Steve Grubb <sgrubb@redhat.com>,
-        Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
-        Amir Goldstein <amir73il@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YxDsu8Ol/yOg7sMV@monkey>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 3:52 AM Jan Kara <jack@suse.cz> wrote:
-> On Wed 31-08-22 21:47:09, Paul Moore wrote:
-> > On Wed, Aug 31, 2022 at 7:55 PM Steve Grubb <sgrubb@redhat.com> wrote:
-> > > On Wednesday, August 31, 2022 6:19:40 PM EDT Richard Guy Briggs wrote:
-> > > > On 2022-08-31 17:25, Steve Grubb wrote:
-> > > > > On Wednesday, August 31, 2022 5:07:25 PM EDT Richard Guy Briggs wrote:
-> > > > > > > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
-> > > > > > > > index 433418d73584..f000fec52360 100644
-> > > > > > > > --- a/kernel/auditsc.c
-> > > > > > > > +++ b/kernel/auditsc.c
-> > > > > > > > @@ -64,6 +64,7 @@
-> > > > > > > > #include <uapi/linux/limits.h>
-> > > > > > > > #include <uapi/linux/netfilter/nf_tables.h>
-> > > > > > > > #include <uapi/linux/openat2.h> // struct open_how
-> > > > > > > > +#include <uapi/linux/fanotify.h>
-> > > > > > > >
-> > > > > > > > #include "audit.h"
-> > > > > > > >
-> > > > > > > > @@ -2899,10 +2900,34 @@ void __audit_log_kern_module(char *name)
-> > > > > > > > context->type = AUDIT_KERN_MODULE;
-> > > > > > > > }
-> > > > > > > >
-> > > > > > > > -void __audit_fanotify(u32 response)
-> > > > > > > > +void __audit_fanotify(u32 response, size_t len, char *buf)
-> > > > > > > > {
-> > > > > > > > -       audit_log(audit_context(), GFP_KERNEL,
-> > > > > > > > -               AUDIT_FANOTIFY, "resp=%u", response);
-> > > > > > > > +       struct fanotify_response_info_audit_rule *friar;
-> > > > > > > > +       size_t c = len;
-> > > > > > > > +       char *ib = buf;
-> > > > > > > > +
-> > > > > > > > +       if (!(len && buf)) {
-> > > > > > > > +               audit_log(audit_context(), GFP_KERNEL,
-> > > > > > > > AUDIT_FANOTIFY,
-> > > > > > > > +                         "resp=%u fan_type=0 fan_info=?",
-> > > > > > > > response);
-> > > > > > > > +               return;
-> > > > > > > > +       }
-> > > > > > > > +       while (c >= sizeof(struct fanotify_response_info_header)) {
-> > > > > > > > +               friar = (struct fanotify_response_info_audit_rule
-> > > > > > > > *)buf;
-> > > > > > >
-> > > > > > > Since the only use of this at the moment is the
-> > > > > > > fanotify_response_info_rule, why not pass the
-> > > > > > > fanotify_response_info_rule struct directly into this function?  We
-> > > > > > > can always change it if we need to in the future without affecting
-> > > > > > > userspace, and it would simplify the code.
-> > > > > >
-> > > > > > Steve, would it make any sense for there to be more than one
-> > > > > > FAN_RESPONSE_INFO_AUDIT_RULE header in a message?  Could there be more
-> > > > > > than one rule that contributes to a notify reason?  If not, would it be
-> > > > > > reasonable to return -EINVAL if there is more than one?
-> > > > >
-> > > > > I don't see a reason for sending more than one header. What is more
-> > > > > probable is the need to send additional data in that header. I was
-> > > > > thinking of maybe bit mapping it in the rule number. But I'd suggest
-> > > > > padding the struct just in case it needs expanding some day.
-> > > >
-> > > > This doesn't exactly answer my question about multiple rules
-> > > > contributing to one decision.
-> > >
-> > > I don't forsee that.
-> > >
-> > > > The need for more as yet undefined information sounds like a good reason
-> > > > to define a new header if that happens.
-> > >
-> > > It's much better to pad the struct so that the size doesn't change.
-> > >
-> > > > At this point, is it reasonable to throw an error if more than one RULE
-> > > > header appears in a message?
-> > >
-> > > It is a write syscall. I'd silently discard everything else and document that
-> > > in the man pages. But the fanotify maintainers should really weigh in on
-> > > this.
-> > >
-> > > > The way I had coded this last patchset was to allow for more than one RULE
-> > > > header and each one would get its own record in the event.
-> > >
-> > > I do not forsee a need for this.
-> > >
-> > > > How many rules total are likely to exist?
-> > >
-> > > Could be a thousand. But I already know some missing information we'd like to
-> > > return to user space in an audit event, so the bit mapping on the rule number
-> > > might happen. I'd suggest padding one u32 for future use.
-> >
-> > A better way to handle an expansion like that would be to have a
-> > length/version field at the top of the struct that could be used to
-> > determine the size and layout of the struct.
->
-> We already do have the 'type' and 'len' fields in
-> struct fanotify_response_info_header. So if audit needs to pass more
-> information, we can define a new 'type' and either make it replace the
-> current struct fanotify_response_info_audit_rule or make it expand the
-> information in it. At least this is how we handle similar situation when
-> fanotify wants to report some new bits of information to userspace.
+On Thu, Sep 01, 2022 at 10:32:43AM -0700, Mike Kravetz wrote:
+> Not really an issue with this patch, but it made me read more of this
+> comment about folios.  It goes on to say ...
+> 
+>  * same power-of-two.  It is at least as large as %PAGE_SIZE.  If it is
+>  * in the page cache, it is at a file offset which is a multiple of that
+>  * power-of-two.  It may be mapped into userspace at an address which is
+>  * at an arbitrary page offset, but its kernel virtual address is aligned
+>  * to its size.
+>  */
+> 
+> This series is to begin converting hugetlb code to folios.  Just want to
+> note that 'hugetlb folios' have specific user space alignment restrictions.
+> So, I do not think the comment about arbitrary page offset would apply to
+> hugetlb.
+> 
+> Matthew, should we note that hugetlb is special in the comment?  Or, is it
+> not worth updating?
 
-Perfect, I didn't know that was an option from the fanotify side; I
-agree that's the right approach.
+I'm open to updating it if we can find good wording.  What I'm trying
+to get across there is that when dealing with folios, you can assume
+that they're naturally aligned physically, logically (in the file) and
+virtually (kernel address), but not necessarily virtually (user
+address).  Hugetlb folios are special in that they are guaranteed to
+be virtually aligned in user space, but I don't know if here is the
+right place to document that.  It's an additional restriction, so code
+which handles generic folios doesn't need to know it.
 
-> That being said if audit wants to have u32 pad in its struct
-> fanotify_response_info_audit_rule for future "optional" expansion I'm not
-> strictly opposed to that but I don't think it is a good idea.
+> Also, folio_get_private_1 will be used for the hugetlb subpool pointer
+> which resides in page[1].private.  This is used in the next patch of
+> this series.  I'm sure you are aware that hugetlb also uses page private
+> in sub pages 2 and 3.  Can/will/should this method of accessing private
+> in sub pages be expanded to cover these as well?  Expansion can happen
+> later, but if this can not be expanded perhaps we should come up with
+> another scheme.
 
-Yes, I'm not a fan of padding out this way, especially when we have
-better options.
+There's a few ways of tackling this.  What I'm currently thinking is
+that we change how hugetlbfs uses struct page to store its extra data.
+It would end up looking something like this (in struct page):
 
-> Ultimately I guess I'll leave it upto audit subsystem what it wants to have
-> in its struct fanotify_response_info_audit_rule because for fanotify
-> subsystem, it is just an opaque blob it is passing.
++++ b/include/linux/mm_types.h
+@@ -147,9 +147,10 @@ struct page {
+                };
+                struct {        /* Second tail page of compound page */
+                        unsigned long _compound_pad_1;  /* compound_head */
+-                       unsigned long _compound_pad_2;
+                        /* For both global and memcg */
+                        struct list_head deferred_list;
++                       unsigned long hugetlbfs_private_2;
++                       unsigned long hugetlbfs_private_3;
+                };
+                struct {        /* Page table pages */
+                        unsigned long _pt_pad_1;        /* compound_head */
 
-In that case, let's stick with leveraging the type/len fields in the
-fanotify_response_info_header struct, that should give us all the
-flexibility we need.
+although we could use better names and/or types?  I haven't looked to
+see what you're storing here yet.  And then we can make the
+corresponding change to struct folio to add these elements at the
+right place.
 
-Richard and Steve, it sounds like Steve is already aware of additional
-information that he wants to send via the
-fanotify_response_info_audit_rule struct, please include that in the
-next revision of this patchset.  I don't want to get this merged and
-then soon after have to hack in additional info.
-
--- 
-paul-moore.com
+Does that sound sensible?

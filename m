@@ -2,43 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 806EE5A8D1C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:11:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418315A8D20
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:12:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232820AbiIAFLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 01:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
+        id S232859AbiIAFMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 01:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231249AbiIAFLv (ORCPT
+        with ESMTP id S232827AbiIAFMb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 01:11:51 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7810F10D4FC;
-        Wed, 31 Aug 2022 22:11:50 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E5A9D6E;
-        Wed, 31 Aug 2022 22:11:56 -0700 (PDT)
-Received: from [10.162.43.7] (unknown [10.162.43.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B05CD3F71A;
-        Wed, 31 Aug 2022 22:11:48 -0700 (PDT)
-Message-ID: <81864464-8cd1-8afe-ed57-c04b1b22a35b@arm.com>
-Date:   Thu, 1 Sep 2022 10:41:46 +0530
+        Thu, 1 Sep 2022 01:12:31 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3372122BE1;
+        Wed, 31 Aug 2022 22:12:30 -0700 (PDT)
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27VNn73D030499;
+        Thu, 1 Sep 2022 05:12:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=corp-2022-7-12;
+ bh=18OOGS2sPRiJ+9EzIU6kd0ZppZE6bIuuoI3mlcLK2ho=;
+ b=mENwGyprbs5K6QROCeBaeuWxewkJ6jiRjENkopfT8zj/pX+jTxt5aEpl2e5bDR8mDyjI
+ GZfnhejO4hzufQCIrK2cardNxdbeU2mnsCv54s7mn2wPwThYSV+opMZ66eVzDNvABu0d
+ abgpA1X6yrqeXNzmmaaGPihjffk3c7cZj1Y8Grlrl1SQnEBtusXANC12B8waqpeOeUee
+ CwTfHtUnCL4daTVp0DN1UFPjbjY7QQXqmDpj2xOaLmPYHFPO+cBu23nUdFqfV8ySJumQ
+ wcbxQR5dIJqyojrittcRHWU4DoAn+TmwTIBEthNU63CnEL90G9FSNx1Rg/wAeSjG9yqj QQ== 
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j7a22b0tt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Sep 2022 05:12:24 +0000
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2813cnRa022878;
+        Thu, 1 Sep 2022 05:12:23 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3j79q61j2b-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Sep 2022 05:12:23 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2815CJTO026239;
+        Thu, 1 Sep 2022 05:12:23 GMT
+Received: from ca-mkp.mkp.ca.oracle.com (ca-mkp.ca.oracle.com [10.156.108.201])
+        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 3j79q61j0y-4;
+        Thu, 01 Sep 2022 05:12:23 +0000
+From:   "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     linux-kernel@vger.kernel.org,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        linux-scsi@vger.kernel.org
+Cc:     "Martin K . Petersen" <martin.petersen@oracle.com>,
+        james.smart@broadcom.com, dick.kennedy@broadcom.com
+Subject: Re: [PATCH -next v2] scsi: lpfc: add missing destroy_workqueue() on error path in lpfc_sli4_driver_resource_setup()
+Date:   Thu,  1 Sep 2022 01:12:18 -0400
+Message-Id: <166200876313.24183.16607865138971231049.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220823044237.285643-1-yangyingliang@huawei.com>
+References: <20220823044237.285643-1-yangyingliang@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: linux-next: build failure after merge of the perf tree
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-References: <20220831083452.2fc938cf@canb.auug.org.au>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20220831083452.2fc938cf@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_02,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0 spamscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=958 suspectscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209010022
+X-Proofpoint-GUID: z-VHPOgN6j15dC1ndrJacd-NXMzED1n5
+X-Proofpoint-ORIG-GUID: z-VHPOgN6j15dC1ndrJacd-NXMzED1n5
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,42 +78,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Stephen,
+On Tue, 23 Aug 2022 12:42:37 +0800, Yang Yingliang wrote:
 
-This seems to be the same problem as pointed by ACME on the patch series [1].
-Could this be a compiler false positive ? Because the new code block is exact
-same like the existing one. This warning seems to only occurs on powerpc64el
-platform, but not on others.
+> Add the missing destroy_workqueue() before return from
+> lpfc_sli4_driver_resource_setup() in error path.
+> 
+> 
 
-[1] https://lore.kernel.org/lkml/Yw59CkHUVbfrHdkh@kernel.org/
+Applied to 6.0/scsi-fixes, thanks!
 
-- Anshuman
+[1/1] scsi: lpfc: add missing destroy_workqueue() on error path in lpfc_sli4_driver_resource_setup()
+      https://git.kernel.org/mkp/scsi/c/da6d507f5ff3
 
-On 8/31/22 04:04, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the perf tree, today's linux-next build (native perf)
-> failed like this:
-> 
-> In file included from /usr/include/stdio.h:866,
->                  from /home/sfr/next/next/tools/perf/util/branch.h:9,
->                  from util/branch.c:2:
-> In function 'fprintf',
->     inlined from 'branch_type_stat_display' at util/branch.c:152:4:
-> /usr/include/powerpc64le-linux-gnu/bits/stdio2.h:105:10: error: '%8s' directive argument is null [-Werror=format-overflow=]
->   105 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   106 |                         __va_arg_pack ());
->       |                         ~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> 
-> Presumably caused by commit
-> 
->   9781e500dcb8 ("perf branch: Extend branch type classification")
-> 
-> "native" here is PowerPC64 LE.
-> $ gcc --version
-> gcc (Debian 11.2.0-10) 11.2.0
-> 
-> I have used the perf tree from next-20220830 for today.
-> 
+-- 
+Martin K. Petersen	Oracle Linux Engineering

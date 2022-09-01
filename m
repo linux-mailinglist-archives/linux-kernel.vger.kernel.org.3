@@ -2,61 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0535A942B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A83AD5A941D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233872AbiIAKSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
+        id S232124AbiIAKRw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:17:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233853AbiIAKR7 (ORCPT
+        with ESMTP id S233602AbiIAKRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:17:59 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30E4E1341B6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:17:55 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1oThGU-0007Ov-7H; Thu, 01 Sep 2022 12:17:38 +0200
-Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1oThGQ-000073-U2; Thu, 01 Sep 2022 12:17:34 +0200
-Date:   Thu, 1 Sep 2022 12:17:34 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        krzysztof.kozlowski@linaro.org, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 2/6] clk: qcom: Allow custom reset ops
-Message-ID: <20220901101734.GA32271@pengutronix.de>
-References: <1661923108-789-1-git-send-email-quic_akhilpo@quicinc.com>
- <20220831104741.v6.2.I75baff799a363bbb960376539e3a0f737377c3f1@changeid>
+        Thu, 1 Sep 2022 06:17:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3132F132EFD
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:17:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7984B8253D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:17:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF0EFC433C1;
+        Thu,  1 Sep 2022 10:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662027460;
+        bh=lEsecR9/MhQrB8RJTlGXlTDanfUfsZB9RoqMuYg27TE=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=pPK95ZqwJxoq7d/isyzZEpNdJN6BOYFln6Zkf9b1+DHwe4qBgUMOn3uqHNeek0h8Q
+         IWV8mHognZcqHTrMIZwk14btCeUkDPzgq3TdLoy3ZL9zNbTbvSpZZr4Xp2syU7JVkk
+         MxncaHuhsg1FkwTykqwb15HIgFK/e18Jc3W2BrtvqlkyQcRSPpMZ7fzr8WzAqcIX9J
+         o5xxs21jtEghhqUuhPXcNaOtkH7E5bGIEMcclKHGPq+6IjBogiCzJ57xtFFSjtnxY3
+         bQFiHQ5kpcxaSt3Ju14A2OfydAyQMkkCq+uttXG8VfVKZVuwz6FJjmBlwR7oiS0X6K
+         bhVIX4bZEtVwA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 36DEF5C06C8; Thu,  1 Sep 2022 03:17:40 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 03:17:40 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, gwml@vger.gnuweeb.org,
+        kernel-team@fb.com, w@lwt.eu, Petr Mladek <pmladek@suse.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH rcu 1/2] torture: Optionally flush printk() buffers
+ before powering off
+Message-ID: <20220901101740.GP6159@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220831182113.GA2697286@paulmck-ThinkPad-P17-Gen-1>
+ <20220831182148.2698489-2-paulmck@kernel.org>
+ <87tu5rfogb.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831104741.v6.2.I75baff799a363bbb960376539e3a0f737377c3f1@changeid>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: pza@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+In-Reply-To: <87tu5rfogb.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,81 +62,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Akhil,
-
-On Wed, Aug 31, 2022 at 10:48:23AM +0530, Akhil P Oommen wrote:
-> Allow soc specific clk drivers to specify a custom reset operation. We
-> will use this in an upcoming patch to allow gpucc driver to specify a
-> differet reset operation for cx_gdsc.
+On Thu, Sep 01, 2022 at 11:18:20AM +0206, John Ogness wrote:
+> Added CC the rest of the printk folks since this would be the first use
+> of pr_flush() outside of the printk subsystem. And it is a controversial
+> usage, since it is used to work around potential (future) bugs in
+> printk.
 > 
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
+> On 2022-08-31, "Paul E. McKenney" <paulmck@kernel.org> wrote:
+> > The rcutorture test suite produces quite a bit of console output at
+> > the end of a test.  This means that the new-in-2022 printk() kthreads
+> > are likely to be in the process of flushing output at the time of the
+> > torture_shutdown() function's call to kernel_power_off().  Normally,
+> > rcutorture relies on printk() to flush any pending output upon shutdown,
+> > the better to detect bugs in this area, for example, the one introduced
+> > by 8e274732115f ("printk: extend console_lock for per-console locking").
+> > However, once such a bug is detected and reported, it is necessary to
+> > test the rest of the system, without noise from the already-reported bug.
 > 
-> (no changes since v3)
+> Since the printk kthread implementation has been reverted, this is no
+> longer an issue. When a kthread implementation is re-introduced, this
+> issue will need to have been considered and handled.
 > 
-> Changes in v3:
-> - Use pointer to const for "struct qcom_reset_ops" in qcom_reset_map (Krzysztof)
+> IMHO this patch is premature at this time and hopefully will never
+> become necessary (in the form of a bug workaround).
+
+Very well, I will drop it, for the time being, anyway.  ;-)
+
+							Thanx, Paul
+
+> > This commit therefore adds a torture.printk_shutdown_bug_workaround
+> > kernel parameter, which causes torture_shutdown() to invoke pr_flush(),
+> > and print an informative message on the console, immediately before
+> > invoking kernel_power_off().  When this kernel parameter is not specified,
+> > it is up to printk() to flush its own buffers.
+> >
+> > Suggested-by: John Ogness <john.ogness@linutronix.de>
+> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > ---
+> >  Documentation/admin-guide/kernel-parameters.txt | 6 ++++++
+> >  kernel/torture.c                                | 7 +++++++
+> >  2 files changed, 13 insertions(+)
+> >
+> > diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+> > index d7f30902fda02..ba1b8776aab83 100644
+> > --- a/Documentation/admin-guide/kernel-parameters.txt
+> > +++ b/Documentation/admin-guide/kernel-parameters.txt
+> > @@ -6143,6 +6143,12 @@
+> >  			are running concurrently, especially on systems
+> >  			with rotating-rust storage.
+> >  
+> > +	torture.printk_shutdown_bug_workaround= [KNL]
+> > +			Execute pr_flush(1000, true) just before invoking
+> > +			kernel_power_off() to work around any bugs that
+> > +			might prevent printk() from flushing its buffers
+> > +			at shutdown time.
+> > +
+> >  	torture.verbose_sleep_frequency= [KNL]
+> >  			Specifies how many verbose printk()s should be
+> >  			emitted between each sleep.  The default of zero
+> > diff --git a/kernel/torture.c b/kernel/torture.c
+> > index 789aeb0e1159c..7cd2016b02076 100644
+> > --- a/kernel/torture.c
+> > +++ b/kernel/torture.c
+> > @@ -48,6 +48,9 @@ module_param(disable_onoff_at_boot, bool, 0444);
+> >  static bool ftrace_dump_at_shutdown;
+> >  module_param(ftrace_dump_at_shutdown, bool, 0444);
+> >  
+> > +static bool printk_shutdown_bug_workaround;
+> > +module_param(printk_shutdown_bug_workaround, bool, 0444);
+> > +
+> >  static int verbose_sleep_frequency;
+> >  module_param(verbose_sleep_frequency, int, 0444);
+> >  
+> > @@ -651,6 +654,10 @@ static int torture_shutdown(void *arg)
+> >  		VERBOSE_TOROUT_STRING("No torture_shutdown_hook(), skipping.");
+> >  	if (ftrace_dump_at_shutdown)
+> >  		rcu_ftrace_dump(DUMP_ALL);
+> > +	if (printk_shutdown_bug_workaround) {
+> > +		pr_info("%s: Flushing printk() buffers at power-down time.\n", __func__);
+> > +		pr_flush(1000, true);
+> > +	}
+> >  	kernel_power_off();	/* Shut down the system. */
+> >  	return 0;
+> >  }
+> > -- 
+> > 2.31.1.189.g2e36527f23
 > 
-> Changes in v2:
-> - Return error when a particular custom reset op is not implemented. (Dmitry)
-> 
->  drivers/clk/qcom/reset.c | 27 +++++++++++++++++++++++++++
->  drivers/clk/qcom/reset.h |  8 ++++++++
->  2 files changed, 35 insertions(+)
-> 
-> diff --git a/drivers/clk/qcom/reset.c b/drivers/clk/qcom/reset.c
-> index 819d194..b7ae4a3 100644
-> --- a/drivers/clk/qcom/reset.c
-> +++ b/drivers/clk/qcom/reset.c
-> @@ -13,6 +13,21 @@
->  
->  static int qcom_reset(struct reset_controller_dev *rcdev, unsigned long id)
->  {
-> +	struct qcom_reset_controller *rst;
-> +	const struct qcom_reset_map *map;
-> +
-> +	rst = to_qcom_reset_controller(rcdev);
-> +	map = &rst->reset_map[id];
-> +
-> +	if (map->ops && map->ops->reset)
-> +		return map->ops->reset(map->priv);
-> +	/*
-> +	 * If custom ops is implemented but just not this callback, return
-> +	 * error
-> +	 */
-> +	else if (map->ops)
-> +		return -EOPNOTSUPP;
-> +
-
-It doesn't seem necessary to stack reset_ops -> qcom_reset_ops for what
-you need here.
-Just add an optional const struct reset_ops * to qcom_cc_desc and feed
-that into qcom_cc_really_probe to replace &qcom_reset_ops.
-
-[...]
-> +struct qcom_reset_ops {
-> +	int (*reset)(void *priv);
-> +	int (*assert)(void *priv);
-> +	int (*deassert)(void *priv);
-
-Why add assert and deassert ops? There doesn't seem to be any user.
-
-> +};
-> +
->  struct qcom_reset_map {
->  	unsigned int reg;
->  	u8 bit;
-> +	const struct qcom_reset_ops *ops;
-> +	void *priv;
-
-Adding per-reset ops + priv counters seems excessive to me.
-
-Are you expecting different reset controls in the same reset controller
-to have completely different ops at some point? If so, I would wonder
-whether it wouldn't be better to split the reset controller in that
-case. Either way, for the GDSC collapse workaround this does not seem
-to be required at all.
-
-regards
-Philipp
+> John Ogness

@@ -2,230 +2,467 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 451425A9DD5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 664DD5A9DDD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:16:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234682AbiIARL4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41792 "EHLO
+        id S233501AbiIARQL convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Sep 2022 13:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234987AbiIARLu (ORCPT
+        with ESMTP id S232776AbiIARQC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:11:50 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A482E80502;
-        Thu,  1 Sep 2022 10:11:49 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id z187so18038315pfb.12;
-        Thu, 01 Sep 2022 10:11:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=YDC5tyBH7wmTL3j65AV3g9HNqXBKCTVoZvt49f51Mhg=;
-        b=FFWEPn5yBKL8K+u0bzKsPjeK5DPBzNjR3mEbeFKIXjnSasDSkljtTfus1siS+pY4US
-         +ogJ7QwAvGGK7kJKgwIV46iKIC1fxb3Kpn/K+g7uD60tbF2nzrvnCRkEff46xul3Vb0k
-         KsNXvadKrsIvwbKBh/JUdYlubFL6APe8M0G5kJ/GdcdvYoyMsY664Y1RewhST2OJUu0X
-         UTedGbfYicG8KLbvejMeeCRoPbeWrPjo9xzJnDxIvvwqC6ZRjt8RTomuRBH+egCHENH4
-         UOUD/6NbFF/TILxpcdeO8Ucf3Z/+YUGzoEoGRKKeDnOLpsENwTt1OZEca8pYJdAacGYj
-         Dhpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=YDC5tyBH7wmTL3j65AV3g9HNqXBKCTVoZvt49f51Mhg=;
-        b=DRjbAs7pZ7OH88xfcCBZPlv3/XRXA4V4Yw8kQt3/OpSFkzfaZrd+hQFeGaFAdH/qtc
-         /d7buNN6OG7y6Tz9cUb9e/r932CghhUqs0wK9biSq8I1kBglshAMysADZntbYxIcm4pj
-         fJEOTU5JZyC/sE5nIGwf2O9s9ZsNi7lc2RKHHAcaxvn3ka4CwYneTCXsIUel7gIJFwv8
-         4vqXJBrorVxJXMEB8wYdxex2wXVePcaM0rDJCUgFfqkn9DsDBQZYx2EMij1nr7pTXHoa
-         mAuasRdqc8Hf+Pk+ACzH+AG3PHGsHbRuwvhpZvlrBR9wo4qAxbPS9Wr5mx6icQMTdtGQ
-         57gw==
-X-Gm-Message-State: ACgBeo2dTPF5jZ4C/MGeqHboRU/a/TaYAvHr0R0RJcoCMSd3CKSTlYlA
-        XptvU6yB0oPjzclKtwnjvq4=
-X-Google-Smtp-Source: AA6agR5J2qfd+dwystlya3rM6FvZfroB70yZGLijJjcxrn44kTx+rcYKaXBHa2EQSxxa/wxRQ9Y9FQ==
-X-Received: by 2002:a62:27c1:0:b0:536:32d2:d098 with SMTP id n184-20020a6227c1000000b0053632d2d098mr32306075pfn.63.1662052308996;
-        Thu, 01 Sep 2022 10:11:48 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170902c24d00b0016ecc7d5297sm14180703plg.292.2022.09.01.10.11.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 10:11:47 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <a48f6c26-232a-f3ae-01d1-277e5c9800ee@roeck-us.net>
-Date:   Thu, 1 Sep 2022 10:11:45 -0700
+        Thu, 1 Sep 2022 13:16:02 -0400
+Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF9D40E1C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:16:01 -0700 (PDT)
+Received: from pps.filterd (m0109331.ppops.net [127.0.0.1])
+        by mx0a-00082601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2819eLaI032534
+        for <linux-kernel@vger.kernel.org>; Thu, 1 Sep 2022 10:16:00 -0700
+Received: from maileast.thefacebook.com ([163.114.130.16])
+        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3ja8n3h6gq-2
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:16:00 -0700
+Received: from twshared5413.23.frc3.facebook.com (2620:10d:c0a8:1b::d) by
+ mail.thefacebook.com (2620:10d:c0a8:82::d) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 1 Sep 2022 10:15:58 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id 447B8C567595; Thu,  1 Sep 2022 10:12:56 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <jpoimboe@kernel.org>, <jikos@kernel.org>, <mbenes@suse.cz>,
+        <pmladek@suse.com>, <x86@kernel.org>, <joe.lawrence@redhat.com>,
+        <linuxppc-dev@lists.ozlabs.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Song Liu <song@kernel.org>
+Subject: [PATCH v6] livepatch: Clear relocation targets on a module removal
+Date:   Thu, 1 Sep 2022 10:12:52 -0700
+Message-ID: <20220901171252.2148348-1-song@kernel.org>
+X-Mailer: git-send-email 2.30.2
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: rnMSrou92P5T74sqN8w3TcZxcs_POtyF
+X-Proofpoint-ORIG-GUID: rnMSrou92P5T74sqN8w3TcZxcs_POtyF
+Content-Transfer-Encoding: 8BIT
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when
- "intel, vm-map" not defined
-Content-Language: en-US
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        talel@amazon.com, hhhawa@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, ronenk@amazon.com, itamark@amazon.com,
-        shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
-        almogbs@amazon.com, dkl@amazon.com, andriy.shevchenko@intel.com
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-3-farbere@amazon.com>
- <cddebb5a-3b83-e89d-db00-9a59ddbd6741@roeck-us.net>
- <84a68eff-be64-71ce-1533-1e228d3da2a4@amazon.com>
- <71d6d57c-2165-5fe3-515d-9395022921e2@roeck-us.net>
- <2f5c5828-87b9-f3d2-e3d3-0200adbe830c@amazon.com>
- <20220901144434.GB3477025@roeck-us.net>
- <ceef1c33-1af5-53d1-5e5b-5aeb5d2679ca@amazon.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ceef1c33-1af5-53d1-5e5b-5aeb5d2679ca@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_10,2022-08-31_03,2022-06-22_01
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/1/22 08:24, Farber, Eliav wrote:
-> On 9/1/2022 5:44 PM, Guenter Roeck wrote:
->> On Thu, Sep 01, 2022 at 11:39:58AM +0300, Farber, Eliav wrote:
->>> On 8/31/2022 2:48 PM, Guenter Roeck wrote:
->>> > On 8/30/22 22:49, Farber, Eliav wrote:
->>> > > On 8/31/2022 8:36 AM, Guenter Roeck wrote:
->>> > > > On 8/30/22 12:21, Eliav Farber wrote:
->>> > > > > Bug fix - in case "intel,vm-map" is missing in device-tree
->>> > > > > ,'num' is set
->>> > > > > to 0, and no voltage channel infos are allocated.
->>> > > > >
->>> > > > > Signed-off-by: Eliav Farber <farbere@amazon.com>
->>> > > > > ---
->>> > > > >   drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
->>> > > > >   1 file changed, 12 insertions(+), 16 deletions(-)
->>> > > > >
->>> > > > > diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
->>> > > > > index 046523d47c29..0e29877a1a9c 100644
->>> > > > > --- a/drivers/hwmon/mr75203.c
->>> > > > > +++ b/drivers/hwmon/mr75203.c
->>> > > > > @@ -580,8 +580,6 @@ static int mr75203_probe(struct
->>> > > > > platform_device *pdev)
->>> > > > >       }
->>> > > > >
->>> > > > >       if (vm_num) {
->>> > > > > -             u32 num = vm_num;
->>> > > > > -
->>> > > > >               ret = pvt_get_regmap(pdev, "vm", pvt);
->>> > > > >               if (ret)
->>> > > > >                       return ret;
->>> > > > > @@ -594,30 +592,28 @@ static int mr75203_probe(struct
->>> > > > > platform_device *pdev)
->>> > > > >               ret = device_property_read_u8_array(dev, "intel,vm-map",
->>> > > > > pvt->vm_idx, vm_num);
->>> > > > >               if (ret) {
->>> > > > > -                     num = 0;
->>> > > > > +                     /*
->>> > > > > +                      * Incase intel,vm-map property is not
->>> > > > > defined, we
->>> > > > > +                      * assume incremental channel numbers.
->>> > > > > +                      */
->>> > > > > +                     for (i = 0; i < vm_num; i++)
->>> > > > > + pvt->vm_idx[i] = i;
->>> > > > >               } else {
->>> > > > >                       for (i = 0; i < vm_num; i++)
->>> > > > >                               if (pvt->vm_idx[i] >= vm_num ||
->>> > > > > - pvt->vm_idx[i] == 0xff) {
->>> > > > > -                                     num = i;
->>> > > > > + pvt->vm_idx[i] == 0xff)
->>> > > > >                                       break;
->>> > > >
->>> > > > So all vm_idx values from 0x00 to 0xfe would be acceptable ?
->>> > > > Does the chip really have that many registers (0x200 + 0x40 +
->>> > > > 0x200 * 0xfe) ?
->>> > > > Is that documented somewhere ?
->>> > > According to the code vm_num is limited to 32 because the mask is
->>> > > only 5 bits:
->>> > >
->>> > > #define VM_NUM_MSK    GENMASK(20, 16)
->>> > > #define VM_NUM_SFT    16
->>> > > vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
->>> > >
->>> > > In practice according to the data sheet I have:
->>> > > 0 <= VM instances <= 8
->>> > >
->>> > Sorry, my bad. I misread the patch and thought the first part of
->>> > the if statement was removed.
->>> >
->>> > Anyway, what is the difference between specifying an vm_idx value of
->>> > 0xff and not specifying anything ? Or, in other words, taking the dt
->>> > example, the difference between
->>> >        intel,vm-map = [03 01 04 ff ff];
->>> > and
->>> >        intel,vm-map = [03 01 04];
->>>
->>> The actual number of VMs is read from a HW register:
->>>     ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
->>>     ...
->>>     vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
->>>
->>> Also, using:
->>>     ret = device_property_read_u8_array(dev, "intel,vm-map", vm_idx,
->>>                         vm_num);
->>> in the driver will fail if vm_num > sizeof array in device-tree.
->>>
->>> So, if for example vm_num = 5, but you will want to map only 3 of them
->>> you most set property to be:
->>>     intel,vm-map = [03 01 04 ff ff];
->>> otherwise if you set:
->>>     intel,vm-map = [03 01 04];
->>> it will assume the property doesn't, and will continue the flow in code
->>> as if it doesn’t exist (which is not what the user wanted, and before my
->>> fix also has a bug).
->>
->> There should be some error handling to catch this case (ie if the number
->> of entries does not match the expected count), or if a value in the array
->> is larger or equal to vm_num. Today the latter is silently handled as end
->> of entries (similar to 0xff), but that should result in an error.
->> This would avoid situations like
->>        intel,vm-map = [01 02 03 04 05];
->> ie where the person writing the devicetree file accidentally entered
->> index values starting with 1 instead of 0. A mismatch between vm_num
->> and the number of entries in the array is silently handled as if there
->> was no property at all, which is at the very least misleading and
->> most definitely unexpected and should also result in an error.
-> 
-> 
-> I assume it is possible to tell according to the return value, if property
-> doesn’t exist at all, or if it does exists and size of array in
-> device-tree is smaller than vm_num.
-> In [PATCH v3 17/19] Andy wrote that “code shouldn't be a YAML validator.
-> Drop this and make sure you have correct DT schema” so I’m a bit confused
-> if code should validate “intel,bm-map” or if it is the user responsibility.
-> As this property was not added by me, I prefer not to fix it as part of
-> this series of patches.
-> 
+From: Miroslav Benes <mbenes@suse.cz>
 
-You are changing the driver all over the place with 19 patches, including
-this code, but you don't want to add code that validates the devicetree
-data ? That seems odd.
+Josh reported a bug:
 
-> 
->> Also, what happens if the devicetree content is something like the
->> following ? Would that be valid ?
->>        intel,vm-map = [00 01 01 01 01 01];
-> 
-> If device-tree content would be:
->      intel,vm-map = [00 01 01 01 01 01];
-> and assuming 16 channels for each VM, the hwmon sub-system will expose 90
-> sysfs to read voltage values.
-> In practice 16 – 31, 32 – 47, 48 – 63, 64 – 89 will all report the same
-> input signals for VM1.
-> 
+  When the object to be patched is a module, and that module is
+  rmmod'ed and reloaded, it fails to load with:
 
-Does that make any sense, and is there a valid reason to have a mapping
-table like the one in this example ?
+  module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+  livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+  livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
 
-Thanks,
-Guenter
+  The livepatch module has a relocation which references a symbol
+  in the _previous_ loading of nfsd. When apply_relocate_add()
+  tries to replace the old relocation with a new one, it sees that
+  the previous one is nonzero and it errors out.
+
+  On ppc64le, we have a similar issue:
+
+  module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+  livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+  livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+
+He also proposed three different solutions. We could remove the error
+check in apply_relocate_add() introduced by commit eda9cec4c9a1
+("x86/module: Detect and skip invalid relocations"). However the check
+is useful for detecting corrupted modules.
+
+We could also deny the patched modules to be removed. If it proved to be
+a major drawback for users, we could still implement a different
+approach. The solution would also complicate the existing code a lot.
+
+We thus decided to reverse the relocation patching (clear all relocation
+targets on x86_64). The solution is not
+universal and is too much arch-specific, but it may prove to be simpler
+in the end.
+
+Reported-by: Josh Poimboeuf <jpoimboe@redhat.com>
+Signed-off-by: Miroslav Benes <mbenes@suse.cz>
+Signed-off-by: Song Liu <song@kernel.org>
+
+---
+
+NOTE: powerpc32 code is only compile tested.
+
+Changes v5 = v6:
+1. Fix powerpc64.
+2. Fix compile for powerpc32.
+
+Changes v4 = v5:
+1. Fix compile with powerpc.
+
+Changes v3 = v4:
+1. Reuse __apply_relocate_add to make it more reliable in long term.
+   (Josh Poimboeuf)
+2. Add back ppc64 logic from v2, with changes to match current code.
+   (Josh Poimboeuf)
+
+Changes v2 => v3:
+1. Rewrite x86 changes to match current code style.
+2. Remove powerpc changes as there is no test coverage in v3.
+3. Only keep 1/3 of v2.
+
+v2: https://lore.kernel.org/all/20190905124514.8944-1-mbenes@suse.cz/T/#u
+---
+ arch/powerpc/kernel/module_32.c |  10 ++++
+ arch/powerpc/kernel/module_64.c |  49 +++++++++++++++
+ arch/s390/kernel/module.c       |   8 +++
+ arch/x86/kernel/module.c        | 102 +++++++++++++++++++++++---------
+ include/linux/moduleloader.h    |   7 +++
+ kernel/livepatch/core.c         |  41 ++++++++++++-
+ 6 files changed, 189 insertions(+), 28 deletions(-)
+
+diff --git a/arch/powerpc/kernel/module_32.c b/arch/powerpc/kernel/module_32.c
+index ea6536171778..e3c312770453 100644
+--- a/arch/powerpc/kernel/module_32.c
++++ b/arch/powerpc/kernel/module_32.c
+@@ -285,6 +285,16 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_LIVEPATCH
++void clear_relocate_add(Elf32_Shdr *sechdrs,
++		   const char *strtab,
++		   unsigned int symindex,
++		   unsigned int relsec,
++		   struct module *me)
++{
++}
++#endif
++
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ notrace int module_trampoline_target(struct module *mod, unsigned long addr,
+ 				     unsigned long *target)
+diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+index 7e45dc98df8a..514951f97391 100644
+--- a/arch/powerpc/kernel/module_64.c
++++ b/arch/powerpc/kernel/module_64.c
+@@ -739,6 +739,55 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+ 	return 0;
+ }
+ 
++#ifdef CONFIG_LIVEPATCH
++void clear_relocate_add(Elf64_Shdr *sechdrs,
++		       const char *strtab,
++		       unsigned int symindex,
++		       unsigned int relsec,
++		       struct module *me)
++{
++	unsigned int i;
++	Elf64_Rela *rela = (void *)sechdrs[relsec].sh_addr;
++	Elf64_Sym *sym;
++	unsigned long *location;
++	const char *symname;
++	u32 *instruction;
++
++	pr_debug("Clearing ADD relocate section %u to %u\n", relsec,
++		 sechdrs[relsec].sh_info);
++
++	for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
++		location = (void *)sechdrs[sechdrs[relsec].sh_info].sh_addr
++			+ rela[i].r_offset;
++		sym = (Elf64_Sym *)sechdrs[symindex].sh_addr
++			+ ELF64_R_SYM(rela[i].r_info);
++		symname = me->core_kallsyms.strtab
++			+ sym->st_name;
++
++		if (ELF64_R_TYPE(rela[i].r_info) != R_PPC_REL24)
++			continue;
++		/*
++		 * reverse the operations in apply_relocate_add() for case
++		 * R_PPC_REL24.
++		 */
++		if (sym->st_shndx != SHN_UNDEF &&
++		    sym->st_shndx != SHN_LIVEPATCH)
++			continue;
++
++		instruction = (u32 *)location;
++		if (is_mprofile_ftrace_call(symname))
++			continue;
++
++		if (!instr_is_relative_link_branch(ppc_inst(*instruction)))
++			continue;
++
++		instruction += 1;
++		patch_instruction(instruction, ppc_inst(PPC_RAW_NOP()));
++	}
++
++}
++#endif
++
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ int module_trampoline_target(struct module *mod, unsigned long addr,
+ 			     unsigned long *target)
+diff --git a/arch/s390/kernel/module.c b/arch/s390/kernel/module.c
+index 2d159b32885b..cc6784fbc1ac 100644
+--- a/arch/s390/kernel/module.c
++++ b/arch/s390/kernel/module.c
+@@ -500,6 +500,14 @@ static int module_alloc_ftrace_hotpatch_trampolines(struct module *me,
+ }
+ #endif /* CONFIG_FUNCTION_TRACER */
+ 
++#ifdef CONFIG_LIVEPATCH
++void clear_relocate_add(Elf64_Shdr *sechdrs, const char *strtab,
++			unsigned int symindex, unsigned int relsec,
++			struct module *me)
++{
++}
++#endif
++
+ int module_finalize(const Elf_Ehdr *hdr,
+ 		    const Elf_Shdr *sechdrs,
+ 		    struct module *me)
+diff --git a/arch/x86/kernel/module.c b/arch/x86/kernel/module.c
+index b1abf663417c..f9632afbb84c 100644
+--- a/arch/x86/kernel/module.c
++++ b/arch/x86/kernel/module.c
+@@ -128,18 +128,20 @@ int apply_relocate(Elf32_Shdr *sechdrs,
+ 	return 0;
+ }
+ #else /*X86_64*/
+-static int __apply_relocate_add(Elf64_Shdr *sechdrs,
++static int __apply_clear_relocate_add(Elf64_Shdr *sechdrs,
+ 		   const char *strtab,
+ 		   unsigned int symindex,
+ 		   unsigned int relsec,
+ 		   struct module *me,
+-		   void *(*write)(void *dest, const void *src, size_t len))
++		   void *(*write)(void *dest, const void *src, size_t len),
++		   bool clear)
+ {
+ 	unsigned int i;
+ 	Elf64_Rela *rel = (void *)sechdrs[relsec].sh_addr;
+ 	Elf64_Sym *sym;
+ 	void *loc;
+ 	u64 val;
++	u64 zero = 0ULL;
+ 
+ 	DEBUGP("Applying relocate section %u to %u\n",
+ 	       relsec, sechdrs[relsec].sh_info);
+@@ -163,40 +165,60 @@ static int __apply_relocate_add(Elf64_Shdr *sechdrs,
+ 		case R_X86_64_NONE:
+ 			break;
+ 		case R_X86_64_64:
+-			if (*(u64 *)loc != 0)
+-				goto invalid_relocation;
+-			write(loc, &val, 8);
++			if (!clear) {
++				if (*(u64 *)loc != 0)
++					goto invalid_relocation;
++				write(loc, &val, 8);
++			} else {
++				write(loc, &zero, 8);
++			}
+ 			break;
+ 		case R_X86_64_32:
+-			if (*(u32 *)loc != 0)
+-				goto invalid_relocation;
+-			write(loc, &val, 4);
+-			if (val != *(u32 *)loc)
+-				goto overflow;
++			if (!clear) {
++				if (*(u32 *)loc != 0)
++					goto invalid_relocation;
++				write(loc, &val, 4);
++				if (val != *(u32 *)loc)
++					goto overflow;
++			} else {
++				write(loc, &zero, 4);
++			}
+ 			break;
+ 		case R_X86_64_32S:
+-			if (*(s32 *)loc != 0)
+-				goto invalid_relocation;
+-			write(loc, &val, 4);
+-			if ((s64)val != *(s32 *)loc)
+-				goto overflow;
++			if (!clear) {
++				if (*(s32 *)loc != 0)
++					goto invalid_relocation;
++				write(loc, &val, 4);
++				if ((s64)val != *(s32 *)loc)
++					goto overflow;
++			} else {
++				write(loc, &zero, 4);
++			}
+ 			break;
+ 		case R_X86_64_PC32:
+ 		case R_X86_64_PLT32:
+-			if (*(u32 *)loc != 0)
+-				goto invalid_relocation;
+-			val -= (u64)loc;
+-			write(loc, &val, 4);
++			if (!clear) {
++				if (*(u32 *)loc != 0)
++					goto invalid_relocation;
++				val -= (u64)loc;
++				write(loc, &val, 4);
+ #if 0
+-			if ((s64)val != *(s32 *)loc)
+-				goto overflow;
++				if ((s64)val != *(s32 *)loc)
++					goto overflow;
+ #endif
++			} else {
++				write(loc, &zero, 4);
++			}
+ 			break;
+ 		case R_X86_64_PC64:
+-			if (*(u64 *)loc != 0)
+-				goto invalid_relocation;
+-			val -= (u64)loc;
+-			write(loc, &val, 8);
++			if (!clear) {
++				if (*(u64 *)loc != 0)
++					goto invalid_relocation;
++				val -= (u64)loc;
++				write(loc, &val, 8);
++			} else {
++				write(loc, &zero, 8);
++			}
+ 			break;
+ 		default:
+ 			pr_err("%s: Unknown rela relocation: %llu\n",
+@@ -234,8 +256,8 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+ 		mutex_lock(&text_mutex);
+ 	}
+ 
+-	ret = __apply_relocate_add(sechdrs, strtab, symindex, relsec, me,
+-				   write);
++	ret = __apply_clear_relocate_add(sechdrs, strtab, symindex, relsec, me,
++					 write, false /* clear */);
+ 
+ 	if (!early) {
+ 		text_poke_sync();
+@@ -245,6 +267,32 @@ int apply_relocate_add(Elf64_Shdr *sechdrs,
+ 	return ret;
+ }
+ 
++#ifdef CONFIG_LIVEPATCH
++
++void clear_relocate_add(Elf64_Shdr *sechdrs,
++			const char *strtab,
++			unsigned int symindex,
++			unsigned int relsec,
++			struct module *me)
++{
++	bool early = me->state == MODULE_STATE_UNFORMED;
++	void *(*write)(void *, const void *, size_t) = memcpy;
++
++	if (!early) {
++		write = text_poke;
++		mutex_lock(&text_mutex);
++	}
++
++	__apply_clear_relocate_add(sechdrs, strtab, symindex, relsec, me,
++				   write, true /* clear */);
++
++	if (!early) {
++		text_poke_sync();
++		mutex_unlock(&text_mutex);
++	}
++}
++#endif
++
+ #endif
+ 
+ int module_finalize(const Elf_Ehdr *hdr,
+diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+index 9e09d11ffe5b..958e6da7f475 100644
+--- a/include/linux/moduleloader.h
++++ b/include/linux/moduleloader.h
+@@ -72,6 +72,13 @@ int apply_relocate_add(Elf_Shdr *sechdrs,
+ 		       unsigned int symindex,
+ 		       unsigned int relsec,
+ 		       struct module *mod);
++#ifdef CONFIG_LIVEPATCH
++void clear_relocate_add(Elf_Shdr *sechdrs,
++		   const char *strtab,
++		   unsigned int symindex,
++		   unsigned int relsec,
++		   struct module *me);
++#endif
+ #else
+ static inline int apply_relocate_add(Elf_Shdr *sechdrs,
+ 				     const char *strtab,
+diff --git a/kernel/livepatch/core.c b/kernel/livepatch/core.c
+index bc475e62279d..5c0d8a4eba13 100644
+--- a/kernel/livepatch/core.c
++++ b/kernel/livepatch/core.c
+@@ -316,6 +316,45 @@ int klp_apply_section_relocs(struct module *pmod, Elf_Shdr *sechdrs,
+ 	return apply_relocate_add(sechdrs, strtab, symndx, secndx, pmod);
+ }
+ 
++static void klp_clear_object_relocations(struct module *pmod,
++					struct klp_object *obj)
++{
++	int i, cnt;
++	const char *objname, *secname;
++	char sec_objname[MODULE_NAME_LEN];
++	Elf_Shdr *sec;
++
++	objname = klp_is_module(obj) ? obj->name : "vmlinux";
++
++	/* For each klp relocation section */
++	for (i = 1; i < pmod->klp_info->hdr.e_shnum; i++) {
++		sec = pmod->klp_info->sechdrs + i;
++		secname = pmod->klp_info->secstrings + sec->sh_name;
++		if (!(sec->sh_flags & SHF_RELA_LIVEPATCH))
++			continue;
++
++		/*
++		 * Format: .klp.rela.sec_objname.section_name
++		 * See comment in klp_resolve_symbols() for an explanation
++		 * of the selected field width value.
++		 */
++		secname = pmod->klp_info->secstrings + sec->sh_name;
++		cnt = sscanf(secname, ".klp.rela.%55[^.]", sec_objname);
++		if (cnt != 1) {
++			pr_err("section %s has an incorrectly formatted name\n",
++			       secname);
++			continue;
++		}
++
++		if (strcmp(objname, sec_objname))
++			continue;
++
++		clear_relocate_add(pmod->klp_info->sechdrs,
++				   pmod->core_kallsyms.strtab,
++				   pmod->klp_info->symndx, i, pmod);
++	}
++}
++
+ /*
+  * Sysfs Interface
+  *
+@@ -1154,7 +1193,7 @@ static void klp_cleanup_module_patches_limited(struct module *mod,
+ 			klp_unpatch_object(obj);
+ 
+ 			klp_post_unpatch_callback(obj);
+-
++			klp_clear_object_relocations(patch->mod, obj);
+ 			klp_free_object_loaded(obj);
+ 			break;
+ 		}
+-- 
+2.30.2
+

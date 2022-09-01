@@ -2,327 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C9E5A954C
+	by mail.lfdr.de (Postfix) with ESMTP id BFDAF5A954D
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234422AbiIALBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 07:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
+        id S234429AbiIALCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234406AbiIALBC (ORCPT
+        with ESMTP id S234465AbiIALBs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 07:01:02 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE21011E81D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 04:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662030056; x=1693566056;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RtYK0BiDVziXnFNqLQQMzxTLP+0jwAiG2RMhkIE91Vo=;
-  b=WQgNx6W8SBugKEbKH8mD7k2WvPL2HSOqzfhR6ouqT0tcl7ZWt6x0d65q
-   Qw5sv7wvhqk8AKOF7lPRRkSwD94HPEjsRyWdO+YSMWCZOL7pAvU1ZX+SS
-   TunCRA/MH6OkGvYPEUEO9J2drbVFlIzFceRSdr3BYVgM6GjLwLkBMWGHt
-   8S79l7syJ3EZla+nxYgCtBumMp1BiQwToEZEKAGTYuF8EZNNG/TjDVtlv
-   P5xI8j8n1BmF3k1W0GO8iyff3EE3l1KR/S6IMBNl1Me3iNdJevrm1nttD
-   cwC90Tpe0DzCt4uKfor/1kP0T2LzMxLlaVD1m7fS9VnARLdWrtNJWPZxs
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="294424832"
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="294424832"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 04:00:56 -0700
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="673799696"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO ahunter-VirtualBox.home\044ger.corp.intel.com) ([10.252.42.13])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 04:00:54 -0700
-From:   Adrian Hunter <adrian.hunter@intel.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 5/5] perf intel-pt: Support itrace option flag d+e to log on error
-Date:   Thu,  1 Sep 2022 14:00:32 +0300
-Message-Id: <20220901110032.9226-6-adrian.hunter@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220901110032.9226-1-adrian.hunter@intel.com>
-References: <20220901110032.9226-1-adrian.hunter@intel.com>
+        Thu, 1 Sep 2022 07:01:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B5A20139F58;
+        Thu,  1 Sep 2022 04:01:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 34134D6E;
+        Thu,  1 Sep 2022 04:01:37 -0700 (PDT)
+Received: from [10.57.18.92] (unknown [10.57.18.92])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF7353F766;
+        Thu,  1 Sep 2022 04:01:28 -0700 (PDT)
+Message-ID: <e01e6ef2-ba45-7433-5fe4-a6806dac3af9@arm.com>
+Date:   Thu, 1 Sep 2022 12:01:23 +0100
 MIME-Version: 1.0
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v4 1/2] iommu/s390: Fix race with release_device ops
+Content-Language: en-GB
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev
+Cc:     linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        jgg@nvidia.com, linux-kernel@vger.kernel.org
+References: <20220831201236.77595-1-mjrosato@linux.ibm.com>
+ <20220831201236.77595-2-mjrosato@linux.ibm.com>
+ <9887e2f4-3f3d-137d-dad7-59dab5f98aab@linux.ibm.com>
+ <52d3fe0b86bdc04fdbf3aae095b2f71f4ea12d44.camel@linux.ibm.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <52d3fe0b86bdc04fdbf3aae095b2f71f4ea12d44.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pass d+e option and log size via intel_pt_log_enable(). Allocate a buffer
-for log messages and provide intel_pt_log_dump_buf() to dump and reset the
-buffer upon decoder errors.
+On 2022-09-01 10:37, Niklas Schnelle wrote:
+> On Thu, 2022-09-01 at 09:56 +0200, Pierre Morel wrote:
+>>
+>> On 8/31/22 22:12, Matthew Rosato wrote:
+>>> With commit fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev
+>>> calls") s390-iommu is supposed to handle dynamic switching between IOMMU
+>>> domains and the DMA API handling.  However, this commit does not
+>>> sufficiently handle the case where the device is released via a call
+>>> to the release_device op as it may occur at the same time as an opposing
+>>> attach_dev or detach_dev since the group mutex is not held over
+>>> release_device.  This was observed if the device is deconfigured during a
+>>> small window during vfio-pci initialization and can result in WARNs and
+>>> potential kernel panics.
+>>>
+>>> Handle this by tracking when the device is probed/released via
+>>> dev_iommu_priv_set/get().  Ensure that once the device is released only
+>>> release_device handles the re-init of the device DMA.
+>>>
+>>> Fixes: fa7e9ecc5e1c ("iommu/s390: Tolerate repeat attach_dev calls")
+>>> Signed-off-by: Matthew Rosato <mjrosato@linux.ibm.com>
+>>> ---
+>>>    arch/s390/include/asm/pci.h |  1 +
+>>>    arch/s390/pci/pci.c         |  1 +
+>>>    drivers/iommu/s390-iommu.c  | 39 ++++++++++++++++++++++++++++++++++---
+>>>    3 files changed, 38 insertions(+), 3 deletions(-)
+>>>
+>>>
+> ---8<---
+>>>    
+>>> @@ -206,10 +221,28 @@ static void s390_iommu_release_device(struct device *dev)
+>>>
+>>
+> ---8<---
+>>> +		/* Make sure this device is removed from the domain list */
+>>>    		domain = iommu_get_domain_for_dev(dev);
+>>>    		if (domain)
+>>>    			s390_iommu_detach_device(domain, dev);
+>>> +		/* Now ensure DMA is initialized from here */
+>>> +		mutex_lock(&zdev->dma_domain_lock);
+>>> +		if (zdev->s390_domain) {
+>>> +			zdev->s390_domain = NULL;
+>>> +			zpci_unregister_ioat(zdev, 0);
+>>> +			zpci_dma_init_device(zdev);
+>>
+>> Sorry if it is a stupid question, but two things looks strange to me:
+>>
+>> - having DMA initialized just after having unregistered the IOAT
+>> Is that really all we need to unregister before calling dma_init_device?
+>>
+>> - having DMA initialized inside the release_device callback:
+>> Why isn't it done in the device_probe ?
+> 
+> As I understand it iommu_release_device() which calls this code is only
+> used when a device goes away. So, I think you're right in that it makes
+> little sense to re-initialize DMA at this point, it's going to be torn
+> down immediately after anyway. I do wonder if it would be an acceptably
+> small change to just set zdev->s390_domain = NULL here and leave DMA
+> uninitialized while making zpci_dma_exit_device() deal with that e.g.
+> by doing nothing if zdev->dma_table is NULL but I'm not sure.
+> 
+> Either way I fear this mess really is just a symptom of our current
+> design oddity of driving the same IOMMU hardware through both our DMA
+> API implementation (arch/s390/pci_dma.c) and the IOMMU driver
+> (driver/iommu/s390-iommu.c) and trying to hand off between them
+> smoothly where common code instead just layers one atop the other when
+> using an IOMMU at all.
+> 
+> I think the correct medium term solution is to use the common DMA API
+> implementation (drivers/iommu/dma-iommu.c) like everyone else. But that
+> isn't the minimal fix we need now.
+> 
+> I do have a working prototype of using the common implementation but
+> the big problem that I'm still searching a solution for is its
+> performance with a virtualized IOMMU where IOTLB flushes (RPCIT on
+> s390) are used for shadowing and are expensive and serialized. The
+> optimization we used so far for unmap, only doing one global IOTLB
+> flush once we run out of IOVA space, is just too much better in that
+> scenario to just ignore. As one data point, on an NVMe I get about
+> _twice_ the IOPS when using our existing scheme compared to strict
+> mode. Which makes sense as IOTLB flushes are known as the bottleneck
+> and optimizing unmap like that reduces them by almost half. Queued
+> flushing is still much worse likely due to serialization of the
+> shadowing, though again it works great on LPAR. To make sure it's not
+> due to some bug in the IOMMU driver I even tried converting our
+> existing DMA driver to layer on top of the IOMMU driver with the same
+> result.
 
-Example:
+FWIW, can you approximate the same behaviour by just making IOVA_FQ_SIZE 
+and IOVA_FQ_TIMEOUT really big, and deferring your zpci_refresh_trans() 
+hook from .unmap to .flush_iotlb_all when in non-strict mode?
 
- $ sudo perf record -e intel_pt// sleep 1
- [ perf record: Woken up 1 times to write data ]
- [ perf record: Captured and wrote 0.094 MB perf.data ]
- $ sudo perf config itrace.debug-log-buffer-size=300
- $ sudo perf script --itrace=ed+e+o | head -20
- Dumping debug log buffer (first line may be sliced)
-                                         Other
-           ffffffff96ca22f6:  48 89 e5                                        Other
-           ffffffff96ca22f9:  65 48 8b 05 ff e0 38 69                         Other
-           ffffffff96ca2301:  48 3d c0 a5 c1 98                               Other
-           ffffffff96ca2307:  74 08                                           Jcc +8
-           ffffffff96ca2311:  5d                                              Other
-           ffffffff96ca2312:  c3                                              Ret
- ERROR: Bad RET compression (TNT=N) at 0xffffffff96ca2312
- End of debug log buffer dump
-  instruction trace error type 1 time 15913.537143482 cpu 5 pid 36292 tid 36292 ip 0xffffffff96ca2312 code 6: Trace doesn't match instruction
- Dumping debug log buffer (first line may be sliced)
-                                        Other
-           ffffffff96ce7fe9:  f6 47 2e 20                                     Other
-           ffffffff96ce7fed:  74 11                                           Jcc +17
-           ffffffff96ce7fef:  48 8b 87 28 0a 00 00                            Other
-           ffffffff96ce7ff6:  5d                                              Other
-           ffffffff96ce7ff7:  48 8b 40 18                                     Other
-           ffffffff96ce7ffb:  c3                                              Ret
- ERROR: Bad RET compression (TNT=N) at 0xffffffff96ce7ffb
- Warning:
- 8 instruction trace errors
+I'm not against the idea of trying to support this mode of operation 
+better in the common code, since it seems like it could potentially be 
+useful for *any* virtualised scenario where trapping to invalidate is 
+expensive and the user is happy to trade off the additional address 
+space/memory overhead (and even greater loss of memory protection) 
+against that.
 
-Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
----
- tools/perf/Documentation/perf-intel-pt.txt    |  5 +-
- .../perf/util/intel-pt-decoder/intel-pt-log.c | 94 ++++++++++++++++++-
- .../perf/util/intel-pt-decoder/intel-pt-log.h |  3 +-
- tools/perf/util/intel-pt.c                    | 20 +++-
- 4 files changed, 117 insertions(+), 5 deletions(-)
-
-diff --git a/tools/perf/Documentation/perf-intel-pt.txt b/tools/perf/Documentation/perf-intel-pt.txt
-index d5ddb968bcf4..92464a5d7eaf 100644
---- a/tools/perf/Documentation/perf-intel-pt.txt
-+++ b/tools/perf/Documentation/perf-intel-pt.txt
-@@ -989,10 +989,13 @@ must be preceded by either '+' or '-'. The flags support by Intel PT are:
- 
- 		-a	Suppress logging of perf events
- 		+a	Log all perf events
-+		+e	Output only on decoding errors (size configurable)
- 		+o	Output to stdout instead of "intel_pt.log"
- 
- By default, logged perf events are filtered by any specified time ranges, but
--flag +a overrides that.
-+flag +a overrides that.  The +e flag can be useful for analyzing errors.  By
-+default, the log size in that case is 16384 bytes, but can be altered by
-+linkperf:perf-config[1] e.g. perf config itrace.debug-log-buffer-size=30000
- 
- In addition, the period of the "instructions" event can be specified. e.g.
- 
-diff --git a/tools/perf/util/intel-pt-decoder/intel-pt-log.c b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
-index 5f5dfc8753f3..ea96dcae187a 100644
---- a/tools/perf/util/intel-pt-decoder/intel-pt-log.c
-+++ b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
-@@ -5,12 +5,16 @@
-  */
- 
- #include <stdio.h>
-+#include <stdlib.h>
- #include <stdint.h>
- #include <inttypes.h>
- #include <stdarg.h>
- #include <stdbool.h>
- #include <string.h>
- 
-+#include <linux/zalloc.h>
-+#include <linux/kernel.h>
-+
- #include "intel-pt-log.h"
- #include "intel-pt-insn-decoder.h"
- 
-@@ -21,15 +25,20 @@
- static FILE *f;
- static char log_name[MAX_LOG_NAME];
- bool intel_pt_enable_logging;
-+static bool intel_pt_dump_log_on_error;
-+static unsigned int intel_pt_log_on_error_size;
-+static struct log_buf log_buf;
- 
- void *intel_pt_log_fp(void)
- {
- 	return f;
- }
- 
--void intel_pt_log_enable(void)
-+void intel_pt_log_enable(bool dump_log_on_error, unsigned int log_on_error_size)
- {
- 	intel_pt_enable_logging = true;
-+	intel_pt_dump_log_on_error = dump_log_on_error;
-+	intel_pt_log_on_error_size = log_on_error_size;
- }
- 
- void intel_pt_log_disable(void)
-@@ -74,6 +83,87 @@ static void intel_pt_print_no_data(uint64_t pos, int indent)
- 	fprintf(f, " ");
- }
- 
-+#define DFLT_BUF_SZ	(16 * 1024)
-+
-+struct log_buf {
-+	char			*buf;
-+	size_t			buf_sz;
-+	size_t			head;
-+	bool			wrapped;
-+	FILE			*backend;
-+};
-+
-+static ssize_t log_buf__write(void *cookie, const char *buf, size_t size)
-+{
-+	struct log_buf *b = cookie;
-+	size_t sz = size;
-+
-+	if (!b->buf)
-+		return size;
-+
-+	while (sz) {
-+		size_t space = b->buf_sz - b->head;
-+		size_t n = min(space, sz);
-+
-+		memcpy(b->buf + b->head, buf, n);
-+		sz -= n;
-+		buf += n;
-+		b->head += n;
-+		if (sz && b->head >= b->buf_sz) {
-+			b->head = 0;
-+			b->wrapped = true;
-+		}
-+	}
-+	return size;
-+}
-+
-+static int log_buf__close(void *cookie)
-+{
-+	struct log_buf *b = cookie;
-+
-+	zfree(&b->buf);
-+	return 0;
-+}
-+
-+static FILE *log_buf__open(struct log_buf *b, FILE *backend, unsigned int sz)
-+{
-+	cookie_io_functions_t fns = {
-+		.write = log_buf__write,
-+		.close = log_buf__close,
-+	};
-+	FILE *file;
-+
-+	memset(b, 0, sizeof(*b));
-+	b->buf_sz = sz;
-+	b->buf = malloc(b->buf_sz);
-+	b->backend = backend;
-+	file = fopencookie(b, "a", fns);
-+	if (!file)
-+		zfree(&b->buf);
-+	return file;
-+}
-+
-+static void log_buf__dump(struct log_buf *b)
-+{
-+	if (!b->buf)
-+		return;
-+
-+	fflush(f);
-+	fprintf(b->backend, "Dumping debug log buffer (first line may be sliced)\n");
-+	if (b->wrapped)
-+		fwrite(b->buf + b->head, b->buf_sz - b->head, 1, b->backend);
-+	fwrite(b->buf, b->head, 1, b->backend);
-+	fprintf(b->backend, "End of debug log buffer dump\n");
-+
-+	b->head = 0;
-+	b->wrapped = false;
-+}
-+
-+void intel_pt_log_dump_buf(void)
-+{
-+	log_buf__dump(&log_buf);
-+}
-+
- static int intel_pt_log_open(void)
- {
- 	if (!intel_pt_enable_logging)
-@@ -86,6 +176,8 @@ static int intel_pt_log_open(void)
- 		f = fopen(log_name, "w+");
- 	else
- 		f = stdout;
-+	if (f && intel_pt_dump_log_on_error)
-+		f = log_buf__open(&log_buf, f, intel_pt_log_on_error_size);
- 	if (!f) {
- 		intel_pt_enable_logging = false;
- 		return -1;
-diff --git a/tools/perf/util/intel-pt-decoder/intel-pt-log.h b/tools/perf/util/intel-pt-decoder/intel-pt-log.h
-index d900aab24b21..354d7d23fc81 100644
---- a/tools/perf/util/intel-pt-decoder/intel-pt-log.h
-+++ b/tools/perf/util/intel-pt-decoder/intel-pt-log.h
-@@ -14,9 +14,10 @@
- struct intel_pt_pkt;
- 
- void *intel_pt_log_fp(void);
--void intel_pt_log_enable(void);
-+void intel_pt_log_enable(bool dump_log_on_error, unsigned int log_on_error_size);
- void intel_pt_log_disable(void);
- void intel_pt_log_set_name(const char *name);
-+void intel_pt_log_dump_buf(void);
- 
- void __intel_pt_log_packet(const struct intel_pt_pkt *packet, int pkt_len,
- 			   uint64_t pos, const unsigned char *buf);
-diff --git a/tools/perf/util/intel-pt.c b/tools/perf/util/intel-pt.c
-index c01ff8001501..b34cb3dec1aa 100644
---- a/tools/perf/util/intel-pt.c
-+++ b/tools/perf/util/intel-pt.c
-@@ -2419,6 +2419,8 @@ static int intel_pt_synth_error(struct intel_pt *pt, int code, int cpu,
- 				pid_t pid, pid_t tid, u64 ip, u64 timestamp,
- 				pid_t machine_pid, int vcpu)
- {
-+	bool dump_log_on_error = pt->synth_opts.log_plus_flags & AUXTRACE_LOG_FLG_ON_ERROR;
-+	bool log_on_stdout = pt->synth_opts.log_plus_flags & AUXTRACE_LOG_FLG_USE_STDOUT;
- 	union perf_event event;
- 	char msg[MAX_AUXTRACE_ERROR_MSG];
- 	int err;
-@@ -2438,6 +2440,16 @@ static int intel_pt_synth_error(struct intel_pt *pt, int code, int cpu,
- 				   code, cpu, pid, tid, ip, msg, timestamp,
- 				   machine_pid, vcpu);
- 
-+	if (intel_pt_enable_logging && !log_on_stdout) {
-+		FILE *fp = intel_pt_log_fp();
-+
-+		if (fp)
-+			perf_event__fprintf_auxtrace_error(&event, fp);
-+	}
-+
-+	if (code != INTEL_PT_ERR_LOST && dump_log_on_error)
-+		intel_pt_log_dump_buf();
-+
- 	err = perf_session__deliver_synth_event(pt->session, &event, NULL);
- 	if (err)
- 		pr_err("Intel Processor Trace: failed to deliver error event, error %d\n",
-@@ -4272,8 +4284,12 @@ int intel_pt_process_auxtrace_info(union perf_event *event,
- 		goto err_delete_thread;
- 	}
- 
--	if (pt->synth_opts.log)
--		intel_pt_log_enable();
-+	if (pt->synth_opts.log) {
-+		bool log_on_error = pt->synth_opts.log_plus_flags & AUXTRACE_LOG_FLG_ON_ERROR;
-+		unsigned int log_on_error_size = pt->synth_opts.log_on_error_size;
-+
-+		intel_pt_log_enable(log_on_error, log_on_error_size);
-+	}
- 
- 	/* Maximum non-turbo ratio is TSC freq / 100 MHz */
- 	if (pt->tc.time_mult) {
--- 
-2.25.1
-
+Robin.

@@ -2,336 +2,544 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 578A55A8E57
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:36:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69E95A8E5A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbiIAGgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35756 "EHLO
+        id S233128AbiIAGh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233133AbiIAGgV (ORCPT
+        with ESMTP id S231843AbiIAGhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:36:21 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2B8979D1;
-        Wed, 31 Aug 2022 23:36:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662014174; x=1693550174;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=ogB39jQwWSObeNHBvepWfJN2dIcdD1XEppoqtvaFkXs=;
-  b=NDCnLvCCVd3woywlANsKNP7d1JFvFjj3GhctKfx/iOeCQ9kcrS0bj2QW
-   Xu2v/F1etxgA+16sHMPM1DY3Ul3bG2yFUlbhJS9Fl38Ehm6quwAj6mqHQ
-   6DXKcbBtjCUEMogsJ93Lf7NvFQDmFKtKe8HIrNNmIKSwCmwkoqxFErfxn
-   ruRb5REVRegcPLChUGZmTxCprHylQzG661ueaJAcQyWOU3IOqYCobwF5v
-   xkJUkRRj7V6XncS26i924GirsXy7LqE8k24w4XDKQVhiEVxkx4dzBPRD5
-   fRDhcZn+y+vV8B5YI7uM1uxsXE3UmtgnEHDtpKLz6FUHT95dxIQitfJh4
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="188943446"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Aug 2022 23:36:10 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 31 Aug 2022 23:36:10 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
- Transport; Wed, 31 Aug 2022 23:36:10 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gy07hJOpNiDNia52pKhK/Fg/Z0KjvSNX1u0W4kSzgvLY8W2QH2YkOcbalh3tWwIiNastg1hKGMuceWQLIz1BTpZZPWtFEb1kLSM4NrK7uZZem8OMS3laW3TymSlW9iHyTgj3vSNHmM/n0fYGsu4PUPW0mUgMY5EEuExr58d9hnttCUvb6eWbVMxxdwmmDkYv93MaCDIV1gTyinjAJpBCGMW8zVWDO3uUEhxgM4qGKJLhTvGMOlf2RmZcrkQJ9VMOBWy2VFTXNFA46qWN2+HB8a5hNFfNi8UE1sHnYmO34jJlnlY+6ivWAQD6ldJ6iEKtKIS5CraOKd3ZrW+AfPfLAw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ogB39jQwWSObeNHBvepWfJN2dIcdD1XEppoqtvaFkXs=;
- b=hvzxuISzRd9RY2PQvqnBfe3WJPX0wX3IahA/ebTI4BGtXBYH7EFwRJ7QmUNM5k8ygpdIIDpVtgW/NQ2webRJ8LbgOsC0abAqGErRM9dzW3CBS27U2IPxJso/CpQARz7etJdJs4pE3PYZTKagGASAIVg7bA7Yumw8tlSLOnF34ZhTgxrfNLvXObXCk9AR2k0zXYnqiNAe6YQpp1B94Hts9NNZ57BiUGzxVkCu5yUYybQALwIel0pWRllv9GWByBkhmxm7ZXFkaKMKN97GmdmRfv8Kj89j6fBMuVZTAlVcQrtucXFSX1iOyR3g8jlztP7BC35dKoB6eue3Mw1B0J0CpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+        Thu, 1 Sep 2022 02:37:21 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 759C8C0BD4
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:37:19 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id o123so16804074vsc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:37:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ogB39jQwWSObeNHBvepWfJN2dIcdD1XEppoqtvaFkXs=;
- b=GOhsh0hGT2bsrrMM3lFyElLco/tpLUDIOx1RCNeNxJvcnoKsJarI+2HW9aZkFwk40P6Lm0pD922O8nwU/unK3/bf/f5liWAwPGOlF+yhDsQHA/NzIF99FcaSJ3xClwqltAjWSigyc0RdPsTaq5zvYIyoqJHGgIEG3MHFoawzsrQ=
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
- by PH0PR11MB5643.namprd11.prod.outlook.com (2603:10b6:510:d5::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Thu, 1 Sep
- 2022 06:36:05 +0000
-Received: from BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::a159:97ec:24bc:6610]) by BN6PR11MB1953.namprd11.prod.outlook.com
- ([fe80::a159:97ec:24bc:6610%10]) with mapi id 15.20.5566.021; Thu, 1 Sep 2022
- 06:36:05 +0000
-From:   <Claudiu.Beznea@microchip.com>
-To:     <Sergiu.Moga@microchip.com>, <lee@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <Nicolas.Ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-        <radu_nicolae.pirea@upb.ro>, <richard.genoud@gmail.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-        <admin@hifiphile.com>, <Kavyasree.Kotagiri@microchip.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>, <linux-serial@vger.kernel.org>
-Subject: Re: [PATCH 5/5] tty: serial: atmel: Make the driver aware of the
- existence of GCLK
-Thread-Topic: [PATCH 5/5] tty: serial: atmel: Make the driver aware of the
- existence of GCLK
-Thread-Index: AQHYvR6Ei2ZQH++jXUSygHOJRrCWrA==
-Date:   Thu, 1 Sep 2022 06:36:05 +0000
-Message-ID: <e8b24ecc-4061-e240-9c21-d888e6a90463@microchip.com>
-References: <20220817075517.49575-1-sergiu.moga@microchip.com>
- <20220817075517.49575-6-sergiu.moga@microchip.com>
- <b29233a6-88f8-42cd-806f-6b3e82cb0b27@microchip.com>
- <ecd3a33a-7cf1-31b7-af06-597ac8625e5f@microchip.com>
-In-Reply-To: <ecd3a33a-7cf1-31b7-af06-597ac8625e5f@microchip.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 793a2d61-d1cc-4d00-0f6f-08da8be43f0f
-x-ms-traffictypediagnostic: PH0PR11MB5643:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 4oPixFP0SjCSRSvkwRhblmryXf1Rzx9UyShcsHgQ8+dlPjlqJ5lU3CjlD9yZRnV7VynwhWoo3aCLTd2X6MV+Po6n6CxjhFp+thrjXxUmzbdzBFyUQ08q2VoODSuGB2Il9jOJjeLHK7Ct50BxO3u8UFCFbwjp3DlXReL/RUguif39bTkuakuDXI75csecuiitdpP3drMQH8eZ8ToLHW2bDNdZRGiXPbJ/fk+n6zRxxE2gZRzX+9rKTfrQOD1b0Tqa8jU6qKQ0U4NF16yAsePuORdmIrGXxyUKeNYZFbLauMtfzaSi+fUwwZPSNJ1okbVlvxgMRN6jSZaJPYiKWqZcRfqSe19L7c7V1eCD0RauNvuoc+lWFpIRIK7Ux5Vxkl7YLxcT8pYKW9PGLLdRVeno/INn8QbwHeXXhKP5wVA0ksoFvIGIXlfGITBklQT3Cq39iplqNS98hmHbxadWbUXS8NxglO+BCo2WYryWZHhJ5NM4+VTVbRliewapWej5vEeK0Alm7HnttXanVYMgWfFPh9tPSgOrE5vgprKVsMgVXJP34v4mSAHnEPsXeCjRfe0HqPX4+IQR+u7ZjvfASs/Mad4tOaR2SlMnpfVWaBcCeUit5OAeQ6cuYm2FpfmEBUgQcuMV8grBeSIzemSmjdieieDZUABV/6AzRO0X/tTalfGLpSI7QbjKS4M4OXl/NQY1QUmw6pP0m9AS4z7jUfoPOejKn5haShbedpLLQRZXUBvpdOnMDQYbLeXXvioitm+c2Ri7SpStBzn9W7XTQ2bpgjQ1V/jlX4zupB4m8ED2ljUAe4S0k7c7f9QsBoAYgzZ6ednRChZ1iUb9/+x8DXvaGWbaFNm+IUzXlLhtS/wl+jQ=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(136003)(376002)(396003)(366004)(39860400002)(122000001)(83380400001)(38070700005)(38100700002)(66556008)(316002)(110136005)(64756008)(71200400001)(66476007)(8676002)(66446008)(4326008)(66946007)(478600001)(54906003)(76116006)(36756003)(6486002)(91956017)(31686004)(6636002)(8936002)(5660300002)(41300700001)(921005)(31696002)(86362001)(2616005)(186003)(7416002)(26005)(6506007)(2906002)(6512007)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?cFB5VzNOTFlybCtiT0d4eVZXbGpQYittU29ZUFoxcXUrNkp0ZkJmZnVKRWlP?=
- =?utf-8?B?R3Z6QTdOd0EvV1Z6WFNGMGdyekxEQ1hQQmJWUGVsMi9QZ0JTSHBhdWhtRXdW?=
- =?utf-8?B?MkVHVTR2a091aTN0dzk0azJLOGlGWVZMTzdHbFNKWlExakRHcVFuNGxtVm1H?=
- =?utf-8?B?dkwzL1lYYkdMaWFZV0xUd296dG9YcklybS9sK2JyL0lYUnBhMTNVUFpxNFlt?=
- =?utf-8?B?UEhhY04rY1V4NzNKQ1dpb1RPZUZ5dTQ2YWNKbmVpMFcvbjFjWWJ1MUVNWlMz?=
- =?utf-8?B?Qk5UYURERGtCazhtUGU4VzJjYU03bm9OSGlZV09iRVFYOTZSRDY5ZDNQL0hH?=
- =?utf-8?B?Zm5hYXA1MWRMRWE4UTQwUDIyUjNVcHhPUUx5M0t4UFlMVmNkMi9JOXduNFJZ?=
- =?utf-8?B?OEpIQlJCM2huS1pucDhtYXlzRitrVGRkSEpvYVJBUm0wSEluQ2JnYlBHeFVP?=
- =?utf-8?B?MUIrNVd2WG44VE1udGY2cmNrVGdXSlpHTnJDaWRLY3ZGbTBkeTVYUWVzYmY3?=
- =?utf-8?B?ZkgxcHpLbGp4QnVtUktCOHZNcE1HQWFSUGEyK2ZrdWZERnozbms1TWRRNVJT?=
- =?utf-8?B?ZHgvMlFnUmVENHY0djV4VHJYd2VDVEtxc2lUNkRUL0I3N2xJZDl6WTlZMXho?=
- =?utf-8?B?OXB4S2ExVjBaQ2pNZCt1UDVQVmlySmk2TW5NeWlOYTV1R01ycDAxTGc3UUp1?=
- =?utf-8?B?Y25iakg3cCtmaUM3RmFGclhoRER1NExTWnN6cTEvQTQ3aCsrOGE1SzZzUjV2?=
- =?utf-8?B?cDhqZTUzNzdPRVQzTnE0bWgzNnEwWXdLQ0ExVC9ZcnRlWlVOWHZBQlFWbXpM?=
- =?utf-8?B?b0k2NTM3a25NSGxWcEkrT3Z1SzhsMmp5U0lBQnZlc2ZMUGRmckZZNldBUXdU?=
- =?utf-8?B?aUVXRFovS3dELzgwQlpsdFZyZTFxVUFtTDhSUnc0aXZ1blUwalpWYW9PWEoz?=
- =?utf-8?B?Y0Z6blAzMXBXRnFaZWFQWmQ1RGxTTUpuTmR0TlFZK0NFM2lQRDg0SzlmSU1a?=
- =?utf-8?B?YnVIY2F3VjRydGpoWndJSmkzLytIM25SR05kYjZtRmp2eVFMUDB2c1BFVzR4?=
- =?utf-8?B?US9HMHpjKy9ncXF3RkI0Zm1kUjE4NWdxUDJjSGxlN2JiLzJMTXVVQlUrck0y?=
- =?utf-8?B?cjNxbTRlUE9RaVd1ZDM0RWp4amN3SXBDU20rQ2Z6aEdzYTF2c2lCWjlhaldM?=
- =?utf-8?B?bkw4MlRya01Lc0NoSDYvVkpLa1VpMXZOaFdXeGpiNE1ESWZmL0ZEWVhLdTBy?=
- =?utf-8?B?eWo5Qk1LY21pTVVVSG40bTd1dEVrbnBoU1B0UDRCa2VFZS9nLzNLUGpURFk4?=
- =?utf-8?B?WHo5bHp2OHROVkJsbmZ3S0M3TDVqajA5RXVucGljajNGMTkzUEtTWDVzVXBG?=
- =?utf-8?B?RzZXc2RKSVdKVUtVQW9KcUpjNkJsZFRLdGdTMVd2dFg2UTMwUzVQV0dJeWN3?=
- =?utf-8?B?SHgrc2xEZ0I3RXJjRlYzaVF2OTZZY29MYVJhcTFHdXh1QjR4eHhMZENuTy9x?=
- =?utf-8?B?SjRRbjVwYWc0dWxHWjE0M3AxcjJDaVY5S05CN2krbG9EQUg4VHFBbG84cDNW?=
- =?utf-8?B?QW1NQnZyZnM3bThXZTM5cDBNNGR5WHJSUXJ3Zkw5ZUZiTisrQkhudUtaM3Ax?=
- =?utf-8?B?SjZaN2VRaXU4U1h5djR5bWZJVWJRTDBtZEQ3dXRxZjhHRHZUNWdQRmJxeGhN?=
- =?utf-8?B?azRoMlRqWUhzL3A5V0tHNmptVDZvUkY5TGxyVlA3NWJ5V3EzWm1weHFZSjVi?=
- =?utf-8?B?NHB0SzVRZ2RuMnhnNUdPU1E0Q0NlT0U0anhHd2lHbVpzZjBlSkRzV0s1K3VL?=
- =?utf-8?B?anIrWU1DK0JXTnRmTmRBMEFsalJvQmVFaFpDdHE0TndpaTBNVGc3ZzBPS1lK?=
- =?utf-8?B?YTh1YzFFVFRaUXN1ZjJjekV6RzFqZVVIZXRFdlN4aXV5TWxZZk9TWm5Qa2Mw?=
- =?utf-8?B?Z2ExcGZXTStmL2YrYzRIQitxcW1qQWR1SWkwREx2TzlxMWwwZUJqc0IzQkxX?=
- =?utf-8?B?djFXT1Y5VkM4b3BNT2NSTXhFM2xxNldMQ0JXNFlEaytwbmFZbWorSno2OFZn?=
- =?utf-8?B?cVVFWVVERUtxK2toN1ZHdDZCYnNXUmhvcUovMEd5K0tHOGhSaFRad2xOUVVL?=
- =?utf-8?B?ZkRZbm4yR1p3VlNnUExmV3ZlR2xRci8zMDJ1WVZ3cFNMcEU4OE0xbElPQmRE?=
- =?utf-8?B?SkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <878CC1F9F61EB54BAC04718B8286FDD8@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=H9CkmWrhh8cqI5kSGquOJoEwqLryEu1HXmjGxufRHAQ=;
+        b=pauAGB7V8aNYfO5rKcMQaJFZoqnlAvnhMN6GYQDQoK++zi9fsTLIjY/TplotLxfFvE
+         78wp+g4bzVhy8YiRWr1gyU3QWIzQGi7vUhWWAZdfUELZF0ZuH0y2QKo5WPjv43XouLKf
+         A8tCceonec7f0fu/MMC9fXSq9N8ZethrI8V5TFnoKQI8KNwrnCKM2El1e0H0+2DI9vA7
+         jsAQlHw1oF9R2FcQHvb2x0rSGkUoA0RsEVqleT7Hl+1ingi60gVMqAtYUZqNLfJ4VeMz
+         goCHnstlnjwKJznQPj+e+DH27xrWZAIaBbv4iOg9Hak36TSB8Le89XoDRlh1pbgxNFoq
+         WSEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=H9CkmWrhh8cqI5kSGquOJoEwqLryEu1HXmjGxufRHAQ=;
+        b=wFBvfhUmrkFyMZH6zirzkNC3J6UC2n7lagLTuqM5tKuEwYd3ttuPZivxrKlui4jzX6
+         80HfBUVqi09WjH841QO3QV3T8AaY3pZ1HT7brfWAyAgBCAs6hbTezjUdCuwe/0tMOSxf
+         Xe0RRLudUeueKOFVMpKikS4xLaKGAEopMR/V2qFpQwCiknYI/Bm23w1iNZWTty0HsITZ
+         nVaXDeKbKzkbBDtUGhdtxkDoiSPtZa4ad8jQAAll6CKndMu0JBziv8Fcf7jzSQSWi5Qs
+         Fmg4B9LzQK3o5IdMPL8uLP4axc7r1FeLmuHCSxPkMwV8Nl1JEBk2J/y3r1K0FJuPbLbs
+         +NGg==
+X-Gm-Message-State: ACgBeo3P8e0wqgzT8IBMUwecKV5jm/ss8/ggmfeD+m8LQHzY9jzD0xeQ
+        AQ7O1GmpCi+OJhGsV+D77FSCjdL9nuxXBRfAhlOwow==
+X-Google-Smtp-Source: AA6agR4NAV19QWIHoFEXU6O+uthAhDMaD87xdUwCVjxquvOW+2ucg/oF3TA8+SwqtmHQeMF+H6kECODeanHrPnTUA0g=
+X-Received: by 2002:a05:6102:38c6:b0:390:e7e4:8a7e with SMTP id
+ k6-20020a05610238c600b00390e7e48a7emr5592768vst.38.1662014238449; Wed, 31 Aug
+ 2022 23:37:18 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 793a2d61-d1cc-4d00-0f6f-08da8be43f0f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2022 06:36:05.2946
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: cZhj3fFsVu65u6JjO/6UYMJr2VEMbOg6daGQFDW7jEKAQPgxI1QhOxNQwt+4hD3IVyqWcWSf2ns/pCcPKFb/M8LDRRlfoJbjcJbfGlr+22w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5643
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220829000920.38185-1-isabbasso@riseup.net> <20220829000920.38185-4-isabbasso@riseup.net>
+In-Reply-To: <20220829000920.38185-4-isabbasso@riseup.net>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 1 Sep 2022 14:37:06 +0800
+Message-ID: <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
+Subject: Re: [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility for KUnit
+To:     Isabella Basso <isabbasso@riseup.net>
+Cc:     igt-dev@lists.freedesktop.org, magalilemes00@gmail.com,
+        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
+        Tales Aparecida <tales.aparecida@gmail.com>,
+        Rodrigo Siqueira <rodrigo.siqueira@amd.com>, mwen@igalia.com,
+        andrealmeid@riseup.net, Trevor Woerner <twoerner@gmail.com>,
+        leandro.ribeiro@collabora.com, n@nfraprado.net,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        daniel@fooishbar.org, linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="00000000000050cfb505e797d822"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMzEuMDguMjAyMiAxNDozMiwgU2VyZ2l1IE1vZ2EgLSBNNjg3MDEgd3JvdGU6DQo+IE9uIDMx
-LjA4LjIwMjIgMTI6NDYsIENsYXVkaXUgQmV6bmVhIHdyb3RlOg0KPj4gT24gMTcuMDguMjAyMiAx
-MDo1NSwgU2VyZ2l1IE1vZ2Egd3JvdGU6DQo+Pj4gUHJldmlvdXNseSwgdGhlIGF0bWVsIHNlcmlh
-bCBkcml2ZXIgZGlkIG5vdCB0YWtlIGludG8gYWNjb3VudCB0aGUNCj4+PiBwb3NzaWJpbGl0eSBv
-ZiB1c2luZyB0aGUgbW9yZSBjdXN0b21pemFibGUgZ2VuZXJpYyBjbG9jayBhcyBpdHMNCj4+PiBi
-YXVkcmF0ZSBnZW5lcmF0b3IuIFVubGVzcyB0aGVyZSBpcyBhIEZyYWN0aW9uYWwgUGFydCBhdmFp
-bGFibGUgdG8NCj4+PiBpbmNyZWFzZSBhY2N1cmFjeSwgdGhlcmUgaXMgYSBoaWdoIGNoYW5jZSB0
-aGF0IHdlIG1heSBiZSBhYmxlIHRvDQo+Pj4gZ2VuZXJhdGUgYSBiYXVkcmF0ZSBjbG9zZXIgdG8g
-dGhlIGRlc2lyZWQgb25lIGJ5IHVzaW5nIHRoZSBHQ0xLIGFzIHRoZQ0KPj4+IGNsb2NrIHNvdXJj
-ZS4gTm93LCBkZXBlbmRpbmcgb24gdGhlIGVycm9yIHJhdGUgYmV0d2Vlbg0KPj4+IHRoZSBkZXNp
-cmVkIGJhdWRyYXRlIGFuZCB0aGUgYWN0dWFsIGJhdWRyYXRlLCB0aGUgc2VyaWFsIGRyaXZlciB3
-aWxsDQo+Pj4gZmFsbGJhY2sgb24gdGhlIGdlbmVyaWMgY2xvY2suIFRoZSBnZW5lcmljIGNsb2Nr
-IG11c3QgYmUgcHJvdmlkZWQNCj4+PiBpbiB0aGUgRFQgbm9kZSBvZiB0aGUgc2VyaWFsIHRoYXQg
-bWF5IG5lZWQgYSBtb3JlIGZsZXhpYmxlIGNsb2NrIHNvdXJjZS4NCj4+Pg0KPj4+IFNpZ25lZC1v
-ZmYtYnk6IFNlcmdpdSBNb2dhIDxzZXJnaXUubW9nYUBtaWNyb2NoaXAuY29tPg0KPj4+IC0tLQ0K
-Pj4+ICAgZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jIHwgNTIgKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrLQ0KPj4+ICAgZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3Nlcmlh
-bC5oIHwgIDEgKw0KPj4+ICAgMiBmaWxlcyBjaGFuZ2VkLCA1MiBpbnNlcnRpb25zKCspLCAxIGRl
-bGV0aW9uKC0pDQo+Pj4NCj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvc2VyaWFsL2F0bWVs
-X3NlcmlhbC5jIGIvZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5jDQo+Pj4gaW5kZXgg
-MzBiYTllZWY3YjM5Li4wYTBiNDZlZTA5NTUgMTAwNjQ0DQo+Pj4gLS0tIGEvZHJpdmVycy90dHkv
-c2VyaWFsL2F0bWVsX3NlcmlhbC5jDQo+Pj4gKysrIGIvZHJpdmVycy90dHkvc2VyaWFsL2F0bWVs
-X3NlcmlhbC5jDQo+Pj4gQEAgLTE1LDYgKzE1LDcgQEANCj4+PiAgICNpbmNsdWRlIDxsaW51eC9p
-bml0Lmg+DQo+Pj4gICAjaW5jbHVkZSA8bGludXgvc2VyaWFsLmg+DQo+Pj4gICAjaW5jbHVkZSA8
-bGludXgvY2xrLmg+DQo+Pj4gKyNpbmNsdWRlIDxsaW51eC9jbGstcHJvdmlkZXIuaD4NCj4+PiAg
-ICNpbmNsdWRlIDxsaW51eC9jb25zb2xlLmg+DQo+Pj4gICAjaW5jbHVkZSA8bGludXgvc3lzcnEu
-aD4NCj4+PiAgICNpbmNsdWRlIDxsaW51eC90dHlfZmxpcC5oPg0KPj4+IEBAIC03Nyw2ICs3OCw4
-IEBAIHN0YXRpYyB2b2lkIGF0bWVsX3N0b3Bfcngoc3RydWN0IHVhcnRfcG9ydCAqcG9ydCk7DQo+
-Pj4gICAjZW5kaWYNCj4+PiAgIA0KPj4+ICAgI2RlZmluZSBBVE1FTF9JU1JfUEFTU19MSU1JVAky
-NTYNCj4+PiArI2RlZmluZSBFUlJPUl9SQVRFKGRlc2lyZWRfdmFsdWUsIGFjdHVhbF92YWx1ZSkg
-XA0KPj4+ICsJKChpbnQpKDEwMCAtICgoZGVzaXJlZF92YWx1ZSkgKiAxMDApIC8gKGFjdHVhbF92
-YWx1ZSkpKQ0KPj4+ICAgDQo+Pj4gICBzdHJ1Y3QgYXRtZWxfZG1hX2J1ZmZlciB7DQo+Pj4gICAJ
-dW5zaWduZWQgY2hhcgkqYnVmOw0KPj4+IEBAIC0xMTAsNiArMTEzLDcgQEAgc3RydWN0IGF0bWVs
-X3VhcnRfY2hhciB7DQo+Pj4gICBzdHJ1Y3QgYXRtZWxfdWFydF9wb3J0IHsNCj4+PiAgIAlzdHJ1
-Y3QgdWFydF9wb3J0CXVhcnQ7CQkvKiB1YXJ0ICovDQo+Pj4gICAJc3RydWN0IGNsawkJKmNsazsJ
-CS8qIHVhcnQgY2xvY2sgKi8NCj4+PiArCXN0cnVjdCBjbGsJCSpnY2xrOwkJLyogdWFydCBnZW5l
-cmljIGNsb2NrICovDQo+Pj4gICAJaW50CQkJbWF5X3dha2V1cDsJLyogY2FjaGVkIHZhbHVlIG9m
-IGRldmljZV9tYXlfd2FrZXVwIGZvciB0aW1lcyB3ZSBuZWVkIHRvIGRpc2FibGUgaXQgKi8NCj4+
-PiAgIAl1MzIJCQliYWNrdXBfaW1yOwkvKiBJTVIgc2F2ZWQgZHVyaW5nIHN1c3BlbmQgKi8NCj4+
-PiAgIAlpbnQJCQlicmVha19hY3RpdmU7CS8qIGJyZWFrIGJlaW5nIHJlY2VpdmVkICovDQo+Pj4g
-QEAgLTIxMTUsNiArMjExOSw4IEBAIHN0YXRpYyB2b2lkIGF0bWVsX3NlcmlhbF9wbShzdHJ1Y3Qg
-dWFydF9wb3J0ICpwb3J0LCB1bnNpZ25lZCBpbnQgc3RhdGUsDQo+Pj4gICAJCSAqIFRoaXMgaXMg
-Y2FsbGVkIG9uIHVhcnRfY2xvc2UoKSBvciBhIHN1c3BlbmQgZXZlbnQuDQo+Pj4gICAJCSAqLw0K
-Pj4+ICAgCQljbGtfZGlzYWJsZV91bnByZXBhcmUoYXRtZWxfcG9ydC0+Y2xrKTsNCj4+PiArCQlp
-ZiAoYXRtZWxfcG9ydC0+Z2NsayAmJiBfX2Nsa19pc19lbmFibGVkKGF0bWVsX3BvcnQtPmdjbGsp
-KQ0KPj4NCj4+IE5vIG5lZWQgdG8gY2hlY2sgZm9yIGF0bWVsX3BvcnQtPmdjbGsgIT0gTlVMTC4g
-Y2xrIEFQSXMgYXJlIGFscmVhZHkgZG9pbmcgdGhpcy4NCj4+DQo+Pj4gKwkJCWNsa19kaXNhYmxl
-X3VucHJlcGFyZShhdG1lbF9wb3J0LT5nY2xrKTsNCj4+PiAgIAkJYnJlYWs7DQo+Pj4gICAJZGVm
-YXVsdDoNCj4+PiAgIAkJZGV2X2Vycihwb3J0LT5kZXYsICJhdG1lbF9zZXJpYWw6IHVua25vd24g
-cG0gJWRcbiIsIHN0YXRlKTsNCj4+PiBAQCAtMjEyOSw3ICsyMTM1LDggQEAgc3RhdGljIHZvaWQg
-YXRtZWxfc2V0X3Rlcm1pb3Moc3RydWN0IHVhcnRfcG9ydCAqcG9ydCwgc3RydWN0IGt0ZXJtaW9z
-ICp0ZXJtaW9zLA0KPj4+ICAgew0KPj4+ICAgCXN0cnVjdCBhdG1lbF91YXJ0X3BvcnQgKmF0bWVs
-X3BvcnQgPSB0b19hdG1lbF91YXJ0X3BvcnQocG9ydCk7DQo+Pj4gICAJdW5zaWduZWQgbG9uZyBm
-bGFnczsNCj4+PiAtCXVuc2lnbmVkIGludCBvbGRfbW9kZSwgbW9kZSwgaW1yLCBxdW90LCBiYXVk
-LCBkaXYsIGNkLCBmcCA9IDA7DQo+Pj4gKwl1bnNpZ25lZCBpbnQgb2xkX21vZGUsIG1vZGUsIGlt
-ciwgcXVvdCwgZGl2LCBjZCwgZnAgPSAwOw0KPj4+ICsJdW5zaWduZWQgaW50IGJhdWQsIGFjdHVh
-bF9iYXVkLCBnY2xrX3JhdGU7DQo+Pj4gICANCj4+PiAgIAkvKiBzYXZlIHRoZSBjdXJyZW50IG1v
-ZGUgcmVnaXN0ZXIgKi8NCj4+PiAgIAltb2RlID0gb2xkX21vZGUgPSBhdG1lbF91YXJ0X3JlYWRs
-KHBvcnQsIEFUTUVMX1VTX01SKTsNCj4+PiBAQCAtMjI4OCw2ICsyMjk1LDM3IEBAIHN0YXRpYyB2
-b2lkIGF0bWVsX3NldF90ZXJtaW9zKHN0cnVjdCB1YXJ0X3BvcnQgKnBvcnQsIHN0cnVjdCBrdGVy
-bWlvcyAqdGVybWlvcywNCj4+PiAgIAkJY2QgLz0gODsNCj4+PiAgIAkJbW9kZSB8PSBBVE1FTF9V
-U19VU0NMS1NfTUNLX0RJVjg7DQo+Pj4gICAJfQ0KPj4+ICsNCj4+PiArCS8qDQo+Pj4gKwkgKiBJ
-ZiB0aGVyZSBpcyBubyBGcmFjdGlvbmFsIFBhcnQsIHRoZXJlIGlzIGEgaGlnaCBjaGFuY2UgdGhh
-dA0KPj4+ICsJICogd2UgbWF5IGJlIGFibGUgdG8gZ2VuZXJhdGUgYSBiYXVkcmF0ZSBjbG9zZXIg
-dG8gdGhlIGRlc2lyZWQgb25lDQo+Pj4gKwkgKiBpZiB3ZSB1c2UgdGhlIEdDTEsgYXMgdGhlIGNs
-b2NrIHNvdXJjZSBkcml2aW5nIHRoZSBiYXVkcmF0ZQ0KPj4+ICsJICogZ2VuZXJhdG9yLg0KPj4+
-ICsJICovDQo+Pj4gKwlpZiAoIWZwICYmIGF0bWVsX3BvcnQtPmdjbGspIHsNCj4+PiArCQlpZiAo
-X19jbGtfaXNfZW5hYmxlZChhdG1lbF9wb3J0LT5nY2xrKSkNCj4+PiArCQkJY2xrX2Rpc2FibGVf
-dW5wcmVwYXJlKGF0bWVsX3BvcnQtPmdjbGspOw0KPj4NCj4+IFlvdSBkaXNhYmxlZCBpdCBoZXJl
-LCBzZXQgbmV3IHJhdGUgYnV0IHJlLWVuYWJsZSBpdCBjb25kaXRpb25hbGx5IGFib3ZlLCBpcw0K
-Pj4gdGhpcyBpbnRlbmRlZD8gdGhlIGJlbG93IGNvbmRpdGlvbiBtYXkgZmFpbC4NCj4+DQo+IA0K
-PiBZZXMsIGl0IGlzIGludGVuZGVkLiBHY2xrIHNob3VsZCByZW1haW4gZGlzYWJsZWQgaWYgdGhl
-IGJlbG93IGNvbmRpdGlvbiANCj4gZmFpbHMuDQo+IA0KPiANCj4+PiArCQljbGtfc2V0X3JhdGUo
-YXRtZWxfcG9ydC0+Z2NsaywgMTYgKiBiYXVkKTsNCj4+PiArCQlnY2xrX3JhdGUgPSBjbGtfZ2V0
-X3JhdGUoYXRtZWxfcG9ydC0+Z2Nsayk7DQo+Pg0KPj4gWW91IHNob3VsZCBiZSBhYmxlIHRvIHVz
-ZSBjbGtfcm91bmRfcmF0ZSgpIGhlcmU6DQo+PiAJCWdjbGtfcmF0ZSA9IGNsa19yb3VuZF9yYXRl
-KGF0bWVsX3BvcnQtPmdjbGssDQo+PiAJCQkJCSAgIDE2ICogYmF1ZHJhdGUpOw0KPj4NCj4+IFdp
-dGggdGhpcyB5b3UgY2FuIHJlLXdyaXRlIGFsbCB0aGlzIGJsb2NrIHNvbWV0aGluZyBsaWtlOg0K
-Pj4NCj4+IAkJZ2Nsa19yYXRlID0gY2xrX3JvdW5kX3JhdGUoYXRtZWxfcG9ydC0+Z2NsaywNCj4+
-IAkJCQkJICAgMTYgKiBiYXVkcmF0ZSk7DQo+PiAJCWFjdHVhbF9iYXVkID0gZ2Nsa19yYXRlIC8g
-KDE2ICogY2QpOw0KPj4gCQlpZiAoYWJzKEVSUk9SX1JBVEUoYmF1ZCwgYWN0dWFsX2JhdWQpKSA+
-DQo+PiAJCSAgICBhYmQoRVJST1JfUkFURShiYXVkLCBnY2xrX3JhdGUgLyAxNikpKSB7DQo+PiAJ
-CQltb2RlIHw9IEFUTUVMX1VTX0dDTEs7DQo+PiAJCQljZCA9IDE7DQo+PiAJCQlpZiAoX19jbGtf
-aXNfZW5hYmxlZChhdG1lbF9wb3J0LT5nY2xrKSkNCj4+IAkJCQljbGtfZGlzYWJsZV91bnByZXBh
-cmUoYXRtZWxfcG9ydC0+Z2NsaykNCj4+IAkJCWNsa19zZXRfcmF0ZShhdG1lbF9wb3J0LT5nY2xr
-LCBnY2xrX3JhdGUpOw0KPj4gCQkJY2xrX3ByZXBhcmVfZW5hYmxlKGF0bWVsX3BvcnQtPmdjbGsp
-Ow0KPj4gCQl9DQo+Pg0KPj4NCj4gDQo+IEhtbSwgeWVzLCB5b3UgYXJlIHJpZ2h0LCBpdCBpcyBt
-dWNoIGJldHRlciB3aXRoIHRoaXMgY2xrX3JvdW5kX3JhdGUoKSANCj4gc2luY2UgdGhlcmUgd291
-bGQgYmUgbm8gbmVlZCB0byBkaXNhYmxlIGdjbGsgYmVmb3JlIHNldHRpbmcgdGhlIG5ldyANCj4g
-cmF0ZSwgSSBkaWQgbm90IGtub3cgb2YgdGhpcyBmdW5jdGlvbiBhdCB0aGF0IHBvaW50LiBIb3dl
-dmVyLCBpbiB0aGlzIA0KPiBjYXNlLCB0aGUgaWYoYWJzLi4uKSB3aWxsIGFsc28gbmVlZCBhbiBl
-bHNlIHRvIGRpc2FibGUgdGhlIGdjbGsgaW4gY2FzZSANCj4gdGhlIGNvbmRpdGlvbiBmYWlsZWQg
-YW5kIGl0IHdhcyBzb21laG93IGVuYWJsZWQgYmVmb3JlLg0KDQpUaGVuIHlvdSBjYW4ga2VlcCB0
-aGUgZGlzYWJsZSBhdCB0aGUgYmVnaW5uaW5nIG9mIHRoZSBibG9jayAoYXMgaXQNCnByZXZpb3Vz
-bHkgd2FzKSBhbmQgdXNlIGNsa19yb3VuZF9yYXRlKCkgaW5zdGVhZCBvZjoNCg0KCQljbGtfc2V0
-X3JhdGUoKTsNCgkJY2xrX2dldF9yYXRlKCk7DQoNCkFuZCB1c2UgY2xrX3NldF9yYXRlKCkgb25s
-eSBpZiB0aGUgZm9sbG93aW5nIGlzIHRydWU6DQoNCisJCWlmIChhYnMoRVJST1JfUkFURShiYXVk
-LCBhY3R1YWxfYmF1ZCkpID4NCisJCSAgICBhYnMoRVJST1JfUkFURShiYXVkLCBnY2xrX3JhdGUg
-LyAxNikpKSB7DQoNCkhhdmluZyB0aGlzLCBpbiBjYXNlIGdjbGsgY2Fubm90IGJlIHVzZWQgaXQg
-aXMganVzdCBkaXNhYmxlIHcvbyBhbHNvIGhhdmluZw0KdGhlIHJhdGUgY2hhbmdlZC4NCg0KPiAN
-Cj4gDQo+Pj4gKwkJYWN0dWFsX2JhdWQgPSBjbGtfZ2V0X3JhdGUoYXRtZWxfcG9ydC0+Y2xrKSAv
-ICgxNiAqIGNkKTsNCj4+PiArCQlpZiAoYWJzKEVSUk9SX1JBVEUoYmF1ZCwgYWN0dWFsX2JhdWQp
-KSA+DQo+Pj4gKwkJICAgIGFicyhFUlJPUl9SQVRFKGJhdWQsIGdjbGtfcmF0ZSAvIDE2KSkpIHsN
-Cj4+PiArCQkJbW9kZSB8PSBBVE1FTF9VU19HQ0xLOw0KPj4+ICsNCj4+PiArCQkJLyoNCj4+PiAr
-CQkJICogU2V0IHRoZSBDbG9jayBEaXZpc29yIGZvciBHQ0xLIHRvIDEuDQo+Pj4gKwkJCSAqIFNp
-bmNlIHdlIHdlcmUgYWJsZSB0byBnZW5lcmF0ZSB0aGUgc21hbGxlc3QNCj4+PiArCQkJICogbXVs
-dGlwbGUgb2YgdGhlIGRlc2lyZWQgYmF1ZHJhdGUgdGltZXMgMTYsDQo+Pj4gKwkJCSAqIHRoZW4g
-d2Ugc3VyZWx5IGNhbiBnZW5lcmF0ZSBhIGJpZ2dlciBtdWx0aXBsZQ0KPj4+ICsJCQkgKiB3aXRo
-IHRoZSBleGFjdCBlcnJvciByYXRlIGZvciBhbiBlcXVhbGx5IGluY3JlYXNlZA0KPj4+ICsJCQkg
-KiBDRC4gVGh1cyBubyBuZWVkIHRvIHRha2UgaW50byBhY2NvdW50DQo+Pj4gKwkJCSAqIGEgaGln
-aGVyIHZhbHVlIGZvciBDRC4NCj4+PiArCQkJICovDQo+Pj4gKwkJCWNkID0gMTsNCj4+PiArCQkJ
-Y2xrX3ByZXBhcmVfZW5hYmxlKGF0bWVsX3BvcnQtPmdjbGspOw0KPj4+ICsJCX0NCj4+PiArCX0N
-Cj4+PiArDQo+Pj4gICAJcXVvdCA9IGNkIHwgZnAgPDwgQVRNRUxfVVNfRlBfT0ZGU0VUOw0KPj4+
-ICAgDQo+Pj4gICAJaWYgKCEocG9ydC0+aXNvNzgxNi5mbGFncyAmIFNFUl9JU083ODE2X0VOQUJM
-RUQpKQ0KPj4+IEBAIC0yODgzLDYgKzI5MjEsMTYgQEAgc3RhdGljIGludCBhdG1lbF9zZXJpYWxf
-cHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4+PiAgIAlpZiAocmV0KQ0KPj4+
-ICAgCQlnb3RvIGVycjsNCj4+PiAgIA0KPj4+ICsJYXRtZWxfcG9ydC0+Z2NsayA9IGRldm1fY2xr
-X2dldF9vcHRpb25hbCgmcGRldi0+ZGV2LCAiZ2NsayIpOw0KPj4+ICsJaWYgKGF0bWVsX3BvcnQt
-PmdjbGspIHsNCj4+PiArCQlyZXQgPSBjbGtfcHJlcGFyZV9lbmFibGUoYXRtZWxfcG9ydC0+Z2Ns
-ayk7DQo+Pj4gKwkJaWYgKHJldCkgew0KPj4+ICsJCQlhdG1lbF9wb3J0LT5nY2xrID0gTlVMTDsN
-Cj4+PiArCQkJcmV0dXJuIHJldDsNCj4+PiArCQl9DQo+Pj4gKwkJY2xrX2Rpc2FibGVfdW5wcmVw
-YXJlKGF0bWVsX3BvcnQtPmdjbGspOw0KPj4NCj4+IElzIHRoZXJlIGEgcmVhc29uIHlvdSBlbmFi
-bGUgdGhlbiBkaXNhYmxlIHRoZSBjbG9jayBoZXJlPw0KPj4NCj4gDQo+IA0KPiBJIHRoaW5rIGl0
-J3MgYmV0dGVyIHRvIG1ha2Ugc3VyZSBpbiB0aGUgcHJvYmUgbWV0aG9kIHRoYXQgZW5hYmxpbmcg
-dGhlIA0KPiBnY2xrIGlzc3VlcyBubyBlcnJvcnMsIHNvIHRoYXQgdGhlIGVycm9yIGRvZXMgbm90
-IGFwcGVhciBpbiANCj4gc2V0X3Rlcm1pb3MoKS4gU2luY2UgdGhlIHVzZXIgbXVzdCBwbGFjZSB0
-aGUgb3B0aW9uYWwgZ2NsayBpbiBEVCBpZiB0aGV5IA0KPiB3YW50IGEgZmluZXIgcmF0ZSB3aGVu
-IG1pc3NpbmcgdGhlIEZyYWN0aW9uYWwgUGFydCwgSSB0aGluayB0aGV5IHNob3VsZCANCj4ga25v
-dyBiZWZvcmUgZXZlbiB0cnlpbmcgdG8gb3BlbiB0aGUgcG9ydCB0aGF0IGl0IGlzIGZpcnN0IGNv
-cnJlY3RseSANCj4gc2V0dXAgaW4gdGhlIGNsb2NrIHRyZWUgYXMgd2VsbCBieSBtYWtpbmcgdGhl
-IHByb2JlIG1ldGhvZCBmYWlsIGZyb20gdGhlIA0KPiB2ZXJ5IGJlZ2lubmluZyBpbiBjYXNlIGl0
-IGlzIG5vdC4NCg0KVGhlcmUgaXMgbm8gZ3VhcmFudGVlIHRoYXQgdGhlIGRpc2FibGUvZW5hYmxl
-IGluIHNldF90ZXJtaW9zKCkgd2lsbCBub3QNCmZhaWwuIElmIHlvdSB3YW50IHRvIGF2b2lkIGZh
-aWx1cmVzIHlvdSBjYW4ganVzdCB0YWtlIGludG8gYWNjb3VudCB0aGUNCnJldHVybmluZyBjb2Rl
-IG9mIGNsa19wcmVwYXJlX2VuYWJsZSgpIGluIHNldF90ZXJtaW9zKCkgYW5kIGRlY2lkZSB0byB1
-c2UNCmdlbmVyaWMgY2xvY2sgZm9yIGJhdWQgcmF0ZSBkZXBlbmRpbmcgb24gdGhpcy4NCg0KPiAN
-Cj4gU28sIEkgZmlyc3QgZW5hYmxlIGl0IGFuZCBtYWtlIHN1cmUgdGhlcmUgYXJlIG5vIGVycm9y
-cyBhbmQgdGhlbiBkaXNhYmxlIA0KPiBpdCBiZWNhdXNlIEkgZG8gbm90IHNlZSB0aGUgcG9pbnQg
-b2YgaGF2aW5nIGFuIGVuYWJsZWQgY2xvY2sgdGhhdCBtaWdodCANCj4gbm90IGJlIHVzZWQuDQo+
-IA0KPiANCj4+PiArCX0NCj4+PiArDQo+Pj4gICAJcmV0ID0gYXRtZWxfaW5pdF9wb3J0KGF0bWVs
-X3BvcnQsIHBkZXYpOw0KPj4+ICAgCWlmIChyZXQpDQo+Pj4gICAJCWdvdG8gZXJyX2Nsa19kaXNh
-YmxlX3VucHJlcGFyZTsNCj4+PiBAQCAtMjkyOSw2ICsyOTc3LDggQEAgc3RhdGljIGludCBhdG1l
-bF9zZXJpYWxfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldikNCj4+PiAgIAkgKiBp
-cyB1c2VkDQo+Pj4gICAJICovDQo+Pj4gICAJY2xrX2Rpc2FibGVfdW5wcmVwYXJlKGF0bWVsX3Bv
-cnQtPmNsayk7DQo+Pj4gKwlpZiAoYXRtZWxfcG9ydC0+Z2NsayAmJiBfX2Nsa19pc19lbmFibGVk
-KGF0bWVsX3BvcnQtPmdjbGspKQ0KPj4+ICsJCWNsa19kaXNhYmxlX3VucHJlcGFyZShhdG1lbF9w
-b3J0LT5nY2xrKTsNCj4+DQo+PiBJcyB0aGlzIGR1ZSB0byB0aGUgZW5hYmxlIGluIGF0bWVsX3Nl
-dF90ZXJtaW9zKCk/IElzIHRoYXQgY2FsbGVkIG9uIHByb2JlDQo+PiBwYXRoPyBBbHNvLCB0aGVy
-ZSBpcyBubyBuZWVkIHRvIGNoZWNrIGZvciBhdG1lbF9wb3J0LT5nY2xrIGFzIGNsayBBUElzIGFy
-ZQ0KPj4gYWxyZWFkeSBkb2luZyB0aGlzLg0KPj4NCj4gDQo+IA0KPiBObywgSSBndWVzcyB0aGlz
-IGlzIG5vdCByZWFsbHkgbmVlZGVkLCBzaW5jZSBpdCBpcyBkaXNhYmxlZCBvbmNlIGl0IGlzIA0K
-PiBjbGFpbWVkIGZyb20gRFQgaWYgZW5hYmxpbmcgaXQgc3VjY2VlZHMuIEkgaW5pdGlhbGx5IHBs
-YWNlZCB0aGlzIGNvZGUgDQo+IHNlcXVlbmNlIHdoZXJldmVyIHRoZSBwZXJpcGhlcmFsIGNsb2Nr
-IGlzIGRpc2FibGVkIGFzIHdlbGwuDQo+IA0KPj4+ICAgDQo+Pj4gICAJcmV0dXJuIDA7DQo+Pj4g
-ICANCj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5oIGIv
-ZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5oDQo+Pj4gaW5kZXggMGQ4YTBmOWNjNWMz
-Li5mYjcxODk3MmY4MWEgMTAwNjQ0DQo+Pj4gLS0tIGEvZHJpdmVycy90dHkvc2VyaWFsL2F0bWVs
-X3NlcmlhbC5oDQo+Pj4gKysrIGIvZHJpdmVycy90dHkvc2VyaWFsL2F0bWVsX3NlcmlhbC5oDQo+
-Pj4gQEAgLTYzLDYgKzYzLDcgQEANCj4+PiAgICNkZWZpbmUJCUFUTUVMX1VTX1BBUl9NQVJLCQko
-MyA8PCAgOSkNCj4+PiAgICNkZWZpbmUJCUFUTUVMX1VTX1BBUl9OT05FCQkoNCA8PCAgOSkNCj4+
-PiAgICNkZWZpbmUJCUFUTUVMX1VTX1BBUl9NVUxUSV9EUk9QCQkoNiA8PCAgOSkNCj4+PiArI2Rl
-ZmluZSBBVE1FTF9VU19HQ0xLICAgICAgICAgICAgICAgICAgICAgICAgICBCSVQoMTIpDQo+Pg0K
-Pj4gSXQgc2VlbXMgdGhlcmUgYXJlIHNwYWNlcyBoZXJlLg0KPj4NCj4+PiAgICNkZWZpbmUJQVRN
-RUxfVVNfTkJTVE9QCQlHRU5NQVNLKDEzLCAxMikJLyogTnVtYmVyIG9mIFN0b3AgQml0cyAqLw0K
-Pj4+ICAgI2RlZmluZQkJQVRNRUxfVVNfTkJTVE9QXzEJCSgwIDw8IDEyKQ0KPj4+ICAgI2RlZmlu
-ZQkJQVRNRUxfVVNfTkJTVE9QXzFfNQkJKDEgPDwgMTIpDQo+Pg0KPiANCj4gVGhhbmtzLA0KPiAJ
-U2VyZ2l1DQoNCg==
+--00000000000050cfb505e797d822
+Content-Type: text/plain; charset="UTF-8"
+
+On Mon, Aug 29, 2022 at 8:10 AM Isabella Basso <isabbasso@riseup.net> wrote:
+>
+> This adds functions for both executing the tests as well as parsing (K)TAP
+> kmsg output, as per the KTAP spec [1].
+>
+> [1] https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
+>
+> Signed-off-by: Isabella Basso <isabbasso@riseup.net>
+> ---
+
+Thanks very much for sending these patches out again.
+
+Alas, I don't have a particularly useful igt setup to test this
+properly, but I've left a couple of notes from trying it on my laptop
+here.
+
+
+>  lib/igt_kmod.c | 290 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  lib/igt_kmod.h |   2 +
+>  2 files changed, 292 insertions(+)
+>
+> diff --git a/lib/igt_kmod.c b/lib/igt_kmod.c
+> index 97cac7f5..93cdfcc5 100644
+> --- a/lib/igt_kmod.c
+> +++ b/lib/igt_kmod.c
+> @@ -25,6 +25,7 @@
+>  #include <signal.h>
+>  #include <errno.h>
+>  #include <sys/utsname.h>
+> +#include <limits.h>
+>
+>  #include "igt_aux.h"
+>  #include "igt_core.h"
+> @@ -32,6 +33,8 @@
+>  #include "igt_sysfs.h"
+>  #include "igt_taints.h"
+>
+> +#define BUF_LEN 4096
+> +
+>  /**
+>   * SECTION:igt_kmod
+>   * @short_description: Wrappers around libkmod for module loading/unloading
+> @@ -713,6 +716,293 @@ void igt_kselftest_get_tests(struct kmod_module *kmod,
+>         kmod_module_info_free_list(pre);
+>  }
+>
+> +/**
+> + * lookup_value:
+> + * @haystack: the string to search in
+> + * @needle: the string to search for
+> + *
+> + * Returns: the value of the needle in the haystack, or -1 if not found.
+> + */
+> +static long lookup_value(const char *haystack, const char *needle)
+> +{
+> +       const char *needle_rptr;
+> +       char *needle_end;
+> +       long num;
+> +
+> +       needle_rptr = strcasestr(haystack, needle);
+> +
+> +       if (needle_rptr == NULL)
+> +               return -1;
+> +
+> +       /* skip search string and whitespaces after it */
+> +       needle_rptr += strlen(needle);
+> +
+> +       num = strtol(needle_rptr, &needle_end, 10);
+> +
+> +       if (needle_rptr == needle_end)
+> +               return -1;
+> +
+> +       if (num == LONG_MIN || num == LONG_MAX)
+> +               return 0;
+> +
+> +       return num > 0 ? num : 0;
+> +}
+> +
+> +static int find_next_tap_subtest(char *record, char *test_name,
+> +                                bool is_subtest)
+> +{
+> +       const char *name_lookup_str,
+> +             *lend, *version_rptr, *name_rptr;
+> +       long test_count;
+> +
+> +       name_lookup_str = "test: ";
+> +
+> +       version_rptr = strcasestr(record, "TAP version ");
+> +       name_rptr = strcasestr(record, name_lookup_str);
+> +
+> +       /*
+> +        * total test count will almost always appear as 0..N at the beginning
+> +        * of a run, so we use it as indication of a run
+> +        */
+> +       test_count = lookup_value(record, "..");
+> +
+> +       /* no count found, so this is probably not starting a (sub)test */
+> +       if (test_count < 0) {
+> +               if (name_rptr != NULL) {
+> +                       if (test_name[0] == '\0')
+> +                               strncpy(test_name,
+> +                                       name_rptr + strlen(name_lookup_str),
+> +                                       BUF_LEN);
+> +                       else if (strcmp(test_name, name_rptr + strlen(name_lookup_str)) == 0)
+> +                               return 0;
+> +                       else
+> +                               test_name[0] = '\0';
+> +
+> +               }
+> +               return -1;
+> +       }
+> +
+> +       /*
+> +        * "(K)TAP version XX" should be the first line on all (sub)tests as per
+> +        * https://www.kernel.org/doc/html/latest/dev-tools/ktap.html#version-lines
+> +        * but actually isn't, as it currently depends on whoever writes the
+> +        * test to print this info
+
+FYI: we're really trying to fix cases of "missing version lines",
+largely by making the kunit_test_suites() macro work in more
+circumstances.
+
+So while it may be worth still handling the case where this is
+missing, I don't think there are any tests in the latest versions of
+the kernel which should have this missing.
+
+> +        */
+> +       if (version_rptr == NULL)
+> +               igt_info("Missing test version string\n");
+> +
+> +       if (name_rptr == NULL) {
+> +               /* we have to keep track of the name string, as it might be
+> +                * contained in a line read previously */
+> +               if (test_name[0] == '\0') {
+> +                       igt_info("Missing test name string\n");
+> +
+> +                       if (is_subtest)
+> +                               igt_info("Running %ld subtests...\n", test_count);
+> +                       else
+> +                               igt_info("Running %ld tests...\n", test_count);
+> +               } else {
+> +                       lend = strchrnul(test_name, '\n');
+> +
+> +                       if (*lend == '\0') {
+> +                               if (is_subtest)
+> +                                       igt_info("Executing %ld subtests in: %s\n",
+> +                                                test_count, test_name);
+> +                               else
+> +                                       igt_info("Executing %ld tests in: %s\n",
+> +                                                test_count, test_name);
+> +                               return test_count;
+> +                       }
+> +
+> +                       if (is_subtest)
+> +                               igt_info("Executing %ld subtests in: %.*s\n",
+> +                                        test_count, (int)(lend - test_name),
+> +                                        test_name);
+> +                       else
+> +                               igt_info("Executing %ld tests in: %.*s\n",
+> +                                        test_count, (int)(lend - test_name),
+> +                                        test_name);
+> +                       test_name[0] = '\0';
+> +               }
+> +       } else {
+> +               name_rptr += strlen(name_lookup_str);
+> +               lend = strchrnul(name_rptr, '\n');
+> +               /*
+> +                * as the test count comes after the test name we need not check
+> +                * for a long line again
+> +                */
+> +               if (is_subtest)
+> +                       igt_info("Executing %ld subtests in: %.*s\n",
+> +                                test_count, (int)(lend - name_rptr),
+> +                                name_rptr);
+> +               else
+> +                       igt_info("Executing %ld tests in: %.*s\n",
+> +                                test_count, (int)(lend - name_rptr),
+> +                                name_rptr);
+> +       }
+> +
+> +       return test_count;
+> +}
+> +
+> +static void parse_kmsg_for_tap(const char *lstart, char *lend,
+> +                              int *sublevel, bool *failed_tests)
+> +{
+> +       const char *nok_rptr, *comment_start, *value_parse_start;
+> +
+> +       nok_rptr = strstr(lstart, "not ok ");
+> +       if (nok_rptr != NULL) {
+> +               igt_warn("kmsg> %.*s\n",
+> +                        (int)(lend - lstart), lstart);
+> +               *failed_tests = true;
+> +               return;
+> +       }
+> +
+> +       comment_start = strchrnul(lstart, '#');
+> +
+> +       /* check if we're still in a subtest */
+> +       if (*comment_start != '\0') {
+> +               comment_start++;
+> +               value_parse_start = comment_start;
+> +
+> +               if (lookup_value(value_parse_start, "fail: ") > 0) {
+> +                       igt_warn("kmsg> %.*s\n",
+> +                                (int)(lend - comment_start), comment_start);
+> +                       *failed_tests = true;
+> +                       (*sublevel)--;
+> +                       return;
+> +               }
+> +       }
+> +
+> +       igt_info("kmsg> %.*s\n",
+> +                (int)(lend - lstart), lstart);
+> +}
+> +
+> +static void igt_kunit_subtests(int fd, char *record,
+> +                              int *sublevel, bool *failed_tests)
+> +{
+> +       char test_name[BUF_LEN + 1], *lend;
+> +
+> +       lend = NULL;
+> +       test_name[0] = '\0';
+> +       test_name[BUF_LEN] = '\0';
+> +
+> +       while (*sublevel >= 0) {
+> +               const char *lstart;
+> +               ssize_t r;
+> +
+> +               if (lend != NULL && *lend != '\0')
+> +                       lseek(fd, (int) (lend - record), SEEK_CUR);
+> +
+> +               r = read(fd, record, BUF_LEN);
+> +
+> +               if (r <= 0) {
+> +                       switch (errno) {
+> +                       case EINTR:
+> +                               continue;
+> +                       case EPIPE:
+> +                               igt_warn("kmsg truncated: too many messages. \
+> +                                        You may want to increase log_buf_len \
+> +                                        in your boot options\n");
+> +                               continue;
+> +                       case !EAGAIN:
+> +                               igt_warn("kmsg truncated: unknown error (%m)\n");
+> +                               *sublevel = -1;
+> +                       default:
+> +                               break;
+> +                       }
+> +                       break;
+> +               }
+> +
+> +               lend = strchrnul(record, '\n');
+> +
+> +               /* in case line > 4096 */
+> +               if (*lend == '\0')
+> +                       continue;
+> +
+> +               if (find_next_tap_subtest(record, test_name, *sublevel > 0) != -1)
+> +                       (*sublevel)++;
+> +
+> +               if (*sublevel > 0) {
+> +                       lstart = strchrnul(record, ';');
+> +
+> +                       if (*lstart == '\0') {
+> +                               igt_warn("kmsg truncated: output malformed (%m)\n");
+> +                               igt_fail(IGT_EXIT_FAILURE);
+> +                       }
+> +
+> +                       lstart++;
+> +                       while (isspace(*lstart))
+> +                               lstart++;
+> +
+> +                       parse_kmsg_for_tap(lstart, lend, sublevel, failed_tests);
+> +               }
+> +       }
+> +
+> +       if (*failed_tests || *sublevel < 0)
+> +               igt_fail(IGT_EXIT_FAILURE);
+> +       else
+> +               igt_success();
+> +}
+> +
+> +/**
+> + * igt_kunit:
+> + * @module_name: the name of the module
+> + * @opts: options to load the module
+> + *
+> + * Loads the kunit module, parses its dmesg output, then unloads it
+> + */
+> +void igt_kunit(const char *module_name, const char *opts)
+> +{
+> +       struct igt_ktest tst;
+> +       char record[BUF_LEN + 1];
+> +       bool failed_tests = false;
+> +       int sublevel = 0;
+> +
+> +       record[BUF_LEN] = '\0';
+> +
+> +       /* get normalized module name */
+> +       if (igt_ktest_init(&tst, module_name) != 0) {
+> +               igt_warn("Unable to initialize ktest for %s\n", module_name);
+> +               return;
+> +       }
+> +
+> +       if (igt_ktest_begin(&tst) != 0) {
+> +               igt_warn("Unable to begin ktest for %s\n", module_name);
+> +
+> +               igt_ktest_fini(&tst);
+> +               return;
+> +       }
+> +
+> +       if (tst.kmsg < 0) {
+> +               igt_warn("Could not open /dev/kmsg");
+> +               goto unload;
+> +       }
+> +
+> +       if (lseek(tst.kmsg, 0, SEEK_END)) {
+> +               igt_warn("Could not seek the end of /dev/kmsg");
+> +               goto unload;
+> +       }
+> +
+> +       /* The kunit module is required for running any kunit tests */
+> +       if (igt_kmod_load("kunit", NULL) != 0) {
+> +               igt_warn("Unable to load kunit module\n");
+> +               goto unload;
+> +       }
+
+Do you want to _require_ KUnit be built as a module, rather than built-in here?
+
+Equally, does this need to mark a failure (or at least "SKIPPED")
+rather than success, in the case it fails.
+
+> +
+> +       if (igt_kmod_load(module_name, opts) != 0) {
+> +               igt_warn("Unable to load %s module\n", module_name);
+> +               goto unload;
+> +       }
+
+As above, should this record a failure, or skip?
+
+> +
+> +       igt_kunit_subtests(tst.kmsg, record, &sublevel, &failed_tests);
+> +unload:
+> +       igt_kmod_unload("kunit", 0);
+
+Do you want to unconditionally unload the KUnit module here? It's safe
+(maybe even safer) to leave it loaded between runs of KUnit tests.
+
+Equally, how would you handle the case where KUnit is already loaded?
+
+> +
+> +       igt_ktest_end(&tst);
+> +
+> +       igt_ktest_fini(&tst);
+> +}
+> +
+>  static int open_parameters(const char *module_name)
+>  {
+>         char path[256];
+> diff --git a/lib/igt_kmod.h b/lib/igt_kmod.h
+> index ceb10cd0..737143c1 100644
+> --- a/lib/igt_kmod.h
+> +++ b/lib/igt_kmod.h
+> @@ -45,6 +45,8 @@ int __igt_i915_driver_unload(char **whom);
+>  int igt_amdgpu_driver_load(const char *opts);
+>  int igt_amdgpu_driver_unload(void);
+>
+> +void igt_kunit(const char *module_name, const char *opts);
+> +
+>  void igt_kselftests(const char *module_name,
+>                     const char *module_options,
+>                     const char *result_option,
+> --
+> 2.37.2
+>
+
+Regardless, thanks very much. Hopefully I'll get a chance to play with
+igt a bit more and actually get the tests running. :-)
+
+Cheers,
+-- David
+
+--00000000000050cfb505e797d822
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+z/tQRXr3iPeVmZCr7nttMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAx+EQjLATc/sze
+VoZkH7OLz+/no1+y31x4BQ3wjW7lKfay9DAAVym896b7ECttSo95GEvS7pYMikzud57WypK7Bjpi
+ep8YLarLRDrvyyvBuYtyDrIewkuASHtV1oy5E6QZZe2VOxMm6e2oJnFFjbflot4A08D3SwqDwV0i
+OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
+3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
+lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAT
+RyBcXrTOEAP2f/+NfBlL7nTa06Tef6ZoLoWBtIKhmjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA5MDEwNjM3MThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEASpjSj1HUnHQR5Q76k7l/
+eUA9Kjgtkr3Ue3Qe7Z1uKMQV0MMJLfFAOBT1SwMNgut+v9LwVO/O68gFhlAFy3SmF1DFVin1hZl9
+PNuTS+6AYwyegqGXuJWqaMcYAOn2Uo8ewoYvru73SbAULuSEBQpMqzHYTsZa47RwFcWNfaPf25ZI
+I04ld4dvq88MDm/j4dl9oajFGI7kuEYJmCP7z7rnzDDzhf4sm2YqnqgoMW0W0ghecRmzwNnS+O/X
+Dmm7vvlPufd7LFa8k8NCMm48Nb0PfFmZCC34N4PZ2HdZ7OuFfZPbCxhIM2UF6ElhYEAmn7tTaiI8
+pm+e2VZ18ul6Ac5hzg==
+--00000000000050cfb505e797d822--

@@ -2,302 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2FE5A9B9D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DCA445A9B94
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234152AbiIAP2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:28:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59540 "EHLO
+        id S234282AbiIAP00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234626AbiIAP1O (ORCPT
+        with ESMTP id S231668AbiIAP0O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:27:14 -0400
-Received: from mail-pl1-x642.google.com (mail-pl1-x642.google.com [IPv6:2607:f8b0:4864:20::642])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3D9E74DF1;
-        Thu,  1 Sep 2022 08:26:58 -0700 (PDT)
-Received: by mail-pl1-x642.google.com with SMTP id y1so15538492plb.2;
-        Thu, 01 Sep 2022 08:26:58 -0700 (PDT)
+        Thu, 1 Sep 2022 11:26:14 -0400
+Received: from smtp-fw-6001.amazon.com (smtp-fw-6001.amazon.com [52.95.48.154])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F86048EA3;
+        Thu,  1 Sep 2022 08:25:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=RPrcEJAJCD/nkvZTx8kYWYuaVzDcXjCYkTbQS5NK0Jo=;
-        b=LE0kbsUCjBewNG10A2IcIG5kENnl0g8RYkDuNaZzSBBemer3d1QOKeqoP/bJ54Hhgn
-         /mBOaxEEuRHiA8A4UWsk7sa/4g/l+iBIhmat0uD2V2uGGzvze65Nm5rjdl716HHZPRh7
-         16T/52eFeVtBbb7hUBU91fOAcZRkUUuX8xd5A6LlqBwtlnBB/mtoERDVtQngTLpY3Ay2
-         GeV1vHmBso7U6eSk9l8ycQLGa5n3etOy1TqqY6GPFkANMrq/1MsdR0AHYNXsS9Uvkulf
-         7po+6MX7TBQmvpyL1jwrb8Q/SbAXUu9kjkR64GkyzV/stQekpE/XR0wnL+WkiVNtSIaH
-         jTnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=RPrcEJAJCD/nkvZTx8kYWYuaVzDcXjCYkTbQS5NK0Jo=;
-        b=S1LTPTJovPfudJZuV3gBYDT34cESNKa5+D9pz9mUnIiTM8UqDFY+ZwkLXTjgcTYvGY
-         ewtyZInh3aV72zDHK1b4HDOr9Rlod0O/UYTmz0l665XzplnC0eBwQXGd6h63snWCvZ2z
-         LD+IEL51PmKSkKmw9NmkxpzZtGybnUtHQk+U8OdG9/2oilCZIvhd3QtQHPRZc+qsFpSp
-         9xqkiomKy26F2e4Ahb8UAMxXDQcdKmqJ35mdEEPV7YdEVfpnsS1vJ00wqOGIlyU50Ill
-         dHK/gKFlBesK7XlT2XKM828fdK2B/yz8CfAlWuSZFS607rU9U7wrPpIn2tPlCR5GwvUf
-         OhVQ==
-X-Gm-Message-State: ACgBeo0X3YwzNpdC0H+aNk63dPjAEqVqe7zvwTBmKam8H8fIYg2czk+N
-        vt8cNkWU+gGwdnSEcNb3yNw=
-X-Google-Smtp-Source: AA6agR7lauJA9hz7vzGYDI2CGpjsqaQam8MFlkZEj2FUE8ljdtb26m7mcPv5YXjGqKcpNctXZW89JQ==
-X-Received: by 2002:a17:902:ab59:b0:175:2cb4:48b4 with SMTP id ij25-20020a170902ab5900b001752cb448b4mr11753034plb.73.1662046018350;
-        Thu, 01 Sep 2022 08:26:58 -0700 (PDT)
-Received: from localhost.localdomain ([203.205.141.83])
-        by smtp.gmail.com with ESMTPSA id 23-20020a631157000000b004277f43b736sm5338937pgr.92.2022.09.01.08.26.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 08:26:57 -0700 (PDT)
-From:   menglong8.dong@gmail.com
-X-Google-Original-From: imagedong@tencent.com
-To:     edumazet@google.com, kuba@kernel.org
-Cc:     davem@davemloft.net, pabeni@redhat.com, rostedt@goodmis.org,
-        mingo@redhat.com, imagedong@tencent.com, dsahern@kernel.org,
-        flyingpeng@tencent.com, dongli.zhang@oracle.com, robh@kernel.org,
-        asml.silence@gmail.com, luiz.von.dentz@intel.com,
-        vasily.averin@linux.dev, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: [PATCH net-next] net: skb: export skb drop reaons to user by TRACE_DEFINE_ENUM
-Date:   Thu,  1 Sep 2022 23:23:39 +0800
-Message-Id: <20220901152339.471045-1-imagedong@tencent.com>
-X-Mailer: git-send-email 2.37.2
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1662045912; x=1693581912;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=ThCcDc02Fnh0N75Y6vq9PwesblySqNiNxskJBN7lQ4U=;
+  b=GFA/tvJU6WRLkpIsT5WYRhqGyJYbRH8EgfXanO0RdHZkBoPts2btoSBz
+   ZKIS7fCk/cK5N1HFVkARVcvvzhjmUIyncYRmkrLUza1YFXH1jLccm2CCA
+   /eerQG4cmNI9tAxKGRFKPN4jJQKskoRAFCf5x2bXLbCAfyzpIXGmachoV
+   Q=;
+Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when "intel,
+ vm-map" not defined
+Received: from iad12-co-svc-p1-lb1-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com) ([10.43.8.2])
+  by smtp-border-fw-6001.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 15:25:00 +0000
+Received: from EX13D37EUA003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com (Postfix) with ESMTPS id C9F0F22005B;
+        Thu,  1 Sep 2022 15:24:57 +0000 (UTC)
+Received: from EX19D005EUA002.ant.amazon.com (10.252.50.11) by
+ EX13D37EUA003.ant.amazon.com (10.43.165.7) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 1 Sep 2022 15:24:56 +0000
+Received: from EX13MTAUEB002.ant.amazon.com (10.43.60.12) by
+ EX19D005EUA002.ant.amazon.com (10.252.50.11) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.12; Thu, 1 Sep 2022 15:24:56 +0000
+Received: from [192.168.93.228] (10.85.143.172) by mail-relay.amazon.com
+ (10.43.60.234) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Thu, 1 Sep 2022 15:24:51 +0000
+Message-ID: <ceef1c33-1af5-53d1-5e5b-5aeb5d2679ca@amazon.com>
+Date:   Thu, 1 Sep 2022 18:24:51 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+To:     Guenter Roeck <linux@roeck-us.net>
+CC:     <jdelvare@suse.com>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
+        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
+        <dkl@amazon.com>, <andriy.shevchenko@intel.com>,
+        "Farber, Eliav" <farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-3-farbere@amazon.com>
+ <cddebb5a-3b83-e89d-db00-9a59ddbd6741@roeck-us.net>
+ <84a68eff-be64-71ce-1533-1e228d3da2a4@amazon.com>
+ <71d6d57c-2165-5fe3-515d-9395022921e2@roeck-us.net>
+ <2f5c5828-87b9-f3d2-e3d3-0200adbe830c@amazon.com>
+ <20220901144434.GB3477025@roeck-us.net>
+Content-Language: en-US
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <20220901144434.GB3477025@roeck-us.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Menglong Dong <imagedong@tencent.com>
+On 9/1/2022 5:44 PM, Guenter Roeck wrote:
+> On Thu, Sep 01, 2022 at 11:39:58AM +0300, Farber, Eliav wrote:
+>> On 8/31/2022 2:48 PM, Guenter Roeck wrote:
+>> > On 8/30/22 22:49, Farber, Eliav wrote:
+>> > > On 8/31/2022 8:36 AM, Guenter Roeck wrote:
+>> > > > On 8/30/22 12:21, Eliav Farber wrote:
+>> > > > > Bug fix - in case "intel,vm-map" is missing in device-tree
+>> > > > > ,'num' is set
+>> > > > > to 0, and no voltage channel infos are allocated.
+>> > > > >
+>> > > > > Signed-off-by: Eliav Farber <farbere@amazon.com>
+>> > > > > ---
+>> > > > >   drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
+>> > > > >   1 file changed, 12 insertions(+), 16 deletions(-)
+>> > > > >
+>> > > > > diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
+>> > > > > index 046523d47c29..0e29877a1a9c 100644
+>> > > > > --- a/drivers/hwmon/mr75203.c
+>> > > > > +++ b/drivers/hwmon/mr75203.c
+>> > > > > @@ -580,8 +580,6 @@ static int mr75203_probe(struct
+>> > > > > platform_device *pdev)
+>> > > > >       }
+>> > > > >
+>> > > > >       if (vm_num) {
+>> > > > > -             u32 num = vm_num;
+>> > > > > -
+>> > > > >               ret = pvt_get_regmap(pdev, "vm", pvt);
+>> > > > >               if (ret)
+>> > > > >                       return ret;
+>> > > > > @@ -594,30 +592,28 @@ static int mr75203_probe(struct
+>> > > > > platform_device *pdev)
+>> > > > >               ret = device_property_read_u8_array(dev, 
+>> "intel,vm-map",
+>> > > > > pvt->vm_idx, vm_num);
+>> > > > >               if (ret) {
+>> > > > > -                     num = 0;
+>> > > > > +                     /*
+>> > > > > +                      * Incase intel,vm-map property is not
+>> > > > > defined, we
+>> > > > > +                      * assume incremental channel numbers.
+>> > > > > +                      */
+>> > > > > +                     for (i = 0; i < vm_num; i++)
+>> > > > > + pvt->vm_idx[i] = i;
+>> > > > >               } else {
+>> > > > >                       for (i = 0; i < vm_num; i++)
+>> > > > >                               if (pvt->vm_idx[i] >= vm_num ||
+>> > > > > - pvt->vm_idx[i] == 0xff) {
+>> > > > > -                                     num = i;
+>> > > > > + pvt->vm_idx[i] == 0xff)
+>> > > > >                                       break;
+>> > > >
+>> > > > So all vm_idx values from 0x00 to 0xfe would be acceptable ?
+>> > > > Does the chip really have that many registers (0x200 + 0x40 +
+>> > > > 0x200 * 0xfe) ?
+>> > > > Is that documented somewhere ?
+>> > > According to the code vm_num is limited to 32 because the mask is
+>> > > only 5 bits:
+>> > >
+>> > > #define VM_NUM_MSK    GENMASK(20, 16)
+>> > > #define VM_NUM_SFT    16
+>> > > vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
+>> > >
+>> > > In practice according to the data sheet I have:
+>> > > 0 <= VM instances <= 8
+>> > >
+>> > Sorry, my bad. I misread the patch and thought the first part of
+>> > the if statement was removed.
+>> >
+>> > Anyway, what is the difference between specifying an vm_idx value of
+>> > 0xff and not specifying anything ? Or, in other words, taking the dt
+>> > example, the difference between
+>> >        intel,vm-map = [03 01 04 ff ff];
+>> > and
+>> >        intel,vm-map = [03 01 04];
+>>
+>> The actual number of VMs is read from a HW register:
+>>     ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
+>>     ...
+>>     vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
+>>
+>> Also, using:
+>>     ret = device_property_read_u8_array(dev, "intel,vm-map", vm_idx,
+>>                         vm_num);
+>> in the driver will fail if vm_num > sizeof array in device-tree.
+>>
+>> So, if for example vm_num = 5, but you will want to map only 3 of them
+>> you most set property to be:
+>>     intel,vm-map = [03 01 04 ff ff];
+>> otherwise if you set:
+>>     intel,vm-map = [03 01 04];
+>> it will assume the property doesn't, and will continue the flow in code
+>> as if it doesn’t exist (which is not what the user wanted, and before my
+>> fix also has a bug).
+>
+> There should be some error handling to catch this case (ie if the number
+> of entries does not match the expected count), or if a value in the array
+> is larger or equal to vm_num. Today the latter is silently handled as end
+> of entries (similar to 0xff), but that should result in an error.
+> This would avoid situations like
+>        intel,vm-map = [01 02 03 04 05];
+> ie where the person writing the devicetree file accidentally entered
+> index values starting with 1 instead of 0. A mismatch between vm_num
+> and the number of entries in the array is silently handled as if there
+> was no property at all, which is at the very least misleading and
+> most definitely unexpected and should also result in an error.
 
-As Eric reported, the 'reason' field is not presented when trace the
-kfree_skb event by perf:
 
-$ perf record -e skb:kfree_skb -a sleep 10
-$ perf script
-  ip_defrag 14605 [021]   221.614303:   skb:kfree_skb:
-  skbaddr=0xffff9d2851242700 protocol=34525 location=0xffffffffa39346b1
-  reason:
+I assume it is possible to tell according to the return value, if property
+doesn’t exist at all, or if it does exists and size of array in
+device-tree is smaller than vm_num.
+In [PATCH v3 17/19] Andy wrote that “code shouldn't be a YAML validator.
+Drop this and make sure you have correct DT schema” so I’m a bit confused
+if code should validate “intel,bm-map” or if it is the user responsibility.
+As this property was not added by me, I prefer not to fix it as part of
+this series of patches.
 
-The cause seems to be passing kernel address directly to TP_printk(),
-which is not right. As the enum 'skb_drop_reason' is not exported to
-user space through TRACE_DEFINE_ENUM(), perf can't get the drop reason
-string from the 'reason' field, which is a number.
 
-Therefore, we introduce the macro DEFINE_DROP_REASON(), which is used
-to define the trace enum by TRACE_DEFINE_ENUM(). With the help of
-DEFINE_DROP_REASON(), now we can remove the auto-generate that we
-introduced in the commit ec43908dd556
-("net: skb: use auto-generation to convert skb drop reason to string"),
-and define the string array 'drop_reasons'.
+> Also, what happens if the devicetree content is something like the
+> following ? Would that be valid ?
+>        intel,vm-map = [00 01 01 01 01 01];
 
-Hmmmm...now we come back to the situation that have to maintain drop
-reasons in both enum skb_drop_reason and DEFINE_DROP_REASON. But they
-are both in dropreason.h, which makes it easier.
+If device-tree content would be:
+     intel,vm-map = [00 01 01 01 01 01];
+and assuming 16 channels for each VM, the hwmon sub-system will expose 90
+sysfs to read voltage values.
+In practice 16 – 31, 32 – 47, 48 – 63, 64 – 89 will all report the same
+input signals for VM1.
 
-After this commit, now the format of kfree_skb is like this:
-
-$ cat /tracing/events/skb/kfree_skb/format
-name: kfree_skb
-ID: 1524
-format:
-        field:unsigned short common_type;       offset:0;       size:2; signed:0;
-        field:unsigned char common_flags;       offset:2;       size:1; signed:0;
-        field:unsigned char common_preempt_count;       offset:3;       size:1; signed:0;
-        field:int common_pid;   offset:4;       size:4; signed:1;
-
-        field:void * skbaddr;   offset:8;       size:8; signed:0;
-        field:void * location;  offset:16;      size:8; signed:0;
-        field:unsigned short protocol;  offset:24;      size:2; signed:0;
-        field:enum skb_drop_reason reason;      offset:28;      size:4; signed:0;
-
-print fmt: "skbaddr=%p protocol=%u location=%p reason: %s", REC->skbaddr, REC->protocol, REC->location, __print_symbolic(REC->reason, { 1, "NOT_SPECIFIED" }, { 2, "NO_SOCKET" } ......
-
-Reported-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Menglong Dong <imagedong@tencent.com>
----
- include/net/dropreason.h   | 67 ++++++++++++++++++++++++++++++++++++++
- include/trace/events/skb.h | 12 ++++++-
- net/core/.gitignore        |  1 -
- net/core/Makefile          | 22 +------------
- net/core/skbuff.c          |  6 +++-
- 5 files changed, 84 insertions(+), 24 deletions(-)
- delete mode 100644 net/core/.gitignore
-
-diff --git a/include/net/dropreason.h b/include/net/dropreason.h
-index fae9b40e54fa..c1cbcdbaf149 100644
---- a/include/net/dropreason.h
-+++ b/include/net/dropreason.h
-@@ -3,6 +3,73 @@
- #ifndef _LINUX_DROPREASON_H
- #define _LINUX_DROPREASON_H
- 
-+#define DEFINE_DROP_REASON(FN, FNe)	\
-+	FN(NOT_SPECIFIED)		\
-+	FN(NO_SOCKET)			\
-+	FN(PKT_TOO_SMALL)		\
-+	FN(TCP_CSUM)			\
-+	FN(SOCKET_FILTER)		\
-+	FN(UDP_CSUM)			\
-+	FN(NETFILTER_DROP)		\
-+	FN(OTHERHOST)			\
-+	FN(IP_CSUM)			\
-+	FN(IP_INHDR)			\
-+	FN(IP_RPFILTER)			\
-+	FN(UNICAST_IN_L2_MULTICAST)	\
-+	FN(XFRM_POLICY)			\
-+	FN(IP_NOPROTO)			\
-+	FN(SOCKET_RCVBUFF)		\
-+	FN(PROTO_MEM)			\
-+	FN(TCP_MD5NOTFOUND)		\
-+	FN(TCP_MD5UNEXPECTED)		\
-+	FN(TCP_MD5FAILURE)		\
-+	FN(SOCKET_BACKLOG)		\
-+	FN(TCP_FLAGS)			\
-+	FN(TCP_ZEROWINDOW)		\
-+	FN(TCP_OLD_DATA)		\
-+	FN(TCP_OVERWINDOW)		\
-+	FN(TCP_OFOMERGE)		\
-+	FN(TCP_RFC7323_PAWS)		\
-+	FN(TCP_INVALID_SEQUENCE)	\
-+	FN(TCP_RESET)			\
-+	FN(TCP_INVALID_SYN)		\
-+	FN(TCP_CLOSE)			\
-+	FN(TCP_FASTOPEN)		\
-+	FN(TCP_OLD_ACK)			\
-+	FN(TCP_TOO_OLD_ACK)		\
-+	FN(TCP_ACK_UNSENT_DATA)		\
-+	FN(TCP_OFO_QUEUE_PRUNE)		\
-+	FN(TCP_OFO_DROP)		\
-+	FN(IP_OUTNOROUTES)		\
-+	FN(BPF_CGROUP_EGRESS)		\
-+	FN(IPV6DISABLED)		\
-+	FN(NEIGH_CREATEFAIL)		\
-+	FN(NEIGH_FAILED)		\
-+	FN(NEIGH_QUEUEFULL)		\
-+	FN(NEIGH_DEAD)			\
-+	FN(TC_EGRESS)			\
-+	FN(QDISC_DROP)			\
-+	FN(CPU_BACKLOG)			\
-+	FN(XDP)				\
-+	FN(TC_INGRESS)			\
-+	FN(UNHANDLED_PROTO)		\
-+	FN(SKB_CSUM)			\
-+	FN(SKB_GSO_SEG)			\
-+	FN(SKB_UCOPY_FAULT)		\
-+	FN(DEV_HDR)			\
-+	FN(DEV_READY)			\
-+	FN(FULL_RING)			\
-+	FN(NOMEM)			\
-+	FN(HDR_TRUNC)			\
-+	FN(TAP_FILTER)			\
-+	FN(TAP_TXFILTER)		\
-+	FN(ICMP_CSUM)			\
-+	FN(INVALID_PROTO)		\
-+	FN(IP_INADDRERRORS)		\
-+	FN(IP_INNOROUTES)		\
-+	FN(PKT_TOO_BIG)			\
-+	FNe(MAX)
-+
- /**
-  * enum skb_drop_reason - the reasons of skb drops
-  *
-diff --git a/include/trace/events/skb.h b/include/trace/events/skb.h
-index 45264e4bb254..3d7b20fea758 100644
---- a/include/trace/events/skb.h
-+++ b/include/trace/events/skb.h
-@@ -9,6 +9,15 @@
- #include <linux/netdevice.h>
- #include <linux/tracepoint.h>
- 
-+#undef FN
-+#define FN(reason)	TRACE_DEFINE_ENUM(SKB_DROP_REASON_##reason);
-+DEFINE_DROP_REASON(FN, FN)
-+
-+#undef FN
-+#undef FNe
-+#define FN(reason)	{ SKB_DROP_REASON_##reason, #reason },
-+#define FNe(reason)	{ SKB_DROP_REASON_##reason, #reason }
-+
- /*
-  * Tracepoint for free an sk_buff:
-  */
-@@ -35,7 +44,8 @@ TRACE_EVENT(kfree_skb,
- 
- 	TP_printk("skbaddr=%p protocol=%u location=%p reason: %s",
- 		  __entry->skbaddr, __entry->protocol, __entry->location,
--		  drop_reasons[__entry->reason])
-+		  __print_symbolic(__entry->reason,
-+				   DEFINE_DROP_REASON(FN, FNe)))
- );
- 
- TRACE_EVENT(consume_skb,
-diff --git a/net/core/.gitignore b/net/core/.gitignore
-deleted file mode 100644
-index df1e74372cce..000000000000
---- a/net/core/.gitignore
-+++ /dev/null
-@@ -1 +0,0 @@
--dropreason_str.c
-diff --git a/net/core/Makefile b/net/core/Makefile
-index e8ce3bd283a6..5857cec87b83 100644
---- a/net/core/Makefile
-+++ b/net/core/Makefile
-@@ -5,7 +5,7 @@
- 
- obj-y := sock.o request_sock.o skbuff.o datagram.o stream.o scm.o \
- 	 gen_stats.o gen_estimator.o net_namespace.o secure_seq.o \
--	 flow_dissector.o dropreason_str.o
-+	 flow_dissector.o
- 
- obj-$(CONFIG_SYSCTL) += sysctl_net_core.o
- 
-@@ -40,23 +40,3 @@ obj-$(CONFIG_NET_SOCK_MSG) += skmsg.o
- obj-$(CONFIG_BPF_SYSCALL) += sock_map.o
- obj-$(CONFIG_BPF_SYSCALL) += bpf_sk_storage.o
- obj-$(CONFIG_OF)	+= of_net.o
--
--clean-files := dropreason_str.c
--
--quiet_cmd_dropreason_str = GEN     $@
--cmd_dropreason_str = awk -F ',' 'BEGIN{ print "\#include <net/dropreason.h>\n"; \
--	print "const char * const drop_reasons[] = {" }\
--	/^enum skb_drop/ { dr=1; }\
--	/^\};/ { dr=0; }\
--	/^\tSKB_DROP_REASON_/ {\
--		if (dr) {\
--			sub(/\tSKB_DROP_REASON_/, "", $$1);\
--			printf "\t[SKB_DROP_REASON_%s] = \"%s\",\n", $$1, $$1;\
--		}\
--	}\
--	END{ print "};" }' $< > $@
--
--$(obj)/dropreason_str.c: $(srctree)/include/net/dropreason.h
--	$(call cmd,dropreason_str)
--
--$(obj)/dropreason_str.o: $(obj)/dropreason_str.c
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 48ecfbf29174..f1b8b20fc20b 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -91,7 +91,11 @@ static struct kmem_cache *skbuff_ext_cache __ro_after_init;
- int sysctl_max_skb_frags __read_mostly = MAX_SKB_FRAGS;
- EXPORT_SYMBOL(sysctl_max_skb_frags);
- 
--/* The array 'drop_reasons' is auto-generated in dropreason_str.c */
-+#undef FN
-+#define FN(reason) [SKB_DROP_REASON_##reason] = #reason,
-+const char * const drop_reasons[] = {
-+	DEFINE_DROP_REASON(FN, FN)
-+};
- EXPORT_SYMBOL(drop_reasons);
- 
- /**
--- 
-2.37.2
-
+--
+Regards, Eliav

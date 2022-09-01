@@ -2,357 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 867635A9C2D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 412475A9C2A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:51:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234079AbiIAPt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52254 "EHLO
+        id S233588AbiIAPuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbiIAPtt (ORCPT
+        with ESMTP id S233787AbiIAPtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Sep 2022 11:49:49 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B03D8C03F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:49:43 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 33C9C40737AF;
-        Thu,  1 Sep 2022 15:49:39 +0000 (UTC)
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA0B3AE;
+        Thu,  1 Sep 2022 08:49:44 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JRbfD081w9tpgxBc7dZf4Z0pGS5BiBJ9b8XVVxvaEQZDHP0gNl1CvYRg9qeYWKn95/0XRL3ls4/fLze3EX6iaWF7pMuvPtbrJ516XZox2o1dxMiBqXOMHx7vjI0t9Kbn1J+LhZxSTkD0Igw6BPWSvsQyAJyF0e0xARMapxpuSBlI++T0R8CJ7Yad3u3mExAb7h1ShpxT5+rlrNpfOTmSEdwUqCX9zWGce6SQBQudD2d0O1VdYOpEc3MhOq4RGSkr0wht8K3TRvG9nK61G+OEQ5kMf+RWtHsP1rT1LeYBeQHNbkZ+CO0PA1WSaLsSwlUvsLcveuS0qmQMYo9CX/oLAw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qVckLzpuxTLqox170T455GnnAogN/IixmtzKsdrHGqU=;
+ b=ibVDrJlknNL6/PehHHZwTo+UTlX1baAOc9OW7VqxUaR3LwGSN30Jia7a1wpOcJEnZmUAr95q2hxHKV6zIoTTZSfRl/5Vtv6Fu6Bjoj3eWeLhMma1EUOaPvZOgf8WENw+zkJn9lP2fuUwLkIG8cTdZ5WPUxXsLvQm2iJzToS1HuQTQwiQAd675+s56Tvz64/nk7RlBFGdBG6ogSZVDaBmFuj9aaxIa4O5xAhAcGwdpK56H9ohCLXusV5YLGcOhVO77exhNq2gke1qAYgkJ9fllTBDq7u2tBnp5FLBnB5KC4HqOh8xmInP5TQpVu/IWiH3RDfemkKet4+/wXrgifSkAQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qVckLzpuxTLqox170T455GnnAogN/IixmtzKsdrHGqU=;
+ b=GVHP0ELwdKSQjQKG8Mt1vFSqY/R7j7SKay46dUHfZ/rnTTTewjn9G+riJFX3YV9gwX3uAUZnglNuPzCTH45P02kL/EKcWkJsEbeamW6JJoDmZhn4sMRnYbybYypo3Q5MX2DIInl2AuyvIGfA8L/d5qnRByz1TxbOx7QwvmlhKe31w9FxJv2/B2Lb2jd/1roYyb/TuT9FeH8p6PvIRKxgCRbwMw6D7SSUNtjiMpjg3c16OyaCsJCiJGQpgFlCo6XTE7Of0EuoXdh4oiERypl4dIi0IP9388cJIzFIdU/9ys9eP4LSnLIEqIp7dSmNDb1W/z9YXkwmBQ+KS0k+F2gQ6A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
+ by DS7PR12MB6192.namprd12.prod.outlook.com (2603:10b6:8:97::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5588.10; Thu, 1 Sep 2022 15:49:43 +0000
+Received: from MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
+ ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5588.012; Thu, 1 Sep 2022
+ 15:49:42 +0000
+Date:   Thu, 1 Sep 2022 12:49:41 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] iommu/s390: Fix race with release_device ops
+Message-ID: <YxDUlQprVaZp1RF1@nvidia.com>
+References: <20220831201236.77595-1-mjrosato@linux.ibm.com>
+ <20220831201236.77595-2-mjrosato@linux.ibm.com>
+ <9887e2f4-3f3d-137d-dad7-59dab5f98aab@linux.ibm.com>
+ <52d3fe0b86bdc04fdbf3aae095b2f71f4ea12d44.camel@linux.ibm.com>
+ <e01e6ef2-ba45-7433-5fe4-a6806dac3af9@arm.com>
+ <8b561ad3023fc146ba0779cbd8fff14d6409c6aa.camel@linux.ibm.com>
+ <3e402947-61f9-b7e8-1414-fde006257b6f@arm.com>
+ <YxDDD2DF9KFDQ+Yk@nvidia.com>
+ <58d14cfc-f8ba-777b-a975-371ff2b29e5a@arm.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <58d14cfc-f8ba-777b-a975-371ff2b29e5a@arm.com>
+X-ClientProxiedBy: BL0PR03CA0005.namprd03.prod.outlook.com
+ (2603:10b6:208:2d::18) To MN2PR12MB4192.namprd12.prod.outlook.com
+ (2603:10b6:208:1d5::15)
 MIME-Version: 1.0
-Date:   Thu, 01 Sep 2022 18:49:39 +0300
-From:   Alexey Izbyshev <izbyshev@ispras.ru>
-To:     Andrei Vagin <avagin@gmail.com>
-Cc:     Florian Weimer <fweimer@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: Potentially undesirable interactions between vfork() and time
- namespaces
-In-Reply-To: <YxAq2jYvGG8QOypu@gmail.com>
-References: <YxAq2jYvGG8QOypu@gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <fed91ee96b861aaf8db3d72c1b7eb135@ispras.ru>
-X-Sender: izbyshev@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c5b8db55-9710-42c1-c6b0-08da8c31960a
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6192:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tLDuKcZGgCKaWb5kmEoxpJk/HrZBkdOvAW2mkKyuxVD6kg7OKvO4VOL8SHeWBa0vBt3w2R1ovEgvmlmTT6ssX55AOdosXk6B4U3zHa16Eanhr+T3+9b6AUzW2DR4NhlgVDZqkhdBadkRMob5QQ7Ny9hgUPXPjW4s1ebQl9E61CUN+tBaG2LrQ1Xb4xZ8YkmMYF2+aXaoreRGTUF47XlMvDEWBMnOC8vkx8KjqkKrzuHH93uQMQGlzaqxrQUpqub6+lsUyPjV1WsSN55+UvC3RARBO//OL73AxFgiwNF5AvHHzS07JnqeePmHCp+ALdAEOdy8hN+RLIs58VEAfJouiWm23VM39ly4BCdrzZSSgx2FE34E9ZYEW3Ozjv26EDqcz0jtB24UyqcJtr2YE4/m9KSSAjQEZ09hMlu836y0NaSOfRTnTivthzrnEGlW8BOaMth0oIalrpR/EwPiTDQjffZoqKldUuc9B9L71iKgjrnsfEE7kwNvJDYYFPPwTtPTPNzweB8owX+OwnKYbZfoRGUbaCLhA6zMxn0ad66lMtB6nL+iBkYGzrShTeXpOdlzYYLX/n+4e2HknKB7SSuda5jhk3i4DlsELtDJpP2Jzv23HFTZqKaLYTvnUsdt3v+t1rpKNy1BTro2dLlEpLfg9bQod1ZsLZcKbymnwGBoqpBQRtqGASO/qZ3S5dlm4Wnf2EF9ypfOZF1WwyY+3w2AqQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(346002)(376002)(136003)(366004)(83380400001)(186003)(54906003)(6916009)(5660300002)(316002)(6486002)(6506007)(8936002)(53546011)(2616005)(36756003)(41300700001)(6512007)(2906002)(26005)(86362001)(38100700002)(66556008)(66476007)(478600001)(4326008)(66946007)(7416002)(8676002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YbOt0NAZkUBB/TMJuOu4rvoHr4E+TGJrbwQhi7GSk8RbdH5q0jb/8X8EIKKc?=
+ =?us-ascii?Q?xZDm6fM4azNbn6P6Ri+y0IlIpzJGLlVG9NPpsGPgwEc2BVG3TTA+QKRCzTnt?=
+ =?us-ascii?Q?M8lefdMIXksJLhJtbEjdjvlcf7TRgFTBCfYnztJySf1wWLzDCs2AN9JiLlqx?=
+ =?us-ascii?Q?VXz0UuCxRQ+CfK7RVAZv94kfx/59c0ju9Ij31KgF5tdRhd03DKJN5PBSf/L+?=
+ =?us-ascii?Q?8fNDjUzVObhfFdOvB5Yh3CT2iY9uhUngKFWr92jZuXdQjtaD5Tw4KRlQ2fP5?=
+ =?us-ascii?Q?OZdeoxMwnESvgd01N0oldPVW5VBYgAna0rvH7+aadZ4ZyVX4AnT8bGt2Ae0R?=
+ =?us-ascii?Q?VczjlFUPFOeG9GDbgD72KMihtjZj4JJo/udnaKfuwkrofqCewwbIBL36tLN0?=
+ =?us-ascii?Q?BJZ8jPHo45t3oz5I6OfP/gN5jX/wGac/s5YYJwGpf3SL0scgo4mBL+L/gTVk?=
+ =?us-ascii?Q?Rc9FmGJUbCVY9f6OUXlDEqqxQZdQzf6l5zbL+7UYtIFugPlX88ElDhthpSQF?=
+ =?us-ascii?Q?00OCcBCHZ5Ve+DgUA/29ffCN/cG9pa/9DynuMSEXsCcOKW1Wt3R+S5RWJb01?=
+ =?us-ascii?Q?p9jNNQHOWvvf0GJne+Ke2CQFbZe5F+FmNgVtfXsj4//3d2qVdoRnUptQu0kA?=
+ =?us-ascii?Q?5z9vCu9ccGfm+v1+M85cQIrdEDDvXeQ8OpCoHwXsnlI2cwWfz2jRqR23Ll+N?=
+ =?us-ascii?Q?KlOLXHZsftwmbS+V21wiXpd5LqvRsByDoTadNTy7jbQ2Re7B8X18RLvUHQrs?=
+ =?us-ascii?Q?JG/bPs24M4TZdmJPrG4jJ8N6W1u5L2NhAfDBNwFImDwrZt5sMYYg/xGU5PSK?=
+ =?us-ascii?Q?pADrRiigFmD71ninzBEx6YvIFyLZW1KFrJu3zKtmTKOdD8Md5/MD4PTngVSI?=
+ =?us-ascii?Q?PS/NkC8KqVAHs/lpP6ehH7B/zAxvdEYHIYKtihrAwIPGRlZ8ZzQ7hn+JoHa5?=
+ =?us-ascii?Q?tSVBs7p+SZVJkueijR/Lqdw7mNPXe/HKnPtjP5UBs96cmoqZgisA02Qoxkhc?=
+ =?us-ascii?Q?Qera6elZfK4eU4ckft/2QJp5zpbsyeSa65ewE4F5SecEda+6MOOFrGzFmdcv?=
+ =?us-ascii?Q?tia7NAZU8cDcvEENyAHMy5iuYkLQYtjkO/aU2CihRe8zlCa7YMg5wRUBCqjC?=
+ =?us-ascii?Q?s8jKDpvfnzRi8gD86N0q1iQfpsb1xktsilNJ7J3kFt9KdmZwUN1JmNX6qSzr?=
+ =?us-ascii?Q?pD6RZv1XWEn6YUECd60gsORYa1GdGj47I/Q0cRMcb2pGMug1rK8bFbxqlZ5E?=
+ =?us-ascii?Q?z0fJlPqqgdcRcd6eIuJ1CVqCOibU2bjqFgOVvQfs+wuNeWIr0Wmiy8C3Ll47?=
+ =?us-ascii?Q?m76/eRv5ZNb/vc6gM5MA4CKJtrAvzKeasmHAldCXvFC4NcJdIQCeG6bCwR5g?=
+ =?us-ascii?Q?cQaI+ini+LIqsNge0n7nwV0WGKE/KjvC44QBIjyAwJcoD3nBM7DduCCxJu5i?=
+ =?us-ascii?Q?QPg6ZjkINUF+kQPyBfuPUmiaxT9tD5HihGFP05AZIps8ZNIJA1N/A0KYDQ1t?=
+ =?us-ascii?Q?+zxUfjQ2eJ1PIK5hvlUw/LDO1Ur/+k5ItQEuIb1pi1ZvLC43Ugi1YAB04HXJ?=
+ =?us-ascii?Q?a1nbWPeBwdQaEh2MrOhEa9ZKmZU3oQn8/qWqhUKx?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5b8db55-9710-42c1-c6b0-08da8c31960a
+X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 15:49:42.6952
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: svOyKjTKnIeEChbrmQAjstmKJH05RQzL0eQ6OEYkHbREK3fCgpy4YMv3ba1Uk2jy
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6192
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-01 06:45, Andrei Vagin wrote:
-> On Tue, Aug 30, 2022 at 6:18 PM Andrei Vagin <avagin@gmail.com> wrote:
->> On Tue, Aug 30, 2022 at 10:49:43PM +0300, Alexey Izbyshev wrote:
-> <snip>
->>> @@ -1030,6 +1033,10 @@ static int exec_mmap(struct mm_struct *mm)
->>>         tsk->mm->vmacache_seqnum = 0;
->>>         vmacache_flush(tsk);
->>>         task_unlock(tsk);
->>> +
->>> +       if (vfork)
->>> +               timens_on_fork(tsk->nsproxy, tsk);
->>> +
->>> 
->>> Similarly, even after a normal vfork(), time namespace switch could 
->>> be
->>> silently skipped if the parent dies before "tsk->vfork_done" is read. 
->>> Again,
->>> I don't know whether anybody cares, but this behavior seems 
->>> non-obvious and
->>> probably unintended to me.
->> This is the more interesting case. I will try to find out how we can
->> handle it properly.
+On Thu, Sep 01, 2022 at 04:03:36PM +0100, Robin Murphy wrote:
+> On 2022-09-01 15:34, Jason Gunthorpe wrote:
+> > On Thu, Sep 01, 2022 at 03:29:16PM +0100, Robin Murphy wrote:
+> > 
+> > > Right, the next step would be to bridge that gap to iommu-dma to dump the
+> > > flush queue when IOVA allocation failure implies we've reached the
+> > > "rollover" point, and perhaps not use the timer at all. By that point a
+> > > dedicated domain type, or at least some definite internal flag, for this
+> > > alternate behaviour seems like the logical way to go.
+> > 
+> > At least on this direction, I've been thinking it would be nice to
+> > replace the domain type _FQ with a flag inside the domain, maybe the
+> > ops, saying how the domain wants the common DMA API to operate. If it
+> > wants FQ mode or other tuning parameters
 > 
-> It might not be a good idea to use vfork_done in this case. Let's
-> think about what we have and what we want to change. We don't want to
-> allow switching timens if a process mm is used by someone else. But we
-> forgot to handle execve that creates a new mm, and we can't change this
-> behavior right now because it can affect current users. Right?
-> 
-> So maybe the best choice, in this case, is to change behavior by adding
-> a new control that enables it. The first interface that comes to my 
-> mind
-> is to introduce a new ioctl for a namespace file descriptor. Here is a
-> draft patch below that should help to understand what I mean.
-> 
-While I'm not a user of time namespaces (at least yet), I welcome a 
-change that makes time namespace switching and inheritance semantics 
-easier to understand and document. Here is my understanding of how that 
-evolved.
+> Compare the not-necessarily-obvious matrix of "strict" and "passthrough"
+> command-line parameters with the nice understandable kconfig and sysfs
+> controls for a reminder of why I moved things *from* that paradigm in the
+> first place ;)
 
-Before the original patch that allowed vfork():
+I'm looking at it from a code perspective, where the drivers don't
+seem to actually care about DMA_FQ. eg search for it in the drivers
+and you mostly see:
 
-* Switching happens only on clone(~CLONE_VM).
-* clone(CLONE_VM) is forbidden after unshare(CLONE_NEWTIME) (thereby 
-vfork() and pthread_create() fail).
-* time_ns/time_ns_for_children is preserved across execve().
+	    (type != IOMMU_DOMAIN_DMA && type != IOMMU_DOMAIN_DMA_FQ))
 
-After that patch:
+The exception is domain_alloc which fails in cases where the domain
+doesn't 'support' FQ.
 
-* Switching happens on clone(~CLONE_VM).
-* Switching also happens on execve() if the current task is a 
-vfork-child whose creator task is still alive (because of reliance on 
-"vfork_done").
-* clone(CLONE_VM) is forbidden after unshare(CLONE_NEWTIME) unless it's 
-clone(CLONE_VM|CLONE_VFORK), in which case time_ns/time_ns_for_children 
-is inherited.
-* time_ns/time_ns_for_children is preserved across execve() unless 
-switched as described above.
+But support FQ or not can be cast as a simple capability flag in the
+domain. We don't need a whole type for the driver to communicate it.
 
-Note that switching conditions on execve() are very subtle. Apart from 
-the motivating use case of "unshare(CLONE_NEWTIME) -> vfork() -> 
-execve()", it would also happen on e.g. "vfork() -> 
-unshare(CLONE_NEWTIME) -> execve()", because unshare(CLONE_NEWTIME) is 
-not forbidden for tasks which share mm.
+The strictness level belongs completely in the core code, it shouldn't
+leak into the driver.
 
-With the current patch:
+The same general comment seems to be true of IOMMU_DOMAIN_DMA. All the
+drivers implement this as an UNMANAGED domain. There are only two
+places in the Intel driver that do anything special with DOMAIN_DMA vs
+DOMAIN_UNMANAGED (and possibly that is just cruft). So the "does this
+support DMA API" is also just a capability flag, and doesn't really
+need a whole type.
 
-* Switching happens on clone(~CLONE_VM).
-* Switching also happens on execve() if ioctl(TIMENS_SET_SWITCH_ON_EXEC) 
-was called on time_ns_for_children.
-* clone(CLONE_VM) is forbidden after unshare(CLONE_NEWTIME) unless it's 
-clone(CLONE_VM|CLONE_VFORK) without CLONE_THREAD, in which case 
-time_ns/time_ns_for_children is inherited. Thereby vfork() is permitted, 
-while pthread_create() is not.
-* time_ns/time_ns_for_children is preserved across execve() unless 
-switched as described above.
+This is what I mean, not going backwards to the driver specifying
+strictness policy.
 
-So in terms of cognitive complexity it seems like a clear improvement 
-that regains some of the simplicity of the initial implementation.
-
-However, I'd like to point out that while for a narrow fix of the 
-original issue (vfork() doesn't work when fork() does) time ns switching 
-on execve() is not required at all, removing "automatic" switching in 
-posix_spawn()-like cases could potentially surprise time namespace 
-users. In the initial time ns implementation, "unshare(CLONE_NEWTIME); 
-posix_spawn(...)" would either succeed with the expected effect (an 
-executable is running in a new time ns) or fail, depending on whether 
-posix_spawn() uses fork() or vfork(). With the first patch, vfork-based 
-posix_spawn() would *usually* behave as a fork-based one (modulo the 
-parent death issue). But with the current patch, unless user space is 
-modified to set switch_on_exec, vfork-based posix_spawn() will succeed 
-but the exe will be running in the parent's time ns. I'm not in a 
-position to estimate whether any actual time ns users are affected, 
-though it still looks like something that could affect *future* time ns 
-users that are not careful enough.
-
-Regarding the interface to control switching on execve(), one possible 
-alternative to ioctl() is a separate file in /proc like 
-/proc/$PID/setgroups that was added in a somewhat similar situation 
-(fixing a problem with user namespaces implementation). Regardless of 
-the interface, it'd probably be nice to also have the ability to get the 
-current value of switch_on_exec flag.
-
-Thanks,
-Alexey
-
-> ---
->  fs/exec.c                                   |  4 +---
->  fs/nsfs.c                                   |  3 +++
->  include/linux/proc_ns.h                     |  1 +
->  include/linux/time_namespace.h              |  1 +
->  include/uapi/linux/nsfs.h                   |  2 ++
->  kernel/fork.c                               |  3 ++-
->  kernel/time/namespace.c                     | 15 +++++++++++++++
->  tools/testing/selftests/timens/vfork_exec.c | 14 +++++++++++++-
->  8 files changed, 38 insertions(+), 5 deletions(-)
-> 
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 9a5ca7b82bfc..961348084257 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -979,12 +979,10 @@ static int exec_mmap(struct mm_struct *mm)
->  {
->  	struct task_struct *tsk;
->  	struct mm_struct *old_mm, *active_mm;
-> -	bool vfork;
->  	int ret;
-> 
->  	/* Notify parent that we're no longer interested in the old VM */
->  	tsk = current;
-> -	vfork = !!tsk->vfork_done;
->  	old_mm = current->mm;
->  	exec_mm_release(tsk, old_mm);
->  	if (old_mm)
-> @@ -1030,7 +1028,7 @@ static int exec_mmap(struct mm_struct *mm)
->  	vmacache_flush(tsk);
->  	task_unlock(tsk);
-> 
-> -	if (vfork)
-> +	if (READ_ONCE(tsk->nsproxy->time_ns_for_children->switch_on_exec))
->  		timens_on_fork(tsk->nsproxy, tsk);
-> 
->  	if (old_mm) {
-> diff --git a/fs/nsfs.c b/fs/nsfs.c
-> index 800c1d0eb0d0..723ab5f69bcd 100644
-> --- a/fs/nsfs.c
-> +++ b/fs/nsfs.c
-> @@ -11,6 +11,7 @@
->  #include <linux/user_namespace.h>
->  #include <linux/nsfs.h>
->  #include <linux/uaccess.h>
-> +#include <linux/nsfs.h>
-> 
->  #include "internal.h"
-> 
-> @@ -210,6 +211,8 @@ static long ns_ioctl(struct file *filp, unsigned 
-> int ioctl,
->  		uid = from_kuid_munged(current_user_ns(), user_ns->owner);
->  		return put_user(uid, argp);
->  	default:
-> +		if (ns->ops->ioctl)
-> +			return ns->ops->ioctl(ns, ioctl,  arg);
->  		return -ENOTTY;
->  	}
->  }
-> diff --git a/include/linux/proc_ns.h b/include/linux/proc_ns.h
-> index 75807ecef880..b690eb1a3468 100644
-> --- a/include/linux/proc_ns.h
-> +++ b/include/linux/proc_ns.h
-> @@ -22,6 +22,7 @@ struct proc_ns_operations {
->  	int (*install)(struct nsset *nsset, struct ns_common *ns);
->  	struct user_namespace *(*owner)(struct ns_common *ns);
->  	struct ns_common *(*get_parent)(struct ns_common *ns);
-> +	long (*ioctl)(struct ns_common *ns, unsigned int ioctl, unsigned long 
-> arg);
->  } __randomize_layout;
-> 
->  extern const struct proc_ns_operations netns_operations;
-> diff --git a/include/linux/time_namespace.h 
-> b/include/linux/time_namespace.h
-> index 3146f1c056c9..6569300d68ce 100644
-> --- a/include/linux/time_namespace.h
-> +++ b/include/linux/time_namespace.h
-> @@ -24,6 +24,7 @@ struct time_namespace {
->  	struct page		*vvar_page;
->  	/* If set prevents changing offsets after any task joined namespace. 
-> */
->  	bool			frozen_offsets;
-> +	bool			switch_on_exec;
->  } __randomize_layout;
-> 
->  extern struct time_namespace init_time_ns;
-> diff --git a/include/uapi/linux/nsfs.h b/include/uapi/linux/nsfs.h
-> index a0c8552b64ee..ce3a9f9b1bcf 100644
-> --- a/include/uapi/linux/nsfs.h
-> +++ b/include/uapi/linux/nsfs.h
-> @@ -16,4 +16,6 @@
->  /* Get owner UID (in the caller's user namespace) for a user namespace 
-> */
->  #define NS_GET_OWNER_UID	_IO(NSIO, 0x4)
-> 
-> +#define TIMENS_SET_SWITCH_ON_EXEC _IO(NSIO, 0x100)
-> +
->  #endif /* __LINUX_NSFS_H */
-> diff --git a/kernel/fork.c b/kernel/fork.c
-> index 90c85b17bf69..1f7bf2a087e9 100644
-> --- a/kernel/fork.c
-> +++ b/kernel/fork.c
-> @@ -2050,7 +2050,8 @@ static __latent_entropy struct task_struct 
-> *copy_process(
->  	 * On vfork, the child process enters the target time namespace only
->  	 * after exec.
->  	 */
-> -	if ((clone_flags & (CLONE_VM | CLONE_VFORK)) == CLONE_VM) {
-> +	if ((clone_flags & CLONE_THREAD) ||
-> +	    (clone_flags & (CLONE_VM | CLONE_VFORK)) == CLONE_VM) {
->  		if (nsp->time_ns != nsp->time_ns_for_children)
->  			return ERR_PTR(-EINVAL);
->  	}
-> diff --git a/kernel/time/namespace.c b/kernel/time/namespace.c
-> index aec832801c26..9966e0bdefa7 100644
-> --- a/kernel/time/namespace.c
-> +++ b/kernel/time/namespace.c
-> @@ -17,6 +17,7 @@
->  #include <linux/cred.h>
->  #include <linux/err.h>
->  #include <linux/mm.h>
-> +#include <linux/nsfs.h>
-> 
->  #include <vdso/datapage.h>
-> 
-> @@ -439,6 +440,18 @@ int proc_timens_set_offset(struct file *file,
-> struct task_struct *p,
->  	return err;
->  }
-> 
-> +static long timens_ioctl(struct ns_common *ns, unsigned int ioctl,
-> unsigned long arg)
-> +{
-> +	struct time_namespace *time_ns = to_time_ns(ns);
-> +
-> +	switch (ioctl) {
-> +	case TIMENS_SET_SWITCH_ON_EXEC:
-> +		WRITE_ONCE(time_ns->switch_on_exec, true);
-> +		return 0;
-> +	}
-> +	return -ENOTTY;
-> +}
-> +
->  const struct proc_ns_operations timens_operations = {
->  	.name		= "time",
->  	.type		= CLONE_NEWTIME,
-> @@ -446,6 +459,7 @@ const struct proc_ns_operations timens_operations = 
-> {
->  	.put		= timens_put,
->  	.install	= timens_install,
->  	.owner		= timens_owner,
-> +	.ioctl		= timens_ioctl,
->  };
-> 
->  const struct proc_ns_operations timens_for_children_operations = {
-> @@ -456,6 +470,7 @@ const struct proc_ns_operations
-> timens_for_children_operations = {
->  	.put		= timens_put,
->  	.install	= timens_install,
->  	.owner		= timens_owner,
-> +	.ioctl		= timens_ioctl,
->  };
-> 
->  struct time_namespace init_time_ns = {
-> diff --git a/tools/testing/selftests/timens/vfork_exec.c
-> b/tools/testing/selftests/timens/vfork_exec.c
-> index e6ccd900f30a..5f4e2043e0a7 100644
-> --- a/tools/testing/selftests/timens/vfork_exec.c
-> +++ b/tools/testing/selftests/timens/vfork_exec.c
-> @@ -12,6 +12,11 @@
->  #include <time.h>
->  #include <unistd.h>
->  #include <string.h>
-> +#include <fcntl.h>
-> +#include <sys/ioctl.h>
-> +#include <linux/nsfs.h>
-> +
-> +#define TIMENS_SET_SWITCH_ON_EXEC _IO(NSIO, 0x100)
-> 
->  #include "log.h"
->  #include "timens.h"
-> @@ -21,7 +26,7 @@
->  int main(int argc, char *argv[])
->  {
->  	struct timespec now, tst;
-> -	int status, i;
-> +	int status, i, nsfd;
->  	pid_t pid;
-> 
->  	if (argc > 1) {
-> @@ -45,6 +50,13 @@ int main(int argc, char *argv[])
->  	if (unshare_timens())
->  		return 1;
-> 
-> +	nsfd = open("/proc/self/ns/time_for_children", O_RDONLY);
-> +	if (nsfd < 0)
-> +		return pr_perror("open");
-> +	if (ioctl(nsfd, TIMENS_SET_SWITCH_ON_EXEC))
-> +		return pr_perror("ioctl");
-> +	close(nsfd);
-> +
->  	if (_settime(CLOCK_MONOTONIC, OFFSET))
->  		return 1;
+Jason

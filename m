@@ -2,43 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB5D5A9BA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:29:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2675A9BAD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232718AbiIAP3q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40410 "EHLO
+        id S234533AbiIAP3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234524AbiIAP3b (ORCPT
+        with ESMTP id S234505AbiIAP3Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:29:31 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7208A1D4
+        Thu, 1 Sep 2022 11:29:25 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564E689834
         for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:29:23 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oTm7o-0005k8-P8; Thu, 01 Sep 2022 17:29:00 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Anup Patel <apatel@ventanamicro.com>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>
-Subject: Re: [PATCH v2 2/4] RISC-V: Move riscv_init_cbom_blocksize() to cacheflush.c
-Date:   Thu, 01 Sep 2022 17:29:00 +0200
-Message-ID: <5909904.6fTUFtlzNn@diego>
-In-Reply-To: <20220830044642.566769-3-apatel@ventanamicro.com>
-References: <20220830044642.566769-1-apatel@ventanamicro.com> <20220830044642.566769-3-apatel@ventanamicro.com>
+Received: by mail-lf1-x130.google.com with SMTP id bt10so24961624lfb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:29:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=BCY/cRkulmgD8efvrpZqAejN7PwSrZj7VLEKd75R8dk=;
+        b=EEg+s2Dk6ErATC6NodQiY0vR22s5pNaUp/idyFYWYa+dPgvboxX3wbd5I5k3vb3uEZ
+         M4jlGBzEl8dqrTqFyMAbQwM4AMV76qpiItod025PJDUvPhRDDbj7eCtZKI8zC1peOSLX
+         ROdrrCYYaM+ZY/5COw8hWQnsWy0HC4xfxcP+TyLi2tRAs4GR2zNYZtvE9O7hD4dw1cRc
+         1M6Oz+xGv4LqoV1gVcx4iFAyBZIFcPY/6GH0sIkvaRjHa/GV8jsGi8MggQX9HoUCedgA
+         3/78GVIfmx3vv6K80T7nWJiuk5PF8zJ4vVjELR3qocGmwzAVrsS2vAqnR6Nczj12qfvD
+         zz4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=BCY/cRkulmgD8efvrpZqAejN7PwSrZj7VLEKd75R8dk=;
+        b=HVB1EMYc2rycukelSzPfra7AlNewGDvPqFFxg6+b5slaf0vwyqEYDvZBmffUxKN1Nl
+         /tYjM38Y8P5h/XDOb6Ydf50wxaWsdvxaY3qdTAm7CPw4qYss5q6gESbxKm2piKKgw1mX
+         S7HLdrR7vQCcVVKLXtW7i3yR++NGlMrX9ZdN83vguHSKoUntTrVT+J9K6vlt7SvHc0SU
+         1ueqYZ0KZVNbZsh5jeWlgFRz/nWecNuHhX5IWGqCe6HDCtmd7sERU9bbZjkYOqoBZKNu
+         GkVAK2tZ3TJhtETZx7GC0XC24vxYvmUeUMpLprKKyjDet4prrst6PO9dcpI73xBoH3YT
+         bhQA==
+X-Gm-Message-State: ACgBeo2cwggBORLlFXQJsfVeLI6ct31evjadD7YhQM+KHE7pwKIDlcvs
+        j5eLnQXLVrVIjeuOYFN1kdOyxQ==
+X-Google-Smtp-Source: AA6agR6At8ltsyotH0RJp7m2Msf4mRKclPNAQhFe1NEiooPETdAZnykN74Jn0wEWps7gOZ7gn9z1Pw==
+X-Received: by 2002:a05:6512:3408:b0:494:9aa0:b3b6 with SMTP id i8-20020a056512340800b004949aa0b3b6mr1295316lfr.318.1662046157817;
+        Thu, 01 Sep 2022 08:29:17 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id s11-20020a056512214b00b0049461118819sm1875284lfr.77.2022.09.01.08.29.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 08:29:17 -0700 (PDT)
+Message-ID: <f16cbcaa-1457-b809-1323-39f07695bc7c@linaro.org>
+Date:   Thu, 1 Sep 2022 18:29:16 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 3/4] soc: qcom: icc-bwmon: force clear counter/irq
+ registers
+Content-Language: en-US
+To:     Rajendra Nayak <quic_rjendra@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20220901124730.19460-1-quic_rjendra@quicinc.com>
+ <20220901124730.19460-4-quic_rjendra@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220901124730.19460-4-quic_rjendra@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,171 +79,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-Am Dienstag, 30. August 2022, 06:46:40 CEST schrieb Anup Patel:
-> The riscv_cbom_block_size parsing from DT belongs to cacheflush.c which
-> is home for all cache maintenance related stuff so let us move the
-> riscv_init_cbom_blocksize() and riscv_cbom_block_size to cacheflush.c.
+On 01/09/2022 15:47, Rajendra Nayak wrote:
+> In some SoCs we have to force clear the counter/irq clear registers as
+> they are not self clearing after they are written into.
+> sc7280 seems to be one such SoC, handle this with a quirk flag.
 > 
-> Co-developed-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> Signed-off-by: Mayuresh Chitale <mchitale@ventanamicro.com>
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-
-Makes a lot of sense to keep stuff together.
-
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
-Tested-by: Heiko Stuebner <heiko@sntech.de>
+> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
 
 
-Also, can we handle this as fix patch?
-
-I.e. Currently the t-head code somewhat relies on the default value
-set to L1_CACHE_BYTES. The cache-block-size is static there.
-
-Palmers upcoming patch reworking the parsing [0], will remove that default,
-so having the riscv_cbom_block_size defined in the cacheflush header
-will allow an easy fix by setting that value from the t-head errata init
-for those cores.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
-Heiko
-
-[0] https://lore.kernel.org/r/20220812154010.18280-1-palmer@rivosinc.com
-
-> ---
->  arch/riscv/include/asm/cacheflush.h |  2 ++
->  arch/riscv/mm/cacheflush.c          | 39 +++++++++++++++++++++++++++++
->  arch/riscv/mm/dma-noncoherent.c     | 38 ----------------------------
->  3 files changed, 41 insertions(+), 38 deletions(-)
-> 
-> diff --git a/arch/riscv/include/asm/cacheflush.h b/arch/riscv/include/asm/cacheflush.h
-> index a60acaecfeda..de55d6b8deeb 100644
-> --- a/arch/riscv/include/asm/cacheflush.h
-> +++ b/arch/riscv/include/asm/cacheflush.h
-> @@ -42,6 +42,8 @@ void flush_icache_mm(struct mm_struct *mm, bool local);
->  
->  #endif /* CONFIG_SMP */
->  
-> +extern unsigned int riscv_cbom_block_size;
-> +
->  #ifdef CONFIG_RISCV_ISA_ZICBOM
->  void riscv_init_cbom_blocksize(void);
->  #else
-> diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-> index 6cb7d96ad9c7..336c5deea870 100644
-> --- a/arch/riscv/mm/cacheflush.c
-> +++ b/arch/riscv/mm/cacheflush.c
-> @@ -3,6 +3,8 @@
->   * Copyright (C) 2017 SiFive
->   */
->  
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
->  #include <asm/cacheflush.h>
->  
->  #ifdef CONFIG_SMP
-> @@ -86,3 +88,40 @@ void flush_icache_pte(pte_t pte)
->  		flush_icache_all();
->  }
->  #endif /* CONFIG_MMU */
-> +
-> +unsigned int riscv_cbom_block_size = L1_CACHE_BYTES;
-> +
-> +#ifdef CONFIG_RISCV_ISA_ZICBOM
-> +void riscv_init_cbom_blocksize(void)
-> +{
-> +	struct device_node *node;
-> +	int ret;
-> +	u32 val;
-> +
-> +	for_each_of_cpu_node(node) {
-> +		unsigned long hartid;
-> +		int cbom_hartid;
-> +
-> +		ret = riscv_of_processor_hartid(node, &hartid);
-> +		if (ret)
-> +			continue;
-> +
-> +		if (hartid < 0)
-> +			continue;
-> +
-> +		/* set block-size for cbom extension if available */
-> +		ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-> +		if (ret)
-> +			continue;
-> +
-> +		if (!riscv_cbom_block_size) {
-> +			riscv_cbom_block_size = val;
-> +			cbom_hartid = hartid;
-> +		} else {
-> +			if (riscv_cbom_block_size != val)
-> +				pr_warn("cbom-block-size mismatched between harts %d and %lu\n",
-> +					cbom_hartid, hartid);
-> +		}
-> +	}
-> +}
-> +#endif
-> diff --git a/arch/riscv/mm/dma-noncoherent.c b/arch/riscv/mm/dma-noncoherent.c
-> index cd2225304c82..3f502a1a68b1 100644
-> --- a/arch/riscv/mm/dma-noncoherent.c
-> +++ b/arch/riscv/mm/dma-noncoherent.c
-> @@ -8,11 +8,8 @@
->  #include <linux/dma-direct.h>
->  #include <linux/dma-map-ops.h>
->  #include <linux/mm.h>
-> -#include <linux/of.h>
-> -#include <linux/of_device.h>
->  #include <asm/cacheflush.h>
->  
-> -static unsigned int riscv_cbom_block_size = L1_CACHE_BYTES;
->  static bool noncoherent_supported;
->  
->  void arch_sync_dma_for_device(phys_addr_t paddr, size_t size,
-> @@ -75,41 +72,6 @@ void arch_setup_dma_ops(struct device *dev, u64 dma_base, u64 size,
->  	dev->dma_coherent = coherent;
->  }
->  
-> -#ifdef CONFIG_RISCV_ISA_ZICBOM
-> -void riscv_init_cbom_blocksize(void)
-> -{
-> -	struct device_node *node;
-> -	int ret;
-> -	u32 val;
-> -
-> -	for_each_of_cpu_node(node) {
-> -		unsigned long hartid;
-> -		int cbom_hartid;
-> -
-> -		ret = riscv_of_processor_hartid(node, &hartid);
-> -		if (ret)
-> -			continue;
-> -
-> -		if (hartid < 0)
-> -			continue;
-> -
-> -		/* set block-size for cbom extension if available */
-> -		ret = of_property_read_u32(node, "riscv,cbom-block-size", &val);
-> -		if (ret)
-> -			continue;
-> -
-> -		if (!riscv_cbom_block_size) {
-> -			riscv_cbom_block_size = val;
-> -			cbom_hartid = hartid;
-> -		} else {
-> -			if (riscv_cbom_block_size != val)
-> -				pr_warn("cbom-block-size mismatched between harts %d and %lu\n",
-> -					cbom_hartid, hartid);
-> -		}
-> -	}
-> -}
-> -#endif
-> -
->  void riscv_noncoherent_supported(void)
->  {
->  	noncoherent_supported = true;
-> 
-
-
-
-
+Best regards,
+Krzysztof

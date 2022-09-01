@@ -2,323 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EC5C5A9EB0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:12:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39AFA5A9EB2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:12:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233576AbiIASLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56642 "EHLO
+        id S233644AbiIASL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:11:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234363AbiIASKx (ORCPT
+        with ESMTP id S233101AbiIASLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:10:53 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58C75FF42;
-        Thu,  1 Sep 2022 11:10:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662055824; x=1693591824;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=O4+ydsfOmJ26ZdN9QGVy9k81fbSN1/Xa6Ap49CZeSPI=;
-  b=KPu4vps44ke1b1M2CtT/hZUj6Zzzo20GJb6MCcu/fROuhmfvGXjY7DAg
-   gPjv2ocHWA/bqnqW6bdukaN9YH+Uhwbq0d8GnJ5oSCCvspmF6SAhJPH5s
-   mUrorM5v1YlLCJAXCCdr8d4f0W/Jqx+2cM5LifZhEUUOGguWfB4TIivIO
-   5I1IjvUf1sFVOiCYCWj99xFxy/FiajcCrMPK2VEBTtfPDAbtExz9iZWXN
-   fTMiUdvgyLXk7KXylepbNUgnzC5JJlruor99EuSwj93/uHysjnD6QkM6l
-   rUVDjJC3kWw0jO2vqiM0uwUUc2kz+m2foUZ64eLJ4JJJ1xmtlyn3l4mGH
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="295799432"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="295799432"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 11:10:24 -0700
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="612605842"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.209.165.86]) ([10.209.165.86])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 11:10:23 -0700
-Message-ID: <e42daada-2471-6379-f06b-77d2e9044132@intel.com>
-Date:   Thu, 1 Sep 2022 11:10:22 -0700
+        Thu, 1 Sep 2022 14:11:03 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A018D23BEC;
+        Thu,  1 Sep 2022 11:10:38 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BF7E06CD;
+        Thu,  1 Sep 2022 20:10:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662055837;
+        bh=yisMqaoWBDsbWebXqcpHBHBjvKY6q+kjKiEmjB4kfeo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LzKug78Jh6jAwH5sL52x6kMBrm941Z72a6IYapStVAuwe5lJ92fR5S4wTK6jAZWKc
+         1ziH80WGYihPVFmtuqImuWOKECc6zGrlG23uVu9B46N0MuL3zuh0Ls5W6W0U4eH8xM
+         cua6gl/RILJerjkUSreHo/7jOnJ1tM7++0dn0qf4=
+Date:   Thu, 1 Sep 2022 21:10:25 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Max Krummenacher <max.oss.09@gmail.com>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] arm64: dts: imx8mp-verdin: add dsi to lvds
+ functionality
+Message-ID: <YxD1kecBOaqG+GNh@pendragon.ideasonboard.com>
+References: <20220901154051.1885509-1-max.oss.09@gmail.com>
+ <20220901154051.1885509-2-max.oss.09@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.0
-Subject: Re: [RFC PATCH 0/9] CXL: Read and clear event logs
-Content-Language: en-US
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Cc:     Davidlohr Bueso <dave@stgolabs.net>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>, a.manzanares@samsung.com,
-        linux-kernel@vger.kernel.org, linux-cxl@vger.kernel.org
-References: <20220813053243.757363-1-ira.weiny@intel.com>
- <20220822161802.h47v7yfrqufeltqt@offworld> <YwQJAqThYczUHhOB@iweiny-desk3>
- <20220824110755.00000c1e@huawei.com>
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20220824110755.00000c1e@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220901154051.1885509-2-max.oss.09@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Max,
 
-On 8/24/2022 3:07 AM, Jonathan Cameron wrote:
-> On Mon, 22 Aug 2022 15:53:54 -0700
-> Ira Weiny <ira.weiny@intel.com> wrote:
->
->> On Mon, Aug 22, 2022 at 09:18:02AM -0700, Davidlohr Bueso wrote:
->>> On Fri, 12 Aug 2022, ira.weiny@intel.com wrote:
->>>    
->>>> From: Ira Weiny <ira.weiny@intel.com>
->>>>
->>>> Event records inform the OS of various device events.  Events are not needed
->>>> for any kernel operation but various user level software will want to track
->>>> events.
->>>>
->>>> Add event reporting through the trace event mechanism.  On driver load read and
->>>> clear all device events.
->>>>
->>>> Normally interrupts will trigger new events to be reported as they occur.
->>>> Because the interrupt code is still being worked on this series provides a
->>>> cxl-test mechanism to create a series of events and trigger the reporting of
->>>> those events.
->>> Where is this irq code being worked on? I've asked about this for async mbox
->>> commands, and Jonathan has also posted some code for the PMU implementation.
->> I'm still trying to work out how to share irq's between PCI and CXL.  Mainly
->> for DOE.
->>
->> I thought that we could skip IRQ support for DOE completely and this would
->> support your proposal below.  But I just found that:
->>
->> "A device may interrupt the host when CDAT content changes using the MSI
->> associated with this DOE Capability instance."
-> As of today that doesn't work because there is no status flag anywhere to let
-> you know that was the interrupt source.
->
-> It's been raised in appropriate places, but I can't say anymore on that
-> until stuff is published.
->
-> Hence I'd not worry about that corner for now.
->
->> So I guess it needs to be supported at some point.
->>
->>> Could we not just start with an initial MSI/MSI-X support? Then gradually
->>> interested users can be added? So each "feature" would need to do implement
->>> it's "get message number" and to install the isr just do the standard:
->>>
->>>       irq = pci_irq_vector(pdev, num);
->>>       irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s_%s\n", dev_name(dev),
->>> 			       cxl_irq_cap_table[feature].name);
->>>       rc = devm_request_irq(dev, irq, isr_fn, IRQF_SHARED, irq_name, info);
->>>
->>> The only complexity I see for this is to know the number of vectors to request
->>> apriori, for which we'd have to get the larges value of all CXL features that
->>> can support interrupts. Something like the following?
->> Generally it seems ok but I have questions below.
->>
->>> One thing I have not
->>> considered in this is the DOE stuff.
->> I think this is the harder thing to support because of needing to allow both
->> the PCI layer and the CXL layer to create irqs.  Potentially at different
->> times.
-> My reasoning on this is that IRQ creation has to be done by
-> the PCI device driver.  That may result in some juggling and late starting
-> or indeed restarting of DOE mailboxes once we can know the list of vectors.
-> (e.g. query them by polling, then a later driver register can request enabling
-> the DOE with an irq).
-> Or it needs the ability to do dynamic increasing of the requested IRQ vectors.
+Thank you for the patch.
 
-tglx was working on dynamic MSIX a while back. not sure the state of 
-that now
+On Thu, Sep 01, 2022 at 05:40:51PM +0200, Max Krummenacher wrote:
+> From: Max Krummenacher <max.krummenacher@toradex.com>
+> 
+> Add a panel-lvds node and use the correct dsi to lvds chip name.
+> Both to be later extended in a dt overlay according to the exact
+> board HW configuration.
 
-https://lore.kernel.org/lkml/87a6hof5sr.ffs@tglx/T/
+Same as with patch 1/2, this doesn't look right. The panel isn't part of
+the Verdin SoM, it's not even part of the base board. It should be moved
+to an overlay, and the SN65DSI83, which I understand isn't on the SoM
+either, should be moved somewhere else too..
 
-DJ
+> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
+> ---
+> 
+>  arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 11 +++++++++--
+>  1 file changed, 9 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+> index bd84a0d135dc..a3e20c7add3e 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+> @@ -67,6 +67,13 @@ hdmi_connector: hdmi-connector {
+>  		status = "disabled";
+>  	};
+>  
+> +	panel_lvds: panel-lvds {
+> +		compatible = "panel-lvds";
+> +		backlight = <&backlight>;
+> +		data-mapping = "vesa-24";
+> +		status = "disabled";
+> +	};
+> +
+>  	/* Carrier Board Supplies */
+>  	reg_1p8v: regulator-1p8v {
+>  		compatible = "regulator-fixed";
+> @@ -690,8 +697,8 @@ gpio_expander_21: gpio-expander@21 {
+>  		status = "disabled";
+>  	};
+>  
+> -	lvds_ti_sn65dsi83: bridge@2c {
+> -		compatible = "ti,sn65dsi83";
+> +	lvds_ti_sn65dsi84: bridge@2c {
+> +		compatible = "ti,sn65dsi84";
+>  		/* Verdin GPIO_9_DSI (SN65DSI84 IRQ, SODIMM 17, unused) */
+>  		/* Verdin GPIO_10_DSI (SODIMM 21) */
+>  		enable-gpios = <&gpio4 28 GPIO_ACTIVE_HIGH>;
 
->
->>> Thanks,
->>> Davidlohr
->>>
->>> ------
->>> diff --git a/drivers/cxl/cxlmem.h b/drivers/cxl/cxlmem.h
->>> index 88e3a8e54b6a..b334d2f497c1 100644
->>> --- a/drivers/cxl/cxlmem.h
->>> +++ b/drivers/cxl/cxlmem.h
->>> @@ -245,6 +245,8 @@ struct cxl_dev_state {
->>> 	resource_size_t component_reg_phys;
->>> 	u64 serial;
->>>
->>> +	int irq_type; /* MSI-X, MSI */
->>> +
->>> 	struct xarray doe_mbs;
->>>
->>> 	int (*mbox_send)(struct cxl_dev_state *cxlds, struct cxl_mbox_cmd *cmd);
->>> diff --git a/drivers/cxl/cxlpci.h b/drivers/cxl/cxlpci.h
->>> index eec597dbe763..95f4b91f43b1 100644
->>> --- a/drivers/cxl/cxlpci.h
->>> +++ b/drivers/cxl/cxlpci.h
->>> @@ -53,15 +53,6 @@
->>>   #define	    CXL_DVSEC_REG_LOCATOR_BLOCK_ID_MASK			GENMASK(15, 8)
->>>   #define     CXL_DVSEC_REG_LOCATOR_BLOCK_OFF_LOW_MASK		GENMASK(31, 16)
->>>
->>> -/* Register Block Identifier (RBI) */
->>> -enum cxl_regloc_type {
->>> -	CXL_REGLOC_RBI_EMPTY = 0,
->>> -	CXL_REGLOC_RBI_COMPONENT,
->>> -	CXL_REGLOC_RBI_VIRT,
->>> -	CXL_REGLOC_RBI_MEMDEV,
->>> -	CXL_REGLOC_RBI_TYPES
->>> -};
->> Why move this?
->>
->>> -
->>>   static inline resource_size_t cxl_regmap_to_base(struct pci_dev *pdev,
->>> 						 struct cxl_register_map *map)
->>>   {
->>> @@ -75,4 +66,44 @@ int devm_cxl_port_enumerate_dports(struct cxl_port *port);
->>>   struct cxl_dev_state;
->>>   int cxl_hdm_decode_init(struct cxl_dev_state *cxlds, struct cxl_hdm *cxlhdm);
->>>   void read_cdat_data(struct cxl_port *port);
->>> +
->>> +#define CXL_IRQ_CAPABILITY_TABLE				\
->>> +	C(ISOLATION, "isolation", NULL),			\
->>> +	C(PMU, "pmu_overflow", NULL), /* per pmu instance */	\
->>> +	C(MBOX, "mailbox", NULL), /* primary-only */		\
->>> +	C(EVENT, "event", NULL),
->> This is defining get_max_msgnum to NULL right?
->>
->>> +
->>> +#undef C
->>> +#define C(a, b, c) CXL_IRQ_CAPABILITY_##a
->>> +enum  { CXL_IRQ_CAPABILITY_TABLE };
->>> +#undef C
->>> +#define C(a, b, c) { b, c }
->>> +/**
->>> + * struct cxl_irq_cap - CXL feature that is capable of receiving MSI/MSI-X irqs.
->>> + *
->>> + * @name: Name of the device generating this interrupt.
->>> + * @get_max_msgnum: Get the feature's largest interrupt message number. In cases
->>> + *                  where there is only one instance it also indicates which
->>> + *                  MSI/MSI-X vector is used for the interrupt message generated
->>> + *                  in association with the feature. If the feature does not
->>> + *                  have the Interrupt Supported bit set, then return -1.
->>> + */
->>> +struct cxl_irq_cap {
->>> +	const char *name;
->>> +	int (*get_max_msgnum)(struct cxl_dev_state *cxlds);
->>> +};
->>> +
->>> +static const
->>> +struct cxl_irq_cap cxl_irq_cap_table[] = { CXL_IRQ_CAPABILITY_TABLE };
->>> +#undef C
->> Why all this macro magic?
-> Agreed. I'm rarely persuaded it's a good idea to do this sort of trickery
-> and it definitely isn't worth the readabilty problems unless there a
-> large number of users.
->
->>> +
->>> +/* Register Block Identifier (RBI) */
->>> +enum cxl_regloc_type {
->>> +	CXL_REGLOC_RBI_EMPTY = 0,
->>> +	CXL_REGLOC_RBI_COMPONENT,
->>> +	CXL_REGLOC_RBI_VIRT,
->>> +	CXL_REGLOC_RBI_MEMDEV,
->>> +	CXL_REGLOC_RBI_TYPES
->>> +};
->>> +
->>>   #endif /* __CXL_PCI_H__ */
->>> diff --git a/drivers/cxl/pci.c b/drivers/cxl/pci.c
->>> index faeb5d9d7a7a..c0fe78e0559b 100644
->>> --- a/drivers/cxl/pci.c
->>> +++ b/drivers/cxl/pci.c
->>> @@ -387,6 +387,52 @@ static int cxl_setup_regs(struct pci_dev *pdev, enum cxl_regloc_type type,
->>> 	return rc;
->>>   }
->>>
->>> +static void cxl_pci_free_irq_vectors(void *data)
->>> +{
->>> +	pci_free_irq_vectors(data);
->>> +}
->>> +
->>> +static int cxl_pci_alloc_irq_vectors(struct cxl_dev_state *cxlds)
->>> +{
->>> +	struct device *dev = cxlds->dev;
->>> +	struct pci_dev *pdev = to_pci_dev(dev);
->>> +	int rc, i, vectors = -1;
->>> +
->>> +	for (i = 0; i < ARRAY_SIZE(cxl_irq_cap_table); i++) {
->>> +		int irq;
->>> +
->>> +		if (!cxl_irq_cap_table[i].get_max_msgnum)
->>> +			continue;
->>> +
->>> +		irq = cxl_irq_cap_table[i].get_max_msgnum(cxlds);
->>> +		vectors = max_t(int, irq, vectors);
->>> +	}
->>> +
->>> +	if (vectors == -1)
->>> +		return -EINVAL; /* no irq support whatsoever */
->>> +
->>> +	vectors++;
->> This is pretty much what earlier versions of the DOE code did with the
->> exception of only have 1 get_max_msgnum() calls defined (for DOE).  But there
->> was a lot of debate about how to share vectors with the PCI layer.  And
->> eventually we got rid of it.  I'm still trying to figure it out.  Sorry for
->> being slow.
-> I'm not yet setting huge advantage in wrapping this up. For now a set of
-> linear calls to establish the max irq vector is more readable.  Sure
-> down the line moving to this may make sense.
->
->> Perhaps we do this for this series.  However, won't we have an issue if we want
->> to support switch events?
-> We 'could' extend existing stuff in the portdrv code (which is ultimately
-> where this general approach was copied from ;) but I suspect doing that
-> for non generic PCI stuff is going to be controversial.
->
-> That whole infrastructure in PCI may need a rewrite.
->
->> Ira
->>
->>> +	rc = pci_alloc_irq_vectors(pdev, vectors, vectors, PCI_IRQ_MSIX);
->>> +	if (rc < 0) {
->>> +		rc = pci_alloc_irq_vectors(pdev, vectors, vectors, PCI_IRQ_MSI);
->>> +		if (rc < 0)
->>> +			return rc;
->>> +
->>> +		cxlds->irq_type = PCI_IRQ_MSI;
->>> +	} else {
->>> +		cxlds->irq_type = PCI_IRQ_MSIX;
->>> +	}
->>> +
->>> +	if (rc != vectors) {
->>> +		pci_err(pdev, "Not enough interrupts; use polling where supported\n");
->>> +		/* Some got allocated; clean them up */
->>> +		cxl_pci_free_irq_vectors(pdev);
->>> +		return -ENOSPC;
->>> +	}
->>> +
->>> +	return devm_add_action_or_reset(dev, cxl_pci_free_irq_vectors, pdev);
->>> +}
->>> +
->>>   static void cxl_pci_destroy_doe(void *mbs)
->>>   {
->>> 	xa_destroy(mbs);
->>> @@ -476,6 +522,9 @@ static int cxl_pci_probe(struct pci_dev *pdev, const struct pci_device_id *id)
->>>
->>> 	cxlds->component_reg_phys = cxl_regmap_to_base(pdev, &map);
->>>
->>> +	if (cxl_pci_alloc_irq_vectors(cxlds))
->>> +		cxlds->irq_type = 0;
->>> +
->>> 	devm_cxl_pci_create_doe(cxlds);
->>>
->>> 	rc = cxl_pci_setup_mailbox(cxlds);
+-- 
+Regards,
+
+Laurent Pinchart

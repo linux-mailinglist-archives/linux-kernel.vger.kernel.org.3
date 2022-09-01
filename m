@@ -2,176 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970B05A9C3B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:52:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED6E75A9C3E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234718AbiIAPvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
+        id S234489AbiIAPwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234654AbiIAPvP (ORCPT
+        with ESMTP id S234143AbiIAPwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:51:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3716BCCA
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:51:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662047473;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ceLO303KUmrfBpUmDlWW6bfcpSkbAE/shqJJVjKA2W8=;
-        b=SbnDKYkDQcxDIFRyc7dyLbfTgkopZT4KX/sfXAzTDNed56LCSjTbDgVDGeluzDDnhhB8wV
-        fPwCUHojOdXl1BFa1nvjZTPhjlI9NRJJCZsCy8j+FtPd5poVjGN+1wsVr3vx0XRQhNrd9t
-        uAIh98sE3r0h5bdZzE4gzYY4GKAGOs4=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-564-Ai_WT7FFNAuiTWxcwhIvVQ-1; Thu, 01 Sep 2022 11:51:12 -0400
-X-MC-Unique: Ai_WT7FFNAuiTWxcwhIvVQ-1
-Received: by mail-ed1-f71.google.com with SMTP id w19-20020a05640234d300b004482dd03feeso9978918edc.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:51:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=ceLO303KUmrfBpUmDlWW6bfcpSkbAE/shqJJVjKA2W8=;
-        b=PAX+up21qe3GTBpVC2Qd0edmfrH23+KefHWypXEE2wI4Tvjq3BHdrZKLox+qfvxOE6
-         6zsPSSvOl9pqKc6qjEyW8NMe05q3VVX+3V1r0ImJL1CfT94Va5kxcpQ08CYy/T0/sWpF
-         bM7g2sFZL94lg5gU722aRnHFYHHJU7ScpqcEKEtEaNgg+oT+WmbeyAjk94KMlTtOublf
-         wP32Lnlp+tL4rherskWZ1BX+Krf4B9oXGlhY8CZvPKp7fCcYQ8k0UPJFhNjAbPpO7zpb
-         Pq0bjSt5k5izb2dOTgQ/Adtf2uueYgwKaL81t1fJSqLguMgJp8YIPtBOASums5Awj2IG
-         Ev1Q==
-X-Gm-Message-State: ACgBeo0Dmt63PPm+TNNaMkx5lP73J+ErTx3BhXPj+1ysYe+Xdf1C7Ktd
-        840ttreOThGV5J4hIk/5miGqqu3O8W2uxPDZBXUvoRXl4Y9n//kVGEyNvgl6fiwtLzWdeWSrH4h
-        eMVGn0G20c+qGG5g67vcM4/JA
-X-Received: by 2002:a17:906:974b:b0:733:10e:b940 with SMTP id o11-20020a170906974b00b00733010eb940mr24299164ejy.326.1662047471324;
-        Thu, 01 Sep 2022 08:51:11 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR53q/rSRkk/xrOhhO7q/AleiPEgKRnSsOD8nQB0CtaGMstmT1apyYCnltjwPvPvF8H99yYDqA==
-X-Received: by 2002:a17:906:974b:b0:733:10e:b940 with SMTP id o11-20020a170906974b00b00733010eb940mr24299146ejy.326.1662047471079;
-        Thu, 01 Sep 2022 08:51:11 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id eh22-20020a0564020f9600b0044792480994sm1525249edb.68.2022.09.01.08.51.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 08:51:10 -0700 (PDT)
-Message-ID: <42bb615d-995a-5bcb-d481-f0d6054d4398@redhat.com>
-Date:   Thu, 1 Sep 2022 17:51:10 +0200
+        Thu, 1 Sep 2022 11:52:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252AF402D9;
+        Thu,  1 Sep 2022 08:52:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B829561F19;
+        Thu,  1 Sep 2022 15:52:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FDFCC433D6;
+        Thu,  1 Sep 2022 15:52:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662047540;
+        bh=34vESrVVRe/Gvd1WwwkrRcgjvAK0J4ZY6Nipqtoutgs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Aj2arhAoWe07La6XVtPnCUxijvLpgwYBi1YBn9wVtXodcREyNJh44XP192jPrZWEY
+         4cQx29s2fH5WooVsi9YwAiyC03/TPXXxUlshA+Z4cLsIFrUHe9SrF7Nw+sgVYiqhmS
+         gdnOF9Hboc5uwVEH66H4v17LfcFYE3WF01iw5EI2GyL9uJyhNl1s+a4lEGiaDbnhEr
+         vOia4IOspZ+D51srFikbpPekK46b+ZlrQ8VEIklPGuqvunfPsk4uv6YGKVHsaB8XXN
+         N8iwFi0MlGcWf7B+Eb3jT2tqt0A/+VR+NqyyqadY+xkkkJrF9OPyK3rJidFPin5cg0
+         IslzDQgPs6OIQ==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oTmUP-0004Qm-Fa; Thu, 01 Sep 2022 17:52:21 +0200
+Date:   Thu, 1 Sep 2022 17:52:21 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-arm-msm <linux-arm-msm@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/6] arm64: dts: qcom: Fix broken regulator spec on
+ RPMH boards
+Message-ID: <YxDVNW+EQbHRw16s@hovoldconsulting.com>
+References: <20220829164952.2672848-1-dianders@chromium.org>
+ <Yw8EE/ESDUnIRf8P@hovoldconsulting.com>
+ <CAD=FV=VJz2hjvsUhsjBPt9nmm3X62oTdAqMeSFABYJietPPzWw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1 1/1] platform/x86: p2sb: Fix UAF when caller uses
- resource name
-Content-Language: en-US
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Mark Gross <markgross@kernel.org>,
-        kernel test robot <oliver.sang@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20220901113406.65876-1-andriy.shevchenko@linux.intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220901113406.65876-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAD=FV=VJz2hjvsUhsjBPt9nmm3X62oTdAqMeSFABYJietPPzWw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 9/1/22 13:34, Andy Shevchenko wrote:
-> We have to copy only selected fields from the original resource.
-> Because a PCI device will be removed immediately after getting
-> its resources, we may not use any allocated data, hence we may
-> not copy any pointers.
+On Wed, Aug 31, 2022 at 07:52:52AM -0700, Doug Anderson wrote:
+> Hi,
 > 
-> Consider the following scenario:
+> On Tue, Aug 30, 2022 at 11:47 PM Johan Hovold <johan@kernel.org> wrote:
+> >
+> > On Mon, Aug 29, 2022 at 09:49:46AM -0700, Douglas Anderson wrote:
+> > > Prior to commit efb0cb50c427 ("regulator: qcom-rpmh: Implement
+> > > get_optimum_mode(), not set_load()") several boards were able to
+> > > change their regulator mode even though they had nothing listed in
+> > > "regulator-allowed-modes". After that commit (and fixes [1]) we'll be
+> > > stuck at the initial mode. Discussion of this (again, see [1]) has
+> > > resulted in the decision that the old dts files were wrong and should
+> > > be fixed to fully restore old functionality.
+> > >
+> > > This series attempts to fix everyone. I've kept each board in a
+> > > separate patch to make stable / backports work easier.
+> >
+> > Should you also update the bindings so that this can be caught during
+> > devicetree validation? That is, to always require
+> > "regulator-allowed-modes" when "regulator-allow-set-load" is specified.
 > 
->   1/ a caller of p2sb_bar() gets the resource;
+> Yeah, it's probably a good idea. I'm happy to review a patch that does
+> that. I'm already quite a few patches deep of submitting random
+> cleanups because someone mentioned it in a code review. ;-) That's
+> actually how I got in this mess to begin with. The RPMH change was in
+> response to a request in a different code review. ...and that came
+> about in a code review that was posted in response to a comment about
+> how awkward setting regulator loads was... Need to get back to my day
+> job.
+
+Heh.
+
+> In any case, I think these dts patches are ready to land now.
+
+Yeah, as the old dtbs are now broken with newer kernels these are indeed
+needed.
+
+But regardless of the question of backwards compatibility, it seems that
+the bindings should at least reflect that the old DTs are now considered
+malformed.
+
+> > Perhaps at least for RPMh as it seemed you found some cases were this
+> > wasn't currently needed (even if that sounded like an Linux-specific
+> > implementation detail).
 > 
->   2/ the resource has been copied by platform_device_add_data()
->      in order to create a platform device;
-> 
->   3/ the platform device creation will call for the device driver's
->      ->probe() as soon as a match found;
-> 
->   4/ the ->probe() takes given resources (see 2/) and tries to
->      access one of its field, i.e. 'name', in the
->      __devm_ioremap_resource() to create a pretty looking output;
-> 
->   5/ but the 'name' is a dangling pointer because p2sb_bar()
->      removed a PCI device, which 'name' had been copied to
->      the caller's memory.
-> 
->   6/ UAF (Use-After-Free) as a result.
-> 
-> Kudos to Mika for the initial analisys of the issue.
-> 
-> Fixes: 9745fb07474f ("platform/x86/intel: Add Primary to Sideband (P2SB) bridge support")
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Suggested-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Link: https://lore.kernel.org/linux-i2c/YvPCbnKqDiL2XEKp@xsang-OptiPlex-9020/
-> Link: https://lore.kernel.org/linux-i2c/YtjAswDKfiuDfWYs@xsang-OptiPlex-9020/
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> I think you're talking about the RPM vs. RPMH difference? It's
+> actually not Linux specific. In RPM the API to the "hardware"
+> (actually a remote processor) is to pass the load. In RPMH the API to
+> the hardware is to pass a mode. This is why RPMH has
+> "regulator-allowed-modes" and "regulator-initial-mode". Both RPM and
+> RPMH have "regulator-allow-set-load" though...
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+Ah, ok. And this was only an issue for Qualcomm DTs, which are the only
+users of "regulator-allow-set-load" in mainline.
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-
-> ---
->  drivers/platform/x86/p2sb.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/p2sb.c b/drivers/platform/x86/p2sb.c
-> index fb2e141f3eb8..384d0962ae93 100644
-> --- a/drivers/platform/x86/p2sb.c
-> +++ b/drivers/platform/x86/p2sb.c
-> @@ -42,10 +42,24 @@ static int p2sb_get_devfn(unsigned int *devfn)
->  	return 0;
->  }
->  
-> +/* Copy resource from the first BAR of the device in question */
->  static int p2sb_read_bar0(struct pci_dev *pdev, struct resource *mem)
->  {
-> -	/* Copy resource from the first BAR of the device in question */
-> -	*mem = pdev->resource[0];
-> +	struct resource *bar0 = &pdev->resource[0];
-> +
-> +	/* Make sure we have no dangling pointers in the output */
-> +	memset(mem, 0, sizeof(*mem));
-> +
-> +	/*
-> +	 * We copy only selected fields from the original resource.
-> +	 * Because a PCI device will be removed soon, we may not use
-> +	 * any allocated data, hence we may not copy any pointers.
-> +	 */
-> +	mem->start = bar0->start;
-> +	mem->end = bar0->end;
-> +	mem->flags = bar0->flags;
-> +	mem->desc = bar0->desc;
-> +
->  	return 0;
->  }
->  
-
+Johan

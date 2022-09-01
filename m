@@ -2,50 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48D55A9C50
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8217E5A9C58
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:58:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234489AbiIAP45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40164 "EHLO
+        id S234720AbiIAP6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiIAP4z (ORCPT
+        with ESMTP id S229720AbiIAP6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:56:55 -0400
+        Thu, 1 Sep 2022 11:58:18 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DEA8000D;
-        Thu,  1 Sep 2022 08:56:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF0D482FB1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:58:17 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 196F861F31;
-        Thu,  1 Sep 2022 15:56:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE578C433C1;
-        Thu,  1 Sep 2022 15:56:52 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BC8E61F2F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:58:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84D60C433C1;
+        Thu,  1 Sep 2022 15:58:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662047813;
-        bh=PO3JHixyGeTvQB4eTxI5p4EHFoeyb/XZAm6c6Dd80j0=;
+        s=korg; t=1662047896;
+        bh=j9IiE+cBGM6l+xNAPKSMRgz3GaWODjr55a3hhGAhTOM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=0T35UNSHQHSgOBUKHNO9VBJ4BCdHZK/qYKZOXB4euigOIxuLMeBeNeQXG2NnGbzPo
-         69V1C046Lmbr9BIZXNGGWplxACTZMdvDQnBEiDj1VbhTjK3o3LwT80tPrdv0gf3cx1
-         a0eUc2sOlFbPEW6WWLONFhW74FIq5wtbX/tYV468=
-Date:   Thu, 1 Sep 2022 17:56:50 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Vimal Kumar <vimal.kumar32@gmail.com>
-Cc:     chinmoyghosh2001@gmail.com, Mintu Patel <mintupatel89@gmail.com>,
-        Vishal Badole <badolevishal1116@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] PM: runtime: Add support to disable wakeup sources
-Message-ID: <YxDWQjMlEGQH4yz3@kroah.com>
-References: <20220821134533.22901-1-vimal.kumar32@gmail.com>
- <YwI7PM9wVF/H9hQL@kroah.com>
- <20220827114028.GA258@DESKTOP-KA7F9LU.localdomain>
+        b=CjUBi8VVLZMQzzaILq62zqKIfDixy86GV7wrbEC5HRKz7L9m1Uoc7tcTD8g10b4ES
+         4CDQ+5VwKku9L2cwMhRnP764cPDtZZfvZZHUPBDThZhCLkAfOzjiF6nTGJH86t6xdx
+         hocDdyjmrglO/fb2uCgNnB/nL/zPkD6lfLRq6wN8=
+Date:   Thu, 1 Sep 2022 17:58:14 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] debugfs: Only clobber mode/uid/gid on remount if
+ asked
+Message-ID: <YxDWlgulBijTzj3y@kroah.com>
+References: <20220826174353.1.Icbd40fce59f55ad74b80e5d435ea233579348a78@changeid>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220827114028.GA258@DESKTOP-KA7F9LU.localdomain>
+In-Reply-To: <20220826174353.1.Icbd40fce59f55ad74b80e5d435ea233579348a78@changeid>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -56,29 +54,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 27, 2022 at 05:10:28PM +0530, Vimal Kumar wrote:
-> On Sun, Aug 21, 2022 at 04:03:40PM +0200, Greg KH wrote:
-> > On Sun, Aug 21, 2022 at 07:15:32PM +0530, Vimal Kumar wrote:
-> > > User could find many wakeup sources available in the bsp, which
-> > > they won't be using. Currently users can only get the status and
-> > > list of enabled wakeup sources, but users can't disable it runtime.
-> > > It's very difficult to find the driver for each wakeup sources from
-> > > where it's getting enabled and make the changes for disabling it.
-> > > 
-> > > This will help users to disable any wakeup sources at runtime,
-> > > avoiding any code change and re-compilation. A new class attribute
-> > > "disable_ws" will be added in the wakeup calss. If user want to disable
-> > > any wakeup sources, user need to find the wakeup dev node associated
-> > > with the particular wakeup source and write the devnode name to the
-> > > class attribute "disable_ws".
+On Fri, Aug 26, 2022 at 05:44:16PM -0700, Brian Norris wrote:
+> Users may have explicitly configured their debugfs permissions; we
+> shouldn't overwrite those just because a second mount appeared.
 
-What userspace tool will use this new interface?
+What userspace mounts debugfs twice?
 
-Who is supposed to interact with it?  Why is this even needed?  Who
-would disable this dynamically, shouldn't the kernel handle this all
-automatically with no need for usersapce to get involved?
+> Only clobber if the options were provided at mount time.
+> 
+>   # Don't change /sys/kernel/debug/ permissions.
+>   mount -t debugfs none /mnt/foo
+> 
+>   # Change /sys/kernel/debug/ mode and uid, but not gid.
+>   mount -t debugfs -o uid=bar,mode=0750 none /mnt/baz
 
-What is the root problem here you are trying to solve?
+So what happens today with this change?  Without it?
+
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+> I'm open to writing an LTP test case for this, if that seems like a good
+> idea.
+
+If it's really needed, again, why would debugfs be ever mounted more
+than once?
 
 thanks,
 

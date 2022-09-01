@@ -2,162 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46CE15A8DF1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:04:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70D915A8DF2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbiIAGEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:04:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
+        id S233285AbiIAGEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232440AbiIAGEf (ORCPT
+        with ESMTP id S233256AbiIAGEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:04:35 -0400
-Received: from m13111.mail.163.com (m13111.mail.163.com [220.181.13.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEA91E8339;
-        Wed, 31 Aug 2022 23:04:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=TXvoI
-        haUY/iXJSdIN8mkn50AsHOGVufvR2Mtl3RH4BM=; b=ggqzbHFQNUWhsr0bD5kwm
-        C5+lYXTyNQ69PRbpS66nbsEyX5vuPJG8Vgb4CoS0veH2RkqdIENNkoH/9Ds7WBYR
-        Zuj5SVpcH8YDqRzXJP3IpqEX1Pg+ytE6gmH/Be2E4n6U31w0wJLBu7DWAvZCsW9T
-        zEgCidXcKBCkemVe0iZuh8=
-Received: from 15815827059$163.com ( [116.128.244.169] ) by
- ajax-webmail-wmsvr111 (Coremail) ; Thu, 1 Sep 2022 14:03:48 +0800 (CST)
-X-Originating-IP: [116.128.244.169]
-Date:   Thu, 1 Sep 2022 14:03:48 +0800 (CST)
-From:   huhai <15815827059@163.com>
-To:     "Sathya Prakash Veerichetty" <sathya.prakash@broadcom.com>
-Cc:     jejb@linux.ibm.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        "Sreekanth Reddy" <sreekanth.reddy@broadcom.com>,
-        "Suganath Prabu Subramani" <suganath-prabu.subramani@broadcom.com>,
-        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        huhai <huhai@kylinos.cn>, stable@vger.kernel.org,
-        "Jackie Liu" <liuyun01@kylinos.cn>
-Subject: Re:Re: [PATCH] scsi: mpt3sas: Fix NULL pointer crash due to missing
- check device hostdata
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
- Copyright (c) 2002-2022 www.mailtech.cn 163com
-In-Reply-To: <CAFdVvOzAWcFLgPi_y8HW5Jx5JbC1AgBtADnwvd9usq8veU0vOg@mail.gmail.com>
-References: <20220825092645.326953-1-15815827059@163.com>
- <49b0768d.96d.182f69a26f6.Coremail.15815827059@163.com>
- <CAFdVvOzAWcFLgPi_y8HW5Jx5JbC1AgBtADnwvd9usq8veU0vOg@mail.gmail.com>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+        Thu, 1 Sep 2022 02:04:36 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 549D1E2C67
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:04:36 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id e7so7396115ilc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:04:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
+        b=P0KFx8ZyOrHcngCKqgKagANWqMLi9s905+GAobwWs4f5I4VrgI1al3bO1zeubB+tTs
+         3TnGGNRzhpsy/YwEzsU4NlG6xx4AF0P9kYS3336w7oJz2XrdukgZiMST+OaqdqoXqz3K
+         9q3Sp/og3VznjYZ5IFlPDTVo1vTTH4/HKShxAe1yYHmRjZkkUcP4bcfUazESyP4kiBRt
+         1N/Hptfn060VLDmSz/LJsppb2AWPbxVTkDIIn41iWKOm3ZpCA4jS918xbG8K8TgpvMm9
+         kjLxcy+m1DEdvxRGhxSRjpHvUnEW4BTEt+lowbHwaXhIqF/h9C/n9cpKTCaRsC7uuxkW
+         yxEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=FcyQcUXi9xALQQ6Lm7VNXiWYStBjH/LCUTADg6v4m+k=;
+        b=yqS6/k9DU+oAX8zuj3TBOmTARr4b/ikmREt4w4U1iyxBWJnUxbzXHDUl/1jOfttjdO
+         ZRUYgoAfz33zhLx7pTF1mk6k//BOsWBm+kNl7OixY/qhiqnGZUoues3cKamF8GANf19H
+         LUSp5rROv16AKxsOCI37iASllzjcPMmkaKQcKFdIOJF6eWjoyb2BJd1kEO0YqvdsSwjZ
+         Lfa7EtEP+vN2A8Tb9DRqZFGOjCo6SDNP8s2+8Z/fC380yRx0dmGFOVrcQluqL05URXqc
+         t5S7QTKTmkbu1Iqo3wD9juj6u7AMmCwH9W0keCJn3qDiOFlEmlRXTjx0L7UU8EuIQ19J
+         YLOw==
+X-Gm-Message-State: ACgBeo2kjC/OwrrDtCzZRMFhQQg5XkS3aUsVT44JqRxypNEjEVwXzEKK
+        7r+YE+1XgpaZEwo5tgWp/JvueJ9ermSBgr3iQOQ=
+X-Google-Smtp-Source: AA6agR5moLVWYPJj5wDxZVbQ6gSSfsXAY5YjLuBw5LO52HPdOlmsHvXPl7wW4lVab+FGyalQOJAJQO8P81UhqgR/ls4=
+X-Received: by 2002:a05:6e02:543:b0:2eb:5d3c:dde6 with SMTP id
+ i3-20020a056e02054300b002eb5d3cdde6mr5040480ils.84.1662012275751; Wed, 31 Aug
+ 2022 23:04:35 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <3b74287a.3728.182f7a604b3.Coremail.15815827059@163.com>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: b8GowAD3TNtFSxBjugZMAA--.28828W
-X-CM-SenderInfo: rprvmiivyslimvzbiqqrwthudrp/xtbB3xdvhWBHLk8cHQABsk
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Received: by 2002:a02:29c8:0:b0:349:d3f5:d804 with HTTP; Wed, 31 Aug 2022
+ 23:04:35 -0700 (PDT)
+Reply-To: maryalbert00045@gmail.com
+From:   Mary Albert <tinaevan26261@gmail.com>
+Date:   Thu, 1 Sep 2022 07:04:35 +0100
+Message-ID: <CAD13F+W9qGrUP5nptSW7KyY9LH3Bixd-Q9W-jsMWLu8vAUMM7A@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:141 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.4882]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [maryalbert00045[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [tinaevan26261[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [tinaevan26261[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.2 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CkF0IDIwMjItMDktMDEgMTM6MDg6MTQsICJTYXRoeWEgUHJha2FzaCBWZWVyaWNoZXR0eSIgPHNh
-dGh5YS5wcmFrYXNoQGJyb2FkY29tLmNvbT4gd3JvdGU6Cj5UaGUgcGF0Y2ggY291bGQgYmUgaW1w
-cm92ZWQgdG8gY2xlYXIgdGhlIGF0YV9jbWRfcGVuZGluZyBiaXQgZm9yIHRoZQo+Y2FzZXMgIXNh
-c19kZXZpY2VfcHJpdl9kYXRhLT5zYXNfdGFyZ2V0IGFuZAo+c2FzX2RldmljZV9wcml2X2RhdGEt
-PnNhc190YXJnZXQtPmRlbGV0ZWQgYmVmb3JlIHJldHVybmluZwoKPkRJRF9OT19DT05ORUNUIHRv
-IHJldGFpbiB0aGUgY3VycmVudCBmdW5jdGlvbmFsaXR5LgoKSGksIAoKTWF5YmUgbXkgY29tbWl0
-IGluZm9ybWF0aW9uIGlzIG5vdCBjbGVhciBlbm91Z2ijrFRoaXMgcGF0Y2ggaXMgZml4ZWQgTlVM
-TCBwb2ludGVyIGNyYXNoCmR1dG8gdG8gInN0cnVjdCBNUFQzU0FTX0RFVklDRSAqcHJpdiA9IHNj
-bWQtPmRldmljZS0+aG9zdGRhdGE7IiAgZ290IGEgTlVMTCBwb2ludGVyLCBhbmQKd2hlbiAiY2xl
-YXJfYml0KDAsICZwcml2LT5hdGFfY29tbWFuZF9wZW5kaW5nKTsiIGlzIGNhbGxlZCwga2VybmVs
-IHdpbGwgcGFuaWMuIAoKVGhhbmtzCgo+Cj4KPk9uIFdlZCwgQXVnIDMxLCAyMDIyIGF0IDc6MTEg
-UE0gaHVoYWkgPDE1ODE1ODI3MDU5QDE2My5jb20+IHdyb3RlOgo+Pgo+PiBGcmllbmRseSBwaW5n
-Lgo+Pgo+Pgo+PiBBdCAyMDIyLTA4LTI1IDE3OjI2OjQ1LCAiaHVoYWkiIDwxNTgxNTgyNzA1OUAx
-NjMuY29tPiB3cm90ZToKPj4gPkZyb206IGh1aGFpIDxodWhhaUBreWxpbm9zLmNuPgo+PiA+Cj4+
-ID5JZiBfc2NzaWhfaW9fZG9uZSgpIGlzIGNhbGxlZCB3aXRoIHNjbWQtPmRldmljZS0+aG9zdGRh
-dGE9TlVMTCwgaXQgY2FuIGxlYWQKPj4gPnRvIHRoZSBmb2xsb3dpbmcgcGFuaWM6Cj4+ID4KPj4g
-PiAgQlVHOiB1bmFibGUgdG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2Ug
-YXQgMDAwMDAwMDAwMDAwMDAxOAo+PiA+ICBQR0QgNDU0N2E0MDY3IFA0RCA0NTQ3YTQwNjcgUFVE
-IDAKPj4gPiAgT29wczogMDAwMiBbIzFdIFNNUCBOT1BUSQo+PiA+ICBDUFU6IDYyIFBJRDogMCBD
-b21tOiBzd2FwcGVyLzYyIEtkdW1wOiBsb2FkZWQgTm90IHRhaW50ZWQgNC4xOS45MC0yNC40LnYy
-MTAxLmt5MTAueDg2XzY0ICMxCj4+ID4gIEhhcmR3YXJlIG5hbWU6IFN0b3JhZ2UgU2VydmVyLzY1
-TjMyLVVTLCBCSU9TIFNRTDEwNDEyMTcgMDUvMzAvMjAyMgo+PiA+ICBSSVA6IDAwMTA6X3Njc2lo
-X3NldF9zYXRsX3BlbmRpbmcrMHgyZC8weDUwIFttcHQzc2FzXQo+PiA+ICBDb2RlOiAwMCAwMCA0
-OCA4YiA4NyA2MCAwMSAwMCAwMCAwZiBiNiAxMCA4MCBmYSBhMSA3NCAwOSAzMSBjMCA4MCBmYSA4
-NSA3NCAwMiBmMyBjMyA0OCA4YiA0NyAzOCA0MCA4NCBmNiA0OCA4YiA4MCA5OCAwMCAwMCAwMCA3
-NSAwOCA8ZjA+IDgwIDYwIDE4IGZlIDMxIGMwIGMzIGYwIDQ4IDBmIGJhIDY4IDE4IDAwIDBmIDky
-IGMwIDBmIGI2IGMwIGMzCj4+ID4gIFJTUDogMDAxODpmZmZmOGVjMjJmYzAzZTAwIEVGTEFHUzog
-MDAwMTAwNDYKPj4gPiAgUkFYOiAwMDAwMDAwMDAwMDAwMDAwIFJCWDogZmZmZjhlYmExYjA3MjUx
-OCBSQ1g6IDAwMDAwMDAwMDAwMDAwMDEKPj4gPiAgUkRYOiAwMDAwMDAwMDAwMDAwMDg1IFJTSTog
-MDAwMDAwMDAwMDAwMDAwMCBSREk6IGZmZmY4ZWJhMWIwNzI1MTgKPj4gPiAgUkJQOiAwMDAwMDAw
-MDAwMDAwZGJkIFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IDAwMDAwMDAwMDAwMjk3MDAKPj4g
-PiAgUjEwOiBmZmZmOGVjMjJmYzAzZjgwIFIxMTogMDAwMDAwMDAwMDAwMDAwMCBSMTI6IGZmZmY4
-ZWJlMmQzNjA5ZTgKPj4gPiAgUjEzOiBmZmZmOGViZTJhNzJiNjAwIFIxNDogZmZmZjhlY2E0NzI3
-MDdlMCBSMTU6IDAwMDAwMDAwMDAwMDAwMjAKPj4gPiAgRlM6ICAwMDAwMDAwMDAwMDAwMDAwKDAw
-MDApIEdTOmZmZmY4ZWMyMmZjMDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAwMAo+PiA+
-ICBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzCj4+ID4g
-IENSMjogMDAwMDAwMDAwMDAwMDAxOCBDUjM6IDAwMDAwMDA0NmU1ZjYwMDAgQ1I0OiAwMDAwMDAw
-MDAwMzQwNmUwCj4+ID4gIENhbGwgVHJhY2U6Cj4+ID4gICA8SVJRPgo+PiA+ICAgX3Njc2loX2lv
-X2RvbmUrMHg0YS8weDlmMCBbbXB0M3Nhc10KPj4gPiAgIF9iYXNlX2ludGVycnVwdCsweDIzZi8w
-eGUxMCBbbXB0M3Nhc10KPj4gPiAgIF9faGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHg0MC8weDE5
-MAo+PiA+ICAgaGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHgzMC8weDcwCj4+ID4gICBoYW5kbGVf
-aXJxX2V2ZW50KzB4MzYvMHg2MAo+PiA+ICAgaGFuZGxlX2VkZ2VfaXJxKzB4N2UvMHgxOTAKPj4g
-PiAgIGhhbmRsZV9pcnErMHhhOC8weDExMAo+PiA+ICAgZG9fSVJRKzB4NDkvMHhlMAo+PiA+Cj4+
-ID5GaXggaXQgYnkgbW92ZSBzY21kLT5kZXZpY2UtPmhvc3RkYXRhIGNoZWNrIGJlZm9yZSBfc2Nz
-aWhfc2V0X3NhdGxfcGVuZGluZwo+PiA+Y2FsbGVkLgo+PiA+Cj4+ID5PdGhlciBjaGFuZ2VzOgo+
-PiA+LSBJdCBsb29rcyBjbGVhciB0byBtb3ZlIGdldCBtcGlfcmVwbHkgdG8gbmVhciBpdHMgY2hl
-Y2suCj4+ID4KPj4gPkZpeGVzOiBmZmI1ODQ1NjU4OTQgKCJzY3NpOiBtcHQzc2FzOiBmaXggaGFu
-ZyBvbiBhdGEgcGFzc3Rocm91Z2ggY29tbWFuZHMiKQo+PiA+Q2M6IDxzdGFibGVAdmdlci5rZXJu
-ZWwub3JnPiAjIHY0LjkrCj4+ID5Dby1kZXZlbG9wZWQtYnk6IEphY2tpZSBMaXUgPGxpdXl1bjAx
-QGt5bGlub3MuY24+Cj4+ID5TaWduZWQtb2ZmLWJ5OiBKYWNraWUgTGl1IDxsaXV5dW4wMUBreWxp
-bm9zLmNuPgo+PiA+U2lnbmVkLW9mZi1ieTogaHVoYWkgPGh1aGFpQGt5bGlub3MuY24+Cj4+ID4t
-LS0KPj4gPiBkcml2ZXJzL3Njc2kvbXB0M3Nhcy9tcHQzc2FzX3Njc2loLmMgfCAxNSArKysrKysr
-LS0tLS0tLS0KPj4gPiAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9u
-cygtKQo+PiA+Cj4+ID5kaWZmIC0tZ2l0IGEvZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0M3Nhc19z
-Y3NpaC5jIGIvZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0M3Nhc19zY3NpaC5jCj4+ID5pbmRleCBk
-ZWYzN2E3ZTU5ODAuLjg1ZjU3NDlhMDQyMSAxMDA2NDQKPj4gPi0tLSBhL2RyaXZlcnMvc2NzaS9t
-cHQzc2FzL21wdDNzYXNfc2NzaWguYwo+PiA+KysrIGIvZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0
-M3Nhc19zY3NpaC5jCj4+ID5AQCAtNTcwNCwyNyArNTcwNCwyNiBAQCBfc2NzaWhfaW9fZG9uZShz
-dHJ1Y3QgTVBUM1NBU19BREFQVEVSICppb2MsIHUxNiBzbWlkLCB1OCBtc2l4X2luZGV4LCB1MzIg
-cmVwbHkpCj4+ID4gICAgICAgc3RydWN0IE1QVDNTQVNfREVWSUNFICpzYXNfZGV2aWNlX3ByaXZf
-ZGF0YTsKPj4gPiAgICAgICB1MzIgcmVzcG9uc2VfY29kZSA9IDA7Cj4+ID4KPj4gPi0gICAgICBt
-cGlfcmVwbHkgPSBtcHQzc2FzX2Jhc2VfZ2V0X3JlcGx5X3ZpcnRfYWRkcihpb2MsIHJlcGx5KTsK
-Pj4gPi0KPj4gPiAgICAgICBzY21kID0gbXB0M3Nhc19zY3NpaF9zY3NpX2xvb2t1cF9nZXQoaW9j
-LCBzbWlkKTsKPj4gPiAgICAgICBpZiAoc2NtZCA9PSBOVUxMKQo+PiA+ICAgICAgICAgICAgICAg
-cmV0dXJuIDE7Cj4+ID4KPj4gPisgICAgICBzYXNfZGV2aWNlX3ByaXZfZGF0YSA9IHNjbWQtPmRl
-dmljZS0+aG9zdGRhdGE7Cj4+ID4rICAgICAgaWYgKCFzYXNfZGV2aWNlX3ByaXZfZGF0YSB8fCAh
-c2FzX2RldmljZV9wcml2X2RhdGEtPnNhc190YXJnZXQgfHwKPj4gPisgICAgICAgICAgIHNhc19k
-ZXZpY2VfcHJpdl9kYXRhLT5zYXNfdGFyZ2V0LT5kZWxldGVkKSB7Cj4+ID4rICAgICAgICAgICAg
-ICBzY21kLT5yZXN1bHQgPSBESURfTk9fQ09OTkVDVCA8PCAxNjsKPj4gPisgICAgICAgICAgICAg
-IGdvdG8gb3V0Owo+PiA+KyAgICAgIH0KPj4gPiAgICAgICBfc2NzaWhfc2V0X3NhdGxfcGVuZGlu
-ZyhzY21kLCBmYWxzZSk7Cj4+ID4KPj4gPiAgICAgICBtcGlfcmVxdWVzdCA9IG1wdDNzYXNfYmFz
-ZV9nZXRfbXNnX2ZyYW1lKGlvYywgc21pZCk7Cj4+ID4KPj4gPisgICAgICBtcGlfcmVwbHkgPSBt
-cHQzc2FzX2Jhc2VfZ2V0X3JlcGx5X3ZpcnRfYWRkcihpb2MsIHJlcGx5KTsKPj4gPiAgICAgICBp
-ZiAobXBpX3JlcGx5ID09IE5VTEwpIHsKPj4gPiAgICAgICAgICAgICAgIHNjbWQtPnJlc3VsdCA9
-IERJRF9PSyA8PCAxNjsKPj4gPiAgICAgICAgICAgICAgIGdvdG8gb3V0Owo+PiA+ICAgICAgIH0K
-Pj4gPgo+PiA+LSAgICAgIHNhc19kZXZpY2VfcHJpdl9kYXRhID0gc2NtZC0+ZGV2aWNlLT5ob3N0
-ZGF0YTsKPj4gPi0gICAgICBpZiAoIXNhc19kZXZpY2VfcHJpdl9kYXRhIHx8ICFzYXNfZGV2aWNl
-X3ByaXZfZGF0YS0+c2FzX3RhcmdldCB8fAo+PiA+LSAgICAgICAgICAgc2FzX2RldmljZV9wcml2
-X2RhdGEtPnNhc190YXJnZXQtPmRlbGV0ZWQpIHsKPj4gPi0gICAgICAgICAgICAgIHNjbWQtPnJl
-c3VsdCA9IERJRF9OT19DT05ORUNUIDw8IDE2Owo+PiA+LSAgICAgICAgICAgICAgZ290byBvdXQ7
-Cj4+ID4tICAgICAgfQo+PiA+ICAgICAgIGlvY19zdGF0dXMgPSBsZTE2X3RvX2NwdShtcGlfcmVw
-bHktPklPQ1N0YXR1cyk7Cj4+ID4KPj4gPiAgICAgICAvKgo+PiA+LS0KPj4gPjIuMjcuMAo+PiA+
-Cj4+ID4KPj4gPk5vIHZpcnVzIGZvdW5kCj4+ID4gICAgICAgICAgICAgICBDaGVja2VkIGJ5IEhp
-bGxzdG9uZSBOZXR3b3JrIEFudGlWaXJ1cwo+Cj4tLSAKPlRoaXMgZWxlY3Ryb25pYyBjb21tdW5p
-Y2F0aW9uIGFuZCB0aGUgaW5mb3JtYXRpb24gYW5kIGFueSBmaWxlcyB0cmFuc21pdHRlZCAKPndp
-dGggaXQsIG9yIGF0dGFjaGVkIHRvIGl0LCBhcmUgY29uZmlkZW50aWFsIGFuZCBhcmUgaW50ZW5k
-ZWQgc29sZWx5IGZvciAKPnRoZSB1c2Ugb2YgdGhlIGluZGl2aWR1YWwgb3IgZW50aXR5IHRvIHdo
-b20gaXQgaXMgYWRkcmVzc2VkIGFuZCBtYXkgY29udGFpbiAKPmluZm9ybWF0aW9uIHRoYXQgaXMg
-Y29uZmlkZW50aWFsLCBsZWdhbGx5IHByaXZpbGVnZWQsIHByb3RlY3RlZCBieSBwcml2YWN5IAo+
-bGF3cywgb3Igb3RoZXJ3aXNlIHJlc3RyaWN0ZWQgZnJvbSBkaXNjbG9zdXJlIHRvIGFueW9uZSBl
-bHNlLiBJZiB5b3UgYXJlIAo+bm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQgb3IgdGhlIHBlcnNv
-biByZXNwb25zaWJsZSBmb3IgZGVsaXZlcmluZyB0aGUgCj5lLW1haWwgdG8gdGhlIGludGVuZGVk
-IHJlY2lwaWVudCwgeW91IGFyZSBoZXJlYnkgbm90aWZpZWQgdGhhdCBhbnkgdXNlLCAKPmNvcHlp
-bmcsIGRpc3RyaWJ1dGluZywgZGlzc2VtaW5hdGlvbiwgZm9yd2FyZGluZywgcHJpbnRpbmcsIG9y
-IGNvcHlpbmcgb2YgCj50aGlzIGUtbWFpbCBpcyBzdHJpY3RseSBwcm9oaWJpdGVkLiBJZiB5b3Ug
-cmVjZWl2ZWQgdGhpcyBlLW1haWwgaW4gZXJyb3IsIAo+cGxlYXNlIHJldHVybiB0aGUgZS1tYWls
-IHRvIHRoZSBzZW5kZXIsIGRlbGV0ZSBpdCBmcm9tIHlvdXIgY29tcHV0ZXIsIGFuZCAKPmRlc3Ry
-b3kgYW55IHByaW50ZWQgY29weSBvZiBpdC4K
+-- 
+Hello,
+how are you?

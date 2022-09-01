@@ -2,62 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07F565A95C4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:32:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD5845A95C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:32:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbiIALcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 07:32:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35550 "EHLO
+        id S232448AbiIALc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbiIALcO (ORCPT
+        with ESMTP id S232332AbiIALcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 07:32:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3082115182;
-        Thu,  1 Sep 2022 04:32:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52A5261DE7;
-        Thu,  1 Sep 2022 11:32:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A10AC433D6;
-        Thu,  1 Sep 2022 11:32:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662031931;
-        bh=EsgujPsEDFpEWnoAnspdrmAPsj3OKMP5J2fqvUSUohE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AmZpZPOsQwuKrMloCYTe6CQsiMxwwzuyK72ZdAY/s9iy9Raq305Vd0DVcb28WjmsS
-         TcBQMP4dax4jYbYxCeu+zEtqLwp7peOK8FVRRgEyKhKQG6wHfprXkhpFZr7fXJsVsL
-         5ijOzinqIt0qfrYWZ3fvAON2wqI2C2dV98we5DG82iZteQ3ZGQRoG/XlmXe0RR/otp
-         5JXXVs2GpoU6mBHBMnyRqzsEhShj6qFdMpjJJzvN5ELmd5r3aHpO2SZnnOJ/3w3YMC
-         JuS3JQpBg20HfBi8p3vQa/ALhlZrr1xPSTHQBenofkHBo02g4vD+/G6tQlhNh/czGi
-         e3123FvxnbXKQ==
-Date:   Thu, 1 Sep 2022 12:32:05 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH 04/13] regulator: rk808: reduce 'struct rk808' usage
-Message-ID: <YxCYNbqdBB+YthaY@sirena.org.uk>
-References: <20220831215437.117880-1-sebastian.reichel@collabora.com>
- <20220831215437.117880-5-sebastian.reichel@collabora.com>
+        Thu, 1 Sep 2022 07:32:24 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E09115194
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 04:32:22 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id t129so17191095pfb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 04:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=K3i/UnosIGJmKHVXhTeIIT/EaYH6kdVXUlLCkIMVqnU=;
+        b=pzclts0pBjC1mJuS2/XVUv7o720uiS/bdOOt0wDqSm8l97sMFWum+pj8X0+qaJhipv
+         MivWx7XNY9lDogeh0ZO/hPmFuet9doSXc2a4PUwyQ3mJ6itcVnIyD8vtdLLIs+NpNm9W
+         xCCT00fJANCHQlPpvDd/xnSwT/oxFMMbJ3GcXV1JOat4/wA56ASdQqEckSJ05oCE+IjV
+         8SUTrpyu1UwSj/dOCkfXLF3/yuw3nWSox1YaqG3OsxWce1tYpKhT24rKhq3D9uMEpDBF
+         3M08rGLx8auZQXaIH8xBLQg8a4XcDQewHx2UeyzgY5CzihDrUqOFAQBXbsbcyB+rpUWi
+         IzmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=K3i/UnosIGJmKHVXhTeIIT/EaYH6kdVXUlLCkIMVqnU=;
+        b=qjx69PVNgjB/aZMyoZDNrSLRVU1bWztRVU+CLcxJLAH3kiSMXuzcMW4NvR2X4Glmop
+         mitTjKWySBgp+U2AuzysKquKBXEdyIuvUD8op+4JuNH1WJ1rJQtfxZYGnujpkVtVThBc
+         tguZIo9NphAV+YpAfRYj6mI+Fpx21whHiW2U2xCssbsWd+jYVQIDaoKdfXkvMOh9Kv1+
+         7F88zNOhlELoEurMN33Ld/enb5KYq1LJBHHWtgSagwWkCE5xt7wzMHkAEjsLivProF2D
+         YvsG7XrLURVslyEnu7DrWLOwrzkMt3UX2dGjCQRLP+hkRlyIrsJCZyQ4M72B56nubsyA
+         RwGQ==
+X-Gm-Message-State: ACgBeo1tZ8AAO7vPAAo/6TrXu4/qGYFqFo3zI6RqHc7cqQPL/6aDN5od
+        oMAfM4uNkhjwGsp9bCMJs4LBXkZ/Qo9b9d8GFISsyJOrsmI=
+X-Google-Smtp-Source: AA6agR7cggWLq6Teq4ickfIqTGCbUEH378WddiLgRvIIekyZtZ/i5myX/SljLHlUEJUVxA2ygg3O6ddkALMFrlS4iv8=
+X-Received: by 2002:a63:5809:0:b0:42a:3145:507d with SMTP id
+ m9-20020a635809000000b0042a3145507dmr25265572pgb.428.1662031941547; Thu, 01
+ Sep 2022 04:32:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="uSgKifA/gnLpK9Ba"
-Content-Disposition: inline
-In-Reply-To: <20220831215437.117880-5-sebastian.reichel@collabora.com>
-X-Cookie: This bag is recyclable.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220830100700.344594-1-sudeep.holla@arm.com> <20220830100700.344594-5-sudeep.holla@arm.com>
+ <CAHUa44HL5g-b+oGpYg=jne1MPNJSGLYbeW8_nx7a40=26ehQ1A@mail.gmail.com> <20220901090416.25riofko2m5mrlnt@bogus>
+In-Reply-To: <20220901090416.25riofko2m5mrlnt@bogus>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Thu, 1 Sep 2022 13:32:10 +0200
+Message-ID: <CAHUa44GdfJgzbfowY1ZMEZyM8B_hh4h-bYxsZ3h9mtgfj=bYSw@mail.gmail.com>
+Subject: Re: [PATCH 4/9] firmware: arm_ffa: Add support for querying FF-A features
+To:     Sudeep Holla <sudeep.holla@arm.com>
+Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
+        Marc Bonnici <marc.bonnici@arm.com>,
+        Achin Gupta <achin.gupta@arm.com>,
+        Valentin Laurent <valentin.laurent@trustonic.com>,
+        Lukas Hanel <lukas.hanel@trustonic.com>,
+        Coboy Chen <coboy.chen@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,32 +71,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 1, 2022 at 11:04 AM Sudeep Holla <sudeep.holla@arm.com> wrote:
+>
+> On Thu, Sep 01, 2022 at 09:56:41AM +0200, Jens Wiklander wrote:
+> > On Tue, Aug 30, 2022 at 12:07 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
+> > >
+> > > Add support for FFA_FEATURES to discover properties supported at the
+> > > FF-A interface. This interface can be used to query:
+> > >  - If an FF-A interface is implemented by the component at the higher EL,
+> > >  - If an implemented FF-A interface also implements any optional features
+> > >    described in its interface definition, and
+> > >  - Any implementation details exported by an implemented FF-A interface
+> > >    as described in its interface definition.
+> > >
+> > > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> > > ---
+> > >  drivers/firmware/arm_ffa/driver.c | 23 +++++++++++++++++++++++
+> > >  1 file changed, 23 insertions(+)
+> > >
+> > > diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
+> > > index 04e7cbb1b9aa..de94073f4109 100644
+> > > --- a/drivers/firmware/arm_ffa/driver.c
+> > > +++ b/drivers/firmware/arm_ffa/driver.c
+> > > @@ -571,6 +571,29 @@ static int ffa_memory_reclaim(u64 g_handle, u32 flags)
+> > >         return 0;
+> > >  }
+> > >
+> > > +static int ffa_features(u32 func_feat_id, u32 input_props, u32 *if_props)
+> > > +{
+> > > +       ffa_value_t id;
+> > > +
+> > > +       if (!ARM_SMCCC_IS_FAST_CALL(func_feat_id) && input_props) {
+> > > +               pr_err("%s: Invalid Parameters: %x, %x", __func__,
+> > > +                      func_feat_id, input_props);
+> > > +               return ffa_to_linux_errno(FFA_RET_INVALID_PARAMETERS);
+> > > +       }
+> > > +
+> > > +       invoke_ffa_fn((ffa_value_t){
+> > > +               .a0 = FFA_FEATURES, .a1 = func_feat_id, .a2 = input_props,
+> > > +               }, &id);
+> > > +
+> > > +       if (id.a0 == FFA_ERROR)
+> > > +               return ffa_to_linux_errno((int)id.a2);
+> > > +
+> > > +       if (if_props)
+> > > +               *if_props = id.a2;
+> >
+> > w3 (id.a3) also contains a value when querying for
+> > FFA_MEM_RETRIEVE_REQ. I see that in "[PATCH 5/9] firmware: arm_ffa:
+> > Use FFA_FEATURES to detect if native versions are supported" you're
+> > using this function with if_props = NULL. So I guess that at the
+> > moment we have more than needed, but in case you need to add another
+> > parameter to this function you'll need to update all the call sites
+> > too.
+> >
+>
+> Right, I clearly missed to observe that. I am fine either way. Do you
+> have any preference ? As long as the callers are with this driver, it
+> shouldn't be much of an issue to change all, but happy to update to
+> accommodate w3 as well in v2.
 
---uSgKifA/gnLpK9Ba
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Either way is fine, it was more of an observation.
 
-On Wed, Aug 31, 2022 at 11:54:28PM +0200, Sebastian Reichel wrote:
-> Reduce usage of 'struct rk808' (driver data of the parent MFD), so
-> that only the chip variant field is still being accessed directly.
-> This allows restructuring the MFD driver to support SPI based
-> PMICs.
-
-Acked-by: Mark Brown <broonie@kernel.org>
-
---uSgKifA/gnLpK9Ba
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmMQmDQACgkQJNaLcl1U
-h9AZjAf9FHKbnro30y43M5NJYAf+6hCpaAE9y0K8KkAaiH6CBT4dx10pIFWqXiKe
-rvJmow9dQhZpwVjBt5A25ERvzgQvK7HVkhsy2+RugStEpdqAv+YnRzq+0zjVWDGO
-2FPxdUZt30sQsgEZQGJeL/rFmGXylC8JkmfW8dnMmc75+OPabWESgucpaQvzxPW2
-YGbuEWESARTKy6Hi1rK3+IZ03U42Ry6OypGTuTLaJ9vFkyGxR6voB4WBd0WJ5sMe
-dUbRJQeBKOLP9gVSo/+XjfqGWYWVKjTUB08kJn6qfLy4oqKKCuGVd8JSQHW+qqfx
-pthDv0By/uhm+YobdEUHrg3vH3RJ/w==
-=eGS0
------END PGP SIGNATURE-----
-
---uSgKifA/gnLpK9Ba--
+Cheers,
+Jens

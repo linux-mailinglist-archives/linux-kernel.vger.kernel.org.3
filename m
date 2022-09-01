@@ -2,112 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F6C5A8F08
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787A65A8F14
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233504AbiIAHBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S232699AbiIAHC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233430AbiIAHAx (ORCPT
+        with ESMTP id S233354AbiIAHCf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:00:53 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0714B56DB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:00:31 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id 72so16651426pfx.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:00:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=XcLxmoK8X1rF3FVFD0JBqtFjjFipU55iwKHDlizFoCg=;
-        b=ELWrLnRa+jJMj9l69Mv3iL3lMyvZ5BmSP0cgO1D9xRZ6jvTsvYtpxQJsPNxPna9r+/
-         sipKO9ZnYcpqQ3+wkD9z+lxmFIrTcPalX8cC5zcyVEgVQ9cnObBprDvuaGPJ1C9ZMBtk
-         aDm193aRttofrbI8KWUVS3yxeDvKZhupR5FCC6cZ2dag6q3oCvaWebHj0yr63tUSqrSc
-         J61vJMomwIMzImOJxvR7yz6znfAuez1YyabI1w8DEOWJ48agv285VjBz/yk785/rSDWk
-         FysEoblcKPbkP5lA53XuRYncOCM6SAI16EWdeeEAP/1FeTwO0K3cUR/leywK/5xzFLbr
-         /AgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=XcLxmoK8X1rF3FVFD0JBqtFjjFipU55iwKHDlizFoCg=;
-        b=XYEGMMDaJ2CatqWjqvtPGGWPodsnveTFVwiNxGi2DpK4SQb/8yTRFxspZOSkHU6RJw
-         c5P4jRNnh8gGlwq958T1S2cJ0ilJjNFbhrkVir8upLMceJeQVoC0oY39r2K1hwxzUDCA
-         eU1xt7RaUO1OpebPoSTVrFKUaDeaTWKsmeXeyC3HcmHfU7HtiKaalwDdJeZHDUb9Da+s
-         Bblg5vQuqxyp9WyLNoJ1G8YH4JfRUg7hEIUcN25qvknHJ0IFHgskHqsO9QCXQWz+YuEk
-         XnhfO4Lmuh2oQpDaeP5BJ7I/allWoCeypMx1/uI8c2n6Lv9iZO3nY0ntX9vSBLjUKERZ
-         7GVw==
-X-Gm-Message-State: ACgBeo2M7FRPCG/qK8+QGmf6q0AvomdbgpnMj66i9LB8T7yRLshS8Y7a
-        oas5BNMDALXtqN6GnutvpimGhA==
-X-Google-Smtp-Source: AA6agR6uOq/9FNUO/JkGYj+fPAoBwunDhHXuoa8RiEVETo4ejMSHHIQD4X5ylxMWepEgJ6YgSPPJUQ==
-X-Received: by 2002:a63:1e11:0:b0:41c:d233:31f8 with SMTP id e17-20020a631e11000000b0041cd23331f8mr25233343pge.228.1662015631026;
-        Thu, 01 Sep 2022 00:00:31 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id i3-20020a17090ac40300b001fd77933fb3sm2559403pjt.17.2022.09.01.00.00.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 00:00:30 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 12:30:28 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Yuan, Perry" <Perry.Yuan@amd.com>
-Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v6] cpufreq: amd-pstate: cleanup the unused and
- duplicated headers declaration
-Message-ID: <20220901070028.gdm7uiszm35iom3e@vireshk-i7>
-References: <20220901062339.2357552-1-Perry.Yuan@amd.com>
- <20220901063153.zutwnnfykaz47sah@vireshk-i7>
- <DM4PR12MB5278D01EA2D78367F182C7C69C7B9@DM4PR12MB5278.namprd12.prod.outlook.com>
+        Thu, 1 Sep 2022 03:02:35 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661A8124864
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:01:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662015709; x=1693551709;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=V5eFPntE7kEE/MubUOdAVDILHNkJ4zNIH5bzumuL+3k=;
+  b=UVBgClmIGJ8XlmlPXOZsEWkSP8h7R+UhfHcHtDbmeyQhDrDo22EAb1qp
+   PjefgHSnw/xKMN8wSmvDETORsD4ES8jadqkOfxMJJCvtO2pauBfkq/MZE
+   IVmTmVBQ6y5OPru9EWviVUu13s5jkAwAUiq8kL8hCS1X39ngEKA2B8D1h
+   WP7rzzl9ORBPCq4W/5Uv86zKUoHp+KTQAsW2elBbwW0DXykMisFhz3CvC
+   3A01NwZcyepP3DyhVZ/LvUIreZE8rRZR7ljCZWZgSX8r2pQfDpJS+nbz9
+   3x7w0gG/LAksPqkx0227yy9g/4TSahH4PvTEH3JsUPbcuyt2ZJxBQWvbz
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="296418944"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="296418944"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 00:01:48 -0700
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="642205433"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 00:01:41 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Wei Xu <weixugc@google.com>,
+        Johannes Weiner <hannes@cmpxchg.org>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        jvgediya.oss@gmail.com, Bharata B Rao <bharata@amd.com>
+Subject: Re: [PATCH v3 updated] mm/demotion: Expose memory tier details via
+ sysfs
+References: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com>
+Date:   Thu, 01 Sep 2022 15:01:39 +0800
+In-Reply-To: <20220830081736.119281-1-aneesh.kumar@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Tue, 30 Aug 2022 13:47:36 +0530")
+Message-ID: <87tu5rzigc.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DM4PR12MB5278D01EA2D78367F182C7C69C7B9@DM4PR12MB5278.namprd12.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01-09-22, 06:56, Yuan, Perry wrote:
-> > On 01-09-22, 14:23, Perry Yuan wrote:
-> > > Cleanup the headers declaration which are not used actually and
-> > 
-> > This is okay.
-> 
-> Thank you help to confirm this . 
-> 
-> > 
-> > > some duplicated declaration which is declarated in some other headers
-> > > already, it will help to simplify the header part.
-> > 
-> > This isn't.
-> > 
-> > Every file should directly include headers they use definitions from, instead of
-> > relying on indirect inclusions.
-> > 
-> > --
-> > Viresh
-> 
-> Do I need to update the commit with another V7 version ?
+"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
 
-I am not sure which headers you removed are still required, working
-for now since included indirectly. If there are any, then better to
-get a new version out.
+> This patch adds /sys/devices/virtual/memory_tiering/ where all memory tier
+> related details can be found. All allocated memory tiers will be listed
+> there as /sys/devices/virtual/memory_tiering/memory_tierN/
+>
+> The nodes which are part of a specific memory tier can be listed via
+> /sys/devices/virtual/memory_tiering/memory_tierN/nodes
 
--- 
-viresh
+I think "memory_tier" is a better subsystem/bus name than
+memory_tiering.  Because we have a set of memory_tierN devices inside.
+"memory_tier" sounds more natural.  I know this is subjective, just my
+preference.
+
+>
+> A directory hierarchy looks like
+> :/sys/devices/virtual/memory_tiering$ tree memory_tier4/
+> memory_tier4/
+> =E2=94=9C=E2=94=80=E2=94=80 nodes
+> =E2=94=9C=E2=94=80=E2=94=80 subsystem -> ../../../../bus/memory_tiering
+> =E2=94=94=E2=94=80=E2=94=80 uevent
+>
+> All toptier nodes are listed via
+> /sys/devices/virtual/memory_tiering/toptier_nodes
+>
+> :/sys/devices/virtual/memory_tiering$ cat toptier_nodes
+> 0,2
+> :/sys/devices/virtual/memory_tiering$ cat memory_tier4/nodes
+> 0,2
+
+I don't think that it is a good idea to show toptier information in user
+space interface.  Because it is just a in kernel implementation
+details.  Now, we only promote pages from !toptier to toptier.  But
+there may be multiple memory tiers in toptier and !toptier, we may
+change the implementation in the future.  For example, we may promote
+pages from DRAM to HBM in the future.
+
+Do we need a way to show the default memory tier in sysfs?  That is, the
+memory tier that the DRAM nodes belong to.
+
+Best Regards,
+Huang, Ying
+
+> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+> ---
+>
+> Changes from v2:
+> * update macro to static inline
+> * Fix build error with CONFIG_MIGRATION disabled
+> * drop abstract_distance
+> * update commit message
+>
+>
+
+[snip]

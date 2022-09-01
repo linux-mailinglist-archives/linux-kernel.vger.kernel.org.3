@@ -2,191 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DA85A9E5D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:44:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 920515A9E62
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:45:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234687AbiIARnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
+        id S232517AbiIARoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbiIARnH (ORCPT
+        with ESMTP id S235344AbiIARoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:43:07 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B1769F8EC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:40:58 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id t129so18128264pfb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:40:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=b0H9B0FRwbPM5Cz+4QjPTjCFU3PLC04eS989QmgK6OY=;
-        b=SLXbEaDl+m0WNW1mdPDM1JtgiXI2fq5Ahl2hAk+1/2KblOlCwZQ27c5OI3iOPG0aeV
-         jC73JvdnF0WDCP0VTMr7X/+IkartYastE/3OjD4t5EyGGynnNHX5TQco0hAHHE6zk7/G
-         7njhGCkfe6HH19n8JFQo2ce+Eg/V2GnSL9aEKHrN6du2K9QBSB16Hxx8esgENcDuGuxG
-         ZJKJhsbWYspdEHAQIHKfo8D4Mtjmxd7CSz0Qtp5icSOBzjQRD1UxNka1xGvbZCQD2k1n
-         8tS73TtJOA+1XWXPO3Dru+oORzI1CqlyMUyBAKCr6zNVRYwirwpv1Zs8XAMOs8leAGGl
-         u8Uw==
+        Thu, 1 Sep 2022 13:44:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23C19C2D1
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:42:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662054124;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FJJ0qYVRnAgLcuZMSjxbZMetNdfRSF7eNDaKLQRRUXM=;
+        b=MIijdwWQ31c0lq/foijMuAfxc6oc9tVOn5CuKmwGUAu0P9CBLeQc7Pwmh9KwJ2nk1J3Yru
+        bbkuscGb+1nxmURRbXv8Wcv4lp6VldH3ZLnTRXJPCvoBtH+uEQPkzQR+yTFwi1hwOJue7S
+        oSxpp6WRuH1g6oqHaoCb/CtLnSqCtCM=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-277-R4Sym7V7MhqQ6XX_5IDeFg-1; Thu, 01 Sep 2022 13:42:03 -0400
+X-MC-Unique: R4Sym7V7MhqQ6XX_5IDeFg-1
+Received: by mail-qk1-f198.google.com with SMTP id r14-20020a05620a298e00b006be796b6164so11367002qkp.19
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:42:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=b0H9B0FRwbPM5Cz+4QjPTjCFU3PLC04eS989QmgK6OY=;
-        b=nu4bh39eriiWOS1mHkEjZbK24n0W+phUwRPf3rx6f0Ihd53HPPBzhHaVxTy5Ros+M4
-         BjazZ98iKeHpWgyvePDzBSpu+CCb4n8kED0yjpu4M59q85PBH4LAhAjmeoCCMLsS0/XU
-         ezCRMwJUviKuTGvm4sasSjL2Vi/Wj6CtS/SuYlpkuzBJldZo05let4PeaMTtsTUnlOmE
-         ZrF8tD96Ds5RbNOkTxY6TEZsYqb1P/IaxM7X7RvqrhDShV8SKtx8JaL7r3RXrrEE3GQC
-         lVMKsI8EFJSW8L2ZzdNmxpnVM1bxzr7UiSHJSRFmRCIePA2UVT/n8oOo84tYHzYyiiJK
-         rgVA==
-X-Gm-Message-State: ACgBeo2qiQPqBgapux3cbnwoMDxMqETl897yfn0B41qXnLcoXk/6QNgb
-        cv9yMq9xcmpAhRGALKD5NzGlZtKTwpeGMrOvyFU=
-X-Google-Smtp-Source: AA6agR70Xdh8a0e1gFvCSjjLJRyRMUbqTHe5xl2eniat52M1jOZH+rSLT5JNyscu9FMW2Gi3BF+0eQ9CMccIMC7cVus=
-X-Received: by 2002:a63:de01:0:b0:42b:31f7:b6ea with SMTP id
- f1-20020a63de01000000b0042b31f7b6eamr26540720pgg.587.1662054043593; Thu, 01
- Sep 2022 10:40:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220831083024.37138-1-david@redhat.com> <CAHbLzkqeDAnCdt3q4E2RZw64QEzVaO_pseR3VaoHUhB+rZFcZQ@mail.gmail.com>
- <4845ae71-b7dd-1707-ebc3-2eb3521e7fa0@redhat.com> <CAHbLzkoMMWAgai2bvgu7y5EAcKOhhx3gK+OA4v2+kOHBW4cauw@mail.gmail.com>
- <ab41f458-eb0f-5edb-ccab-643bf00d5110@redhat.com> <CAHbLzkpFqSBTv3HVye4UCKj93NPW8VRqCGZO1p5hk_wfNA_GtQ@mail.gmail.com>
- <94c3217d-df73-2b6b-21f0-95baf117c584@redhat.com> <CAHbLzkp+HNmz7hGS5uDrfDDW0HpSj5Z+xmmkRbwvgn1qYk8Btg@mail.gmail.com>
- <CAHbLzkqM5qj7AZRpeCemsA56oKuHo2T51chTbh1pkGrr0wRFDQ@mail.gmail.com> <a5277667-1b41-dabe-837a-19afd0a68fd1@redhat.com>
-In-Reply-To: <a5277667-1b41-dabe-837a-19afd0a68fd1@redhat.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 1 Sep 2022 10:40:30 -0700
-Message-ID: <CAHbLzkrd5RZ3S88LmeyFoTURxd2=GGMXOjowVQVWW9W8+ncXRg@mail.gmail.com>
-Subject: Re: [PATCH v1] mm/ksm: update stale comment in write_protect_page()
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=FJJ0qYVRnAgLcuZMSjxbZMetNdfRSF7eNDaKLQRRUXM=;
+        b=SJXXsbVn+38oYOVVEor6pGUzoGSlXF7iJYwMrYt5JyqClvXnk4cELdKjFZ+gbOUkDo
+         xh2jQDkUj+cwzoob4JuD9F90+HUvwJ4JiFW3pNzSBORh+bP3v4oL4BEoBwsoKGlTHbj/
+         OI/FcwW8YcoX8aW+VGikJTXkQ4ClrL2RIKMBRSW5g31CJ9Vss9Ie8cpgOu/75B06tV9A
+         t6H11OTxSxzzixApd8GZZgUxMgYBZIiIIdjLIjXz0kerE9uZEcsY60cO6bs9i7GO+YEH
+         8m8V+q0Uulhqj6/aYeHhCb9QVne5XAiTU3M8fUmJIXrVF1TwibdkNcb56EBPNBvdFfRC
+         RbJQ==
+X-Gm-Message-State: ACgBeo0O0TOwNk2cZUVL6kELx+gEWG/QbD3YCeoH+ij6FUG/KIT20N4M
+        4kqMaUzwek3Nxq0IPnoRRUHH8HJB66ydr1GyZEeq8trM0Cz5gG0FT3UXahATP8oJ1FxWxkkg32t
+        gF1V0BczcHIR5slglCr1At42y
+X-Received: by 2002:ae9:e64a:0:b0:6ba:e284:2102 with SMTP id x10-20020ae9e64a000000b006bae2842102mr21448788qkl.739.1662054122493;
+        Thu, 01 Sep 2022 10:42:02 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7/AqLBwvxgQGrjag8RZdp9bkMzn6qTQ+vkvLkjwrJcY9zLuSyHBMu7nrPruXvlxE+Ugo1WQw==
+X-Received: by 2002:ae9:e64a:0:b0:6ba:e284:2102 with SMTP id x10-20020ae9e64a000000b006bae2842102mr21448756qkl.739.1662054122209;
+        Thu, 01 Sep 2022 10:42:02 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id hj12-20020a05622a620c00b0031ea864d3b2sm10393509qtb.30.2022.09.01.10.42.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 10:42:01 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 13:41:59 -0400
+From:   Peter Xu <peterx@redhat.com>
 To:     David Hildenbrand <david@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sasha Levin <sasha.levin@oracle.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jerome Marchand <jmarchan@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
         Jason Gunthorpe <jgg@nvidia.com>,
         John Hubbard <jhubbard@nvidia.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
+Message-ID: <YxDu51TQTz8lhIPP@xz-m1.local>
+References: <20220901072119.37588-1-david@redhat.com>
+ <YxDdycTur733hMgt@xz-m1.local>
+ <fa0bb4b1-3edd-eb5a-7ad6-dff785d88d8f@redhat.com>
+ <YxDghv54uHYMGCfG@xz-m1.local>
+ <c9dc3f22-4a72-9b9d-7a74-ad77fe4f3b6e@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c9dc3f22-4a72-9b9d-7a74-ad77fe4f3b6e@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 11:58 PM David Hildenbrand <david@redhat.com> wrote:
->
-> On 01.09.22 00:18, Yang Shi wrote:
-> > On Wed, Aug 31, 2022 at 12:43 PM Yang Shi <shy828301@gmail.com> wrote:
-> >>
-> >> On Wed, Aug 31, 2022 at 12:36 PM David Hildenbrand <david@redhat.com> wrote:
-> >>>
-> >>> On 31.08.22 21:34, Yang Shi wrote:
-> >>>> On Wed, Aug 31, 2022 at 12:15 PM David Hildenbrand <david@redhat.com> wrote:
-> >>>>>
-> >>>>> On 31.08.22 21:08, Yang Shi wrote:
-> >>>>>> On Wed, Aug 31, 2022 at 11:29 AM David Hildenbrand <david@redhat.com> wrote:
-> >>>>>>>
-> >>>>>>> On 31.08.22 19:55, Yang Shi wrote:
-> >>>>>>>> On Wed, Aug 31, 2022 at 1:30 AM David Hildenbrand <david@redhat.com> wrote:
-> >>>>>>>>>
-> >>>>>>>>> The comment is stale, because a TLB flush is no longer sufficient and
-> >>>>>>>>> required to synchronize against concurrent GUP-fast. This used to be true
-> >>>>>>>>> in the past, whereby a TLB flush would have implied an IPI on architectures
-> >>>>>>>>> that support GUP-fast, resulting in GUP-fast that disables local interrupts
-> >>>>>>>>> from completing before completing the flush.
-> >>>>>>>>
-> >>>>>>>> Hmm... it seems there might be problem for THP collapse IIUC. THP
-> >>>>>>>> collapse clears and flushes pmd before doing anything on pte and
-> >>>>>>>> relies on interrupt disable of fast GUP to serialize against fast GUP.
-> >>>>>>>> But if TLB flush is no longer sufficient, then we may run into the
-> >>>>>>>> below race IIUC:
-> >>>>>>>>
-> >>>>>>>>          CPU A                                                CPU B
-> >>>>>>>> THP collapse                                             fast GUP
-> >>>>>>>>
-> >>>>>>>> gup_pmd_range() <-- see valid pmd
-> >>>>>>>>
-> >>>>>>>> gup_pte_range() <-- work on pte
-> >>>>>>>> clear pmd and flush TLB
-> >>>>>>>> __collapse_huge_page_isolate()
-> >>>>>>>>     isolate page <-- before GUP bump refcount
-> >>>>>>>>
-> >>>>>>>>    pin the page
-> >>>>>>>> __collapse_huge_page_copy()
-> >>>>>>>>     copy data to huge page
-> >>>>>>>>     clear pte (don't flush TLB)
-> >>>>>>>> Install huge pmd for huge page
-> >>>>>>>>
-> >>>>>>>> return the obsolete page
-> >>>>>>>
-> >>>>>>> Hm, the is_refcount_suitable() check runs while the PTE hasn't been
-> >>>>>>> cleared yet. And we don't check if the PMD changed once we're in
-> >>>>>>> gup_pte_range().
-> >>>>>>
-> >>>>>> Yes
-> >>>>>>
-> >>>>>>>
-> >>>>>>> The comment most certainly should be stale as well -- unless there is
-> >>>>>>> some kind of an implicit IPI broadcast being done.
-> >>>>>>>
-> >>>>>>> 2667f50e8b81 mentions: "The RCU page table free logic coupled with an
-> >>>>>>> IPI broadcast on THP split (which is a rare event), allows one to
-> >>>>>>> protect a page table walker by merely disabling the interrupts during
-> >>>>>>> the walk."
-> >>>>>>>
-> >>>>>>> I'm not able to quickly locate that IPI broadcast -- maybe there is one
-> >>>>>>> being done here (in collapse) as well?
-> >>>>>>
-> >>>>>> The TLB flush may call IPI. I'm supposed it is arch dependent, right?
-> >>>>>> Some do use IPI, some may not.
-> >>>>>
-> >>>>> Right, and the whole idea of the RCU GUP-fast was to support
-> >>>>> architectures that don't do it. x86-64 does it. IIRC, powerpc doesn't do
-> >>>>> it -- but maybe it does so for PMDs?
+On Thu, Sep 01, 2022 at 06:46:13PM +0200, David Hildenbrand wrote:
+> On 01.09.22 18:40, Peter Xu wrote:
+> > On Thu, Sep 01, 2022 at 06:34:41PM +0200, David Hildenbrand wrote:
+> >> On 01.09.22 18:28, Peter Xu wrote:
+> >>> On Thu, Sep 01, 2022 at 09:21:19AM +0200, David Hildenbrand wrote:
+> >>>> commit 4b471e8898c3 ("mm, thp: remove infrastructure for handling splitting
+> >>>> PMDs") didn't remove all details about the THP split requirements for
+> >>>> RCU GUP-fast.
 > >>>>
-> >>>> It looks powerpc does issue IPI for pmd flush. But arm64 doesn't IIRC.
+> >>>> IPI broeadcasts on THP split are no longer required.
 > >>>>
-> >>>> So maybe we should implement pmdp_collapse_flush() for those arches to
-> >>>> issue IPI.
+> >>>> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> >>>> Cc: Sasha Levin <sasha.levin@oracle.com>
+> >>>> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.vnet.ibm.com>
+> >>>> Cc: Vlastimil Babka <vbabka@suse.cz>
+> >>>> Cc: Jerome Marchand <jmarchan@redhat.com>
+> >>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+> >>>> Cc: Hugh Dickins <hughd@google.com>
+> >>>> Cc: Jason Gunthorpe <jgg@nvidia.com>
+> >>>> Cc: John Hubbard <jhubbard@nvidia.com>
+> >>>> Cc: Peter Xu <peterx@redhat.com>
+> >>>> Cc: Yang Shi <shy828301@gmail.com>
+> >>>> Signed-off-by: David Hildenbrand <david@redhat.com>
+> >>>> ---
+> >>>>  mm/gup.c | 5 ++---
+> >>>>  1 file changed, 2 insertions(+), 3 deletions(-)
+> >>>>
+> >>>> diff --git a/mm/gup.c b/mm/gup.c
+> >>>> index 5abdaf487460..cfe71f422787 100644
+> >>>> --- a/mm/gup.c
+> >>>> +++ b/mm/gup.c
+> >>>> @@ -2309,9 +2309,8 @@ EXPORT_SYMBOL(get_user_pages_unlocked);
+> >>>>   *
+> >>>>   * Another way to achieve this is to batch up page table containing pages
+> >>>>   * belonging to more than one mm_user, then rcu_sched a callback to free those
+> >>>> - * pages. Disabling interrupts will allow the fast_gup walker to both block
+> >>>> - * the rcu_sched callback, and an IPI that we broadcast for splitting THPs
+> >>>> - * (which is a relatively rare event). The code below adopts this strategy.
+> >>>> + * pages. Disabling interrupts will allow the fast_gup walker to block the
+> >>>> + * rcu_sched callback.
 > >>>
-> >>> ... or find another way to detect and handle this in GUP-fast?
-> >>>
-> >>> Not sure if, for handling PMDs, it could be sufficient to propagate the
-> >>> pmdp pointer + value and double check that the values didn't change.
+> >>> This is the comment for fast-gup in general but not only for thp split.
 > >>
-> >> Should work too, right before pinning the page.
-> >
-> > I actually mean the same place for checking pte. So, something like:
-> >
-> > diff --git a/mm/gup.c b/mm/gup.c
-> > index 5abdaf487460..2b0703403902 100644
-> > --- a/mm/gup.c
-> > +++ b/mm/gup.c
-> > @@ -2392,7 +2392,8 @@ static int gup_pte_range(pmd_t pmd, unsigned
-> > long addr, unsigned long end,
-> >                         goto pte_unmap;
-> >                 }
-> >
-> > -               if (unlikely(pte_val(pte) != pte_val(*ptep))) {
-> > +               if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
-> > +                   unlikely(pte_val(pte) != pte_val(*ptep))) {
-> >                         gup_put_folio(folio, 1, flags);
-> >                         goto pte_unmap;
-> >                 }
-> >
-> > It doesn't build, just shows the idea.
->
-> Exactly what I had in mind. We should add a comment spelling out that
-> this is for handling huge PMD collapse.
+> >> "an IPI that we broadcast for splitting THP" is about splitting THP.
+> > 
+> > Ah OK.  Shall we still keep some "IPI broadcast" information here if we're
+> > modifying it?  Otherwise it gives a feeling that none needs the IPIs.
+> 
+> I guess that's the end goal -- and we forgot about the PMD collapse case.
+> 
+> Are we aware of any other case that needs an IPI? I'd rather avoid
+> documenting something that's no longer true.
 
-Yeah, I will prepare a patch soon.
+I'm not aware of any.
 
->
->
-> --
-> Thanks,
->
-> David / dhildenb
->
+> 
+> > 
+> > It can be dropped later if you want to rework the thp collapse side and
+> > finally remove IPI dependency on fast-gup, but so far it seems to me it's
+> > still needed.  Or just drop this patch until that rework happens?
+> 
+> The doc as is is obviously stale, why drop this patch?
+> 
+> We should see a fix for the THP collapse issue very soon I guess. Most
+> probably this patch will go upstream after that fix.
+
+No objection to have this patch alone as the removal statement is only
+about "thp split".  But IMHO this patch alone didn't really help a great
+lot, especially if you plan to have more to come that is very relevant to
+this, so it'll be clearer to put them together.  Your call.
+
+> 
+> > 
+> >>
+> >>>
+> >>> I can understand that we don't need IPI for thp split, but isn't the IPIs
+> >>> still needed for thp collapse (aka pmdp_collapse_flush)?
+> >>
+> >> That was, unfortunately, never documented -- and as discussed in the
+> >> other thread, arm64 doesn't do that IPI before collapse and might need
+> >> fixing. We'll most probably end up getting rid of that
+> >> (undocumented/forgotten) IPI requirement and fix it in GUP-fast by
+> >> re-rechecking if the PMD changed.
+> > 
+> > Yeah from an initial thought that looks valid to me.  It'll also allow
+> > pmdp_collapse_flush() to be dropped too, am I right?
+> 
+> I think the magic about pmdp_collapse_flush() is not only the IPIs, but
+> that we don't perform an ordinary PMD flush but we logically flush "all
+> PTEs in that range".
+
+Yes there's a difference, good to learn that, thanks.
+
+-- 
+Peter Xu
+

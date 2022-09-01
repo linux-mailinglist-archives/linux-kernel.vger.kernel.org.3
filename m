@@ -2,275 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 047D95A8BBD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 05:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56CA65A8BC4
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 05:07:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231700AbiIADDV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 23:03:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
+        id S232254AbiIADGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 23:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232052AbiIADDQ (ORCPT
+        with ESMTP id S229706AbiIADGW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 23:03:16 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3553C7756B
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 20:03:13 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id y3so32017264ejc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 20:03:13 -0700 (PDT)
+        Wed, 31 Aug 2022 23:06:22 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242EBE7274
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 20:06:18 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id y1so14013033plb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 20:06:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date;
-        bh=wmnsiEoq8lKi6fXSU3uMcdYEtnhfEIVER7hrMYEUhjA=;
-        b=cAlkmLf3rf017PazPIONyWw1H6H4bpoEnjh/W/JYmjR9XWjIFxSt5iLolwfJlplVWj
-         axv4p+0PWnc4n5TPGWKbHaYJ7dlEWionIkv0cJRbCVDOopmxtPIJr1YJ1GySHUeqJ1yi
-         4AWHffmanLgGnzKeVCn8Xm0T3WJU/DEA/r2jrZE8HbFxcRCkfBhBn7x9IDaNiBBst+OK
-         pp3PZor/JXBHuaoVEqFMTajB3UE7dB4dBpN3yjn/h27t8siTSzTXb5Pptk0iHmFO034h
-         8vk6J0rCMhbY9+5J6hoSDz2noKgZTQ8L7kleS9gULgIT2vz4WTRbUeHZahBA25UjkPyy
-         mFsA==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=jzys6zYw+Q1prsW6OWxyYvYOSLZd2kL6s95paGupV2g=;
+        b=F5nSQkcMwejQysNXHC8CODiyUdITMnG0y4pu5ezM7eQhyrOkVf8jYUGpo+uxfb5E2w
+         W0YMBn1yRnYHaR1uQodK+elIfSQQhzjkfXuJnl7IS6lwrpLXbtxK8E6M9Vno1fwWoMNk
+         b8NuNowjd9h+6EFiay8NfIbamRPLv5JkXrsoE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=wmnsiEoq8lKi6fXSU3uMcdYEtnhfEIVER7hrMYEUhjA=;
-        b=WVp7UCDFlOsyZkzHpo4I8yo698M3FxTcCV9mpwAEAd6YDfSUSOFIfUxmSMLLJhEGWP
-         Wdg8Q4NQ+gkJQQenEr00UIV+yqkdq55ML5mgDFlJ+LohHsjOrHHiCKarbnDOpsjpAfFe
-         YwHhwHFKGcRQvjqLB7PgghrAFcX0gyWM9s0REck+Eq67zhWrLYbTc1xvAwfLiv7D+58J
-         7UDlWuS4KqVrNgI6OCnTKXEhyPK67lvRKLbjhd4wlE7h0PBvAC7rzmXpOqvKcuAmvAr0
-         AZwqRH/DxxZEJXNVTD/Y7C9jXYuBFY2NlT94xW5y+2r1bB5SP3XzX4pb4qMHgEVCkeW7
-         LjRg==
-X-Gm-Message-State: ACgBeo1sZSwFTIzK7g4zX9hXgBBDgVehUx/EhvC8Nwgc9i0KPXuXg48p
-        vGBS7oAabRaIcaN7WMw9hTCHHB5xaQ8aVKUSezTIxY4ImFtxyw==
-X-Google-Smtp-Source: AA6agR6tqTwofI4asy0b6mkioNbCFeahkMrjo7dyBsT/ANsdpO9IXpJmsyYe9QKPg+uMdUfZU449kxYk5zlF/zmAX20=
-X-Received: by 2002:a17:907:a057:b0:730:a2d8:d5ac with SMTP id
- gz23-20020a170907a05700b00730a2d8d5acmr21656474ejc.764.1662001391749; Wed, 31
- Aug 2022 20:03:11 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=jzys6zYw+Q1prsW6OWxyYvYOSLZd2kL6s95paGupV2g=;
+        b=guAwi8NLb6SyZVRbTIikXi0Wjz1a3StkmNfI2hmlCav3yTFdsuGWMeOywcnUG3XCND
+         dyUNZy14K1hkthGY04RwS8gXAcFneJ5Es3P4hufr2Q7+Eka5r98G/pznVh3tv9T2Wwt+
+         nnUKgHFplk2j9Rgdd5NxhXaeuj38G7YoFXBuNXssyI2u//6VJ/mEwWHglv6eiB6Cuwxy
+         Zcd/1PY0g0YXxfXdzkbWTELmKfjaIZPM5QeynKasWSDrZl+44WEBLLPsxJ/iNqHwSSXe
+         WAjBhaVgPWrAxlU6VKHvRiXjH9MZ0ODIZEHKhtgPAaWUy4m0YAi1j/ymvq71tXvNaTIN
+         tCpg==
+X-Gm-Message-State: ACgBeo1yQL06w4rkW7VTfjvHCtKnf48sSgjY43KFiFoZ3vtjk29Swkvt
+        YJyAsFDNwAE7a0zkIoNqY2/CWw==
+X-Google-Smtp-Source: AA6agR7Sw+dqFlOTeUmZaBwOiuN/kmajQej38R1obITTaafcexZiEYqlr48/2rV64Jg66rGyJ7IGUQ==
+X-Received: by 2002:a17:90b:293:b0:1fd:7caa:e324 with SMTP id az19-20020a17090b029300b001fd7caae324mr6512598pjb.11.1662001577713;
+        Wed, 31 Aug 2022 20:06:17 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q63-20020a634342000000b0042bea8405a3sm4027035pga.14.2022.08.31.20.06.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 20:06:14 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        syzbot <syzkaller@googlegroups.com>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH 0/2] netlink: Bounds-check struct nlmsgerr creation
+Date:   Wed, 31 Aug 2022 20:06:08 -0700
+Message-Id: <20220901030610.1121299-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20220825130552.29587-1-zhangtianci.1997@bytedance.com>
- <CAJfpegsAOJmT=9FdanDVA_s5xF3iy9ccXxmin4cKW9-XxKG3xQ@mail.gmail.com>
- <20220831134327.dria7um4bhpk62mn@wittgenstein> <CAJfpegvLHV34FFU+59eH0WqPKAXy8340yNA6rxWXSmKeBbSnOA@mail.gmail.com>
- <20220831152904.efqd56kayvrxsdj6@wittgenstein>
-In-Reply-To: <20220831152904.efqd56kayvrxsdj6@wittgenstein>
-From:   =?UTF-8?B?5aSp6LWQ5byg?= <zhangtianci.1997@bytedance.com>
-Date:   Thu, 1 Sep 2022 11:02:59 +0800
-Message-ID: <CAP4dvscRZZgryM=SZR94FsjQJs_8=kqt0f-TRGzuY2WUXZcArw@mail.gmail.com>
-Subject: Re: [PATCH v2] ovl: Use current fsuid and fsgid in ovl_link()
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     Miklos Szeredi <miklos@szeredi.hu>,
-        overlayfs <linux-unionfs@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Amir Goldstein <amir73il@gmail.com>,
-        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=711; h=from:subject; bh=AnHz3m3mc0z+GZYjU6Piduca0GteHs1YZz+sSzFG5+Y=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjECGh7nSUR2+OcGMxUlRYtLO5qXb0hG272l98gx5I 0dRnn7aJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxAhoQAKCRCJcvTf3G3AJi9zD/ 9Y789r9orV98vIr8AJnnmPwd42aVbjUD0uuHQMvUOaB2uwFrsuer7Vj9UlBZpFabqvSUoktYZAkAXM M7zbZN/1K3fIWBczSXU30vjTEy3IhbQVQjYutjnN10gwX4c+dLp3TJI+J5JhPI4xJlp/zcdVv2ueh5 qdm8MphncPkPbftKkJUIIOi9wmooz1AyTHH10CXz6oFZ+ATk6lwMEzvFW0pF8cE/E9juA9bogtvLC8 XD07LfP2xRV3GZT77FzIvVlvY8W5ifHjA3lOaiJ9MY905mklwQ+5ZDmDyBwzMqstNl2aouoFIKmcYU O2VpuVaKH/k4QL2oKPIiR5ep8E0Drb4QYby9ZNKX6PjpVEd9y+wqN+cEyfaRzblIwMTYYdOsP7THKR zhBB64gJJdRrH3qKetnto0g+9JVUBPcL/57cAbny3NdMMUOt/pLWZnpHXEWZOL+DBG28b0o5vwP+TI uFpQXIrQp+hyes/kL7UnXCunvpcWQm0T9BQUOH/yYVtIjKjX7w0KyPNmKrAr+VOzj0v+/IOWZe4I1f CPxmSKfcaYUME1wxX27uPbsHI0zxdJJlHfF4/T8iFf5QkMtmrCFMirB6ORwxA698IfFf2bDzH0cSGi MDeSpINnYWiug34OUnzNUB8BpzuXeeaZMZazcZKdX9B4L0hc1S5zccLOtPPg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christian Brauner <brauner@kernel.org> =E4=BA=8E2022=E5=B9=B48=E6=9C=8831=
-=E6=97=A5=E5=91=A8=E4=B8=89 23:29=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Wed, Aug 31, 2022 at 03:53:58PM +0200, Miklos Szeredi wrote:
-> > On Wed, 31 Aug 2022 at 15:43, Christian Brauner <brauner@kernel.org> wr=
-ote:
-> > >
-> > > On Wed, Aug 31, 2022 at 03:00:18PM +0200, Miklos Szeredi wrote:
-> > > > On Thu, 25 Aug 2022 at 15:08, Zhang Tianci
-> > > > <zhangtianci.1997@bytedance.com> wrote:
-> > > > >
-> > > > > There is a wrong case of link() on overlay:
-> > > > >   $ mkdir /lower /fuse /merge
-> > > > >   $ mount -t fuse /fuse
-> > > > >   $ mkdir /fuse/upper /fuse/work
-> > > > >   $ mount -t overlay /merge -o lowerdir=3D/lower,upperdir=3D/fuse=
-/upper,\
-> > > > >     workdir=3Dwork
-> > > > >   $ touch /merge/file
-> > > > >   $ chown bin.bin /merge/file // the file's caller becomes "bin"
-> > > > >   $ ln /merge/file /merge/lnkfile
-> > > > >
-> > > > > Then we will get an error(EACCES) because fuse daemon checks the =
-link()'s
-> > > > > caller is "bin", it denied this request.
-> > > > >
-> > > > > In the changing history of ovl_link(), there are two key commits:
-> > > > >
-> > > > > The first is commit bb0d2b8ad296 ("ovl: fix sgid on directory") w=
-hich
-> > > > > overrides the cred's fsuid/fsgid using the new inode. The new ino=
-de's
-> > > > > owner is initialized by inode_init_owner(), and inode->fsuid is
-> > > > > assigned to the current user. So the override fsuid becomes the
-> > > > > current user. We know link() is actually modifying the directory,=
- so
-> > > > > the caller must have the MAY_WRITE permission on the directory. T=
-he
-> > > > > current caller may should have this permission. This is acceptabl=
-e
-> > > > > to use the caller's fsuid.
-> > > > >
-> > > > > The second is commit 51f7e52dc943 ("ovl: share inode for hard lin=
-k")
-> > > > > which removed the inode creation in ovl_link(). This commit move
-> > > > > inode_init_owner() into ovl_create_object(), so the ovl_link() ju=
-st
-> > > > > give the old inode to ovl_create_or_link(). Then the override fsu=
-id
-> > > > > becomes the old inode's fsuid, neither the caller nor the overlay=
-'s
-> > > > > creator! So this is incorrect.
-> > > > >
-> > > > > Fix this bug by using current fsuid/fsgid to do underlying fs's l=
-ink().
-> > > > >
-> > > > > Link: https://lore.kernel.org/all/20220817102951.xnvesg3a7rbv576x=
-@wittgenstein/T
-> > > > >
-> > > > > Signed-off-by: Zhang Tianci <zhangtianci.1997@bytedance.com>
-> > > > > Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
-> > > > > Signed-off-by: Christian Brauner (Microsoft) <brauner@kernel.org>
-> > > > > ---
-> > > > >  fs/overlayfs/dir.c       | 16 +++++++++++-----
-> > > > >  fs/overlayfs/overlayfs.h |  2 ++
-> > > > >  2 files changed, 13 insertions(+), 5 deletions(-)
-> > > > >
-> > > > > diff --git a/fs/overlayfs/dir.c b/fs/overlayfs/dir.c
-> > > > > index 6b03457f72bb..dd84e6fc5f6e 100644
-> > > > > --- a/fs/overlayfs/dir.c
-> > > > > +++ b/fs/overlayfs/dir.c
-> > > > > @@ -595,8 +595,8 @@ static int ovl_create_or_link(struct dentry *=
-dentry, struct inode *inode,
-> > > > >         err =3D -ENOMEM;
-> > > > >         override_cred =3D prepare_creds();
-> > > > >         if (override_cred) {
-> > > > > -               override_cred->fsuid =3D inode->i_uid;
-> > > > > -               override_cred->fsgid =3D inode->i_gid;
-> > > > > +               override_cred->fsuid =3D attr->fsuid;
-> > > > > +               override_cred->fsgid =3D attr->fsgid;
-> > > > >                 if (!attr->hardlink) {
-> > > > >                         err =3D security_dentry_create_files_as(d=
-entry,
-> > > > >                                         attr->mode, &dentry->d_na=
-me, old_cred,
-> > > > > @@ -646,6 +646,8 @@ static int ovl_create_object(struct dentry *d=
-entry, int mode, dev_t rdev,
-> > > > >         inode_init_owner(&init_user_ns, inode, dentry->d_parent->=
-d_inode, mode);
-> > > > >         attr.mode =3D inode->i_mode;
-> > > > >
-> > > > > +       attr.fsuid =3D inode->i_uid;
-> > > > > +       attr.fsgid =3D inode->i_gid;
-> > > > >         err =3D ovl_create_or_link(dentry, inode, &attr, false);
-> > > > >         /* Did we end up using the preallocated inode? */
-> > > > >         if (inode !=3D d_inode(dentry))
-> > > > > @@ -702,6 +704,7 @@ static int ovl_link(struct dentry *old, struc=
-t inode *newdir,
-> > > > >  {
-> > > > >         int err;
-> > > > >         struct inode *inode;
-> > > > > +       struct ovl_cattr attr;
-> > > > >
-> > > > >         err =3D ovl_want_write(old);
-> > > > >         if (err)
-> > > > > @@ -728,9 +731,12 @@ static int ovl_link(struct dentry *old, stru=
-ct inode *newdir,
-> > > > >         inode =3D d_inode(old);
-> > > > >         ihold(inode);
-> > > > >
-> > > > > -       err =3D ovl_create_or_link(new, inode,
-> > > > > -                       &(struct ovl_cattr) {.hardlink =3D ovl_de=
-ntry_upper(old)},
-> > > > > -                       ovl_type_origin(old));
-> > > > > +       attr =3D (struct ovl_cattr) {
-> > > > > +               .hardlink =3D ovl_dentry_upper(old),
-> > > > > +               .fsuid =3D current_fsuid(),
-> > > > > +               .fsgid =3D current_fsgid(),
-> > > > > +       };
-> > > >
-> > > > Why do we need to override fsuid/fsgid for the hardlink case?
-> > > >
-> > > > Wouldn't it be simpler to just use the mounter's creds unmodified i=
-n
-> > > > this case?   The inode is not created in this case, so overriding w=
-ith
-> > > > current uid/gid is not necessary, I think.
-> > > >
-> > > > Another way to look at it is: rename(A, B) is equivalent to an
-> > > > imaginary atomic [link(A, B) + unlink(A)] pair.  But we don't overr=
-ide
-> > > > uid/gid for rename() or unlink() so why should we for link().
-> > >
-> > > So my assumption has been that we want to override for any creation
-> > > request and so for the sake of consistency I would've expected to als=
-o
-> > > use that for ->link().
-> >
-> > But link() is *not* a creation op.  It's a namespace manipulation op.
->
-> Yeah, I know what you mean but it's borderline in so far as the
-> underlying fs might still perform permission checking based on the
-> caller's fs{g,u}id which together with what I'm saying below in a bit
-> was what made me go oh well, we should use the caller's fs{g,u}id then
-> for consistency.
->
-> >
-> > > Plus, this is also what has been done before the
-> > > commit  51f7e52dc943 ("ovl: share inode for hard link") iiuc.
-> >
-> > It wouldn't have mattered back then either, since the upper inode was
-> > linked and not copied.
->
-> What I meant was back then even for link the fs{g,u}id was based on a
-> newly allocated inode->i_{g,u}id that was initialized through
-> inode_init_owner() with the caller's fs{g,u}id:
->
->         inode =3D ovl_new_inode(dentry->d_sb, mode);
->         if (!inode)
->                 goto out;
->
->         err =3D ovl_copy_up(dentry->d_parent);
->         if (err)
->                 goto out_iput;
->
->         inode_init_owner(inode, dentry->d_parent->d_inode, mode);
->         stat.mode =3D inode->i_mode;
->
->         old_cred =3D ovl_override_creds(dentry->d_sb);
->         err =3D -ENOMEM;
->         override_cred =3D prepare_creds();
->         if (override_cred) {
->                 override_cred->fsuid =3D inode->i_uid;
->                 override_cred->fsgid =3D inode->i_gid;
->
-> and it changed after that commit to be based on old inode. So emulating
-> the old behavior seemed the better approach.
->
-> >
-> > > Fwiw, I would've opted for consistency and even use the caller's
-> > > fs{g,u}id during ->rename() and ->unlink().
-> > >
-> > > Right now the caller's fs{g,u}id - indirectly through inode_init_owne=
-r()
-> > > - is used to ensure that the ownership of newly created files in the
-> > > upper layer are based on the caller's not on the mounter's fs{g,u}id
-> > > afaict. If we continue to only override for those cases it would real=
-ly
-> > > help that we document this in a good comment in ovl_create_or_link().
-> >
-> > Yep.
->
-> Sounds good.
+Hi,
 
-It looks like you've reached an agreement.
+In order to avoid triggering the coming runtime memcpy() bounds checking,
+the length of the destination needs to be "visible" to the compiler in
+some way. However, netlink is constructed in a rather hidden fashion,
+and my attempts to wrangle it have resulted in this series, which perform
+explicit bounds checking before using unsafe_memcpy().
 
-So I will send the v3 patch using the mounter's fs{g,u}id with the
-proper comment in ovl_create_or_link().
+-Kees
 
-Thanks,
-Tianci
+Kees Cook (2):
+  netlink: Bounds-check nlmsg_len()
+  netlink: Bounds-check struct nlmsgerr creation
+
+ include/net/netlink.h             | 10 ++++++-
+ net/netfilter/ipset/ip_set_core.c | 10 +++++--
+ net/netlink/af_netlink.c          | 49 +++++++++++++++++++++----------
+ 3 files changed, 49 insertions(+), 20 deletions(-)
+
+-- 
+2.34.1
+

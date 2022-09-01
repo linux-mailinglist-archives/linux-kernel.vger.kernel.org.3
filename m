@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D4C5A91E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88AEA5A91E6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233799AbiIAIQu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:16:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        id S233999AbiIAIRC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 04:17:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbiIAIQn (ORCPT
+        with ESMTP id S233632AbiIAIQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:16:43 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F45F1706D;
-        Thu,  1 Sep 2022 01:16:35 -0700 (PDT)
-X-UUID: 44d7660e4c97499b865c3f4473251e96-20220901
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=mSKU3/XNrzgDEXyKoQN+SoaiHQESlxP9Gq2Nquvsogg=;
-        b=Cqnaie7DGwMn5apetXJgAJtILSyK7TxAv8CLnpsaCuZVZSPQcnJAThFbSDt0X9a2P8gKLgv69Cz5IMZKgxfOadEDs3nFM9MgXU/lcelseBWq4D4Iluy5TB2NYVY8sYASNKkVaKbHT27+xD+482hGs5sj+c2i+AF6tRUbGBL/azc=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.10,REQID:cf580489-ebd6-44a9-bec1-cbcacb796034,OB:0,L
-        OB:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release
-        _Ham,ACTION:release,TS:-5
-X-CID-META: VersionHash:84eae18,CLOUDID:53624dd0-20bd-4e5e-ace8-00692b7ab380,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 44d7660e4c97499b865c3f4473251e96-20220901
-Received: from mtkmbs10n2.mediatek.inc [(172.21.101.183)] by mailgw02.mediatek.com
-        (envelope-from <liju-clr.chen@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1255327469; Thu, 01 Sep 2022 16:16:29 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 1 Sep 2022 16:16:28 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Thu, 1 Sep 2022 16:16:28 +0800
-Message-ID: <092345db980b30c577350edc46d88dc3888736d4.camel@mediatek.com>
-Subject: Re: [PATCH v2 1/3] dt-bindings: watchdog: Add compatible for
- MediaTek MT8188
-From:   Liju-clr Chen <liju-clr.chen@mediatek.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        Runyang Chen <Runyang.Chen@mediatek.com>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, <nfraprado@collabora.com>
-CC:     <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Thu, 1 Sep 2022 16:16:28 +0800
-In-Reply-To: <0b17f336-5c04-e375-ef4a-3804f9702bf8@kernel.org>
-References: <20220816065330.27570-1-Runyang.Chen@mediatek.com>
-         <20220816065330.27570-2-Runyang.Chen@mediatek.com>
-         <0b17f336-5c04-e375-ef4a-3804f9702bf8@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 1 Sep 2022 04:16:59 -0400
+Received: from gnuweeb.org (gnuweeb.org [51.81.211.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF7CC9E8D
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:16:54 -0700 (PDT)
+Received: from [192.168.210.80] (unknown [182.2.39.249])
+        by gnuweeb.org (Postfix) with ESMTPSA id E4CB880866;
+        Thu,  1 Sep 2022 08:16:48 +0000 (UTC)
+X-GW-Data: lPqxHiMPbJw1wb7CM9QUryAGzr0yq5atzVDdxTR0iA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gnuweeb.org;
+        s=default; t=1662020213;
+        bh=lq7B7oslVdIFiKkrtZ+qbc4fMNOk/JK8jrKwVYgHXPA=;
+        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
+        b=JNpAuVJ5a6I0m+tL/+XHuHKTzItsLB+ceDJbHSItVsXP9EsqQmDwuJYhOvdaVswvB
+         w0CT9IqSEsd8UB92uuaWDVJmV9vAV2CzDGSSgrdftCyysK0yqBrVhLtkK+u+WruiXS
+         q1jzDD20kX1K7oxyYPIouYw9X/J1o6Y2PHtWlhOaWZnOgYB7hGLH3vXiW/HepViXx3
+         W4cCpoXMWUoWCTsEODYNb9fraO6elr7AIJON+RGJK3NZYNbnEvFRGuIJxzMIz/WUt7
+         Gh2Dpo4l0xmv8b7KkP8gwwAmdsb5b56iWv13mBPxfe+iq8nbbctsM9OHoSYSx8dmsz
+         GEhU22TS/WgRw==
+Message-ID: <9f2ef1ac-c0a1-eb77-8e68-e9a60bc8efd2@gnuweeb.org>
+Date:   Thu, 1 Sep 2022 15:16:44 +0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Oscar Salvador <osalvador@suse.de>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@suse.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Eric Dumazet <edumazet@google.com>,
+        Waiman Long <longman@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Ammar Faizi <ammarfaizi2@gmail.com>
+References: <20220901044249.4624-1-osalvador@suse.de>
+ <20220901044249.4624-3-osalvador@suse.de>
+From:   Ammar Faizi <ammarfaizi2@gnuweeb.org>
+Subject: Re: [PATCH 2/3] mm, page_owner: Add page_owner_stacks file to print
+ out only stacks and their counter
+In-Reply-To: <20220901044249.4624-3-osalvador@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maintainers,
+On 9/1/22 11:42 AM, Oscar Salvador wrote:
+> +static unsigned long last_stack = 0;
 
-Gentle ping for this patch.
-It would be appreciated if you could give some suggestions.
+This @last_stack can just be a static local variable in the new
+function you wrote, read_page_owner_stacks(), since no other
+functions use it.
 
-Best Regards,
-Liju Chen
+> +static ssize_t read_page_owner_stacks(struct file *file, char __user *buf,
+> +				      size_t count, loff_t *pos)
+> +{
+> +	char *kbuf;
+> +	int ret = 0;
+> +
+> +	count = min_t(size_t, count, PAGE_SIZE);
+> +	kbuf = kmalloc(count, GFP_KERNEL);
+> +	if (!kbuf)
+> +		return ENOMEM;
 
-On Tue, 2022-08-16 at 12:49 +0300, Krzysztof Kozlowski wrote:
-> On 16/08/2022 09:53, Runyang Chen wrote:
-> > From: Runyang Chen <runyang.chen@mediatek.com>
-> > 
-> > Add dt-binding documentation of watchdog for MediaTek MT8188 Soc
-> > 
-> 
-> 
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> 
-> Best regards,
-> Krzysztof
+Missing a negative sign, return -ENOMEM;
 
+> +	ret += stack_depot_print_stacks_threshold(kbuf, count, pos, &last_stack);
+> +	if (copy_to_user(buf, kbuf, ret))
+> +		ret = -EFAULT;
+> +
+> +	if (!ret)
+> +		last_stack = 0;
+> +
+> +	kfree(kbuf);
+> +	return ret;
+> +}
+
+-- 
+Ammar Faizi

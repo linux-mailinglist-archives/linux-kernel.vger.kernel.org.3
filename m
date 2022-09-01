@@ -2,241 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C505A8EA0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E658A5A8EAA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:49:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233365AbiIAGtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:49:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55408 "EHLO
+        id S233394AbiIAGta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiIAGtE (ORCPT
+        with ESMTP id S233389AbiIAGtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:49:04 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAF15121430
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:49:02 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id t129so16630184pfb.6
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:49:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=ZN0wlf/8I2US3eM7pqsH0yFkY6GDu2IDTHDWieRp2po=;
-        b=X/CJF0Tr5QeNRrDvXvoVRBol7+/ExtpCIaUOem2xX6N7aXB60RtHYcKxwjMH6Vty9F
-         NOQvGNdQVhvTFtGDc8xAODwnJvcxAxQyjyHd7InhTwWL9bZeIVFGpCBq76Rqb5hvYFJ8
-         zcomzqblXd+aht5XULk69wevTCaYmnptDe7mg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=ZN0wlf/8I2US3eM7pqsH0yFkY6GDu2IDTHDWieRp2po=;
-        b=eYbxwYYHOlTNyppJ1KZ2SiTRgWfHEhSgWFSa02YqwSqzZlhCaq34ZBeKzxbAcTGieI
-         sxL2cK12ZITsMYKFUobhpDH4XPwkAgKM9n+/6PC7eLr3bJ5HnU7a5fjesW8VCIq0GTWn
-         qtBEsU4i0QMzT0mwY6qbJXDV10jmsal+oZ+Ye9SPw3qIEA4jrs3dk+Ur9uC8SzvWzoDd
-         rPKEZLgAYrdUsvvq8X+qdlob/YucnLO5Lq482PhorE/G4UMkf3rXyZRVjePp5aFWpoYU
-         rIOrzXI/pMBsXltOjar6iEBPme+tujl3AmUBx/n1gLgBPDifXK6ENdf183rfJGOjmFz+
-         Oh4g==
-X-Gm-Message-State: ACgBeo3pzTOBh0IQ1IZqtnGNug0diA8SSZBONvHgWq7giJZQPHLIdDs1
-        m9/WbRwhwDmvjWlrVbmd8ZwVSA0GN+OvGw==
-X-Google-Smtp-Source: AA6agR5Q403qJEV6Lfi3M3NQrLbZNuHS84/xKnEfJUrk+AQUgpa/ica9Wop9P5cEQBd2i673E/jetg==
-X-Received: by 2002:a63:6e09:0:b0:430:663:7757 with SMTP id j9-20020a636e09000000b0043006637757mr7319766pgc.340.1662014942305;
-        Wed, 31 Aug 2022 23:49:02 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w8-20020a1709026f0800b00172c298ba42sm1183219plk.28.2022.08.31.23.49.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 23:49:01 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, Petr Machata <petrm@nvidia.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v2] netlink: Bounds-check struct nlmsgerr creation
-Date:   Wed, 31 Aug 2022 23:48:58 -0700
-Message-Id: <20220901064858.1417126-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5452; h=from:subject; bh=8yuSgL8t29LfBBmN/bpYmo03naVR7KsUIBiIJrZifO0=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjEFXZHG0g03slkKZAfp1i1tVcHkNwSK+Q/MIEK8Pi 0ZNnt3CJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxBV2QAKCRCJcvTf3G3AJsmiD/ wJTp0r9y/BO4058/6vDENLnnoGFoC+r21uBcF3NIhXeMOmdPmT2z9jj/0KG7fE9ioheBknqClFywq5 tzEXntFpVSgzz/ve19Xc+0GrRFu5sC/n6eFFpOAtutaBFPngsQl9xLS4U15U5SSOMkiN0XGITpqqUK gL871NId+UsPPuWpbcX413rgxFFT30ekWQElg8UKlScStGzKygaTuK+sa7C9pCyQMxg0SlSIvL8DOp AXWHH6UQtq5/gTT5/Se3VXmcH+iMgEgj3sUtx/1QsImFoFqr0AxnvCeLOsZMR+bkRkEZGo5ID/Q9bA 1SwMFKbVDAXWvJyQS4zcajisUvZm5oLJnJb5xre2KPoS8LDg2c62xnzm/XJqfyDyWoRYEALpXuORGq Ix3Q2kg+E2vzGiQpfCvBasuyuY+lJyYWFIA4+fuRbK6DAsuqNshCU+0243DCrI3ctsRB7d0z8UQ4ji HHzNftkzyoOGhmbdEwBRkVTZ7rG83RwhkXU3tpv0TAyVG2mxG1XYABVgLB7RK/C7MyMoNVAI0go/PZ bh2YxAOUUHAHI7GrhPfA6anPg6Tpvb+dmGvBumWdnrf0+lnOM48U2J45XFwwLfkcxyDuzngsFmX6n4 fM0TxICZEQqj+oyBvM9k/i25vREXb98a0q9fhTORiJpGMayayLs+ZbALCohA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+        Thu, 1 Sep 2022 02:49:24 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2087.outbound.protection.outlook.com [40.107.243.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 316712EF13;
+        Wed, 31 Aug 2022 23:49:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GK82JKVXMMEfjra4ba+Bbnyw4cyJHljQyH3Dupfx5ODHOu+mNpiLSKJRBocoP7hJoGiuBab3ngkHRVk454Py8fdfSHs8RkyAj3yBdx+6fAFhoWI2AASdv/d2s0jMeJDIuHeoduPavY3nOi92VfU/l63LhkBDNNuDNNrtVPZ2++MEOtSY0cBrQWXpXZ+rUHOg5KkgfrvSzAj4P8YVsu3vepaZBdwakvWX8u0Euloz1pypTfSIFXZK1gqNPA2DUK4RmKly/zOcLe4cEAZ2sQaupVmwMQEeGisUkbJpIou41gMihLlCcEgAG7iltFB16fjmAcUkW/swt8x8rzmtfm/fKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZPV+fN/IgPonO2d/3mQjufZK877q8riVBr0uiCKDOKs=;
+ b=MxBzX0ycYn7NuOzR+d0reLv08HGaVCZUjdk6L8HW85q9rU/N35LAdYPmE7kl+dHu9sLpPJFXWnDEm1xdAkeUxgtE3/K+UhYkDr/0BkoQLeKDm3Yo5Tz2rjIDWAikGihAWEIUsGCuu3GJ2uvcAFPGHaqLVLJV5r87fMYr4RuPyosS1JaPW/MBAmlZVLr5df0nO7CIFYRzzhmOyeerWDDxmWBQzYFlsrwE15/Z8xcK9+7ZA/T9PBSSBOcCMIX52Wq5UOWeOxPLh6xAjcPsdq8TEjs9wmClrXYOHsRO6bwj/72CRcwNie2oGtZ92Jg9HlQJm1UjSNGo5F4FRa5b6GXctA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZPV+fN/IgPonO2d/3mQjufZK877q8riVBr0uiCKDOKs=;
+ b=EDEVblmhCaWwc0JcDYL8iCHEA+Q/XIDPzMYYzjJYCiod4e+Bo2QQMufj3WWEB22FjQ1bTwz0Hjo9hSQKe19+r1t1Wy9quBs/Cb0RIrVqakS1cWubGEW/abT/gMDGt81dAYzy0xjJXQHdzLNw1y+4WIp367b7RU9aB4iClVl+s8w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by MN2PR12MB4360.namprd12.prod.outlook.com (2603:10b6:208:266::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Thu, 1 Sep
+ 2022 06:49:16 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5588.011; Thu, 1 Sep 2022
+ 06:49:16 +0000
+Message-ID: <7108c7c3-865e-c74b-b993-1227f31a0ef4@amd.com>
+Date:   Thu, 1 Sep 2022 08:49:05 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 08/21] drm/tegra: Prepare to dynamic dma-buf locking
+ specification
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
+        Qiang Yu <yuq825@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
+ <20220831153757.97381-9-dmitry.osipenko@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220831153757.97381-9-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: AS8P189CA0045.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:458::14) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: a2e243b5-b0a1-453e-2ddf-08da8be6169c
+X-MS-TrafficTypeDiagnostic: MN2PR12MB4360:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ViNPMCT6YUsrjN4C0212f9sdI8meg/rmTjuFjKvSUparj4FH3lWoT0Vy6WqkMavrm2vEYfpK+Llp+eCMWJ0PSQqNVDUCJFkvmCgnwmsiucgk9b9HeOe0F3DmMoTHGY1DZY/jBtN4F5yJQ5CcqxBMS/lDSXNjtDsskI6yzHjX3a35f+XOmhwoUfckYh9gkfw+UBDpiPxkPbZomH7dPCHzzBlC3jCeIKvi9C/oe2vniy6lrufsdoPDOjAf/d0tF1aEJ4f5xO0jVsLc5q6F764ytQtrUKNrIiHYONdZIGXT8LPY6RbIJncht7tC1Q/seLop8vtwQP4SWWaiw6PB41sFm7Se9ot+TE5NR1R0ITQ8ga0aDhMxBO9j6eEDZ8Um3IjEL2tt+rOI687PhyZ8endNT7YywBL//CKZRH/rAPUGl66dVNLTOYp+xGGIexTLyCP3A4G488WHR+COkt9OKvF71Di8COhb11BKMLcVVJklDhYHuJyE3ZzEhraHPVLVtdmqVBwvT/lkqIBRikS2KyTDrF3ltvM5yfGosBQsLnNxXxvMA4FK/xGrpRAwYwzKgLBCZXs57VyQVvX9wANGjfjjB1seTx5+BQHWguL0yUd93SzukAlsR+8EE5ryEiWUQxmqpKWZ9mvMvEJ2S9npUqpt3Z73Qt2V36ACRjlRM7YrJ4WeNNs2mh/KAZy4viJ5RGol3gRxdGtO7E9vQ2pJCQmVqf6f+tCjzChpOTUukc7zpiYq0aDhRS3BGb59bQ7ntRW9UaNl17JmIWXsBBlJ5BJ39Ia96F7DCFjOoqJ4XFzRpoywJZlOEwEMd//BsqQrZZU9
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(376002)(136003)(39860400002)(366004)(83380400001)(38100700002)(66556008)(110136005)(316002)(66476007)(4326008)(8676002)(66946007)(478600001)(36756003)(6486002)(31686004)(6666004)(5660300002)(41300700001)(8936002)(921005)(31696002)(86362001)(2616005)(66574015)(186003)(7416002)(7406005)(26005)(6506007)(2906002)(6512007)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bjVVbmxuOUxGVUdNbVFGYXp4WXZ3cDdPMkVIdEdOUnFIVUd4UW53b2ROTUc4?=
+ =?utf-8?B?REREK2tMQTdrRDVxWTFXWWRpM1AwQU9hdzV3OEd5amZBb3FWL1kvNkxPbmZm?=
+ =?utf-8?B?K0M2cDFYL1ZreHpCYlJsSGtZczFZWW1PbVY2bmRqVXgvTWlhK0Z4Z1RiSWFD?=
+ =?utf-8?B?TUdXKzQrNURNQlpEbE5IL1B5RC93eXIxaG52bGVxUkJqdWMvVTVXTTBxdkdo?=
+ =?utf-8?B?blcrVEk1V0JYbDN5ZGRIZEVlZ1VLdm41ZHFJSm9KM2pZaFk3Z2NJUTU5YU45?=
+ =?utf-8?B?YzQ0blpjaGR2K1lKYW5udktqS0VnQmtqcFR0ejFZVE1ITjNKcWZoRVpwdGFn?=
+ =?utf-8?B?TVFVK0ErRS9Sc2tiOElZSkkxcmt3Z0xFU3EwRVNENTMxakJDNUNzOFc2endH?=
+ =?utf-8?B?bG1LWTJpeVdqZHlmUFR5MnozK0xLaFJxSXUyL2lLdUZUWHpBelNxdmh0Rmwx?=
+ =?utf-8?B?TWZza0dKWUNhRk9NeTZhYlFPUjVkT05QTmNNRENtUnpzOTkvNFlCRnJUV1Qv?=
+ =?utf-8?B?bjBQZzFDS2ExRXRhSWJRayswQ091cGZ1RlBjL2FNcG9ZaXltdXFoN3hlMjg0?=
+ =?utf-8?B?dkIydzl0MU9kRTlaUHZ6Y3FvV0lXOUdPLzYwcDFUYUNHRFhrdzljUTliam9P?=
+ =?utf-8?B?c1E4WGVQMStNMnhGNEszbzlTVkM0U2pucE8rZk5vL3J6OXdaWCtBdEh6bmpY?=
+ =?utf-8?B?ajl1T1FmM2hvNWVBc1FUdzRSb2lXMno4YjhzYlNFWTE5N2ZBMU1PQlAreEhz?=
+ =?utf-8?B?ZmU4c0JUYjA1NThlczlNSDNhWUJVMXIxcy9yY2pseERwMjB3T1R3NEdhL0l1?=
+ =?utf-8?B?bHZzY2gvaHpWbTUxUCtLcUNwdWhvVGxUZitnZHZMMk1wV0lrSHBDSk5FS3U1?=
+ =?utf-8?B?QXZ1amcrSXU3azltS3hIeVdXTjhtVmp3NU1NNFdBcHNCRVdEOEsyMk1mR21w?=
+ =?utf-8?B?dk1TcWd2emozczBCUGlEUXFmTis1WUNqVlRMaFJsQlNiNzFsRThVL2lNV2ZV?=
+ =?utf-8?B?NEFaWDlnSUVtWUl4NVByNFhMUXVpWE5mMVY2NmRxV3BnWWtmMGUydjlPWnRE?=
+ =?utf-8?B?Rjl6VENJOTcyWXB3WmNGc0JLTkI2T1AxMGp0UnRZaldhNmNtVk1VaStPRUo3?=
+ =?utf-8?B?RW9XRzNYN3V2cVZOZi9UWXRESTRFS0JOelhYdDFUbzdpSW41ZVYzc01vWFZP?=
+ =?utf-8?B?YnNPU2FublRFL3YzMWt3OTVIZ3FUVzBFMTZ3NTlxcXRxSjU2TjNrQ2hXSnJs?=
+ =?utf-8?B?MWdycDZwcXpUSGdsTlg0WUJvbTVjOWcvTnF0TzVLNVJLekRmakhsNzE2WjNH?=
+ =?utf-8?B?VVZLZVNicGFBUTNCaHg0OTM4ZlVxQmVXSXlNNlZIeVFyRDhjUVFWVW83NE1X?=
+ =?utf-8?B?aWJCU2FlZlZvaDB1T2FVUFk1cTdhUmYzTzdMakw5R0E4VUdlNFFacWZlOEJl?=
+ =?utf-8?B?TzNzYyt2azJXNkQ5cllTQm9xd3hBSmpqSlIrcG1LSHNRSXVpaE9XU28wdFor?=
+ =?utf-8?B?bjFmWWdxMHlZTUo4RFc3dDF6U1o5dU8xbGlhOStHRit4NThZeWhOd1VwTW1m?=
+ =?utf-8?B?NVFmV0lVL3lTSUVzM1h2K1ZkNjI2U29OSUhXMXN3TFRUQ2VwZnZmd2M1Wk9X?=
+ =?utf-8?B?cHAvYmFmNGhSc3FTamhGSzRCVUZoTTdxSFJZTFhreE1GU3BPSHg4bDF0TUVs?=
+ =?utf-8?B?cUVIZEQ5endJMzZCSk51K1FpT2cxNXJqelVqcjdQR3JrRVJORlpvSmVGS3NR?=
+ =?utf-8?B?dGVMekd0cy9LVWI2ZmFnc2lYQUo0SVZGWld0VkdhTWNyU1MxOGQvdVZ6NW00?=
+ =?utf-8?B?b0ZFbjFGelVRWks5WEl3UjdoNjRlUk5UN3NlN0RWSVhQWHZvY1duZUl1a24w?=
+ =?utf-8?B?VDFBWlQ0RldmKzU0RzIwOS83QUtVMjJYblo4aGQ1WWgrMGwxNTliSVJJckdD?=
+ =?utf-8?B?ay9ya2NIczBpV3dUQWtoZUlvYXg1WFdrUU1qV2xDQzFvWi9mS0lEdjZRR1ZP?=
+ =?utf-8?B?NDhqaStleENNUFlGU0hYNVkyNXprTkNqWXhNa0pWb1krU0l5WTdPT2pSclV4?=
+ =?utf-8?B?YmVydEcvRTdHSW9UQXhPMnh6cVN1MlJFcngvYis0L0JiVlBLS2lRVHc5bjJk?=
+ =?utf-8?Q?RNBNDJiJ3tT74c54wYf2wtBGY?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a2e243b5-b0a1-453e-2ddf-08da8be6169c
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 06:49:16.6294
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yQm26iAz+Ydnnf2Sc1GurjvLZy0uzFmUkttuA2nmkIazZdgnldYVSgQ8pmGf0q9V
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4360
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For 32-bit systems, it might be possible to wrap lnmsgerr content
-lengths beyond SIZE_MAX. Explicitly test for all overflows, and mark the
-memcpy() as being unable to internally diagnose overflows.
+Am 31.08.22 um 17:37 schrieb Dmitry Osipenko:
+> Prepare Tegra DRM driver to the common dynamic dma-buf locking convention
+> by starting to use the unlocked versions of dma-buf API functions.
+>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-This also excludes netlink from the coming runtime bounds check on
-memcpy(), since it's an unusual case of open-coded sizing and
-allocation. Avoid this future run-time warning:
+Acked-by: Christian König <christian.koenig@amd.com>
 
-  memcpy: detected field-spanning write (size 32) of single field "&errmsg->msg" at net/netlink/af_netlink.c:2447 (size 16)
-
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
-Cc: Florian Westphal <fw@strlen.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: syzbot <syzkaller@googlegroups.com>
-Cc: netfilter-devel@vger.kernel.org
-Cc: coreteam@netfilter.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
-v2: Rebased to -next
-v1: https://lore.kernel.org/lkml/20220901030610.1121299-3-keescook@chromium.org
----
- net/netlink/af_netlink.c | 81 +++++++++++++++++++++++++---------------
- 1 file changed, 51 insertions(+), 30 deletions(-)
-
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index f89ba302ac6e..1285779d9ab6 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -2400,35 +2400,44 @@ int __netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
- }
- EXPORT_SYMBOL(__netlink_dump_start);
- 
--static size_t
-+/* Returns false on overflow */
-+static bool __must_check
- netlink_ack_tlv_len(struct netlink_sock *nlk, int err,
--		    const struct netlink_ext_ack *extack)
-+		    const struct netlink_ext_ack *extack,
-+		    size_t *tlvlen)
- {
--	size_t tlvlen;
-+	*tlvlen = 0;
- 
- 	if (!extack || !(nlk->flags & NETLINK_F_EXT_ACK))
--		return 0;
-+		return true;
- 
--	tlvlen = 0;
--	if (extack->_msg)
--		tlvlen += nla_total_size(strlen(extack->_msg) + 1);
--	if (extack->cookie_len)
--		tlvlen += nla_total_size(extack->cookie_len);
-+	if (extack->_msg &&
-+	    check_add_overflow(*tlvlen, nla_total_size(strlen(extack->_msg) + 1), tlvlen))
-+		return false;
-+
-+	if (extack->cookie_len &&
-+	    check_add_overflow(*tlvlen, nla_total_size(extack->cookie_len), tlvlen))
-+		return false;
- 
- 	/* Following attributes are only reported as error (not warning) */
- 	if (!err)
--		return tlvlen;
-+		return true;
- 
--	if (extack->bad_attr)
--		tlvlen += nla_total_size(sizeof(u32));
--	if (extack->policy)
--		tlvlen += netlink_policy_dump_attr_size_estimate(extack->policy);
--	if (extack->miss_type)
--		tlvlen += nla_total_size(sizeof(u32));
--	if (extack->miss_nest)
--		tlvlen += nla_total_size(sizeof(u32));
-+	if (extack->bad_attr &&
-+	    check_add_overflow(*tlvlen, nla_total_size(sizeof(u32)), tlvlen))
-+		return false;
-+	if (extack->policy &&
-+	    check_add_overflow(*tlvlen, netlink_policy_dump_attr_size_estimate(extack->policy),
-+			       tlvlen))
-+		return false;
-+	if (extack->miss_type &&
-+	    check_add_overflow(*tlvlen, nla_total_size(sizeof(u32)), tlvlen))
-+		return false;
-+	if (extack->miss_nest &&
-+	    check_add_overflow(*tlvlen, nla_total_size(sizeof(u32)), tlvlen))
-+		return false;
- 
--	return tlvlen;
-+	return true;
- }
- 
- static void
-@@ -2472,33 +2481,39 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
- 	size_t payload = sizeof(*errmsg);
- 	struct netlink_sock *nlk = nlk_sk(NETLINK_CB(in_skb).sk);
- 	unsigned int flags = 0;
--	size_t tlvlen;
-+	size_t alloc_size, tlvlen = 0;
- 
- 	/* Error messages get the original request appened, unless the user
- 	 * requests to cap the error message, and get extra error data if
- 	 * requested.
- 	 */
--	if (err && !(nlk->flags & NETLINK_F_CAP_ACK))
--		payload += nlmsg_len(nlh);
-+	if (err && !(nlk->flags & NETLINK_F_CAP_ACK) &&
-+	    check_add_overflow(payload, (size_t)nlmsg_len(nlh), &payload))
-+		goto failure;
- 	else
- 		flags |= NLM_F_CAPPED;
- 
--	tlvlen = netlink_ack_tlv_len(nlk, err, extack);
-+	if (!netlink_ack_tlv_len(nlk, err, extack, &tlvlen))
-+		goto failure;
- 	if (tlvlen)
- 		flags |= NLM_F_ACK_TLVS;
- 
--	skb = nlmsg_new(payload + tlvlen, GFP_KERNEL);
--	if (!skb) {
--		NETLINK_CB(in_skb).sk->sk_err = ENOBUFS;
--		sk_error_report(NETLINK_CB(in_skb).sk);
--		return;
--	}
-+	if (check_add_overflow(payload, tlvlen, &alloc_size))
-+		goto failure;
-+
-+	skb = nlmsg_new(alloc_size, GFP_KERNEL);
-+	if (!skb)
-+		goto failure;
- 
- 	rep = __nlmsg_put(skb, NETLINK_CB(in_skb).portid, nlh->nlmsg_seq,
- 			  NLMSG_ERROR, payload, flags);
- 	errmsg = nlmsg_data(rep);
- 	errmsg->error = err;
--	memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg) ? nlh->nlmsg_len : sizeof(*nlh));
-+	unsafe_memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg)
-+					 ?  nlh->nlmsg_len : sizeof(*nlh),
-+		      /* "payload" was bounds checked against nlh->nlmsg_len,
-+		       * and overflow-checked as tlvlen was constructed.
-+		       */);
- 
- 	if (tlvlen)
- 		netlink_ack_tlv_fill(in_skb, skb, nlh, err, extack);
-@@ -2506,6 +2521,12 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
- 	nlmsg_end(skb, rep);
- 
- 	nlmsg_unicast(in_skb->sk, skb, NETLINK_CB(in_skb).portid);
-+	return;
-+
-+failure:
-+	NETLINK_CB(in_skb).sk->sk_err = ENOBUFS;
-+	sk_error_report(NETLINK_CB(in_skb).sk);
-+	return;
- }
- EXPORT_SYMBOL(netlink_ack);
- 
--- 
-2.34.1
+> ---
+>   drivers/gpu/drm/tegra/gem.c | 17 +++++++++--------
+>   1 file changed, 9 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/tegra/gem.c b/drivers/gpu/drm/tegra/gem.c
+> index 81991090adcc..b09b8ab40ae4 100644
+> --- a/drivers/gpu/drm/tegra/gem.c
+> +++ b/drivers/gpu/drm/tegra/gem.c
+> @@ -84,7 +84,7 @@ static struct host1x_bo_mapping *tegra_bo_pin(struct device *dev, struct host1x_
+>   			goto free;
+>   		}
+>   
+> -		map->sgt = dma_buf_map_attachment(map->attach, direction);
+> +		map->sgt = dma_buf_map_attachment_unlocked(map->attach, direction);
+>   		if (IS_ERR(map->sgt)) {
+>   			dma_buf_detach(buf, map->attach);
+>   			err = PTR_ERR(map->sgt);
+> @@ -160,7 +160,8 @@ static struct host1x_bo_mapping *tegra_bo_pin(struct device *dev, struct host1x_
+>   static void tegra_bo_unpin(struct host1x_bo_mapping *map)
+>   {
+>   	if (map->attach) {
+> -		dma_buf_unmap_attachment(map->attach, map->sgt, map->direction);
+> +		dma_buf_unmap_attachment_unlocked(map->attach, map->sgt,
+> +						  map->direction);
+>   		dma_buf_detach(map->attach->dmabuf, map->attach);
+>   	} else {
+>   		dma_unmap_sgtable(map->dev, map->sgt, map->direction, 0);
+> @@ -181,7 +182,7 @@ static void *tegra_bo_mmap(struct host1x_bo *bo)
+>   	if (obj->vaddr) {
+>   		return obj->vaddr;
+>   	} else if (obj->gem.import_attach) {
+> -		ret = dma_buf_vmap(obj->gem.import_attach->dmabuf, &map);
+> +		ret = dma_buf_vmap_unlocked(obj->gem.import_attach->dmabuf, &map);
+>   		return ret ? NULL : map.vaddr;
+>   	} else {
+>   		return vmap(obj->pages, obj->num_pages, VM_MAP,
+> @@ -197,7 +198,7 @@ static void tegra_bo_munmap(struct host1x_bo *bo, void *addr)
+>   	if (obj->vaddr)
+>   		return;
+>   	else if (obj->gem.import_attach)
+> -		dma_buf_vunmap(obj->gem.import_attach->dmabuf, &map);
+> +		dma_buf_vunmap_unlocked(obj->gem.import_attach->dmabuf, &map);
+>   	else
+>   		vunmap(addr);
+>   }
+> @@ -461,7 +462,7 @@ static struct tegra_bo *tegra_bo_import(struct drm_device *drm,
+>   
+>   	get_dma_buf(buf);
+>   
+> -	bo->sgt = dma_buf_map_attachment(attach, DMA_TO_DEVICE);
+> +	bo->sgt = dma_buf_map_attachment_unlocked(attach, DMA_TO_DEVICE);
+>   	if (IS_ERR(bo->sgt)) {
+>   		err = PTR_ERR(bo->sgt);
+>   		goto detach;
+> @@ -479,7 +480,7 @@ static struct tegra_bo *tegra_bo_import(struct drm_device *drm,
+>   
+>   detach:
+>   	if (!IS_ERR_OR_NULL(bo->sgt))
+> -		dma_buf_unmap_attachment(attach, bo->sgt, DMA_TO_DEVICE);
+> +		dma_buf_unmap_attachment_unlocked(attach, bo->sgt, DMA_TO_DEVICE);
+>   
+>   	dma_buf_detach(buf, attach);
+>   	dma_buf_put(buf);
+> @@ -508,8 +509,8 @@ void tegra_bo_free_object(struct drm_gem_object *gem)
+>   		tegra_bo_iommu_unmap(tegra, bo);
+>   
+>   	if (gem->import_attach) {
+> -		dma_buf_unmap_attachment(gem->import_attach, bo->sgt,
+> -					 DMA_TO_DEVICE);
+> +		dma_buf_unmap_attachment_unlocked(gem->import_attach, bo->sgt,
+> +						  DMA_TO_DEVICE);
+>   		drm_prime_gem_destroy(gem, NULL);
+>   	} else {
+>   		tegra_bo_free(gem->dev, bo);
 

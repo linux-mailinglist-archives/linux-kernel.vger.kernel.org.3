@@ -2,167 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EC415A9FEE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA5DD5A9FE1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:27:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234101AbiIAT0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47410 "EHLO
+        id S234314AbiIAT1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234301AbiIAT0n (ORCPT
+        with ESMTP id S234212AbiIAT04 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:26:43 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830617B1C4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:26:39 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-11ee4649dfcso27625115fac.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 12:26:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=nUFKb0lwuoJnPBzhuuDRyGpS99t7DT6AsET+CKwieMQ=;
-        b=kab0/IS7ZlINDcHCLmc50JrBFqemoC73endhL3ZpKsJ3xs4hicL9pGZtRgbHUVZHJ6
-         9Np79qggyerdPcGnJ463kP4VGbE1WVilQH4gI8q2W09RSjHrThq5srLUj2g4yBnjXSbb
-         kdcWybUERjlnw69YdIO9w2hmaYZltUrxsDfxc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=nUFKb0lwuoJnPBzhuuDRyGpS99t7DT6AsET+CKwieMQ=;
-        b=4p/bfdpTGRtVQsryA3ApwX3jlo1fMvk77A/Ak/hV+y0wbqwqsY1WwGcOzJPIvYbzWC
-         HS92CMcxZ+L6UKOi35eUqhXKuZcsZM//lkV09A6pyJoV64v3WrXh81z7s9XWjdciwdQH
-         WRcCAxbzPRF5lyhLu17Igi4GmSjjUx+vD24LyCpAKWaxoqA/r2PBdfH/HviNKYtbpE6+
-         zev5G8xn37EePiLC81hty5K8T7G5KcJUj8oe+wNuMKHzmZ501w93DUnQ6HCC9NEPZxYU
-         pmK3d6fO468BMx1m5SJUOPOKHCwn6fHF0dfiRAOmE49FXunbVKIApiUN8MpBQHDuDlYo
-         /V7A==
-X-Gm-Message-State: ACgBeo0uH8fboBsPsgx5GUVJwRDckooI5+8ozHlZ3g8Ngyuoz4JP64dq
-        PqwEmpzZ8L8h6g4ifbfIHF/JZlmhsc7RF4WqH5mMXg==
-X-Google-Smtp-Source: AA6agR76Qx1UhZamCUF7S9TUTYDl6xeDAqqmTX5Bo6k+e7Hx34+fSOeUvrMaPFePMLZcsKk4Dq+ttY1jW3moMxdkm/k=
-X-Received: by 2002:a54:448a:0:b0:344:99d1:1578 with SMTP id
- v10-20020a54448a000000b0034499d11578mr325859oiv.7.1662060398178; Thu, 01 Sep
- 2022 12:26:38 -0700 (PDT)
+        Thu, 1 Sep 2022 15:26:56 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C195F79A4E;
+        Thu,  1 Sep 2022 12:26:54 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281JHXNw008381;
+        Thu, 1 Sep 2022 19:26:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=CeMLFtrPswi26kTXVK5yVfMUzXmqd4iY8yXrDKKQZvU=;
+ b=Q0+U9QDsNFeVWty//i7w/bd2BL3R8p760SB3GJR2yWAmk6/cqpy/inCjMELUrB8cKGhP
+ AGNJ18zosYY+++TmIrGM8gvFhuWcboppSbG+lzo4mVltgbUnFsUldB1KdLlOAzXxQZEZ
+ HvDO/8AUN2tLfD6ysEdEOPo78s4zvjsi+zPlPGhyEvxZyiPXgaBRLwejLeI7fUGwfzRA
+ prNTjOD+vcuSV+mBMaNdSv5vzz+5kx3OZnsszKzz7MmI5iYxpRpadaCm1DeA6SNmZmyX
+ UAz8DxgUikQ4jKv32PSqU76FcXoIPsYvvSPEFUqb4GmJqOcPqL+HEEPfbBKJVD9kc90d Dg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jab5gn0md-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 19:26:51 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 281JQoU3014885
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Sep 2022 19:26:50 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 1 Sep 2022 12:26:49 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v7 0/5] Fix controller halt and endxfer timeout issues
+Date:   Thu, 1 Sep 2022 12:26:33 -0700
+Message-ID: <20220901192638.30408-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20220830145004.430545-1-daniel.vetter@ffwll.ch> <YxCY57DmFfTuHs1q@alley>
-In-Reply-To: <YxCY57DmFfTuHs1q@alley>
-From:   Daniel Vetter <daniel.vetter@ffwll.ch>
-Date:   Thu, 1 Sep 2022 21:26:27 +0200
-Message-ID: <CAKMK7uFwJumoLCddSxtd=tPoV1xLFw5uCWpY+WDtiRC=fiSedg@mail.gmail.com>
-Subject: Re: [PATCH] kernel/panic: Drop unblank_screen call
-To:     Petr Mladek <pmladek@suse.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel.vetter@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Xuezhi Zhang <zhangxuezhi1@coolpad.com>,
-        Yangxi Xiang <xyangxi5@gmail.com>,
-        nick black <dankamongmen@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Marco Elver <elver@google.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        David Gow <davidgow@google.com>,
-        tangmeng <tangmeng@uniontech.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Chris Wilson <chris@chris-wilson.co.uk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: cYxc92LllB-wV6MgPWgI14dBXRm9jjsy
+X-Proofpoint-GUID: cYxc92LllB-wV6MgPWgI14dBXRm9jjsy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 mlxlogscore=635 bulkscore=0 spamscore=0 mlxscore=0
+ suspectscore=0 priorityscore=1501 clxscore=1015 adultscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209010084
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Sept 2022 at 13:35, Petr Mladek <pmladek@suse.com> wrote:
->
-> On Tue 2022-08-30 16:50:04, Daniel Vetter wrote:
-> > console_unblank() does this too (called in both places right after),
-> > and with a lot more confidence inspiring approach to locking.
-> >
-> > Reconstructing this story is very strange:
-> >
-> > In b61312d353da ("oops handling: ensure that any oops is flushed to
-> > the mtdoops console") it is claimed that a printk(" "); flushed out
-> > the console buffer, which was removed in e3e8a75d2acf ("[PATCH]
-> > Extract and use wake_up_klogd()"). In todays kernels this is done way
-> > earlier in console_flush_on_panic with some really nasty tricks. I
-> > didn't bother to fully reconstruct this all, least because the call to
-> > bust_spinlock(0); gets moved every few years, depending upon how the
-> > wind blows (or well, who screamed loudest about the various issue each
-> > call site caused).
-> >
-> > Before that commit the only calls to console_unblank() where in s390
-> > arch code.
-> >
-> > The other side here is the console->unblank callback, which was
-> > introduced in 2.1.31 for the vt driver. Which predates the
-> > console_unblank() function by a lot, which was added (without users)
-> > in 2.4.14.3. So pretty much impossible to guess at any motivation
-> > here. Also afaict the vt driver is the only (and always was the only)
-> > console driver implementing the unblank callback, so no idea why a
-> > call to console_unblank() was added for the mtdooops driver - the
-> > action actually flushing out the console buffers is done from
-> > console_unlock() only.
->
-> My understanding is that mtdoops is not a real console. The commit
-> 4b23aff083649eafa141 ("[MTD] oops and panic message logging to MTD
-> device") suggests that it was just (mis)using the console
-> infrastructure.
->
-> The commit 2e386e4bac90554887e73d ("mtd: mtdoops: refactor as a
-> kmsg_dumper") converted it to use the new kmsg_dumper API that
-> was created for this use case.
->
-> So, I would consider all the mtdoops-related changes as a misuse
-> of the console API.
+Changs in v7:
+- Added missing arugment if DWC3 is not enabled in the kernel config
 
-Ah, that's a good piece of information that I didn't figure out.
+Changes in v6:
+- Fix kernel bot errors/warnings.
 
-Greg, if you haven't baked in the patch yet, can you perhaps add the
-above information from Petr to the commit message?
+Changes in v5:
+- Rebased series on usb-testing from patch #5 onwards.
 
-Thanks, Daniel
+Changes in v4:
+- Split the increase timeout patch into separate patches. #1 for the
+gadget suspend/resume locking changes #2 for the increased timeout
+- Modified msleep to usleep_range w/ an interval of 1-2ms and a max
+timeout of 4s.
 
->
->
-> > Note that as prep for the s390 users the locking was adjusted in
-> > 2.5.22 (I couldn't figure out how to properly reference the BK commit
-> > from the historical git trees) from a normal semaphore to a trylock.
-> >
-> > Note that a copy of the direct unblank_screen() call was added to
-> > panic() in c7c3f05e341a ("panic: avoid deadlocks in re-entrant console
-> > drivers"), which partially inlined the bust_spinlocks(0); call.
-> >
-> > Long story short, I have no idea why the direct call to unblank_screen
-> > survived for so long (the infrastructure to do it properly existed for
-> > years), nor why it wasn't removed when the console_unblank() call was
-> > finally added. But it makes a ton more sense to finally do that than
-> > not - it's just better encapsulation to go through the console
-> > functions instead of doing a direct call, so let's dare. Plus it
-> > really does not make much sense to call the only unblank
-> > implementation there is twice, once without, and once with appropriate
-> > locking.
-> >
-> > Signed-off-by: Daniel Vetter <daniel.vetter@intel.com>
->
-> Nice analyze. The change makes perfect sense from my POV:
->
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
->
-> Best Regards,
-> Petr
+Changes in v3:
+- Modified the msleep() duration to ~2s versus ~10s due to the minimum
+mdelay() value.
+- Removed patch to modify DEP flags during dwc3_stop_active_transfer().
+This was not required after fixing the logic to allow EP xfercomplete
+events to be handled on EP0.
+- Added some changes to account for a cable disconnect scenario, where
+dwc3_gadget_pullup() would not be executed to stop active transfers.
+Needed to add some logic to the disconnect interrupt to ensure that we
+cleanup/restart any pending SETUP transaction, so that we can clear the
+EP0 delayed stop status. (if pending)
+- Added patch to ensure that we don't proceed with umapping buffers
+until the endxfer was actually sent.
 
+Changes in v2:
+- Moved msleep() to before reading status register for halted state
+- Fixed kernel bot errors
+- Clearing DEP flags in __dwc3_stop_active_transfers()
+- Added Suggested-by tags and link references to previous discussions
 
+This patch series addresses some issues seen while testing with the latest
+soft disconnect implementation where EP events are allowed to process while
+the controller halt is occurring.
 
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+#1
+Since routines can now interweave, we can see that the soft disconnect can
+occur while conndone is being serviced.  This leads to a controller halt
+timeout, as the soft disconnect clears the DEP flags, for which conndone
+interrupt handler will issue a __dwc3_ep_enable(ep0), that leads to
+re-issuing the set ep config command for every endpoint.
+
+#2
+Function drivers can ask for a delayed_status phase, while it processes the
+received SETUP packet.  This can lead to large delays when handling the
+soft disconnect routine.  To improve the timing, forcefully send the status
+phase, as we are going to disconnect from the host.
+
+#3
+Ensure that local interrupts are left enabled, so that EP0 events can be
+processed while the soft disconnect/dequeue is happening.
+
+#4
+Since EP0 events can occur during controller halt, it may increase the time
+needed for the controller to fully stop.
+
+#5
+Account for cable disconnect scenarios where nothing may cause the endxfer
+retry if DWC3_EP_DELAY_STOP is set.
+
+#6
+Avoid unmapping pending USB requests that were never stopped.  This would
+lead to a potential SMMU fault.
+
+Wesley Cheng (5):
+  usb: dwc3: Avoid unmapping USB requests if endxfer is not complete
+  usb: dwc3: Remove DWC3 locking during gadget suspend/resume
+  usb: dwc3: Increase DWC3 controller halt timeout
+  usb: dwc3: gadget: Skip waiting for CMDACT cleared during endxfer
+  usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
+
+ drivers/usb/dwc3/core.c   |  4 ----
+ drivers/usb/dwc3/core.h   |  4 ++++
+ drivers/usb/dwc3/ep0.c    |  5 ++++-
+ drivers/usb/dwc3/gadget.c | 31 +++++++++++++++++++++++++++----
+ 4 files changed, 35 insertions(+), 9 deletions(-)
+

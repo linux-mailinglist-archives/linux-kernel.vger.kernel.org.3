@@ -2,79 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D155A9CEB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5F95A9CEC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235024AbiIAQRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57818 "EHLO
+        id S234880AbiIAQSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234995AbiIAQRc (ORCPT
+        with ESMTP id S233260AbiIAQSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:17:32 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C20CC82872
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:17:30 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id z25so25181180lfr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:17:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Pw7SR/RaYNdAbxzs8fWlzUi0/Q9E1CCUq15ZcZfhshk=;
-        b=XwyOX/I9MYxWuBr2Ucoq/d6Eg1NhpsS4QgIzBAS2UHSH5jD0sOiSGzpS3HSfDDMNY8
-         TsfAtC6h3GXWE5gakJ1M1XPaQ1jCZvOma7fBSITj/n0rWhfcNSd/RTkh8rWxRgyAW1j7
-         kBrIpn6s9UjDQS0+oWZYfOp56DJsHtxalTUxalNc2OLQEtPc7/eQaYSKByf3VMyJ8I3i
-         tXsrVUQ4asnt6Ie2bs4s/SYk0G0m1tee5ykOXb2U+vZctkU4TjUafyM8huYM2BCbYn67
-         eV9bQaS90IXRPp7/nloogBdSQWyOHj5MKvnKejLWbsFqo0d+KqTLsQbiEGJ44OiXXlY+
-         dEZw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Pw7SR/RaYNdAbxzs8fWlzUi0/Q9E1CCUq15ZcZfhshk=;
-        b=hg+UEkpXV6HAjQh2yTxVAN/q/xgPWO9N6r05sGhtDVoqFuMB5AxzogcZYfWEV4WZ8N
-         7+pQkc3+bC0AHk4oIXhCuMVr38xqkxN1hckF/PC6vFZ6s2Bm+JB0xwJQEhKpaI9vII0H
-         iLKCwV483nFGLJzjL/6AIAqCzrtqxKGEg7sh0RO5r2j4K5d6d1Se/VZ8PBE6CApXVGB/
-         MxL90E7tpnkM26Dfezd75t5GeoT7Akmdf3sz/o+DcjTpcU/he8eG2ZR2Yc3xRHeHYYB1
-         TcJ+XFp4zaAdUgqgBiRIpcRI7zr52ZfyqIvEFIoIimv6ooUG86uZKhJJax0FAUd37G5a
-         vuQQ==
-X-Gm-Message-State: ACgBeo1s2YX0tCc1t+fOP3B5E4pBsOCotY4VdQ5Jn32jIpcEjcb5PMXG
-        3Dxxd7WaesQgz2MiJFDZhZl7Fg==
-X-Google-Smtp-Source: AA6agR6M5neHx4ebJfv1les3M63/zKblHkE+UvydSDI2Al+gian8ELIzigc6H64SRYNIpdxnq12fQw==
-X-Received: by 2002:a05:6512:3da2:b0:494:686b:a111 with SMTP id k34-20020a0565123da200b00494686ba111mr6228998lfv.622.1662049048185;
-        Thu, 01 Sep 2022 09:17:28 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id s26-20020a195e1a000000b00494a27500c1sm84920lfb.163.2022.09.01.09.17.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 09:17:27 -0700 (PDT)
-Message-ID: <f2e9dda4-4255-8d14-e06c-6d7b6f0a697a@linaro.org>
-Date:   Thu, 1 Sep 2022 19:17:26 +0300
+        Thu, 1 Sep 2022 12:18:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EE099082C;
+        Thu,  1 Sep 2022 09:18:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D654CB82830;
+        Thu,  1 Sep 2022 16:18:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AEBEC433C1;
+        Thu,  1 Sep 2022 16:18:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662049094;
+        bh=NYM7sZ2xl4aspZzJ8vDD56tOIY1cw4rh2fH+IWisKvM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vk7bd013YZBndDkC6u1hHwjyPSLgZwEhGaSre8lB4d5OB/iKfVYyTcmmhsUZd+szp
+         suVrTZxlEK/OdoGCIDQykwJs5S3XsNTpdjq4TJW3U4u+Mq8QTaeOvlEnLY9/B/bPPj
+         J0S+HoAvYvdfMd8uvBngOMihI6IhXwSNUAD1F6p8=
+Date:   Thu, 1 Sep 2022 18:18:11 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Logan Gunthorpe <logang@deltatee.com>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+Subject: Re: [PATCH v9 8/8] ABI: sysfs-bus-pci: add documentation for p2pmem
+ allocate
+Message-ID: <YxDbQ3CBlQVvQFIW@kroah.com>
+References: <20220825152425.6296-1-logang@deltatee.com>
+ <20220825152425.6296-9-logang@deltatee.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 13/14] dt-bindings: arm: qcom: Add compatible for
- oneplus,billie2 phone
-Content-Language: en-US
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
- <20220901072414.1923075-14-iskren.chernev@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220901072414.1923075-14-iskren.chernev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825152425.6296-9-logang@deltatee.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,24 +72,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 10:24, Iskren Chernev wrote:
-> oneplus,billie2 (OnePlus Nord N100) is based on QualComm Snapdragon
-> SM4250 SoC.
+On Thu, Aug 25, 2022 at 09:24:25AM -0600, Logan Gunthorpe wrote:
+> Add documentation for the p2pmem/allocate binary file which allows
+> for allocating p2pmem buffers in userspace for passing to drivers
+> that support them. (Currently only O_DIRECT to NVMe devices.)
 > 
-> Add support for the same in dt-bindings.
+> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+> ---
+>  Documentation/ABI/testing/sysfs-bus-pci | 12 +++++++++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 > 
-> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
+> diff --git a/Documentation/ABI/testing/sysfs-bus-pci b/Documentation/ABI/testing/sysfs-bus-pci
+> index 6fc2c2efe8ab..dca5e032b4fa 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-pci
+> +++ b/Documentation/ABI/testing/sysfs-bus-pci
+> @@ -171,7 +171,7 @@ Description:
+>  		binary file containing the Vital Product Data for the
+>  		device.  It should follow the VPD format defined in
+>  		PCI Specification 2.1 or 2.2, but users should consider
+> -		that some devices may have incorrectly formatted data.  
+> +		that some devices may have incorrectly formatted data.
+>  		If the underlying VPD has a writable section then the
+>  		corresponding section of this file will be writable.
+>  
 
+Not relevant change :(
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+thanks,
 
-Bjorn,
-
-Can we get top-level schemas merged?
-https://lore.kernel.org/all/20220830065744.161163-1-krzysztof.kozlowski@linaro.org/
-
-https://lore.kernel.org/all/20220720073326.19591-1-krzysztof.kozlowski@linaro.org/
-
-
-Best regards,
-Krzysztof
+greg k-h

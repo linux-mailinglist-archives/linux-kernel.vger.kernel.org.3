@@ -2,197 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4DA65A9079
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:38:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A16065A9076
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:38:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233941AbiIAHiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
+        id S233837AbiIAHh5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:37:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiIAHiW (ORCPT
+        with ESMTP id S233610AbiIAHhy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:38:22 -0400
-Received: from mx01.puc.rediris.es (outbound4mad.lav.puc.rediris.es [130.206.19.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA851108A2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:38:20 -0700 (PDT)
-Received: from sim.rediris.es (mta-out04.sim.rediris.es [130.206.24.46])
-        by mx01.puc.rediris.es  with ESMTP id 2817bp7d004582-2817bp7f004582
-        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
-        Thu, 1 Sep 2022 09:37:51 +0200
-Received: from sim.rediris.es (localhost.localdomain [127.0.0.1])
-        by sim.rediris.es (Postfix) with ESMTPS id 377EB39C39;
-        Thu,  1 Sep 2022 09:37:50 +0200 (CEST)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by sim.rediris.es (Postfix) with ESMTP id 9F7C239C3C;
-        Thu,  1 Sep 2022 09:37:49 +0200 (CEST)
-X-Amavis-Modified: Mail body modified (using disclaimer) -
-        mta-out04.sim.rediris.es
-Received: from sim.rediris.es ([127.0.0.1])
-        by localhost (mta-out04.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Aco7_lIICjnn; Thu,  1 Sep 2022 09:37:49 +0200 (CEST)
-Received: from lt-gp.iram.es (haproxy01.sim.rediris.es [130.206.24.69])
-        by sim.rediris.es (Postfix) with ESMTPA id 1498139C39;
-        Thu,  1 Sep 2022 09:37:46 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 09:37:42 +0200
-From:   Gabriel Paubert <paubert@iram.es>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Nicholas Piggin <npiggin@gmail.com>
-Subject: Re: [PATCH v2] powerpc: Fix irq_soft_mask_set() and
- irq_soft_mask_return() with sanitizer
-Message-ID: <YxBhRtTuJ4Ut7wUt@lt-gp.iram.es>
-References: <c0b486e782b6695092dcdb2cd340a3d44c8c266d.1661272738.git.christophe.leroy@csgroup.eu>
- <CMJ3VICKD1CI.SVFJOKYJPKZQ@bobo>
- <e022754d-b4d3-bc9f-cc79-2cf556180459@csgroup.eu>
- <CMJ8P06JA9OY.1S8VDV2XRU3W5@bobo>
- <7c11b659-5b8e-256c-508e-39395041fccb@csgroup.eu>
- <20220831224522.GX25951@gate.crashing.org>
- <ad5ebb37-6b6f-372c-dd07-fc4cfc5f5fe5@csgroup.eu>
+        Thu, 1 Sep 2022 03:37:54 -0400
+Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120078.outbound.protection.outlook.com [40.107.12.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8B8109082
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:37:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cwhDKPAcq1rPhRw/DLEhrCZx1ys5bA1fodbXJWl+VdjLeM3UysJGKudqc6jWrJxsx93cadep7KpuT6BM4V5/F+4euNu1Ujp53z6WCJ+yowBXGdDtztSNMl/RdTAVVJkuDZL/6NBRzJ+Ko/l4RJrG0pFadiMHyVZKEQxYC1p+u/YWmY0Ke4Q92BEqwSpM+MSTfyQtHSJphEHlyf17JigVNiYvugt79WZ+X2uILRH+1dy+A/AbQ2ecgTJc4NAe4AQCJPpTMhPOvl4Al/Kzz0mKUusSMUsOO6LTFc2NHordfOZIsvOccH5Vu0IYM2BPKFSPUMNNd3akyctsnNNbMn5NDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=isJtQLFV4RWpaXxTFbSr1A+UN+Xsw4rz7OJt5ifA5Cs=;
+ b=G4u8KRaPFwBdG6QGVDtvqMycPfwUqFHMUAOPOj7uSxjuT/yVB1EMf570sxHZdO1ehdMo3Ueg2Y/1/5KbyMoPKFoVcB9pIpWjgAJLlC1N4WU7hzFnCVbjnkkVnWX/zf43+e1J0xAm0TjBx4SynHsAYfuSygfmQsYfNrabnLZmL+b+RKOo2PyfRsiRM8PVT0BMGIysvVCELLKscjfPMycU/6iAKlO6xnPnwR++EHX8r74HCVAMQ96H2tzcKZte4LWXuiyU8mma9uPLjDqFU0QfwmggHeTLvv00z330D/M2was6cyHWCrP+Tl1kGkOs6LcZ58qu8X311WwRPkfwc1BCDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
+ dkim=pass header.d=csgroup.eu; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=isJtQLFV4RWpaXxTFbSr1A+UN+Xsw4rz7OJt5ifA5Cs=;
+ b=PNMfUa5PAy/OcruWilQCtSPTodqz00Y4P9UB7wl+NSSCks6MgPVnNbVF0wlQSQV3w+7+t9zJMSZsfLnM50QqPJo8z17jftncAmHAZOhsXrgjFHENnYObJrKQT6A9fJE0hl0smCi9gc2KP104RjGIADLxjY6owEDDOjNVLY1pUjvVgc7pQBggazLGHW6bgw8hI+VzDDmu98GJnZXy1RtBYAb6pp/nFpesL9xRmLwPz8tTrgPYCnKPHSYENDT9FZfAnKmLhBGdASi97s8QewU0VsXlMxLWrbWWCCf1Bm/oJMLL/h2OPgKwYIH+DUYEwqnhChioUwN6ao81Mv2uVlSqUA==
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
+ by PR0P264MB3144.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1d7::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 1 Sep
+ 2022 07:37:50 +0000
+Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::382a:ed3b:83d6:e5d8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+ ([fe80::382a:ed3b:83d6:e5d8%4]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
+ 07:37:50 +0000
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Yuan Can <yuancan@huawei.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] mm: remove extra empty line
+Thread-Topic: [PATCH] mm: remove extra empty line
+Thread-Index: AQHYvc2TONWZCjFsJ0SltDVL7gZs263KL9qA
+Date:   Thu, 1 Sep 2022 07:37:49 +0000
+Message-ID: <0e2ea2d8-5b0b-107a-c679-7d5a7e37718f@csgroup.eu>
+References: <20220901063725.24220-1-yuancan@huawei.com>
+In-Reply-To: <20220901063725.24220-1-yuancan@huawei.com>
+Accept-Language: fr-FR, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=csgroup.eu;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 7867fc1f-3213-440d-b8e1-08da8becdf3c
+x-ms-traffictypediagnostic: PR0P264MB3144:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iBPDGW6gV0ix4XiapQ/qnKLjOS4lP/kK2ABbqVUoJzrLrzvL3UcoRNb5qciKT2+nJ7EQ+SHEND1G0i3PHunOF8w2FIkU0ieft/UL66e5kJ4jX+JJVMQTwKftiKBn7yp9pz/TvKv/rdTRyNSBT8tGtbB3qOyfvrCml9C04ER11ZTEUL4SUh16cYgjxO7vww8CZPtVq1jsOqqRnv8Rhyjll+O3iejc1wpIQuEH7I0Bm5TvVBdxxIMj1K/QFjBpNIDVa3mu/NSUxghzGqsUiS1aHVCfwgpaaAbgvX57m16tMhvit3+wWw0t0wlknEehdgs5CxAjb1lnkAi0eX1jPovO7bcyZyAUiRqfCRBP7+/OzvpM6AKtIx6+bDEfJ07alLfF4gDg/2laThOw2bep+qQpiqVljfJzVH8HHy6z4+OKIDthyfW7/mWxRkpj8i7AcBl9ku2xlEPTEuXZycQUDHkEotVwic8sbzZHGE4GY3Ok5R7Xg/0wSzfjTws05MbsRgc/zcYM54+/ZnsgKdCvbDQ5LoyRt7pG8q6x6mGdAPwcqLjjRvSxytgABAP2Cbwr8cIYLL8NkXvyD2pR0HT0aA4NGI3EhdOXH+rXsltxv0EbRJY+TE9hNMCbb+psQ4V0ls40SXfBPlMBs6ZXRKzhuHB7w9Iub7wNjqDEJe1l5uZyYg3jq6rveUCJszGTi7+UiixtAbjKG8QS4dQcvlt0j9uA3yoO84XQXaUCaenIx1EnZYBMCL9wF5jfpdKfZG/bmxGeRqA5koBSddMnINUtNtG2TJ9Fxl0puFxnRcwe0lhFhyeKHjdDpB+iKxrwZeGgXgzxDlikqYT28kYxpMwd9AfKOw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(39850400004)(346002)(396003)(366004)(136003)(66556008)(38070700005)(4326008)(76116006)(66446008)(64756008)(8676002)(66946007)(31686004)(36756003)(122000001)(38100700002)(86362001)(31696002)(91956017)(66574015)(83380400001)(41300700001)(478600001)(26005)(4744005)(6486002)(2616005)(6506007)(71200400001)(6512007)(186003)(2906002)(316002)(5660300002)(966005)(110136005)(8936002)(44832011)(66476007)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?VFA0dUR1WDVzSUw0bUg1d2o0Skp2ODdSZlNyRmYyYjc1YVRDWHlPRzRZWjNz?=
+ =?utf-8?B?bDNjSStockV3cHlRV3Q0TDkyYzZHS0NOajI0ZEVXUktkS3d5VHhiQjNZcmJU?=
+ =?utf-8?B?SE9UREdzUi9jVkcrY0dtaDZNNk9lOXJCT0V4QW5LdFRYTlU1OUtLbXl6eVBU?=
+ =?utf-8?B?WmpIRmlsUEtPaHBKcVZHOWZaZTF1NkwwYVo5ei9McUJGb0FGVUpqVEpwcnhh?=
+ =?utf-8?B?aWJvNXl5TnMzT2wvam9wQ1gybUZRQTN4Q2xmRS9zN0QreE5VVlE1SE56ZVhM?=
+ =?utf-8?B?eVZTM0VxM3gySmlCVi84eHBkRU55cXFTQ0Z4UW42dDVaMEJSV2IyeDhuc09G?=
+ =?utf-8?B?RXVrVmRMZkJnU0N1Y2loZjFmSEI3UUI1L2djaEd6MTNwUThDRHBXS1Q3ZktF?=
+ =?utf-8?B?U0xscEJnR01SaW80SlpiVlBlTkpQL3l4TXU2bVhHYzYvVU91dWFFV05taXlK?=
+ =?utf-8?B?UnVzYzhuMy85NjRTWUdtRkh2NENSaDZQOHd2WEVMUTZSUmZ3Wm84L0h5TmJV?=
+ =?utf-8?B?SFlLd2s5VXphZjR4ZHVSUkVmQlBIQUxBdVF0YWhvMDFzZmlVZTFsTGpzQTVZ?=
+ =?utf-8?B?dS9zRjF6M2pjNnBWUHV2bS9HZzVmSjVzK1JsbzZjaGNHeGduV3M0ZFVoTkk3?=
+ =?utf-8?B?eEEyUldOemh0MktlWTBSL25DejRnc0lGazgyb0hYRnJzNGZmUmFmQlkrT200?=
+ =?utf-8?B?c2ZmbFVBSkVGVWVGd2lQcWpQVkhFY3JaeGFic1V2VFZwb3p4QmM1enNwdkpt?=
+ =?utf-8?B?bDI1eHdLVENhOGJ0WWhHZlBRSkpxdy9GdlpuVk85dGVJcFRDWFdTc0d3bis3?=
+ =?utf-8?B?NS9LSU1VR2o3OGZ1NzB1cVZGa1J3aTBwNXF0QjY4Zm9IRFA3amx3d2hoanNv?=
+ =?utf-8?B?QlB1Njd0ekJHbUJyelpiRVJNT3VTOHRsT0JKdkE3UVNFZnJGcnU4RS96TXdQ?=
+ =?utf-8?B?R0tQNkZYQUpHanNCUDdXYnZyZjVqdUR5RElGcUY3dWk5YVZLeXNDeG80WmVy?=
+ =?utf-8?B?MUFyZC9oOHIzbVJXTTZQc0RxbjdIRDFXOFVheFB5cGJNMTZ0UUxFbVg3L3dB?=
+ =?utf-8?B?cXJYeWJ6NHErWGVSZmhKU0VYY1FHY0E4QVNPNzhGOFEzcGZpU1BNNmQ4cTNX?=
+ =?utf-8?B?VnhkUmV6UmNDZkNoNzRCVGF5eUcxN3MvdmE3RDkvTXBhdjdkUmdTKy9lMnpv?=
+ =?utf-8?B?c1hCOVNBUC9hWTR4eDltMVdrY1FBNjBhNDRmbWx0dkNJWW1kOFJLakZ2bHd3?=
+ =?utf-8?B?cGdGYlJoT3Z1MkphNVpBMGVGWTJaQVlGUGs0Zi83bGpib3VZeVJ3bWpZYjht?=
+ =?utf-8?B?MW56Wkx0UjJNVmYvaG40MUdITjN2eWpSOUVSeGdrNXZNOFEvUlVmOEZKNmRN?=
+ =?utf-8?B?eXNtbGg1TmVsbFFGdEsxMFZtMzNHRmRDeHNPVFg3QVJCVjN2aG5yeXVPVk5K?=
+ =?utf-8?B?S0ZlQ1J5UnhSaW84cVFZZlB6Y0VGSU9Gd2c2bUcyRFBPb09YMi9VRjdpdnFQ?=
+ =?utf-8?B?emhya0NXampQYTBmSjlxM3Zwb0RUSk5DVnhXQk1aRnpVRzZGZWRkQTVlZm11?=
+ =?utf-8?B?NWNORVh4NUVpZjdqZ3k3YWxRRlZZS3gwT3gyVTVCQURTRS83SjY2S1RNU2ZJ?=
+ =?utf-8?B?b1hLeGZ6K2RRSHlpaGVtdExXMnFvYmtZZUVkdFpNWExiSmRaMmJlekRtWUY1?=
+ =?utf-8?B?ZXl6bUk1a2tndlV3QmFlVVpWNXZoZ241LzhxYVo1a3RVQnhQKzBxVFRSZkUx?=
+ =?utf-8?B?M2FnZHE1aHhDbEZUWGxucHpmZmxhT2RjeUIwMnFpeU55QVYxVnI1bkpoWmpl?=
+ =?utf-8?B?VjhhWXBLNjJXQlY2SEhkQlcydnF5bUNBbWR0aGJaRXZNT2xRM2dSVE1PZUln?=
+ =?utf-8?B?QlNZRkVPQUJmV3VrVSsyZWpaYlhPaTNualN2dFFPVFhvSitPS0QxYldsMWdo?=
+ =?utf-8?B?SkplaHdUR2JiWkt1ZHBzWHluMExwRjF1eCtWOENncVNlZ2pkM2RZSmpiRURm?=
+ =?utf-8?B?eS9EajVpbEpRUGdXd2xKT29XbHBTTldDUjhjakhGK3BSWlc0aXJWcTVjWTU2?=
+ =?utf-8?B?RVplNkhYS2dncmpZcEt0Mnd0cmYzMjZMNjFFZjBKdlRKaDhSbC9UWnUxTG9m?=
+ =?utf-8?B?SFhNRHovTHM4ay9RSFo2SDN1UzV1TWFmajd1bithY0lpRldXYTNMcEVJMmNy?=
+ =?utf-8?Q?ao4Ss9bcUuoYazqQVCB/6Ek=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <33165CBA048E564F8A833F828935B457@FRAP264.PROD.OUTLOOK.COM>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-In-Reply-To: <ad5ebb37-6b6f-372c-dd07-fc4cfc5f5fe5@csgroup.eu>
-Content-Transfer-Encoding: quoted-printable
-X-FE-Policy-ID: 23:8:0:SYSTEM
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=iram.es; s=DKIM; c=relaxed/relaxed;
- h=date:from:to:cc:subject:message-id:references:mime-version:content-type;
- bh=8oRtUt8n6oJO2slKo6oCUf7IVvigM4Ug71hTwGM018E=;
- b=naAOJdS5nF1l3osWGt5jM0E8jjERSjBSaLXL2U3f5R2uLCZHhOI7XyYC+1YfORGLXI/MXoftea7T
-        pvc4WmzeX1Xp+QO+2DY/aelXWhKhWJhn4oo/ajxPFmH2Rxdi2NtaA3pV6/z1O81TH7O54ixy5loJ
-        QrlW0VVVz5Z/YkEbl+afZzQYk1vgNyTqXu3/3XdnDFEBbQdvVbj6d99CbdM8b8xFRb7UcF1F0X4S
-        gxotryTbBL/b+gcWNqiNweqgyOTFreoPrfmH8utRyjG9KHR6mlJHePZelMdv9umKQ4Zq3p0HsOwB
-        WAQnre8JHZRNrJs8osQRzSl80jPc5bJkwYVf0Q==
+X-OriginatorOrg: csgroup.eu
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7867fc1f-3213-440d-b8e1-08da8becdf3c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2022 07:37:50.0031
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: nFe94jEf5sCD1+NUUyW8GQ1NLwtzeJAqS1Pr89cs7CJYu4R5N9SGfp5Jq8R1ZHdwfBCfjMeoo6+aQQrzTI6fH03X8aM+O7K3oci/rTJHzt8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR0P264MB3144
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 05:22:32AM +0000, Christophe Leroy wrote:
->=20
->=20
-> Le 01/09/2022 =E0 00:45, Segher Boessenkool a =E9crit=A0:
-> > Hi!
-> >=20
-> > On Tue, Aug 30, 2022 at 09:10:02AM +0000, Christophe Leroy wrote:
-> >> Le 30/08/2022 =E0 11:01, Nicholas Piggin a =E9crit=A0:
-> >>> On Tue Aug 30, 2022 at 3:24 PM AEST, Christophe Leroy wrote:
-> >>>>> This is still slightly concerning to me. Is there any guarantee t=
-hat the
-> >>>>> compiler would not use a different sequence for the address here?
-> >>>>>
-> >>>>> Maybe explicit r13 is required.
-> >>>>>
-> >>>>
-> >>>> local_paca is defined as:
-> >>>>
-> >>>> 	register struct paca_struct *local_paca asm("r13");
-> >=20
-> > And this is in global scope, making it a global register variable.
-> >=20
-> >>>> Why would the compiler use another register ?
-> >>>
-> >>> Hopefully it doesn't. Is it guaranteed that it won't?
-> >=20
-> > Yes, this is guaranteed.
-> >=20
-> > For a local register variable this is guaranteed only for operands to=
- an
-> > extended inline asm; any other access to the variable does not have t=
-o
-> > put it in the specified register.
-> >=20
-> > But this is a global register variable.  The only thing that would ma=
-ke
-> > this crash and burn is if *any* translation unit did not see this
-> > declaration: it could then use r13 (if that was allowed by the ABI in
-> > effect, heh).
-> >=20
-> >>> I'm sure Segher will be delighted with the creative asm in __do_IRQ
-> >>> and call_do_irq :) *Grabs popcorn*
-> >=20
-> > All that %% is blinding, yes.
-> >=20
-> > Inline tabs are bad taste.
-> >=20
-> > Operand names instead of numbers are great for obfuscation, and nothi=
-ng
-> > else -- unless you have more than four or five operands, in which cas=
-e
-> > you have bigger problems already.
-> >=20
-> > Oh, this function is a good example of proper use of local register a=
-sm,
-> > btw.
-> >=20
-> > Comments like "// Inputs" are just harmful.  As is the "creative"
-> > indentation here.  Both harm readability and do not help understandin=
-g
-> > in any other way either.
-> >=20
-> > The thing about inline asm is the smallest details change meaning of =
-the
-> > whole, it is a very harsh environment, you are programming both in C =
-and
-> > directly assembler code as well, and things have to be valid for both=
-,
-> > although on the other hand there is almost no error checking.  Keepin=
-g
-> > it small, simple, readable is paramount.
-> >=20
-> > The rules for using inline asm:
-> >=20
-> > 0) Do no use inline asm.
-> > 1) Use extended asm, unless you know all differences with basic asm, =
-and
-> >     you know you want that.  And if you answer "yes I do" to the latt=
-er,
-> >     you answered wrong to the former.
-> > 2) Do not use toplevel asm.
-> > 3) Do no use inline asm.
-> > 4) Do no use inline asm.
-> > 5) Do no use inline asm.
-> >=20
-> > Inline asm is a very powerful escape hatch.  Like all emergency exits=
-,
-> > you should not use them if you do not need them!  :-)
-> >=20
-> > But, you are talking about the function calling and the frame change =
-I
-> > bet :-)  Both of these are only okay because everything is back as it
-> > was when this (single!) asm is done, and the state created is perfect=
-ly
-> > fine (this is very dependent on exact ABI used, etc.)
-> >=20
-> > I would have used real assembler code here (in a .s file).  But there
-> > probably are reasons to do things this way, performance probably?
->=20
-> We changed it to inline asm in order to ... inline it in the caller.
-
-And there is a single caller it seems. Typically GCC inlines function
-with a single call site, but it may be confused by asm statements.
-
->=20
-> I also find that those operand names make it awull more difficult to=20
-> read that traditional numbering. I really dislike that new trend.
-> And same with those // comments, better use meaningfull C variable name=
-s.
-
-Agree, but there is one thing which escapes me: why is r3 listed in the
-outputs section (actually as a read write operand with the "+"
-constraint modifier) but is not used after the asm which is the last
-statement of function returning void?
-
-Do I miss something?
-
-	Gabriel
-
- 
-
+DQoNCkxlIDAxLzA5LzIwMjIgw6AgMDg6MzcsIFl1YW4gQ2FuIGEgw6ljcml0wqA6DQo+IFtWb3Vz
+IG5lIHJlY2V2ZXogcGFzIHNvdXZlbnQgZGUgY291cnJpZXJzIGRlIHl1YW5jYW5AaHVhd2VpLmNv
+bS4gRMOpY291dnJleiBwb3VycXVvaSBjZWNpIGVzdCBpbXBvcnRhbnQgw6AgaHR0cHM6Ly9ha2Eu
+bXMvTGVhcm5BYm91dFNlbmRlcklkZW50aWZpY2F0aW9uIF0NCj4gDQo+IFJlbW92ZSBleHRyYSBl
+bXB0eSBsaW5lLg0KDQpEb24ndCB5b3UgaGF2ZSBhbnl0aGluZyBtb3JlIGV4Y2l0aW5nIGFuZCB1
+c2VmdWxsIHRvIGRvIGluIHlvdXIgbGlmZSA/DQoNClRoaXMga2luZCBvZiBzdGFuZGFsb25lIHBh
+dGNoIGlzIGEgd2FzdGUgb2YgdGltZSBmb3IgYm90aCB5b3UgYW5kIHRoZSANCnJldmlld2Vycy9t
+YWludGFpbmVycy4NCg0KQ2hyaXN0b3BoZQ0KDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBZdWFuIENh
+biA8eXVhbmNhbkBodWF3ZWkuY29tPg0KPiAtLS0NCj4gICBtbS9tbWFwLmMgfCAxIC0NCj4gICAx
+IGZpbGUgY2hhbmdlZCwgMSBkZWxldGlvbigtKQ0KPiANCj4gZGlmZiAtLWdpdCBhL21tL21tYXAu
+YyBiL21tL21tYXAuYw0KPiBpbmRleCA2NDQ1ZmQzODZmMDQuLjI1MDRmODlkNTE5ZiAxMDA2NDQN
+Cj4gLS0tIGEvbW0vbW1hcC5jDQo+ICsrKyBiL21tL21tYXAuYw0KPiBAQCAtMjgwNCw3ICsyODA0
+LDYgQEAgU1lTQ0FMTF9ERUZJTkUyKG11bm1hcCwgdW5zaWduZWQgbG9uZywgYWRkciwgc2l6ZV90
+LCBsZW4pDQo+ICAgU1lTQ0FMTF9ERUZJTkU1KHJlbWFwX2ZpbGVfcGFnZXMsIHVuc2lnbmVkIGxv
+bmcsIHN0YXJ0LCB1bnNpZ25lZCBsb25nLCBzaXplLA0KPiAgICAgICAgICAgICAgICAgIHVuc2ln
+bmVkIGxvbmcsIHByb3QsIHVuc2lnbmVkIGxvbmcsIHBnb2ZmLCB1bnNpZ25lZCBsb25nLCBmbGFn
+cykNCj4gICB7DQo+IC0NCj4gICAgICAgICAgc3RydWN0IG1tX3N0cnVjdCAqbW0gPSBjdXJyZW50
+LT5tbTsNCj4gICAgICAgICAgc3RydWN0IHZtX2FyZWFfc3RydWN0ICp2bWE7DQo+ICAgICAgICAg
+IHVuc2lnbmVkIGxvbmcgcG9wdWxhdGUgPSAwOw0KPiAtLQ0KPiAyLjE3LjENCj4gDQo+IA==

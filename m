@@ -2,155 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ADD65A9B00
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A335A9B04
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbiIAO5j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 10:57:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43020 "EHLO
+        id S233846AbiIAO63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 10:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232449AbiIAO5e (ORCPT
+        with ESMTP id S232713AbiIAO6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 10:57:34 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251285E557;
-        Thu,  1 Sep 2022 07:57:31 -0700 (PDT)
-Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7C4BE10000D;
-        Thu,  1 Sep 2022 14:57:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1662044250;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fTIPUvR6Kg1MdIRVJEFetX2DVyRFLn/K5hDyVlwXeq0=;
-        b=JRf/f31Zr+iQG1WfwUbx+DyE+WxW+UtZdcYuxz9I7irSd6OrLR54AgteN8Wkj6q8jcmVNq
-        V1pblHtO0yrZWthBdBFM47U6/NkQN9RBq3+nAmDm8XuB76orr7SrmDQ1PYgccdk5sWvYgT
-        MrU92RDReh2z7nApwCvoL8DIG/Now8sTH7K3DDQIJlcYxOWcDu86PLniQoML84J1nY/ghW
-        l/auGwgzvdiWGIVi1TVSMYvkwv7vq7WSP8cJsTKL5Eo9CPTftIlutaGgdp8ZbARyC+ZbWr
-        2R8lP3eVcnEjAZadjPnzqXlf4bWNNymNvxxuP3sUBHeO32KMiJcIqTlm6M3LPA==
-Date:   Thu, 1 Sep 2022 16:57:25 +0200
-From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v6 2/6] dt-bindings: media: sun6i-a31-csi: Add ISP output
- port
-Message-ID: <YxDIVZALmaIo/Y6X@aptenodytes>
-References: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
- <20220826184144.605605-3-paul.kocialkowski@bootlin.com>
- <YwlJL3umZrVC4FLc@pendragon.ideasonboard.com>
+        Thu, 1 Sep 2022 10:58:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D468C75CE3;
+        Thu,  1 Sep 2022 07:58:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FAEA61DF3;
+        Thu,  1 Sep 2022 14:58:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50988C433C1;
+        Thu,  1 Sep 2022 14:58:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662044302;
+        bh=En7apUiUy36ywZsUgJ3gviiKGdFpGXtXpQxMMA0VXF0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jX9tR1swI2COSnSV5z/gdyF496mf2T4tk9tBw3Lc9WjSgDeNA1THG+NthmE8IDNmq
+         SCMiJOEYCvpfZG/F2XiLNgDIJyNBfKMj0f1KXV+ohkMdYaNatuUdw/9pHSEXtl+9X6
+         +8AnmTmJEd+gN4s0KGHGN/4J2nnrIEL9s5kYC18ZMEblyT87ohSnEutsxQ+43lHzSZ
+         HbVdwRokcsNDUq39MKTyu52ibu0O9ezEFOw+acdTwpLUE1O9JsJhwe2RKnAFYLEypz
+         bdKhhYftgTH7Nw6QiJWc1rG5O8Utz4uSCIZ2tCee3o5rdH7I+LRYf6ihWa1G9MQU+1
+         UnsikXDEyMD/g==
+Date:   Thu, 1 Sep 2022 16:58:19 +0200
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        rcu <rcu@vger.kernel.org>,
+        Vineeth Pillai <vineeth@bitbyteword.org>
+Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
+ fixes
+Message-ID: <20220901145819.GB105556@lothringen>
+References: <20220829194622.GA58291@lothringen>
+ <CAEXW_YS593n8Gget+REaD-c8vT8Ht_AzOY0kXA_uc674LOyvVw@mail.gmail.com>
+ <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220830105324.GA71266@lothringen>
+ <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220830160316.GC71266@lothringen>
+ <20220830162244.GA73392@lothringen>
+ <20220830164634.GC6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220831152658.GA89704@lothringen>
+ <20220901143907.GU6159@paulmck-ThinkPad-P17-Gen-1>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="zak6f8vSQKBH2kPD"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YwlJL3umZrVC4FLc@pendragon.ideasonboard.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20220901143907.GU6159@paulmck-ThinkPad-P17-Gen-1>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 01, 2022 at 07:39:07AM -0700, Paul E. McKenney wrote:
+> On Wed, Aug 31, 2022 at 05:26:58PM +0200, Frederic Weisbecker wrote:
+> > On Tue, Aug 30, 2022 at 09:46:34AM -0700, Paul E. McKenney wrote:
+> > > > Although who knows, may be some periodic file operation while idle are specific
+> > > > to Android. I'll try to trace lazy callbacks while idle and the number of grace
+> > > > periods associated.
+> > > 
+> > > Sounds like a good start.
+> > > 
+> > > And yes, we don't need to show that the whole !NOCB world needs this,
+> > > just some significant portion of it.  But we do need some decent evidence.
+> > > After all, it is all too easy to do a whole lot of work and find that
+> > > the expected benefits fail to materialize.
+> > 
+> > So here is some quick test. I made a patch that replaces Joel's 1st patch
+> > with an implementation of call_rcu_lazy() that queues lazy callbacks
+> > through the regular call_rcu() way but it counts them in a lazy_count.
+> > 
+> > Upon idle entry it reports whether the tick is retained solely by lazy
+> > callbacks or not.
+> > 
+> > I get periodic and frequent results on my idle test box, something must be
+> > opening/closing some file periodically perhaps.
+> > 
+> > Anyway the thing can be tested with this branch:
+> > 
+> > git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
+> > 	rcu/lazy-trace
+> > 
+> > Excerpt:
+> > 
+> >           <idle>-0       [007] d..1.   414.226966: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+> >           <idle>-0       [007] d..1.   414.228271: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+> >           <idle>-0       [007] d..1.   414.232269: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+> >           <idle>-0       [007] d..1.   414.236269: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+> 
+> Just to make sure that I understand, at this point, there is only the
+> one lazy callback (and no non-lazy callbacks) on this CPU, and that
+> CPU is therefore keeping the tick on only for the benefit of that one
+> lazy callback.  And for the above four traces, this is likely the same
+> lazy callback.
+> 
+> Did I get it right, or is there something else going on?
 
---zak6f8vSQKBH2kPD
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Exactly that!
 
-Hi Laurent,
-
-On Sat 27 Aug 22, 01:29, Laurent Pinchart wrote:
-> Hi Paul,
->=20
-> Thank you for the patch.
-
-Thanks for the review!
-
-> On Fri, Aug 26, 2022 at 08:41:40PM +0200, Paul Kocialkowski wrote:
-> > Some Allwinner devices come with an Image Signal Processor (ISP) that
-> > allows processing camera data to produce good-looking images,
-> > especially from raw bayer representations.
-> >=20
-> > The ISP does not have a dedicated capture path: it is fed directly by
-> > one of the CSI controllers, which can be selected at run-time.
-> >=20
-> > Represent this possibility as a graph connection between the CSI
-> > controller and the ISP in the device-tree bindings.
-> >=20
-> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > Acked-by: Rob Herring <robh@kernel.org>
-> > ---
-> >  .../devicetree/bindings/media/allwinner,sun6i-a31-csi.yaml    | 4 ++++
-> >  1 file changed, 4 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a3=
-1-csi.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-cs=
-i.yaml
-> > index 8551c4a711dc..54eb80e517e3 100644
-> > --- a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.y=
-aml
-> > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-csi.y=
-aml
-> > @@ -73,6 +73,10 @@ properties:
-> >          $ref: /schemas/graph.yaml#/properties/port
-> >          description: MIPI CSI-2 bridge input port
-> > =20
-> > +      port@2:
-> > +        $ref: /schemas/graph.yaml#/properties/port
-> > +        description: ISP output port
-> > +
->=20
-> I'd write "Output port to the ISP" to make it clearer.
->=20
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-Agreed, thanks!
-
-Paul
-
-> >      anyOf:
-> >        - required:
-> >            - port@0
->=20
-> --=20
-> Regards,
->=20
-> Laurent Pinchart
-
---=20
-Paul Kocialkowski, Bootlin
-Embedded Linux and kernel engineering
-https://bootlin.com
-
---zak6f8vSQKBH2kPD
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmMQyFUACgkQ3cLmz3+f
-v9E72Qf+JUqBNPJxnYRP3CDIdAusEIcEorc/b1N0Hzcfi8xOLVzZL0/cIuaCVt/A
-xXngf5KFBW8h8cJJ/wflHMP7PN8e5UPpHTlVMx+EfNzkNeL7gAfHYUh6EmpmS0t1
-a+sEDPevYcn36Jnnoi30Pn6rCd0n5ibFC9vKYoDkOaYrfSlGtvUw8ZljQWQwVLWq
-jv4mhzj8qCRJQpf7gP8DYckAA2unewY1dsqI5xgEhhgCAjCvrtwsjrYfWYieCfMH
-YR1ahUJbG63JgD9SKw6pwkAwGIklv2+ZQ0J40ZtzXby0vAoWUDPawchJWvvXIim8
-bsOnx4MaPlqhohaAjEIaxFZ+PSBROw==
-=J+Ve
------END PGP SIGNATURE-----
-
---zak6f8vSQKBH2kPD--
+Thanks.

@@ -2,244 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D645B5AA1CC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 23:56:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 339325AA1D9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:00:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233027AbiIAV4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 17:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57284 "EHLO
+        id S233070AbiIAWAn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:00:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiIAV4j (ORCPT
+        with ESMTP id S229892AbiIAWAk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 17:56:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D2CF7FF91;
-        Thu,  1 Sep 2022 14:56:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52162B82939;
-        Thu,  1 Sep 2022 21:56:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE8A4C433D6;
-        Thu,  1 Sep 2022 21:56:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662069396;
-        bh=0wt/52J4FbJ8eNgXiAKoCribVUnlksdr70dElnnbvcU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B+INDQ6JNSyDEyeh/5cdv4oOVHlYrWLxZK3lu354yz5bD4ZcT8s7OJMugRFgQzO7o
-         owDpBq2I/U1xXilTTowbEAet6uBDQW/BqH+P+IMguKaxX1n0UYoDGfqFcl55B2KDAc
-         jWhh9lYTtnX9G64yuVIOSOwIW3dliOmlbK9wab1yZaIMsLkbCX8IKmmc1FqMdD3I5K
-         uDfFwWAsNUMOvJLL4oR+2//AU9jd5wD312LXcwGegQbLSff2uiF4vHhoIODaR3eXbO
-         FHyIhoKEI1bOhM+Z7M87bT/P0x26Bk7yF/Oep0gmODCo0OEZWJ6NPeE0jEGiiRVU3Z
-         ZulckpbSbLbXQ==
-Date:   Fri, 2 Sep 2022 00:56:31 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, stable@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] x86/sgx: Do not consider unsanitized pages an
- error
-Message-ID: <YxEqj8/+VXlaIT4m@kernel.org>
-References: <20220831173829.126661-1-jarkko@kernel.org>
- <20220831173829.126661-3-jarkko@kernel.org>
- <24906e57-461f-6c94-9e78-0d8507df01bb@intel.com>
- <YxEp8Ji+ukLBoNE+@kernel.org>
+        Thu, 1 Sep 2022 18:00:40 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEE9F33340
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:00:38 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id g7so637768lfe.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 15:00:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:from:to:cc;
+        bh=9ZOA/uLVkdbadD8sl+x2FgrUVnWNaT54IH6CMV7M0qU=;
+        b=LHm7XQKmoioehKLe+x8wv4sg51dxY3iK7GBIf0ie+fcfdWHmpj8uhKVo1qfStRYUDt
+         hYYwKyXLa6F8Vss8qsGXnhsSbaWjrIFZiJWH0w+6WT1drr8SW/5N5uWQUY13CtCu8RT7
+         XFGF/pp/ZAdp6alq7wI37+qWMkMsD15jW9A1A3zaqPv8x1Ugm06xru39RntLJn/t21Zd
+         Io+z1YLdKsVMwCmBwJgUdIXcFGDcNDdzsiH8DINgDlhluHlE98GV0dVvSpde0N5jFpG/
+         4M6RwAzfFXYpV1BXP/VnjdTCqnFT6/utQ9dJtdN/u84FrH7SItMET/4Tm6x8CjaYhOPO
+         0DtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:x-gm-message-state:from:to:cc;
+        bh=9ZOA/uLVkdbadD8sl+x2FgrUVnWNaT54IH6CMV7M0qU=;
+        b=f+xw36g5Q8CpOPNI5Ywm0z2CTIX3i/10opXuBxSiUnG7CJ3UGwiF7kOaQpJzbQGn5B
+         mg5cTB7p7Ji1Q3vYEkcqlXOuBCXqGTl7wpdR43/14JAHHHiJWMwhBEfua1MGhBpsX5C8
+         0lGQHMPhxP3gpjlEiZHLtK/ANEVeQz2sudklylKMPi0Sc17uoJcND4CrccvMxgrTsALi
+         ETEo6Yy41f2Bypom9vSV88uXRPZ3cLI/EXzIJeZWK/kHrzVDy0EaiXuQNU2d0dtd4HwT
+         bKmr1D0ZIScxSeYBngyzAAM6l+oK+0yuKe+SHZtaot2QcI2Sd4t2MkeFRoKhGLcVu11I
+         Untw==
+X-Gm-Message-State: ACgBeo3lq1ct9KooqxU9u+Rs1CbIb8KVursf2Iksx/Gd2gPIRARvwily
+        rBUcAfisoGLp50d642xLNOU=
+X-Google-Smtp-Source: AA6agR4a/l8hP1u0P8WpD1zmFedHFbGPzszs2HMqNR8fDJ9LD3T/K1IWhmRhwuymqEvOv4w8sp3YdA==
+X-Received: by 2002:a05:6512:3503:b0:481:4470:4134 with SMTP id h3-20020a056512350300b0048144704134mr11024002lfs.42.1662069637088;
+        Thu, 01 Sep 2022 15:00:37 -0700 (PDT)
+Received: from ?IPV6:2a02:a31a:a240:1700:9c45:8fa1:8ce7:8852? ([2a02:a31a:a240:1700:9c45:8fa1:8ce7:8852])
+        by smtp.googlemail.com with ESMTPSA id w15-20020a2e160f000000b0025e4e7c016dsm25477ljd.16.2022.09.01.15.00.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 15:00:36 -0700 (PDT)
+From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
+X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
+Message-ID: <30a9d7cd-d9ff-3177-ac6c-e7c1f966d89a@gmail.com>
+Date:   Fri, 2 Sep 2022 00:00:33 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxEp8Ji+ukLBoNE+@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.2.0
+Subject: Re: [PATCH v2 09/41] drm/connector: Add TV standard property
+Content-Language: pl
+To:     Maxime Ripard <maxime@cerno.tech>,
+        Maxime Ripard <mripard@kernel.org>,
+        Ben Skeggs <bskeggs@redhat.com>,
+        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Lyude Paul <lyude@redhat.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>,
+        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Phil Elwell <phil@raspberrypi.com>,
+        intel-gfx@lists.freedesktop.org,
+        Dave Stevenson <dave.stevenson@raspberrypi.com>,
+        dri-devel@lists.freedesktop.org, Dom Cobley <dom@raspberrypi.com>,
+        linux-kernel@vger.kernel.org, nouveau@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-9-459522d653a7@cerno.tech>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v2-9-459522d653a7@cerno.tech>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 12:53:55AM +0300, Jarkko Sakkinen wrote:
-> On Wed, Aug 31, 2022 at 01:39:53PM -0700, Reinette Chatre wrote:
-> > Hi Jarkko,
-> > 
-> > On 8/31/2022 10:38 AM, Jarkko Sakkinen wrote:
-> > > In sgx_init(), if misc_register() fails or misc_register() succeeds but
-> > > neither sgx_drv_init() nor sgx_vepc_init() succeeds, then ksgxd will be
-> > > prematurely stopped. This may leave some unsanitized pages, which does
-> > > not matter, because SGX will be disabled for the whole power cycle.
-> > > 
-> > > This triggers WARN_ON() because sgx_dirty_page_list ends up being
-> > > non-empty, and dumps the call stack:
-> > > 
-> > > [    0.268103] sgx: EPC section 0x40200000-0x45f7ffff
-> > > [    0.268591] ------------[ cut here ]------------
-> > > [    0.268592] WARNING: CPU: 6 PID: 83 at
-> > > arch/x86/kernel/cpu/sgx/main.c:401 ksgxd+0x1b7/0x1d0
-> > > [    0.268598] Modules linked in:
-> > > [    0.268600] CPU: 6 PID: 83 Comm: ksgxd Not tainted 6.0.0-rc2 #382
-> > > [    0.268603] Hardware name: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0
-> > > 07/06/2022
-> > > [    0.268604] RIP: 0010:ksgxd+0x1b7/0x1d0
-> > > [    0.268607] Code: ff e9 f2 fe ff ff 48 89 df e8 75 07 0e 00 84 c0 0f
-> > > 84 c3 fe ff ff 31 ff e8 e6 07 0e 00 84 c0 0f 85 94 fe ff ff e9 af fe ff
-> > > ff <0f> 0b e9 7f fe ff ff e8 dd 9c 95 00 66 66 2e 0f 1f 84 00 00 00 00
-> > > [    0.268608] RSP: 0000:ffffb6c7404f3ed8 EFLAGS: 00010287
-> > > [    0.268610] RAX: ffffb6c740431a10 RBX: ffff8dcd8117b400 RCX:
-> > > 0000000000000000
-> > > [    0.268612] RDX: 0000000080000000 RSI: ffffb6c7404319d0 RDI:
-> > > 00000000ffffffff
-> > > [    0.268613] RBP: ffff8dcd820a4d80 R08: ffff8dcd820a4180 R09:
-> > > ffff8dcd820a4180
-> > > [    0.268614] R10: 0000000000000000 R11: 0000000000000006 R12:
-> > > ffffb6c74006bce0
-> > > [    0.268615] R13: ffff8dcd80e63880 R14: ffffffffa8a60f10 R15:
-> > > 0000000000000000
-> > > [    0.268616] FS:  0000000000000000(0000) GS:ffff8dcf25580000(0000)
-> > > knlGS:0000000000000000
-> > > [    0.268617] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > [    0.268619] CR2: 0000000000000000 CR3: 0000000213410001 CR4:
-> > > 00000000003706e0
-> > > [    0.268620] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
-> > > 0000000000000000
-> > > [    0.268621] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7:
-> > > 0000000000000400
-> > > [    0.268622] Call Trace:
-> > > [    0.268624]  <TASK>
-> > > [    0.268627]  ? _raw_spin_lock_irqsave+0x24/0x60
-> > > [    0.268632]  ? _raw_spin_unlock_irqrestore+0x23/0x40
-> > > [    0.268634]  ? __kthread_parkme+0x36/0x90
-> > > [    0.268637]  kthread+0xe5/0x110
-> > > [    0.268639]  ? kthread_complete_and_exit+0x20/0x20
-> > > [    0.268642]  ret_from_fork+0x1f/0x30
-> > > [    0.268647]  </TASK>
-> > > [    0.268648] ---[ end trace 0000000000000000 ]---
-> > > 
-> > 
-> > Are you still planning to trim this?
-> > 
-> > > Ultimately this can crash the kernel, if the following is set:
-> > > 
-> > > 	/proc/sys/kernel/panic_on_warn
-> > > 
-> > > In premature stop, print nothing, as the number is by practical means a
-> > > random number. Otherwise, it is an indicator of a bug in the driver, and
-> > > therefore print the number of unsanitized pages with pr_err().
-> > 
-> > I think that "print the number of unsanitized pages with pr_err()" 
-> > contradicts the patch subject of "Do not consider unsanitized pages
-> > an error".
-> > 
-> > ...
-> > 
-> > > @@ -388,17 +393,40 @@ void sgx_reclaim_direct(void)
-> > >  
-> > >  static int ksgxd(void *p)
-> > >  {
-> > > +	long ret;
-> > > +
-> > >  	set_freezable();
-> > >  
-> > >  	/*
-> > >  	 * Sanitize pages in order to recover from kexec(). The 2nd pass is
-> > >  	 * required for SECS pages, whose child pages blocked EREMOVE.
-> > >  	 */
-> > > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > +	ret = __sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > +	if (ret == -ECANCELED)
-> > > +		/* kthread stopped */
-> > > +		return 0;
-> > >  
-> > > -	/* sanity check: */
-> > > -	WARN_ON(!list_empty(&sgx_dirty_page_list));
-> > > +	ret = __sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > +	switch (ret) {
-> > > +	case 0:
-> > > +		/* success, no unsanitized pages */
-> > > +		break;
-> > > +
-> > > +	case -ECANCELED:
-> > > +		/* kthread stopped */
-> > > +		return 0;
-> > > +
-> > > +	default:
-> > > +		/*
-> > > +		 * Never expected to happen in a working driver. If it happens
-> > > +		 * the bug is expected to be in the sanitization process, but
-> > > +		 * successfully sanitized pages are still valid and driver can
-> > > +		 * be used and most importantly debugged without issues. To put
-> > > +		 * short, the global state of kernel is not corrupted so no
-> > > +		 * reason to do any more complicated rollback.
-> > > +		 */
-> > > +		pr_err("%ld unsanitized pages\n", ret);
-> > > +	}
-> > >  
-> > >  	while (!kthread_should_stop()) {
-> > >  		if (try_to_freeze())
-> > 
-> > 
-> > I think I am missing something here. A lot of logic is added here but I
-> > do not see why it is necessary.  ksgxd() knows via kthread_should_stop() if
-> > the reclaimer was canceled. I am thus wondering, could the above not be
-> > simplified to something similar to V1:
-> > 
-> > @@ -388,6 +393,8 @@ void sgx_reclaim_direct(void)
-> >  
-> >  static int ksgxd(void *p)
-> >  {
-> > +	unsigned long left_dirty;
-> > +
-> >  	set_freezable();
-> >  
-> >  	/*
-> > @@ -395,10 +402,10 @@ static int ksgxd(void *p)
-> >  	 * required for SECS pages, whose child pages blocked EREMOVE.
-> >  	 */
-> >  	__sgx_sanitize_pages(&sgx_dirty_page_list);
-> 
-> IMHO, would make sense also to have here:
-> 
->         if (!kthread_should_stop())
->                 return 0;
-> 
-> > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
-> >  
-> > -	/* sanity check: */
-> > -	WARN_ON(!list_empty(&sgx_dirty_page_list));
-> > +	left_dirty = __sgx_sanitize_pages(&sgx_dirty_page_list);
-> > +	if (left_dirty && !kthread_should_stop())
-> > +		pr_err("%lu unsanitized pages\n", left_dirty);
-> 
-> That would be incorrect, if the function returned
-> because of kthread stopped.
-> 
-> If you do the check here you already have a window
-> where kthread could have been stopped anyhow.
-> 
-> So even this would be less correct:
-> 
->         if (kthreas_should_stop()) {
->                 return 0;
->         }  else if (left_dirty) {
->                 pr_err("%lu unsanitized pages\n", left_dirty);
->         }
-> 
-> So in the end you end as complicated and less correct
-> fix. This all is explained in the commit message.
-> 
-> If you unconditionally print error, you don't have
-> a meaning for the number of unsanitized pags.
+Hi Maxime,
 
-If you add my long comment explaining the error case, the SLOC
-size is almost the same. That takes most space in my patch.
+W dniu 29.08.2022 o 15:11, Maxime Ripard pisze:
+> The TV mode property has been around for a while now to select and get the
+> current TV mode output on an analog TV connector.
+>
+> Despite that property name being generic, its content isn't and has been
+> driver-specific which makes it hard to build any generic behaviour on top
+> of it, both in kernel and user-space.
+>
+> Let's create a new bitmask tv norm property, that can contain any of the
+> analog TV standards currently supported by kernel drivers. Each driver can
+> then pass in a bitmask of the modes it supports.
 
-BR, Jarkko
+This is not a bitmask property anymore, you've just changed it to an enum.
+The commit message is now misleading.
+
+> +static const struct drm_prop_enum_list drm_tv_mode_enum_list[] = {
+> +    { DRM_MODE_TV_MODE_NTSC_443, "NTSC-443" },
+> +    { DRM_MODE_TV_MODE_NTSC_J, "NTSC-J" },
+> +    { DRM_MODE_TV_MODE_NTSC_M, "NTSC-M" },
+> +    { DRM_MODE_TV_MODE_PAL_60, "PAL-60" },
+> +    { DRM_MODE_TV_MODE_PAL_B, "PAL-B" },
+> +    { DRM_MODE_TV_MODE_PAL_D, "PAL-D" },
+> +    { DRM_MODE_TV_MODE_PAL_G, "PAL-G" },
+> +    { DRM_MODE_TV_MODE_PAL_H, "PAL-H" },
+> +    { DRM_MODE_TV_MODE_PAL_I, "PAL-I" },
+> +    { DRM_MODE_TV_MODE_PAL_M, "PAL-M" },
+> +    { DRM_MODE_TV_MODE_PAL_N, "PAL-N" },
+> +    { DRM_MODE_TV_MODE_PAL_NC, "PAL-Nc" },
+> +    { DRM_MODE_TV_MODE_SECAM_60, "SECAM-60" },
+> +    { DRM_MODE_TV_MODE_SECAM_B, "SECAM-B" },
+> +    { DRM_MODE_TV_MODE_SECAM_D, "SECAM-D" },
+> +    { DRM_MODE_TV_MODE_SECAM_G, "SECAM-G" },
+> +    { DRM_MODE_TV_MODE_SECAM_K, "SECAM-K" },
+> +    { DRM_MODE_TV_MODE_SECAM_K1, "SECAM-K1" },
+> +    { DRM_MODE_TV_MODE_SECAM_L, "SECAM-L" },
+> +};
+
+I did not comment on it the last time, but this list looks a little bit random.
+
+Compared to the standards defined by V4L2, you also define SECAM-60 (a good
+thing to define, because why not), but don't define PAL-B1, PAL-D1, PAL-K,
+SECAM-H, SECAM-LC (whatever that is - probably just another name for SECAM-L,
+see my comment about PAL-Nc below), or NTSC-M-KR (a Korean variant of NTSC).
+
+Like I mentioned previously, I'm personally not a fan of including all those
+CCIR/ITU system variants, as they don't mean any difference to the output unless
+there is an RF modulator involved. But I get it that they have already been used
+and regressing probably wouldn't be a very good idea. But in that case keeping
+it consistent with the set of values used by V4L2 would be wise, I think.
+
+> +/**
+> + * drm_mode_create_tv_properties - create TV specific connector properties
+> + * @dev: DRM device
+> + * @supported_tv_modes: Bitmask of TV modes supported (See DRM_MODE_TV_MODE_*)
+> +
+> + * Called by a driver's TV initialization routine, this function creates
+> + * the TV specific connector properties for a given device.  Caller is
+> + * responsible for allocating a list of format names and passing them to
+> + * this routine.
+> + *
+> + * Returns:
+> + * 0 on success or a negative error code on failure.
+> + */
+> +int drm_mode_create_tv_properties(struct drm_device *dev,
+> +                  unsigned int supported_tv_modes)
+
+supported_tv_modes is supposed to be a bitmask of BIT(DRM_MODE_TV_MODE_*)
+(or (1<<DRM_MODE_TV_MODE_*)) rather than DRM_MODE_TV_MODE_* directly, but this
+is not said explicitly anywhere in this doc comment.
+
+> +    /**
+> +     * @DRM_MODE_TV_MODE_PAL_NC: Seems equivalent to
+> +     * @DRM_MODE_TV_MODE_PAL_N.
+> +     */
+> +    DRM_MODE_TV_MODE_PAL_NC,
+
+AFAIK, the entire reason that "PAL-Nc" is ever mentioned as something separate
+from PAL-N is a result of a misunderstanding or misreading of the CCIR/ITU
+documents. See also the posting signed as Alchaemist here:
+https://en.wikipedia.org/wiki/Talk:PAL#PAL-N_versus_PAL-Nc
+
+That being said, we probably want to keep it if we want to remaing compatible
+with the loads of software and drivers which enumerate those as separate
+systems. But from a technical standpoint, PAL-N and PAL-Nc (and N/PAL, PAL-CN
+etc.) are just different "spellings" referring to exactly the same system.
+
+> +    /**
+> +     * @DRM_MODE_TV_MODE_SECAM_K: CCIR System G together with the
+> +     * SECAM color system. Similar to @DRM_MODE_TV_MODE_SECAM_G but
+> +     * with different channels.
+> +     */
+> +    DRM_MODE_TV_MODE_SECAM_K,
+> +
+> +    /**
+> +     * @DRM_MODE_TV_MODE_SECAM_K1: CCIR System G together with the
+> +     * SECAM color system. Similar to @DRM_MODE_TV_MODE_SECAM_G and
+> +     * @DRM_MODE_TV_MODE_SECAM_K but with different channels.
+> +     */
+> +    DRM_MODE_TV_MODE_SECAM_K1,
+
+Typos: you meant CCIR Systems K and K1, not System G.
+
+Best regards,
+Mateusz Kwiatkowski

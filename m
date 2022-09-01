@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B695A98E9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:35:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4B05A98F8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:35:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233350AbiIANeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50870 "EHLO
+        id S234078AbiIANfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234679AbiIANeC (ORCPT
+        with ESMTP id S234065AbiIANeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:34:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAEE13CBF2;
-        Thu,  1 Sep 2022 06:31:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0360361F4F;
-        Thu,  1 Sep 2022 13:31:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 512ABC433D6;
-        Thu,  1 Sep 2022 13:31:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662039116;
-        bh=aAfFaNRSRlNYlMv6ajEpeKIZNVBhQeTMMAeMGgdKIUs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=cRixDfeGIrQQYsuRLIJOVxj1LnnD47j/+SoOcmXOQkUUgs/l0qAEd8J1TpKVffgRm
-         /iEpP1X8QE9QT+5eXzz8E/SLfUX7Tmcm1/z7aHNId3oiLG7bOBucBD54XNPCuZDr50
-         JuIc0RiCc9FxYJFHp0Owm+d0EG8Yw/4ZtzjM9uMoz1CjNemmhaF2ZwwrVZLZZaPlZ0
-         aBo/+eOuLr844xsKEZ+AfPZni8QWJK6D8Vt/ERGD2kf7oY6ql+xSfi+JG8nMjPx/X4
-         ZRJcsYxu2dBWEOqsikPOwoc/urUpwUlWF4j+BsqGEUCB4pZBw6MtHKQfGQbnd3K/Sv
-         WU4OfbOplWayQ==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id DCA635C05A0; Thu,  1 Sep 2022 06:31:55 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 06:31:55 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH rcu 3/3] rcu: Simplify rcu_init_nohz() cpumask handling
-Message-ID: <20220901133155.GT6159@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220831181040.GA2694278@paulmck-ThinkPad-P17-Gen-1>
- <20220831181044.2694488-3-paulmck@kernel.org>
- <20220901091557.GA101341@lothringen>
- <20220901102520.GQ6159@paulmck-ThinkPad-P17-Gen-1>
- <20220901111114.GA103483@lothringen>
+        Thu, 1 Sep 2022 09:34:37 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A882265D0
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:32:44 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id p16so31575161ejb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:32:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=GkqcXxkxbiGAUS3mDZ9ZIlXaqo2ypwaG4SLF3IzWGD4=;
+        b=tkpJ8P7txLgCLaajgTyWxraKpmNbXD2ahq6miX/0cQFc3LKU8YlP5w+LoFTWnFrfVO
+         6yDZzgrZy/mlnubTM6WmNE3Gg8dIXrU0W62XZwsPa/TpuK7QzdU2JYGZIc43/FjL+W+C
+         dIjx9ZRnVsHA3w8p0yKeS7RZ6UvAyLDq4bs6/WjQ0JaMb9a0nNuiyzMd0RpPCKfH7w88
+         NcZ6N6GM+wioxWFJox4PZT/Bxgq/vErFeHY6dfOupzUPmXNSpR/2p9TkbVGWI5FeBoDd
+         MBpx/zeJmfQBdUZZjgNw2H9/AeTHjWtmm4a5/x+RA9DkkH2CCDWDI62VorgsACZe7AOc
+         6dKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=GkqcXxkxbiGAUS3mDZ9ZIlXaqo2ypwaG4SLF3IzWGD4=;
+        b=nQZ781UcEPL1nCeMd+gLB31anEODaV184gWclOCYb5t1vq8x72tNw4RO4eCU1Fgf7N
+         H5DRhytAq11JdqINFHbk45bCPmonLXIDV1TlNLQ1B3HpKKYO7Hk/YkXrLXA+eDAbVJFZ
+         yHDuYb08EMcpX1Xv7i70X37jNLsyRMArrRQDEJoSkqRDauZP31sIDtIoQcSsGdM4CXqG
+         CTaEi/xR5O4+xu8BOsLzIEUp5uzN5P+dkeAGS0POf6Aiftuh79W4IHI9hOxhsg59+jbN
+         6AoPHqrkOAAvlVv38HZjQ5m1JSZ8ZYJNHT8CPdRL+l8AxjskK2SEDS8UTBPcQ0L3h0Lo
+         Hu2A==
+X-Gm-Message-State: ACgBeo2UZ/zcsPTjIbk2hAlxQRn45CDvIETdj6ys5i0M7A2qu6iOUVb5
+        0Q5jvTGr3szT7xJKsgUzIx7jFNeYG2UDw1vd7/2QUQ==
+X-Google-Smtp-Source: AA6agR7EMbR1VhzyEbx3KwgyWcAgNnqnpvQizf8d4bjXBqesyVusbdQz6O0joQ2RKwf/Kfu2EXgvGVOlU4GQMZ6WMtQ=
+X-Received: by 2002:a17:906:58c8:b0:6fe:91d5:18d2 with SMTP id
+ e8-20020a17090658c800b006fe91d518d2mr24160316ejs.190.1662039163171; Thu, 01
+ Sep 2022 06:32:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901111114.GA103483@lothringen>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <SA0PR15MB3919F42FFE3C2FBF09D08026997B9@SA0PR15MB3919.namprd15.prod.outlook.com>
+In-Reply-To: <SA0PR15MB3919F42FFE3C2FBF09D08026997B9@SA0PR15MB3919.namprd15.prod.outlook.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 1 Sep 2022 15:32:31 +0200
+Message-ID: <CACRpkdZd17c-0h=LLep71LEtLtc9iqv54kEMF+TbXx-K5tPcQw@mail.gmail.com>
+Subject: Re: [PATCH] RDMA/siw: Solve the error of compiling the 32BIT mips
+ kernel when enable CONFIG_RDMA_SIW
+To:     Bernard Metzler <BMT@zurich.ibm.com>
+Cc:     jianghaoran <jianghaoran@kylinos.cn>,
+        "jgg@ziepe.ca" <jgg@ziepe.ca>, "leon@kernel.org" <leon@kernel.org>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,48 +69,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 01:11:14PM +0200, Frederic Weisbecker wrote:
-> On Thu, Sep 01, 2022 at 03:25:20AM -0700, Paul E. McKenney wrote:
-> > On Thu, Sep 01, 2022 at 11:15:57AM +0200, Frederic Weisbecker wrote:
-> > > > +#elif defined(CONFIG_NO_HZ_FULL)
-> > > > +	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
-> > > > +		cpumask = tick_nohz_full_mask;
-> > > > +#endif
-> > > 
-> > > A subtle behaviour difference here too: CONFIG_RCU_NOCB_CPU_DEFAULT_ALL will
-> > > now override nohz_full=
-> > > 
-> > > I don't mind, it's probably what we want in the end, but the changelog should
-> > > tell about it, or even better, this should be a separate change.
-> > 
-> > Good point.  Perhaps the key point is that if there is nohz_full=,
-> > rcu_nocbs=, and CONFIG_RCU_NOCB_CPU_DEFAULT_ALL, we still need rcu_nocbs=
-> > to include at least those bits set by nohz_full=.
-> 
-> Not sure I get what you mean. nohz_full= should in any case always force
-> rcu_nocbs at least on the nohz_full CPUs.
-> 
-> For example assuming the following combination: rcu_nocbs=6, nohz_full=7 AND
-> CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y, then the result should be:
-> 
-> NOCB CPUs = 6,7
-> NOHZ_FULL CPUs = 7
-> 
-> (CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y is overriden by rcu_nocbs=6).
-> 
-> Now if we have nohz_full=7 AND CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y, then the
-> result is expected to be either:
-> 
-> NOCB CPUs = 7 (upstream behaviour)
-> NOHZ_FULL CPUs = 7
-> 
-> or 
-> 
-> NOCB CPUs = all
-> NOHZ_FULL CPUs = 7
-> 
-> The second makes more sense IMHO but that should be in a separate change.
+On Thu, Sep 1, 2022 at 9:05 AM Bernard Metzler <BMT@zurich.ibm.com> wrote:
 
-Your examples are consistent with what I was trying to say.  ;-)
+> We discussed same thing a few days ago - see PATCH from Linus:
+> '[PATCH] RDMA/siw: Pass a pointer to virt_to_page()'
+(...)
+> Could one of you two re-send?
 
-							Thanx, Paul
+I updated and resent my patch now!
+
+Yours,
+Linus Walleij

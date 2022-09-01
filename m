@@ -2,126 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0435A9776
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:55:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E465A977A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:56:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233286AbiIAMzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
+        id S233329AbiIAMz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233048AbiIAMzi (ORCPT
+        with ESMTP id S233309AbiIAMz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:55:38 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670D452FFA
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:55:37 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id CDCA35C00E5;
-        Thu,  1 Sep 2022 08:55:34 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Thu, 01 Sep 2022 08:55:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1662036934; x=
-        1662123334; bh=yCxLNBFGSZRqkuML/VFgGHBhSSM6CHEUn/5kwqQufZ0=; b=J
-        x4GRMiXMqZhv/vKd2o8BiWANJJLYz3WKd5QGf4csZpCG9cZO16EX1zqY87aHLdI2
-        FFGE/vkG771KuFIJmItNzvjB6KN4JcJwLZYdKQe6/1wyFUsJsVhI1+lBT9IQVqCi
-        qwVOn30fzyVWlD/u3m7HLpJl7YbnAXm5nx37Yi6Z39+9OQFelcnu6kQnY5s6Caqy
-        rq97aMut+ZGgdtQptWC1oTKnreJAJ5BxaWXCSh2kmBkCTnyuhPwrbDjq2EwBUVrP
-        hL5BHjM5wlUV77BPr3ZIv8OftM6K7XMJyXNBrFPZUZcRGsBbFdT+37M8KqgXQABT
-        3onWHgyg5ws4IwKP2dNOg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1662036934; x=
-        1662123334; bh=yCxLNBFGSZRqkuML/VFgGHBhSSM6CHEUn/5kwqQufZ0=; b=m
-        /zcrSii3w5zxhxGrHJs9ZSB5nW8pWOEtE0Gyg3Ti9KJry8F4gm/df2KiCq8RbNST
-        qR8hxXMt6wZEe3FnyMDTzCvUUIi2f6sQGkGxi0FeG4RBfMAY4sgNlxX66RHMDYJV
-        9LHORQls0jTD/Hy3MPAez+cXmI6f0b4nwdVu8mHAkEtWFAR69VHBgSSovv1E4+sb
-        qftjpbx0ap7hYGhadVT6yKVkFBcIFeeMpQnaFR9DTBnhqKGNQpDK2v77rWlUXQ84
-        ixh0tu2LcohohcJtopU9gj9zGSKl8wg47yVTPEbhAWKzVXGrBhgnsGxJiobjTl5Q
-        OErJq1f9vEDSIiW+VUUzA==
-X-ME-Sender: <xms:xasQY56YKaVeQSZb4R9QR7a1cqFXpQAuuqlugbf8jVOXfpl9o_M6rQ>
-    <xme:xasQY24Lcq9nN73OiJzu4j6KeHeRGoiYQjfRe9a68APWF1oGOTG84cGXv5O3es0SV
-    L1BD9WCug32RAwhAsg>
-X-ME-Received: <xmr:xasQYwcKnA7o2XqO61TEsWxwoGV0hgujtKrbwTiQA1PkYqwYFiiA7n-poQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekkedgiedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddunecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepjeevffdtheevvdefveffffejkedtgfekvdeigfefhfefgfethfejjeei
-    geeiueegnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehmrgigihhmvgestggvrhhnohdrthgv
-    tghh
-X-ME-Proxy: <xmx:xasQYyL7yf5VlA9wkzwyiarB6LMEGN-PKYap4Hy0tfsofCw9O2ORVg>
-    <xmx:xasQY9I9PC-ai-noPPo2elUUeitGBgYFhANVpQqttGWMd_l1Xn80SQ>
-    <xmx:xasQY7yar9bCbiW5nVT4qpBruzAi6scphs7r5-CB_NuB1Kbh04omoQ>
-    <xmx:xqsQYyBOc9Bij0OydqDC35tEBX0XpqmYBwkRczuGiv0SkoQdkcdBWA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Sep 2022 08:55:32 -0400 (EDT)
-Date:   Thu, 1 Sep 2022 14:55:30 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>
-Cc:     Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, mwen@igalia.com, andrealmeid@riseup.net,
-        siqueirajordao@riseup.net, Trevor Woerner <twoerner@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        David Gow <davidgow@google.com>, brendanhiggins@google.com,
-        Arthur Grillo <arthur.grillo@usp.br>,
-        michal.winiarski@intel.com,
-        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2 2/2] drm/tests: Change "igt_" prefix to "test_drm_"
-Message-ID: <20220901125530.b56s4zisnkfuigvc@houat>
-References: <20220901124210.591994-1-mairacanal@riseup.net>
- <20220901124210.591994-2-mairacanal@riseup.net>
+        Thu, 1 Sep 2022 08:55:57 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D616B6050D;
+        Thu,  1 Sep 2022 05:55:54 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id c59so16215191edf.10;
+        Thu, 01 Sep 2022 05:55:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=jhfzIaUon51fYQp0F1k+dFqo+kZvbfWBW8TIyHPfH9o=;
+        b=jMSC0YquDnvD/wKHI7Bl6kt3HP8PI5qhhb7sTMXUL+2sSZjhkC4vH4MxakkmvLKGjk
+         QPxjuyey7HagF+AKEaAsGWlUWccERGb/0c3siHGQcJRHzMwkTFAm8yI38icYY1dnI/ZR
+         aJcp7GhNNHp+/NeWvUyqk16WaRrTwzCxLwMXc/YmVsxcBaTyarMh4CYu0gU1Afya2nQt
+         Y97YDdJE3S2oo7RCBbDVSvod461mGchoBGCr7dPjHgA/TAl8PQAqmeFnn+NUzkyI6D68
+         xImxBql/4xfUNMzoJes4HdZqS7VmJqHI1VM19eEqRUgI6esl0d1vJLnCn1eSCqjldWcB
+         bbOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=jhfzIaUon51fYQp0F1k+dFqo+kZvbfWBW8TIyHPfH9o=;
+        b=fwKXAYKXd5Oir65B6LZBzHxAlIYReV1lkVmQoSuzJWVI85NibNhTTd0uPic3DrSyF4
+         /HRRXQ8vN3av0ztVitbl+wYD78S2nf5wVVSmQ9sV/oUOFB7opXPOCPUuWD0ysr6+Vmt4
+         gHpGM2WYT6hyj/BEXiagHIfFc/JYo4imJmqGKZtAYg4sgxt7tRGor+AeqgOgIN9GLp09
+         t8Yha4g87rkOO2IVe4eSEsn/snrcp2vRCXfEUSYW7SqCf2CeO2tgtji2C19KezEOa2fN
+         Vt01650+YWP1MH6Tbk9WuglgCncng0tRbAB9ewadmNloWes7U8yw/h3HIK4VGZ6tpmLy
+         BwHg==
+X-Gm-Message-State: ACgBeo17cmafgZXx9U5+eZKh/tm6dlJ/WHML1ZEFM5fflOmq3BNxr9GW
+        NlSVr3R5ZLp+LI87pzsF7U4H7UWOk60jjL+KXl0=
+X-Google-Smtp-Source: AA6agR67InrKUxArKpIRlcyj7cVISplMIgyuL+xsXdnE6v/afHMiKYTX1RTDY2PSTc+Hfk6DW1c51JwwhoW8mNZLH7w=
+X-Received: by 2002:aa7:c956:0:b0:43b:206d:c283 with SMTP id
+ h22-20020aa7c956000000b0043b206dc283mr28605542edt.381.1662036953082; Thu, 01
+ Sep 2022 05:55:53 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+References: <20220829151536.8578-1-jandryuk@gmail.com> <31F127F6-A096-4991-9D4C-1B2E032689A1@gmail.com>
+In-Reply-To: <31F127F6-A096-4991-9D4C-1B2E032689A1@gmail.com>
+From:   Jason Andryuk <jandryuk@gmail.com>
+Date:   Thu, 1 Sep 2022 08:55:41 -0400
+Message-ID: <CAKf6xpvZNHQyQq9zqNpD0kXFK+pryAKKbRDxoiMkB=PrhvSGKQ@mail.gmail.com>
+Subject: Re: [PATCH] xen-pcifront: Handle missed Connected state
+To:     Rich Persaud <persaur@gmail.com>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <Oleksandr_Tyshchenko@epam.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        xen-devel <xen-devel@lists.xenproject.org>,
+        linux-pci@vger.kernel.org, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20220901124210.591994-2-mairacanal@riseup.net>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Sep 01, 2022 at 09:42:10AM -0300, Ma=EDra Canal wrote:
-> With the introduction of KUnit, IGT is no longer the only option to run
-> the DRM unit tests, as the tests can be run through kunit-tool or on
-> real hardware with CONFIG_KUNIT.
->=20
-> Therefore, remove the "igt_" prefix from the tests and replace it with
-> the "test_drm_" prefix, making the tests' names independent from the tool
-> used.
->=20
-> Signed-off-by: Ma=EDra Canal <mairacanal@riseup.net>
+On Wed, Aug 31, 2022 at 10:35 PM Rich Persaud <persaur@gmail.com> wrote:
 >
-> ---
-> v1 -> v2: https://lore.kernel.org/dri-devel/20220830211603.191734-1-maira=
-canal@riseup.net/
-> - Change "drm_" prefix to "test_drm_", as "drm_" can be a bit confusing (=
-Jani Nikula).
+> On Aug 29, 2022, at 11:16 AM, Jason Andryuk <jandryuk@gmail.com> wrote:
+> >
+> > =EF=BB=BFAn HVM guest with linux stubdom and 2 PCI devices failed to st=
+art as
+> > libxl timed out waiting for the PCI devices to be added.  It happens
+> > intermittently but with some regularity.  libxl wrote the two xenstore
+> > entries for the devices, but then timed out waiting for backend state 4
+> > (Connected) - the state stayed at 7 (Reconfiguring).  (PCI passthrough
+> > to an HVM with stubdomain is PV passthrough to the stubdomain and then
+> > HVM passthrough with the QEMU inside the stubdomain.)
+> >
+> > The stubdom kernel never printed "pcifront pci-0: Installing PCI
+> > frontend", so it seems to have missed state 4 which would have
+> > called pcifront_try_connect -> pcifront_connect_and_init_dma
+>
+> Is there a state machine doc/flowchart for LibXL and Xen PCI device passt=
+hrough to Linux? This would be a valuable addition to Xen's developer docs,=
+ even as a whiteboard photo in this thread.
 
-I appreciate it's a bit of a bikeshed but I disagree with this. The
-majority of the kunit tests already out there start with the framework
-name, including *all* the examples in the kunit doc. Plus, it's fairly
-obvious that it's a test, kunit is only about running tests in the first
-place.
+I am not aware of one.
 
-Maxime
+-Jason

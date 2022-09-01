@@ -2,138 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B624F5A8A06
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC3715A8A14
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229631AbiIAAv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 20:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48536 "EHLO
+        id S231717AbiIAAzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 20:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbiIAAvZ (ORCPT
+        with ESMTP id S229713AbiIAAzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 20:51:25 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF917D87E6;
-        Wed, 31 Aug 2022 17:51:22 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id p185so16027379pfb.13;
-        Wed, 31 Aug 2022 17:51:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=L02Sp50hPwKNmfsR7li6CwKxaHvMpyrjFzMp+2/RDYc=;
-        b=YifSQirQGhLAjW66wrrOh4zVneYTdfs1QnXaG48PYfcduXj4zsFO077Z/ZDE0cDM2q
-         YfbcDVb5XJAp2l/Qxug9wF150vOWJvZaJCT5P0SpLPkPASaOxxr4Nnu3vg76nIW/xEEV
-         BtGeqxUQEtVJ7mA/0ddwxHYmjKGboY7hpx2TCvgmvc5no+ksC2UFDwshDIkpyJiNKHr5
-         tXxWsq76ISWPQj+WmuWNb6V7NH+wB7MjLL2Gss/cR8g06jWvQ8FR+W3B9ME5rT7/cqbK
-         hYq+sef+l77lOoYSQlkyyymIEsXKN6q8U7k5gWcDbz8tlb6WoXNIK3Az5ujmv1bOmlZB
-         VAkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=L02Sp50hPwKNmfsR7li6CwKxaHvMpyrjFzMp+2/RDYc=;
-        b=ZnsTq/ZkhxCHlUkYkXoCNxlyw4QxuQU97V7+89mFsYrLId4fX3xPRHXDvHHx/NfKNS
-         /603BUBC54j4reATSEu3RVPg2xGURSAnOQ073Bu7QHf9yZ0i8YZgKbbiJcxIi8u6JZJh
-         P3VmHVH29DToT9JFJwRq5bSL/JED4UZZNaABz4smsb9Sa/3GumvlAhBEeuRWl7+X287+
-         5sgPf1fHpMbgn69cZePU45lUkA5KLvUazcRA/kHSbjdh96aC+mPrXzTJg//E/RQgIrQl
-         U/VE+FVl0iFwIWAoWw6opjBt75/S1NgXray6d5ZOTzfpbDC50V7+gpzYAF8FE2t+5irk
-         osBw==
-X-Gm-Message-State: ACgBeo3/cggA4b1KCsNUAQCt5hF0sn6PxtqqtBPOKxH5p37l4OAjm5NT
-        zpSmSCtwND0q9JYB1zfK8mo=
-X-Google-Smtp-Source: AA6agR6gpVpjALUClbmTEgMzN+B80iOVObZm2fd2eiysi4JbneIjQ7VClEXw/bKexeeYHktLEdRIIw==
-X-Received: by 2002:a63:d1f:0:b0:422:7774:1969 with SMTP id c31-20020a630d1f000000b0042277741969mr23785234pgl.88.1661993481278;
-        Wed, 31 Aug 2022 17:51:21 -0700 (PDT)
-Received: from carlis-virtual-machine ([156.236.96.164])
-        by smtp.gmail.com with ESMTPSA id d81-20020a621d54000000b0052ac12e7596sm11771524pfd.114.2022.08.31.17.51.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 17:51:20 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 08:51:14 +0800
-From:   <zhangxuezhi3@gmail.com>
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com, bvanassche@acm.org,
-        johannes.thumshirn@wdc.com, himanshu.madhani@oracle.com,
-        zhangxuezhi1@coolpad.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] scsi: csiostor: convert sysfs snprintf to sysfs_emit
-Message-ID: <20220901085114.4a6a5a99@carlis-virtual-machine>
-In-Reply-To: <b2a4ba8c-c67b-3041-9b81-783611de0763@opensource.wdc.com>
-References: <20220831141046.406837-1-zhangxuezhi3@gmail.com>
-        <b2a4ba8c-c67b-3041-9b81-783611de0763@opensource.wdc.com>
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 31 Aug 2022 20:55:19 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFC82124B;
+        Wed, 31 Aug 2022 17:55:16 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4MJ2dZ3stgz4x2c;
+        Thu,  1 Sep 2022 10:55:13 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1661993714;
+        bh=lOso3jPWVpnln6y1wBI3LkdpK6yTA2MDzgGIYggkxPo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=mQV98eckJWqvPTFSooGrxQzy3oyHElfSdQStgwxB9/RW+cdCEm9CK1SAxC4Ui2gRY
+         fwKPgvWl6HgxbD1lb9nutnCJZZlt0GNniRiMXm8Sgq67pYciNVJYB7BKTnJCI+sFGp
+         C7iL/KQVoAMz85l3AjebHrLdsFB+BJ1kJm6Njs/9znV2I6cXbDevV/q4pXUdgDKSEX
+         En9ToziohAD6p2mIRKr8thKWmBr6LPmvhQHNhsw+awGbNTH5/gLUhXD+wGq06ZDJ8x
+         TQUxeeop6y1cG8AIX15d5r3cBLliQkqrJzqHc9QrEQdke5JpS1PW5lScRG732PCJXH
+         YJOsXMzbMAqDA==
+Date:   Thu, 1 Sep 2022 10:55:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joanne Koong <joannelkoong@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the net-next tree with the net tree
+Message-ID: <20220901105512.177ed27d@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/qwdtSox3rF/po_GVulbNPzX";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 1 Sep 2022 09:23:58 +0900
-Damien Le Moal <damien.lemoal@opensource.wdc.com> wrote:
+--Sig_/qwdtSox3rF/po_GVulbNPzX
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-> On 8/31/22 23:10, Xuezhi Zhang wrote:
-> > From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> > 
-> > Fix up all sysfs show entries to use sysfs_emit
-> > 
-> > Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> > ---
-> >  drivers/scsi/csiostor/csio_scsi.c | 8 ++++----
-> >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > 
-> > diff --git a/drivers/scsi/csiostor/csio_scsi.c
-> > b/drivers/scsi/csiostor/csio_scsi.c index
-> > 9aafe0002ab1..39e8c3c26a19 100644 ---
-> > a/drivers/scsi/csiostor/csio_scsi.c +++
-> > b/drivers/scsi/csiostor/csio_scsi.c @@ -1366,9 +1366,9 @@
-> > csio_show_hw_state(struct device *dev, struct csio_hw *hw =
-> > csio_lnode_to_hw(ln); 
-> >  	if (csio_is_hw_ready(hw))
-> > -		return snprintf(buf, PAGE_SIZE, "ready\n");
-> > +		return sysfs_emit(buf, "ready\n");
-> >  	else  
-> 
-> While at it, you could remove this useless else here.
-> 
-> > -		return snprintf(buf, PAGE_SIZE, "not ready\n");
-> > +		return sysfs_emit(buf,  "not ready\n");  
-> 
-> Extra space after the ",".
-Hi,
-  OK, I see.
+Hi all,
 
-Thanks.
-> 
-> >  }
-> >  
-> >  /* Device reset */
-> > @@ -1430,7 +1430,7 @@ csio_show_dbg_level(struct device *dev,
-> >  {
-> >  	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
-> >  
-> > -	return snprintf(buf, PAGE_SIZE, "%x\n",
-> > ln->params.log_level);
-> > +	return sysfs_emit(buf, "%x\n", ln->params.log_level);
-> >  }
-> >  
-> >  /* Store debug level */
-> > @@ -1476,7 +1476,7 @@ csio_show_num_reg_rnodes(struct device *dev,
-> >  {
-> >  	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
-> >  
-> > -	return snprintf(buf, PAGE_SIZE, "%d\n",
-> > ln->num_reg_rnodes);
-> > +	return sysfs_emit(buf, "%d\n", ln->num_reg_rnodes);
-> >  }
-> >  
-> >  static DEVICE_ATTR(num_reg_rnodes, S_IRUGO,
-> > csio_show_num_reg_rnodes, NULL);  
-> 
+Today's linux-next merge of the net-next tree got a conflict in:
 
+  tools/testing/selftests/net/.gitignore
+
+between commit:
+
+  5a3a59981027 ("selftests: net: sort .gitignore file")
+
+from the net tree and commits:
+
+  c35ecb95c448 ("selftests/net: Add test for timing a bind request to a por=
+t with a populated bhash entry")
+  1be9ac87a75a ("selftests/net: Add sk_bind_sendto_listen and sk_connect_ze=
+ro_addr")
+
+from the net-next tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc tools/testing/selftests/net/.gitignore
+index de7d5cc15f85,bec5cf96984c..000000000000
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@@ -1,15 -1,7 +1,16 @@@
+  # SPDX-License-Identifier: GPL-2.0-only
+++bind_bhash
+ +cmsg_sender
+ +fin_ack_lat
+ +gro
+ +hwtstamp_config
+ +ioam6_parser
+ +ip_defrag
+  ipsec
+ +ipv6_flowlabel
+ +ipv6_flowlabel_mgr
+  msg_zerocopy
+ -socket
+ +nettest
+  psock_fanout
+  psock_snd
+  psock_tpacket
+@@@ -20,23 -11,35 +21,25 @@@ reuseport_bp
+  reuseport_bpf_cpu
+  reuseport_bpf_numa
+  reuseport_dualstack
+ -reuseaddr_conflict
+ -tcp_mmap
+ -udpgso
+ -udpgso_bench_rx
+ -udpgso_bench_tx
+ -tcp_inq
+ -tls
+ -txring_overwrite
+ -ip_defrag
+ -ipv6_flowlabel
+ -ipv6_flowlabel_mgr
+ -so_txtime
+ -tcp_fastopen_backup_key
+ -nettest
+ -fin_ack_lat
+ -reuseaddr_ports_exhausted
+ -hwtstamp_config
+  rxtimestamp
+- socket
+ -timestamping
+ -txtimestamp
+++sk_bind_sendto_listen
+++sk_connect_zero_addr
+  so_netns_cookie
+ +so_txtime
+++socket
+ +stress_reuseport_listen
+ +tap
+ +tcp_fastopen_backup_key
+ +tcp_inq
+ +tcp_mmap
+  test_unix_oob
+ -gro
+ -ioam6_parser
+ +timestamping
+ +tls
+  toeplitz
+  tun
+ -cmsg_sender
+ +txring_overwrite
+ +txtimestamp
+ +udpgso
+ +udpgso_bench_rx
+ +udpgso_bench_tx
+  unix_connect
+ -tap
+ -bind_bhash
+ -sk_bind_sendto_listen
+ -sk_connect_zero_addr
+
+--Sig_/qwdtSox3rF/po_GVulbNPzX
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmMQAvAACgkQAVBC80lX
+0GyYCgf/TaoHbLkMm37PGBGviO4EeqEyfN5OLvZ4LB7tC/CE62ENE2zjCaJtq3lD
+bCo8IBVnqTyJrQ7hw6UoxlOAq+u3RD8fXqQfn+2IWMtkjC8T0RlKCrBIiVnRNiqI
+00zwY7EBNx5DuXcP9D+YVM1E9HjA5DcOCtZ6f2gA3rG3amEWSdGl6SCPVTsCY4p1
+Tj3X51FkGPJNh98HBrlX189OZiR0yhQ7+LhWCHCCvfQ6NwvPro2UvCklxHqdDfT0
+p7i+7W/gLitYP0dr7FaQ3XOIbnX318awQDgXrJPTqpNZM8vIUevIPERFoE3Q3J8d
+/orBjhuDdS4oT+PxD9ZortXMQ/SG1g==
+=Jc1Y
+-----END PGP SIGNATURE-----
+
+--Sig_/qwdtSox3rF/po_GVulbNPzX--

@@ -2,210 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0FF35AA096
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:01:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C96075AA09A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:03:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234761AbiIAUBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 16:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55078 "EHLO
+        id S234508AbiIAUDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 16:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233295AbiIAUA5 (ORCPT
+        with ESMTP id S232420AbiIAUC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 16:00:57 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4A7689CDB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:00:55 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id w11-20020a056e021c8b00b002ea48389206so77292ill.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 13:00:55 -0700 (PDT)
+        Thu, 1 Sep 2022 16:02:59 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B124495AE4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:02:58 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id j5so14180400plj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 13:02:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Dt/7n6dH7yedv6I+pVNjMvqmur2tTJcsNeQOFpTnn2w=;
+        b=d2/ldD38Ak7n7aLxMOpM2B9iWtjEXLVY5IwtSlO+I0X9anFNCkVoou7fYV0GbJznZD
+         u1JWN+ZjTeF3cYdPad73SSTxT0xZ0zFEyl7JHsK3jCcND0KLzM4CYiTe7Jg2ra5WB58M
+         cEWuyTUpjDV5XnKn2PAzKlLDIK2PrXgwVK5jZvYxbTXjpdVIfUvbWdBYye+A7RhKOPJX
+         vvkAo5VlUa2PQtfRDW8qT3qHEs0ZayoFTgYLiZVmLieVhEDfS5z+62otUvBgiz5ON3jZ
+         IHzZTpvciEQ/fN9UCg5FHIJXyVNB6a7DbysqN6U9iTb7cioCM7wm34FT5OYOH5bJOsFj
+         yh4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date;
-        bh=ENMvGocuUaeIJ7qPvFSun2TU6viauprGMRi4DnkhQXg=;
-        b=6qh1qVgI6PJbGTjoBwAkk5Zhxyisz+OD4L/j17F4LvrKZ7IpQC9BUAVMRNr9np4RjP
-         JZaPoFhSryqoBy0IHyzxA/t2qdX4mc1V3Mo+ifmDKeeX0APSYkZowisp3hHIa2E1OiAQ
-         hZtonOUkE/EpWrehEVE26eu+Bk55i4TDWvVP9cN2XAurdJwU4BenJ/DcrEgErFVIxyoJ
-         Z+EPh9xG8ynknJEIBrL6QOVGSIpNA5xnIdol2PULSPHk2Yg0fUU2vKHF0mO/DW1lo+QX
-         PsWCuCbDMPUpN+c7ts1dxX2DDOU9/D9TbLbyaDRfrN+QTHP4/jS9f6yqvTKyX0y/OyDp
-         FRoA==
-X-Gm-Message-State: ACgBeo04UqxnLeJFfdd0gO7XzqypcqBYr7IfK8tOTnQ7+PcSRBE8KkwM
-        De7SjWRMrtKzxEpvk+T6rfoKGtjw+hPxq/3sB27BFnCSXRQ9
-X-Google-Smtp-Source: AA6agR7B7rN6SdH1mPU70qD/dSbgZUNL+1a1kETVdqyEqnY4LqP3OKaV/B6eTzLgxXnfFQv8kfTbyuj4oFvWdOD9t5TMMBKC/8Fq
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Dt/7n6dH7yedv6I+pVNjMvqmur2tTJcsNeQOFpTnn2w=;
+        b=wXeVjJ20YxlZ/28IrBXkXEsQC3+9Lj6uhDEdq70g/Bbo5OdAaYn6OvC8S8sT5YlzDR
+         6oBOeZIbVQlcO1Yo+uwtUtvO6Q1XvHmIbjN8h/KRZvXbUI991QcwYm+lTwnOPHcXQ0aE
+         tYNswc2mgalK70HeBbdr4Q5gBtAkE3OegCfASC/8kfL6p89MfkHJoM3BREYqoMGWgk6l
+         mPjKXuhvBgo9tkUuJXwwEkq2mxKnOqm2FzyqyItRJ7Qz3tgd0APbSNGJJ8nJQ3sng6EF
+         El4ezgwkjpOprcoXgMrXETM2bd7iaUuPkNvNCUiEc1e6BKbm/ABhsXGdGzEJKz6Iq9Aa
+         kGYA==
+X-Gm-Message-State: ACgBeo0sr+f+uI9C7E84rK0W08zUgy3d3VmB5pbFZVF2E9G+g+QCth9G
+        zxZGxal/FySh92+l4gXD3X7SDyMI/wTAdw==
+X-Google-Smtp-Source: AA6agR4sqGaDwtDERmmixOPG41voyi1zrtn7ZyOciOz2aeu/3kcyMWhie6sUrqZegnRXI0PqO04hKw==
+X-Received: by 2002:a17:90b:1bc6:b0:1f5:313a:de4b with SMTP id oa6-20020a17090b1bc600b001f5313ade4bmr886025pjb.4.1662062578020;
+        Thu, 01 Sep 2022 13:02:58 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z27-20020aa79e5b000000b0053825055227sm9761982pfq.99.2022.09.01.13.02.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 13:02:57 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 20:02:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Subject: Re: [PATCH 08/19] KVM: SVM: Remove redundant cluster calculation
+ that also creates a shadow
+Message-ID: <YxEP7ZBRIuFWhnYJ@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+ <20220831003506.4117148-9-seanjc@google.com>
+ <7281e42323b53a016cf8545b7a4547d70d87efce.camel@redhat.com>
 MIME-Version: 1.0
-X-Received: by 2002:a92:3652:0:b0:2df:4133:787 with SMTP id
- d18-20020a923652000000b002df41330787mr17285204ilf.39.1662062455203; Thu, 01
- Sep 2022 13:00:55 -0700 (PDT)
-Date:   Thu, 01 Sep 2022 13:00:55 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003caf5b05e7a312d1@google.com>
-Subject: [syzbot] WARNING: locking bug in iput
-From:   syzbot <syzbot+fa40f8c8c3594994616d@syzkaller.appspotmail.com>
-To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7281e42323b53a016cf8545b7a4547d70d87efce.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Aug 31, 2022, Maxim Levitsky wrote:
+> On Wed, 2022-08-31 at 00:34 +0000, Sean Christopherson wrote:
+> > Drop the redundant "cluster" calculation and its horrific shadowing in
+> > the x2avic logical mode path.  The "cluster" that is declared at an outer
+> > scope is derived using the exact same calculation and has performed the
+> > left-shift.
+> 
+> Actually I think we should just revert the commit 
+> 'KVM: SVM: Use target APIC ID to complete x2AVIC IRQs when possible'
+> 
+> 
+> I know that the patch that intially introduced the the avic_kick_target_vcpus_fast had
+> x2apic/x2avic code, and then it was split to avoid adding x2avic code before it was merged,
+> resulting in this patch to add the x2apic specific code.
+> 
+> But when I fixed most issues of avic_kick_target_vcpus_fast in my 
+> 'KVM: x86: SVM: fix avic_kick_target_vcpus_fast', I added back x2apic code because
+> it was just natural to do since I had to calculate cluster/bitmap masks anyway.
+> 
+> I expected this patch to be dropped because of this but I guess it was not noticed,
+> or patches were merged in the wrong order.
+> 
+> This is the reason of shadowing, duplicate calculations/etc.
 
-syzbot found the following issue on:
+Ooooh, I completely missed that x2AVIC was already supported.  I saw the code, but
+between the fixing the first bug and unwinding everything everything else I didn't
+see that the end result ended up being a full revert.
 
-HEAD commit:    a41a877bc12d Merge branch 'for-next/fixes' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=110469db080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5cea15779c42821c
-dashboard link: https://syzkaller.appspot.com/bug?extid=fa40f8c8c3594994616d
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13cd2133080000
+So yeah, a full revert is definitely in order.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+fa40f8c8c3594994616d@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(1)
-WARNING: CPU: 0 PID: 9444 at kernel/locking/lockdep.c:231 check_wait_context kernel/locking/lockdep.c:4727 [inline]
-WARNING: CPU: 0 PID: 9444 at kernel/locking/lockdep.c:231 __lock_acquire+0x2b0/0x30a4 kernel/locking/lockdep.c:5003
-Modules linked in:
-CPU: 0 PID: 9444 Comm: syz-executor.2 Not tainted 6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-pc : __lock_acquire+0x2b0/0x30a4 kernel/locking/lockdep.c:5003
-lr : hlock_class kernel/locking/lockdep.c:231 [inline]
-lr : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-lr : __lock_acquire+0x298/0x30a4 kernel/locking/lockdep.c:5003
-sp : ffff8000144b38c0
-x29: ffff8000144b39a0 x28: 0000000000000001 x27: ffff0000d1919aa8
-x26: ffff0000d08cc117 x25: ffff0000d191a4d8 x24: 0000000000000000
-x23: 0000000000000000 x22: 0000000000000001 x21: 0000000000000000
-x20: 0000000000000000 x19: ffff56001244ac6e x18: 0000000000000229
-x17: 0000000000000000 x16: ffff80000dbb8658 x15: ffff0000d1919a80
-x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d65f960
-x11: ff808000081c39dc x10: ffff80000dd7a698 x9 : 767cda847edbb600
-x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff800008197c8c
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000016
-Call trace:
- check_wait_context kernel/locking/lockdep.c:4727 [inline]
- __lock_acquire+0x2b0/0x30a4 kernel/locking/lockdep.c:5003
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:349 [inline]
- _atomic_dec_and_lock+0xb0/0x104 lib/dec_and_lock.c:28
- iput+0x50/0x314 fs/inode.c:1766
- ntfs_fill_super+0x1254/0x14a4 fs/ntfs/super.c:188
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-irq event stamp: 6629
-hardirqs last  enabled at (6629): [<ffff800008163d78>] raw_spin_rq_unlock_irq kernel/sched/sched.h:1367 [inline]
-hardirqs last  enabled at (6629): [<ffff800008163d78>] finish_lock_switch+0x94/0xe8 kernel/sched/core.c:4942
-hardirqs last disabled at (6628): [<ffff80000c009400>] __schedule+0x84/0x570 kernel/sched/core.c:6393
-softirqs last  enabled at (6146): [<ffff800008434d94>] spin_unlock_bh include/linux/spinlock.h:394 [inline]
-softirqs last  enabled at (6146): [<ffff800008434d94>] wb_wakeup_delayed+0x80/0x94 mm/backing-dev.c:266
-softirqs last disabled at (6142): [<ffff800008434d54>] spin_lock_bh include/linux/spinlock.h:354 [inline]
-softirqs last disabled at (6142): [<ffff800008434d54>] wb_wakeup_delayed+0x40/0x94 mm/backing-dev.c:263
----[ end trace 0000000000000000 ]---
-Unable to handle kernel NULL pointer dereference at virtual address 00000000000000b8
-Mem abort info:
-  ESR = 0x0000000096000006
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x06: level 2 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000006
-  CM = 0, WnR = 0
-user pgtable: 4k pages, 48-bit VAs, pgdp=000000010c587000
-[00000000000000b8] pgd=0800000112734003, p4d=0800000112734003, pud=08000001126ae003, pmd=0000000000000000
-Internal error: Oops: 96000006 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 9444 Comm: syz-executor.2 Tainted: G        W          6.0.0-rc2-syzkaller-16455-ga41a877bc12d #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-pstate: 604000c5 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-pc : __lock_acquire+0x2d0/0x30a4 kernel/locking/lockdep.c:5003
-lr : hlock_class kernel/locking/lockdep.c:231 [inline]
-lr : check_wait_context kernel/locking/lockdep.c:4727 [inline]
-lr : __lock_acquire+0x298/0x30a4 kernel/locking/lockdep.c:5003
-sp : ffff8000144b38c0
-x29: ffff8000144b39a0 x28: 0000000000000001 x27: ffff0000d1919aa8
-x26: ffff0000d08cc117 x25: ffff0000d191a4d8 x24: 0000000000000000
-x23: 0000000000000000 x22: 0000000000000001 x21: 0000000000000000
-x20: 0000000000000000 x19: ffff56001244ac6e x18: 0000000000000229
-x17: 0000000000000000 x16: ffff80000dbb8658 x15: ffff0000d1919a80
-x14: 0000000000000000 x13: 0000000000000012 x12: ffff80000d65f960
-x11: ff808000081c39dc x10: ffff80000dd7a698 x9 : 0000000000040c6e
-x8 : 0000000000000000 x7 : 4e5241575f534b43 x6 : ffff800008197c8c
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000000000016
-Call trace:
- hlock_class kernel/locking/lockdep.c:222 [inline]
- check_wait_context kernel/locking/lockdep.c:4728 [inline]
- __lock_acquire+0x2d0/0x30a4 kernel/locking/lockdep.c:5003
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __raw_spin_lock include/linux/spinlock_api_smp.h:133 [inline]
- _raw_spin_lock+0x54/0x6c kernel/locking/spinlock.c:154
- spin_lock include/linux/spinlock.h:349 [inline]
- _atomic_dec_and_lock+0xb0/0x104 lib/dec_and_lock.c:28
- iput+0x50/0x314 fs/inode.c:1766
- ntfs_fill_super+0x1254/0x14a4 fs/ntfs/super.c:188
- get_tree_bdev+0x1e8/0x2a0 fs/super.c:1323
- ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1358
- vfs_get_tree+0x40/0x140 fs/super.c:1530
- do_new_mount+0x1dc/0x4e4 fs/namespace.c:3040
- path_mount+0x358/0x914 fs/namespace.c:3370
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount fs/namespace.c:3568 [inline]
- __arm64_sys_mount+0x2f8/0x408 fs/namespace.c:3568
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x154 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:624
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:642
- el0t_64_sync+0x18c/0x190
-Code: b002deea 91196210 911a614a b9400329 (3942e114) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	b002deea 	adrp	x10, 0x5bdd000
-   4:	91196210 	add	x16, x16, #0x658
-   8:	911a614a 	add	x10, x10, #0x698
-   c:	b9400329 	ldr	w9, [x25]
-* 10:	3942e114 	ldrb	w20, [x8, #184] <-- trapping instruction
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Thanks!

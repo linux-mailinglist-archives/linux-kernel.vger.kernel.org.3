@@ -2,138 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59CE05A9873
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BADA45A987D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:24:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233617AbiIANXh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:23:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51076 "EHLO
+        id S233815AbiIANXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:23:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232827AbiIANXO (ORCPT
+        with ESMTP id S232539AbiIANX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:23:14 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9536248
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:23:13 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id y10so14731995ljq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=e3HK9US0WO1UkRfGxEbaELQy+bTEUcDkkmiL6uVF2yg=;
-        b=apABlBOmkqX/8VxFa8RkHKfD/jGKjSInOUQVO3GA0XBauhwsYuN4Bjqpuec1v6lpRb
-         tmnSA/mqI8roMEX7RNg61TfDRIOQf+VZAu6fENRP956E0uEngle5V9ERnLhP9JrKdcFk
-         MlaJy5hLI0ypXk+/Ylq9OWaoJq6tyMmBg+lKBTJ+cC4Uzc0QYi50pZGHWsa/J7SPoZBg
-         UADNq4Fud3V+i0ww/Fablu1SjqrOKLVk0T9pW8E/yWLUckWI8lwgn3WggDQClYcFFK3s
-         qr6b0J53BAtT1V1kxttnBFBt/rQTFUDMw3CedEdHju1hPiHvhSNmRbZWR/dhOjKuLX7B
-         ClfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=e3HK9US0WO1UkRfGxEbaELQy+bTEUcDkkmiL6uVF2yg=;
-        b=lpnra57+l/XSAgOGYrXWA5HV5sxPsXJLYN7nx2hS1J46PF/58YoS1NDKHLhBfVzY/r
-         Lw6Armoy7L35DW2m2sAdwFGmr70nAGQqq36KB1dJLL1lJQS9HQ4IxQTbortowuo9XNYY
-         siHEkQT99xAQZY0B3/bsTkVteTQAmxblykfwl06osAOk2rXywVDyF8KHKP/s73i28Iks
-         Q6u9aFAo7hZuLgGMkfxXct7bt988r8RJ4j2JGfW2XBECqEt/R1SpzsdnZnPGFDckjXtY
-         2E5R/MgCLFv7tAwiaKdidAFJ5D3OS909hCMhs7UgD0ZWRZeTYurEAmLtHDPgjcaZnPAw
-         IFWQ==
-X-Gm-Message-State: ACgBeo1UsN1wvf792hGoRQ1gzohJiFSc7VYmp3I1i3EseC90Vv+uAO7P
-        L8PAyWnJAyS9O8PjujSoSEzveyW1LDyt4AEC
-X-Google-Smtp-Source: AA6agR7RakjpXXLRts3xpbaQ0B20blEAd9rZH7OjtbuH7lX4ugJbC/fqnSFfEH8mhHN7r/QF7MNJZg==
-X-Received: by 2002:a05:651c:1542:b0:249:a87f:8a34 with SMTP id y2-20020a05651c154200b00249a87f8a34mr9742725ljp.442.1662038591495;
-        Thu, 01 Sep 2022 06:23:11 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id u5-20020a2e8445000000b0025e4dcc48b1sm2499804ljh.19.2022.09.01.06.23.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 06:23:10 -0700 (PDT)
-Message-ID: <4067432b-b5a6-f3eb-a707-5fa298ba846b@linaro.org>
-Date:   Thu, 1 Sep 2022 16:23:09 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 4/5] drivers: iio: adc: LTC2499 support
-Content-Language: en-US
-To:     Ciprian Regus <ciprian.regus@analog.com>, jic23@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        Thu, 1 Sep 2022 09:23:27 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993C03B7
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:23:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662038605; x=1693574605;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Uf4uabdWV4txRLk2bqOo6gQ1Ue/HvWqnSFldAB4rgj0=;
+  b=RFiTqGAjzQariw3b+H0eHYF4n70Wn6+XolmoWU8erdFNm96Me/QZb3cx
+   KYW5UUx2lyZJMHXdjsd/yQ6MZpF8dOnohvU17pMPNsKJhsCxFJzP921Mh
+   AoLZqJLSIgz2t3amgf6KezZfJt995Pjr4/3n6zhyzknh+n3dYzqBaGPaU
+   qMiRv+xuyiRMurc3wuZiOTo2GpwGU8fAdR4ikQmBR925ihpSYuxCyV6Bd
+   1h1ML1lMr2fe+E+kW2VcNKj8Javvhvi6yITJVxp35ddLMDMiWaIsYTPKU
+   nyYPTFVJS3DccgRR/oEDeBFMyRJ8hT+WzlsbknYzAyMOZF9CuUt/07ULk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="276113223"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="276113223"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 06:23:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="612489901"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orsmga002.jf.intel.com with ESMTP; 01 Sep 2022 06:23:23 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+        id 67840238; Thu,  1 Sep 2022 16:23:38 +0300 (EEST)
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
         linux-kernel@vger.kernel.org
-References: <20220901121700.1325733-1-ciprian.regus@analog.com>
- <20220901121700.1325733-4-ciprian.regus@analog.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220901121700.1325733-4-ciprian.regus@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Cc:     Mark Brown <broonie@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Subject: [PATCH v1 1/3] regmap: trace: Remove useless check for NULL for bulk ops
+Date:   Thu,  1 Sep 2022 16:23:34 +0300
+Message-Id: <20220901132336.33234-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 15:16, Ciprian Regus wrote:
-> The LTC2499 is a 16-channel (eight differential), 24-bit,
-> ADC with Easy Drive technology and a 2-wire, I2C interface.
-> 
-> Implement support for the LTC2499 ADC by extending the LTC2497
-> driver. A new chip_info struct is added to differentiate between
-> chip types and resolutions when reading data from the device.
-> 
-> Datasheet: https://www.analog.com/media/en/technical-documentation/data-sheets/2499fe.pdf
+If the buffer pointer is NULL we already are in troubles since
+regmap bulk API expects caller to provide valid parameters,
+it dereferences that without any checks before we call for
+traces.
 
-Missing blank line. Use standard Git tools for handling your patches or
-be sure you produce the same result when using some custom process.
+Moreover, the current code will print garbage in the case of
+buffer is NULL and length is not 0.
 
-> Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/base/regmap/trace.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-(...)
+diff --git a/drivers/base/regmap/trace.h b/drivers/base/regmap/trace.h
+index 04329ba68ec5..e92edc4f4ca5 100644
+--- a/drivers/base/regmap/trace.h
++++ b/drivers/base/regmap/trace.h
+@@ -82,8 +82,7 @@ DECLARE_EVENT_CLASS(regmap_bulk,
+ 		__assign_str(name, regmap_name(map));
+ 		__entry->reg = reg;
+ 		__entry->val_len = val_len;
+-		if (val)
+-			memcpy(__get_dynamic_array(buf), val, val_len);
++		memcpy(__get_dynamic_array(buf), val, val_len);
+ 	),
+ 
+ 	TP_printk("%s reg=%x val=%s", __get_str(name),
+-- 
+2.35.1
 
-> +};
-> +
->  static const struct i2c_device_id ltc2497_id[] = {
-> -	{ "ltc2497", 0 },
-> +	{ "ltc2497", (kernel_ulong_t)&ltc2497_info[TYPE_LTC2497] },
-> +	{ "ltc2499", (kernel_ulong_t)&ltc2497_info[TYPE_LTC2497] },
-
-So they are the same, aren't they?
-
->  	{ }
->  };
->  MODULE_DEVICE_TABLE(i2c, ltc2497_id);
->  
->  static const struct of_device_id ltc2497_of_match[] = {
-> -	{ .compatible = "lltc,ltc2497", },
-> +	{ .compatible = "lltc,ltc2497", .data = &ltc2497_info[TYPE_LTC2497] },
-> +	{ .compatible = "lltc,ltc2499", .data = &ltc2497_info[TYPE_LTC2499] },
-
-I think this should be split into two patches for easier review - one
-working on driver data for existing variant and second for adding new
-variant 2499.
-
->  	{},
->  };
->  MODULE_DEVICE_TABLE(of, ltc2497_of_match);
-> diff --git a/drivers/iio/adc/ltc2497.h b/drivers/iio/adc/ltc2497.h
-> index d0b42dd6b8ad..95f6a5f4d4a6 100644
-> --- a/drivers/iio/adc/ltc2497.h
-> +++ b/drivers/iio/adc/ltc2497.h
-> @@ -4,9 +4,20 @@
->  #define LTC2497_CONFIG_DEFAULT		LTC2497_ENABLE
->  #define LTC2497_CONVERSION_TIME_MS	150ULL
->  
-> +enum ltc2497_chip_type {
-> +	TYPE_LTC2496,
-
-Why having here 2496 and not using it?
-
-> +	TYPE_LTC2497,
-> +	TYPE_LTC2499,
-> +};
-> +
-Krzysztof

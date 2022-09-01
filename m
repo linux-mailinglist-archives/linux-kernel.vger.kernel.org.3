@@ -2,104 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A305D5A8E62
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:39:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 688AD5A8E6F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:42:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232700AbiIAGjF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
+        id S232920AbiIAGmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231754AbiIAGjB (ORCPT
+        with ESMTP id S229720AbiIAGmm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:39:01 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F380B276A;
-        Wed, 31 Aug 2022 23:39:00 -0700 (PDT)
+        Thu, 1 Sep 2022 02:42:42 -0400
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2063.outbound.protection.outlook.com [40.107.237.63])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E939980022;
+        Wed, 31 Aug 2022 23:42:41 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jlj0iddrcCBEXXCMcFQ95iZkudvwUG/pczqRlj7xLcb282et6IgvrCcbxldrkhx8Mr14PN7jLUtUM2iNE4YNE72wrGIUyDedMopFAjcW20HSKW1G2wFnAuzZGkUaHN31ACZkFza1IzgjAkbWw+xKtxkJLiDJqN7VFijRoghhlCTDBwhMVwL/dK4ARTKS/5t2RvRZthRG7axLWZuKIrZfypLEyz7uX2kT0Sx33V5NomHFzV20E+IJ+jLpSLmUdu91eyCEyeZ6u/oDdMKIdpwOdYAekdmKJZzVyAaKBQTH5wi/KPc+FWF+REbzGFMtlugGeGpdI25nCEUdJ8XVXYz4yA==
+ b=O6z+nWYSe5o2/Whe6E+VgMHFNa3/OMt2THSM6kPHalPa/KX9gD0/wSHgfNY1LfRzntD3Dq7rAt/EfbHDXE+JUzObKVPo2/e2REKayfmE8h8CWaFIh6lUMTKmpOyjXZQJR20FqeQCgQ+uXQKeJ3oqKPa1Vnqd/jETy53CsPGACvYFxJtkfjVVbkH0eyUXvf+fF43/ZKsI6NfIrw0mrpdOA2eEvW8Ph8JsP2tNCRp/FX7C8lQIf6G+3U8/YNbATALO1B4mUmWjKUZT3vOO5tY1EJWyvq18h+TXc9fGwSdDUYU6LZxHr350GG2AcJEIVcXpnYbu4asedp5Tj8iUH3GN3Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yBQJh9l7fv4LcBCmuT5obUkaAMFNrC1W1sHmLg60vsU=;
- b=S0I4QM01YGVAjkrgQCaLoZgEHCq9lkvXZipNOQcVVyCX37zz2rDJkgboHNl2zE9sSkeXsjgeAegxJnEnKULwhPAUGada0veZB0iJx7qqnxqlwWRYL8iSRTHG8bu2FR3wp28A/JirW9zLmhNxuU4nbcxySpy0/Avju/mbKCymChOGGN2G0x4rDKpLqzfSKAVtOP4Xh1NirFq+k5BUxUq+3z9jT+kj0Fs0lLQI0d81W9Lo8cVY9XxfMAhAbESh1wE7yS9FLGJjTpnmotJ2TEughKN8CB4sIMnvHL9tvDPBM9mgGGl5Xj8bdJW/eurKBeyQqOqdTJbAihc/FWXzCf/VgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=huawei.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
+ bh=4BNAjZXyvIcCnEaVAEYj2ATw8Axwa4g12OM8Jd+Ac9A=;
+ b=NyFYsM2iOSkvqaJDdRsXRwKCJVXrxIRiT6aM5sJGyku0AX8fZdXFqZmc/ydK4TrLPAY2r3VazD1GEFgryU/i7EJ2wd+itKirtCEjoaHVHydSYab1EPExFTKuks7hngsoxSzRg2kZjdXnvUEB6wXx6zYHLIgorjm6pr9uAQjmsVdYhrTpMvUkv3xrjU4CmWojLJF8J2+4IhoFX4JMbTsKbcEKy5NWw2eUJ3mFg4cqmoz5VH4WxmLFI/Zqb/GYa6tFn9QXHho+FCcMMPmAQHlOUFziNL/2jKHomNrwPnEESy/Mo3L+eelcaCxsNFu5A0VwRA44DUkcdj9i3lJiw0p3QA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yBQJh9l7fv4LcBCmuT5obUkaAMFNrC1W1sHmLg60vsU=;
- b=tK9KumljwRG2SJqaKWvHwAJw0x6QLmh6QE/5Bd1rgThcJOtfABB1r9Lp7Sn/k3v5Yq0wghky0qexkFEVtDp/MkQ/3UAp148HSb7Gvj3r+X7OvCDvIcom97Wqn4EIubTUXcYByBPgM2Wc2GESZLfUvaMTna4weh7HqVH9e+M2VOg=
-Received: from DS7PR03CA0145.namprd03.prod.outlook.com (2603:10b6:5:3b4::30)
- by SJ0PR12MB5439.namprd12.prod.outlook.com (2603:10b6:a03:3ae::18) with
+ bh=4BNAjZXyvIcCnEaVAEYj2ATw8Axwa4g12OM8Jd+Ac9A=;
+ b=Hp53nflEvH07z68rk3W/XWgfOdkEqm7WT9ILbvLTbnxg8Ij8Hl9EKAJV8gSFCPjdfdaARYDJbmmPrZbbmGcYHFy5Rs/FIGTTSwox2Y9RSHCyJ7nWQQ69XGZ61QqXI9C+4xcKcOw9YgoH1Y1d8aRiGpkBysgi0ETeHx5mObGR/VQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by CH0PR12MB5156.namprd12.prod.outlook.com (2603:10b6:610:bb::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
- 2022 06:38:58 +0000
-Received: from DM6NAM11FT056.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b4:cafe::32) by DS7PR03CA0145.outlook.office365.com
- (2603:10b6:5:3b4::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11 via Frontend
- Transport; Thu, 1 Sep 2022 06:38:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT056.mail.protection.outlook.com (10.13.173.99) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5588.10 via Frontend Transport; Thu, 1 Sep 2022 06:38:57 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 1 Sep
- 2022 01:38:55 -0500
-Date:   Thu, 1 Sep 2022 08:38:52 +0200
-From:   Robert Richter <rrichter@amd.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH 08/15] cxl/acpi: Check RCH's CXL DVSEC capabilities
-Message-ID: <YxBTfD+4hDgo6Sah@rric.localdomain>
-References: <20220831081603.3415-1-rrichter@amd.com>
- <20220831081603.3415-9-rrichter@amd.com>
- <20220831115224.00003afd@huawei.com>
- <20220831121222.00000977@huawei.com>
+ 2022 06:42:39 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5588.011; Thu, 1 Sep 2022
+ 06:42:39 +0000
+Message-ID: <708d3284-f363-9eae-eb68-3687e39e83b0@amd.com>
+Date:   Thu, 1 Sep 2022 08:42:28 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v4 04/21] drm/prime: Prepare to dynamic dma-buf locking
+ specification
+Content-Language: en-US
+To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
+        Qiang Yu <yuq825@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
+ <20220831153757.97381-5-dmitry.osipenko@collabora.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20220831153757.97381-5-dmitry.osipenko@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS8P251CA0002.EURP251.PROD.OUTLOOK.COM
+ (2603:10a6:20b:2f2::15) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220831121222.00000977@huawei.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 465caa96-2625-4e07-2fe1-08da8be4a5d0
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB5439:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8d3a9da6-9ff3-498c-c857-08da8be529d8
+X-MS-TrafficTypeDiagnostic: CH0PR12MB5156:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: eyeT2h180eg0PW7dwIsuM+hsgashM8bQU6sdH6C+mWlVU5HpTmrfuXu+U/uNwyseHMocJLUy6V+AT9X50T74wsXpOCGz00VpvaYbxTyBbn72TeBSKeipd4/cx7qLGnAXvwATfczKIurToqndDLy8ghwlGzgkP0FCi6iOXC2E4AaGrZfPuTho314mq0zDNF0Bj03vSFemJFX+f3obHWaGd4Q9yzwSHeS08XsKTlKCiLGzQD++uYgGXoARP8MIDm6oCpe5TwnjEFDabSVKKcX9l6WjkWySSltkZCfAg4qFoBXyGDaXwo4UWW5rgQBlVSG9XRYKWJqJ+TfLwkSIy3l1HPMQpPYqw6pDddRVJCr+rkoe7y4Hxy0/GyrFhOP1k9+ZhJKgecvlIQwy8SN9kmXlnDxmp797dG7HzOyQrlFRQu42WCrX+t11YkpYadb+/gUysSfXLWyyVfViEP4IODKUSa78oVjtGhYMfpjSFPmAmlQrqbVaPzzlFbkbBNxXl6U+MRmwFbc37vmaTIPlNbYt3RMHzJUU7hGsOK2CjlPTpmtSo+4NrQZw/h3W/XavtmbQBkeRtLmg4FyJLcVk7pkNzliM2+42BJkrejAwZaz+idFDbtkbJXwyIoJ2IPaypp0sPBtsYwyegjOBMKzSgzMeuod9bUv9Lbk3BIkBRku3/Yhh6qptnQU5nIJ+sF7EJDkzxwZ9gCU/Je7aKjeqBNDOe+VtkTQ4cRK1oqJZcWBriI+d8503vJBELkMlvtdIhAhvQqu78lh7i69GjYm1vn2IdbZjLE6ktT7H0/pbTyANPySwOkt+SuCt1FqSuwUWFcc0x5VI0CYab2OH5JFfKHXoEA==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(136003)(376002)(346002)(36840700001)(40470700004)(46966006)(81166007)(26005)(9686003)(36860700001)(356005)(7696005)(16526019)(426003)(41300700001)(336012)(47076005)(186003)(83380400001)(6666004)(53546011)(54906003)(40480700001)(55016003)(4326008)(82310400005)(316002)(8676002)(5660300002)(70586007)(478600001)(7416002)(40460700003)(82740400003)(6916009)(70206006)(8936002)(2906002)(36900700001)(67856001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: aY4TaWwUa9CWM3h9LZeE0vuViOAo7bBBMpfT6gV0irN5QMhMVDMvw5K+G0q2t8zmqAQNGDrZHZWrS/JADaKmZ3mfg/1ShXR4Neu/C5MUVb6Nh1+YQgGQpDF1UsxeacNG+mquXSyhxgM1CUi/mzP85qGWIbA2NmbQ6Vy/Wf5FxBPZ0i1QL5LgINR4A8K571qSc3ELnwZtnb3ZKSBoxrCFAl6SfjyMn2vl7mvldJK9QRDwtT0cRgHE7eRDvJwFigeY2+Artq5Ropk8HA7vLn5kcqpgukXmgLKmza/IS5oiqdyThdr/qWHR/KdjtnHlA5UfuxpJm2sRtjxNEg1iTkmUK25gPDbpZhQPuti7L9oV3eUchlph6FR4X5Mrf+DFOwLxEaNNNsqEWVg0LvPcSZrGdGjJPgwenU1gJMCwsMie+PUe3BC8S1ibmPvE0L6oo277VGFz5lJGDMPtlQcPcCd8JGwyCYVfAx/GsZOq5DQ0/f6FiRu6AMbM2F2y8gJ125RmIgwS1nvYZFzkdC5iKWhocR/HLKjsl0gjH22UD+o4yMJpg4O/nSSV4EpmA5tyf4up8MEA1aB5fhTLkeYcCiHeaaKbS4hD6286UJYpi0XW2ooQdbqDxg7o+YG8QHJvZywZKXA6lrLrufeJoBPGwErpsAF59HFYUugn2BmXtZCmxXMqSGo7uwd7kYdwUPHvy+DuI0wWnFX1WLOugP19E/EajKm4+sQ2a4gI+a1Hbn1qXtEPb+UaiUyMuwTMnNIAe52FR2yqeVX1meIBXvmDtS+EZfoPE2qEQuRGOpgGRgWLJWsHYYRJ+ZsT/kUthgcwQpKa
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(376002)(136003)(346002)(396003)(39860400002)(5660300002)(83380400001)(36756003)(316002)(6666004)(31686004)(7406005)(7416002)(66574015)(110136005)(186003)(38100700002)(41300700001)(6512007)(86362001)(8936002)(31696002)(8676002)(2616005)(4326008)(6506007)(66476007)(66946007)(6486002)(478600001)(26005)(66556008)(921005)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YTRZMlVCOTlPMThZbW85Y3RVRjNYZjloQSsra0JYMjR5elRjYXl1cEo1Wm91?=
+ =?utf-8?B?WTB0cjJ0R2lnT1ZRZTgzWHNEV3ducHl0a2RtcklXYitlRU04Q1VrY2kvTlA3?=
+ =?utf-8?B?eDErWW00aGhROVNUOVdqRnpaR1EzRSs0Yk9wR09EckJsc1ZVZVlTUS9qTm5u?=
+ =?utf-8?B?VXByaDV5QzA3QngrWGlBcUg3RUFoWERDVU5ZYnZ0MzlabkorZGFnYzl1SnhQ?=
+ =?utf-8?B?YlJEMW5xMUJmVFdqTHpsa1pDSHI4MDljZ0xwY2daZWlhNjlXUVI2TFIvWXlr?=
+ =?utf-8?B?eXhrMVpTVnFIWExjczRSdHpaKzNqeHJYTnVHaU9FSFpMa2hnK0tUZmFZY3g4?=
+ =?utf-8?B?NXZvZjM2RUxpNkZjZnkzYXY1S0VYSWJSS3lKS0lZTGRoUXVnbW5KMEdUTVNO?=
+ =?utf-8?B?Z3NVNUZtUEh1SVFnajYyRE1sTkgwN1AxR1VZUGNuUjZkblN3WDFQd2xBL2c2?=
+ =?utf-8?B?RWZ1Q2hjREdtNXJDNjZjNGVnYkVWdU5xSyszc2I0NnJ3d1RoRS82Q3MrRThV?=
+ =?utf-8?B?cWVWS2pEbzF3Skh3SVd4WVYvdjJPaVdRZWUraWNLMHlWcGFCZ0pWdHgvTUsz?=
+ =?utf-8?B?ZkZ5elN6S2hFZDlEY3lWdkh3aGpoT3ZBSE5IK0FFUGNOalJwZUpqYVVQSVFC?=
+ =?utf-8?B?cFNJMVVkd3lxbjdpME16NVJ2ckRaajNoeE5DSDQrdllMcjBZY0hhQytmM2hz?=
+ =?utf-8?B?QnowcHRHUGVqa0JjUmpZQUkyM1JicGtVQXlOWGxzQlhGc2lrS0FGWXBhWHV4?=
+ =?utf-8?B?eWVRN1diMFhvbEtFSUgydXFOclRSQUZhOVZ1K0RlTHBsWFFmbkV0cDdzMC82?=
+ =?utf-8?B?aFR4QmExUGlITXB5YzNYY2sxOEdLTjY3RG9xUGJHUTU2T3lmVmgzWXhWQyt4?=
+ =?utf-8?B?c25KeFZ4dGYxenAvSjFubFl3QWQxZzI4cW9VZVRHVDZpc2oxQkxvekZIMjhv?=
+ =?utf-8?B?RVU2QTdEYU0rK3FaNmY4WnpHSEUxcktQK1RZU3VoYUp4c296bFlLS2svdXpP?=
+ =?utf-8?B?STdPN2w3NHZwTU1DcTVrV0t2VC9JT0cwbVNzTkJIdjVYVzdSWjFCT29WQWNp?=
+ =?utf-8?B?YkNaQ21aS2NKSG1vZDkwdzYxOXQzdXpDN1JhZ2pVUFFUTTZ3bkI5dWtsMS9T?=
+ =?utf-8?B?NXREOERLRVBkUnA4Z0x6aGd6Zi9DdW1BaDVIcjRha1NOMTJMUWhUeWNuZVhO?=
+ =?utf-8?B?S1F5dExxWjlhR1prc3BGQjlET0VNaXUzY3VUYWU0VjJJK0hIbDk2WndJNFFi?=
+ =?utf-8?B?dHRuNnVCNzMvdlM5L1BXYnVrZ3ZGSi9ZKzBvSENneUlncjMxdXVIVGE5b01p?=
+ =?utf-8?B?N0tURzI0OHVqUnYzOFlZNXlTY1F5anZqTUUvYUR0bE8vK2ZEZWNkVzNPTjZ3?=
+ =?utf-8?B?SFRYVVVRZmttcGt2VG1SSG1RUFcyMURsbytHS3VmdWlHY0MyRTM0Ti9TUGZ3?=
+ =?utf-8?B?QWFtb2NINXhBWHY1T0Qzd2FtckVJOUtNcmRjdGdCWEpFeW1ZUzZjeG9kc2Rp?=
+ =?utf-8?B?T1NUblBVeWIzalZleFI5RDV4TTVldVd6MjZvMVhYa1JBaGszdUdFVDJCamJP?=
+ =?utf-8?B?T2NGSFJ6eGxXZ1M2b3ZVQ0svamtYY3lNSVhoV3V2WWUxQXJTSFdkR2NRUnRE?=
+ =?utf-8?B?NGpGTDd3TkdNUXFsdVM0VFdWeWhMM1ZLeGpSeklEbW14TitsME5tc25Zb3lm?=
+ =?utf-8?B?b3ZEbHNDTXlYUTVQRHZrZytOVi9LUTNhM2libW0ySUhYcXRVUEE1S29oYzZE?=
+ =?utf-8?B?TkxjN3l6emlRMkFFTk15TUQ0N3Z3VHFIaE9pL3U3QmtzRXhxL1RwdHRWbUEy?=
+ =?utf-8?B?UXM4VkYzTy8yakJ6b2RvcVM1N3l1NCsxY1F4RFpocmpBMFdZczNHaTc1QjVM?=
+ =?utf-8?B?S1JFem5OYnorMU9ickZNRXpPVUk1VkxLa2JpR0FKN3VMeW9zVDdHRCt4M29x?=
+ =?utf-8?B?Si92Tklxd05LMzlNYk5hSmhxUXJxYUhtS29raHRMem8yaG1OWDZXdTRQUHJM?=
+ =?utf-8?B?bEJvbXkxSlhFaGNLMURRNzVUZ0c4bEdHb0VBamRoUVRkMUFoZU1NTzlmck5h?=
+ =?utf-8?B?LzlyblA3aS81MkR2N2M4TlNTbUlpUEFoVDNqaVNTUnVhaFBnejc1OTdKem0x?=
+ =?utf-8?Q?5kychvX0I8nkNI3QEUqMXQbE5?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 06:38:57.5941
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d3a9da6-9ff3-498c-c857-08da8be529d8
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 06:42:39.4222
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 465caa96-2625-4e07-2fe1-08da8be4a5d0
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT056.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5439
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hYiz98BVSRy9vMtowTQs0BSqDpbdslzvNTvgG25KNatCWU5+G8knz2QD7xmAznky
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5156
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -108,70 +167,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.08.22 12:12:22, Jonathan Cameron wrote:
-> > On Wed, 31 Aug 2022 10:15:56 +0200
-> > Robert Richter <rrichter@amd.com> wrote:
+Am 31.08.22 um 17:37 schrieb Dmitry Osipenko:
+> Prepare DRM prime core to the common dynamic dma-buf locking convention
+> by starting to use the unlocked versions of dma-buf API functions.
+>
+> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
 
-> > > @@ -322,6 +322,8 @@ struct pci_host_bridge *cxl_find_next_rch(struct pci_host_bridge *host)
-> > >  {
-> > >  	struct pci_bus *bus = host ? host->bus : NULL;
-> > >  	struct acpi_device *adev;
-> > > +	struct pci_dev *pdev;
-> > > +	bool is_restricted_host;
-> > >  
-> > >  	while ((bus = pci_find_next_bus(bus)) != NULL) {
-> > >  		host = bus ? to_pci_host_bridge(bus->bridge) : NULL;
-> > > @@ -343,6 +345,20 @@ struct pci_host_bridge *cxl_find_next_rch(struct pci_host_bridge *host)
-> > >  		dev_dbg(&host->dev, "PCI ACPI host found: %s\n",
-> > >  			acpi_dev_name(adev));
-> > >  
-> > > +		/* Check CXL DVSEC of dev 0 func 0 */  
-> > 
-> > So assumption here is that the hostbridge has a one or more RCiEPs.
-> > The spec (r3.0 9.11.4) allows for the EP to appear behind a root port
-> > - that case always felt odd to me, so I'm fine with not supporting it until
-> > we see a user.
-> > 
-> > > +		pdev = pci_get_slot(bus, PCI_DEVFN(0, 0));
-> > > +		is_restricted_host = pdev
-> > > +			&& (pci_pcie_type(pdev) == PCI_EXP_TYPE_RC_END)
-> > > +			&& pci_find_dvsec_capability(pdev,
-> > > +						PCI_DVSEC_VENDOR_ID_CXL,
-> > > +						CXL_DVSEC_PCIE_DEVICE);
-> 
-> Thinking a bit more on this.  I'm not sure this is sufficient.
-> Nothing in CXL 2.0 or later prevents true RCiEP devices (there are a
-> few references in CXL 3.0 e.g. 9.12.1 has RCDs or CXL RCiEPs - so just
-> detecting that there is one on the host bridge might not be sufficient
-> to distinguish this from a non RCH / RCB.
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
-An RCD has its own host bridge created (software view, not the phys
-topology). Host and device are paired in this case. Non-RCDs are
-standard endpoints and not RCiEPs, they have their own host. There
-cannot be both types connected to the same host.
+> ---
+>   drivers/gpu/drm/drm_prime.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/drm_prime.c b/drivers/gpu/drm/drm_prime.c
+> index eb09e86044c6..20e109a802ae 100644
+> --- a/drivers/gpu/drm/drm_prime.c
+> +++ b/drivers/gpu/drm/drm_prime.c
+> @@ -940,7 +940,7 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
+>   
+>   	get_dma_buf(dma_buf);
+>   
+> -	sgt = dma_buf_map_attachment(attach, DMA_BIDIRECTIONAL);
+> +	sgt = dma_buf_map_attachment_unlocked(attach, DMA_BIDIRECTIONAL);
+>   	if (IS_ERR(sgt)) {
+>   		ret = PTR_ERR(sgt);
+>   		goto fail_detach;
+> @@ -958,7 +958,7 @@ struct drm_gem_object *drm_gem_prime_import_dev(struct drm_device *dev,
+>   	return obj;
+>   
+>   fail_unmap:
+> -	dma_buf_unmap_attachment(attach, sgt, DMA_BIDIRECTIONAL);
+> +	dma_buf_unmap_attachment_unlocked(attach, sgt, DMA_BIDIRECTIONAL);
+>   fail_detach:
+>   	dma_buf_detach(dma_buf, attach);
+>   	dma_buf_put(dma_buf);
+> @@ -1056,7 +1056,7 @@ void drm_prime_gem_destroy(struct drm_gem_object *obj, struct sg_table *sg)
+>   
+>   	attach = obj->import_attach;
+>   	if (sg)
+> -		dma_buf_unmap_attachment(attach, sg, DMA_BIDIRECTIONAL);
+> +		dma_buf_unmap_attachment_unlocked(attach, sg, DMA_BIDIRECTIONAL);
+>   	dma_buf = attach->dmabuf;
+>   	dma_buf_detach(attach->dmabuf, attach);
+>   	/* remove the reference */
 
-Again, see figure 9-12 and 9-13.
-
--Robert
-
-> 
-> > > +		pci_dev_put(pdev);
-> > > +
-> > > +		if (!is_restricted_host)
-> > > +			continue;
-> > > +
-> > > +		dev_dbg(&host->dev, "CXL restricted host found\n");
-> > > +
-> > >  		return host;
-> > >  	}
-> > >  
-> > > @@ -354,6 +370,7 @@ static int __init cxl_restricted_host_probe(struct platform_device *pdev)
-> > >  	struct pci_host_bridge *host = NULL;
-> > >  
-> > >  	while ((host = cxl_find_next_rch(host)) != NULL) {
-> > > +		dev_info(&host->dev, "host supports CXL\n");
-> > >  	}
-> > >  
-> > >  	return 0;  
-> > 
-> 

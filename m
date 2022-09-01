@@ -2,384 +2,412 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54B005A9225
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C045A9229
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:36:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234205AbiIAIff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57258 "EHLO
+        id S233041AbiIAIgR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 04:36:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234220AbiIAIfV (ORCPT
+        with ESMTP id S233436AbiIAIgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:35:21 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9FFB2ED73
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:35:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662021318; x=1693557318;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=KARca7HROnREZwvhUXnXlar/18Q4XMohGELdmezKwHU=;
-  b=FsdvSFyS5xEcYbz0ZFoPlJrCZhhqCTDBqRnnsmx4AuEK6+YdlGa0rw4i
-   K5pAK6jPX9DihZIPxtUnqWNwG4PFTDUm/OUZ2fHHfttda3axxZm+5m66i
-   2ukuC0b4F7lQxHDKM7Z+GVQNdCtBYAGkFZmqHpIPMCMECV90NUeRDPAOx
-   3Gy9VlAupOZXHq+gvtaMyQj6hv2o9feNFIbt4OGfhoYCXBXYQgqUXCeRq
-   ETJCw25mG2O+o89LCA/KWb86sqMcwD9mgsYJB0hZs/reV4ODAH0afM3Y6
-   PhU+x+UOqugagsJnvkIAfUqoU1wejMPLLqk4px80KwcS2rd36q/UByYbs
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="275403560"
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="275403560"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 01:35:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="738412009"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by orsmga004.jf.intel.com with ESMTP; 01 Sep 2022 01:35:17 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 01:35:17 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 01:35:16 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 1 Sep 2022 01:35:16 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 1 Sep 2022 01:35:16 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NtJSZJC1VgzEnKPb9KjFb1UfA6bSJiXNDDcLffve2GJLxJgnmtqs2uU6U8cu9qwjZ41ssU9rUf1q42l3nbeR3MXtoTA0i/u/Wjf+n1rDvuy1c0osJV0qIvba0qKg0jhUoQMKqHqBxdv69lNo/B3iwQ0K48lDfsadMyDxzzZ2MYx8eICLDEIxREPfllMgFTyZ2WuY4Sx7NpbiTwWOBTeJdI5JF0YDdH8XZoa1m1WH/VaVZl8acB4p2mqppINfmWbXlR670/SIUwSvyz5y3+wbli6HTfjrVok5avPu4T319N04U+8/WmM/cRU9hWqeqA7MZ395w8+Ranjl7hXr4i6yMw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ILaG0D55jjS+BiAPddZ2vM3YZKS+N9DdoJqQnYyCOX0=;
- b=cPZeYKspi2NG/6kVyQ1XBb4FD6+/mD/rtzH9WYC4/F8YWtr842x4YkzySq7BZ60MeuN6chgY5vSXtsW5LbT7ntu1taDsl5Fz1CfEgWQodoMyuZsECWmIYsiKKzfmrPs1PsGOqbi0c/vMWCU3GY3d0uoDVFPHnrXJysCcdKnVtj3Uc/ZCg6ztLeaTzENLhkEnR2Fvnzu3gOL50Dsh45C1TTaQXUAFNZMHtChGbbvmpb5Fet+wdmcxPCfa4V2veLWP3azIgx9PIlbJb+S0wY6P83gt5ibWs5Scp4/NmCubekbE7AVNu0se033TcFKdjxgWNq38gy8qd1XpyJ84sfLvoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN2PR11MB3870.namprd11.prod.outlook.com (2603:10b6:208:152::11)
- by CY8PR11MB7058.namprd11.prod.outlook.com (2603:10b6:930:52::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.16; Thu, 1 Sep
- 2022 08:35:14 +0000
-Received: from MN2PR11MB3870.namprd11.prod.outlook.com
- ([fe80::d9cb:9341:df01:f8a6]) by MN2PR11MB3870.namprd11.prod.outlook.com
- ([fe80::d9cb:9341:df01:f8a6%4]) with mapi id 15.20.5566.021; Thu, 1 Sep 2022
- 08:35:14 +0000
-Message-ID: <2d75b9c4-e126-0cc2-dca5-64c6ae9666de@intel.com>
-Date:   Thu, 1 Sep 2022 16:35:04 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.13.0
-Subject: Re: [PATCH 1/3] memblock test: Add test to memblock_add() 129th
- region
-Content-Language: en-US
-To:     Mike Rapoport <rppt@kernel.org>
-CC:     Karolina Drobnik <karolinadrobnik@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Rebecca Mckeever <remckee0@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20220830014925.162718-1-shaoqin.huang@intel.com>
- <20220830014925.162718-2-shaoqin.huang@intel.com>
- <YxBnG4xYh/eIJ/ZT@kernel.org>
-From:   "Huang, Shaoqin" <shaoqin.huang@intel.com>
-In-Reply-To: <YxBnG4xYh/eIJ/ZT@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR06CA0202.apcprd06.prod.outlook.com (2603:1096:4:1::34)
- To MN2PR11MB3870.namprd11.prod.outlook.com (2603:10b6:208:152::11)
+        Thu, 1 Sep 2022 04:36:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B218125E94
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662021371;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=/mtezMuJaLKRvru6XrovNRtNHrsgsjKFpG6lGINA/6k=;
+        b=GUQYaSj7LgKmAHrwf/X4ToV2sQlthvszeCeb+BfQHfuEgg8blnAHnsdi28O8GDEppXvJvB
+        SzDJwBBoErGcrAqhnfer5aHfpv78Xg+b7OK2eGeehzXq4+yD1tld1KcB9ljAH80ayRDLlV
+        SJiNobFEU1V7ZveaLz0o2yrF6OpjWs0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-194-YS0GZzlRNGq-ofOdChtTwA-1; Thu, 01 Sep 2022 04:36:06 -0400
+X-MC-Unique: YS0GZzlRNGq-ofOdChtTwA-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E95038032F1;
+        Thu,  1 Sep 2022 08:36:05 +0000 (UTC)
+Received: from t480s.redhat.com (unknown [10.39.193.132])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 1ED034C819;
+        Thu,  1 Sep 2022 08:36:00 +0000 (UTC)
+From:   David Hildenbrand <david@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>, Peter Xu <peterx@redhat.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Nadav Amit <namit@vmware.com>, Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrea Parri <parri.andrea@gmail.com>,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Christoph von Recklinghausen <crecklin@redhat.com>,
+        Don Dutile <ddutile@redhat.com>
+Subject: [PATCH v1] mm: fix PageAnonExclusive clearing racing with concurrent RCU GUP-fast
+Date:   Thu,  1 Sep 2022 10:35:59 +0200
+Message-Id: <20220901083559.67446-1-david@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 028a5061-9ad1-4b5f-8ef9-08da8bf4e405
-X-MS-TrafficTypeDiagnostic: CY8PR11MB7058:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r7t3V80rHJSuoPs19Y9BAaEQZ8NwWO/Er9HMD1iamJkIJFp6IdQ0IKuOnK2YkGotdGqjAvcrIbCqW0dOsawwZtzbDU9UgRqCJGpASgX+3olBQkQZpRXV9ntwM2zfKP1SXQawGuPyQyBnGiCy2bglxSyHeCLW4kIqcKEMEoZyZID4yqD/R2C5qGFKHk3HJG1TkPcRNWNSu30CUIxCnmxzEzW4fkS5wP3zlcaXPjL3CodTLNl0seHHJLYNZfUDB488BcO5wjevOaXDzfMSK0XpKXufi0dXME3YM1Lyj7gOtoBy5FFsU8XZ5sYnrIguQU3ouUbQn28ZsadZL1RjKz1qBMIq1tEd2P4b7iazhJriXTBvZSHN0P7t6KSLGksvORmlkKMMjHgJLpBQqOHqvUso6i2Am2NqNT4eDpkRZkj7ibZNbK4b6xoiJEKmzPZ0siCE+V6ddu4OLLnNNv2fI2H07z9CbbJ2vC4rlEDz4XhFMVg8IJbm4y6hMSTgw65ub+sq2P7B0EKUxXAr9IKn6dSLzvWB56IcV8HkZ3rOz08T2uDKzvDLxwxeZi6ighhrPSpuOotGuKAV96a2xxWQfJ/yOnI3/Fzo9yoLs8z8hS/IlY714Bx13QvukRYjPePSHyB3grcgvYjdBGompQUjAAVjs9lNHpLeMNDvf8hlpKbrA0wkJCXGUgyJbo/gTAz6ulH7U/RRmJRgUOFGTxJ6YdnS5EQqDVQ5KRxzsO4oY/SRv28WIPf/6PZKBr/eccFe6YJwIysnoahxTi+X+fpN8Bp5JdgFOvteu6oi5K2qyT2N2xM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR11MB3870.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(136003)(396003)(346002)(366004)(376002)(478600001)(2906002)(66476007)(4326008)(82960400001)(38100700002)(41300700001)(53546011)(8676002)(8936002)(66946007)(31696002)(66556008)(6666004)(6506007)(86362001)(6512007)(316002)(83380400001)(5660300002)(36756003)(186003)(2616005)(26005)(6916009)(54906003)(31686004)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RlZCeXptZXlHRlNDQ25kclZLektuVXIyVG5QMHkyQy82WS9XVnZhV1JJRHVp?=
- =?utf-8?B?c0dBWEZobTNHM2gxL2xzVjJuU1lCRi93U0d0NXZqSzJRODhId0xJbFBQMHp6?=
- =?utf-8?B?ZXJZbWVJdTdhWmtka1JoMkJDSFp5YldjQnV2UzBrNUdQZjc3eGlIakMzN2ZL?=
- =?utf-8?B?SmVkZEtCckYrQWxuQ0R3UUkyTFBxbXJiMzlaYWQzc2N5aXhjdEdBZElxUU1Q?=
- =?utf-8?B?K0NxSmRFMnRtQUh1WlR4SHJYdFpDVStFNEtEaUJkbGhxRUZaWENwMHVmWXFU?=
- =?utf-8?B?UE5PUzBkQzlKVmthYlFzVjZjTjhhbzV2bGFuVEVNemtWUTdJNHNrd0xkR0J0?=
- =?utf-8?B?S1d6dklibFhVOHJHSFNPQ0s4ZVQ3YTBOQmpkaVEzQzJNUmowM2M4RkJjS1pJ?=
- =?utf-8?B?N004QnBsSjVDZkJ1ejRORktSMU12K0cyRXE4SEdjbEwzWEUxZFhIaHk5SDRR?=
- =?utf-8?B?ditpQlFsVHV5ajlYTlFnUzQxYmpoRmN4UWlkZkRDMk9XTm1BdDIvZ1hvMG9U?=
- =?utf-8?B?QzllUFVNR1pCdjNrL2x0OWUzWm5jcFQ1MndJckljNVpoaUpGM3ZzbHJOazls?=
- =?utf-8?B?ME1RT0Z5a0ttZmJzNlJ5VWMzNzdmSzlaaWpHZEdtUC9tM1dqMGNjQ1ZQcUZ0?=
- =?utf-8?B?TDM1ZDY3dVFzTzFhZEozdU9SMlcxODAwZnJ0S0I2eUc5dE8vVHp0Qk1CVHE4?=
- =?utf-8?B?bytsV0JGZjBLTWZkZi9Bb1VSakhBSGdHNVppazlCMGp2Zmo0MUg5VncraUhC?=
- =?utf-8?B?UmlJUERqaU9ySFc0bmQyTTFScXJCT0dTaHdEaXpzZDdkVVkwWVV6cVhWdGU0?=
- =?utf-8?B?VkpCazZKZXZrZnFITXc0ckxRWWJLTEdqcmxid3lUQkhjdUdtUFlZNE5ueU5F?=
- =?utf-8?B?MXRPeW1RNlBKVnNmbUpURTlqSVpOSjdMbEREM2JZUE9zMXdyUE5GdVZoYWFr?=
- =?utf-8?B?cHd5VUdBc25aRER4THIxaXdYVkFVbDZYOEFjTTFvWS9oNE9aOVVUMmc5aENs?=
- =?utf-8?B?ZCtyN1dzYlZablBwQ1FWaDJ5Z2x6bitDdHl1Z0ZuMWViU2hJbFhreWxkcjla?=
- =?utf-8?B?VGRVOHNDMk1aNm9HYnJKZlVPanE5MEVNNHhwejRTYk9zVmlML2F1S3RLT2Vu?=
- =?utf-8?B?TEpGcDVtMndSWUdmemFkd3FEaWtjOG9LaUpUelhVbzU2R0tVWmR5RDdkbTdK?=
- =?utf-8?B?YytZeGRhdzhxZlArTVljcDlzdkdjYnRQVFN3YkxYOWM5eWRLS29LSy9mbEV6?=
- =?utf-8?B?Nk5odEdTSG9NdDl4dnYybW9hbFRQQVFQak9hZk1ITDlrYnB1VjhlTUxCRDZT?=
- =?utf-8?B?SEpXMDJOTkpodXlTcHdiNzZaYWZ6b202aVBkUlN3bzVTTHRWa1hVa1hZMWI2?=
- =?utf-8?B?eTJjdFlrWW1IZkJvSmtqY3JWa2ZNd0Z3YjBJeVhvblRQM29YZzFKY1FBWDdZ?=
- =?utf-8?B?eXJvM0NuaDJJUTdPczYrelNNODl5Q0JnQzlsTGhrVDhRVlN3azduUVQyanBN?=
- =?utf-8?B?eDEray9EK0s4V0VsOURRWkJveVZNOW9lVzYyUkxBVFlKbEovVGVpa05iVElL?=
- =?utf-8?B?MDRJa1BvcWFmYWxkemROem1ldXpvYkVYTTBYRWdkdngzajdmMVY2UXFER3Ju?=
- =?utf-8?B?RVNxOTd1cVJmcTNhVGxIcXlDOWtRTWNZMEpTYWlLeHdJNC9Fa3BxWE82ZmV5?=
- =?utf-8?B?NkFiK3ozUFV4Z0xyeUZ0VGo4cVY1bzF6Vnh2bmJvcjFGQVM5M0EyWnpoblpt?=
- =?utf-8?B?RVkzbXpRLzhxaXpCeXJyYW52SGN0aDZhU2hXVGlybWd1ZkFyMDR3dENvd3pS?=
- =?utf-8?B?VlJibVRjZUJRKy9GSGxTT2NyQnRxUklBU3hhY0oyb1Q0TDYwV0lTdSs4MWQy?=
- =?utf-8?B?LzZ5SnVZa3ZoVmZJamU5ajBZZWxZTVo0eXhNT3F2dHJJakdKVlVXTnZ6ZE9V?=
- =?utf-8?B?Y3lMODMvc24xSWI2SHlHdUxyS3EzVy80bkNoMnd4aW5iTzJxbWo3T1RmaHcv?=
- =?utf-8?B?M0tUc0VHd0F0VU0yc3RQdGxTYk05bml1NmZqVjhKcDkvMXJXbmQ3K0haRE5N?=
- =?utf-8?B?NlFyVDcwVVU1Zk5lSVdQQ0xFRXRXYm9iN0VxR01BKzJVYnRZa0FKUlpjYlk4?=
- =?utf-8?B?TEN3MThpRytWVS9vTEtnb1B4cTZaWWY4VEZ0Q3NHcHE3QUJ2V1FsRm04OFYv?=
- =?utf-8?B?Rnc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 028a5061-9ad1-4b5f-8ef9-08da8bf4e405
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR11MB3870.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 08:35:14.3478
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bTB6KZi/w2ZLF114nd2Rff/TOW+dYSLywRqh2f+oUnqEj8ZDaa4XIfrB2sTG0yJm7iPvDFyhLHpzW3xfiu1r7g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7058
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+commit 6c287605fd56 ("mm: remember exclusively mapped anonymous pages with
+PG_anon_exclusive") made sure that when PageAnonExclusive() has to be
+cleared during temporary unmapping of a page, that the PTE is
+cleared/invalidated and that the TLB is flushed.
 
+What we want to achieve in all cases is that we cannot end up with a pin on
+an anonymous page that may be shared, because such pins would be
+unreliable and could result in memory corruptions when the mapped page
+and the pin go out of sync due to a write fault.
 
-On 9/1/2022 4:02 PM, Mike Rapoport wrote:
-> On Tue, Aug 30, 2022 at 09:49:17AM +0800, shaoqin.huang@intel.com wrote:
->> From: Shaoqin Huang <shaoqin.huang@intel.com>
->>
->> Add 129th region into the memblock, and this will trigger the
->> memblock_double_array() function, this needs valid memory regions. So
->> using dummy_physical_memory_init() to allocate a valid memory region, and
->> fake the other memory region, so it make sure the memblock_double_array()
->> will always choose the valid memory region that is allocated by the
->> dummy_physical_memory_init(). So memblock_double_array() must success.
->>
->> Another thing should be done is to restore the memory.regions after
->> memblock_double_array(), due to now the memory.regions is pointing to a
->> memory region allocated by dummy_physical_memory_init(). And it will
->> affect the subsequent tests if we don't restore the memory region. So
->> simply record the origin region, and restore it after the test.
->>
->> Signed-off-by: Shaoqin Huang <shaoqin.huang@intel.com>
->> ---
->>   tools/testing/memblock/tests/basic_api.c | 82 ++++++++++++++++++++++++
->>   tools/testing/memblock/tests/common.c    |  7 +-
->>   tools/testing/memblock/tests/common.h    |  3 +
->>   3 files changed, 90 insertions(+), 2 deletions(-)
->>
->> diff --git a/tools/testing/memblock/tests/basic_api.c b/tools/testing/memblock/tests/basic_api.c
->> index 66f46f261e66..c8e201156cdc 100644
->> --- a/tools/testing/memblock/tests/basic_api.c
->> +++ b/tools/testing/memblock/tests/basic_api.c
->> @@ -326,6 +326,87 @@ static int memblock_add_twice_check(void)
->>   	return 0;
->>   }
->>   
->> +/*
->> + * A test that tries to add the 129th memory block.
->> + * Expect to trigger memblock_double_array() to double the
->> + * memblock.memory.max, find a new valid memory as
->> + * memory.regions.
->> + */
->> +static int memblock_add_many_check(void)
->> +{
->> +	int i;
->> +	void *orig_region;
->> +	struct region r = {
->> +		.base = SZ_16K,
->> +		.size = MEM_SIZE,
->> +	};
->> +	phys_addr_t memory_base = SZ_128K;
->> +
->> +	PREFIX_PUSH();
->> +
->> +	reset_memblock_regions();
->> +	memblock_allow_resize();
->> +
->> +	/*
->> +	 * Add one valid memory region, this will be choosed to be the memory
->> +	 * that new memory.regions occupied.
->> +	 */
->> +	dummy_physical_memory_init();
->> +	memblock_add((phys_addr_t)get_memory_block_base(), MEM_SIZE);
->> +
->> +	ASSERT_EQ(memblock.memory.cnt, 1);
->> +	ASSERT_EQ(memblock.memory.total_size, MEM_SIZE);
->> +
->> +	for (i = 1; i < INIT_MEMBLOCK_REGIONS; i++) {
->> +		/* Add some fakes memory region to fulfill the memblock. */
->> +		memblock_add(memory_base, MEM_SIZE);
-> 
-> I would rather prefer to memblock_add() ranges from the simulated memory
-> created in dummy_physical_memory_init(). 16K will be probably too small,
-> but I don't see problem with increasing MEM_SIZE.
-> 
+That TLB flush handling was inspired by an outdated comment in
+mm/ksm.c:write_protect_page(), which similarly required the TLB flush in
+the past to synchronize with GUP-fast. However, ever since general RCU GUP
+fast was introduced in commit 2667f50e8b81 ("mm: introduce a general RCU
+get_user_pages_fast()"), a TLB flush is no longer sufficient to handle
+concurrent GUP-fast in all cases -- it only handles traditional IPI-based
+GUP-fast correctly.
 
-Yes. If we memblock_add() the memory both allocated from 
-dummy_physical_memory_init(), It's no need to fake these memory regions. 
-And with all valid memory region, it will always choose a valid memory 
-region and double the array.
+Peter Xu (thankfully) questioned whether that TLB flush is really
+required. On architectures that send an IPI broadcast on TLB flush,
+it works as expected. To synchronize with RCU GUP-fast properly, we're
+conceptually fine, however, we have to enforce a certain memory order and
+are missing memory barriers.
 
-And now with calculation, 16K is enough. The doubled array will only use 
-8KB, so it will success.
+Let's document that, avoid the TLB flush where possible and use proper
+explicit memory barriers where required. We shouldn't really care about the
+additional memory barriers here, as we're not on extremely hot paths --
+and we're getting rid of some TLB flushes.
 
->> +
->> +		ASSERT_EQ(memblock.memory.cnt, i + 1);
->> +		ASSERT_EQ(memblock.memory.total_size, (i + 1) * MEM_SIZE);
->> +
->> +		/* Keep the gap so these memory region will not be merged. */
->> +		memory_base += MEM_SIZE * 2;
->> +	}
->> +
->> +	orig_region = memblock.memory.regions;
->> +
->> +	/* This adds the 129 memory_region, and makes it double array. */
->> +	memblock_add((phys_addr_t)memory_base, MEM_SIZE);
-> 
-> memory_base is already phys_addr_t, isn't it?
-> 
+We use a smp_mb() pair for handling concurrent pinning and a
+smp_rmb()/smp_wmb() pair for handling the corner case of only temporary
+PTE changes but permanent PageAnonExclusive changes.
 
-Thanks for notice. Will delete it.
+One extreme example, whereby GUP-fast takes a R/O pin and KSM wants to
+convert an exclusive anonymous page to a KSM page, and that page is already
+mapped write-protected (-> no PTE change) would be:
 
->> +
->> +	ASSERT_EQ(memblock.memory.cnt, INIT_MEMBLOCK_REGIONS + 1);
->> +	ASSERT_EQ(memblock.memory.total_size, (INIT_MEMBLOCK_REGIONS + 1) * MEM_SIZE);
->> +	ASSERT_EQ(memblock.memory.max, INIT_MEMBLOCK_REGIONS * 2);
->> +
->> +	ASSERT_EQ(memblock.reserved.cnt, 1);
->> +	/* This is the size used by new memory.regions. Check it. */
->> +	ASSERT_EQ(memblock.reserved.total_size, PAGE_ALIGN(INIT_MEMBLOCK_REGIONS * 2 *
->> +						sizeof(struct memblock_region)));
->> +
-> 
-> Can you please elaborate what does the following sequence test?
-> 
+	Thread 0 (KSM)			Thread 1 (GUP-fast)
 
-Before this line, all checks is to make sure the double_array have 
-successfully make the size doubled and reserved a new region as the new 
-memory.regions.
+					(B1) Read the PTE
+					# (B2) skipped without FOLL_WRITE
+	(A1) Clear PTE
+	smp_mb()
+	(A2) Check pinned
+					(B3) Pin the mapped page
+					smp_mb()
+	(A3) Clear PageAnonExclusive
+	smp_wmb()
+	(A4) Restore PTE
+					(B4) Check if the PTE changed
+					smp_rmb()
+					(B5) Check PageAnonExclusive
 
-Below I try to add a memory region which has a small base, so it will be 
-added to the first region, if it succeed. We can prove the doubled 
-memory.regions has a valid memory.
+Thread 1 will properly detect that PageAnonExclusive was cleared and
+back off.
 
-I will add the commends in the next version.
+Note that we don't need a memory barrier between checking if the page is
+pinned and clearing PageAnonExclusive, because stores are not
+speculated.
 
->> +	/* The base is very small, so it should be insert to the first region. */
->> +	memblock_add(r.base, r.size);
->> +	ASSERT_EQ(memblock.memory.regions[0].base, r.base);
->> +	ASSERT_EQ(memblock.memory.regions[0].size, r.size);
->> +
->> +	ASSERT_EQ(memblock.memory.cnt, INIT_MEMBLOCK_REGIONS + 2);
->> +	ASSERT_EQ(memblock.memory.total_size, (INIT_MEMBLOCK_REGIONS + 2) * MEM_SIZE);
->> +	ASSERT_EQ(memblock.memory.max, INIT_MEMBLOCK_REGIONS * 2);
->> +
->> +	dummy_physical_memory_cleanup();
->> +
->> +	/*
->> +	 * The current memory.regions is occupying a range of memory that
->> +	 * allocated from dummy_physical_memory_init(). After free the memory,
->> +	 * we must not use it. So restore the origin memory region to make sure
->> +	 * the tests can run as normal and not affected by the double array.
->> +	 */
->> +	memblock.memory.regions = orig_region;
->> +	memblock.memory.cnt = INIT_MEMBLOCK_REGIONS;
->> +
->> +	test_pass_pop();
->> +
->> +	return 0;
->> +}
->> +
->>   static int memblock_add_checks(void)
->>   {
->>   	prefix_reset();
->> @@ -339,6 +420,7 @@ static int memblock_add_checks(void)
->>   	memblock_add_overlap_bottom_check();
->>   	memblock_add_within_check();
->>   	memblock_add_twice_check();
->> +	memblock_add_many_check();
->>   
->>   	prefix_pop();
->>   
->> diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
->> index 76a8ad818f3a..96fabd96ff31 100644
->> --- a/tools/testing/memblock/tests/common.c
->> +++ b/tools/testing/memblock/tests/common.c
->> @@ -5,8 +5,6 @@
->>   #include <linux/memory_hotplug.h>
->>   #include <linux/build_bug.h>
->>   
->> -#define INIT_MEMBLOCK_REGIONS			128
->> -#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
->>   #define PREFIXES_MAX				15
->>   #define DELIM					": "
->>   
->> @@ -77,6 +75,11 @@ void dummy_physical_memory_cleanup(void)
->>   	free(memory_block.base);
->>   }
->>   
->> +void *get_memory_block_base(void)
->> +{
->> +	return memory_block.base;
->> +}
->> +
->>   static void usage(const char *prog)
->>   {
->>   	BUILD_BUG_ON(ARRAY_SIZE(help_opts) != ARRAY_SIZE(long_opts) - 1);
->> diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
->> index d396e5423a8e..d56af621c543 100644
->> --- a/tools/testing/memblock/tests/common.h
->> +++ b/tools/testing/memblock/tests/common.h
->> @@ -11,6 +11,8 @@
->>   #include <../selftests/kselftest.h>
->>   
->>   #define MEM_SIZE SZ_16K
->> +#define INIT_MEMBLOCK_REGIONS			128
->> +#define INIT_MEMBLOCK_RESERVED_REGIONS		INIT_MEMBLOCK_REGIONS
->>   
->>   /**
->>    * ASSERT_EQ():
->> @@ -73,6 +75,7 @@ void reset_memblock_attributes(void);
->>   void setup_memblock(void);
->>   void dummy_physical_memory_init(void);
->>   void dummy_physical_memory_cleanup(void);
->> +void *get_memory_block_base(void);
-> 
-> Let's make it
-> 
-> phys_addr_t dummy_physical_memory_base(void);
-> 
+The possible issues due to reordering are of theoretical nature so far
+and attempts to reproduce the race failed.
 
-Got it.
+Especially the "no PTE change" case isn't the common case, because we'd
+need an exclusive anonymous page that's mapped R/O and the PTE is clean
+in KSM code -- and using KSM with page pinning isn't extremely common.
+Further, the clear+TLB flush we used for now implies a memory barrier.
+So the problematic missing part should be the missing memory barrier
+after pinning but before checking if the PTE changed.
 
->>   void parse_args(int argc, char **argv);
->>   
->>   void test_fail(void);
->> -- 
->> 2.34.1
->>
->>
-> 
+Fixes: 6c287605fd56 ("mm: remember exclusively mapped anonymous pages with PG_anon_exclusive")
+Cc: <stable@vger.kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Alistair Popple <apopple@nvidia.com>
+Cc: Nadav Amit <namit@vmware.com>
+Cc: Yang Shi <shy828301@gmail.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Michal Hocko <mhocko@kernel.org>
+Cc: Mike Kravetz <mike.kravetz@oracle.com>
+Cc: Andrea Parri <parri.andrea@gmail.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Christoph von Recklinghausen <crecklin@redhat.com>
+Cc: Don Dutile <ddutile@redhat.com>
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+ include/linux/mm.h   |  9 ++++--
+ include/linux/rmap.h | 66 ++++++++++++++++++++++++++++++++++++++++----
+ mm/gup.c             |  7 +++++
+ mm/huge_memory.c     |  3 ++
+ mm/ksm.c             |  1 +
+ mm/migrate_device.c  | 23 +++++++--------
+ mm/rmap.c            | 11 ++++----
+ 7 files changed, 95 insertions(+), 25 deletions(-)
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 21f8b27bd9fd..9641a2a488c1 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2975,8 +2975,8 @@ static inline int vm_fault_to_errno(vm_fault_t vm_fault, int foll_flags)
+  * PageAnonExclusive() has to protect against concurrent GUP:
+  * * Ordinary GUP: Using the PT lock
+  * * GUP-fast and fork(): mm->write_protect_seq
+- * * GUP-fast and KSM or temporary unmapping (swap, migration):
+- *   clear/invalidate+flush of the page table entry
++ * * GUP-fast and KSM or temporary unmapping (swap, migration): see
++ *    page_try_share_anon_rmap()
+  *
+  * Must be called with the (sub)page that's actually referenced via the
+  * page table entry, which might not necessarily be the head page for a
+@@ -2997,6 +2997,11 @@ static inline bool gup_must_unshare(unsigned int flags, struct page *page)
+ 	 */
+ 	if (!PageAnon(page))
+ 		return false;
++
++	/* Paired with a memory barrier in page_try_share_anon_rmap(). */
++	if (IS_ENABLED(CONFIG_HAVE_FAST_GUP))
++		smp_rmb();
++
+ 	/*
+ 	 * Note that PageKsm() pages cannot be exclusive, and consequently,
+ 	 * cannot get pinned.
+diff --git a/include/linux/rmap.h b/include/linux/rmap.h
+index bf80adca980b..72b2bcc37f73 100644
+--- a/include/linux/rmap.h
++++ b/include/linux/rmap.h
+@@ -267,7 +267,7 @@ static inline int page_try_dup_anon_rmap(struct page *page, bool compound,
+  * @page: the exclusive anonymous page to try marking possibly shared
+  *
+  * The caller needs to hold the PT lock and has to have the page table entry
+- * cleared/invalidated+flushed, to properly sync against GUP-fast.
++ * cleared/invalidated.
+  *
+  * This is similar to page_try_dup_anon_rmap(), however, not used during fork()
+  * to duplicate a mapping, but instead to prepare for KSM or temporarily
+@@ -283,12 +283,68 @@ static inline int page_try_share_anon_rmap(struct page *page)
+ {
+ 	VM_BUG_ON_PAGE(!PageAnon(page) || !PageAnonExclusive(page), page);
+ 
+-	/* See page_try_dup_anon_rmap(). */
+-	if (likely(!is_device_private_page(page) &&
+-	    unlikely(page_maybe_dma_pinned(page))))
+-		return -EBUSY;
++	/* device private pages cannot get pinned via GUP. */
++	if (unlikely(is_device_private_page(page))) {
++		ClearPageAnonExclusive(page);
++		return 0;
++	}
+ 
++	/*
++	 * We have to make sure that when we clear PageAnonExclusive, that
++	 * the page is not pinned and that concurrent GUP-fast won't succeed in
++	 * concurrently pinning the page.
++	 *
++	 * Conceptually, PageAnonExclusive clearing consists of:
++	 * (A1) Clear PTE
++	 * (A2) Check if the page is pinned; back off if so.
++	 * (A3) Clear PageAnonExclusive
++	 * (A4) Restore PTE (optional, but certainly not writable)
++	 *
++	 * When clearing PageAnonExclusive, we cannot possibly map the page
++	 * writable again, because anon pages that may be shared must never
++	 * be writable. So in any case, if the PTE was writable it cannot
++	 * be writable anymore afterwards and there would be a PTE change. Only
++	 * if the PTE wasn't writable, there might not be a PTE change.
++	 *
++	 * Conceptually, GUP-fast pinning of an anon page consists of:
++	 * (B1) Read the PTE
++	 * (B2) FOLL_WRITE: check if the PTE is not writable; back off if so.
++	 * (B3) Pin the mapped page
++	 * (B4) Check if the PTE changed by re-reading it; back off if so.
++	 * (B5) If the original PTE is not writable, check if
++	 *	PageAnonExclusive is not set; back off if so.
++	 *
++	 * If the PTE was writable, we only have to make sure that GUP-fast
++	 * observes a PTE change and properly backs off.
++	 *
++	 * If the PTE was not writable, we have to make sure that GUP-fast either
++	 * detects a (temporary) PTE change or that PageAnonExclusive is cleared
++	 * and properly backs off.
++	 *
++	 * Consequently, when clearing PageAnonExclusive(), we have to make
++	 * sure that (A1), (A2)/(A3) and (A4) happen in the right memory
++	 * order. In GUP-fast pinning code, we have to make sure that (B3),(B4)
++	 * and (B5) happen in the right memory order.
++	 *
++	 * We assume that there might not be a memory barrier after
++	 * clearing/invalidating the PTE (A1) and before restoring the PTE (A4),
++	 * so we use explicit ones here.
++	 */
++
++	/* Paired with the memory barrier in try_grab_folio(). */
++	if (IS_ENABLED(CONFIG_HAVE_FAST_GUP))
++		smp_mb();
++
++	if (unlikely(page_maybe_dma_pinned(page)))
++		return -EBUSY;
+ 	ClearPageAnonExclusive(page);
++
++	/*
++	 * This is conceptually a smp_wmb() paired with the smp_rmb() in
++	 * gup_must_unshare().
++	 */
++	if (IS_ENABLED(CONFIG_HAVE_FAST_GUP))
++		smp_mb__after_atomic();
+ 	return 0;
+ }
+ 
+diff --git a/mm/gup.c b/mm/gup.c
+index 5abdaf487460..750fb317a41a 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -158,6 +158,13 @@ struct folio *try_grab_folio(struct page *page, int refs, unsigned int flags)
+ 		else
+ 			folio_ref_add(folio,
+ 					refs * (GUP_PIN_COUNTING_BIAS - 1));
++		/*
++		 * Adjust the pincount before re-checking the PTE for changes.
++		 * This is essentially a smp_mb() and is paired with a memory
++		 * barrier in page_try_share_anon_rmap().
++		 */
++		smp_mb__after_atomic();
++
+ 		node_stat_mod_folio(folio, NR_FOLL_PIN_ACQUIRED, refs);
+ 
+ 		return folio;
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index e9414ee57c5b..2aef8d76fcf2 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -2140,6 +2140,8 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+ 		 *
+ 		 * In case we cannot clear PageAnonExclusive(), split the PMD
+ 		 * only and let try_to_migrate_one() fail later.
++		 *
++		 * See page_try_share_anon_rmap(): invalidate PMD first.
+ 		 */
+ 		anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+ 		if (freeze && anon_exclusive && page_try_share_anon_rmap(page))
+@@ -3177,6 +3179,7 @@ int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+ 	flush_cache_range(vma, address, address + HPAGE_PMD_SIZE);
+ 	pmdval = pmdp_invalidate(vma, address, pvmw->pmd);
+ 
++	/* See page_try_share_anon_rmap(): invalidate PMD first. */
+ 	anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+ 	if (anon_exclusive && page_try_share_anon_rmap(page)) {
+ 		set_pmd_at(mm, address, pvmw->pmd, pmdval);
+diff --git a/mm/ksm.c b/mm/ksm.c
+index 42ab153335a2..27e067f77097 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -1095,6 +1095,7 @@ static int write_protect_page(struct vm_area_struct *vma, struct page *page,
+ 			goto out_unlock;
+ 		}
+ 
++		/* See page_try_share_anon_rmap(): clear PTE first. */
+ 		if (anon_exclusive && page_try_share_anon_rmap(page)) {
+ 			set_pte_at(mm, pvmw.address, pvmw.pte, entry);
+ 			goto out_unlock;
+diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+index 27fb37d65476..0858bb4ba584 100644
+--- a/mm/migrate_device.c
++++ b/mm/migrate_device.c
+@@ -193,20 +193,17 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+ 			bool anon_exclusive;
+ 			pte_t swp_pte;
+ 
++			flush_cache_page(vma, addr, pte_pfn(*ptep));
++			ptep_get_and_clear(mm, addr, ptep);
++
++			/* See page_try_share_anon_rmap(): clear PTE first. */
+ 			anon_exclusive = PageAnon(page) && PageAnonExclusive(page);
+-			if (anon_exclusive) {
+-				flush_cache_page(vma, addr, pte_pfn(*ptep));
+-				ptep_clear_flush(vma, addr, ptep);
+-
+-				if (page_try_share_anon_rmap(page)) {
+-					set_pte_at(mm, addr, ptep, pte);
+-					unlock_page(page);
+-					put_page(page);
+-					mpfn = 0;
+-					goto next;
+-				}
+-			} else {
+-				ptep_get_and_clear(mm, addr, ptep);
++			if (anon_exclusive && page_try_share_anon_rmap(page)) {
++				set_pte_at(mm, addr, ptep, pte);
++				unlock_page(page);
++				put_page(page);
++				mpfn = 0;
++				goto next;
+ 			}
+ 
+ 			migrate->cpages++;
+diff --git a/mm/rmap.c b/mm/rmap.c
+index edc06c52bc82..b3a21ea9f3d0 100644
+--- a/mm/rmap.c
++++ b/mm/rmap.c
+@@ -1579,11 +1579,8 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 			pteval = huge_ptep_clear_flush(vma, address, pvmw.pte);
+ 		} else {
+ 			flush_cache_page(vma, address, pte_pfn(*pvmw.pte));
+-			/*
+-			 * Nuke the page table entry. When having to clear
+-			 * PageAnonExclusive(), we always have to flush.
+-			 */
+-			if (should_defer_flush(mm, flags) && !anon_exclusive) {
++			/* Nuke the page table entry. */
++			if (should_defer_flush(mm, flags)) {
+ 				/*
+ 				 * We clear the PTE but do not flush so potentially
+ 				 * a remote CPU could still be writing to the folio.
+@@ -1714,6 +1711,8 @@ static bool try_to_unmap_one(struct folio *folio, struct vm_area_struct *vma,
+ 				page_vma_mapped_walk_done(&pvmw);
+ 				break;
+ 			}
++
++			/* See page_try_share_anon_rmap(): clear PTE first. */
+ 			if (anon_exclusive &&
+ 			    page_try_share_anon_rmap(subpage)) {
+ 				swap_free(entry);
+@@ -2045,6 +2044,8 @@ static bool try_to_migrate_one(struct folio *folio, struct vm_area_struct *vma,
+ 			}
+ 			VM_BUG_ON_PAGE(pte_write(pteval) && folio_test_anon(folio) &&
+ 				       !anon_exclusive, subpage);
++
++			/* See page_try_share_anon_rmap(): clear PTE first. */
+ 			if (anon_exclusive &&
+ 			    page_try_share_anon_rmap(subpage)) {
+ 				if (folio_test_hugetlb(folio))
+-- 
+2.37.1
+

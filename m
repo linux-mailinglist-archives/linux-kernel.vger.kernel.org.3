@@ -2,213 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE6845A96EC
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:31:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 224955A96F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232124AbiIAMbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56468 "EHLO
+        id S232585AbiIAMc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiIAMbQ (ORCPT
+        with ESMTP id S232107AbiIAMc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:31:16 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E24F13F2E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:31:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662035474;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ki1zde4FALw2bDe81KTHYsTgpRJIbStksKPzXcDscVQ=;
-        b=SyJ0OAw6xAeJ4JiTYzsY1YZyTCVt3CA7fnS9uV8IHrfxBBDzrJJ9ZK4t6+j8Q+tBbxYvvG
-        zwKgnyavrJnjEbZ1XVhPZGKyZ/z5/+EB84rEUICjSOOa8lU2nTUFqEWPBarI82krQXf1K+
-        9452MuRTMzTYZEhR4/R0ZA4fT/G69o8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-YqzytRJcPl2xfjFveXNSHA-1; Thu, 01 Sep 2022 08:31:11 -0400
-X-MC-Unique: YqzytRJcPl2xfjFveXNSHA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B98C63C0E233;
-        Thu,  1 Sep 2022 12:31:10 +0000 (UTC)
-Received: from localhost (ovpn-12-182.pek2.redhat.com [10.72.12.182])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id EFCE740CF8F2;
-        Thu,  1 Sep 2022 12:31:09 +0000 (UTC)
-Date:   Thu, 1 Sep 2022 20:31:06 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     "Chen, Rong A" <rong.a.chen@intel.com>
-Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
-        kbuild-all@lists.01.org, linux-mm@kvack.org,
-        akpm@linux-foundation.org, hch@infradead.org,
-        agordeev@linux.ibm.com, wangkefeng.wang@huawei.com,
-        linux-arm-kernel@lists.infradead.org,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Subject: Re: [kbuild-all] Re: [PATCH v2 10/11] sh: mm: Convert to
- GENERIC_IOREMAP
-Message-ID: <YxCmCn8MBROkyJ6v@MiWiFi-R3L-srv>
-References: <20220820003125.353570-11-bhe@redhat.com>
- <202208201146.8VeY9pez-lkp@intel.com>
- <YxCL4q1YSbh5wr8i@MiWiFi-R3L-srv>
- <bdb4982b-cb3c-c4a5-a97b-f1b2c0483ef8@intel.com>
+        Thu, 1 Sep 2022 08:32:56 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8711038;
+        Thu,  1 Sep 2022 05:32:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=XNmXI7jU75WuQDzAsKPd7wNSubefotJcywkg3XO9tRg=; b=psQxlo7I+LMz3L1Dk3jCh3tvID
+        YebsirZC/1jAhKTcjSCu6hXUU2FocuLkt42y//sul/TSaqfv669R4UOOQ6V8RJAtg4if3mISuC8CE
+        A4vTQ7G+0TtO/z4K03+sm+EoqQADlTCdVR7lAkmZGw73N5riJ7mv1od2fHJlCkwm24XI=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oTjNG-00FIpt-Mt; Thu, 01 Sep 2022 14:32:46 +0200
+Date:   Thu, 1 Sep 2022 14:32:46 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Arun.Ramadoss@microchip.com
+Cc:     olteanv@gmail.com, linux-kernel@vger.kernel.org,
+        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
+        linux@armlinux.org.uk, Tristram.Ha@microchip.com,
+        f.fainelli@gmail.com, kuba@kernel.org, edumazet@google.com,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        Woojung.Huh@microchip.com, davem@davemloft.net
+Subject: Re: [RFC Patch net-next v3 3/3] net: dsa: microchip: lan937x: add
+ interrupt support for port phy link
+Message-ID: <YxCmbrKFyjtWIHha@lunn.ch>
+References: <20220830105303.22067-1-arun.ramadoss@microchip.com>
+ <20220830105303.22067-4-arun.ramadoss@microchip.com>
+ <Yw4P3OJgtTtmgBHN@lunn.ch>
+ <bd7fcde507f47b22f9a4140bb26b91d9bb7e1662.camel@microchip.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bdb4982b-cb3c-c4a5-a97b-f1b2c0483ef8@intel.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <bd7fcde507f47b22f9a4140bb26b91d9bb7e1662.camel@microchip.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/01/22 at 08:11pm, Chen, Rong A wrote:
-> 
-> 
-> On 9/1/2022 6:39 PM, Baoquan He wrote:
-> > Hi,
+> > > +static irqreturn_t lan937x_girq_thread_fn(int irq, void *dev_id)
+> > > +{
+> > > +     struct ksz_device *dev = dev_id;
+> > > +     unsigned int nhandled = 0;
+> > > +     unsigned int sub_irq;
+> > > +     unsigned int n;
+> > > +     u32 data;
+> > > +     int ret;
+> > > +
+> > > +     ret = ksz_read32(dev, REG_SW_INT_STATUS__4, &data);
+> > > +     if (ret)
+> > > +             goto out;
+> > > +
+> > > +     if (data & POR_READY_INT) {
+> > > +             ret = ksz_write32(dev, REG_SW_INT_STATUS__4,
+> > > POR_READY_INT);
+> > > +             if (ret)
+> > > +                     goto out;
+> > > +     }
 > > 
-> > On 08/20/22 at 11:41am, kernel test robot wrote:
-> > > Hi Baoquan,
-> > > 
-> > > I love your patch! Yet something to improve:
-> > > 
-> > > [auto build test ERROR on akpm-mm/mm-everything]
-> > > 
-> > > url:    https://github.com/intel-lab-lkp/linux/commits/Baoquan-He/mm-ioremap-Convert-architectures-to-take-GENERIC_IOREMAP-way/20220820-083435
-> > > base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> > > config: sh-allmodconfig
-> > > compiler: sh4-linux-gcc (GCC) 12.1.0
-> > > reproduce (this is a W=1 build):
-> > >          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> > >          chmod +x ~/bin/make.cross
-> > >          # https://github.com/intel-lab-lkp/linux/commit/503a31451202f89e58bc5f0a49261398fafbd90e
-> > >          git remote add linux-review https://github.com/intel-lab-lkp/linux
-> > >          git fetch --no-tags linux-review Baoquan-He/mm-ioremap-Convert-architectures-to-take-GENERIC_IOREMAP-way/20220820-083435
-> > >          git checkout 503a31451202f89e58bc5f0a49261398fafbd90e
-> > >          # save the config file
-> > >          mkdir build_dir && cp config build_dir/.config
-> > >          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh prepare
-> > 
-> > I can only find binutils-sh-linux-gnu on fedora, but no gcc-sh-linux-gnu
-> > for cross compiling superh kernel. So I tried above steps, but it failed
-> > as below, any suggestion I can fix it to proceed for reproducing the
-> > reporting issues? Thanks in advance.
+> > What do these two read/writes do? It seems like you are discarding an
+> > interrupt?
 > 
-> Hi Baoquan,
-> 
-> Sorry for the inconvenience, /root/0day/gcc-12.1.0-nolibc/sh4-linux/bin
-> /sh4-linux-gcc is for x86_64 machine, as the name "ampere-mtsnow-altra",
-> is it a arm server?
+> This interrupt in Power on reset interrupt. It is enabled by default in
+> the chip. I am not performing any operation based on POR. So I just
+> cleared the interrupt. Do I need to disable the POR interrupt in the
+> setup function, since no operation is performed based on it?
 
-Oops, I thought the cross compilig can be done on any platform. Since
-I need test arm64 patch in this patchset, so didn't get x86 system to
-reproduce. Didn't realize lkp has an assumption. I will get a x86 system
-to test this.
+It is pretty normal during interrupt controller creation to first
+disable all interrupt sources, then clear the interrupt status
+register if that can be done with a single operation, and then
+register the interrupt controller with the IRQ core. That way, any
+outstanding interrupts don't fire.
 
-Thanks for your help!
-> 
-> the tool for arm64 can be downloaded from
-> https://cdn.kernel.org/pub/tools/crosstool/files/bin/arm64/12.1.0/
-> 
-> Best Regards,
-> Rong Chen
-> 
-> > 
-> > [root@ampere-mtsnow-altra-09 ~]# ls
-> > 0day  anaconda-ks.cfg  bin  config  EFI_BOOT_ENTRY.TXT  linux  NETBOOT_METHOD.TXT  original-ks.cfg  RECIPE.TXT
-> > [root@ampere-mtsnow-altra-09 ~]# ls 0day/gcc-12.1.0-nolibc/sh4-linux/bin/
-> > sh4-linux-addr2line  sh4-linux-elfedit     sh4-linux-gcc-ranlib  sh4-linux-ld        sh4-linux-objdump  sh4-linux-strip
-> > sh4-linux-ar         sh4-linux-gcc         sh4-linux-gcov        sh4-linux-ld.bfd    sh4-linux-ranlib
-> > sh4-linux-as         sh4-linux-gcc-12.1.0  sh4-linux-gcov-dump   sh4-linux-lto-dump  sh4-linux-readelf
-> > sh4-linux-c++filt    sh4-linux-gcc-ar      sh4-linux-gcov-tool   sh4-linux-nm        sh4-linux-size
-> > sh4-linux-cpp        sh4-linux-gcc-nm      sh4-linux-gprof       sh4-linux-objcopy   sh4-linux-strings
-> > [root@ampere-mtsnow-altra-09 ~]# ls bin
-> > make.cross
-> > [root@ampere-mtsnow-altra-09 ~]# cd linux/
-> > [root@ampere-mtsnow-altra-09 linux]# ls
-> > arch       certs    CREDITS        drivers  init      Kbuild   lib          Makefile  README   security  usr
-> > block      config   crypto         fs       io_uring  Kconfig  LICENSES     mm        samples  sound     virt
-> > build_dir  COPYING  Documentation  include  ipc       kernel   MAINTAINERS  net       scripts  tools
-> > [root@ampere-mtsnow-altra-09 linux]# ls build_dir/  -a
-> > .  ..  arch  .config  .gitignore  include  Makefile  scripts  source  usr
-> > 
-> > [root@ampere-mtsnow-altra-09 linux]# COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh prepare
-> > Compiler will be installed in /root/0day
-> > 	not a dynamic executable
-> > make --keep-going CONFIG_OF_ALL_DTBS=y CONFIG_DTC=y CROSS_COMPILE=/root/0day/gcc-12.1.0-nolibc/sh4-linux/bin/sh4-linux- --jobs=160 W=1 O=build_dir ARCH=sh prepare
-> > make[1]: Entering directory '/root/linux/build_dir'
-> > /bin/sh: line 1: /root/0day/gcc-12.1.0-nolibc/sh4-linux/bin/sh4-linux-gcc: cannot execute binary file: Exec format error
-> > /bin/sh: line 1: /root/0day/gcc-12.1.0-nolibc/sh4-linux/bin/sh4-linux-gcc: cannot execute binary file: Exec format error
-> > /bin/sh: line 1: /root/0day/gcc-12.1.0-nolibc/sh4-linux/bin/sh4-linux-gcc: cannot execute binary file: Exec format error
-> >    SYNC    include/config/auto.conf.cmd
-> > /bin/sh: line 1: /root/0day/gcc-12.1.0-nolibc/sh4-linux/bin/sh4-linux-gcc: cannot execute binary file: Exec format error
-> > /bin/sh: line 1: /root/0day/gcc-12.1.0-nolibc/sh4-linux/bin/sh4-linux-gcc: cannot execute binary file: Exec format error
-> > /bin/sh: line 1: /root/0day/gcc-12.1.0-nolibc/sh4-linux/bin/sh4-linux-gcc: cannot execute binary file: Exec format error
-> >    GEN     Makefile
-> >    HOSTCC  scripts/basic/fixdep
-> >    HOSTCC  scripts/kconfig/conf.o
-> >    HOSTCC  scripts/kconfig/confdata.o
-> >    HOSTCC  scripts/kconfig/expr.o
-> >    LEX     scripts/kconfig/lexer.lex.c
-> >    YACC    scripts/kconfig/parser.tab.[ch]
-> >    HOSTCC  scripts/kconfig/menu.o
-> >    HOSTCC  scripts/kconfig/preprocess.o
-> >    HOSTCC  scripts/kconfig/symbol.o
-> >    HOSTCC  scripts/kconfig/util.o
-> >    HOSTCC  scripts/kconfig/lexer.lex.o
-> >    HOSTCC  scripts/kconfig/parser.tab.o
-> >    HOSTLD  scripts/kconfig/conf
-> > /root/0day/gcc-12.1.0-nolibc/sh4-linux/bin/sh4-linux-gcc: unknown compiler
-> > scripts/Kconfig.include:44: Sorry, this compiler is not supported.
-> > make[3]: *** [../scripts/kconfig/Makefile:77: syncconfig] Error 1
-> > make[2]: *** [../Makefile:632: syncconfig] Error 2
-> > make[1]: *** [/root/linux/Makefile:734: include/config/auto.conf.cmd] Error 2
-> > make[1]: Failed to remake makefile 'include/config/auto.conf.cmd'.
-> > make[1]: Failed to remake makefile 'include/config/auto.conf'.
-> >    GEN     Makefile
-> >    SYSHDR  arch/sh/include/generated/uapi/asm/unistd_32.h
-> >    SYSTBL  arch/sh/include/generated/asm/syscall_table.h
-> > Error: kernelrelease not valid - run 'make prepare' to update it
-> >    HOSTCC  scripts/dtc/dtc.o
-> >    HOSTCC  scripts/dtc/flattree.o
-> >    HOSTCC  scripts/dtc/fstree.o
-> >    HOSTCC  scripts/dtc/data.o
-> >    HOSTCC  scripts/dtc/livetree.o
-> >    HOSTCC  scripts/dtc/treesource.o
-> >    HOSTCC  scripts/dtc/srcpos.o
-> >    HOSTCC  scripts/dtc/checks.o
-> >    HOSTCC  scripts/dtc/util.o
-> >    LEX     scripts/dtc/dtc-lexer.lex.c
-> >    YACC    scripts/dtc/dtc-parser.tab.[ch]
-> >    HOSTCC  scripts/dtc/libfdt/fdt_ro.o
-> >    HOSTCC  scripts/dtc/libfdt/fdt.o
-> >    HOSTCC  scripts/dtc/libfdt/fdt_wip.o
-> >    HOSTCC  scripts/dtc/libfdt/fdt_sw.o
-> >    HOSTCC  scripts/dtc/libfdt/fdt_rw.o
-> >    HOSTCC  scripts/dtc/libfdt/fdt_strerror.o
-> >    HOSTCC  scripts/dtc/libfdt/fdt_empty_tree.o
-> >    HOSTCC  scripts/dtc/libfdt/fdt_addresses.o
-> >    HOSTCC  scripts/dtc/libfdt/fdt_overlay.o
-> >    HOSTCC  scripts/dtc/fdtoverlay.o
-> >    HOSTCC  scripts/dtc/dtc-lexer.lex.o
-> >    HOSTCC  scripts/dtc/dtc-parser.tab.o
-> >    HOSTLD  scripts/dtc/fdtoverlay
-> >    HOSTLD  scripts/dtc/dtc
-> > make[1]: Target 'prepare' not remade because of errors.
-> > make[1]: Leaving directory '/root/linux/build_dir'
-> > make: *** [Makefile:222: __sub-make] Error 2
-> > make: Target 'prepare' not remade because of errors.
-> > _______________________________________________
-> > kbuild-all mailing list -- kbuild-all@lists.01.org
-> > To unsubscribe send an email to kbuild-all-leave@lists.01.org
-> > 
-> 
-
+	    Andrew

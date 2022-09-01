@@ -2,151 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F4DB5A9503
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A88665A9507
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:47:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiIAKqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S233869AbiIAKrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232771AbiIAKql (ORCPT
+        with ESMTP id S229495AbiIAKrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:46:41 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3DA74BA6
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:46:39 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id p16so5785207lfd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date;
-        bh=q7GfTDbztJBtRyiLzAqPadkhGM0mICn7vR8np4hSo2U=;
-        b=ja3k4IT1AJG3cTCogL7Ah/V1RQRMAVc58+3EPHiTIgJpWylZ6l9lvyybcbBMtwi5ja
-         k58U2jE80elsd8XkoJS2GhgxfxkdJUehErE0PfH+5xVMcqZYvJSiEW9Nx+BC8zSpBHRL
-         VaaJE9+ODRL9JTue5gYdc2KC9nJ9q8XGBE89uyVYg+iMqRFS8UPg3Sw0Mza6SzFxt+po
-         BeEUF+igPo9ys7LxA1p4qG2/DZskUpLsee36hl2L0o+33KJNDCuDNDOuWY2sviZX17gd
-         FvlQqJI1fZdUyJmO6l9DS1QgBTUpB7s0Y6iYalWWhGng3v6dpvmByewFuXjrjrJRi8H9
-         yCkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=q7GfTDbztJBtRyiLzAqPadkhGM0mICn7vR8np4hSo2U=;
-        b=NHQFV5atcaGNHmMH7n4g8Rhbq0o4cT3hf6zTsCr1RttgCwjV/RKNGGl1Mz3Zzp3qan
-         sC1gwguwDZ9BKwwno91bzO+C55btMGf1NZ54MYHp2axm6YJVlwQnEW2oXRdHD/mOeMYH
-         mSGKDRdSdVzTomz7/LvZH/zJgy3sG+g6P9/YhUq7SLtLsMpde0By6rMtgA89ep3A78nD
-         Ym8aURS51MZaL51Xtrm/bfA1momrRE71gHTAZ702D7ZStvIQLbo/LscB03UXOY+v4CCT
-         ULDK29PcXFiGPvdcFewG62QvYF5zsQFSz7uXazNGESjIQMXDzKVJOPn88I0mrFrDSjhV
-         AYhg==
-X-Gm-Message-State: ACgBeo1tPo6//1KdvhdwZnmDowdypyPs2rvM1PBAcvM/VHpj3x/0oM9s
-        iRLV6upGNRWM7nJeBh6NhDSjGw==
-X-Google-Smtp-Source: AA6agR42QJyzzyisVHax2ivC+hHxBqHzv3MiqXDqBhGKYSNiL2vKQOpWCYeqeHW9DRVEoPuU292NYQ==
-X-Received: by 2002:a05:6512:2520:b0:494:6fbe:2269 with SMTP id be32-20020a056512252000b004946fbe2269mr4951805lfb.387.1662029198290;
-        Thu, 01 Sep 2022 03:46:38 -0700 (PDT)
-Received: from [192.168.1.211] ([37.153.55.125])
-        by smtp.gmail.com with ESMTPSA id h3-20020a056512220300b00492f45cbbfcsm2286586lfu.302.2022.09.01.03.46.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 03:46:37 -0700 (PDT)
-Message-ID: <ff2d8784-0cf9-fac9-4360-71cac30fbd76@linaro.org>
-Date:   Thu, 1 Sep 2022 13:46:36 +0300
+        Thu, 1 Sep 2022 06:47:18 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FB3026122;
+        Thu,  1 Sep 2022 03:47:17 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0F1A86601E0A;
+        Thu,  1 Sep 2022 11:47:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1662029236;
+        bh=601JQW1vRODbZW3nXgrYwKwIYLdatGO7bqQS64cjbC8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=gvIVOPIBzWZGuD6NygXzh1sohbyafn5m4zlspwSvOk7AqMsde4hQLAfTpZRLGT/Xg
+         tZCPVrVupNm/ycsQg0HqK9JAnd7gStXHbCQs/hnoLYCspCe/qIfCqS3tgCPNdjs6sS
+         6ns55hsCsiGqdQjsubmEAVFEAIr1tWG+6jF0V0SgiLyirr7LqTX8z2z8vQEx25L7xu
+         2xXzrL/ZUdOZB7ntAgCtSMwR/pQbOLBKNp236a2yKz2+EFYW2nQ4gkKtpamcIbbFgE
+         dA/wt53VbNU8A3PjajlEJ4BJ2/tgJLW7ng1Zhlr12NCwAZ4urG6dRbPgfbiRq0WfC9
+         7rk9NN0l3hsgQ==
+Message-ID: <532eedc8-b468-4409-1887-8fff264a6486@collabora.com>
+Date:   Thu, 1 Sep 2022 13:47:10 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v6 4/6] clk: qcom: gpucc-sc7280: Add cx collapse reset
- support
-Content-Language: en-GB
-To:     Philipp Zabel <p.zabel@pengutronix.de>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 00/21] Move all drivers to a common dma-buf locking
+ convention
+Content-Language: en-US
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        Daniel Almeida <daniel.almeida@collabora.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Gustavo Padovan <gustavo.padovan@collabora.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
         Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        krzysztof.kozlowski@linaro.org, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1661923108-789-1-git-send-email-quic_akhilpo@quicinc.com>
- <20220831104741.v6.4.I5e64ff4b77bb9079eb2edeea8a02585c9e76778f@changeid>
- <20220901103449.GC32271@pengutronix.de>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20220901103449.GC32271@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
+        Qiang Yu <yuq825@gmail.com>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Lucas Stach <l.stach@pengutronix.de>,
+        Christian Gmeiner <christian.gmeiner@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org,
+        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
+References: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
+ <8322099f-4ef3-6a5d-4a66-27c4b3329884@amd.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <8322099f-4ef3-6a5d-4a66-27c4b3329884@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 13:34, Philipp Zabel wrote:
-> On Wed, Aug 31, 2022 at 10:48:25AM +0530, Akhil P Oommen wrote:
->> Allow a consumer driver to poll for cx gdsc collapse through Reset
->> framework.
->>
->> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> ---
->>
->> (no changes since v3)
->>
->> Changes in v3:
->> - Convert 'struct qcom_reset_ops cx_gdsc_reset' to 'static const' (Krzysztof)
->>
->> Changes in v2:
->> - Minor update to use the updated custom reset ops implementation
->>
->>   drivers/clk/qcom/gpucc-sc7280.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/clk/qcom/gpucc-sc7280.c b/drivers/clk/qcom/gpucc-sc7280.c
->> index 9a832f2..fece3f4 100644
->> --- a/drivers/clk/qcom/gpucc-sc7280.c
->> +++ b/drivers/clk/qcom/gpucc-sc7280.c
->> @@ -433,12 +433,22 @@ static const struct regmap_config gpu_cc_sc7280_regmap_config = {
->>   	.fast_io = true,
->>   };
->>   
->> +static const struct qcom_reset_ops cx_gdsc_reset = {
->> +	.reset = gdsc_wait_for_collapse,
-> 
-> This should be accompanied by a comment explaining the not-quite-reset
-> nature of this workaround, i.e. what is the prerequisite for this to
-> actually work as expected?
-> 
->> +};
->> +
->> +static const struct qcom_reset_map gpucc_sc7280_resets[] = {
->> +	[GPU_CX_COLLAPSE] = { .ops = &cx_gdsc_reset, .priv = &cx_gdsc },
->> +};
->> +
->>   static const struct qcom_cc_desc gpu_cc_sc7280_desc = {
->>   	.config = &gpu_cc_sc7280_regmap_config,
->>   	.clks = gpu_cc_sc7280_clocks,
->>   	.num_clks = ARRAY_SIZE(gpu_cc_sc7280_clocks),
->>   	.gdscs = gpu_cc_sc7180_gdscs,
->>   	.num_gdscs = ARRAY_SIZE(gpu_cc_sc7180_gdscs),
->> +	.resets = gpucc_sc7280_resets,
->> +	.num_resets = ARRAY_SIZE(gpucc_sc7280_resets),
-> 
-> See my comment on patch 2. I think instead of adding a const struct
-> qcom_reset_ops * to gpucc_sc7280_resets, this should just add a const
-> struct reset_control * to gpu_cc_sc7280_desc.
+Hello Christian,
 
-While this will work for the sc7280, the platform that Akhil was 
-developing, this will not work for other platforms (like sm8250), where 
-the dispcc also provides traditional BCR resets.
+On 9/1/22 10:49, Christian König wrote:
+> Hi Dmitry,
+> 
+> I've gone over this multiple times now and while it is still possible
+> that we missed something I think that this should land now.
+
+Thank you very much for the review!
+
+> The whole topic is just to complicated that we can 100% sure guarantee
+> that there isn't anything wrong with the locking, but lockdep and driver
+> testing should allow us to quickly find remaining issues.
+
+At least the most popular drivers should be okay. If anyone will find
+issue introduced by this series, then indeed shouldn't be a problem to
+fix it later on.
+
+> Do you have commit rights to drm-misc-next or should I push it?
+
+I got the drm-misc commit right two weeks ago, haven't pushed anything
+there yet. Please let me try to do the push. I'll let you know if any
+kind of help will be needed from you.
+
+I'll wait for more acks/r-bs and then do the push.
 
 -- 
-With best wishes
+Best regards,
 Dmitry
-

@@ -2,119 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 087565A9FE4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:27:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A659A5A9FF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbiIAT11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48234 "EHLO
+        id S234515AbiIAT1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234254AbiIAT06 (ORCPT
+        with ESMTP id S234470AbiIAT1X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:26:58 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD92196FD4;
-        Thu,  1 Sep 2022 12:26:56 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281JHqPD018228;
-        Thu, 1 Sep 2022 19:26:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=6AjiAER4+ZaB6b+RFmJR/jM7odXFYTlnWKfsob4i6iE=;
- b=ioSKT5Yi5eEAKSOleRfW6suY4vm4HWRdCZlc13PDOp2/U4ANOvZdzBRynT9S2M6ZzO5X
- OV02AY/q+rN8eLBjpeW/yv4MCJ++nxBx1u+4TjQZUMeARsGaKiImKe6+TA5s1yGF74lN
- 95lFILrze7YQdK1Ms9fOE2wxYixY96IYFirE2QnCZsYJ4rKh//GkTAUqos6fRS7SxIm+
- 8YbNlyQ+WlLWxep2QEB4IrhYO1LhLBSsIbjYGM+HXdA9Eu++1BZ+p/W/K/OQSmBp3tlz
- SwBQsTvlTJJFTg0aGXi2asia4NHio6TkK/bP5YWvHmR58p8aUB0CbPi9ba5wr7r7Ehe/ MA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jarc82cgv-1
+        Thu, 1 Sep 2022 15:27:23 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F3D98361;
+        Thu,  1 Sep 2022 12:27:19 -0700 (PDT)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281JHW9P018933;
+        Thu, 1 Sep 2022 19:27:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
+ cc : subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=qcppdkim1; bh=b+gWwkvLqchuyavC4E9TIlQSRmvS/97kUwvoCBaLyq0=;
+ b=HTSOX1rVQ4QfEja3rugzWglHWiWXk7B8de6TrolZemZyfqvy75Hvmuu/XlWnqA+x/TYX
+ vf3u7Ig5EH1UbfnqclKU8+fMvxY58jEvusDVSV4bo4AZeM5QGdUIBJQJE6qCAqe1i3U5
+ uTR+gDLdGPD2r7EklHXbEy8OoNqqZ11LONSq/31M+HrH/amZcznt8T7mtgU7dLizJuqr
+ wu2dnyIehkE/N+mxsj6U7YHgon+Q6sOzJ8p4EB/swLPQLyTQk3H1PH/8y74t2yGGJ8zX
+ UIsW5ZxpSze2spIej10P+5uz05Gx4MBkT1InrO+DUztzj9VplcHDP2P2EjO5Pnnw/Bmb fw== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jabgcvtw3-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 19:26:52 +0000
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 281JQpYs031570
+        Thu, 01 Sep 2022 19:27:14 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 281JREcs009283
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 1 Sep 2022 19:26:51 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+        Thu, 1 Sep 2022 19:27:14 GMT
+Received: from jackp-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Thu, 1 Sep 2022 12:26:51 -0700
-From:   Wesley Cheng <quic_wcheng@quicinc.com>
-To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
-        <Thinh.Nguyen@synopsys.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v7 5/5] usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
-Date:   Thu, 1 Sep 2022 12:26:38 -0700
-Message-ID: <20220901192638.30408-6-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220901192638.30408-1-quic_wcheng@quicinc.com>
-References: <20220901192638.30408-1-quic_wcheng@quicinc.com>
+ 15.2.986.29; Thu, 1 Sep 2022 12:27:13 -0700
+Date:   Thu, 1 Sep 2022 12:27:12 -0700
+From:   Jack Pham <quic_jackp@quicinc.com>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+CC:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: Re: [PATCH v6 1/5] usb: dwc3: Avoid unmapping USB requests if
+ endxfer is not complete
+Message-ID: <20220901192712.GB19313@jackp-linux.qualcomm.com>
+References: <20220901184314.30481-1-quic_wcheng@quicinc.com>
+ <20220901184314.30481-2-quic_wcheng@quicinc.com>
+ <20220901192154.GA19313@jackp-linux.qualcomm.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.49.16.6]
-X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20220901192154.GA19313@jackp-linux.qualcomm.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: cohRL7urN_a62NBGG_mAfeyCqW-cyZ6A
-X-Proofpoint-GUID: cohRL7urN_a62NBGG_mAfeyCqW-cyZ6A
+X-Proofpoint-ORIG-GUID: UpSqkek28FDh2f5T1LDDikBQ-Hu5MdZR
+X-Proofpoint-GUID: UpSqkek28FDh2f5T1LDDikBQ-Hu5MdZR
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- adultscore=0 mlxlogscore=876 lowpriorityscore=0 malwarescore=0
- clxscore=1015 priorityscore=1501 spamscore=0 mlxscore=0 impostorscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 adultscore=0 clxscore=1015 phishscore=0 bulkscore=0
+ priorityscore=1501 mlxlogscore=999 spamscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2207270000 definitions=main-2209010084
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During a cable disconnect sequence, if ep0state is not in the SETUP phase,
-then nothing will trigger any pending end transfer commands.  Force
-stopping of any pending SETUP transaction, and move back to the SETUP
-phase.
+On Thu, Sep 01, 2022 at 12:22:47PM -0700, Jack Pham wrote:
+> Hi Wesley,
+> 
+> On Thu, Sep 01, 2022 at 11:43:10AM -0700, Wesley Cheng wrote:
+> > If DWC3_EP_DELAYED_STOP is set during stop active transfers, then do not
+> > continue attempting to unmap request buffers during dwc3_remove_requests().
+> > This can lead to SMMU faults, as the controller has not stopped the
+> > processing of the TRB.  Defer this sequence to the EP0 out start, which
+> > ensures that there are no pending SETUP transactions before issuing the
+> > endxfer.
+> > 
+> > Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> > ---
+> >  drivers/usb/dwc3/core.h   | 3 +++
+> >  drivers/usb/dwc3/ep0.c    | 5 ++++-
+> >  drivers/usb/dwc3/gadget.c | 6 +++++-
+> >  3 files changed, 12 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > index 4fe4287dc934..7d5d2507244b 100644
+> > --- a/drivers/usb/dwc3/core.h
+> > +++ b/drivers/usb/dwc3/core.h
+> > @@ -1560,6 +1560,7 @@ int dwc3_send_gadget_ep_cmd(struct dwc3_ep *dep, unsigned int cmd,
+> >  int dwc3_send_gadget_generic_command(struct dwc3 *dwc, unsigned int cmd,
+> >  		u32 param);
+> >  void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc);
+> > +void dwc3_remove_requests(struct dwc3 *dwc, struct dwc3_ep *dep, int status);
+> >  #else
+> >  static inline int dwc3_gadget_init(struct dwc3 *dwc)
+> >  { return 0; }
+> > @@ -1581,6 +1582,8 @@ static inline int dwc3_send_gadget_generic_command(struct dwc3 *dwc,
+> >  { return 0; }
+> >  static inline void dwc3_gadget_clear_tx_fifos(struct dwc3 *dwc)
+> >  { }
+> > +static inline void dwc3_remove_requests(struct dwc3 *dwc, struct dwc3_ep *dep)
+> 
+> Oops, you missed updating this with the additional 'status' parameter as
+> well.
 
-Reviewed-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- drivers/usb/dwc3/gadget.c | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+Actually, why even bother having this stub at all? This would only be
+when neither CONFIG_USB_DWC3_GADGET nor CONFIG_USB_DWC3_DUAL_ROLE are
+enabled, but ep0.c itself wouldn't even be compiled in that case.
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index 4721561e4ba5..515980bf61e2 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -3776,13 +3776,24 @@ static void dwc3_gadget_disconnect_interrupt(struct dwc3 *dwc)
- 	reg &= ~DWC3_DCTL_INITU2ENA;
- 	dwc3_gadget_dctl_write_safe(dwc, reg);
- 
-+	dwc->connected = false;
-+
- 	dwc3_disconnect_gadget(dwc);
- 
- 	dwc->gadget->speed = USB_SPEED_UNKNOWN;
- 	dwc->setup_packet_pending = false;
- 	usb_gadget_set_state(dwc->gadget, USB_STATE_NOTATTACHED);
- 
--	dwc->connected = false;
-+	if (dwc->ep0state != EP0_SETUP_PHASE) {
-+		unsigned int    dir;
-+
-+		dir = !!dwc->ep0_expect_in;
-+		if (dwc->ep0state == EP0_DATA_PHASE)
-+			dwc3_ep0_end_control_data(dwc, dwc->eps[dir]);
-+		else
-+			dwc3_ep0_end_control_data(dwc, dwc->eps[!dir]);
-+		dwc3_ep0_stall_and_restart(dwc);
-+	}
- }
- 
- static void dwc3_gadget_reset_interrupt(struct dwc3 *dwc)
+Jack

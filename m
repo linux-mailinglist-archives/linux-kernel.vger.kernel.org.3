@@ -2,156 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B645A89C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C46425A89CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 02:25:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229786AbiIAAYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 20:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
+        id S231874AbiIAAZ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 20:25:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbiIAAYS (ORCPT
+        with ESMTP id S230078AbiIAAZY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 20:24:18 -0400
-Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69F8AE01E7
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 17:24:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1661991858; x=1693527858;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=b+nLJgpn28rI8XB+tceCDIqsNDOgTwY8YQFEJt059HM=;
-  b=BhViqjnAIWncfaSvGVdgcthGu8rzpxkny2DeKzCAGxJiMsnjixH10vaw
-   bk2EZMa+F3BF/h5YIFqj0BoVJxh8Q1P5ujjBvnzkc/MLvuh1OZ7wqeH0G
-   DZhpOSTJXnHb+jkwycUKDTmOzr3Fzo6DBh9IRvBS6+1ndVNTPUpXc3iiB
-   Mdwl693+Gv3YLcxkWDGofILBIzpWWhPiuToJ4VSPE2A12t0kE1yyTRHza
-   Pjb1k7/Z/K/CNPYm1cGaWSkQT9YCF2h4dpnufv2S8IHqROXFvmId6ZPXC
-   wW+8JEU3afLs85F9m9k5Eujllu/tajq9mh4d95YoRj1xfLJzGa2gS9K6D
-   A==;
-X-IronPort-AV: E=Sophos;i="5.93,279,1654531200"; 
-   d="scan'208";a="322283317"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 01 Sep 2022 08:24:03 +0800
-IronPort-SDR: bWfHGvBUtIsRhu2gW4wI1sQb+16uY48gizIIfO0SRv0TELyW0NZfuBam7xaFBqZaUiAFYutGyG
- AXqoS2bcQ2B8bjR5T9itRAxLDky/vDaNtQbJPYoKV1q1BUV2m2wbr/qDlZS9VvOcd+LzN8Xp/m
- Qk3zoe1JcyLkmvprsEyl9gUWqnQOKxJ5IRfIXyZk7W6+giR+KxmEkfLGl1CNPwPFymhrFbvePv
- w2fiIL0QSJQMjPBXqX3RzW8qV+ytPP9PuCN2FX2w4mrdFS7Rs/rIqeVPBBDUvgG98IaWN4RE8g
- AW5chsyrq7XAT11H0YhEb/Z9
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Aug 2022 16:44:32 -0700
-IronPort-SDR: v/9UOPcnz8Ems1wGGgYsjW22qvNwOzpwP3kgodGQsFvvcLSwTJUnycSZKyBr+Pqg7FzrXFw7hY
- Vn8IHZoID5WFaEzEQZl2RcejBUx6CuXxLjWAiGf1wPvJjSpSaZcJQcgsCPmGcCTBsgP1hVlNqw
- 0zOoUno28Sgt2MFAs875mdWhVdJdqCWklD+DR4suai5vKiCwYMYAdc1ZHyouk7w9poPFh5RTBo
- PewKLnGf/liUCGz2tMF4vbEjKimYo5NI2SThqRQrKi+0gdJa1h6N8uJzzg1yKTeYbCgTZYGC7w
- 9IE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 31 Aug 2022 17:24:03 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4MJ1xZ417vz1Rwtm
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 17:24:02 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1661991841; x=1664583842; bh=b+nLJgpn28rI8XB+tceCDIqsNDOgTwY8YQF
-        EJt059HM=; b=JTtFZkmw3v192aUDwLFkhQq3NUpdFAX9T6Tkbf6SytEuCZljEm0
-        0tdUyXI9KCRsrvUkH8MUnhWFEDYuntoSdItWs5IO43ThROrLE0RslYLWhRueFKwh
-        URGER98smDL4qW9BPDGBP9delJtcMgX6mJ6LvR5bRDz2WDXTnZKdzEpi6h+S6Z1L
-        MYhFhXqAE+xFbynyGtZavdV3lpN7LIaff7I7a5FxhRjNi7oWemdlhLpCD9pVYYr6
-        QribCWlWQujm+0XaHJIp1Bh8TGF9qXEAyQRKFi3SoG1tpoPgOJ8ZP2zwZFYuSLyv
-        3J2gu02nPatjI+INajmjSbwuRsWNN6Npsfg==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id NYy141TaSYGy for <linux-kernel@vger.kernel.org>;
-        Wed, 31 Aug 2022 17:24:01 -0700 (PDT)
-Received: from [10.225.163.56] (unknown [10.225.163.56])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4MJ1xX1klHz1RvLy;
-        Wed, 31 Aug 2022 17:24:00 -0700 (PDT)
-Message-ID: <b2a4ba8c-c67b-3041-9b81-783611de0763@opensource.wdc.com>
-Date:   Thu, 1 Sep 2022 09:23:58 +0900
+        Wed, 31 Aug 2022 20:25:24 -0400
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498294DB73
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 17:25:21 -0700 (PDT)
+Received: by mail-vs1-xe2d.google.com with SMTP id b128so12583288vsc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 17:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=AGblqMJVeqiqTttXs8s6V0HV5agdHnP9p/xnbjr8B0c=;
+        b=rNNkzHg+zTKGXzIjelCj5tVA/SWTxmt6zMstgmkxQJ+y4DLTwa2FggUUdbK2nobN8q
+         Ah1N1gL1njUGKNEbP1VSpNIQRxMaL/xgz/o8u1HayqtpYrw+SICupqAXBUR7GU/dySkX
+         /QdcuAvybWi+ncwXwwz91j7mPRhsPh58Hajpr9QPup8pE5aAPalZQt+KO7x4zwhYjEwL
+         8druejYou1nVv4FmH0UGESWUwD4Bf/7M22uk6/pRiU+GG1MSSlU5SsrLw3d6c1yoOZxD
+         tZPb1fzq/8AY+T6ZQdu9Y1JJKVhUsDrEU0jBxMg3+H9yoxzjumBdtBgul0RM5Eo+Ohht
+         BBpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=AGblqMJVeqiqTttXs8s6V0HV5agdHnP9p/xnbjr8B0c=;
+        b=uvwTzOUnp9T0hf3cH923bSU91OLhNkC+1RgcuslHv3CfqkRm4nQh+1inl6wYFLodyA
+         Ijd24Nq0GYFi3UF8kIOzXsMmPZt9kOTBiNxoXfNXFjwkG6y3gBtltHzV8wj6x4tNQb9Q
+         hinxgXORSxn08CgArcjjX/jMoU/8AUnR7YB3jhgnYHdIEwnVFYPC4ZqTfcpCepfHhfts
+         Eooa+KDYq9191kcJsmqeAWPdFr4hUeQjT4vwTq4+Ykl+dP8DirPdoxOU8ALV9QvtP5t6
+         SRpwyKG66mJvnnBq+yOLbQ/mf00VhNVHDoKQ3PAvO0daYeksX+AEfW0M5CHCCOfG3wsE
+         0Zkg==
+X-Gm-Message-State: ACgBeo2/QAHNW8TT9tLbZQmfgM/QYOEFTuZH/v4w1dvvL1OvHeu7mNXA
+        1jPAZgxDY99Zr51j6f+QUctXZu1lXcp6zR44G73law==
+X-Google-Smtp-Source: AA6agR6ZSxxR/lJdTS2J/z5wkfKlYaaaUZqO+2MkqmK4V55gn/u+LkXUcGZU2TnuvZhTvo5q1P4Ah77ta2+R39O0njM=
+X-Received: by 2002:a05:6102:5094:b0:388:6903:5f09 with SMTP id
+ bl20-20020a056102509400b0038869035f09mr7218977vsb.46.1661991920124; Wed, 31
+ Aug 2022 17:25:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] scsi: csiostor: convert sysfs snprintf to sysfs_emit
-To:     Xuezhi Zhang <zhangxuezhi3@gmail.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, bvanassche@acm.org,
-        johannes.thumshirn@wdc.com, himanshu.madhani@oracle.com,
-        zhangxuezhi1@coolpad.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220831141046.406837-1-zhangxuezhi3@gmail.com>
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220831141046.406837-1-zhangxuezhi3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220829232934.3277747-1-yuzhao@google.com> <20220831063818.3902572-1-yuzhao@google.com>
+ <747f76e1-a5ec-150c-311e-a60396f6f7ab@oracle.com>
+In-Reply-To: <747f76e1-a5ec-150c-311e-a60396f6f7ab@oracle.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Wed, 31 Aug 2022 18:24:43 -0600
+Message-ID: <CAOUHufYHh3B6A8_pAusnW5==r3VhPxy6bOoUHbxe0qvhNGovqA@mail.gmail.com>
+Subject: Re: [PATCH v2] Revert "swiotlb: panic if nslabs is too small"
+To:     Dongli Zhang <dongli.zhang@oracle.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        iommu@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kernel test robot <lkp@intel.com>,
+        Dan Carpenter <dan.carpenter@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/22 23:10, Xuezhi Zhang wrote:
-> From: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> 
-> Fix up all sysfs show entries to use sysfs_emit
-> 
-> Signed-off-by: Xuezhi Zhang <zhangxuezhi1@coolpad.com>
-> ---
->  drivers/scsi/csiostor/csio_scsi.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/scsi/csiostor/csio_scsi.c b/drivers/scsi/csiostor/csio_scsi.c
-> index 9aafe0002ab1..39e8c3c26a19 100644
-> --- a/drivers/scsi/csiostor/csio_scsi.c
-> +++ b/drivers/scsi/csiostor/csio_scsi.c
-> @@ -1366,9 +1366,9 @@ csio_show_hw_state(struct device *dev,
->  	struct csio_hw *hw = csio_lnode_to_hw(ln);
->  
->  	if (csio_is_hw_ready(hw))
-> -		return snprintf(buf, PAGE_SIZE, "ready\n");
-> +		return sysfs_emit(buf, "ready\n");
->  	else
+On Wed, Aug 31, 2022 at 4:20 PM Dongli Zhang <dongli.zhang@oracle.com> wrote:
+>
+> Hi Yu,
+>
+> As we discussed in the past, the swiotlb panic on purpose
 
-While at it, you could remove this useless else here.
+We should not panic() at all, especially on a platform that has been
+working well since at least 4.14.
 
-> -		return snprintf(buf, PAGE_SIZE, "not ready\n");
-> +		return sysfs_emit(buf,  "not ready\n");
+Did you check out this link I previously shared with you?
+https://lore.kernel.org/r/CAHk-=wit-DmhMfQErY29JSPjFgebx_Ld+pnerc4J2Ag990WwAA@mail.gmail.com/
 
-Extra space after the ",".
+> because the
+> mips/cavium-octeon/dma-octeon.c requests to allocate only PAGE_SIZE swiotlb
+> buffer.
 
+What's wrong with PAGE_SIZE swiotlb?
+
+> This is smaller than IO_TLB_MIN_SLABS.
+
+IO_TLB_MIN_SLABS is an arbitrary number, and it's inherited from IA64.
+So does the comment below. What exactly is the rationale behind it?
+
+> The below comments mentioned that IO_TLB_MIN_SLABS is the "Minimum IO TLB size
+> to bother booting with".
+>
+> 56 /*
+> 57  * Minimum IO TLB size to bother booting with.  Systems with mainly
+> 58  * 64bit capable cards will only lightly use the swiotlb.  If we can't
+> 59  * allocate a contiguous 1MB, we're probably in trouble anyway.
+> 60  */
+> 61 #define IO_TLB_MIN_SLABS ((1<<20) >> IO_TLB_SHIFT)
+>
+>
+> The arm may create swiotlb conditionally. That is, the swiotlb is not
+> initialized if (1) CONFIG_ARM_LPAE is not set (line 273), or (2) max_pfn <=
+> arm_dma_pfn_limit (line 274).
+>
+> arch/arm/mm/init.c
+>
+> 271 void __init mem_init(void)
+> 272 {
+> 273 #ifdef CONFIG_ARM_LPAE
+> 274         swiotlb_init(max_pfn > arm_dma_pfn_limit, SWIOTLB_VERBOSE);
+> 275 #endif
+> 276
+> 277         set_max_mapnr(pfn_to_page(max_pfn) - mem_map);
+>
+>
+> On x86, the swiotlb is not initialized if the memory is small (> MAX_DMA32_PFN,
+> at line 47), or the secure memory is not required.
+>
+> 44 static void __init pci_swiotlb_detect(void)
+> 45 {
+> 46         /* don't initialize swiotlb if iommu=off (no_iommu=1) */
+> 47         if (!no_iommu && max_possible_pfn > MAX_DMA32_PFN)
+> 48                 x86_swiotlb_enable = true;
+> 49
+> 50         /*
+> 51          * Set swiotlb to 1 so that bounce buffers are allocated and used for
+> 52          * devices that can't support DMA to encrypted memory.
+> 53          */
+> 54         if (cc_platform_has(CC_ATTR_HOST_MEM_ENCRYPT))
+> 55                 x86_swiotlb_enable = true;
+> 56
+> 57         /*
+> 58          * Guest with guest memory encryption currently perform all DMA through
+> 59          * bounce buffers as the hypervisor can't access arbitrary VM memory
+> 60          * that is not explicitly shared with it.
+> 61          */
+> 62         if (cc_platform_has(CC_ATTR_GUEST_MEM_ENCRYPT)) {
+> 63                 x86_swiotlb_enable = true;
+> 64                 x86_swiotlb_flags |= SWIOTLB_FORCE;
+> 65         }
+> 66 }
+
+Thanks for the code snippets. But I failed to see a point.
+
+> Regardless whether the current patch will be reverted, unless there is specific
+> reason (e.g., those PAGE_SIZE will be used), I do not think it is a good idea to
+> allocate <IO_TLB_MIN_SLABS swiotlb buffer.
+
+For what specific reason? My current understanding is that you want to
+be future/fool-proof. If so, then you got the priority wrong. We need
+to make sure currently working systems continue to work first, then
+future/fool-proof.
+
+> I will wait for the suggestion from
+> the swiotlb maintainer.
+
+Chris is on vacation. I sure can wait.
+
+But it sounds like you are unsure about what to do. If so, it's not
+what you claimed "we have already understood everything related to
+swiotlb" previously.
+
+> Since I do not have a mips environment, I am not able to test if the below makes
+> any trouble in your situation at arch/mips/cavium-octeon/dma-octeon.c.
+>
+> @@ -234,6 +234,8 @@ void __init plat_swiotlb_setup(void)
+>                 swiotlbsize = 64 * (1<<20);
+>  #endif
+>
+> -       swiotlb_adjust_size(swiotlbsize);
+> -       swiotlb_init(true, SWIOTLB_VERBOSE);
+> +       if (swiotlbsize != PAGE_SIZE) {
+> +               swiotlb_adjust_size(swiotlbsize);
+> +               swiotlb_init(true, SWIOTLB_VERBOSE);
+> +       }
 >  }
->  
->  /* Device reset */
-> @@ -1430,7 +1430,7 @@ csio_show_dbg_level(struct device *dev,
->  {
->  	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
->  
-> -	return snprintf(buf, PAGE_SIZE, "%x\n", ln->params.log_level);
-> +	return sysfs_emit(buf, "%x\n", ln->params.log_level);
->  }
->  
->  /* Store debug level */
-> @@ -1476,7 +1476,7 @@ csio_show_num_reg_rnodes(struct device *dev,
->  {
->  	struct csio_lnode *ln = shost_priv(class_to_shost(dev));
->  
-> -	return snprintf(buf, PAGE_SIZE, "%d\n", ln->num_reg_rnodes);
-> +	return sysfs_emit(buf, "%d\n", ln->num_reg_rnodes);
->  }
->  
->  static DEVICE_ATTR(num_reg_rnodes, S_IRUGO, csio_show_num_reg_rnodes, NULL);
 
--- 
-Damien Le Moal
-Western Digital Research
-
+Please ask the MIPS/Octeon maintainers to check this first.

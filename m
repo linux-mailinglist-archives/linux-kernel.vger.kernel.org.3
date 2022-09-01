@@ -2,224 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF155A9DF2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:24:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C10915A9DF5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:25:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbiIARYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:24:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S233516AbiIARZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiIARYQ (ORCPT
+        with ESMTP id S232128AbiIARZo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:24:16 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A58F15A174;
-        Thu,  1 Sep 2022 10:24:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662053055; x=1693589055;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=E8rFsh3cOY6TR7v1pVGIy4bcSAYXEqYJdeSl8HkWbzs=;
-  b=MaOl98FUSw0hEb3jtBozOS1jfe62pdGnYqW4S07aGdaboozrf4SB08Q6
-   pMaDlhrNIZxc0HCIBKvnOtN2TIicl8vpUaaiUA4p2Z8XOO7ZQefENu9+Q
-   I95zN3U+iHyKOfaSgBIV7Di10v9OS+LQHH84OLauzVai5TcSZNEz2TGIS
-   1Xdq0EkpJc9xNlzn3AWEIasCseFDVCxoQukbvjp5PU6gpi6lWWXDMcYTh
-   Bp5IYBeTnIPRbcW3NXboJ6YoGAEyHIvnsSy29fC20PkePFbPceroQJqyW
-   Z4AoQm9TAOkar6tPZZy8z5FXB9VfGlX0qsBdvo3xhKyK78KEukrCpkwD1
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="382075432"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="382075432"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 10:24:15 -0700
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="612589501"
-Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.209.165.86]) ([10.209.165.86])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 10:24:14 -0700
-Message-ID: <2450a184-3a97-f45e-b56a-b5e0ae85df19@intel.com>
-Date:   Thu, 1 Sep 2022 10:24:13 -0700
+        Thu, 1 Sep 2022 13:25:44 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564392E9E2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:25:43 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id z187so18073467pfb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:25:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=b7m23koJ1VppwfdVnRo0EjHn4J3Xyy4vt6H6+/PQAvc=;
+        b=Mtu6yhsvW8qiKbyEly7EpT1duLSR1DH5Xjg+oh1zWg4osVtwVvkuniTTXCxk7YysNU
+         /stFYJp+dxJTmgFqtMSuTLfClSNXUj1S+a4sBMJJ/6YePuflPUzI7lq3P+YvUDal9FB1
+         K2FYWmgbKDpZld2MLf+NS/szmQ7c19keXbZcM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=b7m23koJ1VppwfdVnRo0EjHn4J3Xyy4vt6H6+/PQAvc=;
+        b=nz6kIXbQjeh75tLSMT7qRsLJPMs3mRwPvgay0sLy5SIv6Tp2/IrUIXIWnsTXlkZH6i
+         1tsr/NF5kIGRpED223JfVwCGCUGkKx1V0CM8n0K1oPJOdAyx4bFicUw1UZIV0B2UVyXh
+         xQtoN4dZkhN2T+6Xahn2eQTw3uWptDwl9t9o44mQNs8VcYDVkMgnL5cw8TDuWJX+u3CO
+         G2jxx1+vv8emP+z744nzeHvr4pj7m0WjOj/rYm/BMvj4KVYcPUf6u/Fk8zJRCfE6GqFD
+         CNAOwM/9zvNp4kH2xOhyl9vc1JgCY4p6lG4fQBRDK4gsbbIplQCt86D82FkbMLkehf4u
+         WrDg==
+X-Gm-Message-State: ACgBeo1vzRV8cGToXhkRAeGl6hzVAULorSM8Ul8IMgweJeT+LR0YBLyE
+        WsgK/d9aFe01zLT7be51ILCo3w==
+X-Google-Smtp-Source: AA6agR6lKIv9iH6jOojdIWEvRNKtfkVnpIQauHMaIBrvj9jiSNYExlbDTYtiTUYW1ZzzKIyOMj7qFA==
+X-Received: by 2002:a05:6a00:a05:b0:534:b1ad:cfac with SMTP id p5-20020a056a000a0500b00534b1adcfacmr31672604pfh.35.1662053142874;
+        Thu, 01 Sep 2022 10:25:42 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:34cd:3659:c11f:5d05])
+        by smtp.gmail.com with UTF8SMTPSA id n6-20020a170903110600b0016ee26224a4sm9084805plh.305.2022.09.01.10.25.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 10:25:42 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 10:25:41 -0700
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: qcom: sc7180: Configure USB as wakeup source
+Message-ID: <YxDrFUsWZvy7IUBs@google.com>
+References: <20220901101658.1.I347ea409ee3134bd32a29e33fecd1a6ef32085a0@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.0
-Subject: Re: [PATCH v5 6/7] dmaengine: idxd: Support device_tx_status
-To:     Ben Walker <benjamin.walker@intel.com>, vkoul@kernel.org
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Fenghua Yu <fenghua.yu@intel.com>
-References: <20220622193753.3044206-1-benjamin.walker@intel.com>
- <20220829203537.30676-1-benjamin.walker@intel.com>
- <20220829203537.30676-7-benjamin.walker@intel.com>
-Content-Language: en-US
-From:   Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20220829203537.30676-7-benjamin.walker@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220901101658.1.I347ea409ee3134bd32a29e33fecd1a6ef32085a0@changeid>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 8/29/2022 1:35 PM, Ben Walker wrote:
-> This can now be supported even for devices that complete operations out
-> of order. Add support for directly polling transactions.
->
-> Cc: Dave Jiang <dave.jiang@intel.com>
-> Cc: Fenghua Yu <fenghua.yu@intel.com>
-> Signed-off-by: Ben Walker <benjamin.walker@intel.com>
+On Thu, Sep 01, 2022 at 10:17:03AM -0700, Matthias Kaehlcke wrote:
+> The dwc3 USB controller of the sc7180 supports USB remote
+> wakeup, configure it as a wakeup source.
+> 
+> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
 > ---
->   drivers/dma/idxd/device.c |  1 +
->   drivers/dma/idxd/dma.c    | 85 ++++++++++++++++++++++++++++++++++++++-
->   drivers/dma/idxd/idxd.h   |  1 +
->   3 files changed, 85 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-> index 5a8cc52c1abfd..752544bef4551 100644
-> --- a/drivers/dma/idxd/device.c
-> +++ b/drivers/dma/idxd/device.c
-> @@ -148,6 +148,7 @@ int idxd_wq_alloc_resources(struct idxd_wq *wq)
->   			desc->iax_completion = &wq->iax_compls[i];
->   		desc->compl_dma = wq->compls_addr + idxd->data->compl_size * i;
->   		desc->id = i;
-> +		desc->gen = 1;
->   		desc->wq = wq;
->   		desc->cpu = -1;
->   	}
-> diff --git a/drivers/dma/idxd/dma.c b/drivers/dma/idxd/dma.c
-> index e0874cb4721c8..dda5342d273f4 100644
-> --- a/drivers/dma/idxd/dma.c
-> +++ b/drivers/dma/idxd/dma.c
-> @@ -12,6 +12,23 @@
->   #include "registers.h"
->   #include "idxd.h"
->   
+> 
+>  arch/arm64/boot/dts/qcom/sc7180.dtsi | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> index 2d1f38342858..507718f309e1 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+> @@ -2780,7 +2780,9 @@ usb_1: usb@a6f8800 {
+>  					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3 0>;
+>  			interconnect-names = "usb-ddr", "apps-usb";
+>  
+> -			usb_1_dwc3: dwc3@a600000 {
+> +			wakeup-source;
 > +
-> +#define DMA_COOKIE_BITS (sizeof(dma_cookie_t) * 8)
-> +/*
-> + * The descriptor id takes the lower 16 bits of the cookie.
-> + */
-> +#define DESC_ID_BITS 16
-> +#define DESC_ID_MASK ((1 << DESC_ID_BITS) - 1)
-> +/*
-> + * The 'generation' is in the upper half of the cookie. But dma_cookie_t
-> + * is signed, so we leave the upper-most bit for the sign. Further, we
-> + * need to flag whether a cookie corresponds to an operation that is
-> + * being completed via interrupt to avoid polling it, which takes
-> + * the second most upper bit. So we subtract two bits from the upper half.
-> + */
-> +#define DESC_GEN_MAX ((1 << (DMA_COOKIE_BITS - DESC_ID_BITS - 2)) - 1)
-> +#define DESC_INTERRUPT_FLAG (1 << (DMA_COOKIE_BITS - 2))
-> +
->   static inline struct idxd_wq *to_idxd_wq(struct dma_chan *c)
->   {
->   	struct idxd_dma_chan *idxd_chan;
-> @@ -158,13 +175,67 @@ static void idxd_dma_free_chan_resources(struct dma_chan *chan)
->   		idxd_wq_refcount(wq));
->   }
->   
-> +
+> +			usb_1_dwc3: usb@a600000 {
 
-Stray blank line
+Please disregard this version, it is based on a downstream branch which I used
+for testing.
 
-DJ
-
->   static enum dma_status idxd_dma_tx_status(struct dma_chan *dma_chan,
->   					  dma_cookie_t cookie,
->   					  struct dma_tx_state *txstate)
->   {
-> -	return DMA_OUT_OF_ORDER;
-> +	u8 status;
-> +	struct idxd_wq *wq;
-> +	struct idxd_desc *desc;
-> +	u32 idx;
-> +
-> +	memset(txstate, 0, sizeof(*txstate));
-> +
-> +	if (dma_submit_error(cookie))
-> +		return DMA_ERROR;
-> +
-> +	wq = to_idxd_wq(dma_chan);
-> +
-> +	idx = cookie & DESC_ID_MASK;
-> +	if (idx >= wq->num_descs)
-> +		return DMA_ERROR;
-> +
-> +	desc = wq->descs[idx];
-> +
-> +	if (desc->txd.cookie != cookie) {
-> +		/*
-> +		 * The user asked about an old transaction
-> +		 */
-> +		return DMA_COMPLETE;
-> +	}
-> +
-> +	/*
-> +	 * For descriptors completed via interrupt, we can't go
-> +	 * look at the completion status directly because it races
-> +	 * with the IRQ handler recyling the descriptor. However,
-> +	 * since in this case we can rely on the interrupt handler
-> +	 * to invalidate the cookie when the command completes we
-> +	 * know that if we get here, the command is still in
-> +	 * progress.
-> +	 */
-> +	if ((cookie & DESC_INTERRUPT_FLAG) != 0)
-> +		return DMA_IN_PROGRESS;
-> +
-> +	status = desc->completion->status & DSA_COMP_STATUS_MASK;
-> +
-> +	if (status) {
-> +		/*
-> +		 * Check against the original status as ABORT is software defined
-> +		 * and 0xff, which DSA_COMP_STATUS_MASK can mask out.
-> +		 */
-> +		if (unlikely(desc->completion->status == IDXD_COMP_DESC_ABORT))
-> +			idxd_dma_complete_txd(desc, IDXD_COMPLETE_ABORT, true);
-> +		else
-> +			idxd_dma_complete_txd(desc, IDXD_COMPLETE_NORMAL, true);
-> +
-> +		return DMA_COMPLETE;
-> +	}
-> +
-> +	return DMA_IN_PROGRESS;
->   }
->   
-> +
->   /*
->    * issue_pending() does not need to do anything since tx_submit() does the job
->    * already.
-> @@ -181,7 +252,17 @@ static dma_cookie_t idxd_dma_tx_submit(struct dma_async_tx_descriptor *tx)
->   	int rc;
->   	struct idxd_desc *desc = container_of(tx, struct idxd_desc, txd);
->   
-> -	cookie = dma_cookie_assign(tx);
-> +	cookie = (desc->gen << DESC_ID_BITS) | (desc->id & DESC_ID_MASK);
-> +
-> +	if ((desc->hw->flags & IDXD_OP_FLAG_RCI) != 0)
-> +		cookie |= DESC_INTERRUPT_FLAG;
-> +
-> +	if (desc->gen == DESC_GEN_MAX)
-> +		desc->gen = 1;
-> +	else
-> +		desc->gen++;
-> +
-> +	tx->cookie = cookie;
->   
->   	rc = idxd_submit_desc(wq, desc);
->   	if (rc < 0) {
-> diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
-> index bd93ada32c89d..d4f0227895075 100644
-> --- a/drivers/dma/idxd/idxd.h
-> +++ b/drivers/dma/idxd/idxd.h
-> @@ -326,6 +326,7 @@ struct idxd_desc {
->   	struct llist_node llnode;
->   	struct list_head list;
->   	u16 id;
-> +	u16 gen;
->   	int cpu;
->   	struct idxd_wq *wq;
->   };
+>  				compatible = "snps,dwc3";
+>  				reg = <0 0x0a600000 0 0xe000>;
+>  				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
+> -- 
+> 2.37.2.789.g6183377224-goog
+> 

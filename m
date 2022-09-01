@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B9955A9417
+	by mail.lfdr.de (Postfix) with ESMTP id 32D2D5A9416
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:17:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233150AbiIAKRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36768 "EHLO
+        id S233439AbiIAKRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:17:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233317AbiIAKRH (ORCPT
+        with ESMTP id S230064AbiIAKRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:17:07 -0400
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39FB241992;
-        Thu,  1 Sep 2022 03:16:55 -0700 (PDT)
-Received: by mail-qv1-f44.google.com with SMTP id d1so13089052qvs.0;
-        Thu, 01 Sep 2022 03:16:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=iFMVcT4IdQ5sgAT4Vpsh6IRTvv9s1H3TO8+JQ00SHhQ=;
-        b=cWmK99T34xpyBKRawfAdzNrc/njM/AgeSqii2aKxZ5iuN9dJ4CtdwP3fdumGicUaNN
-         uvZNI1retDQG3wdNMmkBSvg6oqhHq5+gvjeKR08iz3lVVx2h6CCBwpIogv0S+mMvZnQg
-         mlZQzbDEzA+Dk42RS0cKZhwyVWBbwTaVyWX0wfrfIDVB+lkaQxpcIJxKXd5XEvSvnmvy
-         e/4Oh5CsBsrmiN8KRQ+Mr5t5LCWVpBYa1tS3DX9HkoosA3LN6IZGY4ffOz9s3+W2R+yV
-         tIgNdqqA/AXtU6nd3b1R6bFz9wfBcQ3GJc8Etw9XwnstKfBe95toBFw7nbMGafU9X+Qz
-         EwlQ==
-X-Gm-Message-State: ACgBeo3BMpsCd33qbPvi4duZgpijUdQMuRAQgN+y+RTlvaHGHJXzc2iD
-        1C9P8TbkBFNvGbsv9Orb8LG32ymkH49keQ==
-X-Google-Smtp-Source: AA6agR7dXGdz7GVkhKPsjQWKRefzsInrURt53lCEwtR8koGum3ezBOHqIG0mVzJvHKkjnqQGqYEyFA==
-X-Received: by 2002:a05:6214:500f:b0:497:9de3:3327 with SMTP id jo15-20020a056214500f00b004979de33327mr24077987qvb.23.1662027413169;
-        Thu, 01 Sep 2022 03:16:53 -0700 (PDT)
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
-        by smtp.gmail.com with ESMTPSA id h12-20020a05620a284c00b006b9bf03d9c6sm12079995qkp.104.2022.09.01.03.16.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 03:16:52 -0700 (PDT)
-Received: by mail-yb1-f174.google.com with SMTP id 123so7920448ybv.7;
-        Thu, 01 Sep 2022 03:16:52 -0700 (PDT)
-X-Received: by 2002:a05:6902:4c7:b0:69a:9e36:debe with SMTP id
- v7-20020a05690204c700b0069a9e36debemr15547199ybs.543.1662027412541; Thu, 01
- Sep 2022 03:16:52 -0700 (PDT)
+        Thu, 1 Sep 2022 06:17:08 -0400
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 525D8133F08
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:17:05 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowAAXDFGShhBjt9wJAA--.12852S2;
+        Thu, 01 Sep 2022 18:16:52 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     hdegoede@redhat.com, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: Re: Re: [PATCH v2 1/2] virt: vbox: Add check for device_create_file
+Date:   Thu,  1 Sep 2022 18:16:49 +0800
+Message-Id: <20220901101649.3499848-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220726174525.620-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220726174525.620-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 1 Sep 2022 12:16:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUKQZcKTJ0v4Rim2gbRMBOeUqN6w6GohXYJyi9mLicGXw@mail.gmail.com>
-Message-ID: <CAMuHMdUKQZcKTJ0v4Rim2gbRMBOeUqN6w6GohXYJyi9mLicGXw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: clock: renesas,rzg2l: Document RZ/Five SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: rQCowAAXDFGShhBjt9wJAA--.12852S2
+X-Coremail-Antispam: 1UD129KBjvJXoWrKF1DKrWDCryDKry5CFyxGrg_yoW8JrW8pa
+        95GFy5KF18W348Gw47ZF4DXwn8CrWUAayxZ347G3y7Wr13Ars3tay3AFy8ZrZxJFZxJF4a
+        qa1UKrWku3y8KFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkm14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY02Avz4vE14v_Gw1l
+        42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJV
+        WUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAK
+        I48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r
+        4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5pBTUUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 7:45 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> The CPG block on the RZ/Five SoC is almost identical to one found on the
-> RZ/G2UL SoC. "renesas,r9a07g043-cpg" compatible string will be used on
-> the RZ/Five SoC so to make this clear, update the comment to include
-> RZ/Five SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+On Thu, Sep 01, 2022 at 05:39:46PM +0800, Greg KH wrote:
+>> -	device_create_file(dev, &dev_attr_host_version);
+>> -	device_create_file(dev, &dev_attr_host_features);
+>> +
+>> +	ret = device_create_file(gdev->dev, &dev_attr_host_features);
+>> +	if (ret)
+>> +		goto err_unregister_misc_device_user;
+>> +	ret = device_create_file(gdev->dev, &dev_attr_host_version);
+>> +	if (ret)
+>> +		goto err_remove_file_features;
+>>  
+>>  	vbg_info("vboxguest: misc device minor %d, IRQ %d, I/O port %x, MMIO at %pap (size %pap)\n",
+>>  		 gdev->misc_device.minor, pci->irq, gdev->io_port,
+>> @@ -399,6 +404,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+>>  
+>>  	return 0;
+>>  
+>> +err_remove_file_features:
+>> +	device_remove_file(gdev->dev, &dev_attr_host_features);
+> Please make a patch series that is linked together, the one you just did
+> was not properly threaded at all (hint, use git send-email).
+> 
+> And again, this is not the correct way to solve this issue, use a
+> default attribute group for the driver instead.  No driver should ever
+> be adding or removing files individually like this.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-clk-for-v6.1.
+Need I use the group to replace the individually removal in
+vbg_pci_remove() too?
 
-Gr{oetje,eeting}s,
+Thanks,
+Jiang
 
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

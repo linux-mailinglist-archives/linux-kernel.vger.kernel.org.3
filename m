@@ -2,69 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70CA85A9407
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CA915A9409
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:16:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233792AbiIAKPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59592 "EHLO
+        id S229639AbiIAKPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233572AbiIAKPG (ORCPT
+        with ESMTP id S233753AbiIAKPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:15:06 -0400
-Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 496BD1D0D4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:15:04 -0700 (PDT)
-Received: by mail-lf1-x12e.google.com with SMTP id v26so13462169lfd.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:15:04 -0700 (PDT)
+        Thu, 1 Sep 2022 06:15:08 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6631326D3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:15:05 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id se27so25908850ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:15:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc;
-        bh=UfjJiZEAo19qjNND3CHqX4TJIKByuTN8Q8XFKaEmWz8=;
-        b=TKrsf52Q9ddOKrIePHpowifFuaGXZwGr7nnqt5/5qxzHukoBbU1LFhbXr0TYtxU037
-         ENlh5/9bMNjo6uoA8dravtDhpiWKCxQnF24CDyY1TnirQOEpWKPTRCJNjtdjWodSf0g8
-         1pau6sAowWb/DJYJfEzXeLMcwvbRga7nxpC/Icl2TjeZt9wqm11NCmDNSn12B7pGF4hI
-         XwSqVYXrVki9il3F221JSZnTBCOETdTPyjDqRGdEEaNx5yheEgoLzUSVqz/t3gfg6QSp
-         zfDO4QLW52Yjqa3WBS0Xyg5+EVEyXSlCwFm83mAmzh2ht8ywHoLfD4by4mUmff3rBgcb
-         gndQ==
+        d=tessares.net; s=google;
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:from:to:cc;
+        bh=epf+Q54XZk9zXGQT4gxazcQCwv6mPJH3vEMEJMYkLpQ=;
+        b=svWAOc6qtTPFNYvoedLJ0EIDEBYH3VtuN1KYrRdz/3ux3M262vUBk9X9A7+PD/sRBo
+         P8KzzDb3pp0d+okHiisztAe7LJelmTgk6//R4KBTId+WZpF9yvtrYQ+lUhNcK/S4BS6H
+         HSkja6e/5Qw8GRVwqPB+r+8/xcBZqHyiN0P7SvWyPCIRG6rZziKGJMO/DmZVXHRyncPw
+         zrTYtyGxxl2NSyXh0b5e8CaTHgnjK2Nc+0tWWdrL3WHo2jkgHXa/6GrxzJlHjdOo3z3b
+         Oou0im51I/7GRaOj2tr9le0YMylGFAlZdp4pDT12DEdgp+9LvmLMbvaC0b5bXcA+beRa
+         uqqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc;
-        bh=UfjJiZEAo19qjNND3CHqX4TJIKByuTN8Q8XFKaEmWz8=;
-        b=xTsyOeyOa4lyKECk5HrlA2EQq0FZenuDc26h2uoHLsl1E0CdzUT/Frh53xt/fl6EeJ
-         W9SJgROeL7t+pT0pAMcZjec+VHo2RFZs5hYzggVZkVjTYDt/I0i8uaXqSseicZvlTDP2
-         yxbrnplSR45FcsLiXFFlHh9BkRIkfjSMrGGP3yA5WowT48o5DhpY5V4b6G1h0HyTugev
-         U7546cNoviupQ6hmY7j9HsYf0HqpoNTMgdNCFqlIxo1GKcjxHap1I400TX57nb84qhRU
-         pObToCmWF+RYTeW0zsOtPZZGE84osEPymiGUX6maezyi74X4mb8al66ItybzZ0bumxq6
-         ofXg==
-X-Gm-Message-State: ACgBeo0Esm0fBcwKdkfdMzPO81JHKXmWfX+a+dxuAuR/OmLVb7oqemTv
-        Du40aTO/42k5EOZ2tfwSEXT0ng==
-X-Google-Smtp-Source: AA6agR5f7OH/NaeXRFpefaOH5s/hdNZXALvs+nG+rRPEVpI0nAU3tYg/eaf9gChB/xIQn9Mkzif8eg==
-X-Received: by 2002:a05:6512:2255:b0:492:ebbb:5f0d with SMTP id i21-20020a056512225500b00492ebbb5f0dmr9923411lfu.304.1662027302632;
-        Thu, 01 Sep 2022 03:15:02 -0700 (PDT)
-Received: from krzk-bin.. (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id 189-20020a2e05c6000000b00261ca0f940esm1266565ljf.62.2022.09.01.03.15.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 03:15:02 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ASoC: codecs: rk817: drop I2C dependencies
-Date:   Thu,  1 Sep 2022 13:14:58 +0300
-Message-Id: <20220901101458.365354-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220901101458.365354-1-krzysztof.kozlowski@linaro.org>
-References: <20220901101458.365354-1-krzysztof.kozlowski@linaro.org>
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc;
+        bh=epf+Q54XZk9zXGQT4gxazcQCwv6mPJH3vEMEJMYkLpQ=;
+        b=V9Toq+puhaaolZOfOAE4J9eiymn8hi9P6QUh/SHK2kbYSxJbeioGUa3CRLDTy3M+N7
+         JBcoq/YiNH9urpstVKFUq8mBYZnmr2kkA77m9lIAD8FX8e8Mx0hcRV+HlFD2soEsrH4Y
+         JiuXXStn38k2Te3OPqG6WL5ghDrsb07Rh4ezP64CS15AiAYKF8fgsZUbUzfDduvMzPkU
+         eNIDw0irBJTGtOz8KSajDtS2aoF0Ve4+Oc0kP0J9w3WXcTgxqCoUVNVDKDytWS5pyKlX
+         loUN56unZ2eTznLZN4hin+wd6hNggAoyq8jMa6Qav/Sko39R5rVKG7NLZNqjId5wMEcz
+         rkaA==
+X-Gm-Message-State: ACgBeo2HEwEMu2aza9T/2uv43F9d0Ir1+q1gEQsyGDfTyTayyuu6nC3v
+        jSPQB9wVlKw2uzmE2mSqR4Ka+Q==
+X-Google-Smtp-Source: AA6agR74hR8VaeJjFAVTZB4MQZJXrrmv36R1guca2wRROCvCmMqo8rBjX09cx+YesnyaqkBZQPKS0g==
+X-Received: by 2002:a17:906:38f:b0:742:1f68:7058 with SMTP id b15-20020a170906038f00b007421f687058mr9223162eja.743.1662027304180;
+        Thu, 01 Sep 2022 03:15:04 -0700 (PDT)
+Received: from ?IPV6:2a02:578:8593:1200:d4bf:4e1a:6131:785b? ([2a02:578:8593:1200:d4bf:4e1a:6131:785b])
+        by smtp.gmail.com with ESMTPSA id dy17-20020a05640231f100b0043cc66d7accsm1084568edb.36.2022.09.01.03.15.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 03:15:03 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------RMx9DqSYj6g7kmVmU6k70eT3"
+Message-ID: <fe9280ff-50b3-805a-07ef-0227cbec13e8@tessares.net>
+Date:   Thu, 1 Sep 2022 12:15:02 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH] selftests: net: sort .gitignore file
+Content-Language: en-GB
+To:     Axel Rasmussen <axelrasmussen@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220829184748.1535580-1-axelrasmussen@google.com>
+From:   Matthieu Baerts <matthieu.baerts@tessares.net>
+In-Reply-To: <20220829184748.1535580-1-axelrasmussen@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,28 +77,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The RK817 codec uses regmap API and not directly regmap I2C.  It is the
-parent MFD who uses and selects regmap I2C.
+This is a multi-part message in MIME format.
+--------------RMx9DqSYj6g7kmVmU6k70eT3
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- sound/soc/codecs/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Hello,
 
-diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
-index 2fc37f4e061c..c7d83fe999e9 100644
---- a/sound/soc/codecs/Kconfig
-+++ b/sound/soc/codecs/Kconfig
-@@ -1197,8 +1197,7 @@ config SND_SOC_RK3328
- 
- config SND_SOC_RK817
- 	tristate "Rockchip RK817 audio CODEC"
--	depends on MFD_RK808 || COMPILE_TEST && I2C
--	select REGMAP_I2C
-+	depends on MFD_RK808 || COMPILE_TEST
- 
- config SND_SOC_RL6231
- 	tristate
+On 29/08/2022 20:47, Axel Rasmussen wrote:
+> This is the result of `sort tools/testing/selftests/net/.gitignore`, but
+> preserving the comment at the top.
+
+FYI, we got a small conflict (as expected by Jakub) when merging -net in
+net-next in the MPTCP tree due to this patch applied in -net:
+
+  5a3a59981027 ("selftests: net: sort .gitignore file")
+
+and these ones from net-next:
+
+  c35ecb95c448 ("selftests/net: Add test for timing a bind request to a
+port with a populated bhash entry")
+  1be9ac87a75a ("selftests/net: Add sk_bind_sendto_listen and
+sk_connect_zero_addr")
+
+The conflict has been resolved on our side[1] and the resolution we
+suggest is attached to this email: new entries have been added in the
+list respecting the alphabetical order.
+
+I'm sharing this thinking it can help others but if it only creates
+noise, please tell me! :-)
+
+Cheers,
+Matt
+
+[1] https://github.com/multipath-tcp/mptcp_net-next/commit/4151695b70b6
 -- 
-2.34.1
+Tessares | Belgium | Hybrid Access Solutions
+www.tessares.net
+--------------RMx9DqSYj6g7kmVmU6k70eT3
+Content-Type: text/x-patch; charset=UTF-8;
+ name="4151695b70b6889c0be046fc6b861f4fba2efff7.patch"
+Content-Disposition: attachment;
+ filename="4151695b70b6889c0be046fc6b861f4fba2efff7.patch"
+Content-Transfer-Encoding: base64
 
+ZGlmZiAtLWNjIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25ldC8uZ2l0aWdub3JlCmluZGV4
+IGJlYzVjZjk2OTg0YyxkZTdkNWNjMTVmODUuLjNkN2FkZWU3YTNlNgotLS0gYS90b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy9uZXQvLmdpdGlnbm9yZQorKysgYi90b29scy90ZXN0aW5nL3Nl
+bGZ0ZXN0cy9uZXQvLmdpdGlnbm9yZQpAQEAgLTEsNyAtMSwxNSArMSwxNiBAQEAKICAjIFNQ
+RFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wLW9ubHkKKytiaW5kX2JoYXNoCisgY21z
+Z19zZW5kZXIKKyBmaW5fYWNrX2xhdAorIGdybworIGh3dHN0YW1wX2NvbmZpZworIGlvYW02
+X3BhcnNlcgorIGlwX2RlZnJhZwogIGlwc2VjCisgaXB2Nl9mbG93bGFiZWwKKyBpcHY2X2Zs
+b3dsYWJlbF9tZ3IKICBtc2dfemVyb2NvcHkKLSBzb2NrZXQKKyBuZXR0ZXN0CiAgcHNvY2tf
+ZmFub3V0CiAgcHNvY2tfc25kCiAgcHNvY2tfdHBhY2tldApAQEAgLTExLDM1IC0yMCwyMyAr
+MjEsMjUgQEBAIHJldXNlcG9ydF9icAogIHJldXNlcG9ydF9icGZfY3B1CiAgcmV1c2Vwb3J0
+X2JwZl9udW1hCiAgcmV1c2Vwb3J0X2R1YWxzdGFjawotIHJldXNlYWRkcl9jb25mbGljdAot
+IHRjcF9tbWFwCi0gdWRwZ3NvCi0gdWRwZ3NvX2JlbmNoX3J4Ci0gdWRwZ3NvX2JlbmNoX3R4
+Ci0gdGNwX2lucQotIHRscwotIHR4cmluZ19vdmVyd3JpdGUKLSBpcF9kZWZyYWcKLSBpcHY2
+X2Zsb3dsYWJlbAotIGlwdjZfZmxvd2xhYmVsX21ncgotIHNvX3R4dGltZQotIHRjcF9mYXN0
+b3Blbl9iYWNrdXBfa2V5Ci0gbmV0dGVzdAotIGZpbl9hY2tfbGF0Ci0gcmV1c2VhZGRyX3Bv
+cnRzX2V4aGF1c3RlZAotIGh3dHN0YW1wX2NvbmZpZwogIHJ4dGltZXN0YW1wCi0gdGltZXN0
+YW1waW5nCi0gdHh0aW1lc3RhbXAKKytza19iaW5kX3NlbmR0b19saXN0ZW4KKytza19jb25u
+ZWN0X3plcm9fYWRkcgorIHNvY2tldAogIHNvX25ldG5zX2Nvb2tpZQorIHNvX3R4dGltZQor
+IHN0cmVzc19yZXVzZXBvcnRfbGlzdGVuCisgdGFwCisgdGNwX2Zhc3RvcGVuX2JhY2t1cF9r
+ZXkKKyB0Y3BfaW5xCisgdGNwX21tYXAKICB0ZXN0X3VuaXhfb29iCi0gZ3JvCi0gaW9hbTZf
+cGFyc2VyCisgdGltZXN0YW1waW5nCisgdGxzCiAgdG9lcGxpdHoKICB0dW4KLSBjbXNnX3Nl
+bmRlcgorIHR4cmluZ19vdmVyd3JpdGUKKyB0eHRpbWVzdGFtcAorIHVkcGdzbworIHVkcGdz
+b19iZW5jaF9yeAorIHVkcGdzb19iZW5jaF90eAogIHVuaXhfY29ubmVjdAotIHRhcAotIGJp
+bmRfYmhhc2gKLSBza19iaW5kX3NlbmR0b19saXN0ZW4KLSBza19jb25uZWN0X3plcm9fYWRk
+cgo=
+
+--------------RMx9DqSYj6g7kmVmU6k70eT3--

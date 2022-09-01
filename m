@@ -2,70 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAB75A9E64
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB5975A9E68
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234107AbiIARpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36000 "EHLO
+        id S231650AbiIARpo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:45:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233701AbiIARoS (ORCPT
+        with ESMTP id S233322AbiIARpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:44:18 -0400
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A6AD1EC5B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:43:19 -0700 (PDT)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-11ba6e79dd1so33295920fac.12
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:43:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=+hQWD3FFiCvjtBjWL5MEbFNgZqBTdR/iIIcXYH+DJ5U=;
-        b=R7kqv1kzxzGMMrQ7ue3Hfy4EHITG2HXRXTNYAnw9dA2uDXa+BfwOU03rkMOS5rQjYM
-         ahC+LAjqe22iF+ExhcYcKvePv59dzyV6wZlEVNpoWowkRIjpjjEeDeZZpLfqdyM98Zdu
-         KtUZfZOz2teyBkHBvFOrHKvq2GLpuQ0L7Ev8fw5sRfP26FgYwlmiVK7TiSw2yasdKt4r
-         Fd8gopCTKTeCWVt/t3oVcu9GJRePw+norCYr9+NYFcqrQbTTdIkJi4UuC72L2sVheYAt
-         BldFaWjQZuw8ec6Lxl0dOoQU9cVaNLqTG4v7IwtS7qBOZVCqMzQpFiPGT4/JJy+KlYhv
-         m4Lg==
+        Thu, 1 Sep 2022 13:45:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DBF95C97C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:44:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662054246;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FQOn0UueP4f1CSvnyezbvyIBmYegvrdiesOa5q4EoyU=;
+        b=e1GnV13wXBMlZlgO7uuVSOcU/+5wbNy3WSRrdsNd6Rl2RljUUHqub6pwPS/XHbaYu4POoK
+        Aa9dzqsHymPvrz84guDpwUJpQ+NSHOE55aYz3+cw1Z3U6us7OU1i21b0MJ6fX5A7mhOnet
+        1VcGwu4ZGE2LwAGIByKObzdcil1h/4U=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-462-bIaAbxaDPjO_6FjCE6IHmQ-1; Thu, 01 Sep 2022 13:44:05 -0400
+X-MC-Unique: bIaAbxaDPjO_6FjCE6IHmQ-1
+Received: by mail-wm1-f72.google.com with SMTP id h82-20020a1c2155000000b003a64d0510d9so10149226wmh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:44:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=+hQWD3FFiCvjtBjWL5MEbFNgZqBTdR/iIIcXYH+DJ5U=;
-        b=E1yuStBPhb6k6MiHwVwPvawP+9gHKd7hwWIPO4rf5CLS/S05j+55zuEmOlGc/1WrLF
-         bUDlSImA/NoW6ZDcc2AZeiahIdMnqqGOEC5qHRBI6NvlJ1+j6TdMzhQLeC1+Ns7oKXMN
-         5pOTK7w0NlcrI4a+Z+2SweC11D02KjBDkEkraEO/Q8GsPh1HfpiiJAbq6wprvRd/NU2G
-         MsMbwbiRjbHVB3Fv7cLM+VH7UWcsUHSu8BgEcT/mwF4PCI0QQm/QHsJ6YU//owpZooIG
-         yzZlC9pvVQuxFQiQz4GWqssmzAGwOEfR5mpW5zs9QEi69QTRjavauq1QF2iip0/SPvo9
-         USEw==
-X-Gm-Message-State: ACgBeo3X12pWbYw4hUZnNWtVsrnE879p/mw+V6i4QaY4AGSiykzN6mst
-        +NH7RxrE3/fKWHqhfcqI4U3ODHtMw/23VOcafgvP5g==
-X-Google-Smtp-Source: AA6agR5GXD4P5DUY4rHzQY2C5yXB500D9X/y2vzf9C2+V0Ha1S+Z3BtW4/l6ETQYrSiEYGgwEfWjF8yPASB4mdbIwVo=
-X-Received: by 2002:a05:6870:5a5:b0:122:5662:bee6 with SMTP id
- m37-20020a05687005a500b001225662bee6mr135980oap.181.1662054198367; Thu, 01
- Sep 2022 10:43:18 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=FQOn0UueP4f1CSvnyezbvyIBmYegvrdiesOa5q4EoyU=;
+        b=qH2JfvS0VbNxi3ZjzrN8gDAgisEage5mzY/UFABb6xx/0NEnryqUONFgwZQvU8e2aV
+         DUgvQhQD0CUZmwb5hQBTLvtoxRdxfzMddBUTrtyFf/HjKFEkzJOUCBWpuA3yoNAVufK0
+         tR+XuGe3OnsfY4JV3mk9qu+rwiq1uN4sEZ+vCx3HGTKhYDXpYMz5POlR0V8z89/O7mNx
+         HOnFzmHCrdc+0mCDCWlL1WmsJ1BV1nolrTz8JodnlI0y05rhkphQR9yU9SyQYLBqbxVh
+         1UzGw3y0ENi62/MuyOjDXR7dqsu4Z6IkU8rUHroolzl8wPFJB3cYRp9Qivs2tGLnr8Oe
+         ZnoA==
+X-Gm-Message-State: ACgBeo2FHEdEPEx5lwUwfS5paDD7yz3ya2gTIh53GgOWVMaFHOPsip4h
+        nXVcp21+TXPs6ivvR7ATZ2H5CTCFSQt8AgrhxFxBpsrnyJBFvz2DLzauVO6eMcjH0A357qeXo/t
+        IPSx5J990+ws871Cmr63dJrsy
+X-Received: by 2002:a1c:7c0d:0:b0:3a6:673a:395e with SMTP id x13-20020a1c7c0d000000b003a6673a395emr169622wmc.67.1662054244061;
+        Thu, 01 Sep 2022 10:44:04 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4RzluDc/Wv+Wtio+db/BCrCcybF1ARP21JtBC1oqfw+IAEf7B2nGKiBSs5+C9mOhjB/UwFRw==
+X-Received: by 2002:a1c:7c0d:0:b0:3a6:673a:395e with SMTP id x13-20020a1c7c0d000000b003a6673a395emr169606wmc.67.1662054243823;
+        Thu, 01 Sep 2022 10:44:03 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:9e00:fec0:7e96:15cb:742? (p200300cbc7079e00fec07e9615cb0742.dip0.t-ipconnect.de. [2003:cb:c707:9e00:fec0:7e96:15cb:742])
+        by smtp.gmail.com with ESMTPSA id k14-20020a5d428e000000b00225232154d7sm9124954wrq.110.2022.09.01.10.44.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 10:44:03 -0700 (PDT)
+Message-ID: <c6990d62-a456-b7c5-f128-311ee758c161@redhat.com>
+Date:   Thu, 1 Sep 2022 19:44:02 +0200
 MIME-Version: 1.0
-References: <20220829100850.1474-1-santosh.shukla@amd.com> <20220829100850.1474-2-santosh.shukla@amd.com>
- <CALMp9eTrz2SkK=CjTSc9NdHvP4qsP+UWukFadbqv+BA+KdtMMg@mail.gmail.com> <a599f0da-3d9b-a37f-af7c-aa1310ed77e1@amd.com>
-In-Reply-To: <a599f0da-3d9b-a37f-af7c-aa1310ed77e1@amd.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 1 Sep 2022 10:43:07 -0700
-Message-ID: <CALMp9eT3zHqZhDLKV=5UTnwLsvmbkpqibsh4tjqFnW4+MGR4aw@mail.gmail.com>
-Subject: Re: [PATCHv4 1/8] x86/cpu: Add CPUID feature bit for VNMI
-To:     "Shukla, Santosh" <santosh.shukla@amd.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mlevitsk@redhat.com,
-        mail@maciej.szmigiero.name
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sasha Levin <sasha.levin@oracle.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jerome Marchand <jmarchan@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>
+References: <20220901072119.37588-1-david@redhat.com>
+ <YxDdycTur733hMgt@xz-m1.local>
+ <fa0bb4b1-3edd-eb5a-7ad6-dff785d88d8f@redhat.com>
+ <YxDghv54uHYMGCfG@xz-m1.local>
+ <c9dc3f22-4a72-9b9d-7a74-ad77fe4f3b6e@redhat.com>
+ <YxDu51TQTz8lhIPP@xz-m1.local>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <YxDu51TQTz8lhIPP@xz-m1.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,48 +96,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 5:45 AM Shukla, Santosh <santosh.shukla@amd.com> wrote:
->
-> Hi Jim,
->
-> On 9/1/2022 5:12 AM, Jim Mattson wrote:
-> > On Mon, Aug 29, 2022 at 3:09 AM Santosh Shukla <santosh.shukla@amd.com> wrote:
-> >>
-> >> VNMI feature allows the hypervisor to inject NMI into the guest w/o
-> >> using Event injection mechanism, The benefit of using VNMI over the
-> >> event Injection that does not require tracking the Guest's NMI state and
-> >> intercepting the IRET for the NMI completion. VNMI achieves that by
-> >> exposing 3 capability bits in VMCB intr_cntrl which helps with
-> >> virtualizing NMI injection and NMI_Masking.
-> >>
-> >> The presence of this feature is indicated via the CPUID function
-> >> 0x8000000A_EDX[25].
-> >>
-> >> Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-> >> Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
-> >> ---
-> >>  arch/x86/include/asm/cpufeatures.h | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-> >> index ef4775c6db01..33e3603be09e 100644
-> >> --- a/arch/x86/include/asm/cpufeatures.h
-> >> +++ b/arch/x86/include/asm/cpufeatures.h
-> >> @@ -356,6 +356,7 @@
-> >>  #define X86_FEATURE_VGIF               (15*32+16) /* Virtual GIF */
-> >>  #define X86_FEATURE_X2AVIC             (15*32+18) /* Virtual x2apic */
-> >>  #define X86_FEATURE_V_SPEC_CTRL                (15*32+20) /* Virtual SPEC_CTRL */
-> >> +#define X86_FEATURE_V_NMI              (15*32+25) /* Virtual NMI */
-> >>  #define X86_FEATURE_SVME_ADDR_CHK      (15*32+28) /* "" SVME addr check */
-> >
-> > Why is it "V_NMI," but "VGIF"?
-> >
-> I guess you are asking why I chose V_NMI and not VNMI, right?
-> if so then there are two reasons for going with V_NMI - IP bits are named in order
-> V_NMI, V_NMI_MASK, and V_NMI_ENABLE style and also Intel already using VNMI (X86_FEATURE_VNMI)
+>>> It can be dropped later if you want to rework the thp collapse side and
+>>> finally remove IPI dependency on fast-gup, but so far it seems to me it's
+>>> still needed.  Or just drop this patch until that rework happens?
+>>
+>> The doc as is is obviously stale, why drop this patch?
+>>
+>> We should see a fix for the THP collapse issue very soon I guess. Most
+>> probably this patch will go upstream after that fix.
+> 
+> No objection to have this patch alone as the removal statement is only
+> about "thp split".  But IMHO this patch alone didn't really help a great
+> lot, especially if you plan to have more to come that is very relevant to
+> this, so it'll be clearer to put them together.  Your call.
 
-I would argue that inconsistency and arbitrary underscores
-unnecessarily increase the cognitive load. It is not immediately
-obvious to me that an extra underscore implies AMD. What's wrong with
-X86_FEATURE_AMD_VNMI? We already have over half a dozen AMD feature
-bits that are distinguished from the Intel version by an AMD prefix.
+I can hold off the resend until the the fix is in place. Then I can add
+to the description that we are not aware of remaining IPI dependencies,
+and one undocumented case was broken and got fixed without the need for
+IPIs.
+
+Thanks!
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

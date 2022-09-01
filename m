@@ -2,127 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E01BC5A9DE2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:17:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3574E5A9DE3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbiIARRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:17:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49506 "EHLO
+        id S233930AbiIARRS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:17:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231447AbiIARRJ (ORCPT
+        with ESMTP id S233729AbiIARRL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:17:09 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7D825E543;
-        Thu,  1 Sep 2022 10:17:08 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id x5so13961115qtv.9;
-        Thu, 01 Sep 2022 10:17:08 -0700 (PDT)
+        Thu, 1 Sep 2022 13:17:11 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FC265248
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:17:09 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id f24so14926503plr.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:17:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ZOHdBiwdIYc+dnYpSN1q+dn6Q0Ow16U+F6k+oTcaels=;
-        b=jCV0u6Xge8EdKIun7aDa1/g3BBAwXbgj2ECaWYIOUQx+qstpL6S/lDXJJ4NQgshrd+
-         dkQi2QxfQCetuXoiCdj3qh5EW/6N5k4hTypZZhBjtxKtazR4VPOws3VZvzsDe9e2mwyB
-         yMh8A6bToGuMdAPSY7ogxZkjaQcCX6Bdg9sRMfUsHtfY2vTH2brdYUT9mmBIezhoctxI
-         q6fYwfsJznU2g+qjnbu8ZDc5iaPHq6nMGTs/tdt88MLk+XpkAwHuGLsc8zN4cwShm4qD
-         LRWhcqIIL7QlVZoaKSw5Tzp6p4zpE2lIMfQDlP2A5bxnQeomTKsLFNRummKG21eSJVo9
-         b2/w==
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=2Jj25UZyRhgqyO+BR+KMQnX1ckBvZ3LEt9xJbNLqsdQ=;
+        b=NtrhabWO2jozpsnAy/Ruq2/NfdDJHKxikJKm8wdSLqDN32pt2+nqlQlyhe3+fUX5Wl
+         NkaM3hUact0+NWIQ6dMDZYPDHczxKuBr62GoZJxnD8bK3VKLkuMoBA/8K3U6Ibxrm0ZE
+         HEs7X47UKVgId3jiBeG06Q49Jjyo0EtjEydko=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ZOHdBiwdIYc+dnYpSN1q+dn6Q0Ow16U+F6k+oTcaels=;
-        b=vOtYNmhl7BR+HZuSrcp3nytdayGyQ82yYFjVRFguTUD13l1JjNRLHdK9Xu3YXsRtGP
-         sQSeSu1sA30/CN6UIXpHRxtNLLMVGD3sZhdAzwdfDnjjYmsZ+c2wfL1+wLl4ALWfQRwy
-         Szdz6UyXv6YhfvHC6RGFSV4gWCUyZvkIGmrkMcH5/zZyirzaPiUw6FLBioyJHAO6ry+a
-         dc8oODFfot8MTVRSVamvyVpceWT+CzzYjINkpWPEbWgM3wCnJOACq57u1yaUIgPliewr
-         0dCUu6Y/6bQK79d1FD//tur/YjkCy1Qraz6F53N7td+Yalu48OJN9QW975eBGXNd//TU
-         59rw==
-X-Gm-Message-State: ACgBeo13WfLhuiaT9q0DIoPbsudsh21+zFtP8g8gmVZH0HJT2R4XlgiE
-        anWq7v3j4+PYkhydJrxXGtBW72N0m/FOEk8xKLU=
-X-Google-Smtp-Source: AA6agR5CqN3nI7KOHP0szFvgAi/dLNLUo0fWAahY13BBukxRKSVN/mrtigRzRoN61PnDThy/C+Md32/m4jfIrwk8ABU=
-X-Received: by 2002:ac8:7dd0:0:b0:344:afc1:b11d with SMTP id
- c16-20020ac87dd0000000b00344afc1b11dmr24103252qte.195.1662052627885; Thu, 01
- Sep 2022 10:17:07 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=2Jj25UZyRhgqyO+BR+KMQnX1ckBvZ3LEt9xJbNLqsdQ=;
+        b=4yl1slfFf9MYghEmlCyyE884H61X9IgGJjAMbAHwHp4LXh/zxZbWWNzc8aYUXuFo22
+         8eP+PFBBbRrxGCmoSahlr1WX6dC3YEDKDt4gop7rWlypR4BKiKGE/VTLEQUlylkKK78Q
+         yl4Xt2I5ZB+n+aAyOruh1WeHRNjZdgLRa95B4XxOeoTRyGHRI+3Uj25AumqE8DgrGle5
+         +hRSGI/SqT+zS1xN+d4HASFev6kbyeHt6I/rJDxnwqfOcW3QPg6T2/vbDXGfH9UaM5o4
+         o2PD8A5WcLh9A6H3jddpQ1Pl9zvO1HwBx0Ro7GF5v9jjOBQdOEMLy6kit5BcVgYODfZA
+         d8/Q==
+X-Gm-Message-State: ACgBeo1MnF+lUJHJmn9MTx548LFZWaPnrXTZIZMXaoyxh5udzHxySb11
+        A56HlP6dRxsgbml9q34b6dXb0g==
+X-Google-Smtp-Source: AA6agR44lXt6Z51IuJvoY5+8O3mc5yc7egYdzoZygLx9D4XWj60XvG6mM3eZhHmnToy0nHzqH0KOUw==
+X-Received: by 2002:a17:902:ee42:b0:174:88f1:20d7 with SMTP id 2-20020a170902ee4200b0017488f120d7mr24152047plo.32.1662052629335;
+        Thu, 01 Sep 2022 10:17:09 -0700 (PDT)
+Received: from localhost ([2620:15c:11a:202:34cd:3659:c11f:5d05])
+        by smtp.gmail.com with UTF8SMTPSA id d9-20020a655ac9000000b0041c45d76b6bsm5593032pgt.38.2022.09.01.10.17.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 10:17:09 -0700 (PDT)
+From:   Matthias Kaehlcke <mka@chromium.org>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        devicetree@vger.kernel.org, Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH] arm64: dts: qcom: sc7180: Configure USB as wakeup source
+Date:   Thu,  1 Sep 2022 10:17:03 -0700
+Message-Id: <20220901101658.1.I347ea409ee3134bd32a29e33fecd1a6ef32085a0@changeid>
+X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 MIME-Version: 1.0
-References: <20220829201500.6341-1-mario.limonciello@amd.com>
-In-Reply-To: <20220829201500.6341-1-mario.limonciello@amd.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 1 Sep 2022 20:16:31 +0300
-Message-ID: <CAHp75Vc3v4a6=ZJnOYYFGHEomExxopuUy8axDL=M2tbxHqtXqQ@mail.gmail.com>
-Subject: Re: [PATCH v2] platform/x86: wmi: Allow duplicate GUIDs for drivers
- that use struct wmi_driver
-To:     Mario Limonciello <mario.limonciello@amd.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 11:20 PM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> The WMI subsystem in the kernel currently tracks WMI devices by
-> a GUID string not by ACPI device.  The GUID used by the `wmi-bmof`
-> module however is available from many devices on nearly every machine.
->
-> This originally was though to be a bug, but as it happens on most
+The dwc3 USB controller of the sc7180 supports USB remote
+wakeup, configure it as a wakeup source.
 
-thought
+Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
+---
 
-> machines it is a design mistake.  It has been fixed by tying an ACPI
-> device to the driver with struct wmi_driver. So drivers that have
-> moved over to struct wmi_driver can actually support multiple
-> instantiations of a GUID without any problem.
->
-> Add an allow list into wmi.c for GUIDs that the drivers that are known
-> to use struct wmi_driver.  The list is populated with `wmi-bmof` right
-> now. The additional instances of that in sysfs with be suffixed with -%d
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-...
-
-> +/* allow duplicate GUIDs as these device drivers use struct wmi_driver */
-> +static const char * const allow_duplicates[] = {
-> +       "05901221-D566-11D1-B2F0-00A0C9062910", /* wmi-bmof */
-> +       NULL,
-
-No comma for the terminator.
-
-> +};
-
-...
-
-> +static int guid_count(const guid_t *guid)
-> +{
-> +       struct wmi_block *wblock;
-> +       int count = 0;
-> +
-> +       list_for_each_entry(wblock, &wmi_block_list, list) {
-> +               if (guid_equal(&wblock->gblock.guid, guid))
-> +                       count++;
-> +       }
-> +
-> +       return count;
-> +}
-
-I haven't deeply checked the code, but this kind of approach is
-fragile and proven to be error prone as shown in practice. The
-scenario is (again, not sure if it's possible, need a comment in the
-code if it's not possible) removing an entry from the list in the
-middle and trying to add it again. you will see the duplicate count
-values. That's why in the general case we use IDA or similar
-approaches.
-
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index 2d1f38342858..507718f309e1 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -2780,7 +2780,9 @@ usb_1: usb@a6f8800 {
+ 					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3 0>;
+ 			interconnect-names = "usb-ddr", "apps-usb";
+ 
+-			usb_1_dwc3: dwc3@a600000 {
++			wakeup-source;
++
++			usb_1_dwc3: usb@a600000 {
+ 				compatible = "snps,dwc3";
+ 				reg = <0 0x0a600000 0 0xe000>;
+ 				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
 -- 
-With Best Regards,
-Andy Shevchenko
+2.37.2.789.g6183377224-goog
+

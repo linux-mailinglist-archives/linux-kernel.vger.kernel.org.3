@@ -2,226 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 410975A8BA2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:51:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E8915A8BA5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbiIACuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 22:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S232301AbiIACxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 22:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232245AbiIACuR (ORCPT
+        with ESMTP id S231873AbiIACxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 22:50:17 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96EE8DCFF1
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:50:15 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id t11-20020a17090a510b00b001fac77e9d1fso1085507pjh.5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:50:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ecs-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date;
-        bh=JRSLS2/OkAR6FReYpzULz2zE/OFO+jMqABa7Dlg1haI=;
-        b=YWzpjyHW+9L5M+LW+Cqdkvl8D83NVRvPieLsrep6o7WpsmG5Fhz1Au8qgAD+MWY2fu
-         ms+MgOZ/YTADw7roRd+d3mpnbPWOzdBj6jvob+LIYZST1IWFzDOpqKSAXlixEuillshj
-         RNJVUhRiAtTqAYS0+otetYVdsgDuXK2/7MwLEocqmNfANGdYGEZOsPLcUnbcS44vljNb
-         o/P9xOJoHPw8W4kpFsleJOhnJLbo1j8cCdLsTgoSKrsrKcoChH5y+CpaTeEZNpR4aHHv
-         /Z2QlLfnX/dV+EcptUHIkrEzmqyCXIFX+iJT+o0q3BVtR9JVN1mN2lytF7vD3IHh6b0L
-         AXgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=JRSLS2/OkAR6FReYpzULz2zE/OFO+jMqABa7Dlg1haI=;
-        b=Cw06caPEEY/ON6eOuCTKytjn/D22bDfnbnpdPx6ZiCfXAcMxzSEEOZzYQ4pzy3YyYU
-         lV7oERyhYDuLtEgtBh4IeLrkS15YgQRu5puWp4evg7K8JcLaeHS7FTFCH61RPEAwgWT6
-         Xhx4Cria4qpP05pUybn2NRCxasyHnv0Cw2vbIrAHkT8jpwe9ve02HNl9vpWa+7Fw7/qA
-         g6Gw/+jRcWnw8DnLNpb6rhHQni2/E97MKCov022y5xD64ZiVNSA2hwG644NNEUHT5cyi
-         C1kXkgaaSR/MfWWG4v7lDHbq2eGMVPvi/M9OjGbRQMBdi1mEYbix48V3RFwJWLVUG13F
-         Ityw==
-X-Gm-Message-State: ACgBeo1dRkY4XiPudNnEOfBknFhMCrMBmcyAzHT2U6/Ulzsft5B1BJO2
-        BuQFKsn3Kv+s7JIapi9GvaGyK1HwvUtegcKf
-X-Google-Smtp-Source: AA6agR7Lh8Z8hkOJy2A7axVINSnrbYyR40/vAMNRHtaBuf6lsaCoKYN1f9mVWNd37v3PWqNxNGzMnw==
-X-Received: by 2002:a17:90a:bc8d:b0:1fd:f4f1:d5da with SMTP id x13-20020a17090abc8d00b001fdf4f1d5damr6390512pjr.205.1662000614738;
-        Wed, 31 Aug 2022 19:50:14 -0700 (PDT)
-Received: from localhost.localdomain ([103.104.171.43])
-        by smtp.gmail.com with ESMTPSA id f9-20020aa79689000000b00528a097aeffsm12014222pfk.118.2022.08.31.19.50.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 19:50:14 -0700 (PDT)
-From:   Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Bob Moragues <moragues@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Henry Sun <henrysun@google.com>,
-        Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: [PATCH v3 2/2] arm64: dts: qcom: Add sc7180-pazquel360
-Date:   Thu,  1 Sep 2022 02:49:58 +0000
-Message-Id: <20220901024827.v3.2.Iea2d2918adfff2825b87d428b5732717425c196f@changeid>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220901024827.v3.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid>
-References: <20220901024827.v3.1.I3aa360986c0e7377ea5e96c116f014ff1ab8c968@changeid>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 31 Aug 2022 22:53:06 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52924161DC1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:53:04 -0700 (PDT)
+Received: from nazgul.tnic (unknown [84.201.196.28])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AD01D1EC0688;
+        Thu,  1 Sep 2022 04:52:58 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1662000778;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=Wg2dbZ7MfL90Glri3BhuLOQ5lxp2b+1lT/0glWKVEHs=;
+        b=ezljlklvb9pRa/tt4Z+CpLmuHQkLKEAW3ulhYhSnhzsLhBZ1T5QYIYt6s6F3Bfqxwj5Ba+
+        GJQDwkBVC0iiih+Q8NutEg5HJQAkAl95PRmhVmBKmjfVurnUztchwC5KqeliJSX+2HT8RP
+        CjGaJtcjbjhuzJPWoR79aVZQFh8EzWQ=
+Date:   Thu, 1 Sep 2022 04:53:04 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Ashok Raj <ashok.raj@intel.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        LKML Mailing List <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, Dave Hansen <dave.hansen@intel.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ingo Molnar <mingo@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Tony Luck <tony.luck@intel.com>
+Subject: Re: [PATCH] x86/microcode/intel: Allow late loading only if a min
+ rev is specified
+Message-ID: <YxAefm3F9zMdTjcs@nazgul.tnic>
+References: <20220829180436.716672-1-ashok.raj@intel.com>
+ <Yw0iDnZ+dB4ULSs/@nazgul.tnic>
+ <Yw1AtFrRPWhkJ4r8@araj-dh-work>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Yw1AtFrRPWhkJ4r8@araj-dh-work>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create first version device tree for pazquel360
-pazquel360 is convertible and the pazquel it is based on is clamshell.
-sku 20 for lte & wifi
-sku 21 for wifi only
-sku 22 for lte w/o esim & wifi
+On Mon, Aug 29, 2022 at 10:41:56PM +0000, Ashok Raj wrote:
+> But I suppose, you mean what refresh_hw is supposed to mean from the
+> existing code?
 
-Signed-off-by: Yunlong Jia <yunlong.jia@ecs.corp-partner.google.com>
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+I've been meaning this for a while now.
 
----
+> refresh_hw seems to imply when to update  the copy of the microcode from
+> the filesystem. Also seems to imply late loading.
 
-(no changes since v2)
+After your patch:
 
-Changes in v2:
- 1. Remove the touchscreen setting, as a follow-up patch
+$ git grep refresh_fw arch/x86/
+arch/x86/kernel/cpu/microcode/core.c:601:static enum ucode_state microcode_init_cpu(int cpu, bool refresh_fw)
+arch/x86/kernel/cpu/microcode/core.c:616:       ustate = microcode_ops->request_microcode_fw(cpu, &microcode_pdev->dev, refresh_fw);
 
----
- arch/arm64/boot/dts/qcom/Makefile             |  2 +
- .../qcom/sc7180-trogdor-pazquel360-lte.dts    | 22 ++++++++
- .../qcom/sc7180-trogdor-pazquel360-wifi.dts   | 17 +++++++
- .../dts/qcom/sc7180-trogdor-pazquel360.dtsi   | 50 +++++++++++++++++++
- 4 files changed, 91 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-lte.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-wifi.dts
- create mode 100644 arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi
+$ git grep late_loading
+arch/x86/include/asm/microcode.h:36:                                              bool late_loading);
+arch/x86/kernel/cpu/microcode/amd.c:894:                                              bool late_loading)
+arch/x86/kernel/cpu/microcode/amd.c:903:        if (!late_loading || !bsp)
+arch/x86/kernel/cpu/microcode/intel.c:166:static int microcode_sanity_check(void *mc, int print_err, bool late_loading)
+...
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 1d86a33de528..9f736702e06f 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -84,6 +84,8 @@ dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-lte-parade.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-lte-ti.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-parade.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel-ti.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel360-lte.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pazquel360-wifi.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r1-lte.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-pompom-r2.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-lte.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-lte.dts
-new file mode 100644
-index 000000000000..021bcafcf815
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-lte.dts
-@@ -0,0 +1,22 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Pazquel board device tree source
-+ *
-+ * Copyright 2021 Google LLC.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sc7180-trogdor.dtsi"
-+#include "sc7180-trogdor-parade-ps8640.dtsi"
-+#include "sc7180-trogdor-pazquel360.dtsi"
-+#include "sc7180-trogdor-lte-sku.dtsi"
-+
-+/ {
-+	model = "Google Pazquel (Parade,LTE)";
-+	compatible = "google,pazquel-sku22", "google,pazquel-sku20", "qcom,sc7180";
-+};
-+
-+&ap_sar_sensor_i2c {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-wifi.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-wifi.dts
-new file mode 100644
-index 000000000000..defd84c5354a
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360-wifi.dts
-@@ -0,0 +1,17 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Pazquel board device tree source
-+ *
-+ * Copyright 2022 Google LLC.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sc7180-trogdor.dtsi"
-+#include "sc7180-trogdor-parade-ps8640.dtsi"
-+#include "sc7180-trogdor-pazquel360.dtsi"
-+
-+/ {
-+	model = "Google Pazquel (Parade,WIFI-only)";
-+	compatible = "google,pazquel-sku21", "qcom,sc7180";
-+};
-diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi
-new file mode 100644
-index 000000000000..5702325d0c7b
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel360.dtsi
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Google Pazquel board device tree source
-+ *
-+ * Copyright 2021 Google LLC.
-+ */
-+
-+/* This file must be included after sc7180-trogdor.dtsi */
-+#include "sc7180-trogdor-pazquel.dtsi"
-+
-+&alc5682 {
-+	compatible = "realtek,rt5682s";
-+	realtek,dmic1-clk-pin = <2>;
-+	realtek,dmic-clk-rate-hz = <2048000>;
-+};
-+
-+&keyboard_controller {
-+	function-row-physmap = <
-+		MATRIX_KEY(0x00, 0x02, 0)	/* T1 */
-+		MATRIX_KEY(0x03, 0x02, 0)	/* T2 */
-+		MATRIX_KEY(0x02, 0x02, 0)	/* T3 */
-+		MATRIX_KEY(0x01, 0x02, 0)	/* T4 */
-+		MATRIX_KEY(0x03, 0x04, 0)	/* T5 */
-+		MATRIX_KEY(0x02, 0x04, 0)	/* T6 */
-+		MATRIX_KEY(0x01, 0x04, 0)	/* T7 */
-+		MATRIX_KEY(0x02, 0x09, 0)	/* T8 */
-+		MATRIX_KEY(0x01, 0x09, 0)	/* T9 */
-+		MATRIX_KEY(0x00, 0x04, 0)	/* T10 */
-+		MATRIX_KEY(0x03, 0x09, 0)       /* T11 */
-+	>;
-+	linux,keymap = <
-+		MATRIX_KEY(0x00, 0x02, KEY_BACK)
-+		MATRIX_KEY(0x03, 0x02, KEY_REFRESH)
-+		MATRIX_KEY(0x02, 0x02, KEY_ZOOM)
-+		MATRIX_KEY(0x01, 0x02, KEY_SCALE)
-+		MATRIX_KEY(0x03, 0x04, KEY_SYSRQ)
-+		MATRIX_KEY(0x02, 0x04, KEY_BRIGHTNESSDOWN)
-+		MATRIX_KEY(0x01, 0x04, KEY_BRIGHTNESSUP)
-+		MATRIX_KEY(0x02, 0x09, KEY_MUTE)
-+		MATRIX_KEY(0x01, 0x09, KEY_VOLUMEDOWN)
-+		MATRIX_KEY(0x00, 0x04, KEY_VOLUMEUP)
-+		MATRIX_KEY(0x03, 0x09, KEY_SLEEP)
-+		CROS_STD_MAIN_KEYMAP
-+	>;
-+};
-+
-+&sound {
-+	compatible = "google,sc7180-trogdor";
-+	model = "sc7180-rt5682s-max98357a-1mic";
-+};
+Now you have both. More mess.
+
+> its used in the following places.
+> 
+> 1. During reload_store() where this is exclicitly due to echo 1 > reload
+> 
+> 	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev, true);
+> 
+> 	Here passing true makes sense since you are going to do a full
+> 	refresh on all CPUs via late loading.
+
+Yes, and here it is perfectly clear that it is late loading.
+
+> 2. microcode_update_cpu() -> microcode_init_cpu()->request_microcode_fw(false)
+> 
+>    Early loading from resume.
+
+CPU hotplug rather.
+
+> So we would use the microcode cache to load from.
+
+So this happens when the CPU is coming online. I'm not sure why I set it
+to "false" back then - whether it is because there's no filesystem yet
+or there was another reason. I *think* this was some contrived used case
+again.
+
+In any case, this'll need to be experimented with to figure out what
+happens when it is set to "true".
+
+> 3. mc_device_add() -> microcode_init_cpu(true)->request_microcode_fw(true)
+> 
+>    This seems like normal CPU hot-add, I'm not sure if refresh_fw=true is
+>    valid. A new CPU should also use from the cache, but not a full reload
+>    from filesystem. This could end up with new cpu with an updated ucode
+>    and older with something that was loaded earlier.
+
+Just check when mc_device_add() is actually called and then try to
+figure out what that actually does instead of speculating.
+
+> Sort of what was fixed in:
+>    commit 7189b3c11903667808029ec9766a6e96de5012a5 (tag: x86_microcode_for_v5.13)
+
+That's a tag - not a git commit.
+
+I think you mean
+
+7189b3c11903 ("x86/microcode: Check for offline CPUs before requesting new microcode")
+
+>    intel.c doesn't seem to use this parameter at all today. But judging from
+> 
+>    amd.c: request_microcode_amd() 
+> 
+>         /* reload ucode container only on the boot cpu */
+>         if (!refresh_fw || !bsp)
+>                 return UCODE_OK;
+> 
+>   Seems like it does the right job, since you would refresh only if
+>   refresh_fw=true and its the bsp. Hence it seems immute to the
+>   mc_device_add() bug.
+
+I don't see a bug there.
+
 -- 
-2.17.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette

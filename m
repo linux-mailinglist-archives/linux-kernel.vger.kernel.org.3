@@ -2,135 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE485A9157
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:57:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2EA5A9158
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233212AbiIAH45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:56:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40186 "EHLO
+        id S233171AbiIAH5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbiIAH4x (ORCPT
+        with ESMTP id S233271AbiIAH5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:56:53 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90BC1EA89E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:56:52 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id z187so16741281pfb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:56:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=X9W6VxAu06jIOMqR9gPP6gg20oaBg0aqDnBh+JFn9xY=;
-        b=BQWFXM4zGwgAulGPxzT8ZCAIBRXcGsSzYrDGvKL+aMN+24FkKktZUJMTKQ0++cHlK7
-         8/dRumDjCXncqX+QrZH0byjevoU2C37we5qVY7kXY9UEYC5Qc+dYOpfMr7ft+FFjpagO
-         km+HFhiBcgmRbT+kl9qldjiSD4SNSfNwWKw3mwPVG1LOUXGS1pL/hK61Bpydnpp287gS
-         Dg5znHRHWpKV1AiA9h9CwaQB4ED6EUXtA4DZLpCxvXPgK9fhv6m0DD6yEv/lOHePlTZ9
-         iDmN5w2PebX/xX+TTU8tAs3dJ+gcZQgNKsZt14IhjPvWX2pNfIZqFYJuGnU4o0rh3w3e
-         KIIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=X9W6VxAu06jIOMqR9gPP6gg20oaBg0aqDnBh+JFn9xY=;
-        b=nVDODRp/Rv/9W6hPrwcWpn8UYq1Odd8ixzNbZsS8XRhdtnqBrS1EWAyHdw4Zourctb
-         TK0SuFf1nJYdbArsaOAFDyXOx2kdH5S7I/9lHQoBqLWi7D11OSoz9oCfg3z2V62m6Eue
-         y1iHok0ydIuPLjQG64g7NapNCE/ZVONrjTzdP42EdG1h2OcbtmLpMMUEBhtNuqPCKdzj
-         HILHsoGoGQ9eVfSjuavXa1wCWAdN+B0+bb+sAsmrnhGtOsld+SmFEOhwPa3POI0gBfOQ
-         gcrGN5Ie9B4uxiGsaHnt1bKlV+YW5lc/EpHAVzxeKuVHqnUoK8FfhWdPPdeAIAZIG2pb
-         dJzA==
-X-Gm-Message-State: ACgBeo1nJlHhRZOhEXQ3r1BJUweko0A3uzHnjjlBnU62I4VO4zumtFRB
-        YKsmZP3Akuft0qP0pS2NROVH8NudpohlXfUV3731Tg==
-X-Google-Smtp-Source: AA6agR5pENCCNyoa7Jw69iqcgBoMzQEr0+CAqB4xWbisdjSDjQBdLXdGHfwQBXfTeWosj+IA0lZDLSIk3dI5HXCIJAQ=
-X-Received: by 2002:a63:ef0e:0:b0:42c:298e:eb7 with SMTP id
- u14-20020a63ef0e000000b0042c298e0eb7mr14476947pgh.568.1662019012050; Thu, 01
- Sep 2022 00:56:52 -0700 (PDT)
+        Thu, 1 Sep 2022 03:57:12 -0400
+Received: from out199-14.us.a.mail.aliyun.com (out199-14.us.a.mail.aliyun.com [47.90.199.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 397D0DF0A3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:57:09 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VNz0wRs_1662019025;
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VNz0wRs_1662019025)
+          by smtp.aliyun-inc.com;
+          Thu, 01 Sep 2022 15:57:06 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     alexander.deucher@amd.com
+Cc:     harry.wentland@amd.com, sunpeng.li@amd.com,
+        Rodrigo.Siqueira@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@linux.ie, daniel@ffwll.ch,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH -next] drm/amd/display: clean up some inconsistent indentings
+Date:   Thu,  1 Sep 2022 15:56:55 +0800
+Message-Id: <20220901075655.57494-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-References: <20220830100700.344594-1-sudeep.holla@arm.com> <20220830100700.344594-5-sudeep.holla@arm.com>
-In-Reply-To: <20220830100700.344594-5-sudeep.holla@arm.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Thu, 1 Sep 2022 09:56:41 +0200
-Message-ID: <CAHUa44HL5g-b+oGpYg=jne1MPNJSGLYbeW8_nx7a40=26ehQ1A@mail.gmail.com>
-Subject: Re: [PATCH 4/9] firmware: arm_ffa: Add support for querying FF-A features
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Marc Bonnici <marc.bonnici@arm.com>,
-        Achin Gupta <achin.gupta@arm.com>,
-        Valentin Laurent <valentin.laurent@trustonic.com>,
-        Lukas Hanel <lukas.hanel@trustonic.com>,
-        Coboy Chen <coboy.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 12:07 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> Add support for FFA_FEATURES to discover properties supported at the
-> FF-A interface. This interface can be used to query:
->  - If an FF-A interface is implemented by the component at the higher EL,
->  - If an implemented FF-A interface also implements any optional features
->    described in its interface definition, and
->  - Any implementation details exported by an implemented FF-A interface
->    as described in its interface definition.
->
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  drivers/firmware/arm_ffa/driver.c | 23 +++++++++++++++++++++++
->  1 file changed, 23 insertions(+)
->
-> diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-> index 04e7cbb1b9aa..de94073f4109 100644
-> --- a/drivers/firmware/arm_ffa/driver.c
-> +++ b/drivers/firmware/arm_ffa/driver.c
-> @@ -571,6 +571,29 @@ static int ffa_memory_reclaim(u64 g_handle, u32 flags)
->         return 0;
->  }
->
-> +static int ffa_features(u32 func_feat_id, u32 input_props, u32 *if_props)
-> +{
-> +       ffa_value_t id;
-> +
-> +       if (!ARM_SMCCC_IS_FAST_CALL(func_feat_id) && input_props) {
-> +               pr_err("%s: Invalid Parameters: %x, %x", __func__,
-> +                      func_feat_id, input_props);
-> +               return ffa_to_linux_errno(FFA_RET_INVALID_PARAMETERS);
-> +       }
-> +
-> +       invoke_ffa_fn((ffa_value_t){
-> +               .a0 = FFA_FEATURES, .a1 = func_feat_id, .a2 = input_props,
-> +               }, &id);
-> +
-> +       if (id.a0 == FFA_ERROR)
-> +               return ffa_to_linux_errno((int)id.a2);
-> +
-> +       if (if_props)
-> +               *if_props = id.a2;
+This if statement is the content of the for statement above it. It
+should be indented.
 
-w3 (id.a3) also contains a value when querying for
-FFA_MEM_RETRIEVE_REQ. I see that in "[PATCH 5/9] firmware: arm_ffa:
-Use FFA_FEATURES to detect if native versions are supported" you're
-using this function with if_props = NULL. So I guess that at the
-moment we have more than needed, but in case you need to add another
-parameter to this function you'll need to update all the call sites
-too.
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=2026
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+---
+ drivers/gpu/drm/amd/display/dc/core/dc_hw_sequencer.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Cheers,
-Jens
+diff --git a/drivers/gpu/drm/amd/display/dc/core/dc_hw_sequencer.c b/drivers/gpu/drm/amd/display/dc/core/dc_hw_sequencer.c
+index 9dd705b985b9..0139e98a0aa1 100644
+--- a/drivers/gpu/drm/amd/display/dc/core/dc_hw_sequencer.c
++++ b/drivers/gpu/drm/amd/display/dc/core/dc_hw_sequencer.c
+@@ -417,8 +417,8 @@ void get_subvp_visual_confirm_color(
+ 	for (i = 0; i < dc->res_pool->pipe_count; i++) {
+ 		struct pipe_ctx *pipe = &dc->current_state->res_ctx.pipe_ctx[i];
+ 
+-	if (pipe->stream && pipe->stream->mall_stream_config.paired_stream &&
+-				pipe->stream->mall_stream_config.type == SUBVP_MAIN) {
++		if (pipe->stream && pipe->stream->mall_stream_config.paired_stream &&
++			pipe->stream->mall_stream_config.type == SUBVP_MAIN) {
+ 			/* SubVP enable - red */
+ 			color->color_r_cr = color_value;
+ 			enable_subvp = true;
+-- 
+2.20.1.7.g153144c
 
-> +
-> +       return 0;
-> +}
-> +
->  static u32 ffa_api_version_get(void)
->  {
->         return drv_info->version;
-> --
-> 2.37.2
->

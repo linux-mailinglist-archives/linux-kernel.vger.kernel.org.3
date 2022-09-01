@@ -2,169 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFC85AA3E2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 01:45:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E93CB5AA3E1
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 01:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbiIAXov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 19:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
+        id S229514AbiIAXoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 19:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbiIAXol (ORCPT
+        with ESMTP id S231936AbiIAXol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Sep 2022 19:44:41 -0400
-Received: from mail-vk1-xa34.google.com (mail-vk1-xa34.google.com [IPv6:2607:f8b0:4864:20::a34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E906A832F5
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F83B6B8DB
         for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:44:40 -0700 (PDT)
-Received: by mail-vk1-xa34.google.com with SMTP id 134so257582vkz.11
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-11f0fa892aeso1071964fac.7
         for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 16:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date;
-        bh=E/w20BQSdzic7HV/DXA4w/RdjxH6IBYdbHhBUiDju7A=;
-        b=d64iMYOScRb/kfj6GTe+dCDg7yBC91L/fdLc+4cxP5Pvcgx6qaOMzL6WLG9T2Qx03q
-         AOJzYfb8Saf9iYFBLzhpB5XfRHYTDsbwIk1HRF7sZ4yEIweU88mUcura4/ZUPzv/4NRf
-         /fXuTOfD3ASnWYUUoXWlU6BZ40RgqoR981eHf0lL6q0L2Tuy8xIjXC4mJgvOJ8/6hoCb
-         TiYPMTEkZ6mxnEupyokGjyQwusEhbNpXe4N1AO5jRXUQqYaHmKnn3ajjMdUsXacezMJ5
-         75x/FX2ZxhFjV1ivLvjjVGSjgXPHeiVdkEzWdRsF+WFhfH3KUckgvRvLwJY47vJe0SPX
-         KY6A==
+        bh=X6a683iDz7ML2b6gQJ7MXVC/aDeAhx+QotiRauAFCC8=;
+        b=XRcSB6A82/S7Wk7JvByhg9pXVGFOf/DvkMz8BsAF2qPDnq1QPyOQ7dh6nN6VMzNKtV
+         Ec8dt6UAqTCWRTNTqnkMs8heo459+ZGQnNDKIDSrixZH9O5u6E/1siRYsnUWaSboaITU
+         2CtHIWhkY+8UyHDyzZ+4mINr7CuCgffnhvCM8WjSx4ZiZeEdqxJPlRmou1saRKeYP7RA
+         QL+dAnoAsuov9hhRe1UlA5ah3q5jGjQKJIMIbsGLVNDwkH2njhR1+Ly9tSJEUM/0vLCN
+         tI1kS7POSxAf4QgBYcPgdySWvhbCHJBMnHu+yuMvA3j8JePMWZyT1DMiH5aPs8NOqE64
+         vnnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=E/w20BQSdzic7HV/DXA4w/RdjxH6IBYdbHhBUiDju7A=;
-        b=yc4BElZagpK7PDEYWz3KStaisZZ1LOlu66SWi7SS1S18BurJmuHy6pFgzJ5tN3w/yN
-         b+gttYzR1lfqWOsXRUphokZB5eAkZPCHs5VO1DFg7zXu8QuBGIAi/QZr3BeNnx60iApf
-         HW82kc09d2U917Gncu/a1lxEXQm02r2LNvhcC87k0f8dC/fzL1DaLEFy3Q7NV0/Y/WwD
-         V72S3bLv3rhIk6rpUGxFREbK51kXh11sBBiXK/jFtIMKeJtIxWHcA7qDbw0MRGUQPNr8
-         9CkZ8KLlsT2/3kxaHYz9SMQ96WH8cW2Q3ndTLafyDl5A6sOnPpbdowZweVdxEXLw8NH8
-         Kryg==
-X-Gm-Message-State: ACgBeo2YsaFBS6WEoMqFyBS/qeamO0P9ygE+TycLLWL9zziU41jij8GB
-        hl0cHvGQGd8GKJFgK0btjkE4AwvIzi31X385Wv4FhQ==
-X-Google-Smtp-Source: AA6agR4FMwqqn0XOwg5/1luwsPx0Iw1rXdGs6d4W88tUlFkF3J5qguh/+CJfJWKYnI2txoV7pm8mMTJ+2OJH3G/vBRM=
-X-Received: by 2002:a1f:2c8c:0:b0:394:76ba:b08c with SMTP id
- s134-20020a1f2c8c000000b0039476bab08cmr6966094vks.32.1662075879803; Thu, 01
- Sep 2022 16:44:39 -0700 (PDT)
+        bh=X6a683iDz7ML2b6gQJ7MXVC/aDeAhx+QotiRauAFCC8=;
+        b=lq29oPVgNJXcM2F38toEE5b9IL5v8df0R7RgdslB8ZkHJJLiXbeLY4SPsHV9lHrPY2
+         +sKGrjwBj1Fm7LJweAnKnwRTRZ4WvUnotKLcVbY3jMx6NShznuLKmS8jFaqqRVVZ8tN7
+         lRCeMB987xPoaFwKsZ/b26q7Hg6MJTWjX4alRZdZdoFNOp03J9O7XV0BqEVmOF15zLp1
+         clFFeASBcdYVp2Cz4eEqFDC407sZp+t2ND2pEPx3Nl1BJIfWB5J4ju9Sfl1rTQnUjTU/
+         Bkg6FIXnALniGIKHtba1v7DDU7LlfTToGZ4u851xDx9jbgIl3EdKoV/m8wAfSp/QWIJL
+         zhmA==
+X-Gm-Message-State: ACgBeo2+L+MuACNEtyrsXVra489nFra69WE+LySvMTqyurxe5zGSQ0q8
+        yrXZd70sqoVCD32VwSAaWV4zovtBF7TWEU0FPy/6
+X-Google-Smtp-Source: AA6agR6O0cEeUyv5nUs5Xy4LsM1ZajObDzXeBBOEECGDx+tKhxY7MVmv8sBcN/a6QVEpRy2PQ3lUScEkxAY82lysvo4=
+X-Received: by 2002:aca:3010:0:b0:343:91b:7f7 with SMTP id w16-20020aca3010000000b00343091b07f7mr733254oiw.51.1662075879854;
+ Thu, 01 Sep 2022 16:44:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220826150807.723137-1-glider@google.com> <20220826150807.723137-5-glider@google.com>
- <20220826211729.e65d52e7919fee5c34d22efc@linux-foundation.org>
- <CAG_fn=Xpva_yx8oG-xi7jqJyM2YLcjNda+8ZyQPGBMV411XgMQ@mail.gmail.com>
- <20220829122452.cce41f2754c4e063f3ae8b75@linux-foundation.org>
- <CAG_fn=X6eZ6Cdrv5pivcROHi3D8uymdgh+EbnFasBap2a=0LQQ@mail.gmail.com> <20220830150549.afa67340c2f5eb33ff9615f4@linux-foundation.org>
-In-Reply-To: <20220830150549.afa67340c2f5eb33ff9615f4@linux-foundation.org>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 1 Sep 2022 17:44:03 -0600
-Message-ID: <CAOUHufY91Eju-g1+xbUsGkGZ-cwBm78v+S_Air7Cp8mAnYJVYA@mail.gmail.com>
-Subject: Re: [PATCH v5 04/44] x86: asm: instrument usercopy in get_user() and put_user()
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrey Konovalov <andreyknvl@google.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
-        Christoph Hellwig <hch@lst.de>,
-        Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Ilya Leoshkevich <iii@linux.ibm.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Kees Cook <keescook@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        kasan-dev <kasan-dev@googlegroups.com>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
+References: <20220824041933.822838-1-joefradley@google.com>
+ <CABVgOSki72Yqb1DBSCgi-qk+FbNniL4GX+19MXwq=K9VEzAyoA@mail.gmail.com> <cb8b16a1-a7d6-1b04-c748-3f2d802b54e5@linuxfoundation.org>
+In-Reply-To: <cb8b16a1-a7d6-1b04-c748-3f2d802b54e5@linuxfoundation.org>
+From:   Joe Fradley <joefradley@google.com>
+Date:   Thu, 1 Sep 2022 16:44:29 -0700
+Message-ID: <CAF-60z1XC0GHNKAv79iomGBmVNSyo_MfZ=uYtxLGOxSiBFSweQ@mail.gmail.com>
+Subject: Re: [PATCH v2] tools: Add new "test" taint to kernel-chktaint
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     David Gow <davidgow@google.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Jonathan Corbet <corbet@lwn.net>, kernel-team@android.com,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 4:05 PM Andrew Morton <akpm@linux-foundation.org> wrote:
-...
-> Yu, that inclusion is regrettable.  I don't think mm_types.h is an
-> appropriate site for implementing lru_gen_use_mm() anyway.  Adding a
-> new header is always the right fix for these things.  I'd suggest
-> adding a new mglru.h (or whatever) and putting most/all of the mglru
-> material in there.
+On Thu, Sep 1, 2022 at 11:57 AM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> Also, the addition to kernel/sched/core.c wasn't clearly changelogged,
-> is uncommented and I doubt if the sched developers know about it, let
-> alone reviewed it.  Please give them a heads-up.
+> On 8/23/22 22:41, David Gow wrote:
+> > On Wed, Aug 24, 2022 at 12:19 PM Joe Fradley <joefradley@google.com> wrote:
+> >>
+> >> Commit c272612cb4a2 ("kunit: Taint the kernel when KUnit tests are run")
+> >> added a new taint flag for when in-kernel tests run. This commit adds
+> >> recognition of this new flag in kernel-chktaint.
+> >>
+>
+> What happens without this change? It isn't clear what this change is
+> fixing.
 
-Adding Ingo, Peter, Juri and Vincent.
+Without this change the correct reason will not be displayed if the kernel
+is tainted because of a test.
 
-I added lru_gen_use_mm() (one store operation) to context_switch() in
-kernel/sched/core.c, and I would appreciate it if you could take a
-look and let me know if you have any concerns:
-https://lore.kernel.org/r/20220815071332.627393-9-yuzhao@google.com/
+>
+> >> Reviewed-by: David Gow <davidgow@google.com>
+> >> Signed-off-by: Joe Fradley <joefradley@google.com>
+> >> ---
+> >> Changes in v2:
+> >> - based off of kselftest/kunit branch
+> >> - Added David's Reviewed-by tag
+> >>
+> >
+> > This still looks good to me.
+> >
+> > Unless anyone objects, I guess we'll take this through the KUnit
+> > branch (which, after all, is where the taint was originally added).
+> > I've added it to the list for 6.1, but it technically could be
+> > considered a fix for 6.0 as well.
+> >
+>
+> I can definitely take this for Linux 6.0 with additional information
+> on the problems seen without this change.
 
-I'll resend the series in a week or so, and cc you when that happens.
+Great, thank you very much.
 
-> The addition looks fairly benign, but core context_switch() is the
-> sort of thing which people get rather defensive about and putting
-> mm-specific stuff in there might be challenged.  Some quantitative
-> justification of this optimization would be appropriate.
-
-The commit message (from the above link) touches on the theory only:
-
-    This patch uses the following optimizations when walking page tables:
-    1. It tracks the usage of mm_struct's between context switches so that
-       page table walkers can skip processes that have been sleeping since
-       the last iteration.
-
-Let me expand on this.
-
-TLDR: lru_gen_use_mm() introduces an extra store operation whenever
-switching to a new mm_struct, which sets a flag for page reclaim to
-clear.
-
-For systems that are NOT under memory pressure:
-1. This is a new overhead.
-2. I don't think it's measurable, hence can't be the last straw.
-3. Assume it can be measured, the belief is that underutilized systems
-should be sacrificed (to some degree) for the greater good.
-
-For systems that are under memory pressure:
-1. When this flag is set on a mm_struct, page reclaim knows that this
-mm_struct has been used since the last time it cleared this flag. So
-it's worth checking out this mm_struct (to clear the accessed bit).
-2. The similar idea has been used on Android and ChromeOS: when an app
-or a tab goes to the background, these systems (conditionally) call
-MADV_COLD. The majority of GUI applications don't implement this idea.
-MGLRU opts to do it for the benefit of them. How it benefits server
-applications is unknown (uninteresting).
-3. This optimization benefits arm64 v8.2+ more than x86, since x86
-supports the accessed bit in non-leaf entries and therefore the search
-space can be reduced based on that. On a 4GB ARM system with 40 Chrome
-tabs opened and 5 tabs in active use, this optimization improves page
-table walk performance by about 5%. The overall benefit is small but
-measurable under heavy memory pressure.
-4. The idea can be reused by other MM components, e.g., khugepaged.
-
-Thanks.
+>
+> thanks,
+> -- Shuah
+>

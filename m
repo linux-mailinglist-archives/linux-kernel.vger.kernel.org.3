@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 012F25AA2B7
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85A685AA2BA
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:18:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234747AbiIAWSQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:18:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45762 "EHLO
+        id S233374AbiIAWSd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:18:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234381AbiIAWSB (ORCPT
+        with ESMTP id S234469AbiIAWSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:18:01 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59AF8543C2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:18:00 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id q8so157347qvr.9
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 15:18:00 -0700 (PDT)
+        Thu, 1 Sep 2022 18:18:02 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4074F58091
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:18:01 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id l5so238841qtv.4
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 15:18:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=joelfernandes.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=wacV+wNWevSZZedckm8hHMeO8v0HhmKZhpXkr12CWiU=;
-        b=e7rfmVttSIAE2dX9U/UrdKI2/QNY3ZP3fKeyJGley56wIpwe2qS6saz3KZesypfmqe
-         hM1riUNN/4tHj4mrt7IXt6dpL2LLv2du/nCXvZZI8MdoBiSD0/AnUB8528he0Bh8pZQV
-         vrMkt1S957E51Pelj+JfGSpSAlfQVDY8utxxc=
+        bh=8tBDdZaeoT3b5CBzqvW/ZB2aZTVcUlmvdmlRm1sAyM4=;
+        b=QBkSAea3WwRWmhiRWRuvpOfEw+FTTLufqMSEdc1gAtyAq+xBunox+Nuh8C6IUqQDo1
+         +LxFhVcyiQIx4jvB2azfPR7AmGcN5zZvubRtp5adhPS46cT5+VACoX35Em9rNj9ukK+M
+         L11Wz8mOl+0mNcbPFv1bMoPDD7RhIAz59Gntw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=wacV+wNWevSZZedckm8hHMeO8v0HhmKZhpXkr12CWiU=;
-        b=QHryVwDuDQby4iBBA1Jg0/KHBxd/gRq++7UpJVZaN3xibzy0LJPBId0md/p//8kPbi
-         ZMIR7ebkh1IsmshbVVawQetj/xvm45BJr/B927W/hYWyufWzohjpkmJ3eQp6b9Yn0JE4
-         cmWlj0RL8NJEYDTaE8yIn2aGJjTqqZp4+L+H4CozKI2kRxIxZ5NjUXDfdSTZWzfKjkc9
-         AYBZuW4LIhNyDg/aLf/x+A3N2vnOkW1iPnOZAL46t9S2nnbnz98q47POu58lB42bNeeC
-         fM3IzB3AQnm8tz8T1X6XpVdI+NLPxIPRqx8bPeysw3C8paChf0I7spGBiHhDy1MMVg6E
-         l+Zg==
-X-Gm-Message-State: ACgBeo2olqCcaizUI+k8VYeDCnoVgPefncMtwRG+9IILON1pu9bVpMkv
-        lRidM825PRA9jJ9yIy6LOp+vww==
-X-Google-Smtp-Source: AA6agR7ebVdicXTu0lYFUslN4hqrp3yrx/UXs4hw278sz5joSWluao70f6a70ft5FQ57ZlDUz+4CoA==
-X-Received: by 2002:a05:6214:27c1:b0:473:85c9:3eeb with SMTP id ge1-20020a05621427c100b0047385c93eebmr26877303qvb.53.1662070679524;
-        Thu, 01 Sep 2022 15:17:59 -0700 (PDT)
+        bh=8tBDdZaeoT3b5CBzqvW/ZB2aZTVcUlmvdmlRm1sAyM4=;
+        b=tibIpqqbxmT2x6BuQQK1w54RI93xQjWD/EZSBoX8EmbEOVeRyVMzZkBMQSNbBrZeg5
+         dGhdZTPk+TkUs/5tlw4iK33GxQXGFegz4DSiGoI9bisVixAZt12K95i07qiynJmG4L/I
+         2BX1IIbPwmy6YpnLPCMH68iHAJrEWrbR9dZeWhycD9EYWabK5ua6knEHSP58QbFiyIf+
+         8AJkf2TeKEMou9jhCpZi4ZTflvLGhDy2PmjgHv6lpGBUZD9S1s9Yvnw4wxmGp/RiRiRV
+         y34tPepGSiyKafsRByvk6SzI2Hut8wrDG7UxILxARb7UTkT0Cj061UGznewUp1DzOmXi
+         /xrg==
+X-Gm-Message-State: ACgBeo2fNhQ2262CYFWGr9CNO6+7iPNXh9x4B0fGOc6WgUXwiz3Ex3Cd
+        bhmx5PZ0M70XD79uhgOmzNELI+M9Ma1oFw==
+X-Google-Smtp-Source: AA6agR4RLjnlk0HhdTMZyE6uJDeBeCmArIKBraVqa1sV/k/4xV1xpnGzfyzL2EqEG8NqbDqWrq33bg==
+X-Received: by 2002:a05:622a:649:b0:343:7b74:5cd1 with SMTP id a9-20020a05622a064900b003437b745cd1mr26095535qtb.407.1662070680221;
+        Thu, 01 Sep 2022 15:18:00 -0700 (PDT)
 Received: from joelboxx.c.googlers.com.com (228.221.150.34.bc.googleusercontent.com. [34.150.221.228])
-        by smtp.gmail.com with ESMTPSA id s16-20020ac85290000000b0034305a91aaesm11060794qtn.83.2022.09.01.15.17.58
+        by smtp.gmail.com with ESMTPSA id s16-20020ac85290000000b0034305a91aaesm11060794qtn.83.2022.09.01.15.17.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 01 Sep 2022 15:17:59 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
@@ -52,9 +52,9 @@ Cc:     linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
         paulmck@kernel.org, rostedt@goodmis.org, vineeth@bitbyteword.org,
         boqun.feng@gmail.com,
         "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: [PATCH v5 03/18] rcu/tree: Use READ_ONCE() for lockless read of rnp->qsmask
-Date:   Thu,  1 Sep 2022 22:17:05 +0000
-Message-Id: <20220901221720.1105021-4-joel@joelfernandes.org>
+Subject: [PATCH v5 04/18] rcu: Fix late wakeup when flush of bypass cblist happens
+Date:   Thu,  1 Sep 2022 22:17:06 +0000
+Message-Id: <20220901221720.1105021-5-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
 In-Reply-To: <20220901221720.1105021-1-joel@joelfernandes.org>
 References: <20220901221720.1105021-1-joel@joelfernandes.org>
@@ -70,28 +70,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rnp->qsmask is locklessly accessed from rcutree_dying_cpu(). This
-may help avoid load/store tearing due to concurrent access, KCSAN
-issues, and preserve sanity of people reading the mask in tracing.
+When the bypass cblist gets too big or its timeout has occurred, it is
+flushed into the main cblist. However, the bypass timer is still running
+and the behavior is that it would eventually expire and wake the GP
+thread.
+
+Since we are going to use the bypass cblist for lazy CBs, do the wakeup
+soon as the flush happens. Otherwise, the lazy-timer will go off much
+later and the now-non-lazy cblist CBs can get stranded for the duration
+of the timer.
+
+This is a good thing to do anyway (regardless of this series), since it
+makes the behavior consistent with behavior of other code paths where queueing
+something into the ->cblist makes the GP kthread in a non-sleeping state
+quickly.
 
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- kernel/rcu/tree.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/rcu/tree_nocb.h | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-index 0ca21ac0f064..5ec97e3f7468 100644
---- a/kernel/rcu/tree.c
-+++ b/kernel/rcu/tree.c
-@@ -2106,7 +2106,7 @@ int rcutree_dying_cpu(unsigned int cpu)
- 	if (!IS_ENABLED(CONFIG_HOTPLUG_CPU))
- 		return 0;
+diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
+index 0a5f0ef41484..31068dd31315 100644
+--- a/kernel/rcu/tree_nocb.h
++++ b/kernel/rcu/tree_nocb.h
+@@ -447,7 +447,13 @@ static bool rcu_nocb_try_bypass(struct rcu_data *rdp, struct rcu_head *rhp,
+ 			rcu_advance_cbs_nowake(rdp->mynode, rdp);
+ 			rdp->nocb_gp_adv_time = j;
+ 		}
+-		rcu_nocb_unlock_irqrestore(rdp, flags);
++
++		// The flush succeeded and we moved CBs into the ->cblist.
++		// However, the bypass timer might still be running. Wakeup the
++		// GP thread by calling a helper with was_all_done set so that
++		// wake up happens (needed if main CB list was empty before).
++		__call_rcu_nocb_wake(rdp, true, flags)
++
+ 		return true; // Callback already enqueued.
+ 	}
  
--	blkd = !!(rnp->qsmask & rdp->grpmask);
-+	blkd = !!(READ_ONCE(rnp->qsmask) & rdp->grpmask);
- 	trace_rcu_grace_period(rcu_state.name, READ_ONCE(rnp->gp_seq),
- 			       blkd ? TPS("cpuofl-bgp") : TPS("cpuofl"));
- 	return 0;
 -- 
 2.37.2.789.g6183377224-goog
 

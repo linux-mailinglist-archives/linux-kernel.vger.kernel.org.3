@@ -2,150 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FA625A9694
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:20:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D1065A9684
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:17:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233247AbiIAMTk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:19:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55322 "EHLO
+        id S233267AbiIAMR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233056AbiIAMT1 (ORCPT
+        with ESMTP id S232868AbiIAMRW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:19:27 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77B5A1195CF;
-        Thu,  1 Sep 2022 05:19:26 -0700 (PDT)
-Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2819FvCQ017167;
-        Thu, 1 Sep 2022 08:19:23 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3japt62478-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 01 Sep 2022 08:19:23 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 281CJMIF031421
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 1 Sep 2022 08:19:22 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 1 Sep 2022 08:19:21 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Thu, 1 Sep 2022 08:19:21 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Thu, 1 Sep 2022 08:19:21 -0400
-Received: from debian.ad.analog.com ([10.48.65.119])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 281CJ1FS010547;
-        Thu, 1 Sep 2022 08:19:14 -0400
-From:   Ciprian Regus <ciprian.regus@analog.com>
-To:     <jic23@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <linux-iio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     Ciprian Regus <ciprian.regus@analog.com>
-Subject: [PATCH v2 5/5] drivers: iio: adc: Rename the LTC2499 iio device
-Date:   Thu, 1 Sep 2022 15:17:00 +0300
-Message-ID: <20220901121700.1325733-5-ciprian.regus@analog.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20220901121700.1325733-1-ciprian.regus@analog.com>
-References: <20220901121700.1325733-1-ciprian.regus@analog.com>
+        Thu, 1 Sep 2022 08:17:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC006118A63;
+        Thu,  1 Sep 2022 05:17:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C462B825E4;
+        Thu,  1 Sep 2022 12:17:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8490C433D6;
+        Thu,  1 Sep 2022 12:17:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662034638;
+        bh=HMRBvtGrMdseHHO8WD6RRw3JemO/uRhitrcEcBh7oNk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JI38jC2mevkX/4GtWpVjQre7XaNbn7VhZ+Rkhr5IpRF7UZvDH5XtH3JLJL8qdirl+
+         Cj7CH8pj40ihyuVu6GQF/Bf3e0VZ6/LxPC2yXycJopLmTWI4Xtxhqk40NqrnQtVg8d
+         zi3zvxmPfRS1JLpJa9fMCqGzXhOvcXClFUvpC2yevjgLyZk2PVOyOkCCp6EQS+9pHE
+         ZDN1pjgpUw+le3WE/VmsnR5pEkX47pYbZMgTwMHBy6KCf3+8pjTkYGbk6lmWCviG7f
+         vbGIubjeVMuSqwdxdutaaV/Il3IrzTukDESCtg5R7nLPG3wi+Qh9yEvTIxxtwAZsy+
+         uF5I3/4+RPJ4A==
+From:   Jeff Layton <jlayton@kernel.org>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org, linux-man@vger.kernel.org
+Cc:     linux-api@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-xfs@vger.kernel.org
+Subject: [RFC PATCH v2] statx, inode: document the new STATX_INO_VERSION field
+Date:   Thu,  1 Sep 2022 08:17:14 -0400
+Message-Id: <20220901121714.20051-1-jlayton@kernel.org>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: OFMe9ibgmWtAAUMxAOuDoCqnPdt2BhZO
-X-Proofpoint-ORIG-GUID: OFMe9ibgmWtAAUMxAOuDoCqnPdt2BhZO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_08,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 malwarescore=0 priorityscore=1501 adultscore=0 spamscore=0
- lowpriorityscore=0 mlxscore=0 phishscore=0 impostorscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2209010056
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set the iio device's name based on the chip used for the
-LTC2499 only. The most common way for IIO clients to interact
-with a device is to address it based on it's name. By using
-the dev_name() function, the name will be set based on a
-i2c_client's kobj name, which has the format i2c_instance-i2c_address
-(1-0076 for example). This is not ideal, since it makes a
-requirement for userspace to have knowledge about the hardware
-connections of the device.
+I'm proposing to expose the inode change attribute via statx [1]. Document
+what this value means and what an observer can infer from it changing.
 
-The name field is set to NULL for the LTC2497 and LTC2496, so
-that the old name can kept as it is, since changing it will
-result in an ABI breakage.
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
 
-Signed-off-by: Ciprian Regus <ciprian.regus@analog.com>
+[1]: https://lore.kernel.org/linux-nfs/20220826214703.134870-1-jlayton@kernel.org/T/#t
 ---
-changes in v2:
- - updated the patch title (LTC249x -> LTC2499), since the name change only
-   affects the LTC2499.
- - updated the commit description to better explain what is being done.
- - only changed the iio_dev's name for the LTC2499.
- - added a comment to explain difference in naming.
- - added the const qualifier to the name field.
- drivers/iio/adc/ltc2496.c      |  1 +
- drivers/iio/adc/ltc2497-core.c | 10 +++++++++-
- drivers/iio/adc/ltc2497.h      |  1 +
- 3 files changed, 11 insertions(+), 1 deletion(-)
+ man2/statx.2 | 17 +++++++++++++++++
+ man7/inode.7 | 12 ++++++++++++
+ 2 files changed, 29 insertions(+)
 
-diff --git a/drivers/iio/adc/ltc2496.c b/drivers/iio/adc/ltc2496.c
-index bf89d5ae19af..2593fa4322eb 100644
---- a/drivers/iio/adc/ltc2496.c
-+++ b/drivers/iio/adc/ltc2496.c
-@@ -89,6 +89,7 @@ static void ltc2496_remove(struct spi_device *spi)
- 
- static const struct ltc2497_chip_info ltc2496_info = {
- 	.resolution = 16,
-+	.name = NULL,
+v2: revised the definition to be more strict, since that seemed to be
+    consensus on desired behavior. Spurious i_version bumps would now
+    be considered bugs, by this definition.
+
+diff --git a/man2/statx.2 b/man2/statx.2
+index 0d1b4591f74c..493e4e234809 100644
+--- a/man2/statx.2
++++ b/man2/statx.2
+@@ -62,6 +62,7 @@ struct statx {
+     __u32 stx_dev_major;   /* Major ID */
+     __u32 stx_dev_minor;   /* Minor ID */
+     __u64 stx_mnt_id;      /* Mount ID */
++    __u64 stx_ino_version; /* Inode change attribute */
  };
- 
- static const struct of_device_id ltc2496_of_match[] = {
-diff --git a/drivers/iio/adc/ltc2497-core.c b/drivers/iio/adc/ltc2497-core.c
-index b2752399402c..f52d37af4d1f 100644
---- a/drivers/iio/adc/ltc2497-core.c
-+++ b/drivers/iio/adc/ltc2497-core.c
-@@ -169,7 +169,15 @@ int ltc2497core_probe(struct device *dev, struct iio_dev *indio_dev)
- 	struct ltc2497core_driverdata *ddata = iio_priv(indio_dev);
- 	int ret;
- 
--	indio_dev->name = dev_name(dev);
-+	/*
-+	 * Keep using dev_name() for the iio_dev's name on some of the parts,
-+	 * since updating it would result in a ABI breakage.
-+	 */
-+	if (ddata->chip_info->name)
-+		indio_dev->name = ddata->chip_info->name;
-+	else
-+		indio_dev->name = dev_name(dev);
-+
- 	indio_dev->info = &ltc2497core_info;
- 	indio_dev->modes = INDIO_DIRECT_MODE;
- 	indio_dev->channels = ltc2497core_channel;
-diff --git a/drivers/iio/adc/ltc2497.h b/drivers/iio/adc/ltc2497.h
-index 95f6a5f4d4a6..fd3dfd491060 100644
---- a/drivers/iio/adc/ltc2497.h
-+++ b/drivers/iio/adc/ltc2497.h
-@@ -12,6 +12,7 @@ enum ltc2497_chip_type {
- 
- struct ltc2497_chip_info {
- 	u32 resolution;
-+	const char *name;
- };
- 
- struct ltc2497core_driverdata {
+ .EE
+ .in
+@@ -247,6 +248,7 @@ STATX_BTIME	Want stx_btime
+ STATX_ALL	The same as STATX_BASIC_STATS | STATX_BTIME.
+ 	It is deprecated and should not be used.
+ STATX_MNT_ID	Want stx_mnt_id (since Linux 5.8)
++STATX_INO_VERSION	Want stx_ino_version (DRAFT)
+ .TE
+ .in
+ .PP
+@@ -411,6 +413,21 @@ and corresponds to the number in the first field in one of the records in
+ For further information on the above fields, see
+ .BR inode (7).
+ .\"
++.TP
++.I stx_ino_version
++The inode version, also known as the inode change attribute. This
++value must change any time there is an inode status change. Any
++operation that would cause the
++.I stx_ctime
++to change must also cause
++.I stx_ino_version
++to change, even when there is no apparent change to the
++.I stx_ctime
++due to coarse timestamp granularity.
++.IP
++An observer cannot infer anything about the nature or magnitude of the change
++from the value of this field. A change in this value only indicates that
++there has been an explicit change in the inode.
+ .SS File attributes
+ The
+ .I stx_attributes
+diff --git a/man7/inode.7 b/man7/inode.7
+index 9b255a890720..d5e0890a52c0 100644
+--- a/man7/inode.7
++++ b/man7/inode.7
+@@ -184,6 +184,18 @@ Last status change timestamp (ctime)
+ This is the file's last status change timestamp.
+ It is changed by writing or by setting inode information
+ (i.e., owner, group, link count, mode, etc.).
++.TP
++Inode version (i_version)
++(not returned in the \fIstat\fP structure); \fIstatx.stx_ino_version\fP
++.IP
++This is the inode change attribute. Any operation that would result in a change
++to \fIstatx.stx_ctime\fP must result in a change to this value. The value must
++change even in the case where the ctime change is not evident due to coarse
++timestamp granularity.
++.IP
++An observer cannot infer anything from the returned value about the nature or
++magnitude of the change. If the returned value is different from the last time
++it was checked, then something has made an explicit change to the inode.
+ .PP
+ The timestamp fields report time measured with a zero point at the
+ .IR Epoch ,
 -- 
-2.30.2
+2.37.2
 

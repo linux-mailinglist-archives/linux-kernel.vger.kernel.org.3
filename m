@@ -2,227 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED7C5A8BC5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 05:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0405A8BCE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 05:11:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232487AbiIADGg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 23:06:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52626 "EHLO
+        id S231837AbiIADLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 23:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231837AbiIADGY (ORCPT
+        with ESMTP id S229746AbiIADLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 23:06:24 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163F910F941
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 20:06:19 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id m10-20020a17090a730a00b001fa986fd8eeso1173316pjk.0
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 20:06:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=7BPZ0w7bR+POM8UWGdSp7cvsHsjrzEmyCxOmSJVn3Sk=;
-        b=h0W5hDXZX1p6OY1jFNHelBXMYElhN5kCe43NFXLFeouKwTwZN/BZ7+ToznHm/Pf4+z
-         4hJTHHaT2dU9C98IhbUK9gU/h3MSsK5O4UyzkKMpOrZVW4cAmoDodPzMk48Aa5DpRXde
-         hn6pR0ZRvBdSiN4lQ/voefmOc0nefZ5azxgsg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=7BPZ0w7bR+POM8UWGdSp7cvsHsjrzEmyCxOmSJVn3Sk=;
-        b=JFAMInAs1U665D3eokt++nTUwBJtMx09bEGf2CVPI/R0bvJzPNVRAVYfsxmYBYsCDz
-         59ukOOTGVHjCPs0JUsydSAr8ILomB3pYfzH6ogpvwEDZ6nlQ6RESCue07oXWBfyZw8I1
-         xH2hosmOMpc6hEskygwzt4Nl8UHbgmc1WNropkERXgSRJColCzCCOBuWQnP3MlPYDRbZ
-         A9mIZj9v6QxPNvQAIL39uN7LWBkd9quAFg8tnmWrgHj4ZFFKSd+SQVBxdZOnTVLb28tp
-         RmA3S+FvajhTN6dCE/VNtaRWQ+rdQIOr6EZoY++L0yNuPIRNjwCZIa1K8S4F22gHfnl6
-         hQwQ==
-X-Gm-Message-State: ACgBeo1EOevp5Xzqc1VA7DV3u9Aogz+/347P55mFJoN9Jq6/6LeYzWmr
-        PRHyIxlst9LLwyoK4E6P4NBfIg==
-X-Google-Smtp-Source: AA6agR4qEkOjTxq3lCWI2gk3QzhiahCCSeb9FdqdRP4PLgYME9Xygid90h2LiUfUrUUP3IZG+U8+jw==
-X-Received: by 2002:a17:90b:3c48:b0:1fd:b6bd:8d2a with SMTP id pm8-20020a17090b3c4800b001fdb6bd8d2amr6320256pjb.159.1662001578599;
-        Wed, 31 Aug 2022 20:06:18 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id i9-20020a170902c94900b00173cfb184c0sm12681822pla.32.2022.08.31.20.06.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 20:06:14 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        syzbot <syzkaller@googlegroups.com>,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, Yajun Deng <yajun.deng@linux.dev>,
-        Oliver Hartkopp <socketcan@hartkopp.net>,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH 2/2] netlink: Bounds-check struct nlmsgerr creation
-Date:   Wed, 31 Aug 2022 20:06:10 -0700
-Message-Id: <20220901030610.1121299-3-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220901030610.1121299-1-keescook@chromium.org>
-References: <20220901030610.1121299-1-keescook@chromium.org>
+        Wed, 31 Aug 2022 23:11:43 -0400
+Received: from mail1.bemta37.messagelabs.com (mail1.bemta37.messagelabs.com [85.158.142.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083A010A632;
+        Wed, 31 Aug 2022 20:11:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fujitsu.com;
+        s=170520fj; t=1662001895; i=@fujitsu.com;
+        bh=AHPZvJazFd1q87YaF+oOE/CDLh9RAqlmX9L7CcYBVwY=;
+        h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=GQIS20UmeaAXxyXF+CLkPX0X1EDJme6AUEJL3UzB6/1GQw6Mv9+0ypYS6HZqXfujV
+         cQYW6c4zHkQsffaDbO5YyTlk/FKAUCApXg6VDlD98Z9IVTXu/WNsXLtAS239/b52rY
+         5yYRgo0MGhTAhafVDuaF1iCjPwIHxro5I+YHozVGz7Lm9W7hPa1eCsb30MZTGPTrxx
+         SBLPsVtpt+Akst1NWrFimUF1a5JeT93JK9SAr8G9d4GHQDJKxs5zSkJaeXobJKr/tE
+         9jZ5QRtbw/BVTu1qPx9JErNqlBSrtQb8+nkR4bcl4VcEQoNgBHBVcg5SGOMhsy2R7D
+         ha/6/ZoZ8GxiA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHIsWRWlGSWpSXmKPExsViZ8ORpPtMSSD
+  ZYNJiCYvXhz8xWlzeNYfNYvqd92wWlw5dZLKY8nIduwOrx+I9L5k8Nq3qZPP4vEkugDmKNTMv
+  Kb8igTVj9vbDjAXvRCr+TT7H2sDYLtjFyMUhJLCRUeLSh3csEM5SJomLs69AOUcZJfbs6GDtY
+  uTkYBPQkLjXcpMRxBYRCJA4fOs4mM0skCWxs/kdkM3BISwQJHF8UzxImEVAReJn10k2EJtXwF
+  Hiyt9v7CC2hICCxJSH75kh4oISJ2c+YYEYIyFx8MULZogaRYkjnX9ZIOxKidYPv6BsNYmr5zY
+  xT2Dkn4WkfRaS9gWMTKsYbZOKMtMzSnITM3N0DQ0MdA0NTYG0sa6RoZleYpVuol5qqW5eflFJ
+  hq6hXmJ5sV5qcbFecWVuck6KXl5qySZGYFCnFKff2MG4a98vvUOMkhxMSqK8FYv5k4X4kvJTK
+  jMSizPii0pzUosPMcpwcChJ8DID40RIsCg1PbUiLTMHGGEwaQkOHiUR3ieKQGne4oLE3OLMdI
+  jUKUZdjoO79u9lFmLJy89LlRLnzVUAKhIAKcoozYMbAYv2S4yyUsK8jAwMDEI8BalFuZklqPK
+  vGMU5GJWEeRlALuHJzCuB2/QK6AgmoCOmz+QHOaIkESEl1cDEyPfy59q3j7bZ7ry/WuZY1EcF
+  uyPe7SJ3NaX2HVq2/2xbWdKJKCbHXKct0/glfTqVsvv72xa8PeX6dD9PJtNdceaW4m832vUM4
+  /YG/1d+6rJfxfq4cl7F5Tdf3p54rXq9VF8olmfH8h/hYrcnxkZ8WlvxUDBz7q9Pp9ZPMlvKHC
+  rw8XPlZoPb9ouVVnPVxE09cH+Xb2i8pKSUh/m/LrlFdpwV0x3mB/wrqL3Ze9j13bnZe0IUV3H
+  vvJN4/fgpvqCcO2FbnFZ+OxYqFv3rWvjmB+tc1di9DCq1b68o2GuZq3XVduXTpQ+5hWoLCgrC
+  OI81fQl6MP1trfbKs5Vt9s+kfVfL63Q+Vrp/8P/e3DgOJZbijERDLeai4kQArxgR5HEDAAA=
+X-Env-Sender: lizhijian@fujitsu.com
+X-Msg-Ref: server-3.tower-728.messagelabs.com!1662001893!143285!1
+X-Originating-IP: [62.60.8.98]
+X-SYMC-ESS-Client-Auth: outbound-route-from=pass
+X-StarScan-Received: 
+X-StarScan-Version: 9.87.3; banners=-,-,-
+X-VirusChecked: Checked
+Received: (qmail 5747 invoked from network); 1 Sep 2022 03:11:34 -0000
+Received: from unknown (HELO n03ukasimr03.n03.fujitsu.local) (62.60.8.98)
+  by server-3.tower-728.messagelabs.com with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP; 1 Sep 2022 03:11:34 -0000
+Received: from n03ukasimr03.n03.fujitsu.local (localhost [127.0.0.1])
+        by n03ukasimr03.n03.fujitsu.local (Postfix) with ESMTP id BEF681AD;
+        Thu,  1 Sep 2022 04:11:33 +0100 (BST)
+Received: from R01UKEXCASM223.r01.fujitsu.local (R01UKEXCASM223 [10.182.185.121])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by n03ukasimr03.n03.fujitsu.local (Postfix) with ESMTPS id B35121AC;
+        Thu,  1 Sep 2022 04:11:33 +0100 (BST)
+Received: from fd75cb8233c6.g08.fujitsu.local (10.167.226.45) by
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.32; Thu, 1 Sep 2022 04:11:30 +0100
+From:   Li Zhijian <lizhijian@fujitsu.com>
+To:     <brauner@kernel.org>, <shuah@kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, Li Zhijian <lizhijian@fujitsu.com>,
+        "Philip Li" <philip.li@intel.com>
+Subject: [PATCH v3] ksefltests: pidfd: Fix wait_states: Test terminated by timeout
+Date:   Thu, 1 Sep 2022 03:10:07 +0000
+Message-ID: <1662001807-7-1-git-send-email-lizhijian@fujitsu.com>
+X-Mailer: git-send-email 1.8.3.1
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5544; h=from:subject; bh=PTnYSDiLEsJDovKpPxYSpPKcq7Gr9tqmNSUX+zizaOA=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjECGia+Ip13JgEGdDSv05K80fyPwzKiQxqsAYFJoZ BNe/+7WJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxAhogAKCRCJcvTf3G3AJsYPD/ 0V5RKSN7bwCg72exKE161D97aLqJRsHhGiZWb0IOJmyL5BJrEmwpfYpQ0B14fq5xU5rV+IoJVNXSll X1yfGa8u9B8v4FEBTZWD01wHvNr2qCRCwmfdTGu0W122+TA7E006P2Z64nl6ztWqbt7MjzXQYys4W3 j30C1GGGCB8p/pCFuhthVqB/STFW2F8gGe1H4+8Dpm+WfwfzZygyXEcXzZ/6PTay88Z1FX4TF4v8lq TtufX5z1jymGdfoZgs6APcwEg6jERKOJKLyqE9JWvdHmjoTei51UWXeZeKYqs0txiCX5l3w3t3zy3/ /tBZXlLhZ5I27XeKS9d+yz0GvXwNBx11jemingI8/6nbDB7Tg05u8X4xEeq8fbedCmKsJ39Pq9I47B AUXr2dXsBTXE93sscUPE+qW+0qPGXOksjsLuPHhTEJqgw8n7cHs6BCreqwPf/9vlNPyvW1Kl5vke1+ raLP03IsNRU/7gjuc1E2zj5nqomffs6xbJMIvvxmOHwkmxcXS8+twXklXnAkobRdsZqwn4WiOufcSY bc83MOA2UsLdbiS2HfEDDbZpdO4hhhTjztngX8cux8CS0iyZr6uNKyyV+R1Y5j2Sr/uhpXs6sSwJXs QiDTHCHxDIxuEcsg4LI9MnLVUNI6IBYAt2lX1AQmWqaVB1QPij1iqgaAhR1A==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.167.226.45]
+X-ClientProxiedBy: G08CNEXCHPEKD07.g08.fujitsu.local (10.167.33.80) To
+ R01UKEXCASM223.r01.fujitsu.local (10.182.185.121)
+X-Virus-Scanned: ClamAV using ClamSMTP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For 32-bit systems, it might be possible to wrap lnmsgerr content
-lengths beyond SIZE_MAX. Explicitly test for all overflows, and mark the
-memcpy() as being unable to internally diagnose overflows.
+0Day/LKP observed that the kselftest blocks forever since one of the
+pidfd_wait doesn't terminate in 1 of 30 runs. After digging into
+the source, we found that it blocks at:
+ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
 
-This also excludes netlink from the coming runtime bounds check on
-memcpy(), since it's an unusual case of open-coded sizing and
-allocation.
+wait_states has below testing flow:
+  CHILD                 PARENT
+  ---------------+--------------
+1 STOP itself
+2                   WAIT for CHILD STOPPED
+3                   SIGNAL CHILD to CONT
+4 CONT
+5 STOP itself
+5'                  WAIT for CHILD CONT
+6                   WAIT for CHILD STOPPED
 
-Cc: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
-Cc: Florian Westphal <fw@strlen.de>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: syzbot <syzkaller@googlegroups.com>
-Cc: netfilter-devel@vger.kernel.org
-Cc: coreteam@netfilter.org
-Cc: netdev@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
+The problem is that the kernel cannot ensure the order of 5 and 5', once
+5 goes first, the test will fail.
+
+we can reproduce it by:
+$ while true; do make run_tests -C pidfd; done
+
+Introduce a blocking read in child process to make sure the parent can
+check its WCONTINUED.
+
+CC: Philip Li <philip.li@intel.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Li Zhijian <lizhijian@fujitsu.com>
+Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>
 ---
- net/netfilter/ipset/ip_set_core.c | 10 +++++--
- net/netlink/af_netlink.c          | 49 +++++++++++++++++++++----------
- 2 files changed, 40 insertions(+), 19 deletions(-)
+I have almost forgotten this patch since the former version post over 6 months
+ago. This time I just do a rebase and update the comments.
+V3: fixes description and add review tag
+V2: rewrite with pipe to avoid usleep
+---
+ tools/testing/selftests/pidfd/pidfd_wait.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/net/netfilter/ipset/ip_set_core.c b/net/netfilter/ipset/ip_set_core.c
-index 16ae92054baa..43576f68f53d 100644
---- a/net/netfilter/ipset/ip_set_core.c
-+++ b/net/netfilter/ipset/ip_set_core.c
-@@ -1709,13 +1709,14 @@ call_ad(struct net *net, struct sock *ctnl, struct sk_buff *skb,
- 		struct nlmsghdr *rep, *nlh = nlmsg_hdr(skb);
- 		struct sk_buff *skb2;
- 		struct nlmsgerr *errmsg;
--		size_t payload = min(SIZE_MAX,
--				     sizeof(*errmsg) + nlmsg_len(nlh));
-+		size_t payload;
- 		int min_len = nlmsg_total_size(sizeof(struct nfgenmsg));
- 		struct nlattr *cda[IPSET_ATTR_CMD_MAX + 1];
- 		struct nlattr *cmdattr;
- 		u32 *errline;
+diff --git a/tools/testing/selftests/pidfd/pidfd_wait.c b/tools/testing/selftests/pidfd/pidfd_wait.c
+index 070c1c876df1..c3e2a3041f55 100644
+--- a/tools/testing/selftests/pidfd/pidfd_wait.c
++++ b/tools/testing/selftests/pidfd/pidfd_wait.c
+@@ -95,20 +95,28 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
+ 		.flags = CLONE_PIDFD | CLONE_PARENT_SETTID,
+ 		.exit_signal = SIGCHLD,
+ 	};
++	int pfd[2];
+ 	pid_t pid;
+ 	siginfo_t info = {
+ 		.si_signo = 0,
+ 	};
  
-+		if (check_add_overflow(sizeof(*errmsg), nlmsg_len(nlh), &payload))
-+			return -ENOMEM;
- 		skb2 = nlmsg_new(payload, GFP_KERNEL);
- 		if (!skb2)
- 			return -ENOMEM;
-@@ -1723,7 +1724,10 @@ call_ad(struct net *net, struct sock *ctnl, struct sk_buff *skb,
- 				  nlh->nlmsg_seq, NLMSG_ERROR, payload, 0);
- 		errmsg = nlmsg_data(rep);
- 		errmsg->error = ret;
--		memcpy(&errmsg->msg, nlh, nlh->nlmsg_len);
-+		unsafe_memcpy(&errmsg->msg, nlh, nlh->nlmsg_len,
-+			      /* "payload" was explicitly bounds-checked, based on
-+			       * the size of nlh->nlmsg_len.
-+			       */);
- 		cmdattr = (void *)&errmsg->msg + min_len;
++	ASSERT_EQ(pipe(pfd), 0);
+ 	pid = sys_clone3(&args);
+ 	ASSERT_GE(pid, 0);
  
- 		ret = nla_parse(cda, IPSET_ATTR_CMD_MAX, cmdattr,
-diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
-index 0cd91f813a3b..8779c273f34f 100644
---- a/net/netlink/af_netlink.c
-+++ b/net/netlink/af_netlink.c
-@@ -2407,7 +2407,7 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
- 	struct nlmsghdr *rep;
- 	struct nlmsgerr *errmsg;
- 	size_t payload = sizeof(*errmsg);
--	size_t tlvlen = 0;
-+	size_t alloc_size, tlvlen = 0;
- 	struct netlink_sock *nlk = nlk_sk(NETLINK_CB(in_skb).sk);
- 	unsigned int flags = 0;
- 	bool nlk_has_extack = nlk->flags & NETLINK_F_EXT_ACK;
-@@ -2419,32 +2419,44 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
- 	if (nlk_has_extack && extack && extack->_msg)
- 		tlvlen += nla_total_size(strlen(extack->_msg) + 1);
- 
--	if (err && !(nlk->flags & NETLINK_F_CAP_ACK))
--		payload += nlmsg_len(nlh);
-+	if (err && !(nlk->flags & NETLINK_F_CAP_ACK) &&
-+	    check_add_overflow(payload, (size_t)nlmsg_len(nlh), &payload))
-+		goto failure;
- 	else
- 		flags |= NLM_F_CAPPED;
--	if (err && nlk_has_extack && extack && extack->bad_attr)
--		tlvlen += nla_total_size(sizeof(u32));
--	if (nlk_has_extack && extack && extack->cookie_len)
--		tlvlen += nla_total_size(extack->cookie_len);
--	if (err && nlk_has_extack && extack && extack->policy)
--		tlvlen += netlink_policy_dump_attr_size_estimate(extack->policy);
-+	if (err && nlk_has_extack && extack && extack->bad_attr &&
-+	    check_add_overflow(tlvlen, (size_t)nla_total_size(sizeof(u32)),
-+			       &tlvlen))
-+		goto failure;
-+	if (nlk_has_extack && extack && extack->cookie_len &&
-+	    check_add_overflow(tlvlen, (size_t)nla_total_size(extack->cookie_len),
-+			       &tlvlen))
-+		goto failure;
-+	if (err && nlk_has_extack && extack && extack->policy &&
-+	    check_add_overflow(tlvlen,
-+			       (size_t)netlink_policy_dump_attr_size_estimate(extack->policy),
-+			       &tlvlen))
-+		goto failure;
- 
- 	if (tlvlen)
- 		flags |= NLM_F_ACK_TLVS;
- 
--	skb = nlmsg_new(payload + tlvlen, GFP_KERNEL);
--	if (!skb) {
--		NETLINK_CB(in_skb).sk->sk_err = ENOBUFS;
--		sk_error_report(NETLINK_CB(in_skb).sk);
--		return;
--	}
-+	if (check_add_overflow(payload, tlvlen, &alloc_size))
-+		goto failure;
+ 	if (pid == 0) {
++		char buf[2];
 +
-+	skb = nlmsg_new(alloc_size, GFP_KERNEL);
-+	if (!skb)
-+		goto failure;
++		close(pfd[1]);
+ 		kill(getpid(), SIGSTOP);
++		ASSERT_EQ(read(pfd[0], buf, 1), 1);
++		close(pfd[0]);
+ 		kill(getpid(), SIGSTOP);
+ 		exit(EXIT_SUCCESS);
+ 	}
  
- 	rep = __nlmsg_put(skb, NETLINK_CB(in_skb).portid, nlh->nlmsg_seq,
- 			  NLMSG_ERROR, payload, flags);
- 	errmsg = nlmsg_data(rep);
- 	errmsg->error = err;
--	memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg) ? nlh->nlmsg_len : sizeof(*nlh));
-+	unsafe_memcpy(&errmsg->msg, nlh, payload > sizeof(*errmsg)
-+					 ?  nlh->nlmsg_len : sizeof(*nlh),
-+		      /* "payload" was bounds checked against nlh->nlmsg_len,
-+		       * and overflow-checked as tlvlen was constructed.
-+		       */);
++	close(pfd[0]);
+ 	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WSTOPPED, NULL), 0);
+ 	ASSERT_EQ(info.si_signo, SIGCHLD);
+ 	ASSERT_EQ(info.si_code, CLD_STOPPED);
+@@ -117,6 +125,8 @@ static int sys_waitid(int which, pid_t pid, siginfo_t *info, int options,
+ 	ASSERT_EQ(sys_pidfd_send_signal(pidfd, SIGCONT, NULL, 0), 0);
  
- 	if (nlk_has_extack && extack) {
- 		if (extack->_msg) {
-@@ -2469,6 +2481,11 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
- 	nlmsg_end(skb, rep);
- 
- 	nlmsg_unicast(in_skb->sk, skb, NETLINK_CB(in_skb).portid);
-+	return;
-+failure:
-+	NETLINK_CB(in_skb).sk->sk_err = ENOBUFS;
-+	sk_error_report(NETLINK_CB(in_skb).sk);
-+
- }
- EXPORT_SYMBOL(netlink_ack);
- 
+ 	ASSERT_EQ(sys_waitid(P_PIDFD, pidfd, &info, WCONTINUED, NULL), 0);
++	ASSERT_EQ(write(pfd[1], "C", 1), 1);
++	close(pfd[1]);
+ 	ASSERT_EQ(info.si_signo, SIGCHLD);
+ 	ASSERT_EQ(info.si_code, CLD_CONTINUED);
+ 	ASSERT_EQ(info.si_pid, parent_tid);
 -- 
-2.34.1
+1.8.3.1
 

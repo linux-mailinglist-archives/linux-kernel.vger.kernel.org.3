@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57F015AA34C
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8005AA352
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:52:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234520AbiIAWqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S234217AbiIAWwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:52:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234385AbiIAWqf (ORCPT
+        with ESMTP id S232517AbiIAWwM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:46:35 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0746E2F2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:46:34 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id bt10so853561lfb.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 15:46:34 -0700 (PDT)
+        Thu, 1 Sep 2022 18:52:12 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1043974E3A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:52:11 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id w19so569799ljj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 15:52:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:from:to:cc;
-        bh=j9JPtLXuGOAthdbqCGaZBEMPKdA+qziCC+Oox2WhyWE=;
-        b=KeZRTpmg+yfKKrQlCWb6p9FCrXOfw+fAObK0nGPdoQQEB9jXrfaidZettyBeWa3nIV
-         cOJHlY1O1waPz+lWUwvlk6O1GTp1OgOoT3QMrLYrtRNgSiZe8oO/nj9ihZAFKUeShrKo
-         eZzD5wo3kchE7FbSnMJJSNSc7SkMe/AwUN2hrEx5QlHXysXfWa8bbvhaVxtr++E3utU8
-         P+QAzv5pgUgN+NVWi9HJbQVusoZd5if6AUN8zXlSTRHzLJR2+7BUcjx9J4NDI6K0uoTC
-         /2TNVxNYQTq15lTo5xELyjfNMDWWt1snAGJlPXjRN6aivFyUt5+admL+PKyoAO6TBUOA
-         yy7Q==
+        bh=Dhwd+COjDW5ThjQ0eGNlcg2FwWXLsRihwwituLHXIZw=;
+        b=Qg20bj9HVOA0O2Dv7pbgLFpIerRd3OpfYftDq4iLQONPRjHm8OE5FicN0K1WL1v+S3
+         bISpN5k4Xg9gTk37HMqAreo6nvuLyU3JTBpgQLIjzDvBJIqAXMP5MfRK4NHoGkdf8jpo
+         3glN34VMEDD6Gh+Zf1murR+o5lg06tWVopJIiQgpwbgHGnSUZUKhfMxhxUfv/PKpvsCf
+         qwtgF3sgpUqP0AbUb+d/a1esSHZ+I5KHKcW+5WE2OKOtNa+X+J/AAtNMS15RdoIDBSEy
+         T+m/BQNhtbsQ6WmcJD2FSngsG3cTf0OyGVh/5RtK7l/wyzsThnJPsLTNCVmQ7lejIS6h
+         shRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:x-gm-message-state:from:to:cc;
-        bh=j9JPtLXuGOAthdbqCGaZBEMPKdA+qziCC+Oox2WhyWE=;
-        b=6ERbkPicSakM175wmJqfJqPSxXMHPIXmTOJGecwlYG4BnWayXFJlph7nr5ptAaavWU
-         jzHSDOnA4M5uiM4JuH0AgnvgrUfPXaMpA46f7EyAvt0sFhPJHPXmNgIoS3nsEz6Avhjm
-         u0PkbPyC0F9lAnFPuYwR341A8aAUyfR2KuQ8wWfVXQfJSr8X6v6UaaOjAR0aDzPVdzZk
-         M2pEy7tEz6m+EYz2vFuPrVK2Be/1K081F6RnT0Vmx+ONeMp/cDCz0SND+Tl5Ar5HctRu
-         saIP4aglp8WP/h2pTNwzvrLo0vbRF3Lwx5X5UiJ6ojRzqvkUJWv0nsY0BPFUg1a1nKgR
-         LHYg==
-X-Gm-Message-State: ACgBeo0XBpyYDkaGY42nkcYJjQeVKzHHmkIbyfs/E6fkdBDqDHdevL7m
-        ArxirmwPD05NYbqV2pP/Z4Q=
-X-Google-Smtp-Source: AA6agR4DDf2sl/p3w9svbMNnoZK7uBdh14I0I0N23iu/YSRY24vtSyAPu3BWH8/9FpD2KRu1t1XcVA==
-X-Received: by 2002:a05:6512:10c4:b0:492:d006:2b13 with SMTP id k4-20020a05651210c400b00492d0062b13mr11967803lfg.398.1662072392749;
-        Thu, 01 Sep 2022 15:46:32 -0700 (PDT)
+        bh=Dhwd+COjDW5ThjQ0eGNlcg2FwWXLsRihwwituLHXIZw=;
+        b=w5w4QVVs/zdKyCQ/RBC65GUAp+OUTs19KklK6+KsvP3Tlmo3XwzuJgNWwvkPaIX177
+         1j4R8R+3R3ATbqlIJJx18Hv82pD9QByXO2ZU+nKHkWjHw/rFF2daCIpHBFuNic8P1nLI
+         K3xxoKOk3ndBvWwMAWeF0dD3rf4LN9r024bytfF16ihLkmMCR32wWhTrvFUZ4TnKM49T
+         WP+q+UWQ7pf2WLIZ0l4KGsO+rzZN31GGk5K/kKxfw7bmPrNagIql3+BlE4GhbgdhPyhj
+         520HJ94v0OSAs2+wXrPtEF6kaPmeJkWdh9sNvKYhLGNYS9pTlQdtbMfc6QxO1jDkW9zE
+         bvXA==
+X-Gm-Message-State: ACgBeo1KTvntsvBSHAbf3glBDdyFT16T0/P/Rny83VlleAZvjEMNfdku
+        Nrc3qzdH4hQB3ctxqkRmTRw=
+X-Google-Smtp-Source: AA6agR5VyqkvxxIZF1flgFAUFyuS1vlvIP1xurquBEUnw5mRA/4PMLSVlwqN/Hy1Kir2419wd9jhSA==
+X-Received: by 2002:a2e:bd0e:0:b0:268:c03b:cf56 with SMTP id n14-20020a2ebd0e000000b00268c03bcf56mr1277850ljq.393.1662072729392;
+        Thu, 01 Sep 2022 15:52:09 -0700 (PDT)
 Received: from ?IPV6:2a02:a31a:a240:1700:9c45:8fa1:8ce7:8852? ([2a02:a31a:a240:1700:9c45:8fa1:8ce7:8852])
-        by smtp.googlemail.com with ESMTPSA id u25-20020a056512041900b00492d6ae2386sm29410lfk.96.2022.09.01.15.46.30
+        by smtp.googlemail.com with ESMTPSA id w9-20020a2e1609000000b0025e15fe421bsm29224ljd.17.2022.09.01.15.52.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 15:46:32 -0700 (PDT)
+        Thu, 01 Sep 2022 15:52:08 -0700 (PDT)
 From:   Mateusz Kwiatkowski <kfyatek@gmail.com>
 X-Google-Original-From: Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>
-Message-ID: <2f607c7d-6da1-c8df-1c02-8dd344a92343@gmail.com>
-Date:   Fri, 2 Sep 2022 00:46:29 +0200
+Message-ID: <768daa58-d1cd-7e9d-4f6e-722f2b0afab9@gmail.com>
+Date:   Fri, 2 Sep 2022 00:52:06 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.2.0
-Subject: Re: [PATCH v2 19/41] drm/modes: Introduce the tv_mode property as a
- command-line option
+Subject: Re: [PATCH v2 20/41] drm/modes: Properly generate a drm_display_mode
+ from a named mode
 Content-Language: pl
 To:     Maxime Ripard <maxime@cerno.tech>,
         Maxime Ripard <mripard@kernel.org>,
@@ -87,8 +87,8 @@ Cc:     Hans de Goede <hdegoede@redhat.com>,
         linux-sunxi@lists.linux.dev,
         Geert Uytterhoeven <geert@linux-m68k.org>
 References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
- <20220728-rpi-analog-tv-properties-v2-19-459522d653a7@cerno.tech>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-19-459522d653a7@cerno.tech>
+ <20220728-rpi-analog-tv-properties-v2-20-459522d653a7@cerno.tech>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v2-20-459522d653a7@cerno.tech>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -103,33 +103,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Maxime,
 
-> @@ -2212,20 +2239,22 @@ struct drm_named_mode {
->      unsigned int xres;
->      unsigned int yres;
->      unsigned int flags;
-> +    unsigned int tv_mode;
->  };
+> +        if (!named_mode->tv_mode)
+> +            continue;
 
-Are _all_ named modes supposed to be about analog TV?
-
-If so, then probably this structure should be renamed drm_named_analog_tv_mode
-or something.
-
-If not, then including tv_mode in all of them sounds almost dangrous. 0 is a
-valid value for enum drm_connector_tv_mode, corresponding to
-DRM_MODE_TV_MODE_NTSC_443. This is a very weird default (maybe it shouldn't be
-the one that has a numeric value of 0?) and if there ever is a named mode that
-is not related to analog TV, it looks that it will refer to NTSC-443.
-
-Not sure where could that actually propagate, and maybe what I'm saying can't
-happen, but I'm imagining weird scenarios where a GPU that has both a
-VGA/HDMI/whatever output, and a composite output, switches to NTSC-443 on the
-composite output by default because a named mode for the modern output is
-selected.
-
-Maybe something like DRM_MODE_TV_MODE_NONE = 0 would make sense?
-
-Maybe not. This is not an actual suggestion, just "thinking out loud".
+As mentioned in the previous email replying to 19/41, this makes it impossible
+to specify DRM_MODE_TV_MODE_NTSC_443 as currently defined in the named mode
+successfully.
 
 Best regards,
 Mateusz Kwiatkowski

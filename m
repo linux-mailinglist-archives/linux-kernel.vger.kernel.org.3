@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F15A5A936F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:43:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E83395A9374
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233897AbiIAJnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34786 "EHLO
+        id S233392AbiIAJn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233873AbiIAJmn (ORCPT
+        with ESMTP id S233372AbiIAJnh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:42:43 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8890D1385A7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:42:19 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id x10so17265407ljq.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 02:42:19 -0700 (PDT)
+        Thu, 1 Sep 2022 05:43:37 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8921927DEC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:43:35 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id m7so14675430lfq.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 02:43:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=cyGoLGFYlRzNkjYzyQzXdAYg9tduOqgaIixq4gRNrZI=;
-        b=TJM+qgmP78WPN0RndE/VLYhAoBjYJOv6Rag8VK3jR+6uYbzVVFP7H4fE8lYtddG60v
-         +FuxG9+2oHabfVV2pV0BUo4GYP1hjrkAHTazM9MblE1gyYGCP3WbXNxkucKTjecG5Xh/
-         t8ppcXv6JkrVF8PdMAw6yp8BfQW9+eyYqh/SyuoVqGNNmvXDyEDdAXmceliP3aOs0Bbj
-         Xom2MXL96es2KYOZLpX590vsc1P2VsZyuO1WYTu8YRIeqyaargB4vTtwu3rk0u9fQpub
-         f484fVUj4Hj3x5AMjyEp89YJpKWY5H9Kxt5y+tOU4G9zgjdrlnUVOQ+ZsEFtN0enJL4x
-         83ew==
+        bh=XEXQPbFYUmyLFpItRto0dJ/tByAUIKacMuPLqwHCo+s=;
+        b=Gfpfg8Sf0jfSEIFCwMWjk3s/aMXgKh97v8gftg2tIeA0hFhfcr9sF82fGNdBg60CS8
+         6QOTX1cQ0bOzLBNDeN0xpUCY/VfhGfKzFpUEC/anMa9dbPhSiKlNvCnaFCxks7sdT5v8
+         mu+7BgT8JYpHUGRxUGpPMI/IpPmcrFmdGbmvEdNPySVhZEmZq3M1o65Xm+/1Q8KhJGPq
+         gSpai+QkPC6f8g6yyRsfgH3oBouVnCSfHT3IBO/K1+1H2ytY7teisWFsxQH/6V6BC3Ns
+         KeIyllpNim/cEtVMwepqRgJmRRGfFaOta1JxIPQp3zn1QG/05V5mBT1hQRJOQqnQCov6
+         pkhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=cyGoLGFYlRzNkjYzyQzXdAYg9tduOqgaIixq4gRNrZI=;
-        b=LiWthHdP+gwSYDzxT4OkZ4Ww0AFjJmVjrd42QmqIupF0Mnl7sRT8bK0MO2pfjoV1HS
-         Xy36xc4Tp9XAbeZc2iAWfyZX+jixm86OmUP2ubktfa4zk9519EP50MZIz3xlnGQej9iF
-         5+1kDFRI0LdrT3fJncaZuIFhn/151rDJb4htmQg4141qJLQRtwrePwCVy8a1t6XclGaV
-         ECGjzijiCJa5CO7dP722X5mV4oTqTJQqhiZ5tc9IZifOfL+ioVzTuzvocIH+jBxEUT2C
-         8MsYZqTmDJcbxn0BC27XdmdEtSJVQGYP82nBhDfzfD7FoWNe/PZePeeSQpG4SyE5D5Km
-         xwJA==
-X-Gm-Message-State: ACgBeo0aD6Qc2X1DOmXYCRWNszGwt5tcWuQWI/mNZqj/JxxiorUcv09+
-        sHRcVdklJOTerc9VB2/U/+Z+gQ==
-X-Google-Smtp-Source: AA6agR41jeZpevY4b5EMQDTYDrqO8wPCUCqUani6cv6z6SYnfuyTde+XLqs0U9nLZQgJVkuXdjSAVA==
-X-Received: by 2002:a2e:3317:0:b0:264:6516:93ce with SMTP id d23-20020a2e3317000000b00264651693cemr5716037ljc.212.1662025337680;
-        Thu, 01 Sep 2022 02:42:17 -0700 (PDT)
+        bh=XEXQPbFYUmyLFpItRto0dJ/tByAUIKacMuPLqwHCo+s=;
+        b=CqKswYdOSm1biXIqnsedBqLG7++HM7Bm5+xFr4X/p4PsKaLL1TWWCOozj/SGX+etcP
+         ldKd3PfgBQ2CU1JjUz8KsDCM4/D3VoqMmzr9Qnus/iyfltXqTXLoRndHtup1OiSVli28
+         Y/9gZuTt117XiT/g978EHvjP0D1mLtV0k6yMxu6btZRBa1rc+0Xp06Vs5fc1HK7+IDjE
+         jrikDiNp6TCiPvYctdV74BnNT1gLbzJZW8m8QiZrWJlGt54frd0SdqB1Mdbn/gqaa3eZ
+         jEcmdZPTsjrIeJ1Xpc6LwiKd1IAmkQIB6GblC2rx3OBN+E4XBb7/6bigjiAZBTHgEZKn
+         sm2w==
+X-Gm-Message-State: ACgBeo11fntFM6Bv5e/s3ywsjxe2NT1f2zXrbf8JyWdlFtwKSTU6DiAt
+        aa4cW0bjXMl5O+tk9O4VSesp6Q==
+X-Google-Smtp-Source: AA6agR4UzJqQQVStYvJ8JDhqeBGqAZuikeg2f1LAfkytqNgMWk4O3K4J51+OxtTxriFWxC20JQQqcg==
+X-Received: by 2002:a19:505b:0:b0:494:6549:ade7 with SMTP id z27-20020a19505b000000b004946549ade7mr6436821lfj.62.1662025413899;
+        Thu, 01 Sep 2022 02:43:33 -0700 (PDT)
 Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id h18-20020a056512221200b00492f294f06bsm993545lfu.110.2022.09.01.02.42.16
+        by smtp.gmail.com with ESMTPSA id u1-20020a05651220c100b0048b4690c78esm1180497lfr.288.2022.09.01.02.43.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 02:42:16 -0700 (PDT)
-Message-ID: <38910de5-89ad-e7a1-261f-18b51c8e7877@linaro.org>
-Date:   Thu, 1 Sep 2022 12:42:15 +0300
+        Thu, 01 Sep 2022 02:43:32 -0700 (PDT)
+Message-ID: <91ed22e5-41c3-8a09-101f-7d3b7555cd7b@linaro.org>
+Date:   Thu, 1 Sep 2022 12:43:31 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.13.0
@@ -86,92 +86,16 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 01/09/2022 11:04, AngeloGioacchino Del Regno wrote:
-> Il 31/08/22 15:19, Krzysztof Kozlowski ha scritto:
->> On 31/08/2022 15:48, Johnson Wang wrote:
->>> Add the new binding documentation for MediaTek frequency hopping
->>> and spread spectrum clocking control.
->>>
->>> Co-developed-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
->>> Signed-off-by: Edward-JW Yang <edward-jw.yang@mediatek.com>
->>> Signed-off-by: Johnson Wang <johnson.wang@mediatek.com>
->>> ---
->>>   .../bindings/arm/mediatek/mediatek,fhctl.yaml | 49 +++++++++++++++++++
->>>   1 file changed, 49 insertions(+)
->>>   create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
->>>
->>> diff --git a/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
->>> new file mode 100644
->>> index 000000000000..c5d76410538b
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/arm/mediatek/mediatek,fhctl.yaml
->>> @@ -0,0 +1,49 @@
->>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>> +%YAML 1.2
->>> +---
->>> +$id: http://devicetree.org/schemas/arm/mediatek/mediatek,fhctl.yaml#
->>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>> +
->>> +title: MediaTek frequency hopping and spread spectrum clocking control
->>> +
->>> +maintainers:
->>> +  - Edward-JW Yang <edward-jw.yang@mediatek.com>
->>> +
->>> +description: |
->>> +  Frequency hopping control (FHCTL) is a piece of hardware that control
->>> +  some PLLs to adopt "hopping" mechanism to adjust their frequency.
->>> +  Spread spectrum clocking (SSC) is another function provided by this hardware.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    const: mediatek,fhctl
->>
->> You need SoC/device specific compatibles. Preferably only SoC specific,
->> without generic fallback, unless you can guarantee (while representing
->> MediaTek), that generic fallback will cover all of their SoCs?
->>
->>> +
->>> +  reg:
->>> +    maxItems: 1
->>> +
->>> +  mediatek,hopping-ssc-percents:
->>> +    description: |
->>> +      Determine the enablement of frequency hopping feature and the percentage
->>> +      of spread spectrum clocking for PLLs.
->>> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
->>> +    items:
->>> +      items:
->>> +        - description: PLL id that is expected to enable frequency hopping.
->>
->> So the clocks are indices from some specific, yet unnamed
->> clock-controller? This feels hacky. You should rather take here clock
->> phandles (1) or integrate it into specific clock controller (2). The
->> reason is that either your device does something on top of existing
->> clocks (option 1, thus it takes clock as inputs) or it modifies existing
->> clocks (option 2, thus it is integral part of clock-controller).
->>
-> 
-> FHCTL is a MCU that handles (some, or all, depending on what's supported on the
-> SoC and what's needed by the board) PLL frequency setting, doing it in steps and
-> avoiding overshooting and other issues.
-> 
-> We had a pretty big conversation about this a while ago and the indices instead
-> of phandles is actually my fault, that happened because I initially proposed your
-> option 2 but then for a number of reasons we went with this kind of solution.
-> 
 > I know it's going to be a long read, but the entire conversation is on the list [1]
 > 
+> Cheers,
+> Angelo
+> 
+> [1]: 
+> https://patchwork.kernel.org/project/linux-mediatek/patch/20220612135414.3003-3-johnson.wang@mediatek.com/
 
-Sorry, but it's a hacky architecture where one device (which is a clock
-provider) and second device have no relationship in hardware description
-but both play with each other resources. That's simply not a proper
-hardware description, so again:
-
-1. If this is separate device (as you indicated), then it needs
-expressing the dependencies and uses of other device resources.
-
-2. If this is not a separate device, but integral part of clock
-controller, then it would be fine but then probably should be child of
-that device.
+I see there hundreds of lines of quoted text without trimming to actual
+parts, so no, no one is going to read it.
 
 Best regards,
 Krzysztof

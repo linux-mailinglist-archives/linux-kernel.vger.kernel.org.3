@@ -2,145 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4EAA65A8CF8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 06:53:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4D2D5A8D00
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:00:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232664AbiIAExD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 00:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S232693AbiIAFAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 01:00:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232638AbiIAEw7 (ORCPT
+        with ESMTP id S231359AbiIAFAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 00:52:59 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCF4114C6C;
-        Wed, 31 Aug 2022 21:52:58 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3D059221FD;
-        Thu,  1 Sep 2022 04:52:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1662007977; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eTDe59i5UNhXbLPqqFo4WrMbXbqRlxGLfSkkAQ8Fk/c=;
-        b=MXuVo2yVstAVCBS1varMecEXswz7FuXIDAQoWezwenAAYl9Y3PpRhbQ5He3NmYqXLh+xPX
-        jn8EotqxdKlpoHsOLAGA9/hldaOwN5qgNQ9dGNBfKhsAkMyZOy8dG2wdiqd/dEPEUn2GH3
-        2GWaydR4UCkectkbjmLF+pOVJTedvZg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1662007977;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eTDe59i5UNhXbLPqqFo4WrMbXbqRlxGLfSkkAQ8Fk/c=;
-        b=g2uWhOe8Agl2O5OiQ5uOLDZi7V4xateLoucVNLb1+2O63J77RwR9Dmx9Wxfg3YF3VCD9bc
-        vcZMMEi8r2KuRXCg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 67DE3139C4;
-        Thu,  1 Sep 2022 04:52:54 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id E7aqFqY6EGPsewAAMHmgww
-        (envelope-from <osalvador@suse.de>); Thu, 01 Sep 2022 04:52:54 +0000
-Date:   Thu, 1 Sep 2022 06:52:52 +0200
-From:   Oscar Salvador <osalvador@suse.de>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
-        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
-        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
-        changbin.du@intel.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, dvyukov@google.com, shakeelb@google.com,
-        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <YxA6pCu0YNIiXkHf@localhost.localdomain>
-References: <20220830214919.53220-1-surenb@google.com>
+        Thu, 1 Sep 2022 01:00:02 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6419B1ADB1
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 21:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662008401; x=1693544401;
+  h=subject:to:cc:references:from:message-id:date:
+   mime-version:in-reply-to:content-transfer-encoding;
+  bh=ueruG8WsUTevhyhbBIXLg6A1hVu7N4IpTDEhHSBXoiw=;
+  b=HwDwQoxWxyu314APWfSP/6HcH0GBou5tM6GhGEd0BUnchZ4oLi2srGj4
+   AE9Wc2P2PuJ7QwO3C77acIrPMVk4z1uhTZ+tRdUbibnOeT2uGXkxcWaIE
+   ccO4YFEv5NfDsP5L52U8dbbpORlUNRulZYAAfwdyGAwXqVqWpH81el/EP
+   d0R9h7JgYedGB6wP4w8WMfOxi9VSYhCoH47WTbFUkjSOLezMPXtsUrlQo
+   UBhNUJoedHmxRaRESi/Jk/2DRdH3fk/4iHmnlMiOcDOuA5O1ljIS1pFy4
+   Znm4JUzWrQdhy4gzAb9cZ5TfIYr42Y1MUdz1s6Nx+sVHwcCg6hn4DXbzL
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="276017921"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="276017921"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 21:59:58 -0700
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="673676377"
+Received: from rongch2-mobl.ccr.corp.intel.com (HELO [10.254.213.173]) ([10.254.213.173])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 21:59:54 -0700
+Subject: Re: [kbuild-all] Re: powerpc-linux-objdump: Warning: Unrecognized
+ form: 0x23
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        Kees Cook <keescook@chromium.org>, llvm@lists.linux.dev,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+References: <202208311414.4OPuYS9K-lkp@intel.com>
+ <Yw+A+0BY26l0AC5j@dev-arch.thelio-3990X>
+ <b0b8fecd-4041-d04e-9a11-2c7947e5d5a0@intel.com>
+ <YxAS9NBjBI/vi0XK@dev-arch.thelio-3990X>
+From:   "Chen, Rong A" <rong.a.chen@intel.com>
+Message-ID: <8d2c3aef-aa4f-1f4d-dc89-622554ffda31@intel.com>
+Date:   Thu, 1 Sep 2022 12:59:52 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Firefox/78.0 Thunderbird/78.12.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830214919.53220-1-surenb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <YxAS9NBjBI/vi0XK@dev-arch.thelio-3990X>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
-> ===========================
-> Code tagging framework
-> ===========================
-> Code tag is a structure identifying a specific location in the source code
-> which is generated at compile time and can be embedded in an application-
-> specific structure. Several applications of code tagging are included in
-> this RFC, such as memory allocation tracking, dynamic fault injection,
-> latency tracking and improved error code reporting.
-> Basically, it takes the old trick of "define a special elf section for
-> objects of a given type so that we can iterate over them at runtime" and
-> creates a proper library for it.
+
+
+On 9/1/2022 10:03 AM, Nathan Chancellor wrote:
+> Hi Rong,
 > 
-> ===========================
-> Memory allocation tracking
-> ===========================
-> The goal for using codetags for memory allocation tracking is to minimize
-> performance and memory overhead. By recording only the call count and
-> allocation size, the required operations are kept at the minimum while
-> collecting statistics for every allocation in the codebase. With that
-> information, if users are interested in mode detailed context for a
-> specific allocation, they can enable more in-depth context tracking,
-> which includes capturing the pid, tgid, task name, allocation size,
-> timestamp and call stack for every allocation at the specified code
-> location.
-> Memory allocation tracking is implemented in two parts:
+> On Thu, Sep 01, 2022 at 09:15:58AM +0800, Chen, Rong A wrote:
+>>
+>>
+>> On 8/31/2022 11:40 PM, Nathan Chancellor wrote:
+>>> On Wed, Aug 31, 2022 at 02:52:36PM +0800, kernel test robot wrote:
+>>>> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+>>>> head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
+>>>> commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug: make DEBUG_INFO selectable from a choice
+>>>> date:   5 months ago
+>>>> config: powerpc-buildonly-randconfig-r003-20220830 (https://download.01.org/0day-ci/archive/20220831/202208311414.4OPuYS9K-lkp@intel.com/config)
+>>>> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+>>>> reproduce (this is a W=1 build):
+>>>>           wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>>>>           chmod +x ~/bin/make.cross
+>>>>           # install powerpc cross compiling tool for clang build
+>>>>           # apt-get install binutils-powerpc-linux-gnu
+>>>>           # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
+>>>>           git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+>>>>           git fetch --no-tags linus master
+>>>>           git checkout f9b3cd24578401e7a392974b3353277286e49cee
+>>>>           # save the config file
+>>>>           mkdir build_dir && cp config build_dir/.config
+>>>>           COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+>>>>
+>>>> If you fix the issue, kindly add following tag where applicable
+>>>> Reported-by: kernel test robot <lkp@intel.com>
+>>>>
+>>>> All warnings (new ones prefixed by >>):
+>>>>
+>>>>>> powerpc-linux-objdump: Warning: Unrecognized form: 0x23
+>>>
+>>> Given this is clang 16.0.0 with
+>>> CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y, which uses DWARF5 by
+>>> default instead of DWARF4, it looks like older binutils not
+>>> understanding DWARF5. What version of binutils is being used by the bot?
+>>
+>> Hi Nathan,
+>>
+>> We're using binutils v2.38.90.20220713-2
+>>
+>> ||/ Name           Version            Architecture Description
+>> +++-==============-==================-============-==========================================
+>> ii  binutils       2.38.90.20220713-2 amd64        GNU assembler, linker and binary utilities
 > 
-> part1: instruments page and slab allocators to record call count and total
-> memory allocated at every allocation in the source code. Every time an
-> allocation is performed by an instrumented allocator, the codetag at that
-> location increments its call and size counters. Every time the memory is
-> freed these counters are decremented. To decrement the counters upon free,
-> allocated object needs a reference to its codetag. Page allocators use
-> page_ext to record this reference while slab allocators use memcg_data of
-> the slab page.
-> The data is exposed to the user space via a read-only debugfs file called
-> alloc_tags.
+> Thanks for chiming in! This looks like the output of 'dpkg -l', right? I
 
-Hi Suren,
+Hi Nathan,
 
-I just posted a patch [1] and reading through your changelog and seeing your PoC,
-I think we have some kind of overlap.
-My patchset aims to give you the stacktrace <-> relationship information and it is
-achieved by a little amount of extra code mostly in page_owner.c/ and lib/stackdepot.
+oh, yes, I misunderstood, it's not related to this package.
 
-Of course, your works seems to be more complete wrt. the information you get.
+> noticed on second glance that the tuple for the objdump warning above is
+> 'powerpc-linux-', which leads me to believe that a kernel.org toolchain
+> (or a self compiled one) is being used. I would expect the tuple to be
+> 'powerpc-linux-gnu-' if Debian's package was being used. Is that
+> possible?
 
-I CCed you in case you want to have a look
+you are right, we used a self-compiled toolchain, we'll try the binutils
+from debian package.
 
-[1] https://lkml.org/lkml/2022/9/1/36
+Best Regards,
+Rong Chen
 
-Thanks
-
-
--- 
-Oscar Salvador
-SUSE Labs
+> 
+> Cheers,
+> Nathan
+> 

@@ -2,91 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543595A9BE3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F1BC5A9BE9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234496AbiIAPkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34616 "EHLO
+        id S234500AbiIAPlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234515AbiIAPkd (ORCPT
+        with ESMTP id S234186AbiIAPlD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:40:33 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61DA140562
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:40:29 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id y10so15169172ljq.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:40:29 -0700 (PDT)
+        Thu, 1 Sep 2022 11:41:03 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B67A3E760;
+        Thu,  1 Sep 2022 08:41:02 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id se27so27807718ejb.8;
+        Thu, 01 Sep 2022 08:41:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Tc8st16ldO3LR4x4k8qnwcD0Tom1BLgfV/y64ZJm6QU=;
-        b=REBowHyL5yz3ah/2foJcWtFffL7LkMB1FgwC26SSPfHrUoc4ACJ1JMo/gc+TaArr6i
-         aDaou7pheYdkBJD0rYLiEJ+Vr6Vhy9Q25gsLa3zOrw7ParXPQ9fTfrwmBWJJSCtfWUlf
-         5+Apy5n5sco4juevFynJbdXPfOLTYAwtEYtvwmNHd6M4eFw1nG8Fvzs1cGdLDm20yB7O
-         h6KZjccWd83xPv/8FlX5tmfSegrR6p2D2gwk+LkVEPGVqyZCR5KhpBrm06v/Pj/hQDdX
-         sdjRQfe9NrLSk8Mngr0upFOdh9bV10TdmNN5A2f/gA+kt1HCSQsY+sqDMOV1rjsE7hrg
-         BRgg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=UdAxssIJlstCZGaS8Jok9Kgh/CUKOzKmjtPHBIyHVi4=;
+        b=LaVUqW7/5aaJGtTFd8WDfW48b8Qa3G6lf0BGE9xuAuERoiEANky9qxVZm7B7nbg/PB
+         pvHYeUVIf0jAmSkWvMlXKCx/JgRcynWB9tmgqIgDWhp9nvlpOrKRn7vR8HqfYpEY543m
+         LniA9a7v3HwM4P3OeHI1QwJy3f/ODBs7Qq/AE6ssGZ4pMgbGisGYbDDqw3IqLx4e1FS5
+         tt9BemVlDg0NDtR8ws4vb9Y78mGlVzOzG7SIyJFkFqhfAJjSN+7pSdC1t4WfXhEipnKE
+         jmzd0N1eXK3N9tKytuxq7V5czetDpxZlzBnOc1p3bx0hfHG8/J3CTPDN8kCVaoRXNRBx
+         vYTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Tc8st16ldO3LR4x4k8qnwcD0Tom1BLgfV/y64ZJm6QU=;
-        b=Hik3VgEVslnvhCv6Omv4LwYkXrEJcrjaAJi4biJObr1ihWrB6MwhaLh/d/hpnyB4g5
-         1il1moiCeUr+6Umkb1efeMCjpBz2R68x/8xWbGzZv+ICYN0CJfmscgQMeKkPljjR2GnE
-         lZriWHbGthM97m4Hm99jsXOe5FG9eDRBGaQhLeCOBoHFrM6820CoeO8MBhXVxgIzEODI
-         SJi4/Bxq73RdJgDKUYs1vrpgiyT70r1AYjGSQ9FxrVhTXABTQWmtyKrcibLg22yaeGRc
-         ofozQYkf/6yxHjzVNXXGa2U6y8g8CLN9hsjCxorxD754cj92fh7tYcqVxXPx0p0BuSeC
-         ZPdA==
-X-Gm-Message-State: ACgBeo2YLPWpa40U9Yci1dQZ4buvlLLlkmJy7oPo6ZdbHxQ4aJiq017C
-        +1gcsDGrgn81QXluSkIMSmoqNw==
-X-Google-Smtp-Source: AA6agR5PFZ8fGUUHpOcmkv1A29YAZ8ou6iydEeE839SYJXlfDUWf+aogaGVzTGrNpN5cO7/Aeoi0hQ==
-X-Received: by 2002:a05:651c:1a0e:b0:268:94ad:85f8 with SMTP id by14-20020a05651c1a0e00b0026894ad85f8mr2091413ljb.415.1662046828381;
-        Thu, 01 Sep 2022 08:40:28 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id v8-20020a056512348800b004946b549a19sm1527807lfr.45.2022.09.01.08.40.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 08:40:27 -0700 (PDT)
-Message-ID: <2f0b658c-1e82-4518-5060-660e2eedf72c@linaro.org>
-Date:   Thu, 1 Sep 2022 18:40:26 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=UdAxssIJlstCZGaS8Jok9Kgh/CUKOzKmjtPHBIyHVi4=;
+        b=1OS5UGb/HCEIscM2yQJIR23X5H9/IkCTtm/oS2n4p6X38XNFurAc9O15IIFAA3C8hQ
+         5y8qnxzQ3bxV0b9w4/AgGfVUrhM3eyJ70ZP55222b1qGHHWAbbFZBoRmqEo2AtCMK4DX
+         Xa7yVnsM0l6vdt3HcNElnGn87JzJ/1+CZ6tl9TZg147EjthUmS5JVMa28vomsUA1yWUU
+         MoiYQ5/2yqpqSvfUCPGQLxD/4ot91jSaxD62D435zSB3j3PGnyS+pJas0xCvwppOCS+2
+         YGwfEIhn6JOOPCs3Rp01xU7fodIPrJ9FlTYloZHs+O8EB285QgmOAzQ5jk3gY8PEOECb
+         u6hA==
+X-Gm-Message-State: ACgBeo0a3XZ1GAj+LRkyABSF5DgXw6D+mtwogY2JWmoux9zEup6xohH8
+        0uXheqloLHhjEkopN1u2oSo=
+X-Google-Smtp-Source: AA6agR6iDpQf1r7dRyqoRN8uoo+/0JfYGnx+uIepyVxknKh4bMh1Ff/C5w/BfILcoRJIi1boOhDMKA==
+X-Received: by 2002:a17:906:9b89:b0:73d:6a55:c489 with SMTP id dd9-20020a1709069b8900b0073d6a55c489mr24666187ejc.406.1662046861059;
+        Thu, 01 Sep 2022 08:41:01 -0700 (PDT)
+Received: from linuxdev2.toradex.int (31-10-206-125.static.upc.ch. [31.10.206.125])
+        by smtp.gmail.com with ESMTPSA id c25-20020a056402159900b00447b1772a26sm1543103edv.12.2022.09.01.08.41.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 08:41:00 -0700 (PDT)
+From:   Max Krummenacher <max.oss.09@gmail.com>
+To:     Max Krummenacher <max.krummenacher@toradex.com>
+Cc:     Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] arm64: dts: imx8mp-verdin: add dsi to hdmi functionality
+Date:   Thu,  1 Sep 2022 17:40:50 +0200
+Message-Id: <20220901154051.1885509-1-max.oss.09@gmail.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sc7280: Add cpu and llcc BWMON
-Content-Language: en-US
-To:     Rajendra Nayak <quic_rjendra@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20220901124730.19460-1-quic_rjendra@quicinc.com>
- <20220901124730.19460-5-quic_rjendra@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220901124730.19460-5-quic_rjendra@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 15:47, Rajendra Nayak wrote:
-> Add cpu and llcc BWMON nodes and their corresponding
-> OPP tables for sc7280 SoC.
-> 
-> Signed-off-by: Rajendra Nayak <quic_rjendra@quicinc.com>
+From: Max Krummenacher <max.krummenacher@toradex.com>
 
+Add the hdmi connector present on the dsi to hdmi adapter now
+required by the upstream lontium bridge driver.
+The dsi to hdmi adapter is enabled in an device tree overlay.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 
+---
 
-Best regards,
-Krzysztof
+ arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+index 76cc89296150..bd84a0d135dc 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+@@ -59,6 +59,14 @@ button-wakeup {
+ 		};
+ 	};
+ 
++	hdmi_connector: hdmi-connector {
++		compatible = "hdmi-connector";
++		ddc-i2c-bus = <&i2c2>;
++		label = "hdmi";
++		type = "a";
++		status = "disabled";
++	};
++
+ 	/* Carrier Board Supplies */
+ 	reg_1p8v: regulator-1p8v {
+ 		compatible = "regulator-fixed";
+-- 
+2.35.3
+

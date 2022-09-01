@@ -2,55 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7A335A9DA4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:02:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB075A9DA8
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:03:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235085AbiIARBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51760 "EHLO
+        id S234944AbiIARDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:03:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbiIARBA (ORCPT
+        with ESMTP id S231133AbiIARDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:01:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E3726B647;
-        Thu,  1 Sep 2022 10:00:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6BC00D6E;
-        Thu,  1 Sep 2022 10:01:04 -0700 (PDT)
-Received: from [10.57.15.167] (unknown [10.57.15.167])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A9DC3F7B4;
-        Thu,  1 Sep 2022 10:00:54 -0700 (PDT)
-Message-ID: <31269d99-5ffc-7060-2af2-ce1f5bc33de2@arm.com>
-Date:   Thu, 1 Sep 2022 18:00:51 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v4 1/2] iommu/s390: Fix race with release_device ops
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>,
-        Pierre Morel <pmorel@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>, iommu@lists.linux.dev,
-        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
-        hca@linux.ibm.com, gor@linux.ibm.com,
-        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
-        svens@linux.ibm.com, joro@8bytes.org, will@kernel.org,
+        Thu, 1 Sep 2022 13:03:10 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2771C8C01D;
+        Thu,  1 Sep 2022 10:03:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t0tbXnpw9PoNHokbrL2mN8UkdNxPcPnmI53yrOl5Xwk=; b=PMi26llEoWLExTDhFnJPkFHXlY
+        5MdFVFSnLqtvcc/cePwW9IjH03dldOTbdGXeA7pP1jVjHo9TL5YFHbx3kmDCPoHp+/h8MnEDBXGQ4
+        H+lmlJzhvfVjqZyxT+8SwnMbEJFHmE2sqLrsFtnf+RctOM1K2p2X4fGucPh82y4oX0P/5+/zx95x/
+        N/AhKM9MHEWk4KdSYZwKijmrobfwbcXi1wj3WgoV+NHgS6OEq+lFypwu4qHvqvn7YIQvGRgeTQRcP
+        ouKuLdwvK6Mo1+nAe/auyke0aX13BLO3ni9sfIDhApr26y/2KbEKrDkgVTkoSa6LCgyIIfK0gdgZh
+        cflVhKrQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oTnaq-00B2ig-Ta;
+        Thu, 01 Sep 2022 17:03:05 +0000
+Date:   Thu, 1 Sep 2022 18:03:04 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-arch@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         linux-kernel@vger.kernel.org
-References: <20220831201236.77595-1-mjrosato@linux.ibm.com>
- <20220831201236.77595-2-mjrosato@linux.ibm.com>
- <9887e2f4-3f3d-137d-dad7-59dab5f98aab@linux.ibm.com>
- <52d3fe0b86bdc04fdbf3aae095b2f71f4ea12d44.camel@linux.ibm.com>
- <e01e6ef2-ba45-7433-5fe4-a6806dac3af9@arm.com>
- <8b561ad3023fc146ba0779cbd8fff14d6409c6aa.camel@linux.ibm.com>
- <3e402947-61f9-b7e8-1414-fde006257b6f@arm.com> <YxDDD2DF9KFDQ+Yk@nvidia.com>
- <58d14cfc-f8ba-777b-a975-371ff2b29e5a@arm.com> <YxDUlQprVaZp1RF1@nvidia.com>
-Content-Language: en-GB
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <YxDUlQprVaZp1RF1@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Subject: Re: [PATCH v2 3/8] termios: uninline conversion helpers
+Message-ID: <YxDlyBneTC/zBx4S@ZenIV>
+References: <YwF8vibZ2/Xz7a/g@ZenIV>
+ <20220821010239.1554132-1-viro@zeniv.linux.org.uk>
+ <20220821010239.1554132-3-viro@zeniv.linux.org.uk>
+ <Yw4B6IU9WWKhN+1H@kroah.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yw4B6IU9WWKhN+1H@kroah.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,65 +54,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-01 16:49, Jason Gunthorpe wrote:
-> On Thu, Sep 01, 2022 at 04:03:36PM +0100, Robin Murphy wrote:
->> On 2022-09-01 15:34, Jason Gunthorpe wrote:
->>> On Thu, Sep 01, 2022 at 03:29:16PM +0100, Robin Murphy wrote:
->>>
->>>> Right, the next step would be to bridge that gap to iommu-dma to dump the
->>>> flush queue when IOVA allocation failure implies we've reached the
->>>> "rollover" point, and perhaps not use the timer at all. By that point a
->>>> dedicated domain type, or at least some definite internal flag, for this
->>>> alternate behaviour seems like the logical way to go.
->>>
->>> At least on this direction, I've been thinking it would be nice to
->>> replace the domain type _FQ with a flag inside the domain, maybe the
->>> ops, saying how the domain wants the common DMA API to operate. If it
->>> wants FQ mode or other tuning parameters
->>
->> Compare the not-necessarily-obvious matrix of "strict" and "passthrough"
->> command-line parameters with the nice understandable kconfig and sysfs
->> controls for a reminder of why I moved things *from* that paradigm in the
->> first place ;)
+On Tue, Aug 30, 2022 at 02:26:16PM +0200, Greg Kroah-Hartman wrote:
+> On Sun, Aug 21, 2022 at 02:02:34AM +0100, Al Viro wrote:
+> > default go into drivers/tty/tty_ioctl.c, unusual - into
+> > arch/*/kernel/termios.c (only alpha and sparc have those).
+> > 
+> > Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+> > ---
+> >  arch/alpha/include/asm/termios.h   |  77 ++--------------
+> >  arch/alpha/kernel/Makefile         |   2 +-
+> >  arch/alpha/kernel/termios.c        |  57 ++++++++++++
+> >  arch/ia64/include/asm/termios.h    |  41 ++-------
+> >  arch/mips/include/asm/termios.h    |  84 ++----------------
+> >  arch/parisc/include/asm/termios.h  |  41 ++-------
+> >  arch/sparc/include/asm/termios.h   | 136 ++---------------------------
+> >  arch/sparc/kernel/Makefile         |   4 +-
+> >  arch/sparc/kernel/termios.c        | 115 ++++++++++++++++++++++++
+> >  drivers/tty/tty_ioctl.c            |  74 ++++++++++++++++
+> >  include/asm-generic/termios-base.h |  69 ++-------------
+> >  include/asm-generic/termios.h      |  42 ++-------
+> >  12 files changed, 294 insertions(+), 448 deletions(-)
+> >  create mode 100644 arch/alpha/kernel/termios.c
+> >  create mode 100644 arch/sparc/kernel/termios.c
 > 
-> I'm looking at it from a code perspective, where the drivers don't
-> seem to actually care about DMA_FQ. eg search for it in the drivers
-> and you mostly see:
-> 
-> 	    (type != IOMMU_DOMAIN_DMA && type != IOMMU_DOMAIN_DMA_FQ))
-> 
-> The exception is domain_alloc which fails in cases where the domain
-> doesn't 'support' FQ.
-> 
-> But support FQ or not can be cast as a simple capability flag in the
-> domain. We don't need a whole type for the driver to communicate it.
+> The build blows up on me with this commit added to my tty-testing tree:
 
-Right, since the rest of DMA domain setup got streamlined into the core 
-code this one remaining vestige of the old world order is ripe for 
-cleanup, I've just had bigger fish to fry. Or as the case may be, bigger 
-chunks of repetitive boilerplate to remove from elsewhere in the drivers :)
+My apologies - reordering damage.  inlines in include/asm-generic/termios.h
+should've been removed in this commit, not in the next one.
 
-> The strictness level belongs completely in the core code, it shouldn't
-> leak into the driver.
-
-It's already not about drivers having any influence on strictness, it's 
-about there being good reason to treat these as distinct domain types 
-through the core code, and as things stand those domain types are 
-exposed to drivers, so drivers need to not freak out at seeing them. 
-Indeed Any driver can "support" IOMMU_DOMAIN_DMA now, so if you've got 
-time to come up with a way of making that completely transparent to 
-drivers then please go ahead, though IIRC there were one or two cases 
-where folks explicitly *didn't* want it being used, so those might need 
-proper IOMMU_DOMAIN_IDENTITY support and a def_domain_type override adding.
-
-The thing with IOMMU_DOMAIN_DMA_FQ is that drivers *do* need to somehow 
-indicate that they implement the relevant optimisations in their unmap 
-path, otherwise using a flush queue is objectively worse in every 
-respect than not using a flush queue. Given the status quo, rejecting 
-the domain type at allocation was by far the simplest and most obvious 
-way to achieve that. Once again, please do propose moving it to a more 
-explicit "I can support deferred unmap" driver capability if you'd like, 
-otherwise I'll get there eventually.
-
-Thanks,
-Robin.
+Anyway, fixed branch rebased on top of your #tty-next; see
+vfs.git #work.termios2.  Individual patches in followups...

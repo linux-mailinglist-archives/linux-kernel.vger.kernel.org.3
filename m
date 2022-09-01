@@ -2,59 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6687F5A9D90
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:55:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32EC25A9D94
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234454AbiIAQzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
+        id S233996AbiIAQzU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:55:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231281AbiIAQy6 (ORCPT
+        with ESMTP id S234838AbiIAQzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:54:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A07910541;
-        Thu,  1 Sep 2022 09:54:57 -0700 (PDT)
+        Thu, 1 Sep 2022 12:55:15 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35257201AE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:55:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 05FCD61FCC;
-        Thu,  1 Sep 2022 16:54:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 529D0C433C1;
-        Thu,  1 Sep 2022 16:54:56 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 02CE4CE2902
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:55:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 977CEC433D6;
+        Thu,  1 Sep 2022 16:55:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662051296;
-        bh=7FYLfwjXAYaFsdwLNtKcqI4+Kia6WIEZKLw/kcERa2Y=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=F14e1LvLxOy8giklK/8qsg38dkTBva6gGBt+pI1HaoN0HUXr6xvSahc+4yUkv9623
-         61kBwrE3dnT7hWoQbjHexbWdmxfqwPZGZJWa3SgTWIbc5VrczmVXLxK7/QDbFcenui
-         K5LPsTl2oLnYPSa35YUf7TDdt4tSFeDHgrbp9Joc+FuwmUzfPevxx1d/+J7mY/Tj4Z
-         pYr/2gycpFgG+d1I0zzdJETwTkhCkLRbvsQlGZ+yyiGfoZV8QynrzrdHVKnfl72/vk
-         yVcptgwYR9neowiCPtWEWzIxB0ppbD9xTXL3cVP7y2iR0AzBw+EjoyI4JZy+LlKskb
-         G5YxYCLU+NaFw==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id E495B5C0691; Thu,  1 Sep 2022 09:54:55 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 09:54:55 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 1/2] rcu: Simplify rcu_init_nohz() cpumask handling
-Message-ID: <20220901165455.GB6159@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220901131436.986-1-thunder.leizhen@huawei.com>
- <20220901131436.986-2-thunder.leizhen@huawei.com>
- <4849b7c1-2fea-6f9f-31dc-c0408b32044e@huawei.com>
+        s=k20201202; t=1662051309;
+        bh=C4hLcy/GChnctsZot7rMHIwTtugnUggmaB1mtjRQYX4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RFFpntlUbwvAS9vJVvb9UEZUs3LOUeOAnid9JaVs9JFbGA+5sdzE0gg8qbDavjOvA
+         a4cnG4ExUfY+Lw1H3cx736feGa/usHnE/vvKEnjk+llSxItabxk6eLFA+/JK3P549T
+         rlZNeTKH0l5quUnSkxK6SwqdivJPqHsOwGE35e1wjYLJMCUAxtXuzWqyilFNxqw4Be
+         hwCPquPn/uegPijdXsvzpS1nYMr+OtVHYmhjt1X+HbNajGjwfxMUhq4H6hlhQw1GEl
+         UcJKN0j69dwCgF1jSWXVJcrFezZDeHGx4QRClPCl9SJ/t43jMAQhz0Zdn8vEH2x9Kk
+         NJEDv5pwDlmMQ==
+Date:   Thu, 1 Sep 2022 09:55:06 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Chen, Rong A" <rong.a.chen@intel.com>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        kernel test robot <lkp@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "kbuild-all@lists.01.org" <kbuild-all@lists.01.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: Re: [kbuild-all] Re: powerpc-linux-objdump: Warning: Unrecognized
+ form: 0x23
+Message-ID: <YxDj6v5p+wHop0Wm@dev-arch.thelio-3990X>
+References: <202208311414.4OPuYS9K-lkp@intel.com>
+ <Yw+A+0BY26l0AC5j@dev-arch.thelio-3990X>
+ <b0b8fecd-4041-d04e-9a11-2c7947e5d5a0@intel.com>
+ <YxAS9NBjBI/vi0XK@dev-arch.thelio-3990X>
+ <8d2c3aef-aa4f-1f4d-dc89-622554ffda31@intel.com>
+ <9d77cb93-2eff-d87d-6554-1636d5e7d5ec@csgroup.eu>
+ <0acfb209-a792-a47b-0261-9fb29824e4b9@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <4849b7c1-2fea-6f9f-31dc-c0408b32044e@huawei.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0acfb209-a792-a47b-0261-9fb29824e4b9@intel.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -65,102 +71,125 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 09:25:06PM +0800, Leizhen (ThunderTown) wrote:
+On Thu, Sep 01, 2022 at 01:52:42PM +0800, Chen, Rong A wrote:
 > 
 > 
-> On 2022/9/1 21:14, Zhen Lei wrote:
-> > In kernels built with either CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y or
-> > CONFIG_NO_HZ_FULL=y, additional CPUs must be added to rcu_nocb_mask.
-> > Except that kernels booted without the rcu_nocbs= will not have
-> > allocated rcu_nocb_mask.  And the current rcu_init_nohz() function uses
-> > its need_rcu_nocb_mask and offload_all local variables to track the
-> > rcu_nocb and nohz_full state.
+> On 9/1/2022 1:45 PM, Christophe Leroy wrote:
 > > 
-> > But there is a much simpler approach, namely creating a cpumask pointer
-> > to track the default and then using cpumask_available() to check the
-> > rcu_nocb_mask state.  This commit takes this approach, thereby simplifying
-> > and shortening the rcu_init_nohz() function.
 > > 
-> > Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > Le 01/09/2022 à 06:59, Chen, Rong A a écrit :
+> > > 
+> > > 
+> > > On 9/1/2022 10:03 AM, Nathan Chancellor wrote:
+> > > > Hi Rong,
+> > > > 
+> > > > On Thu, Sep 01, 2022 at 09:15:58AM +0800, Chen, Rong A wrote:
+> > > > > 
+> > > > > 
+> > > > > On 8/31/2022 11:40 PM, Nathan Chancellor wrote:
+> > > > > > On Wed, Aug 31, 2022 at 02:52:36PM +0800, kernel test robot wrote:
+> > > > > > > tree:
+> > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > > > > > > master
+> > > > > > > head:   dcf8e5633e2e69ad60b730ab5905608b756a032f
+> > > > > > > commit: f9b3cd24578401e7a392974b3353277286e49cee Kconfig.debug:
+> > > > > > > make DEBUG_INFO selectable from a choice
+> > > > > > > date:   5 months ago
+> > > > > > > config: powerpc-buildonly-randconfig-r003-20220830
+> > > > > > > (https://download.01.org/0day-ci/archive/20220831/202208311414.4OPuYS9K-lkp@intel.com/config)
+> > > > > > > compiler: clang version 16.0.0
+> > > > > > > (https://github.com/llvm/llvm-project
+> > > > > > > c7df82e4693c19e3fd2e25c83eb04d9deb7b7b59)
+> > > > > > > reproduce (this is a W=1 build):
+> > > > > > >            wget
+> > > > > > > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > > > > > >            chmod +x ~/bin/make.cross
+> > > > > > >            # install powerpc cross compiling tool for clang build
+> > > > > > >            # apt-get install binutils-powerpc-linux-gnu
+> > > > > > >            #
+> > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f9b3cd24578401e7a392974b3353277286e49cee
+> > > > > > >            git remote add linus
+> > > > > > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+> > > > > > >            git fetch --no-tags linus master
+> > > > > > >            git checkout f9b3cd24578401e7a392974b3353277286e49cee
+> > > > > > >            # save the config file
+> > > > > > >            mkdir build_dir && cp config build_dir/.config
+> > > > > > >            COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang
+> > > > > > > make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash
+> > > > > > > 
+> > > > > > > If you fix the issue, kindly add following tag where applicable
+> > > > > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > > > > 
+> > > > > > > All warnings (new ones prefixed by >>):
+> > > > > > > 
+> > > > > > > > > powerpc-linux-objdump: Warning: Unrecognized form: 0x23
+> > > > > > 
+> > > > > > Given this is clang 16.0.0 with
+> > > > > > CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y, which uses DWARF5 by
+> > > > > > default instead of DWARF4, it looks like older binutils not
+> > > > > > understanding DWARF5. What version of binutils is being used by the
+> > > > > > bot?
+> > > > > 
+> > > > > Hi Nathan,
+> > > > > 
+> > > > > We're using binutils v2.38.90.20220713-2
+> > > > > 
+> > > > > ||/ Name           Version            Architecture Description
+> > > > > +++-==============-==================-============-==========================================
+> > > > > ii  binutils       2.38.90.20220713-2 amd64        GNU assembler,
+> > > > > linker and binary utilities
+> > > > 
+> > > > Thanks for chiming in! This looks like the output of 'dpkg -l', right? I
+> > > 
+> > > Hi Nathan,
+> > > 
+> > > oh, yes, I misunderstood, it's not related to this package.
+> > > 
+> > > > noticed on second glance that the tuple for the objdump warning above is
+> > > > 'powerpc-linux-', which leads me to believe that a kernel.org toolchain
+> > > > (or a self compiled one) is being used. I would expect the tuple to be
+> > > > 'powerpc-linux-gnu-' if Debian's package was being used. Is that
+> > > > possible?
+> > > 
+> > > you are right, we used a self-compiled toolchain, we'll try the binutils
+> > > from debian package.
+> > 
+> > Can you first tell us the version you are using ?
+> > 
+> > 	powerpc-linux-objdump -v
+> > 
+> > That will tell you the version.
 > 
-> Sorry, I forgot remove this "Signed-off-by".
+> Hi Christophe,
+> 
+> the version is v2.38:
+> 
+> $ ./powerpc-linux-objdump -v
+> GNU objdump (GNU Binutils) 2.38
+> Copyright (C) 2022 Free Software Foundation, Inc.
+> This program is free software; you may redistribute it under the terms of
+> the GNU General Public License version 3 or (at your option) any later
+> version.
+> This program has absolutely no warranty.
 
-Not a problem, especially given that in view of my oversight on the
-previous version, I am going to let Frederic take first crack at this
-version.  ;-)
+Thanks! I did some research and it seems like this warning is expected
+with binutils older than 2.39. The warning appears to come from
+read_and_display_attr_value() in binutils/dwarf.c. 0x22 and 0x23 are
+DW_FORM_loclistx and DW_FORM_rnglistx, which were only recently
+supported in that function.
 
-							Thanx, Paul
+https://sourceware.org/bugzilla/show_bug.cgi?id=28981
+https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;h=19c26da69d68d5d863f37c06ad73ab6292d02ffa
 
-> > Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> > ---
-> >  kernel/rcu/tree_nocb.h | 35 ++++++++++++-----------------------
-> >  1 file changed, 12 insertions(+), 23 deletions(-)
-> > 
-> > diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> > index 0a5f0ef41484518..8b6dceeabde0b4d 100644
-> > --- a/kernel/rcu/tree_nocb.h
-> > +++ b/kernel/rcu/tree_nocb.h
-> > @@ -1210,45 +1210,34 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
-> >  void __init rcu_init_nohz(void)
-> >  {
-> >  	int cpu;
-> > -	bool need_rcu_nocb_mask = false;
-> > -	bool offload_all = false;
-> >  	struct rcu_data *rdp;
-> > -
-> > -#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
-> > -	if (!rcu_state.nocb_is_setup) {
-> > -		need_rcu_nocb_mask = true;
-> > -		offload_all = true;
-> > -	}
-> > -#endif /* #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) */
-> > +	const struct cpumask *cpumask = NULL;
-> >  
-> >  #if defined(CONFIG_NO_HZ_FULL)
-> > -	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
-> > -		need_rcu_nocb_mask = true;
-> > -		offload_all = false; /* NO_HZ_FULL has its own mask. */
-> > -	}
-> > -#endif /* #if defined(CONFIG_NO_HZ_FULL) */
-> > +	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
-> > +		cpumask = tick_nohz_full_mask;
-> > +#endif
-> > +
-> > +#if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
-> > +	if (!rcu_state.nocb_is_setup && !cpumask)
-> > +		cpumask = cpu_possible_mask;
-> > +#endif
-> >  
-> > -	if (need_rcu_nocb_mask) {
-> > +	if (cpumask) {
-> >  		if (!cpumask_available(rcu_nocb_mask)) {
-> >  			if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
-> >  				pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
-> >  				return;
-> >  			}
-> >  		}
-> > +
-> > +		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, cpumask);
-> >  		rcu_state.nocb_is_setup = true;
-> >  	}
-> >  
-> >  	if (!rcu_state.nocb_is_setup)
-> >  		return;
-> >  
-> > -#if defined(CONFIG_NO_HZ_FULL)
-> > -	if (tick_nohz_full_running)
-> > -		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
-> > -#endif /* #if defined(CONFIG_NO_HZ_FULL) */
-> > -
-> > -	if (offload_all)
-> > -		cpumask_setall(rcu_nocb_mask);
-> > -
-> >  	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
-> >  		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
-> >  		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
-> > 
-> 
-> -- 
-> Regards,
->   Zhen Lei
+That change shipped in binutils 2.39. I am not really sure how we should
+work around this in the kernel, other than maybe requiring binutils
+2.39+ for CONFIG_DEBUG_INFO_DWARF5. Unfortunately, that will not fix
+CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT when DWARF5 is the default
+version... Alternatively, switching to llvm-objdump for clang builds
+would help :) I am not aware of any issues that would affect that switch
+for PowerPC:
+
+https://github.com/ClangBuiltLinux/linux/labels/%5BTOOL%5D%20llvm-objdump
+
+Cheers,
+Nathan

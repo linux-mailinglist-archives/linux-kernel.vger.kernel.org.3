@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25E7E5A9EE6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:28:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1935A9EEA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:29:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233374AbiIAS2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:28:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S233668AbiIAS3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:29:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiIAS2K (ORCPT
+        with ESMTP id S231589AbiIAS3C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:28:10 -0400
+        Thu, 1 Sep 2022 14:29:02 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A117CB55;
-        Thu,  1 Sep 2022 11:28:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985B97CB62;
+        Thu,  1 Sep 2022 11:29:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 228C860B9A;
-        Thu,  1 Sep 2022 18:28:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B196C433C1;
-        Thu,  1 Sep 2022 18:28:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662056887;
-        bh=YWgybhhjcjU5jUOQFDqICzPZy3pdwcYT9rfQcigKjhM=;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 301A360B9A;
+        Thu,  1 Sep 2022 18:29:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EACC7C433D6;
+        Thu,  1 Sep 2022 18:28:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662056940;
+        bh=PlCL4cySnm15Ux+0EPr8LEeim/gpgor8ir7LBM4lzyM=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=T+LR2BL+97bJ7sMyH3KChJOTCU4OlNi+VkQ37FcDiIAB/QrMhPoRTUoF58W0czxyA
-         bXiRHVhZna3yuZ9VL9khBxhItNHXqy7mRitSQ0quS9wRQ6G8Zao8aAz9JwCyPLy8ps
-         f5owrifXe/RGWBAbwt9egDeSRmjeLGhXifeXoweJca0fxB8RIwr7Ilth6Nx0dyDxCR
-         pEr4oYC6Ry4O8oyL3OeFS4GOPF0JgIaSGVaQ7ADN1RNPGIgnz6a4KvKgw2s9Dn1knV
-         vcE0jZNrOQ++AjGF2+THrho+GJdbsweJhft3ikr9kGFe1kYyNDPC99lA7FTXYyuvCF
-         B533uhhbUZkig==
-Date:   Thu, 1 Sep 2022 20:28:04 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rcu <rcu@vger.kernel.org>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
- fixes
-Message-ID: <20220901182804.GA108007@lothringen>
-References: <20220830105324.GA71266@lothringen>
- <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830160316.GC71266@lothringen>
- <20220830162244.GA73392@lothringen>
- <20220830164634.GC6159@paulmck-ThinkPad-P17-Gen-1>
- <20220831152658.GA89704@lothringen>
- <20220901143907.GU6159@paulmck-ThinkPad-P17-Gen-1>
- <20220901145819.GB105556@lothringen>
- <0e8687de-bf45-5de6-c2f1-be6084991921@joelfernandes.org>
- <20220901164928.GZ6159@paulmck-ThinkPad-P17-Gen-1>
+        b=vuTFFXU/OEqKHZMxgSu1J2oOLUFORW1IBflDMHF+L5ALQBpp1DbA/kh9YjhwTOF5h
+         R/98kj9n6QiYlSpIATE1ocJpSDFLA8CTzJn29GQ73DSCypT49mbtCQet/xoHjueyQY
+         EBifd6Wce5OjHHW34tzOJJ1tI+OAP31Hje9EU67Y=
+Date:   Thu, 1 Sep 2022 20:28:57 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     evgreen@chromium.org, arnd@arndb.de, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@gpiccoli.net, ardb@kernel.org,
+        davidgow@google.com, jwerner@chromium.org,
+        Petr Mladek <pmladek@suse.com>
+Subject: Re: [PATCH V3] firmware: google: Test spinlock on panic path to
+ avoid lockups
+Message-ID: <YxD56RTI9v/P2QOL@kroah.com>
+References: <20220819155059.451674-1-gpiccoli@igalia.com>
+ <YxDVPqVkdgQbAIvY@kroah.com>
+ <f89cd87c-7d1c-d8e6-ed95-6876f0201872@igalia.com>
+ <YxDX9+p+58q2sip2@kroah.com>
+ <6bc5dbc3-2cdd-5cb8-1632-11de2008a85a@igalia.com>
+ <YxDhiSDs4YcUrqV5@kroah.com>
+ <85683284-db85-7e3a-57bd-750e1c204e3e@igalia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220901164928.GZ6159@paulmck-ThinkPad-P17-Gen-1>
+In-Reply-To: <85683284-db85-7e3a-57bd-750e1c204e3e@igalia.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,93 +60,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 09:49:28AM -0700, Paul E. McKenney wrote:
-> > On 9/1/2022 10:58 AM, Frederic Weisbecker wrote:
-> > > On Thu, Sep 01, 2022 at 07:39:07AM -0700, Paul E. McKenney wrote:
-> > >> On Wed, Aug 31, 2022 at 05:26:58PM +0200, Frederic Weisbecker wrote:
-> > >>> On Tue, Aug 30, 2022 at 09:46:34AM -0700, Paul E. McKenney wrote:
-> > >>>>> Although who knows, may be some periodic file operation while idle are specific
-> > >>>>> to Android. I'll try to trace lazy callbacks while idle and the number of grace
-> > >>>>> periods associated.
-> > >>>>
-> > >>>> Sounds like a good start.
-> > >>>>
-> > >>>> And yes, we don't need to show that the whole !NOCB world needs this,
-> > >>>> just some significant portion of it.  But we do need some decent evidence.
-> > >>>> After all, it is all too easy to do a whole lot of work and find that
-> > >>>> the expected benefits fail to materialize.
-> > >>>
-> > >>> So here is some quick test. I made a patch that replaces Joel's 1st patch
-> > >>> with an implementation of call_rcu_lazy() that queues lazy callbacks
-> > >>> through the regular call_rcu() way but it counts them in a lazy_count.
-> > >>>
-> > >>> Upon idle entry it reports whether the tick is retained solely by lazy
-> > >>> callbacks or not.
-> > >>>
-> > >>> I get periodic and frequent results on my idle test box, something must be
-> > >>> opening/closing some file periodically perhaps.
-> > >>>
-> > >>> Anyway the thing can be tested with this branch:
-> > >>>
-> > >>> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-> > >>> 	rcu/lazy-trace
-> > >>>
-> > >>> Excerpt:
-> > >>>
-> > >>>           <idle>-0       [007] d..1.   414.226966: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-> > >>>           <idle>-0       [007] d..1.   414.228271: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-> > >>>           <idle>-0       [007] d..1.   414.232269: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-> > >>>           <idle>-0       [007] d..1.   414.236269: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-> > >>
-> > >> Just to make sure that I understand, at this point, there is only the
-> > >> one lazy callback (and no non-lazy callbacks) on this CPU, and that
-> > >> CPU is therefore keeping the tick on only for the benefit of that one
-> > >> lazy callback.  And for the above four traces, this is likely the same
-> > >> lazy callback.
-> > >>
-> > >> Did I get it right, or is there something else going on?
-> > > 
-> > > Exactly that!
+On Thu, Sep 01, 2022 at 02:46:48PM -0300, Guilherme G. Piccoli wrote:
+> On 01/09/2022 13:44, Greg KH wrote:
+> > [...]
+> >>> How are we supposed to know this here?
+> >>>
+> >>
+> >> Reading the code?
+> >> Or you mean, in the commit description this should be mentioned?
+> > 
+> > Yes, and in the comment as this type of call is very rare and should
+> > almost never be used.
 > 
-> Are these callbacks confined to the RCU_NEXT_READY_TAIL and RCU_NEXT_TAIL
-> segments, which are the ones that could (in theory) buffer callbacks
-> without having started a grace period?  Or is it all the callbacks
-> regardless of segment?
+> OK, I can add that, for sure.
+> 
+> 
+> >> [...]
+> >> I don't think it is so simple - we are in the panic path.
+> > 
+> > Great, then the lock doesn't matter :)
+> > 
+> >> So, imagine the lock was taken in CPU0, where GSMI is doing some
+> >> operation. During that operation, CPU1 panics!
+> >>
+> >> When that happens, panic() executes in CPU1, disabling CPU0 through
+> >> "strong" mechanisms (NMI). So, CPU0 had the lock, it is now off, and
+> >> when CPU1 goes through the panic notifiers, it'll eventually wait
+> >> forever for this lock in the GSMI handler, unless we have this patch
+> >> that would prevent the handler to run in such case.
+> >> Makes sense?
+> > 
+> > I'm trying to say "if you are in panic, never grab the lock in the first
+> > place".  So change the place when you grab the lock, not here.
+> > 
+> 
+> Evan, any comment here?
+> I think the patch is still well suited for this case. Suggestions on how
+> to improve it are welcome, of course.
+> 
+> I honestly didn't understand exactly what you're suggesting Greg...
+> Mind clarifying?
 
-Ah good point!
+Something like this totally untested code:
 
-So I just excluded when those segments have callbacks and I now only get
-two tick retains every two seconds:
+diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
+index adaa492c3d2d..6ad41b22671c 100644
+--- a/drivers/firmware/google/gsmi.c
++++ b/drivers/firmware/google/gsmi.c
+@@ -19,6 +19,7 @@
+ #include <linux/dma-mapping.h>
+ #include <linux/fs.h>
+ #include <linux/slab.h>
++#include <linux/panic.h>
+ #include <linux/panic_notifier.h>
+ #include <linux/ioctl.h>
+ #include <linux/acpi.h>
+@@ -611,6 +612,11 @@ static const struct attribute *gsmi_attrs[] = {
+ 	NULL,
+ };
+ 
++static bool panic_in_progress(void)
++{
++	return unlikely(atomic_read(&panic_cpu) != PANIC_CPU_INVALID);
++}
++
+ static int gsmi_shutdown_reason(int reason)
+ {
+ 	struct gsmi_log_entry_type_1 entry = {
+@@ -629,7 +635,8 @@ static int gsmi_shutdown_reason(int reason)
+ 	if (saved_reason & (1 << reason))
+ 		return 0;
+ 
+-	spin_lock_irqsave(&gsmi_dev.lock, flags);
++	if (!panic_in_progress())
++		spin_lock_irqsave(&gsmi_dev.lock, flags);
+ 
+ 	saved_reason |= (1 << reason);
+ 
+@@ -644,7 +651,8 @@ static int gsmi_shutdown_reason(int reason)
+ 
+ 	rc = gsmi_exec(GSMI_CALLBACK, GSMI_CMD_SET_EVENT_LOG);
+ 
+-	spin_unlock_irqrestore(&gsmi_dev.lock, flags);
++	if (!panic_in_progress())
++		spin_unlock_irqrestore(&gsmi_dev.lock, flags);
+ 
+ 	if (rc < 0)
+ 		printk(KERN_ERR "gsmi: Log Shutdown Reason failed\n");
 
-          <idle>-0       [007] d..1.  1111.893649: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1111.967575: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1113.895470: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1115.669446: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1115.898144: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1117.202833: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1117.900521: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1119.903327: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1120.766864: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1121.909182: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1122.441927: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1123.908911: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1125.868505: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1125.910898: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1127.682837: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1127.913719: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1129.916740: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1130.967052: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1131.919256: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1132.957163: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [000] d..1.  1133.630082: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1133.923053: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1135.927054: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1136.067679: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1137.652294: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1137.932546: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1138.200768: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1139.932573: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1141.167489: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1141.935232: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1143.440538: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-          <idle>-0       [007] d..1.  1143.938560: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
+
+
+That being said, are you sure spinlocks are still held in the panic
+notifier?  What about the call to bust_spinlocks() that is called in
+panic() already?  Wouldn't that have already dropped whatever you were
+worried about here?
+
+thanks,
+
+greg k-h

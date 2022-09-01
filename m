@@ -2,88 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 382A55A9F87
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:02:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6723D5A9F8C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:04:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbiIATCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35054 "EHLO
+        id S232840AbiIATEb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232599AbiIATCc (ORCPT
+        with ESMTP id S231133AbiIATE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:02:32 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E586F57E;
-        Thu,  1 Sep 2022 12:02:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=fEq7ylXFVAD0/Jym3hdJKK4evsjkFDxgx44dOr3dnPM=; b=gkA2hI4dMcnOiridULo7op/MPs
-        qkaaLntakJEq85jBxO0CoAztAK8QHCtnDdPErZqq9+AkL/gllioPMqfTn0MCpg55pk78cGIkiBLzx
-        RYjOuw90T8RjeYukCPsn3EOXC5lo0SWV6PF/tZXqbXmJAk/qV3fuXb8aT97kVW2OdouXROpLSA51O
-        6KYhZSqEpjOfzzi+vbV6BTnXriFhpYc3Nt76Qk1I/RU5W7nNxIKxZzf2DO6hAxZe6M+UnAzHrNnCm
-        Rc1fwk5LmuqHLEPGhEuJbMYAQWET5FpYeQ7e27nYIOYuqrxVQHlfKhGB4sGA0Zy/Eo/f5zDl812fV
-        8ElKfy0A==;
-Received: from 189-69-202-182.dial-up.telesp.net.br ([189.69.202.182] helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1oTpSK-007uUo-4P; Thu, 01 Sep 2022 21:02:24 +0200
-Message-ID: <794efe45-2fef-0d3f-b6d0-f2f451be850c@igalia.com>
-Date:   Thu, 1 Sep 2022 16:02:08 -0300
+        Thu, 1 Sep 2022 15:04:29 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6495F991;
+        Thu,  1 Sep 2022 12:04:28 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id j6so44424qkl.10;
+        Thu, 01 Sep 2022 12:04:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=W/qFFOOAdXUcatsqWYCMrmRU7POJYRljMGuVofmOMck=;
+        b=hkW+zBJPReWeLUB3DZtFBgm6zHDihFOEvnFqil+PeSGlnM2//BuVoLToJapTiC7G/t
+         qKErgmXdNqbsjaETG1oLE8jDMKA0kkJDFsesCFci6pxnYteU1A00bG0zV7FD6l/s6ZRn
+         My67PuzXtJVCgNQBDzrFI+1l6TabVFjDiFh6MndvGe9sQc7a7UCuH1xlDwjEwrQkfHCd
+         sWDpDfjMUMmQUZ9ywzhPcbVEizuhQgYHboo0UDteT7HXEYhcJCkDOenaNamvjBdz3ByE
+         ObBDTk4fSzp5xkU99HMyTa3binfrAC0uB8XhAvIoQ60lek1zr9FW+PAIceyh8iPd+C9U
+         ToCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=W/qFFOOAdXUcatsqWYCMrmRU7POJYRljMGuVofmOMck=;
+        b=WeZ+UH57uSJapeI0jjaB9Da3JH3o5CvJFRughPxnRqwu6QhMDhbPT50ybVBgFd2xzj
+         89mLikLU474A2rKY24yuBsUHpjJ+xShrcsWbfFcTtif1S2+pw5kIUv9m5iCg9ItySO3v
+         +yXj8MOgxxW8335oEtXavBHgCDNWVXgCKaHovC7AmA3RwRx3mdQhFXZ9NZKDKC68S0Zd
+         I1eMqTxG6h1PY0aRtsTInw0GEMu0ILwf7pseKZHv2qlVerT3Mv38jWjtgen/eW6f+YRH
+         q3qctZHosOi+0bNz+3C82H6WuOtmq4nTkzPiv+juLIY7Uu0nHO19uBpmHyk1D4R1DUOQ
+         lC5Q==
+X-Gm-Message-State: ACgBeo2dNhoEGEcMxQ/o55KU0bFOUzK5BjuopOBq38u9FqPVMuF5110c
+        2x7J4qYaqtmcKIsxzkIfxNA1ItOGjTbnqwZ5rdIGCq7Q/hwDlQ==
+X-Google-Smtp-Source: AA6agR4WH37VH8nTA6WfWnnPnxk2D7IFWLwSOev+koVtMfhDbxoJpV8t9O5yUTzQCNy8XJxz2zTJ7rS8l6t76oVHZvQ=
+X-Received: by 2002:ae9:e311:0:b0:6ba:e711:fb27 with SMTP id
+ v17-20020ae9e311000000b006bae711fb27mr20760737qkf.320.1662059067344; Thu, 01
+ Sep 2022 12:04:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V3] firmware: google: Test spinlock on panic path to avoid
- lockups
-Content-Language: en-US
-To:     Greg KH <gregkh@linuxfoundation.org>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     evgreen@chromium.org, arnd@arndb.de, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@gpiccoli.net, ardb@kernel.org,
-        davidgow@google.com, jwerner@chromium.org
-References: <20220819155059.451674-1-gpiccoli@igalia.com>
- <YxDVPqVkdgQbAIvY@kroah.com>
- <f89cd87c-7d1c-d8e6-ed95-6876f0201872@igalia.com>
- <YxDX9+p+58q2sip2@kroah.com>
- <6bc5dbc3-2cdd-5cb8-1632-11de2008a85a@igalia.com>
- <YxDhiSDs4YcUrqV5@kroah.com>
- <85683284-db85-7e3a-57bd-750e1c204e3e@igalia.com>
- <YxD56RTI9v/P2QOL@kroah.com>
- <b050f00b-6c3a-a0d9-a3c1-175a724faf1c@igalia.com>
- <YxEBCVRgWE8VTZaf@kroah.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <YxEBCVRgWE8VTZaf@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20220901092922.1024311-1-qingtao.cao.au@gmail.com>
+In-Reply-To: <20220901092922.1024311-1-qingtao.cao.au@gmail.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 1 Sep 2022 22:03:51 +0300
+Message-ID: <CAHp75Vc9LiO=YMNHgq=M2vqvqS7sL_4C89E7wPzbF6TyLtmOVw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] gpio: exar: access MPIO registers on slave chips
+To:     Qingtao Cao <qingtao.cao.au@gmail.com>
+Cc:     nathan@nathanrossi.com, Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 15:59, Greg KH wrote:
-> [...]
-> Ick, I don't know, this all feels odd.  I want someone else to review
-> this and give their ack on the patch before I'll take it so someone else
-> can share in the blame :)
-> 
-> thanks,
-> 
-> greg k-h
+On Thu, Sep 1, 2022 at 12:41 PM Qingtao Cao <qingtao.cao.au@gmail.com> wrote:
+>
+> When EXAR xr17v35x chips are cascaded in order to access the MPIO registers
+> (part of the Device Configuration Registers) of the slave chips, an offset
+> needs to be applied based on the number of master chip's UART channels.
 
-LOL, that's OK for me! Evan seems to be fine with it BTW.
+...
 
-Let's see if Petr can jump in, also adding Andrew here since he's
-usually merging stuff for panic.
-Cheers,
+>  #define EXAR_OFFSET_MPIOSEL_LO 0x93
+>  #define EXAR_OFFSET_MPIOLVL_HI 0x96
+>  #define EXAR_OFFSET_MPIOSEL_HI 0x99
 
++ Blank line.
 
-Guilherme
+> +#define EXAR_UART_CHANNEL_SIZE 0x400
+
+Add a comment explaining what this does include, etc.
+
+...
+
+> +       /*
+> +        * The offset to the slave device's (if existing)
+> +        * Device Configuration Registers
+
+Always finish multi-line comments with a period. Applies to other
+comments in this patch.
+
+> +        */
+
+...
+
+>  {
+> -       return (offset + exar_gpio->first_pin) / 8 ? EXAR_OFFSET_MPIOSEL_HI
+> -                                                  : EXAR_OFFSET_MPIOSEL_LO;
+> +       int addr;
+> +
+> +       addr = (offset % 16 + exar_gpio->first_pin) / 8 ? EXAR_OFFSET_MPIOSEL_HI
+> +                                                       : EXAR_OFFSET_MPIOSEL_LO;
+> +       return offset / 16 ? addr + exar_gpio->slave_offset : addr;
+
+Can we rather have something like
+
+  unsigned int pin = exar->first_pin + (offset % 16);
+  unsigned int slave = offset / 16;
+
+  addr = pin / 8 ? ...;
+  return addr + (slave ? ... : 0);
+
+?
+
+>  }
+>
+>  static unsigned int
+>  exar_offset_to_lvl_addr(struct exar_gpio_chip *exar_gpio, unsigned int offset)
+>  {
+> -       return (offset + exar_gpio->first_pin) / 8 ? EXAR_OFFSET_MPIOLVL_HI
+> -                                                  : EXAR_OFFSET_MPIOLVL_LO;
+> +       int addr;
+> +
+> +       addr = (offset % 16 + exar_gpio->first_pin) / 8 ? EXAR_OFFSET_MPIOLVL_HI
+> +                                                       : EXAR_OFFSET_MPIOLVL_LO;
+> +       return offset / 16 ? addr + exar_gpio->slave_offset : addr;
+
+In the similar way as above.
+
+>  }
+
+...
+
+> +       if (pcidev->device & 0xf000) {
+
+GENMASK()
+
+> +               /*
+> +                * xr17v354 or xr17v358 slaves have the same amount of
+> +                * MPIOs as the master
+> +                */
+> +               ngpios += ngpios;
+> +
+> +               /*
+> +                * The last 4 bits of the master's PCI Device ID is
+> +                * the number of its UART channels
+> +                */
+> +               exar_gpio->slave_offset = (pcidev->device & 0xf) *
+
+GENMASK()
+
+> +                               EXAR_UART_CHANNEL_SIZE;
+> +       }
+
+-- 
+With Best Regards,
+Andy Shevchenko

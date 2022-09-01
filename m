@@ -2,166 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 645F15A8DEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46CE15A8DF1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbiIAGBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38942 "EHLO
+        id S233263AbiIAGEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiIAGBn (ORCPT
+        with ESMTP id S232440AbiIAGEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:01:43 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2074.outbound.protection.outlook.com [40.107.237.74])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE301E2C76;
-        Wed, 31 Aug 2022 23:01:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=L+ZQ/TtpEy+SPYqcY0/M9eJ7XAotxz5+Ouwo2i2TsO/GlEsRnuWVw+5ZDqGfFcK2hjKITXbfJRNxm40CtFrB6408IQawnlgQfgp2ShbbqKg0pwwkh3i9GhqWXGsdMw/v1yRTDqJfv92tLgiUuN+EYF/SFaQweO3FUHiqFK05LgJDwKPbtHVgzezqPRG+zHtAkeuvFEh329PJtgAcUYZh8qCkaBbd6XvgPqHz1mJ/DxRhPYs01SK0yQ3Wd/Pkmt9EgqMFd1MJtMbAw/tt6+ZSshZ1mLpVrBt1mw0591yxoucXax2erbC3MG3I3/2WUJ/q/Jtcq0KgTwfurRCxcFQmDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c9/yf7Urz4ohspQzWVW630EJWoBHog91yWFmH94Xcic=;
- b=CO7Qw/vSXAxVt9cL6McWA9ZMBMRtHCy3lm0wyzoy5NKQpYwxtV3ZFGWZe2jP+fKHiicXCsx1SA2JUk86KjwZBri+bEknao6f0Mqco0dLsfIgJU4SB/oOlWDwegF0cRgBPo9+5H3UAXc/UcmHu5CYMf7D+ABqe6Eov14g9qrCsD81Pntjx7Q/Ef0br1RNdFbMP9yZfRp921MgJZUBXFah8KXohWFqU+VEeKkAFYKL7TqH6mQP71fc52tjLq9g4foMloxQamCCucKwqZZHOt6klvYCCCRh19YFayKq1gp0uVU1wFWvofBPPancgXoeNv4OAf6hPLfvA3gY/0fiHBhxYg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=huawei.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c9/yf7Urz4ohspQzWVW630EJWoBHog91yWFmH94Xcic=;
- b=OpaGG8D9gfl2vFj9Q4zybx+XEcacUVJeBsAdgcpVmUDTgeKatZwLLfdnABtJAos90Ym1r2fbwIZWquO0u6lJcsIIqh3awNVGumA913jEgkCoFOeGKWsx2PlGZz0S40KGuQjkvPB2GTTeA5vWBIiDJKesul0lIhLes9OmcWThI+o=
-Received: from MW4PR04CA0156.namprd04.prod.outlook.com (2603:10b6:303:85::11)
- by IA1PR12MB6436.namprd12.prod.outlook.com (2603:10b6:208:3ac::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
- 2022 06:01:40 +0000
-Received: from CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:85:cafe::38) by MW4PR04CA0156.outlook.office365.com
- (2603:10b6:303:85::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12 via Frontend
- Transport; Thu, 1 Sep 2022 06:01:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT054.mail.protection.outlook.com (10.13.174.70) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5588.10 via Frontend Transport; Thu, 1 Sep 2022 06:01:39 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 1 Sep
- 2022 01:01:34 -0500
-Date:   Thu, 1 Sep 2022 08:01:05 +0200
-From:   Robert Richter <rrichter@amd.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH 05/15] cxl/acpi: Add probe function to detect restricted
- CXL hosts in RCD mode
-Message-ID: <YxBKoT2zlUVgXIry@rric.localdomain>
-References: <20220831081603.3415-1-rrichter@amd.com>
- <20220831081603.3415-6-rrichter@amd.com>
- <20220831110804.00003812@huawei.com>
+        Thu, 1 Sep 2022 02:04:35 -0400
+Received: from m13111.mail.163.com (m13111.mail.163.com [220.181.13.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DEA91E8339;
+        Wed, 31 Aug 2022 23:04:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=TXvoI
+        haUY/iXJSdIN8mkn50AsHOGVufvR2Mtl3RH4BM=; b=ggqzbHFQNUWhsr0bD5kwm
+        C5+lYXTyNQ69PRbpS66nbsEyX5vuPJG8Vgb4CoS0veH2RkqdIENNkoH/9Ds7WBYR
+        Zuj5SVpcH8YDqRzXJP3IpqEX1Pg+ytE6gmH/Be2E4n6U31w0wJLBu7DWAvZCsW9T
+        zEgCidXcKBCkemVe0iZuh8=
+Received: from 15815827059$163.com ( [116.128.244.169] ) by
+ ajax-webmail-wmsvr111 (Coremail) ; Thu, 1 Sep 2022 14:03:48 +0800 (CST)
+X-Originating-IP: [116.128.244.169]
+Date:   Thu, 1 Sep 2022 14:03:48 +0800 (CST)
+From:   huhai <15815827059@163.com>
+To:     "Sathya Prakash Veerichetty" <sathya.prakash@broadcom.com>
+Cc:     jejb@linux.ibm.com,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        "Sreekanth Reddy" <sreekanth.reddy@broadcom.com>,
+        "Suganath Prabu Subramani" <suganath-prabu.subramani@broadcom.com>,
+        PDL-MPT-FUSIONLINUX <MPT-FusionLinux.pdl@broadcom.com>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        huhai <huhai@kylinos.cn>, stable@vger.kernel.org,
+        "Jackie Liu" <liuyun01@kylinos.cn>
+Subject: Re:Re: [PATCH] scsi: mpt3sas: Fix NULL pointer crash due to missing
+ check device hostdata
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <CAFdVvOzAWcFLgPi_y8HW5Jx5JbC1AgBtADnwvd9usq8veU0vOg@mail.gmail.com>
+References: <20220825092645.326953-1-15815827059@163.com>
+ <49b0768d.96d.182f69a26f6.Coremail.15815827059@163.com>
+ <CAFdVvOzAWcFLgPi_y8HW5Jx5JbC1AgBtADnwvd9usq8veU0vOg@mail.gmail.com>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220831110804.00003812@huawei.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b518b3fe-3538-4bb7-34e0-08da8bdf6fee
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6436:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BHgBedyk/UvczAYaiA14wuB/B4DyULbIyh3pAc5zgV1PcEdQbYfgfiSXfj05XoSSjmiyZSiFd91Fil6I+bu0t1Ed6586HDJaiUjWTIIqDw/JDtKZbVdC2NscfkHA+NP3bh2YfXAVYBfejIlBwMrY+zxbI+oTnMP/wq7AL69uKyzcoooP/RG/hLlviMGMZE8aww5YeSiR1JgsdeeLoSfNVYucv7rYoazuSf6Cv6p7O+MP6HBxOYHBOuZCv19JS6qTp9uYcN2lOYmS/ipa4jmtf4CieWS/fZrwVtCUq+Mt2FYxFX+BYj8xY6BSkPBWriQO2NkkdRES8o7OcjwaPl22VZJAoR07HEKYyK+KvW78yBHTqgVtysdoM4PN27p/s/MCWXm14YSvKW0njt0Ts5rOty2Ovks6qHesnkO3R2aica9Ea1rNEyPGGdAZSSD0RdqHoqMo/n7M8RrIrJXNT2wcRD0udcA2stV81PJ77Yjx7XqdJBeczWEkc5pZOVdDVwMbCw1ENwrEqDZ9+D5mPPFcvB0uNoe+Ad1WramMBVXylAviqvJ5wZ18wR4bZIGOXTF+fvI0AijlWV+IRoDXWKVgm4/Cm77oQ6IdfpOqin2iCROQRCIS2lQCJm4eY/rTleiKcLhhkZRZqnGj2f6zVYVgEY8iMc3MM7MAcwrqgQh/At/FOZMjnhu2k+kRhDPPNWgrK7/U9u8Z7EKN3zJg93RTz1jkMuukpHi2drQF6ZnuSuw13NqP0Sl3blVHJnzGsinyVQ+CCXygV1I5uCQRkCD2C6B6zsuCDvnhyMePoKrZw1sDCe2aPF5zyRgaYGYhBDX5
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(376002)(346002)(39860400002)(40470700004)(46966006)(36840700001)(7416002)(6666004)(55016003)(2906002)(82740400003)(40480700001)(16526019)(336012)(54906003)(41300700001)(6916009)(47076005)(426003)(7696005)(316002)(83380400001)(40460700003)(81166007)(82310400005)(53546011)(356005)(4326008)(186003)(36860700001)(9686003)(8936002)(5660300002)(70206006)(26005)(478600001)(8676002)(70586007)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 06:01:39.6321
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b518b3fe-3538-4bb7-34e0-08da8bdf6fee
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT054.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6436
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <3b74287a.3728.182f7a604b3.Coremail.15815827059@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: b8GowAD3TNtFSxBjugZMAA--.28828W
+X-CM-SenderInfo: rprvmiivyslimvzbiqqrwthudrp/xtbB3xdvhWBHLk8cHQABsk
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.08.22 11:08:04, Jonathan Cameron wrote:
-> On Wed, 31 Aug 2022 10:15:53 +0200
-
-> Robert Richter <rrichter@amd.com> wrote:
-> 
-> > Restricted CXL device (RCD) mode (formerly CXL 1.1) uses a different
-> > enumeration scheme other than CXL VH (formerly CXL 2.0). In RCD mode a
-> > host/device (RCH-RCD) pair shows up as a legal PCIe hierarchy with an
-> > ACPI host bridge ("PNP0A08" or "ACPI0016" HID) and RCiEP connected to
-> > it with a description of the CXL device.
-> > 
-> > Add function cxl_restricted_host_probe() to probe RCD enumerated
-> > devices. The function implements a loop that detects all CXL capable
-> > ACPI PCI root bridges in the system (RCD mode only). The iterator
-> > function cxl_find_next_rch() is introduced to walk through all of the
-> > CXL hosts. The loop will then enable all CXL devices connected to the
-> > host. For now, only implement an empty loop with an iterator that
-> > returns all pci host bridges in the system.
-> > 
-> > The probe function is triggered by adding an own root device for RCHs.
-> > This is different to CXL VH where an ACPI "ACPI0017" root device
-> > exists. Its detection starts the CXL host detection. In RCD mode such
-> > a device does not necessarily exists, so solve this by creating a
-> > plain platform device that is not an ACPI device and is root only for
-> > RCHs.
-> 
-> If I read this correctly that platform device is created whether or not
-> there are any cxl devices in the system?
-> 
-> Can we create it only if we find some devices that will be placed
-> under it later?
-
-This would move the host detection from probe to init which I wanted
-to avoid to better control driver init order dependencies.
-
-I could add a put_device() at the end of a probe so that it will be
-released in case no other references use it. This implies the refcount
-is maintained for parent devices. Or this needs to be added to. So if
-there are no children (hosts) attached to the root device after probe,
-it will disappear.
-
-> > @@ -531,7 +566,41 @@ static struct platform_driver cxl_acpi_driver = {
-> >  	.id_table = cxl_test_ids,
-> >  };
-> >  
-> > -module_platform_driver(cxl_acpi_driver);
-> > +static void cxl_acpi_device_release(struct device *dev) { }
-> 
-> Why the empty release?  Perhaps introduce this only when it
-> does something.
-
-The core device driver requires this in device_release() to be setup.
-
-There is nothing to do as the device is kept in a static struct.
-That's why it's empty.
-
--Robert
+CkF0IDIwMjItMDktMDEgMTM6MDg6MTQsICJTYXRoeWEgUHJha2FzaCBWZWVyaWNoZXR0eSIgPHNh
+dGh5YS5wcmFrYXNoQGJyb2FkY29tLmNvbT4gd3JvdGU6Cj5UaGUgcGF0Y2ggY291bGQgYmUgaW1w
+cm92ZWQgdG8gY2xlYXIgdGhlIGF0YV9jbWRfcGVuZGluZyBiaXQgZm9yIHRoZQo+Y2FzZXMgIXNh
+c19kZXZpY2VfcHJpdl9kYXRhLT5zYXNfdGFyZ2V0IGFuZAo+c2FzX2RldmljZV9wcml2X2RhdGEt
+PnNhc190YXJnZXQtPmRlbGV0ZWQgYmVmb3JlIHJldHVybmluZwoKPkRJRF9OT19DT05ORUNUIHRv
+IHJldGFpbiB0aGUgY3VycmVudCBmdW5jdGlvbmFsaXR5LgoKSGksIAoKTWF5YmUgbXkgY29tbWl0
+IGluZm9ybWF0aW9uIGlzIG5vdCBjbGVhciBlbm91Z2ijrFRoaXMgcGF0Y2ggaXMgZml4ZWQgTlVM
+TCBwb2ludGVyIGNyYXNoCmR1dG8gdG8gInN0cnVjdCBNUFQzU0FTX0RFVklDRSAqcHJpdiA9IHNj
+bWQtPmRldmljZS0+aG9zdGRhdGE7IiAgZ290IGEgTlVMTCBwb2ludGVyLCBhbmQKd2hlbiAiY2xl
+YXJfYml0KDAsICZwcml2LT5hdGFfY29tbWFuZF9wZW5kaW5nKTsiIGlzIGNhbGxlZCwga2VybmVs
+IHdpbGwgcGFuaWMuIAoKVGhhbmtzCgo+Cj4KPk9uIFdlZCwgQXVnIDMxLCAyMDIyIGF0IDc6MTEg
+UE0gaHVoYWkgPDE1ODE1ODI3MDU5QDE2My5jb20+IHdyb3RlOgo+Pgo+PiBGcmllbmRseSBwaW5n
+Lgo+Pgo+Pgo+PiBBdCAyMDIyLTA4LTI1IDE3OjI2OjQ1LCAiaHVoYWkiIDwxNTgxNTgyNzA1OUAx
+NjMuY29tPiB3cm90ZToKPj4gPkZyb206IGh1aGFpIDxodWhhaUBreWxpbm9zLmNuPgo+PiA+Cj4+
+ID5JZiBfc2NzaWhfaW9fZG9uZSgpIGlzIGNhbGxlZCB3aXRoIHNjbWQtPmRldmljZS0+aG9zdGRh
+dGE9TlVMTCwgaXQgY2FuIGxlYWQKPj4gPnRvIHRoZSBmb2xsb3dpbmcgcGFuaWM6Cj4+ID4KPj4g
+PiAgQlVHOiB1bmFibGUgdG8gaGFuZGxlIGtlcm5lbCBOVUxMIHBvaW50ZXIgZGVyZWZlcmVuY2Ug
+YXQgMDAwMDAwMDAwMDAwMDAxOAo+PiA+ICBQR0QgNDU0N2E0MDY3IFA0RCA0NTQ3YTQwNjcgUFVE
+IDAKPj4gPiAgT29wczogMDAwMiBbIzFdIFNNUCBOT1BUSQo+PiA+ICBDUFU6IDYyIFBJRDogMCBD
+b21tOiBzd2FwcGVyLzYyIEtkdW1wOiBsb2FkZWQgTm90IHRhaW50ZWQgNC4xOS45MC0yNC40LnYy
+MTAxLmt5MTAueDg2XzY0ICMxCj4+ID4gIEhhcmR3YXJlIG5hbWU6IFN0b3JhZ2UgU2VydmVyLzY1
+TjMyLVVTLCBCSU9TIFNRTDEwNDEyMTcgMDUvMzAvMjAyMgo+PiA+ICBSSVA6IDAwMTA6X3Njc2lo
+X3NldF9zYXRsX3BlbmRpbmcrMHgyZC8weDUwIFttcHQzc2FzXQo+PiA+ICBDb2RlOiAwMCAwMCA0
+OCA4YiA4NyA2MCAwMSAwMCAwMCAwZiBiNiAxMCA4MCBmYSBhMSA3NCAwOSAzMSBjMCA4MCBmYSA4
+NSA3NCAwMiBmMyBjMyA0OCA4YiA0NyAzOCA0MCA4NCBmNiA0OCA4YiA4MCA5OCAwMCAwMCAwMCA3
+NSAwOCA8ZjA+IDgwIDYwIDE4IGZlIDMxIGMwIGMzIGYwIDQ4IDBmIGJhIDY4IDE4IDAwIDBmIDky
+IGMwIDBmIGI2IGMwIGMzCj4+ID4gIFJTUDogMDAxODpmZmZmOGVjMjJmYzAzZTAwIEVGTEFHUzog
+MDAwMTAwNDYKPj4gPiAgUkFYOiAwMDAwMDAwMDAwMDAwMDAwIFJCWDogZmZmZjhlYmExYjA3MjUx
+OCBSQ1g6IDAwMDAwMDAwMDAwMDAwMDEKPj4gPiAgUkRYOiAwMDAwMDAwMDAwMDAwMDg1IFJTSTog
+MDAwMDAwMDAwMDAwMDAwMCBSREk6IGZmZmY4ZWJhMWIwNzI1MTgKPj4gPiAgUkJQOiAwMDAwMDAw
+MDAwMDAwZGJkIFIwODogMDAwMDAwMDAwMDAwMDAwMCBSMDk6IDAwMDAwMDAwMDAwMjk3MDAKPj4g
+PiAgUjEwOiBmZmZmOGVjMjJmYzAzZjgwIFIxMTogMDAwMDAwMDAwMDAwMDAwMCBSMTI6IGZmZmY4
+ZWJlMmQzNjA5ZTgKPj4gPiAgUjEzOiBmZmZmOGViZTJhNzJiNjAwIFIxNDogZmZmZjhlY2E0NzI3
+MDdlMCBSMTU6IDAwMDAwMDAwMDAwMDAwMjAKPj4gPiAgRlM6ICAwMDAwMDAwMDAwMDAwMDAwKDAw
+MDApIEdTOmZmZmY4ZWMyMmZjMDAwMDAoMDAwMCkga25sR1M6MDAwMDAwMDAwMDAwMDAwMAo+PiA+
+ICBDUzogIDAwMTAgRFM6IDAwMDAgRVM6IDAwMDAgQ1IwOiAwMDAwMDAwMDgwMDUwMDMzCj4+ID4g
+IENSMjogMDAwMDAwMDAwMDAwMDAxOCBDUjM6IDAwMDAwMDA0NmU1ZjYwMDAgQ1I0OiAwMDAwMDAw
+MDAwMzQwNmUwCj4+ID4gIENhbGwgVHJhY2U6Cj4+ID4gICA8SVJRPgo+PiA+ICAgX3Njc2loX2lv
+X2RvbmUrMHg0YS8weDlmMCBbbXB0M3Nhc10KPj4gPiAgIF9iYXNlX2ludGVycnVwdCsweDIzZi8w
+eGUxMCBbbXB0M3Nhc10KPj4gPiAgIF9faGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHg0MC8weDE5
+MAo+PiA+ICAgaGFuZGxlX2lycV9ldmVudF9wZXJjcHUrMHgzMC8weDcwCj4+ID4gICBoYW5kbGVf
+aXJxX2V2ZW50KzB4MzYvMHg2MAo+PiA+ICAgaGFuZGxlX2VkZ2VfaXJxKzB4N2UvMHgxOTAKPj4g
+PiAgIGhhbmRsZV9pcnErMHhhOC8weDExMAo+PiA+ICAgZG9fSVJRKzB4NDkvMHhlMAo+PiA+Cj4+
+ID5GaXggaXQgYnkgbW92ZSBzY21kLT5kZXZpY2UtPmhvc3RkYXRhIGNoZWNrIGJlZm9yZSBfc2Nz
+aWhfc2V0X3NhdGxfcGVuZGluZwo+PiA+Y2FsbGVkLgo+PiA+Cj4+ID5PdGhlciBjaGFuZ2VzOgo+
+PiA+LSBJdCBsb29rcyBjbGVhciB0byBtb3ZlIGdldCBtcGlfcmVwbHkgdG8gbmVhciBpdHMgY2hl
+Y2suCj4+ID4KPj4gPkZpeGVzOiBmZmI1ODQ1NjU4OTQgKCJzY3NpOiBtcHQzc2FzOiBmaXggaGFu
+ZyBvbiBhdGEgcGFzc3Rocm91Z2ggY29tbWFuZHMiKQo+PiA+Q2M6IDxzdGFibGVAdmdlci5rZXJu
+ZWwub3JnPiAjIHY0LjkrCj4+ID5Dby1kZXZlbG9wZWQtYnk6IEphY2tpZSBMaXUgPGxpdXl1bjAx
+QGt5bGlub3MuY24+Cj4+ID5TaWduZWQtb2ZmLWJ5OiBKYWNraWUgTGl1IDxsaXV5dW4wMUBreWxp
+bm9zLmNuPgo+PiA+U2lnbmVkLW9mZi1ieTogaHVoYWkgPGh1aGFpQGt5bGlub3MuY24+Cj4+ID4t
+LS0KPj4gPiBkcml2ZXJzL3Njc2kvbXB0M3Nhcy9tcHQzc2FzX3Njc2loLmMgfCAxNSArKysrKysr
+LS0tLS0tLS0KPj4gPiAxIGZpbGUgY2hhbmdlZCwgNyBpbnNlcnRpb25zKCspLCA4IGRlbGV0aW9u
+cygtKQo+PiA+Cj4+ID5kaWZmIC0tZ2l0IGEvZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0M3Nhc19z
+Y3NpaC5jIGIvZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0M3Nhc19zY3NpaC5jCj4+ID5pbmRleCBk
+ZWYzN2E3ZTU5ODAuLjg1ZjU3NDlhMDQyMSAxMDA2NDQKPj4gPi0tLSBhL2RyaXZlcnMvc2NzaS9t
+cHQzc2FzL21wdDNzYXNfc2NzaWguYwo+PiA+KysrIGIvZHJpdmVycy9zY3NpL21wdDNzYXMvbXB0
+M3Nhc19zY3NpaC5jCj4+ID5AQCAtNTcwNCwyNyArNTcwNCwyNiBAQCBfc2NzaWhfaW9fZG9uZShz
+dHJ1Y3QgTVBUM1NBU19BREFQVEVSICppb2MsIHUxNiBzbWlkLCB1OCBtc2l4X2luZGV4LCB1MzIg
+cmVwbHkpCj4+ID4gICAgICAgc3RydWN0IE1QVDNTQVNfREVWSUNFICpzYXNfZGV2aWNlX3ByaXZf
+ZGF0YTsKPj4gPiAgICAgICB1MzIgcmVzcG9uc2VfY29kZSA9IDA7Cj4+ID4KPj4gPi0gICAgICBt
+cGlfcmVwbHkgPSBtcHQzc2FzX2Jhc2VfZ2V0X3JlcGx5X3ZpcnRfYWRkcihpb2MsIHJlcGx5KTsK
+Pj4gPi0KPj4gPiAgICAgICBzY21kID0gbXB0M3Nhc19zY3NpaF9zY3NpX2xvb2t1cF9nZXQoaW9j
+LCBzbWlkKTsKPj4gPiAgICAgICBpZiAoc2NtZCA9PSBOVUxMKQo+PiA+ICAgICAgICAgICAgICAg
+cmV0dXJuIDE7Cj4+ID4KPj4gPisgICAgICBzYXNfZGV2aWNlX3ByaXZfZGF0YSA9IHNjbWQtPmRl
+dmljZS0+aG9zdGRhdGE7Cj4+ID4rICAgICAgaWYgKCFzYXNfZGV2aWNlX3ByaXZfZGF0YSB8fCAh
+c2FzX2RldmljZV9wcml2X2RhdGEtPnNhc190YXJnZXQgfHwKPj4gPisgICAgICAgICAgIHNhc19k
+ZXZpY2VfcHJpdl9kYXRhLT5zYXNfdGFyZ2V0LT5kZWxldGVkKSB7Cj4+ID4rICAgICAgICAgICAg
+ICBzY21kLT5yZXN1bHQgPSBESURfTk9fQ09OTkVDVCA8PCAxNjsKPj4gPisgICAgICAgICAgICAg
+IGdvdG8gb3V0Owo+PiA+KyAgICAgIH0KPj4gPiAgICAgICBfc2NzaWhfc2V0X3NhdGxfcGVuZGlu
+ZyhzY21kLCBmYWxzZSk7Cj4+ID4KPj4gPiAgICAgICBtcGlfcmVxdWVzdCA9IG1wdDNzYXNfYmFz
+ZV9nZXRfbXNnX2ZyYW1lKGlvYywgc21pZCk7Cj4+ID4KPj4gPisgICAgICBtcGlfcmVwbHkgPSBt
+cHQzc2FzX2Jhc2VfZ2V0X3JlcGx5X3ZpcnRfYWRkcihpb2MsIHJlcGx5KTsKPj4gPiAgICAgICBp
+ZiAobXBpX3JlcGx5ID09IE5VTEwpIHsKPj4gPiAgICAgICAgICAgICAgIHNjbWQtPnJlc3VsdCA9
+IERJRF9PSyA8PCAxNjsKPj4gPiAgICAgICAgICAgICAgIGdvdG8gb3V0Owo+PiA+ICAgICAgIH0K
+Pj4gPgo+PiA+LSAgICAgIHNhc19kZXZpY2VfcHJpdl9kYXRhID0gc2NtZC0+ZGV2aWNlLT5ob3N0
+ZGF0YTsKPj4gPi0gICAgICBpZiAoIXNhc19kZXZpY2VfcHJpdl9kYXRhIHx8ICFzYXNfZGV2aWNl
+X3ByaXZfZGF0YS0+c2FzX3RhcmdldCB8fAo+PiA+LSAgICAgICAgICAgc2FzX2RldmljZV9wcml2
+X2RhdGEtPnNhc190YXJnZXQtPmRlbGV0ZWQpIHsKPj4gPi0gICAgICAgICAgICAgIHNjbWQtPnJl
+c3VsdCA9IERJRF9OT19DT05ORUNUIDw8IDE2Owo+PiA+LSAgICAgICAgICAgICAgZ290byBvdXQ7
+Cj4+ID4tICAgICAgfQo+PiA+ICAgICAgIGlvY19zdGF0dXMgPSBsZTE2X3RvX2NwdShtcGlfcmVw
+bHktPklPQ1N0YXR1cyk7Cj4+ID4KPj4gPiAgICAgICAvKgo+PiA+LS0KPj4gPjIuMjcuMAo+PiA+
+Cj4+ID4KPj4gPk5vIHZpcnVzIGZvdW5kCj4+ID4gICAgICAgICAgICAgICBDaGVja2VkIGJ5IEhp
+bGxzdG9uZSBOZXR3b3JrIEFudGlWaXJ1cwo+Cj4tLSAKPlRoaXMgZWxlY3Ryb25pYyBjb21tdW5p
+Y2F0aW9uIGFuZCB0aGUgaW5mb3JtYXRpb24gYW5kIGFueSBmaWxlcyB0cmFuc21pdHRlZCAKPndp
+dGggaXQsIG9yIGF0dGFjaGVkIHRvIGl0LCBhcmUgY29uZmlkZW50aWFsIGFuZCBhcmUgaW50ZW5k
+ZWQgc29sZWx5IGZvciAKPnRoZSB1c2Ugb2YgdGhlIGluZGl2aWR1YWwgb3IgZW50aXR5IHRvIHdo
+b20gaXQgaXMgYWRkcmVzc2VkIGFuZCBtYXkgY29udGFpbiAKPmluZm9ybWF0aW9uIHRoYXQgaXMg
+Y29uZmlkZW50aWFsLCBsZWdhbGx5IHByaXZpbGVnZWQsIHByb3RlY3RlZCBieSBwcml2YWN5IAo+
+bGF3cywgb3Igb3RoZXJ3aXNlIHJlc3RyaWN0ZWQgZnJvbSBkaXNjbG9zdXJlIHRvIGFueW9uZSBl
+bHNlLiBJZiB5b3UgYXJlIAo+bm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQgb3IgdGhlIHBlcnNv
+biByZXNwb25zaWJsZSBmb3IgZGVsaXZlcmluZyB0aGUgCj5lLW1haWwgdG8gdGhlIGludGVuZGVk
+IHJlY2lwaWVudCwgeW91IGFyZSBoZXJlYnkgbm90aWZpZWQgdGhhdCBhbnkgdXNlLCAKPmNvcHlp
+bmcsIGRpc3RyaWJ1dGluZywgZGlzc2VtaW5hdGlvbiwgZm9yd2FyZGluZywgcHJpbnRpbmcsIG9y
+IGNvcHlpbmcgb2YgCj50aGlzIGUtbWFpbCBpcyBzdHJpY3RseSBwcm9oaWJpdGVkLiBJZiB5b3Ug
+cmVjZWl2ZWQgdGhpcyBlLW1haWwgaW4gZXJyb3IsIAo+cGxlYXNlIHJldHVybiB0aGUgZS1tYWls
+IHRvIHRoZSBzZW5kZXIsIGRlbGV0ZSBpdCBmcm9tIHlvdXIgY29tcHV0ZXIsIGFuZCAKPmRlc3Ry
+b3kgYW55IHByaW50ZWQgY29weSBvZiBpdC4K

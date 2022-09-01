@@ -2,169 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 632FB5A949D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:29:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276B75A94A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:30:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234029AbiIAK2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:28:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59456 "EHLO
+        id S233669AbiIAKa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233984AbiIAK2e (ORCPT
+        with ESMTP id S233514AbiIAKaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:28:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D92E4D152
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:28:33 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1oThQq-0000YK-87; Thu, 01 Sep 2022 12:28:20 +0200
-Received: from pza by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <pza@pengutronix.de>)
-        id 1oThQn-0000Tb-NO; Thu, 01 Sep 2022 12:28:17 +0200
-Date:   Thu, 1 Sep 2022 12:28:17 +0200
-From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     freedreno <freedreno@lists.freedesktop.org>,
-        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        krzysztof.kozlowski@linaro.org, Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 3/6] clk: qcom: gdsc: Add a reset op to poll gdsc
- collapse
-Message-ID: <20220901102817.GB32271@pengutronix.de>
-References: <1661923108-789-1-git-send-email-quic_akhilpo@quicinc.com>
- <20220831104741.v6.3.I162c4be55f230cd439f0643f1624527bdc8a9831@changeid>
+        Thu, 1 Sep 2022 06:30:24 -0400
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19C0BD117
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:30:22 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id e71so7983276ybh.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:30:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=o0dNB2dEotiHbBAgc7JJeptZGUlaTEB/UzQJO7GfLf0=;
+        b=bspJqr6d2pNTsTde3J/UZTklopjaOq0xQ657lWZba3kWfZ39ts0XRC6i0lMDVKm1/a
+         lmSUBSAs+KvDq6OOV0bVfk3iClwt0D2Bmukd23jGf3Xp6MFkGWFc9uBjb5GRShZDEwCJ
+         z6W9dRPllVhxxz2y5dVE6sG9qn1JwnxqGDAq6qP0ArJ5wh7oH6AO4Iqg86PvFjVkfd78
+         sQqc2MjhRojfpnRh0hzRLrqsxyf/MUeBi6MGHqG70yVSBpa13NKBAdpprvNIYXYxqO4u
+         SmFGHGrzO2+SOYzVGggZ4p8I8h6G/Ic/68W2dkCqiQXL4QLOp3lngn/RjSmG2w98Ged0
+         m6rw==
+X-Gm-Message-State: ACgBeo1ZL4r5F6//ba0oN9gv9Dj/pKXJNSj3kmKvWaLJPxD0un4149Dw
+        a5ZiLibGovDJJ2+RLKUt2+UooS9vkssvWI7G97M=
+X-Google-Smtp-Source: AA6agR4eU/leGtZXqINtxP77iUKDVvRtNJm8A9wHt1oClNaG3THlQmhcG79vWTs7fJxTbIYhOgNqLGK9Xo6zlfsq7M8=
+X-Received: by 2002:a25:34d8:0:b0:6a2:2cc3:3b2d with SMTP id
+ b207-20020a2534d8000000b006a22cc33b2dmr431315yba.142.1662028221974; Thu, 01
+ Sep 2022 03:30:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831104741.v6.3.I162c4be55f230cd439f0643f1624527bdc8a9831@changeid>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: pza@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220831075742.295-1-mailhol.vincent@wanadoo.fr> <Yw8hJS9f6SofG4/6@yury-laptop>
+ <YxArx4UGoSQXljQd@yury-laptop>
+In-Reply-To: <YxArx4UGoSQXljQd@yury-laptop>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Thu, 1 Sep 2022 19:30:10 +0900
+Message-ID: <CAMZ6Rq+XVWGEEHr9t5dkXN0E36hkpMb5kNEZJmMFgtJxyQntsg@mail.gmail.com>
+Subject: Re: [PATCH v6 0/2] x86/asm/bitops: optimize ff{s,z} functions for
+ constant expressions
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Joe Perches <joe@perches.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 10:48:24AM +0530, Akhil P Oommen wrote:
-> Add a reset op compatible function to poll for gdsc collapse.
-> 
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
-> 
-> (no changes since v2)
-> 
-> Changes in v2:
-> - Minor update to function prototype
-> 
->  drivers/clk/qcom/gdsc.c | 23 +++++++++++++++++++----
->  drivers/clk/qcom/gdsc.h |  7 +++++++
->  2 files changed, 26 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-> index 44520ef..2d0f1d1 100644
-> --- a/drivers/clk/qcom/gdsc.c
-> +++ b/drivers/clk/qcom/gdsc.c
-> @@ -17,6 +17,7 @@
->  #include <linux/reset-controller.h>
->  #include <linux/slab.h>
->  #include "gdsc.h"
-> +#include "reset.h"
->  
->  #define PWR_ON_MASK		BIT(31)
->  #define EN_REST_WAIT_MASK	GENMASK_ULL(23, 20)
-> @@ -116,7 +117,8 @@ static int gdsc_hwctrl(struct gdsc *sc, bool en)
->  	return regmap_update_bits(sc->regmap, sc->gdscr, HW_CONTROL_MASK, val);
->  }
->  
-> -static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
-> +static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status,
-> +		s64 timeout_us, unsigned int interval_ms)
->  {
->  	ktime_t start;
->  
-> @@ -124,7 +126,9 @@ static int gdsc_poll_status(struct gdsc *sc, enum gdsc_status status)
->  	do {
->  		if (gdsc_check_status(sc, status))
->  			return 0;
-> -	} while (ktime_us_delta(ktime_get(), start) < TIMEOUT_US);
-> +		if (interval_ms)
-> +			msleep(interval_ms);
-> +	} while (ktime_us_delta(ktime_get(), start) < timeout_us);
+On Tue. 1 sept. 2022 at 12:49, Yury Norov <yury.norov@gmail.com> wrote:
+> On Wed, Aug 31, 2022 at 01:54:01AM -0700, Yury Norov wrote:
+> > On Wed, Aug 31, 2022 at 04:57:40PM +0900, Vincent Mailhol wrote:
+> > > The compilers provide some builtin expression equivalent to the ffs(),
+> > > __ffs() and ffz() functions of the kernel. The kernel uses optimized
+> > > assembly which produces better code than the builtin
+> > > functions. However, such assembly code can not be folded when used
+> > > with constant expressions.
+> > >
+> > > This series relies on __builtin_constant_p to select the optimal solution:
+> > >
+> > >   * use kernel assembly for non constant expressions
+> > >
+> > >   * use compiler's __builtin function for constant expressions.
+> > >
+> > >
+> > > ** Statistics **
+> > >
+> > > Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+> > > of __ffs() and ffz() calls (details of the calculation in each patch).
+> >
+> > Hi Vincent,
+> >
+> > Can you please add a test for this? We've recently added a very similar
+> > test_bitmap_const_eval() in lib/test_bitmap.c.
+> >
+> > dc34d5036692c ("lib: test_bitmap: add compile-time optimization/evaluations
+> > assertions")
+> >
+> > Would be nice to have something like this for ffs() and ffz() in
+> > lib/test_bitops.c.
+> >
+> > Please keep me in loop in case of new versions.
 
-Could this loop be implemented with read_poll_timeout()?
+Hi Yury,
 
->  	if (gdsc_check_status(sc, status))
->  		return 0;
-> @@ -172,7 +176,7 @@ static int gdsc_toggle_logic(struct gdsc *sc, enum gdsc_status status)
->  		udelay(1);
->  	}
->  
-> -	ret = gdsc_poll_status(sc, status);
-> +	ret = gdsc_poll_status(sc, status, TIMEOUT_US, 0);
->  	WARN(ret, "%s status stuck at 'o%s'", sc->pd.name, status ? "ff" : "n");
->  
->  	if (!ret && status == GDSC_OFF && sc->rsupply) {
-> @@ -343,7 +347,7 @@ static int _gdsc_disable(struct gdsc *sc)
->  		 */
->  		udelay(1);
->  
-> -		ret = gdsc_poll_status(sc, GDSC_ON);
-> +		ret = gdsc_poll_status(sc, GDSC_ON, TIMEOUT_US, 0);
->  		if (ret)
->  			return ret;
->  	}
-> @@ -565,3 +569,14 @@ int gdsc_gx_do_nothing_enable(struct generic_pm_domain *domain)
->  	return 0;
->  }
->  EXPORT_SYMBOL_GPL(gdsc_gx_do_nothing_enable);
-> +
-> +int gdsc_wait_for_collapse(void *priv)
-> +{
-> +	struct gdsc *sc = priv;
-> +	int ret;
-> +
-> +	ret = gdsc_poll_status(sc, GDSC_OFF, 500000, 5);
-> +	WARN(ret, "%s status stuck at 'on'", sc->pd.name);
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL_GPL(gdsc_wait_for_collapse);
+My patch only takes care of the x86 architecture. Assuming some other
+architectures are not optimized yet, adding such a test might break
+some builds. I am fine with adding the test, however, I will not write
+patches for the other architecture because I do not have the
+environment to compile and test it.
 
-Superficially, using this as a reset op seems like abuse of the reset
-controller API. Calling reset_control_reset() on this in the GPU driver
-will not trigger a reset signal on the GPU's "cx_collapse" reset input.
+Does it still make sense to add the test before fixing all the architectures?
 
-So at the very least, this patchset should contain an explanation why
-this is a good idea regardless, and how this is almost a reset control.
+> Also, what about fls? Is there any difference with ffs/ffz wrt compile
+> time optimizations? If not, would be great if the series will take
+> care of it too.
 
-I have read the linked discussion, and I'm not sure I understand all
-of it, so please correct me if I'm wrong: There is some other way to
-force the GDSC into a state that will eventually cause a GPU reset, and
-this is just the remaining part to make sure that the workaround dance
-is finished?
+Agree. The fls() and fls64() can use __builtin_ctz() and
+__builtin_ctzll(). However, those two functions are a bit less
+trivial. I wanted to have this first series approved first before
+working on *fls*().
 
-If so, it should be explained that this depends on something else to
-actually indirectly trigger the reset, and where this happens.
 
-regards
-Philipp
+Yours sincerely,
+Vincent Mailhol

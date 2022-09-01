@@ -2,66 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85D365A900A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AB65A900B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233565AbiIAHYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
+        id S233895AbiIAHYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:24:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233845AbiIAHXC (ORCPT
+        with ESMTP id S234001AbiIAHXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:23:02 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11924124847
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:21:44 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id t129so16693107pfb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:21:44 -0700 (PDT)
+        Thu, 1 Sep 2022 03:23:46 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84D681257F0
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:22:26 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id bt10so23148297lfb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:22:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=0HqSn0Ox0h+zex/0MovePHLPQd5vbfE0VJ6wh/+Xb8U=;
-        b=FCUYOtcqINLucitLMdn4Q7w+N4jAz3oWi3yz/tfuivP4ZP27j39mUYEhUHGJ1tCcBS
-         abuZ269dc3vVPf02Cm3ZYdpuRWAv/vaN7KWstNn0Dm0xK4GqFVGeosCDnC6056RFPyp3
-         ThDjOnr2DfQru8Kr3c7DEg9KTbWKiBEy9KuflUWgIy9thMney4Jv4nkrFaPeTdJAt0Pi
-         PfH+9qa2HQb07xs2eQA+GnWMsKkKUg9GdE2qMXaVBIifVUty9467gajKo4j7oQqLo0Dh
-         CvF/1a0PXCXWfpsbNMIGUqyLcyWOKbeXlL2KgC8P8DfkHM3mQe1TV/47gX9/YMc0R6R6
-         rkZw==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=ie2djqYNwgtHdEpHOV+v/LaEpFF1VLi5D+xGUiqnUlQ=;
+        b=yx+10WgNA8vbWj86iSzdffDWkiXLC6RkN0OA/LaRYIceHpNdUDnISMcUq9v0erTQid
+         OS4chuIARwbiC/E/3SFMJHRIyZ7+ADYxmNTi/HthzUQWc7X333GWoSvYXbdO7mSNo2/j
+         gZX6Z39LqqQIUNn3MBM0GsIOiraxvWfAfDUbGvNAxIN5B7+6g9jThGKh8E7qNu0pVjJC
+         dBjXcl4qf+4L0oQwKcYmToCKDhMwq5cm3z+4ldceol6UeVntr5u2riV8VD7qWBLHxq6W
+         zEvKxMR+73ubvIidHeMbEwaMzfsF1mA34MQkVXmwIzfuH4m0wKosmOC4/pgD/iK6Xkqv
+         PRZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=0HqSn0Ox0h+zex/0MovePHLPQd5vbfE0VJ6wh/+Xb8U=;
-        b=0PbIb0gvReaxzvKbaC+Vxa8TUT+CgSyOYFtBd6xx1NKK3CJR/lT4WZ/apbaWe8Kuag
-         cI5XNNm2in6onZVBW0Ypy6M+X73045icJoJGFUujG2ILRjR4xVPW3+0qUiTRRMwEe1Hy
-         QctJYwzEcv7twicapwI4dGSM0n5rJ7JV6e3WqipzabM5meD2PTD2OrZsAa4c0ZEkdkEl
-         j8h1T6xAFxMZLDaTziUN7EyrhtzfcVlBbeu4XF1qN+KCM8Qg5x0onwctQUbEx1Eozk0K
-         3Y28ny7rafLSkRN1w3fHWO2yya3txV9VYiLvo990nb9zMX+Qnb4hqqvPkw9DjwEROfzx
-         KN8Q==
-X-Gm-Message-State: ACgBeo38pZNp+D7cMPvZpOMOvlJHJh1H9nMNwx0/9GDIdVbhccQzM7Ky
-        +Oux5lSMJS8YeNThchCBAU6GWfIBda2yTrI3KxbddQ==
-X-Google-Smtp-Source: AA6agR46mHRzWOrAOTwErntVCqk2ig3IBvg1EIYAc3L1t8gfnMPbA60TmU3+pvCDmudNP1FIpFuB7d1BB18zX7L8x4w=
-X-Received: by 2002:a62:30c7:0:b0:52f:9a31:5935 with SMTP id
- w190-20020a6230c7000000b0052f9a315935mr30042793pfw.14.1662016903630; Thu, 01
- Sep 2022 00:21:43 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=ie2djqYNwgtHdEpHOV+v/LaEpFF1VLi5D+xGUiqnUlQ=;
+        b=E/mmfX1c0nSiUTc+k62m4hO58QYMFaLtIEPzkXetABz6Cy/CAVR+woE/I5UNpdrBJ7
+         8UXRZS3t2Xj4J4ReKEkiQxvsdR4lzN/7i7g4J+FltTAVXpwiYpfiFov8auCDVurLcs+n
+         LaFA7OCNcC3ilCfUqU1UBrdUjpk9rraagr5upaIrbByizNLB8faBVmkJiAN/RUUsniYn
+         sqQ6hI22+9n/QiO3p+5107hVH4qkvm1AyjnX8tf4nKR5abaQbO/XQeVSZzf/nuIoxt55
+         cRMlPhERZX9kNLRh5/BIMTbreFD4aYWkMw7UHihJou4KipZj1S/XEMGRsVlsIyrH4sMV
+         0uZA==
+X-Gm-Message-State: ACgBeo0TrGpOvrwg0S1QlkFfjvKOI9Cbh9ftAabLcWclZd4cNlM1FZFw
+        8t4OtdCxX/YRD/wpIJJzvamshw==
+X-Google-Smtp-Source: AA6agR6HAGWkYV9AblNrfA6nszZ++/weoiQT80yxwTmaNTDOyHaLVUjO9zlO1QVAGd9VSncFBccJcQ==
+X-Received: by 2002:a05:6512:3043:b0:492:c11b:6883 with SMTP id b3-20020a056512304300b00492c11b6883mr11438731lfb.642.1662016939597;
+        Thu, 01 Sep 2022 00:22:19 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id b24-20020a196458000000b004946b7593fesm1380054lfj.198.2022.09.01.00.22.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 00:22:19 -0700 (PDT)
+Message-ID: <02397b5b-63dd-ebf1-2c2e-11fa4a0750db@linaro.org>
+Date:   Thu, 1 Sep 2022 10:22:18 +0300
 MIME-Version: 1.0
-References: <20220830100700.344594-1-sudeep.holla@arm.com> <20220830100700.344594-3-sudeep.holla@arm.com>
-In-Reply-To: <20220830100700.344594-3-sudeep.holla@arm.com>
-From:   Jens Wiklander <jens.wiklander@linaro.org>
-Date:   Thu, 1 Sep 2022 09:21:32 +0200
-Message-ID: <CAHUa44Fxg4p1t4O+P094m2vvjOVaJ-phPVZTLVKbdL0pOQNGkA@mail.gmail.com>
-Subject: Re: [PATCH 2/9] tee: optee: Use ffa_dev->ops directly
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Marc Bonnici <marc.bonnici@arm.com>,
-        Achin Gupta <achin.gupta@arm.com>,
-        Valentin Laurent <valentin.laurent@trustonic.com>,
-        Lukas Hanel <lukas.hanel@trustonic.com>,
-        Coboy Chen <coboy.chen@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH v4 2/2] nvmem: lan9662-otp: add support.
+Content-Language: en-US
+To:     Horatiu Vultur <horatiu.vultur@microchip.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     srinivas.kandagatla@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, UNGLinuxDriver@microchip.com
+References: <20220901064405.149611-1-horatiu.vultur@microchip.com>
+ <20220901064405.149611-3-horatiu.vultur@microchip.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220901064405.149611-3-horatiu.vultur@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,16 +77,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 12:07 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
->
-> Now that the ffa_device structure holds the pointer to ffa_dev_ops,
-> there is no need to obtain the same through ffa_dev_ops_get().
->
-> Just use the ffa_dev->ops directly.
->
-> Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> ---
->  drivers/tee/optee/ffa_abi.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
+On 01/09/2022 09:44, Horatiu Vultur wrote:
+> Add support for OTP controller available on LAN9662. The OTPC controls
+> the access to a non-volatile memory. The size of the memory is 8KB.
+> The OTPC can access the memory based on an offset.
+> Implement both the read and the write functionality.
 
-Reviewed-by: Jens Wiklander <jens.wiklander@linaro.org>
+Drop the full-stop from subject.
+
+Best regards,
+Krzysztof

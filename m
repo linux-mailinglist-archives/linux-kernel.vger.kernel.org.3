@@ -2,91 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 224955A96F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:33:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 070BC5A96F5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232585AbiIAMc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58954 "EHLO
+        id S232997AbiIAMeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:34:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232107AbiIAMc4 (ORCPT
+        with ESMTP id S232879AbiIAMd7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:32:56 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8711038;
-        Thu,  1 Sep 2022 05:32:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=XNmXI7jU75WuQDzAsKPd7wNSubefotJcywkg3XO9tRg=; b=psQxlo7I+LMz3L1Dk3jCh3tvID
-        YebsirZC/1jAhKTcjSCu6hXUU2FocuLkt42y//sul/TSaqfv669R4UOOQ6V8RJAtg4if3mISuC8CE
-        A4vTQ7G+0TtO/z4K03+sm+EoqQADlTCdVR7lAkmZGw73N5riJ7mv1od2fHJlCkwm24XI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oTjNG-00FIpt-Mt; Thu, 01 Sep 2022 14:32:46 +0200
-Date:   Thu, 1 Sep 2022 14:32:46 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Arun.Ramadoss@microchip.com
-Cc:     olteanv@gmail.com, linux-kernel@vger.kernel.org,
-        UNGLinuxDriver@microchip.com, vivien.didelot@gmail.com,
-        linux@armlinux.org.uk, Tristram.Ha@microchip.com,
-        f.fainelli@gmail.com, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        Woojung.Huh@microchip.com, davem@davemloft.net
-Subject: Re: [RFC Patch net-next v3 3/3] net: dsa: microchip: lan937x: add
- interrupt support for port phy link
-Message-ID: <YxCmbrKFyjtWIHha@lunn.ch>
-References: <20220830105303.22067-1-arun.ramadoss@microchip.com>
- <20220830105303.22067-4-arun.ramadoss@microchip.com>
- <Yw4P3OJgtTtmgBHN@lunn.ch>
- <bd7fcde507f47b22f9a4140bb26b91d9bb7e1662.camel@microchip.com>
+        Thu, 1 Sep 2022 08:33:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2965CD112;
+        Thu,  1 Sep 2022 05:33:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AED4961DF4;
+        Thu,  1 Sep 2022 12:33:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8291AC433D6;
+        Thu,  1 Sep 2022 12:33:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662035635;
+        bh=9UIyfyyALoM0eBslsP+U76/M/W3Lbw5Q0719KJ6vMKU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xvc/T3sCjwdDiqe3jU5SB+YjvT4jAnI6vmPeoP1OYgLt8fw9cBnmEDwC6xL3Sa3VL
+         1RizMwJ36Apxl/q0v7NGjPx2eFF2c6l7kT/0xYGs3J2M73VoXT3cyF1MwtVzpfSzwJ
+         rHRwtbtkw37e1xv+4v85vr/3QkTQyqhJCxEivyzMjl4xVaS7Ot+weuI3fX1zEUGQnq
+         ku4y0O9hpmMEz1HvIc9YDmAjoOid8IwX8KxAgbFltvVNXHyDuz9Eev/Ix8GHfzrabC
+         k0avvOm7M6MHs7I4/t3GJDtzlFwkNDrYHGI9iYGnGswMx9U4w2E5epMG6VU003Pht2
+         WWGt+VVqOD5aw==
+Date:   Thu, 1 Sep 2022 14:33:50 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Zhang Tianci <zhangtianci.1997@bytedance.com>
+Cc:     miklos@szeredi.hu, linux-unionfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, amir73il@gmail.com,
+        Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+Subject: Re: [PATCH v3] ovl: Use ovl mounter's fsuid and fsgid in ovl_link()
+Message-ID: <20220901123350.wak7yjbvddtcnwfb@wittgenstein>
+References: <20220901082929.66831-1-zhangtianci.1997@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <bd7fcde507f47b22f9a4140bb26b91d9bb7e1662.camel@microchip.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220901082929.66831-1-zhangtianci.1997@bytedance.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > +static irqreturn_t lan937x_girq_thread_fn(int irq, void *dev_id)
-> > > +{
-> > > +     struct ksz_device *dev = dev_id;
-> > > +     unsigned int nhandled = 0;
-> > > +     unsigned int sub_irq;
-> > > +     unsigned int n;
-> > > +     u32 data;
-> > > +     int ret;
-> > > +
-> > > +     ret = ksz_read32(dev, REG_SW_INT_STATUS__4, &data);
-> > > +     if (ret)
-> > > +             goto out;
-> > > +
-> > > +     if (data & POR_READY_INT) {
-> > > +             ret = ksz_write32(dev, REG_SW_INT_STATUS__4,
-> > > POR_READY_INT);
-> > > +             if (ret)
-> > > +                     goto out;
-> > > +     }
-> > 
-> > What do these two read/writes do? It seems like you are discarding an
-> > interrupt?
+On Thu, Sep 01, 2022 at 04:29:29PM +0800, Zhang Tianci wrote:
+> There is a wrong case of link() on overlay:
+>   $ mkdir /lower /fuse /merge
+>   $ mount -t fuse /fuse
+>   $ mkdir /fuse/upper /fuse/work
+>   $ mount -t overlay /merge -o lowerdir=/lower,upperdir=/fuse/upper,\
+>     workdir=work
+>   $ touch /merge/file
+>   $ chown bin.bin /merge/file // the file's caller becomes "bin"
+>   $ ln /merge/file /merge/lnkfile
 > 
-> This interrupt in Power on reset interrupt. It is enabled by default in
-> the chip. I am not performing any operation based on POR. So I just
-> cleared the interrupt. Do I need to disable the POR interrupt in the
-> setup function, since no operation is performed based on it?
+> Then we will get an error(EACCES) because fuse daemon checks the link()'s
+> caller is "bin", it denied this request.
+> 
+> In the changing history of ovl_link(), there are two key commits:
+> 
+> The first is commit bb0d2b8ad296 ("ovl: fix sgid on directory") which
+> overrides the cred's fsuid/fsgid using the new inode. The new inode's
+> owner is initialized by inode_init_owner(), and inode->fsuid is
+> assigned to the current user. So the override fsuid becomes the
+> current user. We know link() is actually modifying the directory, so
+> the caller must have the MAY_WRITE permission on the directory. The
+> current caller may should have this permission. This is acceptable
+> to use the caller's fsuid.
+> 
+> The second is commit 51f7e52dc943 ("ovl: share inode for hard link")
+> which removed the inode creation in ovl_link(). This commit move
+> inode_init_owner() into ovl_create_object(), so the ovl_link() just
+> give the old inode to ovl_create_or_link(). Then the override fsuid
+> becomes the old inode's fsuid, neither the caller nor the overlay's
+> mounter! So this is incorrect.
+> 
+> Fix this bug by using ovl mounter's fsuid/fsgid to do underlying
+> fs's link().
+> 
+> v1: https://lore.kernel.org/all/20220817102952.xnvesg3a7rbv576x@wittgenstein/T
+> v2: https://lore.kernel.org/lkml/20220825130552.29587-1-zhangtianci.1997@bytedance.com/t
+> 
+> Signed-off-by: Zhang Tianci <zhangtianci.1997@bytedance.com>
+> Signed-off-by: Jiachen Zhang <zhangjiachen.jaycee@bytedance.com>
+> ---
 
-It is pretty normal during interrupt controller creation to first
-disable all interrupt sources, then clear the interrupt status
-register if that can be done with a single operation, and then
-register the interrupt controller with the IRQ core. That way, any
-outstanding interrupts don't fire.
-
-	    Andrew
+Looks good to me,
+Reviewed-by: Christian Brauner (Microsoft) <brauner@kernel.org>

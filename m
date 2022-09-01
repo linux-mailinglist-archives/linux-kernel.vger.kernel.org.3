@@ -2,157 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B453D5A92ED
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:16:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFB05A92F1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233746AbiIAJQF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:16:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46552 "EHLO
+        id S233833AbiIAJRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233496AbiIAJQC (ORCPT
+        with ESMTP id S233511AbiIAJQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:16:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 194CE11E812;
-        Thu,  1 Sep 2022 02:16:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id AC40061736;
-        Thu,  1 Sep 2022 09:16:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC3A0C433C1;
-        Thu,  1 Sep 2022 09:15:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662023760;
-        bh=EOXV8/cxgZ9U2fhKP5zijCVI58O0ja1whVreiypMn0M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HBTItFdg+aO72LMccCwXO/ZSbg5egTSitZro6yL2n+9DXVolU3x0MnXALco5OFeQr
-         iaoi8KafwGvhV6pduixN0/SXolGBfmL96mbhNlPSwqCGpCztP17rr+WI2bispBaAuL
-         HnZtLu7lwpUQXwdAFA6yt/VE5GI152rpfrnKftKJ0IsRddS9Ef1SzjKL34IT/IAYOr
-         7euYVJ8U9LyWEjtVFGebbUR+aLaRwBtN8T8LX/bTbRBQMiigfgVIgAtm5Vyw3v+JeD
-         9RhFuH+wr76XP16Pq0HrQ7vo0c2csCCBQfgrb5C1MDKQoIH/ujw+hYwsCyuqKVwes8
-         1w0cxhJTIntdA==
-Date:   Thu, 1 Sep 2022 11:15:57 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: Re: [PATCH rcu 3/3] rcu: Simplify rcu_init_nohz() cpumask handling
-Message-ID: <20220901091557.GA101341@lothringen>
-References: <20220831181040.GA2694278@paulmck-ThinkPad-P17-Gen-1>
- <20220831181044.2694488-3-paulmck@kernel.org>
+        Thu, 1 Sep 2022 05:16:59 -0400
+Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0673911E836
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:16:58 -0700 (PDT)
+Received: by mail-ua1-x932.google.com with SMTP id s5so6422474uar.1
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 02:16:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=0DavK3tZEl9/gW1tvRuU8853rjZL9v3RtTzVrdO9jBs=;
+        b=CLwtF0ktF1zQqhWHkRI/Q6SDdY2uwAO14CtmVnuN7Kxp130VgBgOurQXRX7jbw3xy9
+         VQYPsqq/zKxzf/2dC1DgRpDhp8dN2wpsYL/wxTTOa6L1+3gMbfFjtHQeq+fwNFDT8JvY
+         aBaBTk8sfHj8Z8KjpkLyBVjGI7TUrw4GNPLGA+jYcLxyOsozVgOsarJCSCONa3wc/egL
+         oqfrhZxgOOCsVWcPhj1zn87ROHjStDGP2r9tuOcYJWJuaLqCqfVr7/Ulgr0oOSRwqzzE
+         ebFGHtiHsZaYjqgYlEdNwYTPHFXvCJhpL6GB9IjQzMJe2Um6n6YpL1PYykqUx3rCczZq
+         Crbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=0DavK3tZEl9/gW1tvRuU8853rjZL9v3RtTzVrdO9jBs=;
+        b=h0VNgJoVjjhmAF7TsbGCvjJG6oZTxe4CTubyKwVL0i9BIhLRar3vl+H2i1HwlRrqiP
+         552LklcjEQW6BkK38tK8PPh03RJDqfQxl+v5EvtqK+IXK2jLzP0M37WntyIGHyZGPiod
+         meEwYgW9BlX1asL1zfoMpbJgfZw70mZjxUTocXmS91+bQaXFe2a7U/aWAa7dIjCEa12a
+         anKgV02/4SXvEMOSf02r3Ep8FstCx93dv9Eo85z8pZtRvaOpwwODTO6mU0raOFpcg+go
+         r3eKpbXliuXNYNvCsBUI8wIfzlHWsdHeWOFxvYwYccVdrP1R8quPcl3prap14Ck35viS
+         KhIQ==
+X-Gm-Message-State: ACgBeo1+WLhmgn2fXeGrN3v17rOmzIFeqc373mf32u8pyGpB+bwkc75Z
+        69JnWS+uJ3efPtTwXY6ryAoUp+hI2/KSNo1HHrv90w==
+X-Google-Smtp-Source: AA6agR4VHP6N0f2EIlgnEiWiCBfG8MZ+FiFFMODbGmcaj/Rm7oimUzkQgxkV0CmdsfvACZ76VkiuzborI4hQ90Pj2YA=
+X-Received: by 2002:ab0:70c6:0:b0:39e:ed14:806b with SMTP id
+ r6-20020ab070c6000000b0039eed14806bmr8753856ual.82.1662023817019; Thu, 01 Sep
+ 2022 02:16:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220831181044.2694488-3-paulmck@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <00000000000043579605e6d0ce41@google.com> <87czcscvlf.wl-tiwai@suse.de>
+In-Reply-To: <87czcscvlf.wl-tiwai@suse.de>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Thu, 1 Sep 2022 11:16:46 +0200
+Message-ID: <CANp29Y6cq0+3SBxQLWvtcsmQ-Pw0RqtEKDUSM2JV1R2no3gOsw@mail.gmail.com>
+Subject: Re: [syzbot] KASAN: use-after-free Read in udl_get_urb_timeout
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     syzbot <syzbot+f24934fe125a19d77eae@syzkaller.appspotmail.com>,
+        airlied@linux.ie, airlied@redhat.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org,
+        LKML <linux-kernel@vger.kernel.org>, sean@poorly.run,
+        "'Aleksandr Nogikh' via syzkaller-bugs" 
+        <syzkaller-bugs@googlegroups.com>, tzimmermann@suse.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 11:10:44AM -0700, Paul E. McKenney wrote:
-> From: Zhen Lei <thunder.leizhen@huawei.com>
-> 
-> In kernels built with either CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y or
-> CONFIG_NO_HZ_FULL=y, additional CPUs must be added to rcu_nocb_mask.
-> Except that kernels booted without the rcu_nocbs= will not have
-> allocated rcu_nocb_mask.  And the current rcu_init_nohz() function uses
-> its need_rcu_nocb_mask and offload_all local variables to track the
-> rcu_nocb and nohz_full state.
-> 
-> But there is a much simpler approach, namely creating a cpumask pointer
-> to track the default and then using cpumask_available() to check the
-> rcu_nocb_mask state.  This commit takes this approach, thereby simplifying
-> and shortening the rcu_init_nohz() function.
-> 
-> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  kernel/rcu/tree_nocb.h | 32 +++++++++-----------------------
->  1 file changed, 9 insertions(+), 23 deletions(-)
-> 
-> diff --git a/kernel/rcu/tree_nocb.h b/kernel/rcu/tree_nocb.h
-> index 0a5f0ef414845..c8167be2288fa 100644
-> --- a/kernel/rcu/tree_nocb.h
-> +++ b/kernel/rcu/tree_nocb.h
-> @@ -1210,45 +1210,31 @@ EXPORT_SYMBOL_GPL(rcu_nocb_cpu_offload);
->  void __init rcu_init_nohz(void)
->  {
->  	int cpu;
-> -	bool need_rcu_nocb_mask = false;
-> -	bool offload_all = false;
->  	struct rcu_data *rdp;
-> +	const struct cpumask *cpumask = NULL;
->  
->  #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL)
-> -	if (!rcu_state.nocb_is_setup) {
-> -		need_rcu_nocb_mask = true;
-> -		offload_all = true;
-> -	}
-> -#endif /* #if defined(CONFIG_RCU_NOCB_CPU_DEFAULT_ALL) */
-> -
-> -#if defined(CONFIG_NO_HZ_FULL)
-> -	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask)) {
-> -		need_rcu_nocb_mask = true;
-> -		offload_all = false; /* NO_HZ_FULL has its own mask. */
-> -	}
-> -#endif /* #if defined(CONFIG_NO_HZ_FULL) */
-> +	cpumask = cpu_possible_mask;
+Let's tell syzbot about the series
 
-You're missing the rcu_state.nocb_is_setup check, so
-CONFIG_RCU_NOCB_CPU_DEFAULT_ALL will now always override the rcu_nocbs=
-parameter (should be the other way around).
+#syz fix: Revert "drm/udl: Kill pending URBs at suspend and disconnect"
 
-
-> +#elif defined(CONFIG_NO_HZ_FULL)
-> +	if (tick_nohz_full_running && !cpumask_empty(tick_nohz_full_mask))
-> +		cpumask = tick_nohz_full_mask;
-> +#endif
-
-A subtle behaviour difference here too: CONFIG_RCU_NOCB_CPU_DEFAULT_ALL will
-now override nohz_full=
-
-I don't mind, it's probably what we want in the end, but the changelog should
-tell about it, or even better, this should be a separate change.
-
-Thanks.
-
->  
-> -	if (need_rcu_nocb_mask) {
-> +	if (cpumask) {
->  		if (!cpumask_available(rcu_nocb_mask)) {
->  			if (!zalloc_cpumask_var(&rcu_nocb_mask, GFP_KERNEL)) {
->  				pr_info("rcu_nocb_mask allocation failed, callback offloading disabled.\n");
->  				return;
->  			}
->  		}
-> +
-> +		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, cpumask);
->  		rcu_state.nocb_is_setup = true;
->  	}
->  
->  	if (!rcu_state.nocb_is_setup)
->  		return;
->  
-> -#if defined(CONFIG_NO_HZ_FULL)
-> -	if (tick_nohz_full_running)
-> -		cpumask_or(rcu_nocb_mask, rcu_nocb_mask, tick_nohz_full_mask);
-> -#endif /* #if defined(CONFIG_NO_HZ_FULL) */
-> -
-> -	if (offload_all)
-> -		cpumask_setall(rcu_nocb_mask);
-> -
->  	if (!cpumask_subset(rcu_nocb_mask, cpu_possible_mask)) {
->  		pr_info("\tNote: kernel parameter 'rcu_nocbs=', 'nohz_full', or 'isolcpus=' contains nonexistent CPUs.\n");
->  		cpumask_and(rcu_nocb_mask, cpu_possible_mask,
-> -- 
-> 2.31.1.189.g2e36527f23
-> 
+On Mon, Aug 22, 2022 at 2:26 PM Takashi Iwai <tiwai@suse.de> wrote:
+>
+> On Mon, 22 Aug 2022 11:09:31 +0200,
+> syzbot wrote:
+> >
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    5b6a4bf680d6 Add linux-next specific files for 20220818
+> > git tree:       linux-next
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=12341a3d080000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=f24934fe125a19d77eae
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12731867080000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=165b64f3080000
+> >
+> > The issue was bisected to:
+> >
+> > commit e25d5954264d1871ab2792c7ca2298b811462500
+> > Author: Takashi Iwai <tiwai@suse.de>
+> > Date:   Thu Aug 4 07:58:25 2022 +0000
+> >
+> >     drm/udl: Kill pending URBs at suspend and disconnect
+>
+> FYI, the fix including the revert of this commit was already
+> submitted, waiting for review & merge:
+>   https://lore.kernel.org/r/20220816153655.27526-1-tiwai@suse.de
+>
+>
+> thanks,
+>
+> Takashi
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/87czcscvlf.wl-tiwai%40suse.de.

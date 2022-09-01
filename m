@@ -1,83 +1,68 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D5CB5A9CBD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:12:09 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 3F1FA5A9CC9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:14:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234447AbiIAQLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45518 "EHLO
+        id S234970AbiIAQM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234941AbiIAQLs (ORCPT
+        with ESMTP id S234974AbiIAQMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:11:48 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B26D7B7B2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:11:44 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id m7so16231518lfq.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:11:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=ZT0UUgL98furUMTTllJ+IvKDmlJK1HsHd+roqciqR7g=;
-        b=XmjqaXzcNHK1fQAUkelNc1TLbofd+c3HoDH/xwjX0atcCtDwNCfThcM2oD1jrv6mD0
-         HUr4r+fomvVC7Ul6Iac4NE1Tr5yPTwFWGkETeoZJsaETaH2SHh+T9dXPx5r5F1mEl4Qz
-         4a822TemsMhKG3+p8mYh/6k9vvg2YWdYsQkK5lUCaxqW/hJbZqQlf8JoshSr6abUlpOj
-         fXvbFN1zzHUDVcnXxe++nT7/B9Z0y+8TLmQ1BpseEqZFjpc5X34gfHjEgS5hIZskNuGH
-         jPV9bFxm6+IRHr98dw8dDx6zTFwZNQSVpfy6Mp+miAStK1ZDk9PADZQHX4/mdIUkGDYz
-         T6Tw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=ZT0UUgL98furUMTTllJ+IvKDmlJK1HsHd+roqciqR7g=;
-        b=wOTLlwwtCAYM4VLWgEpI2snN/UD/b+jr4CxoMyGDlBIp4Hdpc7SRlU2br4/o4+FpIm
-         4tAxSm0wHh9Qzk+l8UhXLkpm3pMMpV44i6bJYZptFQDdzEMEwOmTfArI64FDsJ2yWp2Q
-         DOkWDgN8Nz5MSj6jBxRkFBGUUO5OxvdiCj6nrzYaw7Q3eh5yFJk99ibqZaL6QDOKyHq7
-         0R2FOaTH9HqHR3cJ+zhvJAcqYNXm5ajDHj6Mum4R8DFYOX5cAb0IfficpKqzi5Asu9Fo
-         FU73YRFbUw/+sXmrd7q0iDJSI6Zdfxr+O6LUZqLnwXf6hzdYGQvSnNPXNn+KJQlg3eKW
-         emvg==
-X-Gm-Message-State: ACgBeo3xGg2+OedzVaeOL5174coMlLKKhilaeeP5/yNB0cTfstwWR/YB
-        ecUkBc995sl2QxhDC055Q65ibg==
-X-Google-Smtp-Source: AA6agR7fa2cffMYhl6EVvGJvlvaohMBq/6GEuVCGGl4FC8t88eKtvkuzfo4WFJl3V4F8xXTCVl/DRA==
-X-Received: by 2002:a05:6512:260d:b0:492:df5a:e4f9 with SMTP id bt13-20020a056512260d00b00492df5ae4f9mr10306759lfb.90.1662048702494;
-        Thu, 01 Sep 2022 09:11:42 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id bd8-20020a05651c168800b002687e283bf1sm754869ljb.134.2022.09.01.09.11.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 09:11:41 -0700 (PDT)
-Message-ID: <7804ffbe-4e27-d8bd-dbe2-75d1323da064@linaro.org>
-Date:   Thu, 1 Sep 2022 19:11:40 +0300
+        Thu, 1 Sep 2022 12:12:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FB4915F3
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:12:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662048767;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UHmYOlxrBiaepineueJ+BA2NniHKUIf3ILRk7FlgVfY=;
+        b=iGhdxqlWzgkGCJ6rLO+U/azTwVBLuQq2UkT3SaWFrujZCBZwChdO4N0QOEIhsk5IvVx17s
+        ze91o/2urXSnAgZQYAiasmpKTDNoo9otSQPz77S+97oQ7EvAHqr1hLrqGgcBGOBdAAOLBT
+        cqXhdLVOY2zymrmo8lq0p0RE3ruOWgA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-442-Du0mSLDPMe-xNlqIJu9UJw-1; Thu, 01 Sep 2022 12:12:40 -0400
+X-MC-Unique: Du0mSLDPMe-xNlqIJu9UJw-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C8FEF80A0AE;
+        Thu,  1 Sep 2022 16:12:39 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 301FE40CF8F2;
+        Thu,  1 Sep 2022 16:12:34 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, djwong@kernel.org,
+        david@fromorbit.com, trondmy@hammerspace.com, neilb@suse.de,
+        viro@zeniv.linux.org.uk, zohar@linux.ibm.com, xiubli@redhat.com,
+        chuck.lever@oracle.com, lczerner@redhat.com, jack@suse.cz,
+        bfields@fieldses.org, brauner@kernel.org,
+        linux-man@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-nfs@vger.kernel.org,
+        linux-xfs@vger.kernel.org
+Subject: Re: [RFC PATCH v2] statx, inode: document the new STATX_INO_VERSION
+ field
+References: <20220901121714.20051-1-jlayton@kernel.org>
+Date:   Thu, 01 Sep 2022 18:12:33 +0200
+In-Reply-To: <20220901121714.20051-1-jlayton@kernel.org> (Jeff Layton's
+        message of "Thu, 1 Sep 2022 08:17:14 -0400")
+Message-ID: <874jxrqdji.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 08/14] dt-bindings: ufs: qcom: Add sm6115 binding
-Content-Language: en-US
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
- <20220901072414.1923075-9-iskren.chernev@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220901072414.1923075-9-iskren.chernev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,52 +70,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 10:24, Iskren Chernev wrote:
-> Add SM6115 UFS to DT schema.
-> 
-> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
-> ---
->  .../devicetree/bindings/ufs/qcom,ufs.yaml     | 26 +++++++++++++++++++
->  1 file changed, 26 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> index f2d6298d926c..7c5f6e2e6d4c 100644
-> --- a/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> +++ b/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml
-> @@ -28,6 +28,7 @@ properties:
->            - qcom,msm8998-ufshc
->            - qcom,sc8280xp-ufshc
->            - qcom,sdm845-ufshc
-> +          - qcom,sm6115-ufshc
->            - qcom,sm6350-ufshc
->            - qcom,sm8150-ufshc
->            - qcom,sm8250-ufshc
-> @@ -178,6 +179,31 @@ allOf:
->            minItems: 1
->            maxItems: 1
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,sm6115-ufshc
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 8
-> +          maxItems: 8
-> +        clock-names:
-> +          items:
-> +            - const: core_clk
-> +            - const: bus_aggr_clk
-> +            - const: iface_clk
-> +            - const: core_clk_unipro
-> +            - const: core_clk_ice
+* Jeff Layton:
 
-Use existing name and put it in the same place as existing variant - sdm845:
-ice_core_clk
+> @@ -411,6 +413,21 @@ and corresponds to the number in the first field in one of the records in
+>  For further information on the above fields, see
+>  .BR inode (7).
+>  .\"
+> +.TP
+> +.I stx_ino_version
+> +The inode version, also known as the inode change attribute. This
+> +value must change any time there is an inode status change. Any
+> +operation that would cause the
+> +.I stx_ctime
+> +to change must also cause
+> +.I stx_ino_version
+> +to change, even when there is no apparent change to the
+> +.I stx_ctime
+> +due to coarse timestamp granularity.
+> +.IP
+> +An observer cannot infer anything about the nature or magnitude of the change
+> +from the value of this field. A change in this value only indicates that
+> +there has been an explicit change in the inode.
 
+What happens if the file system does not support i_version?
 
-Best regards,
-Krzysztof
+> diff --git a/man7/inode.7 b/man7/inode.7
+> index 9b255a890720..d5e0890a52c0 100644
+> --- a/man7/inode.7
+> +++ b/man7/inode.7
+> @@ -184,6 +184,18 @@ Last status change timestamp (ctime)
+>  This is the file's last status change timestamp.
+>  It is changed by writing or by setting inode information
+>  (i.e., owner, group, link count, mode, etc.).
+> +.TP
+> +Inode version (i_version)
+> +(not returned in the \fIstat\fP structure); \fIstatx.stx_ino_version\fP
+> +.IP
+> +This is the inode change attribute. Any operation that would result in a change
+> +to \fIstatx.stx_ctime\fP must result in a change to this value. The value must
+> +change even in the case where the ctime change is not evident due to coarse
+> +timestamp granularity.
+> +.IP
+> +An observer cannot infer anything from the returned value about the nature or
+> +magnitude of the change. If the returned value is different from the last time
+> +it was checked, then something has made an explicit change to the inode.
+
+What is the wraparound behavior for i_version?  Does it use the full
+64-bit range?
+
+If the system crashes without flushing disks, is it possible to observe
+new file contents without a change of i_version?
+
+Thanks,
+Florian
+

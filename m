@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0485A982A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:13:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45E1A5A9834
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:13:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbiIANNB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:13:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55260 "EHLO
+        id S234159AbiIANM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234106AbiIANML (ORCPT
+        with ESMTP id S233877AbiIANML (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Sep 2022 09:12:11 -0400
 Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8FCDECC
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:10:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8298617049
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:10:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662037804; x=1693573804;
+  t=1662037805; x=1693573805;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=W90ukXHTqD3/ytQV1eaV6HB5Q17e2Jfw0GZUVVJ897A=;
-  b=Aw+DyveaCcGMx+MYowAdzP+es+dO/l0CFU5Vf2l271DTLzKySWfQWavm
-   P8FlA+aJXrbvRieFd3htyynZlrDe13aFkO6UehxV78M4dp9GaMTxYv9wW
-   YxgMjNUcaEwpB5vVv/EpCQcG51BhS1pY3HH8uSvmU2sCmvR+qc/A2+zqY
-   +g4R6LQotibNUF2rW6HM/5tqORbhKz2fcj74AnJx9dmKIEKBqwdNRx1vp
-   1MUJwVm1duFQH8qezYpS4S2lUQ8grfITqCSxQL+WCLJOh/U+LJitO6lqj
-   RBQ8QitnvNrljqJhqv/5boPHpvqmj4BK+A5AEmEDyvm7vRwVG6zjdVSpA
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="321858085"
+  bh=sbi6khNsjjvSS4caSIbQyKIV39nuU2klly/xGl3rjT8=;
+  b=QzVPrnf0A4xUqdXjv4tvAGcXWnApZGcBKS6NcF6t3sAGdNB5kVXk4hVC
+   RVlUHGFuvYcvjHDIAtzj2EgeGUqwzPZpqiU+sB6l0XQXHnDN/cj+oVFzc
+   2gYxcxqQoiF5JayAIqPq5ksRatbpB84n5zaQy3myYNX1ae/NZENiDa2wl
+   MO3SSMji3J7h/BQsAaa7jSdi50olxHChEygI1HcPX2efoXGNw4QN8APiJ
+   Yc517HVfp8Y/78Y3JXkxYy/JSKXMZkKx9k8Os2RsJGp8YHUJelJzKYe3N
+   wEbSUU8LofEKbxnr3FV8FFXEBJ8XK3gxfWEFNNy/uARY0M7qY7+IH/3ng
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="321858087"
 X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="321858085"
+   d="scan'208";a="321858087"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
   by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 06:10:02 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="612485311"
+   d="scan'208";a="612485335"
 Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orsmga002.jf.intel.com with ESMTP; 01 Sep 2022 06:10:01 -0700
+  by orsmga002.jf.intel.com with ESMTP; 01 Sep 2022 06:10:02 -0700
 From:   kan.liang@linux.intel.com
 To:     peterz@infradead.org, acme@kernel.org, mingo@redhat.com,
         eranian@google.com, mpe@ellerman.id.au,
@@ -45,9 +45,9 @@ To:     peterz@infradead.org, acme@kernel.org, mingo@redhat.com,
 Cc:     ak@linux.intel.com, andreas.kogler.0x@gmail.com,
         atrajeev@linux.vnet.ibm.com, namhyung@kernel.org,
         ravi.bangoria@amd.com, Kan Liang <kan.liang@linux.intel.com>
-Subject: [PATCH V2 1/6] perf: Add sample_flags to indicate the PMU-filled sample data
-Date:   Thu,  1 Sep 2022 06:09:54 -0700
-Message-Id: <20220901130959.1285717-2-kan.liang@linux.intel.com>
+Subject: [PATCH V2 2/6] perf/x86/intel/pebs: Fix PEBS timestamps overwritten
+Date:   Thu,  1 Sep 2022 06:09:55 -0700
+Message-Id: <20220901130959.1285717-3-kan.liang@linux.intel.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220901130959.1285717-1-kan.liang@linux.intel.com>
 References: <20220901130959.1285717-1-kan.liang@linux.intel.com>
@@ -65,112 +65,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kan Liang <kan.liang@linux.intel.com>
 
-On some platforms, some data e.g., timestamps, can be retrieved from
-the PMU driver. Usually, the data from the PMU driver is more accurate.
-The current perf kernel should output the PMU-filled sample data if
-it's available.
+The PEBS TSC-based timestamps do not appear correctly in the final
+perf.data output file from perf record.
 
-To check the availability of the PMU-filled sample data, the current
-perf kernel initializes the related fields in the
-perf_sample_data_init(). When outputting a sample, the perf checks
-whether the field is updated by the PMU driver. If yes, the updated
-value will be output. If not, the perf uses an SW way to calculate the
-value or just outputs the initialized value if an SW way is unavailable
-either.
+The data->time field setup by PEBS in the setup_pebs_fixed_sample_data()
+is later overwritten by perf_events generic code in
+perf_prepare_sample(). There is an ordering problem.
 
-With more and more data being provided by the PMU driver, more fields
-has to be initialized in the perf_sample_data_init(). That will
-increase the number of cache lines touched in perf_sample_data_init()
-and be harmful to the performance.
+Set the sample flags when the data->time is updated by PEBS.
+The data->time field will not be overwritten anymore.
 
-Add new "sample_flags" to indicate the PMU-filled sample data. The PMU
-driver should set the corresponding PERF_SAMPLE_ flag when the field is
-updated. The initialization of the corresponding field is not required
-anymore. The following patches will make use of it and remove the
-corresponding fields from the perf_sample_data_init(), which will
-further minimize the number of cache lines touched.
-
-Only clear the sample flags that have already been done by the PMU
-driver in the perf_prepare_sample() for the PERF_RECORD_SAMPLE. For the
-other PERF_RECORD_ event type, the sample data is not available.
-
-Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reported-by: Andreas Kogler <andreas.kogler.0x@gmail.com>
+Reported-by: Stephane Eranian <eranian@google.com>
 Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
 ---
- include/linux/perf_event.h |  2 ++
- kernel/events/core.c       | 17 +++++++++++------
- 2 files changed, 13 insertions(+), 6 deletions(-)
+ arch/x86/events/intel/ds.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-index 1999408a9cbb..0978165a2d87 100644
---- a/include/linux/perf_event.h
-+++ b/include/linux/perf_event.h
-@@ -1008,6 +1008,7 @@ struct perf_sample_data {
- 	 * Fields set by perf_sample_data_init(), group so as to
- 	 * minimize the cachelines touched.
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index de1f55d51784..01cbe26225c2 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -1643,8 +1643,10 @@ static void setup_pebs_fixed_sample_data(struct perf_event *event,
+ 	 * We can only do this for the default trace clock.
  	 */
-+	u64				sample_flags;
- 	u64				addr;
- 	struct perf_raw_record		*raw;
- 	struct perf_branch_stack	*br_stack;
-@@ -1057,6 +1058,7 @@ static inline void perf_sample_data_init(struct perf_sample_data *data,
- 					 u64 addr, u64 period)
- {
- 	/* remaining struct members initialized in perf_prepare_sample() */
-+	data->sample_flags = 0;
- 	data->addr = addr;
- 	data->raw  = NULL;
- 	data->br_stack = NULL;
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 2621fd24ad26..c9b9cb79231a 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -6794,11 +6794,10 @@ static void perf_aux_sample_output(struct perf_event *event,
+ 	if (x86_pmu.intel_cap.pebs_format >= 3 &&
+-		event->attr.use_clockid == 0)
++		event->attr.use_clockid == 0) {
+ 		data->time = native_sched_clock_from_tsc(pebs->tsc);
++		data->sample_flags |= PERF_SAMPLE_TIME;
++	}
  
- static void __perf_event_header__init_id(struct perf_event_header *header,
- 					 struct perf_sample_data *data,
--					 struct perf_event *event)
-+					 struct perf_event *event,
-+					 u64 sample_type)
- {
--	u64 sample_type = event->attr.sample_type;
--
--	data->type = sample_type;
-+	data->type = event->attr.sample_type;
- 	header->size += event->id_header_size;
+ 	if (has_branch_stack(event))
+ 		data->br_stack = &cpuc->lbr_stack;
+@@ -1705,8 +1707,10 @@ static void setup_pebs_adaptive_sample_data(struct perf_event *event,
+ 	perf_sample_data_init(data, 0, event->hw.last_period);
+ 	data->period = event->hw.last_period;
  
- 	if (sample_type & PERF_SAMPLE_TID) {
-@@ -6827,7 +6826,7 @@ void perf_event_header__init_id(struct perf_event_header *header,
- 				struct perf_event *event)
- {
- 	if (event->attr.sample_id_all)
--		__perf_event_header__init_id(header, data, event);
-+		__perf_event_header__init_id(header, data, event, event->attr.sample_type);
- }
+-	if (event->attr.use_clockid == 0)
++	if (event->attr.use_clockid == 0) {
+ 		data->time = native_sched_clock_from_tsc(basic->tsc);
++		data->sample_flags |= PERF_SAMPLE_TIME;
++	}
  
- static void __perf_event__output_id_sample(struct perf_output_handle *handle,
-@@ -7303,6 +7302,7 @@ void perf_prepare_sample(struct perf_event_header *header,
- 			 struct pt_regs *regs)
- {
- 	u64 sample_type = event->attr.sample_type;
-+	u64 filtered_sample_type;
- 
- 	header->type = PERF_RECORD_SAMPLE;
- 	header->size = sizeof(*header) + event->header_size;
-@@ -7310,7 +7310,12 @@ void perf_prepare_sample(struct perf_event_header *header,
- 	header->misc = 0;
- 	header->misc |= perf_misc_flags(regs);
- 
--	__perf_event_header__init_id(header, data, event);
-+	/*
-+	 * Clear the sample flags that have already been done by the
-+	 * PMU driver.
-+	 */
-+	filtered_sample_type = sample_type & ~data->sample_flags;
-+	__perf_event_header__init_id(header, data, event, filtered_sample_type);
- 
- 	if (sample_type & (PERF_SAMPLE_IP | PERF_SAMPLE_CODE_PAGE_SIZE))
- 		data->ip = perf_instruction_pointer(regs);
+ 	/*
+ 	 * We must however always use iregs for the unwinder to stay sane; the
 -- 
 2.35.1
 

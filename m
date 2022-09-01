@@ -2,94 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 610C35A9A94
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4A35A9A8A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:39:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234435AbiIAOiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 10:38:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56956 "EHLO
+        id S232635AbiIAOig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 10:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234910AbiIAOhl (ORCPT
+        with ESMTP id S234917AbiIAOiH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 10:37:41 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD7147E33A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 07:37:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662043048; x=1693579048;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ORmCa86BV+qGlurL4z2DsbOpqGhBny3TKiFZbG9VSiE=;
-  b=e8xM7R8KpaWD2nK4qkUhPAu5pmObtK4PakJ5pd6GZZkhkB4vtiL56561
-   pAROG139lMioSXi1j49VfKIcYKaWQ7Zuv643TvMLULg3UQ1if+Wtr0w40
-   s6/McE4vSYn5oJ58NRvEATmpI+UFvhyojsF8e3DhfFdL9a9mromwCKSFN
-   gOVJxrvVzOQTx/JxdIH7wZTwWs8EcIfIQGwelO4+YsTGizvC0SDPUTZnw
-   A0UFrj89mKq6cZWQ1ym2ZpVO40j1Kak558VlLW3I61+XiPKxRZhUKu5yp
-   cxiW2FHHecnhllabBu3HnkoWMO2R4s56I8gDkJ3qw7Km+6IvxdqSM/6Mr
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="357447782"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="357447782"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 07:37:28 -0700
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="754842284"
-Received: from vzilkov-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.53.108])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 07:37:25 -0700
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 277F610483D; Thu,  1 Sep 2022 17:37:23 +0300 (+03)
-Date:   Thu, 1 Sep 2022 17:37:23 +0300
-From:   "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Sasha Levin <sasha.levin@oracle.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Jerome Marchand <jmarchan@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
-Message-ID: <20220901143723.wg2wjqubcfztze7a@box.shutemov.name>
-References: <20220901072119.37588-1-david@redhat.com>
+        Thu, 1 Sep 2022 10:38:07 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC617C1B8
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 07:38:01 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id j9-20020a17090a3e0900b001fd9568b117so2792112pjc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 07:38:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date;
+        bh=o6yMdDL9GGqHD1GiDwF9wfetaKhW1e9T/BEjpmKh4O4=;
+        b=RDZEl+KUVoHh18UaGCBFBp6JNa0eHKGh8KzFzPTiwMrkR0u2OHp25dXSQKmA/jNamb
+         IiKkrZ5lBVdWxnI/LcUkzPip6f0NQsONbHoVQih7x6c2N1mbmQFmzkeEBTpMRfn2ECBF
+         U1TXJUawm//eU8tU0W9UgJfYC1lju6CfmO4Rio+cDZbgEy623Xx2rF2sTwVFq71diuz1
+         6vOhPgQsVmJ0Pgu6XzGZMfTos/Xw1mX1UvMKkKvUQcIcQSDc/1DxULEZ45lsw8Vzy8rK
+         8Q2aonNJ3cKN916WWywRB9QLD8716prsM5ubHbGMyH0BPo8/J4R1TR84ImBp3v7FOape
+         9I3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=o6yMdDL9GGqHD1GiDwF9wfetaKhW1e9T/BEjpmKh4O4=;
+        b=eHJBkHuUGf5T8kSim6XoQ3GiEMViNlaKItXPuuChSwZR83GaYZcS44OeRDJ/SWYZwW
+         yEv2BFJamJNJjqgQQeuerhV/tCd8nRRJXtZjH3FLf2jXDqV6pEIGlPodcR7EUOBKbiAx
+         vejdEtz/NkWWyT/18FSYTz5o3QVNw5WVcF5u7RbKdj9kzOI0jK6chEkzcljmVSj6WWY5
+         hLjv6bDKr8Z1L1sSBevHLebBM1HJiJKZsNHm0ZXshKmNWPaUFMs8zks8cJf/Oo/33JSE
+         neV52s/tm1XreE1gTutXpssbnmg63aiKP7RAgRclZgyVlgisICvHKXSmKH6s23AHY0wV
+         bO9g==
+X-Gm-Message-State: ACgBeo1mD61CNL5XwumMPcomGU0Re4txMY77CoOkHaHI7mt0kc74O5FF
+        jqvB7gJ1Xw7lXUIemruHcTSjmg==
+X-Google-Smtp-Source: AA6agR4lWS8LqRjOi35EuZrK28RrGmRfFYIo8kNT9zxA1ZYtmfQGrOFUbDVbHHjeErQDZZDxt3XYRQ==
+X-Received: by 2002:a17:90b:2c12:b0:1fd:78fa:5ea7 with SMTP id rv18-20020a17090b2c1200b001fd78fa5ea7mr9247426pjb.29.1662043080062;
+        Thu, 01 Sep 2022 07:38:00 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id f5-20020a170902684500b001635b86a790sm13788150pln.44.2022.09.01.07.37.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 07:37:59 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 14:37:56 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Sagi Shahar <sagis@google.com>, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Ryan Afranji <afranji@google.com>,
+        Roger Wang <runanwang@google.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <drjones@redhat.com>,
+        Marc Zyngier <maz@kernel.org>, Ben Gardon <bgardon@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Peter Xu <peterx@redhat.com>, Oliver Upton <oupton@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Yang Zhong <yang.zhong@intel.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Peter Gonda <pgonda@google.com>, Marc Orr <marcorr@google.com>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Christian Borntraeger <borntraeger@de.ibm.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Yanan Wang <wangyanan55@huawei.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Peter Shier <pshier@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Like Xu <like.xu@linux.intel.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [RFC PATCH v2 03/17] KVM: selftest: Adding TDX life cycle test.
+Message-ID: <YxDDxKEdqEORDz72@google.com>
+References: <20220830222000.709028-1-sagis@google.com>
+ <20220830222000.709028-4-sagis@google.com>
+ <20220901004631.GC2711697@ls.amr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220901072119.37588-1-david@redhat.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220901004631.GC2711697@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 09:21:19AM +0200, David Hildenbrand wrote:
-> commit 4b471e8898c3 ("mm, thp: remove infrastructure for handling splitting
-> PMDs") didn't remove all details about the THP split requirements for
-> RCU GUP-fast.
+On Wed, Aug 31, 2022, Isaku Yamahata wrote:
+> Sometimes compiler (my gcc is (Ubuntu 11.1.0-1ubuntu1~20.04) 11.1.0) doesn't like
+> clobering the frame pointer as follows. (I edited the caller site for other test.)
 > 
-> IPI broeadcasts on THP split are no longer required.
+>    x86_64/tdx_vm_tests.c:343:1: error: bp cannot be used in ‘asm’ here
 > 
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Cc: Sasha Levin <sasha.levin@oracle.com>
-> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.vnet.ibm.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Jerome Marchand <jmarchan@redhat.com>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Jason Gunthorpe <jgg@nvidia.com>
-> Cc: John Hubbard <jhubbard@nvidia.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> I ended up the following workaround.  I didn't use pushq/popq pair because
+> I didn't want to play with offset in the stack of the caller.
+> 
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx.h b/tools/testing/selftests/kvm/lib/x86_64/tdx.h
+> index aa6961c6f304..8ddf3b64f003 100644
+> --- a/tools/testing/selftests/kvm/lib/x86_64/tdx.h
+> +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx.h
+> @@ -122,7 +122,11 @@ void prepare_source_image(struct kvm_vm *vm, void *guest_code,
+>   */
+>  static inline void tdcall(struct kvm_regs *regs)
+>  {
+> +       unsigned long saved_rbp = 0;
+> +
+>         asm volatile (
+> +               /* gcc complains that frame pointer %rbp can't be clobbered. */
+> +                       "movq %%rbp, %28;\n\t"
+>                         "mov %13, %%rax;\n\t"
+>                         "mov %14, %%rbx;\n\t"
+>                         "mov %15, %%rcx;\n\t"
+> @@ -152,6 +156,8 @@ static inline void tdcall(struct kvm_regs *regs)
+>                         "mov %%r15, %10;\n\t"
+>                         "mov %%rsi, %11;\n\t"
+>                         "mov %%rdi, %12;\n\t"
+> +                       "movq %28, %%rbp\n\t"
+> +                       "movq $0, %28\n\t"
+>                         : "=m" (regs->rax), "=m" (regs->rbx), "=m" (regs->rdx),
+>                         "=m" (regs->r8), "=m" (regs->r9), "=m" (regs->r10),
+>                         "=m" (regs->r11), "=m" (regs->r12), "=m" (regs->r13),
+> @@ -161,9 +167,10 @@ static inline void tdcall(struct kvm_regs *regs)
+>                         "m" (regs->rdx), "m" (regs->r8), "m" (regs->r9),
+>                         "m" (regs->r10), "m" (regs->r11), "m" (regs->r12),
+>                         "m" (regs->r13), "m" (regs->r14), "m" (regs->r15),
+> -                       "m" (regs->rbp), "m" (regs->rsi), "m" (regs->rdi)
+> +                       "m" (regs->rbp), "m" (regs->rsi), "m" (regs->rdi),
+> +                       "m" (saved_rbp)
+>                         : "rax", "rbx", "rcx", "rdx", "r8", "r9", "r10", "r11",
+> -                       "r12", "r13", "r14", "r15", "rbp", "rsi", "rdi");
+> +                         "r12", "r13", "r14", "r15", "rsi", "rdi");
+>  }
 
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Inline assembly for TDCALL is going to be a mess.  Assuming proper assembly doesn't
+Just Work for selftests, we should solve that problem and build this on top.

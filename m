@@ -2,104 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 499455A96AB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9ADF5A96AE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:25:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233348AbiIAMYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
+        id S233439AbiIAMZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:25:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbiIAMY1 (ORCPT
+        with ESMTP id S232404AbiIAMZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:24:27 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9453C1223B2;
-        Thu,  1 Sep 2022 05:24:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6248BD6E;
-        Thu,  1 Sep 2022 05:24:32 -0700 (PDT)
-Received: from [10.57.18.92] (unknown [10.57.18.92])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2B9643F7B4;
-        Thu,  1 Sep 2022 05:24:53 -0700 (PDT)
-Message-ID: <ccacc117-0be8-2cd3-480b-dcbca5485d6f@arm.com>
-Date:   Thu, 1 Sep 2022 13:24:18 +0100
+        Thu, 1 Sep 2022 08:25:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D4B7CB5F;
+        Thu,  1 Sep 2022 05:25:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A5E7D61DF4;
+        Thu,  1 Sep 2022 12:25:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8588C433C1;
+        Thu,  1 Sep 2022 12:25:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662035117;
+        bh=GBVFSBe0bo4VRzuItQqKjxBIRrfeZYQb6FobCyqvZrQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Dkwg05ef965iTl/gPTXT3Ps+w2WjWBy199KgzzKW1hAMJ0uSk1P0yVpZjrk1AFU7A
+         gAfNRDuvn5FMUt6xqUVfpiOJ8EOcwcnk44dlNZUAOWxgqq5vx9YhSXPfVbapCnMMrh
+         kbtfe7Fhpwa3DlJZoSlW6wRNAl1R+tlyhNKvqy3U=
+Date:   Thu, 1 Sep 2022 14:25:14 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Jiri Slaby <jslaby@suse.cz>
+Cc:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] tty: serial: introduce transmit helper generators
+Message-ID: <YxCkqmz32qMAZAPh@kroah.com>
+References: <20220901110657.3305-1-jslaby@suse.cz>
+ <20220901110657.3305-2-jslaby@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v2] Revert "swiotlb: panic if nslabs is too small"
-Content-Language: en-GB
-To:     Dongli Zhang <dongli.zhang@oracle.com>, Yu Zhao <yuzhao@google.com>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        iommu@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <dan.carpenter@oracle.com>
-References: <20220829232934.3277747-1-yuzhao@google.com>
- <20220831063818.3902572-1-yuzhao@google.com>
- <747f76e1-a5ec-150c-311e-a60396f6f7ab@oracle.com>
- <CAOUHufYHh3B6A8_pAusnW5==r3VhPxy6bOoUHbxe0qvhNGovqA@mail.gmail.com>
- <982a4b95-0ab5-f18e-cbaf-1f503a35ada7@oracle.com>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <982a4b95-0ab5-f18e-cbaf-1f503a35ada7@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220901110657.3305-2-jslaby@suse.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-09-01 03:18, Dongli Zhang wrote:
-> Hi Yu,
+On Thu, Sep 01, 2022 at 01:06:55PM +0200, Jiri Slaby wrote:
+> Many serial drivers do the same thing:
+> * send x_char if set
+> * keep sending from the xmit circular buffer until either
+>   - the loop reaches the end of the xmit buffer
+>   - TX is stopped
+>   - HW fifo is full
+> * check for pending characters and:
+>   - wake up tty writers to fill for more data into xmit buffer
+>   - stop TX if there is nothing in the xmit buffer
 > 
-> On 8/31/22 5:24 PM, Yu Zhao wrote:
->> On Wed, Aug 31, 2022 at 4:20 PM Dongli Zhang <dongli.zhang@oracle.com> wrote:
->>>
->>> Hi Yu,
->>>
->>> As we discussed in the past, the swiotlb panic on purpose
->>
->> We should not panic() at all, especially on a platform that has been
->> working well since at least 4.14.
->>
->> Did you check out this link I previously shared with you?
->> https://urldefense.com/v3/__https://lore.kernel.org/r/CAHk-=wit-DmhMfQErY29JSPjFgebx_Ld*pnerc4J2Ag990WwAA@mail.gmail.com/__;Kw!!ACWV5N9M2RV99hQ!PXzSLurBv7VqxI1451TV4zO3_-BYj4grk-HYBsXzSnA6nZcXaBzdsQ-rF2DAqlICSRPMt-efYv_Uu2A2CQ$
+> The only differences are:
+> * how to write the character to the HW fifo
+> * the check of the end condition:
+>   - is the HW fifo full?
+>   - is limit of the written characters reached?
 > 
-> Thanks for sharing! I used to read that in the past. To be honest I am still
-> confused on when to use BUG/panic and when to not, as I still see many usage in
-> some patches.
+> So unify the above into two helper generators:
+> * DEFINE_UART_PORT_TX_HELPER_LIMITED() -- it performs the above taking
+>   the written characters limit into account, and
+> * DEFINE_UART_PORT_TX_HELPER() -- the same as above, except it only
+>   checks the HW readiness, not the characters limit.
 > 
-> Just about swiotlb, it may panic in many cases during boot, e.g.,:
+> The HW specific operations (as stated as "differences" above) are passed
+> as arguments to the macros. They are:
+> * tx_ready() -- returns true if HW can accept more data.
+> * put_char() -- write a character to the device.
+> * tx_done() -- when the write loop is done, perform arbitrary action
+>   before potential invocation of ops->stop_tx() happens.
 > 
-> https://bugs.launchpad.net/ubuntu/+source/linux/+bug/1955655
+> Note that the above macros are generators. This means the code is
+> generated in place and the above 3 arguments are "inlined". I.e. no
+> added penalty by generating call instructions for every single
+> character. Nor any indirect calls. (As in previous versions of this
+> patchset.)
+> 
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
+> ---
+> 
+> Notes:
+>     [v2] instead of a function (uart_port_tx_limit()) in serial_core,
+>          generate these in-place using macros. Thus eliminating "call"
+>          penalty.
 
-That's really a different thing, but frankly that panic is also bogus 
-anyway - there is no good reason to have different behaviour for failing 
-to allocate a buffer slot because the buffer is full vs. failing to 
-allocate a buffer slot because there is no buffer. If we can fail 
-gracefully some of the time we should fail gracefully all of the time. 
-Yes, there's a slight difference in that one case has a chance of 
-succeeding if retried in future while the other definitely doesn't, but 
-it's not SWIOTLB's place to decide that the entire system is terminally 
-unusable just because some device can't make a DMA mapping.
+Much nicer, but:
 
-Similarly for the other panics at init time, which seem to have 
-originated from a mechanical refactoring of the memblock API with the 
-expectation of preserving the existing behaviour at the time. Those have 
-then just been moved around without anyone thinking to question why 
-they're there, and if memblock *does* now return usable error 
-information, why don't we start handling that error properly like we do 
-in other init paths?
+> +#define __DEFINE_UART_PORT_TX_HELPER(name, port, ch, tx_ready, put_char,  \
+> +		tx_done, for_test, for_post, ...)			  \
 
-Really there is no reason to panic anywhere in SWIOTLB. This is old 
-code, things have moved on over the last 20 years, and we can and should 
-do much better. I'll add this to my list of things to look at for 
-cleanup once I find a bit of free time, unless anyone else fancies 
-taking it on.
+Do you really need "port" and "ch" as part of this macro?  You always
+set that to the same thing in your patches, so is it really needed?
 
-Thanks,
-Robin.
+thanks,
+
+greg k-h

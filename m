@@ -2,83 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E6D55A94A3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C78D5A94A5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:30:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234022AbiIAKal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:30:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35000 "EHLO
+        id S232790AbiIAKax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234026AbiIAKag (ORCPT
+        with ESMTP id S234071AbiIAKar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:30:36 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D18C1D8E27
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:30:34 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id q16so17394062ljp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:30:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Hq/wXphQ4CQCWqFQUckeg7mpeUY2opCgFidU5GlYS/M=;
-        b=wMrHD5kd1sjRAGwDOMxCLd5TmCSprc0l8Nf3sWx1dXuMRw6mfEP63hWBtvHNhJ801W
-         QEkV7vymXEa/aXbYqGX4R5yiFQnl8uzfQEIiMjxXJxpx8itKZweitlkO/FPuZmia0adE
-         M6WddBo1NBOeeg5/1y/DaNd3wmc3E/n8vDRwKSngkHvNCgF5wx2WcPhrlyIoBIJtnDOC
-         DWPdhzxfLoAUMhVxP5tYYJk6X9aNydarTKdgb5IBaD2c6MQAxCPQWDlMkv2YMw6j0jj3
-         N/UvpNU9lhbiLUy9Hr6JHYnM5DzYIpAwh8rG0p8VNvFxLcn+dEak3SolRfU50q23CH6t
-         W37g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Hq/wXphQ4CQCWqFQUckeg7mpeUY2opCgFidU5GlYS/M=;
-        b=iDNpYzcEdYmjghQYQc8ZXENexq+J7p3Ev9QK5VUGAta2i+CvZctKEYTy7Tcab/1iG2
-         LzJ4WJsIwROo0/E0DGYobSg+TkxGDR9rk1cSS7nWqEUWNq9T6052bStfdAJsrUdeXW98
-         Y3F94zMUIigLeynysP8/XRGWpu7Ly2LoKllxkSsP7sDHWQT7LhEcgvZUVHgywg/Pp8OX
-         GQH2lqpBwl2nEqGsLW9A2xv/7CfZwM6tNUss4QzIrWD/M9oEaZYhVJcZOPUj6jysNXbn
-         ndI4Zs0kOJZsC3emZQ7puvweju4nIAFp/2HY5Db/KiqyRqXGK3qFWYvRZLtFT0GHrBaA
-         oSIQ==
-X-Gm-Message-State: ACgBeo0f355spehiTTpRimSPPqyLeWaR1Rs6NeyTEHS7uXRNturI6w0C
-        RM4fkc+Ky6qmI38iccj+3kyWOw==
-X-Google-Smtp-Source: AA6agR6rVg//wgHti5p5gLXR9YIZj3y2n/9kU9errMO9J/QeGYwVMsfd2wxCYlqzONqcnaXPvhV2VA==
-X-Received: by 2002:a2e:9018:0:b0:266:6871:cdc1 with SMTP id h24-20020a2e9018000000b002666871cdc1mr4524850ljg.244.1662028232455;
-        Thu, 01 Sep 2022 03:30:32 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id 8-20020ac25f48000000b00492f84befffsm1567689lfz.192.2022.09.01.03.30.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 03:30:31 -0700 (PDT)
-Message-ID: <93d5de8e-31b2-4412-3348-7ba1903cde84@linaro.org>
-Date:   Thu, 1 Sep 2022 13:30:30 +0300
+        Thu, 1 Sep 2022 06:30:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27315DD744;
+        Thu,  1 Sep 2022 03:30:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1082961CEF;
+        Thu,  1 Sep 2022 10:30:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA065C433B5;
+        Thu,  1 Sep 2022 10:30:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662028241;
+        bh=5x525oxOQnL5n2nwqhJjrzExqTe/rEL0u72839GNWBE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QU0V3e0WFz9AhpRDxUHs/QGDxBSbwSxyBzxh9MUe6detw1ed0d7y6qv1F0f8VsMSf
+         bixtTRnEKXniCojgtzgzjjr4ua6y6m0DAmR0udb4jzjKoDMbtsnaumC7uVzHRk9lzD
+         8GIlS7IFbC6dWaj0Wy9Kq7PczxHvDhsgJSwAw/cs=
+Date:   Thu, 1 Sep 2022 12:30:38 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Stable <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
+Subject: Re: [PATCH 5.15 000/136] 5.15.64-rc1 review
+Message-ID: <YxCJzr0XCd+6/JW4@kroah.com>
+References: <20220829105804.609007228@linuxfoundation.org>
+ <CADVatmOLoaGgAW951JqEk3v88EA7mn3qur84Xd30QJWP21+eVg@mail.gmail.com>
+ <YxB/ZPFEQG9zS+wa@kroah.com>
+ <CADVatmPxfdEA3yi9KGHtvmQA2n-mA=ekBidqU+keGrBsL+rFeQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 2/4] dt-bindings: arm: mediatek: Add new bindings of
- MediaTek frequency hopping
-Content-Language: en-US
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Johnson Wang <johnson.wang@mediatek.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, sboyd@kernel.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        Edward-JW Yang <edward-jw.yang@mediatek.com>
-References: <20220831124850.7748-1-johnson.wang@mediatek.com>
- <20220831124850.7748-3-johnson.wang@mediatek.com>
- <b1296c37-5283-81f7-1939-7ea20e1f4d0d@linaro.org>
- <1fae0c47-fff9-89e9-c849-536d167d741d@collabora.com>
- <38910de5-89ad-e7a1-261f-18b51c8e7877@linaro.org>
- <955f7200-9d08-0d21-2d1a-5ccbd0f3a8af@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <955f7200-9d08-0d21-2d1a-5ccbd0f3a8af@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADVatmPxfdEA3yi9KGHtvmQA2n-mA=ekBidqU+keGrBsL+rFeQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,25 +61,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 13:22, AngeloGioacchino Del Regno wrote:
->> That's simply not a proper
->> hardware description, so again:
->>
->> 1. If this is separate device (as you indicated), then it needs
->> expressing the dependencies and uses of other device resources.
+On Thu, Sep 01, 2022 at 11:22:53AM +0100, Sudip Mukherjee wrote:
+> On Thu, Sep 1, 2022 at 10:46 AM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Aug 29, 2022 at 09:11:28PM +0100, Sudip Mukherjee wrote:
+> > > Hi Greg,
+> > >
+> > > On Mon, Aug 29, 2022 at 12:00 PM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > This is the start of the stable review cycle for the 5.15.64 release.
+> > > > There are 136 patches in this series, all will be posted as a response
+> > > > to this one.  If anyone has any issues with these being applied, please
+> > > > let me know.
+> > > >
+> > > > Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
+> > > > Anything received after that time might be too late.
+> > >
+> > > My builds are still running, but just an initial report for gcc-12. (I
+> > > know v5.15.y still does not build completely with gcc-12).
+> > >
+> > > x86_64 and arm64 allmodconfig build fails with gcc-12, with the error:
+> > >
 > 
-> Agreed. In this case, what about...
+> <snip>
 > 
-> mediatek,hopping-ssc-percents = <&provider CLK_SOMEPLL 3>;
+> > >
+> > > Introduced in v5.15.61 due to 2711bedab26c ("Bluetooth: L2CAP: Fix
+> > > l2cap_global_chan_by_psm regression").
+> > > But v5.19.y and mainline does not show the build failure as they also
+> > > have 41b7a347bf14 ("powerpc: Book3S 64-bit outline-only KASAN
+> > > support").
+> >
+> > Ick, ok, what to do here?  I can't really backport 41b7a347bf14 to 5.15
+> > easily as it's huge and a new feature.  Any other ideas?
 > 
-> or would it be better to specify the clocks in a separated property?
-> 
-> clocks = <&provider CLK_SOMEPLL>, <&provider CLK_SOME_OTHER_PLL>;
-> mediatek,hopping-ssc-percents = <3>, <5>;
-> 
+> Yeah.
+> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=b840304fb46cdf7012722f456bce06f151b3e81b
+> will fix the it for mips and csky failure in mainline and v5.19.y. And
+> I just verified that it will fix for powerpc also in v5.15.y. So, we
+> just need to wait for now.
 
-I propose the last one - using standard clocks property and a matching
-table.
+Ah good, thanks for pointing that out!
 
-Best regards,
-Krzysztof
+greg k-h

@@ -2,71 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8F65A8B2E
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE355A8B2D
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:05:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232753AbiIACEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 22:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46696 "EHLO
+        id S229499AbiIACFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 22:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232487AbiIACEd (ORCPT
+        with ESMTP id S232804AbiIACFM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 22:04:33 -0400
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F20F5122BE4
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:04:32 -0700 (PDT)
-Received: by mail-qt1-x832.google.com with SMTP id r6so12417539qtx.6
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:04:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=saPMMzuK3Ho4SUDDsCSKY8/njcHtrQrgxH2RFe9bLtY=;
-        b=K9IDTvUvJFqhOsyyJMTui8J3nK54HCRWlFQ0E2R2CIXsDOGaEPoLRfixcVoGQ42Nai
-         8fojjLOAuj6zDPY/I0YRch7xQz4Rjri5/GpCJhlQlouT66IK0PIxX3Md1KE64GytB5PJ
-         NMw/7TQlKB78JKfav0Xn8sxyA/bNwKSndshAJd8S9Cv9sjTVDv6bYkuju2EuyZFFmWk6
-         NVeNoS7u5cJ8d9Hug0VoEnXI3X1Le8ppuHPthxxjbSX+2mIBm3yUlxKNUeiHRKxPAmO4
-         FIDZ0N5upArZ39fzCWiKhABpoEqStPHFtMLfTFP+Cr7hl7rIrf8hgb/uxkTzBGj2vRTe
-         Pe5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=saPMMzuK3Ho4SUDDsCSKY8/njcHtrQrgxH2RFe9bLtY=;
-        b=oLYpUGRoUxe1RzBdMhqHt7VR6qPYdeP1tCE0ZdHf9caO8dD41rM3B401gU1ZxaR4gX
-         v5XBuZIJIzGn5X45D45K+6Gv5g0pYLYPvXrUqyztVMh2hzhIPLnj99duSfwoqehuIgcp
-         gHd/8DK1QSAF+RFsnbCvIfMH7WBnhJf2/yphmcItqAvQspvswQeW3+U+UQwPUv6zxDM0
-         h4AzA2EevC1wxUebKmBLKIxIAuAOnKEy7BEo4Sl1IgWkuQRi34YWnPlKpJctutmjUy5p
-         8a6eyXegWlKkg7775KvYwn6AlA1tGRB9ci2iZUeEGwiCytTjKNBZfh0OyfjRqAbDAKo0
-         vf9A==
-X-Gm-Message-State: ACgBeo3+5H8lsmPTq32LJQ6uBJ9D+YkY66rumhlOukj5UgsU1rsbsVq6
-        iC/g0q8mu+Nd1rfeayIlQyPEYzvh2453k+mPSBj0hw==
-X-Google-Smtp-Source: AA6agR6R6a9y6NVWlb8HXU/ybD+Q0Mnf5IJ7JiD8dpmIgIz7qgchladeggSJF9076AcPv4IxW6Y7O+QrOHrrGSgKZzw=
-X-Received: by 2002:ac8:5853:0:b0:343:7b95:96ff with SMTP id
- h19-20020ac85853000000b003437b9596ffmr22411999qth.386.1661997872094; Wed, 31
- Aug 2022 19:04:32 -0700 (PDT)
+        Wed, 31 Aug 2022 22:05:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9C71F611
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:05:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1661997909;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9LKozqYIo84oic3xLC1Bs+/dle6Aj4LlgDEmJDQ1gts=;
+        b=i5fBcCsY+BW2U/FDMHrtowca1NxEwwpah1A6asvBJUgRGwlqSelN5rUEumYwLn8j7bd2E1
+        sc8tLjQOZYEO87UjhriPgivILvA45yXNr/oLaxK+fDu9FUVRp4800dL+edem0d9gqFdWn5
+        OnBjAsGlj/DMOdjG8V3J38ukeWngCgI=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-467-nmiMVpgIMAWq3p_YgCt9jQ-1; Wed, 31 Aug 2022 22:05:06 -0400
+X-MC-Unique: nmiMVpgIMAWq3p_YgCt9jQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4DC3E29AB44C;
+        Thu,  1 Sep 2022 02:05:05 +0000 (UTC)
+Received: from redhat.com (unknown [10.22.32.220])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 84DDD2026D4C;
+        Thu,  1 Sep 2022 02:05:04 +0000 (UTC)
+Date:   Wed, 31 Aug 2022 22:05:03 -0400
+From:   Joe Lawrence <joe.lawrence@redhat.com>
+To:     Song Liu <song@kernel.org>
+Cc:     Michael Ellerman <mpe@ellerman.id.au>,
+        live-patching@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>, X86 ML <x86@kernel.org>,
+        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>
+Subject: Re: [PATCH v5] livepatch: Clear relocation targets on a module
+ removal
+Message-ID: <YxATT0lpgVndnc0z@redhat.com>
+References: <20220830185313.76402-1-song@kernel.org>
+ <Yw+4xxiONngOTqin@redhat.com>
+ <875yi8uju3.fsf@mpe.ellerman.id.au>
+ <CAPhsuW7aZwXyuZAv23xDXsxCJc0mJNms+HegqkZqukVqT0cfZA@mail.gmail.com>
 MIME-Version: 1.0
-References: <cover.1650539846.git.robin.murphy@arm.com> <20220421141300.GC20492@lst.de>
- <665d2b46-c9e2-2543-cad5-9adf022e4bcb@arm.com> <CAMSo37XN3PC22JK4ot-B8gUxWOhK+UD-73Zb8LqvYpgPL1Bj6g@mail.gmail.com>
- <9ec5ba90-150a-c675-d95b-b13e3a4e9e10@arm.com> <CAMSo37XmxGn4VJJXwOca=mjHfmgYoh-i4bOs_DpP2LdjaN87wA@mail.gmail.com>
- <5c617d66-f04b-df26-bf7a-7f479d081ac2@arm.com> <CAMSo37UUXd9FT1coAqgxU4urXi0NeCkONesmWqFfyrdDi+03dA@mail.gmail.com>
- <6cc93088-981e-5c2d-a757-90508455aa42@arm.com>
-In-Reply-To: <6cc93088-981e-5c2d-a757-90508455aa42@arm.com>
-From:   Yongqin Liu <yongqin.liu@linaro.org>
-Date:   Thu, 1 Sep 2022 10:04:21 +0800
-Message-ID: <CAMSo37Xszek-45WSEr3xtv0vWF8aB9rFNsStWHiXjKmc7p6VGg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] More ARM DMA ops cleanup
-To:     Robin Murphy <robin.murphy@arm.com>
-Cc:     Christoph Hellwig <hch@lst.de>, linux@armlinux.org.uk,
-        linux-arm-kernel@lists.infradead.org, m.szyprowski@samsung.com,
-        arnd@kernel.org, iommu@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        "Bajjuri, Praneeth" <praneeth@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPhsuW7aZwXyuZAv23xDXsxCJc0mJNms+HegqkZqukVqT0cfZA@mail.gmail.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,108 +71,239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Robin
-
-On Thu, 1 Sept 2022 at 01:10, Robin Murphy <robin.murphy@arm.com> wrote:
->
-> On 2022-08-31 17:41, Yongqin Liu wrote:
-> > Hi, Robin
+On Wed, Aug 31, 2022 at 03:48:26PM -0700, Song Liu wrote:
+> On Wed, Aug 31, 2022 at 3:30 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
 > >
-> > On Tue, 30 Aug 2022 at 23:37, Robin Murphy <robin.murphy@arm.com> wrote:
-> >>
-> >> On 2022-08-30 16:19, Yongqin Liu wrote:
-> >>> Hi, Robin
-> >>>
-> >>> Thanks for the kind reply!
-> >>>
-> >>> On Tue, 30 Aug 2022 at 17:48, Robin Murphy <robin.murphy@arm.com> wrote:
-> >>>>
-> >>>> On 2022-08-27 13:24, Yongqin Liu wrote:
-> >>>>> Hi, Robin, Christoph
-> >>>>>
-> >>>>> With the changes landed in the mainline kernel,
-> >>>>> one problem is exposed with our out of tree pvr module.
-> >>>>> Like the source here[1], arm_dma_ops.sync_single_for_cpu is called in
-> >>>>> the format like the following:
-> >>>>>        arm_dma_ops.sync_single_for_cpu(NULL, pStart, pEnd - pStart,
-> >>>>> DMA_FROM_DEVICE);
-> >>>>>
-> >>>>> Not sure if you could give some suggestions on what I should do next
-> >>>>> to make the pvr module work again.
-> >>>>
-> >>>> Wow, that driver reinvents so many standard APIs for no apparent reason
-> >>>> it's not even funny.
-> >>>>
-> >>>> Anyway, from a brief look it seemingly already knows how to call the DMA
-> >>>> API semi-correctly, so WTF that's doing behind an #ifdef, who knows?
-> >>>> However it's still so completely wrong in general - fundamentally broken
-> >>>> AArch64 set/way cache maintenance!? - that it looks largely beyond help.
-> >>>> "Throw CONFIG_DMA_API_DEBUG at it and cry" is about the extent of
-> >>>> support I'm prepared to provide for that mess.
-> >>>
-> >>> For the moment, I do not care about the AArch64 lines, like if we only
-> >>> say the following two lines:
-> >>>       arm_dma_ops.sync_single_for_device(NULL, pStart, pEnd - pStart,
-> >>> DMA_TO_DEVICE);
-> >>>       arm_dma_ops.sync_single_for_cpu(NULL, pStart, pEnd - pStart,
-> >>> DMA_FROM_DEVICE);
-> >>>
-> >>> Could you please give some suggestions for that?
-> >>
-> >> Remove them. Then remove the #ifdef __arch64__ too, since the code under
-> >> there is doing a passable impression of generic DMA API usage, as long
-> >> as one ignores the bigger picture.
+> > Joe Lawrence <joe.lawrence@redhat.com> writes:
+> > > On Tue, Aug 30, 2022 at 11:53:13AM -0700, Song Liu wrote:
+> > >> From: Miroslav Benes <mbenes@suse.cz>
+> > >>
+> > >> Josh reported a bug:
+> > >>
+> > >>   When the object to be patched is a module, and that module is
+> > >>   rmmod'ed and reloaded, it fails to load with:
+> > >>
+> > >>   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
+> > >>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> > >>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> > >>
+> > >>   The livepatch module has a relocation which references a symbol
+> > >>   in the _previous_ loading of nfsd. When apply_relocate_add()
+> > >>   tries to replace the old relocation with a new one, it sees that
+> > >>   the previous one is nonzero and it errors out.
+> > >>
+> > >>   On ppc64le, we have a similar issue:
+> > >>
+> > >>   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
+> > >>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
+> > >>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
+> > ...
+> > >>
+> > >
+> > > Hi Song,
+> > >
+> > > Applying your patch on top of my latest klp-convert-tree branch [1], I
+> > > modified a few of its late module patching tests
+> > > (tools/testing/selftests/livepatch/test-song.sh) such that:
+> > >
+> > >  1 - A livepatch module is loaded
+> > >    - this module contains klp-relocations to objects in (2)
+> > >  2 - A target test module is loaded
+> > >  3 - Unload the test target module
+> > >    - Clear klp-relocations in (1)
+> > >  4 - Repeat target module load (2) / unload (3) a few times
+> > >  5 - Unload livepatch module
 > >
-> > I tried with this method, and found that if I only update for the
-> > pvr_flush_range
-> > and the pvr_clean_range functions, the build still could boot to the
-> > home screen.
+> > If you push that test code somewhere I could test it on ppc64le.
 > >
-> > but if I update all the pvr_flush_range, pvr_clean_range and
-> > pvr_invalidate_range
-> > functions with this method(remove the arm_dma_ops lines and the #ifdef
-> > __arch64__ lines),
-> > then a "Unable to handle kernel NULL pointer dereference at virtual
-> > address 0000003c"
-> > error is reported like here: http://ix.io/49gu
+> > > The results:
+> > >
+> > >  x86_64  : pass
+> > >  s390x   : pass
+> > >  ppc64le : crash
+> > >
+> > > I suspect Power 32-bit would suffer the same fate, but I don't have
+> > > hardware to verify.  See the kernel log from the crash below...
+> > >
+> > >
+> > > ===== TEST: klp-convert symbols (late module patching) =====
+> > > % modprobe test_klp_convert1
+> > > test_klp_convert1: tainting kernel with TAINT_LIVEPATCH
+> > > livepatch: enabling patch 'test_klp_convert1'
+> > > livepatch: 'test_klp_convert1': starting patching transition
+> > > livepatch: 'test_klp_convert1': patching complete
+> > > % modprobe test_klp_convert_mod
+> > > livepatch: applying patch 'test_klp_convert1' to loading module 'test_klp_convert_mod'
+> > > test_klp_convert1: saved_command_line, 0: BOOT_IMAGE=(ieee1275//vdevice/v-scsi@30000003/disk@8100000000000000,msdos2)/vmlinuz-5.19.0+ root=/dev/mapper/rhel_ibm--p9z--18--lp7-root ro crashkernel=2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G rd.lvm.lv=rhel_ibm-p9z-18-lp7/root rd.lvm.lv=rhel_ibm-p9z-18-lp7/swap
+> > > test_klp_convert1: driver_name, 0: test_klp_convert_mod
+> > > test_klp_convert1: test_klp_get_driver_name(), 0: test_klp_convert_mod
+> > > test_klp_convert1: homonym_string, 1: homonym string A
+> > > test_klp_convert1: get_homonym_string(), 1: homonym string A
+> > > test_klp_convert1: klp_string.12345 = lib/livepatch/test_klp_convert_mod_a.c static string
+> > > test_klp_convert1: klp_string.67890 = lib/livepatch/test_klp_convert_mod_b.c static string
+> > > % rmmod test_klp_convert_mod
+> > > livepatch: reverting patch 'test_klp_convert1' on unloading module 'test_klp_convert_mod'
+> > > module_64: Clearing ADD relocate section 48 to 6
+> > > BUG: Unable to handle kernel data access on write at 0xc008000002140150
+> > > Faulting instruction address: 0xc00000000005659c
+> > > Oops: Kernel access of bad area, sig: 11 [#1]
+> > > LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
+> > > Modules linked in: test_klp_convert_mod(-) test_klp_convert1(K) bonding tls rfkill pseries_rng drm fuse drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sg ibmvscsi ibmveth scsi_transport_srp vmx_crypto dm_mirror dm_region_hash dm_log dm_mod
+> > > CPU: 6 PID: 4766 Comm: rmmod Kdump: loaded Tainted: G              K   5.19.0+ #1
+> > > NIP:  c00000000005659c LR: c000000000056590 CTR: 0000000000000024
+> > > REGS: c000000007223840 TRAP: 0300   Tainted: G              K    (5.19.0+)
+> > > MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 48008282  XER: 0000000a
+> > > CFAR: c0000000000a87e0 DAR: c008000002140150 DSISR: 0a000000 IRQMASK: 0
 > >
-> > Not sure if you have any idea from the log, or could you please give
-> > some suggestions
-> > on how to debug it.
->
-> Obviously there's almost certainly going to be more work to do on top to
-> make the newly-exposed codepath actually behave as expected - I was
-> simply making a general suggestion for a starting point based on looking
-> at half a dozen lines of code in isolation.
->
-> To restate the point yet again in the hope that it's clear this time,
-> the DMA ops on ARM are now effectively the same as the DMA ops on arm64,
-> and will behave the same way.
-Thanks for confirming again here!
+> > This is saying you don't have permissions to write at that address.
+> >
+> > > GPR00: c000000000056568 c000000007223ae0 c000000002a68a00 0000000000000001
+> > > GPR04: c0080000021706f0 000000000000002d 0000000000000000 0000000000000000
+> > > GPR08: 0000000000000066 0000001200000010 0000000000000000 0000000000008000
+> > > GPR12: 0000000000000000 c00000000ffca080 0000000000000000 0000000000000000
+> > > GPR16: 0000010005bf1810 000000010c0f7370 c0000000011b7e50 c0000000011b7e68
+> > > GPR20: c0080000021501c8 c008000002150228 0000000000000030 0000000060000000
+> > > GPR24: c008000002160380 c000000056b43000 000000000000ff20 c000000056b43c00
+> > > GPR28: aaaaaaaaaaaaaaab c000000056b43b40 0000000000000000 c00800000214014c
+> > > NIP [c00000000005659c] clear_relocate_add+0x11c/0x1c0
+> > > LR [c000000000056590] clear_relocate_add+0x110/0x1c0
+> > > Call Trace:
+> > > [c000000007223ae0] [ffffffffffffffff] 0xffffffffffffffff (unreliable)
+> > > [c000000007223ba0] [c00000000021e3a8] klp_cleanup_module_patches_limited+0x448/0x480
+> > > [c000000007223cb0] [c000000000220278] klp_module_going+0x68/0x94
+> > > [c000000007223ce0] [c00000000022f480] __do_sys_delete_module.constprop.0+0x1d0/0x390
+> > > [c000000007223db0] [c00000000002f004] system_call_exception+0x164/0x340
+> > > [c000000007223e10] [c00000000000be68] system_call_vectored_common+0xe8/0x278
+> > > --- interrupt: 3000 at 0x7fffa178fb6c
+> > > NIP:  00007fffa178fb6c LR: 0000000000000000 CTR: 0000000000000000
+> > > REGS: c000000007223e80 TRAP: 3000   Tainted: G              K    (5.19.0+)
+> > > MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 48002482  XER: 00000000
+> > > IRQMASK: 0
+> > > GPR00: 0000000000000081 00007ffff2d1b720 00007fffa1887200 0000010005bf1878
+> > > GPR04: 0000000000000800 000000000000000a 0000000000000000 00000000000000da
+> > > GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> > > GPR12: 0000000000000000 00007fffa201c540 0000000000000000 0000000000000000
+> > > GPR16: 0000010005bf1810 000000010c0f7370 000000010c0f8090 000000010c0f8078
+> > > GPR20: 000000010c0f8050 000000010c0f80a8 000000010c0f7518 000000010c0f80d0
+> > > GPR24: 00007ffff2d1b830 00007ffff2d1efbb 0000000000000000 0000010005bf02a0
+> > > GPR28: 00007ffff2d1be50 0000000000000000 0000010005bf1810 0000000000100000
+> > > NIP [00007fffa178fb6c] 0x7fffa178fb6c
+> > > LR [0000000000000000] 0x0
+> > > --- interrupt: 3000
+> > > Instruction dump:
+> > > 40820044 813b002c 7ff5f82a 79293664 7d394a14 e9290010 7c69f82e 7fe9fa14
+> > > 48052235 60000000 2c030000 41820008 <92ff0004> eadb0020 60000000 60000000
+> > > ---[ end trace 0000000000000000 ]---
+> > >
+> > > $ addr2line 0xc00000000005659c -e vmlinux
+> > > /root/klp-convert-tree/arch/powerpc/kernel/module_64.c:785
+> > >
+> > > 743 void clear_relocate_add(Elf64_Shdr *sechdrs,
+> > > 744                        const char *strtab,
+> > > 745                        unsigned int symindex,
+> > > 746                        unsigned int relsec,
+> > > 747                        struct module *me)
+> > > 748 {
+> > > ...
+> > > 759         for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
+> > > ...
+> > > 785                 *instruction = PPC_RAW_NOP();
+> > > 786         }
+> >
+> > Has the module text been marked RW prior to this? I suspect not?
+> >
+> > In which case you need to use patch_instruction() here.
+> >
+> > cheers
+> 
+> Thanks folks!
+> 
+> I guess something like this would fix compile for ppc32 and fix crash for ppc64.
+> 
+> I also pushed it to
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/song/linux.git/log/?h=klp-module-reload
+> 
+> This includes Joe's klp-convert patches and this patch.
+> 
+> Thanks!
+> Song
+> 
+> 
+> 
+> diff --git a/arch/powerpc/kernel/module_32.c b/arch/powerpc/kernel/module_32.c
+> index ea6536171778..e3c312770453 100644
+> --- a/arch/powerpc/kernel/module_32.c
+> +++ b/arch/powerpc/kernel/module_32.c
+> @@ -285,6 +285,16 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
+>         return 0;
+>  }
+> 
+> +#ifdef CONFIG_LIVEPATCH
+> +void clear_relocate_add(Elf32_Shdr *sechdrs,
+> +                  const char *strtab,
+> +                  unsigned int symindex,
+> +                  unsigned int relsec,
+> +                  struct module *me)
+> +{
+> +}
+> +#endif
+> +
+>  #ifdef CONFIG_DYNAMIC_FTRACE
+>  notrace int module_trampoline_target(struct module *mod, unsigned long addr,
+>                                      unsigned long *target)
+> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+> index 6aaf5720070d..4d55f0e52704 100644
+> --- a/arch/powerpc/kernel/module_64.c
+> +++ b/arch/powerpc/kernel/module_64.c
+> @@ -782,7 +782,7 @@ void clear_relocate_add(Elf64_Shdr *sechdrs,
+>                         continue;
+> 
+>                 instruction += 1;
+> -               *instruction = PPC_RAW_NOP();
+> +               patch_instruction(instruction, PPC_RAW_NOP());
 
-> Assuming the driver already works on
-> arm64, then the aim should be to unify all the ARM and arm64 codepaths
-> for things that involve the DMA API.
+Close.  I believe PPC_RAW_NOP() needs to be passed to ppc_inst() like:
 
-Thanks for the suggestion here, I will try to see if I could find
-anything there.
+diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
+index 4d55f0e52..514951f97 100644
+--- a/arch/powerpc/kernel/module_64.c
++++ b/arch/powerpc/kernel/module_64.c
+@@ -782,7 +782,7 @@ void clear_relocate_add(Elf64_Shdr *sechdrs,
+ 			continue;
+ 
+ 		instruction += 1;
+-		patch_instruction(instruction, PPC_RAW_NOP());
++		patch_instruction(instruction, ppc_inst(PPC_RAW_NOP()));
+ 	}
+ 
+ }
 
-> If you don't understand the code
-> well enough to do that, please contact Imagination; I don't support
-> their driver.
-Will try to contact the maintainer of the PVR source, but as you could guess,
-it might take quite a long time before it's fixed in the perfect way,
-and before that
-I need to have the build continue even with various workarounds based
-on my limited undersanding:(
+And with that tweak, new result:
 
-Thanks again for all the kind help and suggestions!
+ ppc64le : pass
 
+Tested-by: Joe Lawrence <joe.lawrence@redhat.com> # x86_64, s390x, ppc64le
 
--- 
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+Thanks guys,
+
+-- Joe
+
+>         }
+> 
+>  }
+> diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
+> index d22b36b84b4b..958e6da7f475 100644
+> --- a/include/linux/moduleloader.h
+> +++ b/include/linux/moduleloader.h
+> @@ -73,7 +73,7 @@ int apply_relocate_add(Elf_Shdr *sechdrs,
+>                        unsigned int relsec,
+>                        struct module *mod);
+>  #ifdef CONFIG_LIVEPATCH
+> -void clear_relocate_add(Elf64_Shdr *sechdrs,
+> +void clear_relocate_add(Elf_Shdr *sechdrs,
+>                    const char *strtab,
+>                    unsigned int symindex,
+>                    unsigned int relsec,
+> 
+

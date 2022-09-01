@@ -2,250 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED4595AA1E0
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D64F5AA1E9
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:02:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233652AbiIAWBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36974 "EHLO
+        id S234235AbiIAWCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:02:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232731AbiIAWBr (ORCPT
+        with ESMTP id S229514AbiIAWCg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:01:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570B04BA71;
-        Thu,  1 Sep 2022 15:01:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E0C35B82962;
-        Thu,  1 Sep 2022 22:01:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29C69C433D6;
-        Thu,  1 Sep 2022 22:01:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662069702;
-        bh=5J2fZaY2SZYVV/qA8tQvMcVyQP2JhpvBw27qwVceS8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mxn3dWKzcR6Qr5530izk0wFMLq05/qVM71vPJqle5+XlMHRqK2r00BKauhLXe8OmB
-         R0xwlZ+tUF4SURCgOcM4swTD3Gqo/MGat5thqmIte3i07UxCa5cjkekAhukgH7FoLD
-         FWVD196/JEKCBou1Py3n61DbSkgC3JRF0LXqj0Od7MTv4nrYte1uI0gSCWly81KuWo
-         7FNzjNMNwX79qPfzV0HOM5wZ7BewYrrSnsb+0IFKAGe6iyyzKurU1R9AN8QUHrbt5i
-         Oyt/vKOWpccRP2SgEPKbNsWZE83M4Rk+wz6GXOlYtRaflyRtcqY/BC8RUnbanbLvhw
-         RZn1L1JhiO/JA==
-Date:   Fri, 2 Sep 2022 01:01:36 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     linux-sgx@vger.kernel.org,
-        Haitao Huang <haitao.huang@linux.intel.com>,
-        Vijay Dhanraj <vijay.dhanraj@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Paul Menzel <pmenzel@molgen.mpg.de>, stable@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" 
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] x86/sgx: Do not consider unsanitized pages an
- error
-Message-ID: <YxErwGYfY5JI+/Ex@kernel.org>
-References: <20220831173829.126661-1-jarkko@kernel.org>
- <20220831173829.126661-3-jarkko@kernel.org>
- <24906e57-461f-6c94-9e78-0d8507df01bb@intel.com>
- <YxEp8Ji+ukLBoNE+@kernel.org>
- <YxEqj8/+VXlaIT4m@kernel.org>
+        Thu, 1 Sep 2022 18:02:36 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C4C4F671;
+        Thu,  1 Sep 2022 15:02:34 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id 199so132502pfz.2;
+        Thu, 01 Sep 2022 15:02:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date;
+        bh=9AhdqT0NnU3T2Py6z8gOWa0P0fDVhbOVg/CkZAFmw8w=;
+        b=qqKY9adEs9TgtJmoU7MkA9KxJfs/ZTmfIPOpeAs+A4H8hVlDwQBSv2Jq3kNi9lgE6S
+         8sJ+rYnWCFvuUeYVIPMMc2exsm8WDRdpvjl5fwAEJA+hLvjFfZAtjhOJ0rUOJchnBc56
+         yhvalmUSmzK+izTbVuCqRNjA9nDlcTXylDL3VZlcV3KVFQb7Jua/oZo7BYKQbAaqTLSA
+         0nn5TAj8h81O2WRfodLf6sJyeFFan770SoHigA/s/3I6JiZR3jJOqLuh3a2ws+xWJr7A
+         6uzZs0H1SnSL3lrVxw1n/ypvvcF4KXV5Qs7Kr5OM5r1RoP7UiydsApsG1GNd8TC+k7RW
+         PKfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date;
+        bh=9AhdqT0NnU3T2Py6z8gOWa0P0fDVhbOVg/CkZAFmw8w=;
+        b=QF/DzVmKPZNh5CB1h/b8WlvrfHZPacKN9riz39uu/fbixL5LcJq4SsmR52S0DdAbxI
+         OFdUjqYVtRtojVcOH5l9eakJ4ve7o6aPSpOEIGlwgc5ogYyGjjs9cksVY7y7w7LcWXfA
+         3ttwghzazfUK2c1C6nwiXqQ+iHaRLmhAer5Zj0ie0v4UZfY9OdyoN8VLHbl+JsDbfMfF
+         nZ+N9YOTRAX2kvzLf6vpSONBkvybPrZjfZ6fyubjvyN5DJBTAgqhdSMLm65O1Ok/6cf4
+         bEe/rsRt3NUgS/oluk+NgajGxPnzsCeH+sFer3h3tKiM/Vwca53j0lC9FcRFMVLpSTP6
+         NBvg==
+X-Gm-Message-State: ACgBeo1SxaUqbNRRD8clAlUZtgNhqhT53fRkChLv2q/6AD/d9x5ydY7b
+        ZHOyqpNdtZecNkjJOe5zZy/GqbG8qtJ+uw==
+X-Google-Smtp-Source: AA6agR4DbAW2WPj9nw69+I1LEgmTLkTdrd7+Xqwg+w+CQfOQH0TJG5g4HJoQPF72jeEeLW1NipGm9A==
+X-Received: by 2002:a65:6d89:0:b0:421:94bc:cb89 with SMTP id bc9-20020a656d89000000b0042194bccb89mr27551314pgb.129.1662069754081;
+        Thu, 01 Sep 2022 15:02:34 -0700 (PDT)
+Received: from vmfolio.. (c-73-189-111-8.hsd1.ca.comcast.net. [73.189.111.8])
+        by smtp.googlemail.com with ESMTPSA id fv4-20020a17090b0e8400b001fb350026f1sm128894pjb.4.2022.09.01.15.02.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 15:02:33 -0700 (PDT)
+From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To:     linux-fsdevel@vger.kernel.org
+Cc:     linux-afs@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-cifs@vger.kernel.org, linux-ext4@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, cluster-devel@redhat.com,
+        linux-nilfs@vger.kernel.org, linux-mm@kvack.org,
+        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: [PATCH 00/23] Convert to filemap_get_folios_tag()
+Date:   Thu,  1 Sep 2022 15:01:15 -0700
+Message-Id: <20220901220138.182896-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxEqj8/+VXlaIT4m@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Sep 02, 2022 at 12:56:34AM +0300, Jarkko Sakkinen wrote:
-> On Fri, Sep 02, 2022 at 12:53:55AM +0300, Jarkko Sakkinen wrote:
-> > On Wed, Aug 31, 2022 at 01:39:53PM -0700, Reinette Chatre wrote:
-> > > Hi Jarkko,
-> > > 
-> > > On 8/31/2022 10:38 AM, Jarkko Sakkinen wrote:
-> > > > In sgx_init(), if misc_register() fails or misc_register() succeeds but
-> > > > neither sgx_drv_init() nor sgx_vepc_init() succeeds, then ksgxd will be
-> > > > prematurely stopped. This may leave some unsanitized pages, which does
-> > > > not matter, because SGX will be disabled for the whole power cycle.
-> > > > 
-> > > > This triggers WARN_ON() because sgx_dirty_page_list ends up being
-> > > > non-empty, and dumps the call stack:
-> > > > 
-> > > > [    0.268103] sgx: EPC section 0x40200000-0x45f7ffff
-> > > > [    0.268591] ------------[ cut here ]------------
-> > > > [    0.268592] WARNING: CPU: 6 PID: 83 at
-> > > > arch/x86/kernel/cpu/sgx/main.c:401 ksgxd+0x1b7/0x1d0
-> > > > [    0.268598] Modules linked in:
-> > > > [    0.268600] CPU: 6 PID: 83 Comm: ksgxd Not tainted 6.0.0-rc2 #382
-> > > > [    0.268603] Hardware name: Dell Inc. XPS 13 9370/0RMYH9, BIOS 1.21.0
-> > > > 07/06/2022
-> > > > [    0.268604] RIP: 0010:ksgxd+0x1b7/0x1d0
-> > > > [    0.268607] Code: ff e9 f2 fe ff ff 48 89 df e8 75 07 0e 00 84 c0 0f
-> > > > 84 c3 fe ff ff 31 ff e8 e6 07 0e 00 84 c0 0f 85 94 fe ff ff e9 af fe ff
-> > > > ff <0f> 0b e9 7f fe ff ff e8 dd 9c 95 00 66 66 2e 0f 1f 84 00 00 00 00
-> > > > [    0.268608] RSP: 0000:ffffb6c7404f3ed8 EFLAGS: 00010287
-> > > > [    0.268610] RAX: ffffb6c740431a10 RBX: ffff8dcd8117b400 RCX:
-> > > > 0000000000000000
-> > > > [    0.268612] RDX: 0000000080000000 RSI: ffffb6c7404319d0 RDI:
-> > > > 00000000ffffffff
-> > > > [    0.268613] RBP: ffff8dcd820a4d80 R08: ffff8dcd820a4180 R09:
-> > > > ffff8dcd820a4180
-> > > > [    0.268614] R10: 0000000000000000 R11: 0000000000000006 R12:
-> > > > ffffb6c74006bce0
-> > > > [    0.268615] R13: ffff8dcd80e63880 R14: ffffffffa8a60f10 R15:
-> > > > 0000000000000000
-> > > > [    0.268616] FS:  0000000000000000(0000) GS:ffff8dcf25580000(0000)
-> > > > knlGS:0000000000000000
-> > > > [    0.268617] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > [    0.268619] CR2: 0000000000000000 CR3: 0000000213410001 CR4:
-> > > > 00000000003706e0
-> > > > [    0.268620] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
-> > > > 0000000000000000
-> > > > [    0.268621] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7:
-> > > > 0000000000000400
-> > > > [    0.268622] Call Trace:
-> > > > [    0.268624]  <TASK>
-> > > > [    0.268627]  ? _raw_spin_lock_irqsave+0x24/0x60
-> > > > [    0.268632]  ? _raw_spin_unlock_irqrestore+0x23/0x40
-> > > > [    0.268634]  ? __kthread_parkme+0x36/0x90
-> > > > [    0.268637]  kthread+0xe5/0x110
-> > > > [    0.268639]  ? kthread_complete_and_exit+0x20/0x20
-> > > > [    0.268642]  ret_from_fork+0x1f/0x30
-> > > > [    0.268647]  </TASK>
-> > > > [    0.268648] ---[ end trace 0000000000000000 ]---
-> > > > 
-> > > 
-> > > Are you still planning to trim this?
-> > > 
-> > > > Ultimately this can crash the kernel, if the following is set:
-> > > > 
-> > > > 	/proc/sys/kernel/panic_on_warn
-> > > > 
-> > > > In premature stop, print nothing, as the number is by practical means a
-> > > > random number. Otherwise, it is an indicator of a bug in the driver, and
-> > > > therefore print the number of unsanitized pages with pr_err().
-> > > 
-> > > I think that "print the number of unsanitized pages with pr_err()" 
-> > > contradicts the patch subject of "Do not consider unsanitized pages
-> > > an error".
-> > > 
-> > > ...
-> > > 
-> > > > @@ -388,17 +393,40 @@ void sgx_reclaim_direct(void)
-> > > >  
-> > > >  static int ksgxd(void *p)
-> > > >  {
-> > > > +	long ret;
-> > > > +
-> > > >  	set_freezable();
-> > > >  
-> > > >  	/*
-> > > >  	 * Sanitize pages in order to recover from kexec(). The 2nd pass is
-> > > >  	 * required for SECS pages, whose child pages blocked EREMOVE.
-> > > >  	 */
-> > > > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > > +	ret = __sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > > +	if (ret == -ECANCELED)
-> > > > +		/* kthread stopped */
-> > > > +		return 0;
-> > > >  
-> > > > -	/* sanity check: */
-> > > > -	WARN_ON(!list_empty(&sgx_dirty_page_list));
-> > > > +	ret = __sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > > +	switch (ret) {
-> > > > +	case 0:
-> > > > +		/* success, no unsanitized pages */
-> > > > +		break;
-> > > > +
-> > > > +	case -ECANCELED:
-> > > > +		/* kthread stopped */
-> > > > +		return 0;
-> > > > +
-> > > > +	default:
-> > > > +		/*
-> > > > +		 * Never expected to happen in a working driver. If it happens
-> > > > +		 * the bug is expected to be in the sanitization process, but
-> > > > +		 * successfully sanitized pages are still valid and driver can
-> > > > +		 * be used and most importantly debugged without issues. To put
-> > > > +		 * short, the global state of kernel is not corrupted so no
-> > > > +		 * reason to do any more complicated rollback.
-> > > > +		 */
-> > > > +		pr_err("%ld unsanitized pages\n", ret);
-> > > > +	}
-> > > >  
-> > > >  	while (!kthread_should_stop()) {
-> > > >  		if (try_to_freeze())
-> > > 
-> > > 
-> > > I think I am missing something here. A lot of logic is added here but I
-> > > do not see why it is necessary.  ksgxd() knows via kthread_should_stop() if
-> > > the reclaimer was canceled. I am thus wondering, could the above not be
-> > > simplified to something similar to V1:
-> > > 
-> > > @@ -388,6 +393,8 @@ void sgx_reclaim_direct(void)
-> > >  
-> > >  static int ksgxd(void *p)
-> > >  {
-> > > +	unsigned long left_dirty;
-> > > +
-> > >  	set_freezable();
-> > >  
-> > >  	/*
-> > > @@ -395,10 +402,10 @@ static int ksgxd(void *p)
-> > >  	 * required for SECS pages, whose child pages blocked EREMOVE.
-> > >  	 */
-> > >  	__sgx_sanitize_pages(&sgx_dirty_page_list);
-> > 
-> > IMHO, would make sense also to have here:
-> > 
-> >         if (!kthread_should_stop())
-> >                 return 0;
-> > 
-> > > -	__sgx_sanitize_pages(&sgx_dirty_page_list);
-> > >  
-> > > -	/* sanity check: */
-> > > -	WARN_ON(!list_empty(&sgx_dirty_page_list));
-> > > +	left_dirty = __sgx_sanitize_pages(&sgx_dirty_page_list);
-> > > +	if (left_dirty && !kthread_should_stop())
-> > > +		pr_err("%lu unsanitized pages\n", left_dirty);
-> > 
-> > That would be incorrect, if the function returned
-> > because of kthread stopped.
-> > 
-> > If you do the check here you already have a window
-> > where kthread could have been stopped anyhow.
-> > 
-> > So even this would be less correct:
-> > 
-> >         if (kthreas_should_stop()) {
-> >                 return 0;
-> >         }  else if (left_dirty) {
-> >                 pr_err("%lu unsanitized pages\n", left_dirty);
-> >         }
-> > 
-> > So in the end you end as complicated and less correct
-> > fix. This all is explained in the commit message.
-> > 
-> > If you unconditionally print error, you don't have
-> > a meaning for the number of unsanitized pags.
-> 
-> If you add my long comment explaining the error case, the SLOC
-> size is almost the same. That takes most space in my patch.
+This patch series replaces find_get_pages_range_tag() with
+filemap_get_folios_tag(). This also allows the removal of multiple
+calls to compound_head() throughout.
+It also makes a good chunk of the straightforward conversions to folios,
+and takes the opportunity to introduce a function that grabs a folio
+from the pagecache.
 
-Printing pages if the thread was stopped is just making
-the bug look different and have less output, it does not
-fix anything, except prevent kernel panic.
+F2fs and Ceph have quite alot of work to be done regarding folios, so
+for now those patches only have the changes necessary for the removal of
+find_get_pages_range_tag(), and only support folios of size 1 (which is
+all they use right now anyways).
 
-BR, Jarkko
+I've run xfstests on btrfs, ext4, f2fs, and nilfs2, but more testing may be
+beneficial. The page-writeback and filemap changes implicitly work. Testing
+and review of the other changes (afs, ceph, cifs, gfs2) would be appreciated.
+
+Vishal Moola (Oracle) (23):
+  pagemap: Add filemap_grab_folio()
+  filemap: Added filemap_get_folios_tag()
+  filemap: Convert __filemap_fdatawait_range() to use
+    filemap_get_folios_tag()
+  page-writeback: Convert write_cache_pages() to use
+    filemap_get_folios_tag()
+  afs: Convert afs_writepages_region() to use filemap_get_folios_tag()
+  btrfs: Convert btree_write_cache_pages() to use
+    filemap_get_folio_tag()
+  btrfs: Convert extent_write_cache_pages() to use
+    filemap_get_folios_tag()
+  ceph: Convert ceph_writepages_start() to use filemap_get_folios_tag()
+  cifs: Convert wdata_alloc_and_fillpages() to use
+    filemap_get_folios_tag()
+  ext4: Convert mpage_prepare_extent_to_map() to use
+    filemap_get_folios_tag()
+  f2fs: Convert f2fs_fsync_node_pages() to use filemap_get_folios_tag()
+  f2fs: Convert f2fs_flush_inline_data() to use filemap_get_folios_tag()
+  f2fs: Convert f2fs_sync_node_pages() to use filemap_get_folios_tag()
+  f2fs: Convert f2fs_write_cache_pages() to use filemap_get_folios_tag()
+  f2fs: Convert last_fsync_dnode() to use filemap_get_folios_tag()
+  f2fs: Convert f2fs_sync_meta_pages() to use filemap_get_folios_tag()
+  gfs2: Convert gfs2_write_cache_jdata() to use filemap_get_folios_tag()
+  nilfs2: Convert nilfs_lookup_dirty_data_buffers() to use
+    filemap_get_folios_tag()
+  nilfs2: Convert nilfs_lookup_dirty_node_buffers() to use
+    filemap_get_folios_tag()
+  nilfs2: Convert nilfs_btree_lookup_dirty_buffers() to use
+    filemap_get_folios_tag()
+  nilfs2: Convert nilfs_copy_dirty_pages() to use
+    filemap_get_folios_tag()
+  nilfs2: Convert nilfs_clear_dirty_pages() to use
+    filemap_get_folios_tag()
+  filemap: Remove find_get_pages_range_tag()
+
+ fs/afs/write.c          | 114 +++++++++++++++++----------------
+ fs/btrfs/extent_io.c    |  57 +++++++++--------
+ fs/ceph/addr.c          | 138 ++++++++++++++++++++--------------------
+ fs/cifs/file.c          |  33 +++++++++-
+ fs/ext4/inode.c         |  55 ++++++++--------
+ fs/f2fs/checkpoint.c    |  49 +++++++-------
+ fs/f2fs/compress.c      |  13 ++--
+ fs/f2fs/data.c          |  67 ++++++++++---------
+ fs/f2fs/f2fs.h          |   5 +-
+ fs/f2fs/node.c          |  72 +++++++++++----------
+ fs/gfs2/aops.c          |  64 ++++++++++---------
+ fs/nilfs2/btree.c       |  14 ++--
+ fs/nilfs2/page.c        |  59 ++++++++---------
+ fs/nilfs2/segment.c     |  44 +++++++------
+ include/linux/pagemap.h |  32 +++++++---
+ include/linux/pagevec.h |   8 ---
+ mm/filemap.c            |  87 ++++++++++++-------------
+ mm/page-writeback.c     |  44 +++++++------
+ mm/swap.c               |  10 ---
+ 19 files changed, 506 insertions(+), 459 deletions(-)
+
+-- 
+2.36.1
+

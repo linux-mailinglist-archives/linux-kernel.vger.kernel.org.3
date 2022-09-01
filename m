@@ -2,61 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0046B5A8E68
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:41:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD0F5A8E7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:45:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232868AbiIAGl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44082 "EHLO
+        id S232445AbiIAGpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233019AbiIAGlO (ORCPT
+        with ESMTP id S229679AbiIAGpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:41:14 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B0C286FC;
-        Wed, 31 Aug 2022 23:40:02 -0700 (PDT)
+        Thu, 1 Sep 2022 02:45:15 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F2C865642
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:45:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1662014403; x=1693550403;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=NX1eyNaQr4+ALgShy2RcwVdH16jqwIgGKyV7rd+hiNk=;
-  b=rG/rfvdblFDzymQVjB1oykCAJEsdayRI/XLP8n/9hddtSKvOaI3umMbE
-   +ufL1p9IH9tvvgyD/02XInijuPvniiWEdLMArMLjfZe0MNhJGst1fOqjI
-   RdvDBYsxaLbaifYLa+9YRJUnYz9TXAZ+8kLDB3JtmYLH+BA50sJ2J3Sah
-   WWD8b+MM+FD4qii1PiJvzcF6tdVpdZMKCbrFEa+8QtCxtGVgwfXnff8BG
-   4ZyymrHoaSD0YlMCZvEodmaqUmrW/BI3A/AQVlcqf3XVPH3+407V3RZGs
-   enXKszopJOuxLUBGxqZBK3gryO9wm8KkJ60pSUI7f6/KI3Dn3Dfr1ELM/
-   w==;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662014714; x=1693550714;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=hNxVVK32D6iCwH0/rf/rQNVbgNj+5447bH9KuDWgOqE=;
+  b=jJwqmZH8UQwA6XK+S7wqp50UCzk79ffgbYNzCyfkCVmX96TIIOawolB/
+   Pl3uq2fpF2iGXSefZPuGUv7PXfVShCjhi++3Pa/mpZDj1WOfMIWwFUXYV
+   XvCXv4JOK0MRQ3RZY2gqyXKG8xFTTAY25WJUJyZBFgmy+IhqXYTAKw3Hi
+   z2ZcJq8emh8awNdkrSSzEREDDVtbqNNtBxbKz6Ev+IeXzdM8Gk0srTbPF
+   WM/3/Manz3954bA+EZEdASdjBYZ7wVk96IVa2Yd9EVnMM8vDacgBbtjoJ
+   Z3FjSH6Pv1P5x6tzf4Y7LrqM4Yf69RQOKBp4IcPhoRXzgBp97AogoPh/J
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="357348973"
 X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="188943927"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 31 Aug 2022 23:40:02 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 31 Aug 2022 23:40:01 -0700
-Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 31 Aug 2022 23:40:00 -0700
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <srinivas.kandagatla@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <UNGLinuxDriver@microchip.com>,
-        "Horatiu Vultur" <horatiu.vultur@microchip.com>
-Subject: [PATCH v4 2/2] nvmem: lan9662-otp: add support.
-Date:   Thu, 1 Sep 2022 08:44:05 +0200
-Message-ID: <20220901064405.149611-3-horatiu.vultur@microchip.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20220901064405.149611-1-horatiu.vultur@microchip.com>
-References: <20220901064405.149611-1-horatiu.vultur@microchip.com>
+   d="scan'208";a="357348973"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 23:45:10 -0700
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="615226088"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 23:45:04 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com,
+        Bharata B Rao <bharata@amd.com>
+Subject: Re: [PATCH mm-unstable] mm/demotion: Assign correct memory type for
+ multiple dax devices with the same node affinity
+References: <20220826100224.542312-1-aneesh.kumar@linux.ibm.com>
+        <87a67j1uyk.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <c484fb58-6bc2-1103-a95d-1587232f56ba@linux.ibm.com>
+Date:   Thu, 01 Sep 2022 14:45:02 +0800
+In-Reply-To: <c484fb58-6bc2-1103-a95d-1587232f56ba@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Thu, 1 Sep 2022 11:54:42 +0530")
+Message-ID: <87y1v3zj81.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=ascii
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,279 +74,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for OTP controller available on LAN9662. The OTPC controls
-the access to a non-volatile memory. The size of the memory is 8KB.
-The OTPC can access the memory based on an offset.
-Implement both the read and the write functionality.
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
 
-Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
----
- drivers/nvmem/Kconfig        |   8 ++
- drivers/nvmem/Makefile       |   2 +
- drivers/nvmem/lan9662-otpc.c | 222 +++++++++++++++++++++++++++++++++++
- 3 files changed, 232 insertions(+)
- create mode 100644 drivers/nvmem/lan9662-otpc.c
+> On 9/1/22 11:45 AM, Huang, Ying wrote:
+>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>> 
+>>> With multiple dax devices having the same node affinity, the kernel wrongly assigned
+>>> default_dram memory type to some devices after the memory hotplug operation. Fix this by
+>>> not clearing node_memory_types on the dax device remove.
+>> 
+>> Sorry for late reply.
+>> 
+>> Just for confirmation.  There are multiple dax devices in one NUMA node?
+>> 
+>> If you can show the bug reproducing steps, that will make it even easier
+>> to understand.
+>> 
+>
+> NUMA nodes are assigned per region and you can have multiple devdax namespace with same NUMA node affinity. 
 
-diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
-index 967d0084800e..9399445a2f4c 100644
---- a/drivers/nvmem/Kconfig
-+++ b/drivers/nvmem/Kconfig
-@@ -84,6 +84,14 @@ config NVMEM_LPC18XX_OTP
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called nvmem_lpc18xx_otp.
- 
-+config NVMEM_LAN9662_OTPC
-+	tristate "Microchip LAN9662 OTP controller support"
-+	depends on SOC_LAN966 || COMPILE_TEST
-+	depends on HAS_IOMEM
-+	help
-+	  This driver enables the OTP controller available on Microchip LAN9662
-+	  SoCs. It controls the access to the OTP memory connected to it.
-+
- config NVMEM_MXS_OCOTP
- 	tristate "Freescale MXS On-Chip OTP Memory Support"
- 	depends on ARCH_MXS || COMPILE_TEST
-diff --git a/drivers/nvmem/Makefile b/drivers/nvmem/Makefile
-index 00e136a0a123..e1baface2c53 100644
---- a/drivers/nvmem/Makefile
-+++ b/drivers/nvmem/Makefile
-@@ -21,6 +21,8 @@ obj-$(CONFIG_NVMEM_LPC18XX_EEPROM)	+= nvmem_lpc18xx_eeprom.o
- nvmem_lpc18xx_eeprom-y	:= lpc18xx_eeprom.o
- obj-$(CONFIG_NVMEM_LPC18XX_OTP)	+= nvmem_lpc18xx_otp.o
- nvmem_lpc18xx_otp-y		:= lpc18xx_otp.o
-+obj-$(CONFIG_NVMEM_LAN9662_OTPC)	+= nvmem-lan9662-otpc.o
-+nvmem-lan9662-otpc-y		:= lan9662-otpc.o
- obj-$(CONFIG_NVMEM_MXS_OCOTP)	+= nvmem-mxs-ocotp.o
- nvmem-mxs-ocotp-y		:= mxs-ocotp.o
- obj-$(CONFIG_NVMEM_NINTENDO_OTP)	+= nvmem-nintendo-otp.o
-diff --git a/drivers/nvmem/lan9662-otpc.c b/drivers/nvmem/lan9662-otpc.c
-new file mode 100644
-index 000000000000..f6732fd216d8
---- /dev/null
-+++ b/drivers/nvmem/lan9662-otpc.c
-@@ -0,0 +1,222 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <linux/iopoll.h>
-+#include <linux/module.h>
-+#include <linux/nvmem-provider.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+
-+#define OTP_OTP_PWR_DN(t)			(t + 0x00)
-+#define OTP_OTP_PWR_DN_OTP_PWRDN_N		BIT(0)
-+#define OTP_OTP_ADDR_HI(t)			(t + 0x04)
-+#define OTP_OTP_ADDR_LO(t)			(t + 0x08)
-+#define OTP_OTP_PRGM_DATA(t)			(t + 0x10)
-+#define OTP_OTP_PRGM_MODE(t)			(t + 0x14)
-+#define OTP_OTP_PRGM_MODE_OTP_PGM_MODE_BYTE	BIT(0)
-+#define OTP_OTP_RD_DATA(t)			(t + 0x18)
-+#define OTP_OTP_FUNC_CMD(t)			(t + 0x20)
-+#define OTP_OTP_FUNC_CMD_OTP_PROGRAM		BIT(1)
-+#define OTP_OTP_FUNC_CMD_OTP_READ		BIT(0)
-+#define OTP_OTP_CMD_GO(t)			(t + 0x28)
-+#define OTP_OTP_CMD_GO_OTP_GO			BIT(0)
-+#define OTP_OTP_PASS_FAIL(t)			(t + 0x2c)
-+#define OTP_OTP_PASS_FAIL_OTP_READ_PROHIBITED	BIT(3)
-+#define OTP_OTP_PASS_FAIL_OTP_WRITE_PROHIBITED	BIT(2)
-+#define OTP_OTP_PASS_FAIL_OTP_FAIL		BIT(0)
-+#define OTP_OTP_STATUS(t)			(t + 0x30)
-+#define OTP_OTP_STATUS_OTP_CPUMPEN		BIT(1)
-+#define OTP_OTP_STATUS_OTP_BUSY			BIT(0)
-+
-+#define OTP_MEM_SIZE 8192
-+#define OTP_SLEEP_US 10
-+#define OTP_TIMEOUT_US 500000
-+
-+struct lan9662_otp {
-+	struct device *dev;
-+	void __iomem *base;
-+};
-+
-+static bool lan9662_otp_wait_flag_clear(void __iomem *reg, u32 flag)
-+{
-+	u32 val;
-+
-+	return readl_poll_timeout(reg, val, !(val & flag),
-+				  OTP_SLEEP_US, OTP_TIMEOUT_US);
-+}
-+
-+static int lan9662_otp_power(struct lan9662_otp *otp, bool up)
-+{
-+	void __iomem *pwrdn = OTP_OTP_PWR_DN(otp->base);
-+
-+	if (up) {
-+		writel(readl(pwrdn) & ~OTP_OTP_PWR_DN_OTP_PWRDN_N, pwrdn);
-+		if (lan9662_otp_wait_flag_clear(OTP_OTP_STATUS(otp->base),
-+						OTP_OTP_STATUS_OTP_CPUMPEN))
-+			return -ETIMEDOUT;
-+	} else {
-+		writel(readl(pwrdn) | OTP_OTP_PWR_DN_OTP_PWRDN_N, pwrdn);
-+	}
-+
-+	return 0;
-+}
-+
-+static int lan9662_otp_execute(struct lan9662_otp *otp)
-+{
-+	if (lan9662_otp_wait_flag_clear(OTP_OTP_CMD_GO(otp->base),
-+					OTP_OTP_CMD_GO_OTP_GO))
-+		return -ETIMEDOUT;
-+
-+	if (lan9662_otp_wait_flag_clear(OTP_OTP_STATUS(otp->base),
-+					OTP_OTP_STATUS_OTP_BUSY))
-+		return -ETIMEDOUT;
-+
-+	return 0;
-+}
-+
-+static void lan9662_otp_set_address(struct lan9662_otp *otp, u32 offset)
-+{
-+	writel(0xff & (offset >> 8), OTP_OTP_ADDR_HI(otp->base));
-+	writel(0xff & offset, OTP_OTP_ADDR_LO(otp->base));
-+}
-+
-+static int lan9662_otp_read_byte(struct lan9662_otp *otp, u32 offset, u8 *dst)
-+{
-+	u32 pass;
-+	int rc;
-+
-+	lan9662_otp_set_address(otp, offset);
-+	writel(OTP_OTP_FUNC_CMD_OTP_READ, OTP_OTP_FUNC_CMD(otp->base));
-+	writel(OTP_OTP_CMD_GO_OTP_GO, OTP_OTP_CMD_GO(otp->base));
-+	rc = lan9662_otp_execute(otp);
-+	if (!rc) {
-+		pass = readl(OTP_OTP_PASS_FAIL(otp->base));
-+		if (pass & OTP_OTP_PASS_FAIL_OTP_READ_PROHIBITED)
-+			return -EACCES;
-+		*dst = (u8) readl(OTP_OTP_RD_DATA(otp->base));
-+	}
-+	return rc;
-+}
-+
-+static int lan9662_otp_write_byte(struct lan9662_otp *otp, u32 offset, u8 data)
-+{
-+	u32 pass;
-+	int rc;
-+
-+	lan9662_otp_set_address(otp, offset);
-+	writel(OTP_OTP_PRGM_MODE_OTP_PGM_MODE_BYTE, OTP_OTP_PRGM_MODE(otp->base));
-+	writel(data, OTP_OTP_PRGM_DATA(otp->base));
-+	writel(OTP_OTP_FUNC_CMD_OTP_PROGRAM, OTP_OTP_FUNC_CMD(otp->base));
-+	writel(OTP_OTP_CMD_GO_OTP_GO, OTP_OTP_CMD_GO(otp->base));
-+
-+	rc = lan9662_otp_execute(otp);
-+	if (!rc) {
-+		pass = readl(OTP_OTP_PASS_FAIL(otp->base));
-+		if (pass & OTP_OTP_PASS_FAIL_OTP_WRITE_PROHIBITED)
-+			return -EACCES;
-+		if (pass & OTP_OTP_PASS_FAIL_OTP_FAIL)
-+			return -EIO;
-+	}
-+	return rc;
-+}
-+
-+static int lan9662_otp_read(void *context, unsigned int offset,
-+			    void *_val, size_t bytes)
-+{
-+	struct lan9662_otp *otp = context;
-+	u8 *val = _val;
-+	uint8_t data;
-+	int i, rc = 0;
-+
-+	lan9662_otp_power(otp, true);
-+	for (i = 0; i < bytes; i++) {
-+		rc = lan9662_otp_read_byte(otp, offset + i, &data);
-+		if (rc < 0)
-+			break;
-+		*val++ = data;
-+	}
-+	lan9662_otp_power(otp, false);
-+
-+	return rc;
-+}
-+
-+static int lan9662_otp_write(void *context, unsigned int offset,
-+			     void *_val, size_t bytes)
-+{
-+	struct lan9662_otp *otp = context;
-+	u8 *val = _val;
-+	u8 data, newdata;
-+	int i, rc = 0;
-+
-+	lan9662_otp_power(otp, true);
-+	for (i = 0; i < bytes; i++) {
-+		/* Skip zero bytes */
-+		if (val[i]) {
-+			rc = lan9662_otp_read_byte(otp, offset + i, &data);
-+			if (rc < 0)
-+				break;
-+
-+			newdata = data | val[i];
-+			if (newdata == data)
-+				continue;
-+
-+			rc = lan9662_otp_write_byte(otp, offset + i,
-+						      newdata);
-+			if (rc < 0)
-+				break;
-+		}
-+	}
-+	lan9662_otp_power(otp, false);
-+
-+	return rc;
-+}
-+
-+static struct nvmem_config otp_config = {
-+	.name = "lan9662-otp",
-+	.stride = 1,
-+	.word_size = 1,
-+	.reg_read = lan9662_otp_read,
-+	.reg_write = lan9662_otp_write,
-+	.size = OTP_MEM_SIZE,
-+};
-+
-+static int lan9662_otp_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	struct nvmem_device *nvmem;
-+	struct lan9662_otp *otp;
-+
-+	otp = devm_kzalloc(&pdev->dev, sizeof(*otp), GFP_KERNEL);
-+	if (!otp)
-+		return -ENOMEM;
-+
-+	otp->dev = dev;
-+	otp->base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(otp->base))
-+		return PTR_ERR(otp->base);
-+
-+	otp_config.priv = otp;
-+	otp_config.dev = dev;
-+
-+	nvmem = devm_nvmem_register(dev, &otp_config);
-+
-+	return PTR_ERR_OR_ZERO(nvmem);
-+}
-+
-+static const struct of_device_id lan9662_otp_match[] = {
-+	{ .compatible = "microchip,lan9662-otp", },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, lan9662_otp_match);
-+
-+static struct platform_driver lan9662_otp_driver = {
-+	.probe = lan9662_otp_probe,
-+	.driver = {
-+		.name = "lan9662-otp",
-+		.of_match_table = lan9662_otp_match,
-+	},
-+};
-+module_platform_driver(lan9662_otp_driver);
-+
-+MODULE_AUTHOR("Horatiu Vultur <horatiu.vultur@microchip.com>");
-+MODULE_DESCRIPTION("lan9662 OTP driver");
-+MODULE_LICENSE("GPL");
--- 
-2.33.0
+I think that the patch description will be clearer if we added the above
+line into it.
 
+> dax0.1 and dax0.2 are examples. To recreate you can follow the below steps
+>
+>
+> root@ubuntu-guest:/sys/devices/system/node/node3# ls
+> compact  cpumap    meminfo   memory34  memory36  memory38  memory41  memory43  memory45  memory47  memory50  memory52  memory54  numastat   uevent
+> cpulist  distance  memory33  memory35  memory37  memory39  memory42  memory44  memory46  memory49  memory51  memory53  memory55  subsystem  vmstat
+> root@ubuntu-guest:/sys/devices/system/node/node3#
+> root@ubuntu-guest:/sys/devices/system/node/node3# for mem in memory*; do echo 0 > $mem/online; done
+> root@ubuntu-guest:/sys/devices/system/node/node3# cd /sys/bus/dax/drivers
+> root@ubuntu-guest:/sys/bus/dax/drivers# echo dax0.0  > kmem/unbind
+> root@ubuntu-guest:/sys/bus/dax/drivers# cd /sys/devices/system/node/node3/
+> root@ubuntu-guest:/sys/devices/system/node/node3# ls
+> compact  cpumap    meminfo   memory42  memory44  memory46  memory49  memory51  memory53  memory55  subsystem  vmstat
+> cpulist  distance  memory41  memory43  memory45  memory47  memory50  memory52  memory54  numastat  uevent
+> root@ubuntu-guest:/sys/devices/system/node/node3# for mem in memory*; do echo 1 > $mem/online; done
+
+Thanks a lot for detailed information.
+
+Best Regards,
+Huang, Ying

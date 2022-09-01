@@ -2,108 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0635A92AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EA645A92B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:05:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234437AbiIAJFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
+        id S233380AbiIAJFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:05:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234413AbiIAJEU (ORCPT
+        with ESMTP id S234458AbiIAJEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:04:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5362C134D4E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:03:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662022991;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mrKHoCTy/cp62lo3FDhMr8bD3kYn4ot6+m7P8dmXw60=;
-        b=GtPkh9c2Tlxkd+KT5TY5Emqr2cQiyk4MIWSTKKSMKH6/hUBxmpfnQAOEg5WnY2kZmO5q1a
-        NG3VJ0j16nzflSqgsq+yTu14yWshrfRMA2x9IIYo+V7AM23xNbMAaIHP5BkxGTVq+vdY8j
-        Hf/zGvOFyv50H8hTZ9i549/QkrwGS0I=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-5-MYls7W_GMIm_qjTfgPOZWg-1; Thu, 01 Sep 2022 05:03:10 -0400
-X-MC-Unique: MYls7W_GMIm_qjTfgPOZWg-1
-Received: by mail-wm1-f69.google.com with SMTP id r83-20020a1c4456000000b003a7b679981cso968276wma.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 02:03:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=mrKHoCTy/cp62lo3FDhMr8bD3kYn4ot6+m7P8dmXw60=;
-        b=TPmbjHR20uf4oT51jkOyrhYkprBq0mozZQ76/gOILcT7Kwr8/B7w2/ickIKGguxuvA
-         oijgkhAxV6IGZluOx3quSbCPQ742onXLXVCiWeSde5zxwKCuKTWKr/6zOlZCGqsxQJA9
-         HYCQXshxszyBHs6CI3A2weDp0H/5Q0wtF80gdz43nLIqKQS6WwMcj2fR8Jlx46xzR7jt
-         HnYLEOIIy4HyM4HPECvKqRQ5kh271XkPS1qyGt6xu0DwrH7xqCD2YPA3E3yPJXhWq9jx
-         GnLCvlG5+j2lZFXOVvVS5pf2ooBgjlnVqau9Vmz7lv5KA1hU/GP6GQ8EjoTQiLrlo+J+
-         MADg==
-X-Gm-Message-State: ACgBeo0onB3MjY+oURFZmrQsoNBCn/aL1lixO9NhRdJO9xoYWJBK2S00
-        cgbMS1YDjqls01AHVonFj/ghFcLVoUmYEusKGpkrLSO09QkgKIdukrUxgdzNF4U1QKmVdqGsKBw
-        khuK3c5KQxQ0Zu6DMQii/bKxN
-X-Received: by 2002:a05:6000:15c7:b0:226:f1f6:a061 with SMTP id y7-20020a05600015c700b00226f1f6a061mr2160715wry.395.1662022989305;
-        Thu, 01 Sep 2022 02:03:09 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6A195Tuml2HQ1a93DU2zk3JUgL5Enmdh6tJBboweFD9ejBDdn4Dq3In44+Nfh9iP7w/u9dxg==
-X-Received: by 2002:a05:6000:15c7:b0:226:f1f6:a061 with SMTP id y7-20020a05600015c700b00226f1f6a061mr2160702wry.395.1662022989069;
-        Thu, 01 Sep 2022 02:03:09 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:9e00:fec0:7e96:15cb:742? (p200300cbc7079e00fec07e9615cb0742.dip0.t-ipconnect.de. [2003:cb:c707:9e00:fec0:7e96:15cb:742])
-        by smtp.gmail.com with ESMTPSA id q3-20020adff943000000b0021efc75914esm14186300wrr.79.2022.09.01.02.03.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 02:03:08 -0700 (PDT)
-Message-ID: <e20c2f22-5df7-270c-27c4-13af0d3b3904@redhat.com>
-Date:   Thu, 1 Sep 2022 11:03:07 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] mm: hugetlb: eliminate memory-less nodes handling
-Content-Language: en-US
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        mike.kravetz@oracle.com, akpm@linux-foundation.org,
-        osalvador@suse.de, ying.huang@intel.com, rientjes@google.com
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20220901083023.42319-1-songmuchun@bytedance.com>
- <c39c6ed2-4766-71d2-d459-6bb39f09943a@linux.ibm.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <c39c6ed2-4766-71d2-d459-6bb39f09943a@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Sep 2022 05:04:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB5F134D58;
+        Thu,  1 Sep 2022 02:03:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A3F37B824F7;
+        Thu,  1 Sep 2022 09:03:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64527C433D6;
+        Thu,  1 Sep 2022 09:03:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662022999;
+        bh=F8rr54ynDkiAk122+iZ4WVXked8recuKxxS5se5pHy0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=gLmONwx6Kqr0v6S0ElWGrlSZVEVr3Kz12w0vrk2/Ozicvi2zr3W/7kggFpuHzAwlW
+         W0VtkjbZBXNad5Ae9zN9DdRBLe8VQdwG521Eew7lxEbeOdXewgpVu+yh40swwc9eGO
+         kZ0De3giB9QNwL6aPWPtckjlfFWM8Vi/a/CxeZ84UdUyuMGnh/Cil7ckaHfVFhpLF8
+         GBPDBFq38LakBs3Jl1RJbJtqENKlTbIbrOrGZVKKGmvuJi/fGTXDBG1Cp24M9pHTf3
+         m4X2nU/aNbVnddlXP3eAFY9R5ynXreAgYXIxhK1a0w3uHC8DAMjdz+LtY7PuGae4+X
+         i7g8x9yD787dw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oTg6X-007GUo-1Y;
+        Thu, 01 Sep 2022 10:03:17 +0100
+Date:   Thu, 01 Sep 2022 10:03:16 +0100
+Message-ID: <87y1v3v54b.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     "Huang, Kai" <kai.huang@intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v8 003/103] KVM: Refactor CPU compatibility check on module initialization
+In-Reply-To: <YvU+6fdkHaqQiKxp@google.com>
+References: <cover.1659854790.git.isaku.yamahata@intel.com>
+        <4092a37d18f377003c6aebd9ced1280b0536c529.1659854790.git.isaku.yamahata@intel.com>
+        <d36802ee3d96d0fdac00d2c11be341f94a362ef9.camel@intel.com>
+        <YvU+6fdkHaqQiKxp@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, kai.huang@intel.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, isaku.yamahata@intel.com, pbonzini@redhat.com, sagis@google.com, erdemaktas@google.com, isaku.yamahata@gmail.com, will@kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.09.22 11:00, Aneesh Kumar K V wrote:
-> On 9/1/22 2:00 PM, Muchun Song wrote:
->> The memory-notify-based approach aims to handle meory-less nodes, however, it just adds
->> the complexity of code as pointed by David in thread [1].  The handling of memory-less
->> nodes is introduced by commit 4faf8d950ec4 ("hugetlb: handle memory hot-plug events").
->> From its commit message, we cannot find any necessity of handling this case. So, we can
->> simply register/unregister sysfs entries in register_node/unregister_node to simlify the
->> code.
-> 
-> Isn't that hotplug callback added because in hugetlb_register_all_nodes() we register
-> sysfs nodes only for N_MEMORY nodes? 
-> 
+Sean,
 
-Right, that needs adjustment as well.
+On Thu, 11 Aug 2022 18:39:53 +0100,
+Sean Christopherson <seanjc@google.com> wrote:
+> 
+> +Will (for arm crud)
 
+When it comes to KVM/arm64, I'd appreciate if you could Cc me.
+
+> arm64 is also quite evil and circumvents KVM's hardware enabling
+> logic to some extent.  kvm_arch_init() => init_subsystems()
+> unconditionally enables hardware, and for pKVM _leaves_ hardware
+> enabled.  And then hyp_init_cpu_pm_notifier() disables/enables
+> hardware across lower power enter+exit, except if pKVM is enabled.
+> The icing on the cake is "disabling" hardware doesn't even do
+> anything (AFAICT) if the kernel is running at EL2 (which I think is
+> nVHE + not-pKVM?).
+
+In the cases where disabling doesn't do anything (which are the exact
+opposite of the cases you describe), that's because there is
+absolutely *nothing* to do:
+
+- If VHE, the kernel is the bloody hypervisor: disable virtualisation,
+  kill the kernel.
+
+- if pKVM, the kernel is basically a guest, and has no business
+  touching anything at all.
+
+So much the 'evil' behaviour.
+
+	M.
 
 -- 
-Thanks,
-
-David / dhildenb
-
+Without deviation from the norm, progress is not possible.

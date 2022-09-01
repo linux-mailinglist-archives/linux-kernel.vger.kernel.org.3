@@ -2,185 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D0615A9D28
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:32:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E541F5A9D2D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234049AbiIAQcI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:32:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
+        id S235053AbiIAQdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232156AbiIAQcG (ORCPT
+        with ESMTP id S232156AbiIAQdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:32:06 -0400
-Received: from out1.migadu.com (out1.migadu.com [IPv6:2001:41d0:2:863f::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC2D183F13;
-        Thu,  1 Sep 2022 09:32:04 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 12:31:55 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1662049922;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lF0nzK0I3dkKY+VmvooE06KpjT5GF7za7apoY2ziCzA=;
-        b=b+mGQz7e+S8nXflcP/Umq6k8mCFjCcajhS+oAKrOSAu3dWGCTZFUhafPBFCwtky43SVO1A
-        9liE+TRIsb/HqXx3Llx9NtT4cCnU5G225wc5/aVXkK7HBe0kN/DeWe/oPRR6yMuknOrEyX
-        Th1UnEJvMcgJF/T8At8EC/TVB4d1otU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
-        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <20220901163155.sz4dqtubicdvzmsw@moria.home.lan>
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de>
- <20220831155941.q5umplytbx6offku@moria.home.lan>
- <20220901110501.o5rq5yzltomirxiw@suse.de>
+        Thu, 1 Sep 2022 12:33:10 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7721E647C4;
+        Thu,  1 Sep 2022 09:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=5gkmuO+qoqnmDsP41ZiRbkDae1Udt8/Fk8pl8Xm9Hs0=; b=mOsx/k4psgsJL3q6FjjiML9zVe
+        qJ71SG2hugvvrfumPhF5dZZujShfV6qK6vaMaVXOKMOnVglDLQfitdVCYJ+noFk4so4TLGng/SUzQ
+        k+TVmZAgcC3pmjLZDA8Op+/DG26pvPZKUF+TgmtapDlPjM3Vu6Lks+x7m61QSlnwTCTa4fYXEY2Tz
+        Jy45GIppuKl8F/bICvYHyd4V0iWR/up/OqqQtI45TqUUDbC78aKSRu6CnhXVSUb2DSiVp06jRO59D
+        FVQgqVYZVuOUvlsikqOPKgIx51xugfbVrnA5WeUQVeuKUfFG2Eu7pJdzFGniWBCcKj9MkN/ScLbgi
+        KbiFhtPg==;
+Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1oTn7n-00DuUi-W0; Thu, 01 Sep 2022 10:33:04 -0600
+Message-ID: <4a4bca1e-bebf-768f-92d4-92eb8ae714e1@deltatee.com>
+Date:   Thu, 1 Sep 2022 10:32:55 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901110501.o5rq5yzltomirxiw@suse.de>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Content-Language: en-CA
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+References: <20220825152425.6296-1-logang@deltatee.com>
+ <20220825152425.6296-8-logang@deltatee.com> <YxDb2MyRx6o/wDAz@kroah.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <YxDb2MyRx6o/wDAz@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 24.64.144.200
+X-SA-Exim-Rcpt-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, hch@lst.de, dan.j.williams@intel.com, jgg@ziepe.ca, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, sbates@raithlin.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v9 7/8] PCI/P2PDMA: Allow userspace VMA allocations
+ through sysfs
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 12:05:01PM +0100, Mel Gorman wrote:
-> As pointed out elsewhere, attaching to the tracepoint and recording relevant
-> state is an option other than trying to parse a raw ftrace feed. For memory
-> leaks, there are already tracepoints for page allocation and free that could
-> be used to track allocations that are not freed at a given point in time.
 
-Page allocation tracepoints are not sufficient for what we're trying to do here,
-and a substantial amount of effort in this patchset has gone into just getting
-the hooking locations right - our memory allocation interfaces are not trivial.
 
-That's something people should keep in mind when commenting on the size of this
-patchset, since that's effort that would have to be spent for /any/ complete
-solution, be in tracepoint based or no.
 
-Additionally, we need to be able to write assertions that verify that our hook
-locations are correct, that allocations or frees aren't getting double counted
-or missed - highly necessary given the maze of nested memory allocation
-interfaces we have (i.e. slab.h), and it's something a tracepoint based
-implementation would have to account for - otherwise, a tool isn't very useful
-if you can't trust the numbers it's giving you.
-
-And then you have to correlate the allocate and free events, so that you know
-which allocate callsite to decrement the amount freed from.
-
-How would you plan on doing that with tracepoints?
-
-> There is also the kernel memory leak detector although I never had reason
-> to use it (https://www.kernel.org/doc/html/v6.0-rc3/dev-tools/kmemleak.html)
-> and it sounds like it would be expensive.
-
-Kmemleak is indeed expensive, and in the past I've had issues with it not
-catching everything (I've noticed the kmemleak annotations growing, so maybe
-this is less of an issue than it was).
-
-And this is a more complete solution (though not something that could strictly
-replace kmemleak): strict memory leaks aren't the only issue, it's also drivers
-unexpectedly consuming more memory than expected.
-
-I'll bet you a beer that when people have had this awhile, we're going to have a
-bunch of bugs discovered and fixed along the lines of "oh hey, this driver
-wasn't supposed to be using this 1 MB of memory, I never noticed that before".
-
-> > > It's also unclear *who* would enable this. It looks like it would mostly
-> > > have value during the development stage of an embedded platform to track
-> > > kernel memory usage on a per-application basis in an environment where it
-> > > may be difficult to setup tracing and tracking. Would it ever be enabled
-> > > in production? Would a distribution ever enable this? If it's enabled, any
-> > > overhead cannot be disabled/enabled at run or boot time so anyone enabling
-> > > this would carry the cost without never necessarily consuming the data.
-> > 
-> > The whole point of this is to be cheap enough to enable in production -
-> > especially the latency tracing infrastructure. There's a lot of value to
-> > always-on system visibility infrastructure, so that when a live machine starts
-> > to do something wonky the data is already there.
-> > 
+On 2022-09-01 10:20, Greg Kroah-Hartman wrote:
+> On Thu, Aug 25, 2022 at 09:24:24AM -0600, Logan Gunthorpe wrote:
+>> Create a sysfs bin attribute called "allocate" under the existing
+>> "p2pmem" group. The only allowable operation on this file is the mmap()
+>> call.
+>>
+>> When mmap() is called on this attribute, the kernel allocates a chunk of
+>> memory from the genalloc and inserts the pages into the VMA. The
+>> dev_pagemap .page_free callback will indicate when these pages are no
+>> longer used and they will be put back into the genalloc.
+>>
+>> On device unbind, remove the sysfs file before the memremap_pages are
+>> cleaned up. This ensures unmap_mapping_range() is called on the files
+>> inode and no new mappings can be created.
+>>
+>> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+>> ---
+>>  drivers/pci/p2pdma.c | 124 +++++++++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 124 insertions(+)
+>>
+>> diff --git a/drivers/pci/p2pdma.c b/drivers/pci/p2pdma.c
+>> index 4496a7c5c478..a6ed6bbca214 100644
+>> --- a/drivers/pci/p2pdma.c
+>> +++ b/drivers/pci/p2pdma.c
+>> @@ -89,6 +89,90 @@ static ssize_t published_show(struct device *dev, struct device_attribute *attr,
+>>  }
+>>  static DEVICE_ATTR_RO(published);
+>>  
+>> +static int p2pmem_alloc_mmap(struct file *filp, struct kobject *kobj,
+>> +		struct bin_attribute *attr, struct vm_area_struct *vma)
+>> +{
+>> +	struct pci_dev *pdev = to_pci_dev(kobj_to_dev(kobj));
+>> +	size_t len = vma->vm_end - vma->vm_start;
+>> +	struct pci_p2pdma *p2pdma;
+>> +	struct percpu_ref *ref;
+>> +	unsigned long vaddr;
+>> +	void *kaddr;
+>> +	int ret;
+>> +
+>> +	/* prevent private mappings from being established */
+>> +	if ((vma->vm_flags & VM_MAYSHARE) != VM_MAYSHARE) {
+>> +		pci_info_ratelimited(pdev,
+>> +				     "%s: fail, attempted private mapping\n",
+>> +				     current->comm);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	if (vma->vm_pgoff) {
+>> +		pci_info_ratelimited(pdev,
+>> +				     "%s: fail, attempted mapping with non-zero offset\n",
+>> +				     current->comm);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	rcu_read_lock();
+>> +	p2pdma = rcu_dereference(pdev->p2pdma);
+>> +	if (!p2pdma) {
+>> +		ret = -ENODEV;
+>> +		goto out;
+>> +	}
+>> +
+>> +	kaddr = (void *)gen_pool_alloc_owner(p2pdma->pool, len, (void **)&ref);
+>> +	if (!kaddr) {
+>> +		ret = -ENOMEM;
+>> +		goto out;
+>> +	}
+>> +
+>> +	/*
+>> +	 * vm_insert_page() can sleep, so a reference is taken to mapping
+>> +	 * such that rcu_read_unlock() can be done before inserting the
+>> +	 * pages
+>> +	 */
+>> +	if (unlikely(!percpu_ref_tryget_live_rcu(ref))) {
+>> +		ret = -ENODEV;
+>> +		goto out_free_mem;
+>> +	}
+>> +	rcu_read_unlock();
+>> +
+>> +	for (vaddr = vma->vm_start; vaddr < vma->vm_end; vaddr += PAGE_SIZE) {
+>> +		ret = vm_insert_page(vma, vaddr, virt_to_page(kaddr));
+>> +		if (ret) {
+>> +			gen_pool_free(p2pdma->pool, (uintptr_t)kaddr, len);
+>> +			return ret;
+>> +		}
+>> +		percpu_ref_get(ref);
+>> +		put_page(virt_to_page(kaddr));
+>> +		kaddr += PAGE_SIZE;
+>> +		len -= PAGE_SIZE;
+>> +	}
+>> +
+>> +	percpu_ref_put(ref);
+>> +
+>> +	return 0;
+>> +out_free_mem:
+>> +	gen_pool_free(p2pdma->pool, (uintptr_t)kaddr, len);
+>> +out:
+>> +	rcu_read_unlock();
+>> +	return ret;
+>> +}
+>> +
+>> +static struct bin_attribute p2pmem_alloc_attr = {
+>> +	.attr = { .name = "allocate", .mode = 0660 },
+>> +	.mmap = p2pmem_alloc_mmap,
+>> +	/*
+>> +	 * Some places where we want to call mmap (ie. python) will check
+>> +	 * that the file size is greater than the mmap size before allowing
+>> +	 * the mmap to continue. To work around this, just set the size
+>> +	 * to be very large.
+>> +	 */
+>> +	.size = SZ_1T,
+>> +};
+>> +
+>>  static struct attribute *p2pmem_attrs[] = {
+>>  	&dev_attr_size.attr,
+>>  	&dev_attr_available.attr,
+>> @@ -96,11 +180,32 @@ static struct attribute *p2pmem_attrs[] = {
+>>  	NULL,
+>>  };
+>>  
+>> +static struct bin_attribute *p2pmem_bin_attrs[] = {
+>> +	&p2pmem_alloc_attr,
+>> +	NULL,
+>> +};
+>> +
+>>  static const struct attribute_group p2pmem_group = {
+>>  	.attrs = p2pmem_attrs,
+>> +	.bin_attrs = p2pmem_bin_attrs,
+>>  	.name = "p2pmem",
+>>  };
+>>  
+>> +static void p2pdma_page_free(struct page *page)
+>> +{
+>> +	struct pci_p2pdma_pagemap *pgmap = to_p2p_pgmap(page->pgmap);
+>> +	struct percpu_ref *ref;
+>> +
+>> +	gen_pool_free_owner(pgmap->provider->p2pdma->pool,
+>> +			    (uintptr_t)page_to_virt(page), PAGE_SIZE,
+>> +			    (void **)&ref);
+>> +	percpu_ref_put(ref);
+>> +}
+>> +
+>> +static const struct dev_pagemap_ops p2pdma_pgmap_ops = {
+>> +	.page_free = p2pdma_page_free,
+>> +};
+>> +
+>>  static void pci_p2pdma_release(void *data)
+>>  {
+>>  	struct pci_dev *pdev = data;
+>> @@ -152,6 +257,19 @@ static int pci_p2pdma_setup(struct pci_dev *pdev)
+>>  	return error;
+>>  }
+>>  
+>> +static void pci_p2pdma_unmap_mappings(void *data)
+>> +{
+>> +	struct pci_dev *pdev = data;
+>> +
+>> +	/*
+>> +	 * Removing the alloc attribute from sysfs will call
+>> +	 * unmap_mapping_range() on the inode, teardown any existing userspace
+>> +	 * mappings and prevent new ones from being created.
+>> +	 */
+>> +	sysfs_remove_file_from_group(&pdev->dev.kobj, &p2pmem_alloc_attr.attr,
+>> +				     p2pmem_group.name);
 > 
-> Sure, there is value but nothing stops the tracepoints being attached as
-> a boot-time service where interested. For latencies, there is already
-> bpf examples for tracing individual function latency over time e.g.
-> https://github.com/iovisor/bcc/blob/master/tools/funclatency.py although
-> I haven't used it recently.
+> Wait, why are you manually removing the sysfs file here?  It's part of
+> the group, if you do this then it is gone for forever, right?  Why
+> manually do this the sysfs core should handle this for you if the device
+> is removed.
 
-So this is cool, I'll check it out today.
+We have to make sure the mappings are all removed before the cleanup of
+devm_memremap_pages() which will wait for all the pages to be freed. If
+we don't do this any userspace mapping will hang the cleanup until those
+uses are unmapped themselves.
 
-Tracing of /function/ latency is definitely something you'd want tracing/kprobes
-for - that's way more practical than any code tagging-based approach. And if the
-output is reliable and useful I could definitely see myself using this, thank
-you.
+> And worst case, just pass in the device, not the pci device.
 
-But for data collection where it makes sense to annotate in the source code
-where the data collection points are, I see the code-tagging based approach as
-simpler - it cuts out a whole bunch of indirection. The diffstat on the code
-tagging time stats patch is
+Ok, I'll make that change for v10.
 
- 8 files changed, 233 insertions(+), 6 deletions(-)
-
-And that includes hooking wait.h - this is really simple, easy stuff.
-
-The memory allocation tracking patches are more complicated because we've got a
-ton of memory allocation interfaces and we're aiming for strict correctness
-there - because that tool needs strict correctness in order to be useful.
-
-> Live parsing of ftrace is possible, albeit expensive.
-> https://github.com/gormanm/mmtests/blob/master/monitors/watch-highorder.pl
-> tracks counts of high-order allocations and dumps a report on interrupt as
-> an example of live parsing ftrace and only recording interesting state. It's
-> not tracking state you are interested in but it demonstrates it is possible
-> to rely on ftrace alone and monitor from userspace. It's bit-rotted but
-> can be fixed with
-
-Yeah, if this is as far as people have gotten with ftrace on memory allocations
-than I don't think tracing is credible here, sorry.
-
-> The ease of use is a criticism as there is effort required to develop
-> the state tracking of in-kernel event be it from live parsing ftrace,
-> attaching to tracepoints with systemtap/bpf/whatever and the like. The
-> main disadvantage with an in-kernel implementation is three-fold. First,
-> it doesn't work with older kernels without backports. Second, if something
-> slightly different it needed then it's a kernel rebuild.  Third, if the
-> option is not enabled in the deployed kernel config then you are relying
-> on the end user being willing to deploy a custom kernel.  The initial
-> investment in doing memory leak tracking or latency tracking by attaching
-> to tracepoints is significant but it works with older kernels up to a point
-> and is less sensitive to the kernel config options selected as features
-> like ftrace are often selected.
-
-The next version of this patch set is going to use the alternatives mechanism to
-add a boot parameter.
-
-I'm not interested in backporting to older kernels - eesh. People on old
-enterprise kernels don't always get all the new shiny things :)
+Logan

@@ -2,129 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ACE0A5A9B6E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:20:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BF2B5A9B71
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:21:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234026AbiIAPUR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:20:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
+        id S234032AbiIAPVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:21:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233758AbiIAPUN (ORCPT
+        with ESMTP id S233225AbiIAPVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:20:13 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 734AE26111
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:20:11 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id a36so19229708edf.5
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:20:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=Q6mBPFQpA06ZvWUnOEBda1D5SKhKuxvQbDfHBpf3uwc=;
-        b=Kw/EoRfWoshcdSsSEeJr6RNkQ3rmFQFy4BcuBRdDcXp9SQSg7EyYGf8Wv929UeL19E
-         46wzxNxWgMPlwMQOCBxq0/FEbjdwRZ1tW84RaosNaJFpZ0VIt38j4l2Lg5uJPZT90CiR
-         wgiRel239a1f0EJmYA/oSeM0+X6+hYVrmnAyELAit4wbh3wAd/QUjrq7M5yRXQ60GjvH
-         5fieFSd0Q8FhH+QKuO4o++KGJ7WSjzxpCPu4zlcPRV+0piF4P5MDOcKA+LvIWcZjuKSD
-         3o9httpKBNq2k0Q5ozGB5D3TdTH+jRiO/Kw+FKdZQk/elpH/M7zyVqcuIluE+C9YCvrT
-         p/YQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=Q6mBPFQpA06ZvWUnOEBda1D5SKhKuxvQbDfHBpf3uwc=;
-        b=r4gJpcpv1jvr99QAQ/SC/gvtD1CuB6rMAd8vwk7hwBn1+yMO7zS3GZZw70eH8RS+ME
-         ql9sYr8VW/VvFlCm9cymsNwgrSaTWWOLn8rPaN3fCyPxUIJKso3bQ3UJ27Au4A8wvk6f
-         sN7/3Re08qU3AJcxbIVpcLqoyyQU3pcbIhJ31ZO63UtAHU79/Rh0Mxd55W+/yASL0v7F
-         np+9vbOc8pqlLi+RsoMcIQkYl8+TwfaetWmFeshy3cz0naFFgalzWBFCAtP4Bc8ekuiv
-         DHSSQogEQC1Iem7mwjmFLsDighkskITlIau0ZNmqmVVJNUArFzmfB5Kbh8FxKLfm+cKF
-         +qIQ==
-X-Gm-Message-State: ACgBeo1UeIbjBfpWFBBbXGbrEVEPNpge+z4P6BKk8aT2zFvNHwzujz1S
-        4b2O5k85yT8ryfacsoml1KKb659+8X4ABPGHnDpA/w==
-X-Google-Smtp-Source: AA6agR5EiqW8yi4rig6EGzVf96EbDsC2nA3KamdLRmLfuxYLnfdyAOimOKpKepGbWdH7MVblW4fMOcn8lYH3DDQBXLs=
-X-Received: by 2002:a05:6402:71a:b0:447:ebb2:18f2 with SMTP id
- w26-20020a056402071a00b00447ebb218f2mr24571735edx.408.1662045609686; Thu, 01
- Sep 2022 08:20:09 -0700 (PDT)
+        Thu, 1 Sep 2022 11:21:07 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F11E3C8F4;
+        Thu,  1 Sep 2022 08:21:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id E90CD20195;
+        Thu,  1 Sep 2022 15:21:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662045661; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oQoq4bqQp7xDr4YMkqk9mdRdNYnybE6NtXuH/R709S8=;
+        b=BlnfTdmzfEyX3DONFJzlyJLtdMETXUSg3qcaBBRvAAgCQPTeWqbyCnhqHgBiwaT9+yWxcN
+        iRvbRhUSJ+vbfbryWrxexdRB9d19CRGCQPzR1um9gD0UR59dV3fJh+dTwL6fPBztMfluIJ
+        zhKToXzB2xKMnXGopb10V2jmlBGDeyE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A5BBC13A89;
+        Thu,  1 Sep 2022 15:21:01 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dSweJ93NEGOtdQAAMHmgww
+        (envelope-from <jgross@suse.com>); Thu, 01 Sep 2022 15:21:01 +0000
+Message-ID: <efb37ff0-5e0f-0813-3ffe-a8745ecf968b@suse.com>
+Date:   Thu, 1 Sep 2022 17:21:01 +0200
 MIME-Version: 1.0
-References: <20220825104422.14156-1-henning.schild@siemens.com> <298e6d86-dc7b-ed24-893d-2211017463bb@redhat.com>
-In-Reply-To: <298e6d86-dc7b-ed24-893d-2211017463bb@redhat.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 1 Sep 2022 17:19:58 +0200
-Message-ID: <CAMRc=McxL0KEb+KHTcTAW1NC91Jx8uNAt9AAaLrH97oAA_0SZA@mail.gmail.com>
-Subject: Re: [GIT PULL] Immutable branch with 6.0-rc1 + "[PATCH v6 0/7] add
- support for another simatic board" series
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Henning Schild <henning.schild@siemens.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee@kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux LED Subsystem <linux-leds@vger.kernel.org>,
-        platform-driver-x86@vger.kernel.org,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        simon.guinot@sequanux.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 0/3] xen-blk{front,back}: Fix the broken semantic and
+ flow of feature-persistent
+Content-Language: en-US
+To:     SeongJae Park <sj@kernel.org>, roger.pau@citrix.com
+Cc:     marmarek@invisiblethingslab.com, mheyne@amazon.de,
+        xen-devel@lists.xenproject.org, axboe@kernel.dk, ptyadav@amazon.de,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220831165824.94815-1-sj@kernel.org>
+From:   Juergen Gross <jgross@suse.com>
+In-Reply-To: <20220831165824.94815-1-sj@kernel.org>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------CAINiOsjmi0msmQ0OUfeF4Kz"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 4:53 PM Hans de Goede <hdegoede@redhat.com> wrote:
->
-> Dear GPIO and LED subsystem maintainers,
->
-> Here is a pull-request for v6.0-rc1 + the
-> "[PATCH v6 0/7] add support for another simatic board" series
-> for merging into the gpio and leds subsystems.
->
-> Regards,
->
-> Hans
->
->
-> The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
->
->   Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
->
-> are available in the Git repository at:
->
->   git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-simatec-1
->
-> for you to fetch changes up to 8f5c9858c5db129359b5de2f60f5f034bf5d56c0:
->
->   platform/x86: simatic-ipc: add new model 427G (2022-09-01 16:15:03 +0200)
->
-> ----------------------------------------------------------------
-> Tag (immutable branch) for:
-> v6.0-rc1 + "[PATCH v6 0/7] add support for another simatic board" series
-> for merging into the gpio, leds and pdx86 subsystems.
->
-> ----------------------------------------------------------------
-> Henning Schild (7):
->       gpio-f7188x: switch over to using pr_fmt
->       gpio-f7188x: add a prefix to macros to keep gpio namespace clean
->       gpio-f7188x: Add GPIO support for Nuvoton NCT6116
->       gpio-f7188x: use unique labels for banks/chips
->       leds: simatic-ipc-leds-gpio: add new model 227G
->       platform/x86: simatic-ipc: enable watchdog for 227G
->       platform/x86: simatic-ipc: add new model 427G
->
->  drivers/gpio/Kconfig                               |   3 +-
->  drivers/gpio/gpio-f7188x.c                         | 275 ++++++++++++---------
->  drivers/leds/simple/simatic-ipc-leds-gpio.c        |  42 +++-
->  drivers/platform/x86/simatic-ipc.c                 |  10 +-
->  include/linux/platform_data/x86/simatic-ipc-base.h |   1 +
->  include/linux/platform_data/x86/simatic-ipc.h      |   2 +
->  6 files changed, 216 insertions(+), 117 deletions(-)
->
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------CAINiOsjmi0msmQ0OUfeF4Kz
+Content-Type: multipart/mixed; boundary="------------zXbVxqxcXeKv8xitDfEShKed";
+ protected-headers="v1"
+From: Juergen Gross <jgross@suse.com>
+To: SeongJae Park <sj@kernel.org>, roger.pau@citrix.com
+Cc: marmarek@invisiblethingslab.com, mheyne@amazon.de,
+ xen-devel@lists.xenproject.org, axboe@kernel.dk, ptyadav@amazon.de,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <efb37ff0-5e0f-0813-3ffe-a8745ecf968b@suse.com>
+Subject: Re: [PATCH v2 0/3] xen-blk{front,back}: Fix the broken semantic and
+ flow of feature-persistent
+References: <20220831165824.94815-1-sj@kernel.org>
+In-Reply-To: <20220831165824.94815-1-sj@kernel.org>
 
-Pulled, thanks!
+--------------zXbVxqxcXeKv8xitDfEShKed
+Content-Type: multipart/mixed; boundary="------------XOd2EQ3pU0OaWz2JuWcdTqkZ"
 
-Bart
+--------------XOd2EQ3pU0OaWz2JuWcdTqkZ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+T24gMzEuMDguMjIgMTg6NTgsIFNlb25nSmFlIFBhcmsgd3JvdGU6DQo+IENoYW5nZXMgZnJv
+bSB2MQ0KPiAoaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcveGVuLWRldmVsLzIwMjIwODI1MTYx
+NTExLjk0OTIyLTEtc2pAa2VybmVsLm9yZy8pDQo+IC0gRml4IHRoZSB3cm9uZyBmZWF0dXJl
+X3BlcnNpc3RlbnQgY2FjaGluZyBwb3NpdGlvbiBvZiBibGtmcm9udA0KPiAtIFNldCBibGtm
+cm9udCdzIGZlYXR1cmVfcGVyc2lzdGVudCBmaWVsZCBzZXR0aW5nIHdpdGggc2ltcGxlICcm
+JicNCj4gICAgaW5zdGVhZCBvZiAnaWYnIChQcmF0eXVzaCBZYWRhdikNCj4gDQo+IFRoaXMg
+cGF0Y2hzZXQgZml4ZXMgbWlzdXNlIG9mIHRoZSAnZmVhdHVyZS1wZXJzaXN0ZW50JyBhZHZl
+cnRpc2VtZW50DQo+IHNlbWFudGljIChwYXRjaGVzIDEgYW5kIDIpLCBhbmQgdGhlIHdyb25n
+IHRpbWluZyBvZiB0aGUNCj4gJ2ZlYXR1cmVfcGVyc2lzdGVudCcgdmFsdWUgY2FjaGluZywg
+d2hpY2ggbWFkZSBwZXJzaXN0ZW50IGdyYW50cyBmZWF0dXJlDQo+IGFsd2F5cyBkaXNhYmxl
+ZC4NCj4gDQo+IFNlb25nSmFlIFBhcmsgKDMpOg0KPiAgICB4ZW4tYmxrYmFjazogQWR2ZXJ0
+aXNlIGZlYXR1cmUtcGVyc2lzdGVudCBhcyB1c2VyIHJlcXVlc3RlZA0KPiAgICB4ZW4tYmxr
+ZnJvbnQ6IEFkdmVydGlzZSBmZWF0dXJlLXBlcnNpc3RlbnQgYXMgdXNlciByZXF1ZXN0ZWQN
+Cj4gICAgeGVuLWJsa2Zyb250OiBDYWNoZSBmZWF0dXJlX3BlcnNpc3RlbnQgdmFsdWUgYmVm
+b3JlIGFkdmVydGlzZW1lbnQNCj4gDQo+ICAgZHJpdmVycy9ibG9jay94ZW4tYmxrYmFjay9j
+b21tb24uaCB8ICAzICsrKw0KPiAgIGRyaXZlcnMvYmxvY2sveGVuLWJsa2JhY2sveGVuYnVz
+LmMgfCAgNiArKysrLS0NCj4gICBkcml2ZXJzL2Jsb2NrL3hlbi1ibGtmcm9udC5jICAgICAg
+IHwgMjAgKysrKysrKysrKysrLS0tLS0tLS0NCj4gICAzIGZpbGVzIGNoYW5nZWQsIDE5IGlu
+c2VydGlvbnMoKyksIDEwIGRlbGV0aW9ucygtKQ0KPiANCg0KRm9yIHRoZSB3aG9sZSBzZXJp
+ZXM6DQoNClJldmlld2VkLWJ5OiBKdWVyZ2VuIEdyb3NzIDxqZ3Jvc3NAc3VzZS5jb20+DQoN
+Cg0KSnVlcmdlbg0K
+--------------XOd2EQ3pU0OaWz2JuWcdTqkZ
+Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+jR/i1DG86lem3iBDXzXsZDn8R38=3D
+=3D2wuH
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------XOd2EQ3pU0OaWz2JuWcdTqkZ--
+
+--------------zXbVxqxcXeKv8xitDfEShKed--
+
+--------------CAINiOsjmi0msmQ0OUfeF4Kz
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
+
+-----BEGIN PGP SIGNATURE-----
+
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmMQzd0FAwAAAAAACgkQsN6d1ii/Ey/f
+Hgf+NtistZlmf1qGYX/+wGy2DO972jLlom8DItCYrJ+2iaNffsH4Lyuz6uBRm45XwVYS8JCoBfY9
+isDdLyxiq/mB82HCTI4rSznw/RXD93qZxpB9Ly48kitFArGhskGnm1zx28pRMtT9Uc9sd/bcfQQ9
+koN0M3Ak9y0d3J8suqObS0grcqCdye3SRXnJ3iw/y1bDVxEb3ree/KrfcVy44Em5nvteM44igCsy
+BQQxRSDmJwbMiAVIc1e1Gf5LfZuNjnKI+pQBzo7GOBmHfbTbRx9Xi8ZXvbb1YQ5v3rxU2OmJYekA
+wGrmsH//uLsCMpPyZcKeeVdCLCyB4NSUZ+we+vPVgA==
+=+pQd
+-----END PGP SIGNATURE-----
+
+--------------CAINiOsjmi0msmQ0OUfeF4Kz--

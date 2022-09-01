@@ -2,191 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB8F45A8EE2
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E595A8EEE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:58:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233209AbiIAG4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44696 "EHLO
+        id S233312AbiIAG60 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:58:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbiIAG4s (ORCPT
+        with ESMTP id S233038AbiIAG6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:56:48 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2044.outbound.protection.outlook.com [40.107.102.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08CDC3F4C;
-        Wed, 31 Aug 2022 23:56:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JRMvRuoLypYrI17qLkJwKSmjgrSJQp3t7QQmInU6jtZQzZd0DMP5/sxh+YWqyu5eW4YTAKsBm+g47HA23aCLYRF0+CITh8AwvAC2JvVZLG85Onykw2fP8tasuKjT+7+0PLQF9+yT0FfFRiIRPQQVkUdegyNRXDqRjOHPFUMkAGn7H9K/oyxGiBfVbCHslgpLhJT57tefkuBiwSnrC/L7ZecszJj/wJDBUnHupg68MpmTsPmv3sPZfKegcVzBemhaecntAYYBHaQFrMZ+ZaOSCegkcuaYjozx0kN07eYw822ExGJOsUo6L/nsc9hr8q59irtnERQYLq2+R64xn4HaAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SlqmB0s5wLoiNEtVlOppEG/ZTrJ2zmnfrbJ8eJFGZzQ=;
- b=JM3KKvnEVeKeFqEi4lNV8LhnwGHiNYgKptmMouaxUT9CpFCzX1zrfWL9Yn5hPWputSJjQb9xwsDwUoh7nJ+ih6eTfwyZfJs7oyBtkOheWIVBM2mGgLydnhpDmktt8X05VLO9ZxjtSPcoGKJORQ3yVHZl4299SYM2mPyLB3CAcnxIbY85aCuxXWU15Gvnoln27UmrT74jOVE0ZNE1XyC9dAwA273SbIJmwplADbfhb5h2bj1AbsM4aUEgQTsqkKDkJ0icQRlUOymmP9ydcBYbd8tOvUhGZtkqYvUpU0Agk/JYy5d8BTxce0+OCdtpSGqEGGr3RMGXKiqEeerj24KmLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SlqmB0s5wLoiNEtVlOppEG/ZTrJ2zmnfrbJ8eJFGZzQ=;
- b=nyIBPstbocgLOyqdqS7Hmq4uqv0Ea7WUt1TkrYQ/IqFLliwqaYsa2pRYBWW8xPS0CxC0o7UpnmP6+yxFeWLWJQJnZKG169fTNySQpypVEeDMflPBBurnrsE23gdgyNC3rcNMpwVhCbUdBKowGZ4vT/wRUpAl7aJnej11JSfbmdE=
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com (2603:10b6:5:39e::17)
- by SA0PR12MB4397.namprd12.prod.outlook.com (2603:10b6:806:93::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
- 2022 06:56:46 +0000
-Received: from DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::a970:8eb0:b1f7:5e7c]) by DM4PR12MB5278.namprd12.prod.outlook.com
- ([fe80::a970:8eb0:b1f7:5e7c%8]) with mapi id 15.20.5588.012; Thu, 1 Sep 2022
- 06:56:46 +0000
-From:   "Yuan, Perry" <Perry.Yuan@amd.com>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
-        "Huang, Ray" <Ray.Huang@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v6] cpufreq: amd-pstate: cleanup the unused and duplicated
- headers declaration
-Thread-Topic: [PATCH v6] cpufreq: amd-pstate: cleanup the unused and
- duplicated headers declaration
-Thread-Index: AQHYvct0m9i+1ckBBkKHTFOVc8xFH63KHXWAgAAGJHA=
-Date:   Thu, 1 Sep 2022 06:56:46 +0000
-Message-ID: <DM4PR12MB5278D01EA2D78367F182C7C69C7B9@DM4PR12MB5278.namprd12.prod.outlook.com>
-References: <20220901062339.2357552-1-Perry.Yuan@amd.com>
- <20220901063153.zutwnnfykaz47sah@vireshk-i7>
-In-Reply-To: <20220901063153.zutwnnfykaz47sah@vireshk-i7>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-09-01T06:56:42Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=90f69e70-c5d3-4ce6-9240-5ebea8c48b72;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-09-01T06:56:42Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: 8eb82365-7c7e-40ab-b233-edd13cc7ebbe
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: abb0938e-1754-4cac-d2cf-08da8be7229a
-x-ms-traffictypediagnostic: SA0PR12MB4397:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: r+WWi4rnMGcmFvw6mKO4bWpxXYXJFPN2vIdU6yhcBPwU/t1/PrGYu3gvRvfT4IpTOXQ9uRS1XrYXwy5DoE9ymd1fz0hdGwlRDU/LE8E6D3FIaYNCpGa/d/dT1nEl+9peeGuo6LOpwR52MR7X10alRYHiGfEfk7+w7HUgduDga/4P4i9LlqJj01k/T2nwqFBrP7m+ArAqohrfzSLXi2TUaX46K5h76VdRDlIqNtiFbIfqpPydz+OTC95g/VwCN9O81KXd/8ewRf4NqtmM5IjwCRUs1exPk56iw1LhnnIkqBHbVc+JuqMezLoj1As2H2k92hb3ZyG3mTiHYWutPSKK4N5nSVRNWXLx45QN1qgEQgCGCMARls5fSGHyldTRieMuWXJhLxA8h/2Vtr1WLG7IK0XlouxECOusnxpGRoptZ64/GHCdXjhHf6k0D+ZfAt8uueUJ3u75GX9jXimjfX5R+B9ghx0KBqU5uYWKxjT2t6Y9fvqMM5hvtI5cFyf0rOgzPKUkyIP9aFm2bQqvXbG92RtZhr6MJzy2dcOHzYCQHRXyxNmkZXGGy3gyNyBAdWplwyts/3uccKY92XGStsg4Ij05RXJVjEbr8cOiwe4FUmmlrQbUQ7civacoeWuYt91PgyoKm31+10g/8SQokUdP/U0v0HNcnMEZZf9t5vM4ePeFcgpNcBfpmTRj7Vl4jTH8Yf6NDicEL11GUEqR9kddCSTQTF7NZZMfV4OGCjUt+m5iz9By+wOOiBE9sLBdMfWCKrMK5Z288vtSAJ0pahyc5A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5278.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(136003)(376002)(366004)(396003)(71200400001)(8936002)(38100700002)(478600001)(52536014)(54906003)(53546011)(6506007)(316002)(7696005)(41300700001)(33656002)(6916009)(5660300002)(9686003)(66446008)(26005)(86362001)(64756008)(55016003)(83380400001)(2906002)(66946007)(66476007)(122000001)(76116006)(186003)(8676002)(66556008)(4326008)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?1pCEXgRq2GX5TUSltrLbBKm0FBZ9E/6ZXtKutGtD0gd2NjtwvXp6isVVJWBV?=
- =?us-ascii?Q?7y4QGdnbe+PPRtN9nb5BiZIbSH/emAtgoYoCfbz0ohutRLvtw/6QTFWLCeJZ?=
- =?us-ascii?Q?aJWxYtM2aH+IQ1vTfkMSB4dH+dYW2AIEF0AhunNep+RK7pNAfMTkALPdbBj2?=
- =?us-ascii?Q?YJXFMK++uSoCcSPz9shpsz1vdFhPIc7FTWe5iQ0j5k8RpQtEA10UD0G7DeQ6?=
- =?us-ascii?Q?894Z3dtnCuHVvlOObw0PWMnXhOjgr7BVusyICv1Qy4MN0zO9cKEr0easWL1k?=
- =?us-ascii?Q?l1gbPO6TlDpaqoy1LGmgO3jJmT1hzdSIo0MpN4AwWJlEftLZ9k1NIPnHBYrD?=
- =?us-ascii?Q?jVezREdOJQ3DgSeOJ/OEAXdFzEdJ9G2sMORvoaLqLxD4ivVKxWlv1Qyih33y?=
- =?us-ascii?Q?yRL6PP+W9lvOYUbJi6pi2bih/ZcTPhukDulzmNstXkOpXP7nojMwGkLrws9l?=
- =?us-ascii?Q?1QoWjJ8/ZXt4uZdDQ+z1J7kTkFU7tTV4OuF0hP6jE6FSw0pFcKZ3bPBVtY9X?=
- =?us-ascii?Q?+DhRoPF7a5gsDmtIdmzYsnFrQOus2x+zH42fXdeA9f3bDRX1WQ/iOmYW//lI?=
- =?us-ascii?Q?fQw1Z66HbhQfhw+y5/zgg11GVuroukLWGmXPfSlpR4XyV/LBXqne5iOiojIx?=
- =?us-ascii?Q?2BZXcAFFcqbXSGy6BLGsqoCIEvT4hZednxSvdQQpDdkzxgAWvUw+tcZQcKYE?=
- =?us-ascii?Q?QU8a2wDt9EBZncvwJDi5oCmPBCwXR0rUHDhexDxzx6eVCgKBzk23KE/b5URp?=
- =?us-ascii?Q?nrIsr2mAPCIGfKQHAkg2VdGT3Wjpk2aX5W0AWVTfUBqwQz5czcfCpt/P+BpG?=
- =?us-ascii?Q?RXKqIbv39CPPJXLblvbFmc7nA/QLD1DpBml1SqgTJPMZaPcwWGm2Xp/4eGdf?=
- =?us-ascii?Q?c96ldFddzpHFomkONG5xydL+pYJSNlC9rtzk3V/0clKuAmK1t/UF6M/QipjA?=
- =?us-ascii?Q?bZX8umYTWwLv+zDyJoSz9APY3OxDoSe5cx85GsgsHPTjHNPdWJK6l+6SJuX/?=
- =?us-ascii?Q?fhy34k6JtbvJTey3WXUPwXQjjursjnit985ILR2/ByEFFz8YGdFOnUz1oeQJ?=
- =?us-ascii?Q?6sWf9bo1mHMPOZ7u13Jcgw6iz8wF/ERXIJ1zhlSlhhHFM+062I4j1hHdZ9Ks?=
- =?us-ascii?Q?B1kav72ljB9vtb/cNQmcLeocx2SwYM4NV4dtxI9/elu7VRCLBpBL9SwImZMa?=
- =?us-ascii?Q?yKnBSaSiSG108YPdlAVqtXBIE2FlbKmuGfEU3lnpil0vuQ6Aye/Sjb0/ujoO?=
- =?us-ascii?Q?MvT5fiOR/a/KIOTzfGCSLWW+iDhulZO3cMAh+ma1IR7HmQ4tB94NB14uK5eT?=
- =?us-ascii?Q?HSrAcssbsmZOJ/SObcrQm3mRadYkBndaNmyeGPKUuZH2nLNTRO1yCXnqDIs3?=
- =?us-ascii?Q?mNUVBlvq4k45R/lQZEuIynpK0s/sfTPYEgjpQx7QPb1VS6G2iWu8ytdRggxK?=
- =?us-ascii?Q?sF6dC6xGr8+klpIIr7SR8xXcL92nwdX67FAiD1NGLOXzmpRa8eo778N+amiz?=
- =?us-ascii?Q?XY+RX+NhoRNeiXqz8Cxc7HziBlIH7YcLFPAXePcyXsih4H30+fbwcXFmCvMf?=
- =?us-ascii?Q?UOhMEIbiA9v3O1LFg36c3IRCXnP02tBc+ruyeACN?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 1 Sep 2022 02:58:21 -0400
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC7AD11E5;
+        Wed, 31 Aug 2022 23:58:18 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.18.147.227])
+        by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4MJBZ93wPyz9v7Hg;
+        Thu,  1 Sep 2022 14:52:49 +0800 (CST)
+Received: from roberto-ThinkStation-P620 (unknown [10.204.63.22])
+        by APP2 (Coremail) with SMTP id GxC2BwA3s13fVxBjZcATAA--.7637S2;
+        Thu, 01 Sep 2022 07:57:48 +0100 (CET)
+Message-ID: <2b2242f8d09378fbec49d4f7e29960d5e50d0a68.camel@huaweicloud.com>
+Subject: Re: [PATCH v15 12/12] selftests/bpf: Add tests for dynamic pointers
+ parameters in kfuncs
+From:   Roberto Sassu <roberto.sassu@huaweicloud.com>
+To:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
+        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com, shuah@kernel.org
+Cc:     bpf@vger.kernel.org, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        deso@posteo.net, memxor@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>
+Date:   Thu, 01 Sep 2022 08:57:30 +0200
+In-Reply-To: <20220831165445.1071641-13-roberto.sassu@huaweicloud.com>
+References: <20220831165445.1071641-1-roberto.sassu@huaweicloud.com>
+         <20220831165445.1071641-13-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5278.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: abb0938e-1754-4cac-d2cf-08da8be7229a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2022 06:56:46.0468
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VBB79gp6Zf61UayqQmoveK5/XNBRVOJ8TmIRo+/ryreBlt3CNMmfYi2vCeejY8361TXnGTEZkc8dePB1wL23Bg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4397
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: GxC2BwA3s13fVxBjZcATAA--.7637S2
+X-Coremail-Antispam: 1UD129KBjvJXoW3AF4kCF18Zr4UJrWUKr1kAFb_yoWxGF13pa
+        yrGFy29rWIq3W7Wr13XF4IvF4fKr48Zr1akrZFq34xAr1DXryxWF48Kr45Jwn5K395Xw45
+        Zw1Sgr4rCr4Uta7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
+        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
+        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWUJVW8JwA2z4x0Y4vEx4A2jsIEc7CjxV
+        AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
+        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
+        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
+        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
+        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
+        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgACBF1jj3589gAEsF
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+On Wed, 2022-08-31 at 18:54 +0200, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+> Add tests to ensure that only supported dynamic pointer types are
+> accepted,
+> that the passed argument is actually a dynamic pointer, and that the
+> passed
+> argument is a pointer to the stack.
 
-Hi Viresh,=20
+Sorry, forgot to add this test to the deny list of s390.
 
-> -----Original Message-----
-> From: Viresh Kumar <viresh.kumar@linaro.org>
-> Sent: Thursday, September 1, 2022 2:32 PM
-> To: Yuan, Perry <Perry.Yuan@amd.com>
-> Cc: rafael.j.wysocki@intel.com; Huang, Ray <Ray.Huang@amd.com>; Sharma,
-> Deepak <Deepak.Sharma@amd.com>; Limonciello, Mario
-> <Mario.Limonciello@amd.com>; Fontenot, Nathan
-> <Nathan.Fontenot@amd.com>; Deucher, Alexander
-> <Alexander.Deucher@amd.com>; Su, Jinzhou (Joe) <Jinzhou.Su@amd.com>;
-> Huang, Shimmer <Shimmer.Huang@amd.com>; Du, Xiaojian
-> <Xiaojian.Du@amd.com>; Meng, Li (Jassmine) <Li.Meng@amd.com>; linux-
-> pm@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v6] cpufreq: amd-pstate: cleanup the unused and
-> duplicated headers declaration
->=20
-> [CAUTION: External Email]
->=20
-> On 01-09-22, 14:23, Perry Yuan wrote:
-> > Cleanup the headers declaration which are not used actually and
->=20
-> This is okay.
+I also rebased to the latest commit.
 
-Thank you help to confirm this .=20
+Let me know if I should resend.
 
->=20
-> > some duplicated declaration which is declarated in some other headers
-> > already, it will help to simplify the header part.
->=20
-> This isn't.
->=20
-> Every file should directly include headers they use definitions from, ins=
-tead of
-> relying on indirect inclusions.
->=20
-> --
-> Viresh
+Thanks
 
-Do I need to update the commit with another V7 version ?
-If need, I will update this later.
+Roberto
 
-Thank you.
-
-Perry.=20
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> ---
+>  .../bpf/prog_tests/kfunc_dynptr_param.c       | 102
+> ++++++++++++++++++
+>  .../bpf/progs/test_kfunc_dynptr_param.c       |  57 ++++++++++
+>  2 files changed, 159 insertions(+)
+>  create mode 100644
+> tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+>  create mode 100644
+> tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> 
+> diff --git
+> a/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+> b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+> new file mode 100644
+> index 000000000000..732897faf36b
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/kfunc_dynptr_param.c
+> @@ -0,0 +1,102 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2022 Facebook
+> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + */
+> +
+> +#include <test_progs.h>
+> +#include "test_kfunc_dynptr_param.skel.h"
+> +
+> +static size_t log_buf_sz = 1048576; /* 1 MB */
+> +static char obj_log_buf[1048576];
+> +
+> +static struct {
+> +	const char *prog_name;
+> +	const char *expected_err_msg;
+> +} kfunc_dynptr_tests[] = {
+> +	{"dynptr_type_not_supp",
+> +	 "arg#0 pointer type STRUCT bpf_dynptr_kern points to
+> unsupported dynamic pointer type"},
+> +	{"not_valid_dynptr",
+> +	 "arg#0 pointer type STRUCT bpf_dynptr_kern must be valid and
+> initialized"},
+> +	{"not_ptr_to_stack", "arg#0 pointer type STRUCT bpf_dynptr_kern
+> not to stack"},
+> +};
+> +
+> +static bool kfunc_not_supported;
+> +
+> +static int libbpf_print_cb(enum libbpf_print_level level, const char
+> *fmt,
+> +			   va_list args)
+> +{
+> +	if (strcmp(fmt, "libbpf: extern (func ksym) '%s': not found in
+> kernel or module BTFs\n"))
+> +		return 0;
+> +
+> +	if (strcmp(va_arg(args, char *), "bpf_verify_pkcs7_signature"))
+> +		return 0;
+> +
+> +	kfunc_not_supported = true;
+> +	return 0;
+> +}
+> +
+> +static void verify_fail(const char *prog_name, const char
+> *expected_err_msg)
+> +{
+> +	struct test_kfunc_dynptr_param *skel;
+> +	LIBBPF_OPTS(bpf_object_open_opts, opts);
+> +	libbpf_print_fn_t old_print_cb;
+> +	struct bpf_program *prog;
+> +	int err;
+> +
+> +	opts.kernel_log_buf = obj_log_buf;
+> +	opts.kernel_log_size = log_buf_sz;
+> +	opts.kernel_log_level = 1;
+> +
+> +	skel = test_kfunc_dynptr_param__open_opts(&opts);
+> +	if (!ASSERT_OK_PTR(skel, "test_kfunc_dynptr_param__open_opts"))
+> +		goto cleanup;
+> +
+> +	prog = bpf_object__find_program_by_name(skel->obj, prog_name);
+> +	if (!ASSERT_OK_PTR(prog, "bpf_object__find_program_by_name"))
+> +		goto cleanup;
+> +
+> +	bpf_program__set_autoload(prog, true);
+> +
+> +	bpf_map__set_max_entries(skel->maps.ringbuf, getpagesize());
+> +
+> +	kfunc_not_supported = false;
+> +
+> +	old_print_cb = libbpf_set_print(libbpf_print_cb);
+> +	err = test_kfunc_dynptr_param__load(skel);
+> +	libbpf_set_print(old_print_cb);
+> +
+> +	if (err < 0 && kfunc_not_supported) {
+> +		fprintf(stderr,
+> +		  "%s:SKIP:bpf_verify_pkcs7_signature() kfunc not
+> supported\n",
+> +		  __func__);
+> +		test__skip();
+> +		goto cleanup;
+> +	}
+> +
+> +	if (!ASSERT_ERR(err, "unexpected load success"))
+> +		goto cleanup;
+> +
+> +	if (!ASSERT_OK_PTR(strstr(obj_log_buf, expected_err_msg),
+> "expected_err_msg")) {
+> +		fprintf(stderr, "Expected err_msg: %s\n",
+> expected_err_msg);
+> +		fprintf(stderr, "Verifier output: %s\n", obj_log_buf);
+> +	}
+> +
+> +cleanup:
+> +	test_kfunc_dynptr_param__destroy(skel);
+> +}
+> +
+> +void test_kfunc_dynptr_param(void)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(kfunc_dynptr_tests); i++) {
+> +		if
+> (!test__start_subtest(kfunc_dynptr_tests[i].prog_name))
+> +			continue;
+> +
+> +		verify_fail(kfunc_dynptr_tests[i].prog_name,
+> +			    kfunc_dynptr_tests[i].expected_err_msg);
+> +	}
+> +}
+> diff --git
+> a/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> new file mode 100644
+> index 000000000000..2f09f91a1576
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_kfunc_dynptr_param.c
+> @@ -0,0 +1,57 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * Copyright (C) 2022 Huawei Technologies Duesseldorf GmbH
+> + *
+> + * Author: Roberto Sassu <roberto.sassu@huawei.com>
+> + */
+> +
+> +#include "vmlinux.h"
+> +#include <errno.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +struct bpf_dynptr {
+> +	__u64 :64;
+> +	__u64 :64;
+> +} __attribute__((aligned(8)));
+> +
+> +extern int bpf_verify_pkcs7_signature(struct bpf_dynptr *data_ptr,
+> +				      struct bpf_dynptr *sig_ptr,
+> +				      struct bpf_key *trusted_keyring)
+> __ksym;
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_RINGBUF);
+> +} ringbuf SEC(".maps");
+> +
+> +char _license[] SEC("license") = "GPL";
+> +
+> +SEC("?lsm.s/bpf")
+> +int BPF_PROG(dynptr_type_not_supp, int cmd, union bpf_attr *attr,
+> +	     unsigned int size)
+> +{
+> +	char write_data[64] = "hello there, world!!";
+> +	struct bpf_dynptr ptr;
+> +
+> +	bpf_ringbuf_reserve_dynptr(&ringbuf, sizeof(write_data), 0,
+> &ptr);
+> +
+> +	return bpf_verify_pkcs7_signature(&ptr, &ptr, NULL);
+> +}
+> +
+> +SEC("?lsm.s/bpf")
+> +int BPF_PROG(not_valid_dynptr, int cmd, union bpf_attr *attr,
+> unsigned int size)
+> +{
+> +	unsigned long val;
+> +
+> +	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)&val,
+> +					  (struct bpf_dynptr *)&val,
+> NULL);
+> +}
+> +
+> +SEC("?lsm.s/bpf")
+> +int BPF_PROG(not_ptr_to_stack, int cmd, union bpf_attr *attr,
+> unsigned int size)
+> +{
+> +	unsigned long val;
+> +
+> +	return bpf_verify_pkcs7_signature((struct bpf_dynptr *)val,
+> +					  (struct bpf_dynptr *)val,
+> NULL);
+> +}
 

@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00D05A9ADF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA1FB5A9AD7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:50:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234238AbiIAOvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 10:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60056 "EHLO
+        id S232852AbiIAOtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 10:49:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233918AbiIAOuv (ORCPT
+        with ESMTP id S232795AbiIAOtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 10:50:51 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F984AD72;
-        Thu,  1 Sep 2022 07:50:43 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id n17-20020a05600c501100b003a84bf9b68bso1616714wmr.3;
-        Thu, 01 Sep 2022 07:50:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=+ZP6o1gBBlBVeWAFEqgtYPLn6+d3r7xqEVeih0fyUso=;
-        b=iFrD1NozxA6YVu/pF75I5AvknHZH0pFYr0Ht2CqUidAoEzNuE45O8UivGswS3F+2MO
-         tI+GAGT4gXRqxaJpTMNjUivI7L77XgfmnnqwhkJ50GCb3FuakSkrZoL75xX6mzwfjWTQ
-         P/HRjyOYZIcBL0/qfDmABdX/0BxlNqU0FAtQkEqfMMHYCSxGdm9rLlcmYLe43pg1cc7h
-         WrC5+1ddVMQ9PANwg4bP8KGiX8+1J0Fmr2cT8nvimFiL4wA+FXtebFDs3LAPQm9aJinE
-         6jSG5eD0hBWEMBn/s/r8tyiGdnqNkHVGxoIib3crCA772KUd1huXzl5Inl1JdlR9HJbC
-         L+vw==
+        Thu, 1 Sep 2022 10:49:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567A482748
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 07:48:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662043738;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+ov7wwJ0fh1QZTrH+Sh8g22A0JfLzVY29JwityzZL8s=;
+        b=IqulTX2atyOhTvhCkjoZCpwkspWmlKslHmlJGKV/yDJ+5aaPbf9ziaYA3EJKuA5LZwqO1K
+        goynt7ARMeTINoP2IVw+d44zQtt8NF7RKWSdQX1j35BSnmJlNiUC9WgjwfyRyJ0/HCXNSM
+        dxCfUBOAu/MnehMCFn9FATIkIy7Im3M=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-586-qHarbQEiMtSTLtqRYmieRw-1; Thu, 01 Sep 2022 10:48:57 -0400
+X-MC-Unique: qHarbQEiMtSTLtqRYmieRw-1
+Received: by mail-ej1-f72.google.com with SMTP id sd6-20020a1709076e0600b0073315809fb5so6966529ejc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 07:48:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=+ZP6o1gBBlBVeWAFEqgtYPLn6+d3r7xqEVeih0fyUso=;
-        b=LTvxVjBE9I89pKPLnne1PQzDDrh6PBRwoqlQHFtgIle6f8eloSErGTCFrxEjaOUnBy
-         tDZNLXeJF5GSD/0LUvPdxJIYzDno20Q8MQqCd3GGXZWPhgs5kmAGfWxgp4+sBa8RjAc+
-         IZU/aKro+UThCt+5CFPJroeofKdOcWWXh+44UbwW9K8jdWYo+p7yjkQ7f7JuWuTfo2ED
-         AHpK8haaUF3TdCR/KwCvcLMneVT3LiErcrh230EQf0jXq+fJ2mrz5yKizNpFsGPphrNE
-         lZnsHMfSZLyum97xci8XPh3qtWEeQtMqiYbZpZ+mQvCoGsSxQ1ngi3zP2zYsEU37Ig8v
-         aYFA==
-X-Gm-Message-State: ACgBeo0230T5eL5XTwSiiRKmlVadv2TxpBdxc98ZGcNBa5ummNY1b5NJ
-        Djy0Kxvd+Mh6b7G1suiGalY=
-X-Google-Smtp-Source: AA6agR6QGHgUJ6JL78VmA9OekXr5ZRCUaKHcp8uzSaCgosq6wKYvw6oMjyK6sGuqR3194MMhIKcKkw==
-X-Received: by 2002:a05:600c:3790:b0:3a5:435d:b2d3 with SMTP id o16-20020a05600c379000b003a5435db2d3mr5611084wmr.134.1662043841499;
-        Thu, 01 Sep 2022 07:50:41 -0700 (PDT)
-Received: from debian ([89.238.191.199])
-        by smtp.gmail.com with ESMTPSA id r21-20020adfa155000000b0022585f6679dsm14872979wrr.106.2022.09.01.07.50.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 07:50:41 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 16:48:47 +0200
-From:   Richard Gobert <richardbgobert@gmail.com>
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
-        Jozsef Kadlecsik <kadlec@netfilter.org>,
-        Florian Westphal <fw@strlen.de>,
-        Martin KaFai Lau <kafai@fb.com>,
-        netdev <netdev@vger.kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, linux-wpan@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
-Subject: Re: [PATCH 2/4] net-next: ip6: fetch inetpeer in ip6frag_init
-Message-ID: <20220901144810.GA31767@debian>
-References: <20220829114600.GA2374@debian>
- <CANn89iLH4nDuOHS-0AzYBYOz4f3byZndKXG3_VefVxUbujJZNg@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=+ov7wwJ0fh1QZTrH+Sh8g22A0JfLzVY29JwityzZL8s=;
+        b=0VT2nPAMyVI8Cbuwhb9uFsr7dp2tDqkGCRgbe+e9DgU3wZp3CcTkjdmH97aD4jb3J8
+         i6EV2al14+WMT6Z2+orR8bOddtHw5lnP6YnF8ZIZSiVcJORkB3sH/m1oT3OT4LvxKyi1
+         ibPXpyZe4V7Z20PAJCJeSmlrCa3qeGB9ZUxCfBRpXeXndqA7b53GGQCQjRjYIvsKibUP
+         2ARhrV5lRfICF1RTWrkF8hq1HpBP50zQvLveUVAJaUHc+zh1fSeGcMH6UINdL9lC0W3/
+         Kd5+vYzhjwqLCRBZDYygNYdJwe0gecO2ZPcyQh/3NfGUmgHhVRZVFlGOs1InLTjB3sYJ
+         CmLw==
+X-Gm-Message-State: ACgBeo0hxyaZMoXtLDowvE8L+cDFmM3DFqTyGKCOVGpeOSvItVq9WluQ
+        S6pDcq57bBx1pkwE1oypKeDXOOF9uDYHD8kFVu73WaHXAmo/XMn3U4CoZiP53kmAJqjzVmDkXit
+        Jsz6HesDuaJDRPgo9frGKYj3o
+X-Received: by 2002:a17:907:78b:b0:741:3d29:33d2 with SMTP id xd11-20020a170907078b00b007413d2933d2mr19782674ejb.103.1662043735895;
+        Thu, 01 Sep 2022 07:48:55 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR50ykrvGnM8MKw50x9TZflH8yEPLxxLkST/sFxaWdEgGOFvP2ZalhHmragwCrbAeThKzltrLA==
+X-Received: by 2002:a17:907:78b:b0:741:3d29:33d2 with SMTP id xd11-20020a170907078b00b007413d2933d2mr19782662ejb.103.1662043735633;
+        Thu, 01 Sep 2022 07:48:55 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id u6-20020a170906c40600b0073dd1ac2fc8sm8525162ejz.195.2022.09.01.07.48.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 07:48:55 -0700 (PDT)
+Message-ID: <22b3904d-380c-a628-2f62-d108139f09e2@redhat.com>
+Date:   Thu, 1 Sep 2022 16:48:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANn89iLH4nDuOHS-0AzYBYOz4f3byZndKXG3_VefVxUbujJZNg@mail.gmail.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/2] virt: vbox: convert to use dev_groups
+Content-Language: en-US
+To:     Jiasheng Jiang <jiasheng@iscas.ac.cn>, gregkh@linuxfoundation.org
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org
+References: <20220901144610.3550300-1-jiasheng@iscas.ac.cn>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20220901144610.3550300-1-jiasheng@iscas.ac.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,13 +80,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 03:20:54PM -0700, Eric Dumazet wrote:
-> Sorry, this is adding yet another bottleneck, and will make DDOS
-> attacks based on fragments more effective.
-> 
-> Whole concept of 'peers' based on IPv6 addresses is rather weak, as
-> hosts with IPv6 can easily
-> get millions of different 'addresses'.
+Hi,
 
-I understand the problem with the implementation. Since peers don't 
-carry much weight in IPv6, this patch can be dropped.
+On 9/1/22 16:46, Jiasheng Jiang wrote:
+> The driver core supports the ability to handle the creation and removal
+> of device-specific sysfs files in a race-free manner. Moreover, it can
+> guarantee the success of creation. Therefore, it should be better to
+> convert to use dev_groups.
+> 
+> Fixes: 0ba002bc4393 ("virt: Add vboxguest driver for Virtual Box Guest integration")
+> Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+
+Thanks, patch looks good to me:
+
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+Regards,
+
+Hans
+
+
+> ---
+> Change log:
+> 
+> v2-> v3:
+> 
+> 1. Switch to use an attribute group.
+> 
+> v1 -> v2:
+> 
+> 1. Use gdev->dev instead of dev.
+> 2. Remove file when creation failed.
+> ---
+>  drivers/virt/vboxguest/vboxguest_linux.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
+> index 4ccfd30c2a30..6fc81347ae72 100644
+> --- a/drivers/virt/vboxguest/vboxguest_linux.c
+> +++ b/drivers/virt/vboxguest/vboxguest_linux.c
+> @@ -270,6 +270,13 @@ static ssize_t host_features_show(struct device *dev,
+>  static DEVICE_ATTR_RO(host_version);
+>  static DEVICE_ATTR_RO(host_features);
+>  
+> +static struct attribute *vbg_pci_attrs[] = {
+> +	&dev_attr_host_version.attr,
+> +	&dev_attr_host_features.attr,
+> +	NULL,
+> +};
+> +ATTRIBUTE_GROUPS(vbg_pci);
+> +
+>  /**
+>   * Does the PCI detection and init of the device.
+>   *
+> @@ -390,8 +397,6 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+>  	}
+>  
+>  	pci_set_drvdata(pci, gdev);
+> -	device_create_file(dev, &dev_attr_host_version);
+> -	device_create_file(dev, &dev_attr_host_features);
+>  
+>  	vbg_info("vboxguest: misc device minor %d, IRQ %d, I/O port %x, MMIO at %pap (size %pap)\n",
+>  		 gdev->misc_device.minor, pci->irq, gdev->io_port,
+> @@ -422,8 +427,6 @@ static void vbg_pci_remove(struct pci_dev *pci)
+>  	mutex_unlock(&vbg_gdev_mutex);
+>  
+>  	free_irq(pci->irq, gdev);
+> -	device_remove_file(gdev->dev, &dev_attr_host_features);
+> -	device_remove_file(gdev->dev, &dev_attr_host_version);
+>  	misc_deregister(&gdev->misc_device_user);
+>  	misc_deregister(&gdev->misc_device);
+>  	vbg_core_exit(gdev);
+> @@ -488,6 +491,7 @@ MODULE_DEVICE_TABLE(pci,  vbg_pci_ids);
+>  
+>  static struct pci_driver vbg_pci_driver = {
+>  	.name		= DEVICE_NAME,
+> +	.dev_groups	= vbg_pci_groups,
+>  	.id_table	= vbg_pci_ids,
+>  	.probe		= vbg_pci_probe,
+>  	.remove		= vbg_pci_remove,
+

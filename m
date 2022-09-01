@@ -2,153 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D56325A92F5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 536755A92F6
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:18:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233509AbiIAJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49604 "EHLO
+        id S233963AbiIAJSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233913AbiIAJSS (ORCPT
+        with ESMTP id S233957AbiIAJSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:18:18 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B0A2121431;
-        Thu,  1 Sep 2022 02:18:17 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id 72so16915617pfx.9;
-        Thu, 01 Sep 2022 02:18:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc;
-        bh=EHj+UQ7Tu6usfmBtBbDH78MoNwVO7qgjOcn++ecvlvY=;
-        b=aMwYpy2KmhETBuSWfDOMI/KUwUdaiz66ylUoOKLq/yZ8fmJ+Ul7XISdXpYSPdOs5aZ
-         hZtBfzrZqXVL7x14Wk9CnFzHh2iORZE3AZbAV2KF9NTQVMQ9Tq/p/uMR1sOCGRSFPQ66
-         ZxgiRXFlzY376dnus4ZOMl/YJ6CvYDbuGf/ya2l4+ggklFsSC0Csoz5MNHaAIpsXzACZ
-         F72/kjARU9SXz10euMoRn8wBl8jW+cmz05VTepLee1r5K7llYtEnoNJ4X/sBptiPyqUb
-         ULchk4Bw0rjEzTOAKJ7oVVnRzfDmJhGmI8RAHAHgkISeioj2Zms3zL+ab3biVreZPpj7
-         NCBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
-        bh=EHj+UQ7Tu6usfmBtBbDH78MoNwVO7qgjOcn++ecvlvY=;
-        b=h7PjYcJ6i+uqbFxxsZN3oO9cHM7hoRHHtSYoeF4meKQvyeaZCFTnsKgcfBfzog/Vbk
-         LG7WPLYgM91cmfB33wHZfyFY3MNKoxQYO7d3QbpaONr/S6tAjbJ6hhwGcbQsbcBVCWWm
-         ODCVTTBnGAVn4ErvWtqNrfMCKAuCxAiPi7Ff+fz/p+VgrrMjikM7/01A1FCCOPFFbBff
-         c2UbwfycjzxZvw/vmjcKuVnuGEQlUCI0UHfRLSX0SgVjZK6t50LvZ4rmVVOccEmTl1BI
-         m6xo3/8qM3FMiXrA2RgIf88pkryrQi1cjDOQn57eEmHX8gLLMaXn5rGO8TI9CiUcXLMW
-         qEHg==
-X-Gm-Message-State: ACgBeo2paTpH31Dc8vv2GLtsUF7cvn1cJuw0nhvWbwtoEyh8nguHSnRM
-        ldK751/gKvknrkEqWOoVj8I=
-X-Google-Smtp-Source: AA6agR76OOzHcAQSPNDhPXO6cgJytqnQSy7k6ZWl7/3QSAmuwkzg82qYETdDuikHUMV5zDmsOuUM4g==
-X-Received: by 2002:a05:6a00:850:b0:536:341b:99b7 with SMTP id q16-20020a056a00085000b00536341b99b7mr30073896pfk.47.1662023896175;
-        Thu, 01 Sep 2022 02:18:16 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id bg8-20020a056a02010800b0042a5e8486a1sm4782830pgb.42.2022.09.01.02.18.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 01 Sep 2022 02:18:15 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v14 07/14] mm: multi-gen LRU: exploit locality in rmap
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20220815071332.627393-8-yuzhao@google.com>
-Date:   Thu, 1 Sep 2022 02:18:10 -0700
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Hillf Danton <hdanton@sina.com>, Jens Axboe <axboe@kernel.dk>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Michael Larabel <Michael@michaellarabel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Tejun Heo <tj@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
-        Will Deacon <will@kernel.org>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux MM <linux-mm@kvack.org>, X86 ML <x86@kernel.org>,
-        page-reclaim@google.com, Barry Song <baohua@kernel.org>,
-        Brian Geffon <bgeffon@google.com>,
-        Jan Alexander Steffens <heftig@archlinux.org>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Steven Barrett <steven@liquorix.net>,
-        Suleiman Souhlal <suleiman@google.com>,
-        Daniel Byrne <djbyrne@mtu.edu>,
-        Donald Carr <d@chaos-reins.com>,
-        =?utf-8?Q?Holger_Hoffst=C3=A4tte?= <holger@applied-asynchrony.com>,
-        Konstantin Kharlamov <Hi-Angel@yandex.ru>,
-        Shuang Zhai <szhai2@cs.rochester.edu>,
-        Sofia Trinh <sofia.trinh@edi.works>,
-        Vaibhav Jain <vaibhav@linux.ibm.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <0F7CF2A7-F671-4196-B8FD-F35E9556391B@gmail.com>
-References: <20220815071332.627393-1-yuzhao@google.com>
- <20220815071332.627393-8-yuzhao@google.com>
-To:     Yu Zhao <yuzhao@google.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 1 Sep 2022 05:18:25 -0400
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C5ED8125E9A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:18:23 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowACXyLXZeBBjFW0DAA--.9809S2;
+        Thu, 01 Sep 2022 17:18:17 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     hdegoede@redhat.com, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH 2/2] virt: vbox: Remove unproper information
+Date:   Thu,  1 Sep 2022 17:18:15 +0800
+Message-Id: <20220901091815.3474147-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowACXyLXZeBBjFW0DAA--.9809S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw4DKw43uFW5KFW3CF4UArb_yoWDJwc_uF
+        yqvF9FgrWkArn5tr1qvwnxur9YqFsFq3WfWF13tFyrX347KrnxCFyxur13X343Zw48AFW5
+        tr4DJry8Zr1rujkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbcxFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc2xSY4AK67AK6r4f
+        MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr
+        0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0E
+        wIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJV
+        W8JwCI42IY6xAIw20EY4v20xvaj40_Gr0_Zr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAI
+        cVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUj_WrJUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+When drivers are working properly, they are quiet.
+Therefore, the vbg_info() should be removed.
 
+Fixes: 0ba002bc4393 ("virt: Add vboxguest driver for Virtual Box Guest integration")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ drivers/virt/vboxguest/vboxguest_linux.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-> On Aug 15, 2022, at 12:13 AM, Yu Zhao <yuzhao@google.com> wrote:
->=20
-> Searching the rmap for PTEs mapping each page on an LRU list (to test
-> and clear the accessed bit) can be expensive because pages from
-> different VMAs (PA space) are not cache friendly to the rmap (VA
-> space). For workloads mostly using mapped pages, searching the rmap
-> can incur the highest CPU cost in the reclaim path.
-
-Impressive work. Sorry if my feedback is not timely.
-
-Just one minor point for thought, that can be left for a later cleanup.
-
->=20
-> +	for (i =3D 0, addr =3D start; addr !=3D end; i++, addr +=3D =
-PAGE_SIZE) {
-> +		unsigned long pfn;
-> +
-> +		pfn =3D get_pte_pfn(pte[i], pvmw->vma, addr);
-> +		if (pfn =3D=3D -1)
-> +			continue;
-> +
-> +		if (!pte_young(pte[i]))
-> +			continue;
-> +
-> +		folio =3D get_pfn_folio(pfn, memcg, pgdat);
-> +		if (!folio)
-> +			continue;
-> +
-> +		if (!ptep_test_and_clear_young(pvmw->vma, addr, pte + =
-i))
-> +			continue;
-> +
-
-You have already checked that the PTE is old (not young), so this check
-seems redundant. I do not see a way in which the access-bit can be =
-cleared
-since you hold the ptl. IOW, there is no need for the =E2=80=9Cif" and =
-=E2=80=9Ccontinue".
-
-Makes me also wonder whether having a separate ptep_clear_young() can
-slightly help, since anyhow the access-bit is more of an estimation,
-and having a separate ptep_clear_young() can enable optimizations.
-
-On x86, for instance, if the PTE is dirty, we may be able to clear the
-access-bit without an atomic operation, which should be faster.
+diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
+index 2fb9a6d91b53..2c484c3a9c09 100644
+--- a/drivers/virt/vboxguest/vboxguest_linux.c
++++ b/drivers/virt/vboxguest/vboxguest_linux.c
+@@ -398,10 +398,6 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 	if (ret)
+ 		goto err_remove_file_features;
+ 
+-	vbg_info("vboxguest: misc device minor %d, IRQ %d, I/O port %x, MMIO at %pap (size %pap)\n",
+-		 gdev->misc_device.minor, pci->irq, gdev->io_port,
+-		 &mmio, &mmio_len);
+-
+ 	return 0;
+ 
+ err_remove_file_features:
+-- 
+2.25.1
 

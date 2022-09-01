@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF9725A9BCB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:35:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1B05A9BCF
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:37:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233865AbiIAPe5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51852 "EHLO
+        id S234186AbiIAPhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233646AbiIAPev (ORCPT
+        with ESMTP id S233639AbiIAPhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:34:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D4952F5
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:34:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662046486;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EdU6kcxk31+NfDy/R26HslGdp1j7dLdIqqiHO/JJmC8=;
-        b=XUVMCgmIt7zgb1iQZn7DdvpuhJrMbmVssMFRazT7OQzsFvSO2M31mnm9UMiwfyF1ku4uay
-        QIp13hWRg61FUeF5nIc6kds+VGfLT1OpQznMn96BArBP/ZrY2guSRcAeyUDu5QYPpST1UU
-        cXvWuOHn4gjBh2IYnwYcq+S+2rzvi+I=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-341-f114iezFNdqHo0w8Tg7lpQ-1; Thu, 01 Sep 2022 11:34:45 -0400
-X-MC-Unique: f114iezFNdqHo0w8Tg7lpQ-1
-Received: by mail-ej1-f71.google.com with SMTP id sb14-20020a1709076d8e00b0073d48a10e10so7098545ejc.16
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:34:45 -0700 (PDT)
+        Thu, 1 Sep 2022 11:37:20 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FA80792DC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:37:19 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id q9so16729207pgq.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:37:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=YDVYQsuU6s5buwUKaoSyW52HU9Fi2XFtlERumB7twbo=;
+        b=KGMOWmXOe9YjIfL0P64s9lFGHXuwn6yFmDKdS6PIMG++a9Z5mLZRtVjeAnEFWOcsbs
+         e1826Z3KC6WjicbpfIvpiXYvI/KLqGTvH7IUl6AVRH3HbX92gJWKsFS0ynvE3SuUnZDZ
+         9Jm5aJVgrUjBwA4PVUoEuPLiD+gPSv9wUkwEKqEHxl5gzC8fOt7fWEOnpN7yyDvd0WgN
+         B1P8PFDzGw7IOS5nteeN3AB7/9A/sQCtHMxzz23OabfcYWLlrjdynO7XQS1giPoGOYDM
+         ddJeeJnyB+5oYgQd557BiHjEtvkMch4Gi4FgusEThqZ8eHEOOhTIdfa6LEoEUhMkl/7W
+         +QXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date;
-        bh=EdU6kcxk31+NfDy/R26HslGdp1j7dLdIqqiHO/JJmC8=;
-        b=RuBrheUg6ZjMss4vyliSqKCjzAszdds0MPRr79bMxSZoH6dMDqIGXT09W6qqMC+qQb
-         /rPiasfzUMHP94+zdrmqvBmyp8Xq9fzAObL0AislaketPHbvvFY3aCEs6t/xogq7eDGg
-         IMrgJBRF9qt8l6M+YRBJ/75yOal3SWG/ba4GjoHH2+t316n84kifUHkLYecrO91L+U9/
-         4l+ouRWJwghMxIEp+aJG+od6SN1EaihJAaS1L91v3a9s/N44C1vJDwrTH9c4WpKVlDdF
-         1jAvwkaM93S+kMOty/hZQoh4LZM+EPKO/rZegcodpWN6S7/7x7aZsJMpENlRtlunV0HV
-         VDPA==
-X-Gm-Message-State: ACgBeo2Z8I8vt5FOt/BdvXZ2/KxyQ5powWjfA+32azUIvwt1QtUDp9pk
-        hAktW3OHvPlgnK7fASRw1Ih1eQnemmWMeFcdqblQUAnKz6H0UC+R1xJuBk+5MuqJldK3j3OJrOK
-        dGPPFTFp1M1G3ZJhcrEo4wPX9
-X-Received: by 2002:a17:907:3e06:b0:733:693:600e with SMTP id hp6-20020a1709073e0600b007330693600emr22714944ejc.410.1662046484224;
-        Thu, 01 Sep 2022 08:34:44 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6CGvsVadtU/FKpog77yx9E+0aH5YULUA3W4O38vGBKP5LbcMpEQQEm87QgPg9ZZYddq9+tLA==
-X-Received: by 2002:a17:907:3e06:b0:733:693:600e with SMTP id hp6-20020a1709073e0600b007330693600emr22714935ejc.410.1662046484002;
-        Thu, 01 Sep 2022 08:34:44 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id dy17-20020a05640231f100b0043cc66d7accsm1518518edb.36.2022.09.01.08.34.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 08:34:43 -0700 (PDT)
-Message-ID: <c23819ae-f7be-d07d-65bc-ea2c56a85b58@redhat.com>
-Date:   Thu, 1 Sep 2022 17:34:42 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=YDVYQsuU6s5buwUKaoSyW52HU9Fi2XFtlERumB7twbo=;
+        b=4X/26sqwaQuozgm8A1gzHg28IFEjB6V+uuX3W3xV/XMNveXv5azq7RU5ugV8DVz9Ln
+         1txvm3j/873CwYr2iisLHgxu0WTOhg+HgR4+DbqJc6AEetFEkET20N5MAIlVHsLqrp06
+         7C/BKsCaSQvBjPjO/XsHbcNfmTMkuqR6Zc0nN/abKCDrVBUuXoSqx2mCFsuOMBLuooJd
+         wdhRf34pYGYOvFbZmpCaZSFqyFYL92udYCdpbsJyGiSWEoVJyI7iJI+7cz9kR2X+m5mB
+         oB7Dl1JMErlIrmJqY7w8E9wW5pvtFecQBoeR5i/8UPQ8QY6CG7JGwLKnz6bcQdgROc1g
+         h1Jw==
+X-Gm-Message-State: ACgBeo3AoIGkQP3jSNTgYLMySwl5NoLmF35UqF83CbAtMZxvqkbupPwO
+        gfjSND89SxEp0K+DuMdqBKlOZH573QnlXg==
+X-Google-Smtp-Source: AA6agR4Q1iERWrDzRCPXOpgw719iTo4GnEe1MELTduwlobtAUHlRvqlwucUS5iHfDldQaVGmbIbP5A==
+X-Received: by 2002:a65:6216:0:b0:41d:8248:3d05 with SMTP id d22-20020a656216000000b0041d82483d05mr27501504pgv.36.1662046638926;
+        Thu, 01 Sep 2022 08:37:18 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id ij8-20020a170902ab4800b00172e19c5f8bsm6194235plb.168.2022.09.01.08.37.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 08:37:18 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 15:37:14 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH] KVM/VMX: Do not declare vmread_error asmlinkage
+Message-ID: <YxDRquTx2piSX66J@google.com>
+References: <20220817144045.3206-1-ubizjak@gmail.com>
+ <Yv0QFZUdePurfjKh@google.com>
+ <CAFULd4bVQ73Cur85Oj=oXHiMRvfrxkAVy=V4TfHcbtNWbqOQzw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] asus-wmi: Increase FAN_CURVE_BUF_LEN to 32
-Content-Language: en-US
-To:     "Luke D. Jones" <luke@ljones.dev>
-Cc:     linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org, markgross@kernel.org
-References: <20220828074638.5473-1-luke@ljones.dev>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220828074638.5473-1-luke@ljones.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAFULd4bVQ73Cur85Oj=oXHiMRvfrxkAVy=V4TfHcbtNWbqOQzw@mail.gmail.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,73 +74,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 8/28/22 09:46, Luke D. Jones wrote:
-> Fix for TUF laptops returning with an -ENOSPC on calling
-> asus_wmi_evaluate_method_buf() when fetching default curves. The TUF method
-> requires at least 32 bytes space.
+On Wed, Aug 31, 2022, Uros Bizjak wrote:
+> On Wed, Aug 17, 2022 at 5:58 PM Sean Christopherson <seanjc@google.com> wrote:
+> >
+> > +PeterZ
+> >
+> > On Wed, Aug 17, 2022, Uros Bizjak wrote:
+> > > There is no need to declare vmread_error asmlinkage, its arguments
+> > > can be passed via registers for both, 32-bit and 64-bit targets.
+> > > Function argument registers are considered call-clobbered registers,
+> > > they are saved in the trampoline just before the function call and
+> > > restored afterwards.
+> >
+> > I'm officially confused.  What's the purpose of asmlinkage when used in the kernel?
+> > Is it some historical wart that's no longer truly necessary and only causes pain?
+> >
+> > When I wrote this code, I thought that the intent was that it should be applied to
+> > any and all asm => C function calls.  But that's obviously not required as there
+> > are multiple instances of asm code calling C functions without annotations of any
+> > kind.
 > 
-> This also moves and changes the pr_debug() in fan_curve_check_present() to
-> pr_warn() in fan_curve_get_factory_default() so that there is at least some
-> indication in logs of why it fails.
+> It is the other way around. As written in coding-style.rst:
 > 
-> Signed-off-by: Luke D. Jones <luke@ljones.dev>
-
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
-
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
-
-Once I've run some tests on this branch the patches there will be
-added to the platform-drivers-x86/for-next branch and eventually
-will be included in the pdx86 pull-request to Linus for the next
-merge-window.
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/platform/x86/asus-wmi.c | 9 ++++-----
->  1 file changed, 4 insertions(+), 5 deletions(-)
+> Large, non-trivial assembly functions should go in .S files, with corresponding
+> C prototypes defined in C header files.  The C prototypes for assembly
+> functions should use ``asmlinkage``.
 > 
-> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-> index 3d9fd58573f9..11203213e00d 100644
-> --- a/drivers/platform/x86/asus-wmi.c
-> +++ b/drivers/platform/x86/asus-wmi.c
-> @@ -108,7 +108,7 @@ module_param(fnlock_default, bool, 0444);
->  #define WMI_EVENT_MASK			0xFFFF
->  
->  #define FAN_CURVE_POINTS		8
-> -#define FAN_CURVE_BUF_LEN		(FAN_CURVE_POINTS * 2)
-> +#define FAN_CURVE_BUF_LEN		32
->  #define FAN_CURVE_DEV_CPU		0x00
->  #define FAN_CURVE_DEV_GPU		0x01
->  /* Mask to determine if setting temperature or percentage */
-> @@ -2383,8 +2383,10 @@ static int fan_curve_get_factory_default(struct asus_wmi *asus, u32 fan_dev)
->  	curves = &asus->custom_fan_curves[fan_idx];
->  	err = asus_wmi_evaluate_method_buf(asus->dsts_id, fan_dev, mode, buf,
->  					   FAN_CURVE_BUF_LEN);
-> -	if (err)
-> +	if (err) {
-> +		pr_warn("%s (0x%08x) failed: %d\n", __func__, fan_dev, err);
->  		return err;
-> +	}
->  
->  	fan_curve_copy_from_buf(curves, buf);
->  	curves->device_id = fan_dev;
-> @@ -2402,9 +2404,6 @@ static int fan_curve_check_present(struct asus_wmi *asus, bool *available,
->  
->  	err = fan_curve_get_factory_default(asus, fan_dev);
->  	if (err) {
-> -		pr_debug("fan_curve_get_factory_default(0x%08x) failed: %d\n",
-> -			 fan_dev, err);
-> -		/* Don't cause probe to fail on devices without fan-curves */
->  		return 0;
->  	}
->  
+> So, prototypes for *assembly functions* should use asmlinkage.
 
+I gotta imagine that documentation is stale.  I don't understand why asmlinkage
+would be a one-way thing.
+
+> That said, asmlinkage for i386 just switches ABI to the default
+> stack-passing ABI. However, we are calling assembly files, so the
+> argument handling in the callee is totally under our control and there
+> is no need to switch ABIs. It looks to me that besides syscalls,
+> asmlinkage is and should be used only for a large imported body of asm
+> functions that use standard stack-passing ABI (e.g. x86 crypto and
+> math-emu functions), otherwise it is just a burden to push and pop
+> registers to/from stack for no apparent benefit.
+
+Yeah, this is what I'm confused about.  Unless there's something we're missing,
+we should update the docs to clarify when asmlinkage is actually needed.
+
+> > And vmread_error() isn't the only case where asmlinkage appears to be a burden, e.g.
+> > schedule_tail_wrapper() => schedule_tail() seems to exist purely to deal with the
+> > side affect of asmlinkage generating -regparm=0 on 32-bit kernels.
+> 
+> schedule_tail is external to the x86 arch directory, and for some
+> reason marked asmlinkage. So, the call from asm must follow asmlinkage
+> ABI.
+
+Ahhh, it's a common helper that's called from assembly on other architectures.
+That makes sense.
+
+Thanks much!

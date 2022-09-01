@@ -2,83 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 670BA5A9CD3
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E44FF5A9CD2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:16:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234996AbiIAQOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49944 "EHLO
+        id S235055AbiIAQPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:15:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235000AbiIAQOj (ORCPT
+        with ESMTP id S235011AbiIAQP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:14:39 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E39EE93510
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:14:37 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id p16so7132759lfd.6
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:14:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=oM5Ezf93shH3kTZ/vWZom8C9aO4D37NWLp1m2av/9KE=;
-        b=weJDobI4VZLlQOv2NmBusEwHliBx35A0mbIaFjUlAYWNEroUGOQ8uthHHliuu7BU8p
-         b+KkC1eXTODjP+yuFhR/dK5ZRTcFfygCZR1bMaH8t9B7bCXYJUsBhtAdMNY8OQXzZLqr
-         yOqF000XGvlGs2gwcW1w8bEFYaE7b033v7/966gK1virFXNzIp7cdlwLUysFMGdPpqH0
-         yloNo0s3Q4YiKAeTShZ8bszaujCDsORpn8fMuagniFsviVOlkajOSHZo02qFPvynefB9
-         BbgW9UAL4Ccn4FZRR6LQYxUzNiE0P802zOAWfiUztoFcBaktOnN9aJ4sq6SvhnJtCe9l
-         /ykw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=oM5Ezf93shH3kTZ/vWZom8C9aO4D37NWLp1m2av/9KE=;
-        b=2nJ1VT1JcWUy5y8WGLJli2+n9vgjo4+kI8DeKY6BBT2+QIQ9W+MNycKJCZ/VNcXH03
-         5DtO6icT6V781K374k/kUUlv7NgHaDxZCaBcFHuYeR813YG74GuiSZr6oWzzQ5oZMCp0
-         mkuZt/L9ft/V5SXP8/aiYb1aY27KMcsla0BxUI1a8M2+h5SZ/frH2l7ubYueyAtHUw2p
-         Fv3zXBqAZsARlB/N+GeYexOBJLy77Ul8/zHtS0xLt54xQ2n8tWgQD/A3N5hK1noSrt6K
-         aOC6W8E1FZOrZuhrbDdiSepnpV+oHyHNygB4Czz5uwEWd6HTAHtQI66P34SbEhuvvOw2
-         Ateg==
-X-Gm-Message-State: ACgBeo1iFEFdTHJ3TUw5OktA5le2upSQn7NhSde4mO80ItQqkQp09YSR
-        70hACrn+0rMpovW1vzFpFSJoDg==
-X-Google-Smtp-Source: AA6agR7mFWuOJgz07cAbY8XAhBR6s/+8zDbJ48LhLiRZk/NLUAK+9mIF34+dj5dbwMX4aTNNI+016w==
-X-Received: by 2002:a05:6512:3b23:b0:492:b36c:acab with SMTP id f35-20020a0565123b2300b00492b36cacabmr11580881lfv.157.1662048876214;
-        Thu, 01 Sep 2022 09:14:36 -0700 (PDT)
-Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
-        by smtp.gmail.com with ESMTPSA id t24-20020a056512209800b0049490b3bb46sm78580lfr.36.2022.09.01.09.14.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 09:14:35 -0700 (PDT)
-Message-ID: <df07db67-e710-389a-ba9a-903c6855397b@linaro.org>
-Date:   Thu, 1 Sep 2022 19:14:34 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH 11/14] dt-bindings: arm: cpus: Add kryo240 compatible
-Content-Language: en-US
-To:     Iskren Chernev <iskren.chernev@gmail.com>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Maxime Ripard <maxime@cerno.tech>,
-        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-kernel@vger.kernel.org
-References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
- <20220901072414.1923075-12-iskren.chernev@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220901072414.1923075-12-iskren.chernev@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        Thu, 1 Sep 2022 12:15:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1CE2220DD
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:15:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27E8961F78
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:15:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8942DC433C1;
+        Thu,  1 Sep 2022 16:15:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662048900;
+        bh=kkJWnAECW2shhV7o/E4tny0315pPgUtNsb2VZGH5UUc=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=sO4+ds1/FTgg7WnhSbl15b/zUW3JuBOHvooNW84OyKx9zdb0EU7UN2PxLJWovz7r8
+         iFeijy95i4XW2it23+Hduiz1MlqDphGaii/LnWtqjFRf5C8NA8IFwxK4Tjn09aVsef
+         N5OH4wM41GAAOititeWp8/urQAnHuJnhr+MPI/FQCbEfcAL8HrzXFD11dApBHijisg
+         0aK7Ke/IIiu3THNyG7HfYcRXRwDMyb7auqb6dN+8w/KTHIdOUTLQxgzS8F7z0Xb/Z7
+         FZX4KFa3AUiShu3Pk0/ewKXudp4SJ7a7959qB0QdJ7P8AZgtbdDRnLAzO4430u9zFY
+         kNSB6Fw+nLxFw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 73742E924D5;
+        Thu,  1 Sep 2022 16:15:00 +0000 (UTC)
+Subject: Re: [GIT PULL] sound fixes for 6.0-rc4
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <874jxrh5s7.wl-tiwai@suse.de>
+References: <874jxrh5s7.wl-tiwai@suse.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <874jxrh5s7.wl-tiwai@suse.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.0-rc4
+X-PR-Tracked-Commit-Id: 5f3d9e8161bb8cb23ab3b4678cd13f6e90a06186
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 2880e1a175b9f31798f9d9482ee49187f61b5539
+Message-Id: <166204890046.19752.14878926071050811043.pr-tracker-bot@kernel.org>
+Date:   Thu, 01 Sep 2022 16:15:00 +0000
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,16 +61,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/09/2022 10:24, Iskren Chernev wrote:
-> Kryo240 is found in SM4250, the slower sibling of the SM6115.
-> 
-> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/cpus.yaml | 1 +
+The pull request you sent on Thu, 01 Sep 2022 10:12:40 +0200:
 
+> git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git tags/sound-6.0-rc4
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/2880e1a175b9f31798f9d9482ee49187f61b5539
 
+Thank you!
 
-Best regards,
-Krzysztof
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

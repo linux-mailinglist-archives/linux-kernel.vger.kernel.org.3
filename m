@@ -2,70 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C10915A9DF5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:25:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E96295A9DF9
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233516AbiIARZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:25:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35300 "EHLO
+        id S230437AbiIAR0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232128AbiIARZo (ORCPT
+        with ESMTP id S234129AbiIARZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:25:44 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 564392E9E2
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:25:43 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id z187so18073467pfb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:25:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=b7m23koJ1VppwfdVnRo0EjHn4J3Xyy4vt6H6+/PQAvc=;
-        b=Mtu6yhsvW8qiKbyEly7EpT1duLSR1DH5Xjg+oh1zWg4osVtwVvkuniTTXCxk7YysNU
-         /stFYJp+dxJTmgFqtMSuTLfClSNXUj1S+a4sBMJJ/6YePuflPUzI7lq3P+YvUDal9FB1
-         K2FYWmgbKDpZld2MLf+NS/szmQ7c19keXbZcM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=b7m23koJ1VppwfdVnRo0EjHn4J3Xyy4vt6H6+/PQAvc=;
-        b=nz6kIXbQjeh75tLSMT7qRsLJPMs3mRwPvgay0sLy5SIv6Tp2/IrUIXIWnsTXlkZH6i
-         1tsr/NF5kIGRpED223JfVwCGCUGkKx1V0CM8n0K1oPJOdAyx4bFicUw1UZIV0B2UVyXh
-         xQtoN4dZkhN2T+6Xahn2eQTw3uWptDwl9t9o44mQNs8VcYDVkMgnL5cw8TDuWJX+u3CO
-         G2jxx1+vv8emP+z744nzeHvr4pj7m0WjOj/rYm/BMvj4KVYcPUf6u/Fk8zJRCfE6GqFD
-         CNAOwM/9zvNp4kH2xOhyl9vc1JgCY4p6lG4fQBRDK4gsbbIplQCt86D82FkbMLkehf4u
-         WrDg==
-X-Gm-Message-State: ACgBeo1vzRV8cGToXhkRAeGl6hzVAULorSM8Ul8IMgweJeT+LR0YBLyE
-        WsgK/d9aFe01zLT7be51ILCo3w==
-X-Google-Smtp-Source: AA6agR6lKIv9iH6jOojdIWEvRNKtfkVnpIQauHMaIBrvj9jiSNYExlbDTYtiTUYW1ZzzKIyOMj7qFA==
-X-Received: by 2002:a05:6a00:a05:b0:534:b1ad:cfac with SMTP id p5-20020a056a000a0500b00534b1adcfacmr31672604pfh.35.1662053142874;
-        Thu, 01 Sep 2022 10:25:42 -0700 (PDT)
-Received: from localhost ([2620:15c:11a:202:34cd:3659:c11f:5d05])
-        by smtp.gmail.com with UTF8SMTPSA id n6-20020a170903110600b0016ee26224a4sm9084805plh.305.2022.09.01.10.25.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 10:25:42 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 10:25:41 -0700
-From:   Matthias Kaehlcke <mka@chromium.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krishna Kurapati <quic_kriskura@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] arm64: dts: qcom: sc7180: Configure USB as wakeup source
-Message-ID: <YxDrFUsWZvy7IUBs@google.com>
-References: <20220901101658.1.I347ea409ee3134bd32a29e33fecd1a6ef32085a0@changeid>
+        Thu, 1 Sep 2022 13:25:53 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FDE03A4A5;
+        Thu,  1 Sep 2022 10:25:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662053148; x=1693589148;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TmDhYbU8HgErUAJVzSa3J2R5NUU4fr8wdqMREO2cf5U=;
+  b=PYyw19nOnLX4Eyi415vFEYxVfBxxGhPsvpI5+Fm5oBVa83x0GtX33CIG
+   FdMWXqL1Y2zHTY47e/20P6Qa0AKxzI3aXHcSYfWgiNjyK9FyKVCc7+eN/
+   67y/kkzD9zdre0HXwoPWYB+EeELhD27mRAoU5SwuKI0tghNbT1rXffYv4
+   +xXOTlteWUGhq5JcD3eZ6llhPYRvcF8Ppf63Jv+E02QcjR7bKJTZbSiZO
+   1FyFNo3b/BTV2KFXzNgl/Fm3MP+QwwvuE2jRvmWeVq2sDklCZimfq6iZ8
+   nmNdEj8EeNE1FJB6EkmpMl9oU1w9DdUty/lFxPNkTWFdBLbPt1xt5Wn9B
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="278796633"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="278796633"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 10:25:47 -0700
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="612589961"
+Received: from djiang5-mobl2.amr.corp.intel.com (HELO [10.209.165.86]) ([10.209.165.86])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 10:25:47 -0700
+Message-ID: <8bced9df-bf93-d2c6-bb7c-8dc2a6aaea6f@intel.com>
+Date:   Thu, 1 Sep 2022 10:25:47 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220901101658.1.I347ea409ee3134bd32a29e33fecd1a6ef32085a0@changeid>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.0
+Subject: Re: [PATCH v5 0/7] dmaengine: Support polling for out of order
+ completions
+Content-Language: en-US
+To:     Ben Walker <benjamin.walker@intel.com>, vkoul@kernel.org
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220622193753.3044206-1-benjamin.walker@intel.com>
+ <20220829203537.30676-1-benjamin.walker@intel.com>
+From:   Dave Jiang <dave.jiang@intel.com>
+In-Reply-To: <20220829203537.30676-1-benjamin.walker@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,35 +63,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:17:03AM -0700, Matthias Kaehlcke wrote:
-> The dwc3 USB controller of the sc7180 supports USB remote
-> wakeup, configure it as a wakeup source.
-> 
-> Signed-off-by: Matthias Kaehlcke <mka@chromium.org>
-> ---
-> 
->  arch/arm64/boot/dts/qcom/sc7180.dtsi | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> index 2d1f38342858..507718f309e1 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
-> @@ -2780,7 +2780,9 @@ usb_1: usb@a6f8800 {
->  					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3 0>;
->  			interconnect-names = "usb-ddr", "apps-usb";
->  
-> -			usb_1_dwc3: dwc3@a600000 {
-> +			wakeup-source;
-> +
-> +			usb_1_dwc3: usb@a600000 {
 
-Please disregard this version, it is based on a downstream branch which I used
-for testing.
-
->  				compatible = "snps,dwc3";
->  				reg = <0 0x0a600000 0 0xe000>;
->  				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-> -- 
-> 2.37.2.789.g6183377224-goog
-> 
+On 8/29/2022 1:35 PM, Ben Walker wrote:
+> This series adds support for polling async transactions for completion
+> even if interrupts are disabled and transactions can complete out of
+> order.
+>
+> Prior to this series, dma_cookie_t was a monotonically increasing integer and
+> cookies could be compared to one another to determine if earlier operations had
+> completed (up until the cookie wraps around, then it would break). Now, cookies
+> are treated as opaque handles. The series also does some API clean up and
+> documents how dma_cookie_t should behave.
+>
+> This closes out by adding support for .device_tx_status() to the idxd
+> driver and then reverting the DMA_OUT_OF_ORDER patch that previously
+> allowed idxd to opt-out of support for polling, which I think is a nice
+> overall simplification to the dmaengine API.
+>
+> Changes since version 4:
+>   - Rebased
+>   - Removed updates to the various drivers that call dma_async_is_tx_complete.
+>     These clean ups will be spun off into a separate patch series since they need
+>     acks from other maintainers.
+>
+> Changes since version 3:
+>   - Fixed Message-Id in emails. Sorry they were all stripped! Won't
+>     happen again.
+>
+> Changes since version 2:
+>   - None. Rebased as requested without conflict.
+>
+> Changes since version 1:
+>   - Broke up the change to remove dma_async_is_tx_complete into a single
+>     patch for each driver
+>   - Renamed dma_async_is_tx_complete to dmaengine_async_is_tx_complete.
+>
+> Ben Walker (7):
+>    dmaengine: Remove dma_async_is_complete from client API
+>    dmaengine: Move dma_set_tx_state to the provider API header
+>    dmaengine: Add dmaengine_async_is_tx_complete
+>    dmaengine: Add provider documentation on cookie assignment
+>    dmaengine: idxd: idxd_desc.id is now a u16
+>    dmaengine: idxd: Support device_tx_status
+>    dmaengine: Revert "cookie bypass for out of order completion"
+>
+>   Documentation/driver-api/dmaengine/client.rst | 24 ++----
+>   .../driver-api/dmaengine/provider.rst         | 64 ++++++++------
+>   drivers/dma/dmaengine.c                       |  2 +-
+>   drivers/dma/dmaengine.h                       | 21 ++++-
+>   drivers/dma/dmatest.c                         | 14 +--
+>   drivers/dma/idxd/device.c                     |  1 +
+>   drivers/dma/idxd/dma.c                        | 86 ++++++++++++++++++-
+>   drivers/dma/idxd/idxd.h                       |  3 +-
+>   include/linux/dmaengine.h                     | 43 +++-------
+>   9 files changed, 164 insertions(+), 94 deletions(-)
+Besides the stray white space, Reviewed-by: Dave Jiang 
+<dave.jiang@gmail.com>

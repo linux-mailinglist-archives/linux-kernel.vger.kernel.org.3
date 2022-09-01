@@ -2,128 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC3D5A9D82
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B9685A9D85
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:53:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233996AbiIAQwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
+        id S234554AbiIAQwq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:52:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiIAQwO (ORCPT
+        with ESMTP id S231133AbiIAQwn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:52:14 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE39979DA;
-        Thu,  1 Sep 2022 09:52:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id C59D4CE28D5;
-        Thu,  1 Sep 2022 16:52:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DF7DC433C1;
-        Thu,  1 Sep 2022 16:52:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662051130;
-        bh=fwnNs67ZFBWw6DkWLKvb+7JiRojuVmxIxKtpiQTBCNM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=QBTC3Pku9CajQUNAdqMXreZd11O7yedw+JlN+d8sLEP/CH1T6K9M8657vJDcnjl51
-         FDATmpHC2FCF4//31dZAq4KzkNfo13Waw7WMQTsw3vvojM6++vPGgI8yO6zliq0rd5
-         jPNnxd9OkDjW1aLFcJjrzB2VNOG+AERp2ba5vrlEelbdnPL6S/M+2qhgyYW/a/c88x
-         S0qXBtWdxFtFjPl5C8ZNorSsKyvZsw4dk/W0eXwjsD+6v7THXKchtHvhHwO1loaQUa
-         j1qy4QNzSwMtNS23pqcvCN/jo15WMkidyhhBO3AfGCYx4Ua87WlqzgzcJm2VvyilUX
-         zi10BlrHEw2xg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id BCBA15C0691; Thu,  1 Sep 2022 09:52:09 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 09:52:09 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rcu <rcu@vger.kernel.org>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
- fixes
-Message-ID: <20220901165209.GA6159@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830105324.GA71266@lothringen>
- <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830160316.GC71266@lothringen>
- <20220830162244.GA73392@lothringen>
- <Yw4+g/0yEf7fpHrh@pc636>
- <20220901112947.GA105556@lothringen>
- <YxCejoKH8dGIeW22@pc636>
- <20220901144158.GV6159@paulmck-ThinkPad-P17-Gen-1>
- <20220901153034.GA106955@lothringen>
+        Thu, 1 Sep 2022 12:52:43 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7452C979F5;
+        Thu,  1 Sep 2022 09:52:42 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id w88-20020a17090a6be100b001fbb0f0b013so3238972pjj.5;
+        Thu, 01 Sep 2022 09:52:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=EyYzuAJICZEJkeXJX1j7tTOYHHP3WGLUevJ1ub5HhfA=;
+        b=bJYn0c4dA5o6LdUBFOu/jowBMOlO1js31IW99n1CfFxdw/+1+TLvhTiuB1Qhv7Mo9y
+         WRums3uISzLpDmLGIn23q+DxIrCeQa1xSNKNlHo+VFq417Slm+uxi4y+hGuFYaj05Jug
+         yylzuj47la/WnOnr64saKhbbW2MkmcMaPhXFSdAs3YIlCZkrdn2sKVBt7OFO5US37ShH
+         5ZqJp9tXHLvU9e6YGH6mCqgzDbeb6TCY+MTLLn0oWO/pjw1E/dXgiO4dNBdup3W4O3hz
+         dQLNmbBonzIA4BhH5zUNDf4xqi7ZCMD3DkqzsIMizLfYy15YPzXFUKW9PthwwU3qB8ot
+         sR1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=EyYzuAJICZEJkeXJX1j7tTOYHHP3WGLUevJ1ub5HhfA=;
+        b=ryQbcJCN1odW/kaLn7TjaO3RsijW5YFnbjDDCTTFp5UAqzo7yv9wrw2cceXEZCrc4u
+         6lueAJZ6xJNPCYz/sS8IQXIZhpkniXx1+ZD/RXBgz9Aas+gbLTfwuhkmP2OthbmSr28y
+         btmCPHLwLSlamE5NuGOcLpe6aAeRpz0YQTFvnTM05ViDfhOWWAGMMzyiXSlzCanq0Dkq
+         lqVkkEeEnjmxTxT3za+AtYckNog38BW7BBp9Z7K9YK0C+kazpv7s1xQgPzbsoskBRcuE
+         BIhUeXMBZ7XE1ElLRTew67LoHEU+cs5IdgA/OF2x2YnSVE4rblq4u0cgNrCJCsJxvAVG
+         fYvQ==
+X-Gm-Message-State: ACgBeo0pbo8MlG8JgddtrwVhGXCENwoAeoVL8vMnRMVoP4lTXuksJFfT
+        Tzbm03J163+k/JfLS48p198=
+X-Google-Smtp-Source: AA6agR67jmgSj2wsMKqv5E1HqgxQ3iSX+z5Id4efYN9RgT1LfhGxXwSgcEzKspAbxSmw7jMWpykDWQ==
+X-Received: by 2002:a17:903:244f:b0:175:34d6:97a8 with SMTP id l15-20020a170903244f00b0017534d697a8mr11727714pls.100.1662051161743;
+        Thu, 01 Sep 2022 09:52:41 -0700 (PDT)
+Received: from localhost ([192.55.55.51])
+        by smtp.gmail.com with ESMTPSA id s3-20020a170902ea0300b00174c5fb500dsm9301380plg.116.2022.09.01.09.52.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 09:52:41 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 09:52:40 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "Gao, Chao" <chao.gao@intel.com>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>
+Subject: Re: [PATCH v2 05/19] KVM: Rename and move CPUHP_AP_KVM_STARTING to
+ ONLINE section
+Message-ID: <20220901165240.GG2711697@ls.amr.corp.intel.com>
+References: <cover.1661860550.git.isaku.yamahata@intel.com>
+ <d2c8815a56be1712e189ddcbea16c8b6cbc53e4a.1661860550.git.isaku.yamahata@intel.com>
+ <YxBOoWckyP1wvzMZ@gao-cwp>
+ <933858c97f69bcf6fb00ea5dcb2ec9fa368eced3.camel@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220901153034.GA106955@lothringen>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <933858c97f69bcf6fb00ea5dcb2ec9fa368eced3.camel@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 05:30:34PM +0200, Frederic Weisbecker wrote:
-> On Thu, Sep 01, 2022 at 07:41:58AM -0700, Paul E. McKenney wrote:
-> > On Thu, Sep 01, 2022 at 01:59:10PM +0200, Uladzislau Rezki wrote:
-> > > On Thu, Sep 01, 2022 at 01:29:47PM +0200, Frederic Weisbecker wrote:
-> > > > On Tue, Aug 30, 2022 at 06:44:51PM +0200, Uladzislau Rezki wrote:
-> > > > > Hello, Frederic.
-> > > > > 
-> > > > > > 
-> > > > > > Although who knows, may be some periodic file operation while idle are specific
-> > > > > > to Android. I'll try to trace lazy callbacks while idle and the number of grace
-> > > > > > periods associated.
-> > > > > > 
-> > > > > > 
-> > > > > Everything related to lazy call-backs is about not waking "nocb"
-> > > > > kthreads in order to offload one or i should say few callbacks
-> > > > > because it is more or less useless. Currently if incoming callback
-> > > > > is the only one, it will kick a GP whereas a GP will kick nocb_kthread
-> > > > > to offload.
-> > > > 
-> > > > Not sure this is only about not waking "nocb" kthreads. The grace period
-> > > > kthread is also awaken in !NOCB and has quite some work to do. And there,
-> > > > having a server expands the issue because you may have a lot of CPUs's extended
-> > > > quiescent states to check.
-> > > > 
-> > > I mean here the following combination: NOCB + call_rcu_lazy() tandem.
-> > > The !NOCB is not about power save, IMHO. Because it implies callbacks
-> > > to be processed on CPUs they are landed.
+On Thu, Sep 01, 2022 at 10:58:04AM +0000,
+"Huang, Kai" <kai.huang@intel.com> wrote:
+
+> On Thu, 2022-09-01 at 14:18 +0800, Gao, Chao wrote:
+> > On Tue, Aug 30, 2022 at 05:01:20AM -0700, isaku.yamahata@intel.com wrote:
+> > > From: Chao Gao <chao.gao@intel.com>
 > > > 
-> > > In this scenario you can not let the EAS scheduler to find a more
-> > > efficient CPU for further handling.
+> > > The CPU STARTING section doesn't allow callbacks to fail. Move KVM's
+> > > hotplug callback to ONLINE section so that it can abort onlining a CPU in
+> > > certain cases to avoid potentially breaking VMs running on existing CPUs.
+> > > For example, when kvm fails to enable hardware virtualization on the
+> > > hotplugged CPU.
+> > > 
+> > > Place KVM's hotplug state before CPUHP_AP_SCHED_WAIT_EMPTY as it ensures
+> > > when offlining a CPU, all user tasks and non-pinned kernel tasks have left
+> > > the CPU, i.e. there cannot be a vCPU task around. So, it is safe for KVM's
+> > > CPU offline callback to disable hardware virtualization at that point.
+> > > Likewise, KVM's online callback can enable hardware virtualization before
+> > > any vCPU task gets a chance to run on hotplugged CPUs.
+> > > 
+> > > KVM's CPU hotplug callbacks are renamed as well.
+> > > 
+> > > Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> > > Signed-off-by: Chao Gao <chao.gao@intel.com>
 > > 
-> > Just to follow up, Uladzislau and others did some detailed performance
-> > analysis of NOCB on Android.  Of course, this analysis might or might
-> > not carry over to servers, but it was pretty detailed.
+> > Isaku, your signed-off-by is missing.
+> > 
+> > > Link: https://lore.kernel.org/r/20220216031528.92558-6-chao.gao@intel.com
+> > > ---
+> > > include/linux/cpuhotplug.h |  2 +-
+> > > virt/kvm/kvm_main.c        | 30 ++++++++++++++++++++++--------
+> > > 2 files changed, 23 insertions(+), 9 deletions(-)
+> > > 
+> > > diff --git a/include/linux/cpuhotplug.h b/include/linux/cpuhotplug.h
+> > > index f61447913db9..7972bd63e0cb 100644
+> > > --- a/include/linux/cpuhotplug.h
+> > > +++ b/include/linux/cpuhotplug.h
+> > > @@ -185,7 +185,6 @@ enum cpuhp_state {
+> > > 	CPUHP_AP_CSKY_TIMER_STARTING,
+> > > 	CPUHP_AP_TI_GP_TIMER_STARTING,
+> > > 	CPUHP_AP_HYPERV_TIMER_STARTING,
+> > > -	CPUHP_AP_KVM_STARTING,
+> > > 	CPUHP_AP_KVM_ARM_VGIC_INIT_STARTING,
+> > > 	CPUHP_AP_KVM_ARM_VGIC_STARTING,
+> > > 	CPUHP_AP_KVM_ARM_TIMER_STARTING,
+> > 
+> > The movement of CPUHP_AP_KVM_STARTING changes the ordering between
+> > CPUHP_AP_KVM_STARTING and CPUHP_AP_KVM_ARM_* above [1]. We need
+> > the patch [2] from Marc to avoid breaking ARM.
+> > 
+> > [1] https://lore.kernel.org/lkml/87sfsq4xy8.wl-maz@kernel.org/
+> > [2] https://lore.kernel.org/lkml/20220216031528.92558-5-chao.gao@intel.com/
 > 
-> Sure I certainly don't deny the benefit on Android and similar workload.
-> What I'm worried about is that we are making this feature too specialized
-> when it may deserve to be made more generic.
-> 
-> I'm not convincing anyone though and I don't have the means to provide
-> numbers, I would need to produce an actual !NOCB implementation for that.
+> How about Isaku just to take your series directly (+his SoB) and add additional
+> patches?
 
-I have not yet given up on thinking about what measurements I could take
-that would be convincing within Meta.  Maybe some idea will present itself
-on the plane.  If nothing else, exploratory measurements with rcutop.
-
-> So I'm not entirely comfortable but I'm going to review the current patchset
-> anyway and once it lands -rcu I'll try to hack a quick !NOCB implementation
-> for measurements purpose.
-
-That sounds like a very good approach!
-
-							Thanx, Paul
+Ok will do.  Although I hoped to slim it down, I've ended up to take most of it.
+four out of six.  Now why not two more.
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>

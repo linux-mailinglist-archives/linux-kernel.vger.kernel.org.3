@@ -2,47 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (unknown [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EAE5A9CB0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2978D5A9CB1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234925AbiIAQKq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:10:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
+        id S234893AbiIAQLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234898AbiIAQKj (ORCPT
+        with ESMTP id S234910AbiIAQLP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:10:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A7DE2F66F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:10:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EA72261F5F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:10:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2427C433C1;
-        Thu,  1 Sep 2022 16:10:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662048634;
-        bh=DCp5squR5m5NwHxUhWVUSu23csTamGHJnCEZsRIaMts=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CPJyeSVZ16sd9K2jtcTBLh6HDPGoj5yZeCTs5fPgdR9nAjlCBqaILmfkj6nNc3u3X
-         iMWF8IfNYJpkC+prjLbYYUKTA4AySigkS1XCyL2xfJiClVEExVcO1CRFhstrfV78My
-         cU2mdzEa84OjAJOtXYSDma4JNQKNFpuTv9kIqnhY=
-Date:   Thu, 1 Sep 2022 18:10:31 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Jim Cromie <jim.cromie@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, jbaron@akamai.com
-Subject: Re: [PATCH 00/11] DYNAMIC_DEBUG for this cycle
-Message-ID: <YxDZd8MQtrTLLNmC@kroah.com>
-References: <20220811173541.2901122-1-jim.cromie@gmail.com>
+        Thu, 1 Sep 2022 12:11:15 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B4B052FF4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:11:12 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id b9so13623719qka.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:11:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=//crJhFC2MP6k+HqBJNKrFTDqDx3Mg1jCPzBiBq8JGQ=;
+        b=DK8L+9n+n2ETtpIVa2bW5wX4fRT1GikHoburKedmagzhhyxwVaZ4UTYmAk9NhZbNHZ
+         eMSwrLbJhT3hR/JaUA3aihvQedzouBDxTUdXpaqQvmdFhM1SLxXQA5AVsejxo2VmwEx9
+         n2PI9JHmr49EANJrGwFswqazuWU75iWJapKrQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=//crJhFC2MP6k+HqBJNKrFTDqDx3Mg1jCPzBiBq8JGQ=;
+        b=0b8vBqIWH+sHPSe+Pohe997tqvRLKnPoQBHYcEaC1aaeQg+QYUaZSWx1h/TKWLdQk5
+         hIWQdTqbKjC1nrNYG/qAVu4jNQX7W0x41VwDZ87A2vFlmmWYXIJlCx//D2WTJsll4IKt
+         uedpmVX7qvQP9QpDvUB9qa1NX1rnwqgWvruEEtLbJ5vq6hrbHJ2uWAwzbFgzupbghLTy
+         vLZrW8vQP/p1ZpYdK9DpxhzWIRaYPTQ/0sj2WrFHm+ENe/2BbX9G434Qunfw6XaZF96w
+         GJdUV3wGaHoORCucV6w0OeZcI69iQ5jbJ+aRYWmbzk4M8xCANPo7BxsberdGIjWAII89
+         +kpg==
+X-Gm-Message-State: ACgBeo3sYqa20V73WyTT08uHcKhMm6rOZ4tnCkVbKnv3yjJspnHRrrXc
+        3s0zKrwbFMWdd83fwSw3Va9JEQ==
+X-Google-Smtp-Source: AA6agR5uFGoSCi5T5ZGXDJDTTEG/opf7vE6mOpV4fQ7WbI4io+T3C6z3skjl/kN8pa8uHldxMPaM5w==
+X-Received: by 2002:a37:9a16:0:b0:6ba:f09a:a61b with SMTP id c22-20020a379a16000000b006baf09aa61bmr20312266qke.486.1662048671547;
+        Thu, 01 Sep 2022 09:11:11 -0700 (PDT)
+Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id bq42-20020a05620a46aa00b006b8f4ade2c9sm12570413qkb.19.2022.09.01.09.11.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 09:11:11 -0700 (PDT)
+Message-ID: <1a25723e-a7ad-a9f6-bd9f-278b1248d822@joelfernandes.org>
+Date:   Thu, 1 Sep 2022 12:11:08 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220811173541.2901122-1-jim.cromie@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
+ fixes
+Content-Language: en-US
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
+        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        rcu <rcu@vger.kernel.org>,
+        Vineeth Pillai <vineeth@bitbyteword.org>
+References: <CAEXW_YS593n8Gget+REaD-c8vT8Ht_AzOY0kXA_uc674LOyvVw@mail.gmail.com>
+ <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220830105324.GA71266@lothringen>
+ <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220830160316.GC71266@lothringen> <20220830162244.GA73392@lothringen>
+ <Yw4+g/0yEf7fpHrh@pc636> <20220901112947.GA105556@lothringen>
+ <YxCejoKH8dGIeW22@pc636> <20220901144158.GV6159@paulmck-ThinkPad-P17-Gen-1>
+ <20220901153034.GA106955@lothringen>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <20220901153034.GA106955@lothringen>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,47 +87,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 11:35:30AM -0600, Jim Cromie wrote:
-> Hi Greg, Jason,
-> 
-> Please consider these for this rc-cycle.
->   - 1-9 have Jason's Ack,
->   - 9th removes unused EXPORTed fn.
->   - 10 is simple var cleanup
->   - 11 is a partial decoupling of dyndbg from kernel/module
-> 
-> Jim Cromie (11):
->   dyndbg: fix static_branch manipulation
->   dyndbg: fix module.dyndbg handling
->   dyndbg: show both old and new in change-info
->   dyndbg: reverse module walk in cat control
->   dyndbg: reverse module.callsite walk in cat control
->   dyndbg: use ESCAPE_SPACE for cat control
->   dyndbg: let query-modname override actual module name
->   dyndbg: add test_dynamic_debug module
->   dyndbg: drop EXPORTed dynamic_debug_exec_queries
->   dyndbg: cleanup auto vars in dynamic_debug_init
->   dyndbg: create and use struct _ddebug_info
-> 
->  MAINTAINERS                   |   2 +
->  include/linux/dynamic_debug.h |  22 ++----
->  kernel/module/internal.h      |   4 +-
->  kernel/module/main.c          |  18 ++---
->  lib/Kconfig.debug             |  10 +++
->  lib/Makefile                  |   1 +
->  lib/dynamic_debug.c           | 141 +++++++++++++++++-----------------
->  lib/test_dynamic_debug.c      |  70 +++++++++++++++++
->  8 files changed, 172 insertions(+), 96 deletions(-)
->  create mode 100644 lib/test_dynamic_debug.c
-> 
-> -- 
-> 2.37.1
-> 
 
-Is this still ok for linux-next now to go into 6.1-rc1?
 
-Or does it need to be rebased?
+On 9/1/2022 11:30 AM, Frederic Weisbecker wrote:
+> So I'm not entirely comfortable but I'm going to review the current patchset
+> anyway and once it lands -rcu I'll try to hack a quick !NOCB implementation
+> for measurements purpose.
 
-thanks,
+Sounds good, arguable the core implementation to use bypass list is not too
+complex or anything, and maybe you can generalize the bypass list for !NONCB as
+well and re-use most of the code. You will need a per-cpu list anyway (bypass or
+some other) to queue the CBs. In v1, we had a separate per-cpu list.
 
-greg k-h
+Thanks for offering to review the patches, you guys really motivate me to work
+on it (I am currently on leave but still working on it). I'll be looking forward
+to getting that out soon. Yesterday was good progress.
+
+ - Joel

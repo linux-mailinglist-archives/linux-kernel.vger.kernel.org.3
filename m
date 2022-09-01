@@ -2,312 +2,344 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBA5D5AA000
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D93C55AA019
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:34:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233994AbiIATcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58540 "EHLO
+        id S234330AbiIATem (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:34:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbiIATcN (ORCPT
+        with ESMTP id S234042AbiIATei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:32:13 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7744E7C533
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:32:12 -0700 (PDT)
-Received: from [10.0.0.188] (modemcable081.74-201-24.mc.videotron.ca [24.201.74.81])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: padovan)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5792B6601EAE;
-        Thu,  1 Sep 2022 20:32:09 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1662060730;
-        bh=aXFkSTUVr6ByaFtV0pFOjl80AzhsvEdHaE/OzpeLp3s=;
-        h=Date:Subject:From:To:Cc:Reply-To:References:In-Reply-To:From;
-        b=CztI3Ro8Nm2RdCuyAtaSpXl7CLARJjE/e7KyynFYV5u+Q4hempnzsg6tRDSyHloMx
-         k/7AWY7kZXXFB0cCkBBv+UgcBN63qDAPMHVQbF0Rphi91fOsg9ZMutm5A4ApU6MXn5
-         bK/3uAXvhCoV3G2NIFb7Eb8KtAllshFPO3N70UsINtgZWgOcNe06pOElqXVvFW7iL1
-         Gvm9am9xYnqNHtiuxZVcLyaATJjfsakdMsS/fq1lWTqBBA22tLRT08sGOAQi5Ed/qV
-         ixHUSHl1Af/YSWVG9HstNsq7CGFd9aBJ+3wu3/6W8Xjf7heQJwBFKH6GCgsNf1KnO0
-         EFw7o50zaTFvw==
-Content-Type: multipart/mixed; boundary="------------9zxYN0ml4XwR0YZdYFUfBlf6"
-Message-ID: <3116ef32-140a-88a7-e929-98eaf2f3f357@collabora.com>
-Date:   Thu, 1 Sep 2022 15:32:06 -0400
+        Thu, 1 Sep 2022 15:34:38 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267E89753F;
+        Thu,  1 Sep 2022 12:34:37 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id c2so18005815plo.3;
+        Thu, 01 Sep 2022 12:34:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date;
+        bh=Xwk/X3XW/n8YVg10+aCzfkjIQYvdcIXQ5VXDewTVwHQ=;
+        b=c58/kXmzIIZucQb3ENiqDvcphxG2PJaMDsOGd2Lqw6QNfnSmV3US1cYcGXS4PiLtfv
+         YxA24wdEV8RM/f3c2QKeSquJyuJPDlX/RplVfCwJUnKcJO6GVNeRZ8bezoYwhiU0tYjE
+         T2WESPXDF8k4LCP4G1VuD9uuo0z5vv1esjsToQGTWsheAMIbcO+Q6xhFQIe2ElhiqI77
+         tXJnxtKT3qHSIkDehhGDoWCJyPh0fzz40Kk3i1hRYI2zk36GYW2FAJq2kh+JSXBPVK4P
+         EA00yc3cC/imt3U3cRoBPdglrpBtz6afTWd5wz0PcIVb6hMwqYXvHlo62lQrSyeWTmfZ
+         Etkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date;
+        bh=Xwk/X3XW/n8YVg10+aCzfkjIQYvdcIXQ5VXDewTVwHQ=;
+        b=rdAlV/LGw5Q/9JVMK3f1EuI2KI2vzC7lsJPIciN5NlixH+wY1LYvxx3zvJ+8YbUsyR
+         41OpsmcJ1XMkKgQ4Lof9gL0Dl3dwLUWAUSW9IJqhMXOQ0ZkbtEdOBwAMCdx/wBJ1GM4C
+         dt865zVOBmAW2/m8IiPLfV+wN00cRzZc52y2UnMTaLBMk+/iBEA10Mfpi29ZtvduTyA4
+         kJnk+lZq1SpgKfl9GmOLsayFmxB607BOlJHWYu8OymYST9hMtFpaJ5G238qQH2S0StbF
+         zRGrhbxaeso8HozwxL432VF2KguuFCVIcaqnEf9PaeUT5OxBvgDVY3RgnGEYoA6jh4Py
+         qhxA==
+X-Gm-Message-State: ACgBeo3OEOVp80Wie5OCaCxMh6kPXkteqVwdKO+7iZlr6aJ/O90rR5/V
+        b6kV6pYwmaTNt8g/TNb2WSc=
+X-Google-Smtp-Source: AA6agR64X33w5QtJo7wem7QV9n1gdbO4iz/918AvOtTCwgg0yJM3MTD6Vw+UzgrY0W45kUrb8vaKLQ==
+X-Received: by 2002:a17:902:db12:b0:172:9e51:64 with SMTP id m18-20020a170902db1200b001729e510064mr32074827plx.140.1662060876643;
+        Thu, 01 Sep 2022 12:34:36 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id on4-20020a17090b1d0400b001fda71ab2aesm3748136pjb.11.2022.09.01.12.34.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 12:34:35 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ba161718-bc61-57b8-dfbe-dee666fd06e8@roeck-us.net>
+Date:   Thu, 1 Sep 2022 12:34:34 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [kernelci-members] KernelCI working group: Web Dashboard
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2] string: Introduce strtomem() and strtomem_pad()
 Content-Language: en-US
-From:   Gustavo Padovan <gustavo.padovan@collabora.com>
-To:     kernelci-members@groups.io,
-        "kernelci@groups.io" <kernelci@groups.io>
-Cc:     automated-testing@lists.yoctoproject.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kernelci-tsc@groups.io" <kernelci-tsc@groups.io>,
-        Simon Xiao <sixiao@microsoft.com>,
-        Carlos Cardenas <Carlos.Cardenas@microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Sharath George John <sgeorgejohn@microsoft.com>,
-        "Alain Gefflaut (HE/HIM)" <agefflaut@microsoft.com>,
-        Johnson George <Johnson.George@microsoft.com>
-Reply-To: kernelci-members@groups.io
-References: <f3874e7d-ccfe-4a2d-d054-9b7bf9e8b44d@collabora.com>
- <16F4479F76A8C807.11895@groups.io> <16F65ECD601264EC.15470@groups.io>
- <1706557437ACCB9C.25939@groups.io> <170FD91B51709B41.16609@groups.io>
-Organization: Collabora Ltd.
-In-Reply-To: <170FD91B51709B41.16609@groups.io>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     Kees Cook <keescook@chromium.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Len Baker <len.baker@gmx.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Francis Laniel <laniel_francis@privacyrequired.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20220901190952.2229696-1-keescook@chromium.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <20220901190952.2229696-1-keescook@chromium.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------9zxYN0ml4XwR0YZdYFUfBlf6
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+On 9/1/22 12:09, Kees Cook wrote:
+> One of the "legitimate" uses of strncpy() is copying a NUL-terminated
+> string into a fixed-size non-NUL-terminated character array. To avoid
+> the weaknesses and ambiguity of intent when using strncpy(), provide
+> replacement functions that explicitly distinguish between trailing
+> padding and not, and require the destination buffer size be discoverable
+> by the compiler.
+> 
+> For example:
+> 
+> struct obj {
+> 	int foo;
+> 	char small[4] __nonstring;
+> 	char big[8] __nonstring;
+> 	int bar;
+> };
+> 
+> struct obj p;
+> 
+> /* This will truncate to 4 chars with no trailing NUL */
+> strncpy(p.small, "hello", sizeof(p.small));
+> /* p.small contains 'h', 'e', 'l', 'l' */
+> 
+> /* This will NUL pad to 8 chars. */
+> strncpy(p.big, "hello", sizeof(p.big));
+> /* p.big contains 'h', 'e', 'l', 'l', 'o', '\0', '\0', '\0' */
+> 
+> When the "__nonstring" attributes are missing, the intent of the
+> programmer becomes ambiguous for whether the lack of a trailing NUL
+> in the p.small copy is a bug. Additionally, it's not clear whether
+> the trailing padding in the p.big copy is _needed_. Both cases
+> become unambiguous with:
+> 
+> strtomem(p.small, "hello");
+> strtomem_pad(p.big, "hello", 0);
+> 
+> See also https://github.com/KSPP/linux/issues/90
+> 
+> Expand the memcpy KUnit tests to include these functions.
+> 
+> Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Cc: Nick Desaulniers <ndesaulniers@google.com>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Guenter Roeck <linux@roeck-us.net>
+> Signed-off-by: Kees Cook <keescook@chromium.org>
+> ---
+> v2:
+>   - updated deprecated.rst to include strtomem*()
+>   - added kerndoc and replacement table to strncpy()
+>   - switched to ULONG_MAX in KUnit tests (Geert)
+>   - fix typo in commit log example (Geert)
+> v1: https://lore.kernel.org/lkml/20220831230006.1016236-1-keescook@chromium.org
+> ---
+>   Documentation/process/deprecated.rst | 11 +++---
+>   include/linux/fortify-string.h       | 30 ++++++++++++++++
+>   include/linux/string.h               | 43 ++++++++++++++++++++++
+>   lib/memcpy_kunit.c                   | 53 ++++++++++++++++++++++++++++
+>   4 files changed, 133 insertions(+), 4 deletions(-)
+> 
+> diff --git a/Documentation/process/deprecated.rst b/Documentation/process/deprecated.rst
+> index a6e36d9c3d14..783b0488cf4d 100644
+> --- a/Documentation/process/deprecated.rst
+> +++ b/Documentation/process/deprecated.rst
+> @@ -138,17 +138,20 @@ be NUL terminated. This can lead to various linear read overflows and
+>   other misbehavior due to the missing termination. It also NUL-pads
+>   the destination buffer if the source contents are shorter than the
+>   destination buffer size, which may be a needless performance penalty
+> -for callers using only NUL-terminated strings. The safe replacement is
+> +for callers using only NUL-terminated strings.
+> +
+> +When the destination is required to be NUL-terminated, the replacement is
+>   strscpy(), though care must be given to any cases where the return value
+>   of strncpy() was used, since strscpy() does not return a pointer to the
+>   destination, but rather a count of non-NUL bytes copied (or negative
+>   errno when it truncates). Any cases still needing NUL-padding should
+>   instead use strscpy_pad().
+>   
+> -If a caller is using non-NUL-terminated strings, strncpy() can
+> -still be used, but destinations should be marked with the `__nonstring
+> +If a caller is using non-NUL-terminated strings, strtomem() should be
+> +be used, and the destinations should be marked with the `__nonstring
 
-Hello,
+s/be //
 
-The next meeting is next Monday September 5th at 12:00pm EDT. Invite 
-sent to those who answered the poll and the the members and tsc mailing 
-list. In any invite ics is attached.
+>   <https://gcc.gnu.org/onlinedocs/gcc/Common-Variable-Attributes.html>`_
+> -attribute to avoid future compiler warnings.
+> +attribute to avoid future compiler warnings. For cases still needing
+> +NUL-padding, strtomem_pad() can be used.
+>   
+>   strlcpy()
+>   ---------
+> diff --git a/include/linux/fortify-string.h b/include/linux/fortify-string.h
+> index 3b401fa0f374..eed2119b23c5 100644
+> --- a/include/linux/fortify-string.h
+> +++ b/include/linux/fortify-string.h
+> @@ -77,6 +77,36 @@ extern char *__underlying_strncpy(char *p, const char *q, __kernel_size_t size)
+>   #define POS	__pass_object_size(1)
+>   #define POS0	__pass_object_size(0)
+>   
+> +/** strncpy - Copy a string to memory with non-guaranteed NUL padding
 
-Best regards,
+Does that need a newline before strncpy() ?
 
-Gustavo
+> + *
+> + * @p: pointer to destination of copy
+> + * @q: pointer to NUL-terminated source string to copy
+> + * @size: bytes to write at @p
+> + *
+> + * If strlen(@q) >= @size, the copy of @q will stop after @size bytes,
+> + * and @p will NOT be NUL-terminated
+> + *
+> + * If strlen(@q) < @size, following the copy of @q, trailing NUL bytes
+> + * will be written to @p until @size total bytes have been written.
+> + *
+> + * Do not use this function. While FORTIFY_SOURCE tries to avoid
+> + * over-reads of @q, it cannot defend against writing unterminated
+> + * results to @p. Using strncpy() remains ambiguous and fragile.
+> + * Instead, please choose an alternative, so that the expectation
+> + * of @p's contents is unambiguous:
+> + *
+> + * @p needs to be:     | padded to @size | not padded
+> + * --------------------+-----------------+------------+
+> + *      NUL-terminated | strscpy_pad()   | strscpy()  |
+> + * --------------------+-----------------+------------+
+> + *  not NUL-terminated | strtomem_pad()  | strtomem() |
+> + * --------------------+-----------------+------------+
+> + *
+> + * Note strscpy*()'s differing return values for detecting truncation,
+> + * and strtomem*()'s expectation that the destination is marked with
+> + * __nonstring when it is a character array.
+> + *
+> + */
+>   __FORTIFY_INLINE __diagnose_as(__builtin_strncpy, 1, 2, 3)
+>   char *strncpy(char * const POS p, const char *q, __kernel_size_t size)
+>   {
+> diff --git a/include/linux/string.h b/include/linux/string.h
+> index 61ec7e4f6311..cf7607b32102 100644
+> --- a/include/linux/string.h
+> +++ b/include/linux/string.h
+> @@ -260,6 +260,49 @@ static inline const char *kbasename(const char *path)
+>   void memcpy_and_pad(void *dest, size_t dest_len, const void *src, size_t count,
+>   		    int pad);
+>   
+> +/**
+> + * strtomem_pad - Copy NUL-terminated string to non-NUL-terminated buffer
+> + *
+> + * @dest: Pointer of destination character array (marked as __nonstring)
+> + * @src: Pointer to NUL-terminated string
+> + * @pad: Padding character to fill any remaining bytes of @dest after copy
+> + *
+> + * This is a replacement for strncpy() uses where the destination is not
+> + * a NUL-terminated string, but with bounds checking on the source size, and
+> + * an explicit padding character. If padding is not required, use strtomem().
+> + *
+> + * Note that the size of @dest is not an argument, as the length of @dest
+> + * must be discoverable by the compiler.
+> + */
+> +#define strtomem_pad(dest, src, pad)	do {				\
+> +	const size_t _dest_len = __builtin_object_size(dest, 1);	\
+> +									\
+> +	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
+> +		     _dest_len == (size_t)-1);				\
+> +	memcpy_and_pad(dest, _dest_len, src, strnlen(src, _dest_len), pad); \
+> +} while (0)
+> +
+> +/**
+> + * strtomem - Copy NUL-terminated string to non-NUL-terminated buffer
+> + *
+> + * @dest: Pointer of destination character array (marked as __nonstring)
+> + * @src: Pointer to NUL-terminated string
+> + *
+> + * This is a replacement for strncpy() uses where the destination is not
+> + * a NUL-terminated string, but with bounds checking on the source size, and
+> + * without trailing padding. If padding is required, use strtomem_pad().
+> + *
+> + * Note that the size of @dest is not an argument, as the length of @dest
+> + * must be discoverable by the compiler.
+> + */
+> +#define strtomem(dest, src)	do {					\
+> +	const size_t _dest_len = __builtin_object_size(dest, 1);	\
+> +									\
+> +	BUILD_BUG_ON(!__builtin_constant_p(_dest_len) ||		\
+> +		     _dest_len == (size_t)-1);				\
+> +	memcpy(dest, src, min(_dest_len, strnlen(src, _dest_len)));	\
+> +} while (0)
+> +
+>   /**
+>    * memset_after - Set a value after a struct member to the end of a struct
+>    *
+> diff --git a/lib/memcpy_kunit.c b/lib/memcpy_kunit.c
+> index 62f8ffcbbaa3..598f5f7dadf4 100644
+> --- a/lib/memcpy_kunit.c
+> +++ b/lib/memcpy_kunit.c
+> @@ -272,10 +272,63 @@ static void memset_test(struct kunit *test)
+>   #undef TEST_OP
+>   }
+>   
+> +static void strtomem_test(struct kunit *test)
+> +{
+> +	static const char input[] = "hi";
+> +	static const char truncate[] = "this is too long";
+> +	struct {
+> +		unsigned long canary1;
+> +		unsigned char output[sizeof(unsigned long)] __nonstring;
+> +		unsigned long canary2;
+> +	} wrap;
+> +
+> +	memset(&wrap, 0xFF, sizeof(wrap));
+> +	KUNIT_EXPECT_EQ_MSG(test, wrap.canary1, ULONG_MAX,
+> +			    "bad initial canary value");
+> +	KUNIT_EXPECT_EQ_MSG(test, wrap.canary2, ULONG_MAX,
+> +			    "bad initial canary value");
+> +
+> +	/* Check unpadded copy leaves surroundings untouched. */
+> +	strtomem(wrap.output, input);
+> +	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
+> +	KUNIT_EXPECT_EQ(test, wrap.output[0], input[0]);
+> +	KUNIT_EXPECT_EQ(test, wrap.output[1], input[1]);
+> +	for (int i = 2; i < sizeof(wrap.output); i++)
+> +		KUNIT_EXPECT_EQ(test, wrap.output[i], 0xFF);
+> +	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
+> +
+> +	/* Check truncated copy leaves surroundings untouched. */
+> +	memset(&wrap, 0xFF, sizeof(wrap));
+> +	strtomem(wrap.output, truncate);
+> +	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
+> +	for (int i = 0; i < sizeof(wrap.output); i++)
+> +		KUNIT_EXPECT_EQ(test, wrap.output[i], truncate[i]);
+> +	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
+> +
+> +	/* Check padded copy leaves only string padded. */
+> +	memset(&wrap, 0xFF, sizeof(wrap));
+> +	strtomem_pad(wrap.output, input, 0xAA);
+> +	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
+> +	KUNIT_EXPECT_EQ(test, wrap.output[0], input[0]);
+> +	KUNIT_EXPECT_EQ(test, wrap.output[1], input[1]);
+> +	for (int i = 2; i < sizeof(wrap.output); i++)
+> +		KUNIT_EXPECT_EQ(test, wrap.output[i], 0xAA);
+> +	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
+> +
+> +	/* Check truncated padded copy has no padding. */
+> +	memset(&wrap, 0xFF, sizeof(wrap));
+> +	strtomem(wrap.output, truncate);
+> +	KUNIT_EXPECT_EQ(test, wrap.canary1, ULONG_MAX);
+> +	for (int i = 0; i < sizeof(wrap.output); i++)
+> +		KUNIT_EXPECT_EQ(test, wrap.output[i], truncate[i]);
+> +	KUNIT_EXPECT_EQ(test, wrap.canary2, ULONG_MAX);
+> +}
+> +
+>   static struct kunit_case memcpy_test_cases[] = {
+>   	KUNIT_CASE(memset_test),
+>   	KUNIT_CASE(memcpy_test),
+>   	KUNIT_CASE(memmove_test),
+> +	KUNIT_CASE(strtomem_test),
+>   	{}
+>   };
+>   
 
-Le 29/08/2022 à 11:04, Gustavo Padovan a écrit :
-> Hello,
->
-> The previous tentative below didn't work due to vacation season. 
-> Here's a new pool with dates from 1st to 8th of September. Please 
-> answer it until this Wednesday August 31th.
->
-> https://doodle.com/meeting/participate/id/dG5v423a
->
-> See the email below for meetings notes and current User Stories document.
->
-> Regards,
->
-> Gustavo
->
-> On 7/18/22 10:17, Gustavo Padovan wrote:
->> Hi everyone,
->>
->> In our last Web Dashboard meeting[1] where we reviewed the User 
->> Stories document[2]. Then, after that we worked offline to 
->> incorporate the feedback on doc, so it is time for our next meeting 
->> to further discuss. Please answer the poll with your time 
->> availability on the link below. I added dates from 21th to 28th of July.
->>
->> https://doodle.com/meeting/participate/id/eX6vyY5b
->>
->> Thank you,
->>
->> Gus
->> —
->> [1]https://docs.google.com/document/d/1yp-2L54tnrwkZ--59t2GeXuq1gt5dDnsFy08odizl1Y/edit#bookmark=id.6ok0ufne9shj 
->>
->> [2]https://docs.google.com/document/d/1_rfMpas4n_gw2GvUTRU63vIXk95VotJuittalX7trP8/edit#heading=h.wjoxi4s5pxzl 
->>
->>
->> On 6/7/22 10:46, Gustavo Padovan wrote:
->>>
->>> Hello,
->>>
->>> Our next meeting has been scheduled for this Thursday at 3pm UTC. 
->>> Invite was sent to the kernelci-members list, but here goes the 
->>> instructions to join as well:
->>>
->>> This event has a video call.
->>> Join: https://meet.google.com/yyz-jzjy-yfu
->>> (US) +1 254-227-6870 PIN: 188509910#
->>> View more phone numbers: 
->>> https://tel.meet/yyz-jzjy-yfu?pin=5882595078642&hs=7
->>>
->>> Regards,
->>>
->>> Gustavo
->>>
->>> Le 31/05/2022 à 15:34, Gustavo Padovan a écrit :
->>>>
->>>> Hello everyone,
->>>>
->>>> **
->>>>
->>>> *From our first meeting back in October[1], we took the action of 
->>>> organizing our user stories that you were spread as a comments in 
->>>> the the github issue{2} and, converting them into User Stories 
->>>> document[3].*
->>>>
->>>> *
->>>>
->>>> In the next meeting, we want to study the current User Stories and 
->>>> start discussions to progress on development. The proposed slots 
->>>> are for next week. Please answer the doodle by the end of this week:
->>>>
->>>> https://doodle.com/meeting/participate/id/egJ12A9d
->>>>
->>>> Best regards,
->>>>
->>>> Gustavo
->>>>
->>>> [1] 
->>>> https://docs.google.com/document/d/1yp-2L54tnrwkZ--59t2GeXuq1gt5dDnsFy08odizl1Y/edit# 
->>>> <https://docs.google.com/document/d/1yp-2L54tnrwkZ--59t2GeXuq1gt5dDnsFy08odizl1Y/edit#> 
->>>>
->>>>
->>>> [2] https://github.com/kernelci/kernelci-project/discussions/28 
->>>> <https://github.com/kernelci/kernelci-project/discussions/28>
->>>>
->>>> {3} 
->>>> https://docs.google.com/document/d/1_rfMpas4n_gw2GvUTRU63vIXk95VotJuittalX7trP8/edit 
->>>> <https://docs.google.com/document/d/1_rfMpas4n_gw2GvUTRU63vIXk95VotJuittalX7trP8/edit>* 
->>>>
->>>> Le 27/07/2021 à 11:54, Guillaume Tucker a écrit :
->>>>> Last year's KernelCI Community Survey[1] showed the importance of
->>>>> having a good web dashboard.  About 70% of respondents would use
->>>>> one if it provided the information they needed efficiently.
->>>>> While other things are arguably even more important, such as
->>>>> testing patches from mailing lists, replying to stable reviews
->>>>> and sending email reports directly to contributors in a "natural"
->>>>> workflow, the web dashboard has been a sticking point for a
->>>>> while.
->>>>>
->>>>> There have been several attempts at solving this problem, using
->>>>> Elastic Stack and Grafana among other things, but there isn't a
->>>>> single framework able to directly provide an off-the-shelf
->>>>> solution to the community's needs.  In fact, the first issue is
->>>>> the lack of understanding of these needs: who wants to use the
->>>>> web dashboard, and how?  Then, how does one translate those needs
->>>>> into a user interface?  Doing this requires skills that engineers
->>>>> who regularly contribute to KernelCI typically don't have. As
->>>>> such, a dedicated working group is being created in order to fill
->>>>> this gap.
->>>>>
->>>>> The aim is to coordinate efforts and try to follow best practices
->>>>> to make steady progress and avoid repeating the same mistakes.
->>>>> Most likely, we will need some help from proper web developers
->>>>> who aren't part of the usual KernelCI community.  This may be
->>>>> facilitated by the KernelCI LF project budget if approved by the
->>>>> governing board.
->>>>>
->>>>> In order to get started, we would need to have maybe 3 to 5
->>>>> people available to focus on this.  It doesn't necessarily mean a
->>>>> lot of hours spent but actions to be carried out on a daily or
->>>>> weekly basis.  So far we have Gustavo Padovan as our new KernelCI
->>>>> Project Manager and a few people have expressed interest but we
->>>>> still need formal confirmation.
->>>>>
->>>>>
->>>>> Here's a GitHub project dedicated to the new web dashboard:
->>>>>
->>>>>    https://github.com/orgs/kernelci/projects/4
->>>>>
->>>>> I've created a couple of issues to get started about user
->>>>> stories, and some initial milestones as a basic skeleton:
->>>>>
->>>>>    https://github.com/kernelci/kernelci-project/milestones
->>>>>
->>>>>
->>>>> This is ultimately a community-driven effort to address the needs
->>>>> of the kernel community.  Please share any thoughts you may have
->>>>> on this, whether you want to add some user stories, share some
->>>>> expertise, be officially in the working group or take part in
->>>>> this effort in any other way.
->>>>>
->>>>> Best wishes,
->>>>> Guillaume
->>>>>
->>>>> [1]https://foundation.kernelci.org/blog/2020/07/09/kernelci-community-survey-report/ 
->>>>>
->>>>>
->>>>>
->>>>>
->>>>>
->>>>>
->>>
->>
->
---------------9zxYN0ml4XwR0YZdYFUfBlf6
-Content-Type: text/calendar; charset=UTF-8; name="invite.ics"
-Content-Disposition: attachment; filename="invite.ics"
-Content-Transfer-Encoding: base64
-
-QkVHSU46VkNBTEVOREFSDQpQUk9ESUQ6LS8vR29vZ2xlIEluYy8vR29vZ2xlIENhbGVuZGFy
-IDcwLjkwNTQvL0VODQpWRVJTSU9OOjIuMA0KQ0FMU0NBTEU6R1JFR09SSUFODQpNRVRIT0Q6
-UkVRVUVTVA0KQkVHSU46VkVWRU5UDQpEVFNUQVJUOjIwMjIwOTA1VDE2MDAwMFoNCkRURU5E
-OjIwMjIwOTA1VDE3MDAwMFoNCkRUU1RBTVA6MjAyMjA5MDFUMTkyOTA0Wg0KT1JHQU5JWkVS
-O0NOPWtlcm5lbCBib3Q6bWFpbHRvOmJvdEBrZXJuZWxjaS5vcmcNClVJRDo1OWUxMzRhNXY4
-MTF0cGxxcHIxajhjMmdjbkBnb29nbGUuY29tDQpBVFRFTkRFRTtDVVRZUEU9SU5ESVZJRFVB
-TDtST0xFPVJFUS1QQVJUSUNJUEFOVDtQQVJUU1RBVD1ORUVEUy1BQ1RJT047UlNWUD0NCiBU
-UlVFO0NOPWd1aWxsYXVtZS50dWNrZXJAY29sbGFib3JhLmNvbTtYLU5VTS1HVUVTVFM9MDpt
-YWlsdG86Z3VpbGxhdW1lLnR1Y2sNCiBlckBjb2xsYWJvcmEuY29tDQpBVFRFTkRFRTtDVVRZ
-UEU9SU5ESVZJRFVBTDtST0xFPVJFUS1QQVJUSUNJUEFOVDtQQVJUU1RBVD1BQ0NFUFRFRDtS
-U1ZQPVRSVUUNCiA7Q049a2VybmVsIGJvdDtYLU5VTS1HVUVTVFM9MDptYWlsdG86Ym90QGtl
-cm5lbGNpLm9yZw0KQVRURU5ERUU7Q1VUWVBFPUlORElWSURVQUw7Uk9MRT1SRVEtUEFSVElD
-SVBBTlQ7UEFSVFNUQVQ9TkVFRFMtQUNUSU9OO1JTVlA9DQogVFJVRTtDTj1raGlsbWFuQGJh
-eWxpYnJlLmNvbTtYLU5VTS1HVUVTVFM9MDptYWlsdG86a2hpbG1hbkBiYXlsaWJyZS5jb20N
-CkFUVEVOREVFO0NVVFlQRT1JTkRJVklEVUFMO1JPTEU9UkVRLVBBUlRJQ0lQQU5UO1BBUlRT
-VEFUPU5FRURTLUFDVElPTjtSU1ZQPQ0KIFRSVUU7Q049bmlrb2xhaS5rb25kcmFzaG92QHJl
-ZGhhdC5jb207WC1OVU0tR1VFU1RTPTA6bWFpbHRvOm5pa29sYWkua29uZHJhcw0KIGhvdkBy
-ZWRoYXQuY29tDQpBVFRFTkRFRTtDVVRZUEU9SU5ESVZJRFVBTDtST0xFPVJFUS1QQVJUSUNJ
-UEFOVDtQQVJUU1RBVD1ORUVEUy1BQ1RJT047UlNWUD0NCiBUUlVFO0NOPWtlcm5lbGNpLXRz
-Y0Bncm91cHMuaW87WC1OVU0tR1VFU1RTPTA6bWFpbHRvOmtlcm5lbGNpLXRzY0Bncm91cHMu
-aW8NCkFUVEVOREVFO0NVVFlQRT1JTkRJVklEVUFMO1JPTEU9UkVRLVBBUlRJQ0lQQU5UO1BB
-UlRTVEFUPU5FRURTLUFDVElPTjtSU1ZQPQ0KIFRSVUU7Q049a2VybmVsY2ktbWVtYmVyc0Bn
-cm91cHMuaW87WC1OVU0tR1VFU1RTPTA6bWFpbHRvOmtlcm5lbGNpLW1lbWJlcnNAZw0KIHJv
-dXBzLmlvDQpBVFRFTkRFRTtDVVRZUEU9SU5ESVZJRFVBTDtST0xFPVJFUS1QQVJUSUNJUEFO
-VDtQQVJUU1RBVD1ORUVEUy1BQ1RJT047UlNWUD0NCiBUUlVFO0NOPWpvaG5zb24uZ2Vvcmdl
-QG1pY3Jvc29mdC5jb207WC1OVU0tR1VFU1RTPTA6bWFpbHRvOmpvaG5zb24uZ2VvcmdlQG0N
-CiBpY3Jvc29mdC5jb20NCkFUVEVOREVFO0NVVFlQRT1JTkRJVklEVUFMO1JPTEU9UkVRLVBB
-UlRJQ0lQQU5UO1BBUlRTVEFUPU5FRURTLUFDVElPTjtSU1ZQPQ0KIFRSVUU7Q049ZGVueXMu
-ZkBjb2xsYWJvcmEuY29tO1gtTlVNLUdVRVNUUz0wOm1haWx0bzpkZW55cy5mQGNvbGxhYm9y
-YS5jb20NCkFUVEVOREVFO0NVVFlQRT1JTkRJVklEVUFMO1JPTEU9UkVRLVBBUlRJQ0lQQU5U
-O1BBUlRTVEFUPU5FRURTLUFDVElPTjtSU1ZQPQ0KIFRSVUU7Q049Z3VzdGF2by5wYWRvdmFu
-QGNvbGxhYm9yYS5jb207WC1OVU0tR1VFU1RTPTA6bWFpbHRvOmd1c3Rhdm8ucGFkb3Zhbg0K
-IEBjb2xsYWJvcmEuY29tDQpYLUdPT0dMRS1DT05GRVJFTkNFOmh0dHBzOi8vbWVldC5nb29n
-bGUuY29tL2FqZy1xeHN6LXVqZQ0KWC1NSUNST1NPRlQtQ0RPLU9XTkVSQVBQVElEOi0xMTg0
-MjcyNzE4DQpDUkVBVEVEOjIwMjIwOTAxVDE5MjkwM1oNCkRFU0NSSVBUSU9OOjxicj5JbiBv
-dXIgbGFzdCBXZWIgRGFzaGJvYXJkIG1lZXRpbmdbMV0gd2hlcmUgd2UgcmV2aWV3ZWQgdGhl
-IA0KIFVzZXIgU3RvcmllcyBkb2N1bWVudFsyXS4gVGhlblwsIGFmdGVyIHRoYXQgd2Ugd29y
-a2VkIG9mZmxpbmUgdG8gaW5jb3Jwb3JhdA0KIGUgdGhlIGZlZWRiYWNrIG9uIGRvY1wsIHNv
-IGl0IGlzIHRpbWUgZm9yIG91ciBuZXh0IG1lZXRpbmcgdG8gZnVydGhlciBkaXNjdQ0KIHNz
-IHRoZSBuZXh0IHN0ZXBzPGJyPuKAlDxicj5bMV0gbWVldGluZyBub3RlczombmJzcFw7PGEg
-aHJlZj0iaHR0cHM6Ly9kb2NzLmdvDQogb2dsZS5jb20vZG9jdW1lbnQvZC8xeXAtMkw1NHRu
-cndrWi0tNTl0MkdlWHVxMWd0NWREbnNGeTA4b2RpemwxWS9lZGl0I2Jvb2ttDQogYXJrPWlk
-LjZvazB1Zm5lOXNoaiIgY2xhc3M9InBhc3RlZERyaXZlTGluay0wIiBpZD0ib3c2OTgiIF9f
-aXNfb3duZXI9InRydWUiDQogPmh0dHBzOi8vZG9jcy5nb29nbGUuY29tL2RvY3VtZW50L2Qv
-MXlwLTJMNTR0bnJ3a1otLTU5dDJHZVh1cTFndDVkRG5zRnkwOG9kDQogaXpsMVkvZWRpdCNi
-b29rbWFyaz1pZC42b2swdWZuZTlzaGo8L2E+IDxicj5bMl0gVXNlciBzdG9yaWVzJm5ic3Bc
-OzxhIGhyZWY9DQogImh0dHBzOi8vZG9jcy5nb29nbGUuY29tL2RvY3VtZW50L2QvMV9yZk1w
-YXM0bl9ndzJHdlVUUlU2M3ZJWGs5NVZvdEp1aXR0YWxYDQogN3RyUDgvZWRpdCNoZWFkaW5n
-PWgud2pveGk0czVweHpsIiBjbGFzcz0icGFzdGVkRHJpdmVMaW5rLTEiIGlkPSJvdzcwNSIg
-X19pDQogc19vd25lcj0idHJ1ZSI+aHR0cHM6Ly9kb2NzLmdvb2dsZS5jb20vZG9jdW1lbnQv
-ZC8xX3JmTXBhczRuX2d3Mkd2VVRSVTYzdklYDQogazk1Vm90SnVpdHRhbFg3dHJQOC9lZGl0
-I2hlYWRpbmc9aC53am94aTRzNXB4emw8L2E+XG5cbi06On46fjo6fjp+On46fjp+On46DQog
-fjp+On46fjp+On46fjp+On46fjp+On46fjp+On46fjp+On46fjp+On46fjp+On46fjp+On46
-fjp+On46On46fjo6LVxuVGhpcyBlDQogdmVudCBoYXMgYSB2aWRlbyBjYWxsLlxuSm9pbjog
-aHR0cHM6Ly9tZWV0Lmdvb2dsZS5jb20vYWpnLXF4c3otdWplXG4oVVMpICsxDQogIDMxNC0z
-MjUtMjMyNSBQSU46IDU2MDY5NDU2NiNcblZpZXcgbW9yZSBwaG9uZSBudW1iZXJzOiBodHRw
-czovL3RlbC5tZWV0L2FqDQogZy1xeHN6LXVqZT9waW49ODQxNTA2MjY4MDQ5MiZocz03XG5c
-blZpZXcgeW91ciBldmVudCBhdCBodHRwczovL2NhbGVuZGFyLmdvDQogb2dsZS5jb20vY2Fs
-ZW5kYXIvZXZlbnQ/YWN0aW9uPVZJRVcmZWlkPU5UbGxNVE0wWVRWMk9ERXhkSEJzY1hCeU1X
-bzRZekpuWTI0DQogZ2EyVnlibVZzWTJrdGJXVnRZbVZ5YzBCbmNtOTFjSE11YVc4JnRvaz1N
-VFlqWW05MFFHdGxjbTVsYkdOcExtOXlaekU0TkdOaE1HDQogUXpPRFpqWVROa05XWXlPR1pp
-TWpVNU5tVmhZalU0TlRGaU9XUm1NV000T1RNJmN0ej1BbWVyaWNhJTJGTG9zX0FuZ2VsZXMm
-aGw9DQogZW4mZXM9MS5cblxuRG8gbm90IGVkaXQgdGhpcyBzZWN0aW9uIG9mIHRoZSBkZXNj
-cmlwdGlvbi5cbi06On46fjo6fjp+On46fjp+DQogOn46fjp+On46fjp+On46fjp+On46fjp+
-On46fjp+On46fjp+On46fjp+On46fjp+On46fjp+On46fjp+On46On46fjo6LQ0KTEFTVC1N
-T0RJRklFRDoyMDIyMDkwMVQxOTI5MDNaDQpMT0NBVElPTjoNClNFUVVFTkNFOjANClNUQVRV
-UzpDT05GSVJNRUQNClNVTU1BUlk6S2VybmVsQ0kgV2ViIERhc2hib2FyZCBXRw0KVFJBTlNQ
-Ok9QQVFVRQ0KRU5EOlZFVkVOVA0KRU5EOlZDQUxFTkRBUg0K
-
---------------9zxYN0ml4XwR0YZdYFUfBlf6--

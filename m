@@ -2,57 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C78D5A94A5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30E085A94AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:32:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232790AbiIAKax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:30:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36106 "EHLO
+        id S234184AbiIAKcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234071AbiIAKar (ORCPT
+        with ESMTP id S232666AbiIAKci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:30:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27315DD744;
-        Thu,  1 Sep 2022 03:30:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1082961CEF;
-        Thu,  1 Sep 2022 10:30:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA065C433B5;
-        Thu,  1 Sep 2022 10:30:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662028241;
-        bh=5x525oxOQnL5n2nwqhJjrzExqTe/rEL0u72839GNWBE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QU0V3e0WFz9AhpRDxUHs/QGDxBSbwSxyBzxh9MUe6detw1ed0d7y6qv1F0f8VsMSf
-         bixtTRnEKXniCojgtzgzjjr4ua6y6m0DAmR0udb4jzjKoDMbtsnaumC7uVzHRk9lzD
-         8GIlS7IFbC6dWaj0Wy9Kq7PczxHvDhsgJSwAw/cs=
-Date:   Thu, 1 Sep 2022 12:30:38 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
-        Stable <stable@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Shuah Khan <shuah@kernel.org>, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, Pavel Machek <pavel@denx.de>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Florian Fainelli <f.fainelli@gmail.com>, slade@sladewatkins.com
-Subject: Re: [PATCH 5.15 000/136] 5.15.64-rc1 review
-Message-ID: <YxCJzr0XCd+6/JW4@kroah.com>
-References: <20220829105804.609007228@linuxfoundation.org>
- <CADVatmOLoaGgAW951JqEk3v88EA7mn3qur84Xd30QJWP21+eVg@mail.gmail.com>
- <YxB/ZPFEQG9zS+wa@kroah.com>
- <CADVatmPxfdEA3yi9KGHtvmQA2n-mA=ekBidqU+keGrBsL+rFeQ@mail.gmail.com>
+        Thu, 1 Sep 2022 06:32:38 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC9E12206C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:32:37 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id v26so13520857lfd.10
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:32:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=HXeJHCAXo+Xl23q56BVg26tN6HoFjavkkhsO/UPUSCA=;
+        b=eWV9NJYuWmlhBNQjRqqJh21c9CuVTF8puoFd6FhvGU1FcWeHJwWakos45j1Ht7fc/O
+         Z13gOUa1yogoHDNl23GvvdjaT02jEi/pzJbE2IbdTWJ601oyMdmuq92FYWXGMP+2Rfem
+         1x5ZPTRNxtX52Ff6rNPZi+dnScPcqIEG28qfVSwqIKv5migHKqaepCVcAkYC5iCtzR0y
+         /38kX9+s/r50kTv8Bab9SHE+wF0lC9vdchJIDXwjhIqIu13M3gxubRsFwmzrONxRRNsS
+         npa4TiMaFzYEj2Qr8w8KEWoyE8VBzzllh1a92e2+GNBcnF3e3Su0t3PbxcVhHfN12InO
+         AmKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=HXeJHCAXo+Xl23q56BVg26tN6HoFjavkkhsO/UPUSCA=;
+        b=MJmdPB8ERBLg8FvsbAPE3494OVLFny/IIsGsb4Kt0yQbgBqxH2Qqo7EX8WAg767nZj
+         D73VnQCVfpQEfpqTPezrseeJ0GNy7/3b+rmTr4lZDBUPIhg0khcxaOG50NgFvhSF8Y0+
+         cbxu2xsO2iE5eiZksSyiwKQ2oMF06Ufr+4MP4JmAcvZId1YLCuiTgZyNyQWsLsJoAbwB
+         BFTJlGREwZNdfKmwGtmut1NAcvcP+X0lFDBdvIj2+DsfdrcpdtO9kZLRQtWOT4cylVQE
+         6IIt8+Etcua3Q+BeJyRZaCbD/ZsL/E3Hawvi16OJRmp2neLg2Wkpfl15ZzEST8jip98q
+         pLvA==
+X-Gm-Message-State: ACgBeo01Jznr5YKabcnQ3w6Z7VzBfZ+lGcTp3+U5fJYLQmljGvwmVD67
+        8LhtcHlxXIbq/ygahpn14hw/qA6Wx//4TyjLsVNOow==
+X-Google-Smtp-Source: AA6agR6N5ywWgfouWR/JVPBzzKCE4dtOVAqUK96KtyUH5iS36msWajnh943hORgNKjzHwQ7pKxba9YlqO2wq3xL5t28=
+X-Received: by 2002:ac2:5d26:0:b0:494:6d31:4c5b with SMTP id
+ i6-20020ac25d26000000b004946d314c5bmr5836840lfb.358.1662028356081; Thu, 01
+ Sep 2022 03:32:36 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CADVatmPxfdEA3yi9KGHtvmQA2n-mA=ekBidqU+keGrBsL+rFeQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220830083349.276709-1-ye.xingchen@zte.com.cn>
+In-Reply-To: <20220830083349.276709-1-ye.xingchen@zte.com.cn>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 1 Sep 2022 12:31:59 +0200
+Message-ID: <CAPDyKFp_r3RNbeYHFC2ncezJHJkmPcNkZ17N-FDQqxpLq0b20w@mail.gmail.com>
+Subject: Re: [PATCH linux-next] mmc: sdhci_am654: Remove the unneeded result variable
+To:     cgel.zte@gmail.com
+Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
+        Zeal Robot <zealci@zte.com.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,48 +67,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 11:22:53AM +0100, Sudip Mukherjee wrote:
-> On Thu, Sep 1, 2022 at 10:46 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Mon, Aug 29, 2022 at 09:11:28PM +0100, Sudip Mukherjee wrote:
-> > > Hi Greg,
-> > >
-> > > On Mon, Aug 29, 2022 at 12:00 PM Greg Kroah-Hartman
-> > > <gregkh@linuxfoundation.org> wrote:
-> > > >
-> > > > This is the start of the stable review cycle for the 5.15.64 release.
-> > > > There are 136 patches in this series, all will be posted as a response
-> > > > to this one.  If anyone has any issues with these being applied, please
-> > > > let me know.
-> > > >
-> > > > Responses should be made by Wed, 31 Aug 2022 10:57:37 +0000.
-> > > > Anything received after that time might be too late.
-> > >
-> > > My builds are still running, but just an initial report for gcc-12. (I
-> > > know v5.15.y still does not build completely with gcc-12).
-> > >
-> > > x86_64 and arm64 allmodconfig build fails with gcc-12, with the error:
-> > >
-> 
-> <snip>
-> 
-> > >
-> > > Introduced in v5.15.61 due to 2711bedab26c ("Bluetooth: L2CAP: Fix
-> > > l2cap_global_chan_by_psm regression").
-> > > But v5.19.y and mainline does not show the build failure as they also
-> > > have 41b7a347bf14 ("powerpc: Book3S 64-bit outline-only KASAN
-> > > support").
-> >
-> > Ick, ok, what to do here?  I can't really backport 41b7a347bf14 to 5.15
-> > easily as it's huge and a new feature.  Any other ideas?
-> 
-> Yeah.
-> https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=b840304fb46cdf7012722f456bce06f151b3e81b
-> will fix the it for mips and csky failure in mainline and v5.19.y. And
-> I just verified that it will fix for powerpc also in v5.15.y. So, we
-> just need to wait for now.
+On Tue, 30 Aug 2022 at 10:33, <cgel.zte@gmail.com> wrote:
+>
+> From: ye xingchen <ye.xingchen@zte.com.cn>
+>
+> Return the value cqhci_init() directly instead of storing it in another
+> redundant variable.
+>
+> Reported-by: Zeal Robot <zealci@zte.com.cn>
+> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
 
-Ah good, thanks for pointing that out!
+Applied for next, thanks!
 
-greg k-h
+Kind regards
+Uffe
+
+
+> ---
+>  drivers/mmc/host/sdhci_am654.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
+> index e7ced1496a07..8f1023480e12 100644
+> --- a/drivers/mmc/host/sdhci_am654.c
+> +++ b/drivers/mmc/host/sdhci_am654.c
+> @@ -554,7 +554,6 @@ static const struct cqhci_host_ops sdhci_am654_cqhci_ops = {
+>  static int sdhci_am654_cqe_add_host(struct sdhci_host *host)
+>  {
+>         struct cqhci_host *cq_host;
+> -       int ret;
+>
+>         cq_host = devm_kzalloc(mmc_dev(host->mmc), sizeof(struct cqhci_host),
+>                                GFP_KERNEL);
+> @@ -568,9 +567,7 @@ static int sdhci_am654_cqe_add_host(struct sdhci_host *host)
+>
+>         host->mmc->caps2 |= MMC_CAP2_CQE;
+>
+> -       ret = cqhci_init(cq_host, host->mmc, 1);
+> -
+> -       return ret;
+> +       return cqhci_init(cq_host, host->mmc, 1);
+>  }
+>
+>  static int sdhci_am654_get_otap_delay(struct sdhci_host *host,
+> --
+> 2.25.1

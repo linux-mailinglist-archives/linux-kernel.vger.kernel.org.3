@@ -2,79 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2E2C5A93BF
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:59:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 220BF5A93C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:01:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbiIAJ7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:59:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34524 "EHLO
+        id S232538AbiIAKBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232494AbiIAJ7R (ORCPT
+        with ESMTP id S232229AbiIAKBP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:59:17 -0400
-Received: from out30-56.freemail.mail.aliyun.com (out30-56.freemail.mail.aliyun.com [115.124.30.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18FD71377A7
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:59:15 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R381e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=cruzzhao@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VO.DDU5_1662026352;
-Received: from 30.97.49.1(mailfrom:cruzzhao@linux.alibaba.com fp:SMTPD_---0VO.DDU5_1662026352)
-          by smtp.aliyun-inc.com;
-          Thu, 01 Sep 2022 17:59:13 +0800
-Message-ID: <acc065a2-9378-e4fe-9033-d46ebadf2d16@linux.alibaba.com>
-Date:   Thu, 1 Sep 2022 17:59:11 +0800
+        Thu, 1 Sep 2022 06:01:15 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7424F134898
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:01:12 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id z25so23668248lfr.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=UqgiLV0VjUKBJcxnLyNLTyV9eN+dAh8A/iqAACf8+dA=;
+        b=qPDLCIYOwEP0VD55mNFupQq6wIzbcFHFLZrCcDkTOwZfolZtzzlbTrHWZw0t5twFX5
+         n9c09BxM7QSkWWhf/UiZWT487FfYr3P3XwJmwA85RkmDNZtjyzzQ8AiuutpZPQ6jAylS
+         zunBK3n56GFzJqUxmPK1Jfcrr/edXsq7xeuynlO0EBCoC96oVfwIEOE+NaB+xJkG9dbI
+         Dh5Lcf3ZSKgtuUINz57lr69alOiT14+7aLnSRn76hD5IQbDyAZZgPRCrL1lDPnkL0nRT
+         wkxUZjmCkcFtOYpT1ivhU0nD5yGrMGaJd/hL5gY5WhUgfSzDdraY7mhrIoHFQOIjwgER
+         wluA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=UqgiLV0VjUKBJcxnLyNLTyV9eN+dAh8A/iqAACf8+dA=;
+        b=x8AFKdu5qbIaIf6BoAFlqZSCZ2Xo1SVqPEDlkdQZ3yUGkL2RMSqdqGU6hYPAfqNGID
+         IRVkF6GGns39INYWFPo8eOySvvFDwuH9arsP6DVRS4OmeJFtog4AP/+qAelmg0t9Ldt1
+         4Y+m9WY7VJuJBVa9LOZB4NDmhTlEfDflKj4d6Nxsf5OyowEFxXJFedNNPVpkI4g2uYdB
+         JoxH1fw2A1memHcyy2ZL7NzNE3+aTHbHc65cWtd4EfoT9YXGC/lJtxDgbGxdkQFAHyP9
+         5hpN34VoM4HNLs4kEsoH2KYy/G5pwYFhxu1tTCUfnCb5tNn9vYeufPB1XvERwT5SCunI
+         ScMA==
+X-Gm-Message-State: ACgBeo0BPyFPfYInFFauUGbdFuaJfyF6AinHeVEmGXETVqOP/MhR413h
+        glm1ro68l7P9sXEdUQgTfk2FqA==
+X-Google-Smtp-Source: AA6agR6g+J6hbZWE8D79tqnXYT/J1Z+BYuCIbp6i4arwcPiX+TtniNK3fPjXn3edpb61J1WeKy8VoQ==
+X-Received: by 2002:a19:5e01:0:b0:492:c03a:aa8e with SMTP id s1-20020a195e01000000b00492c03aaa8emr11392646lfb.139.1662026470851;
+        Thu, 01 Sep 2022 03:01:10 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id f24-20020a2eb5b8000000b0025e5cd1620fsm1627599ljn.57.2022.09.01.03.01.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 03:01:10 -0700 (PDT)
+Message-ID: <cae05f4d-57af-7923-58e5-c4bf06a8a3c8@linaro.org>
+Date:   Thu, 1 Sep 2022 13:01:09 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH] sched/core: Fix the bug that sched_core_find() may return
- throttled task
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: sc7280: Add device tree for
+ herobrine evoker
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     mingo@redhat.com, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org
-References: <1661928558-108473-1-git-send-email-CruzZhao@linux.alibaba.com>
- <YxB1Eu9wTPel8LWu@hirez.programming.kicks-ass.net>
-From:   cruzzhao <cruzzhao@linux.alibaba.com>
-In-Reply-To: <YxB1Eu9wTPel8LWu@hirez.programming.kicks-ass.net>
+To:     Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     mka@chromium.org, dianders@chromium.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20220901091253.93333-1-sheng-liang.pan@quanta.corp-partner.google.com>
+ <20220901170958.1.I7dd7a79c4cc5fe91c3feb004473feb3b34b7b2d8@changeid>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220901170958.1.I7dd7a79c4cc5fe91c3feb004473feb3b34b7b2d8@changeid>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/9/1 下午5:02, Peter Zijlstra 写道:
-> On Wed, Aug 31, 2022 at 02:49:18PM +0800, Cruz Zhao wrote:
->> When a cfs_rq is throttled, the cookie'd task in this cfs_rq wouldn't
->> dequeue from the core tree, and sched_core_find() may return this task,
->> which will result that the throttled task running on the cpu.
->>
->> To resolve this problem, we pick the first cookie matched task and
->> unthrottled task.
+On 01/09/2022 12:12, Sheng-Liang Pan wrote:
+> Add a basic device tree for the herobrine evoker board.
 > 
-> You mean: first that that both matches the cookie and is not throttled.
-> 
+> Signed-off-by: Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
+> ---
 
-Yeah, I mean "the first cookie matched and not throttled task".
+And this is third v1? At least this is what your subject is suggesting.
+Patches should be properly versioned. Git format-patch helps in that,
+but you can use any other tools if you wish.
 
-> Except I think you can have the same problem with the RT crud.
+I pointed you to documentation you must read before posting. You can
+keep ignoring it, so we keep ignoring your patch.
 
-Sure, there's the same problem with the RT crud.
+That's a NAK :(
 
-There's also a problem that the priority of the tasks in the core_tree
-won't change since sched_core_enqueue(), but the priority of cfs tasks
-will change as vruntime changes. And sched_core_find() may not pick the
-cookie matched task with the highest priority.
-
-I tried to combine the core_tree with cfs_rq (dl_rq, rt_rq should also
-be considered) to solve this problem, but I haven't come up with a
-simple and graceful solution yet.
+Best regards,
+Krzysztof

@@ -2,76 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D5B5A9F59
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B77A5A9F5C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:47:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234457AbiIASqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
+        id S232776AbiIASqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234217AbiIASp5 (ORCPT
+        with ESMTP id S231589AbiIASqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:45:57 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72EFC273A;
-        Thu,  1 Sep 2022 11:45:37 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id y3so36606082ejc.1;
-        Thu, 01 Sep 2022 11:45:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date;
-        bh=EI+1N/llj9L85b9NcuYg64P4zBWYxAlSDInm7LZKJiE=;
-        b=AOnpLzASJSI5wTZShO7PVB+6AfPc3VOoQ+Dh4ohASVvg2bAjptrWh951uiGYqtwS8+
-         Q+ULbBcsPtGcSpNmn+tL4QjZR5Sm81/TF6v/uz96xeYcjOoZASF8NXWk0jRu4GAGki9V
-         R9xg93hvODgA+wHeHCjaeO/MvHfRHnQs2ayWw3GlGoXt4m+yJt37julvliDDjiHtKliJ
-         3GWPNu+wc8pUD0FhwIbtPBP+koH3/eKL5ccCwJ/YAL6a2P6c9+QeagaA9NMfyt1PxYIX
-         sG1A8VciClCYmgkZIcF9gbNDvoKTzuP2bpBwZVtcHa/iQp2nrSHYIH+iQpbd2VssX8nc
-         eAgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date;
-        bh=EI+1N/llj9L85b9NcuYg64P4zBWYxAlSDInm7LZKJiE=;
-        b=ALeSa76n6MoTRMNYEYPosFzfD6AxE+Uc0lhGMK3Fw0AxS1zYX201kW1DG416Y4IijP
-         4tnbQea4/sDaS/YXes5lJ6cxUkJR/PnDfxWgIPaaZeVOuezoLEL69rH3uvZDwWGUQ2XJ
-         5Jq7XNH/hErp2tZQtygU3gsLe/+whV8pup7mQuo+BToInCgomVV0hcMUhrOjh5jnwBUD
-         oLOggRaNUOIfH1WF4u48qtQTV4+0kj3mvHa7QEypNMzW3ATK6j/BKnxKsTlCGlYDlG1g
-         y7aPjfibWMC9XRMn8o+qqMSC5o/faLUaxeTX1AxCwhTmyJ6ArwQ8Xi0aeUn2OYPYh79k
-         n0Cg==
-X-Gm-Message-State: ACgBeo3+B5iQ63Ypk9GN2/7gLB9/CceBJmld7wvlSLb2q1601T62M3kp
-        lqWhsWRO90Ge65YwHWo5wmA=
-X-Google-Smtp-Source: AA6agR7C1eNnJDOfnfQVBMk+BdAAEzf0m1yz4gzcFBN0vOhoBtPP59mO1qv9UrCu1Rr4D+ejcMKY9w==
-X-Received: by 2002:a17:906:8450:b0:741:5b1b:5c7f with SMTP id e16-20020a170906845000b007415b1b5c7fmr16853312ejy.766.1662057936037;
-        Thu, 01 Sep 2022 11:45:36 -0700 (PDT)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id k8-20020a17090632c800b0074134543f82sm11682ejk.90.2022.09.01.11.45.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 11:45:34 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id 2233DBE41F1; Thu,  1 Sep 2022 20:45:34 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 20:45:34 +0200
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>, Sasha Levin <sashal@kernel.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Documentation: stable: Document alternative for
- referring upstream commit hash
-Message-ID: <YxD9zpYyL08sh2jd@eldamar.lan>
-References: <20220809045543.2049293-1-carnil@debian.org>
- <8735e5a864.fsf@meer.lwn.net>
- <YwiEDsngUL//ogBL@eldamar.lan>
- <YxDWzCoQJwWEnKXw@kroah.com>
+        Thu, 1 Sep 2022 14:46:39 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 240F4B498;
+        Thu,  1 Sep 2022 11:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=XRAc12CEffd6UPewH7ccY0GIxlcGsZ0nDr5uMann2po=; b=LrIm/0Nee/5kQPChCwKM5mR7cS
+        x/tkmOjSOkF21LeaUXzbtHiYXJ2G2eDB6PjOHrdhA2NLbODRKysIiHWX2Po/jLSxA73LX6AIjwYpo
+        uCDMRwWffp9Kg0N64hh/CRmZC7fZcdH3jRzGf/QBtsIG+2D62NB6yaZUbjUg7yneBzT2wipVCed1D
+        4DmdJ7Vqo2DmckjAUvu07vzR3BOLdjqRWCUSL4VI7ycxabym8A6kaMOb9fBZJNXoFafQWFaltEg6v
+        r6IJYn+myeJlTUWsnMrHYZukWw90sMtyav3tRe2tTXpkn07uGfn8Uu7z8pyTHbB1qq7eVnevSVL4u
+        KuIgAf0Q==;
+Received: from 189-69-202-182.dial-up.telesp.net.br ([189.69.202.182] helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1oTpCz-007tqI-1P; Thu, 01 Sep 2022 20:46:33 +0200
+Message-ID: <b050f00b-6c3a-a0d9-a3c1-175a724faf1c@igalia.com>
+Date:   Thu, 1 Sep 2022 15:46:17 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxDWzCoQJwWEnKXw@kroah.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V3] firmware: google: Test spinlock on panic path to avoid
+ lockups
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     evgreen@chromium.org, arnd@arndb.de, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@gpiccoli.net, ardb@kernel.org,
+        davidgow@google.com, jwerner@chromium.org,
+        Petr Mladek <pmladek@suse.com>
+References: <20220819155059.451674-1-gpiccoli@igalia.com>
+ <YxDVPqVkdgQbAIvY@kroah.com>
+ <f89cd87c-7d1c-d8e6-ed95-6876f0201872@igalia.com>
+ <YxDX9+p+58q2sip2@kroah.com>
+ <6bc5dbc3-2cdd-5cb8-1632-11de2008a85a@igalia.com>
+ <YxDhiSDs4YcUrqV5@kroah.com>
+ <85683284-db85-7e3a-57bd-750e1c204e3e@igalia.com>
+ <YxD56RTI9v/P2QOL@kroah.com>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <YxD56RTI9v/P2QOL@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,67 +66,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Thu, Sep 01, 2022 at 05:59:08PM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Aug 26, 2022 at 10:27:58AM +0200, Salvatore Bonaccorso wrote:
-> > Hi Jonathan,
-> > 
-> > On Tue, Aug 09, 2022 at 06:54:59AM -0600, Jonathan Corbet wrote:
-> > > Salvatore Bonaccorso <carnil@debian.org> writes:
-> > > 
-> > > > Additionally to the "commit <sha1> upstream." variant, "[ Upstream
-> > > > commit <sha1> ]" is used as well as alternative to refer to the upstream
-> > > > commit hash.
-> > > >
-> > > > Signed-off-by: Salvatore Bonaccorso <carnil@debian.org>
-> > > > ---
-> > > >  Documentation/process/stable-kernel-rules.rst | 6 ++++++
-> > > >  1 file changed, 6 insertions(+)
-> > > 
-> > > So this is a nit but...
-> > > 
-> > > > diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
-> > > > index c61865e91f52..2fd8aa593a28 100644
-> > > > --- a/Documentation/process/stable-kernel-rules.rst
-> > > > +++ b/Documentation/process/stable-kernel-rules.rst
-> > > > @@ -97,6 +97,12 @@ text, like this:
-> > > >  
-> > > >      commit <sha1> upstream.
-> > > >  
-> > > > +or alternatively:
-> > > > +
-> > > > +.. code-block:: none
-> > > > +
-> > > > +    [ Upstream commit <sha1> ]
-> > > 
-> > > Can this just be:
-> > > 
-> > >   or alternatively::
-> > > 
-> > >     [ Upstream commit <sha1> ]
-> > > 
-> > > That extra RST markup just clutters things without any advantage.
-> > 
-> > Btw, after revisiting, I think Greg actually can pick up the first
-> > version of the patch. Changing the above without adding the
-> > code-block:node will reformat the
-> > 
-> >      [ Upstream commit <sha1> ]
-> > 
-> > differently when rendering to html.
-> > 
-> > Greg, so as the patch has not yet been commited, can you pick up the
-> > first version from
-> > https://lore.kernel.org/lkml/20220809045543.2049293-1-carnil@debian.org/
-> > ?
+On 01/09/2022 15:28, Greg KH wrote:
+> [...]
+>> I honestly didn't understand exactly what you're suggesting Greg...
+>> Mind clarifying?
 > 
-> Please resend it as v3 so that our tools don't try to apply v2.
+> Something like this totally untested code:
+> 
+> diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
+> index adaa492c3d2d..6ad41b22671c 100644
+> --- a/drivers/firmware/google/gsmi.c
+> +++ b/drivers/firmware/google/gsmi.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/dma-mapping.h>
+>  #include <linux/fs.h>
+>  #include <linux/slab.h>
+> +#include <linux/panic.h>
+>  #include <linux/panic_notifier.h>
+>  #include <linux/ioctl.h>
+>  #include <linux/acpi.h>
+> @@ -611,6 +612,11 @@ static const struct attribute *gsmi_attrs[] = {
+>  	NULL,
+>  };
+>  
+> +static bool panic_in_progress(void)
+> +{
+> +	return unlikely(atomic_read(&panic_cpu) != PANIC_CPU_INVALID);
+> +}
+> +
+>  static int gsmi_shutdown_reason(int reason)
+>  {
+>  	struct gsmi_log_entry_type_1 entry = {
+> @@ -629,7 +635,8 @@ static int gsmi_shutdown_reason(int reason)
+>  	if (saved_reason & (1 << reason))
+>  		return 0;
+>  
+> -	spin_lock_irqsave(&gsmi_dev.lock, flags);
+> +	if (!panic_in_progress())
+> +		spin_lock_irqsave(&gsmi_dev.lock, flags);
+>  
+>  	saved_reason |= (1 << reason);
+>  
+> @@ -644,7 +651,8 @@ static int gsmi_shutdown_reason(int reason)
+>  
+>  	rc = gsmi_exec(GSMI_CALLBACK, GSMI_CMD_SET_EVENT_LOG);
+>  
+> -	spin_unlock_irqrestore(&gsmi_dev.lock, flags);
+> +	if (!panic_in_progress())
+> +		spin_unlock_irqrestore(&gsmi_dev.lock, flags);
+>  
+>  	if (rc < 0)
+>  		printk(KERN_ERR "gsmi: Log Shutdown Reason failed\n");
+> 
+> 
+>
 
-Okay right, make sense! Just sumitted v3 with the original version of
-the documentation patch.
+Thanks! Personally, I feel the approach a bit more complex than mine,
+and...racy!
+Imagine CPU0 runs your tests, right after the if (!panic_in_progress())
+is done, spinlock is taken and boom - panic on CPU1. This would cause
+the same issue...
 
-https://lore.kernel.org/lkml/20220901184328.4075701-1-carnil@debian.org/
+My approach is zero racy, since it checks if spinlock was taken in a
+moment that the machine is like a no-SMP, only a single CPU running...
 
-Regards,
-Salvatore
+
+> That being said, are you sure spinlocks are still held in the panic
+> notifier?  What about the call to bust_spinlocks() that is called in
+> panic() already?  Wouldn't that have already dropped whatever you were
+> worried about here?
+
+This function is very weird. Basically, the call of "bust_spinlocks(1);"
+in panic effectively means "++oops_in_progress;" IIUC.
+So, I still think we can have lockups in panic notifiers with locks
+previously taken =)
+
+Cheers,
+
+
+Guilherme

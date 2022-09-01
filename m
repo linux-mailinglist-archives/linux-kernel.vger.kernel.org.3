@@ -2,203 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5315A9256
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3865B5A925B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbiIAIpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47906 "EHLO
+        id S233056AbiIAIsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 04:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232332AbiIAIpl (ORCPT
+        with ESMTP id S229639AbiIAIsp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:45:41 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B9880495;
-        Thu,  1 Sep 2022 01:45:37 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2818jV2b068892;
-        Thu, 1 Sep 2022 03:45:31 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1662021931;
-        bh=rYJIONg+SpsbjwLdW3SdWXOOkx45HaZcz//qkzU7Uvw=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=TAS3Z2RuC2ZV4EDWdcqFcH5ZUmBvlQ8HIEjgDjKNMX0kalSV2CMn786WOQjO7k6MS
-         DckWACWvT3WEq7E+/u39Uad4esbPWIQb0gqperM9u8ju4goxP86nSOFjhdusEz/reN
-         a0xMaYFpHyLKHCPC7ZY+aG1P79qScEnQudlC4lAY=
-Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2818jVHg113417
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 1 Sep 2022 03:45:31 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 1 Sep
- 2022 03:45:31 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 1 Sep 2022 03:45:31 -0500
-Received: from [172.24.145.182] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2818jTQw005036;
-        Thu, 1 Sep 2022 03:45:29 -0500
-Message-ID: <8c130e92-9970-54d3-d263-37ae2f722b34@ti.com>
-Date:   Thu, 1 Sep 2022 14:15:28 +0530
+        Thu, 1 Sep 2022 04:48:45 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F39A41314FC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:48:39 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8CAE25C01B3;
+        Thu,  1 Sep 2022 04:48:37 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 01 Sep 2022 04:48:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1662022117; x=
+        1662108517; bh=l2iVpNcckBloZiYPxiEHdOZw0tm4eADgBiJaKSqaraY=; b=p
+        yV5b9uU27wvovs8MXLl5F+nTQPP5t5ry8Y0ZwsSov8b7Rl1MuaOnyThDenQd9oWZ
+        KFxmdBfYGGeYhWHEWjNd3I+78iZVlsD/kpSPPChcMHdJyoSZLu1qpff1+dHikXBB
+        ffuTE2IzxQsSpXRm6il4I51PbdeZ5OZd8U4TqYWuahSq79d1lYekS+2oZ6A+NeHU
+        vUkf17BhFOu8Madqu8vFjZhg4WHDt+RJOqF4wc2iWsO2hFHDnoBCttxk3ARTxtEF
+        FyqkqDbmK7HhPIeSy2Al8KMrBRuW5dd/PHkA3hmJhq1xSX0d2dvqrF6bA82PJjyC
+        lPjq+ZLMAqMEh88z8romg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1662022117; x=
+        1662108517; bh=l2iVpNcckBloZiYPxiEHdOZw0tm4eADgBiJaKSqaraY=; b=I
+        A0heguE6IEVOKY+7iwefJzG2eqCmNGx+1nuznbZWYZA46A8liCwfsZM9He4xSOLY
+        wvlO6wFtRCmw6NRqwI3r1GVpnfgkjZAc1in4J+4xy4CAE7igWOUlklSbPGUU8HtQ
+        gVHrbhK7lahXpSTOf9P1gkbHtR7zTf93xzvcP2xFjc7hGHarWpSfXeAKGcgT0+Cg
+        TjXos0U2yfj1qaTUSFgawwamnagHck27/pByB+5SPzodEvBv22lnBp4lQky+1SR6
+        adWxXVOcfw3JO6oNYeyYwpiRJlxIqi6WwkS8IYQbUxkjZw8a3y5OgSLU7jWcWEBO
+        R2jy5PW+iy/+eXmxHkaTQ==
+X-ME-Sender: <xms:5HEQY2chM5ODqvnhzXP9ZIL1R0II1xvOudmjKXq2LxOgsYhHDklWnA>
+    <xme:5HEQYwPfsQEJ2kzUmT6tmQprwyl3Y_-wBKdyTTAGFK_nBLniDL4FlvP8mQS-O6Uqc
+    -2xp2OSOsq0a13WeaE>
+X-ME-Received: <xmr:5HEQY3j-PK_NezsNY21hsuQNLxrIJ--bUPcdDyL8NNEutMllQ19YSyTa2X8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekkedgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggugfgjsehtqhertddttddvnecuhfhrohhmpeforgig
+    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
+    grthhtvghrnhepgfehleelheduhfekvdfgjeefudeftdetfeduueejueevheevveegvdfg
+    ueekvedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdptddurdhorhhgpdhgihhthh
+    husghushgvrhgtohhnthgvnhhtrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfr
+    rghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggthh
+X-ME-Proxy: <xmx:5HEQYz-VG1W0lzYyMizqEw9tBLiRNXIbJ_mFD6KUek5g4xPAqW8wzQ>
+    <xmx:5HEQYyvqLHkGRZdRgxaFCmHzYUw_k1O-9hNZ4GzJOKftA-oXcV--VQ>
+    <xmx:5HEQY6HyDJ33oqAZS3xoczvb034jrRCGDMTqdosOR8pB9MYZGYU2vw>
+    <xmx:5XEQY0KksNuNLZ63YA6icr8Ety-hwNeD5CrN6GO__8X0gg5Ilolz0w>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 1 Sep 2022 04:48:36 -0400 (EDT)
+Date:   Thu, 1 Sep 2022 10:48:33 +0200
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     kernel test robot <lkp@intel.com>,
+        "Minghao Chi (CGEL ZTE)" <chi.minghao@zte.com.cn>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Sasha Levin <sashal@kernel.org>
+Subject: Re: [stable:linux-5.15.y 9126/9999] ERROR: modpost:
+ "devm_drm_of_get_bridge" [drivers/gpu/drm/vc4/vc4.ko] undefined!
+Message-ID: <20220901084833.fupxbfutuz6yqoqo@houat>
+References: <202209011256.zvBzxcpP-lkp@intel.com>
+ <20220901080017.fe4bx2ywuafry6ie@houat>
+ <YxBvyDBxtP57MULl@kroah.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH RESEND 2/6] arm64: dts: ti: k3-j721s2-main: Add SERDES and
- WIZ device tree node
-Content-Language: en-US
-To:     Matt Ranostay <mranostay@ti.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>
-References: <20220810094000.248487-1-mranostay@ti.com>
- <20220810094000.248487-2-mranostay@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20220810094000.248487-2-mranostay@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <YxBvyDBxtP57MULl@kroah.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Sep 01, 2022 at 10:39:36AM +0200, Greg Kroah-Hartman wrote:
+> On Thu, Sep 01, 2022 at 10:00:17AM +0200, Maxime Ripard wrote:
+> > On Thu, Sep 01, 2022 at 12:51:57PM +0800, kernel test robot wrote:
+> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-=
+stable.git linux-5.15.y
+> > > head:   1ded0ef2419e8f83a17d65594523ec3aeb2e3d0f
+> > > commit: 3d722c01d628d17a37cf2820195f15cfc9a6a332 [9126/9999] drm/vc4:=
+ Use of_device_get_match_data()
+> > > config: parisc-randconfig-c034-20220831 (https://download.01.org/0day=
+-ci/archive/20220901/202209011256.zvBzxcpP-lkp@intel.com/config)
+> > > compiler: hppa-linux-gcc (GCC) 12.1.0
+> > > reproduce (this is a W=3D1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master=
+/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linu=
+x-stable.git/commit/?id=3D3d722c01d628d17a37cf2820195f15cfc9a6a332
+> > >         git remote add stable https://git.kernel.org/pub/scm/linux/ke=
+rnel/git/stable/linux-stable.git
+> > >         git fetch --no-tags stable linux-5.15.y
+> > >         git checkout 3d722c01d628d17a37cf2820195f15cfc9a6a332
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=3D$HOME/0day COMPILER=3Dgcc-12.1.0 make=
+=2Ecross W=3D1 O=3Dbuild_dir ARCH=3Dparisc SHELL=3D/bin/bash
+> > >=20
+> > > If you fix the issue, kindly add following tag where applicable
+> > > Reported-by: kernel test robot <lkp@intel.com>
+> > >=20
+> > > All errors (new ones prefixed by >>, old ones prefixed by <<):
+> > >=20
+> > > >> ERROR: modpost: "devm_drm_of_get_bridge" [drivers/gpu/drm/vc4/vc4.=
+ko] undefined!
+> >=20
+> > I think this is due to stable having backported 87ea95808d53 and
+> > a43dd76bacd0, but missing 59050d7838482
+>=20
+> I see no such commit as "59050d7838482" in Linus's tree, what are you
+> referring to exactly here?
 
+Sorry, I meant 59050d783848, I'm not sure how the final 2 ended up there
 
-On 10/08/22 15:09, Matt Ranostay wrote:
-> From: Aswath Govindraju <a-govindraju@ti.com>
-> 
-> Add dt node for the single instance of WIZ (SERDES wrapper) and
-> SERDES module shared by PCIe, eDP and USB.
-> 
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Nishanth Menon <nm@ti.com>
-> Acked-by: Matt Ranostay <mranostay@ti.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 70 ++++++++++++++++++++++
->  1 file changed, 70 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> index f7e359da8690..f1e02d896168 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> @@ -5,6 +5,13 @@
->   * Copyright (C) 2021 Texas Instruments Incorporated - https://www.ti.com/
->   */
->  
-> +/ {
-> +	serdes_refclk: serdes-refclk {
-
-clk-X
-
-> +		#clock-cells = <0>;
-> +		compatible = "fixed-clock";
-> +	};
-> +};
-> +
->  &cbass_main {
->  	msmc_ram: sram@70000000 {
->  		compatible = "mmio-sram";
-> @@ -33,6 +40,13 @@ scm_conf: scm-conf@104000 {
->  		#size-cells = <1>;
->  		ranges = <0x00 0x00 0x00104000 0x18000>;
->  
-> +		serdes_ln_ctrl: mux-controller@80 {
-
-mux-controller-X
-
-> +			compatible = "mmio-mux";
-> +			#mux-control-cells = <1>;
-> +			mux-reg-masks = <0x80 0x3>, <0x84 0x3>, /* SERDES0 lane0/1 select */
-> +					<0x88 0x3>, <0x8c 0x3>; /* SERDES0 lane2/3 select */
-> +		};
-> +
->  		usb_serdes_mux: mux-controller@0 {
->  			compatible = "mmio-mux";
->  			#mux-control-cells = <1>;
-> @@ -728,6 +742,62 @@ usb0: usb@6000000 {
->  		};
->  	};
->  
-> +	serdes_wiz0: wiz@5060000 {
-> +		compatible = "ti,j721e-wiz-10g";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		power-domains = <&k3_pds 365 TI_SCI_PD_EXCLUSIVE>;
-> +		clocks = <&k3_clks 365 0>, <&k3_clks 365 3>, <&serdes_refclk>;
-> +		clock-names = "fck", "core_ref_clk", "ext_ref_clk";
-> +		num-lanes = <4>;
-> +		#reset-cells = <1>;
-> +		ranges = <0x5060000 0x0 0x5060000 0x10000>;
-> +
-> +		assigned-clocks = <&k3_clks 365 3>;
-> +		assigned-clock-parents = <&k3_clks 365 7>;
-> +
-> +		wiz0_pll0_refclk: pll0-refclk {
-
-please use generic node name clk-X here and elsewhere in the patch
-
-> +			clocks = <&k3_clks 365 3>, <&serdes_refclk>;
-> +			clock-output-names = "wiz0_pll0_refclk";
-> +			#clock-cells = <0>;
-> +			assigned-clocks = <&wiz0_pll0_refclk>;
-> +			assigned-clock-parents = <&k3_clks 365 3>;
-> +		};
-> +
-> +		wiz0_pll1_refclk: pll1-refclk {
-
-ditto
-
-> +			clocks = <&k3_clks 365 3>, <&serdes_refclk>;
-> +			clock-output-names = "wiz0_pll1_refclk";
-> +			#clock-cells = <0>;
-> +			assigned-clocks = <&wiz0_pll1_refclk>;
-> +			assigned-clock-parents = <&k3_clks 365 3>;
-> +		};
-> +
-> +		wiz0_refclk_dig: refclk-dig {
-
-ditto
-
-> +			clocks = <&k3_clks 365 3>, <&serdes_refclk>;
-> +			clock-output-names = "wiz0_refclk_dig";
-> +			#clock-cells = <0>;
-> +			assigned-clocks = <&wiz0_refclk_dig>;
-> +			assigned-clock-parents = <&k3_clks 365 3>;
-> +		};
-> +
-> +		wiz0_cmn_refclk_dig_div: cmn-refclk-dig-div {
-
-ditto
-
-> +			clocks = <&wiz0_refclk_dig>;
-> +			#clock-cells = <0>;
-> +		};
-> +
-> +		serdes0: serdes@5060000 {
-> +			compatible = "ti,j721e-serdes-10g";
-> +			reg = <0x05060000 0x00010000>;
-> +			reg-names = "torrent_phy";
-> +			resets = <&serdes_wiz0 0>;
-> +			reset-names = "torrent_reset";
-> +			clocks = <&wiz0_pll0_refclk>;
-> +			clock-names = "refclk";
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
-> +	};
-> +
->  	main_mcan0: can@2701000 {
->  		compatible = "bosch,m_can";
->  		reg = <0x00 0x02701000 0x00 0x200>,
-
--- 
-Regards
-Vignesh
+Maxime

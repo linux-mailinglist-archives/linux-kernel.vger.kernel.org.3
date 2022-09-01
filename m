@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24E7F5A9D0D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1B15A9D0E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:29:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbiIAQ1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S233483AbiIAQ3F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:29:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234995AbiIAQ10 (ORCPT
+        with ESMTP id S233480AbiIAQ26 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:27:26 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF7B5AA2C;
-        Thu,  1 Sep 2022 09:27:22 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id s11so23250673edd.13;
-        Thu, 01 Sep 2022 09:27:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=+0L2eClwsYHKJeXwvZYuWRKn+FjwoNn5ZEAvWBll6m0=;
-        b=ACc7zrT169Ua1FVZex6ZCHgP4BuYWGFxhVzF51e4NFzAFmt2vyRARTrtEeaEZ0pmEu
-         ynhMCS4bJgsy2LQ+Kh+JUBy8Rn6DGhz8F8ipUiNavfw/os0ii3yx8/ykRFfwvMlD4Ei6
-         tawh0TF4yoXoHuiuat3LN2yyQ2/6YCaH/vnVznruo40J0RYyLL0NKFIGvS0tvGRlYHRg
-         wgLbyaKPN+oC8ve8Nvlvtqg3R9ufMcOtyO1lPw1izNPvvwCnCyDW6j3TdUpnciLA7CtO
-         d6Dppa6TC2DMAMAZkx7EwxmtEpybqj20UiTiQ0RXXg0qGcJl3LInnVDBRY/xddZPDUI3
-         7cvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=+0L2eClwsYHKJeXwvZYuWRKn+FjwoNn5ZEAvWBll6m0=;
-        b=astnkAgitOPaMMlktWFAoV8aLxrWSB9gLx1xAJQpzlXh2FKY71zbbCjNNRm0eKLEkJ
-         33z0rPxx9kpf3NkhL3RAKfARQPkiQVlqyvWLVthzx6qH8xnbi+Vw/ngy8MzmoQ07xEs6
-         sJiRp/MVq10knbDUz7nwa8t9884Lq5NPyD6E1ag22iS8VJVf4sd0NkxA1gfYpQx97836
-         9bAGrdXa04mH5oAF5Y+MjTV6saxMAvqsNaXe+knBjNWc5q0inSxmOauxDC1qYho9Toi8
-         HyynfNxR5iFfS/52I0ov7i7by359/WTimuPAwJoqD7Z33CEQVmThUbRxWInVrCAWGmUj
-         teRA==
-X-Gm-Message-State: ACgBeo0r4pvxS8bGzhhHYkRLjcQ2UoIruVGa0l33ulci3K/iF2RuYRMH
-        NBggcwiRkTo8yMzc5KwKE+E=
-X-Google-Smtp-Source: AA6agR66W/BK8tzwCWWoLIWVGbBUAC1Wi7eWWthXQBDYDdP23dChnEBehgKjee7rgOzwyyBalzCMfA==
-X-Received: by 2002:a05:6402:401a:b0:448:2ce5:652a with SMTP id d26-20020a056402401a00b004482ce5652amr16907012eda.322.1662049640715;
-        Thu, 01 Sep 2022 09:27:20 -0700 (PDT)
-Received: from localhost.localdomain (host-87-1-103-238.retail.telecomitalia.it. [87.1.103.238])
-        by smtp.gmail.com with ESMTPSA id k19-20020a1709061c1300b00730f0c19108sm8573444ejg.86.2022.09.01.09.27.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 09:27:18 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Benjamin LaHaise <bcrl@kvack.org>,
-        linux-fsdevel@vger.kernel.org, linux-aio@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [RESEND PATCH] aio: Replace kmap{,_atomic}() with kmap_local_page()
-Date:   Thu,  1 Sep 2022 18:27:13 +0200
-Message-Id: <20220901162713.27501-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.2
+        Thu, 1 Sep 2022 12:28:58 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DEC7E817
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:28:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662049737; x=1693585737;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/B+8TPx1zdaxCnMYeWoIPODTLSjkwoVsI7CiYhh0Xwk=;
+  b=UOu0TcyA/nOAUKoFtWcxt2+MU0eHrx3l++TjmLL5JOIhi+wukPU5jELq
+   V6FJxfbCXKiSY3EWa35CQZ0giKuHCaTQ4FWbXn7qlnD/2y0JSlehxnOsK
+   Ht213YVMGlrPajTqe4I1Dz9rPGaIXUUYAwqW+AoZRfj4GDZkVerVqR3MY
+   A9ghwFu26/NgIKYegO4IMVaEo2NP7Lj2ZdGbwQ7zWJZRepw7LwL8En1Cv
+   o+l+8bFFmsO+3EqLgRTyZAwMyl9IiRbSSU+6kZRJYIsf15INmie6JQY4k
+   LnE0ZOvct2LpFWgGPaXz0Skcio5yLP4Wtw9NbparkrVKPK80X9Giyv47R
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="275512042"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="275512042"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 09:28:56 -0700
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="642407740"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.42.13])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 09:28:54 -0700
+Message-ID: <1a7aaa51-1858-bb59-834c-7e8f6a58bc39@intel.com>
+Date:   Thu, 1 Sep 2022 19:28:49 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 5/5] perf intel-pt: Support itrace option flag d+e to log
+ on error
+Content-Language: en-US
+To:     Andi Kleen <ak@linux.intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org
+References: <20220901110032.9226-1-adrian.hunter@intel.com>
+ <20220901110032.9226-6-adrian.hunter@intel.com>
+ <dadd6179-4867-211a-ad6e-30fcd66a8e0a@linux.intel.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <dadd6179-4867-211a-ad6e-30fcd66a8e0a@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,154 +68,219 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The use of kmap() and kmap_atomic() are being deprecated in favor of
-kmap_local_page().
+On 1/09/22 17:31, Andi Kleen wrote:
+> 
+> On 9/1/2022 4:00 AM, Adrian Hunter wrote:
+>> Pass d+e option and log size via intel_pt_log_enable(). Allocate a buffer
+>> for log messages and provide intel_pt_log_dump_buf() to dump and reset the
+>> buffer upon decoder errors.
+>>
+>> Example:
+>>
+>>   $ sudo perf record -e intel_pt// sleep 1
+>>   [ perf record: Woken up 1 times to write data ]
+>>   [ perf record: Captured and wrote 0.094 MB perf.data ]
+>>   $ sudo perf config itrace.debug-log-buffer-size=300
+>>   $ sudo perf script --itrace=ed+e+o | head -20
+>>   Dumping debug log buffer (first line may be sliced)
+>>                                           Other
+>>             ffffffff96ca22f6:  48 89 e5                                        Other
+>>             ffffffff96ca22f9:  65 48 8b 05 ff e0 38 69                         Other
+>>             ffffffff96ca2301:  48 3d c0 a5 c1 98                               Other
+>>             ffffffff96ca2307:  74 08                                           Jcc +8
+>>             ffffffff96ca2311:  5d                                              Other
+>>             ffffffff96ca2312:  c3                                              Ret
+>>   ERROR: Bad RET compression (TNT=N) at 0xffffffff96ca2312
+>>   End of debug log buffer dump
+>>    instruction trace error type 1 time 15913.537143482 cpu 5 pid 36292 tid 36292 ip 0xffffffff96ca2312 code 6: Trace doesn't match instruction
+>>   Dumping debug log buffer (first line may be sliced)
+>>                                          Other
+>>             ffffffff96ce7fe9:  f6 47 2e 20                                     Other
+>>             ffffffff96ce7fed:  74 11                                           Jcc +17
+>>             ffffffff96ce7fef:  48 8b 87 28 0a 00 00                            Other
+>>             ffffffff96ce7ff6:  5d                                              Other
+>>             ffffffff96ce7ff7:  48 8b 40 18                                     Other
+>>             ffffffff96ce7ffb:  c3                                              Ret
+>>   ERROR: Bad RET compression (TNT=N) at 0xffffffff96ce7ffb
+>>   Warning:
+>>   8 instruction trace errors
+>>
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+>>   tools/perf/Documentation/perf-intel-pt.txt    |  5 +-
+>>   .../perf/util/intel-pt-decoder/intel-pt-log.c | 94 ++++++++++++++++++-
+>>   .../perf/util/intel-pt-decoder/intel-pt-log.h |  3 +-
+>>   tools/perf/util/intel-pt.c                    | 20 +++-
+>>   4 files changed, 117 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/tools/perf/Documentation/perf-intel-pt.txt b/tools/perf/Documentation/perf-intel-pt.txt
+>> index d5ddb968bcf4..92464a5d7eaf 100644
+>> --- a/tools/perf/Documentation/perf-intel-pt.txt
+>> +++ b/tools/perf/Documentation/perf-intel-pt.txt
+>> @@ -989,10 +989,13 @@ must be preceded by either '+' or '-'. The flags support by Intel PT are:
+>>             -a    Suppress logging of perf events
+>>           +a    Log all perf events
+>> +        +e    Output only on decoding errors (size configurable)
+>>           +o    Output to stdout instead of "intel_pt.log"
+>>     By default, logged perf events are filtered by any specified time ranges, but
+>> -flag +a overrides that.
+>> +flag +a overrides that.  The +e flag can be useful for analyzing errors.  By
+>> +default, the log size in that case is 16384 bytes, but can be altered by
+>> +linkperf:perf-config[1] e.g. perf config itrace.debug-log-buffer-size=30000
+>>     In addition, the period of the "instructions" event can be specified. e.g.
+>>   diff --git a/tools/perf/util/intel-pt-decoder/intel-pt-log.c b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
+>> index 5f5dfc8753f3..ea96dcae187a 100644
+>> --- a/tools/perf/util/intel-pt-decoder/intel-pt-log.c
+>> +++ b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
+>> @@ -5,12 +5,16 @@
+>>    */
+>>     #include <stdio.h>
+>> +#include <stdlib.h>
+>>   #include <stdint.h>
+>>   #include <inttypes.h>
+>>   #include <stdarg.h>
+>>   #include <stdbool.h>
+>>   #include <string.h>
+>>   +#include <linux/zalloc.h>
+>> +#include <linux/kernel.h>
+>> +
+>>   #include "intel-pt-log.h"
+>>   #include "intel-pt-insn-decoder.h"
+>>   @@ -21,15 +25,20 @@
+>>   static FILE *f;
+>>   static char log_name[MAX_LOG_NAME];
+>>   bool intel_pt_enable_logging;
+>> +static bool intel_pt_dump_log_on_error;
+>> +static unsigned int intel_pt_log_on_error_size;
+>> +static struct log_buf log_buf;
+>>     void *intel_pt_log_fp(void)
+>>   {
+>>       return f;
+>>   }
+>>   -void intel_pt_log_enable(void)
+>> +void intel_pt_log_enable(bool dump_log_on_error, unsigned int log_on_error_size)
+>>   {
+>>       intel_pt_enable_logging = true;
+>> +    intel_pt_dump_log_on_error = dump_log_on_error;
+>> +    intel_pt_log_on_error_size = log_on_error_size;
+>>   }
+>>     void intel_pt_log_disable(void)
+>> @@ -74,6 +83,87 @@ static void intel_pt_print_no_data(uint64_t pos, int indent)
+>>       fprintf(f, " ");
+>>   }
+>>   +#define DFLT_BUF_SZ    (16 * 1024)
+>> +
+>> +struct log_buf {
+>> +    char            *buf;
+>> +    size_t            buf_sz;
+>> +    size_t            head;
+>> +    bool            wrapped;
+>> +    FILE            *backend;
+>> +};
+>> +
+>> +static ssize_t log_buf__write(void *cookie, const char *buf, size_t size)
+>> +{
+>> +    struct log_buf *b = cookie;
+>> +    size_t sz = size;
+>> +
+>> +    if (!b->buf)
+>> +        return size;
+>> +
+>> +    while (sz) {
+>> +        size_t space = b->buf_sz - b->head;
+>> +        size_t n = min(space, sz);
+>> +
+>> +        memcpy(b->buf + b->head, buf, n);
+>> +        sz -= n;
+>> +        buf += n;
+>> +        b->head += n;
+>> +        if (sz && b->head >= b->buf_sz) {
+>> +            b->head = 0;
+>> +            b->wrapped = true;
+>> +        }
+>> +    }
+> 
+> 
+> I would add an assert or somesuch for the case where sz is larger than the buffer size, which would otherwise loop forever.
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-the mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+It will just overwrite itself a few times, as b->head keeps wrapping back to 0.
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-the tasks can be preempted and, when they are scheduled to run again, the
-kernel virtual addresses are restored and still valid.
+> 
+> 
+>> +
+>> +static void log_buf__dump(struct log_buf *b)
+>> +{
+>> +    if (!b->buf)
+>> +        return;
+>> +
+>> +    fflush(f);
+>> +    fprintf(b->backend, "Dumping debug log buffer (first line may be sliced)\n");
+> 
+> 
+> Should be easy to skip the first line, no?
 
-Since its use in fs/aio.c is safe everywhere, it should be preferred.
+Not as easy as typing " (first line may be sliced)" ;-)
 
-Therefore, replace kmap() and kmap_atomic() with kmap_local_page() in
-fs/aio.c.
+Still not sure it is worth having the extra complication, but here
+is the change as a separate patch:
 
-Tested with xfstests on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel
-with HIGHMEM64GB enabled.
+From: Adrian Hunter <adrian.hunter@intel.com>
+Date: Thu, 1 Sep 2022 19:01:33 +0300
+Subject: [PATCH] perf intel-pt: Remove first line of log dumped on error
 
-Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+Instead of printing "(first line may be sliced)", always remove the
+first line of the debug log when dumping on error.
+
+Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
+ .../perf/util/intel-pt-decoder/intel-pt-log.c | 27 ++++++++++++++++---
+ 1 file changed, 24 insertions(+), 3 deletions(-)
 
-I'm resending this patch because some recipients were missing in the 
-previous submission. In the meantime I'm also adding some more information 
-in the commit message. There are no changes in the code.
-
- fs/aio.c | 32 ++++++++++++++++----------------
- 1 file changed, 16 insertions(+), 16 deletions(-)
-
-diff --git a/fs/aio.c b/fs/aio.c
-index 606613e9d1f4..83c2c2e3e428 100644
---- a/fs/aio.c
-+++ b/fs/aio.c
-@@ -567,7 +567,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
- 	ctx->user_id = ctx->mmap_base;
- 	ctx->nr_events = nr_events; /* trusted copy */
+diff --git a/tools/perf/util/intel-pt-decoder/intel-pt-log.c b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
+index ea96dcae187a7..6cc465d1f7a9e 100644
+--- a/tools/perf/util/intel-pt-decoder/intel-pt-log.c
++++ b/tools/perf/util/intel-pt-decoder/intel-pt-log.c
+@@ -143,16 +143,37 @@ static FILE *log_buf__open(struct log_buf *b, FILE *backend, unsigned int sz)
+ 	return file;
+ }
  
--	ring = kmap_atomic(ctx->ring_pages[0]);
-+	ring = kmap_local_page(ctx->ring_pages[0]);
- 	ring->nr = nr_events;	/* user copy */
- 	ring->id = ~0U;
- 	ring->head = ring->tail = 0;
-@@ -575,7 +575,7 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
- 	ring->compat_features = AIO_RING_COMPAT_FEATURES;
- 	ring->incompat_features = AIO_RING_INCOMPAT_FEATURES;
- 	ring->header_length = sizeof(struct aio_ring);
--	kunmap_atomic(ring);
-+	kunmap_local(ring);
- 	flush_dcache_page(ctx->ring_pages[0]);
++static bool remove_first_line(const char **p, size_t *n)
++{
++	for (; *n && **p != '\n'; ++*p, --*n)
++		;
++	if (*n) {
++		*p += 1;
++		*n -= 1;
++		return true;
++	}
++	return false;
++}
++
++static void write_lines(const char *p, size_t n, FILE *fp, bool *remove_first)
++{
++	if (*remove_first)
++		*remove_first = !remove_first_line(&p, &n);
++	fwrite(p, n, 1, fp);
++}
++
+ static void log_buf__dump(struct log_buf *b)
+ {
++	bool remove_first = true;
++
+ 	if (!b->buf)
+ 		return;
  
- 	return 0;
-@@ -678,9 +678,9 @@ static int ioctx_add_table(struct kioctx *ctx, struct mm_struct *mm)
- 					 * we are protected from page migration
- 					 * changes ring_pages by ->ring_lock.
- 					 */
--					ring = kmap_atomic(ctx->ring_pages[0]);
-+					ring = kmap_local_page(ctx->ring_pages[0]);
- 					ring->id = ctx->id;
--					kunmap_atomic(ring);
-+					kunmap_local(ring);
- 					return 0;
- 				}
+ 	fflush(f);
+-	fprintf(b->backend, "Dumping debug log buffer (first line may be sliced)\n");
++	fprintf(b->backend, "Dumping debug log buffer\n");
+ 	if (b->wrapped)
+-		fwrite(b->buf + b->head, b->buf_sz - b->head, 1, b->backend);
+-	fwrite(b->buf, b->head, 1, b->backend);
++		write_lines(b->buf + b->head, b->buf_sz - b->head, b->backend, &remove_first);
++	write_lines(b->buf, b->head, b->backend, &remove_first);
+ 	fprintf(b->backend, "End of debug log buffer dump\n");
  
-@@ -1024,9 +1024,9 @@ static void user_refill_reqs_available(struct kioctx *ctx)
- 		 * against ctx->completed_events below will make sure we do the
- 		 * safe/right thing.
- 		 */
--		ring = kmap_atomic(ctx->ring_pages[0]);
-+		ring = kmap_local_page(ctx->ring_pages[0]);
- 		head = ring->head;
--		kunmap_atomic(ring);
-+		kunmap_local(ring);
- 
- 		refill_reqs_available(ctx, head, ctx->tail);
- 	}
-@@ -1132,12 +1132,12 @@ static void aio_complete(struct aio_kiocb *iocb)
- 	if (++tail >= ctx->nr_events)
- 		tail = 0;
- 
--	ev_page = kmap_atomic(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
-+	ev_page = kmap_local_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
- 	event = ev_page + pos % AIO_EVENTS_PER_PAGE;
- 
- 	*event = iocb->ki_res;
- 
--	kunmap_atomic(ev_page);
-+	kunmap_local(ev_page);
- 	flush_dcache_page(ctx->ring_pages[pos / AIO_EVENTS_PER_PAGE]);
- 
- 	pr_debug("%p[%u]: %p: %p %Lx %Lx %Lx\n", ctx, tail, iocb,
-@@ -1151,10 +1151,10 @@ static void aio_complete(struct aio_kiocb *iocb)
- 
- 	ctx->tail = tail;
- 
--	ring = kmap_atomic(ctx->ring_pages[0]);
-+	ring = kmap_local_page(ctx->ring_pages[0]);
- 	head = ring->head;
- 	ring->tail = tail;
--	kunmap_atomic(ring);
-+	kunmap_local(ring);
- 	flush_dcache_page(ctx->ring_pages[0]);
- 
- 	ctx->completed_events++;
-@@ -1214,10 +1214,10 @@ static long aio_read_events_ring(struct kioctx *ctx,
- 	mutex_lock(&ctx->ring_lock);
- 
- 	/* Access to ->ring_pages here is protected by ctx->ring_lock. */
--	ring = kmap_atomic(ctx->ring_pages[0]);
-+	ring = kmap_local_page(ctx->ring_pages[0]);
- 	head = ring->head;
- 	tail = ring->tail;
--	kunmap_atomic(ring);
-+	kunmap_local(ring);
- 
- 	/*
- 	 * Ensure that once we've read the current tail pointer, that
-@@ -1249,10 +1249,10 @@ static long aio_read_events_ring(struct kioctx *ctx,
- 		avail = min(avail, nr - ret);
- 		avail = min_t(long, avail, AIO_EVENTS_PER_PAGE - pos);
- 
--		ev = kmap(page);
-+		ev = kmap_local_page(page);
- 		copy_ret = copy_to_user(event + ret, ev + pos,
- 					sizeof(*ev) * avail);
--		kunmap(page);
-+		kunmap_local(ev);
- 
- 		if (unlikely(copy_ret)) {
- 			ret = -EFAULT;
-@@ -1264,9 +1264,9 @@ static long aio_read_events_ring(struct kioctx *ctx,
- 		head %= ctx->nr_events;
- 	}
- 
--	ring = kmap_atomic(ctx->ring_pages[0]);
-+	ring = kmap_local_page(ctx->ring_pages[0]);
- 	ring->head = head;
--	kunmap_atomic(ring);
-+	kunmap_local(ring);
- 	flush_dcache_page(ctx->ring_pages[0]);
- 
- 	pr_debug("%li  h%u t%u\n", ret, head, tail);
+ 	b->head = 0;
 -- 
-2.37.2
+2.34.1
 

@@ -2,205 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0DD75A8EDD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:55:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4635F5A8EE4
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:57:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbiIAGzZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:55:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S233239AbiIAG5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231969AbiIAGzU (ORCPT
+        with ESMTP id S232971AbiIAG5E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:55:20 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2081.outbound.protection.outlook.com [40.107.223.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279634CA0E;
-        Wed, 31 Aug 2022 23:55:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=neBzB0/O4hnlq3ymTWFbFsEgcMXcPV+f7tXm5XvXctAY2+zrKSqnpxZjd3Bq/WLIwnIgFmJmrR0aVTaZLvLEi3PGm/yzVTp4A+wqWEQ6sPlE5lt2+5F7rLLjNd88XMue81+WwW5qaXLr8ZDirfz6PC5wnLHGl94oVMZKnHsokZF7OdOwcpNYT0Nsg7TUBVqZFLbgEVXbVHlmLUw3vhIWRNfby/CTK4BiP7QdMfziqePE1VxQk95fZKUMYzwW0AwY+akJ4pZGxWUSjlbFXrduKUdNCwWnxb3WKQxNXGri3K9pnYR/Ji7CB7vdM84YcOQCZcIUHRGBwVyR0fdVP06W7g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=akN2a1Wgmqf1q4N6+stU9PFi00lxSLd6MVgNGbipNas=;
- b=iGfykgLkTjZ9Gd6WJHt62zVq7CqqcfW2Uys7ueQDg6J52Tg7jU2KS+Ax80C+AE1z2eUDDhvEUzue0YKspY32Q2NFHfhg8ufpA99y9gsRsGsb7cTN+ujnJ3mu1oGtX+VjTzwGLj34+FH/yjIIbkVYfe/e7JUhjqxoV92bfH4S5aD1C2SZbvsDL/bdUaeBGxI3AecvAL8Ms7H6J23aFGiUXuhIt4aNkDqg9NnF1LB/o0jFNIx5CBpaBrM+nLmQxAuEspfqln5Jqnj7lxgSHx3RMjUyKNQqT37qZumx3gvfZ4nCw2HTi+wV0Jw9WXOuq0+mfij3UXzw0uyY9gq0DCjfzw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=akN2a1Wgmqf1q4N6+stU9PFi00lxSLd6MVgNGbipNas=;
- b=JOsa0PLZMZgez0uuEzWIw1IpWh/JAekz/rllcbVfNs4f1vVMrL+LAX3Br8pUo9So1KF/rqkkhqFh2mCk3kcbDZnszgGbUbxt84l3YvB4guInZLmEBArRPqPxTMbYGksnBWBLD/Jyec7fw/H7wUQo20JAo+E9HwOUmcwuC2/0eUo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM4PR12MB6039.namprd12.prod.outlook.com (2603:10b6:8:aa::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
- 2022 06:55:17 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5588.011; Thu, 1 Sep 2022
- 06:55:16 +0000
-Message-ID: <ad72df13-920e-6b22-80ae-ecf2e6bc5b55@amd.com>
-Date:   Thu, 1 Sep 2022 08:55:04 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 11/21] misc: fastrpc: Prepare to dynamic dma-buf
- locking specification
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
- <20220831153757.97381-12-dmitry.osipenko@collabora.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220831153757.97381-12-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS8P251CA0005.EURP251.PROD.OUTLOOK.COM
- (2603:10a6:20b:2f2::10) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Thu, 1 Sep 2022 02:57:04 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D949121406;
+        Wed, 31 Aug 2022 23:57:01 -0700 (PDT)
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 2816uTPA029122;
+        Thu, 1 Sep 2022 15:56:29 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2816uTPA029122
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1662015389;
+        bh=dEBifxWsZbGTjkX4Q4TXMbY4QRDyWToKG+5NkGoIiwI=;
+        h=From:Date:Subject:To:Cc:From;
+        b=i44gVMINQTP60BtDWVA4il1nf4VUxhoJUmJg33mQczyLfnK+mrMBpUgt5CNqOZkrT
+         bHkcUadN79jiJyt6zJZDEikdLLHqdvBUdYO40zyuTWDfwn01G/z62WEb4Pk9P3exxS
+         ouk2redb9+SUEK/p6cQXyw6hIv1y3a34RCXLWPQEQMVrXWeCn0wxiOvASugSeYFq5+
+         31z6aYSu85Ip9vnj01Fl/2svewpwIuKBayCeHDPsvecxmEOTbIr15bxqgVZeqPakNQ
+         jj7F4OYf2YQTTN3cY7M+8DfQbijjBOvw9aSLhJZSFF8WNYvSKrvzrR6uktzNWLoRyk
+         zv+SslJim3F1Q==
+X-Nifty-SrcIP: [209.85.160.49]
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-11ee4649dfcso23083702fac.1;
+        Wed, 31 Aug 2022 23:56:29 -0700 (PDT)
+X-Gm-Message-State: ACgBeo1i27iqJnpI9NivBuZqSIWiy+KZFz82cc5rqSpVf24dIw3RCvW/
+        cVVkSxOp4xDAY471dOpS887u/NQu2IvLw+dqn34=
+X-Google-Smtp-Source: AA6agR7DUBm/R7AQ7AzML8dCnDkweWnAfSbC2YBIG6meuI1GlY4tPxfpzZRrEvfXPjdzp8rbo1DjPj42gj4BCbCRx5Y=
+X-Received: by 2002:a05:6808:1189:b0:33a:34b3:6788 with SMTP id
+ j9-20020a056808118900b0033a34b36788mr2701440oil.194.1662015388666; Wed, 31
+ Aug 2022 23:56:28 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 23112121-b4a2-47fe-3dc5-08da8be6ecd6
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6039:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9HRW5bqonJ5VobVy0GTfxPygJxSFhNLJHVvnhRc7TuhcMW+9cnhuBZ7TS3ikydx6eNTo6jMI54qtUTz1qb5sUykQ5uJj9xoKqaEQ3WtYJAaYhs3a6Xmll38shJ886vhH2x8reCYDPFu0cw6IQsDijSXq2TK9dm/RYTaOP3Zmha5NlYw5XS3MiaroNqPzYlIZXaoRrAZWfPOZYaoU5O8GF3BtMULgihu+mLlHQq9k+DlgJh9Ro3V9ikSl7xncvoP3VAzut1p21WXK9RpKZwTOEsixsrRECCIq9y2g5gQs5pcqTGVG5h6tD+EtZMzmIu9F/ajRZTX9FM5yZIDvfnCYFSTuCjIhDMm7nPTkk7RcreFw9n8xg3t+oqkexfeoUXDT0YRQuyY8dBdo+NPgqRldR/RcxLaZ+uIJ4OljE9I8OqLjvPz238RVoywTQoGQctP7GaFDrMdApkpQT+HS+PQ6YrmtlHobzHnZovye1ubGxwbbCBXHqHCtTQnoxrSJwpCnXj5f06JsT0w45XqFeolbbGsUamvpwmDeJVXyDLb/XOvnYGO/kIxg1FU8BaUkwxbon5UtMrmqOuxHek7VStq/cHcySl3Q6zuyXwv9qwX9nk/VzB6k4W0I6nYzCHC2bcoiX+vXYwQWTATefvDW6tnAD+DZ+VVHv7Ivnt1hc+QfNRmIMzYuxJ0Z1lUwqv0Qg4x4ElmSJtNhEZhaapxeO3CjhXfMSO4zWWrdBtdPY7HhUaScDFTj5fyjy3K2xr1mguwnvu+GEijS3vqm+yI9+rHFeo2+xpzXrqS4rmGchkjOyZkN1JKCZGUM+rZ38qwueBPE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(346002)(396003)(366004)(136003)(2906002)(6506007)(6666004)(8676002)(66476007)(4326008)(66556008)(66946007)(316002)(478600001)(36756003)(6486002)(2616005)(41300700001)(6512007)(110136005)(26005)(31696002)(921005)(86362001)(186003)(66574015)(83380400001)(7406005)(8936002)(5660300002)(31686004)(7416002)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cTJWcENQdG9QeU1sLzVONlFiTTY1WUs4dGNKQTR3dDRCcy9Ic2Vnd1I1NmY2?=
- =?utf-8?B?bXR6U2hsbVpQU1JRTVE0d01Nbjk1cTQ4OGNCeVUrSHJrb1NoNzZsSzJ1eFVo?=
- =?utf-8?B?ODRzaWhCK1F2UlVwSGhDYlZZaUJhZFFmaDJkT2U4MXJNWW9yeWFPVDcxS1Rx?=
- =?utf-8?B?TzBIUTZXNEVpbXQxcHBkVHVXYmVqUXpGcFkwQWRaenlYaTBmYkk2L2pXOWdk?=
- =?utf-8?B?d2tHVUVlQzRFRjU5ZUpJZGZadEpEMnYzUzM5WjJONFNKVXRTdzNjVi91VWNP?=
- =?utf-8?B?NlUzVjNUZ096aENxbHVqRGxqZzE0cEdEUzczcVlqMWpDaFUxYmk2c0labnox?=
- =?utf-8?B?ajlPb2RKRnV1LzZkN1VvQTNxeUpkU1lZRDRTR1l3YjVnMnNCazduNTlvZFhE?=
- =?utf-8?B?YUNxWjR4VDVkTXhaMnBkbERhQ1crSXZOSHdxdGJML2V3UUxOS3FORmVzRHQ0?=
- =?utf-8?B?VnFmbDd3WUIxUTJ2ZkMzY01Jck4rY05YTGFrMFVkcFF4UG1QTi84cG5jSTRm?=
- =?utf-8?B?NWJSVEpKT2RXdjExc2JKTGhOKzZxSWIvQU9WUHYwazhCSUNqZW9aOVZrSndm?=
- =?utf-8?B?MjdXbEdwSW91eGRRUU5UaGVTV0FjZnc5RnFvSWZzTmpyVmdpQ0xLdkpMNGdw?=
- =?utf-8?B?OE40SUVBSGRwOGZyVFdTc1NnQVA1T1pRWmU3SFc0bWVFaHFFakxGOTIwMmky?=
- =?utf-8?B?TWJ2MlowVXY3VXM4TGdSclNKSzRQendRMGF4TWtJMnNTUXljNnJNTkwraXFj?=
- =?utf-8?B?NTZUMmF1UmpIR1NyZ25ObXFUTE1vYUYzN1NIWHlOVzFpTTR1dUZHc3Y3b1li?=
- =?utf-8?B?dW01Y0Myd3l1SmJtcFZ5VHlkWkdmY3pYUERsTVdyUlRVS2JFeDUzS21CRVE0?=
- =?utf-8?B?bWtIT2QyTWJOdCtRdnljclY1ZSsreHJiRXBSdXZ6Zy81dEhBZHBxWXFyNWEw?=
- =?utf-8?B?L0VMdld2T0o2MjRHNjV2NVJhUW1SVldKS2xhY1MzK3hrV2dpcC9DK2xCTFRl?=
- =?utf-8?B?NHhYRmMvcmJ5Q2lDVHk5Y2tQNlRxaFBhVEtwVENxbTFmaVNBOVg2NTVWb0hY?=
- =?utf-8?B?Z2ptWVpaN1lrQ2RGc1ZvTUVJTDBRelB2R2h2S1pHQXU3a0ZRRStkV2k5b2Vw?=
- =?utf-8?B?Y2FHUURDd1NqbTdHcWdvd01PMy9NTmlXMDJWUnJDcGNnRk9vTEV0eFdxaWtW?=
- =?utf-8?B?RWwvdU5jVk11Skp0aXYrc3BKcFN0ZWcrQkFwc3NEU0hLdFlJUWRBNHROcVJw?=
- =?utf-8?B?UGpVVWR2VVpydVFmUVZtdVcyWUNXQWh5RG4vK3F1WG1mVHVMZ2E2S1grRWZM?=
- =?utf-8?B?Qk1WRndhOGkyKzlmQ2xUQzZaekZWVXZRb1NMT0s4a2JuYWt4SlJwVk05anZ5?=
- =?utf-8?B?ek9jUGtLWUk5aE9BQmRUcmJVTVFzZlBuRnYvUFR5eEFnODY3dUlrZFQvNnFr?=
- =?utf-8?B?SmhzNlRwQ2VvT2xHbzJvenF0NjBiYXJMcjJuTnpiRVYvT3JQZWIraGh6RWVP?=
- =?utf-8?B?N0xjZ0VyUlNOSnZ1NkYrUWpRcytad1NNc3VEeWx3UGFGNzNvWWdBMXhqbEkr?=
- =?utf-8?B?a0pwdzl0MjZqQW0zUFlwTXFsc3hLSmlOWXo5VVRXZkUwSEZkdkwvTVJuYjFp?=
- =?utf-8?B?S2hUSDJjN21kOXFqeVVlcUltZ3QzQUxzL2FNY25FdTJIQUdNRkFXejJ3clhS?=
- =?utf-8?B?cHhHeE9JVytsNmRMSUFKejJlMHRDMDV3OXJERDdlTDZtK2ZVM3k4MXk0Z0pB?=
- =?utf-8?B?eUNFdlhGSlpQaTc3MjNzbUZ3cmJNLzR5K0RNZGpsWG9HSmRmSmJ2UzI0VDVa?=
- =?utf-8?B?aW1HYWdibHdkVDFDZXRTTEhobFdhS1l6ZWpaa0pTWWNuVHdrb0FNR21QTzJE?=
- =?utf-8?B?OHQyOEFCOE1WU3Vmc0xTV2o1UWM4dFI1ODdVRnFiUHdqcEdoZTlIN21Zd011?=
- =?utf-8?B?SU1JK1dpRGVEODRYUGFpZVdOdzVVazdLTmlDMS9RUE4zUmptbXJER2hCTW9J?=
- =?utf-8?B?R2NkQkF3eGF1TVBFVTA3cUZJbTk1amtaRncwY0xoZ0wwWUpuNDY4WGN1dkJi?=
- =?utf-8?B?VmJzVjZZOGZlTUI3SXUxRHFTTlFDQ1dWVFNMYWdpUjJMVEdNUE9Lcm9GTUh2?=
- =?utf-8?Q?oEoievHDTiOq5zZuuIUPVMSsz?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 23112121-b4a2-47fe-3dc5-08da8be6ecd6
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 06:55:16.0892
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tQumFulxCHigYDaK47wSc4r97LXHDMk3BbjcwK0KyL9avvdD90aj3cnvKX+tKRNr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6039
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Thu, 1 Sep 2022 15:55:52 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATbAVE8QY_QZQkiaNy9UZb2tH30eP50n0TNpgsHVrTKJQ@mail.gmail.com>
+Message-ID: <CAK7LNATbAVE8QY_QZQkiaNy9UZb2tH30eP50n0TNpgsHVrTKJQ@mail.gmail.com>
+Subject: Fix make.cross for 0day bot
+To:     lkp@lists.01.org, 0day robot <lkp@intel.com>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 31.08.22 um 17:37 schrieb Dmitry Osipenko:
-> Prepare fastrpc to the common dynamic dma-buf locking convention by
-> starting to use the unlocked versions of dma-buf API functions.
->
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Hello,  maintainers of Intel 0day bot,
 
-Acked-by: Christian König <christian.koenig@amd.com>
+make.cross is supposed to use the latest GCC by default
+(according to the comment "use highest available version")
+but actually chooses GCC 9.3.0 rather than gcc-12.1.0.
 
-> ---
->   drivers/misc/fastrpc.c | 6 +++---
->   1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/misc/fastrpc.c b/drivers/misc/fastrpc.c
-> index 93ebd174d848..6fcfb2e9f7a7 100644
-> --- a/drivers/misc/fastrpc.c
-> +++ b/drivers/misc/fastrpc.c
-> @@ -310,8 +310,8 @@ static void fastrpc_free_map(struct kref *ref)
->   				return;
->   			}
->   		}
-> -		dma_buf_unmap_attachment(map->attach, map->table,
-> -					 DMA_BIDIRECTIONAL);
-> +		dma_buf_unmap_attachment_unlocked(map->attach, map->table,
-> +						  DMA_BIDIRECTIONAL);
->   		dma_buf_detach(map->buf, map->attach);
->   		dma_buf_put(map->buf);
->   	}
-> @@ -726,7 +726,7 @@ static int fastrpc_map_create(struct fastrpc_user *fl, int fd,
->   		goto attach_err;
->   	}
->   
-> -	map->table = dma_buf_map_attachment(map->attach, DMA_BIDIRECTIONAL);
-> +	map->table = dma_buf_map_attachment_unlocked(map->attach, DMA_BIDIRECTIONAL);
->   	if (IS_ERR(map->table)) {
->   		err = PTR_ERR(map->table);
->   		goto map_err;
+If both gcc-9.3.0-nolibc and gcc-12.1.0-nolibc exist
+in COMPILER_INSTALL_PATH, make.cross chooses gcc-9.3.0.
 
+Likewise, make.cross installs gcc-9.3.0 when no suitable compiler is found.
+
+
+This is due the fact that compiler is sorted like follows:
+
+gcc-10.2.0-nolibc
+gcc-10.3.0-nolibc
+gcc-11.1.0-nolibc
+gcc-11.2.0-nolibc
+gcc-11.3.0-nolibc
+gcc-12.1.0-nolibc
+gcc-4.9.4-nolibc
+gcc-5.5.0-nolibc
+gcc-6.4.0-nolibc
+gcc-6.5.0-nolibc
+gcc-7.5.0-nolibc
+gcc-8.1.0-nolibc
+gcc-9.2.0-nolibc
+gcc-9.3.0-nolibc
+
+
+Then, gcc-9.3.0-nolibc is picked up since it is listed at the last.
+
+
+
+'sort -V' can do natural sort for versions:
+
+gcc-4.9.4-nolibc
+gcc-5.5.0-nolibc
+gcc-6.4.0-nolibc
+gcc-6.5.0-nolibc
+gcc-7.5.0-nolibc
+gcc-8.1.0-nolibc
+gcc-9.2.0-nolibc
+gcc-9.3.0-nolibc
+gcc-10.2.0-nolibc
+gcc-10.3.0-nolibc
+gcc-11.1.0-nolibc
+gcc-11.2.0-nolibc
+gcc-11.3.0-nolibc
+gcc-12.1.0-nolibc
+
+
+
+
+One example code change is like follows:
+
+
+
+--- make.cross.old      2022-09-01 12:18:20.933154233 +0900
++++ make.cross  2022-09-01 15:06:48.995945712 +0900
+@@ -143,7 +143,7 @@
+        local URL='https://download.01.org/0day-ci/cross-package'
+        local list=/tmp/0day-ci-crosstool-files
+
+-       lftp -c "open $URL && find -d 3 > $list" || return
++       lftp -c "open $URL && find -d 3" | sort -V > $list || return
+
+        local file
+        local gcc_arch_pattern=$(echo "${gcc_arch}" | sed 's/*/.*/g')
+@@ -206,7 +206,7 @@
+        }
+
+        # use highest available version
+-       gcc_exec=${gcc_exec[-1]}
++       gcc_evec=$(tr ' ' '\n' <<< ${gcc_exec[@]} | sort -V | tail -n1)
+ }
+
+ update_path_env_for_parisc()
+@@ -340,7 +340,7 @@
+
+                # load build-in depends libs
+                local
+deplibs_path=($COMPILER_INSTALL_PATH/${COMPILER}*/${gcc_arch}/libexec/gcc/${gcc_arch}/*)
+-               deplibs_path=${deplibs_path[-1]}
++               deplibs_path=$(tr ' ' '\n' <<< ${deplibs_path[@]} |
+sort -V | tail -n1)
+                [[ -d $deplibs_path ]] && export
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$deplibs_path
+
+                install_dependence "$gcc_exec" || return
+
+
+
+-- 
+Best Regards
+Masahiro Yamada

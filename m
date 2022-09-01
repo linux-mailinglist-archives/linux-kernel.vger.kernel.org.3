@@ -2,213 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB4D5AA10C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:46:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2C305AA10E
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:53:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234507AbiIAUqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 16:46:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
+        id S233452AbiIAUxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 16:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233644AbiIAUqF (ORCPT
+        with ESMTP id S229892AbiIAUxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 16:46:05 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BDD56B90
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:46:02 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id w139so2493950pfc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 13:46:02 -0700 (PDT)
+        Thu, 1 Sep 2022 16:53:06 -0400
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8869D98A44
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:53:05 -0700 (PDT)
+Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281KRLn6024971;
+        Thu, 1 Sep 2022 20:51:54 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=1tMNHePL4xT0E2TFMChCPBoQuHGCX5NV4tQ1QJrWSAw=;
+ b=erwne72MlD+T36YNQ9G4cHr3QSfQZkLJesjuo5tzl4Ny+wur1faSKaH/9FwTk8DFgQVC
+ Cp+CT6kCcQNpHmqwGw2kqrlIWaQFlyz7oXTXnpwwXQojTFnhbq9q1g0DjgiLX45Jap7W
+ E/pUJWi3X4grhZ/5VW0xOnd5NiQN8R3m+KKzX+dkFT6Mh0CM7aIOfcSQ5HeN/ATi/idG
+ /TY48cpfhcWvaJkjHiV5tCew5I6XDNovI42AWT5i4x8ujdpuLloitowA7tlkWJ9EMjfp
+ LklreJbh6SOhyEBKpLLuOrTS+eAuwW407RaOm6GYg3X6lw/ZWGKllVyU/DbeIBECh0Ie 4Q== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j7avsngdq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Sep 2022 20:51:54 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 281Ic6Mm002238;
+        Thu, 1 Sep 2022 20:51:53 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j79q6y2aq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Sep 2022 20:51:53 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OX+F+W3mO4YzEAdN+Er11fTPchjCK/pmjjciWpOHP9zDCBhWBfPjelmX5v/su2UX5H9eJfCeo6NjKLaMMbEaW+z9oKzTTYdkHAdPT8k/HyNHzl7xh2mwT9cilta2gX6ngcSGFOg/TVvsKwKAtrEHSbhycgSYSXX4KmohxXX47MPlRLGNP5v6Mz/7dXkoll1K0H15kC+AkF3a6/OUIj9oeKupt898QD6zTHot6gOZNCoDIQ79SIuAMCvmQp4dpjCz0YDReejXsUFU6reXN1fZmzikEyfoI2MA+XJkM6j4J2orM37SdShc2tLcNm/U8rcApLokB3w0PzuUFtCPy+xhjA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1tMNHePL4xT0E2TFMChCPBoQuHGCX5NV4tQ1QJrWSAw=;
+ b=C2fiwScQePqvDYA746veq7MfG6C2U3Ywmyec60Au71LzuaCUZK4UKvEb9LtnnLZoo0vLHEnPYJvG7jZ5fYMiKuFi2j50KSQIr0+NP2TzNMVReeCwixkAZjxV7dv40h57/62uxNCALVhZAti3b3+NTa4Vu+PSoWj2XZaw1ndzhRn1oa3QAR9i/0XOwC9Qmhfchkj/IxS4jhQKiV1TE1X04kP6cUPUocYnLNFe9AMzKOQKife2hxagt3QevWUvVZIWaiiMC6hVG2kFtFV8/TYGc1fdiJT/nFyS2qOd7eCA8n8/HcGrOvqedv490bMxko7dNZW0/7e8phBpAuhovGMENA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=3FATo+4aSu7y8dsoj+GqrdVX/tRMTr67LwXEb3c92qM=;
-        b=JDejjNU/A1CEVLmDw/kbCrNbdJoDEXGLDDaIyV9Igs/XsnOsjR1Dc6yu+mvq7kTeMM
-         cvw4U0gVZCifDlqJhtwiRsOvulrMamJ1N3LMefiLT5hGizjH0dPJDT5JLnQPTaFNqL7+
-         TUAz8UxE1PUEmXH6jTTj+ycsmdoRAwJ7rPHtU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=3FATo+4aSu7y8dsoj+GqrdVX/tRMTr67LwXEb3c92qM=;
-        b=qRgv7NwANS29OBgLpuyUPqPCV6DEIO0IDu1XT0+/jAqn8o/MKG7hiw/VVaVzLJE4Zm
-         ijjCr1do/RcThLlaKf2zEMf6kV15tuvwAZruaTxlp1U0dgHoUnZg3SUWsQGQ9fCgpdWf
-         iE/XI+yG8sc51Eqi79EEfIwzohKkK7gqwQrtrtmvyup/PJsjz/NZz8ZcmHhRkchtBXzW
-         faonnmaouEmjMRg195vsrzDQRzCeqIGejRYOqkA2RYYz72lijCvqq1iWHD5/+jlejwyn
-         yetOdlmPnA/Xm3s/79gAA6DntjNXy0W8PLhXBCtyqDdCvl2M49iHY/CMKPnfEKrRhDmM
-         +H/Q==
-X-Gm-Message-State: ACgBeo2z/zfBKcteoqmvpWyA6qYkoxjLvvjM+3AqHlLC7hdhVRLLuIrZ
-        c0wlt1PZuWkoIt4bGLtghc5HOg==
-X-Google-Smtp-Source: AA6agR5ZsGlC3fTZ03AIuh04jvZ/ffxqC7vYoNL6qJA03Vhg3EK6HLxeudH2vcuvQD4N+aTvr2burQ==
-X-Received: by 2002:a63:7843:0:b0:42b:4e77:a508 with SMTP id t64-20020a637843000000b0042b4e77a508mr27570344pgc.449.1662065161707;
-        Thu, 01 Sep 2022 13:46:01 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q3-20020aa78423000000b0052d87b76d12sm23827pfn.68.2022.09.01.13.46.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 13:46:00 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Luca Coelho <luciano.coelho@intel.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Kalle Valo <kvalo@codeaurora.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Lee Jones <lee.jones@linaro.org>,
-        Johannes Berg <johannes.berg@intel.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Andy Lavr <andy.lavr@gmail.com>, Kalle Valo <kvalo@kernel.org>,
-        Gregory Greenman <gregory.greenman@intel.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH] iwlwifi: calib: Refactor iwl_calib_result usage for clarity
-Date:   Thu,  1 Sep 2022 13:45:58 -0700
-Message-Id: <20220901204558.2256458-1-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1tMNHePL4xT0E2TFMChCPBoQuHGCX5NV4tQ1QJrWSAw=;
+ b=BiYKXxGFYNWQn3TB0T2QMAx9yuINXE55mJYZbWfGep6G2vRbcSkbLNRVGwrHLBJxkKboBvKaM3+L+jhAv7c9ytJ+fZ4JQDpAEwc1cctZMxcHXoKdDMHHPX5wGeqOubqsubQcCLyBpGHRw9Yh/Kuah1EDoseElTrKjTwpyn2QHuU=
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
+ by CY5PR10MB6167.namprd10.prod.outlook.com (2603:10b6:930:31::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
+ 2022 20:51:51 +0000
+Received: from SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::a420:3107:436d:d223]) by SN6PR10MB3022.namprd10.prod.outlook.com
+ ([fe80::a420:3107:436d:d223%5]) with mapi id 15.20.5566.021; Thu, 1 Sep 2022
+ 20:51:50 +0000
+From:   Liam Howlett <liam.howlett@oracle.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+CC:     Suren Baghdasaryan <surenb@google.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "michel@lespinasse.org" <michel@lespinasse.org>,
+        "jglisse@google.com" <jglisse@google.com>,
+        "mhocko@suse.com" <mhocko@suse.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "dave@stgolabs.net" <dave@stgolabs.net>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "ldufour@linux.ibm.com" <ldufour@linux.ibm.com>,
+        "laurent.dufour@fr.ibm.com" <laurent.dufour@fr.ibm.com>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "songliubraving@fb.com" <songliubraving@fb.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "david@redhat.com" <david@redhat.com>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "hughd@google.com" <hughd@google.com>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "axelrasmussen@google.com" <axelrasmussen@google.com>,
+        "joelaf@google.com" <joelaf@google.com>,
+        "minchan@google.com" <minchan@google.com>,
+        "kernel-team@android.com" <kernel-team@android.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [RFC PATCH RESEND 04/28] mm: move mmap_lock assert function
+ definitions
+Thread-Topic: [RFC PATCH RESEND 04/28] mm: move mmap_lock assert function
+ definitions
+Thread-Index: AQHYvik+oqqHYdXkPESLRNx1ViJtsa3LBUKAgAAHtQA=
+Date:   Thu, 1 Sep 2022 20:51:50 +0000
+Message-ID: <20220901205144.66ilifzaxr5p4xi3@revolver>
+References: <20220901173516.702122-1-surenb@google.com>
+ <20220901173516.702122-5-surenb@google.com>
+ <20220901202409.e2fqegqghlijkzey@moria.home.lan>
+In-Reply-To: <20220901202409.e2fqegqghlijkzey@moria.home.lan>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 6a46e8e2-44d3-4834-145d-08da8c5bcb64
+x-ms-traffictypediagnostic: CY5PR10MB6167:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Hc39LxsrVSFpDuu474gwUcnlodCmde+9CQEcY8Ef9NrX6deI8YtFrkMKvR6DyqfZTJ6aoanonMmlPqBcUPy/2nchnHSaO6i/nuN7Sl4nkZPIW9sN2RyIAQF4/S8hSVzqBKkCgTxfEuRxoxD74SUR88ctsUa1zGgB2QCTrJzMocXWfrc9iOl6WIdRqjzs9wy4l/2ER/5NQ0n20ElCr0BE/lxy+lKerBP3e5TIFTsN2FgpFFv9qMNIIBg4W54pqjzuZ+Tp5WaCu3i833ew0arwH8LzR66BseDJDMD99fSIMTIKaLKgk4axKJxQ3wntB8XJA6gTLw3J6V1NFSDBI5wpS41aRCKs6ka2LsJkhzI3a5p2ZnWhXb2UaQBT9LINdE1LH1h6yc8Byf4uNs5W0ug+P79xrw6Hwgs/6ZBsinCP5KZCOJOK5Do1Fraqk6x9IJXNEZya5yhVfZK/ifeNBM2r386j8TJoPJSpNmF6UiQPYyM4j5I1dC8jxBOofnrceLNPVWXHW75o8j0oQMjBUBMpZnRmhn1qaf8IM7s+djGBwLQZFv4QV61GnFZTNHIvfOxM0ZsiqbpRQRJGuxr/Yf96Q0rA1PFOw3e14iNhLfU5Dr8bO+hm8ktPQXfm+hOXNlCEW5TEZUueDJ2+Z+X724pwxCTc84/sVVyUG40KggCNkwMwpfJ3YK6JgQuAhZ9+hCaZdexa/68Q6LlYEPmd0MR8c8b8LOOMN4nC2IIABH6Pfz7NhvwB5Qz11kEJ7dytjr5UOIgQW3QRNnc1F0bPLCEW2Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(396003)(39860400002)(136003)(346002)(376002)(83380400001)(6512007)(26005)(186003)(9686003)(1076003)(6506007)(2906002)(86362001)(38070700005)(38100700002)(122000001)(5660300002)(7406005)(91956017)(7416002)(33716001)(66446008)(8676002)(76116006)(41300700001)(64756008)(66476007)(316002)(66556008)(4326008)(66946007)(6486002)(478600001)(54906003)(71200400001)(6916009)(8936002)(44832011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fPwcxqEJh42Im+LDqPqUgsnZ3ywEKKwNZ0g7b5OQdCZBscQz6P8+mnUeFTsD?=
+ =?us-ascii?Q?s8Bd2giRas8Jq9ceq+7ZOBz8uZH5UlAC0iwyjb7VUR+RHCR7uBN7MIKXjpJj?=
+ =?us-ascii?Q?kBNSdPKWCozuP0flGF6dUmaL3Dh7hZaAFxqdwrYngdWDl7ozVFyjqJkq/yMj?=
+ =?us-ascii?Q?1mDarqakuJI+K6PFBUSIqhWuhZD1SlpcMTy1cj8o2s0ho5zJrFm2SeyU38Uc?=
+ =?us-ascii?Q?xNBmHfHum2ZVK8KLO0lFfj62G38CGo7WbyNKw2+dnQf2ibYK7+sLQqgINj/7?=
+ =?us-ascii?Q?ACoZccVfpOtk4vFAoiQWMLOqjAUUc8RtOwekvh2pLJKqumIfqpoT261LvXbg?=
+ =?us-ascii?Q?max41zDKzmJI+X/n2qjJ612ezTX+rteIcXkGfGqj1a2YecbIeJ17NbjO11t4?=
+ =?us-ascii?Q?T1cqHpJOHCkt9eUccqx71V85PB6//j30l2d2L/CamQDClsamWnPRfRbppnRv?=
+ =?us-ascii?Q?loMygyYFBfPpQN3KPemlMjYJEzXbGeVsgT8yiLCgMbqaUrDV37B6tB3xWOaf?=
+ =?us-ascii?Q?oE4tNqzFYM+8AES6j1Tw6JpU8pjxjtAyhkGqNeQd+nYBVqYEqpgDKiuT0icV?=
+ =?us-ascii?Q?JzZc3ZJRwN7Ec5nAPIDRpa0yhiPXEjsR9L/STnevOpvcevFbByEMs0ncIw77?=
+ =?us-ascii?Q?FOn4MM1Ny3xmbrhAYhwfKVTIi8rQ3IUYEU9vDxKqAOdOoFkc8mSN0BmyZLt+?=
+ =?us-ascii?Q?u/sNWh08t/ceIp73VQUlzW6wCU/x3yu+oriSCCKM7hnUBHpY6c0VEjJVhHDU?=
+ =?us-ascii?Q?ybnV4jfqa0SrvyZw+wnrJem5CPE0wC23D8cUkoQjwybFiiMVXuIlxhcaI+Ti?=
+ =?us-ascii?Q?j3aMxKbzBFHTW+u2a/FDlIWHKUcjsCYMyJL++AabQ7+ZmvI3KIS9bqfF1yJ8?=
+ =?us-ascii?Q?KgXbtq0dwJEmcsHIIV4sus+1kc4O0dvJjTILE2pDAVqx9tlSmZQvWWc03gBb?=
+ =?us-ascii?Q?72LUQCz86SZ9OFLj/3B2C4ArgZ2fYcYhf3kw9rBYK1i7nmEkYQcMF8W97QCj?=
+ =?us-ascii?Q?M5zLhyFkA0fYUHakEizOzG2sQGre3PO6bv9Ggv4Mcs5VmFkB4ikGK9DfxIfz?=
+ =?us-ascii?Q?2ZaKTn1wBEimkNT+K8dRn7PUq6COC8w5dt4SOoT8Aqp0F2z5NdmKPPbOYCbS?=
+ =?us-ascii?Q?oZLzBOy8OnlU10J4MKU1loMWeBlrtErpIPyNFJx8Hk8NQ7OHqVpn/p1reVsM?=
+ =?us-ascii?Q?4v2cTJtCZeQ3QNhkI3pp2+o2pIGRi2QlNiyRx7sxjNLIxRvLo/6qQwn4gsOq?=
+ =?us-ascii?Q?g0/7jBbcd3unmodM0mB1nHyvvMQLtCk3AHtxzwws2IZnt2Lqld8mwkCqPIYu?=
+ =?us-ascii?Q?sgAIreP7/nafO+Dq+psTBSai5gGGDyV/q9RSQfvCKzr9l6EZ/d/4qhzltT0c?=
+ =?us-ascii?Q?GDyVEreQqZjgi8RTzCNSpz29pga/poH8YsxP1Pqx/GGe0IQVuhOo5BAXaay2?=
+ =?us-ascii?Q?1sj1rleVNy1ifC2ixLFkzO4+DPBUfHrVx2qYUWbTVA7PoJYrgjO5X/TcTGCY?=
+ =?us-ascii?Q?Zk737ZMjaK/60f8wY+jso7DXX9O3FBAbS/2MheiZ2civcGFufl5yGe1DPpBP?=
+ =?us-ascii?Q?2g+yH+DGTqpghk6jfSclllKOxHlCoXUNazX2l6RMGeN7ARY75tA8gZkuviC6?=
+ =?us-ascii?Q?LA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <E69BDBB19177E24192A4FF7F16B2EDF7@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5095; h=from:subject; bh=dXk9FvP8mQV+OU7HzHs8EJnNRxX0VzSl2ssfNfi+TYY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjERoGa6dATzMBuf7tKR2Kr6iz+T5BgWqO5lKzP2H+ tXAHCbyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxEaBgAKCRCJcvTf3G3AJnCEEA CD5yRk+eEyd95e31q9KVFxtiS/4qWSVLf7kkpCTuMDpudMz7nUxKvg7jTXy2XRiRkpqkwS+UxmsAC0 jrtzN1L/iWsq0KBqjH7uw8Qc0nLos6Ya42Jc+ylzkBMLywoVNW0r2a/JBaMNwCxakQa49fCeKKQpsK ufdhJ/oBicA6OA9NXeGWKu5Wlh/ADv+wvCxadKqd0xwppvmQacyvSjIzuV4choGTHjRuRRkG/BTUBf nVuRVuZ1JVPbwD7nZ+weIPI1WvAW8Ky+Xl8Ly6z72DM66Y2nbldOfg0cz6nnTFeHyZysLmhwT/DS6h YkijlAzekNR90QCKm0Qkn+O54AyhRrRZlGYWnXtObOihyPLgfJpBALGdkCo15y0wQ7HccpBHUItsRS vrAY5y1KYcsPG6pfGCEnNpmU8uqCmqoCTc2rfRc03/LUqsp06vfEi91++48DuBo3iPy0Ny4zeBfpv0 Vib/W0vHtvvuFk5JbC7syM6V25NKeSNzb8u8khHd/MQYJrN42LOWkQb8dQ9KgIHb7MDP5FcPES9K1R pPgRp5CqwkCx7b6QG7Z7apVES3Sv8380ZLHZHw2fdsxwxEEQQhfolh45K6mZS5HBHoUuMboyRDMYwD Dm5x1YW9ST0RxrJmoTfUiDOMy8M9lb0SZMkg9a2zpH8W/cz9BOfYNBov8iFg==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6a46e8e2-44d3-4834-145d-08da8c5bcb64
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2022 20:51:50.8436
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SpSYm5/5+6ZImmhNJY5QkvOXkG67+MdOtaYpljB+yjtJ1dKSzlA4Ffx5gKopKwnHb+Tqi1KtU0DYalVq5FoULw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR10MB6167
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
+ suspectscore=0 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209010090
+X-Proofpoint-GUID: tjL-tgitKqT4jHdrHyqZFE6ML1i0nR8J
+X-Proofpoint-ORIG-GUID: tjL-tgitKqT4jHdrHyqZFE6ML1i0nR8J
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In preparation for FORTIFY_SOURCE performing run-time destination buffer
-bounds checking for memcpy(), refactor the use of struct iwl_calib_result:
+* Kent Overstreet <kent.overstreet@linux.dev> [220901 16:24]:
+> On Thu, Sep 01, 2022 at 10:34:52AM -0700, Suren Baghdasaryan wrote:
+> > Move mmap_lock assert function definitions up so that they can be used
+> > by other mmap_lock routines.
+> >=20
+> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > ---
+> >  include/linux/mmap_lock.h | 24 ++++++++++++------------
+> >  1 file changed, 12 insertions(+), 12 deletions(-)
+> >=20
+> > diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
+> > index 96e113e23d04..e49ba91bb1f0 100644
+> > --- a/include/linux/mmap_lock.h
+> > +++ b/include/linux/mmap_lock.h
+> > @@ -60,6 +60,18 @@ static inline void __mmap_lock_trace_released(struct=
+ mm_struct *mm, bool write)
+> > =20
+> >  #endif /* CONFIG_TRACING */
+> > =20
+> > +static inline void mmap_assert_locked(struct mm_struct *mm)
+> > +{
+> > +	lockdep_assert_held(&mm->mmap_lock);
+> > +	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
+>=20
+> These look redundant to me - maybe there's a reason the VM developers wan=
+t both,
+> but I would drop the VM_BUG_ON() and just keep the lockdep_assert_held(),=
+ since
+> that's the standard way to write that assertion.
 
-- Have struct iwl_calib_result contain struct iwl_calib_cmd since
-  functions expect to operate on the "data" flex array in "cmd", which
-  follows the "hdr" member.
-- Switch argument passing around to use struct iwl_calib_cmd instead of
-  struct iwl_calib_hdr to prepare functions to see the "data" member.
-- Change iwl_calib_set()'s "len" argument to a size_t since it is always
-  unsigned and is normally receiving the output of sizeof().
-- Add an explicit length sanity check in iwl_calib_set().
-- Adjust the memcpy() to avoid copying across the now visible composite
-  flex array structure.
+I think this is because the VM_BUG_ON_MM() will give you a lot more
+information and BUG_ON().
 
-This avoids the future run-time warning:
+lockdep_assert_held() does not return a value and is a WARN_ON().
 
-  memcpy: detected field-spanning write (size 8) of single field "&res->hdr" (size 4)
-
-Cc: Luca Coelho <luciano.coelho@intel.com>
-Cc: Kalle Valo <kvalo@codeaurora.org>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Lee Jones <lee.jones@linaro.org>
-Cc: Johannes Berg <johannes.berg@intel.com>
-Cc: linux-wireless@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Reported-by: Andy Lavr <andy.lavr@gmail.com>
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- drivers/net/wireless/intel/iwlwifi/dvm/agn.h  |  2 +-
- .../net/wireless/intel/iwlwifi/dvm/calib.c    | 22 ++++++++++---------
- .../net/wireless/intel/iwlwifi/dvm/ucode.c    |  8 +++----
- 3 files changed, 17 insertions(+), 15 deletions(-)
-
-diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/agn.h b/drivers/net/wireless/intel/iwlwifi/dvm/agn.h
-index 411a6f6638b4..fefaa414272b 100644
---- a/drivers/net/wireless/intel/iwlwifi/dvm/agn.h
-+++ b/drivers/net/wireless/intel/iwlwifi/dvm/agn.h
-@@ -112,7 +112,7 @@ int iwl_load_ucode_wait_alive(struct iwl_priv *priv,
- 			      enum iwl_ucode_type ucode_type);
- int iwl_send_calib_results(struct iwl_priv *priv);
- int iwl_calib_set(struct iwl_priv *priv,
--		  const struct iwl_calib_hdr *cmd, int len);
-+		  const struct iwl_calib_cmd *cmd, size_t len);
- void iwl_calib_free_results(struct iwl_priv *priv);
- int iwl_dump_nic_event_log(struct iwl_priv *priv, bool full_log,
- 			    char **buf);
-diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/calib.c b/drivers/net/wireless/intel/iwlwifi/dvm/calib.c
-index a11884fa254b..f488620d2844 100644
---- a/drivers/net/wireless/intel/iwlwifi/dvm/calib.c
-+++ b/drivers/net/wireless/intel/iwlwifi/dvm/calib.c
-@@ -19,8 +19,7 @@
- struct iwl_calib_result {
- 	struct list_head list;
- 	size_t cmd_len;
--	struct iwl_calib_hdr hdr;
--	/* data follows */
-+	struct iwl_calib_cmd cmd;
- };
- 
- struct statistics_general_data {
-@@ -43,12 +42,12 @@ int iwl_send_calib_results(struct iwl_priv *priv)
- 		int ret;
- 
- 		hcmd.len[0] = res->cmd_len;
--		hcmd.data[0] = &res->hdr;
-+		hcmd.data[0] = &res->cmd;
- 		hcmd.dataflags[0] = IWL_HCMD_DFL_NOCOPY;
- 		ret = iwl_dvm_send_cmd(priv, &hcmd);
- 		if (ret) {
- 			IWL_ERR(priv, "Error %d on calib cmd %d\n",
--				ret, res->hdr.op_code);
-+				ret, res->cmd.hdr.op_code);
- 			return ret;
- 		}
- 	}
-@@ -57,19 +56,22 @@ int iwl_send_calib_results(struct iwl_priv *priv)
- }
- 
- int iwl_calib_set(struct iwl_priv *priv,
--		  const struct iwl_calib_hdr *cmd, int len)
-+		  const struct iwl_calib_cmd *cmd, size_t len)
- {
- 	struct iwl_calib_result *res, *tmp;
- 
--	res = kmalloc(sizeof(*res) + len - sizeof(struct iwl_calib_hdr),
--		      GFP_ATOMIC);
-+	if (check_sub_overflow(len, sizeof(*cmd), &len))
-+		return -ENOMEM;
-+
-+	res = kmalloc(struct_size(res, cmd.data, len), GFP_ATOMIC);
- 	if (!res)
- 		return -ENOMEM;
--	memcpy(&res->hdr, cmd, len);
--	res->cmd_len = len;
-+	res->cmd = *cmd;
-+	memcpy(res->cmd.data, cmd->data, len);
-+	res->cmd_len = struct_size(cmd, data, len);
- 
- 	list_for_each_entry(tmp, &priv->calib_results, list) {
--		if (tmp->hdr.op_code == res->hdr.op_code) {
-+		if (tmp->cmd.hdr.op_code == res->cmd.hdr.op_code) {
- 			list_replace(&tmp->list, &res->list);
- 			kfree(tmp);
- 			return 0;
-diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/ucode.c b/drivers/net/wireless/intel/iwlwifi/dvm/ucode.c
-index 4b27a53d0bb4..bb13ca5d666c 100644
---- a/drivers/net/wireless/intel/iwlwifi/dvm/ucode.c
-+++ b/drivers/net/wireless/intel/iwlwifi/dvm/ucode.c
-@@ -356,18 +356,18 @@ static bool iwlagn_wait_calib(struct iwl_notif_wait_data *notif_wait,
- 			      struct iwl_rx_packet *pkt, void *data)
- {
- 	struct iwl_priv *priv = data;
--	struct iwl_calib_hdr *hdr;
-+	struct iwl_calib_cmd *cmd;
- 
- 	if (pkt->hdr.cmd != CALIBRATION_RES_NOTIFICATION) {
- 		WARN_ON(pkt->hdr.cmd != CALIBRATION_COMPLETE_NOTIFICATION);
- 		return true;
- 	}
- 
--	hdr = (struct iwl_calib_hdr *)pkt->data;
-+	cmd = (struct iwl_calib_cmd *)pkt->data;
- 
--	if (iwl_calib_set(priv, hdr, iwl_rx_packet_payload_len(pkt)))
-+	if (iwl_calib_set(priv, cmd, iwl_rx_packet_payload_len(pkt)))
- 		IWL_ERR(priv, "Failed to record calibration data %d\n",
--			hdr->op_code);
-+			cmd->hdr.op_code);
- 
- 	return false;
- }
--- 
-2.34.1
-
+So they are partially redundant.

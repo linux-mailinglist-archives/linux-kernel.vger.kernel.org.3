@@ -2,209 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C48A85A9EB8
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:13:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD1705A9EBA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233101AbiIASNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
+        id S232404AbiIASOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiIASNP (ORCPT
+        with ESMTP id S229781AbiIASOg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:13:15 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23E2474D8;
-        Thu,  1 Sep 2022 11:13:12 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 476A56CD;
-        Thu,  1 Sep 2022 20:13:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662055990;
-        bh=w3cnA7QpTZH9H6rGUREb2H83enbsbvl5uMVJxERt/tg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rhnRqGz9TFyiYKIK2CaTWyN0MB8FLWTcnXcmfyvXrsZD0YnkrGc5EGUKCUnENitbn
-         0Q1Z/815H54UeYyOvzJu2p6uq8X72wHo+nqgpahotmtHu7OcAqVBhXVR6Ceorq7nRH
-         az8Kw0vX0PQjO85K3rRbbE5B4O0v8rDUbfHMKO1s=
-Date:   Thu, 1 Sep 2022 21:12:58 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Hans Verkuil <hans.verkuil@cisco.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v6 1/6] dt-bindings: media: Add Allwinner A31 ISP
- bindings documentation
-Message-ID: <YxD2Kvrs+RjnPOnn@pendragon.ideasonboard.com>
-References: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
- <20220826184144.605605-2-paul.kocialkowski@bootlin.com>
- <Ywk3W6pTOOlzLYVn@pendragon.ideasonboard.com>
- <YxDJtYgW/NYLw77u@aptenodytes>
+        Thu, 1 Sep 2022 14:14:36 -0400
+Received: from ale.deltatee.com (ale.deltatee.com [204.191.154.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE71C4BA7C;
+        Thu,  1 Sep 2022 11:14:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=deltatee.com; s=20200525; h=Subject:In-Reply-To:From:References:Cc:To:
+        MIME-Version:Date:Message-ID:content-disposition;
+        bh=sWRKw2yHnva/fkslMEKIBYXYtsFYh9CE67WvtTKYh9o=; b=LUIvBgXNanbwZx0H1YeUvZgz+W
+        ul/GPgxn/izyWHImD9lqPZLOeLp2e5DPV9+wMaetQl9lN8rbG69efLBarhCWXjJEqFRIUZ/a89fuP
+        J2vlO4iHchGWdU3cW+ChfYCl/ChEYQKScgeFtoa49hZHGEdtT6Y85OqSzoLVMTuBGJioNmnxaH/y4
+        UCjYLZRzU+iuvnnVzftig3939k08pTGaZkFTrGdK4tP1yGmwfkBG1jNR1SuDAFuT/Zqv/GQSQO8S7
+        EQTKoaT6u/1UuhYU+UA+7NfA+KpWCAmFvy5SIcDH9GOZ2nun6awzVDrZFqUtbfU/RUz0nIA+/OJuT
+        aVwiAEMg==;
+Received: from s0106a84e3fe8c3f3.cg.shawcable.net ([24.64.144.200] helo=[192.168.0.10])
+        by ale.deltatee.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <logang@deltatee.com>)
+        id 1oToi1-00Dvye-Mb; Thu, 01 Sep 2022 12:14:34 -0600
+Message-ID: <cc9a24a8-dd3a-9d21-d9a7-5ee4b0ad7a57@deltatee.com>
+Date:   Thu, 1 Sep 2022 12:14:25 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <YxDJtYgW/NYLw77u@aptenodytes>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Content-Language: en-CA
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+        linux-block@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-mm@kvack.org, Christoph Hellwig <hch@lst.de>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Don Dutile <ddutile@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Minturn Dave B <dave.b.minturn@intel.com>,
+        Jason Ekstrand <jason@jlekstrand.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Xiong Jianxin <jianxin.xiong@intel.com>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Martin Oliveira <martin.oliveira@eideticom.com>,
+        Chaitanya Kulkarni <ckulkarnilinux@gmail.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Stephen Bates <sbates@raithlin.com>
+References: <20220825152425.6296-1-logang@deltatee.com>
+ <20220825152425.6296-8-logang@deltatee.com> <YxDb2MyRx6o/wDAz@kroah.com>
+ <4a4bca1e-bebf-768f-92d4-92eb8ae714e1@deltatee.com>
+ <YxDhEO9ycZDTnbZm@kroah.com>
+From:   Logan Gunthorpe <logang@deltatee.com>
+In-Reply-To: <YxDhEO9ycZDTnbZm@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 24.64.144.200
+X-SA-Exim-Rcpt-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, linux-block@vger.kernel.org, linux-pci@vger.kernel.org, linux-mm@kvack.org, hch@lst.de, dan.j.williams@intel.com, jgg@ziepe.ca, christian.koenig@amd.com, jhubbard@nvidia.com, ddutile@redhat.com, willy@infradead.org, daniel.vetter@ffwll.ch, dave.b.minturn@intel.com, jason@jlekstrand.net, dave.hansen@linux.intel.com, jianxin.xiong@intel.com, helgaas@kernel.org, ira.weiny@intel.com, robin.murphy@arm.com, martin.oliveira@eideticom.com, ckulkarnilinux@gmail.com, rcampbell@nvidia.com, sbates@raithlin.com
+X-SA-Exim-Mail-From: logang@deltatee.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [PATCH v9 7/8] PCI/P2PDMA: Allow userspace VMA allocations
+ through sysfs
+X-SA-Exim-Version: 4.2.1 (built Sat, 13 Feb 2021 17:57:42 +0000)
+X-SA-Exim-Scanned: Yes (on ale.deltatee.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Paul,
 
-On Thu, Sep 01, 2022 at 05:03:17PM +0200, Paul Kocialkowski wrote:
-> On Sat 27 Aug 22, 00:12, Laurent Pinchart wrote:
-> > On Fri, Aug 26, 2022 at 08:41:39PM +0200, Paul Kocialkowski wrote:
-> > > This introduces YAML bindings documentation for the Allwinner A31 Image
-> > > Signal Processor (ISP).
-> > > 
-> > > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > ---
-> > >  .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
-> > >  1 file changed, 97 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> > > new file mode 100644
-> > > index 000000000000..2fda6e05e16c
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.yaml
-> > > @@ -0,0 +1,97 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree Bindings
-> > > +
-> > > +maintainers:
-> > > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    enum:
-> > > +      - allwinner,sun6i-a31-isp
-> > > +      - allwinner,sun8i-v3s-isp
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  clocks:
-> > > +    items:
-> > > +      - description: Bus Clock
-> > > +      - description: Module Clock
-> > > +      - description: DRAM Clock
-> > > +
-> > > +  clock-names:
-> > > +    items:
-> > > +      - const: bus
-> > > +      - const: mod
-> > > +      - const: ram
-> > > +
-> > > +  resets:
-> > > +    maxItems: 1
-> > > +
-> > > +  ports:
-> > > +    $ref: /schemas/graph.yaml#/properties/ports
-> > > +
-> > > +    properties:
-> > > +      port@0:
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +        description: CSI0 input port
-> > > +
-> > > +      port@1:
-> > > +        $ref: /schemas/graph.yaml#/properties/port
-> > > +        description: CSI1 input port
-> > > +
-> > > +    anyOf:
-> > > +      - required:
-> > > +          - port@0
-> > > +      - required:
-> > > +          - port@1
-> > 
-> > I'd still like to see all ports that exist in the hardware being
-> > mandatory. I assume at least one of the A31 and V3s has two connected
-> > ports in the SoC or you wouldn't declare them both here :-)
+
+
+On 2022-09-01 10:42, Greg Kroah-Hartman wrote:
+> On Thu, Sep 01, 2022 at 10:32:55AM -0600, Logan Gunthorpe wrote:
+>> On 2022-09-01 10:20, Greg Kroah-Hartman wrote:
+>>> On Thu, Aug 25, 2022 at 09:24:24AM -0600, Logan Gunthorpe wrote:
+>>>> +	/*
+>>>> +	 * Removing the alloc attribute from sysfs will call
+>>>> +	 * unmap_mapping_range() on the inode, teardown any existing userspace
+>>>> +	 * mappings and prevent new ones from being created.
+>>>> +	 */
+>>>> +	sysfs_remove_file_from_group(&pdev->dev.kobj, &p2pmem_alloc_attr.attr,
+>>>> +				     p2pmem_group.name);
+>>>
+>>> Wait, why are you manually removing the sysfs file here?  It's part of
+>>> the group, if you do this then it is gone for forever, right?  Why
+>>> manually do this the sysfs core should handle this for you if the device
+>>> is removed.
+>>
+>> We have to make sure the mappings are all removed before the cleanup of
+>> devm_memremap_pages() which will wait for all the pages to be freed.
 > 
-> Some SoCs (e.g. A83T) only have one CSI controller so we can't require both.
-> This could be a decision based on the compatible but my personal opinion is
-> that it's not really worth making this binding so complex.
-> 
-> We can always informally enforce that all possible links should be present
-> when merging changes to the soc dts.
-> 
-> What do you think?
+> Then don't use devm_ functions.  Why not just use the manual functions
+> instead as you know when you want to tear this down.
 
-It makes the binding more complex, but it allows catching issues in an
-automated way instead of relying on reviews. Lowering the review burden
-is something I usually welcome :-) It's probably less of an issue here
-as this is all about the SoC integration, not about board files, so I
-won't insist too strongly even if I prefer bindings that are more
-descriptive.
+Well we haven't plugged in a remove call into p2pdma, that would be more
+work and more interfaces touching the PCI code. Note: this code isn't a
+driver but a set of PCI helpers available to other PCI drivers.
+Everything that's setup is using the devm interfaces and gets torn down
+with the same. So I don't really see the benefit of making the change
+you propose.
 
-> > Apart from that, this looks good.
-> > 
-> > > +
-> > > +required:
-> > > +  - compatible
-> > > +  - reg
-> > > +  - interrupts
-> > > +  - clocks
-> > > +  - clock-names
-> > > +  - resets
-> > > +
-> > > +additionalProperties: false
-> > > +
-> > > +examples:
-> > > +  - |
-> > > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > > +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
-> > > +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
-> > > +
-> > > +    isp: isp@1cb8000 {
-> > > +        compatible = "allwinner,sun8i-v3s-isp";
-> > > +        reg = <0x01cb8000 0x1000>;
-> > > +        interrupts = <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
-> > > +        clocks = <&ccu CLK_BUS_CSI>,
-> > > +             <&ccu CLK_CSI1_SCLK>,
-> > > +             <&ccu CLK_DRAM_CSI>;
-> > > +        clock-names = "bus", "mod", "ram";
-> > > +        resets = <&ccu RST_BUS_CSI>;
-> > > +
-> > > +        ports {
-> > > +            #address-cells = <1>;
-> > > +            #size-cells = <0>;
-> > > +
-> > > +            port@0 {
-> > > +                reg = <0>;
-> > > +
-> > > +                isp_in_csi0: endpoint {
-> > > +                    remote-endpoint = <&csi0_out_isp>;
-> > > +                };
-> > > +            };
-> > > +        };
-> > > +    };
-> > > +
-> > > +...
-
--- 
-Regards,
-
-Laurent Pinchart
+Logan

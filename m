@@ -2,114 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 301055A95AA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:26:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F14185A95AB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:26:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234465AbiIAL0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 07:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53094 "EHLO
+        id S234476AbiIAL0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232840AbiIAL0F (ORCPT
+        with ESMTP id S234472AbiIAL01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 07:26:05 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBB12132ED9;
-        Thu,  1 Sep 2022 04:26:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F971B825C9;
-        Thu,  1 Sep 2022 11:26:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0B36C433D6;
-        Thu,  1 Sep 2022 11:26:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662031561;
-        bh=ypVl01yuB6aIuwds2khZ+OY7xKgsZJREnfbYXivAWs0=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=Q7iX8ECEHji51gHr9FzGbt3GNN3d9JkTPGc0T3530VejKeFS1LQZ+E9z7sS6EDrHh
-         4A3uPZKIFmMBjsGXls3a+m52krTl3AOeWmgkpr2gL9QmnLd0xtFQ8YCyvIdlgUb8zm
-         c9CzmUk3Ost/zzdjghaihXaynbYqSsYeddKsNBrPCdWVc5abIyTbXngu0skwNKLF3m
-         Y61laEDyDQqcabLc4bEsSUMrndOx7G76YDyEjnNuML4W6aLCjdZRjRUJeXLocMkZTg
-         KkUWLiYAoGv7i5Y9ENhmuTPf3Rex9RxOoWaM3UBYIK2b7KZkkKlvGyCyjtCtSSW3pP
-         6U3KKeZHDGYMg==
-Message-ID: <ec2c210d9d2353b31ea7121f80f5231e402926ed.camel@kernel.org>
-Subject: Re: [PATCH v2 3/3] nfsd: Propagate some error code returned by
- memdup_user()
-From:   Jeff Layton <jlayton@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Chuck Lever <chuck.lever@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        linux-nfs@vger.kernel.org
-Date:   Thu, 01 Sep 2022 07:25:59 -0400
-In-Reply-To: <d8af52e13f53dcb14d72486d6ac92607d5f42716.1662009844.git.christophe.jaillet@wanadoo.fr>
-References: <14d802144c88da0eb9e201b3acbf4bde376b2473.1662009844.git.christophe.jaillet@wanadoo.fr>
-         <d8af52e13f53dcb14d72486d6ac92607d5f42716.1662009844.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset="ISO-8859-15"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Thu, 1 Sep 2022 07:26:27 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8360F134194
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 04:26:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662031585; x=1693567585;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=sC4QdX0r1MwQtaRfsRE9/BVMBzDWVXkdnI+yv3yJ7FE=;
+  b=DTeSx8/nY9SPhDNdU8mrXqQLYBUAAZddpvSqSpUhB7nT4W5IUyXg1P5R
+   jOczB1rkTDPArw8pOXTpzg7eZXAkaubHJDVRsHGkltmrtD0wnDMYxGIzO
+   z+FLlFujScvmVdo1CS/GNmgHaliUa8m7yQM+ezcptJYZSLa+0R7iBqk43
+   wDUfWVTj8774y3uQrvGpklYq3ZMEVGwSgtPFgT8WJApLDEx3Ix8vGkhXq
+   HkmxcS2k+1ZzPMewjHytdrtdTYqu5w6FcUpXb8541FAk3y6k4IL9l47vW
+   m7pbeAi5qDj5kFb+cP8NaUdVpFK+3Vt2BvF2WadaQKmK8DmnBdqRNiUjS
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="296473135"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="296473135"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 04:26:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="642292767"
+Received: from lkp-server02.sh.intel.com (HELO b138c9e8658c) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 01 Sep 2022 04:26:24 -0700
+Received: from kbuild by b138c9e8658c with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oTiL1-0000Db-15;
+        Thu, 01 Sep 2022 11:26:23 +0000
+Date:   Thu, 01 Sep 2022 19:26:02 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/apic] BUILD SUCCESS
+ b8d1d163604bd1e600b062fb00de5dc42baa355f
+Message-ID: <631096ca.OTqBiwtxd7k7vDDu%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-09-01 at 07:27 +0200, Christophe JAILLET wrote:
-> Propagate the error code returned by memdup_user() instead of a hard code=
-d
-> -EFAULT.
->=20
-> Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> ---
-> This patch is speculative. The whole call chains have not been checked to
-> see if there was no path explicitly expecting a -EFAULT.
-> ---
->  fs/nfsd/nfs4recover.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/fs/nfsd/nfs4recover.c b/fs/nfsd/nfs4recover.c
-> index 2968cf604e3b..78b8cd9651d5 100644
-> --- a/fs/nfsd/nfs4recover.c
-> +++ b/fs/nfsd/nfs4recover.c
-> @@ -808,7 +808,7 @@ __cld_pipe_inprogress_downcall(const struct cld_msg_v=
-2 __user *cmsg,
->  				return -EFAULT;
->  			name.data =3D memdup_user(&ci->cc_name.cn_id, namelen);
->  			if (IS_ERR(name.data))
-> -				return -EFAULT;
-> +				return PTR_ERR(name.data);
->  			name.len =3D namelen;
->  			get_user(princhashlen, &ci->cc_princhash.cp_len);
->  			if (princhashlen > 0) {
-> @@ -817,7 +817,7 @@ __cld_pipe_inprogress_downcall(const struct cld_msg_v=
-2 __user *cmsg,
->  						princhashlen);
->  				if (IS_ERR(princhash.data)) {
->  					kfree(name.data);
-> -					return -EFAULT;
-> +					return PTR_ERR(princhash.data);
->  				}
->  				princhash.len =3D princhashlen;
->  			} else
-> @@ -830,7 +830,7 @@ __cld_pipe_inprogress_downcall(const struct cld_msg_v=
-2 __user *cmsg,
->  				return -EFAULT;
->  			name.data =3D memdup_user(&cnm->cn_id, namelen);
->  			if (IS_ERR(name.data))
-> -				return -EFAULT;
-> +				return PTR_ERR(name.data);
->  			name.len =3D namelen;
->  		}
->  		if (name.len > 5 && memcmp(name.data, "hash:", 5) =3D=3D 0) {
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/apic
+branch HEAD: b8d1d163604bd1e600b062fb00de5dc42baa355f  x86/apic: Don't disable x2APIC if locked
 
-I *think* this error gets propagated to userland on a write to
-rpc_pipefs, and the callers already handle a variety of errors. This
-looks reasonable to me.=20
+elapsed time: 821m
 
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
+configs tested: 87
+configs skipped: 3
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+alpha                            allyesconfig
+arc                              allyesconfig
+um                             i386_defconfig
+powerpc                           allnoconfig
+um                           x86_64_defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+x86_64                              defconfig
+sh                               allmodconfig
+x86_64                               rhel-8.3
+mips                             allyesconfig
+powerpc                          allmodconfig
+x86_64                        randconfig-a013
+x86_64                           allyesconfig
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+arc                  randconfig-r043-20220831
+i386                          randconfig-a001
+i386                          randconfig-a003
+i386                          randconfig-a005
+riscv                randconfig-r042-20220831
+s390                 randconfig-r044-20220831
+i386                          randconfig-a014
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a002
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a004
+x86_64                           rhel-8.3-syz
+x86_64                        randconfig-a006
+x86_64                           rhel-8.3-kvm
+i386                             allyesconfig
+i386                                defconfig
+sh                   sh7724_generic_defconfig
+sparc                       sparc32_defconfig
+arc                 nsimosci_hs_smp_defconfig
+sh                          rsk7203_defconfig
+sh                               alldefconfig
+arc                           tb10x_defconfig
+arm                       multi_v4t_defconfig
+parisc64                            defconfig
+powerpc                      cm5200_defconfig
+arm                            hisi_defconfig
+powerpc                      pcm030_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                     rainier_defconfig
+arm                      jornada720_defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+mips                         cobalt_defconfig
+mips                           xway_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+xtensa                         virt_defconfig
+powerpc                        warp_defconfig
+arm                        multi_v7_defconfig
+arm64                            alldefconfig
+i386                          randconfig-c001
+mips                      loongson3_defconfig
+sh                          r7780mp_defconfig
+sh                           se7705_defconfig
+sh                          lboxre2_defconfig
+ia64                             allmodconfig
+
+clang tested configs:
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+i386                          randconfig-a002
+i386                          randconfig-a004
+i386                          randconfig-a006
+hexagon              randconfig-r041-20220831
+hexagon              randconfig-r045-20220831
+i386                          randconfig-a013
+i386                          randconfig-a011
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a015
+x86_64                        randconfig-a005
+arm                         socfpga_defconfig
+arm                        vexpress_defconfig
+x86_64                        randconfig-k001
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

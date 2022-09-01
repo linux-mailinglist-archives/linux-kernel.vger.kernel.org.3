@@ -2,133 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 984355A9848
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 309D85A9840
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234280AbiIANNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55722 "EHLO
+        id S234191AbiIANOI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:14:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233055AbiIANM0 (ORCPT
+        with ESMTP id S232997AbiIANNA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:12:26 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A8B2F649
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:11:46 -0700 (PDT)
-Received: from dggpeml500024.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4MJLv738TNzkWj8;
-        Thu,  1 Sep 2022 21:08:03 +0800 (CST)
-Received: from dggpeml500002.china.huawei.com (7.185.36.158) by
- dggpeml500024.china.huawei.com (7.185.36.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 1 Sep 2022 21:11:44 +0800
-Received: from [10.67.101.90] (10.67.101.90) by dggpeml500002.china.huawei.com
- (7.185.36.158) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 1 Sep
- 2022 21:11:44 +0800
-Subject: Re: [PATCH v9 0/2] Add support for UltraSoc System Memory Buffer
-To:     <mathieu.poirier@linaro.org>, <suzuki.poulose@arm.com>,
-        <mike.leach@linaro.org>, <leo.yan@linaro.org>
-References: <20220818132231.28240-1-hejunhao3@huawei.com>
-CC:     <coresight@lists.linaro.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linuxarm@huawei.com>,
-        <rdunlap@infradead.org>, <liuqi115@huawei.com>,
-        <f.fangjian@huawei.com>, <prime.zeng@hisilicon.com>
-From:   hejunhao <hejunhao3@huawei.com>
-Message-ID: <ab129d55-9b4f-1685-d102-fd963ed447bc@huawei.com>
-Date:   Thu, 1 Sep 2022 21:11:30 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:45.0) Gecko/20100101
- Thunderbird/45.7.1
+        Thu, 1 Sep 2022 09:13:00 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 413DF30E
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:12:25 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id se27so26846822ejb.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:12:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=G9R0QAAm6mXZOdYiAbbisy0joj2Ln2Tb7boXjxnlO/g=;
+        b=XZmKOPIt8Qub9dr7WZ0y95VXwgms4z2JKISqKno0HjZqjygLhx86t/8lg8cQA1V259
+         aIFSzv2ggf7B/nBSpbOnOz4EYycxS3OctxzAFjx2jK9377GZqOays6bmAHc8mqKvmBWl
+         rYGSv/RTvkHvwuY2T94ju1Qj1Wp7r8VfYRIcXKv1mxCrLdiEV5r/4Ob4ixWDxeKAW8Fl
+         qTcsz/JkBpXt3ObqhruCwrv8+t5aSk+Q0USqUQ2qqk4FZmqnG5WEWojPSIc0ONSvbKi1
+         g2LoyoFZzSYLqORYz1RUwx5C2vqSRtOm/uqJFdfnDCSZCUDUN7U/Z5KCja3e35VT974k
+         Uh/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=G9R0QAAm6mXZOdYiAbbisy0joj2Ln2Tb7boXjxnlO/g=;
+        b=Yqso8cNtVZJgShxGXZkyqvoHm8Nd2mgeTz09X7lZ5/6tmcYWowPBlA5lOLcZfr78I7
+         EdLbAm9vi1ZotGNBpbfH1G1QM8AVcgn6zjlqHd9gT0aFb2CGIH0fGIDR1zzLjvfDlbk+
+         kJmq3fQo7LIS3NwW0S7WwcSoMKG49hUTS2sHefUqyhKv8MLLfNjZJd/7r3zlMd3FzKpx
+         o0zpRMYQvw7it+CGvYtVJzqr0bqD2tge4B+AAoVa1cNh8y09eE31VQttyx1MIWCkUdwN
+         t/Wsx5E1OInAYWiZGIH9PgmoOoVR2KyKFHIZgz4sjaG6rZY+UYaWm6Ueg2zHc7oEML4D
+         qL2Q==
+X-Gm-Message-State: ACgBeo2MnOKLt6VmLn0Lv+EVDYrBOHBjcSXozGgXsYo4N6rINl1fbTTU
+        xvc9Vk5xblpL/22jhm2RaWMoSMVmRJQXR5OqKJDFAg==
+X-Google-Smtp-Source: AA6agR5UF8wTUdNJMqiJ1bGz7CO4QmbS2WAvDOmDCubR574vrDPFyL+Pq6Ir79zWEUfqZAPm5lH0f0EctbBbcfvO3dA=
+X-Received: by 2002:a17:907:2707:b0:741:7c18:4e76 with SMTP id
+ w7-20020a170907270700b007417c184e76mr13260189ejk.690.1662037943636; Thu, 01
+ Sep 2022 06:12:23 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20220818132231.28240-1-hejunhao3@huawei.com>
-Content-Type: text/plain; charset="windows-1252"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.101.90]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500002.china.huawei.com (7.185.36.158)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220827213009.44316-1-alexander.sverdlin@nokia.com>
+ <CACRpkdYgZK1oaceme6-EEuV3F=m1L5B3Y8t6z7Yxrx842dgrFw@mail.gmail.com> <ccde957b-20b1-2fd6-5c90-ad9ee4b8924c@nokia.com>
+In-Reply-To: <ccde957b-20b1-2fd6-5c90-ad9ee4b8924c@nokia.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 1 Sep 2022 15:12:12 +0200
+Message-ID: <CACRpkdarYrhtrv2W8+MQm6QNFkrqE-EUVz4cm7kGvsbWgBdk+Q@mail.gmail.com>
+Subject: Re: [PATCH] ARM: kasan: Only map modules if CONFIG_KASAN_VMALLOC=n
+To:     Alexander Sverdlin <alexander.sverdlin@nokia.com>
+Cc:     kasan-dev@googlegroups.com,
+        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Gentle ping. Any comment or suggestion is appreciated.
+On Thu, Sep 1, 2022 at 10:42 AM Alexander Sverdlin
+<alexander.sverdlin@nokia.com> wrote:
 
-thanks.
+> >> -       create_mapping((void *)MODULES_VADDR, (void *)(PKMAP_BASE + PMD_SIZE));
+> >> +       if (!IS_ENABLED(CONFIG_KASAN_VMALLOC) && IS_ENABLED(CONFIG_MODULES))
+> >> +               create_mapping((void *)MODULES_VADDR, (void *)(MODULES_END));
+> > So the way I understand it is that modules are first and foremost loaded into
+> > the area MODULES_VADDR .. MODULES_END, and then after that is out,
+> > they get loaded into VMALLOC. See arch/arm/kernel/module.c, module_alloc().
+>
+> yes, but both areas are managed by __vmalloc_node_range().
 
-On 2022/8/18 21:22, Junhao He wrote:
-> Add support for UltraSoc System Memory Buffer.
->
-> Change since v8:
-> - Insert a blank line at the end of the config tag in Kconfig.
-> - Fix the "llseek" initialization.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20220816131634.38195-1-hejunhao3@huawei.com/
->
-> Change since v7:
-> - Use the macros for register bit flags and numbers of resource.
-> - Fix punctuation.
-> - Update the Date tag and the KernelVersion tag in the document.
-> - Link: https://lore.kernel.org/lkml/20220712091353.34540-1-hejunhao3@huawei.com/
->
-> Change since v6:
-> - Modify the code style and driver description according to Suzuki's comment.
-> - Modify configuration of "drvdata->reading", to void problems in open/read
->    concurrency scenario.
-> - Rename the macro of "SMB_FLOW_MASK".
-> - Use the "handle->head" to determine the page number and offset.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20220606130223.57354-1-liuqi115@huawei.com/
->
-> Change since v5:
-> - Address the comments from Suzuki, add some comments in SMB document, and modify
->    configuration of "drvdata->reading", to void problems in multi-core concurrency scenario
-> - Link: https://lore.kernel.org/linux-arm-kernel/20220416083953.52610-1-liuqi115@huawei.com/
->
-> Change since v4:
-> - Add a simple document of SMB driver according to Suzuki's comment.
-> - Address the comments from Suzuki.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20220128061755.31909-1-liuqi115@huawei.com/
->
-> Change since v3:
-> - Modify the file header according to community specifications.
-> - Address the comments from Mathieu.
-> - Link: https://lore.kernel.org/linux-arm-kernel/20211118110016.40398-1-liuqi115@huawei.com/
->
-> Change since v2:
-> - Move ultrasoc driver to drivers/hwtracing/coresight.
-> - Link: https://lists.linaro.org/pipermail/coresight/2021-November/007310.html
->
-> Change since v1:
-> - Drop the document of UltraSoc according to Mathieu's comment.
-> - Add comments to explain some private hardware settings.
-> - Address the comments from Mathieu.
-> - Link: https://lists.linaro.org/pipermail/coresight/2021-August/006842.html
->
-> Change since RFC:
-> - Move driver to drivers/hwtracing/coresight/ultrasoc.
-> - Remove ultrasoc-axi-com.c, as AXI-COM doesn't need to be configured in
->    basic tracing function.
-> - Remove ultrasoc.c as SMB does not need to register with the ultrasoc core.
-> - Address the comments from Mathieu and Suzuki.
-> - Link: https://lists.linaro.org/pipermail/coresight/2021-June/006535.html
->
-> Qi Liu (2):
->    drivers/coresight: Add UltraSoc System Memory Buffer driver
->    Documentation: Add document for UltraSoc SMB drivers
->
->   .../sysfs-bus-coresight-devices-ultra_smb     |  31 +
->   .../trace/coresight/ultrasoc-smb.rst          |  80 +++
->   drivers/hwtracing/coresight/Kconfig           |  11 +
->   drivers/hwtracing/coresight/Makefile          |   1 +
->   drivers/hwtracing/coresight/ultrasoc-smb.c    | 636 ++++++++++++++++++
->   drivers/hwtracing/coresight/ultrasoc-smb.h    | 115 ++++
->   6 files changed, 874 insertions(+)
->   create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
->   create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
->   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
->   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
->
+Owww!
 
+> > If you do this, how are the addresses between MODULES_VADDR..MODULES_END
+> > shadowed when using CONFIG_KASAN_VMALLOC?
+>
+> That's the thing, __vmalloc_node_range() doesn't differentiate between address
+> ranges and tries first to recreate [already existing] shadow mapping, and then
+> vfree() unconditionally frees the mapping and the page.
+>
+> vmalloc() KASAN handling is generic, module_alloc() implemented via vmalloc()
+> is however ARM-specific. Even though we could teach vmalloc() about MODULES_VADDR
+> and MODULES_END (and don't call kasan_ instrumentation on these), but, this is
+> ARM-specifics that it's used for this range.
+
+OK I get it. Maybe this warrants a comment in the code explaining the
+above behaviour (also in commitlog) so nobody gets confused.
+
+With that:
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+
+Yours.
+Linus Walleij

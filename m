@@ -2,137 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A7B5A9988
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8C65A9987
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:57:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233368AbiIAN50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54982 "EHLO
+        id S233800AbiIAN53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:57:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbiIAN5U (ORCPT
+        with ESMTP id S233652AbiIAN5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:57:20 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE8E92AE18
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:57:18 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 0D1C03F0C3
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:57:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1662040636;
-        bh=eatamg8KEOTO7jgHDtGKXWunmQpTPYEKBxdi9CxrfRQ=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=itGmv9SFZm2qXuKbr7XXoIlJ4E9xCTAtWm+liiA+QDAmuq0x7ocwzb9A3dBIYlXlr
-         qsuaUCtgneXQvcd6YFpd7PcNH16hoWCKhpIJFRBuzlbpMk5AHqDZaSnw7hcjNzm916
-         iQk2cwl71ymj8d0SRi6h2zZD0P/BzDHYSRthUzACk/clL8tGK7QmL844th2hICnqWm
-         y3lM7l9BrCS/MLwARp2BdgZiaiyOJAqL14l/zlkZoEF+yrN6i8/ozJe0N5w4hcA5ch
-         NC6aRkBYkde8vzbC4vVbPhecg2PnHoKWB6B/UvMfgOzPetBC6rqcItBl3CS6YBqYvg
-         Z3veD64S+SL6w==
-Received: by mail-ej1-f70.google.com with SMTP id ho13-20020a1709070e8d00b00730a655e173so6883509ejc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:57:16 -0700 (PDT)
+        Thu, 1 Sep 2022 09:57:22 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 955C8357D4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:57:21 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id az27so22494217wrb.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:57:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=c9ZUGn6ses9HPyvq9e/NzCNdBEc5E/knBGWlwYd1Tus=;
+        b=bE/nZBqeJ2souFDdZbS3OgrXyjAWhaQ697q1QYSc0udNg/WEb+IZGvQ8AN5ggOm/Vv
+         ypN6l09kffv08bpEOI7dNBAThdYtUk3wbdohm1m4/y12f3gsP1wPCQLRXH4i7Uiu13wQ
+         mlF37OZnD1prQdvo4bJ/1XDu0JcwLV4SKlogBImHOyE0xj2bZSfFz+JkZNuoxYVurT19
+         AX9Yit1mrA+7Uz0YKT4jqmNfkOzaSGFZ85md7qgMf+33nMphfBYM7KwtPXDMqfN22yBt
+         IZKrvhkqDHXbk4ouGFqidBtFVtSBP2UIc1N1bA4T6PpA/Ro4wPPTJJfw59Vn49ggEe7y
+         BSjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=eatamg8KEOTO7jgHDtGKXWunmQpTPYEKBxdi9CxrfRQ=;
-        b=7Gdr5AGc0wQc6OoHEFxlwTRzp1IT05QkH/pvnOjHOUMtSzxvus1bpKyG7jV/J3wN3G
-         UW9tpK+EuGT8WEaCQyZllwyS44rMVZBPEYdnZhhYBtbEd1TYjMvYgV32hhAAdS0E0ac7
-         01X7pwiXjb2gDzGIIvzsvNvmucWYjAot/vrXoRNFWNjDrhfoKBg09aYhaoyC/HcYXwQU
-         HyEXAoy6bKVEzkc+64vv5p7g9UCTkIAlbz2kQFQaP7JW/mUEtvEXkpkI0ZgNbU11bdcT
-         CzUj7Pdnt1TA1cWafxmuaxDz6/9lX/VyUTDW4xOFQ8KtTtpvTbxbbB3FJA60kVlGbv/v
-         9+SQ==
-X-Gm-Message-State: ACgBeo0kA+CFmX8PJvMZ0EWjmV/ssNEwioRjxlgDNaLRMqLqTiwAijbm
-        FA88Tvh1PA4RaEF87p4/3i2wtonFS8c+pIr7EDOMMl+J6kbgJThweeDtI+KOpOTaHiPGwQ/j/iD
-        4aI1diBaZ0wTy6BWVZ/y3X4hNtBMkEqJiiIx8vLGHxK1fvYxABug91i406Q==
-X-Received: by 2002:a50:fe91:0:b0:43d:c97d:1b93 with SMTP id d17-20020a50fe91000000b0043dc97d1b93mr29907573edt.67.1662040633957;
-        Thu, 01 Sep 2022 06:57:13 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4pjZ4PvM9dADBtZDfV/dC1vl9LAgpRNbNaP8opEFR0qd/BGnVwJ1XzicJH6Wlr5JB2yCtqu7vb3pn5KKjrzVI=
-X-Received: by 2002:a50:fe91:0:b0:43d:c97d:1b93 with SMTP id
- d17-20020a50fe91000000b0043dc97d1b93mr29907548edt.67.1662040633618; Thu, 01
- Sep 2022 06:57:13 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=c9ZUGn6ses9HPyvq9e/NzCNdBEc5E/knBGWlwYd1Tus=;
+        b=cUnS3s3+oE5h7omt96SDGyslNF7QX6wezBT41Gmorrr50HHTCGUcUcdhfBR2nLn3OB
+         eyJZ7nQ/34E7Js2ASWG2y+XUZQPOV/Nk2CafHAWbKP0Iulw+9SHjJ3KL5tYDZYUxLK6X
+         BX/anGJ0311aEn1n93WtIWUN6GoEvOHiARIZODDP0B4TThhYayRVPGLsDbDKnyVVXTcL
+         SmleRqwlFjXViIQBSAhQnUzue9YDrQ0oLeXj/SiPI7CWh8vfrTvBQup+3WdNGFWljp/T
+         Yzk4xJKQ3tlP71lsHAlsWbOqDqPV3ckoGOoyBj98rFxXJ9YRAJEtwdXpv83K+CgpfF49
+         Hz6A==
+X-Gm-Message-State: ACgBeo2biPANbnMrZHWkhqvHojwkIDYThvNP3PbAM4ykM/fg0K/JVmaZ
+        DqT/uX5Or1W4U7SnD3tjC5E=
+X-Google-Smtp-Source: AA6agR7VY4WEkptfJIBlnMh98zqvJSve1tAjqfJQi3iSOnMepxSeF8sv4Fut3CyeOpRzAw2j4b3ZnA==
+X-Received: by 2002:adf:f642:0:b0:226:d4b1:8502 with SMTP id x2-20020adff642000000b00226d4b18502mr13358795wrp.553.1662040639961;
+        Thu, 01 Sep 2022 06:57:19 -0700 (PDT)
+Received: from localhost.localdomain (host-87-1-103-238.retail.telecomitalia.it. [87.1.103.238])
+        by smtp.gmail.com with ESMTPSA id m6-20020a5d6a06000000b00226d3e9f8f4sm13227343wru.98.2022.09.01.06.57.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 06:57:18 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Bryan Tan <bryantan@vmware.com>,
+        Rajesh Jalisatgi <rjalisatgi@vmware.com>,
+        Vishnu Dasa <vdasa@vmware.com>,
+        VMware PV-Drivers Reviewers <pv-drivers@vmware.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] misc/vmw_vmci: Use kmap_local_page() in vmci_queue_pair.c
+Date:   Thu,  1 Sep 2022 15:57:14 +0200
+Message-Id: <20220901135714.16481-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20220901021628.1130985-1-koba.ko@canonical.com> <a15ab3e6-249d-af48-b4d5-25840b72a933@amd.com>
-In-Reply-To: <a15ab3e6-249d-af48-b4d5-25840b72a933@amd.com>
-From:   Koba Ko <koba.ko@canonical.com>
-Date:   Thu, 1 Sep 2022 21:57:02 +0800
-Message-ID: <CAJB-X+V-D0Es+5=KJQYdv6DKVK48jYzyU_4y6qvfY=H55y6oHQ@mail.gmail.com>
-Subject: Re: [PATCH V2] crypto: ccp - Release dma channels before dmaengine unrgister
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 9:42 PM Tom Lendacky <thomas.lendacky@amd.com> wrote:
->
-> On 8/31/22 21:16, Koba Ko wrote:
-> > A warning is shown during shutdown,
-> >
-> > __dma_async_device_channel_unregister called while 2 clients hold a reference
-> > WARNING: CPU: 15 PID: 1 at drivers/dma/dmaengine.c:1110 __dma_async_device_channel_unregister+0xb7/0xc0
-> >
-> > Call dma_release_channel for occupied channles before dma_async_device_unregister.
-> >
-> > Fixes: 4cbe9bc34ed0 ("crypto: ccp - ccp_dmaengine_unregister release dma channels")
->
-> I can't find this Fixes: tag. I did find:
->
-> 54cce8ecb925 ("crypto: ccp - ccp_dmaengine_unregister release dma channels")
->
-> Not sure if Herbert can take care of that or if you'll need a v3.
+kmap() is being deprecated in favor of kmap_local_page().
 
-Sorry, it should be 54cce8ecb925("crypto: ccp -
-ccp_dmaengine_unregister release dma channels")
+There are two main problems with kmap(): (1) It comes with an overhead as
+the mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
 
->
-> With the change to the Fixes: tag
->
-> Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
->
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Signed-off-by: Koba Ko <koba.ko@canonical.com>
-> > ---
-> > V2: Fix the unused warning
-> > ---
-> >   drivers/crypto/ccp/ccp-dmaengine.c | 6 +++++-
-> >   1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/crypto/ccp/ccp-dmaengine.c b/drivers/crypto/ccp/ccp-dmaengine.c
-> > index 7d4b4ad1db1f3..9f753cb4f5f18 100644
-> > --- a/drivers/crypto/ccp/ccp-dmaengine.c
-> > +++ b/drivers/crypto/ccp/ccp-dmaengine.c
-> > @@ -641,6 +641,10 @@ static void ccp_dma_release(struct ccp_device *ccp)
-> >       for (i = 0; i < ccp->cmd_q_count; i++) {
-> >               chan = ccp->ccp_dma_chan + i;
-> >               dma_chan = &chan->dma_chan;
-> > +
-> > +             if (dma_chan->client_count)
-> > +                     dma_release_channel(dma_chan);
-> > +
-> >               tasklet_kill(&chan->cleanup_tasklet);
-> >               list_del_rcu(&dma_chan->device_node);
-> >       }
-> > @@ -766,8 +770,8 @@ void ccp_dmaengine_unregister(struct ccp_device *ccp)
-> >       if (!dmaengine)
-> >               return;
-> >
-> > -     dma_async_device_unregister(dma_dev);
-> >       ccp_dma_release(ccp);
-> > +     dma_async_device_unregister(dma_dev);
-> >
-> >       kmem_cache_destroy(ccp->dma_desc_cache);
-> >       kmem_cache_destroy(ccp->dma_cmd_cache);
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and still valid.
+
+Since its use in vmci_queue_pair.c is safe everywhere, replace kmap() with
+kmap_local_page().
+
+Cc: "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ drivers/misc/vmw_vmci/vmci_queue_pair.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/misc/vmw_vmci/vmci_queue_pair.c b/drivers/misc/vmw_vmci/vmci_queue_pair.c
+index 8f2de1893245..e71068f7759b 100644
+--- a/drivers/misc/vmw_vmci/vmci_queue_pair.c
++++ b/drivers/misc/vmw_vmci/vmci_queue_pair.c
+@@ -324,7 +324,7 @@ static void *qp_alloc_queue(u64 size, u32 flags)
+ 
+ /*
+  * Copies from a given buffer or iovector to a VMCI Queue.  Uses
+- * kmap()/kunmap() to dynamically map/unmap required portions of the queue
++ * kmap_local_page() to dynamically map required portions of the queue
+  * by traversing the offset -> page translation structure for the queue.
+  * Assumes that offset + size does not wrap around in the queue.
+  */
+@@ -345,7 +345,7 @@ static int qp_memcpy_to_queue_iter(struct vmci_queue *queue,
+ 		size_t to_copy;
+ 
+ 		if (kernel_if->host)
+-			va = kmap(kernel_if->u.h.page[page_index]);
++			va = kmap_local_page(kernel_if->u.h.page[page_index]);
+ 		else
+ 			va = kernel_if->u.g.vas[page_index + 1];
+ 			/* Skip header. */
+@@ -359,12 +359,12 @@ static int qp_memcpy_to_queue_iter(struct vmci_queue *queue,
+ 		if (!copy_from_iter_full((u8 *)va + page_offset, to_copy,
+ 					 from)) {
+ 			if (kernel_if->host)
+-				kunmap(kernel_if->u.h.page[page_index]);
++				kunmap_local(va);
+ 			return VMCI_ERROR_INVALID_ARGS;
+ 		}
+ 		bytes_copied += to_copy;
+ 		if (kernel_if->host)
+-			kunmap(kernel_if->u.h.page[page_index]);
++			kunmap_local(va);
+ 	}
+ 
+ 	return VMCI_SUCCESS;
+@@ -372,7 +372,7 @@ static int qp_memcpy_to_queue_iter(struct vmci_queue *queue,
+ 
+ /*
+  * Copies to a given buffer or iovector from a VMCI Queue.  Uses
+- * kmap()/kunmap() to dynamically map/unmap required portions of the queue
++ * kmap_local_page() to dynamically map required portions of the queue
+  * by traversing the offset -> page translation structure for the queue.
+  * Assumes that offset + size does not wrap around in the queue.
+  */
+@@ -393,7 +393,7 @@ static int qp_memcpy_from_queue_iter(struct iov_iter *to,
+ 		int err;
+ 
+ 		if (kernel_if->host)
+-			va = kmap(kernel_if->u.h.page[page_index]);
++			va = kmap_local_page(kernel_if->u.h.page[page_index]);
+ 		else
+ 			va = kernel_if->u.g.vas[page_index + 1];
+ 			/* Skip header. */
+@@ -407,12 +407,12 @@ static int qp_memcpy_from_queue_iter(struct iov_iter *to,
+ 		err = copy_to_iter((u8 *)va + page_offset, to_copy, to);
+ 		if (err != to_copy) {
+ 			if (kernel_if->host)
+-				kunmap(kernel_if->u.h.page[page_index]);
++				kunmap_local(va);
+ 			return VMCI_ERROR_INVALID_ARGS;
+ 		}
+ 		bytes_copied += to_copy;
+ 		if (kernel_if->host)
+-			kunmap(kernel_if->u.h.page[page_index]);
++			kunmap_local(va);
+ 	}
+ 
+ 	return VMCI_SUCCESS;
+-- 
+2.37.2
+

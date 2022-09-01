@@ -2,105 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4FE5A910D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:47:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFCAD5A9110
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233846AbiIAHra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:47:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35724 "EHLO
+        id S233222AbiIAHr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233401AbiIAHq4 (ORCPT
+        with ESMTP id S233399AbiIAHrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:46:56 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E21B255AA;
-        Thu,  1 Sep 2022 00:45:13 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id x19so14885994pfr.1;
-        Thu, 01 Sep 2022 00:45:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=ljVHK94lOLMXeyDYK8rETR5FdziQ3+pJDqhAkr3kihM=;
-        b=QzG/aQmaMyWSgnRR/emLiWScS9fOw2EtnaXzFcwYg0RzPzbKHZfbvcbDHQ/ggvF3y/
-         /BcjLfAofVEerU8jaurKxj1do1dHnna04rDlprmyNmrdz8Ku6FEJjQj2GwgRbemusQCO
-         6ccEddvmacFilvFwc3t0eotYxjdPIvdCPWJY//MrvPKip/Ax6aH+wWvovb7nBaueuG8S
-         yjz82jafZHIFby2oXZ6LZt5NxQMmnSYxe0VZMhvBaHIIa56eQ39Tt5kj7iQBOq1SOzX3
-         /zNSUwBTu7KoNxuv3E59ue9Bc3BaQcN8Ol1j2Ev51WH6GLelaJ8v0p7NOnHpkJXZLmmH
-         uutQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=ljVHK94lOLMXeyDYK8rETR5FdziQ3+pJDqhAkr3kihM=;
-        b=zJmGcx2KxHhVdyht0e/9bFBuaGYNqtZX0AxP3RTX2nZSXeYVUK01hZi8tHv2KPYx5h
-         QjM4HE6GwHmHXlMJtsBcZuYrvhOtoE5/KRKbbtFjL3/GROTAT6k5wYQrEPw/ybiA0sBa
-         53YpogyjqIiLP+q5ljb4zL24sxb4kdTkw0ASWtM02Um1JefDESJvyY4aYPttCNgmY0Wo
-         Fo6in/oIp8CsKVpst0duvEZ8l1sCO3OJzzI0qpNXscT6dnu44V6k/J/NiEa1vsptzzlw
-         TtFxXWqB2mu+XwtDN8M0gxmLT04OyZJToE0mnyNGFWO5bTfNitvh3x3xuGbQSNiVuYYT
-         vOTg==
-X-Gm-Message-State: ACgBeo2s4M0lEmNSFe9HgYluavKQDO1yHu0C+zNHARUvOTfaIAopMgNR
-        9SJ6tK/YzelQnWSZZC8OpSYgAwTs5qg=
-X-Google-Smtp-Source: AA6agR6i0PW4jcHSbC8f9tljwfT3UA9m7s8uR3aE2lTIXWxk6WvG/iqx/uwP1+R4ziXRRtal6laexA==
-X-Received: by 2002:a05:6a00:4393:b0:52f:3603:e62f with SMTP id bt19-20020a056a00439300b0052f3603e62fmr29848577pfb.23.1662018310920;
-        Thu, 01 Sep 2022 00:45:10 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id b8-20020a62a108000000b0053ab9c18d3csm2977210pff.14.2022.09.01.00.45.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 00:45:10 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: ye.xingchen@zte.com.cn
-To:     mchehab@kernel.org
-Cc:     nathan@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>
-Subject: [PATCH linux-next] media: radio-si476x: Remove the unneeded result variable
-Date:   Thu,  1 Sep 2022 07:45:07 +0000
-Message-Id: <20220901074507.313203-1-ye.xingchen@zte.com.cn>
+        Thu, 1 Sep 2022 03:47:16 -0400
+Received: from cstnet.cn (smtp23.cstnet.cn [159.226.251.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E6BA213F81
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:45:29 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-03 (Coremail) with SMTP id rQCowABnyHETYxBjIoMgAA--.64009S2;
+        Thu, 01 Sep 2022 15:45:24 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     hdegoede@redhat.com, arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] virt: vbox: Add check for device_create_file
+Date:   Thu,  1 Sep 2022 15:45:21 +0800
+Message-Id: <20220901074521.3448337-1-jiasheng@iscas.ac.cn>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowABnyHETYxBjIoMgAA--.64009S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFWxGw1ruF1DuF1fGw1kuFg_yoW8Jw18pF
+        47Ca4ay3yFgw4jgw47ta4qqFyYgrWxt397urWxAw1rWr97A39YvFWDGayUZrZ8ZFZ5GF1r
+        Xw1Utr1rCa1UWFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyC14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
+        6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rWUJVWrZr1UMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUywZ7UUUUU=
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: ye xingchen <ye.xingchen@zte.com.cn>
+As device_create_file() can return error number,
+it should be better to check the return value and
+deal with the exception.
 
-Return the value v4l2_fh_release() directly instead of storing it in
-another redundant variable.
-
-Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+Fixes: 0ba002bc4393 ("virt: Add vboxguest driver for Virtual Box Guest integration")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- drivers/media/radio/radio-si476x.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+ drivers/virt/vboxguest/vboxguest_linux.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/media/radio/radio-si476x.c b/drivers/media/radio/radio-si476x.c
-index 0bf99e1cd1d8..171f9cc9ee5e 100644
---- a/drivers/media/radio/radio-si476x.c
-+++ b/drivers/media/radio/radio-si476x.c
-@@ -1072,7 +1072,6 @@ static int si476x_radio_fops_open(struct file *file)
+diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
+index 4ccfd30c2a30..0fee8e6ee6e0 100644
+--- a/drivers/virt/vboxguest/vboxguest_linux.c
++++ b/drivers/virt/vboxguest/vboxguest_linux.c
+@@ -390,8 +390,13 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 	}
  
- static int si476x_radio_fops_release(struct file *file)
- {
--	int err;
- 	struct si476x_radio *radio = video_drvdata(file);
+ 	pci_set_drvdata(pci, gdev);
+-	device_create_file(dev, &dev_attr_host_version);
+-	device_create_file(dev, &dev_attr_host_features);
++
++	ret = device_create_file(dev, &dev_attr_host_version);
++	if (ret)
++		goto err_unregister_misc_device_user;
++	ret = device_create_file(dev, &dev_attr_host_features);
++	if (ret)
++		goto err_unregister_misc_device_user;
  
- 	if (v4l2_fh_is_singular_file(file) &&
-@@ -1080,9 +1079,7 @@ static int si476x_radio_fops_release(struct file *file)
- 		si476x_core_set_power_state(radio->core,
- 					    SI476X_POWER_DOWN);
- 
--	err = v4l2_fh_release(file);
--
--	return err;
-+	return v4l2_fh_release(file);
- }
- 
- static ssize_t si476x_radio_fops_read(struct file *file, char __user *buf,
+ 	vbg_info("vboxguest: misc device minor %d, IRQ %d, I/O port %x, MMIO at %pap (size %pap)\n",
+ 		 gdev->misc_device.minor, pci->irq, gdev->io_port,
 -- 
 2.25.1
+

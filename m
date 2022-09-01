@@ -2,72 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223AD5A9BB5
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:30:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4A05A9BB1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234609AbiIAPaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40572 "EHLO
+        id S234470AbiIAPaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234576AbiIAPaA (ORCPT
+        with ESMTP id S234591AbiIAPaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:30:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56752A3;
-        Thu,  1 Sep 2022 08:29:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D3C40B827F0;
-        Thu,  1 Sep 2022 15:29:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 127C8C433D7;
-        Thu,  1 Sep 2022 15:29:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662046181;
-        bh=d5ZaiJJZmZijzR8TBsyEbX8fYa3CVJ1eKnFJnVSpO6k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Od20IUqztwDI02Q+39X4ol8oIB8R1bbqyYf+XcA34qxCu3+eas1X9AAl50I3CFUyT
-         mNTlUZ98p9Sod8HpZgBwJyNk4L3rLh2kPfY/260RCL9JbnMPvXbzIq/ZTDyRieFSGp
-         lOuSR81oIuRSHHkHMjMD8dLMeJAThPD2HbhlzZ7gLbHjHfimdogB1a04RxcL2Tvk2H
-         Ry97Io8o+1JHZny/YvDAvvo2m01szH6tbVlNSrO5gT0Am/juLUsEwoVSt7sGpQBG1E
-         pYnEb+vVQDRBbwbbMLwTH+MC0wTh1bkygajmsDYDpG5SYtjJX0k60l3KDhC4Pz+LGC
-         akk1wYOep3G8w==
-Date:   Thu, 1 Sep 2022 20:59:37 +0530
-From:   Vinod Koul <vkoul@kernel.org>
-To:     Iskren Chernev <iskren.chernev@gmail.com>
-Cc:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, phone-devel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Maxime Ripard <maxime@cerno.tech>,
-        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 11/14] dt-bindings: arm: cpus: Add kryo240 compatible
-Message-ID: <YxDP4Q7ExOjzNSqS@matsya>
-References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
- <20220901072414.1923075-12-iskren.chernev@gmail.com>
+        Thu, 1 Sep 2022 11:30:01 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748181106
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:29:52 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id j9-20020a17090a3e0900b001fd9568b117so2975549pjc.3
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:29:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=uEj+Y7Y/+YOHMSskQFWNi+2HHQDrIeW3yFZoL+MzmCA=;
+        b=XnJ2wsCxF8tcfraG5sEl0nCNjGP9Bilt7of9qMjRKEcLdnCtKg/Y/70LxLSz5b/LQW
+         HB7FwbLhalHN/C3kOLN1pB2v/LJyTHSucRh85pppfXgfAzvejP4gPJFlfiU8Q+KnCQmU
+         yPdk/503lGXLXQ71TW81D1UxFpAE9siiVke4rKqb/jPQ2gGYMfU6ln/flqL9VNl+PH3C
+         0Fv+RojMJYsoBEaBN7p0QfRr4O/7KG5Ylhr9ReSQf80+DUFAXTVV5+CiTRkMurXAdzAk
+         lZRuywlOuVc01HdjcAYq125MKpHz8Zmk3KfemiIY9iKxSPCbb/hwFo07lNSf8jt/YxaF
+         1i3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=uEj+Y7Y/+YOHMSskQFWNi+2HHQDrIeW3yFZoL+MzmCA=;
+        b=MEns4w4XoMOprM5qS3yQ6rAhlOAnebK+43nx+qsVI5EC2hbf4U9NKux0dI2Q8GP3J4
+         k+Pl4r9ywTom9PRRJL7TWSPDcENERV8V/cYk1melchzT76veGgr/G4fbQfwAEne98tYH
+         KsUyK25LHO12nVH/0lJc+VLFLnXTVrOl6ZUWKIS4XYCIlI4cit9kWBguqgn3Xdrzb/b/
+         i6D01gGRCd0VZkCOKhnru4nEV0rsx/mM3WrZGBwze/kajrvQ5hh9UQI64OrLjU0fmX2B
+         glo7D5ihh6JKy1RAVSxjJR8YSWXQPX8iRV3d/LVqdBq56oHn3Yx+KdbX8hinos+DpYMS
+         jE4g==
+X-Gm-Message-State: ACgBeo3FZF8EPtI0yumIDxhy9zrgwJVBGvbKTTrDqurceAQDncpZBLcE
+        NqtEXQEHNkIBj3GD7EXqXYGXiw==
+X-Google-Smtp-Source: AA6agR6g/blRPHq0d3n7aMFn6OtHPk3vvVO7+7+iZmO5GTldkf85RNK960XEeC83SwKhjZRzxu+kdA==
+X-Received: by 2002:a17:90b:1d0f:b0:1fe:4171:6e6f with SMTP id on15-20020a17090b1d0f00b001fe41716e6fmr5633707pjb.206.1662046191185;
+        Thu, 01 Sep 2022 08:29:51 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id r21-20020a170902ea5500b001708c4ebbaesm13590277plg.309.2022.09.01.08.29.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 08:29:50 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 15:29:46 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kyle Huey <me@kylehuey.com>
+Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Borislav Petkov <bp@alien8.de>, Ingo Molnar <mingo@redhat.com>,
+        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Robert O'Callahan <robert@ocallahan.org>,
+        David Manouchehri <david.manouchehri@riseup.net>,
+        Borislav Petkov <bp@suse.de>, stable@vger.kernel.org
+Subject: Re: [PATCH v6 1/2] x86/fpu: Allow PKRU to be (once again) written by
+ ptrace.
+Message-ID: <YxDP6jie4cwzZIHp@google.com>
+References: <20220829194905.81713-1-khuey@kylehuey.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220901072414.1923075-12-iskren.chernev@gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220829194905.81713-1-khuey@kylehuey.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01-09-22, 10:24, Iskren Chernev wrote:
-> Kryo240 is found in SM4250, the slower sibling of the SM6115.
+On Mon, Aug 29, 2022, Kyle Huey wrote:
+> @@ -1246,6 +1246,21 @@ static int copy_uabi_to_xstate(struct fpstate *fpstate, const void *kbuf,
+>  		}
+>  	}
+>  
+> +	/*
+> +	 * Update the user protection key storage. Allow KVM to
+> +	 * pass in a NULL pkru pointer if the mask bit is unset
+> +	 * for its legacy ABI behavior.
+> +	 */
+> +	if (pkru)
+> +		*pkru = 0;
+> +
+> +	if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
+> +		struct pkru_state *xpkru;
+> +
+> +		xpkru = __raw_xsave_addr(xsave, XFEATURE_PKRU);
+> +		*pkru = xpkru->pkru;
+> +	}
 
-Reviewed-by: Vinod Koul <vkoul@kernel.org>
+What about writing this as:
 
--- 
-~Vinod
+	if (hdr.xfeatures & XFEATURE_MASK_PKRU) {
+		...
+
+		*pkru = xpkru->pkru;
+	} else if (pkru) {
+		*pkru = 0;
+	}
+
+to make it slightly more obvious that @pkru must be non-NULL if the feature flag
+is enabled?
+
+Or we could be paranoid, though I'm not sure this is worthwhile.
+
+	if ((hdr.xfeatures & XFEATURE_MASK_PKRU) &&
+	    !WARN_ON_ONCE(!pkru)) {
+		...
+
+		*pkru = xpkru->pkru;
+	} else if (pkru) {
+		*pkru = 0;
+	}
+
+
+Otherwise, looks good from a KVM perspective.  Thanks!

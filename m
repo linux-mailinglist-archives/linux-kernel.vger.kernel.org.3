@@ -2,233 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA84D5AA01F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6955AA02F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234402AbiIATfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:35:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34956 "EHLO
+        id S234553AbiIATgt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:36:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234392AbiIATfh (ORCPT
+        with ESMTP id S232561AbiIATgm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:35:37 -0400
-Received: from smtp.domeneshop.no (smtp.domeneshop.no [IPv6:2a01:5b40:0:3005::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A1E4056D
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:35:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=tronnes.org
-        ; s=ds202112; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=HSmU8cbfTMrBaPDEft9ugvcLZ7df9DZiQiiVlzQT0Tw=; b=qLjy/48/HybrCZXhucwMbBtKJp
-        3TQbxLtZYMvSPYnBIV1FP4YMZdeVxZdeb8IrBeAhyjcHbR48eZ3cqwaUyKSRMM6DOQ9iZfJ2XCPD6
-        av7PC77mmiFG6qUN0YW2TLxNBmhG/OHSuD5qut6FTgE9i/x1rSJzTI8Sc2eAma98W6N4XxH64KZyD
-        nX//akYOhh3zihSmyGBz7pNFVaeuP5f+pGW5j4s9zWcQ2RNqzSMRDsGMOSZkpxU2nUJWqrKaD0MyS
-        K6gTTOv8Lx+Cv8ibktpYIIY5h542j1BJDWvYwCzIYBQPXPj6+c9B6PKY4gZZIneg3dathxMx/k1tv
-        4FK26vCQ==;
-Received: from [2a01:799:961:d200:cca0:57ac:c55d:a485] (port=52634)
-        by smtp.domeneshop.no with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <noralf@tronnes.org>)
-        id 1oTpyL-0002UR-US; Thu, 01 Sep 2022 21:35:29 +0200
-Message-ID: <24e09a29-6d04-3b1e-63ce-cd3c31d350e2@tronnes.org>
-Date:   Thu, 1 Sep 2022 21:35:23 +0200
+        Thu, 1 Sep 2022 15:36:42 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6382A74347;
+        Thu,  1 Sep 2022 12:36:41 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281JHVO7018969;
+        Thu, 1 Sep 2022 19:36:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=0vTLilb6GDdgIy9McvcoI5bJ1lU4xywEby2MrZZ661w=;
+ b=QdLA6jxOVjwFeabnQPhQqMO+/Qicnj8STvmLJeK31Rziq9XHL7CRpcWtqBhhcBWmu3Nw
+ FtMH02A0+rFXvnmpXzDJSN+oFNLUg7PiRFsd8VRbgVA5TRjqOrj13ISHuY3N9pAjlzEk
+ KmOAFp+wYcEuRuMeL/z+eju6czvsASu2ni2AXneT6SDKcnKNwyY6XMNckwxzDNPv5xnF
+ 92I8udHVue07g2nfELzfVAc4LF6/3IZ+ZdeIs6+5uH6efMbBFDbnH6VRV3bAq5I2HGjk
+ DaWzK6GeFqKSxzMJdPQ3kilHFE4b5tfQHeQf8GFhT4/UgSxWnVJOq5RXpj1VTVccswGg qA== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3jaeb4v0gu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 01 Sep 2022 19:36:37 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 281Jaa5u029144
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 1 Sep 2022 19:36:36 GMT
+Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
+ nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Thu, 1 Sep 2022 12:36:36 -0700
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+To:     <balbi@kernel.org>, <gregkh@linuxfoundation.org>,
+        <Thinh.Nguyen@synopsys.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <quic_jackp@quicinc.com>, Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: [PATCH v8 0/5] Fix controller halt and endxfer timeout issues
+Date:   Thu, 1 Sep 2022 12:36:20 -0700
+Message-ID: <20220901193625.8727-1-quic_wcheng@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH v2 00/41] drm: Analog TV Improvements
-To:     Maxime Ripard <maxime@cerno.tech>,
-        Maxime Ripard <mripard@kernel.org>,
-        Ben Skeggs <bskeggs@redhat.com>,
-        David Airlie <airlied@linux.ie>, Chen-Yu Tsai <wens@csie.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Lyude Paul <lyude@redhat.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Karol Herbst <kherbst@redhat.com>,
-        Emma Anholt <emma@anholt.net>, Daniel Vetter <daniel@ffwll.ch>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Dom Cobley <dom@raspberrypi.com>
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        intel-gfx@lists.freedesktop.org,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        nouveau@lists.freedesktop.org, linux-sunxi@lists.linux.dev,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-References: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
-From:   =?UTF-8?Q?Noralf_Tr=c3=b8nnes?= <noralf@tronnes.org>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v2-0-459522d653a7@cerno.tech>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -8CxXDsJVAi4KL4AYkJghGis8Dshts9P
+X-Proofpoint-ORIG-GUID: -8CxXDsJVAi4KL4AYkJghGis8Dshts9P
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxlogscore=639
+ impostorscore=0 suspectscore=0 priorityscore=1501 mlxscore=0 bulkscore=0
+ malwarescore=0 clxscore=1015 phishscore=0 lowpriorityscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2209010085
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Changes in v8:
+- Remove stub for dwc3_remove_requests() as if DWC3 host only is enabled
+then ep0 isn't event compiled.
+
+Changes in v7:
+- Added missing arugment if DWC3 is not enabled in the kernel config
+
+Changes in v6:
+- Fix kernel bot errors/warnings.
+
+Changes in v5:
+- Rebased series on usb-testing from patch #5 onwards.
+
+Changes in v4:
+- Split the increase timeout patch into separate patches. #1 for the
+gadget suspend/resume locking changes #2 for the increased timeout
+- Modified msleep to usleep_range w/ an interval of 1-2ms and a max
+timeout of 4s.
+
+Changes in v3:
+- Modified the msleep() duration to ~2s versus ~10s due to the minimum
+mdelay() value.
+- Removed patch to modify DEP flags during dwc3_stop_active_transfer().
+This was not required after fixing the logic to allow EP xfercomplete
+events to be handled on EP0.
+- Added some changes to account for a cable disconnect scenario, where
+dwc3_gadget_pullup() would not be executed to stop active transfers.
+Needed to add some logic to the disconnect interrupt to ensure that we
+cleanup/restart any pending SETUP transaction, so that we can clear the
+EP0 delayed stop status. (if pending)
+- Added patch to ensure that we don't proceed with umapping buffers
+until the endxfer was actually sent.
+
+Changes in v2:
+- Moved msleep() to before reading status register for halted state
+- Fixed kernel bot errors
+- Clearing DEP flags in __dwc3_stop_active_transfers()
+- Added Suggested-by tags and link references to previous discussions
+
+This patch series addresses some issues seen while testing with the latest
+soft disconnect implementation where EP events are allowed to process while
+the controller halt is occurring.
+
+#1
+Since routines can now interweave, we can see that the soft disconnect can
+occur while conndone is being serviced.  This leads to a controller halt
+timeout, as the soft disconnect clears the DEP flags, for which conndone
+interrupt handler will issue a __dwc3_ep_enable(ep0), that leads to
+re-issuing the set ep config command for every endpoint.
+
+#2
+Function drivers can ask for a delayed_status phase, while it processes the
+received SETUP packet.  This can lead to large delays when handling the
+soft disconnect routine.  To improve the timing, forcefully send the status
+phase, as we are going to disconnect from the host.
+
+#3
+Ensure that local interrupts are left enabled, so that EP0 events can be
+processed while the soft disconnect/dequeue is happening.
+
+#4
+Since EP0 events can occur during controller halt, it may increase the time
+needed for the controller to fully stop.
+
+#5
+Account for cable disconnect scenarios where nothing may cause the endxfer
+retry if DWC3_EP_DELAY_STOP is set.
+
+#6
+Avoid unmapping pending USB requests that were never stopped.  This would
+lead to a potential SMMU fault.
 
 
-Den 29.08.2022 15.11, skrev Maxime Ripard:
-> Hi,
-> 
-> 
-> 
-> Here's a series aiming at improving the command line named modes support,
-> 
-> and more importantly how we deal with all the analog TV variants.
-> 
-> 
-> 
-> The named modes support were initially introduced to allow to specify the
-> 
-> analog TV mode to be used.
-> 
-> 
-> 
-> However, this was causing multiple issues:
-> 
-> 
-> 
->   * The mode name parsed on the command line was passed directly to the
-> 
->     driver, which had to figure out which mode it was suppose to match;
-> 
-> 
-> 
->   * Figuring that out wasn't really easy, since the video= argument or what
-> 
->     the userspace might not even have a name in the first place, but
-> 
->     instead could have passed a mode with the same timings;
-> 
-> 
-> 
->   * The fallback to matching on the timings was mostly working as long as
-> 
->     we were supporting one 525 lines (most likely NSTC) and one 625 lines
-> 
->     (PAL), but couldn't differentiate between two modes with the same
-> 
->     timings (NTSC vs PAL-M vs NSTC-J for example);
-> 
-> 
-> 
->   * There was also some overlap with the tv mode property registered by
-> 
->     drm_mode_create_tv_properties(), but named modes weren't interacting
-> 
->     with that property at all.
-> 
-> 
-> 
->   * Even though that property was generic, its possible values were
-> 
->     specific to each drivers, which made some generic support difficult.
-> 
-> 
-> 
-> Thus, I chose to tackle in multiple steps:
-> 
-> 
-> 
->   * A new TV norm property was introduced, with generic values, each driver
-> 
->     reporting through a bitmask what standard it supports to the userspace;
-> 
-> 
-> 
->   * This option was added to the command line parsing code to be able to
-> 
->     specify it on the kernel command line, and new atomic_check and reset
-> 
->     helpers were created to integrate properly into atomic KMS;
-> 
-> 
-> 
->   * The named mode parsing code is now creating a proper display mode for
-> 
->     the given named mode, and the TV standard will thus be part of the
-> 
->     connector state;
-> 
-> 
-> 
->   * Two drivers were converted and tested for now (vc4 and sun4i), with
-> 
->     some backward compatibility code to translate the old TV mode to the
-> 
->     new TV mode;
-> 
-> 
-> 
-> Unit tests were created along the way.
-> 
-> 
-> 
-> One can switch from NTSC to PAL now using (on vc4)
-> 
-> 
-> 
-> modetest -M vc4  -s 53:720x480i -w 53:'tv norm':0
-> 
-> 
-> 
-> modetest -M vc4 -s 53:720x480i -w 53:'tv norm':4
-> 
+Wesley Cheng (5):
+  usb: dwc3: Avoid unmapping USB requests if endxfer is not complete
+  usb: dwc3: Remove DWC3 locking during gadget suspend/resume
+  usb: dwc3: Increase DWC3 controller halt timeout
+  usb: dwc3: gadget: Skip waiting for CMDACT cleared during endxfer
+  usb: dwc3: gadget: Submit endxfer command if delayed during disconnect
 
-The property name has changed, this gives me PAL:
+ drivers/usb/dwc3/core.c   |  4 ----
+ drivers/usb/dwc3/core.h   |  1 +
+ drivers/usb/dwc3/ep0.c    |  5 ++++-
+ drivers/usb/dwc3/gadget.c | 31 +++++++++++++++++++++++++++----
+ 4 files changed, 32 insertions(+), 9 deletions(-)
 
-$ modetest -M vc4 -s 45:720x576i -w 45:'TV mode':4
-
-
-I have finally found a workaround for my kernel hangs.
-
-Dom had a look at my kernel and found that the VideoCore was fine, and
-he said this:
-
-> That suggests cause of lockup was on arm side rather than VC side.
->
-> But it's hard to diagnose further. Once you've had a peripheral not
-> respond, the AXI bus locks up and no further operations are possible.
-> Usual causes of this are required clocks being stopped or domains
-> disabled and then trying to access the hardware.
->
-
-So when I got this on my 64-bit build:
-
-[  166.702171] SError Interrupt on CPU1, code 0x00000000bf000002 -- SError
-[  166.702187] CPU: 1 PID: 8 Comm: kworker/u8:0 Tainted: G        W
-    5.19.0-rc6-00096-gba7973977976-dirty #1
-[  166.702200] Hardware name: Raspberry Pi 4 Model B Rev 1.1 (DT)
-[  166.702206] Workqueue: events_freezable_power_ thermal_zone_device_check
-[  166.702231] pstate: 200000c5 (nzCv daIF -PAN -UAO -TCO -DIT -SSBS
-BTYPE=--)
-[  166.702242] pc : regmap_mmio_read32le+0x10/0x28
-[  166.702261] lr : regmap_mmio_read+0x44/0x70
-...
-[  166.702606]  bcm2711_get_temp+0x58/0xb0 [bcm2711_thermal]
-
-I wondered if that reg read was stalled due to a clock being stopped.
-
-Lo and behold, disabling runtime pm and keeping the vec clock running
-all the time fixed it[1].
-
-I don't know what the problem is, but at least I can now test this patchset.
-
-[1] https://gist.github.com/notro/23b984e7fa05cfbda2db50a421cac065
-
-Noralf.

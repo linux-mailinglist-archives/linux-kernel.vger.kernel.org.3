@@ -2,47 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0515A9295
+	by mail.lfdr.de (Postfix) with ESMTP id 437C55A9294
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232552AbiIAI70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37962 "EHLO
+        id S234366AbiIAI7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 04:59:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233219AbiIAI6x (ORCPT
+        with ESMTP id S234260AbiIAI64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:58:53 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 07B1B130A14
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:58:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BFC80D6E;
-        Thu,  1 Sep 2022 01:58:29 -0700 (PDT)
-Received: from bogus (unknown [10.57.46.12])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 89F223F766;
-        Thu,  1 Sep 2022 01:58:21 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 09:57:56 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Jens Wiklander <jens.wiklander@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, op-tee@lists.trustedfirmware.org,
-        Marc Bonnici <marc.bonnici@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Achin Gupta <achin.gupta@arm.com>,
-        Valentin Laurent <valentin.laurent@trustonic.com>,
-        Lukas Hanel <lukas.hanel@trustonic.com>,
-        Coboy Chen <coboy.chen@mediatek.com>
-Subject: Re: [PATCH 7/9] firmware: arm_ffa: Add v1.1 get_partition_info
- support
-Message-ID: <20220901085756.ymk3rd7zjqvjpaj6@bogus>
-References: <20220830100700.344594-1-sudeep.holla@arm.com>
- <20220830100700.344594-8-sudeep.holla@arm.com>
- <CAHUa44Fmr=vDLbST5qwTDOtSZJq4RYqO+Y4Pij64VeBU-0BgrQ@mail.gmail.com>
+        Thu, 1 Sep 2022 04:58:56 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D98A130A1C
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:58:26 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id a14-20020a921a0e000000b002eb0baeeb1dso8576917ila.16
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 01:58:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date;
+        bh=OWc08Czh542+n2j7Jr99E99uAYpH5Cu42kPDNtF9Coo=;
+        b=J9flqnZXGEn9NIWyc7kr9OEPDHEiYcT/58FEplaI9FZ/hLv5Z1DAH5p0q3VkyQpU+e
+         O+kz7DHPN2aKMEY+U0g1NGxngE6o2fEbw9FbQxzGr5jKOLBGQPmpFwgZg9WSRjBaDyeW
+         ftOpgfrj7FsMCQS89F25RXppsBjTHyKAeFiPOHadVmEzusGcf3ss17Sx6U0e3mCDFr6m
+         mp6ubScTHAzk4zkPL2f0+qpyNfiHQZQSBGqddSWkpfbLKoOPWC/5LRWCRJERicKt7qRJ
+         2cz4Cg9allTA5DZfYFqD+GBuoSFaA9wfVqQYElECJ+uwLdUUpZQFr0z+DzA0VBVVFwY3
+         VS8g==
+X-Gm-Message-State: ACgBeo1RYKmHd+4KBCyVUaNn91JKoLauIwvLHgnhzrmqLRGAiLYg+dYX
+        7LbTLLa3TlqoYiL/+baF+DDIyJijH7aIDqsh9+pjS/nL0zKW
+X-Google-Smtp-Source: AA6agR4Qaz3Rzpj8GH4d6W/7aDjLYxNQ7esTtqevTh9xSsx0uWhx3rAtJTM3t1pKLBonmIM4tJO2G1DhrlaeNObzw0zP1ez2APrs
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHUa44Fmr=vDLbST5qwTDOtSZJq4RYqO+Y4Pij64VeBU-0BgrQ@mail.gmail.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6602:1614:b0:689:d670:be5b with SMTP id
+ x20-20020a056602161400b00689d670be5bmr14058432iow.126.1662022705305; Thu, 01
+ Sep 2022 01:58:25 -0700 (PDT)
+Date:   Thu, 01 Sep 2022 01:58:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f5622905e799d02f@google.com>
+Subject: [syzbot] WARNING: ODEBUG bug in hci_dev_close_sync (2)
+From:   syzbot <syzbot+e6fb0b74cd2dab0c42ec@syzkaller.appspotmail.com>
+To:     davem@davemloft.net, edumazet@google.com, johan.hedberg@gmail.com,
+        kuba@kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org, luiz.dentz@gmail.com,
+        marcel@holtmann.org, netdev@vger.kernel.org, pabeni@redhat.com,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,68 +57,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:43:58AM +0200, Jens Wiklander wrote:
-> On Tue, Aug 30, 2022 at 12:07 PM Sudeep Holla <sudeep.holla@arm.com> wrote:
-> >
-> > FF-A v1.1 adds support to discovery the UUIDs of the partitions that was
-> > missing in v1.0 and which the driver workarounds by using UUIDs supplied
-> > by the ffa_drivers.
-> >
-> > Add the v1.1 get_partition_info support and disable the workaround if
-> > the detected FF-A version is greater than v1.0.
-> >
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > ---
-> >  drivers/firmware/arm_ffa/driver.c | 39 ++++++++++++++++++++++++-------
-> >  include/linux/arm_ffa.h           |  1 +
-> >  2 files changed, 32 insertions(+), 8 deletions(-)
-> >
-> > diff --git a/drivers/firmware/arm_ffa/driver.c b/drivers/firmware/arm_ffa/driver.c
-> > index 5c8484b05c50..6822241168d6 100644
-> > --- a/drivers/firmware/arm_ffa/driver.c
-> > +++ b/drivers/firmware/arm_ffa/driver.c
-> > @@ -264,18 +264,24 @@ static int ffa_rxtx_unmap(u16 vm_id)
-> >         return 0;
-> >  }
-> >
-> > +#define PARTITION_INFO_GET_RETURN_COUNT_ONLY   BIT(0)
-> > +
-> >  /* buffer must be sizeof(struct ffa_partition_info) * num_partitions */
-> >  static int
-> >  __ffa_partition_info_get(u32 uuid0, u32 uuid1, u32 uuid2, u32 uuid3,
-> >                          struct ffa_partition_info *buffer, int num_partitions)
-> >  {
-> > -       int count;
-> > +       int idx, count, flags = 0, size;
-> >         ffa_value_t partition_info;
-> >
-> > +       if (!buffer || !num_partitions) /* Just get the count for now */
-> > +               flags = PARTITION_INFO_GET_RETURN_COUNT_ONLY;
-> > +
-> >         mutex_lock(&drv_info->rx_lock);
-> >         invoke_ffa_fn((ffa_value_t){
-> >                       .a0 = FFA_PARTITION_INFO_GET,
-> >                       .a1 = uuid0, .a2 = uuid1, .a3 = uuid2, .a4 = uuid3,
-> > +                     .a5 = flags,
-> >                       }, &partition_info);
-> >
-> >         if (partition_info.a0 == FFA_ERROR) {
-> > @@ -285,8 +291,15 @@ __ffa_partition_info_get(u32 uuid0, u32 uuid1, u32 uuid2, u32 uuid3,
-> >
-> >         count = partition_info.a2;
-> >
-> > +       if (drv_info->version > FFA_VERSION_1_0)
-> > +               size = partition_info.a3;
-> 
-> What happens if this value is larger than sizeof(struct ffa_partition_info)?
-> 
+Hello,
 
-Right, I had the check for both 0 size and size > struct size. I removed
-both at once instead of just dropping 0 size. I assume 0 size is non
-compliant or do you prefer to keep that check as well.
+syzbot found the following issue on:
 
-Thanks a lot for the reviews.
+HEAD commit:    e022620b5d05 Merge tag 'arm64-fixes' of git://git.kernel.o..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=13841183080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=312be25752c7fe30
+dashboard link: https://syzkaller.appspot.com/bug?extid=e6fb0b74cd2dab0c42ec
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
--- 
-Regards,
-Sudeep
+Unfortunately, I don't have any reproducer for this issue yet.
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e6fb0b74cd2dab0c42ec@syzkaller.appspotmail.com
+
+Bluetooth: hci1: hardware error 0x00
+------------[ cut here ]------------
+ODEBUG: assert_init not available (active state 0) object type: timer_list hint: 0x0
+WARNING: CPU: 2 PID: 3720 at lib/debugobjects.c:502 debug_print_object+0x16e/0x250 lib/debugobjects.c:502
+Modules linked in:
+CPU: 2 PID: 3720 Comm: kworker/u19:8 Not tainted 6.0.0-rc2-syzkaller-00248-ge022620b5d05 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.14.0-2 04/01/2014
+Workqueue: hci1 hci_error_reset
+RIP: 0010:debug_print_object+0x16e/0x250 lib/debugobjects.c:502
+Code: ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 0f 85 af 00 00 00 48 8b 14 dd 60 f3 48 8a 4c 89 ee 48 c7 c7 00 e7 48 8a e8 9f 21 39 05 <0f> 0b 83 05 35 43 dd 09 01 48 83 c4 18 5b 5d 41 5c 41 5d 41 5e c3
+RSP: 0018:ffffc900030af920 EFLAGS: 00010086
+RAX: 0000000000000000 RBX: 0000000000000005 RCX: 0000000000000000
+RDX: ffff8880767d6200 RSI: ffffffff81611ee8 RDI: fffff52000615f16
+RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000000 R12: ffffffff89eeec60
+R13: ffffffff8a48edc0 R14: ffffffff816a50a0 R15: 1ffff92000615f2f
+FS:  0000000000000000(0000) GS:ffff88802ca00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020170000 CR3: 0000000049298000 CR4: 0000000000152ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ debug_object_assert_init lib/debugobjects.c:892 [inline]
+ debug_object_assert_init+0x1f4/0x2e0 lib/debugobjects.c:863
+ debug_timer_assert_init kernel/time/timer.c:792 [inline]
+ debug_assert_init kernel/time/timer.c:837 [inline]
+ del_timer+0x6d/0x110 kernel/time/timer.c:1257
+ try_to_grab_pending+0x6d/0xd0 kernel/workqueue.c:1275
+ __cancel_work_timer+0xa6/0x570 kernel/workqueue.c:3121
+ hci_dev_close_sync+0xc37/0x1130 net/bluetooth/hci_sync.c:4452
+ hci_dev_do_close+0x2d/0x70 net/bluetooth/hci_core.c:554
+ hci_error_reset+0x96/0x130 net/bluetooth/hci_core.c:1050
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

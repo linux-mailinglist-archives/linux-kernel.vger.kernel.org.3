@@ -2,42 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672725A966E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 922185A9678
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232715AbiIAMMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45568 "EHLO
+        id S232887AbiIAMO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229498AbiIAMMp (ORCPT
+        with ESMTP id S231737AbiIAMO0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:12:45 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [IPv6:2a01:488:42:1000:50ed:8234::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989C797507;
-        Thu,  1 Sep 2022 05:12:43 -0700 (PDT)
-Received: from [2a02:8108:963f:de38:eca4:7d19:f9a2:22c5]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1oTj3o-0000jP-Dm; Thu, 01 Sep 2022 14:12:40 +0200
-Message-ID: <04ce8956-3285-345a-4ce5-b78500729e42@leemhuis.info>
-Date:   Thu, 1 Sep 2022 14:12:39 +0200
+        Thu, 1 Sep 2022 08:14:26 -0400
+Received: from smtp-fw-9103.amazon.com (smtp-fw-9103.amazon.com [207.171.188.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A68B1157E3;
+        Thu,  1 Sep 2022 05:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1662034466; x=1693570466;
+  h=message-id:date:mime-version:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:subject;
+  bh=/vA7gC+PVHNkG1R/rakP0JdQCUqSGd0Sd7RAHPh/RrE=;
+  b=HmjLhhBDR3/a5jcsZF7TtG6yLsGJZ3ioJRFZadVyogu/NUPMaLG5yqDU
+   sMxvVeULMB97CFobbVruyjkWWC6sOcIDNa9Aurz7Eh3DcBAtXpjHHRmG0
+   EQRPbwqy1KdXJEgRdG/iwTXohQMmJgtbz6Rx1sfvKsnVkfgbJt7ysOXXx
+   I=;
+X-IronPort-AV: E=Sophos;i="5.93,280,1654560000"; 
+   d="scan'208";a="1050300137"
+Subject: Re: [PATCH v3 15/19] hwmon: (mr75203) add support for series 6 temperature
+ equation
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-9103.sea19.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:14:10 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2a-2dbf0206.us-west-2.amazon.com (Postfix) with ESMTPS id C5D72A25C2;
+        Thu,  1 Sep 2022 12:14:09 +0000 (UTC)
+Received: from EX19D013UWB004.ant.amazon.com (10.13.138.62) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.249) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Thu, 1 Sep 2022 12:14:09 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (10.43.161.207) by
+ EX19D013UWB004.ant.amazon.com (10.13.138.62) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.1118.12; Thu, 1 Sep 2022 12:14:09 +0000
+Received: from [192.168.93.228] (10.85.143.172) by mail-relay.amazon.com
+ (10.43.161.249) with Microsoft SMTP Server id 15.0.1497.38 via Frontend
+ Transport; Thu, 1 Sep 2022 12:14:03 +0000
+Message-ID: <7b4baf42-eb8e-ad83-a259-a4a0e4e4ac01@amazon.com>
+Date:   Thu, 1 Sep 2022 15:14:02 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Content-Language: en-US, de-DE
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     Kai Huang <kai.huang@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com, regressions@lists.linux.dev
-References: <YvpZYGa1Z1M38YcR@xsang-OptiPlex-9020>
-From:   Thorsten Leemhuis <regressions@leemhuis.info>
-Subject: Re: [KVM] c3e0c8c2e8: leaking-addresses.proc..data..ro_after_init.
-In-Reply-To: <YvpZYGa1Z1M38YcR@xsang-OptiPlex-9020>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1662034363;299e0616;
-X-HE-SMSGID: 1oTj3o-0000jP-Dm
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.1
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@intel.com>
+CC:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <p.zabel@pengutronix.de>, <rtanwar@maxlinear.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <talel@amazon.com>,
+        <hhhawa@amazon.com>, <jonnyc@amazon.com>, <hanochu@amazon.com>,
+        <ronenk@amazon.com>, <itamark@amazon.com>, <shellykz@amazon.com>,
+        <shorer@amazon.com>, <amitlavi@amazon.com>, <almogbs@amazon.com>,
+        <dkl@amazon.com>, "Farber, Eliav" <farbere@amazon.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-16-farbere@amazon.com>
+ <Yw9PTobSRlkh/0i4@smile.fi.intel.com>
+From:   "Farber, Eliav" <farbere@amazon.com>
+In-Reply-To: <Yw9PTobSRlkh/0i4@smile.fi.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-11.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,66 +77,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, this is your Linux kernel regression tracker.
-
-On 15.08.22 16:34, kernel test robot wrote:
-> Greeting,
-> 
-> FYI, we noticed the following commit (built with gcc-11):
-> 
-> commit: c3e0c8c2e8b17bae30d5978bc2decdd4098f0f99 ("KVM: x86/mmu: Fully re-evaluate MMIO caching when SPTE masks change")
-> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> 
-> in testcase: leaking-addresses
-> version: leaking-addresses-x86_64-4f19048-1_20220518
-> with following parameters:
-> 
-> 	ucode: 0x28
-> 
-> 
-> 
-> on test machine: 8 threads 1 sockets Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz with 16G memory
-> 
-> caused below changes (please refer to attached dmesg/kmsg for entire log/backtrace):
-> 
-> If you fix the issue, kindly add following tag
-> Reported-by: kernel test robot <oliver.sang@intel.com>
+On 8/31/2022 3:08 PM, Andy Shevchenko wrote:
+> On Tue, Aug 30, 2022 at 07:22:08PM +0000, Eliav Farber wrote:
+>> The current equation used in code is aligned to series 5:
+>> T = G + H * (n / cal5 - 0.5) + J * F
+>> Where:
+>> G = 60, H = 200, cal5 = 4094, J = -0.1, F = frequency clock in MHz
+>>
+>> Series 6 has a slightly different equation:
+>> T = G + H * (n / cal5 - 0.5)
+>> and a different set of coefficients:
+>> G = 57.4, H = 249.4, cal5 = 4096
+>>
+>> This change supports equation and coefficients for both series.
+>> (for series 6, J is set to 0).
+>>
+>> The series is determined according to “ts-series” property in device
+>> tree.
+>> If absent, series 5 is assumed to be the default.
 >
-> [...]
+> ...
 >
-> #regzbot introduced: c3e0c8c2e8
-
-Removing this from the list of tracked regressions:
-
-#regzbot invalid: report from the kernel test report that was ignored by
-developers, so I assume it's not something bad
-
-To explain: Yeah, maybe tracking regressions found by CI systems in
-regzbot might be a good idea now or in the long run. If you are from
-Intel and would like to discuss how to do this, please get in touch (I
-tried recently, but got no answer[1]).
-
-But I'm not sure if it's a good idea right now to get regzbot involved
-by default (especially as long as the reports are not telling developers
-to add proper "Link:" tags that would allow regzbot to notice when fixes
-for the problem are posted or merged; see [1] and [2]), as it looks like
-developers ignore quite a few (many?) reports like the one partly quoted
-above.
-
-I guess there are various reasons why developers do so (too many false
-positives? issues unlikely to happen in practice? already fixed?).
-Normally I'd say "this is a regression and I should try to find out and
-prod developers to get it fixed". And I'll do that if the issue
-obviously looks important to a Linux kernel generalist like me.
-
-But that doesn't appear to be the case here (please correct me if I
-misjudged!). I hence chose to ignore this report, as there are quite a
-few other reports that are waiting for my attention, too. :-/
-
-Ciao, Thorsten
-
-[1]
-https://lore.kernel.org/all/384393c2-6155-9a07-ebd4-c2c410cbe947@leemhuis.info/
+>> -#define PVT_H_CONST          200000
+>> -#define PVT_G_CONST          60000
+>> -#define PVT_J_CONST          -100
+>> -#define PVT_CAL5_CONST               4094
+>
+> You just introduced them patch before. Please, avoid ping-pong style in
+> the same series.
 
 
-[2] https://docs.kernel.org/process/handling-regressions.html
+Fixed for v4.
+I now introduce these defines in patch 13 to avoid modifying the above
+ones and then remove them:
+/* Temperature coefficients for series 5 */
+#define PVT_SERIES5_H_CONST    200000
+#define PVT_SERIES5_G_CONST    60000
+#define PVT_SERIES5_J_CONST    -100
+#define PVT_SERIES5_CAL5_CONST    4094
+
+> ...
+>
+>> +     ret = of_property_read_u32(np, "moortec,ts-series", &series);
+>
+> of_ ?!
+>
+> Be consistent. Either you use OF everywhere, or device property APIs.
+>
+
+Fixed for v4.
+Using device_property_read_u32() instead.
+
+> ...
+>
+>> +     if (ret)
+>> +             series = TEMPERATURE_SENSOR_SERIES_5;
+>> +
+>> +     if (series == TEMPERATURE_SENSOR_SERIES_5) {
+>> +             ts_coeff->h = PVT_SERIES5_H_CONST;
+>> +             ts_coeff->g = PVT_SERIES5_G_CONST;
+>> +             ts_coeff->j = PVT_SERIES5_J_CONST;
+>> +             ts_coeff->cal5 = PVT_SERIES5_CAL5_CONST;
+>> +     } else if (series == TEMPERATURE_SENSOR_SERIES_6) {
+>> +             ts_coeff->h = PVT_SERIES6_H_CONST;
+>> +             ts_coeff->g = PVT_SERIES6_G_CONST;
+>> +             ts_coeff->j = PVT_SERIES6_J_CONST;
+>> +             ts_coeff->cal5 = PVT_SERIES6_CAL5_CONST;
+>> +     } else {
+>> +             dev_err(dev, "invalid temperature sensor series (%u)\n",
+>> +                     series);
+>> +             return -EINVAL;
+>> +     }
+>
+> switch-case? 
+
+Changed to switch-case (will be part of v4).
+
+--
+Thanks, Eliav

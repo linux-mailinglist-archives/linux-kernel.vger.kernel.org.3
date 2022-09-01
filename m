@@ -2,102 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98B0F5A9EA7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:08:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 325F95A9EBB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234336AbiIASIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:08:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54074 "EHLO
+        id S233668AbiIASOJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:14:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234306AbiIASIE (ORCPT
+        with ESMTP id S229781AbiIASOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:08:04 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C049550BF;
-        Thu,  1 Sep 2022 11:08:03 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id BB4DF6CD;
-        Thu,  1 Sep 2022 20:08:00 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662055681;
-        bh=YMIi5UBpbzantzAuqdDxtUWjhWEbfNnLmbHpGpFj4hA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uP4w2XjNoWnYv+NUW1ikTgl4PQ6YdmfO4kGwEQOohDS6HFacyg1DmN0lC0SujVq7n
-         1Fm+7l28dNUIRjUsOmyNfzGwpwgDOc+FqWNeAA5YCIWheoDVA2ZuTxrRJ+ccrxE0q+
-         sfoDf/26SCpwQQIqow8iJXiU/NN3mBVY5+ZeYjXw=
-Date:   Thu, 1 Sep 2022 21:07:49 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: imx8mp-verdin: add dsi to hdmi
- functionality
-Message-ID: <YxD09SqpcbB3dt8I@pendragon.ideasonboard.com>
-References: <20220901154051.1885509-1-max.oss.09@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+        Thu, 1 Sep 2022 14:14:07 -0400
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AB06246DAE
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 11:14:05 -0700 (PDT)
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+        by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 281I7qru032240;
+        Thu, 1 Sep 2022 13:07:52 -0500
+Received: (from segher@localhost)
+        by gate.crashing.org (8.14.1/8.14.1/Submit) id 281I7phS032237;
+        Thu, 1 Sep 2022 13:07:51 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date:   Thu, 1 Sep 2022 13:07:51 -0500
+From:   Segher Boessenkool <segher@kernel.crashing.org>
+To:     Gabriel Paubert <paubert@iram.es>
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2] powerpc: Fix irq_soft_mask_set() and irq_soft_mask_return() with sanitizer
+Message-ID: <20220901180751.GH25951@gate.crashing.org>
+References: <c0b486e782b6695092dcdb2cd340a3d44c8c266d.1661272738.git.christophe.leroy@csgroup.eu> <CMJ3VICKD1CI.SVFJOKYJPKZQ@bobo> <e022754d-b4d3-bc9f-cc79-2cf556180459@csgroup.eu> <CMJ8P06JA9OY.1S8VDV2XRU3W5@bobo> <7c11b659-5b8e-256c-508e-39395041fccb@csgroup.eu> <20220831224522.GX25951@gate.crashing.org> <ad5ebb37-6b6f-372c-dd07-fc4cfc5f5fe5@csgroup.eu> <YxBhRtTuJ4Ut7wUt@lt-gp.iram.es>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220901154051.1885509-1-max.oss.09@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YxBhRtTuJ4Ut7wUt@lt-gp.iram.es>
+User-Agent: Mutt/1.4.2.3i
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
-
-Thank you for the patch.
-
-On Thu, Sep 01, 2022 at 05:40:50PM +0200, Max Krummenacher wrote:
-> From: Max Krummenacher <max.krummenacher@toradex.com>
+On Thu, Sep 01, 2022 at 09:37:42AM +0200, Gabriel Paubert wrote:
+> On Thu, Sep 01, 2022 at 05:22:32AM +0000, Christophe Leroy wrote:
+> > Le 01/09/2022 à 00:45, Segher Boessenkool a écrit :
+> > > I would have used real assembler code here (in a .s file).  But there
+> > > probably are reasons to do things this way, performance probably?
+> > 
+> > We changed it to inline asm in order to ... inline it in the caller.
 > 
-> Add the hdmi connector present on the dsi to hdmi adapter now
-> required by the upstream lontium bridge driver.
-> The dsi to hdmi adapter is enabled in an device tree overlay.
+> And there is a single caller it seems. Typically GCC inlines function
+> with a single call site, but it may be confused by asm statements.
 
-Shouldn't the connector also be in the overlay ? There's certainly no
-physical HDMI connector on the i.MX8MP Verdin SoM :-)
+"Confused"...  It might estimate the assembler statement to be
+significantly more expensive than it really is.  The compiler has to be
+somewhat conservative, to be able to generate code that can be assembled
+without errors.  It counts instructions by counting newlines and semis
+and that kind of thing.  Since GCC 7 there is "asm inline", to make the
+compiler think for inlining purposes that the asm outputs minimum size
+code.  You can use asm_inline in the kernel for this.
 
-> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-> 
-> ---
-> 
->  arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> index 76cc89296150..bd84a0d135dc 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> @@ -59,6 +59,14 @@ button-wakeup {
->  		};
->  	};
->  
-> +	hdmi_connector: hdmi-connector {
-> +		compatible = "hdmi-connector";
-> +		ddc-i2c-bus = <&i2c2>;
-> +		label = "hdmi";
-> +		type = "a";
-> +		status = "disabled";
-> +	};
-> +
->  	/* Carrier Board Supplies */
->  	reg_1p8v: regulator-1p8v {
->  		compatible = "regulator-fixed";
+> > I also find that those operand names make it awull more difficult to 
+> > read that traditional numbering. I really dislike that new trend.
 
--- 
-Regards,
+Yup.  All the extra markup it needs doesn't benefit readability either.
 
-Laurent Pinchart
+> > And same with those // comments, better use meaningfull C variable names.
+
+I wrote:
+
+> > > Comments like "// Inputs" are just harmful.  As is the "creative"
+> > > indentation here.  Both harm readability and do not help understanding
+> > > in any other way either.
+
+This is a comment trying to explain (GNU) C syntax.  I certainly agree
+that variable naming is very important, but this was meant as commentary
+on a worse comment offence :-)
+
+
+Segher

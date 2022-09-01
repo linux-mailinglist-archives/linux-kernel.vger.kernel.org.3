@@ -2,105 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8EA5A8D6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:36:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB39C5A8D70
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233086AbiIAFg3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 01:36:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51492 "EHLO
+        id S232648AbiIAFkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 01:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbiIAFg0 (ORCPT
+        with ESMTP id S233090AbiIAFkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 01:36:26 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam07on2050.outbound.protection.outlook.com [40.107.212.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B0B4D87FF;
-        Wed, 31 Aug 2022 22:36:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Tb8XSFu/PQ+76NAFHXeWawIJOLDWlM5P0W2LETV7KrSgUNSGQ+af4dr+tXtvZFgDhTVjhH4Z0ExJHfUVwoGPZnpFn6c1bjI8SuXcjHFDI9KQah6i+QYojUsRVOyPCno3jLy+6PU3E6CsJiY9PfOGwIuPbjaXKGwv+oTA59OdMiTSwFgwjRQ/JJGaBjhQDgq15Oxbvouu2/a/A4yMttdLagkLAqtRdW4xhWVgP2R3rv2FRtNp7MhdR6UyzzJGDNpxkHpstD7i8bZT1BoyFze91CXHKeR2tLI0xvQjSd5BIULuJrNLXjourplJ4vtGdAITs+yH6UsxIOMGFdEWn09+3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l2HG/id/6/6W+u0xfRmx9BYPPymW5Qt2Ywzom8uHqYs=;
- b=Xxen6zkyE+0g2HTmle25POvT3ul2ATX5juPxa5FQnWzY2cNz/2TXbP0pqOskY6xLk4UtIigvT00XqZa4nq9oxoJgsU1t1mUHC55fsbGdp337Lqp5BLXPp97y6AWSU+dX0LwsUr4uRLYxuYjal+3h3e2LRDvhcKrO5rofmx/2zNBBRrw4AYLnngO1zdmctzsavxRtaNBsX93hVoVi28dy9eG/qCjwkW+gUwNmmGAAkTfAMMqcMlMKEcUIwZ8fsz4RhAfkTk/mZr3F5aqMESaGXqJeS0NKI3dpSEjrBuvjeNbv0aZZgpYpYJbsFD29g7psQu72KK+VMRONVfWWVMQ6iQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=huawei.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=l2HG/id/6/6W+u0xfRmx9BYPPymW5Qt2Ywzom8uHqYs=;
- b=LLwGhkUOtVwWBPdozNlpRzrsaqDUo+fiLi6l6vYs2bBR0AYeKAg3JwTibGZeevVS1JAHT9kUzH77PTrToVKYeqxi9b3U/xb2JDeFO2q2Xx2bsClJBzeH73FUPi46J+3luK0sdhDkYtGudJe2owgD682aoWKp0T7AuDJ+9JQaAPE=
-Received: from DS7PR07CA0021.namprd07.prod.outlook.com (2603:10b6:5:3af::23)
- by CH0PR12MB5281.namprd12.prod.outlook.com (2603:10b6:610:d4::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
- 2022 05:36:23 +0000
-Received: from DM6NAM11FT016.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3af:cafe::7) by DS7PR07CA0021.outlook.office365.com
- (2603:10b6:5:3af::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10 via Frontend
- Transport; Thu, 1 Sep 2022 05:36:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT016.mail.protection.outlook.com (10.13.173.139) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5588.10 via Frontend Transport; Thu, 1 Sep 2022 05:36:23 +0000
-Received: from rric.localdomain (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 1 Sep
- 2022 00:36:20 -0500
-Date:   Thu, 1 Sep 2022 07:36:17 +0200
-From:   Robert Richter <rrichter@amd.com>
-To:     Jonathan Cameron <Jonathan.Cameron@huawei.com>
-CC:     Alison Schofield <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Subject: Re: [PATCH 03/15] cxl: Unify debug messages when calling
- devm_cxl_add_port()
-Message-ID: <YxBE0U4WyBeAc3R+@rric.localdomain>
-References: <20220831081603.3415-1-rrichter@amd.com>
- <20220831081603.3415-4-rrichter@amd.com>
- <20220831105945.00004668@huawei.com>
+        Thu, 1 Sep 2022 01:40:01 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D83B12AAF;
+        Wed, 31 Aug 2022 22:39:57 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2815dfXP039408;
+        Thu, 1 Sep 2022 00:39:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1662010781;
+        bh=CLucAmRdzDQNvBoahPBI20arD+x2VD/6P7PmYblwV0w=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=PtqD6COknhqeDRNxeq7zKOLAKIJ520MiOV7zYVHpHL/wP/0NWXSM3sYK/pJhT8XGz
+         w2SOohw4tDw+/+1jy2CDvrajXYvUQqagVMIjQimgiQHtD0plXV4mG29vggaAqRqbQg
+         f1ykGIwKo2Bfew8PM9XH/cLXaBUZ5m/S7W35X39U=
+Received: from DFLE110.ent.ti.com (dfle110.ent.ti.com [10.64.6.31])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2815dfLt017466
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 1 Sep 2022 00:39:41 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 1 Sep
+ 2022 00:39:41 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 1 Sep 2022 00:39:41 -0500
+Received: from [172.24.145.182] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2815dbxu031523;
+        Thu, 1 Sep 2022 00:39:38 -0500
+Message-ID: <f4b54ddb-3364-e765-f683-9af19076db13@ti.com>
+Date:   Thu, 1 Sep 2022 11:09:36 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20220831105945.00004668@huawei.com>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: f1d073fb-9c15-4216-ee26-08da8bdbe7f5
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5281:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bs7RRob/ley/ztWxJo397SD1D0PNUYPK0HLrY1pQKW0249vog/n0ApwdhskThlEjM6EQEPqXwBBz3zUywdaarGw4WdQVSFLbrt5unqU8Lqp/w4RBfBl4Hd7Y0qLMM2r4vG0ZT0Nmc1yRYctJs9/py2D0tVv0kakDTF0T/spAGOiW5y2jQyE4tA2VyirCRoY/GkjP63LLxSysSYh7AmhiF0775YWKBrQ/yDZT8ZbwQjtbJU0WD8CbBh+hOT7SQs2FbnyYRX+SADOSWLs/x61gmRQ0gkJEEbWWUAVSwQzmYRUMfHwMQf1/EqgNWWm6Skz7qEhyxDYAOCw+H/FMxpurksrEz6g9JRCDzVa1QKhpjZ194e3AmCReTk1T57Kfauy4LxiUL5X/qtLhxPPQ0pp/DJCfQIT/Wgxbm4iPN8iv0+KydQmcvw5nnqiT07pvMl32bUwB4+vK1OTLsR7R+Q69HKfYdbgpPQdbVsmQUXXPZYmEdq/K1nCYVqU9WilojsW7RacXUnAifosg+L5TczkryzGhs+uRAMCczbpgU+YVZ1DXNd03eR8vNjb/LQTaHp/lmiOwYnktV7akSnNeIbQb4si+aIOMeWK6Leec2FKirCFeJaHP4spmRqEYTUsYukOmqy7wh5RxcdJVx6bAftpru9bfLga4OWzA/VcI4SouU9a4Bu+74h2EUHuG9GsKamoe6jfTDycPxefzPjnINcty+pYH+8ewbmToYu6S4J2O89z6SLyLQBwRml//oW3RBCH1FkkkN0uOBW2hAVuYukWtYUyEVaYx4Y9RqxPdeKTG679tr+zdsyXOqzrDXw5G5VPq
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(396003)(376002)(346002)(36840700001)(40470700004)(46966006)(70586007)(70206006)(4744005)(5660300002)(15650500001)(7416002)(4326008)(8936002)(8676002)(6666004)(478600001)(316002)(6916009)(54906003)(82310400005)(2906002)(41300700001)(336012)(81166007)(426003)(186003)(47076005)(26005)(7696005)(9686003)(83380400001)(53546011)(82740400003)(40480700001)(40460700003)(36860700001)(16526019)(55016003)(356005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 05:36:23.1161
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f1d073fb-9c15-4216-ee26-08da8bdbe7f5
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT016.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5281
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 3/4] arm64: dts: ti: Introduce AM62A7 family of SoCs
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, Bryan Brattlof <bb@ti.com>
+References: <20220829082200.241653-1-vigneshr@ti.com>
+ <20220829082200.241653-4-vigneshr@ti.com>
+ <dc971b60-c2be-aabb-20d6-181ea34d55c4@linaro.org>
+From:   Vignesh Raghavendra <vigneshr@ti.com>
+In-Reply-To: <dc971b60-c2be-aabb-20d6-181ea34d55c4@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,23 +73,143 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.08.22 10:59:45, Jonathan Cameron wrote:
-> On Wed, 31 Aug 2022 10:15:51 +0200
-> Robert Richter <rrichter@amd.com> wrote:
-> 
-> > CXL ports are added in a couple of code paths using
-> > devm_cxl_add_port(). Debug messages are individually generated, but
-> > are incomplete and inconsistent. Change this by moving its generation
-> > to devm_cxl_add_port(). This unifies the messages and reduces code
-> > duplication. Also, generate messages on failure.
-> > 
-> > Signed-off-by: Robert Richter <rrichter@amd.com>
-> 
-> This is one for Dan etc as it is mostly a question of how verbose we want
-> the debug prints to be plus preference for caller or callee being
-> responsible for outputting this sort of message.
 
-Esp. together with dyndbg this is very useful as you can get a whole
-picture of the port enablement.
 
--Robert
+On 30/08/22 15:26, Krzysztof Kozlowski wrote:
+> On 29/08/2022 11:21, Vignesh Raghavendra wrote:
+> 
+> (...)
+> 
+>> +		/*
+>> +		 * vcpumntirq:
+>> +		 * virtual CPU interface maintenance interrupt
+>> +		 */
+>> +		interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +		gic_its: msi-controller@1820000 {
+>> +			compatible = "arm,gic-v3-its";
+>> +			reg = <0x00 0x01820000 0x00 0x10000>;
+>> +			socionext,synquacer-pre-its = <0x1000000 0x400000>;
+>> +			msi-controller;
+>> +			#msi-cells = <1>;
+>> +		};
+>> +	};
+>> +
+>> +	main_conf: syscon@100000 {
+>> +		compatible = "syscon", "simple-mfd";
+> 
+> No, these are not allowed alone.
+
+Will add device specific compatible
+
+compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
+
+> 
+>> +		reg = <0x00 0x00100000 0x00 0x20000>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0x00 0x00 0x00100000 0x20000>;
+>> +	};
+>> +
+>> +	dmss: bus@48000000 {
+>> +		compatible = "simple-mfd";
+> 
+> No. Not allowed alone.
+
+This can be "simple-bus". Will change accordingly
+
+> 
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		dma-ranges;
+>> +		ranges = <0x00 0x48000000 0x00 0x48000000 0x00 0x06000000>;
+>> +
+>> +		ti,sci-dev-id = <25>;
+>> +
+>> +		secure_proxy_main: mailbox@4d000000 {
+>> +			compatible = "ti,am654-secure-proxy";
+>> +			#mbox-cells = <1>;
+>> +			reg-names = "target_data", "rt", "scfg";
+>> +			reg = <0x00 0x4d000000 0x00 0x80000>,
+>> +			      <0x00 0x4a600000 0x00 0x80000>,
+>> +			      <0x00 0x4a400000 0x00 0x80000>;
+>> +			interrupt-names = "rx_012";
+>> +			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+>> +		};
+>> +	};
+>> +
+>> +	dmsc: system-controller@44043000 {
+>> +		compatible = "ti,k2g-sci";
+>> +		ti,host-id = <12>;
+>> +		mbox-names = "rx", "tx";
+>> +		mboxes= <&secure_proxy_main 12>,
+>> +			<&secure_proxy_main 13>;
+>> +		reg-names = "debug_messages";
+>> +		reg = <0x00 0x44043000 0x00 0xfe0>;
+> 
+> First compatible, then reg, then the reset of properties.  This applies
+> everywhere.
+
+Will fix
+
+> 
+>> +
+>> +		k3_pds: power-controller {
+>> +			compatible = "ti,sci-pm-domain";
+>> +			#power-domain-cells = <2>;
+>> +		};
+>> +
+>> +		k3_clks: clock-controller {
+>> +			compatible = "ti,k2g-sci-clk";
+>> +			#clock-cells = <2>;
+>> +		};
+>> +
+>> +		k3_reset: reset-controller {
+>> +			compatible = "ti,sci-reset";
+>> +			#reset-cells = <2>;
+>> +		};
+>> +	};
+>> +
+[...]
+>> diff --git a/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
+>> new file mode 100644
+>> index 000000000000..fe6d682a0f33
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/ti/k3-am62a-wakeup.dtsi
+>> @@ -0,0 +1,54 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Device Tree Source for AM62A SoC Family Wakeup Domain peripherals
+>> + *
+>> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+>> + */
+>> +
+>> +&cbass_wakeup {
+>> +	wkup_conf: syscon@43000000 {
+>> +		compatible = "syscon", "simple-mfd";
+> 
+> No. Not allowed alone.
+
+Will change to
+
+compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
+
+> 
+>> +		reg = <0x00 0x43000000 0x00 0x20000>;
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0x00 0x00 0x43000000 0x20000>;
+>> +
+>> +		chipid: chipid@14 {
+>> +			compatible = "ti,am654-chipid";
+>> +			reg = <0x14 0x4>;
+>> +		};
+>> +	};
+>> +
+> 
+> 
+
+Thanks for the review!
+-- 
+Regards
+Vignesh

@@ -2,76 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56CA65A8BC4
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 05:07:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1D785A8BC2
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 05:07:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232254AbiIADGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 23:06:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S232408AbiIADGa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 23:06:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229706AbiIADGW (ORCPT
+        with ESMTP id S229601AbiIADGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 23:06:22 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 242EBE7274
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 20:06:18 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id y1so14013033plb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 20:06:18 -0700 (PDT)
+        Wed, 31 Aug 2022 23:06:24 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30457E68F0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 20:06:16 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d12so15864038plr.6
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 20:06:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=jzys6zYw+Q1prsW6OWxyYvYOSLZd2kL6s95paGupV2g=;
-        b=F5nSQkcMwejQysNXHC8CODiyUdITMnG0y4pu5ezM7eQhyrOkVf8jYUGpo+uxfb5E2w
-         W0YMBn1yRnYHaR1uQodK+elIfSQQhzjkfXuJnl7IS6lwrpLXbtxK8E6M9Vno1fwWoMNk
-         b8NuNowjd9h+6EFiay8NfIbamRPLv5JkXrsoE=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=HBoZfnQNI+HfqlpbIESjGhVcV3oI45aOaNXfV3ZCT+M=;
+        b=eTuTwVYJ0tOmU7pb1JotZVoA2KlqihO9iBSjlDBRFwaMAH5iJ1lsOrdpz2Pe913xHf
+         8NqsUwncBSOtPvPbdv1/ONLmyfZ1lNFYDZ81/b/dFd6dBsv/uifMvEE+GJzCeiWHwfX6
+         x7FyuJIu4a/fYrGZJECePZTFpQ3sIYahfwxyQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=jzys6zYw+Q1prsW6OWxyYvYOSLZd2kL6s95paGupV2g=;
-        b=guAwi8NLb6SyZVRbTIikXi0Wjz1a3StkmNfI2hmlCav3yTFdsuGWMeOywcnUG3XCND
-         dyUNZy14K1hkthGY04RwS8gXAcFneJ5Es3P4hufr2Q7+Eka5r98G/pznVh3tv9T2Wwt+
-         nnUKgHFplk2j9Rgdd5NxhXaeuj38G7YoFXBuNXssyI2u//6VJ/mEwWHglv6eiB6Cuwxy
-         Zcd/1PY0g0YXxfXdzkbWTELmKfjaIZPM5QeynKasWSDrZl+44WEBLLPsxJ/iNqHwSSXe
-         WAjBhaVgPWrAxlU6VKHvRiXjH9MZ0ODIZEHKhtgPAaWUy4m0YAi1j/ymvq71tXvNaTIN
-         tCpg==
-X-Gm-Message-State: ACgBeo1yQL06w4rkW7VTfjvHCtKnf48sSgjY43KFiFoZ3vtjk29Swkvt
-        YJyAsFDNwAE7a0zkIoNqY2/CWw==
-X-Google-Smtp-Source: AA6agR7Sw+dqFlOTeUmZaBwOiuN/kmajQej38R1obITTaafcexZiEYqlr48/2rV64Jg66rGyJ7IGUQ==
-X-Received: by 2002:a17:90b:293:b0:1fd:7caa:e324 with SMTP id az19-20020a17090b029300b001fd7caae324mr6512598pjb.11.1662001577713;
-        Wed, 31 Aug 2022 20:06:17 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=HBoZfnQNI+HfqlpbIESjGhVcV3oI45aOaNXfV3ZCT+M=;
+        b=VKK+I74pCmV8OURu7pUt6zD6t2ctn6uBk4n8i/ZciX01kSJzXq8FZYFpQBI9o/i1+g
+         isVEJIbOqrb3aWhfLPfGKh852gLSauyzwqXv6P2SpksY9uK5OTbN2KUPgfSc9sZuYzI2
+         hEGSwQgKcmu+L4EhzTJvXn9SFxo1Y2EjNwiXyyYIn3rMqvcUxiI0IA3p847Z8MrfV2Ji
+         ie2kvvoikyAWdKGMk4yNKk3hQgC6EAYXqCLuDuEfHwusuJy/OHpQAhOew0h5aC7Xhgkn
+         /VhoCOrkP0B/XS9FCDioRb6bD+Y3E4QGLonhbVv28wqbjq/pb/WpL6dJyqp3JXNCKS0n
+         0wvA==
+X-Gm-Message-State: ACgBeo1m7p9pEm3eIk1x7SCBi9GUEyAstA/Duqb2TxnqPLdMH26tA0sp
+        qM3rQVzRnp766EytYZ+ZkdNyQg==
+X-Google-Smtp-Source: AA6agR5/U6baaN5sD2EdExrJ5F5GC2Bv1QNsCjGqfLFKYQTmttofQxGHKCgZ2TpKIwzvQ9M5FDgCag==
+X-Received: by 2002:a17:903:2d0:b0:172:b63b:3a1e with SMTP id s16-20020a17090302d000b00172b63b3a1emr28934419plk.76.1662001575695;
+        Wed, 31 Aug 2022 20:06:15 -0700 (PDT)
 Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id q63-20020a634342000000b0042bea8405a3sm4027035pga.14.2022.08.31.20.06.14
+        by smtp.gmail.com with ESMTPSA id u17-20020a627911000000b00536b975b013sm11958015pfc.24.2022.08.31.20.06.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Wed, 31 Aug 2022 20:06:14 -0700 (PDT)
 From:   Kees Cook <keescook@chromium.org>
 To:     Jakub Kicinski <kuba@kernel.org>
 Cc:     Kees Cook <keescook@chromium.org>,
-        Pablo Neira Ayuso <pablo@netfilter.org>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Paolo Abeni <pabeni@redhat.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
         Jozsef Kadlecsik <kadlec@netfilter.org>,
         Florian Westphal <fw@strlen.de>,
         syzbot <syzkaller@googlegroups.com>,
-        Yajun Deng <yajun.deng@linux.dev>,
+        Yajun Deng <yajun.deng@linux.dev>, netdev@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
         Oliver Hartkopp <socketcan@hartkopp.net>,
         Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        linux-hardening@vger.kernel.org
-Subject: [PATCH 0/2] netlink: Bounds-check struct nlmsgerr creation
-Date:   Wed, 31 Aug 2022 20:06:08 -0700
-Message-Id: <20220901030610.1121299-1-keescook@chromium.org>
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH 1/2] netlink: Bounds-check nlmsg_len()
+Date:   Wed, 31 Aug 2022 20:06:09 -0700
+Message-Id: <20220901030610.1121299-2-keescook@chromium.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220901030610.1121299-1-keescook@chromium.org>
+References: <20220901030610.1121299-1-keescook@chromium.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=711; h=from:subject; bh=AnHz3m3mc0z+GZYjU6Piduca0GteHs1YZz+sSzFG5+Y=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjECGh7nSUR2+OcGMxUlRYtLO5qXb0hG272l98gx5I 0dRnn7aJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxAhoQAKCRCJcvTf3G3AJi9zD/ 9Y789r9orV98vIr8AJnnmPwd42aVbjUD0uuHQMvUOaB2uwFrsuer7Vj9UlBZpFabqvSUoktYZAkAXM M7zbZN/1K3fIWBczSXU30vjTEy3IhbQVQjYutjnN10gwX4c+dLp3TJI+J5JhPI4xJlp/zcdVv2ueh5 qdm8MphncPkPbftKkJUIIOi9wmooz1AyTHH10CXz6oFZ+ATk6lwMEzvFW0pF8cE/E9juA9bogtvLC8 XD07LfP2xRV3GZT77FzIvVlvY8W5ifHjA3lOaiJ9MY905mklwQ+5ZDmDyBwzMqstNl2aouoFIKmcYU O2VpuVaKH/k4QL2oKPIiR5ep8E0Drb4QYby9ZNKX6PjpVEd9y+wqN+cEyfaRzblIwMTYYdOsP7THKR zhBB64gJJdRrH3qKetnto0g+9JVUBPcL/57cAbny3NdMMUOt/pLWZnpHXEWZOL+DBG28b0o5vwP+TI uFpQXIrQp+hyes/kL7UnXCunvpcWQm0T9BQUOH/yYVtIjKjX7w0KyPNmKrAr+VOzj0v+/IOWZe4I1f CPxmSKfcaYUME1wxX27uPbsHI0zxdJJlHfF4/T8iFf5QkMtmrCFMirB6ORwxA698IfFf2bDzH0cSGi MDeSpINnYWiug34OUnzNUB8BpzuXeeaZMZazcZKdX9B4L0hc1S5zccLOtPPg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1489; h=from:subject; bh=kTIzPiI3XGTCF2tMjW+3PGFXwtUGmpz93ALVlrdAflg=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjECGinowdI8+RbQIJuuvIuxm1f6BHZsT/hX1WUouh UA4VBdSJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxAhogAKCRCJcvTf3G3AJlauEA Cjt6bHTa4IjL851iMSju08HCU9JQ6MwajPOCSHt4nnmCGRsSHXlfDDjuj2d58oqlprjPDnQfZud9FS DudDKadlPVZaEtXzu48IydekR5zXcFEBQxZ5bXgNrxSifHhPUy+5OAaJ3fNWmlhY2rh5ANa+rup4Rq VAq5mVSdWRlDQybKX6CmAVsa/vIbuwPHbRaYYX3/3g1/fDO5dwKs67QQ8QCq4OU8RVGLrJgWHJGmu0 mWZhKMqxJq2vcnGtKuo3BVdkgnAxBq3qgOJpMB8Ww45MyWkueEe2xsZ14gDzlMf2cnPwnqsjL5fbPz DnEOtSBNhoBrhTqp4CTuw8P/O/+UVvfcf5DnVhbD8TbPKU/yxmwWqbNQKfv7ullrEcskEGcCGmvhEJ lot0bIf3p/Ac8IRtXqoj+6lX9oOCAiJcx1Qhn7Cdel2YiRdliYS1GkJMiM3TFbXqXuNaX5kyAte9oJ /E2bNIkA3HSZjRGVZVjs5JehwOj6RKLaECUgTLzi6Jl3jJ/RKe3Gp3c8ysX3uCoj8o7OCNiDsFP8Is L00xAMueWLjxGfSChP0JJGc/SSOu17Vl8nGpk08bP/NHhQ0WZpntJbrnLPqinCibDd3mJoAjWPAS0x 6qeYdXnqrYDsDocjZeW1zdzaGdldu7u7vWN9p5o6DM2I3BMsjWCbilArMPAw==
 X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,25 +80,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The nlmsg_len() helper returned "int" from a u32 calculation that could
+possible go negative. WARN() if this calculation ever goes negative
+(instead returning 0), or if the result would be larger than INT_MAX
+(instead returning INT_MAX).
 
-In order to avoid triggering the coming runtime memcpy() bounds checking,
-the length of the destination needs to be "visible" to the compiler in
-some way. However, netlink is constructed in a rather hidden fashion,
-and my attempts to wrangle it have resulted in this series, which perform
-explicit bounds checking before using unsafe_memcpy().
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Jozsef Kadlecsik <kadlec@netfilter.org>
+Cc: Florian Westphal <fw@strlen.de>
+Cc: syzbot <syzkaller@googlegroups.com>
+Cc: Yajun Deng <yajun.deng@linux.dev>
+Cc: netdev@vger.kernel.org
+Cc: netfilter-devel@vger.kernel.org
+Cc: coreteam@netfilter.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ include/net/netlink.h | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
--Kees
-
-Kees Cook (2):
-  netlink: Bounds-check nlmsg_len()
-  netlink: Bounds-check struct nlmsgerr creation
-
- include/net/netlink.h             | 10 ++++++-
- net/netfilter/ipset/ip_set_core.c | 10 +++++--
- net/netlink/af_netlink.c          | 49 +++++++++++++++++++++----------
- 3 files changed, 49 insertions(+), 20 deletions(-)
-
+diff --git a/include/net/netlink.h b/include/net/netlink.h
+index 7a2a9d3144ba..f8cb0543635e 100644
+--- a/include/net/netlink.h
++++ b/include/net/netlink.h
+@@ -576,7 +576,15 @@ static inline void *nlmsg_data(const struct nlmsghdr *nlh)
+  */
+ static inline int nlmsg_len(const struct nlmsghdr *nlh)
+ {
+-	return nlh->nlmsg_len - NLMSG_HDRLEN;
++	u32 nlmsg_contents_len;
++
++	if (WARN_ON_ONCE(check_sub_overflow(nlh->nlmsg_len,
++					    (u32)NLMSG_HDRLEN,
++					    &nlmsg_contents_len)))
++		return 0;
++	if (WARN_ON_ONCE(nlmsg_contents_len > INT_MAX))
++		return INT_MAX;
++	return nlmsg_contents_len;
+ }
+ 
+ /**
 -- 
 2.34.1
 

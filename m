@@ -2,158 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CD75A9CC1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A9945A9CCC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:14:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234956AbiIAQMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:12:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S235008AbiIAQN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234385AbiIAQMl (ORCPT
+        with ESMTP id S235002AbiIAQNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:12:41 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2064.outbound.protection.outlook.com [40.107.94.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5131E5F11B
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:12:39 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Bj7sD2jj5lxKczLibmXGClaW8nMYONaoIHy8EpqZDtQocWpJTHA0PCLMnMnBmbo98G3sfHHMgyQtApn/q4dnkNN9c8jTLdqPZs568o90VOMNAfJ0RNPho6EcgX/dVmmtQkrqyNbabYeN9diqg5KPu2HOZFDITxaQrZoTm+Ag5gYeJdheJcMIvdPy+Lku2iYI15gYbjC7i88RBZUpZmnSKn61YXP6s4Veh6CdGLPUc7mXfUr4x2CuvJ4jTl8QqtgwnVuIpOO2B+fUqbYaJ7syCJEp4PoYZj1BaYr8MBJw6do5Nr5PMVbag7eiccD+71ONJm3BCa83rtlj+Y2FzJx/ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=isp4kMHbDFVMPlzaXPnqg7e7eggzAKIZoaGlc0geB8k=;
- b=U0wAXhp/pMJLV7smDqhD92y7+d//IMQcOiuyk7bcgCUA9e5hlMTUMRTGx8m+Ymvpw0GWvl1atMMWBextPFNqekelftyTDIT9zEBK+NDqHuCjdYP1fNViWuVx1rE720CtyHCnTxJPnBzCfqP/cn8ObV7T/PId8R5azdRTnxOYsDME/JLS3aictpqHqFp4WKIqkUym2kS9vD2L22swNu23mUfUYM3lNC8xY7vGsWRYom0SE9ciky0zLgpxGxpbgpncFNJOvSKBDrBEt9wJ8Vhg4fd/XVDVg/+5Vq0NWydvM12uGR9BLmwxCLbt59Egjuq+qUHywxhsPp4tH6P1eU7L3g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=isp4kMHbDFVMPlzaXPnqg7e7eggzAKIZoaGlc0geB8k=;
- b=m4Da4TnGXEQJDw4JHtP+iODmZaS0cJimk3Occut+ZKK5L1uj0cAGzeaiY5hnn0b4mx2a8L8DzFoBxNsPNkHBVOEkaM+l3ZNthol+hWZCE2bVg5gLJCD06l8CSRS84YDOD4Bjq1WYWGwK4o1VTVZ4DW4zuBZ95uE/VId1P/w8z6b40vvjdIOickP2Koy6Xxmn5ngAhj9FJqWj9y23M8GUZMGgiTWm+b8cKWkjhVDjQh1l5FUp5adV8WAZs8RLBZICDJC685ARhsb0wy5UBXpMp7rOIgXwILOHJVarDv6T3RnSnwNBOaoM3HKqniuC7eoHFmxN6+2A8soC7d1nqQAUqg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by SA0PR12MB4573.namprd12.prod.outlook.com (2603:10b6:806:9c::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.21; Thu, 1 Sep
- 2022 16:12:37 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%7]) with mapi id 15.20.5588.012; Thu, 1 Sep 2022
- 16:12:37 +0000
-Date:   Thu, 1 Sep 2022 13:12:35 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sasha Levin <sasha.levin@oracle.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Jerome Marchand <jmarchan@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>, Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
-Message-ID: <YxDZ86XW3hPcJtPX@nvidia.com>
-References: <20220901072119.37588-1-david@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901072119.37588-1-david@redhat.com>
-X-ClientProxiedBy: BLAPR05CA0032.namprd05.prod.outlook.com
- (2603:10b6:208:335::13) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 1 Sep 2022 12:13:40 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A3B91D0A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:13:39 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id w8so16081147lft.12
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:13:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=/h8fdpcLhY4wu6EZotB0ad3yUb1WuRgsZLCw3g30N7s=;
+        b=AL58HhQtL8dAINZDiR9Jy7SCy6M1Dh/RHGgmNLEaJXlbv04ar66bwmzyAjo/AkOzfM
+         HLA0NmZy0HcVlc//0crt4Y78sdwVeYZTRZLrBnkasm5jDooceRFzNsWaHLxzN64ZSxio
+         ARI582Qi7CFJFX8Ee2UaYuB2gR/LGnTLRoevMAjhm+l3ZrZYgQFCzaEnSEm3xa/MpFy/
+         77VlrEwioFsuiM0TPssqXQmgUBrbaSOeTKg5tc+GlAqSsBC6dVQCIat3X4ER7Td7kPzV
+         uJEEZaN9PXuPkfjY9VlCDcFrxKsmrWV+aOyykph5dmYow4TwiBnkEUxNd53xh2ZdcbG8
+         FgLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=/h8fdpcLhY4wu6EZotB0ad3yUb1WuRgsZLCw3g30N7s=;
+        b=16BOJx1X9ylO2cFwpXf1pD2+z1WqZ+GM9nUJQUYnh2Kw5zY86mTbt83fGpzjD02ePw
+         1qZclc81Rcg5wcR4bfg3Cy96At5lSTnntOLVqoMbvZt29qmb86G+kBdED2iQMD/72B/i
+         7K8SPVKiyV8R2AQhFZoBMQMzrQW/7ETSyHQnMpfGcku3H/ulnEWydSF+rbD1VDwZ6LV2
+         vFVaxzXMzYE0UMOapORi6hboU8P2lhBXHzHLh4mGf7vlPjpnF/7UdNjppE26gvNLxI7E
+         ZUguP/7++b9FbbioIr2AmUn9r9WerCxBfCtOFnGFMVze6kOgZaB4By+0CIXF9wWQCjuN
+         nKHQ==
+X-Gm-Message-State: ACgBeo3jwVyc/u3P7BYqJ5glcuz+sWREA3QHnRUzjNR3LWwq4m9Ntjvf
+        Pw3ZcqFWyaXmaTehbRCZXqBDeQ==
+X-Google-Smtp-Source: AA6agR4WPGNknCusu5ZB4w+TzAKz+hU2cGpzNsGUYnCdtjfKXHgQ3HQZ0okBViuMoNSFRKc4vQ/Vdg==
+X-Received: by 2002:a05:6512:6c8:b0:494:796e:93b6 with SMTP id u8-20020a05651206c800b00494796e93b6mr4379172lff.213.1662048817367;
+        Thu, 01 Sep 2022 09:13:37 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id m9-20020a197109000000b00485caa0f5dfsm2389640lfc.44.2022.09.01.09.13.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 09:13:36 -0700 (PDT)
+Message-ID: <a0204dc3-af13-6b0b-d779-0f207d1aff7e@linaro.org>
+Date:   Thu, 1 Sep 2022 19:13:35 +0300
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0f0e5e35-bb6a-4f36-dcc4-08da8c34c970
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4573:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: fJTySVWnu8zowj1NIP/eEUPfnmvgORvzfdeyzBQSbLVUbyfD7NjYB2L8isbAeXkOLMpxbk3NKiaetBM1NCZKh1CULQ2Gq/xvQ7OiXSkqibFWWr96d5Np8fNdBJz5kJNzFOWfcjWzsbfgXlm+MuSqWlwZNBspURFHWKmE9UWqDT4DkbPLh8WQBqfiEQw+m1tk3+PnK1ggPXqDS9oiyzNYHGcYjwIOO1mME8bM4Qa4AcMAXmFWl685VX4xJz/R+PsoRG1OanWVmcEouSAy5bv5rPMSFpFzMOLqfKcy9bZ9Vzb96VtSzux18YTF+xYwcQYJswbiZCHPapQgO2mkpYuxpKvdAl6FgzVMI+O6nw7yUHGGIDc1APvfUyJk9H+hL8WpQazY7P3ouFy6jhOZ4S3pnrF6UplzhAqhrFI8+RBJA/pWCdcsBanaU4ztfIv9+QWDzXii1wMs8ywoJ8d/R12RqeDG7rbN88k6eZvZhspLSbEpVFWRppNNPJaTTfVX1SrO4YIWnxJ8gDm+ztVMiFU/yhqbPzEXrTF0q0hgZaHRXiVMV+FmwS2QHBCaBFvBVGvBJR5tkB3AIT7bx8Zvh1yelr1VNY6RSnhA5woppg2PgqHLFcSgtws9Ahce3IKfzqsOrxj5AT+XR0d/lVSvlRMaKkoQ09kUQw8c1nSPFJMAtH2cLapWuLITk+LT8Uleb5vrTCvSxFgVQPZp2JgK07QqQg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(39860400002)(396003)(376002)(136003)(38100700002)(4326008)(66556008)(86362001)(8676002)(66946007)(7416002)(41300700001)(6486002)(54906003)(8936002)(5660300002)(478600001)(316002)(6916009)(2616005)(2906002)(186003)(26005)(6512007)(6506007)(66476007)(83380400001)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RhA4bmni8Jn4iAlYNDOVHxNlB9TBaabF32aUQHdi2LO5reGDg3w8EbvXt0WS?=
- =?us-ascii?Q?bDOgSQ/auquX1beSo4lOSykVP1MTPkEkmSe9taauzBQdWi0ZuWi2v9Z6+BNw?=
- =?us-ascii?Q?EBG5nvLPAb9WEihSbAvaaIxj5r80Q+7ok94ZhAriJ0dFcpMAWaD9L58fMyfY?=
- =?us-ascii?Q?V3Cj0zA6k1yx97SnASuohUGLvm6fKVN3d5G/X6UrJX0nWipH61L2zqWxVTq4?=
- =?us-ascii?Q?LO0ScYTIC47AcJ0ju+dgsn2LO3lkGTm5wHEB3OS2C23ObublR/1EsdVcagG/?=
- =?us-ascii?Q?Q+OpTbktEKGM2GhzenDmBJjjMkqiZhzwczArQkVno8LRq/8mR/sPkWuHpVdN?=
- =?us-ascii?Q?rs9MlpUD6aW+CyR95ZHYhekVNvWYTlf3+tMy6X+Q+5o6ntj5287y4CRIfGfg?=
- =?us-ascii?Q?Eih7c9+M2SlEN2EEklEIYoLDBPiReIGnChC5RH8srw55Ka20HaIH1u/8tUyl?=
- =?us-ascii?Q?TUmZqkZpPL7yh+ISRihmdPzyOj2h4pop6PQe7Ek3ruJmmlVhrlCAgdg55dSn?=
- =?us-ascii?Q?7+VWakI9gf3szs6yNpH51Cx5Xh5dT0H9YHhBwsSIuOePAsktStlfO7hGMi6v?=
- =?us-ascii?Q?APhGbqy8E640y0HrPpTOS8msVZo7egz192PYVZ28e9pohacPhpaa6rZhx/CV?=
- =?us-ascii?Q?hUO/qM8g76/l6BI9SWJiQRuW17qzpMXJUIEeCIhZAn7dfUgK7a8A0qrO/iEy?=
- =?us-ascii?Q?aP5eIfLSNmY80V0M1pvD9JzpMF4BnJ/O6S0GGHQzRs9r0herTzqqNyzPcE7s?=
- =?us-ascii?Q?Fv8KfxXX/s2ULBAjpi7/sr/ZNP7b0iQE4jl7xf7k6VzfAYpuSgfCzub9hzd+?=
- =?us-ascii?Q?zV0GCCU7vSt6YrXoL+9qLiF5HfH6NHiBOt/E5yYUjjFMGQNz59gDZziXZ0lv?=
- =?us-ascii?Q?euXoFMwjmbX/zuH/0PBbpNz3lR15Gq33CVgBC6F5f7otCsEsejcH3zpuI56F?=
- =?us-ascii?Q?/5KSie+z0kxNSXRXjhjSREWOoIlCdJ7U6DSwDxH5LtUeFA/75xusHD45pLND?=
- =?us-ascii?Q?F8QMI+AiPp6oyEyExPcPCgDjbKh4idlB/cRL2qdq01EV3E1Rb87AXYaIHrLw?=
- =?us-ascii?Q?32aAbszYbVAvNhhnvwPWFGOIbylbvj1bAxcphEBtEXVJsHX9X9D9PNDsVQno?=
- =?us-ascii?Q?WfCszSXPFbms2OCl6DoMEDAdEQ4J12SlT6Keax4Msqr5QdcM0XhG+O9Fhl00?=
- =?us-ascii?Q?WZHFyHRs0n69PBISd6Sxd3X9CSo6wTRgvTtIpjmXCr1Wj7CDAkwEYXXpyfTu?=
- =?us-ascii?Q?phRNNdJTFHOklX6GK/1VGRLvz/Q2VaW5soMwSGxHJ2zYFnN8ctPRnELrblpX?=
- =?us-ascii?Q?2VSI/DeIhxbiUEyU5lN4v5wuGdyKSFdSyXgbvwz0Q8m92x4scN+SnY9Grrgm?=
- =?us-ascii?Q?pkQk85Uhhvu8hIRSwAE/bOUk9tFPt+A7G8Y3cJFzs1Lsbv70JZxi2dHG9gJ+?=
- =?us-ascii?Q?5lpi/+ES81+fQpoCv1FRHCB/MnVOnxIYnx9rnhJbURZNz9zANRF7OQ0mzJBA?=
- =?us-ascii?Q?wROR4FeYd8JU1pWlCU2Ws+xuCYFus/RNRXNhakuYu+kgguMG0DrUSdvi2W6s?=
- =?us-ascii?Q?W8zOwIoKk62DKBQ8yWYBQkoud8z4FWOrAGTWu5X1?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0f0e5e35-bb6a-4f36-dcc4-08da8c34c970
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 16:12:37.5119
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: eVIzhl/4jKzdNjStRRY2zNsC4YXg6lvoDttuoschK1Ppem/dSyw2eO1d5TLIvDrr
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4573
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 09/14] arm64: dts: qcom: sm6115: Add UFS nodes
+Content-Language: en-US
+To:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
+ <20220901072414.1923075-10-iskren.chernev@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220901072414.1923075-10-iskren.chernev@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 09:21:19AM +0200, David Hildenbrand wrote:
-> commit 4b471e8898c3 ("mm, thp: remove infrastructure for handling splitting
-> PMDs") didn't remove all details about the THP split requirements for
-> RCU GUP-fast.
+On 01/09/2022 10:24, Iskren Chernev wrote:
+> The SM6115 comes with UFS support, so add the related UFS and UFS PHY
+> nodes.
 > 
-> IPI broeadcasts on THP split are no longer required.
-> 
-> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> Cc: Sasha Levin <sasha.levin@oracle.com>
-> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.vnet.ibm.com>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Jerome Marchand <jmarchan@redhat.com>
-> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> Cc: Hugh Dickins <hughd@google.com>
-> Cc: Jason Gunthorpe <jgg@nvidia.com>
-> Cc: John Hubbard <jhubbard@nvidia.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: Yang Shi <shy828301@gmail.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 > ---
->  mm/gup.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
+>  arch/arm64/boot/dts/qcom/sm6115.dtsi | 70 ++++++++++++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> index cde963c56ac9..491fffff8aa1 100644
+> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
+> @@ -620,6 +620,76 @@ opp-202000000 {
+>  			};
+>  		};
+>  
+> +		ufs_mem_hc: ufshc@4804000 {
+> +			compatible = "qcom,sm6115-ufshc", "qcom,ufshc",
+> +				     "jedec,ufs-2.0";
+> +			reg = <0x4804000 0x3000>, <0x4810000 0x8000>;
+> +			reg-names = "std", "ice";
 
-The comment a bit above seems to need touching to:
+I could imagine that testing DTS against existing bindings might miss a
+lot, because we have still a lot of errors. But at least I would expect
+you test your DTS against your own bindings, which you submit here (and
+previously).
 
- * protected from page table pages being freed from under it, and should
- * block any THP splits.
+You just wrote that ice is not allowed.
 
-What is the current situation for THP splits anyhow? Is there are
-comment in the fast pmd code explaining it?
+> +			interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
+> +			phys = <&ufs_mem_phy_lanes>;
+> +			phy-names = "ufsphy";
+> +			lanes-per-direction = <1>;
+> +			#reset-cells = <1>;
+> +			resets = <&gcc GCC_UFS_PHY_BCR>;
+> +			reset-names = "rst";
+> +
+> +			power-domains = <&gcc GCC_UFS_PHY_GDSC>;
+> +			iommus = <&apps_smmu 0x100 0>;
+> +
+> +			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
+> +				 <&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
+> +				 <&gcc GCC_UFS_PHY_AHB_CLK>,
+> +				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
+> +				 <&gcc GCC_UFS_PHY_ICE_CORE_CLK>,
+> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>,
+> +				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
+> +				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>;
+> +			clock-names = "core_clk",
+> +				      "bus_aggr_clk",
+> +				      "iface_clk",
+> +				      "core_clk_unipro",
+> +				      "core_clk_ice",
+> +				      "ref_clk",
+> +				      "tx_lane0_sync_clk",
+> +				      "rx_lane0_sync_clk";
+> +
+> +			freq-table-hz = <50000000 200000000>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<37500000 150000000>,
+> +					<75000000 300000000>,
+> +					<0 0>,
+> +					<0 0>,
+> +					<0 0>;
+> +
+> +			non-removable;
 
-But this seems OK too
+Is it allowed property?
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> +			status = "disabled";
+> +		};
+> +
+> +		ufs_mem_phy: phy@4807000 {
+> +			compatible = "qcom,sm6115-qmp-ufs-phy";
+> +			reg = <0x4807000 0x1c4>;
+> +			#address-cells = <1>;
+> +			#size-cells = <1>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_UFS_CLKREF_CLK>,
+> +				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
+> +			clock-names = "ref", "ref_aux";
+> +
+> +			resets = <&ufs_mem_hc 0>;
+> +			reset-names = "ufsphy";
+> +			status = "disabled";
+> +
+> +			ufs_mem_phy_lanes: lanes@4807400 {
+> +				reg = <0x4807400 0x098>,
+> +				      <0x4807600 0x130>,
+> +				      <0x4807c00 0x16c>;
+> +				#phy-cells = <0>;
+> +			};
+> +		};
+> +
+> +
 
-Jason
+Just one blank line.
+
+Best regards,
+Krzysztof

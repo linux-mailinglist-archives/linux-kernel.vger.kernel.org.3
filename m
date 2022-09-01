@@ -2,53 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3119B5A9ADD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:51:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 727AA5A9AEA
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:53:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234053AbiIAOuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 10:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58712 "EHLO
+        id S233640AbiIAOxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 10:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233849AbiIAOuf (ORCPT
+        with ESMTP id S233825AbiIAOxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 10:50:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5298432BAC;
-        Thu,  1 Sep 2022 07:50:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D5CF061DE5;
-        Thu,  1 Sep 2022 14:50:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 753EBC4314A;
-        Thu,  1 Sep 2022 14:50:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662043833;
-        bh=Eme6Jpl1dpN6KSO3d/NwtB8aYk/1sMq97j6D1VP3rXU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LDuqUoZqJmDmnf8DgGXRAR3l5RAEaKbXeIimHUIoM8y2hn5Ps3WAgNJKp87I+1KGQ
-         MRaelA0wd8mIa05A+94C2vs2vG0R1QLLKRKozoNuk9cWV0Avwy5MPJ8kpYUgRaZdd0
-         IbafHfWY64tCPL35xigTonhroAHZ6mRAfeCy8B+vSGxpimwGdxzxXVmKNvSOpsZZSZ
-         h5yelfm84qc2JcKSxSmCAY8EKstAAL4AWsVfDoX9nZYGt35V3PwKUZtt3XzTrmBI3G
-         nHKZJC5l4LnBZfCW2LOfbmZX95QJZ4zWDId/cz69lAX6VWYz7UQHGvlD3T0KDrzrTe
-         ZWudog5ZyEVBw==
-Date:   Thu, 1 Sep 2022 16:50:28 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Seth Jenkins <sethjenkins@google.com>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dhowells@redhat.com,
-        Jann Horn <jannh@google.com>,
-        Natalie Silvanovich <natashenka@google.com>
-Subject: Re: fsconfig parsing bugs
-Message-ID: <20220901145028.3lndphzrylsyqx5o@wittgenstein>
-References: <CALxfFW4BXhEwxR0Q5LSkg-8Vb4r2MONKCcUCVioehXQKr35eHg@mail.gmail.com>
+        Thu, 1 Sep 2022 10:53:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E5D8051F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 07:53:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662044009;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=A0g1blcGod6K82z7PHFW5jtZohl7FHhnQON5Wk+LVyQ=;
+        b=S3EV/+vPYAy1cW7/4C/yQ1rVTrB1E/2GV5Czy7Q8GXM8eMZGmxllsTvMC9inBOxxXFtjNA
+        zjsJBQ5QWNxNChqvMP1q7iHlHTLUnE+v1RABekj/FS2r44/vAtScVmX3dvteN+7+X2iHzV
+        TuedTHRwQMJeqK1+8JSfGXFdAJFAMss=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-645-HJdqUyzXPrm32-Z4PXGB9Q-1; Thu, 01 Sep 2022 10:53:28 -0400
+X-MC-Unique: HJdqUyzXPrm32-Z4PXGB9Q-1
+Received: by mail-ed1-f69.google.com with SMTP id s19-20020a056402521300b00448954f38c9so7363809edd.14
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 07:53:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date;
+        bh=A0g1blcGod6K82z7PHFW5jtZohl7FHhnQON5Wk+LVyQ=;
+        b=bZBF6h6rB198v9HUVdFk/mTjYfeBgUNRFG5MIJ1she+OKD1spgX2Op75n7nfeULpjj
+         NwJJRS+dMaCiegrDLZTQUPWTkIRF83dBluOsiRxP86rzZNAIlGWAzYLgqPkII6m4JjwW
+         C/D0izd8fHfuUVlOAxbZDreWcf0in8F1PTETrIpcjuPCpyECRuxgeLk5JMbxCcXMAlDG
+         CRTQu8Ah4uhDJGqU9tVhUUQb6y5ufD+gr9QqV1YBQ5t5vPUXoCgLWE8PKpPJEqTGMhBK
+         F+uV8kUSf0YSyUj9eZfYB7MSSfV7X1VD761FiTCVy6/39autIVfjGieXK1/DG383yCqy
+         nYJg==
+X-Gm-Message-State: ACgBeo3YiDR81dvng0PdZ8rg3+qQ1QxpGz3F6juvVj/DWsoH2m77apJ7
+        8gWuw1MXa60rnxwAKoTz9Goigov3z7m4/BS2lxp7DlOtLWoR/zXhzcMipP3pHwFhmJQngE4VAWE
+        YFy09BimJxT5JUluJUCK4apVK
+X-Received: by 2002:a17:907:97d3:b0:73d:8b9b:a6c1 with SMTP id js19-20020a17090797d300b0073d8b9ba6c1mr23841552ejc.71.1662044006876;
+        Thu, 01 Sep 2022 07:53:26 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6A5xb5zxDdAmIlrBKOAQ/kfMCQXQVATSUFSS8Zk3+p7j3ebhCP6gZtK0drupcmwhEfsr5TTQ==
+X-Received: by 2002:a17:907:97d3:b0:73d:8b9b:a6c1 with SMTP id js19-20020a17090797d300b0073d8b9ba6c1mr23841540ejc.71.1662044006697;
+        Thu, 01 Sep 2022 07:53:26 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id vs23-20020a170907139700b0072ed9efc9dfsm8530465ejb.48.2022.09.01.07.53.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 07:53:26 -0700 (PDT)
+Message-ID: <298e6d86-dc7b-ed24-893d-2211017463bb@redhat.com>
+Date:   Thu, 1 Sep 2022 16:53:25 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CALxfFW4BXhEwxR0Q5LSkg-8Vb4r2MONKCcUCVioehXQKr35eHg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+From:   Hans de Goede <hdegoede@redhat.com>
+Subject: [GIT PULL] Immutable branch with 6.0-rc1 + "[PATCH v6 0/7] add
+ support for another simatic board" series
+To:     Henning Schild <henning.schild@siemens.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Pavel Machek <pavel@ucw.cz>, Mark Gross <markgross@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org
+Cc:     Sheng-Yuan Huang <syhuang3@nuvoton.com>,
+        Tasanakorn Phaipool <tasanakorn@gmail.com>,
+        simon.guinot@sequanux.org
+References: <20220825104422.14156-1-henning.schild@siemens.com>
+Content-Language: en-US
+In-Reply-To: <20220825104422.14156-1-henning.schild@siemens.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,95 +90,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 04:12:21PM -0700, Seth Jenkins wrote:
-> The codebase-wide refactor efforts to using the latest fs mounting API
-> (with support for fsopen/fsconfig/fsmount etc.) have introduced some
-> bugs into mount configuration parsing in several parse_param handlers,
-> most notably shmem_parse_one() which can be accessed from a userns.
-> There are several cases where the following code pattern is used:
-> 
-> ctx->value = <expression>
-> if(ctx->value is invalid)
->    goto fail;
-> ctx->seen |= SHMEM_SEEN_X;
-> break;
-> 
-> However, this coding pattern does not work in the case where multiple
-> fsconfig calls are made. For example, if I were to call fsconfig with
-> the key "nr_blocks" twice, the first time with a valid value, and the
-> second time with an invalid value, the invalid value will be persisted
-> and used upon creation of the mount for the value of ctx->blocks, and
-> consequently for sbinfo->max_blocks.
-> 
-> This code pattern is used for Opt_nr_blocks, Opt_nr_inodes, Opt_uid,
-> Opt_gid and Opt_huge. Probably the proper thing to do is to check for
-> validity before assigning the value to the shmem_options struct in the
-> fs_context.
-> 
-> We also see this code pattern replicated throughout other filesystems
-> for uid/gid resolution, including hugetlbfs, FUSE, ntfs3 and ffs.
-> 
-> The other outstanding issue I noticed comes from the fact that
-> fsconfig syscalls may occur in a different userns than that which
-> called fsopen. That means that resolving the uid/gid via
-> current_user_ns() can save a kuid that isn't mapped in the associated
-> namespace when the filesystem is finally mounted. This means that it
-> is possible for an unprivileged user to create files owned by any
-> group in a tmpfs mount (since we can set the SUID bit on the tmpfs
-> directory), or a tmpfs that is owned by any user, including the root
-> group/user. This is probably outside the original intention of this
-> code.
-> 
-> The fix for this bug is not quite so simple as the others. The options
-> that I've assessed are:
-> 
-> - Resolve the kuid/kgid via the fs_context namespace - this does
-> however mean that any task outside the fsopen'ing userns that tries to
-> set the uid/gid of a tmpfs will have to know that the uid/gid will be
-> resolved by a different namespace than that which the current task is
-> in. It also subtly changes the behavior of this specific subsystem in
-> a userland visible way.
-> - Globally disallow fsconfig calls originating from outside the
-> fs_context userns - This is a more robust solution that would prevent
-> any similar bugs, but it may impinge on valid mount use-cases. It's
-> the best from a security standpoint and if it's determined that it was
-> not in the original intention to be juggling user/mount namespaces
-> this way, it's probably the ideal solution.
-> - Throw EINVAL if the kuid specified cannot be mapped in the mounting
-> userns (and/or potentially in the fs_context userns) - This is
-> probably the solution that remains most faithful to all potential
-> use-cases, but it doesn't reduce the potential for variants in the
-> future in other parts of the codebase and it also introduces some
-> slight derivative logic bug risk.
-> - Don't resolve the uid/gid specified in fsconfig at all, and resolve
-> it during mount-time when calling an associated fill_super. This is
-> precedented and used in other parts of the codebase, but specificity
-> is lost in the final error case since an end-user cannot easily
-> attribute a mount failure to an unmappable uid.
-> 
-> I've also attached a PoC for this bug that demonstrates that an
-> unprivileged user can create files/directories with root uid/gid's.
-> There is no deadline for this issue as we can't see any obvious way to
-> cross a privilege boundary with this.
-> 
-> Thanks in advance!
+Dear GPIO and LED subsystem maintainers,
 
-I'm involved in 2 large projects that make use of the new mount api LXC
-and CRIU. None of them call fsconfig() outside of the target user
-namespace. util-linux mount(2) does not yet use the new mount api and so
-can't be affected either but will in maybe even the next release.
-Additionally, glibc 2.36 is the first glibc with support for the new
-mount api which just released. So all users before that users would have
-to write their own system call wrappers so I think we have some liberty
-here.
+Here is a pull-request for v6.0-rc1 + the
+"[PATCH v6 0/7] add support for another simatic board" series
+for merging into the gpio and leds subsystems.
 
-I think this is too much of a restriction to require that fsopen() and
-fsconfig() userns must match in order to set options. It is pretty handy
-to be able to set mount options outside of fc->user_ns. And we'd
-definitely want to make use of this in the future.
+Regards,
 
-So ideally, we just switch all filesystems that are mountable in userns
-over to use fc->user_ns. There's not really a big regression risk here
-because it's not used in userns workloads widely today. Taking a close
-look, the affected filesystems are devpts and tmpfs. Having them rely on
-fc->user_ns aligns them with how fuse does it today.
+Hans
+
+
+The following changes since commit 568035b01cfb107af8d2e4bd2fb9aea22cf5b868:
+
+  Linux 6.0-rc1 (2022-08-14 15:50:18 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git tags/platform-drivers-x86-simatec-1
+
+for you to fetch changes up to 8f5c9858c5db129359b5de2f60f5f034bf5d56c0:
+
+  platform/x86: simatic-ipc: add new model 427G (2022-09-01 16:15:03 +0200)
+
+----------------------------------------------------------------
+Tag (immutable branch) for:
+v6.0-rc1 + "[PATCH v6 0/7] add support for another simatic board" series
+for merging into the gpio, leds and pdx86 subsystems.
+
+----------------------------------------------------------------
+Henning Schild (7):
+      gpio-f7188x: switch over to using pr_fmt
+      gpio-f7188x: add a prefix to macros to keep gpio namespace clean
+      gpio-f7188x: Add GPIO support for Nuvoton NCT6116
+      gpio-f7188x: use unique labels for banks/chips
+      leds: simatic-ipc-leds-gpio: add new model 227G
+      platform/x86: simatic-ipc: enable watchdog for 227G
+      platform/x86: simatic-ipc: add new model 427G
+
+ drivers/gpio/Kconfig                               |   3 +-
+ drivers/gpio/gpio-f7188x.c                         | 275 ++++++++++++---------
+ drivers/leds/simple/simatic-ipc-leds-gpio.c        |  42 +++-
+ drivers/platform/x86/simatic-ipc.c                 |  10 +-
+ include/linux/platform_data/x86/simatic-ipc-base.h |   1 +
+ include/linux/platform_data/x86/simatic-ipc.h      |   2 +
+ 6 files changed, 216 insertions(+), 117 deletions(-)
+

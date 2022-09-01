@@ -2,65 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE355A8B2D
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:05:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A20D55A8B34
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:06:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbiIACFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 22:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
+        id S232500AbiIACGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 22:06:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232804AbiIACFM (ORCPT
+        with ESMTP id S229572AbiIACGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 22:05:12 -0400
+        Wed, 31 Aug 2022 22:06:00 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9C71F611
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:05:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947CD62A8F
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:05:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1661997909;
+        s=mimecast20190719; t=1661997957;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9LKozqYIo84oic3xLC1Bs+/dle6Aj4LlgDEmJDQ1gts=;
-        b=i5fBcCsY+BW2U/FDMHrtowca1NxEwwpah1A6asvBJUgRGwlqSelN5rUEumYwLn8j7bd2E1
-        sc8tLjQOZYEO87UjhriPgivILvA45yXNr/oLaxK+fDu9FUVRp4800dL+edem0d9gqFdWn5
-        OnBjAsGlj/DMOdjG8V3J38ukeWngCgI=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-467-nmiMVpgIMAWq3p_YgCt9jQ-1; Wed, 31 Aug 2022 22:05:06 -0400
-X-MC-Unique: nmiMVpgIMAWq3p_YgCt9jQ-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4DC3E29AB44C;
-        Thu,  1 Sep 2022 02:05:05 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.32.220])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 84DDD2026D4C;
-        Thu,  1 Sep 2022 02:05:04 +0000 (UTC)
-Date:   Wed, 31 Aug 2022 22:05:03 -0400
-From:   Joe Lawrence <joe.lawrence@redhat.com>
-To:     Song Liu <song@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        live-patching@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>, X86 ML <x86@kernel.org>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>
-Subject: Re: [PATCH v5] livepatch: Clear relocation targets on a module
- removal
-Message-ID: <YxATT0lpgVndnc0z@redhat.com>
-References: <20220830185313.76402-1-song@kernel.org>
- <Yw+4xxiONngOTqin@redhat.com>
- <875yi8uju3.fsf@mpe.ellerman.id.au>
- <CAPhsuW7aZwXyuZAv23xDXsxCJc0mJNms+HegqkZqukVqT0cfZA@mail.gmail.com>
+        bh=/Uc9eSniapYBlyChWU+AZI0xqtO1iDX5hC1kW3YMyLk=;
+        b=hIsGtrnsSUPnPskoXOk+xXH12hhdTVUEWcM09lotc8eVqGCjHCmIjal937YbdiPXn3FQ/b
+        GXFk41btq54jFxCidyNq3Zcd3Ic/7+FJ1LlXswwDB4HlxuM0ue60+ddMUDOWv+uD0oLjI/
+        xuXsn3OxVrjkjMIFORpis9QKjdELRac=
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com
+ [209.85.166.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-325-Gc6KFrNgPw6YUmA2iODpTg-1; Wed, 31 Aug 2022 22:05:56 -0400
+X-MC-Unique: Gc6KFrNgPw6YUmA2iODpTg-1
+Received: by mail-il1-f198.google.com with SMTP id g5-20020a92cda5000000b002e954ecceb0so11723059ild.5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:05:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc;
+        bh=/Uc9eSniapYBlyChWU+AZI0xqtO1iDX5hC1kW3YMyLk=;
+        b=aa+zPmEopvmA36m/5M/m7k3yg4jb8VoSnYawXBMdEeo8c1L+7KciGXLSJyARGdOJ7X
+         xtPBuSk2lNCqQQ6AelehrIOdYa2GuVG6fwzDC4C74YFA/O18r/ovstJc10qtmFr933Gb
+         gRXMoXfvdiXADjU3Zd+cy28ciykbcB15q1eizgedh3YIg0snJi6sizbkrjX2EMSkq72F
+         Do0IPooUdSobVjcL0xhUMtt0CQ0NKE5Qi3wY3FA8Vagxg21NiS8d4y/Xd1po/N4Ej8s0
+         BygGmRd9KrjaJ182Mq5nCj7PuvrCaPsKDzWYC81gsAMkG9fN4YwEcM5BL4q3Bl1xskCz
+         32Hw==
+X-Gm-Message-State: ACgBeo2MKRPk7wVUoWRPvAT3jggP7GI0N3navL3ANom7JR0iet9Vdp9g
+        doEAMRttY4mnwKbL61INl8TUUb8a1jrsMKaTrAduZCsazgLs54CWSsMLL4kEsnUyF6/XFLNkB4G
+        AHlw1x+4GHd1dpIP+SS5m3S7f
+X-Received: by 2002:a02:caa6:0:b0:349:bbca:9a90 with SMTP id e6-20020a02caa6000000b00349bbca9a90mr16413125jap.203.1661997955681;
+        Wed, 31 Aug 2022 19:05:55 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR69HUeX58FMkYxODUyoKw5kYP6agdJ53j1pRzyBTmGQRYpiiEtOoSguPX68IkBTLGR0Abgyow==
+X-Received: by 2002:a02:caa6:0:b0:349:bbca:9a90 with SMTP id e6-20020a02caa6000000b00349bbca9a90mr16413094jap.203.1661997955449;
+        Wed, 31 Aug 2022 19:05:55 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id u7-20020a02b1c7000000b0034293459b44sm7434106jah.142.2022.08.31.19.05.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Aug 2022 19:05:55 -0700 (PDT)
+Date:   Wed, 31 Aug 2022 20:05:52 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     "Tian, Kevin" <kevin.tian@intel.com>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        "Peter Oberparleiter" <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        "Cornelia Huck" <cohuck@redhat.com>,
+        Longfang Liu <liulongfang@huawei.com>,
+        "Shameer Kolothum" <shameerali.kolothum.thodi@huawei.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: Re: [PATCH 15/15] vfio: Add struct device to vfio_device
+Message-ID: <20220831200552.12169ae3.alex.williamson@redhat.com>
+In-Reply-To: <BN9PR11MB527652B0557897BDA08B5FE38C7B9@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20220827171037.30297-1-kevin.tian@intel.com>
+        <20220827171037.30297-16-kevin.tian@intel.com>
+        <20220830161838.4aa47045.alex.williamson@redhat.com>
+        <Yw6i7btDKcUDPADP@ziepe.ca>
+        <BN9PR11MB5276BF3B8D65B66DB292CAE58C789@BN9PR11MB5276.namprd11.prod.outlook.com>
+        <20220831111512.4924e152.alex.williamson@redhat.com>
+        <BN9PR11MB527652B0557897BDA08B5FE38C7B9@BN9PR11MB5276.namprd11.prod.outlook.com>
+Organization: Red Hat
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPhsuW7aZwXyuZAv23xDXsxCJc0mJNms+HegqkZqukVqT0cfZA@mail.gmail.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
@@ -71,239 +122,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 03:48:26PM -0700, Song Liu wrote:
-> On Wed, Aug 31, 2022 at 3:30 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
-> >
-> > Joe Lawrence <joe.lawrence@redhat.com> writes:
-> > > On Tue, Aug 30, 2022 at 11:53:13AM -0700, Song Liu wrote:
-> > >> From: Miroslav Benes <mbenes@suse.cz>
-> > >>
-> > >> Josh reported a bug:
-> > >>
-> > >>   When the object to be patched is a module, and that module is
-> > >>   rmmod'ed and reloaded, it fails to load with:
-> > >>
-> > >>   module: x86/modules: Skipping invalid relocation target, existing value is nonzero for type 2, loc 00000000ba0302e9, val ffffffffa03e293c
-> > >>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > >>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> > >>
-> > >>   The livepatch module has a relocation which references a symbol
-> > >>   in the _previous_ loading of nfsd. When apply_relocate_add()
-> > >>   tries to replace the old relocation with a new one, it sees that
-> > >>   the previous one is nonzero and it errors out.
-> > >>
-> > >>   On ppc64le, we have a similar issue:
-> > >>
-> > >>   module_64: livepatch_nfsd: Expected nop after call, got e8410018 at e_show+0x60/0x548 [livepatch_nfsd]
-> > >>   livepatch: failed to initialize patch 'livepatch_nfsd' for module 'nfsd' (-8)
-> > >>   livepatch: patch 'livepatch_nfsd' failed for module 'nfsd', refusing to load module 'nfsd'
-> > ...
-> > >>
-> > >
-> > > Hi Song,
-> > >
-> > > Applying your patch on top of my latest klp-convert-tree branch [1], I
-> > > modified a few of its late module patching tests
-> > > (tools/testing/selftests/livepatch/test-song.sh) such that:
-> > >
-> > >  1 - A livepatch module is loaded
-> > >    - this module contains klp-relocations to objects in (2)
-> > >  2 - A target test module is loaded
-> > >  3 - Unload the test target module
-> > >    - Clear klp-relocations in (1)
-> > >  4 - Repeat target module load (2) / unload (3) a few times
-> > >  5 - Unload livepatch module
-> >
-> > If you push that test code somewhere I could test it on ppc64le.
-> >
-> > > The results:
-> > >
-> > >  x86_64  : pass
-> > >  s390x   : pass
-> > >  ppc64le : crash
-> > >
-> > > I suspect Power 32-bit would suffer the same fate, but I don't have
-> > > hardware to verify.  See the kernel log from the crash below...
-> > >
-> > >
-> > > ===== TEST: klp-convert symbols (late module patching) =====
-> > > % modprobe test_klp_convert1
-> > > test_klp_convert1: tainting kernel with TAINT_LIVEPATCH
-> > > livepatch: enabling patch 'test_klp_convert1'
-> > > livepatch: 'test_klp_convert1': starting patching transition
-> > > livepatch: 'test_klp_convert1': patching complete
-> > > % modprobe test_klp_convert_mod
-> > > livepatch: applying patch 'test_klp_convert1' to loading module 'test_klp_convert_mod'
-> > > test_klp_convert1: saved_command_line, 0: BOOT_IMAGE=(ieee1275//vdevice/v-scsi@30000003/disk@8100000000000000,msdos2)/vmlinuz-5.19.0+ root=/dev/mapper/rhel_ibm--p9z--18--lp7-root ro crashkernel=2G-4G:384M,4G-16G:512M,16G-64G:1G,64G-128G:2G,128G-:4G rd.lvm.lv=rhel_ibm-p9z-18-lp7/root rd.lvm.lv=rhel_ibm-p9z-18-lp7/swap
-> > > test_klp_convert1: driver_name, 0: test_klp_convert_mod
-> > > test_klp_convert1: test_klp_get_driver_name(), 0: test_klp_convert_mod
-> > > test_klp_convert1: homonym_string, 1: homonym string A
-> > > test_klp_convert1: get_homonym_string(), 1: homonym string A
-> > > test_klp_convert1: klp_string.12345 = lib/livepatch/test_klp_convert_mod_a.c static string
-> > > test_klp_convert1: klp_string.67890 = lib/livepatch/test_klp_convert_mod_b.c static string
-> > > % rmmod test_klp_convert_mod
-> > > livepatch: reverting patch 'test_klp_convert1' on unloading module 'test_klp_convert_mod'
-> > > module_64: Clearing ADD relocate section 48 to 6
-> > > BUG: Unable to handle kernel data access on write at 0xc008000002140150
-> > > Faulting instruction address: 0xc00000000005659c
-> > > Oops: Kernel access of bad area, sig: 11 [#1]
-> > > LE PAGE_SIZE=64K MMU=Hash SMP NR_CPUS=2048 NUMA pSeries
-> > > Modules linked in: test_klp_convert_mod(-) test_klp_convert1(K) bonding tls rfkill pseries_rng drm fuse drm_panel_orientation_quirks xfs libcrc32c sd_mod t10_pi sg ibmvscsi ibmveth scsi_transport_srp vmx_crypto dm_mirror dm_region_hash dm_log dm_mod
-> > > CPU: 6 PID: 4766 Comm: rmmod Kdump: loaded Tainted: G              K   5.19.0+ #1
-> > > NIP:  c00000000005659c LR: c000000000056590 CTR: 0000000000000024
-> > > REGS: c000000007223840 TRAP: 0300   Tainted: G              K    (5.19.0+)
-> > > MSR:  8000000000009033 <SF,EE,ME,IR,DR,RI,LE>  CR: 48008282  XER: 0000000a
-> > > CFAR: c0000000000a87e0 DAR: c008000002140150 DSISR: 0a000000 IRQMASK: 0
-> >
-> > This is saying you don't have permissions to write at that address.
-> >
-> > > GPR00: c000000000056568 c000000007223ae0 c000000002a68a00 0000000000000001
-> > > GPR04: c0080000021706f0 000000000000002d 0000000000000000 0000000000000000
-> > > GPR08: 0000000000000066 0000001200000010 0000000000000000 0000000000008000
-> > > GPR12: 0000000000000000 c00000000ffca080 0000000000000000 0000000000000000
-> > > GPR16: 0000010005bf1810 000000010c0f7370 c0000000011b7e50 c0000000011b7e68
-> > > GPR20: c0080000021501c8 c008000002150228 0000000000000030 0000000060000000
-> > > GPR24: c008000002160380 c000000056b43000 000000000000ff20 c000000056b43c00
-> > > GPR28: aaaaaaaaaaaaaaab c000000056b43b40 0000000000000000 c00800000214014c
-> > > NIP [c00000000005659c] clear_relocate_add+0x11c/0x1c0
-> > > LR [c000000000056590] clear_relocate_add+0x110/0x1c0
-> > > Call Trace:
-> > > [c000000007223ae0] [ffffffffffffffff] 0xffffffffffffffff (unreliable)
-> > > [c000000007223ba0] [c00000000021e3a8] klp_cleanup_module_patches_limited+0x448/0x480
-> > > [c000000007223cb0] [c000000000220278] klp_module_going+0x68/0x94
-> > > [c000000007223ce0] [c00000000022f480] __do_sys_delete_module.constprop.0+0x1d0/0x390
-> > > [c000000007223db0] [c00000000002f004] system_call_exception+0x164/0x340
-> > > [c000000007223e10] [c00000000000be68] system_call_vectored_common+0xe8/0x278
-> > > --- interrupt: 3000 at 0x7fffa178fb6c
-> > > NIP:  00007fffa178fb6c LR: 0000000000000000 CTR: 0000000000000000
-> > > REGS: c000000007223e80 TRAP: 3000   Tainted: G              K    (5.19.0+)
-> > > MSR:  800000000280f033 <SF,VEC,VSX,EE,PR,FP,ME,IR,DR,RI,LE>  CR: 48002482  XER: 00000000
-> > > IRQMASK: 0
-> > > GPR00: 0000000000000081 00007ffff2d1b720 00007fffa1887200 0000010005bf1878
-> > > GPR04: 0000000000000800 000000000000000a 0000000000000000 00000000000000da
-> > > GPR08: 0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> > > GPR12: 0000000000000000 00007fffa201c540 0000000000000000 0000000000000000
-> > > GPR16: 0000010005bf1810 000000010c0f7370 000000010c0f8090 000000010c0f8078
-> > > GPR20: 000000010c0f8050 000000010c0f80a8 000000010c0f7518 000000010c0f80d0
-> > > GPR24: 00007ffff2d1b830 00007ffff2d1efbb 0000000000000000 0000010005bf02a0
-> > > GPR28: 00007ffff2d1be50 0000000000000000 0000010005bf1810 0000000000100000
-> > > NIP [00007fffa178fb6c] 0x7fffa178fb6c
-> > > LR [0000000000000000] 0x0
-> > > --- interrupt: 3000
-> > > Instruction dump:
-> > > 40820044 813b002c 7ff5f82a 79293664 7d394a14 e9290010 7c69f82e 7fe9fa14
-> > > 48052235 60000000 2c030000 41820008 <92ff0004> eadb0020 60000000 60000000
-> > > ---[ end trace 0000000000000000 ]---
-> > >
-> > > $ addr2line 0xc00000000005659c -e vmlinux
-> > > /root/klp-convert-tree/arch/powerpc/kernel/module_64.c:785
-> > >
-> > > 743 void clear_relocate_add(Elf64_Shdr *sechdrs,
-> > > 744                        const char *strtab,
-> > > 745                        unsigned int symindex,
-> > > 746                        unsigned int relsec,
-> > > 747                        struct module *me)
-> > > 748 {
-> > > ...
-> > > 759         for (i = 0; i < sechdrs[relsec].sh_size / sizeof(*rela); i++) {
-> > > ...
-> > > 785                 *instruction = PPC_RAW_NOP();
-> > > 786         }
-> >
-> > Has the module text been marked RW prior to this? I suspect not?
-> >
-> > In which case you need to use patch_instruction() here.
-> >
-> > cheers
-> 
-> Thanks folks!
-> 
-> I guess something like this would fix compile for ppc32 and fix crash for ppc64.
-> 
-> I also pushed it to
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/song/linux.git/log/?h=klp-module-reload
-> 
-> This includes Joe's klp-convert patches and this patch.
-> 
-> Thanks!
-> Song
-> 
-> 
-> 
-> diff --git a/arch/powerpc/kernel/module_32.c b/arch/powerpc/kernel/module_32.c
-> index ea6536171778..e3c312770453 100644
-> --- a/arch/powerpc/kernel/module_32.c
-> +++ b/arch/powerpc/kernel/module_32.c
-> @@ -285,6 +285,16 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
->         return 0;
->  }
-> 
-> +#ifdef CONFIG_LIVEPATCH
-> +void clear_relocate_add(Elf32_Shdr *sechdrs,
-> +                  const char *strtab,
-> +                  unsigned int symindex,
-> +                  unsigned int relsec,
-> +                  struct module *me)
-> +{
-> +}
-> +#endif
-> +
->  #ifdef CONFIG_DYNAMIC_FTRACE
->  notrace int module_trampoline_target(struct module *mod, unsigned long addr,
->                                      unsigned long *target)
-> diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-> index 6aaf5720070d..4d55f0e52704 100644
-> --- a/arch/powerpc/kernel/module_64.c
-> +++ b/arch/powerpc/kernel/module_64.c
-> @@ -782,7 +782,7 @@ void clear_relocate_add(Elf64_Shdr *sechdrs,
->                         continue;
-> 
->                 instruction += 1;
-> -               *instruction = PPC_RAW_NOP();
-> +               patch_instruction(instruction, PPC_RAW_NOP());
+On Thu, 1 Sep 2022 00:46:51 +0000
+"Tian, Kevin" <kevin.tian@intel.com> wrote:
 
-Close.  I believe PPC_RAW_NOP() needs to be passed to ppc_inst() like:
-
-diff --git a/arch/powerpc/kernel/module_64.c b/arch/powerpc/kernel/module_64.c
-index 4d55f0e52..514951f97 100644
---- a/arch/powerpc/kernel/module_64.c
-+++ b/arch/powerpc/kernel/module_64.c
-@@ -782,7 +782,7 @@ void clear_relocate_add(Elf64_Shdr *sechdrs,
- 			continue;
- 
- 		instruction += 1;
--		patch_instruction(instruction, PPC_RAW_NOP());
-+		patch_instruction(instruction, ppc_inst(PPC_RAW_NOP()));
- 	}
- 
- }
-
-And with that tweak, new result:
-
- ppc64le : pass
-
-Tested-by: Joe Lawrence <joe.lawrence@redhat.com> # x86_64, s390x, ppc64le
-
-Thanks guys,
-
--- Joe
-
->         }
+> > From: Alex Williamson <alex.williamson@redhat.com>
+> > Sent: Thursday, September 1, 2022 1:15 AM
+> > 
+> > On Wed, 31 Aug 2022 06:10:51 +0000
+> > "Tian, Kevin" <kevin.tian@intel.com> wrote:
+> >   
+> > > > From: Jason Gunthorpe <jgg@ziepe.ca>
+> > > > Sent: Wednesday, August 31, 2022 7:53 AM
+> > > >
+> > > > On Tue, Aug 30, 2022 at 04:18:38PM -0600, Alex Williamson wrote:  
+> > > > > On Sun, 28 Aug 2022 01:10:37 +0800
+> > > > > Kevin Tian <kevin.tian@intel.com> wrote:
+> > > > >  
+> > > > > > From: Yi Liu <yi.l.liu@intel.com>
+> > > > > >
+> > > > > > and replace kref. With it a 'vfio-dev/vfioX' node is created under the
+> > > > > > sysfs path of the parent, indicating the device is bound to a vfio
+> > > > > > driver, e.g.:
+> > > > > >
+> > > > > > /sys/devices/pci0000\:6f/0000\:6f\:01.0/vfio-dev/vfio0
+> > > > > >
+> > > > > > It is also a preparatory step toward adding cdev for supporting future
+> > > > > > device-oriented uAPI.  
+> > > > >
+> > > > > Shall we start Documentation/ABI/testing/vfio-dev now?  Thanks.  
+> > > >
+> > > > I always thought that was something to use when adding new custom
+> > > > sysfs attributes?
+> > > >
+> > > > Here we are just creating a standard struct device with its standard
+> > > > sysfs?
+> > > >  
+> > >
+> > > There is nothing special for vfio-dev/vfioX. But from pci device p.o.v
+> > > this does introduce a custom node in the directory, which is probably
+> > > what Alex referred to?  
+> > 
+> > Yup, but not just for pci, we're adding a node into the device
+> > directory for any device bound to vfio.
+> >   
+> > > Anyway if required following can be introduced:
+> > >
+> > > diff --git a/Documentation/ABI/testing/sysfs-devices-vfio-dev  
+> > b/Documentation/ABI/testing/sysfs-devices-vfio-dev  
+> > > new file mode 100644
+> > > index 000000000000..dfe8baaf1ccb
+> > > --- /dev/null
+> > > +++ b/Documentation/ABI/testing/sysfs-devices-vfio-dev
+> > > @@ -0,0 +1,8 @@
+> > > +What:		 /sys/.../<device>/vfio-dev/vfioX/
+> > > +Date:		 September 2022
+> > > +Contact:	 Yi Liu <yi.l.liu@intel.com>
+> > > +Description:
+> > > +		 This directory is created when the device is bound to a
+> > > +		 vfio driver. The layout under this directory matches what
+> > > +		 exists for a standard 'struct device'. 'X' is a random
+> > > +		 number marking this device in vfio.  
+> > 
+> > It's not really random, it's a unique index.  Seems like a good
+> > starting point.
+> >   
+> > >
+> > > At the start I thought it might make more sense to add it into an
+> > > existing vfio ABI file. But looks it doesn't exist.
+> > >
+> > > Curious why nobody asked for ABI doc for /dev/vfio/vfio, /sys/class/vfio,  
+> > etc...
+> > 
+> > Oversight, there should probably be a sysfs-class-vfio file.  Thanks,
+> >   
 > 
->  }
-> diff --git a/include/linux/moduleloader.h b/include/linux/moduleloader.h
-> index d22b36b84b4b..958e6da7f475 100644
-> --- a/include/linux/moduleloader.h
-> +++ b/include/linux/moduleloader.h
-> @@ -73,7 +73,7 @@ int apply_relocate_add(Elf_Shdr *sechdrs,
->                        unsigned int relsec,
->                        struct module *mod);
->  #ifdef CONFIG_LIVEPATCH
-> -void clear_relocate_add(Elf64_Shdr *sechdrs,
-> +void clear_relocate_add(Elf_Shdr *sechdrs,
->                    const char *strtab,
->                    unsigned int symindex,
->                    unsigned int relsec,
+> I can help add one.
+> 
+> btw I plan to respin v2 tomorrow. Regarding to this ABI thing there are
+> three options:
+> 
+> 1) Just add sysfs-devices-vfio-dev in this series. Later merge to
+>    sysfs-class-vfio once the latter is introduced in a separate patch.
+
+This.  Thanks,
+
+Alex
+
+> 
+> 2) Do sysfs-class-vfio in this series, including both existing vfio ABIs and
+>    the new vfio-dev.
+> 
+> 3) No ABI file in this series. Handle it in a separate patch with
+>    sysfs-class-vfio.
+> 
+> Which one do  you prefer to?
+> 
+> Thanks
+> Kevin
 > 
 

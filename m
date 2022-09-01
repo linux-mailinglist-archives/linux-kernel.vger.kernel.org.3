@@ -2,86 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4821A5A93E1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CDE15A93EE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbiIAKEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44624 "EHLO
+        id S233518AbiIAKKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:10:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbiIAKEt (ORCPT
+        with ESMTP id S233326AbiIAKKq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:04:49 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A8DD137DBF
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=E7Pj8d93m0JiiJeXTEUQOcUvv07HLnIlWqZMHnp6uuM=; b=kHEuwZ6PlHxiap9evj2L/urMpc
-        ya4JvUiTYGruZzelyyjd7L2g6dsff1EqfgXm4BBHNqZmvwmvEoDFBp0S/PqwQs/h7zPbdVQmE2NqJ
-        gb8dEPR64uBsKjVSaMpbQxxYX0sL570bkRsWdM2KBfkZKCzy9icNXNnIZvXI43KWOJO3VznaW3brS
-        LXlVFkjyLatG9neCk87YZJwnTFIRCECXdlbNUaE/YbM9+kpTqUV4l/cqFvt6aI9+n8gVOhzV5jM84
-        5QN2uP6NtCj6PR9DC4mNfySMRLwLtTB3w0LH6+FchGgn4rEZexRwUER527OxGnsodNZapMjxZRgwX
-        4ibjfEng==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTh3q-005w82-Vo; Thu, 01 Sep 2022 10:04:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 19F993002C7;
-        Thu,  1 Sep 2022 12:04:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id F30502B85513D; Thu,  1 Sep 2022 12:04:31 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 12:04:31 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     x86@kernel.org, eranian@google.com, ravi.bangoria@amd.com,
-        linux-kernel@vger.kernel.org, acme@kernel.org,
-        mark.rutland@arm.com, alexander.shishkin@linux.intel.com,
-        jolsa@kernel.org, namhyung@kernel.org
-Subject: Re: [PATCH v2 8/9] perf/x86/intel: Shadow
- MSR_ARCH_PERFMON_FIXED_CTR_CTRL
-Message-ID: <YxCDr2uugoBQ5z27@hirez.programming.kicks-ass.net>
-References: <20220829100959.917169441@infradead.org>
- <20220829101321.905673933@infradead.org>
- <0b8477e2-6e85-b349-0e92-e6a298531c18@linux.intel.com>
- <YxB3GWVCNHg5RutQ@hirez.programming.kicks-ass.net>
+        Thu, 1 Sep 2022 06:10:46 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBAAAA3FF;
+        Thu,  1 Sep 2022 03:10:42 -0700 (PDT)
+Received: from fraeml704-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MJGxg5Qz1z67xt4;
+        Thu,  1 Sep 2022 18:09:59 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml704-chm.china.huawei.com (10.206.15.53) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Thu, 1 Sep 2022 12:10:40 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 1 Sep
+ 2022 11:10:40 +0100
+Date:   Thu, 1 Sep 2022 11:10:38 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Robert Richter <rrichter@amd.com>
+CC:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH 05/15] cxl/acpi: Add probe function to detect restricted
+ CXL hosts in RCD mode
+Message-ID: <20220901111038.00002e00@huawei.com>
+In-Reply-To: <YxBKoT2zlUVgXIry@rric.localdomain>
+References: <20220831081603.3415-1-rrichter@amd.com>
+        <20220831081603.3415-6-rrichter@amd.com>
+        <20220831110804.00003812@huawei.com>
+        <YxBKoT2zlUVgXIry@rric.localdomain>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YxB3GWVCNHg5RutQ@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml500006.china.huawei.com (7.191.161.198) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 11:10:49AM +0200, Peter Zijlstra wrote:
-> On Wed, Aug 31, 2022 at 09:52:19AM -0400, Liang, Kan wrote:
-> > 
-> > 
-> > On 2022-08-29 6:10 a.m., Peter Zijlstra wrote:
-> > > Less RDMSR is more better.
-> > 
-> > I had an RFC patch which does a further step to move the fixed
-> > control register write to right before the entire PMU re-enabling, which
-> > could also save some writes if there are several fixed counters enabled.
-> > https://lore.kernel.org/lkml/20220804140729.2951259-1-kan.liang@linux.intel.com/
-> > 
-> > Do you have any comments for the RFC patch?
-> > 
+On Thu, 1 Sep 2022 08:01:05 +0200
+Robert Richter <rrichter@amd.com> wrote:
+
+> On 31.08.22 11:08:04, Jonathan Cameron wrote:
+> > On Wed, 31 Aug 2022 10:15:53 +0200  
 > 
-> Oh, I like that better, let me just replace my patch with that.
+> > Robert Richter <rrichter@amd.com> wrote:
+> >   
+> > > Restricted CXL device (RCD) mode (formerly CXL 1.1) uses a different
+> > > enumeration scheme other than CXL VH (formerly CXL 2.0). In RCD mode a
+> > > host/device (RCH-RCD) pair shows up as a legal PCIe hierarchy with an
+> > > ACPI host bridge ("PNP0A08" or "ACPI0016" HID) and RCiEP connected to
+> > > it with a description of the CXL device.
+> > > 
+> > > Add function cxl_restricted_host_probe() to probe RCD enumerated
+> > > devices. The function implements a loop that detects all CXL capable
+> > > ACPI PCI root bridges in the system (RCD mode only). The iterator
+> > > function cxl_find_next_rch() is introduced to walk through all of the
+> > > CXL hosts. The loop will then enable all CXL devices connected to the
+> > > host. For now, only implement an empty loop with an iterator that
+> > > returns all pci host bridges in the system.
+> > > 
+> > > The probe function is triggered by adding an own root device for RCHs.
+> > > This is different to CXL VH where an ACPI "ACPI0017" root device
+> > > exists. Its detection starts the CXL host detection. In RCD mode such
+> > > a device does not necessarily exists, so solve this by creating a
+> > > plain platform device that is not an ACPI device and is root only for
+> > > RCHs.  
+> > 
+> > If I read this correctly that platform device is created whether or not
+> > there are any cxl devices in the system?
+> > 
+> > Can we create it only if we find some devices that will be placed
+> > under it later?  
+> 
+> This would move the host detection from probe to init which I wanted
+> to avoid to better control driver init order dependencies.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/peterz/queue.git perf/wip.cleanup
+It's a bit nasty either way.  I can see your reasoning, but
+definitely not keen on it if there is a plausible way to avoid.
+> 
+> I could add a put_device() at the end of a probe so that it will be
+> released in case no other references use it. This implies the refcount
+> is maintained for parent devices. Or this needs to be added to. So if
+> there are no children (hosts) attached to the root device after probe,
+> it will disappear.
 
-Should have your patch instead of mine for the FIXED_CTR_CTRL and have
-the pmu methods in the right place.
+Unless there is precedence for that, it'll be weird enough to be
+hard to maintain.  I guess I can live with the ugliness if we can't
+add something new to ACPI to base this off.
+
+> 
+> > > @@ -531,7 +566,41 @@ static struct platform_driver cxl_acpi_driver = {
+> > >  	.id_table = cxl_test_ids,
+> > >  };
+> > >  
+> > > -module_platform_driver(cxl_acpi_driver);
+> > > +static void cxl_acpi_device_release(struct device *dev) { }  
+> > 
+> > Why the empty release?  Perhaps introduce this only when it
+> > does something.  
+> 
+> The core device driver requires this in device_release() to be setup.
+> 
+> There is nothing to do as the device is kept in a static struct.
+> That's why it's empty.
+Ah got it. I'd failed to register the static structure.
+
+> 
+> -Robert
+

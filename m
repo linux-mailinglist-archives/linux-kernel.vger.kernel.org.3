@@ -2,79 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF28B5A96F9
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 047BA5A96FC
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 14:36:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbiIAMf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 08:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36788 "EHLO
+        id S232718AbiIAMgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 08:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232743AbiIAMfy (ORCPT
+        with ESMTP id S229679AbiIAMgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 08:35:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6474B9E886;
-        Thu,  1 Sep 2022 05:35:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D317561DF4;
-        Thu,  1 Sep 2022 12:35:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADBE8C433C1;
-        Thu,  1 Sep 2022 12:35:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662035750;
-        bh=+afvwk8ga1DOFv3I2d+CwI1SBBov75nLCbpTXJsr2Pw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Ca9JyL2YMHJPNXJY+Yy3LN4ERHKvHenlZEXs//eaaQrKhLf/rT7p6bndS+Wm9UJm8
-         BTb1zu3WAroDH9dNmW8ku8hTU94VzQMwUmXcnNKG0IfZbNHhveFwl1fmypTrGgnZE7
-         Cd0ARFwD1eyxO62nRr2NYhYF1jZo0VZuAPPIAmllcNGBMIbuHCCECJy8t/W7rPuVGg
-         A557UjYoRomXt5+qndP8/7DgCDXf6wdfLVl4QV2YUlMgW/MfzySqorYWUNBolnhcQy
-         jyvqZwNUz3TVT2wZgZCev/17TcunspBHk+0xZrM/ju4CkwAE6U61udYu1XaCvuGMqP
-         tbzfpTbNjdKeQ==
-Date:   Thu, 1 Sep 2022 15:35:45 +0300
-From:   Leon Romanovsky <leon@kernel.org>
-To:     jianghaoran <jianghaoran@kylinos.cn>
-Cc:     Bernard Metzler <BMT@zurich.ibm.com>,
-        "jgg@ziepe.ca" <jgg@ziepe.ca>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] RDMA/siw: Solve the error of compiling the 32BIT mips
- kernel when enable CONFIG_RDMA_SIW
-Message-ID: <YxCnIYIxQllk5LBh@unreal>
-References: <SA0PR15MB3919F42FFE3C2FBF09D08026997B9@SA0PR15MB3919.namprd15.prod.outlook.com>
- <3e5b573b-91c1-d9d8-cf1a-8da02ad6b568@kylinos.cn>
+        Thu, 1 Sep 2022 08:36:43 -0400
+Received: from smtp16.bhosted.nl (smtp16.bhosted.nl [IPv6:2a02:9e0:8000::27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291FEDFC
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 05:36:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=protonic.nl; s=202111;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=B+SehaGXwjYGSf7G+iS3bDh795Izby0gHEeRvgWvOao=;
+        b=Mq2fqu2v/VS1Y035laNkKVWwmBHA/cN2S5Ry+YweGLphHxf2RRku9b045PHCOffUEiR2acDHXWxxC
+         1/a1bDlXcO7Wg7af0ezpok0HMpkg8SmaiEdxnbChwEWeSZyBZiuR1fGum2f57XkH5VisTY3Z6PeEt8
+         jRgr7DlR7R/aEKYNiG6l4ynzpA8oD/bfoPjJMJ53qZ1E0s8aatPaDx90poNLb97x7P+6B0LGZnlW0+
+         c+M8ayfxwKpgigzu8fy66wff/ZWGKV+6ldFffR0dgGNBHIYzdgBwyIKc6uzDnfc0OEwYD8gzasCLyI
+         DfgH3jIyMbQ4JLoZYlK6YVoBltKlp9g==
+X-MSG-ID: b9ca1510-29f2-11ed-9051-0050569d2c73
+From:   David Jander <david@protonic.nl>
+To:     linux-spi@vger.kernel.org, Mark Brown <broonie@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Vincent Whitchurch <vincent.whitchurch@axis.com>,
+        Casper Andersson <casper.casan@gmail.com>,
+        David Jander <david@protonic.nl>
+Subject: [PATCH] spi: spi.c: Fix queue hang if previous transfer failed
+Date:   Thu,  1 Sep 2022 14:36:30 +0200
+Message-Id: <20220901123630.1098433-1-david@protonic.nl>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3e5b573b-91c1-d9d8-cf1a-8da02ad6b568@kylinos.cn>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 07:26:19PM +0800, jianghaoran wrote:
-> 
-> 
-> 在 2022/9/1 下午3:05, Bernard Metzler 写道:
-> > 
-> > 
-> > > -----Original Message-----
-> > > From: jianghaoran <jianghaoran@kylinos.cn>
-> > > Sent: Thursday, 1 September 2022 07:52
-> > > To: Bernard Metzler <BMT@zurich.ibm.com>
-> > > Cc: jgg@ziepe.ca; leon@kernel.org; linux-rdma@vger.kernel.org; linux-
-> > > kernel@vger.kernel.org
-> > > Subject: [EXTERNAL] [PATCH] RDMA/siw: Solve the error of compiling the
-> > > 32BIT mips kernel when enable CONFIG_RDMA_SIW
+The queue worker always needs to be kicked one final time after a transfer
+is done in order to transition to idle (ctlr->busy = false).
 
-Please read Documentation/process/submitting-patches.rst and resubmit.
+Commit 69fa95905d40 ("spi: Ensure the io_mutex is held until
+spi_finalize_current_message()") moved this code into
+__spi_pump_messages(), but it was executed only if the transfer was
+successful. This condition check causes ctlr-busy to stay true in case of
+a failed transfer.
+This in turn causes that no new work is ever scheduled to the work queue.
 
-Thanks
+Fixes: 69fa95905d40 ("spi: Ensure the io_mutex is held until spi_finalize_current_message()")
+Reported-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+Signed-off-by: David Jander <david@protonic.nl>
+---
+ drivers/spi/spi.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
+index 83da8862b8f2..7355f4ac4e33 100644
+--- a/drivers/spi/spi.c
++++ b/drivers/spi/spi.c
+@@ -1727,8 +1727,7 @@ static void __spi_pump_messages(struct spi_controller *ctlr, bool in_kthread)
+ 	spin_unlock_irqrestore(&ctlr->queue_lock, flags);
+ 
+ 	ret = __spi_pump_transfer_message(ctlr, msg, was_busy);
+-	if (!ret)
+-		kthread_queue_work(ctlr->kworker, &ctlr->pump_messages);
++	kthread_queue_work(ctlr->kworker, &ctlr->pump_messages);
+ 
+ 	ctlr->cur_msg = NULL;
+ 	ctlr->fallback = false;
+-- 
+2.34.1
+

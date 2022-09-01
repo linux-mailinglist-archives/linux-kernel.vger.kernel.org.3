@@ -2,159 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1935A9EEA
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:29:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 813075A9EF0
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233668AbiIAS3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
+        id S233795AbiIAS32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:29:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiIAS3C (ORCPT
+        with ESMTP id S231589AbiIAS31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:29:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985B97CB62;
-        Thu,  1 Sep 2022 11:29:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 301A360B9A;
-        Thu,  1 Sep 2022 18:29:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EACC7C433D6;
-        Thu,  1 Sep 2022 18:28:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662056940;
-        bh=PlCL4cySnm15Ux+0EPr8LEeim/gpgor8ir7LBM4lzyM=;
+        Thu, 1 Sep 2022 14:29:27 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7A87CB62;
+        Thu,  1 Sep 2022 11:29:26 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9319B6CD;
+        Thu,  1 Sep 2022 20:29:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1662056964;
+        bh=Z2PmbE+q+oRXUcaxQb4yleqabhSi7+sIU+fRtX1f08s=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vuTFFXU/OEqKHZMxgSu1J2oOLUFORW1IBflDMHF+L5ALQBpp1DbA/kh9YjhwTOF5h
-         R/98kj9n6QiYlSpIATE1ocJpSDFLA8CTzJn29GQ73DSCypT49mbtCQet/xoHjueyQY
-         EBifd6Wce5OjHHW34tzOJJ1tI+OAP31Hje9EU67Y=
-Date:   Thu, 1 Sep 2022 20:28:57 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     evgreen@chromium.org, arnd@arndb.de, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@gpiccoli.net, ardb@kernel.org,
-        davidgow@google.com, jwerner@chromium.org,
-        Petr Mladek <pmladek@suse.com>
-Subject: Re: [PATCH V3] firmware: google: Test spinlock on panic path to
- avoid lockups
-Message-ID: <YxD56RTI9v/P2QOL@kroah.com>
-References: <20220819155059.451674-1-gpiccoli@igalia.com>
- <YxDVPqVkdgQbAIvY@kroah.com>
- <f89cd87c-7d1c-d8e6-ed95-6876f0201872@igalia.com>
- <YxDX9+p+58q2sip2@kroah.com>
- <6bc5dbc3-2cdd-5cb8-1632-11de2008a85a@igalia.com>
- <YxDhiSDs4YcUrqV5@kroah.com>
- <85683284-db85-7e3a-57bd-750e1c204e3e@igalia.com>
+        b=EC9PRlW04t2B9cCt+4wz2+8sQ2yp8ZM7K4V7wFcAu18ic4AGLGU00x4HynEEWPN2Q
+         Qz2NoygeN3lB+O3uKqaXMdjNbid1+cX2wo60JSgsJWl4n9pr++mwna1ahvOcnmbBYQ
+         uTEIOzPWZL7Zo/XQrQStWN6+c4w7jIunb8wj3B2s=
+Date:   Thu, 1 Sep 2022 21:29:13 +0300
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Max Krummenacher <max.oss.09@gmail.com>
+Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: [PATCH] arm64: dts: imx8mp-verdin: board regulators: add
+ always-on
+Message-ID: <YxD5+RCYtzcxEdjj@pendragon.ideasonboard.com>
+References: <20220901110422.1859621-1-max.oss.09@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <85683284-db85-7e3a-57bd-750e1c204e3e@igalia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220901110422.1859621-1-max.oss.09@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 02:46:48PM -0300, Guilherme G. Piccoli wrote:
-> On 01/09/2022 13:44, Greg KH wrote:
-> > [...]
-> >>> How are we supposed to know this here?
-> >>>
-> >>
-> >> Reading the code?
-> >> Or you mean, in the commit description this should be mentioned?
-> > 
-> > Yes, and in the comment as this type of call is very rare and should
-> > almost never be used.
+Hi Max,
+
+(CC'ing Mark and Liam)
+
+Thank you for the patch.
+
+On Thu, Sep 01, 2022 at 01:04:22PM +0200, Max Krummenacher wrote:
+> From: Max Krummenacher <max.krummenacher@toradex.com>
 > 
-> OK, I can add that, for sure.
+> These regulators are switched on by HW during power up and can not
+> be influenced by SW.
+> Set the always-on property.
+
+Is this needed ? When a fixed regulator has no control GPIO or clock, as
+is the case here, I would expect the driver and/or regulator core to
+understand that it's always on, as the alternative is always-off, which
+is pointless :-) Mark, Liam, what do you think ?
+
+> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
 > 
+> ---
 > 
-> >> [...]
-> >> I don't think it is so simple - we are in the panic path.
-> > 
-> > Great, then the lock doesn't matter :)
-> > 
-> >> So, imagine the lock was taken in CPU0, where GSMI is doing some
-> >> operation. During that operation, CPU1 panics!
-> >>
-> >> When that happens, panic() executes in CPU1, disabling CPU0 through
-> >> "strong" mechanisms (NMI). So, CPU0 had the lock, it is now off, and
-> >> when CPU1 goes through the panic notifiers, it'll eventually wait
-> >> forever for this lock in the GSMI handler, unless we have this patch
-> >> that would prevent the handler to run in such case.
-> >> Makes sense?
-> > 
-> > I'm trying to say "if you are in panic, never grab the lock in the first
-> > place".  So change the place when you grab the lock, not here.
-> > 
+>  arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
-> Evan, any comment here?
-> I think the patch is still well suited for this case. Suggestions on how
-> to improve it are welcome, of course.
-> 
-> I honestly didn't understand exactly what you're suggesting Greg...
-> Mind clarifying?
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+> index 557cfef8f049..76cc89296150 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
+> @@ -62,6 +62,7 @@ button-wakeup {
+>  	/* Carrier Board Supplies */
+>  	reg_1p8v: regulator-1p8v {
+>  		compatible = "regulator-fixed";
+> +		regulator-always-on;
+>  		regulator-max-microvolt = <1800000>;
+>  		regulator-min-microvolt = <1800000>;
+>  		regulator-name = "+V1.8_SW";
+> @@ -69,6 +70,7 @@ reg_1p8v: regulator-1p8v {
+>  
+>  	reg_3p3v: regulator-3p3v {
+>  		compatible = "regulator-fixed";
+> +		regulator-always-on;
+>  		regulator-max-microvolt = <3300000>;
+>  		regulator-min-microvolt = <3300000>;
+>  		regulator-name = "+V3.3_SW";
+> @@ -76,6 +78,7 @@ reg_3p3v: regulator-3p3v {
+>  
+>  	reg_5p0v: regulator-5p0v {
+>  		compatible = "regulator-fixed";
+> +		regulator-always-on;
+>  		regulator-max-microvolt = <5000000>;
+>  		regulator-min-microvolt = <5000000>;
+>  		regulator-name = "+V5_SW";
 
-Something like this totally untested code:
+-- 
+Regards,
 
-diff --git a/drivers/firmware/google/gsmi.c b/drivers/firmware/google/gsmi.c
-index adaa492c3d2d..6ad41b22671c 100644
---- a/drivers/firmware/google/gsmi.c
-+++ b/drivers/firmware/google/gsmi.c
-@@ -19,6 +19,7 @@
- #include <linux/dma-mapping.h>
- #include <linux/fs.h>
- #include <linux/slab.h>
-+#include <linux/panic.h>
- #include <linux/panic_notifier.h>
- #include <linux/ioctl.h>
- #include <linux/acpi.h>
-@@ -611,6 +612,11 @@ static const struct attribute *gsmi_attrs[] = {
- 	NULL,
- };
- 
-+static bool panic_in_progress(void)
-+{
-+	return unlikely(atomic_read(&panic_cpu) != PANIC_CPU_INVALID);
-+}
-+
- static int gsmi_shutdown_reason(int reason)
- {
- 	struct gsmi_log_entry_type_1 entry = {
-@@ -629,7 +635,8 @@ static int gsmi_shutdown_reason(int reason)
- 	if (saved_reason & (1 << reason))
- 		return 0;
- 
--	spin_lock_irqsave(&gsmi_dev.lock, flags);
-+	if (!panic_in_progress())
-+		spin_lock_irqsave(&gsmi_dev.lock, flags);
- 
- 	saved_reason |= (1 << reason);
- 
-@@ -644,7 +651,8 @@ static int gsmi_shutdown_reason(int reason)
- 
- 	rc = gsmi_exec(GSMI_CALLBACK, GSMI_CMD_SET_EVENT_LOG);
- 
--	spin_unlock_irqrestore(&gsmi_dev.lock, flags);
-+	if (!panic_in_progress())
-+		spin_unlock_irqrestore(&gsmi_dev.lock, flags);
- 
- 	if (rc < 0)
- 		printk(KERN_ERR "gsmi: Log Shutdown Reason failed\n");
-
-
-
-That being said, are you sure spinlocks are still held in the panic
-notifier?  What about the call to bust_spinlocks() that is called in
-panic() already?  Wouldn't that have already dropped whatever you were
-worried about here?
-
-thanks,
-
-greg k-h
+Laurent Pinchart

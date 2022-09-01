@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CEA75A9033
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:26:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A8AF5A9037
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234073AbiIAH0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
+        id S233586AbiIAH1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:27:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232470AbiIAHZq (ORCPT
+        with ESMTP id S233599AbiIAHZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:25:46 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60F5E51;
-        Thu,  1 Sep 2022 00:24:48 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id az27so21107512wrb.6;
-        Thu, 01 Sep 2022 00:24:48 -0700 (PDT)
+        Thu, 1 Sep 2022 03:25:57 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C12BCB8;
+        Thu,  1 Sep 2022 00:24:53 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so866823wmb.4;
+        Thu, 01 Sep 2022 00:24:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=W4sHhBFT7l0RZw3UjJyqKYPr5puCq7omf6aKnnWND30=;
-        b=JQZZvUi6O0ekBj3q+z2Stpq3f90RJSDx3xoOvdXfAF8N0rSyGrLOA7leU6sDOpvgoO
-         50fduhhKDz94Yq/r9Z47JHLiyKu7sYX9pxM6CAk16dTsxL7oGIcsn1nGjO53Sv7l1X/+
-         wWDz3gEFby1KyOlMgu9+Urc3i5XFOA64jDY4Yqo3TTqyIVYvHTyyQ+355sjPNsLOY7Mb
-         nlEiEjI3FfWhofbgEqCCw7AdaGgb4GKr7+/D5exkDgxhZbbJ1TVyyYW0/2g/8HdMGEhv
-         0plb1kZ4T+rlBgOfx7Qo5hGJeylsBNcBFsQZlAhLjMr3XG3KmNY/KpQgJnox/qe+yXpj
-         EpNQ==
+        bh=Po8E7/OIBjbSJpNPSFcYw7gzbRFnsYc7RcCzMnBQZCE=;
+        b=d+ZAEadifEtEK0I36qrNTGwR7qCxMEj/G5oudE0uUNdcMRZV1nVWyBCNE42U/e55ct
+         JKDq5ldbWlHu2wi98fEKGTr+x3ciyq8FW2PNel3/7hbcUtYdVWeRVjSSUaTHQn/vwgyc
+         RvQlgCUOe6WYi1K6Z7FGFQJWQ8sx4/177P9Q5c5MCRMdWRhPSUPjRjOCk+xVIhLM3eIu
+         EdBM2b70gynfcr0lDaDOA2v7ASVG5jwbB7M+RBlYfKcjcvZmifEMfT+okI1e3Np6f9CU
+         9zeAZXyvvLfh8cb4hxHqPdHl0YQGfsoQNSkEJvUBRe+GuCRywu+yvR/sXPwKriYMzEW8
+         /VjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=W4sHhBFT7l0RZw3UjJyqKYPr5puCq7omf6aKnnWND30=;
-        b=cslRbQgLzAHjfGwLBsKqG8reeIxfCtrM1Zp4Kj0Z3tNfkLJgyB6h4yMyEMhIAW9khd
-         U0DBYCULDZVtmYeHP9/MnbXZQIe5rrdbS05z/A+UAs57epaoLnfdsYOETkU7oLzP4EHc
-         ZWm090IFG1jVFTVmhoYy4VKXDoArGXIANKuPUuPazWWQxy/Bkzz+EX2P06vIp+me1Oa/
-         +bUIl2AUquXFbcVenPu8kD7FFbaFRLiwgO/a9WixUBOAZL0zMWhYq7dt+fKUSFW3KIT5
-         PNly91QXCtr/2YGqUsiXxLrxzKapHrpBMp7UF/316AUzmLKYbrioTiuzMHXbcfJbev9w
-         FUPg==
-X-Gm-Message-State: ACgBeo1qtIpwubKYWqQdz3iZjUgDDgRqQYC8z6vcb98BzExldsa4mkWh
-        kzStRIk3m8BDuvTR6Hbb+nc=
-X-Google-Smtp-Source: AA6agR5UAfAyP88xhdAn5WyYEnMT6lPL1ngs0NcfIIBlVKw6XqsJlHInPx6Gie40IB9NPz5vECUixA==
-X-Received: by 2002:a05:6000:904:b0:21a:3dca:4297 with SMTP id bz4-20020a056000090400b0021a3dca4297mr13599962wrb.487.1662017088630;
-        Thu, 01 Sep 2022 00:24:48 -0700 (PDT)
+        bh=Po8E7/OIBjbSJpNPSFcYw7gzbRFnsYc7RcCzMnBQZCE=;
+        b=ppN7dyPG/OnD4ivAWkHClR5pA4bb2M1D8v9TwYZSZF+RxP6zQQpmERitIsrlSmO7p6
+         YTSX/omyimqamT+7ZfbV8y4zM6FkXoQW/2m46E/ayQKdkXqEHSCLyxCVHyk05zKYuGPQ
+         dvG6MMBYJOzgAtTcZCMXPqNc5US0/yTg6Hkj0BBReiuWrBVeGMmaFV0PCR6U0U+EuyYl
+         bdxG1LKf3DAChSK5ZmP5wd3ElxTHHvIpdo8UgybZbl+wmI8zHCq5/h4Tx5UQ+aCCpMpB
+         yOdSsIwLMvMn8uQ6Hw/kNcBXUS3+rK0kw265oxjDJH0U1rnQUO1IEX8FysMfKeVW4vTu
+         LXHQ==
+X-Gm-Message-State: ACgBeo2AvP9Hd6x73Ek2Ec4rSdft1CTMaC+9JpKZDsnQljoM7p+p3Q1M
+        4F2UYNjEtGj4964CIDx75Ps=
+X-Google-Smtp-Source: AA6agR4X3Xg49JGgo5+uiWIgYlxOk2IfYPYs3HN+jSnL2bjj3B9lNMNRvLsokdg2o7KqvVvcJ8PMAA==
+X-Received: by 2002:a05:600c:22ca:b0:3a5:c30d:ca9f with SMTP id 10-20020a05600c22ca00b003a5c30dca9fmr4172325wmg.25.1662017091310;
+        Thu, 01 Sep 2022 00:24:51 -0700 (PDT)
 Received: from localhost (87-126-55-15.ip.btc-net.bg. [87.126.55.15])
-        by smtp.gmail.com with ESMTPSA id x14-20020a5d60ce000000b002252e5a6841sm13952561wrt.57.2022.09.01.00.24.46
+        by smtp.gmail.com with ESMTPSA id f14-20020a05600c4e8e00b003a5dbdea6a8sm5515967wmq.27.2022.09.01.00.24.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 00:24:48 -0700 (PDT)
+        Thu, 01 Sep 2022 00:24:50 -0700 (PDT)
 From:   Iskren Chernev <iskren.chernev@gmail.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -59,9 +59,9 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 09/14] arm64: dts: qcom: sm6115: Add UFS nodes
-Date:   Thu,  1 Sep 2022 10:24:08 +0300
-Message-Id: <20220901072414.1923075-10-iskren.chernev@gmail.com>
+Subject: [PATCH 10/14] arm64: dts: qcom: sm6115: Add SPMI bus node
+Date:   Thu,  1 Sep 2022 10:24:09 +0300
+Message-Id: <20220901072414.1923075-11-iskren.chernev@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220901072414.1923075-1-iskren.chernev@gmail.com>
 References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
@@ -77,95 +77,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The SM6115 comes with UFS support, so add the related UFS and UFS PHY
-nodes.
+Add support for the SPMI bus on the SM6115.
 
 Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 70 ++++++++++++++++++++++++++++
- 1 file changed, 70 insertions(+)
+ arch/arm64/boot/dts/qcom/sm6115.dtsi | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index cde963c56ac9..491fffff8aa1 100644
+index 491fffff8aa1..d578f8425e36 100644
 --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -620,6 +620,76 @@ opp-202000000 {
+@@ -543,6 +543,25 @@ qusb2_hstx_trim: hstx_trim@25b {
  			};
  		};
  
-+		ufs_mem_hc: ufshc@4804000 {
-+			compatible = "qcom,sm6115-ufshc", "qcom,ufshc",
-+				     "jedec,ufs-2.0";
-+			reg = <0x4804000 0x3000>, <0x4810000 0x8000>;
-+			reg-names = "std", "ice";
-+			interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH>;
-+			phys = <&ufs_mem_phy_lanes>;
-+			phy-names = "ufsphy";
-+			lanes-per-direction = <1>;
-+			#reset-cells = <1>;
-+			resets = <&gcc GCC_UFS_PHY_BCR>;
-+			reset-names = "rst";
-+
-+			power-domains = <&gcc GCC_UFS_PHY_GDSC>;
-+			iommus = <&apps_smmu 0x100 0>;
-+
-+			clocks = <&gcc GCC_UFS_PHY_AXI_CLK>,
-+				 <&gcc GCC_SYS_NOC_UFS_PHY_AXI_CLK>,
-+				 <&gcc GCC_UFS_PHY_AHB_CLK>,
-+				 <&gcc GCC_UFS_PHY_UNIPRO_CORE_CLK>,
-+				 <&gcc GCC_UFS_PHY_ICE_CORE_CLK>,
-+				 <&rpmcc RPM_SMD_XO_CLK_SRC>,
-+				 <&gcc GCC_UFS_PHY_TX_SYMBOL_0_CLK>,
-+				 <&gcc GCC_UFS_PHY_RX_SYMBOL_0_CLK>;
-+			clock-names = "core_clk",
-+				      "bus_aggr_clk",
-+				      "iface_clk",
-+				      "core_clk_unipro",
-+				      "core_clk_ice",
-+				      "ref_clk",
-+				      "tx_lane0_sync_clk",
-+				      "rx_lane0_sync_clk";
-+
-+			freq-table-hz = <50000000 200000000>,
-+					<0 0>,
-+					<0 0>,
-+					<37500000 150000000>,
-+					<75000000 300000000>,
-+					<0 0>,
-+					<0 0>,
-+					<0 0>;
-+
-+			non-removable;
-+			status = "disabled";
++		spmi_bus: qcom,spmi@1c40000 {
++			compatible = "qcom,spmi-pmic-arb";
++			reg = <0x1c40000 0x1100>,
++			      <0x1e00000 0x2000000>,
++			      <0x3e00000 0x100000>,
++			      <0x3f00000 0xa0000>,
++			      <0x1c0a000 0x26000>;
++			reg-names = "core", "chnls", "obsrvr", "intr", "cnfg";
++			interrupt-names = "periph_irq";
++			interrupts = <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>;
++			qcom,ee = <0>;
++			qcom,channel = <0>;
++			#address-cells = <2>;
++			#size-cells = <0>;
++			interrupt-controller;
++			#interrupt-cells = <4>;
++			cell-index = <0>;
 +		};
 +
-+		ufs_mem_phy: phy@4807000 {
-+			compatible = "qcom,sm6115-qmp-ufs-phy";
-+			reg = <0x4807000 0x1c4>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges;
-+
-+			clocks = <&gcc GCC_UFS_CLKREF_CLK>,
-+				 <&gcc GCC_UFS_PHY_PHY_AUX_CLK>;
-+			clock-names = "ref", "ref_aux";
-+
-+			resets = <&ufs_mem_hc 0>;
-+			reset-names = "ufsphy";
-+			status = "disabled";
-+
-+			ufs_mem_phy_lanes: lanes@4807400 {
-+				reg = <0x4807400 0x098>,
-+				      <0x4807600 0x130>,
-+				      <0x4807c00 0x16c>;
-+				#phy-cells = <0>;
-+			};
-+		};
-+
-+
- 		usb3: usb@4ef8800 {
- 			compatible = "qcom,sm6115-dwc3", "qcom,dwc3";
- 			reg = <0x04ef8800 0x400>;
+ 		tcsr_mutex_regs: syscon@1f40000 {
+ 			compatible = "syscon";
+ 			reg = <0x340000 0x20000>;
 -- 
 2.37.2
 

@@ -2,64 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30E085A94AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:32:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 171B25A94B1
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:32:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234184AbiIAKcl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:32:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39354 "EHLO
+        id S232666AbiIAKcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbiIAKci (ORCPT
+        with ESMTP id S234181AbiIAKcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:32:38 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEC9E12206C
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:32:37 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id v26so13520857lfd.10
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:32:37 -0700 (PDT)
+        Thu, 1 Sep 2022 06:32:48 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 141F212206F
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:32:44 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id k22so17396240ljg.2
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 03:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=HXeJHCAXo+Xl23q56BVg26tN6HoFjavkkhsO/UPUSCA=;
-        b=eWV9NJYuWmlhBNQjRqqJh21c9CuVTF8puoFd6FhvGU1FcWeHJwWakos45j1Ht7fc/O
-         Z13gOUa1yogoHDNl23GvvdjaT02jEi/pzJbE2IbdTWJ601oyMdmuq92FYWXGMP+2Rfem
-         1x5ZPTRNxtX52Ff6rNPZi+dnScPcqIEG28qfVSwqIKv5migHKqaepCVcAkYC5iCtzR0y
-         /38kX9+s/r50kTv8Bab9SHE+wF0lC9vdchJIDXwjhIqIu13M3gxubRsFwmzrONxRRNsS
-         npa4TiMaFzYEj2Qr8w8KEWoyE8VBzzllh1a92e2+GNBcnF3e3Su0t3PbxcVhHfN12InO
-         AmKw==
+        bh=ZXVAap/RQrEllx7GHmHFEmTUCY+2JbnwMtDeiKRHfQ8=;
+        b=Dhp+UYVqpfFeh+jDqzEIVKnoKF7JxN/03AsLCTOUMgF8GcAn6Ch3lv7LeqCPXQKl+w
+         mnc7afdTf2olu/Dsh7tqSXvjEofGX/mfpNqZlPHUtutvzz+oOQQEHqxXi8KaEHRdTios
+         D2olRqF2FvB2dZtP2+ZAuWQIKpYYqv3RWn2ILqHvhQoJK+SiOLyVC8LpGt2zi+GN4cgD
+         BuJRqt794voF/gu2V68Qq88X7FxsK+u0VUAnJfOfrI2JjbX2gSTzBpNBqQq5Q8d5nuaA
+         5WKRSjE9z1bBCVukE+iSE/s5V+duh/l7eW03rRDCG1+dEZ2QlkM6WzSw85o48R4/8o+M
+         Y5vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=HXeJHCAXo+Xl23q56BVg26tN6HoFjavkkhsO/UPUSCA=;
-        b=MJmdPB8ERBLg8FvsbAPE3494OVLFny/IIsGsb4Kt0yQbgBqxH2Qqo7EX8WAg767nZj
-         D73VnQCVfpQEfpqTPezrseeJ0GNy7/3b+rmTr4lZDBUPIhg0khcxaOG50NgFvhSF8Y0+
-         cbxu2xsO2iE5eiZksSyiwKQ2oMF06Ufr+4MP4JmAcvZId1YLCuiTgZyNyQWsLsJoAbwB
-         BFTJlGREwZNdfKmwGtmut1NAcvcP+X0lFDBdvIj2+DsfdrcpdtO9kZLRQtWOT4cylVQE
-         6IIt8+Etcua3Q+BeJyRZaCbD/ZsL/E3Hawvi16OJRmp2neLg2Wkpfl15ZzEST8jip98q
-         pLvA==
-X-Gm-Message-State: ACgBeo01Jznr5YKabcnQ3w6Z7VzBfZ+lGcTp3+U5fJYLQmljGvwmVD67
-        8LhtcHlxXIbq/ygahpn14hw/qA6Wx//4TyjLsVNOow==
-X-Google-Smtp-Source: AA6agR6N5ywWgfouWR/JVPBzzKCE4dtOVAqUK96KtyUH5iS36msWajnh943hORgNKjzHwQ7pKxba9YlqO2wq3xL5t28=
-X-Received: by 2002:ac2:5d26:0:b0:494:6d31:4c5b with SMTP id
- i6-20020ac25d26000000b004946d314c5bmr5836840lfb.358.1662028356081; Thu, 01
- Sep 2022 03:32:36 -0700 (PDT)
+        bh=ZXVAap/RQrEllx7GHmHFEmTUCY+2JbnwMtDeiKRHfQ8=;
+        b=isnA9KlivcfaTWedUDfVdVrBrODDgfcf2Fom/pEG005KiPD+36modkvwhIUMQwZfSX
+         w2TgT0d2CMWO0uZvtqTRejpfeCjUrU9MMKW+3boDELeY4OdNxZBuXhmXqZA+RAGQ0kav
+         aWdMCP0C7tNj26vfOqTYyB+cJxb6/WYjmRsHpe8uiFwmHna0gxVG4Ib1DPx4XBcWMAX2
+         T//Uy9y/0iEt7Ei8EGOtT+17nwJwVyaG4uS76aHMJT0vgFjE1L7cXAZJQybpQuAX23rz
+         TIB6zTejsW4T7ASjNcU1pvFSigFUwMvUfcFd7Xh9R+VGmMhapUl+youDvzAA1hZ4tnjS
+         yH9Q==
+X-Gm-Message-State: ACgBeo2hoOQqtNUWZUndcKWTu1Angeka30SEwvdNIujXjqe82hWqnAsY
+        hgW/WB4mXfTBcBMhlGwyIL82wIlkZ4vToyMSbjZm8Q==
+X-Google-Smtp-Source: AA6agR7mNmum3u12wn3ZgEHjcazZ/nYXQByxwmYoXxhjxe9BEdBb/1ct3OBV5/pl3brFfdAY/MsAgwYyy+RX0B+CEP8=
+X-Received: by 2002:a2e:9799:0:b0:261:e51d:8576 with SMTP id
+ y25-20020a2e9799000000b00261e51d8576mr10441111lji.367.1662028362375; Thu, 01
+ Sep 2022 03:32:42 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220830083349.276709-1-ye.xingchen@zte.com.cn>
-In-Reply-To: <20220830083349.276709-1-ye.xingchen@zte.com.cn>
+References: <20220831214314.7794-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220831214314.7794-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 1 Sep 2022 12:31:59 +0200
-Message-ID: <CAPDyKFp_r3RNbeYHFC2ncezJHJkmPcNkZ17N-FDQqxpLq0b20w@mail.gmail.com>
-Subject: Re: [PATCH linux-next] mmc: sdhci_am654: Remove the unneeded result variable
-To:     cgel.zte@gmail.com
-Cc:     adrian.hunter@intel.com, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, ye xingchen <ye.xingchen@zte.com.cn>,
-        Zeal Robot <zealci@zte.com.cn>
+Date:   Thu, 1 Sep 2022 12:32:05 +0200
+Message-ID: <CAPDyKFpsQwB97qqR6otk6VuyWF3fk+o9qh3tbxrme8B_oENnuQ@mail.gmail.com>
+Subject: Re: [PATCH v2] dt-bindings: mmc: renesas,sdhi: Add iommus property
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,15 +72,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 30 Aug 2022 at 10:33, <cgel.zte@gmail.com> wrote:
+On Wed, 31 Aug 2022 at 23:43, Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
 >
-> From: ye xingchen <ye.xingchen@zte.com.cn>
+> The SDHI blocks on Renesas R-Car and RZ/G2 SoCs make use of IOMMU.
 >
-> Return the value cqhci_init() directly instead of storing it in another
-> redundant variable.
+> This patch fixes the below dtbs_check warnings:
+> arch/arm64/boot/dts/renesas/r8a774e1-hihope-rzg2h-ex-idk-1110wr.dtb: mmc@ee100000: Unevaluated properties are not allowed ('iommus' was unexpected)
+>         From schema: Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
 >
-> Reported-by: Zeal Robot <zealci@zte.com.cn>
-> Signed-off-by: ye xingchen <ye.xingchen@zte.com.cn>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
 Applied for next, thanks!
 
@@ -84,31 +91,30 @@ Uffe
 
 
 > ---
->  drivers/mmc/host/sdhci_am654.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+> v1->v2
+> * Moved the iommus property after dma-names
+> * Updated commit message
+> * Included RB tag from Geert
 >
-> diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
-> index e7ced1496a07..8f1023480e12 100644
-> --- a/drivers/mmc/host/sdhci_am654.c
-> +++ b/drivers/mmc/host/sdhci_am654.c
-> @@ -554,7 +554,6 @@ static const struct cqhci_host_ops sdhci_am654_cqhci_ops = {
->  static int sdhci_am654_cqe_add_host(struct sdhci_host *host)
->  {
->         struct cqhci_host *cq_host;
-> -       int ret;
+> v1: https://lore.kernel.org/lkml/20220829214256.5583-1-prabhakar.mahadev-lad.rj@bp.renesas.com/T/
+> ---
+>  Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
 >
->         cq_host = devm_kzalloc(mmc_dev(host->mmc), sizeof(struct cqhci_host),
->                                GFP_KERNEL);
-> @@ -568,9 +567,7 @@ static int sdhci_am654_cqe_add_host(struct sdhci_host *host)
+> diff --git a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
+> index 3ea94d842c33..79dcd5f16a42 100644
+> --- a/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
+> +++ b/Documentation/devicetree/bindings/mmc/renesas,sdhi.yaml
+> @@ -89,6 +89,9 @@ properties:
+>          - tx
+>          - rx
 >
->         host->mmc->caps2 |= MMC_CAP2_CQE;
+> +  iommus:
+> +    maxItems: 1
+> +
+>    power-domains:
+>      maxItems: 1
 >
-> -       ret = cqhci_init(cq_host, host->mmc, 1);
-> -
-> -       return ret;
-> +       return cqhci_init(cq_host, host->mmc, 1);
->  }
->
->  static int sdhci_am654_get_otap_delay(struct sdhci_host *host,
 > --
 > 2.25.1
+>

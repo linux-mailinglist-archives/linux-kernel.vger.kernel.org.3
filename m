@@ -2,78 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9F935A9B45
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:10:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70E6B5A9B49
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233591AbiIAPJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34898 "EHLO
+        id S232313AbiIAPKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbiIAPJP (ORCPT
+        with ESMTP id S233671AbiIAPKK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:09:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E6B84EFE
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:09:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Thu, 1 Sep 2022 11:10:10 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65C41262D;
+        Thu,  1 Sep 2022 08:10:07 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 388AB224DF;
+        Thu,  1 Sep 2022 15:10:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662045006; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=dUKqF4WFMLbnhGWVoEtADqWmwSRbbb9QvEBtc3R+Zg0=;
+        b=U9HPKwCIb5JAZTFpZN5DXWhfcwxNOhOQFYiiNhh+Q69fT08o6r5vrhy/sVFYx9hXrPt9S7
+        GRpaRRpKlWKn4aU6oF8JCK9OqwvOZQ96oITArc1VJXiWoUr2mi6RSrxFosIcjxxuzjaKbn
+        fGhJiSbNBthJJz+YF5OZIp7Gnapk0Us=
+Received: from suse.cz (unknown [10.100.208.146])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C5617B82794
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 15:09:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 590C6C433D6;
-        Thu,  1 Sep 2022 15:09:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1662044951;
-        bh=Zfu18nSkzL58oEN660XiJknnjBz40fILMUsFoMnmQtM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=irKcvZR4FTqMeAbrRid6T5HEEvrlk0t+8GWAfVDZr4qQqdPBlb/Z66sDoH879P2Nl
-         PEjrJkCXSLh+7dSExn3pxYF64C5PzrXWmOMMZZYO2WWdhh/L/iwmg1VB+KkmY6t+mY
-         AZQCawkkcVaoAz9AS/ANR+4U5GQg9LrpPfJ7uUWk=
-Date:   Thu, 1 Sep 2022 17:09:09 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tomas Winkler <tomas.winkler@intel.com>
-Cc:     David Airlie <airlied@linux.ie>, Daniel Vetter <daniel@ffwll.ch>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Alexander Usyskin <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>
-Subject: Re: [PATCH v7 00/15] GSC support for XeHP SDV and DG2
-Message-ID: <YxDLFWjIllqqh9de@kroah.com>
-References: <20220806122636.43068-1-tomas.winkler@intel.com>
+        by relay2.suse.de (Postfix) with ESMTPS id 1A5EE2C141;
+        Thu,  1 Sep 2022 15:10:05 +0000 (UTC)
+Date:   Thu, 1 Sep 2022 17:10:05 +0200
+From:   Petr Mladek <pmladek@suse.com>
+To:     Zhen Lei <thunder.leizhen@huawei.com>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] livepatch: Add a missing newline character in
+ klp_module_coming()
+Message-ID: <YxDLTbbsqER7yrvj@alley>
+References: <20220830112855.749-1-thunder.leizhen@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220806122636.43068-1-tomas.winkler@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220830112855.749-1-thunder.leizhen@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 06, 2022 at 03:26:21PM +0300, Tomas Winkler wrote:
-> Add GSC support for XeHP SDV and DG2 platforms.
+On Tue 2022-08-30 19:28:55, Zhen Lei wrote:
+> The error message is not printed immediately because it does not end with
+> a newline character.
 > 
-> The series includes changes for the mei driver:
-> - add ability to use polling instead of interrupts
-> - add ability to use extended timeouts
-> - setup extended operational memory for GSC
+> Before:
+> root@localhost:~# insmod vmlinux.ko
+> insmod: ERROR: could not insert module vmlinux.ko: Invalid parameters
 > 
-> The series includes changes for the i915 driver:
-> - allocate extended operational memory for GSC
-> - GSC on XeHP SDV offsets and definitions
+> After:
+> root@localhost:~# insmod vmlinux.ko
+> [   43.982558] livepatch: vmlinux.ko: invalid module name
+> insmod: ERROR: could not insert module vmlinux.ko: Invalid parameters
 > 
-> This patch set should be merged via gfx tree as
-> the auxiliary device belongs there.
-> Greg, your ACK is required for the drives/misc/mei code base,
-> please review the patches.
+> Fixes: dcf550e52f56 ("livepatch: Disallow vmlinux.ko")
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
 
-With the exception that you all don't know what year it is:
+Great catch! The message is not pushed to the console because
+the line is not finished and might be eventually extended by pr_cont().
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
+
+The fix is trivial. I have pushed it into livepatching/livepatching.git,
+branch for-6.1/fixes.
+
+Best Regards,
+Petr

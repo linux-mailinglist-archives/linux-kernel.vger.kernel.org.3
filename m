@@ -2,35 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FD515A94E7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DDE95A94E3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:43:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233577AbiIAKmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:42:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55326 "EHLO
+        id S234110AbiIAKmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234377AbiIAKlo (ORCPT
+        with ESMTP id S234363AbiIAKlm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:41:44 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBA012FDE4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:41:40 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VO.fSTD_1662028897;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VO.fSTD_1662028897)
-          by smtp.aliyun-inc.com;
-          Thu, 01 Sep 2022 18:41:38 +0800
-From:   Baolin Wang <baolin.wang@linux.alibaba.com>
-To:     akpm@linux-foundation.org, mike.kravetz@oracle.com
-Cc:     songmuchun@bytedance.com, david@redhat.com,
-        baolin.wang@linux.alibaba.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3] mm/hugetlb: fix races when looking up a CONT-PTE/PMD size hugetlb page
-Date:   Thu,  1 Sep 2022 18:41:31 +0800
-Message-Id: <635f43bdd85ac2615a58405da82b4d33c6e5eb05.1662017562.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        Thu, 1 Sep 2022 06:41:42 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D52CC12C3FA;
+        Thu,  1 Sep 2022 03:41:37 -0700 (PDT)
+Received: from fraeml735-chm.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MJHYm0cVWz67yhg;
+        Thu,  1 Sep 2022 18:37:48 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ fraeml735-chm.china.huawei.com (10.206.15.216) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 1 Sep 2022 12:41:35 +0200
+Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 1 Sep
+ 2022 11:41:34 +0100
+Date:   Thu, 1 Sep 2022 11:41:33 +0100
+From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To:     Robert Richter <rrichter@amd.com>,
+        Dan Williams <dan.j.williams@intel.com>
+CC:     Alison Schofield <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        <linux-cxl@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Subject: Re: [PATCH 09/15] cxl/acpi: Determine PCI host bridge's ACPI UID
+Message-ID: <20220901114133.0000540c@huawei.com>
+In-Reply-To: <YxBW8Kz/bgoMsAee@rric.localdomain>
+References: <20220831081603.3415-1-rrichter@amd.com>
+        <20220831081603.3415-10-rrichter@amd.com>
+        <20220831120027.000017b3@huawei.com>
+        <YxBW8Kz/bgoMsAee@rric.localdomain>
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+MIME-Version: 1.0
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.226.42]
+X-ClientProxiedBy: lhrpeml100005.china.huawei.com (7.191.160.25) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -38,165 +62,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some architectures (like ARM64), it can support CONT-PTE/PMD size
-hugetlb, which means it can support not only PMD/PUD size hugetlb
-(2M and 1G), but also CONT-PTE/PMD size(64K and 32M) if a 4K page size
-specified.
+On Thu, 1 Sep 2022 08:53:36 +0200
+Robert Richter <rrichter@amd.com> wrote:
 
-So when looking up a CONT-PTE size hugetlb page by follow_page(), it
-will use pte_offset_map_lock() to get the pte entry lock for the CONT-PTE
-size hugetlb in follow_page_pte(). However this pte entry lock is incorrect
-for the CONT-PTE size hugetlb, since we should use huge_pte_lock() to
-get the correct lock, which is mm->page_table_lock.
+> On 31.08.22 12:00:27, Jonathan Cameron wrote:
+> > On Wed, 31 Aug 2022 10:15:57 +0200
+> > Robert Richter <rrichter@amd.com> wrote:
+> >   
+> > > The UID is needed to read the RCH's CEDT entry with the RCRB base
+> > > address. Determine the host's UID from its ACPI fw node.
+> > > 
+> > > Signed-off-by: Robert Richter <rrichter@amd.com>
+> > > ---
+> > >  drivers/cxl/acpi.c | 12 ++++++++++++
+> > >  1 file changed, 12 insertions(+)
+> > > 
+> > > diff --git a/drivers/cxl/acpi.c b/drivers/cxl/acpi.c
+> > > index f9cdf23a91a8..b3146b7ae922 100644
+> > > --- a/drivers/cxl/acpi.c
+> > > +++ b/drivers/cxl/acpi.c
+> > > @@ -368,8 +368,20 @@ struct pci_host_bridge *cxl_find_next_rch(struct pci_host_bridge *host)
+> > >  static int __init cxl_restricted_host_probe(struct platform_device *pdev)
+> > >  {
+> > >  	struct pci_host_bridge *host = NULL;
+> > > +	struct acpi_device *adev;
+> > > +	unsigned long long uid = ~0;
+> > >  
+> > >  	while ((host = cxl_find_next_rch(host)) != NULL) {
+> > > +		adev = ACPI_COMPANION(&host->dev);
+> > > +		if (!adev || !adev->pnp.unique_id ||
+> > > +			(kstrtoull(adev->pnp.unique_id, 10, &uid) < 0))  
+> > 
+> > There is an acpi_device_uid() accessor function that should probably be
+> > used here.  
+> 
+> That accessor actually does not help really, there is no null pointer
+> check for adev. Using it actually adds more complexity since another
+> variable is introduced plus you need to look at the function's
+> implementation anyway.
+> 
+> The adev->pnp.unique_id access pattern is widely used in the kernel, I
+> don't expect changes in the data struct here.
 
-That means the pte entry of the CONT-PTE size hugetlb under current
-pte lock is unstable in follow_page_pte(), we can continue to migrate
-or poison the pte entry of the CONT-PTE size hugetlb, which can cause
-some potential race issues, even though they are under the 'pte lock'.
+Ok.
 
-For example, suppose thread A is trying to look up a CONT-PTE size
-hugetlb page by move_pages() syscall under the lock, however antoher
-thread B can migrate the CONT-PTE hugetlb page at the same time, which
-will cause thread A to get an incorrect page, if thread A also wants to
-do page migration, then data inconsistency error occurs.
+> 
+> > Also, should a fialure to convert to an integer (or one within
+> > limits) be something we paper over?  Feels like we should fail
+> > hard if that happens.  
+> 
+> This is a real corner case and close to a broken firmware
+> implementation. I think current dbg messages are good to find where
+> the detection stops.
 
-Moreover we have the same issue for CONT-PMD size hugetlb in
-follow_huge_pmd().
+Hmm. I don't like papering over such bugs as it leads to people not
+fixing their bios as early as they otherwise would,
+	but fair enough I guess.
 
-To fix above issues, rename the follow_huge_pmd() as follow_huge_pmd_pte()
-to handle PMD and PTE level size hugetlb, which uses huge_pte_lock() to
-get the correct pte entry lock to make the pte entry stable.
+> 
+> > Admittedly I can't immediately find any spec that states that
+> > the _UID should be either integer or under 32 bits...
+> > ACPI allows a string and CXL just says it's 4 bytes long.  
+> 
+> IIRC the UID can be implemented as string or 8 bytes, there is no
+> limitation then. That's why the range check below.
+Ok.
 
-Cc: <stable@vger.kernel.org>
-Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
----
-Changes from v2:
- - Combine PMD and PTE level hugetlb handling into one function.
- - Drop unnecessary patches.
- - Update the commit message.
+All queries answered so
 
-Mike, please fold this patch into your series. Thanks.
----
- include/linux/hugetlb.h |  8 ++++----
- mm/gup.c                | 14 +++++++++++++-
- mm/hugetlb.c            | 27 +++++++++++++--------------
- 3 files changed, 30 insertions(+), 19 deletions(-)
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 852f911..fe4944f 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -207,8 +207,8 @@ struct page *follow_huge_addr(struct mm_struct *mm, unsigned long address,
- struct page *follow_huge_pd(struct vm_area_struct *vma,
- 			    unsigned long address, hugepd_t hpd,
- 			    int flags, int pdshift);
--struct page *follow_huge_pmd(struct mm_struct *mm, unsigned long address,
--				pmd_t *pmd, int flags);
-+struct page *follow_huge_pmd_pte(struct vm_area_struct *vma, unsigned long address,
-+				 int flags);
- struct page *follow_huge_pud(struct mm_struct *mm, unsigned long address,
- 				pud_t *pud, int flags);
- struct page *follow_huge_pgd(struct mm_struct *mm, unsigned long address,
-@@ -319,8 +319,8 @@ static inline struct page *follow_huge_pd(struct vm_area_struct *vma,
- 	return NULL;
- }
- 
--static inline struct page *follow_huge_pmd(struct mm_struct *mm,
--				unsigned long address, pmd_t *pmd, int flags)
-+static inline struct page *follow_huge_pmd_pte(struct vm_area_struct *vma,
-+				unsigned long address, int flags)
- {
- 	return NULL;
- }
-diff --git a/mm/gup.c b/mm/gup.c
-index 66d8619e..1e74fc0 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -530,6 +530,18 @@ static struct page *follow_page_pte(struct vm_area_struct *vma,
- 	if (WARN_ON_ONCE((flags & (FOLL_PIN | FOLL_GET)) ==
- 			 (FOLL_PIN | FOLL_GET)))
- 		return ERR_PTR(-EINVAL);
-+
-+	/*
-+	 * Considering PTE level hugetlb, like continuous-PTE hugetlb on
-+	 * ARM64 architecture.
-+	 */
-+	if (is_vm_hugetlb_page(vma)) {
-+		page = follow_huge_pmd_pte(vma, address, flags);
-+		if (page)
-+			return page;
-+		return no_page_table(vma, flags);
-+	}
-+
- retry:
- 	if (unlikely(pmd_bad(*pmd)))
- 		return no_page_table(vma, flags);
-@@ -662,7 +674,7 @@ static struct page *follow_pmd_mask(struct vm_area_struct *vma,
- 	if (pmd_none(pmdval))
- 		return no_page_table(vma, flags);
- 	if (pmd_huge(pmdval) && is_vm_hugetlb_page(vma)) {
--		page = follow_huge_pmd(mm, address, pmd, flags);
-+		page = follow_huge_pmd_pte(vma, address, flags);
- 		if (page)
- 			return page;
- 		return no_page_table(vma, flags);
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index d0617d6..c613d3c 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -7156,12 +7156,13 @@ struct page * __weak
- }
- 
- struct page * __weak
--follow_huge_pmd(struct mm_struct *mm, unsigned long address,
--		pmd_t *pmd, int flags)
-+follow_huge_pmd_pte(struct vm_area_struct *vma, unsigned long address, int flags)
- {
-+	struct hstate *h = hstate_vma(vma);
-+	struct mm_struct *mm = vma->vm_mm;
- 	struct page *page = NULL;
- 	spinlock_t *ptl;
--	pte_t pte;
-+	pte_t *ptep, pte;
- 
- 	/*
- 	 * FOLL_PIN is not supported for follow_page(). Ordinary GUP goes via
-@@ -7171,17 +7172,15 @@ struct page * __weak
- 		return NULL;
- 
- retry:
--	ptl = pmd_lockptr(mm, pmd);
--	spin_lock(ptl);
--	/*
--	 * make sure that the address range covered by this pmd is not
--	 * unmapped from other threads.
--	 */
--	if (!pmd_huge(*pmd))
--		goto out;
--	pte = huge_ptep_get((pte_t *)pmd);
-+	ptep = huge_pte_offset(mm, address, huge_page_size(h));
-+	if (!ptep)
-+		return NULL;
-+
-+	ptl = huge_pte_lock(h, mm, ptep);
-+	pte = huge_ptep_get(ptep);
- 	if (pte_present(pte)) {
--		page = pmd_page(*pmd) + ((address & ~PMD_MASK) >> PAGE_SHIFT);
-+		page = pte_page(pte) +
-+			((address & ~huge_page_mask(h)) >> PAGE_SHIFT);
- 		/*
- 		 * try_grab_page() should always succeed here, because: a) we
- 		 * hold the pmd (ptl) lock, and b) we've just checked that the
-@@ -7197,7 +7196,7 @@ struct page * __weak
- 	} else {
- 		if (is_hugetlb_entry_migration(pte)) {
- 			spin_unlock(ptl);
--			__migration_entry_wait_huge((pte_t *)pmd, ptl);
-+			__migration_entry_wait_huge(ptep, ptl);
- 			goto retry;
- 		}
- 		/*
--- 
-1.8.3.1
+> 
+> -Robert
+> 
+> >   
+> > > +			continue;
+> > > +
+> > > +		dev_dbg(&adev->dev, "host uid: %llu\n", uid);
+> > > +
+> > > +		if (uid > U32_MAX)
+> > > +			continue;
+> > > +
+> > >  		dev_info(&host->dev, "host supports CXL\n");
+> > >  	}
+> > >    
+> >   
 

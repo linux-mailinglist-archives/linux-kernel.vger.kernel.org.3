@@ -2,110 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 335145A950C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF9715A94FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:46:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233881AbiIAKtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:49:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
+        id S233366AbiIAKqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:46:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbiIAKtN (ORCPT
+        with ESMTP id S232394AbiIAKqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:49:13 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B8D11EB7F
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:49:12 -0700 (PDT)
-Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4MJHjn4GCFzYcys;
-        Thu,  1 Sep 2022 18:44:45 +0800 (CST)
-Received: from dggpemm500016.china.huawei.com (7.185.36.25) by
- dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+        Thu, 1 Sep 2022 06:46:03 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA457E831A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:46:01 -0700 (PDT)
+Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4MJHkQ4j58z67Q1Y;
+        Thu,  1 Sep 2022 18:45:18 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.31; Thu, 1 Sep 2022 12:45:59 +0200
+Received: from [10.48.151.166] (10.48.151.166) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 1 Sep 2022 18:49:10 +0800
-Received: from huawei.com (10.67.175.41) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 1 Sep
- 2022 18:49:10 +0800
-From:   Yipeng Zou <zouyipeng@huawei.com>
-To:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <rostedt@goodmis.org>, <mingo@redhat.com>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>
-CC:     <liaochang1@huawei.com>, <chris.zjh@huawei.com>,
-        <zouyipeng@huawei.com>
-Subject: [PATCH 2/2] riscv: tracing: Improve hardirq tracing message
-Date:   Thu, 1 Sep 2022 18:45:15 +0800
-Message-ID: <20220901104515.135162-3-zouyipeng@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220901104515.135162-1-zouyipeng@huawei.com>
-References: <20220901104515.135162-1-zouyipeng@huawei.com>
+ 15.1.2375.24; Thu, 1 Sep 2022 11:45:59 +0100
+Message-ID: <1351998d-4fd7-dffb-c1fa-a0b1ca759123@huawei.com>
+Date:   Thu, 1 Sep 2022 11:45:58 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.41]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500016.china.huawei.com (7.185.36.25)
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+From:   John Garry <john.garry@huawei.com>
+Subject: Re: [PATCH v2] iommu/iova: Optimize alloc_iova with rbtree_augmented
+To:     Peng Zhang <zhangpeng.00@bytedance.com>,
+        Ethan Zhao <haifeng.zhao@linux.intel.com>, <joro@8bytes.org>,
+        <will@kernel.org>
+CC:     <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <robin.murphy@arm.com>
+References: <20220824095139.66477-1-zhangpeng.00@bytedance.com>
+ <06c215c6-cbae-d6b9-312c-6535e51a3128@linux.intel.com>
+ <486fcde8-e9f5-e40c-db5d-fd3ade59b267@bytedance.com>
+ <a2479500-479a-22ef-3bd2-90606a26a35e@linux.intel.com>
+ <4527c925-076b-a477-4ff8-697d75f16761@bytedance.com>
+In-Reply-To: <4527c925-076b-a477-4ff8-697d75f16761@bytedance.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.48.151.166]
+X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use trace_hardirqs_on_caller to improve irq_tracing message.
+On 26/08/2022 11:28, Peng Zhang wrote:
+> 
+>> Though only 3-4 drivers use alloc_iova() directly, in my understanding
+>>
+>> your test has simulated the worst case, rcache doesn't work at all,
+>>
+>> "alloc_iova" +“remove_iova” number looks great for worst case.
+> 
+> There is another case, when the size to allocate greater to 2^5, even if 
+> alloc_iova_fast() is used, alloc_iova() will always be called because 
+> the maximum iova size that rcache supports to allocate is 32.
+> IOVA_RANGE_CACHE_MAX_SIZE specifies the maximum size.
+> 
 
-lockdep log in riscv showing the last {enabled,disabled} at
-__trace_hardirqs_{on,off} all the time(if called by).
-But that's not what we want to see, the caller is what we want.
 
-Before this commit:
-[   57.853175] hardirqs last  enabled at (2519): __trace_hardirqs_on+0xc/0x14
-[   57.853848] hardirqs last disabled at (2520): __trace_hardirqs_off+0xc/0x14
+If you really have a performance issue with alloc_iova_fast() -> 
+alloc_iova() then I suggest that you consider trying to use 
+dma_opt_mapping_size() to teach the DMA engine driver to not create 
+requests whose overall size exceeds to the rcache limit.
 
-After this commit
-[   53.781428] hardirqs last  enabled at (2595): restore_all+0xe/0x66
-[   53.782185] hardirqs last disabled at (2596): ret_from_exception+0xa/0x10
-
-Signed-off-by: Yipeng Zou <zouyipeng@huawei.com>
----
- arch/riscv/kernel/trace_irq.c | 4 ++--
- include/linux/irqflags.h      | 2 ++
- 2 files changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/arch/riscv/kernel/trace_irq.c b/arch/riscv/kernel/trace_irq.c
-index 095ac976d7da..7ca24b26e19f 100644
---- a/arch/riscv/kernel/trace_irq.c
-+++ b/arch/riscv/kernel/trace_irq.c
-@@ -16,12 +16,12 @@
- 
- void __trace_hardirqs_on(void)
- {
--	trace_hardirqs_on();
-+	trace_hardirqs_on_caller(CALLER_ADDR0);
- }
- NOKPROBE_SYMBOL(__trace_hardirqs_on);
- 
- void __trace_hardirqs_off(void)
- {
--	trace_hardirqs_off();
-+	trace_hardirqs_off_caller(CALLER_ADDR0);
- }
- NOKPROBE_SYMBOL(__trace_hardirqs_off);
-diff --git a/include/linux/irqflags.h b/include/linux/irqflags.h
-index 5ec0fa71399e..46774fa85cde 100644
---- a/include/linux/irqflags.h
-+++ b/include/linux/irqflags.h
-@@ -53,6 +53,8 @@ extern void trace_hardirqs_on_prepare(void);
- extern void trace_hardirqs_off_finish(void);
- extern void trace_hardirqs_on(void);
- extern void trace_hardirqs_off(void);
-+extern void trace_hardirqs_on_caller(unsigned long caller_addr);
-+extern void trace_hardirqs_off_caller(unsigned long caller_addr);
- 
- # define lockdep_hardirq_context()	(raw_cpu_read(hardirq_context))
- # define lockdep_softirq_context(p)	((p)->softirq_context)
--- 
-2.17.1
+Thanks,
+John
 

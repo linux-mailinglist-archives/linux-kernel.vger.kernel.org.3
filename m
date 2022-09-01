@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 183D05AA2D2
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:21:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1DB5AA2D5
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 00:21:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235213AbiIAWVL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 18:21:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46822 "EHLO
+        id S235151AbiIAWVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 18:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235093AbiIAWUn (ORCPT
+        with ESMTP id S235099AbiIAWUo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 18:20:43 -0400
-Received: from mail.3ffe.de (0001.3ffe.de [159.69.201.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55043A1A63;
-        Thu,  1 Sep 2022 15:19:10 -0700 (PDT)
+        Thu, 1 Sep 2022 18:20:44 -0400
+Received: from mail.3ffe.de (0001.3ffe.de [IPv6:2a01:4f8:c0c:9d57::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9636272B77;
+        Thu,  1 Sep 2022 15:19:11 -0700 (PDT)
 Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.3ffe.de (Postfix) with ESMTPSA id DCC132010;
-        Fri,  2 Sep 2022 00:19:07 +0200 (CEST)
+        by mail.3ffe.de (Postfix) with ESMTPSA id B53E82174;
+        Fri,  2 Sep 2022 00:19:08 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2022082101;
         t=1662070748;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wdjSL3TiHg3qFpviZsE8DP2S5RzCHH4DKzPfG+JMhKc=;
-        b=MD31gvVbYo7tM0nTjHtSpj+l08HOGGoGiWF6xKQiUjq68ekoSRL++w3Q4T1lJIaMTgX8hF
-        Dn5laG5VT2yoyNqpvBuuHnH9UOkfphV5B+jn0SWPSEQtuzaNQTUyx3LpNFWg6BdLDALDWL
-        A35GGTTMPmhrr+ZwOnXXjVOnOkOGIPwDvNC8lubbocR1C/eu341/xSUSvXzs9SI37y9Icj
-        LdLR/xMA+hRltry8fFAP7sKWHQhGLw1QJFAlpuMEyC9B7I5guVEGlhF+7zdY9BWGl04QW8
-        QVlnsB1qZcsPx+iuszGFE1ezn0hgNlyShJPek5X4+3wRG6nVgHKYv+2Kp27+cw==
+        bh=KPTSNnKuOZ7slK5iP2y/D4YlHgeHTfE+RpZ3l5g5oDE=;
+        b=xVw9apIIeycfaSw4xC5V+V9aqeQ+Yhu7JgXVUqFEgGpHNt0DbYiOqB8hQx+rwVIBbseS4d
+        Xv3TdS7ReFq+ZB1fdj+y2qCBF0DQM83gQ+8gZ8kmRZQ/l9ICbqBTm8XCEr0vIl/w24trl/
+        2vfBccFYhuNqgWqEOmOVCiXsN9zNWyey4vjN/ju14C4YANPzHhk05uJMSRh+uxLgFTdfXY
+        mQzyWJY61bzFrBiiEMNwiARl0UJs+GMQXNhYX9oLlNqSxxv93+HmO7pP1wlga2VCGiemE8
+        JBARPRLsKjn5pSrAG1/4uHSrt/86WceOjMa8wmu5BrkTSlcYo3EU2VHv2qu4wA==
 From:   Michael Walle <michael@walle.cc>
 To:     Miquel Raynal <miquel.raynal@bootlin.com>,
         Richard Weinberger <richard@nod.at>,
@@ -47,11 +47,10 @@ Cc:     linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         Ahmad Fatoum <a.fatoum@pengutronix.de>,
         Philipp Zabel <p.zabel@pengutronix.de>,
-        Michael Walle <michael@walle.cc>, Andrew Lunn <andrew@lunn.ch>,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH v2 01/20] net: add helper eth_addr_add()
-Date:   Fri,  2 Sep 2022 00:18:38 +0200
-Message-Id: <20220901221857.2600340-2-michael@walle.cc>
+        Michael Walle <michael@walle.cc>, Rob Herring <robh@kernel.org>
+Subject: [PATCH v2 02/20] of: base: add of_parse_phandle_with_optional_args()
+Date:   Fri,  2 Sep 2022 00:18:39 +0200
+Message-Id: <20220901221857.2600340-3-michael@walle.cc>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20220901221857.2600340-1-michael@walle.cc>
 References: <20220901221857.2600340-1-michael@walle.cc>
@@ -67,44 +66,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a helper to add an offset to a ethernet address. This comes in handy
-if you have a base ethernet address for multiple interfaces.
+Add a new variant of the of_parse_phandle_with_args() which treats the
+cells name as optional. If it's missing, it is assumed that the phandle
+has no arguments.
+
+Up until now, a nvmem node didn't have any arguments, so all the device
+trees haven't any '#*-cells' property. But there is a need for an
+additional argument for the phandle, for which we need a '#*-cells'
+property. Therefore, we need to support nvmem nodes with and without
+this property.
 
 Signed-off-by: Michael Walle <michael@walle.cc>
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-Acked-by: Jakub Kicinski <kuba@kernel.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
 changes since v1:
  - none
 
- include/linux/etherdevice.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+ include/linux/of.h | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
-diff --git a/include/linux/etherdevice.h b/include/linux/etherdevice.h
-index a541f0c4f146..f144cadbe99d 100644
---- a/include/linux/etherdevice.h
-+++ b/include/linux/etherdevice.h
-@@ -507,6 +507,20 @@ static inline void eth_addr_inc(u8 *addr)
- 	u64_to_ether_addr(u, addr);
+diff --git a/include/linux/of.h b/include/linux/of.h
+index 766d002bddb9..a0fe1a017452 100644
+--- a/include/linux/of.h
++++ b/include/linux/of.h
+@@ -1008,6 +1008,31 @@ static inline int of_parse_phandle_with_fixed_args(const struct device_node *np,
+ 					    index, out_args);
  }
  
 +/**
-+ * eth_addr_add() - Add (or subtract) and offset to/from the given MAC address.
++ * of_parse_phandle_with_optional_args() - Find a node pointed by phandle in a list
++ * @np:		pointer to a device tree node containing a list
++ * @list_name:	property name that contains a list
++ * @cells_name:	property name that specifies phandles' arguments count
++ * @index:	index of a phandle to parse out
++ * @out_args:	optional pointer to output arguments structure (will be filled)
 + *
-+ * @offset: Offset to add.
-+ * @addr: Pointer to a six-byte array containing Ethernet address to increment.
++ * Same as of_parse_phandle_with_args() except that if the cells_name property
++ * is not found, cell_count of 0 is assumed.
++ *
++ * This is used to useful, if you have a phandle which didn't have arguments
++ * before and thus doesn't have a '#*-cells' property but is now migrated to
++ * having arguments while retaining backwards compatibility.
 + */
-+static inline void eth_addr_add(u8 *addr, long offset)
++static inline int of_parse_phandle_with_optional_args(const struct device_node *np,
++						      const char *list_name,
++						      const char *cells_name,
++						      int index,
++						      struct of_phandle_args *out_args)
 +{
-+	u64 u = ether_addr_to_u64(addr);
-+
-+	u += offset;
-+	u64_to_ether_addr(u, addr);
++	return __of_parse_phandle_with_args(np, list_name, cells_name,
++					    0, index, out_args);
 +}
 +
  /**
-  * is_etherdev_addr - Tell if given Ethernet address belongs to the device.
-  * @dev: Pointer to a device structure
+  * of_property_count_u8_elems - Count the number of u8 elements in a property
+  *
 -- 
 2.30.2
 

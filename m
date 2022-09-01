@@ -2,161 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ABAF5AA154
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 23:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC7EF5AA15A
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 23:06:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235060AbiIAVC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 17:02:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37284 "EHLO
+        id S234514AbiIAVGY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 17:06:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235031AbiIAVCv (ORCPT
+        with ESMTP id S231326AbiIAVGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 17:02:51 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06302673
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 14:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662066169; x=1693602169;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=4pnWsGKM3AbFBAiPQAgqjVOjeD8oJO0SKDZgCMyB9zA=;
-  b=nduEX4aePAKR0cfm/EoS/9cKmphUWkup+Q0Vf+KrT3BLSHp2KHqgOupR
-   XShXkEt0wQpMAVHZag3vl9Mruu11DpgIU3+VWIm0Stld6KUEtR06QSiDl
-   Mm++/GoAglJB4i25y5axlXL1jDOjoS+j0bjq7Z0bnmocOvBAUy0yf3Y2D
-   l6o4BMG2FI3etQrAkeEryyOpt9d97sSA54oqrxKVHYviG24VaYNY5UJye
-   ZV520Ch4BFknbbG20+5AfjGU9meYrGJuChbnqu7ssL9vCDwpxyoN1/CDT
-   Xr7s1CSoQtl/PxkaXxQEfgom2CFjIccpD5O+hLcAO9NuL/qu8rNAJWnU4
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="275574004"
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="275574004"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 14:02:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
-   d="scan'208";a="612656819"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga002.jf.intel.com with ESMTP; 01 Sep 2022 14:02:49 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 14:02:48 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 1 Sep 2022 14:02:48 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.102)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 1 Sep 2022 14:02:48 -0700
+        Thu, 1 Sep 2022 17:06:21 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2E8C5A174
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 14:06:20 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281KRSYi029044;
+        Thu, 1 Sep 2022 21:06:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2022-7-12;
+ bh=GdOc9wgSrwRAibuW3Nv7ZjfmdTNLDadhpBWc8mKN6gg=;
+ b=z97Z/L7sKSw5+UUiVI7qn9VQ2OYWiXphYHroDp0uNsJU687IxecpMjzEDQ/InHDxwfYd
+ EVOC60ob2GHUfSjeCOChwTNtbw5PmzIoITXXgiF9SVR2xdOxu5tWiYB8GPh0hziEk044
+ GLv+Vk8DFuFBXmx9evk8AkTrqUxikzOM+0MGlbS2Em/FHi+saqwahNhvXIJM0tPHNbDB
+ QZaE0FAl55jMw0V4etVfSdXUIG3b3VUgyP9RvABNy5EXasyG8h/8XLSb5SgWVOfLNVvp
+ 1AeK8qAPTtu/B2zK89XE4oPAYti4/5ctkABjRCOEqJARh5p02HyCp/W7UzjH6ClQHXPb Aw== 
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j79v0wghs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Sep 2022 21:06:14 +0000
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 281IuhwI002331;
+        Thu, 1 Sep 2022 21:06:12 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2174.outbound.protection.outlook.com [104.47.56.174])
+        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j79q6yfug-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 01 Sep 2022 21:06:12 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ErHqOtUieGsNvMMVI3rGT3dZDyynBEUOhuGxHuXgHrHurkinUs2UqGeHdebTpMspMj9ebN+Z2AiGqEdoz9ENc0O046M2etSyk+Mca1aa8whrmSl0Go4AvizsUErt3TkHZPktJQNebXDlTuZ3hjs6Bdot3PUqy3zKKZA3AVpB3ebsZ7519hKySNP9+WNyBm1nzHpQRm2joFoXU7VKwHtw/Rxy3p4QRqOi75p63pQC0f/AlJdGErxLxh5VKtPguPkisL4uIVnfDB7AzsQTIQGQcp9vY1n+WG7Qy8aAILDHufKVAKvcl8hsE8IJzrYtitVG1M+0oJWqqVlCcsUYnmiIkg==
+ b=KerWrzqlC57CrRUGNrQ207ekYbe/BOBqxkh9SYgMptDaCcIsF/jvGdTwpj7pP+HdFzL2VgNjsvYMoUd/lEb7eZJBln4+i8/v019U4B21Zs/T7j/4eo17rByOdNt8gYRRxnVqN5hnyhSyStMj/SlSp1tk0U/OnlB/U+9opvismmpdta4op7IKY2yTXen5ulK7Jba3uKfc2J4FDxYHp0izQPtbs2qiFFONZCIk643+n357P5i0pcKVuuEZ5SCfGu+m3DiGiB687JDF4EZQSX6sr2ixufH32I5mK9o2AYCL+vDb0g1zJ8RPjSyYkm87dPbyh+2kZEmJk8tT6DF9ma7qLg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=852tJ+cXrBoIaGHFqd/2Y2KCKh/zGt5L9Wczq/VIoe4=;
- b=RTuRqqlEQEMOxluyrvirYN8uf42ESvMkv1hLNN4gvoUX4Dh8bYZ45m5UIVzbOOogBS4a2wIFtMjofoZ8zSRtHcfPc9HMJZ2U1zxp1qoxIERr7GcmqI8dUbkD3o4NdForcJdRGjwjkBQuyEK+e3r3dcuE8wDsPzrO8w9NrcG3lx9SI8X+7v4lTlwY7iSA5Zb3cXNQS8RSi4WuBmElwFnUn0mu6YEffghCgLTWbIxdNOvF+88FAVdKWpWtbFk/AC9ysoQNf/r818ca5SGXk0j5R8FDwCRzJ+YaQKja/UcvpJuEPpt4gI6LTOGU/xT8yPig0vVOGkVDvpEriFmkW+yQEg==
+ bh=GdOc9wgSrwRAibuW3Nv7ZjfmdTNLDadhpBWc8mKN6gg=;
+ b=QjOlNbSbzOiaWDdIisYibplEPH46qPNzJAM/EmS+hWcYmDioEA/kgiI3Ac7olD5b9ZTo61MbFwlZ0HCzdW3AnC+tiy+n9MkPUAEK4yHHRskrVrwlA07xes7TMaF/4mKFPDAzO6Dj579YjC27oYo4XcP+AMTBrkcnOEpJoa5M5JfcI1LmcmJc3juJvvvHOC33YHHD6IyZag+NTVQcjqxrcpUd9POEp9i3gtTUI9gyGWm+dHQw5XNompK8xNh5SDHRtivMdBiAQXMKt5IMR46/JUzSdu5DLA3RxlM/R+1M8K4VHJoQPIygC0wT4qwbP9P+jjjOt0gXZTupWpyjrDqCCA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5488.namprd11.prod.outlook.com (2603:10b6:5:39d::5) by
- SA0PR11MB4686.namprd11.prod.outlook.com (2603:10b6:806:97::7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5566.15; Thu, 1 Sep 2022 21:02:47 +0000
-Received: from DM4PR11MB5488.namprd11.prod.outlook.com
- ([fe80::1977:59e7:5a28:24e1]) by DM4PR11MB5488.namprd11.prod.outlook.com
- ([fe80::1977:59e7:5a28:24e1%9]) with mapi id 15.20.5588.012; Thu, 1 Sep 2022
- 21:02:47 +0000
-Message-ID: <e2296121-1f99-5bd2-2a80-a24b029bf4f3@intel.com>
-Date:   Thu, 1 Sep 2022 14:02:44 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v7 11/15] mei: gsc: setup gsc extended operational memory
-Content-Language: en-US
-To:     Tomas Winkler <tomas.winkler@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>
-CC:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        <intel-gfx@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        "Alexander Usyskin" <alexander.usyskin@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>
-References: <20220806122636.43068-1-tomas.winkler@intel.com>
- <20220806122636.43068-12-tomas.winkler@intel.com>
-From:   "Ceraolo Spurio, Daniele" <daniele.ceraolospurio@intel.com>
-In-Reply-To: <20220806122636.43068-12-tomas.winkler@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR05CA0169.namprd05.prod.outlook.com
- (2603:10b6:a03:339::24) To DM4PR11MB5488.namprd11.prod.outlook.com
- (2603:10b6:5:39d::5)
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=GdOc9wgSrwRAibuW3Nv7ZjfmdTNLDadhpBWc8mKN6gg=;
+ b=x0c3ZzWGsqRq9Wmty1oCyG5k1JJQoCdyXUxgldj48eTQ5MEvwdVSuRkrkpJA3XgjJkCzOcbeHX+rM47TPiUvCloLhyrNQAAntmcaeHVglnosNq6XsredU2eg+EIcABPWuyD2AHXtc36yHK6ejq5nOhTqxryvWbvalinofp/uISY=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by DS7PR10MB5357.namprd10.prod.outlook.com (2603:10b6:5:3ac::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.12; Thu, 1 Sep
+ 2022 21:06:09 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::e9d2:a804:e53a:779a]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::e9d2:a804:e53a:779a%6]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
+ 21:06:09 +0000
+Date:   Thu, 1 Sep 2022 14:06:06 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Baolin Wang <baolin.wang@linux.alibaba.com>,
+        akpm@linux-foundation.org
+Cc:     songmuchun@bytedance.com, david@redhat.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm/hugetlb: fix races when looking up a CONT-PTE/PMD
+ size hugetlb page
+Message-ID: <YxEevpqBy2rIjcrO@monkey>
+References: <635f43bdd85ac2615a58405da82b4d33c6e5eb05.1662017562.git.baolin.wang@linux.alibaba.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <635f43bdd85ac2615a58405da82b4d33c6e5eb05.1662017562.git.baolin.wang@linux.alibaba.com>
+X-ClientProxiedBy: MW3PR05CA0021.namprd05.prod.outlook.com
+ (2603:10b6:303:2b::26) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 53e6da18-5809-4bc5-3c31-08da8c5d5259
-X-MS-TrafficTypeDiagnostic: SA0PR11MB4686:EE_
+X-MS-Office365-Filtering-Correlation-Id: 66857384-b7c1-436d-652f-08da8c5dcafc
+X-MS-TrafficTypeDiagnostic: DS7PR10MB5357:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8JwGEljPFtwLMDoHVwi+JHnOh2Ayj+U5e8Uj6CeZ1wsvoF3szcHHhDsG4czOECuOK7NT01lo20UafvMpMQgOWuKxq83vWREcijZ1a506XKeNJ4/xerKI0UwicFdpu6GMe4rin4wFuRJ9qOxLXxuC3FWm9A1SwGPgcdlZzF8dDj3f7b/3z084FBwVrh3dSI8tYmXNWOh5l+T4Wv0ghVrQKnqTp6HuXp/3meaBSAJnbD4EW42K3QClK+W7bNJzwEUSVNmautuECN3QTwxyrDlGkgsAus9U7+E/Pocit9ZsEaLlxn6u6ZAsYMlXj5m/PJHUiKxdqIlgdVAtFbg+jnbz6WV1lOz3/osJlLVmXWRikRDqI+vfwmRIeALQFDuZI0vDopFQPK7IjmYwRLosEkxVz+79DO1UMBm84jZoMlysFj1EhGeu8Qw07J2yxvSGRSR5aeM7LxkHO8wf+FH4xz0sRT+bkKZ5AwOVt6WdOESNABOazsY4JGiXvaZsTkhUycS/vOtOa47BuB7XQsquirmbD6RMPJz0vgOrA1kdv7k/mlvA5fu/ZQgqDbsXIZAaMz8Hn6UplaA8aY+rBulSb/eM5+HW6lEfGXyIMHGqhwWGeGEvhjaXfcMxRtg5EcGMIiUz5gUKopVALOweaVdmmqTLz8GkNjJ6g6eVImeZ7QH63htjPtXWXONEFZEJExeRo+c2GvHBCeNG2EhAt8z1Xb0MmbuYBB8G1/l+VjSKL4L+mrHJD68eXk+XMxpGi6UzRItRj5NSrW3DYe3qjLG7385Z98/DciqO58e9aRHbRbl2/Ww=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5488.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(366004)(39860400002)(346002)(396003)(376002)(82960400001)(316002)(66946007)(66476007)(66556008)(4326008)(6486002)(110136005)(31696002)(8676002)(5660300002)(8936002)(86362001)(36756003)(478600001)(31686004)(54906003)(41300700001)(6512007)(6506007)(2616005)(26005)(53546011)(38100700002)(2906002)(6666004)(83380400001)(186003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: +wCcpjKFsLPSAr07fHS1CHT3iZxyE1F8Y9T0HWXHjOCp9lQfkI+rqPiIeX6LcamaYjEUq6K0AipGLe5oV5kCSLcViFJH2x3oxY3JsG1Emx7foAnnFqdtty3yhbHh4RGNwGdGjPQz4PAu8/hdHGg8nze0937z0nF3I04lrDLjcb1L5/uqvP5Rlirgehs9qtCvvnFKAASDwWiOJAA45F0s7j0WqcfhE+7tr+CVFLZ7h/VWKv2XPLq+EYVKB/bQ8RrAJ3oA2knQsAGOzWOuZrjNfpeKny+yw0/UGuaSYK8MHRkCoTM7AvMCGqUPTmL575nQrfvitp9Qvdyc3nApWHFgDGmzeUZf+WyfHXzeK42vu8FU9/vUEtO5D34yYoPmOoazjasnSe3MFaTesXUFu68QTzcD+ttzamB5Zd5C74TGIMmP7psqsy1tLnfCqxb2bnAAp8TLZLmqQgwUbmOzVy8JKpmfrgzVj6TrzE828+0bLAbBKo4JgHBtWyByCDLruLUeY62P4BD+H1davuDjAAtfe41M/n4c+CgpTzqU5JvmA+HjsfpZUAPabPSniin5K21RS8S81UmTsNTPgrypgYHL0AoGx2Et6CxqCZG3b2XteXu4qsU9RnB7fjeWUx7RfJbzmbXCE62ieeQz5E9TCFBOiv5SpzyS1o3ZtyX6iO0+/letr1G8FHELfSSIFkE2wSLBS2zr3lf6XaEm8z8ZAojvlw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(136003)(39860400002)(346002)(366004)(396003)(86362001)(83380400001)(6506007)(186003)(53546011)(6666004)(41300700001)(26005)(9686003)(6512007)(66476007)(33716001)(316002)(4326008)(8676002)(66556008)(478600001)(66946007)(6486002)(5660300002)(2906002)(44832011)(38100700002)(8936002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?b2Uwb1RDOUFscDhSY0E3RWZlN2o0Vy9pOFcra3V1STJCeXN6UzZ3eVNEbE9o?=
- =?utf-8?B?MmpmbU13M3BGT0xzVXNtT0svN2tKU3ZsYTc0S2xpdFFqeDJJbTFwNkFjUTJC?=
- =?utf-8?B?ZCtwSlVmVXVYdlY5NWVRcGlpZjRvNXNoUjVBVVJhdUl5NXVqczlFaTFXRU1P?=
- =?utf-8?B?U0cyZm5pak40WjlGb0l5a1htTXlHU1V3SXhCdHZYdDI4bUt3MS9tNCt2VmRD?=
- =?utf-8?B?MGhRTkhwcDRkNjFMb0l2RFYwcVh1VW9wbXlFS095SDVKTFFjdmJESjluQVVT?=
- =?utf-8?B?Tm5OT1E0cGpvRG5jdmgwVytqendZS0dTSnBYUWhubGpxRVE2Zk5WRjlKdmNH?=
- =?utf-8?B?Q2M1ZHlpMzQ2dmFnMUJZR3l2ZisvRkIzVUYxTUhqdlkzdWE1TjM2Uld2L256?=
- =?utf-8?B?M2RPb1NyUWVFTTU3WjNVVi83aE5IMWFKVTJFODV3TG5mNWdGa1Z6am9Oeklw?=
- =?utf-8?B?MlQ3MUlpbXg2L1JBWGRTV2RNM1E2Ny9VdytaLzBSNEswVmx2azRXaWsvb3Qy?=
- =?utf-8?B?NWhRcEx6b1NFVFhwTGQ1L0Y4TjkwUE1Ra0ZwZ21XVmh4U1orVGY3bTFkL09i?=
- =?utf-8?B?OWtNdUJ1YUNYSjhQUlc4OHBhMGppTkRqVThMVHlHYU9GaDJ2N1UxcHpTS0ds?=
- =?utf-8?B?S0NMajRIV1R0Rk9FaVBiam9RNW5yWHNVcVUySVRRaGJmKzROQVE2WHJ5Lzhv?=
- =?utf-8?B?YUtKUDFmeVp5eXZ4elhTN0R6VVZsYzNueGVBTlVSRG81QmRMWmpPUEhqWUJN?=
- =?utf-8?B?QW9lN0ZhNGJlU0c5NjVvSnlJM0VkMFN4MlQ5bjZGcXd3SHBDTXh1anlvWTdF?=
- =?utf-8?B?YWJ1WUUwUktVclI4Y21BU3E4dFFjMmhCMW5obDdsYkRUTjdBM1ZpS05hdjFl?=
- =?utf-8?B?NUdLcWxVSW5jYzViTCt5cDhNQWFrTER3UHY2MGh1WjFGK1JwWW54OXpBZ0JB?=
- =?utf-8?B?ZWlLVlp1S0d1Rkd2M2QwTngxRGc3U2ZNWmtEcHpVYTExKzFiaS9UUk5iZnpP?=
- =?utf-8?B?SExlZzN0Z0tZS3hCckZUemxlb1MyVnhOYlFLUG16aUdnRy81TlFSdGdjS1VU?=
- =?utf-8?B?aHlHOFpJamVSOU04V1pIU1ZQejc3cTlEKzZDRk5KT2dYRllndmxHRFdjQ0Ir?=
- =?utf-8?B?YW9xS0plVEEwU3lENXhxUmRCWjYyZis1N0NJN0lRc0loRDZUd2d6a1owOUQ4?=
- =?utf-8?B?R2lXaDU1aWltMWdZWDB0aFdEUWI0TGUvNmsxMjlzNnBHeVloaGVRY2NkM0NR?=
- =?utf-8?B?MlVaSFh6a0ZQclNwSFpGbnVud3pnL2FqaE40ekNDSHN1WjFncEp6OGYxeCti?=
- =?utf-8?B?S2NzL2tTU1ZScUlnNkZkQTBvNGtlb0orRkpzUFYzZkp6VUgyTk4wWFl6TzA0?=
- =?utf-8?B?b1lrVW9TZTQwTDBJRzlJY3pZRUpmMXdVS0E4a0dudVQ1c3FBWUVWbGpFWHlt?=
- =?utf-8?B?aWJ5KzYvZEI0eGowS2pkbnZtcUhjNWM2WHdXY2poWTRpRnZXRVJoalZHWitp?=
- =?utf-8?B?eWRESndLM0pmdGw0Tyt4bk5ZNGp0cVc4blZMSEF2cWF0dGNuTFlIa0hOMkxC?=
- =?utf-8?B?SUlabndaWkVwczR3M1VaLzhQZWFDUld0NXpQaGVCOXVMUHdzb3ZlOGQ2S0dP?=
- =?utf-8?B?VjVmTVA5THVjQlh0Vy9QMktTSkN0YmViYzVjUjRTeHZuM3Q0QXJWSytYcDJq?=
- =?utf-8?B?M3VmNU5qRThuQ2tmZWhTMnphWVRCbm1CRzlOaThZMUQwN3pkZUxuM0pXQ3BZ?=
- =?utf-8?B?eXVGOEtjRStveGRGWWIyQTRTdFB6d0FRVWRxYnJ1OEg1eHd0MmM4MVErSnNQ?=
- =?utf-8?B?Yi9Ba3AxMXhISThSelhpMThQbzhQSE9uMENrYzNKYWxCQW51MENYR29qRTIr?=
- =?utf-8?B?Wmk4MUxyK2RBc2RNWnVRbmZkcXM3YTJkclhjKzJzZDROMjB4bm1sWGRnUjRt?=
- =?utf-8?B?RnlBVytyS2d0ZVZyRVJSRGpYWHdFVEN1cjI4bVhYUjN2Zk8zNzc1dThzM1V3?=
- =?utf-8?B?STVyem1NdnZuNkJFZTVwSDdWWUttRDJEcDAzZk1RbTRsTndCVlhNNXFGT3Zm?=
- =?utf-8?B?NWV1UCtxZmIrbEFtTUhHSVVKc1pwd1NodVRub0hZNkdDazJMMVZKNE9vdlpQ?=
- =?utf-8?B?YkFGY2VGZE5wVFpTWnlJRmN5bjBaNEpIUHlLY1hnRVI5Q1RzTEFRNHozcEZX?=
- =?utf-8?Q?+l6H7eiV0oBjNKvCKKXjjfY=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 53e6da18-5809-4bc5-3c31-08da8c5d5259
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5488.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TTHVOYc3oeQEuvtJ/mZsZme8HdyuKQNUojUKVeP5mWgjsTAjwk4JnI3TqWVn?=
+ =?us-ascii?Q?RbtAM5vTHI9i8vq4ifIjfacHUMT/dgIaLj9g600PYwg8Kq6hYJVxHETjlKDW?=
+ =?us-ascii?Q?bRcSjUGQ9T+XW+3qJUOlesi+N73BpdB/RkRFfOHU1OkAfdyuRYWg2R/Y6Z4K?=
+ =?us-ascii?Q?SO4eyufW4Bu2FcUI3VaKKSmMDoRGyguaqDDQn0CGqdwoqPA6TTjo6DLM4Whu?=
+ =?us-ascii?Q?VKU0VciHldqqwVrhylhihVkuv+cLuhjE2HGDs2T2EZX4Jg7iyPHhL4rjIyCe?=
+ =?us-ascii?Q?jQuw+GlYqW/sXxCznHO2g4YrtOk7Mj8J+s2uwv6RP+PtWuBLfDoLqVC0YEZH?=
+ =?us-ascii?Q?di+hI6jhy8dYyumiZ38rZpLurfG/ieK791WT4i2NQRa/nO4Y7H/Z84w7S+3P?=
+ =?us-ascii?Q?yfLyEKg99ZiW3sIDKr/AtCkWUjkw/MZk7cFS9X2g6xxafgwGBAe2awd7P7vw?=
+ =?us-ascii?Q?H+wJfhWSPAO2mfgyfPDpfU3LZz+vFmqGUv78boaGfa0tiU9Cu1M2uC44jQVt?=
+ =?us-ascii?Q?CsAEvB5U/xO8hasKfwu/iCyuwvkIJVb33Wd96wsSc/i8NkeIXvDkv7BYR0i0?=
+ =?us-ascii?Q?eYc1CwvrPMo1v+glG35emgFLpYCrO/Kt0hqm81ywqraSQY24ncCNyjx3JpA7?=
+ =?us-ascii?Q?fNUEwesOLG8FCWttEerOrm4GMYHHXIJE4IUzcchpjPbtGmMp7Oc5cNUQKsse?=
+ =?us-ascii?Q?PgeDYPZ8oMclJiy54r9DdxKQyvq8+KDIuc7VenBrke2FVZ6NbRYZAIbzr/YZ?=
+ =?us-ascii?Q?HMg3S+7zMn/f2Mbzjy+rBzMhdHlIVACt0hitfA5NgVN9TSBdTLHwl9xiE+bM?=
+ =?us-ascii?Q?94QO0JdhbtG9D0FDa4HcJEHCTZSCFStlRiRlDXJq0N+yLXVlrIx22KZmxQaX?=
+ =?us-ascii?Q?eTcI4UoKJoDpeXJJ6YIqSlh2YrZQKuwGKIsFvqhixIwNOoBecFVNnXO/xxqq?=
+ =?us-ascii?Q?GLjM/1Wiw0OLoOXVqAU/+J0DaAHHCpmxS3Y7cRnHObJ3GyMnhHlPmN7OlPft?=
+ =?us-ascii?Q?LFqsb7ZCU1uq8yQ9p4o7cW9YNzdBmuyb5IRs5Qytyq8WfX7xNetkw+vAM5+8?=
+ =?us-ascii?Q?pHjw8A2QlBZ+zTTzRPn+dlJa8xWsOFMD76EkECaKoPfNPNZxqEsPdJ7FnL5F?=
+ =?us-ascii?Q?HNSVVDdTXd4Ut0EQmUpSQZk1G7P6UN4g/uS29WO7MytnolppHk7LbmtKbhdL?=
+ =?us-ascii?Q?5LKKPmQ4Lwzb8kALDZq2OcEs7XsmG6s6RTm75HoNJX2jg7ou05dATsF1dz+3?=
+ =?us-ascii?Q?zqKOIzoG1ZLR0RWKURMKnTBtv7usET2pxhBEUbOy93YeNTTQ2+GVc6ukaxV+?=
+ =?us-ascii?Q?3wlrUdQ6PViObq4gZXtsmQbhy3eVpI9XYLpRk3cAXIQ+HQQ3S+cDq+LLdOsO?=
+ =?us-ascii?Q?YBtl4YRqMr0FK0nUrjTCJL3y34jeYvcuM9mZileoL2MFthvJc2ApFAbR4VqN?=
+ =?us-ascii?Q?D11QHA+5+KVLUfkuaCjTZrpd4V6uUbe91OecxhHAfxbMqgBfEBKqFIhxeHJq?=
+ =?us-ascii?Q?YNGatRwBP8cHBzEDrYu1dDwg2nyWlTewmlaIy4pEDzRW6whYXxrccB2cSCdR?=
+ =?us-ascii?Q?eHO90FSYYymqwuwi1GrfYBYysT7B2ma/1Q3+ZLP4jrs+h8mpdg6QRqHNpzNF?=
+ =?us-ascii?Q?Hw=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66857384-b7c1-436d-652f-08da8c5dcafc
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 21:02:46.9474
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 21:06:09.3606
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PQPpL2eUnDdTFrsbI+5G4QF4L0QmnVO0qIJp2yeizMVnht1g+d7wTzaOxg+RJWOEwkbgEllJmGQ6kdyuZODXVmT0IABwVvgg0G/N8h9I6zw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4686
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-MS-Exchange-CrossTenant-UserPrincipalName: wTzQGAI7ynWsloorW8YuDNPndjRcKInF/4C/AtB0Qs5HxcUiy8PhpWLG00mThGmH53RUKr2av0JVHKhf0ZN0+g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB5357
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=757
+ suspectscore=0 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2209010091
+X-Proofpoint-GUID: hU2cWngNvO24vqR_nHkl_muO183IRH1S
+X-Proofpoint-ORIG-GUID: hU2cWngNvO24vqR_nHkl_muO183IRH1S
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -164,311 +146,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/6/2022 5:26 AM, Tomas Winkler wrote:
-> 1. Retrieve extended operational memory physical pointers from the
->     auxiliary device info.
-> 2. Setup memory registers.
-> 3. Notify firmware that the memory is ready by sending the memory
->     ready command.
-> 4. Disable PXP device if GSC is not in PXP mode.
+On 09/01/22 18:41, Baolin Wang wrote:
+> On some architectures (like ARM64), it can support CONT-PTE/PMD size
+> hugetlb, which means it can support not only PMD/PUD size hugetlb
+> (2M and 1G), but also CONT-PTE/PMD size(64K and 32M) if a 4K page size
+> specified.
+> 
+> So when looking up a CONT-PTE size hugetlb page by follow_page(), it
+> will use pte_offset_map_lock() to get the pte entry lock for the CONT-PTE
+> size hugetlb in follow_page_pte(). However this pte entry lock is incorrect
+> for the CONT-PTE size hugetlb, since we should use huge_pte_lock() to
+> get the correct lock, which is mm->page_table_lock.
+> 
+> That means the pte entry of the CONT-PTE size hugetlb under current
+> pte lock is unstable in follow_page_pte(), we can continue to migrate
+> or poison the pte entry of the CONT-PTE size hugetlb, which can cause
+> some potential race issues, even though they are under the 'pte lock'.
+> 
+> For example, suppose thread A is trying to look up a CONT-PTE size
+> hugetlb page by move_pages() syscall under the lock, however antoher
+> thread B can migrate the CONT-PTE hugetlb page at the same time, which
+> will cause thread A to get an incorrect page, if thread A also wants to
+> do page migration, then data inconsistency error occurs.
 >
-> V7:
-> 1. Add kdoc to mei_aux
-> 2. rename pxp_isready() to pxp_is_ready()
->
-> CC: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-> Signed-off-by: Tomas Winkler <tomas.winkler@intel.com>
-> Signed-off-by: Alexander Usyskin <alexander.usyskin@intel.com>
+> Moreover we have the same issue for CONT-PMD size hugetlb in
+> follow_huge_pmd().
+> 
+> To fix above issues, rename the follow_huge_pmd() as follow_huge_pmd_pte()
+> to handle PMD and PTE level size hugetlb, which uses huge_pte_lock() to
+> get the correct pte entry lock to make the pte entry stable.
+> 
+> Cc: <stable@vger.kernel.org>
+> Suggested-by: Mike Kravetz <mike.kravetz@oracle.com>
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 > ---
->   drivers/misc/mei/bus-fixup.c  | 70 ++++++++++++++++++++++++++++++++++-
->   drivers/misc/mei/gsc-me.c     | 16 ++++++++
->   drivers/misc/mei/hw-me-regs.h |  7 ++++
->   drivers/misc/mei/hw-me.c      | 28 +++++++++++++-
->   drivers/misc/mei/mei_dev.h    | 10 +++++
->   include/linux/mei_aux.h       |  3 ++
->   6 files changed, 131 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/misc/mei/bus-fixup.c b/drivers/misc/mei/bus-fixup.c
-> index 811c94ebf250..b350cc8d500c 100644
-> --- a/drivers/misc/mei/bus-fixup.c
-> +++ b/drivers/misc/mei/bus-fixup.c
-> @@ -188,6 +188,19 @@ static int mei_fwver(struct mei_cl_device *cldev)
->   	return ret;
->   }
->   
-> +static int mei_gfx_memory_ready(struct mei_cl_device *cldev)
-> +{
-> +	struct mkhi_gfx_mem_ready req = {0};
-> +	unsigned int mode = MEI_CL_IO_TX_INTERNAL;
-> +
-> +	req.hdr.group_id = MKHI_GROUP_ID_GFX;
-> +	req.hdr.command = MKHI_GFX_MEMORY_READY_CMD_REQ;
-> +	req.flags = MKHI_GFX_MEM_READY_PXP_ALLOWED;
-> +
-> +	dev_dbg(&cldev->dev, "Sending memory ready command\n");
-> +	return __mei_cl_send(cldev->cl, (u8 *)&req, sizeof(req), 0, mode);
-> +}
-> +
->   static void mei_mkhi_fix(struct mei_cl_device *cldev)
->   {
->   	int ret;
-> @@ -234,6 +247,39 @@ static void mei_gsc_mkhi_ver(struct mei_cl_device *cldev)
->   		dev_err(&cldev->dev, "FW version command failed %d\n", ret);
->   	mei_cldev_disable(cldev);
->   }
-> +
-> +static void mei_gsc_mkhi_fix_ver(struct mei_cl_device *cldev)
-> +{
-> +	int ret;
-> +
-> +	/* No need to enable the client if nothing is needed from it */
-> +	if (!cldev->bus->fw_f_fw_ver_supported &&
-> +	    cldev->bus->pxp_mode != MEI_DEV_PXP_INIT)
-> +		return;
-> +
-> +	ret = mei_cldev_enable(cldev);
-> +	if (ret)
-> +		return;
-> +
-> +	if (cldev->bus->pxp_mode == MEI_DEV_PXP_INIT) {
-> +		ret = mei_gfx_memory_ready(cldev);
-> +		if (ret < 0)
-> +			dev_err(&cldev->dev, "memory ready command failed %d\n", ret);
-> +		else
-> +			dev_dbg(&cldev->dev, "memory ready command sent\n");
-> +		/* we go to reset after that */
-> +		cldev->bus->pxp_mode = MEI_DEV_PXP_SETUP;
-> +		goto out;
-> +	}
-> +
-> +	ret = mei_fwver(cldev);
-> +	if (ret < 0)
-> +		dev_err(&cldev->dev, "FW version command failed %d\n",
-> +			ret);
-> +out:
-> +	mei_cldev_disable(cldev);
-> +}
-> +
->   /**
->    * mei_wd - wd client on the bus, change protocol version
->    *   as the API has changed.
-> @@ -473,6 +519,26 @@ static void vt_support(struct mei_cl_device *cldev)
->   		cldev->do_match = 1;
->   }
->   
-> +/**
-> + * pxp_is_ready - enable bus client if pxp is ready
-> + *
-> + * @cldev: me clients device
-> + */
-> +static void pxp_is_ready(struct mei_cl_device *cldev)
-> +{
-> +	struct mei_device *bus = cldev->bus;
-> +
-> +	switch (bus->pxp_mode) {
-> +	case MEI_DEV_PXP_READY:
-> +	case MEI_DEV_PXP_DEFAULT:
-> +		cldev->do_match = 1;
+> Changes from v2:
+>  - Combine PMD and PTE level hugetlb handling into one function.
+>  - Drop unnecessary patches.
+>  - Update the commit message.
 
-Can you explain why you set do_match = 1 with MEI_DEV_PXP_DEFAULT ? 
-AFAIU MEI_DEV_PXP_DEFAULT means that we haven't even started to 
-initialize PXP, so it seems weird to match in that scenario.
+Baolin, were you able to at least exercise the new code paths?  Especially the
+path for CONT_PTE.  Code looks fine to me.
 
-Apart from this, the patch LGTM.
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-Daniele
+It is a little hackish, but this is only for backports.  So, I think it is OK.
+We may want to point out that code cleanup and simplification is going upstream
+that will address these issues in a more elegant manner.
 
-> +	break;
-> +	default:
-> +		cldev->do_match = 0;
-> +	break;
-> +	}
-> +}
-> +
->   #define MEI_FIXUP(_uuid, _hook) { _uuid, _hook }
->   
->   static struct mei_fixup {
-> @@ -486,10 +552,10 @@ static struct mei_fixup {
->   	MEI_FIXUP(MEI_UUID_WD, mei_wd),
->   	MEI_FIXUP(MEI_UUID_MKHIF_FIX, mei_mkhi_fix),
->   	MEI_FIXUP(MEI_UUID_IGSC_MKHI, mei_gsc_mkhi_ver),
-> -	MEI_FIXUP(MEI_UUID_IGSC_MKHI_FIX, mei_gsc_mkhi_ver),
-> +	MEI_FIXUP(MEI_UUID_IGSC_MKHI_FIX, mei_gsc_mkhi_fix_ver),
->   	MEI_FIXUP(MEI_UUID_HDCP, whitelist),
->   	MEI_FIXUP(MEI_UUID_ANY, vt_support),
-> -	MEI_FIXUP(MEI_UUID_PAVP, whitelist),
-> +	MEI_FIXUP(MEI_UUID_PAVP, pxp_is_ready),
->   };
->   
->   /**
-> diff --git a/drivers/misc/mei/gsc-me.c b/drivers/misc/mei/gsc-me.c
-> index bfa6154b93e2..6b22726aed55 100644
-> --- a/drivers/misc/mei/gsc-me.c
-> +++ b/drivers/misc/mei/gsc-me.c
-> @@ -32,6 +32,17 @@ static int mei_gsc_read_hfs(const struct mei_device *dev, int where, u32 *val)
->   	return 0;
->   }
->   
-> +static void mei_gsc_set_ext_op_mem(const struct mei_me_hw *hw, struct resource *mem)
-> +{
-> +	u32 low = lower_32_bits(mem->start);
-> +	u32 hi  = upper_32_bits(mem->start);
-> +	u32 limit = (resource_size(mem) / SZ_4K) | GSC_EXT_OP_MEM_VALID;
-> +
-> +	iowrite32(low, hw->mem_addr + H_GSC_EXT_OP_MEM_BASE_ADDR_LO_REG);
-> +	iowrite32(hi, hw->mem_addr + H_GSC_EXT_OP_MEM_BASE_ADDR_HI_REG);
-> +	iowrite32(limit, hw->mem_addr + H_GSC_EXT_OP_MEM_LIMIT_REG);
-> +}
-> +
->   static int mei_gsc_probe(struct auxiliary_device *aux_dev,
->   			 const struct auxiliary_device_id *aux_dev_id)
->   {
-> @@ -67,6 +78,11 @@ static int mei_gsc_probe(struct auxiliary_device *aux_dev,
->   
->   	dev_set_drvdata(device, dev);
->   
-> +	if (adev->ext_op_mem.start) {
-> +		mei_gsc_set_ext_op_mem(hw, &adev->ext_op_mem);
-> +		dev->pxp_mode = MEI_DEV_PXP_INIT;
-> +	}
-> +
->   	/* use polling */
->   	if (mei_me_hw_use_polling(hw)) {
->   		mei_disable_interrupts(dev);
-> diff --git a/drivers/misc/mei/hw-me-regs.h b/drivers/misc/mei/hw-me-regs.h
-> index 15e8e2b322b1..8049f288f74c 100644
-> --- a/drivers/misc/mei/hw-me-regs.h
-> +++ b/drivers/misc/mei/hw-me-regs.h
-> @@ -127,6 +127,8 @@
->   #  define PCI_CFG_HFS_3_FW_SKU_SPS   0x00000060
->   #define PCI_CFG_HFS_4         0x64
->   #define PCI_CFG_HFS_5         0x68
-> +#  define GSC_CFG_HFS_5_BOOT_TYPE_MSK      0x00000003
-> +#  define GSC_CFG_HFS_5_BOOT_TYPE_PXP               3
->   #define PCI_CFG_HFS_6         0x6C
->   
->   /* MEI registers */
-> @@ -143,6 +145,11 @@
->   /* H_D0I3C - D0I3 Control  */
->   #define H_D0I3C    0x800
->   
-> +#define H_GSC_EXT_OP_MEM_BASE_ADDR_LO_REG 0x100
-> +#define H_GSC_EXT_OP_MEM_BASE_ADDR_HI_REG 0x104
-> +#define H_GSC_EXT_OP_MEM_LIMIT_REG        0x108
-> +#define GSC_EXT_OP_MEM_VALID              BIT(31)
-> +
->   /* register bits of H_CSR (Host Control Status register) */
->   /* Host Circular Buffer Depth - maximum number of 32-bit entries in CB */
->   #define H_CBD             0xFF000000
-> diff --git a/drivers/misc/mei/hw-me.c b/drivers/misc/mei/hw-me.c
-> index 6a8e8f3cea7e..c86d6018bc20 100644
-> --- a/drivers/misc/mei/hw-me.c
-> +++ b/drivers/misc/mei/hw-me.c
-> @@ -433,6 +433,29 @@ static bool mei_me_hw_is_resetting(struct mei_device *dev)
->   	return (mecsr & ME_RST_HRA) == ME_RST_HRA;
->   }
->   
-> +/**
-> + * mei_gsc_pxp_check - check for gsc firmware entering pxp mode
-> + *
-> + * @dev: the device structure
-> + */
-> +static void mei_gsc_pxp_check(struct mei_device *dev)
-> +{
-> +	struct mei_me_hw *hw = to_me_hw(dev);
-> +	u32 fwsts5 = 0;
-> +
-> +	if (dev->pxp_mode == MEI_DEV_PXP_DEFAULT)
-> +		return;
-> +
-> +	hw->read_fws(dev, PCI_CFG_HFS_5, &fwsts5);
-> +	trace_mei_pci_cfg_read(dev->dev, "PCI_CFG_HFS_5", PCI_CFG_HFS_5, fwsts5);
-> +	if ((fwsts5 & GSC_CFG_HFS_5_BOOT_TYPE_MSK) == GSC_CFG_HFS_5_BOOT_TYPE_PXP) {
-> +		dev_dbg(dev->dev, "pxp mode is ready 0x%08x\n", fwsts5);
-> +		dev->pxp_mode = MEI_DEV_PXP_READY;
-> +	} else {
-> +		dev_dbg(dev->dev, "pxp mode is not ready 0x%08x\n", fwsts5);
-> +	}
-> +}
-> +
->   /**
->    * mei_me_hw_ready_wait - wait until the me(hw) has turned ready
->    *  or timeout is reached
-> @@ -452,6 +475,8 @@ static int mei_me_hw_ready_wait(struct mei_device *dev)
->   		return -ETIME;
->   	}
->   
-> +	mei_gsc_pxp_check(dev);
-> +
->   	mei_me_hw_reset_release(dev);
->   	dev->recvd_hw_ready = false;
->   	return 0;
-> @@ -1270,7 +1295,8 @@ irqreturn_t mei_me_irq_thread_handler(int irq, void *dev_id)
->   
->   	/* check if ME wants a reset */
->   	if (!mei_hw_is_ready(dev) && dev->dev_state != MEI_DEV_RESETTING) {
-> -		dev_warn(dev->dev, "FW not ready: resetting.\n");
-> +		dev_warn(dev->dev, "FW not ready: resetting: dev_state = %d pxp = %d\n",
-> +			 dev->dev_state, dev->pxp_mode);
->   		if (dev->dev_state == MEI_DEV_POWERING_DOWN ||
->   		    dev->dev_state == MEI_DEV_POWER_DOWN)
->   			mei_cl_all_disconnect(dev);
-> diff --git a/drivers/misc/mei/mei_dev.h b/drivers/misc/mei/mei_dev.h
-> index 16f59b3a45fc..7c508bca9a00 100644
-> --- a/drivers/misc/mei/mei_dev.h
-> +++ b/drivers/misc/mei/mei_dev.h
-> @@ -62,6 +62,14 @@ enum mei_dev_state {
->   	MEI_DEV_POWER_UP
->   };
->   
-> +/* MEI PXP mode state */
-> +enum mei_dev_pxp_mode {
-> +	MEI_DEV_PXP_DEFAULT = 0,
-> +	MEI_DEV_PXP_INIT    = 1,
-> +	MEI_DEV_PXP_SETUP   = 2,
-> +	MEI_DEV_PXP_READY   = 3,
-> +};
-> +
->   const char *mei_dev_state_str(int state);
->   
->   enum mei_file_transaction_states {
-> @@ -454,6 +462,7 @@ struct mei_dev_timeouts {
->    * @reset_count : number of consecutive resets
->    * @dev_state   : device state
->    * @hbm_state   : state of host bus message protocol
-> + * @pxp_mode    : PXP device mode
->    * @init_clients_timer : HBM init handshake timeout
->    *
->    * @pg_event    : power gating event
-> @@ -537,6 +546,7 @@ struct mei_device {
->   	unsigned long reset_count;
->   	enum mei_dev_state dev_state;
->   	enum mei_hbm_state hbm_state;
-> +	enum mei_dev_pxp_mode pxp_mode;
->   	u16 init_clients_timer;
->   
->   	/*
-> diff --git a/include/linux/mei_aux.h b/include/linux/mei_aux.h
-> index 4894d8bf4159..506912ad363b 100644
-> --- a/include/linux/mei_aux.h
-> +++ b/include/linux/mei_aux.h
-> @@ -12,6 +12,8 @@
->    * @aux_dev: - auxiliary device object
->    * @irq: interrupt driving the mei auxiliary device
->    * @bar: mmio resource bar reserved to mei auxiliary device
-> + * @ext_op_mem: resource for extend operational memory
-> + *              used in graphics PXP mode.
->    * @slow_firmware: The device has slow underlying firmware.
->    *                 Such firmware will require to use larger operation timeouts.
->    */
-> @@ -19,6 +21,7 @@ struct mei_aux_device {
->   	struct auxiliary_device aux_dev;
->   	int irq;
->   	struct resource bar;
-> +	struct resource ext_op_mem;
->   	bool slow_firmware;
->   };
->   
+> 
+> Mike, please fold this patch into your series. Thanks.
 
+If I understand Andrew, this can go in as a separate patch for backport to
+address potential bugs.  I will provide a cleanup/simplification that will
+remove this going forward.
+
+Andrew also asked for a Fixes tag.
+Support for CONT_PMD/_PTE was added with bb9dd3df8ee9 "arm64: hugetlb: refactor
+find_num_contig()".  Patch series "Support for contiguous pte hugepages", v4.
+However, I do not believe these code paths were executed until migration
+support was added with 5480280d3f2d "arm64/mm: enable HugeTLB migration for
+contiguous bit HugeTLB pages"
+I would go with 5480280d3f2d.
+-- 
+Mike Kravetz

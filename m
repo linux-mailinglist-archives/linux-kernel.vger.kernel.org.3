@@ -2,124 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 196435AA055
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:44:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EDB5AA05B
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:47:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234765AbiIAToT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:44:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51754 "EHLO
+        id S233795AbiIATrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:47:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234695AbiIAToP (ORCPT
+        with ESMTP id S233919AbiIATrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:44:15 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E578696CE
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:44:12 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 98029223F5;
-        Thu,  1 Sep 2022 19:44:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1662061450; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=3rgpNwOhkFzND6nXCguYHiOum8GrZt8wm1cXfoBldJ8=;
-        b=jtQPXjxF+G2s+Eb78kD1gtUPD738zRvrYJFGmwp2Wj9oNpRzq0LUh6gACFCYVq5OsYvq3e
-        FZNXa5ADfyceBSPhN/4GJqYNvxH8G5VlEwSoc4pHQsPa2KlP+mfU13AmivmJyIwxh1pYAe
-        1T+cAaW06IfaUIZBpnqMLjpAprSGLCg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1662061450;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=3rgpNwOhkFzND6nXCguYHiOum8GrZt8wm1cXfoBldJ8=;
-        b=JP0Yj+0bK5i6uliRoPlkHphgNpGdipOYxOYks3F723a8MrFFbbn8/ilyJ63trMDlHbuKUy
-        vBBPTzOFL6sUT0DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 129FD13A89;
-        Thu,  1 Sep 2022 19:44:10 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RF4uAYoLEWMrYgAAMHmgww
-        (envelope-from <pvorel@suse.cz>); Thu, 01 Sep 2022 19:44:10 +0000
-From:   Petr Vorel <pvorel@suse.cz>
-To:     linux-kernel@vger.kernel.org
-Cc:     Petr Vorel <pvorel@suse.cz>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        David Sterba <dsterba@suse.com>
-Subject: [PATCH v3 1/1] kernel/utsname_sysctl.c: Print kernel arch
-Date:   Thu,  1 Sep 2022 21:44:03 +0200
-Message-Id: <20220901194403.3819-1-pvorel@suse.cz>
-X-Mailer: git-send-email 2.37.2
+        Thu, 1 Sep 2022 15:47:00 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4F6286C05;
+        Thu,  1 Sep 2022 12:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662061619; x=1693597619;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=K+qjlCNhhEYa6vAoO0LiHSR2znEMey6RlkEGVK0g59g=;
+  b=je4i8lzInp2R93rbU5Qr55QCWvPZMnwqeICAdfwYiNoU0Q9syi3dCa8a
+   0aVT4zhIThO/2zo/0Otu1br3v/rpt69KwgTf6NJnTNdtTF/L1VdFA/+2B
+   Z6RN0PW9UIY/M0NYDNVD1wscWIA0xV0hoZhwBV06CQKvkZI4pLOrhWzYC
+   0EHdtJc9A4w96aqACCzMbg5nI0wjukZZcadfHx2D6VUa/F8oUHW/5X919
+   ynOlzb0BwjQofEB5aP4ti5U0zO73+KnCoBo9hsQYuTaefCWQ59byzrjJ/
+   9Tx414T8hRxNW2npsxRPyNZpEt4K6hAw2A7MgGJJq9dlpRke9wnreoX/w
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10457"; a="293390887"
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="293390887"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:46:49 -0700
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="645796668"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 12:46:44 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oTq9B-0071NR-1w;
+        Thu, 01 Sep 2022 22:46:41 +0300
+Date:   Thu, 1 Sep 2022 22:46:41 +0300
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     "Farber, Eliav" <farbere@amazon.com>
+Cc:     jdelvare@suse.com, linux@roeck-us.net, robh+dt@kernel.org,
+        p.zabel@pengutronix.de, rtanwar@maxlinear.com,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, talel@amazon.com, hhhawa@amazon.com,
+        jonnyc@amazon.com, hanochu@amazon.com, ronenk@amazon.com,
+        itamark@amazon.com, shellykz@amazon.com, shorer@amazon.com,
+        amitlavi@amazon.com, almogbs@amazon.com, dkl@amazon.com
+Subject: Re: [PATCH v3 18/19] hwmon: (mr75203) add debugfs to read and write
+ temperature coefficients
+Message-ID: <YxEMIdBMOeDBsu5D@smile.fi.intel.com>
+References: <20220830192212.28570-1-farbere@amazon.com>
+ <20220830192212.28570-19-farbere@amazon.com>
+ <Yw9Qq+PIfxgXRIK2@smile.fi.intel.com>
+ <646af681-38b0-1268-3798-c5434ca30bee@amazon.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <646af681-38b0-1268-3798-c5434ca30bee@amazon.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Print the machine hardware name (UTS_MACHINE) in /proc/sys/kernel/arch.
+On Thu, Sep 01, 2022 at 09:54:21AM +0300, Farber, Eliav wrote:
+> On 8/31/2022 3:14 PM, Andy Shevchenko wrote:
+> > On Tue, Aug 30, 2022 at 07:22:11PM +0000, Eliav Farber wrote:
 
-This helps people who debug kernel with initramfs with minimal
-environment (i.e. without coreutils or even busybox) or allow to open
-sysfs file instead of run 'uname -m' in high level languages.
+...
 
-Signed-off-by: Petr Vorel <pvorel@suse.cz>
----
-Changes v2->v3:
-* fix title in the subject
+> > > +     pvt->dbgfs_dir = debugfs_create_dir(dev_name(dev), NULL);
+> > 
+> > > +     if (!pvt->dbgfs_dir) {
+> > > +             dev_err(dev, "Failed to create dbgfs_dir\n");
+> > > +             return -EINVAL;
+> > > +     }
+> > 
+> > No, just don't check the return value of debugfs API calls.
+> > 
+> Do you mean that I should just do:
+> debugfs_create_dir(dev_name(dev), NULL);
+> Can you please explain why it's OK to ignore the return value?
 
-@Andrew @Eric: FYI previously the sysfs file was in
-/sys/devices/system/cpu/, that's why I sent previous versions to Greg.
+Author of the debugfs is speaking:
+https://patchwork.kernel.org/project/linux-wireless/patch/20190122152151.16139-38-gregkh@linuxfoundation.org/
 
- Documentation/admin-guide/sysctl/kernel.rst | 5 +++++
- kernel/utsname_sysctl.c                     | 7 +++++++
- 2 files changed, 12 insertions(+)
-
-diff --git a/Documentation/admin-guide/sysctl/kernel.rst b/Documentation/admin-guide/sysctl/kernel.rst
-index ee6572b1edad..bbaa85194695 100644
---- a/Documentation/admin-guide/sysctl/kernel.rst
-+++ b/Documentation/admin-guide/sysctl/kernel.rst
-@@ -65,6 +65,11 @@ combining the following values:
- 4 s3_beep
- = =======
- 
-+arch
-+====
-+
-+The machine hardware name, the same output as ``uname -m``
-+(e.g. ``x86_64`` or ``aarch64``).
- 
- auto_msgmni
- ===========
-diff --git a/kernel/utsname_sysctl.c b/kernel/utsname_sysctl.c
-index 4ca61d49885b..7ffdd2cd5ff9 100644
---- a/kernel/utsname_sysctl.c
-+++ b/kernel/utsname_sysctl.c
-@@ -73,6 +73,13 @@ static DEFINE_CTL_TABLE_POLL(hostname_poll);
- static DEFINE_CTL_TABLE_POLL(domainname_poll);
- 
- static struct ctl_table uts_kern_table[] = {
-+	{
-+		.procname	= "arch",
-+		.data		= init_uts_ns.name.machine,
-+		.maxlen		= sizeof(init_uts_ns.name.machine),
-+		.mode		= 0444,
-+		.proc_handler	= proc_do_uts_string,
-+	},
- 	{
- 		.procname	= "ostype",
- 		.data		= init_uts_ns.name.sysname,
 -- 
-2.35.3
+With Best Regards,
+Andy Shevchenko
+
 

@@ -2,49 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204F35AA06B
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:51:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42B6E5AA07D
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:55:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234587AbiIATvM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:51:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36026 "EHLO
+        id S234733AbiIATyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233680AbiIATvI (ORCPT
+        with ESMTP id S231936AbiIATyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:51:08 -0400
+        Thu, 1 Sep 2022 15:54:35 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA72445F56
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:51:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623216A48E;
+        Thu,  1 Sep 2022 12:54:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 75513B82933
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 19:51:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D788C433D6;
-        Thu,  1 Sep 2022 19:51:03 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 00D8FB82934;
+        Thu,  1 Sep 2022 19:54:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5AE0C433D6;
+        Thu,  1 Sep 2022 19:54:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662061864;
-        bh=ek561zrci+T240jIRlvhhGht6fexDVv5DyBcQ95A8eQ=;
-        h=From:To:Cc:Subject:Date:From;
-        b=eOfQWYh+HJ+GIyfaZcOMEBACc4xr2LnMz3ApFSvfQaS3B4qarCBf/2bnRUIIgMd1J
-         PO7tyNwhFPYBCLmyh+2h6ZLOwGXfnU0fp9mrGIfjOpOz9cQNB79/JLWl4MBGjBjoBa
-         d8G4tIOXKksBA3BD87+xqnZJqtvQvezkpYQ6XEaG2Jf5CrKIfSP43kiZc91sZz9jQt
-         w8CbyuCiQK+6xwUt5nVZp5UpGUv9H337SrOED2gRkr943hWRkcx7ohePiy4TRnyQ8E
-         Co66Urd8RxpVpvCdC//OQLnXOyLsaKpjUcsvz4aOuBDq06BGj4v4b3ca+TxBuHaE8C
-         TZFtE2vHuIcsA==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>
-Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] coresight: cti-sysfs: Mark coresight_cti_reg_store() as __maybe_unused
-Date:   Thu,  1 Sep 2022 12:50:55 -0700
-Message-Id: <20220901195055.1932340-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.3
+        s=k20201202; t=1662062071;
+        bh=YH1Y50y+aIWGJPESEAGpE11vQpdK/FiX3f4PxACu/lI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=e190hmZgGNV2kzXNTjhOh2R6yto1hDszS2MYqhvM6ISoM0OPu9sbZ/iuGKKqgyNya
+         MQcWNnE74qWqj5l3/Pi2imRO4m7CZwKvlxpXfhITNrBKwLhMW7JWqnU/188cyR8NHY
+         /JM/oj6AKmbanv/4zUjhtU3ArZoeyjN8ddZ1T7rQrWq+83wlHMnD1FCQT+IDssDR7N
+         vGyp3L0v2aKmeeiu1iV8lKCw3VMcKLceBJYxNU5Sh5+kmhkcM7tIhDelv6TlOGRJSz
+         b9E1wcKKQbl1OJbrMcEUQxxxlf47tNK/0CziKvOeLe1DCfFJ4PvlqxGtVJoZ7kL6j1
+         Gx2rxo97L+EOg==
+Date:   Thu, 1 Sep 2022 12:54:30 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Michael Walle <michael@walle.cc>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        linux-mtd@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        netdev@vger.kernel.org, Ahmad Fatoum <a.fatoum@pengutronix.de>
+Subject: Re: [PATCH v1 01/14] net: add helper eth_addr_add()
+Message-ID: <20220901125430.5dd9e586@kernel.org>
+In-Reply-To: <1682967feab905d06402d0f8402799a8@walle.cc>
+References: <20220825214423.903672-1-michael@walle.cc>
+        <20220825214423.903672-2-michael@walle.cc>
+        <1682967feab905d06402d0f8402799a8@walle.cc>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,44 +69,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When building without CONFIG_CORESIGHT_CTI_INTEGRATION_REGS, there is a
-warning about coresight_cti_reg_store() being unused in the file:
+On Thu, 01 Sep 2022 18:26:39 +0200 Michael Walle wrote:
+> Am 2022-08-25 23:44, schrieb Michael Walle:
+> > Add a helper to add an offset to a ethernet address. This comes in 
+> > handy
+> > if you have a base ethernet address for multiple interfaces.
+> > 
+> > Signed-off-by: Michael Walle <michael@walle.cc>  
+> 
+> Would it be possible to get an Ack for this patch, so I don't have
+> to repost this large (and still growing) series to netdev every time?
+> 
+> I guess it would be ok to have this go through another tree?
 
-  drivers/hwtracing/coresight/coresight-cti-sysfs.c:184:16: warning: 'coresight_cti_reg_store' defined but not used [-Wunused-function]
-    184 | static ssize_t coresight_cti_reg_store(struct device *dev,
-        |                ^~~~~~~~~~~~~~~~~~~~~~~
+Andrew's ack is strong enough, but in case there's any doubt:
 
-This is expected as coresight_cti_reg_store() is only used in the
-coresight_cti_reg_rw macro, which is only used in a block guarded by
-CONFIG_CORESIGHT_CTI_INTEGRATION_REGS. Mark coresight_cti_reg_store() as
-__maybe_unused to clearly indicate that the function may be unused
-depending on the configuration.
-
-Fixes: fbca79e55429 ("coresight: cti-sysfs: Re-use same functions for similar sysfs register accessors")
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/hwtracing/coresight/coresight-cti-sysfs.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/hwtracing/coresight/coresight-cti-sysfs.c b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
-index 478b8d38b744..6d59c815ecf5 100644
---- a/drivers/hwtracing/coresight/coresight-cti-sysfs.c
-+++ b/drivers/hwtracing/coresight/coresight-cti-sysfs.c
-@@ -181,9 +181,9 @@ static ssize_t coresight_cti_reg_show(struct device *dev,
- }
- 
- /* Write registers with power check only (no enable check). */
--static ssize_t coresight_cti_reg_store(struct device *dev,
--				       struct device_attribute *attr,
--				       const char *buf, size_t size)
-+static __maybe_unused ssize_t coresight_cti_reg_store(struct device *dev,
-+						      struct device_attribute *attr,
-+						      const char *buf, size_t size)
- {
- 	struct cti_drvdata *drvdata = dev_get_drvdata(dev->parent);
- 	struct cs_off_attribute *cti_attr = container_of(attr, struct cs_off_attribute, attr);
-
-base-commit: 0a98181f805058773961c5ab3172ecf1bf1ed0e1
--- 
-2.37.3
-
+Acked-by: Jakub Kicinski <kuba@kernel.org>

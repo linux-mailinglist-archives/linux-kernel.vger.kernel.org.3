@@ -2,55 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 813075A9EF0
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:30:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F24D5A9EF3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 20:31:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233795AbiIAS32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 14:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S233808AbiIASbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 14:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231589AbiIAS31 (ORCPT
+        with ESMTP id S231589AbiIASbO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 14:29:27 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F7A87CB62;
-        Thu,  1 Sep 2022 11:29:26 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9319B6CD;
-        Thu,  1 Sep 2022 20:29:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1662056964;
-        bh=Z2PmbE+q+oRXUcaxQb4yleqabhSi7+sIU+fRtX1f08s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EC9PRlW04t2B9cCt+4wz2+8sQ2yp8ZM7K4V7wFcAu18ic4AGLGU00x4HynEEWPN2Q
-         Qz2NoygeN3lB+O3uKqaXMdjNbid1+cX2wo60JSgsJWl4n9pr++mwna1ahvOcnmbBYQ
-         uTEIOzPWZL7Zo/XQrQStWN6+c4w7jIunb8wj3B2s=
-Date:   Thu, 1 Sep 2022 21:29:13 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Max Krummenacher <max.oss.09@gmail.com>
-Cc:     Max Krummenacher <max.krummenacher@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH] arm64: dts: imx8mp-verdin: board regulators: add
- always-on
-Message-ID: <YxD5+RCYtzcxEdjj@pendragon.ideasonboard.com>
-References: <20220901110422.1859621-1-max.oss.09@gmail.com>
+        Thu, 1 Sep 2022 14:31:14 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3995165810
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 11:31:13 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-11eab59db71so29779501fac.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 11:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=DWclz0cI2Qzp/WFkCaK+AoAFDfwG7DzVDaialA7WOVA=;
+        b=VQUzR7mE00Iv3vCd3+i0WpUYdn9aP59Pbv4I9ZtntuyG5+07xtyFGsIU9XPMhmJPQr
+         Ue7O44guqoWzlr4kDQi/hLdYLyqJcLni8d4CJ5cyhLLZs7PWSroE+/LZLEeSn3ntnXey
+         Kvg0CseM0umyM7HTJ2dBL9aK5wP1d1u5vBhRJarQfoIYVPX6pSjlSg5w6Po9NrwG8UYg
+         EXN+lx18gHnkJ3659AigDLSmbuPI7SVGfTghpLXw6CZfg9Ij1AYksDyipHc2bH/yZYtV
+         K96X+tdewpVSHI+/WIJjuWa5PBRKhYN16yRtsEv3AihoiAGB6IqqgUUB7etOCOCv8dI/
+         PMlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=DWclz0cI2Qzp/WFkCaK+AoAFDfwG7DzVDaialA7WOVA=;
+        b=IFyS+FnNRCYsMpD7VGDyHRPMpp6nD+73vLvW8cu7HT8cSXKdndl9ZkYsy1fwgsY7c/
+         bZaRfkTqM2zUTZIuG/eA6A5hyhKgtvZAP2j6vh7SP3BLJnp7iMBbENdLK4iUQyJn9iq8
+         nzaPhnUWqkt7+APWo6BmzsFWYO/eVQ7dm1nCYhyp0mocdDxi3WrCQRI98tjgj2KcMoMC
+         eqSrrRgNHWRB7CQ1D1yMqvzkCdlRnA47CPhqpgkMXgvlow79N5Q7rqPeFDjfgRrzDfxP
+         qsbsD85ZeXSbe3y6zbhJx47k4zIjJ7XcLtyQJloMjV5Jhgb5WFMFYohPTRnBPFqXeV7C
+         ujJg==
+X-Gm-Message-State: ACgBeo2/XfEHHr7FupSw57UNxI3u+JmrfAAuiAMo4eyLa6e5Sivp3SUH
+        EY4VPabpreS+08UGH+BZKD4Eb82ZG4tYKtT6q94o
+X-Google-Smtp-Source: AA6agR4QcciaJ+V9DEP2dfhKeqL/C3Zg9FMWfYLckt6vpWX3sm1XllSrF7qtjHTDSSSTbXuSk2/ZxnQ2UHLplKdsUxo=
+X-Received: by 2002:a05:6871:796:b0:11e:b92e:731e with SMTP id
+ o22-20020a056871079600b0011eb92e731emr269638oap.41.1662057072424; Thu, 01 Sep
+ 2022 11:31:12 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220901110422.1859621-1-max.oss.09@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+References: <cover.1659996830.git.rgb@redhat.com> <12063373.O9o76ZdvQC@x2>
+ <Yw/efLafvmimtCDq@madcap2.tricolour.ca> <5600292.DvuYhMxLoT@x2>
+ <CAHC9VhSPS7dRXLU9eV3Ne6Q7q=GPpak+=QRYLa_8Z4i-fESz8w@mail.gmail.com> <20220901075158.jqwaz3pklf3rqc6q@quack3>
+In-Reply-To: <20220901075158.jqwaz3pklf3rqc6q@quack3>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Thu, 1 Sep 2022 14:31:01 -0400
+Message-ID: <CAHC9VhStnE9vGu9h5tHnS58eyb8vm8rMN4miXpLAG6fFnidD=w@mail.gmail.com>
+Subject: Re: [PATCH v4 3/4] fanotify,audit: Allow audit to use the full
+ permission event response
+To:     Jan Kara <jack@suse.cz>, Steve Grubb <sgrubb@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Eric Paris <eparis@parisplace.org>,
+        Amir Goldstein <amir73il@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,61 +71,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Max,
+On Thu, Sep 1, 2022 at 3:52 AM Jan Kara <jack@suse.cz> wrote:
+> On Wed 31-08-22 21:47:09, Paul Moore wrote:
+> > On Wed, Aug 31, 2022 at 7:55 PM Steve Grubb <sgrubb@redhat.com> wrote:
+> > > On Wednesday, August 31, 2022 6:19:40 PM EDT Richard Guy Briggs wrote:
+> > > > On 2022-08-31 17:25, Steve Grubb wrote:
+> > > > > On Wednesday, August 31, 2022 5:07:25 PM EDT Richard Guy Briggs wrote:
+> > > > > > > > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> > > > > > > > index 433418d73584..f000fec52360 100644
+> > > > > > > > --- a/kernel/auditsc.c
+> > > > > > > > +++ b/kernel/auditsc.c
+> > > > > > > > @@ -64,6 +64,7 @@
+> > > > > > > > #include <uapi/linux/limits.h>
+> > > > > > > > #include <uapi/linux/netfilter/nf_tables.h>
+> > > > > > > > #include <uapi/linux/openat2.h> // struct open_how
+> > > > > > > > +#include <uapi/linux/fanotify.h>
+> > > > > > > >
+> > > > > > > > #include "audit.h"
+> > > > > > > >
+> > > > > > > > @@ -2899,10 +2900,34 @@ void __audit_log_kern_module(char *name)
+> > > > > > > > context->type = AUDIT_KERN_MODULE;
+> > > > > > > > }
+> > > > > > > >
+> > > > > > > > -void __audit_fanotify(u32 response)
+> > > > > > > > +void __audit_fanotify(u32 response, size_t len, char *buf)
+> > > > > > > > {
+> > > > > > > > -       audit_log(audit_context(), GFP_KERNEL,
+> > > > > > > > -               AUDIT_FANOTIFY, "resp=%u", response);
+> > > > > > > > +       struct fanotify_response_info_audit_rule *friar;
+> > > > > > > > +       size_t c = len;
+> > > > > > > > +       char *ib = buf;
+> > > > > > > > +
+> > > > > > > > +       if (!(len && buf)) {
+> > > > > > > > +               audit_log(audit_context(), GFP_KERNEL,
+> > > > > > > > AUDIT_FANOTIFY,
+> > > > > > > > +                         "resp=%u fan_type=0 fan_info=?",
+> > > > > > > > response);
+> > > > > > > > +               return;
+> > > > > > > > +       }
+> > > > > > > > +       while (c >= sizeof(struct fanotify_response_info_header)) {
+> > > > > > > > +               friar = (struct fanotify_response_info_audit_rule
+> > > > > > > > *)buf;
+> > > > > > >
+> > > > > > > Since the only use of this at the moment is the
+> > > > > > > fanotify_response_info_rule, why not pass the
+> > > > > > > fanotify_response_info_rule struct directly into this function?  We
+> > > > > > > can always change it if we need to in the future without affecting
+> > > > > > > userspace, and it would simplify the code.
+> > > > > >
+> > > > > > Steve, would it make any sense for there to be more than one
+> > > > > > FAN_RESPONSE_INFO_AUDIT_RULE header in a message?  Could there be more
+> > > > > > than one rule that contributes to a notify reason?  If not, would it be
+> > > > > > reasonable to return -EINVAL if there is more than one?
+> > > > >
+> > > > > I don't see a reason for sending more than one header. What is more
+> > > > > probable is the need to send additional data in that header. I was
+> > > > > thinking of maybe bit mapping it in the rule number. But I'd suggest
+> > > > > padding the struct just in case it needs expanding some day.
+> > > >
+> > > > This doesn't exactly answer my question about multiple rules
+> > > > contributing to one decision.
+> > >
+> > > I don't forsee that.
+> > >
+> > > > The need for more as yet undefined information sounds like a good reason
+> > > > to define a new header if that happens.
+> > >
+> > > It's much better to pad the struct so that the size doesn't change.
+> > >
+> > > > At this point, is it reasonable to throw an error if more than one RULE
+> > > > header appears in a message?
+> > >
+> > > It is a write syscall. I'd silently discard everything else and document that
+> > > in the man pages. But the fanotify maintainers should really weigh in on
+> > > this.
+> > >
+> > > > The way I had coded this last patchset was to allow for more than one RULE
+> > > > header and each one would get its own record in the event.
+> > >
+> > > I do not forsee a need for this.
+> > >
+> > > > How many rules total are likely to exist?
+> > >
+> > > Could be a thousand. But I already know some missing information we'd like to
+> > > return to user space in an audit event, so the bit mapping on the rule number
+> > > might happen. I'd suggest padding one u32 for future use.
+> >
+> > A better way to handle an expansion like that would be to have a
+> > length/version field at the top of the struct that could be used to
+> > determine the size and layout of the struct.
+>
+> We already do have the 'type' and 'len' fields in
+> struct fanotify_response_info_header. So if audit needs to pass more
+> information, we can define a new 'type' and either make it replace the
+> current struct fanotify_response_info_audit_rule or make it expand the
+> information in it. At least this is how we handle similar situation when
+> fanotify wants to report some new bits of information to userspace.
 
-(CC'ing Mark and Liam)
+Perfect, I didn't know that was an option from the fanotify side; I
+agree that's the right approach.
 
-Thank you for the patch.
+> That being said if audit wants to have u32 pad in its struct
+> fanotify_response_info_audit_rule for future "optional" expansion I'm not
+> strictly opposed to that but I don't think it is a good idea.
 
-On Thu, Sep 01, 2022 at 01:04:22PM +0200, Max Krummenacher wrote:
-> From: Max Krummenacher <max.krummenacher@toradex.com>
-> 
-> These regulators are switched on by HW during power up and can not
-> be influenced by SW.
-> Set the always-on property.
+Yes, I'm not a fan of padding out this way, especially when we have
+better options.
 
-Is this needed ? When a fixed regulator has no control GPIO or clock, as
-is the case here, I would expect the driver and/or regulator core to
-understand that it's always on, as the alternative is always-off, which
-is pointless :-) Mark, Liam, what do you think ?
+> Ultimately I guess I'll leave it upto audit subsystem what it wants to have
+> in its struct fanotify_response_info_audit_rule because for fanotify
+> subsystem, it is just an opaque blob it is passing.
 
-> Signed-off-by: Max Krummenacher <max.krummenacher@toradex.com>
-> 
-> ---
-> 
->  arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> index 557cfef8f049..76cc89296150 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-> @@ -62,6 +62,7 @@ button-wakeup {
->  	/* Carrier Board Supplies */
->  	reg_1p8v: regulator-1p8v {
->  		compatible = "regulator-fixed";
-> +		regulator-always-on;
->  		regulator-max-microvolt = <1800000>;
->  		regulator-min-microvolt = <1800000>;
->  		regulator-name = "+V1.8_SW";
-> @@ -69,6 +70,7 @@ reg_1p8v: regulator-1p8v {
->  
->  	reg_3p3v: regulator-3p3v {
->  		compatible = "regulator-fixed";
-> +		regulator-always-on;
->  		regulator-max-microvolt = <3300000>;
->  		regulator-min-microvolt = <3300000>;
->  		regulator-name = "+V3.3_SW";
-> @@ -76,6 +78,7 @@ reg_3p3v: regulator-3p3v {
->  
->  	reg_5p0v: regulator-5p0v {
->  		compatible = "regulator-fixed";
-> +		regulator-always-on;
->  		regulator-max-microvolt = <5000000>;
->  		regulator-min-microvolt = <5000000>;
->  		regulator-name = "+V5_SW";
+In that case, let's stick with leveraging the type/len fields in the
+fanotify_response_info_header struct, that should give us all the
+flexibility we need.
+
+Richard and Steve, it sounds like Steve is already aware of additional
+information that he wants to send via the
+fanotify_response_info_audit_rule struct, please include that in the
+next revision of this patchset.  I don't want to get this merged and
+then soon after have to hack in additional info.
 
 -- 
-Regards,
-
-Laurent Pinchart
+paul-moore.com

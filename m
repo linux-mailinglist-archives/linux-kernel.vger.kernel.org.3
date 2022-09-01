@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95ED5A9D7F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:50:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8935A9D83
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233934AbiIAQtg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:49:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59886 "EHLO
+        id S234361AbiIAQwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:52:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232557AbiIAQtd (ORCPT
+        with ESMTP id S234196AbiIAQwZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:49:33 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E7298589;
-        Thu,  1 Sep 2022 09:49:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 7429BCE28F4;
-        Thu,  1 Sep 2022 16:49:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB640C433D6;
-        Thu,  1 Sep 2022 16:49:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662050968;
-        bh=O+c/dwFtaC6r32rAjIcVyeF4cmFKSBmo4TEvZ5rCvFs=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=O7y6ZPkkXna1h/1oq0PnOwNbnqbHk6IxxYObIm2uKfQ9voTPSaQvLbM1mq03O61Tt
-         0JKMTdOD6n4o2mennWVkyIi18sclCX0eqXIihkNy2o2BYFxXm+WmoltuHy/8+24jPs
-         79mfhrrm+ITYY30SNTh7pOLlGR01pn2CQPifith7R4/uiuqMK6wRCITJHLxNGRrFOz
-         xdENAscQUghrLbNQ1yRbyV5Yyk6kxiT9ZytIFMXiWMkPPUxz0Z9XgMbN/nycVyIOEp
-         pJGuoq0Wj47hviQpuJjnsYLTJ5fnMDjCrol4dkw1kdoJujJ9FZ0qHvU1xht4hHmyRL
-         1rx9GaYLI817w==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 586035C0691; Thu,  1 Sep 2022 09:49:28 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 09:49:28 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rcu <rcu@vger.kernel.org>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
- fixes
-Message-ID: <20220901164928.GZ6159@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830105324.GA71266@lothringen>
- <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830160316.GC71266@lothringen>
- <20220830162244.GA73392@lothringen>
- <20220830164634.GC6159@paulmck-ThinkPad-P17-Gen-1>
- <20220831152658.GA89704@lothringen>
- <20220901143907.GU6159@paulmck-ThinkPad-P17-Gen-1>
- <20220901145819.GB105556@lothringen>
- <0e8687de-bf45-5de6-c2f1-be6084991921@joelfernandes.org>
+        Thu, 1 Sep 2022 12:52:25 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9478C98A68
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:52:22 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id fy31so35567161ejc.6
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:52:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=8gpXKd/rcgdoy4YCxJm6j2dyIOOgr77cRPkJmoI6lKk=;
+        b=z4NRuNJ+v1eoMoPIr5/iSOQDh/P+oZt6qu1ks9yWm6E3+hBVQqx5UHkIBVu6wNKuek
+         6fLQR7JWEhw0kIkMKd/PMB41NW875rLDJUMs2XD3vkxPEHxFI+5OzY9Ppkfma4UfJbH6
+         oUA1kG9c0AtV4cBS10sumKQJyB/2MQpbC0kHCh8ulo34jzIXKJ2GBhR5NbW4ZqkThChp
+         pimSpi2vdasOPf7PSkhSuhR7RFNbdWFRSvM8m3/10v8cfxtWkFL3Mk9DHk39GVUHCkhH
+         3wrE+PEC6Gwpj/4DwZz6DGskxwHH2o39PVfejubJyJJBZnqDQd1VjaZV0d6/uM9K+mki
+         xcfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=8gpXKd/rcgdoy4YCxJm6j2dyIOOgr77cRPkJmoI6lKk=;
+        b=f+fECZXRuiBzsrFfuSO9NhGTPek1uzhEnAiPGXwIQ5TEvc9erdiNivFWbyixzhVKM6
+         iwy189bISJwNNt0hKDfkLKupcatD129ovm8O4hS3wwMbmB4Gj/axd68V3WJM3B4n8jmw
+         WOORFToFuYYycyleOjPVNj8Kxg/2gDuxoweew1ymjXwx+jEAtZQRLzSHyAnvkUPk+vno
+         2kWKf4m6wCgplQnsFnufnqiLoGed/zc7dNmDsD12VpuC1W5H6AILrzdkFeBHg5sKTg4I
+         1rZzxGzTq8p77mt7E0Dh1Lb03bfXkGw87ovAyvgDCqrTjSzhcCXpTDukxJqJ9Fd6H5iF
+         Tb7Q==
+X-Gm-Message-State: ACgBeo302F34N4uGTJn+ufKm0+r4KlU0dvvLcqNS/TxXuNjQJisq6HY0
+        l60ziI6+AOmY2vowSrto1yGcebCP1aXaf0BMsg4Zgg==
+X-Google-Smtp-Source: AA6agR7BaAKxuDmGMYFoHkUOkW7cfwd7OH3CSzZWQSt0QnzsL8LHIoezQdLYgtxLWazJMZxRf8869xBolCRGGdZifj8=
+X-Received: by 2002:a17:907:760b:b0:73d:b5bc:feb6 with SMTP id
+ jx11-20020a170907760b00b0073db5bcfeb6mr24486780ejc.407.1662051141088; Thu, 01
+ Sep 2022 09:52:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0e8687de-bf45-5de6-c2f1-be6084991921@joelfernandes.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220818132231.28240-1-hejunhao3@huawei.com> <ab129d55-9b4f-1685-d102-fd963ed447bc@huawei.com>
+In-Reply-To: <ab129d55-9b4f-1685-d102-fd963ed447bc@huawei.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Thu, 1 Sep 2022 10:52:08 -0600
+Message-ID: <CANLsYkzWnEY2t-7Di5LXX6oYKzTUAwfBHT0dkPm0puGt6YhL3w@mail.gmail.com>
+Subject: Re: [PATCH v9 0/2] Add support for UltraSoc System Memory Buffer
+To:     hejunhao <hejunhao3@huawei.com>
+Cc:     suzuki.poulose@arm.com, mike.leach@linaro.org, leo.yan@linaro.org,
+        coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linuxarm@huawei.com,
+        rdunlap@infradead.org, liuqi115@huawei.com, f.fangjian@huawei.com,
+        prime.zeng@hisilicon.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,59 +69,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 12:07:56PM -0400, Joel Fernandes wrote:
-> 
-> 
-> On 9/1/2022 10:58 AM, Frederic Weisbecker wrote:
-> > On Thu, Sep 01, 2022 at 07:39:07AM -0700, Paul E. McKenney wrote:
-> >> On Wed, Aug 31, 2022 at 05:26:58PM +0200, Frederic Weisbecker wrote:
-> >>> On Tue, Aug 30, 2022 at 09:46:34AM -0700, Paul E. McKenney wrote:
-> >>>>> Although who knows, may be some periodic file operation while idle are specific
-> >>>>> to Android. I'll try to trace lazy callbacks while idle and the number of grace
-> >>>>> periods associated.
-> >>>>
-> >>>> Sounds like a good start.
-> >>>>
-> >>>> And yes, we don't need to show that the whole !NOCB world needs this,
-> >>>> just some significant portion of it.  But we do need some decent evidence.
-> >>>> After all, it is all too easy to do a whole lot of work and find that
-> >>>> the expected benefits fail to materialize.
-> >>>
-> >>> So here is some quick test. I made a patch that replaces Joel's 1st patch
-> >>> with an implementation of call_rcu_lazy() that queues lazy callbacks
-> >>> through the regular call_rcu() way but it counts them in a lazy_count.
-> >>>
-> >>> Upon idle entry it reports whether the tick is retained solely by lazy
-> >>> callbacks or not.
-> >>>
-> >>> I get periodic and frequent results on my idle test box, something must be
-> >>> opening/closing some file periodically perhaps.
-> >>>
-> >>> Anyway the thing can be tested with this branch:
-> >>>
-> >>> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
-> >>> 	rcu/lazy-trace
-> >>>
-> >>> Excerpt:
-> >>>
-> >>>           <idle>-0       [007] d..1.   414.226966: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-> >>>           <idle>-0       [007] d..1.   414.228271: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-> >>>           <idle>-0       [007] d..1.   414.232269: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-> >>>           <idle>-0       [007] d..1.   414.236269: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
-> >>
-> >> Just to make sure that I understand, at this point, there is only the
-> >> one lazy callback (and no non-lazy callbacks) on this CPU, and that
-> >> CPU is therefore keeping the tick on only for the benefit of that one
-> >> lazy callback.  And for the above four traces, this is likely the same
-> >> lazy callback.
-> >>
-> >> Did I get it right, or is there something else going on?
-> > 
-> > Exactly that!
+On Thu, 1 Sept 2022 at 07:12, hejunhao <hejunhao3@huawei.com> wrote:
+>
+> Gentle ping. Any comment or suggestion is appreciated.
+>
 
-Are these callbacks confined to the RCU_NEXT_READY_TAIL and RCU_NEXT_TAIL
-segments, which are the ones that could (in theory) buffer callbacks
-without having started a grace period?  Or is it all the callbacks
-regardless of segment?
+There are a few patchset that are both substantial and complex to
+review on the log.  As such reviewing will take longer than usual.
 
-							Thanx, Paul
+> thanks.
+>
+> On 2022/8/18 21:22, Junhao He wrote:
+> > Add support for UltraSoc System Memory Buffer.
+> >
+> > Change since v8:
+> > - Insert a blank line at the end of the config tag in Kconfig.
+> > - Fix the "llseek" initialization.
+> > - Link: https://lore.kernel.org/linux-arm-kernel/20220816131634.38195-1-hejunhao3@huawei.com/
+> >
+> > Change since v7:
+> > - Use the macros for register bit flags and numbers of resource.
+> > - Fix punctuation.
+> > - Update the Date tag and the KernelVersion tag in the document.
+> > - Link: https://lore.kernel.org/lkml/20220712091353.34540-1-hejunhao3@huawei.com/
+> >
+> > Change since v6:
+> > - Modify the code style and driver description according to Suzuki's comment.
+> > - Modify configuration of "drvdata->reading", to void problems in open/read
+> >    concurrency scenario.
+> > - Rename the macro of "SMB_FLOW_MASK".
+> > - Use the "handle->head" to determine the page number and offset.
+> > - Link: https://lore.kernel.org/linux-arm-kernel/20220606130223.57354-1-liuqi115@huawei.com/
+> >
+> > Change since v5:
+> > - Address the comments from Suzuki, add some comments in SMB document, and modify
+> >    configuration of "drvdata->reading", to void problems in multi-core concurrency scenario
+> > - Link: https://lore.kernel.org/linux-arm-kernel/20220416083953.52610-1-liuqi115@huawei.com/
+> >
+> > Change since v4:
+> > - Add a simple document of SMB driver according to Suzuki's comment.
+> > - Address the comments from Suzuki.
+> > - Link: https://lore.kernel.org/linux-arm-kernel/20220128061755.31909-1-liuqi115@huawei.com/
+> >
+> > Change since v3:
+> > - Modify the file header according to community specifications.
+> > - Address the comments from Mathieu.
+> > - Link: https://lore.kernel.org/linux-arm-kernel/20211118110016.40398-1-liuqi115@huawei.com/
+> >
+> > Change since v2:
+> > - Move ultrasoc driver to drivers/hwtracing/coresight.
+> > - Link: https://lists.linaro.org/pipermail/coresight/2021-November/007310.html
+> >
+> > Change since v1:
+> > - Drop the document of UltraSoc according to Mathieu's comment.
+> > - Add comments to explain some private hardware settings.
+> > - Address the comments from Mathieu.
+> > - Link: https://lists.linaro.org/pipermail/coresight/2021-August/006842.html
+> >
+> > Change since RFC:
+> > - Move driver to drivers/hwtracing/coresight/ultrasoc.
+> > - Remove ultrasoc-axi-com.c, as AXI-COM doesn't need to be configured in
+> >    basic tracing function.
+> > - Remove ultrasoc.c as SMB does not need to register with the ultrasoc core.
+> > - Address the comments from Mathieu and Suzuki.
+> > - Link: https://lists.linaro.org/pipermail/coresight/2021-June/006535.html
+> >
+> > Qi Liu (2):
+> >    drivers/coresight: Add UltraSoc System Memory Buffer driver
+> >    Documentation: Add document for UltraSoc SMB drivers
+> >
+> >   .../sysfs-bus-coresight-devices-ultra_smb     |  31 +
+> >   .../trace/coresight/ultrasoc-smb.rst          |  80 +++
+> >   drivers/hwtracing/coresight/Kconfig           |  11 +
+> >   drivers/hwtracing/coresight/Makefile          |   1 +
+> >   drivers/hwtracing/coresight/ultrasoc-smb.c    | 636 ++++++++++++++++++
+> >   drivers/hwtracing/coresight/ultrasoc-smb.h    | 115 ++++
+> >   6 files changed, 874 insertions(+)
+> >   create mode 100644 Documentation/ABI/testing/sysfs-bus-coresight-devices-ultra_smb
+> >   create mode 100644 Documentation/trace/coresight/ultrasoc-smb.rst
+> >   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.c
+> >   create mode 100644 drivers/hwtracing/coresight/ultrasoc-smb.h
+> >
+>

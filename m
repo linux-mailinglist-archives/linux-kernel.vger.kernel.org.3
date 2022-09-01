@@ -2,70 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A045A9FF6
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:29:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74FBD5A9FF7
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229514AbiIAT3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
+        id S233822AbiIAT3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 15:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234650AbiIAT2m (ORCPT
+        with ESMTP id S233151AbiIAT24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 15:28:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB19E96764
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:28:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=DVqvYmW8GcL7wXAJ/UsUeOny/43FV7uLCqc3mx9G/g4=; b=fcgpRgFENgCiZXhWtjPlxmfzAx
-        8DT9AJql7ya0UIHLRlSd+ep4qitdoi81b+aU3AaUWcpjYG63aravYTPYGfYYg1z3izXoUEH4k6gt4
-        FKWa4sVl1S6+qvgCCGvF/2ZbJrNKn0Wnl6RjgzCnwoXsEMVkPBMtk1zq7vwkjWYGPk2VDtWL70feI
-        3hoGdn0wqBnw435OAqesICkPK40EcsCiqV36hQqflN+9rVXg/9Gwoqh1PkfTyP8UDJML7rsm0pfS5
-        ql5MSbUGjpV5/WwUYSR5TOGpVRMc+p+pDlpTyG0GSRaUPcpnyvPDA0xc//QzGnv4uFBTiStiElGGE
-        mL55im9g==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTprR-006Ike-Mj; Thu, 01 Sep 2022 19:28:21 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 0D5D230010B;
-        Thu,  1 Sep 2022 21:28:20 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id E9ABF2B8D5A28; Thu,  1 Sep 2022 21:28:19 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 21:28:19 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>
-Cc:     linuxppc-dev@lists.ozlabs.org, jpoimboe@redhat.com,
-        linux-kernel@vger.kernel.org, aik@ozlabs.ru, mpe@ellerman.id.au,
-        mingo@redhat.com, christophe.leroy@csgroup.eu, rostedt@goodmis.org,
-        mbenes@suse.cz, npiggin@gmail.com, chenzhongjin@huawei.com,
-        naveen.n.rao@linux.vnet.ibm.com
-Subject: Re: [PATCH v2 13/16] objtool: Use macros to define arch specific
- reloc types
-Message-ID: <YxEH05wtANcr9g83@hirez.programming.kicks-ass.net>
-References: <20220829055223.24767-1-sv@linux.ibm.com>
- <20220829055223.24767-14-sv@linux.ibm.com>
+        Thu, 1 Sep 2022 15:28:56 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C12279A4E;
+        Thu,  1 Sep 2022 12:28:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 952C5CE2949;
+        Thu,  1 Sep 2022 19:28:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4811EC433D7;
+        Thu,  1 Sep 2022 19:28:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1662060531;
+        bh=wPGJi1HYQfzdkkC89+e/MCcsIJMqTVYm3fW789MbPn8=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Y/6VIhw8ct4HHtcXOrxI4FCzZqPeilyN6llgRP5TATov6yt+nLIeApjVTlUzMUHIQ
+         r8jUpPCKcxPCdvWF2J9eAdYnyH01pDUTTshLIuLCWSpDPYZAEnjC1qO26BHvR4yVug
+         vy5+vaZGUih/xn22/GaUqsgG484pTKUYaCwe8vl6kTHl08PTF2yKhNPW5tFFVMJdpW
+         foIJgk/Sfr2C2w57UHWSiRYgHSCTJmJ2M97gOkQuZ6of8xYW2+I0u1XwWUHmaJAbZe
+         97UK0HCr/JApbF3yDxMqCM7S4solcrj4/OslwOgY4oTlBe+LhnV8QD6urV/h1dhoQx
+         wAf5lWAyJWQ3g==
+Received: by mail-ua1-f52.google.com with SMTP id a18so39582uat.11;
+        Thu, 01 Sep 2022 12:28:51 -0700 (PDT)
+X-Gm-Message-State: ACgBeo0wW89xObdnBN5sASfkAus0QS8MUG3yKJUeNHqBZexw7tbXjiYl
+        +t4+cl0UbL+a6nr6dYUB43mPmW+lUVuttwJQwg==
+X-Google-Smtp-Source: AA6agR7VHuEcnFA5n4ZVUkDfVEkdIBa9x92i7DYGLhMLYv4WJB9UjEZ3YID74DSaJ8wUn2D0rPrWT2MzLZdQFo+tlIs=
+X-Received: by 2002:ab0:35d4:0:b0:3a2:b85:c04b with SMTP id
+ x20-20020ab035d4000000b003a20b85c04bmr4929355uat.43.1662060530264; Thu, 01
+ Sep 2022 12:28:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220829055223.24767-14-sv@linux.ibm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220901184709.2179309-1-robh@kernel.org> <3361AE1E-778E-46F7-A51B-D143DF29FEAD@gmail.com>
+In-Reply-To: <3361AE1E-778E-46F7-A51B-D143DF29FEAD@gmail.com>
+From:   Rob Herring <robh@kernel.org>
+Date:   Thu, 1 Sep 2022 14:28:39 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLW=Vd=isvPd7_X3Vwp=0XUYjKqLkGYW2cztkd6JnGntQ@mail.gmail.com>
+Message-ID: <CAL_JsqLW=Vd=isvPd7_X3Vwp=0XUYjKqLkGYW2cztkd6JnGntQ@mail.gmail.com>
+Subject: Re: [PATCH] perf: Ignore format attributes with an unknown
+ perf_event_attr field
+To:     Arnaldo Carvalho de Melo <arnaldo.melo@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 29, 2022 at 11:22:20AM +0530, Sathvika Vasireddy wrote:
-> Make relocation types architecture specific.
-> 
-> Signed-off-by: Sathvika Vasireddy <sv@linux.ibm.com>
+On Thu, Sep 1, 2022 at 2:22 PM Arnaldo Carvalho de Melo
+<arnaldo.melo@gmail.com> wrote:
+>
+>
+>
+> On September 1, 2022 3:47:10 PM GMT-03:00, Rob Herring <robh@kernel.org> wrote:
+> >If the kernel exposes a new perf_event_attr field in a format attr, perf
+> >will return an error stating the specified PMU can't be found. For
+> >example, a format attr with 'config3:0-63' causes an error if config3 is
+> >unknown to perf. This causes a compatibility issue between a newer
+> >kernel and an older perf tool.
+> >
+> >The addition here makes any attr string up to the ':' ignored, but
+> >still checks the 'bits' portion.
+>
+> So, can you please show what is the behavior of the tool, with an actual command line and it's output, before and after your patch?
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Before this patch with a kernel adding 'config3' I get:
+
+# perf record -e arm_spe// -- true
+event syntax error: 'arm_spe//'
+                     \___ Cannot find PMU `arm_spe'. Missing kernel support?
+Run 'perf list' for a list of valid events
+
+ Usage: perf record [<options>] [<command>]
+    or: perf record [<options>] -- <command> [<options>]
+
+    -e, --event <event>   event selector. use 'perf list' to list
+available events
+
+After this patch, I get:
+
+# perf record -e arm_spe// -- true
+[ perf record: Woken up 2 times to write data ]
+[ perf record: Captured and wrote 0.091 MB perf.data ]
+
+Rob

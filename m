@@ -2,169 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 999245A9B3D
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4A65A9B3C
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234064AbiIAPHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33158 "EHLO
+        id S233496AbiIAPIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234138AbiIAPHU (ORCPT
+        with ESMTP id S232389AbiIAPIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:07:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A177E857C4
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:07:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662044834;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n51zgqgBl470PB0vgcZT4BRIRHbxoQSrqhNCiStba2E=;
-        b=ObDiSLMfQ9MXDmrGnlC1LZZNZWle7oseddosLR97XfdCMFtq6NiEU84hrrYb+YIX+PVJ95
-        lMwvk1ghQb+NVS3Q/a+XVJLVsH26CMN+7TkcbwgomSX2qCI1PUwBoHSpVpz7igyTQh4Sou
-        4X/G4lPfE32Y+MmVTqFcZL1HZ3QkZEY=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-283-5f9x3F5rPtKr2sIHHlE51A-1; Thu, 01 Sep 2022 11:07:13 -0400
-X-MC-Unique: 5f9x3F5rPtKr2sIHHlE51A-1
-Received: by mail-wr1-f71.google.com with SMTP id d11-20020adfc08b000000b002207555c1f6so3126357wrf.7
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:07:13 -0700 (PDT)
+        Thu, 1 Sep 2022 11:08:14 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE5C5D132
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 08:08:13 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id 72so17737196pfx.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 08:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date;
+        bh=Fq0ekErVXJDWil/E50tDxiM+tfA4mWxyU7wswKHf5FY=;
+        b=UMllB6o3GSAyrYXYQvdageapI9InpEBTzYUnaB//0Dr7iv9Yy4xL5EiZNrYM+NPntC
+         I310zPiDU4mhpBT3SWUKIjT/k6alv9tWwizNDssmOGwN7201o6MjmH64cbKeJcz7zqOZ
+         IOD7fH9Gak7FkjTikOi7rLVKCOGtswejt0u4sHNmsLcYBFkL35MJ1miF7nnAvLXcdoCK
+         w7iH6jnZNpb0J9j8tyt+bS6dJDm1+X5uZjVYIWE0gee4Roga4Qs8Ok5ahVnARLyNr9Nl
+         1NQdbZiE3xoP+BFi+cSGGOUu+Ggc16S3RYb9SJa6Gwu3ARTsUHAdgIzOh/08gPbvoBKO
+         uAbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date;
-        bh=n51zgqgBl470PB0vgcZT4BRIRHbxoQSrqhNCiStba2E=;
-        b=wF+/IUK/Qw2Jh+jWI7NKAAcyJa8PfheLu43J/enr0ToL4n/riJq9LQ9qv/1EhieYyN
-         ow/4TNrVknLv96kYObwLsMVGN2AtzLobyvyrYc6rl2guUIW2PrhPWhH7ild05uYebcSc
-         +hS58g8IT2A5GEsRvjEhaicgHgARvEUq5joDYTvIwnG9AvX6EbmvP50xHuI5JpNdzMVE
-         uwNcqdGilSLrkKxK+NJKYB0g6TaVLewkaAbf4j6QoOTk7PCbwxl9qpVgxChugF3zqTGZ
-         7s2cNZ5xU3+iA2FSi6kFmbjZni/t8SI6Q1r0KMqZAWEnxTOtB77L+Qr7m2nafF+x9uox
-         VQsQ==
-X-Gm-Message-State: ACgBeo22GaI50/J6GrYep9frXbI1I+x8QKZhKqTI4FztxeCjgXfuMWDG
-        xPyTVCb6n9cnywBlVPLQGvBZKMPMISI5U1G7ASfPExUB5RpoHmxVtbeycmM5S6bA6VmINtPwmK/
-        luPHultcL5Hqlm+45hgLmsbNC
-X-Received: by 2002:a7b:ce13:0:b0:3a6:34f8:e21d with SMTP id m19-20020a7bce13000000b003a634f8e21dmr5628113wmc.22.1662044831141;
-        Thu, 01 Sep 2022 08:07:11 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4MsTHzosmA7E7hGiZjHmjlTUlB0s2DWeDkp38EpmRPnqXeJG3hehRWe5SqC6TIKnfqy7LhVg==
-X-Received: by 2002:a7b:ce13:0:b0:3a6:34f8:e21d with SMTP id m19-20020a7bce13000000b003a634f8e21dmr5628080wmc.22.1662044830813;
-        Thu, 01 Sep 2022 08:07:10 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:9e00:fec0:7e96:15cb:742? (p200300cbc7079e00fec07e9615cb0742.dip0.t-ipconnect.de. [2003:cb:c707:9e00:fec0:7e96:15cb:742])
-        by smtp.gmail.com with ESMTPSA id a6-20020a5d4d46000000b00226dedf1ab7sm9303786wru.76.2022.09.01.08.07.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 08:07:09 -0700 (PDT)
-Message-ID: <78e55029-0eaf-b4b3-7e86-1086b97c60c6@redhat.com>
-Date:   Thu, 1 Sep 2022 17:07:06 +0200
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
+        bh=Fq0ekErVXJDWil/E50tDxiM+tfA4mWxyU7wswKHf5FY=;
+        b=nJ+X0F4dCxcCBsQktEyO+V74BMGvW40lr2LT/deLL6WgDycMnW37aYh2iV1FTrP3pd
+         COkHMO/o7tc3JJJW7iTTHXurIsBMrsJJdli+iNLuAMI4OHvzzW+u+I6JRy3AQTvmT+aO
+         hYE2t5JCIZl7mCPaqy9iaW4exvXNQaUHuvyCZjU8+K0swqK4T1tLxdr8m9+C92Nx2iN7
+         YiYp/54W+8L3e97Azro0U1QB97K9XAahmfbGwEypKKS253Wd8oBURuPBFI7yirJTpWsC
+         Hil/6UTDWYbV/rU8hNLtdWIBbWDcI5R3fOSBFeLLJrXlSWYquAusVPL9t+4GpY87TvKK
+         vHdQ==
+X-Gm-Message-State: ACgBeo2sQ3UP+Spla1/zrhyVHNiuZo0NJnkbJP+etGtQK6UT0UrWAe7a
+        g9ADAMs/dHsSzpts5cOLXS9wKg==
+X-Google-Smtp-Source: AA6agR6tqozr7gCfHGpwcc/zCo72xzDKevY2OMKHYb1ZNcrHbpzo4uDKZKmR9TQLEHU7lYT/CFnasg==
+X-Received: by 2002:a63:5620:0:b0:429:9ad7:b4f2 with SMTP id k32-20020a635620000000b004299ad7b4f2mr26305648pgb.162.1662044892953;
+        Thu, 01 Sep 2022 08:08:12 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id r14-20020a17090a4dce00b001fde4a4c28csm3387201pjl.37.2022.09.01.08.08.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 08:08:12 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 15:08:08 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Maxim Levitsky <mlevitsk@redhat.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Li RongQing <lirongqing@baidu.com>
+Subject: Re: [PATCH 03/19] Revert "KVM: SVM: Introduce hybrid-AVIC mode"
+Message-ID: <YxDK2GIlhr+mQFWd@google.com>
+References: <20220831003506.4117148-1-seanjc@google.com>
+ <20220831003506.4117148-4-seanjc@google.com>
+ <17e776dccf01e03bce1356beb8db0741e2a13d9a.camel@redhat.com>
+ <84c2e836d6ba4eae9fa20329bcbc1d19f8134b0f.camel@redhat.com>
+ <Yw+MYLyVXvxmbIRY@google.com>
+ <59206c01da236c836c58ff96c5b4123d18a28b2b.camel@redhat.com>
+ <Yw+yjo4TMDYnyAt+@google.com>
+ <c6e9a565d60fb602a9f4fc48f2ce635bf658f1ea.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Michal Hocko <mhocko@suse.com>, Mel Gorman <mgorman@suse.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, dave@stgolabs.net, willy@infradead.org,
-        liam.howlett@oracle.com, void@manifault.com, juri.lelli@redhat.com,
-        ldufour@linux.ibm.com, peterx@redhat.com, axboe@kernel.dk,
-        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
-        changbin.du@intel.com, ytcoode@gmail.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
-        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
-        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
-        elver@google.com, dvyukov@google.com, shakeelb@google.com,
-        songmuchun@bytedance.com, arnd@arndb.de, jbaron@akamai.com,
-        rientjes@google.com, minchan@google.com, kaleshsingh@google.com,
-        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de> <Yw88RFuBgc7yFYxA@dhcp22.suse.cz>
- <20220831190154.qdlsxfamans3ya5j@moria.home.lan>
- <404e947a-e1b2-0fae-8b4f-6f2e3ba6328d@redhat.com>
- <20220901142345.agkfp2d5lijdp6pt@moria.home.lan>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-In-Reply-To: <20220901142345.agkfp2d5lijdp6pt@moria.home.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c6e9a565d60fb602a9f4fc48f2ce635bf658f1ea.camel@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01.09.22 16:23, Kent Overstreet wrote:
-> On Thu, Sep 01, 2022 at 10:05:03AM +0200, David Hildenbrand wrote:
->> On 31.08.22 21:01, Kent Overstreet wrote:
->>> On Wed, Aug 31, 2022 at 12:47:32PM +0200, Michal Hocko wrote:
->>>> On Wed 31-08-22 11:19:48, Mel Gorman wrote:
->>>>> Whatever asking for an explanation as to why equivalent functionality
->>>>> cannot not be created from ftrace/kprobe/eBPF/whatever is reasonable.
->>>>
->>>> Fully agreed and this is especially true for a change this size
->>>> 77 files changed, 3406 insertions(+), 703 deletions(-)
->>>
->>> In the case of memory allocation accounting, you flat cannot do this with ftrace
->>> - you could maybe do a janky version that isn't fully accurate, much slower,
->>> more complicated for the developer to understand and debug and more complicated
->>> for the end user.
->>>
->>> But please, I invite anyone who's actually been doing this with ftrace to
->>> demonstrate otherwise.
->>>
->>> Ftrace just isn't the right tool for the job here - we're talking about adding
->>> per callsite accounting to some of the fastest fast paths in the kernel.
->>>
->>> And the size of the changes for memory allocation accounting are much more
->>> reasonable:
->>>  33 files changed, 623 insertions(+), 99 deletions(-)
->>>
->>> The code tagging library should exist anyways, it's been open coded half a dozen
->>> times in the kernel already.
->>
->> Hi Kent,
->>
->> independent of the other discussions, if it's open coded already, does
->> it make sense to factor that already-open-coded part out independently
->> of the remainder of the full series here?
-> 
-> It's discussed in the cover letter, that is exactly how the patch series is
-> structured.
+Sorry for forking a bunch of different threads, wanted to respond to the other
+stuff before you signed off for the day.
 
-Skimming over the patches (that I was CCed on) and skimming over the
-cover letter, I got the impression that everything after patch 7 is
-introducing something new instead of refactoring something out.
+On Thu, Sep 01, 2022, Maxim Levitsky wrote:
+> However when APIC mode changes to x2apic, I don't think that we zap that
+> SPTE.
 
->  
->> [I didn't immediately spot if this series also attempts already to
->> replace that open-coded part]
-> 
-> Uh huh.
-> 
-> Honestly, some days it feels like lkml is just as bad as slashdot, with people
-> wanting to get in their two cents without actually reading...
+Hmm, yes. 
 
-... and of course you had to reply like that. I should just have learned
-from my last upstream experience with you and kept you on my spam list.
+> A side efect of this will be that AVIC in hybrid mode will just work and be
+> 100% to the spec. 
 
-Thanks, bye
+And I believe we can solve the avic_set_virtual_apic_mode() issue as well.  If
+x2APIC is treated as an inhibit for xAPIC but not APICv at large, then setting the
+inhibit will zap the SPTEs, and toggling the inhibit will force AVIC to re-assess
+its VMCB controls without needing to hook ->set_virtual_apic_mode().
 
--- 
-Thanks,
+Roughly what I'm thinking.  I'll try to give this a shot today.
 
-David / dhildenb
+diff --git a/arch/x86/kvm/lapic.c b/arch/x86/kvm/lapic.c
+index 164b002777cf..0b69acef2bee 100644
+--- a/arch/x86/kvm/lapic.c
++++ b/arch/x86/kvm/lapic.c
+@@ -2381,7 +2381,11 @@ void kvm_lapic_set_base(struct kvm_vcpu *vcpu, u64 value)
+        if (((old_value ^ value) & X2APIC_ENABLE) && (value & X2APIC_ENABLE))
+                kvm_apic_set_x2apic_id(apic, vcpu->vcpu_id);
+ 
+-       if ((old_value ^ value) & (MSR_IA32_APICBASE_ENABLE | X2APIC_ENABLE)) {
++       if ((old_value ^ value) & X2APIC_ENABLE) {
++               kvm_set_or_clear_apicv_inhibit(vcpu->kvm,
++                                              APICV_INHIBIT_REASON_X2APIC,
++                                              value & X2APIC_ENABLE;
++       } else if ((old_value ^ value) & MSR_IA32_APICBASE_ENABLE) {
+                kvm_vcpu_update_apicv(vcpu);
+                static_call_cond(kvm_x86_set_virtual_apic_mode)(vcpu);
+        }
+diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+index 270403610185..76d93f87071f 100644
+--- a/arch/x86/kvm/mmu/mmu.c
++++ b/arch/x86/kvm/mmu/mmu.c
+@@ -4156,7 +4156,7 @@ static int kvm_faultin_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+                 * when the AVIC is re-enabled.
+                 */
+                if (slot && slot->id == APIC_ACCESS_PAGE_PRIVATE_MEMSLOT &&
+-                   !kvm_apicv_activated(vcpu->kvm))
++                   !kvm_xapic_apicv_activated(vcpu->kvm))
+                        return RET_PF_EMULATE;
+        }
+ 
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 1328326acfae..ee381d155adc 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -9297,11 +9297,24 @@ static void kvm_pv_kick_cpu_op(struct kvm *kvm, int apicid)
+        kvm_irq_delivery_to_apic(kvm, NULL, &lapic_irq, NULL);
+ }
+ 
+-bool kvm_apicv_activated(struct kvm *kvm)
++bool kvm_xapic_apicv_activated(struct kvm *kvm)
+ {
+        return (READ_ONCE(kvm->arch.apicv_inhibit_reasons) == 0);
+ }
+ 
++bool kvm_apicv_activated(struct kvm *kvm)
++{
++       unsigned long inhibits = READ_ONCE(kvm->arch.apicv_inhibit_reasons);
++
++       /*
++        * x2APIC only needs to "inhibit" the MMIO region, all other aspects of
++        * APICv can continue to be utilized.
++        */
++       inhibits &= ~APICV_INHIBIT_REASON_X2APIC;
++
++       return !inhibits;
++}
++
+ bool kvm_vcpu_apicv_activated(struct kvm_vcpu *vcpu)
+ {
+        ulong vm_reasons = READ_ONCE(vcpu->kvm->arch.apicv_inhibit_reasons);
 

@@ -2,109 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D93C5A9AB1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:44:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 777F75A9A9C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 16:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233617AbiIAOms (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 10:42:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42630 "EHLO
+        id S234330AbiIAOlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 10:41:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233652AbiIAOmp (ORCPT
+        with ESMTP id S233851AbiIAOl0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 10:42:45 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC80776976
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 07:42:41 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id s206so16588653pgs.3
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 07:42:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date;
-        bh=fbvLaxBSrUU1twip21pfwSPLgyOYXUmDr/PBKjQl9Hk=;
-        b=iBNu0BAJj/GpEUqQRjnaHH1UAVKM0yqNr+vLtcPE94fECJjuF6vBMeoGPa5BqbF31d
-         aCdf1DE9mIPgnNBkJCcVS5e9oT+mAhFu6N85WXBEU4D42jTaTdR/FTe9a9R/l5c16W96
-         x8Ps2dkMZ/jFStSqosO9ss1JRD7GN2Nvz6GjU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date;
-        bh=fbvLaxBSrUU1twip21pfwSPLgyOYXUmDr/PBKjQl9Hk=;
-        b=5GlVfrP5ppBdWJtSB7QrjYsiDX/nSjTrznKSrptwalwJiHOHUCHVhWoZVKDhPQIu2Q
-         +Pz7mVx7erdXmv0w6PsMfz/6Ey0d7v9QqeMgtjn5xdEqfxQ0diQuM441qSY7gMMo5eUx
-         ZgthUEewH46xV9On9sKZqamasq3oyfT6HtCKeoj1N74pMaV0xQbcJ8OmAABkbRnpjv3V
-         Or9FO0JnYzEaoG/NCFzm3kyChify5sWhOBIUPRHBpkBJuyKuEhCGbfLIE+3Ms1xp2mGH
-         sW/9w5Wm4BUuRf/plgPCPQpJDRUcY3v8ZRaoo2JBBbzf2m4d0kqei4phxdw0M1rv+dsf
-         TtVQ==
-X-Gm-Message-State: ACgBeo2Bz+uKEwNXkHS4vp4eEzXnTQSKGP5LpGKbdIpMrQuG/geW+ZUI
-        jwDWXrsTwsrB3+/c0gnpauJVUQnFSZHQghY+
-X-Google-Smtp-Source: AA6agR6BfX/F1wz6XflLFLFd19euXTh7VtM19NzJrOeQTVd832Lr0ExH5kSESTiAQwpUNn2ABOJ4Wg==
-X-Received: by 2002:a63:1a46:0:b0:42c:414a:95ee with SMTP id a6-20020a631a46000000b0042c414a95eemr14901158pgm.386.1662043361169;
-        Thu, 01 Sep 2022 07:42:41 -0700 (PDT)
-Received: from pteerapong.c.googlers.com.com (148.175.199.104.bc.googleusercontent.com. [104.199.175.148])
-        by smtp.gmail.com with ESMTPSA id z18-20020a170903019200b001709b9d292esm4238112plg.268.2022.09.01.07.42.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 07:42:40 -0700 (PDT)
-From:   Pattara Teerapong <pteerapong@chromium.org>
-To:     alsa-devel@alsa-project.org
-Cc:     Pattara Teerapong <pteerapong@chromium.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH] ALSA: aloop: Fix random zeros in capture data when using jiffies timer
-Date:   Thu,  1 Sep 2022 14:40:36 +0000
-Message-Id: <20220901144036.4049060-1-pteerapong@chromium.org>
-X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
+        Thu, 1 Sep 2022 10:41:26 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3CA80B51
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 07:41:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A05DC21A58;
+        Thu,  1 Sep 2022 14:41:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1662043270; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=q4N85gBIGjjkFJw1wkwc5ynL7FFJex63BJvLcg0HCeA=;
+        b=CJmILTtzWNnIHcZbFdvtuaob6Tl/IccFBow9lu5myxXMyqCFbxZkSWIhix8zjKuaMlVpvB
+        qY+KrMMfTOdjmuinwaybfCD0QtNMRMoWA50VtutsryB4hr6Uu5LcP64wYuVhs8bUHPDI30
+        SU+staKJSRquCRcBzfSx5FYKxh2qJCM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 82DBE13A79;
+        Thu,  1 Sep 2022 14:41:10 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id ntKrHYbEEGNwYwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 01 Sep 2022 14:41:10 +0000
+Date:   Thu, 1 Sep 2022 16:41:09 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org
+Subject: Re: [PATCH v2 3/8] mm/vmstat: Use preempt_[dis|en]able_nested()
+Message-ID: <YxDEhV0QAnil3h7e@dhcp22.suse.cz>
+References: <20220825164131.402717-1-bigeasy@linutronix.de>
+ <20220825164131.402717-4-bigeasy@linutronix.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220825164131.402717-4-bigeasy@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In loopback_jiffies_timer_pos_update(), we are getting jiffies twice.
-First time for playback, second time for capture. Jiffies can be updated
-between these two calls and if the capture jiffies is larger, extra zeros
-will be filled in the capture buffer.
+On Thu 25-08-22 18:41:26, Sebastian Andrzej Siewior wrote:
+> From: Thomas Gleixner <tglx@linutronix.de>
+> 
+> Replace the open coded CONFIG_PREEMPT_RT conditional
+> preempt_enable/disable() pairs with the new helper functions which hide
+> the underlying implementation details.
+> 
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-mm@kvack.org
+> Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 
-Change to get jiffies once and use it for both playback and capture.
+Acked-by: Michal Hocko <mhocko@suse.com>
+Thanks!
 
-Signed-off-by: Pattara Teerapong <pteerapong@chromium.org>
----
+> ---
+>  mm/vmstat.c | 36 ++++++++++++------------------------
+>  1 file changed, 12 insertions(+), 24 deletions(-)
+> 
+> diff --git a/mm/vmstat.c b/mm/vmstat.c
+> index 373d2730fcf21..d514fe7f90af0 100644
+> --- a/mm/vmstat.c
+> +++ b/mm/vmstat.c
+> @@ -355,8 +355,7 @@ void __mod_zone_page_state(struct zone *zone, enum zone_stat_item item,
+>  	 * CPU migrations and preemption potentially corrupts a counter so
+>  	 * disable preemption.
+>  	 */
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_disable();
+> +	preempt_disable_nested();
+>  
+>  	x = delta + __this_cpu_read(*p);
+>  
+> @@ -368,8 +367,7 @@ void __mod_zone_page_state(struct zone *zone, enum zone_stat_item item,
+>  	}
+>  	__this_cpu_write(*p, x);
+>  
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_enable();
+> +	preempt_enable_nested();
+>  }
+>  EXPORT_SYMBOL(__mod_zone_page_state);
+>  
+> @@ -393,8 +391,7 @@ void __mod_node_page_state(struct pglist_data *pgdat, enum node_stat_item item,
+>  	}
+>  
+>  	/* See __mod_node_page_state */
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_disable();
+> +	preempt_disable_nested();
+>  
+>  	x = delta + __this_cpu_read(*p);
+>  
+> @@ -406,8 +403,7 @@ void __mod_node_page_state(struct pglist_data *pgdat, enum node_stat_item item,
+>  	}
+>  	__this_cpu_write(*p, x);
+>  
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_enable();
+> +	preempt_enable_nested();
+>  }
+>  EXPORT_SYMBOL(__mod_node_page_state);
+>  
+> @@ -441,8 +437,7 @@ void __inc_zone_state(struct zone *zone, enum zone_stat_item item)
+>  	s8 v, t;
+>  
+>  	/* See __mod_node_page_state */
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_disable();
+> +	preempt_disable_nested();
+>  
+>  	v = __this_cpu_inc_return(*p);
+>  	t = __this_cpu_read(pcp->stat_threshold);
+> @@ -453,8 +448,7 @@ void __inc_zone_state(struct zone *zone, enum zone_stat_item item)
+>  		__this_cpu_write(*p, -overstep);
+>  	}
+>  
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_enable();
+> +	preempt_enable_nested();
+>  }
+>  
+>  void __inc_node_state(struct pglist_data *pgdat, enum node_stat_item item)
+> @@ -466,8 +460,7 @@ void __inc_node_state(struct pglist_data *pgdat, enum node_stat_item item)
+>  	VM_WARN_ON_ONCE(vmstat_item_in_bytes(item));
+>  
+>  	/* See __mod_node_page_state */
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_disable();
+> +	preempt_disable_nested();
+>  
+>  	v = __this_cpu_inc_return(*p);
+>  	t = __this_cpu_read(pcp->stat_threshold);
+> @@ -478,8 +471,7 @@ void __inc_node_state(struct pglist_data *pgdat, enum node_stat_item item)
+>  		__this_cpu_write(*p, -overstep);
+>  	}
+>  
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_enable();
+> +	preempt_enable_nested();
+>  }
+>  
+>  void __inc_zone_page_state(struct page *page, enum zone_stat_item item)
+> @@ -501,8 +493,7 @@ void __dec_zone_state(struct zone *zone, enum zone_stat_item item)
+>  	s8 v, t;
+>  
+>  	/* See __mod_node_page_state */
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_disable();
+> +	preempt_disable_nested();
+>  
+>  	v = __this_cpu_dec_return(*p);
+>  	t = __this_cpu_read(pcp->stat_threshold);
+> @@ -513,8 +504,7 @@ void __dec_zone_state(struct zone *zone, enum zone_stat_item item)
+>  		__this_cpu_write(*p, overstep);
+>  	}
+>  
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_enable();
+> +	preempt_enable_nested();
+>  }
+>  
+>  void __dec_node_state(struct pglist_data *pgdat, enum node_stat_item item)
+> @@ -526,8 +516,7 @@ void __dec_node_state(struct pglist_data *pgdat, enum node_stat_item item)
+>  	VM_WARN_ON_ONCE(vmstat_item_in_bytes(item));
+>  
+>  	/* See __mod_node_page_state */
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_disable();
+> +	preempt_disable_nested();
+>  
+>  	v = __this_cpu_dec_return(*p);
+>  	t = __this_cpu_read(pcp->stat_threshold);
+> @@ -538,8 +527,7 @@ void __dec_node_state(struct pglist_data *pgdat, enum node_stat_item item)
+>  		__this_cpu_write(*p, overstep);
+>  	}
+>  
+> -	if (IS_ENABLED(CONFIG_PREEMPT_RT))
+> -		preempt_enable();
+> +	preempt_enable_nested();
+>  }
+>  
+>  void __dec_zone_page_state(struct page *page, enum zone_stat_item item)
+> -- 
+> 2.37.2
 
- sound/drivers/aloop.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/sound/drivers/aloop.c b/sound/drivers/aloop.c
-index 9b4a7cdb103a..12f12a294df5 100644
---- a/sound/drivers/aloop.c
-+++ b/sound/drivers/aloop.c
-@@ -605,17 +605,18 @@ static unsigned int loopback_jiffies_timer_pos_update
- 			cable->streams[SNDRV_PCM_STREAM_PLAYBACK];
- 	struct loopback_pcm *dpcm_capt =
- 			cable->streams[SNDRV_PCM_STREAM_CAPTURE];
--	unsigned long delta_play = 0, delta_capt = 0;
-+	unsigned long delta_play = 0, delta_capt = 0, cur_jiffies;
- 	unsigned int running, count1, count2;
- 
-+	cur_jiffies = jiffies;
- 	running = cable->running ^ cable->pause;
- 	if (running & (1 << SNDRV_PCM_STREAM_PLAYBACK)) {
--		delta_play = jiffies - dpcm_play->last_jiffies;
-+		delta_play = cur_jiffies - dpcm_play->last_jiffies;
- 		dpcm_play->last_jiffies += delta_play;
- 	}
- 
- 	if (running & (1 << SNDRV_PCM_STREAM_CAPTURE)) {
--		delta_capt = jiffies - dpcm_capt->last_jiffies;
-+		delta_capt = cur_jiffies - dpcm_capt->last_jiffies;
- 		dpcm_capt->last_jiffies += delta_capt;
- 	}
- 
 -- 
-2.37.2.789.g6183377224-goog
-
+Michal Hocko
+SUSE Labs

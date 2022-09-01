@@ -2,69 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D56D5A93C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:01:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A6A05A93CB
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 12:02:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233523AbiIAKBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 06:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39636 "EHLO
+        id S233434AbiIAKCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 06:02:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233301AbiIAKBY (ORCPT
+        with ESMTP id S232059AbiIAKCT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 06:01:24 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EB86134898
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 03:01:22 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id C7512219F1;
-        Thu,  1 Sep 2022 10:01:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1662026480; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=pUkZJWp2nQ4dbOBqWBuaF5RJwLtyXngvDW9UF32VZDE=;
-        b=qKa4+SljwPi5zCaniT9NpUQnkosVRVt7giTvOKUpwsXKorMmAxQewzjtYbLbBdGPJ3Isuk
-        yqbtgGqvo/AMBanDVSdZICG5/GeuXneHiiibqQ2mgUR60pgTiQM2Ffm7mcCEHJnX6p30rD
-        D64G/Oo5iJ6um4ICyQ+S6C4NGOgXzSw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A4B7D13A89;
-        Thu,  1 Sep 2022 10:01:20 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id m67wJfCCEGMyXwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 01 Sep 2022 10:01:20 +0000
-Date:   Thu, 1 Sep 2022 12:01:19 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Marco Elver <elver@google.com>
-Cc:     Oscar Salvador <osalvador@suse.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Eric Dumazet <edumazet@google.com>,
-        Waiman Long <longman@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>, kasan-dev@googlegroups.com
-Subject: Re: [PATCH 1/3] lib/stackdepot: Add a refcount field in stack_record
-Message-ID: <YxCC7zoc3wX3ieMR@dhcp22.suse.cz>
-References: <20220901044249.4624-1-osalvador@suse.de>
- <20220901044249.4624-2-osalvador@suse.de>
- <YxBsWu36eqUw03Dy@elver.google.com>
- <YxBvcDFSsLqn3i87@dhcp22.suse.cz>
- <CANpmjNNjkgibnBcp7ZOWGC5CcBJ=acgrRKo0cwZG0xOB5OCpLw@mail.gmail.com>
+        Thu, 1 Sep 2022 06:02:19 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0091D134880;
+        Thu,  1 Sep 2022 03:02:17 -0700 (PDT)
+Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
+ (mreueus003 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LdpDh-1pCPRQ3a0h-00j4Xv;
+ Thu, 01 Sep 2022 12:02:04 +0200
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 2/4] arm64: dts: verdin-imx8mm: add lvds panel node
+Date:   Thu,  1 Sep 2022 12:01:49 +0200
+Message-Id: <20220901100151.1378709-3-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.36.1
+In-Reply-To: <20220901100151.1378709-1-marcel@ziswiler.com>
+References: <20220901100151.1378709-1-marcel@ziswiler.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANpmjNNjkgibnBcp7ZOWGC5CcBJ=acgrRKo0cwZG0xOB5OCpLw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:VnJ1NtTLb2JU1Blx2e3SKtrQp3EdMQeViKJsWwf5rLUxEB1shvY
+ vS064QvQGr55BCiteGpK48LHQqjnsIgT+riivzy3+97mTAsKNuZIzMPujfQKU7QEj3yJenl
+ C6FoPqn57Dnl64+kmH2sgMqssAi+/InQUA3NZf2coWa0/S2ODlfzvkhgx4yzFJyGCLFvDG4
+ 3iXWk9b6/KFm+8mOgWdGg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:y7q2VLfuQ70=:7Oha8K3JZ7BotefxI7rMap
+ iEwLgYETh8v2s4dy92xO/+HZBiC9IE3g/OJD93w5C8C9u1YdL/Hqj2w+Rp+5khecp6Pjmhecn
+ qXek6xSL8+twy3g4qY4zHCwNBeWQld1dv5GSkamrTC4+WRS5LC38FL3Th4Zrg1htASAab5W3r
+ 6gesfIBrNmkkhqCBQfodZ/9wIllmmc8tassD5JsSc5AuGK9uIk0KV/ovGleB7bH1Nwiw7dzwf
+ PL6vVZT3Ckrfk14O5DWP0L2+YK4kyn7GKkknOMDR8stK+UNQgXzl7wUPsGbsBzVYB/G7d/gYu
+ fzmEYAovOb7MM5JshKsG/bHkfuUcxofPuWRVsan/H8s5Wp+MX9Ud3y+69U9cRE1ZKlRg7AzAT
+ ZhcGDXS+6zKae83mTG4828xHzBPXT35MUFCUTktToSyOQ5sT/A2EcrQU/B+0UTG3mbcakjVYL
+ tf27ELOIxL1jZeyAgCCqBhFL9DfNLBqzV+WG7FThd94arjy1n0qVgivpl+ilclpVD2TwQZGB0
+ ZR+Gr961q8x1JDDOpsXcWvsxaEFOtaTe+Fbd9rQF3QNPSfpSQjL7r3101jDO1ttV9iqDz921c
+ e86ZipHISmIjmssg5L1YWxCHHlYpf04Kb5IjvnLq4OGl61MNb0/6ZScCFqTsnUUqISx8vKyuu
+ xA8wyN09vwqOo+l/lAgCgA0EvsSNIV1VEl/r+wTpfgZMpktry4IlnnWBHZE9iE/PmJo0ra0DY
+ uJGEWB9GOLbj81itonLs2bD8HaSfw0i3qGk0mWfpIAE3pOV128NH4jIbVvE+082LPSxBirdkR
+ ZNZlfoc
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,50 +64,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 01-09-22 11:18:19, Marco Elver wrote:
-> On Thu, 1 Sept 2022 at 10:38, Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Thu 01-09-22 10:24:58, Marco Elver wrote:
-> > > On Thu, Sep 01, 2022 at 06:42AM +0200, Oscar Salvador wrote:
-> > [...]
-> > > > diff --git a/lib/stackdepot.c b/lib/stackdepot.c
-> > > > index 5ca0d086ef4a..aeb59d3557e2 100644
-> > > > --- a/lib/stackdepot.c
-> > > > +++ b/lib/stackdepot.c
-> > > > @@ -63,6 +63,7 @@ struct stack_record {
-> > > >     u32 hash;                       /* Hash in the hastable */
-> > > >     u32 size;                       /* Number of frames in the stack */
-> > > >     union handle_parts handle;
-> > > > +   refcount_t count;               /* Number of the same repeated stacks */
-> > >
-> > > This will increase stack_record size for every user, even if they don't
-> > > care about the count.
-> >
-> > Couldn't this be used for garbage collection?
-> 
-> Only if we can precisely figure out at which point a stack is no
-> longer going to be needed.
-> 
-> But more realistically, stack depot was designed to be simple. Right
-> now it can allocate new stacks (from an internal pool), but giving the
-> memory back to that pool isn't supported. Doing garbage collection
-> would effectively be a redesign of stack depot.
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Fair argument. 
+Add an LVDS panel node to be extended by a device tree overlay.
 
-> And for the purpose
-> for which stack depot was designed (debugging tools), memory has never
-> been an issue (note that stack depot also has a fixed upper bound on
-> memory usage).
+Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+---
 
-Is the increased size really a blocker then? I see how it sucks to
-maintain a counter when it is not used by anything but page_owner but
-storing that counte externally would just add more complexity AFAICS
-(more allocations, more tracking etc.).
+ arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Maybe the counter can be conditional on the page_owner which would add
-some complexity as well (variable size structure) but at least the
-external allocation stuff could be avoided.
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
+index f5a2dade24a1..ca1c087e7c29 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi
+@@ -53,6 +53,13 @@ key-wakeup {
+ 		};
+ 	};
+ 
++	panel_lvds: panel-lvds {
++		compatible = "panel-lvds";
++		backlight = <&backlight>;
++		data-mapping = "vesa-24";
++		status = "disabled";
++	};
++
+ 	/* Carrier Board Supplies */
+ 	reg_1p8v: regulator-1p8v {
+ 		compatible = "regulator-fixed";
 -- 
-Michal Hocko
-SUSE Labs
+2.36.1
+

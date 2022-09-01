@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F31C5A8B4C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:16:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCA515A8B58
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232507AbiIACQm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 22:16:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38778 "EHLO
+        id S232651AbiIACRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 22:17:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiIACQi (ORCPT
+        with ESMTP id S229631AbiIACRR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 22:16:38 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6B3BD7D27
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:16:36 -0700 (PDT)
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 31 Aug 2022 22:17:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD83EA33E
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:17:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 653223F10A
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:16:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1661998593;
-        bh=1IzFF6NAQjDWF+6OiRwseJVIAWC07UHezHJ/hzeYRN8=;
-        h=From:To:Subject:Date:Message-Id:MIME-Version;
-        b=qWhHWEn4igmEgy/Tm06YyI09hzpR6hkNB6YprvG2JYPj7PmAcdvjIcbydPYpQppJu
-         weCKmIv3h67XdF7revUHBSR3mXiN02vh0Wgm2ngSJ3IosT7jEvrMARurHGTQ2Pm/G5
-         hCt7KtPSHS8iIL2XVDVTg/BuMCjiHNKIvL0xgyYP4Ur9gbtlvl/OxJxDPszmAXQNCd
-         Bu2VjYAwqvQVjuArI22/At6g1V69Xbv9TDVy4XrD6UvqgOmhcy8N/7DnCq5Hqu+m21
-         nK8m9jE226krvFUlc+qYdabWnB6xly3lziOL/zN9/eron16dT5UZtq9o4WX+DOhLkD
-         EEaKvrGZljTKA==
-Received: by mail-pf1-f200.google.com with SMTP id s129-20020a625e87000000b005383388a6bcso4808601pfb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:16:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc;
-        bh=1IzFF6NAQjDWF+6OiRwseJVIAWC07UHezHJ/hzeYRN8=;
-        b=LeGXC9p9DLDMYI3LEBiZarkBwBH5oZ07oel2KJ2bTQrwW9Y2nQNVAB8Poey5dh9abp
-         E5NJO9UtFWU2z691B6sgxiPNvYhLuwkuNV2XmKqjB1JEcXmy7Uv9mX01lIsoS81sUfvf
-         wYvr7Hpoc8OY6dggfGEm7ClixwXYBNOBNbgLiJcxyW6ZrbrDcRGdV7izrvkWZye2e2kP
-         Q8DOAKaYVlsbmqBQaki3XHk1h/Fs7OIvXHgDa+XX/WsHCB/lnEgYStTia7T8vbgHCoSF
-         3k62cpSL84qfksJZs+9NJp9T5sZ1GUVnBZ5wBCtWhYtArLNawuFykw2vW3Ho9m7NAKKU
-         oaWQ==
-X-Gm-Message-State: ACgBeo254t8f/rULQpogGChIR1Ncy7rn8bXVoSEtt6hqIUkIg/nJZwLt
-        IF9Lx3AL8HZI2CJNUWkKRWVfMpl1pl1LlkK2y6i6OwycHabO32JdK93+lQwAMeXNZ/V1xW/2ur4
-        geQOJsULgEnqRT7v2SdlfKIxYqvaFPcQe0h32KELNGA==
-X-Received: by 2002:a63:4d5b:0:b0:42c:299e:eecc with SMTP id n27-20020a634d5b000000b0042c299eeeccmr13844071pgl.41.1661998591633;
-        Wed, 31 Aug 2022 19:16:31 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7N7E+WOAR5KMVrMlnNNPvwtUZG4N5E7Zz8yJZq3UvydP/V9Fw6/gRWjas/qyikocmrTGqKDg==
-X-Received: by 2002:a63:4d5b:0:b0:42c:299e:eecc with SMTP id n27-20020a634d5b000000b0042c299eeeccmr13844056pgl.41.1661998591331;
-        Wed, 31 Aug 2022 19:16:31 -0700 (PDT)
-Received: from canonical.com (2001-b011-3815-31f6-fb99-d5df-1120-3f91.dynamic-ip6.hinet.net. [2001:b011:3815:31f6:fb99:d5df:1120:3f91])
-        by smtp.gmail.com with ESMTPSA id b4-20020a63eb44000000b0041c30def5e8sm4033374pgk.33.2022.08.31.19.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Aug 2022 19:16:30 -0700 (PDT)
-From:   Koba Ko <koba.ko@canonical.com>
-To:     Tom Lendacky <thomas.lendacky@amd.com>,
-        John Allen <john.allen@amd.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V2] crypto: ccp - Release dma channels before dmaengine unrgister
-Date:   Thu,  1 Sep 2022 10:16:28 +0800
-Message-Id: <20220901021628.1130985-1-koba.ko@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        by ams.source.kernel.org (Postfix) with ESMTPS id 71B1DB823C5
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:17:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 324F2C433D7
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:17:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1661998634;
+        bh=Nk27irCFVQ/B31eOpwb7cfZCo9RX5b6offw8YfVRSqw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=dtev6JZbZWYnd1b81x0Di3kF4r40zTCj6UQbkVjfz13h6ODMRfToIeosgkuNHn99o
+         Yyz8YxvWc+TEuz9wv5/eCdeaCpP/Ms62a8f0WmeUUmItQe8u95e+QzpEgmxn5Qtf4s
+         xahDsjarVYHzXX0papdLOzcwAd3nh5Em6VTCzAJgjvEszS9sa1AcG/Bj9MN2AW6i92
+         OvkgLcw6V2dt9bUMQCSScFNct3cGNAdqYRfLh2XZL+y1WmwKnsLZRHmruFFVUzlMdJ
+         LnG0GEz99VirUVlGRPX1Z2zWvrm9XCsnwkA9DbQK0TEfFSdPyg+fzivddZCYDqAUP9
+         5gjEVjgNYCHkQ==
+Received: by mail-vk1-f176.google.com with SMTP id u11so4956837vkk.0
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:17:14 -0700 (PDT)
+X-Gm-Message-State: ACgBeo10AjBccBWnRa7LNKM/QoD1Au1E4KTOGeiefssn5BQWGAbSxPFF
+        72Oz3A5Y63boDC0SwolgLW2Qg2qRgRuABeQeN6c=
+X-Google-Smtp-Source: AA6agR4lL0Odh3mHi3zFiNi1s4o/n89sqW4pL+sKCvo10g3/JzrqZ/VxD9qtYJhLb6wFZKkkkJrMjWMTdzwk14KjlgM=
+X-Received: by 2002:a1f:9d13:0:b0:376:7f81:9b85 with SMTP id
+ g19-20020a1f9d13000000b003767f819b85mr8039553vke.18.1661998633063; Wed, 31
+ Aug 2022 19:17:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+References: <20220830104806.128365-1-xry111@xry111.site> <CAAhV-H5bH7xZTWLhqcZ_Bmh=RNaEVBy9523hmj-gTmitqqc8ag@mail.gmail.com>
+ <c0ba2e23-5be3-924d-554a-2f10272c05bc@xen0n.name> <CAAhV-H7Dz21qRgwkMcJ0SnA9FNDN19E6mpa7C25LUitrO9LGeA@mail.gmail.com>
+ <5b87173faeef587a2ffaaa6f58d34e0940231067.camel@xry111.site>
+ <c53303bf-a5d2-098f-8975-efadbe0b2f2e@loongson.cn> <bc323d8578d2f6ec580066bab181788b305ae3c3.camel@xry111.site>
+ <CAAhV-H4N_XvmP9KA1M5crU44kHr33MZUVSsMY4Ugu5wQSv_LOQ@mail.gmail.com> <97291c0fe5a660c844475ff019c8db6af77ecf86.camel@xry111.site>
+In-Reply-To: <97291c0fe5a660c844475ff019c8db6af77ecf86.camel@xry111.site>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Thu, 1 Sep 2022 10:17:01 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6wzw-MV+h225rM4PfK_HY0tAdSXcUG-2Hx+_gfhzQ4_g@mail.gmail.com>
+Message-ID: <CAAhV-H6wzw-MV+h225rM4PfK_HY0tAdSXcUG-2Hx+_gfhzQ4_g@mail.gmail.com>
+Subject: Re: [PATCH v7 0/5] LoongArch: Support toolchain with new relocation types
+To:     Xi Ruoyao <xry111@xry111.site>
+Cc:     Jinyang He <hejinyang@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Youling Tang <tangyouling@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,47 +68,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A warning is shown during shutdown,
+Hi, Ruoyao,
 
-__dma_async_device_channel_unregister called while 2 clients hold a reference
-WARNING: CPU: 15 PID: 1 at drivers/dma/dmaengine.c:1110 __dma_async_device_channel_unregister+0xb7/0xc0
+On Wed, Aug 31, 2022 at 11:15 PM Xi Ruoyao <xry111@xry111.site> wrote:
+>
+> On Wed, 2022-08-31 at 22:40 +0800, Huacai Chen wrote:
+> > On Wed, Aug 31, 2022 at 4:09 PM Xi Ruoyao <xry111@xry111.site> wrote:
+> > >
+> > > On Wed, 2022-08-31 at 14:58 +0800, Jinyang He wrote:
+> > > > That's right. Also I am wondering why new toolchain produce .got* in
+> > > > kernel. It's unneeded. In the past, gcc create la.global and parsed
+> > > > to la.pcrel by gas, and kernel works well. Now it seems we lost this
+> > > > feature in gcc. I checked the x86 asm code just now. And some info
+> > > > follows,
+> > > >
+> > > > LoongArch64, ./net/ipv4/udp_diag.s, *have reloc hint*
+> > > >           pcalau12i       $r4,%got_pc_hi20(udplite_table)
+> > > >           ld.d    $r4,$r4,%got_pc_lo12(udplite_table)
+> > > >           b       udp_dump
+> > > >
+> > > > x86_64, ./net/ipv4/udp_diag.s
+> > > >           movq    $udplite_table, %rdi
+> > > >           jmp     udp_dump
+> > > >
+> > > > It seems related to -fno-PIE and -cmodel=kernel on x86_64.
+> > > > Hope new gcc with this feature now.
+> > >
+> > > On x86_64 -mcmodel=kernel means "all code and data are located in [-
+> > > 2GiB, 0) range.  We actually don't strictly require a "high" range as
+> > > we're mostly a PIC-friendly architecture: note that we use a
+> > > pcalau12i/addi.d pair for PIC addressing in [PC-2GiB, PC+2GiB, and a
+> > > lu12i.w/addi.d pair for "non-PIC" addressing in [-2GiB, 2GiB), both are
+> > > 2-insn sequence.
+> > >
+> > > If we can put the main kernel image and the modules in one 2GiB VA
+> > > range, we can avoid GOT completely.  But it's not possible for now
+> > > because main kernel image is loaded in XKPRANGE but the modules are in
+> > > XKVRANGE.  So the best we can achieve before implementing
+> > > CONFIG_RELOCATION is using GOT in modules, and avoid GOT in the main
+> > > kernel image (with a new code model in GCC, which will benefit both the
+> > > kernel and statically linked executables).
+>
+> > Emmm, can you implement this new code model in the near future?
+>
+> I have a plan to make our toolchain addressing the symbols better:
+>
+> (1) https://sourceware.org/pipermail/binutils/2022-August/122682.html.
+> This change will allow the linker to link a main executable image
+> (dynamically linked or statically linked, PIE or non-PIE, kernel or
+> userspace) with R_LARCH_COPY instead of GOT.  (Note that R_LARCH_COPY
+> will not show up in the kernel because we don't link to shared objects,
+> but GOT will be gone.)
+>
+> (2) Change GCC to stop using GOT unless -fPIC.  (Technically it's a one-
+> line change.)
+>
+> (3) In kernel, for main kernel image the default of toolchain will be
+> good enough (no GOT).  For modules we have two options:
+>
+>   (a) get rid of XKPRANGE.
+>   (b) force -mcmodel=extreme globally.
+>   (c) use -Wl,nocopyreloc to produce GOT.
+>
+> (a) is the best, the performance of (b) and (c) will be worse than (a).
+> I'm not sure which one in (b) and (c) is better, but as (a) will be the
+> final solution we can just choose one in (b) and (c) "randomly" for now.
+>
+> I don't want to add a new code model now, because if (1) works fine
+> we'll not need a new code model.  (1) is also the most tricky step in
+> the plan (I've sent the patch but not sure if it's completely correct),
+> (2) and (3) should be trivial.
+Now all global variable accesses are via got, I think the performance
+may be much worse than before when we didn't use explicit-relocs.
+I don't know whether "a new code model" or your "(1)(2)(3)" is easier
+to implement, but I think it is better to solve the performance issue
+before 6.1-rc1.
 
-Call dma_release_channel for occupied channles before dma_async_device_unregister.
+Huacai
 
-Fixes: 4cbe9bc34ed0 ("crypto: ccp - ccp_dmaengine_unregister release dma channels")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Koba Ko <koba.ko@canonical.com>
----
-V2: Fix the unused warning
----
- drivers/crypto/ccp/ccp-dmaengine.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/crypto/ccp/ccp-dmaengine.c b/drivers/crypto/ccp/ccp-dmaengine.c
-index 7d4b4ad1db1f3..9f753cb4f5f18 100644
---- a/drivers/crypto/ccp/ccp-dmaengine.c
-+++ b/drivers/crypto/ccp/ccp-dmaengine.c
-@@ -641,6 +641,10 @@ static void ccp_dma_release(struct ccp_device *ccp)
- 	for (i = 0; i < ccp->cmd_q_count; i++) {
- 		chan = ccp->ccp_dma_chan + i;
- 		dma_chan = &chan->dma_chan;
-+
-+		if (dma_chan->client_count)
-+			dma_release_channel(dma_chan);
-+
- 		tasklet_kill(&chan->cleanup_tasklet);
- 		list_del_rcu(&dma_chan->device_node);
- 	}
-@@ -766,8 +770,8 @@ void ccp_dmaengine_unregister(struct ccp_device *ccp)
- 	if (!dmaengine)
- 		return;
- 
--	dma_async_device_unregister(dma_dev);
- 	ccp_dma_release(ccp);
-+	dma_async_device_unregister(dma_dev);
- 
- 	kmem_cache_destroy(ccp->dma_desc_cache);
- 	kmem_cache_destroy(ccp->dma_cmd_cache);
--- 
-2.25.1
-
+> --
+> Xi Ruoyao <xry111@xry111.site>
+> School of Aerospace Science and Technology, Xidian University
+>

@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97A255A9E17
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B330B5A9E11
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:35:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234624AbiIARd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:33:27 -0400
+        id S234702AbiIARdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:33:38 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234123AbiIARdL (ORCPT
+        with ESMTP id S234325AbiIARdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:33:11 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A0993503
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:33:07 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id e187-20020a6369c4000000b0041c8dfb8447so8973232pgc.23
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:33:07 -0700 (PDT)
+        Thu, 1 Sep 2022 13:33:12 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A08694134
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 10:33:08 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id p18-20020a170902a41200b00172b0dc71e0so12136122plq.0
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 10:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date;
-        bh=up2TM/zYvuiSr9vjf1/TjFbeoqAIIxAqdA2XP4Ysf64=;
-        b=mnzCFMgQovP4pOxeqKDuUiKfKrfoW65FbzBEQyAYN0ttmKM9Hh1tn19fDLY1zlYtWu
-         +n7/5M4T94WtHynUEM5Qxjeinqtsgq7kkWH1LAKgXSBGxeeB4/vbe1jcHe/yBUsPS47r
-         CS8IVxzzXWcq68j/3bpQUF6p/7SH4+Sgj0cIqPEZt25gWPd6VkfhYz+p2Rt1jEahgKP2
-         VMVS1gWvHEFx4IC8PCk70lmXV016g5e8CrdOg/DNbEb5xuetcpm3Yq6WuPP+NMhYDh/i
-         XiYz9dt3VoPajHrHpKBF/rxWZeUyIF4eymR1mkVJRp56WXnN1UakQer/LEUTyRLDRfZq
-         B4IA==
+        bh=bQAGklJeyQtfbSP1sQy4j5NLftSXbGdRMGCxjEjeZBE=;
+        b=PdkvWuh4lRJLlzLZBbjbzpy37xR6IQu9kwQz7qrAqd239iRTSJWykjxRYMmBimg3/Q
+         xa4hrx7YMgkWl3jCAPCOdRSeu0/JVNri+7Acm6pWFis0pIPsjXO8IIk5GsLceQzgNiGH
+         SRnMZArYW5WcVrbKZmCy+oXc5zexH/PAbnV8Y28bcsxVy7Wgb8GT93cAZ4+Kkn59cD0t
+         +UsGw1gYCbHh6rj+1p2IZyVlNom+ZQuDpfFFWYhmEIM7K7A9tIpJWdQUYxw0rKd+aVRs
+         synctq1mDKakYzMMdNZU2QjzenjaxjsnYPIVW33uxBJ/YquqpxS9IK4yoZnwSJZLyfIX
+         /Gmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date;
-        bh=up2TM/zYvuiSr9vjf1/TjFbeoqAIIxAqdA2XP4Ysf64=;
-        b=MWTEC5suc6YgPu4M2ejKa4a/UYzg+O/GfkS/cjD8CweILR1rEJLdhuByIVm7go59wl
-         1XTofRYIBRcArNTLUwugOdKPv/bQNLD5aYgFJOD0qXUlEsaFO0iJDLZj2tRuSKGiJguP
-         3Rt3MsVnDW3q57M1SxqLlP1YfMTW3eHc6bir3kvLwNcrzhjjA9Xi5qKxpmyVP5usuSmh
-         0b+Irvxmh0uEP0LT7Js6I936APFRM4PYgaJRJK2Nj3C0dEu8J9FTE3yOm5Vl7vdAq+7W
-         5alaIFpDJAJ4xrcM8DLuPHvkm1XJjZVgjQhu7VnXv2sYB1kWsWVaIis+4/FdQLf0aEFi
-         2T5Q==
-X-Gm-Message-State: ACgBeo3/JdtihDLjYvSpA+F7mii9bvwLpdCDsFRp27J8xGufaR3AhK3D
-        KWV/JkAMxEMQHYEdHyZt0JOQ/QjbGSs=
-X-Google-Smtp-Source: AA6agR7YtYGNAqd7HjqTYxeCdsRMjgGly3qkWP2F386oX2uY9RK0QBieMMd91SJA6yGNmzbigLsV1w4m5nk=
+        bh=bQAGklJeyQtfbSP1sQy4j5NLftSXbGdRMGCxjEjeZBE=;
+        b=EXJXNbaUC2MxIruBOtpfhsO8y8LjYqFXl9zLb0w2a08+E4DwbE61tRC1ntu8JTeUDr
+         zvPApXeVs8mdI2uC+kFI3VQaTtXp2UZPrLdSJR07uqUr18F6epmMegVuzfhhn5hQUAy7
+         4CeZ5g91ThwpvwCavrdjro8i+apE0Q2lsVHJpqOvDdOt7Py6CM0N54tQyOX+MR2LsG68
+         XENkZz1BHpHxxjXM2J5kx+TIZ/kWTX55FMGHVPurSR3kXRlq0HvAGqXfOQI52Gsfgcr1
+         h6rw0EVDfrjmKgeQZzi0HFfAe5OWSuRCaS4tbexhD4uDiDcrcaOj2bO//jbGrCiK+lbX
+         3b9Q==
+X-Gm-Message-State: ACgBeo3myxurAh19IJObbxm/x185SzK2tnhhQMt/X8AFEePnXDPPo/df
+        fL5SJKEZEUObdl042ja7oUdqsW/n0Vg=
+X-Google-Smtp-Source: AA6agR7I1859m8VZecCthmcgmvZYjzJM9cufmEyvv83W0quJFOCpP/gF1zvOWMDumK4rb5c+eAU4R1rl3t0=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:3b52:b0:1fe:2ee2:e341 with SMTP id
- ot18-20020a17090b3b5200b001fe2ee2e341mr207479pjb.231.1662053586161; Thu, 01
- Sep 2022 10:33:06 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a05:6a00:a90:b0:530:2f3c:da43 with SMTP id
+ b16-20020a056a000a9000b005302f3cda43mr32164396pfl.50.1662053587846; Thu, 01
+ Sep 2022 10:33:07 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu,  1 Sep 2022 17:32:56 +0000
+Date:   Thu,  1 Sep 2022 17:32:57 +0000
 In-Reply-To: <20220901173258.925729-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20220901173258.925729-1-seanjc@google.com>
 X-Mailer: git-send-email 2.37.2.789.g6183377224-goog
-Message-ID: <20220901173258.925729-4-seanjc@google.com>
-Subject: [PATCH v4 3/5] KVM: VMX: Move vmx_get_perf_capabilities() definition
- to vmx.c
+Message-ID: <20220901173258.925729-5-seanjc@google.com>
+Subject: [PATCH v4 4/5] KVM: VMX: Fold vmx_supported_debugctl() into vcpu_supported_debugctl()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -78,95 +77,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move vmx_get_perf_capabilities() to vmx.c as a non-inline function so
-that it can safely reference x86_perf_get_lbr(), which is available iff
-CPU_SUP_INTEL=y, i.e. only if kvm_intel is being built.  The helper is
-non-trivial and isn't used in any paths that are performance critical,
-i.e. doesn't need to be inlined.
+Fold vmx_supported_debugctl() into vcpu_supported_debugctl(), its only
+caller.  Setting bits only to clear them a few instructions later is
+rather silly, and splitting the logic makes things seem more complicated
+than they actually are.
 
-No functional change intended.
+Opportunistically drop DEBUGCTLMSR_LBR_MASK now that there's a single
+reference to the pair of bits.  The extra layer of indirection provides
+no meaningful value and makes it unnecessarily tedious to understand
+what KVM is doing.
+
+No functional change.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/capabilities.h | 24 ++----------------------
- arch/x86/kvm/vmx/vmx.c          | 22 ++++++++++++++++++++++
- 2 files changed, 24 insertions(+), 22 deletions(-)
+ arch/x86/kvm/vmx/capabilities.h | 15 ---------------
+ arch/x86/kvm/vmx/vmx.c          | 12 +++++++-----
+ 2 files changed, 7 insertions(+), 20 deletions(-)
 
 diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-index c5e5dfef69c7..23dca5ebae16 100644
+index 23dca5ebae16..189a64a6e139 100644
 --- a/arch/x86/kvm/vmx/capabilities.h
 +++ b/arch/x86/kvm/vmx/capabilities.h
-@@ -75,6 +75,8 @@ struct vmx_capability {
- };
- extern struct vmx_capability vmx_capability;
+@@ -24,8 +24,6 @@ extern int __read_mostly pt_mode;
+ #define PMU_CAP_FW_WRITES	(1ULL << 13)
+ #define PMU_CAP_LBR_FMT		0x3f
  
-+u64 vmx_get_perf_capabilities(void);
-+
- static inline bool cpu_has_vmx_basic_inout(void)
- {
- 	return	(((u64)vmcs_config.basic_cap << 32) & VMX_BASIC_INOUT);
-@@ -401,28 +403,6 @@ static inline bool vmx_pebs_supported(void)
+-#define DEBUGCTLMSR_LBR_MASK		(DEBUGCTLMSR_LBR | DEBUGCTLMSR_FREEZE_LBRS_ON_PMI)
+-
+ struct nested_vmx_msrs {
+ 	/*
+ 	 * We only store the "true" versions of the VMX capability MSRs. We
+@@ -403,19 +401,6 @@ static inline bool vmx_pebs_supported(void)
  	return boot_cpu_has(X86_FEATURE_PEBS) && kvm_pmu_cap.pebs_ept;
  }
  
--static inline u64 vmx_get_perf_capabilities(void)
+-static inline u64 vmx_supported_debugctl(void)
 -{
--	u64 perf_cap = PMU_CAP_FW_WRITES;
--	u64 host_perf_cap = 0;
+-	u64 debugctl = 0;
 -
--	if (!enable_pmu)
--		return 0;
+-	if (boot_cpu_has(X86_FEATURE_BUS_LOCK_DETECT))
+-		debugctl |= DEBUGCTLMSR_BUS_LOCK_DETECT;
 -
--	if (boot_cpu_has(X86_FEATURE_PDCM))
--		rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
+-	if (vmx_get_perf_capabilities() & PMU_CAP_LBR_FMT)
+-		debugctl |= DEBUGCTLMSR_LBR_MASK;
 -
--	perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
--
--	if (vmx_pebs_supported()) {
--		perf_cap |= host_perf_cap & PERF_CAP_PEBS_MASK;
--		if ((perf_cap & PERF_CAP_PEBS_FORMAT) < 4)
--			perf_cap &= ~PERF_CAP_PEBS_BASELINE;
--	}
--
--	return perf_cap;
+-	return debugctl;
 -}
 -
- static inline u64 vmx_supported_debugctl(void)
+ static inline bool cpu_has_notify_vmexit(void)
  {
- 	u64 debugctl = 0;
+ 	return vmcs_config.cpu_based_2nd_exec_ctrl &
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index c9b49a09e6b5..657fa9908bf9 100644
+index 657fa9908bf9..a5e3c1e6aa2b 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -1826,6 +1826,28 @@ static inline bool vmx_feature_control_msr_valid(struct kvm_vcpu *vcpu,
- 	return !(val & ~valid_bits);
- }
+@@ -2030,13 +2030,15 @@ static u64 nested_vmx_truncate_sysenter_addr(struct kvm_vcpu *vcpu,
  
-+u64 vmx_get_perf_capabilities(void)
-+{
-+	u64 perf_cap = PMU_CAP_FW_WRITES;
-+	u64 host_perf_cap = 0;
-+
-+	if (!enable_pmu)
-+		return 0;
-+
-+	if (boot_cpu_has(X86_FEATURE_PDCM))
-+		rdmsrl(MSR_IA32_PERF_CAPABILITIES, host_perf_cap);
-+
-+	perf_cap |= host_perf_cap & PMU_CAP_LBR_FMT;
-+
-+	if (vmx_pebs_supported()) {
-+		perf_cap |= host_perf_cap & PERF_CAP_PEBS_MASK;
-+		if ((perf_cap & PERF_CAP_PEBS_FORMAT) < 4)
-+			perf_cap &= ~PERF_CAP_PEBS_BASELINE;
-+	}
-+
-+	return perf_cap;
-+}
-+
- static int vmx_get_msr_feature(struct kvm_msr_entry *msr)
+ static u64 vcpu_supported_debugctl(struct kvm_vcpu *vcpu)
  {
- 	switch (msr->index) {
+-	u64 debugctl = vmx_supported_debugctl();
++	u64 debugctl = 0;
+ 
+-	if (!intel_pmu_lbr_is_enabled(vcpu))
+-		debugctl &= ~DEBUGCTLMSR_LBR_MASK;
++	if (boot_cpu_has(X86_FEATURE_BUS_LOCK_DETECT) &&
++	    guest_cpuid_has(vcpu, X86_FEATURE_BUS_LOCK_DETECT))
++		debugctl |= DEBUGCTLMSR_BUS_LOCK_DETECT;
+ 
+-	if (!guest_cpuid_has(vcpu, X86_FEATURE_BUS_LOCK_DETECT))
+-		debugctl &= ~DEBUGCTLMSR_BUS_LOCK_DETECT;
++	if ((vmx_get_perf_capabilities() & PMU_CAP_LBR_FMT) &&
++	    intel_pmu_lbr_is_enabled(vcpu))
++		debugctl |= DEBUGCTLMSR_LBR | DEBUGCTLMSR_FREEZE_LBRS_ON_PMI;
+ 
+ 	return debugctl;
+ }
 -- 
 2.37.2.789.g6183377224-goog
 

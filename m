@@ -2,196 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4EF5A9074
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4DA65A9079
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233208AbiIAHhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S233941AbiIAHiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:38:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233057AbiIAHhK (ORCPT
+        with ESMTP id S229639AbiIAHiW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:37:10 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EC1109081;
-        Thu,  1 Sep 2022 00:37:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1662017830; x=1693553830;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=E0tjURMAVeo957WRs0WKwNwl2PPLitzga8gvJwF55UY=;
-  b=fk/4JKuV+KGp1ilBGEL7TIpJeACQWPxNljbNpPP6VTUGKDH6lzfpCWJI
-   V0C15kbgqkAoS5azcSZbelknvqVQsGDNfqa9ZoN0yiZg8SkjvwVE9B19y
-   ho6vufehOyeibZZ6gkZ/TezhnGFw67HV1LyZOxpN9Pa6PRuMuNEwqh7YN
-   wWxdlpPd1CBxPjqBI2O4vbtIZzcnUWY3cKoSHT5tQcVR5xzHP+pJ2Y8Z5
-   16FfZq+sPHmzl3j8fOegJMgEstmnfz+dxk4fvGBU2qGsaKHUogHE0hzAw
-   grRZBkuoa8Iv6kUDjOQXSqP7cA6NufML3R/hyxZ0ES2DSjOlst/NpRoQ9
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="278660945"
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="278660945"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2022 00:37:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
-   d="scan'208";a="857736439"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Sep 2022 00:37:08 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 00:37:08 -0700
-Received: from orsmsx607.amr.corp.intel.com (10.22.229.20) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 1 Sep 2022 00:37:07 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx607.amr.corp.intel.com (10.22.229.20) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Thu, 1 Sep 2022 00:37:07 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Thu, 1 Sep 2022 00:37:07 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=G5j+gGloIt26NQDRyZfrDNP6h5aGNqeiVeOU1I2qfOOE0w/L+QjpOtrebARe3BIWPSMUgcHyzw1L1xd0tRiQaN96h1hAaKEmLuZ7y+P0H9O1NnTBzSxz9qxtor4xOzElkEJLygZps1HOh9/kvkVd/e+M4emkpyPVqCdXeMbsYZC8rpJMt1ldTnGRO2EA1nPKd/wMVMhcZy1S9uyWr4h19pI9rEVaOYH6syJPhfeP95M39v34tcIrgb3RB/SOqBz7c3pGUAQdcpPrKQYmff02MmecRYfll7yEQH41TYtsI6Ppfmkyx93sA9ZUML3+Ln42kqEYFd29FPohbJBlqY1i9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E0tjURMAVeo957WRs0WKwNwl2PPLitzga8gvJwF55UY=;
- b=k74RRWt4Blal0gwr2e0betc4agQw6Xao9BHk0rNQbj9VGoN3EECBSuaQMVS5Mfg1gi0+YW/2RnJ35Ts7yTw2jWglT+u7ceUyAekC2JjFK5e/S9OvpTJQU+GykO0Az3N9CvwAORL7xE2F5NVA01AefF3RpJKW1HQLBndKHK2Xayn/rdwAoEsveM7Vln/X10cvntEFkOlQfMOOpyqtPgnbNxZTYdXEW+DBxm+s9cmM9RwfIH9YEq2Ah0fYkDS8U3zilRTDqQSVKP7ra/F8t5SnzAxrzvHPQzq+GsNt+0ZmaVXAAt89o0tFMArPsO7C0olOl6WRXcTW2ZqE9E+a3uJ8zQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by BN6PR11MB1428.namprd11.prod.outlook.com (2603:10b6:405:a::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
- 2022 07:37:06 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::a435:3eff:aa83:73d7]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::a435:3eff:aa83:73d7%5]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
- 07:37:06 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        "Peter Oberparleiter" <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        "Alex Williamson" <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Longfang Liu <liulongfang@huawei.com>,
-        Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        "Kirti Wankhede" <kwankhede@nvidia.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        "Abhishek Sahu" <abhsahu@nvidia.com>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        Thu, 1 Sep 2022 03:38:22 -0400
+Received: from mx01.puc.rediris.es (outbound4mad.lav.puc.rediris.es [130.206.19.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA851108A2
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:38:20 -0700 (PDT)
+Received: from sim.rediris.es (mta-out04.sim.rediris.es [130.206.24.46])
+        by mx01.puc.rediris.es  with ESMTP id 2817bp7d004582-2817bp7f004582
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+        Thu, 1 Sep 2022 09:37:51 +0200
+Received: from sim.rediris.es (localhost.localdomain [127.0.0.1])
+        by sim.rediris.es (Postfix) with ESMTPS id 377EB39C39;
+        Thu,  1 Sep 2022 09:37:50 +0200 (CEST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by sim.rediris.es (Postfix) with ESMTP id 9F7C239C3C;
+        Thu,  1 Sep 2022 09:37:49 +0200 (CEST)
+X-Amavis-Modified: Mail body modified (using disclaimer) -
+        mta-out04.sim.rediris.es
+Received: from sim.rediris.es ([127.0.0.1])
+        by localhost (mta-out04.sim.rediris.es [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id Aco7_lIICjnn; Thu,  1 Sep 2022 09:37:49 +0200 (CEST)
+Received: from lt-gp.iram.es (haproxy01.sim.rediris.es [130.206.24.69])
+        by sim.rediris.es (Postfix) with ESMTPA id 1498139C39;
+        Thu,  1 Sep 2022 09:37:46 +0200 (CEST)
+Date:   Thu, 1 Sep 2022 09:37:42 +0200
+From:   Gabriel Paubert <paubert@iram.es>
+To:     Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc:     Segher Boessenkool <segher@kernel.crashing.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Zhouyi Zhou <zhouzhouyi@gmail.com>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-CC:     "Liu, Yi L" <yi.l.liu@intel.com>
-Subject: RE: [PATCH v2 12/15] vfio/amba: Use the new device life cycle helpers
-Thread-Topic: [PATCH v2 12/15] vfio/amba: Use the new device life cycle
- helpers
-Thread-Index: AQHYvdM1bc3iXCaPfUypseokfXt+uq3KL2kA
-Date:   Thu, 1 Sep 2022 07:37:05 +0000
-Message-ID: <BN9PR11MB52760EBD9E07701E1C5D651D8C7B9@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20220901143747.32858-1-kevin.tian@intel.com>
- <20220901143747.32858-13-kevin.tian@intel.com>
-In-Reply-To: <20220901143747.32858-13-kevin.tian@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 63b2371a-9553-4af5-ffd5-08da8becc4e9
-x-ms-traffictypediagnostic: BN6PR11MB1428:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ymBu+g1eutbSWViypK9xrL0zxsPdlOKgvQW7l7bwPJRHUFjhc6dRbXaTCVLXRqJxCpRKOvdEPauVnHXthJMD+Jk8aPol8Xxt2g6HPbti05VKlt3j7TiH25diFQuZa1sLlFObSGMNMCOXCtSMkZJjGgbiuPEckbes4JrUUup4adUqVYg8aE2ibDhBriwHMPI1n5wMi2WiVO15ndylabMogdUGUtViFM87YaJZOty0E0/UT8KpgbrdivIdgLP/XhLct4JWu55sohatJk56CPf+aWKX+IHfTx2VktHYo7g16vODS4l0CAJP8FE9qYfV5tTDyqHNleOQxANFbqZr1S0+ul8B6n4f00ph0MgvlXz8UCeHK1B0fXpJXRg7GTw2F7mSS8urf0UqQtn71KS0nCzjvq/NZnbrqSrt3FUic2n3oV+98AL1xqJaQXu28FN3KqXRD39NwCEizdozA71bcUkr7XhKlxsR9kralDMpjiyeVPqX+xqc5uUbrPvUR0Rp0DFNPOHb+2xZcxokeGgsRINZ/0zQbofXhKZp9cypmieAT9C0IeZxzIQr/iRrFv/P55qktHzKR2JDcMk5fpULkNFurLsxNwlyOJdtdeosDGN/d3eT378lOH9K8H6HfFSkO022g0TfUB+NnxWDQq+NxhKwq4aqGtJpWy2CBaDWXnyuyIK02k87TuIvTM3RDU0zNmaDhPIuRipXYX8aZDet/SwMhK9zuxxu5dGPS9vMoQZbQZCoHR75wNOpoVAjmXVJPea3Oht1bZ4rmiAFN5G+O5ORnIhc1MoXQlhnOZjeICHN2gg=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39860400002)(396003)(136003)(346002)(366004)(558084003)(6506007)(7696005)(55016003)(110136005)(316002)(4326008)(8676002)(64756008)(66476007)(76116006)(66946007)(66556008)(38070700005)(52536014)(8936002)(66446008)(33656002)(921005)(478600001)(38100700002)(71200400001)(7416002)(7406005)(122000001)(82960400001)(86362001)(9686003)(2906002)(5660300002)(41300700001)(26005)(186003);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Be7RFIdTO0SP6shqnlo47Wxy96SjStKV4AM/jcbVDgAecTT37m8ySty9G5OE?=
- =?us-ascii?Q?zXOb0FvMlSc33ozlHYnz5UTN7ifi+skE7dONerYlydfrCVaTuzlNgQ3HS/lB?=
- =?us-ascii?Q?cw+lF3NBuQn1bCx8x4yO2eAP1YUWhu55zaN/yo9GXUs4dKLWN1I70VBmAVi1?=
- =?us-ascii?Q?idrRZkQNyO+tLbLlYkgSK1Gi3YN6WudE9EwdV+trR2Tyh/hpEPhhhPxQlHPT?=
- =?us-ascii?Q?/+e4ABEtU/JmWDildjwiH4ar4C/dx8aWyka7vkZBBQzw0Bxj+jycCnmAxOYh?=
- =?us-ascii?Q?wCQ5+H9CZ7qZXSBxdC539gmdsy4v6sE86njJOeB6YLn4t0Xk3Q+Kvw69tdf2?=
- =?us-ascii?Q?J8Q8z2VMzEa5rWWneC/Em2VNXZ0FwkzP3xuQ0cclBmAceGdSgpMMLSO6MVeZ?=
- =?us-ascii?Q?vi/HiuGZhMk5Wuc2aYbvI1Sw8Ucdlg+AM186scUUlm/G7e7H5akWPdD3Osz1?=
- =?us-ascii?Q?Ktew3eGvlegH0LNW+dD95egECi0aS3/uInkn/D4gpCABVOJ0zsOqAe27Py49?=
- =?us-ascii?Q?vomEbXQZ0XBtJLZovr+T/qUDZr4gxyGRgmELudFtKbPGalblWwBTuGhw2efL?=
- =?us-ascii?Q?HL2ar3GYw8BIi8KWXVOpSzkRKBzFSFBiG0svBsJEC1ckmO88ZaDvxD5r56uc?=
- =?us-ascii?Q?v0ajmas2492m1Twdmq+DQ1y7Z8QjmPHlQdkfO3Q3XzQrxnk6O/A+UdvRPPKJ?=
- =?us-ascii?Q?y5krKg/UJquBCuQF5m2obONqERZPvJPoiSRBnVegsQ0cfdX37LRhE/+1Vyg+?=
- =?us-ascii?Q?Bf6Kimn5Esw/O3snVuNEzWH7GnU8u44TAM3RZkEIPtqTtTEUWlE0/xOpPABC?=
- =?us-ascii?Q?UyYCluVWP31QlBUUC5CIuDXp224DbtDb71MTSQmV+kB+VPvQ5mEYF96uFvF/?=
- =?us-ascii?Q?GcFnxR63ct1u/8tCii+bCcLUdeGvKe2IZ1cdDpMnD+jTgLwUrqnDv0dkKXMa?=
- =?us-ascii?Q?G1qyA8cDH/a/Sob10OsFuTLJJwRb29vM9rj30Wi9xKcaFobi4QnDeUXNQfxd?=
- =?us-ascii?Q?3gdQpxJRxE4yz3X7C20Lzty6bn0qfHGshzW8M3MzPpQr35qTtaTFRN9lPSO1?=
- =?us-ascii?Q?jFEn423CmXKtWj9JkI0Ru1NwSFVSfcG1kgEEBLhUaj82jfxsNS3qPt5AaOKO?=
- =?us-ascii?Q?q5Wd0xzwpwK/TLyTPwkkrd2b3oik2tU3EsXJDDvwjDgt3P642CZFuBH6+Qyc?=
- =?us-ascii?Q?++nUFjMZPLzlofUs+CCuiz49IPX+slHTUArlhj+HLps8uMTk3eZqoQiLMcGl?=
- =?us-ascii?Q?j415ERtq3kFKgIIbszyZePzhft+LTId5PqVVqHZudeEBs3rg0WhT3ELfO2Lq?=
- =?us-ascii?Q?/LcM/EeR5HMo1t5oyGFe9NhRIms+p0ksvJxy8hqxt5ENq1G3UyyvP3sNMb8n?=
- =?us-ascii?Q?8iwma1smFMRBG4aFSLQL6aHZeNLIyFRFD/G7PiV1ZwUtviDUupOCT+8Yy7Bn?=
- =?us-ascii?Q?pvD6195eZZ+4TufgDYOkijESEZPrYgFZCO9hnj7NYDa2tJRCq69LH5ZhLLci?=
- =?us-ascii?Q?Dw3IhMFYWtNB7AfvAs0iYFC7ZtHwuXP5klYwdvF6sthIQZUGj3uPmaKYXS94?=
- =?us-ascii?Q?jVtH4KDBrsOQGZuSFNk98l68skTvFBKuChyo8GyX?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Nicholas Piggin <npiggin@gmail.com>
+Subject: Re: [PATCH v2] powerpc: Fix irq_soft_mask_set() and
+ irq_soft_mask_return() with sanitizer
+Message-ID: <YxBhRtTuJ4Ut7wUt@lt-gp.iram.es>
+References: <c0b486e782b6695092dcdb2cd340a3d44c8c266d.1661272738.git.christophe.leroy@csgroup.eu>
+ <CMJ3VICKD1CI.SVFJOKYJPKZQ@bobo>
+ <e022754d-b4d3-bc9f-cc79-2cf556180459@csgroup.eu>
+ <CMJ8P06JA9OY.1S8VDV2XRU3W5@bobo>
+ <7c11b659-5b8e-256c-508e-39395041fccb@csgroup.eu>
+ <20220831224522.GX25951@gate.crashing.org>
+ <ad5ebb37-6b6f-372c-dd07-fc4cfc5f5fe5@csgroup.eu>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63b2371a-9553-4af5-ffd5-08da8becc4e9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2022 07:37:05.8245
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zDo1E8A3rFj8efaTFcC55Lw1jW2142olW9b6nrhfFwD6eFdBT07SkHu3H4ksKXnTQ9Q8tqFe63Rn3+pP1DcWyQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN6PR11MB1428
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <ad5ebb37-6b6f-372c-dd07-fc4cfc5f5fe5@csgroup.eu>
+Content-Transfer-Encoding: quoted-printable
+X-FE-Policy-ID: 23:8:0:SYSTEM
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; d=iram.es; s=DKIM; c=relaxed/relaxed;
+ h=date:from:to:cc:subject:message-id:references:mime-version:content-type;
+ bh=8oRtUt8n6oJO2slKo6oCUf7IVvigM4Ug71hTwGM018E=;
+ b=naAOJdS5nF1l3osWGt5jM0E8jjERSjBSaLXL2U3f5R2uLCZHhOI7XyYC+1YfORGLXI/MXoftea7T
+        pvc4WmzeX1Xp+QO+2DY/aelXWhKhWJhn4oo/ajxPFmH2Rxdi2NtaA3pV6/z1O81TH7O54ixy5loJ
+        QrlW0VVVz5Z/YkEbl+afZzQYk1vgNyTqXu3/3XdnDFEBbQdvVbj6d99CbdM8b8xFRb7UcF1F0X4S
+        gxotryTbBL/b+gcWNqiNweqgyOTFreoPrfmH8utRyjG9KHR6mlJHePZelMdv9umKQ4Zq3p0HsOwB
+        WAQnre8JHZRNrJs8osQRzSl80jPc5bJkwYVf0Q==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Tian, Kevin <kevin.tian@intel.com>
-> Sent: Thursday, September 1, 2022 10:38 PM
+On Thu, Sep 01, 2022 at 05:22:32AM +0000, Christophe Leroy wrote:
 >=20
-> +static const struct vfio_device_ops vfio_amba_ops=3D {
+>=20
+> Le 01/09/2022 =E0 00:45, Segher Boessenkool a =E9crit=A0:
+> > Hi!
+> >=20
+> > On Tue, Aug 30, 2022 at 09:10:02AM +0000, Christophe Leroy wrote:
+> >> Le 30/08/2022 =E0 11:01, Nicholas Piggin a =E9crit=A0:
+> >>> On Tue Aug 30, 2022 at 3:24 PM AEST, Christophe Leroy wrote:
+> >>>>> This is still slightly concerning to me. Is there any guarantee t=
+hat the
+> >>>>> compiler would not use a different sequence for the address here?
+> >>>>>
+> >>>>> Maybe explicit r13 is required.
+> >>>>>
+> >>>>
+> >>>> local_paca is defined as:
+> >>>>
+> >>>> 	register struct paca_struct *local_paca asm("r13");
+> >=20
+> > And this is in global scope, making it a global register variable.
+> >=20
+> >>>> Why would the compiler use another register ?
+> >>>
+> >>> Hopefully it doesn't. Is it guaranteed that it won't?
+> >=20
+> > Yes, this is guaranteed.
+> >=20
+> > For a local register variable this is guaranteed only for operands to=
+ an
+> > extended inline asm; any other access to the variable does not have t=
+o
+> > put it in the specified register.
+> >=20
+> > But this is a global register variable.  The only thing that would ma=
+ke
+> > this crash and burn is if *any* translation unit did not see this
+> > declaration: it could then use r13 (if that was allowed by the ABI in
+> > effect, heh).
+> >=20
+> >>> I'm sure Segher will be delighted with the creative asm in __do_IRQ
+> >>> and call_do_irq :) *Grabs popcorn*
+> >=20
+> > All that %% is blinding, yes.
+> >=20
+> > Inline tabs are bad taste.
+> >=20
+> > Operand names instead of numbers are great for obfuscation, and nothi=
+ng
+> > else -- unless you have more than four or five operands, in which cas=
+e
+> > you have bigger problems already.
+> >=20
+> > Oh, this function is a good example of proper use of local register a=
+sm,
+> > btw.
+> >=20
+> > Comments like "// Inputs" are just harmful.  As is the "creative"
+> > indentation here.  Both harm readability and do not help understandin=
+g
+> > in any other way either.
+> >=20
+> > The thing about inline asm is the smallest details change meaning of =
+the
+> > whole, it is a very harsh environment, you are programming both in C =
+and
+> > directly assembler code as well, and things have to be valid for both=
+,
+> > although on the other hand there is almost no error checking.  Keepin=
+g
+> > it small, simple, readable is paramount.
+> >=20
+> > The rules for using inline asm:
+> >=20
+> > 0) Do no use inline asm.
+> > 1) Use extended asm, unless you know all differences with basic asm, =
+and
+> >     you know you want that.  And if you answer "yes I do" to the latt=
+er,
+> >     you answered wrong to the former.
+> > 2) Do not use toplevel asm.
+> > 3) Do no use inline asm.
+> > 4) Do no use inline asm.
+> > 5) Do no use inline asm.
+> >=20
+> > Inline asm is a very powerful escape hatch.  Like all emergency exits=
+,
+> > you should not use them if you do not need them!  :-)
+> >=20
+> > But, you are talking about the function calling and the frame change =
+I
+> > bet :-)  Both of these are only okay because everything is back as it
+> > was when this (single!) asm is done, and the state created is perfect=
+ly
+> > fine (this is very dependent on exact ABI used, etc.)
+> >=20
+> > I would have used real assembler code here (in a .s file).  But there
+> > probably are reasons to do things this way, performance probably?
+>=20
+> We changed it to inline asm in order to ... inline it in the caller.
 
-Above missed a space after vfio_amba_ops.
+And there is a single caller it seems. Typically GCC inlines function
+with a single call site, but it may be confused by asm statements.
+
+>=20
+> I also find that those operand names make it awull more difficult to=20
+> read that traditional numbering. I really dislike that new trend.
+> And same with those // comments, better use meaningfull C variable name=
+s.
+
+Agree, but there is one thing which escapes me: why is r3 listed in the
+outputs section (actually as a read write operand with the "+"
+constraint modifier) but is not used after the asm which is the last
+statement of function returning void?
+
+Do I miss something?
+
+	Gabriel
+
+ 
+

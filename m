@@ -2,86 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8E335A9C95
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90ADA5A9C96
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232539AbiIAQIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
+        id S234902AbiIAQIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234874AbiIAQIF (ORCPT
+        with ESMTP id S234871AbiIAQIZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:08:05 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DBB290195
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:08:01 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id f14so13642752qkm.0
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:08:01 -0700 (PDT)
+        Thu, 1 Sep 2022 12:08:25 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DAB390808
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:08:23 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id q16so18383097ljp.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:08:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=fbLPgUKDeEmpi5XNyJeAxZHlZZP3Z6lE/BSo3Y5wwyI=;
-        b=lWVe/bC+Si53mXtJ+1IDEDdGyGm3oRk86702du2JvUscb7XiaS7mWPQMaTMn7Pfc7s
-         LIlnolzJYkptY9UJvY2auBeUQINWeq9mnqFDF5MlGRhF/DTTZv8Cp2Eaw+VrCjpQrXYX
-         1bS9uaKIXTDMSzc5zYhoSKTMJIOQeC9jm863Y=
+        bh=KYvFkyrPz2x0IYdeTE0W89ngYIK6SP7fOgbckJJ8zd4=;
+        b=AhvHAeuH6sqLp7A9IVsiRIbH1K2UWoVW2sqI4+XMgxdsE89ppFuHFya8dPZJx0ZnSk
+         qNElNT+9M/ETdG3XfV4IfmzNm6gUvYyIFrc7fXjTF8Up32R63T9MEJu/DMcxu/5Y+rFQ
+         h01k/Onijh6Hz2JyYaTRJWPsGoyMq5Rz7GlCjmmJDXPgMjMpU13cL43WUPoKf1bukSkw
+         t9csYFdmo24eP4Okhi1hDS+glV1xOVgj6clFVe/TTGEH5f4NpzfoofsClv4gZtegjYPi
+         cmXqpE61ISgmkY74sKBMfiKiPSMb/eiIuE+okehYnAucUW5szHn9wafaydst48Ru5ZRw
+         q4og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=fbLPgUKDeEmpi5XNyJeAxZHlZZP3Z6lE/BSo3Y5wwyI=;
-        b=RVqEzZBEDvghR7vsyHilXWTu90wE/fNnsME9SfbYmO4RXF7bLsIR8HXBjnHYpxssUW
-         j/pLl+F9y3EbsAXIl8uiVcq8V9tHm8fuB/VFn1M7HEM9PIyGPfotZd37W7/SvWuoD4Gw
-         ++3pBENhoNCDhZBm701j4lfZXj2EjgIDYH5Wc9i8yrCGcE4u/law/CnliyA+CctkqSe6
-         jeDSxYwLthlk8q6BjpUI2i6mM1egcU5sLvFmvxoP412hoIaeTnL4mSJ/yKP5QPUEfO/J
-         YC/4XsoPjXPk4JKa59rwuNYlJBgYrOwsH92yd4tbaNBU6rpWMYPGoa66FA0dpFL6XHfQ
-         9sFA==
-X-Gm-Message-State: ACgBeo0MrYdXWcS15/VKkhGPgvQSZlnWbd+bpg2KfUCaNup1dbvsz//G
-        DIV3aF7NkhNkmttjGeh94AlDcg==
-X-Google-Smtp-Source: AA6agR5OPsi7Ca+K/UzjkYkdBBG/PAq+Osq2CCbPnnpQEyFSe99xEPcD+vKp81LxZCGQqL6K43h9OQ==
-X-Received: by 2002:a37:b702:0:b0:6b8:d9ec:3196 with SMTP id h2-20020a37b702000000b006b8d9ec3196mr19729545qkf.660.1662048480173;
-        Thu, 01 Sep 2022 09:08:00 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id n3-20020a05620a294300b006b97151d2b3sm12547778qkp.67.2022.09.01.09.07.59
+        bh=KYvFkyrPz2x0IYdeTE0W89ngYIK6SP7fOgbckJJ8zd4=;
+        b=rfrbzYlDQJxexaQV5lCuYdsTNIJMLdE/q2DD+nvvTb4qmGTiNTxilNQCQ56Ou5GOW5
+         ji83B9B/vwB9I6ZtIZqlcD1moHXpHyUhP+WACz0Iy1aJg1Dii2sqJqJJkM/zBr5BFttG
+         tWYKPMs3rOmAm0meWiYfEwmMpkJfnxHrpY0biNNiC3abmyOXF5dRkkpqc10XftYSvmu4
+         RabbWXl+kcJqJxbRhe/sxN5nPoTGQs5TLis6Kr7qOoLbWRIfq6libxxVCnmQYdqIEU/S
+         7vTkVdPZgZM1Go4oou00p7Ax92hLa64PRX1bVW9nESGUz4IYV3Xp9xa0+3H5LrnzMOzH
+         /0+w==
+X-Gm-Message-State: ACgBeo37ItyNR6OkmguEpI7AL31vLCeco0d1S2W1LpLXqm4xeMaohkz2
+        GpFJYN7UvdupYArKr2qn4ApV+Q==
+X-Google-Smtp-Source: AA6agR5utYpXb3hJTQVHi9X8ggWxlHrM7ptKBoh5n5p8CD6vKZiy0YksAgNVhPDZQN/SPhoMb/pfyw==
+X-Received: by 2002:a05:651c:1591:b0:261:c388:aa58 with SMTP id h17-20020a05651c159100b00261c388aa58mr10247625ljq.277.1662048501903;
+        Thu, 01 Sep 2022 09:08:21 -0700 (PDT)
+Received: from [192.168.28.124] (balticom-73-99-134.balticom.lv. [109.73.99.134])
+        by smtp.gmail.com with ESMTPSA id o17-20020a05651205d100b0048b045a5c3asm1067234lfo.201.2022.09.01.09.08.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 09:07:59 -0700 (PDT)
-Message-ID: <0e8687de-bf45-5de6-c2f1-be6084991921@joelfernandes.org>
-Date:   Thu, 1 Sep 2022 12:07:56 -0400
+        Thu, 01 Sep 2022 09:08:21 -0700 (PDT)
+Message-ID: <339df7b9-bc7d-039d-99d8-ecdd480419d8@linaro.org>
+Date:   Thu, 1 Sep 2022 19:08:20 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH v4 00/14] Implement call_rcu_lazy() and miscellaneous
- fixes
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [PATCH 07/14] arm64: dts: qcom: sm6115: Add sdhci nodes and
+ related pinctrl
 Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Rushikesh S Kadam <rushikesh.s.kadam@intel.com>,
-        "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Neeraj upadhyay <neeraj.iitr10@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        rcu <rcu@vger.kernel.org>,
-        Vineeth Pillai <vineeth@bitbyteword.org>
-References: <20220829194622.GA58291@lothringen>
- <CAEXW_YS593n8Gget+REaD-c8vT8Ht_AzOY0kXA_uc674LOyvVw@mail.gmail.com>
- <20220829204202.GQ6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830105324.GA71266@lothringen>
- <20220830114343.GS6159@paulmck-ThinkPad-P17-Gen-1>
- <20220830160316.GC71266@lothringen> <20220830162244.GA73392@lothringen>
- <20220830164634.GC6159@paulmck-ThinkPad-P17-Gen-1>
- <20220831152658.GA89704@lothringen>
- <20220901143907.GU6159@paulmck-ThinkPad-P17-Gen-1>
- <20220901145819.GB105556@lothringen>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20220901145819.GB105556@lothringen>
+To:     Iskren Chernev <iskren.chernev@gmail.com>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org
+References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
+ <20220901072414.1923075-8-iskren.chernev@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220901072414.1923075-8-iskren.chernev@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,56 +83,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9/1/2022 10:58 AM, Frederic Weisbecker wrote:
-> On Thu, Sep 01, 2022 at 07:39:07AM -0700, Paul E. McKenney wrote:
->> On Wed, Aug 31, 2022 at 05:26:58PM +0200, Frederic Weisbecker wrote:
->>> On Tue, Aug 30, 2022 at 09:46:34AM -0700, Paul E. McKenney wrote:
->>>>> Although who knows, may be some periodic file operation while idle are specific
->>>>> to Android. I'll try to trace lazy callbacks while idle and the number of grace
->>>>> periods associated.
->>>>
->>>> Sounds like a good start.
->>>>
->>>> And yes, we don't need to show that the whole !NOCB world needs this,
->>>> just some significant portion of it.  But we do need some decent evidence.
->>>> After all, it is all too easy to do a whole lot of work and find that
->>>> the expected benefits fail to materialize.
->>>
->>> So here is some quick test. I made a patch that replaces Joel's 1st patch
->>> with an implementation of call_rcu_lazy() that queues lazy callbacks
->>> through the regular call_rcu() way but it counts them in a lazy_count.
->>>
->>> Upon idle entry it reports whether the tick is retained solely by lazy
->>> callbacks or not.
->>>
->>> I get periodic and frequent results on my idle test box, something must be
->>> opening/closing some file periodically perhaps.
->>>
->>> Anyway the thing can be tested with this branch:
->>>
->>> git://git.kernel.org/pub/scm/linux/kernel/git/frederic/linux-dynticks.git
->>> 	rcu/lazy-trace
->>>
->>> Excerpt:
->>>
->>>           <idle>-0       [007] d..1.   414.226966: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
->>>           <idle>-0       [007] d..1.   414.228271: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
->>>           <idle>-0       [007] d..1.   414.232269: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
->>>           <idle>-0       [007] d..1.   414.236269: rcu_needs_cpu: BAD: 1 lazy callbacks retaining dynticks-idle
->>
->> Just to make sure that I understand, at this point, there is only the
->> one lazy callback (and no non-lazy callbacks) on this CPU, and that
->> CPU is therefore keeping the tick on only for the benefit of that one
->> lazy callback.  And for the above four traces, this is likely the same
->> lazy callback.
->>
->> Did I get it right, or is there something else going on?
+On 01/09/2022 10:24, Iskren Chernev wrote:
+> Add support for the two sdhci's present on the SM6115 and the related
+> pinctrl.
 > 
-> Exactly that!
 
-Interesting!
 
- - Joel
+>  
+>  		gcc: clock-controller@1400000 {
+> @@ -449,6 +553,73 @@ rpm_msg_ram: memory@45f0000 {
+>  			reg = <0x45f0000 0x7000>;
+>  		};
+>  
+> +		sdhc_1: sdhci@4744000 {
+> +			compatible = "qcom,sm6115-sdhci", "qcom,sdhci-msm-v5";
+> +			reg = <0x4744000 0x1000>, <0x4745000 0x1000>, <0x4748000 0x8000>;
+> +			reg-names = "hc", "cqhci", "ice";
+> +
+> +			interrupts = <GIC_SPI 348 IRQ_TYPE_LEVEL_HIGH>,
+> +				<GIC_SPI 352 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "hc_irq", "pwr_irq";
+> +
+> +			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
+> +				 <&gcc GCC_SDCC1_APPS_CLK>,
+> +				 <&xo_board>,
+> +				 <&gcc GCC_SDCC1_ICE_CORE_CLK>;
+> +			clock-names = "iface", "core", "xo", "ice_core_clk";
 
+Does not look like you tested the DTS against bindings. Please run `make
+dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+for instructions).
+
+> +
+
+Best regards,
+Krzysztof

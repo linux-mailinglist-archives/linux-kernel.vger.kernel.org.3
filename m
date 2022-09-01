@@ -2,66 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8AF5A9037
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:27:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B37F25A903F
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233586AbiIAH1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46998 "EHLO
+        id S234114AbiIAH1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233599AbiIAHZ5 (ORCPT
+        with ESMTP id S233990AbiIAH0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:25:57 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57C12BCB8;
-        Thu,  1 Sep 2022 00:24:53 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id bd26-20020a05600c1f1a00b003a5e82a6474so866823wmb.4;
-        Thu, 01 Sep 2022 00:24:53 -0700 (PDT)
+        Thu, 1 Sep 2022 03:26:05 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0216824973;
+        Thu,  1 Sep 2022 00:24:57 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id b5so21091300wrr.5;
+        Thu, 01 Sep 2022 00:24:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=Po8E7/OIBjbSJpNPSFcYw7gzbRFnsYc7RcCzMnBQZCE=;
-        b=d+ZAEadifEtEK0I36qrNTGwR7qCxMEj/G5oudE0uUNdcMRZV1nVWyBCNE42U/e55ct
-         JKDq5ldbWlHu2wi98fEKGTr+x3ciyq8FW2PNel3/7hbcUtYdVWeRVjSSUaTHQn/vwgyc
-         RvQlgCUOe6WYi1K6Z7FGFQJWQ8sx4/177P9Q5c5MCRMdWRhPSUPjRjOCk+xVIhLM3eIu
-         EdBM2b70gynfcr0lDaDOA2v7ASVG5jwbB7M+RBlYfKcjcvZmifEMfT+okI1e3Np6f9CU
-         9zeAZXyvvLfh8cb4hxHqPdHl0YQGfsoQNSkEJvUBRe+GuCRywu+yvR/sXPwKriYMzEW8
-         /VjA==
+        bh=w5hQ9lsg4aStVnWEe58NuxmSMBp6bNEY3Ax3y4vZW/0=;
+        b=RFeGeqi16qSzVROI6DPTpkL3kAVLZ/kqbl1ZL/bTRjLlLtPTpjjUYRvZGjKqimHKlp
+         QSVuNafhJ3QIWOGwM5BV7zS03nOJGIqyRdpAH6m/xYPbFtX097/WrFEPmNB6HC5iwT70
+         6lbrShSyKlKQhpquG/CUyUyunwEBNka4Xu8tA9fKGpWOZmUmGkckLdeTr62R/oap8DFu
+         yDw3fTpOGC6kr6q1jPDsitXrygQXY4MNaGUUBXG2SFDO3Ck9qpUyQjF53z5/YtPcX8/E
+         QEaOH596WRWEEYgFVmcXtY6JzmK2FpHny9BMwPCCJkQeO+qRGz6LRjKTizN+NkptE8Ws
+         J0rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=Po8E7/OIBjbSJpNPSFcYw7gzbRFnsYc7RcCzMnBQZCE=;
-        b=ppN7dyPG/OnD4ivAWkHClR5pA4bb2M1D8v9TwYZSZF+RxP6zQQpmERitIsrlSmO7p6
-         YTSX/omyimqamT+7ZfbV8y4zM6FkXoQW/2m46E/ayQKdkXqEHSCLyxCVHyk05zKYuGPQ
-         dvG6MMBYJOzgAtTcZCMXPqNc5US0/yTg6Hkj0BBReiuWrBVeGMmaFV0PCR6U0U+EuyYl
-         bdxG1LKf3DAChSK5ZmP5wd3ElxTHHvIpdo8UgybZbl+wmI8zHCq5/h4Tx5UQ+aCCpMpB
-         yOdSsIwLMvMn8uQ6Hw/kNcBXUS3+rK0kw265oxjDJH0U1rnQUO1IEX8FysMfKeVW4vTu
-         LXHQ==
-X-Gm-Message-State: ACgBeo2AvP9Hd6x73Ek2Ec4rSdft1CTMaC+9JpKZDsnQljoM7p+p3Q1M
-        4F2UYNjEtGj4964CIDx75Ps=
-X-Google-Smtp-Source: AA6agR4X3Xg49JGgo5+uiWIgYlxOk2IfYPYs3HN+jSnL2bjj3B9lNMNRvLsokdg2o7KqvVvcJ8PMAA==
-X-Received: by 2002:a05:600c:22ca:b0:3a5:c30d:ca9f with SMTP id 10-20020a05600c22ca00b003a5c30dca9fmr4172325wmg.25.1662017091310;
-        Thu, 01 Sep 2022 00:24:51 -0700 (PDT)
+        bh=w5hQ9lsg4aStVnWEe58NuxmSMBp6bNEY3Ax3y4vZW/0=;
+        b=4ovrVrJNehNyJZqQYONID16AHzWNKpNqXr+DJC67SfVLZ+qjWgoCM25CEJr0I2R8q2
+         NEAoj8vVjU7s3DhTfvHXOe25MqrTS709rYSmvMvYaYzQ0yYupEIeL5Pj85Twwj+K1Tpy
+         cAoYas//w+Q7hciEakvD0VZZLUgs0wK3ABFdpQMlEq3E+KO0Kc7QffTIZjU91Rnk7k5v
+         IizUu0ovJijhtbl8xNHzYGi3MCCqShRLo4G5jp437+IFLJ/Zpv52wuOSLakJ7pSboRXA
+         buAPVApnk/14KYlMRVPDtFCyE0a/9xUrN5LAgNkUTKgGdNHep3gEkLNxupnQpG1WCWLA
+         bOYQ==
+X-Gm-Message-State: ACgBeo3QPDcWhmVWWDwyic5xxd9Lcaxwk5NVrqGtOJvHTYjCC7JpjXtI
+        p8WSOrAm/FJzPAttDQD8y7s=
+X-Google-Smtp-Source: AA6agR5odP5Ugn3TkDqE478NxD4yIrxOlCn+qhJwW8/lHqdPEH1iwqertOhGy2R+w1bnYn4DIoIc8g==
+X-Received: by 2002:a5d:6d50:0:b0:225:89b2:a03a with SMTP id k16-20020a5d6d50000000b0022589b2a03amr14509418wri.51.1662017096204;
+        Thu, 01 Sep 2022 00:24:56 -0700 (PDT)
 Received: from localhost (87-126-55-15.ip.btc-net.bg. [87.126.55.15])
-        by smtp.gmail.com with ESMTPSA id f14-20020a05600c4e8e00b003a5dbdea6a8sm5515967wmq.27.2022.09.01.00.24.49
+        by smtp.gmail.com with ESMTPSA id t12-20020a05600c198c00b003a2e92edeccsm4602717wmq.46.2022.09.01.00.24.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 00:24:50 -0700 (PDT)
+        Thu, 01 Sep 2022 00:24:55 -0700 (PDT)
 From:   Iskren Chernev <iskren.chernev@gmail.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
 Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         Iskren Chernev <iskren.chernev@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Luca Weiss <luca@z3ntu.xyz>, Maxime Ripard <maxime@cerno.tech>,
+        Bartosz Dudziak <bartosz.dudziak@snejp.pl>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 10/14] arm64: dts: qcom: sm6115: Add SPMI bus node
-Date:   Thu,  1 Sep 2022 10:24:09 +0300
-Message-Id: <20220901072414.1923075-11-iskren.chernev@gmail.com>
+Subject: [PATCH 11/14] dt-bindings: arm: cpus: Add kryo240 compatible
+Date:   Thu,  1 Sep 2022 10:24:10 +0300
+Message-Id: <20220901072414.1923075-12-iskren.chernev@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220901072414.1923075-1-iskren.chernev@gmail.com>
 References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
@@ -77,43 +81,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the SPMI bus on the SM6115.
+Kryo240 is found in SM4250, the slower sibling of the SM6115.
 
 Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+ Documentation/devicetree/bindings/arm/cpus.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 491fffff8aa1..d578f8425e36 100644
---- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -543,6 +543,25 @@ qusb2_hstx_trim: hstx_trim@25b {
- 			};
- 		};
- 
-+		spmi_bus: qcom,spmi@1c40000 {
-+			compatible = "qcom,spmi-pmic-arb";
-+			reg = <0x1c40000 0x1100>,
-+			      <0x1e00000 0x2000000>,
-+			      <0x3e00000 0x100000>,
-+			      <0x3f00000 0xa0000>,
-+			      <0x1c0a000 0x26000>;
-+			reg-names = "core", "chnls", "obsrvr", "intr", "cnfg";
-+			interrupt-names = "periph_irq";
-+			interrupts = <GIC_SPI 183 IRQ_TYPE_LEVEL_HIGH>;
-+			qcom,ee = <0>;
-+			qcom,channel = <0>;
-+			#address-cells = <2>;
-+			#size-cells = <0>;
-+			interrupt-controller;
-+			#interrupt-cells = <4>;
-+			cell-index = <0>;
-+		};
-+
- 		tcsr_mutex_regs: syscon@1f40000 {
- 			compatible = "syscon";
- 			reg = <0x340000 0x20000>;
+diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Documentation/devicetree/bindings/arm/cpus.yaml
+index a07c5bac7c46..5c13b73e4d57 100644
+--- a/Documentation/devicetree/bindings/arm/cpus.yaml
++++ b/Documentation/devicetree/bindings/arm/cpus.yaml
+@@ -174,6 +174,7 @@ properties:
+       - nvidia,tegra194-carmel
+       - qcom,krait
+       - qcom,kryo
++      - qcom,kryo240
+       - qcom,kryo250
+       - qcom,kryo260
+       - qcom,kryo280
 -- 
 2.37.2
 

@@ -2,88 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D08F05A8A6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:15:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FE4B5A8A62
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:14:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232351AbiIABPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 21:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50416 "EHLO
+        id S232244AbiIABNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 21:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232007AbiIABPS (ORCPT
+        with ESMTP id S232007AbiIABNv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 21:15:18 -0400
-Received: from conuserg-10.nifty.com (conuserg-10.nifty.com [210.131.2.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E231057210;
-        Wed, 31 Aug 2022 18:15:15 -0700 (PDT)
-Received: from grover.sesame (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-10.nifty.com with ESMTP id 2811DDtu004311;
-        Thu, 1 Sep 2022 10:13:13 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-10.nifty.com 2811DDtu004311
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1661994794;
-        bh=pSLA7lAlGxKHbICT8gTY7i5Zp2giDjasDzYgClZZbNY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qID+LEtprhEh9OzWC/QN0PYJNs5/bV9Yf3wWeIehxq6QVxx1Qrfi1dBZy4N3dHPQw
-         h3Hw5f0kjWFaP4dS5Ix7dittJ4MidYbEIBUw1PJFnoMhjbvy32oFsrvRWP+30lYLdW
-         aFhZHBX8mFEmEMOUZoTk7FTTfe1r9mGp+/gcxt7d2cLATiGhjQAQBWzVodLvalrK9V
-         Uqlyz013HHH2cxFkYyF+Z/TQVy1W1XlvVdR/fgaJjpy6ln1xvk6/Nt0giw+GYZCSFL
-         NW2AsX7J7P82MpQZ914zQFNWWqTxAAVivHrQBwGPRbVlZDJntbN+9cD7voBgRfI7bZ
-         VouolwA3KaAJA==
-X-Nifty-SrcIP: [133.32.182.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Richard Weinberger <richard@nod.at>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kbuild: disable header exports for UML in a straightforward way
-Date:   Thu,  1 Sep 2022 10:12:52 +0900
-Message-Id: <20220901011252.550830-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 31 Aug 2022 21:13:51 -0400
+Received: from smtpbg.qq.com (bg4.exmail.qq.com [43.155.67.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B68412A5FA;
+        Wed, 31 Aug 2022 18:13:46 -0700 (PDT)
+X-QQ-mid: bizesmtp64t1661994822t0foq260
+Received: from localhost.localdomain ( [182.148.14.80])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 01 Sep 2022 09:13:41 +0800 (CST)
+X-QQ-SSF: 01000000000000D0F000000A0000000
+X-QQ-FEAT: Yl5FOsZ5kXkmKP4wJouCLkMBfgdOs7J4lBDjZMdGPgAhTtJN8LzaSZqPRK1if
+        3R1BLIgGu64MW7wSnhfn5OlaEHHFm2/2YAOThPKYwF+PSX1DmcKZUyIjWrFq5pEXbGx79sv
+        55H+yiDVIel/yw8HvEG8a0ZTRC8sqXRxyXBCGjetNwD0+x6/BS+T5pwPes0GEUrvZXbFLz1
+        y2jRBfTr9azNeauNizO4SUzHG63UC6C1ElpVTH29jHT5UBLBy9f64bt/fciBC2+khUgtzVT
+        S/thsJ1IymqF3ziw353F/Ixz0OTtSb/8YbolIsSGsZuDP4spSmDcv0GQVxKPwO0IiGmhzbz
+        /VLsNMvTBVAL8RSwGwAcTblpsiiqO/P+8U/dkbSjoss6JJ6QUM=
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     mchehab@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] media: siano: Use 'unsigned int' instead of just 'unsigned'.
+Date:   Thu,  1 Sep 2022 09:13:35 +0800
+Message-Id: <20220901011335.23313-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_00,RCVD_IN_PBL,
+        RCVD_IN_SBL_CSS,RCVD_IN_XBL,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_HELO_TEMPERROR autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: *  3.3 RCVD_IN_SBL_CSS RBL: Received via a relay in Spamhaus SBL-CSS
+        *      [43.155.67.158 listed in zen.spamhaus.org]
+        *  3.3 RCVD_IN_PBL RBL: Received via a relay in Spamhaus PBL
+        *  0.4 RCVD_IN_XBL RBL: Received via a relay in Spamhaus XBL
+        * -1.9 BAYES_00 BODY: Bayes spam probability is 0 to 1%
+        *      [score: 0.0000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 T_SPF_HELO_TEMPERROR SPF: test of HELO record failed
+        *      (temperror)
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously 'make ARCH=um headers' stopped because of missing
-arch/um/include/uapi/asm/Kbuild.
+'unsigned int' should be clearer than 'unsigned'.
 
-The error is not shown since commit ed102bf2afed ("um: Fix W=1
-missing-include-dirs warnings") because UML got
-arch/um/include/uapi/asm/Kbuild.
-
-Hard-code the unsupported architecture, so it works like before.
-
-Fixes: ed102bf2afed ("um: Fix W=1 missing-include-dirs warnings")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
+ drivers/media/common/siano/sms-cards.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Makefile | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/Makefile b/Makefile
-index 9d40255d1557..8d2047a4de9b 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1304,8 +1304,7 @@ hdr-inst := -f $(srctree)/scripts/Makefile.headersinst obj
+diff --git a/drivers/media/common/siano/sms-cards.c b/drivers/media/common/siano/sms-cards.c
+index d4a116ab6c88..905007275fd6 100644
+--- a/drivers/media/common/siano/sms-cards.c
++++ b/drivers/media/common/siano/sms-cards.c
+@@ -149,7 +149,7 @@ static struct sms_board sms_boards[] = {
+ 	},
+ };
  
- PHONY += headers
- headers: $(version_h) scripts_unifdef uapi-asm-generic archheaders archscripts
--	$(if $(wildcard $(srctree)/arch/$(SRCARCH)/include/uapi/asm/Kbuild),, \
--	  $(error Headers not exportable for the $(SRCARCH) architecture))
-+	$(if $(filter um, $(SRCARCH)), $(error Headers not exportable for UML))
- 	$(Q)$(MAKE) $(hdr-inst)=include/uapi
- 	$(Q)$(MAKE) $(hdr-inst)=arch/$(SRCARCH)/include/uapi
+-struct sms_board *sms_get_board(unsigned id)
++struct sms_board *sms_get_board(unsigned int id)
+ {
+ 	BUG_ON(id >= ARRAY_SIZE(sms_boards));
  
 -- 
-2.34.1
+2.36.1
 

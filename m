@@ -2,298 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BD3E5A8E83
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:45:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B30F5A8E90
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 08:46:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233172AbiIAGpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 02:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49620 "EHLO
+        id S233264AbiIAGp6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 02:45:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiIAGpT (ORCPT
+        with ESMTP id S233131AbiIAGpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 02:45:19 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 134B0792DB;
-        Wed, 31 Aug 2022 23:45:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ahTYEC9QIsWQA3pCRmrDzL7V1OOzCuaXptvg2vcr1uBoWIAFAAgtX+QbbkVI2NFPfZUYBJWK+KJO9zV3UVZaaD4Ro/Eqc7g9+OdsaYBYlgpyAgwkyxhWUSxmo8YskqSNV64ZnPSAeGNWPq1KYlYBEEJocnN6w9l8djP+rWX8kscNuLbeBplro3YlWUYGlumtbpxPD1swatRLkJDKaJ3+VzVxFg/k8U611W4xpKzGTfdGbPI6taigcai9fIFnAFfj5hxUJV23p4Ub+cPqzcfjEfJrpIlDsrqBD+c+iVPfsD2T9o8H1tFoZSaDidRDhfzVwagYiuHaGiVs95DEuZaACA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CO9nrEklpYX7tnEq4edqxYFL4EsrLF2kpEA6u4/TGdM=;
- b=ZZIonSv9iByR9iS9HB5OlHzmBf6GTTCivAvlxcjDXBq4pgJ+4NWapX9gySWRjBR2MNQtiWxBRpzVEihEz9/cWmqGyR6n11OOuNhVqyo2+jdi2W4cfqBGNaJwiAvCOdMcj6c2YYws2Y1GvhDfw/ets5zvwdzbEdvR7+prG594Sg3eQRql1RI8+YtQxqb1o1x56+dqRlt+47I4qmAC64iREOxmCWxq7ldb1mSKCd1ay1/Yb6N/7T5Ckf0XGe+JRJab7hxK/YHYM0OkMiGzccXQ+d+HBuqNAEDizw2LhqKxML8JogQgU4y61SkU33Bct1HtN8QcB4mEoXQ65VfmbmN4gg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CO9nrEklpYX7tnEq4edqxYFL4EsrLF2kpEA6u4/TGdM=;
- b=4nypQjFJBVh+sM+sOEWfC427n+XX8zUjZTaoB5cGzpcUUP1dRjktgLRW+4aowALo+SWkiNDqxwWw6Cc3ctr0Lhf0evKSvGKfTV2SB/ZOi/ydYMJ9u4aFrFopI4iQ+zsxFQ02s3DhCn8CzVo26sYpNKkY4hi1EO9fnaNxvMLompw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by BN9PR12MB5228.namprd12.prod.outlook.com (2603:10b6:408:101::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
- 2022 06:45:15 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::4524:eda6:873a:8f94%7]) with mapi id 15.20.5588.011; Thu, 1 Sep 2022
- 06:45:15 +0000
-Message-ID: <2463ccb0-6620-8760-fc06-532847835207@amd.com>
-Date:   Thu, 1 Sep 2022 08:45:03 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4 06/21] drm/i915: Prepare to dynamic dma-buf locking
- specification
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        Qiang Yu <yuq825@gmail.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Leon Romanovsky <leon@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Tomi Valkeinen <tomba@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        linux-rdma@vger.kernel.org, linux-arm-msm@vger.kernel.org
-References: <20220831153757.97381-1-dmitry.osipenko@collabora.com>
- <20220831153757.97381-7-dmitry.osipenko@collabora.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20220831153757.97381-7-dmitry.osipenko@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AM6P194CA0008.EURP194.PROD.OUTLOOK.COM
- (2603:10a6:209:90::21) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Thu, 1 Sep 2022 02:45:55 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1484B07E5
+        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 23:45:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1662014753; x=1693550753;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=hsMNK9xOjMb0hqIOQK4CsGKdCYUrUueFT0rtmIk9Wu8=;
+  b=mnuKmpukwbFCGEce8JrYpdmqAHkn3YXBpKszueLCk2e7mH2KXRq9wDhA
+   gn1gOZuUnZeZU8w4+nQ1Qk4NvsBCNH+KD3svqFloNpShS6qAIhAH00dMl
+   EYDorwmfSps65CoFiuRfWKIbJkFN0McOINDqmSaT5hFuq+TN7gBt+gmjx
+   PdCAVeS4j2gm2lLAcnHzoL8k+zfmxN7QX17BGYGvA2BClnlfgRscF2Xiy
+   nZBs2seoJq2unB83Q8jZBPp9vxTB477dhpVb29nOSbWbPODiiqKAELZS8
+   f8Z77kqZMO7sOrSztZB6dpNYwkj5m/UVCaDjLDmUCx9z4TZaHz8p5EuHd
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10456"; a="295636767"
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="295636767"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2022 23:45:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,280,1654585200"; 
+   d="scan'208";a="857720236"
+Received: from lkp-server02.sh.intel.com (HELO 811e2ceaf0e5) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 31 Aug 2022 23:45:52 -0700
+Received: from kbuild by 811e2ceaf0e5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oTdxX-0001Ee-2e;
+        Thu, 01 Sep 2022 06:45:51 +0000
+Date:   Thu, 01 Sep 2022 14:45:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cache] BUILD SUCCESS
+ 499c8bb4693d1c8d8f3d6dd38e5bdde3ff5bd906
+Message-ID: <631054f0.Eomc2+KRxYcLIKpK%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3a74a4ab-696e-4f28-3427-08da8be58665
-X-MS-TrafficTypeDiagnostic: BN9PR12MB5228:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2T40/60DPhA+Jlw3HehoxUCX9U9KfdkJaTxhATgiaohs/vuipqQ4DlcD4ySaEFw7ZvmwOiOXxs1g76NONWvWt88M8trdKGRuRW1dzMTOE70HLSH3CutJ4N+UMdOMr1SWxRyLcVKzohJt9TP8TQdJFowdBLXtkRxe4IHx/EuCtQ6sX8C1D0dkvxS5yTf68hnBp1uC6FUIIZ9+SRsXeQDO1tKFF5gWlIms12mKNdGgRsZ/szyH3D6aWfZEEQtEEdxwJFfMKnuFfowHImYKwIDV9wdmT5uP2n9xwusvM7ucDpwoK83C5c1vcd8E7+vcRhlUCAJIZCsly5JBUybFFvLIbBjmu3qCMX6E2/vSpKRKSLnMmQIF3mQP2IA/TsBA5fZ//5v0ZHCNvZLiRSMhdhrdb3zL3W4AWBaSPOofEYv8vbcBh91seC14bLszZKadyWJSlh9x3Gw601jZwZ5fnJfrz8kCWke/Pst6dj3n677iOQOpkvM4IHFB+HkpxlTloWSxAQsXavg6eq28MUARpjB72idYgvmtijtJVrGbPtJlSqkid4zGJh45w23+hkZfIdoSo8G3qyUARh+Rw1OM19dGnClo718I2iOpmFEev8Skxk8UTFok6pAaZ70uTL7Fj7Bff6mZLnOpWLxOBKAhZdZRm3Y6GTIn2ij0JfJy6AFVOQ1roD+VnP/foaGWCHHdtME6C3Vsi0rxjDSDTSPcE1m7a17NWXQCgePLkwCv3hUe9Sw4uOza5DtqFKsP/0b0VZynOf+0j2kCMQAsWKG3KxOe7JD/IE5ZiioM6XFB0OGqC44v2um5rj77JktTbwxQYUZk
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(39860400002)(136003)(376002)(366004)(396003)(8936002)(7406005)(6486002)(38100700002)(478600001)(7416002)(110136005)(31686004)(6506007)(316002)(41300700001)(6666004)(5660300002)(6512007)(26005)(86362001)(2616005)(83380400001)(2906002)(66946007)(66476007)(36756003)(31696002)(186003)(8676002)(66556008)(4326008)(66574015)(921005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUdVWTBFbFJJUDZMMEdjZnlmcElNWXJrZkhKSThKWmlHUnB0cTc1R0VMc2xl?=
- =?utf-8?B?dXBGQUZ5YXJKeno1YXAwTFRoQldpVExYc2R2Y0RDWUI2cU4vMUhsdUZIOUI1?=
- =?utf-8?B?RFB1b3lZZE1EWVlzcDhJY0FWNXRIaXpmbk9xSDMrbm5VbEx4ajZaOGlHb1pX?=
- =?utf-8?B?bWVFOHg5SitlMkJKTmxQdXR0QVV1NW5GMW5XS2QzVzR5b2RqZ1BYUmw3WXN3?=
- =?utf-8?B?VnhHcjN3OUxGUTRpSTZvcW9oSVAzRDFUaDU5ZUZLY0NMNFpvZFE1VmJCSzBq?=
- =?utf-8?B?cHVYR2tKYVZNeFoyQzlYYm8veTNXaTFiUG8vVisxTGhtTzM1ZGd1NGE1ZDJY?=
- =?utf-8?B?eHdJV2NRbE1jUjNhT3NyNUdTdnM0dHVaK2trQldOdWlFYU9kUlBGa29kSzVL?=
- =?utf-8?B?amhtNXRwWjM1aGxJb0UrZktyaFBRMGhmbnl6NHJ3Nm0yYVVCM3pORCtIZVpV?=
- =?utf-8?B?MEJobVU2TWg3WEE4RGZxRzJlaFh2VHVNT2pWN0FWNDBOWGVEQ3FuVGQrVS82?=
- =?utf-8?B?N1hGNGYwdXRVeVY0MkRBUmJZamh3TGs4NUgwcmJqWEdTTFFTMmpBcm40Z28v?=
- =?utf-8?B?SnBWVG9ybkoyakIyaUFFbWp5ZC9mOXZaRDIvR1VxVVZkRXlwc004RndMWXda?=
- =?utf-8?B?bUNTb2o2SmVjNzNmODNiMDdjRVN2dTQvRnhRd1QyOGVkY0FCaytSTHdGSG5a?=
- =?utf-8?B?eEJoR3MzcXVYb2NIdU80Nmd2aXg4ZFkvVmNGcVVOOElTNDlvbkpaYkZIcmR0?=
- =?utf-8?B?aEpqVkNKR092ZGpPcmo2ckxuaFMrQzRqYlZ1bDV4Q0NqRGpnNmlYMVZRS2g3?=
- =?utf-8?B?ekt0MHZueTA0RGpSak1TYU1Oa0dYZFZBQ0h4WThwYjRlQ3BuMlRSVjBhSGI3?=
- =?utf-8?B?QjNhb09jRE94VUFHczUxYUtQRC9pRVkwNytueWhhUlJLdDZiOGNwU1hmQ3Fx?=
- =?utf-8?B?clVCWi9wNjJHYm5KV0VtdFBtaXJaVTR2dWdoS2o5ZWRHZUdBMzFUV0htQ280?=
- =?utf-8?B?N3VlSzJHQi8zUFo2VTdpM1pPdHNVeEUyRmtLRXByT2k0akVuTXUzTWwrN0JJ?=
- =?utf-8?B?VVNCQWdIVW5wcVhaMTVNbVFqVWZpZytZcmt4VXJmbWhGSWs2eGdVYWVMOEc4?=
- =?utf-8?B?UDVzeVZxdXVOaldCZU9xSDZoRW9IcGZiVmRrcDdoeUQ0andqeTY3N3E2WE1t?=
- =?utf-8?B?Z1J0WWx4anFrS0xUWG53UURRQVhkZEFXUzIxYzA0T0FFTXY5UlNKYXhQVlFK?=
- =?utf-8?B?akJMWEpEbGUzeXhlODR6RTZjb2N5UWxhSWNVS1NmK3BBTjdzd2pJWm8ya1VG?=
- =?utf-8?B?bW5vWEJuQ1Y3a2FUTitFLzNjdW1mS1RsQkQzOGdmRHR4WU1VeWt3RUNiVzcv?=
- =?utf-8?B?Ylc4bVZzNTdZVDY1aDNYNWJBb1czMWxwS2JhSGlENXpUS1dMSGhqRVloZlpE?=
- =?utf-8?B?ZjhFem1nd3MrY1ZnNUx4SVM5eFk4SE93UnpRRmRzU2VlbVNSd3JKbGNLZE0x?=
- =?utf-8?B?T3hzZkdVYXRwVWkwTDlWSWdidHYwdXlMSnVqNnl3QWcybWcyMjVEYVRkdVNQ?=
- =?utf-8?B?NDhSQ3A2bm5TRm1YTEMxYTRkZzJsLzEvSTJua1lkMnJnRVN5MUpVejRpaUtR?=
- =?utf-8?B?dU5UVFU1L3VyMW5TdjFTMk84NEE4aVo5V0U5UXUyRlR4NWVWdkFCZTJyc3NZ?=
- =?utf-8?B?Ym5nbmlrQ1grY2dIVmdXdHd4RGxVMGVodUc5T2JHUFdKUHRVaTNpeDZsZGJC?=
- =?utf-8?B?eEM0bkNDRUtjalZVdTROSklOZkUxRVFQTDdpeWZ1a1pNbHBhTmtBaGF1OG1Q?=
- =?utf-8?B?K09RaGdUL1hTSTB4SU5MMnRIeGw5VWM1WHRUSzR3NFdMVkdpNVhwNTVqSXMz?=
- =?utf-8?B?TUpybUY1aTZKWFRHU0p6UWZZak9MRzBXSDRZZm5KM1FaRlVkZmFYVUhlL3RB?=
- =?utf-8?B?RUExUnFDcUdib2JaQ1ZmYjV1NncycEFDWVlKRVRhL0Q0dDdDdW1XdktuL0Fa?=
- =?utf-8?B?SnZFSmlqWjZTZGkya2IrWDVGM0gzcWJjck9RMy8ybUdTbjNQV3FIRWNvZC9n?=
- =?utf-8?B?YnZkUGRKdkVFaktmR2hLZEZzVDg0dTdPanlKbGk4YURLaHllMjNJZ3lESlFz?=
- =?utf-8?Q?uR5oex08w5wYUxOtfuFIiXDAF?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3a74a4ab-696e-4f28-3427-08da8be58665
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 06:45:14.9272
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i/9qNzgInkJX/XdKXehavtVkTevzayvvOgGwZJJ8NCfq3V7yS6nfj34Jq2ZmNdLj
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5228
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 31.08.22 um 17:37 schrieb Dmitry Osipenko:
-> Prepare i915 driver to the common dynamic dma-buf locking convention
-> by starting to use the unlocked versions of dma-buf API functions
-> and handling cases where importer now holds the reservation lock.
->
-> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cache
+branch HEAD: 499c8bb4693d1c8d8f3d6dd38e5bdde3ff5bd906  x86/resctrl: Fix to restore to original value when re-enabling hardware prefetch register
 
-Acked-by: Christian König <christian.koenig@amd.com>, but it's probably 
-best if somebody from the Intel guys take a look as well.
+elapsed time: 720m
 
-> ---
->   drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c       |  2 +-
->   drivers/gpu/drm/i915/gem/i915_gem_object.c       | 12 ++++++++++++
->   .../gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c | 16 ++++++++--------
->   3 files changed, 21 insertions(+), 9 deletions(-)
->
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
-> index f5062d0c6333..07eee1c09aaf 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_dmabuf.c
-> @@ -72,7 +72,7 @@ static int i915_gem_dmabuf_vmap(struct dma_buf *dma_buf,
->   	struct drm_i915_gem_object *obj = dma_buf_to_obj(dma_buf);
->   	void *vaddr;
->   
-> -	vaddr = i915_gem_object_pin_map_unlocked(obj, I915_MAP_WB);
-> +	vaddr = i915_gem_object_pin_map(obj, I915_MAP_WB);
->   	if (IS_ERR(vaddr))
->   		return PTR_ERR(vaddr);
->   
-> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object.c b/drivers/gpu/drm/i915/gem/i915_gem_object.c
-> index 389e9f157ca5..7e2a9b02526c 100644
-> --- a/drivers/gpu/drm/i915/gem/i915_gem_object.c
-> +++ b/drivers/gpu/drm/i915/gem/i915_gem_object.c
-> @@ -331,7 +331,19 @@ static void __i915_gem_free_objects(struct drm_i915_private *i915,
->   			continue;
->   		}
->   
-> +		/*
-> +		 * dma_buf_unmap_attachment() requires reservation to be
-> +		 * locked. The imported GEM shouldn't share reservation lock,
-> +		 * so it's safe to take the lock.
-> +		 */
-> +		if (obj->base.import_attach)
-> +			i915_gem_object_lock(obj, NULL);
-> +
->   		__i915_gem_object_pages_fini(obj);
-> +
-> +		if (obj->base.import_attach)
-> +			i915_gem_object_unlock(obj);
-> +
->   		__i915_gem_free_object(obj);
->   
->   		/* But keep the pointer alive for RCU-protected lookups */
-> diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c
-> index 62c61af77a42..9e3ed634aa0e 100644
-> --- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c
-> +++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_dmabuf.c
-> @@ -213,7 +213,7 @@ static int igt_dmabuf_import_same_driver(struct drm_i915_private *i915,
->   		goto out_import;
->   	}
->   
-> -	st = dma_buf_map_attachment(import_attach, DMA_BIDIRECTIONAL);
-> +	st = dma_buf_map_attachment_unlocked(import_attach, DMA_BIDIRECTIONAL);
->   	if (IS_ERR(st)) {
->   		err = PTR_ERR(st);
->   		goto out_detach;
-> @@ -226,7 +226,7 @@ static int igt_dmabuf_import_same_driver(struct drm_i915_private *i915,
->   		timeout = -ETIME;
->   	}
->   	err = timeout > 0 ? 0 : timeout;
-> -	dma_buf_unmap_attachment(import_attach, st, DMA_BIDIRECTIONAL);
-> +	dma_buf_unmap_attachment_unlocked(import_attach, st, DMA_BIDIRECTIONAL);
->   out_detach:
->   	dma_buf_detach(dmabuf, import_attach);
->   out_import:
-> @@ -296,7 +296,7 @@ static int igt_dmabuf_import(void *arg)
->   		goto out_obj;
->   	}
->   
-> -	err = dma_buf_vmap(dmabuf, &map);
-> +	err = dma_buf_vmap_unlocked(dmabuf, &map);
->   	dma_map = err ? NULL : map.vaddr;
->   	if (!dma_map) {
->   		pr_err("dma_buf_vmap failed\n");
-> @@ -337,7 +337,7 @@ static int igt_dmabuf_import(void *arg)
->   
->   	err = 0;
->   out_dma_map:
-> -	dma_buf_vunmap(dmabuf, &map);
-> +	dma_buf_vunmap_unlocked(dmabuf, &map);
->   out_obj:
->   	i915_gem_object_put(obj);
->   out_dmabuf:
-> @@ -358,7 +358,7 @@ static int igt_dmabuf_import_ownership(void *arg)
->   	if (IS_ERR(dmabuf))
->   		return PTR_ERR(dmabuf);
->   
-> -	err = dma_buf_vmap(dmabuf, &map);
-> +	err = dma_buf_vmap_unlocked(dmabuf, &map);
->   	ptr = err ? NULL : map.vaddr;
->   	if (!ptr) {
->   		pr_err("dma_buf_vmap failed\n");
-> @@ -367,7 +367,7 @@ static int igt_dmabuf_import_ownership(void *arg)
->   	}
->   
->   	memset(ptr, 0xc5, PAGE_SIZE);
-> -	dma_buf_vunmap(dmabuf, &map);
-> +	dma_buf_vunmap_unlocked(dmabuf, &map);
->   
->   	obj = to_intel_bo(i915_gem_prime_import(&i915->drm, dmabuf));
->   	if (IS_ERR(obj)) {
-> @@ -418,7 +418,7 @@ static int igt_dmabuf_export_vmap(void *arg)
->   	}
->   	i915_gem_object_put(obj);
->   
-> -	err = dma_buf_vmap(dmabuf, &map);
-> +	err = dma_buf_vmap_unlocked(dmabuf, &map);
->   	ptr = err ? NULL : map.vaddr;
->   	if (!ptr) {
->   		pr_err("dma_buf_vmap failed\n");
-> @@ -435,7 +435,7 @@ static int igt_dmabuf_export_vmap(void *arg)
->   	memset(ptr, 0xc5, dmabuf->size);
->   
->   	err = 0;
-> -	dma_buf_vunmap(dmabuf, &map);
-> +	dma_buf_vunmap_unlocked(dmabuf, &map);
->   out:
->   	dma_buf_put(dmabuf);
->   	return err;
+configs tested: 87
+configs skipped: 87
 
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+gcc tested configs:
+x86_64                              defconfig
+x86_64                               rhel-8.3
+x86_64                           allyesconfig
+i386                                defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                             allyesconfig
+x86_64                        randconfig-a002
+x86_64                          rhel-8.3-func
+x86_64                         rhel-8.3-kunit
+um                           x86_64_defconfig
+um                             i386_defconfig
+x86_64                           rhel-8.3-kvm
+x86_64                        randconfig-a004
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+x86_64                        randconfig-a006
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+csky                              allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+arc                        nsim_700_defconfig
+parisc                generic-32bit_defconfig
+riscv             nommu_k210_sdcard_defconfig
+sh                          lboxre2_defconfig
+xtensa                         virt_defconfig
+powerpc                        warp_defconfig
+arm                        multi_v7_defconfig
+arm64                            alldefconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+i386                          randconfig-c001
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
+s390                 randconfig-r044-20220831
+arc                  randconfig-r043-20220831
+riscv                randconfig-r042-20220831
+sh                   sh7724_generic_defconfig
+sparc                       sparc32_defconfig
+sh                          rsk7203_defconfig
+sh                               alldefconfig
+arc                           tb10x_defconfig
+arm                       multi_v4t_defconfig
+parisc64                            defconfig
+powerpc                      cm5200_defconfig
+powerpc                      pcm030_defconfig
+sh                   rts7751r2dplus_defconfig
+powerpc                     rainier_defconfig
+arm                      jornada720_defconfig
+alpha                             allnoconfig
+mips                         cobalt_defconfig
+mips                           xway_defconfig
+i386                          debian-10.3-kvm
+i386                        debian-10.3-kunit
+i386                         debian-10.3-func
+
+clang tested configs:
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+powerpc                          allyesconfig
+hexagon              randconfig-r045-20220831
+hexagon              randconfig-r041-20220831
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+powerpc                     tqm8560_defconfig
+powerpc                 xes_mpc85xx_defconfig
+arm                         socfpga_defconfig
+arm                        vexpress_defconfig
+x86_64                        randconfig-k001
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

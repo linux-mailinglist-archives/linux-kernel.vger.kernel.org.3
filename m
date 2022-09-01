@@ -2,84 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5CFB5A9D44
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:41:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 882375A9D47
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:42:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234485AbiIAQkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43316 "EHLO
+        id S234666AbiIAQmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232404AbiIAQko (ORCPT
+        with ESMTP id S233452AbiIAQmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:40:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 736FD2B245
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662050442;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=A/nMIHK86arro9noAagcH6dFQdyi31EgjkmWhoBXsjo=;
-        b=JvCbHA38cUUZPupCFOAhO8+iQn4cb5J43T3gzzuC0Umqw6oBYM5isPHMGdlmeLn4z62bGA
-        DmYny5/G8COD9smUDCtVB+g5q5QHM+9uKkdGLD4w6nOPLmcH3SCHBleEMclGLG3Kqci8mi
-        6PewQf+bRHADyMK6cD25+8Md8aaef+g=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-231-SB561SSqP_y7MaNmAopwyQ-1; Thu, 01 Sep 2022 12:40:41 -0400
-X-MC-Unique: SB561SSqP_y7MaNmAopwyQ-1
-Received: by mail-qk1-f199.google.com with SMTP id f1-20020a05620a280100b006bc4966f463so14733336qkp.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:40:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=A/nMIHK86arro9noAagcH6dFQdyi31EgjkmWhoBXsjo=;
-        b=KmIsqyrpPWuelHHDaCvr6tgtuL9NfUsEKSNyZHZCWOoLKj37vyRrQ+9errPDhxabzp
-         gYE10B/xkEgSQ5RCaB9F//iEZpXn6V9jNN0U2jzmFXmFG/DScuY718hiRGZCSf6nzMYN
-         ZMQUYIva3T0PvMUnmn2uz76W581pqGqZ/TjaSsMf0pM9TH1MUd33k8s+75NUIpoS6V/S
-         H6J/9T7aqpOpOkY5aaypEf5KEzuXkvPPhr3RMBfv861LFNkniiIq6X7hCxZpG92TmJ0d
-         gBE2LLIpphKAop7M8PkOd7hRYKyLGhEVuvp77/fYcvPW5oD+ZdPaXeEuUuv466WUW7eW
-         eylw==
-X-Gm-Message-State: ACgBeo1QWqNE21fNccpD6melUIi/gwWksuYdURdLnTxIH5Ao0dxvDe2T
-        UmPwHMUx7O/m7brHNW+LryyFdIxLlJYt2qrlblcKA7Uo9MDbdyCzCNkN8mYWcP1CU9gu77feAUY
-        8psfk4veSZtZWLiktEIgD6zz3
-X-Received: by 2002:a05:6214:246b:b0:497:28b7:d411 with SMTP id im11-20020a056214246b00b0049728b7d411mr24701935qvb.128.1662050441197;
-        Thu, 01 Sep 2022 09:40:41 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6MS53lmxGSQT61ajcBBr0tov+zWwrNh1g766JGRTCtjpX/L+p5GXxooVqt8Z75SFx2xdREzg==
-X-Received: by 2002:a05:6214:246b:b0:497:28b7:d411 with SMTP id im11-20020a056214246b00b0049728b7d411mr24701907qvb.128.1662050440899;
-        Thu, 01 Sep 2022 09:40:40 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id fg15-20020a05622a580f00b0034456277e3asm10657307qtb.89.2022.09.01.09.40.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 09:40:40 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 12:40:38 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sasha Levin <sasha.levin@oracle.com>,
-        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Jerome Marchand <jmarchan@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
-Message-ID: <YxDghv54uHYMGCfG@xz-m1.local>
-References: <20220901072119.37588-1-david@redhat.com>
- <YxDdycTur733hMgt@xz-m1.local>
- <fa0bb4b1-3edd-eb5a-7ad6-dff785d88d8f@redhat.com>
+        Thu, 1 Sep 2022 12:42:10 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F2BC74DF1;
+        Thu,  1 Sep 2022 09:42:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1662050529; x=1693586529;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=/OOJf/IbuVmCXNoMeeMPjAzrIBVmDkkOgYDzXOC2FjA=;
+  b=nKZxRLmIdQnjBozgGE8RU0YHXglIGzO3c7P8asZiuPZOZYqBtAI5/wC6
+   3//etUUrtzwa9hLmINcbl9TE+XE3N5xxJQyMGHjyw2kL1kg3Q+eyYkN6h
+   IWhRR1A0Sl81zL3P52RFbKSx2BCumuX4W1LHztzPolHxRiZjoZxd5t1bR
+   JR572+M7P1wShdbrkK99WJTSFo5skBJfJWg6J9CC0xlHX9NZnEEkl1AWw
+   XbI3Tx/sgR1krt4QGMj2JYC7rlzcegbeNij2BsDJVMs40Agy1rAulfvCU
+   sfb5EA7M0g+8WbWdXLq0hFB2Npsw0Ar/kyw6weU6RiwwyxaUBBIUyKgKG
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,281,1654585200"; 
+   d="scan'208";a="111788135"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Sep 2022 09:42:07 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Thu, 1 Sep 2022 09:41:58 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.12 via Frontend
+ Transport; Thu, 1 Sep 2022 09:41:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VTBnWIuuyjn7s1UC3lnP7TTfBTSrtigl0Vgghb3d33FKiOEElS6u4OsM4B20urXIREa6xZ7PlFHlLcA5sDPY4niwFqNGN8Qg7VytYLC7IaplLotrr/j04mGqH9nKJVQZNVuJQODCyJmdFW1y3QeK/xuxb2+erY43ojHzryGqhYmVIY5DyyZ74RY0ZQj46GIgk/Gf9xDF2APzWVNfYt5OXScKz3nur1kOdjq0ZmAhMjYWSaE73v3SsAO49dyWAODKkx+F1UnNctFxtLQKQ92rMNWpLF/nXcjoZbKze7MWKqpB5WziYbk6j70vGzGY5/1+AcxgiqZLSultK1oxgHpOJQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/OOJf/IbuVmCXNoMeeMPjAzrIBVmDkkOgYDzXOC2FjA=;
+ b=Q8h6m572I3WNTmePUvQJ5rJPFIIxOEko+k65XqgsRWpHL0j8Bcejc7es0EMeCZMPHUsPqm5kQhKaExeXFfPPBQEiGq8CTrkkGHkMB6jQrno90vVzVkhmuTznDfO5/S5xfqCq9bwjYATf2MAFTMfZO7VY960PzMlxJQNQbUe5xpa+z6V1Nt2H7XPswxmzc0FekILXhkVXVddYGP/XIvMJgWLqgEJDase3GwufeGY9FWsc0l0TBz3V6zeb5Jt2mV3SeiuQFPmGZHkdLhj+3ErlZwOVuDZSlnx8sIoz+Ak5ZtnPXch6s1hKwpZnraBvbdd7u23uKTTDIkQGuqqTbWwE1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/OOJf/IbuVmCXNoMeeMPjAzrIBVmDkkOgYDzXOC2FjA=;
+ b=McIFnrjxA9s3dzHk3YbXKEdivEdE4Zhua90OZslcvZdoSMZ1iJEpGsqL15YDwyn+LhWKnlcteB2f3AdKYfDH8W6QBZn4vMSVBamXockbCfLbq4M0wGl0/VbgSO2SdNyqTunu/udpIoc9FTT4MLn03IJa5bIfFtFf/E7j55avA1U=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by SN6PR11MB2925.namprd11.prod.outlook.com (2603:10b6:805:cf::25) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5566.15; Thu, 1 Sep
+ 2022 16:41:53 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::545a:72f5:1940:e009%3]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
+ 16:41:53 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <jszhang@kernel.org>, <paul.walmsley@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <anup@brainfault.org>, <atishp@atishpatra.org>,
+        <bigeasy@linutronix.de>, <tglx@linutronix.de>,
+        <rostedt@goodmis.org>
+CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <kvm@vger.kernel.org>, <kvm-riscv@lists.infradead.org>
+Subject: Re: [PATCH v2 0/5] riscv: add PREEMPT_RT support
+Thread-Topic: [PATCH v2 0/5] riscv: add PREEMPT_RT support
+Thread-Index: AQHYvWTJWdidtLbFYESs6cM+7jS71q3KyLAA
+Date:   Thu, 1 Sep 2022 16:41:52 +0000
+Message-ID: <4488b1ec-aa34-4be5-3b9b-c65f052f5270@microchip.com>
+References: <20220831175920.2806-1-jszhang@kernel.org>
+In-Reply-To: <20220831175920.2806-1-jszhang@kernel.org>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: f27817b7-cba8-40a4-3df4-08da8c38dffe
+x-ms-traffictypediagnostic: SN6PR11MB2925:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MVZoOgicjx4zM/guofublhxjf24irPKvIP3KhQMSYOq8MtDSE1Mqt59hAG+u78DHjMy9wWgem+9L0IlbbU58ve0ZUSHBHZSeEKLXF1JCGvqVlJSOTrrLfEXZtXr3kBO5zwKlO63hYKIxBJ2s870j0/9bv8LHObF2RKShqgHQdPWDX4rmUCaSgtG6W3oVoROnLwAPzoEU/cH3w1CfNUkpKYYPGLzAbYTJMLkLPedMusHvTMK5dBWXCnUt80Jr/+D9PGm9J0kTJabIXV7844p6GX2ozJNg0USjTBTMBJ8qvP35f/+pDCmG/vENcmiciV0X5S1cg5PngdAT+N/0toqZ5Zu7fWkG1XqFtBzCFkn8Ir8WgrdxBfpoqogUtB3k2DtdxAhmyDhEiL1ZYI7QB+yJZNu0SuyE7QsjH4gwN2JEmK7can3ThjVIS8h0Ibt2/cmhheKmCYEXwTxc6FX17bIVN4o9F6OXXqAKg3gg1PwEuR8TxGuiF5pxd1ILp2Gs7Atw65fm0aIF25sMpHlJGta7iRyRgJLp4W7MlruA26Vx8p+5aWqRGN3Hms9yEgV28/5AbLN+G36JzxdPlIDO8fAaeTt4f7DcF6kxjs69bCP4pb6UnJflqyuTvRk3Znan5GEUZzz8et1MCUqGVyfuPmGEvaDV6jepirmeCNk2EmDOzyqmgBZlJTFWg+g8pIfCBAOiGdP/vLRoBOKlnlN7JVwwnB4HhYd0oGjIxShqdjRYKKtwd0y+c1/IFpIZ3uLiD0BEfaQeaJlVLOUlE8zggllJ2Bj1ySJEAfN+CHBIKl7O+08U3dmQMirfRbugigcqPv8kRnhF9pSEzblcBHjrJFqCg1G+McrrvyRYY9EXfyF9M+4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(346002)(376002)(396003)(366004)(136003)(36756003)(83380400001)(186003)(2616005)(38070700005)(91956017)(54906003)(316002)(31686004)(966005)(71200400001)(6486002)(110136005)(26005)(6512007)(31696002)(2906002)(86362001)(53546011)(6506007)(5660300002)(7416002)(8936002)(41300700001)(478600001)(66446008)(66556008)(8676002)(66946007)(76116006)(4326008)(64756008)(66476007)(122000001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y29adkxrYUVLcGl3bDNLajhnNXoyendhSTRvTXNpa1JXZ3VTL0Fabjhic04y?=
+ =?utf-8?B?WUVoQUJMMzJSMlhsQVlOLzNvQUhKY3ZnNzVQcTlxUWUzdXVOSkpUTjE0TU15?=
+ =?utf-8?B?dVU1eGgyM0p1MDBQSnhTSGNIaFU5OXhibjBBYnFhRkVQQjBjQzVBU3RUQjNn?=
+ =?utf-8?B?Tmp2Mm9IU2c2QWJYTXJGSkxYSlg3aS9mSzNEeC9yZC9GSVVXWGRIbkVwY1hZ?=
+ =?utf-8?B?U1N5TWl2SHBNNEJDeGJFWUZiTVpCUHdyTzRTZjNHdlE5eDFQM0tNcFRrK0pP?=
+ =?utf-8?B?SUErOCtPS0F6aGVtUlA4Uno0bnFYeExyWTh4S3E4NHdiVGgydTR1Q2FUTGJB?=
+ =?utf-8?B?N1R6VTQxcVdpUWlUcVNoVFhuLzdqN3ZIV1ROUXM2T2lPa0U4VUhCUUFUZzhx?=
+ =?utf-8?B?NW43YkpnVFRWMTdtRE1wZmpaZnErb0FQL1dLL0tYaEk0WjdodjhucVl1VTZN?=
+ =?utf-8?B?MGlVMWFJYklROXZLVW9VS3pXZjBJOC9wUVFSRnJ0TDdFNDh6Y1ozM0E2WW5I?=
+ =?utf-8?B?SlQzS0k4cncrOHF3MFNqeGdSeFJGL0tqSUxzOWhCcVIrU3FNWE1oSUFUWUJy?=
+ =?utf-8?B?SjdYNHp2dGYvcjBVL3V3a3NwOVFvb0U1NmRQdVFGbTNpdkladUlEbExuOFI4?=
+ =?utf-8?B?eWg0elNwYjRtMEpWSnZjMWVOSUdydDRvUWErWElQdzVsUlNYVEV3YURCRU8v?=
+ =?utf-8?B?WnRITTZUd09wS0J2RGVrNXBOeXJCSFdjdWFkL1dJZzVoT0VqbUdUSklpQ0Jj?=
+ =?utf-8?B?NmlleXZpR1hEWTlyZ0xBMm5LV3NONGdpd0xjR09tMStWR0RSaTlvK0NDcEgr?=
+ =?utf-8?B?MDlUTm0za2tsaFBLeG5xWmIxUUM4UUY3dnU5ZDVWSjhMTWZrc0NXZXcxTnhE?=
+ =?utf-8?B?R0VLUDdCS2FQeGc5Q3c0STQvaitRN2VEZGF2Z2xXd1BuRVM1NFE2M0VwaVkw?=
+ =?utf-8?B?QTZyRndyYS9uT1RFUjR0NEpaZ2tkMDJoV01hZFpuVk5hamZwZVFidEdHUVJH?=
+ =?utf-8?B?a28yVlduSU9XU0ZWQU9TMGQ2bnRLZFpxQ0lsWU50ZlRoY3JXMkRleGdCVUtp?=
+ =?utf-8?B?MGJSdVloMEgvdDNSZFJmYXR2MXhCS1JvR1NqZVJWWU04bU5oU011Y28xUTlY?=
+ =?utf-8?B?Q1JUVUxwMUM5c0hsdUNGbnFFRHBJTG1tRk1wZjRXSWFGK3hKQysyL1QxZ2Rp?=
+ =?utf-8?B?MUw5VkFVV1ZzdkU4bSsxdDg0TTg2R1hENXJ5cjV0NTZ6RGZzUVNpL0plQU1N?=
+ =?utf-8?B?T3Q1Z050ZTgyRU1yd24vdEFUY2VRL3lDRWZMcWVhSkV3RTYvNE13LzlzUHdW?=
+ =?utf-8?B?N1JhVnF3MGZrdDl6V2hhY041c25hUVJYY3ljWjVPbUE5Yk5VQXIzZXR2MGV2?=
+ =?utf-8?B?QWhYQzA5WW5LSTVaZ0hFWE9zdmJ0WjNpYUtSOEJJV240d3JHbVpkelRyWndx?=
+ =?utf-8?B?eHhwdFY4OUlRd3FWS3BBeGpvRWgxeDI5T3Ztd0ZkZkovR0JpK1M1dk5abFZH?=
+ =?utf-8?B?NVdJQ3UyaHJobzdFSUpTVitsclFvd0dmYzdPdWFwUzdYNVczeFA2cDF5Wlp5?=
+ =?utf-8?B?M3dvTlBFZzZVNEpIc3VnVGFnaGxsaER0dEhkd1VHOGZReXFtaVdnaU1JOFJ3?=
+ =?utf-8?B?Z0xVejVoNzFlUmFtcXBIc3BxWHJGVUo2cTFLN2pjWEtoSERvUkt1R2lzUS94?=
+ =?utf-8?B?Ni8wVSsrclo4MEpVeGg4RndWQ3M5dTZCQmFpdlgySERoNnkxSy9zN3Zja284?=
+ =?utf-8?B?QW1INW5qRFRJNDdyanZnZmt0TmJoNmJ6R2d4RGVDU3dPUk5CQUc5QnBSYXd0?=
+ =?utf-8?B?ZUdsNGF6cnVGTXdJUHFCYXRNeXpDOGxjZzBwY01JR1R4bDQyVWdYbW1ydm43?=
+ =?utf-8?B?WkN5SFdOVkJObTJ3QzFRODB2Yy9HYi9JdFBHempnNU5sTzdnYkNCMzlseWlw?=
+ =?utf-8?B?WC8wWHJXRUJrMVA2eGpGaHlYcWprb0NCWDUrOHc0OGVrL25SQnZaQ09vM2Zv?=
+ =?utf-8?B?SjNVRVUwcGJYNG9EUzF2Uld5NVg4bWJmV1B5bEI0MEh1YmFEbzMzYVVjT05H?=
+ =?utf-8?B?QjdNZ0dxRFQ5NXdoalBhaDNOOGY1a0hISS9YOWVKYnRUbHFLSE5NU0tlTFJk?=
+ =?utf-8?B?MWNmQllCTXFKeDBuWEZ4Wm9OL1UwVHdvUktwZjZqMWdlTk90aEg3R3RNanpj?=
+ =?utf-8?B?L1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <100FD227D367FC458DAFCC4097D47609@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <fa0bb4b1-3edd-eb5a-7ad6-dff785d88d8f@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f27817b7-cba8-40a4-3df4-08da8c38dffe
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2022 16:41:52.9916
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: yhCF0NuxkSPYAdLGggwD97FeIeROhGrf0zdXu2nY0a6nP8lSI5Lpc/M9FUZa5eZqOt40h9GmoNqGS3CDYpRpgW7mSzTS60nyzLBS4QxCaPQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2925
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,70 +159,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 06:34:41PM +0200, David Hildenbrand wrote:
-> On 01.09.22 18:28, Peter Xu wrote:
-> > On Thu, Sep 01, 2022 at 09:21:19AM +0200, David Hildenbrand wrote:
-> >> commit 4b471e8898c3 ("mm, thp: remove infrastructure for handling splitting
-> >> PMDs") didn't remove all details about the THP split requirements for
-> >> RCU GUP-fast.
-> >>
-> >> IPI broeadcasts on THP split are no longer required.
-> >>
-> >> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-> >> Cc: Sasha Levin <sasha.levin@oracle.com>
-> >> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.vnet.ibm.com>
-> >> Cc: Vlastimil Babka <vbabka@suse.cz>
-> >> Cc: Jerome Marchand <jmarchan@redhat.com>
-> >> Cc: Andrea Arcangeli <aarcange@redhat.com>
-> >> Cc: Hugh Dickins <hughd@google.com>
-> >> Cc: Jason Gunthorpe <jgg@nvidia.com>
-> >> Cc: John Hubbard <jhubbard@nvidia.com>
-> >> Cc: Peter Xu <peterx@redhat.com>
-> >> Cc: Yang Shi <shy828301@gmail.com>
-> >> Signed-off-by: David Hildenbrand <david@redhat.com>
-> >> ---
-> >>  mm/gup.c | 5 ++---
-> >>  1 file changed, 2 insertions(+), 3 deletions(-)
-> >>
-> >> diff --git a/mm/gup.c b/mm/gup.c
-> >> index 5abdaf487460..cfe71f422787 100644
-> >> --- a/mm/gup.c
-> >> +++ b/mm/gup.c
-> >> @@ -2309,9 +2309,8 @@ EXPORT_SYMBOL(get_user_pages_unlocked);
-> >>   *
-> >>   * Another way to achieve this is to batch up page table containing pages
-> >>   * belonging to more than one mm_user, then rcu_sched a callback to free those
-> >> - * pages. Disabling interrupts will allow the fast_gup walker to both block
-> >> - * the rcu_sched callback, and an IPI that we broadcast for splitting THPs
-> >> - * (which is a relatively rare event). The code below adopts this strategy.
-> >> + * pages. Disabling interrupts will allow the fast_gup walker to block the
-> >> + * rcu_sched callback.
-> > 
-> > This is the comment for fast-gup in general but not only for thp split.
-> 
-> "an IPI that we broadcast for splitting THP" is about splitting THP.
-
-Ah OK.  Shall we still keep some "IPI broadcast" information here if we're
-modifying it?  Otherwise it gives a feeling that none needs the IPIs.
-
-It can be dropped later if you want to rework the thp collapse side and
-finally remove IPI dependency on fast-gup, but so far it seems to me it's
-still needed.  Or just drop this patch until that rework happens?
-
-> 
-> > 
-> > I can understand that we don't need IPI for thp split, but isn't the IPIs
-> > still needed for thp collapse (aka pmdp_collapse_flush)?
-> 
-> That was, unfortunately, never documented -- and as discussed in the
-> other thread, arm64 doesn't do that IPI before collapse and might need
-> fixing. We'll most probably end up getting rid of that
-> (undocumented/forgotten) IPI requirement and fix it in GUP-fast by
-> re-rechecking if the PMD changed.
-
-Yeah from an initial thought that looks valid to me.  It'll also allow
-pmdp_collapse_flush() to be dropped too, am I right?
-
--- 
-Peter Xu
-
+T24gMzEvMDgvMjAyMiAxODo1OSwgSmlzaGVuZyBaaGFuZyB3cm90ZToNCj4gRVhURVJOQUwgRU1B
+SUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25v
+dyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBUaGlzIHNlcmllcyBpcyB0byBhZGQgUFJFRU1Q
+VF9SVCBzdXBwb3J0IHRvIHJpc2N2Og0KPiBwYXRjaDEgYWRkcyB0aGUgbWlzc2luZyBudW1iZXIg
+b2Ygc2lnbmFsIGV4aXRzIGluIHZDUFUgc3RhdA0KPiBwYXRjaDIgc3dpdGNoZXMgdG8gdGhlIGdl
+bmVyaWMgZ3Vlc3QgZW50cnkgaW5mcmFzdHJ1Y3R1cmUNCj4gcGF0Y2gzIHNlbGVjdCBIQVZFX1BP
+U0lYX0NQVV9USU1FUlNfVEFTS19XT1JLIHdoaWNoIGlzIGEgcmVxdWlyZW1lbnQgZm9yDQo+IFJU
+DQo+IHBhdGNoNCBhZGRzIGxhenkgcHJlZW1wdCBzdXBwb3J0DQo+IHBhdGNoNSBhbGxvd3MgdG8g
+ZW5hYmxlIFBSRUVNUFRfUlQNCj4gDQoNCldoYXQgdmVyc2lvbiBvZiB0aGUgcHJlZW1wdF9ydCBw
+YXRjaCBkaWQgeW91IHRlc3QgdGhpcyB3aXRoPw0KDQpNYXliZSBJIGFtIG1pc3Npbmcgc29tZXRo
+aW5nLCBidXQgSSBnYXZlIHRoaXMgYSB3aGlybCB3aXRoDQp2Ni4wLXJjMyArIHY2LjAtcmMzLXJ0
+NSAmIHdhcyBtZWFudCBieSBhIGJ1bmNoIG9mIGNvbXBsYWludHMuDQpJIGFtIG5vdCBmYW1pbGlh
+ciB3aXRoIHRoZSBwcmVlbXB0X3J0IHBhdGNoLCBzbyBJIGFtIG5vdCBzdXJlIHdoYXQNCmxldmVs
+IG9mIEJVRygpcyBvciBXQVJOSU5HKClzIGFyZSB0byBiZSBleHBlY3RlZCwgYnV0IEkgc2F3IGEg
+ZmFpcg0KZmV3Li4uDQoNClRoYW5rcywNCkNvbm9yLg0KDQoNCg0KPiBJIGFzc3VtZSBwYXRjaDEs
+IHBhdGNoMiBhbmQgcGF0Y2gzIGNhbiBiZSByZXZpZXdlZCBhbmQgbWVyZ2VkIGZvcg0KPiByaXNj
+di1uZXh0LCBwYXRjaDQgYW5kIHBhdGNoNSBjYW4gYmUgcmV2aWV3ZWQgYW5kIG1haW50YWluZWQg
+aW4gcnQgdHJlZSwNCj4gYW5kIGZpbmFsbHkgbWVyZ2VkIG9uY2UgdGhlIHJlbWFpbmluZyBwYXRj
+aGVzIGluIHJ0IHRyZWUgYXJlIGFsbA0KPiBtYWlubGluZWQuDQo+IA0KPiBTaW5jZSB2MToNCj4g
+ICAtIHNlbmQgdG8gcmVsYXRlZCBtYWlsbGlzdCwgSSBwcmVzcyBFTlRFUiB0b28gcXVpY2tseSB3
+aGVuIHNlbmRpbmcgdjENCj4gICAtIHJlbW92ZSB0aGUgc2lnbmFsX3BlbmRpbmcoKSBoYW5kbGlu
+ZyBiZWNhdXNlIHRoYXQncyBjb3ZlcmVkIGJ5DQo+ICAgICBnZW5lcmljIGd1ZXN0IGVudHJ5IGlu
+ZnJhc3RydWN0dXJlDQo+IA0KPiBKaXNoZW5nIFpoYW5nICg1KToNCj4gICBSSVNDLVY6IEtWTTog
+UmVjb3JkIG51bWJlciBvZiBzaWduYWwgZXhpdHMgYXMgYSB2Q1BVIHN0YXQNCj4gICBSSVNDLVY6
+IEtWTTogVXNlIGdlbmVyaWMgZ3Vlc3QgZW50cnkgaW5mcmFzdHJ1Y3R1cmUNCj4gICByaXNjdjog
+c2VsZWN0IEhBVkVfUE9TSVhfQ1BVX1RJTUVSU19UQVNLX1dPUksNCj4gICByaXNjdjogYWRkIGxh
+enkgcHJlZW1wdCBzdXBwb3J0DQo+ICAgcmlzY3Y6IEFsbG93IHRvIGVuYWJsZSBSVA0KPiANCj4g
+IGFyY2gvcmlzY3YvS2NvbmZpZyAgICAgICAgICAgICAgICAgICB8ICAzICsrKw0KPiAgYXJjaC9y
+aXNjdi9pbmNsdWRlL2FzbS9rdm1faG9zdC5oICAgIHwgIDEgKw0KPiAgYXJjaC9yaXNjdi9pbmNs
+dWRlL2FzbS90aHJlYWRfaW5mby5oIHwgIDcgKysrKystLQ0KPiAgYXJjaC9yaXNjdi9rZXJuZWwv
+YXNtLW9mZnNldHMuYyAgICAgIHwgIDEgKw0KPiAgYXJjaC9yaXNjdi9rZXJuZWwvZW50cnkuUyAg
+ICAgICAgICAgIHwgIDkgKysrKysrKy0tDQo+ICBhcmNoL3Jpc2N2L2t2bS9LY29uZmlnICAgICAg
+ICAgICAgICAgfCAgMSArDQo+ICBhcmNoL3Jpc2N2L2t2bS92Y3B1LmMgICAgICAgICAgICAgICAg
+fCAxOCArKysrKysrLS0tLS0tLS0tLS0NCj4gIDcgZmlsZXMgY2hhbmdlZCwgMjUgaW5zZXJ0aW9u
+cygrKSwgMTUgZGVsZXRpb25zKC0pDQo+IA0KPiAtLQ0KPiAyLjM0LjENCj4gDQo+IA0KPiBfX19f
+X19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fXw0KPiBsaW51eC1yaXNj
+diBtYWlsaW5nIGxpc3QNCj4gbGludXgtcmlzY3ZAbGlzdHMuaW5mcmFkZWFkLm9yZw0KPiBodHRw
+Oi8vbGlzdHMuaW5mcmFkZWFkLm9yZy9tYWlsbWFuL2xpc3RpbmZvL2xpbnV4LXJpc2N2DQoNCg==

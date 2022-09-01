@@ -2,75 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B4635AA3B3
-	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 01:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 302F65AA3E4
+	for <lists+linux-kernel@lfdr.de>; Fri,  2 Sep 2022 01:47:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235007AbiIAX1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 19:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
+        id S233992AbiIAXqp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 19:46:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235005AbiIAX1A (ORCPT
+        with ESMTP id S232332AbiIAXqn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 19:27:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DA558B7E
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 16:26:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1662074818;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=4zhQGyUQdaZfg/v5RuJfK81JYWToWC40+GtvI6Qq18w=;
-        b=iHV28TC774j54FPqkccV9y/0O4CbLJMFX+ErH5lpjKZ/pfsCdhyF60BK/w7amzX+lDQzp7
-        VwldjhUdnivvOwX1sibMMvgjkoq0mv5BcAnqQeu35MBOIJvRmbYQi0c2IZn7rX8IERPxi5
-        F16g3KZ1KWU/+FDTfKiCbfYBNCm5u8I=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-564-Y6rw-dffMDm9NN6qOaNbFw-1; Thu, 01 Sep 2022 19:26:57 -0400
-X-MC-Unique: Y6rw-dffMDm9NN6qOaNbFw-1
-Received: by mail-qt1-f198.google.com with SMTP id o21-20020ac87c55000000b00344646ea2ccso325423qtv.11
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 16:26:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=4zhQGyUQdaZfg/v5RuJfK81JYWToWC40+GtvI6Qq18w=;
-        b=uS870yYb0mRxtotmhZifIizqClR4JhV2yF20H7TcwQccBmdNzYikFxOx2PQO8ooA1X
-         8fTJo6VZhKIez+HcdpbT2hQ8QPwIcqnXgDSzivkG+Nc8w8Z4yq1sn7h3CuHbWhJgrXJm
-         gwtlxzqz9cMc6zwDvSdLW2jo6VdF148/xzDRGXoHChRfwBvw47hLUwyeRczG0gN966JP
-         M02bCl+P0e29oaUpigY53613qAs4LspEp0TFGQgCA0R4lMH226zjUE9wfMq9X5XA8LSW
-         wkqYFV1n5XdR4lVOkC4hS/jLVKAGdZz8878KZHQh85p9f62V6Qbp+NLhU0u0fMAlrLqU
-         SM0A==
-X-Gm-Message-State: ACgBeo0RVH7DuBCfo7r0uiClNGlf2BjaIemco7wA2dEgO6fYh7mlwZ7k
-        +dufpz84IW3wZ6gsVSTVHkrdF887HdVre/It4VtZKWDHBBaRtdz6Z+emKTCecajgwtLCPBxFrVa
-        j12FMKqFSJzjQdLlOH6Puej/2
-X-Received: by 2002:a05:6214:238b:b0:48a:f607:c4e0 with SMTP id fw11-20020a056214238b00b0048af607c4e0mr27083583qvb.44.1662074817144;
-        Thu, 01 Sep 2022 16:26:57 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7PbY3MIHgmSUi6mRoFOFLyzTJoF2sshpE2r5ybOvJGbOWappmAtfv6+P5IvtHPGmBYk24LkQ==
-X-Received: by 2002:a05:6214:238b:b0:48a:f607:c4e0 with SMTP id fw11-20020a056214238b00b0048af607c4e0mr27083571qvb.44.1662074816889;
-        Thu, 01 Sep 2022 16:26:56 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id d3-20020a05620a166300b006b5c061844fsm203236qko.49.2022.09.01.16.26.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 16:26:56 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 19:26:54 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     david@redhat.com, kirill.shutemov@linux.intel.com,
-        jhubbard@nvidia.com, jgg@nvidia.com, hughd@google.com,
-        akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: gup: fix the fast GUP race against THP collapse
-Message-ID: <YxE/vuQlWJCJMuG2@xz-m1.local>
-References: <20220901222707.477402-1-shy828301@gmail.com>
+        Thu, 1 Sep 2022 19:46:43 -0400
+X-Greylist: delayed 714 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Sep 2022 16:46:40 PDT
+Received: from mo-csw-fb.securemx.jp (mo-csw-fb1115.securemx.jp [210.130.202.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0FDF7C1A3;
+        Thu,  1 Sep 2022 16:46:40 -0700 (PDT)
+Received: by mo-csw-fb.securemx.jp (mx-mo-csw-fb1115) id 281NYlLI029791; Fri, 2 Sep 2022 08:34:47 +0900
+Received: by mo-csw.securemx.jp (mx-mo-csw1114) id 281NXVK1008867; Fri, 2 Sep 2022 08:33:31 +0900
+X-Iguazu-Qid: 2wGr4d9xrFbDfCVpqr
+X-Iguazu-QSIG: v=2; s=0; t=1662075211; q=2wGr4d9xrFbDfCVpqr; m=pyt+BGlcR0JlGt+mlDJ5VkirvQAzSOqdSrbYJtLnpQg=
+Received: from imx12-a.toshiba.co.jp ([38.106.60.135])
+        by relay.securemx.jp (mx-mr1113) id 281NXSDe023113
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Fri, 2 Sep 2022 08:33:28 +0900
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X7Vfmmf82am7zgAIDvobYZum3KaHfiFeEyNGjJZ4NVmc+nXdOFIz2nU5IzNUsmHeQi8j5DC5ZOIT+CBY8cFqZtLVzMPZlJyzMB8mnWwa+MvoSLIYEQzK2dDvtk2UgItoCbV6/MxmoVsW4zrQvU21NPsLmP5b5QZHq0iYkj4HnOMVhgRB11w0XdGVl3XTjbSq/NMAoGagkg2KKoPuYA2XbE8ecTW1VSuNrxHqGRjpI8Z7cpc24paAAqsD09NnywJ6QT9qV+NVwPgmvj+QXNygGbwuy1bCJ7svWaAG3YR7Aje8CLeA7kgDpKMAK7I6BwSQgjVaILNbLaQgSvTIUqJeiQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=praOG0K/sFnS6rEdtQPkOR5Hl/iSCaI3v74333B2Azk=;
+ b=IJ3vhW+9SbfG3z9J/31fpvTJLUKOxr1fT3bVowA7tXIwzbM8tw0ODnkAHAT9TxW9T4l6As3KVB973tF2Y+RxfalX/CBdBk2ecGgbZq+/5qxXw6oTqfEh0CW3a6xGpQAX9huj4S9FnYdCgF/NafW25cTBJdr0DzVLkCDrvKa4HSLUB9wLiGJRKAbxtmP/COgX71aa+evOAQpSmH1ew296px0orLf2M2W1C5PHKxZ5uB/7+EXefTay0oTCoRXjNH7W7F5YnD8l9sCDnAvnDWHPQO6u9JOP7M5FIsNCclIuIGsjiqr98jqDBTRVDW3EXOh/z1Doy6hBz6yK+BGOoreqsQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=toshiba.co.jp; dmarc=pass action=none
+ header.from=toshiba.co.jp; dkim=pass header.d=toshiba.co.jp; arc=none
+From:   <nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     <Sergey.Semin@baikalelectronics.ru>, <robh+dt@kernel.org>,
+        <robh@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <bhelgaas@google.com>, <lorenzo.pieralisi@arm.com>,
+        <jingoohan1@gmail.com>, <gustavo.pimentel@synopsys.com>
+CC:     <fancer.lancer@gmail.com>, <Alexey.Malahov@baikalelectronics.ru>,
+        <Pavel.Parkhomenko@baikalelectronics.ru>, <kw@linux.com>,
+        <Frank.Li@nxp.com>, <manivannan.sadhasivam@linaro.org>,
+        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: [PATCH v5 02/20] dt-bindings: visconti-pcie: Fix interrupts array
+ max constraints
+Thread-Topic: [PATCH v5 02/20] dt-bindings: visconti-pcie: Fix interrupts
+ array max constraints
+Thread-Index: AQHYtlet6QFk3JOve06vSZaj9zDrTK3JtZvw
+Date:   Thu, 1 Sep 2022 23:33:25 +0000
+X-TSB-HOP2: ON
+Message-ID: <TYWPR01MB94203F5B2F3737448364719E927B9@TYWPR01MB9420.jpnprd01.prod.outlook.com>
+References: <20220822184701.25246-1-Sergey.Semin@baikalelectronics.ru>
+ <20220822184701.25246-3-Sergey.Semin@baikalelectronics.ru>
+In-Reply-To: <20220822184701.25246-3-Sergey.Semin@baikalelectronics.ru>
+Accept-Language: ja-JP, en-US
+Content-Language: ja-JP
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=toshiba.co.jp;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d055b993-2059-473f-7ea5-08da8c725df0
+x-ms-traffictypediagnostic: TYAPR01MB6138:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TO4crLbNpX+X3Gv0yYWXK3Gop0hpdPLar2lnbEj+3nJvv4OwwjZvinpZCYXkqxU+88ly8BRSUOIVk7OvhybemWl/t/rTv0W4YARA67W1zF1CdL/2Xq742t+7Ig1Y57NQ/twkOjoLoKqbDwH1YziEYMcCoenxxg/t0BdpQyWmvGal5ltOCZovk1Jt+tFt02xY49NMg6BHRdtWB1YAP6gdu+oqm8b+NvM6K98k8aGB+WQySFT1/5ZB2QIv7zbKyejYQnpn72ckJ+/DUuO6bJb7GuoYt/wO4cnHvMrGIUAb3vDQ1HOPnwTiZIJ2P60sxZBHnTUdf7q0JiylhvbCd3gkYjZVsk82hCa5N3B+82HmMh3rIkcppbH17v1ohG0BLaDiilzHRYYP0zGnaAt339oV5dRg9GJeslcBT/P17JJsvK3UIpqYdrOrdjITpzA9d7rWkWg6O+i6LnSrq07X/FRqHi6qpktPInFuTZnn73oJyRZObrgYPyVnLbYX70U2EWF0xpNkAFTiZlz8qEct92XFisRYupWtNcN4C0DznzhRbTQgcNQt/A4U83YauPmfCrE/6s6m5Pi8PhZlEQ7H9oxQLDLVICszipI4abLWjiwv82g5IyGqSnDs8TFRsciP3px+twPTVO+HS425Vkr4ow0wGQgF13l6cBNPMUKvrQ4L+0RGuUZRvGRYRX2I3+ZzpXA2tUCa63cObQJmNDZYZXv/AlYTL6VY5Lg9H5bgDZ6pl6muzrwK31+kPIvH0iPfq8NPndhJwsS2Zn0EfLntUUhrfw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB9420.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(136003)(376002)(39860400002)(346002)(396003)(110136005)(71200400001)(316002)(54906003)(52536014)(8676002)(4326008)(8936002)(5660300002)(66946007)(66556008)(66476007)(66446008)(64756008)(76116006)(41300700001)(26005)(6506007)(7696005)(7416002)(2906002)(9686003)(53546011)(478600001)(38070700005)(33656002)(55016003)(186003)(83380400001)(122000001)(86362001)(38100700002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YVVRdlM0TFJnV2ltNW53a1ZoUkhpZ2pBMTVBbU9Rc09uamRCdFVNQXVxT2Yx?=
+ =?utf-8?B?S3Zkdm42RXpUcXJvanBEYnpvSU5EbVpwZFk0TXlBZ1VZbi81VXBJVUZOMWgz?=
+ =?utf-8?B?NWZoS3RZTXdEd3AzSnNGVENBaVoySjhqU2hFaHh1M2VSVGdiQW9vdmR3VHZF?=
+ =?utf-8?B?WFZMSWpZSnRPTVZLQmdVTGNCMFpWTmhGZ0RaSGZZMTdNbm82VEVkMXhRVTJy?=
+ =?utf-8?B?ZURNK3d6ZmszbVhZWUtmYTZWYXdPM1BJNk0rWkIxUzJEemtzVTE0UUdvVm4r?=
+ =?utf-8?B?U1RTekdVeld4bUM2SlRWR2xwSGRSVzl1QitYSzB2cW5FZFNYenZBUVpXWE1w?=
+ =?utf-8?B?dzg2VSt4Z2gyNUhJS3Z0c3lyMVBWcGRwa2FUYU5TYktiZm5wU05yTTEzTEFt?=
+ =?utf-8?B?UDJwZ0I3YnhUTDl5YWJwSDJxRXlVMzJXL2pGVDJsQjlEbVljTUIwWEM2S1Q0?=
+ =?utf-8?B?b0Q1anlLSGtjY0hDRVJ5MkcrN01HVFF4UHA5VWJQeHVqWnM3WG1uQ3AvaVQy?=
+ =?utf-8?B?OTJLNUhKd01PdnNuemFuVldaZ0FmYVg1WFdwY25HaXJEbEwrR0h1Nlk4YTNT?=
+ =?utf-8?B?WEdOTlNUWUtsNU9WalhvZXA2N2hHZzFhVGVNU0x5REE0cEVpYnRjLzVuK254?=
+ =?utf-8?B?N0xMMHNRM0dmSUc5TlNIMVozT2ZKNlJ2QnB0ZWhFbUhLWU5XSk9NaXpVc285?=
+ =?utf-8?B?Z2ZZNVlyVWxXUUNSUy9WU3NGbVN6Rlc4bXozYXFrY05mY29qSm92R1VSUG9H?=
+ =?utf-8?B?dklpWEJmUXk1cDN5RDZ6S3RVdHRQM3gxSWFFV2U1aEJSSU1WaHh0cHF6UDE0?=
+ =?utf-8?B?YWVqYzVVbjd0ajc3bGpxV3FQcjJaYnhqZUZMemJyZXgzdXZtbkNDZUFJQmtP?=
+ =?utf-8?B?d0xLbCtoMVJOVkZ0akY1QnVQVGRkcHpXWmRXTUFaMnczRnJ3QU1LSmZTMndS?=
+ =?utf-8?B?NmJEUlJicVdNN1UzaGJuMEV3SGp0ZE1FZnZTamVYRm03S1pnWU11L3A1RzdO?=
+ =?utf-8?B?bWFIVzBIUnVLamhIUFBBQ3Q1Y2daKzdDeHJETGRENU0vcjVSdWlvZm9jOEVK?=
+ =?utf-8?B?QmdPVjRFVjhicHhmaHdvTkJhVElJUzN6OHp4VlBZSVl2R1BndDRLRmZVRjZ3?=
+ =?utf-8?B?TXA2L0dRSytTcVprbFJ3dDJxY0lJSlovVzJ4NWQ2QStxbWxHdDlXQ1U1aWFa?=
+ =?utf-8?B?Vyt5djVyRVBna3NMbnBsYW84Zzhoekw1Sm9YVmtEV2g2MVgxcEthWWptWmdF?=
+ =?utf-8?B?c2ZVS0YzMHBiRnJycDZtbktQUlpYbk1BSDhJMFBTTVBrMWpXbm1ab0ZpUjdT?=
+ =?utf-8?B?dFJvUXQwNHpSZDlpMGNnWTJvMDBvWS9KdDlqeW4yWkx6Q0lmakFYdk1UdVVM?=
+ =?utf-8?B?QTlmMExINHpUOElIMllYMTI1ZFZtV3VycWJnZHlmZWxyNGNLZVkxWW9YblZi?=
+ =?utf-8?B?Smw2ZlZEWXo2SFNWUDJjQ1l5N0Rmb1pMMjZBS3A1em8rOHZJNDRvYUs1UXpy?=
+ =?utf-8?B?dFEvYkYxZU43TXlXOGFUalZDallTNkRqUmE3WkRQZkNLaFpZcEVBWksyek85?=
+ =?utf-8?B?NEg2eUd1RkF3NVRicFJ2dGFueTVtMm0zd052OTBKSk0rT2FiZ09Mb0gwNU1z?=
+ =?utf-8?B?bklvRnJlanp4NWROWUk0eE02TkJjRm1GSmphdHdjQ0t6T1cxcTg3QVlOQ1Fk?=
+ =?utf-8?B?UTN0bTUrT0xFOU1GSXNvSHlnbmxsN2xEVmpvTUZNd3RmWWJSc1RyTlZKbGx2?=
+ =?utf-8?B?RWcrRUUyTG1TbThwdm1mWjZwd2E4RXo3ZGMvT25HcExSTyttdSthMFBPZ1oy?=
+ =?utf-8?B?ZGlVRFBEem44b1o3eTVOdXpGWFVzRVQyWGZEODNFdUNBYmpOckN0Qmhxc1Uz?=
+ =?utf-8?B?Q2xUWlRRWTJidjgrOTRsWFRodlUrQzU0WFhwVzhjMDRKaS94WDRTbXlGVFhY?=
+ =?utf-8?B?YmNzWVViWitrOFFFWlJMZlptR01Rd3d2MFhYelYwK3NLUHJ1dktFZjhyZnZL?=
+ =?utf-8?B?Y2NRc0dQeG55VEJxdkcybVJxanNEa0prQlNYb29YT2JEUEg2ai95dG1IR2k1?=
+ =?utf-8?B?MEE1bkJDQzN6SlF6b2lEVmQ4ZUxWcDc4RUw3QUk4dkZoM2xPN2dyTWFoN0Q5?=
+ =?utf-8?B?SnM4QmZpY0MzZE02OElyMDhmVExBOUwyL0VFZDd0RFQ4aFVwT1N3WlVJMHZi?=
+ =?utf-8?B?VWc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220901222707.477402-1-shy828301@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB9420.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d055b993-2059-473f-7ea5-08da8c725df0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2022 23:33:25.6236
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: f109924e-fb71-4ba0-b2cc-65dcdf6fbe4f
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ja41vp7toqW2ZwtNmEaQkg8tSfn0thSyJhdim6lxsGQT3hb31QGTdDO68/MlX0Z9PSrtqzIgSfIa0BgqUKBvrbcdX7N/NcXTqwIqQ1X2f989lJfpDXYlrX4uGTAhWXAf
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYAPR01MB6138
+X-OriginatorOrg: toshiba.co.jp
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,155 +131,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Yang,
-
-On Thu, Sep 01, 2022 at 03:27:07PM -0700, Yang Shi wrote:
-> Since general RCU GUP fast was introduced in commit 2667f50e8b81 ("mm:
-> introduce a general RCU get_user_pages_fast()"), a TLB flush is no longer
-> sufficient to handle concurrent GUP-fast in all cases, it only handles
-> traditional IPI-based GUP-fast correctly.
-
-If TLB flush (or, IPI broadcasts) used to work to protect against gup-fast,
-I'm kind of confused why it's not sufficient even if with RCU gup?  Isn't
-that'll keep working as long as interrupt disabled (which current fast-gup
-will still do)?
-
-IIUC the issue is you suspect not all archs correctly implemented
-pmdp_collapse_flush(), or am I wrong?
-
-> On architectures that send
-> an IPI broadcast on TLB flush, it works as expected.  But on the
-> architectures that do not use IPI to broadcast TLB flush, it may have
-> the below race:
-> 
->    CPU A                                          CPU B
-> THP collapse                                     fast GUP
->                                               gup_pmd_range() <-- see valid pmd
->                                                   gup_pte_range() <-- work on pte
-> pmdp_collapse_flush() <-- clear pmd and flush
-> __collapse_huge_page_isolate()
->     check page pinned <-- before GUP bump refcount
->                                                       pin the page
->                                                       check PTE <-- no change
-> __collapse_huge_page_copy()
->     copy data to huge page
->     ptep_clear()
-> install huge pmd for the huge page
->                                                       return the stale page
-> discard the stale page
-> 
-> The race could be fixed by checking whether PMD is changed or not after
-> taking the page pin in fast GUP, just like what it does for PTE.  If the
-> PMD is changed it means there may be parallel THP collapse, so GUP
-> should back off.
-
-Could the race also be fixed by impl pmdp_collapse_flush() correctly for
-the archs that are missing? Do you know which arch(s) is broken with it?
-
-It's just not clear to me whether this patch is an optimization or a fix,
-if it's a fix whether the IPI broadcast in ppc pmdp_collapse_flush() would
-still be needed.
-
-Thanks,
-
-> 
-> Also update the stale comment about serializing against fast GUP in
-> khugepaged.
-> 
-> Fixes: 2667f50e8b81 ("mm: introduce a general RCU get_user_pages_fast()")
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
-> ---
->  mm/gup.c        | 30 ++++++++++++++++++++++++------
->  mm/khugepaged.c | 10 ++++++----
->  2 files changed, 30 insertions(+), 10 deletions(-)
-> 
-> diff --git a/mm/gup.c b/mm/gup.c
-> index f3fc1f08d90c..4365b2811269 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -2380,8 +2380,9 @@ static void __maybe_unused undo_dev_pagemap(int *nr, int nr_start,
->  }
->  
->  #ifdef CONFIG_ARCH_HAS_PTE_SPECIAL
-> -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
-> -			 unsigned int flags, struct page **pages, int *nr)
-> +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
-> +			 unsigned long end, unsigned int flags,
-> +			 struct page **pages, int *nr)
->  {
->  	struct dev_pagemap *pgmap = NULL;
->  	int nr_start = *nr, ret = 0;
-> @@ -2423,7 +2424,23 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
->  			goto pte_unmap;
->  		}
->  
-> -		if (unlikely(pte_val(pte) != pte_val(*ptep))) {
-> +		/*
-> +		 * THP collapse conceptually does:
-> +		 *   1. Clear and flush PMD
-> +		 *   2. Check the base page refcount
-> +		 *   3. Copy data to huge page
-> +		 *   4. Clear PTE
-> +		 *   5. Discard the base page
-> +		 *
-> +		 * So fast GUP may race with THP collapse then pin and
-> +		 * return an old page since TLB flush is no longer sufficient
-> +		 * to serialize against fast GUP.
-> +		 *
-> +		 * Check PMD, if it is changed just back off since it
-> +		 * means there may be parallel THP collapse.
-> +		 */
-> +		if (unlikely(pmd_val(pmd) != pmd_val(*pmdp)) ||
-> +		    unlikely(pte_val(pte) != pte_val(*ptep))) {
->  			gup_put_folio(folio, 1, flags);
->  			goto pte_unmap;
->  		}
-> @@ -2470,8 +2487,9 @@ static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
->   * get_user_pages_fast_only implementation that can pin pages. Thus it's still
->   * useful to have gup_huge_pmd even if we can't operate on ptes.
->   */
-> -static int gup_pte_range(pmd_t pmd, unsigned long addr, unsigned long end,
-> -			 unsigned int flags, struct page **pages, int *nr)
-> +static int gup_pte_range(pmd_t pmd, pmd_t *pmdp, unsigned long addr,
-> +			 unsigned long end, unsigned int flags,
-> +			 struct page **pages, int *nr)
->  {
->  	return 0;
->  }
-> @@ -2791,7 +2809,7 @@ static int gup_pmd_range(pud_t *pudp, pud_t pud, unsigned long addr, unsigned lo
->  			if (!gup_huge_pd(__hugepd(pmd_val(pmd)), addr,
->  					 PMD_SHIFT, next, flags, pages, nr))
->  				return 0;
-> -		} else if (!gup_pte_range(pmd, addr, next, flags, pages, nr))
-> +		} else if (!gup_pte_range(pmd, pmdp, addr, next, flags, pages, nr))
->  			return 0;
->  	} while (pmdp++, addr = next, addr != end);
->  
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index 2d74cf01f694..518b49095db3 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -1049,10 +1049,12 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
->  
->  	pmd_ptl = pmd_lock(mm, pmd); /* probably unnecessary */
->  	/*
-> -	 * After this gup_fast can't run anymore. This also removes
-> -	 * any huge TLB entry from the CPU so we won't allow
-> -	 * huge and small TLB entries for the same virtual address
-> -	 * to avoid the risk of CPU bugs in that area.
-> +	 * This removes any huge TLB entry from the CPU so we won't allow
-> +	 * huge and small TLB entries for the same virtual address to
-> +	 * avoid the risk of CPU bugs in that area.
-> +	 *
-> +	 * Parallel fast GUP is fine since fast GUP will back off when
-> +	 * it detects PMD is changed.
->  	 */
->  	_pmd = pmdp_collapse_flush(vma, address, pmd);
->  	spin_unlock(pmd_ptl);
-> -- 
-> 2.26.3
-> 
-
--- 
-Peter Xu
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBTZXJnZSBTZW1pbiA8U2VyZ2V5
+LlNlbWluQGJhaWthbGVsZWN0cm9uaWNzLnJ1Pg0KPiBTZW50OiBUdWVzZGF5LCBBdWd1c3QgMjMs
+IDIwMjIgMzo0NyBBTQ0KPiBUbzogUm9iIEhlcnJpbmcgPHJvYmgrZHRAa2VybmVsLm9yZz47IFJv
+YiBIZXJyaW5nIDxyb2JoQGtlcm5lbC5vcmc+Ow0KPiBLcnp5c3p0b2YgS296bG93c2tpIDxrcnp5
+c3p0b2Yua296bG93c2tpK2R0QGxpbmFyby5vcmc+OyBCam9ybiBIZWxnYWFzDQo+IDxiaGVsZ2Fh
+c0Bnb29nbGUuY29tPjsgTG9yZW56byBQaWVyYWxpc2kgPGxvcmVuem8ucGllcmFsaXNpQGFybS5j
+b20+Ow0KPiBKaW5nb28gSGFuIDxqaW5nb29oYW4xQGdtYWlsLmNvbT47IEd1c3Rhdm8gUGltZW50
+ZWwNCj4gPGd1c3Rhdm8ucGltZW50ZWxAc3lub3BzeXMuY29tPjsgaXdhbWF0c3Ugbm9idWhpcm8o
+5bKp5p2+IOS/oea0iyDilqHvvLPvvLfvvKMNCj4g4pev77yh77yj77y0KSA8bm9idWhpcm8xLml3
+YW1hdHN1QHRvc2hpYmEuY28uanA+DQo+IENjOiBTZXJnZSBTZW1pbiA8U2VyZ2V5LlNlbWluQGJh
+aWthbGVsZWN0cm9uaWNzLnJ1PjsgU2VyZ2UgU2VtaW4NCj4gPGZhbmNlci5sYW5jZXJAZ21haWwu
+Y29tPjsgQWxleGV5IE1hbGFob3YNCj4gPEFsZXhleS5NYWxhaG92QGJhaWthbGVsZWN0cm9uaWNz
+LnJ1PjsgUGF2ZWwgUGFya2hvbWVua28NCj4gPFBhdmVsLlBhcmtob21lbmtvQGJhaWthbGVsZWN0
+cm9uaWNzLnJ1PjsgS3J6eXN6dG9mIFdpbGN6ecWEc2tpDQo+IDxrd0BsaW51eC5jb20+OyBGcmFu
+ayBMaSA8RnJhbmsuTGlAbnhwLmNvbT47IE1hbml2YW5uYW4gU2FkaGFzaXZhbQ0KPiA8bWFuaXZh
+bm5hbi5zYWRoYXNpdmFtQGxpbmFyby5vcmc+OyBsaW51eC1wY2lAdmdlci5rZXJuZWwub3JnOw0K
+PiBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGludXgta2VybmVsQHZnZXIua2VybmVsLm9y
+ZzsNCj4gbGludXgtYXJtLWtlcm5lbEBsaXN0cy5pbmZyYWRlYWQub3JnDQo+IFN1YmplY3Q6IFtQ
+QVRDSCB2NSAwMi8yMF0gZHQtYmluZGluZ3M6IHZpc2NvbnRpLXBjaWU6IEZpeCBpbnRlcnJ1cHRz
+IGFycmF5IG1heA0KPiBjb25zdHJhaW50cw0KPiANCj4gSW4gYWNjb3JkYW5jZSB3aXRoIHRoZSB3
+YXkgdGhlIGRldmljZSBEVC1ub2RlIGlzIGFjdHVhbGx5IGRlZmluZWQgaW4NCj4gYXJjaC9hcm02
+NC9ib290L2R0cy90b3NoaWJhL3RtcHY3NzA4LmR0c2kgYW5kIHRoZSB3YXkgdGhlIGRldmljZSBp
+cyBwcm9iZWQNCj4gYnkgdGhlIERXIFBDSWUgZHJpdmVyIHRoZXJlIGFyZSB0d28gSVJRcyBpdCBh
+Y3R1YWxseSBoYXMuIEl0J3MgTVNJIElSUSB0aGUNCj4gRFQtYmluZGluZ3MgbGFjay4gTGV0J3Mg
+ZXh0ZW5kIHRoZSBpbnRlcnJ1cHRzIHByb3BlcnR5IGNvbnN0cmFpbnRzIHRoZW4gYW5kIGZpeA0K
+PiB0aGUgc2NoZW1hIGV4YW1wbGUgc28gb25lIHdvdWxkIGJlIGFjY2VwdGFibGUgYnkgdGhlIGFj
+dHVhbCBkZXZpY2UNCj4gRFQtYmluZGluZ3MuDQo+IA0KPiBGaXhlczogMTdjMWIxNjM0MGYwICgi
+ZHQtYmluZGluZ3M6IHBjaTogQWRkIERUIGJpbmRpbmcgZm9yIFRvc2hpYmEgVmlzY29udGkNCj4g
+UENJZSBjb250cm9sbGVyIikNCj4gU2lnbmVkLW9mZi1ieTogU2VyZ2UgU2VtaW4gPFNlcmdleS5T
+ZW1pbkBiYWlrYWxlbGVjdHJvbmljcy5ydT4NCg0KVGhhbmtzIGZvciB0aGlzIHBhdGNoLg0KDQpB
+Y2tlZC1ieTogTm9idWhpcm8gSXdhbWF0c3UgPG5vYnVoaXJvMS5pd2FtYXRzdUB0b3NoaWJhLmNv
+LmpwPg0KDQpCZXN0IHJlZ2FyZHMsDQogIE5vYnVoaXJvDQo=
 

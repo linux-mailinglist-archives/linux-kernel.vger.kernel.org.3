@@ -2,78 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8ED5AA106
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:43:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB4D5AA10C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233871AbiIAUn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 16:43:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60980 "EHLO
+        id S234507AbiIAUqI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 16:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232301AbiIAUnW (ORCPT
+        with ESMTP id S233644AbiIAUqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 16:43:22 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A17D779A69;
-        Thu,  1 Sep 2022 13:43:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+R0zLcDvTGRyvxl4zDbTTDzdi+vOOjcTrIaxayIUUvg=; b=Kk7eaJ6Rqf3HJfgflPvOn2S5w9
-        0gTgPTEzbYGfIz1iFeWKbkUpOq9BOJy7FCWVBsXwPD4XxmexSlx2jo2e1KcibDcKu2y82RZFRL/FO
-        xQF64t6iAkjcKCKmseQv15D9P0cqE+HAL5Coa6uAbF25VCJ5ZORLmPVpGKfgfxlKEElnMTlGq3W9p
-        5PSLOrg1zd2+cGDSoAIDBgmsLdhMBmDWGSillVUqYzNStL1QrRwD0fnyFca4klpndJp//F6jNkPkr
-        TVllTk1Jvaw3qbP3c124qfCRwNFrtvTIkFXHS5iwWBzXgsUBFOR6mX5E735GYvFTh8f399Cw/cjos
-        TEXs18Rw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTr1t-006Mh0-4C; Thu, 01 Sep 2022 20:43:13 +0000
-Date:   Thu, 1 Sep 2022 21:43:13 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        David Howells <dhowells@redhat.com>,
-        Ingo Molnar <mingo@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        NeilBrown <neilb@suse.de>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Russell King <linux@armlinux.org.uk>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        William Kucharski <william.kucharski@oracle.com>,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH 08/10] headers/deps: mm: Split <linux/gfp_types.h> out of
- <linux/gfp.h>
-Message-ID: <YxEZYUCA0b8Cd1/S@casper.infradead.org>
-References: <20220706174253.4175492-1-yury.norov@gmail.com>
- <20220706174253.4175492-9-yury.norov@gmail.com>
+        Thu, 1 Sep 2022 16:46:05 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31BDD56B90
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:46:02 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id w139so2493950pfc.13
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 13:46:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=3FATo+4aSu7y8dsoj+GqrdVX/tRMTr67LwXEb3c92qM=;
+        b=JDejjNU/A1CEVLmDw/kbCrNbdJoDEXGLDDaIyV9Igs/XsnOsjR1Dc6yu+mvq7kTeMM
+         cvw4U0gVZCifDlqJhtwiRsOvulrMamJ1N3LMefiLT5hGizjH0dPJDT5JLnQPTaFNqL7+
+         TUAz8UxE1PUEmXH6jTTj+ycsmdoRAwJ7rPHtU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=3FATo+4aSu7y8dsoj+GqrdVX/tRMTr67LwXEb3c92qM=;
+        b=qRgv7NwANS29OBgLpuyUPqPCV6DEIO0IDu1XT0+/jAqn8o/MKG7hiw/VVaVzLJE4Zm
+         ijjCr1do/RcThLlaKf2zEMf6kV15tuvwAZruaTxlp1U0dgHoUnZg3SUWsQGQ9fCgpdWf
+         iE/XI+yG8sc51Eqi79EEfIwzohKkK7gqwQrtrtmvyup/PJsjz/NZz8ZcmHhRkchtBXzW
+         faonnmaouEmjMRg195vsrzDQRzCeqIGejRYOqkA2RYYz72lijCvqq1iWHD5/+jlejwyn
+         yetOdlmPnA/Xm3s/79gAA6DntjNXy0W8PLhXBCtyqDdCvl2M49iHY/CMKPnfEKrRhDmM
+         +H/Q==
+X-Gm-Message-State: ACgBeo2z/zfBKcteoqmvpWyA6qYkoxjLvvjM+3AqHlLC7hdhVRLLuIrZ
+        c0wlt1PZuWkoIt4bGLtghc5HOg==
+X-Google-Smtp-Source: AA6agR5ZsGlC3fTZ03AIuh04jvZ/ffxqC7vYoNL6qJA03Vhg3EK6HLxeudH2vcuvQD4N+aTvr2burQ==
+X-Received: by 2002:a63:7843:0:b0:42b:4e77:a508 with SMTP id t64-20020a637843000000b0042b4e77a508mr27570344pgc.449.1662065161707;
+        Thu, 01 Sep 2022 13:46:01 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id q3-20020aa78423000000b0052d87b76d12sm23827pfn.68.2022.09.01.13.46.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 13:46:00 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     Luca Coelho <luciano.coelho@intel.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Lee Jones <lee.jones@linaro.org>,
+        Johannes Berg <johannes.berg@intel.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Andy Lavr <andy.lavr@gmail.com>, Kalle Valo <kvalo@kernel.org>,
+        Gregory Greenman <gregory.greenman@intel.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [PATCH] iwlwifi: calib: Refactor iwl_calib_result usage for clarity
+Date:   Thu,  1 Sep 2022 13:45:58 -0700
+Message-Id: <20220901204558.2256458-1-keescook@chromium.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220706174253.4175492-9-yury.norov@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5095; h=from:subject; bh=dXk9FvP8mQV+OU7HzHs8EJnNRxX0VzSl2ssfNfi+TYY=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjERoGa6dATzMBuf7tKR2Kr6iz+T5BgWqO5lKzP2H+ tXAHCbyJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCYxEaBgAKCRCJcvTf3G3AJnCEEA CD5yRk+eEyd95e31q9KVFxtiS/4qWSVLf7kkpCTuMDpudMz7nUxKvg7jTXy2XRiRkpqkwS+UxmsAC0 jrtzN1L/iWsq0KBqjH7uw8Qc0nLos6Ya42Jc+ylzkBMLywoVNW0r2a/JBaMNwCxakQa49fCeKKQpsK ufdhJ/oBicA6OA9NXeGWKu5Wlh/ADv+wvCxadKqd0xwppvmQacyvSjIzuV4choGTHjRuRRkG/BTUBf nVuRVuZ1JVPbwD7nZ+weIPI1WvAW8Ky+Xl8Ly6z72DM66Y2nbldOfg0cz6nnTFeHyZysLmhwT/DS6h YkijlAzekNR90QCKm0Qkn+O54AyhRrRZlGYWnXtObOihyPLgfJpBALGdkCo15y0wQ7HccpBHUItsRS vrAY5y1KYcsPG6pfGCEnNpmU8uqCmqoCTc2rfRc03/LUqsp06vfEi91++48DuBo3iPy0Ny4zeBfpv0 Vib/W0vHtvvuFk5JbC7syM6V25NKeSNzb8u8khHd/MQYJrN42LOWkQb8dQ9KgIHb7MDP5FcPES9K1R pPgRp5CqwkCx7b6QG7Z7apVES3Sv8380ZLHZHw2fdsxwxEEQQhfolh45K6mZS5HBHoUuMboyRDMYwD Dm5x1YW9ST0RxrJmoTfUiDOMy8M9lb0SZMkg9a2zpH8W/cz9BOfYNBov8iFg==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 10:42:51AM -0700, Yury Norov wrote:
-> From: Ingo Molnar <mingo@kernel.org>
-> 
-> This is a much smaller header.
-> 
-> Signed-off-by: Ingo Molnar <mingo@kernel.org>
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  include/linux/gfp.h       | 345 +------------------------------------
->  include/linux/gfp_types.h | 348 ++++++++++++++++++++++++++++++++++++++
->  2 files changed, 350 insertions(+), 343 deletions(-)
+In preparation for FORTIFY_SOURCE performing run-time destination buffer
+bounds checking for memcpy(), refactor the use of struct iwl_calib_result:
 
-You move a lot of kernel-doc.  Where do you change the rst files?
+- Have struct iwl_calib_result contain struct iwl_calib_cmd since
+  functions expect to operate on the "data" flex array in "cmd", which
+  follows the "hdr" member.
+- Switch argument passing around to use struct iwl_calib_cmd instead of
+  struct iwl_calib_hdr to prepare functions to see the "data" member.
+- Change iwl_calib_set()'s "len" argument to a size_t since it is always
+  unsigned and is normally receiving the output of sizeof().
+- Add an explicit length sanity check in iwl_calib_set().
+- Adjust the memcpy() to avoid copying across the now visible composite
+  flex array structure.
+
+This avoids the future run-time warning:
+
+  memcpy: detected field-spanning write (size 8) of single field "&res->hdr" (size 4)
+
+Cc: Luca Coelho <luciano.coelho@intel.com>
+Cc: Kalle Valo <kvalo@codeaurora.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Lee Jones <lee.jones@linaro.org>
+Cc: Johannes Berg <johannes.berg@intel.com>
+Cc: linux-wireless@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Reported-by: Andy Lavr <andy.lavr@gmail.com>
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+ drivers/net/wireless/intel/iwlwifi/dvm/agn.h  |  2 +-
+ .../net/wireless/intel/iwlwifi/dvm/calib.c    | 22 ++++++++++---------
+ .../net/wireless/intel/iwlwifi/dvm/ucode.c    |  8 +++----
+ 3 files changed, 17 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/agn.h b/drivers/net/wireless/intel/iwlwifi/dvm/agn.h
+index 411a6f6638b4..fefaa414272b 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/agn.h
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/agn.h
+@@ -112,7 +112,7 @@ int iwl_load_ucode_wait_alive(struct iwl_priv *priv,
+ 			      enum iwl_ucode_type ucode_type);
+ int iwl_send_calib_results(struct iwl_priv *priv);
+ int iwl_calib_set(struct iwl_priv *priv,
+-		  const struct iwl_calib_hdr *cmd, int len);
++		  const struct iwl_calib_cmd *cmd, size_t len);
+ void iwl_calib_free_results(struct iwl_priv *priv);
+ int iwl_dump_nic_event_log(struct iwl_priv *priv, bool full_log,
+ 			    char **buf);
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/calib.c b/drivers/net/wireless/intel/iwlwifi/dvm/calib.c
+index a11884fa254b..f488620d2844 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/calib.c
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/calib.c
+@@ -19,8 +19,7 @@
+ struct iwl_calib_result {
+ 	struct list_head list;
+ 	size_t cmd_len;
+-	struct iwl_calib_hdr hdr;
+-	/* data follows */
++	struct iwl_calib_cmd cmd;
+ };
+ 
+ struct statistics_general_data {
+@@ -43,12 +42,12 @@ int iwl_send_calib_results(struct iwl_priv *priv)
+ 		int ret;
+ 
+ 		hcmd.len[0] = res->cmd_len;
+-		hcmd.data[0] = &res->hdr;
++		hcmd.data[0] = &res->cmd;
+ 		hcmd.dataflags[0] = IWL_HCMD_DFL_NOCOPY;
+ 		ret = iwl_dvm_send_cmd(priv, &hcmd);
+ 		if (ret) {
+ 			IWL_ERR(priv, "Error %d on calib cmd %d\n",
+-				ret, res->hdr.op_code);
++				ret, res->cmd.hdr.op_code);
+ 			return ret;
+ 		}
+ 	}
+@@ -57,19 +56,22 @@ int iwl_send_calib_results(struct iwl_priv *priv)
+ }
+ 
+ int iwl_calib_set(struct iwl_priv *priv,
+-		  const struct iwl_calib_hdr *cmd, int len)
++		  const struct iwl_calib_cmd *cmd, size_t len)
+ {
+ 	struct iwl_calib_result *res, *tmp;
+ 
+-	res = kmalloc(sizeof(*res) + len - sizeof(struct iwl_calib_hdr),
+-		      GFP_ATOMIC);
++	if (check_sub_overflow(len, sizeof(*cmd), &len))
++		return -ENOMEM;
++
++	res = kmalloc(struct_size(res, cmd.data, len), GFP_ATOMIC);
+ 	if (!res)
+ 		return -ENOMEM;
+-	memcpy(&res->hdr, cmd, len);
+-	res->cmd_len = len;
++	res->cmd = *cmd;
++	memcpy(res->cmd.data, cmd->data, len);
++	res->cmd_len = struct_size(cmd, data, len);
+ 
+ 	list_for_each_entry(tmp, &priv->calib_results, list) {
+-		if (tmp->hdr.op_code == res->hdr.op_code) {
++		if (tmp->cmd.hdr.op_code == res->cmd.hdr.op_code) {
+ 			list_replace(&tmp->list, &res->list);
+ 			kfree(tmp);
+ 			return 0;
+diff --git a/drivers/net/wireless/intel/iwlwifi/dvm/ucode.c b/drivers/net/wireless/intel/iwlwifi/dvm/ucode.c
+index 4b27a53d0bb4..bb13ca5d666c 100644
+--- a/drivers/net/wireless/intel/iwlwifi/dvm/ucode.c
++++ b/drivers/net/wireless/intel/iwlwifi/dvm/ucode.c
+@@ -356,18 +356,18 @@ static bool iwlagn_wait_calib(struct iwl_notif_wait_data *notif_wait,
+ 			      struct iwl_rx_packet *pkt, void *data)
+ {
+ 	struct iwl_priv *priv = data;
+-	struct iwl_calib_hdr *hdr;
++	struct iwl_calib_cmd *cmd;
+ 
+ 	if (pkt->hdr.cmd != CALIBRATION_RES_NOTIFICATION) {
+ 		WARN_ON(pkt->hdr.cmd != CALIBRATION_COMPLETE_NOTIFICATION);
+ 		return true;
+ 	}
+ 
+-	hdr = (struct iwl_calib_hdr *)pkt->data;
++	cmd = (struct iwl_calib_cmd *)pkt->data;
+ 
+-	if (iwl_calib_set(priv, hdr, iwl_rx_packet_payload_len(pkt)))
++	if (iwl_calib_set(priv, cmd, iwl_rx_packet_payload_len(pkt)))
+ 		IWL_ERR(priv, "Failed to record calibration data %d\n",
+-			hdr->op_code);
++			cmd->hdr.op_code);
+ 
+ 	return false;
+ }
+-- 
+2.34.1
+

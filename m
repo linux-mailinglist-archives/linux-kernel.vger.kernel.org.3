@@ -2,100 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F401E5A8F05
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:01:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97F6C5A8F08
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233513AbiIAHBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S233504AbiIAHBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:01:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233484AbiIAHAr (ORCPT
+        with ESMTP id S233430AbiIAHAx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:00:47 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B346D6D9C0;
-        Thu,  1 Sep 2022 00:00:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=lP/axgW6wVbLw99T8GY0xIMHkeiyf6aNs2WovZZWBOY=; b=DsovPIHjiTzLDFEHMUZax6kdiz
-        YmrmwM4nfhUlXHU6+jwtzeSmRIqJzuk4utR6vlplHXI5NoTsSiI6NPT6mQ1h/o6UlCxpUVBSYBOGF
-        mAwUrbTARvU58QmTx2lzLaDbpKSsvApZwYA684cbuuNFGxM7GOsrIGOTXXVvQaBIhlfCdGZ/9loBM
-        L3IgWlK3G+key+g2ORNzZ1jfQX4w6GwCWwHdxGrO4bIeb/Qje5accP3+IyavFM2jCZdaLz1F3Z14t
-        Fw+hvjFeYcySCXoo9Bh3TdJ8voxVMcJyDg7RBGMnnwLLPADNOXfsqH/S6AwZDXh9BZoWO7rjOM3mx
-        f18fOvcQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTeBX-005oaa-An; Thu, 01 Sep 2022 07:00:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C4CAE30041D;
-        Thu,  1 Sep 2022 09:00:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A749520981381; Thu,  1 Sep 2022 09:00:17 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 09:00:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, roman.gushchin@linux.dev, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
-        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-Message-ID: <YxBYgcyP7IvMLJwq@hirez.programming.kicks-ass.net>
-References: <20220830214919.53220-1-surenb@google.com>
- <Yw8P8xZ4zqu121xL@hirez.programming.kicks-ass.net>
- <20220831084230.3ti3vitrzhzsu3fs@moria.home.lan>
- <20220831101948.f3etturccmp5ovkl@suse.de>
+        Thu, 1 Sep 2022 03:00:53 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0714B56DB
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:00:31 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id 72so16651426pfx.9
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 00:00:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=XcLxmoK8X1rF3FVFD0JBqtFjjFipU55iwKHDlizFoCg=;
+        b=ELWrLnRa+jJMj9l69Mv3iL3lMyvZ5BmSP0cgO1D9xRZ6jvTsvYtpxQJsPNxPna9r+/
+         sipKO9ZnYcpqQ3+wkD9z+lxmFIrTcPalX8cC5zcyVEgVQ9cnObBprDvuaGPJ1C9ZMBtk
+         aDm193aRttofrbI8KWUVS3yxeDvKZhupR5FCC6cZ2dag6q3oCvaWebHj0yr63tUSqrSc
+         J61vJMomwIMzImOJxvR7yz6znfAuez1YyabI1w8DEOWJ48agv285VjBz/yk785/rSDWk
+         FysEoblcKPbkP5lA53XuRYncOCM6SAI16EWdeeEAP/1FeTwO0K3cUR/leywK/5xzFLbr
+         /AgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=XcLxmoK8X1rF3FVFD0JBqtFjjFipU55iwKHDlizFoCg=;
+        b=XYEGMMDaJ2CatqWjqvtPGGWPodsnveTFVwiNxGi2DpK4SQb/8yTRFxspZOSkHU6RJw
+         c5P4jRNnh8gGlwq958T1S2cJ0ilJjNFbhrkVir8upLMceJeQVoC0oY39r2K1hwxzUDCA
+         eU1xt7RaUO1OpebPoSTVrFKUaDeaTWKsmeXeyC3HcmHfU7HtiKaalwDdJeZHDUb9Da+s
+         Bblg5vQuqxyp9WyLNoJ1G8YH4JfRUg7hEIUcN25qvknHJ0IFHgskHqsO9QCXQWz+YuEk
+         XnhfO4Lmuh2oQpDaeP5BJ7I/allWoCeypMx1/uI8c2n6Lv9iZO3nY0ntX9vSBLjUKERZ
+         7GVw==
+X-Gm-Message-State: ACgBeo2M7FRPCG/qK8+QGmf6q0AvomdbgpnMj66i9LB8T7yRLshS8Y7a
+        oas5BNMDALXtqN6GnutvpimGhA==
+X-Google-Smtp-Source: AA6agR6uOq/9FNUO/JkGYj+fPAoBwunDhHXuoa8RiEVETo4ejMSHHIQD4X5ylxMWepEgJ6YgSPPJUQ==
+X-Received: by 2002:a63:1e11:0:b0:41c:d233:31f8 with SMTP id e17-20020a631e11000000b0041cd23331f8mr25233343pge.228.1662015631026;
+        Thu, 01 Sep 2022 00:00:31 -0700 (PDT)
+Received: from localhost ([122.171.18.80])
+        by smtp.gmail.com with ESMTPSA id i3-20020a17090ac40300b001fd77933fb3sm2559403pjt.17.2022.09.01.00.00.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 01 Sep 2022 00:00:30 -0700 (PDT)
+Date:   Thu, 1 Sep 2022 12:30:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>
+Cc:     "rafael.j.wysocki@intel.com" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Su, Jinzhou (Joe)" <Jinzhou.Su@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v6] cpufreq: amd-pstate: cleanup the unused and
+ duplicated headers declaration
+Message-ID: <20220901070028.gdm7uiszm35iom3e@vireshk-i7>
+References: <20220901062339.2357552-1-Perry.Yuan@amd.com>
+ <20220901063153.zutwnnfykaz47sah@vireshk-i7>
+ <DM4PR12MB5278D01EA2D78367F182C7C69C7B9@DM4PR12MB5278.namprd12.prod.outlook.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220831101948.f3etturccmp5ovkl@suse.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <DM4PR12MB5278D01EA2D78367F182C7C69C7B9@DM4PR12MB5278.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 11:19:48AM +0100, Mel Gorman wrote:
+On 01-09-22, 06:56, Yuan, Perry wrote:
+> > On 01-09-22, 14:23, Perry Yuan wrote:
+> > > Cleanup the headers declaration which are not used actually and
+> > 
+> > This is okay.
+> 
+> Thank you help to confirm this . 
+> 
+> > 
+> > > some duplicated declaration which is declarated in some other headers
+> > > already, it will help to simplify the header part.
+> > 
+> > This isn't.
+> > 
+> > Every file should directly include headers they use definitions from, instead of
+> > relying on indirect inclusions.
+> > 
+> > --
+> > Viresh
+> 
+> Do I need to update the commit with another V7 version ?
 
-> It's also unclear *who* would enable this. It looks like it would mostly
-> have value during the development stage of an embedded platform to track
-> kernel memory usage on a per-application basis in an environment where it
-> may be difficult to setup tracing and tracking. Would it ever be enabled
-> in production? 
+I am not sure which headers you removed are still required, working
+for now since included indirectly. If there are any, then better to
+get a new version out.
 
-Afaict this is developer only; it is all unconditional code.
-
-> Would a distribution ever enable this? 
-
-I would sincerely hope not. Because:
-
-> If it's enabled, any overhead cannot be disabled/enabled at run or
-> boot time so anyone enabling this would carry the cost without never
-> necessarily consuming the data.
-
-this.
+-- 
+viresh

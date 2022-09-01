@@ -2,38 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6C445A8A91
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 990495A8A97
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 03:25:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232069AbiIABXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 21:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
+        id S232521AbiIABZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 21:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232483AbiIABXO (ORCPT
+        with ESMTP id S232506AbiIABZH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 21:23:14 -0400
+        Wed, 31 Aug 2022 21:25:07 -0400
 Received: from smtpbg.qq.com (bg4.exmail.qq.com [43.154.221.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED58214FC82;
-        Wed, 31 Aug 2022 18:23:08 -0700 (PDT)
-X-QQ-mid: bizesmtp86t1661995383tf6b7xma
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6961A23159;
+        Wed, 31 Aug 2022 18:24:58 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1661995465t9y4saum
 Received: from localhost.localdomain ( [182.148.14.80])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 01 Sep 2022 09:23:01 +0800 (CST)
+        id ; Thu, 01 Sep 2022 09:24:23 +0800 (CST)
 X-QQ-SSF: 01000000000000D0F000000A0000000
-X-QQ-FEAT: 9E3Ddn8eo0LQgNSXZVdgud8z0yQ0Cn35g1PJs2XVEc34sQusOu8mptrcaab57
-        r2TgtwvWyDLddhRh7bsRDIAyCRME8N0tkXEVREDX0053GLdLw5mszFVjj5knZkFY/PmppyA
-        u10RMrXxaXaOY9NdUUEmliGdY/Md1X07ZxGAoRO/8DNNw6Sza5x9Ywj/K7X+9PZTMjBM2fa
-        6F6kvP72AgJpVQHd/irmSzPSc36K8KUN9nYJ5vVRc6CPMRQkcg7e65plJw6aRivdAl/gd82
-        jY6uepBGCYmZXK5usF6nwCudXwZRk4C/cOqLara48DJvOrd9fCp6jjQXynehq/BEmsbxcJB
-        qfidrLyi6qDkiuU+uTQWifLB7Noqlt+WofNyRFoViQtbvwB90uiLTax4EcK/w==
+X-QQ-FEAT: ALw5QuVtm4WA3GanO4tjQw9jLexe55QkUyjbHpzNaXEASRvOyHgFLGWyh+t9h
+        CZY/Z5rw/ljIfYWLl+tD33gG5pfsfcufK2nxM/6PqqEaP8ca2MZtEjF/OPAvy9ibUmJGrLM
+        HNP5eRYpTLJE1kRTgdloUFP9kqHWfwhcjjHE2/R+jo5b0sejB9aUfFuHlTF9ZA7Iy/lR1cr
+        r2nF+XgNJRLTyBTnvguHI5vAsVqigky+fvWSARlaT8rv5JkeO2AmIMcsE+wGD6XZApCcM/A
+        YpClbrQWAuRVWoRUTFLwcZ96II9SrMJw5vk/605jATYUdAGZE65gtkXHRe8WtaQARiC/P2u
+        eECeQ1pZ+CLOH5iZEZFd5+A7y6Y/1HGtEScQgYAMZi0aAEfdCjYq8bsWTCvzw==
 X-QQ-GoodBg: 0
 From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+To:     mchehab@kernel.org, s.nawrocki@samsung.com,
+        krzysztof.kozlowski@linaro.org, alim.akhtar@samsung.com
+Cc:     linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
         Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] media: videobuf2: Use 'unsigned int' instead of just 'unsigned'.
-Date:   Thu,  1 Sep 2022 09:22:55 +0800
-Message-Id: <20220901012255.26586-1-yuanjilin@cdjrlc.com>
+Subject: [PATCH] media: platform: Use 'unsigned int' instead of just 'unsigned'.
+Date:   Thu,  1 Sep 2022 09:24:17 +0800
+Message-Id: <20220901012417.28681-1-yuanjilin@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -52,42 +54,22 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
 ---
- drivers/media/common/videobuf2/videobuf2-core.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ drivers/media/platform/samsung/exynos4-is/fimc-is.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
-index b203c1e26353..abfd84173df6 100644
---- a/drivers/media/common/videobuf2/videobuf2-core.c
-+++ b/drivers/media/common/videobuf2/videobuf2-core.c
-@@ -1590,7 +1590,7 @@ static int vb2_start_streaming(struct vb2_queue *q)
- 	 * should be returned to vb2 in start_streaming().
- 	 */
- 	if (WARN_ON(atomic_read(&q->owned_by_drv_count))) {
--		unsigned i;
-+		unsigned int i;
+diff --git a/drivers/media/platform/samsung/exynos4-is/fimc-is.h b/drivers/media/platform/samsung/exynos4-is/fimc-is.h
+index 06586e455b1d..89bb1bc15c81 100644
+--- a/drivers/media/platform/samsung/exynos4-is/fimc-is.h
++++ b/drivers/media/platform/samsung/exynos4-is/fimc-is.h
+@@ -292,7 +292,7 @@ struct fimc_is {
+ 	struct is_fd_result_header	fd_header;
  
- 		/*
- 		 * Forcefully reclaim buffers if the driver did not
-@@ -2738,7 +2738,7 @@ static size_t __vb2_perform_fileio(struct vb2_queue *q, char __user *data, size_
- 	 * else is able to provide this information with the write() operation.
- 	 */
- 	bool copy_timestamp = !read && q->copy_timestamp;
--	unsigned index;
-+	unsigned int index;
- 	int ret;
+ 	struct chain_config		config[IS_SC_MAX];
+-	unsigned			config_index;
++	unsigned int			config_index;
  
- 	dprintk(q, 3, "mode %s, offset %ld, count %zd, %sblocking\n",
-@@ -2914,8 +2914,8 @@ static int vb2_thread(void *data)
- 	struct vb2_queue *q = data;
- 	struct vb2_threadio_data *threadio = q->threadio;
- 	bool copy_timestamp = false;
--	unsigned prequeue = 0;
--	unsigned index = 0;
-+	unsigned int prequeue = 0;
-+	unsigned int index = 0;
- 	int ret = 0;
- 
- 	if (q->is_output) {
+ 	struct is_region		*is_p_region;
+ 	dma_addr_t			is_dma_p_region;
 -- 
 2.36.1
 

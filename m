@@ -2,179 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2C305AA10E
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:53:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EFB5AA113
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 22:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233452AbiIAUxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 16:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S234259AbiIAUyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 16:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229892AbiIAUxG (ORCPT
+        with ESMTP id S233582AbiIAUyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 16:53:06 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8869D98A44
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:53:05 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 281KRLn6024971;
-        Thu, 1 Sep 2022 20:51:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=1tMNHePL4xT0E2TFMChCPBoQuHGCX5NV4tQ1QJrWSAw=;
- b=erwne72MlD+T36YNQ9G4cHr3QSfQZkLJesjuo5tzl4Ny+wur1faSKaH/9FwTk8DFgQVC
- Cp+CT6kCcQNpHmqwGw2kqrlIWaQFlyz7oXTXnpwwXQojTFnhbq9q1g0DjgiLX45Jap7W
- E/pUJWi3X4grhZ/5VW0xOnd5NiQN8R3m+KKzX+dkFT6Mh0CM7aIOfcSQ5HeN/ATi/idG
- /TY48cpfhcWvaJkjHiV5tCew5I6XDNovI42AWT5i4x8ujdpuLloitowA7tlkWJ9EMjfp
- LklreJbh6SOhyEBKpLLuOrTS+eAuwW407RaOm6GYg3X6lw/ZWGKllVyU/DbeIBECh0Ie 4Q== 
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3j7avsngdq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Sep 2022 20:51:54 +0000
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 281Ic6Mm002238;
-        Thu, 1 Sep 2022 20:51:53 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2101.outbound.protection.outlook.com [104.47.55.101])
-        by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3j79q6y2aq-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 01 Sep 2022 20:51:53 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OX+F+W3mO4YzEAdN+Er11fTPchjCK/pmjjciWpOHP9zDCBhWBfPjelmX5v/su2UX5H9eJfCeo6NjKLaMMbEaW+z9oKzTTYdkHAdPT8k/HyNHzl7xh2mwT9cilta2gX6ngcSGFOg/TVvsKwKAtrEHSbhycgSYSXX4KmohxXX47MPlRLGNP5v6Mz/7dXkoll1K0H15kC+AkF3a6/OUIj9oeKupt898QD6zTHot6gOZNCoDIQ79SIuAMCvmQp4dpjCz0YDReejXsUFU6reXN1fZmzikEyfoI2MA+XJkM6j4J2orM37SdShc2tLcNm/U8rcApLokB3w0PzuUFtCPy+xhjA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1tMNHePL4xT0E2TFMChCPBoQuHGCX5NV4tQ1QJrWSAw=;
- b=C2fiwScQePqvDYA746veq7MfG6C2U3Ywmyec60Au71LzuaCUZK4UKvEb9LtnnLZoo0vLHEnPYJvG7jZ5fYMiKuFi2j50KSQIr0+NP2TzNMVReeCwixkAZjxV7dv40h57/62uxNCALVhZAti3b3+NTa4Vu+PSoWj2XZaw1ndzhRn1oa3QAR9i/0XOwC9Qmhfchkj/IxS4jhQKiV1TE1X04kP6cUPUocYnLNFe9AMzKOQKife2hxagt3QevWUvVZIWaiiMC6hVG2kFtFV8/TYGc1fdiJT/nFyS2qOd7eCA8n8/HcGrOvqedv490bMxko7dNZW0/7e8phBpAuhovGMENA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Thu, 1 Sep 2022 16:54:36 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B736198A44
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 13:54:34 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id g5so453923ybg.11
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 13:54:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1tMNHePL4xT0E2TFMChCPBoQuHGCX5NV4tQ1QJrWSAw=;
- b=BiYKXxGFYNWQn3TB0T2QMAx9yuINXE55mJYZbWfGep6G2vRbcSkbLNRVGwrHLBJxkKboBvKaM3+L+jhAv7c9ytJ+fZ4JQDpAEwc1cctZMxcHXoKdDMHHPX5wGeqOubqsubQcCLyBpGHRw9Yh/Kuah1EDoseElTrKjTwpyn2QHuU=
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com (2603:10b6:805:d8::25)
- by CY5PR10MB6167.namprd10.prod.outlook.com (2603:10b6:930:31::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.10; Thu, 1 Sep
- 2022 20:51:51 +0000
-Received: from SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::a420:3107:436d:d223]) by SN6PR10MB3022.namprd10.prod.outlook.com
- ([fe80::a420:3107:436d:d223%5]) with mapi id 15.20.5566.021; Thu, 1 Sep 2022
- 20:51:50 +0000
-From:   Liam Howlett <liam.howlett@oracle.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-CC:     Suren Baghdasaryan <surenb@google.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "michel@lespinasse.org" <michel@lespinasse.org>,
-        "jglisse@google.com" <jglisse@google.com>,
-        "mhocko@suse.com" <mhocko@suse.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "hannes@cmpxchg.org" <hannes@cmpxchg.org>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "dave@stgolabs.net" <dave@stgolabs.net>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "ldufour@linux.ibm.com" <ldufour@linux.ibm.com>,
-        "laurent.dufour@fr.ibm.com" <laurent.dufour@fr.ibm.com>,
-        "paulmck@kernel.org" <paulmck@kernel.org>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "songliubraving@fb.com" <songliubraving@fb.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "hughd@google.com" <hughd@google.com>,
-        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "axelrasmussen@google.com" <axelrasmussen@google.com>,
-        "joelaf@google.com" <joelaf@google.com>,
-        "minchan@google.com" <minchan@google.com>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC PATCH RESEND 04/28] mm: move mmap_lock assert function
- definitions
-Thread-Topic: [RFC PATCH RESEND 04/28] mm: move mmap_lock assert function
- definitions
-Thread-Index: AQHYvik+oqqHYdXkPESLRNx1ViJtsa3LBUKAgAAHtQA=
-Date:   Thu, 1 Sep 2022 20:51:50 +0000
-Message-ID: <20220901205144.66ilifzaxr5p4xi3@revolver>
-References: <20220901173516.702122-1-surenb@google.com>
- <20220901173516.702122-5-surenb@google.com>
- <20220901202409.e2fqegqghlijkzey@moria.home.lan>
-In-Reply-To: <20220901202409.e2fqegqghlijkzey@moria.home.lan>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6a46e8e2-44d3-4834-145d-08da8c5bcb64
-x-ms-traffictypediagnostic: CY5PR10MB6167:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Hc39LxsrVSFpDuu474gwUcnlodCmde+9CQEcY8Ef9NrX6deI8YtFrkMKvR6DyqfZTJ6aoanonMmlPqBcUPy/2nchnHSaO6i/nuN7Sl4nkZPIW9sN2RyIAQF4/S8hSVzqBKkCgTxfEuRxoxD74SUR88ctsUa1zGgB2QCTrJzMocXWfrc9iOl6WIdRqjzs9wy4l/2ER/5NQ0n20ElCr0BE/lxy+lKerBP3e5TIFTsN2FgpFFv9qMNIIBg4W54pqjzuZ+Tp5WaCu3i833ew0arwH8LzR66BseDJDMD99fSIMTIKaLKgk4axKJxQ3wntB8XJA6gTLw3J6V1NFSDBI5wpS41aRCKs6ka2LsJkhzI3a5p2ZnWhXb2UaQBT9LINdE1LH1h6yc8Byf4uNs5W0ug+P79xrw6Hwgs/6ZBsinCP5KZCOJOK5Do1Fraqk6x9IJXNEZya5yhVfZK/ifeNBM2r386j8TJoPJSpNmF6UiQPYyM4j5I1dC8jxBOofnrceLNPVWXHW75o8j0oQMjBUBMpZnRmhn1qaf8IM7s+djGBwLQZFv4QV61GnFZTNHIvfOxM0ZsiqbpRQRJGuxr/Yf96Q0rA1PFOw3e14iNhLfU5Dr8bO+hm8ktPQXfm+hOXNlCEW5TEZUueDJ2+Z+X724pwxCTc84/sVVyUG40KggCNkwMwpfJ3YK6JgQuAhZ9+hCaZdexa/68Q6LlYEPmd0MR8c8b8LOOMN4nC2IIABH6Pfz7NhvwB5Qz11kEJ7dytjr5UOIgQW3QRNnc1F0bPLCEW2Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR10MB3022.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(366004)(396003)(39860400002)(136003)(346002)(376002)(83380400001)(6512007)(26005)(186003)(9686003)(1076003)(6506007)(2906002)(86362001)(38070700005)(38100700002)(122000001)(5660300002)(7406005)(91956017)(7416002)(33716001)(66446008)(8676002)(76116006)(41300700001)(64756008)(66476007)(316002)(66556008)(4326008)(66946007)(6486002)(478600001)(54906003)(71200400001)(6916009)(8936002)(44832011);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?fPwcxqEJh42Im+LDqPqUgsnZ3ywEKKwNZ0g7b5OQdCZBscQz6P8+mnUeFTsD?=
- =?us-ascii?Q?s8Bd2giRas8Jq9ceq+7ZOBz8uZH5UlAC0iwyjb7VUR+RHCR7uBN7MIKXjpJj?=
- =?us-ascii?Q?kBNSdPKWCozuP0flGF6dUmaL3Dh7hZaAFxqdwrYngdWDl7ozVFyjqJkq/yMj?=
- =?us-ascii?Q?1mDarqakuJI+K6PFBUSIqhWuhZD1SlpcMTy1cj8o2s0ho5zJrFm2SeyU38Uc?=
- =?us-ascii?Q?xNBmHfHum2ZVK8KLO0lFfj62G38CGo7WbyNKw2+dnQf2ibYK7+sLQqgINj/7?=
- =?us-ascii?Q?ACoZccVfpOtk4vFAoiQWMLOqjAUUc8RtOwekvh2pLJKqumIfqpoT261LvXbg?=
- =?us-ascii?Q?max41zDKzmJI+X/n2qjJ612ezTX+rteIcXkGfGqj1a2YecbIeJ17NbjO11t4?=
- =?us-ascii?Q?T1cqHpJOHCkt9eUccqx71V85PB6//j30l2d2L/CamQDClsamWnPRfRbppnRv?=
- =?us-ascii?Q?loMygyYFBfPpQN3KPemlMjYJEzXbGeVsgT8yiLCgMbqaUrDV37B6tB3xWOaf?=
- =?us-ascii?Q?oE4tNqzFYM+8AES6j1Tw6JpU8pjxjtAyhkGqNeQd+nYBVqYEqpgDKiuT0icV?=
- =?us-ascii?Q?JzZc3ZJRwN7Ec5nAPIDRpa0yhiPXEjsR9L/STnevOpvcevFbByEMs0ncIw77?=
- =?us-ascii?Q?FOn4MM1Ny3xmbrhAYhwfKVTIi8rQ3IUYEU9vDxKqAOdOoFkc8mSN0BmyZLt+?=
- =?us-ascii?Q?u/sNWh08t/ceIp73VQUlzW6wCU/x3yu+oriSCCKM7hnUBHpY6c0VEjJVhHDU?=
- =?us-ascii?Q?ybnV4jfqa0SrvyZw+wnrJem5CPE0wC23D8cUkoQjwybFiiMVXuIlxhcaI+Ti?=
- =?us-ascii?Q?j3aMxKbzBFHTW+u2a/FDlIWHKUcjsCYMyJL++AabQ7+ZmvI3KIS9bqfF1yJ8?=
- =?us-ascii?Q?KgXbtq0dwJEmcsHIIV4sus+1kc4O0dvJjTILE2pDAVqx9tlSmZQvWWc03gBb?=
- =?us-ascii?Q?72LUQCz86SZ9OFLj/3B2C4ArgZ2fYcYhf3kw9rBYK1i7nmEkYQcMF8W97QCj?=
- =?us-ascii?Q?M5zLhyFkA0fYUHakEizOzG2sQGre3PO6bv9Ggv4Mcs5VmFkB4ikGK9DfxIfz?=
- =?us-ascii?Q?2ZaKTn1wBEimkNT+K8dRn7PUq6COC8w5dt4SOoT8Aqp0F2z5NdmKPPbOYCbS?=
- =?us-ascii?Q?oZLzBOy8OnlU10J4MKU1loMWeBlrtErpIPyNFJx8Hk8NQ7OHqVpn/p1reVsM?=
- =?us-ascii?Q?4v2cTJtCZeQ3QNhkI3pp2+o2pIGRi2QlNiyRx7sxjNLIxRvLo/6qQwn4gsOq?=
- =?us-ascii?Q?g0/7jBbcd3unmodM0mB1nHyvvMQLtCk3AHtxzwws2IZnt2Lqld8mwkCqPIYu?=
- =?us-ascii?Q?sgAIreP7/nafO+Dq+psTBSai5gGGDyV/q9RSQfvCKzr9l6EZ/d/4qhzltT0c?=
- =?us-ascii?Q?GDyVEreQqZjgi8RTzCNSpz29pga/poH8YsxP1Pqx/GGe0IQVuhOo5BAXaay2?=
- =?us-ascii?Q?1sj1rleVNy1ifC2ixLFkzO4+DPBUfHrVx2qYUWbTVA7PoJYrgjO5X/TcTGCY?=
- =?us-ascii?Q?Zk737ZMjaK/60f8wY+jso7DXX9O3FBAbS/2MheiZ2civcGFufl5yGe1DPpBP?=
- =?us-ascii?Q?2g+yH+DGTqpghk6jfSclllKOxHlCoXUNazX2l6RMGeN7ARY75tA8gZkuviC6?=
- =?us-ascii?Q?LA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <E69BDBB19177E24192A4FF7F16B2EDF7@namprd10.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=4jlXXthmnZbjTZtiVrsRSCOXepCwvjAKaezedZTf+1M=;
+        b=dww8G34SkCKoX5t98auUmen/B2j+GBXp6v4tE5lPg8O17Ou+bYMY7NGL0+OFiLmfPX
+         KB5TW3Hg05olsDbU2CzwQ+b0l2lXaobxlM0bqgJd9XPq2lkwiMhtg268U0LR1pgENUyg
+         mw9NHDwFHa5UrvAydPu1H6hHymu7U37QFWsbhjRhtTy3sd/4bQQDVlT2RD4CEIgqicfq
+         3vAOEfU4qC2vZ5VlgP4L4MGQSEnf35XUEk7uw7FC2H2NRZMCpev2bF2irrAkr91s2SgH
+         cZP7vWAiNZggz+AuEqXG93mTZqAu8LM40i5ToAdS8XYVSMYFvx/sLwdWdFANCqCL8K9k
+         UJtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=4jlXXthmnZbjTZtiVrsRSCOXepCwvjAKaezedZTf+1M=;
+        b=z9tPOevxLZe2P3Tr/QOf3SnwHBLrM2+BjJazgpHI1+VcHhdXR/1WpO0LE5D/tYqVwt
+         6P3fRL8F5gf2LVRAlodvgolQPMSTJqcmDsQduNBQVDB+o0HlpQzGjvR0aQDsPjkG0u75
+         CDpy4pX6ZlhLRTSyljtMaLb9TnofXLUW0U+JyJMc1OJKrktNpkWEybPtW4Osmq2pGdUM
+         j5MSq/xs9Cy5AHV4uKmuqEbwmlGmdrfEKhqYRfPjvkPk5pShh5b1+IcW7A6POeEYhNk0
+         w0cTyqDz0LgbeW4Wpc6mapSNHZYFco/aoqeLyb7YKuY0VAKsIekiOdgyHecd4OSvFdkF
+         VkGg==
+X-Gm-Message-State: ACgBeo3PSWmobsmpCAZYin+Xwmdtp04dswvVs8SahvfAv//55NDnHYe9
+        HI25RcJDgRmIK4qwjaBbeOS98FJJYHe+Tfzcz66HQA==
+X-Google-Smtp-Source: AA6agR6jgLiIHymOoujt2bkT4znI6OH8iUHG1AMhcO6J1HbWzop1c6DYcRaGmYydlzzhjkJk39ilU83dzTQekkbMduQ=
+X-Received: by 2002:a25:84cd:0:b0:67a:699e:4e84 with SMTP id
+ x13-20020a2584cd000000b0067a699e4e84mr20165239ybm.407.1662065673654; Thu, 01
+ Sep 2022 13:54:33 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR10MB3022.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6a46e8e2-44d3-4834-145d-08da8c5bcb64
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Sep 2022 20:51:50.8436
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SpSYm5/5+6ZImmhNJY5QkvOXkG67+MdOtaYpljB+yjtJ1dKSzlA4Ffx5gKopKwnHb+Tqi1KtU0DYalVq5FoULw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR10MB6167
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-09-01_12,2022-08-31_03,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 mlxlogscore=999
- suspectscore=0 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2209010090
-X-Proofpoint-GUID: tjL-tgitKqT4jHdrHyqZFE6ML1i0nR8J
-X-Proofpoint-ORIG-GUID: tjL-tgitKqT4jHdrHyqZFE6ML1i0nR8J
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220901030610.1121299-1-keescook@chromium.org>
+ <20220901030610.1121299-2-keescook@chromium.org> <20220831201825.378d748d@kernel.org>
+ <202208312324.F2F8B28CA@keescook> <20220901124915.24ebc067@kernel.org>
+In-Reply-To: <20220901124915.24ebc067@kernel.org>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Thu, 1 Sep 2022 13:54:22 -0700
+Message-ID: <CANn89iLPLu=cP0zu5r+hsXudSjMzieWke=nh0YwccH1QJUnzog@mail.gmail.com>
+Subject: Re: [PATCH 1/2] netlink: Bounds-check nlmsg_len()
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Pablo Neira Ayuso <pablo@netfilter.org>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>,
+        syzbot <syzkaller@googlegroups.com>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        netdev <netdev@vger.kernel.org>, netfilter-devel@vger.kernel.org,
+        coreteam@netfilter.org, Oliver Hartkopp <socketcan@hartkopp.net>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -182,39 +80,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Kent Overstreet <kent.overstreet@linux.dev> [220901 16:24]:
-> On Thu, Sep 01, 2022 at 10:34:52AM -0700, Suren Baghdasaryan wrote:
-> > Move mmap_lock assert function definitions up so that they can be used
-> > by other mmap_lock routines.
-> >=20
-> > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > ---
-> >  include/linux/mmap_lock.h | 24 ++++++++++++------------
-> >  1 file changed, 12 insertions(+), 12 deletions(-)
-> >=20
-> > diff --git a/include/linux/mmap_lock.h b/include/linux/mmap_lock.h
-> > index 96e113e23d04..e49ba91bb1f0 100644
-> > --- a/include/linux/mmap_lock.h
-> > +++ b/include/linux/mmap_lock.h
-> > @@ -60,6 +60,18 @@ static inline void __mmap_lock_trace_released(struct=
- mm_struct *mm, bool write)
-> > =20
-> >  #endif /* CONFIG_TRACING */
-> > =20
-> > +static inline void mmap_assert_locked(struct mm_struct *mm)
-> > +{
-> > +	lockdep_assert_held(&mm->mmap_lock);
-> > +	VM_BUG_ON_MM(!rwsem_is_locked(&mm->mmap_lock), mm);
->=20
-> These look redundant to me - maybe there's a reason the VM developers wan=
-t both,
-> but I would drop the VM_BUG_ON() and just keep the lockdep_assert_held(),=
- since
-> that's the standard way to write that assertion.
+On Thu, Sep 1, 2022 at 12:49 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Wed, 31 Aug 2022 23:27:08 -0700 Kees Cook wrote:
+> > This would catch corrupted values...
+> >
+> > Is the concern the growth in image size? The check_sub_overflow() isn't
+> > large at all -- it's just adding a single overflow bit test. The WARNs
+> > are heavier, but they're all out-of-line.
+>
+> It turns the most obvious function into a noodle bar :(
+>
+> Looking at this function in particular is quite useful, because
+> it clearly indicates that the nlmsg_len includes the header.
+>
+> How about we throw in a
+>
+>         WARN_ON_ONCE(nlh->nlmsg_len < NLMSG_HDRLEN ||
+>                      nlh->nlmsg_len > INT_MAX);
+>
+> but leave the actual calculation human readable C?
 
-I think this is because the VM_BUG_ON_MM() will give you a lot more
-information and BUG_ON().
+This is inlined, and will add a lot of extra code. We are making the
+kernel slower at each release.
 
-lockdep_assert_held() does not return a value and is a WARN_ON().
+What about letting fuzzers like syzbot find the potential issues ?
 
-So they are partially redundant.
+DEBUG_NET_WARN_ON_ONCE(...);

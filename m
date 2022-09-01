@@ -2,274 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E7695A9FE7
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:27:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E23A5A9FDD
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 21:26:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232744AbiIAT0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 15:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45914 "EHLO
+        id S233291AbiIAT0R convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 1 Sep 2022 15:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232874AbiIAT0P (ORCPT
+        with ESMTP id S232992AbiIAT0P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 1 Sep 2022 15:26:15 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544EA4E61C;
-        Thu,  1 Sep 2022 12:25:21 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id f24so15225826plr.1;
-        Thu, 01 Sep 2022 12:25:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date;
-        bh=C6sKHTsSE/X9c2+J9QgkAtiQ7L50Tlqyc0fm3w0aWMI=;
-        b=UXoaUTKr0dnbx5dRk4uYqsLaXtX1VUkPS7MAikC1UpGIJ9/S21utmpR2yAEIfv0Mkh
-         5dhw3yp0ZQWk6DrilvAzqqpTrL7DYq5oJ5/bdZjoElSMnfLKN1MIaQkOwaImTlGpZZ2E
-         1lJC1nE21+c+T3KQyVIQyisSPYbpstmFG5uDz4NKalQxYUtZ5vdcc2jteWGoRqyeNq/A
-         ob/m/QL2upUdnwNf17dqLfX6Sp/qYkL2g91CtykNG/x0L59b47TBVprgkMbCswimomkB
-         RAA1vcBqJIPSVzY5yRQppNtOcJEVanrbgrHrSkxxmD043moILv55j8g9hl1Ou5my22tU
-         ykBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date;
-        bh=C6sKHTsSE/X9c2+J9QgkAtiQ7L50Tlqyc0fm3w0aWMI=;
-        b=Stl4SLB/NvLyGoj+7PoP0Ke2v8Bt2nP8Ng8u4R3aTgMrH0SK6Ryi0oH9SesgcCXvop
-         u/URhQsdALcp95he7T+dOqugfns8TTgEOhCEihDjpT44Et8AEECm60McnFXgzUkg7PDX
-         mTZ41QiiwOnMBQElgwVZ/3mtb4QvTuvR7Rr3MWBonEf9fHTQs0hv7Si1jm8/HE+pcwEl
-         e0pIdtkqCvIzCOWOPlqaWNMInm2Rm34eNC8ARghidfDp+cDAnVE70+svnS7KQWXeo+W5
-         pxe/8Y2f/wRnVqQr3PHFDtSqNVkOOjqs8AnOuGBsFTTgzQgLs0YxlkugVxMpq11B294L
-         voCA==
-X-Gm-Message-State: ACgBeo1l9iw6pxtSy0Hy0R9dlbsKo2LxD50u1NG5v3WrWdXIE1M14Thq
-        QJ0/vib3+V8szL4b+nrT5VLB04vNhbDukw==
-X-Google-Smtp-Source: AA6agR40dbVSsTjS/+gDWWX+qOQDH8/azaHs9ltdhGtOQ7MpyhUH1OUjwcJajgb490PeQ0lhFq36XA==
-X-Received: by 2002:a17:90a:8b82:b0:1fa:973c:1d34 with SMTP id z2-20020a17090a8b8200b001fa973c1d34mr693556pjn.31.1662060320464;
-        Thu, 01 Sep 2022 12:25:20 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s66-20020a625e45000000b005350ea966c7sm13822199pfb.154.2022.09.01.12.25.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 12:25:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <fa3e91f0-fae5-cfed-4656-c7be74e37a74@roeck-us.net>
-Date:   Thu, 1 Sep 2022 12:25:16 -0700
+Received: from de-smtp-delivery-113.mimecast.com (de-smtp-delivery-113.mimecast.com [194.104.111.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201305F10B
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 12:25:31 -0700 (PDT)
+Received: from CHE01-GV0-obe.outbound.protection.outlook.com
+ (mail-gv0che01lp2043.outbound.protection.outlook.com [104.47.22.43]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ de-mta-46-hKZQW-0cNqGE46VUpa8_0A-2; Thu, 01 Sep 2022 21:25:29 +0200
+X-MC-Unique: hKZQW-0cNqGE46VUpa8_0A-2
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:2e::8) by
+ GVAP278MB0167.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:3e::9) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5588.11; Thu, 1 Sep 2022 19:25:28 +0000
+Received: from ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::6c6d:333:ab23:3f5b]) by ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ ([fe80::6c6d:333:ab23:3f5b%2]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
+ 19:25:28 +0000
+Date:   Thu, 1 Sep 2022 21:25:27 +0200
+From:   Francesco Dolcini <francesco.dolcini@toradex.com>
+To:     Francesco Dolcini <francesco.dolcini@toradex.com>
+Cc:     netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: possible circular locking in
+ kernfs_remove_by_name_ns/devinet_ioctl linux 6.0-rc3
+Message-ID: <20220901192527.GA2269019@francesco-nb.int.toradex.com>
+References: <20220901122129.GA493609@francesco-nb.int.toradex.com>
+In-Reply-To: <20220901122129.GA493609@francesco-nb.int.toradex.com>
+X-ClientProxiedBy: MRXP264CA0018.FRAP264.PROD.OUTLOOK.COM
+ (2603:10a6:500:15::30) To ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:2e::8)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 02/19] hwmon: (mr75203) fix VM sensor allocation when
- "intel, vm-map" not defined
-Content-Language: en-US
-To:     "Farber, Eliav" <farbere@amazon.com>
-Cc:     jdelvare@suse.com, robh+dt@kernel.org, p.zabel@pengutronix.de,
-        rtanwar@maxlinear.com, linux-hwmon@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        talel@amazon.com, hhhawa@amazon.com, jonnyc@amazon.com,
-        hanochu@amazon.com, ronenk@amazon.com, itamark@amazon.com,
-        shellykz@amazon.com, shorer@amazon.com, amitlavi@amazon.com,
-        almogbs@amazon.com, dkl@amazon.com, andriy.shevchenko@intel.com
-References: <20220830192212.28570-1-farbere@amazon.com>
- <20220830192212.28570-3-farbere@amazon.com>
- <cddebb5a-3b83-e89d-db00-9a59ddbd6741@roeck-us.net>
- <84a68eff-be64-71ce-1533-1e228d3da2a4@amazon.com>
- <71d6d57c-2165-5fe3-515d-9395022921e2@roeck-us.net>
- <2f5c5828-87b9-f3d2-e3d3-0200adbe830c@amazon.com>
- <20220901144434.GB3477025@roeck-us.net>
- <ceef1c33-1af5-53d1-5e5b-5aeb5d2679ca@amazon.com>
- <a48f6c26-232a-f3ae-01d1-277e5c9800ee@roeck-us.net>
- <3364aecd-c1d0-3929-9f51-4d90549d8731@amazon.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <3364aecd-c1d0-3929-9f51-4d90549d8731@amazon.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1a62f178-9284-4b6e-f630-08da8c4fba2e
+X-MS-TrafficTypeDiagnostic: GVAP278MB0167:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0
+X-Microsoft-Antispam-Message-Info: DoonaH6d18mTUusXKqaV916e7q6whrj0AwUBiIPfWO1WoqvbvZrgDVVEvsvqF5+V3lMSN1FkTBid+hRRzR8EXLa+aDaWmdV/JC/6jIu1mj8EGb3FwXYQmc1EwcEcflFx5J2xBF8wrLcH78XO3hV7D9g+afdWi3PhbKLz4KRdaS4Yr31MXl+GkzG3q6QX/3cI5h5buReoRQ7zq/YIF4fodOUAm7I99HdJh96fJxcxjQs6oDXwkR7kfOVhAc/0M9D24pzuBPTGEtxiWff81soevXJAiT1yocuMeDb5spSnB0H3MGWeyR2IRZFqVD5jwcUAJAyFbV1dKMgKnnpO160ddH8nStPf6uf28bpa4i+gnymmov9ZdDHo9DFMppkdgG8OPsOjWwAuKtSUZb6qS81H92Oocn2ryiKemjuz8PTC59K/t5J0I8HQIbFC3eBVaeJQEeCcxu6lDn3GnNoqDPEnpqz2cMUN0OYKiLDWEeEYLXKo6GcnGlT/iXDfum4O9o4DnYuEKa9wip7ZLpNj+0Se26ScT+2Q2Wzgh/pFLX4m4XIgc8Ye2Bz09pXXpQGlQseVM5ZHV7JeImvlPWlpCbXriJGgb1gP5kPJYx53R3MMqhLy2WRaBmTNOVJeUwA4o2aZZmEdEaESUnAWJsQaFeDPPy4RV/cAQw+3un5oZrEyE3uJR5bgSdt8g5uZkZ7JD3WWY4nIKjpyGLmyUq5i6HEx1OSHQFY+PgL118HUhH4tz3NgXnHOER00RFZ8cvlsp+gC7+5vXOltYqInx24GBz31jjh+4EcDeJq6l1T6p1+JUSY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(136003)(366004)(346002)(376002)(39850400004)(52116002)(44832011)(2906002)(6862004)(8936002)(5660300002)(66946007)(66476007)(4326008)(316002)(6200100001)(33656002)(478600001)(6506007)(966005)(8676002)(41300700001)(6486002)(1076003)(26005)(83380400001)(186003)(66556008)(38100700002)(6512007)(86362001)(38350700002);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?sEJdF+oUqVMD9+IGRi0Jv0pQXxnIYpvMNqSe18O7NZG+6uMuCLXmtXaPSLpY?=
+ =?us-ascii?Q?eyYLFUck7ZUeod9A9Sy/acUScvj4rpcx5/xIUPKDfko+GHAhscVau//xWeJM?=
+ =?us-ascii?Q?LUAjpegDUBjboPWGZ/uCvpre2YU/65/dXGNrk/Gi6yN1kt9AQZsnAZZkf08U?=
+ =?us-ascii?Q?GsxcYl3E1BSEMU5/ahA1ScHZTVViyOnof9QxXN4g2Z9lSXecphLdvPCVn3x3?=
+ =?us-ascii?Q?uyYYtg2b2F3mQQ8MDfKIuX5/CXjj+Jfoz/ytdhMeC0Q85+a5/KumQiNHDCK/?=
+ =?us-ascii?Q?FNoFGEcZbgG7+tARMLZdLc7owuP04+sw3ewBP2zR55cisTFK3GCzF4ohRgrS?=
+ =?us-ascii?Q?d226dQARe0DkmOfloXMg1NJE2OyvVZs9yYqLRe9Xc7Hz2DYLpz2Cct3OAiQL?=
+ =?us-ascii?Q?uZu1Ai25a2fIRLAnnm/XjwZqm3n5JW/q3hGvIa9XkZYc1NzobgMz9Sy2TuG4?=
+ =?us-ascii?Q?F3pzppwqodq/2uRUVst89EFFCe4vx5n/k/Yj3ZlmLPc5+EpN4FycU3WYBPfe?=
+ =?us-ascii?Q?5cayPx5bxk6hdBkyOr/XB2Q+/GRAiGMYdsDBw6QEwDXQ5boUU/peH40+QyLF?=
+ =?us-ascii?Q?vDHxOp2CFvpy2LnoRzRbt7DrPfaYFIkF7fmsMAT3D60kvrJZLVDkVZ1nyEex?=
+ =?us-ascii?Q?bPp3LYDHZ41wVymp5Oz03GQ/sviCaeE5niWAVi5xQLRrz4Pl5w8YmBpk1/X/?=
+ =?us-ascii?Q?R55ZP6zsp/lYo93tBSHMh3RL0uF/LvyhQjIutxvy7ZbeZ+A0Bkb/kOt6Priw?=
+ =?us-ascii?Q?syL85sdIP2xxPvWMyIAvkbOvF1kwMp0pz81Bd1Kcfv8iw09nsFxuODI6JaJc?=
+ =?us-ascii?Q?D7N+l+aVIZ0I1yteavfqRUvtJxvPiqT+1iyimBwVt3RSvBwIGWgX2F9oP6LC?=
+ =?us-ascii?Q?AsCut9JXnDZ7tg0sXO2I02OyGiCmk78//SsHyTLd/Baj4qIb7JVNLMiZK6Up?=
+ =?us-ascii?Q?IuROQfzn8I04jvfsiP5ii5TzmlBSng4biCjzRZysMIJ6vBaHtYLhKj5Gy6o/?=
+ =?us-ascii?Q?LRjyBRuRtSLK6+hZdvng2h0jcFkl5QFoJb+BpSlcx1/1wRBCQ8jDUjCNMRFB?=
+ =?us-ascii?Q?mosCqOjVRUrF5zUzmrjE7ebPVRhG2ldnkRD1zS8U5EedbDXfREz07iavFOmz?=
+ =?us-ascii?Q?FYZbsgNJTmYVo2+g5s70SK6B7QWHzB5wG2sOFPL24pTpj0Hde6MUrwkzanin?=
+ =?us-ascii?Q?iQESDGWaD3eyflhUqgi0lLTXeXv7/P0xuJ0z64eWXBpccjiyIu6BbkRsuMrl?=
+ =?us-ascii?Q?LxYrMlWNY3fTJYqOM5fzg9AAxq0WGqTBIZLEeKg+ex/13COfJtV1Rsfkl91s?=
+ =?us-ascii?Q?2VH5nMqWZyDqOOUT08fU7teDDlopOjQ4mGiLHTnYirOq5VDh1j5YWJPLPXjV?=
+ =?us-ascii?Q?FII0qUkcasuTwPyKpaufZSAXxExUKZIImEYfeDiLK97tD55K6CAKPcjBqDgq?=
+ =?us-ascii?Q?pViQISqAEQ96qpK6SurOfxjTT2PUvBj4OyIlJg4f62lJS9Euil2+BMz92L5A?=
+ =?us-ascii?Q?RMhI8p2RUBAFH49WCP+tLLKfYvihDLaNz9nzXtBtQRmQ6MmAqrTXx7kMtGGJ?=
+ =?us-ascii?Q?IzIO2tiOd/M4RE6tEr6MXkuzQ4JqN1NQ8G6XPIxzwDlaG87iCtNXD/tiRps/?=
+ =?us-ascii?Q?hg=3D=3D?=
+X-OriginatorOrg: toradex.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1a62f178-9284-4b6e-f630-08da8c4fba2e
+X-MS-Exchange-CrossTenant-AuthSource: ZRAP278MB0495.CHEP278.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 19:25:28.0916
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d9995866-0d9b-4251-8315-093f062abab4
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Kd1F7JDNj82/FTNa6NmPEqIaphJsmJtA6YmQJvTaPWRPNDTs+tywdwrBMJVRuNbCSDcYLflSLjJV5fYNUh9Yfkgb4582K042o/RR/ytVfB0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVAP278MB0167
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: toradex.com
+Content-Type: text/plain; charset=WINDOWS-1252
+Content-Disposition: inline
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/1/22 11:36, Farber, Eliav wrote:
-> On 9/1/2022 8:11 PM, Guenter Roeck wrote:
->> CAUTION: This email originated from outside of the organization. Do not click links or open attachments unless you can confirm the sender and know the content is safe.
->>
->>
->>
->> On 9/1/22 08:24, Farber, Eliav wrote:
->>> On 9/1/2022 5:44 PM, Guenter Roeck wrote:
->>>> On Thu, Sep 01, 2022 at 11:39:58AM +0300, Farber, Eliav wrote:
->>>>> On 8/31/2022 2:48 PM, Guenter Roeck wrote:
->>>>> > On 8/30/22 22:49, Farber, Eliav wrote:
->>>>> > > On 8/31/2022 8:36 AM, Guenter Roeck wrote:
->>>>> > > > On 8/30/22 12:21, Eliav Farber wrote:
->>>>> > > > > Bug fix - in case "intel,vm-map" is missing in device-tree
->>>>> > > > > ,'num' is set
->>>>> > > > > to 0, and no voltage channel infos are allocated.
->>>>> > > > >
->>>>> > > > > Signed-off-by: Eliav Farber <farbere@amazon.com>
->>>>> > > > > ---
->>>>> > > > >   drivers/hwmon/mr75203.c | 28 ++++++++++++----------------
->>>>> > > > >   1 file changed, 12 insertions(+), 16 deletions(-)
->>>>> > > > >
->>>>> > > > > diff --git a/drivers/hwmon/mr75203.c b/drivers/hwmon/mr75203.c
->>>>> > > > > index 046523d47c29..0e29877a1a9c 100644
->>>>> > > > > --- a/drivers/hwmon/mr75203.c
->>>>> > > > > +++ b/drivers/hwmon/mr75203.c
->>>>> > > > > @@ -580,8 +580,6 @@ static int mr75203_probe(struct
->>>>> > > > > platform_device *pdev)
->>>>> > > > >       }
->>>>> > > > >
->>>>> > > > >       if (vm_num) {
->>>>> > > > > -             u32 num = vm_num;
->>>>> > > > > -
->>>>> > > > >               ret = pvt_get_regmap(pdev, "vm", pvt);
->>>>> > > > >               if (ret)
->>>>> > > > >                       return ret;
->>>>> > > > > @@ -594,30 +592,28 @@ static int mr75203_probe(struct
->>>>> > > > > platform_device *pdev)
->>>>> > > > >               ret = device_property_read_u8_array(dev, "intel,vm-map",
->>>>> > > > > pvt->vm_idx, vm_num);
->>>>> > > > >               if (ret) {
->>>>> > > > > -                     num = 0;
->>>>> > > > > +                     /*
->>>>> > > > > +                      * Incase intel,vm-map property is not
->>>>> > > > > defined, we
->>>>> > > > > +                      * assume incremental channel numbers.
->>>>> > > > > +                      */
->>>>> > > > > +                     for (i = 0; i < vm_num; i++)
->>>>> > > > > + pvt->vm_idx[i] = i;
->>>>> > > > >               } else {
->>>>> > > > >                       for (i = 0; i < vm_num; i++)
->>>>> > > > >                               if (pvt->vm_idx[i] >= vm_num ||
->>>>> > > > > - pvt->vm_idx[i] == 0xff) {
->>>>> > > > > - num = i;
->>>>> > > > > + pvt->vm_idx[i] == 0xff)
->>>>> > > > > break;
->>>>> > > >
->>>>> > > > So all vm_idx values from 0x00 to 0xfe would be acceptable ?
->>>>> > > > Does the chip really have that many registers (0x200 + 0x40 +
->>>>> > > > 0x200 * 0xfe) ?
->>>>> > > > Is that documented somewhere ?
->>>>> > > According to the code vm_num is limited to 32 because the mask is
->>>>> > > only 5 bits:
->>>>> > >
->>>>> > > #define VM_NUM_MSK    GENMASK(20, 16)
->>>>> > > #define VM_NUM_SFT    16
->>>>> > > vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
->>>>> > >
->>>>> > > In practice according to the data sheet I have:
->>>>> > > 0 <= VM instances <= 8
->>>>> > >
->>>>> > Sorry, my bad. I misread the patch and thought the first part of
->>>>> > the if statement was removed.
->>>>> >
->>>>> > Anyway, what is the difference between specifying an vm_idx value of
->>>>> > 0xff and not specifying anything ? Or, in other words, taking the dt
->>>>> > example, the difference between
->>>>> >        intel,vm-map = [03 01 04 ff ff];
->>>>> > and
->>>>> >        intel,vm-map = [03 01 04];
->>>>>
->>>>> The actual number of VMs is read from a HW register:
->>>>>     ret = regmap_read(pvt->c_map, PVT_IP_CONFIG, &val);
->>>>>     ...
->>>>>     vm_num = (val & VM_NUM_MSK) >> VM_NUM_SFT;
->>>>>
->>>>> Also, using:
->>>>>     ret = device_property_read_u8_array(dev, "intel,vm-map", vm_idx,
->>>>>                         vm_num);
->>>>> in the driver will fail if vm_num > sizeof array in device-tree.
->>>>>
->>>>> So, if for example vm_num = 5, but you will want to map only 3 of them
->>>>> you most set property to be:
->>>>>     intel,vm-map = [03 01 04 ff ff];
->>>>> otherwise if you set:
->>>>>     intel,vm-map = [03 01 04];
->>>>> it will assume the property doesn't, and will continue the flow in code
->>>>> as if it doesn’t exist (which is not what the user wanted, and before my
->>>>> fix also has a bug).
->>>>
->>>> There should be some error handling to catch this case (ie if the number
->>>> of entries does not match the expected count), or if a value in the array
->>>> is larger or equal to vm_num. Today the latter is silently handled as end
->>>> of entries (similar to 0xff), but that should result in an error.
->>>> This would avoid situations like
->>>>        intel,vm-map = [01 02 03 04 05];
->>>> ie where the person writing the devicetree file accidentally entered
->>>> index values starting with 1 instead of 0. A mismatch between vm_num
->>>> and the number of entries in the array is silently handled as if there
->>>> was no property at all, which is at the very least misleading and
->>>> most definitely unexpected and should also result in an error.
->>>
->>>
->>> I assume it is possible to tell according to the return value, if property
->>> doesn’t exist at all, or if it does exists and size of array in
->>> device-tree is smaller than vm_num.
->>> In [PATCH v3 17/19] Andy wrote that “code shouldn't be a YAML validator.
->>> Drop this and make sure you have correct DT schema” so I’m a bit confused
->>> if code should validate “intel,bm-map” or if it is the user responsibility.
->>> As this property was not added by me, I prefer not to fix it as part of
->>> this series of patches.
->>>
->>
->> You are changing the driver all over the place with 19 patches, including
->> this code, but you don't want to add code that validates the devicetree
->> data ? That seems odd.
->>
-> OK. I have added patch #20 to validate that same VM index doesn't appear
-> more than once in intel,vm-map.
+On Thu, Sep 01, 2022 at 02:21:29PM +0200, Francesco Dolcini wrote:
+> [   21.629186] ======================================================
+> [   21.635418] WARNING: possible circular locking dependency detected
+> [   21.641646] 6.0.0-rc3 #7 Not tainted
+> [   21.645256] ------------------------------------------------------
+> [   21.651480] connmand/542 is trying to acquire lock:
+> [   21.656399] c2ce1d70 (kn->active#9){++++}-{0:0}, at: kernfs_remove_by_name_ns+0x50/0xa0
+> [   21.664516]
+>                but task is already holding lock:
+> [   21.670394] c17af6e0 (rtnl_mutex){+.+.}-{3:3}, at: devinet_ioctl+0xc8/0x870
+> [   21.677441]
+>                which lock already depends on the new lock.
+...
+> [   21.945318] Chain exists of:
+>                  kn->active#9 --> udc_lock --> rtnl_mutex
 > 
-> u32 vm_mask = 0;
+> [   21.954902]  Possible unsafe locking scenario:
 > 
-> for (i = 0; i < vm_num; i++) {
->      if (vm_idx[i] >= vm_num || vm_idx[i] == 0xff)
+> [   21.960865]        CPU0                    CPU1
+> [   21.965430]        ----                    ----
+> [   21.969994]   lock(rtnl_mutex);
+> [   21.973174]                                lock(udc_lock);
+> [   21.978709]                                lock(rtnl_mutex);
+> [   21.984419]   lock(kn->active#9);
+> [   21.987779]
+>                 *** DEADLOCK ***
+> 
+> [   21.993745] 1 lock held by connmand/542:
+> [   21.997704]  #0: c17af6e0 (rtnl_mutex){+.+.}-{3:3}, at: devinet_ioctl+0xc8/0x870
+> [   22.005191]
+...
+> I have not tried to bisect this yet, just probing if someone has already
+> some idea on this.
 
-I think "vm_idx[i] >= vm_num && vm_idx[i] != 0xff)
-should also be invalid, ie.
+Commit 2191c00855b0 ("USB: gadget: Fix use-after-free Read in usb_udc_uevent()")
+introduced this, see
+https://lore.kernel.org/all/20220901192204.GA2268599@francesco-nb.int.toradex.com/
 
-	if (vm_idx[i] == 0xff)
-		break;
-	if (vm_idx[i] >= vm_num)
-		return -EINVAL;
-
-Thanks,
-Guenter
-
->          break;
-> 
->      if (vm_mask & BIT(vm_idx[i])) {
->          dev_err(dev, "Same VM appears more than once in intel,vm-map\n",
->              vm_idx[i]);
->          return EINVAL;
->      }
-> 
->      vm_mask |= BIT(vm_idx[i]);
-> }
-> 
-> 
->>>
->>>> Also, what happens if the devicetree content is something like the
->>>> following ? Would that be valid ?
->>>>        intel,vm-map = [00 01 01 01 01 01];
->>>
->>> If device-tree content would be:
->>>      intel,vm-map = [00 01 01 01 01 01];
->>> and assuming 16 channels for each VM, the hwmon sub-system will expose 90
->>> sysfs to read voltage values.
->>> In practice 16 – 31, 32 – 47, 48 – 63, 64 – 89 will all report the same
->>> input signals for VM1.
->>>
->>
->> Does that make any sense, and is there a valid reason to have a mapping
->> table like the one in this example ?
-> 
-> I can't find any sense in having such a mapping.
-> Anyway the new patch will not allow it to happen.
-> 
-> -- 
-> Regards, Eliav
-> 
+Francesco
 

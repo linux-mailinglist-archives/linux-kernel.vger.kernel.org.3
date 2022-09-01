@@ -2,99 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24A55A9974
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3D05A9973
 	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 15:53:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233994AbiIANxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 09:53:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46018 "EHLO
+        id S234384AbiIANxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 09:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiIANxe (ORCPT
+        with ESMTP id S234043AbiIANxj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 09:53:34 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB84B311
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 06:53:32 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id n65-20020a17090a5ac700b001fbb4fad865so2641948pji.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 06:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date;
-        bh=ErJ0HYTeWtEwPWkKjxUMjvfOzkq3x7pnzQs4DfaztQI=;
-        b=gVBhlXo+kWUOUAdPW/8QSC/spoR7aDlJ+7CKxJMA9X4LfDMCbY0jOUYmO6zAh3erUc
-         oDX28M1zm7XifH6YMEdep0LvM0DAR1RzZHK1dKgbF41FQwrbtMpSsXNHw8GmdWQmPLoR
-         feQD2gsEzTxU2EY8Nh9t0hdI4ycnocSPLPo1OcTMrlIpjH6dPDOFTlzq+GCed9ZkdD7O
-         2QH4VVZY1+/PuOV8c/EZxWWqQTLedlbdpCU4hEVh2OKSofLAKmn/mCoi53a+yjT8c/Kj
-         z+FG2shz1RwkAqnaACpuZdnx6ThYZcxNI1PMQxDakoPYcFYBvOhi+ZLBfGSZ+ygoClXr
-         2mHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date;
-        bh=ErJ0HYTeWtEwPWkKjxUMjvfOzkq3x7pnzQs4DfaztQI=;
-        b=iwk19bbmfzEIN/AvxCKgq33P7jGULspxMcrpnfCV9I4mxjijWr/c4ZzcEOHFkFzjUQ
-         W7ufrHCwtIO3LmdNwU076rMBIUxUYpverdxm6RnMD7Rlhl99e2jXrXHCUdGw1B/LkpTn
-         sa+rw97Dt8+TpZai6a94XMk4StMZ9muHstv4xxisiMIEo+0T1t2UEcd8yeKxipzB9eHs
-         8z44cGevyjg6asNT/MnCS+cZUYCNLRsulWmrlrbulkrtk5cK1RzxD6u1PcXv1yGyIuXf
-         fx1+GzgbrtIfBEsKHryyDWaJTnY0QybToAOKRruMmLb6z4zMgzzsexpDlYXw/xPPhyU7
-         mYQQ==
-X-Gm-Message-State: ACgBeo3sysQO7Ce1kMcYozMf700ae3jQ0yaMbVsEwIOeLW1tn9wJI8jX
-        DHquWDeYZqM9pWl/qFD7Q8xMz1ydyKHQYQ==
-X-Google-Smtp-Source: AA6agR4Z7Z7RmmgguQab7+M3a9D+IP8AxhQm8Xs9dhC8dxIBwXv55n3Xcy8OAa6q4QCV1g5i38p46g==
-X-Received: by 2002:a17:902:7845:b0:16e:d647:a66c with SMTP id e5-20020a170902784500b0016ed647a66cmr29779570pln.64.1662040412275;
-        Thu, 01 Sep 2022 06:53:32 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id k88-20020a17090a3ee100b001fd86f8dc03sm3359852pjc.8.2022.09.01.06.53.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 01 Sep 2022 06:53:31 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 13:53:28 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Subject: Re: [PATCH 03/19] Revert "KVM: SVM: Introduce hybrid-AVIC mode"
-Message-ID: <YxC5WI9BW+dVyXw/@google.com>
-References: <20220831003506.4117148-1-seanjc@google.com>
- <20220831003506.4117148-4-seanjc@google.com>
- <17e776dccf01e03bce1356beb8db0741e2a13d9a.camel@redhat.com>
- <84c2e836d6ba4eae9fa20329bcbc1d19f8134b0f.camel@redhat.com>
- <Yw+MYLyVXvxmbIRY@google.com>
- <59206c01da236c836c58ff96c5b4123d18a28b2b.camel@redhat.com>
- <Yw+yjo4TMDYnyAt+@google.com>
- <c6e9a565d60fb602a9f4fc48f2ce635bf658f1ea.camel@redhat.com>
+        Thu, 1 Sep 2022 09:53:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 690812B1;
+        Thu,  1 Sep 2022 06:53:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1BBB4B826E3;
+        Thu,  1 Sep 2022 13:53:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22043C433C1;
+        Thu,  1 Sep 2022 13:53:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1662040415;
+        bh=maj09gBjgscBkimh9rmhEf4vQtAIsp/gFrKj8Dk/SMc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ER2mMSX7WIaCZk/ViG3Pj/CXpVATHmCLMeUgxwozwckOUik86kZiChQGC5NXMWbiH
+         tdbW3Q7tw30yl6Cjj93D+UPPSpteRSzWpPtQffjN1j67unQtAigqeIlv+GJOImfge1
+         pYWvbaUeXE+OnfhgRW5GDYdh6TkP25Xy8w+lNnyc=
+Date:   Thu, 1 Sep 2022 15:53:32 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Alan Stern <stern@rowland.harvard.edu>
+Cc:     linux-usb@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: hcd: remove unused hcd_name variables
+Message-ID: <YxC5XCnJaYQPWAMP@kroah.com>
+References: <20220831073032.1409291-1-gregkh@linuxfoundation.org>
+ <Yw9ucDxO7huIl/2W@rowland.harvard.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c6e9a565d60fb602a9f4fc48f2ce635bf658f1ea.camel@redhat.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Yw9ucDxO7huIl/2W@rowland.harvard.edu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022, Maxim Levitsky wrote:
-> There was actually a patch series that was fixing it, but you said, just like me,
-> that it is not worth it, better to have an errata in KVM, since guest should not use
-> this info anyway. I didn't object to it, and neither I do now, but as you see,
-> you also sometimes agree that going 100% to the spec is not worth it.
+On Wed, Aug 31, 2022 at 10:21:36AM -0400, Alan Stern wrote:
+> On Wed, Aug 31, 2022 at 09:30:32AM +0200, Greg Kroah-Hartman wrote:
+> > In the commit 10174220f55a ("usb: reduce kernel log spam on driver
+> > registration") a lot of unneeded kernel log messages were removed, but
+> > that caused a few build warnings to show up where the variable
+> > `hcd_name` was being set but never used anymore.
+> > 
+> > Resolve this by just removing these variables as they are not needed
+> > anymore
+> > 
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Cc: Ard Biesheuvel <ardb@kernel.org>
+> > Cc: Alan Stern <stern@rowland.harvard.edu>
+> > Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Cc: Alim Akhtar <alim.akhtar@samsung.com>
+> > Cc: Rob Herring <robh@kernel.org>
+> > Cc: linux-usb@vger.kernel.org
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linux-samsung-soc@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Fixes: 10174220f55a ("usb: reduce kernel log spam on driver registration")
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> >  drivers/usb/host/ehci-exynos.c   | 1 -
+> >  drivers/usb/host/ehci-platform.c | 2 --
+> >  drivers/usb/host/ohci-platform.c | 2 --
+> >  3 files changed, 5 deletions(-)
 > 
+> This isn't enough, as you can see from this kernel test robot excerpt:
 > 
-> I hope you understand me.
+> clang_recent_errors
+> |-- arm-s5pv210_defconfig
+> |   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
+> |   `-- drivers-usb-host-ohci-exynos.c:warning:unused-variable-hcd_name
+> |-- hexagon-randconfig-r024-20220830
+> |   |-- drivers-usb-host-ehci-atmel.c:warning:unused-variable-hcd_name
+> |   |-- drivers-usb-host-ehci-exynos.c:warning:unused-variable-hcd_name
+> |   |-- drivers-usb-host-ehci-orion.c:warning:unused-variable-hcd_name
+> |   |-- 
+> drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+> |   |-- drivers-usb-host-ehci-spear.c:warning:unused-variable-hcd_name
+> |   `-- 
+> drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+> |-- hexagon-randconfig-r036-20220830
+> |   |-- drivers-usb-host-ehci-atmel.c:warning:unused-variable-hcd_name
+> |   |-- drivers-usb-host-ehci-npcm7xx.c:warning:unused-variable-hcd_name
+> |   |-- 
+> drivers-usb-host-ehci-platform.c:warning:unused-variable-hcd_name
+> |   |-- drivers-usb-host-ehci-st.c:warning:unused-variable-hcd_name
+> |   |-- drivers-usb-host-ohci-at91.c:warning:unused-variable-hcd_name
+> |   |-- 
+> drivers-usb-host-ohci-platform.c:warning:unused-variable-hcd_name
+> |   |-- drivers-usb-host-ohci-s3c2410.c:warning:unused-variable-hcd_name
+> |   |-- drivers-usb-host-ohci-spear.c:warning:unused-variable-hcd_name
+> |   `-- drivers-usb-host-ohci-st.c:warning:unused-variable-hcd_name
+> 
+> Yes, it has duplicates and your patch handles some of these.  But there 
+> are others that still need to be fixed.  Also, this list is missing 
+> ohci-pxa27x.c.
 
-Yep.
+Ick, ok, I went off of a different kbuild report.  Let me fix this up
+later today...
 
-And rereading what I wrote...  I didn't intend to imply that you personally aren't
-operating in "good faith" or whatever is the right terminology.  What I was trying
-to explain is why I sometimes speak in absolutes.  When there is a bug/regression
-and KVM is clearly violating spec, it's not a matter of opinion; KVM is broken and
-needs to be fixed.
-
-Of course, one could argue that that's an opinion in and of itself...
+greg k-h

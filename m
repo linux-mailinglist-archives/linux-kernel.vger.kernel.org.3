@@ -2,90 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E485A9B1A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3C445A9B23
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 17:04:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbiIAPCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 11:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51446 "EHLO
+        id S234443AbiIAPDa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 11:03:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229781AbiIAPC3 (ORCPT
+        with ESMTP id S229781AbiIAPD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 11:02:29 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4141D52807;
-        Thu,  1 Sep 2022 08:02:25 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id D76035C01D4;
-        Thu,  1 Sep 2022 11:02:22 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 01 Sep 2022 11:02:22 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1662044542; x=1662130942; bh=OnCzvjXHRH
-        y3N01m9+/V/6PmzsRMFO+pjDdDzmDLqh8=; b=bAWw0w7lmxKpxZhg0KSndm5IGa
-        CjvSz8L9c46N144paZAd/ACxx4RaBaGy69H56TmCDTThTY+q17DurbG6LH1WBi57
-        LvkOeWBf/QCQRgOUz9/cs6xYu6irXXAAaG/YrqB7zup71MCijLAXRfF7zpyfYxen
-        verVO4QKyY4ydq+zoWe0hlzunBuGUK03oYQzTkGYtMhhJfKQP8sWV1DqDfatv3d1
-        eTzGr+VA98WfhEYaa/CFpjW3riVnAFJNfhoDZlZSL6zOy7h460Kp8krb87wYEals
-        /eI5AEU5q2y7i/KnTJuvRPp2gv0QGz0n7xjMAVaafbFqRxbbmzS8NjDbVkDw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1662044542; x=1662130942; bh=OnCzvjXHRHy3N01m9+/V/6PmzsRM
-        FO+pjDdDzmDLqh8=; b=jxvUFZvhqZPLAJFitpqPXFK02DNY6gEoVnbdqlzONrTx
-        ZXlWjBv67U9rAioUyCZpqf8OBuYEeUrWrUBVGjtn5S2sYXlAGGwWOwY5IoKGi2ld
-        rzIZ7TV/dCkMlNPBg1hToMEOaEp050WElhfHU4Stpk3fIACol/cjsfAHgXskminz
-        E2eKBMyrTpqgupR7kVDXYnZwdBLfYDedW4vfZEWjSurlzx37DQ3XsLJcYDhOOvO5
-        3bioGzxfv7fTnLz9Gp7TRSZLoi+ZoUf/cBIlTS9XLfw2+K04pzcV0llfK74K/e1c
-        4+r/Bkaa7G1TYNOEx1ZVDwRky93ijtOQ6SirNK3qLg==
-X-ME-Sender: <xms:fMkQYxbw-rm4rljKQSL-WISJRfFF6Ns2VNfijNJgy4V-IBgIHodBmg>
-    <xme:fMkQY4YZylOnCpIXYs8_FWZU_rddoJUB6Z0K9JoVEBdbx6B4GlYwwTGEd04zCKDrs
-    WpgulftJbcDd2EgcII>
-X-ME-Received: <xmr:fMkQYz-a4_LJX6K1yRLU0fnrcqr8CwtfNGRgxbjyLso3pCzaOfUZw8Naig>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdekkedgkeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtjeenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeejgeeiveevvdfgffeftdevuefhheduveejieefgeejveeuhfetkeelgfev
-    teefffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:fckQY_qydAAJ8qPV0HJCOf1acyfGkqS4eTRPHMY5DXtGi11fMcZ1AQ>
-    <xmx:fckQY8qUOBEp165phkWFRoy5Obgf6JyxdsnVup_Pq4MaKMczhCAkYQ>
-    <xmx:fckQY1Ry4wEXfEqZSIIunm04iVHBn8_4x0wDocsIUnVg-i79oFaCqQ>
-    <xmx:fskQYygebStlrWoaUmohAB_yOXEftWdrJk3TmHk8TxUSPTkYlhnwfA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 1 Sep 2022 11:02:20 -0400 (EDT)
-Date:   Thu, 1 Sep 2022 17:02:16 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-doc@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Gow <davidgow@google.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>, Helge Deller <deller@gmx.de>,
-        =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Subject: Re: [PATCH] drm: Simplify testing on UML with kunit.py
-Message-ID: <20220901150216.gt4ozth6oz6cwgjt@houat>
-References: <20220901133621.353270-1-michal.winiarski@intel.com>
- <20220901140253.6ebvykv35kyc3v3w@houat>
- <20220901144909.6rihfj4mgklk3ddf@nostramo.hardline.pl>
+        Thu, 1 Sep 2022 11:03:26 -0400
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36579832E8;
+        Thu,  1 Sep 2022 08:03:23 -0700 (PDT)
+Received: (Authenticated sender: paul.kocialkowski@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 569522000F;
+        Thu,  1 Sep 2022 15:03:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1662044601;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=scHOxPLJc2mIdZy+ocLkyQPw2mekrtVBOig7nZ4p7Tc=;
+        b=V/VzarijTnZgS3sRdroUnUGr05FAQdZ45PShfkrfxGnnT9zI61ZvoQ6MDf2grtEZ8I0lUn
+        g/YBV3l7UflQx+aSKhe19v+mTSzBAr5pFhd/ogFbao/EutQaCBMPLDKMqyqOwv2j3zD7Nd
+        APgAzjI/ecDbYmEs31PEo31BCFH2ZNiMmtfOHL0lj9ge0b4vg20t/T+xBo8LtPwVft0FN/
+        FY+ImlQJDrxbVaLvYt+DGYjEiMJ7kHYnpYCSIfFEa9E/VhetuZrEUbeGYZ0+ECPE4ftU/e
+        PRjOmeBsDKNQ6vNHy3ngLxly8n509kLTvOhHWeq6kxvoFZW5Z8ayfyN4sjxp4Q==
+Date:   Thu, 1 Sep 2022 17:03:17 +0200
+From:   Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc:     linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Hans Verkuil <hans.verkuil@cisco.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v6 1/6] dt-bindings: media: Add Allwinner A31 ISP
+ bindings documentation
+Message-ID: <YxDJtYgW/NYLw77u@aptenodytes>
+References: <20220826184144.605605-1-paul.kocialkowski@bootlin.com>
+ <20220826184144.605605-2-paul.kocialkowski@bootlin.com>
+ <Ywk3W6pTOOlzLYVn@pendragon.ideasonboard.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="v37zbd2gmhxbbh3v"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="G/X/1fL20N7fVp/v"
 Content-Disposition: inline
-In-Reply-To: <20220901144909.6rihfj4mgklk3ddf@nostramo.hardline.pl>
+In-Reply-To: <Ywk3W6pTOOlzLYVn@pendragon.ideasonboard.com>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,80 +68,181 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---v37zbd2gmhxbbh3v
+--G/X/1fL20N7fVp/v
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 01, 2022 at 04:49:09PM +0200, Micha=C5=82 Winiarski wrote:
-> On Thu, Sep 01, 2022 at 04:02:53PM +0200, Maxime Ripard wrote:
-> > Hi,
-> >=20
-> > On Thu, Sep 01, 2022 at 03:36:21PM +0200, Micha=C5=82 Winiarski wrote:
-> > > DRM depends on IOMEM and DMA, introduce an additional Kconfig to pull=
- in
-> > > IOMEM and DMA emulation on UML.
-> > > Since --kconfig_add usage is no longer needed, remove it from
-> > > documentation.
-> > >=20
-> > > Signed-off-by: Micha=C5=82 Winiarski <michal.winiarski@intel.com>
-> > > ---
-> > >  Documentation/gpu/drm-internals.rst | 7 +------
-> > >  drivers/video/Kconfig               | 4 ++++
-> > >  2 files changed, 5 insertions(+), 6 deletions(-)
-> > >=20
-> > > diff --git a/Documentation/gpu/drm-internals.rst b/Documentation/gpu/=
-drm-internals.rst
-> > > index 5fd20a306718..c264a9587d21 100644
-> > > --- a/Documentation/gpu/drm-internals.rst
-> > > +++ b/Documentation/gpu/drm-internals.rst
-> > > @@ -228,16 +228,11 @@ follows:
-> > > =20
-> > >  .. code-block:: bash
-> > > =20
-> > > -	$ ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/dr=
-m/tests \
-> > > -		--kconfig_add CONFIG_VIRTIO_UML=3Dy \
-> > > -		--kconfig_add CONFIG_UML_PCI_OVER_VIRTIO=3Dy
-> > > +	$ ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/dr=
-m/tests
-> > > =20
-> > >  .. note::
-> > >  	The configuration included in ``.kunitconfig`` should be as generic=
- as
-> > >  	possible.
-> > > -	``CONFIG_VIRTIO_UML`` and ``CONFIG_UML_PCI_OVER_VIRTIO`` are not
-> > > -	included in it because they are only required for User Mode Linux.
-> > > -
-> >=20
-> > I'm all for removing that part of the documentation, but because
-> > 6fc3a8636a7b, in 6.0 should address this entirely? Why would we need
-> > that other symbol?
+Hi Laurent,
+
+On Sat 27 Aug 22, 00:12, Laurent Pinchart wrote:
+> Hi Paul,
 >=20
-> We don't. I wasn't aware that 6fc3a8636a7b exists and had this one in my =
-tree
-> prior to 6.0.
-> (well... technically we do need those other symbols and don't need VIRTIO=
-, but
-> since CONFIG_UML_PCI_OVER_VIRTIO pull in those two, it also works).
-> Since docs were not updated, I didn't see any conflicts when rebasing.
+> Thank you for the patch.
+
+Thanks for the review!
+
+> On Fri, Aug 26, 2022 at 08:41:39PM +0200, Paul Kocialkowski wrote:
+> > This introduces YAML bindings documentation for the Allwinner A31 Image
+> > Signal Processor (ISP).
+> >=20
+> > Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../media/allwinner,sun6i-a31-isp.yaml        | 97 +++++++++++++++++++
+> >  1 file changed, 97 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/media/allwinner,s=
+un6i-a31-isp.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/media/allwinner,sun6i-a3=
+1-isp.yaml b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-is=
+p.yaml
+> > new file mode 100644
+> > index 000000000000..2fda6e05e16c
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/media/allwinner,sun6i-a31-isp.y=
+aml
+> > @@ -0,0 +1,97 @@
+> > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/media/allwinner,sun6i-a31-isp.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Allwinner A31 Image Signal Processor Driver (ISP) Device Tree B=
+indings
+> > +
+> > +maintainers:
+> > +  - Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - allwinner,sun6i-a31-isp
+> > +      - allwinner,sun8i-v3s-isp
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    items:
+> > +      - description: Bus Clock
+> > +      - description: Module Clock
+> > +      - description: DRAM Clock
+> > +
+> > +  clock-names:
+> > +    items:
+> > +      - const: bus
+> > +      - const: mod
+> > +      - const: ram
+> > +
+> > +  resets:
+> > +    maxItems: 1
+> > +
+> > +  ports:
+> > +    $ref: /schemas/graph.yaml#/properties/ports
+> > +
+> > +    properties:
+> > +      port@0:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: CSI0 input port
+> > +
+> > +      port@1:
+> > +        $ref: /schemas/graph.yaml#/properties/port
+> > +        description: CSI1 input port
+> > +
+> > +    anyOf:
+> > +      - required:
+> > +          - port@0
+> > +      - required:
+> > +          - port@1
 >=20
-> Sorry for the noise, please ignore this patch.
+> I'd still like to see all ports that exist in the hardware being
+> mandatory. I assume at least one of the A31 and V3s has two connected
+> ports in the SoC or you wouldn't declare them both here :-)
 
-I mean, the doc still isn't up to date, so please send that part of the
-patch :)
+Some SoCs (e.g. A83T) only have one CSI controller so we can't require both.
+This could be a decision based on the compatible but my personal opinion is
+that it's not really worth making this binding so complex.
 
-Maxime
+We can always informally enforce that all possible links should be present
+when merging changes to the soc dts.
 
---v37zbd2gmhxbbh3v
+What do you think?
+
+Paul
+
+> Apart from that, this looks good.
+>=20
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+> > +  - interrupts
+> > +  - clocks
+> > +  - clock-names
+> > +  - resets
+> > +
+> > +additionalProperties: false
+> > +
+> > +examples:
+> > +  - |
+> > +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +    #include <dt-bindings/clock/sun8i-v3s-ccu.h>
+> > +    #include <dt-bindings/reset/sun8i-v3s-ccu.h>
+> > +
+> > +    isp: isp@1cb8000 {
+> > +        compatible =3D "allwinner,sun8i-v3s-isp";
+> > +        reg =3D <0x01cb8000 0x1000>;
+> > +        interrupts =3D <GIC_SPI 83 IRQ_TYPE_LEVEL_HIGH>;
+> > +        clocks =3D <&ccu CLK_BUS_CSI>,
+> > +             <&ccu CLK_CSI1_SCLK>,
+> > +             <&ccu CLK_DRAM_CSI>;
+> > +        clock-names =3D "bus", "mod", "ram";
+> > +        resets =3D <&ccu RST_BUS_CSI>;
+> > +
+> > +        ports {
+> > +            #address-cells =3D <1>;
+> > +            #size-cells =3D <0>;
+> > +
+> > +            port@0 {
+> > +                reg =3D <0>;
+> > +
+> > +                isp_in_csi0: endpoint {
+> > +                    remote-endpoint =3D <&csi0_out_isp>;
+> > +                };
+> > +            };
+> > +        };
+> > +    };
+> > +
+> > +...
+>=20
+> --=20
+> Regards,
+>=20
+> Laurent Pinchart
+
+--=20
+Paul Kocialkowski, Bootlin
+Embedded Linux and kernel engineering
+https://bootlin.com
+
+--G/X/1fL20N7fVp/v
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYxDJeAAKCRDj7w1vZxhR
-xfn6AP9az1d/tvykqX2O94leJJ+WaUANxEmlxQ4simD8YMJHDwEA3+Lorxpg5ULV
-d3Xg5NRITlDK7yxBCYTbbOdSjfgtggg=
-=jMVD
+iQEzBAEBCAAdFiEEJZpWjZeIetVBefti3cLmz3+fv9EFAmMQybUACgkQ3cLmz3+f
+v9FY1Qf+MjlIt9ACVEy5fR7m2aNXvgztFaDP7rND1ypJ61HVqYq5bNCR35e0/rKW
+AgN9KbDyvtNRjocFEb9kB/ueg/GF1trZ5hPPoE26sRl/ZeSveWYWAFw1JKONZPxa
+j/+CMQbp1JKd6VTvY+T42hp/4TIQ55q9Km4xGsH3uFeQFXWVDTBRJ/KIpmq1bumJ
+3CohtIp1XziiuKvW+GwF//VTvbqLP4OnPi2/AOpsKTtgmZu3heW5ykMRPsxkQf2D
+Vf3TA/wnv9ehWz98Uxl/d5Sv1YZCJEXWMUeqjOV1ao7vKVcfQ+zJnF4CnJL+3cdy
+rk4gNANwhYFpIY8Aip6d8rwnEwkVuQ==
+=YcBa
 -----END PGP SIGNATURE-----
 
---v37zbd2gmhxbbh3v--
+--G/X/1fL20N7fVp/v--

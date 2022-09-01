@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EFB05A92F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 693555A92F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 11:18:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233833AbiIAJRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 05:17:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
+        id S229720AbiIAJSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 05:18:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233511AbiIAJQ7 (ORCPT
+        with ESMTP id S233511AbiIAJSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 05:16:59 -0400
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0673911E836
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:16:58 -0700 (PDT)
-Received: by mail-ua1-x932.google.com with SMTP id s5so6422474uar.1
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 02:16:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=0DavK3tZEl9/gW1tvRuU8853rjZL9v3RtTzVrdO9jBs=;
-        b=CLwtF0ktF1zQqhWHkRI/Q6SDdY2uwAO14CtmVnuN7Kxp130VgBgOurQXRX7jbw3xy9
-         VQYPsqq/zKxzf/2dC1DgRpDhp8dN2wpsYL/wxTTOa6L1+3gMbfFjtHQeq+fwNFDT8JvY
-         aBaBTk8sfHj8Z8KjpkLyBVjGI7TUrw4GNPLGA+jYcLxyOsozVgOsarJCSCONa3wc/egL
-         oqfrhZxgOOCsVWcPhj1zn87ROHjStDGP2r9tuOcYJWJuaLqCqfVr7/Ulgr0oOSRwqzzE
-         ebFGHtiHsZaYjqgYlEdNwYTPHFXvCJhpL6GB9IjQzMJe2Um6n6YpL1PYykqUx3rCczZq
-         Crbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=0DavK3tZEl9/gW1tvRuU8853rjZL9v3RtTzVrdO9jBs=;
-        b=h0VNgJoVjjhmAF7TsbGCvjJG6oZTxe4CTubyKwVL0i9BIhLRar3vl+H2i1HwlRrqiP
-         552LklcjEQW6BkK38tK8PPh03RJDqfQxl+v5EvtqK+IXK2jLzP0M37WntyIGHyZGPiod
-         meEwYgW9BlX1asL1zfoMpbJgfZw70mZjxUTocXmS91+bQaXFe2a7U/aWAa7dIjCEa12a
-         anKgV02/4SXvEMOSf02r3Ep8FstCx93dv9Eo85z8pZtRvaOpwwODTO6mU0raOFpcg+go
-         r3eKpbXliuXNYNvCsBUI8wIfzlHWsdHeWOFxvYwYccVdrP1R8quPcl3prap14Ck35viS
-         KhIQ==
-X-Gm-Message-State: ACgBeo1+WLhmgn2fXeGrN3v17rOmzIFeqc373mf32u8pyGpB+bwkc75Z
-        69JnWS+uJ3efPtTwXY6ryAoUp+hI2/KSNo1HHrv90w==
-X-Google-Smtp-Source: AA6agR4VHP6N0f2EIlgnEiWiCBfG8MZ+FiFFMODbGmcaj/Rm7oimUzkQgxkV0CmdsfvACZ76VkiuzborI4hQ90Pj2YA=
-X-Received: by 2002:ab0:70c6:0:b0:39e:ed14:806b with SMTP id
- r6-20020ab070c6000000b0039eed14806bmr8753856ual.82.1662023817019; Thu, 01 Sep
- 2022 02:16:57 -0700 (PDT)
+        Thu, 1 Sep 2022 05:18:02 -0400
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 27A9E11EB43
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 02:18:00 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowAAnL6_BeBBj7WEDAA--.2690S2;
+        Thu, 01 Sep 2022 17:17:54 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     gregkh@linuxfoundation.org
+Cc:     hdegoede@redhat.com, arnd@arndb.de, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH v2 1/2] virt: vbox: Add check for device_create_file
+Date:   Thu,  1 Sep 2022 17:17:52 +0800
+Message-Id: <20220901091752.3474095-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <00000000000043579605e6d0ce41@google.com> <87czcscvlf.wl-tiwai@suse.de>
-In-Reply-To: <87czcscvlf.wl-tiwai@suse.de>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Thu, 1 Sep 2022 11:16:46 +0200
-Message-ID: <CANp29Y6cq0+3SBxQLWvtcsmQ-Pw0RqtEKDUSM2JV1R2no3gOsw@mail.gmail.com>
-Subject: Re: [syzbot] KASAN: use-after-free Read in udl_get_urb_timeout
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     syzbot <syzbot+f24934fe125a19d77eae@syzkaller.appspotmail.com>,
-        airlied@linux.ie, airlied@redhat.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org,
-        LKML <linux-kernel@vger.kernel.org>, sean@poorly.run,
-        "'Aleksandr Nogikh' via syzkaller-bugs" 
-        <syzkaller-bugs@googlegroups.com>, tzimmermann@suse.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowAAnL6_BeBBj7WEDAA--.2690S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7CFWxGw13uryUAr4UXr17GFg_yoW8Aw4Upa
+        n3Ga43t3yrWw4jgw47Aa4qva45urWxJ3yxZrWxGw1FgrnxArsYvFWkGFyUArZ5JFZ5GF48
+        Xw1UtrWrCayUuF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUyK14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26r
+        xl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
+        6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr
+        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI7VAK
+        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
+        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
+        jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
+        0EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF
+        7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5WlkUUUUU
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's tell syzbot about the series
+As device_create_file() can return error number,
+it should be better to check the return value and
+deal with the exception.
+Moreover, this driver should be using an attribute group.
 
-#syz fix: Revert "drm/udl: Kill pending URBs at suspend and disconnect"
+Fixes: 0ba002bc4393 ("virt: Add vboxguest driver for Virtual Box Guest integration")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+Change log:
 
-On Mon, Aug 22, 2022 at 2:26 PM Takashi Iwai <tiwai@suse.de> wrote:
->
-> On Mon, 22 Aug 2022 11:09:31 +0200,
-> syzbot wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    5b6a4bf680d6 Add linux-next specific files for 20220818
-> > git tree:       linux-next
-> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=12341a3d080000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=ead6107a3bbe3c62
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=f24934fe125a19d77eae
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12731867080000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=165b64f3080000
-> >
-> > The issue was bisected to:
-> >
-> > commit e25d5954264d1871ab2792c7ca2298b811462500
-> > Author: Takashi Iwai <tiwai@suse.de>
-> > Date:   Thu Aug 4 07:58:25 2022 +0000
-> >
-> >     drm/udl: Kill pending URBs at suspend and disconnect
->
-> FYI, the fix including the revert of this commit was already
-> submitted, waiting for review & merge:
->   https://lore.kernel.org/r/20220816153655.27526-1-tiwai@suse.de
->
->
-> thanks,
->
-> Takashi
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/87czcscvlf.wl-tiwai%40suse.de.
+v1 -> v2:
+
+1. Use gdev->dev instead of dev.
+2. Remove file when creation failed.
+---
+ drivers/virt/vboxguest/vboxguest_linux.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/virt/vboxguest/vboxguest_linux.c b/drivers/virt/vboxguest/vboxguest_linux.c
+index 4ccfd30c2a30..2fb9a6d91b53 100644
+--- a/drivers/virt/vboxguest/vboxguest_linux.c
++++ b/drivers/virt/vboxguest/vboxguest_linux.c
+@@ -390,8 +390,13 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 	}
+ 
+ 	pci_set_drvdata(pci, gdev);
+-	device_create_file(dev, &dev_attr_host_version);
+-	device_create_file(dev, &dev_attr_host_features);
++
++	ret = device_create_file(gdev->dev, &dev_attr_host_features);
++	if (ret)
++		goto err_unregister_misc_device_user;
++	ret = device_create_file(gdev->dev, &dev_attr_host_version);
++	if (ret)
++		goto err_remove_file_features;
+ 
+ 	vbg_info("vboxguest: misc device minor %d, IRQ %d, I/O port %x, MMIO at %pap (size %pap)\n",
+ 		 gdev->misc_device.minor, pci->irq, gdev->io_port,
+@@ -399,6 +404,8 @@ static int vbg_pci_probe(struct pci_dev *pci, const struct pci_device_id *id)
+ 
+ 	return 0;
+ 
++err_remove_file_features:
++	device_remove_file(gdev->dev, &dev_attr_host_features);
+ err_unregister_misc_device_user:
+ 	misc_deregister(&gdev->misc_device_user);
+ err_unregister_misc_device:
+-- 
+2.25.1
+

@@ -2,74 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 510115A8F6A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85615A8F72
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:13:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233331AbiIAHL1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:11:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46374 "EHLO
+        id S233455AbiIAHND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:13:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232531AbiIAHLZ (ORCPT
+        with ESMTP id S233574AbiIAHM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:11:25 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE31E1173;
-        Thu,  1 Sep 2022 00:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0alPrNIyXUGsDd/lDjKfjoAzSlLEpkpL3yJZZ94RPpk=; b=HKZ8zbQDTcxT7/jy9grUcHmJ4v
-        MyVzgFvSrbPQLFiwijNHUSSiUlaaBHzCHBs9+70BEVDM9MToqbrQNr8UvWxofIcrrX8GwM6eOonSK
-        6szU8OuuHG+vfDK7qTco/TEVeTjPEsrJy2NwBMJGxQIiApv2ohzIAIMYAKmyu71oXfi4BkKZh1EEf
-        yDito6PTpR0FPBaeSnYB/G3xro4IABhjAP4qO2n2U1vtuvb2UuRIjbvpWBj437K+oapKyEpvo3Au1
-        q4o6vAz6W9ihYu06aO9bYWS3Cfufchc9RQ+BxIjoMxuDoh8gMbcVTNj7wicKWVFNNupBfEUvp7p4r
-        G0W8NxwA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oTeMA-008LX1-Ry; Thu, 01 Sep 2022 07:11:19 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D18AF300223;
-        Thu,  1 Sep 2022 09:11:17 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B51EF20981381; Thu,  1 Sep 2022 09:11:17 +0200 (CEST)
-Date:   Thu, 1 Sep 2022 09:11:17 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, kent.overstreet@linux.dev,
-        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
-        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
-        juri.lelli@redhat.com, ldufour@linux.ibm.com, peterx@redhat.com,
-        david@redhat.com, axboe@kernel.dk, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, changbin.du@intel.com,
-        ytcoode@gmail.com, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        bristot@redhat.com, vschneid@redhat.com, cl@linux.com,
-        penberg@kernel.org, iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com,
-        glider@google.com, elver@google.com, dvyukov@google.com,
-        shakeelb@google.com, songmuchun@bytedance.com, arnd@arndb.de,
-        jbaron@akamai.com, rientjes@google.com, minchan@google.com,
-        kaleshsingh@google.com, kernel-team@android.com,
-        linux-mm@kvack.org, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 27/30] Code tagging based latency tracking
-Message-ID: <YxBbFUirdlbXDaZA@hirez.programming.kicks-ass.net>
-References: <20220830214919.53220-1-surenb@google.com>
- <20220830214919.53220-28-surenb@google.com>
+        Thu, 1 Sep 2022 03:12:57 -0400
+Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A3A49123C2A
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 00:11:46 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.126])
+        by APP-05 (Coremail) with SMTP id zQCowADnb0khWxBja30gAA--.56086S2;
+        Thu, 01 Sep 2022 15:11:30 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, kuninori.morimoto.gx@renesas.com
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] ASoC: rsnd: Add check for rsnd_mod_power_on
+Date:   Thu,  1 Sep 2022 15:11:27 +0800
+Message-Id: <20220901071127.3448059-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220830214919.53220-28-surenb@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: zQCowADnb0khWxBja30gAA--.56086S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Jw45uF4UCF4DtFWxJw15XFb_yoW3Xwb_Ga
+        1fWw1rZrW2krySyFyDGw4S9rWI9ry7CFyUWFWftr1Ut3yUXryfJayvqryfCryrWw1kur9x
+        uayUA34xCrWSyjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbzxFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1l42xK82IYc2Ij64vI
+        r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8Gjc
+        xK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0
+        cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8V
+        AvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7Cj
+        xVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-Originating-IP: [124.16.138.126]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,24 +56,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 30, 2022 at 02:49:16PM -0700, Suren Baghdasaryan wrote:
-> From: Kent Overstreet <kent.overstreet@linux.dev>
-> 
-> This adds the ability to easily instrument code for measuring latency.
-> To use, add the following to calls to your code, at the start and end of
-> the event you wish to measure:
-> 
->   code_tag_time_stats_start(start_time);
->   code_tag_time_stats_finish(start_time);
-> 
-> Stastistics will then show up in debugfs under
-> /sys/kernel/debug/time_stats, listed by file and line number.
-> 
-> Stastics measured include weighted averages of frequency, duration, max
-> duration, as well as quantiles.
-> 
-> This patch also instruments all calls to init_wait and finish_wait,
-> which includes all calls to wait_event. Example debugfs output:
+As rsnd_mod_power_on() can return negative numbers,
+it should be better to check the return value and
+deal with the exception.
 
-How can't you do this with a simple eBPF script on top of
-trace_sched_stat_* and friends?
+Fixes: e7d850dd10f4 ("ASoC: rsnd: use mod base common method on SSI-parent")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
+---
+ sound/soc/sh/rcar/ssi.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/sound/soc/sh/rcar/ssi.c b/sound/soc/sh/rcar/ssi.c
+index 43c5e27dc5c8..7ade6c5ed96f 100644
+--- a/sound/soc/sh/rcar/ssi.c
++++ b/sound/soc/sh/rcar/ssi.c
+@@ -480,7 +480,9 @@ static int rsnd_ssi_init(struct rsnd_mod *mod,
+ 
+ 	ssi->usrcnt++;
+ 
+-	rsnd_mod_power_on(mod);
++	ret = rsnd_mod_power_on(mod);
++	if (ret < 0)
++		return ret;
+ 
+ 	rsnd_ssi_config_init(mod, io);
+ 
+-- 
+2.25.1
+

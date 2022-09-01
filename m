@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 732A25A901A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC075A9020
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 09:26:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232950AbiIAHZ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 03:25:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46950 "EHLO
+        id S233933AbiIAH0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 03:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233920AbiIAHZZ (ORCPT
+        with ESMTP id S233652AbiIAHZa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 03:25:25 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A2531257DC;
-        Thu,  1 Sep 2022 00:24:28 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id h204-20020a1c21d5000000b003a5b467c3abso809261wmh.5;
-        Thu, 01 Sep 2022 00:24:28 -0700 (PDT)
+        Thu, 1 Sep 2022 03:25:30 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4484F1264B3;
+        Thu,  1 Sep 2022 00:24:31 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so867035wms.5;
+        Thu, 01 Sep 2022 00:24:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date;
-        bh=L2uh9K2VjTAJTjLgoqSW0ywBONxF4H1K/tbZKUAc0eA=;
-        b=hBWb4GP47ntfmGRvHuSrfGPYqGQRtFAwq1nikuVZZqnJkqfSkJcQp47DPSC65opylY
-         0EYXGX1bZF+15wlvmz/w7TRV8ovc86C/LIX2In7KdUBHS2t2pcPFye8hAo2qLp0vzJVw
-         4G6a3TaJN8B7GxAuBvvfvgq3Lqrz3E9dQGzQik7wC19VrDPfKSdJnsU4QorV/UraWcVR
-         FhM8SxaUlzF2zHRK3MdXfrKrjo2juNIbZoUJh3de6IA5yWiC4vJ1ZUwtKP/iixyaOPTS
-         7BuCVAr+74FjcXWJadKlatxLTvyF4dABuZeVTe5knjDd1l+ad9Uvb/MyMtXAZV2bf9v6
-         4SUQ==
+        bh=B3Oi4ISMm7UdYV++8x2M6I2Kowk7pRqgdJUjdnaMDkU=;
+        b=RzHusp8DKwe72M5ISQsq/uNk8lduXoXj5FqkKQPgTUgP7CPUcAocK4HvV5x0eBgHgh
+         eMeh9RoW8tq6N+bwYVuRyCKwtBFNfmRghYfyLiXTfzP1spQSArqvIqiHF3bRtw3kJv9y
+         IUamQsCDUnJvzFXmVIWjjOhDTIsQsBOVTl62ksc60XrIf1KPv5JkDJ71NBSFdV54Dq+u
+         o46td1Dp8GRNEMWpOK8WdWM1ivXOcqCzQ4ttBoLoN/gZB4p8XLibS08AEWLnJBVm/TbG
+         wL8oQeaxyTs8W1U0fJsdvF3I6nxgrDrGnlYfG+CrnnVpev9L76JXHeqOTveTF0S2irhn
+         AHwQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date;
-        bh=L2uh9K2VjTAJTjLgoqSW0ywBONxF4H1K/tbZKUAc0eA=;
-        b=gSn5QI9NKSksq+75wLw4eEo38kl5NLT7TQT129uJ51SV0csrFFU6NR3kvE9npGAOpA
-         YBp1gPJmc3OL803iq/QKhEAdFhxaD3BcVxsiphzjhwrHIMp2EFWchJk04X5KGkzT8gsg
-         XoqiwaxwsScQ/yBVL4Mp0NI70wkplE2e44sqzUZyPRJoHGAYh6R4Q5W3a86ydcaGdU1F
-         k3KVBu9vrC3AYeBxAIjgLJFVod0NgN9zT0811H5vsvWqpBx9WRMyHxQLXldHiHp0O1LN
-         5y9v4yTXjTuaiUCwwT3pyrLrG6OiSEB+oIB9ZavDIuMIJattzISCdWtd5oErSmyCI3ho
-         FdNA==
-X-Gm-Message-State: ACgBeo1K3/Mkvpxktew4aUbekC0pGDr99FHmMfzJRqRrsdan2Gg49Tt1
-        pEKMy9ghqXWqWYfbbL79CKw=
-X-Google-Smtp-Source: AA6agR7DVwjOuMe0d4rXBImHXkagxdxmES+lDo9YMMrhu8jSGJNmB47udGmtZk1oy8P1L/nYE9OC4A==
-X-Received: by 2002:a05:600c:2059:b0:3a5:92cc:19c5 with SMTP id p25-20020a05600c205900b003a592cc19c5mr3996426wmg.101.1662017066816;
-        Thu, 01 Sep 2022 00:24:26 -0700 (PDT)
+        bh=B3Oi4ISMm7UdYV++8x2M6I2Kowk7pRqgdJUjdnaMDkU=;
+        b=WAvA4p3n0ievBLFBXTneyj1ei+9GKY3vDga2NMHOOCfgczWLq46Zvi3jJtHfd4HlVN
+         6j8uCncec5hYUn4VpBWzcmZ/X79AhQ/8cbzDHklISGe2WHqz+MVYrER2M7l+8eC0Uee9
+         dZo7BNj+hjW10/8ctvYjyV56U9DvWpl+YiQjTTu41shL9drZK/pFhIanLWn+9cDYExoo
+         GeqeeNDEmnhBAYCZlUs/fCpDnCq2/3IkBbuhic9m+/s8EM93YOHJv6AEthflbsJEXuWP
+         UPqqFiSgOUwF4mGGFUP9iJc5miFOy6ojf1tOO1OMW5pSWkyxISk9wR0yIttpjGJvu7om
+         DgMA==
+X-Gm-Message-State: ACgBeo0kW1UATxaKgFZlXb3sg/8zZrO3D3khwEChVaOttNk0I62hExYf
+        Q2KEla3MYsNDtc21kxbF5sI=
+X-Google-Smtp-Source: AA6agR68I90fXiUz/6KzqcPfBZbXEkWEUyzSxKNMwtFkN9YzjcpZfV80UU2cKptwaMn7fb2/Ws52yQ==
+X-Received: by 2002:a7b:cbd0:0:b0:3a6:9f6:a3e8 with SMTP id n16-20020a7bcbd0000000b003a609f6a3e8mr4140180wmi.13.1662017069756;
+        Thu, 01 Sep 2022 00:24:29 -0700 (PDT)
 Received: from localhost (87-126-55-15.ip.btc-net.bg. [87.126.55.15])
-        by smtp.gmail.com with ESMTPSA id q28-20020a056000137c00b002205cbc1c74sm13768905wrz.101.2022.09.01.00.24.25
+        by smtp.gmail.com with ESMTPSA id bn6-20020a056000060600b00222ed7ea203sm12551636wrb.100.2022.09.01.00.24.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 01 Sep 2022 00:24:26 -0700 (PDT)
+        Thu, 01 Sep 2022 00:24:29 -0700 (PDT)
 From:   Iskren Chernev <iskren.chernev@gmail.com>
 To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
         Rob Herring <robh+dt@kernel.org>
@@ -59,9 +59,9 @@ Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 02/14] arm64: dts: qcom: sm6115: Add rpmcc and rpmpd nodes
-Date:   Thu,  1 Sep 2022 10:24:01 +0300
-Message-Id: <20220901072414.1923075-3-iskren.chernev@gmail.com>
+Subject: [PATCH 03/14] arm64: dts: qcom: sm6115: Add GCC node
+Date:   Thu,  1 Sep 2022 10:24:02 +0300
+Message-Id: <20220901072414.1923075-4-iskren.chernev@gmail.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220901072414.1923075-1-iskren.chernev@gmail.com>
 References: <20220901072414.1923075-1-iskren.chernev@gmail.com>
@@ -77,98 +77,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sm6115 uses glink rpm to control some clocks and regulators.
+Add support for the main clock bundle on the SM6115.
 
 Signed-off-by: Iskren Chernev <iskren.chernev@gmail.com>
 ---
- arch/arm64/boot/dts/qcom/sm6115.dtsi | 67 ++++++++++++++++++++++++++++
- 1 file changed, 67 insertions(+)
+ arch/arm64/boot/dts/qcom/sm6115.dtsi | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-index 69d9de540478..7496b3e0ff48 100644
+index 7496b3e0ff48..5af915e80017 100644
 --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-@@ -315,6 +315,66 @@ linux_cma_mem: memory@fdc00000 {
+@@ -388,6 +388,17 @@ soc: soc {
+ 		#size-cells = <1>;
+ 		ranges = <0 0 0 0xffffffff>;
  
- 	};
- 
-+	rpm-glink {
-+		compatible = "qcom,glink-rpm";
-+
-+		interrupts = <GIC_SPI 194 IRQ_TYPE_EDGE_RISING>;
-+		qcom,rpm-msg-ram = <&rpm_msg_ram>;
-+		mboxes = <&apcs_glb 0>;
-+
-+		rpm_requests: rpm-requests {
-+			compatible = "qcom,rpm-sm6115";
-+			qcom,glink-channels = "rpm_requests";
-+
-+			rpmcc: rpmcc {
-+				compatible = "qcom,rpmcc-sm6115";
-+				#clock-cells = <1>;
-+			};
-+
-+			rpmpd: power-controller {
-+				compatible = "qcom,sm6115-rpmpd";
-+				#power-domain-cells = <1>;
-+				operating-points-v2 = <&rpmpd_opp_table>;
-+
-+				rpmpd_opp_table: opp-table {
-+					compatible = "operating-points-v2";
-+
-+					rpmpd_opp_min_svs: opp1 {
-+						opp-level = <RPM_SMD_LEVEL_MIN_SVS>;
-+					};
-+
-+					rpmpd_opp_low_svs: opp2 {
-+						opp-level = <RPM_SMD_LEVEL_LOW_SVS>;
-+					};
-+
-+					rpmpd_opp_svs: opp3 {
-+						opp-level = <RPM_SMD_LEVEL_SVS>;
-+					};
-+
-+					rpmpd_opp_svs_plus: opp4 {
-+						opp-level = <RPM_SMD_LEVEL_SVS_PLUS>;
-+					};
-+
-+					rpmpd_opp_nom: opp5 {
-+						opp-level = <RPM_SMD_LEVEL_NOM>;
-+					};
-+
-+					rpmpd_opp_nom_plus: opp6 {
-+						opp-level = <RPM_SMD_LEVEL_NOM_PLUS>;
-+					};
-+
-+					rpmpd_opp_turbo: opp7 {
-+						opp-level = <RPM_SMD_LEVEL_TURBO>;
-+					};
-+
-+					rpmpd_opp_turbo_plus: opp8 {
-+						opp-level = <RPM_SMD_LEVEL_TURBO_NO_CPR>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+
- 	smem {
- 		compatible = "qcom,smem";
- 		memory-region = <&smem_mem>;
-@@ -350,6 +410,13 @@ rpm_msg_ram: memory@45f0000 {
- 			reg = <0x45f0000 0x7000>;
- 		};
- 
-+		apcs_glb: mailbox@f111000 {
-+			compatible = "qcom,sm6115-apcs-hmss-global";
-+			reg = <0xf111000 0x1000>;
-+
-+			#mbox-cells = <1>;
++		gcc: clock-controller@1400000 {
++			compatible = "qcom,gcc-sm6115", "syscon";
++			reg = <0x1400000 0x1f0000>;
++			reg-names = "cc_base";
++			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>, <&sleep_clk>;
++			clock-names = "bi_tcxo", "sleep_clk";
++			#clock-cells = <1>;
++			#reset-cells = <1>;
++			#power-domain-cells = <1>;
 +		};
 +
- 		timer@f120000 {
- 			compatible = "arm,armv7-timer-mem";
- 			#address-cells = <1>;
+ 		qfprom@1b40000 {
+ 			compatible = "qcom,qfprom";
+ 			reg = <0x1b40000 0x7000>;
 -- 
 2.37.2
 

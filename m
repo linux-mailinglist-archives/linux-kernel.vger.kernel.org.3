@@ -2,157 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2E25A924A
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:43:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EED85A924C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 10:43:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234220AbiIAIne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 04:43:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42778 "EHLO
+        id S234252AbiIAIns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 04:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233561AbiIAIn3 (ORCPT
+        with ESMTP id S234264AbiIAIno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 04:43:29 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3569B130637;
-        Thu,  1 Sep 2022 01:43:28 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2818hNkL062735;
-        Thu, 1 Sep 2022 03:43:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1662021803;
-        bh=hupE8mezdV0pS1EwTZfUATinSVzLqJp2B2HtBetZ2Uo=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=K0bz4JdZskSOyKhfmytsemIjEQ12T+FfafLQfvGeLnsyKRsdM0rdHsybvfEdefNyl
-         h4eEwXvfnMN0UxkSU9ol3JAJDBt0l6wt4pV3jLsoG3ycCHfg0tzZgS5Mf8xssNHBRq
-         L4JXE3VnNooiMwWB6SAt7cBU2i6MxGHP/HmENuXs=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2818hNx3112027
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 1 Sep 2022 03:43:23 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 1 Sep
- 2022 03:43:23 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 1 Sep 2022 03:43:23 -0500
-Received: from [172.24.145.182] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2818hKHm010763;
-        Thu, 1 Sep 2022 03:43:21 -0500
-Message-ID: <5cb7a059-a419-1271-c4d0-c5c546b85706@ti.com>
-Date:   Thu, 1 Sep 2022 14:13:20 +0530
+        Thu, 1 Sep 2022 04:43:44 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6CC1314DF
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 01:43:40 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id bx38so17111865ljb.10
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 01:43:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date;
+        bh=VH72CkJdWHRYjuIFqG3YYZtTrJw2Fhi5jnFxkucPCHY=;
+        b=q7AjWjhmnd64a4Ge80aSMXzM40DYISK3cXmW/EibDBVwJ+8k/kXbGydZOb9luK+PIZ
+         Ht/KjsMCWD5TF/twQCHm6itfvd6g64oIsvl5c5eKge4E9VhNnF7iOxqToHuyozIfoFb1
+         5I88bd1UfHObAquK0acXH+XbI6Py13HNPo09dD+NGiTxpVgIr43RQcU5305AlaqKPpll
+         qwKybw5Q2+9d/Onlv8u1vDEdJlLQ1JUMSCRevC4eAiHePyL2wzZzh3KSvr/OLrTmD05T
+         eLyu3SeubEOLjLKn16wG4v4TsahkBmU2CrHwp0/PiiByarcOmjtEcsv6KWve7EKHFu99
+         DiuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date;
+        bh=VH72CkJdWHRYjuIFqG3YYZtTrJw2Fhi5jnFxkucPCHY=;
+        b=x9xAusBSK5aamqpSFVkwycM7IXmIBrqDHu5A3vPplHWlMe9jR+ZWZ3YoQsw6cDAU8c
+         2cHGXFDSGc2+QO8A3lCHcUbfSTpmr8F7cEUzsew/Be38U1BsfTTuauGBTzxEbHddOx8n
+         QpnfDeRt5Xqa7jU34lOSuO2dcJqkAt+PQpMFmx8GE5og3Gj7ZShuicK6lWi9qazlP0b1
+         Udxt2703YqdsFAaC80sAsJdxdH8KXtWaz9NxUAxO7NwZ/9cXKzBBpbvpVNSktgnRxcy/
+         iZF2cDhvDfdjzmL/9aWGEAiEMrlS/xVEBhrCWmSZ2aQEFkinufOdmojPn0FPuzmnFomf
+         RVyw==
+X-Gm-Message-State: ACgBeo2Q3AuMv7ohQ5fJQdrQo9LBVf0eMqxfAdFwmdKCMIsSfG/xLUVz
+        fOFz8MmDKskyyPNzK9HZuj+J/CQbT3R+2nAof6Qj/g==
+X-Google-Smtp-Source: AA6agR4BjD3DwjS+CZ4CCVxEVQ6+miy/r1+fo/IQYDRJogJb7LowD/eAhVezdlkQzk6xOh63IrvI7g9qP1YqXlNutus=
+X-Received: by 2002:a2e:be88:0:b0:25f:e9a8:44b8 with SMTP id
+ a8-20020a2ebe88000000b0025fe9a844b8mr8851946ljr.92.1662021818766; Thu, 01 Sep
+ 2022 01:43:38 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [PATCH RESEND 1/6] arm64: dts: ti: k3-j721s2-main: Add support
- for USB
-Content-Language: en-US
-To:     Matt Ranostay <mranostay@ti.com>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>
-References: <20220810094000.248487-1-mranostay@ti.com>
-From:   Vignesh Raghavendra <vigneshr@ti.com>
-In-Reply-To: <20220810094000.248487-1-mranostay@ti.com>
+References: <20220830214919.53220-1-surenb@google.com> <20220830214919.53220-23-surenb@google.com>
+ <CACT4Y+ZX3U1=cAPXPhoOy6xrngSCfSmyFagXK-9fWtWWODfsew@mail.gmail.com> <20220831173010.wc5j3ycmfjx6ezfu@moria.home.lan>
+In-Reply-To: <20220831173010.wc5j3ycmfjx6ezfu@moria.home.lan>
+From:   Dmitry Vyukov <dvyukov@google.com>
+Date:   Thu, 1 Sep 2022 10:43:26 +0200
+Message-ID: <CACT4Y+bMeqvWQwqzG3nfcf0-VOjU7usxht5mKgUwMcOpWKRjxQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 22/30] Code tagging based fault injection
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        mhocko@suse.com, vbabka@suse.cz, hannes@cmpxchg.org,
+        roman.gushchin@linux.dev, mgorman@suse.de, dave@stgolabs.net,
+        willy@infradead.org, liam.howlett@oracle.com, void@manifault.com,
+        peterz@infradead.org, juri.lelli@redhat.com, ldufour@linux.ibm.com,
+        peterx@redhat.com, david@redhat.com, axboe@kernel.dk,
+        mcgrof@kernel.org, masahiroy@kernel.org, nathan@kernel.org,
+        changbin.du@intel.com, ytcoode@gmail.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, bristot@redhat.com,
+        vschneid@redhat.com, cl@linux.com, penberg@kernel.org,
+        iamjoonsoo.kim@lge.com, 42.hyeyoo@gmail.com, glider@google.com,
+        elver@google.com, shakeelb@google.com, songmuchun@bytedance.com,
+        arnd@arndb.de, jbaron@akamai.com, rientjes@google.com,
+        minchan@google.com, kaleshsingh@google.com,
+        kernel-team@android.com, linux-mm@kvack.org, iommu@lists.linux.dev,
+        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
+        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
+        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matt,
+ On Wed, 31 Aug 2022 at 19:30, Kent Overstreet
+<kent.overstreet@linux.dev> wrote:
+> > > From: Kent Overstreet <kent.overstreet@linux.dev>
+> > >
+> > > This adds a new fault injection capability, based on code tagging.
+> > >
+> > > To use, simply insert somewhere in your code
+> > >
+> > >   dynamic_fault("fault_class_name")
+> > >
+> > > and check whether it returns true - if so, inject the error.
+> > > For example
+> > >
+> > >   if (dynamic_fault("init"))
+> > >       return -EINVAL;
+> >
+> > Hi Suren,
+> >
+> > If this is going to be used by mainline kernel, it would be good to
+> > integrate this with fail_nth systematic fault injection:
+> > https://elixir.bootlin.com/linux/latest/source/lib/fault-inject.c#L109
+> >
+> > Otherwise these dynamic sites won't be tested by testing systems doing
+> > systematic fault injection testing.
+>
+> That's a discussion we need to have, yeah. We don't want two distinct fault
+> injection frameworks, we'll have to have a discussion as to whether this is (or
+> can be) better enough to make a switch worthwhile, and whether a compatibility
+> interface is needed - or maybe there's enough distinct interesting bits in both
+> to make merging plausible?
+>
+> The debugfs interface for this fault injection code is necessarily different
+> from our existing fault injection - this gives you a fault injection point _per
+> callsite_, which is huge - e.g. for filesystem testing what I need is to be able
+> to enable fault injection points within a given module. I can do that easily
+> with this, not with our current fault injection.
+>
+> I think the per-callsite fault injection points would also be pretty valuable
+> for CONFIG_FAULT_INJECTION_USERCOPY, too.
+>
+> OTOH, existing kernel fault injection can filter based on task - this fault
+> injection framework doesn't have that. Easy enough to add, though. Similar for
+> the interval/probability/ratelimit stuff.
+>
+> fail_function is the odd one out, I'm not sure how that would fit into this
+> model. Everything else I've seen I think fits into this model.
+>
+> Also, it sounds like you're more familiar with our existing fault injection than
+> I am, so if I've misunderstood anything about what it can do please do correct
+> me.
 
-On 10/08/22 15:09, Matt Ranostay wrote:
-> From: Aswath Govindraju <a-govindraju@ti.com>
-> 
-> Add support for single instance of USB 3.0 controller in J721S2 SoC.
-> 
-> Cc: Vignesh Raghavendra <vigneshr@ti.com>
-> Cc: Nishanth Menon <nm@ti.com>
-> Acked-by: Matt Ranostay <mranostay@ti.com>
-> Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> index 34e7d577ae13..f7e359da8690 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
-> @@ -26,6 +26,20 @@ l3cache-sram@200000 {
->  		};
->  	};
->  
-> +	scm_conf: scm-conf@104000 {
+What you are saying makes sense. But I can't say if we want to do a
+global switch or not. I don't know how many existing users there are
+(by users I mean automated testing b/c humans can switch for one-off
+manual testing).
 
-syscon@
+However, fail_nth that I mentioned is orthogonal to this. It's a
+different mechanism to select the fault site that needs to be failed
+(similar to what you mentioned as "interval/probability/ratelimit
+stuff"). fail_nth allows to fail the specified n-th call site in the
+specified task. And that's the only mechanism we use in
+syzkaller/syzbot.
+And I think it can be supported relatively easily (copy a few lines to
+the "does this site needs to fail" check).
 
-> +		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
-> +		reg = <0x00 0x00104000 0x00 0x18000>;
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges = <0x00 0x00 0x00104000 0x18000>;
-> +
-> +		usb_serdes_mux: mux-controller@0 {
+I don't know how exactly you want to use this new mechanism, but I
+found fail_nth much better than any of the existing selection
+mechanisms, including what this will add for specific site failing.
 
-mux-controller-0
+fail_nth allows to fail every site in a given test/syscall one-by-one
+systematically. E.g. we can even have strace-like utility that repeats
+the given test failing all sites in to systematically:
+$ fail_all ./a_unit_test
+This can be integrated into any CI system, e.g. running all LTP tests with this.
 
-I see that the mux-controller@0 node gets renamed to mux-controller@1 in
-2/6. Why not move both to 2/6?
+For file:line-based selection, first, we need to get these file:line
+from somewhere; second, lines are changing over time so can't be
+hardcoded in tests; third, it still needs to be per-task, since
+unrelated processes can execute the same code.
 
-> +			compatible = "mmio-mux";
-> +			#mux-control-cells = <1>;
-> +			mux-reg-masks = <0x0 0x8000000>; /* USB0 to SERDES0 lane 1/3 mux */
-> +		};
-> +	};
-> +
->  	gic500: interrupt-controller@1800000 {
->  		compatible = "arm,gic-v3";
->  		#address-cells = <2>;
-> @@ -686,6 +700,34 @@ cpts@310d0000 {
->  		};
->  	};
->  
-> +	usbss0: cdns-usb@4104000 {
-> +		compatible = "ti,j721e-usb";
-> +		reg = <0x00 0x04104000 0x00 0x100>;
-> +		clocks = <&k3_clks 360 16>, <&k3_clks 360 15>;
-> +		clock-names = "ref", "lpm";
-> +		assigned-clocks = <&k3_clks 360 16>; /* USB2_REFCLK */
-> +		assigned-clock-parents = <&k3_clks 360 17>;
-> +		power-domains = <&k3_pds 360 TI_SCI_PD_EXCLUSIVE>;
-> +		#address-cells = <2>;
-> +		#size-cells = <2>;
-> +		ranges;
-> +		dma-coherent;
-> +
-> +		usb0: usb@6000000 {
-> +			compatible = "cdns,usb3";
-> +			reg = <0x00 0x06000000 0x00 0x10000>,
-> +			      <0x00 0x06010000 0x00 0x10000>,
-> +			      <0x00 0x06020000 0x00 0x10000>;
-> +			reg-names = "otg", "xhci", "dev";
-> +			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
-> +				     <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "host", "peripheral", "otg";
-> +			maximum-speed = "super-speed";
-> +			dr_mode = "otg";
-> +		};
-> +	};
-> +
->  	main_mcan0: can@2701000 {
->  		compatible = "bosch,m_can";
->  		reg = <0x00 0x02701000 0x00 0x200>,
+One downside of fail_nth, though, is that it does not cover background
+threads/async work. But we found that there are so many untested
+synchronous error paths, that moving to background threads is not
+necessary at this point.
 
--- 
-Regards
-Vignesh
+
+
+> Interestingly: I just discovered from reading the code that
+> CONFIG_FAULT_INJECTION_STACKTRACE_FILTER is a thing (hadn't before because it
+> depends on !X86_64 - what?). That's cool, though.

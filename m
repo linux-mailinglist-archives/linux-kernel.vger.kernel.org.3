@@ -2,112 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E331D5A9D69
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0FB45A9D79
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 18:48:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbiIAQqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 12:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54580 "EHLO
+        id S234693AbiIAQqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 12:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233710AbiIAQqB (ORCPT
+        with ESMTP id S234488AbiIAQq1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 12:46:01 -0400
-Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92CE974E01
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:45:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1662050757; bh=9nHeOjx+oUd5y0MsJP7DNJNKQadTmJll50lk9O3Na9I=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=JZ9gg8a6GLDaMpgGyH9Z7Ag2ocklEAHN4JBqo2PPUyKHYpJo9fvvXLaMnau0hOiasTvxeR3n/PUVoipGK3g+4IQUZJeyHHd164pVpeJGhkP62PEOX+xyX+eFPrwNzYRnJ+J8o+Nfau+PtO4KS1ZBQ0hasGZsjFyg4H4Yz6ZrXzpp3bignVuhJF+DGVLlfuEMWVMNWK7OzCj8nDFMN+mfBsuUz480bCMs0AE6FIOQ4YWdzoJWEqTkrmehbxty5h9gqMV3oUkmakzPMzf9qj2Lc9CA2CsxBj6P7iSSNH6O6WCn7buvvkoExOdlQSI2Zx8KRyntE1QDqBw4+SaHfaY8FA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1662050757; bh=/3CobprxR6K2uzLbcm3nw2s8yew+lDyi/NfpgYNRyBH=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=DhBtPfin884uXXme9XcFbk/SYkP8bovzL6rTsK/9M9WbCAfca8T5PLavQW6k41wdNN+DwP1cF2Untr5pnfbdzV+1BvJEHUyqzqHhLGS89Ng1AvJB2PfxtwgFCN+0UeNiipd2AqL5OBjviTzjurPl0rAMz5YNeH1h274TTuZB/hRek53xZ1Wsc7+uEAV7ZUHVCxMueU6SrNTKVvCjF5J+a+1cbsGW19dNESGBQNdhcnGy98MEWTZ25TK/lyRBRPe0BgIfCMxxJPGtKq1roVPiqU5X3NIrjK+JChBL+1yQGkAyEaR0k0ZH061WZlcFQTPQ58bx1ONtucooNHmJFKSsEw==
-X-YMail-OSG: lgTRNzIVM1kiPmOFxRpQD_pm63nB3UTKqnImFapRXW3mVCD2WiLQqHTwT3qh9Il
- Y_nOA9WqFX_fL9IwkxETq3CKksuPvBt.o9gzjc.g3X_oGYq5gNtNruRykZtM6Prd1HS54wz_1UoN
- ZG1ECjTMJZAEzpfZAsPYnt.PR5b76OIEY8hi7lTs9dI4f1XBGEf025vC8vuR.D2Zz2DEtpAtrQo7
- 7xzIbuUH2YyUgkwqwatiKF5oOG0Kn7UPwttmmHxInXRjmb.PSuZbS928H4JD3tXHy.WUOspTiJjp
- 7tjSWZQlWNE8wULBpNba5nKlKjhqSnWbduziuN__iwK4VtJ9vGq3mFbb6C7qZyBulZ_BcrUCJEja
- VC7jA3YT2WP8yicZXd2bKMvpVKzm6Wypv1vi.VaDxCVL2Pmey5m1pdvikv.B3MwEN2deV5FOdjJ2
- OKiFE_TmGRWMNhsIIA.cH3Z9yWCHpIbBm.FZva8W5ripRn1qTzhs9..nmhDBbgI_a6GlmIwGFDdP
- 200OKLL3ElMiJkDAIZCPgbPTI84zn2WiR6odYUP0lRQXmFT4Vu69z8E8x.rnoz4cUVD1bZck7b3I
- aOaP2b3UQU.wK0UxYE5y8r5lcB9NKTtOlqwNHIf.Z_UP5PNu684d7wzSqStqc.2GxkpVHkTdtDDZ
- QzXlMQQnSejiSYyEkA0KqLAE59TXdjFIis9MvgtSxhuMufSPHw650wojlwA_gUydJ2xBYB5XWpZ7
- XD9KtKvG8DKXOjO_b0cGL_Y0IrCUIrR0dXVYtPIYuFdMx2_rKjfglR4PL_X9ntZFPFarFHplVRpV
- TTd4drTL3AmkEWUQX_wLaTMyNPmNyFjUy6Ig8nJK4TtjXbTFh97rkdPzxFl73IuozSfidPH2DPR2
- 9KmXAqQ5jmSZ6an6iva_2p0.fOK4.m2BWRPeEC5qK2zoDKTA306dM6CxaY.OMXyPWQz_6InhnQkJ
- ZXiih4OfyVTq22gV3tK.kqGRif602JCfd73zuFfsSc_D7ehfas9mZPK5tcuAbrdQ0uvQWOWJKhFm
- TlMOyj4ehZaeKJwrX6r2GsR4rBDlJTLXwmQFFifhL7FsbfoqQNhYIa3pbkrgnwwQBCngCd3hLaf8
- zmri9JG6yys4UgQlb3mrwMSsxhWr_ncnKnErjF7hYGBejWWl57QU8LV19hHcChtM9TNGwjNqFC0Y
- GKfMUWmun2_oG3R8nBnCPBZSuEpxHE8oRUNldc_oxVEwCcg8bdFwsw_DAnWqRl8xGbesKCCM2pcW
- iBbxXVeR9LLu5yx9zeT7Kurm5.pb.oKmTKxF9MJ36s0IUny5VtGuEeYiwNLENic43izNVGsmod5K
- wVQucGqb0Pm15Ng.FBaGmDL.UHYy6YLuLGfnLFwKevc6rr3fiSHHr0AQyGa8r_liRdJvqL3Va8mq
- CJ2_7TsTAbLO8Am9tKmWzo5.qDZQAQ9hvZXbEDZudZ97h1Ro2dOpqRZAmjODuimROLayIHfGZ9Wg
- VnuKBPXTl3fXdr5X1xmy.dI.XuTiqvLKmnyW4ba6ny8FnQIBUoWI7fRyoSCOTIVDE.9fdziEV41a
- QOY9u4qJFa3SWVagJaPtZDOyZammP0KoEPEi0SrWZUceoGH46Rij2dhtelLNdzV6Zbzg56kIm82Q
- ncn9uqQEYS2tNITf6uqWWmaBSWnM_wjd9Xg6n4WfiVz7ysE8W_sPTR_gfy64flZHR_F1aaZxvWET
- AuIuL_NjDcB0xaZO3UyxGA.vezoFXbhdlGl.6ZOAdW0yIjWd3EDWQB8aXRVvMOq8sJhhh9c9B_yM
- u_xhaJV5l615logpm.5SqkhC9zAuK77eh6LCzksQQTIjSoklRUT9DB.fJ5gBDQk4j4Xym1wmmClU
- B0hYpCcV1_voJC1Wop5OIp43zr5Mm1XosJ1hFg4amZbV0W5t6JJKWBgkCUDfTP8skm8_51QnjXQE
- 8QCpQpaPddXZc9Hfx8m.Q2.0P8pQO3u91godK_vr.qiMeUI6vOOFqYeRaZOrA95JD_x.rtD0s3k_
- U9bhsQCX.VTmzIKrKjFVPjpHagPm35StglXeP4vUMxWor_i5bKk0hKX9DMxYt9eTcoMp9NY191I4
- qO7YchoVzYO0EveRwEy_EiXlBwGVUm0JacfVd0AN.7sbKiIdVyEoPxaYenupG2AMP5OWBL1GwFlD
- QKlQbRQF_pU.Lm6yfw_EVlJA9UnwBZay9m9Hmi0jRXSi.tx8VkPtsNWOYXrpPSjqW4OGcV5zWnqY
- ibo2F3s3HdQXix1bjFw4D.3ubhLeT7Nv6pKeZCcPxPJYH
-X-Sonic-MF: <casey@schaufler-ca.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Thu, 1 Sep 2022 16:45:57 +0000
-Received: by hermes--production-ne1-544744cc75-fkh7w (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 562a760a3854b598b8eb46b4e9c8ee91;
-          Thu, 01 Sep 2022 16:45:53 +0000 (UTC)
-Message-ID: <d955d8b5-ca2e-c040-9415-772fa5a71bc7@schaufler-ca.com>
-Date:   Thu, 1 Sep 2022 09:45:51 -0700
+        Thu, 1 Sep 2022 12:46:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCA978210
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 09:46:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1662050786;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2b9v4HXJzhZu/yaMjJXJJEE+gK1pvbHfVCvX7BuxTMI=;
+        b=C8sdvL1n0FbFwS/0AjZ0P1oAztgHYgOBclZh7qhzrAJBiF4nhSBoxIwkM+YS+0NgwPpE7n
+        mNt15T/5Ay+QgotaLVyYyqk3Ewt7lb/q0GmZXpcCimWNdLq1ydl8misQpFQzEloT8U9Kta
+        SwiYvqYzrBgP29ogG7U9kXkm8M4gJk8=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-73-8nmyFxM2N8iMFf80UffMtg-1; Thu, 01 Sep 2022 12:46:17 -0400
+X-MC-Unique: 8nmyFxM2N8iMFf80UffMtg-1
+Received: by mail-wm1-f70.google.com with SMTP id h82-20020a1c2155000000b003a64d0510d9so10079960wmh.8
+        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 09:46:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date;
+        bh=2b9v4HXJzhZu/yaMjJXJJEE+gK1pvbHfVCvX7BuxTMI=;
+        b=Mth1LL/DYkpUKVQ1RdwpvRiWSS4CrPsUbtPVu0DjwjktGoxC1/cA9qZxhrlSNsn/vn
+         YUDOwxdTNiqhhmuihmXVDVBBETg7ctroIXhZh7hZ8oZp6FTTgDW4djyZJO/XY5OdL9ez
+         Zmy85zJD4CruHwjqK/XeNUMaaGmUjnZAeC9mTbXum0FYnEDFY3ECIfNySfHd6KHhhMAq
+         qGItxcxEpKUtZG977EdSBuOxho8yWQZJp1r2pZ+wlK4YGw4bvVmjoKA1VBfsyxHRkBFk
+         PUlfPptMi9aNdcZhumIUwXVB/53mq0+Ok+wogbS/LnGnzqDwKgl8+IirOFh17pWfVzDl
+         j9TA==
+X-Gm-Message-State: ACgBeo0HGEjWOY4Badfycq0brbUMN1zxNd5LkZ1YyL/3ur1LWhkpMKYn
+        fE64+atolrXvntJ4PFbeEMeAafiVfT57hqt7Vtm78PxK7t9HAiqUM8mT9eCYu+V8CCbKZmSS8SD
+        iPiiZ2+LVgn+CtAldX5ROSZRd
+X-Received: by 2002:a7b:c4d5:0:b0:3a6:161b:4d77 with SMTP id g21-20020a7bc4d5000000b003a6161b4d77mr11048wmk.87.1662050774952;
+        Thu, 01 Sep 2022 09:46:14 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR46f7lDfKgw7Jdfg/C67X2AVW4i1hdeIwsRk9vy73cEvdnFAp98R9rCbQQNyYOFDaDsj/3Aqg==
+X-Received: by 2002:a7b:c4d5:0:b0:3a6:161b:4d77 with SMTP id g21-20020a7bc4d5000000b003a6161b4d77mr11029wmk.87.1662050774652;
+        Thu, 01 Sep 2022 09:46:14 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:9e00:fec0:7e96:15cb:742? (p200300cbc7079e00fec07e9615cb0742.dip0.t-ipconnect.de. [2003:cb:c707:9e00:fec0:7e96:15cb:742])
+        by smtp.gmail.com with ESMTPSA id m15-20020a7bcb8f000000b003a83b066401sm5620862wmi.31.2022.09.01.09.46.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 01 Sep 2022 09:46:14 -0700 (PDT)
+Message-ID: <c9dc3f22-4a72-9b9d-7a74-ad77fe4f3b6e@redhat.com>
+Date:   Thu, 1 Sep 2022 18:46:13 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [RFC PATCH 1/2] fs/xattr: add *at family syscalls
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
 Content-Language: en-US
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>
-Cc:     selinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        LSM List <linux-security-module@vger.kernel.org>
-References: <20220830152858.14866-1-cgzones@googlemail.com>
- <20220830152858.14866-2-cgzones@googlemail.com> <Yw/eEufm/QpKg5Pq@ZenIV>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <Yw/eEufm/QpKg5Pq@ZenIV>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sasha Levin <sasha.levin@oracle.com>,
+        "Aneesh Kumar K . V" <aneesh.kumar@linux.vnet.ibm.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Jerome Marchand <jmarchan@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>
+References: <20220901072119.37588-1-david@redhat.com>
+ <YxDdycTur733hMgt@xz-m1.local>
+ <fa0bb4b1-3edd-eb5a-7ad6-dff785d88d8f@redhat.com>
+ <YxDghv54uHYMGCfG@xz-m1.local>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v1] mm/gup: adjust stale comment for RCU GUP-fast
+In-Reply-To: <YxDghv54uHYMGCfG@xz-m1.local>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Mailer: WebService/1.1.20595 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/31/2022 3:17 PM, Al Viro wrote:
-> [linux-arch Cc'd for ABI-related stuff]
-
-The LSM list <linux-security-module@vger.kernel.org> should be on
-this thread as SELinux isn't the only security module that uses xattrs
-extensively.
-
->
-> On Tue, Aug 30, 2022 at 05:28:39PM +0200, Christian Göttsche wrote:
->> Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
->> removexattrat() to enable extended attribute operations via file
->> descriptors.  This can be used from userspace to avoid race conditions,
->> especially on security related extended attributes, like SELinux labels
->> ("security.selinux") via setfiles(8).
+On 01.09.22 18:40, Peter Xu wrote:
+> On Thu, Sep 01, 2022 at 06:34:41PM +0200, David Hildenbrand wrote:
+>> On 01.09.22 18:28, Peter Xu wrote:
+>>> On Thu, Sep 01, 2022 at 09:21:19AM +0200, David Hildenbrand wrote:
+>>>> commit 4b471e8898c3 ("mm, thp: remove infrastructure for handling splitting
+>>>> PMDs") didn't remove all details about the THP split requirements for
+>>>> RCU GUP-fast.
+>>>>
+>>>> IPI broeadcasts on THP split are no longer required.
+>>>>
+>>>> Cc: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+>>>> Cc: Sasha Levin <sasha.levin@oracle.com>
+>>>> Cc: Aneesh Kumar K.V <aneesh.kumar@linux.vnet.ibm.com>
+>>>> Cc: Vlastimil Babka <vbabka@suse.cz>
+>>>> Cc: Jerome Marchand <jmarchan@redhat.com>
+>>>> Cc: Andrea Arcangeli <aarcange@redhat.com>
+>>>> Cc: Hugh Dickins <hughd@google.com>
+>>>> Cc: Jason Gunthorpe <jgg@nvidia.com>
+>>>> Cc: John Hubbard <jhubbard@nvidia.com>
+>>>> Cc: Peter Xu <peterx@redhat.com>
+>>>> Cc: Yang Shi <shy828301@gmail.com>
+>>>> Signed-off-by: David Hildenbrand <david@redhat.com>
+>>>> ---
+>>>>  mm/gup.c | 5 ++---
+>>>>  1 file changed, 2 insertions(+), 3 deletions(-)
+>>>>
+>>>> diff --git a/mm/gup.c b/mm/gup.c
+>>>> index 5abdaf487460..cfe71f422787 100644
+>>>> --- a/mm/gup.c
+>>>> +++ b/mm/gup.c
+>>>> @@ -2309,9 +2309,8 @@ EXPORT_SYMBOL(get_user_pages_unlocked);
+>>>>   *
+>>>>   * Another way to achieve this is to batch up page table containing pages
+>>>>   * belonging to more than one mm_user, then rcu_sched a callback to free those
+>>>> - * pages. Disabling interrupts will allow the fast_gup walker to both block
+>>>> - * the rcu_sched callback, and an IPI that we broadcast for splitting THPs
+>>>> - * (which is a relatively rare event). The code below adopts this strategy.
+>>>> + * pages. Disabling interrupts will allow the fast_gup walker to block the
+>>>> + * rcu_sched callback.
+>>>
+>>> This is the comment for fast-gup in general but not only for thp split.
 >>
->> Use the do_{name}at() pattern from fs/open.c.
->> Use a single flag parameter for extended attribute flags (currently
->> XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
->> syscall arguments in setxattrat().
-> 	I've no problems with the patchset aside of the flags part;
-> however, note that XATTR_CREATE and XATTR_REPLACE are actually exposed
-> to the network - the values are passed to nfsd by clients.
-> See nfsd4_decode_setxattr() and
->         BUILD_BUG_ON(XATTR_CREATE != SETXATTR4_CREATE);
-> 	BUILD_BUG_ON(XATTR_REPLACE != SETXATTR4_REPLACE);
-> in encode_setxattr() on the client side.
->
-> 	Makes me really nervous about constraints like that.  Sure,
-> AT_... flags you are using are in the second octet and these are in
-> the lowest one, but...
+>> "an IPI that we broadcast for splitting THP" is about splitting THP.
+> 
+> Ah OK.  Shall we still keep some "IPI broadcast" information here if we're
+> modifying it?  Otherwise it gives a feeling that none needs the IPIs.
+
+I guess that's the end goal -- and we forgot about the PMD collapse case.
+
+Are we aware of any other case that needs an IPI? I'd rather avoid
+documenting something that's no longer true.
+
+> 
+> It can be dropped later if you want to rework the thp collapse side and
+> finally remove IPI dependency on fast-gup, but so far it seems to me it's
+> still needed.  Or just drop this patch until that rework happens?
+
+The doc as is is obviously stale, why drop this patch?
+
+We should see a fix for the THP collapse issue very soon I guess. Most
+probably this patch will go upstream after that fix.
+
+> 
+>>
+>>>
+>>> I can understand that we don't need IPI for thp split, but isn't the IPIs
+>>> still needed for thp collapse (aka pmdp_collapse_flush)?
+>>
+>> That was, unfortunately, never documented -- and as discussed in the
+>> other thread, arm64 doesn't do that IPI before collapse and might need
+>> fixing. We'll most probably end up getting rid of that
+>> (undocumented/forgotten) IPI requirement and fix it in GUP-fast by
+>> re-rechecking if the PMD changed.
+> 
+> Yeah from an initial thought that looks valid to me.  It'll also allow
+> pmdp_collapse_flush() to be dropped too, am I right?
+
+I think the magic about pmdp_collapse_flush() is not only the IPIs, but
+that we don't perform an ordinary PMD flush but we logically flush "all
+PTEs in that range".
+
+Apparently, that's a difference on some architectures.
+
+
+-- 
+Thanks,
+
+David / dhildenb
+

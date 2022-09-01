@@ -2,81 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C03075A95EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A61645A95FE
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 13:49:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232415AbiIALsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 07:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58112 "EHLO
+        id S232864AbiIALtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 07:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232666AbiIALsL (ORCPT
+        with ESMTP id S233125AbiIALtA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 07:48:11 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37FB21616BB
-        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 04:48:08 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id h20-20020a056830165400b00638ac7ddba5so12183711otr.4
-        for <linux-kernel@vger.kernel.org>; Thu, 01 Sep 2022 04:48:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=gs2edPsujnl7CWNh7HlhsQUZIDEP93wl7jDr/MStIUw=;
-        b=p4Jy2v4kA4G083K2jvV8paFTLopfZmvrFFiJVDXHA2CLiAiMQbvzaI+6xtM8fy/ioG
-         q6v7h070g3jpHvc4zgWyn3PlpTVoAJgBTO2vVRqQ3EqVA8c08gieh25/eEkREYxnvqky
-         TXkIBKV0x1PI2gdqV0XGCVMXGEeDH6C6muFw/yupvnl6MjMyjVVbFbPShk3Jp824gz71
-         N7Rba0BKxgepKwaUOE+wXqFZ3V32Gshk2fFTQE/vAu0GyhiDDfyyUOytBQkvw7WZ40UR
-         sh7VZ6I3eovXnP5i1aVdjY/A1mrIEVM/6RFgdxOsTWqH4+36C6UQ89MrljrPBnuhgQKp
-         7dUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=gs2edPsujnl7CWNh7HlhsQUZIDEP93wl7jDr/MStIUw=;
-        b=Nsotm8TWUqHdbRtPreYyrME5V2H089Os5koXia8axaVoltdEZpMhJP/+c3N7t255po
-         LyDMsOKDATsnJ/+Lbt1c1Lpv4jjCy3pGS55xUb6N67/GKL7cOOSYKpDkS5p5Tv4yU86a
-         Vycw3kN6Bw0gfc1U2eN0081iVEqyd9GwTN4v10FFvPMshsk62KH1D+EJUG3/PqoEbF3A
-         21gVi1IWttE0OxiLbgcPOORDYYmmmZGg/ydVXKBSEb+I30lnQUfHAEg6pkUALbduYcWq
-         fWTfQkbY7x7Z5t+zNOqasqT/yVEiKv8E2h6L6zQBA0FqwS3mqdX/vPqgQusWI2ieGsQc
-         7MVg==
-X-Gm-Message-State: ACgBeo0bcmJsr8lo/2H3Ig1YT26BitaqQb4BdmAKrTwXdfl0e2VjRTUm
-        uxYMMSNj+8DBANkKnwwlbnR2B3RYFrDlS4/XyXYHOA==
-X-Google-Smtp-Source: AA6agR6hJTVkzRjg9Zp0GaEGFRl4JLkQUdmzHa2xCc6eISLwJhjaURVIMa4Ntc6+O/EMeYoeT/5memUCEXVJ+lrAETU=
-X-Received: by 2002:a05:6830:2a8e:b0:638:c41c:d5a1 with SMTP id
- s14-20020a0568302a8e00b00638c41cd5a1mr12801248otu.367.1662032887714; Thu, 01
- Sep 2022 04:48:07 -0700 (PDT)
+        Thu, 1 Sep 2022 07:49:00 -0400
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA83C13A7E4
+        for <linux-kernel@vger.kernel.org>; Thu,  1 Sep 2022 04:48:59 -0700 (PDT)
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+        by localhost (Postfix) with ESMTP id 4MJK7s1Bkmz9sp8;
+        Thu,  1 Sep 2022 13:48:57 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+        by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id zENmgUcEPJFI; Thu,  1 Sep 2022 13:48:57 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+        by pegase2.c-s.fr (Postfix) with ESMTP id 4MJK7r70wRz9sp7;
+        Thu,  1 Sep 2022 13:48:56 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id DD8BF8B780;
+        Thu,  1 Sep 2022 13:48:56 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+        by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+        with ESMTP id TIenZCy2TllG; Thu,  1 Sep 2022 13:48:56 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (unknown [192.168.232.131])
+        by messagerie.si.c-s.fr (Postfix) with ESMTP id A3AA18B764;
+        Thu,  1 Sep 2022 13:48:56 +0200 (CEST)
+Received: from PO20335.IDSI0.si.c-s.fr (localhost [127.0.0.1])
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.16.1) with ESMTPS id 281BmkoS1768874
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NOT);
+        Thu, 1 Sep 2022 13:48:46 +0200
+Received: (from chleroy@localhost)
+        by PO20335.IDSI0.si.c-s.fr (8.17.1/8.17.1/Submit) id 281BmgEQ1768870;
+        Thu, 1 Sep 2022 13:48:42 +0200
+X-Authentication-Warning: PO20335.IDSI0.si.c-s.fr: chleroy set sender to christophe.leroy@csgroup.eu using -f
+From:   Christophe Leroy <christophe.leroy@csgroup.eu>
+To:     Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>, sv@linux.ibm.com,
+        bgray@linux.ibm.com, agust@denx.de, jpoimboe@kernel.org,
+        peterz@infradead.org, jbaron@akamai.com, rostedt@goodmis.org,
+        ardb@kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com
+Cc:     Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        x86@kernel.org, chenzhongjin@huawei.com
+Subject: [PATCH v3 0/6] Implement inline static calls on PPC32 - v3
+Date:   Thu,  1 Sep 2022 13:48:19 +0200
+Message-Id: <cover.1662032631.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-References: <20220831003506.4117148-1-seanjc@google.com> <20220831003506.4117148-4-seanjc@google.com>
- <17e776dccf01e03bce1356beb8db0741e2a13d9a.camel@redhat.com>
- <84c2e836d6ba4eae9fa20329bcbc1d19f8134b0f.camel@redhat.com>
- <Yw+MYLyVXvxmbIRY@google.com> <59206c01da236c836c58ff96c5b4123d18a28b2b.camel@redhat.com>
- <Yw+yjo4TMDYnyAt+@google.com> <c6e9a565d60fb602a9f4fc48f2ce635bf658f1ea.camel@redhat.com>
-In-Reply-To: <c6e9a565d60fb602a9f4fc48f2ce635bf658f1ea.camel@redhat.com>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Thu, 1 Sep 2022 04:47:56 -0700
-Message-ID: <CALMp9eQWHADOoQsocSWwwhyyxk-5oT=GzsGJSj1H=Lsfo=fuEQ@mail.gmail.com>
-Subject: Re: [PATCH 03/19] Revert "KVM: SVM: Introduce hybrid-AVIC mode"
-To:     Maxim Levitsky <mlevitsk@redhat.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Li RongQing <lirongqing@baidu.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1662032901; l=1870; s=20211009; h=from:subject:message-id; bh=GAgDRyI5Iv4v6NxY6e0q7Pc95r863rGYKNlkTCV4Iz4=; b=xIoTdQATVlMxl+qo3b8kowa0Ce1JnaXHUKOLiVoHMjZhqAH98kCIcW/VrJESaDkHweU7OcGCCuQ/ ZHZ5QlLlAZhSMhFyRCUfG3ew9RKhh2g10uAM5ujyxo71l437f4Kv
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 1, 2022 at 3:26 AM Maxim Levitsky <mlevitsk@redhat.com> wrote:
+This series applies on top of the series v2 "objtool: Enable and
+implement --mcount option on powerpc" [1]
 
-> I just know that nothing is absolute, in some rare cases (like different APIC base per cpu),
-> it is just not feasable to support the spec.
+A few modifications are done to core parts to enable powerpc
+implementation:
+- R_X86_64_PC32 is abstracted to R_REL32 so that it can then be
+redefined as R_PPC_REL32.
+- A call to static_call_init() is added to start_kernel() to avoid
+every architecture to have to call it
+- Trampoline address is provided to arch_static_call_transform() even
+when setting a site to fallback on a call to the trampoline when the
+target is too far.
 
-Why isn't this feasible? We supported it when I was at VMware.
+[1] https://lore.kernel.org/all/20220829055223.24767-8-sv@linux.ibm.com/T/
+
+This version of the series includes a preliminary patch (patch 1) that
+should be squashed into Sathvika's series.
+
+Christophe Leroy (6):
+  Fixup for "objtool/powerpc: Add --mcount specific implementation"
+  objtool: Add architecture specific R_REL32 macro
+  init: Call static_call_init() from start_kernel()
+  static_call_inline: Provide trampoline address when updating sites
+  powerpc: Prepare arch_static_call_transform() for supporting inline
+    static calls
+  powerpc/static_call: Implement inline static calls
+
+ arch/powerpc/Kconfig                          |  1 +
+ arch/powerpc/include/asm/static_call.h        |  2 +
+ arch/powerpc/kernel/static_call.c             | 58 ++++++++++++++-----
+ arch/x86/kernel/static_call.c                 |  2 +-
+ init/main.c                                   |  1 +
+ kernel/static_call_inline.c                   |  2 +-
+ tools/objtool/arch/powerpc/decode.c           | 39 +++++++++----
+ tools/objtool/arch/powerpc/include/arch/elf.h |  1 +
+ tools/objtool/arch/x86/include/arch/elf.h     |  1 +
+ tools/objtool/check.c                         | 10 ++--
+ tools/objtool/orc_gen.c                       |  2 +-
+ 11 files changed, 85 insertions(+), 34 deletions(-)
+
+-- 
+2.37.1
+

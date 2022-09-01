@@ -2,102 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12D375A8D0F
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D55055A8D12
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 07:07:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232757AbiIAFFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 01:05:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36860 "EHLO
+        id S232787AbiIAFHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 01:07:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232718AbiIAFFm (ORCPT
+        with ESMTP id S231447AbiIAFHe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 01:05:42 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5185FF9957
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 22:05:40 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3321c2a8d4cso326159737b3.5
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 22:05:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=ktZOhU9M+eiBxoPfSKrBwsk5VZxY64ML34Vei/rqz2s=;
-        b=UnvyXVMIRiciK0rqi4Rla4SS9BjEhBuxvGCuhtbiGji3fDuHUeDlC2C4TbCLRZRSwR
-         +328Kj0pV/r/xNPqU1581dA9M6WZOvrs39FcqOg6hNQT5ifEu0MLEP+Zz/2G+jRm7WMN
-         7axpEQrwYULoaAc5UOWeK4pidUhWzYApn91X0NwQTEXfOOrYw3wXsfjb2f2S21BvY7t3
-         Zg1V8M6rEvRQMEwY0dY+iYzvNIKUl0aPxff0C2lbwvD8YaEzrAOwphxkhABpA5cqFwfx
-         wpTyALvpTmRkdUhm9RVjdaatnoaqYeLhUBKhA4+4MYeMDI/E+7MF6YajUpv+RJVJmtfD
-         MOWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=ktZOhU9M+eiBxoPfSKrBwsk5VZxY64ML34Vei/rqz2s=;
-        b=FgDPwt5ITBZXYtC/9G/3wijDcv2UT628+22TeUWzJ+kE92Ok2aFF3+PIU5L1XFRU0q
-         DeWtiu6hJUOkvg6Lk2A14rhWRX6HniXrXqDQquxKQiS4uEB2lvu7gTu/aNO1c0RqwEjO
-         BHjSh74Z9CabQr4KjtWUqzQcJKU1NVVg+mP7jNhQ3zcD9OzUZ7gX6njDs87RPJzV/oML
-         6PWoKFF+6sU+6X5IJmNovnuoXi3Ui+/FaCYuU0loAQBeqbkOK1b8tAgHTWK85EkjMGKU
-         vXr1P5tH1f7zsDqkFf0ouSlN9XqDJ3tEQwOA+I/jRGuqA+a8c0+hd3EXoIothKbRBgF6
-         FZEg==
-X-Gm-Message-State: ACgBeo3YQ5tc5eCvuuKtSUvYoIFyHsrUXDUw/7Ba53Ql9kHt7MdSbIPl
-        SBv1tWYxUA9piu1rq1Qyjb6M6TswaYBfZQsO+x5lqA==
-X-Google-Smtp-Source: AA6agR6X7FU4pvrjt5vMDUM/DC2IsE6vILG7I4DBJ25hoCu+6BelY82RpFQkl53Zm+EyPsuJsyRbi+nPLdvdkyesITk=
-X-Received: by 2002:a81:a04c:0:b0:340:4c27:dfc6 with SMTP id
- x73-20020a81a04c000000b003404c27dfc6mr20996289ywg.507.1662008739346; Wed, 31
- Aug 2022 22:05:39 -0700 (PDT)
+        Thu, 1 Sep 2022 01:07:34 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 020FA112EC7;
+        Wed, 31 Aug 2022 22:07:32 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AA834D6E;
+        Wed, 31 Aug 2022 22:07:38 -0700 (PDT)
+Received: from [10.162.43.7] (unknown [10.162.43.7])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 610963F71A;
+        Wed, 31 Aug 2022 22:07:27 -0700 (PDT)
+Message-ID: <9b1a8ebd-0562-f104-7439-308282f7fb52@arm.com>
+Date:   Thu, 1 Sep 2022 10:37:24 +0530
 MIME-Version: 1.0
-References: <20220830214919.53220-1-surenb@google.com> <YxA6pCu0YNIiXkHf@localhost.localdomain>
-In-Reply-To: <YxA6pCu0YNIiXkHf@localhost.localdomain>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Wed, 31 Aug 2022 22:05:28 -0700
-Message-ID: <CAJuCfpGxB0z1V1Vau3bXF9eHZVHnANdA7keMzCLUK+_gN6+HeA@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/30] Code tagging framework and applications
-To:     Oscar Salvador <osalvador@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Kent Overstreet <kent.overstreet@linux.dev>,
-        Michal Hocko <mhocko@suse.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Mel Gorman <mgorman@suse.de>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Matthew Wilcox <willy@infradead.org>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        David Vernet <void@manifault.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Laurent Dufour <ldufour@linux.ibm.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>, mcgrof@kernel.org,
-        masahiroy@kernel.org, nathan@kernel.org, ytcoode@gmail.com,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Benjamin Segall <bsegall@google.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Christopher Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>, 42.hyeyoo@gmail.com,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>, dvyukov@google.com,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>, arnd@arndb.de,
-        jbaron@akamai.com, David Rientjes <rientjes@google.com>,
-        Minchan Kim <minchan@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        kernel-team <kernel-team@android.com>,
-        linux-mm <linux-mm@kvack.org>, iommu@lists.linux.dev,
-        kasan-dev@googlegroups.com, io-uring@vger.kernel.org,
-        linux-arch@vger.kernel.org, xen-devel@lists.xenproject.org,
-        linux-bcache@vger.kernel.org, linux-modules@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH V7 6/8] perf/tools: Extend branch type classification
+Content-Language: en-US
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        peterz@infradead.org, alexander.shishkin@linux.intel.com,
+        jolsa@redhat.com, mark.rutland@arm.com,
+        Robin Murphy <robin.murphy@arm.com>,
+        Suzuki Poulose <suzuki.poulose@arm.com>,
+        James Clark <james.clark@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        linux-arm-kernel@lists.infradead.org
+References: <20220824044822.70230-1-anshuman.khandual@arm.com>
+ <20220824044822.70230-7-anshuman.khandual@arm.com>
+ <Yw59CkHUVbfrHdkh@kernel.org>
+From:   Anshuman Khandual <anshuman.khandual@arm.com>
+In-Reply-To: <Yw59CkHUVbfrHdkh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,69 +57,176 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 31, 2022 at 9:52 PM Oscar Salvador <osalvador@suse.de> wrote:
->
-> On Tue, Aug 30, 2022 at 02:48:49PM -0700, Suren Baghdasaryan wrote:
-> > ===========================
-> > Code tagging framework
-> > ===========================
-> > Code tag is a structure identifying a specific location in the source code
-> > which is generated at compile time and can be embedded in an application-
-> > specific structure. Several applications of code tagging are included in
-> > this RFC, such as memory allocation tracking, dynamic fault injection,
-> > latency tracking and improved error code reporting.
-> > Basically, it takes the old trick of "define a special elf section for
-> > objects of a given type so that we can iterate over them at runtime" and
-> > creates a proper library for it.
-> >
-> > ===========================
-> > Memory allocation tracking
-> > ===========================
-> > The goal for using codetags for memory allocation tracking is to minimize
-> > performance and memory overhead. By recording only the call count and
-> > allocation size, the required operations are kept at the minimum while
-> > collecting statistics for every allocation in the codebase. With that
-> > information, if users are interested in mode detailed context for a
-> > specific allocation, they can enable more in-depth context tracking,
-> > which includes capturing the pid, tgid, task name, allocation size,
-> > timestamp and call stack for every allocation at the specified code
-> > location.
-> > Memory allocation tracking is implemented in two parts:
-> >
-> > part1: instruments page and slab allocators to record call count and total
-> > memory allocated at every allocation in the source code. Every time an
-> > allocation is performed by an instrumented allocator, the codetag at that
-> > location increments its call and size counters. Every time the memory is
-> > freed these counters are decremented. To decrement the counters upon free,
-> > allocated object needs a reference to its codetag. Page allocators use
-> > page_ext to record this reference while slab allocators use memcg_data of
-> > the slab page.
-> > The data is exposed to the user space via a read-only debugfs file called
-> > alloc_tags.
->
-> Hi Suren,
->
-> I just posted a patch [1] and reading through your changelog and seeing your PoC,
-> I think we have some kind of overlap.
-> My patchset aims to give you the stacktrace <-> relationship information and it is
-> achieved by a little amount of extra code mostly in page_owner.c/ and lib/stackdepot.
->
-> Of course, your works seems to be more complete wrt. the information you get.
->
-> I CCed you in case you want to have a look
->
-> [1] https://lkml.org/lkml/2022/9/1/36
 
-Hi Oscar,
-Thanks for the note. I'll take a look most likely on Friday and will
-follow up with you.
-Thanks,
-Suren.
 
->
-> Thanks
->
->
-> --
-> Oscar Salvador
-> SUSE Labs
+On 8/31/22 02:41, Arnaldo Carvalho de Melo wrote:
+> Em Wed, Aug 24, 2022 at 10:18:20AM +0530, Anshuman Khandual escreveu:
+>> This updates the perf tool with generic branch type classification with new
+>> ABI extender place holder i.e PERF_BR_EXTEND_ABI, the new 4 bit branch type
+>> field i.e perf_branch_entry.new_type, new generic page fault related branch
+>> types and some arch specific branch types as added earlier in the kernel.
+>>
+>> Cc: Peter Zijlstra <peterz@infradead.org>
+>> Cc: Ingo Molnar <mingo@redhat.com>
+>> Cc: Arnaldo Carvalho de Melo <acme@kernel.org>
+>> Cc: Mark Rutland <mark.rutland@arm.com>
+>> Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
+>> Cc: Jiri Olsa <jolsa@redhat.com>
+>> Cc: Namhyung Kim <namhyung@kernel.org>
+>> Cc: Thomas Gleixner <tglx@linutronix.de>
+>> Cc: Will Deacon <will@kernel.org>
+>> Cc: linux-arm-kernel@lists.infradead.org
+>> Cc: linux-perf-users@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org
+>> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> ---
+>>  tools/include/uapi/linux/perf_event.h | 16 ++++++++-
+>>  tools/perf/builtin-script.c           |  2 +-
+>>  tools/perf/util/branch.c              | 52 ++++++++++++++++++++++++++-
+>>  tools/perf/util/branch.h              |  6 +++-
+>>  tools/perf/util/session.c             |  2 +-
+>>  5 files changed, 73 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+>> index 146c137ff0c1..0f7c7ce29899 100644
+>> --- a/tools/include/uapi/linux/perf_event.h
+>> +++ b/tools/include/uapi/linux/perf_event.h
+>> @@ -255,9 +255,22 @@ enum {
+>>  	PERF_BR_IRQ		= 12,	/* irq */
+>>  	PERF_BR_SERROR		= 13,	/* system error */
+>>  	PERF_BR_NO_TX		= 14,	/* not in transaction */
+>> +	PERF_BR_EXTEND_ABI	= 15,	/* extend ABI */
+>>  	PERF_BR_MAX,
+>>  };
+>>  
+>> +enum {
+>> +	PERF_BR_NEW_FAULT_ALGN		= 0,    /* Alignment fault */
+>> +	PERF_BR_NEW_FAULT_DATA		= 1,    /* Data fault */
+>> +	PERF_BR_NEW_FAULT_INST		= 2,    /* Inst fault */
+>> +	PERF_BR_NEW_ARCH_1		= 3,    /* Architecture specific */
+>> +	PERF_BR_NEW_ARCH_2		= 4,    /* Architecture specific */
+>> +	PERF_BR_NEW_ARCH_3		= 5,    /* Architecture specific */
+>> +	PERF_BR_NEW_ARCH_4		= 6,    /* Architecture specific */
+>> +	PERF_BR_NEW_ARCH_5		= 7,    /* Architecture specific */
+>> +	PERF_BR_NEW_MAX,
+>> +};
+>> +
+>>  #define PERF_SAMPLE_BRANCH_PLM_ALL \
+>>  	(PERF_SAMPLE_BRANCH_USER|\
+>>  	 PERF_SAMPLE_BRANCH_KERNEL|\
+>> @@ -1375,7 +1388,8 @@ struct perf_branch_entry {
+>>  		abort:1,    /* transaction abort */
+>>  		cycles:16,  /* cycle count to last branch */
+>>  		type:4,     /* branch type */
+>> -		reserved:40;
+>> +		new_type:4, /* additional branch type */
+>> +		reserved:36;
+>>  };
+>>  
+>>  union perf_sample_weight {
+>> diff --git a/tools/perf/builtin-script.c b/tools/perf/builtin-script.c
+>> index 13580a9c50b8..585171479876 100644
+>> --- a/tools/perf/builtin-script.c
+>> +++ b/tools/perf/builtin-script.c
+>> @@ -877,7 +877,7 @@ static int print_bstack_flags(FILE *fp, struct branch_entry *br)
+>>  		       br->flags.in_tx ? 'X' : '-',
+>>  		       br->flags.abort ? 'A' : '-',
+>>  		       br->flags.cycles,
+>> -		       br->flags.type ? branch_type_name(br->flags.type) : "-");
+>> +		       get_branch_type(br));
+>>  }
+>>  
+>>  static int perf_sample__fprintf_brstack(struct perf_sample *sample,
+>> diff --git a/tools/perf/util/branch.c b/tools/perf/util/branch.c
+>> index abc673347bee..6d962b0a4532 100644
+>> --- a/tools/perf/util/branch.c
+>> +++ b/tools/perf/util/branch.c
+>> @@ -21,7 +21,10 @@ void branch_type_count(struct branch_type_stat *st, struct branch_flags *flags,
+>>  	if (flags->type == PERF_BR_UNKNOWN || from == 0)
+>>  		return;
+>>  
+>> -	st->counts[flags->type]++;
+>> +	if (flags->type == PERF_BR_EXTEND_ABI)
+>> +		st->new_counts[flags->new_type]++;
+>> +	else
+>> +		st->counts[flags->type]++;
+>>  
+>>  	if (flags->type == PERF_BR_COND) {
+>>  		if (to > from)
+>> @@ -36,6 +39,25 @@ void branch_type_count(struct branch_type_stat *st, struct branch_flags *flags,
+>>  		st->cross_4k++;
+>>  }
+>>  
+>> +const char *branch_new_type_name(int new_type)
+>> +{
+>> +	const char *branch_new_names[PERF_BR_NEW_MAX] = {
+>> +		"FAULT_ALGN",
+>> +		"FAULT_DATA",
+>> +		"FAULT_INST",
+>> +		"ARCH_1",
+>> +		"ARCH_2",
+>> +		"ARCH_3",
+>> +		"ARCH_4",
+>> +		"ARCH_5"
+>> +	};
+>> +
+>> +	if (new_type >= 0 && new_type < PERF_BR_NEW_MAX)
+>> +		return branch_new_names[new_type];
+>> +
+>> +	return NULL;
+>> +}
+>> +
+>>  const char *branch_type_name(int type)
+>>  {
+>>  	const char *branch_names[PERF_BR_MAX] = {
+>> @@ -62,6 +84,17 @@ const char *branch_type_name(int type)
+>>  	return NULL;
+>>  }
+>>  
+>> +const char *get_branch_type(struct branch_entry *e)
+>> +{
+>> +	if (e->flags.type == PERF_BR_UNKNOWN)
+>> +		return "";
+>> +
+>> +	if (e->flags.type == PERF_BR_EXTEND_ABI)
+>> +		return branch_new_type_name(e->flags.new_type);
+>> +
+>> +	return branch_type_name(e->flags.type);
+>> +}
+>> +
+>>  void branch_type_stat_display(FILE *fp, struct branch_type_stat *st)
+>>  {
+>>  	u64 total = 0;
+>> @@ -108,6 +141,15 @@ void branch_type_stat_display(FILE *fp, struct branch_type_stat *st)
+>>  				100.0 *
+>>  				(double)st->counts[i] / (double)total);
+>>  	}
+>> +
+>> +	for (i = 0; i < PERF_BR_NEW_MAX; i++) {
+>> +		if (st->new_counts[i] > 0)
+>> +			fprintf(fp, "\n%8s: %5.1f%%",
+>> +				branch_new_type_name(i),
+>> +				100.0 *
+>> +				(double)st->new_counts[i] / (double)total);
+>> +	}
+>> +
+> Strange:
+> 
+>   75     8.89 ubuntu:20.04-x-powerpc64el    : FAIL gcc version 10.3.0 (Ubuntu 10.3.0-1ubuntu1~20.04)
+>         inlined from 'branch_type_stat_display' at util/branch.c:152:4:
+>     /usr/powerpc64le-linux-gnu/include/bits/stdio2.h:100:10: error: '%8s' directive argument is null [-Werror=format-overflow=]
+>       100 |   return __fprintf_chk (__stream, __USE_FORTIFY_LEVEL - 1, __fmt,
+>           |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>       101 |    __va_arg_pack ());
+>           |    ~~~~~~~~~~~~~~~~~
+> 
+
+Indeed. But this new code block here looks exact same like the previous and existing one
+i.e with branch_new_name() and PERF_BR_NEW_MAX. The complain is that - '%8s' directive
+argument is NULL. This warning might just be a false positive [1], because of a compiler
+problem on powerpc64el ? But please do let me know if something needs to be changed here
+to avoid this warning.
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90036
+
+- Anshuman

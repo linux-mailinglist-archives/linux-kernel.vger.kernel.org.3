@@ -2,64 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C29AE5A8B2C
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:05:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0749A5A8B26
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 04:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbiIACD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 31 Aug 2022 22:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46298 "EHLO
+        id S232465AbiIACCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 31 Aug 2022 22:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232487AbiIACDw (ORCPT
+        with ESMTP id S231484AbiIACCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 31 Aug 2022 22:03:52 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D0B12A5DB
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:03:49 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id y64so8874059ede.2
-        for <linux-kernel@vger.kernel.org>; Wed, 31 Aug 2022 19:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date;
-        bh=GLyJtpKYjAWVukHj8OfQs9NooE0dTpqijstiqps581g=;
-        b=HQRRbGdVNSTYJ5UP4+Tguup9O7S5t7OrR2G/YHcyaaOEGRc2gtHYq4pL2Qmc1bVBWZ
-         HRBtMM2pkr5HrIPodU/WipVR9DFKhX3triPvh1WTruXCYYg9S5q3Ugfg/BKkVHpBig4M
-         yuhcvSl9MM5JypcTjhIwTPZqBei98pzAqgk62PdH1foiqytmUtnHN+X1guStBC7VTNN2
-         KsCOyjOyllSFD7aNks43Bh1NvoAuhWpscM+ii+sQa8NLhxXp5y//dwLvAxj1DTUmfD0B
-         LITEFTQAZdzUA1pOY/qPAnveXvlLOI5m1r3OA3KR3sHDEUXK6zVIGSGRqHED9TvEzfKP
-         3/qw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date;
-        bh=GLyJtpKYjAWVukHj8OfQs9NooE0dTpqijstiqps581g=;
-        b=gXM7tVmuXE2VYcL++pj9A8cawokFJiGyzbX0iZDQZTQrVHPTRPMdAEXeyq2vMu9Znh
-         MnnenN5QhbEsicvLCKOsCtCPVYmAkHioIweqQoYC2Nsf4NyHM8EHZVMCExzFms/jbbBV
-         RBJhuJTKIw3OOz2MUZBnreSM91vRJ3nVMiyjLOPLpxnpLprzNPwKtNSMJ3H8tMSjJIeL
-         wgnnNrY2ac8d9e8ZWBBzwgQe421S3klaWiKxd+vEIE3hUepqjeXFDhY2C9IY9CIXnDHk
-         D1ZeS7haXc6SqUDZz/xLB/MGCMKnh7NcG1eKmDbDDG4UZEaeznct+mC++46izFGJR4Lw
-         MgXg==
-X-Gm-Message-State: ACgBeo2A82WgUy0G22YqbTlODrfhd6djDY4qHqShbOK4ZTucaO1xZQvD
-        8QMER9V+Mb8l8evpn9ZqiIhNqUmJZoOTikB+m7rue8lDAN0=
-X-Google-Smtp-Source: AA6agR4/+KFyeZCLR7QNyK/SwA5h7iSK9WD+Wcq0DzfwSJfKHs6ZZBiqBGKiRcM82+AXjWVepeK/cW9bqfs4CrsnwRA=
-X-Received: by 2002:aa7:df8c:0:b0:448:a9a0:5fd8 with SMTP id
- b12-20020aa7df8c000000b00448a9a05fd8mr11048961edy.244.1661997827725; Wed, 31
- Aug 2022 19:03:47 -0700 (PDT)
+        Wed, 31 Aug 2022 22:02:34 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70074.outbound.protection.outlook.com [40.107.7.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2240511CFA8;
+        Wed, 31 Aug 2022 19:02:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=T7hGpJ2Sv41bhWVW5YlN/4tBjc4rLtV/Qmf1Ab95qVTK2lK8cD5KEecYnIv1QQmBhtpdMs8xB28jvf2rv5FIT7OgWBMjE1TPe9YPObYkr2KZ3Ve9CBLCHU22kSkhlrQd/g6gklRuRoghpVlAZs78qEWA3MRxQeI9GobcJpo+Cw40iI5fJQivd+xtoclv/Hdc+7oQftYDdfbyRQH2pq3llO3BNmmQm7Dfb6QT2UaopGO7aH1MyMhVcQSmmTMAMKsINhO9hPUE6aFHOnSSsDYl5EMXVuID/lIurVHsrNiqNU1YLTR6VhU/fUXOQxjAmZwz46DAp6f8Bgb1E7JrLe+Y7Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8RliWHG/hoezWalVNV+sQSmj+LjOk1JfSSi3qn0sqnM=;
+ b=bFNYqSsMfYEAZ9y66bJpCty6D82g586Rj0gVorLYnhzC3RFmBZEIP7Ktpk2rxuA/XFtcfyfir+YTL3I2TULrwUNL+mqGk4g8p2t3qzQCLzSxih1BbAh0LLLoCOu229sZgO6sIdAzTzjR1i+2LE95GVw9x5GrWgl2u8SrlOWxPet+NU2GkriKRvvqc8eoa9HJjZZU0yr7yEPMFJKElF9bpL0RGaOxm0sg1Z5GX/0SqGlSG1LQpvs3qzBdTGSv9VdgkGlRndDNfq/H8i790LJnNggEzwxUY43/4f7fNb73FLvod7LN2SiGDS+oEEiAee7XYEb4IyIWUoeOmJEGwvylZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8RliWHG/hoezWalVNV+sQSmj+LjOk1JfSSi3qn0sqnM=;
+ b=jb2pWMMm4n4mUVOOc8C6BEYfXlrfxNJq7ljjv0mvGfC/+2nrM4c4rT7je/wtgUbvj2uPoSdtHOXu7eO6PWsAeETGlxH+JM5r1GVobliMIAivHhdf+bnkDyzOVxO8CH/37rKrkBeZpTFKjlhwarG0el09MTm6a96vHfVBL195xdw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB5925.eurprd04.prod.outlook.com (2603:10a6:20b:ab::19)
+ by AS8PR04MB8724.eurprd04.prod.outlook.com (2603:10a6:20b:42b::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5588.11; Thu, 1 Sep
+ 2022 02:02:29 +0000
+Received: from AM6PR04MB5925.eurprd04.prod.outlook.com
+ ([fe80::704a:fa82:a28e:d198]) by AM6PR04MB5925.eurprd04.prod.outlook.com
+ ([fe80::704a:fa82:a28e:d198%6]) with mapi id 15.20.5588.010; Thu, 1 Sep 2022
+ 02:02:29 +0000
+From:   Joy Zou <joy.zou@nxp.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
+        festevam@gmail.com
+Cc:     linux-imx@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH V4 3/4] ARM: dts: imx: update sdma node name format
+Date:   Thu,  1 Sep 2022 10:04:02 +0800
+Message-Id: <20220901020402.50206-1-joy.zou@nxp.com>
+X-Mailer: git-send-email 2.37.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SG2PR06CA0189.apcprd06.prod.outlook.com (2603:1096:4:1::21)
+ To AM6PR04MB5925.eurprd04.prod.outlook.com (2603:10a6:20b:ab::19)
 MIME-Version: 1.0
-References: <20220613192301.8817-1-sj@kernel.org> <20220613192301.8817-9-sj@kernel.org>
-In-Reply-To: <20220613192301.8817-9-sj@kernel.org>
-From:   Barry Song <21cnbao@gmail.com>
-Date:   Thu, 1 Sep 2022 14:03:36 +1200
-Message-ID: <CAGsJ_4yX3y3QyL_wX3L4ectZsQ9uOAfJrw-eWn8a-F=AEuLb9Q@mail.gmail.com>
-Subject: Re: [PATCH 7/8] mm/damon: introduce DAMON-based LRU-lists Sorting
-To:     SeongJae Park <sj@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, damon@lists.linux.dev,
-        linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 40bf43f5-7baa-4d7c-48f3-08da8bbe067e
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8724:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: VIbUOrzHt78J9UqKidPjZzddthquHYdJ72uzNL9+dRGUYoWAKrqLACPuEfjKAAr3y93OkVhfqVOkH9En8SBMBaBFVkdwWvbaspHwbZJUoMSDiLQLXOfjgKbSi3gCvsvUKG81xtT/6y1ElLIDNjEM4UNfJNVDSihYTHQkDHpi4JnSf2bjeuEiNKcbhZkW/HnsqzQEhOx6HV19QM6aGxxmiUU09qf71zsT9Rl/1hH7TxY7bHw/nCjVK05ophNlBmfvzvkvaet+EvS1rePKfE+SDeFmGAzcYVbjgs5e81P8m9KPVz/XGn2t22oKBm9bsYdU65mHO7OYMAe3B6p+smGJLiWz3K0ds0TzHyV2x6wThxmAvo+eQHh0tQQWbjkx1BSTIqmtVoBYyeM6CnoZgU4aasykldzvo+thyAFlvPLnr0b/Hwm2BpOLrB9QRqEObAt7WpOuDI++aj3vBaZxLz5lWtWtkQSSZrbNOi1Wzk29okZqMc72uO5KPcqLyaTnri8d+GNNX7mKV90KQtqOGeG856JvGz1JpEpCKWPHoao17z4F0P2QW+KFGPgWU8xUD6Mwb+/PJECuacr7bFKSvG/lOCbTafUgriEJ7uoKkXGyWxLE/H75JKLHk/4+eTO066uarG/0fScYwFl4lUjyIdcYDFCyiVoZsuJj5Osd/7/IbZ5mVBtLVuj7ZzrQ1lvLB43JL8GkKsyPD+WV1OUCnsqs9+48pjh2N35/Duwni2Mw9DS7GVG8pO7W6xKIQLBuRbeB8eGZWGQATb1nwcVhvgO2DQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB5925.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(366004)(396003)(376002)(346002)(8936002)(4326008)(8676002)(66476007)(66556008)(66946007)(6486002)(478600001)(26005)(6512007)(2616005)(1076003)(83380400001)(186003)(6666004)(44832011)(5660300002)(86362001)(52116002)(2906002)(41300700001)(316002)(6506007)(36756003)(38100700002)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wAKnG6WX7PSp7P8OkHEKhz1f/ut6+UppTIMGVenWvUWQzxNXTO//qbGUVXQL?=
+ =?us-ascii?Q?cI/jmu7YVILKFoMCyWR/pUiPCKchVBXv/c0Nd5OCPBBh4UhoQpahtOqs0V4R?=
+ =?us-ascii?Q?wthKDJ/dC90rzlYpdKmKfDtlOxFU1dWxkKCz7FNJLy28A3zjQ2I0sJbgaJW9?=
+ =?us-ascii?Q?fvI72GbRqvE9O/YSnNErLLQypS2GciNIph/iD5OtA2zWk1/50Lq1qcTdnkFn?=
+ =?us-ascii?Q?qVVOjUtOf7ibQNhhisqR53TWp198E9tiysJa0ug6nV/AtUBuZnm+rNL5lBnJ?=
+ =?us-ascii?Q?GrIScOdFx70qC6QCnn2/2wFKcX4ShB9CYnq3BLwgod324IsHADFG+FKA1GtA?=
+ =?us-ascii?Q?rHJ6dF8Td2g19LRhf/gUVZUZzOX0Y6YF6xwbAN2wGqnPVunzhT8VWIRcu2v+?=
+ =?us-ascii?Q?wF82uoWwiXKy83OwacnJuOHgQ83asVllRlJk9FNrMyvl3O/jmlLSxBiTy3xE?=
+ =?us-ascii?Q?ybSIDxntfi4sWe0rGdrR9hJD7XjzrQmxGdm6BJ+D6cw7XKwhgeFSTmhA/NlK?=
+ =?us-ascii?Q?48VzeJabUyoXzswSXjO2P3Aj5k3noXnyTAjvN9eDZtpxhnro6HC1SX84cy5B?=
+ =?us-ascii?Q?nj0lat6yi638hdcPT26ZCF6vnhkF3XKqmajcT8Ul1TWK2pj8MFU+s64q/MFa?=
+ =?us-ascii?Q?V3cqRbbmaVyifd9wV28IiAxwX0K4aJNNPROPqi/6lfI5jeFJl0I34h6zIZ+P?=
+ =?us-ascii?Q?iIDNxZT9iH1Anm2gAs3rAKtcsrIeTNCLRwLmUsArJI8Lb5TYzfjF8PzlGWxl?=
+ =?us-ascii?Q?pNT8XKPe4CbC/wSJe8q0YlTCF/7gMQoU0SdJWJg3/vmVEUQT4/5Q8ZHZsE4Y?=
+ =?us-ascii?Q?EdWtcuf42U2fPWx2qBF252ez0um7RluhKzdmGt1AjqH+OvolVfYM7hPcMp0z?=
+ =?us-ascii?Q?s13n5pLeOdNrPn9yMmZE7yVl/rRTw0EGLUglW0r8M1k9Fo1AY1Ipjyt2oebc?=
+ =?us-ascii?Q?cmukyVCwKR41ohfcd2nWkaSKShw3wpKITjeUMmOmTiYLZ1T5jzj+JM4fhZ3S?=
+ =?us-ascii?Q?yejq7Ahp3eaJXaFfU9RgpflEt8/9aLBuDQPs9bcwaRUwX+XI5LNo7Dhf3FeM?=
+ =?us-ascii?Q?lFd1Y4jZRm/9VQ82xI3L8S81S9V+z0naXXFDYk8fC8sShc/6K1ztB3IjUqqg?=
+ =?us-ascii?Q?pChI3VLdhGBB8ixeK1IGkt/Q1+2YyQo6n51lXb7emAakEl4VF0qaA/C6dC83?=
+ =?us-ascii?Q?pJUVWkMbMOADh13/dFnl1zucJPepi7WbyTUHUdLZQW8pvm+1WwwwQjZaLa2+?=
+ =?us-ascii?Q?RTNeJUJ1pnn2KirGE6+bJ76Trb53Q0M4VRCy+N0X1UMGZkAC6pTk+Mytk+7A?=
+ =?us-ascii?Q?Irr3EDFDaLA1WKcgPhAMMDIUo8XDKc/q+2kBU4rRJtjg5PvBsswiue40y7Zb?=
+ =?us-ascii?Q?8Z0uEVLCplkHTHhIElfkVKRyarOOBqKcYnA/wZD0bpTRFf323O204LPusgSs?=
+ =?us-ascii?Q?jjdO+84Ydmte/5EIVmNj4V5GsNVG5YD4mNfCgdtDI2xUeiadvmdgUSNzzxes?=
+ =?us-ascii?Q?hptYrV8fyDQx13L5EU8Tchz81/fdj4Fycq+keyPnEpBtTjV4yKhwzjdblWeV?=
+ =?us-ascii?Q?AIHy20qlmjdy+JIaEawgwLh8Ko6c0dOrK44ebbSc?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40bf43f5-7baa-4d7c-48f3-08da8bbe067e
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB5925.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Sep 2022 02:02:29.7051
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: I+Dr1KiTdKUVxkfxCpCzMpL+1hI4cm1Squa4ACLa4RM45kbCPgA+Iaax1Q03/Y66
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8724
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,613 +112,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jun 14, 2022 at 10:01 AM SeongJae Park <sj@kernel.org> wrote:
->
-> Users can do data access-aware LRU-lists sorting using 'LRU_PRIO' and
-> 'LRU_DEPRIO' DAMOS actions.  However, finding best parameters including
-> the hotness/coldness thresholds, CPU quota, and watermarks could be
-> challenging for some users.  To make the scheme easy to be used without
-> complex tuning for common situations, this commit implements a static
-> kernel module called 'DAMON_LRU_SORT' using the 'LRU_PRIO' and
-> 'LRU_DEPRIO' DAMOS actions.
->
-> It proactively sorts LRU-lists using DAMON with conservatively chosen
-> default values of the parameters.  That is, the module under its default
-> parameters will make no harm for common situations but provide some
-> level of efficiency improvements for systems having clear hot/cold
-> access pattern under a level of memory pressure while consuming only a
-> limited small portion of CPU time.
+change the sdma node name format 'sdma' into 'dma-controller'.
 
-Hi SeongJae,
-While I believe DAMON pro-active reclamation and LRU-SORT
+Signed-off-by: Joy Zou <joy.zou@nxp.com>
+---
+ arch/arm/boot/dts/imx25.dtsi   | 2 +-
+ arch/arm/boot/dts/imx31.dtsi   | 2 +-
+ arch/arm/boot/dts/imx35.dtsi   | 2 +-
+ arch/arm/boot/dts/imx50.dtsi   | 2 +-
+ arch/arm/boot/dts/imx51.dtsi   | 2 +-
+ arch/arm/boot/dts/imx53.dtsi   | 2 +-
+ arch/arm/boot/dts/imx6qdl.dtsi | 2 +-
+ arch/arm/boot/dts/imx6sl.dtsi  | 2 +-
+ arch/arm/boot/dts/imx6sx.dtsi  | 2 +-
+ arch/arm/boot/dts/imx6ul.dtsi  | 2 +-
+ arch/arm/boot/dts/imx7s.dtsi   | 2 +-
+ 11 files changed, 11 insertions(+), 11 deletions(-)
 
->
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
->  mm/damon/Kconfig    |   8 +
->  mm/damon/Makefile   |   1 +
->  mm/damon/lru_sort.c | 546 ++++++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 555 insertions(+)
->  create mode 100644 mm/damon/lru_sort.c
->
-> diff --git a/mm/damon/Kconfig b/mm/damon/Kconfig
-> index 9b559c76d6dd..66265e3a9c65 100644
-> --- a/mm/damon/Kconfig
-> +++ b/mm/damon/Kconfig
-> @@ -92,4 +92,12 @@ config DAMON_RECLAIM
->           reclamation under light memory pressure, while the traditional page
->           scanning-based reclamation is used for heavy pressure.
->
-> +config DAMON_LRU_SORT
-> +       bool "Build DAMON-based LRU-lists sorting (DAMON_LRU_SORT)"
-> +       depends on DAMON_PADDR
-> +       help
-> +         This builds the DAMON-based LRU-lists sorting subsystem.  It tries to
-> +         protect frequently accessed (hot) pages while rarely accessed (cold)
-> +         pages reclaimed first under memory pressure.
-> +
->  endmenu
-> diff --git a/mm/damon/Makefile b/mm/damon/Makefile
-> index dbf7190b4144..3e6b8ad73858 100644
-> --- a/mm/damon/Makefile
-> +++ b/mm/damon/Makefile
-> @@ -6,3 +6,4 @@ obj-$(CONFIG_DAMON_PADDR)       += ops-common.o paddr.o
->  obj-$(CONFIG_DAMON_SYSFS)      += sysfs.o
->  obj-$(CONFIG_DAMON_DBGFS)      += dbgfs.o
->  obj-$(CONFIG_DAMON_RECLAIM)    += reclaim.o
-> +obj-$(CONFIG_DAMON_LRU_SORT)   += lru_sort.o
-> diff --git a/mm/damon/lru_sort.c b/mm/damon/lru_sort.c
-> new file mode 100644
-> index 000000000000..c276736a071c
-> --- /dev/null
-> +++ b/mm/damon/lru_sort.c
-> @@ -0,0 +1,546 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * DAMON-based LRU-lists Sorting
-> + *
-> + * Author: SeongJae Park <sj@kernel.org>
-> + */
-> +
-> +#define pr_fmt(fmt) "damon-lru-sort: " fmt
-> +
-> +#include <linux/damon.h>
-> +#include <linux/ioport.h>
-> +#include <linux/module.h>
-> +#include <linux/sched.h>
-> +#include <linux/workqueue.h>
-> +
-> +#ifdef MODULE_PARAM_PREFIX
-> +#undef MODULE_PARAM_PREFIX
-> +#endif
-> +#define MODULE_PARAM_PREFIX "damon_lru_sort."
-> +
-> +/*
-> + * Enable or disable DAMON_LRU_SORT.
-> + *
-> + * You can enable DAMON_LRU_SORT by setting the value of this parameter as
-> + * ``Y``.  Setting it as ``N`` disables DAMON_LRU_SORT.  Note that
-> + * DAMON_LRU_SORT could do no real monitoring and LRU-lists sorting due to the
-> + * watermarks-based activation condition.  Refer to below descriptions for the
-> + * watermarks parameter for this.
-> + */
-> +static bool enabled __read_mostly;
-> +
-> +/*
-> + * Make DAMON_LRU_SORT reads the input parameters again, except ``enabled``.
-> + *
-> + * Input parameters that updated while DAMON_LRU_SORT is running are not
-> + * applied by default.  Once this parameter is set as ``Y``, DAMON_LRU_SORT
-> + * reads values of parametrs except ``enabled`` again.  Once the re-reading is
-> + * done, this parameter is set as ``N``.  If invalid parameters are found while
-> + * the re-reading, DAMON_LRU_SORT will be disabled.
-> + */
-> +static bool commit_inputs __read_mostly;
-> +module_param(commit_inputs, bool, 0600);
-> +
-> +/*
-> + * Access frequency threshold for hot memory regions identification in permil.
-> + *
-> + * If a memory region is accessed in frequency of this or higher,
-> + * DAMON_LRU_SORT identifies the region as hot, and mark it as accessed on the
-> + * LRU list, so that it could not be reclaimed under memory pressure.  50% by
-> + * default.
-> + */
-> +static unsigned long hot_thres_access_freq = 500;
-> +module_param(hot_thres_access_freq, ulong, 0600);
-> +
-> +/*
-> + * Time threshold for cold memory regions identification in microseconds.
-> + *
-> + * If a memory region is not accessed for this or longer time, DAMON_LRU_SORT
-> + * identifies the region as cold, and mark it as unaccessed on the LRU list, so
-> + * that it could be reclaimed first under memory pressure.  120 seconds by
-> + * default.
-> + */
-> +static unsigned long cold_min_age __read_mostly = 120000000;
-> +module_param(cold_min_age, ulong, 0600);
-> +
-> +/*
-> + * Limit of time for trying the LRU lists sorting in milliseconds.
-> + *
-> + * DAMON_LRU_SORT tries to use only up to this time within a time window
-> + * (quota_reset_interval_ms) for trying LRU lists sorting.  This can be used
-> + * for limiting CPU consumption of DAMON_LRU_SORT.  If the value is zero, the
-> + * limit is disabled.
-> + *
-> + * 10 ms by default.
-> + */
-> +static unsigned long quota_ms __read_mostly = 10;
-> +module_param(quota_ms, ulong, 0600);
-> +
-> +/*
-> + * The time quota charge reset interval in milliseconds.
-> + *
-> + * The charge reset interval for the quota of time (quota_ms).  That is,
-> + * DAMON_LRU_SORT does not try LRU-lists sorting for more than quota_ms
-> + * milliseconds or quota_sz bytes within quota_reset_interval_ms milliseconds.
-> + *
-> + * 1 second by default.
-> + */
-> +static unsigned long quota_reset_interval_ms __read_mostly = 1000;
-> +module_param(quota_reset_interval_ms, ulong, 0600);
-> +
-> +/*
-> + * The watermarks check time interval in microseconds.
-> + *
-> + * Minimal time to wait before checking the watermarks, when DAMON_LRU_SORT is
-> + * enabled but inactive due to its watermarks rule.  5 seconds by default.
-> + */
-> +static unsigned long wmarks_interval __read_mostly = 5000000;
-> +module_param(wmarks_interval, ulong, 0600);
-> +
-> +/*
-> + * Free memory rate (per thousand) for the high watermark.
-> + *
-> + * If free memory of the system in bytes per thousand bytes is higher than
-> + * this, DAMON_LRU_SORT becomes inactive, so it does nothing but periodically
-> + * checks the watermarks.  200 (20%) by default.
-> + */
-> +static unsigned long wmarks_high __read_mostly = 200;
-> +module_param(wmarks_high, ulong, 0600);
-> +
-> +/*
-> + * Free memory rate (per thousand) for the middle watermark.
-> + *
-> + * If free memory of the system in bytes per thousand bytes is between this and
-> + * the low watermark, DAMON_LRU_SORT becomes active, so starts the monitoring
-> + * and the LRU-lists sorting.  150 (15%) by default.
-> + */
-> +static unsigned long wmarks_mid __read_mostly = 150;
-> +module_param(wmarks_mid, ulong, 0600);
-> +
-> +/*
-> + * Free memory rate (per thousand) for the low watermark.
-> + *
-> + * If free memory of the system in bytes per thousand bytes is lower than this,
-> + * DAMON_LRU_SORT becomes inactive, so it does nothing but periodically checks
-> + * the watermarks.  50 (5%) by default.
-> + */
-> +static unsigned long wmarks_low __read_mostly = 50;
-> +module_param(wmarks_low, ulong, 0600);
-> +
-> +/*
-> + * Sampling interval for the monitoring in microseconds.
-> + *
-> + * The sampling interval of DAMON for the hot/cold memory monitoring.  Please
-> + * refer to the DAMON documentation for more detail.  5 ms by default.
-> + */
-> +static unsigned long sample_interval __read_mostly = 5000;
-> +module_param(sample_interval, ulong, 0600);
-> +
-> +/*
-> + * Aggregation interval for the monitoring in microseconds.
-> + *
-> + * The aggregation interval of DAMON for the hot/cold memory monitoring.
-> + * Please refer to the DAMON documentation for more detail.  100 ms by default.
-> + */
-> +static unsigned long aggr_interval __read_mostly = 100000;
-> +module_param(aggr_interval, ulong, 0600);
-> +
-> +/*
-> + * Minimum number of monitoring regions.
-> + *
-> + * The minimal number of monitoring regions of DAMON for the hot/cold memory
-> + * monitoring.  This can be used to set lower-bound of the monitoring quality.
-> + * But, setting this too high could result in increased monitoring overhead.
-> + * Please refer to the DAMON documentation for more detail.  10 by default.
-> + */
-> +static unsigned long min_nr_regions __read_mostly = 10;
-> +module_param(min_nr_regions, ulong, 0600);
-> +
-> +/*
-> + * Maximum number of monitoring regions.
-> + *
-> + * The maximum number of monitoring regions of DAMON for the hot/cold memory
-> + * monitoring.  This can be used to set upper-bound of the monitoring overhead.
-> + * However, setting this too low could result in bad monitoring quality.
-> + * Please refer to the DAMON documentation for more detail.  1000 by default.
-> + */
-> +static unsigned long max_nr_regions __read_mostly = 1000;
-> +module_param(max_nr_regions, ulong, 0600);
-> +
-> +/*
-> + * Start of the target memory region in physical address.
-> + *
-> + * The start physical address of memory region that DAMON_LRU_SORT will do work
-> + * against.  By default, biggest System RAM is used as the region.
-> + */
-> +static unsigned long monitor_region_start __read_mostly;
-> +module_param(monitor_region_start, ulong, 0600);
-> +
-> +/*
-> + * End of the target memory region in physical address.
-> + *
-> + * The end physical address of memory region that DAMON_LRU_SORT will do work
-> + * against.  By default, biggest System RAM is used as the region.
-> + */
-> +static unsigned long monitor_region_end __read_mostly;
-> +module_param(monitor_region_end, ulong, 0600);
-> +
-> +/*
-> + * PID of the DAMON thread
-> + *
-> + * If DAMON_LRU_SORT is enabled, this becomes the PID of the worker thread.
-> + * Else, -1.
-> + */
-> +static int kdamond_pid __read_mostly = -1;
-> +module_param(kdamond_pid, int, 0400);
-> +
-> +/*
-> + * Number of hot memory regions that tried to be LRU-sorted.
-> + */
-> +static unsigned long nr_lru_sort_tried_hot_regions __read_mostly;
-> +module_param(nr_lru_sort_tried_hot_regions, ulong, 0400);
-> +
-> +/*
-> + * Total bytes of hot memory regions that tried to be LRU-sorted.
-> + */
-> +static unsigned long bytes_lru_sort_tried_hot_regions __read_mostly;
-> +module_param(bytes_lru_sort_tried_hot_regions, ulong, 0400);
-> +
-> +/*
-> + * Number of hot memory regions that successfully be LRU-sorted.
-> + */
-> +static unsigned long nr_lru_sorted_hot_regions __read_mostly;
-> +module_param(nr_lru_sorted_hot_regions, ulong, 0400);
-> +
-> +/*
-> + * Total bytes of hot memory regions that successfully be LRU-sorted.
-> + */
-> +static unsigned long bytes_lru_sorted_hot_regions __read_mostly;
-> +module_param(bytes_lru_sorted_hot_regions, ulong, 0400);
-> +
-> +/*
-> + * Number of times that the time quota limit for hot regions have exceeded
-> + */
-> +static unsigned long nr_hot_quota_exceeds __read_mostly;
-> +module_param(nr_hot_quota_exceeds, ulong, 0400);
-> +
-> +/*
-> + * Number of cold memory regions that tried to be LRU-sorted.
-> + */
-> +static unsigned long nr_lru_sort_tried_cold_regions __read_mostly;
-> +module_param(nr_lru_sort_tried_cold_regions, ulong, 0400);
-> +
-> +/*
-> + * Total bytes of cold memory regions that tried to be LRU-sorted.
-> + */
-> +static unsigned long bytes_lru_sort_tried_cold_regions __read_mostly;
-> +module_param(bytes_lru_sort_tried_cold_regions, ulong, 0400);
-> +
-> +/*
-> + * Number of cold memory regions that successfully be LRU-sorted.
-> + */
-> +static unsigned long nr_lru_sorted_cold_regions __read_mostly;
-> +module_param(nr_lru_sorted_cold_regions, ulong, 0400);
-> +
-> +/*
-> + * Total bytes of cold memory regions that successfully be LRU-sorted.
-> + */
-> +static unsigned long bytes_lru_sorted_cold_regions __read_mostly;
-> +module_param(bytes_lru_sorted_cold_regions, ulong, 0400);
-> +
-> +/*
-> + * Number of times that the time quota limit for cold regions have exceeded
-> + */
-> +static unsigned long nr_cold_quota_exceeds __read_mostly;
-> +module_param(nr_cold_quota_exceeds, ulong, 0400);
-> +
-> +static struct damon_ctx *ctx;
-> +static struct damon_target *target;
-> +
-> +struct damon_lru_sort_ram_walk_arg {
-> +       unsigned long start;
-> +       unsigned long end;
-> +};
-> +
-> +static int walk_system_ram(struct resource *res, void *arg)
-> +{
-> +       struct damon_lru_sort_ram_walk_arg *a = arg;
-> +
-> +       if (a->end - a->start < resource_size(res)) {
-> +               a->start = res->start;
-> +               a->end = res->end;
-> +       }
-> +       return 0;
-> +}
-> +
-> +/*
-> + * Find biggest 'System RAM' resource and store its start and end address in
-> + * @start and @end, respectively.  If no System RAM is found, returns false.
-> + */
-> +static bool get_monitoring_region(unsigned long *start, unsigned long *end)
-> +{
-> +       struct damon_lru_sort_ram_walk_arg arg = {};
-> +
-> +       walk_system_ram_res(0, ULONG_MAX, &arg, walk_system_ram);
-> +       if (arg.end <= arg.start)
-> +               return false;
-> +
-> +       *start = arg.start;
-> +       *end = arg.end;
-> +       return true;
-> +}
-> +
-> +/* Create a DAMON-based operation scheme for hot memory regions */
-> +static struct damos *damon_lru_sort_new_hot_scheme(unsigned int hot_thres)
-> +{
-> +       struct damos_watermarks wmarks = {
-> +               .metric = DAMOS_WMARK_FREE_MEM_RATE,
-> +               .interval = wmarks_interval,
-> +               .high = wmarks_high,
-> +               .mid = wmarks_mid,
-> +               .low = wmarks_low,
-> +       };
-> +       struct damos_quota quota = {
-> +               /*
-> +                * Do not try LRU-lists sorting of hot pages for more than half
-> +                * of quota_ms milliseconds within quota_reset_interval_ms.
-> +                */
-> +               .ms = quota_ms / 2,
-> +               .sz = 0,
-> +               .reset_interval = quota_reset_interval_ms,
-> +               /* Within the quota, mark hotter regions accessed first. */
-> +               .weight_sz = 0,
-> +               .weight_nr_accesses = 1,
-> +               .weight_age = 0,
-> +       };
-> +       struct damos *scheme = damon_new_scheme(
-> +                       /* Find regions having PAGE_SIZE or larger size */
-> +                       PAGE_SIZE, ULONG_MAX,
-> +                       /* and accessed for more than the threshold */
-> +                       hot_thres, UINT_MAX,
-> +                       /* no matter its age */
-> +                       0, UINT_MAX,
-> +                       /* prioritize those on LRU lists, as soon as found */
-> +                       DAMOS_LRU_PRIO,
-> +                       /* under the quota. */
-> +                       &quota,
-> +                       /* (De)activate this according to the watermarks. */
-> +                       &wmarks);
-> +
-> +       return scheme;
-> +}
-> +
-> +/* Create a DAMON-based operation scheme for cold memory regions */
-> +static struct damos *damon_lru_sort_new_cold_scheme(unsigned int cold_thres)
-> +{
-> +       struct damos_watermarks wmarks = {
-> +               .metric = DAMOS_WMARK_FREE_MEM_RATE,
-> +               .interval = wmarks_interval,
-> +               .high = wmarks_high,
-> +               .mid = wmarks_mid,
-> +               .low = wmarks_low,
-> +       };
-> +       struct damos_quota quota = {
-> +               /*
-> +                * Do not try LRU-lists sorting of cold pages for more than
-> +                * half of quota_ms milliseconds within
-> +                * quota_reset_interval_ms.
-> +                */
-> +               .ms = quota_ms / 2,
-> +               .sz = 0,
-> +               .reset_interval = quota_reset_interval_ms,
-> +               /* Within the quota, mark colder regions not accessed first. */
-> +               .weight_sz = 0,
-> +               .weight_nr_accesses = 0,
-> +               .weight_age = 1,
-> +       };
-> +       struct damos *scheme = damon_new_scheme(
-> +                       /* Find regions having PAGE_SIZE or larger size */
-> +                       PAGE_SIZE, ULONG_MAX,
-> +                       /* and not accessed at all */
-> +                       0, 0,
-> +                       /* for cold_thres or more micro-seconds, and */
-> +                       cold_thres, UINT_MAX,
-> +                       /* mark those as not accessed, as soon as found */
-> +                       DAMOS_LRU_DEPRIO,
-> +                       /* under the quota. */
-> +                       &quota,
-> +                       /* (De)activate this according to the watermarks. */
-> +                       &wmarks);
-> +
-> +       return scheme;
-> +}
-> +
-> +static int damon_lru_sort_apply_parameters(void)
-> +{
-> +       struct damos *scheme, *next_scheme;
-> +       struct damon_addr_range addr_range;
-> +       unsigned int hot_thres, cold_thres;
-> +       int err = 0;
-> +
-> +       err = damon_set_attrs(ctx, sample_interval, aggr_interval, 0,
-> +                       min_nr_regions, max_nr_regions);
-> +       if (err)
-> +               return err;
-> +
-> +       /* free previously set schemes */
-> +       damon_for_each_scheme_safe(scheme, next_scheme, ctx)
-> +               damon_destroy_scheme(scheme);
-> +
-> +       /* aggr_interval / sample_interval is the maximum nr_accesses */
-> +       hot_thres = aggr_interval / sample_interval * hot_thres_access_freq /
-> +               1000;
-> +       scheme = damon_lru_sort_new_hot_scheme(hot_thres);
-> +       if (!scheme)
-> +               return -ENOMEM;
-> +       damon_add_scheme(ctx, scheme);
-> +
-> +       cold_thres = cold_min_age / aggr_interval;
-> +       scheme = damon_lru_sort_new_cold_scheme(cold_thres);
-> +       if (!scheme)
-> +               return -ENOMEM;
-> +       damon_add_scheme(ctx, scheme);
-> +
-> +       if (monitor_region_start > monitor_region_end)
-> +               return -EINVAL;
-> +       if (!monitor_region_start && !monitor_region_end &&
-> +                       !get_monitoring_region(&monitor_region_start,
-> +                               &monitor_region_end))
-> +               return -EINVAL;
-> +       addr_range.start = monitor_region_start;
-> +       addr_range.end = monitor_region_end;
-> +       return damon_set_regions(target, &addr_range, 1);
-> +}
-> +
-> +static int damon_lru_sort_turn(bool on)
-> +{
-> +       int err;
-> +
-> +       if (!on) {
-> +               err = damon_stop(&ctx, 1);
-> +               if (!err)
-> +                       kdamond_pid = -1;
-> +               return err;
-> +       }
-> +
-> +       err = damon_lru_sort_apply_parameters();
-> +       if (err)
-> +               return err;
-> +
-> +       err = damon_start(&ctx, 1, true);
-> +       if (err)
-> +               return err;
-> +       kdamond_pid = ctx->kdamond->pid;
-> +       return 0;
-> +}
-> +
-> +static struct delayed_work damon_lru_sort_timer;
-> +static void damon_lru_sort_timer_fn(struct work_struct *work)
-> +{
-> +       static bool last_enabled;
-> +       bool now_enabled;
-> +
-> +       now_enabled = enabled;
-> +       if (last_enabled != now_enabled) {
-> +               if (!damon_lru_sort_turn(now_enabled))
-> +                       last_enabled = now_enabled;
-> +               else
-> +                       enabled = last_enabled;
-> +       }
-> +}
-> +static DECLARE_DELAYED_WORK(damon_lru_sort_timer, damon_lru_sort_timer_fn);
-> +
-> +static bool damon_lru_sort_initialized;
-> +
-> +static int damon_lru_sort_enabled_store(const char *val,
-> +               const struct kernel_param *kp)
-> +{
-> +       int rc = param_set_bool(val, kp);
-> +
-> +       if (rc < 0)
-> +               return rc;
-> +
-> +       if (!damon_lru_sort_initialized)
-> +               return rc;
-> +
-> +       schedule_delayed_work(&damon_lru_sort_timer, 0);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct kernel_param_ops enabled_param_ops = {
-> +       .set = damon_lru_sort_enabled_store,
-> +       .get = param_get_bool,
-> +};
-> +
-> +module_param_cb(enabled, &enabled_param_ops, &enabled, 0600);
-> +MODULE_PARM_DESC(enabled,
-> +       "Enable or disable DAMON_LRU_SORT (default: disabled)");
-> +
-> +static int damon_lru_sort_handle_commit_inputs(void)
-> +{
-> +       int err;
-> +
-> +       if (!commit_inputs)
-> +               return 0;
-> +
-> +       err = damon_lru_sort_apply_parameters();
-> +       commit_inputs = false;
-> +       return err;
-> +}
-> +
-> +static int damon_lru_sort_after_aggregation(struct damon_ctx *c)
-> +{
-> +       struct damos *s;
-> +
-> +       /* update the stats parameter */
-> +       damon_for_each_scheme(s, c) {
-> +               if (s->action == DAMOS_LRU_PRIO) {
-> +                       nr_lru_sort_tried_hot_regions = s->stat.nr_tried;
-> +                       bytes_lru_sort_tried_hot_regions = s->stat.sz_tried;
-> +                       nr_lru_sorted_hot_regions = s->stat.nr_applied;
-> +                       bytes_lru_sorted_hot_regions = s->stat.sz_applied;
-> +                       nr_hot_quota_exceeds = s->stat.qt_exceeds;
-> +               } else if (s->action == DAMOS_LRU_DEPRIO) {
-> +                       nr_lru_sort_tried_cold_regions = s->stat.nr_tried;
-> +                       bytes_lru_sort_tried_cold_regions = s->stat.sz_tried;
-> +                       nr_lru_sorted_cold_regions = s->stat.nr_applied;
-> +                       bytes_lru_sorted_cold_regions = s->stat.sz_applied;
-> +                       nr_cold_quota_exceeds = s->stat.qt_exceeds;
-> +               }
-> +       }
-> +
-> +       return damon_lru_sort_handle_commit_inputs();
-> +}
-> +
-> +static int damon_lru_sort_after_wmarks_check(struct damon_ctx *c)
-> +{
-> +       return damon_lru_sort_handle_commit_inputs();
-> +}
-> +
-> +static int __init damon_lru_sort_init(void)
-> +{
-> +       ctx = damon_new_ctx();
-> +       if (!ctx)
-> +               return -ENOMEM;
-> +
-> +       if (damon_select_ops(ctx, DAMON_OPS_PADDR))
-> +               return -EINVAL;
-> +
-> +       ctx->callback.after_wmarks_check = damon_lru_sort_after_wmarks_check;
-> +       ctx->callback.after_aggregation = damon_lru_sort_after_aggregation;
-> +
-> +       target = damon_new_target();
-> +       if (!target) {
-> +               damon_destroy_ctx(ctx);
-> +               return -ENOMEM;
-> +       }
-> +       damon_add_target(ctx, target);
-> +
-> +       schedule_delayed_work(&damon_lru_sort_timer, 0);
-> +
-> +       damon_lru_sort_initialized = true;
-> +       return 0;
-> +}
-> +
-> +module_init(damon_lru_sort_init);
-> --
-> 2.25.1
->
+diff --git a/arch/arm/boot/dts/imx25.dtsi b/arch/arm/boot/dts/imx25.dtsi
+index bc4de0c05511..5f90d72b840b 100644
+--- a/arch/arm/boot/dts/imx25.dtsi
++++ b/arch/arm/boot/dts/imx25.dtsi
+@@ -515,7 +515,7 @@ gpio2: gpio@53fd0000 {
+ 				#interrupt-cells = <2>;
+ 			};
+ 
+-			sdma: sdma@53fd4000 {
++			sdma: dma-controller@53fd4000 {
+ 				compatible = "fsl,imx25-sdma";
+ 				reg = <0x53fd4000 0x4000>;
+ 				clocks = <&clks 112>, <&clks 68>;
+diff --git a/arch/arm/boot/dts/imx31.dtsi b/arch/arm/boot/dts/imx31.dtsi
+index 5c4938b0d5a1..95c05f17a6d5 100644
+--- a/arch/arm/boot/dts/imx31.dtsi
++++ b/arch/arm/boot/dts/imx31.dtsi
+@@ -297,7 +297,7 @@ gpio2: gpio@53fd0000 {
+ 				#interrupt-cells = <2>;
+ 			};
+ 
+-			sdma: sdma@53fd4000 {
++			sdma: dma-controller@53fd4000 {
+ 				compatible = "fsl,imx31-sdma";
+ 				reg = <0x53fd4000 0x4000>;
+ 				interrupts = <34>;
+diff --git a/arch/arm/boot/dts/imx35.dtsi b/arch/arm/boot/dts/imx35.dtsi
+index 8e41c8b7bd70..d650f54c3fc6 100644
+--- a/arch/arm/boot/dts/imx35.dtsi
++++ b/arch/arm/boot/dts/imx35.dtsi
+@@ -284,7 +284,7 @@ gpio2: gpio@53fd0000 {
+ 				#interrupt-cells = <2>;
+ 			};
+ 
+-			sdma: sdma@53fd4000 {
++			sdma: dma-controller@53fd4000 {
+ 				compatible = "fsl,imx35-sdma";
+ 				reg = <0x53fd4000 0x4000>;
+ 				clocks = <&clks 9>, <&clks 65>;
+diff --git a/arch/arm/boot/dts/imx50.dtsi b/arch/arm/boot/dts/imx50.dtsi
+index c0c7575fbecf..3d9a9f37f672 100644
+--- a/arch/arm/boot/dts/imx50.dtsi
++++ b/arch/arm/boot/dts/imx50.dtsi
+@@ -421,7 +421,7 @@ ecspi2: spi@63fac000 {
+ 				status = "disabled";
+ 			};
+ 
+-			sdma: sdma@63fb0000 {
++			sdma: dma-controller@63fb0000 {
+ 				compatible = "fsl,imx50-sdma", "fsl,imx35-sdma";
+ 				reg = <0x63fb0000 0x4000>;
+ 				interrupts = <6>;
+diff --git a/arch/arm/boot/dts/imx51.dtsi b/arch/arm/boot/dts/imx51.dtsi
+index 592d9c23a447..853707574d2e 100644
+--- a/arch/arm/boot/dts/imx51.dtsi
++++ b/arch/arm/boot/dts/imx51.dtsi
+@@ -504,7 +504,7 @@ ecspi2: spi@83fac000 {
+ 				status = "disabled";
+ 			};
+ 
+-			sdma: sdma@83fb0000 {
++			sdma: dma-controller@83fb0000 {
+ 				compatible = "fsl,imx51-sdma", "fsl,imx35-sdma";
+ 				reg = <0x83fb0000 0x4000>;
+ 				interrupts = <6>;
+diff --git a/arch/arm/boot/dts/imx53.dtsi b/arch/arm/boot/dts/imx53.dtsi
+index b7a6469d3472..56b3c13f4eb7 100644
+--- a/arch/arm/boot/dts/imx53.dtsi
++++ b/arch/arm/boot/dts/imx53.dtsi
+@@ -710,7 +710,7 @@ ecspi2: spi@63fac000 {
+ 				status = "disabled";
+ 			};
+ 
+-			sdma: sdma@63fb0000 {
++			sdma: dma-controller@63fb0000 {
+ 				compatible = "fsl,imx53-sdma", "fsl,imx35-sdma";
+ 				reg = <0x63fb0000 0x4000>;
+ 				interrupts = <6>;
+diff --git a/arch/arm/boot/dts/imx6qdl.dtsi b/arch/arm/boot/dts/imx6qdl.dtsi
+index 4f7fefc14d0a..ff1e0173b39b 100644
+--- a/arch/arm/boot/dts/imx6qdl.dtsi
++++ b/arch/arm/boot/dts/imx6qdl.dtsi
+@@ -929,7 +929,7 @@ dcic2: dcic@20e8000 {
+ 				interrupts = <0 125 IRQ_TYPE_LEVEL_HIGH>;
+ 			};
+ 
+-			sdma: sdma@20ec000 {
++			sdma: dma-controller@20ec000 {
+ 				compatible = "fsl,imx6q-sdma", "fsl,imx35-sdma";
+ 				reg = <0x020ec000 0x4000>;
+ 				interrupts = <0 2 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm/boot/dts/imx6sl.dtsi b/arch/arm/boot/dts/imx6sl.dtsi
+index 06a515121dfc..61dd78467aea 100644
+--- a/arch/arm/boot/dts/imx6sl.dtsi
++++ b/arch/arm/boot/dts/imx6sl.dtsi
+@@ -747,7 +747,7 @@ spdc: spdc@20e8000 {
+ 				interrupts = <0 6 IRQ_TYPE_LEVEL_HIGH>;
+ 			};
+ 
+-			sdma: sdma@20ec000 {
++			sdma: dma-controller@20ec000 {
+ 				compatible = "fsl,imx6sl-sdma", "fsl,imx6q-sdma";
+ 				reg = <0x020ec000 0x4000>;
+ 				interrupts = <0 2 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm/boot/dts/imx6sx.dtsi b/arch/arm/boot/dts/imx6sx.dtsi
+index 4d075e2bf749..514ed4dbd6fd 100644
+--- a/arch/arm/boot/dts/imx6sx.dtsi
++++ b/arch/arm/boot/dts/imx6sx.dtsi
+@@ -842,7 +842,7 @@ gpr: iomuxc-gpr@20e4000 {
+ 				reg = <0x020e4000 0x4000>;
+ 			};
+ 
+-			sdma: sdma@20ec000 {
++			sdma: dma-controller@20ec000 {
+ 				compatible = "fsl,imx6sx-sdma", "fsl,imx6q-sdma";
+ 				reg = <0x020ec000 0x4000>;
+ 				interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
+diff --git a/arch/arm/boot/dts/imx6ul.dtsi b/arch/arm/boot/dts/imx6ul.dtsi
+index c95efd1d8c2d..2b5996395701 100644
+--- a/arch/arm/boot/dts/imx6ul.dtsi
++++ b/arch/arm/boot/dts/imx6ul.dtsi
+@@ -744,7 +744,7 @@ gpt2: timer@20e8000 {
+ 				status = "disabled";
+ 			};
+ 
+-			sdma: sdma@20ec000 {
++			sdma: dma-controller@20ec000 {
+ 				compatible = "fsl,imx6ul-sdma", "fsl,imx6q-sdma",
+ 					     "fsl,imx35-sdma";
+ 				reg = <0x020ec000 0x4000>;
+diff --git a/arch/arm/boot/dts/imx7s.dtsi b/arch/arm/boot/dts/imx7s.dtsi
+index 29148285f9fc..0fc9e6b8b05d 100644
+--- a/arch/arm/boot/dts/imx7s.dtsi
++++ b/arch/arm/boot/dts/imx7s.dtsi
+@@ -1224,7 +1224,7 @@ qspi: spi@30bb0000 {
+ 				status = "disabled";
+ 			};
+ 
+-			sdma: sdma@30bd0000 {
++			sdma: dma-controller@30bd0000 {
+ 				compatible = "fsl,imx7d-sdma", "fsl,imx35-sdma";
+ 				reg = <0x30bd0000 0x10000>;
+ 				interrupts = <GIC_SPI 2 IRQ_TYPE_LEVEL_HIGH>;
+-- 
+2.37.1
+

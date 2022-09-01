@@ -2,187 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07BFC5A9E15
-	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 081795A9E1C
+	for <lists+linux-kernel@lfdr.de>; Thu,  1 Sep 2022 19:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234402AbiIARdb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 1 Sep 2022 13:33:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44542 "EHLO
+        id S234245AbiIARfo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 1 Sep 2022 13:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234069AbiIARdL (ORCPT
+        with ESMTP id S234032AbiIARfU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 1 Sep 2022 13:33:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8C192F73;
-        Thu,  1 Sep 2022 10:33:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9639D61FEF;
-        Thu,  1 Sep 2022 17:33:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 041A8C433D7;
-        Thu,  1 Sep 2022 17:33:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1662053585;
-        bh=Tq0rG+ZmykyWv/+uRuggAUDl+ZN37G+pmZ0/EKVVsaw=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=bB4jwaNZ3efSgeu7GlgNDqRc2nflVPexLMYWu2xef7ZghDNBgJpAJ5c8afhiKUP+M
-         kqMx/u7v9KpGHPZjdQbczH1/G8FID3J5pVJkp24aVyR4xNhMuO9KCZA+NePzdYdx8M
-         zoK17D7FcgYweZaUu3yz/N4cwBhTVrzs+DE8EVD1JlnGvH/O4q8SPEVpfcRuDr7Obj
-         Qd04Jp/6L7HkKlVyu6YQXdGJQFtn/31Cm3hTsFH4hUwMLD7wmwCfbAKsNbUj2lxUuG
-         hEG77bwTYgYnjwiRp6DNNVNgv586RendAzBWPZUy0auwhQ/U/bnn9K8P2rklEDUUZ2
-         2M2jzKgwz9SWg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id A96085C0691; Thu,  1 Sep 2022 10:33:04 -0700 (PDT)
-Date:   Thu, 1 Sep 2022 10:33:04 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Sascha Hauer <sha@pengutronix.de>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@fb.com, rostedt@goodmis.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>, kernel@pengutronix.de
-Subject: Re: [PATCH rcu 04/32] rcu-tasks: Drive synchronous grace periods
- from calling task
-Message-ID: <20220901173304.GA2280413@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220620225402.GA3842369@paulmck-ThinkPad-P17-Gen-1>
- <20220620225411.3842519-4-paulmck@kernel.org>
- <20220901103625.GA1658@pengutronix.de>
- <20220901172725.GC6159@paulmck-ThinkPad-P17-Gen-1>
+        Thu, 1 Sep 2022 13:35:20 -0400
+X-Greylist: delayed 9270 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 01 Sep 2022 10:34:28 PDT
+Received: from smtp-190b.mail.infomaniak.ch (smtp-190b.mail.infomaniak.ch [185.125.25.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7496E92F4D;
+        Thu,  1 Sep 2022 10:34:27 -0700 (PDT)
+Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
+        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4MJSpD2KxYzMqK1f;
+        Thu,  1 Sep 2022 19:34:12 +0200 (CEST)
+Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
+        by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4MJSpC0M5lzlh8TN;
+        Thu,  1 Sep 2022 19:34:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+        s=20191114; t=1662053652;
+        bh=o/v/WCsruLFuIKPLYfYVi2ZWkfCBoZTi3cgn9QP8x2I=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=lxSMPoQjcyoYGPH2mJTUzxKF7Ho3MUUpp+fWEFqTQ8uzen1kRgFn9QuD+UtiBMvEW
+         ogKQt0Rv1c0+NKP8Lu+L8IxKLcP/2SlmPj7KlIizHPH/6PpMYnoQfEdWjFbXVdCu/s
+         LRxd+4c+cKCcHjUi+4MagOS5S7RdvtzEa3ogkYco=
+Message-ID: <4b69a4ac-28ab-16aa-14b1-04a6f64d5490@digikod.net>
+Date:   Thu, 1 Sep 2022 19:34:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220901172725.GC6159@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: 
+Subject: Re: [PATCH -next v2 3/6] landlock: add chmod and chown support
+Content-Language: en-US
+To:     xiujianfeng <xiujianfeng@huawei.com>,
+        =?UTF-8?Q?G=c3=bcnther_Noack?= <gnoack3000@gmail.com>
+Cc:     paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        shuah@kernel.org, corbet@lwn.net,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Christian Brauner <brauner@kernel.org>
+References: <20220827111215.131442-1-xiujianfeng@huawei.com>
+ <20220827111215.131442-4-xiujianfeng@huawei.com> <Ywpw66EYRDTQIyTx@nuc>
+ <de8834b6-0ff2-1a81-f2d3-af33103e9942@huawei.com>
+ <de4620d2-3268-b3cc-71dd-acbbd204435e@digikod.net>
+ <2f286496-f4f8-76f7-2fb6-cc3dd5ffdeaa@huawei.com>
+From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
+In-Reply-To: <2f286496-f4f8-76f7-2fb6-cc3dd5ffdeaa@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Sep 01, 2022 at 10:27:25AM -0700, Paul E. McKenney wrote:
-> On Thu, Sep 01, 2022 at 12:36:25PM +0200, Sascha Hauer wrote:
-> > Hi Paul,
-> > 
-> > On Mon, Jun 20, 2022 at 03:53:43PM -0700, Paul E. McKenney wrote:
-> > > This commit causes synchronous grace periods to be driven from the task
-> > > invoking synchronize_rcu_*(), allowing these functions to be invoked from
-> > > the mid-boot dead zone extending from when the scheduler was initialized
-> > > to to point that the various RCU tasks grace-period kthreads are spawned.
-> > > This change will allow the self-tests to run in a consistent manner.
-> > > 
-> > > Reported-by: Matthew Wilcox <willy@infradead.org>
-> > > Reported-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> > 
-> > This commit (appeared in mainline as 4a8cc433b8bf) breaks booting my
-> > ARMv7 based i.MX6ul board when CONFIG_PROVE_RCU is enabled. Reverting
-> > this patch on v6.0-rc3 makes my board boot again. See below for a boot
-> > log. The last message is "Running RCU-tasks wait API self tests", after
-> > that the board hangs. Any idea what goes wrong here?
-> 
-> New one on me!
-> 
-> Is it possible to get a stack trace of the hang, perhaps via
-> one form or another of sysrq-T?  Such a stack trace would likely
-> include synchronize_rcu_tasks(), synchronize_rcu_tasks_rude(), or
-> synchronize_rcu_tasks_trace() followed by synchronize_rcu_tasks_generic(),
-> rcu_tasks_one_gp(), and one of rcu_tasks_wait_gp(),
-> rcu_tasks_rude_wait_gp(), or rcu_tasks_wait_gp().
+CCing linux-fsdevel@vger.kernel.org
 
-If there is no chance of sysrq-T, kernel debuggers, kernel crash
-dumps, or any other source of the stack trace, please decorate the
-code path with printk() or similar and let me know where it goes.
-Under normal circumstances, this code path is not sensitive to performance
-perturbations of the printk() persuasion.
 
-							Thanx, Paul
+On 01/09/2022 15:06, xiujianfeng wrote:
+> Hi,
+> 
+> 在 2022/8/30 0:01, Mickaël Salaün 写道:
+>>
+>> On 29/08/2022 03:17, xiujianfeng wrote:
+>>>
+>>> Hi,
+>>>
+>>> 在 2022/8/28 3:30, Günther Noack 写道:
+>>>> Hello!
+>>>>
+>>>> the mapping between Landlock rights to LSM hooks is now as follows in
+>>>> your patch set:
+>>>>
+>>>> * LANDLOCK_ACCESS_FS_CHMOD controls hook_path_chmod
+>>>> * LANDLOCK_ACCESS_FS_CHGRP controls hook_path_chown
+>>>>      (this hook can restrict both the chown(2) and chgrp(2) syscalls)
+>>>>
+>>>> Is this the desired mapping?
+>>>>
+>>>> The previous discussion I found on the topic was in
+>>>>
+>>>> [1]
+>>>> https://lore.kernel.org/all/5873455f-fff9-618c-25b1-8b6a4ec94368@digikod.net/
+>>>>
+>>>> [2]
+>>>> https://lore.kernel.org/all/b1d69dfa-6d93-2034-7854-e2bc4017d20e@schaufler-ca.com/
+>>>>
+>>>> [3]
+>>>> https://lore.kernel.org/all/c369c45d-5aa8-3e39-c7d6-b08b165495fd@digikod.net/
+>>>>
+>>>>
+>>>> In my understanding the main arguments were the ones in [2] and [3].
+>>>>
+>>>> There were no further responses to [3], so I was under the impression
+>>>> that we were gravitating towards an approach where the
+>>>> file-metadata-modification operations were grouped more coarsely?
+>>>>
+>>>> For example with the approach suggested in [3], which would be to
+>>>> group the operations coarsely into (a) one Landlock right for
+>>>> modifying file metadata that is used in security contexts, and (b) one
+>>>> Landlock right for modifying metadata that was used in non-security
+>>>> contexts. That would mean that there would be:
+>>>>
+>>>> (a) LANDLOCK_ACCESS_FS_MODIFY_SECURITY_ATTRIBUTES to control the
+>>>> following operations:
+>>>>      * chmod(2)-variants through hook_path_chmod,
+>>>>      * chown(2)-variants and chgrp(2)-variants through hook_path_chown,
+>>>>      * setxattr(2)-variants and removexattr(2)-variants for extended
+>>>>        attributes that are not "user extended attributes" as described in
+>>>>        xattr(7) through hook_inode_setxattr and hook_inode_removexattr
+>>>>
+>>>> (b) LANDLOCK_ACCESS_FS_MODIFY_NON_SECURITY_ATTRIBUTES to control the
+>>>> following operations:
+>>>>      * utimes(2) and other operations for setting other non-security
+>>>>        sensitive attributes, probably through hook_inode_setattr(?)
+>>>>      * xattr modifications like above, but for the "user extended
+>>>>        attributes", though hook_inode_setxattr and hook_inode_removexattr
+>>>>
+>>>> In my mind, this would be a sensible grouping, and it would also help
+>>>> to decouple the userspace-exposed API from the underlying
+>>>> implementation, as Casey suggested to do in [2].
+>>>>
+>>>> Specifically for this patch set, if you want to use this grouping, you
+>>>> would only need to add one new Landlock right
+>>>> (LANDLOCK_ACCESS_FS_MODIFY_SECURITY_ATTRIBUTES) as described above
+>>>> under (a) (and maybe we can find a shorter name for it... :))?
+>>>>
+>>>> Did I miss any operations here that would be necessary to restrict?
+>>>>
+>>>> Would that make sense to you? Xiu, what is your opinion on how this
+>>>> should be grouped? Do you have use cases in mind where a more
+>>>> fine-grained grouping would be required?
+>>>
+>>> I apologize I may missed that discussion when I prepared v2:(
+>>>
+>>> Yes, agreed, this grouping is more sensible and resonnable. so in this
+>>> patchset only one right will be added, and I suppose the first commit
+>>> which expand access_mask_t to u32 can be droped.
+>>>
+>>>>
+>>>> —Günther
+>>>>
+>>>> P.S.: Regarding utimes: The hook_inode_setattr hook *also* gets called
+>>>> on a variety on attribute changes including file ownership, file size
+>>>> and file mode, so it might potentially interact with a bunch of other
+>>>> existing Landlock rights. Maybe that is not the right approach. In any
+>>>> case, it seems like it might require more thinking and it might be
+>>>> sensible to do that in a separate patch set IMHO.
+>>>
+>>> Thanks for you reminder, that seems it's more complicated to support
+>>> utimes, so I think we'd better not support it in this patchset.
+>>
+>> The issue with this approach is that it makes it impossible to properly
+>> group such access rights. Indeed, to avoid inconsistencies and much more
+>> complexity, we cannot extend a Landlock access right once it is defined.
+>>
+>> We also need to consider that file ownership and permissions have a
+>> default (e.g. umask), which is also a way to set them. How to
+>> consistently manage that? What if the application wants to protect its
+>> files with chmod 0400?
+> 
+> what do you mean by this? do you mean that we should have a set of
+> default permissions for files created by applications within the
+> sandbox, so that it can update metadata of its own file.
 
-> At this point in the boot sequence, there is only one online CPU,
-> correct?
+I mean that we need a consistent access control system, and for this we 
+need to consider all the ways an extended attribute can be set.
+
+We can either extend the meaning of current access rights (controlled 
+with a ruleset flag for compatibility reasons), or create new access 
+rights. I think it would be better to add new dedicated rights to make 
+it more explicit and flexible.
+
+I'm not sure about the right approach to properly control file 
+permission. We need to think about it. Do you have some ideas?
+
+BTW, utimes can be controlled with the inode_setattr() LSM hook. Being 
+able to control arbitrary file time modification could be part of the 
+FS_WRITE_SAFE_METADATA, but modification and access time should always 
+be updated according to the file operation.
+
+
 > 
-> I have seen recent non-boot hangs within synchronize_rcu_tasks()
-> due to some other task getting stuck in do_exit() between its calls
-> to exit_tasks_rcu_start() and exit_tasks_rcu_finish().  The symptom of
-> this is that the aforementioned stack trace includes synchronize_srcu().
-> I would not expect much in the way of exiting tasks that early in the
-> boot sequence, but who knows?
+>>
+>> About the naming, I think we can start with:
+>> - LANDLOCK_ACCESS_FS_READ_METADATA (read any file/dir metadata);
+>> - LANDLOCK_ACCESS_FS_WRITE_SAFE_METADATA: change file times, user xattr;
 > 
-> 							Thanx, Paul
+> do you mean we should have permission controls on metadata level or
+> operation level? e.g. should we allow update on user xattr but deny
+> update on security xattr? or should we disallow update on any xattr?
 > 
-> > Sascha
-> > 
-> > ----------------------------8<-----------------------------
-> > 
-> > [    0.000000] Booting Linux on physical CPU 0x0
-> > [    0.000000] Linux version 5.19.0-rc3-00004-g4a8cc433b8bf (sha@dude02) (arm-v7a-linux-gnueabihf-gcc (OSELAS.Toolchain-2021.07.0 11-20210703) 11.1.1 20210703, GNU ld (GNU Binutils) 2.36.1) #229 SMP Thu Sep 1 12:00:07 CEST 2022
-> > [    0.000000] CPU: ARMv7 Processor [410fc075] revision 5 (ARMv7), cr=10c5387d
-> > [    0.000000] CPU: div instructions available: patching division code
-> > [    0.000000] CPU: PIPT / VIPT nonaliasing data cache, VIPT aliasing instruction cache
-> > [    0.000000] OF: fdt: Machine model: IDS CU33X
-> > [    0.000000] earlycon: ec_imx6q0 at MMIO 0x02020000 (options '')
-> > [    0.000000] printk: bootconsole [ec_imx6q0] enabled
-> > [    0.000000] Memory policy: Data cache writealloc
-> > [    0.000000] cma: Reserved 64 MiB at 0x8c000000
-> > [    0.000000] Zone ranges:
-> > [    0.000000]   Normal   [mem 0x0000000080000000-0x000000008fffffff]
-> > [    0.000000]   HighMem  empty
-> > [    0.000000] Movable zone start for each node
-> > [    0.000000] Early memory node ranges
-> > [    0.000000]   node   0: [mem 0x0000000080000000-0x000000008fffffff]
-> > [    0.000000] Initmem setup node 0 [mem 0x0000000080000000-0x000000008fffffff]
-> > [    0.000000] percpu: Embedded 17 pages/cpu s38068 r8192 d23372 u69632
-> > [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 65024
-> > [    0.000000] Kernel command line: console=ttymxc0,115200n8 earlycon ip=dhcp root=/dev/nfs nfsroot=192.168.8.12:/hom
-> > e/sha/nfsroot/cu33x,v3,tcp
-> > [    0.000000] Dentry cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
-> > [    0.000000] Inode-cache hash table entries: 16384 (order: 4, 65536 bytes, linear)
-> > [    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-> > [    0.000000] Memory: 162600K/262144K available (15360K kernel code, 2146K rwdata, 5472K rodata, 1024K init, 6681K b
-> > ss, 34008K reserved, 65536K cma-reserved, 0K highmem)
-> > [    0.000000] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
-> > [    0.000000] trace event string verifier disabled
-> > [    0.000000] Running RCU self tests
-> > [    0.000000] rcu: Hierarchical RCU implementation.
-> > [    0.000000] rcu:     RCU event tracing is enabled.
-> > [    0.000000] rcu:     RCU lockdep checking is enabled.
-> > [    0.000000] rcu:     RCU restricting CPUs from NR_CPUS=4 to nr_cpu_ids=1.
-> > [    0.000000]  Tracing variant of Tasks RCU enabled.
-> > [    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
-> > [    0.000000] rcu: Adjusting geometry for rcu_fanout_leaf=16, nr_cpu_ids=1
-> > [    0.000000] NR_IRQS: 16, nr_irqs: 16, preallocated irqs: 16
-> > [    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
-> > [    0.000000] Switching to timer-based delay loop, resolution 41ns
-> > [    0.000003] sched_clock: 32 bits at 24MHz, resolution 41ns, wraps every 89478484971ns
-> > [    0.007810] clocksource: mxc_timer1: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 79635851949 ns
-> > [    0.021748] Console: colour dummy device 80x30
-> > [    0.023488] Lock dependency validator: Copyright (c) 2006 Red Hat, Inc., Ingo Molnar
-> > [    0.032009] ... MAX_LOCKDEP_SUBCLASSES:  8
-> > [    0.035282] ... MAX_LOCK_DEPTH:          48
-> > [    0.039445] ... MAX_LOCKDEP_KEYS:        8192
-> > [    0.043886] ... CLASSHASH_SIZE:          4096
-> > [    0.048127] ... MAX_LOCKDEP_ENTRIES:     32768
-> > [    0.052552] ... MAX_LOCKDEP_CHAINS:      65536
-> > [    0.057069] ... CHAINHASH_SIZE:          32768
-> > [    0.061405]  memory used by lock dependency info: 4061 kB
-> > [    0.066788]  memory used for stack traces: 2112 kB
-> > [    0.071645]  per task-struct memory footprint: 1536 bytes
-> > [    0.077138] Calibrating delay loop (skipped), value calculated using timer frequency.. 48.00 BogoMIPS (lpj=240000)
-> > [    0.087384] pid_max: default: 32768 minimum: 301
-> > [    0.093527] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-> > [    0.099327] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-> > [    0.116798] CPU: Testing write buffer coherency: ok
-> > [    0.122036] CPU0: update cpu_capacity 1024
-> > [    0.123381] CPU0: thread -1, cpu 0, socket 0, mpidr 80000000
-> > [    0.137390] cblist_init_generic: Setting adjustable number of callback queues.
-> > [    0.142282] cblist_init_generic: Setting shift to 0 and lim to 1.
-> > [    0.149333] Running RCU-tasks wait API self tests
-> > 
-> > -- 
-> > Pengutronix e.K.                           |                             |
-> > Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-> > 31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-> > Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+>> - LANDLOCK_ACCESS_FS_WRITE_UNSAFE_METADATA: interpreted by the kernel
+>> (could change non-Landlock DAC or MAC, which could be considered as a
+>> policy bypass; or other various xattr that might be interpreted by
+>> filesystems), this should be denied most of the time.
+> 
+> do you mean FS_WRITE_UNSAFE_METADATA is security-related? and
+> FS_WRITE_SAFE_METADATA is non-security-related?
+
+Yes, FS_WRITE_UNSAFE_METADATA would be for security related 
+xattr/chmod/chown, and FS_WRITE_SAFE_METADATA for non-security xattr. 
+Both are mutually exclusive. This would involve the inode_setattr and 
+inode_setxattr LSM hooks. Looking at the calling sites, it seems 
+possible to replace all inode arguments with paths.
